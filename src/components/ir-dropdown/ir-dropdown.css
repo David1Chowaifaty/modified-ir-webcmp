@@ -1,0 +1,14 @@
+/* Existing styles */
+
+/* New styles for the overlay dropdown */
+.dropdown-menu {
+  position: absolute !important;
+  top: 100%; /* positions the dropdown just below the toggle */
+  right: 0;
+  z-index: 1000; /* ensures the dropdown appears above other content */
+  display: none; /* by default, the dropdown is not displayed */
+}
+
+.dropdown.nav-item.show .dropdown-menu {
+  display: block; /* display the dropdown when the parent has the "show" class */
+}

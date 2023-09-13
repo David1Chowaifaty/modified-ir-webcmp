@@ -1,0 +1,89 @@
+:root {
+  --sidebar-width: 40rem;
+}
+#container {
+  padding: 1rem;
+  height: 100%;
+}
+.card {
+  height: 100%;
+}
+
+#ir-list-item {
+  height: 100%;
+}
+.cardBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.emptyBody {
+  text-align: center;
+}
+.emptyBody img {
+  height: auto;
+  width: 100px;
+  transform: translate(7%, 0);
+  margin: 1rem;
+}
+
+.loader-position {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.card-head {
+  background: #f8f8f8;
+
+  padding: 0.3rem;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+}
+.item-info {
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.item-info .row .col-3:last-child {
+  text-align: end;
+}
+
+.list-group {
+  list-style: none;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.list-group li {
+  padding: 0.5rem;
+  color: #444;
+  transition: all 0.3s ease-out;
+}
+.list-group li:hover {
+  color: #7c83eb;
+}
+.list-group li.active {
+  border-bottom: 2px solid #7c83eb;
+  color: #7c83eb;
+}
+.btn-position {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem;
+  background: #f8f8f8;
+  border-top: 1px solid #e7e7e7;
+}
+
+.test-icon {
+  margin-right: 0.2rem !important;
+}
+.text-dark:hover {
+  color: #444 !important;
+}

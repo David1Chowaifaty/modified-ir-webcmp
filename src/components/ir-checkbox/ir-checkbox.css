@@ -1,0 +1,62 @@
+/* custome checkbox */
+.check-container {
+  display: block;
+  position: relative;
+  /* padding-left: 30px; */
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+.check-container input {
+  position: relative;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.check-container .checkmark {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 1px solid #cacfe7;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.check-container input:checked ~ .checkmark {
+  background-color: #1e9ff2;
+  border-color: #1e9ff2;
+}
+.checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+.check-container input:checked ~ .checkmark:after {
+  display: block;
+}
+.check-container .checkmark:after {
+  left: 6px;
+  top: 3px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.check-container.before span:last-child,
+.check-container.after span:first-child {
+  margin-right: 8px;
+}
+
+.check-container.after span:last-child {
+  margin-left: 8px;
+}
