@@ -23,7 +23,6 @@ export class IrGeneralSettings {
     RoomsMapping: null,
   };
   @State() selectedChannel: string = '';
-
   @State() connected: boolean = false;
   @Event({ bubbles: true, composed: true }) sendToParent: EventEmitter;
   @Event({ bubbles: true, composed: true }) connectionOff: EventEmitter;
@@ -46,26 +45,17 @@ export class IrGeneralSettings {
     const channelSelect = document.querySelector('ir-select.channel-select');
     channelSelect.addEventListener('selectChange', (event: CustomEvent) => {
       this.connected = false;
-
       this.selectedChannel = event.detail;
-      this.data = {
-        ...this.data,
-        channel: event.detail,
-      };
+      this.data = {...this.data,channel: event.detail};
+      this.sendToParent.emit(this.data);
     });
-
-    // const groupSelect = document.querySelector('ir-select#group-select');
-    // groupSelect.addEventListener('selectChange', (event: CustomEvent) => {
-    //   this.connected = false;
-    //   this.connectionOff.emit();
-    //   this.data = { ...this.data, group: event.detail };
-    // });
 
     const titleInput = document.querySelector('ir-input-text#title-input');
     titleInput.addEventListener('textChange', (event: CustomEvent) => {
       this.connected = false;
       this.connectionOff.emit();
       this.data = { ...this.data, title: event.detail };
+      this.sendToParent.emit(this.data);
     });
 
     const propertySelect = document.querySelector('ir-select#property-select');
@@ -73,40 +63,45 @@ export class IrGeneralSettings {
       this.connected = false;
       this.connectionOff.emit();
       this.data = { ...this.data, property: event.detail };
+      this.sendToParent.emit(this.data);
     });
+
   }
 
   componentDidUpdate() {
-    const hotelID = document.querySelector('ir-input-text#hotel-id');
-    hotelID.addEventListener('textChange', (event: CustomEvent) => {
-      this.connected = false;
-      this.connectionOff.emit();
-      this.connectionStatus = 'Not connected';
-      this.data = {
-        ...this.data,
-        hotelId: event.detail.trim(),
-      };
-    });
+    debugger;
+    // const hotelID = document.querySelector('ir-input-text#hotel-id');
+    // hotelID.addEventListener('textChange', (event: CustomEvent) => {
+    //   this.connected = false;
+    //   this.connectionOff.emit();
+    //   this.connectionStatus = 'Not connected';
+    //   this.data = {
+    //     ...this.data,
+    //     hotelId: event.detail.trim(),
+    //   };
+    // });
 
-    const minimumStay = document.querySelector('ir-select#minimum-stay-select');
-    minimumStay.addEventListener('selectChange', (event: CustomEvent) => {
-      this.connected = false;
-      this.connectionOff.emit();
-      this.data = {
-        ...this.data,
-        minimumStay: event.detail.trim(),
-      };
-    });
+    // const minimumStay = document.querySelector('ir-select#minimum-stay-select');
+    // minimumStay.addEventListener('selectChange', (event: CustomEvent) => {
+    //   this.connected = false;
+    //   this.connectionOff.emit();
+    //   this.data = {
+    //     ...this.data,
+    //     minimumStay: event.detail.trim(),
+    //   };
+    // });
 
     const channelSelect = document.querySelector('ir-select.channel-select');
     channelSelect.addEventListener('selectChange', (event: CustomEvent) => {
       this.connected = false;
       this.connectionOff.emit();
       this.selectedChannel = event.detail;
+      debugger;
       this.data = {
         ...this.data,
         channel: event.detail,
       };
+      this.sendToParent.emit(this.data);
     });
 
     // const groupSelect = document.querySelector('ir-select#group-select');
@@ -121,6 +116,7 @@ export class IrGeneralSettings {
       this.connected = false;
       this.connectionOff.emit();
       this.data = { ...this.data, title: event.detail };
+      this.sendToParent.emit(this.data);
     });
 
     const propertySelect = document.querySelector('ir-select#property-select');
@@ -128,6 +124,7 @@ export class IrGeneralSettings {
       this.connected = false;
       this.connectionOff.emit();
       this.data = { ...this.data, property: event.detail };
+      this.sendToParent.emit(this.data);
     });
   }
 
@@ -209,7 +206,7 @@ export class IrGeneralSettings {
             />
           </div>
         </div>
-        {this.selectedChannel && (
+        {/* {this.selectedChannel && (
           <div class="container-fluid mt-1">
             <div class="text-light border-bottom-light mb-2">Connection Settings</div>
             <div class="row">
@@ -262,7 +259,7 @@ export class IrGeneralSettings {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </div>,
       <ir-modal
         class="alertFields"

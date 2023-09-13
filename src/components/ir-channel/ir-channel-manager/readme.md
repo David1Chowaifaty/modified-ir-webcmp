@@ -58,8 +58,6 @@ graph TD;
   ir-sidebar --> ir-icon
   ir-general-settings --> ir-select
   ir-general-settings --> ir-input-text
-  ir-general-settings --> ir-loader
-  ir-general-settings --> ir-icon
   ir-general-settings --> ir-modal
   ir-mapping --> ir-icon
   style ir-channel-manager fill:#f9f,stroke:#333,stroke-width:4px

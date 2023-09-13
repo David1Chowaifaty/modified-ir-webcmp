@@ -17,7 +17,6 @@
 ### Used by
 
  - [ir-dropdown](../ir-dropdown)
- - [ir-general-settings](../ir-channel/ir-general-settings)
  - [ir-list-item](../ir-channel/ir-listItems)
  - [ir-mapping](../ir-channel/ir-mapping)
  - [ir-modal](../ir-modal)
@@ -28,7 +27,6 @@
 ```mermaid
 graph TD;
   ir-dropdown --> ir-icon
-  ir-general-settings --> ir-icon
   ir-list-item --> ir-icon
   ir-mapping --> ir-icon
   ir-modal --> ir-icon

@@ -181,21 +181,25 @@ export class IrChannelManager {
 
   goNext() {
     const IrMapping = document.querySelector('ir-mapping');
+    debugger;
     if (this.activeTab == 'General Settings') {
-      if (!this.item.title || !this.item.channel || !this.item.property || !this.item.hotelId) {
-        const alertModal: any = document.querySelector('ir-modal.alertModal-manager');
-        if (this.mode === 'edit') {
-          return;
+      //if (!this.item.title || !this.item.channel || !this.item.property || !this.item.hotelId) {
+        if (!this.item.title || !this.item.channel || !this.item.property)
+        {
+          const alertModal: any = document.querySelector('ir-modal.alertModal-manager');
+          if (this.mode === 'edit') {
+            return;
+          }
+          alertModal.openModal();
         }
-        alertModal.openModal();
-      } else {
-        this.activeTab = 'Mapping';
-        this.loader = true;
-        setTimeout(() => {
-          this.loader = false;
-        }, 2000);
-
-      }
+        else
+        {
+          this.activeTab = 'Mapping';
+          this.loader = true;
+          setTimeout(() => {
+            this.loader = false;
+          }, 2000);
+       }
     } else if (this.activeTab == 'Mapping') {
       IrMapping._onSaveMapping();
     }
@@ -203,7 +207,8 @@ export class IrChannelManager {
 
   _onSwitchTab(tab) {
     if (this.activeTab == 'General Settings') {
-      if (!this.item.title || !this.item.channel || !this.item.property || !this.item.hotelId) {
+      //if (!this.item.title || !this.item.channel || !this.item.property || !this.item.hotelId) {
+        if (!this.item.title || !this.item.channel || !this.item.property) {
         const alertModal: any = document.querySelector('ir-modal.alertModal-manager');
         if (this.mode == 'edit') {
           return;
@@ -229,7 +234,6 @@ export class IrChannelManager {
       <div id="container">
         <div class="card">
           <ir-topbar></ir-topbar>
-
           <ir-list-item id="ir-list-item" listData={this.listData} dropdownData={this.dropdownData}></ir-list-item>
         </div>
       </div>,
