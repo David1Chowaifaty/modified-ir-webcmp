@@ -1,5 +1,5 @@
 {
-  "name": "training",
+  "name": "ir-webcmp",
   "version": "0.0.1",
   "description": "Stencil Component Starter",
   "main": "dist/index.cjs.js",
