@@ -51,6 +51,7 @@ export class IrChannelManager {
 
   @Event({ bubbles: true, composed: true }) fetchApi: EventEmitter<ChannelManager[]>;
   @Event({ bubbles: true, composed: true }) requestApiDelete: EventEmitter;
+  @Event({ bubbles: true, composed: true }) requestApiDestinationHierarchy: EventEmitter<number>;
 
   @Listen('connectionOff')
   connectionOffHandler() {
@@ -181,7 +182,6 @@ export class IrChannelManager {
 
   goNext() {
     const IrMapping = document.querySelector('ir-mapping');
-    debugger;
     if (this.activeTab == 'General Settings') {
       //if (!this.item.title || !this.item.channel || !this.item.property || !this.item.hotelId) {
         if (!this.item.title || !this.item.channel || !this.item.property)
@@ -194,6 +194,7 @@ export class IrChannelManager {
         }
         else
         {
+          this.requestApiDestinationHierarchy.emit(this.item.property);
           this.activeTab = 'Mapping';
           this.loader = true;
           setTimeout(() => {

@@ -69,7 +69,6 @@ export class IrGeneralSettings {
   }
 
   componentDidUpdate() {
-    debugger;
     // const hotelID = document.querySelector('ir-input-text#hotel-id');
     // hotelID.addEventListener('textChange', (event: CustomEvent) => {
     //   this.connected = false;
@@ -96,7 +95,6 @@ export class IrGeneralSettings {
       this.connected = false;
       this.connectionOff.emit();
       this.selectedChannel = event.detail;
-      debugger;
       this.data = {
         ...this.data,
         channel: event.detail,

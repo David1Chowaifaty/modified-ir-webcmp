@@ -20,10 +20,11 @@
 
 ## Events
 
-| Event              | Description | Type                            |
-| ------------------ | ----------- | ------------------------------- |
-| `fetchApi`         |             | `CustomEvent<ChannelManager[]>` |
-| `requestApiDelete` |             | `CustomEvent<any>`              |
+| Event                            | Description | Type                            |
+| -------------------------------- | ----------- | ------------------------------- |
+| `fetchApi`                       |             | `CustomEvent<ChannelManager[]>` |
+| `requestApiDelete`               |             | `CustomEvent<any>`              |
+| `requestApiDestinationHierarchy` |             | `CustomEvent<number>`           |
 
 
 ## Dependencies

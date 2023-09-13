@@ -443,6 +443,7 @@ declare namespace LocalJSX {
         "mapReference"?: RoomType[];
         "onFetchApi"?: (event: IrChannelManagerCustomEvent<ChannelManager[]>) => void;
         "onRequestApiDelete"?: (event: IrChannelManagerCustomEvent<any>) => void;
+        "onRequestApiDestinationHierarchy"?: (event: IrChannelManagerCustomEvent<number>) => void;
     }
     interface IrCheckbox {
         "checked"?: boolean;
