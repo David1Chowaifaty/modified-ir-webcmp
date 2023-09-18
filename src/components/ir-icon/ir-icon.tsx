@@ -1,13 +1,19 @@
-import { Component,Prop, h } from '@stencil/core';
+import { Component,Prop, h, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'ir-icon'
 })
 export class IrIcon {  
   @Prop() icon = 'ft-check';
-  connectedCallback() {}
-  disconnectedCallback() {}
+  
+  @Event({bubbles: true, composed: true}) iconClickHandler: EventEmitter;
+
+
   render() {    
-    return (<i class={this.icon}></i>);
+    return (<i 
+      onClick={() => {
+        this.iconClickHandler.emit();
+      }}
+       class={this.icon}></i>);
   }
 }

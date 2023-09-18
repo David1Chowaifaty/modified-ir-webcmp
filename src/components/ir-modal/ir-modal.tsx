@@ -41,13 +41,16 @@ export class IrModal {
 
     if (name === this.leftBtnText) {
       this.confirmModal.emit(this.item);
+      this.item = {};
+      this.closeModal();
     } else if (name === this.rightBtnText) {
       this.cancelModal.emit();
+      this.item = {};
       this.closeModal();
     }
   }
 
-  @Prop({ reflect: true }) item: any = {};
+  @Prop() item: any = {};
 
   render() {
     return [

@@ -14,14 +14,15 @@ export class GuestInfo {
   @Event() getSetupData: EventEmitter;
   @Prop({ mutable: true, reflect: true }) setupDataCountries: selectOption[] = null;
   @Prop({ mutable: true, reflect: true }) setupDataCountriesCode: selectOption[] = null;
-  @Prop({ reflect: true, mutable: true }) data: guestInfo = null;
+  @Prop({ reflect: true, mutable: true }) data: guestInfo = null
 
-  componentWillLoad() {
+  componentWillLoad() { 
     this.getSetupData.emit();
   }
 
   @Watch('data')
   watchHandler() {
+    console.log('The new value of data is: ', this.data);
     this.submit = false;
     if (this.data !== null) {
       this.Model = { ...this.Model, ...this.data };

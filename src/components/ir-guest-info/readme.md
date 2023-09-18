@@ -24,6 +24,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [ir-booking-details](../ir-booking-details)
+
 ### Depends on
 
 - [ir-select](../ir-select)
@@ -38,6 +42,7 @@ graph TD;
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-checkbox
   ir-guest-info --> ir-button
+  ir-booking-details --> ir-guest-info
   style ir-guest-info fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

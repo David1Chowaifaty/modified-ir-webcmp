@@ -81,7 +81,7 @@ export class IrInputText {
           {label}
           <input
             type={this.type}
-            class={`${className} form-control-${this.size} text-${this.textSize} col-${12 - this.labelWidth}`}
+            class={`${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}
             placeholder={this.placeholder}
             value={this.value}
             onInput={this.handleInputChange.bind(this)}

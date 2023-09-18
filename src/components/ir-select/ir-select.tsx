@@ -84,7 +84,7 @@ export class IrSelect {
         <div class="input-group row m-0">
           {label}
           <select
-            class={`${className} form-control-${this.size} text-${this.textSize} col-${12 - this.labelWidth}`}
+            class={`${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}
             onInput={this.handleSelectChange.bind(this)}
             required={this.required}
           >

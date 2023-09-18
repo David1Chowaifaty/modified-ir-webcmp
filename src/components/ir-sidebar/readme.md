@@ -38,6 +38,7 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [ir-booking-details](../ir-booking-details)
  - [ir-channel-manager](../ir-channel/ir-channel-manager)
 
 ### Depends on
@@ -48,6 +49,7 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   ir-sidebar --> ir-icon
+  ir-booking-details --> ir-sidebar
   ir-channel-manager --> ir-sidebar
   style ir-sidebar fill:#f9f,stroke:#333,stroke-width:4px
 ```
