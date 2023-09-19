@@ -25,7 +25,7 @@
 
  - [ir-booking-details](../ir-booking-details)
  - [ir-dropdown](../ir-dropdown)
- - [ir-label](../ir-booking-details/label)
+ - [ir-label](../ir-label)
  - [ir-list-item](../ir-channel/ir-listItems)
  - [ir-mapping](../ir-channel/ir-mapping)
  - [ir-modal](../ir-modal)

@@ -49,7 +49,7 @@
 - [ir-select](../ir-select)
 - [ir-button](../ir-button)
 - [ir-icon](../ir-icon)
-- [ir-label](label)
+- [ir-label](../ir-label)
 - [ir-room](ir-room)
 - [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)

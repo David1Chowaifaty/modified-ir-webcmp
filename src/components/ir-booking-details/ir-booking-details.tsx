@@ -278,7 +278,7 @@ export class IrBookingDetails {
       </div>,
       <div class="fluid-container m-1">
         <div class="row m-0">
-          <div class="col-lg-7 col-md-12 pl-0 p-md-0">
+          <div class="col-lg-7 col-md-12 pl-0 pr-lg-1 p-0">
             <div class="card">
               <div class="p-1">
                 {this.bookingDetails.My_Ac?.NAME || ''}

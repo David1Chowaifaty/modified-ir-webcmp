@@ -37,7 +37,7 @@
 
 - [ir-icon](../../ir-icon)
 - [ir-button](../../ir-button)
-- [ir-label](../label)
+- [ir-label](../../ir-label)
 
 ### Graph
 ```mermaid

@@ -26,12 +26,12 @@
 
 ### Used by
 
- - [ir-booking-details](..)
- - [ir-room](../ir-room)
+ - [ir-booking-details](../ir-booking-details)
+ - [ir-room](../ir-booking-details/ir-room)
 
 ### Depends on
 
-- [ir-icon](../../ir-icon)
+- [ir-icon](../ir-icon)
 
 ### Graph
 ```mermaid

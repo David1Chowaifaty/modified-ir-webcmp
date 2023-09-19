@@ -54,7 +54,7 @@ export class IrPaymentDetails {
       <div class="row m-0">
         <div class="col-9 p-0">
           <div class="row m-0">
-            <div class="col-4 border-right-light p-0 border-bottom-light border-2">
+            <div class="col-4  border-right-light p-0 border-bottom-light border-2">
               {rowMode === 'normal' ? (
                 <span class="sm-padding-left">{_formatDate(item.PAYMENT_DATE)}</span>
               ) : (
@@ -172,11 +172,14 @@ export class IrPaymentDetails {
 
   _renderDueDate(item) {
     return (
-      <div class="row mb-1">
-        <span class="col-xl-3 col-lg-4 col-md-3">{_formatDate(item.Date)}</span>
-        <span class="col-xl-3 col-lg-4 col-md-3">{item.Description}</span>
-        <span class="col-xl-3 col-lg-4 col-md-3 d-flex justify-content-end">{_formatAmount(item.Amount, this.item.My_Currency.REF)}</span>
-        <span class="ml-1 col-12 font-size-small collapse roomName">{item.Room}</span>
+      <div class="fluid-container">
+        <div class="row mb-1">
+          <div class="col-xl-3 col-lg-4 col-md-3 col-sm-3 col-4 pr-0">{_formatDate(item.Date)}</div>
+          <div class="col-2 d-flex pl-0 justify-content-end">{_formatAmount(item.Amount, this.item.My_Currency.REF)}</div>
+          <div class="col-xl-3 col-lg-4 col-md-3 col-sm-3 col-4">{item.Description}</div>
+
+          <span class="ml-1 col-12 font-size-small collapse roomName">{item.Room}</span>
+        </div>
       </div>
     );
   }
