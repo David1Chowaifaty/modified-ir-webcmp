@@ -51,7 +51,7 @@ export class IrChannelManager {
 
   @Event({ bubbles: true, composed: true }) fetchApi: EventEmitter<ChannelManager[]>;
   @Event({ bubbles: true, composed: true }) requestApiDelete: EventEmitter;
-  @Event({ bubbles: true, composed: true }) requestApiDestinationHierarchy: EventEmitter<number>;
+  @Event({ bubbles: true, composed: true }) requestApiDestinationHierarchy: EventEmitter<string>;
 
   @Listen('connectionOff')
   connectionOffHandler() {

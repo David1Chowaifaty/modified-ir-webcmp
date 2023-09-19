@@ -24,7 +24,7 @@
 | -------------------------------- | ----------- | ------------------------------- |
 | `fetchApi`                       |             | `CustomEvent<ChannelManager[]>` |
 | `requestApiDelete`               |             | `CustomEvent<any>`              |
-| `requestApiDestinationHierarchy` |             | `CustomEvent<number>`           |
+| `requestApiDestinationHierarchy` |             | `CustomEvent<string>`           |
 
 
 ## Dependencies

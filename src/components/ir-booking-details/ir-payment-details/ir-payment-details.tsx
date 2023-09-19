@@ -190,7 +190,7 @@ export class IrPaymentDetails {
       <div class="card">
         <div class="p-1">
           <div class="mb-2 h4">
-            Due Balance: <span class="danger font-weight-bold">$40.00</span>
+            Due Balance: <span class="danger font-weight-bold">{_formatAmount(this.item.TOTAL_AMOUNT, this.item.My_Currency.REF)}</span>
           </div>
 
           {this.item.IS_DIRECT && this.directPayment()}

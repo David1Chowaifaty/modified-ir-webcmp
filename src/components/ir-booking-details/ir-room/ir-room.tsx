@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, EventEmitter, Event, Listen } from '@stencil/core';
+import { Component, h, Prop,  EventEmitter, Event, Listen } from '@stencil/core';
 import { _formatAmount, _formatDate, _getDay } from '../functions';
 
 @Component({
@@ -21,8 +21,7 @@ export class IrRoom {
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
 
-  // Total Amount
-  @State() tAmount: number = 0;
+
 
   // Event Emitters
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
@@ -36,13 +35,6 @@ export class IrRoom {
     } else if (target.id == 'checkout') {
       this.pressCheckOut.emit(this.item);
     }
-  }
-
-  componentWillLoad() {
-    // get total amount from this.item.My_Bsad.TOTAL_AMOUNT and add them to tAmount
-    this.item.My_Bsad.forEach((item: any) => {
-      this.tAmount += item.TOTAL_AMOUNT;
-    });
   }
 
   _getFoodArrangeCat(catCode: string) {
@@ -72,7 +64,7 @@ export class IrRoom {
             </div>
             <div>
               {/* <span class="mr-1">{this.item.TOTAL_AMOUNT + this.item.EXCLUDED_TAXES}</span> */}
-              <span class="mr-1">{_formatAmount(this.tAmount, this.currency)}</span>
+              <span class="mr-1">{_formatAmount(this.item.TOTAL_AMOUNT, this.currency)}</span>
               {this.hasRoomEdit && <ir-icon id={`roomEdit-${this.item.BSA_ID}`} icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon>}
               {this.hasRoomDelete && <ir-icon id={`roomDelete-${this.item.BSA_ID}`} icon="ft-trash-2 danger h4 pointer"></ir-icon>}
             </div>

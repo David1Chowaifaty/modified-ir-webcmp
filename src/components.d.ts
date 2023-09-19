@@ -555,7 +555,7 @@ declare namespace LocalJSX {
         "mapReference"?: RoomType[];
         "onFetchApi"?: (event: IrChannelManagerCustomEvent<ChannelManager[]>) => void;
         "onRequestApiDelete"?: (event: IrChannelManagerCustomEvent<any>) => void;
-        "onRequestApiDestinationHierarchy"?: (event: IrChannelManagerCustomEvent<number>) => void;
+        "onRequestApiDestinationHierarchy"?: (event: IrChannelManagerCustomEvent<string>) => void;
     }
     interface IrCheckbox {
         "checked"?: boolean;
