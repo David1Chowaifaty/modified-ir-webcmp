@@ -177,6 +177,7 @@ export class IrBookingDetails {
       language: newValue.My_Guest.My_User.LANGUAGE,
     };
     this.guestData = _data;
+    this.rerenderFlag = !this.rerenderFlag;
   }
 
   @Watch('dropdownStatuses')
@@ -193,7 +194,7 @@ export class IrBookingDetails {
     this.statusData = _newValue;
     this.rerenderFlag = !this.rerenderFlag;
   }
-
+  
   openEditSidebar() {
     const sidebar: any = document.querySelector('ir-sidebar#editGuestInfo');
     sidebar.open = true;
@@ -233,11 +234,9 @@ export class IrBookingDetails {
       return null;
     }
 
-    const guestInfo = document.querySelector('ir-guest-info');
-    if (guestInfo) {
-      guestInfo.data = this.guestData;
-    }
-
+    
+    
+   
     let confirmationBG: string = '';
     console.log(this.bookingDetails.BOOK_STATUS_CODE);
     switch (this._getBookingStatus(this.bookingDetails.BOOK_STATUS_CODE)) {
@@ -296,7 +295,7 @@ export class IrBookingDetails {
               {`${_formatDate(this.bookingDetails.FROM_DATE)} - ${_formatDate(this.bookingDetails.TO_DATE)} (${this._calculateNights(
                 this.bookingDetails.FROM_DATE,
                 this.bookingDetails.TO_DATE,
-              )} nights)`}
+              )} ${this._calculateNights(this.bookingDetails.FROM_DATE, this.bookingDetails.TO_DATE) > 1 ? 'nights' : 'night'})`}
               {this.hasRoomAdd && <ir-icon id="room-add" icon="ft-plus h3 color-ir-dark-blue-hover pointer"></ir-icon>}
             </div>
             <div class="card">
@@ -323,7 +322,7 @@ export class IrBookingDetails {
         </div>
       </div>,
       <ir-sidebar side={'right'} id="editGuestInfo">
-        <ir-guest-info setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
+        <ir-guest-info data={this.guestData} setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
       </ir-sidebar>,
     ];
   }

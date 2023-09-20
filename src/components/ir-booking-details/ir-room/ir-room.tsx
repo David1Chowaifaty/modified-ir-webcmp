@@ -100,8 +100,8 @@ export class IrRoom {
                   this.item.My_Bsad.map(item => (
                     <div class="fluid-container">
                       <div class="row">
-                        <div class="col-lg-3 col-md-2 col-sm-3 col-7 pr-0">{_getDay(item.ALLOTMENT_DATE)}</div>{' '}
-                        <div class=" col-lg-2 col-1 pl-0 d-flex justify-content-end">{_formatAmount(item.TOTAL_AMOUNT, this.currency)}</div>
+                        <div class="col-xl-2 col-lg-3 col-md-2 col-sm-3 col-7 pr-0">{_getDay(item.ALLOTMENT_DATE)}</div>{' '}
+                        <div class="col-1 px-0 d-flex justify-content-end">{_formatAmount(item.TOTAL_AMOUNT, this.currency)}</div>
                       </div>
                     </div>
                   ))}
