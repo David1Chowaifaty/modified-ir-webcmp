@@ -176,6 +176,7 @@ export class IrBookingDetails {
       currency: newValue.My_Guest.My_User.CURRENCY,
       language: newValue.My_Guest.My_User.LANGUAGE,
     };
+
     this.guestData = _data;
     this.rerenderFlag = !this.rerenderFlag;
   }
@@ -194,7 +195,7 @@ export class IrBookingDetails {
     this.statusData = _newValue;
     this.rerenderFlag = !this.rerenderFlag;
   }
-  
+
   openEditSidebar() {
     const sidebar: any = document.querySelector('ir-sidebar#editGuestInfo');
     sidebar.open = true;
@@ -234,9 +235,6 @@ export class IrBookingDetails {
       return null;
     }
 
-    
-    
-   
     let confirmationBG: string = '';
     console.log(this.bookingDetails.BOOK_STATUS_CODE);
     switch (this._getBookingStatus(this.bookingDetails.BOOK_STATUS_CODE)) {

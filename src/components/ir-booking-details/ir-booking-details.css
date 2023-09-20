@@ -14,7 +14,7 @@ ir-select#update-status {
 }
 
 :root {
-  --sidebar-width: 100%;
+  --sidebar-width: 50rem;
 }
 
 .sm-padding-right {
