@@ -1,4 +1,4 @@
-import { Component, h, Prop, EventEmitter, Event, Listen } from '@stencil/core';
+import { Component, h, Prop, EventEmitter, Event, Listen, State } from '@stencil/core';
 import { _formatAmount, _formatDate, _getDay } from '../functions';
 
 @Component({
@@ -10,7 +10,7 @@ export class IrRoom {
 
   // Currency
   @Prop() currency: string = 'USD';
-
+  @State() collapsed: boolean = false;
   // Statuses and Codes
   @Prop({ reflect: true }) mealCode: any;
 
@@ -47,12 +47,15 @@ export class IrRoom {
       <div class="p-1 d-flex">
         <ir-icon
           id="drawer-icon"
-          icon="ft-eye h2 color-ir-dark-blue-hover"
+          icon={`${this.collapsed ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-dark-blue-hover`}
           data-toggle="collapse"
           data-target={`#roomCollapse-${this.item.BSA_ID}`}
           aria-expanded="false"
           aria-controls="myCollapse"
           class="sm-padding-right pointer"
+          onClick={() => {
+            this.collapsed = !this.collapsed;
+          }}
         ></ir-icon>
         <div class="w-100">
           <div class="d-flex justify-content-between">

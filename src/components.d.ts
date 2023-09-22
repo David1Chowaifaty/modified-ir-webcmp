@@ -25,6 +25,7 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
+        "paymentDetailsUrl": string;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
     }
@@ -163,6 +164,7 @@ export namespace Components {
     }
     interface IrPaymentDetails {
         "item": any;
+        "paymentDetailsUrl": string;
     }
     interface IrRoom {
         "currency": string;
@@ -523,6 +525,7 @@ declare namespace LocalJSX {
         "onHandleRoomDelete"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onHandleRoomEdit"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onSendDataToServer"?: (event: IrBookingDetailsCustomEvent<guestInfo>) => void;
+        "paymentDetailsUrl"?: string;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
     }
@@ -679,7 +682,9 @@ declare namespace LocalJSX {
     }
     interface IrPaymentDetails {
         "item"?: any;
+        "onEyePressHandler"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
         "onHandlePaymentItemChange"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
+        "paymentDetailsUrl"?: string;
     }
     interface IrRoom {
         "currency"?: string;

@@ -16,6 +16,8 @@ export class IrBookingDetails {
 
   @Prop({ mutable: true }) dropdownStatuses: any = [];
 
+  @Prop() paymentDetailsUrl: string = '';
+
   // Statuses and Codes
   @Prop() bookingStatuses: any = [];
   @Prop() foodArrangeCats: any = [];
@@ -315,7 +317,7 @@ export class IrBookingDetails {
             </div>
           </div>
           <div class="col-lg-5 col-md-12 pr-0 pl-0 pl-md-1">
-            <ir-payment-details item={this.bookingDetails}></ir-payment-details>
+            <ir-payment-details item={this.bookingDetails} paymentDetailsUrl={this.paymentDetailsUrl}></ir-payment-details>
           </div>
         </div>
       </div>,
