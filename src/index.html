@@ -4,113 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
     <title>Stencil Component Starter</title>
-
     <script type="module" src="/build/ir-webcmp.esm.js"></script>
     <script nomodule src="/build/ir-webcmp.js"></script>
     <style></style>
   </head>
-
   <body>
-    <ir-channel-manager></ir-channel-manager>
-    <script>
-      let NOSQL_ID = -1;
-      const irChannel = document.querySelector('ir-channel-manager');
-      function getData() {
-        const url =
-          'https://gateway.igloorooms.com/IR/Get_Nosql_By_ENTITY_NAME_ENTITY_KEY_ENTITY_FIELD?Ticket=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTM1NzA4MTYsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoidEx1dmxrYUxwWkovSE85N1RuWktuUHpxM1JSZmpJUUpmS0hmNno1bzEzST0ifQ.-O-RGt_-xmH-uayEspr57uz4zeBCJ4QdZoKEXCcdQxs';
-
-        var myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-
-        var raw = JSON.stringify({
-          ENTITY_NAME: 'TBL_AC',
-          ENTITY_KEY: '42',
-          ENTITY_FIELD: 'CHANNELS',
-        });
-
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow',
-        };
-
-        fetch(url, requestOptions)
-          .then(response => response.json())
-          .then(result => {
-            console.log(result);
-            const res = JSON.parse(result.My_Result[0].DATA);
-            irChannel.listData = res;
-            if (res.length > 0) {
-              NOSQL_ID = result.My_Result[0].NOSQL_ID;
-            } else {
-              NOSQL_ID = -1;
-            }
-          })
-          .catch(error => console.log('error', error));
-      }
-      document.addEventListener('DOMContentLoaded', () => {
-        getData();
-      });
-
-      irChannel.addEventListener('fetchApi', e => {
-        console.log('Fetching to server', NOSQL_ID);
-        const url =
-          'https://gateway.igloorooms.com/IR/Edit_Nosql?Ticket=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTM1NzA4MTYsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoidEx1dmxrYUxwWkovSE85N1RuWktuUHpxM1JSZmpJUUpmS0hmNno1bzEzST0ifQ.-O-RGt_-xmH-uayEspr57uz4zeBCJ4QdZoKEXCcdQxs';
-
-        var myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-
-        let d = JSON.stringify(e.detail);
-        console.log(d);
-
-        var raw = JSON.stringify({
-          NOSQL_ID: NOSQL_ID,
-          ENTITY_NAME: 'TBL_AC',
-          ENTITY_KEY: 42,
-          ENTITY_FIELD: 'CHANNELS',
-          DATA: d,
-        });
-
-        console.log(raw);
-
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow',
-        };
-
-        fetch(url, requestOptions)
-          .then(response => response.text())
-          .then(result => getData())
-          .catch(error => console.log('error', error));
-      });
-
-      irChannel.addEventListener('requestApiDelete', e => {
-        const url =
-          'https://gateway.igloorooms.com/IR/Delete_Nosql?Ticket=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTM1NzA4MTYsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoidEx1dmxrYUxwWkovSE85N1RuWktuUHpxM1JSZmpJUUpmS0hmNno1bzEzST0ifQ.-O-RGt_-xmH-uayEspr57uz4zeBCJ4QdZoKEXCcdQxs';
-        var myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-
-        var raw = JSON.stringify({
-          NOSQL_ID: e,
-          ENTITY_NAME: 'TBL_AC',
-          ENTITY_KEY: 42,
-          ENTITY_FIELD: 'CHANNELS',
-        });
-
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow',
-        };
-        fetch(url, requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
-      });
-    </script>
+    <ir-common></ir-common>
+    <ir-input-text></ir-input-text>
   </body>
 </html>

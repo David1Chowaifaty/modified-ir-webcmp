@@ -1,3 +1,8 @@
+export interface IrStyles {
+  script?: string;
+  href?: string;
+}
+
 export class selectOption {
   value: string;
   text: string;

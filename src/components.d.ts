@@ -67,6 +67,9 @@ export namespace Components {
     interface IrCheckboxes {
         "checkboxes": checkboxes[];
     }
+    interface IrCommon {
+        "hrefs": string;
+    }
     interface IrDropdown {
         "data": {
     name: string;
@@ -359,6 +362,12 @@ declare global {
         prototype: HTMLIrCheckboxesElement;
         new (): HTMLIrCheckboxesElement;
     };
+    interface HTMLIrCommonElement extends Components.IrCommon, HTMLStencilElement {
+    }
+    var HTMLIrCommonElement: {
+        prototype: HTMLIrCommonElement;
+        new (): HTMLIrCommonElement;
+    };
     interface HTMLIrDropdownElement extends Components.IrDropdown, HTMLStencilElement {
     }
     var HTMLIrDropdownElement: {
@@ -479,6 +488,7 @@ declare global {
         "ir-channel-manager": HTMLIrChannelManagerElement;
         "ir-checkbox": HTMLIrCheckboxElement;
         "ir-checkboxes": HTMLIrCheckboxesElement;
+        "ir-common": HTMLIrCommonElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-general-settings": HTMLIrGeneralSettingsElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
@@ -572,6 +582,9 @@ declare namespace LocalJSX {
     interface IrCheckboxes {
         "checkboxes"?: checkboxes[];
         "onCheckboxesChange"?: (event: IrCheckboxesCustomEvent<checkboxes[]>) => void;
+    }
+    interface IrCommon {
+        "hrefs"?: string;
     }
     interface IrDropdown {
         "data"?: {
@@ -778,6 +791,7 @@ declare namespace LocalJSX {
         "ir-channel-manager": IrChannelManager;
         "ir-checkbox": IrCheckbox;
         "ir-checkboxes": IrCheckboxes;
+        "ir-common": IrCommon;
         "ir-dropdown": IrDropdown;
         "ir-general-settings": IrGeneralSettings;
         "ir-guest-info": IrGuestInfo;
@@ -808,6 +822,7 @@ declare module "@stencil/core" {
             "ir-channel-manager": LocalJSX.IrChannelManager & JSXBase.HTMLAttributes<HTMLIrChannelManagerElement>;
             "ir-checkbox": LocalJSX.IrCheckbox & JSXBase.HTMLAttributes<HTMLIrCheckboxElement>;
             "ir-checkboxes": LocalJSX.IrCheckboxes & JSXBase.HTMLAttributes<HTMLIrCheckboxesElement>;
+            "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-general-settings": LocalJSX.IrGeneralSettings & JSXBase.HTMLAttributes<HTMLIrGeneralSettingsElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
