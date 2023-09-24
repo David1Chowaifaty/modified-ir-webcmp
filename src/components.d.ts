@@ -11,11 +11,8 @@ export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
 export namespace Components {
     interface IrBookingDetails {
-        "arrivalTimes": any;
         "bookingDetails": any;
-        "bookingStatuses": any;
         "dropdownStatuses": any;
-        "foodArrangeCats": any;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
         "hasDelete": boolean;
@@ -25,9 +22,12 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
+        "languageAbreviation": string;
         "paymentDetailsUrl": string;
+        "paymentExceptionMessage": string;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
+        "statusCodes": any;
     }
     interface IrButton {
         "btn_block": boolean;
@@ -168,6 +168,7 @@ export namespace Components {
     interface IrPaymentDetails {
         "item": any;
         "paymentDetailsUrl": string;
+        "paymentExceptionMessage": string;
     }
     interface IrRoom {
         "currency": string;
@@ -177,7 +178,8 @@ export namespace Components {
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
         "item": any;
-        "mealCode": any;
+        "mealCodeName": string;
+        "myRoomTypeFoodCat": string;
     }
     interface IrSelect {
         "LabelAvailable": boolean;
@@ -512,11 +514,8 @@ declare global {
 }
 declare namespace LocalJSX {
     interface IrBookingDetails {
-        "arrivalTimes"?: any;
         "bookingDetails"?: any;
-        "bookingStatuses"?: any;
         "dropdownStatuses"?: any;
-        "foodArrangeCats"?: any;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
         "hasDelete"?: boolean;
@@ -526,6 +525,7 @@ declare namespace LocalJSX {
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
+        "languageAbreviation"?: string;
         "onHandleAddPayment"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onHandleDeleteClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onHandleMenuClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
@@ -536,8 +536,10 @@ declare namespace LocalJSX {
         "onHandleRoomEdit"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onSendDataToServer"?: (event: IrBookingDetailsCustomEvent<guestInfo>) => void;
         "paymentDetailsUrl"?: string;
+        "paymentExceptionMessage"?: string;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
+        "statusCodes"?: any;
     }
     interface IrButton {
         "btn_block"?: boolean;
@@ -695,9 +697,10 @@ declare namespace LocalJSX {
     }
     interface IrPaymentDetails {
         "item"?: any;
-        "onEyePressHandler"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
+        "onCreditCardPressHandler"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
         "onHandlePaymentItemChange"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
         "paymentDetailsUrl"?: string;
+        "paymentExceptionMessage"?: string;
     }
     interface IrRoom {
         "currency"?: string;
@@ -707,7 +710,8 @@ declare namespace LocalJSX {
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
         "item"?: any;
-        "mealCode"?: any;
+        "mealCodeName"?: string;
+        "myRoomTypeFoodCat"?: string;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
     }

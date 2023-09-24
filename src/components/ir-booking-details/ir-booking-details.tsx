@@ -13,15 +13,15 @@ export class IrBookingDetails {
   // Setup Data
   @Prop() setupDataCountries: selectOption[] = null;
   @Prop() setupDataCountriesCode: selectOption[] = null;
+  @Prop() languageAbreviation: string = '';
 
   @Prop({ mutable: true }) dropdownStatuses: any = [];
 
   @Prop() paymentDetailsUrl: string = '';
+  @Prop() paymentExceptionMessage: string = '';
 
   // Statuses and Codes
-  @Prop() bookingStatuses: any = [];
-  @Prop() foodArrangeCats: any = [];
-  @Prop() arrivalTimes: any = [];
+  @Prop() statusCodes: any = [];
 
   // Booleans Conditions
   @Prop() hasPrint: boolean = false;
@@ -36,11 +36,7 @@ export class IrBookingDetails {
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
 
-  @State() statusData = [
-    { value: '1', text: '' },
-    { value: '2', text: '' },
-    { value: '3', text: '' },
-  ];
+  @State() statusData = []
   // Temp Status Before Save
   @State() tempStatus: string = null;
 
@@ -188,14 +184,20 @@ export class IrBookingDetails {
     console.log('The new value of dropdownStatuses is: ', newValue);
     console.log('The old value of dropdownStatuses is: ', oldValue);
     // Make the newValue in way that can be handled by the dropdown
+    try {
     const _newValue = newValue.map(item => {
       return {
         value: item.CODE_NAME,
-        text: this._getBookingStatus(item.CODE_NAME),
+        text: this._getBookingStatus(item.CODE_NAME, '_BOOK_STATUS')
       };
     });
+
     this.statusData = _newValue;
+    console.log('The new value of statusData is: ', this.statusData);
     this.rerenderFlag = !this.rerenderFlag;
+    } catch (e) {
+      console.log('Error in watchDropdownStatuses: ', e);
+    }
   }
 
   openEditSidebar() {
@@ -210,19 +212,15 @@ export class IrBookingDetails {
     return diff;
   }
 
-  _getBookingStatus(statusCode: string) {
-    // get the status from the bookingStatuses array
-    const status = this.bookingStatuses.find((status: any) => status.CODE_NAME === statusCode);
+  _getBookingStatus(statusCode: string, tableName: string) {
+    // get the status from the statusCode and tableName and also where the language is CODE_VALUE_${language}
+    const status = this.statusCodes.find((status: any) => status.CODE_NAME === statusCode && status.TBL_NAME === tableName);
+
+    const value = status[`CODE_VALUE_${this.languageAbreviation}`];
     // return the status
-    return status.CODE_VALUE_EN;
+    return value;
   }
 
-  _getArrivalTime(timeCode: string) {
-    // get the time from the arrivalTimes array
-    const time = this.arrivalTimes.find((time: any) => time.CODE_NAME === timeCode);
-    // return the time
-    return time.CODE_VALUE_EN;
-  }
 
   updateStatus() {
     const bookingDetails = this.bookingDetails;
@@ -238,18 +236,17 @@ export class IrBookingDetails {
     }
 
     let confirmationBG: string = '';
-    console.log(this.bookingDetails.BOOK_STATUS_CODE);
-    switch (this._getBookingStatus(this.bookingDetails.BOOK_STATUS_CODE)) {
-      case 'Pending':
+    switch (this.bookingDetails.BOOK_STATUS_CODE) {
+      case '001':
         confirmationBG = 'bg-ir-orange';
         break;
-      case 'Confirmed':
+      case '002':
         confirmationBG = 'bg-ir-green';
         break;
-      case 'Cancelled':
+      case '003':
         confirmationBG = 'bg-ir-red';
         break;
-      case 'No show':
+      case '004':
         confirmationBG = 'bg-ir-red';
         break;
     }
@@ -265,7 +262,7 @@ export class IrBookingDetails {
             </div>
           </div>
           <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
-            <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this._getBookingStatus(this.bookingDetails.BOOK_STATUS_CODE)}</span>
+            <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this._getBookingStatus(this.bookingDetails.BOOK_STATUS_CODE, '_BOOK_STATUS')}</span>
             <ir-select id="update-status" size="sm" label-available="false" data={this.statusData} textSize="sm" class="sm-padding-right"></ir-select>
             <ir-button icon="" id="update-status-btn" size="sm" text="Update"></ir-button>
             {this.hasReceipt && <ir-icon id="receipt" icon="ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
@@ -287,7 +284,7 @@ export class IrBookingDetails {
                 <ir-label label="Email:" value={this.bookingDetails.My_Guest.My_User.EMAIL}></ir-label>
                 <ir-label label="Alternate Email:" value={this.bookingDetails.My_Guest.My_User.DISCLOSED_EMAIL}></ir-label>
                 <ir-label label="Address:" value={this.bookingDetails.My_Guest.ADDRESS}></ir-label>
-                <ir-label label="Arrival Time:" value={this._getArrivalTime(this.bookingDetails.ARRIVAL_TIME_CODE)}></ir-label>
+                <ir-label label="Arrival Time:" value={this._getBookingStatus(this.bookingDetails.ARRIVAL_TIME_CODE, '_ARRIVAL_TIME')}></ir-label>
                 <ir-label label="Notes:" value={this.bookingDetails.GUEST_REMARK}></ir-label>
               </div>
             </div>
@@ -300,14 +297,18 @@ export class IrBookingDetails {
             </div>
             <div class="card">
               {this.bookingDetails.My_Bsa.map((bsa: any, index: number) => {
+                const mealCodeName = this._getBookingStatus(bsa.FOOD_ARRANGE_CAT_CODE, '_FOOD_ARRANGE_CAT');
+                const myRoomTypeFoodCat = this._getBookingStatus(bsa.My_Room_type.FOOD_ARRANGE_CAT_CODE, '_FOOD_ARRANGE_CAT')
+              
                 return [
                   <ir-room
+                  myRoomTypeFoodCat={myRoomTypeFoodCat}
+                    mealCodeName={mealCodeName}
                     currency={this.bookingDetails.My_Currency.REF}
                     hasRoomEdit={this.hasRoomEdit}
                     hasRoomDelete={this.hasRoomDelete}
                     hasCheckIn={this.hasCheckIn}
                     hasCheckOut={this.hasCheckOut}
-                    mealCode={this.foodArrangeCats}
                     item={bsa}
                   />,
                   // add separator if not last item with marginHorizontal and alignCenter
@@ -317,7 +318,11 @@ export class IrBookingDetails {
             </div>
           </div>
           <div class="col-lg-5 col-md-12 pr-0 pl-0 pl-md-1">
-            <ir-payment-details item={this.bookingDetails} paymentDetailsUrl={this.paymentDetailsUrl}></ir-payment-details>
+            <ir-payment-details 
+            item={this.bookingDetails}
+            paymentDetailsUrl={this.paymentDetailsUrl}
+            paymentExceptionMessage={this.paymentExceptionMessage}
+            ></ir-payment-details>
           </div>
         </div>
       </div>,

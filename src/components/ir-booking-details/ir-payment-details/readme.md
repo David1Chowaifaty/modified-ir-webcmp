@@ -7,17 +7,18 @@
 
 ## Properties
 
-| Property            | Attribute             | Description | Type     | Default     |
-| ------------------- | --------------------- | ----------- | -------- | ----------- |
-| `item`              | `item`                |             | `any`    | `undefined` |
-| `paymentDetailsUrl` | `payment-details-url` |             | `string` | `''`        |
+| Property                  | Attribute                   | Description | Type     | Default     |
+| ------------------------- | --------------------------- | ----------- | -------- | ----------- |
+| `item`                    | `item`                      |             | `any`    | `undefined` |
+| `paymentDetailsUrl`       | `payment-details-url`       |             | `string` | `""`        |
+| `paymentExceptionMessage` | `payment-exception-message` |             | `string` | `""`        |
 
 
 ## Events
 
 | Event                     | Description | Type               |
 | ------------------------- | ----------- | ------------------ |
-| `eyePressHandler`         |             | `CustomEvent<any>` |
+| `creditCardPressHandler`  |             | `CustomEvent<any>` |
 | `handlePaymentItemChange` |             | `CustomEvent<any>` |
 
 

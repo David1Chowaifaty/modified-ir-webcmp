@@ -16,11 +16,12 @@ export class IrPaymentDetails {
   @State() confirmModal: boolean = false;
   @State() toBeDeletedItem: any = {};
 
-  @Prop() paymentDetailsUrl: string = '';
+  @Prop() paymentDetailsUrl: string = "";
+  @Prop() paymentExceptionMessage: string = "";
 
 
   @Event({ bubbles: true }) handlePaymentItemChange: EventEmitter<any>;
-  @Event({bubbles: true}) eyePressHandler: EventEmitter<any>;
+  @Event({bubbles: true}) creditCardPressHandler: EventEmitter<any>;
 
 
   itemToBeAdded: any = {
@@ -31,7 +32,7 @@ export class IrPaymentDetails {
     PAYMENT_ID: '',
   };
 
- 
+
 
   _handleSave() {
     // emit the item to be added
@@ -185,11 +186,10 @@ export class IrPaymentDetails {
             aria-controls="myCollapse"
             class="sm-padding-right pointer"
             onClick={() => {
-              this.collapsedGuarantee = !this.collapsedGuarantee;
               if (!this.item.IS_DIRECT) {
-             this.eyePressHandler.emit(this.item.BOOK_NBR);
-
+             this.creditCardPressHandler.emit(this.item.BOOK_NBR);
               }
+              this.collapsedGuarantee = !this.collapsedGuarantee;
             }}
           ></ir-icon>
         </div>
@@ -208,8 +208,10 @@ export class IrPaymentDetails {
                 <span> {this.item.My_Guest?.CVC || ''}</span>
               </div>,
             ]
+          ) : this.paymentDetailsUrl ? (
+            <iframe src={this.paymentDetailsUrl} width="100%" class='iframeHeight' frameborder="0"></iframe>
           ) : (
-            <iframe src={this.paymentDetailsUrl} width="100%" height="100%" frameborder="0" ></iframe>
+            <div class="text-center">{this.paymentExceptionMessage}</div>
           )}
         </div>
       </div>

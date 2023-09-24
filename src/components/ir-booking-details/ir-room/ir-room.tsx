@@ -7,12 +7,14 @@ import { _formatAmount, _formatDate, _getDay } from '../functions';
 export class IrRoom {
   // Room Data
   @Prop() item: any;
-
+  // Meal Code names
+  @Prop() mealCodeName: string;
+  @Prop() myRoomTypeFoodCat: string;
   // Currency
   @Prop() currency: string = 'USD';
   @State() collapsed: boolean = false;
-  // Statuses and Codes
-  @Prop({ reflect: true }) mealCode: any;
+
+
 
   // Booleans Conditions
   @Prop() hasRoomEdit: boolean = false;
@@ -35,12 +37,14 @@ export class IrRoom {
     }
   }
 
-  _getFoodArrangeCat(catCode: string) {
-    // get the category from the foodArrangeCats array
-    const cat = this.mealCode.find((cat: any) => cat.CODE_NAME === catCode);
-    // return the category
-    return cat.CODE_VALUE_EN;
-  }
+  
+
+  // _getFoodArrangeCat(catCode: string) {
+  //   // get the category from the foodArrangeCats array
+  //   const cat = this.mealCode.find((cat: any) => cat.CODE_NAME === catCode);
+  //   // return the category
+  //   return cat.CODE_VALUE_EN;
+  // }
 
   render() {
     return (
@@ -60,7 +64,7 @@ export class IrRoom {
         <div class="w-100">
           <div class="d-flex justify-content-between">
             <div>
-              <strong>{this.item.My_Room_type.My_Room_category.NAME || ''} </strong> {this.mealCode && this._getFoodArrangeCat(this.item.My_Room_type.FOOD_ARRANGE_CAT_CODE)} -{' '}
+              <strong>{this.item.My_Room_type.My_Room_category.NAME || ''} </strong> {this.myRoomTypeFoodCat} -{' '}
               {this.item.My_Room_type.IS_NON_REFUNDABLE ? 'Refundable' : 'Non-refundable'} {this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''}
             </div>
             <div>
@@ -114,7 +118,7 @@ export class IrRoom {
             <div innerHTML={this.item.CANCELATION_POLICY_PHRASE || ''}></div>
             <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label>
-            <ir-label label="Meal Plan:" value={this.mealCode && this._getFoodArrangeCat(this.item.FOOD_ARRANGE_CAT_CODE)}></ir-label>
+            <ir-label label="Meal Plan:" value={this.mealCodeName}></ir-label>
             <ir-label label="Special rate:" value="Non-refundable"></ir-label>
           </div>
         </div>
