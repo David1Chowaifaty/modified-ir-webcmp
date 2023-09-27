@@ -1,13 +1,13 @@
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { IrStyles } from '../../common/models';
-import { onlineStyles } from '../../common/ir.common.styles';
+import { IrOnlineResource } from '../../common/models';
+import { onlineResources } from '../../common/ir.common.resources';
 
 @Component({
   tag: 'ir-common',
 })
 export class IrCommon {
-  @Prop({ reflect: true }) hrefs: string = '';
-  @State() arrHrefs: IrStyles[] = onlineStyles;
+  @Prop({ reflect: true }) extraResources: string = '';
+  @State() resources: IrOnlineResource[] = onlineResources;
   componentWillLoad() {
     this.parseRefs();
   }
@@ -16,14 +16,14 @@ export class IrCommon {
     this.initializeStyles();
   }
 
-  @Watch('hrefs')
+  @Watch('extraResources')
   hrefsChanged() {
     this.parseRefs();
     this.initializeStyles();
   }
 
   private parseRefs() {
-    if (this.hrefs !== '') this.arrHrefs.push(JSON.parse(this.hrefs));
+    if (this.extraResources !== '') this.resources.push(JSON.parse(this.extraResources));
   }
 
   private appendTag(tagName: string, attributes: any) {
@@ -44,17 +44,17 @@ export class IrCommon {
   }
 
   private initializeStyles() {
-    this.arrHrefs.forEach(ref => {
-      if (ref.href) {
+    this.resources.forEach(res => {
+      if (res.isCSS) {
         this.appendTag('link', {
-          href: ref.href,
+          href: res.link,
           rel: 'stylesheet',
           type: 'text/css',
         });
       }
-      if (ref.script) {
+      if (res.isJS) {
         this.appendTag('script', {
-          src: ref.script,
+          src: res.link,
         });
       }
     });

@@ -68,7 +68,7 @@ export namespace Components {
         "checkboxes": checkboxes[];
     }
     interface IrCommon {
-        "hrefs": string;
+        "extraResources": string;
     }
     interface IrDropdown {
         "data": {
@@ -586,7 +586,7 @@ declare namespace LocalJSX {
         "onCheckboxesChange"?: (event: IrCheckboxesCustomEvent<checkboxes[]>) => void;
     }
     interface IrCommon {
-        "hrefs"?: string;
+        "extraResources"?: string;
     }
     interface IrDropdown {
         "data"?: {

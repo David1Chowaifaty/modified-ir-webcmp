@@ -1,6 +1,7 @@
-export interface IrStyles {
-  script?: string;
-  href?: string;
+export interface IrOnlineResource {
+  isJS?: boolean;
+  isCSS?: boolean
+  link?: string;
 }
 
 export class selectOption {
