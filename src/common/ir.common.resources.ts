@@ -7,15 +7,15 @@ export const onlineResources: IrOnlineResource[] = [
   },
   {
     isCSS:true,
-    link: 'https://x.igloorooms.com/app-assets/vendors/css/forms/icheck/icheck.css',
+    link: 'https://x.igloorooms.com/app-assets/vendors/css/vendors.min.css',
   },
   {
     isCSS:true,
-    link: 'https://x.igloorooms.com/app-assets/vendors/css/forms/icheck/custom.css',
+    link: 'https://x.igloorooms.com/app-assets/css/bootstrap.css',
   },
   {
     isCSS:true,
-    link: 'https://x.igloorooms.com/app-assets/css/colors.css',
+    link: 'https://x.igloorooms.com/app-assets/css/bootstrap-extended.css',
   },
   {
     isCSS:true,
@@ -35,19 +35,7 @@ export const onlineResources: IrOnlineResource[] = [
   },
   {
     isCSS:true,
-    link: 'https://x.igloorooms.com/app-assets/css/pages/login-register.css',
-  },
-  {
-    isCSS:true,
-    link: 'https://x.igloorooms.com/assets/css/style.css',
-  },
-  {
-    isCSS:true,
-    link: 'https://x.igloorooms.com/app-assets/css/bootstrap.css',
-  },
-  {
-    isCSS:true,
-    link: 'https://x.igloorooms.com/app-assets/css/bootstrap-extended.css',
+    link: 'https://x.igloorooms.com/app-assets/fonts/feather/style.css',
   },
   {
     isJS:true,

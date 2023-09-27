@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type     | Default |
-| -------- | --------- | ----------- | -------- | ------- |
-| `hrefs`  | `hrefs`   |             | `string` | `''`    |
+| Property         | Attribute         | Description | Type     | Default |
+| ---------------- | ----------------- | ----------- | -------- | ------- |
+| `extraResources` | `extra-resources` |             | `string` | `''`    |
 
 
 ----------------------------------------------
