@@ -43,6 +43,10 @@ export const onlineResources: IrOnlineResource[] = [
   },
   {
     isJS:true,
+    link: 'https://x.igloorooms.com/app-assets/js/core/libraries/jquery.min.js'
+  },
+  {
+    isJS:true,
     link: 'https://x.igloorooms.com/app-assets/vendors/js/ui/jquery.sticky.js'
   },
   {
