@@ -1,14 +1,48 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>Stencil Component Starter</title>
-    <script type="module" src="/build/ir-webcmp.esm.js"></script>
-    <script nomodule src="/build/ir-webcmp.js"></script>
-    <style></style>
-  </head>
-  <body>
-    <ir-common></ir-common>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+  <title>Stencil Component Starter</title>
+  <script type="module" src="/build/ir-webcmp.esm.js"></script>
+  <script nomodule src="/build/ir-webcmp.js"></script>
+  <script src="assets/scripts/jquery.min.js"></script>
+  <script src="assets/scripts/daterangepicker/moment.min.js"></script>
+  <script src="assets/scripts/daterangepicker/daterangepicker.js"></script>
+  <script src="assets/scripts/toastr/toastr.min.js"></script>
+</head>
+
+<body>
+  <igloo-calendar currency-name="USD" propertyid="42" from_date="2023-10-11" to_date="2024-1-31" language="en"
+    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+  <!-- <script src="assets/"></script> -->
+  <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+
+  <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
+  <script>
+    const calendar = document.querySelector("igloo-calendar")
+    fetch("https://gateway.igloorooms.com/IR/Authenticate", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: "A35", password: "BluePasta" })
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+      .then(data => {
+
+        calendar.ticket = data.My_Result;
+      })
+      .catch(error => {
+        console.log('There was a problem with the fetch operation:', error.message);
+      });
+  </script>
+
+</body>
+
 </html>

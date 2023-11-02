@@ -7,6 +7,7 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
+      copy: [{ src: 'assets', dest: 'assets' }],
     },
     {
       type: 'dist-custom-elements',
@@ -16,7 +17,12 @@ export const config: Config = {
     },
     {
       type: 'www',
-      serviceWorker: null, // disable service workers
+      serviceWorker: null,
+      copy: [
+        { src: 'assets/fontawesome/webfonts', dest: 'webfonts' },
+        { src: 'assets/feather/fonts', dest: 'fonts' },
+        { src: 'assets/line-awesome/fonts', dest: 'fonts' },
+      ],
     },
   ],
   testing: {

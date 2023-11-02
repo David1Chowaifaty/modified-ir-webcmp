@@ -1,0 +1,144 @@
+@import url("../../../assets/feather/style.min.css");
+@import url("../../../assets/fontawesome/css/all.css");
+@import url("../../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+}
+
+/* Legend */
+
+.legendHeader {
+  font-weight: 500;
+  letter-spacing: 0.05rem;
+  font-size: 1.12rem;
+  padding-top: 5px;
+  margin-bottom: 1rem;
+}
+
+.legendCloseBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  font-size: 1.75em;
+  line-height: 1em;
+  padding: 0.4rem;
+}
+
+.legendCloseBtn:hover {
+  background-color: #f6f6f6;
+}
+
+.stickyHeader {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 1;
+}
+
+.legendRow {
+  position: relative;
+  vertical-align: middle;
+  margin-bottom: 0.3rem;
+}
+
+.legendRow div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.legend_skew,
+.legend_skewsplit {
+  transform: skew(-30deg);
+  width: 15px;
+  height: 16px;
+}
+
+.legend_circle {
+  border-radius: 100%;
+  width: 10px;
+  height: 10px;
+  margin: 3px 3px 3px 2px;
+}
+
+.legend_skewsplit {
+  border-right: 2px solid #000000;
+}
+
+.blueColor {
+  background-color: #31bef1;
+}
+.greenColor {
+  background-color: #45b16d;
+}
+.yellowColor {
+  background-color: #f4d552;
+}
+.greyColor {
+  background-color: #a0a0a0;
+}
+.redColor {
+  background-color: #f34752;
+}
+.pinkColor {
+  background-color: #f9b4b7;
+}
+
+/* Legend Calendar */
+
+.legendCalendar .legendRow {
+  margin-bottom: 0;
+}
+
+.legendCalendar .legendRow:first-child .legendCal {
+  background-color: #ececec;
+}
+
+.legendCalendar .legendRow div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.legendCalendar .legendCal {
+  width: 80px;
+  height: 25px;
+  text-align: center;
+  display: inline-grid !important;
+  align-content: center;
+  font-size: 0.9em;
+}
+
+.legendCalendar .legendCal .badge {
+  margin-top: 0.2rem;
+}
+
+.legendCalendar .legendCal.legendCal-h2 {
+  height: 40px;
+}
+
+.br-t {
+  border-top: 1px solid #a0a0a0;
+}
+.br-s {
+  border-left: 1px solid #a0a0a0;
+  border-right: 1px solid #a0a0a0;
+}
+.br-bt {
+  border-bottom: 1px solid #a0a0a0;
+}
+
+.highphenLegend {
+  font-size: 0.9em;
+}
+
+.highphenLegend::before {
+  width: 12px;
+  height: 0.5px;
+  content: " ";
+  background-color: #000000;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+}

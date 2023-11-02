@@ -1,0 +1,72 @@
+@import url("../../../assets/feather/style.min.css");
+@import url("../../../assets/fontawesome/css/all.css");
+@import url("../../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+  position: relative;
+  z-index: 100;
+}
+
+.btn {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+.pointerContainer {
+  position: absolute;
+  left: 50%;
+  height: 10px;
+  width: 350px;
+  transform: translate(-50%, 0);
+}
+
+.pointerContainerTop {
+  top: -26px;
+}
+
+.iglPopOver {
+  max-width: 350px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #656ee7;
+  border-radius: 6px;
+  position: absolute;
+  transform: translate(-50%, 10px);
+  left: 50%;
+  box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+.iglPopOver.infoBubble {
+  width: 350px;
+}
+
+.iglPopOver.blockedView {
+  max-width: 400px;
+  width: 400px;
+}
+
+.iglPopOver.newBookingOptions {
+  width: 230px;
+}
+
+.bubblePointer {
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 50%;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  transform: translate(-50%, 0px);
+}
+
+.bubblePointTop {
+  border-top: 10px solid #656ee7;
+}
+
+.bubblePointBottom {
+  border-bottom: 10px solid #656ee7;
+}
+
+.bubbleInfoAbove {
+  bottom: 35px;
+}

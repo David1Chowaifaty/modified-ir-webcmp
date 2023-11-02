@@ -1,0 +1,65 @@
+@import url("../../assets/feather/style.min.css");
+@import url("../../assets/fontawesome/css/all.css");
+@import url("../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+  position: relative;
+  background-color: #ffffff;
+  height: 100%;
+  text-align: center;
+}
+
+.igl-calendar {
+  display: grid;
+  grid-template-columns: 1fr;
+  height: 100%;
+}
+
+.calendarScrollContainer div {
+  position: relative;
+}
+
+.calendarScrollContainer {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  position: relative;
+  white-space: nowrap;
+  border-left: 2px solid grey;
+}
+
+.showToBeAssigned,
+.showLegend {
+  grid-template-columns: 330px 1fr;
+}
+
+#calendarContainer {
+  position: absolute;
+}
+
+div {
+  position: relative;
+}
+
+.legendContainer,
+.tobeAssignedContainer {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  padding-left: 0.5em !important;
+  padding-right: 0.5em !important;
+}
+
+.showToBeAssigned .tobeAssignedContainer {
+  display: block;
+}
+
+.showLegend .legendContainer {
+  display: block;
+}
+
+.tobeBooked {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: left;
+}

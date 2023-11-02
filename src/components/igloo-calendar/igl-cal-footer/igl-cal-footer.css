@@ -1,0 +1,88 @@
+@import url("../../../assets/feather/style.min.css");
+@import url("../../../assets/fontawesome/css/all.css");
+@import url("../../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+  position: sticky;
+  bottom: 0;
+  width: max-content;
+  z-index: 3;
+}
+
+.footerCell {
+  display: -moz-inline-grid;
+  display: -ms-inline-grid;
+  display: inline-grid;
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  width: 70px;
+  height: 40px;
+  /* color: #b8b6b7; */
+  background: #fff;
+  vertical-align: top;
+  border-top: 1px solid #e0e0e0;
+}
+
+.bottomLeftCell {
+  left: -1px;
+  z-index: 2;
+  width: 170px;
+  text-align: left;
+  padding-left: 15px;
+  color: #000000;
+}
+
+.footerCell i {
+  margin-right: 5px;
+}
+
+.legendBtn {
+  color: #41bff3;
+  cursor: pointer;
+}
+
+.isOnline i {
+  color: #2f9c3f;
+  font-weight: bold;
+}
+
+.isOffline i {
+  font-weight: bold;
+}
+
+.isOffline {
+  color: #a40000;
+}
+
+.dayTitle {
+  font-size: 0.8em;
+  font-weight: 600;
+  display: grid;
+
+  /* height: 100%;
+  
+  align-items: center;
+  text-align: center;
+  width: 100%; */
+}
+
+.currentDay .dayTitle {
+  font-weight: bold;
+  /* color: #262b31; */
+}
+
+.currentDay {
+  background-color: #e3f3fa;
+}
+
+.dayCapacityPercent {
+  font-size: 0.75em;
+}
+
+.badge-pill {
+  padding-left: 1em;
+  padding-right: 1em;
+  font-size: 0.7em;
+  margin-bottom: 2px;
+}

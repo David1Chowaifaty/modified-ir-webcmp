@@ -1,0 +1,34 @@
+@import url("../../../assets/feather/style.min.css");
+@import url("../../../assets/fontawesome/css/all.css");
+@import url("../../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+}
+
+.row {
+  padding: 0 0 0 15px;
+  margin: 0;
+}
+
+.bookedByEmailContainer {
+  flex: auto;
+  max-width: 250px;
+}
+
+.bookedDetailsForm label {
+  min-width: 125px;
+  max-width: 125px;
+}
+
+.bookedDetailsForm .controlContainer {
+  width: calc(100% - 127px);
+}
+
+.bookedDetailsForm .form-group {
+  margin-bottom: 10px !important;
+}
+
+.bookedDetailsForm .checkBoxContainer input {
+  height: 1.2rem !important;
+  width: 30px;
+}

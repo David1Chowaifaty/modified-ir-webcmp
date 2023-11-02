@@ -1,0 +1,19 @@
+@import url("../../../assets/feather/style.min.css");
+@import url("../../../assets/fontawesome/css/all.css");
+@import url("../../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+}
+
+:host .controlContainer {
+  width: 24px;
+}
+
+:host .checkBoxContainer input {
+  height: 1.2rem !important;
+  width: 30px;
+}
+
+.releaseTime {
+  padding-left: 5px;
+}

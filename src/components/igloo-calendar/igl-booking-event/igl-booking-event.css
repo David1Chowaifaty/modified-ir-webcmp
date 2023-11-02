@@ -1,0 +1,87 @@
+@import url("../../../assets/feather/style.min.css");
+@import url("../../../assets/fontawesome/css/all.css");
+@import url("../../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+  position: absolute;
+}
+
+.bookingEventBase {
+  position: absolute;
+  background-color: rgb(49, 190, 241);
+  width: 100%;
+  height: 100%;
+  transform: skewX(-22deg);
+}
+
+.bookingEventHiddenBase {
+  position: absolute;
+  top: 0;
+  left: -4px;
+  width: calc(100% + 8);
+}
+
+.bookingEventDragHandle {
+  position: absolute;
+  top: 0;
+  width: 15px;
+  height: 100%;
+  opacity: 0.1;
+  background-color: rgba(0, 0, 0, 0.15);
+  transform: skewX(-22deg);
+  /* display: none; */
+  cursor: pointer;
+}
+
+.splitBooking {
+  border-right: 2px solid #000000;
+}
+
+:host:hover .bookingEventDragHandle {
+  display: block;
+  opacity: 1;
+}
+
+:host.newEvent:hover .bookingEventDragHandle {
+  display: none;
+  opacity: 1;
+}
+
+.leftSide {
+  left: 0;
+}
+
+.rightSide {
+  right: 0;
+}
+
+.bookingEventTitle {
+  color: #fff;
+  font-size: 0.8em;
+  position: relative;
+  max-width: calc(100% - 10px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  top: 2px;
+  left: 5px;
+}
+
+.legend_circle {
+  border-radius: 100%;
+  width: 10px;
+  height: 10px;
+  margin: 3px 3px 3px 2px;
+  border: 1px solid #fff;
+}
+
+.noteIcon {
+  position: absolute;
+  bottom: -8px;
+  left: 2px;
+}
+
+.balanceIcon {
+  position: absolute;
+  top: -8px;
+  right: 2px;
+}

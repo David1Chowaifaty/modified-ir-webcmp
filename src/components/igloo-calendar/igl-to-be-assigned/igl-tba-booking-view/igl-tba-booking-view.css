@@ -1,0 +1,52 @@
+@import url("../../../../assets/feather/style.min.css");
+@import url("../../../../assets/fontawesome/css/all.css");
+@import url("../../../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+}
+
+.guestTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  /* margin-bottom: 5px; */
+}
+
+.guestTitle.selectedOrder {
+  background-color: #f9f9c9;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+hr {
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+
+.bookingContainer {
+  background-color: #ececec;
+}
+
+.actionsContainer {
+  padding: 5px !important;
+  padding-right: 0px !important;
+}
+
+.selectContainer {
+  width: 195px;
+  margin-right: 8px;
+}
+
+.buttonsContainer {
+  width: 100px;
+}
+.btn-secondary {
+  margin-right: 8px !important;
+}

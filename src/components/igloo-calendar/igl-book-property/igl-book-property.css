@@ -1,0 +1,78 @@
+@import url("../../../assets/feather/style.min.css");
+@import url("../../../assets/fontawesome/css/all.css");
+@import url("../../../assets/line-awesome/css/line-awesome.min.css");
+:host {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  /* min-width: 450px; */
+}
+
+.card-title {
+  border-bottom: 1px solid #e4e5ec;
+}
+
+.scrollContent {
+  height: calc(100% - 79px);
+  overflow: auto;
+  position: relative;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.formContainer {
+  height: calc(100% - 79px);
+  overflow: auto;
+}
+
+.sideWindow {
+  /* display: grid; */
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  appearance: none;
+}
+
+.close-icon {
+  position: absolute;
+  top: 18px;
+  right: 33px;
+  outline: none;
+}
+
+button:not(:disabled),
+[type="button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+.row {
+  padding: 0 0 0 15px;
+  margin: 0;
+}
