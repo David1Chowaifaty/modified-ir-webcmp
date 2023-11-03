@@ -21,26 +21,39 @@
 
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
   <script>
-    const calendar = document.querySelector("igloo-calendar")
-    fetch("https://gateway.igloorooms.com/IR/Authenticate", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username: "A35", password: "BluePasta" })
-    }).then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-      .then(data => {
+    const calendar = document.querySelector("igloo-calendar");
 
-        calendar.ticket = data.My_Result;
-      })
-      .catch(error => {
-        console.log('There was a problem with the fetch operation:', error.message);
-      });
+    setTimeout(() => {
+      sessionStorage.removeItem('token');
+      // Theo
+      // calendar.propertyid="235";
+      // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjE1MDMsIkNMQUlNLTAxIjoibk1nM0NIWDYzVjA9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.iKAxCG3kFTyHVhk7ugaSf0Rd-w2Ual69ocTyFq0IFXc";
+
+      // Demo
+      calendar.propertyid = "42";
+      calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjA2OTYsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.HlXEt6jMDOl9zG6qdBi12whhy3kaIRfJxBe2A_9UpkM";
+
+    }, 300)
+
+    // fetch("https://gateway.igloorooms.com/IR/Authenticate", {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({ username: "A35", password: "71081422" })
+    // }).then(response => {
+    //   if (!response.ok) {
+    //     throw new Error('Network response was not ok');
+    //   }
+    //   return response.json();
+    // })
+    //   .then(data => {
+
+    //     calendar.ticket = data.My_Result;
+    //   })
+    //   .catch(error => {
+    //     console.log('There was a problem with the fetch operation:', error.message);
+    //   });
   </script>
 
 </body>
