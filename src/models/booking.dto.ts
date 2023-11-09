@@ -96,8 +96,14 @@ export interface RatePlan {
   name: string;
   rate_restrictions: null;
   variations: null;
+  selected_variation: IVariations;
 }
-
+export interface IVariations {
+  adult_child_offering: string;
+  adult_nbr: number;
+  amount: number | null;
+  child_nbr: number;
+}
 export interface RoomType {
   availabilities: null;
   id: number;

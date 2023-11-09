@@ -256,7 +256,7 @@ export class BookingService {
 
   public async bookUser(
     bookedByInfoData,
-    assign_units: boolean,
+    check_in: boolean,
     fromDate: Date,
     toDate: Date,
     guestData,
@@ -289,7 +289,8 @@ export class BookingService {
           guest = { ...guest, id: bookedByInfoData.id };
         }
         const body = {
-          assign_units,
+          assign_units: true,
+          check_in,
           booking: {
             booking_nbr: bookingNumber || "",
             from_date: fromDateStr,

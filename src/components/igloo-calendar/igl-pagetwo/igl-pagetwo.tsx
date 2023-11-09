@@ -43,7 +43,6 @@ export class IglPagetwo {
 
     this.selectedUnits = newSelectedUnits;
     this.guestData = [];
-
     for (const key of Object.keys(this.selectedRooms)) {
       for (const prop of Object.keys(this.selectedRooms[key])) {
         for (let i = 1; i <= this.selectedRooms[key][prop].totalRooms; i++) {
@@ -90,22 +89,24 @@ export class IglPagetwo {
       });
     }
   }
-
+  isGuestDataIncomplete() {
+    if (this.selectedGuestData.length !== this.guestData.length) {
+      return true;
+    }
+    for (const data of this.selectedGuestData) {
+      if (data.guestName === '' || data.preference === '' || data.roomId === '') {
+        return true;
+      }
+    }
+    return false;
+  }
   isButtonDisabled(key: string) {
     const isValidProperty = (property, key, comparedBy) => {
       if (!property) {
         return true;
       }
       if (property === this.selectedGuestData) {
-        if (this.selectedGuestData.length !== this.guestData.length) {
-          return true;
-        }
-        for (const data of this.selectedGuestData) {
-          if (data.guestName === '' || data.preference === '') {
-            return true;
-          }
-        }
-        return false;
+        return this.isGuestDataIncomplete();
       }
       return property[key] === comparedBy || property[key] === undefined;
     };
@@ -177,7 +178,12 @@ export class IglPagetwo {
               </button>
             </div>
             <div class="col-6">
-              <button disabled={this.isLoading === 'save'} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'save' })}>
+              <button
+                disabled={this.isLoading === 'save' || this.isGuestDataIncomplete()}
+                type="button"
+                class="btn btn-primary full-width"
+                onClick={() => this.buttonClicked.emit({ key: 'save' })}
+              >
                 {this.isLoading === 'save' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 Save
               </button>

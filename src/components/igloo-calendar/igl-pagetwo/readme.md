@@ -17,6 +17,7 @@
 | `isEditOrAddRoomEvent`   | `is-edit-or-add-room-event` |             | `boolean`                 | `undefined` |
 | `isLoading`              | `is-loading`                |             | `string`                  | `undefined` |
 | `language`               | `language`                  |             | `string`                  | `undefined` |
+| `selectedGuestData`      | `selected-guest-data`       |             | `any`                     | `undefined` |
 | `selectedRooms`          | `selected-rooms`            |             | `any`                     | `undefined` |
 | `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                 | `undefined` |
 

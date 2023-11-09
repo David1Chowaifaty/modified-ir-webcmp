@@ -1,19 +1,11 @@
-import {
-  Component,
-  Host,
-  h,
-  Prop,
-  Event,
-  EventEmitter,
-  State,
-} from "@stencil/core";
-import { findCountry, getCurrencySymbol } from "../../../utils/utils";
-import { ICountry } from "../../../models/IBooking";
-import { EventsService } from "../../../services/events.service";
+import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { findCountry, getCurrencySymbol } from '../../../utils/utils';
+import { ICountry } from '../../../models/IBooking';
+import { EventsService } from '../../../services/events.service';
 
 @Component({
-  tag: "igl-booking-event-hover",
-  styleUrl: "igl-booking-event-hover.css",
+  tag: 'igl-booking-event-hover',
+  styleUrl: 'igl-booking-event-hover.css',
   scoped: true,
 })
 export class IglBookingEventHover {
@@ -25,12 +17,10 @@ export class IglBookingEventHover {
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
-
   private fromTimeStamp: number;
   private toTimeStamp: number;
   private todayTimeStamp: number = new Date().setHours(0, 0, 0, 0);
   private eventService = new EventsService();
-
   getBookingId() {
     return this.bookingEvent.ID;
   }
@@ -47,13 +37,10 @@ export class IglBookingEventHover {
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).name;
   }
   getPhoneCode() {
-    return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList)
-      .phone_prefix;
+    return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).phone_prefix;
   }
   renderPhone() {
-    return this.bookingEvent.COUNTRY
-      ? `${this.getPhoneCode()}-${this.getPhoneNumber()} - ${this.getCountry()}`
-      : this.getPhoneNumber();
+    return this.bookingEvent.COUNTRY ? `${this.getPhoneCode()}-${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
   }
 
   getGuestNote() {
@@ -93,22 +80,19 @@ export class IglBookingEventHover {
   }
 
   isNewBooking() {
-    return this.getBookingId() === "NEW_TEMP_EVENT";
+    return this.getBookingId() === 'NEW_TEMP_EVENT';
   }
 
   isCheckedIn() {
-    return this.bookingEvent.STATUS === "CHECKED-IN";
+    return this.bookingEvent.STATUS === 'CHECKED-IN';
   }
 
   isCheckedOut() {
-    return this.bookingEvent.STATUS === "CHECKED-OUT";
+    return this.bookingEvent.STATUS === 'CHECKED-OUT';
   }
 
   isBlockedDateEvent() {
-    return (
-      this.bookingEvent.STATUS === "BLOCKED" ||
-      this.bookingEvent.STATUS === "BLOCKED-WITH-DATES"
-    );
+    return this.bookingEvent.STATUS === 'BLOCKED' || this.bookingEvent.STATUS === 'BLOCKED-WITH-DATES';
   }
 
   getRoomId() {
@@ -118,16 +102,11 @@ export class IglBookingEventHover {
   getCategoryByRoomId(roomId) {
     // console.log("room id ",roomId)
     // console.log("booking event",this.bookingEvent)
-    return this.bookingEvent.roomsInfo.find((roomCategory) =>
-      roomCategory.physicalrooms.find((room) => room.id === roomId)
-    );
+    return this.bookingEvent.roomsInfo.find(roomCategory => roomCategory.physicalrooms.find(room => room.id === roomId));
   }
 
   hasSplitBooking() {
-    return (
-      this.bookingEvent.hasOwnProperty("splitBookingEvents") &&
-      this.bookingEvent.splitBookingEvents.length
-    );
+    return this.bookingEvent.hasOwnProperty('splitBookingEvents') && this.bookingEvent.splitBookingEvents.length;
   }
 
   canCheckIn() {
@@ -144,10 +123,7 @@ export class IglBookingEventHover {
     if (this.isCheckedIn() || this.isCheckedOut()) {
       return false;
     }
-    if (
-      this.fromTimeStamp <= this.todayTimeStamp &&
-      this.todayTimeStamp <= this.toTimeStamp
-    ) {
+    if (this.fromTimeStamp <= this.todayTimeStamp && this.todayTimeStamp <= this.toTimeStamp) {
       return true;
     } else {
       return false;
@@ -172,20 +148,12 @@ export class IglBookingEventHover {
 
   handleEditBooking() {
     // console.log("Edit booking");
-    this.bookingEvent.TITLE = "Edit Room";
-    this.handleBookingOption("EDIT_BOOKING");
+    this.bookingEvent.TITLE = 'Edit Room';
+    this.handleBookingOption('EDIT_BOOKING');
   }
 
   getStringDateFormat(dt) {
-    return (
-      dt.getFullYear() +
-      "-" +
-      (dt.getMonth() < 9 ? "0" : "") +
-      (dt.getMonth() + 1) +
-      "-" +
-      (dt.getDate() <= 9 ? "0" : "") +
-      dt.getDate()
-    );
+    return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
 
   handleAddRoom() {
@@ -199,58 +167,57 @@ export class IglBookingEventHover {
     let to_date_str = this.getStringDateFormat(toDate);
 
     let eventData = {
-      ID: "",
-      NAME: "",
+      ID: '',
+      NAME: '',
       FROM_DATE: from_date_str, // "2023-07-09",
       TO_DATE: to_date_str, // "2023-07-11",
       roomsInfo: this.bookingEvent.roomsInfo,
       ADD_ROOM_TO_BOOKING: this.bookingEvent.ID,
-      TITLE:
-        "Add Room to #" + this.bookingEvent.ID + " - " + this.bookingEvent.NAME,
-      event_type: "ADD_ROOM",
+      TITLE: 'Add Room to #' + this.bookingEvent.ID + ' - ' + this.bookingEvent.NAME,
+      event_type: 'ADD_ROOM',
       defaultDateRange: {
         fromDate: fromDate, //new Date("2023-09-10"),
-        fromDateStr: "", //"10 Sep 2023",
+        fromDateStr: '', //"10 Sep 2023",
         toDate: toDate, //new Date("2023-09-15"),
-        toDateStr: "", // "15 Sep 2023",
+        toDateStr: '', // "15 Sep 2023",
         dateDifference: 0,
         editabled: true,
-        message: "Including 5.00% City Tax - Excluding 11.00% VAT",
+        message: 'Including 5.00% City Tax - Excluding 11.00% VAT',
       },
     };
 
-    this.handleBookingOption("ADD_ROOM", eventData);
+    this.handleBookingOption('ADD_ROOM', eventData);
   }
 
   handleCustomerCheckIn() {
-    console.log("Handle Customer Check In");
+    console.log('Handle Customer Check In');
   }
 
   handleCustomerCheckOut() {
-    console.log("Handle Customer Check Out");
+    console.log('Handle Customer Check Out');
   }
   handleDeleteEvent() {
     this.deleteButton.emit(this.bookingEvent.POOL);
-    console.log("Delete Event");
+    console.log('Delete Event');
   }
 
   async handleUpdateBlockedDates() {
     try {
-      this.isLoading = "update";
+      this.isLoading = 'update';
       await this.eventService.updateBlockedEvent(this.bookingEvent);
       this.hideBubbleInfo.emit({
-        key: "hidebubble",
+        key: 'hidebubble',
         currentInfoBubbleId: this.getBookingId(),
       });
-      this.isLoading = "";
-      console.log("Updated blocked dates");
+      this.isLoading = '';
+      console.log('Updated blocked dates');
     } catch (error) {
       //   toastr.error(error);
     }
   }
 
   handleConvertBlockedDateToBooking() {
-    this.handleBookingOption("BAR_BOOKING");
+    this.handleBookingOption('BAR_BOOKING');
   }
 
   getRoomInfo() {
@@ -274,11 +241,11 @@ export class IglBookingEventHover {
     const roomInfo = this.getRoomInfo();
     let data = roomData ? roomData : this.bookingEvent;
     data.event_type = eventType;
-    if (["003", "002", "004"].includes(this.bookingEvent.STATUS_CODE)) {
+    if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
       data.roomsInfo = [roomInfo.ROOMS_INFO];
     }
     this.showBookingPopup.emit({
-      key: "add",
+      key: 'add',
       data: {
         ...data,
         TITLE: `New Booking for ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`,
@@ -286,22 +253,16 @@ export class IglBookingEventHover {
       },
     });
     this.hideBubbleInfo.emit({
-      key: "hidebubble",
+      key: 'hidebubble',
       currentInfoBubbleId: this.getBookingId(),
     });
   }
 
   getInfoElement() {
     return (
-      <div
-        class={`iglPopOver infoBubble ${
-          this.bubbleInfoTop ? "bubbleInfoAbove" : ""
-        } text-left`}
-      >
+      <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class="row p-0 m-0 pb-1">
-          <div class="pl-0 col-8 font-weight-bold font-medium-1">
-            {this.getBookingId()}
-          </div>
+          <div class="pl-0 col-8 font-weight-bold font-medium-1">{this.bookingEvent.BOOKING_NUMBER}</div>
           <div class="pr-0 col-4 text-right">
             {getCurrencySymbol(this.currency.code)}
             {this.getTotalPrice()}
@@ -310,8 +271,7 @@ export class IglBookingEventHover {
         <div class="row p-0 m-0">
           <div class="pl-0 pr-0 col-12">
             <span class="font-weight-bold">In: </span>
-            {this.getCheckInDate()} -{" "}
-            <span class="font-weight-bold">Out: </span>
+            {this.getCheckInDate()} - <span class="font-weight-bold">Out: </span>
             {this.getCheckOutDate()}
           </div>
         </div>
@@ -365,14 +325,11 @@ export class IglBookingEventHover {
         ) : null}
 
         <div class="row p-0 m-0 mt-2">
-          <div
-            class="full-width btn-group btn-group-sm font-small-3"
-            role="group"
-          >
+          <div class="full-width btn-group btn-group-sm font-small-3" role="group">
             <button
               type="button"
               class="btn btn-primary mr-1"
-              onClick={(_) => {
+              onClick={_ => {
                 this.handleEditBooking();
               }}
               disabled={!this.bookingEvent.IS_EDITABLE}
@@ -382,7 +339,7 @@ export class IglBookingEventHover {
             <button
               type="button"
               class="btn btn-primary mr-1"
-              onClick={(_) => {
+              onClick={_ => {
                 this.handleAddRoom();
               }}
               disabled={!this.bookingEvent.IS_EDITABLE}
@@ -393,7 +350,7 @@ export class IglBookingEventHover {
               <button
                 type="button"
                 class="btn btn-primary p-0 mr-1"
-                onClick={(_) => {
+                onClick={_ => {
                   this.handleCustomerCheckIn();
                 }}
                 disabled={!this.bookingEvent.IS_EDITABLE}
@@ -405,7 +362,7 @@ export class IglBookingEventHover {
               <button
                 type="button"
                 class="btn btn-primary p-0 mr-1"
-                onClick={(_) => {
+                onClick={_ => {
                   this.handleCustomerCheckOut();
                 }}
                 disabled={!this.bookingEvent.IS_EDITABLE}
@@ -416,7 +373,7 @@ export class IglBookingEventHover {
             <button
               type="button"
               class="btn btn-danger p-0"
-              onClick={(_) => {
+              onClick={_ => {
                 this.handleDeleteEvent();
               }}
               disabled={!this.bookingEvent.IS_EDITABLE}
@@ -431,16 +388,12 @@ export class IglBookingEventHover {
 
   getNewBookingOptions() {
     return (
-      <div
-        class={`iglPopOver newBookingOptions ${
-          this.bubbleInfoTop ? "bubbleInfoAbove" : ""
-        } text-left`}
-      >
+      <div class={`iglPopOver newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <button
           type="button"
           class="d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square"
-          onClick={(_) => {
-            this.handleBookingOption("BAR_BOOKING");
+          onClick={_ => {
+            this.handleBookingOption('BAR_BOOKING');
           }}
         >
           Create new booking
@@ -449,8 +402,8 @@ export class IglBookingEventHover {
           <button
             type="button"
             class="d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square"
-            onClick={(_) => {
-              this.handleBookingOption("SPLIT_BOOKING");
+            onClick={_ => {
+              this.handleBookingOption('SPLIT_BOOKING');
             }}
           >
             Assign unit to existing booking
@@ -459,8 +412,8 @@ export class IglBookingEventHover {
         <button
           type="button"
           class="d-block full-width btn btn-sm btn-primary font-small-3 square"
-          onClick={(_) => {
-            this.handleBookingOption("BLOCK_DATES");
+          onClick={_ => {
+            this.handleBookingOption('BLOCK_DATES');
           }}
         >
           Block dates
@@ -472,11 +425,7 @@ export class IglBookingEventHover {
   getBlockedView() {
     // let defaultData = {RELEASE_AFTER_HOURS: 0, OPTIONAL_REASON: "", OUT_OF_SERVICE: false};
     return (
-      <div
-        class={`iglPopOver blockedView ${
-          this.bubbleInfoTop ? "bubbleInfoAbove" : ""
-        } text-left`}
-      >
+      <div class={`iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <igl-block-dates-view
           entryHour={this.bookingEvent.ENTRY_HOUR}
           entryMinute={this.bookingEvent.ENTRY_MINUTE}
@@ -484,32 +433,25 @@ export class IglBookingEventHover {
           fromDate={this.getCheckInDate()}
           toDate={this.getCheckOutDate()}
           entryDate={this.getEntryDate()}
-          onDataUpdateEvent={(event) => this.handleBlockDateUpdate(event)}
+          onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>
         <div class="row p-0 m-0 mt-2">
-          <div
-            class="full-width btn-group btn-group-sm font-small-3"
-            role="group"
-          >
+          <div class="full-width btn-group btn-group-sm font-small-3" role="group">
             <button
-              disabled={this.isLoading === "update"}
+              disabled={this.isLoading === 'update'}
               type="button"
               class="btn btn-primary mr-1"
-              onClick={(_) => {
+              onClick={_ => {
                 this.handleUpdateBlockedDates();
               }}
             >
-              {this.isLoading === "update" ? (
-                <i class="la la-circle-o-notch spinner mx-1"></i>
-              ) : (
-                <i class="ft ft-edit font-small-3"></i>
-              )}
+              {this.isLoading === 'update' ? <i class="la la-circle-o-notch spinner mx-1"></i> : <i class="ft ft-edit font-small-3"></i>}
               Update
             </button>
             <button
               type="button"
               class="btn btn-primary p-0"
-              onClick={(_) => {
+              onClick={_ => {
                 this.handleConvertBlockedDateToBooking();
               }}
             >
@@ -518,7 +460,7 @@ export class IglBookingEventHover {
             <button
               type="button"
               class="btn btn-danger ml-1 p-0"
-              onClick={(_) => {
+              onClick={_ => {
                 this.handleDeleteEvent();
               }}
             >
@@ -533,22 +475,12 @@ export class IglBookingEventHover {
   render() {
     return (
       <Host>
-        <div
-          class={`pointerContainer ${
-            this.bubbleInfoTop ? "pointerContainerTop" : ""
-          }`}
-        >
-          <div
-            class={`bubblePointer ${
-              this.bubbleInfoTop ? "bubblePointTop" : "bubblePointBottom"
-            }`}
-          ></div>
+        <div class={`pointerContainer ${this.bubbleInfoTop ? 'pointerContainerTop' : ''}`}>
+          <div class={`bubblePointer ${this.bubbleInfoTop ? 'bubblePointTop' : 'bubblePointBottom'}`}></div>
         </div>
         {this.isBlockedDateEvent() ? this.getBlockedView() : null}
         {this.isNewBooking() ? this.getNewBookingOptions() : null}
-        {!this.isBlockedDateEvent() && !this.isNewBooking()
-          ? this.getInfoElement()
-          : null}
+        {!this.isBlockedDateEvent() && !this.isNewBooking() ? this.getInfoElement() : null}
       </Host>
     );
   }
