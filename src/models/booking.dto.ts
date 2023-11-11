@@ -81,22 +81,27 @@ export interface Room {
   to_date: string;
   total: number;
   identifier: string;
-  unit: string | number | null;
+  unit: string | number | IUnit | null;
 }
-
+export interface IUnit {
+  calendar_cell: null;
+  id: 2;
+  name: '402';
+}
 export interface Day {
   amount: number;
   date: string;
 }
 
 export interface RatePlan {
-  cancelation: null;
+  cancelation: string | null;
   guarantee: null;
   id: number;
   name: string;
   rate_restrictions: null;
   variations: null;
   selected_variation: IVariations;
+  is_non_refundable: boolean;
 }
 export interface IVariations {
   adult_child_offering: string;

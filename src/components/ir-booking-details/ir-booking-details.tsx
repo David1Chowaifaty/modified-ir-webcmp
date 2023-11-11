@@ -1,7 +1,10 @@
-import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter } from '@stencil/core';
+import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element } from '@stencil/core';
 import moment from 'moment';
 import { guestInfo, selectOption } from '../../common/models';
 import { _formatDate, _formatTime } from './functions';
+import { Booking, Guest, Room } from '../../models/booking.dto';
+import axios from 'axios';
+import { BookingService } from '../../services/booking.service';
 
 @Component({
   tag: 'ir-booking-details',
@@ -9,12 +12,16 @@ import { _formatDate, _formatTime } from './functions';
 })
 export class IrBookingDetails {
   // Booking Details
+  @Element() element: HTMLElement;
   @Prop({ mutable: true, reflect: true }) bookingDetails: any = null;
   // Setup Data
   @Prop() setupDataCountries: selectOption[] = null;
   @Prop() setupDataCountriesCode: selectOption[] = null;
   @Prop() languageAbreviation: string = '';
-
+  @Prop() language: string = '';
+  @Prop() ticket: string = '';
+  @Prop() bookingNumber: string = '';
+  @Prop() baseurl: string = '';
   @Prop({ mutable: true }) dropdownStatuses: any = [];
 
   @Prop() paymentDetailsUrl: string = '';
@@ -36,12 +43,13 @@ export class IrBookingDetails {
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
 
-  @State() statusData = []
+  @State() statusData = [];
   // Temp Status Before Save
   @State() tempStatus: string = null;
 
+  @State() bookingData: Booking;
   // Guest Data
-  @State() guestData: guestInfo = null;
+  @State() guestData: Guest = null;
 
   // Rerender Flag
   @State() rerenderFlag = false;
@@ -61,6 +69,27 @@ export class IrBookingDetails {
   // Payment Event
   @Event() handleAddPayment: EventEmitter;
 
+  private bookingService = new BookingService();
+  componentDidLoad() {
+    if (this.baseurl) {
+      axios.defaults.baseURL = this.baseurl;
+    }
+    if (this.ticket !== '') {
+      this.initializeApp();
+    }
+  }
+  @Watch('ticket')
+  async ticketChanged() {
+    sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    this.initializeApp();
+  }
+  async initializeApp() {
+    const result = await this.bookingService.getExoposedBooking(this.bookingNumber, this.language);
+    this.guestData = result.guest;
+    this.bookingData = result;
+    this.rerenderFlag = !this.rerenderFlag;
+    console.log(this.bookingData);
+  }
   @Listen('iconClickHandler')
   handleIconClick(e) {
     const target = e.target;
@@ -76,6 +105,8 @@ export class IrBookingDetails {
         this.handleDeleteClick.emit();
         return;
       case 'menu':
+        this.element.querySelector('ir-sidebar').open = true;
+
         this.handleMenuClick.emit();
         return;
       case 'room-add':
@@ -159,23 +190,23 @@ export class IrBookingDetails {
   watchHandler(newValue: any, oldValue: any) {
     console.log('The new value of bookingDetails is: ', newValue);
     console.log('The old value of bookingDetails is: ', oldValue);
-    let _data: guestInfo = {
-      firstName: newValue.My_Guest.FIRST_NAME,
-      lastName: newValue.My_Guest.LAST_NAME,
-      email: newValue.My_Guest.My_User.EMAIL,
-      altEmail: newValue.My_Guest.My_User.DISCLOSED_EMAIL,
-      password: newValue.My_Guest.My_User.PASSWORD,
-      country: newValue.My_Guest.COUNTRY_ID,
-      city: newValue.My_Guest.CITY,
-      address: newValue.My_Guest.ADDRESS,
-      mobile: newValue.My_Guest.MOBILE,
-      prefix: newValue.My_Guest.PHONE_PREFIX,
-      newsletter: newValue.My_Guest.IS_NEWS_LETTER,
-      currency: newValue.My_Guest.My_User.CURRENCY,
-      language: newValue.My_Guest.My_User.LANGUAGE,
-    };
+    // let _data: guestInfo = {
+    //   firstName: newValue.My_Guest.FIRST_NAME,
+    //   lastName: newValue.My_Guest.LAST_NAME,
+    //   email: newValue.My_Guest.My_User.EMAIL,
+    //   altEmail: newValue.My_Guest.My_User.DISCLOSED_EMAIL,
+    //   password: newValue.My_Guest.My_User.PASSWORD,
+    //   country: newValue.My_Guest.COUNTRY_ID,
+    //   city: newValue.My_Guest.CITY,
+    //   address: newValue.My_Guest.ADDRESS,
+    //   mobile: newValue.My_Guest.MOBILE,
+    //   prefix: newValue.My_Guest.PHONE_PREFIX,
+    //   newsletter: newValue.My_Guest.IS_NEWS_LETTER,
+    //   currency: newValue.My_Guest.My_User.CURRENCY,
+    //   language: newValue.My_Guest.My_User.LANGUAGE,
+    // };
 
-    this.guestData = _data;
+    //this.guestData = _data;
     this.rerenderFlag = !this.rerenderFlag;
   }
 
@@ -185,16 +216,16 @@ export class IrBookingDetails {
     console.log('The old value of dropdownStatuses is: ', oldValue);
     // Make the newValue in way that can be handled by the dropdown
     try {
-    const _newValue = newValue.map(item => {
-      return {
-        value: item.CODE_NAME,
-        text: this._getBookingStatus(item.CODE_NAME, '_BOOK_STATUS')
-      };
-    });
+      const _newValue = newValue.map(item => {
+        return {
+          value: item.CODE_NAME,
+          text: this._getBookingStatus(item.CODE_NAME, '_BOOK_STATUS'),
+        };
+      });
 
-    this.statusData = _newValue;
-    console.log('The new value of statusData is: ', this.statusData);
-    this.rerenderFlag = !this.rerenderFlag;
+      this.statusData = _newValue;
+      console.log('The new value of statusData is: ', this.statusData);
+      this.rerenderFlag = !this.rerenderFlag;
     } catch (e) {
       console.log('Error in watchDropdownStatuses: ', e);
     }
@@ -221,7 +252,6 @@ export class IrBookingDetails {
     return value;
   }
 
-
   updateStatus() {
     const bookingDetails = this.bookingDetails;
     bookingDetails.BOOK_STATUS_CODE = this.tempStatus;
@@ -231,12 +261,12 @@ export class IrBookingDetails {
   }
 
   render() {
-    if (!this.bookingDetails) {
+    if (!this.bookingData) {
       return null;
     }
 
     let confirmationBG: string = '';
-    switch (this.bookingDetails.BOOK_STATUS_CODE) {
+    switch (this.bookingData.status.code) {
       case '001':
         confirmationBG = 'bg-ir-orange';
         break;
@@ -252,17 +282,18 @@ export class IrBookingDetails {
     }
 
     return [
+      <ir-common></ir-common>,
       <div class="fluid-container pt-1 mr-2 ml-2">
         <div class="row">
           <div class="col-lg-7 col-md-12 d-flex justify-content-start align-items-end">
-            <div class="font-size-large sm-padding-right">{`Booking#${this.bookingDetails.BOOK_NBR}`}</div>
+            <div class="font-size-large sm-padding-right">{`Booking#${this.bookingNumber}`}</div>
             <div>
-              {/* format date */}@ {_formatDate(this.bookingDetails.BOOK_DATE)} {/* format time */}
-              {_formatTime(this.bookingDetails.BOOK_HOUR, +' ' + this.bookingDetails.BOOK_MINUTE)}
+              {/* format date */}@ {_formatDate(this.bookingData.booked_on.date)} {/* format time */}
+              {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
             </div>
           </div>
           <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
-            <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this._getBookingStatus(this.bookingDetails.BOOK_STATUS_CODE, '_BOOK_STATUS')}</span>
+            <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
             <ir-select id="update-status" size="sm" label-available="false" data={this.statusData} textSize="sm" class="sm-padding-right"></ir-select>
             <ir-button icon="" id="update-status-btn" size="sm" text="Update"></ir-button>
             {this.hasReceipt && <ir-icon id="receipt" icon="ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
@@ -277,53 +308,49 @@ export class IrBookingDetails {
           <div class="col-lg-7 col-md-12 pl-0 pr-lg-1 p-0">
             <div class="card">
               <div class="p-1">
-                {this.bookingDetails.My_Ac?.NAME || ''}
-                <ir-label label="Source:" value={this.bookingDetails.My_Source.Label} imageSrc={this.bookingDetails.My_Source.Icon}></ir-label>
-                <ir-label label="Booked by:" value={`${this.bookingDetails.My_Guest.FIRST_NAME} ${this.bookingDetails.My_Guest.LAST_NAME}`} iconShown={true}></ir-label>
-                <ir-label label="Phone:" value={this.bookingDetails.My_Guest.MOBILE}></ir-label>
-                <ir-label label="Email:" value={this.bookingDetails.My_Guest.My_User.EMAIL}></ir-label>
-                <ir-label label="Alternate Email:" value={this.bookingDetails.My_Guest.My_User.DISCLOSED_EMAIL}></ir-label>
-                <ir-label label="Address:" value={this.bookingDetails.My_Guest.ADDRESS}></ir-label>
-                <ir-label label="Arrival Time:" value={this._getBookingStatus(this.bookingDetails.ARRIVAL_TIME_CODE, '_ARRIVAL_TIME')}></ir-label>
-                <ir-label label="Notes:" value={this.bookingDetails.GUEST_REMARK}></ir-label>
+                {this.bookingData.property.name || ''}
+                <ir-label label="Source:" value={this.bookingData.origin.Label} imageSrc={this.bookingData.origin.Icon}></ir-label>
+                <ir-label label="Booked by:" value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`} iconShown={true}></ir-label>
+                <ir-label label="Phone:" value={this.bookingData.guest.mobile}></ir-label>
+                <ir-label label="Email:" value={this.bookingData.guest.email}></ir-label>
+                {/* <ir-label label="Alternate Email:" value={this.bookingData.guest.email}></ir-label> */}
+                <ir-label label="Address:" value={this.bookingData.guest.address}></ir-label>
+                <ir-label label="Arrival Time:" value={this.bookingData.arrival.description}></ir-label>
+                <ir-label label="Notes:" value={this.bookingData.remark}></ir-label>
               </div>
             </div>
             <div class="font-size-large d-flex justify-content-between align-items-center ml-1 mb-1">
-              {`${_formatDate(this.bookingDetails.FROM_DATE)} - ${_formatDate(this.bookingDetails.TO_DATE)} (${this._calculateNights(
-                this.bookingDetails.FROM_DATE,
-                this.bookingDetails.TO_DATE,
-              )} ${this._calculateNights(this.bookingDetails.FROM_DATE, this.bookingDetails.TO_DATE) > 1 ? 'nights' : 'night'})`}
+              {`${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(
+                this.bookingData.from_date,
+                this.bookingData.to_date,
+              )} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1 ? 'nights' : 'night'})`}
               {this.hasRoomAdd && <ir-icon id="room-add" icon="ft-plus h3 color-ir-dark-blue-hover pointer"></ir-icon>}
             </div>
             <div class="card">
-              {this.bookingDetails.My_Bsa.map((bsa: any, index: number) => {
-                const mealCodeName = this._getBookingStatus(bsa.FOOD_ARRANGE_CAT_CODE, '_FOOD_ARRANGE_CAT');
-                const myRoomTypeFoodCat = this._getBookingStatus(bsa.My_Room_type.FOOD_ARRANGE_CAT_CODE, '_FOOD_ARRANGE_CAT')
-              
+              {this.bookingData.rooms.map((room: Room, index: number) => {
+                const mealCodeName = room.rateplan.name;
+                // const myRoomTypeFoodCat = this._getBookingStatus(bsa.My_Room_type.FOOD_ARRANGE_CAT_CODE, '_FOOD_ARRANGE_CAT');
+
                 return [
                   <ir-room
-                  myRoomTypeFoodCat={myRoomTypeFoodCat}
+                    myRoomTypeFoodCat={''}
                     mealCodeName={mealCodeName}
-                    currency={this.bookingDetails.My_Currency.REF}
+                    currency={this.bookingData.currency.code}
                     hasRoomEdit={this.hasRoomEdit}
                     hasRoomDelete={this.hasRoomDelete}
                     hasCheckIn={this.hasCheckIn}
                     hasCheckOut={this.hasCheckOut}
-                    item={bsa}
+                    item={room}
                   />,
                   // add separator if not last item with marginHorizontal and alignCenter
-                  index !== this.bookingDetails.My_Bsa.length - 1 && <hr class="mr-2 ml-2 mt-1 mb-1" />,
+                  index !== this.bookingData.rooms.length - 1 && <hr class="mr-2 ml-2 mt-1 mb-1" />,
                 ];
               })}
             </div>
           </div>
-          <div class="col-lg-5 col-md-12 pr-0 pl-0 pl-md-1">
-            <ir-payment-details 
-            item={this.bookingDetails}
-            paymentDetailsUrl={this.paymentDetailsUrl}
-            paymentExceptionMessage={this.paymentExceptionMessage}
-            ></ir-payment-details>
-          </div>
+          {/* <div class="col-lg-5 col-md-12 pr-0 pl-0 pl-md-1">
+            <ir-payment-details item={this.bookingDetails} paymentDetailsUrl={this.paymentDetailsUrl} paymentExceptionMessage={this.paymentExceptionMessage}></ir-payment-details>
+          </div> */}
         </div>
       </div>,
       <ir-sidebar side={'right'} id="editGuestInfo">

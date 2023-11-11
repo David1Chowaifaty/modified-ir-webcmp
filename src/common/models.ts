@@ -1,6 +1,8 @@
+import { Guest } from '../models/booking.dto';
+
 export interface IrOnlineResource {
   isJS?: boolean;
-  isCSS?: boolean
+  isCSS?: boolean;
   link?: string;
 }
 
@@ -31,7 +33,17 @@ export class guestInfo {
   language: string = '';
 }
 
-export class guestInfoValidation extends guestInfo {
+export class guestInfoValidation implements Guest {
+  address: string;
+  city: string;
+  country_id: number;
+  dob: string;
+  email: string;
+  first_name: string;
+  id: number;
+  last_name: string;
+  mobile: string;
+  subscribe_to_news_letter: boolean;
   firstNameValid: boolean = false;
   lastNameValid: boolean = false;
   emailValid: boolean = false;

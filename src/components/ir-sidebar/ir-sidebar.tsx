@@ -12,11 +12,10 @@ export class IrSidebar {
 
   @Event({ bubbles: true, composed: true }) irSidebarToggle: EventEmitter;
 
-
   componentDidLoad() {
-     // If esc key is pressed, close the modal
-     document.addEventListener('keydown', (e) => {
-      if (e.keyCode === 27) {
+    // If esc key is pressed, close the modal
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
         this.toggleSidebar();
       }
     });
@@ -26,7 +25,6 @@ export class IrSidebar {
   disconnectedCallback() {
     document.removeEventListener('keydown', () => {});
   }
-
 
   @Method()
   async toggleSidebar() {

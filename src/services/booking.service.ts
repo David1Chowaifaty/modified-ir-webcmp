@@ -1,60 +1,36 @@
-import { DayData } from "../models/DayType";
-import axios from "axios";
-import {
-  BookingDetails,
-  IBlockUnit,
-  ICountry,
-  IEntries,
-  ISetupEntries,
-  MonthType,
-} from "../models/IBooking";
+import { DayData } from '../models/DayType';
+import axios from 'axios';
+import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType } from '../models/IBooking';
 
-import {
-  convertDateToCustomFormat,
-  convertDateToTime,
-  dateToFormattedString,
-} from "../utils/utils";
-import { getMyBookings } from "../utils/booking";
-import { Day } from "../models/booking.dto";
+import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString } from '../utils/utils';
+import { getMyBookings } from '../utils/booking';
+import { Booking, Day } from '../models/booking.dto';
 
 export class BookingService {
-  public async getCalendarData(
-    propertyid: number,
-    from_date: string,
-    to_date: string
-  ): Promise<{ [key: string]: any }> {
+  public async getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{ [key: string]: any }> {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token !== null) {
-        const { data } = await axios.post(
-          `/Get_Exposed_Calendar?Ticket=${token}`,
-          {
-            propertyid,
-            from_date,
-            to_date,
-          }
-        );
-        if (data.ExceptionMsg !== "") {
+        const { data } = await axios.post(`/Get_Exposed_Calendar?Ticket=${token}`, {
+          propertyid,
+          from_date,
+          to_date,
+        });
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         const months: MonthType[] = data.My_Result.months;
         const customMonths: { daysCount: number; monthName: string }[] = [];
         const myBooking = await getMyBookings(months);
         const days: DayData[] = months
-          .map((month) => {
+          .map(month => {
             customMonths.push({
               daysCount: month.days.length,
               monthName: month.description,
             });
-            return month.days.map((day) => ({
-              day: convertDateToCustomFormat(
-                day.description,
-                month.description
-              ),
-              currentDate: convertDateToTime(
-                day.description,
-                month.description
-              ),
+            return month.days.map(day => ({
+              day: convertDateToCustomFormat(day.description, month.description),
+              currentDate: convertDateToTime(day.description, month.description),
               dayDisplayName: day.description,
               rate: day.room_types,
               unassigned_units_nbr: day.unassigned_units_nbr,
@@ -65,7 +41,7 @@ export class BookingService {
 
         return Promise.resolve({
           ExceptionCode: null,
-          ExceptionMsg: "",
+          ExceptionMsg: '',
           My_Params_Get_Rooming_Data: {
             AC_ID: propertyid,
             FROM: data.My_Params_Get_Exposed_Calendar.from_date,
@@ -87,28 +63,25 @@ export class BookingService {
     propertyid: number,
     language: string,
     room_type_ids: number[],
-    currency: { id: number; code: string }
+    currency: { id: number; code: string },
   ): Promise<BookingDetails> {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
-        const { data } = await axios.post(
-          `/Get_Exposed_Booking_Availability?Ticket=${token}`,
-          {
-            propertyid,
-            from_date,
-            to_date,
-            adult_nbr: 2,
-            child_nbr: 0,
-            language,
-            currency_ref: currency.code,
-            room_type_ids,
-          }
-        );
-        if (data.ExceptionMsg !== "") {
+        const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
+          propertyid,
+          from_date,
+          to_date,
+          adult_nbr: 2,
+          child_nbr: 0,
+          language,
+          currency_ref: currency.code,
+          room_type_ids,
+        });
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
-        return data["My_Result"];
+        return data['My_Result'];
       } else {
         throw new Error("Token doesn't exist");
       }
@@ -120,15 +93,12 @@ export class BookingService {
 
   public async getCountries(language: string): Promise<ICountry[]> {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
-        const { data } = await axios.post(
-          `/Get_Exposed_Countries?Ticket=${token}`,
-          {
-            language,
-          }
-        );
-        if (data.ExceptionMsg !== "") {
+        const { data } = await axios.post(`/Get_Exposed_Countries?Ticket=${token}`, {
+          language,
+        });
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         return data.My_Result;
@@ -141,32 +111,20 @@ export class BookingService {
 
   public async fetchSetupEntries(): Promise<ISetupEntries> {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
-        const { data } = await axios.post(
-          `/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`,
-          {
-            TBL_NAMES: [
-              "_ARRIVAL_TIME",
-              "_BOOKING_SOURCE",
-              "_RATE_PRICING_MODE",
-              "_BED_PREFERENCE_TYPE",
-            ],
-          }
-        );
-        if (data.ExceptionMsg !== "") {
+        const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, {
+          TBL_NAMES: ['_ARRIVAL_TIME', '_BOOKING_SOURCE', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
+        });
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         const res: any[] = data.My_Result;
         return {
-          arrivalTime: res.filter((e) => e.TBL_NAME === "_ARRIVAL_TIME"),
-          bookingSource: res.filter((e) => e.TBL_NAME === "_BOOKING_SOURCE"),
-          ratePricingMode: res.filter(
-            (e) => e.TBL_NAME === "_RATE_PRICING_MODE"
-          ),
-          bedPreferenceType: res.filter(
-            (e) => e.TBL_NAME === "_BED_PREFERENCE_TYPE"
-          ),
+          arrivalTime: res.filter(e => e.TBL_NAME === '_ARRIVAL_TIME'),
+          bookingSource: res.filter(e => e.TBL_NAME === '_BOOKING_SOURCE'),
+          ratePricingMode: res.filter(e => e.TBL_NAME === '_RATE_PRICING_MODE'),
+          bedPreferenceType: res.filter(e => e.TBL_NAME === '_BED_PREFERENCE_TYPE'),
         };
       }
     } catch (error) {
@@ -176,13 +134,10 @@ export class BookingService {
   }
   public async getBlockedInfo(): Promise<IEntries[]> {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
-        const { data } = await axios.post(
-          `/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`,
-          { TBL_NAMES: ["_CALENDAR_BLOCKED_TILL"] }
-        );
-        if (data.ExceptionMsg !== "") {
+        const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, { TBL_NAMES: ['_CALENDAR_BLOCKED_TILL'] });
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         return data.My_Result;
@@ -195,13 +150,10 @@ export class BookingService {
 
   public async blockUnit(params: IBlockUnit) {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
-        const { data } = await axios.post(
-          `/Block_Exposed_Unit?Ticket=${token}`,
-          params
-        );
-        if (data.ExceptionMsg !== "") {
+        const { data } = await axios.post(`/Block_Exposed_Unit?Ticket=${token}`, params);
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         return data;
@@ -214,38 +166,50 @@ export class BookingService {
 
   public async getUserInfo(email: string) {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
-        const { data } = await axios.post(
-          `/GET_EXPOSED_GUEST?Ticket=${token}`,
-          {
-            email,
-          }
-        );
-        if (data.ExceptionMsg !== "") {
+        const { data } = await axios.post(`/GET_EXPOSED_GUEST?Ticket=${token}`, {
+          email,
+        });
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         return data.My_Result;
       } else {
-        throw new Error("Invalid Token");
+        throw new Error('Invalid Token');
       }
     } catch (error) {
       console.error(error);
       throw new Error(error);
     }
   }
-  private generateDays(
-    from_date: string,
-    to_date: string,
-    amount: number
-  ): Day[] {
+  public async getExoposedBooking(booking_nbr: string, language: string): Promise<Booking> {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token) {
+        const { data } = await axios.post(`/Get_Exposed_Booking?Ticket=${token}`, {
+          booking_nbr,
+          language,
+        });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data.My_Result;
+      } else {
+        throw new Error('Invalid Token');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  private generateDays(from_date: string, to_date: string, amount: number): Day[] {
     const startDate = new Date(from_date);
     const endDate = new Date(to_date);
     const days: Day[] = [];
 
     while (startDate < endDate) {
       days.push({
-        date: startDate.toISOString().split("T")[0],
+        date: startDate.toISOString().split('T')[0],
         amount: amount,
       });
       startDate.setDate(startDate.getDate() + 1);
@@ -267,10 +231,10 @@ export class BookingService {
     bookingNumber?: string,
     defaultGuest?: any,
     arrivalTime?: any,
-    pr_id?: number
+    pr_id?: number,
   ) {
     try {
-      const token = JSON.parse(sessionStorage.getItem("token"));
+      const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
         const fromDateStr = dateToFormattedString(fromDate);
         const toDateStr = dateToFormattedString(toDate);
@@ -281,7 +245,7 @@ export class BookingService {
           country_id: bookedByInfoData.countryId,
           city: null,
           mobile: bookedByInfoData.contactNumber,
-          address: "",
+          address: '',
           dob: null,
           subscribe_to_news_letter: bookedByInfoData.emailGuest || false,
         };
@@ -292,7 +256,7 @@ export class BookingService {
           assign_units: true,
           check_in,
           booking: {
-            booking_nbr: bookingNumber || "",
+            booking_nbr: bookingNumber || '',
             from_date: fromDateStr,
             to_date: toDateStr,
             remark: bookedByInfoData.message || null,
@@ -305,7 +269,7 @@ export class BookingService {
               code: arrivalTime || bookedByInfoData.selectedArrivalTime,
             },
             guest: defaultGuest || guest,
-            rooms: guestData.map((data) => ({
+            rooms: guestData.map(data => ({
               roomtype: {
                 id: data.roomCategoryId,
                 name: data.roomCategoryName,
@@ -323,10 +287,7 @@ export class BookingService {
                 cancelation: data.cancelation,
                 guarantee: data.guarantee,
               },
-              unit:
-                typeof pr_id === "undefined" && data.roomId === ""
-                  ? null
-                  : { id: pr_id || data.roomId },
+              unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: pr_id || data.roomId },
               occupancy: {
                 adult_nbr: data.adultCount,
                 children_nbr: data.childrenCount,
@@ -335,11 +296,7 @@ export class BookingService {
               from_date: fromDateStr,
               to_date: toDateStr,
               notes: null,
-              days: this.generateDays(
-                fromDateStr,
-                toDateStr,
-                +data.rate / totalNights
-              ),
+              days: this.generateDays(fromDateStr, toDateStr, +data.rate / totalNights),
               guest: {
                 email: null,
                 first_name: data.guestName,
@@ -354,19 +311,16 @@ export class BookingService {
             })),
           },
         };
-        console.log("body", body);
+        console.log('body', body);
 
-        const { data } = await axios.post(
-          `/DoReservation?Ticket=${token}`,
-          body
-        );
-        if (data.ExceptionMsg !== "") {
+        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
         console.log(data);
         return data;
       } else {
-        throw new Error("Invalid token");
+        throw new Error('Invalid token');
       }
     } catch (error) {
       console.error(error);
