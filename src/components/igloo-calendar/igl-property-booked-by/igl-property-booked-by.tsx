@@ -1,62 +1,42 @@
-import {
-  Component,
-  Host,
-  h,
-  Prop,
-  Event,
-  EventEmitter,
-  State,
-} from "@stencil/core";
-import { BookingService } from "../../../services/booking.service";
-import { IEntries, ICountry } from "../../../models/IBooking";
-import { v4 } from "uuid";
+import { Component, Host, h, Prop, Event, EventEmitter, State, Fragment } from '@stencil/core';
+import { BookingService } from '../../../services/booking.service';
+import { IEntries, ICountry } from '../../../models/IBooking';
+import { v4 } from 'uuid';
 
 @Component({
-  tag: "igl-property-booked-by",
-  styleUrl: "igl-property-booked-by.css",
+  tag: 'igl-property-booked-by',
+  styleUrl: 'igl-property-booked-by.css',
   scoped: true,
 })
 export class IglPropertyBookedBy {
   @Prop() language: string;
+  @Prop() showPaymentDetails: boolean = false;
   @Prop() defaultData: { [key: string]: any };
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   private bookingService: BookingService = new BookingService();
   private arrivalTimeList: IEntries[] = [];
   @Prop() countryNodeList: ICountry[] = [];
-  private expiryMonths: string[] = [
-    "01",
-    "02",
-    "03",
-    "04",
-    "05",
-    "06",
-    "07",
-    "08",
-    "09",
-    "10",
-    "11",
-    "12",
-  ];
+  private expiryMonths: string[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
   private expiryYears: string[] = [];
-  private currentMonth: string = "01";
+  private currentMonth: string = '01';
   @State() bookedByData: { [key: string]: any } = {
     id: undefined,
-    email: "",
-    firstName: "",
-    lastName: "",
-    countryId: "",
-    isdCode: "",
-    contactNumber: "",
+    email: '',
+    firstName: '',
+    lastName: '',
+    countryId: '',
+    isdCode: '',
+    contactNumber: '',
     selectedArrivalTime: {
-      code: "",
-      description: "",
+      code: '',
+      description: '',
     },
     emailGuest: false,
-    message: "",
-    cardNumber: "",
-    cardHolderName: "",
-    expiryMonth: "",
-    expiryYear: "",
+    message: '',
+    cardNumber: '',
+    cardHolderName: '',
+    expiryMonth: '',
+    expiryYear: '',
   };
 
   async componentWillLoad() {
@@ -67,9 +47,7 @@ export class IglPropertyBookedBy {
 
   private initializeExpiryYears() {
     const currentYear = new Date().getFullYear();
-    this.expiryYears = Array.from({ length: 4 }, (_, index) =>
-      (currentYear + index).toString()
-    );
+    this.expiryYears = Array.from({ length: 4 }, (_, index) => (currentYear + index).toString());
   }
 
   private initializeDateData() {
@@ -91,24 +69,22 @@ export class IglPropertyBookedBy {
   }
 
   handleDataChange(key, event) {
-    const foundTime = this.arrivalTimeList.find(
-      (time) => time.CODE_NAME === event.target.value
-    );
+    const foundTime = this.arrivalTimeList.find(time => time.CODE_NAME === event.target.value);
 
     this.bookedByData[key] =
-      key === "emailGuest"
+      key === 'emailGuest'
         ? event.target.checked
-        : key === "arrivalTime"
+        : key === 'arrivalTime'
         ? {
             code: event.target.value,
-            description: (foundTime && foundTime.CODE_VALUE_EN) || "",
+            description: (foundTime && foundTime.CODE_VALUE_EN) || '',
           }
         : event.target.value;
     this.dataUpdateEvent.emit({
-      key: "bookedByInfoUpdated",
+      key: 'bookedByInfoUpdated',
       data: { ...this.bookedByData },
     });
-    if (key === "countryId") {
+    if (key === 'countryId') {
       this.bookedByData = {
         ...this.bookedByData,
         isdCode: event.target.value,
@@ -125,7 +101,7 @@ export class IglPropertyBookedBy {
 
     if (!numericRegex.test(inputValue)) {
       // If the input is not numeric, prevent it from being entered
-      inputElement.value = inputValue.replace(/[^0-9]/g, "");
+      inputElement.value = inputValue.replace(/[^0-9]/g, '');
     }
     if (inputValue === inputElement.value) {
       this.handleDataChange(key, event);
@@ -158,15 +134,15 @@ export class IglPropertyBookedBy {
           this.bookedByData = {
             ...this.bookedByData,
             id: undefined,
-            firstName: "",
-            lastName: "",
-            contactNumber: "",
-            countryId: "",
-            isdCode: "",
+            firstName: '',
+            lastName: '',
+            contactNumber: '',
+            countryId: '',
+            isdCode: '',
           };
         }
         this.dataUpdateEvent.emit({
-          key: "bookedByInfoUpdated",
+          key: 'bookedByInfoUpdated',
           data: { ...this.bookedByData },
         });
       }
@@ -184,9 +160,7 @@ export class IglPropertyBookedBy {
       <Host>
         <div class="text-left mt-3">
           <div class="form-group row text-left align-items-center">
-            <label class="p-0 m-0 label-control mr-1 font-weight-bold">
-              Booked by
-            </label>
+            <label class="p-0 m-0 label-control mr-1 font-weight-bold">Booked by</label>
             <div class="bookedByEmailContainer">
               <input
                 id={v4()}
@@ -195,7 +169,7 @@ export class IglPropertyBookedBy {
                 placeholder="Email address"
                 name="bookeyByEmail"
                 value={this.bookedByData.email}
-                onInput={(event) => this.handleEmailInput("email", event)}
+                onInput={event => this.handleEmailInput('email', event)}
                 required
                 onBlur={() => this.checkUser()}
               />
@@ -214,9 +188,7 @@ export class IglPropertyBookedBy {
                     placeholder="First name"
                     id={v4()}
                     value={this.bookedByData.firstName}
-                    onInput={(event) =>
-                      this.handleDataChange("firstName", event)
-                    }
+                    onInput={event => this.handleDataChange('firstName', event)}
                     required
                   />
                 </div>
@@ -231,9 +203,7 @@ export class IglPropertyBookedBy {
                     placeholder="Last name"
                     id={v4()}
                     value={this.bookedByData.lastName}
-                    onInput={(event) =>
-                      this.handleDataChange("lastName", event)
-                    }
+                    onInput={event => this.handleDataChange('lastName', event)}
                   />
                 </div>
               </div>
@@ -241,26 +211,12 @@ export class IglPropertyBookedBy {
               <div class="form-group row p-0 align-items-center">
                 <label class="p-0 m-0">Country</label>
                 <div class="p-0 m-0 pr-1 controlContainer">
-                  <select
-                    class="form-control input-sm pr-0"
-                    id={v4()}
-                    onChange={(event) =>
-                      this.handleDataChange("countryId", event)
-                    }
-                  >
-                    <option
-                      value=""
-                      selected={this.bookedByData.countryId === ""}
-                    >
+                  <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
+                    <option value="" selected={this.bookedByData.countryId === ''}>
                       Select
                     </option>
-                    {this.countryNodeList.map((countryNode) => (
-                      <option
-                        value={countryNode.id}
-                        selected={
-                          this.bookedByData.countryId === countryNode.id
-                        }
-                      >
+                    {this.countryNodeList.map(countryNode => (
+                      <option value={countryNode.id} selected={this.bookedByData.countryId === countryNode.id}>
                         {countryNode.name}
                       </option>
                     ))}
@@ -272,26 +228,12 @@ export class IglPropertyBookedBy {
                 <label class="p-0 m-0">Mobile phone</label>
                 <div class="p-0 m-0 pr-1 row controlContainer">
                   <div class="col-3 p-0 m-0">
-                    <select
-                      class="form-control input-sm pr-0"
-                      id={v4()}
-                      onChange={(event) =>
-                        this.handleDataChange("isdCode", event)
-                      }
-                    >
-                      <option
-                        value=""
-                        selected={this.bookedByData.isdCode === ""}
-                      >
+                    <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
+                      <option value="" selected={this.bookedByData.isdCode === ''}>
                         ISD
                       </option>
-                      {this.countryNodeList.map((country) => (
-                        <option
-                          value={country.id}
-                          selected={
-                            this.bookedByData.isdCode === country.id.toString()
-                          }
-                        >
+                      {this.countryNodeList.map(country => (
+                        <option value={country.id} selected={this.bookedByData.isdCode === country.id.toString()}>
                           {country.phone_prefix}
                         </option>
                       ))}
@@ -304,9 +246,7 @@ export class IglPropertyBookedBy {
                       placeholder="Contact Number"
                       id={v4()}
                       value={this.bookedByData.contactNumber}
-                      onInput={(event) =>
-                        this.handleNumberInput("contactNumber", event)
-                      }
+                      onInput={event => this.handleNumberInput('contactNumber', event)}
                     />
                   </div>
                 </div>
@@ -315,27 +255,12 @@ export class IglPropertyBookedBy {
               <div class="form-group row p-0 align-items-center">
                 <label class="p-0 m-0">Your arrival time</label>
                 <div class="p-0 m-0 pr-1 controlContainer">
-                  <select
-                    class="form-control input-sm pr-0"
-                    id={v4()}
-                    onChange={(event) =>
-                      this.handleDataChange("selectedArrivalTime", event)
-                    }
-                  >
-                    <option
-                      value=""
-                      selected={this.bookedByData.selectedArrivalTime === ""}
-                    >
+                  <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('selectedArrivalTime', event)}>
+                    <option value="" selected={this.bookedByData.selectedArrivalTime === ''}>
                       -
                     </option>
-                    {this.arrivalTimeList.map((time) => (
-                      <option
-                        value={time.CODE_NAME}
-                        selected={
-                          this.bookedByData.selectedArrivalTime ===
-                          time.CODE_NAME
-                        }
-                      >
+                    {this.arrivalTimeList.map(time => (
+                      <option value={time.CODE_NAME} selected={this.bookedByData.selectedArrivalTime === time.CODE_NAME}>
                         {time.CODE_VALUE_EN}
                       </option>
                     ))}
@@ -346,15 +271,7 @@ export class IglPropertyBookedBy {
               <div class="form-group row p-0 align-items-center">
                 <label class="p-0 m-0">Email the guest</label>
                 <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer">
-                  <input
-                    class="form-control"
-                    type="checkbox"
-                    checked={this.bookedByData.emailGuest}
-                    id={v4()}
-                    onChange={(event) =>
-                      this.handleDataChange("emailGuest", event)
-                    }
-                  />
+                  <input class="form-control" type="checkbox" checked={this.bookedByData.emailGuest} id={v4()} onChange={event => this.handleDataChange('emailGuest', event)} />
                 </div>
               </div>
             </div>
@@ -368,83 +285,65 @@ export class IglPropertyBookedBy {
                     class="form-control"
                     name="message"
                     value={this.bookedByData.message}
-                    onInput={(event) => this.handleDataChange("message", event)}
+                    onInput={event => this.handleDataChange('message', event)}
                   ></textarea>
                 </div>
               </div>
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Card Number</label>
-                <div class="p-0 m-0 pr-1 controlContainer">
-                  <input
-                    class="form-control"
-                    type="text"
-                    placeholder=""
-                    pattern="0-9 "
-                    id={v4()}
-                    value={this.bookedByData.cardNumber}
-                    onInput={(event) =>
-                      this.handleNumberInput("cardNumber", event)
-                    }
-                  />
-                </div>
-              </div>
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Card holder name</label>
-                <div class="p-0 m-0 pr-1 controlContainer">
-                  <input
-                    class="form-control"
-                    type="text"
-                    placeholder=""
-                    pattern="0-9 "
-                    id={v4()}
-                    value={this.bookedByData.cardHolderName}
-                    onInput={(event) =>
-                      this.handleDataChange("cardHolderName", event)
-                    }
-                  />
-                </div>
-              </div>
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Expiry Date</label>
-                <div class="p-0 m-0 row controlContainer">
-                  <div class="col-3 p-0 m-0">
-                    <select
-                      class="form-control input-sm pr-0"
-                      id={v4()}
-                      onChange={(event) =>
-                        this.handleDataChange("expiryMonth", event)
-                      }
-                    >
-                      {this.expiryMonths.map((month) => (
-                        <option
-                          value={month}
-                          selected={month === this.bookedByData.expiryMonth}
-                        >
-                          {month}
-                        </option>
-                      ))}
-                    </select>
+              {this.showPaymentDetails && (
+                <Fragment>
+                  <div class="form-group row p-0 align-items-center">
+                    <label class="p-0 m-0">Card Number</label>
+                    <div class="p-0 m-0 pr-1 controlContainer">
+                      <input
+                        class="form-control"
+                        type="text"
+                        placeholder=""
+                        pattern="0-9 "
+                        id={v4()}
+                        value={this.bookedByData.cardNumber}
+                        onInput={event => this.handleNumberInput('cardNumber', event)}
+                      />
+                    </div>
                   </div>
-                  <div class="col-4 p-0 m-0">
-                    <select
-                      class="form-control input-sm pr-0"
-                      id={v4()}
-                      onChange={(event) =>
-                        this.handleDataChange("expiryYear", event)
-                      }
-                    >
-                      {this.expiryYears.map((year, index) => (
-                        <option
-                          value={year}
-                          selected={index === this.bookedByData.expiryYear}
-                        >
-                          {year}
-                        </option>
-                      ))}
-                    </select>
+                  <div class="form-group row p-0 align-items-center">
+                    <label class="p-0 m-0">Card holder name</label>
+                    <div class="p-0 m-0 pr-1 controlContainer">
+                      <input
+                        class="form-control"
+                        type="text"
+                        placeholder=""
+                        pattern="0-9 "
+                        id={v4()}
+                        value={this.bookedByData.cardHolderName}
+                        onInput={event => this.handleDataChange('cardHolderName', event)}
+                      />
+                    </div>
                   </div>
-                </div>
-              </div>
+                  <div class="form-group row p-0 align-items-center">
+                    <label class="p-0 m-0">Expiry Date</label>
+                    <div class="p-0 m-0 row pr-1 controlContainer">
+                      <div class="p-0 m-0">
+                        <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('expiryMonth', event)}>
+                          {this.expiryMonths.map(month => (
+                            <option value={month} selected={month === this.bookedByData.expiryMonth}>
+                              {month}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div class="p-0 m-0 ml-1">
+                        <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('expiryYear', event)}>
+                          {this.expiryYears.map((year, index) => (
+                            <option value={year} selected={index === this.bookedByData.expiryYear}>
+                              {year}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </Fragment>
+              )}
             </div>
           </div>
         </div>

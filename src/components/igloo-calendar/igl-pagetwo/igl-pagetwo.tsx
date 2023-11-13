@@ -6,6 +6,7 @@ import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/mo
   scoped: true,
 })
 export class IglPagetwo {
+  @Prop() showPaymentDetails: boolean;
   @Prop({ reflect: true }) isEditOrAddRoomEvent: boolean;
   @Prop() dateRangeData: { [key: string]: any };
   @Prop() bookingData: { [key: string]: any };
@@ -108,6 +109,10 @@ export class IglPagetwo {
       if (property === this.selectedGuestData) {
         return this.isGuestDataIncomplete();
       }
+      const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
+      if (!this.showPaymentDetails && isCardDetails) {
+        return false;
+      }
       return property[key] === comparedBy || property[key] === undefined;
     };
 
@@ -120,7 +125,11 @@ export class IglPagetwo {
       isValidProperty(this.selectedBookedByData, 'lastName', '') ||
       isValidProperty(this.selectedBookedByData, 'countryId', -1) ||
       isValidProperty(this.selectedBookedByData, 'selectedArrivalTime', '') ||
-      isValidProperty(this.selectedBookedByData, 'email', '')
+      isValidProperty(this.selectedBookedByData, 'email', '') ||
+      isValidProperty(this.selectedBookedByData, 'cardNumber', '') ||
+      isValidProperty(this.selectedBookedByData, 'cardHolderName', '') ||
+      isValidProperty(this.selectedBookedByData, 'expiryMonth', '') ||
+      isValidProperty(this.selectedBookedByData, 'expiryYear', '')
     );
   }
 
@@ -159,6 +168,7 @@ export class IglPagetwo {
           <igl-property-booked-by
             countryNodeList={this.countryNodeList}
             language={this.language}
+            showPaymentDetails={this.showPaymentDetails}
             defaultData={this.bookedByInfoData}
             onDataUpdateEvent={event =>
               // this.dataUpdateEvent.emit({

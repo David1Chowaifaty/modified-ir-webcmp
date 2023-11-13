@@ -248,6 +248,14 @@ export class BookingService {
           address: '',
           dob: null,
           subscribe_to_news_letter: bookedByInfoData.emailGuest || false,
+          cci: bookedByInfoData.cardNumber
+            ? {
+                nbr: bookedByInfoData.cardNumber,
+                holder_name: bookedByInfoData.cardHolderName,
+                expiry_month: bookedByInfoData.expiryMonth,
+                expiry_year: bookedByInfoData.expiryYear,
+              }
+            : null,
         };
         if (bookedByInfoData.id) {
           guest = { ...guest, id: bookedByInfoData.id };

@@ -1,30 +1,15 @@
-import {
-  Component,
-  Element,
-  Event,
-  EventEmitter,
-  Host,
-  Listen,
-  Prop,
-  State,
-  Watch,
-  h,
-} from "@stencil/core";
-import { RoomService } from "../../services/room.service";
-import { BookingService } from "../../services/booking.service";
-import {
-  computeEndDate,
-  convertDMYToISO,
-  formatLegendColors,
-} from "../../utils/utils";
+import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { RoomService } from '../../services/room.service';
+import { BookingService } from '../../services/booking.service';
+import { computeEndDate, convertDMYToISO, formatLegendColors } from '../../utils/utils';
 
-import axios from "axios";
-import { EventsService } from "../../services/events.service";
-import { ICountry } from "../../models/IBooking";
+import axios from 'axios';
+import { EventsService } from '../../services/events.service';
+import { ICountry } from '../../models/IBooking';
 
 @Component({
-  tag: "igloo-calendar",
-  styleUrl: "igloo-calendar.css",
+  tag: 'igloo-calendar',
+  styleUrl: 'igloo-calendar.css',
   scoped: true,
 })
 export class IglooCalendar {
@@ -35,7 +20,7 @@ export class IglooCalendar {
   @Prop() baseurl: string;
   @Prop() loadingMessage: string;
   @Prop() currencyName: string;
-  @Prop({ reflect: true }) ticket: string = "";
+  @Prop({ reflect: true }) ticket: string = '';
   @Element() private element: HTMLElement;
   @Event({ bubbles: true, composed: true })
   dragOverHighlightElement: EventEmitter;
@@ -47,17 +32,18 @@ export class IglooCalendar {
 
   @State() bookingItem: { [key: string]: any } = null;
   @State() showLegend: boolean = false;
+  @State() showPaymentDetails: boolean = false;
   @State() showToBeAssigned: boolean = false;
   private bookingService: BookingService = new BookingService();
   private countryNodeList: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
   private scrollContainer: HTMLElement;
-  private today: String = "";
+  private today: String = '';
   private roomService: RoomService = new RoomService();
   private eventsService = new EventsService();
-  @Watch("ticket")
+  @Watch('ticket')
   async ticketChanged() {
-    sessionStorage.setItem("token", JSON.stringify(this.ticket));
+    sessionStorage.setItem('token', JSON.stringify(this.ticket));
     this.initializeApp();
   }
 
@@ -65,68 +51,45 @@ export class IglooCalendar {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
-    if (this.ticket !== "") {
+    if (this.ticket !== '') {
       this.initializeApp();
     }
   }
   initializeApp() {
     try {
-      this.roomService
-        .fetchData(this.propertyid, this.language)
-        .then((roomResp) => {
-          this.setRoomsData(roomResp);
-          this.bookingService
-            .getCalendarData(this.propertyid, this.from_date, this.to_date)
-            .then(async (bookingResp) => {
-              this.countryNodeList = await this.bookingService.getCountries(
-                this.language
-              );
-              this.calendarData.currency = roomResp["My_Result"].currency;
-              this.calendarData.legendData = this.getLegendData(roomResp);
-              this.calendarData.startingDate = new Date(
-                bookingResp.My_Params_Get_Rooming_Data.FROM
-              ).getTime();
-              this.calendarData.endingDate = new Date(
-                bookingResp.My_Params_Get_Rooming_Data.TO
-              ).getTime();
-              this.calendarData.formattedLegendData = formatLegendColors(
-                this.calendarData.legendData
-              );
-              this.calendarData.bookingEvents = bookingResp.myBookings || [];
-              this.calendarData.toBeAssignedEvents = [];
-
-              this.updateBookingEventsDateRange(
-                this.calendarData.bookingEvents
-              );
-              this.updateBookingEventsDateRange(
-                this.calendarData.toBeAssignedEvents
-              );
-
-              let dt = new Date();
-              this.today =
-                dt.getDate() +
-                "_" +
-                (dt.getMonth() + 1) +
-                "_" +
-                dt.getFullYear();
-              let startingDay: Date = new Date(
-                this.getStartingDateOfCalendar()
-              );
-              startingDay.setHours(0, 0, 0, 0);
-              this.days = bookingResp.days;
-              this.calendarData.days = this.days;
-              this.calendarData.monthsInfo = bookingResp.months;
-              setTimeout(() => {
-                this.scrollToElement(this.today);
-              }, 200);
-            });
+      this.roomService.fetchData(this.propertyid, this.language).then(roomResp => {
+        this.setRoomsData(roomResp);
+        this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date).then(async bookingResp => {
+          this.countryNodeList = await this.bookingService.getCountries(this.language);
+          this.calendarData.currency = roomResp['My_Result'].currency;
+          this.calendarData.legendData = this.getLegendData(roomResp);
+          this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
+          this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
+          this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
+          this.calendarData.bookingEvents = bookingResp.myBookings || [];
+          this.calendarData.toBeAssignedEvents = [];
+          let paymentMethods = roomResp['My_Result']['allowed_payment_methods'] as any[];
+          this.showPaymentDetails = paymentMethods.some(item => item.code === '001' || item.code === '004');
+          this.updateBookingEventsDateRange(this.calendarData.bookingEvents);
+          this.updateBookingEventsDateRange(this.calendarData.toBeAssignedEvents);
+          let dt = new Date();
+          this.today = dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear();
+          let startingDay: Date = new Date(this.getStartingDateOfCalendar());
+          startingDay.setHours(0, 0, 0, 0);
+          this.days = bookingResp.days;
+          this.calendarData.days = this.days;
+          this.calendarData.monthsInfo = bookingResp.months;
+          setTimeout(() => {
+            this.scrollToElement(this.today);
+          }, 200);
         });
+      });
     } catch (error) {}
   }
   componentDidLoad() {
     this.scrollToElement(this.today);
   }
-  @Listen("deleteButton")
+  @Listen('deleteButton')
   async handledeleteEvent(ev: CustomEvent) {
     try {
       ev.stopImmediatePropagation();
@@ -136,33 +99,23 @@ export class IglooCalendar {
 
       this.calendarData = {
         ...this.calendarData,
-        bookingEvents: bookingEvent.filter((e) => e.POOL !== ev.detail),
+        bookingEvents: bookingEvent.filter(e => e.POOL !== ev.detail),
       };
     } catch (error) {
       //toastr.error(error);
     }
   }
   updateBookingEventsDateRange(eventData) {
-    eventData.forEach((bookingEvent) => {
+    eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
       bookingEvent.defaultDateRange = {};
-      bookingEvent.defaultDateRange.fromDate = new Date(
-        bookingEvent.FROM_DATE + "T00:00:00"
-      );
-      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(
-        bookingEvent.defaultDateRange.fromDate
-      );
-      bookingEvent.defaultDateRange.fromDateTimeStamp =
-        bookingEvent.defaultDateRange.fromDate.getTime();
+      bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
+      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.fromDate.getTime();
 
-      bookingEvent.defaultDateRange.toDate = new Date(
-        bookingEvent.TO_DATE + "T00:00:00"
-      );
-      bookingEvent.defaultDateRange.toDateStr = this.getDateStr(
-        bookingEvent.defaultDateRange.toDate
-      );
-      bookingEvent.defaultDateRange.toDateTimeStamp =
-        bookingEvent.defaultDateRange.toDate.getTime();
+      bookingEvent.defaultDateRange.toDate = new Date(bookingEvent.TO_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.toDateStr = this.getDateStr(bookingEvent.defaultDateRange.toDate);
+      bookingEvent.defaultDateRange.toDateTimeStamp = bookingEvent.defaultDateRange.toDate.getTime();
 
       bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS; // (bookingEvent.defaultDateRange.toDate.getTime() - bookingEvent.defaultDateRange.fromDate.getTime())/(86400000);
       bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
@@ -172,7 +125,7 @@ export class IglooCalendar {
     let roomsData: { [key: string]: any }[] = new Array();
     if (roomServiceResp.My_Result?.roomtypes?.length) {
       roomsData = roomServiceResp.My_Result.roomtypes;
-      roomServiceResp.My_Result.roomtypes.forEach((roomCategory) => {
+      roomServiceResp.My_Result.roomtypes.forEach(roomCategory => {
         roomCategory.expanded = true;
       });
     }
@@ -180,7 +133,7 @@ export class IglooCalendar {
   }
 
   getLegendData(aData) {
-    return aData["My_Result"].calendar_legends;
+    return aData['My_Result'].calendar_legends;
   }
 
   getStartingDateOfCalendar() {
@@ -193,129 +146,103 @@ export class IglooCalendar {
 
   getDay(dt) {
     const currentDate = new Date(dt);
-    const locale = "en-US";
+    const locale = 'en-US';
     const dayOfWeek = this.getLocalizedDayOfWeek(currentDate, locale);
-    return dayOfWeek + " " + currentDate.getDate();
+    return dayOfWeek + ' ' + currentDate.getDate();
   }
 
   getLocalizedDayOfWeek(date, locale) {
-    const options = { weekday: "short" };
+    const options = { weekday: 'short' };
     return date.toLocaleDateString(locale, options);
   }
 
-  getLocalizedMonth(date, locale = "default") {
-    return (
-      date.toLocaleString(locale, { month: "short" }) + " " + date.getFullYear()
-    );
+  getLocalizedMonth(date, locale = 'default') {
+    return date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
   }
 
-  getDateStr(date, locale = "default") {
-    return (
-      date.getDate() +
-      " " +
-      date.toLocaleString(locale, { month: "short" }) +
-      " " +
-      date.getFullYear()
-    );
+  getDateStr(date, locale = 'default') {
+    return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
   }
 
   scrollToElement(goToDate) {
-    this.scrollContainer =
-      this.scrollContainer ||
-      this.element.querySelector(".calendarScrollContainer");
-    const topLeftCell = this.element.querySelector(".topLeftCell");
-    const gotoDay = this.element.querySelector(".day-" + goToDate);
+    this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
+    const topLeftCell = this.element.querySelector('.topLeftCell');
+    const gotoDay = this.element.querySelector('.day-' + goToDate);
     if (gotoDay) {
       this.scrollContainer.scrollTo({ left: 0 });
       const gotoRect = gotoDay.getBoundingClientRect();
       const containerRect = this.scrollContainer.getBoundingClientRect();
       const topLeftCellRect = topLeftCell.getBoundingClientRect();
       this.scrollContainer.scrollTo({
-        left:
-          gotoRect.left -
-          containerRect.left -
-          topLeftCellRect.width -
-          gotoRect.width,
+        left: gotoRect.left - containerRect.left - topLeftCellRect.width - gotoRect.width,
       });
     }
   }
 
-  @Listen("scrollPageToRoom", { target: "window" })
+  @Listen('scrollPageToRoom', { target: 'window' })
   scrollPageToRoom(event: CustomEvent) {
     let targetScrollClass = event.detail.refClass;
-    this.scrollContainer =
-      this.scrollContainer ||
-      this.element.querySelector(".calendarScrollContainer");
-    const topLeftCell = this.element.querySelector(".topLeftCell");
-    const gotoRoom = this.element.querySelector("." + targetScrollClass);
+    this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
+    const topLeftCell = this.element.querySelector('.topLeftCell');
+    const gotoRoom = this.element.querySelector('.' + targetScrollClass);
     if (gotoRoom) {
       this.scrollContainer.scrollTo({ top: 0 });
       const gotoRect = gotoRoom.getBoundingClientRect();
       const containerRect = this.scrollContainer.getBoundingClientRect();
       const topLeftCellRect = topLeftCell.getBoundingClientRect();
       this.scrollContainer.scrollTo({
-        top:
-          gotoRect.top -
-          containerRect.top -
-          topLeftCellRect.height -
-          gotoRect.height,
+        top: gotoRect.top - containerRect.top - topLeftCellRect.height - gotoRect.height,
       });
     }
   }
 
   shouldRenderCalendarView() {
     // console.log("rendering...")
-    return (
-      this.calendarData &&
-      this.calendarData.days &&
-      this.calendarData.days.length
-    );
+    return this.calendarData && this.calendarData.days && this.calendarData.days.length;
   }
 
   onOptionSelect(event: CustomEvent<{ [key: string]: any }>) {
     const opt: { [key: string]: any } = event.detail;
-    const calendarElement = this.element.querySelector("#iglooCalendar");
+    const calendarElement = this.element.querySelector('#iglooCalendar');
     switch (opt.key) {
-      case "showAssigned":
-        calendarElement.classList.remove("showLegend");
-        calendarElement.classList.remove("showToBeAssigned");
-        calendarElement.classList.toggle("showToBeAssigned");
+      case 'showAssigned':
+        calendarElement.classList.remove('showLegend');
+        calendarElement.classList.remove('showToBeAssigned');
+        calendarElement.classList.toggle('showToBeAssigned');
 
         this.showLegend = false;
         this.showToBeAssigned = true;
         break;
-      case "showLegend":
-        calendarElement.classList.remove("showToBeAssigned");
-        calendarElement.classList.remove("showLegend");
-        calendarElement.classList.toggle("showLegend");
+      case 'showLegend':
+        calendarElement.classList.remove('showToBeAssigned');
+        calendarElement.classList.remove('showLegend');
+        calendarElement.classList.toggle('showLegend');
 
         this.showLegend = true;
         this.showToBeAssigned = false;
         break;
-      case "calendar":
+      case 'calendar':
         let dt = new Date(opt.data);
-        this.scrollToElement(
-          dt.getDate() + "_" + (dt.getMonth() + 1) + "_" + dt.getFullYear()
-        );
+        this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
         break;
-      case "search":
+      case 'search':
         break;
-      case "add":
+      case 'add':
         this.bookingItem = opt.data;
         break;
-      case "gotoToday":
+      case 'gotoToday':
         this.scrollToElement(this.today);
         break;
-      case "closeSideMenu":
+      case 'closeSideMenu':
         this.closeSideMenu();
         break;
     }
   }
 
   closeSideMenu() {
-    const calendarElement = this.element.querySelector("#iglooCalendar");
-    calendarElement.classList.remove("showToBeAssigned");
-    calendarElement.classList.remove("showLegend");
+    const calendarElement = this.element.querySelector('#iglooCalendar');
+    calendarElement.classList.remove('showToBeAssigned');
+    calendarElement.classList.remove('showLegend');
 
     this.showLegend = false;
     this.showToBeAssigned = false;
@@ -324,13 +251,7 @@ export class IglooCalendar {
   scrollViewDragPos = { top: 0, left: 0, x: 0, y: 0 };
   dragScrollContent(event: MouseEvent) {
     this.scrollViewDragging = false;
-    let isPreventPageScroll =
-      event && event.target
-        ? this.hasAncestorWithClass(
-            event.target as HTMLElement,
-            "preventPageScroll"
-          )
-        : false;
+    let isPreventPageScroll = event && event.target ? this.hasAncestorWithClass(event.target as HTMLElement, 'preventPageScroll') : false;
     if (!isPreventPageScroll) {
       this.scrollViewDragPos = {
         // The current scroll
@@ -340,8 +261,8 @@ export class IglooCalendar {
         x: event.clientX,
         y: event.clientY,
       };
-      document.addEventListener("mousemove", this.onScrollContentMoveHandler);
-      document.addEventListener("mouseup", this.onScrollContentMoveEndHandler);
+      document.addEventListener('mousemove', this.onScrollContentMoveHandler);
+      document.addEventListener('mouseup', this.onScrollContentMoveEndHandler);
     }
   }
 
@@ -359,8 +280,8 @@ export class IglooCalendar {
   };
 
   onScrollContentMoveEndHandler: EventListener = () => {
-    document.removeEventListener("mousemove", this.onScrollContentMoveHandler);
-    document.removeEventListener("mouseup", this.onScrollContentMoveEndHandler);
+    document.removeEventListener('mousemove', this.onScrollContentMoveHandler);
+    document.removeEventListener('mouseup', this.onScrollContentMoveEndHandler);
   };
 
   calendarScrolling() {
@@ -370,9 +291,7 @@ export class IglooCalendar {
     let leftX = containerRect.x + leftSideMenuSize;
     let rightX = containerRect.x + containerRect.width;
 
-    let cells = Array.from(
-      this.element.querySelectorAll(".monthCell")
-    ) as HTMLElement[];
+    let cells = Array.from(this.element.querySelectorAll('.monthCell')) as HTMLElement[];
 
     if (cells.length) {
       cells.map((monthContainer: HTMLElement) => {
@@ -382,29 +301,18 @@ export class IglooCalendar {
         } else if (monthRect.x > rightX) {
           // item is outside scrollview, in +x
         } else {
-          let titleElement = monthContainer.querySelector(
-            ".monthTitle"
-          ) as HTMLElement;
+          let titleElement = monthContainer.querySelector('.monthTitle') as HTMLElement;
           let marginLeft = 0;
           let monthWidth = monthRect.width;
           if (monthRect.x < leftX) {
             marginLeft = Math.abs(monthRect.x) - leftX;
-            marginLeft =
-              monthRect.x < 0
-                ? Math.abs(monthRect.x) + leftX
-                : Math.abs(marginLeft);
-            monthWidth =
-              monthRect.x + monthRect.width > rightX
-                ? maxWidth
-                : monthRect.x + monthRect.width - leftX;
+            marginLeft = monthRect.x < 0 ? Math.abs(monthRect.x) + leftX : Math.abs(marginLeft);
+            monthWidth = monthRect.x + monthRect.width > rightX ? maxWidth : monthRect.x + monthRect.width - leftX;
           } else {
-            monthWidth =
-              maxWidth - monthWidth > monthWidth
-                ? monthWidth
-                : maxWidth - monthRect.x + leftX;
+            monthWidth = maxWidth - monthWidth > monthWidth ? monthWidth : maxWidth - monthRect.x + leftX;
           }
-          titleElement.style.marginLeft = marginLeft + "px";
-          titleElement.style.width = monthWidth + "px";
+          titleElement.style.marginLeft = marginLeft + 'px';
+          titleElement.style.width = monthWidth + 'px';
         }
       });
     }
@@ -421,7 +329,7 @@ export class IglooCalendar {
     return false;
   }
 
-  @Listen("showBookingPopup", { target: "window" })
+  @Listen('showBookingPopup', { target: 'window' })
   showBookingPopupEventDataHandler(event: CustomEvent) {
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -429,11 +337,9 @@ export class IglooCalendar {
     //console.log("show booking event", event);
   }
 
-  @Listen("updateEventData")
+  @Listen('updateEventData')
   updateEventDataHandler(event: CustomEvent) {
-    let bookedData = this.calendarData.bookingEvents.find(
-      (bookedEvent) => bookedEvent.id === event.detail.id
-    );
+    let bookedData = this.calendarData.bookingEvents.find(bookedEvent => bookedEvent.id === event.detail.id);
     if (bookedData && event.detail && event.detail.data) {
       Object.entries(event.detail.data).forEach(([key, value]) => {
         bookedData[key] = value;
@@ -441,43 +347,37 @@ export class IglooCalendar {
     }
   }
 
-  @Listen("dragOverEventData")
+  @Listen('dragOverEventData')
   dragOverEventDataHandler(event: CustomEvent) {
-    if (event.detail.id === "CALCULATE_DRAG_OVER_BOUNDS") {
-      let topLeftCell = document.querySelector(
-        "igl-cal-header .topLeftCell"
-      ) as HTMLElement;
-      let containerDays = document.querySelectorAll(
-        ".headersContainer .headerCell"
-      );
-      let containerRooms = document.querySelectorAll(
-        ".bodyContainer .roomRow .roomTitle"
-      );
+    if (event.detail.id === 'CALCULATE_DRAG_OVER_BOUNDS') {
+      let topLeftCell = document.querySelector('igl-cal-header .topLeftCell') as HTMLElement;
+      let containerDays = document.querySelectorAll('.headersContainer .headerCell');
+      let containerRooms = document.querySelectorAll('.bodyContainer .roomRow .roomTitle');
       this.visibleCalendarCells = { x: [], y: [] };
 
-      containerDays.forEach((element) => {
+      containerDays.forEach(element => {
         const htmlElement = element as HTMLElement;
         this.visibleCalendarCells.x.push({
           left: htmlElement.offsetLeft + topLeftCell.offsetWidth,
           width: htmlElement.offsetWidth,
-          id: htmlElement.getAttribute("data-day"),
+          id: htmlElement.getAttribute('data-day'),
         });
       });
 
-      containerRooms.forEach((element) => {
+      containerRooms.forEach(element => {
         const htmlElement = element as HTMLElement;
         this.visibleCalendarCells.y.push({
           top: htmlElement.offsetTop,
           height: htmlElement.offsetHeight,
-          id: htmlElement.getAttribute("data-room"),
+          id: htmlElement.getAttribute('data-room'),
         });
       });
       this.highlightDragOver(true, event.detail.data);
-    } else if (event.detail.id === "DRAG_OVER") {
+    } else if (event.detail.id === 'DRAG_OVER') {
       this.highlightDragOver(true, event.detail.data);
-    } else if (event.detail.id === "DRAG_OVER_END") {
+    } else if (event.detail.id === 'DRAG_OVER_END') {
       this.highlightDragOver(false, event.detail.data);
-    } else if (event.detail.id === "STRETCH_OVER_END") {
+    } else if (event.detail.id === 'STRETCH_OVER_END') {
       this.highlightDragOver(false, event.detail.data);
     }
   }
@@ -485,37 +385,26 @@ export class IglooCalendar {
   async highlightDragOver(hightLightElement, currentPosition) {
     let xElement, yElement;
     if (currentPosition) {
-      xElement = this.visibleCalendarCells.x.find(
-        (pos) =>
-          pos.left < currentPosition.x &&
-          currentPosition.x <= pos.left + pos.width
-      );
-      yElement = this.visibleCalendarCells.y.find(
-        (pos) =>
-          pos.top < currentPosition.y &&
-          currentPosition.y <= pos.top + pos.height
-      );
+      xElement = this.visibleCalendarCells.x.find(pos => pos.left < currentPosition.x && currentPosition.x <= pos.left + pos.width);
+      yElement = this.visibleCalendarCells.y.find(pos => pos.top < currentPosition.y && currentPosition.y <= pos.top + pos.height);
     }
     // console.log(hightLightElement+":::"+yElement.id+"_"+xElement.id);
     if (hightLightElement && xElement && yElement) {
       this.dragOverHighlightElement.emit({
-        dragOverElement: yElement.id + "_" + xElement.id,
+        dragOverElement: yElement.id + '_' + xElement.id,
       });
     } else {
-      this.dragOverHighlightElement.emit({ dragOverElement: "" });
+      this.dragOverHighlightElement.emit({ dragOverElement: '' });
     }
     if (!hightLightElement) {
       this.moveBookingTo.emit({
         bookingId: currentPosition.id,
         fromRoomId: currentPosition.fromRoomId,
-        toRoomId: (yElement && yElement.id) || "revert",
-        moveToDay: (xElement && xElement.id) || "revert",
+        toRoomId: (yElement && yElement.id) || 'revert',
+        moveToDay: (xElement && xElement.id) || 'revert',
         pool: currentPosition.pool,
         from_date: convertDMYToISO(xElement && xElement.id),
-        to_date: computeEndDate(
-          xElement && xElement.id,
-          currentPosition.nbOfDays
-        ),
+        to_date: computeEndDate(xElement && xElement.id, currentPosition.nbOfDays),
       });
     }
   }
@@ -536,27 +425,15 @@ export class IglooCalendar {
                     propertyid={this.propertyid}
                     class="tobeAssignedContainer"
                     calendarData={this.calendarData}
-                    onOptionEvent={(evt) => this.onOptionSelect(evt)}
+                    onOptionEvent={evt => this.onOptionSelect(evt)}
                   ></igl-to-be-assigned>
                 ) : null,
                 this.showLegend ? (
-                  <igl-legends
-                    class="legendContainer"
-                    legendData={this.calendarData.legendData}
-                    onOptionEvent={(evt) => this.onOptionSelect(evt)}
-                  ></igl-legends>
+                  <igl-legends class="legendContainer" legendData={this.calendarData.legendData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-legends>
                 ) : null,
-                <div
-                  class="calendarScrollContainer"
-                  onMouseDown={(event) => this.dragScrollContent(event)}
-                  onScroll={() => this.calendarScrolling()}
-                >
+                <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
                   <div id="calendarContainer">
-                    <igl-cal-header
-                      today={this.today}
-                      calendarData={this.calendarData}
-                      onOptionEvent={(evt) => this.onOptionSelect(evt)}
-                    ></igl-cal-header>
+                    <igl-cal-header today={this.today} calendarData={this.calendarData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-cal-header>
                     <igl-cal-body
                       countryNodeList={this.countryNodeList}
                       currency={this.calendarData.currency}
@@ -564,26 +441,21 @@ export class IglooCalendar {
                       isScrollViewDragging={this.scrollViewDragging}
                       calendarData={this.calendarData}
                     ></igl-cal-body>
-                    <igl-cal-footer
-                      today={this.today}
-                      calendarData={this.calendarData}
-                      onOptionEvent={(evt) => this.onOptionSelect(evt)}
-                    ></igl-cal-footer>
+                    <igl-cal-footer today={this.today} calendarData={this.calendarData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-cal-footer>
                   </div>
                 </div>,
               ]
-            : "Data not yet loaded"}
-          {this.bookingItem ? (
+            : 'Data not yet loaded'}
+          {this.bookingItem && (
             <igl-book-property
+              showPaymentDetails={this.showPaymentDetails}
               countryNodeList={this.countryNodeList}
               currency={this.calendarData.currency}
               language={this.language}
               propertyid={this.propertyid}
               bookingData={this.bookingItem}
-              onCloseBookingWindow={(_) => (this.bookingItem = null)}
+              onCloseBookingWindow={_ => (this.bookingItem = null)}
             ></igl-book-property>
-          ) : (
-            ""
           )}
         </div>
       </Host>

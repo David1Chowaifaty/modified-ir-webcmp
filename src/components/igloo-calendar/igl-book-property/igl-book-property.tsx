@@ -14,6 +14,7 @@ export class IglBookProperty {
   @Prop() propertyid: number;
   @Prop() language: string;
   @Prop() countryNodeList;
+  @Prop() showPaymentDetails: boolean = false;
   @Prop() currency: { id: number; code: string };
   @Prop({ reflect: true, mutable: true }) bookingData: { [key: string]: any };
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
@@ -43,7 +44,16 @@ export class IglBookProperty {
   private bedPreferenceType: IEntries[] = [];
   private bookingService: BookingService = new BookingService();
   private eventsService = new EventsService();
-
+  componentDidLoad() {
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        this.closeWindow();
+      }
+    });
+  }
+  disconnectedCallback() {
+    document.removeEventListener('keydown', () => {});
+  }
   async componentWillLoad() {
     if (!this.bookingData.defaultDateRange) {
       return;
@@ -119,6 +129,7 @@ export class IglBookProperty {
         roomsInfo: data.roomtypes,
       };
       this.message = data.tax_statement;
+      console.log(data);
     } catch (error) {
       // toastr.error(error);
     }
@@ -637,6 +648,7 @@ export class IglBookProperty {
 
           {this.isPageTwo() && (
             <igl-pagetwo
+              showPaymentDetails={this.showPaymentDetails}
               selectedGuestData={this.guestData}
               countryNodeList={this.countryNodeList}
               isLoading={this.isLoading}

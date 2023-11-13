@@ -34,7 +34,7 @@
 }
 .sidebar-right.active {
   right: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .sidebar-left {

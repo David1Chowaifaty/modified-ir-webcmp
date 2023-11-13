@@ -39,6 +39,7 @@ export namespace Components {
         "currency": { id: number; code: string };
         "language": string;
         "propertyid": number;
+        "showPaymentDetails": boolean;
     }
     interface IglBookingEvent {
         "allBookingEvents": { [key: string]: any };
@@ -102,12 +103,14 @@ export namespace Components {
         "language": string;
         "selectedGuestData": any;
         "selectedRooms": any;
+        "showPaymentDetails": boolean;
         "showSplitBookingOption": boolean;
     }
     interface IglPropertyBookedBy {
         "countryNodeList": ICountry[];
         "defaultData": { [key: string]: any };
         "language": string;
+        "showPaymentDetails": boolean;
     }
     interface IglTbaBookingView {
         "calendarData": { [key: string]: any };
@@ -1377,6 +1380,7 @@ declare namespace LocalJSX {
         "language"?: string;
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
         "propertyid"?: number;
+        "showPaymentDetails"?: boolean;
     }
     interface IglBookingEvent {
         "allBookingEvents"?: { [key: string]: any };
@@ -1466,6 +1470,7 @@ declare namespace LocalJSX {
         "onDataUpdateEvent"?: (event: IglPagetwoCustomEvent<IPageTwoDataUpdateProps>) => void;
         "selectedGuestData"?: any;
         "selectedRooms"?: any;
+        "showPaymentDetails"?: boolean;
         "showSplitBookingOption"?: boolean;
     }
     interface IglPropertyBookedBy {
@@ -1473,6 +1478,7 @@ declare namespace LocalJSX {
         "defaultData"?: { [key: string]: any };
         "language"?: string;
         "onDataUpdateEvent"?: (event: IglPropertyBookedByCustomEvent<{ [key: string]: any }>) => void;
+        "showPaymentDetails"?: boolean;
     }
     interface IglTbaBookingView {
         "calendarData"?: { [key: string]: any };
