@@ -321,12 +321,12 @@ export class BookingService {
         };
         console.log('body', body);
 
-        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data);
-        return data;
+        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        // if (data.ExceptionMsg !== '') {
+        //   throw new Error(data.ExceptionMsg);
+        // }
+        // console.log(data);
+        // return data;
       } else {
         throw new Error('Invalid token');
       }

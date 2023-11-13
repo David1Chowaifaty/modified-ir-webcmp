@@ -62,7 +62,7 @@ export class IrRoom {
         <div class="w-100">
           <div class="d-flex justify-content-between">
             <div>
-              <strong>{this.mealCodeName || ''} </strong> {this.myRoomTypeFoodCat} - {this.item.rateplan.is_non_refundable ? 'Refundable' : 'Non-refundable'}{' '}
+              <strong>{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName} - {this.item.rateplan.is_non_refundable ? 'Refundable' : 'Non-refundable'}{' '}
               {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
             </div>
             <div>
@@ -115,7 +115,7 @@ export class IrRoom {
           <div innerHTML={this.item.rateplan.cancelation || ''}></div>
           {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
-          {/* <ir-label label="Meal Plan:" value={this.mealCodeName}></ir-label>*/}
+          <ir-label label="Meal Plan:" value={this.mealCodeName}></ir-label>
           <ir-label label="Special rate:" value="Non-refundable"></ir-label>
         </div>
         {/* </div> */}

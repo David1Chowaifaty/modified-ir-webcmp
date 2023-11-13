@@ -1,0 +1,95 @@
+{
+  "assign_units": true,
+  "check_in": true,
+  "booking": {
+    "booking_nbr": "",
+    "from_date": "2023-11-15",
+    "to_date": "2023-11-17",
+    "remark": null,
+    "property": {
+      "id": 42
+    },
+    "source": {
+      "code": "001",
+      "description": "Agent"
+    },
+    "currency": {
+      "code": "USD",
+      "id": 4
+    },
+    "arrival": {
+      "code": "004"
+    },
+    "guest": {
+      "email": "test@gmail.com",
+      "first_name": "ronald",
+      "last_name": "yazbik",
+      "country_id": 2,
+      "city": null,
+      "mobile": "03030303",
+      "address": "",
+      "dob": null,
+      "subscribe_to_news_letter": false,
+      "cci": {
+        "nbr": "4111111111111111",
+        "holder_name": "david",
+        "expiry_month": "11",
+        "expiry_year": 2023
+      },
+      "id": 195932
+    },
+    "rooms": [
+      {
+        "roomtype": {
+          "id": 110,
+          "name": "Standard Rooms",
+          "physicalrooms": null,
+          "rateplans": null,
+          "availabilities": null,
+          "inventory": 0,
+          "rate": 42
+        },
+        "rateplan": {
+          "id": 123,
+          "name": "Standard Rooms/Bed-&-breakfast",
+          "rate_restrictions": null,
+          "variations": null,
+          "cancelation": "<u><b>Cancellation</b></u>: 100% of the total price will be charged if cancelled after Friday, 10 Nov 2023, 22:00 or in case of no show.\r\n",
+          "guarantee": "<u><b>Guarantee</b></u>: No deposit required."
+        },
+        "unit": {
+          "id": 24
+        },
+        "occupancy": {
+          "adult_nbr": 1,
+          "children_nbr": 0,
+          "infant_nbr": null
+        },
+        "from_date": "2023-11-15",
+        "to_date": "2023-11-17",
+        "notes": null,
+        "days": [
+          {
+            "date": "2023-11-15",
+            "amount": 42
+          },
+          {
+            "date": "2023-11-16",
+            "amount": 42
+          }
+        ],
+        "guest": {
+          "email": null,
+          "first_name": "david",
+          "last_name": null,
+          "country_id": null,
+          "city": null,
+          "mobile": null,
+          "address": null,
+          "dob": null,
+          "subscribe_to_news_letter": null
+        }
+      }
+    ]
+  }
+}

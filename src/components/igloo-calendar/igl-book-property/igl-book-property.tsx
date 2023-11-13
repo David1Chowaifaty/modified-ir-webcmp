@@ -601,7 +601,7 @@ export class IglBookProperty {
         arrivalTime,
         pr_id,
       );
-      window.location.reload();
+      //window.location.reload();
       //console.log("booking data ", this.bookingData);
     } catch (error) {
       //  toastr.error(error);

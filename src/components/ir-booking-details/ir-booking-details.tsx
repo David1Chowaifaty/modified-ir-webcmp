@@ -328,8 +328,8 @@ export class IrBookingDetails {
             </div>
             <div class="card">
               {this.bookingData.rooms.map((room: Room, index: number) => {
-                const mealCodeName = room.roomtype.name;
-                const myRoomTypeFoodCat = room.rateplan.name;
+                const mealCodeName = room.rateplan.name;
+                const myRoomTypeFoodCat = room.roomtype.name;
 
                 return [
                   <ir-room
