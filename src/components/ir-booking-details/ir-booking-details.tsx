@@ -328,12 +328,12 @@ export class IrBookingDetails {
             </div>
             <div class="card">
               {this.bookingData.rooms.map((room: Room, index: number) => {
-                const mealCodeName = room.rateplan.name;
-                // const myRoomTypeFoodCat = this._getBookingStatus(bsa.My_Room_type.FOOD_ARRANGE_CAT_CODE, '_FOOD_ARRANGE_CAT');
+                const mealCodeName = room.roomtype.name;
+                const myRoomTypeFoodCat = room.rateplan.name;
 
                 return [
                   <ir-room
-                    myRoomTypeFoodCat={''}
+                    myRoomTypeFoodCat={myRoomTypeFoodCat}
                     mealCodeName={mealCodeName}
                     currency={this.bookingData.currency.code}
                     hasRoomEdit={this.hasRoomEdit}
