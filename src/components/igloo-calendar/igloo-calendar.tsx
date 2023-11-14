@@ -5,7 +5,8 @@ import { computeEndDate, convertDMYToISO, formatLegendColors } from '../../utils
 
 import axios from 'axios';
 import { EventsService } from '../../services/events.service';
-import { ICountry } from '../../models/IBooking';
+import { ICountry, RoomBlockDetails, RoomBookingDetails } from '../../models/IBooking';
+import moment from 'moment';
 
 @Component({
   tag: 'igloo-calendar',
@@ -72,8 +73,7 @@ export class IglooCalendar {
           this.showPaymentDetails = paymentMethods.some(item => item.code === '001' || item.code === '004');
           this.updateBookingEventsDateRange(this.calendarData.bookingEvents);
           this.updateBookingEventsDateRange(this.calendarData.toBeAssignedEvents);
-          let dt = new Date();
-          this.today = dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear();
+          this.today = this.transformDateForScroll(new Date());
           let startingDay: Date = new Date(this.getStartingDateOfCalendar());
           startingDay.setHours(0, 0, 0, 0);
           this.days = bookingResp.days;
@@ -105,6 +105,7 @@ export class IglooCalendar {
       //toastr.error(error);
     }
   }
+
   updateBookingEventsDateRange(eventData) {
     eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
@@ -165,6 +166,7 @@ export class IglooCalendar {
   }
 
   scrollToElement(goToDate) {
+    console.log(goToDate);
     this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
     const topLeftCell = this.element.querySelector('.topLeftCell');
     const gotoDay = this.element.querySelector('.day-' + goToDate);
@@ -178,7 +180,35 @@ export class IglooCalendar {
       });
     }
   }
-
+  @Listen('bookingCreated')
+  onBookingCreation(event: CustomEvent<RoomBookingDetails[]>) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    this.updateBookingEventsDateRange(event.detail);
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: [...this.calendarData.bookingEvents, ...event.detail],
+    };
+    setTimeout(() => {
+      this.scrollToElement(this.transformDateForScroll(new Date(event.detail[0].FROM_DATE)));
+    }, 200);
+  }
+  @Listen('blockedCreated')
+  onBlockCreation(event: CustomEvent<RoomBlockDetails>) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    this.updateBookingEventsDateRange([event.detail]);
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: [...this.calendarData.bookingEvents, event.detail],
+    };
+    // setTimeout(() => {
+    //   this.scrollToElement(this.transformDateForScroll(new Date(event.detail.FROM_DATE)));
+    // }, 200);
+  }
+  private transformDateForScroll(date: Date) {
+    return moment(date).format('D_M_YYYY');
+  }
   @Listen('scrollPageToRoom', { target: 'window' })
   scrollPageToRoom(event: CustomEvent) {
     let targetScrollClass = event.detail.refClass;

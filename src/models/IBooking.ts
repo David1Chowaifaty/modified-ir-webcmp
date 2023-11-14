@@ -1,5 +1,5 @@
-import { Booking, IFormat, Room } from "./booking.dto";
-import { IRoomService } from "./property-types";
+import { Booking, Guest, IFormat, Room } from './booking.dto';
+import { IRoomService } from './property-types';
 
 export default interface IBooking {
   ID: string;
@@ -29,16 +29,16 @@ export default interface IBooking {
 }
 
 export type STATUS =
-  | "IN-HOUSE"
-  | "CONFIRMED"
-  | "PENDING-CONFIRMATION"
-  | "SPLIT-UNIT"
-  | "CHECKED-IN"
-  | "CHECKED-OUT"
-  | "BLOCKED"
-  | "BLOCKED-WITH-DATES"
-  | "NOTES"
-  | "OUTSTANDING-BALANCE";
+  | 'IN-HOUSE'
+  | 'CONFIRMED'
+  | 'PENDING-CONFIRMATION'
+  | 'SPLIT-UNIT'
+  | 'CHECKED-IN'
+  | 'CHECKED-OUT'
+  | 'BLOCKED'
+  | 'BLOCKED-WITH-DATES'
+  | 'NOTES'
+  | 'OUTSTANDING-BALANCE';
 
 export interface ICountry {
   cities: string[];
@@ -151,7 +151,7 @@ export interface IBlockUnit {
   from_date: string;
   to_date: string;
   pr_id: string;
-  STAY_STATUS_CODE: "003" | "004"|"002";
+  STAY_STATUS_CODE: '003' | '004' | '002';
   DESCRIPTION: string;
   NOTES: string;
   BLOCKED_TILL_DATE?: string;
@@ -219,11 +219,64 @@ export interface RoomRatePlanUpdateData {
   rate: number;
 }
 export interface RoomRatePlanUpdateEvent {
-  eventType: "roomRatePlanUpdate";
+  eventType: 'roomRatePlanUpdate';
   data: RoomRatePlanUpdateData;
 }
 export interface RoomUpdateEvent {
   roomRatePlanUpdateData: RoomRatePlanUpdateData;
   roomCategoryId: number;
   roomCategoryName: string;
+}
+
+export interface RoomBookingDetails {
+  ID: string;
+  TO_DATE: string;
+  FROM_DATE: string;
+  NO_OF_DAYS: number;
+  IS_EDITABLE: boolean;
+  STATUS: STATUS;
+  NAME: string;
+  PHONE: string;
+  ENTRY_DATE: string;
+  RATE: number;
+  RATE_PLAN: string;
+  SPLIT_BOOKING: boolean;
+  RATE_PLAN_ID: number;
+  IDENTIFIER: string;
+  RATE_TYPE: number;
+  ADULTS_COUNT: number;
+  CHILDREN_COUNT: number;
+  PR_ID: number;
+  POOL: string;
+  GUEST: any;
+  BOOKING_NUMBER: string;
+  cancelation: string;
+  guarantee: string;
+  TOTAL_PRICE: number;
+  COUNTRY: string;
+  FROM_DATE_STR: string;
+  TO_DATE_STR: string;
+  adult_child_offering: string;
+  ARRIVAL_TIME: string;
+}
+export interface RoomBlockDetails {
+  ID: string;
+  NOTES: string;
+  BALANCE: string;
+  NAME: string;
+  RELEASE_AFTER_HOURS: string;
+  PR_ID: string;
+  ENTRY_DATE: string;
+  ENTRY_HOUR: string;
+  ENTRY_MINUTE: string;
+  OPTIONAL_REASON: string;
+  FROM_DATE: string;
+  TO_DATE: string;
+  NO_OF_DAYS: number;
+  STATUS: STATUS;
+  POOL: string;
+  STATUS_CODE: string;
+  OUT_OF_SERVICE: boolean;
+  FROM_DATE_STR: string;
+  TO_DATE_STR: string;
 }

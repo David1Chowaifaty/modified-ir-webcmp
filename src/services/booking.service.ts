@@ -156,7 +156,8 @@ export class BookingService {
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
-        return data;
+        console.log(data);
+        return data['My_Params_Block_Exposed_Unit'];
       }
     } catch (error) {
       console.error(error);
@@ -320,13 +321,12 @@ export class BookingService {
           },
         };
         console.log('body', body);
-
-        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        // if (data.ExceptionMsg !== '') {
-        //   throw new Error(data.ExceptionMsg);
-        // }
-        // console.log(data);
-        // return data;
+        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        console.log(data['My_Result']);
+        return data['My_Result'];
       } else {
         throw new Error('Invalid token');
       }

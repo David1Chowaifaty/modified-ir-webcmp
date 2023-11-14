@@ -5,12 +5,12 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { ICountry } from "./models/IBooking";
+import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
 import { Guest, Room } from "./models/booking.dto";
-export { ICountry } from "./models/IBooking";
+export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
@@ -597,6 +597,8 @@ declare global {
     };
     interface HTMLIglBookPropertyElementEventMap {
         "closeBookingWindow": { [key: string]: any };
+        "bookingCreated": RoomBookingDetails[];
+        "blockedCreated": RoomBlockDetails;
     }
     interface HTMLIglBookPropertyElement extends Components.IglBookProperty, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyElement, ev: IglBookPropertyCustomEvent<HTMLIglBookPropertyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1378,6 +1380,8 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: { id: number; code: string };
         "language"?: string;
+        "onBlockedCreated"?: (event: IglBookPropertyCustomEvent<RoomBlockDetails>) => void;
+        "onBookingCreated"?: (event: IglBookPropertyCustomEvent<RoomBookingDetails[]>) => void;
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
         "propertyid"?: number;
         "showPaymentDetails"?: boolean;

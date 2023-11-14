@@ -186,30 +186,6 @@ export class IrBookingDetails {
     }
   }
 
-  @Watch('bookingDetails')
-  watchHandler(newValue: any, oldValue: any) {
-    console.log('The new value of bookingDetails is: ', newValue);
-    console.log('The old value of bookingDetails is: ', oldValue);
-    // let _data: guestInfo = {
-    //   firstName: newValue.My_Guest.FIRST_NAME,
-    //   lastName: newValue.My_Guest.LAST_NAME,
-    //   email: newValue.My_Guest.My_User.EMAIL,
-    //   altEmail: newValue.My_Guest.My_User.DISCLOSED_EMAIL,
-    //   password: newValue.My_Guest.My_User.PASSWORD,
-    //   country: newValue.My_Guest.COUNTRY_ID,
-    //   city: newValue.My_Guest.CITY,
-    //   address: newValue.My_Guest.ADDRESS,
-    //   mobile: newValue.My_Guest.MOBILE,
-    //   prefix: newValue.My_Guest.PHONE_PREFIX,
-    //   newsletter: newValue.My_Guest.IS_NEWS_LETTER,
-    //   currency: newValue.My_Guest.My_User.CURRENCY,
-    //   language: newValue.My_Guest.My_User.LANGUAGE,
-    // };
-
-    //this.guestData = _data;
-    this.rerenderFlag = !this.rerenderFlag;
-  }
-
   @Watch('dropdownStatuses')
   watchDropdownStatuses(newValue: any, oldValue: any) {
     console.log('The new value of dropdownStatuses is: ', newValue);

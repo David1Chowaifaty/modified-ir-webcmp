@@ -48,8 +48,14 @@ export interface Guest {
   last_name: string | null;
   mobile: string | null;
   subscribe_to_news_letter: boolean | null;
+  //cci: ICCI | null;
 }
-
+export interface ICCI {
+  nbr: string | number;
+  holder_name: string | number;
+  expiry_month: string | number;
+  expiry_year: string | number;
+}
 export interface Occupancy {
   adult_nbr: number;
   children_nbr: number;

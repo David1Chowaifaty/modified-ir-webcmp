@@ -95,30 +95,30 @@ export class IrRoom {
             {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
           </div>
-          {/* <div class="collapse" id={`roomCollapse-${this.item.identifier}`}> */}
-          <div class="d-flex">
-            <div class=" sm-padding-top">
-              <strong class="sm-padding-right">Rate Breakdown:</strong>
-            </div>
-            <div class="sm-padding-top w-100 ">
-              {this.item.days.length > 0 &&
-                this.item.days.map(item => (
-                  <div class="fluid-container">
-                    <div class="row">
-                      <div class="col-xl-2 col-lg-3 col-md-2 col-sm-3 col-7 pr-0">{_getDay(item.date)}</div>{' '}
-                      <div class="col-1 px-0 d-flex justify-content-end">{_formatAmount(item.amount, this.currency)}</div>
+          <div class="collapse" id={`roomCollapse-${this.item.identifier}`}>
+            <div class="d-flex">
+              <div class=" sm-padding-top">
+                <strong class="sm-padding-right">Rate Breakdown:</strong>
+              </div>
+              <div class="sm-padding-top w-100 ">
+                {this.item.days.length > 0 &&
+                  this.item.days.map(item => (
+                    <div class="fluid-container">
+                      <div class="row">
+                        <div class="col-xl-2 col-lg-3 col-md-2 col-sm-3 col-7 pr-0">{_getDay(item.date)}</div>{' '}
+                        <div class="col-1 px-0 d-flex justify-content-end">{_formatAmount(item.amount, this.currency)}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+              </div>
             </div>
-          </div>
-          <div innerHTML={this.item.rateplan.cancelation || ''}></div>
-          {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
+            <div innerHTML={this.item.rateplan.cancelation || ''}></div>
+            {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
-          <ir-label label="Meal Plan:" value={this.mealCodeName}></ir-label>
-          <ir-label label="Special rate:" value="Non-refundable"></ir-label>
+            <ir-label label="Meal Plan:" value={this.mealCodeName}></ir-label>
+            <ir-label label="Special rate:" value="Non-refundable"></ir-label>
+          </div>
         </div>
-        {/* </div> */}
       </div>
     );
   }
