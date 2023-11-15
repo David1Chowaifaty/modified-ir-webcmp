@@ -177,9 +177,9 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       TO_DATE_STR: data.format.to_date,
       adult_child_offering: room.rateplan.selected_variation.adult_child_offering,
       ARRIVAL_TIME: data.arrival.description,
-      origin: data.booking.origin,
-      channel_booking_nbr: data.booking.channel_booking_nbr,
-      is_direct: data.booking.is_direct,
+      origin: data.origin,
+      channel_booking_nbr: data.channel_booking_nbr,
+      is_direct: data.is_direct,
     });
   });
 
