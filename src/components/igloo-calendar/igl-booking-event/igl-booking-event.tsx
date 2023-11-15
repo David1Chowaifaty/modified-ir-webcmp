@@ -1,5 +1,4 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
-import { EventsService } from '../../../services/events.service';
 
 @Component({
   tag: 'igl-booking-event',
@@ -29,7 +28,6 @@ export class IglBookingEvent {
   /* show bubble */
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
-  private eventsService = new EventsService();
   /* Resize props */
   resizeSide: string = '';
   isDragging: boolean = false;
