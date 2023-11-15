@@ -1,24 +1,15 @@
-import {
-  Component,
-  Element,
-  Event,
-  EventEmitter,
-  Host,
-  Listen,
-  Prop,
-  State,
-  h,
-} from "@stencil/core";
-import { EventsService } from "../../../services/events.service";
+import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
+import { EventsService } from '../../../services/events.service';
 
 @Component({
-  tag: "igl-booking-event",
-  styleUrl: "igl-booking-event.css",
+  tag: 'igl-booking-event',
+  styleUrl: 'igl-booking-event.css',
   scoped: true,
 })
 export class IglBookingEvent {
   @Element() private element: HTMLElement;
   @Prop() currency;
+  @Prop() is_vacation_rental: boolean = false;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
 
   @Event() updateEventData: EventEmitter;
@@ -40,7 +31,7 @@ export class IglBookingEvent {
   private bubbleInfoTopSide: boolean = false;
   private eventsService = new EventsService();
   /* Resize props */
-  resizeSide: string = "";
+  resizeSide: string = '';
   isDragging: boolean = false;
   initialX: number;
   initialY: number;
@@ -61,7 +52,7 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
-    window.addEventListener("click", this.handleClickOutsideBind);
+    window.addEventListener('click', this.handleClickOutsideBind);
   }
 
   componentDidLoad() {
@@ -77,10 +68,10 @@ export class IglBookingEvent {
   }
 
   disconnectedCallback() {
-    window.removeEventListener("click", this.handleClickOutsideBind);
+    window.removeEventListener('click', this.handleClickOutsideBind);
   }
 
-  @Listen("click", { target: "window" })
+  @Listen('click', { target: 'window' })
   handleClickOutside(event: Event) {
     const clickedElement = event.target as HTMLElement;
     // Check if the clicked element is not within the target div
@@ -90,19 +81,15 @@ export class IglBookingEvent {
     }
   }
 
-  @Listen("hideBubbleInfo", { target: "window" })
+  @Listen('hideBubbleInfo', { target: 'window' })
   hideBubbleInfoPopup(event: CustomEvent) {
-    if (
-      event.detail.currentInfoBubbleId != this.getBookingId() ||
-      (event.detail.key === "hidebubble" &&
-        event.detail.currentInfoBubbleId === this.getBookingId())
-    ) {
+    if (event.detail.currentInfoBubbleId != this.getBookingId() || (event.detail.key === 'hidebubble' && event.detail.currentInfoBubbleId === this.getBookingId())) {
       this.showInfoPopup = false;
       this.renderAgain();
     }
   }
 
-  @Listen("moveBookingTo", { target: "window" })
+  @Listen('moveBookingTo', { target: 'window' })
   async moveBookingToHandler(event: CustomEvent) {
     try {
       if (event.detail.bookingId !== this.getBookingId()) {
@@ -110,38 +97,27 @@ export class IglBookingEvent {
         return;
       }
       // event.detail.fromRoomId === this.getBookedRoomId() && ()
-      if (
-        event.detail.moveToDay === "revert" ||
-        event.detail.toRoomId === "revert"
-      ) {
+      if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
-        if (
-          this.isTouchStart &&
-          this.moveDiffereneX <= 5 &&
-          this.moveDiffereneY <= 5
-        ) {
+        if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
           this.showEventInfo(true);
         }
       } else {
-        if (
-          this.isTouchStart &&
-          this.moveDiffereneX <= 5 &&
-          this.moveDiffereneY <= 5
-        ) {
+        if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
           this.showEventInfo(true);
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
           console.log(pool, from_date, to_date, toRoomId);
-          const result = await this.eventsService.reallocateEvent(
-            pool,
-            toRoomId,
-            from_date,
-            to_date
-          );
-          this.bookingEvent.POOL = result.My_Result.POOL;
+          // const result = await this.eventsService.reallocateEvent(
+          //   pool,
+          //   toRoomId,
+          //   from_date,
+          //   to_date
+          // );
+          //this.bookingEvent.POOL = result.My_Result.POOL;
           console.log(event.detail);
-          console.log("calll update here");
+          console.log('calll update here');
         }
       }
 
@@ -169,15 +145,10 @@ export class IglBookingEvent {
 
   onMoveUpdateBooking(data) {
     this.bookingEvent.PR_ID = data.toRoomId;
-    this.bookingEvent.FROM_DATE = data.moveToDay.split("_").reverse().join("/");
+    this.bookingEvent.FROM_DATE = data.moveToDay.split('_').reverse().join('/');
     let tempDate = new Date(this.bookingEvent.FROM_DATE);
     tempDate.setDate(tempDate.getDate() + this.getStayDays());
-    this.bookingEvent.TO_DATE =
-      tempDate.getFullYear() +
-      "/" +
-      (tempDate.getMonth() + 1) +
-      "/" +
-      tempDate.getDate();
+    this.bookingEvent.TO_DATE = tempDate.getFullYear() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getDate();
   }
   /* End of Resize props */
 
@@ -186,11 +157,11 @@ export class IglBookingEvent {
   }
 
   isNewEvent() {
-    return this.getBookingId() === "NEW_TEMP_EVENT";
+    return this.getBookingId() === 'NEW_TEMP_EVENT';
   }
 
   isHighlightEventType() {
-    return this.getEventType() === "HIGH_LIGHT";
+    return this.getEventType() === 'HIGH_LIGHT';
   }
 
   getBookingId() {
@@ -223,9 +194,8 @@ export class IglBookingEvent {
 
   getEventLegend() {
     // console.log(this.getBookingStatus());
-    let status =
-      this.bookingEvent?.legendData.statusId[this.getBookingStatus()];
-    let orderRide = this.isNewEvent() ? { color: "#f9f9c9" } : {};
+    let status = this.bookingEvent?.legendData.statusId[this.getBookingStatus()];
+    let orderRide = this.isNewEvent() ? { color: '#f9f9c9' } : {};
     return {
       ...this.bookingEvent?.legendData[status.id],
       ...status,
@@ -241,14 +211,14 @@ export class IglBookingEvent {
 
   getNoteNode() {
     if (this.bookingEvent.NOTES || this.bookingEvent.INTERNAL_NOTE) {
-      return this.getLegendOfStatus("NOTES");
+      return this.getLegendOfStatus('NOTES');
     }
     return null;
   }
 
   getBalanceNode() {
     if (this.bookingEvent.BALANCE) {
-      return this.getLegendOfStatus("OUTSTANDING-BALANCE");
+      return this.getLegendOfStatus('OUTSTANDING-BALANCE');
     }
     return null;
   }
@@ -265,42 +235,19 @@ export class IglBookingEvent {
 
   getPosition() {
     let startingDate = this.getEventStartingDate();
-    let startingCellClass =
-      ".room_" +
-      this.getBookedRoomId() +
-      "_" +
-      startingDate.getDate() +
-      "_" +
-      (startingDate.getMonth() + 1) +
-      "_" +
-      startingDate.getFullYear();
-    let bodyContainer = document.querySelector(".bodyContainer");
+    let startingCellClass = '.room_' + this.getBookedRoomId() + '_' + startingDate.getDate() + '_' + (startingDate.getMonth() + 1) + '_' + startingDate.getFullYear();
+    let bodyContainer = document.querySelector('.bodyContainer');
     let startingCell = document.querySelector(startingCellClass);
-    let pos = { top: "0", left: "0", width: "0", height: "20px" };
-    if (
-      startingCell &&
-      bodyContainer &&
-      startingCell.getBoundingClientRect() &&
-      bodyContainer.getBoundingClientRect()
-    ) {
+    let pos = { top: '0', left: '0', width: '0', height: '20px' };
+    if (startingCell && bodyContainer && startingCell.getBoundingClientRect() && bodyContainer.getBoundingClientRect()) {
       let bodyContainerRect = bodyContainer.getBoundingClientRect();
       let boundingRect = startingCell.getBoundingClientRect();
       this.dayWidth = this.dayWidth || boundingRect.width;
-      pos.top =
-        boundingRect.top +
-        boundingRect.height / 2 -
-        this.vertSpace -
-        bodyContainerRect.top +
-        "px";
-      pos.left =
-        boundingRect.left +
-        this.dayWidth / 2 +
-        this.eventSpace / 2 -
-        bodyContainerRect.left +
-        "px";
-      pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + "px";
+      pos.top = boundingRect.top + boundingRect.height / 2 - this.vertSpace - bodyContainerRect.top + 'px';
+      pos.left = boundingRect.left + this.dayWidth / 2 + this.eventSpace / 2 - bodyContainerRect.left + 'px';
+      pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
     } else {
-      console.log("Locating event cell failed ", startingCellClass);
+      console.log('Locating event cell failed ', startingCellClass);
     }
     //console.log(pos);
     return pos;
@@ -324,7 +271,7 @@ export class IglBookingEvent {
 
     this.showEventInfo(false); // Hide bubble;
 
-    if (side === "move") {
+    if (side === 'move') {
       this.initialX = event.clientX || event.touches[0].clientX;
       this.initialY = event.clientY || event.touches[0].clientY;
       this.elementRect = this.element.getBoundingClientRect();
@@ -343,7 +290,7 @@ export class IglBookingEvent {
       this.element.style.left = `${this.dragInitPos.left}px`;
       this.isTouchStart = true; // !!(event.touches && event.touches.length);
       this.dragOverEventData.emit({
-        id: "CALCULATE_DRAG_OVER_BOUNDS",
+        id: 'CALCULATE_DRAG_OVER_BOUNDS',
         data: this.dragInitPos,
       });
     } else {
@@ -351,7 +298,7 @@ export class IglBookingEvent {
       this.initialLeft = this.element.offsetLeft;
       this.initialX = event.clientX || event.touches[0].clientX;
       this.dragOverEventData.emit({
-        id: "CALCULATE_DRAG_OVER_BOUNDS",
+        id: 'CALCULATE_DRAG_OVER_BOUNDS',
         data: {
           id: this.getBookingId(),
           fromRoomId: this.getBookedRoomId(),
@@ -363,20 +310,20 @@ export class IglBookingEvent {
       });
     }
 
-    document.addEventListener("mousemove", this.handleMouseMoveBind);
-    document.addEventListener("touchmove", this.handleMouseMoveBind);
-    document.addEventListener("pointermove", this.handleMouseMoveBind);
+    document.addEventListener('mousemove', this.handleMouseMoveBind);
+    document.addEventListener('touchmove', this.handleMouseMoveBind);
+    document.addEventListener('pointermove', this.handleMouseMoveBind);
 
-    document.addEventListener("mouseup", this.handleMouseUpBind);
-    document.addEventListener("touchup", this.handleMouseUpBind);
-    document.addEventListener("pointerup", this.handleMouseUpBind);
+    document.addEventListener('mouseup', this.handleMouseUpBind);
+    document.addEventListener('touchup', this.handleMouseUpBind);
+    document.addEventListener('pointerup', this.handleMouseUpBind);
   }
 
   handleMouseMove(event: any) {
     if (this.isDragging) {
       this.currentX = event.clientX || event.touches[0].clientX;
       let distanceX = this.currentX - this.initialX;
-      if (this.resizeSide === "move") {
+      if (this.resizeSide === 'move') {
         this.currentY = event.clientY || event.touches[0].clientY;
         let distanceY = this.currentY - this.initialY;
         this.element.style.top = `${this.dragInitPos.top + distanceY}px`;
@@ -389,22 +336,16 @@ export class IglBookingEvent {
         };
         this.dragEndPos.x = this.dragEndPos.left; // + 18;
         this.dragEndPos.y = this.dragEndPos.top; // + (this.elementRect.height/2);
-        this.dragOverEventData.emit({ id: "DRAG_OVER", data: this.dragEndPos });
+        this.dragOverEventData.emit({ id: 'DRAG_OVER', data: this.dragEndPos });
       } else {
         let newWidth = this.initialWidth;
-        if (this.resizeSide == "rightSide") {
+        if (this.resizeSide == 'rightSide') {
           newWidth = this.initialWidth + distanceX;
-          newWidth = Math.min(
-            newWidth,
-            this.initialX + this.element.offsetWidth
-          );
+          newWidth = Math.min(newWidth, this.initialX + this.element.offsetWidth);
           newWidth = Math.max(this.dayWidth - this.eventSpace, newWidth);
           this.element.style.width = `${newWidth}px`;
-        } else if (this.resizeSide == "leftSide") {
-          newWidth = Math.max(
-            this.dayWidth - this.eventSpace,
-            this.initialWidth - distanceX
-          );
+        } else if (this.resizeSide == 'leftSide') {
+          newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
           let newLeft = this.initialLeft + (this.initialWidth - newWidth);
           this.element.style.left = `${newLeft}px`;
           this.element.style.width = `${newWidth}px`;
@@ -412,27 +353,23 @@ export class IglBookingEvent {
         this.finalWidth = newWidth;
       }
     } else {
-      console.log("still mouse move listening...");
+      console.log('still mouse move listening...');
     }
   }
 
   handleMouseUp() {
     if (this.isDragging) {
-      if (this.resizeSide === "move") {
+      if (this.resizeSide === 'move') {
         // console.log("Initial X::"+this.dragInitPos.x);
         // console.log("Initial Y::"+this.dragInitPos.y);
         // console.log("End X::"+this.dragEndPos.x);
         // console.log("End Y::"+this.dragEndPos.y);
         if (this.isTouchStart) {
-          this.moveDiffereneX = Math.abs(
-            this.dragEndPos.x - this.dragInitPos.x
-          );
-          this.moveDiffereneY = Math.abs(
-            this.dragEndPos.y - this.dragInitPos.y
-          );
+          this.moveDiffereneX = Math.abs(this.dragEndPos.x - this.dragInitPos.x);
+          this.moveDiffereneY = Math.abs(this.dragEndPos.y - this.dragInitPos.y);
         }
         this.dragOverEventData.emit({
-          id: "DRAG_OVER_END",
+          id: 'DRAG_OVER_END',
           data: {
             ...this.dragEndPos,
             pool: this.bookingEvent.POOL,
@@ -444,47 +381,40 @@ export class IglBookingEvent {
         let initialStayDays = this.getStayDays();
         if (initialStayDays != numberOfDays) {
           this.setStayDays(numberOfDays);
-          if (this.resizeSide == "leftSide") {
-            this.element.style.left = `${
-              this.initialLeft +
-              (initialStayDays - numberOfDays) * this.dayWidth
-            }px`;
+          if (this.resizeSide == 'leftSide') {
+            this.element.style.left = `${this.initialLeft + (initialStayDays - numberOfDays) * this.dayWidth}px`;
             // set FROM_DATE = TO_DATE - numberOfDays
           } else {
             // set TO_DATE = FROM_DATE + numberOfDays
           }
           this.dragOverEventData.emit({
-            id: "STRETCH_OVER_END",
+            id: 'STRETCH_OVER_END',
             data: {
               id: this.getBookingId(),
               fromRoomId: +this.getBookedRoomId(),
-              x: +this.element.style.left.replace("px", ""),
-              y: +this.element.style.top.replace("px", ""),
+              x: +this.element.style.left.replace('px', ''),
+              y: +this.element.style.top.replace('px', ''),
               pool: this.bookingEvent.POOL,
               nbOfDays: this.bookingEvent.NO_OF_DAYS,
             },
           });
-          this.element.style.width = `${
-            numberOfDays * this.dayWidth - this.eventSpace
-          }px`;
+          this.element.style.width = `${numberOfDays * this.dayWidth - this.eventSpace}px`;
         } else {
           this.element.style.left = `${this.initialLeft}px`;
-          this.element.style.width = `${
-            numberOfDays * this.dayWidth - this.eventSpace
-          }px`;
+          this.element.style.width = `${numberOfDays * this.dayWidth - this.eventSpace}px`;
         }
       }
     } else {
-      console.log("still mouse up listening...");
+      console.log('still mouse up listening...');
     }
     this.isDragging = false;
-    document.removeEventListener("mousemove", this.handleMouseMoveBind);
-    document.removeEventListener("touchmove", this.handleMouseMoveBind);
-    document.removeEventListener("pointermove", this.handleMouseMoveBind);
+    document.removeEventListener('mousemove', this.handleMouseMoveBind);
+    document.removeEventListener('touchmove', this.handleMouseMoveBind);
+    document.removeEventListener('pointermove', this.handleMouseMoveBind);
 
-    document.removeEventListener("mouseup", this.handleMouseUpBind);
-    document.removeEventListener("touchup", this.handleMouseUpBind);
-    document.removeEventListener("pointerup", this.handleMouseUpBind);
+    document.removeEventListener('mouseup', this.handleMouseUpBind);
+    document.removeEventListener('touchup', this.handleMouseUpBind);
+    document.removeEventListener('pointerup', this.handleMouseUpBind);
   }
 
   updateData(data: any) {
@@ -498,11 +428,9 @@ export class IglBookingEvent {
 
     if (showInfo) {
       // Calculate which side we need to show the bubble, top side or bottom.
-      let bodyContainer = document.querySelector(".calendarScrollContainer");
-      let bodyContainerRect: { [key: string]: any } =
-        bodyContainer.getBoundingClientRect();
-      let elementRect: { [key: string]: any } =
-        this.element.getBoundingClientRect();
+      let bodyContainer = document.querySelector('.calendarScrollContainer');
+      let bodyContainerRect: { [key: string]: any } = bodyContainer.getBoundingClientRect();
+      let elementRect: { [key: string]: any } = this.element.getBoundingClientRect();
       let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top;
       // let topDifference = elementRect.top - bodyContainerRect.top;
       // let bottomDifference = bodyContainerRect.bottom - elementRect.bottom;
@@ -517,7 +445,7 @@ export class IglBookingEvent {
     // showInfo = true;
     if (showInfo) {
       this.hideBubbleInfo.emit({
-        key: "hidePopup",
+        key: 'hidePopup',
         currentInfoBubbleId: this.getBookingId(),
       });
     }
@@ -533,53 +461,36 @@ export class IglBookingEvent {
 
     return (
       <Host
-        class={`bookingEvent ${
-          this.isNewEvent() || this.isHighlightEventType() ? "newEvent" : ""
-        } ${legend.clsName}`}
+        class={`bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName}`}
         style={this.getPosition()}
-        id={"event_" + this.getBookingId()}
+        id={'event_' + this.getBookingId()}
       >
         {/* onMouseOver={() =>this.showEventInfo(true)}  */}
         <div
-          class={`bookingEventBase  ${
-            this.isSplitBooking() ? "splitBooking" : ""
-          }`}
+          class={`bookingEventBase  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
           style={{ backgroundColor: legend.color }}
-          onTouchStart={(event) => this.startDragging(event, "move")}
-          onMouseDown={(event) => this.startDragging(event, "move")}
+          onTouchStart={event => this.startDragging(event, 'move')}
+          onMouseDown={event => this.startDragging(event, 'move')}
         ></div>
-        {noteNode ? (
-          <div
-            class="legend_circle noteIcon"
-            style={{ backgroundColor: noteNode.color }}
-          ></div>
-        ) : null}
-        {balanceNode ? (
-          <div
-            class="legend_circle balanceIcon"
-            style={{ backgroundColor: balanceNode.color }}
-          ></div>
-        ) : null}
+        {noteNode ? <div class="legend_circle noteIcon" style={{ backgroundColor: noteNode.color }}></div> : null}
+        {balanceNode ? <div class="legend_circle balanceIcon" style={{ backgroundColor: balanceNode.color }}></div> : null}
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
-        <div
-          class="bookingEventTitle"
-          onTouchStart={(event) => this.startDragging(event, "move")}
-          onMouseDown={(event) => this.startDragging(event, "move")}
-        >
+        <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
           {this.getBookedBy()}
         </div>
         <div
           class="bookingEventDragHandle leftSide"
-          onTouchStart={(event) => this.startDragging(event, "leftSide")}
-          onMouseDown={(event) => this.startDragging(event, "leftSide")}
+          onTouchStart={event => this.startDragging(event, 'leftSide')}
+          onMouseDown={event => this.startDragging(event, 'leftSide')}
         ></div>
         <div
           class="bookingEventDragHandle rightSide"
-          onTouchStart={(event) => this.startDragging(event, "rightSide")}
-          onMouseDown={(event) => this.startDragging(event, "rightSide")}
+          onTouchStart={event => this.startDragging(event, 'rightSide')}
+          onMouseDown={event => this.startDragging(event, 'rightSide')}
         ></div>
         {this.showInfoPopup ? (
           <igl-booking-event-hover
+            is_vacation_rental={this.is_vacation_rental}
             countryNodeList={this.countryNodeList}
             currency={this.currency}
             class="top"

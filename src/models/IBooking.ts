@@ -1,4 +1,4 @@
-import { Booking, Guest, IFormat, Room } from './booking.dto';
+import { Booking, IFormat, Room, Origin } from './booking.dto';
 import { IRoomService } from './property-types';
 
 export default interface IBooking {
@@ -249,6 +249,9 @@ export interface RoomBookingDetails {
   PR_ID: number;
   POOL: string;
   GUEST: any;
+  origin: Origin;
+  channel_booking_nbr: string | null;
+  is_direct: boolean;
   BOOKING_NUMBER: string;
   cancelation: string;
   guarantee: string;

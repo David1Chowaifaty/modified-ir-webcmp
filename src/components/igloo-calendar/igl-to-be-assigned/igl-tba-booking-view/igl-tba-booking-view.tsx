@@ -1,6 +1,8 @@
 import { Component, Host, Prop, h, Event, EventEmitter, Listen, State } from '@stencil/core';
 import { ToBeAssignedService } from '../../../../services/toBeAssigned.service';
 import { v4 } from 'uuid';
+import { BookingService } from '../../../../services/booking.service';
+import { transformNewBooking } from '../../../../utils/booking';
 // import $ from 'jquery';
 
 @Component({
@@ -28,6 +30,7 @@ export class IglTbaBookingView {
   private highlightSection: boolean = false;
   private allRoomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
+  private bookingService = new BookingService();
   onSelectRoom(evt) {
     if (evt.stopImmediatePropagation) {
       evt.stopImmediatePropagation();
@@ -76,14 +79,16 @@ export class IglTbaBookingView {
       event.stopPropagation();
       if (this.selectedRoom) {
         await this.toBeAssignedService.assignUnit(this.eventData.BOOKING_NUMBER, this.eventData.ID, this.selectedRoom);
-        let assignEvent = { ...this.eventData, PR_ID: this.selectedRoom };
-        this.calendarData.bookingEvents.push(assignEvent);
+        const booking = await this.bookingService.getExoposedBooking(this.eventData.BOOKING_NUMBER, 'en');
+        let assignEvent = transformNewBooking(booking);
+        const newEvent = { ...this.eventData, ...assignEvent[0] };
+        this.calendarData.bookingEvents.push(newEvent);
+        //console.log(newEvent);
         this.addToBeAssignedEvent.emit({
           key: 'tobeAssignedEvents',
-          data: [assignEvent],
+          data: [newEvent],
         });
-        this.assignRoomEvent.emit({ key: 'assignRoom', data: assignEvent });
-        window.location.reload();
+        this.assignRoomEvent.emit({ key: 'assignRoom', data: newEvent });
       }
     } catch (error) {
       //   toastr.error(error);

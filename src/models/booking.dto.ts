@@ -16,6 +16,8 @@ export interface Booking {
   total: number;
   is_editable: boolean;
   format: IFormat;
+  channel_booking_nbr: string | null;
+  is_direct: boolean;
 }
 export interface IFormat {
   from_date: string;

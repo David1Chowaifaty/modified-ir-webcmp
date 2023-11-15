@@ -46,12 +46,14 @@ export namespace Components {
         "bookingEvent": { [key: string]: any };
         "countryNodeList": any;
         "currency": any;
+        "is_vacation_rental": boolean;
     }
     interface IglBookingEventHover {
         "bookingEvent": { [key: string]: any };
         "bubbleInfoTop": boolean;
         "countryNodeList": ICountry[];
         "currency": any;
+        "is_vacation_rental": boolean;
     }
     interface IglBookingRoomRatePlan {
         "bookingType": string;
@@ -304,6 +306,9 @@ export namespace Components {
     }
     interface IrLoader {
         "size": string;
+    }
+    interface IrLoadingScreen {
+        "message": string;
     }
     interface IrMapping {
         "_onSaveMapping": () => Promise<void>;
@@ -1150,6 +1155,12 @@ declare global {
         prototype: HTMLIrLoaderElement;
         new (): HTMLIrLoaderElement;
     };
+    interface HTMLIrLoadingScreenElement extends Components.IrLoadingScreen, HTMLStencilElement {
+    }
+    var HTMLIrLoadingScreenElement: {
+        prototype: HTMLIrLoadingScreenElement;
+        new (): HTMLIrLoadingScreenElement;
+    };
     interface HTMLIrMappingElementEventMap {
         "sendMappingToParent": any;
     }
@@ -1342,6 +1353,7 @@ declare global {
         "ir-label": HTMLIrLabelElement;
         "ir-list-item": HTMLIrListItemElement;
         "ir-loader": HTMLIrLoaderElement;
+        "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-mapping": HTMLIrMappingElement;
         "ir-modal": HTMLIrModalElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
@@ -1391,6 +1403,7 @@ declare namespace LocalJSX {
         "bookingEvent"?: { [key: string]: any };
         "countryNodeList"?: any;
         "currency"?: any;
+        "is_vacation_rental"?: boolean;
         "onDragOverEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onUpdateEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
@@ -1400,6 +1413,7 @@ declare namespace LocalJSX {
         "bubbleInfoTop"?: boolean;
         "countryNodeList"?: ICountry[];
         "currency"?: any;
+        "is_vacation_rental"?: boolean;
         "onDeleteButton"?: (event: IglBookingEventHoverCustomEvent<string>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
@@ -1720,6 +1734,9 @@ declare namespace LocalJSX {
     interface IrLoader {
         "size"?: string;
     }
+    interface IrLoadingScreen {
+        "message"?: string;
+    }
     interface IrMapping {
         "hostRoom"?: RoomType[];
         "map"?: RoomType[];
@@ -1860,6 +1877,7 @@ declare namespace LocalJSX {
         "ir-label": IrLabel;
         "ir-list-item": IrListItem;
         "ir-loader": IrLoader;
+        "ir-loading-screen": IrLoadingScreen;
         "ir-mapping": IrMapping;
         "ir-modal": IrModal;
         "ir-payment-details": IrPaymentDetails;
@@ -1911,6 +1929,7 @@ declare module "@stencil/core" {
             "ir-label": LocalJSX.IrLabel & JSXBase.HTMLAttributes<HTMLIrLabelElement>;
             "ir-list-item": LocalJSX.IrListItem & JSXBase.HTMLAttributes<HTMLIrListItemElement>;
             "ir-loader": LocalJSX.IrLoader & JSXBase.HTMLAttributes<HTMLIrLoaderElement>;
+            "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-mapping": LocalJSX.IrMapping & JSXBase.HTMLAttributes<HTMLIrMappingElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;

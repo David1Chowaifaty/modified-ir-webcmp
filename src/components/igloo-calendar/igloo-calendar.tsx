@@ -64,6 +64,7 @@ export class IglooCalendar {
           this.countryNodeList = await this.bookingService.getCountries(this.language);
           this.calendarData.currency = roomResp['My_Result'].currency;
           this.calendarData.legendData = this.getLegendData(roomResp);
+          this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
           this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
           this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
           this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
@@ -445,37 +446,39 @@ export class IglooCalendar {
         <ir-interceptor></ir-interceptor>
         <ir-common></ir-common>
         <div id="iglooCalendar" class="igl-calendar">
-          {this.shouldRenderCalendarView()
-            ? [
-                this.showToBeAssigned ? (
-                  <igl-to-be-assigned
-                    loadingMessage={this.loadingMessage}
-                    to_date={this.to_date}
-                    from_date={this.from_date}
-                    propertyid={this.propertyid}
-                    class="tobeAssignedContainer"
+          {this.shouldRenderCalendarView() ? (
+            [
+              this.showToBeAssigned ? (
+                <igl-to-be-assigned
+                  loadingMessage={'Fetching unassigned units'}
+                  to_date={this.to_date}
+                  from_date={this.from_date}
+                  propertyid={this.propertyid}
+                  class="tobeAssignedContainer"
+                  calendarData={this.calendarData}
+                  onOptionEvent={evt => this.onOptionSelect(evt)}
+                ></igl-to-be-assigned>
+              ) : null,
+              this.showLegend ? (
+                <igl-legends class="legendContainer" legendData={this.calendarData.legendData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-legends>
+              ) : null,
+              <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
+                <div id="calendarContainer">
+                  <igl-cal-header today={this.today} calendarData={this.calendarData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-cal-header>
+                  <igl-cal-body
+                    countryNodeList={this.countryNodeList}
+                    currency={this.calendarData.currency}
+                    today={this.today}
+                    isScrollViewDragging={this.scrollViewDragging}
                     calendarData={this.calendarData}
-                    onOptionEvent={evt => this.onOptionSelect(evt)}
-                  ></igl-to-be-assigned>
-                ) : null,
-                this.showLegend ? (
-                  <igl-legends class="legendContainer" legendData={this.calendarData.legendData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-legends>
-                ) : null,
-                <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
-                  <div id="calendarContainer">
-                    <igl-cal-header today={this.today} calendarData={this.calendarData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-cal-header>
-                    <igl-cal-body
-                      countryNodeList={this.countryNodeList}
-                      currency={this.calendarData.currency}
-                      today={this.today}
-                      isScrollViewDragging={this.scrollViewDragging}
-                      calendarData={this.calendarData}
-                    ></igl-cal-body>
-                    <igl-cal-footer today={this.today} calendarData={this.calendarData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-cal-footer>
-                  </div>
-                </div>,
-              ]
-            : 'Data not yet loaded'}
+                  ></igl-cal-body>
+                  <igl-cal-footer today={this.today} calendarData={this.calendarData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-cal-footer>
+                </div>
+              </div>,
+            ]
+          ) : (
+            <ir-loading-screen message="Preparing Calendar Data"></ir-loading-screen>
+          )}
           {this.bookingItem && (
             <igl-book-property
               showPaymentDetails={this.showPaymentDetails}

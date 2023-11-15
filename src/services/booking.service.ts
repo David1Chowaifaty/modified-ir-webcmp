@@ -147,7 +147,23 @@ export class BookingService {
       throw new Error(error);
     }
   }
-
+  public async getUserDefaultCountry() {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token) {
+        const { data } = await axios.post(`/Get_Country_By_IP?Ticket=${token}`, {
+          IP: '',
+        });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data['My_Result'];
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
   public async blockUnit(params: IBlockUnit) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));

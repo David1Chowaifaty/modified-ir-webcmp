@@ -295,7 +295,7 @@ export class IglCalBody {
     return this.getCategoryRooms(roomCategory)?.map(room => (
       <div class="roomRow">
         <div
-          class={`cellData text-left align-items-center roomHeaderCell roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${'room_' + this.getRoomId(room)}`}
+          class={`cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${'room_' + this.getRoomId(room)}`}
           data-room={this.getRoomId(room)}
         >
           <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div>
@@ -318,6 +318,7 @@ export class IglCalBody {
           <div class="bookingEventsContainer preventPageScroll">
             {this.getBookingData()?.map(bookingEvent => (
               <igl-booking-event
+                is_vacation_rental={this.calendarData.is_vacation_rental}
                 countryNodeList={this.countryNodeList}
                 currency={this.currency}
                 data-component-id={bookingEvent.ID}

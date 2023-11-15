@@ -13,6 +13,7 @@ export class IglBookingEventHover {
   @Prop() bubbleInfoTop: boolean = false;
   @Prop() currency;
   @Prop() countryNodeList: ICountry[];
+  @Prop() is_vacation_rental: boolean = false;
   @State() isLoading: string;
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
@@ -262,7 +263,10 @@ export class IglBookingEventHover {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class="row p-0 m-0 pb-1">
-          <div class="pl-0 col-8 font-weight-bold font-medium-1">{this.bookingEvent.BOOKING_NUMBER}</div>
+          <div class="pl-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center">
+            <img src={this.bookingEvent.origin.Icon} alt="icon" class={'icon-image'} />
+            <p class={'p-0 m-0'}>{!this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER}</p>
+          </div>
           <div class="pr-0 col-4 text-right">
             {getCurrencySymbol(this.currency.code)}
             {this.getTotalPrice()}
@@ -376,7 +380,7 @@ export class IglBookingEventHover {
               onClick={_ => {
                 this.handleDeleteEvent();
               }}
-              disabled={!this.bookingEvent.IS_EDITABLE}
+              disabled={!this.bookingEvent.IS_EDITABLE || this.is_vacation_rental}
             >
               <i class="ft ft-trash-2 font-small-3"></i> Delete
             </button>
@@ -445,12 +449,12 @@ export class IglBookingEventHover {
                 this.handleUpdateBlockedDates();
               }}
             >
-              {this.isLoading === 'update' ? <i class="la la-circle-o-notch spinner mx-1"></i> : <i class="ft ft-edit font-small-3"></i>}
+              {this.isLoading === 'update' ? <i class="la la-circle-o-notch spinner mx-1"></i> : <i class="ft ft-edit font-small-3 updateBtnIcon"></i>}
               Update
             </button>
             <button
               type="button"
-              class="btn btn-primary p-0"
+              class="btn btn-primary"
               onClick={_ => {
                 this.handleConvertBlockedDateToBooking();
               }}
@@ -459,7 +463,7 @@ export class IglBookingEventHover {
             </button>
             <button
               type="button"
-              class="btn btn-danger ml-1 p-0"
+              class="btn btn-danger ml-1"
               onClick={_ => {
                 this.handleDeleteEvent();
               }}

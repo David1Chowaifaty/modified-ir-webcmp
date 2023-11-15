@@ -13,9 +13,9 @@ export class IglPropertyBookedBy {
   @Prop() showPaymentDetails: boolean = false;
   @Prop() defaultData: { [key: string]: any };
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
+  @Prop() countryNodeList: ICountry[] = [];
   private bookingService: BookingService = new BookingService();
   private arrivalTimeList: IEntries[] = [];
-  @Prop() countryNodeList: ICountry[] = [];
   private expiryMonths: string[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
   private expiryYears: string[] = [];
   private currentMonth: string = '01';
@@ -40,6 +40,7 @@ export class IglPropertyBookedBy {
   };
 
   async componentWillLoad() {
+    this.assignCountryCode();
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
@@ -49,7 +50,13 @@ export class IglPropertyBookedBy {
     const currentYear = new Date().getFullYear();
     this.expiryYears = Array.from({ length: 4 }, (_, index) => (currentYear + index).toString());
   }
-
+  private async assignCountryCode() {
+    const country = await this.bookingService.getUserDefaultCountry();
+    console.log(country);
+    const countryId = country['COUNTRY_ID'];
+    console.log(countryId);
+    this.bookedByData = { ...this.bookedByData, isdCode: countryId.toString(), countryId };
+  }
   private initializeDateData() {
     const dt = new Date();
     const month = dt.getMonth() + 1;

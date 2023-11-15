@@ -1,18 +1,10 @@
-import {
-  Component,
-  Host,
-  h,
-  Prop,
-  State,
-  Event,
-  EventEmitter,
-} from "@stencil/core";
-import { BookingService } from "../../../services/booking.service";
-import { IEntries } from "../../../models/IBooking";
+import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/core';
+import { BookingService } from '../../../services/booking.service';
+import { IEntries } from '../../../models/IBooking';
 
 @Component({
-  tag: "igl-block-dates-view",
-  styleUrl: "igl-block-dates-view.css",
+  tag: 'igl-block-dates-view',
+  styleUrl: 'igl-block-dates-view.css',
   scoped: true,
 })
 export class IglBlockDatesView {
@@ -27,7 +19,7 @@ export class IglBlockDatesView {
 
   private blockDatesData: { [key: string]: any } = {
     RELEASE_AFTER_HOURS: 0,
-    OPTIONAL_REASON: "",
+    OPTIONAL_REASON: '',
     OUT_OF_SERVICE: false,
   }; // Change of property name might require updates in booking-event-hover
   private releaseList: IEntries[] = [];
@@ -38,9 +30,7 @@ export class IglBlockDatesView {
       if (this.defaultData) {
         this.blockDatesData = { ...this.defaultData };
       } else {
-        this.blockDatesData.RELEASE_AFTER_HOURS = parseInt(
-          this.releaseList[0].CODE_NAME
-        );
+        this.blockDatesData.RELEASE_AFTER_HOURS = parseInt(this.releaseList[0].CODE_NAME);
         this.emitData();
       }
     } catch (error) {
@@ -62,7 +52,7 @@ export class IglBlockDatesView {
 
   emitData() {
     this.dataUpdateEvent.emit({
-      key: "blockDatesData",
+      key: 'blockDatesData',
       data: { ...this.blockDatesData },
     });
   }
@@ -74,29 +64,18 @@ export class IglBlockDatesView {
     if (this.entryDate && this.entryHour && this.entryMinute) {
       dt.setHours(this.entryHour, this.entryMinute, 0, 0);
     } else {
-      dt.setHours(
-        dt.getHours() + this.blockDatesData.RELEASE_AFTER_HOURS,
-        dt.getMinutes(),
-        0,
-        0
-      );
+      dt.setHours(dt.getHours() + this.blockDatesData.RELEASE_AFTER_HOURS, dt.getMinutes(), 0, 0);
     }
 
-    return (
-      dt.toLocaleString("default", { month: "short" }) +
-      " " +
-      dt.getDate() +
-      ", " +
-      dt.getHours() +
-      ":" +
-      dt.getMinutes()
-    );
+    return dt.toLocaleString('default', { month: 'short' }) + ' ' + dt.getDate() + ', ' + this.formatNumber(dt.getHours()) + ':' + this.formatNumber(dt.getMinutes());
   }
-
+  formatNumber(value: number) {
+    return value < 10 ? `0${value}` : value;
+  }
   handleOutOfService(evt) {
     this.blockDatesData.OUT_OF_SERVICE = evt.target.checked;
     if (this.blockDatesData.OUT_OF_SERVICE) {
-      this.blockDatesData.OPTIONAL_REASON = "";
+      this.blockDatesData.OPTIONAL_REASON = '';
       this.blockDatesData.RELEASE_AFTER_HOURS = 0;
     }
     this.renderPage();
@@ -115,25 +94,17 @@ export class IglBlockDatesView {
             <span class="pr-1">
               <span class="text-bold-700 font-medium-1">From: </span>
               {this.fromDate}
-            </span>{" "}
+            </span>{' '}
             <span class="text-bold-700 font-medium-1">To: </span>
             {this.toDate}
           </div>
         </div>
         <div class="col mb-1 text-left">
           <div class="mb-1">
-            <label class="p-0 text-bold-700 font-medium-1 m-0 align-middle">
-              Reason:
-            </label>
+            <label class="p-0 text-bold-700 font-medium-1 m-0 align-middle">Reason:</label>
             <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer d-inline-block align-middle">
-              <input
-                class="form-control"
-                type="checkbox"
-                checked={this.blockDatesData.OUT_OF_SERVICE}
-                id="userinput6"
-                onChange={(event) => this.handleOutOfService(event)}
-              />
-            </div>{" "}
+              <input class="form-control" type="checkbox" checked={this.blockDatesData.OUT_OF_SERVICE} id="userinput6" onChange={event => this.handleOutOfService(event)} />
+            </div>{' '}
             <span class="align-middle">Out of service</span>
           </div>
           {!this.blockDatesData.OUT_OF_SERVICE ? (
@@ -147,28 +118,16 @@ export class IglBlockDatesView {
                     placeholder="Optional reason"
                     id="optReason"
                     value={this.blockDatesData.OPTIONAL_REASON}
-                    onInput={(event) => this.handleOptionalReason(event)}
+                    onInput={event => this.handleOptionalReason(event)}
                   />
                 </div>
               </div>
               <div class="mb-1 w-100 pr-0 ">
-                <span class="text-bold-700 font-medium-1">
-                  Automatic release in:{" "}
-                </span>
+                <span class="text-bold-700 font-medium-1">Automatic release in: </span>
                 <div class="d-inline-block">
-                  <select
-                    class="form-control input-sm"
-                    id="zSmallSelect"
-                    onChange={(evt) => this.handleReleaseAfterChange(evt)}
-                  >
-                    {this.releaseList.map((releaseItem) => (
-                      <option
-                        value={+releaseItem.CODE_NAME}
-                        selected={
-                          this.blockDatesData.RELEASE_AFTER_HOURS ==
-                          +releaseItem.CODE_NAME
-                        }
-                      >
+                  <select class="form-control input-sm" id="zSmallSelect" onChange={evt => this.handleReleaseAfterChange(evt)}>
+                    {this.releaseList.map(releaseItem => (
+                      <option value={+releaseItem.CODE_NAME} selected={this.blockDatesData.RELEASE_AFTER_HOURS == +releaseItem.CODE_NAME}>
                         {releaseItem.CODE_VALUE_EN}
                       </option>
                     ))}

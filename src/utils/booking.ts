@@ -83,7 +83,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  //console.log("booked cells", cell);
+  console.log('booked cells', cell);
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
@@ -104,6 +104,9 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     CHILDREN_COUNT: cell.room.occupancy.children_nbr,
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
+    channel_booking_nbr: cell.booking.channel_booking_nbr,
+    origin: cell.booking.origin,
+    is_direct: cell.booking.is_direct,
     GUEST: cell.booking.guest,
     BOOKING_NUMBER: cell.booking.booking_nbr,
     cancelation: cell.room.rateplan.cancelation,
@@ -150,7 +153,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       FROM_DATE: room.from_date,
       NO_OF_DAYS: room.days.length,
       IS_EDITABLE: true,
-      STATUS: 'IN-HOUSE',
+      STATUS: status['001'],
       NAME: formatName(room.guest.first_name, room.guest.last_name),
       PHONE: data.guest.mobile ?? '',
       ENTRY_DATE: '12-12-2023',
@@ -160,8 +163,8 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       RATE_PLAN_ID: room.rateplan.id,
       IDENTIFIER: room.identifier,
       RATE_TYPE: room.roomtype.id,
-      ADULTS_COUNT: room.occupancy.adult_nbradult_nbr,
-      CHILDREN_COUNT: room.occupancy.children_nbrchildren_nbr,
+      ADULTS_COUNT: room.occupancy.adult_nbr,
+      CHILDREN_COUNT: room.occupancy.children_nbr,
       PR_ID: +room.unit.id,
       POOL: room.identifier,
       GUEST: data.guest,
@@ -174,6 +177,9 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       TO_DATE_STR: data.format.to_date,
       adult_child_offering: room.rateplan.selected_variation.adult_child_offering,
       ARRIVAL_TIME: data.arrival.description,
+      origin: data.booking.origin,
+      channel_booking_nbr: data.booking.channel_booking_nbr,
+      is_direct: data.booking.is_direct,
     });
   });
 
