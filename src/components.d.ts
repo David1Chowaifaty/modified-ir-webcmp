@@ -85,6 +85,8 @@ export namespace Components {
     }
     interface IglCalHeader {
         "calendarData": { [key: string]: any };
+        "propertyid": number;
+        "to_date": string;
         "today": String;
     }
     interface IglDateRange {
@@ -1461,6 +1463,8 @@ declare namespace LocalJSX {
     [key: string]: any;
   }>) => void;
         "onOptionEvent"?: (event: IglCalHeaderCustomEvent<{ [key: string]: any }>) => void;
+        "propertyid"?: number;
+        "to_date"?: string;
         "today"?: String;
     }
     interface IglDateRange {

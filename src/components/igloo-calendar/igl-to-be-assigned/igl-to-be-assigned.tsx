@@ -1,6 +1,7 @@
 import { Component, Host, h, Prop, Event, EventEmitter, State, Listen, Fragment } from '@stencil/core';
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
+import { updateCategories } from '../../../utils/events.utils';
 
 @Component({
   tag: 'igl-to-be-assigned',
@@ -33,27 +34,27 @@ export class IglToBeAssigned {
   componentWillLoad() {
     this.reArrangeData();
   }
-  async updateCategories(key, calendarData) {
-    try {
-      let categorisedRooms = {};
-      const result = await this.toBeAssignedService.getUnassignedRooms(
-        this.propertyid,
-        dateToFormattedString(new Date(+key)),
-        calendarData.roomsInfo,
-        calendarData.formattedLegendData,
-      );
-      result.forEach(room => {
-        if (!categorisedRooms.hasOwnProperty(room.RT_ID)) {
-          categorisedRooms[room.RT_ID] = [room];
-        } else {
-          categorisedRooms[room.RT_ID].push(room);
-        }
-      });
-      this.unassignedDates[key].categories = categorisedRooms;
-    } catch (error) {
-      //  toastr.error(error);
-    }
-  }
+  // async updateCategories(key, calendarData) {
+  //   try {
+  //     let categorisedRooms = {};
+  //     const result = await this.toBeAssignedService.getUnassignedRooms(
+  //       this.propertyid,
+  //       dateToFormattedString(new Date(+key)),
+  //       calendarData.roomsInfo,
+  //       calendarData.formattedLegendData,
+  //     );
+  //     result.forEach(room => {
+  //       if (!categorisedRooms.hasOwnProperty(room.RT_ID)) {
+  //         categorisedRooms[room.RT_ID] = [room];
+  //       } else {
+  //         categorisedRooms[room.RT_ID].push(room);
+  //       }
+  //     });
+  //     this.unassignedDates[key].categories = categorisedRooms;
+  //   } catch (error) {
+  //     //  toastr.error(error);
+  //   }
+  // }
 
   async reArrangeData() {
     try {
@@ -74,7 +75,7 @@ export class IglToBeAssigned {
       console.log(this.unassignedDates);
       if (Object.keys(this.unassignedDates).length > 0) {
         const firstKey = Object.keys(this.unassignedDates)[0];
-        await this.updateCategories(firstKey, this.calendarData);
+        await updateCategories(firstKey, this.calendarData, this.propertyid, this.unassignedDates);
       }
 
       this.data = this.unassignedDates;
@@ -101,7 +102,7 @@ export class IglToBeAssigned {
     try {
       this.isLoading = true;
       this.showUnassignedDate();
-      await this.updateCategories(dateStamp, this.calendarData);
+      await updateCategories(dateStamp, this.calendarData, this.propertyid, this.unassignedDates);
       this.addToBeAssignedEvent.emit({ key: 'tobeAssignedEvents', data: [] });
       this.selectedDate = dateStamp;
       this.showBookingPopup.emit({

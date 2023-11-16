@@ -468,7 +468,13 @@ export class IglooCalendar {
               ) : null,
               <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
                 <div id="calendarContainer">
-                  <igl-cal-header today={this.today} calendarData={this.calendarData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-cal-header>
+                  <igl-cal-header
+                    to_date={this.to_date}
+                    propertyid={this.propertyid}
+                    today={this.today}
+                    calendarData={this.calendarData}
+                    onOptionEvent={evt => this.onOptionSelect(evt)}
+                  ></igl-cal-header>
                   <igl-cal-body
                     countryNodeList={this.countryNodeList}
                     currency={this.calendarData.currency}
