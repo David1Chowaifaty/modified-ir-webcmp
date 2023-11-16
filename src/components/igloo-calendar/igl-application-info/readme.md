@@ -10,7 +10,7 @@
 | Property            | Attribute       | Description | Type                        | Default          |
 | ------------------- | --------------- | ----------- | --------------------------- | ---------------- |
 | `bedPreferenceType` | --              |             | `any[]`                     | `[]`             |
-| `bookingType`       | `booking-type`  |             | `string`                    | `"PLUS_BOOKING"` |
+| `bookingType`       | `booking-type`  |             | `string`                    | `'PLUS_BOOKING'` |
 | `guestInfo`         | --              |             | `{ [key: string]: any; }`   | `undefined`      |
 | `guestRefKey`       | `guest-ref-key` |             | `string`                    | `undefined`      |
 | `index`             | `index`         |             | `number`                    | `undefined`      |

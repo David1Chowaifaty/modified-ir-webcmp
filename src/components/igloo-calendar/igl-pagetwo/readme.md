@@ -19,6 +19,7 @@
 | `language`               | `language`                  |             | `string`                  | `undefined` |
 | `selectedGuestData`      | `selected-guest-data`       |             | `any`                     | `undefined` |
 | `selectedRooms`          | `selected-rooms`            |             | `any`                     | `undefined` |
+| `showPaymentDetails`     | `show-payment-details`      |             | `boolean`                 | `undefined` |
 | `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                 | `undefined` |
 
 

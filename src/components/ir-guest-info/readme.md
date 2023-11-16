@@ -9,7 +9,7 @@
 
 | Property                 | Attribute | Description | Type             | Default |
 | ------------------------ | --------- | ----------- | ---------------- | ------- |
-| `data`                   | --        |             | `guestInfo`      | `null`  |
+| `data`                   | --        |             | `Guest`          | `null`  |
 | `setupDataCountries`     | --        |             | `selectOption[]` | `null`  |
 | `setupDataCountriesCode` | --        |             | `selectOption[]` | `null`  |
 

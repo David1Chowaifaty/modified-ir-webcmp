@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property         | Attribute         | Description | Type                      | Default                           |
-| ---------------- | ----------------- | ----------- | ------------------------- | --------------------------------- |
-| `calendarData`   | --                |             | `{ [key: string]: any; }` | `undefined`                       |
-| `from_date`      | `from_date`       |             | `string`                  | `undefined`                       |
-| `loadingMessage` | `loading-message` |             | `string`                  | `"Fetching For Unassigned Rooms"` |
-| `propertyid`     | `propertyid`      |             | `number`                  | `undefined`                       |
-| `to_date`        | `to_date`         |             | `string`                  | `undefined`                       |
+| Property         | Attribute         | Description | Type                      | Default                       |
+| ---------------- | ----------------- | ----------- | ------------------------- | ----------------------------- |
+| `calendarData`   | --                |             | `{ [key: string]: any; }` | `undefined`                   |
+| `from_date`      | `from_date`       |             | `string`                  | `undefined`                   |
+| `loadingMessage` | `loading-message` |             | `string`                  | `'Fetching unassigned units'` |
+| `propertyid`     | `propertyid`      |             | `number`                  | `undefined`                   |
+| `to_date`        | `to_date`         |             | `string`                  | `undefined`                   |
 
 
 ## Events

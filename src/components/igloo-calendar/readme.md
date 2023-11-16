@@ -15,7 +15,7 @@
 | `language`       | `language`        |             | `string` | `undefined` |
 | `loadingMessage` | `loading-message` |             | `string` | `undefined` |
 | `propertyid`     | `propertyid`      |             | `number` | `undefined` |
-| `ticket`         | `ticket`          |             | `string` | `""`        |
+| `ticket`         | `ticket`          |             | `string` | `''`        |
 | `to_date`        | `to_date`         |             | `string` | `undefined` |
 
 
@@ -38,6 +38,7 @@
 - [igl-cal-header](igl-cal-header)
 - [igl-cal-body](igl-cal-body)
 - [igl-cal-footer](igl-cal-footer)
+- [ir-loading-screen](../ir-loading-screen)
 - [igl-book-property](igl-book-property)
 
 ### Graph
@@ -50,7 +51,9 @@ graph TD;
   igloo-calendar --> igl-cal-header
   igloo-calendar --> igl-cal-body
   igloo-calendar --> igl-cal-footer
+  igloo-calendar --> ir-loading-screen
   igloo-calendar --> igl-book-property
+  ir-interceptor --> ir-loading-screen
   igl-to-be-assigned --> igl-tba-category-view
   igl-tba-category-view --> igl-tba-booking-view
   igl-cal-body --> igl-booking-event

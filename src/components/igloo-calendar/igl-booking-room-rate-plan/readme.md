@@ -9,7 +9,7 @@
 
 | Property              | Attribute               | Description | Type                      | Default          |
 | --------------------- | ----------------------- | ----------- | ------------------------- | ---------------- |
-| `bookingType`         | `booking-type`          |             | `string`                  | `"PLUS_BOOKING"` |
+| `bookingType`         | `booking-type`          |             | `string`                  | `'PLUS_BOOKING'` |
 | `currency`            | `currency`              |             | `any`                     | `undefined`      |
 | `dateDifference`      | `date-difference`       |             | `number`                  | `undefined`      |
 | `defaultData`         | --                      |             | `{ [key: string]: any; }` | `undefined`      |

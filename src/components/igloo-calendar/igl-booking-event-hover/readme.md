@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property          | Attribute         | Description | Type                      | Default     |
-| ----------------- | ----------------- | ----------- | ------------------------- | ----------- |
-| `bookingEvent`    | --                |             | `{ [key: string]: any; }` | `undefined` |
-| `bubbleInfoTop`   | `bubble-info-top` |             | `boolean`                 | `false`     |
-| `countryNodeList` | --                |             | `ICountry[]`              | `undefined` |
-| `currency`        | `currency`        |             | `any`                     | `undefined` |
+| Property             | Attribute            | Description | Type                      | Default     |
+| -------------------- | -------------------- | ----------- | ------------------------- | ----------- |
+| `bookingEvent`       | --                   |             | `{ [key: string]: any; }` | `undefined` |
+| `bubbleInfoTop`      | `bubble-info-top`    |             | `boolean`                 | `false`     |
+| `countryNodeList`    | --                   |             | `ICountry[]`              | `undefined` |
+| `currency`           | `currency`           |             | `any`                     | `undefined` |
+| `is_vacation_rental` | `is_vacation_rental` |             | `boolean`                 | `false`     |
 
 
 ## Events

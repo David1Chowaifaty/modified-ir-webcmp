@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property          | Attribute  | Description | Type                      | Default     |
-| ----------------- | ---------- | ----------- | ------------------------- | ----------- |
-| `countryNodeList` | --         |             | `ICountry[]`              | `[]`        |
-| `defaultData`     | --         |             | `{ [key: string]: any; }` | `undefined` |
-| `language`        | `language` |             | `string`                  | `undefined` |
+| Property             | Attribute              | Description | Type                      | Default     |
+| -------------------- | ---------------------- | ----------- | ------------------------- | ----------- |
+| `countryNodeList`    | --                     |             | `ICountry[]`              | `[]`        |
+| `defaultData`        | --                     |             | `{ [key: string]: any; }` | `undefined` |
+| `language`           | `language`             |             | `string`                  | `undefined` |
+| `showPaymentDetails` | `show-payment-details` |             | `boolean`                 | `false`     |
 
 
 ## Events

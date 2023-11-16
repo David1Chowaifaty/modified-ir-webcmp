@@ -7,19 +7,22 @@
 
 ## Properties
 
-| Property          | Attribute           | Description | Type                            | Default     |
-| ----------------- | ------------------- | ----------- | ------------------------------- | ----------- |
-| `bookingData`     | --                  |             | `{ [key: string]: any; }`       | `undefined` |
-| `countryNodeList` | `country-node-list` |             | `any`                           | `undefined` |
-| `currency`        | --                  |             | `{ id: number; code: string; }` | `undefined` |
-| `language`        | `language`          |             | `string`                        | `undefined` |
-| `propertyid`      | `propertyid`        |             | `number`                        | `undefined` |
+| Property             | Attribute              | Description | Type                            | Default     |
+| -------------------- | ---------------------- | ----------- | ------------------------------- | ----------- |
+| `bookingData`        | --                     |             | `{ [key: string]: any; }`       | `undefined` |
+| `countryNodeList`    | `country-node-list`    |             | `any`                           | `undefined` |
+| `currency`           | --                     |             | `{ id: number; code: string; }` | `undefined` |
+| `language`           | `language`             |             | `string`                        | `undefined` |
+| `propertyid`         | `propertyid`           |             | `number`                        | `undefined` |
+| `showPaymentDetails` | `show-payment-details` |             | `boolean`                       | `false`     |
 
 
 ## Events
 
 | Event                | Description | Type                                   |
 | -------------------- | ----------- | -------------------------------------- |
+| `blockedCreated`     |             | `CustomEvent<RoomBlockDetails>`        |
+| `bookingCreated`     |             | `CustomEvent<RoomBookingDetails[]>`    |
 | `closeBookingWindow` |             | `CustomEvent<{ [key: string]: any; }>` |
 
 

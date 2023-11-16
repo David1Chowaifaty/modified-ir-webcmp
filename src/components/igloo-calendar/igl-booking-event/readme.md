@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property           | Attribute           | Description | Type                      | Default     |
-| ------------------ | ------------------- | ----------- | ------------------------- | ----------- |
-| `allBookingEvents` | --                  |             | `{ [key: string]: any; }` | `[]`        |
-| `bookingEvent`     | --                  |             | `{ [key: string]: any; }` | `undefined` |
-| `countryNodeList`  | `country-node-list` |             | `any`                     | `undefined` |
-| `currency`         | `currency`          |             | `any`                     | `undefined` |
+| Property             | Attribute            | Description | Type                      | Default     |
+| -------------------- | -------------------- | ----------- | ------------------------- | ----------- |
+| `allBookingEvents`   | --                   |             | `{ [key: string]: any; }` | `[]`        |
+| `bookingEvent`       | --                   |             | `{ [key: string]: any; }` | `undefined` |
+| `countryNodeList`    | `country-node-list`  |             | `any`                     | `undefined` |
+| `currency`           | `currency`           |             | `any`                     | `undefined` |
+| `is_vacation_rental` | `is_vacation_rental` |             | `boolean`                 | `false`     |
 
 
 ## Events
