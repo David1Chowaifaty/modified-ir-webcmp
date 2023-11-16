@@ -152,7 +152,9 @@ export class ToBeAssignedService {
   private convertUnassignedDates(dates: IUnassignedDates[]): Record<number, InnerRecord> {
     let convertedDates: Record<number, InnerRecord> = {};
     dates.forEach(date => {
-      convertedDates[new Date(date.date).getTime()] = {
+      let newDate = new Date(date.date);
+      newDate.setHours(0, 0, 0, 0);
+      convertedDates[newDate.getTime()] = {
         categories: {},
         dateStr: date.description,
       };

@@ -7,14 +7,15 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type                      | Default     |
-| ------------- | -------------- | ----------- | ------------------------- | ----------- |
-| `defaultData` | --             |             | `{ [key: string]: any; }` | `undefined` |
-| `entryDate`   | `entry-date`   |             | `string`                  | `undefined` |
-| `entryHour`   | `entry-hour`   |             | `number`                  | `undefined` |
-| `entryMinute` | `entry-minute` |             | `number`                  | `undefined` |
-| `fromDate`    | `from-date`    |             | `string`                  | `undefined` |
-| `toDate`      | `to-date`      |             | `string`                  | `undefined` |
+| Property       | Attribute        | Description | Type                      | Default     |
+| -------------- | ---------------- | ----------- | ------------------------- | ----------- |
+| `defaultData`  | --               |             | `{ [key: string]: any; }` | `undefined` |
+| `entryDate`    | `entry-date`     |             | `string`                  | `undefined` |
+| `entryHour`    | `entry-hour`     |             | `number`                  | `undefined` |
+| `entryMinute`  | `entry-minute`   |             | `number`                  | `undefined` |
+| `fromDate`     | `from-date`      |             | `string`                  | `undefined` |
+| `isEventHover` | `is-event-hover` |             | `boolean`                 | `false`     |
+| `toDate`       | `to-date`        |             | `string`                  | `undefined` |
 
 
 ## Events

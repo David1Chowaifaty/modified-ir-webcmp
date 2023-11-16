@@ -22,7 +22,7 @@ export class IglCalHeader {
   @Prop() propertyid: number;
   @Prop() to_date: string;
   @State() renderAgain: boolean = false;
-  @State() availableDays: any = {};
+  @State() unassignedRoomsNumber: any = {};
   private searchValue: string = '';
   private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
@@ -58,8 +58,9 @@ export class IglCalHeader {
         this.calendarData.roomsInfo,
         this.calendarData.formattedLegendData,
       );
-      this.availableDays = { ...this.availableDays, [transformDateFormatWithMoment(days[day].dateStr)]: result.length };
+      this.unassignedRoomsNumber = { ...this.unassignedRoomsNumber, [transformDateFormatWithMoment(days[day].dateStr)]: result.length };
     }
+    console.log(this.unassignedRoomsNumber);
   }
 
   @Listen('reduceAvailableUnitEvent', { target: 'window' })
@@ -82,7 +83,7 @@ export class IglCalHeader {
   }
 
   showToBeAssigned(dayInfo) {
-    if (this.availableDays[dayInfo.day] || 0) {
+    if (this.unassignedRoomsNumber[dayInfo.day] || 0) {
       this.handleOptionEvent('showAssigned');
       setTimeout(() => {
         this.gotoToBeAssignedDate.emit({
@@ -248,10 +249,10 @@ export class IglCalHeader {
               {!this.calendarData.is_vacation_rental && (
                 <div class="preventPageScroll">
                   <span
-                    class={`badge badge-${this.availableDays[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
+                    class={`badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
                     onClick={() => this.showToBeAssigned(dayInfo)}
                   >
-                    {this.availableDays[dayInfo.day] || dayInfo.unassigned_units_nbr}
+                    {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr}
                   </span>
                 </div>
               )}
