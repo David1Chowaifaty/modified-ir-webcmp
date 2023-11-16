@@ -30,6 +30,7 @@ export class IglBookingEvent {
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
   private eventsService = new EventsService();
+  private defaultBookingPosition = { height: '', left: '', top: '', width: '' };
   /* Resize props */
   resizeSide: string = '';
   isDragging: boolean = false;
@@ -53,6 +54,7 @@ export class IglBookingEvent {
 
   componentWillLoad() {
     window.addEventListener('click', this.handleClickOutsideBind);
+    // console.log("booking event",this.bookingEvent)
   }
 
   componentDidLoad() {
@@ -96,7 +98,6 @@ export class IglBookingEvent {
         this.showEventInfo(false);
         return;
       }
-      // event.detail.fromRoomId === this.getBookedRoomId() && ()
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
@@ -108,26 +109,44 @@ export class IglBookingEvent {
           this.showEventInfo(true);
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
+          const isOccupied = this.checkIfSlotOccupied(toRoomId, from_date, to_date);
+
+          if (isOccupied) {
+            this.element.style.top = this.defaultBookingPosition.top;
+            this.element.style.left = this.defaultBookingPosition.left;
+            //this.element.style.left = "500px";
+            console.log("default position",this.defaultBookingPosition)
+          }
+          console.log('position', this.getPosition());
+
+          //console.log("isOccupied",isOccupied)
           console.log(pool, from_date, to_date, toRoomId);
-          const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
-          this.bookingEvent.POOL = result.My_Result.POOL;
+          //const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+          //this.bookingEvent.POOL = result.My_Result.POOL;
+          console.log('booking event new ', this.bookingEvent);
           console.log(event.detail);
           console.log('calll update here');
         }
       }
 
       if (event.detail.fromRoomId === this.getBookedRoomId()) {
-        // Temporarily set to some other title and revert it.. as refresh issue is happening when there minimum change in top / left.
-        // this.onMoveUpdateBooking({ toRoomId: "X", moveToDay: "01_01_2023" });
-        // this.renderAgain();
-        // setTimeout(() => {
-        // }, 20);
         this.onMoveUpdateBooking(event.detail);
         this.renderAgain();
       }
-    } catch (error) {
-      //  toastr.error(error);
-    }
+    } catch (error) {}
+  }
+  async checkIfSlotOccupied(toRoomId, from_date, to_date) {
+    const fromTime = new Date(from_date).getTime();
+    const toTime = new Date(to_date).getTime();
+
+    const isOccupied = this.allBookingEvents.some(event => {
+      const eventFromTime = new Date(event.FROM_DATE).getTime();
+      const eventToTime = new Date(event.TO_DATE).getTime();
+
+      return event.PR_ID === +toRoomId && eventToTime > fromTime && eventFromTime < toTime;
+    });
+
+    return isOccupied;
   }
 
   renderAgain() {
@@ -260,6 +279,8 @@ export class IglBookingEvent {
     if (this.isNewEvent() || this.isHighlightEventType()) {
       return null;
     }
+
+    this.defaultBookingPosition = this.getPosition();
 
     this.resizeSide = side;
     this.isDragging = true;
