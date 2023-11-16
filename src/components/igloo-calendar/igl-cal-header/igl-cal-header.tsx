@@ -1,4 +1,7 @@
 import { Component, Event, EventEmitter, Element, Host, Prop, h, State, Listen } from '@stencil/core';
+import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
+import { dateToFormattedString } from '../../../utils/utils';
+import { transformDateFormatWithMoment } from '../../../utils/events.utils';
 
 @Component({
   tag: 'igl-cal-header',
@@ -16,16 +19,44 @@ export class IglCalHeader {
   }>;
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
+  @Prop() propertyid: number;
+  @Prop() to_date: string;
   @State() renderAgain: boolean = false;
-
+  @State() availableDays: any = {};
   private searchValue: string = '';
   private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
+  private toBeAssignedService = new ToBeAssignedService();
   componentWillLoad() {
+    try {
+      this.initializeRoomsList();
+      this.fetchAndAssignUnassignedRooms();
+    } catch (error) {
+      console.error('Error in componentWillLoad:', error);
+    }
+  }
+  private initializeRoomsList() {
     this.roomsList = [];
     this.calendarData.roomsInfo.forEach(category => {
       this.roomsList = this.roomsList.concat(...category.physicalrooms);
     });
+  }
+
+  private async fetchAndAssignUnassignedRooms() {
+    const days = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
+    await this.assignRoomsToDate(days);
+  }
+
+  private async assignRoomsToDate(days) {
+    for (const day of Object.keys(days)) {
+      const result = await this.toBeAssignedService.getUnassignedRooms(
+        this.propertyid,
+        dateToFormattedString(new Date(+day)),
+        this.calendarData.roomsInfo,
+        this.calendarData.formattedLegendData,
+      );
+      this.availableDays = { ...this.availableDays, [transformDateFormatWithMoment(days[day].dateStr)]: result.length };
+    }
   }
 
   @Listen('reduceAvailableUnitEvent', { target: 'window' })
@@ -48,7 +79,7 @@ export class IglCalHeader {
   }
 
   showToBeAssigned(dayInfo) {
-    if (dayInfo.tobeAssignedCount || 0) {
+    if (this.availableDays[dayInfo.day] || 0) {
       this.handleOptionEvent('showAssigned');
       setTimeout(() => {
         this.gotoToBeAssignedDate.emit({
@@ -146,15 +177,15 @@ export class IglCalHeader {
         <div class="stickyCell align-items-center topLeftCell preventPageScroll">
           <div class="row justify-content-around no-gutters">
             {!this.calendarData.is_vacation_rental && (
-              <div class="caledarBtns" onClick={() => this.handleOptionEvent('showAssigned')} data-toggle="tooltip" data-placement="bottom" data-original-title="Assignments">
+              <div class="caledarBtns" onClick={() => this.handleOptionEvent('showAssigned')} data-toggle="tooltip" data-placement="bottom" title="Unassigned Units">
                 <i class="la la-tasks"></i>
               </div>
             )}
-            <div class="caledarBtns" onClick={() => this.handleOptionEvent('calendar')} data-toggle="tooltip" data-placement="bottom" data-original-title="Navigate">
+            <div class="caledarBtns" onClick={() => this.handleOptionEvent('calendar')} data-toggle="tooltip" data-placement="bottom" title="Navigate">
               <i class="la la-calendar-o"></i>
-              <input class="datePickerHidden" type="date" onChange={this.handleDateSelect.bind(this)} />
+              <input class="datePickerHidden" type="date" onChange={this.handleDateSelect.bind(this)} title="" />
             </div>
-            <div class="caledarBtns" onClick={() => this.handleOptionEvent('gotoToday')} data-toggle="tooltip" data-placement="bottom" data-original-title="Today">
+            <div class="caledarBtns" onClick={() => this.handleOptionEvent('gotoToday')} data-toggle="tooltip" data-placement="bottom" title="Today">
               <i class="la la-clock-o"></i>
             </div>
             <div
@@ -162,7 +193,7 @@ export class IglCalHeader {
               onClick={() => this.handleOptionEvent('add', this.getNewBookingModel())}
               data-toggle="tooltip"
               data-placement="bottom"
-              data-original-title="Create new booking"
+              title="Create new booking"
             >
               <i class="la la-plus"></i>
             </div>
@@ -212,8 +243,11 @@ export class IglCalHeader {
           {this.calendarData.days.map(dayInfo => (
             <div class={`headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`} data-day={dayInfo.day}>
               <div class="preventPageScroll">
-                <span class={`badge badge-${dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`} onClick={() => this.showToBeAssigned(dayInfo)}>
-                  {dayInfo.unassigned_units_nbr}
+                <span
+                  class={`badge badge-${this.availableDays[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
+                  onClick={() => this.showToBeAssigned(dayInfo)}
+                >
+                  {this.availableDays[dayInfo.day] || dayInfo.unassigned_units_nbr}
                 </span>
               </div>
               <div class="dayTitle">{dayInfo.dayDisplayName}</div>
