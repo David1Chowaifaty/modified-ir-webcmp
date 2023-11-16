@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
-import { EventsService } from '../../../services/events.service';
+//import { EventsService } from '../../../services/events.service';
 
 @Component({
   tag: 'igl-booking-event',
@@ -29,7 +29,7 @@ export class IglBookingEvent {
   /* show bubble */
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
-  private eventsService = new EventsService();
+  //private eventsService = new EventsService();
   /* Resize props */
   resizeSide: string = '';
   isDragging: boolean = false;
@@ -109,8 +109,8 @@ export class IglBookingEvent {
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
           console.log(pool, from_date, to_date, toRoomId);
-          const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
-          this.bookingEvent.POOL = result.My_Result.POOL;
+          // const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+          // this.bookingEvent.POOL = result.My_Result.POOL;
           console.log(event.detail);
           console.log('calll update here');
         }
