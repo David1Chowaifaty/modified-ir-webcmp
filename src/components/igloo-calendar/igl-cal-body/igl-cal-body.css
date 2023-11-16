@@ -16,6 +16,10 @@
 .roomRow:first-child {
   margin-top: 80px;
 }
+.categoryName {
+  font-weight: bold;
+}
+
 
 .cellData {
   width: 70px;

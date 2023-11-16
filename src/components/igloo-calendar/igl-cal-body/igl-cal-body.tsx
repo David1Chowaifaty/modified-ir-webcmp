@@ -279,7 +279,7 @@ export class IglCalBody {
           class={`cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`}
           onClick={() => this.toggleCategory(roomCategory)}
         >
-          <div>{this.getCategoryName(roomCategory)}</div> <i class={`la la-angle-${roomCategory.expanded ? 'down' : 'right'}`}></i>
+          <div class={"categoryName"}>{this.getCategoryName(roomCategory)}</div> <i class={`la la-angle-${roomCategory.expanded ? 'down' : 'right'}`}></i>
         </div>
         {this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)}
       </div>

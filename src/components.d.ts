@@ -31,6 +31,7 @@ export namespace Components {
         "entryHour": number;
         "entryMinute": number;
         "fromDate": string;
+        "isEventHover": boolean;
         "toDate": string;
     }
     interface IglBookProperty {
@@ -1384,6 +1385,7 @@ declare namespace LocalJSX {
         "entryHour"?: number;
         "entryMinute"?: number;
         "fromDate"?: string;
+        "isEventHover"?: boolean;
         "onDataUpdateEvent"?: (event: IglBlockDatesViewCustomEvent<{ [key: string]: any }>) => void;
         "toDate"?: string;
     }

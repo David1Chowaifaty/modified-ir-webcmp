@@ -13,6 +13,7 @@ export class IglBlockDatesView {
   @Prop() toDate: string;
   @Prop({ mutable: true }) entryDate: string;
   @Prop() entryHour: number;
+  @Prop() isEventHover: boolean=false;
   @Prop() entryMinute: number;
   @State() renderAgain: boolean = false;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
@@ -89,7 +90,7 @@ export class IglBlockDatesView {
   render() {
     return (
       <Host>
-        <div class="row m-0 p-0 ml-1 mb-1">
+        <div class={`row m-0 p-0 ${!this.isEventHover&&"ml-1"} mb-1`}>
           <div class="col-12 text-left p-0">
             <span class="pr-1">
               <span class="text-bold-700 font-medium-1">From: </span>
@@ -99,8 +100,8 @@ export class IglBlockDatesView {
             {this.toDate}
           </div>
         </div>
-        <div class="col mb-1 text-left">
-          <div class="mb-1">
+        <div class={`col mb-1 text-left ${this.isEventHover&&"p-0"}` }>
+          <div class="mb-1 " >
             <label class="p-0 text-bold-700 font-medium-1 m-0 align-middle">Reason:</label>
             <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer d-inline-block align-middle">
               <input class="form-control" type="checkbox" checked={this.blockDatesData.OUT_OF_SERVICE} id="userinput6" onChange={event => this.handleOutOfService(event)} />

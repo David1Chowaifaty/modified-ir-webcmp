@@ -41,7 +41,7 @@ export class IglBookingEventHover {
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).phone_prefix;
   }
   renderPhone() {
-    return this.bookingEvent.COUNTRY ? `${this.getPhoneCode()}-${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
+    return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct?this.getPhoneCode()+"-":""}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
   }
 
   getGuestNote() {
@@ -431,7 +431,7 @@ export class IglBookingEventHover {
     return (
       <div class={`iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <igl-block-dates-view
-          class="m-0"
+          isEventHover={true}
           entryHour={this.bookingEvent.ENTRY_HOUR}
           entryMinute={this.bookingEvent.ENTRY_MINUTE}
           defaultData={this.bookingEvent}
