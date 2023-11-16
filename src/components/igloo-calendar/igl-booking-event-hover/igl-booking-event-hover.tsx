@@ -431,6 +431,7 @@ export class IglBookingEventHover {
     return (
       <div class={`iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <igl-block-dates-view
+          class="m-0"
           entryHour={this.bookingEvent.ENTRY_HOUR}
           entryMinute={this.bookingEvent.ENTRY_MINUTE}
           defaultData={this.bookingEvent}

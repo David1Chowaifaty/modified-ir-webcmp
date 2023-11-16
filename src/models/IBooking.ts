@@ -261,6 +261,7 @@ export interface RoomBookingDetails {
   TO_DATE_STR: string;
   adult_child_offering: string;
   ARRIVAL_TIME: string;
+  NOTES: string;
 }
 export interface RoomBlockDetails {
   ID: string;

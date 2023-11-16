@@ -60,12 +60,12 @@ async function getStayStatus() {
 }
 function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
   if (['003', '002', '004'].includes(cell.STAY_STATUS_CODE)) {
-    //console.log("blocked cells", cell);
+    //console.log('blocked cells', cell);
     return {
       ID: cell.POOL,
-      NOTES: cell.My_Block_Info.NOTES,
+      NOTES: '',
       BALANCE: '',
-      NAME: stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
+      NAME: cell.My_Block_Info.NOTES !== '' ? cell.My_Block_Info.NOTES : stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
       RELEASE_AFTER_HOURS: cell.My_Block_Info.DESCRIPTION,
       PR_ID: cell.My_Block_Info.pr_id,
       ENTRY_DATE: cell.My_Block_Info.BLOCKED_TILL_DATE,
@@ -116,6 +116,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     FROM_DATE_STR: cell.booking.format.from_date,
     TO_DATE_STR: cell.booking.format.to_date,
     adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
+    NOTES: cell.booking.remark,
   };
 }
 
@@ -180,6 +181,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       origin: data.origin,
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
+      NOTES: data.remark,
     });
   });
 
@@ -189,9 +191,9 @@ export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDeta
   const stayStatus = await getStayStatus();
   return {
     ID: data.POOL,
-    NOTES: data.NOTES,
+    NOTES: '',
     BALANCE: '',
-    NAME: stayStatus.find(st => st.code === data.STAY_STATUS_CODE).value || '',
+    NAME: data.NOTES !== '' ? data.NOTES : stayStatus.find(st => st.code === data.STAY_STATUS_CODE).value || '',
     RELEASE_AFTER_HOURS: data.DESCRIPTION,
     PR_ID: data.pr_id,
     ENTRY_DATE: data.BLOCKED_TILL_DATE,
