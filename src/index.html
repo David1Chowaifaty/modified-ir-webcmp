@@ -23,33 +23,15 @@
 
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
   <script>
-    function getYesterdaysDate() {
-      const today = new Date();
-      const yesterday = new Date(today);
 
-      yesterday.setDate(yesterday.getDate() - 1);
-
-      const year = yesterday.getFullYear();
-      const month = String(yesterday.getMonth() + 1).padStart(2, '0');
-      const day = String(yesterday.getDate()).padStart(2, '0');
-
-      return `${year}-${month}-${day}`;
-    }
-    function getTwoMonthsFromToday() {
-      const today = new Date();
-      const twoMonthsLater = new Date(today);
-
-      twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
-
-      const year = twoMonthsLater.getFullYear();
-      const month = String(twoMonthsLater.getMonth() + 1).padStart(2, '0');
-      const day = String(twoMonthsLater.getDate()).padStart(2, '0');
-
-      return `${year}-${month}-${day}`;
-    }
+    var today = new Date();
+    today.setDate(today.getDate() - 1);
+    var _FROM_DATE = today.toISOString().substring(0, 10)
+    today.setDate(today.getDate() + 60);
+    var _TO_DATE = today.toISOString().substring(0, 10)
     const calendar = document.querySelector("igloo-calendar");
-    calendar.from_date = getYesterdaysDate()
-    calendar.to_date = getTwoMonthsFromToday()
+    calendar.from_date = _FROM_DATE;
+    calendar.to_date = _TO_DATE;
     //const bookingDetail = document.querySelector("ir-booking-details");
     setTimeout(() => {
       sessionStorage.removeItem('token');
