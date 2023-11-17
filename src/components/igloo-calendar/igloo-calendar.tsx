@@ -509,18 +509,18 @@ export class IglooCalendar {
           ) : (
             <ir-loading-screen message="Preparing Calendar Data"></ir-loading-screen>
           )}
-          {this.bookingItem && (
-            <igl-book-property
-              showPaymentDetails={this.showPaymentDetails}
-              countryNodeList={this.countryNodeList}
-              currency={this.calendarData.currency}
-              language={this.language}
-              propertyid={this.propertyid}
-              bookingData={this.bookingItem}
-              onCloseBookingWindow={_ => (this.bookingItem = null)}
-            ></igl-book-property>
-          )}
         </div>
+        {this.bookingItem && (
+          <igl-book-property
+            showPaymentDetails={this.showPaymentDetails}
+            countryNodeList={this.countryNodeList}
+            currency={this.calendarData.currency}
+            language={this.language}
+            propertyid={this.propertyid}
+            bookingData={this.bookingItem}
+            onCloseBookingWindow={_ => (this.bookingItem = null)}
+          ></igl-book-property>
+        )}
       </Host>
     );
   }
