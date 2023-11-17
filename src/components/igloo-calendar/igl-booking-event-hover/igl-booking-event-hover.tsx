@@ -2,6 +2,7 @@ import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/c
 import { findCountry, getCurrencySymbol } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
+import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
   tag: 'igl-booking-event-hover',
@@ -18,6 +19,7 @@ export class IglBookingEventHover {
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
+  @Event() bookingCreated: EventEmitter<{ pool?: string; data: any[] }>;
   private fromTimeStamp: number;
   private toTimeStamp: number;
   private todayTimeStamp: number = new Date().setHours(0, 0, 0, 0);
@@ -41,7 +43,7 @@ export class IglBookingEventHover {
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).phone_prefix;
   }
   renderPhone() {
-    return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct?this.getPhoneCode()+"-":""}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
+    return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct ? this.getPhoneCode() + '-' : ''}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
   }
 
   getGuestNote() {
@@ -205,7 +207,9 @@ export class IglBookingEventHover {
   async handleUpdateBlockedDates() {
     try {
       this.isLoading = 'update';
-      await this.eventService.updateBlockedEvent(this.bookingEvent);
+      const result = await this.eventService.updateBlockedEvent(this.bookingEvent);
+      const blockedUnit = await transformNewBLockedRooms(result);
+      this.bookingCreated.emit({ pool: this.bookingEvent.POOL, data: [blockedUnit] });
       this.hideBubbleInfo.emit({
         key: 'hidebubble',
         currentInfoBubbleId: this.getBookingId(),

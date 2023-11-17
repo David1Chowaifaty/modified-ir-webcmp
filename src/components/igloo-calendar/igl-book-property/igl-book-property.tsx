@@ -30,7 +30,7 @@ export class IglBookProperty {
   @State() dateRangeData: { [key: string]: any };
   @State() selectedUnits: { [key: string]: any } = {};
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
-  @Event() bookingCreated: EventEmitter<RoomBookingDetails[]>;
+  @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
   private PAGE_ZERO: string = 'page_zero';
   private PAGE_ONE: string = 'page_one';
@@ -584,8 +584,16 @@ export class IglBookProperty {
     this.setLoadingState(check_in);
 
     try {
+      let booking = {
+        pool: '',
+        data: [],
+      };
       if (['003', '002', '004'].includes(this.bookingData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.bookingData.POOL);
+        booking.pool = this.bookingData.POOL;
+      }
+      if (this.isEventType('EDIT_BOOKING')) {
+        booking.pool = this.bookingData.POOL;
       }
 
       const arrivalTime = this.isEventType('EDIT_BOOKING') ? this.getArrivalTimeForBooking() : '';
@@ -606,9 +614,10 @@ export class IglBookProperty {
         arrivalTime,
         pr_id,
       );
-      if (check_in) {
+      if (check_in || this.isEventType('EDIT_BOOKING')) {
         const newBookings: RoomBookingDetails[] = transformNewBooking(result);
-        this.bookingCreated.emit(newBookings);
+        booking.data = newBookings;
+        this.bookingCreated.emit(booking);
       }
       //window.location.reload();
       //console.log("booking data ", this.bookingData);
