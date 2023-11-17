@@ -237,6 +237,16 @@ export class IglooCalendar {
       });
     }
   }
+  @Listen('addBookingDatasEvent')
+  handleBookingDatasChange(event: CustomEvent) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    this.updateBookingEventsDateRange(event.detail);
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: [...this.calendarData.bookingEvents, ...event.detail],
+    };
+  }
 
   shouldRenderCalendarView() {
     // console.log("rendering...")

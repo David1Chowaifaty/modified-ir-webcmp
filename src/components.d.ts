@@ -699,6 +699,7 @@ declare global {
     interface HTMLIglCalBodyElementEventMap {
         "showBookingPopup": any;
         "scrollPageToRoom": any;
+        "addBookingDatasEvent": any[];
     }
     interface HTMLIglCalBodyElement extends Components.IglCalBody, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglCalBodyElementEventMap>(type: K, listener: (this: HTMLIglCalBodyElement, ev: IglCalBodyCustomEvent<HTMLIglCalBodyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1449,6 +1450,7 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: any;
         "isScrollViewDragging"?: boolean;
+        "onAddBookingDatasEvent"?: (event: IglCalBodyCustomEvent<any[]>) => void;
         "onScrollPageToRoom"?: (event: IglCalBodyCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglCalBodyCustomEvent<any>) => void;
         "today"?: String;

@@ -83,7 +83,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  console.log('booked cells', cell);
+  //console.log('booked cells', cell);
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
@@ -149,7 +149,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
   data.rooms.forEach(room => {
     bookings.push({
-      ID: room.identifier,
+      ID: room['assigned_units_pool'],
       TO_DATE: room.to_date,
       FROM_DATE: room.from_date,
       NO_OF_DAYS: room.days.length,
@@ -167,7 +167,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       ADULTS_COUNT: room.occupancy.adult_nbr,
       CHILDREN_COUNT: room.occupancy.children_nbr,
       PR_ID: +room.unit.id,
-      POOL: room.identifier,
+      POOL: room['assigned_units_pool'],
       GUEST: data.guest,
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,

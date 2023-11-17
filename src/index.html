@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <igloo-calendar currency-name="USD" propertyid="42" from_date="2023-10-11" to_date="2024-1-31" language="en"
+  <igloo-calendar currency-name="USD" propertyid="42" language="en"
     baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
   <!-- <script src="assets/"></script> -->
   <!-- <ir-booking-details baseurl="https://gateway.igloorooms.com/IR" language="en" has-menu="true" has-print="true"
@@ -23,7 +23,33 @@
 
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
   <script>
+    function getYesterdaysDate() {
+      const today = new Date();
+      const yesterday = new Date(today);
+
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const year = yesterday.getFullYear();
+      const month = String(yesterday.getMonth() + 1).padStart(2, '0');
+      const day = String(yesterday.getDate()).padStart(2, '0');
+
+      return `${year}-${month}-${day}`;
+    }
+    function getTwoMonthsFromToday() {
+      const today = new Date();
+      const twoMonthsLater = new Date(today);
+
+      twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
+
+      const year = twoMonthsLater.getFullYear();
+      const month = String(twoMonthsLater.getMonth() + 1).padStart(2, '0');
+      const day = String(twoMonthsLater.getDate()).padStart(2, '0');
+
+      return `${year}-${month}-${day}`;
+    }
     const calendar = document.querySelector("igloo-calendar");
+    calendar.from_date = getYesterdaysDate()
+    calendar.to_date = getTwoMonthsFromToday()
     //const bookingDetail = document.querySelector("ir-booking-details");
     setTimeout(() => {
       sessionStorage.removeItem('token');
