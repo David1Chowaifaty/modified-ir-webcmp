@@ -1,7 +1,7 @@
 import { Component, Host, h, Prop, Event, EventEmitter, State, Listen, Fragment } from '@stencil/core';
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
-import { updateCategories } from '../../../utils/events.utils';
+//import { updateCategories } from '../../../utils/events.utils';
 
 @Component({
   tag: 'igl-to-be-assigned',
@@ -24,7 +24,8 @@ export class IglToBeAssigned {
   @State() showDatesList: boolean = false;
   @State() renderAgain: boolean = false;
   @State() orderedDatesList: any[] = [];
-  @State() isLoading: boolean = false;
+  @State() isGotoToBeAssignedDate: boolean;
+  @State() isLoading: boolean = true;
   private selectedDate = null;
   private data: { [key: string]: any } = {};
   private today = new Date();
@@ -34,31 +35,30 @@ export class IglToBeAssigned {
   componentWillLoad() {
     this.reArrangeData();
   }
-  // async updateCategories(key, calendarData) {
-  //   try {
-  //     let categorisedRooms = {};
-  //     const result = await this.toBeAssignedService.getUnassignedRooms(
-  //       this.propertyid,
-  //       dateToFormattedString(new Date(+key)),
-  //       calendarData.roomsInfo,
-  //       calendarData.formattedLegendData,
-  //     );
-  //     result.forEach(room => {
-  //       if (!categorisedRooms.hasOwnProperty(room.RT_ID)) {
-  //         categorisedRooms[room.RT_ID] = [room];
-  //       } else {
-  //         categorisedRooms[room.RT_ID].push(room);
-  //       }
-  //     });
-  //     this.unassignedDates[key].categories = categorisedRooms;
-  //   } catch (error) {
-  //     //  toastr.error(error);
-  //   }
-  // }
+  async updateCategories(key, calendarData) {
+    try {
+      let categorisedRooms = {};
+      const result = await this.toBeAssignedService.getUnassignedRooms(
+        this.propertyid,
+        dateToFormattedString(new Date(+key)),
+        calendarData.roomsInfo,
+        calendarData.formattedLegendData,
+      );
+      result.forEach(room => {
+        if (!categorisedRooms.hasOwnProperty(room.RT_ID)) {
+          categorisedRooms[room.RT_ID] = [room];
+        } else {
+          categorisedRooms[room.RT_ID].push(room);
+        }
+      });
+      this.unassignedDates[key].categories = categorisedRooms;
+    } catch (error) {
+      //  toastr.error(error);
+    }
+  }
 
   async reArrangeData() {
     try {
-      this.isLoading = true;
       this.today.setHours(0, 0, 0, 0);
       this.calendarData.roomsInfo.forEach(category => {
         this.categoriesData[category.id] = {
@@ -71,28 +71,29 @@ export class IglToBeAssigned {
       });
 
       this.selectedDate = null;
-      this.unassignedDates = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-      console.log(this.unassignedDates);
-      if (Object.keys(this.unassignedDates).length > 0) {
-        const firstKey = Object.keys(this.unassignedDates)[0];
-        await updateCategories(firstKey, this.calendarData, this.propertyid, this.unassignedDates);
-      }
+      //this.unassignedDates = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
+      this.unassignedDates = this.calendarData.unassignedDates;
 
       this.data = this.unassignedDates;
       this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
+
       if (!this.selectedDate && this.orderedDatesList.length) {
         this.selectedDate = this.orderedDatesList[0];
       }
     } catch (error) {
       console.error('Error fetching unassigned dates:', error);
       //  toastr.error(error);
-    } finally {
-      this.isLoading = false;
     }
   }
-
+  async componentDidLoad() {
+    if (!this.isGotoToBeAssignedDate && Object.keys(this.unassignedDates).length > 0) {
+      const firstKey = Object.keys(this.unassignedDates)[0];
+      this.showForDate(firstKey);
+    }
+  }
   @Listen('gotoToBeAssignedDate', { target: 'window' })
-  gotoDate(event: CustomEvent) {
+  async gotoDate(event: CustomEvent) {
+    this.isGotoToBeAssignedDate = true;
     this.showForDate(event.detail.data);
     this.showDatesList = false;
     this.renderView();
@@ -101,15 +102,20 @@ export class IglToBeAssigned {
   async showForDate(dateStamp) {
     try {
       this.isLoading = true;
-      this.showUnassignedDate();
-      await updateCategories(dateStamp, this.calendarData, this.propertyid, this.unassignedDates);
+      if (this.showDatesList) {
+        this.showUnassignedDate();
+      }
+      await this.updateCategories(dateStamp, this.calendarData);
       this.addToBeAssignedEvent.emit({ key: 'tobeAssignedEvents', data: [] });
-      this.selectedDate = dateStamp;
       this.showBookingPopup.emit({
         key: 'calendar',
         data: parseInt(dateStamp) - 86400000,
       });
-      this.isLoading = false; // goto 1 days before.. // calendar moves another 1 day
+      if (this.isGotoToBeAssignedDate) {
+        this.isGotoToBeAssignedDate = false;
+      }
+      this.isLoading = false;
+      this.selectedDate = dateStamp;
     } catch (error) {
       // toastr.error(error);
     }

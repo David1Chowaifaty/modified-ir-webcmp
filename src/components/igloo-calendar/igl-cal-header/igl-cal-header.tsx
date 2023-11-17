@@ -22,7 +22,7 @@ export class IglCalHeader {
   @Prop() propertyid: number;
   @Prop() to_date: string;
   @State() renderAgain: boolean = false;
-  @State() availableDays: any = {};
+  @State() unassignedRoomsNumber: any = {};
   private searchValue: string = '';
   private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
@@ -30,7 +30,9 @@ export class IglCalHeader {
   componentWillLoad() {
     try {
       this.initializeRoomsList();
-      this.fetchAndAssignUnassignedRooms();
+      if (!this.calendarData.is_vacation_rental) {
+        this.fetchAndAssignUnassignedRooms();
+      }
     } catch (error) {
       console.error('Error in componentWillLoad:', error);
     }
@@ -43,7 +45,8 @@ export class IglCalHeader {
   }
 
   private async fetchAndAssignUnassignedRooms() {
-    const days = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
+    //const days = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
+    const days = this.calendarData.unassignedDates;
     await this.assignRoomsToDate(days);
   }
 
@@ -55,8 +58,9 @@ export class IglCalHeader {
         this.calendarData.roomsInfo,
         this.calendarData.formattedLegendData,
       );
-      this.availableDays = { ...this.availableDays, [transformDateFormatWithMoment(days[day].dateStr)]: result.length };
+      this.unassignedRoomsNumber = { ...this.unassignedRoomsNumber, [transformDateFormatWithMoment(days[day].dateStr)]: result.length };
     }
+    console.log(this.unassignedRoomsNumber);
   }
 
   @Listen('reduceAvailableUnitEvent', { target: 'window' })
@@ -79,7 +83,7 @@ export class IglCalHeader {
   }
 
   showToBeAssigned(dayInfo) {
-    if (this.availableDays[dayInfo.day] || 0) {
+    if (this.unassignedRoomsNumber[dayInfo.day] || 0) {
       this.handleOptionEvent('showAssigned');
       setTimeout(() => {
         this.gotoToBeAssignedDate.emit({
@@ -242,14 +246,16 @@ export class IglCalHeader {
           </div>
           {this.calendarData.days.map(dayInfo => (
             <div class={`headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`} data-day={dayInfo.day}>
-              <div class="preventPageScroll">
-                <span
-                  class={`badge badge-${this.availableDays[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
-                  onClick={() => this.showToBeAssigned(dayInfo)}
-                >
-                  {this.availableDays[dayInfo.day] || dayInfo.unassigned_units_nbr}
-                </span>
-              </div>
+              {!this.calendarData.is_vacation_rental && (
+                <div class="preventPageScroll">
+                  <span
+                    class={`badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
+                    onClick={() => this.showToBeAssigned(dayInfo)}
+                  >
+                    {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr}
+                  </span>
+                </div>
+              )}
               <div class="dayTitle">{dayInfo.dayDisplayName}</div>
               <div class="dayCapacityPercent">{dayInfo.occupancy}%</div>
             </div>

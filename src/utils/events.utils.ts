@@ -21,5 +21,5 @@ export async function updateCategories(key, calendarData, property_id, unassigne
 }
 export function transformDateFormatWithMoment(dateStr: string) {
   var dateObj = moment(dateStr, 'ddd, DD MMM YYYY');
-  return dateObj.format('DD_MM_YYYY');
+  return dateObj.format('D_M_YYYY');
 }
