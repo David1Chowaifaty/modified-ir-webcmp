@@ -599,6 +599,9 @@ export class IglBookProperty {
       const arrivalTime = this.isEventType('EDIT_BOOKING') ? this.getArrivalTimeForBooking() : '';
       const pr_id = this.isEventType('BAR_BOOKING') ? this.bookingData.PR_ID : undefined;
       const booking_nbr = this.isEventType('EDIT_BOOKING') ? this.bookingData.BOOKING_NUMBER : undefined;
+      if (this.isEventType('EDIT_BOOKING')) {
+        this.bookedByInfoData.message = this.bookingData.NOTES;
+      }
       const result = await this.bookingService.bookUser(
         this.bookedByInfoData,
         check_in,
