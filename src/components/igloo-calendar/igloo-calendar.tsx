@@ -241,10 +241,13 @@ export class IglooCalendar {
   handleBookingDatasChange(event: CustomEvent) {
     event.stopPropagation();
     event.stopImmediatePropagation();
+    let bookings = [...this.calendarData.bookingEvents];
+    bookings = bookings.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
+    bookings.push(...event.detail);
     this.updateBookingEventsDateRange(event.detail);
     this.calendarData = {
       ...this.calendarData,
-      bookingEvents: [...this.calendarData.bookingEvents, ...event.detail],
+      bookingEvents: bookings,
     };
   }
 

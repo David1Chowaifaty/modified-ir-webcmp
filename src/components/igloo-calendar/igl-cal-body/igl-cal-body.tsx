@@ -98,8 +98,6 @@ export class IglCalBody {
   }
 
   addBookingDatas(aData) {
-    this.calendarData.bookingEvents = this.calendarData.bookingEvents.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
-
     this.addBookingDatasEvent.emit(aData);
   }
 
