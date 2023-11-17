@@ -15,7 +15,7 @@ export class IglCalBody {
   @Prop() countryNodeList;
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
-
+  @Event() addBookingDatasEvent: EventEmitter<any[]>;
   private selectedRooms: { [key: string]: any } = {};
   private fromRoomId: number = -1;
   private newEvent: { [key: string]: any };
@@ -99,7 +99,8 @@ export class IglCalBody {
 
   addBookingDatas(aData) {
     this.calendarData.bookingEvents = this.calendarData.bookingEvents.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
-    this.calendarData.bookingEvents = this.calendarData.bookingEvents.concat(aData);
+
+    this.addBookingDatasEvent.emit(aData);
   }
 
   getSelectedCellRefName(roomId, selectedDay) {
@@ -279,7 +280,7 @@ export class IglCalBody {
           class={`cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`}
           onClick={() => this.toggleCategory(roomCategory)}
         >
-          <div class={"categoryName"}>{this.getCategoryName(roomCategory)}</div> <i class={`la la-angle-${roomCategory.expanded ? 'down' : 'right'}`}></i>
+          <div class={'categoryName'}>{this.getCategoryName(roomCategory)}</div> <i class={`la la-angle-${roomCategory.expanded ? 'down' : 'right'}`}></i>
         </div>
         {this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)}
       </div>

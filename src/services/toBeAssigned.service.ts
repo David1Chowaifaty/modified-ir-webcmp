@@ -57,7 +57,7 @@ export class ToBeAssignedService {
           throw new Error(data.ExceptionMsg);
         }
         console.log(data);
-        return data;
+        return data['My_Result'];
       } else {
         throw new Error('Invalid token');
       }

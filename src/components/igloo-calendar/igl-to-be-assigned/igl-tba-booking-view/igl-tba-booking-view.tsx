@@ -1,9 +1,7 @@
 import { Component, Host, Prop, h, Event, EventEmitter, Listen, State } from '@stencil/core';
 import { ToBeAssignedService } from '../../../../services/toBeAssigned.service';
 import { v4 } from 'uuid';
-import { BookingService } from '../../../../services/booking.service';
 import { transformNewBooking } from '../../../../utils/booking';
-// import $ from 'jquery';
 
 @Component({
   tag: 'igl-tba-booking-view',
@@ -30,7 +28,6 @@ export class IglTbaBookingView {
   private highlightSection: boolean = false;
   private allRoomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
-  private bookingService = new BookingService();
   onSelectRoom(evt) {
     if (evt.stopImmediatePropagation) {
       evt.stopImmediatePropagation();
@@ -63,30 +60,20 @@ export class IglTbaBookingView {
     }
   }
 
-  // initializeToolTips(){
-  // console.log($(this.element));
-  // console.log($('[data-toggle="tooltip"]'))
-  // console.log($(this.element + ' [data-toggle="tooltip"]'));
-
-  // $('[data-toggle="tooltip"]').tooltip({
-  //   container: 'body'
-  // });
-  // }
-  //
   async handleAssignUnit(event) {
     try {
       event.stopImmediatePropagation();
       event.stopPropagation();
       if (this.selectedRoom) {
-        await this.toBeAssignedService.assignUnit(this.eventData.BOOKING_NUMBER, this.eventData.ID, this.selectedRoom);
-        const booking = await this.bookingService.getExoposedBooking(this.eventData.BOOKING_NUMBER, 'en');
-        let assignEvent = transformNewBooking(booking);
-        const newEvent = { ...this.eventData, ...assignEvent[0] };
-        this.calendarData.bookingEvents.push(newEvent);
+        const result = await this.toBeAssignedService.assignUnit(this.eventData.BOOKING_NUMBER, this.eventData.ID, this.selectedRoom);
+        let assignEvent = transformNewBooking(result);
+        const newEvent = { ...this.eventData, ...assignEvent[0], ID: this.eventData.ID };
+        console.log(newEvent);
+        //this.calendarData.bookingEvents.push(newEvent);
         //console.log(newEvent);
         this.addToBeAssignedEvent.emit({
           key: 'tobeAssignedEvents',
-          data: [newEvent],
+          data: [assignEvent[0]],
         });
         this.assignRoomEvent.emit({ key: 'assignRoom', data: newEvent });
       }

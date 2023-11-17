@@ -187,16 +187,22 @@ export class IglooCalendar {
     }
   }
   @Listen('bookingCreated')
-  onBookingCreation(event: CustomEvent<RoomBookingDetails[]>) {
+  onBookingCreation(event: CustomEvent<{ pool?: string; data: RoomBookingDetails[] }>) {
     event.stopPropagation();
     event.stopImmediatePropagation();
-    this.updateBookingEventsDateRange(event.detail);
+    const { data, pool } = event.detail;
+    this.updateBookingEventsDateRange(data);
+    let bookings = [...this.calendarData.bookingEvents];
+    if (pool) {
+      bookings = bookings.filter(booking => booking.POOL !== pool);
+    }
+    bookings.push(...data);
     this.calendarData = {
       ...this.calendarData,
-      bookingEvents: [...this.calendarData.bookingEvents, ...event.detail],
+      bookingEvents: bookings,
     };
     setTimeout(() => {
-      this.scrollToElement(this.transformDateForScroll(new Date(event.detail[0].FROM_DATE)));
+      this.scrollToElement(this.transformDateForScroll(new Date(data[0].FROM_DATE)));
     }, 200);
   }
   @Listen('blockedCreated')
@@ -230,6 +236,16 @@ export class IglooCalendar {
         top: gotoRect.top - containerRect.top - topLeftCellRect.height - gotoRect.height,
       });
     }
+  }
+  @Listen('addBookingDatasEvent')
+  handleBookingDatasChange(event: CustomEvent) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    this.updateBookingEventsDateRange(event.detail);
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: [...this.calendarData.bookingEvents, ...event.detail],
+    };
   }
 
   shouldRenderCalendarView() {

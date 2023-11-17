@@ -169,31 +169,34 @@ export class IglToBeAssigned {
     }
   }
 
-  handleAssignUnit(event: CustomEvent<{ [key: string]: any }>) {
+  async handleAssignUnit(event: CustomEvent<{ [key: string]: any }>) {
     const opt: { [key: string]: any } = event.detail;
     const data = opt.data;
     event.stopImmediatePropagation();
     event.stopPropagation();
 
     if (opt.key === 'assignUnit') {
-      // this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
-      // // this.calendarData = data.calendarData; // RAJA
-      // // this.calendarData.bookingEvents.push(data.assignEvent);
-
-      // if (!this.data[data.selectedDate].categories[data.RT_ID].length) {
-      //   delete this.data[data.selectedDate].categories[data.RT_ID];
-
-      //   if (!Object.keys(this.data[data.selectedDate].categories).length) {
-      //     delete this.data[data.selectedDate];
-      //     this.orderedDatesList = this.orderedDatesList.filter(dateStamp => dateStamp != data.selectedDate);
-      //     this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
-      //   }
-      // }
-
+      console.log(this.data);
+      this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
+      // this.calendarData = data.calendarData; // RAJA
+      // this.calendarData.bookingEvents.push(data.assignEvent);
       this.reduceAvailableUnitEvent.emit({
         key: 'reduceAvailableDays',
         data: { selectedDate: data.selectedDate },
       });
+      if (this.selectedDate !== null) {
+        await this.updateCategories(this.selectedDate, this.calendarData);
+      }
+      if (!this.data[data.selectedDate].categories[data.RT_ID]) {
+        delete this.data[data.selectedDate].categories[data.RT_ID];
+
+        if (!Object.keys(this.data[data.selectedDate].categories).length) {
+          delete this.data[data.selectedDate];
+          this.orderedDatesList = this.orderedDatesList.filter(dateStamp => dateStamp != data.selectedDate);
+          this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
+        }
+      }
+
       this.renderView();
     }
   }

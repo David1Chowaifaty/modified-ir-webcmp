@@ -605,7 +605,7 @@ declare global {
     };
     interface HTMLIglBookPropertyElementEventMap {
         "closeBookingWindow": { [key: string]: any };
-        "bookingCreated": RoomBookingDetails[];
+        "bookingCreated": { pool?: string; data: RoomBookingDetails[] };
         "blockedCreated": RoomBlockDetails;
     }
     interface HTMLIglBookPropertyElement extends Components.IglBookProperty, HTMLStencilElement {
@@ -645,6 +645,7 @@ declare global {
         "showBookingPopup": any;
         "hideBubbleInfo": any;
         "deleteButton": string;
+        "bookingCreated": { pool?: string; data: any[] };
     }
     interface HTMLIglBookingEventHoverElement extends Components.IglBookingEventHover, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookingEventHoverElementEventMap>(type: K, listener: (this: HTMLIglBookingEventHoverElement, ev: IglBookingEventHoverCustomEvent<HTMLIglBookingEventHoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -698,6 +699,7 @@ declare global {
     interface HTMLIglCalBodyElementEventMap {
         "showBookingPopup": any;
         "scrollPageToRoom": any;
+        "addBookingDatasEvent": any[];
     }
     interface HTMLIglCalBodyElement extends Components.IglCalBody, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglCalBodyElementEventMap>(type: K, listener: (this: HTMLIglCalBodyElement, ev: IglCalBodyCustomEvent<HTMLIglCalBodyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1397,7 +1399,7 @@ declare namespace LocalJSX {
         "currency"?: { id: number; code: string };
         "language"?: string;
         "onBlockedCreated"?: (event: IglBookPropertyCustomEvent<RoomBlockDetails>) => void;
-        "onBookingCreated"?: (event: IglBookPropertyCustomEvent<RoomBookingDetails[]>) => void;
+        "onBookingCreated"?: (event: IglBookPropertyCustomEvent<{ pool?: string; data: RoomBookingDetails[] }>) => void;
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
         "propertyid"?: number;
         "showPaymentDetails"?: boolean;
@@ -1418,6 +1420,7 @@ declare namespace LocalJSX {
         "countryNodeList"?: ICountry[];
         "currency"?: any;
         "is_vacation_rental"?: boolean;
+        "onBookingCreated"?: (event: IglBookingEventHoverCustomEvent<{ pool?: string; data: any[] }>) => void;
         "onDeleteButton"?: (event: IglBookingEventHoverCustomEvent<string>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
@@ -1447,6 +1450,7 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: any;
         "isScrollViewDragging"?: boolean;
+        "onAddBookingDatasEvent"?: (event: IglCalBodyCustomEvent<any[]>) => void;
         "onScrollPageToRoom"?: (event: IglCalBodyCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglCalBodyCustomEvent<any>) => void;
         "today"?: String;
