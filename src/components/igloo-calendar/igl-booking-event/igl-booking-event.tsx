@@ -96,7 +96,7 @@ export class IglBookingEvent {
         this.showEventInfo(false);
         return;
       }
-      // event.detail.fromRoomId === this.getBookedRoomId() && ()
+
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
@@ -108,28 +108,44 @@ export class IglBookingEvent {
           this.showEventInfo(true);
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
-          console.log(pool, from_date, to_date, toRoomId);
+
+          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+            this.element.style.top = `${this.dragInitPos.top}px`;
+            this.element.style.left = `${this.dragInitPos.left}px`;
+
+            this.dragEndPos = {
+              ...this.dragInitPos,
+              id: this.getBookingId(),
+              fromRoomId: this.getBookedRoomId(),
+            };
+
+            this.dragOverEventData.emit({ id: 'DRAG_OVER_END', data: this.dragEndPos });
+          }
+
           const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
           this.bookingEvent.POOL = result.My_Result.POOL;
-          console.log(event.detail);
-          console.log('calll update here');
         }
       }
 
       if (event.detail.fromRoomId === this.getBookedRoomId()) {
-        // Temporarily set to some other title and revert it.. as refresh issue is happening when there minimum change in top / left.
-        // this.onMoveUpdateBooking({ toRoomId: "X", moveToDay: "01_01_2023" });
-        // this.renderAgain();
-        // setTimeout(() => {
-        // }, 20);
         this.onMoveUpdateBooking(event.detail);
         this.renderAgain();
       }
-    } catch (error) {
-      //  toastr.error(error);
-    }
+    } catch (error) {}
   }
+  checkIfSlotOccupied(toRoomId, from_date, to_date) {
+    const fromTime = new Date(from_date).getTime();
+    const toTime = new Date(to_date).getTime();
 
+    const isOccupied = this.allBookingEvents.some(event => {
+      const eventFromTime = new Date(event.FROM_DATE).getTime();
+      const eventToTime = new Date(event.TO_DATE).getTime();
+
+      return event.PR_ID === +toRoomId && eventToTime > fromTime && eventFromTime < toTime;
+    });
+
+    return isOccupied;
+  }
   renderAgain() {
     this.renderElement = !this.renderElement;
   }
