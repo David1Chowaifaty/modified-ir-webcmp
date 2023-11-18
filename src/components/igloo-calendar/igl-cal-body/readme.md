@@ -18,10 +18,11 @@
 
 ## Events
 
-| Event              | Description | Type               |
-| ------------------ | ----------- | ------------------ |
-| `scrollPageToRoom` |             | `CustomEvent<any>` |
-| `showBookingPopup` |             | `CustomEvent<any>` |
+| Event                  | Description | Type                 |
+| ---------------------- | ----------- | -------------------- |
+| `addBookingDatasEvent` |             | `CustomEvent<any[]>` |
+| `scrollPageToRoom`     |             | `CustomEvent<any>`   |
+| `showBookingPopup`     |             | `CustomEvent<any>`   |
 
 
 ## Dependencies

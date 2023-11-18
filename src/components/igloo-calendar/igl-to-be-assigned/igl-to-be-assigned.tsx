@@ -24,8 +24,8 @@ export class IglToBeAssigned {
   @State() showDatesList: boolean = false;
   @State() renderAgain: boolean = false;
   @State() orderedDatesList: any[] = [];
-  @State() isGotoToBeAssignedDate: boolean;
-  @State() isLoading: boolean = true;
+  private isGotoToBeAssignedDate: boolean = false;
+  private isLoading: boolean = true;
   private selectedDate = null;
   private data: { [key: string]: any } = {};
   private today = new Date();
@@ -86,10 +86,14 @@ export class IglToBeAssigned {
     }
   }
   async componentDidLoad() {
-    if (!this.isGotoToBeAssignedDate && Object.keys(this.unassignedDates).length > 0) {
-      const firstKey = Object.keys(this.unassignedDates)[0];
-      this.showForDate(firstKey);
-    }
+    setTimeout(() => {
+      if (!this.isGotoToBeAssignedDate && Object.keys(this.unassignedDates).length > 0) {
+        console.log(this.isGotoToBeAssignedDate);
+        const firstKey = Object.keys(this.unassignedDates)[0];
+
+        this.showForDate(firstKey);
+      }
+    }, 100);
   }
   @Listen('gotoToBeAssignedDate', { target: 'window' })
   async gotoDate(event: CustomEvent) {

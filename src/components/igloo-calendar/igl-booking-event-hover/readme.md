@@ -18,11 +18,12 @@
 
 ## Events
 
-| Event              | Description | Type                  |
-| ------------------ | ----------- | --------------------- |
-| `deleteButton`     |             | `CustomEvent<string>` |
-| `hideBubbleInfo`   |             | `CustomEvent<any>`    |
-| `showBookingPopup` |             | `CustomEvent<any>`    |
+| Event              | Description | Type                                           |
+| ------------------ | ----------- | ---------------------------------------------- |
+| `bookingCreated`   |             | `CustomEvent<{ pool?: string; data: any[]; }>` |
+| `deleteButton`     |             | `CustomEvent<string>`                          |
+| `hideBubbleInfo`   |             | `CustomEvent<any>`                             |
+| `showBookingPopup` |             | `CustomEvent<any>`                             |
 
 
 ## Dependencies

@@ -19,11 +19,11 @@
 
 ## Events
 
-| Event                | Description | Type                                   |
-| -------------------- | ----------- | -------------------------------------- |
-| `blockedCreated`     |             | `CustomEvent<RoomBlockDetails>`        |
-| `bookingCreated`     |             | `CustomEvent<RoomBookingDetails[]>`    |
-| `closeBookingWindow` |             | `CustomEvent<{ [key: string]: any; }>` |
+| Event                | Description | Type                                                          |
+| -------------------- | ----------- | ------------------------------------------------------------- |
+| `blockedCreated`     |             | `CustomEvent<RoomBlockDetails>`                               |
+| `bookingCreated`     |             | `CustomEvent<{ pool?: string; data: RoomBookingDetails[]; }>` |
+| `closeBookingWindow` |             | `CustomEvent<{ [key: string]: any; }>`                        |
 
 
 ## Dependencies
