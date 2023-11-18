@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
-//import { EventsService } from '../../../services/events.service';
+import { EventsService } from '../../../services/events.service';
 
 @Component({
   tag: 'igl-booking-event',
@@ -29,8 +29,7 @@ export class IglBookingEvent {
   /* show bubble */
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
-  //private eventsService = new EventsService();
-  private defaultBookingPosition = { height: '', left: '', top: '', width: '' };
+  private eventsService = new EventsService();
   /* Resize props */
   resizeSide: string = '';
   isDragging: boolean = false;
@@ -54,7 +53,6 @@ export class IglBookingEvent {
 
   componentWillLoad() {
     window.addEventListener('click', this.handleClickOutsideBind);
-    // console.log("booking event",this.bookingEvent)
   }
 
   componentDidLoad() {
@@ -98,6 +96,7 @@ export class IglBookingEvent {
         this.showEventInfo(false);
         return;
       }
+
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
@@ -109,23 +108,22 @@ export class IglBookingEvent {
           this.showEventInfo(true);
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
-          const isOccupied = this.checkIfSlotOccupied(toRoomId, from_date, to_date);
 
-          if (isOccupied) {
-            this.element.style.top = this.defaultBookingPosition.top;
-            this.element.style.left = this.defaultBookingPosition.left;
-            //this.element.style.left = "500px";
-            console.log("default position",this.defaultBookingPosition)
+          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+            this.element.style.top = `${this.dragInitPos.top}px`;
+            this.element.style.left = `${this.dragInitPos.left}px`;
+
+            this.dragEndPos = {
+              ...this.dragInitPos,
+              id: this.getBookingId(),
+              fromRoomId: this.getBookedRoomId(),
+            };
+
+            this.dragOverEventData.emit({ id: 'DRAG_OVER_END', data: this.dragEndPos });
           }
-          console.log('position', this.getPosition());
 
-          //console.log("isOccupied",isOccupied)
-          console.log(pool, from_date, to_date, toRoomId);
-          //const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
-          //this.bookingEvent.POOL = result.My_Result.POOL;
-          console.log('booking event new ', this.bookingEvent);
-          console.log(event.detail);
-          console.log('calll update here');
+          const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+          this.bookingEvent.POOL = result.My_Result.POOL;
         }
       }
 
@@ -135,7 +133,7 @@ export class IglBookingEvent {
       }
     } catch (error) {}
   }
-  async checkIfSlotOccupied(toRoomId, from_date, to_date) {
+  checkIfSlotOccupied(toRoomId, from_date, to_date) {
     const fromTime = new Date(from_date).getTime();
     const toTime = new Date(to_date).getTime();
 
@@ -148,7 +146,6 @@ export class IglBookingEvent {
 
     return isOccupied;
   }
-
   renderAgain() {
     this.renderElement = !this.renderElement;
   }
@@ -279,8 +276,6 @@ export class IglBookingEvent {
     if (this.isNewEvent() || this.isHighlightEventType()) {
       return null;
     }
-
-    this.defaultBookingPosition = this.getPosition();
 
     this.resizeSide = side;
     this.isDragging = true;
