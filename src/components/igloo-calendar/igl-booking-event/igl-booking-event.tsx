@@ -30,6 +30,7 @@ export class IglBookingEvent {
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
   private eventsService = new EventsService();
+  private isStreatch = false;
   /* Resize props */
   resizeSide: string = '';
   isDragging: boolean = false;
@@ -109,7 +110,7 @@ export class IglBookingEvent {
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
 
-          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date) && !this.isStreatch) {
             this.element.style.top = `${this.dragInitPos.top}px`;
             this.element.style.left = `${this.dragInitPos.left}px`;
 
@@ -281,7 +282,7 @@ export class IglBookingEvent {
     this.isDragging = true;
 
     this.showEventInfo(false); // Hide bubble;
-
+    this.isStreatch = side !== 'move';
     if (side === 'move') {
       this.initialX = event.clientX || event.touches[0].clientX;
       this.initialY = event.clientY || event.touches[0].clientY;

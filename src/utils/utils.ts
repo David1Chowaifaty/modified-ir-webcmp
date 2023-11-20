@@ -120,3 +120,9 @@ export function convertDMYToISO(date: string) {
   const dateObj = moment(date, 'D_M_YYYY');
   return dateObj.format('YYYY-MM-DD');
 }
+export function addTwoMonthToDate(date: Date) {
+  return moment(date).add(2, 'months').format('YYYY-MM-DD');
+}
+export function getNextDay(date: Date) {
+  return moment(date).add(1, 'days').format('YYYY-MM-DD');
+}

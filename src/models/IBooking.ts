@@ -39,7 +39,7 @@ export type STATUS =
   | 'BLOCKED-WITH-DATES'
   | 'NOTES'
   | 'OUTSTANDING-BALANCE';
-
+export type bookingReasons = 'DORESERVATION' | 'BLOCK_EXPOSED_UNIT' | 'ASSIGN_EXPOSED_ROOM' | 'REALLOCATE_EXPOSED_ROOM' | 'UNBLOCK_EXPOSED_UNIT' | 'DELETE_CALENDAR_POOL';
 export interface ICountry {
   cities: string[];
   id: number;
