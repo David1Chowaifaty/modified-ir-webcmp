@@ -37,6 +37,7 @@ export class IglooCalendar {
   @State() showLegend: boolean = false;
   @State() showPaymentDetails: boolean = false;
   @State() showToBeAssigned: boolean = false;
+  @State() unassignedDates = {};
   private bookingService: BookingService = new BookingService();
   private countryNodeList: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
@@ -71,9 +72,6 @@ export class IglooCalendar {
           this.calendarData.currency = roomResp['My_Result'].currency;
           this.calendarData.legendData = this.getLegendData(roomResp);
           this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
-          if (!this.calendarData.is_vacation_rental) {
-            this.calendarData.unassignedDates = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-          }
           this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
           this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
           this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
@@ -92,6 +90,11 @@ export class IglooCalendar {
           setTimeout(() => {
             this.scrollToElement(this.today);
           }, 200);
+          if (!this.calendarData.is_vacation_rental) {
+            const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
+            this.unassignedDates = { ...this.unassignedDates, ...data };
+            this.calendarData.unassignedDates = data;
+          }
           this.socket = io('https://realtime.igloorooms.com/');
           this.socket.on('MSG', async msg => {
             let msgAsObject = JSON.parse(msg);
@@ -104,10 +107,11 @@ export class IglooCalendar {
                 } else {
                   result = JSON.parse(PAYLOAD);
                 }
-                const resasons: bookingReasons[] = ['DORESERVATION', 'BLOCK_EXPOSED_UNIT', 'ASSIGN_EXPOSED_ROOM', 'REALLOCATE_EXPOSED_ROOM'];
+                console.log(result, REASON);
+                const resasons: bookingReasons[] = ['DORESERVATION', 'BLOCK_EXPOSED_UNIT', 'ASSIGN_EXPOSED_ROOM', 'REALLOCATE_EXPOSED_ROOM_BLOCK', 'REALLOCATE_EXPOSED_ROOM_BOOK'];
                 if (resasons.includes(REASON)) {
                   let transformedBooking: RoomBookingDetails[] | RoomBlockDetails[];
-                  if (REASON === 'BLOCK_EXPOSED_UNIT') {
+                  if (REASON === 'BLOCK_EXPOSED_UNIT' || REASON === 'REALLOCATE_EXPOSED_ROOM_BLOCK') {
                     transformedBooking = [await transformNewBLockedRooms(result)];
                   } else {
                     transformedBooking = transformNewBooking(result);
@@ -232,7 +236,6 @@ export class IglooCalendar {
     };
   }
   scrollToElement(goToDate) {
-    console.log(goToDate);
     this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
     const topLeftCell = this.element.querySelector('.topLeftCell');
     const gotoDay = this.element.querySelector('.day-' + goToDate);
@@ -563,6 +566,7 @@ export class IglooCalendar {
               <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
                 <div id="calendarContainer">
                   <igl-cal-header
+                    unassignedDates={this.unassignedDates}
                     to_date={this.to_date}
                     propertyid={this.propertyid}
                     today={this.today}

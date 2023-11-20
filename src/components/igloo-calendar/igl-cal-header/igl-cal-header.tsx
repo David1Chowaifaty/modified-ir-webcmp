@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Element, Host, Prop, h, State, Listen } from '@stencil/core';
+import { Component, Event, EventEmitter, Element, Host, Prop, h, State, Listen, Watch } from '@stencil/core';
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
 import { transformDateFormatWithMoment } from '../../../utils/events.utils';
@@ -21,6 +21,7 @@ export class IglCalHeader {
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
   @Prop() propertyid: number;
+  @Prop() unassignedDates = {};
   @Prop() to_date: string;
   @State() renderAgain: boolean = false;
   @State() unassignedRoomsNumber: any = {};
@@ -31,12 +32,17 @@ export class IglCalHeader {
   componentWillLoad() {
     try {
       this.initializeRoomsList();
-      if (!this.calendarData.is_vacation_rental) {
+
+      if (!this.calendarData.is_vacation_rental && Object.keys(this.unassignedDates).length > 0) {
         this.fetchAndAssignUnassignedRooms();
       }
     } catch (error) {
       console.error('Error in componentWillLoad:', error);
     }
+  }
+  @Watch('unassignedDates')
+  handleCalendarDataChanged() {
+    this.fetchAndAssignUnassignedRooms();
   }
   private initializeRoomsList() {
     this.roomsList = [];
@@ -47,7 +53,7 @@ export class IglCalHeader {
 
   private async fetchAndAssignUnassignedRooms() {
     //const days = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-    const days = this.calendarData.unassignedDates;
+    const days = this.unassignedDates;
     await this.assignRoomsToDate(days);
   }
 
@@ -61,7 +67,6 @@ export class IglCalHeader {
       );
       this.unassignedRoomsNumber = { ...this.unassignedRoomsNumber, [transformDateFormatWithMoment(days[day].dateStr)]: result.length };
     }
-    console.log(this.unassignedRoomsNumber);
   }
 
   @Listen('reduceAvailableUnitEvent', { target: 'window' })

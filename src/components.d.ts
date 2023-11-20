@@ -89,6 +89,7 @@ export namespace Components {
         "propertyid": number;
         "to_date": string;
         "today": String;
+        "unassignedDates": {};
     }
     interface IglDateRange {
         "defaultData": { [key: string]: any };
@@ -1472,6 +1473,7 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "to_date"?: string;
         "today"?: String;
+        "unassignedDates"?: {};
     }
     interface IglDateRange {
         "defaultData"?: { [key: string]: any };
