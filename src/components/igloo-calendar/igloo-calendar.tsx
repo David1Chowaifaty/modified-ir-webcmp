@@ -108,7 +108,7 @@ export class IglooCalendar {
                   result = JSON.parse(PAYLOAD);
                 }
                 console.log(result, REASON);
-                const resasons: bookingReasons[] = ['DORESERVATION', 'BLOCK_EXPOSED_UNIT', 'ASSIGN_EXPOSED_ROOM', 'REALLOCATE_EXPOSED_ROOM_BLOCK', 'REALLOCATE_EXPOSED_ROOM_BOOK'];
+                const resasons: bookingReasons[] = ['DORESERVATION', 'BLOCK_EXPOSED_UNIT', 'ASSIGN_EXPOSED_ROOM', 'REALLOCATE_EXPOSED_ROOM_BLOCK'];
                 if (resasons.includes(REASON)) {
                   let transformedBooking: RoomBookingDetails[] | RoomBlockDetails[];
                   if (REASON === 'BLOCK_EXPOSED_UNIT' || REASON === 'REALLOCATE_EXPOSED_ROOM_BLOCK') {

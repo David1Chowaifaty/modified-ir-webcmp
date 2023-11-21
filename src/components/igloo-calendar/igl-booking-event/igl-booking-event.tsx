@@ -110,21 +110,43 @@ export class IglBookingEvent {
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
 
-          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date) && !this.isStreatch) {
-            this.element.style.top = `${this.dragInitPos.top}px`;
-            this.element.style.left = `${this.dragInitPos.left}px`;
+          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+            if (this.isStreatch) {
+              // if (!isNaN(this.initialLeft) && !isNaN(this.initialWidth)) {
+              //   this.element.style.left = `${this.initialLeft}px`;
+              //   this.element.style.width = `${this.initialWidth}px`;
+              //   this.dragOverEventData.emit({
+              //     id: 'STRETCH_OVER_END',
+              //     data: {
+              //       id: this.getBookingId(),
+              //       fromRoomId: this.getBookedRoomId(),
+              //       top: this.getNumber(this.element.style.top),
+              //       left: this.initialLeft,
+              //       x: +this.element.style.left.replace('px', ''),
+              //       y: +this.element.style.top.replace('px', ''),
+              //     },
+              //   });
+              // } else {
+              //   console.error('Initial values are not set correctly');
+              // }
+            } else {
+              this.element.style.top = `${this.dragInitPos.top}px`;
+              this.element.style.left = `${this.dragInitPos.left}px`;
 
-            this.dragEndPos = {
-              ...this.dragInitPos,
-              id: this.getBookingId(),
-              fromRoomId: this.getBookedRoomId(),
-            };
+              this.dragEndPos = {
+                ...this.dragInitPos,
+                id: this.getBookingId(),
+                fromRoomId: this.getBookedRoomId(),
+              };
 
-            this.dragOverEventData.emit({ id: 'DRAG_OVER_END', data: this.dragEndPos });
+              this.dragOverEventData.emit({ id: 'DRAG_OVER_END', data: this.dragEndPos });
+            }
           }
-
-          const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
-          this.bookingEvent.POOL = result.My_Result.POOL;
+          if (pool) {
+            this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).then(result => {
+              this.bookingEvent.POOL = result.My_Result.POOL;
+            });
+          }
         }
       }
 
@@ -132,7 +154,9 @@ export class IglBookingEvent {
         this.onMoveUpdateBooking(event.detail);
         this.renderAgain();
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log('something went wrong');
+    }
   }
   checkIfSlotOccupied(toRoomId, from_date, to_date) {
     const fromTime = new Date(from_date).getTime();
