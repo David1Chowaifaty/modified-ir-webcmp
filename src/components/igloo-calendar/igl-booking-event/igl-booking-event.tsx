@@ -1,6 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 import { EventsService } from '../../../services/events.service';
-import { error } from 'console';
 
 @Component({
   tag: 'igl-booking-event',
