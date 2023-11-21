@@ -234,6 +234,9 @@ export class IglooCalendar {
       monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
       bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
     };
+    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, nextDay, nextTwoMonths);
+    this.unassignedDates = { ...this.unassignedDates, ...data };
+    this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
   }
   scrollToElement(goToDate) {
     this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');

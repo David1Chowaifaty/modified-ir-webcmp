@@ -9,12 +9,10 @@ import axios from 'axios';
 export class IrInterceptor {
   @State() isShown = false;
   @State() isLoading = false;
-  @State() isSuccess = false;
   @State() isUnassignedUnit = false;
 
   @Prop({ reflect: true, mutable: true }) defaultMessage = {
     loadingMessage: 'Fetching Data',
-    successMessage: 'Success',
     errorMessage: 'Something Went Wrong',
   };
 
@@ -54,17 +52,12 @@ export class IrInterceptor {
 
   handleResponse(response) {
     this.isLoading = false;
-
     if (response.data.ExceptionMsg?.trim()) {
       this.handleError(response.data.ExceptionMsg);
-
       throw new Error(response.data.ExceptionMsg);
+    } else {
+      this.handleCompletion('', true);
     }
-
-    if (this.isHandledEndpoint(response.config.url)) {
-      this.handleCompletion('Success', true);
-    }
-
     return response;
   }
 
@@ -89,7 +82,6 @@ export class IrInterceptor {
       this.isUnassignedUnit = false;
     } else {
       const delay = isSuccess ? 0 : 5000;
-
       setTimeout(() => {
         this.isShown = false;
       }, delay);
@@ -97,19 +89,20 @@ export class IrInterceptor {
   }
 
   handleCompletion(message: string, success: boolean) {
-    this.isSuccess = success;
-    this.defaultMessage = {
-      ...this.defaultMessage,
-      [success ? 'successMessage' : 'errorMessage']: message,
-    };
+    if (!success) {
+      this.defaultMessage = {
+        ...this.defaultMessage,
+        errorMessage: message,
+      };
+    }
     this.hideToastAfterDelay(success);
   }
 
   renderMessage(): string {
-    if (this.isLoading) return this.defaultMessage.loadingMessage;
-    return this.isSuccess ? this.defaultMessage.successMessage : this.defaultMessage.errorMessage;
+    return this.defaultMessage.errorMessage;
   }
   render() {
+    const show = !this.isLoading && this.isShown;
     return (
       <Host>
         {this.isLoading && this.isShown && (
@@ -119,9 +112,8 @@ export class IrInterceptor {
             </div>
           </div>
         )}
-
-        <div class="toast-container" data-state={!this.isLoading && this.isShown && !this.isSuccess ? 'open' : 'closed'}>
-          {!this.isLoading && this.isShown && !this.isSuccess && (
+        <div class="toast-container" data-state={show ? 'open' : 'closed'}>
+          {show && (
             <Fragment>
               <div class="x-mark-container">
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
