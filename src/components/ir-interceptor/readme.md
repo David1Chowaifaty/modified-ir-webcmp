@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property           | Attribute | Description | Type                                                                        | Default                                                                                                               |
-| ------------------ | --------- | ----------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `defaultMessage`   | --        |             | `{ loadingMessage: string; successMessage: string; errorMessage: string; }` | `{     loadingMessage: 'Fetching Data',     successMessage: 'Success',     errorMessage: 'Something Went Wrong',   }` |
-| `handledEndpoints` | --        |             | `string[]`                                                                  | `['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room']`                                                   |
+| Property           | Attribute | Description | Type                                                | Default                                                                                |
+| ------------------ | --------- | ----------- | --------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `defaultMessage`   | --        |             | `{ loadingMessage: string; errorMessage: string; }` | `{     loadingMessage: 'Fetching Data',     errorMessage: 'Something Went Wrong',   }` |
+| `handledEndpoints` | --        |             | `string[]`                                          | `['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room']`                    |
 
 
 ## Dependencies
