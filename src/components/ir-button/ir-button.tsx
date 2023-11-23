@@ -2,6 +2,7 @@ import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-button',
+  styleUrl:"ir-button.css"
 })
 export class IrButton {
   @Prop() name: string;

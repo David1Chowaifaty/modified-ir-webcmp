@@ -271,7 +271,7 @@ export class IrBookingDetails {
           <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
             <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
             <ir-select id="update-status" size="sm" label-available="false" data={this.statusData} textSize="sm" class="sm-padding-right"></ir-select>
-            <ir-button icon="" id="update-status-btn" size="sm" text="Update"></ir-button>
+            <ir-button  id="update-status-btn" size="sm" text="Update"></ir-button>
             {this.hasReceipt && <ir-icon id="receipt" icon="ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
             {this.hasPrint && <ir-icon id="print" icon="ft-printer h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
             {this.hasDelete && <ir-icon id="book-delete" icon="ft-trash-2 h1 danger ml-1 pointer"></ir-icon>}
@@ -324,9 +324,9 @@ export class IrBookingDetails {
               })}
             </div>
           </div>
-          {/* <div class="col-lg-5 col-md-12 pr-0 pl-0 pl-md-1">
+          <div class="col-lg-5 col-md-12 pr-0 pl-0 pl-md-1">
             <ir-payment-details item={this.bookingDetails} paymentDetailsUrl={this.paymentDetailsUrl} paymentExceptionMessage={this.paymentExceptionMessage}></ir-payment-details>
-          </div> */}
+          </div>
         </div>
       </div>,
       <ir-sidebar side={'right'} id="editGuestInfo">
