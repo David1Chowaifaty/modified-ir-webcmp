@@ -82,6 +82,7 @@ export class IglDateRange {
           <h5 class="dateRangeLabel">Dates</h5>
           <div class="iglRangePicker">
             <ir-date-picker
+              class={'date-range-input'}
               disabled={this.disabled}
               fromDate={this.fromDate}
               toDate={this.toDate}
