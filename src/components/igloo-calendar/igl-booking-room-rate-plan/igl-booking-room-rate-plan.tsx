@@ -19,6 +19,8 @@ export class IglBookingRoomRatePlan {
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
   @State() plan: { [key: string]: any };
+private initialRate :number=0;
+
   componentWillLoad() {
     this.selectedData = {
       ratePlanId: this.ratePlanData.id,
@@ -39,6 +41,7 @@ export class IglBookingRoomRatePlan {
         this.selectedData[key] = value;
       }
     }
+   this.initialRate=this.selectedData.rate/this.dateDifference
   }
 
   getSelectedOffering(value: any) {
@@ -116,6 +119,11 @@ export class IglBookingRoomRatePlan {
     this.handleDataChange('totalRooms', { target: { value: '1' } });
     this.gotoSplitPageTwoEvent.emit({ key: 'gotoSplitPage', data: '' });
   }
+  handleValue(){
+    console.log("selectedDateRate",this.selectedData.rate)
+      return this.selectedData.rateType === 1 ? this.selectedData.rate : this.initialRate
+    
+  }
 
   render() {
     return (
@@ -142,7 +150,7 @@ export class IglBookingRoomRatePlan {
                 <input
                   type="text"
                   class="form-control input-sm"
-                  value={this.selectedData.rateType === 1 ? this.selectedData.rate : this.selectedData.rate / this.dateDifference}
+                  value={this.handleValue()}
                   id={v4()}
                   placeholder="Rate"
                   onInput={(event: InputEvent) => this.handleInput(event)}
