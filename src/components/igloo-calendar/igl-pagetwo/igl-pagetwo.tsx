@@ -34,7 +34,12 @@ export class IglPagetwo {
   initializeGuestData() {
     let total = 0;
     const newSelectedUnits = { ...this.selectedUnits };
-
+    const getRate = (rate: number, totalNights: number, isRateModified: boolean, preference: number) => {
+      if (isRateModified && preference === 2) {
+        return rate * totalNights;
+      }
+      return rate;
+    };
     for (const key in this.selectedRooms) {
       for (const prop in this.selectedRooms[key]) {
         const totalRooms = this.selectedRooms[key][prop].totalRooms;
@@ -54,7 +59,9 @@ export class IglPagetwo {
             ...this.selectedRooms[key][prop],
           });
         }
-        total += this.selectedRooms[key][prop].totalRooms * this.selectedRooms[key][prop].rate;
+        total +=
+          this.selectedRooms[key][prop].totalRooms *
+          getRate(this.selectedRooms[key][prop].rate, this.dateRangeData.dateDifference, this.selectedRooms[key][prop].isRateModified, this.selectedRooms[key][prop].rateType);
       }
     }
     this.bookingData.TOTAL_PRICE = total;

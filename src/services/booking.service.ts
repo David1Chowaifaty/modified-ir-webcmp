@@ -234,7 +234,12 @@ export class BookingService {
 
     return days;
   }
-
+  private calculateTotalRate(rate: number, totalNights: number, isRateModified: boolean, preference: number) {
+    if (isRateModified && preference === 2) {
+      return +rate;
+    }
+    return +rate / +totalNights;
+  }
   public async bookUser(
     bookedByInfoData,
     check_in: boolean,
@@ -321,7 +326,7 @@ export class BookingService {
               from_date: fromDateStr,
               to_date: toDateStr,
               notes: null,
-              days: this.generateDays(fromDateStr, toDateStr, +data.rate / totalNights),
+              days: this.generateDays(fromDateStr, toDateStr, this.calculateTotalRate(data.rate, totalNights, data.isRateModified, data.rateType)),
               guest: {
                 email: null,
                 first_name: data.guestName,
