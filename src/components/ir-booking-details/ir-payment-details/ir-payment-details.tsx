@@ -16,13 +16,11 @@ export class IrPaymentDetails {
   @State() confirmModal: boolean = false;
   @State() toBeDeletedItem: any = {};
 
-  @Prop() paymentDetailsUrl: string = "";
-  @Prop() paymentExceptionMessage: string = "";
-
+  @Prop() paymentDetailsUrl: string = '';
+  @Prop() paymentExceptionMessage: string = '';
 
   @Event({ bubbles: true }) handlePaymentItemChange: EventEmitter<any>;
-  @Event({bubbles: true}) creditCardPressHandler: EventEmitter<any>;
-
+  @Event({ bubbles: true }) creditCardPressHandler: EventEmitter<any>;
 
   itemToBeAdded: any = {
     PAYMENT_DATE: '',
@@ -31,8 +29,6 @@ export class IrPaymentDetails {
     REFERENCE: '',
     PAYMENT_ID: '',
   };
-
-
 
   _handleSave() {
     // emit the item to be added
@@ -63,11 +59,9 @@ export class IrPaymentDetails {
 
   @Watch('paymentDetailsUrl')
   wandler() {
-    console.log("Changed")
+    console.log('Changed');
     this.flag = !this.flag;
   }
-
-
 
   _renderTableRow(item: any, rowMode: 'add' | 'normal' = 'normal') {
     return (
@@ -187,7 +181,7 @@ export class IrPaymentDetails {
             class="sm-padding-right pointer"
             onClick={() => {
               if (!this.item.IS_DIRECT) {
-             this.creditCardPressHandler.emit(this.item.BOOK_NBR);
+                this.creditCardPressHandler.emit(this.item.BOOK_NBR);
               }
               this.collapsedGuarantee = !this.collapsedGuarantee;
             }}
@@ -209,7 +203,7 @@ export class IrPaymentDetails {
               </div>,
             ]
           ) : this.paymentDetailsUrl ? (
-            <iframe src={this.paymentDetailsUrl} width="100%" class='iframeHeight' frameborder="0"></iframe>
+            <iframe src={this.paymentDetailsUrl} width="100%" class="iframeHeight" frameborder="0"></iframe>
           ) : (
             <div class="text-center">{this.paymentExceptionMessage}</div>
           )}
@@ -234,7 +228,7 @@ export class IrPaymentDetails {
 
   render() {
     if (!this.item) {
-      return <div></div>;
+      return null;
     }
 
     return [

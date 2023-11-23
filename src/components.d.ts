@@ -93,6 +93,7 @@ export namespace Components {
     }
     interface IglDateRange {
         "defaultData": { [key: string]: any };
+        "disabled": boolean;
         "message": string;
     }
     interface IglLegends {
@@ -222,13 +223,14 @@ export namespace Components {
         "cancelLabel": string;
         "customRangeLabel": string;
         "daysOfWeek": string[];
+        "disabled": boolean;
         "firstDay": number;
         "format": string;
         "fromDate": Date;
         "fromLabel": string;
         "maxSpan": moment.DurationInputArg1;
         "monthNames": string[];
-        "opens": "left" | "right" | "center";
+        "opens": 'left' | 'right' | 'center';
         "separator": string;
         "toDate": Date;
         "toLabel": string;
@@ -1477,6 +1479,7 @@ declare namespace LocalJSX {
     }
     interface IglDateRange {
         "defaultData"?: { [key: string]: any };
+        "disabled"?: boolean;
         "message"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
     }
@@ -1641,6 +1644,7 @@ declare namespace LocalJSX {
         "cancelLabel"?: string;
         "customRangeLabel"?: string;
         "daysOfWeek"?: string[];
+        "disabled"?: boolean;
         "firstDay"?: number;
         "format"?: string;
         "fromDate"?: Date;
@@ -1651,7 +1655,7 @@ declare namespace LocalJSX {
     start: moment.Moment;
     end: moment.Moment;
   }>) => void;
-        "opens"?: "left" | "right" | "center";
+        "opens"?: 'left' | 'right' | 'center';
         "separator"?: string;
         "toDate"?: Date;
         "toLabel"?: string;

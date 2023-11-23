@@ -450,7 +450,12 @@ export class IglBookProperty {
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
 
         <fieldset class="form-group col-12 row">
-          <igl-date-range message={this.message} defaultData={this.bookingData.defaultDateRange} onDateSelectEvent={evt => this.onDateRangeSelect(evt)}></igl-date-range>
+          <igl-date-range
+            disabled={this.isEventType('BAR_BOOKING')}
+            message={this.message}
+            defaultData={this.bookingData.defaultDateRange}
+            onDateSelectEvent={evt => this.onDateRangeSelect(evt)}
+          ></igl-date-range>
         </fieldset>
 
         <div class="col text-left">

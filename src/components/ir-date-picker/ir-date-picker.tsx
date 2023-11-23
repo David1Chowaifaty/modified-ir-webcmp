@@ -1,16 +1,9 @@
-import {
-  Component,
-  h,
-  Element,
-  Prop,
-  Event,
-  EventEmitter,
-} from "@stencil/core";
-import moment from "moment";
+import { Component, h, Element, Prop, Event, EventEmitter } from '@stencil/core';
+import moment from 'moment';
 
 @Component({
-  tag: "ir-date-picker",
-  styleUrl: "ir-date-picker.css",
+  tag: 'ir-date-picker',
+  styleUrl: 'ir-date-picker.css',
   scoped: true,
 })
 export class IrDatePicker {
@@ -18,40 +11,20 @@ export class IrDatePicker {
   @Prop({ reflect: true }) fromDate: Date;
   @Prop({ reflect: true }) toDate: Date;
 
-  @Prop({ reflect: true }) opens: "left" | "right" | "center";
+  @Prop({ reflect: true }) opens: 'left' | 'right' | 'center';
   @Prop({ reflect: true }) autoApply: boolean;
   @Prop({ reflect: true }) firstDay: number = 1;
-  @Prop({ reflect: true }) monthNames: string[] = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  @Prop({ reflect: true }) daysOfWeek: string[] = [
-    "Su",
-    "Mo",
-    "Tu",
-    "We",
-    "Th",
-    "Fr",
-    "Sa",
-  ];
-  @Prop({ reflect: true }) format: string = "MMM DD,YYYY";
-  @Prop({ reflect: true }) separator: string = "-";
-  @Prop({ reflect: true }) applyLabel: string = "Apply";
-  @Prop({ reflect: true }) cancelLabel: string = "Cancel";
-  @Prop({ reflect: true }) fromLabel: string = "Form";
-  @Prop({ reflect: true }) toLabel: string = "To";
-  @Prop({ reflect: true }) customRangeLabel: string = "Custom";
-  @Prop({ reflect: true }) weekLabel: string = "W";
+  @Prop({ reflect: true }) monthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  @Prop({ reflect: true }) daysOfWeek: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  @Prop({ reflect: true }) format: string = 'MMM DD,YYYY';
+  @Prop({ reflect: true }) separator: string = '-';
+  @Prop({ reflect: true }) applyLabel: string = 'Apply';
+  @Prop({ reflect: true }) cancelLabel: string = 'Cancel';
+  @Prop({ reflect: true }) fromLabel: string = 'Form';
+  @Prop({ reflect: true }) toLabel: string = 'To';
+  @Prop({ reflect: true }) customRangeLabel: string = 'Custom';
+  @Prop({ reflect: true }) weekLabel: string = 'W';
+  @Prop({ reflect: true }) disabled: boolean = false;
   @Prop({ reflect: true }) maxSpan: moment.DurationInputArg1 = {
     days: 240,
   };
@@ -62,7 +35,7 @@ export class IrDatePicker {
   }>;
   dateRangeInput: HTMLElement;
   componentDidLoad() {
-    this.dateRangeInput = this.element.querySelector(".date-range-input");
+    this.dateRangeInput = this.element.querySelector('.date-range-input');
     $(this.dateRangeInput).daterangepicker(
       {
         opens: this.opens,
@@ -86,11 +59,11 @@ export class IrDatePicker {
       },
       (start, end) => {
         this.dateChanged.emit({ start, end });
-      }
+      },
     );
   }
 
   render() {
-    return <input class="date-range-input" type="text" />;
+    return <input class="date-range-input" type="text" disabled={this.disabled} />;
   }
 }
