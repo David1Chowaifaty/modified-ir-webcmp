@@ -109,10 +109,10 @@ export class IglPagetwo {
       if (property === this.selectedGuestData) {
         return this.isGuestDataIncomplete();
       }
-      const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
-      if (!this.showPaymentDetails && isCardDetails) {
-        return false;
-      }
+      // const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
+      // if (!this.showPaymentDetails && isCardDetails) {
+      //   return false;
+      // }
       return property[key] === comparedBy || property[key] === undefined;
     };
 
@@ -125,11 +125,11 @@ export class IglPagetwo {
       isValidProperty(this.selectedBookedByData, 'lastName', '') ||
       isValidProperty(this.selectedBookedByData, 'countryId', -1) ||
       isValidProperty(this.selectedBookedByData, 'selectedArrivalTime', '') ||
-      isValidProperty(this.selectedBookedByData, 'email', '') ||
-      isValidProperty(this.selectedBookedByData, 'cardNumber', '') ||
-      isValidProperty(this.selectedBookedByData, 'cardHolderName', '') ||
-      isValidProperty(this.selectedBookedByData, 'expiryMonth', '') ||
-      isValidProperty(this.selectedBookedByData, 'expiryYear', '')
+      isValidProperty(this.selectedBookedByData, 'email', '')
+      // isValidProperty(this.selectedBookedByData, 'cardNumber', '') ||
+      // isValidProperty(this.selectedBookedByData, 'cardHolderName', '') ||
+      // isValidProperty(this.selectedBookedByData, 'expiryMonth', '') ||
+      // isValidProperty(this.selectedBookedByData, 'expiryYear', '')
     );
   }
 
