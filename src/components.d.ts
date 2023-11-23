@@ -93,6 +93,7 @@ export namespace Components {
     }
     interface IglDateRange {
         "defaultData": { [key: string]: any };
+        "disabled": boolean;
         "message": string;
     }
     interface IglLegends {
@@ -1478,6 +1479,7 @@ declare namespace LocalJSX {
     }
     interface IglDateRange {
         "defaultData"?: { [key: string]: any };
+        "disabled"?: boolean;
         "message"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
     }
