@@ -10,8 +10,8 @@
 | Property                  | Attribute                   | Description | Type     | Default     |
 | ------------------------- | --------------------------- | ----------- | -------- | ----------- |
 | `item`                    | `item`                      |             | `any`    | `undefined` |
-| `paymentDetailsUrl`       | `payment-details-url`       |             | `string` | `""`        |
-| `paymentExceptionMessage` | `payment-exception-message` |             | `string` | `""`        |
+| `paymentDetailsUrl`       | `payment-details-url`       |             | `string` | `''`        |
+| `paymentExceptionMessage` | `payment-exception-message` |             | `string` | `''`        |
 
 
 ## Events
