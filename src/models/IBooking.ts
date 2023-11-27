@@ -268,6 +268,12 @@ export interface RoomBookingDetails {
   adult_child_offering: string;
   ARRIVAL_TIME: string;
   NOTES: string;
+  SOURCE: ISource;
+}
+export interface ISource {
+  code: string;
+  description: string;
+  tag: string;
 }
 export interface RoomBlockDetails {
   ID: string;
