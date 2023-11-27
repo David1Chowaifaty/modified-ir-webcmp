@@ -53,7 +53,7 @@ export class IrRoom {
           data-toggle="collapse"
           data-target={`#roomCollapse-${this.item.identifier}`}
           aria-expanded="false"
-          aria-controls="myCollapse"
+          aria-controls="collapseExample"
           class="sm-padding-right pointer"
           onClick={() => {
             this.collapsed = !this.collapsed;

@@ -35,6 +35,7 @@ export namespace Components {
         "toDate": string;
     }
     interface IglBookProperty {
+        "allowedBookingSources": any;
         "bookingData": { [key: string]: any };
         "countryNodeList": any;
         "currency": { id: number; code: string };
@@ -1397,6 +1398,7 @@ declare namespace LocalJSX {
         "toDate"?: string;
     }
     interface IglBookProperty {
+        "allowedBookingSources"?: any;
         "bookingData"?: { [key: string]: any };
         "countryNodeList"?: any;
         "currency"?: { id: number; code: string };

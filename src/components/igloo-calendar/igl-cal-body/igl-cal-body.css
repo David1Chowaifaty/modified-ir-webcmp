@@ -18,6 +18,8 @@
 }
 .categoryName {
   font-weight: bold;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 
@@ -67,6 +69,7 @@
   cursor: pointer;
   height: 40px;
   font-size: 0.9em;
+  
 }
 .categoryTitle > :nth-child(1) {
   white-space: nowrap;
@@ -77,6 +80,8 @@
 .roomTitle {
   padding-left: 20px;
   font-size: 0.9em;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .roomTitle > :nth-child(1) {
@@ -93,6 +98,8 @@
   font-size: 0.75em;
   align-items: center;
   height: 40px;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* BOOKING EVENT */

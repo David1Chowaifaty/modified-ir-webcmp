@@ -70,6 +70,7 @@ export class IglooCalendar {
         this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date).then(async bookingResp => {
           this.countryNodeList = await this.bookingService.getCountries(this.language);
           this.calendarData.currency = roomResp['My_Result'].currency;
+          this.calendarData.allowedBookingSources=roomResp['My_Result'].allowed_booking_sources
           this.calendarData.legendData = this.getLegendData(roomResp);
           this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
           this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
@@ -593,6 +594,7 @@ export class IglooCalendar {
         </div>
         {this.bookingItem && (
           <igl-book-property
+            allowedBookingSources={this.calendarData.allowedBookingSources}
             showPaymentDetails={this.showPaymentDetails}
             countryNodeList={this.countryNodeList}
             currency={this.calendarData.currency}
