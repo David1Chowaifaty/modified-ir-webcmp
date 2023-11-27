@@ -79,7 +79,6 @@ export interface IEntries {
 }
 export interface ISetupEntries {
   arrivalTime: IEntries[];
-  bookingSource: IEntries[];
   ratePricingMode: IEntries[];
   bedPreferenceType: IEntries[];
 }

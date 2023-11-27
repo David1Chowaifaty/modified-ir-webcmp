@@ -13,14 +13,16 @@ import { transformNewBLockedRooms, transformNewBooking } from '../../../utils/bo
 })
 export class IglBookProperty {
   @Prop() propertyid: number;
+  @Prop() allowedBookingSources :any;
   @Prop() language: string;
   @Prop() countryNodeList;
   @Prop() showPaymentDetails: boolean = false;
   @Prop() currency: { id: number; code: string };
   @Prop({ reflect: true, mutable: true }) bookingData: { [key: string]: any };
-  @State() sourceOption: { code: string; description: string } = {
+  @State() sourceOption: { code: string; description: string;tag:string } = {
     code: '',
     description: '',
+    tag:'',
   };
   @State() splitBookingId: any = '';
   @State() renderAgain: boolean = false;
@@ -38,7 +40,7 @@ export class IglBookProperty {
   private PAGE_BLOCK_DATES: string = 'page_block_date';
   private page: string;
   private showSplitBookingOption: boolean = false;
-  private sourceOptions: { id: string; value: string }[] = [];
+  private sourceOptions: { id: string; value: string,tag:string }[] = [];
   private selectedRooms: { [key: string]: any } = {};
   private guestData: { [key: string]: any }[] = [];
   private bookedByInfoData: { [key: string]: any } = {};
@@ -66,7 +68,7 @@ export class IglBookProperty {
 
     try {
       const setupEntries = await this.fetchSetupEntries();
-      this.setSourceOptions(setupEntries.bookingSource);
+      this.setSourceOptions(this.allowedBookingSources);
       this.setOtherProperties(setupEntries);
 
       if (this.isEventType('EDIT_BOOKING')) {
@@ -85,12 +87,14 @@ export class IglBookProperty {
 
   setSourceOptions(bookingSource: any[]) {
     this.sourceOptions = bookingSource.map(source => ({
-      id: source.CODE_NAME,
-      value: source.CODE_VALUE_EN,
+      id: source.code,
+      value: source.description,
+      tag:source.tag
     }));
     this.sourceOption = {
-      code: bookingSource[0].CODE_NAME,
-      description: bookingSource[0].CODE_VALUE_EN,
+      code: bookingSource[0].code,
+      description: bookingSource[0].description,
+      tag:bookingSource[0].tag
     };
   }
 
@@ -310,9 +314,11 @@ export class IglBookProperty {
   }
 
   handleSourceDropDown(selectedOption) {
+    const selectedSource=this.sourceOptions.find(opt => opt.id === selectedOption.target.value.toString())
     this.sourceOption = {
       code: selectedOption.target.value,
-      description: this.sourceOptions.find(opt => opt.id === selectedOption.target.value.toString()).value || '',
+      description: selectedSource.value || '',
+      tag:selectedSource.tag
     };
   }
 
