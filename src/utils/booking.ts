@@ -117,6 +117,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     TO_DATE_STR: cell.booking.format.to_date,
     adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
     NOTES: cell.booking.remark,
+    SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }
 
@@ -182,6 +183,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
       NOTES: data.remark,
+      SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
     });
   });
 
