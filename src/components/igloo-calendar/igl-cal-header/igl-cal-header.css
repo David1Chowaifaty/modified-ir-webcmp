@@ -71,6 +71,9 @@
   font-size: 0.9em;
   text-transform: uppercase;
   font-weight: bold;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .topLeftCell {
@@ -102,6 +105,9 @@
 .dayTitle {
   font-size: 0.8em;
   font-weight: 600;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .currentDay .dayTitle {
@@ -114,11 +120,17 @@
 
 .dayCapacityPercent {
   font-size: 0.75em;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .badge-pill {
   padding: 3px 1em;
   font-size: 0.8em;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .pointer {
@@ -144,6 +156,9 @@
 
 .badge-light {
   background-color: #999999;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 .min-width-full {
   min-width: 100%;
