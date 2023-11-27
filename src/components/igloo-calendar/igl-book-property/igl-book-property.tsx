@@ -607,6 +607,7 @@ export class IglBookProperty {
       if (this.isEventType('EDIT_BOOKING')) {
         this.bookedByInfoData.message = this.bookingData.NOTES;
       }
+      console.log(this.guestData);
       const result = await this.bookingService.bookUser(
         this.bookedByInfoData,
         check_in,
