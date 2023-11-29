@@ -7,14 +7,15 @@
 
 ## Properties
 
-| Property             | Attribute              | Description | Type                            | Default     |
-| -------------------- | ---------------------- | ----------- | ------------------------------- | ----------- |
-| `bookingData`        | --                     |             | `{ [key: string]: any; }`       | `undefined` |
-| `countryNodeList`    | `country-node-list`    |             | `any`                           | `undefined` |
-| `currency`           | --                     |             | `{ id: number; code: string; }` | `undefined` |
-| `language`           | `language`             |             | `string`                        | `undefined` |
-| `propertyid`         | `propertyid`           |             | `number`                        | `undefined` |
-| `showPaymentDetails` | `show-payment-details` |             | `boolean`                       | `false`     |
+| Property                | Attribute                 | Description | Type                            | Default     |
+| ----------------------- | ------------------------- | ----------- | ------------------------------- | ----------- |
+| `allowedBookingSources` | `allowed-booking-sources` |             | `any`                           | `undefined` |
+| `bookingData`           | --                        |             | `{ [key: string]: any; }`       | `undefined` |
+| `countryNodeList`       | `country-node-list`       |             | `any`                           | `undefined` |
+| `currency`              | --                        |             | `{ id: number; code: string; }` | `undefined` |
+| `language`              | `language`                |             | `string`                        | `undefined` |
+| `propertyid`            | `propertyid`              |             | `number`                        | `undefined` |
+| `showPaymentDetails`    | `show-payment-details`    |             | `boolean`                       | `false`     |
 
 
 ## Events

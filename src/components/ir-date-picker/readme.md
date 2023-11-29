@@ -39,11 +39,13 @@
 
 ### Used by
 
+ - [igl-cal-header](../igloo-calendar/igl-cal-header)
  - [igl-date-range](../igloo-calendar/igl-date-range)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-cal-header --> ir-date-picker
   igl-date-range --> ir-date-picker
   style ir-date-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```
