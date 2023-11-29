@@ -353,6 +353,7 @@ export class IglooCalendar {
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
     if (new Date(fromDate).getTime() < new Date(this.from_date).getTime()) {
+      this.calendarData.startingDate = new Date(fromDate).getTime();
       this.from_date = fromDate;
       this.days = [...results.days, ...this.days];
       if (this.calendarData.monthsInfo[0].monthName === results.months[results.months.length - 1].monthName) {
