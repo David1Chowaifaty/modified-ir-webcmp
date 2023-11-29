@@ -17,7 +17,7 @@ import { transformNewBLockedRooms, transformNewBooking } from '../../utils/booki
 })
 export class IglooCalendar {
   @Prop() propertyid: number;
-  @Prop() from_date: string;
+  @Prop({ mutable: true }) from_date: string;
   @Prop() to_date: string;
   @Prop() language: string;
   @Prop() baseurl: string;
@@ -327,7 +327,7 @@ export class IglooCalendar {
         this.showToBeAssigned = false;
         break;
       case 'calendar':
-        if (opt.data) {
+        if (opt.data.start !== undefined && opt.data.end !== undefined) {
           this.handleDateSearch(opt.data);
         } else {
           let dt = new Date();
@@ -387,7 +387,7 @@ export class IglooCalendar {
     this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
   }
   async handleDateSearch(dates: { start: Moment; end: Moment }) {
-    const startDate = dates.start.toDate();
+    const startDate = moment(dates.start).toDate();
     const defaultFromDate = moment(this.from_date).toDate();
     const endDate = dates.end.toDate();
     const defaultToDate = moment(this.to_date).toDate();
