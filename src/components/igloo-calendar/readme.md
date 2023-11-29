@@ -56,6 +56,7 @@ graph TD;
   ir-interceptor --> ir-loading-screen
   igl-to-be-assigned --> igl-tba-category-view
   igl-tba-category-view --> igl-tba-booking-view
+  igl-cal-header --> ir-date-picker
   igl-cal-body --> igl-booking-event
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> igl-block-dates-view

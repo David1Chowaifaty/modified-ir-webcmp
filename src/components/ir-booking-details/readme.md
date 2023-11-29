@@ -57,6 +57,7 @@
 - [ir-icon](../ir-icon)
 - [ir-label](../ir-label)
 - [ir-room](ir-room)
+- [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)
 - [ir-guest-info](../ir-guest-info)
 
@@ -69,12 +70,17 @@ graph TD;
   ir-booking-details --> ir-icon
   ir-booking-details --> ir-label
   ir-booking-details --> ir-room
+  ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
   ir-booking-details --> ir-guest-info
   ir-label --> ir-icon
   ir-room --> ir-icon
   ir-room --> ir-button
   ir-room --> ir-label
+  ir-payment-details --> ir-icon
+  ir-payment-details --> ir-modal
+  ir-modal --> ir-icon
+  ir-modal --> ir-button
   ir-sidebar --> ir-icon
   ir-guest-info --> ir-select
   ir-guest-info --> ir-input-text

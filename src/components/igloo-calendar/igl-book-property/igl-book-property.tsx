@@ -13,16 +13,16 @@ import { transformNewBLockedRooms, transformNewBooking } from '../../../utils/bo
 })
 export class IglBookProperty {
   @Prop() propertyid: number;
-  @Prop() allowedBookingSources :any;
+  @Prop() allowedBookingSources: any;
   @Prop() language: string;
   @Prop() countryNodeList;
   @Prop() showPaymentDetails: boolean = false;
   @Prop() currency: { id: number; code: string };
   @Prop({ reflect: true, mutable: true }) bookingData: { [key: string]: any };
-  @State() sourceOption: { code: string; description: string;tag:string } = {
+  @State() sourceOption: { code: string; description: string; tag: string } = {
     code: '',
     description: '',
-    tag:'',
+    tag: '',
   };
   @State() splitBookingId: any = '';
   @State() renderAgain: boolean = false;
@@ -40,7 +40,7 @@ export class IglBookProperty {
   private PAGE_BLOCK_DATES: string = 'page_block_date';
   private page: string;
   private showSplitBookingOption: boolean = false;
-  private sourceOptions: { id: string; value: string,tag:string }[] = [];
+  private sourceOptions: { id: string; value: string; tag: string }[] = [];
   private selectedRooms: { [key: string]: any } = {};
   private guestData: { [key: string]: any }[] = [];
   private bookedByInfoData: { [key: string]: any } = {};
@@ -89,13 +89,18 @@ export class IglBookProperty {
     this.sourceOptions = bookingSource.map(source => ({
       id: source.code,
       value: source.description,
-      tag:source.tag
+      tag: source.tag,
     }));
-    this.sourceOption = {
-      code: bookingSource[0].code,
-      description: bookingSource[0].description,
-      tag:bookingSource[0].tag
-    };
+    if (this.isEventType('EDIT_BOOKING')) {
+      this.sourceOption = { ...this.bookingData.SOURCE };
+      console.log(this.sourceOption);
+    } else {
+      this.sourceOption = {
+        code: bookingSource[0].code,
+        description: bookingSource[0].description,
+        tag: bookingSource[0].tag,
+      };
+    }
   }
 
   setOtherProperties(res: any) {
@@ -314,11 +319,11 @@ export class IglBookProperty {
   }
 
   handleSourceDropDown(selectedOption) {
-    const selectedSource=this.sourceOptions.find(opt => opt.id === selectedOption.target.value.toString())
+    const selectedSource = this.sourceOptions.find(opt => opt.id === selectedOption.target.value.toString());
     this.sourceOption = {
       code: selectedOption.target.value,
       description: selectedSource.value || '',
-      tag:selectedSource.tag
+      tag: selectedSource.tag,
     };
   }
 

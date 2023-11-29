@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Element, Host, Prop, h, State, Listen, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, h, State, Listen, Watch } from '@stencil/core';
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
 import { transformDateFormatWithMoment } from '../../../utils/events.utils';
@@ -10,7 +10,6 @@ import moment from 'moment';
   scoped: true,
 })
 export class IglCalHeader {
-  @Element() private element: HTMLElement;
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Event({ bubbles: true, composed: true }) gotoRoomEvent: EventEmitter<{
     [key: string]: any;
@@ -29,9 +28,6 @@ export class IglCalHeader {
   private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
-  private fromDate: Date;
-  private toDate: Date;
-  private totalNights: number = 0;
   componentWillLoad() {
     try {
       this.initializeRoomsList();
@@ -105,25 +101,10 @@ export class IglCalHeader {
     this.optionEvent.emit({ key, data });
   }
 
-  // handleDateSelect(event: Event) {
-  //   const inputElement = event.target as HTMLInputElement;
-  //   let selectedDate = inputElement.value;
-
-  //   // // Manually close the date picker - for Safari
-  //   const picker = this.element.querySelector('.datePickerHidden') as HTMLInputElement;
-  //   picker.blur();
-  //   if (selectedDate) {
-  //     this.handleOptionEvent('calendar', selectedDate);
-  //   }
-  // }
- 
-
-  handleDateSelectEvent(key, data: any = '') {
-    this.optionEvent.emit({ key, data });
-  }
-  handleDateChange(evt) {
-    this.handleDateSelectEvent('calendar', evt.detail);
-    
+  handleDateSelect(event: CustomEvent) {
+    if (Object.keys(event.detail).length > 0) {
+      this.handleOptionEvent('calendar', event.detail);
+    }
   }
 
   handleClearSearch() {
@@ -201,13 +182,15 @@ export class IglCalHeader {
             )}
             <div class="caledarBtns" onClick={() => this.handleOptionEvent('calendar')} data-toggle="tooltip" data-placement="bottom" title="Navigate">
               <i class="la la-calendar-o"></i>
-              {/* <input class="datePickerHidden" type="date" onChange={this.handleDateSelect.bind(this)} title="" /> */}
-              <ir-date-picker class="datePickerHidden"  fromDate={this.fromDate}
-              toDate={this.toDate}
-              autoApply
-              onDateChanged={evt => {
-                this.handleDateChange(evt);
-              }}></ir-date-picker>
+              {/* <input  type="date" onChange={this.handleDateSelect.bind(this)} title="" /> */}
+              <ir-date-picker
+                autoApply
+                onDateChanged={evt => {
+                  console.log('evt', evt);
+                  this.handleDateSelect(evt);
+                }}
+                class="datePickerHidden"
+              ></ir-date-picker>
             </div>
             <div class="caledarBtns" onClick={() => this.handleOptionEvent('gotoToday')} data-toggle="tooltip" data-placement="bottom" title="Today">
               <i class="la la-clock-o"></i>

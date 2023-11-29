@@ -31,9 +31,14 @@
 
  - [igloo-calendar](..)
 
+### Depends on
+
+- [ir-date-picker](../../ir-date-picker)
+
 ### Graph
 ```mermaid
 graph TD;
+  igl-cal-header --> ir-date-picker
   igloo-calendar --> igl-cal-header
   style igl-cal-header fill:#f9f,stroke:#333,stroke-width:4px
 ```

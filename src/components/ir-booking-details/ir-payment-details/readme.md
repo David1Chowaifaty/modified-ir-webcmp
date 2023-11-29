@@ -24,6 +24,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [ir-booking-details](..)
+
 ### Depends on
 
 - [ir-icon](../../ir-icon)
@@ -36,6 +40,7 @@ graph TD;
   ir-payment-details --> ir-modal
   ir-modal --> ir-icon
   ir-modal --> ir-button
+  ir-booking-details --> ir-payment-details
   style ir-payment-details fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

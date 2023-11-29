@@ -130,6 +130,7 @@ export interface RoomType {
 export interface Source {
   code: string | null;
   description: string;
+  tag: string | null;
 }
 
 export interface Status {

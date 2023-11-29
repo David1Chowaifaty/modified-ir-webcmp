@@ -6,7 +6,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { EventsService } from '../../services/events.service';
 import { ICountry, RoomBlockDetails, RoomBookingDetails, bookingReasons } from '../../models/IBooking';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '../../services/toBeAssigned.service';
 import { transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
 
@@ -17,7 +17,7 @@ import { transformNewBLockedRooms, transformNewBooking } from '../../utils/booki
 })
 export class IglooCalendar {
   @Prop() propertyid: number;
-  @Prop() from_date: string;
+  @Prop({ mutable: true }) from_date: string;
   @Prop() to_date: string;
   @Prop() language: string;
   @Prop() baseurl: string;
@@ -161,9 +161,9 @@ export class IglooCalendar {
     eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
       bookingEvent.defaultDateRange = {};
-      bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
-      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
-      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.fromDate.getTime();
+      bookingEvent.defaultDateRange.startDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.startDate);
+      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.startDate.getTime();
 
       bookingEvent.defaultDateRange.toDate = new Date(bookingEvent.TO_DATE + 'T00:00:00');
       bookingEvent.defaultDateRange.toDateStr = this.getDateStr(bookingEvent.defaultDateRange.toDate);
@@ -214,30 +214,6 @@ export class IglooCalendar {
 
   getDateStr(date, locale = 'default') {
     return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
-  }
-  async addNextTwoMonthsToCalendar() {
-    const nextTwoMonths = addTwoMonthToDate(new Date(this.calendarData.endingDate));
-    const nextDay = getNextDay(new Date(this.calendarData.endingDate));
-    const results = await this.bookingService.getCalendarData(this.propertyid, nextDay, nextTwoMonths);
-    this.calendarData.endingDate = new Date(nextTwoMonths).getTime();
-    const newBookings = results.myBookings || [];
-    this.updateBookingEventsDateRange(newBookings);
-    this.days = [...this.days, ...results.days];
-    let newMonths = [...results.months];
-    if (this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].monthName === results.months[0].monthName) {
-      this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].daysCount =
-        this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].daysCount + results.months[0].daysCount;
-        newMonths.shift();
-    }
-    this.calendarData = {
-      ...this.calendarData,
-      days: this.days,
-      monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
-      bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
-    };
-    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, nextDay, nextTwoMonths);
-    this.unassignedDates = { ...this.unassignedDates, ...data };
-    this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
   }
   scrollToElement(goToDate) {
     this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
@@ -351,10 +327,13 @@ export class IglooCalendar {
         this.showToBeAssigned = false;
         break;
       case 'calendar':
-        // let dt = new Date(opt.data);
-        if(opt.data)this.handleFindDate(opt.data);
-        console.log(opt.data)
-        // this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+        if (opt.data.start !== undefined && opt.data.end !== undefined) {
+          this.handleDateSearch(opt.data);
+        }
+        // else {
+        //   let dt = new Date();
+        //   this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+        // }
         break;
       case 'search':
         break;
@@ -369,62 +348,59 @@ export class IglooCalendar {
         break;
     }
   }
-async fetchCalendardata(startDate:string,endDate:string){
-console.log(startDate,endDate)
-
-    const results = await this.bookingService.getCalendarData(this.propertyid, startDate, endDate);
+  async addDatesToCalendar(fromDate: string, toDate: string) {
+    const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
-   // this.days = [...this.days, ...results.days];
-    let newMonths = [...results.months];
-    
-    if(new Date(startDate).getTime() < new Date(endDate).getTime()){
-      this.calendarData.startingDate = new Date(startDate).getTime()
-      this.days = [...results.days,...this.days];
-      if (this.calendarData.monthsInfo[0].monthName === results.months[results.months.length-1].monthName) {
-        this.calendarData.monthsInfo[0].daysCount =
-          this.calendarData.monthsInfo[0].daysCount + results.months[results.months.length-1].daysCount;
-          newMonths.shift();
-        }
-        this.calendarData = {
-          ...this.calendarData,
-          days: this.days,
-          monthsInfo: [...newMonths,...this.calendarData.monthsInfo ],
-          bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
-        };
-    }else{
-      this.calendarData.endingDate = new Date(endDate).getTime();
+    if (new Date(fromDate).getTime() < new Date(this.from_date).getTime()) {
+      this.from_date = fromDate;
+      this.days = [...results.days, ...this.days];
+      if (this.calendarData.monthsInfo[0].monthName === results.months[results.months.length - 1].monthName) {
+        this.calendarData.monthsInfo[0].daysCount = this.calendarData.monthsInfo[0].daysCount + results.months[results.months.length - 1].daysCount;
+      }
+      let newMonths = [...results.months];
+      newMonths.pop();
+      this.calendarData = {
+        ...this.calendarData,
+        startingDate: new Date(fromDate).getTime(),
+        days: this.days,
+        monthsInfo: [...newMonths, ...this.calendarData.monthsInfo],
+        bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
+      };
+    } else {
+      this.calendarData.endingDate = new Date(toDate).getTime();
+      let newMonths = [...results.months];
       this.days = [...this.days, ...results.days];
       if (this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].monthName === results.months[0].monthName) {
         this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].daysCount =
           this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].daysCount + results.months[0].daysCount;
-          newMonths.shift();
-        }
-        this.calendarData = {
-          ...this.calendarData,
-          days: this.days,
-          monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
-          bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
-        };
-        
+        newMonths.shift();
       }
-      const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, startDate, endDate);
-      this.unassignedDates = { ...this.unassignedDates, ...data };
-      this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
-}
-
-  handleFindDate({ start, end }: any) {
-    let previousFromDate = this.calendarData.startingDate;
-    let previoustoDate = this.calendarData.endingDate;
-
-    if (start.toDate().getTime() < previousFromDate) {
-      this.fetchCalendardata(moment(start).format('YYYY-MM-DD'),moment(previousFromDate).add(-1,'days').format('YYYY-MM-DD'))
-      
-    } else if (start.toDate().getTime() > previousFromDate && end.toDate().getTime() < previoustoDate) {
-      this.scrollToElement(this.transformDateForScroll(start.toDate()))
-    } else if (start.toDate().getTime() > previoustoDate) {
-      this.fetchCalendardata(moment(previoustoDate).add(+1,'days').format('YYYY-MM-DD'),moment(end).format('YYYY-MM-DD'))
-      console.log("t3ayat")
+      this.calendarData = {
+        ...this.calendarData,
+        days: this.days,
+        monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
+        bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
+      };
+    }
+    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
+    this.unassignedDates = { ...this.unassignedDates, ...data };
+    this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
+  }
+  async handleDateSearch(dates: { start: Moment; end: Moment }) {
+    const startDate = moment(dates.start).toDate();
+    const defaultFromDate = moment(this.from_date).toDate();
+    const endDate = dates.end.toDate();
+    const defaultToDate = this.calendarData.endingDate;
+    if (startDate.getTime() < new Date(this.from_date).getTime()) {
+      await this.addDatesToCalendar(moment(startDate).format('YYYY-MM-DD'), moment(this.from_date).add(-1, 'days').format('YYYY-MM-DD'));
+      this.scrollToElement(this.transformDateForScroll(startDate));
+    } else if (startDate.getTime() > defaultFromDate.getTime() && startDate.getTime() < defaultToDate && endDate.getTime() < defaultToDate) {
+      this.scrollToElement(this.transformDateForScroll(startDate));
+    } else if (startDate.getTime() > defaultToDate) {
+      const nextDay = getNextDay(new Date(this.calendarData.endingDate));
+      await this.addDatesToCalendar(nextDay, moment(endDate).add(30, 'days').format('YYYY-MM-DD'));
+      this.scrollToElement(this.transformDateForScroll(startDate));
     }
   }
 
@@ -488,7 +464,10 @@ console.log(startDate,endDate)
         if (cells.indexOf(monthContainer) === cells.length - 1) {
           if (monthRect.x + monthRect.width <= rightX && !this.reachedEndOfCalendar) {
             this.reachedEndOfCalendar = true;
-            await this.addNextTwoMonthsToCalendar();
+            //await this.addNextTwoMonthsToCalendar();
+            const nextTwoMonths = addTwoMonthToDate(new Date(this.calendarData.endingDate));
+            const nextDay = getNextDay(new Date(this.calendarData.endingDate));
+            await this.addDatesToCalendar(nextDay, nextTwoMonths);
             this.reachedEndOfCalendar = false;
           }
         }

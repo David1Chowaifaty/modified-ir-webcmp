@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property      | Attribute | Description | Type                      | Default     |
-| ------------- | --------- | ----------- | ------------------------- | ----------- |
-| `defaultData` | --        |             | `{ [key: string]: any; }` | `undefined` |
-| `message`     | `message` |             | `string`                  | `""`        |
+| Property      | Attribute  | Description | Type                      | Default     |
+| ------------- | ---------- | ----------- | ------------------------- | ----------- |
+| `defaultData` | --         |             | `{ [key: string]: any; }` | `undefined` |
+| `disabled`    | `disabled` |             | `boolean`                 | `false`     |
+| `message`     | `message`  |             | `string`                  | `''`        |
 
 
 ## Events
