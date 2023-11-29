@@ -369,13 +369,13 @@ export class IglooCalendar {
       };
     } else {
       this.calendarData.endingDate = new Date(toDate).getTime();
+      let newMonths = [...results.months];
       this.days = [...this.days, ...results.days];
       if (this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].monthName === results.months[0].monthName) {
         this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].daysCount =
           this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].daysCount + results.months[0].daysCount;
+        newMonths.shift();
       }
-      let newMonths = [...results.months];
-      newMonths.shift();
       this.calendarData = {
         ...this.calendarData,
         days: this.days,
