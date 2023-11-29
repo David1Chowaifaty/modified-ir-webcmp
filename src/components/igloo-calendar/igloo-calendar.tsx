@@ -391,13 +391,14 @@ export class IglooCalendar {
     const startDate = moment(dates.start).toDate();
     const defaultFromDate = moment(this.from_date).toDate();
     const endDate = dates.end.toDate();
-    const defaultToDate = moment(this.to_date).toDate();
+    const defaultToDate = this.calendarData.endingDate;
     if (startDate.getTime() < new Date(this.from_date).getTime()) {
       await this.addDatesToCalendar(moment(startDate).format('YYYY-MM-DD'), moment(this.from_date).add(-1, 'days').format('YYYY-MM-DD'));
       this.scrollToElement(this.transformDateForScroll(startDate));
-    } else if (startDate.getTime() > defaultFromDate.getTime() && startDate.getTime() < defaultToDate.getTime() && endDate.getTime() < defaultToDate.getTime()) {
+    } else if (startDate.getTime() > defaultFromDate.getTime() && startDate.getTime() < defaultToDate && endDate.getTime() < defaultToDate) {
+      console.log('here');
       this.scrollToElement(this.transformDateForScroll(startDate));
-    } else if (startDate.getTime() > defaultToDate.getTime()) {
+    } else if (startDate.getTime() > defaultToDate) {
       const nextDay = getNextDay(new Date(this.calendarData.endingDate));
       await this.addDatesToCalendar(nextDay, moment(endDate).add(30, 'days').format('YYYY-MM-DD'));
       setTimeout(() => {
