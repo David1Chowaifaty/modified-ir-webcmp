@@ -396,14 +396,11 @@ export class IglooCalendar {
       await this.addDatesToCalendar(moment(startDate).format('YYYY-MM-DD'), moment(this.from_date).add(-1, 'days').format('YYYY-MM-DD'));
       this.scrollToElement(this.transformDateForScroll(startDate));
     } else if (startDate.getTime() > defaultFromDate.getTime() && startDate.getTime() < defaultToDate && endDate.getTime() < defaultToDate) {
-      console.log('here');
       this.scrollToElement(this.transformDateForScroll(startDate));
     } else if (startDate.getTime() > defaultToDate) {
       const nextDay = getNextDay(new Date(this.calendarData.endingDate));
       await this.addDatesToCalendar(nextDay, moment(endDate).add(30, 'days').format('YYYY-MM-DD'));
-      setTimeout(() => {
-        this.scrollToElement(this.transformDateForScroll(startDate));
-      }, 100);
+      this.scrollToElement(this.transformDateForScroll(startDate));
     }
   }
 
