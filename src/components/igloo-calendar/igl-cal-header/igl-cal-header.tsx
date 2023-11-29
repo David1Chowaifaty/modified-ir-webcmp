@@ -29,6 +29,9 @@ export class IglCalHeader {
   private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
+  private fromDate: Date;
+  private toDate: Date;
+  private totalNights: number = 0;
   componentWillLoad() {
     try {
       this.initializeRoomsList();
@@ -102,16 +105,25 @@ export class IglCalHeader {
     this.optionEvent.emit({ key, data });
   }
 
-  handleDateSelect(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    let selectedDate = inputElement.value;
+  // handleDateSelect(event: Event) {
+  //   const inputElement = event.target as HTMLInputElement;
+  //   let selectedDate = inputElement.value;
 
-    // // Manually close the date picker - for Safari
-    const picker = this.element.querySelector('.datePickerHidden') as HTMLInputElement;
-    picker.blur();
-    if (selectedDate) {
-      this.handleOptionEvent('calendar', selectedDate);
-    }
+  //   // // Manually close the date picker - for Safari
+  //   const picker = this.element.querySelector('.datePickerHidden') as HTMLInputElement;
+  //   picker.blur();
+  //   if (selectedDate) {
+  //     this.handleOptionEvent('calendar', selectedDate);
+  //   }
+  // }
+ 
+
+  handleDateSelectEvent(key, data: any = '') {
+    this.optionEvent.emit({ key, data });
+  }
+  handleDateChange(evt) {
+    this.handleDateSelectEvent('calendar', evt.detail);
+    
   }
 
   handleClearSearch() {
@@ -189,7 +201,13 @@ export class IglCalHeader {
             )}
             <div class="caledarBtns" onClick={() => this.handleOptionEvent('calendar')} data-toggle="tooltip" data-placement="bottom" title="Navigate">
               <i class="la la-calendar-o"></i>
-              <input class="datePickerHidden" type="date" onChange={this.handleDateSelect.bind(this)} title="" />
+              {/* <input class="datePickerHidden" type="date" onChange={this.handleDateSelect.bind(this)} title="" /> */}
+              <ir-date-picker class="datePickerHidden"  fromDate={this.fromDate}
+              toDate={this.toDate}
+              autoApply
+              onDateChanged={evt => {
+                this.handleDateChange(evt);
+              }}></ir-date-picker>
             </div>
             <div class="caledarBtns" onClick={() => this.handleOptionEvent('gotoToday')} data-toggle="tooltip" data-placement="bottom" title="Today">
               <i class="la la-clock-o"></i>
