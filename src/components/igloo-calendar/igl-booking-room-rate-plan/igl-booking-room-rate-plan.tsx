@@ -232,13 +232,20 @@ export class IglBookingRoomRatePlan {
             {this.bookingType === 'EDIT_BOOKING' ? (
               <div class="col-2 m-0 p-0 align-self-center">
                 <fieldset class="position-relative">
-                  <input type="radio" name="ratePlanGroup" value="1" onChange={evt => this.handleDataChange('totalRooms', evt)} checked={this.selectedData.totalRooms === 1} />
+                  <input
+                    disabled={this.disableForm()}
+                    type="radio"
+                    name="ratePlanGroup"
+                    value="1"
+                    onChange={evt => this.handleDataChange('totalRooms', evt)}
+                    checked={this.selectedData.totalRooms === 1}
+                  />
                 </fieldset>
               </div>
             ) : null}
 
             {this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (
-              <button disabled={this.selectedData.rate === 0} type="button" class="btn mb-1 btn-primary btn-sm" onClick={() => this.bookProperty()}>
+              <button disabled={this.selectedData.rate === 0 || this.disableForm()} type="button" class="btn mb-1 btn-primary btn-sm" onClick={() => this.bookProperty()}>
                 Book
               </button>
             ) : null}
