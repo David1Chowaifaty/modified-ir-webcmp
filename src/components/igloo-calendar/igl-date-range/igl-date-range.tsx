@@ -95,7 +95,7 @@ export class IglDateRange {
             {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')}</span> : ''}
           </div>
         </div>
-        <div class="taxMessage display-inline">{this.message}</div>
+        
       </Host>
     );
   }

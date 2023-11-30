@@ -14,6 +14,7 @@ import { transformNewBLockedRooms, transformNewBooking } from '../../../utils/bo
 export class IglBookProperty {
   @Prop() propertyid: number;
   @Prop() allowedBookingSources: any;
+  @Prop() adultChildConstraints: any;
   @Prop() language: string;
   @Prop() countryNodeList;
   @Prop() showPaymentDetails: boolean = false;
@@ -23,6 +24,10 @@ export class IglBookProperty {
     code: '',
     description: '',
     tag: '',
+  };
+  @State() adultChildCount: { adult: number; child: number } = {
+    adult: 0,
+    child: 0,
   };
   @State() splitBookingId: any = '';
   @State() renderAgain: boolean = false;
@@ -73,8 +78,10 @@ export class IglBookProperty {
 
       if (this.isEventType('EDIT_BOOKING')) {
         this.setEditingRoomInfo();
+      }else{
+
+        this.bookingData.roomsInfo = [];
       }
-      //this.bookingData.roomsInfo = [];
       this.page = this.getDefaultPage();
     } catch (error) {
       console.error('Error fetching setup entries:', error);
@@ -134,7 +141,7 @@ export class IglBookProperty {
   async initializeBookingAvailability(from_date: string, to_date: string) {
     try {
       const room_type_ids = this.bookingData.roomsInfo.map(room => room.id);
-      const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.language, room_type_ids, this.currency);
+      const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.adultChildCount, this.language, room_type_ids, this.currency);
       this.message = '';
       this.bookingData = {
         ...this.bookingData,
@@ -142,6 +149,7 @@ export class IglBookProperty {
       };
       this.message = data.tax_statement;
       console.log(data);
+      console.log(this.bookingData.roomsInfo)
     } catch (error) {
       // toastr.error(error);
     }
@@ -275,7 +283,8 @@ export class IglBookProperty {
       this.dateRangeData = opt.data;
       this.bookingData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
       this.bookingData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
-      this.initializeBookingAvailability(dateToFormattedString(this.bookingData.defaultDateRange.fromDate), dateToFormattedString(this.bookingData.defaultDateRange.toDate));
+      if (this.adultChildCount.adult > 0)
+        this.initializeBookingAvailability(dateToFormattedString(this.bookingData.defaultDateRange.fromDate), dateToFormattedString(this.bookingData.defaultDateRange.toDate));
     }
   }
 
@@ -325,6 +334,19 @@ export class IglBookProperty {
       description: selectedSource.value || '',
       tag: selectedSource.tag,
     };
+  }
+  handleAdultChildConstraints(key: any, selectedOption) {
+    if (selectedOption.target.value === '') {
+      this.adultChildCount = {
+        ...this.adultChildCount,
+        [key]: 0,
+      };
+    } else {
+      this.adultChildCount = {
+        ...this.adultChildCount,
+        [key]: selectedOption.target.value,
+      };
+    }
   }
 
   renderPage() {
@@ -418,6 +440,43 @@ export class IglBookProperty {
       </fieldset>
     );
   }
+  getAdultChildConstraints() {
+    return (
+      <div class="form-group  text-left d-flex align-items-center mt-1">
+        <fieldset>
+          <div class="btn-group ml-1">
+            <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.handleAdultChildConstraints('adult', evt)}>
+              <option value={''}>Ad...</option>
+              {Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (
+                <option value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
+        </fieldset>
+        {this.adultChildConstraints.child_max_nbr > 0 && (
+          <fieldset class={'ml-1'}>
+            <div class="btn-group ml-1">
+              <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.handleAdultChildConstraints('child', evt)}>
+                <option value={''}>{`Ch... < ${this.adultChildConstraints.child_max_age} years`}</option>
+                {Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (
+                  <option value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+          </fieldset>
+        )}
+        <button
+          disabled={this.adultChildCount.adult === 0}
+          class={'btn btn-primary ml-2 '}
+          onClick={() =>
+            this.initializeBookingAvailability(dateToFormattedString(this.bookingData.defaultDateRange.fromDate), dateToFormattedString(this.bookingData.defaultDateRange.toDate))
+          }
+        >
+          Check
+        </button>
+      </div>
+    );
+  }
 
   getRoomsListFromCategoryId(categoryId) {
     let category = this.bookingData.roomsInfo?.find(category => category.id === categoryId);
@@ -460,29 +519,35 @@ export class IglBookProperty {
       <div class="scrollContent">
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
 
-        <fieldset class="form-group col-12 row">
-          <igl-date-range
-            disabled={this.isEventType('BAR_BOOKING')}
-            message={this.message}
-            defaultData={this.bookingData.defaultDateRange}
-            onDateSelectEvent={evt => this.onDateRangeSelect(evt)}
-          ></igl-date-range>
-        </fieldset>
-
-        <div class="col text-left">
-          {this.bookingData.roomsInfo?.map(roomInfo => (
-            <igl-booking-rooms
-              currency={this.currency}
-              ratePricingMode={this.ratePricingMode}
-              dateDifference={this.dateRangeData.dateDifference}
-              bookingType={this.bookingData.event_type}
-              roomTypeData={roomInfo}
-              class="mt-2 mb-1"
-              defaultData={this.selectedRooms['c_' + roomInfo.id]}
-              onDataUpdateEvent={evt => this.onRoomsDataUpdate(evt)}
-            ></igl-booking-rooms>
-          ))}
+        <div class={'d-md-flex align-items-center'}>
+          <fieldset class="form-group  row">
+            <igl-date-range
+              disabled={this.isEventType('BAR_BOOKING')}
+              message={this.message}
+              defaultData={this.bookingData.defaultDateRange}
+              onDateSelectEvent={evt => this.onDateRangeSelect(evt)}
+            ></igl-date-range>
+          </fieldset>
+          {this.getAdultChildConstraints()}
         </div>
+        <p class=" text-left ml-1">{this.message}</p>
+
+        {this.bookingData.roomsInfo.length > 0 && (
+          <div class="col text-left">
+            {this.bookingData.roomsInfo?.map(roomInfo => (
+              <igl-booking-rooms
+                currency={this.currency}
+                ratePricingMode={this.ratePricingMode}
+                dateDifference={this.dateRangeData.dateDifference}
+                bookingType={this.bookingData.event_type}
+                roomTypeData={roomInfo}
+                class="mt-2 mb-1"
+                defaultData={this.selectedRooms['c_' + roomInfo.id]}
+                onDataUpdateEvent={evt => this.onRoomsDataUpdate(evt)}
+              ></igl-booking-rooms>
+            ))}
+          </div>
+        )}
 
         {this.isEventType('EDIT_BOOKING') ? (
           <div class="row p-0 mb-1 mt-2">
