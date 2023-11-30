@@ -11,12 +11,14 @@ import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
 import { Guest, Room } from "./models/booking.dto";
+import { IToast, TPositions } from "./components/ir-toast/toast";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { FooterButtonType } from "./models/igl-book-property";
 export { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
 export { Guest, Room } from "./models/booking.dto";
+export { IToast, TPositions } from "./components/ir-toast/toast";
 export namespace Components {
     interface IglApplicationInfo {
         "bedPreferenceType": any[];
@@ -426,6 +428,11 @@ export namespace Components {
         "rows": number;
         "text": string;
     }
+    interface IrToast {
+        "hideToast": () => Promise<void>;
+        "position": TPositions;
+        "showToast": () => Promise<void>;
+    }
     interface IrTooltip {
         "message": string;
     }
@@ -555,6 +562,10 @@ export interface IrIconCustomEvent<T> extends CustomEvent<T> {
 export interface IrInputTextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrInputTextElement;
+}
+export interface IrInterceptorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrInterceptorElement;
 }
 export interface IrLabelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1175,7 +1186,18 @@ declare global {
         prototype: HTMLIrInputTextElement;
         new (): HTMLIrInputTextElement;
     };
+    interface HTMLIrInterceptorElementEventMap {
+        "toast": IToast;
+    }
     interface HTMLIrInterceptorElement extends Components.IrInterceptor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrInterceptorElementEventMap>(type: K, listener: (this: HTMLIrInterceptorElement, ev: IrInterceptorCustomEvent<HTMLIrInterceptorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrInterceptorElementEventMap>(type: K, listener: (this: HTMLIrInterceptorElement, ev: IrInterceptorCustomEvent<HTMLIrInterceptorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrInterceptorElement: {
         prototype: HTMLIrInterceptorElement;
@@ -1364,6 +1386,12 @@ declare global {
         prototype: HTMLIrTextareaElement;
         new (): HTMLIrTextareaElement;
     };
+    interface HTMLIrToastElement extends Components.IrToast, HTMLStencilElement {
+    }
+    var HTMLIrToastElement: {
+        prototype: HTMLIrToastElement;
+        new (): HTMLIrToastElement;
+    };
     interface HTMLIrTooltipElement extends Components.IrTooltip, HTMLStencilElement {
     }
     var HTMLIrTooltipElement: {
@@ -1434,6 +1462,7 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-textarea": HTMLIrTextareaElement;
+        "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-topbar": HTMLIrTopbarElement;
     }
@@ -1798,6 +1827,7 @@ declare namespace LocalJSX {
     interface IrInterceptor {
         "defaultMessage"?: { loadingMessage: string; errorMessage: string; };
         "handledEndpoints"?: string[];
+        "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
     interface IrLabel {
         "iconShown"?: boolean;
@@ -1934,6 +1964,9 @@ declare namespace LocalJSX {
         "rows"?: number;
         "text"?: string;
     }
+    interface IrToast {
+        "position"?: TPositions;
+    }
     interface IrTooltip {
         "message"?: string;
     }
@@ -1987,6 +2020,7 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-switch": IrSwitch;
         "ir-textarea": IrTextarea;
+        "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
         "ir-topbar": IrTopbar;
     }
@@ -2041,6 +2075,7 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
+            "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-topbar": LocalJSX.IrTopbar & JSXBase.HTMLAttributes<HTMLIrTopbarElement>;
         }

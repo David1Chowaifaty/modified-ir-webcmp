@@ -584,6 +584,7 @@ export class IglooCalendar {
   render() {
     return (
       <Host>
+        <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <ir-common></ir-common>
         <div id="iglooCalendar" class="igl-calendar">
