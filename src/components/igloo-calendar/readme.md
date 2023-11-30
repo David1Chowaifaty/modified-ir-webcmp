@@ -31,6 +31,7 @@
 
 ### Depends on
 
+- [ir-toast](../ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [ir-common](../ir-common)
 - [igl-to-be-assigned](igl-to-be-assigned)
@@ -44,6 +45,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  igloo-calendar --> ir-toast
   igloo-calendar --> ir-interceptor
   igloo-calendar --> ir-common
   igloo-calendar --> igl-to-be-assigned
@@ -60,11 +62,13 @@ graph TD;
   igl-cal-body --> igl-booking-event
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> igl-block-dates-view
-  igl-book-property --> igl-date-range
-  igl-book-property --> igl-booking-rooms
   igl-book-property --> igl-block-dates-view
+  igl-book-property --> igl-date-range
+  igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo
   igl-date-range --> ir-date-picker
+  igl-booking-overview-page --> igl-booking-rooms
+  igl-booking-overview-page --> igl-book-property-footer
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
   igl-pagetwo --> igl-application-info

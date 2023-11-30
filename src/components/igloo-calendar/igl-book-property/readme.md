@@ -35,19 +35,21 @@
 
 ### Depends on
 
-- [igl-date-range](../igl-date-range)
-- [igl-booking-rooms](../igl-booking-rooms)
 - [igl-block-dates-view](../igl-block-dates-view)
+- [igl-date-range](../igl-date-range)
+- [igl-booking-overview-page](igl-booking-overview-page)
 - [igl-pagetwo](../igl-pagetwo)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-book-property --> igl-date-range
-  igl-book-property --> igl-booking-rooms
   igl-book-property --> igl-block-dates-view
+  igl-book-property --> igl-date-range
+  igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo
   igl-date-range --> ir-date-picker
+  igl-booking-overview-page --> igl-booking-rooms
+  igl-booking-overview-page --> igl-book-property-footer
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
   igl-pagetwo --> igl-application-info
