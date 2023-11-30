@@ -161,9 +161,9 @@ export class IglooCalendar {
     eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
       bookingEvent.defaultDateRange = {};
-      bookingEvent.defaultDateRange.startDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
-      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.startDate);
-      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.startDate.getTime();
+      bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
+      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.fromDate.getTime();
 
       bookingEvent.defaultDateRange.toDate = new Date(bookingEvent.TO_DATE + 'T00:00:00');
       bookingEvent.defaultDateRange.toDateStr = this.getDateStr(bookingEvent.defaultDateRange.toDate);
@@ -211,7 +211,6 @@ export class IglooCalendar {
   getLocalizedMonth(date, locale = 'default') {
     return date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
   }
-
   getDateStr(date, locale = 'default') {
     return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
   }
@@ -305,7 +304,6 @@ export class IglooCalendar {
     // console.log("rendering...")
     return this.calendarData && this.calendarData.days && this.calendarData.days.length;
   }
-
   onOptionSelect(event: CustomEvent<{ [key: string]: any }>) {
     const opt: { [key: string]: any } = event.detail;
     const calendarElement = this.element.querySelector('#iglooCalendar');
@@ -329,11 +327,10 @@ export class IglooCalendar {
       case 'calendar':
         if (opt.data.start !== undefined && opt.data.end !== undefined) {
           this.handleDateSearch(opt.data);
+        } else {
+          let dt = new Date(opt.data);
+          this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
         }
-        // else {
-        //   let dt = new Date();
-        //   this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
-        // }
         break;
       case 'search':
         break;
@@ -348,22 +345,21 @@ export class IglooCalendar {
         break;
     }
   }
+
   async addDatesToCalendar(fromDate: string, toDate: string) {
     const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
-    if (new Date(fromDate).getTime() < new Date(this.from_date).getTime()) {
+    if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
-      this.from_date = fromDate;
       this.days = [...results.days, ...this.days];
+      let newMonths = [...results.months];
       if (this.calendarData.monthsInfo[0].monthName === results.months[results.months.length - 1].monthName) {
         this.calendarData.monthsInfo[0].daysCount = this.calendarData.monthsInfo[0].daysCount + results.months[results.months.length - 1].daysCount;
+        newMonths.pop();
       }
-      let newMonths = [...results.months];
-      newMonths.pop();
       this.calendarData = {
         ...this.calendarData,
-        startingDate: new Date(fromDate).getTime(),
         days: this.days,
         monthsInfo: [...newMonths, ...this.calendarData.monthsInfo],
         bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
