@@ -66,11 +66,6 @@ export class IglPagetwo {
     }
     this.bookingData.TOTAL_PRICE = total;
   }
-
-  getRoomsListFromCategoryId(categoryId) {
-    let category = this.bookingData.roomsInfo?.find(category => category.id === categoryId);
-    return (category && category.physicalrooms) || [];
-  }
   handleOnApplicationInfoDataUpdateEvent(event: CustomEvent, index: number) {
     const opt = event.detail;
     const categoryIdKey = `c_${opt.data.roomCategoryId}`;
@@ -155,21 +150,20 @@ export class IglPagetwo {
           </div>
         </div>
 
-        {this.guestData.map((roomInfo, index) => (
-          <igl-application-info
-            bedPreferenceType={this.bedPreferenceType}
-            index={index}
-            selectedUnits={this.selectedUnits[`c_${roomInfo.roomCategoryId}`]}
-            guestInfo={roomInfo}
-            guestRefKey={index}
-            bookingType={this.bookingData.event_type}
-            roomsList={this.getRoomsListFromCategoryId(roomInfo.roomCategoryId)}
-            onDataUpdateEvent={event =>
-              //this.handleOnApplicationInfoDataUpdateEvent(event, index)
-              this.handleEventData(event, 'application-info', index)
-            }
-          ></igl-application-info>
-        ))}
+        {this.guestData.map((roomInfo, index) => {
+          return (
+            <igl-application-info
+              bedPreferenceType={this.bedPreferenceType}
+              index={index}
+              selectedUnits={this.selectedUnits[`c_${roomInfo.roomCategoryId}`]}
+              guestInfo={roomInfo}
+              guestRefKey={index}
+              bookingType={this.bookingData.event_type}
+              roomsList={roomInfo.physicalRooms}
+              onDataUpdateEvent={event => this.handleEventData(event, 'application-info', index)}
+            ></igl-application-info>
+          );
+        })}
 
         {this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (
           <igl-property-booked-by

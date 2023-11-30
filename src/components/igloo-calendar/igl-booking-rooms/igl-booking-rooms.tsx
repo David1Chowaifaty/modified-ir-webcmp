@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
 
 @Component({
   tag: 'igl-booking-rooms',
@@ -19,7 +19,19 @@ export class IglBookingRooms {
   private totalRooms: number;
 
   componentWillLoad() {
-    this.totalRooms = this.roomTypeData.physicalrooms.length;
+    this.totalRooms = this.roomTypeData.inventory || 0;
+    if (!this.selectedRooms.length) {
+      this.selectedRooms = new Array(this.totalRooms).fill(0);
+    }
+    if (!this.roomsDistributions.length) {
+      this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
+    }
+  }
+
+  @Watch('roomTypeData')
+  handleRoomTypeDataChange(newValue) {
+    console.log(newValue);
+    this.totalRooms = newValue.inventory || 0;
     if (!this.selectedRooms.length) {
       this.selectedRooms = new Array(this.totalRooms).fill(0);
     }

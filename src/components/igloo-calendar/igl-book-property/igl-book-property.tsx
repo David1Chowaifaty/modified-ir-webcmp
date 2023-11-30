@@ -5,6 +5,7 @@ import { IEntries, RoomBlockDetails, RoomBookingDetails } from '../../../models/
 import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
 import { EventsService } from '../../../services/events.service';
 import { transformNewBLockedRooms, transformNewBooking } from '../../../utils/booking';
+import { FooterButtonType } from '../../../models/igl-book-property';
 
 @Component({
   tag: 'igl-book-property',
@@ -31,6 +32,7 @@ export class IglBookProperty {
   @State() isConvertedBooking: boolean;
   @State() dateRangeData: { [key: string]: any };
   @State() selectedUnits: { [key: string]: any } = {};
+  @State() selectedRooms: { [key: string]: any } = {};
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
@@ -41,7 +43,6 @@ export class IglBookProperty {
   private page: string;
   private showSplitBookingOption: boolean = false;
   private sourceOptions: { id: string; value: string; tag: string }[] = [];
-  private selectedRooms: { [key: string]: any } = {};
   private guestData: { [key: string]: any }[] = [];
   private bookedByInfoData: { [key: string]: any } = {};
   private blockDatesData: { [key: string]: any } = {};
@@ -172,21 +173,18 @@ export class IglBookProperty {
   getSplitBookings() {
     return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
   }
-  isEventType(key: string) {
-    return this.bookingData.event_type === key;
-  }
-
   closeWindow() {
     this.isConvertedBooking = false;
     this.closeBookingWindow.emit();
   }
-  isEditBooking() {
-    return this.bookingData.event_type === 'EDIT_BOOKING';
+  isEventType(key: string) {
+    return this.bookingData.event_type === key;
   }
+
   onRoomsDataUpdate(event: CustomEvent<{ [key: string]: any }>) {
     const { data, key, changedKey } = event.detail;
-    const roomCategoryKey = this.getRoomCategoryKey(data.roomCategoryId);
-    const ratePlanKey = this.getRatePlanKey(data.ratePlanId);
+    const roomCategoryKey = `c_${data.roomCategoryId}`;
+    const ratePlanKey = `p_${data.ratePlanId}`;
 
     if (this.shouldClearData(key)) {
       this.selectedRooms = {};
@@ -194,7 +192,7 @@ export class IglBookProperty {
 
     this.initializeRoomCategoryIfNeeded(roomCategoryKey);
 
-    if (this.isEditBooking()) {
+    if (this.isEventType('EDIT_BOOKING')) {
       if (changedKey === 'rate') {
         if (this.selectedRooms.hasOwnProperty(roomCategoryKey) && this.selectedRooms[roomCategoryKey].hasOwnProperty(ratePlanKey)) {
           this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data);
@@ -217,20 +215,9 @@ export class IglBookProperty {
     this.cleanupEmptyData(roomCategoryKey, ratePlanKey);
     this.renderPage();
   }
-  getRoomCategoryKey(roomCategoryId: string): string {
-    return `c_${roomCategoryId}`;
-  }
-
-  getRatePlanKey(ratePlanId: string): string {
-    return `p_${ratePlanId}`;
-  }
 
   shouldClearData(key: string | undefined): boolean {
-    return key === 'clearData' || this.isEditBookingEvent(key);
-  }
-
-  isEditBookingEvent(key: string | undefined): boolean {
-    return key === 'EDIT_BOOKING';
+    return key === 'clearData' || key === 'EDIT_BOOKING';
   }
 
   initializeRoomCategoryIfNeeded(roomCategoryKey: string) {
@@ -240,7 +227,7 @@ export class IglBookProperty {
   }
 
   setSelectedRoomData(roomCategoryKey: string, ratePlanKey: string, data: any) {
-    this.selectedRooms[roomCategoryKey][ratePlanKey] = data;
+    this.selectedRooms = { ...this.selectedRooms, [roomCategoryKey]: { ...this.selectedRooms[roomCategoryKey], [ratePlanKey]: data } };
   }
 
   hasSelectedRoomData(roomCategoryKey: string, ratePlanKey: string): boolean {
@@ -390,13 +377,6 @@ export class IglBookProperty {
               </option>
             ))}
           </select>
-
-          {/* <button type="button" class="btn btn-primary dropdown-toggle" name="sourceType" data-toggle="dropdown">
-                    {this.splitBookingId!=null ? this.getSelectedSplitBookingName(this.splitBookingId) : "Select"}
-                </button>
-                <div class="dropdown-menu">
-                  {this.getSplitBookings().map((option) => <button class={`dropdown-item ${this.isActiveSplitBookingOption(option.ID)}`}  type="button" onClick={() => this.handleSplitBookingDropDown(option.ID)}>{this.getSelectedSplitBookingName(option.ID)}</button>)}
-                </div> */}
         </div>
       </fieldset>
     );
@@ -423,100 +403,13 @@ export class IglBookProperty {
     let category = this.bookingData.roomsInfo?.find(category => category.id === categoryId);
     return (category && category.physicalrooms) || [];
   }
-
-  getPageZeroView() {
-    return (
-      <div class="scrollContent">
-        <div class="row p-0 mb-1">
-          <div class="col-md-3 col-sm-12 mb-1">
-            <button class="btn btn-primary full-width" onClick={() => this.gotoPage(this.PAGE_ONE)}>
-              Create New Booking
-            </button>
-          </div>
-          {this.getSplitBookings().length ? (
-            <div class="col-md-3 col-sm-12 mb-1">
-              <button class="btn btn-primary full-width" onClick={() => this.showSplitBooking()}>
-                Add Unit to Existing Booking
-              </button>
-            </div>
-          ) : null}
-          <div class="col-md-3 col-sm-12 mb-1">
-            <button class="btn btn-primary full-width" onClick={() => this.gotoPage(this.PAGE_BLOCK_DATES)}>
-              Block Dates
-            </button>
-          </div>
-          <div class="col-md-3 col-sm-12 mb-1">
-            <button class="btn btn-secondary full-width" onClick={() => this.closeWindow()}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+  handleButtonFooterClicked(event: CustomEvent<FooterButtonType>) {
+    if (event.detail === 'cancel') {
+      this.closeWindow();
+    } else {
+      this.gotoPage(this.PAGE_TWO);
+    }
   }
-
-  getPageOneView() {
-    return (
-      <div class="scrollContent">
-        {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
-
-        <fieldset class="form-group col-12 row">
-          <igl-date-range
-            disabled={this.isEventType('BAR_BOOKING')}
-            message={this.message}
-            defaultData={this.bookingData.defaultDateRange}
-            onDateSelectEvent={evt => this.onDateRangeSelect(evt)}
-          ></igl-date-range>
-        </fieldset>
-
-        <div class="col text-left">
-          {this.bookingData.roomsInfo?.map(roomInfo => (
-            <igl-booking-rooms
-              currency={this.currency}
-              ratePricingMode={this.ratePricingMode}
-              dateDifference={this.dateRangeData.dateDifference}
-              bookingType={this.bookingData.event_type}
-              roomTypeData={roomInfo}
-              class="mt-2 mb-1"
-              defaultData={this.selectedRooms['c_' + roomInfo.id]}
-              onDataUpdateEvent={evt => this.onRoomsDataUpdate(evt)}
-            ></igl-booking-rooms>
-          ))}
-        </div>
-
-        {this.isEventType('EDIT_BOOKING') ? (
-          <div class="row p-0 mb-1 mt-2">
-            <div class="col-6">
-              <button class="btn btn-secondary full-width" onClick={() => this.closeWindow()}>
-                Cancel
-              </button>
-            </div>
-            <div class="col-6">
-              <button class="btn btn-primary full-width" onClick={() => this.gotoPage(this.PAGE_TWO)}>
-                Next &gt;&gt;
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div class="row p-0 mb-1 mt-2">
-            <div class={this.bookingData.event_type === 'PLUS_BOOKING' || this.isEventType('ADD_ROOM') ? 'col-6' : 'col-12'}>
-              <button class="btn btn-secondary full-width" onClick={() => this.closeWindow()}>
-                Cancel
-              </button>
-            </div>
-            {this.bookingData.event_type === 'PLUS_BOOKING' || this.isEventType('ADD_ROOM') ? (
-              <div class="col-6">
-                <button class="btn btn-primary full-width" disabled={Object.keys(this.selectedRooms).length === 0} onClick={() => this.gotoPage(this.PAGE_TWO)}>
-                  Next &gt;&gt;
-                </button>
-              </div>
-            ) : null}
-          </div>
-        )}
-      </div>
-    );
-  }
-
   getPageBlockDatesView() {
     return (
       <div class="scrollContent blockDatesForm">
@@ -680,9 +573,33 @@ export class IglBookProperty {
             </div>
           </div>
 
-          {this.isPageZero() && this.getPageZeroView()}
+          {this.isPageOne() && (
+            <div class="scrollContent">
+              {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
 
-          {this.isPageOne() && this.getPageOneView()}
+              <fieldset class="form-group col-12 row">
+                <igl-date-range
+                  disabled={this.isEventType('BAR_BOOKING')}
+                  message={this.message}
+                  defaultData={this.bookingData.defaultDateRange}
+                  onDateSelectEvent={evt => this.onDateRangeSelect(evt)}
+                ></igl-date-range>
+              </fieldset>
+              <igl-booking-overview-page
+                class={'p-0 mb-1 mt-2'}
+                onButtonClicked={this.handleButtonFooterClicked.bind(this)}
+                eventType={this.bookingData.event_type}
+                selectedRooms={this.selectedRooms}
+                currency={this.currency}
+                message={this.message}
+                showSplitBookingOption={this.showSplitBookingOption}
+                ratePricingMode={this.ratePricingMode}
+                dateRangeData={this.dateRangeData}
+                bookingData={this.bookingData}
+                onRoomsDataUpdate={evt => this.onRoomsDataUpdate(evt)}
+              ></igl-booking-overview-page>
+            </div>
+          )}
 
           {this.isPageTwo() && (
             <igl-pagetwo
