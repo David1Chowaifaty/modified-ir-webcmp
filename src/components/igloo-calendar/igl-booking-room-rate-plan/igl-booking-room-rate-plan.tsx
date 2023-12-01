@@ -14,6 +14,7 @@ export class IglBookingRoomRatePlan {
   @Prop({ reflect: true, mutable: true }) currency: any;
   @Prop({ reflect: true }) dateDifference: number;
   @Prop({ reflect: true, mutable: true }) bookingType: string = 'PLUS_BOOKING';
+  @Prop({ reflect: true }) fullyBlocked: boolean;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
@@ -52,7 +53,7 @@ export class IglBookingRoomRatePlan {
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
   disableForm() {
-    return this.selectedData.is_closed || this.totalAvailableRooms === undefined;
+    return this.selectedData.is_closed || this.totalAvailableRooms === undefined || this.selectedData.rate === null || this.selectedData.rate === undefined;
   }
 
   getSelectedOffering(value: any) {

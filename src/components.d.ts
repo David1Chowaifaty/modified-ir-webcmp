@@ -80,6 +80,7 @@ export namespace Components {
         "currency": any;
         "dateDifference": number;
         "defaultData": { [key: string]: any };
+        "fullyBlocked": boolean;
         "ratePlanData": { [key: string]: any };
         "ratePricingMode": any[];
         "totalAvailableRooms": number;
@@ -1544,6 +1545,7 @@ declare namespace LocalJSX {
         "currency"?: any;
         "dateDifference"?: number;
         "defaultData"?: { [key: string]: any };
+        "fullyBlocked"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "onGotoSplitPageTwoEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "ratePlanData"?: { [key: string]: any };

@@ -95,6 +95,7 @@ export class IglBookingRooms {
                 currency={this.currency}
                 dateDifference={this.dateDifference}
                 ratePlanData={ratePlan}
+                //fullyBlocked={this.roomTypeData.rate === 0}
                 totalAvailableRooms={this.roomsDistributions[index]}
                 bookingType={this.bookingType}
                 defaultData={(this.defaultData && this.defaultData['p_' + ratePlan.id]) || null}
