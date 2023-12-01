@@ -6,6 +6,7 @@ import { IPageTwoDataUpdateProps } from '../../../models/models';
 import { transformNewBLockedRooms } from '../../../utils/booking';
 import { IglBookPropertyService } from './igl-book-property.service';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../models/igl-book-property';
+import { EventsService } from '../../../services/events.service';
 
 @Component({
   tag: 'igl-book-property',
@@ -45,6 +46,7 @@ export class IglBookProperty {
   private bedPreferenceType: IEntries[] = [];
   private bookingService: BookingService = new BookingService();
   private bookPropertyService = new IglBookPropertyService();
+  private eventsService = new EventsService();
   componentDidLoad() {
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
@@ -73,7 +75,9 @@ export class IglBookProperty {
 
         this.bookPropertyService.setEditingRoomInfo(this.bookingData, this.selectedUnits);
       }
-      this.bookingData.roomsInfo = [];
+      if (!this.isEventType('BAR_BOOKING')) {
+        this.bookingData.roomsInfo = [];
+      }
 
       if (this.bookingData.event_type === 'SPLIT_BOOKING') {
         this.showSplitBookingOption = true;
@@ -305,6 +309,9 @@ export class IglBookProperty {
   async bookUser(check_in: boolean) {
     this.setLoadingState(check_in);
     try {
+      if (['003', '002', '004'].includes(this.bookingData.STATUS_CODE)) {
+        this.eventsService.deleteEvent(this.bookingData.POOL);
+      }
       if (this.isEventType('EDIT_BOOKING')) {
         this.bookedByInfoData.message = this.bookingData.NOTES;
       }
