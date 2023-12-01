@@ -63,12 +63,13 @@ graph TD;
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> igl-block-dates-view
   igl-book-property --> igl-block-dates-view
-  igl-book-property --> igl-date-range
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo
-  igl-date-range --> ir-date-picker
+  igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-booking-rooms
   igl-booking-overview-page --> igl-book-property-footer
+  igl-book-property-header --> igl-date-range
+  igl-date-range --> ir-date-picker
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
   igl-pagetwo --> igl-application-info

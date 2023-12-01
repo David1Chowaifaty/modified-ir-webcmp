@@ -11,7 +11,6 @@
 | ------------- | ---------- | ----------- | ------------------------- | ----------- |
 | `defaultData` | --         |             | `{ [key: string]: any; }` | `undefined` |
 | `disabled`    | `disabled` |             | `boolean`                 | `false`     |
-| `message`     | `message`  |             | `string`                  | `''`        |
 
 
 ## Events
@@ -25,7 +24,7 @@
 
 ### Used by
 
- - [igl-book-property](../igl-book-property)
+ - [igl-book-property-header](../igl-book-property/igl-book-property-header)
 
 ### Depends on
 
@@ -35,7 +34,7 @@
 ```mermaid
 graph TD;
   igl-date-range --> ir-date-picker
-  igl-book-property --> igl-date-range
+  igl-book-property-header --> igl-date-range
   style igl-date-range fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

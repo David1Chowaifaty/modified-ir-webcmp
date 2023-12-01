@@ -15,9 +15,9 @@
 
 ## Events
 
-| Event           | Description | Type                              |
-| --------------- | ----------- | --------------------------------- |
-| `buttonClicked` |             | `CustomEvent<"cancel" \| "next">` |
+| Event           | Description | Type                                           |
+| --------------- | ----------- | ---------------------------------------------- |
+| `buttonClicked` |             | `CustomEvent<{ key: TPropertyButtonsTypes; }>` |
 
 
 ## Dependencies
