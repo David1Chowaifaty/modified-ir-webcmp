@@ -1,5 +1,6 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
-import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
+import { IPageTwoDataUpdateProps } from '../../../models/models';
+import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
 @Component({
   tag: 'igl-pagetwo',
   styleUrl: 'igl-pagetwo.css',
@@ -14,13 +15,13 @@ export class IglPagetwo {
   @Prop() language: string;
   @Prop() bookedByInfoData: { [key: string]: any };
   @Prop() bedPreferenceType: any;
-  @Prop() selectedRooms: any;
+  @Prop() selectedRooms: Map<string, Map<string, any>>;
   @Prop({ reflect: true }) isLoading: string;
   @Prop() countryNodeList;
   @Prop() selectedGuestData;
   @Event() dataUpdateEvent: EventEmitter<IPageTwoDataUpdateProps>;
   @Event() buttonClicked: EventEmitter<{
-    key: PageTwoButtonsTypes;
+    key: TPropertyButtonsTypes;
     data?: CustomEvent;
   }>;
   @State() selectedBookedByData;
@@ -40,30 +41,22 @@ export class IglPagetwo {
       }
       return rate;
     };
-    for (const key in this.selectedRooms) {
-      for (const prop in this.selectedRooms[key]) {
-        const totalRooms = this.selectedRooms[key][prop].totalRooms;
-        newSelectedUnits[key] = Array(totalRooms).fill(-1);
-      }
-    }
-
     this.selectedUnits = newSelectedUnits;
     this.guestData = [];
-    for (const key of Object.keys(this.selectedRooms)) {
-      for (const prop of Object.keys(this.selectedRooms[key])) {
-        for (let i = 1; i <= this.selectedRooms[key][prop].totalRooms; i++) {
+    this.selectedRooms.forEach((room, key) => {
+      room.forEach(rate_plan => {
+        newSelectedUnits[key] = rate_plan.selectedUnits;
+        total += rate_plan.totalRooms * getRate(rate_plan.rate, this.dateRangeData.dateDifference, rate_plan.isRateModified, rate_plan.rateType);
+        for (let i = 1; i <= rate_plan.totalRooms; i++) {
           this.guestData.push({
             guestName: '',
             roomId: '',
             preference: '',
-            ...this.selectedRooms[key][prop],
+            ...rate_plan,
           });
         }
-        total +=
-          this.selectedRooms[key][prop].totalRooms *
-          getRate(this.selectedRooms[key][prop].rate, this.dateRangeData.dateDifference, this.selectedRooms[key][prop].isRateModified, this.selectedRooms[key][prop].rateType);
-      }
-    }
+      });
+    });
     this.bookingData.TOTAL_PRICE = total;
   }
   handleOnApplicationInfoDataUpdateEvent(event: CustomEvent, index: number) {

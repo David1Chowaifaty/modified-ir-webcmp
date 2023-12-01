@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
-import { FooterButtonType } from '../../../../models/igl-book-property';
+import { FooterButtonType, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 
 @Component({
   tag: 'igl-book-property-footer',
@@ -9,7 +9,7 @@ import { FooterButtonType } from '../../../../models/igl-book-property';
 export class IglBookPropertyFooter {
   @Prop() eventType: string;
   @Prop() disabled: boolean = true;
-  @Event() buttonClicked: EventEmitter<FooterButtonType>;
+  @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
   private isEventType(event: string) {
     return event === this.eventType;
   }
@@ -17,7 +17,7 @@ export class IglBookPropertyFooter {
   private renderButton(type: FooterButtonType, label: string, disabled = false) {
     return (
       <div class={this.shouldRenderTwoButtons() ? 'col-6' : 'col-12'}>
-        <button class={`btn btn-${type === 'cancel' ? 'secondary' : 'primary'} full-width`} onClick={() => this.buttonClicked.emit(type)} disabled={disabled}>
+        <button class={`btn btn-${type === 'cancel' ? 'secondary' : 'primary'} full-width`} onClick={() => this.buttonClicked.emit({ key: type })} disabled={disabled}>
           {label}
         </button>
       </div>
