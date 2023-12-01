@@ -73,7 +73,10 @@ export class IglBookProperty {
 
         this.bookPropertyService.setEditingRoomInfo(this.bookingData, this.selectedUnits);
       }
-      this.bookingData.roomsInfo = [];
+      if(!this.isEventType('BAR_BOOKING')){
+
+        this.bookingData.roomsInfo = [];
+      }
 
       if (this.bookingData.event_type === 'SPLIT_BOOKING') {
         this.showSplitBookingOption = true;

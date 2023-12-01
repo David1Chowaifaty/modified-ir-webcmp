@@ -318,7 +318,7 @@ export class BookingService {
                 cancelation: data.cancelation,
                 guarantee: data.guarantee,
               },
-              unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: pr_id || data.roomId },
+              unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: +pr_id || +data.roomId },
               occupancy: {
                 adult_nbr: data.adultCount,
                 children_nbr: data.childrenCount,
