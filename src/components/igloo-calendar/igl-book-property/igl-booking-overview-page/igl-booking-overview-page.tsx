@@ -26,6 +26,9 @@ export class IglBookingOverviewPage {
   isEventType(event: string) {
     return event === this.eventType;
   }
+  componentWillLoad() {
+    console.log(this.selectedRooms.get('c_110'));
+  }
   render() {
     return (
       <Host>
@@ -48,7 +51,7 @@ export class IglBookingOverviewPage {
               bookingType={this.bookingData.event_type}
               roomTypeData={roomInfo}
               class="mt-2 mb-1"
-              defaultData={this.selectedRooms.get('c_' + roomInfo.id)}
+              defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
               onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
             ></igl-booking-rooms>
           ))}

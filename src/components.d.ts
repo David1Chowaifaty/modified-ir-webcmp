@@ -103,7 +103,7 @@ export namespace Components {
         "bookingType": string;
         "currency": any;
         "dateDifference": number;
-        "defaultData": { [key: string]: any };
+        "defaultData": Map<string, any>;
         "ratePricingMode": any[];
         "roomTypeData": { [key: string]: any };
     }
@@ -1614,7 +1614,7 @@ declare namespace LocalJSX {
         "bookingType"?: string;
         "currency"?: any;
         "dateDifference"?: number;
-        "defaultData"?: { [key: string]: any };
+        "defaultData"?: Map<string, any>;
         "onDataUpdateEvent"?: (event: IglBookingRoomsCustomEvent<{ [key: string]: any }>) => void;
         "ratePricingMode"?: any[];
         "roomTypeData"?: { [key: string]: any };

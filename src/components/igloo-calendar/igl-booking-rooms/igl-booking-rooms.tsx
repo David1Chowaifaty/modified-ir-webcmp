@@ -7,7 +7,7 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@st
 })
 export class IglBookingRooms {
   @Prop({ reflect: true, mutable: true }) roomTypeData: { [key: string]: any };
-  @Prop() defaultData: { [key: string]: any };
+  @Prop() defaultData: Map<string, any>;
   @Prop() bookingType: string = 'PLUS_BOOKING';
   @Prop({ reflect: true }) dateDifference: number;
   @Prop() ratePricingMode = [];
@@ -98,7 +98,7 @@ export class IglBookingRooms {
                 //fullyBlocked={this.roomTypeData.rate === 0}
                 totalAvailableRooms={this.roomsDistributions[index]}
                 bookingType={this.bookingType}
-                defaultData={(this.defaultData && this.defaultData['p_' + ratePlan.id]) || null}
+                defaultData={(this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null}
                 onDataUpdateEvent={evt => this.onRoomDataUpdate(evt, index)}
               ></igl-booking-room-rate-plan>
             );
