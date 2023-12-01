@@ -1,0 +1,145 @@
+import { Component, Host, Prop, h, Event, EventEmitter, State } from '@stencil/core';
+
+@Component({
+  tag: 'igl-book-property-header',
+  styleUrl: 'igl-book-property-header.css',
+  scoped: true,
+})
+export class IglBookPropertyHeader {
+  @Prop({ reflect: true }) splitBookingId: any = '';
+  @Prop({ reflect: true }) bookingData: any = '';
+  @Prop({ reflect: true }) sourceOptions: { id: string; value: string; tag: string }[] = [];
+  @Prop({ reflect: true }) message: string;
+  @Prop({ reflect: true, mutable: true }) bookingDataDefaultDateRange: { [key: string]: any };
+  @Prop({ reflect: true }) showSplitBookingOption: boolean = false;
+  @Prop({ reflect: true }) adultChildConstraints: any;
+  @Prop({ reflect: true }) splitBookings: any[];
+  @Event() splitBookingDropDownChange: EventEmitter<any>;
+  @Event() sourceDropDownChange: EventEmitter<string>;
+  @Event() dateRangeSelectChange: EventEmitter<any>;
+  @Event() adultChild: EventEmitter<any>;
+  @Event() checkClicked: EventEmitter<any>;
+  @State() sourceOption: { code: string; description: string; tag: string } = {
+    code: '',
+    description: '',
+    tag: '',
+  };
+  @State() adultChildCount: { adult: number; child: number } = {
+    adult: 0,
+    child: 0,
+  };
+  getSplitBookings() {
+    return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
+  }
+  getSelectedSplitBookingName(bookingId) {
+    let splitBooking = this.splitBookings.find(booking => booking.ID === bookingId);
+    return splitBooking.ID + ' ' + splitBooking.NAME;
+  }
+  getSplitBookingList() {
+    return (
+      <fieldset class="form-group col-12 text-left">
+        <label class="h5">To booking# </label>
+        <div class="btn-group ml-1">
+          <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.splitBookingDropDownChange.emit(evt)}>
+            <option value="" selected={this.splitBookingId != ''}>
+              Select
+            </option>
+            {this.splitBookings.map(option => (
+              <option value={option.ID} selected={this.splitBookingId === option.ID}>
+                {this.getSelectedSplitBookingName(option.ID)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </fieldset>
+    );
+  }
+  getSourceNode() {
+    return (
+      <fieldset class="form-group col-12 text-left">
+        <label class="h5">Source </label>
+        <div class="btn-group ml-1">
+          <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}>
+            {this.sourceOptions.map(option => (
+              <option value={option.id} selected={this.sourceOption.code === option.id}>
+                {option.value}
+              </option>
+            ))}
+          </select>
+        </div>
+      </fieldset>
+    );
+  }
+  handleAdultChildChange(key: string, event: Event) {
+    // this.adultChild.emit({key:key, value:(event.target as HTMLSelectElement).value})
+    const value = (event.target as HTMLSelectElement).value;
+    if (value === '') {
+      this.adultChildCount = {
+        ...this.adultChildCount,
+        [key]: 0,
+      };
+    } else {
+      this.adultChildCount = {
+        ...this.adultChildCount,
+        [key]: value,
+      };
+    }
+  }
+
+  getAdultChildConstraints() {
+    return (
+      <div class="form-group  text-left d-flex align-items-center mt-1">
+        <fieldset>
+          <div class="btn-group ml-1">
+            <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
+              <option value={''}>Ad...</option>
+              {Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (
+                <option value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
+        </fieldset>
+        {this.adultChildConstraints.child_max_nbr > 0 && (
+          <fieldset class={'ml-1'}>
+            <div class="btn-group ml-1">
+              <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.handleAdultChildChange('child', evt)}>
+                <option value={''}>{`Ch... < ${this.adultChildConstraints.child_max_age} years`}</option>
+                {Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (
+                  <option value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+          </fieldset>
+        )}
+        <button disabled={this.adultChildCount.adult === 0} class={'btn btn-primary ml-2 '} onClick={() => this.checkClicked.emit(this.adultChildCount)}>
+          Check
+        </button>
+      </div>
+    );
+  }
+
+  isEventType(key: string) {
+    return this.bookingData.event_type === key;
+  }
+
+  render() {
+    return (
+      <Host>
+        {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
+
+        <div class={'d-md-flex align-items-center'}>
+          <fieldset class="form-group  row">
+            <igl-date-range
+              disabled={this.isEventType('BAR_BOOKING')}
+              message={this.message}
+              defaultData={this.bookingDataDefaultDateRange}
+              onDateSelectEvent={evt => this.dateRangeSelectChange.emit(evt.detail)}
+            ></igl-date-range>
+          </fieldset>
+          {this.getAdultChildConstraints()}
+        </div>
+        <p class=" text-left ml-1">{this.message}</p>
+      </Host>
+    );
+  }
+}

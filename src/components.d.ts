@@ -44,6 +44,16 @@ export namespace Components {
         "propertyid": number;
         "showPaymentDetails": boolean;
     }
+    interface IglBookPropertyHeader {
+        "adultChildConstraints": any;
+        "bookingData": any;
+        "bookingDataDefaultDateRange": { [key: string]: any };
+        "message": string;
+        "showSplitBookingOption": boolean;
+        "sourceOptions": { id: string; value: string; tag: string }[];
+        "splitBookingId": any;
+        "splitBookings": any[];
+    }
     interface IglBookingEvent {
         "allBookingEvents": { [key: string]: any };
         "bookingEvent": { [key: string]: any };
@@ -429,6 +439,10 @@ export interface IglBookPropertyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookPropertyElement;
 }
+export interface IglBookPropertyHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBookPropertyHeaderElement;
+}
 export interface IglBookingEventCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookingEventElement;
@@ -626,6 +640,27 @@ declare global {
     var HTMLIglBookPropertyElement: {
         prototype: HTMLIglBookPropertyElement;
         new (): HTMLIglBookPropertyElement;
+    };
+    interface HTMLIglBookPropertyHeaderElementEventMap {
+        "splitBookingDropDownChange": any;
+        "sourceDropDownChange": string;
+        "dateRangeSelectChange": any;
+        "adultChild": any;
+        "checkClicked": any;
+    }
+    interface HTMLIglBookPropertyHeaderElement extends Components.IglBookPropertyHeader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBookPropertyHeaderElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyHeaderElement, ev: IglBookPropertyHeaderCustomEvent<HTMLIglBookPropertyHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBookPropertyHeaderElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyHeaderElement, ev: IglBookPropertyHeaderCustomEvent<HTMLIglBookPropertyHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIglBookPropertyHeaderElement: {
+        prototype: HTMLIglBookPropertyHeaderElement;
+        new (): HTMLIglBookPropertyHeaderElement;
     };
     interface HTMLIglBookingEventElementEventMap {
         "hideBubbleInfo": any;
@@ -1332,6 +1367,7 @@ declare global {
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
         "igl-book-property": HTMLIglBookPropertyElement;
+        "igl-book-property-header": HTMLIglBookPropertyHeaderElement;
         "igl-booking-event": HTMLIglBookingEventElement;
         "igl-booking-event-hover": HTMLIglBookingEventHoverElement;
         "igl-booking-room-rate-plan": HTMLIglBookingRoomRatePlanElement;
@@ -1410,6 +1446,21 @@ declare namespace LocalJSX {
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
         "propertyid"?: number;
         "showPaymentDetails"?: boolean;
+    }
+    interface IglBookPropertyHeader {
+        "adultChildConstraints"?: any;
+        "bookingData"?: any;
+        "bookingDataDefaultDateRange"?: { [key: string]: any };
+        "message"?: string;
+        "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
+        "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
+        "onDateRangeSelectChange"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
+        "onSourceDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
+        "onSplitBookingDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
+        "showSplitBookingOption"?: boolean;
+        "sourceOptions"?: { id: string; value: string; tag: string }[];
+        "splitBookingId"?: any;
+        "splitBookings"?: any[];
     }
     interface IglBookingEvent {
         "allBookingEvents"?: { [key: string]: any };
@@ -1866,6 +1917,7 @@ declare namespace LocalJSX {
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
         "igl-book-property": IglBookProperty;
+        "igl-book-property-header": IglBookPropertyHeader;
         "igl-booking-event": IglBookingEvent;
         "igl-booking-event-hover": IglBookingEventHover;
         "igl-booking-room-rate-plan": IglBookingRoomRatePlan;
@@ -1918,6 +1970,7 @@ declare module "@stencil/core" {
             "igl-application-info": LocalJSX.IglApplicationInfo & JSXBase.HTMLAttributes<HTMLIglApplicationInfoElement>;
             "igl-block-dates-view": LocalJSX.IglBlockDatesView & JSXBase.HTMLAttributes<HTMLIglBlockDatesViewElement>;
             "igl-book-property": LocalJSX.IglBookProperty & JSXBase.HTMLAttributes<HTMLIglBookPropertyElement>;
+            "igl-book-property-header": LocalJSX.IglBookPropertyHeader & JSXBase.HTMLAttributes<HTMLIglBookPropertyHeaderElement>;
             "igl-booking-event": LocalJSX.IglBookingEvent & JSXBase.HTMLAttributes<HTMLIglBookingEventElement>;
             "igl-booking-event-hover": LocalJSX.IglBookingEventHover & JSXBase.HTMLAttributes<HTMLIglBookingEventHoverElement>;
             "igl-booking-room-rate-plan": LocalJSX.IglBookingRoomRatePlan & JSXBase.HTMLAttributes<HTMLIglBookingRoomRatePlanElement>;

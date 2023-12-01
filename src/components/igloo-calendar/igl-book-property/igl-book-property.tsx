@@ -477,6 +477,7 @@ export class IglBookProperty {
       </div>
     );
   }
+  @Listen('')
 
   getRoomsListFromCategoryId(categoryId) {
     let category = this.bookingData.roomsInfo?.find(category => category.id === categoryId);
@@ -517,7 +518,7 @@ export class IglBookProperty {
   getPageOneView() {
     return (
       <div class="scrollContent">
-        {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
+        {/* {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
 
         <div class={'d-md-flex align-items-center'}>
           <fieldset class="form-group  row">
@@ -530,7 +531,19 @@ export class IglBookProperty {
           </fieldset>
           {this.getAdultChildConstraints()}
         </div>
-        <p class=" text-left ml-1">{this.message}</p>
+        <p class=" text-left ml-1">{this.message}</p> */}
+        <igl-book-property-header
+        splitBookingId={this.splitBookingId}
+        bookingData={this.bookingData}
+        sourceOptions={this.sourceOptions}
+        message={this.message}
+        bookingDataDefaultDateRange={this.bookingData.defaultDateRange}
+        showSplitBookingOption={this.showSplitBookingOption}
+        adultChildConstraints={this.adultChildConstraints}
+        splitBookings={this.getSplitBookings()}
+        >
+
+        </igl-book-property-header>
 
         {this.bookingData.roomsInfo.length > 0 && (
           <div class="col text-left">
