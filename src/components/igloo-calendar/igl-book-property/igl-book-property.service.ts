@@ -45,10 +45,11 @@ export class IglBookPropertyService {
       selectedUnits.set(roomCategoryKey, new Map());
     }
   }
-  private getRoomsListFromCategoryId(bookingData, pr_id, categoryId) {
-    let category = bookingData.roomsInfo?.find(category => category.id === categoryId);
+  private getRoomsListFromCategoryId(bookingData, categoryId, pr_id) {
+    let category = bookingData.roomsInfo?.find(category => category.id === +categoryId);
+
     if (category) {
-      return category.physicalrooms.find(room => room.id === pr_id);
+      return category.physicalrooms.find(room => room.id === +pr_id);
     }
   }
   private setSelectedRoomData(roomCategoryKey: string, ratePlanKey: string, data: any, selectedUnits: Map<string, Map<string, any>>) {
