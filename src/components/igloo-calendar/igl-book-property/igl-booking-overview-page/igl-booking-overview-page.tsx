@@ -26,9 +26,6 @@ export class IglBookingOverviewPage {
   isEventType(event: string) {
     return event === this.eventType;
   }
-  componentWillLoad() {
-    console.log(this.selectedRooms.get('c_110'));
-  }
   render() {
     return (
       <Host>

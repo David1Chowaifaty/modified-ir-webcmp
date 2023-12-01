@@ -100,7 +100,6 @@ export class IglBookProperty {
     }));
     if (this.isEventType('EDIT_BOOKING')) {
       this.sourceOption = { ...this.bookingData.SOURCE };
-      console.log(this.sourceOption);
     } else {
       this.sourceOption = {
         code: bookingSource[0].code,
@@ -117,7 +116,6 @@ export class IglBookProperty {
   }
   @Listen('adultChild')
   handleAdultChildChange(event: CustomEvent) {
-    console.log(event.detail);
     this.adultChildCount = event.detail;
   }
 
@@ -131,7 +129,6 @@ export class IglBookProperty {
         roomsInfo: data.roomtypes,
       };
       this.message = data.tax_statement;
-      console.log(data);
     } catch (error) {
       // toastr.error(error);
     }
@@ -338,7 +335,14 @@ export class IglBookProperty {
     }, 100);
   }
   onRoomDataUpdate(event: CustomEvent) {
-    const units = this.bookPropertyService.onDataRoomUpdate(event, this.selectedUnits, this.isEventType('EDIT_BOOKING'), this.bookingData.NAME, this.bookingData.PR_ID);
+    const units = this.bookPropertyService.onDataRoomUpdate(
+      event,
+      this.selectedUnits,
+      this.isEventType('EDIT_BOOKING'),
+      this.bookingData.NAME,
+      this.bookingData.PR_ID,
+      this.bookingData,
+    );
     this.selectedUnits = new Map(units);
     this.renderPage();
   }

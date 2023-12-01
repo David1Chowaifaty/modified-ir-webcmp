@@ -30,7 +30,6 @@ export class IglBookingRooms {
 
   @Watch('roomTypeData')
   handleRoomTypeDataChange(newValue) {
-    console.log(newValue);
     this.totalRooms = newValue.inventory || 0;
     if (!this.selectedRooms.length) {
       this.selectedRooms = new Array(this.totalRooms).fill(0);
