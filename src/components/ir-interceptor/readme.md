@@ -13,6 +13,13 @@
 | `handledEndpoints` | --        |             | `string[]`                                          | `['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room']`                    |
 
 
+## Events
+
+| Event   | Description | Type                                                                                                 |
+| ------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `toast` |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+
+
 ## Dependencies
 
 ### Used by

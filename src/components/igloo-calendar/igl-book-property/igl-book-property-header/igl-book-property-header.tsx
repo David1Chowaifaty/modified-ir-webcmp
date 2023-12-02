@@ -1,4 +1,5 @@
 import { Component, Host, Prop, h, Event, EventEmitter, State } from '@stencil/core';
+import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../../models/igl-book-property';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -8,18 +9,19 @@ import { Component, Host, Prop, h, Event, EventEmitter, State } from '@stencil/c
 export class IglBookPropertyHeader {
   @Prop({ reflect: true }) splitBookingId: any = '';
   @Prop({ reflect: true }) bookingData: any = '';
-  @Prop({ reflect: true }) sourceOptions: { id: string; value: string; tag: string }[] = [];
+  @Prop({ reflect: true }) sourceOptions: TSourceOptions[] = [];
   @Prop({ reflect: true }) message: string;
   @Prop({ reflect: true, mutable: true }) bookingDataDefaultDateRange: { [key: string]: any };
   @Prop({ reflect: true }) showSplitBookingOption: boolean = false;
-  @Prop({ reflect: true }) adultChildConstraints: any;
+  @Prop({ reflect: true }) adultChildConstraints: TAdultChildConstraints;
   @Prop({ reflect: true }) splitBookings: any[];
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
   @Event() dateRangeSelectChange: EventEmitter<any>;
   @Event() adultChild: EventEmitter<any>;
   @Event() checkClicked: EventEmitter<any>;
-  @State() sourceOption: { code: string; description: string; tag: string } = {
+  @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
+  @State() sourceOption: TSourceOption = {
     code: '',
     description: '',
     tag: '',
@@ -71,7 +73,6 @@ export class IglBookPropertyHeader {
     );
   }
   handleAdultChildChange(key: string, event: Event) {
-    // this.adultChild.emit({key:key, value:(event.target as HTMLSelectElement).value})
     const value = (event.target as HTMLSelectElement).value;
     if (value === '') {
       this.adultChildCount = {
@@ -84,6 +85,7 @@ export class IglBookPropertyHeader {
         [key]: value,
       };
     }
+    this.adultChild.emit(this.adultChildCount);
   }
 
   getAdultChildConstraints() {
@@ -111,7 +113,7 @@ export class IglBookPropertyHeader {
             </div>
           </fieldset>
         )}
-        <button disabled={this.adultChildCount.adult === 0} class={'btn btn-primary ml-2 '} onClick={() => this.checkClicked.emit(this.adultChildCount)}>
+        <button disabled={this.adultChildCount.adult === 0} class={'btn btn-primary ml-2 '} onClick={() => this.buttonClicked.emit({ key: 'check' })}>
           Check
         </button>
       </div>
@@ -126,19 +128,17 @@ export class IglBookPropertyHeader {
     return (
       <Host>
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
-
         <div class={'d-md-flex align-items-center'}>
-          <fieldset class="form-group  row">
+          <fieldset class="form-group row">
             <igl-date-range
               disabled={this.isEventType('BAR_BOOKING')}
-              message={this.message}
               defaultData={this.bookingDataDefaultDateRange}
               onDateSelectEvent={evt => this.dateRangeSelectChange.emit(evt.detail)}
             ></igl-date-range>
           </fieldset>
-          {this.getAdultChildConstraints()}
+          {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
         </div>
-        <p class=" text-left ml-1">{this.message}</p>
+        <p class="text-left ml-1 mt-1">{this.message}</p>
       </Host>
     );
   }

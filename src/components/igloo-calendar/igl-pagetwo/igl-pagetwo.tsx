@@ -1,5 +1,6 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
-import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from '../../../models/models';
+import { IPageTwoDataUpdateProps } from '../../../models/models';
+import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
 @Component({
   tag: 'igl-pagetwo',
   styleUrl: 'igl-pagetwo.css',
@@ -14,13 +15,13 @@ export class IglPagetwo {
   @Prop() language: string;
   @Prop() bookedByInfoData: { [key: string]: any };
   @Prop() bedPreferenceType: any;
-  @Prop() selectedRooms: any;
+  @Prop() selectedRooms: Map<string, Map<string, any>>;
   @Prop({ reflect: true }) isLoading: string;
   @Prop() countryNodeList;
   @Prop() selectedGuestData;
   @Event() dataUpdateEvent: EventEmitter<IPageTwoDataUpdateProps>;
   @Event() buttonClicked: EventEmitter<{
-    key: PageTwoButtonsTypes;
+    key: TPropertyButtonsTypes;
     data?: CustomEvent;
   }>;
   @State() selectedBookedByData;
@@ -40,36 +41,23 @@ export class IglPagetwo {
       }
       return rate;
     };
-    for (const key in this.selectedRooms) {
-      for (const prop in this.selectedRooms[key]) {
-        const totalRooms = this.selectedRooms[key][prop].totalRooms;
-        newSelectedUnits[key] = Array(totalRooms).fill(-1);
-      }
-    }
-
     this.selectedUnits = newSelectedUnits;
     this.guestData = [];
-    for (const key of Object.keys(this.selectedRooms)) {
-      for (const prop of Object.keys(this.selectedRooms[key])) {
-        for (let i = 1; i <= this.selectedRooms[key][prop].totalRooms; i++) {
+    this.selectedRooms.forEach((room, key) => {
+      room.forEach(rate_plan => {
+        newSelectedUnits[key] = rate_plan.selectedUnits;
+        total += rate_plan.totalRooms * getRate(rate_plan.rate, this.dateRangeData.dateDifference, rate_plan.isRateModified, rate_plan.rateType);
+        for (let i = 1; i <= rate_plan.totalRooms; i++) {
           this.guestData.push({
             guestName: '',
             roomId: '',
             preference: '',
-            ...this.selectedRooms[key][prop],
+            ...rate_plan,
           });
         }
-        total +=
-          this.selectedRooms[key][prop].totalRooms *
-          getRate(this.selectedRooms[key][prop].rate, this.dateRangeData.dateDifference, this.selectedRooms[key][prop].isRateModified, this.selectedRooms[key][prop].rateType);
-      }
-    }
+      });
+    });
     this.bookingData.TOTAL_PRICE = total;
-  }
-
-  getRoomsListFromCategoryId(categoryId) {
-    let category = this.bookingData.roomsInfo?.find(category => category.id === categoryId);
-    return (category && category.physicalrooms) || [];
   }
   handleOnApplicationInfoDataUpdateEvent(event: CustomEvent, index: number) {
     const opt = event.detail;
@@ -155,21 +143,20 @@ export class IglPagetwo {
           </div>
         </div>
 
-        {this.guestData.map((roomInfo, index) => (
-          <igl-application-info
-            bedPreferenceType={this.bedPreferenceType}
-            index={index}
-            selectedUnits={this.selectedUnits[`c_${roomInfo.roomCategoryId}`]}
-            guestInfo={roomInfo}
-            guestRefKey={index}
-            bookingType={this.bookingData.event_type}
-            roomsList={this.getRoomsListFromCategoryId(roomInfo.roomCategoryId)}
-            onDataUpdateEvent={event =>
-              //this.handleOnApplicationInfoDataUpdateEvent(event, index)
-              this.handleEventData(event, 'application-info', index)
-            }
-          ></igl-application-info>
-        ))}
+        {this.guestData.map((roomInfo, index) => {
+          return (
+            <igl-application-info
+              bedPreferenceType={this.bedPreferenceType}
+              index={index}
+              selectedUnits={this.selectedUnits[`c_${roomInfo.roomCategoryId}`]}
+              guestInfo={roomInfo}
+              guestRefKey={index}
+              bookingType={this.bookingData.event_type}
+              roomsList={roomInfo.physicalRooms}
+              onDataUpdateEvent={event => this.handleEventData(event, 'application-info', index)}
+            ></igl-application-info>
+          );
+        })}
 
         {this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (
           <igl-property-booked-by

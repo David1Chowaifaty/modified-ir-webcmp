@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
 
 @Component({
   tag: 'igl-booking-rooms',
@@ -7,7 +7,7 @@ import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/c
 })
 export class IglBookingRooms {
   @Prop({ reflect: true, mutable: true }) roomTypeData: { [key: string]: any };
-  @Prop() defaultData: { [key: string]: any };
+  @Prop() defaultData: Map<string, any>;
   @Prop() bookingType: string = 'PLUS_BOOKING';
   @Prop({ reflect: true }) dateDifference: number;
   @Prop() ratePricingMode = [];
@@ -19,7 +19,18 @@ export class IglBookingRooms {
   private totalRooms: number;
 
   componentWillLoad() {
-    this.totalRooms = this.roomTypeData.physicalrooms.length;
+    this.totalRooms = this.roomTypeData.inventory || 0;
+    if (!this.selectedRooms.length) {
+      this.selectedRooms = new Array(this.totalRooms).fill(0);
+    }
+    if (!this.roomsDistributions.length) {
+      this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
+    }
+  }
+
+  @Watch('roomTypeData')
+  handleRoomTypeDataChange(newValue) {
+    this.totalRooms = newValue.inventory || 0;
     if (!this.selectedRooms.length) {
       this.selectedRooms = new Array(this.totalRooms).fill(0);
     }
@@ -83,9 +94,10 @@ export class IglBookingRooms {
                 currency={this.currency}
                 dateDifference={this.dateDifference}
                 ratePlanData={ratePlan}
+                //fullyBlocked={this.roomTypeData.rate === 0}
                 totalAvailableRooms={this.roomsDistributions[index]}
                 bookingType={this.bookingType}
-                defaultData={(this.defaultData && this.defaultData['p_' + ratePlan.id]) || null}
+                defaultData={(this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null}
                 onDataUpdateEvent={evt => this.onRoomDataUpdate(evt, index)}
               ></igl-booking-room-rate-plan>
             );

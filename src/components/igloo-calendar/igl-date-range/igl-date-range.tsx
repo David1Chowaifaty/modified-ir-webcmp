@@ -6,7 +6,6 @@ import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/c
   scoped: true,
 })
 export class IglDateRange {
-  @Prop({ reflect: true }) message: string = '';
   @Prop() defaultData: { [key: string]: any };
   @Prop({ reflect: true }) disabled: boolean = false;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
@@ -95,7 +94,6 @@ export class IglDateRange {
             {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')}</span> : ''}
           </div>
         </div>
-        
       </Host>
     );
   }

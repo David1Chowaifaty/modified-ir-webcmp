@@ -5,16 +5,20 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
-import { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "./models/models";
+import { IPageTwoDataUpdateProps } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
 import { Guest, Room } from "./models/booking.dto";
+import { IToast, TPositions } from "./components/ir-toast/toast";
+export { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
-export { IPageTwoDataUpdateProps, PageTwoButtonsTypes } from "./models/models";
+export { IPageTwoDataUpdateProps } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
 export { Guest, Room } from "./models/booking.dto";
+export { IToast, TPositions } from "./components/ir-toast/toast";
 export namespace Components {
     interface IglApplicationInfo {
         "bedPreferenceType": any[];
@@ -35,7 +39,7 @@ export namespace Components {
         "toDate": string;
     }
     interface IglBookProperty {
-        "adultChildConstraints": any;
+        "adultChildConstraints": TAdultChildConstraints;
         "allowedBookingSources": any;
         "bookingData": { [key: string]: any };
         "countryNodeList": any;
@@ -44,13 +48,17 @@ export namespace Components {
         "propertyid": number;
         "showPaymentDetails": boolean;
     }
+    interface IglBookPropertyFooter {
+        "disabled": boolean;
+        "eventType": string;
+    }
     interface IglBookPropertyHeader {
-        "adultChildConstraints": any;
+        "adultChildConstraints": TAdultChildConstraints;
         "bookingData": any;
         "bookingDataDefaultDateRange": { [key: string]: any };
         "message": string;
         "showSplitBookingOption": boolean;
-        "sourceOptions": { id: string; value: string; tag: string }[];
+        "sourceOptions": TSourceOptions[];
         "splitBookingId": any;
         "splitBookings": any[];
     }
@@ -68,11 +76,25 @@ export namespace Components {
         "currency": any;
         "is_vacation_rental": boolean;
     }
+    interface IglBookingOverviewPage {
+        "adultChildConstraints": TAdultChildConstraints;
+        "bookingData": any;
+        "bookingDataDefaultDateRange": any;
+        "currency": any;
+        "dateRangeData": any;
+        "eventType": string;
+        "message": string;
+        "ratePricingMode": any;
+        "selectedRooms": Map<string, Map<string, any>>;
+        "showSplitBookingOption": boolean;
+        "sourceOptions": TSourceOptions[];
+    }
     interface IglBookingRoomRatePlan {
         "bookingType": string;
         "currency": any;
         "dateDifference": number;
         "defaultData": { [key: string]: any };
+        "fullyBlocked": boolean;
         "ratePlanData": { [key: string]: any };
         "ratePricingMode": any[];
         "totalAvailableRooms": number;
@@ -81,7 +103,7 @@ export namespace Components {
         "bookingType": string;
         "currency": any;
         "dateDifference": number;
-        "defaultData": { [key: string]: any };
+        "defaultData": Map<string, any>;
         "ratePricingMode": any[];
         "roomTypeData": { [key: string]: any };
     }
@@ -106,7 +128,6 @@ export namespace Components {
     interface IglDateRange {
         "defaultData": { [key: string]: any };
         "disabled": boolean;
-        "message": string;
     }
     interface IglLegends {
         "legendData": { [key: string]: any };
@@ -121,7 +142,7 @@ export namespace Components {
         "isLoading": string;
         "language": string;
         "selectedGuestData": any;
-        "selectedRooms": any;
+        "selectedRooms": Map<string, Map<string, any>>;
         "showPaymentDetails": boolean;
         "showSplitBookingOption": boolean;
     }
@@ -421,6 +442,11 @@ export namespace Components {
         "rows": number;
         "text": string;
     }
+    interface IrToast {
+        "hideToast": () => Promise<void>;
+        "position": TPositions;
+        "showToast": () => Promise<void>;
+    }
     interface IrTooltip {
         "message": string;
     }
@@ -439,6 +465,10 @@ export interface IglBookPropertyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookPropertyElement;
 }
+export interface IglBookPropertyFooterCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBookPropertyFooterElement;
+}
 export interface IglBookPropertyHeaderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookPropertyHeaderElement;
@@ -450,6 +480,10 @@ export interface IglBookingEventCustomEvent<T> extends CustomEvent<T> {
 export interface IglBookingEventHoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookingEventHoverElement;
+}
+export interface IglBookingOverviewPageCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBookingOverviewPageElement;
 }
 export interface IglBookingRoomRatePlanCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -547,6 +581,10 @@ export interface IrInputTextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrInputTextElement;
 }
+export interface IrInterceptorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrInterceptorElement;
+}
 export interface IrLabelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrLabelElement;
@@ -641,12 +679,30 @@ declare global {
         prototype: HTMLIglBookPropertyElement;
         new (): HTMLIglBookPropertyElement;
     };
+    interface HTMLIglBookPropertyFooterElementEventMap {
+        "buttonClicked": { key: TPropertyButtonsTypes };
+    }
+    interface HTMLIglBookPropertyFooterElement extends Components.IglBookPropertyFooter, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBookPropertyFooterElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyFooterElement, ev: IglBookPropertyFooterCustomEvent<HTMLIglBookPropertyFooterElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBookPropertyFooterElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyFooterElement, ev: IglBookPropertyFooterCustomEvent<HTMLIglBookPropertyFooterElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIglBookPropertyFooterElement: {
+        prototype: HTMLIglBookPropertyFooterElement;
+        new (): HTMLIglBookPropertyFooterElement;
+    };
     interface HTMLIglBookPropertyHeaderElementEventMap {
         "splitBookingDropDownChange": any;
         "sourceDropDownChange": string;
         "dateRangeSelectChange": any;
         "adultChild": any;
         "checkClicked": any;
+        "buttonClicked": { key: TPropertyButtonsTypes };
     }
     interface HTMLIglBookPropertyHeaderElement extends Components.IglBookPropertyHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyHeaderElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyHeaderElement, ev: IglBookPropertyHeaderCustomEvent<HTMLIglBookPropertyHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -700,6 +756,24 @@ declare global {
     var HTMLIglBookingEventHoverElement: {
         prototype: HTMLIglBookingEventHoverElement;
         new (): HTMLIglBookingEventHoverElement;
+    };
+    interface HTMLIglBookingOverviewPageElementEventMap {
+        "dateRangeSelect": any;
+        "roomsDataUpdate": any;
+    }
+    interface HTMLIglBookingOverviewPageElement extends Components.IglBookingOverviewPage, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBookingOverviewPageElementEventMap>(type: K, listener: (this: HTMLIglBookingOverviewPageElement, ev: IglBookingOverviewPageCustomEvent<HTMLIglBookingOverviewPageElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBookingOverviewPageElementEventMap>(type: K, listener: (this: HTMLIglBookingOverviewPageElement, ev: IglBookingOverviewPageCustomEvent<HTMLIglBookingOverviewPageElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIglBookingOverviewPageElement: {
+        prototype: HTMLIglBookingOverviewPageElement;
+        new (): HTMLIglBookingOverviewPageElement;
     };
     interface HTMLIglBookingRoomRatePlanElementEventMap {
         "dataUpdateEvent": { [key: string]: any };
@@ -832,7 +906,7 @@ declare global {
     interface HTMLIglPagetwoElementEventMap {
         "dataUpdateEvent": IPageTwoDataUpdateProps;
         "buttonClicked": {
-    key: PageTwoButtonsTypes;
+    key: TPropertyButtonsTypes;
     data?: CustomEvent;
   };
     }
@@ -1151,7 +1225,18 @@ declare global {
         prototype: HTMLIrInputTextElement;
         new (): HTMLIrInputTextElement;
     };
+    interface HTMLIrInterceptorElementEventMap {
+        "toast": IToast;
+    }
     interface HTMLIrInterceptorElement extends Components.IrInterceptor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrInterceptorElementEventMap>(type: K, listener: (this: HTMLIrInterceptorElement, ev: IrInterceptorCustomEvent<HTMLIrInterceptorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrInterceptorElementEventMap>(type: K, listener: (this: HTMLIrInterceptorElement, ev: IrInterceptorCustomEvent<HTMLIrInterceptorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrInterceptorElement: {
         prototype: HTMLIrInterceptorElement;
@@ -1340,6 +1425,12 @@ declare global {
         prototype: HTMLIrTextareaElement;
         new (): HTMLIrTextareaElement;
     };
+    interface HTMLIrToastElement extends Components.IrToast, HTMLStencilElement {
+    }
+    var HTMLIrToastElement: {
+        prototype: HTMLIrToastElement;
+        new (): HTMLIrToastElement;
+    };
     interface HTMLIrTooltipElement extends Components.IrTooltip, HTMLStencilElement {
     }
     var HTMLIrTooltipElement: {
@@ -1367,9 +1458,11 @@ declare global {
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
         "igl-book-property": HTMLIglBookPropertyElement;
+        "igl-book-property-footer": HTMLIglBookPropertyFooterElement;
         "igl-book-property-header": HTMLIglBookPropertyHeaderElement;
         "igl-booking-event": HTMLIglBookingEventElement;
         "igl-booking-event-hover": HTMLIglBookingEventHoverElement;
+        "igl-booking-overview-page": HTMLIglBookingOverviewPageElement;
         "igl-booking-room-rate-plan": HTMLIglBookingRoomRatePlanElement;
         "igl-booking-rooms": HTMLIglBookingRoomsElement;
         "igl-cal-body": HTMLIglCalBodyElement;
@@ -1409,6 +1502,7 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-textarea": HTMLIrTextareaElement;
+        "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-topbar": HTMLIrTopbarElement;
     }
@@ -1435,7 +1529,7 @@ declare namespace LocalJSX {
         "toDate"?: string;
     }
     interface IglBookProperty {
-        "adultChildConstraints"?: any;
+        "adultChildConstraints"?: TAdultChildConstraints;
         "allowedBookingSources"?: any;
         "bookingData"?: { [key: string]: any };
         "countryNodeList"?: any;
@@ -1447,18 +1541,24 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "showPaymentDetails"?: boolean;
     }
+    interface IglBookPropertyFooter {
+        "disabled"?: boolean;
+        "eventType"?: string;
+        "onButtonClicked"?: (event: IglBookPropertyFooterCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
+    }
     interface IglBookPropertyHeader {
-        "adultChildConstraints"?: any;
+        "adultChildConstraints"?: TAdultChildConstraints;
         "bookingData"?: any;
         "bookingDataDefaultDateRange"?: { [key: string]: any };
         "message"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
+        "onButtonClicked"?: (event: IglBookPropertyHeaderCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
         "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onDateRangeSelectChange"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onSourceDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onSplitBookingDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "showSplitBookingOption"?: boolean;
-        "sourceOptions"?: { id: string; value: string; tag: string }[];
+        "sourceOptions"?: TSourceOptions[];
         "splitBookingId"?: any;
         "splitBookings"?: any[];
     }
@@ -1483,11 +1583,27 @@ declare namespace LocalJSX {
         "onHideBubbleInfo"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
     }
+    interface IglBookingOverviewPage {
+        "adultChildConstraints"?: TAdultChildConstraints;
+        "bookingData"?: any;
+        "bookingDataDefaultDateRange"?: any;
+        "currency"?: any;
+        "dateRangeData"?: any;
+        "eventType"?: string;
+        "message"?: string;
+        "onDateRangeSelect"?: (event: IglBookingOverviewPageCustomEvent<any>) => void;
+        "onRoomsDataUpdate"?: (event: IglBookingOverviewPageCustomEvent<any>) => void;
+        "ratePricingMode"?: any;
+        "selectedRooms"?: Map<string, Map<string, any>>;
+        "showSplitBookingOption"?: boolean;
+        "sourceOptions"?: TSourceOptions[];
+    }
     interface IglBookingRoomRatePlan {
         "bookingType"?: string;
         "currency"?: any;
         "dateDifference"?: number;
         "defaultData"?: { [key: string]: any };
+        "fullyBlocked"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "onGotoSplitPageTwoEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "ratePlanData"?: { [key: string]: any };
@@ -1498,7 +1614,7 @@ declare namespace LocalJSX {
         "bookingType"?: string;
         "currency"?: any;
         "dateDifference"?: number;
-        "defaultData"?: { [key: string]: any };
+        "defaultData"?: Map<string, any>;
         "onDataUpdateEvent"?: (event: IglBookingRoomsCustomEvent<{ [key: string]: any }>) => void;
         "ratePricingMode"?: any[];
         "roomTypeData"?: { [key: string]: any };
@@ -1535,7 +1651,6 @@ declare namespace LocalJSX {
     interface IglDateRange {
         "defaultData"?: { [key: string]: any };
         "disabled"?: boolean;
-        "message"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
     }
     interface IglLegends {
@@ -1552,12 +1667,12 @@ declare namespace LocalJSX {
         "isLoading"?: string;
         "language"?: string;
         "onButtonClicked"?: (event: IglPagetwoCustomEvent<{
-    key: PageTwoButtonsTypes;
+    key: TPropertyButtonsTypes;
     data?: CustomEvent;
   }>) => void;
         "onDataUpdateEvent"?: (event: IglPagetwoCustomEvent<IPageTwoDataUpdateProps>) => void;
         "selectedGuestData"?: any;
-        "selectedRooms"?: any;
+        "selectedRooms"?: Map<string, Map<string, any>>;
         "showPaymentDetails"?: boolean;
         "showSplitBookingOption"?: boolean;
     }
@@ -1771,6 +1886,7 @@ declare namespace LocalJSX {
     interface IrInterceptor {
         "defaultMessage"?: { loadingMessage: string; errorMessage: string; };
         "handledEndpoints"?: string[];
+        "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
     interface IrLabel {
         "iconShown"?: boolean;
@@ -1907,6 +2023,9 @@ declare namespace LocalJSX {
         "rows"?: number;
         "text"?: string;
     }
+    interface IrToast {
+        "position"?: TPositions;
+    }
     interface IrTooltip {
         "message"?: string;
     }
@@ -1917,9 +2036,11 @@ declare namespace LocalJSX {
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
         "igl-book-property": IglBookProperty;
+        "igl-book-property-footer": IglBookPropertyFooter;
         "igl-book-property-header": IglBookPropertyHeader;
         "igl-booking-event": IglBookingEvent;
         "igl-booking-event-hover": IglBookingEventHover;
+        "igl-booking-overview-page": IglBookingOverviewPage;
         "igl-booking-room-rate-plan": IglBookingRoomRatePlan;
         "igl-booking-rooms": IglBookingRooms;
         "igl-cal-body": IglCalBody;
@@ -1959,6 +2080,7 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-switch": IrSwitch;
         "ir-textarea": IrTextarea;
+        "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
         "ir-topbar": IrTopbar;
     }
@@ -1970,9 +2092,11 @@ declare module "@stencil/core" {
             "igl-application-info": LocalJSX.IglApplicationInfo & JSXBase.HTMLAttributes<HTMLIglApplicationInfoElement>;
             "igl-block-dates-view": LocalJSX.IglBlockDatesView & JSXBase.HTMLAttributes<HTMLIglBlockDatesViewElement>;
             "igl-book-property": LocalJSX.IglBookProperty & JSXBase.HTMLAttributes<HTMLIglBookPropertyElement>;
+            "igl-book-property-footer": LocalJSX.IglBookPropertyFooter & JSXBase.HTMLAttributes<HTMLIglBookPropertyFooterElement>;
             "igl-book-property-header": LocalJSX.IglBookPropertyHeader & JSXBase.HTMLAttributes<HTMLIglBookPropertyHeaderElement>;
             "igl-booking-event": LocalJSX.IglBookingEvent & JSXBase.HTMLAttributes<HTMLIglBookingEventElement>;
             "igl-booking-event-hover": LocalJSX.IglBookingEventHover & JSXBase.HTMLAttributes<HTMLIglBookingEventHoverElement>;
+            "igl-booking-overview-page": LocalJSX.IglBookingOverviewPage & JSXBase.HTMLAttributes<HTMLIglBookingOverviewPageElement>;
             "igl-booking-room-rate-plan": LocalJSX.IglBookingRoomRatePlan & JSXBase.HTMLAttributes<HTMLIglBookingRoomRatePlanElement>;
             "igl-booking-rooms": LocalJSX.IglBookingRooms & JSXBase.HTMLAttributes<HTMLIglBookingRoomsElement>;
             "igl-cal-body": LocalJSX.IglCalBody & JSXBase.HTMLAttributes<HTMLIglCalBodyElement>;
@@ -2012,6 +2136,7 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
+            "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-topbar": LocalJSX.IrTopbar & JSXBase.HTMLAttributes<HTMLIrTopbarElement>;
         }

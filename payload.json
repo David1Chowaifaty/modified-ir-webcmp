@@ -3,15 +3,16 @@
   "check_in": true,
   "booking": {
     "booking_nbr": "",
-    "from_date": "2023-11-15",
-    "to_date": "2023-11-17",
+    "from_date": "2023-12-01",
+    "to_date": "2023-12-13",
     "remark": null,
     "property": {
       "id": 42
     },
     "source": {
-      "code": "001",
-      "description": "Agent"
+      "code": "003",
+      "description": "Phone/Email",
+      "tag": ""
     },
     "currency": {
       "code": "USD",
@@ -24,18 +25,13 @@
       "email": "test@gmail.com",
       "first_name": "ronald",
       "last_name": "yazbik",
-      "country_id": 2,
+      "country_id": 6,
       "city": null,
       "mobile": "03030303",
       "address": "",
       "dob": null,
       "subscribe_to_news_letter": false,
-      "cci": {
-        "nbr": "4111111111111111",
-        "holder_name": "david",
-        "expiry_month": "11",
-        "expiry_year": 2023
-      },
+      "cci": null,
       "id": 195932
     },
     "rooms": [
@@ -47,35 +43,75 @@
           "rateplans": null,
           "availabilities": null,
           "inventory": 0,
-          "rate": 42
+          "rate": 58.333333333333336
         },
         "rateplan": {
           "id": 123,
           "name": "Standard Rooms/Bed-&-breakfast",
           "rate_restrictions": null,
           "variations": null,
-          "cancelation": "<u><b>Cancellation</b></u>: 100% of the total price will be charged if cancelled after Friday, 10 Nov 2023, 22:00 or in case of no show.\r\n",
+          "cancelation": "<u><b>Cancellation</b></u>: 100% of the total price will be charged if cancelled after Sunday, 26 Nov 2023, 22:00 or in case of no show.\r\n",
           "guarantee": "<u><b>Guarantee</b></u>: No deposit required."
         },
         "unit": {
-          "id": 24
+          "id": 16
         },
         "occupancy": {
           "adult_nbr": 1,
           "children_nbr": 0,
           "infant_nbr": null
         },
-        "from_date": "2023-11-15",
-        "to_date": "2023-11-17",
+        "from_date": "2023-12-01",
+        "to_date": "2023-12-13",
         "notes": null,
         "days": [
           {
-            "date": "2023-11-15",
-            "amount": 42
+            "date": "2023-12-01",
+            "amount": 58.333333333333336
           },
           {
-            "date": "2023-11-16",
-            "amount": 42
+            "date": "2023-12-02",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-03",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-04",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-05",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-06",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-07",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-08",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-09",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-10",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-11",
+            "amount": 58.333333333333336
+          },
+          {
+            "date": "2023-12-12",
+            "amount": 58.333333333333336
           }
         ],
         "guest": {

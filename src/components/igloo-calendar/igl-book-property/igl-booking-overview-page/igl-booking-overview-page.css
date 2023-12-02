@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+:host > * {
+  margin: 0;
+  padding: auto;
+}
+.scrollContent {
+  height: calc(100% - 79px);
+  overflow: auto;
+  position: relative;
+}

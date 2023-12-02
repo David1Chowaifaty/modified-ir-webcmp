@@ -28,7 +28,7 @@
 
 ### Used by
 
- - [igl-book-property](../igl-book-property)
+ - [igl-booking-overview-page](../igl-book-property/igl-booking-overview-page)
 
 ### Depends on
 
@@ -39,7 +39,7 @@
 graph TD;
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
-  igl-book-property --> igl-booking-rooms
+  igl-booking-overview-page --> igl-booking-rooms
   style igl-booking-rooms fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
