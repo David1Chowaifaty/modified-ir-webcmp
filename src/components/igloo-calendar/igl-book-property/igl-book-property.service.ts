@@ -84,7 +84,7 @@ export class IglBookPropertyService {
     if (selectedRoom) {
       data.physicalRooms.push(selectedRoom);
     }
-    selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, { ...data, guestName: name, roomId: selectedRoom?pr_id:"" }));
+    selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, { ...data, guestName: name, roomId: selectedRoom ? pr_id : '' }));
   }
   prepareBookUserServiceParams(context, check_in): BookUserParams {
     const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : '';
@@ -105,6 +105,7 @@ export class IglBookPropertyService {
       context.bookingData.GUEST,
       arrivalTime,
       pr_id,
+      context.bookingData.IDENTIFIER,
     ];
   }
   private getBookingPreferenceRoomId(bookingData) {

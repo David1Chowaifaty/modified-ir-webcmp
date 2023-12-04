@@ -255,6 +255,7 @@ export class BookingService {
     defaultGuest?: any,
     arrivalTime?: any,
     pr_id?: number,
+    identifier?: string,
   ) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
@@ -301,6 +302,7 @@ export class BookingService {
             },
             guest: defaultGuest || guest,
             rooms: guestData.map(data => ({
+              identifier: identifier || null,
               roomtype: {
                 id: data.roomCategoryId,
                 name: data.roomCategoryName,
