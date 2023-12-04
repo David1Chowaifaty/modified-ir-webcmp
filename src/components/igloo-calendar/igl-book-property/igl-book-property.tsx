@@ -159,7 +159,9 @@ export class IglBookProperty {
     event.stopImmediatePropagation();
     event.stopPropagation();
     if (opt.key === 'selectedDateRange') {
-      this.dateRangeData = opt.data;
+      if (!this.isEventType('EDIT_BOOKING')) {
+        this.dateRangeData = opt.data;
+      }
       this.bookingData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
       this.bookingData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
       if (this.adultChildCount.adult !== 0) {
