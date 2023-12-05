@@ -110,8 +110,8 @@ export class IrToast {
                 this.toastBody.body
               ) : (
                 <Fragment>
-                  <h3 class="ToastTitle">{this.toastBody.title}</h3>
-                  <p class="ToastDescription">{this.toastBody.description}</p>
+                  {this.toastBody.title !== '' && <h3 class="ToastTitle">{this.toastBody.title}</h3>}
+                  {this.toastBody.description !== '' && <p class="ToastDescription">{this.toastBody.description}</p>}
                   {this.renderIcon()}
                 </Fragment>
               )}
