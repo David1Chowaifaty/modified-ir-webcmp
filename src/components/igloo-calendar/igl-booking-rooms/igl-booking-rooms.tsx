@@ -27,7 +27,6 @@ export class IglBookingRooms {
     this.totalRooms = inventory || 0;
     this.selectedRooms = new Array(rateplans.length).fill(0);
     this.roomsDistributions = this.calculateInitialDistributions(rateplans, inventory);
-    //console.log(this.roomsDistributions, this.selectedRooms);
   }
   @Watch('roomTypeData')
   handleRoomTypeData() {
@@ -36,7 +35,7 @@ export class IglBookingRooms {
 
   private calculateInitialDistributions(rateplans, inventory) {
     let distributions = new Array(rateplans.length).fill(inventory);
-    if (this.defaultData && this.bookingType !== 'EDIT_BOOKING') {
+    if (this.defaultData && this.bookingType !== 'EDIT_BOOKING' && inventory > 0) {
       let selectedIndexes = [];
       let sum = 0;
       this.defaultData.forEach(category => {
