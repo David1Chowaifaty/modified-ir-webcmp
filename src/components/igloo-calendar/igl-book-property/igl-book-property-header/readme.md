@@ -10,6 +10,7 @@
 | Property                      | Attribute                   | Description | Type                                                                       | Default     |
 | ----------------------------- | --------------------------- | ----------- | -------------------------------------------------------------------------- | ----------- |
 | `adultChildConstraints`       | --                          |             | `{ adult_max_nbr: number; child_max_nbr: number; child_max_age: number; }` | `undefined` |
+| `adultChildCount`             | --                          |             | `{ adult: number; child: number; }`                                        | `undefined` |
 | `bookingData`                 | `booking-data`              |             | `any`                                                                      | `''`        |
 | `bookingDataDefaultDateRange` | --                          |             | `{ [key: string]: any; }`                                                  | `undefined` |
 | `message`                     | `message`                   |             | `string`                                                                   | `undefined` |
@@ -26,7 +27,6 @@
 | `adultChild`                 |             | `CustomEvent<any>`                             |
 | `buttonClicked`              |             | `CustomEvent<{ key: TPropertyButtonsTypes; }>` |
 | `checkClicked`               |             | `CustomEvent<any>`                             |
-| `dateRangeSelectChange`      |             | `CustomEvent<any>`                             |
 | `sourceDropDownChange`       |             | `CustomEvent<string>`                          |
 | `splitBookingDropDownChange` |             | `CustomEvent<any>`                             |
 

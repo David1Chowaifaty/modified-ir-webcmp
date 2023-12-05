@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Host, Prop, h, Event, EventEmitter } from '@stencil/core';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../../models/igl-book-property';
 
 @Component({
@@ -15,20 +15,16 @@ export class IglBookPropertyHeader {
   @Prop({ reflect: true }) showSplitBookingOption: boolean = false;
   @Prop({ reflect: true }) adultChildConstraints: TAdultChildConstraints;
   @Prop({ reflect: true }) splitBookings: any[];
+  @Prop() adultChildCount: { adult: number; child: number };
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
-  @Event() dateRangeSelectChange: EventEmitter<any>;
   @Event() adultChild: EventEmitter<any>;
   @Event() checkClicked: EventEmitter<any>;
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
-  @State() sourceOption: TSourceOption = {
+  private sourceOption: TSourceOption = {
     code: '',
     description: '',
     tag: '',
-  };
-  @State() adultChildCount: { adult: number; child: number } = {
-    adult: 0,
-    child: 0,
   };
   getSplitBookings() {
     return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
@@ -74,18 +70,19 @@ export class IglBookPropertyHeader {
   }
   handleAdultChildChange(key: string, event: Event) {
     const value = (event.target as HTMLSelectElement).value;
+    let obj = {};
     if (value === '') {
-      this.adultChildCount = {
+      obj = {
         ...this.adultChildCount,
         [key]: 0,
       };
     } else {
-      this.adultChildCount = {
+      obj = {
         ...this.adultChildCount,
         [key]: value,
       };
     }
-    this.adultChild.emit(this.adultChildCount);
+    this.adultChild.emit(obj);
   }
 
   getAdultChildConstraints() {
@@ -130,11 +127,7 @@ export class IglBookPropertyHeader {
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
         <div class={'d-md-flex align-items-center'}>
           <fieldset class="form-group row">
-            <igl-date-range
-              disabled={this.isEventType('BAR_BOOKING')}
-              defaultData={this.bookingDataDefaultDateRange}
-              onDateSelectEvent={evt => this.dateRangeSelectChange.emit(evt.detail)}
-            ></igl-date-range>
+            <igl-date-range disabled={this.isEventType('BAR_BOOKING')} defaultData={this.bookingDataDefaultDateRange}></igl-date-range>
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
         </div>

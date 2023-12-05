@@ -7,26 +7,25 @@
 
 ## Properties
 
-| Property                      | Attribute                         | Description | Type                                                                       | Default     |
-| ----------------------------- | --------------------------------- | ----------- | -------------------------------------------------------------------------- | ----------- |
-| `adultChildConstraints`       | --                                |             | `{ adult_max_nbr: number; child_max_nbr: number; child_max_age: number; }` | `undefined` |
-| `bookingData`                 | `booking-data`                    |             | `any`                                                                      | `undefined` |
-| `bookingDataDefaultDateRange` | `booking-data-default-date-range` |             | `any`                                                                      | `undefined` |
-| `currency`                    | `currency`                        |             | `any`                                                                      | `undefined` |
-| `dateRangeData`               | `date-range-data`                 |             | `any`                                                                      | `undefined` |
-| `eventType`                   | `event-type`                      |             | `string`                                                                   | `undefined` |
-| `message`                     | `message`                         |             | `string`                                                                   | `undefined` |
-| `ratePricingMode`             | `rate-pricing-mode`               |             | `any`                                                                      | `undefined` |
-| `selectedRooms`               | --                                |             | `Map<string, Map<string, any>>`                                            | `undefined` |
-| `showSplitBookingOption`      | `show-split-booking-option`       |             | `boolean`                                                                  | `undefined` |
-| `sourceOptions`               | --                                |             | `TSourceOptions[]`                                                         | `undefined` |
+| Property                 | Attribute                   | Description | Type                                                                       | Default     |
+| ------------------------ | --------------------------- | ----------- | -------------------------------------------------------------------------- | ----------- |
+| `adultChildConstraints`  | --                          |             | `{ adult_max_nbr: number; child_max_nbr: number; child_max_age: number; }` | `undefined` |
+| `adultChildCount`        | --                          |             | `{ adult: number; child: number; }`                                        | `undefined` |
+| `bookingData`            | `booking-data`              |             | `any`                                                                      | `undefined` |
+| `currency`               | `currency`                  |             | `any`                                                                      | `undefined` |
+| `dateRangeData`          | `date-range-data`           |             | `any`                                                                      | `undefined` |
+| `eventType`              | `event-type`                |             | `string`                                                                   | `undefined` |
+| `message`                | `message`                   |             | `string`                                                                   | `undefined` |
+| `ratePricingMode`        | `rate-pricing-mode`         |             | `any`                                                                      | `undefined` |
+| `selectedRooms`          | --                          |             | `Map<string, Map<string, any>>`                                            | `undefined` |
+| `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                                                                  | `undefined` |
+| `sourceOptions`          | --                          |             | `TSourceOptions[]`                                                         | `undefined` |
 
 
 ## Events
 
 | Event             | Description | Type               |
 | ----------------- | ----------- | ------------------ |
-| `dateRangeSelect` |             | `CustomEvent<any>` |
 | `roomsDataUpdate` |             | `CustomEvent<any>` |
 
 

@@ -8,56 +8,91 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@st
 export class IglBookingRooms {
   @Prop({ reflect: true, mutable: true }) roomTypeData: { [key: string]: any };
   @Prop() defaultData: Map<string, any>;
-  @Prop() bookingType: string = 'PLUS_BOOKING';
+  @Prop() bookingType = 'PLUS_BOOKING';
   @Prop({ reflect: true }) dateDifference: number;
   @Prop() ratePricingMode = [];
   @Prop() currency;
-  @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedRooms: number[] = [];
+  @State() totalRooms: number;
   @State() roomsDistributions: number[] = [];
+  @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   private validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING'];
-  private totalRooms: number;
 
   componentWillLoad() {
-    this.totalRooms = this.roomTypeData.inventory || 0;
-    if (!this.selectedRooms.length) {
-      this.selectedRooms = new Array(this.totalRooms).fill(0);
-    }
-    if (!this.roomsDistributions.length) {
-      this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
-    }
+    this.initializeRoomData();
   }
 
+  private initializeRoomData() {
+    const { inventory, rateplans } = this.roomTypeData;
+    this.totalRooms = inventory || 0;
+    this.selectedRooms = new Array(rateplans.length).fill(0);
+    this.roomsDistributions = this.calculateInitialDistributions(rateplans, inventory);
+    //console.log(this.roomsDistributions, this.selectedRooms);
+  }
   @Watch('roomTypeData')
-  handleRoomTypeDataChange(newValue) {
-    this.totalRooms = newValue.inventory || 0;
-    if (!this.selectedRooms.length) {
-      this.selectedRooms = new Array(this.totalRooms).fill(0);
+  handleRoomTypeData() {
+    this.initializeRoomData();
+  }
+
+  private calculateInitialDistributions(rateplans, inventory) {
+    let distributions = new Array(rateplans.length).fill(inventory);
+    if (this.defaultData && this.bookingType !== 'EDIT_BOOKING') {
+      let selectedIndexes = [];
+      let sum = 0;
+      this.defaultData.forEach(category => {
+        this.selectedRooms[category.index] = category.totalRooms;
+        distributions[category.index] = category.totalRooms;
+        sum += category.totalRooms;
+        selectedIndexes.push(category.index);
+      });
+      if (selectedIndexes.length < distributions.length) {
+        distributions.forEach((_, index) => {
+          if (!selectedIndexes.includes(index)) {
+            if (sum === this.totalRooms) {
+              distributions[index] = 0;
+            } else {
+              distributions[index] = distributions[index] - sum;
+            }
+          } else {
+            if (sum < this.totalRooms) {
+              distributions[index] = this.totalRooms - sum + distributions[index];
+            }
+          }
+        });
+      }
+    } else {
+      distributions.fill(inventory);
     }
-    if (!this.roomsDistributions.length) {
-      this.roomsDistributions = new Array(this.totalRooms).fill(this.totalRooms);
-    }
+    return distributions;
   }
 
   onRoomDataUpdate(event: CustomEvent<{ [key: string]: any }>, index: number) {
     event.stopImmediatePropagation();
-    const opt: { [key: string]: any } = event.detail;
-    let data = { ...opt.data };
-    if (opt.changedKey === 'totalRooms') {
-      let newValue = data.totalRooms;
-      if (this.selectedRooms[index] !== newValue) {
-        this.selectedRooms[index] = newValue;
-        this.updateRatePlanTotalRooms(index);
-      }
+    const {
+      detail: { data, changedKey },
+    } = event;
+    let updatedData = { ...data };
+
+    if (changedKey === 'totalRooms') {
+      this.handleTotalRoomsUpdate(index, updatedData.totalRooms);
     }
-    data.roomCategoryId = this.roomTypeData.id;
-    data.roomCategoryName = this.roomTypeData.name;
-    data.inventory = this.roomTypeData.inventory;
-    this.dataUpdateEvent.emit({
-      key: opt.key,
-      data: data,
-      changedKey: opt.changedKey,
-    });
+
+    updatedData = {
+      ...updatedData,
+      roomCategoryId: this.roomTypeData.id,
+      roomCategoryName: this.roomTypeData.name,
+      inventory: this.roomTypeData.inventory,
+    };
+
+    this.dataUpdateEvent.emit({ key: data.key, data: updatedData, changedKey });
+  }
+
+  private handleTotalRoomsUpdate(index: number, newValue: number) {
+    if (this.selectedRooms[index] !== newValue) {
+      this.selectedRooms[index] = newValue;
+      this.updateRatePlanTotalRooms(index);
+    }
+    //console.log(this.roomsDistributions, this.selectedRooms);
   }
 
   updateRatePlanTotalRooms(ratePlanIndex: number) {
@@ -75,7 +110,7 @@ export class IglBookingRooms {
     });
 
     if (JSON.stringify(this.roomsDistributions) !== JSON.stringify(newRoomsDistributions)) {
-      this.roomsDistributions = newRoomsDistributions;
+      this.roomsDistributions = [...newRoomsDistributions];
     }
   }
 
@@ -88,13 +123,13 @@ export class IglBookingRooms {
           if (ratePlan.variations !== null) {
             return (
               <igl-booking-room-rate-plan
+                index={index}
                 key={`rate-plan-${ratePlan.id}`}
                 ratePricingMode={this.ratePricingMode}
                 class={isValidBookingType ? 'ml-1' : ''}
                 currency={this.currency}
                 dateDifference={this.dateDifference}
                 ratePlanData={ratePlan}
-                //fullyBlocked={this.roomTypeData.rate === 0}
                 totalAvailableRooms={this.roomsDistributions[index]}
                 bookingType={this.bookingType}
                 defaultData={(this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null}
