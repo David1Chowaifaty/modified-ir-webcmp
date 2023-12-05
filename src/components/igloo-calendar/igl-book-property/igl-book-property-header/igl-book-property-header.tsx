@@ -93,7 +93,7 @@ export class IglBookPropertyHeader {
       <div class="form-group  text-left d-flex align-items-center mt-1">
         <fieldset>
           <div class="btn-group ml-1">
-            <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
+            <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
               <option value={''}>Ad...</option>
               {Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (
                 <option value={option}>{option}</option>
@@ -104,7 +104,7 @@ export class IglBookPropertyHeader {
         {this.adultChildConstraints.child_max_nbr > 0 && (
           <fieldset class={'ml-1'}>
             <div class="btn-group ml-1">
-              <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.handleAdultChildChange('child', evt)}>
+              <select class="form-control input-sm" id="xChildrenSmallSelect" onChange={evt => this.handleAdultChildChange('child', evt)}>
                 <option value={''}>{`Ch... < ${this.adultChildConstraints.child_max_age} years`}</option>
                 {Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (
                   <option value={option}>{option}</option>
