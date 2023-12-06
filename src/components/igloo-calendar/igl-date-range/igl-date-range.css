@@ -9,22 +9,17 @@
 }
 
 .date-range-input {
-  flex: 1;
-  margin-right: 1rem;
+  margin: 0;
+  padding: 0rem 2rem;
 }
 
 .iglRangePicker {
   margin: 0;
   border: 1px solid #379ff2;
   border-radius: 6px;
-  min-width: 300px;
-  max-width: 320px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  text-align: center;
   margin-right: 5px;
-  padding: 5px 2rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0;
 }
 .calendarPickerContainer {
   display: flex;
@@ -33,6 +28,8 @@
 }
 
 .dateRangeLabel {
+  margin-bottom: 0;
+  margin-top: 0;
   margin-right: 5px;
 }
 

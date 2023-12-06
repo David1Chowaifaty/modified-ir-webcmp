@@ -201,7 +201,7 @@ export class IglCalHeader {
               onClick={() => this.handleOptionEvent('add', this.getNewBookingModel())}
               data-toggle="tooltip"
               data-placement="bottom"
-              title="Create new booking"
+              title="Create New Booking"
             >
               <i class="la la-plus"></i>
             </div>

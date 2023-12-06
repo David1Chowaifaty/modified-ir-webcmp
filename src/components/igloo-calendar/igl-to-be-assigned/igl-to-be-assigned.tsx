@@ -243,20 +243,27 @@ export class IglToBeAssigned {
               ) : (
                 <Fragment>
                   {this.orderedDatesList.length ? (
-                    <div class={`text-center ` + (this.showDatesList ? 'show' : '')}>
-                      <div onClick={() => this.showUnassignedDate()}>
+                    <div
+                      class={`custom-dropdown border border-light rounded text-center ` + (this.showDatesList ? 'show' : '')}
+                      id="dropdownMenuButton"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <div
+                        class={'dropdown-toggle'}
+                        //onClick={() => this.showUnassignedDate()}
+                      >
                         <span class="font-weight-bold">{this.data[this.selectedDate].dateStr}</span>
-                        <i class="la la-angle-down ml-2"></i>
+                        {/* <i class="la la-angle-down ml-2"></i> */}
                       </div>
-                      {this.showDatesList ? (
-                        <div class="dropdown-menu dropdown-menu-right full-width">
-                          {this.orderedDatesList.map(ordDate => (
-                            <div class="pointer dropdown-item pointer" onClick={() => this.showForDate(ordDate)}>
-                              {this.data[ordDate].dateStr}
-                            </div>
-                          ))}
-                        </div>
-                      ) : null}
+                      <div class="dropdown-menu dropdown-menu-right full-width" aria-labelledby="dropdownMenuButton">
+                        {this.orderedDatesList?.map(ordDate => (
+                          <div class="pointer dropdown-item pointer" onClick={() => this.showForDate(ordDate)}>
+                            {this.data[ordDate].dateStr}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ) : (
                     'All bookings assigned'
