@@ -293,7 +293,7 @@ export class IglooCalendar {
     event.stopImmediatePropagation();
     let bookings = [...this.calendarData.bookingEvents];
     bookings = bookings.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
-    bookings.push(...event.detail);
+    bookings.push(...event.detail.filter(ev => ev.STATUS === 'PENDING-CONFIRMATION'));
     this.updateBookingEventsDateRange(event.detail);
     this.calendarData = {
       ...this.calendarData,
