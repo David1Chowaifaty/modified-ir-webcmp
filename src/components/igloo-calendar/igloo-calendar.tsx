@@ -391,7 +391,7 @@ export class IglooCalendar {
     const endDate = dates.end.toDate();
     const defaultToDate = this.calendarData.endingDate;
     if (startDate.getTime() < new Date(this.from_date).getTime()) {
-      await this.addDatesToCalendar(moment(startDate).format('YYYY-MM-DD'), moment(this.from_date).add(-1, 'days').format('YYYY-MM-DD'));
+      await this.addDatesToCalendar(moment(startDate).add(-1, 'days').format('YYYY-MM-DD'), moment(this.from_date).add(-1, 'days').format('YYYY-MM-DD'));
       this.scrollToElement(this.transformDateForScroll(startDate));
     } else if (startDate.getTime() > defaultFromDate.getTime() && startDate.getTime() < defaultToDate && endDate.getTime() < defaultToDate) {
       this.scrollToElement(this.transformDateForScroll(startDate));

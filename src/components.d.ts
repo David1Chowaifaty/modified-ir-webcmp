@@ -267,6 +267,7 @@ export namespace Components {
         "monthNames": string[];
         "opens": 'left' | 'right' | 'center';
         "separator": string;
+        "singleDatePicker": boolean;
         "toDate": Date;
         "toLabel": string;
         "weekLabel": string;
@@ -1827,6 +1828,7 @@ declare namespace LocalJSX {
   }>) => void;
         "opens"?: 'left' | 'right' | 'center';
         "separator"?: string;
+        "singleDatePicker"?: boolean;
         "toDate"?: Date;
         "toLabel"?: string;
         "weekLabel"?: string;
