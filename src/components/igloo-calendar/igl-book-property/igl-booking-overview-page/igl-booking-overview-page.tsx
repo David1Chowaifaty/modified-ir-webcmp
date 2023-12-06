@@ -15,11 +15,9 @@ export class IglBookingOverviewPage {
   @Prop() ratePricingMode: any;
   @Prop() dateRangeData: any;
   @Prop() selectedRooms: Map<string, Map<string, any>>;
-  @Prop() bookingDataDefaultDateRange;
+  @Prop() adultChildCount: { adult: number; child: number };
   @Prop() sourceOptions: TSourceOptions[];
-  @Event() dateRangeSelect: EventEmitter;
   @Event() roomsDataUpdate: EventEmitter;
-
   getSplitBookings() {
     return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
   }
@@ -30,28 +28,32 @@ export class IglBookingOverviewPage {
     return (
       <Host>
         <igl-book-property-header
+          adultChildCount={this.adultChildCount}
           splitBookingId={this.showSplitBookingOption}
           bookingData={this.bookingData}
           sourceOptions={this.sourceOptions}
           message={this.message}
-          bookingDataDefaultDateRange={this.bookingDataDefaultDateRange}
+          bookingDataDefaultDateRange={this.bookingData.defaultDateRange}
           showSplitBookingOption={this.showSplitBookingOption}
           adultChildConstraints={this.adultChildConstraints}
           splitBookings={this.getSplitBookings()}
         ></igl-book-property-header>
         <div class="col text-left">
-          {this.bookingData.roomsInfo?.map(roomInfo => (
-            <igl-booking-rooms
-              currency={this.currency}
-              ratePricingMode={this.ratePricingMode}
-              dateDifference={this.dateRangeData.dateDifference}
-              bookingType={this.bookingData.event_type}
-              roomTypeData={roomInfo}
-              class="mt-2 mb-1"
-              defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
-              onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
-            ></igl-booking-rooms>
-          ))}
+          {this.bookingData?.roomsInfo?.map(roomInfo => {
+            return (
+              <igl-booking-rooms
+                key={`room-info-${roomInfo.id}`}
+                currency={this.currency}
+                ratePricingMode={this.ratePricingMode}
+                dateDifference={this.dateRangeData.dateDifference}
+                bookingType={this.bookingData.event_type}
+                roomTypeData={roomInfo}
+                class="mt-2 mb-1"
+                defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
+                onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
+              ></igl-booking-rooms>
+            );
+          })}
         </div>
         <igl-book-property-footer class={'p-0 mb-1 mt-2'} eventType={this.bookingData.event_type} disabled={this.selectedRooms.size === 0}></igl-book-property-footer>
       </Host>

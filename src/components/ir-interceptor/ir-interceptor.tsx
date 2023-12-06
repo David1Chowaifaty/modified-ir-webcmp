@@ -70,8 +70,8 @@ export class IrInterceptor {
     this.hideToastAfterDelay(true);
     this.toast.emit({
       type: 'error',
-      title: '',
-      description: error,
+      title: error,
+      description: '',
       position: 'top-right',
     });
     return Promise.reject(error);

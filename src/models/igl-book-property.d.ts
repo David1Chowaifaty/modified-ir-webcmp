@@ -13,7 +13,7 @@ export type BookUserParams = [
   any | undefined,
   any | undefined,
   number | undefined,
-  string|undefined
+  string | undefined,
 ];
 export type TPropertyButtonsTypes = 'cancel' | 'save' | 'back' | 'book' | 'bookAndCheckIn' | 'next' | 'check';
 export type TSourceOption = { code: string; description: string; tag: string };

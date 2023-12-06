@@ -7,28 +7,28 @@
 
 ## Properties
 
-| Property                 | Attribute                   | Description | Type                      | Default     |
-| ------------------------ | --------------------------- | ----------- | ------------------------- | ----------- |
-| `bedPreferenceType`      | `bed-preference-type`       |             | `any`                     | `undefined` |
-| `bookedByInfoData`       | --                          |             | `{ [key: string]: any; }` | `undefined` |
-| `bookingData`            | --                          |             | `{ [key: string]: any; }` | `undefined` |
-| `countryNodeList`        | `country-node-list`         |             | `any`                     | `undefined` |
-| `dateRangeData`          | --                          |             | `{ [key: string]: any; }` | `undefined` |
-| `isEditOrAddRoomEvent`   | `is-edit-or-add-room-event` |             | `boolean`                 | `undefined` |
-| `isLoading`              | `is-loading`                |             | `string`                  | `undefined` |
-| `language`               | `language`                  |             | `string`                  | `undefined` |
-| `selectedGuestData`      | `selected-guest-data`       |             | `any`                     | `undefined` |
-| `selectedRooms`          | `selected-rooms`            |             | `any`                     | `undefined` |
-| `showPaymentDetails`     | `show-payment-details`      |             | `boolean`                 | `undefined` |
-| `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                 | `undefined` |
+| Property                 | Attribute                   | Description | Type                            | Default     |
+| ------------------------ | --------------------------- | ----------- | ------------------------------- | ----------- |
+| `bedPreferenceType`      | `bed-preference-type`       |             | `any`                           | `undefined` |
+| `bookedByInfoData`       | --                          |             | `{ [key: string]: any; }`       | `undefined` |
+| `bookingData`            | --                          |             | `{ [key: string]: any; }`       | `undefined` |
+| `countryNodeList`        | `country-node-list`         |             | `any`                           | `undefined` |
+| `dateRangeData`          | --                          |             | `{ [key: string]: any; }`       | `undefined` |
+| `isEditOrAddRoomEvent`   | `is-edit-or-add-room-event` |             | `boolean`                       | `undefined` |
+| `isLoading`              | `is-loading`                |             | `string`                        | `undefined` |
+| `language`               | `language`                  |             | `string`                        | `undefined` |
+| `selectedGuestData`      | `selected-guest-data`       |             | `any`                           | `undefined` |
+| `selectedRooms`          | --                          |             | `Map<string, Map<string, any>>` | `undefined` |
+| `showPaymentDetails`     | `show-payment-details`      |             | `boolean`                       | `undefined` |
+| `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                       | `undefined` |
 
 
 ## Events
 
-| Event             | Description | Type                                                                  |
-| ----------------- | ----------- | --------------------------------------------------------------------- |
-| `buttonClicked`   |             | `CustomEvent<{ key: PageTwoButtonsTypes; data?: CustomEvent<any>; }>` |
-| `dataUpdateEvent` |             | `CustomEvent<IPageTwoDataUpdateProps>`                                |
+| Event             | Description | Type                                                                    |
+| ----------------- | ----------- | ----------------------------------------------------------------------- |
+| `buttonClicked`   |             | `CustomEvent<{ key: TPropertyButtonsTypes; data?: CustomEvent<any>; }>` |
+| `dataUpdateEvent` |             | `CustomEvent<IPageTwoDataUpdateProps>`                                  |
 
 
 ## Dependencies

@@ -1,7 +1,7 @@
 import { BookUserParams } from '../../../models/igl-book-property';
 
 export class IglBookPropertyService {
-  public onDataRoomUpdate(event: CustomEvent, selectedUnits: Map<string, Map<string, any>>, isEditBooking: boolean, name: string, pr_id: string, bookingData) {
+  public onDataRoomUpdate(event: CustomEvent, selectedUnits: Map<string, Map<string, any>>, isEditBooking: boolean, name: string) {
     let units = selectedUnits;
     const { data, key, changedKey } = event.detail;
     const roomCategoryKey = `c_${data.roomCategoryId}`;
@@ -16,16 +16,16 @@ export class IglBookPropertyService {
     if (isEditBooking) {
       if (changedKey === 'rate') {
         if (units.has(roomCategoryKey) && units.get(roomCategoryKey).has(ratePlanKey)) {
-          this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name, pr_id, bookingData);
+          this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name);
         }
       } else {
         if (changedKey !== 'rateType') {
           if (changedKey === 'adult_child_offering') {
             if (units.has(roomCategoryKey) && selectedUnits.get(roomCategoryKey).has(ratePlanKey)) {
-              this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name, pr_id, bookingData);
+              this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name);
             }
           } else {
-            this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name, pr_id, bookingData);
+            this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name);
           }
         }
       }
@@ -45,16 +45,9 @@ export class IglBookPropertyService {
       selectedUnits.set(roomCategoryKey, new Map());
     }
   }
-  private getRoomsListFromCategoryId(bookingData, categoryId, pr_id) {
-    let category = bookingData.roomsInfo?.find(category => category.id === +categoryId);
-
-    if (category) {
-      return category.physicalrooms.find(room => room.id === +pr_id);
-    }
-  }
   private setSelectedRoomData(roomCategoryKey: string, ratePlanKey: string, data: any, selectedUnits: Map<string, Map<string, any>>) {
     let selectedRatePlans = selectedUnits.get(roomCategoryKey);
-    if (data.totalRooms === 0) {
+    if (data.totalRooms === 0 || data.inventory === 0) {
       selectedRatePlans.delete(ratePlanKey);
     } else {
       selectedUnits.set(roomCategoryKey, selectedRatePlans.set(ratePlanKey, { ...data, selectedUnits: Array(data.totalRooms).fill(-1) }));
@@ -70,23 +63,11 @@ export class IglBookPropertyService {
     }
   }
 
-  private applyBookingEditToSelectedRoom(
-    roomCategoryKey: string,
-    ratePlanKey: string,
-    data,
-    selectedUnits: Map<string, Map<string, any>>,
-    name: string,
-    pr_id: string,
-    bookingData,
-  ) {
+  private applyBookingEditToSelectedRoom(roomCategoryKey: string, ratePlanKey: string, data, selectedUnits: Map<string, Map<string, any>>, name: string) {
     selectedUnits.clear();
-    const selectedRoom = this.getRoomsListFromCategoryId(bookingData, roomCategoryKey.substring(2, roomCategoryKey.length), pr_id);
-    if (selectedRoom) {
-      data.physicalRooms.push(selectedRoom);
-    }
-    selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, { ...data, guestName: name, roomId: selectedRoom?pr_id:"" }));
+    selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, { ...data, guestName: name, roomId: '' }));
   }
-  prepareBookUserServiceParams(context, check_in): BookUserParams {
+  prepareBookUserServiceParams(context, check_in, sourceOption): BookUserParams {
     const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : '';
     const pr_id = context.isEventType('BAR_BOOKING') ? context.bookingData.PR_ID : undefined;
     const bookingNumber = context.isEventType('EDIT_BOOKING') ? context.bookingData.BOOKING_NUMBER : undefined;
@@ -94,18 +75,18 @@ export class IglBookPropertyService {
     return [
       context.bookedByInfoData,
       check_in,
-      context.bookingData.defaultDateRange.fromDate,
-      context.bookingData.defaultDateRange.toDate,
+      new Date(context.dateRangeData.fromDate),
+      new Date(context.dateRangeData.toDate),
       context.guestData,
       context.dateRangeData.dateDifference,
-      context.sourceOption,
+      sourceOption,
       context.propertyid,
       context.currency,
       bookingNumber,
       context.bookingData.GUEST,
       arrivalTime,
       pr_id,
-      context.bookingData.IDENTIFIER
+      context.bookingData.IDENTIFIER,
     ];
   }
   private getBookingPreferenceRoomId(bookingData) {

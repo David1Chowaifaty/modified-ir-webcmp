@@ -9,7 +9,8 @@ import { getCurrencySymbol } from '../../../utils/utils';
 export class IglBookingRoomRatePlan {
   @Prop({ reflect: true, mutable: true }) defaultData: { [key: string]: any };
   @Prop({ mutable: true }) ratePlanData: { [key: string]: any };
-  @Prop({ reflect: true, mutable: true }) totalAvailableRooms: number;
+  @Prop({ reflect: true }) totalAvailableRooms: number;
+  @Prop() index: number;
   @Prop({ reflect: true, mutable: true }) ratePricingMode = [];
   @Prop({ reflect: true, mutable: true }) currency: any;
   @Prop({ reflect: true }) dateDifference: number;
@@ -29,21 +30,32 @@ export class IglBookingRoomRatePlan {
     return result;
   }
   componentWillLoad() {
+    this.updateSelectedRatePlan(this.ratePlanData);
+  }
+  disableForm() {
+    return this.selectedData.is_closed || this.totalAvailableRooms === 0;
+  }
+  getSelectedOffering(value: any) {
+    return this.ratePlanData.variations.find(variation => variation.adult_child_offering === value);
+  }
+
+  updateSelectedRatePlan(data) {
     this.selectedData = {
-      ratePlanId: this.ratePlanData.id,
-      adult_child_offering: this.ratePlanData.variations[0].adult_child_offering,
+      ratePlanId: data.id,
+      adult_child_offering: data.variations[0].adult_child_offering,
       rateType: 1,
       totalRooms: 0,
-      rate: this.ratePlanData.variations[0].amount,
-      ratePlanName: this.ratePlanData.name,
-      adultCount: this.ratePlanData.variations[0].adult_nbr,
-      childrenCount: this.ratePlanData.variations[0].child_nbr,
-      cancelation: this.ratePlanData.cancelation,
-      guarantee: this.ratePlanData.guarantee,
+      rate: data.variations[0].amount,
+      ratePlanName: data.name,
+      adultCount: data.variations[0].adult_nbr,
+      childrenCount: data.variations[0].child_nbr,
+      cancelation: data.cancelation,
+      guarantee: data.guarantee,
       isRateModified: false,
       defaultSelectedRate: 0,
-      is_closed: this.ratePlanData.is_closed,
-      physicalRooms: this.getAvailableRooms(this.ratePlanData.assignable_units),
+      index: this.index,
+      is_closed: data.is_closed,
+      physicalRooms: this.getAvailableRooms(data.assignable_units),
     };
     if (this.defaultData) {
       for (const [key, value] of Object.entries(this.defaultData)) {
@@ -58,18 +70,13 @@ export class IglBookingRoomRatePlan {
 
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
-  disableForm() {
-    return this.selectedData.is_closed || this.totalAvailableRooms === undefined || this.selectedData.rate === null || this.selectedData.rate === undefined;
-  }
 
-  getSelectedOffering(value: any) {
-    return this.ratePlanData.variations.find(variation => variation.adult_child_offering === value);
-  }
   @Watch('ratePlanData')
-  async ratePlanDataChanged() {
+  async ratePlanDataChanged(newData) {
     this.selectedData = {
       ...this.selectedData,
       rate: this.handleRateDaysUpdate(),
+      physicalRooms: this.getAvailableRooms(newData.assignable_units),
     };
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',

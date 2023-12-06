@@ -13,6 +13,8 @@
 | `currency`            | `currency`              |             | `any`                     | `undefined`      |
 | `dateDifference`      | `date-difference`       |             | `number`                  | `undefined`      |
 | `defaultData`         | --                      |             | `{ [key: string]: any; }` | `undefined`      |
+| `fullyBlocked`        | `fully-blocked`         |             | `boolean`                 | `undefined`      |
+| `index`               | `index`                 |             | `number`                  | `undefined`      |
 | `ratePlanData`        | --                      |             | `{ [key: string]: any; }` | `undefined`      |
 | `ratePricingMode`     | --                      |             | `any[]`                   | `[]`             |
 | `totalAvailableRooms` | `total-available-rooms` |             | `number`                  | `undefined`      |
