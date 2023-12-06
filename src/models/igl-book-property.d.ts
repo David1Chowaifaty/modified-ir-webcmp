@@ -17,5 +17,5 @@ export type BookUserParams = [
 ];
 export type TPropertyButtonsTypes = 'cancel' | 'save' | 'back' | 'book' | 'bookAndCheckIn' | 'next' | 'check';
 export type TSourceOption = { code: string; description: string; tag: string };
-export type TSourceOptions = { id: string; value: string; tag: string };
+export type TSourceOptions = { id: string; value: string; tag: string; type: string };
 export type TAdultChildConstraints = { adult_max_nbr: number | null; child_max_nbr: number | null; child_max_age: number | null };

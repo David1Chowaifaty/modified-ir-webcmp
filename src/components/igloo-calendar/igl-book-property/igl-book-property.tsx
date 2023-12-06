@@ -103,6 +103,7 @@ export class IglBookProperty {
       id: source.code,
       value: source.description,
       tag: source.tag,
+      type: source.type,
     }));
     if (this.isEventType('EDIT_BOOKING')) {
       this.sourceOption = { ...this.defaultData.SOURCE };
