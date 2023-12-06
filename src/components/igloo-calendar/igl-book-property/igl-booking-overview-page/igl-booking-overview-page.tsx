@@ -38,6 +38,7 @@ export class IglBookingOverviewPage {
           adultChildConstraints={this.adultChildConstraints}
           splitBookings={this.getSplitBookings()}
         ></igl-book-property-header>
+        {this.adultChildCount.adult === 0 && <p class={'col text-left'}>Please select the number of guests</p>}
         <div class="col text-left">
           {this.bookingData?.roomsInfo?.map(roomInfo => {
             return (
