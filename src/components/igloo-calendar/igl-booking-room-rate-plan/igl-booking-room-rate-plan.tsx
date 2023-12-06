@@ -7,15 +7,15 @@ import { getCurrencySymbol } from '../../../utils/utils';
   scoped: true,
 })
 export class IglBookingRoomRatePlan {
-  @Prop({ reflect: true, mutable: true }) defaultData: { [key: string]: any };
-  @Prop({ mutable: true }) ratePlanData: { [key: string]: any };
-  @Prop({ reflect: true }) totalAvailableRooms: number;
+  @Prop() defaultData: { [key: string]: any };
+  @Prop() ratePlanData: { [key: string]: any };
+  @Prop() totalAvailableRooms: number;
   @Prop() index: number;
-  @Prop({ reflect: true, mutable: true }) ratePricingMode = [];
-  @Prop({ reflect: true, mutable: true }) currency: any;
-  @Prop({ reflect: true }) dateDifference: number;
-  @Prop({ reflect: true, mutable: true }) bookingType: string = 'PLUS_BOOKING';
-  @Prop({ reflect: true }) fullyBlocked: boolean;
+  @Prop() ratePricingMode = [];
+  @Prop() currency: any;
+  @Prop() dateDifference: number;
+  @Prop() bookingType: string = 'PLUS_BOOKING';
+  @Prop() fullyBlocked: boolean;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
@@ -67,7 +67,7 @@ export class IglBookingRoomRatePlan {
         data: this.selectedData,
       });
     }
-
+    //
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
 
