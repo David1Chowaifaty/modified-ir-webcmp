@@ -54,7 +54,7 @@ export class IglBookPropertyHeader {
   }
   getSourceNode() {
     return (
-      <fieldset class="form-group col-12 text-left">
+      <fieldset class="col-12 text-left">
         <label class="h5">Source </label>
         <div class="btn-group ml-1">
           <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}>
