@@ -163,7 +163,7 @@ export class IglTbaBookingView {
             data-placement="top"
             data-original-title="Click to assign unit"
           >
-            {`Book# ${this.eventData.BOOKING_NUMBER} , ${this.eventData.NAME}`}
+            {`Book# ${this.eventData.BOOKING_NUMBER} - ${this.eventData.NAME}`}
           </div>
           <div class="row m-0 p-0 actionsContainer">
             <div class="d-inline-block p-0 selectContainer">

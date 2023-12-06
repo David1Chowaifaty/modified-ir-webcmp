@@ -90,9 +90,8 @@ export class IglDateRange {
                 this.handleDateChange(evt);
               }}
             ></ir-date-picker>
-
-            {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')}</span> : ''}
           </div>
+          {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')}</span> : ''}
         </div>
       </Host>
     );
