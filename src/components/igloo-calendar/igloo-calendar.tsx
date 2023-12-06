@@ -124,6 +124,13 @@ export class IglooCalendar {
                     ...this.calendarData,
                     bookingEvents: this.calendarData.bookingEvents.filter(e => e.POOL !== result),
                   };
+                } else if(REASON === 'GET_UNASSIGNED_DATES'){                
+                  console.log("first")
+                  if (!this.calendarData.is_vacation_rental && (new Date(result.FROM_DATE).getTime() >= this.calendarData.startingDate && new Date(result.TO_DATE).getTime() <= this.calendarData.endingDate)) {
+                    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, result.FROM_DATE, result.TO_DATE);
+                    this.unassignedDates = { ...this.unassignedDates, ...data };
+                    this.calendarData.unassignedDates = data;
+                  }
                 } else {
                   return;
                 }
