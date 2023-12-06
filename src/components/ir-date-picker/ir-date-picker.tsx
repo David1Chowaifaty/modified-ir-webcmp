@@ -25,6 +25,7 @@ export class IrDatePicker {
   @Prop({ reflect: true }) customRangeLabel: string = 'Custom';
   @Prop({ reflect: true }) weekLabel: string = 'W';
   @Prop({ reflect: true }) disabled: boolean = false;
+  @Prop({ reflect: true }) singleDatePicker = false;
   @Prop({ reflect: true }) maxSpan: moment.DurationInputArg1 = {
     days: 240,
   };
@@ -38,6 +39,7 @@ export class IrDatePicker {
     this.dateRangeInput = this.element.querySelector('.date-range-input');
     $(this.dateRangeInput).daterangepicker(
       {
+        singleDatePicker: this.singleDatePicker,
         opens: this.opens,
         startDate: moment(this.fromDate),
         endDate: moment(this.toDate),

@@ -185,6 +185,7 @@ export class IglCalHeader {
               {/* <input  type="date" onChange={this.handleDateSelect.bind(this)} title="" /> */}
               <ir-date-picker
                 autoApply
+                singleDatePicker
                 onDateChanged={evt => {
                   console.log('evt', evt);
                   this.handleDateSelect(evt);
