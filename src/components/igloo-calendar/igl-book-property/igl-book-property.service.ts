@@ -105,6 +105,7 @@ export class IglBookPropertyService {
       context.bookingData.GUEST,
       arrivalTime,
       pr_id,
+      context.bookingData.IDENTIFIER
     ];
   }
   private getBookingPreferenceRoomId(bookingData) {
