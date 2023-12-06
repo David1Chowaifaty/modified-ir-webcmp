@@ -369,7 +369,7 @@ export class IglBookProperty {
           {this.getCurrentPage('page_one') && (
             <div class="scrollContent">
               <igl-booking-overview-page
-                class={'p-0 mb-1 mt-2'}
+                class={'p-0 mb-1 '}
                 eventType={this.defaultData.event_type}
                 selectedRooms={this.selectedUnits}
                 currency={this.currency}
