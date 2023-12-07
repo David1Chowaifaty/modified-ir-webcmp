@@ -8,9 +8,9 @@
 }
 
 .loader {
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 3.5px solid #3f3f3f;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2.5px solid #3f3f3f;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
@@ -38,7 +38,7 @@
   justify-content: center;
   gap: 20px;
   border-radius: 5px;
-  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  /* box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px; */
 }
 @keyframes rotation {
   0% {

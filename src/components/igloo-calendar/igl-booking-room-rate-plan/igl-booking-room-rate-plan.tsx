@@ -20,6 +20,7 @@ export class IglBookingRoomRatePlan {
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
   private initialRateValue: number = 0;
+  private bookingTypes =[ 'BAR_BOOKING' ,'SPLIT_BOOKING', 'EDIT_BOOKING']
   getAvailableRooms(assignable_units: any[]) {
     let result = [];
     assignable_units.forEach(unit => {
@@ -183,15 +184,17 @@ export class IglBookingRoomRatePlan {
   render() {
     return (
       <Host>
-        <div class="row m-0 p-0">
-          <div class="col-md-6 col-sm-12 p-0 align-self-center">
+        <div class="d-flex flex-column mt-2 m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
+          <div class=" rateplan-name-container">
             <span>{this.ratePlanData.name}</span>
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
           </div>
-          <div class="col-md-6 col-sm-12 row pr-0">
-            <div class="col-4">
+
+          
+          <div class={"d-md-flex justify-content-md-end align-items-md-center pr-0  flex-fill rateplan-container" }>
+            <div class="mt-1 mt-lg-0 flex-fill max-w-300  ">
               <fieldset class="position-relative">
-                <select disabled={this.disableForm()} class="form-control input-sm" id={v4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
+                <select disabled={this.disableForm()} class="form-control  input-sm" id={v4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
                   {this.ratePlanData.variations.map(variation => (
                     <option value={variation.adult_child_offering} selected={this.selectedData.adult_child_offering === variation.adult_child_offering}>
                       {variation.adult_child_offering}
@@ -200,8 +203,9 @@ export class IglBookingRoomRatePlan {
                 </select>
               </fieldset>
             </div>
-            <div class="row col-6 m-0 p-0">
-              <fieldset class="position-relative has-icon-left col-6 m-0 p-0 rate-input-container">
+            <div class={"m-0 p-0 d-md-flex justify-content-between ml-md-1 "}>
+            <div class=" d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   ">
+              <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
                 <input
                   disabled={this.disableForm()}
                   type="text"
@@ -213,8 +217,8 @@ export class IglBookingRoomRatePlan {
                 />
                 <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
               </fieldset>
-              <fieldset class="position-relative m-0 p-0">
-                <select disabled={this.disableForm()} class="form-control input-sm m-0 px-2 py-0" id={v4()} onChange={evt => this.handleDataChange('rateType', evt)}>
+              <fieldset class="position-relative m-0 total-nights-container p-0">
+                <select disabled={this.disableForm()} class="form-control input-sm m-0  py-0" id={v4()} onChange={evt => this.handleDataChange('rateType', evt)}>
                   {this.ratePricingMode.map(data => (
                     <option value={data.CODE_NAME} selected={this.selectedData.rateType === +data.CODE_NAME}>
                       {data.CODE_VALUE_EN}
@@ -225,7 +229,7 @@ export class IglBookingRoomRatePlan {
             </div>
 
             {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (
-              <div class="col-2 m-0 p-0">
+              <div class="flex-lg-fill  mt-lg-0 ml-md-2 m-0 mt-1 p-0">
                 <fieldset class="position-relative">
                   <select
                     disabled={this.selectedData.rate === 0 || this.disableForm()}
@@ -242,9 +246,10 @@ export class IglBookingRoomRatePlan {
                 </fieldset>
               </div>
             ) : null}
+            </div>
 
             {this.bookingType === 'EDIT_BOOKING' ? (
-              <div class="col-2 m-0 p-0 align-self-center">
+              <div class=" m-0 p-0  mt-lg-0  ml-md-1 mt-md-1">
                 <fieldset class="position-relative">
                   <input
                     disabled={this.disableForm()}
@@ -259,7 +264,7 @@ export class IglBookingRoomRatePlan {
             ) : null}
 
             {this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (
-              <button disabled={this.selectedData.rate === 0 || this.disableForm()} type="button" class="btn mb-1 btn-primary btn-sm" onClick={() => this.bookProperty()}>
+              <button disabled={this.selectedData.rate === 0 || this.disableForm()} type="button" class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 " onClick={() => this.bookProperty()}>
                 Book
               </button>
             ) : null}

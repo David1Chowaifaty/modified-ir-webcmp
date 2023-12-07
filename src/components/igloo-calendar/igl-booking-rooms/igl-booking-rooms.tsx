@@ -125,7 +125,7 @@ export class IglBookingRooms {
                 index={index}
                 key={`rate-plan-${ratePlan.id}`}
                 ratePricingMode={this.ratePricingMode}
-                class={isValidBookingType ? 'ml-1' : ''}
+                class={isValidBookingType ? '' : ''}
                 currency={this.currency}
                 dateDifference={this.dateDifference}
                 ratePlanData={ratePlan}

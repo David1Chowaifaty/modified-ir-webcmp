@@ -115,7 +115,7 @@ export class IglBookPropertyHeader {
             </div>
           </fieldset>
         )}
-        <button disabled={this.adultChildCount.adult === 0} class={'btn btn-primary ml-2 '} onClick={() => this.buttonClicked.emit({ key: 'check' })}>
+        <button disabled={this.adultChildCount.adult === 0} class={'btn btn-primary btn-sm ml-2 '} onClick={() => this.buttonClicked.emit({ key: 'check' })}>
           Check
         </button>
       </div>
@@ -131,7 +131,7 @@ export class IglBookPropertyHeader {
       <Host>
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
         <div class={'d-md-flex align-items-center'}>
-          <fieldset class="form-group row">
+          <fieldset class="form-group row mt-1 mt-sm-0">
             <igl-date-range disabled={this.isEventType('BAR_BOOKING')} defaultData={this.bookingDataDefaultDateRange}></igl-date-range>
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
