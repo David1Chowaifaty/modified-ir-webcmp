@@ -1,4 +1,5 @@
 import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@stencil/core';
+import { getCurrencySymbol } from '../../../utils/utils';
 
 @Component({
   tag: 'igl-cal-body',
@@ -242,7 +243,7 @@ export class IglCalBody {
           <span>
             {dayInfo.rate[index].inventory}
             <br />
-            <u>$ {dayInfo.rate[index].rate}</u>
+           {dayInfo.rate[index].rate && <u>{getCurrencySymbol(this.currency.code)} {dayInfo.rate[index].rate}</u>}
           </span>
         ) : (
           ''
