@@ -20,7 +20,6 @@ export class IglBookingRoomRatePlan {
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
   private initialRateValue: number = 0;
-  private bookingTypes =[ 'BAR_BOOKING' ,'SPLIT_BOOKING', 'EDIT_BOOKING']
   getAvailableRooms(assignable_units: any[]) {
     let result = [];
     assignable_units.forEach(unit => {
