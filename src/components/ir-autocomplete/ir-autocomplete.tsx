@@ -69,15 +69,12 @@ export class IrAutocomplete {
       const margin = 2;
       const itemTotalHeight = itemHeight + margin;
       const selectedPosition = itemTotalHeight * this.selectedIndex;
-      const currentScrollTop = combobox.scrollTop;
-      const currentBottom = currentScrollTop + visibleHeight;
-      let newScrollTop = currentScrollTop;
-      if (selectedPosition < currentScrollTop) {
-        newScrollTop = selectedPosition;
-      } else if (selectedPosition + itemHeight > currentBottom) {
-        newScrollTop = selectedPosition + itemHeight - visibleHeight;
-      }
-      combobox.scrollTop = newScrollTop;
+      let newScrollTop = selectedPosition - visibleHeight / 2 + itemHeight / 2;
+      newScrollTop = Math.max(0, Math.min(newScrollTop, combobox.scrollHeight - visibleHeight));
+      combobox.scrollTo({
+        top: newScrollTop,
+        behavior: 'smooth',
+      });
     }
   }
 
