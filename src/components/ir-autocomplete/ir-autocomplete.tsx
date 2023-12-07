@@ -1,4 +1,5 @@
 import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element } from '@stencil/core';
+import axios from 'axios';
 import { v4 } from 'uuid';
 
 @Component({
@@ -18,10 +19,7 @@ export class IrAutocomplete {
   @State() inputValue: string = '';
   @State() data: any[] = [];
   @State() selectedIndex: number = -1;
-  @State() isLoading: boolean = false;
-  @State() isError: boolean = false;
   @State() isComboBoxVisible: boolean = false;
-
   @Event({ bubbles: true, composed: true }) comboboxValue: EventEmitter<string>;
   @Element() el: HTMLElement;
   private inputRef: HTMLInputElement;
@@ -74,23 +72,15 @@ export class IrAutocomplete {
     }, this.duration);
   }
 
-  fetchData() {
-    this.isLoading = true;
-    this.isError = false;
-    fetch(`https://jsonplaceholder.typicode.com/users/${this.inputValue}`)
-      .then(response => response.json())
-      .then(user => {
-        if (!this.data.some(d => d.email === user.email)) {
-          this.data = [...this.data, user];
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        this.isError = true;
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });
+  async fetchData() {
+    try {
+      const { data } = await axios(`https://jsonplaceholder.typicode.com/users/${this.inputValue}`);
+      if (data) {
+        this.data = [...this.data, data];
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
   }
 
   handleInputChange(event: Event) {
