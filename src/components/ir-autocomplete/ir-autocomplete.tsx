@@ -27,15 +27,18 @@ export class IrAutocomplete {
 
   handleKeyDown(event: KeyboardEvent) {
     const dataSize = this.data.length;
+    const itemHeight = this.getHeightOfPElement();
     if (dataSize > 0) {
       switch (event.key) {
         case 'ArrowUp':
           event.preventDefault();
           this.selectedIndex = (this.selectedIndex - 1 + dataSize) % dataSize;
+          this.adjustScrollPosition(itemHeight);
           break;
         case 'ArrowDown':
           event.preventDefault();
           this.selectedIndex = (this.selectedIndex + 1) % dataSize;
+          this.adjustScrollPosition(itemHeight);
           break;
         case 'Enter':
         case ' ':
@@ -47,6 +50,34 @@ export class IrAutocomplete {
           this.inputRef?.blur();
           this.isComboBoxVisible = false;
           break;
+      }
+    }
+  }
+  getHeightOfPElement() {
+    const combobox = this.el.querySelector('.combobox');
+    const pItem = combobox.querySelector('p');
+    return pItem ? pItem.offsetHeight : 0;
+  }
+  adjustScrollPosition(itemHeight, visibleHeight = 250) {
+    const combobox = this.el.querySelector('.combobox');
+    if (combobox) {
+      const margin = 2;
+      const dataSize = this.data.length;
+      const itemTotalHeight = itemHeight + margin;
+      const totalContentHeight = itemTotalHeight * dataSize - margin;
+      const scrollTop = combobox.scrollTop;
+      const selectedPosition = itemTotalHeight * this.selectedIndex;
+
+      if (selectedPosition < scrollTop || selectedPosition + itemHeight > scrollTop + visibleHeight) {
+        let newScrollTop;
+        if (this.selectedIndex >= dataSize - 8) {
+          console.log('object');
+          newScrollTop = totalContentHeight - visibleHeight / 2 + margin;
+        } else {
+          newScrollTop = selectedPosition - visibleHeight / 2 + itemHeight / 2;
+        }
+        newScrollTop = Math.max(0, Math.min(newScrollTop, totalContentHeight - visibleHeight));
+        combobox.scrollTop = newScrollTop;
       }
     }
   }
@@ -89,6 +120,7 @@ export class IrAutocomplete {
       this.debounceFetchData();
     } else {
       clearTimeout(this.debounceTimer);
+      this.resetCombobox();
     }
   }
 

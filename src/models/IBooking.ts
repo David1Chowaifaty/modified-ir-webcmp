@@ -46,7 +46,8 @@ export type bookingReasons =
   | 'ASSIGN_EXPOSED_ROOM'
   | 'REALLOCATE_EXPOSED_ROOM_BOOK'
   | 'UNBLOCK_EXPOSED_UNIT'
-  | 'DELETE_CALENDAR_POOL';
+  | 'DELETE_CALENDAR_POOL'
+  | 'GET_UNASSIGNED_DATES';
 export interface ICountry {
   cities: string[];
   id: number;
