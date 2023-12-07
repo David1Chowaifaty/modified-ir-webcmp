@@ -73,7 +73,7 @@ export class IrAutocomplete {
       newScrollTop = Math.max(0, Math.min(newScrollTop, combobox.scrollHeight - visibleHeight));
       combobox.scrollTo({
         top: newScrollTop,
-        behavior: 'smooth',
+        behavior: 'auto',
       });
     }
   }
