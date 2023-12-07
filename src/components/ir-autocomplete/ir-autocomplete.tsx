@@ -105,7 +105,9 @@ export class IrAutocomplete {
       const data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
       if (data) {
         this.data = data;
-        console.log(data);
+        if (!this.isComboBoxVisible) {
+          this.isComboBoxVisible = true;
+        }
       }
     } catch (error) {
       console.log('error', error);
@@ -194,6 +196,9 @@ export class IrAutocomplete {
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
   }
+  // handleKeyUp(event:KeyboardEvent) {
+
+  // }
   render() {
     return (
       <Host>
@@ -202,6 +207,7 @@ export class IrAutocomplete {
             required={this.required}
             disabled={this.disabled}
             id={this.inputId}
+            //onKeyUp={this.handleKeyUp.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}
             class={'form-control input-sm flex-full'}
             type={this.type}
