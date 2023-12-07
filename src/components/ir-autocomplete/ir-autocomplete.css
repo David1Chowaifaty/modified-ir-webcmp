@@ -42,6 +42,7 @@ button {
 .combobox p:hover {
   background: #f4f5fa;
 }
+
 .combobox p[data-selected],
 .combobox p[data-selected]:hover {
   color: #fff;

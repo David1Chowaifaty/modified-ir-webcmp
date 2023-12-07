@@ -1,6 +1,6 @@
 import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element } from '@stencil/core';
-import axios from 'axios';
 import { v4 } from 'uuid';
+import { BookingService } from '../../services/booking.service';
 
 @Component({
   tag: 'ir-autocomplete',
@@ -10,6 +10,7 @@ import { v4 } from 'uuid';
 export class IrAutocomplete {
   @Prop() duration: number = 300;
   @Prop() placeholder: string = '';
+  @Prop() propertyId: number;
   @Prop() type: 'email' | 'text' | 'password' | 'number' | 'search' = 'text';
   @Prop() name: string = '';
   @Prop() inputId: string = v4();
@@ -20,11 +21,12 @@ export class IrAutocomplete {
   @State() data: any[] = [];
   @State() selectedIndex: number = -1;
   @State() isComboBoxVisible: boolean = false;
-  @Event({ bubbles: true, composed: true }) comboboxValue: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true }) comboboxValue: EventEmitter<{ key: string; data: unknown }>;
+  @State() isItemSelected: boolean;
   @Element() el: HTMLElement;
   private inputRef: HTMLInputElement;
   private debounceTimer: any;
-
+  private bookingService = new BookingService();
   handleKeyDown(event: KeyboardEvent) {
     const dataSize = this.data.length;
     const itemHeight = this.getHeightOfPElement();
@@ -55,30 +57,27 @@ export class IrAutocomplete {
   }
   getHeightOfPElement() {
     const combobox = this.el.querySelector('.combobox');
-    const pItem = combobox.querySelector('p');
-    return pItem ? pItem.offsetHeight : 0;
+    if (combobox) {
+      const pItem = combobox.querySelector('p');
+      return pItem ? pItem.offsetHeight : 0;
+    }
+    return 0;
   }
   adjustScrollPosition(itemHeight, visibleHeight = 250) {
     const combobox = this.el.querySelector('.combobox');
     if (combobox) {
       const margin = 2;
-      const dataSize = this.data.length;
       const itemTotalHeight = itemHeight + margin;
-      const totalContentHeight = itemTotalHeight * dataSize - margin;
-      const scrollTop = combobox.scrollTop;
       const selectedPosition = itemTotalHeight * this.selectedIndex;
-
-      if (selectedPosition < scrollTop || selectedPosition + itemHeight > scrollTop + visibleHeight) {
-        let newScrollTop;
-        if (this.selectedIndex >= dataSize - 8) {
-          console.log('object');
-          newScrollTop = totalContentHeight - visibleHeight / 2 + margin;
-        } else {
-          newScrollTop = selectedPosition - visibleHeight / 2 + itemHeight / 2;
-        }
-        newScrollTop = Math.max(0, Math.min(newScrollTop, totalContentHeight - visibleHeight));
-        combobox.scrollTop = newScrollTop;
+      const currentScrollTop = combobox.scrollTop;
+      const currentBottom = currentScrollTop + visibleHeight;
+      let newScrollTop = currentScrollTop;
+      if (selectedPosition < currentScrollTop) {
+        newScrollTop = selectedPosition;
+      } else if (selectedPosition + itemHeight > currentBottom) {
+        newScrollTop = selectedPosition + itemHeight - visibleHeight;
       }
+      combobox.scrollTop = newScrollTop;
     }
   }
 
@@ -90,8 +89,9 @@ export class IrAutocomplete {
 
   selectItem(index) {
     if (this.data[index]) {
-      this.inputValue = this.data[index].email;
-      this.comboboxValue.emit(this.inputValue);
+      this.isItemSelected = true;
+      this.comboboxValue.emit({ key: 'select', data: this.data[index] });
+      this.inputValue = '';
       this.resetCombobox();
     }
   }
@@ -105,9 +105,10 @@ export class IrAutocomplete {
 
   async fetchData() {
     try {
-      const { data } = await axios(`https://jsonplaceholder.typicode.com/users/${this.inputValue}`);
+      const data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
       if (data) {
-        this.data = [...this.data, data];
+        this.data = data;
+        console.log(data);
       }
     } catch (error) {
       console.log('error', error);
@@ -120,7 +121,7 @@ export class IrAutocomplete {
       this.debounceFetchData();
     } else {
       clearTimeout(this.debounceTimer);
-      this.resetCombobox();
+      this.resetCombobox(false);
     }
   }
 
@@ -132,7 +133,21 @@ export class IrAutocomplete {
     }
   }
   handleBlur() {
-    this.comboboxValue.emit(this.inputValue);
+    setTimeout(() => {
+      if (this.isDropdownItem(document.activeElement)) {
+        return;
+      }
+      if (!this.isItemSelected) {
+        this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
+        this.inputValue = '';
+        this.resetCombobox();
+      } else {
+        this.isItemSelected = false;
+      }
+    }, 200);
+  }
+  isDropdownItem(element) {
+    return element && element.closest('.combobox');
   }
 
   disconnectedCallback() {
@@ -160,7 +175,7 @@ export class IrAutocomplete {
         <div class="position-absolute border rounded border-light combobox">
           {this.data.map((d, index) => (
             <p role="button" onKeyDown={e => this.handleItemKeyDown(e, index)} data-selected={this.selectedIndex === index} tabIndex={0} onClick={() => this.selectItem(index)}>
-              {d.email}
+              {`${d.email} - ${d.first_name} ${d.last_name}`}
             </p>
           ))}
         </div>
@@ -174,8 +189,10 @@ export class IrAutocomplete {
     this.inputValue = '';
     this.resetCombobox();
   }
-  resetCombobox() {
-    this.inputRef?.blur();
+  resetCombobox(withblur: boolean = true) {
+    if (withblur) {
+      this.inputRef?.blur();
+    }
     this.data = [];
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;

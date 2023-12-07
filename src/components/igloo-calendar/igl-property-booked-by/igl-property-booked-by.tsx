@@ -14,6 +14,7 @@ export class IglPropertyBookedBy {
   @Prop() defaultData: { [key: string]: any };
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() countryNodeList: ICountry[] = [];
+  @Prop() propertyId: number;
   private bookingService: BookingService = new BookingService();
   private arrivalTimeList: IEntries[] = [];
   private expiryMonths: string[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -31,7 +32,7 @@ export class IglPropertyBookedBy {
       code: '',
       description: '',
     },
-    emailGuest: false,
+    emailGuest: true,
     message: '',
     cardNumber: '',
     cardHolderName: '',
@@ -161,6 +162,36 @@ export class IglPropertyBookedBy {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailPattern.test(emailId);
   }
+  handleComboboxChange(e: CustomEvent) {
+    const { key, data } = e.detail;
+    console.log(key, data);
+    switch (key) {
+      case 'blur':
+        if (data !== '') {
+          this.bookedByData.email = data;
+          this.checkUser();
+        }
+        break;
+      case 'select':
+        this.bookedByData.email = data.email;
+        this.bookedByData = {
+          ...this.bookedByData,
+          id: data.id,
+          firstName: data.first_name,
+          lastName: data.last_name,
+          contactNumber: data.mobile,
+          countryId: data.country_id,
+          isdCode: data.country_id.toString(),
+        };
+        this.dataUpdateEvent.emit({
+          key: 'bookedByInfoUpdated',
+          data: { ...this.bookedByData },
+        });
+        break;
+      default:
+        break;
+    }
+  }
 
   render() {
     return (
@@ -180,7 +211,14 @@ export class IglPropertyBookedBy {
                 required
                 onBlur={() => this.checkUser()}
               /> */}
-              <ir-autocomplete type="email" value={this.bookedByData.email} required placeholder="Email address"></ir-autocomplete>
+              <ir-autocomplete
+                onComboboxValue={this.handleComboboxChange.bind(this)}
+                propertyId={this.propertyId}
+                type="email"
+                value={this.bookedByData.email}
+                required
+                placeholder="Email address"
+              ></ir-autocomplete>
             </div>
           </div>
         </div>
