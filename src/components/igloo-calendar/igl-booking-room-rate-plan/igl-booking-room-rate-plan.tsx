@@ -7,15 +7,15 @@ import { getCurrencySymbol } from '../../../utils/utils';
   scoped: true,
 })
 export class IglBookingRoomRatePlan {
-  @Prop({ reflect: true, mutable: true }) defaultData: { [key: string]: any };
-  @Prop({ mutable: true }) ratePlanData: { [key: string]: any };
-  @Prop({ reflect: true }) totalAvailableRooms: number;
+  @Prop() defaultData: { [key: string]: any };
+  @Prop() ratePlanData: { [key: string]: any };
+  @Prop() totalAvailableRooms: number;
   @Prop() index: number;
-  @Prop({ reflect: true, mutable: true }) ratePricingMode = [];
-  @Prop({ reflect: true, mutable: true }) currency: any;
-  @Prop({ reflect: true }) dateDifference: number;
-  @Prop({ reflect: true, mutable: true }) bookingType: string = 'PLUS_BOOKING';
-  @Prop({ reflect: true }) fullyBlocked: boolean;
+  @Prop() ratePricingMode = [];
+  @Prop() currency: any;
+  @Prop() dateDifference: number;
+  @Prop() bookingType: string = 'PLUS_BOOKING';
+  @Prop() fullyBlocked: boolean;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
@@ -42,13 +42,13 @@ export class IglBookingRoomRatePlan {
   updateSelectedRatePlan(data) {
     this.selectedData = {
       ratePlanId: data.id,
-      adult_child_offering: data.variations[0].adult_child_offering,
+      adult_child_offering: data.variations[data.variations.length - 1].adult_child_offering,
       rateType: 1,
       totalRooms: 0,
-      rate: data.variations[0].amount,
+      rate: data.variations[data.variations.length - 1].amount,
       ratePlanName: data.name,
-      adultCount: data.variations[0].adult_nbr,
-      childrenCount: data.variations[0].child_nbr,
+      adultCount: data.variations[data.variations.length - 1].adult_nbr,
+      childrenCount: data.variations[data.variations.length - 1].child_nbr,
       cancelation: data.cancelation,
       guarantee: data.guarantee,
       isRateModified: false,
@@ -67,7 +67,7 @@ export class IglBookingRoomRatePlan {
         data: this.selectedData,
       });
     }
-
+    //
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
 
@@ -201,20 +201,20 @@ export class IglBookingRoomRatePlan {
               </fieldset>
             </div>
             <div class="row col-6 m-0 p-0">
-              <fieldset class="position-relative has-icon-left col-6 m-0 p-0">
+              <fieldset class="position-relative has-icon-left col-6 m-0 p-0 rate-input-container">
                 <input
                   disabled={this.disableForm()}
                   type="text"
-                  class="form-control input-sm"
+                  class="form-control input-sm rate-input py-0 m-0"
                   value={this.renderRate()}
                   id={v4()}
                   placeholder="Rate"
                   onInput={(event: InputEvent) => this.handleInput(event)}
                 />
-                <span class="form-control-position">{getCurrencySymbol(this.currency.code)}</span>
+                <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
               </fieldset>
               <fieldset class="position-relative m-0 p-0">
-                <select disabled={this.disableForm()} class="form-control input-sm" id={v4()} onChange={evt => this.handleDataChange('rateType', evt)}>
+                <select disabled={this.disableForm()} class="form-control input-sm m-0 px-2 py-0" id={v4()} onChange={evt => this.handleDataChange('rateType', evt)}>
                   {this.ratePricingMode.map(data => (
                     <option value={data.CODE_NAME} selected={this.selectedData.rateType === +data.CODE_NAME}>
                       {data.CODE_VALUE_EN}

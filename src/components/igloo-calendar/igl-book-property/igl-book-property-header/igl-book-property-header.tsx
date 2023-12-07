@@ -7,14 +7,14 @@ import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOp
   scoped: true,
 })
 export class IglBookPropertyHeader {
-  @Prop({ reflect: true }) splitBookingId: any = '';
-  @Prop({ reflect: true }) bookingData: any = '';
-  @Prop({ reflect: true }) sourceOptions: TSourceOptions[] = [];
-  @Prop({ reflect: true }) message: string;
-  @Prop({ reflect: true, mutable: true }) bookingDataDefaultDateRange: { [key: string]: any };
-  @Prop({ reflect: true }) showSplitBookingOption: boolean = false;
-  @Prop({ reflect: true }) adultChildConstraints: TAdultChildConstraints;
-  @Prop({ reflect: true }) splitBookings: any[];
+  @Prop() splitBookingId: any = '';
+  @Prop() bookingData: any = '';
+  @Prop() sourceOptions: TSourceOptions[] = [];
+  @Prop() message: string;
+  @Prop() bookingDataDefaultDateRange: { [key: string]: any };
+  @Prop() showSplitBookingOption: boolean = false;
+  @Prop() adultChildConstraints: TAdultChildConstraints;
+  @Prop() splitBookings: any[];
   @Prop() adultChildCount: { adult: number; child: number };
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
@@ -54,15 +54,20 @@ export class IglBookPropertyHeader {
   }
   getSourceNode() {
     return (
-      <fieldset class=" col-12 text-left">
+      <fieldset class="col-12 text-left">
         <label class="h5">Source </label>
         <div class="btn-group ml-1">
           <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}>
-            {this.sourceOptions.map(option => (
-              <option value={option.id} selected={this.sourceOption.code === option.id}>
-                {option.value}
-              </option>
-            ))}
+            {this.sourceOptions.map(option => {
+              if (option.type === 'LABEL') {
+                return <optgroup label={option.value}></optgroup>;
+              }
+              return (
+                <option value={option.id} selected={this.sourceOption.code === option.id}>
+                  {option.value}
+                </option>
+              );
+            })}
           </select>
         </div>
       </fieldset>
@@ -91,7 +96,7 @@ export class IglBookPropertyHeader {
         <fieldset>
           <div class="btn-group ml-1">
             <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
-              <option value={''}>Ad...</option>
+              <option value="">Ad..</option>
               {Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (
                 <option value={option}>{option}</option>
               ))}

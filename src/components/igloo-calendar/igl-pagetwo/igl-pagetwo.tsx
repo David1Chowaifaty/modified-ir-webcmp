@@ -138,9 +138,11 @@ export class IglPagetwo {
             </span>
             {this.dateRangeData.dateDifference} nights
           </div>
-          {this.guestData.length>1&&<div class="col-6 text-right">
-            Total price <span class="font-weight-bold font-medium-1">{'$' + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
-          </div>}
+          {this.guestData.length > 1 && (
+            <div class="col-6 text-right">
+              Total price <span class="font-weight-bold font-medium-1">{'$' + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
+            </div>
+          )}
         </div>
 
         {this.guestData.map((roomInfo, index) => {

@@ -6,10 +6,10 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@st
   scoped: true,
 })
 export class IglBookingRooms {
-  @Prop({ reflect: true, mutable: true }) roomTypeData: { [key: string]: any };
+  @Prop() roomTypeData: { [key: string]: any };
   @Prop() defaultData: Map<string, any>;
   @Prop() bookingType = 'PLUS_BOOKING';
-  @Prop({ reflect: true }) dateDifference: number;
+  @Prop() dateDifference: number;
   @Prop() ratePricingMode = [];
   @Prop() currency;
   @State() selectedRooms: number[] = [];

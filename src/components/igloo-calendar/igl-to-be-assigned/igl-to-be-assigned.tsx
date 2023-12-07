@@ -259,7 +259,7 @@ export class IglToBeAssigned {
                       </div>
                       <div class="dropdown-menu dropdown-menu-right full-width" aria-labelledby="dropdownMenuButton">
                         {this.orderedDatesList?.map(ordDate => (
-                          <div class="pointer dropdown-item pointer" onClick={() => this.showForDate(ordDate)}>
+                          <div class="dropdown-item pointer" onClick={() => this.showForDate(ordDate)}>
                             {this.data[ordDate].dateStr}
                           </div>
                         ))}

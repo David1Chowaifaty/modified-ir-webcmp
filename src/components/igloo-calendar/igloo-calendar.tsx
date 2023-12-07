@@ -104,7 +104,7 @@ export class IglooCalendar {
               const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
               if (KEY.toString() === this.propertyid.toString()) {
                 let result: any;
-                if (REASON === 'DELETE_CALENDAR_POOL') {
+                if (REASON === 'DELETE_CALENDAR_POOL' || REASON === 'GET_UNASSIGNED_DATES') {
                   result = PAYLOAD;
                 } else {
                   result = JSON.parse(PAYLOAD);
@@ -124,13 +124,34 @@ export class IglooCalendar {
                     ...this.calendarData,
                     bookingEvents: this.calendarData.bookingEvents.filter(e => e.POOL !== result),
                   };
-                } else if(REASON === 'GET_UNASSIGNED_DATES'){                
-                  if (!this.calendarData.is_vacation_rental && (new Date(result.FROM_DATE).getTime() >= this.calendarData.startingDate && new Date(result.TO_DATE).getTime() <= this.calendarData.endingDate)) {
-                    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(result.FROM_DATE), dateToFormattedString(result.TO_DATE));
+                } else if (REASON === 'GET_UNASSIGNED_DATES') {
+                  function parseDateRange(str: string): Record<string, string> {
+                    const result: Record<string, string> = {};
+                    const pairs = str.split('|');
+
+                    pairs.forEach(pair => {
+                      const res = pair.split(':');
+                      result[res[0]] = res[1];
+                    });
+                    return result;
+                  }
+                  const parsedResult = parseDateRange(result);
+                  if (
+                    !this.calendarData.is_vacation_rental &&
+                    new Date(parsedResult.FROM_DATE).getTime() >= this.calendarData.startingDate &&
+                    new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate
+                  ) {
+                    const data = await this.toBeAssignedService.getUnassignedDates(
+                      this.propertyid,
+                      dateToFormattedString(new Date(parsedResult.FROM_DATE)),
+                      dateToFormattedString(new Date(parsedResult.TO_DATE)),
+                    );
                     this.unassignedDates = { ...this.unassignedDates, ...data };
                     this.calendarData.unassignedDates = data;
-                    console.log(this.propertyid, dateToFormattedString(result.FROM_DATE), dateToFormattedString(result.TO_DATE))
+                    console.log(this.propertyid, dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   }
+
+                  //FROM_DATE:2023-12-08|TO_DATE:2023-12-11
                 } else {
                   return;
                 }
@@ -300,7 +321,7 @@ export class IglooCalendar {
     event.stopImmediatePropagation();
     let bookings = [...this.calendarData.bookingEvents];
     bookings = bookings.filter(bookingEvent => bookingEvent.ID !== 'NEW_TEMP_EVENT');
-    bookings.push(...event.detail);
+    bookings.push(...event.detail.filter(ev => ev.STATUS === 'PENDING-CONFIRMATION'));
     this.updateBookingEventsDateRange(event.detail);
     this.calendarData = {
       ...this.calendarData,

@@ -243,7 +243,7 @@ export class IglCalBody {
           <span>
             {dayInfo.rate[index].inventory}
             <br />
-           {dayInfo.rate[index].rate && <u>{getCurrencySymbol(this.currency.code)} {dayInfo.rate[index].rate}</u>}
+            {dayInfo.rate[index].rate && <u>{getCurrencySymbol(this.currency.code)} {dayInfo.rate[index].rate}</u>}
           </span>
         ) : (
           ''

@@ -104,6 +104,7 @@ export class IglBookProperty {
       id: source.code,
       value: source.description,
       tag: source.tag,
+      type: source.type,
     }));
     if (this.isEventType('EDIT_BOOKING')) {
       this.sourceOption = { ...this.defaultData.SOURCE };
@@ -369,7 +370,7 @@ export class IglBookProperty {
           {this.getCurrentPage('page_one') && (
             <div class="scrollContent">
               <igl-booking-overview-page
-                class={'p-0 mb-1 '}
+                class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}
                 selectedRooms={this.selectedUnits}
                 currency={this.currency}

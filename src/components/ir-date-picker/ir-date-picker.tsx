@@ -8,25 +8,25 @@ import moment from 'moment';
 })
 export class IrDatePicker {
   @Element() private element: HTMLElement;
-  @Prop({ reflect: true }) fromDate: Date;
-  @Prop({ reflect: true }) toDate: Date;
+  @Prop() fromDate: Date;
+  @Prop() toDate: Date;
 
-  @Prop({ reflect: true }) opens: 'left' | 'right' | 'center';
-  @Prop({ reflect: true }) autoApply: boolean;
-  @Prop({ reflect: true }) firstDay: number = 1;
-  @Prop({ reflect: true }) monthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  @Prop({ reflect: true }) daysOfWeek: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-  @Prop({ reflect: true }) format: string = 'MMM DD,YYYY';
-  @Prop({ reflect: true }) separator: string = '-';
-  @Prop({ reflect: true }) applyLabel: string = 'Apply';
-  @Prop({ reflect: true }) cancelLabel: string = 'Cancel';
-  @Prop({ reflect: true }) fromLabel: string = 'Form';
-  @Prop({ reflect: true }) toLabel: string = 'To';
-  @Prop({ reflect: true }) customRangeLabel: string = 'Custom';
-  @Prop({ reflect: true }) weekLabel: string = 'W';
-  @Prop({ reflect: true }) disabled: boolean = false;
-  @Prop({ reflect: true }) singleDatePicker = false;
-  @Prop({ reflect: true }) maxSpan: moment.DurationInputArg1 = {
+  @Prop() opens: 'left' | 'right' | 'center';
+  @Prop() autoApply: boolean;
+  @Prop() firstDay: number = 1;
+  @Prop() monthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  @Prop() daysOfWeek: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  @Prop() format: string = 'MMM DD,YYYY';
+  @Prop() separator: string = '-';
+  @Prop() applyLabel: string = 'Apply';
+  @Prop() cancelLabel: string = 'Cancel';
+  @Prop() fromLabel: string = 'Form';
+  @Prop() toLabel: string = 'To';
+  @Prop() customRangeLabel: string = 'Custom';
+  @Prop() weekLabel: string = 'W';
+  @Prop() disabled: boolean = false;
+  @Prop() singleDatePicker = false;
+  @Prop() maxSpan: moment.DurationInputArg1 = {
     days: 240,
   };
 
