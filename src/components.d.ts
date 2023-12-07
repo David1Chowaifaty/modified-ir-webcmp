@@ -188,6 +188,16 @@ export namespace Components {
         "ticket": string;
         "to_date": string;
     }
+    interface IrAutocomplete {
+        "disabled": boolean;
+        "duration": number;
+        "inputId": string;
+        "name": string;
+        "placeholder": string;
+        "required": boolean;
+        "type": 'email' | 'text' | 'password' | 'number' | 'search';
+        "value": string;
+    }
     interface IrBookingDetails {
         "baseurl": string;
         "bookingDetails": any;
@@ -539,6 +549,10 @@ export interface IglToBeAssignedCustomEvent<T> extends CustomEvent<T> {
 export interface IglooCalendarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglooCalendarElement;
+}
+export interface IrAutocompleteCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrAutocompleteElement;
 }
 export interface IrBookingDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1018,6 +1032,23 @@ declare global {
         prototype: HTMLIglooCalendarElement;
         new (): HTMLIglooCalendarElement;
     };
+    interface HTMLIrAutocompleteElementEventMap {
+        "comboboxValue": string;
+    }
+    interface HTMLIrAutocompleteElement extends Components.IrAutocomplete, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrAutocompleteElementEventMap>(type: K, listener: (this: HTMLIrAutocompleteElement, ev: IrAutocompleteCustomEvent<HTMLIrAutocompleteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrAutocompleteElementEventMap>(type: K, listener: (this: HTMLIrAutocompleteElement, ev: IrAutocompleteCustomEvent<HTMLIrAutocompleteElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrAutocompleteElement: {
+        prototype: HTMLIrAutocompleteElement;
+        new (): HTMLIrAutocompleteElement;
+    };
     interface HTMLIrBookingDetailsElementEventMap {
         "sendDataToServer": guestInfo;
         "handlePrintClick": any;
@@ -1477,6 +1508,7 @@ declare global {
         "igl-tba-category-view": HTMLIglTbaCategoryViewElement;
         "igl-to-be-assigned": HTMLIglToBeAssignedElement;
         "igloo-calendar": HTMLIglooCalendarElement;
+        "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-button": HTMLIrButtonElement;
         "ir-channel-manager": HTMLIrChannelManagerElement;
@@ -1729,6 +1761,17 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "ticket"?: string;
         "to_date"?: string;
+    }
+    interface IrAutocomplete {
+        "disabled"?: boolean;
+        "duration"?: number;
+        "inputId"?: string;
+        "name"?: string;
+        "onComboboxValue"?: (event: IrAutocompleteCustomEvent<string>) => void;
+        "placeholder"?: string;
+        "required"?: boolean;
+        "type"?: 'email' | 'text' | 'password' | 'number' | 'search';
+        "value"?: string;
     }
     interface IrBookingDetails {
         "baseurl"?: string;
@@ -2056,6 +2099,7 @@ declare namespace LocalJSX {
         "igl-tba-category-view": IglTbaCategoryView;
         "igl-to-be-assigned": IglToBeAssigned;
         "igloo-calendar": IglooCalendar;
+        "ir-autocomplete": IrAutocomplete;
         "ir-booking-details": IrBookingDetails;
         "ir-button": IrButton;
         "ir-channel-manager": IrChannelManager;
@@ -2112,6 +2156,7 @@ declare module "@stencil/core" {
             "igl-tba-category-view": LocalJSX.IglTbaCategoryView & JSXBase.HTMLAttributes<HTMLIglTbaCategoryViewElement>;
             "igl-to-be-assigned": LocalJSX.IglToBeAssigned & JSXBase.HTMLAttributes<HTMLIglToBeAssignedElement>;
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
+            "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
             "ir-channel-manager": LocalJSX.IrChannelManager & JSXBase.HTMLAttributes<HTMLIrChannelManagerElement>;
