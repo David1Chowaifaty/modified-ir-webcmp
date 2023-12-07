@@ -169,7 +169,7 @@ export class IglPropertyBookedBy {
           <div class="form-group row text-left align-items-center">
             <label class="p-0 m-0 label-control mr-1 font-weight-bold">Booked by</label>
             <div class="bookedByEmailContainer">
-              <input
+              {/* <input
                 id={v4()}
                 type="email"
                 class="form-control"
@@ -179,7 +179,8 @@ export class IglPropertyBookedBy {
                 onInput={event => this.handleEmailInput('email', event)}
                 required
                 onBlur={() => this.checkUser()}
-              />
+              /> */}
+              <ir-autocomplete type="email" value={this.bookedByData.email} required placeholder="Email address"></ir-autocomplete>
             </div>
           </div>
         </div>
