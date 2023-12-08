@@ -1,7 +1,7 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
 import { IPageTwoDataUpdateProps } from '../../../models/models';
 import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
-import { getCurrencySymbol } from '../../../utils/utils';
+import { formatDate, getCurrencySymbol } from '../../../utils/utils';
 @Component({
   tag: 'igl-pagetwo',
   styleUrl: 'igl-pagetwo.css',
@@ -137,9 +137,9 @@ export class IglPagetwo {
         <div class="row">
           <div class="col-6 text-left p-0">
             <span class="mr-1 font-weight-bold font-medium-1">
-              {this.dateRangeData.fromDateStr} - {this.dateRangeData.toDateStr}
+              {formatDate(this.dateRangeData.fromDateStr)} - {formatDate(this.dateRangeData.toDateStr)}
             </span>
-            {this.dateRangeData.dateDifference} nights
+            {this.dateRangeData.dateDifference} {+this.dateRangeData.dateDifference > 1 ? 'nights' : 'night'}
           </div>
           {this.guestData.length > 1 && (
             <div class="col-6 text-right">
@@ -151,7 +151,7 @@ export class IglPagetwo {
         {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
-            currency={this.currency}
+              currency={this.currency}
               bedPreferenceType={this.bedPreferenceType}
               index={index}
               selectedUnits={this.selectedUnits[`c_${roomInfo.roomCategoryId}`]}
