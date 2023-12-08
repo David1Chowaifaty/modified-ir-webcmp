@@ -14,6 +14,7 @@ export class IglPagetwo {
   @Prop() showSplitBookingOption: boolean;
   @Prop() language: string;
   @Prop() bookedByInfoData: { [key: string]: any };
+  @Prop() propertyId: number;
   @Prop() bedPreferenceType: any;
   @Prop() selectedRooms: Map<string, Map<string, any>>;
   @Prop({ reflect: true }) isLoading: string;
@@ -162,6 +163,7 @@ export class IglPagetwo {
 
         {this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (
           <igl-property-booked-by
+            propertyId={this.propertyId}
             countryNodeList={this.countryNodeList}
             language={this.language}
             showPaymentDetails={this.showPaymentDetails}

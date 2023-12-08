@@ -143,6 +143,7 @@ export namespace Components {
         "isEditOrAddRoomEvent": boolean;
         "isLoading": string;
         "language": string;
+        "propertyId": number;
         "selectedGuestData": any;
         "selectedRooms": Map<string, Map<string, any>>;
         "showPaymentDetails": boolean;
@@ -152,6 +153,7 @@ export namespace Components {
         "countryNodeList": ICountry[];
         "defaultData": { [key: string]: any };
         "language": string;
+        "propertyId": number;
         "showPaymentDetails": boolean;
     }
     interface IglTbaBookingView {
@@ -194,6 +196,7 @@ export namespace Components {
         "inputId": string;
         "name": string;
         "placeholder": string;
+        "propertyId": number;
         "required": boolean;
         "type": 'email' | 'text' | 'password' | 'number' | 'search';
         "value": string;
@@ -1033,7 +1036,7 @@ declare global {
         new (): HTMLIglooCalendarElement;
     };
     interface HTMLIrAutocompleteElementEventMap {
-        "comboboxValue": string;
+        "comboboxValue": { key: string; data: unknown };
     }
     interface HTMLIrAutocompleteElement extends Components.IrAutocomplete, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrAutocompleteElementEventMap>(type: K, listener: (this: HTMLIrAutocompleteElement, ev: IrAutocompleteCustomEvent<HTMLIrAutocompleteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1704,6 +1707,7 @@ declare namespace LocalJSX {
     data?: CustomEvent;
   }>) => void;
         "onDataUpdateEvent"?: (event: IglPagetwoCustomEvent<IPageTwoDataUpdateProps>) => void;
+        "propertyId"?: number;
         "selectedGuestData"?: any;
         "selectedRooms"?: Map<string, Map<string, any>>;
         "showPaymentDetails"?: boolean;
@@ -1714,6 +1718,7 @@ declare namespace LocalJSX {
         "defaultData"?: { [key: string]: any };
         "language"?: string;
         "onDataUpdateEvent"?: (event: IglPropertyBookedByCustomEvent<{ [key: string]: any }>) => void;
+        "propertyId"?: number;
         "showPaymentDetails"?: boolean;
     }
     interface IglTbaBookingView {
@@ -1767,8 +1772,9 @@ declare namespace LocalJSX {
         "duration"?: number;
         "inputId"?: string;
         "name"?: string;
-        "onComboboxValue"?: (event: IrAutocompleteCustomEvent<string>) => void;
+        "onComboboxValue"?: (event: IrAutocompleteCustomEvent<{ key: string; data: unknown }>) => void;
         "placeholder"?: string;
+        "propertyId"?: number;
         "required"?: boolean;
         "type"?: 'email' | 'text' | 'password' | 'number' | 'search';
         "value"?: string;
