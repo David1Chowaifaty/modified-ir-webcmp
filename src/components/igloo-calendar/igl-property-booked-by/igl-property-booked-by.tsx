@@ -45,6 +45,7 @@ export class IglPropertyBookedBy {
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
+    console.log("default data",this.defaultData)
   }
 
   private initializeExpiryYears() {
@@ -53,9 +54,9 @@ export class IglPropertyBookedBy {
   }
   private async assignCountryCode() {
     const country = await this.bookingService.getUserDefaultCountry();
-    console.log(country);
+    
     const countryId = country['COUNTRY_ID'];
-    console.log(countryId);
+    
     this.bookedByData = { ...this.bookedByData, isdCode: countryId.toString(), countryId };
   }
   private initializeDateData() {
@@ -65,7 +66,7 @@ export class IglPropertyBookedBy {
   }
 
   private populateBookedByData() {
-    this.bookedByData = this.defaultData ? { ...this.defaultData } : {};
+    this.bookedByData = this.defaultData ? {...this.bookedByData, ...this.defaultData } : {};
     this.arrivalTimeList = this.defaultData?.arrivalTime || [];
 
     if (!this.bookedByData.expiryMonth) {
@@ -273,7 +274,7 @@ export class IglPropertyBookedBy {
               <div class="form-group row p-0 align-items-center">
                 <label class="p-0 m-0">Mobile phone</label>
                 <div class="p-0 m-0 pr-1 row controlContainer">
-                  <div class="col-3 p-0 m-0">
+                  <div class="col-4 p-0 m-0">
                     <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
                       <option value="" selected={this.bookedByData.isdCode === ''}>
                         ISD
@@ -285,7 +286,7 @@ export class IglPropertyBookedBy {
                       ))}
                     </select>
                   </div>
-                  <div class="col-9 p-0 m-0">
+                  <div class="col-8 p-0 m-0">
                     <input
                       class="form-control"
                       type="tel"
@@ -314,21 +315,15 @@ export class IglPropertyBookedBy {
                 </div>
               </div>
 
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Email the guest</label>
-                <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer">
-                  <input class="form-control" type="checkbox" checked={this.bookedByData.emailGuest} id={v4()} onChange={event => this.handleDataChange('emailGuest', event)} />
-                </div>
-              </div>
             </div>
             <div class="col-md-6 p-0">
-              <div class="form-group row p-0 align-items-center">
+              <div class=" row p-0 align-items-center mb-1">
                 <label class="p-0 m-0">Any message for us?</label>
-                <div class="p-0 m-0 pr-1 controlContainer">
+                <div class="p-0 m-0 pr-1 controlContainer ">
                   <textarea
                     id={v4()}
                     rows={4}
-                    class="form-control"
+                    class="form-control "
                     name="message"
                     value={this.bookedByData.message}
                     onInput={event => this.handleDataChange('message', event)}
@@ -390,6 +385,12 @@ export class IglPropertyBookedBy {
                   </div>
                 </Fragment>
               )}
+              <div class="form-group row p-0 align-items-center">
+                <label class="p-0 m-0">Email the guest</label>
+                <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer">
+                  <input class="form-control" type="checkbox" checked={this.bookedByData.emailGuest} id={v4()} onChange={event => this.handleDataChange('emailGuest', event)} />
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { Component, Host, Prop, h, Event, EventEmitter } from '@stencil/core';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../../models/igl-book-property';
+import { IToast } from '../../../ir-toast/toast';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -21,6 +22,7 @@ export class IglBookPropertyHeader {
   @Event() adultChild: EventEmitter<any>;
   @Event() checkClicked: EventEmitter<any>;
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
+  @Event() toast: EventEmitter<IToast>;
   private sourceOption: TSourceOption = {
     code: '',
     description: '',
@@ -115,13 +117,19 @@ export class IglBookPropertyHeader {
             </div>
           </fieldset>
         )}
-        <button disabled={this.adultChildCount.adult === 0} class={'btn btn-primary ml-2 '} onClick={() => this.buttonClicked.emit({ key: 'check' })}>
+        <button class={'btn btn-primary btn-sm ml-2 '} onClick={() => this.handleButtonClicked()}>
           Check
         </button>
       </div>
     );
   }
-
+  handleButtonClicked() {
+    if (this.adultChildCount.adult === 0) {
+      this.toast.emit({ type: 'error', title: 'Please select the number of guests', description: '', position: 'top-right' });
+    } else {
+      this.buttonClicked.emit({ key: 'check' });
+    }
+  }
   isEventType(key: string) {
     return this.bookingData.event_type === key;
   }
@@ -131,7 +139,7 @@ export class IglBookPropertyHeader {
       <Host>
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
         <div class={'d-md-flex align-items-center'}>
-          <fieldset class="form-group row">
+          <fieldset class="form-group row mt-1 mt-md-0  ">
             <igl-date-range disabled={this.isEventType('BAR_BOOKING')} defaultData={this.bookingDataDefaultDateRange}></igl-date-range>
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}

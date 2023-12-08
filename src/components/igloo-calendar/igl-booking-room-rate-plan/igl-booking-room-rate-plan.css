@@ -24,4 +24,39 @@
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
+  flex: 1;
+
+}
+
+@media  only screen and (min-width: 1200px) { 
+  .rateplan-name-container {
+    width: 40%;
+  }
+  .rateplan-container{
+    width: 40%;
+  }
+  
+}
+@media only screen and  (min-width: 991px)  { 
+  
+  .max-w-300{
+    max-width: 200px;
+  } 
+  .rate-input-container{
+    max-width: 100px;
+  }
+}
+@media only screen and  (min-width: 991px) and (max-width: 1300px) { 
+  .rateplan-name-container {
+    width: 35%;
+  }
+}
+@media only screen and   (max-width: 768px) { 
+  .booking-btn{
+    width: 100%;
+  }
+}
+
+.total-nights-container{
+  width: max-content;
 }

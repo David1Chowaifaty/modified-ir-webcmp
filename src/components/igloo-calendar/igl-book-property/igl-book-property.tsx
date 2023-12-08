@@ -16,6 +16,7 @@ import { EventsService } from '../../../services/events.service';
 export class IglBookProperty {
   @Prop() propertyid: number;
   @Prop() allowedBookingSources: any;
+
   @Prop() language: string;
   @Prop() countryNodeList;
   @Prop() showPaymentDetails: boolean = false;
@@ -391,6 +392,7 @@ export class IglBookProperty {
 
           {this.getCurrentPage('page_two') && (
             <igl-pagetwo
+            currency={this.currency}
               propertyId={this.propertyid}
               showPaymentDetails={this.showPaymentDetails}
               selectedGuestData={this.guestData}
