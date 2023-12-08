@@ -13,6 +13,7 @@
 
 .card-title {
   border-bottom: 1px solid #e4e5ec;
+  width: 100%;
 }
 
 .scrollContent {
@@ -84,5 +85,10 @@ button:not(:disabled),
 @media only screen and   (min-width: 2000px) { 
   .sideWindow{
     max-width: 40%;
+  }
+}
+@media only screen and   (min-width: 600px) and (max-width:1200px){ 
+  .sideWindow{
+    max-width: 75%;
   }
 }

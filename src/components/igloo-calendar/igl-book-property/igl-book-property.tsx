@@ -358,17 +358,17 @@ export class IglBookProperty {
     return (
       <Host>
         <div class="background-overlay" onClick={() => this.closeWindow()}></div>
-        <div class={'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'col-sm-12 col-md-6 col-lg-5 col-xl-4' : 'col-sm-12 col-md-11 col-lg-9 col-xl-8')}>
-          <div class="card mb-0 shadow-none p-0">
-            <div class="card-header">
-              <h3 class="card-title text-left pb-1 font-medium-2">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h3>
+        <div class={'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'col-sm-12 col-md-6 col-lg-5 col-xl-4' : '')}>
+          <div class="card mb-0 shadow-none p-0 px-2 px-md-3">
+            <div class="d-flex mt-2 align-items-center justify-content-between ">
+              <h3 class="card-title text-left pb-1 font-medium-2 ">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h3>
               <button type="button" class="close close-icon" onClick={() => this.closeWindow()}>
                 <i class="ft-x"></i>
               </button>
             </div>
           </div>
+          <div class="scrollContent px-2 px-md-3">
           {this.getCurrentPage('page_one') && (
-            <div class="scrollContent">
               <igl-booking-overview-page
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}
@@ -387,29 +387,29 @@ export class IglBookProperty {
                 }}
                 sourceOptions={this.sourceOptions}
               ></igl-booking-overview-page>
-            </div>
-          )}
+              )}
 
           {this.getCurrentPage('page_two') && (
             <igl-pagetwo
             currency={this.currency}
-              propertyId={this.propertyid}
-              showPaymentDetails={this.showPaymentDetails}
-              selectedGuestData={this.guestData}
-              countryNodeList={this.countryNodeList}
-              isLoading={this.isLoading}
-              selectedRooms={this.selectedUnits}
-              bedPreferenceType={this.bedPreferenceType}
-              dateRangeData={this.dateRangeData}
-              bookingData={this.defaultData}
-              showSplitBookingOption={this.showSplitBookingOption}
+            propertyId={this.propertyid}
+            showPaymentDetails={this.showPaymentDetails}
+            selectedGuestData={this.guestData}
+            countryNodeList={this.countryNodeList}
+            isLoading={this.isLoading}
+            selectedRooms={this.selectedUnits}
+            bedPreferenceType={this.bedPreferenceType}
+            dateRangeData={this.dateRangeData}
+            bookingData={this.defaultData}
+            showSplitBookingOption={this.showSplitBookingOption}
               language={this.language}
               bookedByInfoData={this.bookedByInfoData}
               isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
               onDataUpdateEvent={event => this.handlePageTwoDataUpdateEvent(event)}
-            ></igl-pagetwo>
-          )}
+              ></igl-pagetwo>
+              )}
           {this.getCurrentPage('page_block_date') ? this.getPageBlockDatesView() : null}
+              </div>
         </div>
       </Host>
     );

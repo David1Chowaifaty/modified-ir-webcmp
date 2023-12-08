@@ -77,8 +77,9 @@ export class IglDateRange {
   render() {
     return (
       <Host>
-        <div class="calendarPickerContainer ml-0">
-          <h5 class="dateRangeLabel">Dates</h5>
+        <div class="calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center ">
+          <h5 class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">Dates</h5>
+          <div class={"d-flex align-items-center mr-lg-1"}>
           <div class="iglRangePicker">
             <ir-date-picker
               class={'date-range-input'}
@@ -92,6 +93,7 @@ export class IglDateRange {
             ></ir-date-picker>
           </div>
           {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')}</span> : ''}
+          </div>
         </div>
       </Host>
     );

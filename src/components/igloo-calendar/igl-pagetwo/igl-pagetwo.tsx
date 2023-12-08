@@ -133,7 +133,7 @@ export class IglPagetwo {
 
   render() {
     return (
-      <Host class="scrollContent">
+      <Host >
         <div class="row">
           <div class="col-6 text-left p-0">
             <span class="mr-1 font-weight-bold font-medium-1">

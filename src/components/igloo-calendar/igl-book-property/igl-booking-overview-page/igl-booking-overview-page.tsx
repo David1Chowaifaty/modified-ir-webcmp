@@ -39,7 +39,7 @@ export class IglBookingOverviewPage {
           splitBookings={this.getSplitBookings()}
         ></igl-book-property-header>
         {/* {this.adultChildCount.adult === 0 && <p class={'col text-left'}>Please select the number of guests</p>} */}
-        <div class="col text-left">
+        <div class=" text-left">
           {this.bookingData?.roomsInfo?.map(roomInfo => {
             return (
               <igl-booking-rooms
@@ -49,13 +49,14 @@ export class IglBookingOverviewPage {
                 dateDifference={this.dateRangeData.dateDifference}
                 bookingType={this.bookingData.event_type}
                 roomTypeData={roomInfo}
-                class="mt-2 mb-1"
+                class="mt-2 mb-1 "
                 defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
                 onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
               ></igl-booking-rooms>
             );
           })}
         </div>
+
         <igl-book-property-footer class={'p-0 mb-1 mt-2'} eventType={this.bookingData.event_type} disabled={this.selectedRooms.size === 0}></igl-book-property-footer>
       </Host>
     );

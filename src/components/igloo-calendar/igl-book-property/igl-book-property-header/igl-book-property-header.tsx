@@ -56,9 +56,9 @@ export class IglBookPropertyHeader {
   }
   getSourceNode() {
     return (
-      <fieldset class="col-12 text-left">
-        <label class="h5">Source </label>
-        <div class="btn-group ml-1">
+      <fieldset class="d-flex flex-column text-left flex-lg-row align-items-lg-center">
+        <label class="h5 mr-lg-1">Source </label>
+        <div class="btn-group mt-1 mt-lg-0 sourceContainer">
           <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}>
             {this.sourceOptions.map(option => {
               if (option.type === 'LABEL') {
@@ -94,9 +94,12 @@ export class IglBookPropertyHeader {
 
   getAdultChildConstraints() {
     return (
-      <div class="form-group  text-left d-flex align-items-center mt-1">
+      
+      <div class={"mt-1 d-flex flex-column text-left"}>
+         <label class="h5 d-lg-none">Number of Guests </label>
+        <div class="form-group  text-left d-flex align-items-center justify-content-between justify-content-sm-start">
         <fieldset>
-          <div class="btn-group ml-1">
+          <div class="btn-group ">
             <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
               <option value="">Ad..</option>
               {Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (
@@ -121,6 +124,7 @@ export class IglBookPropertyHeader {
           Check
         </button>
       </div>
+      </div>
     );
   }
   handleButtonClicked() {
@@ -138,13 +142,13 @@ export class IglBookPropertyHeader {
     return (
       <Host>
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
-        <div class={'d-md-flex align-items-center'}>
-          <fieldset class="form-group row mt-1 mt-md-0  ">
+        <div class={'d-lg-flex align-items-center'}>
+          <fieldset class=" mt-1 mt-lg-0  ">
             <igl-date-range disabled={this.isEventType('BAR_BOOKING')} defaultData={this.bookingDataDefaultDateRange}></igl-date-range>
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
         </div>
-        <p class="text-left ml-1 mt-1">{this.message}</p>
+        <p class="text-left mt-1">{this.message}</p>
       </Host>
     );
   }
