@@ -11,6 +11,10 @@
   margin-left: auto;
   margin-right: auto;
 }
+.dropdown-menu {
+  max-height: 250px;
+  overflow-y: auto;
+}
 .tobeAssignedHeader {
   font-weight: 500;
   letter-spacing: 0.05rem;
