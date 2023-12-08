@@ -196,9 +196,6 @@ export class IrAutocomplete {
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
   }
-  // handleKeyUp(event:KeyboardEvent) {
-
-  // }
   render() {
     return (
       <Host>
@@ -207,7 +204,6 @@ export class IrAutocomplete {
             required={this.required}
             disabled={this.disabled}
             id={this.inputId}
-            //onKeyUp={this.handleKeyUp.bind(this)}
             onKeyDown={this.handleKeyDown.bind(this)}
             class={'form-control input-sm flex-full'}
             type={this.type}
