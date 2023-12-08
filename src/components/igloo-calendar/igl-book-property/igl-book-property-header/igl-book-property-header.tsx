@@ -131,7 +131,7 @@ export class IglBookPropertyHeader {
       <Host>
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
         <div class={'d-md-flex align-items-center'}>
-          <fieldset class="form-group row mt-1 mt-sm-0">
+          <fieldset class="form-group row mt-1 mt-md-0  ">
             <igl-date-range disabled={this.isEventType('BAR_BOOKING')} defaultData={this.bookingDataDefaultDateRange}></igl-date-range>
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
