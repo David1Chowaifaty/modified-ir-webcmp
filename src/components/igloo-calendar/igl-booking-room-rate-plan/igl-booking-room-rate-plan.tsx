@@ -70,11 +70,13 @@ export class IglBookingRoomRatePlan {
     //
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
-
   @Watch('ratePlanData')
   async ratePlanDataChanged(newData) {
     this.selectedData = {
       ...this.selectedData,
+      adult_child_offering: newData.variations[newData.variations.length - 1].adult_child_offering,
+      adultCount: newData.variations[newData.variations.length - 1].adult_nbr,
+      childrenCount: newData.variations[newData.variations.length - 1].child_nbr,
       rate: this.handleRateDaysUpdate(),
       physicalRooms: this.getAvailableRooms(newData.assignable_units),
     };
@@ -189,8 +191,7 @@ export class IglBookingRoomRatePlan {
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
           </div>
 
-          
-          <div class={"d-md-flex justify-content-md-end align-items-md-center pr-0  flex-fill rateplan-container" }>
+          <div class={'d-md-flex justify-content-md-end align-items-md-center pr-0  flex-fill rateplan-container'}>
             <div class="mt-1 mt-lg-0 flex-fill max-w-300  ">
               <fieldset class="position-relative">
                 <select disabled={this.disableForm()} class="form-control  input-sm" id={v4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
@@ -202,49 +203,49 @@ export class IglBookingRoomRatePlan {
                 </select>
               </fieldset>
             </div>
-            <div class={"m-0 p-0 d-md-flex justify-content-between ml-md-1 "}>
-            <div class=" d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   ">
-              <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
-                <input
-                  disabled={this.disableForm()}
-                  type="text"
-                  class="form-control input-sm rate-input py-0 m-0"
-                  value={this.renderRate()}
-                  id={v4()}
-                  placeholder="Rate"
-                  onInput={(event: InputEvent) => this.handleInput(event)}
-                />
-                <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
-              </fieldset>
-              <fieldset class="position-relative m-0 total-nights-container p-0">
-                <select disabled={this.disableForm()} class="form-control input-sm m-0  py-0" id={v4()} onChange={evt => this.handleDataChange('rateType', evt)}>
-                  {this.ratePricingMode.map(data => (
-                    <option value={data.CODE_NAME} selected={this.selectedData.rateType === +data.CODE_NAME}>
-                      {data.CODE_VALUE_EN}
-                    </option>
-                  ))}
-                </select>
-              </fieldset>
-            </div>
-
-            {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (
-              <div class="flex-lg-fill  mt-lg-0 ml-md-2 m-0 mt-1 p-0">
-                <fieldset class="position-relative">
-                  <select
-                    disabled={this.selectedData.rate === 0 || this.disableForm()}
-                    class="form-control input-sm"
+            <div class={'m-0 p-0 d-md-flex justify-content-between ml-md-1 '}>
+              <div class=" d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   ">
+                <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
+                  <input
+                    disabled={this.disableForm()}
+                    type="text"
+                    class="form-control input-sm rate-input py-0 m-0"
+                    value={this.renderRate()}
                     id={v4()}
-                    onChange={evt => this.handleDataChange('totalRooms', evt)}
-                  >
-                    {Array.from({ length: this.totalAvailableRooms + 1 }, (_, i) => i).map(i => (
-                      <option value={i} selected={this.selectedData.totalRooms === i}>
-                        {i}
+                    placeholder="Rate"
+                    onInput={(event: InputEvent) => this.handleInput(event)}
+                  />
+                  <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
+                </fieldset>
+                <fieldset class="position-relative m-0 total-nights-container p-0">
+                  <select disabled={this.disableForm()} class="form-control input-sm m-0  py-0" id={v4()} onChange={evt => this.handleDataChange('rateType', evt)}>
+                    {this.ratePricingMode.map(data => (
+                      <option value={data.CODE_NAME} selected={this.selectedData.rateType === +data.CODE_NAME}>
+                        {data.CODE_VALUE_EN}
                       </option>
                     ))}
                   </select>
                 </fieldset>
               </div>
-            ) : null}
+
+              {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (
+                <div class="flex-lg-fill  mt-lg-0 ml-md-2 m-0 mt-1 p-0">
+                  <fieldset class="position-relative">
+                    <select
+                      disabled={this.selectedData.rate === 0 || this.disableForm()}
+                      class="form-control input-sm"
+                      id={v4()}
+                      onChange={evt => this.handleDataChange('totalRooms', evt)}
+                    >
+                      {Array.from({ length: this.totalAvailableRooms + 1 }, (_, i) => i).map(i => (
+                        <option value={i} selected={this.selectedData.totalRooms === i}>
+                          {i}
+                        </option>
+                      ))}
+                    </select>
+                  </fieldset>
+                </div>
+              ) : null}
             </div>
 
             {this.bookingType === 'EDIT_BOOKING' ? (
@@ -263,7 +264,12 @@ export class IglBookingRoomRatePlan {
             ) : null}
 
             {this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (
-              <button disabled={this.selectedData.rate === 0 || this.disableForm()} type="button" class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 " onClick={() => this.bookProperty()}>
+              <button
+                disabled={this.selectedData.rate === 0 || this.disableForm()}
+                type="button"
+                class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 "
+                onClick={() => this.bookProperty()}
+              >
                 Book
               </button>
             ) : null}
