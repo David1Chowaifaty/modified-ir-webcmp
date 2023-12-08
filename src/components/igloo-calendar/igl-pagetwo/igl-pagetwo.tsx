@@ -1,6 +1,7 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
 import { IPageTwoDataUpdateProps } from '../../../models/models';
 import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
+import { getCurrencySymbol } from '../../../utils/utils';
 @Component({
   tag: 'igl-pagetwo',
   styleUrl: 'igl-pagetwo.css',
@@ -8,6 +9,7 @@ import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
 })
 export class IglPagetwo {
   @Prop() showPaymentDetails: boolean;
+  @Prop() currency;
   @Prop({ reflect: true }) isEditOrAddRoomEvent: boolean;
   @Prop() dateRangeData: { [key: string]: any };
   @Prop() bookingData: { [key: string]: any };
@@ -141,7 +143,7 @@ export class IglPagetwo {
           </div>
           {this.guestData.length > 1 && (
             <div class="col-6 text-right">
-              Total price <span class="font-weight-bold font-medium-1">{'$' + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
+              Total price <span class="font-weight-bold font-medium-1">{getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
             </div>
           )}
         </div>
@@ -149,6 +151,7 @@ export class IglPagetwo {
         {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
+            currency={this.currency}
               bedPreferenceType={this.bedPreferenceType}
               index={index}
               selectedUnits={this.selectedUnits[`c_${roomInfo.roomCategoryId}`]}

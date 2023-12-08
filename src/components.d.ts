@@ -7,22 +7,23 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
+import { IToast, TPositions } from "./components/ir-toast/toast";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
 import { Guest, Room } from "./models/booking.dto";
-import { IToast, TPositions } from "./components/ir-toast/toast";
 export { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
+export { IToast, TPositions } from "./components/ir-toast/toast";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
 export { Guest, Room } from "./models/booking.dto";
-export { IToast, TPositions } from "./components/ir-toast/toast";
 export namespace Components {
     interface IglApplicationInfo {
         "bedPreferenceType": any[];
         "bookingType": string;
+        "currency": any;
         "guestInfo": { [key: string]: any };
         "guestRefKey": string;
         "index": number;
@@ -139,6 +140,7 @@ export namespace Components {
         "bookedByInfoData": { [key: string]: any };
         "bookingData": { [key: string]: any };
         "countryNodeList": any;
+        "currency": any;
         "dateRangeData": { [key: string]: any };
         "isEditOrAddRoomEvent": boolean;
         "isLoading": string;
@@ -722,6 +724,7 @@ declare global {
         "adultChild": any;
         "checkClicked": any;
         "buttonClicked": { key: TPropertyButtonsTypes };
+        "toast": IToast;
     }
     interface HTMLIglBookPropertyHeaderElement extends Components.IglBookPropertyHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyHeaderElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyHeaderElement, ev: IglBookPropertyHeaderCustomEvent<HTMLIglBookPropertyHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1020,6 +1023,7 @@ declare global {
     interface HTMLIglooCalendarElementEventMap {
         "dragOverHighlightElement": any;
         "moveBookingTo": any;
+        "calculateUnassignedDates": any;
     }
     interface HTMLIglooCalendarElement extends Components.IglooCalendar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglooCalendarElementEventMap>(type: K, listener: (this: HTMLIglooCalendarElement, ev: IglooCalendarCustomEvent<HTMLIglooCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1547,6 +1551,7 @@ declare namespace LocalJSX {
     interface IglApplicationInfo {
         "bedPreferenceType"?: any[];
         "bookingType"?: string;
+        "currency"?: any;
         "guestInfo"?: { [key: string]: any };
         "guestRefKey"?: string;
         "index"?: number;
@@ -1593,6 +1598,7 @@ declare namespace LocalJSX {
         "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onSourceDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onSplitBookingDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
+        "onToast"?: (event: IglBookPropertyHeaderCustomEvent<IToast>) => void;
         "showSplitBookingOption"?: boolean;
         "sourceOptions"?: TSourceOptions[];
         "splitBookingId"?: any;
@@ -1698,6 +1704,7 @@ declare namespace LocalJSX {
         "bookedByInfoData"?: { [key: string]: any };
         "bookingData"?: { [key: string]: any };
         "countryNodeList"?: any;
+        "currency"?: any;
         "dateRangeData"?: { [key: string]: any };
         "isEditOrAddRoomEvent"?: boolean;
         "isLoading"?: string;
@@ -1761,6 +1768,7 @@ declare namespace LocalJSX {
         "from_date"?: string;
         "language"?: string;
         "loadingMessage"?: string;
+        "onCalculateUnassignedDates"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onDragOverHighlightElement"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onMoveBookingTo"?: (event: IglooCalendarCustomEvent<any>) => void;
         "propertyid"?: number;

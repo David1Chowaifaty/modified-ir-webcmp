@@ -1,5 +1,6 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Watch, State } from '@stencil/core';
 import { v4 } from 'uuid';
+import { getCurrencySymbol } from '../../../utils/utils';
 
 @Component({
   tag: 'igl-application-info',
@@ -8,6 +9,7 @@ import { v4 } from 'uuid';
 })
 export class IglApplicationInfo {
   @Prop() guestInfo: { [key: string]: any };
+  @Prop() currency;
   @Prop({ reflect: true, mutable: true }) roomsList: { [key: string]: any }[] = [];
   @Prop() guestRefKey: string;
   @Prop() bedPreferenceType = [];
@@ -112,7 +114,7 @@ export class IglApplicationInfo {
                 ))}
               </select>
             </div>
-            <div class="col-2">${this.guestInfo.rate}</div>
+            <div class="col-2">{getCurrencySymbol(this.currency.code) + this.guestInfo.rate}</div>
           </div>
         </div>
       </Host>

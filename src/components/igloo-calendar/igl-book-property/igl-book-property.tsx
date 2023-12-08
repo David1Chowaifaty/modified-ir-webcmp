@@ -392,6 +392,7 @@ export class IglBookProperty {
 
           {this.getCurrentPage('page_two') && (
             <igl-pagetwo
+            currency={this.currency}
               propertyId={this.propertyid}
               showPaymentDetails={this.showPaymentDetails}
               selectedGuestData={this.guestData}
