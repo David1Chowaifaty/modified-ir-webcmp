@@ -1020,6 +1020,7 @@ declare global {
     interface HTMLIglooCalendarElementEventMap {
         "dragOverHighlightElement": any;
         "moveBookingTo": any;
+        "calculateUnassignedDates": any;
     }
     interface HTMLIglooCalendarElement extends Components.IglooCalendar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglooCalendarElementEventMap>(type: K, listener: (this: HTMLIglooCalendarElement, ev: IglooCalendarCustomEvent<HTMLIglooCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1761,6 +1762,7 @@ declare namespace LocalJSX {
         "from_date"?: string;
         "language"?: string;
         "loadingMessage"?: string;
+        "onCalculateUnassignedDates"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onDragOverHighlightElement"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onMoveBookingTo"?: (event: IglooCalendarCustomEvent<any>) => void;
         "propertyid"?: number;

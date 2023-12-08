@@ -28,7 +28,7 @@ export class IglooCalendar {
   @Event({ bubbles: true, composed: true })
   dragOverHighlightElement: EventEmitter;
   @Event({ bubbles: true, composed: true }) moveBookingTo: EventEmitter;
-
+  @Event() calculateUnassignedDates: EventEmitter;
   @State() calendarData: { [key: string]: any } = new Object();
   @State() days: { [key: string]: any }[] = new Array();
   @State() scrollViewDragging: boolean = false;
@@ -146,12 +146,9 @@ export class IglooCalendar {
                       dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                       dateToFormattedString(new Date(parsedResult.TO_DATE)),
                     );
-                    this.unassignedDates = { ...this.unassignedDates, ...data };
-                    this.calendarData.unassignedDates = data;
-                    console.log(this.propertyid, dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
+                    this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
+                    this.unassignedDates = data;
                   }
-
-                  //FROM_DATE:2023-12-08|TO_DATE:2023-12-11
                 } else {
                   return;
                 }
@@ -410,8 +407,8 @@ export class IglooCalendar {
       };
     }
     const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
-    this.unassignedDates = { ...this.unassignedDates, ...data };
     this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
+    this.unassignedDates = { ...data };
   }
   async handleDateSearch(dates: { start: Moment; end: Moment }) {
     const startDate = moment(dates.start).toDate();

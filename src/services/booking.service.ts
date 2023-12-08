@@ -307,6 +307,8 @@ export class BookingService {
         const body = {
           assign_units: true,
           check_in,
+          is_pms: true,
+          is_direct: true,
           booking: {
             booking_nbr: bookingNumber || '',
             from_date: fromDateStr,
