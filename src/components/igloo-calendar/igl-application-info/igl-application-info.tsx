@@ -62,20 +62,20 @@ export class IglApplicationInfo {
     //console.log(this.guestInfo, this.roomsList);
     return (
       <Host>
-        <div class="text-left mt-1">
-          <div class="ml-1 mb-1">
+        <div class="text-left mt-1 ">
+          <div class=" mb-1 ">
             {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
-              <span class="h5">{this.guestInfo.roomCategoryName}</span>
+              <span class="h5 mr-1">{this.guestInfo.roomCategoryName}</span>
             ) : null}
-            <span class="ml-1 font-weight-bold">
+            <span class=" font-weight-bold">
               {this.guestInfo.ratePlanName.replace(this.guestInfo.roomCategoryName + '/', '')}
-              <ir-tooltip class="ml-1 mr-1" message={this.guestInfo.cancelation + this.guestInfo.guarantee}></ir-tooltip>
+              <ir-tooltip class=" mr-1" message={this.guestInfo.cancelation + this.guestInfo.guarantee}></ir-tooltip>
             </span>
             <span>{this.guestInfo.adult_child_offering}</span>
           </div>
 
-          <div class="row m-0 p-0 align-items-center">
-            <div class="col-5">
+          <div class="d-flex m-0 p-0 align-items-center aplicationInfoContainer ">
+            <div class="mr-1 flex-fill">
               <input
                 id={v4()}
                 type="email"
@@ -88,7 +88,7 @@ export class IglApplicationInfo {
               />
             </div>
             {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
-              <div class="col-2 p-0">
+              <div class="mr-1 p-0 flex-fill">
                 <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}>
                   <option value="" selected={this.guestData.roomId === ''}>
                     Assign units
@@ -102,7 +102,7 @@ export class IglApplicationInfo {
               </div>
             ) : null}
 
-            <div class="col-3">
+            <div class="mr-1 flex-fill">
               <select class="form-control input-sm" id={v4()} onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}>
                 <option value="" selected={this.guestData.preference === ''}>
                   No preference
@@ -114,7 +114,7 @@ export class IglApplicationInfo {
                 ))}
               </select>
             </div>
-            <div class="col-2">{getCurrencySymbol(this.currency.code) + this.guestInfo.rate}</div>
+            <div class="">{getCurrencySymbol(this.currency.code) + this.guestInfo.rate}</div>
           </div>
         </div>
       </Host>

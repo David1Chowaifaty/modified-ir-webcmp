@@ -134,15 +134,15 @@ export class IglPagetwo {
   render() {
     return (
       <Host >
-        <div class="row">
-          <div class="col-6 text-left p-0">
+        <div class="d-flex flex-wrap">
+          <div class="flex-fill text-left p-0">
             <span class="mr-1 font-weight-bold font-medium-1">
               {formatDate(this.dateRangeData.fromDateStr)} - {formatDate(this.dateRangeData.toDateStr)}
             </span>
             {this.dateRangeData.dateDifference} {+this.dateRangeData.dateDifference > 1 ? 'nights' : 'night'}
           </div>
           {this.guestData.length > 1 && (
-            <div class="col-6 text-right">
+            <div class="mt-1 mt-md-0 text-right">
               Total price <span class="font-weight-bold font-medium-1">{getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
             </div>
           )}
@@ -201,19 +201,19 @@ export class IglPagetwo {
             </div>
           </div>
         ) : (
-          <div class="row p-0 mb-1 mt-2">
-            <div class="col-4">
+          <div class="d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center">
+            <div class="flex-fill mr-md-1">
               <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'back' })}>
-                &lt;&lt; Back
+              <span class={"d-none d-md-inline-flex"}>  &lt;&lt;</span> Back
               </button>
             </div>
-            <div class="col-4">
+            <div class="mt-1 mt-md-0 flex-fill mr-md-1">
               <button disabled={this.isButtonDisabled('book')} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
                 {this.isLoading === 'book' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 Book
               </button>
             </div>
-            <div class="col-4">
+            <div class="mt-1 mt-md-0 flex-fill">
               <button
                 disabled={this.isButtonDisabled('bookAndCheckIn')}
                 type="button"

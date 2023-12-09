@@ -198,9 +198,9 @@ export class IglPropertyBookedBy {
     return (
       <Host>
         <div class="text-left mt-3">
-          <div class="form-group d-flex flex-column text-left ">
+          <div class="form-group d-flex flex-column flex-md-row align-items-md-center text-left ">
             <label class="p-0 m-0 label-control mr-1 font-weight-bold">Booked by</label>
-            <div class="bookedByEmailContainer mt-1">
+            <div class="bookedByEmailContainer mt-1 mt-md-0">
               {/* <input
                 id={v4()}
                 type="email"
@@ -223,14 +223,14 @@ export class IglPropertyBookedBy {
             </div>
           </div>
         </div>
-        <div class="bookedDetailsForm text-left mt-2 font-small-3">
-          <div class="row">
-            <div class="p-0 col-md-6">
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">First name</label>
-                <div class="p-0 m-0 pr-1 controlContainer">
+        <div class="bookedDetailsForm text-left mt-2 font-small-3 ">
+          <div class="d-flex flex-column flex-md-row  justify-content-md-between ">
+            <div class="p-0 flex-fill ">
+              <div class="form-group d-flex flex-column flex-md-row align-items-md-center p-0 flex-fill ">
+                <label class="p-0 m-0 margin3">First name</label>
+                <div class="p-0 m-0  controlContainer flex-fill  ">
                   <input
-                    class="form-control"
+                    class="form-control flex-fill"
                     type="text"
                     placeholder="First name"
                     id={v4()}
@@ -241,9 +241,9 @@ export class IglPropertyBookedBy {
                 </div>
               </div>
 
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Last name</label>
-                <div class="p-0 m-0 pr-1 controlContainer">
+              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+                <label class="p-0 m-0 margin3">Last name</label>
+                <div class="p-0 m-0  controlContainer flex-fill">
                   <input
                     class="form-control"
                     type="text"
@@ -255,9 +255,9 @@ export class IglPropertyBookedBy {
                 </div>
               </div>
 
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Country</label>
-                <div class="p-0 m-0 pr-1 controlContainer">
+              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+                <label class="p-0 m-0 margin3">Country</label>
+                <div class="p-0 m-0  controlContainer flex-fill">
                   <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
                     <option value="" selected={this.bookedByData.countryId === ''}>
                       Select
@@ -271,10 +271,10 @@ export class IglPropertyBookedBy {
                 </div>
               </div>
 
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Mobile phone</label>
-                <div class="p-0 m-0 pr-1 row controlContainer">
-                  <div class="col-4 p-0 m-0">
+              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+                <label class="p-0 m-0 margin3">Mobile phone</label>
+                <div class="p-0 m-0  row controlContainer flex-fill">
+                  <div class=" p-0 m-0 ">
                     <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
                       <option value="" selected={this.bookedByData.isdCode === ''}>
                         ISD
@@ -286,7 +286,7 @@ export class IglPropertyBookedBy {
                       ))}
                     </select>
                   </div>
-                  <div class="col-8 p-0 m-0">
+                  <div class="flex-fill p-0 m-0">
                     <input
                       class="form-control"
                       type="tel"
@@ -299,9 +299,9 @@ export class IglPropertyBookedBy {
                 </div>
               </div>
 
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Your arrival time</label>
-                <div class="p-0 m-0 pr-1 controlContainer">
+              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+                <label class="p-0 m-0 margin3">Your arrival time</label>
+                <div class="p-0 m-0  controlContainer flex-fill">
                   <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('selectedArrivalTime', event)}>
                     <option value="" selected={this.bookedByData.selectedArrivalTime === ''}>
                       -
@@ -316,10 +316,10 @@ export class IglPropertyBookedBy {
               </div>
 
             </div>
-            <div class="col-md-6 p-0">
-              <div class=" row p-0 align-items-center mb-1">
-                <label class="p-0 m-0">Any message for us?</label>
-                <div class="p-0 m-0 pr-1 controlContainer ">
+            <div class="p-0 flex-fill  ml-md-3">
+              <div class="  p-0 d-flex flex-column flex-md-row align-items-md-center ">
+                <label class="p-0 m-0 margin3">Any message for us?</label>
+                <div class="p-0 m-0  controlContainer flex-fill ">
                   <textarea
                     id={v4()}
                     rows={4}
@@ -332,9 +332,9 @@ export class IglPropertyBookedBy {
               </div>
               {this.showPaymentDetails && (
                 <Fragment>
-                  <div class="form-group row p-0 align-items-center">
-                    <label class="p-0 m-0">Card Number</label>
-                    <div class="p-0 m-0 pr-1 controlContainer">
+                  <div class="form-group mt-md-1  p-0 d-flex flex-column flex-md-row align-items-md-center">
+                    <label class="p-0 m-0 margin3">Card Number</label>
+                    <div class="p-0 m-0  controlContainer flex-fill">
                       <input
                         class="form-control"
                         type="text"
@@ -346,9 +346,9 @@ export class IglPropertyBookedBy {
                       />
                     </div>
                   </div>
-                  <div class="form-group row p-0 align-items-center">
-                    <label class="p-0 m-0">Card holder name</label>
-                    <div class="p-0 m-0 pr-1 controlContainer">
+                  <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+                    <label class="p-0 m-0 margin3">Card holder name</label>
+                    <div class="p-0 m-0  controlContainer flex-fill">
                       <input
                         class="form-control"
                         type="text"
@@ -360,9 +360,9 @@ export class IglPropertyBookedBy {
                       />
                     </div>
                   </div>
-                  <div class="form-group row p-0 align-items-center">
-                    <label class="p-0 m-0">Expiry Date</label>
-                    <div class="p-0 m-0 row pr-1 controlContainer">
+                  <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+                    <label class="p-0 m-0 margin3">Expiry Date</label>
+                    <div class="p-0 m-0 row  controlContainer flex-fill">
                       <div class="p-0 m-0">
                         <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('expiryMonth', event)}>
                           {this.expiryMonths.map(month => (
@@ -385,9 +385,9 @@ export class IglPropertyBookedBy {
                   </div>
                 </Fragment>
               )}
-              <div class="form-group row p-0 align-items-center">
-                <label class="p-0 m-0">Email the guest</label>
-                <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer">
+              <div class="form-group row p-0 d-flex flex-column flex-md-row align-items-md-center">
+                <label class="p-0 m-0 margin3">Email the guest</label>
+                <div class="p-0 m-0  controlContainer flex-fill checkBoxContainer">
                   <input class="form-control" type="checkbox" checked={this.bookedByData.emailGuest} id={v4()} onChange={event => this.handleDataChange('emailGuest', event)} />
                 </div>
               </div>
