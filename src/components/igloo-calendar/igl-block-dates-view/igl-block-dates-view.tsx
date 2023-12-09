@@ -1,6 +1,7 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/core';
 import { BookingService } from '../../../services/booking.service';
 import { IEntries } from '../../../models/IBooking';
+import { formatDate } from '../../../utils/utils';
 
 @Component({
   tag: 'igl-block-dates-view',
@@ -13,7 +14,7 @@ export class IglBlockDatesView {
   @Prop() toDate: string;
   @Prop({ mutable: true }) entryDate: string;
   @Prop() entryHour: number;
-  @Prop() isEventHover: boolean=false;
+  @Prop() isEventHover: boolean = false;
   @Prop() entryMinute: number;
   @State() renderAgain: boolean = false;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
@@ -90,27 +91,27 @@ export class IglBlockDatesView {
   render() {
     return (
       <Host>
-        <div class={`row m-0 p-0 ${!this.isEventHover&&"ml-1"} mb-1`}>
-          <div class="col-12 text-left p-0">
+        <div class={`m-0 p-0 mb-1`}>
+          <div class="text-left p-0">
             <span class="pr-1">
               <span class="text-bold-700 font-medium-1">From: </span>
-              {this.fromDate}
-            </span>{' '}
+              {formatDate(this.fromDate)}
+            </span>
             <span class="text-bold-700 font-medium-1">To: </span>
-            {this.toDate}
+            {formatDate(this.toDate)}
           </div>
         </div>
-        <div class={`col mb-1 text-left ${this.isEventHover&&"p-0"}` }>
-          <div class="mb-1 " >
+        <div class={` mb-1 text-left ${this.isEventHover && 'p-0'}`}>
+          <div class="mb-1 ">
             <label class="p-0 text-bold-700 font-medium-1 m-0 align-middle">Reason:</label>
             <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer d-inline-block align-middle">
               <input class="form-control" type="checkbox" checked={this.blockDatesData.OUT_OF_SERVICE} id="userinput6" onChange={event => this.handleOutOfService(event)} />
-            </div>{' '}
+            </div>
             <span class="align-middle">Out of service</span>
           </div>
           {!this.blockDatesData.OUT_OF_SERVICE ? (
             <div>
-              <div class="mb-1 d-flex w-100 align-items-center">
+              <div class="mb-1 d-flex  align-items-center">
                 <span class="align-middle">or </span>
                 <div class="d-inline-flex col pr-0 align-middle">
                   <input

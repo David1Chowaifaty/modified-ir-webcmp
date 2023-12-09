@@ -22,6 +22,7 @@ export class IrAutocomplete {
   @State() selectedIndex: number = -1;
   @State() isComboBoxVisible: boolean = false;
   @Event({ bubbles: true, composed: true }) comboboxValue: EventEmitter<{ key: string; data: unknown }>;
+  @Event() inputCleared: EventEmitter<null>;
   @State() isItemSelected: boolean;
   @Element() el: HTMLElement;
   private inputRef: HTMLInputElement;
@@ -174,7 +175,8 @@ export class IrAutocomplete {
         <div class="position-absolute border rounded border-light combobox">
           {this.data.map((d, index) => (
             <p role="button" onKeyDown={e => this.handleItemKeyDown(e, index)} data-selected={this.selectedIndex === index} tabIndex={0} onClick={() => this.selectItem(index)}>
-              {`${d.email} - ${d.first_name} ${d.last_name}`}
+              {`${d.email}`}
+              <span class={'d-none d-sm-inline-flex'}>{` - ${d.first_name} ${d.last_name}`}</span>
             </p>
           ))}
         </div>
@@ -187,6 +189,7 @@ export class IrAutocomplete {
   clearInput() {
     this.inputValue = '';
     this.resetCombobox();
+    this.inputCleared.emit(null);
   }
   resetCombobox(withblur: boolean = true) {
     if (withblur) {

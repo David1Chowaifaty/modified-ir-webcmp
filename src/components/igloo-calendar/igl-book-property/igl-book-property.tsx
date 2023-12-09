@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, Prop, State, h, Listen } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, h, Listen, Fragment } from '@stencil/core';
 import { BookingService } from '../../../services/booking.service';
 import { dateToFormattedString, getReleaseHoursString } from '../../../utils/utils';
 import { IEntries, RoomBlockDetails, RoomBookingDetails } from '../../../models/IBooking';
@@ -230,26 +230,23 @@ export class IglBookProperty {
 
   getPageBlockDatesView() {
     return (
-      <div class="scrollContent blockDatesForm">
+      <Fragment>
         <igl-block-dates-view
           fromDate={this.dateRangeData.fromDateStr}
           toDate={this.dateRangeData.toDateStr}
           entryDate={this.defaultData.ENTRY_DATE}
           onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>
-        <div class="row p-0 mb-1 mt-2">
-          <div class="col-6">
-            <button class="btn btn-secondary full-width" onClick={() => this.closeWindow()}>
-              Cancel
-            </button>
-          </div>
-          <div class="col-6">
-            <button class="btn btn-primary full-width" onClick={() => this.handleBlockDate()}>
-              Block dates
-            </button>
-          </div>
+        <div class="p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between">
+          <button class="btn btn-secondary flex-fill" onClick={() => this.closeWindow()}>
+            Cancel
+          </button>
+
+          <button class="btn btn-primary flex-fill" onClick={() => this.handleBlockDate()}>
+            Block dates
+          </button>
         </div>
-      </div>
+      </Fragment>
     );
   }
   @Listen('buttonClicked')
@@ -358,17 +355,19 @@ export class IglBookProperty {
     return (
       <Host>
         <div class="background-overlay" onClick={() => this.closeWindow()}></div>
-        <div class={'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'col-sm-12 col-md-6 col-lg-5 col-xl-4' : '')}>
-          <div class="card mb-0 shadow-none p-0 px-2 px-md-3">
-            <div class="d-flex mt-2 align-items-center justify-content-between ">
-              <h3 class="card-title text-left pb-1 font-medium-2 ">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h3>
+        <div class={'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '')}>
+          <div class="card position-sticky mb-0 shadow-none p-0 ">
+            <div class="d-flex mt-2 align-items-center justify-content-between  ">
+              <h3 class="card-title text-left pb-1 font-medium-2 px-2 px-md-3">
+                {this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}
+              </h3>
               <button type="button" class="close close-icon" onClick={() => this.closeWindow()}>
                 <i class="ft-x"></i>
               </button>
             </div>
           </div>
-          <div class="scrollContent px-2 px-md-3">
-          {this.getCurrentPage('page_one') && (
+          <div class="px-2 px-md-3">
+            {this.getCurrentPage('page_one') && (
               <igl-booking-overview-page
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}
@@ -387,29 +386,29 @@ export class IglBookProperty {
                 }}
                 sourceOptions={this.sourceOptions}
               ></igl-booking-overview-page>
-              )}
+            )}
 
-          {this.getCurrentPage('page_two') && (
-            <igl-pagetwo
-            currency={this.currency}
-            propertyId={this.propertyid}
-            showPaymentDetails={this.showPaymentDetails}
-            selectedGuestData={this.guestData}
-            countryNodeList={this.countryNodeList}
-            isLoading={this.isLoading}
-            selectedRooms={this.selectedUnits}
-            bedPreferenceType={this.bedPreferenceType}
-            dateRangeData={this.dateRangeData}
-            bookingData={this.defaultData}
-            showSplitBookingOption={this.showSplitBookingOption}
-              language={this.language}
-              bookedByInfoData={this.bookedByInfoData}
-              isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
-              onDataUpdateEvent={event => this.handlePageTwoDataUpdateEvent(event)}
+            {this.getCurrentPage('page_two') && (
+              <igl-pagetwo
+                currency={this.currency}
+                propertyId={this.propertyid}
+                showPaymentDetails={this.showPaymentDetails}
+                selectedGuestData={this.guestData}
+                countryNodeList={this.countryNodeList}
+                isLoading={this.isLoading}
+                selectedRooms={this.selectedUnits}
+                bedPreferenceType={this.bedPreferenceType}
+                dateRangeData={this.dateRangeData}
+                bookingData={this.defaultData}
+                showSplitBookingOption={this.showSplitBookingOption}
+                language={this.language}
+                bookedByInfoData={this.bookedByInfoData}
+                isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
+                onDataUpdateEvent={event => this.handlePageTwoDataUpdateEvent(event)}
               ></igl-pagetwo>
-              )}
-          {this.getCurrentPage('page_block_date') ? this.getPageBlockDatesView() : null}
-              </div>
+            )}
+            {this.getCurrentPage('page_block_date') ? this.getPageBlockDatesView() : null}
+          </div>
         </div>
       </Host>
     );

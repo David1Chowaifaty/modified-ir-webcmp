@@ -191,8 +191,8 @@ export class IglBookingRoomRatePlan {
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
           </div>
 
-          <div class={'d-md-flex justify-content-md-end align-items-md-center pr-0  flex-fill rateplan-container'}>
-            <div class="mt-1 mt-lg-0 flex-fill max-w-300  ">
+          <div class={'d-md-flex justify-content-md-end  align-items-md-center  flex-fill rateplan-container'}>
+            <div class="mt-1 mt-lg-0 flex-fill max-w-300">
               <fieldset class="position-relative">
                 <select disabled={this.disableForm()} class="form-control  input-sm" id={v4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
                   {this.ratePlanData.variations.map(variation => (
@@ -218,7 +218,12 @@ export class IglBookingRoomRatePlan {
                   <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
                 </fieldset>
                 <fieldset class="position-relative m-0 total-nights-container p-0 ">
-                  <select disabled={this.disableForm()} class="form-control input-sm m-0 nightBorder rounded-0  py-0" id={v4()} onChange={evt => this.handleDataChange('rateType', evt)}>
+                  <select
+                    disabled={this.disableForm()}
+                    class="form-control input-sm m-0 nightBorder rounded-0  py-0"
+                    id={v4()}
+                    onChange={evt => this.handleDataChange('rateType', evt)}
+                  >
                     {this.ratePricingMode.map(data => (
                       <option value={data.CODE_NAME} selected={this.selectedData.rateType === +data.CODE_NAME}>
                         {data.CODE_VALUE_EN}
