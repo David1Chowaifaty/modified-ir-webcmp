@@ -198,9 +198,9 @@ export class IglPropertyBookedBy {
     return (
       <Host>
         <div class="text-left mt-3">
-          <div class="form-group row text-left align-items-center">
+          <div class="form-group d-flex flex-column text-left ">
             <label class="p-0 m-0 label-control mr-1 font-weight-bold">Booked by</label>
-            <div class="bookedByEmailContainer">
+            <div class="bookedByEmailContainer mt-1">
               {/* <input
                 id={v4()}
                 type="email"
