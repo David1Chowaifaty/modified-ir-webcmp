@@ -20,6 +20,7 @@ export class IglPropertyBookedBy {
   private expiryMonths: string[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
   private expiryYears: string[] = [];
   private currentMonth: string = '01';
+  private country;
   @State() bookedByData: { [key: string]: any } = {
     id: undefined,
     email: '',
@@ -45,7 +46,7 @@ export class IglPropertyBookedBy {
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
-    console.log("default data",this.defaultData)
+    console.log('default data', this.defaultData);
   }
 
   private initializeExpiryYears() {
@@ -54,9 +55,9 @@ export class IglPropertyBookedBy {
   }
   private async assignCountryCode() {
     const country = await this.bookingService.getUserDefaultCountry();
-    
+
     const countryId = country['COUNTRY_ID'];
-    
+    this.country = countryId;
     this.bookedByData = { ...this.bookedByData, isdCode: countryId.toString(), countryId };
   }
   private initializeDateData() {
@@ -66,7 +67,7 @@ export class IglPropertyBookedBy {
   }
 
   private populateBookedByData() {
-    this.bookedByData = this.defaultData ? {...this.bookedByData, ...this.defaultData } : {};
+    this.bookedByData = this.defaultData ? { ...this.bookedByData, ...this.defaultData } : {};
     this.arrivalTimeList = this.defaultData?.arrivalTime || [];
 
     if (!this.bookedByData.expiryMonth) {
@@ -164,6 +165,8 @@ export class IglPropertyBookedBy {
     return emailPattern.test(emailId);
   }
   handleComboboxChange(e: CustomEvent) {
+    e.stopImmediatePropagation()
+    e.stopPropagation()
     const { key, data } = e.detail;
     console.log(key, data);
     switch (key) {
@@ -186,12 +189,28 @@ export class IglPropertyBookedBy {
         };
         this.dataUpdateEvent.emit({
           key: 'bookedByInfoUpdated',
-          data: { ...this.bookedByData },
+          data:this.bookedByData ,
         });
         break;
       default:
         break;
     }
+  }
+  clearEvent() {
+    this.bookedByData.email = '';
+    this.bookedByData = {
+      ...this.bookedByData,
+      id: '',
+      firstName: '',
+      lastName: '',
+      contactNumber: '',
+      isdCode: this.country.toString(),
+      countryId: this.country,
+    };
+    this.dataUpdateEvent.emit({
+      key: 'bookedByInfoUpdated',
+      data: { ...this.bookedByData },
+    });
   }
 
   render() {
@@ -219,6 +238,7 @@ export class IglPropertyBookedBy {
                 value={this.bookedByData.email}
                 required
                 placeholder="Email address"
+                onInputCleared={() => this.clearEvent()}
               ></ir-autocomplete>
             </div>
           </div>
@@ -314,7 +334,6 @@ export class IglPropertyBookedBy {
                   </select>
                 </div>
               </div>
-
             </div>
             <div class="p-0 flex-fill  ml-md-3">
               <div class="  p-0 d-flex flex-column flex-md-row align-items-md-center ">

@@ -104,16 +104,24 @@ export class IglPagetwo {
       if (!property) {
         return true;
       }
+      console.log(this.selectedBookedByData)
       if (property === this.selectedGuestData) {
         return this.isGuestDataIncomplete();
       }
       // const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
       // if (!this.showPaymentDetails && isCardDetails) {
-      //   return false;
-      // }
+        //   return false;
+        // }
+        if(key==="selectedArrivalTime" ){
+          if(property[key]!==undefined){
+
+            return  property[key].code===""
+          }else{
+            return true
+          }
+        }
       return property[key] === comparedBy || property[key] === undefined;
     };
-
     return (
       this.isLoading === key ||
       isValidProperty(this.selectedGuestData, 'guestName', '') ||

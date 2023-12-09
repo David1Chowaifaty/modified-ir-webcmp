@@ -49,7 +49,7 @@ export class IglBookingOverviewPage {
                 dateDifference={this.dateRangeData.dateDifference}
                 bookingType={this.bookingData.event_type}
                 roomTypeData={roomInfo}
-                class="mt-2 mb-1 "
+                class="mt-2 mb-1 p-0"
                 defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
                 onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
               ></igl-booking-rooms>
@@ -57,7 +57,7 @@ export class IglBookingOverviewPage {
           })}
         </div>
 
-        <igl-book-property-footer class={'p-0 mb-1 mt-2'} eventType={this.bookingData.event_type} disabled={this.selectedRooms.size === 0}></igl-book-property-footer>
+        <igl-book-property-footer class={'p-0 mb-1 mt-3'} eventType={this.bookingData.event_type} disabled={this.selectedRooms.size === 0}></igl-book-property-footer>
       </Host>
     );
   }

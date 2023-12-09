@@ -7,3 +7,7 @@
   margin: auto;
   padding: auto;
 }
+
+.gap-30 {
+  gap: 30px;
+}

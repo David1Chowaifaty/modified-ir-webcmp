@@ -16,17 +16,17 @@ export class IglBookPropertyFooter {
   editNext(label) {
     if (this.isEventType('EDIT_BOOKING')) {
       if (label === 'Cancel') {
-        return 'col-12 col-md-6';
+        return 'flex-fill';
       } else {
-        return 'd-none d-md-block col-md-6';
+        return 'd-none d-md-block  flex-fill';
       }
     }
-    return 'col-6';
+    return 'flex-fill';
   }
 
   private renderButton(type: FooterButtonType, label: string, disabled = false) {
     return (
-      <div class={this.shouldRenderTwoButtons() ? ` ${this.editNext(label)}` : 'col-12'}>
+      <div class={this.shouldRenderTwoButtons() ? ` ${this.editNext(label)}` : 'flex-fill'}>
         <button class={`btn btn-${type === 'cancel' ? 'secondary' : 'primary'} full-width`} onClick={() => this.buttonClicked.emit({ key: type })} disabled={disabled}>
           {label}
         </button>
@@ -41,7 +41,7 @@ export class IglBookPropertyFooter {
   render() {
     return (
       <Host>
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between gap-30 align-items-center">
           {this.isEventType('EDIT_BOOKING') ? (
             <Fragment>
               {this.renderButton('cancel', 'Cancel')}
