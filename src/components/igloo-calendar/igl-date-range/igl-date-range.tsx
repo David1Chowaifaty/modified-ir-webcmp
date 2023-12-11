@@ -8,6 +8,7 @@ import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/c
 export class IglDateRange {
   @Prop() defaultData: { [key: string]: any };
   @Prop({ reflect: true }) disabled: boolean = false;
+  @Prop() minDate: string;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
 
@@ -79,20 +80,21 @@ export class IglDateRange {
       <Host>
         <div class="calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center ">
           <h5 class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">Dates</h5>
-          <div class={"d-flex align-items-center mr-lg-1"}>
-          <div class="iglRangePicker">
-            <ir-date-picker
-              class={'date-range-input'}
-              disabled={this.disabled}
-              fromDate={this.fromDate}
-              toDate={this.toDate}
-              autoApply
-              onDateChanged={evt => {
-                this.handleDateChange(evt);
-              }}
-            ></ir-date-picker>
-          </div>
-          {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')}</span> : ''}
+          <div class={'d-flex align-items-center mr-lg-1'}>
+            <div class="iglRangePicker">
+              <ir-date-picker
+                class={'date-range-input'}
+                disabled={this.disabled}
+                fromDate={this.fromDate}
+                toDate={this.toDate}
+                minDate={this.minDate}
+                autoApply
+                onDateChanged={evt => {
+                  this.handleDateChange(evt);
+                }}
+              ></ir-date-picker>
+            </div>
+            {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')}</span> : ''}
           </div>
         </div>
       </Host>
