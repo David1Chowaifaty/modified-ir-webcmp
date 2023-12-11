@@ -1,5 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 import { EventsService } from '../../../services/events.service';
+import { BookingService } from '../../../services/booking.service';
+import { transformNewBooking } from '../../../utils/booking';
 
 @Component({
   tag: 'igl-booking-event',
@@ -20,6 +22,7 @@ export class IglBookingEvent {
   @Prop() countryNodeList;
 
   @State() renderElement: boolean = false;
+  @State() bookingData;
   @State() position: { [key: string]: any };
 
   dayWidth: number = 0;
@@ -27,6 +30,7 @@ export class IglBookingEvent {
   vertSpace: number = 10;
 
   /* show bubble */
+  private bookingService = new BookingService();
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
   private eventsService = new EventsService();
@@ -53,6 +57,7 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
+    this.bookingData = this.bookingEvent;
     window.addEventListener('click', this.handleClickOutsideBind);
   }
 
@@ -60,7 +65,9 @@ export class IglBookingEvent {
     if (this.isNewEvent()) {
       if (!this.bookingEvent.hideBubble) {
         /* auto matically open the popup, calling the method shows bubble either top or bottom based on available space. */
-        setTimeout(() => {
+        setTimeout(async () => {
+          const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
+          this.bookingData = { ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
           this.showEventInfo(true);
           this.renderAgain();
         }, 1);
@@ -102,10 +109,14 @@ export class IglBookingEvent {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
+          const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
+          this.bookingData = { ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
           this.showEventInfo(true);
         }
       } else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
+          const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
+          this.bookingData = { ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
           this.showEventInfo(true);
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
@@ -504,7 +515,7 @@ export class IglBookingEvent {
             countryNodeList={this.countryNodeList}
             currency={this.currency}
             class="top"
-            bookingEvent={this.bookingEvent}
+            bookingEvent={this.bookingData}
             bubbleInfoTop={this.bubbleInfoTopSide}
           ></igl-booking-event-hover>
         ) : null}
