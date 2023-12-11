@@ -56,6 +56,7 @@ graph TD;
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
   igl-application-info --> ir-tooltip
+  igl-property-booked-by --> ir-autocomplete
   igloo-calendar --> igl-book-property
   style igl-book-property fill:#f9f,stroke:#333,stroke-width:4px
 ```

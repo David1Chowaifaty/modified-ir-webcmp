@@ -23,6 +23,7 @@
 
 | Event                      | Description | Type               |
 | -------------------------- | ----------- | ------------------ |
+| `calculateUnassignedDates` |             | `CustomEvent<any>` |
 | `dragOverHighlightElement` |             | `CustomEvent<any>` |
 | `moveBookingTo`            |             | `CustomEvent<any>` |
 
@@ -75,6 +76,7 @@ graph TD;
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
   igl-application-info --> ir-tooltip
+  igl-property-booked-by --> ir-autocomplete
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
