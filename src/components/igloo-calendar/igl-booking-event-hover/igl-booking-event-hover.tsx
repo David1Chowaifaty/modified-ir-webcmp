@@ -160,24 +160,28 @@ export class IglBookingEventHover {
   }
 
   handleAddRoom() {
-    let fromDate = new Date();
+    let fromDate = new Date(this.bookingEvent.FROM_DATE);
     fromDate.setHours(0, 0, 0, 0);
     let from_date_str = this.getStringDateFormat(fromDate);
 
-    let toDate = new Date();
-    toDate.setDate(toDate.getDate() + 1);
+    let toDate = new Date(this.bookingEvent.TO_DATE);
+    //toDate.setDate(toDate.getDate() + 1);
     toDate.setHours(0, 0, 0, 0);
     let to_date_str = this.getStringDateFormat(toDate);
-
+    console.log(this.bookingEvent);
     let eventData = {
       ID: '',
       NAME: '',
+      BOOKING_NUMBER: this.bookingEvent.BOOKING_NUMBER,
       FROM_DATE: from_date_str, // "2023-07-09",
       TO_DATE: to_date_str, // "2023-07-11",
       roomsInfo: this.bookingEvent.roomsInfo,
+      ARRIVAL: this.bookingEvent.ARRIVAL,
       ADD_ROOM_TO_BOOKING: this.bookingEvent.ID,
       TITLE: 'Add Room to #' + this.bookingEvent.ID + ' - ' + this.bookingEvent.NAME,
       event_type: 'ADD_ROOM',
+      defaultGuest: this.bookingEvent.GUEST,
+      SOURCE: this.bookingEvent.SOURCE,
       defaultDateRange: {
         fromDate: fromDate, //new Date("2023-09-10"),
         fromDateStr: '', //"10 Sep 2023",

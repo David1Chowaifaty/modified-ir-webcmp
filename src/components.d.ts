@@ -59,6 +59,7 @@ export namespace Components {
         "bookingData": any;
         "bookingDataDefaultDateRange": { [key: string]: any };
         "message": string;
+        "minDate": string;
         "showSplitBookingOption": boolean;
         "sourceOptions": TSourceOptions[];
         "splitBookingId": any;
@@ -1596,6 +1597,7 @@ declare namespace LocalJSX {
         "bookingData"?: any;
         "bookingDataDefaultDateRange"?: { [key: string]: any };
         "message"?: string;
+        "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onButtonClicked"?: (event: IglBookPropertyHeaderCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
         "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;

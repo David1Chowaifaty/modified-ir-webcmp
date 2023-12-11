@@ -367,12 +367,12 @@ export class BookingService {
           },
         };
         console.log('body', body);
-        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data['My_Result']);
-        return data['My_Result'];
+        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        // if (data.ExceptionMsg !== '') {
+        //   throw new Error(data.ExceptionMsg);
+        // }
+        // console.log(data['My_Result']);
+        // return data['My_Result'];
       } else {
         throw new Error('Invalid token');
       }
