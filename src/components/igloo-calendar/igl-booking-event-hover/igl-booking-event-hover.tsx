@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Element, Listen } from '@stencil/core';
 import { findCountry, getCurrencySymbol } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
@@ -20,10 +20,39 @@ export class IglBookingEventHover {
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: any[] }>;
+  @Element() element;
   private fromTimeStamp: number;
   private toTimeStamp: number;
   private todayTimeStamp: number = new Date().setHours(0, 0, 0, 0);
   private eventService = new EventsService();
+  componentWillLoad() {
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.hideBubble();
+    } else return;
+  }
+  @Listen('click', { target: 'document' })
+  handleDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!this.element.contains(target)) {
+      this.hideBubble();
+    }
+  }
+  hideBubble() {
+    this.hideBubbleInfo.emit({
+      key: 'hidebubble',
+      currentInfoBubbleId: this.getBookingId(),
+    });
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+  componentDidLoad() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
   getBookingId() {
     return this.bookingEvent.ID;
   }

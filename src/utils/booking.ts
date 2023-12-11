@@ -58,14 +58,24 @@ async function getStayStatus() {
     console.log(error);
   }
 }
+function renderBlock003Date(date, hour, minute) {
+  const dt = new Date(date);
+  dt.setHours(hour);
+  dt.setMinutes(minute);
+  return `Blocked till ${moment(dt).format('MMM DD, HH:mm')}`;
+}
 function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
   if (['003', '002', '004'].includes(cell.STAY_STATUS_CODE)) {
-    //console.log('blocked cells', cell);
     return {
       ID: cell.POOL,
       NOTES: '',
       BALANCE: '',
-      NAME: cell.My_Block_Info.NOTES !== '' ? cell.My_Block_Info.NOTES : stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
+      NAME:
+        cell.My_Block_Info.NOTES !== ''
+          ? cell.My_Block_Info.NOTES
+          : cell.STAY_STATUS_CODE === '003'
+          ? renderBlock003Date(cell.My_Block_Info.BLOCKED_TILL_DATE, cell.My_Block_Info.BLOCKED_TILL_HOUR, cell.My_Block_Info.BLOCKED_TILL_MINUTE)
+          : stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
       RELEASE_AFTER_HOURS: cell.My_Block_Info.DESCRIPTION,
       PR_ID: cell.My_Block_Info.pr_id,
       ENTRY_DATE: cell.My_Block_Info.BLOCKED_TILL_DATE,
@@ -199,7 +209,12 @@ export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDeta
     ID: data.POOL,
     NOTES: '',
     BALANCE: '',
-    NAME: data.NOTES !== '' ? data.NOTES : stayStatus.find(st => st.code === data.STAY_STATUS_CODE).value || '',
+    NAME:
+      data.NOTES !== ''
+        ? data.NOTES
+        : data.STAY_STATUS_CODE === '003'
+        ? renderBlock003Date(data.BLOCKED_TILL_DATE, data.BLOCKED_TILL_HOUR, data.BLOCKED_TILL_MINUTE)
+        : stayStatus.find(st => st.code === data.STAY_STATUS_CODE).value || '',
     RELEASE_AFTER_HOURS: data.DESCRIPTION,
     PR_ID: data.pr_id,
     ENTRY_DATE: data.BLOCKED_TILL_DATE,

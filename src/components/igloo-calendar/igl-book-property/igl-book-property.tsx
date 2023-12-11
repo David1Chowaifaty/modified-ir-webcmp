@@ -49,17 +49,19 @@ export class IglBookProperty {
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
+  handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      this.closeWindow();
+    } else return;
+  }
   componentDidLoad() {
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        this.closeWindow();
-      }
-    });
+    document.addEventListener('keydown', this.handleKeyDown);
   }
   disconnectedCallback() {
-    document.removeEventListener('keydown', () => {});
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
   async componentWillLoad() {
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     if (!this.bookingData.defaultDateRange) {
       return;
     }
@@ -154,6 +156,7 @@ export class IglBookProperty {
   closeWindow() {
     this.dateRangeData = {};
     this.closeBookingWindow.emit();
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
   isEventType(key: string) {
     return this.defaultData.event_type === key;
