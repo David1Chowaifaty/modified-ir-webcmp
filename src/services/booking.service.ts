@@ -270,6 +270,7 @@ export class BookingService {
     totalNights: number,
     source: { code: string; description: string },
     propertyid: number,
+    rooms:any[],
     currency: { id: number; code: string },
     bookingNumber?: string,
     defaultGuest?: any,
@@ -323,7 +324,7 @@ export class BookingService {
               code: arrivalTime || bookedByInfoData.selectedArrivalTime,
             },
             guest: defaultGuest || guest,
-            rooms: guestData.map(data => ({
+            rooms: [...guestData.map(data => ({
               identifier: identifier || null,
               roomtype: {
                 id: data.roomCategoryId,
@@ -363,16 +364,16 @@ export class BookingService {
                 dob: null,
                 subscribe_to_news_letter: null,
               },
-            })),
+            })),...rooms],
           },
         };
         console.log('body', body);
-        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        // if (data.ExceptionMsg !== '') {
-        //   throw new Error(data.ExceptionMsg);
-        // }
-        // console.log(data['My_Result']);
-        // return data['My_Result'];
+        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        console.log(data['My_Result']);
+        return data['My_Result'];
       } else {
         throw new Error('Invalid token');
       }

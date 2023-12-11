@@ -1,3 +1,4 @@
+import { Room } from '../../../components';
 import { BookUserParams } from '../../../models/igl-book-property';
 
 export class IglBookPropertyService {
@@ -71,6 +72,8 @@ export class IglBookPropertyService {
     const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : context.isEventType('ADD_ROOM') ? context.bookingData.ARRIVAL.code : '';
     const pr_id = context.isEventType('BAR_BOOKING') ? context.bookingData.PR_ID : undefined;
     const bookingNumber = context.isEventType('EDIT_BOOKING') || context.isEventType('ADD_ROOM') ? context.bookingData.BOOKING_NUMBER : undefined;
+const rooms:Room[]=context.isEventType('ADD_ROOM') ?context.bookingData.ROOMS:[]
+console.log("rooms",rooms)
 
     return [
       context.bookedByInfoData,
@@ -81,6 +84,7 @@ export class IglBookPropertyService {
       context.dateRangeData.dateDifference,
       sourceOption,
       context.propertyid,
+      rooms,
       context.currency,
       bookingNumber,
       context.bookingData.GUEST,

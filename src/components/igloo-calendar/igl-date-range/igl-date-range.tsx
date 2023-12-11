@@ -1,4 +1,5 @@
 import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/core';
+import { IToast } from '../../ir-toast/toast';
 
 @Component({
   tag: 'igl-date-range',
@@ -11,6 +12,7 @@ export class IglDateRange {
   @Prop() minDate: string;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
+  @Event() toast: EventEmitter<IToast>;
 
   private totalNights: number = 0;
   private fromDate: Date;
@@ -63,16 +65,22 @@ export class IglDateRange {
   }
   handleDateChange(evt) {
     const { start, end } = evt.detail;
-    this.fromDate = start.toDate();
-    this.toDate = end.toDate();
-    this.calculateTotalNights();
-    this.handleDateSelectEvent('selectedDateRange', {
-      fromDate: this.fromDate.getTime(),
-      toDate: this.toDate.getTime(),
-      fromDateStr: start.format('DD MMM YYYY'),
-      toDateStr: end.format('DD MMM YYYY'),
-      dateDifference: this.totalNights,
-    });
+    console.log(start.toDate().getTime() > new Date(this.defaultData.toDate).getTime())
+    if(this.minDate && start.toDate().getTime() > new Date(this.defaultData.toDate).getTime()){
+      this.toast.emit({ type: 'error', title: 'Please select the number of guests', description: '', position: 'top-right' });
+    }else{
+      this.fromDate = start.toDate();
+      this.toDate = end.toDate();
+      this.calculateTotalNights();
+
+      this.handleDateSelectEvent('selectedDateRange', {
+        fromDate: this.fromDate.getTime(),
+        toDate: this.toDate.getTime(),
+        fromDateStr: start.format('DD MMM YYYY'),
+        toDateStr: end.format('DD MMM YYYY'),
+        dateDifference: this.totalNights,
+      });
+    }
     this.renderAgain = !this.renderAgain;
   }
   render() {

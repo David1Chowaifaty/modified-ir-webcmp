@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State, Element, Listen } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Element,  } from '@stencil/core';
 import { findCountry, getCurrencySymbol } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
@@ -33,13 +33,7 @@ export class IglBookingEventHover {
       this.hideBubble();
     } else return;
   }
-  @Listen('click', { target: 'document' })
-  handleDocumentClick(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (!this.element.contains(target)) {
-      this.hideBubble();
-    }
-  }
+  
   hideBubble() {
     this.hideBubbleInfo.emit({
       key: 'hidebubble',
@@ -209,6 +203,7 @@ export class IglBookingEventHover {
       ADD_ROOM_TO_BOOKING: this.bookingEvent.ID,
       TITLE: 'Add Room to #' + this.bookingEvent.ID + ' - ' + this.bookingEvent.NAME,
       event_type: 'ADD_ROOM',
+      ROOMS:this.bookingEvent.ROOMS,
       GUEST: this.bookingEvent.GUEST,
       message:this.bookingEvent.NOTES,
       SOURCE: this.bookingEvent.SOURCE,

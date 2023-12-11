@@ -895,6 +895,7 @@ declare global {
     };
     interface HTMLIglDateRangeElementEventMap {
         "dateSelectEvent": { [key: string]: any };
+        "toast": IToast;
     }
     interface HTMLIglDateRangeElement extends Components.IglDateRange, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglDateRangeElementEventMap>(type: K, listener: (this: HTMLIglDateRangeElement, ev: IglDateRangeCustomEvent<HTMLIglDateRangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1700,6 +1701,7 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
         "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
+        "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
     }
     interface IglLegends {
         "legendData"?: { [key: string]: any };
