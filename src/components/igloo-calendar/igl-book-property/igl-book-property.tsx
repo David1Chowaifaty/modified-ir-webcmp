@@ -316,10 +316,10 @@ export class IglBookProperty {
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);
       }
-      if (this.isEventType('EDIT_BOOKING')||this.isEventType('ADD_ROOM')) {
+      if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
         this.bookedByInfoData.message = this.defaultData.NOTES;
       }
-      const serviceParams = this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
+      const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
       await this.bookingService.bookUser(...serviceParams);
     } catch (error) {
       // Handle error
@@ -328,7 +328,7 @@ export class IglBookProperty {
     }
   }
   setLoadingState(assign_units: boolean) {
-    if (this.isEventType('EDIT_BOOKING')||this.isEventType('ADD_ROOM')) {
+    if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
       this.isLoading = 'save';
     } else {
       this.isLoading = assign_units ? 'bookAndCheckIn' : 'book';

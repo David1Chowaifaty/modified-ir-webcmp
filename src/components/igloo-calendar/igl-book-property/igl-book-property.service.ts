@@ -1,5 +1,5 @@
-import { Room } from '../../../components';
 import { BookUserParams } from '../../../models/igl-book-property';
+import { BookingService } from '../../../services/booking.service';
 
 export class IglBookPropertyService {
   public onDataRoomUpdate(event: CustomEvent, selectedUnits: Map<string, Map<string, any>>, isEditBooking: boolean, name: string) {
@@ -68,12 +68,16 @@ export class IglBookPropertyService {
     selectedUnits.clear();
     selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, { ...data, guestName: name, roomId: '' }));
   }
-  prepareBookUserServiceParams(context, check_in, sourceOption): BookUserParams {
+  async prepareBookUserServiceParams(context, check_in, sourceOption): Promise<BookUserParams> {
     const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : context.isEventType('ADD_ROOM') ? context.bookingData.ARRIVAL.code : '';
     const pr_id = context.isEventType('BAR_BOOKING') ? context.bookingData.PR_ID : undefined;
     const bookingNumber = context.isEventType('EDIT_BOOKING') || context.isEventType('ADD_ROOM') ? context.bookingData.BOOKING_NUMBER : undefined;
-const rooms:Room[]=context.isEventType('ADD_ROOM') ?context.bookingData.ROOMS:[]
-console.log("rooms",rooms)
+    let rooms = [];
+    if (context.isEventType('ADD_ROOM')) {
+      const result = await (context.bookingService as BookingService).getExoposedBooking(bookingNumber, context.language);
+      rooms = result.rooms;
+    }
+    console.log('rooms', rooms);
 
     return [
       context.bookedByInfoData,
