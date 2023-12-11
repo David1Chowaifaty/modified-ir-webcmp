@@ -68,9 +68,9 @@ export class IglBookPropertyService {
     selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, { ...data, guestName: name, roomId: '' }));
   }
   prepareBookUserServiceParams(context, check_in, sourceOption): BookUserParams {
-    const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : '';
+    const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : context.isEventType('ADD_ROOM') ? context.bookingData.ARRIVAL.code : '';
     const pr_id = context.isEventType('BAR_BOOKING') ? context.bookingData.PR_ID : undefined;
-    const bookingNumber = context.isEventType('EDIT_BOOKING') ? context.bookingData.BOOKING_NUMBER : undefined;
+    const bookingNumber = context.isEventType('EDIT_BOOKING') || context.isEventType('ADD_ROOM') ? context.bookingData.BOOKING_NUMBER : undefined;
 
     return [
       context.bookedByInfoData,
