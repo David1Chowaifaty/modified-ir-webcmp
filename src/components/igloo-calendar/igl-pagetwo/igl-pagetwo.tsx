@@ -190,13 +190,13 @@ export class IglPagetwo {
         )}
 
         {this.isEditOrAddRoomEvent ? (
-          <div class="row p-0 mb-1 mt-2">
-            <div class="col-6">
+          <div class="d-flex p-0 mb-1 mt-2">
+            <div class="flex-fill mr-2">
               <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'cancel' })}>
                 Cancel
               </button>
             </div>
-            <div class="col-6">
+            <div class="flex-fill">
               <button
                 disabled={this.isLoading === 'save' || this.isGuestDataIncomplete()}
                 type="button"
