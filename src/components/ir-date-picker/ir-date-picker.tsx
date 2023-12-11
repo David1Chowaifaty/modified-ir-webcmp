@@ -26,6 +26,7 @@ export class IrDatePicker {
   @Prop() weekLabel: string = 'W';
   @Prop() disabled: boolean = false;
   @Prop() singleDatePicker = false;
+  @Prop() minDate: string = '2000-01-01';
   @Prop() maxSpan: moment.DurationInputArg1 = {
     days: 240,
   };
@@ -43,6 +44,7 @@ export class IrDatePicker {
         opens: this.opens,
         startDate: moment(this.fromDate),
         endDate: moment(this.toDate),
+        minDate: moment(this.minDate),
         maxSpan: this.maxSpan,
         autoApply: this.autoApply,
         locale: {

@@ -59,6 +59,7 @@ export namespace Components {
         "bookingData": any;
         "bookingDataDefaultDateRange": { [key: string]: any };
         "message": string;
+        "minDate": string;
         "showSplitBookingOption": boolean;
         "sourceOptions": TSourceOptions[];
         "splitBookingId": any;
@@ -131,6 +132,7 @@ export namespace Components {
     interface IglDateRange {
         "defaultData": { [key: string]: any };
         "disabled": boolean;
+        "minDate": string;
     }
     interface IglLegends {
         "legendData": { [key: string]: any };
@@ -279,6 +281,7 @@ export namespace Components {
         "fromDate": Date;
         "fromLabel": string;
         "maxSpan": moment.DurationInputArg1;
+        "minDate": string;
         "monthNames": string[];
         "opens": 'left' | 'right' | 'center';
         "separator": string;
@@ -1594,6 +1597,7 @@ declare namespace LocalJSX {
         "bookingData"?: any;
         "bookingDataDefaultDateRange"?: { [key: string]: any };
         "message"?: string;
+        "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onButtonClicked"?: (event: IglBookPropertyHeaderCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
         "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
@@ -1694,6 +1698,7 @@ declare namespace LocalJSX {
     interface IglDateRange {
         "defaultData"?: { [key: string]: any };
         "disabled"?: boolean;
+        "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
     }
     interface IglLegends {
@@ -1880,6 +1885,7 @@ declare namespace LocalJSX {
         "fromDate"?: Date;
         "fromLabel"?: string;
         "maxSpan"?: moment.DurationInputArg1;
+        "minDate"?: string;
         "monthNames"?: string[];
         "onDateChanged"?: (event: IrDatePickerCustomEvent<{
     start: moment.Moment;

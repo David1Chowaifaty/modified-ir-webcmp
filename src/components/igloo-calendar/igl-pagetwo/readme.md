@@ -13,10 +13,12 @@
 | `bookedByInfoData`       | --                          |             | `{ [key: string]: any; }`       | `undefined` |
 | `bookingData`            | --                          |             | `{ [key: string]: any; }`       | `undefined` |
 | `countryNodeList`        | `country-node-list`         |             | `any`                           | `undefined` |
+| `currency`               | `currency`                  |             | `any`                           | `undefined` |
 | `dateRangeData`          | --                          |             | `{ [key: string]: any; }`       | `undefined` |
 | `isEditOrAddRoomEvent`   | `is-edit-or-add-room-event` |             | `boolean`                       | `undefined` |
 | `isLoading`              | `is-loading`                |             | `string`                        | `undefined` |
 | `language`               | `language`                  |             | `string`                        | `undefined` |
+| `propertyId`             | `property-id`               |             | `number`                        | `undefined` |
 | `selectedGuestData`      | `selected-guest-data`       |             | `any`                           | `undefined` |
 | `selectedRooms`          | --                          |             | `Map<string, Map<string, any>>` | `undefined` |
 | `showPaymentDetails`     | `show-payment-details`      |             | `boolean`                       | `undefined` |
@@ -48,6 +50,7 @@ graph TD;
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
   igl-application-info --> ir-tooltip
+  igl-property-booked-by --> ir-autocomplete
   igl-book-property --> igl-pagetwo
   style igl-pagetwo fill:#f9f,stroke:#333,stroke-width:4px
 ```
