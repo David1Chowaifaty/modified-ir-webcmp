@@ -29,7 +29,7 @@ export class IglBookingOverviewPage {
     return (
       <Host>
         <igl-book-property-header
-          minDate={this.isEventType('ADD_ROOM')? this.bookingData.FROM_DATE:undefined}
+          minDate={this.isEventType('ADD_ROOM') ? this.bookingData.FROM_DATE : undefined}
           adultChildCount={this.adultChildCount}
           splitBookingId={this.showSplitBookingOption}
           bookingData={this.bookingData}
