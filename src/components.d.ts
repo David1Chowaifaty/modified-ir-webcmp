@@ -279,6 +279,7 @@ export namespace Components {
         "fromDate": Date;
         "fromLabel": string;
         "maxSpan": moment.DurationInputArg1;
+        "minDate": string;
         "monthNames": string[];
         "opens": 'left' | 'right' | 'center';
         "separator": string;
@@ -1880,6 +1881,7 @@ declare namespace LocalJSX {
         "fromDate"?: Date;
         "fromLabel"?: string;
         "maxSpan"?: moment.DurationInputArg1;
+        "minDate"?: string;
         "monthNames"?: string[];
         "onDateChanged"?: (event: IrDatePickerCustomEvent<{
     start: moment.Moment;
