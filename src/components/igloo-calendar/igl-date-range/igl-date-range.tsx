@@ -1,5 +1,6 @@
 import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/core';
 import { IToast } from '../../ir-toast/toast';
+import moment from 'moment';
 
 @Component({
   tag: 'igl-date-range',
@@ -67,7 +68,7 @@ export class IglDateRange {
     const { start, end } = evt.detail;
     console.log(start.toDate().getTime() > new Date(this.defaultData.toDate).getTime())
     if(this.minDate && start.toDate().getTime() > new Date(this.defaultData.toDate).getTime()){
-      this.toast.emit({ type: 'error', title: 'Please select the number of guests', description: '', position: 'top-right' });
+      this.toast.emit({ type: 'error', title: `Check-in date should be between ${moment(new Date(this.defaultData.fromDate)).format('ddd, DD MMM YYYY')} and ${moment(new Date(this.defaultData.toDate)).format('ddd, DD MMM YYYY')} `, description: '', position: 'top-right' });
     }else{
       this.fromDate = start.toDate();
       this.toDate = end.toDate();
