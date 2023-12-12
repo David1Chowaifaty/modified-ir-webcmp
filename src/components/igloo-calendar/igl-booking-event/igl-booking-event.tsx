@@ -12,6 +12,7 @@ export class IglBookingEvent {
   @Element() private element: HTMLElement;
   @Prop() currency;
   @Prop() is_vacation_rental: boolean = false;
+  @Prop() language: string;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
 
   @Event() updateEventData: EventEmitter;
@@ -63,7 +64,7 @@ export class IglBookingEvent {
 
   async fetchAndAssignBookingData() {
     if (this.bookingEvent.STATUS === 'IN-HOUSE') {
-      const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
+      const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, this.language);
       this.bookingData = { ...this.bookingEvent, ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
     }
     this.showEventInfo(true);

@@ -73,6 +73,7 @@ export namespace Components {
         "countryNodeList": any;
         "currency": any;
         "is_vacation_rental": boolean;
+        "language": string;
     }
     interface IglBookingEventHover {
         "bookingEvent": { [key: string]: any };
@@ -119,6 +120,7 @@ export namespace Components {
         "countryNodeList": any;
         "currency": any;
         "isScrollViewDragging": boolean;
+        "language": string;
         "today": String;
     }
     interface IglCalFooter {
@@ -1621,6 +1623,7 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: any;
         "is_vacation_rental"?: boolean;
+        "language"?: string;
         "onDragOverEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onUpdateEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
@@ -1678,6 +1681,7 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: any;
         "isScrollViewDragging"?: boolean;
+        "language"?: string;
         "onAddBookingDatasEvent"?: (event: IglCalBodyCustomEvent<any[]>) => void;
         "onScrollPageToRoom"?: (event: IglCalBodyCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglCalBodyCustomEvent<any>) => void;

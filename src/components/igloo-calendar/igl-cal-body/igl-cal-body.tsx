@@ -12,9 +12,11 @@ export class IglCalBody {
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
   @Prop() currency;
+  @Prop() language: string;
   @Prop() countryNodeList;
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
+
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
   private selectedRooms: { [key: string]: any } = {};
   private fromRoomId: number = -1;
@@ -319,6 +321,7 @@ export class IglCalBody {
           <div class="bookingEventsContainer preventPageScroll">
             {this.getBookingData()?.map(bookingEvent => (
               <igl-booking-event
+                language={this.language}
                 is_vacation_rental={this.calendarData.is_vacation_rental}
                 countryNodeList={this.countryNodeList}
                 currency={this.currency}
