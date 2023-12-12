@@ -62,7 +62,7 @@ export class IglBookingEvent {
   }
 
   async fetchAndAssignBookingData() {
-    if (!['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+    if (this.bookingEvent.STATUS === 'IN-HOUSE') {
       const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
       this.bookingData = { ...this.bookingEvent, ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
     }
