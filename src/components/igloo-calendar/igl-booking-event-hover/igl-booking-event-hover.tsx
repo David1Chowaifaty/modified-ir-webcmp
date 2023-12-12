@@ -237,15 +237,11 @@ export class IglBookingEventHover {
   async handleUpdateBlockedDates() {
     try {
       this.isLoading = 'update';
-      const result = await this.eventService.updateBlockedEvent(this.bookingEvent);
-      const blockedUnit = await transformNewBLockedRooms(result);
-      this.bookingCreated.emit({ pool: this.bookingEvent.POOL, data: [blockedUnit] });
-      this.hideBubbleInfo.emit({
-        key: 'hidebubble',
-        currentInfoBubbleId: this.getBookingId(),
-      });
+      setTimeout(() => {
+        this.hideBubble();
+      }, 50);
+      await this.eventService.updateBlockedEvent(this.bookingEvent);
       this.isLoading = '';
-      console.log('Updated blocked dates');
     } catch (error) {
       //   toastr.error(error);
     }
