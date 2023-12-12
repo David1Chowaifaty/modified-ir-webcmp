@@ -59,7 +59,7 @@ export namespace Components {
         "bookingData": any;
         "bookingDataDefaultDateRange": { [key: string]: any };
         "dateRangeData": any;
-        "defaultDaterange": {from_date:string,to_date:string};
+        "defaultDaterange": { from_date: string; to_date: string };
         "message": string;
         "minDate": string;
         "showSplitBookingOption": boolean;
@@ -1603,7 +1603,7 @@ declare namespace LocalJSX {
         "bookingData"?: any;
         "bookingDataDefaultDateRange"?: { [key: string]: any };
         "dateRangeData"?: any;
-        "defaultDaterange"?: {from_date:string,to_date:string};
+        "defaultDaterange"?: { from_date: string; to_date: string };
         "message"?: string;
         "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;

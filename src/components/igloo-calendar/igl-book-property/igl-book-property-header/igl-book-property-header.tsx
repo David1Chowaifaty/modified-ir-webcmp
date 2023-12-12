@@ -20,7 +20,7 @@ export class IglBookPropertyHeader {
   @Prop() splitBookings: any[];
   @Prop() adultChildCount: { adult: number; child: number };
   @Prop() dateRangeData: any;
-  @Prop() defaultDaterange:{from_date:string,to_date:string};
+  @Prop() defaultDaterange: { from_date: string; to_date: string };
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
   @Event() adultChild: EventEmitter<any>;
@@ -37,7 +37,7 @@ export class IglBookPropertyHeader {
   }
   getSelectedSplitBookingName(bookingId) {
     let splitBooking = this.splitBookings.find(booking => booking.ID === bookingId);
-    return splitBooking.ID + ' ' + splitBooking.NAME;
+    return splitBooking.BOOKING_NUMBER + ' ' + splitBooking.NAME;
   }
   getSplitBookingList() {
     return (
@@ -49,7 +49,7 @@ export class IglBookPropertyHeader {
               Select
             </option>
             {this.splitBookings.map(option => (
-              <option value={option.ID} selected={this.splitBookingId === option.ID}>
+              <option value={option.BOOKING_NUMBER} selected={this.splitBookingId === option.BOOKING_NUMBER}>
                 {this.getSelectedSplitBookingName(option.ID)}
               </option>
             ))}
@@ -131,10 +131,14 @@ export class IglBookPropertyHeader {
     );
   }
   handleButtonClicked() {
-    if(this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.defaultDaterange.to_date).getTime()){
-      this.toast.emit({ type: 'error', title: `Check-in date should be max ${moment(new Date(this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `, description: '', position: 'top-right' });
-    }
-    else if (this.adultChildCount.adult === 0) {
+    if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.defaultDaterange.to_date).getTime()) {
+      this.toast.emit({
+        type: 'error',
+        title: `Check-in date should be max ${moment(new Date(this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `,
+        description: '',
+        position: 'top-right',
+      });
+    } else if (this.adultChildCount.adult === 0) {
       this.toast.emit({ type: 'error', title: 'Please select the number of guests', description: '', position: 'top-right' });
     } else {
       this.buttonClicked.emit({ key: 'check' });

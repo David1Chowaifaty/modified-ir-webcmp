@@ -229,6 +229,7 @@ export class IglBookingEventHover {
     console.log('Handle Customer Check Out');
   }
   handleDeleteEvent() {
+    this.hideBubble();
     this.deleteButton.emit(this.bookingEvent.POOL);
     console.log('Delete Event');
   }
@@ -443,7 +444,7 @@ export class IglBookingEventHover {
               this.handleBookingOption('SPLIT_BOOKING');
             }}
           >
-            Assign unit to existing booking
+            Add unit to existing booking
           </button>
         ) : null}
         <button

@@ -18,12 +18,11 @@ export class IglBookingEvent {
   @Event() updateEventData: EventEmitter;
   @Event() dragOverEventData: EventEmitter;
 
-  @Prop() bookingEvent: { [key: string]: any };
+  @Prop({ mutable: true }) bookingEvent: { [key: string]: any };
   @Prop() allBookingEvents: { [key: string]: any } = [];
   @Prop() countryNodeList;
 
   @State() renderElement: boolean = false;
-  @State() bookingData;
   @State() position: { [key: string]: any };
 
   dayWidth: number = 0;
@@ -31,11 +30,12 @@ export class IglBookingEvent {
   vertSpace: number = 10;
 
   /* show bubble */
-  private bookingService = new BookingService();
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
-  private eventsService = new EventsService();
   private isStreatch = false;
+  /*Services */
+  private eventsService = new EventsService();
+  private bookingService = new BookingService();
   /* Resize props */
   resizeSide: string = '';
   isDragging: boolean = false;
@@ -58,23 +58,28 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
-    this.bookingData = this.bookingEvent;
     window.addEventListener('click', this.handleClickOutsideBind);
   }
 
   async fetchAndAssignBookingData() {
     if (this.bookingEvent.STATUS === 'IN-HOUSE') {
-      const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, this.language);
-      this.bookingData = { ...this.bookingEvent, ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
+      const data = await this.bookingService.getExoposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
+      this.bookingEvent = { ...this.bookingEvent, ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
+      this.showEventInfo(true);
     }
-    this.showEventInfo(true);
   }
   componentDidLoad() {
     if (this.isNewEvent()) {
       if (!this.bookingEvent.hideBubble) {
         /* auto matically open the popup, calling the method shows bubble either top or bottom based on available space. */
         setTimeout(async () => {
-          await this.fetchAndAssignBookingData();
+          if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+            this.showEventInfo(true);
+          } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+            await this.fetchAndAssignBookingData();
+          } else {
+            this.showEventInfo(true);
+          }
           this.renderAgain();
         }, 1);
       }
@@ -115,11 +120,19 @@ export class IglBookingEvent {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
-          await this.fetchAndAssignBookingData();
+          if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+            this.showEventInfo(true);
+          } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+            await this.fetchAndAssignBookingData();
+          }
         }
       } else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
-          await this.fetchAndAssignBookingData();
+          if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+            this.showEventInfo(true);
+          } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+            await this.fetchAndAssignBookingData();
+          }
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
           if (pool) {
@@ -517,7 +530,7 @@ export class IglBookingEvent {
             countryNodeList={this.countryNodeList}
             currency={this.currency}
             class="top"
-            bookingEvent={this.bookingData}
+            bookingEvent={this.bookingEvent}
             bubbleInfoTop={this.bubbleInfoTopSide}
           ></igl-booking-event-hover>
         ) : null}
