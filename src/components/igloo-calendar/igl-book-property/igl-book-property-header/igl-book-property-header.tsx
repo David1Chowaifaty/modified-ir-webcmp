@@ -1,6 +1,7 @@
 import { Component, Host, Prop, h, Event, EventEmitter } from '@stencil/core';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../../models/igl-book-property';
 import { IToast } from '../../../ir-toast/toast';
+import moment from 'moment';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -18,6 +19,8 @@ export class IglBookPropertyHeader {
   @Prop() adultChildConstraints: TAdultChildConstraints;
   @Prop() splitBookings: any[];
   @Prop() adultChildCount: { adult: number; child: number };
+  @Prop() dateRangeData: any;
+  @Prop() defaultDaterange:{from_date:string,to_date:string};
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
   @Event() adultChild: EventEmitter<any>;
@@ -128,7 +131,10 @@ export class IglBookPropertyHeader {
     );
   }
   handleButtonClicked() {
-    if (this.adultChildCount.adult === 0) {
+    if(this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.defaultDaterange.to_date).getTime()){
+      this.toast.emit({ type: 'error', title: `Check-in date should be max ${moment(new Date(this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `, description: '', position: 'top-right' });
+    }
+    else if (this.adultChildCount.adult === 0) {
       this.toast.emit({ type: 'error', title: 'Please select the number of guests', description: '', position: 'top-right' });
     } else {
       this.buttonClicked.emit({ key: 'check' });

@@ -32,7 +32,7 @@ export class IglBookProperty {
   @State() isLoading: string;
   private message: string = '';
   private sourceOption: TSourceOption;
-  private dateRangeData: { [key: string]: any };
+  @State() dateRangeData: { [key: string]: any };
   private page: string;
   private showSplitBookingOption: boolean = false;
   private sourceOptions: TSourceOptions[] = [];
@@ -45,6 +45,7 @@ export class IglBookProperty {
   private bookingService: BookingService = new BookingService();
   private bookPropertyService = new IglBookPropertyService();
   private eventsService = new EventsService();
+  private defaultDateRange:{from_date:string,to_date:string};
 
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
@@ -61,6 +62,7 @@ export class IglBookProperty {
     document.removeEventListener('keydown', this.handleKeyDown);
   }
   async componentWillLoad() {
+    this.defaultDateRange={from_date:this.bookingData.FROM_DATE,to_date:this.bookingData.TO_DATE}
     this.handleKeyDown = this.handleKeyDown.bind(this);
     if (!this.bookingData.defaultDateRange) {
       return;
@@ -126,6 +128,10 @@ export class IglBookProperty {
   }
   @Listen('adultChild')
   handleAdultChildChange(event: CustomEvent) {
+    if(this.isEventType('ADD_ROOM')){
+      this.defaultData.roomsInfo = [];
+      this.message=""
+    }
     this.adultChildCount = { ...event.detail };
   }
 
@@ -168,7 +174,11 @@ export class IglBookProperty {
     const opt: { [key: string]: any } = event.detail;
     if (opt.key === 'selectedDateRange') {
       this.dateRangeData = opt.data;
-      if (this.adultChildCount.adult !== 0) {
+      if(this.isEventType('ADD_ROOM')){
+        this.defaultData.roomsInfo = [];
+        this.message=""
+      }
+     else if (this.adultChildCount.adult !== 0) {
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
       }
     }
@@ -372,6 +382,7 @@ export class IglBookProperty {
           <div class="px-2 px-md-3">
             {this.getCurrentPage('page_one') && (
               <igl-booking-overview-page
+              defaultDaterange={this.defaultDateRange}
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}
                 selectedRooms={this.selectedUnits}

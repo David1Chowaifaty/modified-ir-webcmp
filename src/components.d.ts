@@ -58,6 +58,8 @@ export namespace Components {
         "adultChildCount": { adult: number; child: number };
         "bookingData": any;
         "bookingDataDefaultDateRange": { [key: string]: any };
+        "dateRangeData": any;
+        "defaultDaterange": {from_date:string,to_date:string};
         "message": string;
         "minDate": string;
         "showSplitBookingOption": boolean;
@@ -85,6 +87,7 @@ export namespace Components {
         "bookingData": any;
         "currency": any;
         "dateRangeData": any;
+        "defaultDaterange": {from_date:string,to_date:string};
         "eventType": string;
         "message": string;
         "ratePricingMode": any;
@@ -1597,6 +1600,8 @@ declare namespace LocalJSX {
         "adultChildCount"?: { adult: number; child: number };
         "bookingData"?: any;
         "bookingDataDefaultDateRange"?: { [key: string]: any };
+        "dateRangeData"?: any;
+        "defaultDaterange"?: {from_date:string,to_date:string};
         "message"?: string;
         "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
@@ -1637,6 +1642,7 @@ declare namespace LocalJSX {
         "bookingData"?: any;
         "currency"?: any;
         "dateRangeData"?: any;
+        "defaultDaterange"?: {from_date:string,to_date:string};
         "eventType"?: string;
         "message"?: string;
         "onRoomsDataUpdate"?: (event: IglBookingOverviewPageCustomEvent<any>) => void;
