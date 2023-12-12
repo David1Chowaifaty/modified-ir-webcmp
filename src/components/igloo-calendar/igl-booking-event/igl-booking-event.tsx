@@ -59,11 +59,14 @@ export class IglBookingEvent {
   componentWillLoad() {
     this.bookingData = this.bookingEvent;
     window.addEventListener('click', this.handleClickOutsideBind);
+    console.log('bookingData', this.bookingData);
   }
 
   async fetchAndAssignBookingData() {
-    const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
-    this.bookingData = { ...this.bookingEvent, ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
+    if (!['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+      const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
+      this.bookingData = { ...this.bookingEvent, ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
+    }
     this.showEventInfo(true);
   }
   componentDidLoad() {

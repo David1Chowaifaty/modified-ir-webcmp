@@ -1,5 +1,5 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State, Element,  } from '@stencil/core';
-import { findCountry, getCurrencySymbol } from '../../../utils/utils';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Element } from '@stencil/core';
+import { findCountry, formatDate, getCurrencySymbol } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
 import { transformNewBLockedRooms } from '../../../utils/booking';
@@ -33,7 +33,7 @@ export class IglBookingEventHover {
       this.hideBubble();
     } else return;
   }
-  
+
   hideBubble() {
     this.hideBubbleInfo.emit({
       key: 'hidebubble',
@@ -203,9 +203,9 @@ export class IglBookingEventHover {
       ADD_ROOM_TO_BOOKING: this.bookingEvent.ID,
       TITLE: 'Add Room to #' + this.bookingEvent.ID + ' - ' + this.bookingEvent.NAME,
       event_type: 'ADD_ROOM',
-      ROOMS:this.bookingEvent.ROOMS,
+      ROOMS: this.bookingEvent.ROOMS,
       GUEST: this.bookingEvent.GUEST,
-      message:this.bookingEvent.NOTES,
+      message: this.bookingEvent.NOTES,
       SOURCE: this.bookingEvent.SOURCE,
       defaultDateRange: {
         fromDate: fromDate, //new Date("2023-09-10"),
@@ -308,8 +308,8 @@ export class IglBookingEventHover {
         <div class="row p-0 m-0">
           <div class="pl-0 pr-0 col-12">
             <span class="font-weight-bold">In: </span>
-            {this.getCheckInDate()} - <span class="font-weight-bold">Out: </span>
-            {this.getCheckOutDate()}
+            {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')}- <span class="font-weight-bold">Out: </span>
+            {formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD')}
           </div>
         </div>
         {this.getArrivalTime() && (

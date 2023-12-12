@@ -93,7 +93,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  //console.log('booked cells', cell);
+  console.log('booked cells', cell);
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
@@ -101,12 +101,12 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     NO_OF_DAYS: 1,
     STATUS: status[cell.STAY_STATUS_CODE],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
-    ENTRY_DATE: cell.booking.booked_on.date,
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
     ///from here
+    //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
     // ARRIVAL: cell.booking.arrival,
     // PHONE: cell.booking.guest.mobile ?? '',

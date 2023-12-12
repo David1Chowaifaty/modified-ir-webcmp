@@ -59,14 +59,12 @@ export class IglLegends {
                 </div>
                 <div class="legendRow">
                   <div class="legendCal br-s font-small-3">20</div>
-                  <div class="highphenLegend">Inventory</div>
+                  <div class="highphenLegend">Total Availability</div>
                 </div>
                 <div class="legendRow align-items-center">
-                  <div class="legendCal br-s br-bt font-small-2">
-                    <u>R$100,00</u>
-                  </div>
+                  <div class="legendCal br-s br-bt font-small-2">15</div>
                   <div class="highphenLegend">
-                    <div>Rate (Click to Change)</div>
+                    <div>Offline Availability</div>
                   </div>
                 </div>
               </div>
