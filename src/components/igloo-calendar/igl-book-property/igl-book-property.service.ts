@@ -1,5 +1,5 @@
 import { BookUserParams } from '../../../models/igl-book-property';
-import { BookingService } from '../../../services/booking.service';
+//import { BookingService } from '../../../services/booking.service';
 
 export class IglBookPropertyService {
   public onDataRoomUpdate(event: CustomEvent, selectedUnits: Map<string, Map<string, any>>, isEditBooking: boolean, name: string) {
@@ -74,8 +74,9 @@ export class IglBookPropertyService {
     const bookingNumber = context.isEventType('EDIT_BOOKING') || context.isEventType('ADD_ROOM') ? context.bookingData.BOOKING_NUMBER : undefined;
     let rooms = [];
     if (context.isEventType('ADD_ROOM')) {
-      const result = await (context.bookingService as BookingService).getExoposedBooking(bookingNumber, context.language);
-      rooms = result.rooms;
+      // const result = await (context.bookingService as BookingService).getExoposedBooking(bookingNumber, context.language);
+      //rooms = result.rooms;
+      rooms = context.bookingData.ROOMS;
     }
     console.log('rooms', rooms);
 
