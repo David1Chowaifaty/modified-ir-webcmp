@@ -38,6 +38,8 @@ export class IglooCalendar {
   @State() showPaymentDetails: boolean = false;
   @State() showToBeAssigned: boolean = false;
   @State() unassignedDates = {};
+  @Event({ bubbles: true, composed: true })
+  reduceAvailableUnitEvent: EventEmitter<{ fromDate: string; toDate: string }>;
   private bookingService: BookingService = new BookingService();
   private countryNodeList: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
@@ -94,8 +96,8 @@ export class IglooCalendar {
           }, 200);
           if (!this.calendarData.is_vacation_rental) {
             const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-            this.unassignedDates = { ...this.unassignedDates, ...data };
-            this.calendarData.unassignedDates = data;
+            this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: { ...this.unassignedDates, ...data } };
+            this.calendarData = { ...this.calendarData, unassignedDates: data };
           }
           this.socket = io('https://realtime.igloorooms.com/');
           this.socket.on('MSG', async msg => {
@@ -147,7 +149,17 @@ export class IglooCalendar {
                       dateToFormattedString(new Date(parsedResult.TO_DATE)),
                     );
                     this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
-                    this.unassignedDates = data;
+                    this.unassignedDates = {
+                      fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
+                      toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
+                      data,
+                    };
+                    if (Object.keys(data).length === 0) {
+                      this.reduceAvailableUnitEvent.emit({
+                        fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
+                        toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
+                      });
+                    }
                   }
                 } else {
                   return;
@@ -408,7 +420,11 @@ export class IglooCalendar {
     }
     const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
     this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
-    this.unassignedDates = { ...data };
+    this.unassignedDates = {
+      fromDate,
+      toDate,
+      data,
+    };
   }
   async handleDateSearch(dates: { start: Moment; end: Moment }) {
     const startDate = moment(dates.start).toDate();

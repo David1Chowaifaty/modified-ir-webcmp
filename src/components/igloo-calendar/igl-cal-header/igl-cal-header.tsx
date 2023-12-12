@@ -1,7 +1,6 @@
 import { Component, Event, EventEmitter, Host, Prop, h, State, Listen, Watch } from '@stencil/core';
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
-import { transformDateFormatWithMoment } from '../../../utils/events.utils';
 import moment from 'moment';
 
 @Component({
@@ -20,7 +19,7 @@ export class IglCalHeader {
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
   @Prop() propertyid: number;
-  @Prop() unassignedDates = {};
+  @Prop() unassignedDates;
   @Prop() to_date: string;
   @State() renderAgain: boolean = false;
   @State() unassignedRoomsNumber: any = {};
@@ -51,36 +50,50 @@ export class IglCalHeader {
   }
 
   private async fetchAndAssignUnassignedRooms() {
-    //const days = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-    const days = this.unassignedDates;
-    await this.assignRoomsToDate(days);
+    await this.assignRoomsToDate();
   }
 
-  private async assignRoomsToDate(days) {
-    for (const day of Object.keys(days)) {
-      const result = await this.toBeAssignedService.getUnassignedRooms(
-        this.propertyid,
-        dateToFormattedString(new Date(+day)),
-        this.calendarData.roomsInfo,
-        this.calendarData.formattedLegendData,
-      );
-      this.unassignedRoomsNumber = { ...this.unassignedRoomsNumber, [transformDateFormatWithMoment(days[day].dateStr)]: result.length };
+  private async assignRoomsToDate() {
+    try {
+      const { fromDate, toDate, data } = this.unassignedDates;
+      let dt = new Date(fromDate);
+      dt.setHours(0);
+      dt.setMinutes(0);
+      dt.setSeconds(0);
+      let endDate = dt.getTime();
+      while (endDate <= new Date(toDate).getTime()) {
+        const selectedDate = moment(endDate).format('D_M_YYYY');
+        if (data[endDate]) {
+          const result = await this.toBeAssignedService.getUnassignedRooms(
+            this.propertyid,
+            dateToFormattedString(new Date(endDate)),
+            this.calendarData.roomsInfo,
+            this.calendarData.formattedLegendData,
+          );
+          this.unassignedRoomsNumber[selectedDate] = result.length;
+        } else if (this.unassignedRoomsNumber[selectedDate]) {
+          this.unassignedRoomsNumber[selectedDate] = this.unassignedRoomsNumber[selectedDate] - 1;
+        }
+        endDate = moment(endDate).add(1, 'days').toDate().getTime();
+        this.renderView();
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
   @Listen('reduceAvailableUnitEvent', { target: 'window' })
-  handleReduceAvailableUnitEvent(event: CustomEvent<{ [key: string]: any }>) {
-    const opt: { [key: string]: any } = event.detail;
-    const data = opt.data;
+  handleReduceAvailableUnitEvent(event: CustomEvent<{ fromDate: string; toDate: string }>) {
     event.stopImmediatePropagation();
     event.stopPropagation();
-
-    // return {day, dayDisplayName, currentDate, tobeAssignedCount: dates[currentDate]};
-    if (opt.key === 'reduceAvailableDays') {
-      const selectedDate = moment(+data.selectedDate).format('D_M_YYYY');
+    const { fromDate, toDate } = event.detail;
+    let endDate = new Date(fromDate).getTime();
+    while (endDate < new Date(toDate).getTime()) {
+      const selectedDate = moment(endDate).format('D_M_YYYY');
       this.unassignedRoomsNumber[selectedDate] = this.unassignedRoomsNumber[selectedDate] - 1;
-      this.renderView();
+      endDate = moment(endDate).add(1, 'days').toDate().getTime();
     }
+    this.renderView();
   }
 
   showToBeAssigned(dayInfo) {

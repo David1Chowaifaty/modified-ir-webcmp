@@ -132,7 +132,7 @@ export namespace Components {
         "propertyid": number;
         "to_date": string;
         "today": String;
-        "unassignedDates": {};
+        "unassignedDates": any;
     }
     interface IglDateRange {
         "defaultData": { [key: string]: any };
@@ -1033,6 +1033,7 @@ declare global {
         "dragOverHighlightElement": any;
         "moveBookingTo": any;
         "calculateUnassignedDates": any;
+        "reduceAvailableUnitEvent": { fromDate: string; toDate: string };
     }
     interface HTMLIglooCalendarElement extends Components.IglooCalendar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglooCalendarElementEventMap>(type: K, listener: (this: HTMLIglooCalendarElement, ev: IglooCalendarCustomEvent<HTMLIglooCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1704,7 +1705,7 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "to_date"?: string;
         "today"?: String;
-        "unassignedDates"?: {};
+        "unassignedDates"?: any;
     }
     interface IglDateRange {
         "defaultData"?: { [key: string]: any };
@@ -1789,6 +1790,7 @@ declare namespace LocalJSX {
         "onCalculateUnassignedDates"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onDragOverHighlightElement"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onMoveBookingTo"?: (event: IglooCalendarCustomEvent<any>) => void;
+        "onReduceAvailableUnitEvent"?: (event: IglooCalendarCustomEvent<{ fromDate: string; toDate: string }>) => void;
         "propertyid"?: number;
         "ticket"?: string;
         "to_date"?: string;
