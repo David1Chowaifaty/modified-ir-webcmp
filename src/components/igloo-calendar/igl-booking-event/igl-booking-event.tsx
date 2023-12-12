@@ -59,7 +59,6 @@ export class IglBookingEvent {
   componentWillLoad() {
     this.bookingData = this.bookingEvent;
     window.addEventListener('click', this.handleClickOutsideBind);
-    console.log('bookingData', this.bookingData);
   }
 
   async fetchAndAssignBookingData() {

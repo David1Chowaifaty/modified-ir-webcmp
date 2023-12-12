@@ -1,5 +1,4 @@
 import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@stencil/core';
-//import { getCurrencySymbol } from '../../../utils/utils';
 
 @Component({
   tag: 'igl-cal-body',
@@ -237,19 +236,21 @@ export class IglCalBody {
   }
 
   getGeneralCategoryDayColumns(addClass: string, isCategory: boolean = false, index: number) {
-    return this.calendarData.days.map(dayInfo => (
-      <div class={`cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`}>
-        {isCategory ? (
-          <span>
-            {dayInfo.rate[index].inventory}
-            <br />
-            {/* {dayInfo.rate[index].rate && <u>{getCurrencySymbol(this.currency.code)} {dayInfo.rate[index].rate}</u>} */}
-          </span>
-        ) : (
-          ''
-        )}
-      </div>
-    ));
+    return this.calendarData.days.map(dayInfo => {
+      return (
+        <div class={`cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`}>
+          {isCategory ? (
+            <span>
+              {dayInfo.rate[index].exposed_inventory.total}
+              <br />
+              {dayInfo.rate[index].exposed_inventory.offline}
+            </span>
+          ) : (
+            ''
+          )}
+        </div>
+      );
+    });
   }
 
   getGeneralRoomDayColumns(roomId: string, roomCategory) {
