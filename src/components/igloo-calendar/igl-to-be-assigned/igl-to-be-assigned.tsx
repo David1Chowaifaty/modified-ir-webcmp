@@ -172,61 +172,35 @@ export class IglToBeAssigned {
       return null;
     }
   }
-  async handleAssignUnit(event) {
-    event.stopImmediatePropagation();
-    if (event.detail.key !== 'assignUnit') return;
-    const assignmentDetails = event.detail.data;
-    const { selectedDate, RT_ID } = assignmentDetails;
-    const categories = this.data[selectedDate].categories;
-
-    this.removeEventFromCategory(assignmentDetails);
-    this.checkAndCleanEmptyCategories(assignmentDetails);
-    if (!categories[RT_ID]) {
-      this.renderView();
-    } else {
-      await this.updateSelectedDateCategories(assignmentDetails.selectedDate);
-      this.renderView();
-    }
-    this.emitUnitReductionEvent(assignmentDetails.selectedDate);
-  }
-
-  removeEventFromCategory(assignmentDetails) {
-    const { selectedDate, RT_ID, assignEvent } = assignmentDetails;
-    const categories = this.data[selectedDate].categories;
-    if (categories[RT_ID]) {
-      categories[RT_ID] = categories[RT_ID].filter(event => event.ID != assignEvent.ID);
-    }
-  }
-  emitUnitReductionEvent(selectedDate) {
-    this.reduceAvailableUnitEvent.emit({
-      key: 'reduceAvailableDays',
-      data: { selectedDate },
-    });
-  }
-
-  async updateSelectedDateCategories(selectedDate) {
-    if (selectedDate !== null) {
-      await this.updateCategories(selectedDate, this.calendarData);
-    }
-  }
-
-  checkAndCleanEmptyCategories(assignmentDetails) {
-    const { selectedDate, RT_ID } = assignmentDetails;
-    const categories = this.data[selectedDate].categories;
-
-    if (!categories[RT_ID]) {
-      delete categories[RT_ID];
-      if (!Object.keys(categories).length) {
-        delete this.data[selectedDate];
-        this.orderedDatesList = this.orderedDatesList.filter(date => date != selectedDate);
-        this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
-      }
-    }
-  }
+  
   renderView() {
     this.renderAgain = !this.renderAgain;
   }
+  handleAssignUnit(event: CustomEvent<{ [key: string]: any }>){
+    const opt:{ [key: string]: any } = event.detail;
+    const data = opt.data;
+    event.stopImmediatePropagation();
+    event.stopPropagation();
 
+    if(opt.key === "assignUnit"){
+      this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter((eventData) => eventData.ID != data.assignEvent.ID);
+      this.calendarData = data.calendarData; // RAJA
+      // this.calendarData.bookingEvents.push(data.assignEvent);
+
+      if(!this.data[data.selectedDate].categories[data.RT_ID].length){
+        delete this.data[data.selectedDate].categories[data.RT_ID];
+
+        if(!Object.keys(this.data[data.selectedDate].categories).length){
+          delete this.data[data.selectedDate];
+          this.orderedDatesList = this.orderedDatesList.filter((dateStamp) => dateStamp != data.selectedDate);
+          this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
+        }
+      }
+
+      // this.reduceAvailableUnitEvent.emit({key: "reduceAvailableDays", data: {selectedDate: data.selectedDate}});
+      this.renderView();
+    }
+  }
   render() {
     return (
       <Host class="tobeAssignedContainer pr-1 text-left">
