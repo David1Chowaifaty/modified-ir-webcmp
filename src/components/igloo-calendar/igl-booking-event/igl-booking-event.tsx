@@ -61,14 +61,17 @@ export class IglBookingEvent {
     window.addEventListener('click', this.handleClickOutsideBind);
   }
 
+  async fetchAndAssignBookingData() {
+    const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
+    this.bookingData = { ...this.bookingEvent, ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
+    this.showEventInfo(true);
+  }
   componentDidLoad() {
     if (this.isNewEvent()) {
       if (!this.bookingEvent.hideBubble) {
         /* auto matically open the popup, calling the method shows bubble either top or bottom based on available space. */
         setTimeout(async () => {
-          const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
-          this.bookingData = { ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
-          this.showEventInfo(true);
+          await this.fetchAndAssignBookingData();
           this.renderAgain();
         }, 1);
       }
@@ -109,15 +112,11 @@ export class IglBookingEvent {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
-          const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
-          this.bookingData = { ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
-          this.showEventInfo(true);
+          await this.fetchAndAssignBookingData();
         }
       } else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
-          const data = await this.bookingService.getExoposedBooking(this.bookingData.BOOKING_NUMBER, 'en');
-          this.bookingData = { ...transformNewBooking(data).filter(d => d.ID === this.bookingEvent.ID)[0] };
-          this.showEventInfo(true);
+          await this.fetchAndAssignBookingData();
         } else {
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
           if (pool) {
