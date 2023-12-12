@@ -2,7 +2,7 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Element } from '@
 import { findCountry, formatDate, getCurrencySymbol } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
-import { transformNewBLockedRooms } from '../../../utils/booking';
+//import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
   tag: 'igl-booking-event-hover',
