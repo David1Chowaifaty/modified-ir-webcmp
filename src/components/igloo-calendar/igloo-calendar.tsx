@@ -634,6 +634,7 @@ export class IglooCalendar {
             [
               this.showToBeAssigned ? (
                 <igl-to-be-assigned
+                unassignedDatesToBeAssigned={this.unassignedDates}
                   loadingMessage={'Fetching unassigned units'}
                   to_date={this.to_date}
                   from_date={this.from_date}

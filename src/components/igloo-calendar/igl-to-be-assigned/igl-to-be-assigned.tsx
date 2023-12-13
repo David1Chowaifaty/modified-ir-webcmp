@@ -1,6 +1,7 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State, Listen, Fragment } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Listen, Fragment, Watch } from '@stencil/core';
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
+import moment from 'moment';
 //import { updateCategories } from '../../../utils/events.utils';
 
 @Component({
@@ -9,6 +10,7 @@ import { dateToFormattedString } from '../../../utils/utils';
   scoped: true,
 })
 export class IglToBeAssigned {
+  @Prop() unassignedDatesToBeAssigned:any
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
@@ -35,8 +37,81 @@ export class IglToBeAssigned {
   componentWillLoad() {
     this.reArrangeData();
   }
+  @Watch("unassignedDatesToBeAssigned")
+  handleUnassignedDatesToBeAssignedChange(newValue: any) {
+    const { fromDate, toDate, data } = newValue;
+    
+    // Update your unassignedDates based on the new value
+    this.updateUnassignedDates(fromDate, toDate, data);
+    
+    // Attempt to set the dropdown to an appropriate date
+    if (this.allBookingsAssignedForDate(this.selectedDate)) {
+      this.removeDateFromDropdown(this.selectedDate);
+      this.selectedDate = this.findNextAvailableDate(this.selectedDate);
+      
+    }
+    
+    // If there's a selected date available, show it, otherwise handle the case with no unassigned bookings
+    if (this.selectedDate) {
+      this.showForDate(this.selectedDate);
+    } else {
+      this.handleNoMoreUnassignedBookings();
+    }
+    if (this.selectedDate) {
+      this.updateCategories(this.selectedDate, this.calendarData);
+    }
+  }
+  
+  updateUnassignedDates(fromDate: string, toDate: string, data: any) {
+    console.log("last order",this.data)
+    let dt = new Date(fromDate);
+    dt.setHours(0, 0, 0, 0);
+    dt.setMinutes(0);
+    dt.setSeconds(0);
+    let endDate = dt.getTime();
+    while (endDate <= new Date(toDate).getTime()) {
+      if (data && !data[endDate]) {
+        delete this.unassignedDates[endDate];
+      } else if (data && data[endDate]) {
+        this.unassignedDates[endDate] = data[endDate];
+      }
+      endDate = moment(endDate).add(1, 'days').toDate().getTime();
+    }
+    this.data = this.unassignedDates;
+    this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
+    this.renderView()
+    console.log("order",this.data)
+  }
+  
+  allBookingsAssignedForDate(date: string): boolean {
+    // Implement your logic to determine if all bookings are assigned for the date
+    return !this.unassignedDates[date]; // Example check
+  }
+  
+  removeDateFromDropdown(date: string) {
+    // Implement your logic to remove the date from the dropdown list
+    delete this.unassignedDates[date];
+    this.orderedDatesList = this.orderedDatesList.filter(d => d !== date);
+  }
+  
+  findNextAvailableDate(currentDate: string): string | null {
+    // Find the index of the current date in the ordered list
+    const currentIndex = this.orderedDatesList.indexOf(currentDate);
+    // If there's a next date in the list, return it, otherwise return null
+    return currentIndex >= 0 && currentIndex < this.orderedDatesList.length - 1
+      ? this.orderedDatesList[currentIndex + 1]
+      : null;
+  }
+  
+  handleNoMoreUnassignedBookings() {
+    // Implement your logic here to handle when there are no more unassigned bookings
+    console.log("No more unassigned bookings available.");
+    // Possible UI update to inform users
+  }
+
   async updateCategories(key, calendarData) {
     try {
+      console.log("called")
       let categorisedRooms = {};
       const result = await this.toBeAssignedService.getUnassignedRooms(
         this.propertyid,
@@ -120,6 +195,7 @@ export class IglToBeAssigned {
       }
       this.isLoading = false;
       this.selectedDate = dateStamp;
+      this.renderView();
     } catch (error) {
       // toastr.error(error);
     }

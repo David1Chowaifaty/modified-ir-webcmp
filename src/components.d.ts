@@ -188,6 +188,7 @@ export namespace Components {
         "loadingMessage": string;
         "propertyid": number;
         "to_date": string;
+        "unassignedDatesToBeAssigned": any;
     }
     interface IglooCalendar {
         "baseurl": string;
@@ -1780,6 +1781,7 @@ declare namespace LocalJSX {
         "onShowBookingPopup"?: (event: IglToBeAssignedCustomEvent<any>) => void;
         "propertyid"?: number;
         "to_date"?: string;
+        "unassignedDatesToBeAssigned"?: any;
     }
     interface IglooCalendar {
         "baseurl"?: string;
