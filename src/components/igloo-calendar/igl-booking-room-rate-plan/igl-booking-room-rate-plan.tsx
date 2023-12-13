@@ -16,6 +16,7 @@ export class IglBookingRoomRatePlan {
   @Prop() dateDifference: number;
   @Prop() bookingType: string = 'PLUS_BOOKING';
   @Prop() fullyBlocked: boolean;
+  @Prop() isBookDisabled: boolean = false;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
@@ -280,7 +281,7 @@ export class IglBookingRoomRatePlan {
 
             {this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (
               <button
-                disabled={this.selectedData.rate === 0 || this.disableForm()}
+                disabled={this.selectedData.rate === 0 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
                 type="button"
                 class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 "
                 onClick={() => this.bookProperty()}

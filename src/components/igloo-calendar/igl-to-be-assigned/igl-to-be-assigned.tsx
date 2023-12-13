@@ -1,6 +1,7 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State, Listen, Fragment } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Listen, Fragment, Watch } from '@stencil/core';
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
+import moment from 'moment';
 //import { updateCategories } from '../../../utils/events.utils';
 
 @Component({
@@ -12,6 +13,7 @@ export class IglToBeAssigned {
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
+  @Prop() unassignedDatesProp;
   @Prop() loadingMessage: string = 'Fetching unassigned units';
   @Prop({ mutable: true }) calendarData: { [key: string]: any };
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
@@ -35,6 +37,37 @@ export class IglToBeAssigned {
   componentWillLoad() {
     this.reArrangeData();
   }
+
+  @Watch('unassignedDatesProp')
+  async handleCalendarDataChange(newValue) {
+    try {
+      const { fromDate, toDate, data } = newValue;
+      let dt = new Date(fromDate);
+      dt.setHours(0);
+      dt.setMinutes(0);
+      dt.setSeconds(0);
+      let endDate = dt.getTime();
+      while (endDate <= new Date(toDate).getTime()) {
+        if (data && !data[endDate]) {
+          delete this.unassignedDates[endDate];
+        } else if (data[endDate]) {
+          this.unassignedDates[endDate] = data[endDate];
+        }
+        endDate = moment(endDate).add(1, 'days').toDate().getTime();
+      }
+      this.data = this.unassignedDates;
+      this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
+      if (!this.selectedDate && this.orderedDatesList.length) {
+        this.selectedDate = this.orderedDatesList[0];
+      }
+      this.showForDate(this.selectedDate);
+      //this.renderView();
+    } catch (error) {
+      console.error(error);
+    }
+    //this.renderView();
+  }
+
   async updateCategories(key, calendarData) {
     try {
       let categorisedRooms = {};
@@ -172,27 +205,27 @@ export class IglToBeAssigned {
       return null;
     }
   }
-  
+
   renderView() {
     this.renderAgain = !this.renderAgain;
   }
-  handleAssignUnit(event: CustomEvent<{ [key: string]: any }>){
-    const opt:{ [key: string]: any } = event.detail;
+  handleAssignUnit(event: CustomEvent<{ [key: string]: any }>) {
+    const opt: { [key: string]: any } = event.detail;
     const data = opt.data;
     event.stopImmediatePropagation();
     event.stopPropagation();
 
-    if(opt.key === "assignUnit"){
-      this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter((eventData) => eventData.ID != data.assignEvent.ID);
+    if (opt.key === 'assignUnit') {
+      this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
       this.calendarData = data.calendarData; // RAJA
       // this.calendarData.bookingEvents.push(data.assignEvent);
 
-      if(!this.data[data.selectedDate].categories[data.RT_ID].length){
+      if (!this.data[data.selectedDate].categories[data.RT_ID].length) {
         delete this.data[data.selectedDate].categories[data.RT_ID];
 
-        if(!Object.keys(this.data[data.selectedDate].categories).length){
+        if (!Object.keys(this.data[data.selectedDate].categories).length) {
           delete this.data[data.selectedDate];
-          this.orderedDatesList = this.orderedDatesList.filter((dateStamp) => dateStamp != data.selectedDate);
+          this.orderedDatesList = this.orderedDatesList.filter(dateStamp => dateStamp != data.selectedDate);
           this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
         }
       }
@@ -224,13 +257,14 @@ export class IglToBeAssigned {
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      <div
+                      <button
+                        type="button"
                         class={'dropdown-toggle'}
                         //onClick={() => this.showUnassignedDate()}
                       >
                         <span class="font-weight-bold">{this.data[this.selectedDate].dateStr}</span>
                         {/* <i class="la la-angle-down ml-2"></i> */}
-                      </div>
+                      </button>
                       <div class="dropdown-menu dropdown-menu-right full-width" aria-labelledby="dropdownMenuButton">
                         {this.orderedDatesList?.map(ordDate => (
                           <div class="dropdown-item pointer" onClick={() => this.showForDate(ordDate)}>

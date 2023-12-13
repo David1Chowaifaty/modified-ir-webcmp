@@ -34,6 +34,7 @@ export class IglPagetwo {
 
   componentWillLoad() {
     this.initializeGuestData();
+    this.selectedBookedByData = this.bookedByInfoData;
   }
   initializeGuestData() {
     let total = 0;
@@ -104,22 +105,20 @@ export class IglPagetwo {
       if (!property) {
         return true;
       }
-      console.log(this.selectedBookedByData)
       if (property === this.selectedGuestData) {
         return this.isGuestDataIncomplete();
       }
       // const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
       // if (!this.showPaymentDetails && isCardDetails) {
-        //   return false;
-        // }
-        if(key==="selectedArrivalTime" ){
-          if(property[key]!==undefined){
-
-            return  property[key].code===""
-          }else{
-            return true
-          }
+      //   return false;
+      // }
+      if (key === 'selectedArrivalTime') {
+        if (property[key] !== undefined) {
+          return property[key].code === '';
+        } else {
+          return true;
         }
+      }
       return property[key] === comparedBy || property[key] === undefined;
     };
     return (
@@ -141,7 +140,7 @@ export class IglPagetwo {
 
   render() {
     return (
-      <Host >
+      <Host>
         <div class="d-flex flex-wrap">
           <div class="flex-fill text-left p-0">
             <span class="mr-1 font-weight-bold font-medium-1">
@@ -212,7 +211,7 @@ export class IglPagetwo {
           <div class="d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center">
             <div class="flex-fill mr-md-1">
               <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'back' })}>
-              <span class={"d-none d-md-inline-flex"}>  &lt;&lt;</span> Back
+                <span class={'d-none d-md-inline-flex'}> &lt;&lt;</span> Back
               </button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill mr-md-1">

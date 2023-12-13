@@ -1,4 +1,4 @@
-import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element } from '@stencil/core';
+import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
 import { BookingService } from '../../services/booking.service';
 
@@ -11,12 +11,15 @@ export class IrAutocomplete {
   @Prop() duration: number = 300;
   @Prop() placeholder: string = '';
   @Prop() propertyId: number;
+  @Prop() isSplitBooking: boolean = false;
   @Prop() type: 'email' | 'text' | 'password' | 'number' | 'search' = 'text';
   @Prop() name: string = '';
   @Prop() inputId: string = v4();
   @Prop() required: boolean = false;
   @Prop() disabled: boolean = false;
   @Prop() value: string;
+  @Prop() from_date: string = '';
+  @Prop() to_date: string = '';
   @State() inputValue: string = '';
   @State() data: any[] = [];
   @State() selectedIndex: number = -1;
@@ -24,6 +27,7 @@ export class IrAutocomplete {
   @Event({ bubbles: true, composed: true }) comboboxValue: EventEmitter<{ key: string; data: unknown }>;
   @Event() inputCleared: EventEmitter<null>;
   @State() isItemSelected: boolean;
+
   @Element() el: HTMLElement;
   private inputRef: HTMLInputElement;
   private debounceTimer: any;
@@ -79,12 +83,6 @@ export class IrAutocomplete {
     }
   }
 
-  setInputValue(item) {
-    if (item && item.email) {
-      this.inputValue = item.email;
-    }
-  }
-
   selectItem(index) {
     if (this.data[index]) {
       this.isItemSelected = true;
@@ -103,7 +101,14 @@ export class IrAutocomplete {
 
   async fetchData() {
     try {
-      const data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
+      let data = [];
+      if (!this.isSplitBooking) {
+        data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
+      } else {
+        if (this.inputValue.split(' ').length === 1) {
+          data = await this.bookingService.fetchExposedBookings(this.inputValue, this.propertyId, this.from_date, this.to_date);
+        }
+      }
       if (data) {
         this.data = data;
         if (!this.isComboBoxVisible) {
@@ -175,8 +180,14 @@ export class IrAutocomplete {
         <div class="position-absolute border rounded border-light combobox">
           {this.data.map((d, index) => (
             <p role="button" onKeyDown={e => this.handleItemKeyDown(e, index)} data-selected={this.selectedIndex === index} tabIndex={0} onClick={() => this.selectItem(index)}>
-              {`${d.email}`}
-              <span class={'d-none d-sm-inline-flex'}>{` - ${d.first_name} ${d.last_name}`}</span>
+              {this.isSplitBooking ? (
+                <Fragment>{`${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`}</Fragment>
+              ) : (
+                <Fragment>
+                  {`${d.email}`}
+                  <span class={'d-none d-sm-inline-flex'}>{` - ${d.first_name} ${d.last_name}`}</span>
+                </Fragment>
+              )}
             </p>
           ))}
         </div>

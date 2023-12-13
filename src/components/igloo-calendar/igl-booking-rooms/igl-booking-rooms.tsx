@@ -14,6 +14,7 @@ export class IglBookingRooms {
   @Prop() currency;
   @State() selectedRooms: number[] = [];
   @State() totalRooms: number;
+  @Prop() isBookDisabled: boolean;
   @State() roomsDistributions: number[] = [];
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   private validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING'];
@@ -123,6 +124,7 @@ export class IglBookingRooms {
             return (
               <igl-booking-room-rate-plan
                 index={index}
+                isBookDisabled={this.isBookDisabled}
                 key={`rate-plan-${ratePlan.id}`}
                 ratePricingMode={this.ratePricingMode}
                 class={isValidBookingType ? '' : ''}

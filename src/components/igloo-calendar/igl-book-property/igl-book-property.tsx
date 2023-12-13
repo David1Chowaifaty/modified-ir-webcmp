@@ -45,7 +45,7 @@ export class IglBookProperty {
   private bookingService: BookingService = new BookingService();
   private bookPropertyService = new IglBookPropertyService();
   private eventsService = new EventsService();
-  private defaultDateRange:{from_date:string,to_date:string};
+  private defaultDateRange: { from_date: string; to_date: string };
 
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
@@ -61,8 +61,40 @@ export class IglBookProperty {
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
   }
+
+  @Listen('spiltBookingSelected')
+  async handleSpiltBookingSelected(e: CustomEvent<{ key: string; data: unknown }>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation;
+    const { key, data } = e.detail;
+    console.log(data);
+    if (key === 'select') {
+      const res = await this.bookingService.getExoposedBooking((data as any).booking_nbr, this.language);
+      this.bookedByInfoData = {
+        id: res.guest.id,
+        email: res.guest.email,
+        firstName: res.guest.first_name,
+        lastName: res.guest.last_name,
+        countryId: res.guest.country_id,
+        isdCode: res.guest.country_id.toString(),
+        contactNumber: res.guest.mobile,
+        selectedArrivalTime: res.arrival,
+        emailGuest: res.guest.subscribe_to_news_letter,
+        message: res.remark,
+        cardNumber: '',
+        cardHolderName: '',
+        expiryMonth: '',
+        expiryYear: '',
+        bookingNumber: res.booking_nbr,
+        rooms: res.rooms,
+      };
+      this.sourceOption = res.source;
+      this.renderPage();
+      // console.log(res);
+    }
+  }
   async componentWillLoad() {
-    this.defaultDateRange={from_date:this.bookingData.FROM_DATE,to_date:this.bookingData.TO_DATE}
+    this.defaultDateRange = { from_date: this.bookingData.FROM_DATE, to_date: this.bookingData.TO_DATE };
     this.handleKeyDown = this.handleKeyDown.bind(this);
     if (!this.bookingData.defaultDateRange) {
       return;
@@ -128,9 +160,9 @@ export class IglBookProperty {
   }
   @Listen('adultChild')
   handleAdultChildChange(event: CustomEvent) {
-    if(this.isEventType('ADD_ROOM')){
+    if (this.isEventType('ADD_ROOM')) {
       this.defaultData.roomsInfo = [];
-      this.message=""
+      this.message = '';
     }
     this.adultChildCount = { ...event.detail };
   }
@@ -174,11 +206,10 @@ export class IglBookProperty {
     const opt: { [key: string]: any } = event.detail;
     if (opt.key === 'selectedDateRange') {
       this.dateRangeData = opt.data;
-      if(this.isEventType('ADD_ROOM')){
+      if (this.isEventType('ADD_ROOM')) {
         this.defaultData.roomsInfo = [];
-        this.message=""
-      }
-     else if (this.adultChildCount.adult !== 0) {
+        this.message = '';
+      } else if (this.adultChildCount.adult !== 0) {
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
       }
     }
@@ -196,7 +227,7 @@ export class IglBookProperty {
     event.stopPropagation();
     const opt = event.detail;
     if (opt.guestRefKey) {
-      if (this.isEventType('BAR_BOOKING')) {
+      if (this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')) {
         this.guestData[opt.guestRefKey] = {
           ...opt.data,
           roomId: this.defaultData.PR_ID,
@@ -321,6 +352,7 @@ export class IglBookProperty {
   }
 
   async bookUser(check_in: boolean) {
+    console.log('object');
     this.setLoadingState(check_in);
     try {
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
@@ -382,7 +414,7 @@ export class IglBookProperty {
           <div class="px-2 px-md-3">
             {this.getCurrentPage('page_one') && (
               <igl-booking-overview-page
-              defaultDaterange={this.defaultDateRange}
+                defaultDaterange={this.defaultDateRange}
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}
                 selectedRooms={this.selectedUnits}
@@ -393,12 +425,14 @@ export class IglBookProperty {
                 dateRangeData={this.dateRangeData}
                 bookingData={this.defaultData}
                 adultChildCount={this.adultChildCount}
+                bookedByInfoData={this.bookedByInfoData}
                 // bookingDataDefaultDateRange={this.dateRangeData}
                 adultChildConstraints={this.adultChildConstraints}
                 onRoomsDataUpdate={evt => {
                   this.onRoomDataUpdate(evt);
                 }}
                 sourceOptions={this.sourceOptions}
+                propertyId={this.propertyid}
               ></igl-booking-overview-page>
             )}
 

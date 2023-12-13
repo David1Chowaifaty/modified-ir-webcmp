@@ -20,40 +20,42 @@ export class IglBookPropertyHeader {
   @Prop() splitBookings: any[];
   @Prop() adultChildCount: { adult: number; child: number };
   @Prop() dateRangeData: any;
+  @Prop() bookedByInfoData: any;
   @Prop() defaultDaterange: { from_date: string; to_date: string };
+  @Prop() propertyId: number;
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
   @Event() adultChild: EventEmitter<any>;
   @Event() checkClicked: EventEmitter<any>;
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
   @Event() toast: EventEmitter<IToast>;
+  @Event() spiltBookingSelected: EventEmitter<{ key: string; data: unknown }>;
   private sourceOption: TSourceOption = {
     code: '',
     description: '',
     tag: '',
   };
-  getSplitBookings() {
-    return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
-  }
-  getSelectedSplitBookingName(bookingId) {
-    let splitBooking = this.splitBookings.find(booking => booking.ID === bookingId);
-    return splitBooking.BOOKING_NUMBER + ' ' + splitBooking.NAME;
-  }
+
   getSplitBookingList() {
     return (
-      <fieldset class="form-group col-12 text-left">
+      <fieldset class="form-group  text-left">
         <label class="h5">To booking# </label>
         <div class="btn-group ml-1">
-          <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.splitBookingDropDownChange.emit(evt)}>
-            <option value="" selected={this.splitBookingId != ''}>
-              Select
-            </option>
-            {this.splitBookings.map(option => (
-              <option value={option.BOOKING_NUMBER} selected={this.splitBookingId === option.BOOKING_NUMBER}>
-                {this.getSelectedSplitBookingName(option.ID)}
-              </option>
-            ))}
-          </select>
+          <ir-autocomplete
+            value={
+              Object.keys(this.bookedByInfoData).length > 1 ? `${this.bookedByInfoData.bookingNumber} ${this.bookedByInfoData.firstName} ${this.bookedByInfoData.lastName}` : ''
+            }
+            from_date={moment(this.bookingDataDefaultDateRange.fromDate).format('YYYY-MM-DD')}
+            to_date={moment(this.bookingDataDefaultDateRange.toDate).format('YYYY-MM-DD')}
+            propertyId={this.propertyId}
+            placeholder="Booking number"
+            onComboboxValue={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation;
+              this.spiltBookingSelected.emit(e.detail);
+            }}
+            isSplitBooking
+          ></ir-autocomplete>
         </div>
       </fieldset>
     );

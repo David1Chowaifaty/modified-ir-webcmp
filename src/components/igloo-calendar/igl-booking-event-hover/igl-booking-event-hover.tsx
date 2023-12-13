@@ -132,7 +132,7 @@ export class IglBookingEventHover {
   }
 
   hasSplitBooking() {
-    return this.bookingEvent.hasOwnProperty('splitBookingEvents') && this.bookingEvent.splitBookingEvents.length;
+    return this.bookingEvent.hasOwnProperty('splitBookingEvents') && this.bookingEvent.splitBookingEvents;
   }
 
   canCheckIn() {
