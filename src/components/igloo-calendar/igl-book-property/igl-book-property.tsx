@@ -61,6 +61,15 @@ export class IglBookProperty {
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
   }
+  @Listen('inputCleared')
+  clearBooking(e: CustomEvent) {
+    if (this.isEventType('SPLIT_BOOKING')) {
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      this.bookedByInfoData = {};
+      this.renderPage();
+    }
+  }
 
   @Listen('spiltBookingSelected')
   async handleSpiltBookingSelected(e: CustomEvent<{ key: string; data: unknown }>) {
