@@ -87,6 +87,8 @@ export class IglBookProperty {
         expiryYear: '',
         bookingNumber: res.booking_nbr,
         rooms: res.rooms,
+        from_date: res.from_date,
+        to_date: res.to_date,
       };
       this.sourceOption = res.source;
       this.renderPage();

@@ -10,10 +10,10 @@ import moment from 'moment';
   scoped: true,
 })
 export class IglToBeAssigned {
+  @Prop() unassignedDatesProp: any;
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
-  @Prop() unassignedDatesProp;
   @Prop() loadingMessage: string = 'Fetching unassigned units';
   @Prop({ mutable: true }) calendarData: { [key: string]: any };
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
@@ -37,39 +37,35 @@ export class IglToBeAssigned {
   componentWillLoad() {
     this.reArrangeData();
   }
-
   @Watch('unassignedDatesProp')
-  async handleCalendarDataChange(newValue) {
-    try {
-      const { fromDate, toDate, data } = newValue;
-      let dt = new Date(fromDate);
-      dt.setHours(0);
-      dt.setMinutes(0);
-      dt.setSeconds(0);
-      let endDate = dt.getTime();
-      while (endDate <= new Date(toDate).getTime()) {
-        if (data && !data[endDate]) {
-          delete this.unassignedDates[endDate];
-        } else if (data[endDate]) {
-          this.unassignedDates[endDate] = data[endDate];
-        }
-        endDate = moment(endDate).add(1, 'days').toDate().getTime();
+  handleUnassignedDatesToBeAssignedChange(newValue: any) {
+    const { fromDate, toDate, data } = newValue;
+    let dt = new Date(fromDate);
+    dt.setHours(0);
+    dt.setMinutes(0);
+    dt.setSeconds(0);
+    let endDate = dt.getTime();
+    while (endDate <= new Date(toDate).getTime()) {
+      if (data && !data[endDate]) {
+        delete this.unassignedDates[endDate];
+      } else if (data && data[endDate]) {
+        this.unassignedDates[endDate] = data[endDate];
       }
-      this.data = this.unassignedDates;
-      this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
-      if (!this.selectedDate && this.orderedDatesList.length) {
-        this.selectedDate = this.orderedDatesList[0];
-      }
-      this.showForDate(this.selectedDate);
-      //this.renderView();
-    } catch (error) {
-      console.error(error);
+      endDate = moment(endDate).add(1, 'days').toDate().getTime();
     }
-    //this.renderView();
-  }
+    this.data = this.unassignedDates;
+    this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
 
+    if (this.orderedDatesList.length) {
+      this.selectedDate = this.selectedDate || this.orderedDatesList[0];
+      this.showForDate(this.selectedDate);
+    } else {
+      this.selectedDate = null;
+    }
+  }
   async updateCategories(key, calendarData) {
     try {
+      console.log('called');
       let categorisedRooms = {};
       const result = await this.toBeAssignedService.getUnassignedRooms(
         this.propertyid,
@@ -153,6 +149,7 @@ export class IglToBeAssigned {
       }
       this.isLoading = false;
       this.selectedDate = dateStamp;
+      this.renderView();
     } catch (error) {
       // toastr.error(error);
     }
@@ -257,14 +254,13 @@ export class IglToBeAssigned {
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      <button
-                        type="button"
+                      <div
                         class={'dropdown-toggle'}
                         //onClick={() => this.showUnassignedDate()}
                       >
                         <span class="font-weight-bold">{this.data[this.selectedDate].dateStr}</span>
                         {/* <i class="la la-angle-down ml-2"></i> */}
-                      </button>
+                      </div>
                       <div class="dropdown-menu dropdown-menu-right full-width" aria-labelledby="dropdownMenuButton">
                         {this.orderedDatesList?.map(ordDate => (
                           <div class="dropdown-item pointer" onClick={() => this.showForDate(ordDate)}>

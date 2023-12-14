@@ -133,10 +133,18 @@ export class IglBookPropertyHeader {
     );
   }
   handleButtonClicked() {
-    if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.defaultDaterange.to_date).getTime()) {
+    console.log(this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1);
+    if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1) {
       this.toast.emit({
         type: 'error',
-        title: `Check-in date should be max ${moment(new Date(this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `,
+        title: `Choose a booking number.`,
+        description: '',
+        position: 'top-right',
+      });
+    } else if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date).getTime()) {
+      this.toast.emit({
+        type: 'error',
+        title: `Check-in date should be max ${moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `,
         description: '',
         position: 'top-right',
       });
