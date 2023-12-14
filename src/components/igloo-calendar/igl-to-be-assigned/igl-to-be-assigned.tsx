@@ -46,26 +46,57 @@ export class IglToBeAssigned {
     dt.setSeconds(0);
     let endDate = dt.getTime();
     while (endDate <= new Date(toDate).getTime()) {
-      if (data && !data[endDate]) {
+      if (data && !data[endDate] && this.unassignedDates.hasOwnProperty(endDate)) {
         delete this.unassignedDates[endDate];
       } else if (data && data[endDate]) {
         this.unassignedDates[endDate] = data[endDate];
       }
       endDate = moment(endDate).add(1, 'days').toDate().getTime();
     }
-    this.data = this.unassignedDates;
+    this.data = { ...this.unassignedDates };
     this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
 
     if (this.orderedDatesList.length) {
-      this.selectedDate = this.selectedDate || this.orderedDatesList[0];
-      this.showForDate(this.selectedDate);
+      if (!this.data.hasOwnProperty(this.selectedDate)) {
+        this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
+      }
+      this.showForDate(this.selectedDate, false);
+      this.renderView();
     } else {
       this.selectedDate = null;
     }
   }
+  handleAssignUnit(event: CustomEvent<{ [key: string]: any }>) {
+    const opt: { [key: string]: any } = event.detail;
+    const data = opt.data;
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+
+    if (opt.key === 'assignUnit') {
+      if (Object.keys(this.data[data.selectedDate].categories).length === 1) {
+        this.isLoading = true;
+      }
+      this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
+      this.calendarData = data.calendarData;
+      // this.calendarData.bookingEvents.push(data.assignEvent);
+
+      // if (!this.data[data.selectedDate].categories[data.RT_ID].length) {
+      //   delete this.data[data.selectedDate].categories[data.RT_ID];
+
+      //   if (!Object.keys(this.data[data.selectedDate].categories).length) {
+      //     delete this.data[data.selectedDate];
+      //     //this.orderedDatesList = this.orderedDatesList.filter(dateStamp => dateStamp != data.selectedDate);
+      //     //this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
+      //   }
+      // }
+      this.renderView();
+
+      // this.reduceAvailableUnitEvent.emit({key: "reduceAvailableDays", data: {selectedDate: data.selectedDate}});
+    }
+  }
+
   async updateCategories(key, calendarData) {
     try {
-      console.log('called');
       let categorisedRooms = {};
       const result = await this.toBeAssignedService.getUnassignedRooms(
         this.propertyid,
@@ -132,9 +163,11 @@ export class IglToBeAssigned {
     this.renderView();
   }
 
-  async showForDate(dateStamp) {
+  async showForDate(dateStamp, withLoading = true) {
     try {
-      this.isLoading = true;
+      if (withLoading) {
+        this.isLoading = true;
+      }
       if (this.showDatesList) {
         this.showUnassignedDate();
       }
@@ -206,31 +239,7 @@ export class IglToBeAssigned {
   renderView() {
     this.renderAgain = !this.renderAgain;
   }
-  handleAssignUnit(event: CustomEvent<{ [key: string]: any }>) {
-    const opt: { [key: string]: any } = event.detail;
-    const data = opt.data;
-    event.stopImmediatePropagation();
-    event.stopPropagation();
 
-    if (opt.key === 'assignUnit') {
-      this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
-      this.calendarData = data.calendarData; // RAJA
-      // this.calendarData.bookingEvents.push(data.assignEvent);
-
-      if (!this.data[data.selectedDate].categories[data.RT_ID].length) {
-        delete this.data[data.selectedDate].categories[data.RT_ID];
-
-        if (!Object.keys(this.data[data.selectedDate].categories).length) {
-          delete this.data[data.selectedDate];
-          this.orderedDatesList = this.orderedDatesList.filter(dateStamp => dateStamp != data.selectedDate);
-          this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
-        }
-      }
-
-      // this.reduceAvailableUnitEvent.emit({key: "reduceAvailableDays", data: {selectedDate: data.selectedDate}});
-      this.renderView();
-    }
-  }
   render() {
     return (
       <Host class="tobeAssignedContainer pr-1 text-left">
@@ -242,7 +251,9 @@ export class IglToBeAssigned {
                 <i class="ft-chevrons-left"></i>
               </div>
               <hr />
-              {this.isLoading ? (
+              {Object.keys(this.data).length === 0 ? (
+                <p>All Bookings Are Assigned</p>
+              ) : this.isLoading ? (
                 <p>{this.loadingMessage}</p>
               ) : (
                 <Fragment>
