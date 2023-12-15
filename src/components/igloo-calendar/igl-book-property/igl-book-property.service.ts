@@ -69,34 +69,51 @@ export class IglBookPropertyService {
     selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, { ...data, guestName: name, roomId: '' }));
   }
   async prepareBookUserServiceParams(context, check_in, sourceOption): Promise<BookUserParams> {
-    const arrivalTime = context.isEventType('EDIT_BOOKING') ? context.getArrivalTimeForBooking() : context.isEventType('ADD_ROOM') ? context.bookingData.ARRIVAL.code : '';
-    const pr_id = context.isEventType('BAR_BOOKING') ? context.bookingData.PR_ID : undefined;
-    const bookingNumber = context.isEventType('EDIT_BOOKING') || context.isEventType('ADD_ROOM') ? context.bookingData.BOOKING_NUMBER : undefined;
-    let rooms = [];
-    if (context.isEventType('ADD_ROOM')) {
-      // const result = await (context.bookingService as BookingService).getExoposedBooking(bookingNumber, context.language);
-      //rooms = result.rooms;
-      rooms = context.bookingData.ROOMS;
-    }
-    console.log('rooms', rooms);
+    try {
+      const arrivalTime = context.isEventType('EDIT_BOOKING')
+        ? context.getArrivalTimeForBooking()
+        : context.isEventType('ADD_ROOM')
+        ? context.bookingData.ARRIVAL.code
+        : context.isEventType('SPLIT_BOOKING')
+        ? context.bookedByInfoData.selectedArrivalTime.code
+        : '';
+      const pr_id = context.isEventType('BAR_BOOKING') ? context.bookingData.PR_ID : undefined;
+      const bookingNumber =
+        context.isEventType('EDIT_BOOKING') || context.isEventType('ADD_ROOM')
+          ? context.bookingData.BOOKING_NUMBER
+          : context.isEventType('SPLIT_BOOKING')
+          ? context.bookedByInfoData.bookingNumber
+          : undefined;
+      let rooms = [];
+      if (context.isEventType('ADD_ROOM')) {
+        // const result = await (context.bookingService as BookingService).getExoposedBooking(bookingNumber, context.language);
+        //rooms = result.rooms;
+        rooms = context.bookingData.ROOMS;
+      } else if (context.isEventType('SPLIT_BOOKING')) {
+        rooms = context.bookedByInfoData.rooms;
+      }
+      console.log('rooms', rooms);
 
-    return [
-      context.bookedByInfoData,
-      check_in,
-      new Date(context.dateRangeData.fromDate),
-      new Date(context.dateRangeData.toDate),
-      context.guestData,
-      context.dateRangeData.dateDifference,
-      sourceOption,
-      context.propertyid,
-      rooms,
-      context.currency,
-      bookingNumber,
-      context.bookingData.GUEST,
-      arrivalTime,
-      pr_id,
-      context.bookingData.IDENTIFIER,
-    ];
+      return [
+        context.bookedByInfoData,
+        check_in,
+        new Date(context.dateRangeData.fromDate),
+        new Date(context.dateRangeData.toDate),
+        context.guestData,
+        context.dateRangeData.dateDifference,
+        sourceOption,
+        context.propertyid,
+        rooms,
+        context.currency,
+        bookingNumber,
+        context.bookingData.GUEST,
+        arrivalTime,
+        pr_id,
+        context.bookingData.IDENTIFIER,
+      ];
+    } catch (error) {
+      console.log(error);
+    }
   }
   private getBookingPreferenceRoomId(bookingData) {
     return (bookingData.hasOwnProperty('PR_ID') && bookingData.PR_ID) || null;

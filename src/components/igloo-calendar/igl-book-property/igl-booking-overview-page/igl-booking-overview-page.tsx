@@ -7,6 +7,7 @@ import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-b
 })
 export class IglBookingOverviewPage {
   @Prop() bookingData: any;
+  @Prop() propertyId: number;
   @Prop() message: string;
   @Prop() showSplitBookingOption: boolean;
   @Prop() eventType: string;
@@ -14,11 +15,12 @@ export class IglBookingOverviewPage {
   @Prop() adultChildConstraints: TAdultChildConstraints;
   @Prop() ratePricingMode: any;
   @Prop() dateRangeData: any;
-  @Prop() defaultDaterange:{from_date:string,to_date:string};
+  @Prop() defaultDaterange: { from_date: string; to_date: string };
   @Prop() selectedRooms: Map<string, Map<string, any>>;
   @Prop() adultChildCount: { adult: number; child: number };
   @Prop() sourceOptions: TSourceOptions[];
   @Event() roomsDataUpdate: EventEmitter;
+  @Prop() bookedByInfoData: any;
   getSplitBookings() {
     return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
   }
@@ -30,9 +32,10 @@ export class IglBookingOverviewPage {
     return (
       <Host>
         <igl-book-property-header
-        defaultDaterange={this.defaultDaterange}
-         dateRangeData={this.dateRangeData}
-          minDate={this.isEventType('ADD_ROOM') ? this.bookingData.FROM_DATE : undefined}
+          bookedByInfoData={this.bookedByInfoData}
+          defaultDaterange={this.defaultDaterange}
+          dateRangeData={this.dateRangeData}
+          minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
           adultChildCount={this.adultChildCount}
           splitBookingId={this.showSplitBookingOption}
           bookingData={this.bookingData}
@@ -42,12 +45,14 @@ export class IglBookingOverviewPage {
           showSplitBookingOption={this.showSplitBookingOption}
           adultChildConstraints={this.adultChildConstraints}
           splitBookings={this.getSplitBookings()}
+          propertyId={this.propertyId}
         ></igl-book-property-header>
         {/* {this.adultChildCount.adult === 0 && <p class={'col text-left'}>Please select the number of guests</p>} */}
         <div class=" text-left">
           {this.bookingData?.roomsInfo?.map(roomInfo => {
             return (
               <igl-booking-rooms
+                isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
                 key={`room-info-${roomInfo.id}`}
                 currency={this.currency}
                 ratePricingMode={this.ratePricingMode}

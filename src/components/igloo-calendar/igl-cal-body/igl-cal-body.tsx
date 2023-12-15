@@ -108,7 +108,7 @@ export class IglCalBody {
   }
 
   getSplitBookingEvents(newEvent) {
-    return this.getBookingData().filter(bookingEvent => newEvent.FROM_DATE === bookingEvent.TO_DATE);
+    return this.getBookingData().some(bookingEvent => !['003', '002', '004'].includes(bookingEvent.STATUS_CODE) && newEvent.FROM_DATE === bookingEvent.FROM_DATE);
   }
 
   @Listen('closeBookingWindow', { target: 'window' })
@@ -182,7 +182,7 @@ export class IglCalBody {
     this.newEvent.legendData = this.calendarData.formattedLegendData;
 
     let splitBookingEvents = this.getSplitBookingEvents(this.newEvent);
-    if (splitBookingEvents.length) {
+    if (splitBookingEvents) {
       this.newEvent.splitBookingEvents = splitBookingEvents;
     }
 

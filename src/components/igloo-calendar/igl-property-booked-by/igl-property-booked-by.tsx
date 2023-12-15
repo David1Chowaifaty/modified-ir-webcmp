@@ -165,8 +165,8 @@ export class IglPropertyBookedBy {
     return emailPattern.test(emailId);
   }
   handleComboboxChange(e: CustomEvent) {
-    e.stopImmediatePropagation()
-    e.stopPropagation()
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     const { key, data } = e.detail;
     console.log(key, data);
     switch (key) {
@@ -189,7 +189,7 @@ export class IglPropertyBookedBy {
         };
         this.dataUpdateEvent.emit({
           key: 'bookedByInfoUpdated',
-          data:this.bookedByData ,
+          data: this.bookedByData,
         });
         break;
       default:
@@ -293,8 +293,8 @@ export class IglPropertyBookedBy {
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
                 <label class="p-0 m-0 margin3">Mobile phone</label>
-                <div class="p-0 m-0  row controlContainer flex-fill">
-                  <div class=" p-0 m-0 ">
+                <div class="p-0 m-0  d-flex  controlContainer flex-fill">
+                  <div class=" p-0 m-0">
                     <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
                       <option value="" selected={this.bookedByData.isdCode === ''}>
                         ISD

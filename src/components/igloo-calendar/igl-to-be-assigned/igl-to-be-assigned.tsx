@@ -10,7 +10,7 @@ import moment from 'moment';
   scoped: true,
 })
 export class IglToBeAssigned {
-  @Prop() unassignedDatesToBeAssigned:any
+  @Prop() unassignedDatesProp: any;
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
@@ -37,10 +37,8 @@ export class IglToBeAssigned {
   componentWillLoad() {
     this.reArrangeData();
   }
-  @Watch("unassignedDatesToBeAssigned")
-  handleUnassignedDatesToBeAssignedChange(newValue:any){
-    console.log("new value: ",newValue)
-    console.log("orderedList",this.orderedDatesList)
+  @Watch('unassignedDatesProp')
+  handleUnassignedDatesToBeAssignedChange(newValue: any) {
     const { fromDate, toDate, data } = newValue;
     let dt = new Date(fromDate);
     dt.setHours(0);
@@ -50,25 +48,53 @@ export class IglToBeAssigned {
     while (endDate <= new Date(toDate).getTime()) {
       if (data && !data[endDate] && this.unassignedDates.hasOwnProperty(endDate)) {
         delete this.unassignedDates[endDate];
-      } else if(data && data[endDate]){
+      } else if (data && data[endDate]) {
         this.unassignedDates[endDate] = data[endDate];
       }
       endDate = moment(endDate).add(1, 'days').toDate().getTime();
     }
-    console.log("unassign",this.unassignedDates)
-    this.data = {...this.unassignedDates};
+    this.data = { ...this.unassignedDates };
     this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
-    this.renderView()
-   
+
     if (this.orderedDatesList.length) {
-     
-     setTimeout(()=>{
-      this.showForDate(this.selectedDate);
-     },100)
+      if (!this.data.hasOwnProperty(this.selectedDate)) {
+        this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
+      }
+      this.showForDate(this.selectedDate, false);
+      this.renderView();
     } else {
       this.selectedDate = null;
     }
   }
+  handleAssignUnit(event: CustomEvent<{ [key: string]: any }>) {
+    const opt: { [key: string]: any } = event.detail;
+    const data = opt.data;
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+
+    if (opt.key === 'assignUnit') {
+      if (Object.keys(this.data[data.selectedDate].categories).length === 1) {
+        this.isLoading = true;
+      }
+      this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
+      this.calendarData = data.calendarData;
+      // this.calendarData.bookingEvents.push(data.assignEvent);
+
+      // if (!this.data[data.selectedDate].categories[data.RT_ID].length) {
+      //   delete this.data[data.selectedDate].categories[data.RT_ID];
+
+      //   if (!Object.keys(this.data[data.selectedDate].categories).length) {
+      //     delete this.data[data.selectedDate];
+      //     //this.orderedDatesList = this.orderedDatesList.filter(dateStamp => dateStamp != data.selectedDate);
+      //     //this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
+      //   }
+      // }
+      this.renderView();
+
+      // this.reduceAvailableUnitEvent.emit({key: "reduceAvailableDays", data: {selectedDate: data.selectedDate}});
+    }
+  }
+
   async updateCategories(key, calendarData) {
     try {
       //console.log("called")
@@ -138,9 +164,11 @@ export class IglToBeAssigned {
     this.renderView();
   }
 
-  async showForDate(dateStamp) {
+  async showForDate(dateStamp, withLoading = true) {
     try {
-      this.isLoading = true;
+      if (withLoading) {
+        this.isLoading = true;
+      }
       if (this.showDatesList) {
         this.showUnassignedDate();
       }
@@ -208,37 +236,11 @@ export class IglToBeAssigned {
       return null;
     }
   }
-  
+
   renderView() {
     this.renderAgain = !this.renderAgain;
   }
-  handleAssignUnit(event: CustomEvent<{ [key: string]: any }>){
-    const opt:{ [key: string]: any } = event.detail;
-    const data = opt.data;
-    event.stopImmediatePropagation();
-    event.stopPropagation();
 
-    if(opt.key === "assignUnit"){
-      this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter((eventData) => eventData.ID != data.assignEvent.ID);
-      this.calendarData = data.calendarData; // RAJA
-      // this.calendarData.bookingEvents.push(data.assignEvent);
-      console.log("orderedList",this.orderedDatesList)
-      if(!this.data[data.selectedDate].categories[data.RT_ID].length){
-        delete this.data[data.selectedDate].categories[data.RT_ID];
-
-        setTimeout(()=>{
-          if(!Object.keys(this.data[data.selectedDate].categories).length){
-            delete this.data[data.selectedDate];
-            this.orderedDatesList = this.orderedDatesList.filter((dateStamp) => dateStamp != data.selectedDate);
-            this.selectedDate = this.orderedDatesList.length ? this.orderedDatesList[0] : null;
-          }
-        },100)
-      }
-
-      // this.reduceAvailableUnitEvent.emit({key: "reduceAvailableDays", data: {selectedDate: data.selectedDate}});
-      this.renderView()
-    }
-  }
   render() {
     return (
       <Host class="tobeAssignedContainer pr-1 text-left">
@@ -250,7 +252,9 @@ export class IglToBeAssigned {
                 <i class="ft-chevrons-left"></i>
               </div>
               <hr />
-              {this.isLoading ? (
+              {Object.keys(this.data).length === 0 ? (
+                <p>All Bookings Are Assigned</p>
+              ) : this.isLoading ? (
                 <p>{this.loadingMessage}</p>
               ) : (
                 <Fragment>
