@@ -105,6 +105,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
+    NOTES: cell.booking.remark,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -129,7 +130,6 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     // FROM_DATE_STR: cell.booking.format.from_date,
     // TO_DATE_STR: cell.booking.format.to_date,
     // adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
-    // NOTES: cell.booking.remark,
     // SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }

@@ -46,7 +46,7 @@ export class IglBookingRoomRatePlan {
       adult_child_offering: data.variations[data.variations.length - 1].adult_child_offering,
       rateType: 1,
       totalRooms: 0,
-      rate: data.variations[data.variations.length - 1].amount,
+      rate: data.variations[data.variations.length - 1].amount ?? 0,
       ratePlanName: data.name,
       adultCount: data.variations[data.variations.length - 1].adult_nbr,
       childrenCount: data.variations[data.variations.length - 1].child_nbr,

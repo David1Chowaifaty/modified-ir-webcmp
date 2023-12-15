@@ -2,7 +2,7 @@ import { BookUserParams } from '../../../models/igl-book-property';
 //import { BookingService } from '../../../services/booking.service';
 
 export class IglBookPropertyService {
-  public onDataRoomUpdate(event: CustomEvent, selectedUnits: Map<string, Map<string, any>>, isEditBooking: boolean, name: string) {
+  public onDataRoomUpdate(event: CustomEvent, selectedUnits: Map<string, Map<string, any>>, isEdit: boolean, isEditBooking: boolean, name: string) {
     let units = selectedUnits;
     const { data, key, changedKey } = event.detail;
     const roomCategoryKey = `c_${data.roomCategoryId}`;
@@ -17,16 +17,16 @@ export class IglBookPropertyService {
     if (isEditBooking) {
       if (changedKey === 'rate') {
         if (units.has(roomCategoryKey) && units.get(roomCategoryKey).has(ratePlanKey)) {
-          this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name);
+          this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name, isEdit);
         }
       } else {
         if (changedKey !== 'rateType') {
           if (changedKey === 'adult_child_offering') {
             if (units.has(roomCategoryKey) && selectedUnits.get(roomCategoryKey).has(ratePlanKey)) {
-              this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name);
+              this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name, isEdit);
             }
           } else {
-            this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name);
+            this.applyBookingEditToSelectedRoom(roomCategoryKey, ratePlanKey, data, units, name, isEdit);
           }
         }
       }
@@ -64,9 +64,15 @@ export class IglBookPropertyService {
     }
   }
 
-  private applyBookingEditToSelectedRoom(roomCategoryKey: string, ratePlanKey: string, data, selectedUnits: Map<string, Map<string, any>>, name: string) {
+  private applyBookingEditToSelectedRoom(roomCategoryKey: string, ratePlanKey: string, data, selectedUnits: Map<string, Map<string, any>>, name: string, isEdit: boolean) {
     selectedUnits.clear();
-    selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, { ...data, guestName: name, roomId: '' }));
+    let res = {};
+    if (isEdit) {
+      res = { ...data, guestName: name || '', roomId: '' };
+    } else {
+      res = { ...data };
+    }
+    selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, res));
   }
   async prepareBookUserServiceParams(context, check_in, sourceOption): Promise<BookUserParams> {
     try {
