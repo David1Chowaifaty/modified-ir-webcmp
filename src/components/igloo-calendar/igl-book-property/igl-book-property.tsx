@@ -399,7 +399,13 @@ export class IglBookProperty {
     }, 100);
   }
   onRoomDataUpdate(event: CustomEvent) {
-    const units = this.bookPropertyService.onDataRoomUpdate(event, this.selectedUnits, this.isEventType('EDIT_BOOKING'), this.defaultData.NAME);
+    const units = this.bookPropertyService.onDataRoomUpdate(
+      event,
+      this.selectedUnits,
+      this.isEventType('EDIT_BOOKING'),
+      this.isEventType('EDIT_BOOKING') || this.isEventType('SPLIT_BOOKING') || this.isEventType('BAR_BOOKING'),
+      this.defaultData.NAME,
+    );
     this.selectedUnits = new Map(units);
     this.renderPage();
   }
