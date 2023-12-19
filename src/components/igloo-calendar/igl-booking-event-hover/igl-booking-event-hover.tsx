@@ -2,6 +2,8 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Element } from '@
 import { findCountry, formatDate, getCurrencySymbol } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
+import { Unsubscribe } from '@reduxjs/toolkit';
+import { store } from '../../../redux/store';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -16,6 +18,7 @@ export class IglBookingEventHover {
   @Prop() countryNodeList: ICountry[];
   @Prop() is_vacation_rental: boolean = false;
   @State() isLoading: string;
+  @State() defaultTexts:any;
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
@@ -25,8 +28,15 @@ export class IglBookingEventHover {
   private toTimeStamp: number;
   private todayTimeStamp: number = new Date().setHours(0, 0, 0, 0);
   private eventService = new EventsService();
+  private unsubscribe:Unsubscribe;
   componentWillLoad() {
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.updateFromStore()
+    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
   }
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
@@ -46,6 +56,7 @@ export class IglBookingEventHover {
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
+    this.unsubscribe()
   }
   getBookingId() {
     return this.bookingEvent.ID;
@@ -174,7 +185,7 @@ export class IglBookingEventHover {
 
   handleEditBooking() {
     // console.log("Edit booking");
-    this.bookingEvent.TITLE = 'Edit Room for';
+    this.bookingEvent.TITLE = this.defaultTexts.entries.Lcz_EditBookingFor;
     this.handleBookingOption('EDIT_BOOKING');
   }
 
@@ -272,7 +283,7 @@ export class IglBookingEventHover {
     const roomInfo = this.getRoomInfo();
     let data = roomData ? roomData : this.bookingEvent;
     data.event_type = eventType;
-    data.TITLE = eventType === 'EDIT_BOOKING' ? `Edit Booking for ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}` : `New Booking for ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+    data.TITLE = eventType === 'EDIT_BOOKING' ? `${this.defaultTexts.entries.Lcz_EditBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}` : `${this.defaultTexts.entries.Lcz_NewBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
     if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
       data.roomsInfo = [roomInfo.ROOMS_INFO];
     }
@@ -305,14 +316,14 @@ export class IglBookingEventHover {
         <div class="row p-0 m-0">
           <div class="pl-0 pr-0 col-12">
             <span class="font-weight-bold">In: </span>
-            {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')}- <span class="font-weight-bold">Out: </span>
+            {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')}- <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_Out} </span>
             {formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD')}
           </div>
         </div>
         {this.getArrivalTime() && (
           <div class="row p-0 m-0">
             <div class="pl-0 pr-0 col-12">
-              <span class="font-weight-bold">Arrival time: </span>
+              <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_ArrivalTime}: </span>
               {this.getArrivalTime()}
             </div>
           </div>
@@ -320,7 +331,7 @@ export class IglBookingEventHover {
         {this.getTotalOccupants() && (
           <div class="row p-0 m-0">
             <div class="pl-0 pr-0 col-12">
-              <span class="font-weight-bold">Occupancy: </span>
+              <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_Occupancy}: </span>
               {this.getTotalOccupants()}
             </div>
           </div>
@@ -328,7 +339,7 @@ export class IglBookingEventHover {
         {this.getPhoneNumber() && (
           <div class="row p-0 m-0">
             <div class="pl-0 pr-0 col-12 text-wrap">
-              <span class="font-weight-bold">Phone: </span>
+              <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_Phone}: </span>
               {this.renderPhone()}
             </div>
           </div>
@@ -336,7 +347,7 @@ export class IglBookingEventHover {
         {this.getRatePlan() && (
           <div class="row p-0 m-0">
             <div class="pl-0 pr-0 col-12">
-              <span class="font-weight-bold">Rate plan: </span>
+              <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_RatePlan}: </span>
               {this.getRatePlan()}
             </div>
           </div>
@@ -344,7 +355,7 @@ export class IglBookingEventHover {
         {this.getGuestNote() ? (
           <div class="row p-0 m-0">
             <div class="col-12 pl-0 pr-0 text-wrap">
-              <sapn class="font-weight-bold">Note: </sapn>
+              <sapn class="font-weight-bold">{this.defaultTexts.entries.Lcz_Note}: </sapn>
               {this.getGuestNote()}
             </div>
           </div>
@@ -368,7 +379,7 @@ export class IglBookingEventHover {
               }}
               disabled={!this.bookingEvent.IS_EDITABLE}
             >
-              <i class="ft ft-edit font-small-3"></i> Edit
+              <i class="ft ft-edit font-small-3"></i> {this.defaultTexts.entries.Lcz_Edit}
             </button>
             <button
               type="button"
@@ -378,7 +389,7 @@ export class IglBookingEventHover {
               }}
               disabled={!this.bookingEvent.IS_EDITABLE}
             >
-              <i class="ft ft-plus-circle font-small-3"></i> Add room
+              <i class="ft ft-plus-circle font-small-3"></i> {this.defaultTexts.entries.Lcz_AddRoom}
             </button>
             {this.canCheckIn() ? (
               <button
@@ -389,7 +400,7 @@ export class IglBookingEventHover {
                 }}
                 disabled={!this.bookingEvent.IS_EDITABLE}
               >
-                <i class="ft ft-edit font-small-3"></i> Check-in
+                <i class="ft ft-edit font-small-3"></i> {this.defaultTexts.entries.Lcz_CheckIn}
               </button>
             ) : null}
             {this.canCheckOut() ? (
@@ -412,7 +423,7 @@ export class IglBookingEventHover {
               }}
               disabled={!this.bookingEvent.IS_EDITABLE || this.is_vacation_rental}
             >
-              <i class="ft ft-trash-2 font-small-3"></i> Delete
+              <i class="ft ft-trash-2 font-small-3"></i> {this.defaultTexts.entries.Lcz_Delete}
             </button>
           </div>
         </div>
@@ -430,7 +441,7 @@ export class IglBookingEventHover {
             this.handleBookingOption('BAR_BOOKING');
           }}
         >
-          Create new booking
+          {this.defaultTexts.entries.Lcz_CreateNewBooking}
         </button>
         {this.hasSplitBooking() ? (
           <button
@@ -450,7 +461,7 @@ export class IglBookingEventHover {
             this.handleBookingOption('BLOCK_DATES');
           }}
         >
-          Block dates
+         {this.defaultTexts.entries.Lcz_Blockdates}
         </button>
       </div>
     );
@@ -481,7 +492,7 @@ export class IglBookingEventHover {
               }}
             >
               {this.isLoading === 'update' ? <i class="la la-circle-o-notch spinner mx-1"></i> : <i class="ft ft-edit font-small-3 updateBtnIcon"></i>}
-              Update
+              {this.defaultTexts.entries.Lcz_Update}
             </button>
             <button
               type="button"
@@ -490,7 +501,7 @@ export class IglBookingEventHover {
                 this.handleConvertBlockedDateToBooking();
               }}
             >
-              Convert to booking
+              {this.defaultTexts.entries.Lcz_ConvertToBooking}
             </button>
             <button
               type="button"
@@ -499,7 +510,7 @@ export class IglBookingEventHover {
                 this.handleDeleteEvent();
               }}
             >
-              <i class="ft ft-trash-2 font-small-3"></i> Delete
+              <i class="ft ft-trash-2 font-small-3"></i> {this.defaultTexts.entries.Lcz_Delete}
             </button>
           </div>
         </div>

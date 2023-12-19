@@ -2,6 +2,8 @@ import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/c
 import { IPageTwoDataUpdateProps } from '../../../models/models';
 import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
 import { formatDate, getCurrencySymbol } from '../../../utils/utils';
+import { Unsubscribe } from '@reduxjs/toolkit';
+import { store } from '../../../redux/store';
 @Component({
   tag: 'igl-pagetwo',
   styleUrl: 'igl-pagetwo.css',
@@ -10,7 +12,7 @@ import { formatDate, getCurrencySymbol } from '../../../utils/utils';
 export class IglPagetwo {
   @Prop() showPaymentDetails: boolean;
   @Prop() currency;
-  @Prop() defaultTexts:any;
+  @State() defaultTexts:any;
   @Prop({ reflect: true }) isEditOrAddRoomEvent: boolean;
   @Prop() dateRangeData: { [key: string]: any };
   @Prop() bookingData: { [key: string]: any };
@@ -32,10 +34,20 @@ export class IglPagetwo {
   @State() guestData: any;
 
   @State() selectedUnits: { [key: string]: any } = {};
+  private unsubscribe:Unsubscribe;
 
   componentWillLoad() {
     this.initializeGuestData();
+    this.updateFromStore()
+    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
     this.selectedBookedByData = this.bookedByInfoData;
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+  }
+  disconnectedCallback(){
+    this.unsubscribe()
   }
   initializeGuestData() {
     let total = 0;
@@ -159,7 +171,7 @@ export class IglPagetwo {
         {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
-           
+            defaultTexts={this.defaultTexts}
               currency={this.currency}
               bedPreferenceType={this.bedPreferenceType}
               index={index}
