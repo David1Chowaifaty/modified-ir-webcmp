@@ -51,6 +51,7 @@ export namespace Components {
         "showPaymentDetails": boolean;
     }
     interface IglBookPropertyFooter {
+        "defaultTexts": any;
         "disabled": boolean;
         "eventType": string;
     }
@@ -62,6 +63,7 @@ export namespace Components {
         "bookingDataDefaultDateRange": { [key: string]: any };
         "dateRangeData": any;
         "defaultDaterange": { from_date: string; to_date: string };
+        "defaultTexts": any;
         "message": string;
         "minDate": string;
         "propertyId": number;
@@ -146,6 +148,7 @@ export namespace Components {
     }
     interface IglDateRange {
         "defaultData": { [key: string]: any };
+        "defaultTexts": any;
         "disabled": boolean;
         "minDate": string;
     }
@@ -1613,6 +1616,7 @@ declare namespace LocalJSX {
         "showPaymentDetails"?: boolean;
     }
     interface IglBookPropertyFooter {
+        "defaultTexts"?: any;
         "disabled"?: boolean;
         "eventType"?: string;
         "onButtonClicked"?: (event: IglBookPropertyFooterCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
@@ -1625,6 +1629,7 @@ declare namespace LocalJSX {
         "bookingDataDefaultDateRange"?: { [key: string]: any };
         "dateRangeData"?: any;
         "defaultDaterange"?: { from_date: string; to_date: string };
+        "defaultTexts"?: any;
         "message"?: string;
         "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
@@ -1738,6 +1743,7 @@ declare namespace LocalJSX {
     }
     interface IglDateRange {
         "defaultData"?: { [key: string]: any };
+        "defaultTexts"?: any;
         "disabled"?: boolean;
         "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;

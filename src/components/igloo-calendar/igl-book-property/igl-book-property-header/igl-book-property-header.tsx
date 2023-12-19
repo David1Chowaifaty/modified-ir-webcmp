@@ -23,6 +23,7 @@ export class IglBookPropertyHeader {
   @Prop() bookedByInfoData: any;
   @Prop() defaultDaterange: { from_date: string; to_date: string };
   @Prop() propertyId: number;
+  @Prop() defaultTexts;
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
   @Event() adultChild: EventEmitter<any>;
@@ -48,7 +49,7 @@ export class IglBookPropertyHeader {
             from_date={moment(this.bookingDataDefaultDateRange.fromDate).format('YYYY-MM-DD')}
             to_date={moment(this.bookingDataDefaultDateRange.toDate).format('YYYY-MM-DD')}
             propertyId={this.propertyId}
-            placeholder="Booking number"
+            placeholder={this.defaultTexts.entries.Lcz_BookingNumber}
             onComboboxValue={e => {
               e.stopImmediatePropagation();
               e.stopPropagation;
@@ -63,7 +64,7 @@ export class IglBookPropertyHeader {
   getSourceNode() {
     return (
       <fieldset class="d-flex flex-column text-left flex-lg-row align-items-lg-center">
-        <label class="h5 mr-lg-1">Source </label>
+        <label class="h5 mr-lg-1">{this.defaultTexts.entries.Lcz_Source} </label>
         <div class="btn-group mt-1 mt-lg-0 sourceContainer">
           <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}>
             {this.sourceOptions.map(option => {
@@ -101,7 +102,7 @@ export class IglBookPropertyHeader {
   getAdultChildConstraints() {
     return (
       <div class={'mt-1 d-flex flex-column text-left'}>
-        <label class="h5 d-lg-none">Number of Guests </label>
+        <label class="h5 d-lg-none">{this.defaultTexts.entries.Lcz_NumberOfGuests} </label>
         <div class="form-group  text-left d-flex align-items-center justify-content-between justify-content-sm-start">
           <fieldset>
             <div class="btn-group ">
@@ -126,7 +127,7 @@ export class IglBookPropertyHeader {
             </fieldset>
           )}
           <button class={'btn btn-primary btn-sm ml-2 '} onClick={() => this.handleButtonClicked()}>
-            Check
+            {this.defaultTexts.entries.Lcz_Check}
           </button>
         </div>
       </div>
@@ -137,19 +138,21 @@ export class IglBookPropertyHeader {
     if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1) {
       this.toast.emit({
         type: 'error',
-        title: `Choose a booking number.`,
+        title: this.defaultTexts.entries.Lcz_ChooseBookingNumber,
         description: '',
         position: 'top-right',
       });
     } else if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date).getTime()) {
       this.toast.emit({
         type: 'error',
-        title: `Check-in date should be max ${moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `,
+        title: `${this.defaultTexts.entries.Lcz_CheckInDateShouldBeMAx} ${moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format(
+          'ddd, DD MMM YYYY',
+        )} `,
         description: '',
         position: 'top-right',
       });
     } else if (this.adultChildCount.adult === 0) {
-      this.toast.emit({ type: 'error', title: 'Please select the number of guests', description: '', position: 'top-right' });
+      this.toast.emit({ type: 'error', title: this.defaultTexts.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
     } else {
       this.buttonClicked.emit({ key: 'check' });
     }
@@ -164,7 +167,12 @@ export class IglBookPropertyHeader {
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
         <div class={'d-lg-flex align-items-center'}>
           <fieldset class=" mt-1 mt-lg-0  ">
-            <igl-date-range minDate={this.minDate} disabled={this.isEventType('BAR_BOOKING')} defaultData={this.bookingDataDefaultDateRange}></igl-date-range>
+            <igl-date-range
+              defaultTexts={this.defaultTexts}
+              minDate={this.minDate}
+              disabled={this.isEventType('BAR_BOOKING')}
+              defaultData={this.bookingDataDefaultDateRange}
+            ></igl-date-range>
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
         </div>

@@ -171,7 +171,7 @@ export class IglBookProperty {
   }
   @Listen('adultChild')
   handleAdultChildChange(event: CustomEvent) {
-    if (this.isEventType('ADD_ROOM')) {
+    if (this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING')) {
       this.defaultData.roomsInfo = [];
       this.message = '';
     }
@@ -217,7 +217,7 @@ export class IglBookProperty {
     const opt: { [key: string]: any } = event.detail;
     if (opt.key === 'selectedDateRange') {
       this.dateRangeData = opt.data;
-      if (this.isEventType('ADD_ROOM')) {
+      if (this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING')) {
         this.defaultData.roomsInfo = [];
         this.message = '';
       } else if (this.adultChildCount.adult !== 0) {
@@ -431,7 +431,7 @@ export class IglBookProperty {
           <div class="px-2 px-md-3">
             {this.getCurrentPage('page_one') && (
               <igl-booking-overview-page
-              defaultTexts={this.defaultTexts}
+                defaultTexts={this.defaultTexts}
                 defaultDaterange={this.defaultDateRange}
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}
@@ -456,7 +456,7 @@ export class IglBookProperty {
 
             {this.getCurrentPage('page_two') && (
               <igl-pagetwo
-              defaultTexts={this.defaultTexts}
+                defaultTexts={this.defaultTexts}
                 currency={this.currency}
                 propertyId={this.propertyid}
                 showPaymentDetails={this.showPaymentDetails}

@@ -6,7 +6,7 @@ import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-b
   scoped: true,
 })
 export class IglBookingOverviewPage {
-  @Prop() defaultTexts
+  @Prop() defaultTexts;
   @Prop() bookingData: any;
   @Prop() propertyId: number;
   @Prop() message: string;
@@ -33,6 +33,7 @@ export class IglBookingOverviewPage {
     return (
       <Host>
         <igl-book-property-header
+          defaultTexts={this.defaultTexts}
           bookedByInfoData={this.bookedByInfoData}
           defaultDaterange={this.defaultDaterange}
           dateRangeData={this.dateRangeData}
@@ -69,7 +70,12 @@ export class IglBookingOverviewPage {
           })}
         </div>
 
-        <igl-book-property-footer class={'p-0 mb-1 mt-3'} eventType={this.bookingData.event_type} disabled={this.selectedRooms.size === 0}></igl-book-property-footer>
+        <igl-book-property-footer
+          defaultTexts={this.defaultTexts}
+          class={'p-0 mb-1 mt-3'}
+          eventType={this.bookingData.event_type}
+          disabled={this.selectedRooms.size === 0}
+        ></igl-book-property-footer>
       </Host>
     );
   }

@@ -10,6 +10,7 @@ export class IglDateRange {
   @Prop() defaultData: { [key: string]: any };
   @Prop({ reflect: true }) disabled: boolean = false;
   @Prop() minDate: string;
+  @Prop() defaultTexts;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
   @Event() toast: EventEmitter<IToast>;
@@ -64,26 +65,26 @@ export class IglDateRange {
     this.dateSelectEvent.emit({ key, data });
   }
   handleDateChange(evt) {
-    const { start, end } = evt.detail;   
-      this.fromDate = start.toDate();
-      this.toDate = end.toDate();
-      this.calculateTotalNights();
+    const { start, end } = evt.detail;
+    this.fromDate = start.toDate();
+    this.toDate = end.toDate();
+    this.calculateTotalNights();
 
-      this.handleDateSelectEvent('selectedDateRange', {
-        fromDate: this.fromDate.getTime(),
-        toDate: this.toDate.getTime(),
-        fromDateStr: start.format('DD MMM YYYY'),
-        toDateStr: end.format('DD MMM YYYY'),
-        dateDifference: this.totalNights,
-      });
-    
+    this.handleDateSelectEvent('selectedDateRange', {
+      fromDate: this.fromDate.getTime(),
+      toDate: this.toDate.getTime(),
+      fromDateStr: start.format('DD MMM YYYY'),
+      toDateStr: end.format('DD MMM YYYY'),
+      dateDifference: this.totalNights,
+    });
+
     this.renderAgain = !this.renderAgain;
   }
   render() {
     return (
       <Host>
         <div class="calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center ">
-          <h5 class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">Dates</h5>
+          <h5 class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.defaultTexts.entries.Lcz_Dates}</h5>
           <div class={'d-flex align-items-center mr-lg-1'}>
             <div class="iglRangePicker">
               <ir-date-picker

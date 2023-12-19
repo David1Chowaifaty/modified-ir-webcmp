@@ -9,6 +9,7 @@ import { FooterButtonType, TPropertyButtonsTypes } from '../../../../models/igl-
 export class IglBookPropertyFooter {
   @Prop() eventType: string;
   @Prop() disabled: boolean = true;
+  @Prop() defaultTexts;
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
   private isEventType(event: string) {
     return event === this.eventType;
@@ -44,13 +45,13 @@ export class IglBookPropertyFooter {
         <div class="d-flex justify-content-between gap-30 align-items-center">
           {this.isEventType('EDIT_BOOKING') ? (
             <Fragment>
-              {this.renderButton('cancel', 'Cancel')}
-              {this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>')}
+              {this.renderButton('cancel', this.defaultTexts.entries.Lcz_Cancel)}
+              {this.shouldRenderTwoButtons() && this.renderButton('next', `${this.defaultTexts.entries.Lcz_Next} >>`)}
             </Fragment>
           ) : (
             <Fragment>
-              {this.renderButton('cancel', 'Cancel')}
-              {this.shouldRenderTwoButtons() && this.renderButton('next', 'Next >>', this.disabled)}
+              {this.renderButton('cancel', this.defaultTexts.entries.Lcz_Cancel)}
+              {this.shouldRenderTwoButtons() && this.renderButton('next', `${this.defaultTexts.entries.Lcz_Next} >>`, this.disabled)}
             </Fragment>
           )}
         </div>
