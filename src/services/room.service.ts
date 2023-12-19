@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { store } from '../redux/store';
+import { addLanguages } from '../redux/features/languages';
 
 export class RoomService {
   public async fetchData(id: number, language: string): Promise<{ [key: string]: any }> {
@@ -20,12 +22,13 @@ export class RoomService {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, {  code });
+        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
-        let entries=this.transformArrayToObject(data.My_Result.entries);
-        return {entries,direction:data.My_Result.direction};
+        let entries = this.transformArrayToObject(data.My_Result.entries);
+        store.dispatch(addLanguages({ entries, direction: data.My_Result.direction }));
+        return { entries, direction: data.My_Result.direction };
       }
     } catch (error) {
       console.log(error);
@@ -37,6 +40,6 @@ export class RoomService {
     for (const d of data) {
       object[d.code] = d.description;
     }
-    return object
+    return object;
   }
 }
