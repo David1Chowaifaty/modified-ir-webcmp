@@ -10,7 +10,7 @@ import { v4 } from 'uuid';
 })
 export class IglPropertyBookedBy {
   @Prop() language: string;
-  @Prop() defaultTexts:any;
+  @Prop() defaultTexts: any;
   @Prop() showPaymentDetails: boolean = false;
   @Prop() defaultData: { [key: string]: any };
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
@@ -238,7 +238,7 @@ export class IglPropertyBookedBy {
                 type="email"
                 value={this.bookedByData.email}
                 required
-                placeholder="Email address"
+                placeholder={this.defaultTexts.entries.Lcz_EmailAddress}
                 onInputCleared={() => this.clearEvent()}
               ></ir-autocomplete>
             </div>
@@ -253,7 +253,7 @@ export class IglPropertyBookedBy {
                   <input
                     class="form-control flex-fill"
                     type="text"
-                    placeholder="First name"
+                    placeholder={this.defaultTexts.entries.Lcz_FirstName}
                     id={v4()}
                     value={this.bookedByData.firstName}
                     onInput={event => this.handleDataChange('firstName', event)}
@@ -268,7 +268,7 @@ export class IglPropertyBookedBy {
                   <input
                     class="form-control"
                     type="text"
-                    placeholder="Last name"
+                    placeholder={this.defaultTexts.entries.Lcz_LastName}
                     id={v4()}
                     value={this.bookedByData.lastName}
                     onInput={event => this.handleDataChange('lastName', event)}
@@ -311,7 +311,7 @@ export class IglPropertyBookedBy {
                     <input
                       class="form-control"
                       type="tel"
-                      placeholder="Contact Number"
+                      placeholder={this.defaultTexts.entries.Lcz_ContactNumber}
                       id={v4()}
                       value={this.bookedByData.contactNumber}
                       onInput={event => this.handleNumberInput('contactNumber', event)}
