@@ -2,6 +2,7 @@ import { Component, Host, Prop, h, Event, EventEmitter } from '@stencil/core';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../../models/igl-book-property';
 import { IToast } from '../../../ir-toast/toast';
 import moment from 'moment';
+import { Languages } from '../../../../redux/features/languages';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -23,7 +24,7 @@ export class IglBookPropertyHeader {
   @Prop() bookedByInfoData: any;
   @Prop() defaultDaterange: { from_date: string; to_date: string };
   @Prop() propertyId: number;
-  @Prop() defaultTexts;
+  @Prop() defaultTexts: Languages;
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
   @Event() adultChild: EventEmitter<any>;
@@ -168,7 +169,7 @@ export class IglBookPropertyHeader {
         <div class={'d-lg-flex align-items-center'}>
           <fieldset class=" mt-1 mt-lg-0  ">
             <igl-date-range
-              defaultTexts={this.defaultTexts}
+              dateLabel={this.defaultTexts.entries.Lcz_Dates}
               minDate={this.minDate}
               disabled={this.isEventType('BAR_BOOKING')}
               defaultData={this.bookingDataDefaultDateRange}

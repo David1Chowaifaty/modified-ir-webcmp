@@ -431,7 +431,6 @@ export class IglBookProperty {
           <div class="px-2 px-md-3">
             {this.getCurrentPage('page_one') && (
               <igl-booking-overview-page
-                defaultTexts={this.defaultTexts}
                 defaultDaterange={this.defaultDateRange}
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}

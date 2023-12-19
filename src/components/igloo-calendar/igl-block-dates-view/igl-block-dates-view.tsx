@@ -2,6 +2,9 @@ import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/c
 import { BookingService } from '../../../services/booking.service';
 import { IEntries } from '../../../models/IBooking';
 import { formatDate } from '../../../utils/utils';
+import { Languages } from '../../../redux/features/languages';
+import { Unsubscribe } from '@reduxjs/toolkit';
+import { store } from '../../../redux/store';
 
 @Component({
   tag: 'igl-block-dates-view',
@@ -16,6 +19,7 @@ export class IglBlockDatesView {
   @Prop() entryHour: number;
   @Prop() isEventHover: boolean = false;
   @Prop() entryMinute: number;
+  @State() defaultTexts: Languages;
   @State() renderAgain: boolean = false;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
 
@@ -26,8 +30,11 @@ export class IglBlockDatesView {
   }; // Change of property name might require updates in booking-event-hover
   private releaseList: IEntries[] = [];
   private bookingService: BookingService = new BookingService();
+  private unsubscribe: Unsubscribe;
   async componentWillLoad() {
     try {
+      this.updateFromStore();
+      this.unsubscribe = store.subscribe(() => this.updateFromStore());
       this.releaseList = await this.bookingService.getBlockedInfo();
       if (this.defaultData) {
         this.blockDatesData = { ...this.defaultData };
@@ -38,6 +45,14 @@ export class IglBlockDatesView {
     } catch (error) {
       // toastr.error(error);
     }
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+    console.log('default', this.defaultTexts);
+  }
+  disconnectedCallback() {
+    this.unsubscribe();
   }
 
   handleOptionalReason(event) {
@@ -94,30 +109,30 @@ export class IglBlockDatesView {
         <div class={`m-0 p-0 mb-1`}>
           <div class="text-left p-0">
             <span class="pr-1">
-              <span class="text-bold-700 font-medium-1">From: </span>
+              <span class="text-bold-700 font-medium-1">{this.defaultTexts.entries.Lcz_From}: </span>
               {formatDate(this.fromDate)}
             </span>
-            <span class="text-bold-700 font-medium-1">To: </span>
+            <span class="text-bold-700 font-medium-1">{this.defaultTexts.entries.Lcz_To}: </span>
             {formatDate(this.toDate)}
           </div>
         </div>
         <div class={` mb-1 text-left ${this.isEventHover && 'p-0'}`}>
           <div class="mb-1 ">
-            <label class="p-0 text-bold-700 font-medium-1 m-0 align-middle">Reason:</label>
+            <label class="p-0 text-bold-700 font-medium-1 m-0 align-middle">{this.defaultTexts.entries.Lcz_Reason}:</label>
             <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer d-inline-block align-middle">
               <input class="form-control" type="checkbox" checked={this.blockDatesData.OUT_OF_SERVICE} id="userinput6" onChange={event => this.handleOutOfService(event)} />
             </div>
-            <span class="align-middle">Out of service</span>
+            <span class="align-middle">{this.defaultTexts.entries.Lcz_OutOfservice}</span>
           </div>
           {!this.blockDatesData.OUT_OF_SERVICE ? (
             <div>
               <div class="mb-1 d-flex  align-items-center">
-                <span class="align-middle">or </span>
+                <span class="align-middle">{this.defaultTexts.entries.Lcz_Or} </span>
                 <div class="d-inline-flex col pr-0 align-middle">
                   <input
                     class="form-control"
                     type="text"
-                    placeholder="Optional reason"
+                    placeholder={this.defaultTexts.entries.Lcz_OptionalReason}
                     id="optReason"
                     value={this.blockDatesData.OPTIONAL_REASON}
                     onInput={event => this.handleOptionalReason(event)}
@@ -125,7 +140,7 @@ export class IglBlockDatesView {
                 </div>
               </div>
               <div class="mb-1 w-100 pr-0 ">
-                <span class="text-bold-700 font-medium-1">Automatic release in: </span>
+                <span class="text-bold-700 font-medium-1">{this.defaultTexts.entries.Lcz_AutomaticReleaseIn}: </span>
                 <div class="d-inline-block">
                   <select class="form-control input-sm" id="zSmallSelect" onChange={evt => this.handleReleaseAfterChange(evt)}>
                     {this.releaseList.map(releaseItem => (
@@ -137,7 +152,9 @@ export class IglBlockDatesView {
                 </div>
                 {this.blockDatesData.RELEASE_AFTER_HOURS ? (
                   <div class="d-inline-block releaseTime">
-                    <em>on {this.getReleaseHoursString()}</em>
+                    <em>
+                      {this.defaultTexts.entries.Lcz_On} {this.getReleaseHoursString()}
+                    </em>
                   </div>
                 ) : null}
               </div>

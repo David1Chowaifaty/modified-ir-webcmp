@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Languages {
-  entries: Object;
+  entries: { [key: string]: any };
   direction: 'ltr' | 'rtl';
 }
 
@@ -15,9 +15,9 @@ export const languagesSlice = createSlice({
   initialState,
   reducers: {
     addLanguages: (state, action: PayloadAction<Languages>) => {
-     const {direction,entries}=action.payload
-      state.entries = entries
-      state.direction=direction
+      const { direction, entries } = action.payload;
+      state.entries = entries;
+      state.direction = direction;
     },
   },
 });

@@ -7,6 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
+import { Languages } from "./redux/features/languages";
 import { IToast, TPositions } from "./components/ir-toast/toast";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
@@ -14,6 +15,7 @@ import { ChannelManager, RoomType } from "./sample/channel/data";
 import { Guest, Room } from "./models/booking.dto";
 export { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
+export { Languages } from "./redux/features/languages";
 export { IToast, TPositions } from "./components/ir-toast/toast";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
@@ -63,7 +65,7 @@ export namespace Components {
         "bookingDataDefaultDateRange": { [key: string]: any };
         "dateRangeData": any;
         "defaultDaterange": { from_date: string; to_date: string };
-        "defaultTexts": any;
+        "defaultTexts": Languages;
         "message": string;
         "minDate": string;
         "propertyId": number;
@@ -95,7 +97,6 @@ export namespace Components {
         "currency": any;
         "dateRangeData": any;
         "defaultDaterange": { from_date: string; to_date: string };
-        "defaultTexts": any;
         "eventType": string;
         "message": string;
         "propertyId": number;
@@ -147,8 +148,8 @@ export namespace Components {
         "unassignedDates": any;
     }
     interface IglDateRange {
+        "dateLabel": any;
         "defaultData": { [key: string]: any };
-        "defaultTexts": any;
         "disabled": boolean;
         "minDate": string;
     }
@@ -1630,7 +1631,7 @@ declare namespace LocalJSX {
         "bookingDataDefaultDateRange"?: { [key: string]: any };
         "dateRangeData"?: any;
         "defaultDaterange"?: { from_date: string; to_date: string };
-        "defaultTexts"?: any;
+        "defaultTexts"?: Languages;
         "message"?: string;
         "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
@@ -1676,7 +1677,6 @@ declare namespace LocalJSX {
         "currency"?: any;
         "dateRangeData"?: any;
         "defaultDaterange"?: { from_date: string; to_date: string };
-        "defaultTexts"?: any;
         "eventType"?: string;
         "message"?: string;
         "onRoomsDataUpdate"?: (event: IglBookingOverviewPageCustomEvent<any>) => void;
@@ -1743,8 +1743,8 @@ declare namespace LocalJSX {
         "unassignedDates"?: any;
     }
     interface IglDateRange {
+        "dateLabel"?: any;
         "defaultData"?: { [key: string]: any };
-        "defaultTexts"?: any;
         "disabled"?: boolean;
         "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;

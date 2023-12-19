@@ -10,7 +10,7 @@ export class IglDateRange {
   @Prop() defaultData: { [key: string]: any };
   @Prop({ reflect: true }) disabled: boolean = false;
   @Prop() minDate: string;
-  @Prop() defaultTexts;
+  @Prop() dateLabel;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
   @Event() toast: EventEmitter<IToast>;
@@ -84,7 +84,7 @@ export class IglDateRange {
     return (
       <Host>
         <div class="calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center ">
-          <h5 class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.defaultTexts.entries.Lcz_Dates}</h5>
+          <h5 class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.dateLabel}</h5>
           <div class={'d-flex align-items-center mr-lg-1'}>
             <div class="iglRangePicker">
               <ir-date-picker

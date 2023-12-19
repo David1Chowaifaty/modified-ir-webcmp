@@ -1,12 +1,14 @@
-import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-book-property';
+import { store } from '../../../../redux/store';
+import { Unsubscribe } from 'redux';
+import { Languages } from '../../../../redux/features/languages';
 @Component({
   tag: 'igl-booking-overview-page',
   styleUrl: 'igl-booking-overview-page.css',
   scoped: true,
 })
 export class IglBookingOverviewPage {
-  @Prop() defaultTexts;
   @Prop() bookingData: any;
   @Prop() propertyId: number;
   @Prop() message: string;
@@ -20,8 +22,24 @@ export class IglBookingOverviewPage {
   @Prop() selectedRooms: Map<string, Map<string, any>>;
   @Prop() adultChildCount: { adult: number; child: number };
   @Prop() sourceOptions: TSourceOptions[];
-  @Event() roomsDataUpdate: EventEmitter;
   @Prop() bookedByInfoData: any;
+
+  @Event() roomsDataUpdate: EventEmitter;
+
+  @State() defaultTexts: Languages;
+
+  private unsubscribe: Unsubscribe;
+  componentWillLoad() {
+    this.updateFormStore();
+    this.unsubscribe = store.subscribe(() => this.updateFormStore());
+  }
+  updateFormStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+  }
+  disconnectedCallback() {
+    this.unsubscribe();
+  }
   getSplitBookings() {
     return (this.bookingData.hasOwnProperty('splitBookingEvents') && this.bookingData.splitBookingEvents) || [];
   }
