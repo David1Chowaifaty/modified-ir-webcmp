@@ -637,9 +637,9 @@ export class IglooCalendar {
             [
               this.showToBeAssigned ? (
                 <igl-to-be-assigned
-                defaultTexts={this.defaultTexts}
+              
                   unassignedDatesProp={this.unassignedDates}
-                  loadingMessage={'Fetching unassigned units'}
+                 
                   to_date={this.to_date}
                   from_date={this.from_date}
                   propertyid={this.propertyid}
@@ -679,7 +679,6 @@ export class IglooCalendar {
         </div>
         {this.bookingItem && (
           <igl-book-property
-          defaultTexts={this.defaultTexts}
             allowedBookingSources={this.calendarData.allowedBookingSources}
             adultChildConstraints={this.calendarData.adultChildConstraints}
             showPaymentDetails={this.showPaymentDetails}

@@ -1,8 +1,7 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Watch, State } from '@stencil/core';
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
-import { store } from '../../../redux/store';
-import { Unsubscribe } from '@reduxjs/toolkit';
+
 
 @Component({
   tag: 'igl-application-info',
@@ -12,7 +11,7 @@ import { Unsubscribe } from '@reduxjs/toolkit';
 export class IglApplicationInfo {
   @Prop() guestInfo: { [key: string]: any };
   @Prop() currency;
-  @State() defaultTexts: any;
+  @Prop() defaultTexts: any;
   @Prop({ reflect: true, mutable: true }) roomsList: { [key: string]: any }[] = [];
   @Prop() guestRefKey: string;
   @Prop() bedPreferenceType = [];
@@ -22,21 +21,12 @@ export class IglApplicationInfo {
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @State() filterdRoomList = [];
   private guestData: { [key: string]: any };
-private unsubscribe:Unsubscribe;
+
   componentWillLoad() {
     this.guestData = this.guestInfo ? { ...this.guestInfo } : {};
-    this.updateFromStore()
-    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
     this.updateRoomList();
   }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-    console.log("default",this.defaultTexts)
-  }
-  disconnectedCallback(){
-    this.unsubscribe()
-  }
+  
   @Watch('selectedUnits')
   async handleSelctedUnits() {
     this.updateRoomList();
@@ -93,7 +83,7 @@ private unsubscribe:Unsubscribe;
                 id={v4()}
                 type="email"
                 class="form-control"
-                placeholder="Guest first name & last name"
+                placeholder={this.defaultTexts.entries.Lcz_GuestFirstnameAndLastname}
                 name="guestName"
                 onInput={event => this.handleGuestNameChange(event)}
                 required
