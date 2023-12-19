@@ -159,7 +159,7 @@ export class IglPagetwo {
         {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
-            defaultTexts={this.defaultTexts}
+           
               currency={this.currency}
               bedPreferenceType={this.bedPreferenceType}
               index={index}

@@ -14,8 +14,10 @@ export const languagesSlice = createSlice({
   name: 'languages',
   initialState,
   reducers: {
-    addLanguages: (_state, action: PayloadAction<Languages>) => {
-      _state = action.payload;
+    addLanguages: (state, action: PayloadAction<Languages>) => {
+     const {direction,entries}=action.payload
+      state.entries = entries
+      state.direction=direction
     },
   },
 });

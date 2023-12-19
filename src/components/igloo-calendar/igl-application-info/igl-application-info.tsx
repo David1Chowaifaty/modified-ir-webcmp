@@ -1,6 +1,8 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Watch, State } from '@stencil/core';
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
+import { store } from '../../../redux/store';
+import { Unsubscribe } from '@reduxjs/toolkit';
 
 @Component({
   tag: 'igl-application-info',
@@ -10,7 +12,7 @@ import { getCurrencySymbol } from '../../../utils/utils';
 export class IglApplicationInfo {
   @Prop() guestInfo: { [key: string]: any };
   @Prop() currency;
-  @Prop() defaultTexts:any;
+  @State() defaultTexts: any;
   @Prop({ reflect: true, mutable: true }) roomsList: { [key: string]: any }[] = [];
   @Prop() guestRefKey: string;
   @Prop() bedPreferenceType = [];
@@ -20,10 +22,20 @@ export class IglApplicationInfo {
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @State() filterdRoomList = [];
   private guestData: { [key: string]: any };
-
+private unsubscribe:Unsubscribe;
   componentWillLoad() {
     this.guestData = this.guestInfo ? { ...this.guestInfo } : {};
+    this.updateFromStore()
+    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
     this.updateRoomList();
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+    console.log("default",this.defaultTexts)
+  }
+  disconnectedCallback(){
+    this.unsubscribe()
   }
   @Watch('selectedUnits')
   async handleSelctedUnits() {
@@ -92,7 +104,7 @@ export class IglApplicationInfo {
               <div class="mr-1 p-0 flex-fill">
                 <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}>
                   <option value="" selected={this.guestData.roomId === ''}>
-                  {this.defaultTexts.entries.Lcz_Assignunits}
+                    {this.defaultTexts.entries.Lcz_Assignunits}
                   </option>
                   {this.filterdRoomList.map(room => (
                     <option value={room.id} selected={+this.guestData.roomId === room.id}>
@@ -106,7 +118,7 @@ export class IglApplicationInfo {
             <div class="mr-1 flex-fill">
               <select class="form-control input-sm" id={v4()} onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}>
                 <option value="" selected={this.guestData.preference === ''}>
-                {this.defaultTexts.entries.Lcz_NoPreference}
+                  {this.defaultTexts.entries.Lcz_NoPreference}
                 </option>
                 {this.bedPreferenceType.map(data => (
                   <option value={data.CODE_NAME} selected={this.guestData.preference === data.CODE_NAME}>
