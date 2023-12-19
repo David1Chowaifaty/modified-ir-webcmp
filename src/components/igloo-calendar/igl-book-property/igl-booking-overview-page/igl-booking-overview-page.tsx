@@ -6,6 +6,7 @@ import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-b
   scoped: true,
 })
 export class IglBookingOverviewPage {
+  @Prop() defaultTexts
   @Prop() bookingData: any;
   @Prop() propertyId: number;
   @Prop() message: string;
@@ -52,6 +53,7 @@ export class IglBookingOverviewPage {
           {this.bookingData?.roomsInfo?.map(roomInfo => {
             return (
               <igl-booking-rooms
+                defaultTexts={this.defaultTexts}
                 isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
                 key={`room-info-${roomInfo.id}`}
                 currency={this.currency}

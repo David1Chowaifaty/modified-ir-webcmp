@@ -16,7 +16,7 @@ import { EventsService } from '../../../services/events.service';
 export class IglBookProperty {
   @Prop() propertyid: number;
   @Prop() allowedBookingSources: any;
-
+  @Prop() defaultTexts;
   @Prop() language: string;
   @Prop() countryNodeList;
   @Prop() showPaymentDetails: boolean = false;
@@ -431,6 +431,7 @@ export class IglBookProperty {
           <div class="px-2 px-md-3">
             {this.getCurrentPage('page_one') && (
               <igl-booking-overview-page
+              defaultTexts={this.defaultTexts}
                 defaultDaterange={this.defaultDateRange}
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}
@@ -455,6 +456,7 @@ export class IglBookProperty {
 
             {this.getCurrentPage('page_two') && (
               <igl-pagetwo
+              defaultTexts={this.defaultTexts}
                 currency={this.currency}
                 propertyId={this.propertyid}
                 showPaymentDetails={this.showPaymentDetails}

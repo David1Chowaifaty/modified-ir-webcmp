@@ -6,6 +6,7 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@st
   scoped: true,
 })
 export class IglBookingRooms {
+  @Prop() defaultTexts
   @Prop() roomTypeData: { [key: string]: any };
   @Prop() defaultData: Map<string, any>;
   @Prop() bookingType = 'PLUS_BOOKING';
@@ -123,6 +124,7 @@ export class IglBookingRooms {
           if (ratePlan.variations !== null) {
             return (
               <igl-booking-room-rate-plan
+                defaultTexts={this.defaultTexts}
                 index={index}
                 isBookDisabled={this.isBookDisabled}
                 key={`rate-plan-${ratePlan.id}`}

@@ -10,6 +10,7 @@ import { formatDate, getCurrencySymbol } from '../../../utils/utils';
 export class IglPagetwo {
   @Prop() showPaymentDetails: boolean;
   @Prop() currency;
+  @Prop() defaultTexts:any;
   @Prop({ reflect: true }) isEditOrAddRoomEvent: boolean;
   @Prop() dateRangeData: { [key: string]: any };
   @Prop() bookingData: { [key: string]: any };

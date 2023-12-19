@@ -11,6 +11,7 @@ import moment from 'moment';
 })
 export class IglToBeAssigned {
   @Prop() unassignedDatesProp: any;
+  @Prop() defaultTexts: any;
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
@@ -247,13 +248,14 @@ export class IglToBeAssigned {
         <div>
           <div>
             <div class="stickyHeader">
-              <div class="tobeAssignedHeader pt-1">Assignments</div>
+              <div class="tobeAssignedHeader pt-1">{this.defaultTexts.entries.Lcz_Assignments}</div>
               <div class="closeBtn pt-1" onClick={() => this.handleOptionEvent('closeSideMenu')}>
                 <i class="ft-chevrons-left"></i>
               </div>
               <hr />
               {Object.keys(this.data).length === 0 ? (
-                <p>All Bookings Are Assigned</p>
+                <p>{this.defaultTexts.entries.Lcz_AllBookingsAreAssigned
+                }</p>
               ) : this.isLoading ? (
                 <p>{this.loadingMessage}</p>
               ) : (

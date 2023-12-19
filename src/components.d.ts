@@ -45,6 +45,7 @@ export namespace Components {
         "bookingData": { [key: string]: any };
         "countryNodeList": any;
         "currency": { id: number; code: string };
+        "defaultTexts": any;
         "language": string;
         "propertyid": number;
         "showPaymentDetails": boolean;
@@ -92,6 +93,7 @@ export namespace Components {
         "currency": any;
         "dateRangeData": any;
         "defaultDaterange": { from_date: string; to_date: string };
+        "defaultTexts": any;
         "eventType": string;
         "message": string;
         "propertyId": number;
@@ -105,6 +107,7 @@ export namespace Components {
         "currency": any;
         "dateDifference": number;
         "defaultData": { [key: string]: any };
+        "defaultTexts": any;
         "fullyBlocked": boolean;
         "index": number;
         "isBookDisabled": boolean;
@@ -117,6 +120,7 @@ export namespace Components {
         "currency": any;
         "dateDifference": number;
         "defaultData": Map<string, any>;
+        "defaultTexts": any;
         "isBookDisabled": boolean;
         "ratePricingMode": any[];
         "roomTypeData": { [key: string]: any };
@@ -146,6 +150,7 @@ export namespace Components {
         "minDate": string;
     }
     interface IglLegends {
+        "defaultTexts": any;
         "legendData": { [key: string]: any };
     }
     interface IglPagetwo {
@@ -155,6 +160,7 @@ export namespace Components {
         "countryNodeList": any;
         "currency": any;
         "dateRangeData": { [key: string]: any };
+        "defaultTexts": any;
         "isEditOrAddRoomEvent": boolean;
         "isLoading": string;
         "language": string;
@@ -190,6 +196,7 @@ export namespace Components {
     }
     interface IglToBeAssigned {
         "calendarData": { [key: string]: any };
+        "defaultTexts": any;
         "from_date": string;
         "loadingMessage": string;
         "propertyid": number;
@@ -1597,6 +1604,7 @@ declare namespace LocalJSX {
         "bookingData"?: { [key: string]: any };
         "countryNodeList"?: any;
         "currency"?: { id: number; code: string };
+        "defaultTexts"?: any;
         "language"?: string;
         "onBlockedCreated"?: (event: IglBookPropertyCustomEvent<RoomBlockDetails>) => void;
         "onBookingCreated"?: (event: IglBookPropertyCustomEvent<{ pool?: string; data: RoomBookingDetails[] }>) => void;
@@ -1662,6 +1670,7 @@ declare namespace LocalJSX {
         "currency"?: any;
         "dateRangeData"?: any;
         "defaultDaterange"?: { from_date: string; to_date: string };
+        "defaultTexts"?: any;
         "eventType"?: string;
         "message"?: string;
         "onRoomsDataUpdate"?: (event: IglBookingOverviewPageCustomEvent<any>) => void;
@@ -1676,6 +1685,7 @@ declare namespace LocalJSX {
         "currency"?: any;
         "dateDifference"?: number;
         "defaultData"?: { [key: string]: any };
+        "defaultTexts"?: any;
         "fullyBlocked"?: boolean;
         "index"?: number;
         "isBookDisabled"?: boolean;
@@ -1690,6 +1700,7 @@ declare namespace LocalJSX {
         "currency"?: any;
         "dateDifference"?: number;
         "defaultData"?: Map<string, any>;
+        "defaultTexts"?: any;
         "isBookDisabled"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomsCustomEvent<{ [key: string]: any }>) => void;
         "ratePricingMode"?: any[];
@@ -1733,6 +1744,7 @@ declare namespace LocalJSX {
         "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
     }
     interface IglLegends {
+        "defaultTexts"?: any;
         "legendData"?: { [key: string]: any };
         "onOptionEvent"?: (event: IglLegendsCustomEvent<{ [key: string]: any }>) => void;
     }
@@ -1743,6 +1755,7 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: any;
         "dateRangeData"?: { [key: string]: any };
+        "defaultTexts"?: any;
         "isEditOrAddRoomEvent"?: boolean;
         "isLoading"?: string;
         "language"?: string;
@@ -1789,6 +1802,7 @@ declare namespace LocalJSX {
     }
     interface IglToBeAssigned {
         "calendarData"?: { [key: string]: any };
+        "defaultTexts"?: any;
         "from_date"?: string;
         "loadingMessage"?: string;
         "onAddToBeAssignedEvent"?: (event: IglToBeAssignedCustomEvent<any>) => void;

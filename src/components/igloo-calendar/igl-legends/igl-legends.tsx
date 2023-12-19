@@ -8,6 +8,7 @@ import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 export class IglLegends {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() legendData: { [key: string]: any };
+  @Prop() defaultTexts:any;
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
@@ -18,7 +19,7 @@ export class IglLegends {
         <div>
           <div>
             <div class="stickyHeader">
-              <div class="legendHeader pt-1">Legend</div>
+              <div class="legendHeader pt-1">{this.defaultTexts.entries.Lcz_Legend}</div>
               <div class="legendCloseBtn pt-1" onClick={() => this.handleOptionEvent('closeSideMenu')}>
                 <i class="ft-chevrons-left"></i>
               </div>
@@ -39,32 +40,33 @@ export class IglLegends {
                   <div class="legendCal br-t br-s br-bt">
                     <strong>MAR 2022</strong>
                   </div>
-                  <div class="highphenLegend">Month and Year</div>
+                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_MonthAndYear}</div>
                 </div>
                 <div class="legendRow">
                   <div class="legendCal pl-2 pr-2 br-s">
                     <span class="badge badge-primary badge-pill">3</span>
                   </div>
                   <div class="highphenLegend">
-                    <div>Unassigned Units (Click to Assign)</div>
+                    <div>{this.defaultTexts.entries.Lcz_UnassignedUnits}</div>
                   </div>
                 </div>
                 <div class="legendRow">
                   <div class="legendCal br-s">FRI 18</div>
-                  <div class="highphenLegend">Date</div>
+                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_Dates}</div>
                 </div>
                 <div class="legendRow">
                   <div class="legendCal br-s br-bt font-small-3">15%</div>
-                  <div class="highphenLegend">Occupancy</div>
+                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_Occupancy}</div>
                 </div>
                 <div class="legendRow">
                   <div class="legendCal br-s font-small-3">20</div>
-                  <div class="highphenLegend">Total Availability</div>
+                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_TotalAvailability
+}</div>
                 </div>
                 <div class="legendRow align-items-center">
                   <div class="legendCal br-s br-bt font-small-2">15</div>
                   <div class="highphenLegend">
-                    <div>Offline Availability</div>
+                    <div>{this.defaultTexts.entries.Lcz_OfflineAvailability}</div>
                   </div>
                 </div>
               </div>

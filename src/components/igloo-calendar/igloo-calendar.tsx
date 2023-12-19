@@ -50,6 +50,7 @@ export class IglooCalendar {
   private toBeAssignedService = new ToBeAssignedService();
   private socket: any;
   private reachedEndOfCalendar = false;
+  private defaultTexts:any;
   @Watch('ticket')
   ticketChanged() {
     sessionStorage.setItem('token', JSON.stringify(this.ticket));
@@ -65,8 +66,10 @@ export class IglooCalendar {
       this.initializeApp();
     }
   }
-  initializeApp() {
+ async initializeApp() {
     try {
+      this.defaultTexts=await this.roomService.fetchLanguage(this.language)
+      console.log("language",this.defaultTexts)
       this.roomService.fetchData(this.propertyid, this.language).then(roomResp => {
         this.setRoomsData(roomResp);
         this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date).then(async bookingResp => {
@@ -634,6 +637,7 @@ export class IglooCalendar {
             [
               this.showToBeAssigned ? (
                 <igl-to-be-assigned
+                defaultTexts={this.defaultTexts}
                   unassignedDatesProp={this.unassignedDates}
                   loadingMessage={'Fetching unassigned units'}
                   to_date={this.to_date}
@@ -645,7 +649,7 @@ export class IglooCalendar {
                 ></igl-to-be-assigned>
               ) : null,
               this.showLegend ? (
-                <igl-legends class="legendContainer" legendData={this.calendarData.legendData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-legends>
+                <igl-legends defaultTexts={this.defaultTexts} class="legendContainer" legendData={this.calendarData.legendData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-legends>
               ) : null,
               <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
                 <div id="calendarContainer">
@@ -675,6 +679,7 @@ export class IglooCalendar {
         </div>
         {this.bookingItem && (
           <igl-book-property
+          defaultTexts={this.defaultTexts}
             allowedBookingSources={this.calendarData.allowedBookingSources}
             adultChildConstraints={this.calendarData.adultChildConstraints}
             showPaymentDetails={this.showPaymentDetails}

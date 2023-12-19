@@ -7,6 +7,7 @@ import { getCurrencySymbol } from '../../../utils/utils';
   scoped: true,
 })
 export class IglBookingRoomRatePlan {
+  @Prop() defaultTexts;
   @Prop() defaultData: { [key: string]: any };
   @Prop() ratePlanData: { [key: string]: any };
   @Prop() totalAvailableRooms: number;
@@ -213,7 +214,7 @@ export class IglBookingRoomRatePlan {
                     class="form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
                     value={this.renderRate()}
                     id={v4()}
-                    placeholder="Rate"
+                    placeholder={this.defaultTexts.entries.Lcz_Rate||"Rate"}
                     onInput={(event: InputEvent) => this.handleInput(event)}
                   />
                   <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
@@ -286,7 +287,7 @@ export class IglBookingRoomRatePlan {
                 class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 "
                 onClick={() => this.bookProperty()}
               >
-                Book
+                {this.defaultTexts.entries.Lcz_Book}
               </button>
             ) : null}
           </div>
