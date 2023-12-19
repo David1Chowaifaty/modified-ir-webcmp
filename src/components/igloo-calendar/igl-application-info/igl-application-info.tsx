@@ -10,6 +10,7 @@ import { getCurrencySymbol } from '../../../utils/utils';
 export class IglApplicationInfo {
   @Prop() guestInfo: { [key: string]: any };
   @Prop() currency;
+  @Prop() defaultTexts:any;
   @Prop({ reflect: true, mutable: true }) roomsList: { [key: string]: any }[] = [];
   @Prop() guestRefKey: string;
   @Prop() bedPreferenceType = [];
@@ -91,7 +92,7 @@ export class IglApplicationInfo {
               <div class="mr-1 p-0 flex-fill">
                 <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}>
                   <option value="" selected={this.guestData.roomId === ''}>
-                    Assign units
+                  {this.defaultTexts.entries.Lcz_Assignunits}
                   </option>
                   {this.filterdRoomList.map(room => (
                     <option value={room.id} selected={+this.guestData.roomId === room.id}>
@@ -105,7 +106,7 @@ export class IglApplicationInfo {
             <div class="mr-1 flex-fill">
               <select class="form-control input-sm" id={v4()} onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}>
                 <option value="" selected={this.guestData.preference === ''}>
-                  No preference
+                {this.defaultTexts.entries.Lcz_NoPreference}
                 </option>
                 {this.bedPreferenceType.map(data => (
                   <option value={data.CODE_NAME} selected={this.guestData.preference === data.CODE_NAME}>

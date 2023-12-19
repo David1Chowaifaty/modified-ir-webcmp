@@ -24,6 +24,7 @@ export namespace Components {
         "bedPreferenceType": any[];
         "bookingType": string;
         "currency": any;
+        "defaultTexts": any;
         "guestInfo": { [key: string]: any };
         "guestRefKey": string;
         "index": number;
@@ -173,6 +174,7 @@ export namespace Components {
     interface IglPropertyBookedBy {
         "countryNodeList": ICountry[];
         "defaultData": { [key: string]: any };
+        "defaultTexts": any;
         "language": string;
         "propertyId": number;
         "showPaymentDetails": boolean;
@@ -1581,6 +1583,7 @@ declare namespace LocalJSX {
         "bedPreferenceType"?: any[];
         "bookingType"?: string;
         "currency"?: any;
+        "defaultTexts"?: any;
         "guestInfo"?: { [key: string]: any };
         "guestRefKey"?: string;
         "index"?: number;
@@ -1773,6 +1776,7 @@ declare namespace LocalJSX {
     interface IglPropertyBookedBy {
         "countryNodeList"?: ICountry[];
         "defaultData"?: { [key: string]: any };
+        "defaultTexts"?: any;
         "language"?: string;
         "onDataUpdateEvent"?: (event: IglPropertyBookedByCustomEvent<{ [key: string]: any }>) => void;
         "propertyId"?: number;
