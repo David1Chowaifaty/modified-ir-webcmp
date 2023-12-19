@@ -159,6 +159,7 @@ export class IglPagetwo {
         {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
+            defaultTexts={this.defaultTexts}
               currency={this.currency}
               bedPreferenceType={this.bedPreferenceType}
               index={index}
@@ -174,6 +175,7 @@ export class IglPagetwo {
 
         {this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (
           <igl-property-booked-by
+          defaultTexts={this.defaultTexts}
             propertyId={this.propertyId}
             countryNodeList={this.countryNodeList}
             language={this.language}
@@ -193,7 +195,7 @@ export class IglPagetwo {
           <div class="d-flex p-0 mb-1 mt-2">
             <div class="flex-fill mr-2">
               <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'cancel' })}>
-                Cancel
+              {this.defaultTexts.entries.Lcz_Cancel}
               </button>
             </div>
             <div class="flex-fill">
@@ -212,13 +214,13 @@ export class IglPagetwo {
           <div class="d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center">
             <div class="flex-fill mr-md-1">
               <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'back' })}>
-                <span class={'d-none d-md-inline-flex'}> &lt;&lt;</span> Back
+                <span class={'d-none d-md-inline-flex'}> &lt;&lt;</span> {this.defaultTexts.entries.Lcz_Back}
               </button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill mr-md-1">
               <button disabled={this.isButtonDisabled('book')} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
                 {this.isLoading === 'book' && <i class="la la-circle-o-notch spinner mx-1"></i>}
-                Book
+                {this.defaultTexts.entries.Lcz_Book}
               </button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill">
@@ -229,7 +231,7 @@ export class IglPagetwo {
                 onClick={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
               >
                 {this.isLoading === 'bookAndCheckIn' && <i class="la la-circle-o-notch spinner mx-1"></i>}
-                Book & check in
+                {this.defaultTexts.entries.Lcz_BookAndChekcIn}
               </button>
             </div>
           </div>

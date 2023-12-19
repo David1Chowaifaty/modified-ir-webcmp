@@ -10,6 +10,7 @@ import { v4 } from 'uuid';
 })
 export class IglPropertyBookedBy {
   @Prop() language: string;
+  @Prop() defaultTexts:any;
   @Prop() showPaymentDetails: boolean = false;
   @Prop() defaultData: { [key: string]: any };
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
@@ -218,7 +219,7 @@ export class IglPropertyBookedBy {
       <Host>
         <div class="text-left mt-3">
           <div class="form-group d-flex flex-column flex-md-row align-items-md-center text-left ">
-            <label class="p-0 m-0 label-control mr-1 font-weight-bold">Booked by</label>
+            <label class="p-0 m-0 label-control mr-1 font-weight-bold">{this.defaultTexts.entries.Lcz_BookedBy}</label>
             <div class="bookedByEmailContainer mt-1 mt-md-0">
               {/* <input
                 id={v4()}
@@ -247,7 +248,7 @@ export class IglPropertyBookedBy {
           <div class="d-flex flex-column flex-md-row  justify-content-md-between ">
             <div class="p-0 flex-fill ">
               <div class="form-group d-flex flex-column flex-md-row align-items-md-center p-0 flex-fill ">
-                <label class="p-0 m-0 margin3">First name</label>
+                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_FirstName}</label>
                 <div class="p-0 m-0  controlContainer flex-fill  ">
                   <input
                     class="form-control flex-fill"
@@ -262,7 +263,7 @@ export class IglPropertyBookedBy {
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">Last name</label>
+                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_LastName}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
                   <input
                     class="form-control"
@@ -276,7 +277,7 @@ export class IglPropertyBookedBy {
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">Country</label>
+                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_Country}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
                   <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
                     <option value="" selected={this.bookedByData.countryId === ''}>
@@ -292,7 +293,7 @@ export class IglPropertyBookedBy {
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">Mobile phone</label>
+                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_MobilePhone}</label>
                 <div class="p-0 m-0  d-flex  controlContainer flex-fill">
                   <div class=" p-0 m-0">
                     <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
@@ -320,7 +321,7 @@ export class IglPropertyBookedBy {
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">Your arrival time</label>
+                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_YourArrivalTime}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
                   <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('selectedArrivalTime', event)}>
                     <option value="" selected={this.bookedByData.selectedArrivalTime === ''}>
@@ -337,7 +338,7 @@ export class IglPropertyBookedBy {
             </div>
             <div class="p-0 flex-fill  ml-md-3">
               <div class="  p-0 d-flex flex-column flex-md-row align-items-md-center ">
-                <label class="p-0 m-0 margin3">Any message for us?</label>
+                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_AnyMessageForUs}</label>
                 <div class="p-0 m-0  controlContainer flex-fill ">
                   <textarea
                     id={v4()}
@@ -352,7 +353,7 @@ export class IglPropertyBookedBy {
               {this.showPaymentDetails && (
                 <Fragment>
                   <div class="form-group mt-md-1  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">Card Number</label>
+                    <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_CardNumber}</label>
                     <div class="p-0 m-0  controlContainer flex-fill">
                       <input
                         class="form-control"
@@ -366,7 +367,7 @@ export class IglPropertyBookedBy {
                     </div>
                   </div>
                   <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">Card holder name</label>
+                    <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_CardHolderName}</label>
                     <div class="p-0 m-0  controlContainer flex-fill">
                       <input
                         class="form-control"
@@ -380,7 +381,7 @@ export class IglPropertyBookedBy {
                     </div>
                   </div>
                   <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">Expiry Date</label>
+                    <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_ExpiryDate}</label>
                     <div class="p-0 m-0 row  controlContainer flex-fill">
                       <div class="p-0 m-0">
                         <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('expiryMonth', event)}>
@@ -405,7 +406,7 @@ export class IglPropertyBookedBy {
                 </Fragment>
               )}
               <div class="form-group row p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">Email the guest</label>
+                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_EmailTheGuest}</label>
                 <div class="p-0 m-0  controlContainer flex-fill checkBoxContainer">
                   <input class="form-control" type="checkbox" checked={this.bookedByData.emailGuest} id={v4()} onChange={event => this.handleDataChange('emailGuest', event)} />
                 </div>
