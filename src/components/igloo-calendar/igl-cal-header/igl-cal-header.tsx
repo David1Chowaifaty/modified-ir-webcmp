@@ -23,14 +23,14 @@ export class IglCalHeader {
   @Prop() propertyid: number;
   @Prop() unassignedDates;
   @Prop() to_date: string;
-  @State() defaultTexts:any;
+  @State() defaultTexts: any;
   @State() renderAgain: boolean = false;
   @State() unassignedRoomsNumber: any = {};
   private searchValue: string = '';
   private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
-  private unsubscribe:Unsubscribe;
+  private unsubscribe: Unsubscribe;
   componentWillLoad() {
     try {
       this.initializeRoomsList();
@@ -38,8 +38,8 @@ export class IglCalHeader {
       if (!this.calendarData.is_vacation_rental && Object.keys(this.unassignedDates).length > 0) {
         this.fetchAndAssignUnassignedRooms();
       }
-      this.updateFromStore()
-    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
+      this.updateFromStore();
+      this.unsubscribe = store.subscribe(() => this.updateFromStore());
     } catch (error) {
       console.error('Error in componentWillLoad:', error);
     }
@@ -48,8 +48,8 @@ export class IglCalHeader {
     const state = store.getState();
     this.defaultTexts = state.languages;
   }
-  disconnectedCallback(){
-    this.unsubscribe()
+  disconnectedCallback() {
+    this.unsubscribe();
   }
   @Watch('unassignedDates')
   handleCalendarDataChanged() {
@@ -202,11 +202,23 @@ export class IglCalHeader {
         <div class="stickyCell align-items-center topLeftCell preventPageScroll">
           <div class="row justify-content-around no-gutters">
             {!this.calendarData.is_vacation_rental && (
-              <div class="caledarBtns" onClick={() => this.handleOptionEvent('showAssigned')} data-toggle="tooltip" data-placement="bottom" title="Unassigned Units">
+              <div
+                class="caledarBtns"
+                onClick={() => this.handleOptionEvent('showAssigned')}
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title={this.defaultTexts.entries.Lcz_UnassignedUnitsTooltip}
+              >
                 <i class="la la-tasks"></i>
               </div>
             )}
-            <div class="caledarBtns" onClick={() => this.handleOptionEvent('calendar')} data-toggle="tooltip" data-placement="bottom" title={this.defaultTexts.entries.Lcz_Navigate}>
+            <div
+              class="caledarBtns"
+              onClick={() => this.handleOptionEvent('calendar')}
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title={this.defaultTexts.entries.Lcz_Navigate}
+            >
               <i class="la la-calendar-o"></i>
               {/* <input  type="date" onChange={this.handleDateSelect.bind(this)} title="" /> */}
               <ir-date-picker
