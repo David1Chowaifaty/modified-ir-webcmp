@@ -48,7 +48,7 @@ export class IglBookProperty {
   private bookPropertyService = new IglBookPropertyService();
   private eventsService = new EventsService();
   private defaultDateRange: { from_date: string; to_date: string };
-  private unsubscribe:Unsubscribe;
+  private unsubscribe: Unsubscribe;
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
@@ -62,7 +62,7 @@ export class IglBookProperty {
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
-    this.unsubscribe()
+    this.unsubscribe();
   }
   @Listen('inputCleared')
   clearBooking(e: CustomEvent) {
@@ -70,6 +70,7 @@ export class IglBookProperty {
       e.stopImmediatePropagation();
       e.stopPropagation();
       this.bookedByInfoData = {};
+      this.bookPropertyService.resetRoomsInfoAndMessage(this);
       this.renderPage();
     }
   }
@@ -79,32 +80,17 @@ export class IglBookProperty {
     e.stopImmediatePropagation();
     e.stopPropagation;
     const { key, data } = e.detail;
-    console.log(data,key);
-    if (key === 'select' || (key==='blur' && data !=="")) {
-      // const res = await this.bookingService.getExoposedBooking((data as any).booking_nbr, this.language);
-      // this.bookedByInfoData = {
-      //   id: res.guest.id,
-      //   email: res.guest.email,
-      //   firstName: res.guest.first_name,
-      //   lastName: res.guest.last_name,
-      //   countryId: res.guest.country_id,
-      //   isdCode: res.guest.country_id.toString(),
-      //   contactNumber: res.guest.mobile,
-      //   selectedArrivalTime: res.arrival,
-      //   emailGuest: res.guest.subscribe_to_news_letter,
-      //   message: res.remark,
-      //   cardNumber: '',
-      //   cardHolderName: '',
-      //   expiryMonth: '',
-      //   expiryYear: '',
-      //   bookingNumber: res.booking_nbr,
-      //   rooms: res.rooms,
-      //   from_date: res.from_date,
-      //   to_date: res.to_date,
-      // };
-      // this.sourceOption = res.source;
-      // this.renderPage();
-      // // console.log(res);
+    console.log(data, key);
+    if (key === 'select') {
+      const res = await this.bookingService.getExoposedBooking((data as any).booking_nbr, this.language);
+      this.bookPropertyService.setBookingInfoFromAutoComplete(this, res);
+      this.sourceOption = res.source;
+      this.renderPage();
+    } else if (key === 'blur' && data !== '') {
+      const res = await this.bookingService.getExoposedBooking(data as string, this.language);
+      this.bookPropertyService.setBookingInfoFromAutoComplete(this, res);
+      this.sourceOption = res.source;
+      this.renderPage();
     }
   }
   async componentWillLoad() {
@@ -129,7 +115,7 @@ export class IglBookProperty {
         this.bookPropertyService.setEditingRoomInfo(this.defaultData, this.selectedUnits);
       }
       if (!this.isEventType('BAR_BOOKING')) {
-        this.defaultData.roomsInfo = [];
+        this.bookPropertyService.resetRoomsInfoAndMessage(this);
       }
 
       if (this.defaultData.event_type === 'SPLIT_BOOKING') {
@@ -140,8 +126,8 @@ export class IglBookProperty {
       } else {
         this.page = 'page_one';
       }
-      this.updateFromStore()
-    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
+      this.updateFromStore();
+      this.unsubscribe = store.subscribe(() => this.updateFromStore());
     } catch (error) {
       console.error('Error fetching setup entries:', error);
     }
@@ -150,7 +136,7 @@ export class IglBookProperty {
     const state = store.getState();
     this.defaultTexts = state.languages;
   }
- 
+
   async fetchSetupEntries() {
     return await this.bookingService.fetchSetupEntries();
   }
@@ -181,8 +167,7 @@ export class IglBookProperty {
   @Listen('adultChild')
   handleAdultChildChange(event: CustomEvent) {
     if (this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING')) {
-      this.defaultData.roomsInfo = [];
-      this.message = '';
+      this.bookPropertyService.resetRoomsInfoAndMessage(this);
     }
     this.adultChildCount = { ...event.detail };
   }
@@ -303,11 +288,11 @@ export class IglBookProperty {
         ></igl-block-dates-view>
         <div class="p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between">
           <button class="btn btn-secondary flex-fill" onClick={() => this.closeWindow()}>
-          {this.defaultTexts.entries.Lcz_Cancel}
+            {this.defaultTexts.entries.Lcz_Cancel}
           </button>
 
           <button class="btn btn-primary flex-fill" onClick={() => this.handleBlockDate()}>
-          {this.defaultTexts.entries.Lcz_Blockdates}
+            {this.defaultTexts.entries.Lcz_Blockdates}
           </button>
         </div>
       </Fragment>
@@ -464,7 +449,6 @@ export class IglBookProperty {
 
             {this.getCurrentPage('page_two') && (
               <igl-pagetwo
-               
                 currency={this.currency}
                 propertyId={this.propertyid}
                 showPaymentDetails={this.showPaymentDetails}

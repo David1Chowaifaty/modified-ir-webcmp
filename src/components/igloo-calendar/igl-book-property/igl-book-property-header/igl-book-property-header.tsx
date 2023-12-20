@@ -136,7 +136,7 @@ export class IglBookPropertyHeader {
   }
   handleButtonClicked() {
     console.log(this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1);
-    if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1) {
+    if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length <= 1) {
       this.toast.emit({
         type: 'error',
         title: this.defaultTexts.entries.Lcz_ChooseBookingNumber,

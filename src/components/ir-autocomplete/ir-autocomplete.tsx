@@ -1,6 +1,7 @@
 import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
 import { BookingService } from '../../services/booking.service';
+import { IToast } from '../ir-toast/toast';
 
 @Component({
   tag: 'ir-autocomplete',
@@ -26,6 +27,7 @@ export class IrAutocomplete {
   @State() isComboBoxVisible: boolean = false;
   @Event({ bubbles: true, composed: true }) comboboxValue: EventEmitter<{ key: string; data: unknown }>;
   @Event() inputCleared: EventEmitter<null>;
+  @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   @State() isItemSelected: boolean;
 
   @Element() el: HTMLElement;
@@ -142,12 +144,34 @@ export class IrAutocomplete {
       if (this.isDropdownItem(document.activeElement)) {
         return;
       }
-      if (!this.isItemSelected) {
-        this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
-        this.inputValue = '';
-        this.resetCombobox();
+      if (this.isSplitBooking) {
+        if (!this.isItemSelected) {
+          if (this.data.length > 0) {
+            this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
+          } else {
+            if (this.inputValue !== '') {
+              this.toast.emit({
+                type: 'error',
+                description: '',
+                title: `The Booking #${this.inputValue} is not Available`,
+                position: 'top-right',
+              });
+              this.inputCleared.emit();
+            }
+          }
+          this.inputValue = '';
+          this.resetCombobox();
+        } else {
+          this.isItemSelected = false;
+        }
       } else {
-        this.isItemSelected = false;
+        if (!this.isItemSelected) {
+          this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
+          this.inputValue = '';
+          this.resetCombobox();
+        } else {
+          this.isItemSelected = false;
+        }
       }
     }, 200);
   }

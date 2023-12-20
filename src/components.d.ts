@@ -1072,6 +1072,7 @@ declare global {
     interface HTMLIrAutocompleteElementEventMap {
         "comboboxValue": { key: string; data: unknown };
         "inputCleared": null;
+        "toast": IToast;
     }
     interface HTMLIrAutocompleteElement extends Components.IrAutocomplete, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrAutocompleteElementEventMap>(type: K, listener: (this: HTMLIrAutocompleteElement, ev: IrAutocompleteCustomEvent<HTMLIrAutocompleteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1839,6 +1840,7 @@ declare namespace LocalJSX {
         "name"?: string;
         "onComboboxValue"?: (event: IrAutocompleteCustomEvent<{ key: string; data: unknown }>) => void;
         "onInputCleared"?: (event: IrAutocompleteCustomEvent<null>) => void;
+        "onToast"?: (event: IrAutocompleteCustomEvent<IToast>) => void;
         "placeholder"?: string;
         "propertyId"?: number;
         "required"?: boolean;
