@@ -52,7 +52,7 @@ export class IglLegends {
                 </div>
                 <div class="legendRow">
                   <div class="legendCal br-s">FRI 18</div>
-                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_Dates}</div>
+                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_Date}</div>
                 </div>
                 <div class="legendRow">
                   <div class="legendCal br-s br-bt font-small-3">15%</div>

@@ -188,7 +188,7 @@ export class IglTbaBookingView {
             <div class="d-inline-block p-0 selectContainer">
               <select class="form-control input-sm" id={v4()} onChange={evt => this.onSelectRoom(evt)}>
                 <option value="" selected={this.selectedRoom == -1}>
-                  Assign unit
+                {this.defaultTexts.entries.Lcz_AssignUnit}
                 </option>
                 {this.allRoomsList.map(room => (
                   <option value={room.id} selected={this.selectedRoom == room.id}>
@@ -203,7 +203,7 @@ export class IglTbaBookingView {
                   X
                 </button>
                 <button type="button" class="btn btn-primary btn-sm" onClick={evt => this.handleAssignUnit(evt)} disabled={this.selectedRoom === -1}>
-                  Assign
+                {this.defaultTexts.entries.Lcz_Assign}
                 </button>
               </div>
             ) : null}

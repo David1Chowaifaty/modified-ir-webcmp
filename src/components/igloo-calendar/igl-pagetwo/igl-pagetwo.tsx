@@ -159,11 +159,11 @@ export class IglPagetwo {
             <span class="mr-1 font-weight-bold font-medium-1">
               {formatDate(this.dateRangeData.fromDateStr)} - {formatDate(this.dateRangeData.toDateStr)}
             </span>
-            {this.dateRangeData.dateDifference} {+this.dateRangeData.dateDifference > 1 ? 'nights' : 'night'}
+            {this.dateRangeData.dateDifference} {+this.dateRangeData.dateDifference > 1 ? ` ${this.defaultTexts.entries.Lcz_Nights}` : ` ${this.defaultTexts.entries.Lcz_Night}`}
           </div>
           {this.guestData.length > 1 && (
             <div class="mt-1 mt-md-0 text-right">
-              Total price <span class="font-weight-bold font-medium-1">{getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
+              {this.defaultTexts.entries.Lcz_TotalPrice} <span class="font-weight-bold font-medium-1">{getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
             </div>
           )}
         </div>
@@ -218,7 +218,7 @@ export class IglPagetwo {
                 onClick={() => this.buttonClicked.emit({ key: 'save' })}
               >
                 {this.isLoading === 'save' && <i class="la la-circle-o-notch spinner mx-1"></i>}
-                Save
+                {this.defaultTexts.entries.Lcz_Save}
               </button>
             </div>
           </div>

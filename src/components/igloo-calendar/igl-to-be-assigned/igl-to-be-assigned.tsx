@@ -308,7 +308,7 @@ export class IglToBeAssigned {
                   Object.keys(this.data[this.selectedDate].categories).length ? (
                     this.getCategoryView()
                   ) : (
-                    <div class="mt-1">All assigned for this day.</div>
+                    <div class="mt-1">{this.defaultTexts.entries.Lcz_AllAssignForThisDay}</div>
                   )
                 ) : null}
               </div>

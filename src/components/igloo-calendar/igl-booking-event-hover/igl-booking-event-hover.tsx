@@ -328,7 +328,7 @@ export class IglBookingEventHover {
         </div>
         <div class="row p-0 m-0">
           <div class="pl-0 pr-0 col-12">
-            <span class="font-weight-bold">In: </span>
+            <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_In}: </span>
             {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')}- <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_Out} </span>
             {formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD')}
           </div>
@@ -376,7 +376,7 @@ export class IglBookingEventHover {
         {this.getInternalNote() ? (
           <div class="row p-0 m-0">
             <div class="col-12 pl-0 pr-0 text-wrap">
-              <span class="font-weight-bold">Internal remark: </span>
+              <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_InternalRemark}: </span>
               {this.getInternalNote()}
             </div>
           </div>
@@ -425,7 +425,7 @@ export class IglBookingEventHover {
                 }}
                 disabled={!this.bookingEvent.IS_EDITABLE}
               >
-                <i class="ft ft-log-out font-small-3"></i> Check-out
+                <i class="ft ft-log-out font-small-3"></i> {this.defaultTexts.entries.Lcz_CheckOut}
               </button>
             ) : null}
             <button
@@ -464,7 +464,7 @@ export class IglBookingEventHover {
               this.handleBookingOption('SPLIT_BOOKING');
             }}
           >
-            Add unit to existing booking
+            {this.defaultTexts.entries.Lcz_AssignUnitToExistingBooking}
           </button>
         ) : null}
         <button

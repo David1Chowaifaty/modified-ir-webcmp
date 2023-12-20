@@ -41,7 +41,7 @@ export class IglBookPropertyHeader {
   getSplitBookingList() {
     return (
       <fieldset class="form-group  text-left">
-        <label class="h5">To booking# </label>
+        <label class="h5">{this.defaultTexts.entries.Lcz_Tobooking}# </label>
         <div class="btn-group ml-1">
           <ir-autocomplete
             value={

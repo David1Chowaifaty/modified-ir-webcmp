@@ -1,4 +1,6 @@
-import { Component, Event, EventEmitter, Host, Prop, h } from "@stencil/core";
+import { Unsubscribe } from "@reduxjs/toolkit";
+import { Component, Event, EventEmitter, Host, Prop, State, h } from "@stencil/core";
+import { store } from "../../../redux/store";
 
 @Component({
   tag: "igl-cal-footer",
@@ -9,10 +11,25 @@ export class IglCalFooter {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
+  @State() defaultTexts:any;
   // private isOnline:boolean = false;
-
+  private unsubscribe:Unsubscribe;
+  
   handleOptionEvent(key, data = "") {
     this.optionEvent.emit({ key, data });
+  }
+
+  componentWillLoad() {
+    
+    this.updateFromStore()
+    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+  }
+  disconnectedCallback(){
+    this.unsubscribe()
   }
 
   render() {
@@ -24,7 +41,7 @@ export class IglCalFooter {
             onClick={() => this.handleOptionEvent("showLegend")}
           >
             <i class="la la-square"></i>
-            <u>Legend</u>
+            <u>{this.defaultTexts.entries.Lcz_Legend}</u>
           </div>
           {/* <div class={`${this.isOnline ? 'isOnline' : 'isOffline'}`}>
             <i class="la la-share-alt isOffline"></i><span>{this.isOnline ? "Connected": "Offline"}</span>
