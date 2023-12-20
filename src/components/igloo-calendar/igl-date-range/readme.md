@@ -7,17 +7,20 @@
 
 ## Properties
 
-| Property      | Attribute  | Description | Type                      | Default     |
-| ------------- | ---------- | ----------- | ------------------------- | ----------- |
-| `defaultData` | --         |             | `{ [key: string]: any; }` | `undefined` |
-| `disabled`    | `disabled` |             | `boolean`                 | `false`     |
+| Property      | Attribute    | Description | Type                      | Default     |
+| ------------- | ------------ | ----------- | ------------------------- | ----------- |
+| `dateLabel`   | `date-label` |             | `any`                     | `undefined` |
+| `defaultData` | --           |             | `{ [key: string]: any; }` | `undefined` |
+| `disabled`    | `disabled`   |             | `boolean`                 | `false`     |
+| `minDate`     | `min-date`   |             | `string`                  | `undefined` |
 
 
 ## Events
 
-| Event             | Description | Type                                   |
-| ----------------- | ----------- | -------------------------------------- |
-| `dateSelectEvent` |             | `CustomEvent<{ [key: string]: any; }>` |
+| Event             | Description | Type                                                                                                 |
+| ----------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `dateSelectEvent` |             | `CustomEvent<{ [key: string]: any; }>`                                                               |
+| `toast`           |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies

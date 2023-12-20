@@ -14,6 +14,7 @@
 | `countryNodeList`    | `country-node-list`  |             | `any`                     | `undefined` |
 | `currency`           | `currency`           |             | `any`                     | `undefined` |
 | `is_vacation_rental` | `is_vacation_rental` |             | `boolean`                 | `false`     |
+| `language`           | `language`           |             | `string`                  | `undefined` |
 
 
 ## Events

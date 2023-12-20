@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property          | Attribute    | Description | Type                      | Default     |
-| ----------------- | ------------ | ----------- | ------------------------- | ----------- |
-| `calendarData`    | --           |             | `{ [key: string]: any; }` | `undefined` |
-| `propertyid`      | `propertyid` |             | `number`                  | `undefined` |
-| `to_date`         | `to_date`    |             | `string`                  | `undefined` |
-| `today`           | --           |             | `String`                  | `undefined` |
-| `unassignedDates` | --           |             | `{}`                      | `{}`        |
+| Property          | Attribute          | Description | Type                      | Default     |
+| ----------------- | ------------------ | ----------- | ------------------------- | ----------- |
+| `calendarData`    | --                 |             | `{ [key: string]: any; }` | `undefined` |
+| `propertyid`      | `propertyid`       |             | `number`                  | `undefined` |
+| `to_date`         | `to_date`          |             | `string`                  | `undefined` |
+| `today`           | --                 |             | `String`                  | `undefined` |
+| `unassignedDates` | `unassigned-dates` |             | `any`                     | `undefined` |
 
 
 ## Events

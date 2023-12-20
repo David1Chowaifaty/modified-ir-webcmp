@@ -12,6 +12,7 @@
 | `bedPreferenceType` | --              |             | `any[]`                     | `[]`             |
 | `bookingType`       | `booking-type`  |             | `string`                    | `'PLUS_BOOKING'` |
 | `currency`          | `currency`      |             | `any`                       | `undefined`      |
+| `defaultTexts`      | `default-texts` |             | `any`                       | `undefined`      |
 | `guestInfo`         | --              |             | `{ [key: string]: any; }`   | `undefined`      |
 | `guestRefKey`       | `guest-ref-key` |             | `string`                    | `undefined`      |
 | `index`             | `index`         |             | `number`                    | `undefined`      |

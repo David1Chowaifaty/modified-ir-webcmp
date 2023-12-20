@@ -13,6 +13,7 @@
 | `countryNodeList`      | `country-node-list`       |             | `any`                     | `undefined` |
 | `currency`             | `currency`                |             | `any`                     | `undefined` |
 | `isScrollViewDragging` | `is-scroll-view-dragging` |             | `boolean`                 | `undefined` |
+| `language`             | `language`                |             | `string`                  | `undefined` |
 | `today`                | --                        |             | `String`                  | `undefined` |
 
 

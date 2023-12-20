@@ -13,8 +13,10 @@
 | `currency`            | `currency`              |             | `any`                     | `undefined`      |
 | `dateDifference`      | `date-difference`       |             | `number`                  | `undefined`      |
 | `defaultData`         | --                      |             | `{ [key: string]: any; }` | `undefined`      |
+| `defaultTexts`        | `default-texts`         |             | `any`                     | `undefined`      |
 | `fullyBlocked`        | `fully-blocked`         |             | `boolean`                 | `undefined`      |
 | `index`               | `index`                 |             | `number`                  | `undefined`      |
+| `isBookDisabled`      | `is-book-disabled`      |             | `boolean`                 | `false`          |
 | `ratePlanData`        | --                      |             | `{ [key: string]: any; }` | `undefined`      |
 | `ratePricingMode`     | --                      |             | `any[]`                   | `[]`             |
 | `totalAvailableRooms` | `total-available-rooms` |             | `number`                  | `undefined`      |

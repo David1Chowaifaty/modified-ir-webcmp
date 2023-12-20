@@ -21,11 +21,12 @@
 
 ## Events
 
-| Event                      | Description | Type               |
-| -------------------------- | ----------- | ------------------ |
-| `calculateUnassignedDates` |             | `CustomEvent<any>` |
-| `dragOverHighlightElement` |             | `CustomEvent<any>` |
-| `moveBookingTo`            |             | `CustomEvent<any>` |
+| Event                      | Description | Type                                                 |
+| -------------------------- | ----------- | ---------------------------------------------------- |
+| `calculateUnassignedDates` |             | `CustomEvent<any>`                                   |
+| `dragOverHighlightElement` |             | `CustomEvent<any>`                                   |
+| `moveBookingTo`            |             | `CustomEvent<any>`                                   |
+| `reduceAvailableUnitEvent` |             | `CustomEvent<{ fromDate: string; toDate: string; }>` |
 
 
 ## Dependencies
@@ -69,6 +70,7 @@ graph TD;
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-booking-rooms
   igl-booking-overview-page --> igl-book-property-footer
+  igl-book-property-header --> ir-autocomplete
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
   igl-booking-rooms --> igl-booking-room-rate-plan

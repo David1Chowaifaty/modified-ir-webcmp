@@ -11,11 +11,14 @@
 | ------------------------ | --------------------------- | ----------- | -------------------------------------------------------------------------- | ----------- |
 | `adultChildConstraints`  | --                          |             | `{ adult_max_nbr: number; child_max_nbr: number; child_max_age: number; }` | `undefined` |
 | `adultChildCount`        | --                          |             | `{ adult: number; child: number; }`                                        | `undefined` |
+| `bookedByInfoData`       | `booked-by-info-data`       |             | `any`                                                                      | `undefined` |
 | `bookingData`            | `booking-data`              |             | `any`                                                                      | `undefined` |
 | `currency`               | `currency`                  |             | `any`                                                                      | `undefined` |
 | `dateRangeData`          | `date-range-data`           |             | `any`                                                                      | `undefined` |
+| `defaultDaterange`       | --                          |             | `{ from_date: string; to_date: string; }`                                  | `undefined` |
 | `eventType`              | `event-type`                |             | `string`                                                                   | `undefined` |
 | `message`                | `message`                   |             | `string`                                                                   | `undefined` |
+| `propertyId`             | `property-id`               |             | `number`                                                                   | `undefined` |
 | `ratePricingMode`        | `rate-pricing-mode`         |             | `any`                                                                      | `undefined` |
 | `selectedRooms`          | --                          |             | `Map<string, Map<string, any>>`                                            | `undefined` |
 | `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                                                                  | `undefined` |
@@ -47,6 +50,7 @@ graph TD;
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-booking-rooms
   igl-booking-overview-page --> igl-book-property-footer
+  igl-book-property-header --> ir-autocomplete
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
   igl-booking-rooms --> igl-booking-room-rate-plan

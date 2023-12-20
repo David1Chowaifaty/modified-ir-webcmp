@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property    | Attribute    | Description | Type      | Default     |
-| ----------- | ------------ | ----------- | --------- | ----------- |
-| `disabled`  | `disabled`   |             | `boolean` | `true`      |
-| `eventType` | `event-type` |             | `string`  | `undefined` |
+| Property       | Attribute       | Description | Type      | Default     |
+| -------------- | --------------- | ----------- | --------- | ----------- |
+| `defaultTexts` | `default-texts` |             | `any`     | `undefined` |
+| `disabled`     | `disabled`      |             | `boolean` | `true`      |
+| `eventType`    | `event-type`    |             | `string`  | `undefined` |
 
 
 ## Events
