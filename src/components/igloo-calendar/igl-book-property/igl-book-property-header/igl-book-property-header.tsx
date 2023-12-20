@@ -108,7 +108,7 @@ export class IglBookPropertyHeader {
           <fieldset>
             <div class="btn-group ">
               <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
-                <option value="">Ad..</option>
+                <option value="">{this.defaultTexts.entries.Lcz_AdultsCaption}</option>
                 {Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (
                   <option value={option}>{option}</option>
                 ))}
@@ -119,7 +119,7 @@ export class IglBookPropertyHeader {
             <fieldset class={'ml-1'}>
               <div class="btn-group ml-1">
                 <select class="form-control input-sm" id="xChildrenSmallSelect" onChange={evt => this.handleAdultChildChange('child', evt)}>
-                  <option value={''}>{`Ch... < ${this.adultChildConstraints.child_max_age} years`}</option>
+                  <option value={''}>{this.renderChildCaption()}</option>
                   {Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (
                     <option value={option}>{option}</option>
                   ))}
@@ -133,6 +133,15 @@ export class IglBookPropertyHeader {
         </div>
       </div>
     );
+  }
+  renderChildCaption() {
+    const maxAge = this.adultChildConstraints.child_max_age;
+    let years = this.defaultTexts.entries.Lcz_Years;
+
+    if (maxAge === 1) {
+      years = this.defaultTexts.entries.Lcz_Year;
+    }
+    return `${this.defaultTexts.entries.Lcz_ChildCaption} < ${this.adultChildConstraints.child_max_age} ${years}`;
   }
   handleButtonClicked() {
     console.log(this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1);

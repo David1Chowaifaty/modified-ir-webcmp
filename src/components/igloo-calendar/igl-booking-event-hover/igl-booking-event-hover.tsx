@@ -284,9 +284,9 @@ export class IglBookingEventHover {
       case 'EDIT_BOOKING':
         return `${this.defaultTexts.entries.Lcz_EditBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
       case 'ADD_ROOM':
-        return 'Adding unit to Booking#' + ` ${this.bookingEvent.BOOKING_NUMBER}`;
+        return `${this.defaultTexts.entries.Lcz_AddingUnitToBooking}# ${this.bookingEvent.BOOKING_NUMBER}`;
       case 'SPLIT_BOOKING':
-        return 'Adding ' + `${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+        return this.defaultTexts.entries.Lcz_Adding + ` ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
       default:
         return `${this.defaultTexts.entries.Lcz_NewBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
     }
