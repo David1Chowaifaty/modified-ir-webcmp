@@ -18,7 +18,7 @@ export class IglBookingEventHover {
   @Prop() countryNodeList: ICountry[];
   @Prop() is_vacation_rental: boolean = false;
   @State() isLoading: string;
-  @State() defaultTexts:any;
+  @State() defaultTexts: any;
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
@@ -28,11 +28,11 @@ export class IglBookingEventHover {
   private toTimeStamp: number;
   private todayTimeStamp: number = new Date().setHours(0, 0, 0, 0);
   private eventService = new EventsService();
-  private unsubscribe:Unsubscribe;
+  private unsubscribe: Unsubscribe;
   componentWillLoad() {
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.updateFromStore()
-    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
+    this.updateFromStore();
+    this.unsubscribe = store.subscribe(() => this.updateFromStore());
   }
   updateFromStore() {
     const state = store.getState();
@@ -56,7 +56,7 @@ export class IglBookingEventHover {
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
-    this.unsubscribe()
+    this.unsubscribe();
   }
   getBookingId() {
     return this.bookingEvent.ID;
@@ -212,7 +212,7 @@ export class IglBookingEventHover {
       roomsInfo: this.bookingEvent.roomsInfo,
       ARRIVAL: this.bookingEvent.ARRIVAL,
       ADD_ROOM_TO_BOOKING: this.bookingEvent.ID,
-      TITLE: 'Add Room to #' + this.bookingEvent.ID + ' - ' + this.bookingEvent.NAME,
+      TITLE: 'Add Room to #' + this.bookingEvent.BOOKING_NUMBER,
       event_type: 'ADD_ROOM',
       ROOMS: this.bookingEvent.ROOMS,
       GUEST: this.bookingEvent.GUEST,
@@ -279,11 +279,24 @@ export class IglBookingEventHover {
 
     return selectedRoom;
   }
+  renderTitle(eventType, roomInfo) {
+    switch (eventType) {
+      case 'EDIT_BOOKING':
+        return `${this.defaultTexts.entries.Lcz_EditBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+      case 'ADD_ROOM':
+        return 'Adding unit to Booking#' + ` ${this.bookingEvent.BOOKING_NUMBER}`;
+      case 'SPLIT_BOOKING':
+        return 'Adding ' + `${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+      default:
+        return `${this.defaultTexts.entries.Lcz_NewBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+    }
+  }
   handleBookingOption(eventType, roomData = null) {
     const roomInfo = this.getRoomInfo();
     let data = roomData ? roomData : this.bookingEvent;
     data.event_type = eventType;
-    data.TITLE = eventType === 'EDIT_BOOKING' ? `${this.defaultTexts.entries.Lcz_EditBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}` : `${this.defaultTexts.entries.Lcz_NewBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
+    data.TITLE = this.renderTitle(eventType, roomInfo);
+
     if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
       data.roomsInfo = [roomInfo.ROOMS_INFO];
     }
@@ -461,7 +474,7 @@ export class IglBookingEventHover {
             this.handleBookingOption('BLOCK_DATES');
           }}
         >
-         {this.defaultTexts.entries.Lcz_Blockdates}
+          {this.defaultTexts.entries.Lcz_Blockdates}
         </button>
       </div>
     );

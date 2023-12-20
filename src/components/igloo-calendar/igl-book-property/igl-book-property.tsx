@@ -79,32 +79,32 @@ export class IglBookProperty {
     e.stopImmediatePropagation();
     e.stopPropagation;
     const { key, data } = e.detail;
-    console.log(data);
-    if (key === 'select') {
-      const res = await this.bookingService.getExoposedBooking((data as any).booking_nbr, this.language);
-      this.bookedByInfoData = {
-        id: res.guest.id,
-        email: res.guest.email,
-        firstName: res.guest.first_name,
-        lastName: res.guest.last_name,
-        countryId: res.guest.country_id,
-        isdCode: res.guest.country_id.toString(),
-        contactNumber: res.guest.mobile,
-        selectedArrivalTime: res.arrival,
-        emailGuest: res.guest.subscribe_to_news_letter,
-        message: res.remark,
-        cardNumber: '',
-        cardHolderName: '',
-        expiryMonth: '',
-        expiryYear: '',
-        bookingNumber: res.booking_nbr,
-        rooms: res.rooms,
-        from_date: res.from_date,
-        to_date: res.to_date,
-      };
-      this.sourceOption = res.source;
-      this.renderPage();
-      // console.log(res);
+    console.log(data,key);
+    if (key === 'select' || (key==='blur' && data !=="")) {
+      // const res = await this.bookingService.getExoposedBooking((data as any).booking_nbr, this.language);
+      // this.bookedByInfoData = {
+      //   id: res.guest.id,
+      //   email: res.guest.email,
+      //   firstName: res.guest.first_name,
+      //   lastName: res.guest.last_name,
+      //   countryId: res.guest.country_id,
+      //   isdCode: res.guest.country_id.toString(),
+      //   contactNumber: res.guest.mobile,
+      //   selectedArrivalTime: res.arrival,
+      //   emailGuest: res.guest.subscribe_to_news_letter,
+      //   message: res.remark,
+      //   cardNumber: '',
+      //   cardHolderName: '',
+      //   expiryMonth: '',
+      //   expiryYear: '',
+      //   bookingNumber: res.booking_nbr,
+      //   rooms: res.rooms,
+      //   from_date: res.from_date,
+      //   to_date: res.to_date,
+      // };
+      // this.sourceOption = res.source;
+      // this.renderPage();
+      // // console.log(res);
     }
   }
   async componentWillLoad() {
