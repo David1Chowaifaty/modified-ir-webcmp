@@ -1,5 +1,7 @@
 import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/core';
 import { IToast } from '../../ir-toast/toast';
+import { Unsubscribe } from '@reduxjs/toolkit';
+import { store } from '../../../redux/store';
 
 @Component({
   tag: 'igl-date-range',
@@ -13,6 +15,7 @@ export class IglDateRange {
   @Prop() dateLabel;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
+  @State() defaultTexts:any;
   @Event() toast: EventEmitter<IToast>;
 
   private totalNights: number = 0;
@@ -21,12 +24,15 @@ export class IglDateRange {
   private fromDateStr: string = 'from';
   private toDateStr: string = 'to';
   dateRangeInput: HTMLElement;
+  private unsubscribe:Unsubscribe;
 
   getStringDateFormat(dt) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
 
   componentWillLoad() {
+    this.updateFromStore()
+    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
     let dt = new Date();
     dt.setHours(0, 0, 0, 0);
     dt.setDate(dt.getDate() + 1);
@@ -52,6 +58,13 @@ export class IglDateRange {
         dateDifference: this.totalNights,
       });
     }
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+  }
+  disconnectedCallback(){
+    this.unsubscribe()
   }
 
   calculateTotalNights() {
@@ -99,7 +112,7 @@ export class IglDateRange {
                 }}
               ></ir-date-picker>
             </div>
-            {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ? ' nights' : ' night')}</span> : ''}
+            {this.totalNights ? <span class="iglRangeNights">{this.totalNights + (this.totalNights > 1 ?  ` ${this.defaultTexts.entries.Lcz_Nights}` : ` ${this.defaultTexts.entries.Lcz_Night}`)}</span> : ''}
           </div>
         </div>
       </Host>

@@ -281,7 +281,7 @@ export class IglPropertyBookedBy {
                 <div class="p-0 m-0  controlContainer flex-fill">
                   <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
                     <option value="" selected={this.bookedByData.countryId === ''}>
-                      Select
+                    {this.defaultTexts.entries.Lcz_Select}
                     </option>
                     {this.countryNodeList.map(countryNode => (
                       <option value={countryNode.id} selected={this.bookedByData.countryId === countryNode.id}>
@@ -298,7 +298,7 @@ export class IglPropertyBookedBy {
                   <div class=" p-0 m-0">
                     <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
                       <option value="" selected={this.bookedByData.isdCode === ''}>
-                        ISD
+                      {this.defaultTexts.entries.Lcz_Isd}
                       </option>
                       {this.countryNodeList.map(country => (
                         <option value={country.id} selected={this.bookedByData.isdCode === country.id.toString()}>

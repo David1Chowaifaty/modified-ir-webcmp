@@ -275,7 +275,7 @@ export class IglBookingRoomRatePlan {
                   class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 d-md-none "
                   onClick={() => this.bookProperty()}
                 >
-                  {this.selectedData.totalRooms === 1 ? 'Current' : 'Select'}
+                  {this.selectedData.totalRooms === 1 ? this.defaultTexts.entries.Lcz_Current : this.defaultTexts.entries.Lcz_Select}
                 </button>
               </Fragment>
             ) : null}
