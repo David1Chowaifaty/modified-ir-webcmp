@@ -2,6 +2,7 @@ import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element, 
 import { v4 } from 'uuid';
 import { BookingService } from '../../services/booking.service';
 import { IToast } from '../ir-toast/toast';
+import { store } from '../../redux/store';
 
 @Component({
   tag: 'ir-autocomplete',
@@ -21,19 +22,30 @@ export class IrAutocomplete {
   @Prop() value: string;
   @Prop() from_date: string = '';
   @Prop() to_date: string = '';
+
   @State() inputValue: string = '';
   @State() data: any[] = [];
   @State() selectedIndex: number = -1;
   @State() isComboBoxVisible: boolean = false;
+  @State() isLoading: boolean = true;
+  @State() isItemSelected: boolean;
+
   @Event({ bubbles: true, composed: true }) comboboxValue: EventEmitter<{ key: string; data: unknown }>;
   @Event() inputCleared: EventEmitter<null>;
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
-  @State() isItemSelected: boolean;
 
   @Element() el: HTMLElement;
   private inputRef: HTMLInputElement;
   private debounceTimer: any;
   private bookingService = new BookingService();
+  private no_result_found = '';
+  componentWillLoad() {
+    this.updateFromStore();
+  }
+  updateFromStore() {
+    this.no_result_found = store.getState().languages.entries.Lcz_NoResultsFound;
+  }
+
   handleKeyDown(event: KeyboardEvent) {
     const dataSize = this.data.length;
     const itemHeight = this.getHeightOfPElement();
@@ -103,6 +115,7 @@ export class IrAutocomplete {
 
   async fetchData() {
     try {
+      this.isLoading = true;
       let data = [];
       if (!this.isSplitBooking) {
         data = await this.bookingService.fetchExposedGuest(this.inputValue, this.propertyId);
@@ -111,14 +124,14 @@ export class IrAutocomplete {
           data = await this.bookingService.fetchExposedBookings(this.inputValue, this.propertyId, this.from_date, this.to_date);
         }
       }
-      if (data) {
-        this.data = data;
-        if (!this.isComboBoxVisible) {
-          this.isComboBoxVisible = true;
-        }
+      this.data = data;
+      if (!this.isComboBoxVisible) {
+        this.isComboBoxVisible = true;
       }
     } catch (error) {
       console.log('error', error);
+    } finally {
+      this.isLoading = false;
     }
   }
 
@@ -199,10 +212,10 @@ export class IrAutocomplete {
     }
   }
   renderDropdown() {
-    if (this.data.length > 0) {
+    if (this.inputValue !== '') {
       return (
         <div class="position-absolute border rounded border-light combobox">
-          {this.data.map((d, index) => (
+          {this.data?.map((d, index) => (
             <p role="button" onKeyDown={e => this.handleItemKeyDown(e, index)} data-selected={this.selectedIndex === index} tabIndex={0} onClick={() => this.selectItem(index)}>
               {this.isSplitBooking ? (
                 <Fragment>{`${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`}</Fragment>
@@ -214,6 +227,12 @@ export class IrAutocomplete {
               )}
             </p>
           ))}
+          {this.isLoading && (
+            <div class="loader-container d-flex align-items-center justify-content-center">
+              <div class="loader"></div>
+            </div>
+          )}
+          {this.data.length === 0 && !this.isLoading && <span class={'text-center'}>{this.no_result_found}</span>}
         </div>
       );
     }

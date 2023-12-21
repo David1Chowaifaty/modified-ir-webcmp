@@ -33,10 +33,15 @@ button {
   all: unset;
   right: 4px;
 }
-.combobox p {
+.combobox p,
+span,
+loader-container {
   padding: 5px 16px;
   margin: 0px;
   margin-top: 2px;
+  width: 100%;
+}
+.combobox p {
   cursor: pointer;
 }
 .combobox p:hover {
@@ -48,4 +53,23 @@ button {
   color: #fff;
   text-decoration: none;
   background-color: #666ee8;
+}
+.loader {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #0f0f0f;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
