@@ -43,7 +43,7 @@ export class IrDatePicker {
         opens: this.opens,
         startDate: moment(this.fromDate),
         endDate: moment(this.toDate),
-        minDate: moment(this.minDate || '2000-01-01'),
+        minDate: moment(this.minDate || moment(new Date()).format('YYYY-MM-DD')),
         maxSpan: this.maxSpan,
         autoApply: this.autoApply,
         locale: {
