@@ -94,6 +94,7 @@ export class IglooCalendar {
           this.days = bookingResp.days;
           this.calendarData.days = this.days;
           this.calendarData.monthsInfo = bookingResp.months;
+          console.log("calendar data:",this.calendarData)
           setTimeout(() => {
             this.scrollToElement(this.today);
           }, 200);

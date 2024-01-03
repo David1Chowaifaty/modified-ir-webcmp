@@ -43,8 +43,8 @@ export class IglLegends {
                   <div class="highphenLegend">{this.defaultTexts.entries.Lcz_MonthAndYear}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal pl-2 pr-2 br-s">
-                    <span class="badge badge-primary badge-pill">3</span>
+                  <div class="legendCal pl-2 pr-2 br-s ">
+                    <span class="badge badge-info pointer badge-pill ">3</span>
                   </div>
                   <div class="highphenLegend">
                     <div>{this.defaultTexts.entries.Lcz_UnassignedUnits}</div>
