@@ -154,8 +154,6 @@ export namespace Components {
         "minDate": string;
     }
     interface IglLegends {
-        "defaultTexts": any;
-        "legendData": { [key: string]: any };
     }
     interface IglPagetwo {
         "bedPreferenceType": any;
@@ -1749,8 +1747,6 @@ declare namespace LocalJSX {
         "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
     }
     interface IglLegends {
-        "defaultTexts"?: any;
-        "legendData"?: { [key: string]: any };
         "onOptionEvent"?: (event: IglLegendsCustomEvent<{ [key: string]: any }>) => void;
     }
     interface IglPagetwo {

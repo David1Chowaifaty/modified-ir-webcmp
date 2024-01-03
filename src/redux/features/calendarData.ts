@@ -24,8 +24,10 @@ export const calendarDataSlice = createSlice({
   initialState,
   reducers: {
     addCalendarData: (state, action: PayloadAction<CalendarDataDetails>) => {
-      const payload = action.payload;
-      state = { ...state, ...payload };
+      return {
+        ...state,
+        ...action.payload,
+      };
     },
   },
 });

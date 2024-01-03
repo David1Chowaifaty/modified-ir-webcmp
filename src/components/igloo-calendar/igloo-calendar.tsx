@@ -689,9 +689,9 @@ export class IglooCalendar {
               ) : null,
               this.showLegend ? (
                 <igl-legends
-                  defaultTexts={this.defaultTexts}
+                  //  defaultTexts={this.defaultTexts}
                   class="legendContainer"
-                  legendData={this.calendarData.legendData}
+                  //legendData={this.calendarData.legendData}
                   onOptionEvent={evt => this.onOptionSelect(evt)}
                 ></igl-legends>
               ) : null,
@@ -734,7 +734,7 @@ export class IglooCalendar {
             onCloseBookingWindow={_ => (this.bookingItem = null)}
           ></igl-book-property>
         )}
-        <ir-sidebar open>
+        {/* <ir-sidebar open>
           <ir-booking-details
             bookingNumber="47215375"
             ticket={this.ticket}
@@ -744,7 +744,7 @@ export class IglooCalendar {
             has-print="true"
             has-delete="true"
           ></ir-booking-details>
-        </ir-sidebar>
+        </ir-sidebar> */}
       </Host>
     );
   }

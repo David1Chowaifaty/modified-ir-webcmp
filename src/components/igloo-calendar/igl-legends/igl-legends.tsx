@@ -1,4 +1,7 @@
-import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, State, h } from '@stencil/core';
+import { store } from '../../../redux/store';
+import { ILegendData } from '../../../models/calendarData';
+import { Unsubscribe } from '@reduxjs/toolkit';
 
 @Component({
   tag: 'igl-legends',
@@ -7,12 +10,24 @@ import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 })
 export class IglLegends {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
-  @Prop() legendData: { [key: string]: any };
-  @Prop() defaultTexts:any;
+  @State() legendData: ILegendData[];
+  @State() defaultTexts: any;
+  private unsubscribe: Unsubscribe;
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
-
+  componentWillLoad() {
+    this.updateFromStore();
+    this.unsubscribe = store.subscribe(() => this.updateFromStore());
+  }
+  disconnectedCallback() {
+    this.unsubscribe();
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultTexts = state.languages;
+    this.legendData = state.calendar_data.legendData;
+  }
   render() {
     return (
       <Host class="legendContainer pr-1 text-left">
@@ -60,8 +75,7 @@ export class IglLegends {
                 </div>
                 <div class="legendRow">
                   <div class="legendCal br-s font-small-3">20</div>
-                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_TotalAvailability
-}</div>
+                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_TotalAvailability}</div>
                 </div>
                 <div class="legendRow align-items-center">
                   <div class="legendCal br-s br-bt font-small-2">15</div>
