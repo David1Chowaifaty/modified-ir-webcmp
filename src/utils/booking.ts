@@ -108,6 +108,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
     NOTES: cell.booking.remark,
+    is_direct: cell.booking.is_direct,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -122,7 +123,6 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     // CHILDREN_COUNT: cell.room.occupancy.children_nbr,
     // channel_booking_nbr: cell.booking.channel_booking_nbr,
     // origin: cell.booking.origin,
-    // is_direct: cell.booking.is_direct,
     // GUEST: cell.booking.guest,
     // ROOMS: cell.booking.rooms,
     // cancelation: cell.room.rateplan.cancelation,

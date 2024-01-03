@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import { EventsService } from '../../../services/events.service';
 import { BookingService } from '../../../services/booking.service';
 import { transformNewBooking } from '../../../utils/booking';
@@ -522,16 +522,20 @@ export class IglBookingEvent {
         <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
           {this.getBookedBy()}
         </div>
-        <div
-          class="bookingEventDragHandle leftSide"
-          onTouchStart={event => this.startDragging(event, 'leftSide')}
-          onMouseDown={event => this.startDragging(event, 'leftSide')}
-        ></div>
-        <div
-          class="bookingEventDragHandle rightSide"
-          onTouchStart={event => this.startDragging(event, 'rightSide')}
-          onMouseDown={event => this.startDragging(event, 'rightSide')}
-        ></div>
+        {this.bookingEvent.is_direct && (
+          <Fragment>
+            <div
+              class="bookingEventDragHandle leftSide"
+              onTouchStart={event => this.startDragging(event, 'leftSide')}
+              onMouseDown={event => this.startDragging(event, 'leftSide')}
+            ></div>
+            <div
+              class="bookingEventDragHandle rightSide"
+              onTouchStart={event => this.startDragging(event, 'rightSide')}
+              onMouseDown={event => this.startDragging(event, 'rightSide')}
+            ></div>
+          </Fragment>
+        )}
         {this.showInfoPopup ? (
           <igl-booking-event-hover
             is_vacation_rental={this.is_vacation_rental}
