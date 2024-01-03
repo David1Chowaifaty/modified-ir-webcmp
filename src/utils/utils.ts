@@ -78,13 +78,15 @@ export function formatLegendColors(legendData) {
     'NOTES': { id: 8, clsName: 'NOTES' },
     'OUTSTANDING-BALANCE': { id: 9, clsName: 'OUTSTANDING_BALANCE' },
   };
-
   legendData.forEach(legend => {
     formattedLegendData[legend.id] = legend;
     formattedLegendData.statusId = statusId; // NOTE: This will overwrite the 'statusId' property with every iteration.
   });
 
   return formattedLegendData;
+}
+export function isBlockUnit(status_code: any) {
+  return ['003', '002', '004'].includes(status_code);
 }
 export function getCurrencySymbol(currencyCode) {
   const formatter = new Intl.NumberFormat(undefined, {

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, RoomBlockDetails } from '../models/IBooking';
-import { dateDifference } from './utils';
+import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
 import { store } from '../redux/store';
 
@@ -67,7 +67,7 @@ function renderBlock003Date(date, hour, minute) {
   return `${languages.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
-  if (['003', '002', '004'].includes(cell.STAY_STATUS_CODE)) {
+  if (isBlockUnit(cell.STAY_STATUS_CODE)) {
     return {
       ID: cell.POOL,
       NOTES: '',

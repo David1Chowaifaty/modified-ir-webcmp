@@ -2,6 +2,7 @@ import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, 
 import { EventsService } from '../../../services/events.service';
 import { BookingService } from '../../../services/booking.service';
 import { transformNewBooking } from '../../../utils/booking';
+import { isBlockUnit } from '../../../utils/utils';
 
 @Component({
   tag: 'igl-booking-event',
@@ -33,6 +34,7 @@ export class IglBookingEvent {
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
   private isStreatch = false;
+  private isBlockedUnit: boolean;
   /*Services */
   private eventsService = new EventsService();
   private bookingService = new BookingService();
@@ -58,6 +60,7 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
+    this.isBlockedUnit = isBlockUnit(this.bookingEvent.STATUS_CODE);
     window.addEventListener('click', this.handleClickOutsideBind);
   }
 
@@ -126,7 +129,7 @@ export class IglBookingEvent {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
-          if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+          if (this.isBlockedUnit) {
             this.showEventInfo(true);
           } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
             await this.fetchAndAssignBookingData();
@@ -134,7 +137,7 @@ export class IglBookingEvent {
         }
       } else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
-          if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
+          if (this.isBlockedUnit) {
             this.showEventInfo(true);
           } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
             await this.fetchAndAssignBookingData();
@@ -522,7 +525,7 @@ export class IglBookingEvent {
         <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
           {this.getBookedBy()}
         </div>
-        {this.bookingEvent.is_direct && (
+        {(this.bookingEvent.is_direct || this.isBlockedUnit) && (
           <Fragment>
             <div
               class="bookingEventDragHandle leftSide"
