@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, RoomBlockDetails } from '../models/IBooking';
-import { dateDifference } from './utils';
+import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
 import { store } from '../redux/store';
 
@@ -67,7 +67,7 @@ function renderBlock003Date(date, hour, minute) {
   return `${languages.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
-  if (['003', '002', '004'].includes(cell.STAY_STATUS_CODE)) {
+  if (isBlockUnit(cell.STAY_STATUS_CODE)) {
     return {
       ID: cell.POOL,
       NOTES: '',
@@ -108,6 +108,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
     NOTES: cell.booking.remark,
+    is_direct: cell.booking.is_direct,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -122,7 +123,6 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     // CHILDREN_COUNT: cell.room.occupancy.children_nbr,
     // channel_booking_nbr: cell.booking.channel_booking_nbr,
     // origin: cell.booking.origin,
-    // is_direct: cell.booking.is_direct,
     // GUEST: cell.booking.guest,
     // ROOMS: cell.booking.rooms,
     // cancelation: cell.room.rateplan.cancelation,
