@@ -114,8 +114,10 @@ export namespace Components {
         "fullyBlocked": boolean;
         "index": number;
         "isBookDisabled": boolean;
+        "physicalrooms": any;
         "ratePlanData": { [key: string]: any };
         "ratePricingMode": any[];
+        "shouldBeDisabled": boolean;
         "totalAvailableRooms": number;
     }
     interface IglBookingRooms {
@@ -126,6 +128,7 @@ export namespace Components {
         "defaultTexts": any;
         "isBookDisabled": boolean;
         "ratePricingMode": any[];
+        "roomInfoId": number|null;
         "roomTypeData": { [key: string]: any };
     }
     interface IglCalBody {
@@ -1418,6 +1421,7 @@ declare global {
     interface HTMLIrRoomElementEventMap {
         "pressCheckIn": any;
         "pressCheckOut": any;
+        "editInitiated": void;
     }
     interface HTMLIrRoomElement extends Components.IrRoom, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomElementEventMap>(type: K, listener: (this: HTMLIrRoomElement, ev: IrRoomCustomEvent<HTMLIrRoomElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1695,8 +1699,10 @@ declare namespace LocalJSX {
         "isBookDisabled"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "onGotoSplitPageTwoEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
+        "physicalrooms"?: any;
         "ratePlanData"?: { [key: string]: any };
         "ratePricingMode"?: any[];
+        "shouldBeDisabled"?: boolean;
         "totalAvailableRooms"?: number;
     }
     interface IglBookingRooms {
@@ -1708,6 +1714,7 @@ declare namespace LocalJSX {
         "isBookDisabled"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomsCustomEvent<{ [key: string]: any }>) => void;
         "ratePricingMode"?: any[];
+        "roomInfoId"?: number|null;
         "roomTypeData"?: { [key: string]: any };
     }
     interface IglCalBody {
@@ -2084,6 +2091,7 @@ declare namespace LocalJSX {
         "item"?: Room;
         "mealCodeName"?: string;
         "myRoomTypeFoodCat"?: string;
+        "onEditInitiated"?: (event: IrRoomCustomEvent<void>) => void;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
     }

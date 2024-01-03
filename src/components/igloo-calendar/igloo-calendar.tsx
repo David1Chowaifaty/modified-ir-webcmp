@@ -12,6 +12,7 @@ import { transformNewBLockedRooms, transformNewBooking } from '../../utils/booki
 import { store } from '../../redux/store';
 import { addCalendarData } from '../../redux/features/calendarData';
 import { CalendarDataDetails } from '../../models/calendarData';
+import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 
 @Component({
   tag: 'igloo-calendar',
@@ -35,8 +36,7 @@ export class IglooCalendar {
   @State() calendarData: { [key: string]: any } = new Object();
   @State() days: { [key: string]: any }[] = new Array();
   @State() scrollViewDragging: boolean = false;
-
-  @State() bookingItem: { [key: string]: any } = null;
+  @State() bookingItem: TIglBookPropertyPayload | null = null;
   @State() showLegend: boolean = false;
   @State() showPaymentDetails: boolean = false;
   @State() showToBeAssigned: boolean = false;
@@ -54,6 +54,7 @@ export class IglooCalendar {
   private socket: any;
   private reachedEndOfCalendar = false;
   private defaultTexts: any;
+  //@State() showBookProperty:boolean=false;
   @Watch('ticket')
   ticketChanged() {
     sessionStorage.setItem('token', JSON.stringify(this.ticket));
@@ -72,7 +73,7 @@ export class IglooCalendar {
   async initializeApp() {
     try {
       this.defaultTexts = await this.roomService.fetchLanguage(this.language);
-      console.log('language', this.defaultTexts);
+      //console.log('language', this.defaultTexts);
       this.roomService.fetchData(this.propertyid, this.language).then(roomResp => {
         this.setRoomsData(roomResp);
 
@@ -417,7 +418,9 @@ export class IglooCalendar {
       case 'search':
         break;
       case 'add':
+        console.log('data:', opt.data);
         this.bookingItem = opt.data;
+
         break;
       case 'gotoToday':
         this.scrollToElement(this.today);
@@ -666,7 +669,11 @@ export class IglooCalendar {
       });
     }
   }
-
+  // @Listen('editInitiated')
+  // handleEditInitiated() {
+  //   this.showBookProperty = true;
+  // }
+  
   render() {
     return (
       <Host>
@@ -721,7 +728,7 @@ export class IglooCalendar {
             <ir-loading-screen message="Preparing Calendar Data"></ir-loading-screen>
           )}
         </div>
-        {this.bookingItem && (
+        {this.bookingItem &&(
           <igl-book-property
             allowedBookingSources={this.calendarData.allowedBookingSources}
             adultChildConstraints={this.calendarData.adultChildConstraints}
@@ -734,17 +741,25 @@ export class IglooCalendar {
             onCloseBookingWindow={_ => (this.bookingItem = null)}
           ></igl-book-property>
         )}
-        <ir-sidebar open>
-          <ir-booking-details
-            bookingNumber="47215375"
+        
+       
+
+        {/* <ir-sidebar
+          open={this.bookingItem && this.bookingItem.event_type === 'EDIT_BOOKING'}
+          onIrSidebarToggle={open => {
+            if(open)
+            this.bookingItem = null;
+          }}
+        >
+         { this.bookingItem && this.bookingItem.event_type === 'EDIT_BOOKING'&& <ir-booking-details
+         hasRoomEdit
+         hasRoomDelete
+            bookingNumber={this.bookingItem.BOOKING_NUMBER}
             ticket={this.ticket}
             baseurl={this.baseurl}
-            language={this.language}
-            has-menu="true"
-            has-print="true"
-            has-delete="true"
-          ></ir-booking-details>
-        </ir-sidebar>
+            language={this.language}        
+          ></ir-booking-details>}
+        </ir-sidebar> */}
       </Host>
     );
   }

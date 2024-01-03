@@ -81,6 +81,7 @@ export class IglBookingOverviewPage {
                 bookingType={this.bookingData.event_type}
                 roomTypeData={roomInfo}
                 class="mt-2 mb-1 p-0"
+                roomInfoId={this.selectedRooms.has(`c_${roomInfo.id}`)?roomInfo.id:null}
                 defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
                 onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
               ></igl-booking-rooms>

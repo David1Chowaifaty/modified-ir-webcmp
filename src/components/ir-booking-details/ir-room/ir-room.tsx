@@ -26,6 +26,7 @@ export class IrRoom {
   // Event Emitters
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
   @Event({ bubbles: true, composed: true }) pressCheckOut: EventEmitter;
+  @Event() editInitiated: EventEmitter<void>;
 
   @Listen('clickHanlder')
   handleClick(e) {
@@ -68,7 +69,7 @@ export class IrRoom {
             <div>
               {/* <span class="mr-1">{this.item.TOTAL_AMOUNT + this.item.EXCLUDED_TAXES}</span> */}
               <span class="mr-1">{_formatAmount(this.item.total, this.currency)}</span>
-              {this.hasRoomEdit && <ir-icon id={`roomEdit-${this.item.identifier}`} icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon>}
+              {this.hasRoomEdit && <button onClick={()=>this.editInitiated.emit()} ><ir-icon id={`roomEdit-${this.item.identifier}`} icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon></button>}
               {this.hasRoomDelete && <ir-icon id={`roomDelete-${this.item.identifier}`} icon="ft-trash-2 danger h4 pointer"></ir-icon>}
             </div>
           </div>

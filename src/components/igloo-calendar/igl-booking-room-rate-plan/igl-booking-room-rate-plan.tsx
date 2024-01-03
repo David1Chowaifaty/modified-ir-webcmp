@@ -14,6 +14,8 @@ export class IglBookingRoomRatePlan {
   @Prop() index: number;
   @Prop() ratePricingMode = [];
   @Prop() currency: any;
+  @Prop() physicalrooms;
+  @Prop() shouldBeDisabled: boolean;
   @Prop() dateDifference: number;
   @Prop() bookingType: string = 'PLUS_BOOKING';
   @Prop() fullyBlocked: boolean;
@@ -33,9 +35,28 @@ export class IglBookingRoomRatePlan {
   }
   componentWillLoad() {
     this.updateSelectedRatePlan(this.ratePlanData);
+    console.log('default data :', this.defaultData);
+    console.log('selected :', this.selectedData);
   }
   disableForm() {
-    return this.selectedData.is_closed || this.totalAvailableRooms === 0;
+    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
+      console.log('first');
+      return false;
+    } else {
+      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || this.selectedData.physicalRooms.length === 0;
+    }
+  }
+  setAvailableRooms() {
+    let availableRooms = this.getAvailableRooms(this.ratePlanData.assignable_units);
+    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled && this.defaultData) {
+      let selectedRoom = this.physicalrooms.find(room => room.id.toString() === this.defaultData.roomId);
+
+      availableRooms.push({
+        id: this.defaultData.roomId,
+        name: selectedRoom.name,
+      });
+    }
+    return availableRooms;
   }
   getSelectedOffering(value: any) {
     return this.ratePlanData.variations.find(variation => variation.adult_child_offering === value);
@@ -57,7 +78,7 @@ export class IglBookingRoomRatePlan {
       defaultSelectedRate: 0,
       index: this.index,
       is_closed: data.is_closed,
-      physicalRooms: this.getAvailableRooms(data.assignable_units),
+      physicalRooms: this.setAvailableRooms(),
     };
     if (this.defaultData) {
       for (const [key, value] of Object.entries(this.defaultData)) {
@@ -214,7 +235,7 @@ export class IglBookingRoomRatePlan {
                     class="form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
                     value={this.renderRate()}
                     id={v4()}
-                    placeholder={this.defaultTexts.entries.Lcz_Rate||"Rate"}
+                    placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
                     onInput={(event: InputEvent) => this.handleInput(event)}
                   />
                   <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
