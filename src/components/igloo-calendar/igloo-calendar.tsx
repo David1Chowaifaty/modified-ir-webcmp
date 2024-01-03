@@ -9,6 +9,9 @@ import { ICountry, RoomBlockDetails, RoomBookingDetails, bookingReasons } from '
 import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '../../services/toBeAssigned.service';
 import { transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
+import { store } from '../../redux/store';
+import { addCalendarData } from '../../redux/features/calendarData';
+import { CalendarDataDetails } from '../../models/calendarData';
 
 @Component({
   tag: 'igloo-calendar',
@@ -50,7 +53,7 @@ export class IglooCalendar {
   private toBeAssignedService = new ToBeAssignedService();
   private socket: any;
   private reachedEndOfCalendar = false;
-  private defaultTexts:any;
+  private defaultTexts: any;
   @Watch('ticket')
   ticketChanged() {
     sessionStorage.setItem('token', JSON.stringify(this.ticket));
@@ -66,23 +69,59 @@ export class IglooCalendar {
       this.initializeApp();
     }
   }
- async initializeApp() {
+  async initializeApp() {
     try {
-      this.defaultTexts=await this.roomService.fetchLanguage(this.language)
-      console.log("language",this.defaultTexts)
+      this.defaultTexts = await this.roomService.fetchLanguage(this.language);
+      console.log('language', this.defaultTexts);
       this.roomService.fetchData(this.propertyid, this.language).then(roomResp => {
         this.setRoomsData(roomResp);
+
         this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date).then(async bookingResp => {
+          let calData: CalendarDataDetails = {
+            adultChildConstraints: {
+              adult_max_nbr: 0,
+              child_max_nbr: 0,
+              child_max_age: 0,
+            },
+            allowedBookingSources: [],
+            currency: undefined,
+            endingDate: 0,
+            formattedLegendData: undefined,
+            is_vacation_rental: false,
+            legendData: [],
+            roomsInfo: [],
+            startingDate: 0,
+            language: '',
+            toBeAssignedEvents: [],
+          };
           this.countryNodeList = await this.bookingService.getCountries(this.language);
+          //TODO:to be removed
           this.calendarData.currency = roomResp['My_Result'].currency;
+          calData.currency = roomResp['My_Result'].currency;
+          //TODO:to be removed
           this.calendarData.allowedBookingSources = roomResp['My_Result'].allowed_booking_sources;
+          calData.allowedBookingSources = roomResp['My_Result'].allowed_booking_sources;
+          //TODO:to be removed
           this.calendarData.adultChildConstraints = roomResp['My_Result'].adult_child_constraints;
+          calData.allowedBookingSources = roomResp['My_Result'].allowed_booking_sources;
+          //TODO:to be removed
           this.calendarData.legendData = this.getLegendData(roomResp);
+          calData.legendData = this.getLegendData(roomResp);
+          //TODO:to be removed
           this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
+          calData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
+          //TODO:to be removed
           this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
+          calData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
+          //TODO:to be removed
           this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
+          calData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
+          //TODO:to be removed
           this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
+          calData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
+          //TODO:to be removed
           this.calendarData.bookingEvents = bookingResp.myBookings || [];
+          //TODO:to be removed
           this.calendarData.toBeAssignedEvents = [];
           let paymentMethods = roomResp['My_Result']['allowed_payment_methods'] as any[];
           this.showPaymentDetails = paymentMethods.some(item => item.code === '001' || item.code === '004');
@@ -94,10 +133,11 @@ export class IglooCalendar {
           this.days = bookingResp.days;
           this.calendarData.days = this.days;
           this.calendarData.monthsInfo = bookingResp.months;
-          console.log("calendar data:",this.calendarData)
+          console.log('calendar data:', this.calendarData);
           setTimeout(() => {
             this.scrollToElement(this.today);
           }, 200);
+          store.dispatch(addCalendarData(calData));
           if (!this.calendarData.is_vacation_rental) {
             const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
             this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: { ...this.unassignedDates, ...data } };
@@ -638,9 +678,7 @@ export class IglooCalendar {
             [
               this.showToBeAssigned ? (
                 <igl-to-be-assigned
-              
                   unassignedDatesProp={this.unassignedDates}
-                 
                   to_date={this.to_date}
                   from_date={this.from_date}
                   propertyid={this.propertyid}
@@ -650,7 +688,12 @@ export class IglooCalendar {
                 ></igl-to-be-assigned>
               ) : null,
               this.showLegend ? (
-                <igl-legends defaultTexts={this.defaultTexts} class="legendContainer" legendData={this.calendarData.legendData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-legends>
+                <igl-legends
+                  defaultTexts={this.defaultTexts}
+                  class="legendContainer"
+                  legendData={this.calendarData.legendData}
+                  onOptionEvent={evt => this.onOptionSelect(evt)}
+                ></igl-legends>
               ) : null,
               <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
                 <div id="calendarContainer">
@@ -691,6 +734,17 @@ export class IglooCalendar {
             onCloseBookingWindow={_ => (this.bookingItem = null)}
           ></igl-book-property>
         )}
+        <ir-sidebar open>
+          <ir-booking-details
+            bookingNumber="47215375"
+            ticket={this.ticket}
+            baseurl={this.baseurl}
+            language={this.language}
+            has-menu="true"
+            has-print="true"
+            has-delete="true"
+          ></ir-booking-details>
+        </ir-sidebar>
       </Host>
     );
   }
