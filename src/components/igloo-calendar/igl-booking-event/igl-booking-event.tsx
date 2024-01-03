@@ -125,7 +125,7 @@ export class IglBookingEvent {
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
-        if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
+        if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
           if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
           } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
@@ -133,13 +133,14 @@ export class IglBookingEvent {
           }
         }
       } else {
-        if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5) {
+        if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
           if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
           } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
             await this.fetchAndAssignBookingData();
           }
         } else {
+          console.log('object');
           const { pool, from_date, to_date, toRoomId } = event.detail as any;
           if (pool) {
             this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
@@ -421,7 +422,7 @@ export class IglBookingEvent {
       } else {
         let numberOfDays = Math.round(this.finalWidth / this.dayWidth);
         let initialStayDays = this.getStayDays();
-        if (initialStayDays != numberOfDays) {
+        if (initialStayDays != numberOfDays && !isNaN(numberOfDays)) {
           //this.setStayDays(numberOfDays);
           if (this.resizeSide == 'leftSide') {
             this.element.style.left = `${this.initialLeft + (initialStayDays - numberOfDays) * this.dayWidth}px`;
@@ -440,6 +441,7 @@ export class IglBookingEvent {
               nbOfDays: numberOfDays,
             },
           });
+
           this.element.style.width = `${numberOfDays * this.dayWidth - this.eventSpace}px`;
         } else {
           this.element.style.left = `${this.initialLeft}px`;
