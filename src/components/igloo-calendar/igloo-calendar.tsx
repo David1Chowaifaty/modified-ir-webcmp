@@ -54,7 +54,7 @@ export class IglooCalendar {
   private socket: any;
   private reachedEndOfCalendar = false;
   private defaultTexts: any;
-  //@State() showBookProperty:boolean=false;
+  @State() showBookProperty: boolean = false;
   @Watch('ticket')
   ticketChanged() {
     sessionStorage.setItem('token', JSON.stringify(this.ticket));
@@ -134,7 +134,7 @@ export class IglooCalendar {
           this.days = bookingResp.days;
           this.calendarData.days = this.days;
           this.calendarData.monthsInfo = bookingResp.months;
-          console.log('calendar data:', this.calendarData);
+          //console.log('calendar data:', this.calendarData);
           setTimeout(() => {
             this.scrollToElement(this.today);
           }, 200);
@@ -418,7 +418,7 @@ export class IglooCalendar {
       case 'search':
         break;
       case 'add':
-        console.log('data:', opt.data);
+        //console.log('data:', opt.data);
         this.bookingItem = opt.data;
 
         break;
@@ -427,6 +427,7 @@ export class IglooCalendar {
         break;
       case 'closeSideMenu':
         this.closeSideMenu();
+        this.showBookProperty=false
         break;
     }
   }
@@ -669,11 +670,15 @@ export class IglooCalendar {
       });
     }
   }
-  // @Listen('editInitiated')
-  // handleEditInitiated() {
-  //   this.showBookProperty = true;
-  // }
+  @Listen('editInitiated')
+  handleEditInitiated() {
+    this.showBookProperty = true;
+  }
   
+  handleCloseBookingWindow() {
+    this.showBookProperty = false;
+    this.bookingItem = null;
+  }
   render() {
     return (
       <Host>
@@ -728,7 +733,7 @@ export class IglooCalendar {
             <ir-loading-screen message="Preparing Calendar Data"></ir-loading-screen>
           )}
         </div>
-        {this.bookingItem &&(
+        {this.bookingItem && (this.bookingItem.event_type !== 'EDIT_BOOKING' || this.showBookProperty) && (
           <igl-book-property
             allowedBookingSources={this.calendarData.allowedBookingSources}
             adultChildConstraints={this.calendarData.adultChildConstraints}
@@ -738,28 +743,27 @@ export class IglooCalendar {
             language={this.language}
             propertyid={this.propertyid}
             bookingData={this.bookingItem}
-            onCloseBookingWindow={_ => (this.bookingItem = null)}
+            onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
         )}
-        
-       
 
-        {/* <ir-sidebar
-          open={this.bookingItem && this.bookingItem.event_type === 'EDIT_BOOKING'}
+        <ir-sidebar
+          open={this.bookingItem && this.bookingItem.event_type === 'EDIT_BOOKING' && !this.showBookProperty}
           onIrSidebarToggle={open => {
-            if(open)
-            this.bookingItem = null;
+            if (open) this.bookingItem = null;
           }}
         >
-         { this.bookingItem && this.bookingItem.event_type === 'EDIT_BOOKING'&& <ir-booking-details
-         hasRoomEdit
-         hasRoomDelete
-            bookingNumber={this.bookingItem.BOOKING_NUMBER}
-            ticket={this.ticket}
-            baseurl={this.baseurl}
-            language={this.language}        
-          ></ir-booking-details>}
-        </ir-sidebar> */}
+          {this.bookingItem && this.bookingItem.event_type === 'EDIT_BOOKING' && (
+            <ir-booking-details
+              hasRoomEdit
+              hasRoomDelete
+              bookingNumber={this.bookingItem.BOOKING_NUMBER}
+              ticket={this.ticket}
+              baseurl={this.baseurl}
+              language={this.language}
+            ></ir-booking-details>
+          )}
+        </ir-sidebar>
       </Host>
     );
   }

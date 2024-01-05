@@ -69,7 +69,7 @@ export class IrRoom {
             <div>
               {/* <span class="mr-1">{this.item.TOTAL_AMOUNT + this.item.EXCLUDED_TAXES}</span> */}
               <span class="mr-1">{_formatAmount(this.item.total, this.currency)}</span>
-              {this.hasRoomEdit && <button onClick={()=>this.editInitiated.emit()} ><ir-icon id={`roomEdit-${this.item.identifier}`} icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon></button>}
+              {this.hasRoomEdit && <ir-icon id={`roomEdit-${this.item.identifier}`} icon="ft-edit color-ir-dark-blue-hover h4 pointer" onClick={()=>this.editInitiated.emit()}></ir-icon>}
               {this.hasRoomDelete && <ir-icon id={`roomDelete-${this.item.identifier}`} icon="ft-trash-2 danger h4 pointer"></ir-icon>}
             </div>
           </div>
@@ -99,7 +99,7 @@ export class IrRoom {
           <div class="collapse" id={`roomCollapse-${this.item.identifier}`}>
             <div class="d-flex">
               <div class=" sm-padding-top">
-                <strong class="sm-padding-right">Rate Breakdown:</strong>
+                <strong class="sm-padding-right">Breakdown:</strong>
               </div>
               <div class="sm-padding-top w-100 ">
                 {this.item.days.length > 0 &&

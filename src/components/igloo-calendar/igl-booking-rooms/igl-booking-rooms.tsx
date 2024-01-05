@@ -23,7 +23,7 @@ export class IglBookingRooms {
 
   componentWillLoad() {
     this.initializeRoomData();
-    console.log(this.roomTypeData);
+    //console.log(this.roomTypeData);
   }
 
   private initializeRoomData() {
@@ -126,8 +126,8 @@ export class IglBookingRooms {
           if (ratePlan.variations !== null) {
             let shouldBeDisabled = this.roomInfoId&&this.roomInfoId===this.roomTypeData.id;
             
-            console.log("room type",this.roomTypeData)
-            console.log("default data",this.defaultData)
+            //console.log("room type",this.roomTypeData)
+           // console.log("default data",this.defaultData)
             return (
               <igl-booking-room-rate-plan
                 defaultTexts={this.defaultTexts}
