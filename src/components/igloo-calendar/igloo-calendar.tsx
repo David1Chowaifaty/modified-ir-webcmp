@@ -731,7 +731,8 @@ export class IglooCalendar {
           )}
         </ir-sidebar>
         <ir-modal
-          modalTitle="Confirmation!"
+          modalTitle={`${this.defaultTexts?.entries.Lcz_Confirmation}!`}
+          rightBtnActive={this.dialogData ? !this.dialogData.hideConfirmButton : true}
           leftBtnText={this.defaultTexts?.entries.Lcz_Cancel}
           rightBtnText={this.defaultTexts?.entries.Lcz_Ok}
           modalBody={this.dialogData ? this.dialogData.description : ''}

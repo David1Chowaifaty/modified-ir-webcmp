@@ -48,6 +48,7 @@ export interface IReallocationPayload {
   to_date: string;
   title: string;
   description: string;
+  hideConfirmButton?: boolean;
 }
 export interface IRoomNightsDataEventPayload {
   type: 'cancel' | 'confirm';

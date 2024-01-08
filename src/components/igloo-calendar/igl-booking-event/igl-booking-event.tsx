@@ -63,6 +63,7 @@ export class IglBookingEvent {
   isTouchStart: boolean;
   moveDiffereneX: number;
   moveDiffereneY: number;
+  private animationFrameId: number | null = null;
 
   handleMouseMoveBind = this.handleMouseMove.bind(this);
   handleMouseUpBind = this.handleMouseUp.bind(this);
@@ -107,6 +108,9 @@ export class IglBookingEvent {
 
   disconnectedCallback() {
     window.removeEventListener('click', this.handleClickOutsideBind);
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
   }
 
   @Listen('click', { target: 'window' })
@@ -157,11 +161,17 @@ export class IglBookingEvent {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
           if (pool) {
             if (this.isShrinking || !this.isStreatch) {
-              this.showDialog.emit({ ...event.detail, description: this.setModalDescription(toRoomId), title: '' });
+              const description = this.setModalDescription(toRoomId);
+              let hideConfirmButton = false;
+              if (description === 'hello world') {
+                hideConfirmButton = true;
+              }
+              this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
             } else {
               if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
-                // this.finalWidth = this.initialWidth;
-                this.resetBookingToInitialPosition();
+                this.animationFrameId = requestAnimationFrame(() => {
+                  this.resetBookingToInitialPosition();
+                });
                 throw new Error('Overlapping Dates');
               } else {
                 this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool });
