@@ -88,7 +88,7 @@ export class IrBookingDetails {
     this.guestData = result.guest;
     this.bookingData = result;
     this.rerenderFlag = !this.rerenderFlag;
-    console.log(this.bookingData);
+//console.log(this.bookingData);
   }
   @Listen('iconClickHandler')
   handleIconClick(e) {
@@ -268,7 +268,7 @@ export class IrBookingDetails {
               {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
             </div>
           </div>
-          <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
+          {/* <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
             <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
             <ir-select id="update-status" size="sm" label-available="false" data={this.statusData} textSize="sm" class="sm-padding-right"></ir-select>
             <ir-button  id="update-status-btn" size="sm" text="Update"></ir-button>
@@ -276,7 +276,7 @@ export class IrBookingDetails {
             {this.hasPrint && <ir-icon id="print" icon="ft-printer h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
             {this.hasDelete && <ir-icon id="book-delete" icon="ft-trash-2 h1 danger ml-1 pointer"></ir-icon>}
             {this.hasMenu && <ir-icon id="menu" icon="ft-list h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
-          </div>
+          </div> */}
         </div>
       </div>,
       <div class="fluid-container m-1">

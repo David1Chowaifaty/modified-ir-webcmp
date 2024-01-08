@@ -6,12 +6,13 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@st
   scoped: true,
 })
 export class IglBookingRooms {
-  @Prop() defaultTexts
+  @Prop() defaultTexts;
   @Prop() roomTypeData: { [key: string]: any };
   @Prop() defaultData: Map<string, any>;
   @Prop() bookingType = 'PLUS_BOOKING';
   @Prop() dateDifference: number;
   @Prop() ratePricingMode = [];
+  @Prop() roomInfoId :number|null=null;
   @Prop() currency;
   @State() selectedRooms: number[] = [];
   @State() totalRooms: number;
@@ -22,6 +23,7 @@ export class IglBookingRooms {
 
   componentWillLoad() {
     this.initializeRoomData();
+    //console.log(this.roomTypeData);
   }
 
   private initializeRoomData() {
@@ -122,6 +124,15 @@ export class IglBookingRooms {
         {isValidBookingType && <div class="font-weight-bold font-medium-1">{this.roomTypeData.name}</div>}
         {this.roomTypeData.rateplans.map((ratePlan, index) => {
           if (ratePlan.variations !== null) {
+            let shouldBeDisabled = this.roomInfoId&&this.roomInfoId===this.roomTypeData.id;
+            let roomId=-1;
+            if(shouldBeDisabled&&this.defaultData.has(`p_${ratePlan.id}`)&&this.defaultData){
+              roomId=this.defaultData.get(`p_${ratePlan.id}`).roomId
+            }
+            //console.log("ratePlan:",ratePlan.variation)
+            //console.log("room type",this.defaultData.get(`p_${ratePlan.id}`))
+            //console.log("default data",this.defaultData)
+            //console.log("room",this.roomTypeData)
             return (
               <igl-booking-room-rate-plan
                 defaultTexts={this.defaultTexts}
@@ -136,7 +147,10 @@ export class IglBookingRooms {
                 totalAvailableRooms={this.roomsDistributions[index]}
                 bookingType={this.bookingType}
                 defaultData={(this.defaultData && this.defaultData.get(`p_${ratePlan.id}`)) || null}
+                shouldBeDisabled={shouldBeDisabled}
                 onDataUpdateEvent={evt => this.onRoomDataUpdate(evt, index)}
+                physicalrooms={this.roomTypeData.physicalrooms}
+                defaultRoomId={roomId}
               ></igl-booking-room-rate-plan>
             );
           } else {

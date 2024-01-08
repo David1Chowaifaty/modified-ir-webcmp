@@ -14,13 +14,17 @@ export class IglBookingRoomRatePlan {
   @Prop() index: number;
   @Prop() ratePricingMode = [];
   @Prop() currency: any;
+  @Prop() physicalrooms;
+  @Prop() shouldBeDisabled: boolean;
   @Prop() dateDifference: number;
   @Prop() bookingType: string = 'PLUS_BOOKING';
   @Prop() fullyBlocked: boolean;
   @Prop() isBookDisabled: boolean = false;
+  @Prop() defaultRoomId;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
+  @State() ratePlanChangedState: boolean = false;
   private initialRateValue: number = 0;
   getAvailableRooms(assignable_units: any[]) {
     let result = [];
@@ -35,7 +39,27 @@ export class IglBookingRoomRatePlan {
     this.updateSelectedRatePlan(this.ratePlanData);
   }
   disableForm() {
-    return this.selectedData.is_closed || this.totalAvailableRooms === 0;
+    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
+      return false;
+    } else {
+      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || this.selectedData.physicalRooms.length === 0;
+    }
+  }
+
+  setAvailableRooms(data) {
+    let availableRooms = this.getAvailableRooms(data);
+
+    if (this.bookingType === 'EDIT_BOOKING'  && this.defaultData) {
+      let selectedRoom = this.physicalrooms.find(room => room.id.toString() === this.defaultRoomId);
+      console.log('selected rooms', selectedRoom);
+      if (selectedRoom) {
+        availableRooms.push({
+          id: selectedRoom.id,
+          name: selectedRoom.name,
+        });
+      }
+    }
+    return availableRooms;
   }
   getSelectedOffering(value: any) {
     return this.ratePlanData.variations.find(variation => variation.adult_child_offering === value);
@@ -57,19 +81,21 @@ export class IglBookingRoomRatePlan {
       defaultSelectedRate: 0,
       index: this.index,
       is_closed: data.is_closed,
-      physicalRooms: this.getAvailableRooms(data.assignable_units),
+      physicalRooms: this.setAvailableRooms(this.ratePlanData.assignable_units),
     };
+
     if (this.defaultData) {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
+
       this.dataUpdateEvent.emit({
         key: 'roomRatePlanUpdate',
         changedKey: 'totalRooms',
         data: this.selectedData,
       });
     }
-    //
+
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
   @Watch('ratePlanData')
@@ -80,7 +106,7 @@ export class IglBookingRoomRatePlan {
       adultCount: newData.variations[newData.variations.length - 1].adult_nbr,
       childrenCount: newData.variations[newData.variations.length - 1].child_nbr,
       rate: this.handleRateDaysUpdate(),
-      physicalRooms: this.getAvailableRooms(newData.assignable_units),
+      physicalRooms: this.setAvailableRooms(newData.assignable_units),
     };
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
@@ -214,7 +240,7 @@ export class IglBookingRoomRatePlan {
                     class="form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
                     value={this.renderRate()}
                     id={v4()}
-                    placeholder={this.defaultTexts.entries.Lcz_Rate||"Rate"}
+                    placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
                     onInput={(event: InputEvent) => this.handleInput(event)}
                   />
                   <span class="currency">{getCurrencySymbol(this.currency.code)}</span>

@@ -10,6 +10,10 @@ import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '../../services/toBeAssigned.service';
 import { transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from '../../models/property-types';
+import { store } from '../../redux/store';
+import { addCalendarData } from '../../redux/features/calendarData';
+import { CalendarDataDetails } from '../../models/calendarData';
+import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 
 @Component({
   tag: 'igloo-calendar',
@@ -34,7 +38,7 @@ export class IglooCalendar {
   @State() days: { [key: string]: any }[] = new Array();
   @State() scrollViewDragging: boolean = false;
   @State() dialogData: IReallocationPayload | null = null;
-  @State() bookingItem: { [key: string]: any } = null;
+  @State() bookingItem: TIglBookPropertyPayload | null = null;
   @State() showLegend: boolean = false;
   @State() showPaymentDetails: boolean = false;
   @State() showToBeAssigned: boolean = false;
@@ -55,6 +59,7 @@ export class IglooCalendar {
   private socket: any;
   private reachedEndOfCalendar = false;
   private defaultTexts: any;
+  @State() showBookProperty: boolean = false;
   @Watch('ticket')
   ticketChanged() {
     sessionStorage.setItem('token', JSON.stringify(this.ticket));
@@ -73,7 +78,7 @@ export class IglooCalendar {
   async initializeApp() {
     try {
       this.defaultTexts = await this.roomService.fetchLanguage(this.language);
-      console.log('language', this.defaultTexts);
+      //console.log('language', this.defaultTexts);
       this.roomService.fetchData(this.propertyid, this.language).then(roomResp => {
         this.setRoomsData(roomResp);
         this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date).then(async bookingResp => {
@@ -368,13 +373,16 @@ export class IglooCalendar {
       case 'search':
         break;
       case 'add':
+        //console.log('data:', opt.data);
         this.bookingItem = opt.data;
+
         break;
       case 'gotoToday':
         this.scrollToElement(this.today);
         break;
       case 'closeSideMenu':
         this.closeSideMenu();
+        this.showBookProperty = false;
         break;
     }
   }
@@ -640,6 +648,9 @@ export class IglooCalendar {
   }
   handleSideBarToggle(e: CustomEvent<boolean>) {
     if (e.detail) {
+      if (this.bookingItem) {
+        this.bookingItem = null;
+      }
       if (this.roomNightsData) {
         this.revertBooking.emit(this.roomNightsData.pool);
         this.roomNightsData = null;
@@ -704,7 +715,7 @@ export class IglooCalendar {
             <ir-loading-screen message="Preparing Calendar Data"></ir-loading-screen>
           )}
         </div>
-        {this.bookingItem && (
+        {this.bookingItem && (this.bookingItem.event_type !== 'EDIT_BOOKING' || this.showBookProperty) && (
           <igl-book-property
             allowedBookingSources={this.calendarData.allowedBookingSources}
             adultChildConstraints={this.calendarData.adultChildConstraints}
@@ -714,10 +725,14 @@ export class IglooCalendar {
             language={this.language}
             propertyid={this.propertyid}
             bookingData={this.bookingItem}
-            onCloseBookingWindow={_ => (this.bookingItem = null)}
+            // onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
         )}
-        <ir-sidebar onIrSidebarToggle={this.handleSideBarToggle.bind(this)} open={this.roomNightsData !== null} showCloseButton={false}>
+        <ir-sidebar
+          onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
+          open={this.roomNightsData !== null || (this.bookingItem && this.bookingItem.event_type === 'EDIT_BOOKING' && !this.showBookProperty)}
+          showCloseButton={false}
+        >
           {this.roomNightsData && (
             <ir-room-nights
               pool={this.roomNightsData.pool}
@@ -728,6 +743,16 @@ export class IglooCalendar {
               toDate={this.roomNightsData.to_date}
               ticket={this.ticket}
             ></ir-room-nights>
+          )}
+          {this.bookingItem && this.bookingItem.event_type === 'EDIT_BOOKING' && (
+            <ir-booking-details
+              hasRoomEdit
+              hasRoomDelete
+              bookingNumber={this.bookingItem.BOOKING_NUMBER}
+              ticket={this.ticket}
+              baseurl={this.baseurl}
+              language={this.language}
+            ></ir-booking-details>
           )}
         </ir-sidebar>
         <ir-modal
