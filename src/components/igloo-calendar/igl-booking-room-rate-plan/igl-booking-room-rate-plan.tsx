@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h, State, Event, EventEmitter, Watch, Fragment, Listen } from '@stencil/core';
+import { Component, Host, Prop, h, State, Event, EventEmitter, Watch, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
 @Component({
@@ -20,10 +20,11 @@ export class IglBookingRoomRatePlan {
   @Prop() bookingType: string = 'PLUS_BOOKING';
   @Prop() fullyBlocked: boolean;
   @Prop() isBookDisabled: boolean = false;
+  @Prop() defaultRoomId;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
-  @State() ratePlanChangedState:boolean=false;
+  @State() ratePlanChangedState: boolean = false;
   private initialRateValue: number = 0;
   getAvailableRooms(assignable_units: any[]) {
     let result = [];
@@ -36,37 +37,27 @@ export class IglBookingRoomRatePlan {
   }
   componentWillLoad() {
     this.updateSelectedRatePlan(this.ratePlanData);
-    //console.log("rate plan data:",this.ratePlanData)
-    //console.log('default data :', this.defaultData);
-    //console.log('selected :', this.selectedData);
   }
   disableForm() {
     if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
-      //console.log('first');
       return false;
     } else {
       return this.selectedData.is_closed || this.totalAvailableRooms === 0 || this.selectedData.physicalRooms.length === 0;
     }
   }
-  @Listen('ratePlanChanged',{target:'body'})
-  ratePlanChanged(){
-this.ratePlanChangedState=true
-  }
-  setAvailableRooms(data) {
-    //console.log("rate PLan data",this.ratePlanData.assignable_units)
-    let availableRooms = this.getAvailableRooms(data);
-    //console.log("available:",availableRooms)
-    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled && this.defaultData&&this.ratePlanChangedState) {
-      //console.log("physical room id:",this.physicalrooms.find(room => room.id.toString()))
-      //console.log("default data:",this.defaultData)
-      //console.log("default data room id :",this.defaultData.roomId)
-      //console.log(" id :",this.physicalrooms.find(room => room.id.toString() === this.defaultData.roomId))
-      let selectedRoom = this.physicalrooms.find(room => room.id.toString() === this.defaultData.roomId);
 
-      availableRooms.push({
-        id: selectedRoom.id,
-        name: selectedRoom.name,
-      });
+  setAvailableRooms(data) {
+    let availableRooms = this.getAvailableRooms(data);
+
+    if (this.bookingType === 'EDIT_BOOKING'  && this.defaultData) {
+      let selectedRoom = this.physicalrooms.find(room => room.id.toString() === this.defaultRoomId);
+      console.log('selected rooms', selectedRoom);
+      if (selectedRoom) {
+        availableRooms.push({
+          id: selectedRoom.id,
+          name: selectedRoom.name,
+        });
+      }
     }
     return availableRooms;
   }
@@ -92,22 +83,20 @@ this.ratePlanChangedState=true
       is_closed: data.is_closed,
       physicalRooms: this.setAvailableRooms(this.ratePlanData.assignable_units),
     };
-    //console.log("new selected data:",this.selectedData.ratePlanId)
+
     if (this.defaultData) {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
-      //console.log("selected data:",this.selectedData)
+
       this.dataUpdateEvent.emit({
         key: 'roomRatePlanUpdate',
         changedKey: 'totalRooms',
         data: this.selectedData,
       });
     }
-    
+
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
-    //console.log("default data:",this.defaultData)
-    //console.log("selected data:",this.selectedData)
   }
   @Watch('ratePlanData')
   async ratePlanDataChanged(newData) {

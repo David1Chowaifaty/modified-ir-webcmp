@@ -88,7 +88,7 @@ export class IrBookingDetails {
     this.guestData = result.guest;
     this.bookingData = result;
     this.rerenderFlag = !this.rerenderFlag;
-    console.log(this.bookingData);
+//console.log(this.bookingData);
   }
   @Listen('iconClickHandler')
   handleIconClick(e) {

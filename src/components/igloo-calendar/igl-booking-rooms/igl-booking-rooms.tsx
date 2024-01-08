@@ -125,9 +125,14 @@ export class IglBookingRooms {
         {this.roomTypeData.rateplans.map((ratePlan, index) => {
           if (ratePlan.variations !== null) {
             let shouldBeDisabled = this.roomInfoId&&this.roomInfoId===this.roomTypeData.id;
-            
-            //console.log("room type",this.roomTypeData)
-           // console.log("default data",this.defaultData)
+            let roomId=-1;
+            if(shouldBeDisabled&&this.defaultData.has(`p_${ratePlan.id}`)&&this.defaultData){
+              roomId=this.defaultData.get(`p_${ratePlan.id}`).roomId
+            }
+            //console.log("ratePlan:",ratePlan.variation)
+            //console.log("room type",this.defaultData.get(`p_${ratePlan.id}`))
+            //console.log("default data",this.defaultData)
+            //console.log("room",this.roomTypeData)
             return (
               <igl-booking-room-rate-plan
                 defaultTexts={this.defaultTexts}
@@ -145,6 +150,7 @@ export class IglBookingRooms {
                 shouldBeDisabled={shouldBeDisabled}
                 onDataUpdateEvent={evt => this.onRoomDataUpdate(evt, index)}
                 physicalrooms={this.roomTypeData.physicalrooms}
+                defaultRoomId={roomId}
               ></igl-booking-room-rate-plan>
             );
           } else {

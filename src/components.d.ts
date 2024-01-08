@@ -110,6 +110,7 @@ export namespace Components {
         "currency": any;
         "dateDifference": number;
         "defaultData": { [key: string]: any };
+        "defaultRoomId": any;
         "defaultTexts": any;
         "fullyBlocked": boolean;
         "index": number;
@@ -1693,6 +1694,7 @@ declare namespace LocalJSX {
         "currency"?: any;
         "dateDifference"?: number;
         "defaultData"?: { [key: string]: any };
+        "defaultRoomId"?: any;
         "defaultTexts"?: any;
         "fullyBlocked"?: boolean;
         "index"?: number;
