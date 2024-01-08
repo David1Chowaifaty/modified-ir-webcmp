@@ -7,23 +7,31 @@ import { Component, Prop, h, Method, Event, EventEmitter } from '@stencil/core';
 export class IrSidebar {
   @Prop() name: string;
   @Prop() side: 'right' | 'left' = 'right';
-
+  @Prop() showCloseButton: boolean = true;
   @Prop({ mutable: true, reflect: true }) open: boolean = false;
 
   @Event({ bubbles: true, composed: true }) irSidebarToggle: EventEmitter;
 
+  componentWillLoad() {
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+
   componentDidLoad() {
     // If esc key is pressed, close the modal
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        this.toggleSidebar();
-      }
-    });
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      return this.toggleSidebar();
+    } else {
+      return;
+    }
   }
 
   // Unsubscribe to the event when the component is removed from the DOM
   disconnectedCallback() {
-    document.removeEventListener('keydown', () => {});
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
 
   @Method()
@@ -47,14 +55,16 @@ export class IrSidebar {
         }}
       ></div>,
       <div class={`sidebar-${this.side} ${className}`}>
-        <a
-          class="close"
-          onClick={() => {
-            this.toggleSidebar();
-          }}
-        >
-          <ir-icon icon="ft-x"></ir-icon>
-        </a>
+        {this.showCloseButton && (
+          <a
+            class="close"
+            onClick={() => {
+              this.toggleSidebar();
+            }}
+          >
+            <ir-icon icon="ft-x"></ir-icon>
+          </a>
+        )}
         <slot />
       </div>,
     ];

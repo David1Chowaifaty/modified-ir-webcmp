@@ -11,8 +11,8 @@ export class IrModal {
   @Prop() rightBtnActive: boolean = true;
   @Prop() leftBtnActive: boolean = true;
 
-  @Prop() rightBtnText: string = 'Close';
-  @Prop() leftBtnText: string = 'Confirm';
+  @Prop() rightBtnText: string = 'Confirm';
+  @Prop() leftBtnText: string = 'Close';
 
   @Prop() rightBtnColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'primary';
   @Prop() leftBtnColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'secondary';
@@ -40,17 +40,17 @@ export class IrModal {
     let name = target.name;
 
     if (name === this.leftBtnText) {
-      this.confirmModal.emit(this.item);
+      this.cancelModal.emit();
       this.item = {};
       this.closeModal();
     } else if (name === this.rightBtnText) {
-      this.cancelModal.emit();
+      this.confirmModal.emit(this.item);
       this.item = {};
       this.closeModal();
     }
   }
 
-  @Prop() item: any = {};
+  @Prop({ mutable: true }) item: any = {};
 
   render() {
     return [
@@ -68,10 +68,17 @@ export class IrModal {
                 {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} {this.modalTitle}
               </div>
               <div class="font-weight-bold d-flex align-items-center font-size-large">
-                <ir-icon icon="ft-x" style={{ cursor: 'pointer' }} onClick={() => this.closeModal()}></ir-icon>
+                <ir-icon
+                  icon="ft-x"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    this.closeModal();
+                    this.cancelModal.emit();
+                  }}
+                ></ir-icon>
               </div>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-left">
               <div>{this.modalBody}</div>
             </div>
 

@@ -40,3 +40,23 @@ export interface RatePlan {
   name: string;
   rateRestrictions: null;
 }
+
+export interface IReallocationPayload {
+  pool: string;
+  toRoomId: number;
+  from_date: string;
+  to_date: string;
+  title: string;
+  description: string;
+  hideConfirmButton?: boolean;
+}
+export interface IRoomNightsDataEventPayload {
+  type: 'cancel' | 'confirm';
+  pool: string;
+}
+export interface IRoomNightsData {
+  bookingNumber: string;
+  identifier: string;
+  to_date: string;
+  pool: string;
+}

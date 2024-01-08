@@ -1,8 +1,11 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
-import { EventsService } from '../../../services/events.service';
 import { BookingService } from '../../../services/booking.service';
 import { transformNewBooking } from '../../../utils/booking';
 import { isBlockUnit } from '../../../utils/utils';
+import { IReallocationPayload, IRoomNightsData } from '../../../models/property-types';
+import { store } from '../../../redux/store';
+import moment from 'moment';
+import { IToast } from '../../ir-toast/toast';
 
 @Component({
   tag: 'igl-booking-event',
@@ -11,20 +14,26 @@ import { isBlockUnit } from '../../../utils/utils';
 })
 export class IglBookingEvent {
   @Element() private element: HTMLElement;
+
   @Prop() currency;
   @Prop() is_vacation_rental: boolean = false;
   @Prop() language: string;
-  @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
-
-  @Event() updateEventData: EventEmitter;
-  @Event() dragOverEventData: EventEmitter;
-
   @Prop({ mutable: true }) bookingEvent: { [key: string]: any };
   @Prop() allBookingEvents: { [key: string]: any } = [];
   @Prop() countryNodeList;
 
+  @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
+  @Event() updateEventData: EventEmitter;
+  @Event() dragOverEventData: EventEmitter;
+  @Event() showRoomNightsDialog: EventEmitter<IRoomNightsData>;
+  @Event() showDialog: EventEmitter<IReallocationPayload>;
+  @Event() resetStreachedBooking: EventEmitter<string>;
+  @Event() toast: EventEmitter<IToast>;
+
   @State() renderElement: boolean = false;
   @State() position: { [key: string]: any };
+  @State() defaultText;
+  @State() isShrinking: boolean | null = null;
 
   dayWidth: number = 0;
   eventSpace: number = 8;
@@ -36,7 +45,7 @@ export class IglBookingEvent {
   private isStreatch = false;
   private isBlockedUnit: boolean;
   /*Services */
-  private eventsService = new EventsService();
+  // private eventsService = new EventsService();
   private bookingService = new BookingService();
   /* Resize props */
   resizeSide: string = '';
@@ -54,6 +63,7 @@ export class IglBookingEvent {
   isTouchStart: boolean;
   moveDiffereneX: number;
   moveDiffereneY: number;
+  private animationFrameId: number | null = null;
 
   handleMouseMoveBind = this.handleMouseMove.bind(this);
   handleMouseUpBind = this.handleMouseUp.bind(this);
@@ -62,6 +72,7 @@ export class IglBookingEvent {
   componentWillLoad() {
     this.isBlockedUnit = isBlockUnit(this.bookingEvent.STATUS_CODE);
     window.addEventListener('click', this.handleClickOutsideBind);
+    this.defaultText = store.getState().languages;
   }
 
   async fetchAndAssignBookingData() {
@@ -97,6 +108,9 @@ export class IglBookingEvent {
 
   disconnectedCallback() {
     window.removeEventListener('click', this.handleClickOutsideBind);
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
   }
 
   @Listen('click', { target: 'window' })
@@ -126,6 +140,7 @@ export class IglBookingEvent {
       }
 
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
+        console.log('revert');
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
@@ -143,44 +158,105 @@ export class IglBookingEvent {
             await this.fetchAndAssignBookingData();
           }
         } else {
-          console.log('object');
-          const { pool, from_date, to_date, toRoomId } = event.detail as any;
+          const { pool, to_date, from_date, toRoomId } = event.detail as any;
           if (pool) {
-            this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
-              if (this.isStreatch) {
-                this.element.style.left = `${this.initialLeft}px`;
-                this.element.style.width = `${this.initialWidth}px`;
-              } else {
-                this.element.style.top = `${this.dragInitPos.top}px`;
-                this.element.style.left = `${this.dragInitPos.left}px`;
-                this;
+            if (this.isShrinking || !this.isStreatch) {
+              const description = this.setModalDescription(toRoomId);
+              let hideConfirmButton = false;
+              if (description === 'hello world') {
+                hideConfirmButton = true;
               }
-            });
+              this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
+            } else {
+              if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+                this.animationFrameId = requestAnimationFrame(() => {
+                  this.resetBookingToInitialPosition();
+                });
+                throw new Error('Overlapping Dates');
+              } else {
+                this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool });
+              }
+            }
+            this.isShrinking = null;
           }
         }
       }
-
-      if (event.detail.fromRoomId === this.getBookedRoomId()) {
-        this.onMoveUpdateBooking(event.detail);
-        this.renderAgain();
-      }
     } catch (error) {
+      this.toast.emit({
+        position: 'top-right',
+        title: error.message,
+        description: '',
+        type: 'error',
+      });
       console.log('something went wrong');
     }
   }
+  private setModalDescription(toRoomId: number) {
+    const findRoomType = (roomId: number) => {
+      let roomType = this.bookingEvent.roomsInfo.filter(room => room.physicalrooms.some(r => r.id === +roomId));
+      if (roomType.length) {
+        return roomType[0].id;
+      }
+      return null;
+    };
+    if (!this.bookingEvent.is_direct) {
+      if (this.isShrinking) {
+        return `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates} Expedia.${this.defaultText.entries.Lcz_SameRatesWillBeKept}.`;
+      } else {
+        console.log(toRoomId);
+        return 'hello world';
+      }
+    } else {
+      if (!this.isShrinking) {
+        const initialRT = findRoomType(this.bookingEvent.PR_ID);
+        const targetRT = findRoomType(toRoomId);
+        if (initialRT === targetRT) {
+          console.log('same rt');
+          return '';
+        } else {
+          return this.defaultText.entries.Lcz_SameRatesWillBeKept;
+        }
+      }
+      // if (!this.isStreatch) {
+      //   return this.defaultText.entries.Lcz_SameRatesWillBeKept;
+      // } else {
+      //   return this.defaultText.entries.Lcz_BalanceWillBeCalculated;
+      // }
+      return this.defaultText.entries.Lcz_BalanceWillBeCalculated;
+    }
+  }
+  private resetBookingToInitialPosition() {
+    if (this.isStreatch) {
+      this.element.style.left = `${this.initialLeft}px`;
+      this.element.style.width = `${this.initialWidth}px`;
+      this.isStreatch = false;
+      this.finalWidth = this.initialWidth;
+      this.isShrinking = null;
+    } else {
+      this.element.style.top = `${this.dragInitPos.top}px`;
+      this.element.style.left = `${this.dragInitPos.left}px`;
+    }
+  }
+  @Listen('revertBooking', { target: 'window' })
+  handleRevertBooking(event: CustomEvent<string>) {
+    if (this.bookingEvent.POOL === event.detail) {
+      this.resetBookingToInitialPosition();
+    }
+  }
   checkIfSlotOccupied(toRoomId, from_date, to_date) {
-    const fromTime = new Date(from_date).getTime();
-    const toTime = new Date(to_date).getTime();
-
+    const fromTime = moment(from_date, 'YYYY-MM-DD');
+    const toTime = moment(to_date, 'YYYY-MM-DD');
     const isOccupied = this.allBookingEvents.some(event => {
-      const eventFromTime = new Date(event.FROM_DATE).getTime();
-      const eventToTime = new Date(event.TO_DATE).getTime();
-
-      return event.PR_ID === +toRoomId && eventToTime > fromTime && eventFromTime < toTime;
+      if (event.POOL === this.bookingEvent.POOL) {
+        return false;
+      }
+      const eventFromTime = moment(event.FROM_DATE, 'YYYY-MM-DD');
+      const eventToTime = moment(event.TO_DATE, 'YYYY-MM-DD');
+      return event.PR_ID === +toRoomId && toTime.isSameOrAfter(eventFromTime) && fromTime.isBefore(eventToTime);
     });
-
     return isOccupied;
   }
+
   renderAgain() {
     this.renderElement = !this.renderElement;
   }
@@ -188,15 +264,6 @@ export class IglBookingEvent {
   getUniqueId() {
     return new Date().getTime();
   }
-
-  onMoveUpdateBooking(data) {
-    this.bookingEvent.PR_ID = data.toRoomId;
-    this.bookingEvent.FROM_DATE = data.moveToDay.split('_').reverse().join('/');
-    let tempDate = new Date(this.bookingEvent.FROM_DATE);
-    tempDate.setDate(tempDate.getDate() + this.getStayDays());
-    this.bookingEvent.TO_DATE = tempDate.getFullYear() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getDate();
-  }
-  /* End of Resize props */
 
   isSplitBooking() {
     return !!this.bookingEvent.SPLIT_BOOKING;
@@ -340,6 +407,7 @@ export class IglBookingEvent {
         data: this.dragInitPos,
       });
     } else {
+      this.isShrinking = side === 'leftSide';
       this.initialWidth = this.element.offsetWidth;
       this.initialLeft = this.element.offsetLeft;
       this.initialX = event.clientX || event.touches[0].clientX;
@@ -391,10 +459,19 @@ export class IglBookingEvent {
           newWidth = Math.max(this.dayWidth - this.eventSpace, newWidth);
           this.element.style.width = `${newWidth}px`;
         } else if (this.resizeSide == 'leftSide') {
-          newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
-          let newLeft = this.initialLeft + (this.initialWidth - newWidth);
-          this.element.style.left = `${newLeft}px`;
-          this.element.style.width = `${newWidth}px`;
+          if (this.isBlockedUnit) {
+            newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
+            let newLeft = this.initialLeft + (this.initialWidth - newWidth);
+            this.element.style.left = `${newLeft}px`;
+            this.element.style.width = `${newWidth}px`;
+          } else {
+            if (distanceX > 0) {
+              newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
+              let newLeft = this.initialLeft + (this.initialWidth - newWidth);
+              this.element.style.left = `${newLeft}px`;
+              this.element.style.width = `${newWidth}px`;
+            }
+          }
         }
         this.finalWidth = newWidth;
       }
@@ -431,6 +508,9 @@ export class IglBookingEvent {
             this.element.style.left = `${this.initialLeft + (initialStayDays - numberOfDays) * this.dayWidth}px`;
             // set FROM_DATE = TO_DATE - numberOfDays
           } else {
+            if (numberOfDays < initialStayDays) {
+              this.isShrinking = true;
+            }
             // set TO_DATE = FROM_DATE + numberOfDays
           }
           this.dragOverEventData.emit({
@@ -455,6 +535,7 @@ export class IglBookingEvent {
       console.log('still mouse up listening...');
     }
     this.isDragging = false;
+
     document.removeEventListener('mousemove', this.handleMouseMoveBind);
     document.removeEventListener('touchmove', this.handleMouseMoveBind);
     document.removeEventListener('pointermove', this.handleMouseMoveBind);

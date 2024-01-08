@@ -110,6 +110,7 @@ export interface RatePlan {
   variations: null;
   selected_variation: IVariations;
   is_non_refundable: boolean;
+  custom_text: string | null;
 }
 export interface IVariations {
   adult_child_offering: string;

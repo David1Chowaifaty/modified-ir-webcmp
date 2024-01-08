@@ -8,7 +8,7 @@ import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 export class IglLegends {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() legendData: { [key: string]: any };
-  @Prop() defaultTexts:any;
+  @Prop() defaultTexts: any;
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
@@ -43,8 +43,8 @@ export class IglLegends {
                   <div class="highphenLegend">{this.defaultTexts.entries.Lcz_MonthAndYear}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal pl-2 pr-2 br-s ">
-                    <span class="badge badge-info pointer badge-pill ">3</span>
+                  <div class="legendCal pl-2 pr-2 br-s">
+                    <span class="badge badge-primary badge-pill">3</span>
                   </div>
                   <div class="highphenLegend">
                     <div>{this.defaultTexts.entries.Lcz_UnassignedUnits}</div>
@@ -60,8 +60,7 @@ export class IglLegends {
                 </div>
                 <div class="legendRow">
                   <div class="legendCal br-s font-small-3">20</div>
-                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_TotalAvailability
-}</div>
+                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_TotalAvailability}</div>
                 </div>
                 <div class="legendRow align-items-center">
                   <div class="legendCal br-s br-bt font-small-2">15</div>
