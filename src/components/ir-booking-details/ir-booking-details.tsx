@@ -14,6 +14,7 @@ export class IrBookingDetails {
   // Booking Details
   @Element() element: HTMLElement;
   @Prop({ mutable: true, reflect: true }) bookingDetails: any = null;
+  @Prop() editBookingItem;
   // Setup Data
   @Prop() setupDataCountries: selectOption[] = null;
   @Prop() setupDataCountriesCode: selectOption[] = null;
@@ -88,7 +89,7 @@ export class IrBookingDetails {
     this.guestData = result.guest;
     this.bookingData = result;
     this.rerenderFlag = !this.rerenderFlag;
-//console.log(this.bookingData);
+    //console.log(this.bookingData);
   }
   @Listen('iconClickHandler')
   handleIconClick(e) {
@@ -309,6 +310,8 @@ export class IrBookingDetails {
 
                 return [
                   <ir-room
+                    legendData={this.editBookingItem.legendData}
+                    roomsInfo={this.editBookingItem.roomsInfo}
                     myRoomTypeFoodCat={myRoomTypeFoodCat}
                     mealCodeName={mealCodeName}
                     currency={this.bookingData.currency.code}
@@ -316,7 +319,8 @@ export class IrBookingDetails {
                     hasRoomDelete={this.hasRoomDelete}
                     hasCheckIn={this.hasCheckIn}
                     hasCheckOut={this.hasCheckOut}
-                    item={room}
+                    bookingEvent={this.bookingData}
+                    bookingIndex={index}
                   />,
                   // add separator if not last item with marginHorizontal and alignCenter
                   index !== this.bookingData.rooms.length - 1 && <hr class="mr-2 ml-2 mt-1 mb-1" />,

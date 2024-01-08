@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+import { TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { Languages } from "./redux/features/languages";
 import { IToast, TPositions } from "./components/ir-toast/toast";
@@ -13,8 +13,8 @@ import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } fr
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
-import { Guest, Room } from "./models/booking.dto";
-export { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+import { Booking, Guest } from "./models/booking.dto";
+export { TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { Languages } from "./redux/features/languages";
 export { IToast, TPositions } from "./components/ir-toast/toast";
@@ -22,7 +22,7 @@ export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } fr
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
-export { Guest, Room } from "./models/booking.dto";
+export { Booking, Guest } from "./models/booking.dto";
 export namespace Components {
     interface IglApplicationInfo {
         "bedPreferenceType": any[];
@@ -240,6 +240,7 @@ export namespace Components {
         "bookingDetails": any;
         "bookingNumber": string;
         "dropdownStatuses": any;
+        "editBookingItem": any;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
         "hasDelete": boolean;
@@ -428,15 +429,18 @@ export namespace Components {
         "paymentExceptionMessage": string;
     }
     interface IrRoom {
+        "bookingEvent": Booking;
+        "bookingIndex": number;
         "currency": string;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
-        "item": Room;
+        "legendData": any;
         "mealCodeName": string;
         "myRoomTypeFoodCat": string;
+        "roomsInfo": any;
     }
     interface IrRoomNights {
         "baseUrl": string;
@@ -1444,7 +1448,7 @@ declare global {
     interface HTMLIrRoomElementEventMap {
         "pressCheckIn": any;
         "pressCheckOut": any;
-        "editInitiated": void;
+        "editInitiated": TIglBookPropertyPayload;
     }
     interface HTMLIrRoomElement extends Components.IrRoom, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomElementEventMap>(type: K, listener: (this: HTMLIrRoomElement, ev: IrRoomCustomEvent<HTMLIrRoomElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1907,6 +1911,7 @@ declare namespace LocalJSX {
         "bookingDetails"?: any;
         "bookingNumber"?: string;
         "dropdownStatuses"?: any;
+        "editBookingItem"?: any;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
         "hasDelete"?: boolean;
@@ -2129,18 +2134,21 @@ declare namespace LocalJSX {
         "paymentExceptionMessage"?: string;
     }
     interface IrRoom {
+        "bookingEvent"?: Booking;
+        "bookingIndex"?: number;
         "currency"?: string;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
-        "item"?: Room;
+        "legendData"?: any;
         "mealCodeName"?: string;
         "myRoomTypeFoodCat"?: string;
-        "onEditInitiated"?: (event: IrRoomCustomEvent<void>) => void;
+        "onEditInitiated"?: (event: IrRoomCustomEvent<TIglBookPropertyPayload>) => void;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
+        "roomsInfo"?: any;
     }
     interface IrRoomNights {
         "baseUrl"?: string;

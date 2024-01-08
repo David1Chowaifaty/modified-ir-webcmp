@@ -1,6 +1,7 @@
 import { Component, h, Prop, EventEmitter, Event, Listen, State } from '@stencil/core';
 import { _formatAmount, _formatDate, _getDay } from '../functions';
-import { IUnit, Room } from '../../../models/booking.dto';
+import { Booking, IUnit, Room } from '../../../models/booking.dto';
+import { TIglBookPropertyPayload } from '../../../models/igl-book-property';
 
 @Component({
   tag: 'ir-room',
@@ -8,12 +9,15 @@ import { IUnit, Room } from '../../../models/booking.dto';
 })
 export class IrRoom {
   // Room Data
-  @Prop() item: Room;
+  @Prop() bookingEvent: Booking;
+  @Prop() bookingIndex: number;
   // Meal Code names
   @Prop() mealCodeName: string;
   @Prop() myRoomTypeFoodCat: string;
   // Currency
   @Prop() currency: string = 'USD';
+  @Prop() legendData;
+  @Prop() roomsInfo;
   @State() collapsed: boolean = false;
 
   // Booleans Conditions
@@ -26,8 +30,13 @@ export class IrRoom {
   // Event Emitters
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
   @Event({ bubbles: true, composed: true }) pressCheckOut: EventEmitter;
-  @Event() editInitiated: EventEmitter<void>;
-
+  @Event({ bubbles: true, composed: true }) editInitiated: EventEmitter<TIglBookPropertyPayload>;
+  @State() item: Room;
+  componentWillLoad() {
+    if (this.bookingEvent) {
+      this.item = this.bookingEvent.rooms[this.bookingIndex];
+    }
+  }
   @Listen('clickHanlder')
   handleClick(e) {
     let target = e.target;
@@ -44,7 +53,20 @@ export class IrRoom {
   //   // return the category
   //   return cat.CODE_VALUE_EN;
   // }
-
+  /*
+  
+  bookingEvent.defaultDateRange = {};
+      bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
+      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.fromDate.getTime();
+      bookingEvent.defaultDateRange.toDate = new Date(bookingEvent.TO_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.toDateStr = this.getDateStr(bookingEvent.defaultDateRange.toDate);
+      bookingEvent.defaultDateRange.toDateTimeStamp = bookingEvent.defaultDateRange.toDate.getTime();
+      bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
+  */
+  getDateStr(date, locale = 'default') {
+    return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
+  }
   render() {
     return (
       <div class="p-1 d-flex">
@@ -69,7 +91,66 @@ export class IrRoom {
             <div>
               {/* <span class="mr-1">{this.item.TOTAL_AMOUNT + this.item.EXCLUDED_TAXES}</span> */}
               <span class="mr-1">{_formatAmount(this.item.total, this.currency)}</span>
-              {this.hasRoomEdit && <ir-icon id={`roomEdit-${this.item.identifier}`} icon="ft-edit color-ir-dark-blue-hover h4 pointer" onClick={()=>this.editInitiated.emit()}></ir-icon>}
+              {this.hasRoomEdit && (
+                <ir-icon
+                  id={`roomEdit-${this.item.identifier}`}
+                  icon="ft-edit color-ir-dark-blue-hover h4 pointer"
+                  onClick={() =>
+                    this.editInitiated.emit({
+                      event_type: 'EDIT_BOOKING',
+                      ID: this.item['assigned_units_pool'],
+                      NAME: this.bookingEvent.guest.first_name,
+                      EMAIL: this.bookingEvent.guest.last_name,
+                      PHONE: this.bookingEvent.guest.mobile,
+                      REFERENCE_TYPE: '',
+                      FROM_DATE: this.bookingEvent.from_date,
+                      TO_DATE: this.bookingEvent.to_date,
+                      TITLE: 'Edit booking for',
+                      defaultDateRange: {
+                        dateDifference: this.item.days.length,
+                        fromDate: new Date(this.item.from_date + 'T00:00:00'),
+                        fromDateStr: this.getDateStr(new Date(this.item.from_date + 'T00:00:00')),
+                        toDate: new Date(this.item.to_date + 'T00:00:00'),
+                        toDateStr: this.getDateStr(new Date(this.item.to_date + 'T00:00:00')),
+                        message: '',
+                      },
+                      adult_child_offering: this.item.rateplan.selected_variation.adult_child_offering,
+                      ADULTS_COUNT: this.item.rateplan.selected_variation.adult_nbr,
+                      ARRIVAL: this.bookingEvent.arrival,
+                      ARRIVAL_TIME: this.bookingEvent.arrival.description,
+                      BOOKING_NUMBER: this.bookingEvent.booking_nbr,
+                      cancelation: this.item.rateplan.cancelation,
+                      channel_booking_nbr: this.bookingEvent.channel_booking_nbr,
+                      CHILDREN_COUNT: this.item.rateplan.selected_variation.child_nbr,
+                      COUNTRY: this.bookingEvent.guest.country_id,
+                      ENTRY_DATE: this.bookingEvent.from_date,
+                      FROM_DATE_STR: this.bookingEvent.format.from_date,
+                      guarantee: this.item.rateplan.guarantee,
+                      GUEST: this.bookingEvent.guest,
+                      IDENTIFIER: this.item.identifier,
+                      is_direct: this.bookingEvent.is_direct,
+                      IS_EDITABLE: this.bookingEvent.is_editable,
+                      NO_OF_DAYS: this.item.days.length,
+                      NOTES: this.bookingEvent.remark,
+                      origin: this.bookingEvent.origin,
+                      POOL: this.item['assigned_units_pool'],
+                      PR_ID: (this.item.unit as IUnit).id,
+                      RATE: this.item.roomtype.rate,
+                      RATE_PLAN: this.item.rateplan.name,
+                      RATE_PLAN_ID: this.item.rateplan.id,
+                      RATE_TYPE: this.item.roomtype.id,
+                      ROOMS: this.bookingEvent.rooms,
+                      SOURCE: this.bookingEvent.source,
+                      SPLIT_BOOKING: false,
+                      STATUS: 'IN-HOUSE',
+                      TO_DATE_STR: this.bookingEvent.format.to_date,
+                      TOTAL_PRICE: this.bookingEvent.total,
+                      legendData: this.legendData,
+                      roomsInfo: this.roomsInfo,
+                    })
+                  }
+                ></ir-icon>
+              )}
               {this.hasRoomDelete && <ir-icon id={`roomDelete-${this.item.identifier}`} icon="ft-trash-2 danger h4 pointer"></ir-icon>}
             </div>
           </div>

@@ -36,9 +36,9 @@ export interface IglBookPropertyPayload {
 }
 
 export interface IDefaultDateRange {
-  fromDate: string;
+  fromDate: Date;
   fromDateStr: string;
-  toDate: string;
+  toDate: Date;
   toDateStr: string;
   dateDifference: number;
   editable?: boolean;
@@ -51,47 +51,49 @@ interface IglBookPropertyPayloadPlusBooking extends IglBookPropertyPayload {
 
 interface IglBookPropertyPayloadEditBooking extends IglBookPropertyPayload {
   event_type: 'EDIT_BOOKING';
-  NO_OF_DAYS?: number;
-  STATUS?: string;
-  IDENTIFIER?: string;
-  PR_ID?: string;
-  POOL?: string;
-  BOOKING_NUMBER?: string;
-  NOTES?: string;
-  is_direct?: boolean;
-  ARRIVAL_TIME?: string;
-  ARRIVAL?: {
+  NO_OF_DAYS: number;
+  STATUS: string;
+  IDENTIFIER: string;
+  PR_ID: number;
+  POOL: string;
+  BOOKING_NUMBER: string;
+  NOTES: string;
+  is_direct: boolean;
+  ARRIVAL_TIME: string;
+  ARRIVAL: {
     code: string;
     description: string;
   };
-  IS_EDITABLE?: boolean;
+  IS_EDITABLE: boolean;
   ENTRY_DATE?: string;
-  RATE?: number;
-  RATE_PLAN?: string;
-  SPLIT_BOOKING?: boolean;
-  RATE_PLAN_ID?: number;
-  RATE_TYPE?: number;
-  ADULTS_COUNT?: number;
-  CHILDREN_COUNT?: number;
-  GUEST?: {};
-  ROOMS?: Array<{}>;
-  cancelation?: string;
-  guarantee?: string;
-  TOTAL_PRICE?: number;
-  COUNTRY?: number;
-  FROM_DATE_STR?: string;
-  TO_DATE_STR?: string;
-  adult_child_offering?: string;
-  origin?: {
+  RATE: number;
+  RATE_PLAN: string;
+  SPLIT_BOOKING: boolean;
+  RATE_PLAN_ID: number;
+  RATE_TYPE: number;
+  ADULTS_COUNT: number;
+  CHILDREN_COUNT: number;
+  GUEST: {};
+  ROOMS: Array<{}>;
+  cancelation: string;
+  guarantee: string;
+  TOTAL_PRICE: number;
+  COUNTRY: number;
+  FROM_DATE_STR: string;
+  TO_DATE_STR: string;
+  adult_child_offering: string;
+  origin: {
     Icon: string;
     Label: string;
   };
-  channel_booking_nbr?: string;
-  SOURCE?: {
+  channel_booking_nbr: string;
+  SOURCE: {
     code: string;
     description: string;
     tag?: string;
   };
+  legendData: any;
+  roomsInfo: any;
 }
 
 interface IglBookPropertyPayloadAddRoom extends IglBookPropertyPayload {
@@ -146,7 +148,6 @@ interface IglBookPropertyPayloadSplitBooking extends IglBookPropertyPayload {
   INTERNAL_NOTE?: string;
   BLOCK_DATES_TITLE?: string;
   splitBookingEvents?: boolean;
- 
 }
 
 interface IglBookPropertyPayloadBlockDates extends IglBookPropertyPayload {
@@ -168,9 +169,7 @@ interface IglBookPropertyPayloadBlockDates extends IglBookPropertyPayload {
   ARRIVAL_TIME?: string;
   INTERNAL_NOTE?: string;
   splitBookingEvents?: boolean;
- 
 }
-
 
 export type TIglBookPropertyPayload =
   | IglBookPropertyPayloadBlockDates
