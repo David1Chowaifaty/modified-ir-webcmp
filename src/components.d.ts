@@ -9,6 +9,7 @@ import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from ".
 import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { Languages } from "./redux/features/languages";
 import { IToast, TPositions } from "./components/ir-toast/toast";
+import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
@@ -17,6 +18,7 @@ export { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOptions } from ".
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { Languages } from "./redux/features/languages";
 export { IToast, TPositions } from "./components/ir-toast/toast";
+export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
@@ -154,6 +156,8 @@ export namespace Components {
         "minDate": string;
     }
     interface IglLegends {
+        "defaultTexts": any;
+        "legendData": { [key: string]: any };
     }
     interface IglPagetwo {
         "bedPreferenceType": any;
@@ -430,6 +434,16 @@ export namespace Components {
         "mealCodeName": string;
         "myRoomTypeFoodCat": string;
     }
+    interface IrRoomNights {
+        "baseUrl": string;
+        "bookingNumber": string;
+        "identifier": string;
+        "language": string;
+        "pool": string;
+        "propertyId": number;
+        "ticket": string;
+        "toDate": string;
+    }
     interface IrSelect {
         "LabelAvailable": boolean;
         "data": selectOption[];
@@ -451,6 +465,7 @@ export namespace Components {
     interface IrSidebar {
         "name": string;
         "open": boolean;
+        "showCloseButton": boolean;
         "side": 'right' | 'left';
         "toggleSidebar": () => Promise<void>;
     }
@@ -656,6 +671,10 @@ export interface IrRoomCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrRoomElement;
 }
+export interface IrRoomNightsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrRoomNightsElement;
+}
 export interface IrSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSelectElement;
@@ -770,6 +789,10 @@ declare global {
         "hideBubbleInfo": any;
         "updateEventData": any;
         "dragOverEventData": any;
+        "showRoomNightsDialog": IRoomNightsData;
+        "showDialog": IReallocationPayload;
+        "resetStreachedBooking": string;
+        "toast": IToast;
     }
     interface HTMLIglBookingEventElement extends Components.IglBookingEvent, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookingEventElementEventMap>(type: K, listener: (this: HTMLIglBookingEventElement, ev: IglBookingEventCustomEvent<HTMLIglBookingEventElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1052,6 +1075,7 @@ declare global {
         "moveBookingTo": any;
         "calculateUnassignedDates": any;
         "reduceAvailableUnitEvent": { fromDate: string; toDate: string };
+        "revertBooking": any;
     }
     interface HTMLIglooCalendarElement extends Components.IglooCalendar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglooCalendarElementEventMap>(type: K, listener: (this: HTMLIglooCalendarElement, ev: IglooCalendarCustomEvent<HTMLIglooCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1431,6 +1455,23 @@ declare global {
         prototype: HTMLIrRoomElement;
         new (): HTMLIrRoomElement;
     };
+    interface HTMLIrRoomNightsElementEventMap {
+        "closeRoomNightsDialog": IRoomNightsDataEventPayload;
+    }
+    interface HTMLIrRoomNightsElement extends Components.IrRoomNights, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrRoomNightsElementEventMap>(type: K, listener: (this: HTMLIrRoomNightsElement, ev: IrRoomNightsCustomEvent<HTMLIrRoomNightsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrRoomNightsElementEventMap>(type: K, listener: (this: HTMLIrRoomNightsElement, ev: IrRoomNightsCustomEvent<HTMLIrRoomNightsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrRoomNightsElement: {
+        prototype: HTMLIrRoomNightsElement;
+        new (): HTMLIrRoomNightsElement;
+    };
     interface HTMLIrSelectElementEventMap {
         "selectChange": any;
     }
@@ -1567,6 +1608,7 @@ declare global {
         "ir-modal": HTMLIrModalElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
         "ir-room": HTMLIrRoomElement;
+        "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-select": HTMLIrSelectElement;
         "ir-sidebar": HTMLIrSidebarElement;
         "ir-span": HTMLIrSpanElement;
@@ -1652,6 +1694,10 @@ declare namespace LocalJSX {
         "language"?: string;
         "onDragOverEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventCustomEvent<any>) => void;
+        "onResetStreachedBooking"?: (event: IglBookingEventCustomEvent<string>) => void;
+        "onShowDialog"?: (event: IglBookingEventCustomEvent<IReallocationPayload>) => void;
+        "onShowRoomNightsDialog"?: (event: IglBookingEventCustomEvent<IRoomNightsData>) => void;
+        "onToast"?: (event: IglBookingEventCustomEvent<IToast>) => void;
         "onUpdateEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
     }
     interface IglBookingEventHover {
@@ -1747,6 +1793,8 @@ declare namespace LocalJSX {
         "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
     }
     interface IglLegends {
+        "defaultTexts"?: any;
+        "legendData"?: { [key: string]: any };
         "onOptionEvent"?: (event: IglLegendsCustomEvent<{ [key: string]: any }>) => void;
     }
     interface IglPagetwo {
@@ -1823,6 +1871,7 @@ declare namespace LocalJSX {
         "onDragOverHighlightElement"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onMoveBookingTo"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onReduceAvailableUnitEvent"?: (event: IglooCalendarCustomEvent<{ fromDate: string; toDate: string }>) => void;
+        "onRevertBooking"?: (event: IglooCalendarCustomEvent<any>) => void;
         "propertyid"?: number;
         "ticket"?: string;
         "to_date"?: string;
@@ -2083,6 +2132,17 @@ declare namespace LocalJSX {
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
     }
+    interface IrRoomNights {
+        "baseUrl"?: string;
+        "bookingNumber"?: string;
+        "identifier"?: string;
+        "language"?: string;
+        "onCloseRoomNightsDialog"?: (event: IrRoomNightsCustomEvent<IRoomNightsDataEventPayload>) => void;
+        "pool"?: string;
+        "propertyId"?: number;
+        "ticket"?: string;
+        "toDate"?: string;
+    }
     interface IrSelect {
         "LabelAvailable"?: boolean;
         "data"?: selectOption[];
@@ -2106,6 +2166,7 @@ declare namespace LocalJSX {
         "name"?: string;
         "onIrSidebarToggle"?: (event: IrSidebarCustomEvent<any>) => void;
         "open"?: boolean;
+        "showCloseButton"?: boolean;
         "side"?: 'right' | 'left';
     }
     interface IrSpan {
@@ -2193,6 +2254,7 @@ declare namespace LocalJSX {
         "ir-modal": IrModal;
         "ir-payment-details": IrPaymentDetails;
         "ir-room": IrRoom;
+        "ir-room-nights": IrRoomNights;
         "ir-select": IrSelect;
         "ir-sidebar": IrSidebar;
         "ir-span": IrSpan;
@@ -2250,6 +2312,7 @@ declare module "@stencil/core" {
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
+            "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;
             "ir-sidebar": LocalJSX.IrSidebar & JSXBase.HTMLAttributes<HTMLIrSidebarElement>;
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;

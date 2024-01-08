@@ -132,3 +132,18 @@ export function formatDate(dateString, option = 'DD MMM YYYY') {
 export function getNextDay(date: Date) {
   return moment(date).add(1, 'days').format('YYYY-MM-DD');
 }
+
+export function convertDatePrice(date: string) {
+  return moment(date, 'YYYY-MM-DD').format('DD/MM ddd');
+}
+export function getDaysArray(startDate: string, endDate: string) {
+  let dates = [];
+  let currentDate = moment(startDate).add(1, 'days');
+
+  while (currentDate < moment(endDate)) {
+    dates.push(currentDate.format('YYYY-MM-DD'));
+    currentDate.add(1, 'days');
+  }
+
+  return dates;
+}

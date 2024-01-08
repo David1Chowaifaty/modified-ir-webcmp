@@ -1,8 +1,8 @@
-import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h, Fragment } from '@stencil/core';
 
 @Component({
   tag: 'ir-button',
-  styleUrl:"ir-button.css"
+  styleUrl: 'ir-button.css',
 })
 export class IrButton {
   @Prop() name: string;
@@ -29,10 +29,15 @@ export class IrButton {
         onClick={() => {
           this.clickHanlder.emit();
         }}
-        class={`btn btn-${this.btn_color} btn-${this.size} text-${this.textSize} ${block}`}
+        class={`m-0 btn btn-${this.btn_color} btn-${this.size} text-${this.textSize} ${block}`}
         type={this.btn_type}
       >
-        <i class={this.icon}></i>&nbsp;{this.text}
+        {this.icon && (
+          <Fragment>
+            <i class={this.icon}></i>&nbsp;
+          </Fragment>
+        )}
+        {this.text}
       </button>
     );
   }

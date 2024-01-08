@@ -17,6 +17,7 @@
 .stickyCell {
   display: -ms-inline-grid;
   display: -moz-inline-grid;
+  display: inline-grid;
   position: -webkit-sticky;
   position: sticky;
   top: 0px;
@@ -81,9 +82,9 @@
   z-index: 3;
   width: 170px;
   background-color: #ffffff;
-  display: inline-grid;
   display: -ms-inline-grid;
   display: -moz-inline-grid;
+  display: inline-grid;
 }
 
 .caledarBtns {

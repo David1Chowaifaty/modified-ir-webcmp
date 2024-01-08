@@ -1,7 +1,4 @@
-import { Component, Event, EventEmitter, Host, State, h } from '@stencil/core';
-import { store } from '../../../redux/store';
-import { ILegendData } from '../../../models/calendarData';
-import { Unsubscribe } from '@reduxjs/toolkit';
+import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'igl-legends',
@@ -10,24 +7,12 @@ import { Unsubscribe } from '@reduxjs/toolkit';
 })
 export class IglLegends {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
-  @State() legendData: ILegendData[];
-  @State() defaultTexts: any;
-  private unsubscribe: Unsubscribe;
+  @Prop() legendData: { [key: string]: any };
+  @Prop() defaultTexts: any;
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
-  componentWillLoad() {
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-    this.legendData = state.calendar_data.legendData;
-  }
+
   render() {
     return (
       <Host class="legendContainer pr-1 text-left">
@@ -58,8 +43,8 @@ export class IglLegends {
                   <div class="highphenLegend">{this.defaultTexts.entries.Lcz_MonthAndYear}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal pl-2 pr-2 br-s ">
-                    <span class="badge badge-info pointer badge-pill ">3</span>
+                  <div class="legendCal pl-2 pr-2 br-s">
+                    <span class="badge badge-primary badge-pill">3</span>
                   </div>
                   <div class="highphenLegend">
                     <div>{this.defaultTexts.entries.Lcz_UnassignedUnits}</div>

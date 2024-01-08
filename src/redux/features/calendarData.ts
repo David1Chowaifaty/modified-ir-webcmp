@@ -29,7 +29,19 @@ export const calendarDataSlice = createSlice({
         ...action.payload,
       };
     },
+    updateCalendarData: (state, action: PayloadAction<Partial<CalendarDataDetails>>) => {
+      const updates = action.payload;
+      for (const key in updates) {
+        if (updates.hasOwnProperty(key)) {
+          state[key] = {
+            ...state[key],
+            ...updates[key],
+          };
+        }
+      }
+      return state;
+    },
   },
 });
-export const { addCalendarData } = calendarDataSlice.actions;
+export const { addCalendarData, updateCalendarData } = calendarDataSlice.actions;
 export default calendarDataSlice.reducer;

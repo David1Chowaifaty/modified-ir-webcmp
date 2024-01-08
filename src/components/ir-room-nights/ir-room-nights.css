@@ -1,0 +1,58 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.close-icon {
+  position: absolute;
+  top: 18px;
+  right: 33px;
+  outline: none;
+}
+.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  appearance: none;
+}
+.card {
+  top: 0;
+  z-index: 1000;
+}
+.card-title {
+  border-bottom: 1px solid #e4e5ec;
+  width: 100%;
+}
+.irfontgreen {
+  color: #0e930e;
+}
+.currency {
+  display: block;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  left: 10px;
+}
+.rate-input {
+  font-size: 14px;
+  line-height: 0;
+  padding: 0;
+  height: 0;
+}
+.rate-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  flex: 1;
+}
