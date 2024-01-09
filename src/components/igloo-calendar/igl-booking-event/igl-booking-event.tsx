@@ -1,11 +1,11 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
-import { BookingService } from '../../../services/booking.service';
-import { transformNewBooking } from '../../../utils/booking';
-import { isBlockUnit } from '../../../utils/utils';
-import { IReallocationPayload, IRoomNightsData } from '../../../models/property-types';
-import { store } from '../../../redux/store';
+import { BookingService } from '@/services/booking.service';
+import { transformNewBooking } from '@/utils/booking';
+import { isBlockUnit } from '@/utils/utils';
+import { IReallocationPayload, IRoomNightsData } from '@/models/property-types';
+import { store } from '@/redux/store';
 import moment from 'moment';
-import { IToast } from '../../ir-toast/toast';
+import { IToast } from '@components/ir-toast/toast';
 
 @Component({
   tag: 'igl-booking-event',
@@ -83,6 +83,7 @@ export class IglBookingEvent {
         data.rooms = dataForTransformation;
         this.bookingEvent = { ...this.bookingEvent, ...transformNewBooking(data)[0] };
         this.showEventInfo(true);
+        console.log(this.bookingEvent);
       }
     } catch (error) {
       console.error(error);
@@ -161,9 +162,9 @@ export class IglBookingEvent {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
           if (pool) {
             if (this.isShrinking || !this.isStreatch) {
-              const description = this.setModalDescription(toRoomId);
+              const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
               let hideConfirmButton = false;
-              if (description === 'hello world') {
+              if (status === '400') {
                 hideConfirmButton = true;
               }
               this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
@@ -191,7 +192,7 @@ export class IglBookingEvent {
       console.log('something went wrong');
     }
   }
-  private setModalDescription(toRoomId: number) {
+  private setModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string } {
     const findRoomType = (roomId: number) => {
       let roomType = this.bookingEvent.roomsInfo.filter(room => room.physicalrooms.some(r => r.id === +roomId));
       if (roomType.length) {
@@ -201,10 +202,23 @@ export class IglBookingEvent {
     };
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
-        return `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates} Expedia.${this.defaultText.entries.Lcz_SameRatesWillBeKept}.`;
+        return {
+          description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates}.`,
+          status: '200',
+        };
       } else {
-        console.log(toRoomId);
-        return 'hello world';
+        if (
+          moment(from_date, 'YYYY-MM-DD').isSame(moment(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')) &&
+          moment(to_date, 'YYYY-MM-DD').isSame(moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))
+        ) {
+          const initialRT = findRoomType(this.bookingEvent.PR_ID);
+          const targetRT = findRoomType(toRoomId);
+          if (initialRT !== targetRT) {
+            return { description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates}. ${this.defaultText.entries.Lcz_SameRatesWillBeKept}`, status: '200' };
+          }
+          return { description: '', status: '400' };
+        }
+        return { description: this.defaultText.entries.Lcz_CannotChangeCHBookings, status: '400' };
       }
     } else {
       if (!this.isShrinking) {
@@ -212,17 +226,15 @@ export class IglBookingEvent {
         const targetRT = findRoomType(toRoomId);
         if (initialRT === targetRT) {
           console.log('same rt');
-          return '';
+          return { description: '', status: '200' };
         } else {
-          return this.defaultText.entries.Lcz_SameRatesWillBeKept;
+          return {
+            description: this.defaultText.entries.Lcz_SameRatesWillBeKept,
+            status: '200',
+          };
         }
       }
-      // if (!this.isStreatch) {
-      //   return this.defaultText.entries.Lcz_SameRatesWillBeKept;
-      // } else {
-      //   return this.defaultText.entries.Lcz_BalanceWillBeCalculated;
-      // }
-      return this.defaultText.entries.Lcz_BalanceWillBeCalculated;
+      return { description: this.defaultText.entries.Lcz_BalanceWillBeCalculated, status: '200' };
     }
   }
   private resetBookingToInitialPosition() {
@@ -453,6 +465,9 @@ export class IglBookingEvent {
       } else {
         let newWidth = this.initialWidth;
         if (this.resizeSide == 'rightSide') {
+          if (distanceX > 0 && !this.bookingEvent.is_direct && !this.isBlockedUnit) {
+            return;
+          }
           newWidth = this.initialWidth + distanceX;
           newWidth = Math.min(newWidth, this.initialX + this.element.offsetWidth);
           newWidth = Math.max(this.dayWidth - this.eventSpace, newWidth);
@@ -460,6 +475,9 @@ export class IglBookingEvent {
           this.isShrinking = distanceX < 0;
         } else if (this.resizeSide == 'leftSide') {
           this.isShrinking = distanceX > 0;
+          if (distanceX < 0 && !this.bookingEvent.is_direct && !this.isBlockedUnit) {
+            return;
+          }
           if (this.isBlockedUnit) {
             newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
             let newLeft = this.initialLeft + (this.initialWidth - newWidth);

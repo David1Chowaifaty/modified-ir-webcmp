@@ -16,6 +16,7 @@
 | `defaultTexts`    | `default-texts`    |             | `any`                     | `undefined`      |
 | `isBookDisabled`  | `is-book-disabled` |             | `boolean`                 | `undefined`      |
 | `ratePricingMode` | --                 |             | `any[]`                   | `[]`             |
+| `roomInfoId`      | `room-info-id`     |             | `number`                  | `null`           |
 | `roomTypeData`    | --                 |             | `{ [key: string]: any; }` | `undefined`      |
 
 

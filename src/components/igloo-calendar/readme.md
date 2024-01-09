@@ -27,6 +27,7 @@
 | `dragOverHighlightElement` |             | `CustomEvent<any>`                                   |
 | `moveBookingTo`            |             | `CustomEvent<any>`                                   |
 | `reduceAvailableUnitEvent` |             | `CustomEvent<{ fromDate: string; toDate: string; }>` |
+| `revertBooking`            |             | `CustomEvent<any>`                                   |
 
 
 ## Dependencies
@@ -43,6 +44,10 @@
 - [igl-cal-footer](igl-cal-footer)
 - [ir-loading-screen](../ir-loading-screen)
 - [igl-book-property](igl-book-property)
+- [ir-sidebar](../ir-sidebar)
+- [ir-room-nights](../ir-room-nights)
+- [ir-booking-details](../ir-booking-details)
+- [ir-modal](../ir-modal)
 
 ### Graph
 ```mermaid
@@ -57,6 +62,10 @@ graph TD;
   igloo-calendar --> igl-cal-footer
   igloo-calendar --> ir-loading-screen
   igloo-calendar --> igl-book-property
+  igloo-calendar --> ir-sidebar
+  igloo-calendar --> ir-room-nights
+  igloo-calendar --> ir-booking-details
+  igloo-calendar --> ir-modal
   ir-interceptor --> ir-loading-screen
   igl-to-be-assigned --> igl-tba-category-view
   igl-tba-category-view --> igl-tba-booking-view
@@ -79,6 +88,28 @@ graph TD;
   igl-pagetwo --> igl-property-booked-by
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  ir-sidebar --> ir-icon
+  ir-room-nights --> ir-icon
+  ir-booking-details --> ir-common
+  ir-booking-details --> ir-label
+  ir-booking-details --> ir-icon
+  ir-booking-details --> ir-room
+  ir-booking-details --> ir-payment-details
+  ir-booking-details --> ir-sidebar
+  ir-booking-details --> ir-guest-info
+  ir-booking-details --> igl-book-property
+  ir-label --> ir-icon
+  ir-room --> ir-icon
+  ir-room --> ir-button
+  ir-room --> ir-label
+  ir-payment-details --> ir-icon
+  ir-payment-details --> ir-modal
+  ir-modal --> ir-icon
+  ir-modal --> ir-button
+  ir-guest-info --> ir-select
+  ir-guest-info --> ir-input-text
+  ir-guest-info --> ir-checkbox
+  ir-guest-info --> ir-button
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

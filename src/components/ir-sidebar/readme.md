@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type                | Default     |
-| -------- | --------- | ----------- | ------------------- | ----------- |
-| `name`   | `name`    |             | `string`            | `undefined` |
-| `open`   | `open`    |             | `boolean`           | `false`     |
-| `side`   | `side`    |             | `"left" \| "right"` | `'right'`   |
+| Property          | Attribute           | Description | Type                | Default     |
+| ----------------- | ------------------- | ----------- | ------------------- | ----------- |
+| `name`            | `name`              |             | `string`            | `undefined` |
+| `open`            | `open`              |             | `boolean`           | `false`     |
+| `showCloseButton` | `show-close-button` |             | `boolean`           | `true`      |
+| `side`            | `side`              |             | `"left" \| "right"` | `'right'`   |
 
 
 ## Events
@@ -38,6 +39,7 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [igloo-calendar](../igloo-calendar)
  - [ir-booking-details](../ir-booking-details)
  - [ir-channel-manager](../ir-channel/ir-channel-manager)
 
@@ -49,6 +51,7 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   ir-sidebar --> ir-icon
+  igloo-calendar --> ir-sidebar
   ir-booking-details --> ir-sidebar
   ir-channel-manager --> ir-sidebar
   style ir-sidebar fill:#f9f,stroke:#333,stroke-width:4px

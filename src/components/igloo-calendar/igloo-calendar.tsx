@@ -79,7 +79,7 @@ export class IglooCalendar {
   async initializeApp() {
     try {
       this.defaultTexts = await this.roomService.fetchLanguage(this.language);
-      //console.log('language', this.defaultTexts);
+      console.log('language', this.defaultTexts);
       this.roomService.fetchData(this.propertyid, this.language).then(roomResp => {
         this.setRoomsData(roomResp);
         this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date).then(async bookingResp => {

@@ -31,7 +31,6 @@
 
 ### Used by
 
- - [ir-booking-details](../ir-booking-details)
  - [ir-guest-info](../ir-guest-info)
  - [ir-modal](../ir-modal)
  - [ir-room](../ir-booking-details/ir-room)
@@ -39,7 +38,6 @@
 ### Graph
 ```mermaid
 graph TD;
-  ir-booking-details --> ir-button
   ir-guest-info --> ir-button
   ir-modal --> ir-button
   ir-room --> ir-button

@@ -9,23 +9,27 @@
 
 | Property            | Attribute               | Description | Type      | Default     |
 | ------------------- | ----------------------- | ----------- | --------- | ----------- |
+| `bookingEvent`      | --                      |             | `Booking` | `undefined` |
+| `bookingIndex`      | `booking-index`         |             | `number`  | `undefined` |
 | `currency`          | `currency`              |             | `string`  | `'USD'`     |
 | `hasCheckIn`        | `has-check-in`          |             | `boolean` | `false`     |
 | `hasCheckOut`       | `has-check-out`         |             | `boolean` | `false`     |
 | `hasRoomAdd`        | `has-room-add`          |             | `boolean` | `false`     |
 | `hasRoomDelete`     | `has-room-delete`       |             | `boolean` | `false`     |
 | `hasRoomEdit`       | `has-room-edit`         |             | `boolean` | `false`     |
-| `item`              | --                      |             | `Room`    | `undefined` |
+| `legendData`        | `legend-data`           |             | `any`     | `undefined` |
 | `mealCodeName`      | `meal-code-name`        |             | `string`  | `undefined` |
 | `myRoomTypeFoodCat` | `my-room-type-food-cat` |             | `string`  | `undefined` |
+| `roomsInfo`         | `rooms-info`            |             | `any`     | `undefined` |
 
 
 ## Events
 
-| Event           | Description | Type               |
-| --------------- | ----------- | ------------------ |
-| `pressCheckIn`  |             | `CustomEvent<any>` |
-| `pressCheckOut` |             | `CustomEvent<any>` |
+| Event           | Description | Type                                                                                                                                                                                                                                 |
+| --------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `editInitiated` |             | `CustomEvent<IglBookPropertyPayloadAddRoom \| IglBookPropertyPayloadBarBooking \| IglBookPropertyPayloadBlockDates \| IglBookPropertyPayloadEditBooking \| IglBookPropertyPayloadPlusBooking \| IglBookPropertyPayloadSplitBooking>` |
+| `pressCheckIn`  |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
+| `pressCheckOut` |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
 
 
 ## Dependencies

@@ -15,12 +15,12 @@
 | `item`           | `item`             |             | `any`                                                                                           | `{}`            |
 | `leftBtnActive`  | `left-btn-active`  |             | `boolean`                                                                                       | `true`          |
 | `leftBtnColor`   | `left-btn-color`   |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"` | `'secondary'`   |
-| `leftBtnText`    | `left-btn-text`    |             | `string`                                                                                        | `'Confirm'`     |
+| `leftBtnText`    | `left-btn-text`    |             | `string`                                                                                        | `'Close'`       |
 | `modalBody`      | `modal-body`       |             | `string`                                                                                        | `'Modal Body'`  |
 | `modalTitle`     | `modal-title`      |             | `string`                                                                                        | `'Modal Title'` |
 | `rightBtnActive` | `right-btn-active` |             | `boolean`                                                                                       | `true`          |
 | `rightBtnColor`  | `right-btn-color`  |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'`     |
-| `rightBtnText`   | `right-btn-text`   |             | `string`                                                                                        | `'Close'`       |
+| `rightBtnText`   | `right-btn-text`   |             | `string`                                                                                        | `'Confirm'`     |
 
 
 ## Events
@@ -58,6 +58,7 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [igloo-calendar](../igloo-calendar)
  - [ir-channel-manager](../ir-channel/ir-channel-manager)
  - [ir-general-settings](../ir-channel/ir-general-settings)
  - [ir-list-item](../ir-channel/ir-listItems)
@@ -73,6 +74,7 @@ Type: `Promise<void>`
 graph TD;
   ir-modal --> ir-icon
   ir-modal --> ir-button
+  igloo-calendar --> ir-modal
   ir-channel-manager --> ir-modal
   ir-general-settings --> ir-modal
   ir-list-item --> ir-modal

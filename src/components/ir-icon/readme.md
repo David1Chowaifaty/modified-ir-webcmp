@@ -31,6 +31,7 @@
  - [ir-modal](../ir-modal)
  - [ir-payment-details](../ir-booking-details/ir-payment-details)
  - [ir-room](../ir-booking-details/ir-room)
+ - [ir-room-nights](../ir-room-nights)
  - [ir-sidebar](../ir-sidebar)
  - [ir-topbar](../ir-channel/ir-topBar)
 
@@ -45,6 +46,7 @@ graph TD;
   ir-modal --> ir-icon
   ir-payment-details --> ir-icon
   ir-room --> ir-icon
+  ir-room-nights --> ir-icon
   ir-sidebar --> ir-icon
   ir-topbar --> ir-icon
   style ir-icon fill:#f9f,stroke:#333,stroke-width:4px
