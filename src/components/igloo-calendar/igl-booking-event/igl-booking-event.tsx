@@ -407,7 +407,6 @@ export class IglBookingEvent {
         data: this.dragInitPos,
       });
     } else {
-      this.isShrinking = side === 'leftSide';
       this.initialWidth = this.element.offsetWidth;
       this.initialLeft = this.element.offsetLeft;
       this.initialX = event.clientX || event.touches[0].clientX;
@@ -458,14 +457,21 @@ export class IglBookingEvent {
           newWidth = Math.min(newWidth, this.initialX + this.element.offsetWidth);
           newWidth = Math.max(this.dayWidth - this.eventSpace, newWidth);
           this.element.style.width = `${newWidth}px`;
+          this.isShrinking = distanceX < 0;
         } else if (this.resizeSide == 'leftSide') {
+          this.isShrinking = distanceX > 0;
           if (this.isBlockedUnit) {
             newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
             let newLeft = this.initialLeft + (this.initialWidth - newWidth);
             this.element.style.left = `${newLeft}px`;
             this.element.style.width = `${newWidth}px`;
           } else {
-            if (distanceX > 0) {
+            if (distanceX > 0 && !this.bookingEvent.is_direct) {
+              newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
+              let newLeft = this.initialLeft + (this.initialWidth - newWidth);
+              this.element.style.left = `${newLeft}px`;
+              this.element.style.width = `${newWidth}px`;
+            } else {
               newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
               let newLeft = this.initialLeft + (this.initialWidth - newWidth);
               this.element.style.left = `${newLeft}px`;
@@ -606,20 +612,20 @@ export class IglBookingEvent {
         <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
           {this.getBookedBy()}
         </div>
-        {(this.bookingEvent.is_direct || this.isBlockedUnit) && (
-          <Fragment>
-            <div
-              class="bookingEventDragHandle leftSide"
-              onTouchStart={event => this.startDragging(event, 'leftSide')}
-              onMouseDown={event => this.startDragging(event, 'leftSide')}
-            ></div>
-            <div
-              class="bookingEventDragHandle rightSide"
-              onTouchStart={event => this.startDragging(event, 'rightSide')}
-              onMouseDown={event => this.startDragging(event, 'rightSide')}
-            ></div>
-          </Fragment>
-        )}
+
+        <Fragment>
+          <div
+            class="bookingEventDragHandle leftSide"
+            onTouchStart={event => this.startDragging(event, 'leftSide')}
+            onMouseDown={event => this.startDragging(event, 'leftSide')}
+          ></div>
+          <div
+            class="bookingEventDragHandle rightSide"
+            onTouchStart={event => this.startDragging(event, 'rightSide')}
+            onMouseDown={event => this.startDragging(event, 'rightSide')}
+          ></div>
+        </Fragment>
+
         {this.showInfoPopup ? (
           <igl-booking-event-hover
             is_vacation_rental={this.is_vacation_rental}

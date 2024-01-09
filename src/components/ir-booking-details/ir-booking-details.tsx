@@ -280,7 +280,7 @@ export class IrBookingDetails {
           </div> */}
         </div>
       </div>,
-      <div class="fluid-container m-1">
+      <div class="fluid-container m-1 text-left">
         <div class="row m-0">
           <div class="col-lg-7 col-md-12 pl-0 pr-lg-1 p-0">
             <div class="card">

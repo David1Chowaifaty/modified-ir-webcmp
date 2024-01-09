@@ -743,7 +743,7 @@ export class IglooCalendar {
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING')}
-          showCloseButton={false}
+          showCloseButton={this.editBookingItem !== null}
         >
           {this.roomNightsData && (
             <ir-room-nights
