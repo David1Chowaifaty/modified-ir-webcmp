@@ -201,7 +201,7 @@ export class BookingService {
       throw new Error(error);
     }
   }
-  public async getExoposedBooking(booking_nbr: string, language: string): Promise<Booking> {
+  public async getExposedBooking(booking_nbr: string, language: string): Promise<Booking> {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {

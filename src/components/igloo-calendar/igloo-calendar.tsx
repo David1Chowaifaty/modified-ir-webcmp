@@ -755,17 +755,13 @@ export class IglooCalendar {
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
             <ir-booking-details
-            calendarData={this.calendarData}
-            propertyid={this.propertyid}
-            countryNodeList={this.countryNodeList}
-            showPaymentDetails={this.showPaymentDetails}
+              propertyid={this.propertyid}
               hasRoomEdit
               hasRoomDelete
               bookingNumber={this.editBookingItem.BOOKING_NUMBER}
               ticket={this.ticket}
               baseurl={this.baseurl}
               language={this.language}
-              editBookingItem={this.editBookingItem}
             ></ir-booking-details>
           )}
         </ir-sidebar>

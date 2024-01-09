@@ -54,7 +54,7 @@ export class IrRoomNights {
   async init() {
     try {
       this.updateStore();
-      this.bookingEvent = await this.bookingService.getExoposedBooking(this.bookingNumber, this.language);
+      this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       if (this.bookingEvent) {
         const filteredRooms = this.bookingEvent.rooms.filter(room => room.identifier === this.identifier);
         this.selectedRoom = filteredRooms[0];

@@ -240,8 +240,6 @@ export namespace Components {
         "baseurl": string;
         "bookingDetails": any;
         "bookingNumber": string;
-        "calendarData": any;
-        "countryNodeList": any;
         "dropdownStatuses": any;
         "editBookingItem": any;
         "hasCheckIn": boolean;
@@ -260,7 +258,6 @@ export namespace Components {
         "propertyid": any;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
-        "showPaymentDetails": any;
         "statusCodes": any;
         "ticket": string;
     }
@@ -1917,8 +1914,6 @@ declare namespace LocalJSX {
         "baseurl"?: string;
         "bookingDetails"?: any;
         "bookingNumber"?: string;
-        "calendarData"?: any;
-        "countryNodeList"?: any;
         "dropdownStatuses"?: any;
         "editBookingItem"?: any;
         "hasCheckIn"?: boolean;
@@ -1946,7 +1941,6 @@ declare namespace LocalJSX {
         "propertyid"?: any;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
-        "showPaymentDetails"?: any;
         "statusCodes"?: any;
         "ticket"?: string;
     }

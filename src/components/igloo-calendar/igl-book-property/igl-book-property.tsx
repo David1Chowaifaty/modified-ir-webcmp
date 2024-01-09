@@ -82,12 +82,12 @@ export class IglBookProperty {
     const { key, data } = e.detail;
     console.log(data, key);
     if (key === 'select') {
-      const res = await this.bookingService.getExoposedBooking((data as any).booking_nbr, this.language);
+      const res = await this.bookingService.getExposedBooking((data as any).booking_nbr, this.language);
       this.bookPropertyService.setBookingInfoFromAutoComplete(this, res);
       this.sourceOption = res.source;
       this.renderPage();
     } else if (key === 'blur' && data !== '') {
-      const res = await this.bookingService.getExoposedBooking(data as string, this.language);
+      const res = await this.bookingService.getExposedBooking(data as string, this.language);
       this.bookPropertyService.setBookingInfoFromAutoComplete(this, res);
       this.sourceOption = res.source;
       this.renderPage();

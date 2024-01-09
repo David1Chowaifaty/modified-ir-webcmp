@@ -6,6 +6,7 @@ import { Booking, Guest, Room } from '../../models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
+import { RoomService } from '../../services/room.service';
 
 @Component({
   tag: 'ir-booking-details',
@@ -25,10 +26,7 @@ export class IrBookingDetails {
   @Prop() bookingNumber: string = '';
   @Prop() baseurl: string = '';
   @Prop({ mutable: true }) dropdownStatuses: any = [];
-@Prop() calendarData:any
-@Prop() propertyid:any
-@Prop() countryNodeList:any
-@Prop() showPaymentDetails:any
+  @Prop() propertyid: any;
   @Prop() paymentDetailsUrl: string = '';
   @Prop() paymentExceptionMessage: string = '';
 
@@ -52,10 +50,13 @@ export class IrBookingDetails {
   // Temp Status Before Save
   @State() tempStatus: string = null;
 
+  @State() showPaymentDetails: any;
   @State() bookingData: Booking;
+  @State() countryNodeList: any;
+  @State() calendarData: any = {};
   // Guest Data
   @State() guestData: Guest = null;
-
+  @State() defaultTexts;
   // Rerender Flag
   @State() rerenderFlag = false;
 
@@ -75,6 +76,7 @@ export class IrBookingDetails {
   @Event() handleAddPayment: EventEmitter;
 
   private bookingService = new BookingService();
+  private roomService = new RoomService();
   componentDidLoad() {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
@@ -88,13 +90,43 @@ export class IrBookingDetails {
     sessionStorage.setItem('token', JSON.stringify(this.ticket));
     this.initializeApp();
   }
-  async initializeApp() {
-    const result = await this.bookingService.getExoposedBooking(this.bookingNumber, this.language);
-    this.guestData = result.guest;
-    this.bookingData = result;
-    this.rerenderFlag = !this.rerenderFlag;
-    //console.log(this.bookingData);
+  setRoomsData(roomServiceResp) {
+    let roomsData: { [key: string]: any }[] = new Array();
+    if (roomServiceResp.My_Result?.roomtypes?.length) {
+      roomsData = roomServiceResp.My_Result.roomtypes;
+      roomServiceResp.My_Result.roomtypes.forEach(roomCategory => {
+        roomCategory.expanded = true;
+      });
+    }
+    this.calendarData.roomsInfo = roomsData;
   }
+  async initializeApp() {
+    try {
+      const [roomResponse, languageTexts, countriesList, bookingDetails] = await Promise.all([
+        this.roomService.fetchData(this.propertyid, this.language),
+        this.roomService.fetchLanguage(this.language),
+        this.bookingService.getCountries(this.language),
+        this.bookingService.getExposedBooking(this.bookingNumber, this.language),
+      ]);
+
+      this.setRoomsData(roomResponse);
+      this.defaultTexts = languageTexts;
+      this.countryNodeList = countriesList;
+
+      const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
+      this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
+
+      const paymentCodesToShow = ['001', '004'];
+      this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
+
+      this.guestData = bookingDetails.guest;
+      this.bookingData = bookingDetails;
+      this.rerenderFlag = !this.rerenderFlag;
+    } catch (error) {
+      console.error('Error initializing app:', error);
+    }
+  }
+
   @Listen('iconClickHandler')
   handleIconClick(e) {
     const target = e.target;
@@ -321,8 +353,8 @@ export class IrBookingDetails {
 
                 return [
                   <ir-room
-                    legendData={this.editBookingItem.legendData}
-                    roomsInfo={this.editBookingItem.roomsInfo}
+                    legendData={this.calendarData.legendData}
+                    roomsInfo={this.calendarData.roomsInfo}
                     myRoomTypeFoodCat={myRoomTypeFoodCat}
                     mealCodeName={mealCodeName}
                     currency={this.bookingData.currency.code}
@@ -361,7 +393,7 @@ export class IrBookingDetails {
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
         )}
-      </div>
+      </div>,
     ];
   }
 }

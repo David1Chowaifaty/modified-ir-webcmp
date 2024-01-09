@@ -78,7 +78,7 @@ export class IglBookingEvent {
   async fetchAndAssignBookingData() {
     try {
       if (this.bookingEvent.STATUS === 'IN-HOUSE') {
-        const data = await this.bookingService.getExoposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
+        const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
         let dataForTransformation = data.rooms.filter(d => d['assigned_units_pool'] === this.bookingEvent.ID);
         data.rooms = dataForTransformation;
         this.bookingEvent = { ...this.bookingEvent, ...transformNewBooking(data)[0] };
