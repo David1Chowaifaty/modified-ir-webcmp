@@ -445,6 +445,7 @@ export namespace Components {
     interface IrRoomNights {
         "baseUrl": string;
         "bookingNumber": string;
+        "fromDate": string;
         "identifier": string;
         "language": string;
         "pool": string;
@@ -2153,6 +2154,7 @@ declare namespace LocalJSX {
     interface IrRoomNights {
         "baseUrl"?: string;
         "bookingNumber"?: string;
+        "fromDate"?: string;
         "identifier"?: string;
         "language"?: string;
         "onCloseRoomNightsDialog"?: (event: IrRoomNightsCustomEvent<IRoomNightsDataEventPayload>) => void;

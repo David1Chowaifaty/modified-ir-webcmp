@@ -174,7 +174,7 @@ export class IglBookingEvent {
                 });
                 throw new Error('Overlapping Dates');
               } else {
-                this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool });
+                this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
               }
             }
             this.isShrinking = null;

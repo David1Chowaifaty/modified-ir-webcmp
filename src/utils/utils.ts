@@ -136,13 +136,13 @@ export function getNextDay(date: Date) {
 export function convertDatePrice(date: string) {
   return moment(date, 'YYYY-MM-DD').format('DD/MM ddd');
 }
-export function getDaysArray(startDate: string, endDate: string) {
+export function getDaysArray(date1: string, date2: string) {
   let dates = [];
-  let currentDate = moment(startDate).add(1, 'days');
-
-  while (currentDate < moment(endDate)) {
-    dates.push(currentDate.format('YYYY-MM-DD'));
-    currentDate.add(1, 'days');
+  let start = moment.min(moment(date1).add(1, 'days'), moment(date2));
+  let end = moment.max(moment(date1), moment(date2));
+  while (start < end) {
+    dates.push(start.format('YYYY-MM-DD'));
+    start = start.clone().add(1, 'days');
   }
 
   return dates;

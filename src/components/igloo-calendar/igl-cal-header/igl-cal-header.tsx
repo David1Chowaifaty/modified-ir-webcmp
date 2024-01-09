@@ -222,6 +222,7 @@ export class IglCalHeader {
               <i class="la la-calendar-o"></i>
               {/* <input  type="date" onChange={this.handleDateSelect.bind(this)} title="" /> */}
               <ir-date-picker
+                minDate="2000-01-01"
                 autoApply
                 singleDatePicker
                 onDateChanged={evt => {

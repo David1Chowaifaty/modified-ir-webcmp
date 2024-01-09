@@ -7,6 +7,7 @@ import { Booking, Day, IUnit, Room } from '../../models/booking.dto';
 import { Unsubscribe } from 'redux';
 import { IRoomNightsDataEventPayload } from '../../models/property-types';
 import { v4 } from 'uuid';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-room-nights',
@@ -20,6 +21,7 @@ export class IrRoomNights {
   @Prop() language: string;
   @Prop() identifier: string;
   @Prop() toDate: string;
+  @Prop() fromDate: string;
   @Prop() pool: string;
   @Prop() ticket: string;
 
@@ -33,6 +35,8 @@ export class IrRoomNights {
 
   private bookingService = new BookingService();
   private unsubscribe: Unsubscribe;
+  @State() isEndDateBeforeFromDate: boolean = false;
+  @State() defaultTotalNights = 0;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -54,16 +58,43 @@ export class IrRoomNights {
       if (this.bookingEvent) {
         const filteredRooms = this.bookingEvent.rooms.filter(room => room.identifier === this.identifier);
         this.selectedRoom = filteredRooms[0];
+        // const bookingAvailability = await this.bookingService.getBookingAvailability(
+        //   this.bookingEvent.from_date,
+        //   this.toDate,
+        //   this.propertyId,
+        //   {
+        //     adult: this.selectedRoom.rateplan.selected_variation.adult_nbr,
+        //     child: this.selectedRoom.rateplan.selected_variation.child_nbr,
+        //   },
+        //   this.language,
+        //   [this.selectedRoom.roomtype.id],
+        //   this.bookingEvent.currency,
+        // );
+        // console.log(bookingAvailability);
+        console.log(this.selectedRoom.rateplan.selected_variation);
         const lastDay = this.selectedRoom?.days[this.selectedRoom.days.length - 1];
-        const newDatesArr = getDaysArray(lastDay.date, this.toDate);
         let first_rate = this.selectedRoom.days[0].amount;
-        this.rates = [
-          ...this.selectedRoom.days,
-          ...newDatesArr.map(day => ({
-            amount: first_rate,
-            date: day,
-          })),
-        ];
+        if (moment(this.toDate).add(-1, 'days').isSame(moment(lastDay.date))) {
+          const newDatesArr = getDaysArray(this.selectedRoom.days[0].date, this.fromDate);
+          this.isEndDateBeforeFromDate = true;
+          this.rates = [
+            ...newDatesArr.map(day => ({
+              amount: first_rate,
+              date: day,
+            })),
+            ...this.selectedRoom.days,
+          ];
+        } else {
+          const newDatesArr = getDaysArray(lastDay.date, this.toDate);
+          this.rates = [
+            ...this.selectedRoom.days,
+            ...newDatesArr.map(day => ({
+              amount: first_rate,
+              date: day,
+            })),
+          ];
+        }
+        this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
       }
       this.unsubscribe = store.subscribe(() => this.updateStore());
     } catch (error) {
@@ -91,7 +122,35 @@ export class IrRoomNights {
     }
     this.rates = days;
   }
-
+  renderInputField(index: number, currency_symbol: string, day: Day) {
+    return (
+      <fieldset class="col-3 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container">
+        <input
+          type="text"
+          class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
+          id={v4()}
+          value={day.amount > 0 ? day.amount : ''}
+          placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
+          onInput={event => this.handleInput(event, index)}
+        />
+        <span class="currency">{currency_symbol}</span>
+      </fieldset>
+    );
+  }
+  renderReadOnlyField(currency_symbol: string, day: Day) {
+    return <p class="col-9 ml-1 m-0 p-0">{`${currency_symbol}${day.amount}`}</p>;
+  }
+  renderRateFields(index: number, currency_symbol: string, day: Day) {
+    if (this.isEndDateBeforeFromDate) {
+      if (index < this.defaultTotalNights) {
+        return this.renderInputField(index, currency_symbol, day);
+      } else {
+        return this.renderReadOnlyField(currency_symbol, day);
+      }
+    } else {
+      return index < this.selectedRoom.days.length ? this.renderReadOnlyField(currency_symbol, day) : this.renderInputField(index, currency_symbol, day);
+    }
+  }
   renderDates() {
     const currency_symbol = getCurrencySymbol(this.bookingEvent.currency.code);
     return (
@@ -99,21 +158,7 @@ export class IrRoomNights {
         {this.rates?.map((day, index) => (
           <div class={'row m-0 mt-1 align-items-center'}>
             <p class={'col-2 m-0 p-0'}>{convertDatePrice(day.date)}</p>
-            {index < this.selectedRoom.days.length ? (
-              <p class={'col-9 ml-1 m-0 p-0'}>{`${currency_symbol}${day.amount}`}</p>
-            ) : (
-              <fieldset class="col-3 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container  ">
-                <input
-                  type="text"
-                  class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
-                  id={v4()}
-                  value={day.amount > 0 ? day.amount : ''}
-                  placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
-                  onInput={(event: InputEvent) => this.handleInput(event, index)}
-                />
-                <span class="currency">{currency_symbol}</span>
-              </fieldset>
-            )}
+            {this.renderRateFields(index, currency_symbol, day)}
           </div>
         ))}
       </div>
@@ -127,7 +172,7 @@ export class IrRoomNights {
       if (selectedRoomIndex === -1) {
         throw new Error('Invalid Pool');
       }
-      oldRooms[selectedRoomIndex] = { ...oldRooms[selectedRoomIndex], days: this.rates, to_date: this.toDate };
+      oldRooms[selectedRoomIndex] = { ...oldRooms[selectedRoomIndex], days: this.rates, to_date: this.toDate, from_date: this.fromDate };
       const body = {
         assign_units: true,
         check_in: true,
@@ -135,7 +180,7 @@ export class IrRoomNights {
         is_direct: true,
         booking: {
           booking_nbr: this.bookingNumber,
-          from_date: this.bookingEvent.from_date,
+          from_date: this.fromDate,
           to_date: this.toDate,
           remark: this.bookingEvent.remark,
           property: this.bookingEvent.property,

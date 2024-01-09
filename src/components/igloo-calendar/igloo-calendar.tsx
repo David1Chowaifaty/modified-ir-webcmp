@@ -753,7 +753,9 @@ export class IglooCalendar {
               bookingNumber={this.roomNightsData.bookingNumber}
               identifier={this.roomNightsData.identifier}
               toDate={this.roomNightsData.to_date}
+              fromDate={this.roomNightsData.from_date}
               ticket={this.ticket}
+              propertyId={this.propertyid}
             ></ir-room-nights>
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
