@@ -109,13 +109,13 @@ export class IrBookingDetails {
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
 
-      this.setRoomsData(roomResponse);
       this.defaultTexts = languageTexts;
       this.countryNodeList = countriesList;
 
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
-
+      this.setRoomsData(roomResponse);
+      console.log(this.calendarData);
       const paymentCodesToShow = ['001', '004'];
       this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
 
@@ -285,21 +285,21 @@ export class IrBookingDetails {
       return null;
     }
 
-    let confirmationBG: string = '';
-    switch (this.bookingData.status.code) {
-      case '001':
-        confirmationBG = 'bg-ir-orange';
-        break;
-      case '002':
-        confirmationBG = 'bg-ir-green';
-        break;
-      case '003':
-        confirmationBG = 'bg-ir-red';
-        break;
-      case '004':
-        confirmationBG = 'bg-ir-red';
-        break;
-    }
+    // let confirmationBG: string = '';
+    // switch (this.bookingData.status.code) {
+    //   case '001':
+    //     confirmationBG = 'bg-ir-orange';
+    //     break;
+    //   case '002':
+    //     confirmationBG = 'bg-ir-green';
+    //     break;
+    //   case '003':
+    //     confirmationBG = 'bg-ir-red';
+    //     break;
+    //   case '004':
+    //     confirmationBG = 'bg-ir-red';
+    //     break;
+    // }
 
     return [
       <ir-common></ir-common>,
@@ -382,7 +382,7 @@ export class IrBookingDetails {
       <div>
         {this.bookingItem && (
           <igl-book-property
-            allowedBookingSources={this.calendarData.allowedBookingSources}
+            allowedBookingSources={this.calendarData.allowed_booking_sources}
             adultChildConstraints={this.calendarData.adultChildConstraints}
             showPaymentDetails={this.showPaymentDetails}
             countryNodeList={this.countryNodeList}
