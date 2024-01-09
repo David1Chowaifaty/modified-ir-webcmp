@@ -1,4 +1,4 @@
-import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element } from '@stencil/core';
+import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import moment from 'moment';
 import { guestInfo, selectOption } from '../../common/models';
 import { _formatDate, _formatTime } from './functions';
@@ -379,7 +379,7 @@ export class IrBookingDetails {
       <ir-sidebar side={'right'} id="editGuestInfo">
         <ir-guest-info data={this.guestData} setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
       </ir-sidebar>,
-      <div>
+      <Fragment>
         {this.bookingItem && (
           <igl-book-property
             allowedBookingSources={this.calendarData.allowed_booking_sources}
@@ -393,7 +393,7 @@ export class IrBookingDetails {
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
         )}
-      </div>,
+      </Fragment>,
     ];
   }
 }
