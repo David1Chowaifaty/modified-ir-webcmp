@@ -120,6 +120,7 @@ export namespace Components {
         "physicalrooms": any;
         "ratePlanData": { [key: string]: any };
         "ratePricingMode": any[];
+        "selectedRoom": any;
         "shouldBeDisabled": boolean;
         "totalAvailableRooms": number;
     }
@@ -1756,6 +1757,7 @@ declare namespace LocalJSX {
         "physicalrooms"?: any;
         "ratePlanData"?: { [key: string]: any };
         "ratePricingMode"?: any[];
+        "selectedRoom"?: any;
         "shouldBeDisabled"?: boolean;
         "totalAvailableRooms"?: number;
     }

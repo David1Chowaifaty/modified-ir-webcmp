@@ -242,7 +242,7 @@ export class IrBookingDetails {
   }
   @Listen('editInitiated')
   handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
-    console.log(e.detail);
+    //console.log(e.detail);
     this.bookingItem = e.detail;
   }
   handleCloseBookingWindow() {

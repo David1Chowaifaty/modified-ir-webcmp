@@ -374,7 +374,7 @@ export class IglooCalendar {
       case 'search':
         break;
       case 'add':
-        console.log('data:', opt.data);
+        //console.log('data:', opt.data);
         if (opt.data.event_type !== 'EDIT_BOOKING') {
           this.bookingItem = opt.data;
         } else {

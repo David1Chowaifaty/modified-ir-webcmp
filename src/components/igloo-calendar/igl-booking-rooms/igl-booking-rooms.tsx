@@ -129,6 +129,7 @@ export class IglBookingRooms {
             if(shouldBeDisabled&&this.defaultData.has(`p_${ratePlan.id}`)&&this.defaultData){
               roomId=this.defaultData.get(`p_${ratePlan.id}`).roomId
             }
+            let selectedRoom = this.roomTypeData.physicalrooms.find(room => room.id.toString() === roomId.toString());   
             //console.log("ratePlan:",ratePlan.variation)
             //console.log("room type",this.defaultData.get(`p_${ratePlan.id}`))
             //console.log("default data",this.defaultData)
@@ -151,6 +152,7 @@ export class IglBookingRooms {
                 onDataUpdateEvent={evt => this.onRoomDataUpdate(evt, index)}
                 physicalrooms={this.roomTypeData.physicalrooms}
                 defaultRoomId={roomId}
+                selectedRoom={selectedRoom}
               ></igl-booking-room-rate-plan>
             );
           } else {
