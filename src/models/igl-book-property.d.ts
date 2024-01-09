@@ -94,6 +94,7 @@ interface IglBookPropertyPayloadEditBooking extends IglBookPropertyPayload {
   };
   legendData: any;
   roomsInfo: any;
+  roomName:string;
 }
 
 interface IglBookPropertyPayloadAddRoom extends IglBookPropertyPayload {

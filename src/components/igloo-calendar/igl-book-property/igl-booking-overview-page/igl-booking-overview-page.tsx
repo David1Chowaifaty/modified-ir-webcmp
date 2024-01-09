@@ -23,6 +23,7 @@ export class IglBookingOverviewPage {
   @Prop() adultChildCount: { adult: number; child: number };
   @Prop() sourceOptions: TSourceOptions[];
   @Prop() bookedByInfoData: any;
+  @Prop() initialRoomIds: any;
 
   @Event() roomsDataUpdate: EventEmitter;
 
@@ -72,6 +73,7 @@ export class IglBookingOverviewPage {
           {this.bookingData?.roomsInfo?.map(roomInfo => {
             return (
               <igl-booking-rooms
+              initialRoomIds={this.initialRoomIds}
                 defaultTexts={this.defaultTexts}
                 isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
                 key={`room-info-${roomInfo.id}`}

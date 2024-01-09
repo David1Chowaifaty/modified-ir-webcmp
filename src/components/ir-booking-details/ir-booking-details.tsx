@@ -115,7 +115,7 @@ export class IrBookingDetails {
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
       this.setRoomsData(roomResponse);
-      console.log(this.calendarData);
+     // console.log(this.calendarData);
       const paymentCodesToShow = ['001', '004'];
       this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
 
@@ -353,6 +353,7 @@ export class IrBookingDetails {
 
                 return [
                   <ir-room
+                  defaultTexts={this.defaultTexts}
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
                     myRoomTypeFoodCat={myRoomTypeFoodCat}

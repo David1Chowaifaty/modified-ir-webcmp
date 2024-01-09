@@ -49,16 +49,21 @@ export class IglBookingRoomRatePlan {
 
   setAvailableRooms(data) {
     let availableRooms = this.getAvailableRooms(data);
-   //console.log("first")
-    if (this.bookingType === 'EDIT_BOOKING' &&this.shouldBeDisabled && this.defaultData) {    
-      //let selectedRoom = this.physicalrooms.find(room => room.id.toString() === this.defaultRoomId.toString());    
-      //console.log("default data:",this.defaultData)
-      //console.log("room1",this.selectedRoom)
+    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {    
       if (this.selectedRoom) {
         availableRooms.push({
-          id: this.selectedRoom.id,
-          name: this.selectedRoom.name,
+          id: this.selectedRoom.roomId,
+          name: this.selectedRoom.roomName,
         });
+        availableRooms.sort((a, b) => {
+          if (a.name < b.name) {
+              return -1;
+          }
+          if (a.name > b.name) {
+              return 1;
+          }
+          return 0;
+      });
       }
     }
     return availableRooms;
@@ -100,11 +105,6 @@ export class IglBookingRoomRatePlan {
 
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
   }
-  // @Watch("defaultData")
-  // async handleChangeDefaultData(){
-  //   console.log("default data:",this.defaultData)
-
-  // }
   @Watch('ratePlanData')
   async ratePlanDataChanged(newData) {
     this.selectedData = {

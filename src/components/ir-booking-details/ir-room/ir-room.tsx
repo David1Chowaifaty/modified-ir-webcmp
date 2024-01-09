@@ -2,6 +2,7 @@ import { Component, h, Prop, EventEmitter, Event, Listen, State } from '@stencil
 import { _formatAmount, _formatDate, _getDay } from '../functions';
 import { Booking, IUnit, Room } from '../../../models/booking.dto';
 import { TIglBookPropertyPayload } from '../../../models/igl-book-property';
+import { formatName } from '../../../utils/booking';
 
 @Component({
   tag: 'ir-room',
@@ -19,6 +20,7 @@ export class IrRoom {
   @Prop() legendData;
   @Prop() roomsInfo;
   @State() collapsed: boolean = false;
+  @Prop() defaultTexts: any;
 
   // Booleans Conditions
   @Prop() hasRoomEdit: boolean = false;
@@ -99,13 +101,13 @@ export class IrRoom {
                     this.editInitiated.emit({
                       event_type: 'EDIT_BOOKING',
                       ID: this.item['assigned_units_pool'],
-                      NAME: this.bookingEvent.guest.first_name,
+                      NAME: formatName(this.item.guest.first_name, this.item.guest.last_name),
                       EMAIL: this.bookingEvent.guest.last_name,
                       PHONE: this.bookingEvent.guest.mobile,
                       REFERENCE_TYPE: '',
                       FROM_DATE: this.bookingEvent.from_date,
                       TO_DATE: this.bookingEvent.to_date,
-                      TITLE: 'Edit booking for',
+                      TITLE:  `${this.defaultTexts.entries.Lcz_EditBookingFor} ${this.item.roomtype.name} ${(this.item.unit as IUnit).name}`,
                       defaultDateRange: {
                         dateDifference: this.item.days.length,
                         fromDate: new Date(this.item.from_date + 'T00:00:00'),
@@ -135,7 +137,7 @@ export class IrRoom {
                       origin: this.bookingEvent.origin,
                       POOL: this.item['assigned_units_pool'],
                       PR_ID: (this.item.unit as IUnit).id,
-                      RATE: this.item.roomtype.rate,
+                      RATE: this.item.total,
                       RATE_PLAN: this.item.rateplan.name,
                       RATE_PLAN_ID: this.item.rateplan.id,
                       RATE_TYPE: this.item.roomtype.id,
@@ -147,6 +149,7 @@ export class IrRoom {
                       TOTAL_PRICE: this.bookingEvent.total,
                       legendData: this.legendData,
                       roomsInfo: this.roomsInfo,
+                      roomName:(this.item.unit as IUnit).name
                     })
                   }
                 ></ir-icon>
