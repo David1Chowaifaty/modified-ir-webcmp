@@ -374,7 +374,7 @@ export class IglooCalendar {
       case 'search':
         break;
       case 'add':
-        console.log('data:', opt.data);
+        //console.log('data:', opt.data);
         if (opt.data.event_type !== 'EDIT_BOOKING') {
           this.bookingItem = opt.data;
         } else {
@@ -390,11 +390,6 @@ export class IglooCalendar {
         this.showBookProperty = false;
         break;
     }
-  }
-  @Listen('editInitiated')
-  handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
-    console.log(e.detail);
-    this.bookingItem = e.detail;
   }
   async addDatesToCalendar(fromDate: string, toDate: string) {
     const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
@@ -760,6 +755,10 @@ export class IglooCalendar {
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
             <ir-booking-details
+            calendarData={this.calendarData}
+            propertyid={this.propertyid}
+            countryNodeList={this.countryNodeList}
+            showPaymentDetails={this.showPaymentDetails}
               hasRoomEdit
               hasRoomDelete
               bookingNumber={this.editBookingItem.BOOKING_NUMBER}

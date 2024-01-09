@@ -120,6 +120,7 @@ export namespace Components {
         "physicalrooms": any;
         "ratePlanData": { [key: string]: any };
         "ratePricingMode": any[];
+        "selectedRoom": any;
         "shouldBeDisabled": boolean;
         "totalAvailableRooms": number;
     }
@@ -239,6 +240,8 @@ export namespace Components {
         "baseurl": string;
         "bookingDetails": any;
         "bookingNumber": string;
+        "calendarData": any;
+        "countryNodeList": any;
         "dropdownStatuses": any;
         "editBookingItem": any;
         "hasCheckIn": boolean;
@@ -254,8 +257,10 @@ export namespace Components {
         "languageAbreviation": string;
         "paymentDetailsUrl": string;
         "paymentExceptionMessage": string;
+        "propertyid": any;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
+        "showPaymentDetails": any;
         "statusCodes": any;
         "ticket": string;
     }
@@ -1753,6 +1758,7 @@ declare namespace LocalJSX {
         "physicalrooms"?: any;
         "ratePlanData"?: { [key: string]: any };
         "ratePricingMode"?: any[];
+        "selectedRoom"?: any;
         "shouldBeDisabled"?: boolean;
         "totalAvailableRooms"?: number;
     }
@@ -1911,6 +1917,8 @@ declare namespace LocalJSX {
         "baseurl"?: string;
         "bookingDetails"?: any;
         "bookingNumber"?: string;
+        "calendarData"?: any;
+        "countryNodeList"?: any;
         "dropdownStatuses"?: any;
         "editBookingItem"?: any;
         "hasCheckIn"?: boolean;
@@ -1935,8 +1943,10 @@ declare namespace LocalJSX {
         "onSendDataToServer"?: (event: IrBookingDetailsCustomEvent<guestInfo>) => void;
         "paymentDetailsUrl"?: string;
         "paymentExceptionMessage"?: string;
+        "propertyid"?: any;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
+        "showPaymentDetails"?: any;
         "statusCodes"?: any;
         "ticket"?: string;
     }

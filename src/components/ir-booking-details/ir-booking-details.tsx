@@ -5,6 +5,7 @@ import { _formatDate, _formatTime } from './functions';
 import { Booking, Guest, Room } from '../../models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
+import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 
 @Component({
   tag: 'ir-booking-details',
@@ -24,7 +25,10 @@ export class IrBookingDetails {
   @Prop() bookingNumber: string = '';
   @Prop() baseurl: string = '';
   @Prop({ mutable: true }) dropdownStatuses: any = [];
-
+@Prop() calendarData:any
+@Prop() propertyid:any
+@Prop() countryNodeList:any
+@Prop() showPaymentDetails:any
   @Prop() paymentDetailsUrl: string = '';
   @Prop() paymentExceptionMessage: string = '';
 
@@ -43,7 +47,7 @@ export class IrBookingDetails {
   @Prop() hasRoomAdd: boolean = false;
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
-
+  @State() bookingItem: TIglBookPropertyPayload | null = null;
   @State() statusData = [];
   // Temp Status Before Save
   @State() tempStatus: string = null;
@@ -236,7 +240,14 @@ export class IrBookingDetails {
     this.rerenderFlag = !this.rerenderFlag;
     this.sendDataToServer.emit(this.bookingDetails);
   }
-
+  @Listen('editInitiated')
+  handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
+    //console.log(e.detail);
+    this.bookingItem = e.detail;
+  }
+  handleCloseBookingWindow() {
+    this.bookingItem = null;
+  }
   render() {
     if (!this.bookingData) {
       return null;
@@ -336,6 +347,21 @@ export class IrBookingDetails {
       <ir-sidebar side={'right'} id="editGuestInfo">
         <ir-guest-info data={this.guestData} setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
       </ir-sidebar>,
+      <div>
+        {this.bookingItem && (
+          <igl-book-property
+            allowedBookingSources={this.calendarData.allowedBookingSources}
+            adultChildConstraints={this.calendarData.adultChildConstraints}
+            showPaymentDetails={this.showPaymentDetails}
+            countryNodeList={this.countryNodeList}
+            currency={this.calendarData.currency}
+            language={this.language}
+            propertyid={this.propertyid}
+            bookingData={this.bookingItem}
+            onCloseBookingWindow={() => this.handleCloseBookingWindow()}
+          ></igl-book-property>
+        )}
+      </div>
     ];
   }
 }
