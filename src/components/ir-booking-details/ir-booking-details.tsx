@@ -116,7 +116,7 @@ export class IrBookingDetails {
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
       this.setRoomsData(roomResponse);
-     // console.log(this.calendarData);
+      // console.log(this.calendarData);
       const paymentCodesToShow = ['001', '004'];
       this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
 
@@ -281,6 +281,14 @@ export class IrBookingDetails {
   handleCloseBookingWindow() {
     this.bookingItem = null;
   }
+  handleDeleteFinish(e: CustomEvent) {
+    this.bookingData = { ...this.bookingData, rooms: this.bookingData.rooms.filter(room => room.identifier !== e.detail) };
+  }
+  async handleEditFinished() {
+
+    const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
+    this.bookingData = { ...booking };  
+  }
   render() {
     if (!this.bookingData) {
       return null;
@@ -331,7 +339,11 @@ export class IrBookingDetails {
               <div class="p-1">
                 {this.bookingData.property.name || ''}
                 <ir-label label={`${this.defaultTexts.entries.Lcz_Source}:`} value={this.bookingData.origin.Label} imageSrc={this.bookingData.origin.Icon}></ir-label>
-                <ir-label label={`${this.defaultTexts.entries.Lcz_BookedBy}:`} value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`} iconShown={true}></ir-label>
+                <ir-label
+                  label={`${this.defaultTexts.entries.Lcz_BookedBy}:`}
+                  value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`}
+                  iconShown={true}
+                ></ir-label>
                 <ir-label label="Phone:" value={this.bookingData.guest.mobile}></ir-label>
                 <ir-label label="Email:" value={this.bookingData.guest.email}></ir-label>
                 {/* <ir-label label="Alternate Email:" value={this.bookingData.guest.email}></ir-label> */}
@@ -344,7 +356,11 @@ export class IrBookingDetails {
               {`${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(
                 this.bookingData.from_date,
                 this.bookingData.to_date,
-              )} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1 ? ` ${this.defaultTexts.entries.Lcz_Nights}` : ` ${this.defaultTexts.entries.Lcz_Night}`})`}
+              )} ${
+                this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
+                  ? ` ${this.defaultTexts.entries.Lcz_Nights}`
+                  : ` ${this.defaultTexts.entries.Lcz_Night}`
+              })`}
               {this.hasRoomAdd && <ir-icon id="room-add" icon="ft-plus h3 color-ir-dark-blue-hover pointer"></ir-icon>}
             </div>
             <div class="card">
@@ -354,7 +370,7 @@ export class IrBookingDetails {
 
                 return [
                   <ir-room
-                  defaultTexts={this.defaultTexts}
+                    defaultTexts={this.defaultTexts}
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
                     myRoomTypeFoodCat={myRoomTypeFoodCat}
@@ -366,6 +382,8 @@ export class IrBookingDetails {
                     hasCheckOut={this.hasCheckOut}
                     bookingEvent={this.bookingData}
                     bookingIndex={index}
+                    ticket={this.ticket}
+                    onDeleteFinished={this.handleDeleteFinish.bind(this)}
                   />,
                   // add separator if not last item with marginHorizontal and alignCenter
                   index !== this.bookingData.rooms.length - 1 && <hr class="mr-2 ml-2 mt-1 mb-1" />,
@@ -379,7 +397,12 @@ export class IrBookingDetails {
         </div>
       </div>,
       <ir-sidebar side={'right'} id="editGuestInfo">
-        <ir-guest-info defaultTexts={this.defaultTexts} data={this.guestData} setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
+        <ir-guest-info
+          defaultTexts={this.defaultTexts}
+          data={this.guestData}
+          setupDataCountries={this.setupDataCountries}
+          setupDataCountriesCode={this.setupDataCountriesCode}
+        ></ir-guest-info>
       </ir-sidebar>,
       <Fragment>
         {this.bookingItem && (
@@ -393,6 +416,7 @@ export class IrBookingDetails {
             propertyid={this.propertyid}
             bookingData={this.bookingItem}
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
+            onEditFinished={this.handleEditFinished.bind(this)}
           ></igl-book-property>
         )}
       </Fragment>,

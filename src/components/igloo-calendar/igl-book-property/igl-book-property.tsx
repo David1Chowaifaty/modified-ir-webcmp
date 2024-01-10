@@ -32,7 +32,7 @@ export class IglBookProperty {
   @State() renderAgain: boolean = false;
   @State() defaultData: any;
   @State() isLoading: string;
-  private initialRoomIds: {roomName:string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
+  private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private message: string = '';
   private sourceOption: TSourceOption;
   @State() dateRangeData: { [key: string]: any };
@@ -53,6 +53,7 @@ export class IglBookProperty {
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
+  @Event() editFinished: EventEmitter<null>;
   handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       this.closeWindow();
@@ -375,6 +376,9 @@ export class IglBookProperty {
       }
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
       await this.bookingService.bookUser(...serviceParams);
+      if (this.isEventType('EDIT_BOOKING')) {
+        this.editFinished.emit(null);
+      }
     } catch (error) {
       // Handle error
     } finally {
@@ -432,7 +436,7 @@ export class IglBookProperty {
           <div class="px-2 px-md-3">
             {this.getCurrentPage('page_one') && (
               <igl-booking-overview-page
-              initialRoomIds={this.initialRoomIds}
+                initialRoomIds={this.initialRoomIds}
                 defaultDaterange={this.defaultDateRange}
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}
