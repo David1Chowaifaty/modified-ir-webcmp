@@ -34,7 +34,7 @@ const status: Record<string, STATUS> = {
   '001': 'IN-HOUSE',
 };
 
-function formatName(firstName: string | null, lastName: string | null) {
+export function formatName(firstName: string | null, lastName: string | null) {
   if (firstName === null && lastName === null) return '';
   if (lastName !== null) {
     return `${firstName ?? ''} , ${lastName ?? ''}`;

@@ -110,12 +110,13 @@ export class IrBookingDetails {
       ]);
 
       this.defaultTexts = languageTexts;
+      //console.log(this.defaultTexts)
       this.countryNodeList = countriesList;
 
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
       this.setRoomsData(roomResponse);
-      console.log(this.calendarData);
+     // console.log(this.calendarData);
       const paymentCodesToShow = ['001', '004'];
       this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
 
@@ -329,21 +330,21 @@ export class IrBookingDetails {
             <div class="card">
               <div class="p-1">
                 {this.bookingData.property.name || ''}
-                <ir-label label="Source:" value={this.bookingData.origin.Label} imageSrc={this.bookingData.origin.Icon}></ir-label>
-                <ir-label label="Booked by:" value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`} iconShown={true}></ir-label>
+                <ir-label label={`${this.defaultTexts.entries.Lcz_Source}:`} value={this.bookingData.origin.Label} imageSrc={this.bookingData.origin.Icon}></ir-label>
+                <ir-label label={`${this.defaultTexts.entries.Lcz_BookedBy}:`} value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`} iconShown={true}></ir-label>
                 <ir-label label="Phone:" value={this.bookingData.guest.mobile}></ir-label>
                 <ir-label label="Email:" value={this.bookingData.guest.email}></ir-label>
                 {/* <ir-label label="Alternate Email:" value={this.bookingData.guest.email}></ir-label> */}
                 <ir-label label="Address:" value={this.bookingData.guest.address}></ir-label>
-                <ir-label label="Arrival Time:" value={this.bookingData.arrival.description}></ir-label>
-                <ir-label label="Notes:" value={this.bookingData.remark}></ir-label>
+                <ir-label label={`${this.defaultTexts.entries.Lcz_ArrivalTime}:`} value={this.bookingData.arrival.description}></ir-label>
+                <ir-label label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
               </div>
             </div>
             <div class="font-size-large d-flex justify-content-between align-items-center ml-1 mb-1">
               {`${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(
                 this.bookingData.from_date,
                 this.bookingData.to_date,
-              )} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1 ? 'nights' : 'night'})`}
+              )} ${this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1 ? ` ${this.defaultTexts.entries.Lcz_Nights}` : ` ${this.defaultTexts.entries.Lcz_Night}`})`}
               {this.hasRoomAdd && <ir-icon id="room-add" icon="ft-plus h3 color-ir-dark-blue-hover pointer"></ir-icon>}
             </div>
             <div class="card">
@@ -353,6 +354,7 @@ export class IrBookingDetails {
 
                 return [
                   <ir-room
+                  defaultTexts={this.defaultTexts}
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
                     myRoomTypeFoodCat={myRoomTypeFoodCat}
@@ -377,7 +379,7 @@ export class IrBookingDetails {
         </div>
       </div>,
       <ir-sidebar side={'right'} id="editGuestInfo">
-        <ir-guest-info data={this.guestData} setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
+        <ir-guest-info defaultTexts={this.defaultTexts} data={this.guestData} setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
       </ir-sidebar>,
       <Fragment>
         {this.bookingItem && (

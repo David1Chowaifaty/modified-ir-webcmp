@@ -104,6 +104,7 @@ export namespace Components {
         "dateRangeData": any;
         "defaultDaterange": { from_date: string; to_date: string };
         "eventType": string;
+        "initialRoomIds": any;
         "message": string;
         "propertyId": number;
         "ratePricingMode": any;
@@ -134,6 +135,7 @@ export namespace Components {
         "dateDifference": number;
         "defaultData": Map<string, any>;
         "defaultTexts": any;
+        "initialRoomIds": any;
         "isBookDisabled": boolean;
         "ratePricingMode": any[];
         "roomInfoId": number|null;
@@ -348,6 +350,7 @@ export namespace Components {
     }
     interface IrGuestInfo {
         "data": Guest;
+        "defaultTexts": any;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
     }
@@ -438,6 +441,7 @@ export namespace Components {
         "bookingEvent": Booking;
         "bookingIndex": number;
         "currency": string;
+        "defaultTexts": any;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
         "hasRoomAdd": boolean;
@@ -1736,6 +1740,7 @@ declare namespace LocalJSX {
         "dateRangeData"?: any;
         "defaultDaterange"?: { from_date: string; to_date: string };
         "eventType"?: string;
+        "initialRoomIds"?: any;
         "message"?: string;
         "onRoomsDataUpdate"?: (event: IglBookingOverviewPageCustomEvent<any>) => void;
         "propertyId"?: number;
@@ -1769,6 +1774,7 @@ declare namespace LocalJSX {
         "dateDifference"?: number;
         "defaultData"?: Map<string, any>;
         "defaultTexts"?: any;
+        "initialRoomIds"?: any;
         "isBookDisabled"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomsCustomEvent<{ [key: string]: any }>) => void;
         "ratePricingMode"?: any[];
@@ -2044,6 +2050,7 @@ declare namespace LocalJSX {
     }
     interface IrGuestInfo {
         "data"?: Guest;
+        "defaultTexts"?: any;
         "onGetSetupData"?: (event: IrGuestInfoCustomEvent<any>) => void;
         "onSubmitForm"?: (event: IrGuestInfoCustomEvent<guestInfo>) => void;
         "setupDataCountries"?: selectOption[];
@@ -2146,6 +2153,7 @@ declare namespace LocalJSX {
         "bookingEvent"?: Booking;
         "bookingIndex"?: number;
         "currency"?: string;
+        "defaultTexts"?: any;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
         "hasRoomAdd"?: boolean;

@@ -32,6 +32,7 @@ export class IglBookProperty {
   @State() renderAgain: boolean = false;
   @State() defaultData: any;
   @State() isLoading: string;
+  private initialRoomIds: {roomName:string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private message: string = '';
   private sourceOption: TSourceOption;
   @State() dateRangeData: { [key: string]: any };
@@ -107,11 +108,17 @@ export class IglBookProperty {
       this.setOtherProperties(setupEntries);
 
       if (this.isEventType('EDIT_BOOKING')) {
+        console.log('defaul data:', this.defaultData);
         this.adultChildCount = {
           adult: this.defaultData.ADULTS_COUNT,
           child: this.defaultData.CHILDREN_COUNT,
         };
-
+        this.initialRoomIds = {
+          roomName: this.defaultData.roomName,
+          ratePlanId: this.defaultData.RATE_PLAN_ID,
+          roomId: this.defaultData.PR_ID,
+          roomTypeId: this.defaultData.RATE_TYPE,
+        };
         this.bookPropertyService.setEditingRoomInfo(this.defaultData, this.selectedUnits);
       }
       if (!this.isEventType('BAR_BOOKING')) {
@@ -425,6 +432,7 @@ export class IglBookProperty {
           <div class="px-2 px-md-3">
             {this.getCurrentPage('page_one') && (
               <igl-booking-overview-page
+              initialRoomIds={this.initialRoomIds}
                 defaultDaterange={this.defaultDateRange}
                 class={'p-0 mb-1'}
                 eventType={this.defaultData.event_type}

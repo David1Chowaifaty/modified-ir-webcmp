@@ -17,13 +17,13 @@ export class IglBookingRooms {
   @State() selectedRooms: number[] = [];
   @State() totalRooms: number;
   @Prop() isBookDisabled: boolean;
+  @Prop() initialRoomIds: any;
   @State() roomsDistributions: number[] = [];
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   private validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING'];
 
   componentWillLoad() {
     this.initializeRoomData();
-    //console.log(this.roomTypeData);
   }
 
   private initializeRoomData() {
@@ -95,7 +95,6 @@ export class IglBookingRooms {
       this.selectedRooms[index] = newValue;
       this.updateRatePlanTotalRooms(index);
     }
-    //console.log(this.roomsDistributions, this.selectedRooms);
   }
 
   updateRatePlanTotalRooms(ratePlanIndex: number) {
@@ -124,16 +123,11 @@ export class IglBookingRooms {
         {isValidBookingType && <div class="font-weight-bold font-medium-1">{this.roomTypeData.name}</div>}
         {this.roomTypeData.rateplans.map((ratePlan, index) => {
           if (ratePlan.variations !== null) {
-            let shouldBeDisabled = this.roomInfoId&&this.roomInfoId===this.roomTypeData.id;
+            let shouldBeDisabled = this.roomInfoId && this.roomInfoId===this.roomTypeData.id;
             let roomId=-1;
-            if(shouldBeDisabled&&this.defaultData.has(`p_${ratePlan.id}`)&&this.defaultData){
-              roomId=this.defaultData.get(`p_${ratePlan.id}`).roomId
-            }
-            let selectedRoom = this.roomTypeData.physicalrooms.find(room => room.id.toString() === roomId.toString());   
-            //console.log("ratePlan:",ratePlan.variation)
-            //console.log("room type",this.defaultData.get(`p_${ratePlan.id}`))
-            //console.log("default data",this.defaultData)
-            //console.log("room",this.roomTypeData)
+            if(shouldBeDisabled && this.initialRoomIds){
+              roomId=this.initialRoomIds.roomId
+            }        
             return (
               <igl-booking-room-rate-plan
                 defaultTexts={this.defaultTexts}
@@ -151,8 +145,8 @@ export class IglBookingRooms {
                 shouldBeDisabled={shouldBeDisabled}
                 onDataUpdateEvent={evt => this.onRoomDataUpdate(evt, index)}
                 physicalrooms={this.roomTypeData.physicalrooms}
-                defaultRoomId={roomId}
-                selectedRoom={selectedRoom}
+                defaultRoomId={roomId}   
+                selectedRoom={this.initialRoomIds}           
               ></igl-booking-room-rate-plan>
             );
           } else {
