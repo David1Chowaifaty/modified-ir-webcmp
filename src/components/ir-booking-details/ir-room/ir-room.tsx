@@ -235,15 +235,15 @@ export class IrRoom {
               <div class=" sm-padding-top">
                 <strong class="sm-padding-right">Breakdown:</strong>
               </div>
-              <div class={"flex-fill"}>
-              <table>
-                {this.item.days.length > 0 &&
-                  this.item.days.map(item => (
-                    <tr>
-                      <td>{_getDay(item.date)}</td> <td>{_formatAmount(item.amount, this.currency)}</td>
-                    </tr>
-                  ))}
-              </table>
+              <div class={'flex-fill'}>
+                <table>
+                  {this.item.days.length > 0 &&
+                    this.item.days.map(item => (
+                      <tr>
+                        <td class={'pr-2'}>{_getDay(item.date)}</td> <td>{_formatAmount(item.amount, this.currency)}</td>
+                      </tr>
+                    ))}
+                </table>
               </div>
             </div>
             <div innerHTML={this.item.rateplan.cancelation || ''}></div>
