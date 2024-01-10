@@ -1,13 +1,13 @@
-import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, Prop, State, h, Event, EventEmitter, Fragment } from '@stencil/core';
 import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
 import { convertDatePrice, formatDate, getCurrencySymbol, getDaysArray } from '../../utils/utils';
 import { store } from '../../redux/store';
 import { Booking, Day, IUnit, Room } from '../../models/booking.dto';
-import { Unsubscribe } from 'redux';
 import { IRoomNightsDataEventPayload } from '../../models/property-types';
 import { v4 } from 'uuid';
 import moment from 'moment';
+import { Unsubscribe } from '@reduxjs/toolkit';
 
 @Component({
   tag: 'ir-room-nights',
@@ -30,7 +30,8 @@ export class IrRoomNights {
   @State() defaultTexts;
   @State() rates: Day[] = [];
   @State() isLoading = false;
-
+  @State() initialLoading = false;
+  @State() inventory: number | null = null;
   @Event() closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
 
   private bookingService = new BookingService();
@@ -49,7 +50,7 @@ export class IrRoomNights {
     this.defaultTexts = store.getState().languages;
   }
   isButtonDisabled() {
-    return this.isLoading || this.rates.some(rate => rate.amount === 0 || rate.amount === -1);
+    return this.isLoading || this.rates.some(rate => rate.amount === 0 || rate.amount === -1) || this.inventory === 0 || this.inventory === null;
   }
   async init() {
     try {
@@ -58,23 +59,11 @@ export class IrRoomNights {
       if (this.bookingEvent) {
         const filteredRooms = this.bookingEvent.rooms.filter(room => room.identifier === this.identifier);
         this.selectedRoom = filteredRooms[0];
-        // const bookingAvailability = await this.bookingService.getBookingAvailability(
-        //   this.bookingEvent.from_date,
-        //   this.toDate,
-        //   this.propertyId,
-        //   {
-        //     adult: this.selectedRoom.rateplan.selected_variation.adult_nbr,
-        //     child: this.selectedRoom.rateplan.selected_variation.child_nbr,
-        //   },
-        //   this.language,
-        //   [this.selectedRoom.roomtype.id],
-        //   this.bookingEvent.currency,
-        // );
-        // console.log(bookingAvailability);
-        console.log(this.selectedRoom.rateplan.selected_variation);
+
         const lastDay = this.selectedRoom?.days[this.selectedRoom.days.length - 1];
         let first_rate = this.selectedRoom.days[0].amount;
         if (moment(this.toDate).add(-1, 'days').isSame(moment(lastDay.date))) {
+          this.fetchBookingAvailability(this.fromDate, this.bookingEvent.from_date);
           const newDatesArr = getDaysArray(this.selectedRoom.days[0].date, this.fromDate);
           this.isEndDateBeforeFromDate = true;
           this.rates = [
@@ -85,6 +74,7 @@ export class IrRoomNights {
             ...this.selectedRoom.days,
           ];
         } else {
+          this.fetchBookingAvailability(this.bookingEvent.to_date, this.toDate);
           const newDatesArr = getDaysArray(lastDay.date, this.toDate);
           this.rates = [
             ...this.selectedRoom.days,
@@ -122,10 +112,33 @@ export class IrRoomNights {
     }
     this.rates = days;
   }
+  async fetchBookingAvailability(from_date: string, to_date: string) {
+    try {
+      this.initialLoading = true;
+      const bookingAvailability = await this.bookingService.getBookingAvailability(
+        from_date,
+        to_date,
+        this.propertyId,
+        {
+          adult: this.selectedRoom.rateplan.selected_variation.adult_nbr,
+          child: this.selectedRoom.rateplan.selected_variation.child_nbr,
+        },
+        this.language,
+        [this.selectedRoom.roomtype.id],
+        this.bookingEvent.currency,
+      );
+      this.inventory = bookingAvailability.roomtypes[0].inventory;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.initialLoading = false;
+    }
+  }
   renderInputField(index: number, currency_symbol: string, day: Day) {
     return (
       <fieldset class="col-3 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container">
         <input
+          disabled={this.inventory === 0 || this.inventory === null}
           type="text"
           class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
           id={v4()}
@@ -220,12 +233,18 @@ export class IrRoomNights {
         <section class={'text-left px-2'}>
           <p>Booking# {this.bookingNumber}</p>
           <p class={'font-weight-bold font-medium-1'}>{`${formatDate(this.bookingEvent.from_date, 'YYYY-MM-DD')} - ${formatDate(this.bookingEvent.to_date, 'YYYY-MM-DD')}`}</p>
-          <p class={'font-medium-1 mb-0'}>
-            {`${this.selectedRoom.rateplan.name}`}{' '}
-            {this.selectedRoom.rateplan.is_non_refundable && <span class={'irfontgreen'}>{this.defaultTexts.entries.Lcz_NonRefundable}</span>}
-          </p>
-          {this.selectedRoom.rateplan.custom_text && <p class={'text-secondary mt-0'}>{this.selectedRoom.rateplan.custom_text}</p>}
-          {this.renderDates()}
+          {this.initialLoading ? (
+            <p class={'mt-2 text-secondary'}>Checking Room Availability</p>
+          ) : (
+            <Fragment>
+              <p class={'font-medium-1 mb-0'}>
+                {`${this.selectedRoom.rateplan.name}`}{' '}
+                {this.selectedRoom.rateplan.is_non_refundable && <span class={'irfontgreen'}>{this.defaultTexts.entries.Lcz_NonRefundable}</span>}
+              </p>
+              {this.selectedRoom.rateplan.custom_text && <p class={'text-secondary mt-0'}>{this.selectedRoom.rateplan.custom_text}</p>}
+              {this.renderDates()}
+            </Fragment>
+          )}
         </section>
         <section class={'d-flex align-items-center mt-2 px-2'}>
           <button
