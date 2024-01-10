@@ -8,6 +8,7 @@ import { IRoomNightsDataEventPayload } from '../../models/property-types';
 import { v4 } from 'uuid';
 import moment from 'moment';
 import { Unsubscribe } from '@reduxjs/toolkit';
+import { Languages } from '@/components';
 
 @Component({
   tag: 'ir-room-nights',
@@ -27,17 +28,18 @@ export class IrRoomNights {
 
   @State() bookingEvent: Booking;
   @State() selectedRoom: Room;
-  @State() defaultTexts;
+  @State() defaultTexts: Languages;
   @State() rates: Day[] = [];
   @State() isLoading = false;
   @State() initialLoading = false;
   @State() inventory: number | null = null;
+  @State() isEndDateBeforeFromDate: boolean = false;
+  @State() defaultTotalNights = 0;
+
   @Event() closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
 
   private bookingService = new BookingService();
   private unsubscribe: Unsubscribe;
-  @State() isEndDateBeforeFromDate: boolean = false;
-  @State() defaultTotalNights = 0;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -66,6 +68,7 @@ export class IrRoomNights {
           this.fetchBookingAvailability(this.fromDate, this.bookingEvent.from_date);
           const newDatesArr = getDaysArray(this.selectedRoom.days[0].date, this.fromDate);
           this.isEndDateBeforeFromDate = true;
+          this.rates;
           this.rates = [
             ...newDatesArr.map(day => ({
               amount: first_rate,
@@ -136,7 +139,7 @@ export class IrRoomNights {
   }
   renderInputField(index: number, currency_symbol: string, day: Day) {
     return (
-      <fieldset class="col-3 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container">
+      <fieldset class="col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container">
         <input
           disabled={this.inventory === 0 || this.inventory === null}
           type="text"

@@ -1,11 +1,15 @@
 import { Component, h, Prop, State, Event, EventEmitter, Listen, Watch } from '@stencil/core';
 import { _formatAmount, _formatDate } from '../functions';
+import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
+import { BookingService } from '@/services/booking.service';
 
 @Component({
   tag: 'ir-payment-details',
 })
 export class IrPaymentDetails {
   @Prop({ mutable: true, reflect: true }) item: any;
+  @Prop() bookingDetails: Booking;
+
   @State() newTableRow: boolean = false;
 
   @State() collapsedPayment: boolean = false;
@@ -16,18 +20,26 @@ export class IrPaymentDetails {
   @State() confirmModal: boolean = false;
   @State() toBeDeletedItem: any = {};
 
-  @Prop() paymentDetailsUrl: string = '';
+  @State() paymentDetailsUrl: string = '';
   @Prop() paymentExceptionMessage: string = '';
 
   @Event({ bubbles: true }) handlePaymentItemChange: EventEmitter<any>;
   @Event({ bubbles: true }) creditCardPressHandler: EventEmitter<any>;
 
-  itemToBeAdded: any = {
-    PAYMENT_DATE: '',
-    PAYMENT_AMOUNT: '',
-    DESIGNATION: '',
-    REFERENCE: '',
-    PAYMENT_ID: '',
+  async componentWillLoad() {
+    try {
+      if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
+        this.paymentDetailsUrl = await new BookingService().getPCICardInfoURL(this.bookingDetails.booking_nbr);
+      }
+    } catch (error) {}
+  }
+  private itemToBeAdded: IPayment = {
+    id: 0,
+    date: '',
+    amount: 0,
+    currency: undefined,
+    designation: '',
+    reference: '',
   };
 
   _handleSave() {
@@ -35,16 +47,11 @@ export class IrPaymentDetails {
     if (this.item.My_Payment == null) {
       this.item.My_Payment = [];
     }
-    this.itemToBeAdded.PAYMENT_ID = this.item.My_Payment[this.item.My_Payment.length - 1]?.PAYMENT_ID + 1 || 1;
+    this.itemToBeAdded.id = this.item.My_Payment[this.item.My_Payment.length - 1]?.PAYMENT_ID + 1 || 1;
     this.item.My_Payment = [...this.item.My_Payment, this.itemToBeAdded];
     console.log(this.item);
     this.handlePaymentItemChange.emit(this.item.My_Payment);
-    this.itemToBeAdded = {
-      PAYMENT_DATE: '',
-      PAYMENT_AMOUNT: '',
-      DESIGNATION: '',
-      REFERENCE: '',
-    };
+    this.itemToBeAdded = { id: 0, date: '', amount: 0, currency: undefined, designation: '', reference: '' };
   }
 
   @Listen('confirmModal')
@@ -63,19 +70,19 @@ export class IrPaymentDetails {
     this.flag = !this.flag;
   }
 
-  _renderTableRow(item: any, rowMode: 'add' | 'normal' = 'normal') {
+  _renderTableRow(item: IPayment, rowMode: 'add' | 'normal' = 'normal') {
     return (
       <div class="row m-0">
         <div class="col-9 p-0">
           <div class="row m-0">
             <div class="col-4  border-right-light p-0 border-bottom-light border-2">
               {rowMode === 'normal' ? (
-                <span class="sm-padding-left">{_formatDate(item.PAYMENT_DATE)}</span>
+                <span class="sm-padding-left">{_formatDate(item.date)}</span>
               ) : (
                 <input
                   class="border-0 w-100"
                   onChange={event => {
-                    this.itemToBeAdded.PAYMENT_DATE = (event.target as HTMLInputElement).value;
+                    this.itemToBeAdded.date = (event.target as HTMLInputElement).value;
                   }}
                   type="date"
                 ></input>
@@ -83,12 +90,12 @@ export class IrPaymentDetails {
             </div>
             <div class="col-4 border-right-light d-flex p-0 justify-content-end border-bottom-light border-2 sm-padding-right">
               {rowMode === 'normal' ? (
-                <span class="sm-padding-right">${item.PAYMENT_AMOUNT}</span>
+                <span class="sm-padding-right">${item.amount}</span>
               ) : (
                 <input
                   class="border-0 w-100"
                   onChange={event => {
-                    this.itemToBeAdded.PAYMENT_AMOUNT = (event.target as HTMLInputElement).value;
+                    this.itemToBeAdded.amount = +(event.target as HTMLInputElement).value;
                   }}
                   type="number"
                 ></input>
@@ -96,12 +103,12 @@ export class IrPaymentDetails {
             </div>
             <div class="col-4 border-right-light p-0 border-bottom-light border-2 sm-padding-left">
               {rowMode === 'normal' ? (
-                <span class="sm-padding-left">{item.DESIGNATION}</span>
+                <span class="sm-padding-left">{item.designation}</span>
               ) : (
                 <input
                   class="border-0 w-100"
                   onChange={event => {
-                    this.itemToBeAdded.DESIGNATION = (event.target as HTMLInputElement).value;
+                    this.itemToBeAdded.amount = +(event.target as HTMLInputElement).value;
                   }}
                   type="text"
                 ></input>
@@ -109,7 +116,7 @@ export class IrPaymentDetails {
             </div>
             <div class="col-12 border-right-light p-0 border-bottom-light border-2 sm-padding-left">
               {rowMode === 'normal' ? (
-                <span class="sm-padding-left">{item.REFERENCE}</span>
+                <span class="sm-padding-left">{item.reference}</span>
               ) : (
                 <input
                   class="border-0 w-100"
@@ -120,7 +127,7 @@ export class IrPaymentDetails {
                     }
                   }}
                   onChange={event => {
-                    this.itemToBeAdded.REFERENCE = (event.target as HTMLInputElement).value;
+                    this.itemToBeAdded.reference = (event.target as HTMLInputElement).value;
                   }}
                   type="text"
                 ></input>
@@ -147,12 +154,7 @@ export class IrPaymentDetails {
               rowMode === 'add'
                 ? () => {
                     this.newTableRow = false;
-                    this.itemToBeAdded = {
-                      PAYMENT_DATE: '',
-                      PAYMENT_AMOUNT: '',
-                      DESIGNATION: '',
-                      REFERENCE: '',
-                    };
+                    this.itemToBeAdded = { id: 0, date: '', amount: 0, currency: undefined, designation: '', reference: '' };
                   }
                 : () => {
                     this.toBeDeletedItem = item;
@@ -167,6 +169,9 @@ export class IrPaymentDetails {
   }
 
   bookingGuarantee() {
+    if (!this.bookingDetails?.guest?.cci) {
+      return null;
+    }
     return (
       <div>
         <div class="d-flex align-items-center">
@@ -188,18 +193,18 @@ export class IrPaymentDetails {
           ></ir-icon>
         </div>
         <div class="collapse guarrantee">
-          {this.item.IS_DIRECT ? (
+          {this.bookingDetails.is_direct ? (
             [
               <div>
-                {this.item?.My_Guest?.CCN && 'Card:'} <span>{this.item?.My_Guest?.CCN || ''}</span> {this.item?.My_Guest?.CC_EXP_MONTH && 'Expiry: '}
+                {this.bookingDetails?.guest?.cci && 'Card:'} <span>{this.bookingDetails?.guest?.cci?.nbr || ''}</span> {this.bookingDetails?.guest?.cci?.expiry_month && 'Expiry: '}
                 <span>
                   {' '}
-                  {this.item?.My_Guest?.CC_EXP_MONTH || ''} {this.item?.My_Guest?.CC_EXP_YEAR && '/' + this.item?.My_Guest?.CC_EXP_YEAR}
+                  {this.bookingDetails?.guest?.cci?.expiry_month || ''} {this.bookingDetails?.guest?.cci?.expiry_year && '/' + this.bookingDetails?.guest?.cci?.expiry_year}
                 </span>
               </div>,
               <div>
-                {this.item?.My_Guest?.CHN && 'Name:'} <span>{this.item?.My_Guest?.CHN || ''}</span> {this.item?.My_Guest?.CVC && '- CVC:'}{' '}
-                <span> {this.item.My_Guest?.CVC || ''}</span>
+                {this.bookingDetails?.guest?.cci.holder_name && 'Name:'} <span>{this.bookingDetails?.guest?.cci?.holder_name || ''}</span>{' '}
+                {this.bookingDetails?.guest?.cci?.cvc && '- CVC:'} <span> {this.bookingDetails?.guest?.cci?.cvc || ''}</span>
               </div>,
             ]
           ) : this.paymentDetailsUrl ? (
@@ -212,22 +217,28 @@ export class IrPaymentDetails {
     );
   }
 
-  _renderDueDate(item) {
+  _renderDueDate(item: IDueDate) {
     return (
-      <div class="fluid-container">
-        <div class="row mb-1">
-          <div class="col-xl-3 col-lg-4 col-md-2 col-sm-3 col-4 pr-0">{_formatDate(item.Date)}</div>
-          <div class="col-1 d-flex px-0 justify-content-end">{_formatAmount(item.Amount, this.item.My_Currency.REF)}</div>
-          <div class="col-xl-3 col-lg-4 col-md-3 col-sm-3 col-4">{item.Description}</div>
+      // <div class="fluid-container">
+      //   <div class="row mb-1">
+      //     <div class="col-xl-3 col-lg-4 col-md-2 col-sm-3 col-4 pr-0">{_formatDate(item.date)}</div>
+      //     <div class="col-1 d-flex px-0 justify-content-end">{_formatAmount(item.amount, this.bookingDetails.currency.code)}</div>
+      //     <div class="col-xl-3 col-lg-4 col-md-3 col-sm-3 col-4">{item.description}</div>
 
-          <span class="ml-1 col-12 font-size-small collapse roomName">{item.Room}</span>
-        </div>
-      </div>
+      //     <span class="ml-1 col-12 font-size-small collapse roomName">{item.room}</span>
+      //   </div>
+      // </div>
+      <tr>
+        <td class={'pr-1'}>{_formatDate(item.date)}</td>
+        <td class={'pr-1'}>{_formatAmount(item.amount, this.bookingDetails.currency.code)}</td>
+        <td class={'pr-1'}>{item.description}</td>
+        <td class="collapse font-size-small roomName">{item.room}</td>
+      </tr>
     );
   }
 
   render() {
-    if (!this.item) {
+    if (!this.bookingDetails.financial) {
       return null;
     }
 
@@ -235,31 +246,28 @@ export class IrPaymentDetails {
       <div class="card">
         <div class="p-1">
           <div class="mb-2 h4">
-            Due Balance: <span class="danger font-weight-bold">{_formatAmount(this.item.DUE_AMOUNT, this.item.My_Currency.REF)}</span>
+            Due Balance: <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
           </div>
 
-          {(this.item.My_Ac.AC_PAYMENT_OPTION_CODE == '001' || this.item.My_Ac.AC_PAYMENT_OPTION_CODE == '004' || this.item.IS_CHM_SOURCE || this.item.IS_DIRECT) &&
-            this.bookingGuarantee()}
+          {this.bookingGuarantee()}
           <div class="mt-2">
             <div>
               <div class="d-flex align-items-center">
                 <strong class="mr-1">Payment due dates</strong>
-                {this.item.My_Bsa && this.item.My_Bsa.length > 1 && (
-                  <ir-icon
-                    id="drawer-icon"
-                    icon={`${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`}
-                    data-toggle="collapse"
-                    data-target={`.roomName`}
-                    aria-expanded="false"
-                    aria-controls="myCollapse"
-                    class="sm-padding-right pointer"
-                    onClick={() => {
-                      this.collapsedPayment = !this.collapsedPayment;
-                    }}
-                  ></ir-icon>
-                )}
+                <ir-icon
+                  id="drawer-icon"
+                  icon={`${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`}
+                  data-toggle="collapse"
+                  data-target={`.roomName`}
+                  aria-expanded="false"
+                  aria-controls="myCollapse"
+                  class="sm-padding-right pointer"
+                  onClick={() => {
+                    this.collapsedPayment = !this.collapsedPayment;
+                  }}
+                ></ir-icon>
               </div>
-              {this.item?.My_DueDates && this.item?.My_DueDates.map(item => this._renderDueDate(item))}
+              <table>{this.bookingDetails.financial.due_dates?.map(item => this._renderDueDate(item))}</table>
             </div>
           </div>
           <div class="mt-2">
@@ -285,7 +293,7 @@ export class IrPaymentDetails {
                   ></ir-icon>
                 </div>
               </div>
-              {this.item.My_Payment && this.item.My_Payment.map((item: any) => this._renderTableRow(item))}
+              {this.bookingDetails.financial.payments?.map((item: any) => this._renderTableRow(item))}
               {this.newTableRow ? this._renderTableRow(null, 'add') : null}
             </div>
           </div>

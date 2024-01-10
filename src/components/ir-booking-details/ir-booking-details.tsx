@@ -175,33 +175,6 @@ export class IrBookingDetails {
   handleEditSidebar() {
     this.openEditSidebar();
   }
-
-  @Listen('submitForm')
-  handleFormSubmit(e) {
-    const data = e.detail;
-    // handle changes in the booking details
-    const bookingDetails = this.bookingDetails;
-    bookingDetails.My_Guest.FIRST_NAME = data.firstName;
-    bookingDetails.My_Guest.LAST_NAME = data.lastName;
-    bookingDetails.My_Guest.COUNTRY_ID = data.country;
-    bookingDetails.My_Guest.CITY = data.city;
-    bookingDetails.My_Guest.ADDRESS = data.address;
-    bookingDetails.My_Guest.MOBILE = data.mobile;
-    bookingDetails.My_Guest.PHONE_PREFIX = data.prefix;
-    bookingDetails.My_Guest.IS_NEWS_LETTER = data.newsletter;
-    bookingDetails.My_Guest.My_User.CURRENCY = data.currency;
-    bookingDetails.My_Guest.My_User.DISCLOSED_EMAIL = data.altEmail;
-    bookingDetails.My_Guest.My_User.PASSWORD = data.password;
-    bookingDetails.My_Guest.My_User.EMAIL = data.email;
-    this.bookingDetails = bookingDetails;
-    console.log('Form submitted with data: ', this.bookingDetails);
-    this.rerenderFlag = !this.rerenderFlag;
-    // close the sidebar
-    const sidebar: any = document.querySelector('ir-sidebar#editGuestInfo');
-    sidebar.open = false;
-    this.sendDataToServer.emit(this.bookingDetails);
-  }
-
   @Listen('selectChange')
   handleSelectChange(e) {
     const target = e.target;
@@ -285,9 +258,8 @@ export class IrBookingDetails {
     this.bookingData = { ...this.bookingData, rooms: this.bookingData.rooms.filter(room => room.identifier !== e.detail) };
   }
   async handleEditFinished() {
-
     const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
-    this.bookingData = { ...booking };  
+    this.bookingData = { ...booking };
   }
   render() {
     if (!this.bookingData) {
@@ -392,7 +364,7 @@ export class IrBookingDetails {
             </div>
           </div>
           <div class="col-lg-5 col-md-12 pr-0 pl-0 pl-md-1">
-            <ir-payment-details item={this.bookingDetails} paymentDetailsUrl={this.paymentDetailsUrl} paymentExceptionMessage={this.paymentExceptionMessage}></ir-payment-details>
+            <ir-payment-details bookingDetails={this.bookingData} item={this.bookingDetails} paymentExceptionMessage={this.paymentExceptionMessage}></ir-payment-details>
           </div>
         </div>
       </div>,

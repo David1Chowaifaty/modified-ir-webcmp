@@ -283,6 +283,25 @@ export class BookingService {
       throw new Error(error);
     }
   }
+  public async getPCICardInfoURL(BOOK_NBR: string) {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token) {
+        const { data } = await axios.post(`/Get_PCI_Card_Info_URL?Ticket=${token}`, {
+          BOOK_NBR,
+        });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data['My_Result'];
+      } else {
+        throw new Error("Token doesn't exist");
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
   public async bookUser(
     bookedByInfoData,
     check_in: boolean,

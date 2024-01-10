@@ -1,3 +1,5 @@
+import { ICurrency } from './calendarData';
+
 export interface Booking {
   arrival: Arrival;
   booked_on: DateTime;
@@ -18,6 +20,27 @@ export interface Booking {
   format: IFormat;
   channel_booking_nbr: string | null;
   is_direct: boolean;
+  financial: IFinancials;
+}
+export interface IFinancials {
+  due_amount: number;
+  due_dates: IDueDate[];
+  payments: IPayment[] | null;
+}
+export interface IPayment {
+  id: number | null;
+  date: string;
+  amount: number;
+  currency: ICurrency;
+  designation: string;
+  reference: string;
+}
+export interface IDueDate {
+  amount: number;
+  currencysymbol: string;
+  date: string;
+  description: string;
+  room: string;
 }
 export interface IFormat {
   from_date: string;
@@ -50,13 +73,14 @@ export interface Guest {
   last_name: string | null;
   mobile: string | null;
   subscribe_to_news_letter: boolean | null;
-  //cci: ICCI | null;
+  cci?: ICCI | null;
 }
 export interface ICCI {
   nbr: string | number;
   holder_name: string | number;
   expiry_month: string | number;
   expiry_year: string | number;
+  cvc?: string | null;
 }
 export interface Occupancy {
   adult_nbr: number;

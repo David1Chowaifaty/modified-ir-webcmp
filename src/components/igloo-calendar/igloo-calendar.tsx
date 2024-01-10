@@ -496,46 +496,48 @@ export class IglooCalendar {
   };
 
   calendarScrolling() {
-    const containerRect = this.scrollContainer.getBoundingClientRect();
-    let leftSideMenuSize = 170;
-    let maxWidth = containerRect.width - leftSideMenuSize;
-    let leftX = containerRect.x + leftSideMenuSize;
-    let rightX = containerRect.x + containerRect.width;
+    if (this.scrollContainer) {
+      const containerRect = this.scrollContainer.getBoundingClientRect();
+      let leftSideMenuSize = 170;
+      let maxWidth = containerRect.width - leftSideMenuSize;
+      let leftX = containerRect.x + leftSideMenuSize;
+      let rightX = containerRect.x + containerRect.width;
 
-    let cells = Array.from(this.element.querySelectorAll('.monthCell')) as HTMLElement[];
+      let cells = Array.from(this.element.querySelectorAll('.monthCell')) as HTMLElement[];
 
-    if (cells.length) {
-      cells.map(async (monthContainer: HTMLElement) => {
-        let monthRect = monthContainer.getBoundingClientRect();
-        if (cells.indexOf(monthContainer) === cells.length - 1) {
-          if (monthRect.x + monthRect.width <= rightX && !this.reachedEndOfCalendar) {
-            this.reachedEndOfCalendar = true;
-            //await this.addNextTwoMonthsToCalendar();
-            const nextTwoMonths = addTwoMonthToDate(new Date(this.calendarData.endingDate));
-            const nextDay = getNextDay(new Date(this.calendarData.endingDate));
-            await this.addDatesToCalendar(nextDay, nextTwoMonths);
-            this.reachedEndOfCalendar = false;
+      if (cells.length) {
+        cells.map(async (monthContainer: HTMLElement) => {
+          let monthRect = monthContainer.getBoundingClientRect();
+          if (cells.indexOf(monthContainer) === cells.length - 1) {
+            if (monthRect.x + monthRect.width <= rightX && !this.reachedEndOfCalendar) {
+              this.reachedEndOfCalendar = true;
+              //await this.addNextTwoMonthsToCalendar();
+              const nextTwoMonths = addTwoMonthToDate(new Date(this.calendarData.endingDate));
+              const nextDay = getNextDay(new Date(this.calendarData.endingDate));
+              await this.addDatesToCalendar(nextDay, nextTwoMonths);
+              this.reachedEndOfCalendar = false;
+            }
           }
-        }
-        if (monthRect.x + monthRect.width < leftX) {
-          // item end is scrolled outside view, in -x
-        } else if (monthRect.x > rightX) {
-          // item is outside scrollview, in +x
-        } else {
-          let titleElement = monthContainer.querySelector('.monthTitle') as HTMLElement;
-          let marginLeft = 0;
-          let monthWidth = monthRect.width;
-          if (monthRect.x < leftX) {
-            marginLeft = Math.abs(monthRect.x) - leftX;
-            marginLeft = monthRect.x < 0 ? Math.abs(monthRect.x) + leftX : Math.abs(marginLeft);
-            monthWidth = monthRect.x + monthRect.width > rightX ? maxWidth : monthRect.x + monthRect.width - leftX;
+          if (monthRect.x + monthRect.width < leftX) {
+            // item end is scrolled outside view, in -x
+          } else if (monthRect.x > rightX) {
+            // item is outside scrollview, in +x
           } else {
-            monthWidth = maxWidth - monthWidth > monthWidth ? monthWidth : maxWidth - monthRect.x + leftX;
+            let titleElement = monthContainer.querySelector('.monthTitle') as HTMLElement;
+            let marginLeft = 0;
+            let monthWidth = monthRect.width;
+            if (monthRect.x < leftX) {
+              marginLeft = Math.abs(monthRect.x) - leftX;
+              marginLeft = monthRect.x < 0 ? Math.abs(monthRect.x) + leftX : Math.abs(marginLeft);
+              monthWidth = monthRect.x + monthRect.width > rightX ? maxWidth : monthRect.x + monthRect.width - leftX;
+            } else {
+              monthWidth = maxWidth - monthWidth > monthWidth ? monthWidth : maxWidth - monthRect.x + leftX;
+            }
+            titleElement.style.marginLeft = marginLeft + 'px';
+            titleElement.style.width = monthWidth + 'px';
           }
-          titleElement.style.marginLeft = marginLeft + 'px';
-          titleElement.style.width = monthWidth + 'px';
-        }
-      });
+        });
+      }
     }
   }
 

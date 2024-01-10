@@ -214,7 +214,10 @@ export class IglBookingEvent {
           const initialRT = findRoomType(this.bookingEvent.PR_ID);
           const targetRT = findRoomType(toRoomId);
           if (initialRT !== targetRT) {
-            return { description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates}. ${this.defaultText.entries.Lcz_SameRatesWillBeKept}`, status: '200' };
+            return {
+              description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${this.defaultText.entries.Lcz_SameRatesWillBeKept}`,
+              status: '200',
+            };
           }
           return { description: '', status: '400' };
         }

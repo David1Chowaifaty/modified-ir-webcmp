@@ -14,7 +14,8 @@ import { IToast as IToast1 } from "./components/ir-toast/toast";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
-import { Booking, Guest } from "./models/booking.dto";
+import { Booking as Booking1, Guest } from "./models/booking.dto";
+import { Booking } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
@@ -25,7 +26,8 @@ export { IToast as IToast1 } from "./components/ir-toast/toast";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
-export { Booking, Guest } from "./models/booking.dto";
+export { Booking as Booking1, Guest } from "./models/booking.dto";
+export { Booking } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
     interface IglApplicationInfo {
@@ -433,12 +435,12 @@ export namespace Components {
         "rightBtnText": string;
     }
     interface IrPaymentDetails {
+        "bookingDetails": Booking;
         "item": any;
-        "paymentDetailsUrl": string;
         "paymentExceptionMessage": string;
     }
     interface IrRoom {
-        "bookingEvent": Booking;
+        "bookingEvent": Booking1;
         "bookingIndex": number;
         "currency": string;
         "defaultTexts": any;
@@ -2147,14 +2149,14 @@ declare namespace LocalJSX {
         "rightBtnText"?: string;
     }
     interface IrPaymentDetails {
+        "bookingDetails"?: Booking;
         "item"?: any;
         "onCreditCardPressHandler"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
         "onHandlePaymentItemChange"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
-        "paymentDetailsUrl"?: string;
         "paymentExceptionMessage"?: string;
     }
     interface IrRoom {
-        "bookingEvent"?: Booking;
+        "bookingEvent"?: Booking1;
         "bookingIndex"?: number;
         "currency"?: string;
         "defaultTexts"?: any;
