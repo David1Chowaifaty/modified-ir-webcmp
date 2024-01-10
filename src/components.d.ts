@@ -346,6 +346,7 @@ export namespace Components {
     }
     interface IrGuestInfo {
         "data": Guest;
+        "defaultTexts": any;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
     }
@@ -2045,6 +2046,7 @@ declare namespace LocalJSX {
     }
     interface IrGuestInfo {
         "data"?: Guest;
+        "defaultTexts"?: any;
         "onGetSetupData"?: (event: IrGuestInfoCustomEvent<any>) => void;
         "onSubmitForm"?: (event: IrGuestInfoCustomEvent<guestInfo>) => void;
         "setupDataCountries"?: selectOption[];

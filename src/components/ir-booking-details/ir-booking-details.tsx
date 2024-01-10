@@ -77,9 +77,6 @@ export class IrBookingDetails {
 
   private bookingService = new BookingService();
   private roomService = new RoomService();
-  componentWillLoad(){
-    console.log(this.defaultTexts.entries)
-  }
   componentDidLoad() {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
@@ -113,6 +110,7 @@ export class IrBookingDetails {
       ]);
 
       this.defaultTexts = languageTexts;
+      //console.log(this.defaultTexts)
       this.countryNodeList = countriesList;
 
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
@@ -381,7 +379,7 @@ export class IrBookingDetails {
         </div>
       </div>,
       <ir-sidebar side={'right'} id="editGuestInfo">
-        <ir-guest-info data={this.guestData} setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
+        <ir-guest-info defaultTexts={this.defaultTexts} data={this.guestData} setupDataCountries={this.setupDataCountries} setupDataCountriesCode={this.setupDataCountriesCode}></ir-guest-info>
       </ir-sidebar>,
       <div>
         {this.bookingItem && (

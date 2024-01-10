@@ -16,6 +16,7 @@ export class GuestInfo {
   @Prop({ mutable: true, reflect: true }) setupDataCountries: selectOption[] = null;
   @Prop({ mutable: true, reflect: true }) setupDataCountriesCode: selectOption[] = null;
   @Prop({ reflect: true, mutable: true }) data: Guest = null;
+  @Prop() defaultTexts;
 
   componentWillLoad() {
     this.getSetupData.emit();
@@ -131,8 +132,8 @@ export class GuestInfo {
         </div>
         <div class="card-content collapse show">
           <div class="card-body pt-0">
-            <ir-input-text placeholder="" label="First Name" name="firstName" submited={this.submit} value={this.Model.first_name} required></ir-input-text>
-            <ir-input-text placeholder="" label="Last Name" name="lastName" submited={this.submit} value={this.Model.last_name} required></ir-input-text>
+            <ir-input-text placeholder="" label={`${this.defaultTexts.entries.Lcz_FirstName}:`} name="firstName" submited={this.submit} value={this.Model.first_name} required></ir-input-text>
+            <ir-input-text placeholder="" label={`${this.defaultTexts.entries.Lcz_LastName}:`} name="lastName" submited={this.submit} value={this.Model.last_name} required></ir-input-text>
             <ir-input-text placeholder="" label="Email" name="email" submited={this.submit} value={this.Model.email} required></ir-input-text>
             <ir-input-text placeholder="" label="Alternative email" name="altEmail" value={this.Model.email}></ir-input-text>
             {/* <ir-input-text label="Password" placeholder="" name="password" submited={this.submit} type="password" value={this.Model.password} required></ir-input-text> */}
@@ -147,7 +148,7 @@ export class GuestInfo {
               {/* <strong>{this.Model.language}</strong> --- Currency: <strong>{this.Model.currency}</strong> */}
             </p>
             <hr />
-            <ir-button text="Save" color="btn-primary"></ir-button>
+            <ir-button text={this.defaultTexts.entries.Lcz_Save} color="btn-primary"></ir-button>
           </div>
         </div>
       </div>,
