@@ -14,7 +14,8 @@ import { IToast as IToast1 } from "./components/ir-toast/toast";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
-import { Booking, Guest } from "./models/booking.dto";
+import { selectOption as selectOption1 } from "./common/models";
+import { Booking } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
@@ -25,7 +26,8 @@ export { IToast as IToast1 } from "./components/ir-toast/toast";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
-export { Booking, Guest } from "./models/booking.dto";
+export { selectOption as selectOption1 } from "./common/models";
+export { Booking } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
     interface IglApplicationInfo {
@@ -349,8 +351,9 @@ export namespace Components {
         "mode": string;
     }
     interface IrGuestInfo {
-        "data": Guest;
         "defaultTexts": any;
+        "email": string;
+        "language": string;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
     }
@@ -650,10 +653,6 @@ export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
 export interface IrGeneralSettingsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrGeneralSettingsElement;
-}
-export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLIrGuestInfoElement;
 }
 export interface IrIconCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1287,19 +1286,7 @@ declare global {
         prototype: HTMLIrGeneralSettingsElement;
         new (): HTMLIrGeneralSettingsElement;
     };
-    interface HTMLIrGuestInfoElementEventMap {
-        "submitForm": guestInfo;
-        "getSetupData": any;
-    }
     interface HTMLIrGuestInfoElement extends Components.IrGuestInfo, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIrGuestInfoElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoElement, ev: IrGuestInfoCustomEvent<HTMLIrGuestInfoElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIrGuestInfoElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoElement, ev: IrGuestInfoCustomEvent<HTMLIrGuestInfoElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrGuestInfoElement: {
         prototype: HTMLIrGuestInfoElement;
@@ -2053,10 +2040,9 @@ declare namespace LocalJSX {
         "onSendToParent"?: (event: IrGeneralSettingsCustomEvent<any>) => void;
     }
     interface IrGuestInfo {
-        "data"?: Guest;
         "defaultTexts"?: any;
-        "onGetSetupData"?: (event: IrGuestInfoCustomEvent<any>) => void;
-        "onSubmitForm"?: (event: IrGuestInfoCustomEvent<guestInfo>) => void;
+        "email"?: string;
+        "language"?: string;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
     }

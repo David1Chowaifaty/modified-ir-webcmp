@@ -59,6 +59,7 @@ export class IrBookingDetails {
   @State() defaultTexts;
   // Rerender Flag
   @State() rerenderFlag = false;
+  @State() isSidebarOpen = false;
 
   // Event Emitters
 
@@ -74,7 +75,6 @@ export class IrBookingDetails {
   @Event() handleRoomDelete: EventEmitter;
   // Payment Event
   @Event() handleAddPayment: EventEmitter;
-
   private bookingService = new BookingService();
   private roomService = new RoomService();
   componentDidLoad() {
@@ -165,15 +165,10 @@ export class IrBookingDetails {
     }
   }
 
-  @Listen('irSidebarToggle')
-  handleSidebarToggle() {
-    const sidebar: any = document.querySelector('ir-sidebar#editGuestInfo');
-    sidebar.open = false;
-  }
 
   @Listen('editSidebar')
   handleEditSidebar() {
-    this.openEditSidebar();
+    this.isSidebarOpen=true
   }
 
   @Listen('submitForm')
@@ -285,9 +280,8 @@ export class IrBookingDetails {
     this.bookingData = { ...this.bookingData, rooms: this.bookingData.rooms.filter(room => room.identifier !== e.detail) };
   }
   async handleEditFinished() {
-
     const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
-    this.bookingData = { ...booking };  
+    this.bookingData = { ...booking };
   }
   render() {
     if (!this.bookingData) {
@@ -396,12 +390,23 @@ export class IrBookingDetails {
           </div>
         </div>
       </div>,
-      <ir-sidebar side={'right'} id="editGuestInfo">
+      <ir-sidebar
+      open={this.isSidebarOpen}
+        side={'right'}
+        id="editGuestInfo"
+        onIrSidebarToggle={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.isSidebarOpen=false
+          
+        }}
+      >
         <ir-guest-info
           defaultTexts={this.defaultTexts}
-          data={this.guestData}
+          email={this.bookingData?.guest.email}
           setupDataCountries={this.setupDataCountries}
           setupDataCountriesCode={this.setupDataCountriesCode}
+          language={this.language}
         ></ir-guest-info>
       </ir-sidebar>,
       <Fragment>

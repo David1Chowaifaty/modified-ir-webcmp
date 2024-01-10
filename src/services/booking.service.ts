@@ -4,7 +4,7 @@ import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthTyp
 
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
-import { Booking, Day } from '../models/booking.dto';
+import { Booking, Day, Guest } from '../models/booking.dto';
 
 export class BookingService {
   public async getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{ [key: string]: any }> {
@@ -55,6 +55,36 @@ export class BookingService {
       }
     } catch (error) {
       console.error(error);
+    }
+  }
+  public async fetchGuest(email: string): Promise<Guest> {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }    
+        return   data.My_Result;
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+  public async editExposedGuest(guest: Guest): Promise<any> {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token !== null) {
+        const { data } = await axios.post(`/Edit_Exposed_Guest?Ticket=${token}`,  guest );
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }    
+        return   data.My_Result;
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
     }
   }
   public async getBookingAvailability(
