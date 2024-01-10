@@ -2,17 +2,12 @@ import moment from 'moment';
 import IBooking, { ICountry, PhysicalRoomType } from '../models/IBooking';
 
 export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear: string): string {
-  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-
-  const [_, day] = dayWithWeekday.split(' ');
-  const [month, year] = monthWithYear.split(' ');
-
-  const monthIndex = months.indexOf(month);
-  if (monthIndex !== -1) {
-    return `${day}_${monthIndex + 1}_${year}`;
-  } else {
-    throw new Error('Invalid Month');
+  const dateStr = `${dayWithWeekday.split(' ')[1]} ${monthWithYear}`;
+  const date = moment(dateStr, 'DD MMM YYYY');
+  if (!date.isValid()) {
+    throw new Error('Invalid Date');
   }
+  return date.format('D_M_YYYY');
 }
 
 export function convertDateToTime(dayWithWeekday: string, monthWithYear: string): number {
