@@ -451,6 +451,7 @@ export namespace Components {
         "mealCodeName": string;
         "myRoomTypeFoodCat": string;
         "roomsInfo": any;
+        "ticket": any;
     }
     interface IrRoomNights {
         "baseUrl": string;
@@ -749,6 +750,7 @@ declare global {
         "closeBookingWindow": { [key: string]: any };
         "bookingCreated": { pool?: string; data: RoomBookingDetails[] };
         "blockedCreated": RoomBlockDetails;
+        "editFinished": null;
     }
     interface HTMLIglBookPropertyElement extends Components.IglBookProperty, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyElement, ev: IglBookPropertyCustomEvent<HTMLIglBookPropertyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1457,6 +1459,7 @@ declare global {
         new (): HTMLIrPaymentDetailsElement;
     };
     interface HTMLIrRoomElementEventMap {
+        "deleteFinished": string;
         "pressCheckIn": any;
         "pressCheckOut": any;
         "editInitiated": TIglBookPropertyPayload;
@@ -1672,6 +1675,7 @@ declare namespace LocalJSX {
         "onBlockedCreated"?: (event: IglBookPropertyCustomEvent<RoomBlockDetails>) => void;
         "onBookingCreated"?: (event: IglBookPropertyCustomEvent<{ pool?: string; data: RoomBookingDetails[] }>) => void;
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
+        "onEditFinished"?: (event: IglBookPropertyCustomEvent<null>) => void;
         "propertyid"?: number;
         "showPaymentDetails"?: boolean;
     }
@@ -2162,10 +2166,12 @@ declare namespace LocalJSX {
         "legendData"?: any;
         "mealCodeName"?: string;
         "myRoomTypeFoodCat"?: string;
+        "onDeleteFinished"?: (event: IrRoomCustomEvent<string>) => void;
         "onEditInitiated"?: (event: IrRoomCustomEvent<TIglBookPropertyPayload>) => void;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
         "roomsInfo"?: any;
+        "ticket"?: any;
     }
     interface IrRoomNights {
         "baseUrl"?: string;

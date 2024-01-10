@@ -1,8 +1,10 @@
-import { Component, h, Prop, EventEmitter, Event, Listen, State } from '@stencil/core';
+import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Watch } from '@stencil/core';
 import { _formatAmount, _formatDate, _getDay } from '../functions';
 import { Booking, IUnit, Room } from '../../../models/booking.dto';
 import { TIglBookPropertyPayload } from '../../../models/igl-book-property';
 import { formatName } from '../../../utils/booking';
+import { IrModal } from '@/components/ir-modal/ir-modal';
+import axios from 'axios';
 
 @Component({
   tag: 'ir-room',
@@ -21,6 +23,7 @@ export class IrRoom {
   @Prop() roomsInfo;
   @State() collapsed: boolean = false;
   @Prop() defaultTexts: any;
+  @Prop() ticket;
 
   // Booleans Conditions
   @Prop() hasRoomEdit: boolean = false;
@@ -28,16 +31,27 @@ export class IrRoom {
   @Prop() hasRoomAdd: boolean = false;
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
-
+  @Element() element;
   // Event Emitters
+  @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
   @Event({ bubbles: true, composed: true }) pressCheckOut: EventEmitter;
   @Event({ bubbles: true, composed: true }) editInitiated: EventEmitter<TIglBookPropertyPayload>;
   @State() item: Room;
+  @State() isLoading: boolean = false;
+  @State() isModelOpen: boolean = false;
+  private modal: IrModal;
   componentWillLoad() {
     if (this.bookingEvent) {
       this.item = this.bookingEvent.rooms[this.bookingIndex];
     }
+  }
+  @Watch('bookingEvent')
+  handleBookingEventChange() {
+    this.item = this.bookingEvent.rooms[this.bookingIndex];
+  }
+  componentDidLoad() {
+    this.modal = this.element.querySelector('ir-modal');
   }
   @Listen('clickHanlder')
   handleClick(e) {
@@ -69,6 +83,100 @@ export class IrRoom {
   getDateStr(date, locale = 'default') {
     return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
   }
+  handleEditClick() {
+    this.editInitiated.emit({
+      event_type: 'EDIT_BOOKING',
+      ID: this.item['assigned_units_pool'],
+      NAME: formatName(this.item.guest.first_name, this.item.guest.last_name),
+      EMAIL: this.bookingEvent.guest.last_name,
+      PHONE: this.bookingEvent.guest.mobile,
+      REFERENCE_TYPE: '',
+      FROM_DATE: this.bookingEvent.from_date,
+      TO_DATE: this.bookingEvent.to_date,
+      TITLE: `${this.defaultTexts.entries.Lcz_EditBookingFor} ${this.item.roomtype.name} ${(this.item.unit as IUnit).name}`,
+      defaultDateRange: {
+        dateDifference: this.item.days.length,
+        fromDate: new Date(this.item.from_date + 'T00:00:00'),
+        fromDateStr: this.getDateStr(new Date(this.item.from_date + 'T00:00:00')),
+        toDate: new Date(this.item.to_date + 'T00:00:00'),
+        toDateStr: this.getDateStr(new Date(this.item.to_date + 'T00:00:00')),
+        message: '',
+      },
+      adult_child_offering: this.item.rateplan.selected_variation.adult_child_offering,
+      ADULTS_COUNT: this.item.rateplan.selected_variation.adult_nbr,
+      ARRIVAL: this.bookingEvent.arrival,
+      ARRIVAL_TIME: this.bookingEvent.arrival.description,
+      BOOKING_NUMBER: this.bookingEvent.booking_nbr,
+      cancelation: this.item.rateplan.cancelation,
+      channel_booking_nbr: this.bookingEvent.channel_booking_nbr,
+      CHILDREN_COUNT: this.item.rateplan.selected_variation.child_nbr,
+      COUNTRY: this.bookingEvent.guest.country_id,
+      ENTRY_DATE: this.bookingEvent.from_date,
+      FROM_DATE_STR: this.bookingEvent.format.from_date,
+      guarantee: this.item.rateplan.guarantee,
+      GUEST: this.bookingEvent.guest,
+      IDENTIFIER: this.item.identifier,
+      is_direct: this.bookingEvent.is_direct,
+      IS_EDITABLE: this.bookingEvent.is_editable,
+      NO_OF_DAYS: this.item.days.length,
+      NOTES: this.bookingEvent.remark,
+      origin: this.bookingEvent.origin,
+      POOL: this.item['assigned_units_pool'],
+      PR_ID: (this.item.unit as IUnit).id,
+      RATE: this.item.total,
+      RATE_PLAN: this.item.rateplan.name,
+      RATE_PLAN_ID: this.item.rateplan.id,
+      RATE_TYPE: this.item.roomtype.id,
+      ROOMS: this.bookingEvent.rooms,
+      SOURCE: this.bookingEvent.source,
+      SPLIT_BOOKING: false,
+      STATUS: 'IN-HOUSE',
+      TO_DATE_STR: this.bookingEvent.format.to_date,
+      TOTAL_PRICE: this.bookingEvent.total,
+      legendData: this.legendData,
+      roomsInfo: this.roomsInfo,
+      roomName: (this.item.unit as IUnit).name,
+    });
+  }
+  handleDeleteClick() {
+    this.modal.openModal();
+  }
+  async deleteRoom() {
+    try {
+      this.isLoading = true;
+      let oldRooms = [...this.bookingEvent.rooms];
+      oldRooms = oldRooms.filter(room => room.identifier !== this.item.identifier);
+
+      const body = {
+        assign_units: true,
+        check_in: true,
+        is_pms: true,
+        is_direct: true,
+        booking: {
+          booking_nbr: this.bookingEvent.booking_nbr,
+          from_date: this.bookingEvent.from_date,
+          to_date: this.bookingEvent.to_date,
+          remark: this.bookingEvent.remark,
+          property: this.bookingEvent.property,
+          source: this.bookingEvent.source,
+          currency: this.bookingEvent.currency,
+          arrival: this.bookingEvent.arrival,
+          guest: this.bookingEvent.guest,
+          rooms: oldRooms,
+        },
+      };
+      console.log('body:', body);
+
+      const { data } = await axios.post(`/DoReservation?Ticket=${this.ticket}`, body);
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
+      }
+      this.deleteFinished.emit(this.item.identifier);
+    } catch (error) {
+    } finally {
+      this.isLoading = false;
+    }
+  }
   render() {
     return (
       <div class="p-1 d-flex">
@@ -94,67 +202,9 @@ export class IrRoom {
               {/* <span class="mr-1">{this.item.TOTAL_AMOUNT + this.item.EXCLUDED_TAXES}</span> */}
               <span class="mr-1">{_formatAmount(this.item.total, this.currency)}</span>
               {this.hasRoomEdit && (
-                <ir-icon
-                  id={`roomEdit-${this.item.identifier}`}
-                  icon="ft-edit color-ir-dark-blue-hover h4 pointer"
-                  onClick={() =>
-                    this.editInitiated.emit({
-                      event_type: 'EDIT_BOOKING',
-                      ID: this.item['assigned_units_pool'],
-                      NAME: formatName(this.item.guest.first_name, this.item.guest.last_name),
-                      EMAIL: this.bookingEvent.guest.last_name,
-                      PHONE: this.bookingEvent.guest.mobile,
-                      REFERENCE_TYPE: '',
-                      FROM_DATE: this.bookingEvent.from_date,
-                      TO_DATE: this.bookingEvent.to_date,
-                      TITLE:  `${this.defaultTexts.entries.Lcz_EditBookingFor} ${this.item.roomtype.name} ${(this.item.unit as IUnit).name}`,
-                      defaultDateRange: {
-                        dateDifference: this.item.days.length,
-                        fromDate: new Date(this.item.from_date + 'T00:00:00'),
-                        fromDateStr: this.getDateStr(new Date(this.item.from_date + 'T00:00:00')),
-                        toDate: new Date(this.item.to_date + 'T00:00:00'),
-                        toDateStr: this.getDateStr(new Date(this.item.to_date + 'T00:00:00')),
-                        message: '',
-                      },
-                      adult_child_offering: this.item.rateplan.selected_variation.adult_child_offering,
-                      ADULTS_COUNT: this.item.rateplan.selected_variation.adult_nbr,
-                      ARRIVAL: this.bookingEvent.arrival,
-                      ARRIVAL_TIME: this.bookingEvent.arrival.description,
-                      BOOKING_NUMBER: this.bookingEvent.booking_nbr,
-                      cancelation: this.item.rateplan.cancelation,
-                      channel_booking_nbr: this.bookingEvent.channel_booking_nbr,
-                      CHILDREN_COUNT: this.item.rateplan.selected_variation.child_nbr,
-                      COUNTRY: this.bookingEvent.guest.country_id,
-                      ENTRY_DATE: this.bookingEvent.from_date,
-                      FROM_DATE_STR: this.bookingEvent.format.from_date,
-                      guarantee: this.item.rateplan.guarantee,
-                      GUEST: this.bookingEvent.guest,
-                      IDENTIFIER: this.item.identifier,
-                      is_direct: this.bookingEvent.is_direct,
-                      IS_EDITABLE: this.bookingEvent.is_editable,
-                      NO_OF_DAYS: this.item.days.length,
-                      NOTES: this.bookingEvent.remark,
-                      origin: this.bookingEvent.origin,
-                      POOL: this.item['assigned_units_pool'],
-                      PR_ID: (this.item.unit as IUnit).id,
-                      RATE: this.item.total,
-                      RATE_PLAN: this.item.rateplan.name,
-                      RATE_PLAN_ID: this.item.rateplan.id,
-                      RATE_TYPE: this.item.roomtype.id,
-                      ROOMS: this.bookingEvent.rooms,
-                      SOURCE: this.bookingEvent.source,
-                      SPLIT_BOOKING: false,
-                      STATUS: 'IN-HOUSE',
-                      TO_DATE_STR: this.bookingEvent.format.to_date,
-                      TOTAL_PRICE: this.bookingEvent.total,
-                      legendData: this.legendData,
-                      roomsInfo: this.roomsInfo,
-                      roomName:(this.item.unit as IUnit).name
-                    })
-                  }
-                ></ir-icon>
+                <ir-icon id={`roomEdit-${this.item.identifier}`} icon="ft-edit color-ir-dark-blue-hover h4 pointer" onClick={this.handleEditClick.bind(this)}></ir-icon>
               )}
-              {this.hasRoomDelete && <ir-icon id={`roomDelete-${this.item.identifier}`} icon="ft-trash-2 danger h4 pointer"></ir-icon>}
+              {this.hasRoomDelete && <ir-icon onClick={this.handleDeleteClick.bind(this)} id={`roomDelete-${this.item.identifier}`} icon="ft-trash-2 danger h4 pointer"></ir-icon>}
             </div>
           </div>
           <div>
@@ -185,16 +235,15 @@ export class IrRoom {
               <div class=" sm-padding-top">
                 <strong class="sm-padding-right">Breakdown:</strong>
               </div>
-              <div class="sm-padding-top w-100 ">
+              <div class={"flex-fill"}>
+              <table>
                 {this.item.days.length > 0 &&
                   this.item.days.map(item => (
-                    <div class="fluid-container">
-                      <div class="row">
-                        <div class="col-xl-2 col-lg-3 col-md-2 col-sm-3 col-7 pr-0">{_getDay(item.date)}</div>{' '}
-                        <div class="col-1 px-0 d-flex justify-content-end">{_formatAmount(item.amount, this.currency)}</div>
-                      </div>
-                    </div>
+                    <tr>
+                      <td>{_getDay(item.date)}</td> <td>{_formatAmount(item.amount, this.currency)}</td>
+                    </tr>
                   ))}
+              </table>
               </div>
             </div>
             <div innerHTML={this.item.rateplan.cancelation || ''}></div>
@@ -204,6 +253,7 @@ export class IrRoom {
             <ir-label label="Special rate:" value="Non-refundable"></ir-label>
           </div>
         </div>
+        <ir-modal onConfirmModal={this.deleteRoom.bind(this)}></ir-modal>
       </div>
     );
   }
