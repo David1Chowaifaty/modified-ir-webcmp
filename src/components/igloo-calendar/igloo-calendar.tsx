@@ -367,7 +367,6 @@ export class IglooCalendar {
         if (opt.data.event_type !== 'EDIT_BOOKING') {
           this.bookingItem = opt.data;
         } else {
-          this.element.querySelector('ir-sidebar').style.setProperty('--sidebar-width', '80rem');
           this.editBookingItem = opt.data;
         }
 
@@ -731,6 +730,7 @@ export class IglooCalendar {
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING')}
           showCloseButton={this.editBookingItem !== null}
+          sidebarStyles={{ width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)' }}
         >
           {this.roomNightsData && (
             <ir-room-nights
