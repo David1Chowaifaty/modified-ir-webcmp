@@ -15,6 +15,7 @@ import { IPageTwoDataUpdateProps } from "./models/models";
 import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
 import { selectOption as selectOption1 } from "./common/models";
+import { Languages as Languages1 } from "./components.d";
 import { Booking } from "./models/booking.dto";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
@@ -28,6 +29,7 @@ export { IPageTwoDataUpdateProps } from "./models/models";
 export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
 export { selectOption as selectOption1 } from "./common/models";
+export { Languages as Languages1 } from "./components.d";
 export { Booking } from "./models/booking.dto";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
@@ -265,7 +267,7 @@ export namespace Components {
         "languageAbreviation": string;
         "paymentDetailsUrl": string;
         "paymentExceptionMessage": string;
-        "propertyid": any;
+        "propertyid": number;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
         "statusCodes": any;
@@ -353,7 +355,7 @@ export namespace Components {
         "mode": string;
     }
     interface IrGuestInfo {
-        "defaultTexts": any;
+        "defaultTexts": Languages;
         "email": string;
         "language": string;
         "setupDataCountries": selectOption[];
@@ -1942,7 +1944,7 @@ declare namespace LocalJSX {
         "onSendDataToServer"?: (event: IrBookingDetailsCustomEvent<guestInfo>) => void;
         "paymentDetailsUrl"?: string;
         "paymentExceptionMessage"?: string;
-        "propertyid"?: any;
+        "propertyid"?: number;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
         "statusCodes"?: any;
@@ -2043,7 +2045,7 @@ declare namespace LocalJSX {
         "onSendToParent"?: (event: IrGeneralSettingsCustomEvent<any>) => void;
     }
     interface IrGuestInfo {
-        "defaultTexts"?: any;
+        "defaultTexts"?: Languages;
         "email"?: string;
         "language"?: string;
         "setupDataCountries"?: selectOption[];

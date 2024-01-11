@@ -2,7 +2,7 @@ import { Component, State, h, Prop } from '@stencil/core';
 import { selectOption } from '@/common/models';
 import { Guest } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
-import { ICountry } from '@/components';
+import { ICountry, Languages } from '@/components';
 
 @Component({
   tag: 'ir-guest-info',
@@ -11,7 +11,7 @@ import { ICountry } from '@/components';
 export class GuestInfo {
   @Prop({ mutable: true, reflect: true }) setupDataCountries: selectOption[] = null;
   @Prop({ mutable: true, reflect: true }) setupDataCountriesCode: selectOption[] = null;
-  @Prop() defaultTexts;
+  @Prop() defaultTexts: Languages;
   @Prop() language: string;
   @Prop() email: string;
 
@@ -23,11 +23,17 @@ export class GuestInfo {
   private bookingService = new BookingService();
 
   async componentWillLoad() {
-    const [guest, countries] = await Promise.all([this.bookingService.fetchGuest(this.email), this.bookingService.getCountries(this.language)]);
-    this.countries = countries;
-    this.guest = guest;
+    await this.init();
   }
-
+  async init() {
+    try {
+      const [guest, countries] = await Promise.all([this.bookingService.fetchGuest(this.email), this.bookingService.getCountries(this.language)]);
+      this.countries = countries;
+      this.guest = guest;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   handleInputChange(key: keyof Guest, value: any) {
     this.guest = { ...this.guest, [key]: value };
   }
@@ -44,8 +50,7 @@ export class GuestInfo {
     }
   }
   render() {
-    if (this.setupDataCountries !== null && this.setupDataCountriesCode !== null) {
-    }
+   
     if (!this.guest) {
       return null;
     }

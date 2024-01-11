@@ -26,7 +26,7 @@ export class IrBookingDetails {
   @Prop() bookingNumber: string = '';
   @Prop() baseurl: string = '';
   @Prop({ mutable: true }) dropdownStatuses: any = [];
-  @Prop() propertyid: any;
+  @Prop() propertyid: number;
   @Prop() paymentDetailsUrl: string = '';
   @Prop() paymentExceptionMessage: string = '';
 

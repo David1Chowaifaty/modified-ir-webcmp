@@ -2,6 +2,8 @@ import { Component, h, Prop, State, Event, EventEmitter, Listen, Watch } from '@
 import { _formatAmount, _formatDate } from '../functions';
 import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
+import moment from 'moment';
+import { PaymentService } from '@/services/payment.service';
 
 @Component({
   tag: 'ir-payment-details',
@@ -26,34 +28,45 @@ export class IrPaymentDetails {
   @Event({ bubbles: true }) handlePaymentItemChange: EventEmitter<any>;
   @Event({ bubbles: true }) creditCardPressHandler: EventEmitter<any>;
 
+  private itemToBeAdded: IPayment 
+  private paymentService=new PaymentService()
+
   async componentWillLoad() {
     try {
       if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
         this.paymentDetailsUrl = await new BookingService().getPCICardInfoURL(this.bookingDetails.booking_nbr);
       }
+      this.initializeItemToBeAdded()
+      this.paymentService.AddPayment(this.itemToBeAdded,this.bookingDetails.booking_nbr)
+      this.paymentService.CancelPayment(this.itemToBeAdded.id)
     } catch (error) {}
   }
-  private itemToBeAdded: IPayment = {
-    id: 0,
-    date: '',
-    amount: 0,
-    currency: undefined,
-    designation: '',
-    reference: '',
-  };
+  initializeItemToBeAdded(){
+    this.itemToBeAdded= {
+      id: -1,
+      date: moment().format("YYYY-MM-DD"),
+      amount: 0,
+      currency: this.bookingDetails.currency,
+      designation: '',
+      reference: '',
+    };
+  }
 
   _handleSave() {
     // emit the item to be added
-    if (this.item.My_Payment == null) {
-      this.item.My_Payment = [];
-    }
-    this.itemToBeAdded.id = this.item.My_Payment[this.item.My_Payment.length - 1]?.PAYMENT_ID + 1 || 1;
-    this.item.My_Payment = [...this.item.My_Payment, this.itemToBeAdded];
-    console.log(this.item);
-    this.handlePaymentItemChange.emit(this.item.My_Payment);
-    this.itemToBeAdded = { id: 0, date: '', amount: 0, currency: undefined, designation: '', reference: '' };
+    // if (this.item.My_Payment == null) {
+    //   this.item.My_Payment = [];
+    // }
+    // this.itemToBeAdded.id = this.item.My_Payment[this.item.My_Payment.length - 1]?.PAYMENT_ID + 1 || 1;
+    // this.item.My_Payment = [...this.item.My_Payment, this.itemToBeAdded];
+    // console.log(this.item);
+    // this.handlePaymentItemChange.emit(this.item.My_Payment);
+    console.log('item to be added :', this.itemToBeAdded);
+    this.initializeItemToBeAdded()
   }
-
+  handlePaymentInputChange(key: keyof IPayment, value: any) {
+    this.itemToBeAdded = { ...this.itemToBeAdded, [key]: value };
+  }
   @Listen('confirmModal')
   handleConfirmModal(e) {
     // Remove the item from the array
@@ -69,7 +82,15 @@ export class IrPaymentDetails {
     console.log('Changed');
     this.flag = !this.flag;
   }
-
+  
+  handleDateChange(
+    e: CustomEvent<{
+      start: moment.Moment;
+      end: moment.Moment;
+    }>,
+  ) {
+    this.handlePaymentInputChange("date",e.detail.end.format('YYYY-MM-DD'))
+  }
   _renderTableRow(item: IPayment, rowMode: 'add' | 'normal' = 'normal') {
     return (
       <div class="row m-0">
@@ -79,13 +100,7 @@ export class IrPaymentDetails {
               {rowMode === 'normal' ? (
                 <span class="sm-padding-left">{_formatDate(item.date)}</span>
               ) : (
-                <input
-                  class="border-0 w-100"
-                  onChange={event => {
-                    this.itemToBeAdded.date = (event.target as HTMLInputElement).value;
-                  }}
-                  type="date"
-                ></input>
+                <ir-date-picker singleDatePicker autoApply onDateChanged={this.handleDateChange.bind(this)}></ir-date-picker>
               )}
             </div>
             <div class="col-4 border-right-light d-flex p-0 justify-content-end border-bottom-light border-2 sm-padding-right">
@@ -94,9 +109,7 @@ export class IrPaymentDetails {
               ) : (
                 <input
                   class="border-0 w-100"
-                  onChange={event => {
-                    this.itemToBeAdded.amount = +(event.target as HTMLInputElement).value;
-                  }}
+                  onInput={(event)=>this.handlePaymentInputChange("amount",+(event.target as HTMLInputElement).value)}
                   type="number"
                 ></input>
               )}
@@ -107,9 +120,7 @@ export class IrPaymentDetails {
               ) : (
                 <input
                   class="border-0 w-100"
-                  onChange={event => {
-                    this.itemToBeAdded.amount = +(event.target as HTMLInputElement).value;
-                  }}
+                  onInput={(event)=>this.handlePaymentInputChange("designation",(event.target as HTMLInputElement).value)}
                   type="text"
                 ></input>
               )}
@@ -126,9 +137,7 @@ export class IrPaymentDetails {
                       this._handleSave();
                     }
                   }}
-                  onChange={event => {
-                    this.itemToBeAdded.reference = (event.target as HTMLInputElement).value;
-                  }}
+                  onInput={(event)=>this.handlePaymentInputChange("reference",(event.target as HTMLInputElement).value)}
                   type="text"
                 ></input>
               )}
