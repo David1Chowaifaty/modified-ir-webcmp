@@ -492,6 +492,7 @@ export namespace Components {
         "open": boolean;
         "showCloseButton": boolean;
         "side": 'right' | 'left';
+        "sidebarStyles": Partial<CSSStyleDeclaration>;
         "toggleSidebar": () => Promise<void>;
     }
     interface IrSpan {
@@ -2198,6 +2199,7 @@ declare namespace LocalJSX {
         "open"?: boolean;
         "showCloseButton"?: boolean;
         "side"?: 'right' | 'left';
+        "sidebarStyles"?: Partial<CSSStyleDeclaration>;
     }
     interface IrSpan {
         "text"?: any;
