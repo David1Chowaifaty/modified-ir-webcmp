@@ -88,7 +88,7 @@ export class IrRoom {
       event_type: 'EDIT_BOOKING',
       ID: this.item['assigned_units_pool'],
       NAME: formatName(this.item.guest.first_name, this.item.guest.last_name),
-      EMAIL: this.bookingEvent.guest.last_name,
+      EMAIL: this.bookingEvent.guest.email,
       PHONE: this.bookingEvent.guest.mobile,
       REFERENCE_TYPE: '',
       FROM_DATE: this.bookingEvent.from_date,
