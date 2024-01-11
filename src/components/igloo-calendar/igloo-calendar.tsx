@@ -367,6 +367,7 @@ export class IglooCalendar {
         if (opt.data.event_type !== 'EDIT_BOOKING') {
           this.bookingItem = opt.data;
         } else {
+          this.element.querySelector('ir-sidebar').style.setProperty('--sidebar-width', '80rem');
           this.editBookingItem = opt.data;
         }
 
