@@ -1,4 +1,4 @@
-import { Component, State, h, Prop, EventEmitter,Event } from '@stencil/core';
+import { Component, State, h, Prop, EventEmitter, Event } from '@stencil/core';
 import { selectOption } from '@/common/models';
 import { Guest } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
@@ -19,7 +19,7 @@ export class GuestInfo {
   @State() submit: boolean = false;
   @State() guest: Guest | null = null;
   @State() isLoading: boolean = false;
-  @Event() closeSideBar:EventEmitter<null>
+  @Event() closeSideBar: EventEmitter<null>;
 
   private bookingService = new BookingService();
 
@@ -43,7 +43,7 @@ export class GuestInfo {
     try {
       this.isLoading = true;
       await this.bookingService.editExposedGuest(this.guest);
-      this.closeSideBar.emit(null)
+      this.closeSideBar.emit(null);
     } catch (error) {
       console.log(error);
     } finally {
@@ -52,7 +52,6 @@ export class GuestInfo {
     }
   }
   render() {
-   
     if (!this.guest) {
       return null;
     }
@@ -113,14 +112,26 @@ export class GuestInfo {
               firstOption={'...'}
               onSelectChange={e => this.handleInputChange('country_id', e.detail)}
             ></ir-select>
-            <ir-input-text placeholder="" label={this.defaultTexts.entries.Lcz_City} name="city" value={this.guest.city} onTextChange={e => this.handleInputChange('city', e.detail)}></ir-input-text>
-            <ir-input-text placeholder="" label={this.defaultTexts.entries.Lcz_Address} name="address" value={this.guest.address} onTextChange={e => this.handleInputChange('address', e.detail)}></ir-input-text>
+            <ir-input-text
+              placeholder=""
+              label={this.defaultTexts.entries.Lcz_City}
+              name="city"
+              value={this.guest.city}
+              onTextChange={e => this.handleInputChange('city', e.detail)}
+            ></ir-input-text>
+            <ir-input-text
+              placeholder=""
+              label={this.defaultTexts.entries.Lcz_Address}
+              name="address"
+              value={this.guest.address}
+              onTextChange={e => this.handleInputChange('address', e.detail)}
+            ></ir-input-text>
 
             <div class="form-group mr-0">
               <div class="input-group row m-0 p-0">
                 <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
                   <label class={`input-group-text  bg-light flex-grow-1 text-dark border-0 `}>
-                  {this.defaultTexts.entries.Lcz_MobilePhone}
+                    {this.defaultTexts.entries.Lcz_MobilePhone}
                     {'*'}
                   </label>
                 </div>
@@ -145,14 +156,20 @@ export class GuestInfo {
                 />
               </div>
             </div>
-            <div class={'col-3 p-0'}>
-              <ir-checkbox
-                onCheckboxChange={e => this.handleInputChange('subscribe_to_news_letter', e.detail.checked)}
-                label={this.defaultTexts.entries.Lcz_Newsletter}
-                name="newsletter"
-                checked={this.guest.subscribe_to_news_letter}
-              ></ir-checkbox>
+            <div class={'p-0 m-0'}>
+              <label class={`check-container  m-0 p-0`}>
+                <input
+                  class={'m-0 p-0'}
+                  type="checkbox"
+                  name="newsletter"
+                  checked={this.guest.subscribe_to_news_letter}
+                  onInput={e => this.handleInputChange('subscribe_to_news_letter', (e.target as HTMLInputElement).checked)}
+                />
+                <span class="checkmark m-0 p-0"></span>
+                <span class={'m-0 p-0 '}>{this.defaultTexts.entries.Lcz_Newsletter}</span>
+              </label>
             </div>
+
             <hr />
             <ir-button text={this.defaultTexts.entries.Lcz_Save} onClickHanlder={this.editGuest.bind(this)} color="btn-primary"></ir-button>
           </div>
