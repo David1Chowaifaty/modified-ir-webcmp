@@ -219,14 +219,14 @@ export class IrRoomNights {
   }
   render() {
     if (!this.bookingEvent) {
-      return <p>Loading</p>;
+      return <p>{this.defaultTexts.entries.Lcz_Loading}</p>;
     }
     return (
       <Host>
         <div class="card position-sticky mb-0 shadow-none p-0 ">
           <div class="d-flex mt-2 align-items-center justify-content-between ">
             <h3 class="card-title text-left pb-1 font-medium-2 px-2">
-              Adding Room Nights to {this.selectedRoom?.roomtype?.name} {(this.selectedRoom?.unit as IUnit).name}
+            {this.defaultTexts.entries.Lcz_AddingRoomNightsTo} {this.selectedRoom?.roomtype?.name} {(this.selectedRoom?.unit as IUnit).name}
             </h3>
             <button type="button" class="close close-icon" onClick={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}>
               <ir-icon icon="ft-x" class={'m-0'}></ir-icon>
@@ -234,10 +234,10 @@ export class IrRoomNights {
           </div>
         </div>
         <section class={'text-left px-2'}>
-          <p>Booking# {this.bookingNumber}</p>
+          <p>{`${this.defaultTexts.entries.Lcz_Booking}#`} {this.bookingNumber}</p>
           <p class={'font-weight-bold font-medium-1'}>{`${formatDate(this.bookingEvent.from_date, 'YYYY-MM-DD')} - ${formatDate(this.bookingEvent.to_date, 'YYYY-MM-DD')}`}</p>
           {this.initialLoading ? (
-            <p class={'mt-2 text-secondary'}>Checking Room Availability</p>
+            <p class={'mt-2 text-secondary'}>{this.defaultTexts.entries.Lcz_CheckingRoomAvailability}</p>
           ) : (
             <Fragment>
               <p class={'font-medium-1 mb-0'}>

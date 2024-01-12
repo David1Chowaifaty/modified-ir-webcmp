@@ -659,6 +659,10 @@ export interface IrGeneralSettingsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrGeneralSettingsElement;
 }
+export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrGuestInfoElement;
+}
 export interface IrIconCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrIconElement;
@@ -1291,7 +1295,18 @@ declare global {
         prototype: HTMLIrGeneralSettingsElement;
         new (): HTMLIrGeneralSettingsElement;
     };
+    interface HTMLIrGuestInfoElementEventMap {
+        "closeSideBar": null;
+    }
     interface HTMLIrGuestInfoElement extends Components.IrGuestInfo, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrGuestInfoElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoElement, ev: IrGuestInfoCustomEvent<HTMLIrGuestInfoElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrGuestInfoElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoElement, ev: IrGuestInfoCustomEvent<HTMLIrGuestInfoElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrGuestInfoElement: {
         prototype: HTMLIrGuestInfoElement;
@@ -2048,6 +2063,7 @@ declare namespace LocalJSX {
         "defaultTexts"?: Languages;
         "email"?: string;
         "language"?: string;
+        "onCloseSideBar"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
     }

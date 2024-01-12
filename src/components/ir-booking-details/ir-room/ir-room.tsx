@@ -45,6 +45,7 @@ export class IrRoom {
     if (this.bookingEvent) {
       this.item = this.bookingEvent.rooms[this.bookingIndex];
     }
+    //console.log("item",this.item)
   }
   @Watch('bookingEvent')
   handleBookingEventChange() {
@@ -209,18 +210,7 @@ export class IrRoom {
           </div>
           <div>
             <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
-            {this.item.rateplan.selected_variation.adult_nbr > 0 && (
-              <span>
-                {' '}
-                {this.item.rateplan.selected_variation.adult_nbr} {this.item.rateplan.selected_variation.adult_nbr > 1 ? 'Adults' : 'Adult'}
-              </span>
-            )}
-            {this.item.rateplan.selected_variation.child_nbr > 0 && (
-              <span>
-                {' '}
-                {this.item.rateplan.selected_variation.child_nbr} {this.item.rateplan.selected_variation.child_nbr > 1 ? 'Children' : 'Child'}
-              </span>
-            )}
+            {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>}
           </div>
           <div class="d-flex align-items-center">
             <span class=" mr-1">
@@ -233,7 +223,7 @@ export class IrRoom {
           <div class="collapse" id={`roomCollapse-${this.item.identifier}`}>
             <div class="d-flex">
               <div class=" sm-padding-top">
-                <strong class="sm-padding-right">Breakdown:</strong>
+                <strong class="sm-padding-right">{`${this.defaultTexts.entries.Lcz_Breakdown}:`}</strong>
               </div>
               <div class={'flex-fill'}>
                 <table>
@@ -249,11 +239,23 @@ export class IrRoom {
             <div innerHTML={this.item.rateplan.cancelation || ''}></div>
             {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
-            <ir-label label="Meal Plan:" value={this.mealCodeName}></ir-label>
-            <ir-label label="Special rate:" value="Non-refundable"></ir-label>
+            <ir-label label={`${this.defaultTexts.entries.Lcz_MealPlan}:`} value={this.mealCodeName}></ir-label>
+            <ir-label label={`${this.defaultTexts.entries.Lcz_SpecialRate}:`} value="Non-refundable"></ir-label>
           </div>
         </div>
-        <ir-modal onConfirmModal={this.deleteRoom.bind(this)}></ir-modal>
+        <ir-modal
+          onConfirmModal={this.deleteRoom.bind(this)}
+          iconAvailable={true}
+          icon="ft-alert-triangle danger h1"
+          leftBtnText={this.defaultTexts.entries.Lcz_Cancel}
+          rightBtnText={this.defaultTexts.entries.Lcz_Delete}
+          leftBtnColor="secondary"
+          rightBtnColor="danger"
+          modalTitle={this.defaultTexts.entries.Lcz_Confirmation}
+          modalBody={`${this.defaultTexts.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${(this.item.unit as IUnit).name} ${
+            this.defaultTexts.entries.Lcz_FromThisBooking
+          }`}
+        ></ir-modal>
       </div>
     );
   }
