@@ -110,7 +110,6 @@ graph TD;
   ir-payment-details --> ir-modal
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
-  ir-guest-info --> ir-checkbox
   ir-guest-info --> ir-button
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```

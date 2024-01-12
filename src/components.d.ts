@@ -355,6 +355,7 @@ export namespace Components {
         "mode": string;
     }
     interface IrGuestInfo {
+        "booking_nbr": string;
         "defaultTexts": Languages;
         "email": string;
         "language": string;
@@ -2061,6 +2062,7 @@ declare namespace LocalJSX {
         "onSendToParent"?: (event: IrGeneralSettingsCustomEvent<any>) => void;
     }
     interface IrGuestInfo {
+        "booking_nbr"?: string;
         "defaultTexts"?: Languages;
         "email"?: string;
         "language"?: string;

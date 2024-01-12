@@ -64,23 +64,23 @@ export class BookingService {
         const { data } = await axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
-        }    
-        return   data.My_Result;
+        }
+        return data.My_Result;
       }
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
   }
-  public async editExposedGuest(guest: Guest): Promise<any> {
+  public async editExposedGuest(guest: Guest, book_nbr: string): Promise<any> {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token !== null) {
-        const { data } = await axios.post(`/Edit_Exposed_Guest?Ticket=${token}`,  guest );
+        const { data } = await axios.post(`/Edit_Exposed_Guest?Ticket=${token}`, { ...guest, book_nbr });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
-        }    
-        return   data.My_Result;
+        }
+        return data.My_Result;
       }
     } catch (error) {
       console.log(error);

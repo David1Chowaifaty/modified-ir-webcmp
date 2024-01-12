@@ -17,10 +17,10 @@
 
 ## Events
 
-| Event                     | Description | Type               |
-| ------------------------- | ----------- | ------------------ |
-| `creditCardPressHandler`  |             | `CustomEvent<any>` |
-| `handlePaymentItemChange` |             | `CustomEvent<any>` |
+| Event                    | Description | Type                |
+| ------------------------ | ----------- | ------------------- |
+| `creditCardPressHandler` |             | `CustomEvent<any>`  |
+| `resetBookingData`       |             | `CustomEvent<null>` |
 
 
 ## Dependencies

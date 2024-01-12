@@ -14,6 +14,7 @@ export class GuestInfo {
   @Prop() defaultTexts: Languages;
   @Prop() language: string;
   @Prop() email: string;
+  @Prop() booking_nbr: string;
 
   @State() countries: ICountry[];
   @State() submit: boolean = false;
@@ -42,7 +43,7 @@ export class GuestInfo {
   async editGuest() {
     try {
       this.isLoading = true;
-      await this.bookingService.editExposedGuest(this.guest);
+      await this.bookingService.editExposedGuest(this.guest, this.booking_nbr);
       this.closeSideBar.emit(null);
     } catch (error) {
       console.log(error);

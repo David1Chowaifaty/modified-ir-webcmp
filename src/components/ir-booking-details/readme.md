@@ -90,7 +90,6 @@ graph TD;
   ir-sidebar --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
-  ir-guest-info --> ir-checkbox
   ir-guest-info --> ir-button
   igl-book-property --> igl-block-dates-view
   igl-book-property --> igl-booking-overview-page

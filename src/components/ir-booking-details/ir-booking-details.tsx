@@ -385,6 +385,7 @@ export class IrBookingDetails {
         }}
       >
         <ir-guest-info
+          booking_nbr={this.bookingNumber}
           defaultTexts={this.defaultTexts}
           email={this.bookingData?.guest.email}
           setupDataCountries={this.setupDataCountries}

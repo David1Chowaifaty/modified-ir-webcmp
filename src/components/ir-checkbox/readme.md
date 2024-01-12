@@ -29,13 +29,11 @@
 ### Used by
 
  - [ir-checkboxes](../ir-checkboxes)
- - [ir-guest-info](../ir-guest-info)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-checkboxes --> ir-checkbox
-  ir-guest-info --> ir-checkbox
   style ir-checkbox fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
