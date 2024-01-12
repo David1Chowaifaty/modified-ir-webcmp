@@ -110,7 +110,7 @@ export class IrBookingDetails {
       ]);
 
       this.defaultTexts = languageTexts;
-      //console.log(this.defaultTexts)
+      console.log(this.defaultTexts)
       this.countryNodeList = countriesList;
 
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
@@ -281,7 +281,7 @@ export class IrBookingDetails {
       <div class="fluid-container pt-1 mr-2 ml-2">
         <div class="row">
           <div class="col-lg-7 col-md-12 d-flex justify-content-start align-items-end">
-            <div class="font-size-large sm-padding-right">{`Booking#${this.bookingNumber}`}</div>
+            <div class="font-size-large sm-padding-right">{`${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`}</div>
             <div>
               {/* format date */}@ {_formatDate(this.bookingData.booked_on.date)} {/* format time */}
               {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
@@ -310,10 +310,10 @@ export class IrBookingDetails {
                   value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`}
                   iconShown={true}
                 ></ir-label>
-                <ir-label label="Phone:" value={this.bookingData.guest.mobile}></ir-label>
-                <ir-label label="Email:" value={this.bookingData.guest.email}></ir-label>
+                <ir-label label={`${this.defaultTexts.entries.Lcz_Phone}:`} value={this.bookingData.guest.mobile}></ir-label>
+                <ir-label label={`${this.defaultTexts.entries.Lcz_Email}:`} value={this.bookingData.guest.email}></ir-label>
                 {/* <ir-label label="Alternate Email:" value={this.bookingData.guest.email}></ir-label> */}
-                <ir-label label="Address:" value={this.bookingData.guest.address}></ir-label>
+                <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>
                 <ir-label label={`${this.defaultTexts.entries.Lcz_ArrivalTime}:`} value={this.bookingData.arrival.description}></ir-label>
                 <ir-label label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
               </div>
@@ -383,6 +383,7 @@ export class IrBookingDetails {
           setupDataCountries={this.setupDataCountries}
           setupDataCountriesCode={this.setupDataCountriesCode}
           language={this.language}
+          onCloseSideBar={()=>this.isSidebarOpen=false}
         ></ir-guest-info>
       </ir-sidebar>,
       <Fragment>
