@@ -15,6 +15,8 @@ import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } fr
 // import { CalendarDataDetails } from '../../models/calendarData';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import { Languages } from '@/components';
+import { store } from '@/redux/store';
+import { addLanguages } from '@/redux/features/languages';
 
 @Component({
   tag: 'igloo-calendar',
@@ -104,6 +106,7 @@ export class IglooCalendar {
       ]);
       this.defaultTexts = defaultTexts as Languages;
       console.log('languages', this.defaultTexts);
+      store.dispatch(addLanguages({ ...defaultTexts } as Languages));
       this.setRoomsData(roomResp);
       this.countryNodeList = countryNodeList;
       this.setUpCalendarData(roomResp, bookingResp);

@@ -6,6 +6,8 @@ import { IReallocationPayload, IRoomNightsData } from '@/models/property-types';
 import { store } from '@/redux/store';
 import moment from 'moment';
 import { IToast } from '@components/ir-toast/toast';
+import { Languages } from '@/components';
+import { Unsubscribe } from '@reduxjs/toolkit';
 
 @Component({
   tag: 'igl-booking-event',
@@ -32,11 +34,14 @@ export class IglBookingEvent {
 
   @State() renderElement: boolean = false;
   @State() position: { [key: string]: any };
-  @State() defaultText;
+  @State() defaultText: Languages;
   @State() isShrinking: boolean | null = null;
+
+  private unsubscribe: Unsubscribe;
 
   dayWidth: number = 0;
   eventSpace: number = 8;
+
   vertSpace: number = 10;
 
   /* show bubble */
@@ -70,9 +75,14 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
+    this.updateFromStore();
+    this.unsubscribe = store.subscribe(() => this.updateFromStore());
     this.isBlockedUnit = isBlockUnit(this.bookingEvent.STATUS_CODE);
     window.addEventListener('click', this.handleClickOutsideBind);
-    this.defaultText = store.getState().languages;
+  }
+  updateFromStore() {
+    const state = store.getState();
+    this.defaultText = state.languages;
   }
 
   async fetchAndAssignBookingData() {
@@ -83,7 +93,6 @@ export class IglBookingEvent {
         data.rooms = dataForTransformation;
         this.bookingEvent = { ...this.bookingEvent, ...transformNewBooking(data)[0] };
         this.showEventInfo(true);
-        console.log(this.bookingEvent);
       }
     } catch (error) {
       console.error(error);
@@ -112,6 +121,7 @@ export class IglBookingEvent {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
+    this.unsubscribe();
   }
 
   @Listen('click', { target: 'window' })
@@ -229,7 +239,7 @@ export class IglBookingEvent {
         const targetRT = findRoomType(toRoomId);
         if (initialRT === targetRT) {
           console.log('same rt');
-          return { description: '', status: '200' };
+          return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         } else {
           return {
             description: this.defaultText.entries.Lcz_SameRatesWillBeKept,
