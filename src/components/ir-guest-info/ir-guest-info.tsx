@@ -156,14 +156,20 @@ export class GuestInfo {
                 />
               </div>
             </div>
-            <div class={'col-3 p-0'}>
-              <ir-checkbox
-                onCheckboxChange={e => this.handleInputChange('subscribe_to_news_letter', e.detail.checked)}
-                label={this.defaultTexts.entries.Lcz_Newsletter}
-                name="newsletter"
-                checked={this.guest.subscribe_to_news_letter}
-              ></ir-checkbox>
+            <div class={'p-0 m-0'}>
+              <label class={`check-container  m-0 p-0`}>
+                <input
+                  class={'m-0 p-0'}
+                  type="checkbox"
+                  name="newsletter"
+                  checked={this.guest.subscribe_to_news_letter}
+                  onInput={e => this.handleInputChange('subscribe_to_news_letter', (e.target as HTMLInputElement).checked)}
+                />
+                <span class="checkmark m-0 p-0"></span>
+                <span class={'m-0 p-0 '}>{this.defaultTexts.entries.Lcz_Newsletter}</span>
+              </label>
             </div>
+
             <hr />
             <ir-button text={this.defaultTexts.entries.Lcz_Save} onClickHanlder={this.editGuest.bind(this)} color="btn-primary"></ir-button>
           </div>
