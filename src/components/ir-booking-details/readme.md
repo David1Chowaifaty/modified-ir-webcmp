@@ -27,7 +27,7 @@
 | `languageAbreviation`     | `language-abreviation`      |             | `string`         | `''`        |
 | `paymentDetailsUrl`       | `payment-details-url`       |             | `string`         | `''`        |
 | `paymentExceptionMessage` | `payment-exception-message` |             | `string`         | `''`        |
-| `propertyid`              | `propertyid`                |             | `any`            | `undefined` |
+| `propertyid`              | `propertyid`                |             | `number`         | `undefined` |
 | `setupDataCountries`      | --                          |             | `selectOption[]` | `null`      |
 | `setupDataCountriesCode`  | --                          |             | `selectOption[]` | `null`      |
 | `statusCodes`             | `status-codes`              |             | `any`            | `[]`        |
@@ -81,13 +81,15 @@ graph TD;
   ir-room --> ir-icon
   ir-room --> ir-button
   ir-room --> ir-label
-  ir-payment-details --> ir-icon
-  ir-payment-details --> ir-modal
+  ir-room --> ir-modal
   ir-modal --> ir-icon
   ir-modal --> ir-button
+  ir-payment-details --> ir-date-picker
+  ir-payment-details --> ir-icon
+  ir-payment-details --> ir-modal
   ir-sidebar --> ir-icon
-  ir-guest-info --> ir-select
   ir-guest-info --> ir-input-text
+  ir-guest-info --> ir-select
   ir-guest-info --> ir-checkbox
   ir-guest-info --> ir-button
   igl-book-property --> igl-block-dates-view

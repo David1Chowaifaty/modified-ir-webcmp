@@ -14,6 +14,7 @@
 | `dateDifference`  | `date-difference`  |             | `number`                  | `undefined`      |
 | `defaultData`     | --                 |             | `Map<string, any>`        | `undefined`      |
 | `defaultTexts`    | `default-texts`    |             | `any`                     | `undefined`      |
+| `initialRoomIds`  | `initial-room-ids` |             | `any`                     | `undefined`      |
 | `isBookDisabled`  | `is-book-disabled` |             | `boolean`                 | `undefined`      |
 | `ratePricingMode` | --                 |             | `any[]`                   | `[]`             |
 | `roomInfoId`      | `room-info-id`     |             | `number`                  | `null`           |

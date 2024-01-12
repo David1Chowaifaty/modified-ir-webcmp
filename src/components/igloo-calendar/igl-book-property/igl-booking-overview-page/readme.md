@@ -17,6 +17,7 @@
 | `dateRangeData`          | `date-range-data`           |             | `any`                                                                      | `undefined` |
 | `defaultDaterange`       | --                          |             | `{ from_date: string; to_date: string; }`                                  | `undefined` |
 | `eventType`              | `event-type`                |             | `string`                                                                   | `undefined` |
+| `initialRoomIds`         | `initial-room-ids`          |             | `any`                                                                      | `undefined` |
 | `message`                | `message`                   |             | `string`                                                                   | `undefined` |
 | `propertyId`             | `property-id`               |             | `number`                                                                   | `undefined` |
 | `ratePricingMode`        | `rate-pricing-mode`         |             | `any`                                                                      | `undefined` |

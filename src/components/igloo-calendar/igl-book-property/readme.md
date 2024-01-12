@@ -26,6 +26,7 @@
 | `blockedCreated`     |             | `CustomEvent<RoomBlockDetails>`                               |
 | `bookingCreated`     |             | `CustomEvent<{ pool?: string; data: RoomBookingDetails[]; }>` |
 | `closeBookingWindow` |             | `CustomEvent<{ [key: string]: any; }>`                        |
+| `editFinished`       |             | `CustomEvent<null>`                                           |
 
 
 ## Dependencies

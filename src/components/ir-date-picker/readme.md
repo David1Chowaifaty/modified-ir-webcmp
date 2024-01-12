@@ -43,12 +43,14 @@
 
  - [igl-cal-header](../igloo-calendar/igl-cal-header)
  - [igl-date-range](../igloo-calendar/igl-date-range)
+ - [ir-payment-details](../ir-booking-details/ir-payment-details)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-cal-header --> ir-date-picker
   igl-date-range --> ir-date-picker
+  ir-payment-details --> ir-date-picker
   style ir-date-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
