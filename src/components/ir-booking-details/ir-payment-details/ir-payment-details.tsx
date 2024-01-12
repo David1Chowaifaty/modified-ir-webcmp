@@ -37,8 +37,7 @@ export class IrPaymentDetails {
         this.paymentDetailsUrl = await new BookingService().getPCICardInfoURL(this.bookingDetails.booking_nbr);
       }
       this.initializeItemToBeAdded()
-      this.paymentService.AddPayment(this.itemToBeAdded,this.bookingDetails.booking_nbr)
-      this.paymentService.CancelPayment(this.itemToBeAdded.id)
+     
     } catch (error) {}
   }
   initializeItemToBeAdded(){
@@ -52,7 +51,7 @@ export class IrPaymentDetails {
     };
   }
 
-  _handleSave() {
+ async  _handleSave() {
     // emit the item to be added
     // if (this.item.My_Payment == null) {
     //   this.item.My_Payment = [];
@@ -63,13 +62,16 @@ export class IrPaymentDetails {
     // this.handlePaymentItemChange.emit(this.item.My_Payment);
     console.log('item to be added :', this.itemToBeAdded);
     this.initializeItemToBeAdded()
+   await  this.paymentService.AddPayment(this.itemToBeAdded,this.bookingDetails.booking_nbr)
+   
   }
   handlePaymentInputChange(key: keyof IPayment, value: any) {
     this.itemToBeAdded = { ...this.itemToBeAdded, [key]: value };
   }
   @Listen('confirmModal')
-  handleConfirmModal(e) {
+  async handleConfirmModal(e) {
     // Remove the item from the array
+    await this.paymentService.CancelPayment(this.itemToBeAdded.id)
     const newPaymentArray = this.item.My_Payment.filter((item: any) => item.PAYMENT_ID !== e.detail.PAYMENT_ID);
     this.item.My_Payment = newPaymentArray;
     this.confirmModal = !this.confirmModal;
@@ -163,7 +165,7 @@ export class IrPaymentDetails {
               rowMode === 'add'
                 ? () => {
                     this.newTableRow = false;
-                    this.itemToBeAdded = { id: 0, date: '', amount: 0, currency: undefined, designation: '', reference: '' };
+                    this.initializeItemToBeAdded()
                   }
                 : () => {
                     this.toBeDeletedItem = item;
@@ -315,10 +317,10 @@ export class IrPaymentDetails {
         modalBody="If deleted it will be permnantly lost!"
         iconAvailable={true}
         icon="ft-alert-triangle danger h1"
-        leftBtnText="Delete"
-        rightBtnText="Cancel"
-        leftBtnColor="danger"
-        rightBtnColor="primary"
+        leftBtnText="Cancel"
+        rightBtnText="Delete"
+        leftBtnColor="secondary"
+        rightBtnColor="danger"
       ></ir-modal>,
     ];
   }
