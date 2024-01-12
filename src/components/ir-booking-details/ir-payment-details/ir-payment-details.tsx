@@ -180,7 +180,7 @@ export class IrPaymentDetails {
   }
 
   bookingGuarantee() {
-    if (!this.bookingDetails?.guest?.cci) {
+    if (this.bookingDetails.is_direct && !this.bookingDetails.guest.cci) {
       return null;
     }
     return (
@@ -196,14 +196,11 @@ export class IrPaymentDetails {
             aria-controls="myCollapse"
             class="sm-padding-right pointer"
             onClick={() => {
-              if (!this.item.IS_DIRECT) {
-                this.creditCardPressHandler.emit(this.item.BOOK_NBR);
-              }
               this.collapsedGuarantee = !this.collapsedGuarantee;
             }}
           ></ir-icon>
         </div>
-        <div class="collapse guarrantee">
+        <div class="collapse guarrantee ">
           {this.bookingDetails.is_direct ? (
             [
               <div>
