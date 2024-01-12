@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, h, Prop, State, Event, EventEmitter, Fragment } from '@stencil/core';
 import { _formatAmount, _formatDate } from '../functions';
 import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
@@ -7,7 +7,9 @@ import { PaymentService } from '@/services/payment.service';
 import { Languages } from '@/components';
 
 @Component({
+  styleUrl: 'ir-payment-details.css',
   tag: 'ir-payment-details',
+  scoped: true,
 })
 export class IrPaymentDetails {
   @Prop({ mutable: true, reflect: true }) item: any;
@@ -26,7 +28,7 @@ export class IrPaymentDetails {
   @State() paymentDetailsUrl: string = '';
   @Prop() paymentExceptionMessage: string = '';
 
-  @Event({ bubbles: true }) handlePaymentItemChange: EventEmitter<any>;
+  @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
   @Event({ bubbles: true }) creditCardPressHandler: EventEmitter<any>;
 
   private itemToBeAdded: IPayment;
@@ -56,17 +58,13 @@ export class IrPaymentDetails {
   }
 
   async _handleSave() {
-    // emit the item to be added
-    // if (this.item.My_Payment == null) {
-    //   this.item.My_Payment = [];
-    // }
-    // this.itemToBeAdded.id = this.item.My_Payment[this.item.My_Payment.length - 1]?.PAYMENT_ID + 1 || 1;
-    // this.item.My_Payment = [...this.item.My_Payment, this.itemToBeAdded];
-    // console.log(this.item);
-    // this.handlePaymentItemChange.emit(this.item.My_Payment);
-    console.log('item to be added :', this.itemToBeAdded);
-    await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
-    this.initializeItemToBeAdded();
+    try {
+      await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
+      this.initializeItemToBeAdded();
+      this.resetBookingData.emit(null);
+    } catch (error) {
+      console.log(error);
+    }
   }
   handlePaymentInputChange(key: keyof IPayment, value: any) {
     this.itemToBeAdded = { ...this.itemToBeAdded, [key]: value };
@@ -79,17 +77,12 @@ export class IrPaymentDetails {
       const newPaymentArray = this.bookingDetails.financial.payments.filter((item: IPayment) => item.id !== this.toBeDeletedItem.id);
       this.bookingDetails = { ...this.bookingDetails, financial: { ...this.bookingDetails.financial, payments: newPaymentArray } };
       this.confirmModal = !this.confirmModal;
+      this.resetBookingData.emit(null);
       //this.handlePaymentItemChange.emit(this.item.My_Payment);
       this.toBeDeletedItem = null;
     } catch (error) {
       console.log(error);
     }
-  }
-
-  @Watch('paymentDetailsUrl')
-  wandler() {
-    console.log('Changed');
-    this.flag = !this.flag;
   }
 
   handleDateChange(
@@ -102,79 +95,87 @@ export class IrPaymentDetails {
   }
   _renderTableRow(item: IPayment, rowMode: 'add' | 'normal' = 'normal') {
     return (
-      <div class="row m-0">
-        <div class="col-9 p-0">
-          <div class="row m-0">
-            <div class="col-4  border-right-light p-0 border-bottom-light border-2">
-              {rowMode === 'normal' ? (
-                <span class="sm-padding-left">{_formatDate(item.date)}</span>
-              ) : (
-                <ir-date-picker singleDatePicker autoApply onDateChanged={this.handleDateChange.bind(this)}></ir-date-picker>
-              )}
-            </div>
-            <div class="col-4 border-right-light d-flex p-0 justify-content-end border-bottom-light border-2 sm-padding-right">
-              {rowMode === 'normal' ? (
-                <span class="sm-padding-right">${item.amount}</span>
-              ) : (
-                <input class="border-0 w-100" onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value)} type="number"></input>
-              )}
-            </div>
-            <div class="col-4 border-right-light p-0 border-bottom-light border-2 sm-padding-left">
-              {rowMode === 'normal' ? (
-                <span class="sm-padding-left">{item.designation}</span>
-              ) : (
-                <input class="border-0 w-100" onInput={event => this.handlePaymentInputChange('designation', (event.target as HTMLInputElement).value)} type="text"></input>
-              )}
-            </div>
-            <div class="col-12 border-right-light p-0 border-bottom-light border-2 sm-padding-left">
-              {rowMode === 'normal' ? (
-                <span class="sm-padding-left">{item.reference}</span>
-              ) : (
-                <input
-                  class="border-0 w-100"
-                  onKeyPress={event => {
-                    if (event.key === 'Enter') {
+      <Fragment>
+        <tr>
+          <td class={'border border-light border-bottom-0 text-center'}>
+            {rowMode === 'normal' ? (
+              <span class="sm-padding-left">{_formatDate(item.date)}</span>
+            ) : (
+              <ir-date-picker singleDatePicker autoApply onDateChanged={this.handleDateChange.bind(this)}></ir-date-picker>
+            )}
+          </td>
+          <td class={'border border-light border-bottom-0 text-center '}>
+            {rowMode === 'normal' ? (
+              <span class="sm-padding-right">${item.amount}</span>
+            ) : (
+              <input
+                class="border-0  form-control py-0 m-0 w-100"
+                onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value)}
+                type="number"
+              ></input>
+            )}
+          </td>
+          <td class={'border border-light border-bottom-0 text-center'}>
+            {rowMode === 'normal' ? (
+              <span class="sm-padding-left">{item.designation}</span>
+            ) : (
+              <input
+                class="border-0 w-100 form-control py-0 m-0"
+                onInput={event => this.handlePaymentInputChange('designation', (event.target as HTMLInputElement).value)}
+                type="text"
+              ></input>
+            )}
+          </td>
+          <td rowSpan={2} class={'border border-light border-bottom-0 text-center'}>
+            <ir-icon
+              icon="ft-save color-ir-light-blue-hover h5 pointer sm-margin-right"
+              onClick={
+                rowMode === 'add'
+                  ? () => {
                       this.newTableRow = false;
                       this._handleSave();
                     }
-                  }}
-                  onInput={event => this.handlePaymentInputChange('reference', (event.target as HTMLInputElement).value)}
-                  type="text"
-                ></input>
-              )}
-            </div>
-          </div>
-        </div>
-        <div class="col-3 d-flex align-items-center justify-content-between border-right-light border-bottom-light border-2">
-          <ir-icon
-            icon="ft-save color-ir-light-blue-hover h5 pointer"
-            onClick={
-              rowMode === 'add'
-                ? () => {
+                  : () => {}
+              }
+            ></ir-icon>
+            <span> &nbsp;</span>
+            <ir-icon
+              icon="ft-trash-2 danger h5 pointer"
+              onClick={
+                rowMode === 'add'
+                  ? () => {
+                      this.newTableRow = false;
+                      this.initializeItemToBeAdded();
+                    }
+                  : () => {
+                      this.toBeDeletedItem = item;
+                      const modal: any = document.querySelector('.delete-record-modal');
+                      modal.openModal();
+                    }
+              }
+            ></ir-icon>
+          </td>
+        </tr>
+        <tr>
+          <td colSpan={3} class={'border border-light border-bottom-0 text-center'}>
+            {rowMode === 'normal' ? (
+              <span class="sm-padding-left">{item.reference}</span>
+            ) : (
+              <input
+                class="border-0 w-100  form-control py-0 m-0"
+                onKeyPress={event => {
+                  if (event.key === 'Enter') {
                     this.newTableRow = false;
                     this._handleSave();
                   }
-                : () => {}
-            }
-          ></ir-icon>
-
-          <ir-icon
-            icon="ft-trash-2 danger h5 pointer"
-            onClick={
-              rowMode === 'add'
-                ? () => {
-                    this.newTableRow = false;
-                    this.initializeItemToBeAdded();
-                  }
-                : () => {
-                    this.toBeDeletedItem = item;
-                    const modal: any = document.querySelector('.delete-record-modal');
-                    modal.openModal();
-                  }
-            }
-          ></ir-icon>
-        </div>
-      </div>
+                }}
+                onInput={event => this.handlePaymentInputChange('reference', (event.target as HTMLInputElement).value)}
+                type="text"
+              ></input>
+            )}
+          </td>
+        </tr>
+      </Fragment>
     );
   }
 
@@ -229,15 +230,6 @@ export class IrPaymentDetails {
 
   _renderDueDate(item: IDueDate) {
     return (
-      // <div class="fluid-container">
-      //   <div class="row mb-1">
-      //     <div class="col-xl-3 col-lg-4 col-md-2 col-sm-3 col-4 pr-0">{_formatDate(item.date)}</div>
-      //     <div class="col-1 d-flex px-0 justify-content-end">{_formatAmount(item.amount, this.bookingDetails.currency.code)}</div>
-      //     <div class="col-xl-3 col-lg-4 col-md-3 col-sm-3 col-4">{item.description}</div>
-
-      //     <span class="ml-1 col-12 font-size-small collapse roomName">{item.room}</span>
-      //   </div>
-      // </div>
       <tr>
         <td class={'pr-1'}>{_formatDate(item.date)}</td>
         <td class={'pr-1'}>{_formatAmount(item.amount, this.bookingDetails.currency.code)}</td>
@@ -281,32 +273,31 @@ export class IrPaymentDetails {
               <table>{this.bookingDetails.financial.due_dates?.map(item => this._renderDueDate(item))}</table>
             </div>
           </div>
-          <div class="mt-2">
+          <div class="mt-2 d-flex  flex-column rounded">
             <strong>{this.defaultTexts.entries.Lcz_Payments}</strong>
-            <div class="fluid-container border-top-light border-2 border-left-light font-size-small">
-              <div class="row m-0">
-                <div class="col-3 font-weight-bold border-right-light border-bottom-light border-2 p-0">
-                  <span class="sm-padding-left">{this.defaultTexts.entries.Lcz_Dates}</span>
-                </div>
-                <div class="col-3 font-weight-bold border-right-light border-bottom-light border-2 p-0">
-                  <span class="sm-padding-left">{this.defaultTexts.entries.Lcz_Amount}</span>
-                </div>
-                <div class="col-3 font-weight-bold border-right-light border-bottom-light border-2 p-0 sm-padding-left">
-                  <span class="sm-padding-left">{this.defaultTexts.entries.Lcz_Designation}</span>
-                </div>
-                <div class="col-3 text-center border-right-light p-0 border-bottom-light border-2">
-                  <ir-icon
-                    id="add-payment"
-                    icon="ft-plus font-weight-bold color-ir-light-blue-hover pointer p-0"
-                    onClick={() => {
-                      this.newTableRow = true;
-                    }}
-                  ></ir-icon>
-                </div>
-              </div>
-              {this.bookingDetails.financial.payments?.map((item: any) => this._renderTableRow(item))}
-              {this.newTableRow ? this._renderTableRow(null, 'add') : null}
-            </div>
+            <table class="mt-1">
+              <thead>
+                <tr>
+                  <th class={'border border-light border-bottom-0 text-center payment_date'}>{this.defaultTexts.entries.Lcz_Dates}</th>
+                  <th class={'border border-light border-bottom-0 text-center w-60'}>{this.defaultTexts.entries.Lcz_Amount}</th>
+                  <th class={'border border-light border-bottom-0 text-center'}>{this.defaultTexts.entries.Lcz_Designation}</th>
+                  <th class={'border border-light border-bottom-0 text-center action_icons'}>
+                    <span class={'sr-only'}>payment actions</span>
+                    <ir-icon
+                      id="add-payment"
+                      icon="ft-plus font-weight-bold color-ir-light-blue-hover pointer p-0"
+                      onClick={() => {
+                        this.newTableRow = true;
+                      }}
+                    ></ir-icon>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.bookingDetails.financial.payments?.map((item: any) => this._renderTableRow(item))}
+                {this.newTableRow ? this._renderTableRow(null, 'add') : null}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>,

@@ -759,7 +759,7 @@ declare global {
         "closeBookingWindow": { [key: string]: any };
         "bookingCreated": { pool?: string; data: RoomBookingDetails[] };
         "blockedCreated": RoomBlockDetails;
-        "editFinished": null;
+        "resetBookingData": null;
     }
     interface HTMLIglBookPropertyElement extends Components.IglBookProperty, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyElement, ev: IglBookPropertyCustomEvent<HTMLIglBookPropertyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1449,7 +1449,7 @@ declare global {
         new (): HTMLIrModalElement;
     };
     interface HTMLIrPaymentDetailsElementEventMap {
-        "handlePaymentItemChange": any;
+        "resetBookingData": null;
         "creditCardPressHandler": any;
     }
     interface HTMLIrPaymentDetailsElement extends Components.IrPaymentDetails, HTMLStencilElement {
@@ -1683,7 +1683,7 @@ declare namespace LocalJSX {
         "onBlockedCreated"?: (event: IglBookPropertyCustomEvent<RoomBlockDetails>) => void;
         "onBookingCreated"?: (event: IglBookPropertyCustomEvent<{ pool?: string; data: RoomBookingDetails[] }>) => void;
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
-        "onEditFinished"?: (event: IglBookPropertyCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IglBookPropertyCustomEvent<null>) => void;
         "propertyid"?: number;
         "showPaymentDetails"?: boolean;
     }
@@ -2159,7 +2159,7 @@ declare namespace LocalJSX {
         "defaultTexts"?: Languages;
         "item"?: any;
         "onCreditCardPressHandler"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
-        "onHandlePaymentItemChange"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
+        "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "paymentExceptionMessage"?: string;
     }
     interface IrRoom {

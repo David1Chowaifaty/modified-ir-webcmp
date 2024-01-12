@@ -53,7 +53,7 @@ export class IglBookProperty {
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
-  @Event() editFinished: EventEmitter<null>;
+  @Event() resetBookingData: EventEmitter<null>;
   handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       this.closeWindow();
@@ -377,7 +377,7 @@ export class IglBookProperty {
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
       await this.bookingService.bookUser(...serviceParams);
       if (this.isEventType('EDIT_BOOKING')) {
-        this.editFinished.emit(null);
+        this.resetBookingData.emit(null);
       }
     } catch (error) {
       // Handle error

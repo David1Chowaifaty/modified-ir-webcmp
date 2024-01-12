@@ -196,7 +196,7 @@ export class IrRoom {
         <div class="w-100">
           <div class="d-flex justify-content-between">
             <div>
-              <strong>{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName} - {this.item.rateplan.is_non_refundable ? 'Refundable' : 'Non-refundable'}{' '}
+              <strong>{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName} {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
               {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
             </div>
             <div>

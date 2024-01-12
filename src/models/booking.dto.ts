@@ -74,6 +74,7 @@ export interface Guest {
   mobile: string | null;
   subscribe_to_news_letter: boolean | null;
   cci?: ICCI | null;
+  alternative_email?: string;
 }
 export interface ICCI {
   nbr: string | number;

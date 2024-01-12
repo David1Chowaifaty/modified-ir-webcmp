@@ -110,7 +110,7 @@ export class IrBookingDetails {
       ]);
 
       this.defaultTexts = languageTexts;
-      console.log(this.defaultTexts)
+      console.log(this.defaultTexts);
       this.countryNodeList = countriesList;
 
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
@@ -251,9 +251,16 @@ export class IrBookingDetails {
   handleDeleteFinish(e: CustomEvent) {
     this.bookingData = { ...this.bookingData, rooms: this.bookingData.rooms.filter(room => room.identifier !== e.detail) };
   }
-  async handleEditFinished() {
-    const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
-    this.bookingData = { ...booking };
+  @Listen('resetBookingData')
+  async handleResetBookingData(e: CustomEvent) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    try {
+      const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
+      this.bookingData = { ...booking };
+    } catch (error) {
+      console.log(error);
+    }
   }
   render() {
     if (!this.bookingData) {
@@ -383,7 +390,7 @@ export class IrBookingDetails {
           setupDataCountries={this.setupDataCountries}
           setupDataCountriesCode={this.setupDataCountriesCode}
           language={this.language}
-          onCloseSideBar={()=>this.isSidebarOpen=false}
+          onCloseSideBar={() => (this.isSidebarOpen = false)}
         ></ir-guest-info>
       </ir-sidebar>,
       <Fragment>
@@ -398,7 +405,6 @@ export class IrBookingDetails {
             propertyid={this.propertyid}
             bookingData={this.bookingItem}
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
-            onEditFinished={this.handleEditFinished.bind(this)}
           ></igl-book-property>
         )}
       </Fragment>,

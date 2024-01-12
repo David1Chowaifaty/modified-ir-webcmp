@@ -1,4 +1,4 @@
-import { Component, State, h, Prop, EventEmitter,Event } from '@stencil/core';
+import { Component, State, h, Prop, EventEmitter, Event } from '@stencil/core';
 import { selectOption } from '@/common/models';
 import { Guest } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
@@ -19,7 +19,7 @@ export class GuestInfo {
   @State() submit: boolean = false;
   @State() guest: Guest | null = null;
   @State() isLoading: boolean = false;
-  @Event() closeSideBar:EventEmitter<null>
+  @Event() closeSideBar: EventEmitter<null>;
 
   private bookingService = new BookingService();
 
@@ -43,7 +43,7 @@ export class GuestInfo {
     try {
       this.isLoading = true;
       await this.bookingService.editExposedGuest(this.guest);
-      this.closeSideBar.emit(null)
+      this.closeSideBar.emit(null);
     } catch (error) {
       console.log(error);
     } finally {
@@ -52,7 +52,6 @@ export class GuestInfo {
     }
   }
   render() {
-   
     if (!this.guest) {
       return null;
     }
@@ -94,8 +93,8 @@ export class GuestInfo {
               placeholder=""
               label={this.defaultTexts.entries.Lcz_AlternativeEmail}
               name="altEmail"
-              value={this.guest.email}
-              onTextChange={e => this.handleInputChange('email', e.detail)}
+              value={this.guest.alternative_email}
+              onTextChange={e => this.handleInputChange('alternative_email', e.detail)}
             ></ir-input-text>
             {/* <ir-input-text label="Password" placeholder="" name="password" submited={this.submit} type="password" value={this.Model.password} required></ir-input-text> */}
             <ir-select
@@ -113,14 +112,26 @@ export class GuestInfo {
               firstOption={'...'}
               onSelectChange={e => this.handleInputChange('country_id', e.detail)}
             ></ir-select>
-            <ir-input-text placeholder="" label={this.defaultTexts.entries.Lcz_City} name="city" value={this.guest.city} onTextChange={e => this.handleInputChange('city', e.detail)}></ir-input-text>
-            <ir-input-text placeholder="" label={this.defaultTexts.entries.Lcz_Address} name="address" value={this.guest.address} onTextChange={e => this.handleInputChange('address', e.detail)}></ir-input-text>
+            <ir-input-text
+              placeholder=""
+              label={this.defaultTexts.entries.Lcz_City}
+              name="city"
+              value={this.guest.city}
+              onTextChange={e => this.handleInputChange('city', e.detail)}
+            ></ir-input-text>
+            <ir-input-text
+              placeholder=""
+              label={this.defaultTexts.entries.Lcz_Address}
+              name="address"
+              value={this.guest.address}
+              onTextChange={e => this.handleInputChange('address', e.detail)}
+            ></ir-input-text>
 
             <div class="form-group mr-0">
               <div class="input-group row m-0 p-0">
                 <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
                   <label class={`input-group-text  bg-light flex-grow-1 text-dark border-0 `}>
-                  {this.defaultTexts.entries.Lcz_MobilePhone}
+                    {this.defaultTexts.entries.Lcz_MobilePhone}
                     {'*'}
                   </label>
                 </div>
