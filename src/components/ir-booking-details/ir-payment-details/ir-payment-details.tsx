@@ -1,17 +1,18 @@
-import { Component, h, Prop, State, Event, EventEmitter, Listen, Watch } from '@stencil/core';
+import { Component, h, Prop, State, Event, EventEmitter, Watch } from '@stencil/core';
 import { _formatAmount, _formatDate } from '../functions';
 import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
 import { PaymentService } from '@/services/payment.service';
+import { Languages } from '@/components';
 
 @Component({
   tag: 'ir-payment-details',
 })
 export class IrPaymentDetails {
   @Prop({ mutable: true, reflect: true }) item: any;
-  @Prop() bookingDetails: Booking;
-
+  @Prop({ mutable: true }) bookingDetails: Booking;
+  @Prop() defaultTexts: Languages;
   @State() newTableRow: boolean = false;
 
   @State() collapsedPayment: boolean = false;
@@ -20,7 +21,7 @@ export class IrPaymentDetails {
   @State() flag: boolean = false;
 
   @State() confirmModal: boolean = false;
-  @State() toBeDeletedItem: any = {};
+  @State() toBeDeletedItem: IPayment;
 
   @State() paymentDetailsUrl: string = '';
   @Prop() paymentExceptionMessage: string = '';
@@ -28,22 +29,25 @@ export class IrPaymentDetails {
   @Event({ bubbles: true }) handlePaymentItemChange: EventEmitter<any>;
   @Event({ bubbles: true }) creditCardPressHandler: EventEmitter<any>;
 
-  private itemToBeAdded: IPayment 
-  private paymentService=new PaymentService()
+  private itemToBeAdded: IPayment;
+  private paymentService = new PaymentService();
 
   async componentWillLoad() {
     try {
       if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
         this.paymentDetailsUrl = await new BookingService().getPCICardInfoURL(this.bookingDetails.booking_nbr);
       }
-      this.initializeItemToBeAdded()
-     
-    } catch (error) {}
+      this.initializeItemToBeAdded();
+    } catch (error) {
+      if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
+        this.paymentExceptionMessage = error;
+      }
+    }
   }
-  initializeItemToBeAdded(){
-    this.itemToBeAdded= {
+  initializeItemToBeAdded() {
+    this.itemToBeAdded = {
       id: -1,
-      date: moment().format("YYYY-MM-DD"),
+      date: moment().format('YYYY-MM-DD'),
       amount: 0,
       currency: this.bookingDetails.currency,
       designation: '',
@@ -51,7 +55,7 @@ export class IrPaymentDetails {
     };
   }
 
- async  _handleSave() {
+  async _handleSave() {
     // emit the item to be added
     // if (this.item.My_Payment == null) {
     //   this.item.My_Payment = [];
@@ -61,22 +65,25 @@ export class IrPaymentDetails {
     // console.log(this.item);
     // this.handlePaymentItemChange.emit(this.item.My_Payment);
     console.log('item to be added :', this.itemToBeAdded);
-    this.initializeItemToBeAdded()
-   await  this.paymentService.AddPayment(this.itemToBeAdded,this.bookingDetails.booking_nbr)
-   
+    this.initializeItemToBeAdded();
+    await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
   }
   handlePaymentInputChange(key: keyof IPayment, value: any) {
     this.itemToBeAdded = { ...this.itemToBeAdded, [key]: value };
   }
-  @Listen('confirmModal')
-  async handleConfirmModal(e) {
-    // Remove the item from the array
-    await this.paymentService.CancelPayment(this.itemToBeAdded.id)
-    const newPaymentArray = this.item.My_Payment.filter((item: any) => item.PAYMENT_ID !== e.detail.PAYMENT_ID);
-    this.item.My_Payment = newPaymentArray;
-    this.confirmModal = !this.confirmModal;
-    this.handlePaymentItemChange.emit(this.item.My_Payment);
-    this.toBeDeletedItem = {};
+  async handleConfirmModal(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    try {
+      await this.paymentService.CancelPayment(this.toBeDeletedItem.id);
+      const newPaymentArray = this.bookingDetails.financial.payments.filter((item: IPayment) => item.id !== this.toBeDeletedItem.id);
+      this.bookingDetails = { ...this.bookingDetails, financial: { ...this.bookingDetails.financial, payments: newPaymentArray } };
+      this.confirmModal = !this.confirmModal;
+      //this.handlePaymentItemChange.emit(this.item.My_Payment);
+      this.toBeDeletedItem = null;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Watch('paymentDetailsUrl')
@@ -84,14 +91,14 @@ export class IrPaymentDetails {
     console.log('Changed');
     this.flag = !this.flag;
   }
-  
+
   handleDateChange(
     e: CustomEvent<{
       start: moment.Moment;
       end: moment.Moment;
     }>,
   ) {
-    this.handlePaymentInputChange("date",e.detail.end.format('YYYY-MM-DD'))
+    this.handlePaymentInputChange('date', e.detail.end.format('YYYY-MM-DD'));
   }
   _renderTableRow(item: IPayment, rowMode: 'add' | 'normal' = 'normal') {
     return (
@@ -109,22 +116,14 @@ export class IrPaymentDetails {
               {rowMode === 'normal' ? (
                 <span class="sm-padding-right">${item.amount}</span>
               ) : (
-                <input
-                  class="border-0 w-100"
-                  onInput={(event)=>this.handlePaymentInputChange("amount",+(event.target as HTMLInputElement).value)}
-                  type="number"
-                ></input>
+                <input class="border-0 w-100" onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value)} type="number"></input>
               )}
             </div>
             <div class="col-4 border-right-light p-0 border-bottom-light border-2 sm-padding-left">
               {rowMode === 'normal' ? (
                 <span class="sm-padding-left">{item.designation}</span>
               ) : (
-                <input
-                  class="border-0 w-100"
-                  onInput={(event)=>this.handlePaymentInputChange("designation",(event.target as HTMLInputElement).value)}
-                  type="text"
-                ></input>
+                <input class="border-0 w-100" onInput={event => this.handlePaymentInputChange('designation', (event.target as HTMLInputElement).value)} type="text"></input>
               )}
             </div>
             <div class="col-12 border-right-light p-0 border-bottom-light border-2 sm-padding-left">
@@ -139,7 +138,7 @@ export class IrPaymentDetails {
                       this._handleSave();
                     }
                   }}
-                  onInput={(event)=>this.handlePaymentInputChange("reference",(event.target as HTMLInputElement).value)}
+                  onInput={event => this.handlePaymentInputChange('reference', (event.target as HTMLInputElement).value)}
                   type="text"
                 ></input>
               )}
@@ -165,7 +164,7 @@ export class IrPaymentDetails {
               rowMode === 'add'
                 ? () => {
                     this.newTableRow = false;
-                    this.initializeItemToBeAdded()
+                    this.initializeItemToBeAdded();
                   }
                 : () => {
                     this.toBeDeletedItem = item;
@@ -186,7 +185,7 @@ export class IrPaymentDetails {
     return (
       <div>
         <div class="d-flex align-items-center">
-          <strong class="mr-1">Booking Guarantee</strong>
+          <strong class="mr-1">{this.defaultTexts.entries.Lcz_BookingGuarantee}</strong>
           <ir-icon
             id="drawer-icon"
             icon={`${this.collapsedGuarantee ? 'ft-credit-card' : 'ft-credit-card'} h2 color-ir-light-blue-hover`}
@@ -219,7 +218,7 @@ export class IrPaymentDetails {
               </div>,
             ]
           ) : this.paymentDetailsUrl ? (
-            <iframe src={this.paymentDetailsUrl} width="100%" class="iframeHeight" frameborder="0"></iframe>
+            <iframe src={this.paymentDetailsUrl} width="100%" class="iframeHeight" frameborder="0" name="payment"></iframe>
           ) : (
             <div class="text-center">{this.paymentExceptionMessage}</div>
           )}
@@ -257,14 +256,15 @@ export class IrPaymentDetails {
       <div class="card">
         <div class="p-1">
           <div class="mb-2 h4">
-            Due Balance: <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
+            {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
+            <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
           </div>
 
           {this.bookingGuarantee()}
           <div class="mt-2">
             <div>
               <div class="d-flex align-items-center">
-                <strong class="mr-1">Payment due dates</strong>
+                <strong class="mr-1">{this.defaultTexts.entries.Lcz_PaymentDueDates}</strong>
                 <ir-icon
                   id="drawer-icon"
                   icon={`${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`}
@@ -282,17 +282,17 @@ export class IrPaymentDetails {
             </div>
           </div>
           <div class="mt-2">
-            <strong>Payments</strong>
+            <strong>{this.defaultTexts.entries.Lcz_Payments}</strong>
             <div class="fluid-container border-top-light border-2 border-left-light font-size-small">
               <div class="row m-0">
                 <div class="col-3 font-weight-bold border-right-light border-bottom-light border-2 p-0">
-                  <span class="sm-padding-left">Date</span>
+                  <span class="sm-padding-left">{this.defaultTexts.entries.Lcz_Dates}</span>
                 </div>
                 <div class="col-3 font-weight-bold border-right-light border-bottom-light border-2 p-0">
-                  <span class="sm-padding-left">Amount</span>
+                  <span class="sm-padding-left">{this.defaultTexts.entries.Lcz_Amount}</span>
                 </div>
                 <div class="col-3 font-weight-bold border-right-light border-bottom-light border-2 p-0 sm-padding-left">
-                  <span class="sm-padding-left">Designation</span>
+                  <span class="sm-padding-left">{this.defaultTexts.entries.Lcz_Designation}</span>
                 </div>
                 <div class="col-3 text-center border-right-light p-0 border-bottom-light border-2">
                   <ir-icon
@@ -313,14 +313,15 @@ export class IrPaymentDetails {
       <ir-modal
         item={this.toBeDeletedItem}
         class={'delete-record-modal'}
-        modalTitle="Are you sure you want to delete this payment record?"
+        modalTitle={this.defaultTexts.entries.Lcz_Confirmation}
         modalBody="If deleted it will be permnantly lost!"
         iconAvailable={true}
         icon="ft-alert-triangle danger h1"
-        leftBtnText="Cancel"
-        rightBtnText="Delete"
+        leftBtnText={this.defaultTexts.entries.Lcz_Cancel}
+        rightBtnText={this.defaultTexts.entries.Lcz_Delete}
         leftBtnColor="secondary"
         rightBtnColor="danger"
+        onConfirmModal={this.handleConfirmModal.bind(this)}
       ></ir-modal>,
     ];
   }

@@ -165,10 +165,9 @@ export class IrBookingDetails {
     }
   }
 
-
   @Listen('editSidebar')
   handleEditSidebar() {
-    this.isSidebarOpen=true
+    this.isSidebarOpen = true;
   }
   @Listen('selectChange')
   handleSelectChange(e) {
@@ -359,19 +358,23 @@ export class IrBookingDetails {
             </div>
           </div>
           <div class="col-lg-5 col-md-12 pr-0 pl-0 pl-md-1">
-            <ir-payment-details bookingDetails={this.bookingData} item={this.bookingDetails} paymentExceptionMessage={this.paymentExceptionMessage}></ir-payment-details>
+            <ir-payment-details
+              defaultTexts={this.defaultTexts}
+              bookingDetails={this.bookingData}
+              item={this.bookingDetails}
+              paymentExceptionMessage={this.paymentExceptionMessage}
+            ></ir-payment-details>
           </div>
         </div>
       </div>,
       <ir-sidebar
-      open={this.isSidebarOpen}
+        open={this.isSidebarOpen}
         side={'right'}
         id="editGuestInfo"
         onIrSidebarToggle={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
-          this.isSidebarOpen=false
-          
+          this.isSidebarOpen = false;
         }}
       >
         <ir-guest-info

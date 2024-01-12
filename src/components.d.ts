@@ -441,6 +441,7 @@ export namespace Components {
     }
     interface IrPaymentDetails {
         "bookingDetails": Booking;
+        "defaultTexts": Languages;
         "item": any;
         "paymentExceptionMessage": string;
     }
@@ -2139,6 +2140,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
+        "defaultTexts"?: Languages;
         "item"?: any;
         "onCreditCardPressHandler"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
         "onHandlePaymentItemChange"?: (event: IrPaymentDetailsCustomEvent<any>) => void;

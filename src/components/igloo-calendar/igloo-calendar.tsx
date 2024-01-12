@@ -103,6 +103,7 @@ export class IglooCalendar {
         this.bookingService.getCountries(this.language),
       ]);
       this.defaultTexts = defaultTexts as Languages;
+      console.log('languages', this.defaultTexts);
       this.setRoomsData(roomResp);
       this.countryNodeList = countryNodeList;
       this.setUpCalendarData(roomResp, bookingResp);
