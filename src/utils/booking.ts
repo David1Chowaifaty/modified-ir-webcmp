@@ -35,6 +35,7 @@ const status: Record<string, STATUS> = {
 const bookingStatus: Record<string, STATUS> = {
   '001': 'PENDING-CONFIRMATION',
   '002': 'CONFIRMED',
+  '013': 'CHECKED-OUT',
 };
 
 export function formatName(firstName: string | null, lastName: string | null) {

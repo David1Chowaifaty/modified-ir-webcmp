@@ -86,7 +86,7 @@ export class IglBookingEvent {
 
   async fetchAndAssignBookingData() {
     try {
-      if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
+      if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
         const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
         let dataForTransformation = data.rooms.filter(d => d['assigned_units_pool'] === this.bookingEvent.ID);
         data.rooms = dataForTransformation;
@@ -104,7 +104,7 @@ export class IglBookingEvent {
         setTimeout(async () => {
           if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
-          } else if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
+          } else if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
             await this.fetchAndAssignBookingData();
           } else {
             this.showEventInfo(true);
@@ -156,7 +156,7 @@ export class IglBookingEvent {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
           if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
-          } else if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
+          } else if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
             await this.fetchAndAssignBookingData();
           }
         }
@@ -164,7 +164,7 @@ export class IglBookingEvent {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
           if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
-          } else if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
+          } else if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
             await this.fetchAndAssignBookingData();
           }
         } else {
