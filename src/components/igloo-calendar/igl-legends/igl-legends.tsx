@@ -59,15 +59,15 @@ export class IglLegends {
                   <div class="highphenLegend">{this.defaultTexts.entries.Lcz_Occupancy}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal br-s font-small-3">20</div>
+                  <div class="legendCal br-s br-bt font-small-3">20</div>
                   <div class="highphenLegend">{this.defaultTexts.entries.Lcz_TotalAvailability}</div>
                 </div>
-                <div class="legendRow align-items-center">
+                {/* <div class="legendRow align-items-center">
                   <div class="legendCal br-s br-bt font-small-2">15</div>
                   <div class="highphenLegend">
                     <div>{this.defaultTexts.entries.Lcz_OfflineAvailability}</div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

@@ -33,6 +33,7 @@ const status: Record<string, STATUS> = {
   '002': 'BLOCKED',
 };
 const bookingStatus: Record<string, STATUS> = {
+  '000': 'IN-HOUSE',
   '001': 'PENDING-CONFIRMATION',
   '002': 'CONFIRMED',
   '013': 'CHECKED-OUT',
@@ -99,12 +100,13 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
+
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
-    STATUS: bookingStatus[cell.booking?.status.code],
+    STATUS: bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : cell.booking?.status.code],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
@@ -177,7 +179,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       ARRIVAL: data.arrival,
       IS_EDITABLE: true,
       BALANCE: data.financial?.due_amount,
-      STATUS: bookingStatus[data?.status.code || '001'],
+      STATUS: bookingStatus[moment(data.from_date, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : data?.status.code || '001'],
       NAME: formatName(room.guest.first_name, room.guest.last_name),
       PHONE: data.guest.mobile ?? '',
       ENTRY_DATE: '12-12-2023',

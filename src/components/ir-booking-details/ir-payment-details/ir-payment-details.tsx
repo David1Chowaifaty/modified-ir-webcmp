@@ -101,12 +101,17 @@ export class IrPaymentDetails {
             {rowMode === 'normal' ? (
               <span class="sm-padding-left">{_formatDate(item.date)}</span>
             ) : (
-              <ir-date-picker singleDatePicker autoApply onDateChanged={this.handleDateChange.bind(this)}></ir-date-picker>
+              <ir-date-picker
+                minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
+                singleDatePicker
+                autoApply
+                onDateChanged={this.handleDateChange.bind(this)}
+              ></ir-date-picker>
             )}
           </td>
           <td class={'border border-light border-bottom-0 text-center '}>
             {rowMode === 'normal' ? (
-              <span class="sm-padding-right">${item.amount}</span>
+              <span class="sm-padding-right">${Number(item.amount).toFixed(2)}</span>
             ) : (
               <input
                 class="border-0  form-control py-0 m-0 w-100"

@@ -16,7 +16,7 @@ export class IglCalBody {
   @Prop() currency;
   @Prop() language: string;
   @Prop() countryNodeList;
-  @State() defaultTexts:any;
+  @State() defaultTexts: any;
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
 
@@ -25,19 +25,19 @@ export class IglCalBody {
   private fromRoomId: number = -1;
   private newEvent: { [key: string]: any };
   private currentDate = new Date();
-  private unsubscribe:Unsubscribe;
+  private unsubscribe: Unsubscribe;
 
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
-    this.updateFromStore()
-    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
+    this.updateFromStore();
+    this.unsubscribe = store.subscribe(() => this.updateFromStore());
   }
   updateFromStore() {
     const state = store.getState();
     this.defaultTexts = state.languages;
   }
-  disconnectedCallback(){
-    this.unsubscribe()
+  disconnectedCallback() {
+    this.unsubscribe();
   }
 
   @Listen('dragOverHighlightElement', { target: 'window' })
@@ -257,8 +257,8 @@ export class IglCalBody {
           {isCategory ? (
             <span>
               {dayInfo.rate[index].exposed_inventory.total}
-              <br />
-              {dayInfo.rate[index].exposed_inventory.offline}
+              {/* <br />
+              {dayInfo.rate[index].exposed_inventory.offline} */}
             </span>
           ) : (
             ''
