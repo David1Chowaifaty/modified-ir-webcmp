@@ -49,7 +49,6 @@ export class IglBookingEvent {
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
   private isStreatch = false;
-  private isBlockedUnit: boolean;
   /*Services */
   private eventsService = new EventsService();
   private bookingService = new BookingService();
@@ -78,7 +77,6 @@ export class IglBookingEvent {
   componentWillLoad() {
     this.updateFromStore();
     this.unsubscribe = store.subscribe(() => this.updateFromStore());
-    this.isBlockedUnit = isBlockUnit(this.bookingEvent.STATUS_CODE);
     window.addEventListener('click', this.handleClickOutsideBind);
   }
   updateFromStore() {
@@ -156,7 +154,7 @@ export class IglBookingEvent {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
-          if (this.isBlockedUnit) {
+          if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
           } else if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
             await this.fetchAndAssignBookingData();
@@ -164,7 +162,7 @@ export class IglBookingEvent {
         }
       } else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
-          if (this.isBlockedUnit) {
+          if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
           } else if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
             await this.fetchAndAssignBookingData();
@@ -172,7 +170,7 @@ export class IglBookingEvent {
         } else {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
           if (pool) {
-            if (this.isBlockedUnit) {
+            if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
               const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
               this.bookingEvent.POOL = result.My_Result.POOL;
             } else {
@@ -484,7 +482,7 @@ export class IglBookingEvent {
       } else {
         let newWidth = this.initialWidth;
         if (this.resizeSide == 'rightSide') {
-          if (distanceX > 0 && !this.bookingEvent.is_direct && !this.isBlockedUnit) {
+          if (distanceX > 0 && !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE)) {
             return;
           }
           newWidth = this.initialWidth + distanceX;
@@ -494,27 +492,14 @@ export class IglBookingEvent {
           this.isShrinking = distanceX < 0;
         } else if (this.resizeSide == 'leftSide') {
           this.isShrinking = distanceX > 0;
-          if (distanceX < 0 && !this.bookingEvent.is_direct && !this.isBlockedUnit) {
+          if (distanceX < 0 && !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE)) {
             return;
           }
-          if (this.isBlockedUnit) {
-            newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
-            let newLeft = this.initialLeft + (this.initialWidth - newWidth);
-            this.element.style.left = `${newLeft}px`;
-            this.element.style.width = `${newWidth}px`;
-          } else {
-            if (distanceX > 0 && !this.bookingEvent.is_direct) {
-              newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
-              let newLeft = this.initialLeft + (this.initialWidth - newWidth);
-              this.element.style.left = `${newLeft}px`;
-              this.element.style.width = `${newWidth}px`;
-            } else {
-              newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
-              let newLeft = this.initialLeft + (this.initialWidth - newWidth);
-              this.element.style.left = `${newLeft}px`;
-              this.element.style.width = `${newWidth}px`;
-            }
-          }
+
+          newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
+          let newLeft = this.initialLeft + (this.initialWidth - newWidth);
+          this.element.style.left = `${newLeft}px`;
+          this.element.style.width = `${newWidth}px`;
         }
         this.finalWidth = newWidth;
       }
