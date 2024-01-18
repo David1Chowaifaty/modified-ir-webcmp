@@ -65,7 +65,7 @@ export class IrRoomNights {
         const lastDay = this.selectedRoom?.days[this.selectedRoom.days.length - 1];
         let first_rate = this.selectedRoom.days[0].amount;
         if (moment(this.toDate).add(-1, 'days').isSame(moment(lastDay.date))) {
-          this.fetchBookingAvailability(this.fromDate, this.bookingEvent.from_date);
+          this.fetchBookingAvailability(this.fromDate, this.selectedRoom.days[0].date);
           const newDatesArr = getDaysArray(this.selectedRoom.days[0].date, this.fromDate);
           this.isEndDateBeforeFromDate = true;
           this.rates;
@@ -77,7 +77,7 @@ export class IrRoomNights {
             ...this.selectedRoom.days,
           ];
         } else {
-          this.fetchBookingAvailability(this.bookingEvent.to_date, this.toDate);
+          this.fetchBookingAvailability(lastDay.date, this.toDate);
           const newDatesArr = getDaysArray(lastDay.date, this.toDate);
           this.rates = [
             ...this.selectedRoom.days,
@@ -145,7 +145,7 @@ export class IrRoomNights {
           type="text"
           class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
           id={v4()}
-          value={day.amount > 0 ? day.amount : ''}
+          value={day.amount > 0 ? Number(day.amount).toFixed(2) : ''}
           placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
           onInput={event => this.handleInput(event, index)}
         />
@@ -154,7 +154,7 @@ export class IrRoomNights {
     );
   }
   renderReadOnlyField(currency_symbol: string, day: Day) {
-    return <p class="col-9 ml-1 m-0 p-0">{`${currency_symbol}${day.amount}`}</p>;
+    return <p class="col-9 ml-1 m-0 p-0">{`${currency_symbol}${Number(day.amount).toFixed(2)}`}</p>;
   }
   renderRateFields(index: number, currency_symbol: string, day: Day) {
     if (this.isEndDateBeforeFromDate) {
@@ -234,10 +234,10 @@ export class IrRoomNights {
           </div>
         </div>
         <section class={'text-left px-2'}>
-          <p>
+          <p class={"font-medium-1"}>
             {`${this.defaultTexts.entries.Lcz_Booking}#`} {this.bookingNumber}
           </p>
-          <p class={'font-weight-bold font-medium-1'}>{`${formatDate(this.bookingEvent.from_date, 'YYYY-MM-DD')} - ${formatDate(this.bookingEvent.to_date, 'YYYY-MM-DD')}`}</p>
+          <p class={'font-weight-bold font-medium-1'}>{`${formatDate(this.fromDate, 'YYYY-MM-DD')} - ${formatDate(this.toDate, 'YYYY-MM-DD')}`}</p>
           {this.initialLoading ? (
             <p class={'mt-2 text-secondary'}>{this.defaultTexts.entries['Lcz_CheckingRoomAvailability ']}</p>
           ) : (
@@ -262,7 +262,7 @@ export class IrRoomNights {
           </button>
           <button disabled={this.isButtonDisabled()} type="button" class={'btn btn-primary ml-2 full-width'} onClick={this.handleRoomConfirmation.bind(this)}>
             {this.isLoading && <i class="la la-circle-o-notch spinner mx-1"></i>}
-            {this.defaultTexts?.entries.Lcz_Confirmation}
+            {this.defaultTexts?.entries.Lcz_Confirm}
           </button>
         </section>
       </Host>
