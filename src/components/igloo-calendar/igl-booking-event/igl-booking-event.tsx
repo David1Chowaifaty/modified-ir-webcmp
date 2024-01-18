@@ -90,7 +90,8 @@ export class IglBookingEvent {
         const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
         let dataForTransformation = data.rooms.filter(d => d['assigned_units_pool'] === this.bookingEvent.ID);
         data.rooms = dataForTransformation;
-        this.bookingEvent = { ...this.bookingEvent, ...transformNewBooking(data)[0] };
+        const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...others } = transformNewBooking(data)[0];
+        this.bookingEvent = { ...this.bookingEvent, ...others };
         this.showEventInfo(true);
       }
     } catch (error) {
