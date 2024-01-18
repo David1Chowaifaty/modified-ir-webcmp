@@ -179,7 +179,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       ARRIVAL: data.arrival,
       IS_EDITABLE: true,
       BALANCE: data.financial?.due_amount,
-      STATUS: bookingStatus[moment(data.from_date, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : data?.status.code || '001'],
+      STATUS: bookingStatus[moment(room.from_date, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : data?.status.code || '001'],
       NAME: formatName(room.guest.first_name, room.guest.last_name),
       PHONE: data.guest.mobile ?? '',
       ENTRY_DATE: '12-12-2023',

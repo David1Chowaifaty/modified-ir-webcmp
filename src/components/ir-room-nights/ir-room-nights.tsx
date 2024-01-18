@@ -77,7 +77,7 @@ export class IrRoomNights {
             ...this.selectedRoom.days,
           ];
         } else {
-          this.fetchBookingAvailability(lastDay.date, this.toDate);
+          this.fetchBookingAvailability(lastDay.date, moment(this.toDate,"YYYY-MM-DD").add(-1,"days").format("YYYY-MM-DD"));
           const newDatesArr = getDaysArray(lastDay.date, this.toDate);
           this.rates = [
             ...this.selectedRoom.days,
