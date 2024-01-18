@@ -8,6 +8,7 @@ import moment from 'moment';
 import { IToast } from '@components/ir-toast/toast';
 import { Languages } from '@/components';
 import { Unsubscribe } from '@reduxjs/toolkit';
+import { EventsService } from '@/services/events.service';
 
 @Component({
   tag: 'igl-booking-event',
@@ -50,7 +51,7 @@ export class IglBookingEvent {
   private isStreatch = false;
   private isBlockedUnit: boolean;
   /*Services */
-  // private eventsService = new EventsService();
+  private eventsService = new EventsService();
   private bookingService = new BookingService();
   /* Resize props */
   resizeSide: string = '';
@@ -87,7 +88,7 @@ export class IglBookingEvent {
 
   async fetchAndAssignBookingData() {
     try {
-      if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+      if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
         const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
         let dataForTransformation = data.rooms.filter(d => d['assigned_units_pool'] === this.bookingEvent.ID);
         data.rooms = dataForTransformation;
@@ -105,7 +106,7 @@ export class IglBookingEvent {
         setTimeout(async () => {
           if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
-          } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+          } else if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
             await this.fetchAndAssignBookingData();
           } else {
             this.showEventInfo(true);
@@ -157,7 +158,7 @@ export class IglBookingEvent {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
           if (this.isBlockedUnit) {
             this.showEventInfo(true);
-          } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+          } else if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
             await this.fetchAndAssignBookingData();
           }
         }
@@ -165,27 +166,32 @@ export class IglBookingEvent {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
           if (this.isBlockedUnit) {
             this.showEventInfo(true);
-          } else if (this.bookingEvent.STATUS === 'IN-HOUSE') {
+          } else if (this.bookingEvent.STATUS === 'IN-HOUSE' || this.bookingEvent.STATUS === 'CONFIRMED') {
             await this.fetchAndAssignBookingData();
           }
         } else {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
           if (pool) {
-            if (this.isShrinking || !this.isStreatch) {
-              const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
-              let hideConfirmButton = false;
-              if (status === '400') {
-                hideConfirmButton = true;
-              }
-              this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
+            if (this.isBlockedUnit) {
+              const result = await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+              this.bookingEvent.POOL = result.My_Result.POOL;
             } else {
-              if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
-                this.animationFrameId = requestAnimationFrame(() => {
-                  this.resetBookingToInitialPosition();
-                });
-                throw new Error('Overlapping Dates');
+              if (this.isShrinking || !this.isStreatch) {
+                const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
+                let hideConfirmButton = false;
+                if (status === '400') {
+                  hideConfirmButton = true;
+                }
+                this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
               } else {
-                this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
+                if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+                  this.animationFrameId = requestAnimationFrame(() => {
+                    this.resetBookingToInitialPosition();
+                  });
+                  throw new Error('Overlapping Dates');
+                } else {
+                  this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
+                }
               }
             }
             this.isShrinking = null;
@@ -275,7 +281,7 @@ export class IglBookingEvent {
       if (event.POOL === this.bookingEvent.POOL) {
         return false;
       }
-      const eventFromTime = moment(event.FROM_DATE, 'YYYY-MM-DD');
+      const eventFromTime = moment(event.FROM_DATE, 'YYYY-MM-DD').add(1, 'days');
       const eventToTime = moment(event.TO_DATE, 'YYYY-MM-DD');
       return event.PR_ID === +toRoomId && toTime.isSameOrAfter(eventFromTime) && fromTime.isBefore(eventToTime);
     });

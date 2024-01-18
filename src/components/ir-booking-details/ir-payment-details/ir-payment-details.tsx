@@ -111,7 +111,7 @@ export class IrPaymentDetails {
               <input
                 class="border-0  form-control py-0 m-0 w-100"
                 onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value)}
-                type="number"
+                type="text"
               ></input>
             )}
           </td>

@@ -329,7 +329,7 @@ export class IglBookingEventHover {
         <div class="row p-0 m-0">
           <div class="pl-0 pr-0 col-12">
             <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_In}: </span>
-            {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')}- <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_Out} </span>
+            {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')} - <span class="font-weight-bold">{this.defaultTexts.entries.Lcz_Out}: </span>
             {formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD')}
           </div>
         </div>

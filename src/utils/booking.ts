@@ -31,7 +31,10 @@ const status: Record<string, STATUS> = {
   '004': 'BLOCKED',
   '003': 'BLOCKED-WITH-DATES',
   '002': 'BLOCKED',
-  '001': 'IN-HOUSE',
+};
+const bookingStatus: Record<string, STATUS> = {
+  '001': 'PENDING-CONFIRMATION',
+  '002': 'CONFIRMED',
 };
 
 export function formatName(firstName: string | null, lastName: string | null) {
@@ -95,13 +98,12 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  //console.log('booked cells', cell);
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
-    STATUS: status[cell.STAY_STATUS_CODE],
+    STATUS: bookingStatus[cell.booking?.status.code],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
@@ -109,6 +111,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     BOOKING_NUMBER: cell.booking.booking_nbr,
     NOTES: cell.booking.remark,
     is_direct: cell.booking.is_direct,
+    BALANCE: cell.booking.financial?.due_amount,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -163,6 +166,7 @@ function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { cod
 }
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
+  console.log(data);
   data.rooms.forEach(room => {
     bookings.push({
       ID: room['assigned_units_pool'],
@@ -171,7 +175,8 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       NO_OF_DAYS: room.days.length,
       ARRIVAL: data.arrival,
       IS_EDITABLE: true,
-      STATUS: status['001'],
+      BALANCE: data.financial?.due_amount,
+      STATUS: bookingStatus[data?.status.code || '001'],
       NAME: formatName(room.guest.first_name, room.guest.last_name),
       PHONE: data.guest.mobile ?? '',
       ENTRY_DATE: '12-12-2023',

@@ -189,15 +189,14 @@ export interface RoomDetail {
   rate: number;
   rateplans: RatePlanDetail[];
   physicalrooms: PhysicalRoomDetail[];
-  exposed_inventory:null;  
-  occupancy_default:IoccupancyDefault
+  exposed_inventory: null;
+  occupancy_default: IoccupancyDefault;
 }
-export interface IoccupancyDefault{
-  adult_nbr:number;
-  children_nbr:number;
+export interface IoccupancyDefault {
+  adult_nbr: number;
+  children_nbr: number;
   infant_nbr: null;
 }
-
 
 export interface RatePlanDetail {
   id: number;
@@ -260,6 +259,7 @@ export interface RoomBookingDetails {
   RATE_PLAN_ID: number;
   IDENTIFIER: string;
   RATE_TYPE: number;
+  BALANCE: number | null;
   ADULTS_COUNT: number;
   CHILDREN_COUNT: number;
   PR_ID: number;
