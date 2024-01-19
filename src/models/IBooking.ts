@@ -38,7 +38,8 @@ export type STATUS =
   | 'BLOCKED'
   | 'BLOCKED-WITH-DATES'
   | 'NOTES'
-  | 'OUTSTANDING-BALANCE';
+  | 'OUTSTANDING-BALANCE'
+  | 'TEMP-EVENT';
 export type bookingReasons =
   | 'DORESERVATION'
   | 'BLOCK_EXPOSED_UNIT'
