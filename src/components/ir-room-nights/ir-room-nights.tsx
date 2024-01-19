@@ -77,7 +77,7 @@ export class IrRoomNights {
             ...this.selectedRoom.days,
           ];
         } else {
-          this.fetchBookingAvailability(lastDay.date, moment(this.toDate,"YYYY-MM-DD").add(-1,"days").format("YYYY-MM-DD"));
+          this.fetchBookingAvailability(lastDay.date, moment(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'));
           const newDatesArr = getDaysArray(lastDay.date, this.toDate);
           this.rates = [
             ...this.selectedRoom.days,
@@ -234,7 +234,7 @@ export class IrRoomNights {
           </div>
         </div>
         <section class={'text-left px-2'}>
-          <p class={"font-medium-1"}>
+          <p class={'font-medium-1'}>
             {`${this.defaultTexts.entries.Lcz_Booking}#`} {this.bookingNumber}
           </p>
           <p class={'font-weight-bold font-medium-1'}>{`${formatDate(this.fromDate, 'YYYY-MM-DD')} - ${formatDate(this.toDate, 'YYYY-MM-DD')}`}</p>
@@ -246,6 +246,8 @@ export class IrRoomNights {
                 {`${this.selectedRoom.rateplan.name}`}{' '}
                 {this.selectedRoom.rateplan.is_non_refundable && <span class={'irfontgreen'}>{this.defaultTexts.entries.Lcz_NonRefundable}</span>}
               </p>
+              {(this.inventory === 0 || this.inventory === null) && <p class="font-medium-1 text danger">{this.defaultTexts.entries.Lcz_NoAvailabilityForAdditionalNights}</p>}
+
               {this.selectedRoom.rateplan.custom_text && <p class={'text-secondary mt-0'}>{this.selectedRoom.rateplan.custom_text}</p>}
               {this.renderDates()}
             </Fragment>
