@@ -262,10 +262,12 @@ export class IrRoomNights {
           >
             {this.defaultTexts?.entries.Lcz_Cancel}
           </button>
-          <button disabled={this.isButtonDisabled()} type="button" class={'btn btn-primary ml-2 full-width'} onClick={this.handleRoomConfirmation.bind(this)}>
-            {this.isLoading && <i class="la la-circle-o-notch spinner mx-1"></i>}
-            {this.defaultTexts?.entries.Lcz_Confirm}
-          </button>
+          {this.inventory > 0 && this.inventory !== null && (
+            <button disabled={this.isButtonDisabled()} type="button" class={'btn btn-primary ml-2 full-width'} onClick={this.handleRoomConfirmation.bind(this)}>
+              {this.isLoading && <i class="la la-circle-o-notch spinner mx-1"></i>}
+              {this.defaultTexts?.entries.Lcz_Confirm}
+            </button>
+          )}
         </section>
       </Host>
     );
