@@ -63,9 +63,9 @@ export class IrModal {
       <div class={`ir-modal  ${this.isOpen ? 'active' : ''}`} tabindex="-1">
         <div class="modal-dialog">
           <div class={` modal-content`}>
-            <div class={`modal-header align-items-center`}>
+            <div class={`modal-header align-items-center border-0 `}>
               <div class="font-weight-bold d-flex align-items-center">
-                {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} {this.modalTitle}
+                {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} {this.modalBody}
               </div>
               <div class="font-weight-bold d-flex align-items-center font-size-large">
                 <ir-icon
@@ -78,11 +78,11 @@ export class IrModal {
                 ></ir-icon>
               </div>
             </div>
-            <div class="modal-body text-left">
+            {/* <div class="modal-body text-left">
               <div>{this.modalBody}</div>
-            </div>
+            </div> */}
 
-            <div class={`modal-footer d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
+            <div class={`modal-footer border-0 d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
               {this.leftBtnActive && <ir-button icon={''} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>}
               {this.rightBtnActive && <ir-button icon={''} btn_color={this.rightBtnColor} btn_block text={this.rightBtnText} name={this.rightBtnText}></ir-button>}
             </div>
