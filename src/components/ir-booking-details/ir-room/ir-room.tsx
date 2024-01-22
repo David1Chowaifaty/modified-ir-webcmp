@@ -252,7 +252,7 @@ export class IrRoom {
           leftBtnColor="secondary"
           rightBtnColor="danger"
           modalTitle={this.defaultTexts.entries.Lcz_Confirmation}
-          modalBody={`${this.defaultTexts.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${(this.item.unit as IUnit).name} ${
+          modalBody={`${this.defaultTexts.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${this.item.unit && (this.item.unit as IUnit).name} ${
             this.defaultTexts.entries.Lcz_FromThisBooking
           }`}
         ></ir-modal>

@@ -734,7 +734,7 @@ export class IglooCalendar {
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING')}
           showCloseButton={this.editBookingItem !== null}
-          sidebarStyles={{ width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)' }}
+          sidebarStyles={{ width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: this.roomNightsData ? 'white' : '#F2F3F8' }}
         >
           {this.roomNightsData && (
             <ir-room-nights
@@ -765,7 +765,7 @@ export class IglooCalendar {
           modalTitle={''}
           rightBtnActive={this.dialogData ? !this.dialogData.hideConfirmButton : true}
           leftBtnText={this.defaultTexts?.entries.Lcz_Cancel}
-          rightBtnText={this.defaultTexts?.entries.Lcz_Ok}
+          rightBtnText={this.defaultTexts?.entries.Lcz_Confirm}
           modalBody={this.dialogData ? this.dialogData.description : ''}
           onConfirmModal={this.handleModalConfirm.bind(this)}
           onCancelModal={this.handleModalCancel.bind(this)}

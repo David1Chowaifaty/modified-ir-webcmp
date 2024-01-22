@@ -36,9 +36,6 @@ export class IrPaymentDetails {
 
   async componentWillLoad() {
     try {
-      if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
-        this.paymentDetailsUrl = await new BookingService().getPCICardInfoURL(this.bookingDetails.booking_nbr);
-      }
       this.initializeItemToBeAdded();
     } catch (error) {
       if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
@@ -215,7 +212,10 @@ export class IrPaymentDetails {
             aria-expanded="false"
             aria-controls="myCollapse"
             class="sm-padding-right pointer"
-            onClick={() => {
+            onClick={async () => {
+              if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
+                this.paymentDetailsUrl = await new BookingService().getPCICardInfoURL(this.bookingDetails.booking_nbr);
+              }
               this.collapsedGuarantee = !this.collapsedGuarantee;
             }}
           ></ir-icon>
