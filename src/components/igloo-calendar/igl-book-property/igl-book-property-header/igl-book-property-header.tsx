@@ -180,7 +180,7 @@ export class IglBookPropertyHeader {
             <igl-date-range
               dateLabel={this.defaultTexts.entries.Lcz_Dates}
               minDate={this.minDate}
-              disabled={this.isEventType('BAR_BOOKING')}
+              disabled={this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')}
               defaultData={this.bookingDataDefaultDateRange}
             ></igl-date-range>
           </fieldset>
