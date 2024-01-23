@@ -23,7 +23,6 @@
   -webkit-user-drag: none;
 }
 
-
 .cellData {
   width: 70px;
   height: 30px;
@@ -70,7 +69,6 @@
   cursor: pointer;
   height: 40px;
   font-size: 0.9em;
-  
 }
 .categoryTitle > :nth-child(1) {
   white-space: nowrap;
@@ -97,7 +95,6 @@
 }
 
 .categoryPriceColumn {
-  font-size: 0.75em;
   align-items: center;
   height: 40px;
   -webkit-user-select: none;

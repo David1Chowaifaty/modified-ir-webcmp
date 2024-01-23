@@ -265,9 +265,9 @@ export class IglCalBody {
   getGeneralCategoryDayColumns(addClass: string, isCategory: boolean = false, index: number) {
     return this.calendarData.days.map(dayInfo => {
       return (
-        <div class={`cellData pl-0 categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`}>
+        <div class={`cellData pl-0 font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`}>
           {isCategory ? (
-            <span>
+            <span class={'categoryName'}>
               {dayInfo.rate[index].exposed_inventory.total}
               {/* <br />
               {dayInfo.rate[index].exposed_inventory.offline} */}
