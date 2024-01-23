@@ -120,10 +120,22 @@ export class IglCalBody {
     return 'room_' + roomId + '_' + selectedDay.currentDate;
   }
 
+  // getSplitBookingEvents(newEvent) {
+  //   return this.getBookingData().some(bookingEvent => !['003', '002', '004'].includes(bookingEvent.STATUS_CODE) && newEvent.FROM_DATE === bookingEvent.FROM_DATE);
+  // }
   getSplitBookingEvents(newEvent) {
-    return this.getBookingData().some(bookingEvent => !['003', '002', '004'].includes(bookingEvent.STATUS_CODE) && newEvent.FROM_DATE === bookingEvent.FROM_DATE);
+    console.log(newEvent.FROM_DATE);
+    return this.getBookingData().some(bookingEvent => {
+      if (!['003', '002', '004'].includes(bookingEvent.STATUS_CODE)) {
+        if (
+          new Date(newEvent.FROM_DATE).getTime() >= new Date(bookingEvent.FROM_DATE).getTime() &&
+          new Date(newEvent.FROM_DATE).getTime() <= new Date(bookingEvent.TO_DATE).getTime()
+        ) {
+          return bookingEvent;
+        }
+      }
+    });
   }
-
   @Listen('closeBookingWindow', { target: 'window' })
   closeWindow() {
     let ind = this.getBookingData().findIndex(ev => ev.ID === 'NEW_TEMP_EVENT');

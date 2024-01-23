@@ -395,17 +395,18 @@ export class IglBookingEventHover {
             >
               <i class="ft ft-edit font-small-3"></i> {this.defaultTexts.entries.Lcz_Edit}
             </button>
-            <button
-              type="button"
-              class="btn btn-primary mr-1"
-              onClick={_ => {
-                this.handleAddRoom();
-              }}
-              disabled={!this.bookingEvent.IS_EDITABLE}
-            >
-              <i class="ft ft-plus-circle font-small-3"></i> {this.defaultTexts.entries.Lcz_AddRoom}
-            </button>
-            {this.canCheckIn() ? (
+            {this.bookingEvent.IS_EDITABLE && (
+              <button
+                type="button"
+                class="btn btn-primary mr-1"
+                onClick={_ => {
+                  this.handleAddRoom();
+                }}
+              >
+                <i class="ft ft-plus-circle font-small-3"></i> {this.defaultTexts.entries.Lcz_AddRoom}
+              </button>
+            )}
+            {/* {this.canCheckIn() ? (
               <button
                 type="button"
                 class="btn btn-primary p-0 mr-1"
@@ -428,7 +429,7 @@ export class IglBookingEventHover {
               >
                 <i class="ft ft-log-out font-small-3"></i> {this.defaultTexts.entries.Lcz_CheckOut}
               </button>
-            ) : null}
+            ) : null} */}
             <button
               type="button"
               class="btn btn-danger p-0"
@@ -437,7 +438,7 @@ export class IglBookingEventHover {
               }}
               disabled={!this.bookingEvent.IS_EDITABLE || this.is_vacation_rental}
             >
-              <i class="ft ft-trash-2 font-small-3"></i> {this.defaultTexts.entries.Lcz_Delete}
+              <i class="ft ft-trash-2 font-small-3"></i> {this.defaultTexts.entries.Lcz_Unassign}
             </button>
           </div>
         </div>
@@ -490,8 +491,8 @@ export class IglBookingEventHover {
           entryHour={this.bookingEvent.ENTRY_HOUR}
           entryMinute={this.bookingEvent.ENTRY_MINUTE}
           defaultData={this.bookingEvent}
-          fromDate={moment(this.bookingEvent.FROM_DATE,"YYYY-MM-DD").format("DD MM YYYY")}
-          toDate={moment(this.bookingEvent.TO_DATE,"YYYY-MM-DD").format("DD MM YYYY")}
+          fromDate={moment(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD').format('DD MM YYYY')}
+          toDate={moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').format('DD MM YYYY')}
           entryDate={this.getEntryDate()}
           onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>
