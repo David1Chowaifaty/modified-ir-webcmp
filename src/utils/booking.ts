@@ -243,7 +243,7 @@ export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDeta
     TO_DATE_STR: data.format.to_date,
   };
 }
-function calculateDaysBetweenDates(from_date: string, to_date: string) {
+export function calculateDaysBetweenDates(from_date: string, to_date: string) {
   const startDate = moment(from_date, 'YYYY-MM-DD');
   const endDate = moment(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');

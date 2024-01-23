@@ -8,7 +8,7 @@ import { EventsService } from '../../services/events.service';
 import { ICountry, RoomBlockDetails, RoomBookingDetails, bookingReasons } from '../../models/IBooking';
 import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '../../services/toBeAssigned.service';
-import { transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
+import { calculateDaysBetweenDates, transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from '../../models/property-types';
 // import { store } from '../../redux/store';
 // import { addCalendarData } from '../../redux/features/calendarData';
@@ -396,11 +396,24 @@ export class IglooCalendar {
         this.calendarData.monthsInfo[0].daysCount = this.calendarData.monthsInfo[0].daysCount + results.months[results.months.length - 1].daysCount;
         newMonths.pop();
       }
+      let bookings = JSON.parse(JSON.stringify(newBookings));
+      bookings = bookings.filter(newBooking => {
+        const existingBookingIndex = this.calendarData.bookingEvents.findIndex(event => event.ID === newBooking.ID);
+        if (existingBookingIndex !== -1) {
+          this.calendarData.bookingEvents[existingBookingIndex].FROM_DATE = newBooking.FROM_DATE;
+          this.calendarData.bookingEvents[existingBookingIndex].NO_OF_DAYS = calculateDaysBetweenDates(
+            newBooking.FROM_DATE,
+            this.calendarData.bookingEvents[existingBookingIndex].TO_DATE,
+          );
+          return false;
+        }
+        return true;
+      });
       this.calendarData = {
         ...this.calendarData,
         days: this.days,
         monthsInfo: [...newMonths, ...this.calendarData.monthsInfo],
-        bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
+        bookingEvents: [...this.calendarData.bookingEvents, ...bookings],
       };
     } else {
       this.calendarData.endingDate = new Date(toDate).getTime();
@@ -411,6 +424,19 @@ export class IglooCalendar {
           this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].daysCount + results.months[0].daysCount;
         newMonths.shift();
       }
+      let bookings = JSON.parse(JSON.stringify(newBookings));
+      bookings = bookings.filter(newBooking => {
+        const existingBookingIndex = this.calendarData.bookingEvents.findIndex(event => event.ID === newBooking.ID);
+        if (existingBookingIndex !== -1) {
+          this.calendarData.bookingEvents[existingBookingIndex].TO_DATE = newBooking.TO_DATE;
+          this.calendarData.bookingEvents[existingBookingIndex].NO_OF_DAYS = calculateDaysBetweenDates(
+            this.calendarData.bookingEvents[existingBookingIndex].FROM_DATE,
+            newBooking.TO_DATE,
+          );
+          return false;
+        }
+        return true;
+      });
       this.calendarData = {
         ...this.calendarData,
         days: this.days,
