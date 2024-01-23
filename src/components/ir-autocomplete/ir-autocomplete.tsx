@@ -220,10 +220,10 @@ export class IrAutocomplete {
               {this.isSplitBooking ? (
                 <Fragment>{`${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`}</Fragment>
               ) : (
-                <Fragment>
-                  {`${d.email}`}
-                  <span class={'d-none d-sm-inline-flex'}>{` - ${d.first_name} ${d.last_name}`}</span>
-                </Fragment>
+                <div class={'d-flex align-items-center flex-fill'}>
+                  <p class={'p-0 m-0'}>{`${d.email}`}</p>
+                  <span class={'d-sm-flex p-0 m-0'}>{` - ${d.first_name} ${d.last_name}`}</span>
+                </div>
               )}
             </p>
           ))}
