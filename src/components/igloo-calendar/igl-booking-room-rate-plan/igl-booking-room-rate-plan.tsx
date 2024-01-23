@@ -220,7 +220,7 @@ export class IglBookingRoomRatePlan {
   render() {
     return (
       <Host>
-        <div class="d-flex flex-column mt-2 m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
+        <div class="d-flex flex-column mt-1 m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
           <div class=" rateplan-name-container">
             <span>{this.ratePlanData.name}</span>
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
