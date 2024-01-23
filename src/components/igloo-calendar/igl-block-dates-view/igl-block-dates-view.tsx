@@ -119,10 +119,10 @@ export class IglBlockDatesView {
         <div class={` mb-1 text-left ${this.isEventHover && 'p-0'}`}>
           <div class="mb-1 ">
             <label class="p-0 text-bold-700 font-medium-1 m-0 align-middle">{this.defaultTexts.entries.Lcz_Reason}:</label>
-            <div class="p-0 m-0 pr-1 controlContainer checkBoxContainer d-inline-block align-middle">
+            <div class="p-0 m-0 pr-1  controlContainer checkBoxContainer d-inline-block align-middle">
               <input class="form-control" type="checkbox" checked={this.blockDatesData.OUT_OF_SERVICE} id="userinput6" onChange={event => this.handleOutOfService(event)} />
             </div>
-            <span class="align-middle">{this.defaultTexts.entries.Lcz_OutOfservice}</span>
+            <span class="align-middle out-of-service-label">{this.defaultTexts.entries.Lcz_OutOfservice}</span>
           </div>
           {!this.blockDatesData.OUT_OF_SERVICE ? (
             <div>

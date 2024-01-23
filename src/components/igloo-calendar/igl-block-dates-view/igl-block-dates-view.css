@@ -17,3 +17,6 @@
 .releaseTime {
   padding-left: 5px;
 }
+.out-of-service-label {
+  margin-left: 5px !important;
+}
