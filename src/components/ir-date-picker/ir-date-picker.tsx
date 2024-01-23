@@ -16,8 +16,8 @@ export class IrDatePicker {
   @Prop() firstDay: number = 1;
   @Prop() monthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   @Prop() daysOfWeek: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-  @Prop() format: string = 'MMM DD,YYYY';
-  @Prop() separator: string = '-';
+  @Prop() format: string = 'MMM DD, YYYY';
+  @Prop() separator: string = ' - ';
   @Prop() applyLabel: string = 'Apply';
   @Prop() cancelLabel: string = 'Cancel';
   @Prop() fromLabel: string = 'Form';
