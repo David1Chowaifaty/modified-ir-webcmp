@@ -36,7 +36,7 @@ const bookingStatus: Record<string, STATUS> = {
   '000': 'IN-HOUSE',
   '001': 'PENDING-CONFIRMATION',
   '002': 'CONFIRMED',
-  '013': 'CHECKED-OUT',
+  '003': 'CHECKED-OUT',
 };
 
 export function formatName(firstName: string | null, lastName: string | null) {
@@ -145,7 +145,15 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
 function updateBookingWithStayData(data: any, cell: CellType): any {
   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
   data.TO_DATE = cell.DATE;
-
+  if (!isBlockUnit(cell.STAY_STATUS_CODE)) {
+    const now = moment();
+    const toDate = moment(data.TO_DATE, 'YYYY-MM-DD');
+    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+      data.STATUS = bookingStatus['003'];
+    } else {
+      data.STATUS = bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : cell.booking?.status.code];
+    }
+  }
   if (cell.booking) {
     const { arrival } = cell.booking;
     Object.assign(data, {
@@ -170,6 +178,17 @@ function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { cod
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
   console.log(data);
+  const renderStatus = room => {
+    const now = moment();
+    const toDate = moment(room.to_date, 'YYYY-MM-DD');
+    const fromDate = moment(room.from_date, 'YYYY-MM-DD');
+    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+      return bookingStatus['003'];
+    } else {
+      return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
+    }
+  };
+
   data.rooms.forEach(room => {
     bookings.push({
       ID: room['assigned_units_pool'],
@@ -179,7 +198,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       ARRIVAL: data.arrival,
       IS_EDITABLE: true,
       BALANCE: data.financial?.due_amount,
-      STATUS: bookingStatus[moment(room.from_date, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : data?.status.code || '001'],
+      STATUS: renderStatus(room),
       NAME: formatName(room.guest.first_name, room.guest.last_name),
       PHONE: data.guest.mobile ?? '',
       ENTRY_DATE: '12-12-2023',
