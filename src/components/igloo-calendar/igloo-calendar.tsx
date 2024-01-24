@@ -17,6 +17,7 @@ import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import { Languages } from '@/components';
 import { store } from '@/redux/store';
 import { addLanguages } from '@/redux/features/languages';
+import { CalendarService } from '@/services/calendar.service';
 
 @Component({
   tag: 'igloo-calendar',
@@ -96,14 +97,16 @@ export class IglooCalendar {
     this.calendarData.bookingEvents = bookingResp.myBookings || [];
     this.calendarData.toBeAssignedEvents = [];
   }
+  private calendarService = new CalendarService();
   async initializeApp() {
     try {
-      const [defaultTexts, roomResp, bookingResp, countryNodeList] = await Promise.all([
-        this.roomService.fetchLanguage(this.language),
-        this.roomService.fetchData(this.propertyid, this.language),
-        this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date),
-        this.bookingService.getCountries(this.language),
-      ]);
+      // const [defaultTexts, roomResp, bookingResp, countryNodeList] = await Promise.all([
+      //   this.roomService.fetchLanguage(this.language),
+      //   this.roomService.fetchData(this.propertyid, this.language),
+      //   this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date),
+      //   this.bookingService.getCountries(this.language),
+      // ]);
+      const { defaultTexts, roomResp, bookingResp, countryNodeList } = await this.calendarService.Init(this.language, this.propertyid, this.from_date, this.to_date);
       this.defaultTexts = defaultTexts as Languages;
       console.log('languages', this.defaultTexts);
       store.dispatch(addLanguages({ ...defaultTexts } as Languages));

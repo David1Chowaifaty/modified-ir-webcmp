@@ -37,6 +37,9 @@ dependencies:
     version: 9.0.1
 
 devDependencies:
+  '@stencil/store':
+    specifier: ^2.0.12
+    version: 2.0.12(@stencil/core@4.7.0)
   '@types/daterangepicker':
     specifier: ^3.1.8
     version: 3.1.8
@@ -686,7 +689,15 @@ packages:
     resolution: {integrity: sha512-hl3hD5FA8F9kZiDJSus08Kno1QRl+fXeMBzrl5DjWAzAu0JHxL1AqTph5oQSekjvkSahaa8JtsXnHRZU93eivg==}
     engines: {node: '>=16.0.0', npm: '>=7.10.0'}
     hasBin: true
-    dev: false
+
+  /@stencil/store@2.0.12(@stencil/core@4.7.0):
+    resolution: {integrity: sha512-KVO+fRDIchPQ/nZi+XEVTsmW6wtYgizMzv9eVyjlRGX0JpMAp0rpjBvh8LyLJCkrnOhGD7f3Xr6TngMIagBxtQ==}
+    engines: {node: '>=12.0.0', npm: '>=6.0.0'}
+    peerDependencies:
+      '@stencil/core': '>=2.0.0 || >=3.0.0 || >= 4.0.0-beta.0 || >= 4.0.0'
+    dependencies:
+      '@stencil/core': 4.7.0
+    dev: true
 
   /@tootallnate/once@1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
