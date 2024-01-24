@@ -6,13 +6,12 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@st
   scoped: true,
 })
 export class IglBookingRooms {
-  @Prop() defaultTexts;
   @Prop() roomTypeData: { [key: string]: any };
   @Prop() defaultData: Map<string, any>;
   @Prop() bookingType = 'PLUS_BOOKING';
   @Prop() dateDifference: number;
   @Prop() ratePricingMode = [];
-  @Prop() roomInfoId :number|null=null;
+  @Prop() roomInfoId: number | null = null;
   @Prop() currency;
   @State() selectedRooms: number[] = [];
   @State() totalRooms: number;
@@ -120,17 +119,16 @@ export class IglBookingRooms {
     const isValidBookingType = this.validBookingTypes.includes(this.bookingType);
     return (
       <Host>
-        {isValidBookingType && <div class="font-weight-bold font-medium-1">{this.roomTypeData.name}</div>}
+        {isValidBookingType && <div class="font-weight-bold font-medium-1 mb-1">{this.roomTypeData.name}</div>}
         {this.roomTypeData.rateplans.map((ratePlan, index) => {
           if (ratePlan.variations !== null) {
-            let shouldBeDisabled = this.roomInfoId && this.roomInfoId===this.roomTypeData.id;
-            let roomId=-1;
-            if(shouldBeDisabled && this.initialRoomIds){
-              roomId=this.initialRoomIds.roomId
-            }        
+            let shouldBeDisabled = this.roomInfoId && this.roomInfoId === this.roomTypeData.id;
+            let roomId = -1;
+            if (shouldBeDisabled && this.initialRoomIds) {
+              roomId = this.initialRoomIds.roomId;
+            }
             return (
               <igl-booking-room-rate-plan
-                defaultTexts={this.defaultTexts}
                 index={index}
                 isBookDisabled={this.isBookDisabled}
                 key={`rate-plan-${ratePlan.id}`}
@@ -145,8 +143,8 @@ export class IglBookingRooms {
                 shouldBeDisabled={shouldBeDisabled}
                 onDataUpdateEvent={evt => this.onRoomDataUpdate(evt, index)}
                 physicalrooms={this.roomTypeData.physicalrooms}
-                defaultRoomId={roomId}   
-                selectedRoom={this.initialRoomIds}           
+                defaultRoomId={roomId}
+                selectedRoom={this.initialRoomIds}
               ></igl-booking-room-rate-plan>
             );
           } else {

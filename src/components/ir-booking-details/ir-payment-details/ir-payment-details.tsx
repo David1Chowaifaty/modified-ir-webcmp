@@ -4,7 +4,7 @@ import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
 import { PaymentService } from '@/services/payment.service';
-import { Languages } from '@/components';
+import { ILocale } from '@/components';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -14,7 +14,7 @@ import { Languages } from '@/components';
 export class IrPaymentDetails {
   @Prop({ mutable: true, reflect: true }) item: any;
   @Prop({ mutable: true }) bookingDetails: Booking;
-  @Prop() defaultTexts: Languages;
+  @Prop() defaultTexts: ILocale;
   @State() newTableRow: boolean = false;
 
   @State() collapsedPayment: boolean = false;

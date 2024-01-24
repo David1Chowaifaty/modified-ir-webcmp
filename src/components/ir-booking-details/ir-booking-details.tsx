@@ -7,6 +7,7 @@ import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import { RoomService } from '../../services/room.service';
+import { ILocale } from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-booking-details',
@@ -56,7 +57,7 @@ export class IrBookingDetails {
   @State() calendarData: any = {};
   // Guest Data
   @State() guestData: Guest = null;
-  @State() defaultTexts;
+  @State() defaultTexts: ILocale;
   // Rerender Flag
   @State() rerenderFlag = false;
   @State() isSidebarOpen = false;

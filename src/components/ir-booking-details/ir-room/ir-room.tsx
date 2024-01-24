@@ -5,6 +5,7 @@ import { TIglBookPropertyPayload } from '../../../models/igl-book-property';
 import { formatName } from '../../../utils/booking';
 import { IrModal } from '@/components/ir-modal/ir-modal';
 import axios from 'axios';
+import { ILocale } from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-room',
@@ -22,7 +23,7 @@ export class IrRoom {
   @Prop() legendData;
   @Prop() roomsInfo;
   @State() collapsed: boolean = false;
-  @Prop() defaultTexts: any;
+  @Prop() defaultTexts: ILocale;
   @Prop() ticket;
 
   // Booleans Conditions

@@ -1,7 +1,6 @@
-import { Unsubscribe } from '@reduxjs/toolkit';
 import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@stencil/core';
-import { store } from '../../../redux/store';
-
+import calendar_dates from '@/stores/calendar-dates.store';
+import locales from '@/stores/locales.store';
 @Component({
   tag: 'igl-cal-body',
   styleUrl: 'igl-cal-body.css',
@@ -16,28 +15,17 @@ export class IglCalBody {
   @Prop() currency;
   @Prop() language: string;
   @Prop() countryNodeList;
-  @State() defaultTexts: any;
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
-
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
+
   private selectedRooms: { [key: string]: any } = {};
   private fromRoomId: number = -1;
   private newEvent: { [key: string]: any };
   private currentDate = new Date();
-  private unsubscribe: Unsubscribe;
 
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
   }
 
   @Listen('dragOverHighlightElement', { target: 'window' })
@@ -180,7 +168,7 @@ export class IglCalBody {
       TOTAL_PRICE: '',
       RATE_PLAN: '',
       ARRIVAL_TIME: '',
-      TITLE: this.defaultTexts.entries.Lcz_NewBookingFor,
+      TITLE: locales.entries.Lcz_NewBookingFor,
       roomsInfo: [roomCategory],
       CATEGORY: roomCategory.name,
       event_type: 'BAR_BOOKING',
@@ -197,7 +185,7 @@ export class IglCalBody {
     };
 
     let popupTitle = roomCategory.name + ' ' + this.getRoomName(this.getRoomById(this.getCategoryRooms(roomCategory), this.selectedRooms[keys[0]].roomId));
-    this.newEvent.BLOCK_DATES_TITLE = this.defaultTexts.entries.Lcz_BlockDatesFor + popupTitle;
+    this.newEvent.BLOCK_DATES_TITLE = locales.entries.Lcz_BlockDatesFor + popupTitle;
     this.newEvent.TITLE += popupTitle;
     this.newEvent.defaultDateRange.toDate = new Date(this.newEvent.TO_DATE + 'T00:00:00');
     this.newEvent.defaultDateRange.fromDate = new Date(this.newEvent.FROM_DATE + 'T00:00:00');
@@ -263,7 +251,7 @@ export class IglCalBody {
   }
 
   getGeneralCategoryDayColumns(addClass: string, isCategory: boolean = false, index: number) {
-    return this.calendarData.days.map(dayInfo => {
+    return calendar_dates.days.map(dayInfo => {
       return (
         <div class={`cellData pl-0 font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`}>
           {isCategory ? (

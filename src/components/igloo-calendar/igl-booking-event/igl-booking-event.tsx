@@ -3,12 +3,10 @@ import { BookingService } from '@/services/booking.service';
 import { transformNewBooking } from '@/utils/booking';
 import { isBlockUnit } from '@/utils/utils';
 import { IReallocationPayload, IRoomNightsData } from '@/models/property-types';
-import { store } from '@/redux/store';
 import moment from 'moment';
 import { IToast } from '@components/ir-toast/toast';
-import { Languages } from '@/components';
-import { Unsubscribe } from '@reduxjs/toolkit';
 import { EventsService } from '@/services/events.service';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'igl-booking-event',
@@ -35,10 +33,7 @@ export class IglBookingEvent {
 
   @State() renderElement: boolean = false;
   @State() position: { [key: string]: any };
-  @State() defaultText: Languages;
   @State() isShrinking: boolean | null = null;
-
-  private unsubscribe: Unsubscribe;
 
   dayWidth: number = 0;
   eventSpace: number = 8;
@@ -75,13 +70,7 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
     window.addEventListener('click', this.handleClickOutsideBind);
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultText = state.languages;
   }
 
   async fetchAndAssignBookingData() {
@@ -121,7 +110,6 @@ export class IglBookingEvent {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
-    this.unsubscribe();
   }
 
   @Listen('click', { target: 'window' })
@@ -222,7 +210,7 @@ export class IglBookingEvent {
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
-          description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates}.`,
+          description: `${locales.entries.Lcz_YouWillLoseFutureUpdates}.`,
           status: '200',
         };
       } else {
@@ -233,15 +221,15 @@ export class IglBookingEvent {
           const initialRT = findRoomType(this.bookingEvent.PR_ID);
           const targetRT = findRoomType(toRoomId);
           if (initialRT === targetRT) {
-            return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+            return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           } else {
             return {
-              description: `${this.defaultText.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${this.defaultText.entries.Lcz_SameRatesWillBeKept}`,
+              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin.Label}. ${locales.entries.Lcz_SameRatesWillBeKept}`,
               status: '200',
             };
           }
         }
-        return { description: this.defaultText.entries.Lcz_CannotChangeCHBookings, status: '400' };
+        return { description: locales.entries.Lcz_CannotChangeCHBookings, status: '400' };
       }
     } else {
       if (!this.isShrinking) {
@@ -249,15 +237,15 @@ export class IglBookingEvent {
         const targetRT = findRoomType(toRoomId);
         if (initialRT === targetRT) {
           console.log('same rt');
-          return { description: `${this.defaultText.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
+          return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         } else {
           return {
-            description: this.defaultText.entries.Lcz_SameRatesWillBeKept,
+            description: locales.entries.Lcz_SameRatesWillBeKept,
             status: '200',
           };
         }
       }
-      return { description: this.defaultText.entries.Lcz_BalanceWillBeCalculated, status: '200' };
+      return { description: locales.entries.Lcz_BalanceWillBeCalculated, status: '200' };
     }
   }
   private resetBookingToInitialPosition() {

@@ -14,7 +14,6 @@
 | `dateDifference`      | `date-difference`       |             | `number`                  | `undefined`      |
 | `defaultData`         | --                      |             | `{ [key: string]: any; }` | `undefined`      |
 | `defaultRoomId`       | `default-room-id`       |             | `any`                     | `undefined`      |
-| `defaultTexts`        | `default-texts`         |             | `any`                     | `undefined`      |
 | `fullyBlocked`        | `fully-blocked`         |             | `boolean`                 | `undefined`      |
 | `index`               | `index`                 |             | `number`                  | `undefined`      |
 | `isBookDisabled`      | `is-book-disabled`      |             | `boolean`                 | `false`          |

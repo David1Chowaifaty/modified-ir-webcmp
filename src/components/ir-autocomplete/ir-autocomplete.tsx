@@ -2,7 +2,7 @@ import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element, 
 import { v4 } from 'uuid';
 import { BookingService } from '../../services/booking.service';
 import { IToast } from '../ir-toast/toast';
-import { store } from '../../redux/store';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-autocomplete',
@@ -40,10 +40,7 @@ export class IrAutocomplete {
   private bookingService = new BookingService();
   private no_result_found = '';
   componentWillLoad() {
-    this.updateFromStore();
-  }
-  updateFromStore() {
-    this.no_result_found = store.getState().languages.entries.Lcz_NoResultsFound;
+    this.no_result_found = locales.entries.Lcz_NoResultsFound;
   }
 
   handleKeyDown(event: KeyboardEvent) {

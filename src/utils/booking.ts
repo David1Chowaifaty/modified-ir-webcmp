@@ -2,7 +2,7 @@ import moment from 'moment';
 import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, RoomBlockDetails } from '../models/IBooking';
 import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
-import { store } from '../redux/store';
+import locales from '@/stores/locales.store';
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   const myBookings: any[] = [];
@@ -65,11 +65,10 @@ async function getStayStatus() {
   }
 }
 function renderBlock003Date(date, hour, minute) {
-  const { languages } = store.getState();
   const dt = new Date(date);
   dt.setHours(hour);
   dt.setMinutes(minute);
-  return `${languages.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
+  return `${locales.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
   if (isBlockUnit(cell.STAY_STATUS_CODE)) {

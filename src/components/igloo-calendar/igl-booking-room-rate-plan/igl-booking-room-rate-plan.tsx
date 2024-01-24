@@ -1,13 +1,13 @@
 import { Component, Host, Prop, h, State, Event, EventEmitter, Watch, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
+import locales from '@/stores/locales.store';
 @Component({
   tag: 'igl-booking-room-rate-plan',
   styleUrl: 'igl-booking-room-rate-plan.css',
   scoped: true,
 })
 export class IglBookingRoomRatePlan {
-  @Prop() defaultTexts;
   @Prop() defaultData: { [key: string]: any };
   @Prop() ratePlanData: { [key: string]: any };
   @Prop() totalAvailableRooms: number;
@@ -49,7 +49,7 @@ export class IglBookingRoomRatePlan {
 
   setAvailableRooms(data) {
     let availableRooms = this.getAvailableRooms(data);
-    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {    
+    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
       if (this.selectedRoom) {
         availableRooms.push({
           id: this.selectedRoom.roomId,
@@ -57,13 +57,13 @@ export class IglBookingRoomRatePlan {
         });
         availableRooms.sort((a, b) => {
           if (a.name < b.name) {
-              return -1;
+            return -1;
           }
           if (a.name > b.name) {
-              return 1;
+            return 1;
           }
           return 0;
-      });
+        });
       }
     }
     return availableRooms;
@@ -220,7 +220,7 @@ export class IglBookingRoomRatePlan {
   render() {
     return (
       <Host>
-        <div class="d-flex flex-column mt-2 m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
+        <div class="d-flex flex-column m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
           <div class=" rateplan-name-container">
             <span>{this.ratePlanData.name}</span>
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
@@ -247,7 +247,7 @@ export class IglBookingRoomRatePlan {
                     class="form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
                     value={this.renderRate()}
                     id={v4()}
-                    placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
+                    placeholder={locales.entries.Lcz_Rate || 'Rate'}
                     onInput={(event: InputEvent) => this.handleInput(event)}
                   />
                   <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
@@ -308,7 +308,7 @@ export class IglBookingRoomRatePlan {
                   class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 d-md-none "
                   onClick={() => this.bookProperty()}
                 >
-                  {this.selectedData.totalRooms === 1 ? this.defaultTexts.entries.Lcz_Current : this.defaultTexts.entries.Lcz_Select}
+                  {this.selectedData.totalRooms === 1 ? locales.entries.Lcz_Current : locales.entries.Lcz_Select}
                 </button>
               </Fragment>
             ) : null}
@@ -320,7 +320,7 @@ export class IglBookingRoomRatePlan {
                 class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 "
                 onClick={() => this.bookProperty()}
               >
-                {this.defaultTexts.entries.Lcz_Book}
+                {locales.entries.Lcz_Book}
               </button>
             ) : null}
           </div>

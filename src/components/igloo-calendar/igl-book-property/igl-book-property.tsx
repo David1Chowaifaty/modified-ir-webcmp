@@ -7,8 +7,7 @@ import { transformNewBLockedRooms } from '../../../utils/booking';
 import { IglBookPropertyService } from './igl-book-property.service';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../models/igl-book-property';
 import { EventsService } from '../../../services/events.service';
-import { Unsubscribe } from '@reduxjs/toolkit';
-import { store } from '../../../redux/store';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'igl-book-property',
@@ -18,7 +17,6 @@ import { store } from '../../../redux/store';
 export class IglBookProperty {
   @Prop() propertyid: number;
   @Prop() allowedBookingSources: any;
-  @State() defaultTexts;
   @Prop() language: string;
   @Prop() countryNodeList;
   @Prop() showPaymentDetails: boolean = false;
@@ -49,7 +47,6 @@ export class IglBookProperty {
   private bookPropertyService = new IglBookPropertyService();
   private eventsService = new EventsService();
   private defaultDateRange: { from_date: string; to_date: string };
-  private unsubscribe: Unsubscribe;
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
@@ -64,7 +61,6 @@ export class IglBookProperty {
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
-    this.unsubscribe();
   }
   @Listen('inputCleared')
   clearBooking(e: CustomEvent) {
@@ -134,15 +130,9 @@ export class IglBookProperty {
       } else {
         this.page = 'page_one';
       }
-      this.updateFromStore();
-      this.unsubscribe = store.subscribe(() => this.updateFromStore());
     } catch (error) {
       console.error('Error fetching setup entries:', error);
     }
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
   }
 
   async fetchSetupEntries() {
@@ -296,11 +286,11 @@ export class IglBookProperty {
         ></igl-block-dates-view>
         <div class="p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between">
           <button class="btn btn-secondary flex-fill" onClick={() => this.closeWindow()}>
-            {this.defaultTexts.entries.Lcz_Cancel}
+            {locales.entries.Lcz_Cancel}
           </button>
 
           <button class="btn btn-primary flex-fill" onClick={() => this.handleBlockDate()}>
-            {this.defaultTexts.entries.Lcz_Blockdates}
+            {locales.entries.Lcz_Blockdates}
           </button>
         </div>
       </Fragment>

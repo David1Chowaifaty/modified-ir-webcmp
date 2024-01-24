@@ -2,13 +2,11 @@ import { Component, Host, Prop, State, h, Event, EventEmitter, Fragment } from '
 import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
 import { convertDatePrice, formatDate, getCurrencySymbol, getDaysArray } from '../../utils/utils';
-import { store } from '../../redux/store';
 import { Booking, Day, IUnit, Room } from '../../models/booking.dto';
 import { IRoomNightsDataEventPayload } from '../../models/property-types';
 import { v4 } from 'uuid';
 import moment from 'moment';
-import { Unsubscribe } from '@reduxjs/toolkit';
-import { Languages } from '@/components';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-room-nights',
@@ -28,7 +26,6 @@ export class IrRoomNights {
 
   @State() bookingEvent: Booking;
   @State() selectedRoom: Room;
-  @State() defaultTexts: Languages;
   @State() rates: Day[] = [];
   @State() isLoading = false;
   @State() initialLoading = false;
@@ -39,7 +36,6 @@ export class IrRoomNights {
   @Event() closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
 
   private bookingService = new BookingService();
-  private unsubscribe: Unsubscribe;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -48,15 +44,11 @@ export class IrRoomNights {
     this.init();
   }
 
-  updateStore() {
-    this.defaultTexts = store.getState().languages;
-  }
   isButtonDisabled() {
     return this.isLoading || this.rates.some(rate => rate.amount === 0 || rate.amount === -1) || this.inventory === 0 || this.inventory === null;
   }
   async init() {
     try {
-      this.updateStore();
       this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       if (this.bookingEvent) {
         const filteredRooms = this.bookingEvent.rooms.filter(room => room.identifier === this.identifier);
@@ -89,13 +81,9 @@ export class IrRoomNights {
         }
         this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
       }
-      this.unsubscribe = store.subscribe(() => this.updateStore());
     } catch (error) {
       console.log(error);
     }
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
   }
   handleInput(event: InputEvent, index: number) {
     let inputElement = event.target as HTMLInputElement;
@@ -146,7 +134,7 @@ export class IrRoomNights {
           class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
           id={v4()}
           value={day.amount > 0 ? Number(day.amount).toFixed(2) : ''}
-          placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
+          placeholder={locales.entries.Lcz_Rate || 'Rate'}
           onInput={event => this.handleInput(event, index)}
         />
         <span class="currency">{currency_symbol}</span>
@@ -219,14 +207,14 @@ export class IrRoomNights {
   }
   render() {
     if (!this.bookingEvent) {
-      return <p>{this.defaultTexts.entries.Lcz_Loading}</p>;
+      return <p>{locales.entries.Lcz_Loading}</p>;
     }
     return (
       <Host>
         <div class="card position-sticky mb-0 shadow-none p-0 ">
           <div class="d-flex mt-2 align-items-center justify-content-between ">
             <h3 class="card-title text-left pb-1 font-medium-2 px-2">
-              {this.defaultTexts.entries.Lcz_AddingRoomNightsTo} {this.selectedRoom?.roomtype?.name} {(this.selectedRoom?.unit as IUnit).name}
+              {locales.entries.Lcz_AddingRoomNightsTo} {this.selectedRoom?.roomtype?.name} {(this.selectedRoom?.unit as IUnit).name}
             </h3>
             <button type="button" class="close close-icon" onClick={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}>
               <ir-icon icon="ft-x" class={'m-0'}></ir-icon>
@@ -235,18 +223,17 @@ export class IrRoomNights {
         </div>
         <section class={'text-left px-2'}>
           <p class={'font-medium-1'}>
-            {`${this.defaultTexts.entries.Lcz_Booking}#`} {this.bookingNumber}
+            {`${locales.entries.Lcz_Booking}#`} {this.bookingNumber}
           </p>
           <p class={'font-weight-bold font-medium-1'}>{`${formatDate(this.fromDate, 'YYYY-MM-DD')} - ${formatDate(this.toDate, 'YYYY-MM-DD')}`}</p>
           {this.initialLoading ? (
-            <p class={'mt-2 text-secondary'}>{this.defaultTexts.entries['Lcz_CheckingRoomAvailability ']}</p>
+            <p class={'mt-2 text-secondary'}>{locales.entries['Lcz_CheckingRoomAvailability ']}</p>
           ) : (
             <Fragment>
               <p class={'font-medium-1 mb-0'}>
-                {`${this.selectedRoom.rateplan.name}`}{' '}
-                {this.selectedRoom.rateplan.is_non_refundable && <span class={'irfontgreen'}>{this.defaultTexts.entries.Lcz_NonRefundable}</span>}
+                {`${this.selectedRoom.rateplan.name}`} {this.selectedRoom.rateplan.is_non_refundable && <span class={'irfontgreen'}>{locales.entries.Lcz_NonRefundable}</span>}
               </p>
-              {(this.inventory === 0 || this.inventory === null) && <p class="font-medium-1 text danger">{this.defaultTexts.entries.Lcz_NoAvailabilityForAdditionalNights}</p>}
+              {(this.inventory === 0 || this.inventory === null) && <p class="font-medium-1 text danger">{locales.entries.Lcz_NoAvailabilityForAdditionalNights}</p>}
 
               {this.selectedRoom.rateplan.custom_text && <p class={'text-secondary mt-0'}>{this.selectedRoom.rateplan.custom_text}</p>}
               {this.renderDates()}
@@ -260,12 +247,12 @@ export class IrRoomNights {
             class={'btn btn-secondary full-width'}
             onClick={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
           >
-            {this.defaultTexts?.entries.Lcz_Cancel}
+            {locales?.entries.Lcz_Cancel}
           </button>
           {this.inventory > 0 && this.inventory !== null && (
             <button disabled={this.isButtonDisabled()} type="button" class={'btn btn-primary ml-2 full-width'} onClick={this.handleRoomConfirmation.bind(this)}>
               {this.isLoading && <i class="la la-circle-o-notch spinner mx-1"></i>}
-              {this.defaultTexts?.entries.Lcz_Confirm}
+              {locales?.entries.Lcz_Confirm}
             </button>
           )}
         </section>
