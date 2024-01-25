@@ -45,7 +45,7 @@ export class IrRoomNights {
   }
 
   isButtonDisabled() {
-    return this.isLoading || this.rates.some(rate => rate.amount === 0 || rate.amount === -1) || this.inventory === 0 || this.inventory === null;
+    return this.isLoading || this.rates.some(rate => rate.amount === -1) || this.inventory === 0 || this.inventory === null;
   }
   async init() {
     try {
@@ -133,7 +133,7 @@ export class IrRoomNights {
           type="text"
           class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
           id={v4()}
-          value={day.amount > 0 ? Number(day.amount).toFixed(2) : ''}
+          value={day.amount > 0 ? day.amount : ''}
           placeholder={locales.entries.Lcz_Rate || 'Rate'}
           onInput={event => this.handleInput(event, index)}
         />
