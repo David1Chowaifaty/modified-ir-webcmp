@@ -256,7 +256,7 @@ export class IglCalBody {
         <div class={`cellData pl-0 font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`}>
           {isCategory ? (
             <span class={'categoryName'}>
-              {dayInfo.rate[index].exposed_inventory.total}
+              {dayInfo.rate[index].exposed_inventory.rts}
               {/* <br />
               {dayInfo.rate[index].exposed_inventory.offline} */}
             </span>
