@@ -90,18 +90,16 @@ export class IrRoomNights {
     let inputValue = inputElement.value;
 
     let days = [...this.rates];
-    if (!isNaN(Number(inputValue))) {
+    if (inputValue === '') {
+      days[index].amount = -1;
+    } else if (!isNaN(Number(inputValue))) {
       days[index].amount = +inputValue;
     } else {
       inputValue = inputValue.replace(/[^0-9]/g, '');
       inputElement.value = inputValue;
-      if (inputValue === '') {
-        days[index].amount = -1;
-      } else {
-        days[index].amount = +inputValue;
-      }
     }
     this.rates = days;
+    console.log(this.rates);
   }
   async fetchBookingAvailability(from_date: string, to_date: string) {
     try {
