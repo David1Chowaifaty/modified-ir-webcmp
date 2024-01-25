@@ -50,31 +50,42 @@ export class IrRoomNights {
   async init() {
     try {
       this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
+
       if (this.bookingEvent) {
         const filteredRooms = this.bookingEvent.rooms.filter(room => room.identifier === this.identifier);
         this.selectedRoom = filteredRooms[0];
 
         const lastDay = this.selectedRoom?.days[this.selectedRoom.days.length - 1];
-        let first_rate = this.selectedRoom.days[0].amount;
+        //let first_rate = this.selectedRoom.days[0].amount;
         if (moment(this.toDate).add(-1, 'days').isSame(moment(lastDay.date))) {
-          this.fetchBookingAvailability(this.fromDate, this.selectedRoom.days[0].date);
+          const amount = await this.fetchBookingAvailability(
+            this.fromDate,
+            this.selectedRoom.days[0].date,
+            this.selectedRoom.rateplan.id,
+            this.selectedRoom.rateplan.selected_variation.adult_child_offering,
+          );
           const newDatesArr = getDaysArray(this.selectedRoom.days[0].date, this.fromDate);
           this.isEndDateBeforeFromDate = true;
           this.rates;
           this.rates = [
             ...newDatesArr.map(day => ({
-              amount: first_rate,
+              amount,
               date: day,
             })),
             ...this.selectedRoom.days,
           ];
         } else {
-          this.fetchBookingAvailability(lastDay.date, moment(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'));
+          const amount = await this.fetchBookingAvailability(
+            lastDay.date,
+            moment(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'),
+            this.selectedRoom.rateplan.id,
+            this.selectedRoom.rateplan.selected_variation.adult_child_offering,
+          );
           const newDatesArr = getDaysArray(lastDay.date, this.toDate);
           this.rates = [
             ...this.selectedRoom.days,
             ...newDatesArr.map(day => ({
-              amount: first_rate,
+              amount,
               date: day,
             })),
           ];
@@ -101,7 +112,7 @@ export class IrRoomNights {
     this.rates = days;
     console.log(this.rates);
   }
-  async fetchBookingAvailability(from_date: string, to_date: string) {
+  async fetchBookingAvailability(from_date: string, to_date: string, rate_plan_id: number, selected_variation: string) {
     try {
       this.initialLoading = true;
       const bookingAvailability = await this.bookingService.getBookingAvailability(
@@ -117,6 +128,9 @@ export class IrRoomNights {
         this.bookingEvent.currency,
       );
       this.inventory = bookingAvailability.roomtypes[0].inventory;
+      const rate_plan_index = bookingAvailability.roomtypes[0].rateplans.find(rate => rate.id === rate_plan_id);
+      const { amount } = rate_plan_index.variations.find(variation => variation.adult_child_offering === selected_variation);
+      return amount;
     } catch (error) {
       console.log(error);
     } finally {
