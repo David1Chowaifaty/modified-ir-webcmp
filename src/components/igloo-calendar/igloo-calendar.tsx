@@ -44,7 +44,7 @@ export class IglooCalendar {
   @State() roomNightsData: IRoomNightsData | null = null;
   @State() renderAgain = false;
   @State() showBookProperty: boolean = false;
-
+  @State() totalAvailabilityQueue: { room_type_id: number; date: string; availability: number }[] = [];
   @Event({ bubbles: true, composed: true })
   dragOverHighlightElement: EventEmitter;
   @Event({ bubbles: true, composed: true }) moveBookingTo: EventEmitter;
@@ -68,6 +68,7 @@ export class IglooCalendar {
     sessionStorage.setItem('token', JSON.stringify(this.ticket));
     this.initializeApp();
   }
+  private availabilityTimeout;
 
   componentWillLoad() {
     if (this.baseurl) {
@@ -186,7 +187,13 @@ export class IglooCalendar {
                 }
               }
             } else if (REASON === 'UPDATE_CALENDAR_AVAILABILITY') {
-              this.updateTotalAvailability(result.room_type_id, result.date, result.availability);
+              this.totalAvailabilityQueue.push(result);
+              if (this.totalAvailabilityQueue.length > 0) {
+                clearTimeout(this.availabilityTimeout);
+              }
+              this.availabilityTimeout = setTimeout(() => {
+                this.updateTotalAvailability();
+              }, 2000);
               console.log(result);
             } else {
               return;
@@ -199,26 +206,24 @@ export class IglooCalendar {
     }
   }
 
-  private updateTotalAvailability(room_type_id: number, date: string, availability: number) {
+  private updateTotalAvailability() {
     let days = [...calendar_dates.days];
-    let selectedDate = new Date(date);
-    selectedDate.setMilliseconds(0);
-    selectedDate.setSeconds(0);
-    selectedDate.setMinutes(0);
-    selectedDate.setHours(0);
-    //find the selected day
-    const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
-    console.log(index);
-    if (index > 0) {
-      //find room_type_id
-      const room_type_index = days[index].rate.findIndex(room => room.id === room_type_id);
-      console.log('day index:', index);
-      if (room_type_index > 0) {
-        console.log(days[index].rate[room_type_index].exposed_inventory);
-        //(dayInfo.rate[index] as any).exposed_inventory.total
-        days[index].rate[room_type_index].exposed_inventory.total = availability;
+    this.totalAvailabilityQueue.forEach(queue => {
+      let selectedDate = new Date(queue.date);
+      selectedDate.setMilliseconds(0);
+      selectedDate.setSeconds(0);
+      selectedDate.setMinutes(0);
+      selectedDate.setHours(0);
+      //find the selected day
+      const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
+      if (index > 0) {
+        //find room_type_id
+        const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
+        if (room_type_index > 0) {
+          days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
+        }
       }
-    }
+    });
     calendar_dates.days = [...days];
   }
   componentDidLoad() {
