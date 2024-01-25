@@ -133,10 +133,6 @@ export class IglPagetwo {
       isValidProperty(this.selectedBookedByData, 'countryId', -1) ||
       isValidProperty(this.selectedBookedByData, 'selectedArrivalTime', '') ||
       isValidProperty(this.selectedBookedByData, 'email', '')
-      // isValidProperty(this.selectedBookedByData, 'cardNumber', '') ||
-      // isValidProperty(this.selectedBookedByData, 'cardHolderName', '') ||
-      // isValidProperty(this.selectedBookedByData, 'expiryMonth', '') ||
-      // isValidProperty(this.selectedBookedByData, 'expiryYear', '')
     );
   }
 
@@ -217,14 +213,19 @@ export class IglPagetwo {
               </button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill mr-md-1">
-              <button disabled={this.isButtonDisabled('book')} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
+              <button
+                //disabled={this.isButtonDisabled('book')}
+                type="button"
+                class="btn btn-primary full-width"
+                onClick={() => this.buttonClicked.emit({ key: 'book' })}
+              >
                 {this.isLoading === 'book' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 {locales.entries.Lcz_Book}
               </button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill">
               <button
-                disabled={this.isButtonDisabled('bookAndCheckIn')}
+                //disabled={this.isButtonDisabled('bookAndCheckIn')}
                 type="button"
                 class="btn btn-primary full-width"
                 onClick={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}

@@ -51,6 +51,7 @@ export class IglBookProperty {
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
   @Event() resetBookingData: EventEmitter<null>;
+  @State() buttonName = '';
   handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       this.closeWindow();
@@ -137,6 +138,50 @@ export class IglBookProperty {
 
   async fetchSetupEntries() {
     return await this.bookingService.fetchSetupEntries();
+  }
+  isGuestDataIncomplete() {
+    if (this.guestData.length !== this.guestData.length) {
+      return true;
+    }
+    for (const data of this.guestData) {
+      if (data.guestName === '' || data.preference === '' || data.roomId === '') {
+        return true;
+      }
+    }
+    return false;
+  }
+  isButtonDisabled(key: string) {
+    const isValidProperty = (property, key, comparedBy) => {
+      if (!property) {
+        return true;
+      }
+      if (property === this.guestData) {
+        return this.isGuestDataIncomplete();
+      }
+      // const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
+      // if (!this.showPaymentDetails && isCardDetails) {
+      //   return false;
+      // }
+      if (key === 'selectedArrivalTime') {
+        if (property[key] !== undefined) {
+          return property[key].code === '';
+        } else {
+          return true;
+        }
+      }
+      return property[key] === comparedBy || property[key] === undefined;
+    };
+    return (
+      this.isLoading === key ||
+      isValidProperty(this.guestData, 'guestName', '') ||
+      isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
+      isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
+      isValidProperty(this.bookedByInfoData, 'firstName', '') ||
+      isValidProperty(this.bookedByInfoData, 'lastName', '') ||
+      isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
+      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '') ||
+      isValidProperty(this.bookedByInfoData, 'email', '')
+    );
   }
 
   setSourceOptions(bookingSource: any[]) {
@@ -303,25 +348,34 @@ export class IglBookProperty {
       data?: CustomEvent;
     }>,
   ) {
-    event.stopImmediatePropagation();
-    event.stopPropagation();
     switch (event.detail.key) {
       case 'save':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.bookUser(false);
+        this.buttonName === 'save';
         break;
       case 'cancel':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.closeWindow();
         break;
       case 'back':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.gotoPage('page_one');
         break;
       case 'book':
         this.bookUser(false);
+        this.buttonName = 'book';
         break;
       case 'bookAndCheckIn':
         this.bookUser(true);
+        this.buttonName = 'bookAndCheckIn';
         break;
       case 'next':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.gotoPage('page_two');
       case 'check':
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
@@ -355,8 +409,11 @@ export class IglBookProperty {
   }
 
   async bookUser(check_in: boolean) {
-    console.log('object');
     this.setLoadingState(check_in);
+    if (this.isButtonDisabled(this.buttonName)) {
+      this.isLoading = '';
+      return;
+    }
     try {
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);

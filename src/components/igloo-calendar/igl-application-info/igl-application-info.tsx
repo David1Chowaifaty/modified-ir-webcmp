@@ -1,7 +1,8 @@
-import { Component, Host, h, Prop, Event, EventEmitter, Watch, State } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Watch, State, Listen } from '@stencil/core';
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
+import { TPropertyButtonsTypes } from '@/components';
 
 @Component({
   tag: 'igl-application-info',
@@ -19,7 +20,8 @@ export class IglApplicationInfo {
   @Prop() index: number;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @State() filterdRoomList = [];
-  private guestData: { [key: string]: any };
+  @State() isButtonPressed = false;
+  @State() guestData: { [key: string]: any };
 
   componentWillLoad() {
     this.guestData = this.guestInfo ? { ...this.guestInfo } : {};
@@ -59,7 +61,21 @@ export class IglApplicationInfo {
     this.guestData.guestName = event.target.value;
     this.updateData();
   }
-
+  @Listen('buttonClicked', { target: 'body' })
+  handleButtonClicked(
+    event: CustomEvent<{
+      key: TPropertyButtonsTypes;
+      data?: CustomEvent;
+    }>,
+  ) {
+    switch (event.detail.key) {
+      case 'book':
+      case 'bookAndCheckIn':
+      case 'save':
+        this.isButtonPressed = true;
+        break;
+    }
+  }
   render() {
     //console.log(this.guestInfo, this.roomsList);
     return (
@@ -81,7 +97,7 @@ export class IglApplicationInfo {
               <input
                 id={v4()}
                 type="email"
-                class="form-control"
+                class={`form-control ${this.isButtonPressed && this.guestData.guestName === '' && 'border-danger'}`}
                 placeholder={locales.entries.Lcz_GuestFirstnameAndLastname}
                 name="guestName"
                 onInput={event => this.handleGuestNameChange(event)}
@@ -91,7 +107,11 @@ export class IglApplicationInfo {
             </div>
             {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
               <div class="mr-1 p-0 flex-fill">
-                <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}>
+                <select
+                  class={`form-control input-sm pr-0 ${this.isButtonPressed && this.guestData.roomId === '' && 'border-danger'}`}
+                  id={v4()}
+                  onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}
+                >
                   <option value="" selected={this.guestData.roomId === ''}>
                     {locales.entries.Lcz_Assignunits}
                   </option>
@@ -105,7 +125,11 @@ export class IglApplicationInfo {
             ) : null}
 
             <div class="mr-1 flex-fill">
-              <select class="form-control input-sm" id={v4()} onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}>
+              <select
+                class={`form-control input-sm ${this.isButtonPressed && this.guestData.preference === '' && 'border-danger'}`}
+                id={v4()}
+                onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}
+              >
                 <option value="" selected={this.guestData.preference === ''}>
                   {locales.entries.Lcz_NoPreference}
                 </option>

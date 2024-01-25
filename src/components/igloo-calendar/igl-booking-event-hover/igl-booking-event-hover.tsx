@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State, Element } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Element, Fragment } from '@stencil/core';
 import { findCountry, formatDate, getCurrencySymbol } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
@@ -440,28 +440,35 @@ export class IglBookingEventHover {
   }
 
   getNewBookingOptions() {
+    const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);
     return (
       <div class={`iglPopOver newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
-        <button
-          type="button"
-          class="d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square"
-          onClick={_ => {
-            this.handleBookingOption('BAR_BOOKING');
-          }}
-        >
-          {locales.entries.Lcz_CreateNewBooking}
-        </button>
-        {this.hasSplitBooking() ? (
-          <button
-            type="button"
-            class="d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square"
-            onClick={_ => {
-              this.handleBookingOption('SPLIT_BOOKING');
-            }}
-          >
-            {locales.entries.Lcz_AssignUnitToExistingBooking}
-          </button>
-        ) : null}
+        {shouldDisplayButtons ? (
+          <Fragment>
+            <button
+              type="button"
+              class="d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square"
+              onClick={_ => {
+                this.handleBookingOption('BAR_BOOKING');
+              }}
+            >
+              {locales.entries.Lcz_CreateNewBooking}
+            </button>
+            {this.hasSplitBooking() ? (
+              <button
+                type="button"
+                class="d-block full-width btn btn-sm btn-primary mb-1 font-small-3 square"
+                onClick={_ => {
+                  this.handleBookingOption('SPLIT_BOOKING');
+                }}
+              >
+                {locales.entries.Lcz_AssignUnitToExistingBooking}
+              </button>
+            ) : null}
+          </Fragment>
+        ) : (
+          <p class={'text-danger'}>{locales.entries.Lcz_NoRatePlanDefined}</p>
+        )}
         <button
           type="button"
           class="d-block full-width btn btn-sm btn-primary font-small-3 square"

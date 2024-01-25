@@ -5,7 +5,7 @@ import { addTwoMonthToDate, computeEndDate, convertDMYToISO, dateToFormattedStri
 import io, { Socket } from 'socket.io-client';
 import axios from 'axios';
 import { EventsService } from '../../services/events.service';
-import { ICountry, RoomBlockDetails, RoomBookingDetails, bookingReasons } from '../../models/IBooking';
+import { ICountry, RoomBlockDetails, RoomBookingDetails, RoomDetail, bookingReasons } from '../../models/IBooking';
 import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '../../services/toBeAssigned.service';
 import { calculateDaysBetweenDates, transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
@@ -13,6 +13,7 @@ import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } fr
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igloo-calendar',
@@ -261,13 +262,14 @@ export class IglooCalendar {
     });
   }
   setRoomsData(roomServiceResp) {
-    let roomsData: { [key: string]: any }[] = new Array();
+    let roomsData: RoomDetail[] = new Array();
     if (roomServiceResp.My_Result?.roomtypes?.length) {
       roomsData = roomServiceResp.My_Result.roomtypes;
       roomServiceResp.My_Result.roomtypes.forEach(roomCategory => {
         roomCategory.expanded = true;
       });
     }
+    calendar_data.roomsInfo = roomsData;
     this.calendarData.roomsInfo = roomsData;
   }
 

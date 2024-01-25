@@ -22,7 +22,7 @@ export class IrAutocomplete {
   @Prop() value: string;
   @Prop() from_date: string = '';
   @Prop() to_date: string = '';
-
+  @Prop() danger_border: boolean;
   @State() inputValue: string = '';
   @State() data: any[] = [];
   @State() selectedIndex: number = -1;
@@ -211,7 +211,7 @@ export class IrAutocomplete {
   renderDropdown() {
     if (this.inputValue !== '') {
       return (
-        <div class="position-absolute border rounded border-light combobox">
+        <div class={`position-absolute border rounded combobox`}>
           {this.data?.map((d, index) => (
             <p role="button" onKeyDown={e => this.handleItemKeyDown(e, index)} data-selected={this.selectedIndex === index} tabIndex={0} onClick={() => this.selectItem(index)}>
               {this.isSplitBooking ? (
@@ -259,7 +259,7 @@ export class IrAutocomplete {
             disabled={this.disabled}
             id={this.inputId}
             onKeyDown={this.handleKeyDown.bind(this)}
-            class={'form-control input-sm flex-full'}
+            class={`form-control input-sm flex-full ${this.danger_border && 'border-danger'}`}
             type={this.type}
             name={this.name}
             value={this.value || this.inputValue}

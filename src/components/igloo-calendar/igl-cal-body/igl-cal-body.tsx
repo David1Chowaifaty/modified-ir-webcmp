@@ -322,7 +322,6 @@ export class IglCalBody {
   }
 
   getRoomRows() {
-    console.log(this.calendarData.roomsInfo);
     return this.calendarData.roomsInfo.map((roomCategory, index) => {
       if (roomCategory.is_active) {
         return [this.getRoomCategoryRow(roomCategory, index), this.getRoomsByCategory(roomCategory)];

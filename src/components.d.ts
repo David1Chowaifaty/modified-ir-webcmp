@@ -228,6 +228,7 @@ export namespace Components {
         "to_date": string;
     }
     interface IrAutocomplete {
+        "danger_border": boolean;
         "disabled": boolean;
         "duration": number;
         "from_date": string;
@@ -1903,6 +1904,7 @@ declare namespace LocalJSX {
         "to_date"?: string;
     }
     interface IrAutocomplete {
+        "danger_border"?: boolean;
         "disabled"?: boolean;
         "duration"?: number;
         "from_date"?: string;

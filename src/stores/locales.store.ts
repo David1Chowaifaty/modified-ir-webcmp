@@ -136,6 +136,7 @@ export type LocalizationStrings = {
   Lcz_YourArrivalTime: string;
   Lcz_Rate: string;
   Lcz_YouWillLoseFutureUpdates: string;
+  Lcz_NoRatePlanDefined: string;
 };
 
 const initialState: ILocale = {
