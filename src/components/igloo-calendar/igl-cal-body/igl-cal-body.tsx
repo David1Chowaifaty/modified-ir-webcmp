@@ -322,7 +322,14 @@ export class IglCalBody {
   }
 
   getRoomRows() {
-    return this.calendarData.roomsInfo.map((roomCategory, index) => [this.getRoomCategoryRow(roomCategory, index), this.getRoomsByCategory(roomCategory)]);
+    console.log(this.calendarData.roomsInfo);
+    return this.calendarData.roomsInfo.map((roomCategory, index) => {
+      if (roomCategory.is_active) {
+        return [this.getRoomCategoryRow(roomCategory, index), this.getRoomsByCategory(roomCategory)];
+      } else {
+        return null;
+      }
+    });
   }
 
   render() {

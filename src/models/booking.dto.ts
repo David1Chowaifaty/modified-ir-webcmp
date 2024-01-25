@@ -151,6 +151,7 @@ export interface RoomType {
   physicalrooms: null;
   rate: number;
   rateplans: null;
+  is_active: boolean;
 }
 
 export interface Source {
