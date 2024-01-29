@@ -13,10 +13,16 @@
   display: flex;
   flex: 1;
 }
+.iglRangeNights {
+  margin: 0;
+  padding: 0;
+}
 .iglRangePicker[data-state='disabled'] {
   border: 0;
   padding-left: 0;
   padding-right: 0;
+  width: 180px;
+  margin-right: 0;
 }
 .iglRangePicker {
   margin: 0;

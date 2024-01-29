@@ -43,23 +43,23 @@ export class IglLegends {
                   <div class="highphenLegend">{locales.entries.Lcz_MonthAndYear}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal pl-2 pr-2 br-s">
-                    <span class="badge badge-info pointer badge-pill">3</span>
+                  <div class="legendCal headerCell align-items-center br-s">
+                    <span class="badge badge-info  badge-pill">3</span>
                   </div>
                   <div class="highphenLegend">
                     <div>{locales.entries.Lcz_UnassignedUnits}</div>
                   </div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal br-s">FRI 18</div>
+                  <div class="legendCal dayTitle br-s">Fri 18</div>
                   <div class="highphenLegend">{locales.entries.Lcz_Date}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal br-s br-bt font-small-3">15%</div>
+                  <div class="legendCal br-s br-bt dayCapacityPercent">15%</div>
                   <div class="highphenLegend">{locales.entries.Lcz_Occupancy}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal br-s br-bt font-small-3">20</div>
+                  <div class="legendCal br-s br-bt  font-weight-bold total-availability">20</div>
                   <div class="highphenLegend">{locales.entries.Lcz_TotalAvailability}</div>
                 </div>
                 {/* <div class="legendRow align-items-center">

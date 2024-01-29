@@ -144,7 +144,7 @@ export class IglBookingRoomRatePlan {
     } else {
       this.selectedData = {
         ...this.selectedData,
-        rate: 0,
+        rate: -1,
         totalRooms: 0,
       };
       this.dataUpdateEvent.emit({
@@ -213,7 +213,7 @@ export class IglBookingRoomRatePlan {
 
   renderRate(): string | number | string[] {
     if (this.selectedData.isRateModified) {
-      return this.selectedData.rate;
+      return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
     return this.selectedData.rateType === 1 ? this.selectedData.rate : this.initialRateValue;
   }
@@ -221,8 +221,15 @@ export class IglBookingRoomRatePlan {
     return (
       <Host>
         <div class="d-flex flex-column m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
-          <div class=" rateplan-name-container">
-            <span>{this.ratePlanData.name}</span>
+          <div class="rateplan-name-container">
+            {this.bookingType === 'BAR_BOOKING' ? (
+              <Fragment>
+                <span class="font-weight-bold	">{this.ratePlanData.name.split('/')[0]}</span>
+                <span>/{this.ratePlanData.name.split('/')[1]}</span>
+              </Fragment>
+            ) : (
+              <span>{this.ratePlanData.name}</span>
+            )}
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
           </div>
 
@@ -303,7 +310,7 @@ export class IglBookingRoomRatePlan {
                   </fieldset>
                 </div>
                 <button
-                  disabled={this.selectedData.rate === 0 || this.disableForm()}
+                  disabled={this.selectedData.rate === -1 || this.disableForm()}
                   type="button"
                   class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 d-md-none "
                   onClick={() => this.bookProperty()}
@@ -315,7 +322,7 @@ export class IglBookingRoomRatePlan {
 
             {this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (
               <button
-                disabled={this.selectedData.rate === 0 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
+                disabled={this.selectedData.rate === -1 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
                 type="button"
                 class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 "
                 onClick={() => this.bookProperty()}

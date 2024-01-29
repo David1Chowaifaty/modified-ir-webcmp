@@ -8,4 +8,5 @@ input {
 }
 input:disabled {
   text-align: start;
+  font-size: 14px;
 }

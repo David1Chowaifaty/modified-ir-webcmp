@@ -19,7 +19,7 @@ export class IglBookingRooms {
   @Prop() initialRoomIds: any;
   @State() roomsDistributions: number[] = [];
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
-  private validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING'];
+  private validBookingTypes = ['PLUS_BOOKING', 'ADD_ROOM', 'EDIT_BOOKING', 'SPLIT_BOOKING'];
 
   componentWillLoad() {
     this.initializeRoomData();

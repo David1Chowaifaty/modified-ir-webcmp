@@ -212,7 +212,7 @@ export class IglPagetwo {
                 <span class={'d-none d-md-inline-flex'}> &lt;&lt;</span> {locales.entries.Lcz_Back}
               </button>
             </div>
-            <div class="mt-1 mt-md-0 flex-fill mr-md-1">
+            <div class="mt-1 mt-md-0 flex-fill">
               <button
                 //disabled={this.isButtonDisabled('book')}
                 type="button"
@@ -223,7 +223,7 @@ export class IglPagetwo {
                 {locales.entries.Lcz_Book}
               </button>
             </div>
-            <div class="mt-1 mt-md-0 flex-fill">
+            {/* <div class="mt-1 mt-md-0 flex-fill">
               <button
                 //disabled={this.isButtonDisabled('bookAndCheckIn')}
                 type="button"
@@ -233,7 +233,7 @@ export class IglPagetwo {
                 {this.isLoading === 'bookAndCheckIn' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 {locales.entries.Lcz_BookAndChekcIn}
               </button>
-            </div>
+            </div> */}
           </div>
         )}
       </Host>

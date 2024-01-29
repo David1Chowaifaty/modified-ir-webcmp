@@ -5,6 +5,9 @@
   padding: 0 0 0 15px;
   margin: 0;
 }
-.sourceContainer{
+.sourceContainer {
   max-width: 350px;
+}
+.message-label {
+  font-size: 80%;
 }

@@ -95,7 +95,6 @@ export type LocalizationStrings = {
   Lcz_Nights: string;
   Lcz_NoAvailabilityForAdditionalNights: string;
   Lcz_NonRefundable: string;
-  Lcz_NoPreference: string;
   Lcz_NoResultsFound: string;
   Lcz_Note: string;
   Lcz_NumberOfGuests: string;
@@ -137,6 +136,8 @@ export type LocalizationStrings = {
   Lcz_Rate: string;
   Lcz_YouWillLoseFutureUpdates: string;
   Lcz_NoRatePlanDefined: string;
+  Lcz_Stay: string;
+  Lcz_BedConfiguration: string;
 };
 
 const initialState: ILocale = {

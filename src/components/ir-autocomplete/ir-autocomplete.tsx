@@ -218,8 +218,9 @@ export class IrAutocomplete {
                 <Fragment>{`${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`}</Fragment>
               ) : (
                 <div class={'d-flex align-items-center flex-fill'}>
-                  <p class={'p-0 m-0'}>{`${d.email}`}</p>
-                  <span class={'d-sm-flex p-0 m-0'}>{` - ${d.first_name} ${d.last_name}`}</span>
+                  <p class={'p-0 m-0'}>
+                    {`${d.email}`} <span class={'p-0 m-0'}>{` - ${d.first_name} ${d.last_name}`}</span>
+                  </p>
                 </div>
               )}
             </p>

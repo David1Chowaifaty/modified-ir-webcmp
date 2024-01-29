@@ -73,6 +73,9 @@ export class IglPropertyBookedBy {
     this.bookedByData = this.defaultData ? { ...this.bookedByData, ...this.defaultData } : {};
     this.arrivalTimeList = this.defaultData?.arrivalTime || [];
 
+    this.bookedByData = { ...this.bookedByData, selectedArrivalTime: { code: this.arrivalTimeList[0].CODE_NAME, description: this.arrivalTimeList[0].CODE_VALUE_EN } };
+
+    console.log(this.bookedByData);
     if (!this.bookedByData.expiryMonth) {
       this.bookedByData.expiryMonth = this.currentMonth;
     }
@@ -352,7 +355,7 @@ export class IglPropertyBookedBy {
                     id={v4()}
                     onChange={event => this.handleDataChange('selectedArrivalTime', event)}
                   >
-                    <option value="" selected={this.bookedByData.selectedArrivalTime === ''}>
+                    <option value="" selected={this.bookedByData.selectedArrivalTime.code === ''}>
                       -
                     </option>
                     {this.arrivalTimeList.map(time => (
@@ -433,10 +436,18 @@ export class IglPropertyBookedBy {
                   </div>
                 </Fragment>
               )}
-              <div class="form-group row p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{locales.entries.Lcz_EmailTheGuest}</label>
+              <div class="form-group mt-1 p-0 d-flex flex-row align-items-center">
+                <label class="p-0 m-0" htmlFor={'emailTheGuestId'}>
+                  {locales.entries.Lcz_EmailTheGuest}
+                </label>
                 <div class="p-0 m-0  controlContainer flex-fill checkBoxContainer">
-                  <input class="form-control" type="checkbox" checked={this.bookedByData.emailGuest} id={v4()} onChange={event => this.handleDataChange('emailGuest', event)} />
+                  <input
+                    class="form-control"
+                    type="checkbox"
+                    checked={this.bookedByData.emailGuest}
+                    id={'emailTheGuestId'}
+                    onChange={event => this.handleDataChange('emailGuest', event)}
+                  />
                 </div>
               </div>
             </div>

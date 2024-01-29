@@ -64,7 +64,7 @@ export class IglBookPropertyHeader {
   getSourceNode() {
     return (
       <fieldset class="d-flex flex-column text-left flex-lg-row align-items-lg-center">
-        <label class="h5 mr-lg-1">{locales.entries.Lcz_Source} </label>
+        <label class="mr-lg-1">{locales.entries.Lcz_Source} </label>
         <div class="btn-group mt-1 mt-lg-0 sourceContainer">
           <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}>
             {this.sourceOptions.map(option => {
@@ -102,7 +102,7 @@ export class IglBookPropertyHeader {
   getAdultChildConstraints() {
     return (
       <div class={'mt-1 d-flex flex-column text-left'}>
-        <label class="h5 d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label>
+        <label class="d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label>
         <div class="form-group  text-left d-flex align-items-center justify-content-between justify-content-sm-start">
           <fieldset>
             <div class="btn-group ">
@@ -183,7 +183,7 @@ export class IglBookPropertyHeader {
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
         </div>
-        <p class="text-left mt-1">{this.message}</p>
+        <p class="text-right mt-1 message-label">{this.message}</p>
       </Host>
     );
   }
