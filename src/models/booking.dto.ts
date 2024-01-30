@@ -2,6 +2,8 @@ import { ICurrency } from './calendarData';
 
 export interface Booking {
   arrival: Arrival;
+  allowed_actions: IAllowedActions[];
+  system_id: number;
   booked_on: DateTime;
   booking_nbr: string;
   currency: Currency;
@@ -21,6 +23,10 @@ export interface Booking {
   channel_booking_nbr: string | null;
   is_direct: boolean;
   financial: IFinancials;
+}
+export interface IAllowedActions {
+  code: string;
+  description: string;
 }
 export interface IFinancials {
   due_amount: number;
