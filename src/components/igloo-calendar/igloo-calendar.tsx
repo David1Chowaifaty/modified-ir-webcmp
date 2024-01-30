@@ -803,6 +803,7 @@ export class IglooCalendar {
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
             <ir-booking-details
+              show_header={false}
               propertyid={this.propertyid}
               hasRoomEdit
               hasRoomDelete

@@ -264,6 +264,7 @@ export namespace Components {
         "propertyid": number;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
+        "show_header": boolean;
         "statusCodes": any;
         "ticket": string;
     }
@@ -1952,6 +1953,7 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
+        "show_header"?: boolean;
         "statusCodes"?: any;
         "ticket"?: string;
     }
