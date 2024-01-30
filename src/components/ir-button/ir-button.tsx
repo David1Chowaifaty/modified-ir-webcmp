@@ -34,7 +34,7 @@ export class IrButton {
       >
         {this.icon && (
           <Fragment>
-            <i class={this.icon}></i>&nbsp;
+            <i class={`${this.icon} font-small-3`}></i>&nbsp;
           </Fragment>
         )}
         {this.text}

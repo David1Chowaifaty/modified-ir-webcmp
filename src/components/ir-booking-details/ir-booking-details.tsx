@@ -8,6 +8,7 @@ import { BookingService } from '../../services/booking.service';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import { RoomService } from '../../services/room.service';
 import locales, { ILocale } from '@/stores/locales.store';
+import { IToast } from '../ir-toast/toast';
 
 @Component({
   tag: 'ir-booking-details',
@@ -77,6 +78,7 @@ export class IrBookingDetails {
   @Event() handleRoomDelete: EventEmitter;
   // Payment Event
   @Event() handleAddPayment: EventEmitter;
+  @Event() toast: EventEmitter<IToast>;
   private bookingService = new BookingService();
   private roomService = new RoomService();
   componentDidLoad() {
@@ -138,11 +140,10 @@ export class IrBookingDetails {
     const target = e.target;
     switch (target.id) {
       case 'print':
-        window.location.href = `https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`;
+        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
         return;
       case 'receipt':
-        window.location.href = `https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`;
-
+        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
         return;
       case 'book-delete':
         this.handleDeleteClick.emit();
@@ -236,7 +237,7 @@ export class IrBookingDetails {
   }
 
   async updateStatus() {
-    if (this.tempStatus !== 'Select') {
+    if (this.tempStatus !== 'Select' && this.tempStatus !== null) {
       try {
         await axios.post(`/Change_Exposed_Booking_Status?Ticket=${this.ticket}`, {
           book_nbr: this.bookingNumber,
@@ -245,6 +246,13 @@ export class IrBookingDetails {
       } catch (error) {
         console.log(error);
       }
+    } else {
+      this.toast.emit({
+        type: 'error',
+        description: '',
+        title: 'Please Select A Status',
+        position: 'top-right',
+      });
     }
   }
   @Listen('editInitiated')

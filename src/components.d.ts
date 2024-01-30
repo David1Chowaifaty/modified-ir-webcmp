@@ -1146,6 +1146,7 @@ declare global {
         "handleRoomEdit": any;
         "handleRoomDelete": any;
         "handleAddPayment": any;
+        "toast": IToast;
     }
     interface HTMLIrBookingDetailsElement extends Components.IrBookingDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingDetailsElementEventMap>(type: K, listener: (this: HTMLIrBookingDetailsElement, ev: IrBookingDetailsCustomEvent<HTMLIrBookingDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1948,6 +1949,7 @@ declare namespace LocalJSX {
         "onHandleRoomDelete"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onHandleRoomEdit"?: (event: IrBookingDetailsCustomEvent<any>) => void;
         "onSendDataToServer"?: (event: IrBookingDetailsCustomEvent<guestInfo>) => void;
+        "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
         "paymentDetailsUrl"?: string;
         "paymentExceptionMessage"?: string;
         "propertyid"?: number;
