@@ -333,7 +333,7 @@ export class IrBookingDetails {
       </div>,
       <div class="fluid-container m-1 text-left">
         <div class="row m-0">
-          <div class="col-lg-5 col-md-12 pl-0 pr-lg-1 p-0">
+          <div class="col-lg-6 col-md-12 pl-0 pr-lg-1 p-0">
             <div class="card">
               <div class="p-1">
                 {this.bookingData.property.name || ''}
@@ -390,7 +390,7 @@ export class IrBookingDetails {
               })}
             </div>
           </div>
-          <div class="col-lg-7 col-md-12 pr-0 pl-0 pl-md-1">
+          <div class="col-lg-6 col-md-12 pr-0 pl-0 pl-md-1">
             <ir-payment-details
               defaultTexts={this.defaultTexts}
               bookingDetails={this.bookingData}

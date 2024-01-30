@@ -1,3 +1,4 @@
+import { locales } from '@/stores/locales.store';
 import axios from 'axios';
 
 export class RoomService {
@@ -25,6 +26,8 @@ export class RoomService {
           throw new Error(data.ExceptionMsg);
         }
         let entries = this.transformArrayToObject(data.My_Result.entries);
+        locales.entries = entries;
+        locales.direction = data.My_Result.direction;
         return { entries, direction: data.My_Result.direction };
       }
     } catch (error) {

@@ -94,14 +94,12 @@ export class IglooCalendar {
   }
   async initializeApp() {
     try {
-      const [defaultLocales, roomResp, bookingResp, countryNodeList] = await Promise.all([
+      const [_, roomResp, bookingResp, countryNodeList] = await Promise.all([
         this.roomService.fetchLanguage(this.language),
         this.roomService.fetchData(this.propertyid, this.language),
         this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date),
         this.bookingService.getCountries(this.language),
       ]);
-      locales.entries = defaultLocales.entries;
-      locales.direction = defaultLocales.direction;
       calendar_dates.days = bookingResp.days;
       calendar_dates.months = bookingResp.months;
       this.setRoomsData(roomResp);
