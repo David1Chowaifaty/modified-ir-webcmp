@@ -132,12 +132,14 @@ export class IglBookingRoomRatePlan {
 
   handleInput(event: InputEvent) {
     const inputElement = event.target as HTMLInputElement;
-    let inputValue = inputElement.value.replace(/[^0-9]/g, '');
+    let inputValue = inputElement.value.replace(/[^0-9.]/g, '');
 
-    if (inputValue !== inputElement.value) {
-      inputElement.value = inputValue;
+    const validDecimalNumber = /^\d*\.?\d*$/;
+    if (!validDecimalNumber.test(inputValue)) {
+      inputValue = inputValue.substring(0, inputValue.length - 1);
     }
 
+    inputElement.value = inputValue;
     if (inputValue) {
       this.selectedData.isRateModified = true;
       this.handleDataChange('rate', event);
@@ -190,7 +192,7 @@ export class IglBookingRoomRatePlan {
   }
 
   updateRate(value) {
-    const numericValue = value === '' ? 0 : parseInt(value);
+    const numericValue = value === '' ? 0 : Number(value);
     this.selectedData = {
       ...this.selectedData,
       rate: numericValue,
@@ -215,7 +217,7 @@ export class IglBookingRoomRatePlan {
     if (this.selectedData.isRateModified) {
       return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
-    return this.selectedData.rateType === 1 ? this.selectedData.rate : this.initialRateValue;
+    return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);
   }
   render() {
     return (

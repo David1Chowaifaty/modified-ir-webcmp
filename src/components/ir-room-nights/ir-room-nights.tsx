@@ -99,15 +99,22 @@ export class IrRoomNights {
   handleInput(event: InputEvent, index: number) {
     let inputElement = event.target as HTMLInputElement;
     let inputValue = inputElement.value;
-
     let days = [...this.rates];
+    inputValue = inputValue.replace(/[^0-9.]/g, '');
     if (inputValue === '') {
       days[index].amount = -1;
-    } else if (!isNaN(Number(inputValue))) {
-      days[index].amount = +inputValue;
     } else {
-      inputValue = inputValue.replace(/[^0-9]/g, '');
-      inputElement.value = inputValue;
+      const decimalCheck = inputValue.split('.');
+      if (decimalCheck.length > 2) {
+        inputValue = inputValue.substring(0, inputValue.length - 1);
+        inputElement.value = inputValue;
+      } else if (decimalCheck.length === 2 && decimalCheck[1].length > 2) {
+        inputValue = `${decimalCheck[0]}.${decimalCheck[1].substring(0, 2)}`;
+        inputElement.value = inputValue;
+      }
+      if (!isNaN(Number(inputValue))) {
+        days[index].amount = Number(inputValue);
+      }
     }
     this.rates = days;
     console.log(this.rates);

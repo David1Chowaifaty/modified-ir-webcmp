@@ -132,7 +132,7 @@ export class IglApplicationInfo {
                   onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}
                 >
                   <option value="" selected={this.guestData.preference === ''}>
-                    {locales.entries.Lcz_BedConfiguration}
+                    {locales.entries.Lcz_BedConfiguration}...
                   </option>
                   {this.bedPreferenceType.map(data => (
                     <option value={data.CODE_NAME} selected={this.guestData.preference === data.CODE_NAME}>
