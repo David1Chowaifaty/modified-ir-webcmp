@@ -331,9 +331,9 @@ export class IrBookingDetails {
           </div>
         </div>
       </div>,
-      <div class="fluid-container m-1 text-left">
+      <div class="fluid-container p-1 text-left mx-0">
         <div class="row m-0">
-          <div class="col-lg-6 col-md-12 pl-0 pr-lg-1 p-0">
+          <div class="col-12 p-0 mx-0 pr-lg-1 col-lg-6">
             <div class="card">
               <div class="p-1">
                 {this.bookingData.property.name || ''}
@@ -362,7 +362,7 @@ export class IrBookingDetails {
               })`}
               {this.hasRoomAdd && <ir-icon id="room-add" icon="ft-plus h3 color-ir-dark-blue-hover pointer"></ir-icon>}
             </div>
-            <div class="card">
+            <div class="card p-0 mx-0">
               {this.bookingData.rooms.map((room: Room, index: number) => {
                 const mealCodeName = room.rateplan.name;
                 const myRoomTypeFoodCat = room.roomtype.name;
@@ -390,7 +390,7 @@ export class IrBookingDetails {
               })}
             </div>
           </div>
-          <div class="col-lg-6 col-md-12 pr-0 pl-0 pl-md-1">
+          <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details
               defaultTexts={this.defaultTexts}
               bookingDetails={this.bookingData}

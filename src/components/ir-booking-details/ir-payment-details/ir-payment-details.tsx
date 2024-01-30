@@ -262,7 +262,7 @@ export class IrPaymentDetails {
     }
 
     return [
-      <div class="card">
+      <div class="card m-0">
         <div class="p-1">
           <div class="mb-2 h4">
             {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
