@@ -195,10 +195,13 @@ export class IglPagetwo {
             </div>
             <div class="flex-fill">
               <button
-                disabled={this.isLoading === 'save' || this.isGuestDataIncomplete()}
+                disabled={this.isLoading === 'save'}
                 type="button"
                 class="btn btn-primary full-width"
-                onClick={() => this.buttonClicked.emit({ key: 'save' })}
+                onClick={() => {
+                  console.log('save button clicked');
+                  this.buttonClicked.emit({ key: 'save' });
+                }}
               >
                 {this.isLoading === 'save' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 {locales.entries.Lcz_Save}
@@ -213,12 +216,7 @@ export class IglPagetwo {
               </button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill">
-              <button
-                //disabled={this.isButtonDisabled('book')}
-                type="button"
-                class="btn btn-primary full-width"
-                onClick={() => this.buttonClicked.emit({ key: 'book' })}
-              >
+              <button disabled={this.isLoading === 'book'} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
                 {this.isLoading === 'book' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 {locales.entries.Lcz_Book}
               </button>

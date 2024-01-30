@@ -143,7 +143,6 @@ export class IglBookPropertyHeader {
     return `${locales.entries.Lcz_ChildCaption} < ${this.adultChildConstraints.child_max_age} ${years}`;
   }
   handleButtonClicked() {
-    console.log(this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length === 1);
     if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length <= 1) {
       this.toast.emit({
         type: 'error',

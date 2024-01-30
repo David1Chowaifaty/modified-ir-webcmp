@@ -49,7 +49,6 @@ export class IglPropertyBookedBy {
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
-    console.log('default data', this.defaultData);
   }
 
   private initializeExpiryYears() {
@@ -72,10 +71,7 @@ export class IglPropertyBookedBy {
   private populateBookedByData() {
     this.bookedByData = this.defaultData ? { ...this.bookedByData, ...this.defaultData } : {};
     this.arrivalTimeList = this.defaultData?.arrivalTime || [];
-
     this.bookedByData = { ...this.bookedByData, selectedArrivalTime: { code: this.arrivalTimeList[0].CODE_NAME, description: this.arrivalTimeList[0].CODE_VALUE_EN } };
-
-    console.log(this.bookedByData);
     if (!this.bookedByData.expiryMonth) {
       this.bookedByData.expiryMonth = this.currentMonth;
     }
@@ -174,7 +170,6 @@ export class IglPropertyBookedBy {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const { key, data } = e.detail;
-    console.log(key, data);
     switch (key) {
       case 'blur':
         if (data !== '') {
