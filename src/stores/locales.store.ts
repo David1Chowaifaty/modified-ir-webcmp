@@ -138,6 +138,7 @@ export type LocalizationStrings = {
   Lcz_NoRatePlanDefined: string;
   Lcz_Stay: string;
   Lcz_BedConfiguration: string;
+  Lcz_SelectStatus: string;
 };
 
 const initialState: ILocale = {

@@ -250,7 +250,7 @@ export class IrBookingDetails {
       this.toast.emit({
         type: 'error',
         description: '',
-        title: 'Please Select A Status',
+        title: locales.entries.Lcz_SelectStatus,
         position: 'top-right',
       });
     }
