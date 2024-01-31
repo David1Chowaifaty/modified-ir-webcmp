@@ -194,13 +194,13 @@ export class IglooCalendar {
                 this.updateTotalAvailability();
               }, 1000);
               console.log(result);
-            } else if (REASON === 'NO_DUE_AMOUNT') {
+            } else if (REASON === 'CHANGE_IN_DUE_AMOUNT') {
               this.calendarData = {
                 ...this.calendarData,
                 bookingEvents: [
                   ...this.calendarData.bookingEvents.map(event => {
                     if (result.pools.includes(event.ID)) {
-                      return { ...event, BALANCE: 0 };
+                      return { ...event, BALANCE: result.due_amount };
                     }
                     return event;
                   }),
