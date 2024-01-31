@@ -49,7 +49,8 @@ export type bookingReasons =
   | 'UNBLOCK_EXPOSED_UNIT'
   | 'DELETE_CALENDAR_POOL'
   | 'GET_UNASSIGNED_DATES'
-  | 'UPDATE_CALENDAR_AVAILABILITY';
+  | 'UPDATE_CALENDAR_AVAILABILITY'
+  | 'NO_DUE_AMOUNT';
 export interface ICountry {
   cities: string[];
   id: number;
