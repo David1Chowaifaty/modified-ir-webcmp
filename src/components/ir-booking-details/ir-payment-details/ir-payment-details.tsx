@@ -272,7 +272,7 @@ export class IrPaymentDetails {
           {this.bookingGuarantee()}
           <div class="mt-2">
             <div>
-              {this.bookingDetails.financial.due_dates.length > 0 && (
+              {this.bookingDetails.financial?.due_dates?.length > 0 && (
                 <Fragment>
                   <div class="d-flex align-items-center">
                     <strong class="mr-1">{this.defaultTexts.entries.Lcz_PaymentDueDates}</strong>
