@@ -31,7 +31,7 @@ export class IglApplicationInfo {
     if (this.defaultGuestRoomId && this.roomsList.filter(e => e.id.toString() === this.defaultGuestRoomId.toString()).length > 0) {
       this.guestData.roomId = this.defaultGuestRoomId;
     }
-    this.guestData.preference = +this.defaultGuestPreference;
+    this.guestData.preference = +this.defaultGuestPreference || '';
     this.updateRoomList();
   }
 
