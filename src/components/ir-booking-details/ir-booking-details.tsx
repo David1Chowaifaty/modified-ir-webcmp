@@ -390,7 +390,7 @@ export class IrBookingDetails {
                     onDeleteFinished={this.handleDeleteFinish.bind(this)}
                   />,
                   // add separator if not last item with marginHorizontal and alignCenter
-                  index !== this.bookingData.rooms.length - 1 && <hr class="mr-2 ml-2 mt-1 mb-1" />,
+                  index !== this.bookingData.rooms.length - 1 && <hr class="mr-2 ml-2 my-0 p-0" />,
                 ];
               })}
             </div>

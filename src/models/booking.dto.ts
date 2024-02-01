@@ -115,6 +115,7 @@ export interface Room {
   notes: string | null;
   occupancy: Occupancy;
   physicalroom: null;
+  bed_preference: number | null;
   rateplan: RatePlan;
   roomtype: RoomType;
   to_date: string;

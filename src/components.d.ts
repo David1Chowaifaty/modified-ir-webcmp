@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { IToast, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
@@ -19,7 +19,7 @@ import { Booking } from "./models/booking.dto";
 import { ILocale as ILocale1 } from "./components.d";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
-export { TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { IToast, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
@@ -38,6 +38,8 @@ export namespace Components {
         "bedPreferenceType": any[];
         "bookingType": string;
         "currency": any;
+        "defaultGuestPreference": number | null;
+        "defaultGuestRoomId": number;
         "guestInfo": { [key: string]: any };
         "guestRefKey": string;
         "index": number;
@@ -177,6 +179,7 @@ export namespace Components {
         "countryNodeList": any;
         "currency": any;
         "dateRangeData": { [key: string]: any };
+        "defaultGuestData": IglBookPropertyPayloadEditBooking;
         "isEditOrAddRoomEvent": boolean;
         "isLoading": string;
         "language": string;
@@ -1652,6 +1655,8 @@ declare namespace LocalJSX {
         "bedPreferenceType"?: any[];
         "bookingType"?: string;
         "currency"?: any;
+        "defaultGuestPreference"?: number | null;
+        "defaultGuestRoomId"?: number;
         "guestInfo"?: { [key: string]: any };
         "guestRefKey"?: string;
         "index"?: number;
@@ -1834,6 +1839,7 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: any;
         "dateRangeData"?: { [key: string]: any };
+        "defaultGuestData"?: IglBookPropertyPayloadEditBooking;
         "isEditOrAddRoomEvent"?: boolean;
         "isLoading"?: string;
         "language"?: string;

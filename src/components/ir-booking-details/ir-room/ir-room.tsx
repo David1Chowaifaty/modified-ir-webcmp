@@ -104,6 +104,7 @@ export class IrRoom {
         toDateStr: this.getDateStr(new Date(this.item.to_date + 'T00:00:00')),
         message: '',
       },
+      bed_preference: this.item.bed_preference,
       adult_child_offering: this.item.rateplan.selected_variation.adult_child_offering,
       ADULTS_COUNT: this.item.rateplan.selected_variation.adult_nbr,
       ARRIVAL: this.bookingEvent.arrival,
@@ -181,7 +182,7 @@ export class IrRoom {
   }
   render() {
     return (
-      <div class="p-1 d-flex">
+      <div class="p-1 d-flex m-0">
         <ir-icon
           id="drawer-icon"
           icon={`${this.collapsed ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-dark-blue-hover`}
@@ -189,12 +190,12 @@ export class IrRoom {
           data-target={`#roomCollapse-${this.item.identifier}`}
           aria-expanded="false"
           aria-controls="collapseExample"
-          class="sm-padding-right pointer"
+          class="pointer mr-1"
           onClick={() => {
             this.collapsed = !this.collapsed;
           }}
         ></ir-icon>
-        <div class="w-100">
+        <div class="w-100 m-0">
           <div class="d-flex justify-content-between">
             <div>
               <strong>{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName} {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}

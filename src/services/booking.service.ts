@@ -421,6 +421,7 @@ export class BookingService {
                   children_nbr: data.childrenCount,
                   infant_nbr: null,
                 },
+                bed_preference: data.preference,
                 from_date: fromDateStr,
                 to_date: toDateStr,
                 notes: null,
@@ -442,12 +443,12 @@ export class BookingService {
           },
         };
         console.log('book user payload', body);
-        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data['My_Result']);
-        return data['My_Result'];
+        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        // if (data.ExceptionMsg !== '') {
+        //   throw new Error(data.ExceptionMsg);
+        // }
+        // console.log(data['My_Result']);
+        // return data['My_Result'];
       } else {
         throw new Error('Invalid token');
       }

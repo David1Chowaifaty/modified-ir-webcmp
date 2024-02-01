@@ -75,11 +75,20 @@ export class IglBookingEvent {
 
   async fetchAndAssignBookingData() {
     try {
+      console.log('clicked on book#', this.bookingEvent.BOOKING_NUMBER);
       if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
         const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
         let dataForTransformation = data.rooms.filter(d => d['assigned_units_pool'] === this.bookingEvent.ID);
         data.rooms = dataForTransformation;
+        if (data.rooms.length === 0) {
+          throw new Error(`"booking#${this.bookingEvent.BOOKING_NUMBER} have empty array"`);
+        } else {
+          if (data.rooms.some(r => r['assigned_units_pool'] === null)) {
+            throw new Error(`"booking#${this.bookingEvent.BOOKING_NUMBER} have empty pool"`);
+          }
+        }
         const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...others } = transformNewBooking(data)[0];
+
         this.bookingEvent = { ...this.bookingEvent, ...others };
         this.showEventInfo(true);
       }

@@ -79,7 +79,6 @@ export class IglBookProperty {
     e.stopImmediatePropagation();
     e.stopPropagation;
     const { key, data } = e.detail;
-    console.log(data, key);
     if (key === 'select') {
       const res = await this.bookingService.getExposedBooking((data as any).booking_nbr, this.language);
       this.bookPropertyService.setBookingInfoFromAutoComplete(this, res);
@@ -106,7 +105,6 @@ export class IglBookProperty {
       this.setOtherProperties(setupEntries);
 
       if (this.isEventType('EDIT_BOOKING')) {
-        console.log('defaul data:', this.defaultData);
         this.adultChildCount = {
           adult: this.defaultData.ADULTS_COUNT,
           child: this.defaultData.CHILDREN_COUNT,
@@ -144,7 +142,7 @@ export class IglBookProperty {
       return true;
     }
     for (const data of this.guestData) {
-      if (data.guestName === '' || data.preference === '' || data.roomId === '') {
+      if (data.guestName === '' || data.preference === '' || data.preference === 0 || data.roomId === '' || data.roomId === 0) {
         return true;
       }
     }
@@ -525,6 +523,7 @@ export class IglBookProperty {
                 showSplitBookingOption={this.showSplitBookingOption}
                 language={this.language}
                 bookedByInfoData={this.bookedByInfoData}
+                defaultGuestData={this.defaultData}
                 isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
                 onDataUpdateEvent={event => this.handlePageTwoDataUpdateEvent(event)}
               ></igl-pagetwo>

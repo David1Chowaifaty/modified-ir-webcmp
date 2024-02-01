@@ -1,6 +1,6 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
 import { IPageTwoDataUpdateProps } from '../../../models/models';
-import { TPropertyButtonsTypes } from '../../../models/igl-book-property';
+import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../models/igl-book-property';
 import { formatDate, getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
 @Component({
@@ -23,6 +23,7 @@ export class IglPagetwo {
   @Prop({ reflect: true }) isLoading: string;
   @Prop() countryNodeList;
   @Prop() selectedGuestData;
+  @Prop() defaultGuestData: IglBookPropertyPayloadEditBooking;
   @Event() dataUpdateEvent: EventEmitter<IPageTwoDataUpdateProps>;
   @Event() buttonClicked: EventEmitter<{
     key: TPropertyButtonsTypes;
@@ -156,6 +157,8 @@ export class IglPagetwo {
         {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
+              defaultGuestPreference={this.defaultGuestData.bed_preference}
+              defaultGuestRoomId={this.defaultGuestData.PR_ID}
               currency={this.currency}
               bedPreferenceType={this.bedPreferenceType}
               index={index}

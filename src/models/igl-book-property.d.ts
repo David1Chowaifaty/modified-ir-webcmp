@@ -59,6 +59,7 @@ interface IglBookPropertyPayloadEditBooking extends IglBookPropertyPayload {
   BOOKING_NUMBER: string;
   NOTES: string;
   is_direct: boolean;
+  bed_preference: number | null;
   ARRIVAL_TIME: string;
   ARRIVAL: {
     code: string;
@@ -94,7 +95,7 @@ interface IglBookPropertyPayloadEditBooking extends IglBookPropertyPayload {
   };
   legendData: any;
   roomsInfo: any;
-  roomName:string;
+  roomName: string;
 }
 
 interface IglBookPropertyPayloadAddRoom extends IglBookPropertyPayload {

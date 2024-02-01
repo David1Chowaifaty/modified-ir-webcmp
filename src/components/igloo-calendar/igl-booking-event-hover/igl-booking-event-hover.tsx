@@ -315,7 +315,7 @@ export class IglBookingEventHover {
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class="row p-0 m-0 pb-1">
           <div class="pl-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center">
-            <img src={this.bookingEvent.origin.Icon} alt="icon" class={'icon-image'} />
+            <img src={this.bookingEvent?.origin?.Icon} alt="icon" class={'icon-image'} />
             <p class={'p-0 m-0'}>{!this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER}</p>
           </div>
           <div class="pr-0 col-4 text-right">

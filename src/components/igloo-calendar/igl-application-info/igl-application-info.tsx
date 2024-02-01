@@ -17,7 +17,9 @@ export class IglApplicationInfo {
   @Prop() bedPreferenceType = [];
   @Prop() selectedUnits: number[] = [];
   @Prop() bookingType: string = 'PLUS_BOOKING';
+  @Prop() defaultGuestPreference: number | null;
   @Prop() index: number;
+  @Prop() defaultGuestRoomId: number;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @State() filterdRoomList = [];
   @State() isButtonPressed = false;
@@ -25,6 +27,11 @@ export class IglApplicationInfo {
 
   componentWillLoad() {
     this.guestData = this.guestInfo ? { ...this.guestInfo } : {};
+    this.guestData.roomId = '';
+    if (this.defaultGuestRoomId && this.roomsList.filter(e => e.id.toString() === this.defaultGuestRoomId.toString()).length > 0) {
+      this.guestData.roomId = this.defaultGuestRoomId;
+    }
+    this.guestData.preference = +this.defaultGuestPreference;
     this.updateRoomList();
   }
 
@@ -53,6 +60,7 @@ export class IglApplicationInfo {
     if (key === 'roomId' && value !== '') {
       this.guestData['roomName'] = this.filterdRoomList.find(room => room.id === +value).name || '';
     }
+    console.log('guest data', this.guestData);
     this.updateData();
   }
 
@@ -109,7 +117,7 @@ export class IglApplicationInfo {
               {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
                 <div class="mr-1 p-0 flex-fill  preference-select-container">
                   <select
-                    class={`form-control  input-sm pr-0 ${this.isButtonPressed && this.guestData.roomId === '' && 'border-danger'}`}
+                    class={`form-control  input-sm pr-0 ${this.isButtonPressed && (this.guestData.roomId === '' || this.guestData.roomId === 0) && 'border-danger'}`}
                     id={v4()}
                     onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}
                   >
@@ -127,7 +135,7 @@ export class IglApplicationInfo {
 
               <div class="mr-1 flex-fill">
                 <select
-                  class={`form-control input-sm ${this.isButtonPressed && this.guestData.preference === '' && 'border-danger'}`}
+                  class={`form-control input-sm ${this.isButtonPressed && (this.guestData.preference === '' || this.guestData.preference === 0) && 'border-danger'}`}
                   id={v4()}
                   onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}
                 >
@@ -135,14 +143,14 @@ export class IglApplicationInfo {
                     {locales.entries.Lcz_BedConfiguration}
                   </option>
                   {this.bedPreferenceType.map(data => (
-                    <option value={data.CODE_NAME} selected={this.guestData.preference === data.CODE_NAME}>
+                    <option value={+data.CODE_NAME} selected={this.guestData.preference === +data.CODE_NAME}>
                       {data.CODE_VALUE_EN}
                     </option>
                   ))}
                 </select>
               </div>
               <div class="">
-                {getCurrencySymbol(this.currency.code) + this.guestInfo.rate}/{locales.entries.Lcz_Stay}
+                {getCurrencySymbol(this.currency.code) + Number(this.guestInfo.rate).toFixed(2)}/{locales.entries.Lcz_Stay}
               </div>
             </div>
           </div>
