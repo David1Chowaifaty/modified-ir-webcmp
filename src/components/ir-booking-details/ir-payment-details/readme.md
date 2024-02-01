@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property                  | Attribute                   | Description | Type        | Default     |
-| ------------------------- | --------------------------- | ----------- | ----------- | ----------- |
-| `bookingDetails`          | --                          |             | `Booking`   | `undefined` |
-| `defaultTexts`            | --                          |             | `Languages` | `undefined` |
-| `item`                    | `item`                      |             | `any`       | `undefined` |
-| `paymentExceptionMessage` | `payment-exception-message` |             | `string`    | `''`        |
+| Property                  | Attribute                   | Description | Type      | Default     |
+| ------------------------- | --------------------------- | ----------- | --------- | ----------- |
+| `bookingDetails`          | --                          |             | `Booking` | `undefined` |
+| `defaultTexts`            | --                          |             | `ILocale` | `undefined` |
+| `item`                    | `item`                      |             | `any`     | `undefined` |
+| `paymentExceptionMessage` | `payment-exception-message` |             | `string`  | `''`        |
 
 
 ## Events

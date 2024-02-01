@@ -4,7 +4,7 @@ import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
 import { PaymentService } from '@/services/payment.service';
-import { Languages } from '@/components';
+import { ILocale } from '@/components';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -14,7 +14,7 @@ import { Languages } from '@/components';
 export class IrPaymentDetails {
   @Prop({ mutable: true, reflect: true }) item: any;
   @Prop({ mutable: true }) bookingDetails: Booking;
-  @Prop() defaultTexts: Languages;
+  @Prop() defaultTexts: ILocale;
   @State() newTableRow: boolean = false;
 
   @State() collapsedPayment: boolean = false;
@@ -262,7 +262,7 @@ export class IrPaymentDetails {
     }
 
     return [
-      <div class="card">
+      <div class="card m-0">
         <div class="p-1">
           <div class="mb-2 h4">
             {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
@@ -272,22 +272,27 @@ export class IrPaymentDetails {
           {this.bookingGuarantee()}
           <div class="mt-2">
             <div>
-              <div class="d-flex align-items-center">
-                <strong class="mr-1">{this.defaultTexts.entries.Lcz_PaymentDueDates}</strong>
-                <ir-icon
-                  id="drawer-icon"
-                  icon={`${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`}
-                  data-toggle="collapse"
-                  data-target={`.roomName`}
-                  aria-expanded="false"
-                  aria-controls="myCollapse"
-                  class="sm-padding-right pointer"
-                  onClick={() => {
-                    this.collapsedPayment = !this.collapsedPayment;
-                  }}
-                ></ir-icon>
-              </div>
-              <table>{this.bookingDetails.financial.due_dates?.map(item => this._renderDueDate(item))}</table>
+              {this.bookingDetails.financial?.due_dates?.length > 0 && (
+                <Fragment>
+                  <div class="d-flex align-items-center">
+                    <strong class="mr-1">{this.defaultTexts.entries.Lcz_PaymentDueDates}</strong>
+                    <ir-icon
+                      id="drawer-icon"
+                      icon={`${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`}
+                      data-toggle="collapse"
+                      data-target={`.roomName`}
+                      aria-expanded="false"
+                      aria-controls="myCollapse"
+                      class="sm-padding-right pointer"
+                      onClick={() => {
+                        this.collapsedPayment = !this.collapsedPayment;
+                      }}
+                    ></ir-icon>
+                  </div>
+
+                  <table>{this.bookingDetails.financial.due_dates?.map(item => this._renderDueDate(item))}</table>
+                </Fragment>
+              )}
             </div>
           </div>
           <div class="mt-2 d-flex  flex-column rounded">

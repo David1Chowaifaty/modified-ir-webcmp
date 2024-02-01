@@ -1,10 +1,17 @@
 .confirmed {
-  /* background-color: #28c76f; */
   color: #fff;
   display: flex;
   align-items: center;
 }
-
+.bg-ir-green {
+  background: #629a4c;
+}
+.bg-ir-red {
+  background: #ff4961;
+}
+.bg-ir-orange {
+  background: #ff9149;
+}
 ir-select#update-status {
   transform: translateY(0.5rem);
 }

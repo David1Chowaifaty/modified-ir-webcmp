@@ -2,8 +2,7 @@ import { Component, Host, h, Prop, Event, EventEmitter, State, Listen, Fragment,
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
 import moment from 'moment';
-import { Unsubscribe } from '@reduxjs/toolkit';
-import { store } from '../../../redux/store';
+import locales from '@/stores/locales.store';
 //import { updateCategories } from '../../../utils/events.utils';
 
 @Component({
@@ -13,11 +12,10 @@ import { store } from '../../../redux/store';
 })
 export class IglToBeAssigned {
   @Prop() unassignedDatesProp: any;
-  @State() defaultTexts: any;
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
-  @State() loadingMessage: string  ;
+  @State() loadingMessage: string;
   @Prop({ mutable: true }) calendarData: { [key: string]: any };
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Event({ bubbles: true, composed: true })
@@ -37,20 +35,11 @@ export class IglToBeAssigned {
   private categoriesData: { [key: string]: any } = {};
   private toBeAssignedService: ToBeAssignedService = new ToBeAssignedService();
   private unassignedDates: any;
-  private unsubscribe:Unsubscribe;
   componentWillLoad() {
     this.reArrangeData();
-    this.updateFromStore()
-    this.unsubscribe=store.subscribe(()=>this.updateFromStore())
-    this.loadingMessage=this.defaultTexts.entries.Lcz_FetchingUnAssignedUnits;
+    this.loadingMessage = locales.entries.Lcz_FetchingUnAssignedUnits;
   }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback(){
-    this.unsubscribe()
-  }
+
   @Watch('unassignedDatesProp')
   handleUnassignedDatesToBeAssignedChange(newValue: any) {
     const { fromDate, toDate, data } = newValue;
@@ -261,14 +250,13 @@ export class IglToBeAssigned {
         <div>
           <div>
             <div class="stickyHeader">
-              <div class="tobeAssignedHeader pt-1">{this.defaultTexts.entries.Lcz_Assignments}</div>
+              <div class="tobeAssignedHeader pt-1">{locales.entries.Lcz_Assignments}</div>
               <div class="closeBtn pt-1" onClick={() => this.handleOptionEvent('closeSideMenu')}>
                 <i class="ft-chevrons-left"></i>
               </div>
               <hr />
               {Object.keys(this.data).length === 0 ? (
-                <p>{this.defaultTexts.entries.Lcz_AllBookingsAreAssigned
-                }</p>
+                <p>{locales.entries.Lcz_AllBookingsAreAssigned}</p>
               ) : this.isLoading ? (
                 <p>{this.loadingMessage}</p>
               ) : (
@@ -297,7 +285,7 @@ export class IglToBeAssigned {
                       </div>
                     </div>
                   ) : (
-                    this.defaultTexts.entries.Lcz_AllBookingsAreAssigned
+                    locales.entries.Lcz_AllBookingsAreAssigned
                   )}
                 </Fragment>
               )}
@@ -308,7 +296,7 @@ export class IglToBeAssigned {
                   Object.keys(this.data[this.selectedDate].categories).length ? (
                     this.getCategoryView()
                   ) : (
-                    <div class="mt-1">{this.defaultTexts.entries.Lcz_AllAssignForThisDay}</div>
+                    <div class="mt-1">{locales.entries.Lcz_AllAssignForThisDay}</div>
                   )
                 ) : null}
               </div>

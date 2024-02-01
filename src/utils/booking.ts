@@ -2,7 +2,7 @@ import moment from 'moment';
 import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, RoomBlockDetails } from '../models/IBooking';
 import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
-import { store } from '../redux/store';
+import locales from '@/stores/locales.store';
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   const myBookings: any[] = [];
@@ -32,7 +32,7 @@ const status: Record<string, STATUS> = {
   '003': 'BLOCKED-WITH-DATES',
   '002': 'BLOCKED',
 };
-const bookingStatus: Record<string, STATUS> = {
+export const bookingStatus: Record<string, STATUS> = {
   '000': 'IN-HOUSE',
   '001': 'PENDING-CONFIRMATION',
   '002': 'CONFIRMED',
@@ -65,11 +65,10 @@ async function getStayStatus() {
   }
 }
 function renderBlock003Date(date, hour, minute) {
-  const { languages } = store.getState();
   const dt = new Date(date);
   dt.setHours(hour);
   dt.setMinutes(minute);
-  return `${languages.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
+  return `${locales.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
 function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
   if (isBlockUnit(cell.STAY_STATUS_CODE)) {
@@ -106,7 +105,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     TO_DATE: cell.DATE,
     FROM_DATE: cell.DATE,
     NO_OF_DAYS: 1,
-    STATUS: bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : cell.booking?.status.code],
+    STATUS: bookingStatus[cell.booking?.status.code],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
@@ -145,22 +144,12 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
 function updateBookingWithStayData(data: any, cell: CellType): any {
   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
   data.TO_DATE = cell.DATE;
-  if (!isBlockUnit(cell.STAY_STATUS_CODE)) {
-    const now = moment();
-    const toDate = moment(data.TO_DATE, 'YYYY-MM-DD');
-    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
-      data.STATUS = bookingStatus['003'];
-    } else {
-      data.STATUS = bookingStatus[moment(cell.DATE, 'YYYY-MM-DD').isSameOrBefore(moment()) ? '000' : cell.booking?.status.code];
-    }
-  }
   if (cell.booking) {
     const { arrival } = cell.booking;
     Object.assign(data, {
       ARRIVAL_TIME: arrival.description,
     });
   }
-
   return data;
 }
 
@@ -177,16 +166,28 @@ function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { cod
 }
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
-  console.log(data);
+  //console.log(data);
   const renderStatus = room => {
     const now = moment();
     const toDate = moment(room.to_date, 'YYYY-MM-DD');
     const fromDate = moment(room.from_date, 'YYYY-MM-DD');
-    if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+
+    if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+      return bookingStatus['000'];
+    } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+      return bookingStatus['000'];
+    } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+      return bookingStatus['000'];
+    } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
       return bookingStatus['003'];
     } else {
-      return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
+      return bookingStatus[data?.status.code || '001'];
     }
+    // if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
+    //   return bookingStatus['003'];
+    // } else {
+    //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
+    // }
   };
 
   data.rooms.forEach(room => {

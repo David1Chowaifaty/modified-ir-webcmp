@@ -12,7 +12,7 @@
 | `bookingEvent`      | --                      |             | `Booking` | `undefined` |
 | `bookingIndex`      | `booking-index`         |             | `number`  | `undefined` |
 | `currency`          | `currency`              |             | `string`  | `'USD'`     |
-| `defaultTexts`      | `default-texts`         |             | `any`     | `undefined` |
+| `defaultTexts`      | --                      |             | `ILocale` | `undefined` |
 | `hasCheckIn`        | `has-check-in`          |             | `boolean` | `false`     |
 | `hasCheckOut`       | `has-check-out`         |             | `boolean` | `false`     |
 | `hasRoomAdd`        | `has-room-add`          |             | `boolean` | `false`     |

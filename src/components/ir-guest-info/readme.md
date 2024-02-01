@@ -7,13 +7,14 @@
 
 ## Properties
 
-| Property                 | Attribute  | Description | Type             | Default     |
-| ------------------------ | ---------- | ----------- | ---------------- | ----------- |
-| `defaultTexts`           | --         |             | `Languages`      | `undefined` |
-| `email`                  | `email`    |             | `string`         | `undefined` |
-| `language`               | `language` |             | `string`         | `undefined` |
-| `setupDataCountries`     | --         |             | `selectOption[]` | `null`      |
-| `setupDataCountriesCode` | --         |             | `selectOption[]` | `null`      |
+| Property                 | Attribute     | Description | Type             | Default     |
+| ------------------------ | ------------- | ----------- | ---------------- | ----------- |
+| `booking_nbr`            | `booking_nbr` |             | `string`         | `undefined` |
+| `defaultTexts`           | --            |             | `ILocale`        | `undefined` |
+| `email`                  | `email`       |             | `string`         | `undefined` |
+| `language`               | `language`    |             | `string`         | `undefined` |
+| `setupDataCountries`     | --            |             | `selectOption[]` | `null`      |
+| `setupDataCountriesCode` | --            |             | `selectOption[]` | `null`      |
 
 
 ## Events

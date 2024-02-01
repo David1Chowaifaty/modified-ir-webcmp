@@ -2,7 +2,8 @@ import { Component, State, h, Prop, EventEmitter, Event } from '@stencil/core';
 import { selectOption } from '@/common/models';
 import { Guest } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
-import { ICountry, Languages } from '@/components';
+import { ICountry } from '@/components';
+import { ILocale } from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-guest-info',
@@ -11,7 +12,7 @@ import { ICountry, Languages } from '@/components';
 export class GuestInfo {
   @Prop({ mutable: true, reflect: true }) setupDataCountries: selectOption[] = null;
   @Prop({ mutable: true, reflect: true }) setupDataCountriesCode: selectOption[] = null;
-  @Prop() defaultTexts: Languages;
+  @Prop() defaultTexts: ILocale;
   @Prop() language: string;
   @Prop() email: string;
   @Prop() booking_nbr: string;

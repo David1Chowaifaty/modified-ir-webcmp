@@ -2,8 +2,7 @@ import { Component, Event, EventEmitter, Host, Prop, h, State, Listen, Watch } f
 import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
 import moment from 'moment';
-import { Unsubscribe } from '@reduxjs/toolkit';
-import { store } from '../../../redux/store';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'igl-cal-header',
@@ -23,14 +22,12 @@ export class IglCalHeader {
   @Prop() propertyid: number;
   @Prop() unassignedDates;
   @Prop() to_date: string;
-  @State() defaultTexts: any;
   @State() renderAgain: boolean = false;
   @State() unassignedRoomsNumber: any = {};
   private searchValue: string = '';
   private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
-  private unsubscribe: Unsubscribe;
   componentWillLoad() {
     try {
       this.initializeRoomsList();
@@ -38,18 +35,9 @@ export class IglCalHeader {
       if (!this.calendarData.is_vacation_rental && Object.keys(this.unassignedDates).length > 0) {
         this.fetchAndAssignUnassignedRooms();
       }
-      this.updateFromStore();
-      this.unsubscribe = store.subscribe(() => this.updateFromStore());
     } catch (error) {
       console.error('Error in componentWillLoad:', error);
     }
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
   }
   @Watch('unassignedDates')
   handleCalendarDataChanged() {
@@ -177,7 +165,7 @@ export class IglCalHeader {
       FROM_DATE: from_date, // "2023-07-09",
       TO_DATE: to_date, // "2023-07-11",
       roomsInfo: this.calendarData.roomsInfo,
-      TITLE: this.defaultTexts.entries.Lcz_NewBooking,
+      TITLE: locales.entries.Lcz_NewBooking,
       event_type: 'PLUS_BOOKING',
       legendData: this.calendarData.formattedLegendData,
       defaultDateRange: {
@@ -207,18 +195,12 @@ export class IglCalHeader {
                 onClick={() => this.handleOptionEvent('showAssigned')}
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title={this.defaultTexts.entries.Lcz_UnassignedUnitsTooltip}
+                title={locales.entries.Lcz_UnassignedUnitsTooltip}
               >
                 <i class="la la-tasks"></i>
               </div>
             )}
-            <div
-              class="caledarBtns"
-              onClick={() => this.handleOptionEvent('calendar')}
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title={this.defaultTexts.entries.Lcz_Navigate}
-            >
+            <div class="caledarBtns" onClick={() => this.handleOptionEvent('calendar')} data-toggle="tooltip" data-placement="bottom" title={locales.entries.Lcz_Navigate}>
               <i class="la la-calendar-o"></i>
               {/* <input  type="date" onChange={this.handleDateSelect.bind(this)} title="" /> */}
               <ir-date-picker
@@ -232,7 +214,7 @@ export class IglCalHeader {
                 class="datePickerHidden"
               ></ir-date-picker>
             </div>
-            <div class="caledarBtns" onClick={() => this.handleOptionEvent('gotoToday')} data-toggle="tooltip" data-placement="bottom" title={this.defaultTexts.entries.Lcz_Today}>
+            <div class="caledarBtns" onClick={() => this.handleOptionEvent('gotoToday')} data-toggle="tooltip" data-placement="bottom" title={locales.entries.Lcz_Today}>
               <i class="la la-clock-o"></i>
             </div>
             <div
@@ -240,7 +222,7 @@ export class IglCalHeader {
               onClick={() => this.handleOptionEvent('add', this.getNewBookingModel())}
               data-toggle="tooltip"
               data-placement="bottom"
-              title={this.defaultTexts.entries.Lcz_CreateNewBooking}
+              title={locales.entries.Lcz_CreateNewBooking}
             >
               <i class="la la-plus"></i>
             </div>
@@ -252,7 +234,7 @@ export class IglCalHeader {
                 class="form-control form-control-sm input-sm"
                 id="iconLeft7"
                 value={this.searchValue}
-                placeholder={this.defaultTexts.entries.Lcz_FindUnit}
+                placeholder={locales.entries.Lcz_FindUnit}
                 onInput={event => this.handleFilterRooms(event)}
               />
               {this.searchValue !== '' ? (

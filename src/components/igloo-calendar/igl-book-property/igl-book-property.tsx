@@ -7,8 +7,7 @@ import { transformNewBLockedRooms } from '../../../utils/booking';
 import { IglBookPropertyService } from './igl-book-property.service';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../models/igl-book-property';
 import { EventsService } from '../../../services/events.service';
-import { Unsubscribe } from '@reduxjs/toolkit';
-import { store } from '../../../redux/store';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'igl-book-property',
@@ -18,7 +17,6 @@ import { store } from '../../../redux/store';
 export class IglBookProperty {
   @Prop() propertyid: number;
   @Prop() allowedBookingSources: any;
-  @State() defaultTexts;
   @Prop() language: string;
   @Prop() countryNodeList;
   @Prop() showPaymentDetails: boolean = false;
@@ -49,11 +47,11 @@ export class IglBookProperty {
   private bookPropertyService = new IglBookPropertyService();
   private eventsService = new EventsService();
   private defaultDateRange: { from_date: string; to_date: string };
-  private unsubscribe: Unsubscribe;
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
   @Event() resetBookingData: EventEmitter<null>;
+  @State() buttonName = '';
   handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       this.closeWindow();
@@ -64,7 +62,6 @@ export class IglBookProperty {
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
-    this.unsubscribe();
   }
   @Listen('inputCleared')
   clearBooking(e: CustomEvent) {
@@ -82,7 +79,6 @@ export class IglBookProperty {
     e.stopImmediatePropagation();
     e.stopPropagation;
     const { key, data } = e.detail;
-    console.log(data, key);
     if (key === 'select') {
       const res = await this.bookingService.getExposedBooking((data as any).booking_nbr, this.language);
       this.bookPropertyService.setBookingInfoFromAutoComplete(this, res);
@@ -109,7 +105,6 @@ export class IglBookProperty {
       this.setOtherProperties(setupEntries);
 
       if (this.isEventType('EDIT_BOOKING')) {
-        console.log('defaul data:', this.defaultData);
         this.adultChildCount = {
           adult: this.defaultData.ADULTS_COUNT,
           child: this.defaultData.CHILDREN_COUNT,
@@ -134,19 +129,56 @@ export class IglBookProperty {
       } else {
         this.page = 'page_one';
       }
-      this.updateFromStore();
-      this.unsubscribe = store.subscribe(() => this.updateFromStore());
     } catch (error) {
       console.error('Error fetching setup entries:', error);
     }
   }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
 
   async fetchSetupEntries() {
     return await this.bookingService.fetchSetupEntries();
+  }
+  isGuestDataIncomplete() {
+    if (this.guestData.length === 0) {
+      return true;
+    }
+    for (const data of this.guestData) {
+      if (data.guestName === '' || data.preference === '' || data.preference === 0 || data.roomId === '' || data.roomId === 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+  isButtonDisabled() {
+    const isValidProperty = (property, key, comparedBy) => {
+      if (!property) {
+        return true;
+      }
+      if (property === this.guestData) {
+        return this.isGuestDataIncomplete();
+      }
+      // const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
+      // if (!this.showPaymentDetails && isCardDetails) {
+      //   return false;
+      // }
+      if (key === 'selectedArrivalTime') {
+        if (property[key] !== undefined) {
+          return property[key].code === '';
+        } else {
+          return true;
+        }
+      }
+      return property[key] === comparedBy || property[key] === undefined;
+    };
+    return (
+      isValidProperty(this.guestData, 'guestName', '') ||
+      isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
+      isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
+      isValidProperty(this.bookedByInfoData, 'firstName', '') ||
+      isValidProperty(this.bookedByInfoData, 'lastName', '') ||
+      isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
+      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '') ||
+      isValidProperty(this.bookedByInfoData, 'email', '')
+    );
   }
 
   setSourceOptions(bookingSource: any[]) {
@@ -296,11 +328,11 @@ export class IglBookProperty {
         ></igl-block-dates-view>
         <div class="p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between">
           <button class="btn btn-secondary flex-fill" onClick={() => this.closeWindow()}>
-            {this.defaultTexts.entries.Lcz_Cancel}
+            {locales.entries.Lcz_Cancel}
           </button>
 
           <button class="btn btn-primary flex-fill" onClick={() => this.handleBlockDate()}>
-            {this.defaultTexts.entries.Lcz_Blockdates}
+            {locales.entries.Lcz_Blockdates}
           </button>
         </div>
       </Fragment>
@@ -313,25 +345,32 @@ export class IglBookProperty {
       data?: CustomEvent;
     }>,
   ) {
-    event.stopImmediatePropagation();
-    event.stopPropagation();
     switch (event.detail.key) {
       case 'save':
         this.bookUser(false);
+        this.buttonName === 'save';
         break;
       case 'cancel':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.closeWindow();
         break;
       case 'back':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.gotoPage('page_one');
         break;
       case 'book':
         this.bookUser(false);
+        this.buttonName = 'book';
         break;
       case 'bookAndCheckIn':
         this.bookUser(true);
+        this.buttonName = 'bookAndCheckIn';
         break;
       case 'next':
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.gotoPage('page_two');
       case 'check':
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
@@ -365,8 +404,18 @@ export class IglBookProperty {
   }
 
   async bookUser(check_in: boolean) {
-    console.log('object');
     this.setLoadingState(check_in);
+    if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
+      if (this.isGuestDataIncomplete()) {
+        this.isLoading = '';
+        return;
+      }
+    } else {
+      if (this.isButtonDisabled()) {
+        this.isLoading = '';
+        return;
+      }
+    }
     try {
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);
@@ -474,6 +523,7 @@ export class IglBookProperty {
                 showSplitBookingOption={this.showSplitBookingOption}
                 language={this.language}
                 bookedByInfoData={this.bookedByInfoData}
+                defaultGuestData={this.defaultData}
                 isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
                 onDataUpdateEvent={event => this.handlePageTwoDataUpdateEvent(event)}
               ></igl-pagetwo>

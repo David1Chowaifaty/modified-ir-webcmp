@@ -48,7 +48,9 @@ export type bookingReasons =
   | 'REALLOCATE_EXPOSED_ROOM_BOOK'
   | 'UNBLOCK_EXPOSED_UNIT'
   | 'DELETE_CALENDAR_POOL'
-  | 'GET_UNASSIGNED_DATES';
+  | 'GET_UNASSIGNED_DATES'
+  | 'UPDATE_CALENDAR_AVAILABILITY'
+  | 'CHANGE_IN_DUE_AMOUNT';
 export interface ICountry {
   cities: string[];
   id: number;
@@ -111,8 +113,15 @@ export interface RoomType {
   physicalrooms: PhysicalRoomType[];
   rate: number;
   rateplans: RatePlanType[];
+  exposed_inventory: IExposedInventory;
 }
-
+export interface IExposedInventory {
+  blocked: number;
+  booked: number;
+  offline: number;
+  rts: number;
+  total: number;
+}
 export interface PhysicalRoomType {
   calendar_cell: CalendarCellType;
   id: number;

@@ -2,13 +2,11 @@ import { Component, Host, Prop, State, h, Event, EventEmitter, Fragment } from '
 import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
 import { convertDatePrice, formatDate, getCurrencySymbol, getDaysArray } from '../../utils/utils';
-import { store } from '../../redux/store';
 import { Booking, Day, IUnit, Room } from '../../models/booking.dto';
 import { IRoomNightsDataEventPayload } from '../../models/property-types';
 import { v4 } from 'uuid';
 import moment from 'moment';
-import { Unsubscribe } from '@reduxjs/toolkit';
-import { Languages } from '@/components';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-room-nights',
@@ -28,7 +26,6 @@ export class IrRoomNights {
 
   @State() bookingEvent: Booking;
   @State() selectedRoom: Room;
-  @State() defaultTexts: Languages;
   @State() rates: Day[] = [];
   @State() isLoading = false;
   @State() initialLoading = false;
@@ -39,7 +36,6 @@ export class IrRoomNights {
   @Event() closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
 
   private bookingService = new BookingService();
-  private unsubscribe: Unsubscribe;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -48,74 +44,82 @@ export class IrRoomNights {
     this.init();
   }
 
-  updateStore() {
-    this.defaultTexts = store.getState().languages;
-  }
   isButtonDisabled() {
-    return this.isLoading || this.rates.some(rate => rate.amount === 0 || rate.amount === -1) || this.inventory === 0 || this.inventory === null;
+    return this.isLoading || this.rates.some(rate => rate.amount === -1) || this.inventory === 0 || this.inventory === null;
   }
   async init() {
     try {
-      this.updateStore();
       this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
+
       if (this.bookingEvent) {
         const filteredRooms = this.bookingEvent.rooms.filter(room => room.identifier === this.identifier);
         this.selectedRoom = filteredRooms[0];
 
         const lastDay = this.selectedRoom?.days[this.selectedRoom.days.length - 1];
-        let first_rate = this.selectedRoom.days[0].amount;
+        //let first_rate = this.selectedRoom.days[0].amount;
         if (moment(this.toDate).add(-1, 'days').isSame(moment(lastDay.date))) {
-          this.fetchBookingAvailability(this.fromDate, this.selectedRoom.days[0].date);
+          const amount = await this.fetchBookingAvailability(
+            this.fromDate,
+            this.selectedRoom.days[0].date,
+            this.selectedRoom.rateplan.id,
+            this.selectedRoom.rateplan.selected_variation.adult_child_offering,
+          );
           const newDatesArr = getDaysArray(this.selectedRoom.days[0].date, this.fromDate);
           this.isEndDateBeforeFromDate = true;
           this.rates;
           this.rates = [
             ...newDatesArr.map(day => ({
-              amount: first_rate,
+              amount,
               date: day,
             })),
             ...this.selectedRoom.days,
           ];
         } else {
-          this.fetchBookingAvailability(lastDay.date, moment(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'));
+          const amount = await this.fetchBookingAvailability(
+            lastDay.date,
+            moment(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'),
+            this.selectedRoom.rateplan.id,
+            this.selectedRoom.rateplan.selected_variation.adult_child_offering,
+          );
           const newDatesArr = getDaysArray(lastDay.date, this.toDate);
           this.rates = [
             ...this.selectedRoom.days,
             ...newDatesArr.map(day => ({
-              amount: first_rate,
+              amount,
               date: day,
             })),
           ];
         }
         this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
       }
-      this.unsubscribe = store.subscribe(() => this.updateStore());
     } catch (error) {
       console.log(error);
     }
   }
-  disconnectedCallback() {
-    this.unsubscribe();
-  }
   handleInput(event: InputEvent, index: number) {
     let inputElement = event.target as HTMLInputElement;
     let inputValue = inputElement.value;
-
     let days = [...this.rates];
-    if (!isNaN(Number(inputValue))) {
-      days[index].amount = +inputValue;
+    inputValue = inputValue.replace(/[^0-9.]/g, '');
+    if (inputValue === '') {
+      days[index].amount = -1;
     } else {
-      inputValue = inputValue.replace(/[^0-9]/g, '');
-      inputElement.value = inputValue;
-      if (inputValue === '') {
-        days[index].amount = -1;
-      } else {
-        days[index].amount = +inputValue;
+      const decimalCheck = inputValue.split('.');
+      if (decimalCheck.length > 2) {
+        inputValue = inputValue.substring(0, inputValue.length - 1);
+        inputElement.value = inputValue;
+      } else if (decimalCheck.length === 2 && decimalCheck[1].length > 2) {
+        inputValue = `${decimalCheck[0]}.${decimalCheck[1].substring(0, 2)}`;
+        inputElement.value = inputValue;
+      }
+      if (!isNaN(Number(inputValue))) {
+        days[index].amount = Number(inputValue);
       }
     }
     this.rates = days;
+    console.log(this.rates);
   }
-  async fetchBookingAvailability(from_date: string, to_date: string) {
+  async fetchBookingAvailability(from_date: string, to_date: string, rate_plan_id: number, selected_variation: string) {
     try {
       this.initialLoading = true;
       const bookingAvailability = await this.bookingService.getBookingAvailability(
@@ -131,6 +135,9 @@ export class IrRoomNights {
         this.bookingEvent.currency,
       );
       this.inventory = bookingAvailability.roomtypes[0].inventory;
+      const rate_plan_index = bookingAvailability.roomtypes[0].rateplans.find(rate => rate.id === rate_plan_id);
+      const { amount } = rate_plan_index.variations.find(variation => variation.adult_child_offering === selected_variation);
+      return amount;
     } catch (error) {
       console.log(error);
     } finally {
@@ -145,8 +152,8 @@ export class IrRoomNights {
           type="text"
           class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
           id={v4()}
-          value={day.amount > 0 ? Number(day.amount).toFixed(2) : ''}
-          placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
+          value={day.amount > 0 ? day.amount : ''}
+          placeholder={locales.entries.Lcz_Rate || 'Rate'}
           onInput={event => this.handleInput(event, index)}
         />
         <span class="currency">{currency_symbol}</span>
@@ -219,14 +226,14 @@ export class IrRoomNights {
   }
   render() {
     if (!this.bookingEvent) {
-      return <p>{this.defaultTexts.entries.Lcz_Loading}</p>;
+      return <p>{locales.entries.Lcz_Loading}</p>;
     }
     return (
       <Host>
         <div class="card position-sticky mb-0 shadow-none p-0 ">
           <div class="d-flex mt-2 align-items-center justify-content-between ">
             <h3 class="card-title text-left pb-1 font-medium-2 px-2">
-              {this.defaultTexts.entries.Lcz_AddingRoomNightsTo} {this.selectedRoom?.roomtype?.name} {(this.selectedRoom?.unit as IUnit).name}
+              {locales.entries.Lcz_AddingRoomNightsTo} {this.selectedRoom?.roomtype?.name} {(this.selectedRoom?.unit as IUnit).name}
             </h3>
             <button type="button" class="close close-icon" onClick={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}>
               <ir-icon icon="ft-x" class={'m-0'}></ir-icon>
@@ -235,18 +242,17 @@ export class IrRoomNights {
         </div>
         <section class={'text-left px-2'}>
           <p class={'font-medium-1'}>
-            {`${this.defaultTexts.entries.Lcz_Booking}#`} {this.bookingNumber}
+            {`${locales.entries.Lcz_Booking}#`} {this.bookingNumber}
           </p>
           <p class={'font-weight-bold font-medium-1'}>{`${formatDate(this.fromDate, 'YYYY-MM-DD')} - ${formatDate(this.toDate, 'YYYY-MM-DD')}`}</p>
           {this.initialLoading ? (
-            <p class={'mt-2 text-secondary'}>{this.defaultTexts.entries['Lcz_CheckingRoomAvailability ']}</p>
+            <p class={'mt-2 text-secondary'}>{locales.entries['Lcz_CheckingRoomAvailability ']}</p>
           ) : (
             <Fragment>
               <p class={'font-medium-1 mb-0'}>
-                {`${this.selectedRoom.rateplan.name}`}{' '}
-                {this.selectedRoom.rateplan.is_non_refundable && <span class={'irfontgreen'}>{this.defaultTexts.entries.Lcz_NonRefundable}</span>}
+                {`${this.selectedRoom.rateplan.name}`} {this.selectedRoom.rateplan.is_non_refundable && <span class={'irfontgreen'}>{locales.entries.Lcz_NonRefundable}</span>}
               </p>
-              {(this.inventory === 0 || this.inventory === null) && <p class="font-medium-1 text danger">{this.defaultTexts.entries.Lcz_NoAvailabilityForAdditionalNights}</p>}
+              {(this.inventory === 0 || this.inventory === null) && <p class="font-medium-1 text danger">{locales.entries.Lcz_NoAvailabilityForAdditionalNights}</p>}
 
               {this.selectedRoom.rateplan.custom_text && <p class={'text-secondary mt-0'}>{this.selectedRoom.rateplan.custom_text}</p>}
               {this.renderDates()}
@@ -260,12 +266,12 @@ export class IrRoomNights {
             class={'btn btn-secondary full-width'}
             onClick={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
           >
-            {this.defaultTexts?.entries.Lcz_Cancel}
+            {locales?.entries.Lcz_Cancel}
           </button>
           {this.inventory > 0 && this.inventory !== null && (
             <button disabled={this.isButtonDisabled()} type="button" class={'btn btn-primary ml-2 full-width'} onClick={this.handleRoomConfirmation.bind(this)}>
               {this.isLoading && <i class="la la-circle-o-notch spinner mx-1"></i>}
-              {this.defaultTexts?.entries.Lcz_Confirm}
+              {locales?.entries.Lcz_Confirm}
             </button>
           )}
         </section>

@@ -1,7 +1,6 @@
 import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/core';
 import { IToast } from '../../ir-toast/toast';
-import { Unsubscribe } from '@reduxjs/toolkit';
-import { store } from '../../../redux/store';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'igl-date-range',
@@ -15,7 +14,6 @@ export class IglDateRange {
   @Prop() dateLabel;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
-  @State() defaultTexts: any;
   @Event() toast: EventEmitter<IToast>;
 
   private totalNights: number = 0;
@@ -24,15 +22,12 @@ export class IglDateRange {
   private fromDateStr: string = 'from';
   private toDateStr: string = 'to';
   dateRangeInput: HTMLElement;
-  private unsubscribe: Unsubscribe;
 
   getStringDateFormat(dt) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
 
   componentWillLoad() {
-    this.updateFromStore();
-    this.unsubscribe = store.subscribe(() => this.updateFromStore());
     let dt = new Date();
     dt.setHours(0, 0, 0, 0);
     dt.setDate(dt.getDate() + 1);
@@ -58,13 +53,6 @@ export class IglDateRange {
         dateDifference: this.totalNights,
       });
     }
-  }
-  updateFromStore() {
-    const state = store.getState();
-    this.defaultTexts = state.languages;
-  }
-  disconnectedCallback() {
-    this.unsubscribe();
   }
 
   calculateTotalNights() {
@@ -97,9 +85,9 @@ export class IglDateRange {
     return (
       <Host>
         <div class="calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center ">
-          <h5 class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.dateLabel}</h5>
+          <span class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.dateLabel}:</span>
           <div class={'d-flex align-items-center mr-lg-1'}>
-            <div class="iglRangePicker form-control input-sm" data-state={this.disabled ? 'disabled' : 'active'}>
+            <div class="iglRangePicker form-control input-sm " data-state={this.disabled ? 'disabled' : 'active'}>
               <ir-date-picker
                 class={'date-range-input'}
                 disabled={this.disabled}
@@ -113,9 +101,7 @@ export class IglDateRange {
               ></ir-date-picker>
             </div>
             {this.totalNights ? (
-              <span class="iglRangeNights">
-                {this.totalNights + (this.totalNights > 1 ? ` ${this.defaultTexts.entries.Lcz_Nights}` : ` ${this.defaultTexts.entries.Lcz_Night}`)}
-              </span>
+              <span class="iglRangeNights ml-1">({this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)})</span>
             ) : (
               ''
             )}

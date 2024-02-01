@@ -2,7 +2,7 @@ import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element, 
 import { v4 } from 'uuid';
 import { BookingService } from '../../services/booking.service';
 import { IToast } from '../ir-toast/toast';
-import { store } from '../../redux/store';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-autocomplete',
@@ -22,7 +22,7 @@ export class IrAutocomplete {
   @Prop() value: string;
   @Prop() from_date: string = '';
   @Prop() to_date: string = '';
-
+  @Prop() danger_border: boolean;
   @State() inputValue: string = '';
   @State() data: any[] = [];
   @State() selectedIndex: number = -1;
@@ -40,10 +40,7 @@ export class IrAutocomplete {
   private bookingService = new BookingService();
   private no_result_found = '';
   componentWillLoad() {
-    this.updateFromStore();
-  }
-  updateFromStore() {
-    this.no_result_found = store.getState().languages.entries.Lcz_NoResultsFound;
+    this.no_result_found = locales.entries.Lcz_NoResultsFound;
   }
 
   handleKeyDown(event: KeyboardEvent) {
@@ -214,15 +211,16 @@ export class IrAutocomplete {
   renderDropdown() {
     if (this.inputValue !== '') {
       return (
-        <div class="position-absolute border rounded border-light combobox">
+        <div class={`position-absolute border rounded combobox`}>
           {this.data?.map((d, index) => (
             <p role="button" onKeyDown={e => this.handleItemKeyDown(e, index)} data-selected={this.selectedIndex === index} tabIndex={0} onClick={() => this.selectItem(index)}>
               {this.isSplitBooking ? (
                 <Fragment>{`${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`}</Fragment>
               ) : (
                 <div class={'d-flex align-items-center flex-fill'}>
-                  <p class={'p-0 m-0'}>{`${d.email}`}</p>
-                  <span class={'d-sm-flex p-0 m-0'}>{` - ${d.first_name} ${d.last_name}`}</span>
+                  <p class={'p-0 m-0'}>
+                    {`${d.email}`} <span class={'p-0 m-0'}>{` - ${d.first_name} ${d.last_name}`}</span>
+                  </p>
                 </div>
               )}
             </p>
@@ -262,7 +260,7 @@ export class IrAutocomplete {
             disabled={this.disabled}
             id={this.inputId}
             onKeyDown={this.handleKeyDown.bind(this)}
-            class={'form-control input-sm flex-full'}
+            class={`form-control input-sm flex-full ${this.danger_border && 'border-danger'}`}
             type={this.type}
             name={this.name}
             value={this.value || this.inputValue}

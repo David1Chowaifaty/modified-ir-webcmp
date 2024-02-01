@@ -7,6 +7,8 @@ import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import { RoomService } from '../../services/room.service';
+import locales, { ILocale } from '@/stores/locales.store';
+import { IToast } from '../ir-toast/toast';
 
 @Component({
   tag: 'ir-booking-details',
@@ -19,6 +21,7 @@ export class IrBookingDetails {
   @Prop() editBookingItem;
   // Setup Data
   @Prop() setupDataCountries: selectOption[] = null;
+  @Prop() show_header: boolean = true;
   @Prop() setupDataCountriesCode: selectOption[] = null;
   @Prop() languageAbreviation: string = '';
   @Prop() language: string = '';
@@ -56,7 +59,7 @@ export class IrBookingDetails {
   @State() calendarData: any = {};
   // Guest Data
   @State() guestData: Guest = null;
-  @State() defaultTexts;
+  @State() defaultTexts: ILocale;
   // Rerender Flag
   @State() rerenderFlag = false;
   @State() isSidebarOpen = false;
@@ -75,6 +78,7 @@ export class IrBookingDetails {
   @Event() handleRoomDelete: EventEmitter;
   // Payment Event
   @Event() handleAddPayment: EventEmitter;
+  @Event() toast: EventEmitter<IToast>;
   private bookingService = new BookingService();
   private roomService = new RoomService();
   componentDidLoad() {
@@ -108,7 +112,10 @@ export class IrBookingDetails {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
-
+      if (!locales.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
+      }
       this.defaultTexts = languageTexts;
       console.log(this.defaultTexts);
       this.countryNodeList = countriesList;
@@ -131,13 +138,12 @@ export class IrBookingDetails {
   @Listen('iconClickHandler')
   handleIconClick(e) {
     const target = e.target;
-
     switch (target.id) {
       case 'print':
-        this.handlePrintClick.emit();
+        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
         return;
       case 'receipt':
-        this.handleReceiptClick.emit();
+        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
         return;
       case 'book-delete':
         this.handleDeleteClick.emit();
@@ -170,23 +176,21 @@ export class IrBookingDetails {
     this.isSidebarOpen = true;
   }
   @Listen('selectChange')
-  handleSelectChange(e) {
+  handleSelectChange(e: CustomEvent<any>) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
     const target = e.target;
-    const targetID = target.id;
-    switch (targetID) {
-      case 'update-status':
-        this.tempStatus = e.detail;
-        break;
-    }
+    this.tempStatus = (target as any).selectedValue;
   }
 
   @Listen('clickHanlder')
-  handleClick(e) {
+  async handleClick(e) {
     const target = e.target;
     const targetID = target.id;
     switch (targetID) {
       case 'update-status-btn':
-        this.updateStatus();
+        await this.updateStatus();
+        await this.resetBookingData();
         break;
     }
   }
@@ -197,16 +201,15 @@ export class IrBookingDetails {
     console.log('The old value of dropdownStatuses is: ', oldValue);
     // Make the newValue in way that can be handled by the dropdown
     try {
-      const _newValue = newValue.map(item => {
-        return {
-          value: item.CODE_NAME,
-          text: this._getBookingStatus(item.CODE_NAME, '_BOOK_STATUS'),
-        };
-      });
-
-      this.statusData = _newValue;
-      console.log('The new value of statusData is: ', this.statusData);
-      this.rerenderFlag = !this.rerenderFlag;
+      // const _newValue = newValue.map(item => {
+      //   return {
+      //     value: item.CODE_NAME,
+      //     text: this._getBookingStatus(item.CODE_NAME, '_BOOK_STATUS'),
+      //   };
+      // });
+      // this.statusData = _newValue;
+      // console.log('The new value of statusData is: ', this.statusData);
+      // this.rerenderFlag = !this.rerenderFlag;
     } catch (e) {
       console.log('Error in watchDropdownStatuses: ', e);
     }
@@ -233,12 +236,24 @@ export class IrBookingDetails {
     return value;
   }
 
-  updateStatus() {
-    const bookingDetails = this.bookingDetails;
-    bookingDetails.BOOK_STATUS_CODE = this.tempStatus;
-    this.bookingDetails = bookingDetails;
-    this.rerenderFlag = !this.rerenderFlag;
-    this.sendDataToServer.emit(this.bookingDetails);
+  async updateStatus() {
+    if (this.tempStatus !== 'Select' && this.tempStatus !== null) {
+      try {
+        await axios.post(`/Change_Exposed_Booking_Status?Ticket=${this.ticket}`, {
+          book_nbr: this.bookingNumber,
+          status: this.tempStatus,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      this.toast.emit({
+        type: 'error',
+        description: '',
+        title: locales.entries.Lcz_SelectStatus,
+        position: 'top-right',
+      });
+    }
   }
   @Listen('editInitiated')
   handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
@@ -251,10 +266,7 @@ export class IrBookingDetails {
   handleDeleteFinish(e: CustomEvent) {
     this.bookingData = { ...this.bookingData, rooms: this.bookingData.rooms.filter(room => room.identifier !== e.detail) };
   }
-  @Listen('resetBookingData')
-  async handleResetBookingData(e: CustomEvent) {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
+  async resetBookingData() {
     try {
       const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       this.bookingData = { ...booking };
@@ -262,26 +274,32 @@ export class IrBookingDetails {
       console.log(error);
     }
   }
+  @Listen('resetBookingData')
+  async handleResetBookingData(e: CustomEvent) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    await this.resetBookingData();
+  }
   render() {
     if (!this.bookingData) {
       return null;
     }
 
-    // let confirmationBG: string = '';
-    // switch (this.bookingData.status.code) {
-    //   case '001':
-    //     confirmationBG = 'bg-ir-orange';
-    //     break;
-    //   case '002':
-    //     confirmationBG = 'bg-ir-green';
-    //     break;
-    //   case '003':
-    //     confirmationBG = 'bg-ir-red';
-    //     break;
-    //   case '004':
-    //     confirmationBG = 'bg-ir-red';
-    //     break;
-    // }
+    let confirmationBG: string = '';
+    switch (this.bookingData.status.code) {
+      case '001':
+        confirmationBG = 'bg-ir-orange';
+        break;
+      case '002':
+        confirmationBG = 'bg-ir-green';
+        break;
+      case '003':
+        confirmationBG = 'bg-ir-red';
+        break;
+      case '004':
+        confirmationBG = 'bg-ir-red';
+        break;
+    }
 
     return [
       <ir-common></ir-common>,
@@ -294,20 +312,33 @@ export class IrBookingDetails {
               {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
             </div>
           </div>
-          {/* <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
+
+          <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
             <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
-            <ir-select id="update-status" size="sm" label-available="false" data={this.statusData} textSize="sm" class="sm-padding-right"></ir-select>
-            <ir-button  id="update-status-btn" size="sm" text="Update"></ir-button>
+            {this.bookingData.allowed_actions.length > 0 && (
+              <Fragment>
+                <ir-select
+                  firstOption={locales.entries.Lcz_Select}
+                  id="update-status"
+                  size="sm"
+                  label-available="false"
+                  data={this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code }))}
+                  textSize="sm"
+                  class="sm-padding-right"
+                ></ir-select>
+                <ir-button id="update-status-btn" size="sm" text="Update"></ir-button>
+              </Fragment>
+            )}
             {this.hasReceipt && <ir-icon id="receipt" icon="ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
             {this.hasPrint && <ir-icon id="print" icon="ft-printer h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
             {this.hasDelete && <ir-icon id="book-delete" icon="ft-trash-2 h1 danger ml-1 pointer"></ir-icon>}
             {this.hasMenu && <ir-icon id="menu" icon="ft-list h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
-          </div> */}
+          </div>
         </div>
       </div>,
-      <div class="fluid-container m-1 text-left">
+      <div class="fluid-container p-1 text-left mx-0">
         <div class="row m-0">
-          <div class="col-lg-5 col-md-12 pl-0 pr-lg-1 p-0">
+          <div class="col-12 p-0 mx-0 pr-lg-1 col-lg-6">
             <div class="card">
               <div class="p-1">
                 {this.bookingData.property.name || ''}
@@ -336,7 +367,7 @@ export class IrBookingDetails {
               })`}
               {this.hasRoomAdd && <ir-icon id="room-add" icon="ft-plus h3 color-ir-dark-blue-hover pointer"></ir-icon>}
             </div>
-            <div class="card">
+            <div class="card p-0 mx-0">
               {this.bookingData.rooms.map((room: Room, index: number) => {
                 const mealCodeName = room.rateplan.name;
                 const myRoomTypeFoodCat = room.roomtype.name;
@@ -359,12 +390,12 @@ export class IrBookingDetails {
                     onDeleteFinished={this.handleDeleteFinish.bind(this)}
                   />,
                   // add separator if not last item with marginHorizontal and alignCenter
-                  index !== this.bookingData.rooms.length - 1 && <hr class="mr-2 ml-2 mt-1 mb-1" />,
+                  index !== this.bookingData.rooms.length - 1 && <hr class="mr-2 ml-2 my-0 p-0" />,
                 ];
               })}
             </div>
           </div>
-          <div class="col-lg-7 col-md-12 pr-0 pl-0 pl-md-1">
+          <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details
               defaultTexts={this.defaultTexts}
               bookingDetails={this.bookingData}

@@ -1,3 +1,4 @@
+import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 
 @Component({
@@ -8,7 +9,6 @@ import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 export class IglLegends {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() legendData: { [key: string]: any };
-  @Prop() defaultTexts: any;
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
@@ -19,7 +19,7 @@ export class IglLegends {
         <div>
           <div>
             <div class="stickyHeader">
-              <div class="legendHeader pt-1">{this.defaultTexts.entries.Lcz_Legend}</div>
+              <div class="legendHeader pt-1">{locales.entries.Lcz_Legend}</div>
               <div class="legendCloseBtn pt-1" onClick={() => this.handleOptionEvent('closeSideMenu')}>
                 <i class="ft-chevrons-left"></i>
               </div>
@@ -40,32 +40,32 @@ export class IglLegends {
                   <div class="legendCal br-t br-s br-bt">
                     <strong>MAR 2022</strong>
                   </div>
-                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_MonthAndYear}</div>
+                  <div class="highphenLegend">{locales.entries.Lcz_MonthAndYear}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal pl-2 pr-2 br-s">
-                    <span class="badge badge-info pointer badge-pill">3</span>
+                  <div class="legendCal headerCell align-items-center br-s">
+                    <span class="badge badge-info  badge-pill">3</span>
                   </div>
                   <div class="highphenLegend">
-                    <div>{this.defaultTexts.entries.Lcz_UnassignedUnits}</div>
+                    <div>{locales.entries.Lcz_UnassignedUnits}</div>
                   </div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal br-s">FRI 18</div>
-                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_Date}</div>
+                  <div class="legendCal dayTitle br-s">Fri 18</div>
+                  <div class="highphenLegend">{locales.entries.Lcz_Date}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal br-s br-bt font-small-3">15%</div>
-                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_Occupancy}</div>
+                  <div class="legendCal br-s br-bt dayCapacityPercent">15%</div>
+                  <div class="highphenLegend">{locales.entries.Lcz_Occupancy}</div>
                 </div>
                 <div class="legendRow">
-                  <div class="legendCal br-s br-bt font-small-3">20</div>
-                  <div class="highphenLegend">{this.defaultTexts.entries.Lcz_TotalAvailability}</div>
+                  <div class="legendCal br-s br-bt  font-weight-bold total-availability">20</div>
+                  <div class="highphenLegend">{locales.entries.Lcz_TotalAvailability}</div>
                 </div>
                 {/* <div class="legendRow align-items-center">
                   <div class="legendCal br-s br-bt font-small-2">15</div>
                   <div class="highphenLegend">
-                    <div>{this.defaultTexts.entries.Lcz_OfflineAvailability}</div>
+                    <div>{locales.entries.Lcz_OfflineAvailability}</div>
                   </div>
                 </div> */}
               </div>

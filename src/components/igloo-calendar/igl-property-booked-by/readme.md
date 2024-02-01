@@ -11,7 +11,6 @@
 | -------------------- | ---------------------- | ----------- | ------------------------- | ----------- |
 | `countryNodeList`    | --                     |             | `ICountry[]`              | `[]`        |
 | `defaultData`        | --                     |             | `{ [key: string]: any; }` | `undefined` |
-| `defaultTexts`       | `default-texts`        |             | `any`                     | `undefined` |
 | `language`           | `language`             |             | `string`                  | `undefined` |
 | `propertyId`         | `property-id`          |             | `number`                  | `undefined` |
 | `showPaymentDetails` | `show-payment-details` |             | `boolean`                 | `false`     |

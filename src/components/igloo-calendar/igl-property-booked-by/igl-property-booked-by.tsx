@@ -1,7 +1,9 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State, Fragment } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Fragment, Listen } from '@stencil/core';
 import { BookingService } from '../../../services/booking.service';
 import { IEntries, ICountry } from '../../../models/IBooking';
 import { v4 } from 'uuid';
+import locales from '@/stores/locales.store';
+import { TPropertyButtonsTypes } from '@/components';
 
 @Component({
   tag: 'igl-property-booked-by',
@@ -10,12 +12,12 @@ import { v4 } from 'uuid';
 })
 export class IglPropertyBookedBy {
   @Prop() language: string;
-  @Prop() defaultTexts: any;
   @Prop() showPaymentDetails: boolean = false;
   @Prop() defaultData: { [key: string]: any };
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() countryNodeList: ICountry[] = [];
   @Prop() propertyId: number;
+  @State() isButtonPressed: boolean = false;
   private bookingService: BookingService = new BookingService();
   private arrivalTimeList: IEntries[] = [];
   private expiryMonths: string[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -47,7 +49,6 @@ export class IglPropertyBookedBy {
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
-    console.log('default data', this.defaultData);
   }
 
   private initializeExpiryYears() {
@@ -70,7 +71,7 @@ export class IglPropertyBookedBy {
   private populateBookedByData() {
     this.bookedByData = this.defaultData ? { ...this.bookedByData, ...this.defaultData } : {};
     this.arrivalTimeList = this.defaultData?.arrivalTime || [];
-
+    this.bookedByData = { ...this.bookedByData, selectedArrivalTime: { code: this.arrivalTimeList[0].CODE_NAME, description: this.arrivalTimeList[0].CODE_VALUE_EN } };
     if (!this.bookedByData.expiryMonth) {
       this.bookedByData.expiryMonth = this.currentMonth;
     }
@@ -169,7 +170,6 @@ export class IglPropertyBookedBy {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const { key, data } = e.detail;
-    console.log(key, data);
     switch (key) {
       case 'blur':
         if (data !== '') {
@@ -213,13 +213,26 @@ export class IglPropertyBookedBy {
       data: { ...this.bookedByData },
     });
   }
-
+  @Listen('buttonClicked', { target: 'body' })
+  handleButtonClicked(
+    event: CustomEvent<{
+      key: TPropertyButtonsTypes;
+      data?: CustomEvent;
+    }>,
+  ) {
+    switch (event.detail.key) {
+      case 'book':
+      case 'bookAndCheckIn':
+        this.isButtonPressed = true;
+        break;
+    }
+  }
   render() {
     return (
       <Host>
         <div class="text-left mt-3">
           <div class="form-group d-flex flex-column flex-md-row align-items-md-center text-left ">
-            <label class="p-0 m-0 label-control mr-1 font-weight-bold">{this.defaultTexts.entries.Lcz_BookedBy}</label>
+            <label class="p-0 m-0 label-control mr-1 font-weight-bold">{locales.entries.Lcz_BookedBy}</label>
             <div class="bookedByEmailContainer mt-1 mt-md-0">
               {/* <input
                 id={v4()}
@@ -233,12 +246,13 @@ export class IglPropertyBookedBy {
                 onBlur={() => this.checkUser()}
               /> */}
               <ir-autocomplete
+                danger_border={this.isButtonPressed && this.bookedByData.email === ''}
                 onComboboxValue={this.handleComboboxChange.bind(this)}
                 propertyId={this.propertyId}
                 type="email"
                 value={this.bookedByData.email}
                 required
-                placeholder={this.defaultTexts.entries.Lcz_EmailAddress}
+                placeholder={locales.entries.Lcz_EmailAddress}
                 onInputCleared={() => this.clearEvent()}
               ></ir-autocomplete>
             </div>
@@ -248,12 +262,12 @@ export class IglPropertyBookedBy {
           <div class="d-flex flex-column flex-md-row  justify-content-md-between ">
             <div class="p-0 flex-fill ">
               <div class="form-group d-flex flex-column flex-md-row align-items-md-center p-0 flex-fill ">
-                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_FirstName}</label>
+                <label class="p-0 m-0 margin3">{locales.entries.Lcz_FirstName}</label>
                 <div class="p-0 m-0  controlContainer flex-fill  ">
                   <input
-                    class="form-control flex-fill"
+                    class={`form-control flex-fill ${this.isButtonPressed && this.bookedByData.firstName === '' && 'border-danger'}`}
                     type="text"
-                    placeholder={this.defaultTexts.entries.Lcz_FirstName}
+                    placeholder={locales.entries.Lcz_FirstName}
                     id={v4()}
                     value={this.bookedByData.firstName}
                     onInput={event => this.handleDataChange('firstName', event)}
@@ -263,12 +277,12 @@ export class IglPropertyBookedBy {
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_LastName}</label>
+                <label class="p-0 m-0 margin3">{locales.entries.Lcz_LastName}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
                   <input
-                    class="form-control"
+                    class={`form-control ${this.isButtonPressed && this.bookedByData.lastName === '' && 'border-danger'}`}
                     type="text"
-                    placeholder={this.defaultTexts.entries.Lcz_LastName}
+                    placeholder={locales.entries.Lcz_LastName}
                     id={v4()}
                     value={this.bookedByData.lastName}
                     onInput={event => this.handleDataChange('lastName', event)}
@@ -277,11 +291,15 @@ export class IglPropertyBookedBy {
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_Country}</label>
+                <label class="p-0 m-0 margin3">{locales.entries.Lcz_Country}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
-                  <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
+                  <select
+                    class={`form-control input-sm pr-0 ${this.isButtonPressed && this.bookedByData.countryId === '' && 'border-danger'}`}
+                    id={v4()}
+                    onChange={event => this.handleDataChange('countryId', event)}
+                  >
                     <option value="" selected={this.bookedByData.countryId === ''}>
-                    {this.defaultTexts.entries.Lcz_Select}
+                      {locales.entries.Lcz_Select}
                     </option>
                     {this.countryNodeList.map(countryNode => (
                       <option value={countryNode.id} selected={this.bookedByData.countryId === countryNode.id}>
@@ -293,12 +311,16 @@ export class IglPropertyBookedBy {
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_MobilePhone}</label>
+                <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
                 <div class="p-0 m-0  d-flex  controlContainer flex-fill">
                   <div class=" p-0 m-0">
-                    <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
+                    <select
+                      class={`form-control input-sm pr-0 ${this.isButtonPressed && this.bookedByData.isdCode === '' && 'border-danger'}`}
+                      id={v4()}
+                      onChange={event => this.handleDataChange('isdCode', event)}
+                    >
                       <option value="" selected={this.bookedByData.isdCode === ''}>
-                      {this.defaultTexts.entries.Lcz_Isd}
+                        {locales.entries.Lcz_Isd}
                       </option>
                       {this.countryNodeList.map(country => (
                         <option value={country.id} selected={this.bookedByData.isdCode === country.id.toString()}>
@@ -309,9 +331,9 @@ export class IglPropertyBookedBy {
                   </div>
                   <div class="flex-fill p-0 m-0">
                     <input
-                      class="form-control"
+                      class={`form-control ${this.isButtonPressed && this.bookedByData.contactNumber === '' && 'border-danger'}`}
                       type="tel"
-                      placeholder={this.defaultTexts.entries.Lcz_ContactNumber}
+                      placeholder={locales.entries.Lcz_ContactNumber}
                       id={v4()}
                       value={this.bookedByData.contactNumber}
                       onInput={event => this.handleNumberInput('contactNumber', event)}
@@ -321,14 +343,18 @@ export class IglPropertyBookedBy {
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_YourArrivalTime}</label>
+                <label class="p-0 m-0 margin3">{locales.entries.Lcz_YourArrivalTime}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
-                  <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('selectedArrivalTime', event)}>
-                    <option value="" selected={this.bookedByData.selectedArrivalTime === ''}>
+                  <select
+                    class={`form-control input-sm pr-0 ${this.isButtonPressed && this.bookedByData.selectedArrivalTime.code === '' && 'border-danger'}`}
+                    id={v4()}
+                    onChange={event => this.handleDataChange('selectedArrivalTime', event)}
+                  >
+                    {/* <option value="" selected={this.bookedByData.selectedArrivalTime.code === ''}>
                       -
-                    </option>
+                    </option> */}
                     {this.arrivalTimeList.map(time => (
-                      <option value={time.CODE_NAME} selected={this.bookedByData.selectedArrivalTime === time.CODE_NAME}>
+                      <option value={time.CODE_NAME} selected={this.bookedByData.selectedArrivalTime.code === time.CODE_NAME}>
                         {time.CODE_VALUE_EN}
                       </option>
                     ))}
@@ -338,7 +364,7 @@ export class IglPropertyBookedBy {
             </div>
             <div class="p-0 flex-fill  ml-md-3">
               <div class="  p-0 d-flex flex-column flex-md-row align-items-md-center ">
-                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_AnyMessageForUs}</label>
+                <label class="p-0 m-0 margin3">{locales.entries.Lcz_AnyMessageForUs}</label>
                 <div class="p-0 m-0  controlContainer flex-fill ">
                   <textarea
                     id={v4()}
@@ -353,7 +379,7 @@ export class IglPropertyBookedBy {
               {this.showPaymentDetails && (
                 <Fragment>
                   <div class="form-group mt-md-1  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_CardNumber}</label>
+                    <label class="p-0 m-0 margin3">{locales.entries.Lcz_CardNumber}</label>
                     <div class="p-0 m-0  controlContainer flex-fill">
                       <input
                         class="form-control"
@@ -367,7 +393,7 @@ export class IglPropertyBookedBy {
                     </div>
                   </div>
                   <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_CardHolderName}</label>
+                    <label class="p-0 m-0 margin3">{locales.entries.Lcz_CardHolderName}</label>
                     <div class="p-0 m-0  controlContainer flex-fill">
                       <input
                         class="form-control"
@@ -381,7 +407,7 @@ export class IglPropertyBookedBy {
                     </div>
                   </div>
                   <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
-                    <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_ExpiryDate}</label>
+                    <label class="p-0 m-0 margin3">{locales.entries.Lcz_ExpiryDate}</label>
                     <div class="p-0 m-0 row  controlContainer flex-fill">
                       <div class="p-0 m-0">
                         <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('expiryMonth', event)}>
@@ -405,10 +431,18 @@ export class IglPropertyBookedBy {
                   </div>
                 </Fragment>
               )}
-              <div class="form-group row p-0 d-flex flex-column flex-md-row align-items-md-center">
-                <label class="p-0 m-0 margin3">{this.defaultTexts.entries.Lcz_EmailTheGuest}</label>
+              <div class="form-group mt-1 p-0 d-flex flex-row align-items-center">
+                <label class="p-0 m-0" htmlFor={'emailTheGuestId'}>
+                  {locales.entries.Lcz_EmailTheGuest}
+                </label>
                 <div class="p-0 m-0  controlContainer flex-fill checkBoxContainer">
-                  <input class="form-control" type="checkbox" checked={this.bookedByData.emailGuest} id={v4()} onChange={event => this.handleDataChange('emailGuest', event)} />
+                  <input
+                    class="form-control"
+                    type="checkbox"
+                    checked={this.bookedByData.emailGuest}
+                    id={'emailTheGuestId'}
+                    onChange={event => this.handleDataChange('emailGuest', event)}
+                  />
                 </div>
               </div>
             </div>

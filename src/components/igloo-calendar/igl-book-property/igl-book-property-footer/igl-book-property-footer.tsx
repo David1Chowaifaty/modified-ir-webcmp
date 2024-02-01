@@ -1,5 +1,6 @@
 import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
 import { FooterButtonType, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'igl-book-property-footer',
@@ -9,7 +10,6 @@ import { FooterButtonType, TPropertyButtonsTypes } from '../../../../models/igl-
 export class IglBookPropertyFooter {
   @Prop() eventType: string;
   @Prop() disabled: boolean = true;
-  @Prop() defaultTexts;
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
   private isEventType(event: string) {
     return event === this.eventType;
@@ -45,13 +45,13 @@ export class IglBookPropertyFooter {
         <div class="d-flex justify-content-between gap-30 align-items-center">
           {this.isEventType('EDIT_BOOKING') ? (
             <Fragment>
-              {this.renderButton('cancel', this.defaultTexts.entries.Lcz_Cancel)}
-              {this.shouldRenderTwoButtons() && this.renderButton('next', `${this.defaultTexts.entries.Lcz_Next} >>`)}
+              {this.renderButton('cancel', locales.entries.Lcz_Cancel)}
+              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next} >>`)}
             </Fragment>
           ) : (
             <Fragment>
-              {this.renderButton('cancel', this.defaultTexts.entries.Lcz_Cancel)}
-              {this.shouldRenderTwoButtons() && this.renderButton('next', `${this.defaultTexts.entries.Lcz_Next} >>`, this.disabled)}
+              {this.renderButton('cancel', locales.entries.Lcz_Cancel)}
+              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next} >>`, this.disabled)}
             </Fragment>
           )}
         </div>

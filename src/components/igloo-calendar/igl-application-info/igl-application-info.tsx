@@ -1,7 +1,8 @@
-import { Component, Host, h, Prop, Event, EventEmitter, Watch, State } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Watch, State, Listen } from '@stencil/core';
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
-
+import locales from '@/stores/locales.store';
+import { TPropertyButtonsTypes } from '@/components';
 
 @Component({
   tag: 'igl-application-info',
@@ -11,22 +12,29 @@ import { getCurrencySymbol } from '../../../utils/utils';
 export class IglApplicationInfo {
   @Prop() guestInfo: { [key: string]: any };
   @Prop() currency;
-  @Prop() defaultTexts: any;
   @Prop({ reflect: true, mutable: true }) roomsList: { [key: string]: any }[] = [];
   @Prop() guestRefKey: string;
   @Prop() bedPreferenceType = [];
   @Prop() selectedUnits: number[] = [];
   @Prop() bookingType: string = 'PLUS_BOOKING';
+  @Prop() defaultGuestPreference: number | null;
   @Prop() index: number;
+  @Prop() defaultGuestRoomId: number;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @State() filterdRoomList = [];
-  private guestData: { [key: string]: any };
+  @State() isButtonPressed = false;
+  @State() guestData: { [key: string]: any };
 
   componentWillLoad() {
     this.guestData = this.guestInfo ? { ...this.guestInfo } : {};
+    this.guestData.roomId = '';
+    if (this.defaultGuestRoomId && this.roomsList.filter(e => e.id.toString() === this.defaultGuestRoomId.toString()).length > 0) {
+      this.guestData.roomId = this.defaultGuestRoomId;
+    }
+    this.guestData.preference = +this.defaultGuestPreference;
     this.updateRoomList();
   }
-  
+
   @Watch('selectedUnits')
   async handleSelctedUnits() {
     this.updateRoomList();
@@ -52,6 +60,7 @@ export class IglApplicationInfo {
     if (key === 'roomId' && value !== '') {
       this.guestData['roomName'] = this.filterdRoomList.find(room => room.id === +value).name || '';
     }
+    console.log('guest data', this.guestData);
     this.updateData();
   }
 
@@ -60,7 +69,21 @@ export class IglApplicationInfo {
     this.guestData.guestName = event.target.value;
     this.updateData();
   }
-
+  @Listen('buttonClicked', { target: 'body' })
+  handleButtonClicked(
+    event: CustomEvent<{
+      key: TPropertyButtonsTypes;
+      data?: CustomEvent;
+    }>,
+  ) {
+    switch (event.detail.key) {
+      case 'book':
+      case 'bookAndCheckIn':
+      case 'save':
+        this.isButtonPressed = true;
+        break;
+    }
+  }
   render() {
     //console.log(this.guestInfo, this.roomsList);
     return (
@@ -77,47 +100,59 @@ export class IglApplicationInfo {
             <span>{this.guestInfo.adult_child_offering}</span>
           </div>
 
-          <div class="d-flex m-0 p-0 align-items-center aplicationInfoContainer ">
-            <div class="mr-1 flex-fill">
+          <div class="d-flex flex-column flex-md-row m-0 p-0 align-items-md-center aplicationInfoContainer ">
+            <div class="mr-1 flex-fill guest-info-container">
               <input
                 id={v4()}
                 type="email"
-                class="form-control"
-                placeholder={this.defaultTexts.entries.Lcz_GuestFirstnameAndLastname}
+                class={`form-control ${this.isButtonPressed && this.guestData.guestName === '' && 'border-danger'}`}
+                placeholder={locales.entries.Lcz_GuestFirstnameAndLastname}
                 name="guestName"
                 onInput={event => this.handleGuestNameChange(event)}
                 required
                 value={this.guestData.guestName}
               />
             </div>
-            {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
-              <div class="mr-1 p-0 flex-fill">
-                <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}>
-                  <option value="" selected={this.guestData.roomId === ''}>
-                    {this.defaultTexts.entries.Lcz_Assignunits}
+            <div class={'mt-1 mt-md-0 d-flex align-items-center flex-fill'}>
+              {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
+                <div class="mr-1 p-0 flex-fill  preference-select-container">
+                  <select
+                    class={`form-control  input-sm pr-0 ${this.isButtonPressed && (this.guestData.roomId === '' || this.guestData.roomId === 0) && 'border-danger'}`}
+                    id={v4()}
+                    onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}
+                  >
+                    <option value="" selected={this.guestData.roomId === ''}>
+                      {locales.entries.Lcz_Assignunits}
+                    </option>
+                    {this.filterdRoomList.map(room => (
+                      <option value={room.id} selected={+this.guestData.roomId === room.id}>
+                        {room.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : null}
+
+              <div class="mr-1 flex-fill">
+                <select
+                  class={`form-control input-sm ${this.isButtonPressed && (this.guestData.preference === '' || this.guestData.preference === 0) && 'border-danger'}`}
+                  id={v4()}
+                  onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}
+                >
+                  <option value="" selected={this.guestData.preference === ''}>
+                    {locales.entries.Lcz_BedConfiguration}
                   </option>
-                  {this.filterdRoomList.map(room => (
-                    <option value={room.id} selected={+this.guestData.roomId === room.id}>
-                      {room.name}
+                  {this.bedPreferenceType.map(data => (
+                    <option value={+data.CODE_NAME} selected={this.guestData.preference === +data.CODE_NAME}>
+                      {data.CODE_VALUE_EN}
                     </option>
                   ))}
                 </select>
               </div>
-            ) : null}
-
-            <div class="mr-1 flex-fill">
-              <select class="form-control input-sm" id={v4()} onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}>
-                <option value="" selected={this.guestData.preference === ''}>
-                  {this.defaultTexts.entries.Lcz_NoPreference}
-                </option>
-                {this.bedPreferenceType.map(data => (
-                  <option value={data.CODE_NAME} selected={this.guestData.preference === data.CODE_NAME}>
-                    {data.CODE_VALUE_EN}
-                  </option>
-                ))}
-              </select>
+              <div class="">
+                {getCurrencySymbol(this.currency.code) + Number(this.guestInfo.rate).toFixed(2)}/{locales.entries.Lcz_Stay}
+              </div>
             </div>
-            <div class="">{getCurrencySymbol(this.currency.code) + this.guestInfo.rate}</div>
           </div>
         </div>
       </Host>

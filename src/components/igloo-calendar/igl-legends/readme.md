@@ -7,10 +7,9 @@
 
 ## Properties
 
-| Property       | Attribute       | Description | Type                      | Default     |
-| -------------- | --------------- | ----------- | ------------------------- | ----------- |
-| `defaultTexts` | `default-texts` |             | `any`                     | `undefined` |
-| `legendData`   | --              |             | `{ [key: string]: any; }` | `undefined` |
+| Property     | Attribute | Description | Type                      | Default     |
+| ------------ | --------- | ----------- | ------------------------- | ----------- |
+| `legendData` | --        |             | `{ [key: string]: any; }` | `undefined` |
 
 
 ## Events

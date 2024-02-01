@@ -421,6 +421,7 @@ export class BookingService {
                   children_nbr: data.childrenCount,
                   infant_nbr: null,
                 },
+                bed_preference: data.preference,
                 from_date: fromDateStr,
                 to_date: toDateStr,
                 notes: null,

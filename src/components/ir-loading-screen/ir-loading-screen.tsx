@@ -12,7 +12,7 @@ export class IrLoadingScreen {
       <Host>
         <div class="loaderContainer">
           <span class="loader"></span>
-          {this.message && <p class={'m-0'}>{this.message}</p>}
+          {/* {this.message && <p class={'m-0'}>{this.message}</p>} */}
         </div>
       </Host>
     );

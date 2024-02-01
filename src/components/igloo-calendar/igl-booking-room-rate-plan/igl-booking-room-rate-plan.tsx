@@ -1,13 +1,13 @@
 import { Component, Host, Prop, h, State, Event, EventEmitter, Watch, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
+import locales from '@/stores/locales.store';
 @Component({
   tag: 'igl-booking-room-rate-plan',
   styleUrl: 'igl-booking-room-rate-plan.css',
   scoped: true,
 })
 export class IglBookingRoomRatePlan {
-  @Prop() defaultTexts;
   @Prop() defaultData: { [key: string]: any };
   @Prop() ratePlanData: { [key: string]: any };
   @Prop() totalAvailableRooms: number;
@@ -49,7 +49,7 @@ export class IglBookingRoomRatePlan {
 
   setAvailableRooms(data) {
     let availableRooms = this.getAvailableRooms(data);
-    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {    
+    if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
       if (this.selectedRoom) {
         availableRooms.push({
           id: this.selectedRoom.roomId,
@@ -57,13 +57,13 @@ export class IglBookingRoomRatePlan {
         });
         availableRooms.sort((a, b) => {
           if (a.name < b.name) {
-              return -1;
+            return -1;
           }
           if (a.name > b.name) {
-              return 1;
+            return 1;
           }
           return 0;
-      });
+        });
       }
     }
     return availableRooms;
@@ -95,12 +95,12 @@ export class IglBookingRoomRatePlan {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
-
-      this.dataUpdateEvent.emit({
-        key: 'roomRatePlanUpdate',
-        changedKey: 'totalRooms',
-        data: this.selectedData,
-      });
+      (this.selectedData.rateType = 1),
+        this.dataUpdateEvent.emit({
+          key: 'roomRatePlanUpdate',
+          changedKey: 'totalRooms',
+          data: this.selectedData,
+        });
     }
 
     this.initialRateValue = this.selectedData.rate / this.dateDifference;
@@ -132,19 +132,21 @@ export class IglBookingRoomRatePlan {
 
   handleInput(event: InputEvent) {
     const inputElement = event.target as HTMLInputElement;
-    let inputValue = inputElement.value.replace(/[^0-9]/g, '');
+    let inputValue = inputElement.value.replace(/[^0-9.]/g, '');
 
-    if (inputValue !== inputElement.value) {
-      inputElement.value = inputValue;
+    const validDecimalNumber = /^\d*\.?\d*$/;
+    if (!validDecimalNumber.test(inputValue)) {
+      inputValue = inputValue.substring(0, inputValue.length - 1);
     }
 
+    inputElement.value = inputValue;
     if (inputValue) {
       this.selectedData.isRateModified = true;
       this.handleDataChange('rate', event);
     } else {
       this.selectedData = {
         ...this.selectedData,
-        rate: 0,
+        rate: -1,
         totalRooms: 0,
       };
       this.dataUpdateEvent.emit({
@@ -190,7 +192,7 @@ export class IglBookingRoomRatePlan {
   }
 
   updateRate(value) {
-    const numericValue = value === '' ? 0 : parseInt(value);
+    const numericValue = value === '' ? 0 : Number(value);
     this.selectedData = {
       ...this.selectedData,
       rate: numericValue,
@@ -213,16 +215,23 @@ export class IglBookingRoomRatePlan {
 
   renderRate(): string | number | string[] {
     if (this.selectedData.isRateModified) {
-      return this.selectedData.rate;
+      return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
-    return this.selectedData.rateType === 1 ? this.selectedData.rate : this.initialRateValue;
+    return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);
   }
   render() {
     return (
       <Host>
-        <div class="d-flex flex-column mt-2 m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
-          <div class=" rateplan-name-container">
-            <span>{this.ratePlanData.name}</span>
+        <div class="d-flex flex-column m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
+          <div class="rateplan-name-container">
+            {this.bookingType === 'BAR_BOOKING' ? (
+              <Fragment>
+                <span class="font-weight-bold	">{this.ratePlanData.name.split('/')[0]}</span>
+                <span>/{this.ratePlanData.name.split('/')[1]}</span>
+              </Fragment>
+            ) : (
+              <span>{this.ratePlanData.name}</span>
+            )}
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
           </div>
 
@@ -247,7 +256,7 @@ export class IglBookingRoomRatePlan {
                     class="form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
                     value={this.renderRate()}
                     id={v4()}
-                    placeholder={this.defaultTexts.entries.Lcz_Rate || 'Rate'}
+                    placeholder={locales.entries.Lcz_Rate || 'Rate'}
                     onInput={(event: InputEvent) => this.handleInput(event)}
                   />
                   <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
@@ -303,24 +312,24 @@ export class IglBookingRoomRatePlan {
                   </fieldset>
                 </div>
                 <button
-                  disabled={this.selectedData.rate === 0 || this.disableForm()}
+                  disabled={this.selectedData.rate === -1 || this.disableForm()}
                   type="button"
                   class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 d-md-none "
                   onClick={() => this.bookProperty()}
                 >
-                  {this.selectedData.totalRooms === 1 ? this.defaultTexts.entries.Lcz_Current : this.defaultTexts.entries.Lcz_Select}
+                  {this.selectedData.totalRooms === 1 ? locales.entries.Lcz_Current : locales.entries.Lcz_Select}
                 </button>
               </Fragment>
             ) : null}
 
             {this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (
               <button
-                disabled={this.selectedData.rate === 0 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
+                disabled={this.selectedData.rate === -1 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
                 type="button"
                 class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 "
                 onClick={() => this.bookProperty()}
               >
-                {this.defaultTexts.entries.Lcz_Book}
+                {locales.entries.Lcz_Book}
               </button>
             ) : null}
           </div>
