@@ -50,7 +50,8 @@ export type bookingReasons =
   | 'DELETE_CALENDAR_POOL'
   | 'GET_UNASSIGNED_DATES'
   | 'UPDATE_CALENDAR_AVAILABILITY'
-  | 'CHANGE_IN_DUE_AMOUNT';
+  | 'CHANGE_IN_DUE_AMOUNT'
+  | 'CHANGE_IN_BOOK_STATUS';
 export interface ICountry {
   cities: string[];
   id: number;

@@ -206,6 +206,21 @@ export class IglooCalendar {
                   }),
                 ],
               };
+            } else if (REASON === 'CHANGE_IN_BOOK_STATUS') {
+              this.calendarData = {
+                ...this.calendarData,
+                bookingEvents: [
+                  ...this.calendarData.bookingEvents.map(event => {
+                    if (result.pools.includes(event.ID)) {
+                      return {
+                        ...event,
+                        STATUS: event.STATUS !== 'IN-HOUSE' ? bookingStatus[result.status_code] : result.status_code === '001' ? bookingStatus[result.status_code] : 'IN-HOUSE',
+                      };
+                    }
+                    return event;
+                  }),
+                ],
+              };
             } else {
               return;
             }
@@ -273,12 +288,14 @@ export class IglooCalendar {
         const now = moment();
         const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
         const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
-        if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
-          bookingEvent.STATUS = bookingStatus['000'];
-        } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-          bookingEvent.STATUS = bookingStatus['000'];
-        } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
-          bookingEvent.STATUS = bookingStatus['000'];
+        if (bookingEvent.STATUS !== 'PENDING') {
+          if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          }
         } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
           bookingEvent.STATUS = bookingStatus['003'];
         }
