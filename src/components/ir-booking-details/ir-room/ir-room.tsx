@@ -187,7 +187,7 @@ export class IrRoom {
           id="drawer-icon"
           icon={`${this.collapsed ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-dark-blue-hover`}
           data-toggle="collapse"
-          data-target={`#roomCollapse-${this.item.identifier}`}
+          data-target={`#roomCollapse-${this.item.identifier.split(' ').join('')}`}
           aria-expanded="false"
           aria-controls="collapseExample"
           class="pointer mr-1"
@@ -222,7 +222,7 @@ export class IrRoom {
             {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
           </div>
-          <div class="collapse" id={`roomCollapse-${this.item.identifier}`}>
+          <div class="collapse" id={`roomCollapse-${this.item.identifier.split(' ').join('')}`}>
             <div class="d-flex">
               <div class=" sm-padding-top">
                 <strong class="sm-padding-right">{`${this.defaultTexts.entries.Lcz_Breakdown}:`}</strong>
