@@ -1,10 +1,12 @@
 {
   "assign_units": true,
-  "check_in": true,
+  "check_in": false,
+  "is_pms": true,
+  "is_direct": true,
   "booking": {
     "booking_nbr": "",
-    "from_date": "2023-12-01",
-    "to_date": "2023-12-13",
+    "from_date": "2024-02-04",
+    "to_date": "2024-02-06",
     "remark": null,
     "property": {
       "id": 42
@@ -16,107 +18,73 @@
     },
     "currency": {
       "code": "USD",
-      "id": 4
+      "id": 4,
+      "symbol": "US$"
     },
     "arrival": {
-      "code": "004"
+      "code": {
+        "code": "001",
+        "description": "Not sure yet"
+      }
     },
     "guest": {
-      "email": "test@gmail.com",
-      "first_name": "ronald",
-      "last_name": "yazbik",
-      "country_id": 6,
+      "email": "test@xxx.com",
+      "first_name": "Rony",
+      "last_name": "Rizk",
+      "country_id": 2,
       "city": null,
-      "mobile": "03030303",
+      "mobile": "3138878",
       "address": "",
       "dob": null,
-      "subscribe_to_news_letter": false,
+      "subscribe_to_news_letter": true,
       "cci": null,
-      "id": 195932
+      "id": 55035
     },
     "rooms": [
       {
+        "identifier": null,
         "roomtype": {
           "id": 110,
           "name": "Standard Rooms",
           "physicalrooms": null,
           "rateplans": null,
           "availabilities": null,
-          "inventory": 0,
-          "rate": 58.333333333333336
+          "inventory": 4,
+          "rate": 60
         },
         "rateplan": {
           "id": 123,
           "name": "Standard Rooms/Bed-&-breakfast",
           "rate_restrictions": null,
           "variations": null,
-          "cancelation": "<u><b>Cancellation</b></u>: 100% of the total price will be charged if cancelled after Sunday, 26 Nov 2023, 22:00 or in case of no show.\r\n",
-          "guarantee": "<u><b>Guarantee</b></u>: No deposit required."
+          "cancelation": "<u><b>Cancellation</b></u>: 100% of the total price will be charged if cancelled after Tuesday, 30 Jan 2024, 22:00 or in case of no show.\r\n",
+          "guarantee": "<u><b>Guarantee</b></u>: First night from your booking will be charged."
         },
         "unit": {
           "id": 16
         },
         "occupancy": {
-          "adult_nbr": 1,
-          "children_nbr": 0,
+          "adult_nbr": 2,
+          "children_nbr": 1,
           "infant_nbr": null
         },
-        "from_date": "2023-12-01",
-        "to_date": "2023-12-13",
+        "bed_preference": 1,
+        "from_date": "2024-02-04",
+        "to_date": "2024-02-06",
         "notes": null,
         "days": [
           {
-            "date": "2023-12-01",
-            "amount": 58.333333333333336
+            "date": "2024-02-04",
+            "amount": 60
           },
           {
-            "date": "2023-12-02",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-03",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-04",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-05",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-06",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-07",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-08",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-09",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-10",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-11",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-12",
-            "amount": 58.333333333333336
+            "date": "2024-02-05",
+            "amount": 60
           }
         ],
         "guest": {
           "email": null,
-          "first_name": "david",
+          "first_name": "test",
           "last_name": null,
           "country_id": null,
           "city": null,
