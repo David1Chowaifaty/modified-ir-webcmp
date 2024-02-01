@@ -315,15 +315,20 @@ export class IrBookingDetails {
 
           <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
             <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
-            <ir-select
-              id="update-status"
-              size="sm"
-              label-available="false"
-              data={this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code }))}
-              textSize="sm"
-              class="sm-padding-right"
-            ></ir-select>
-            <ir-button id="update-status-btn" size="sm" text="Update"></ir-button>
+            {this.bookingData.allowed_actions.length > 0 && (
+              <Fragment>
+                <ir-select
+                  firstOption={locales.entries.Lcz_Select}
+                  id="update-status"
+                  size="sm"
+                  label-available="false"
+                  data={this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code }))}
+                  textSize="sm"
+                  class="sm-padding-right"
+                ></ir-select>
+                <ir-button id="update-status-btn" size="sm" text="Update"></ir-button>
+              </Fragment>
+            )}
             {this.hasReceipt && <ir-icon id="receipt" icon="ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
             {this.hasPrint && <ir-icon id="print" icon="ft-printer h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
             {this.hasDelete && <ir-icon id="book-delete" icon="ft-trash-2 h1 danger ml-1 pointer"></ir-icon>}

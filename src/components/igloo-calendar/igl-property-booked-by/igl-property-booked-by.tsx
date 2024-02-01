@@ -350,9 +350,9 @@ export class IglPropertyBookedBy {
                     id={v4()}
                     onChange={event => this.handleDataChange('selectedArrivalTime', event)}
                   >
-                    <option value="" selected={this.bookedByData.selectedArrivalTime.code === ''}>
+                    {/* <option value="" selected={this.bookedByData.selectedArrivalTime.code === ''}>
                       -
-                    </option>
+                    </option> */}
                     {this.arrivalTimeList.map(time => (
                       <option value={time.CODE_NAME} selected={this.bookedByData.selectedArrivalTime.code === time.CODE_NAME}>
                         {time.CODE_VALUE_EN}

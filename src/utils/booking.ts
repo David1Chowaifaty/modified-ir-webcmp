@@ -166,7 +166,7 @@ function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { cod
 }
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
-  console.log(data);
+  //console.log(data);
   const renderStatus = room => {
     const now = moment();
     const toDate = moment(room.to_date, 'YYYY-MM-DD');
