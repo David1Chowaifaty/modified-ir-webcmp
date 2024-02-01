@@ -349,6 +349,7 @@ export class BookingService {
     pr_id?: number,
     identifier?: string,
   ) {
+    console.log(arrivalTime);
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token) {
@@ -445,12 +446,12 @@ export class BookingService {
           },
         };
         console.log('book user payload', body);
-        const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data['My_Result']);
-        return data['My_Result'];
+        // const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+        // if (data.ExceptionMsg !== '') {
+        //   throw new Error(data.ExceptionMsg);
+        // }
+        // console.log(data['My_Result']);
+        // return data['My_Result'];
       } else {
         throw new Error('Invalid token');
       }
