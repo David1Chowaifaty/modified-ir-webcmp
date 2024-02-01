@@ -1,11 +1,15 @@
 import { TAdultChildConstraints } from '..';
 import { ISource } from './../../dist/types/models/IBooking.d';
-
 import { createStore } from '@stencil/store';
+
+export interface IDates {
+  fromDate: string;
+  toDate: string;
+}
 export interface IBookingDetails {
   source: ISource | null;
   guests: TAdultChildConstraints;
-  dates: null;
+  dates: IDates;
 }
 
 const initialState: IBookingDetails = {
@@ -15,7 +19,10 @@ const initialState: IBookingDetails = {
     child_max_nbr: 0,
     child_max_age: 0,
   },
-  dates: null,
+  dates: {
+    fromDate: '',
+    toDate: '',
+  },
 };
 export const { state: booking_details } = createStore<IBookingDetails>(initialState);
 
