@@ -295,14 +295,14 @@ export class IrPaymentDetails {
               )}
             </div>
           </div>
-          <div class="mt-2 d-flex  flex-column rounded">
+          <div class="mt-2 d-flex  flex-column rounded payment-container">
             <strong>{this.defaultTexts.entries.Lcz_Payments}</strong>
             <table class="mt-1">
               <thead>
                 <tr>
                   <th class={'border border-light border-bottom-0 text-center payment_date'}>{this.defaultTexts.entries.Lcz_Dates}</th>
                   <th class={'border border-light border-bottom-0 text-center w-60'}>{this.defaultTexts.entries.Lcz_Amount}</th>
-                  <th class={'border border-light border-bottom-0 text-center'}>{this.defaultTexts.entries.Lcz_Designation}</th>
+                  <th class={'border border-light border-bottom-0 text-center designation'}>{this.defaultTexts.entries.Lcz_Designation}</th>
                   <th class={'border border-light border-bottom-0 text-center action_icons'}>
                     <span class={'sr-only'}>payment actions</span>
                     <ir-icon

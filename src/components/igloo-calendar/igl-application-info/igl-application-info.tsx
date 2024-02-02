@@ -116,11 +116,7 @@ export class IglApplicationInfo {
             <div class={'mt-1 mt-md-0 d-flex align-items-center flex-fill'}>
               {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
                 <div class="mr-1 p-0 flex-fill  preference-select-container">
-                  <select
-                    class={`form-control  input-sm pr-0 ${this.isButtonPressed && (this.guestData.roomId === '' || this.guestData.roomId === 0) && 'border-danger'}`}
-                    id={v4()}
-                    onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}
-                  >
+                  <select class={`form-control  input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}>
                     <option value="" selected={this.guestData.roomId === ''}>
                       {locales.entries.Lcz_Assignunits}
                     </option>
