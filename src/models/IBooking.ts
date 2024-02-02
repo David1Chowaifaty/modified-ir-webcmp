@@ -318,3 +318,20 @@ export interface RoomBlockDetails {
   FROM_DATE_STR: string;
   TO_DATE_STR: string;
 }
+export interface ISelectedRatePlan {
+  ratePlanId: number;
+  adult_child_offering: string;
+  rateType: number;
+  totalRooms: number;
+  rate: number;
+  ratePlanName: string;
+  adultCount: number;
+  childrenCount: number;
+  cancelation: string;
+  guarantee: string;
+  isRateModified: boolean;
+  defaultSelectedRate: number;
+  index: number;
+  is_closed: boolean;
+  physicalRooms: { name: string; id: number }[];
+}

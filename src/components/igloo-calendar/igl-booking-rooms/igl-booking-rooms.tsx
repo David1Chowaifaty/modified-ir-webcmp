@@ -1,3 +1,4 @@
+import booking_details from '@/stores/booking.store';
 import { Component, Host, h, Prop, Event, EventEmitter, State, Watch } from '@stencil/core';
 
 @Component({
@@ -11,6 +12,7 @@ export class IglBookingRooms {
   @Prop() bookingType = 'PLUS_BOOKING';
   @Prop() dateDifference: number;
   @Prop() ratePricingMode = [];
+  @Prop() roomTypeId: number;
   @Prop() roomInfoId: number | null = null;
   @Prop() currency;
   @State() selectedRooms: number[] = [];
@@ -23,6 +25,7 @@ export class IglBookingRooms {
 
   componentWillLoad() {
     this.initializeRoomData();
+    console.log(booking_details.bookingDetails);
   }
 
   private initializeRoomData() {
@@ -130,6 +133,7 @@ export class IglBookingRooms {
             return (
               <igl-booking-room-rate-plan
                 index={index}
+                roomTypeId={this.roomTypeId}
                 isBookDisabled={this.isBookDisabled}
                 key={`rate-plan-${ratePlan.id}`}
                 ratePricingMode={this.ratePricingMode}

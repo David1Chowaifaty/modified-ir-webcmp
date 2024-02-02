@@ -8,6 +8,7 @@ import { IglBookPropertyService } from './igl-book-property.service';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../models/igl-book-property';
 import { EventsService } from '../../../services/events.service';
 import locales from '@/stores/locales.store';
+import booking_details from '@/stores/booking.store';
 
 @Component({
   tag: 'igl-book-property',
@@ -218,6 +219,8 @@ export class IglBookProperty {
       const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.adultChildCount, this.language, room_type_ids, this.currency);
       this.message = '';
       this.message = data.tax_statement;
+      booking_details.bookingDetails = { ...data };
+
       if (!this.isEventType('EDIT_BOOKING')) {
         this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
         this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
@@ -254,6 +257,10 @@ export class IglBookProperty {
       if (this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING')) {
         this.defaultData.roomsInfo = [];
         this.message = '';
+        booking_details.dates = {
+          fromDate: this.dateRangeData.fromDate,
+          toDate: this.dateRangeData.toDate,
+        };
       } else if (this.adultChildCount.adult !== 0) {
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
       }

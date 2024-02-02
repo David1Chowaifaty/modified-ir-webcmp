@@ -129,6 +129,7 @@ export namespace Components {
         "physicalrooms": any;
         "ratePlanData": { [key: string]: any };
         "ratePricingMode": any[];
+        "roomTypeId": number;
         "selectedRoom": any;
         "shouldBeDisabled": boolean;
         "totalAvailableRooms": number;
@@ -143,6 +144,7 @@ export namespace Components {
         "ratePricingMode": any[];
         "roomInfoId": number | null;
         "roomTypeData": { [key: string]: any };
+        "roomTypeId": number;
     }
     interface IglCalBody {
         "calendarData": { [key: string]: any };
@@ -1774,6 +1776,7 @@ declare namespace LocalJSX {
         "physicalrooms"?: any;
         "ratePlanData"?: { [key: string]: any };
         "ratePricingMode"?: any[];
+        "roomTypeId"?: number;
         "selectedRoom"?: any;
         "shouldBeDisabled"?: boolean;
         "totalAvailableRooms"?: number;
@@ -1789,6 +1792,7 @@ declare namespace LocalJSX {
         "ratePricingMode"?: any[];
         "roomInfoId"?: number | null;
         "roomTypeData"?: { [key: string]: any };
+        "roomTypeId"?: number;
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };

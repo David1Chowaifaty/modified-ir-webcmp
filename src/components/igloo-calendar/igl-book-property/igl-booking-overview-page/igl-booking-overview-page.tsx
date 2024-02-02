@@ -1,5 +1,6 @@
 import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-book-property';
+import booking_details from '@/stores/booking.store';
 @Component({
   tag: 'igl-booking-overview-page',
   styleUrl: 'igl-booking-overview-page.css',
@@ -52,9 +53,10 @@ export class IglBookingOverviewPage {
         ></igl-book-property-header>
         {/* {this.adultChildCount.adult === 0 && <p class={'col text-left'}>Please select the number of guests</p>} */}
         <div class=" text-left">
-          {this.bookingData?.roomsInfo?.map(roomInfo => {
+          {booking_details.bookingDetails?.roomtypes?.map(roomInfo => {
             return (
               <igl-booking-rooms
+                roomTypeId={roomInfo.id}
                 initialRoomIds={this.initialRoomIds}
                 isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
                 key={`room-info-${roomInfo.id}`}

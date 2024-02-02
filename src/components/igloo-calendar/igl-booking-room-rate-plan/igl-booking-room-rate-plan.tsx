@@ -2,12 +2,15 @@ import { Component, Host, Prop, h, State, Event, EventEmitter, Watch, Fragment }
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
+import { selectRatePlan } from '@/stores/booking.store';
+import { ISelectedRatePlan } from '@/models/IBooking';
 @Component({
   tag: 'igl-booking-room-rate-plan',
   styleUrl: 'igl-booking-room-rate-plan.css',
   scoped: true,
 })
 export class IglBookingRoomRatePlan {
+  @Prop() roomTypeId: number;
   @Prop() defaultData: { [key: string]: any };
   @Prop() ratePlanData: { [key: string]: any };
   @Prop() totalAvailableRooms: number;
@@ -24,7 +27,7 @@ export class IglBookingRoomRatePlan {
   @Prop() selectedRoom;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
-  @State() selectedData: { [key: string]: any };
+  @State() selectedData: ISelectedRatePlan;
   @State() ratePlanChangedState: boolean = false;
   private initialRateValue: number = 0;
   getAvailableRooms(assignable_units: any[]) {
@@ -115,6 +118,7 @@ export class IglBookingRoomRatePlan {
       rate: this.handleRateDaysUpdate(),
       physicalRooms: this.setAvailableRooms(newData.assignable_units),
     };
+    this.initialRateValue = this.selectedData.rate / this.dateDifference;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -157,11 +161,11 @@ export class IglBookingRoomRatePlan {
     }
   }
 
-  handleDataChange(key, evt) {
+  async handleDataChange(key: keyof ISelectedRatePlan, evt: any) {
     const value = evt.target.value;
     switch (key) {
       case 'adult_child_offering':
-        this.updateOffering(value);
+        await this.updateOffering(value);
         break;
       case 'rate':
         this.updateRate(value);
@@ -170,6 +174,7 @@ export class IglBookingRoomRatePlan {
         this.updateGenericData(key, value);
         break;
     }
+    selectRatePlan(this.roomTypeId, this.selectedData, key);
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: key,
@@ -177,7 +182,7 @@ export class IglBookingRoomRatePlan {
     });
   }
 
-  updateOffering(value) {
+  async updateOffering(value) {
     const offering = this.getSelectedOffering(value);
     if (offering) {
       this.selectedData = {
