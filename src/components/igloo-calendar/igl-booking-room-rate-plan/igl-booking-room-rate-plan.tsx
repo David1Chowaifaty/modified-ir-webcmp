@@ -115,6 +115,7 @@ export class IglBookingRoomRatePlan {
       rate: this.handleRateDaysUpdate(),
       physicalRooms: this.setAvailableRooms(newData.assignable_units),
     };
+    this.initialRateValue = this.selectedData.rate / this.dateDifference;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
