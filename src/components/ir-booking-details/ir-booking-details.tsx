@@ -79,6 +79,7 @@ export class IrBookingDetails {
   // Payment Event
   @Event() handleAddPayment: EventEmitter;
   @Event() toast: EventEmitter<IToast>;
+  @State() isUpdateClicked = false;
   private bookingService = new BookingService();
   private roomService = new RoomService();
   componentDidLoad() {
@@ -239,6 +240,7 @@ export class IrBookingDetails {
   async updateStatus() {
     if (this.tempStatus !== 'Select' && this.tempStatus !== null) {
       try {
+        this.isUpdateClicked = true;
         await axios.post(`/Change_Exposed_Booking_Status?Ticket=${this.ticket}`, {
           book_nbr: this.bookingNumber,
           status: this.tempStatus,
@@ -251,6 +253,8 @@ export class IrBookingDetails {
         });
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isUpdateClicked = false;
       }
     } else {
       this.toast.emit({
@@ -332,7 +336,7 @@ export class IrBookingDetails {
                   textSize="sm"
                   class="sm-padding-right"
                 ></ir-select>
-                <ir-button id="update-status-btn" size="sm" text="Update"></ir-button>
+                <ir-button isLoading={this.isUpdateClicked} btn_disabled={this.isUpdateClicked} id="update-status-btn" size="sm" text="Update"></ir-button>
               </Fragment>
             )}
             {this.hasReceipt && <ir-icon id="receipt" icon="ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
