@@ -93,8 +93,55 @@ onChange('bookingDetails', newValue => {
   console.log('new Value', newValue);
 });
 
+// onChange('bookingDetails', newValue => {
+//   if (booking_details.userSelections.length === 0) {
+//     return;
+//   }
+//   booking_details.userSelections.forEach(selection => {
+//     if (!selection.isRateModified) {
+//       const roomType = newValue.roomtypes.find(roomType => roomType.id === selection.roomTypeId);
+//       if (roomType) {
+//         const ratePlan = roomType.rateplans.find(rateplan => rateplan.id === selection.ratePlanId);
+//         if (ratePlan) {
+//           const adultChildOffering = ratePlan.variations.find(variation => variation.adult_child_offering === selection.adult_child_offering);
+//           if (adultChildOffering) {
+//             selection.rate = adultChildOffering.amount;
+//           }
+//         }
+//       }
+//     }
+//   });
+// });
 onChange('bookingDetails', newValue => {
-  console.log('new Value', newValue);
+  if (booking_details.userSelections.length === 0) {
+    return;
+  }
+  const roomTypeCache = {};
+  const ratePlanCache = {};
+
+  booking_details.userSelections.forEach(selection => {
+    if (selection.isRateModified) {
+      let roomType = roomTypeCache[selection.roomTypeId];
+      if (!roomType) {
+        roomType = newValue.roomtypes.find(rt => rt.id === selection.roomTypeId);
+        roomTypeCache[selection.roomTypeId] = roomType;
+      }
+      if (!roomType) return;
+      let ratePlanKey = `${selection.roomTypeId}-${selection.ratePlanId}`;
+      let ratePlan = ratePlanCache[ratePlanKey];
+      if (!ratePlan) {
+        ratePlan = roomType.rateplans.find(rp => rp.id === selection.ratePlanId);
+        ratePlanCache[ratePlanKey] = ratePlan;
+      }
+      if (!ratePlan) return;
+
+      const adultChildOffering = ratePlan.variations.find(variation => variation.adult_child_offering === selection.adult_child_offering);
+      if (!adultChildOffering) return;
+
+      selection.rate = adultChildOffering.amount;
+    }
+  });
+  console.log(booking_details.userSelections);
 });
 
 export function deselectRatePlan(roomTypeId: number, ratePlanId: number, variationIndex: number, numberSelected: number) {
