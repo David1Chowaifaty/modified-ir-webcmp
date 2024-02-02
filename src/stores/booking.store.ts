@@ -1,6 +1,5 @@
-import { BookingDetails, ISelectedRatePlan } from '@/models/IBooking';
+import { BookingDetails, ISelectedRatePlan, ISource } from '@/models/IBooking';
 import { TAdultChildConstraints } from '..';
-import { ISource } from './../../dist/types/models/IBooking.d';
 import { createStore } from '@stencil/store';
 
 export interface IDates {
