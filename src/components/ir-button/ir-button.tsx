@@ -14,6 +14,7 @@ export class IrButton {
   @Prop() btn_block = true;
   @Prop() btn_disabled = false;
   @Prop() btn_type = 'button';
+  @Prop() isLoading: boolean = false;
 
   connectedCallback() {}
   disconnectedCallback() {}
@@ -29,15 +30,20 @@ export class IrButton {
         onClick={() => {
           this.clickHanlder.emit();
         }}
-        class={`m-0 btn btn-${this.btn_color} btn-${this.size} text-${this.textSize} ${block}`}
+        class={`m-0 btn btn-${this.btn_color} d-flex btn-${this.size} text-${this.textSize} ${block}`}
         type={this.btn_type}
       >
-        {this.icon && (
-          <Fragment>
+        {this.icon && !this.isLoading && (
+          <span>
             <i class={`${this.icon} font-small-3`}></i>&nbsp;
+          </span>
+        )}
+        {this.isLoading && (
+          <Fragment>
+            <span class={'m-0 p-0 loader'}></span>&nbsp;
           </Fragment>
         )}
-        {this.text}
+        <span class={'m-0 p-0 button-text'}>{this.text}</span>
       </button>
     );
   }

@@ -279,6 +279,7 @@ export namespace Components {
         "btn_disabled": boolean;
         "btn_type": string;
         "icon": string;
+        "isLoading": boolean;
         "name": string;
         "size": 'sm' | 'md' | 'lg';
         "text": any;
@@ -1975,6 +1976,7 @@ declare namespace LocalJSX {
         "btn_disabled"?: boolean;
         "btn_type"?: string;
         "icon"?: string;
+        "isLoading"?: boolean;
         "name"?: string;
         "onClickHanlder"?: (event: IrButtonCustomEvent<any>) => void;
         "size"?: 'sm' | 'md' | 'lg';
