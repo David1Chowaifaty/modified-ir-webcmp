@@ -1,8 +1,9 @@
+import calendar_data from '@/stores/calendar-data';
 import { locales } from '@/stores/locales.store';
 import axios from 'axios';
 
 export class RoomService {
-  public async fetchData(id: number, language: string): Promise<{ [key: string]: any }> {
+  public async fetchData(id: number, language: string) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token !== null) {
@@ -10,6 +11,13 @@ export class RoomService {
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
+        const results = data.My_Result;
+        calendar_data.adultChildConstraints = results.adult_child_constraints;
+        calendar_data.allowedBookingSources = results.allowed_booking_sources;
+        calendar_data.allowed_payment_methods = results.allowed_booking_methods;
+        calendar_data.currency = results.currency;
+        calendar_data.is_vacation_rental = results.is_vacation_rental;
+        calendar_data.pickup_service = results.pickup_service;
         return data;
       }
     } catch (error) {
