@@ -2,7 +2,7 @@
   overflow-x: hidden;
 }
 .backdrop {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -21,7 +21,7 @@
 }
 
 .sidebar-right {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: -100%;
   bottom: 0;
@@ -42,7 +42,7 @@
 }
 
 .sidebar-left {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: -100%;
   overflow-x: hidden;
@@ -63,7 +63,7 @@
   overflow-y: scroll;
 }
 .close {
-  position: absolute;
+  position: fixed;
   top: 0.5rem;
   right: 1rem;
   width: 1rem;
