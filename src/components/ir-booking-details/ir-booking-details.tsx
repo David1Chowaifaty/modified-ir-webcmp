@@ -410,6 +410,7 @@ export class IrBookingDetails {
               item={this.bookingDetails}
               paymentExceptionMessage={this.paymentExceptionMessage}
             ></ir-payment-details>
+            {/* <ir-pickup></ir-pickup> */}
           </div>
         </div>
       </div>,

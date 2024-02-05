@@ -1,5 +1,5 @@
 .backdrop {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -18,7 +18,7 @@
 }
 
 .sidebar-right {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: -100%;
   bottom: 0;
@@ -38,7 +38,7 @@
 }
 
 .sidebar-left {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: -100%;
   bottom: 0;

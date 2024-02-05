@@ -445,6 +445,8 @@ export namespace Components {
         "item": any;
         "paymentExceptionMessage": string;
     }
+    interface IrPickup {
+    }
     interface IrRoom {
         "bookingEvent": Booking1;
         "bookingIndex": number;
@@ -1467,6 +1469,12 @@ declare global {
         prototype: HTMLIrPaymentDetailsElement;
         new (): HTMLIrPaymentDetailsElement;
     };
+    interface HTMLIrPickupElement extends Components.IrPickup, HTMLStencilElement {
+    }
+    var HTMLIrPickupElement: {
+        prototype: HTMLIrPickupElement;
+        new (): HTMLIrPickupElement;
+    };
     interface HTMLIrRoomElementEventMap {
         "deleteFinished": string;
         "pressCheckIn": any;
@@ -1639,6 +1647,7 @@ declare global {
         "ir-mapping": HTMLIrMappingElement;
         "ir-modal": HTMLIrModalElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
+        "ir-pickup": HTMLIrPickupElement;
         "ir-room": HTMLIrRoomElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-select": HTMLIrSelectElement;
@@ -2164,6 +2173,8 @@ declare namespace LocalJSX {
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "paymentExceptionMessage"?: string;
     }
+    interface IrPickup {
+    }
     interface IrRoom {
         "bookingEvent"?: Booking1;
         "bookingIndex"?: number;
@@ -2307,6 +2318,7 @@ declare namespace LocalJSX {
         "ir-mapping": IrMapping;
         "ir-modal": IrModal;
         "ir-payment-details": IrPaymentDetails;
+        "ir-pickup": IrPickup;
         "ir-room": IrRoom;
         "ir-room-nights": IrRoomNights;
         "ir-select": IrSelect;
@@ -2365,6 +2377,7 @@ declare module "@stencil/core" {
             "ir-mapping": LocalJSX.IrMapping & JSXBase.HTMLAttributes<HTMLIrMappingElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
+            "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;
