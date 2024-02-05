@@ -12,6 +12,11 @@
   <script src="assets/scripts/daterangepicker/daterangepicker.js"></script>
   <script src="assets/scripts/toastr/toastr.min.js"></script>
   <script src="assets/scripts/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+  </style>
 </head>
 
 <body>
@@ -26,7 +31,6 @@
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
 
   <script>
-
     var today = new Date();
     today.setDate(today.getDate() - 1);
     var _FROM_DATE = today.toISOString().substring(0, 10)
