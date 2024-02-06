@@ -38,14 +38,18 @@
 
 ### Used by
 
+ - [ir-booking-details](../ir-booking-details)
  - [ir-general-settings](../ir-channel/ir-general-settings)
  - [ir-guest-info](../ir-guest-info)
+ - [ir-pickup](../ir-booking-details/ir-pickup)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-booking-details --> ir-select
   ir-general-settings --> ir-select
   ir-guest-info --> ir-select
+  ir-pickup --> ir-select
   style ir-select fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

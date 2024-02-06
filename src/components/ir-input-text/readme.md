@@ -40,12 +40,14 @@
 
  - [ir-general-settings](../ir-channel/ir-general-settings)
  - [ir-guest-info](../ir-guest-info)
+ - [ir-pickup](../ir-booking-details/ir-pickup)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-general-settings --> ir-input-text
   ir-guest-info --> ir-input-text
+  ir-pickup --> ir-input-text
   style ir-input-text fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

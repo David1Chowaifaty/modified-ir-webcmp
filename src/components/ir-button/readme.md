@@ -14,6 +14,7 @@
 | `btn_disabled` | `btn_disabled` |             | `boolean`                                                                                       | `false`     |
 | `btn_type`     | `btn_type`     |             | `string`                                                                                        | `'button'`  |
 | `icon`         | `icon`         |             | `string`                                                                                        | `'ft-save'` |
+| `isLoading`    | `is-loading`   |             | `boolean`                                                                                       | `false`     |
 | `name`         | `name`         |             | `string`                                                                                        | `undefined` |
 | `size`         | `size`         |             | `"lg" \| "md" \| "sm"`                                                                          | `'md'`      |
 | `text`         | `text`         |             | `any`                                                                                           | `undefined` |
@@ -31,6 +32,7 @@
 
 ### Used by
 
+ - [ir-booking-details](../ir-booking-details)
  - [ir-guest-info](../ir-guest-info)
  - [ir-modal](../ir-modal)
  - [ir-room](../ir-booking-details/ir-room)
@@ -38,6 +40,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  ir-booking-details --> ir-button
   ir-guest-info --> ir-button
   ir-modal --> ir-button
   ir-room --> ir-button

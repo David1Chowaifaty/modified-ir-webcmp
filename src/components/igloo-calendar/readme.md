@@ -36,7 +36,6 @@
 
 - [ir-toast](../ir-toast)
 - [ir-interceptor](../ir-interceptor)
-- [ir-common](../ir-common)
 - [igl-to-be-assigned](igl-to-be-assigned)
 - [igl-legends](igl-legends)
 - [igl-cal-header](igl-cal-header)
@@ -54,7 +53,6 @@
 graph TD;
   igloo-calendar --> ir-toast
   igloo-calendar --> ir-interceptor
-  igloo-calendar --> ir-common
   igloo-calendar --> igl-to-be-assigned
   igloo-calendar --> igl-legends
   igloo-calendar --> igl-cal-header
@@ -90,9 +88,10 @@ graph TD;
   igl-property-booked-by --> ir-autocomplete
   ir-sidebar --> ir-icon
   ir-room-nights --> ir-icon
-  ir-booking-details --> ir-common
-  ir-booking-details --> ir-label
+  ir-booking-details --> ir-select
+  ir-booking-details --> ir-button
   ir-booking-details --> ir-icon
+  ir-booking-details --> ir-label
   ir-booking-details --> ir-room
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar

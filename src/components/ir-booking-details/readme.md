@@ -30,23 +30,25 @@
 | `propertyid`              | `propertyid`                |             | `number`         | `undefined` |
 | `setupDataCountries`      | --                          |             | `selectOption[]` | `null`      |
 | `setupDataCountriesCode`  | --                          |             | `selectOption[]` | `null`      |
+| `show_header`             | `show_header`               |             | `boolean`        | `true`      |
 | `statusCodes`             | `status-codes`              |             | `any`            | `[]`        |
 | `ticket`                  | `ticket`                    |             | `string`         | `''`        |
 
 
 ## Events
 
-| Event                | Description | Type                     |
-| -------------------- | ----------- | ------------------------ |
-| `handleAddPayment`   |             | `CustomEvent<any>`       |
-| `handleDeleteClick`  |             | `CustomEvent<any>`       |
-| `handleMenuClick`    |             | `CustomEvent<any>`       |
-| `handlePrintClick`   |             | `CustomEvent<any>`       |
-| `handleReceiptClick` |             | `CustomEvent<any>`       |
-| `handleRoomAdd`      |             | `CustomEvent<any>`       |
-| `handleRoomDelete`   |             | `CustomEvent<any>`       |
-| `handleRoomEdit`     |             | `CustomEvent<any>`       |
-| `sendDataToServer`   |             | `CustomEvent<guestInfo>` |
+| Event                | Description | Type                                                                                                 |
+| -------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `handleAddPayment`   |             | `CustomEvent<any>`                                                                                   |
+| `handleDeleteClick`  |             | `CustomEvent<any>`                                                                                   |
+| `handleMenuClick`    |             | `CustomEvent<any>`                                                                                   |
+| `handlePrintClick`   |             | `CustomEvent<any>`                                                                                   |
+| `handleReceiptClick` |             | `CustomEvent<any>`                                                                                   |
+| `handleRoomAdd`      |             | `CustomEvent<any>`                                                                                   |
+| `handleRoomDelete`   |             | `CustomEvent<any>`                                                                                   |
+| `handleRoomEdit`     |             | `CustomEvent<any>`                                                                                   |
+| `sendDataToServer`   |             | `CustomEvent<guestInfo>`                                                                             |
+| `toast`              |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies
@@ -57,9 +59,10 @@
 
 ### Depends on
 
-- [ir-common](../ir-common)
-- [ir-label](../ir-label)
+- [ir-select](../ir-select)
+- [ir-button](../ir-button)
 - [ir-icon](../ir-icon)
+- [ir-label](../ir-label)
 - [ir-room](ir-room)
 - [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)
@@ -69,9 +72,10 @@
 ### Graph
 ```mermaid
 graph TD;
-  ir-booking-details --> ir-common
-  ir-booking-details --> ir-label
+  ir-booking-details --> ir-select
+  ir-booking-details --> ir-button
   ir-booking-details --> ir-icon
+  ir-booking-details --> ir-label
   ir-booking-details --> ir-room
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
