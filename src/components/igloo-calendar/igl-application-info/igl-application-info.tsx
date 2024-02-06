@@ -20,12 +20,20 @@ export class IglApplicationInfo {
   @Prop() defaultGuestPreference: number | null;
   @Prop() index: number;
   @Prop() defaultGuestRoomId: number;
+  @Prop() dateDifference: number;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @State() filterdRoomList = [];
   @State() isButtonPressed = false;
   @State() guestData: { [key: string]: any };
+  private userRate = 0;
 
   componentWillLoad() {
+    console.log(this.guestInfo);
+    if (this.guestInfo.isRateModified && this.guestInfo.rateType === 2) {
+      this.userRate = this.guestInfo.rate * this.dateDifference;
+    } else {
+      this.userRate = this.guestInfo.rate;
+    }
     this.guestData = this.guestInfo ? { ...this.guestInfo } : {};
     this.guestData.roomId = '';
     if (this.defaultGuestRoomId && this.roomsList.filter(e => e.id.toString() === this.defaultGuestRoomId.toString()).length > 0) {
@@ -146,7 +154,7 @@ export class IglApplicationInfo {
                 </select>
               </div>
               <div class="">
-                {getCurrencySymbol(this.currency.code) + Number(this.guestInfo.rate).toFixed(2)}/{locales.entries.Lcz_Stay}
+                {getCurrencySymbol(this.currency.code) + Number(this.userRate).toFixed(2)}/{locales.entries.Lcz_Stay}
               </div>
             </div>
           </div>

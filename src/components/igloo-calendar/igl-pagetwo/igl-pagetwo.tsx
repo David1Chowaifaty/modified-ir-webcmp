@@ -157,6 +157,7 @@ export class IglPagetwo {
         {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
+              dateDifference={this.dateRangeData.dateDifference}
               defaultGuestPreference={this.defaultGuestData.bed_preference}
               defaultGuestRoomId={this.defaultGuestData.PR_ID}
               currency={this.currency}

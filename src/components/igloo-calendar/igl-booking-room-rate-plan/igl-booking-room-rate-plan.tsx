@@ -89,6 +89,7 @@ export class IglBookingRoomRatePlan {
       index: this.index,
       is_closed: data.is_closed,
       physicalRooms: this.setAvailableRooms(this.ratePlanData.assignable_units),
+      dateDifference: this.dateDifference,
     };
 
     if (this.defaultData) {
