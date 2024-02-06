@@ -37,6 +37,7 @@ export class IglBookingRoomRatePlan {
     return result;
   }
   componentWillLoad() {
+    console.log('default data', this.defaultData);
     this.updateSelectedRatePlan(this.ratePlanData);
   }
   disableForm() {
@@ -96,15 +97,20 @@ export class IglBookingRoomRatePlan {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
-      (this.selectedData.rateType = 1),
-        this.dataUpdateEvent.emit({
-          key: 'roomRatePlanUpdate',
-          changedKey: 'totalRooms',
-          data: this.selectedData,
-        });
     }
-
-    this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    if (this.defaultData && this.defaultData.isRateModified) {
+      console.log('object');
+      if (this.selectedData.rateType === 1) {
+        console.log('object1');
+        this.initialRateValue = this.selectedData.rate;
+      } else {
+        console.log('object2');
+        this.initialRateValue = this.selectedData.rate * this.dateDifference;
+      }
+    } else {
+      this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    }
+    console.log('initialRateValue', this.initialRateValue);
   }
   @Watch('ratePlanData')
   async ratePlanDataChanged(newData) {
@@ -116,7 +122,7 @@ export class IglBookingRoomRatePlan {
       rate: this.handleRateDaysUpdate(),
       physicalRooms: this.setAvailableRooms(newData.assignable_units),
     };
-    this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    this.initialRateValue = this.selectedData.rateType === 2 ? this.selectedData.rate / this.dateDifference : this.selectedData.rate;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -199,7 +205,7 @@ export class IglBookingRoomRatePlan {
       ...this.selectedData,
       rate: numericValue,
       totalRooms: value === '' ? 0 : this.selectedData.totalRooms,
-      defaultSelectedRate: this.selectedData.rateType === 1 ? numericValue / this.dateDifference : numericValue,
+      defaultSelectedRate: this.selectedData.rateType === 2 ? numericValue / this.dateDifference : numericValue,
     };
   }
 
@@ -217,6 +223,7 @@ export class IglBookingRoomRatePlan {
 
   renderRate(): string | number | string[] {
     if (this.selectedData.isRateModified) {
+      console.log('selectedData.rate', this.selectedData.rate);
       return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
     return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);
