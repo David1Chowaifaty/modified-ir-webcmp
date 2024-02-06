@@ -773,7 +773,6 @@ export class IglooCalendar {
       <Host>
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
-        <ir-common></ir-common>
         <div id="iglooCalendar" class="igl-calendar">
           {this.shouldRenderCalendarView() ? (
             [

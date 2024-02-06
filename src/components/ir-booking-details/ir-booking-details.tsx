@@ -310,7 +310,6 @@ export class IrBookingDetails {
     }
 
     return [
-      <ir-common></ir-common>,
       <div class="fluid-container pt-1 mr-2 ml-2">
         <div class="row">
           <div class="col-lg-7 col-md-12 d-flex justify-content-start align-items-end">
