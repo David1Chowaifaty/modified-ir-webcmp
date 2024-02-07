@@ -426,7 +426,7 @@ export class IglBookProperty {
       }
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
       await this.bookingService.bookUser(...serviceParams);
-      if (this.isEventType('EDIT_BOOKING')) {
+      if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
         this.resetBookingData.emit(null);
       }
     } catch (error) {

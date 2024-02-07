@@ -859,6 +859,7 @@ export class IglooCalendar {
               ticket={this.ticket}
               baseurl={this.baseurl}
               language={this.language}
+              hasRoomAdd
             ></ir-booking-details>
           )}
         </ir-sidebar>

@@ -1,3 +1,5 @@
+import { Arrival } from './booking.dto';
+
 export type FooterButtonType = 'cancel' | 'next';
 export type BookUserParams = [
   any,
@@ -110,6 +112,7 @@ interface IglBookPropertyPayloadAddRoom extends IglBookPropertyPayload {
     tag?: string;
   };
   ROOMS?: Array<{}>;
+  ARRIVAL: Arrival;
 }
 
 interface IglBookPropertyPayloadBarBooking extends IglBookPropertyPayload {

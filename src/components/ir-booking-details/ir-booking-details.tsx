@@ -5,7 +5,7 @@ import { _formatDate, _formatTime } from './functions';
 import { Booking, Guest, Room } from '../../models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
-import { TIglBookPropertyPayload } from '../../models/igl-book-property';
+import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '../../models/igl-book-property';
 import { RoomService } from '../../services/room.service';
 import locales, { ILocale } from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
@@ -123,6 +123,7 @@ export class IrBookingDetails {
 
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
+      console.log(this.calendarData);
       this.setRoomsData(roomResponse);
       // console.log(this.calendarData);
       const paymentCodesToShow = ['001', '004'];
@@ -153,7 +154,32 @@ export class IrBookingDetails {
         window.location.href = 'https://x.igloorooms.com/manage/acbookinglist.aspx';
         return;
       case 'room-add':
-        this.handleRoomAdd.emit();
+        (this.bookingItem as IglBookPropertyPayloadAddRoom) = {
+          ID: '',
+          NAME: this.bookingData.guest.last_name,
+          EMAIL: this.bookingData.guest.email,
+          PHONE: this.bookingData.guest.mobile,
+          REFERENCE_TYPE: '',
+          FROM_DATE: this.bookingData.from_date,
+          ARRIVAL: this.bookingData.arrival,
+          TO_DATE: this.bookingData.to_date,
+          TITLE: `${locales.entries.Lcz_AddingUnitToBooking}# ${this.bookingData.booking_nbr}`,
+          defaultDateRange: {
+            fromDate: new Date(this.bookingData.from_date),
+            fromDateStr: '',
+            toDate: new Date(this.bookingData.to_date),
+            toDateStr: '',
+            dateDifference: 0,
+            message: '',
+          },
+          event_type: 'ADD_ROOM',
+          BOOKING_NUMBER: this.bookingData.booking_nbr,
+          ADD_ROOM_TO_BOOKING: this.bookingData.booking_nbr,
+          GUEST: this.bookingData.guest,
+          message: this.bookingData.remark,
+          SOURCE: this.bookingData.source,
+          ROOMS: this.bookingData.rooms,
+        };
         return;
       case 'add-payment':
         this.handleAddPayment.emit();
@@ -191,26 +217,6 @@ export class IrBookingDetails {
         await this.updateStatus();
         await this.resetBookingData();
         break;
-    }
-  }
-
-  @Watch('dropdownStatuses')
-  watchDropdownStatuses(newValue: any, oldValue: any) {
-    console.log('The new value of dropdownStatuses is: ', newValue);
-    console.log('The old value of dropdownStatuses is: ', oldValue);
-    // Make the newValue in way that can be handled by the dropdown
-    try {
-      // const _newValue = newValue.map(item => {
-      //   return {
-      //     value: item.CODE_NAME,
-      //     text: this._getBookingStatus(item.CODE_NAME, '_BOOK_STATUS'),
-      //   };
-      // });
-      // this.statusData = _newValue;
-      // console.log('The new value of statusData is: ', this.statusData);
-      // this.rerenderFlag = !this.rerenderFlag;
-    } catch (e) {
-      console.log('Error in watchDropdownStatuses: ', e);
     }
   }
 
@@ -437,7 +443,7 @@ export class IrBookingDetails {
         {this.bookingItem && (
           <igl-book-property
             allowedBookingSources={this.calendarData.allowed_booking_sources}
-            adultChildConstraints={this.calendarData.adultChildConstraints}
+            adultChildConstraints={this.calendarData.adult_child_constraints}
             showPaymentDetails={this.showPaymentDetails}
             countryNodeList={this.countryNodeList}
             currency={this.calendarData.currency}
