@@ -9,6 +9,7 @@ import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '../../mo
 import { RoomService } from '../../services/room.service';
 import locales, { ILocale } from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-booking-details',
@@ -322,12 +323,12 @@ export class IrBookingDetails {
     return [
       <div class="fluid-container pt-1 mr-2 ml-2">
         <div class="row">
-          <div class="col-lg-7 col-md-12 d-flex justify-content-start align-items-end">
-            <div class="font-size-large sm-padding-right">{`${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`}</div>
-            <div>
+          <div class="col-lg-7 col-md-12 d-flex justify-content-start align-items-end ">
+            <div class="font-size-large sm-padding-right ">{`${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`}</div>
+            <p class="m-0 p-0">
               {/* format date */}@ {_formatDate(this.bookingData.booked_on.date)} {/* format time */}
               {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
-            </div>
+            </p>
           </div>
 
           <div class="col-lg-5 col-md-12 mt-1 mt-lg-0 d-flex justify-content-end align-items-center">
@@ -375,7 +376,7 @@ export class IrBookingDetails {
                 <ir-label label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
               </div>
             </div>
-            <div class="font-size-large d-flex justify-content-between align-items-center ml-1 mb-1">
+            <p class="font-size-large d-flex justify-content-between align-items-center ml-1 mb-1">
               {`${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(
                 this.bookingData.from_date,
                 this.bookingData.to_date,
@@ -385,7 +386,7 @@ export class IrBookingDetails {
                   : ` ${this.defaultTexts.entries.Lcz_Night}`
               })`}
               {this.hasRoomAdd && <ir-icon id="room-add" icon="ft-plus h3 color-ir-dark-blue-hover pointer"></ir-icon>}
-            </div>
+            </p>
             <div class="card p-0 mx-0">
               {this.bookingData.rooms.map((room: Room, index: number) => {
                 const mealCodeName = room.rateplan.name;
@@ -413,12 +414,46 @@ export class IrBookingDetails {
                 ];
               })}
             </div>
-            <div class="mb-1">
-              <div class={'d-flex w-100  align-items-center justify-content-between'}>
-                <h4>{locales.entries.Lcz_Pickup}</h4>
-                <ir-icon id="pickup" icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon>
+            {calendar_data.pickup_service.is_enabled && (
+              <div class="mb-1">
+                <div class={'d-flex w-100 mb-1 align-items-center justify-content-between'}>
+                  <p class={'font-size-large ml-1 p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>
+                  <ir-icon id="pickup" icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon>
+                </div>
+                {this.bookingData.pickup_info && (
+                  <div class={'card'}>
+                    <div class={'p-1'}>
+                      <div class={'d-flex align-items-center'}>
+                        <p class={'font-weight-bold mr-1'}>
+                          {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('ddd, DD MM YYYY')}</span>
+                        </p>
+                        <p class={'font-weight-bold flex-fill'}>
+                          {locales.entries.Lcz_Time}:<span class={'font-weight-normal'}> {`${this.bookingData.pickup_info.hour}:${this.bookingData.pickup_info.minute}`}</span>
+                        </p>
+                        <p class={'font-weight-bold '}>
+                          {locales.entries.Lcz_DueUponBooking}:{' '}
+                          <span class={'font-weight-normal'}>
+                            {this.bookingData.pickup_info.currency.symbol}
+                            {this.bookingData.pickup_info.total}
+                          </span>
+                        </p>
+                      </div>
+                      <p class={'font-weight-bold '}>
+                        {locales.entries.Lcz_FlightDetails}:<span class={'font-weight-normal'}> {`${this.bookingData.pickup_info.details}`}</span>
+                      </p>
+                      <p class={''}>{`${this.bookingData.pickup_info.selected_option.vehicle.description}`}</p>
+                      <p class={'font-weight-bold '}>
+                        {locales.entries.Lcz_NbrOfVehicles}:<span class={'font-weight-normal'}> {`${this.bookingData.pickup_info.nbr_of_units}`}</span>
+                      </p>
+                      <p class={'small'}>
+                        {calendar_data.pickup_service.pickup_instruction.description}
+                        {calendar_data.pickup_service.pickup_cancelation_prepayment.description}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details
@@ -454,6 +489,7 @@ export class IrBookingDetails {
         )}
         {this.sidebarState === 'pickup' && (
           <ir-pickup
+            defaultPickupData={this.bookingData.pickup_info}
             bookingNumber={this.bookingData.booking_nbr}
             numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
             onCloseModal={() => (this.sidebarState = null)}

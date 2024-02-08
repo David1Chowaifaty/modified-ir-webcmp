@@ -5,6 +5,7 @@ import { TPickupData } from './types';
 import moment from 'moment';
 import { IAllowedOptions } from '@/models/calendarData';
 import { PickupService } from './pickup.service';
+import { IBookingPickupInfo } from '@/models/booking.dto';
 
 @Component({
   tag: 'ir-pickup',
@@ -14,14 +15,14 @@ import { PickupService } from './pickup.service';
 export class IrPickup {
   @Element() el: HTMLElement;
 
-  @Prop() defaultPickupData: TPickupData;
+  @Prop() defaultPickupData: IBookingPickupInfo | null;
   @Prop() numberOfPersons: number = 0;
   @Prop() bookingNumber: string;
 
   @State() isLoading = false;
   @State() allowedOptionsByLocation: IAllowedOptions[] = [];
   @State() pickupData: TPickupData = {
-    location: '',
+    location: -1,
     flight_details: '',
     due_upon_booking: '',
     number_of_vehicles: 1,
@@ -35,13 +36,25 @@ export class IrPickup {
   @State() cause: keyof TPickupData | null = null;
 
   @Event() closeModal: EventEmitter<null>;
+  @Event() resetBookingData: EventEmitter<null>;
+
   private pickupService = new PickupService();
 
+  componentWillLoad() {
+    if (this.defaultPickupData) {
+      const transformedData = this.pickupService.transformDefaultPickupData(this.defaultPickupData);
+      this.vehicleCapacity = this.pickupService.getNumberOfVehicles(transformedData.selected_option.vehicle.capacity, this.numberOfPersons);
+      this.allowedOptionsByLocation = calendar_data.pickup_service.allowed_options.filter(option => option.location.id === transformedData.location);
+      this.pickupData = { ...transformedData };
+    }
+  }
   handleLocationChange(event: CustomEvent) {
     event.stopImmediatePropagation();
     event.stopPropagation();
     const value = event.detail;
-
+    if (value === '') {
+      this.updatePickupData('location', -1);
+    }
     if (value !== '') {
       this.allowedOptionsByLocation = calendar_data.pickup_service.allowed_options.filter(option => option.location.id.toString() === value);
       let locationChoice = this.allowedOptionsByLocation[0];
@@ -137,9 +150,7 @@ export class IrPickup {
       };
       return;
     }
-    let locationChoice = calendar_data.pickup_service.allowed_options.find(
-      option => option.location.id.toString() === this.pickupData.location && option.vehicle.code === e.detail,
-    );
+    let locationChoice = calendar_data.pickup_service.allowed_options.find(option => option.location.id === this.pickupData.location && option.vehicle.code === e.detail);
     this.vehicleCapacity = [...this.pickupService.getNumberOfVehicles(locationChoice.vehicle.capacity, this.numberOfPersons)];
     this.pickupData = {
       ...this.pickupData,
@@ -171,7 +182,9 @@ export class IrPickup {
       if (this.cause) {
         this.cause = null;
       }
-      await this.pickupService.savePickup(this.pickupData, this.bookingNumber);
+      await this.pickupService.savePickup(this.pickupData, this.bookingNumber, this.defaultPickupData !== null && this.pickupData.location === -1);
+      this.resetBookingData.emit(null);
+      this.closeModal.emit(null);
     } catch (error) {
       console.error(error);
     } finally {
@@ -188,6 +201,7 @@ export class IrPickup {
         </div>
         <section class={'px-2 px-md-3'}>
           <ir-select
+            selectedValue={this.pickupData.location}
             selectContainerStyle="mb-1"
             onSelectChange={this.handleLocationChange.bind(this)}
             firstOption={locales.entries.Lcz_Pickup_NoThankYou}
@@ -195,7 +209,7 @@ export class IrPickup {
             LabelAvailable={false}
             data={this.pickupService.getAvailableLocations(locales.entries.Lcz_Pickup_YesFrom) as any}
           ></ir-select>
-          {this.pickupData.location && (
+          {this.pickupData.location > 0 && (
             <Fragment>
               {/*Date and Time Picker container */}
               <div class={'d-flex'}>
@@ -237,6 +251,7 @@ export class IrPickup {
                 </div>
               </div>
               <ir-input-text
+                value={this.pickupData.flight_details}
                 label={locales.entries.Lcz_FlightDetails}
                 onTextChange={e => this.updatePickupData('flight_details', e.detail)}
                 placeholder=""

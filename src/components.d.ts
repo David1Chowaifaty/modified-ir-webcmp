@@ -15,9 +15,8 @@ import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
 import { selectOption as selectOption1 } from "./common/models";
 import { ILocale } from "./stores/locales.store";
-import { Booking } from "./models/booking.dto";
+import { Booking, IBookingPickupInfo } from "./models/booking.dto";
 import { ILocale as ILocale1 } from "./components.d";
-import { TPickupData } from "./components/ir-booking-details/ir-pickup/types";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -30,9 +29,8 @@ export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
 export { selectOption as selectOption1 } from "./common/models";
 export { ILocale } from "./stores/locales.store";
-export { Booking } from "./models/booking.dto";
+export { Booking, IBookingPickupInfo } from "./models/booking.dto";
 export { ILocale as ILocale1 } from "./components.d";
-export { TPickupData } from "./components/ir-booking-details/ir-pickup/types";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -453,7 +451,7 @@ export namespace Components {
     }
     interface IrPickup {
         "bookingNumber": string;
-        "defaultPickupData": TPickupData;
+        "defaultPickupData": IBookingPickupInfo | null;
         "numberOfPersons": number;
     }
     interface IrRoom {
@@ -1486,6 +1484,7 @@ declare global {
     };
     interface HTMLIrPickupElementEventMap {
         "closeModal": null;
+        "resetBookingData": null;
     }
     interface HTMLIrPickupElement extends Components.IrPickup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPickupElementEventMap>(type: K, listener: (this: HTMLIrPickupElement, ev: IrPickupCustomEvent<HTMLIrPickupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2205,9 +2204,10 @@ declare namespace LocalJSX {
     }
     interface IrPickup {
         "bookingNumber"?: string;
-        "defaultPickupData"?: TPickupData;
+        "defaultPickupData"?: IBookingPickupInfo | null;
         "numberOfPersons"?: number;
         "onCloseModal"?: (event: IrPickupCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IrPickupCustomEvent<null>) => void;
     }
     interface IrRoom {
         "bookingEvent"?: Booking1;

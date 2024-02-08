@@ -1,18 +1,19 @@
 import axios from 'axios';
 import { TDueParams, TPickupData } from './types';
 import calendar_data from '@/stores/calendar-data';
+import { IBookingPickupInfo } from '@/components';
 
 export class PickupService {
   token: string | null;
   constructor() {
     this.token = JSON.parse(sessionStorage.getItem('token'));
   }
-  public async savePickup(params: TPickupData, booking_nbr: string) {
+  public async savePickup(params: TPickupData, booking_nbr: string, is_remove: boolean) {
     try {
       const splitTime = params.arrival_time.split(':');
       await axios.post(`/Do_Pickup?Ticket=${this.token}`, {
         booking_nbr,
-        is_remove: false,
+        is_remove,
         currency: params.currency,
         date: params.arrival_date,
         details: params.flight_details,
@@ -20,11 +21,24 @@ export class PickupService {
         minute: splitTime[1],
         nbr_of_units: params.number_of_vehicles,
         selected_option: params.selected_option,
-        total: params.due_upon_booking,
+        total: +params.due_upon_booking,
       });
     } catch (error) {
       console.log(error);
     }
+  }
+  public transformDefaultPickupData(data: IBookingPickupInfo): TPickupData {
+    return {
+      arrival_date: data.date,
+      arrival_time: data.hour + ':' + data.minute,
+      currency: data.currency,
+      due_upon_booking: data.total.toFixed(2),
+      flight_details: data.details,
+      location: data.selected_option.location.id,
+      number_of_vehicles: data.nbr_of_units,
+      selected_option: data.selected_option,
+      vehicle_type_code: data.selected_option.vehicle.code,
+    };
   }
   public getAvailableLocations(message: string) {
     let locations: { value: number; text: string }[] = [];

@@ -1,4 +1,4 @@
-import { ICurrency } from './calendarData';
+import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 
 export interface Booking {
   arrival: Arrival;
@@ -23,6 +23,17 @@ export interface Booking {
   channel_booking_nbr: string | null;
   is_direct: boolean;
   financial: IFinancials;
+  pickup_info: IBookingPickupInfo | null;
+}
+export interface IBookingPickupInfo {
+  currency: IPickupCurrency;
+  date: string;
+  details: string;
+  hour: number;
+  minute: number;
+  nbr_of_units: number;
+  selected_option: IAllowedOptions;
+  total: number;
 }
 export interface IAllowedActions {
   code: string;
