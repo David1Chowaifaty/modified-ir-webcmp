@@ -8,6 +8,7 @@ export class IrSelect {
   @Prop() name: string;
   @Prop() data: selectOption[];
   @Prop() label = '<label>';
+  @Prop() selectStyles: string;
   @Prop({ reflect: true, mutable: true }) selectedValue = null;
   @Prop() required: boolean;
   @Prop() LabelAvailable: boolean = true;
@@ -84,11 +85,11 @@ export class IrSelect {
         <div class="input-group row m-0">
           {label}
           <select
-            class={`${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}
+            class={`${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}
             onInput={this.handleSelectChange.bind(this)}
             required={this.required}
           >
-            <option value={null}>{this.firstOption}</option>
+            <option value={''}>{this.firstOption}</option>
             {this.data.map(item => {
               if (this.selectedValue === item.value) {
                 return (

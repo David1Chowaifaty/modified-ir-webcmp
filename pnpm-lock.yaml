@@ -8,6 +8,9 @@ dependencies:
   '@stencil/core':
     specifier: ^4.7.0
     version: 4.7.0
+  '@types/inputmask':
+    specifier: ^5.0.7
+    version: 5.0.7
   add:
     specifier: ^2.0.6
     version: 2.0.6
@@ -726,6 +729,10 @@ packages:
     dependencies:
       '@types/node': 16.18.60
     dev: true
+
+  /@types/inputmask@5.0.7:
+    resolution: {integrity: sha512-uojbVPWzBQ/n/0jc/d16fLqmGasFIptbrLD2WrCPWArlk+5PgblOqH4EDkI3AoobXLAlOK5yF01V8jMmvMG5qg==}
+    dev: false
 
   /@types/istanbul-lib-coverage@2.0.5:
     resolution: {integrity: sha512-zONci81DZYCZjiLe0r6equvZut0b+dBRPBN5kBDjsONnutYNtJMoWQ9uR2RkL1gLG9NMTzvf+29e5RFfPbeKhQ==}

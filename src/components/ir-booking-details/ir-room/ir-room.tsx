@@ -242,7 +242,7 @@ export class IrRoom {
             {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
             <ir-label label={`${this.defaultTexts.entries.Lcz_MealPlan}:`} value={this.mealCodeName}></ir-label>
-            <ir-label label={`${this.defaultTexts.entries.Lcz_SpecialRate}:`} value="Non-refundable"></ir-label>
+            {/* <ir-label label={`${this.defaultTexts.entries.Lcz_SpecialRate}:`} value="Non-refundable"></ir-label> */}
           </div>
         </div>
         <ir-modal

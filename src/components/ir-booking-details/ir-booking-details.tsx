@@ -62,7 +62,7 @@ export class IrBookingDetails {
   @State() defaultTexts: ILocale;
   // Rerender Flag
   @State() rerenderFlag = false;
-  @State() isSidebarOpen = false;
+  @State() sidebarState: 'guest' | 'pickup' | null = null;
 
   // Event Emitters
 
@@ -113,6 +113,7 @@ export class IrBookingDetails {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
+      console.log(languageTexts);
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
@@ -141,6 +142,9 @@ export class IrBookingDetails {
   handleIconClick(e) {
     const target = e.target;
     switch (target.id) {
+      case 'pickup':
+        this.sidebarState = 'pickup';
+        return;
       case 'print':
         window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
         return;
@@ -198,7 +202,7 @@ export class IrBookingDetails {
 
   @Listen('editSidebar')
   handleEditSidebar() {
-    this.isSidebarOpen = true;
+    this.sidebarState = 'guest';
   }
   @Listen('selectChange')
   handleSelectChange(e: CustomEvent<any>) {
@@ -407,6 +411,12 @@ export class IrBookingDetails {
                 ];
               })}
             </div>
+            <div class="mb-1">
+              <div class={'d-flex w-100  align-items-center justify-content-between'}>
+                <h4>{locales.entries.Lcz_Pickup}</h4>
+                <ir-icon id="pickup" icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon>
+              </div>
+            </div>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details
@@ -415,29 +425,38 @@ export class IrBookingDetails {
               item={this.bookingDetails}
               paymentExceptionMessage={this.paymentExceptionMessage}
             ></ir-payment-details>
-            {/* <ir-pickup></ir-pickup> */}
           </div>
         </div>
       </div>,
       <ir-sidebar
-        open={this.isSidebarOpen}
+        open={this.sidebarState !== null}
         side={'right'}
         id="editGuestInfo"
         onIrSidebarToggle={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
-          this.isSidebarOpen = false;
+          this.sidebarState = null;
         }}
+        showCloseButton={this.sidebarState === 'pickup' ? false : true}
       >
-        <ir-guest-info
-          booking_nbr={this.bookingNumber}
-          defaultTexts={this.defaultTexts}
-          email={this.bookingData?.guest.email}
-          setupDataCountries={this.setupDataCountries}
-          setupDataCountriesCode={this.setupDataCountriesCode}
-          language={this.language}
-          onCloseSideBar={() => (this.isSidebarOpen = false)}
-        ></ir-guest-info>
+        {this.sidebarState === 'guest' && (
+          <ir-guest-info
+            booking_nbr={this.bookingNumber}
+            defaultTexts={this.defaultTexts}
+            email={this.bookingData?.guest.email}
+            setupDataCountries={this.setupDataCountries}
+            setupDataCountriesCode={this.setupDataCountriesCode}
+            language={this.language}
+            onCloseSideBar={() => (this.sidebarState = null)}
+          ></ir-guest-info>
+        )}
+        {/* {this.sidebarState === 'pickup' && (
+          <ir-pickup
+            bookingNumber={this.bookingData.booking_nbr}
+            numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
+            onCloseModal={() => (this.sidebarState = null)}
+          ></ir-pickup>
+        )} */}
       </ir-sidebar>,
       <Fragment>
         {this.bookingItem && (

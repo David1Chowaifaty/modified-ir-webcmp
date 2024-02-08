@@ -8,8 +8,10 @@ export class IrInputText {
   @Prop() value;
   @Prop() label = '<label>';
   @Prop() placeholder = '<placeholder>';
+  @Prop() inputStyles = '';
   @Prop() required: boolean;
   @Prop() LabelAvailable: boolean = true;
+  @Prop() readonly: boolean = false;
   @Prop() type = 'text';
   @Prop() submited: boolean = false;
   @Prop() inputStyle: boolean = true;
@@ -51,6 +53,7 @@ export class IrInputText {
       this.textChange.emit(event.target.value);
     }
   }
+
   render() {
     let className = 'form-control';
     let label = (
@@ -80,8 +83,11 @@ export class IrInputText {
         <div class="input-group row m-0">
           {label}
           <input
+            readOnly={this.readonly}
             type={this.type}
-            class={`${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}
+            class={`${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12} ${this.readonly && 'bg-white'} ${
+              this.inputStyles
+            }`}
             placeholder={this.placeholder}
             value={this.value}
             onInput={this.handleInputChange.bind(this)}

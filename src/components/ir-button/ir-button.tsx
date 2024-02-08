@@ -15,6 +15,7 @@ export class IrButton {
   @Prop() btn_disabled = false;
   @Prop() btn_type = 'button';
   @Prop() isLoading: boolean = false;
+  @Prop() btn_styles: string;
 
   connectedCallback() {}
   disconnectedCallback() {}
@@ -30,7 +31,7 @@ export class IrButton {
         onClick={() => {
           this.clickHanlder.emit();
         }}
-        class={`m-0 btn btn-${this.btn_color} d-flex btn-${this.size} text-${this.textSize} ${block}`}
+        class={`m-0 btn btn-${this.btn_color} ${this.btn_styles} d-flex btn-${this.size} text-${this.textSize} ${block}`}
         type={this.btn_type}
       >
         {this.icon && !this.isLoading && (

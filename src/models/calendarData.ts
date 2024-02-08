@@ -4,7 +4,7 @@ import { TAdultChildConstraints } from './igl-book-property';
 export interface CalendarDataDetails {
   adultChildConstraints: TAdultChildConstraints;
   allowedBookingSources: IAllowedBookingSources[];
-  currency: ICurrency;
+  currency: IPickupCurrency;
   endingDate: number;
   formattedLegendData: IFormattedLegendData;
   is_vacation_rental: boolean;
@@ -15,6 +15,9 @@ export interface CalendarDataDetails {
   toBeAssignedEvents: [];
   allowed_payment_methods: IAllowedPaymentMethods[];
   pickup_service: IPickupService;
+}
+export interface IPickupCurrency extends ICurrency {
+  symbol: string;
 }
 export interface IPickupService {
   allowed_locations: IAllowedLocation[];
@@ -36,14 +39,19 @@ export interface IPickupCancelationPrepayment {
 }
 export interface IAllowedOptions {
   amount: number;
-  currency: ICurrency;
+  currency: IPickupCurrency;
   id: number;
   location: IAllowedLocation;
   vehicle: IVehicle;
+  pricing_model: {
+    code: string;
+    description: string;
+  };
 }
 export interface IVehicle {
   code: string;
   description: string;
+  capacity: number;
 }
 
 export interface IPriceModel {
