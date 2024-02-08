@@ -15,4 +15,6 @@ export type TPickupData = {
 export type TDueParams = {
   code: string;
   amount: number;
+  numberOfPersons: number;
+  number_of_vehicles: number;
 };

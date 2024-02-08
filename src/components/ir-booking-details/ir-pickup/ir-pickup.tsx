@@ -1,7 +1,7 @@
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
 import { Component, Element, Event, EventEmitter, Fragment, Host, Prop, State, h } from '@stencil/core';
-import { TDueParams, TPickupData } from './types';
+import { TPickupData } from './types';
 import moment from 'moment';
 import { IAllowedOptions } from '@/models/calendarData';
 import { PickupService } from './pickup.service';
@@ -51,12 +51,18 @@ export class IrPickup {
       this.pickupData = {
         ...this.pickupData,
         location: value,
-        due_upon_booking: this.updateDue({
-          amount: locationChoice.amount,
-          code: locationChoice.pricing_model.code,
-        }).toFixed(2),
+        selected_option: locationChoice,
+        due_upon_booking: this.pickupService
+          .updateDue({
+            amount: locationChoice.amount,
+            code: locationChoice.pricing_model.code,
+            numberOfPersons: this.numberOfPersons,
+            number_of_vehicles: this.pickupData.number_of_vehicles,
+          })
+          .toFixed(2),
         vehicle_type_code: locationChoice.vehicle.code,
         currency: locationChoice.currency,
+        // number_of_vehicles:this.pickupService
       };
       const input = this.el.querySelector('#pickup-time');
       if (!input) {
@@ -115,24 +121,18 @@ export class IrPickup {
     );
     this.pickupData = {
       ...this.pickupData,
-      due_upon_booking: this.updateDue({
-        amount: locationChoice.amount,
-        code: locationChoice.pricing_model.code,
-      }).toFixed(2),
+      due_upon_booking: this.pickupService
+        .updateDue({
+          amount: locationChoice.amount,
+          code: locationChoice.pricing_model.code,
+          numberOfPersons: this.numberOfPersons,
+          number_of_vehicles: this.pickupData.number_of_vehicles,
+        })
+        .toFixed(2),
       vehicle_type_code: locationChoice.vehicle.code,
     };
   }
-  updateDue(params: TDueParams) {
-    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === params.code);
-    if (!getCodeDescription) {
-      return;
-    }
-    if (getCodeDescription.description === 'Person') {
-      return params.amount * this.numberOfPersons;
-    } else {
-      return params.amount * this.pickupData.number_of_vehicles;
-    }
-  }
+
   updatePickupData(key: keyof TPickupData, value: any) {
     this.pickupData = { ...this.pickupData, [key]: value };
   }
@@ -182,8 +182,8 @@ export class IrPickup {
                 {/*Date Picker */}
                 <div class="form-group  mr-1">
                   <div class="input-group row m-0">
-                    <div class={`input-group-prepend col-5 p-0 text-dark border-none`}>
-                      <label class={`input-group-text  bg-light flex-grow-1 text-dark border-none} `}>{locales.entries.Lcz_ArrivalDate}</label>
+                    <div class={`input-group-prepend col-5 p-0 text-dark border-0`}>
+                      <label class={`input-group-text  bg-light flex-grow-1 text-dark border-0 `}>{locales.entries.Lcz_ArrivalDate}</label>
                     </div>
                     <div class="form-control form-control-md col-7 d-flex align-items-center pl-0">
                       <ir-date-picker
@@ -199,10 +199,10 @@ export class IrPickup {
                   </div>
                 </div>
                 {/*Time Picker */}
-                <div class="form-group ">
+                <div class="form-group">
                   <div class="input-group  row m-0">
-                    <div class={`input-group-prepend col-4 col-sm-3 p-0 text-dark border-none`}>
-                      <label htmlFor="pickup" class={`input-group-text  bg-light flex-grow-1 text-dark border-none} `}>
+                    <div class={`input-group-prepend col-4 col-sm-3 p-0 text-dark border-0`}>
+                      <label htmlFor="pickup" class={`input-group-text  bg-light flex-grow-1 text-dark border-0`}>
                         {locales.entries.Lcz_Time}
                       </label>
                     </div>
@@ -227,7 +227,7 @@ export class IrPickup {
                 onSelectChange={this.handleVehicleTypeChange.bind(this)}
                 firstOption={locales.entries.Lcz_Select}
                 selectedValue={this.pickupData.vehicle_type_code}
-                class={'m-0 '}
+                class={'m-0'}
                 LabelAvailable={false}
                 data={
                   this.allowedOptionsByLocation.map(option => ({

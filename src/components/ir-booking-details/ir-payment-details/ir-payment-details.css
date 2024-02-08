@@ -19,8 +19,3 @@
 .designation {
   width: 120px;
 }
-@media only screen and (min-width: 768px) {
-  .payment-container {
-    max-width: 80%;
-  }
-}

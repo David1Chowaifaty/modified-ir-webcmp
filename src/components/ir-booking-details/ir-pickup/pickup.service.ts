@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { TPickupData } from './types';
+import { TDueParams, TPickupData } from './types';
+import calendar_data from '@/stores/calendar-data';
 
 export class PickupService {
   token: string | null;
@@ -52,4 +53,23 @@ export class PickupService {
     }
     return { error: false };
   }
+  private getPickUpPersonStatus(code: string) {
+    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
+    if (!getCodeDescription) {
+      return null;
+    }
+    return getCodeDescription.description;
+  }
+  public updateDue(params: TDueParams) {
+    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === params.code);
+    if (!getCodeDescription) {
+      return;
+    }
+    if (getCodeDescription.description === 'Person') {
+      return params.amount * params.numberOfPersons;
+    } else {
+      return params.amount * params.number_of_vehicles;
+    }
+  }
+  public getNumberOfVehicles() {}
 }

@@ -411,12 +411,12 @@ export class IrBookingDetails {
                 ];
               })}
             </div>
-            <div class="mb-1">
+            {/* <div class="mb-1">
               <div class={'d-flex w-100  align-items-center justify-content-between'}>
                 <h4>{locales.entries.Lcz_Pickup}</h4>
                 <ir-icon id="pickup" icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon>
               </div>
-            </div>
+            </div> */}
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details
