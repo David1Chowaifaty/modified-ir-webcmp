@@ -150,7 +150,10 @@ export class IrPickup {
       };
       return;
     }
-    let locationChoice = calendar_data.pickup_service.allowed_options.find(option => option.location.id === this.pickupData.location && option.vehicle.code === e.detail);
+    let locationChoice = calendar_data.pickup_service.allowed_options.find(option => option.location.id === +this.pickupData.location && option.vehicle.code === e.detail);
+    if (!locationChoice) {
+      return;
+    }
     this.vehicleCapacity = [...this.pickupService.getNumberOfVehicles(locationChoice.vehicle.capacity, this.numberOfPersons)];
     this.pickupData = {
       ...this.pickupData,
