@@ -330,26 +330,28 @@ export class IrBookingDetails {
             </div>
           </div>
 
-          <div class="col-lg-5 col-md-12 d-flex justify-content-end align-items-center">
-            <span class={`confirmed btn-sm mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
+          <div class="col-lg-5 col-md-12 mt-1 mt-lg-0 d-flex justify-content-end align-items-center">
+            <span class={`confirmed btn-sm m-0 mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
             {this.bookingData.allowed_actions.length > 0 && (
               <Fragment>
                 <ir-select
+                  selectContainerStyle="h-28"
+                  selectStyles="d-flex align-items-center"
                   firstOption={locales.entries.Lcz_Select}
                   id="update-status"
                   size="sm"
                   label-available="false"
                   data={this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code }))}
                   textSize="sm"
-                  class="sm-padding-right"
+                  class="sm-padding-right m-0"
                 ></ir-select>
-                <ir-button isLoading={this.isUpdateClicked} btn_disabled={this.isUpdateClicked} id="update-status-btn" size="sm" text="Update"></ir-button>
+                <ir-button btn_styles="h-28" isLoading={this.isUpdateClicked} btn_disabled={this.isUpdateClicked} id="update-status-btn" size="sm" text="Update"></ir-button>
               </Fragment>
             )}
-            {this.hasReceipt && <ir-icon id="receipt" icon="ft-file-text h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
-            {this.hasPrint && <ir-icon id="print" icon="ft-printer h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
-            {this.hasDelete && <ir-icon id="book-delete" icon="ft-trash-2 h1 danger ml-1 pointer"></ir-icon>}
-            {this.hasMenu && <ir-icon id="menu" icon="ft-list h1 color-ir-dark-blue-hover ml-1 pointer"></ir-icon>}
+            {this.hasReceipt && <ir-icon id="receipt" icon="ft-file-text h1 color-ir-dark-blue-hover m-0 ml-1 pointer"></ir-icon>}
+            {this.hasPrint && <ir-icon id="print" icon="ft-printer h1 color-ir-dark-blue-hover m-0 ml-1  pointer"></ir-icon>}
+            {this.hasDelete && <ir-icon id="book-delete" icon="ft-trash-2 h1 danger m-0 ml-1 pointer"></ir-icon>}
+            {this.hasMenu && <ir-icon id="menu" icon="ft-list h1 color-ir-dark-blue-hover m-0 ml-1 pointer"></ir-icon>}
           </div>
         </div>
       </div>,
@@ -411,12 +413,12 @@ export class IrBookingDetails {
                 ];
               })}
             </div>
-            {/* <div class="mb-1">
+            <div class="mb-1">
               <div class={'d-flex w-100  align-items-center justify-content-between'}>
                 <h4>{locales.entries.Lcz_Pickup}</h4>
                 <ir-icon id="pickup" icon="ft-edit color-ir-dark-blue-hover h4 pointer"></ir-icon>
               </div>
-            </div> */}
+            </div>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details
@@ -450,13 +452,13 @@ export class IrBookingDetails {
             onCloseSideBar={() => (this.sidebarState = null)}
           ></ir-guest-info>
         )}
-        {/* {this.sidebarState === 'pickup' && (
+        {this.sidebarState === 'pickup' && (
           <ir-pickup
             bookingNumber={this.bookingData.booking_nbr}
             numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
             onCloseModal={() => (this.sidebarState = null)}
           ></ir-pickup>
-        )} */}
+        )}
       </ir-sidebar>,
       <Fragment>
         {this.bookingItem && (

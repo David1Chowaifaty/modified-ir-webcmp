@@ -495,6 +495,7 @@ export namespace Components {
         "labelWidth": 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
         "name": string;
         "required": boolean;
+        "selectContainerStyle": string;
         "selectStyle": boolean;
         "selectStyles": string;
         "selectedValue": any;
@@ -2253,6 +2254,7 @@ declare namespace LocalJSX {
         "name"?: string;
         "onSelectChange"?: (event: IrSelectCustomEvent<any>) => void;
         "required"?: boolean;
+        "selectContainerStyle"?: string;
         "selectStyle"?: boolean;
         "selectStyles"?: string;
         "selectedValue"?: any;

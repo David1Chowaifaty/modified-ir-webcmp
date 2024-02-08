@@ -100,6 +100,7 @@ export class GuestInfo {
             ></ir-input-text>
             {/* <ir-input-text label="Password" placeholder="" name="password" submited={this.submit} type="password" value={this.Model.password} required></ir-input-text> */}
             <ir-select
+              selectContainerStyle="mb-1"
               required
               name="country"
               submited={this.submit}
@@ -173,7 +174,14 @@ export class GuestInfo {
             </div>
 
             <hr />
-            <ir-button text={this.defaultTexts.entries.Lcz_Save} onClickHanlder={this.editGuest.bind(this)} color="btn-primary"></ir-button>
+            <ir-button
+              isLoading={this.isLoading}
+              btn_disabled={this.isLoading}
+              btn_styles="d-flex align-items-center justify-content-center"
+              text={this.defaultTexts.entries.Lcz_Save}
+              onClickHanlder={this.editGuest.bind(this)}
+              color="btn-primary"
+            ></ir-button>
           </div>
         </div>
       </div>,

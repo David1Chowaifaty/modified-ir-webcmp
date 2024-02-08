@@ -9,6 +9,7 @@ export class IrSelect {
   @Prop() data: selectOption[];
   @Prop() label = '<label>';
   @Prop() selectStyles: string;
+  @Prop() selectContainerStyle: string;
   @Prop({ reflect: true, mutable: true }) selectedValue = null;
   @Prop() required: boolean;
   @Prop() LabelAvailable: boolean = true;
@@ -81,7 +82,7 @@ export class IrSelect {
     }
 
     return (
-      <div class="form-group">
+      <div class={`form-group m-0 ${this.selectContainerStyle}`}>
         <div class="input-group row m-0">
           {label}
           <select

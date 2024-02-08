@@ -28,14 +28,15 @@ export class IrPickup {
     vehicle_type_code: '',
     currency: undefined,
     arrival_time: '',
-    arrival_date: '',
+    arrival_date: moment().format('YYYY-MM-DD'),
     selected_option: undefined,
   };
-  @State() vehicleCapacity: number = 1;
+  @State() vehicleCapacity: number[] = [];
   @State() cause: keyof TPickupData | null = null;
 
   @Event() closeModal: EventEmitter<null>;
   private pickupService = new PickupService();
+
   handleLocationChange(event: CustomEvent) {
     event.stopImmediatePropagation();
     event.stopPropagation();
@@ -48,16 +49,18 @@ export class IrPickup {
         return;
       }
       locationChoice.currency;
+      this.vehicleCapacity = this.pickupService.getNumberOfVehicles(locationChoice.vehicle.capacity, this.numberOfPersons);
       this.pickupData = {
         ...this.pickupData,
         location: value,
         selected_option: locationChoice,
+        number_of_vehicles: this.vehicleCapacity[0],
         due_upon_booking: this.pickupService
           .updateDue({
             amount: locationChoice.amount,
             code: locationChoice.pricing_model.code,
             numberOfPersons: this.numberOfPersons,
-            number_of_vehicles: this.pickupData.number_of_vehicles,
+            number_of_vehicles: this.vehicleCapacity[0],
           })
           .toFixed(2),
         vehicle_type_code: locationChoice.vehicle.code,
@@ -107,6 +110,24 @@ export class IrPickup {
       }).mask(input as HTMLElement);
     }
   }
+  handleVehicleQuantityChange(e: CustomEvent) {
+    if (e.detail === '') {
+      return;
+    }
+    const value = +e.detail;
+    this.pickupData = {
+      ...this.pickupData,
+      number_of_vehicles: value,
+      due_upon_booking: this.pickupService
+        .updateDue({
+          amount: this.pickupData.selected_option.amount,
+          code: this.pickupData.selected_option.pricing_model.code,
+          numberOfPersons: this.numberOfPersons,
+          number_of_vehicles: value,
+        })
+        .toFixed(2),
+    };
+  }
   handleVehicleTypeChange(e: CustomEvent) {
     if (e.detail === '') {
       this.pickupData = {
@@ -119,14 +140,17 @@ export class IrPickup {
     let locationChoice = calendar_data.pickup_service.allowed_options.find(
       option => option.location.id.toString() === this.pickupData.location && option.vehicle.code === e.detail,
     );
+    this.vehicleCapacity = [...this.pickupService.getNumberOfVehicles(locationChoice.vehicle.capacity, this.numberOfPersons)];
     this.pickupData = {
       ...this.pickupData,
+      selected_option: locationChoice,
+      number_of_vehicles: this.vehicleCapacity[0],
       due_upon_booking: this.pickupService
         .updateDue({
           amount: locationChoice.amount,
           code: locationChoice.pricing_model.code,
           numberOfPersons: this.numberOfPersons,
-          number_of_vehicles: this.pickupData.number_of_vehicles,
+          number_of_vehicles: this.vehicleCapacity[0],
         })
         .toFixed(2),
       vehicle_type_code: locationChoice.vehicle.code,
@@ -140,7 +164,6 @@ export class IrPickup {
     try {
       this.isLoading = true;
       const isValid = this.pickupService.validateForm(this.pickupData);
-      console.log(isValid);
       if (isValid.error) {
         this.cause = isValid.cause;
         return;
@@ -148,6 +171,7 @@ export class IrPickup {
       if (this.cause) {
         this.cause = null;
       }
+      await this.pickupService.savePickup(this.pickupData, this.bookingNumber);
     } catch (error) {
       console.error(error);
     } finally {
@@ -164,16 +188,12 @@ export class IrPickup {
         </div>
         <section class={'px-2 px-md-3'}>
           <ir-select
+            selectContainerStyle="mb-1"
             onSelectChange={this.handleLocationChange.bind(this)}
             firstOption={locales.entries.Lcz_Pickup_NoThankYou}
-            class={'m-0 '}
+            class={'m-0 mb-1'}
             LabelAvailable={false}
-            data={
-              calendar_data.pickup_service.allowed_locations.map(location => ({
-                text: locales.entries.Lcz_Pickup_YesFrom + ' ' + location.description,
-                value: location.id,
-              })) as any
-            }
+            data={this.pickupService.getAvailableLocations(locales.entries.Lcz_Pickup_YesFrom) as any}
           ></ir-select>
           {this.pickupData.location && (
             <Fragment>
@@ -223,6 +243,7 @@ export class IrPickup {
                 inputStyles={this.cause === 'flight_details' ? 'border-danger' : ''}
               ></ir-input-text>
               <ir-select
+                selectContainerStyle="mb-1"
                 selectStyles={this.cause === 'vehicle_type_code' ? 'border-danger' : ''}
                 onSelectChange={this.handleVehicleTypeChange.bind(this)}
                 firstOption={locales.entries.Lcz_Select}
@@ -238,13 +259,15 @@ export class IrPickup {
               ></ir-select>
               <div class={'d-flex flex-column flex-md-row'}>
                 <ir-select
+                  selectContainerStyle="mb-1"
+                  onSelectChange={this.handleVehicleQuantityChange.bind(this)}
                   selectStyles={this.cause === 'number_of_vehicles' ? 'border-danger' : ''}
                   selectedValue={this.pickupData.number_of_vehicles}
                   labelWidth={6}
                   class={'m-0  mb-md-0 mr-md-1 flex-fill'}
                   label={locales.entries.Lcz_NbrOfVehicles}
                   data={
-                    Array.from({ length: this.vehicleCapacity + 1 }, (_, i) => i + 1).map(i => ({
+                    this.vehicleCapacity.map(i => ({
                       text: i,
                       value: i,
                     })) as any
@@ -261,11 +284,11 @@ export class IrPickup {
               </div>
             </Fragment>
           )}
-          <div class={'d-flex flex-column flex-md-row mt-3'}>
+          <div class={'d-flex flex-column flex-sm-row mt-3'}>
             <ir-button
               onClick={() => this.closeModal.emit(null)}
               btn_styles="justify-content-center"
-              class={`mb-1 mb-md-0  flex-fill ${this.pickupData.location ? 'mr-md-1' : ''}`}
+              class={`mb-1 mb-sm-0 flex-fill  ${this.pickupData.location ? 'mr-sm-1' : ''}`}
               icon=""
               text={locales.entries.Lcz_Cancel}
               btn_color="secondary"

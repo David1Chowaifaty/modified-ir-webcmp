@@ -26,6 +26,18 @@ export class PickupService {
       console.log(error);
     }
   }
+  public getAvailableLocations(message: string) {
+    let locations: { value: number; text: string }[] = [];
+    calendar_data.pickup_service.allowed_options.forEach(option => {
+      if (locations.filter(location => location.value === option.location.id).length === 0) {
+        locations.push({
+          text: message + ' ' + option.location.description,
+          value: option.location.id,
+        });
+      }
+    });
+    return locations;
+  }
   public validateForm(params: TPickupData): { error: boolean; cause?: keyof TPickupData } {
     if (params.arrival_time.split(':').length !== 2) {
       return {
@@ -53,23 +65,28 @@ export class PickupService {
     }
     return { error: false };
   }
-  // private getPickUpPersonStatus(code: string) {
-  //   const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
-  //   if (!getCodeDescription) {
-  //     return null;
-  //   }
-  //   return getCodeDescription.description;
-  // }
+  public getNumberOfVehicles(capacity: number, numberOfPersons: number) {
+    let total_number_of_vehicles = Math.ceil(numberOfPersons / capacity);
+    let startNumber = total_number_of_vehicles > 1 ? total_number_of_vehicles : 1;
+    let bonus_number = total_number_of_vehicles > 1 ? 2 : 3;
+    return Array.from({ length: total_number_of_vehicles + bonus_number }, (_, i) => startNumber + i);
+  }
+  private getPickUpPersonStatus(code: string) {
+    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
+    if (!getCodeDescription) {
+      return null;
+    }
+    return getCodeDescription.description;
+  }
   public updateDue(params: TDueParams) {
-    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === params.code);
+    const getCodeDescription = this.getPickUpPersonStatus(params.code);
     if (!getCodeDescription) {
       return;
     }
-    if (getCodeDescription.description === 'Person') {
+    if (getCodeDescription === 'Person') {
       return params.amount * params.numberOfPersons;
     } else {
       return params.amount * params.number_of_vehicles;
     }
   }
-  public getNumberOfVehicles() {}
 }

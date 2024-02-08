@@ -8,15 +8,24 @@
 }
 .bg-ir-green {
   background: #629a4c;
+  height: 28px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important ;
+}
+.h-28 {
+  height: 28px;
 }
 .bg-ir-red {
   background: #ff4961;
+  height: 28px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important ;
 }
 .bg-ir-orange {
   background: #ff9149;
-}
-ir-select#update-status {
-  transform: translateY(0.5rem);
+  height: 28px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important ;
 }
 
 .pointer {
