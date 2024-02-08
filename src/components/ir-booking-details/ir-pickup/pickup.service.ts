@@ -53,13 +53,13 @@ export class PickupService {
     }
     return { error: false };
   }
-  private getPickUpPersonStatus(code: string) {
-    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
-    if (!getCodeDescription) {
-      return null;
-    }
-    return getCodeDescription.description;
-  }
+  // private getPickUpPersonStatus(code: string) {
+  //   const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
+  //   if (!getCodeDescription) {
+  //     return null;
+  //   }
+  //   return getCodeDescription.description;
+  // }
   public updateDue(params: TDueParams) {
     const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === params.code);
     if (!getCodeDescription) {
