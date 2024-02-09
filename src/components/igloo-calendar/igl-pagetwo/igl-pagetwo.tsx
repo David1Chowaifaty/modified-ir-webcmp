@@ -193,9 +193,17 @@ export class IglPagetwo {
         {this.isEditOrAddRoomEvent ? (
           <div class="d-flex p-0 mb-1 mt-2">
             <div class="flex-fill mr-2">
-              <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'cancel' })}>
+              {/* <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'cancel' })}>
                 {locales.entries.Lcz_Cancel}
-              </button>
+              </button> */}
+              <ir-button
+                icon=""
+                text={locales.entries.Lcz_Back}
+                class="full-width"
+                btn_color="secondary"
+                btn_styles="justify-content-center"
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'back' })}
+              ></ir-button>
             </div>
             <div class="flex-fill">
               <button
