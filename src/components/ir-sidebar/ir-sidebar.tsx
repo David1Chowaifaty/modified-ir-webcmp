@@ -3,6 +3,7 @@ import { Component, Prop, h, Method, Event, EventEmitter, Watch } from '@stencil
 @Component({
   tag: 'ir-sidebar',
   styleUrl: 'ir-sidebar.css',
+  shadow: true,
 })
 export class IrSidebar {
   @Prop() name: string;

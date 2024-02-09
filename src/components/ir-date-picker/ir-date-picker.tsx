@@ -27,6 +27,7 @@ export class IrDatePicker {
   @Prop() disabled: boolean = false;
   @Prop() singleDatePicker = false;
   @Prop() minDate: string;
+  @Prop() maxDate: string;
   @Prop() maxSpan: moment.DurationInputArg1 = {
     days: 240,
   };
@@ -44,6 +45,7 @@ export class IrDatePicker {
         startDate: moment(this.fromDate),
         endDate: moment(this.toDate),
         minDate: moment(this.minDate || moment(new Date()).format('YYYY-MM-DD')),
+        maxDate: this.maxDate ? moment(this.maxDate) : undefined,
         maxSpan: this.maxSpan,
         autoApply: this.autoApply,
         locale: {

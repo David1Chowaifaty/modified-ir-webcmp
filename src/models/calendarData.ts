@@ -13,6 +13,7 @@ export interface CalendarDataDetails {
   startingDate: number;
   language: string;
   toBeAssignedEvents: [];
+  max_nights: number;
   allowed_payment_methods: IAllowedPaymentMethods[];
   pickup_service: IPickupService;
 }

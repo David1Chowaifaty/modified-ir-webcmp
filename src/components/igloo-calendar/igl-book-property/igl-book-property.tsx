@@ -23,17 +23,25 @@ export class IglBookProperty {
   @Prop() currency: { id: number; code: string };
   @Prop({ reflect: true, mutable: true }) bookingData: { [key: string]: any };
   @Prop() adultChildConstraints: TAdultChildConstraints;
+
   @State() adultChildCount: { adult: number; child: number } = {
     adult: 0,
     child: 0,
   };
   @State() renderAgain: boolean = false;
+  @State() dateRangeData: { [key: string]: any };
   @State() defaultData: any;
   @State() isLoading: string;
+  @State() buttonName = '';
+
+  @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
+  @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
+  @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
+  @Event() resetBookingData: EventEmitter<null>;
+
   private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private message: string = '';
   private sourceOption: TSourceOption;
-  @State() dateRangeData: { [key: string]: any };
   private page: string;
   private showSplitBookingOption: boolean = false;
   private sourceOptions: TSourceOptions[] = [];
@@ -47,11 +55,7 @@ export class IglBookProperty {
   private bookPropertyService = new IglBookPropertyService();
   private eventsService = new EventsService();
   private defaultDateRange: { from_date: string; to_date: string };
-  @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
-  @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
-  @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
-  @Event() resetBookingData: EventEmitter<null>;
-  @State() buttonName = '';
+
   handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       this.closeWindow();
@@ -479,7 +483,13 @@ export class IglBookProperty {
                 {this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}
               </h3>
               <button type="button" class="close close-icon" onClick={() => this.closeWindow()}>
-                <i class="ft-x"></i>
+                {/* <i class="ft-x"></i> */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                  <path
+                    fill="#6b6f82"
+                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                  />
+                </svg>
               </button>
             </div>
           </div>

@@ -2,16 +2,27 @@
 @import url('../../assets/fontawesome/css/all.css');
 @import url('../../assets/line-awesome/css/line-awesome.min.css');
 .loader {
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   border: 2px solid #fff;
   border-bottom-color: transparent;
   border-radius: 50%;
-  display: inline-block;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
-
+.button-icon {
+  padding: 0;
+  margin-top: 0;
+}
+.button-icon[data-state='loading'] {
+  display: none;
+}
+.button-text {
+  padding: 0 5px;
+}
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

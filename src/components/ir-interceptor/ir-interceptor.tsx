@@ -19,6 +19,7 @@ export class IrInterceptor {
 
   @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
+  @Event({ bubbles: true, composed: true }) fetchingIrInterceptorDataStatus: EventEmitter<'pending' | 'done'>;
   componentWillLoad() {
     this.setupAxiosInterceptors();
   }
@@ -36,9 +37,29 @@ export class IrInterceptor {
     return this.handledEndpoints.includes(this.extractEndpoint(url));
   }
 
+  /* HTML: <div class="loader"></div> */
+  // .loader {
+  //   width: 60px;
+  //   aspect-ratio: 2;
+  //   --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
+  //   background:
+  //     var(--_g) 0%   50%,
+  //     var(--_g) 50%  50%,
+  //     var(--_g) 100% 50%;
+  //   background-size: calc(100%/3) 50%;
+  //   animation: l3 1s infinite linear;
+  // }
+  // @keyframes l3 {
+  //     20%{background-position:0%   0%, 50%  50%,100%  50%}
+  //     40%{background-position:0% 100%, 50%   0%,100%  50%}
+  //     60%{background-position:0%  50%, 50% 100%,100%   0%}
+  //     80%{background-position:0%  50%, 50%  50%,100% 100%}
+  // }
+
   handleRequest(config) {
     if (this.isHandledEndpoint(config.url)) {
       this.isLoading = true;
+      this.fetchingIrInterceptorDataStatus.emit('pending');
       if (this.extractEndpoint(config.url) === '/ReAllocate_Exposed_Room') {
         this.defaultMessage.loadingMessage = 'Updating Event';
       } else if (this.extractEndpoint(config.url) === '/Get_Aggregated_UnAssigned_Rooms') {
@@ -53,6 +74,7 @@ export class IrInterceptor {
 
   handleResponse(response) {
     this.isLoading = false;
+    this.fetchingIrInterceptorDataStatus.emit('done');
     if (response.data.ExceptionMsg?.trim()) {
       this.handleError(response.data.ExceptionMsg);
       throw new Error(response.data.ExceptionMsg);

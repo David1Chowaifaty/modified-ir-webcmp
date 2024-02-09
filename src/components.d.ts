@@ -168,6 +168,7 @@ export namespace Components {
         "dateLabel": any;
         "defaultData": { [key: string]: any };
         "disabled": boolean;
+        "maxDate": string;
         "minDate": string;
     }
     interface IglLegends {
@@ -326,6 +327,7 @@ export namespace Components {
         "format": string;
         "fromDate": Date;
         "fromLabel": string;
+        "maxDate": string;
         "maxSpan": moment.DurationInputArg1;
         "minDate": string;
         "monthNames": string[];
@@ -1365,6 +1367,7 @@ declare global {
     };
     interface HTMLIrInterceptorElementEventMap {
         "toast": IToast;
+        "fetchingIrInterceptorDataStatus": 'pending' | 'done';
     }
     interface HTMLIrInterceptorElement extends Components.IrInterceptor, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrInterceptorElementEventMap>(type: K, listener: (this: HTMLIrInterceptorElement, ev: IrInterceptorCustomEvent<HTMLIrInterceptorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1860,6 +1863,7 @@ declare namespace LocalJSX {
         "dateLabel"?: any;
         "defaultData"?: { [key: string]: any };
         "disabled"?: boolean;
+        "maxDate"?: string;
         "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
         "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
@@ -2061,6 +2065,7 @@ declare namespace LocalJSX {
         "format"?: string;
         "fromDate"?: Date;
         "fromLabel"?: string;
+        "maxDate"?: string;
         "maxSpan"?: moment.DurationInputArg1;
         "minDate"?: string;
         "monthNames"?: string[];
@@ -2134,6 +2139,7 @@ declare namespace LocalJSX {
     interface IrInterceptor {
         "defaultMessage"?: { loadingMessage: string; errorMessage: string; };
         "handledEndpoints"?: string[];
+        "onFetchingIrInterceptorDataStatus"?: (event: IrInterceptorCustomEvent<'pending' | 'done'>) => void;
         "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
     interface IrLabel {

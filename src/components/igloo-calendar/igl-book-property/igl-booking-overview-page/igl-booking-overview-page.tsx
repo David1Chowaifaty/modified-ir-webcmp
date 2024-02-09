@@ -38,7 +38,7 @@ export class IglBookingOverviewPage {
           bookedByInfoData={this.bookedByInfoData}
           defaultDaterange={this.defaultDaterange}
           dateRangeData={this.dateRangeData}
-          minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
+          // minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
           adultChildCount={this.adultChildCount}
           splitBookingId={this.showSplitBookingOption}
           bookingData={this.bookingData}
