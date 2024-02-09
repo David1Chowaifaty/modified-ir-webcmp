@@ -7,6 +7,10 @@
   top: 0;
   height: 100%;
 }
+.svg-icon {
+  height: 20px;
+  width: 20px;
+}
 .darkGrey {
   background: #ececec;
 }
@@ -93,6 +97,9 @@
   font-size: 1.75em;
   line-height: 1em;
   padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .caledarBtns .la {

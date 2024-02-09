@@ -67,6 +67,7 @@
 - [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)
 - [ir-guest-info](../ir-guest-info)
+- [ir-pickup](ir-pickup)
 - [igl-book-property](../igloo-calendar/igl-book-property)
 
 ### Graph
@@ -80,6 +81,7 @@ graph TD;
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
   ir-booking-details --> ir-guest-info
+  ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
   ir-label --> ir-icon
   ir-room --> ir-icon
@@ -95,6 +97,10 @@ graph TD;
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button
+  ir-pickup --> ir-select
+  ir-pickup --> ir-date-picker
+  ir-pickup --> ir-input-text
+  ir-pickup --> ir-button
   igl-book-property --> igl-block-dates-view
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo

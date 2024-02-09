@@ -16,12 +16,18 @@ export class IglLegends {
   render() {
     return (
       <Host class="legendContainer pr-1 text-left">
-        <div>
-          <div>
-            <div class="stickyHeader">
-              <div class="legendHeader pt-1">{locales.entries.Lcz_Legend}</div>
-              <div class="legendCloseBtn pt-1" onClick={() => this.handleOptionEvent('closeSideMenu')}>
-                <i class="ft-chevrons-left"></i>
+        <div class={'w-full'}>
+          <div class={'w-full'}>
+            <div class="stickyHeader pt-1 ">
+              <p class="legendHeader">{locales.entries.Lcz_Legend}</p>
+              <div class="legendCloseBtn" onClick={() => this.handleOptionEvent('closeSideMenu')}>
+                {/* <i class="ft-chevrons-left"></i> */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height={18} width={18}>
+                  <path
+                    fill="#6b6f82"
+                    d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"
+                  />
+                </svg>
               </div>
               <hr />
             </div>
