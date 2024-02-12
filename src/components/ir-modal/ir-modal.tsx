@@ -3,6 +3,7 @@ import { Component, h, State, Method, Event, EventEmitter, Prop, Listen } from '
 @Component({
   tag: 'ir-modal',
   styleUrl: 'ir-modal.css',
+  scoped: true,
 })
 export class IrModal {
   @Prop() modalTitle: string = 'Modal Title';
@@ -60,32 +61,31 @@ export class IrModal {
           this.closeModal();
         }}
       ></div>,
-      <div class={`ir-modal  ${this.isOpen ? 'active' : ''}`} tabindex="-1">
-        <div class="modal-dialog">
-          <div class={` modal-content`}>
-            <div class={`modal-header align-items-center border-0 `}>
-              <div class="font-weight-bold d-flex align-items-center">
-                {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} {this.modalBody}
-              </div>
-              <div class="font-weight-bold d-flex align-items-center font-size-large">
-                <ir-icon
-                  icon="ft-x"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    this.closeModal();
-                    this.cancelModal.emit();
-                  }}
-                ></ir-icon>
-              </div>
+      <div data-state={this.isOpen ? 'opened' : 'closed'} class={`ir-modal`} tabindex="-1">
+        <div class={`ir-alert-content`}>
+          <div class={`ir-alert-header align-items-center border-0 `}>
+            <div class="font-weight-bold d-flex align-items-center">
+              {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>}
+              {this.modalBody}
             </div>
-            {/* <div class="modal-body text-left">
+            <div class="font-weight-bold d-flex align-items-center font-size-large">
+              <ir-icon
+                icon="ft-x"
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  this.closeModal();
+                  this.cancelModal.emit();
+                }}
+              ></ir-icon>
+            </div>
+          </div>
+          {/* <div class="modal-body text-left">
               <div>{this.modalBody}</div>
             </div> */}
 
-            <div class={`modal-footer border-0 d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
-              {this.leftBtnActive && <ir-button icon={''} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>}
-              {this.rightBtnActive && <ir-button icon={''} btn_color={this.rightBtnColor} btn_block text={this.rightBtnText} name={this.rightBtnText}></ir-button>}
-            </div>
+          <div class={`ir-alert-footer border-0 d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
+            {this.leftBtnActive && <ir-button icon={''} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>}
+            {this.rightBtnActive && <ir-button icon={''} btn_color={this.rightBtnColor} btn_block text={this.rightBtnText} name={this.rightBtnText}></ir-button>}
           </div>
         </div>
       </div>,

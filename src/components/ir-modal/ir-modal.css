@@ -15,6 +15,19 @@
   opacity: 1 !important;
   pointer-events: all;
 }
+
+.ir-modal[data-state='opened'] {
+  opacity: 1;
+  /* transform: translate(-50%, 0); */
+  visibility: visible; /* Make modal visible */
+  pointer-events: all; /* Restore pointer events */
+  transition: all 0.3s ease-in-out;
+}
+.ir-alert-content {
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+}
 .modal {
   z-index: 1001 !important;
 }
@@ -24,21 +37,22 @@
   display: flex;
   align-items: center;
 }
-
+.ir-alert-footer {
+  gap: 10px;
+}
 .ir-modal {
   position: fixed;
-  top: 0;
+  top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1050;
   width: 32rem;
-  height: 100%;
   overflow: hidden;
   outline: 0;
   opacity: 0;
-  transform: translateY(-50%, -20%); /* change from translate(20%, -20%) for a vertical slide effect */
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-  visibility: hidden; /* Add this line to ensure modal is hidden */
-  pointer-events: none; /* Avoid blocking other elements when modal is hidden */
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .ir-modal.active {
