@@ -1,7 +1,10 @@
 :host {
   position: relative;
 }
-
+.tooltip-icon {
+  margin: 0 5px;
+  padding: 0;
+}
 /* p {
   position: absolute;
   top: 10px;
