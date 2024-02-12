@@ -1,10 +1,12 @@
 {
   "assign_units": true,
-  "check_in": true,
+  "check_in": false,
+  "is_pms": true,
+  "is_direct": true,
   "booking": {
-    "booking_nbr": "",
-    "from_date": "2023-12-01",
-    "to_date": "2023-12-13",
+    "booking_nbr": "48228322",
+    "from_date": "2024-02-14",
+    "to_date": "2024-02-17",
     "remark": null,
     "property": {
       "id": 42
@@ -12,111 +14,80 @@
     "source": {
       "code": "003",
       "description": "Phone/Email",
-      "tag": ""
+      "id": null,
+      "tag": "",
+      "type": null
     },
     "currency": {
       "code": "USD",
-      "id": 4
+      "id": 4,
+      "symbol": "US$"
     },
     "arrival": {
-      "code": "004"
+      "code": "001"
     },
     "guest": {
-      "email": "test@gmail.com",
-      "first_name": "ronald",
-      "last_name": "yazbik",
-      "country_id": 6,
-      "city": null,
-      "mobile": "03030303",
       "address": "",
-      "dob": null,
-      "subscribe_to_news_letter": false,
       "cci": null,
-      "id": 195932
+      "city": null,
+      "country_id": 555,
+      "dob": null,
+      "email": "test@gmail.com",
+      "first_name": "test",
+      "id": 195932,
+      "last_name": "test",
+      "mobile": "123456789",
+      "subscribe_to_news_letter": true
     },
     "rooms": [
       {
+        "identifier": "69aae9ca-9073-4317-beaa-32f0e122a447",
         "roomtype": {
-          "id": 110,
-          "name": "Standard Rooms",
+          "id": 111,
+          "name": "Premium Suites",
           "physicalrooms": null,
           "rateplans": null,
           "availabilities": null,
-          "inventory": 0,
-          "rate": 58.333333333333336
+          "inventory": 3,
+          "rate": 53.333333333333336
         },
         "rateplan": {
-          "id": 123,
-          "name": "Standard Rooms/Bed-&-breakfast",
+          "id": 124,
+          "name": "Premium Suites/Bed-&-breakfast",
           "rate_restrictions": null,
           "variations": null,
-          "cancelation": "<u><b>Cancellation</b></u>: 100% of the total price will be charged if cancelled after Sunday, 26 Nov 2023, 22:00 or in case of no show.\r\n",
-          "guarantee": "<u><b>Guarantee</b></u>: No deposit required."
+          "cancelation": "<u><b>Cancellation</b></u>: One night (of the total price will be charged) if cancelled before  Friday, 9 Feb 2024, 22:00.\r\n100% of the total price will be charged if cancelled after Friday, 9 Feb 2024, 22:00 or in case of no show.\r\n",
+          "guarantee": "<u><b>Guarantee</b></u>: First night from your booking will be charged."
         },
         "unit": {
-          "id": 16
+          "id": 2
         },
         "occupancy": {
           "adult_nbr": 1,
           "children_nbr": 0,
           "infant_nbr": null
         },
-        "from_date": "2023-12-01",
-        "to_date": "2023-12-13",
+        "bed_preference": 2,
+        "from_date": "2024-02-14",
+        "to_date": "2024-02-17",
         "notes": null,
         "days": [
           {
-            "date": "2023-12-01",
-            "amount": 58.333333333333336
+            "date": "2024-02-14",
+            "amount": 53.333333333333336
           },
           {
-            "date": "2023-12-02",
-            "amount": 58.333333333333336
+            "date": "2024-02-15",
+            "amount": 53.333333333333336
           },
           {
-            "date": "2023-12-03",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-04",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-05",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-06",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-07",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-08",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-09",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-10",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-11",
-            "amount": 58.333333333333336
-          },
-          {
-            "date": "2023-12-12",
-            "amount": 58.333333333333336
+            "date": "2024-02-16",
+            "amount": 53.333333333333336
           }
         ],
         "guest": {
           "email": null,
-          "first_name": "david",
+          "first_name": "popop",
           "last_name": null,
           "country_id": null,
           "city": null,
@@ -124,6 +95,84 @@
           "address": null,
           "dob": null,
           "subscribe_to_news_letter": null
+        }
+      },
+      {
+        "assigned_units_pool": "e9420c1a-0fe1-46b5-829c-439ca6b6ac8b",
+        "bed_preference": "1",
+        "days": [
+          {
+            "amount": 40,
+            "date": "2024-02-14"
+          },
+          {
+            "amount": 40,
+            "date": "2024-02-15"
+          },
+          {
+            "amount": 40,
+            "date": "2024-02-16"
+          }
+        ],
+        "from_date": "2024-02-14",
+        "guest": {
+          "address": null,
+          "cci": null,
+          "city": null,
+          "country_id": null,
+          "dob": null,
+          "email": null,
+          "first_name": "test1",
+          "id": null,
+          "last_name": null,
+          "mobile": null,
+          "subscribe_to_news_letter": null
+        },
+        "identifier": "a6964eeb-a4b7-4d97-9441-4ffccf8ac062",
+        "notes": null,
+        "occupancy": {
+          "adult_nbr": 1,
+          "children_nbr": 0,
+          "infant_nbr": null
+        },
+        "rateplan": {
+          "assignable_units": null,
+          "cancelation": "<u><b>Cancellation</b></u>: One night (of the total price will be charged) if cancelled before  Friday, 9 Feb 2024, 22:00.\r\n100% of the total price will be charged if cancelled after Friday, 9 Feb 2024, 22:00 or in case of no show.\r\n",
+          "custom_text": null,
+          "guarantee": "<u><b>Guarantee</b></u>: First night from your booking will be charged.",
+          "id": 123,
+          "is_active": null,
+          "is_closed": null,
+          "is_non_refundable": false,
+          "is_targeting_travel_agency": null,
+          "name": "Bed-&-breakfast",
+          "rate_restrictions": null,
+          "selected_variation": {
+            "adult_child_offering": "1 adult",
+            "adult_nbr": 1,
+            "amount": null,
+            "child_nbr": 0
+          },
+          "variations": null
+        },
+        "roomtype": {
+          "availabilities": null,
+          "exposed_inventory": null,
+          "id": 110,
+          "inventory": null,
+          "is_active": null,
+          "name": "Standard Rooms",
+          "occupancy_default": null,
+          "physicalrooms": null,
+          "rate": null,
+          "rateplans": null
+        },
+        "to_date": "2024-02-17",
+        "total": 120,
+        "unit": {
+          "calendar_cell": null,
+          "id": 17,
+          "name": "06"
         }
       }
     ]

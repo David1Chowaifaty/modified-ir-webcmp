@@ -13,8 +13,8 @@
 | `inputStyle`      | `input-style`      |             | `boolean`                                                                                                 | `true`            |
 | `inputStyles`     | `input-styles`     |             | `string`                                                                                                  | `''`              |
 | `label`           | `label`            |             | `string`                                                                                                  | `'<label>'`       |
-| `labelBackground` | `label-background` |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`           | `'light'`         |
-| `labelBorder`     | `label-border`     |             | `"danger" \| "dark" \| "info" \| "light" \| "none" \| "primary" \| "secondary" \| "success" \| "warning"` | `'none'`          |
+| `labelBackground` | `label-background` |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`           | `null`            |
+| `labelBorder`     | `label-border`     |             | `"danger" \| "dark" \| "info" \| "light" \| "none" \| "primary" \| "secondary" \| "success" \| "warning"` | `'light'`         |
 | `labelColor`      | `label-color`      |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`           | `'dark'`          |
 | `labelPosition`   | `label-position`   |             | `"center" \| "left" \| "right"`                                                                           | `'left'`          |
 | `labelWidth`      | `label-width`      |             | `1 \| 10 \| 11 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9`                                                   | `3`               |

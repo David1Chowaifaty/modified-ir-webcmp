@@ -7,20 +7,17 @@
 
 ## Properties
 
-| Property                  | Attribute                   | Description | Type      | Default     |
-| ------------------------- | --------------------------- | ----------- | --------- | ----------- |
-| `bookingDetails`          | --                          |             | `Booking` | `undefined` |
-| `defaultTexts`            | --                          |             | `ILocale` | `undefined` |
-| `item`                    | `item`                      |             | `any`     | `undefined` |
-| `paymentExceptionMessage` | `payment-exception-message` |             | `string`  | `''`        |
+| Property         | Attribute | Description | Type      | Default     |
+| ---------------- | --------- | ----------- | --------- | ----------- |
+| `bookingDetails` | --        |             | `Booking` | `undefined` |
+| `defaultTexts`   | --        |             | `ILocale` | `undefined` |
 
 
 ## Events
 
-| Event                    | Description | Type                |
-| ------------------------ | ----------- | ------------------- |
-| `creditCardPressHandler` |             | `CustomEvent<any>`  |
-| `resetBookingData`       |             | `CustomEvent<null>` |
+| Event              | Description | Type                |
+| ------------------ | ----------- | ------------------- |
+| `resetBookingData` |             | `CustomEvent<null>` |
 
 
 ## Dependencies

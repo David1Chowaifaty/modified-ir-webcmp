@@ -12,6 +12,7 @@
 | `dateLabel`   | `date-label` |             | `any`                     | `undefined` |
 | `defaultData` | --           |             | `{ [key: string]: any; }` | `undefined` |
 | `disabled`    | `disabled`   |             | `boolean`                 | `false`     |
+| `maxDate`     | `max-date`   |             | `string`                  | `undefined` |
 | `minDate`     | `min-date`   |             | `string`                  | `undefined` |
 
 

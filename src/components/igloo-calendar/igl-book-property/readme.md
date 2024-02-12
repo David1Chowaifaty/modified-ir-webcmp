@@ -52,12 +52,14 @@ graph TD;
   igl-booking-overview-page --> igl-booking-rooms
   igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
+  igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
+  igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igloo-calendar --> igl-book-property

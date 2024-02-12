@@ -44,12 +44,14 @@
 
 - [igl-application-info](../igl-application-info)
 - [igl-property-booked-by](../igl-property-booked-by)
+- [ir-button](../../ir-button)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
+  igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-book-property --> igl-pagetwo

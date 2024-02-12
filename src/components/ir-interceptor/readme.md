@@ -15,9 +15,10 @@
 
 ## Events
 
-| Event   | Description | Type                                                                                                 |
-| ------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `toast` |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+| Event                             | Description | Type                                                                                                 |
+| --------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `fetchingIrInterceptorDataStatus` |             | `CustomEvent<"done" \| "pending">`                                                                   |
+| `toast`                           |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies

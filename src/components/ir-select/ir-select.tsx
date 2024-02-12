@@ -3,6 +3,7 @@ import { selectOption } from '../../common/models';
 
 @Component({
   tag: 'ir-select',
+  scoped: true,
 })
 export class IrSelect {
   @Prop() name: string;
@@ -19,9 +20,9 @@ export class IrSelect {
   @Prop() size: 'sm' | 'md' | 'lg' = 'md';
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
   @Prop() labelPosition: 'left' | 'right' | 'center' = 'left';
-  @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'light';
+  @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null = null;
   @Prop() labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'dark';
-  @Prop() labelBorder: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'none';
+  @Prop() labelBorder: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'light';
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
 
   @State() initial: boolean = true;
@@ -59,10 +60,10 @@ export class IrSelect {
   render() {
     let className = 'form-control';
     let label = (
-      <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor} border-${this.labelBorder}`}>
+      <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
         <label
-          class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} bg-${
-            this.labelBackground
+          class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
+            this.labelBackground ? 'bg-' + this.labelBackground : ''
           } flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} `}
         >
           {this.label}

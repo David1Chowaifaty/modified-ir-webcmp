@@ -199,10 +199,10 @@ export class IrPickup {
       <Host class={'p-0'}>
         <div class="position-sticky mb-0 shadow-none p-0">
           <div class="d-flex mt-2 align-items-center justify-content-between">
-            <h3 class="card-title text-left pb-1 font-medium-2 px-2 px-md-3">{locales.entries.Lcz_Pickup}</h3>
+            <h3 class="card-title text-left pb-1 font-medium-2 px-1">{locales.entries.Lcz_Pickup}</h3>
           </div>
         </div>
-        <section class={'px-2 px-md-3'}>
+        <section class={'px-1'}>
           <ir-select
             selectedValue={this.pickupData.location}
             selectContainerStyle="mb-1"
@@ -220,7 +220,7 @@ export class IrPickup {
                 <div class="form-group  mr-1">
                   <div class="input-group row m-0">
                     <div class={`input-group-prepend col-5 p-0 text-dark border-0`}>
-                      <label class={`input-group-text  bg-light flex-grow-1 text-dark border-0 `}>{locales.entries.Lcz_ArrivalDate}</label>
+                      <label class={`input-group-text  flex-grow-1 text-dark border-light `}>{locales.entries.Lcz_ArrivalDate}</label>
                     </div>
                     <div class="form-control form-control-md col-7 d-flex align-items-center pl-0">
                       <ir-date-picker
@@ -239,7 +239,7 @@ export class IrPickup {
                 <div class="form-group">
                   <div class="input-group  row m-0">
                     <div class={`input-group-prepend col-4 col-sm-3 p-0 text-dark border-0`}>
-                      <label htmlFor="pickup" class={`input-group-text  bg-light flex-grow-1 text-dark border-0`}>
+                      <label htmlFor="pickup" class={`input-group-text flex-grow-1 text-dark border-light`}>
                         {locales.entries.Lcz_Time}
                       </label>
                     </div>
@@ -277,11 +277,12 @@ export class IrPickup {
               ></ir-select>
               <div class={'d-flex flex-column flex-md-row'}>
                 <ir-select
+                  labelBorder="light"
                   selectContainerStyle="mb-1"
                   onSelectChange={this.handleVehicleQuantityChange.bind(this)}
                   selectStyles={this.cause === 'number_of_vehicles' ? 'border-danger' : ''}
                   selectedValue={this.pickupData.number_of_vehicles}
-                  labelWidth={6}
+                  labelWidth={7}
                   class={'m-0  mb-md-0 mr-md-1 flex-fill'}
                   label={locales.entries.Lcz_NbrOfVehicles}
                   data={
@@ -292,9 +293,10 @@ export class IrPickup {
                   }
                 ></ir-select>
                 <ir-input-text
+                  labelBorder="light"
                   readonly
                   value={this.pickupData.due_upon_booking}
-                  labelWidth={6}
+                  labelWidth={7}
                   label={`${locales.entries.Lcz_DueUponBooking}  ${this.pickupData.currency.symbol}`}
                   placeholder=""
                   class=""
@@ -306,12 +308,12 @@ export class IrPickup {
             <ir-button
               onClick={() => this.closeModal.emit(null)}
               btn_styles="justify-content-center"
-              class={`mb-1 mb-sm-0 flex-fill  ${this.pickupData.location ? 'mr-sm-1' : ''}`}
+              class={`mb-1 mb-sm-0 flex-fill  ${this.defaultPickupData || this.pickupData.location !== -1 ? 'mr-sm-1' : ''}`}
               icon=""
               text={locales.entries.Lcz_Cancel}
               btn_color="secondary"
             ></ir-button>
-            {this.pickupData.location && (
+            {(this.defaultPickupData || this.pickupData.location !== -1) && (
               <ir-button
                 btn_styles="justify-content-center align-items-center"
                 class={'m-0 flex-fill text-center'}

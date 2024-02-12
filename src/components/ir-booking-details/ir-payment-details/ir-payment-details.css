@@ -9,6 +9,9 @@
   width: 100px;
   padding: 0 5px;
 }
+.payments-height {
+  height: 30px;
+}
 .payment_date {
   width: 100px;
 }

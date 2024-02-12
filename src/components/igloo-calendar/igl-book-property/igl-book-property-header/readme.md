@@ -47,12 +47,14 @@
 ### Depends on
 
 - [ir-autocomplete](../../../ir-autocomplete)
+- [ir-button](../../../ir-button)
 - [igl-date-range](../../igl-date-range)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-book-property-header --> ir-autocomplete
+  igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
   igl-booking-overview-page --> igl-book-property-header

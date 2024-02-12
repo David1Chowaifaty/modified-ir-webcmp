@@ -8,6 +8,7 @@ import { ILocale } from '@/stores/locales.store';
 @Component({
   tag: 'ir-guest-info',
   styleUrl: 'ir-guest-info.css',
+  scoped: true,
 })
 export class GuestInfo {
   @Prop({ mutable: true, reflect: true }) setupDataCountries: selectOption[] = null;
@@ -61,7 +62,7 @@ export class GuestInfo {
       <h3>
         <strong>{this.defaultTexts.entries.Lcz_GuestDetails}</strong>
       </h3>,
-      <div class="card">
+      <div class="card p-1">
         <div class="card-content collapse show">
           <div class="card-body pt-0">
             <ir-input-text
@@ -133,7 +134,7 @@ export class GuestInfo {
             <div class="form-group mr-0">
               <div class="input-group row m-0 p-0">
                 <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
-                  <label class={`input-group-text  bg-light flex-grow-1 text-dark border-0 `}>
+                  <label class={`input-group-text  border-light flex-grow-1 text-dark  `}>
                     {this.defaultTexts.entries.Lcz_MobilePhone}
                     {'*'}
                   </label>
@@ -160,7 +161,7 @@ export class GuestInfo {
               </div>
             </div>
             <div class={'p-0 m-0'}>
-              <label class={`check-container  m-0 p-0`}>
+              <label class={`check-container m-0 p-0`}>
                 <input
                   class={'m-0 p-0'}
                   type="checkbox"
@@ -169,7 +170,7 @@ export class GuestInfo {
                   onInput={e => this.handleInputChange('subscribe_to_news_letter', (e.target as HTMLInputElement).checked)}
                 />
                 <span class="checkmark m-0 p-0"></span>
-                <span class={'m-0 p-0 '}>{this.defaultTexts.entries.Lcz_Newsletter}</span>
+                <span class={'m-0 p-0  check-label'}>{this.defaultTexts.entries.Lcz_Newsletter}</span>
               </label>
             </div>
 

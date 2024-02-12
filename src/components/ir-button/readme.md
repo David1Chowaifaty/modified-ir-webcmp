@@ -33,6 +33,8 @@
 
 ### Used by
 
+ - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
+ - [igl-pagetwo](../igloo-calendar/igl-pagetwo)
  - [ir-booking-details](../ir-booking-details)
  - [ir-guest-info](../ir-guest-info)
  - [ir-modal](../ir-modal)
@@ -42,6 +44,8 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-book-property-header --> ir-button
+  igl-pagetwo --> ir-button
   ir-booking-details --> ir-button
   ir-guest-info --> ir-button
   ir-modal --> ir-button

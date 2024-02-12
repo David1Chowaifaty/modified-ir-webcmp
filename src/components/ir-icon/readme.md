@@ -23,6 +23,7 @@
 
 ### Used by
 
+ - [igl-to-be-assigned](../igloo-calendar/igl-to-be-assigned)
  - [ir-booking-details](../ir-booking-details)
  - [ir-dropdown](../ir-dropdown)
  - [ir-label](../ir-label)
@@ -38,6 +39,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-to-be-assigned --> ir-icon
   ir-booking-details --> ir-icon
   ir-dropdown --> ir-icon
   ir-label --> ir-icon

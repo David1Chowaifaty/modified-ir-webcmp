@@ -11,8 +11,8 @@ import { IToast, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 import { IToast as IToast1 } from "./components/ir-toast/toast";
 import { IPageTwoDataUpdateProps } from "./models/models";
-import { checkboxes, guestInfo, selectOption } from "./common/models";
 import { ChannelManager, RoomType } from "./sample/channel/data";
+import { checkboxes, selectOption } from "./common/models";
 import { selectOption as selectOption1 } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { Booking, IBookingPickupInfo } from "./models/booking.dto";
@@ -25,8 +25,8 @@ export { IToast, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 export { IToast as IToast1 } from "./components/ir-toast/toast";
 export { IPageTwoDataUpdateProps } from "./models/models";
-export { checkboxes, guestInfo, selectOption } from "./common/models";
 export { ChannelManager, RoomType } from "./sample/channel/data";
+export { checkboxes, selectOption } from "./common/models";
 export { selectOption as selectOption1 } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { Booking, IBookingPickupInfo } from "./models/booking.dto";
@@ -249,10 +249,7 @@ export namespace Components {
     }
     interface IrBookingDetails {
         "baseurl": string;
-        "bookingDetails": any;
         "bookingNumber": string;
-        "dropdownStatuses": any;
-        "editBookingItem": any;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
         "hasDelete": boolean;
@@ -263,14 +260,7 @@ export namespace Components {
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
         "language": string;
-        "languageAbreviation": string;
-        "paymentDetailsUrl": string;
-        "paymentExceptionMessage": string;
         "propertyid": number;
-        "setupDataCountries": selectOption[];
-        "setupDataCountriesCode": selectOption[];
-        "show_header": boolean;
-        "statusCodes": any;
         "ticket": string;
     }
     interface IrButton {
@@ -373,7 +363,7 @@ export namespace Components {
         "inputStyle": boolean;
         "inputStyles": string;
         "label": string;
-        "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
         "labelBorder": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
         "labelColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition": 'left' | 'right' | 'center';
@@ -448,8 +438,6 @@ export namespace Components {
     interface IrPaymentDetails {
         "bookingDetails": Booking;
         "defaultTexts": ILocale;
-        "item": any;
-        "paymentExceptionMessage": string;
     }
     interface IrPickup {
         "bookingNumber": string;
@@ -488,7 +476,7 @@ export namespace Components {
         "data": selectOption[];
         "firstOption": string;
         "label": string;
-        "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
         "labelBorder": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
         "labelColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition": 'left' | 'right' | 'center';
@@ -1158,15 +1146,6 @@ declare global {
         new (): HTMLIrAutocompleteElement;
     };
     interface HTMLIrBookingDetailsElementEventMap {
-        "sendDataToServer": guestInfo;
-        "handlePrintClick": any;
-        "handleReceiptClick": any;
-        "handleDeleteClick": any;
-        "handleMenuClick": any;
-        "handleRoomAdd": any;
-        "handleRoomEdit": any;
-        "handleRoomDelete": any;
-        "handleAddPayment": any;
         "toast": IToast;
     }
     interface HTMLIrBookingDetailsElement extends Components.IrBookingDetails, HTMLStencilElement {
@@ -1469,7 +1448,6 @@ declare global {
     };
     interface HTMLIrPaymentDetailsElementEventMap {
         "resetBookingData": null;
-        "creditCardPressHandler": any;
     }
     interface HTMLIrPaymentDetailsElement extends Components.IrPaymentDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentDetailsElementEventMap>(type: K, listener: (this: HTMLIrPaymentDetailsElement, ev: IrPaymentDetailsCustomEvent<HTMLIrPaymentDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1971,10 +1949,7 @@ declare namespace LocalJSX {
     }
     interface IrBookingDetails {
         "baseurl"?: string;
-        "bookingDetails"?: any;
         "bookingNumber"?: string;
-        "dropdownStatuses"?: any;
-        "editBookingItem"?: any;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
         "hasDelete"?: boolean;
@@ -1985,24 +1960,8 @@ declare namespace LocalJSX {
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
         "language"?: string;
-        "languageAbreviation"?: string;
-        "onHandleAddPayment"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleDeleteClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleMenuClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandlePrintClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleReceiptClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleRoomAdd"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleRoomDelete"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleRoomEdit"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onSendDataToServer"?: (event: IrBookingDetailsCustomEvent<guestInfo>) => void;
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
-        "paymentDetailsUrl"?: string;
-        "paymentExceptionMessage"?: string;
         "propertyid"?: number;
-        "setupDataCountries"?: selectOption[];
-        "setupDataCountriesCode"?: selectOption[];
-        "show_header"?: boolean;
-        "statusCodes"?: any;
         "ticket"?: string;
     }
     interface IrButton {
@@ -2120,7 +2079,7 @@ declare namespace LocalJSX {
         "inputStyle"?: boolean;
         "inputStyles"?: string;
         "label"?: string;
-        "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
         "labelBorder"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
         "labelColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition"?: 'left' | 'right' | 'center';
@@ -2203,10 +2162,7 @@ declare namespace LocalJSX {
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
         "defaultTexts"?: ILocale;
-        "item"?: any;
-        "onCreditCardPressHandler"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
-        "paymentExceptionMessage"?: string;
     }
     interface IrPickup {
         "bookingNumber"?: string;
@@ -2252,7 +2208,7 @@ declare namespace LocalJSX {
         "data"?: selectOption[];
         "firstOption"?: string;
         "label"?: string;
-        "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
         "labelBorder"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
         "labelColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition"?: 'left' | 'right' | 'center';

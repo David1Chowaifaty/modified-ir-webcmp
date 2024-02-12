@@ -12,7 +12,6 @@ import { ILocale } from '@/components';
   scoped: true,
 })
 export class IrPaymentDetails {
-  @Prop({ mutable: true, reflect: true }) item: any;
   @Prop({ mutable: true }) bookingDetails: Booking;
   @Prop() defaultTexts: ILocale;
   @State() newTableRow: boolean = false;
@@ -26,10 +25,9 @@ export class IrPaymentDetails {
   @State() toBeDeletedItem: IPayment;
 
   @State() paymentDetailsUrl: string = '';
-  @Prop() paymentExceptionMessage: string = '';
+  @State() paymentExceptionMessage: string = '';
 
   @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
-  @Event({ bubbles: true }) creditCardPressHandler: EventEmitter<any>;
 
   private itemToBeAdded: IPayment;
   private paymentService = new PaymentService();
@@ -89,7 +87,6 @@ export class IrPaymentDetails {
       this.bookingDetails = { ...this.bookingDetails, financial: { ...this.bookingDetails.financial, payments: newPaymentArray } };
       this.confirmModal = !this.confirmModal;
       this.resetBookingData.emit(null);
-      //this.handlePaymentItemChange.emit(this.item.My_Payment);
       this.toBeDeletedItem = null;
     } catch (error) {
       console.log(error);
@@ -108,7 +105,7 @@ export class IrPaymentDetails {
     return (
       <Fragment>
         <tr>
-          <td class={'border border-light border-bottom-0 text-center'}>
+          <td class={'border payments-height border-light border-bottom-0 text-center'}>
             {rowMode === 'normal' ? (
               <span class="sm-padding-left">{_formatDate(item.date)}</span>
             ) : (
@@ -120,7 +117,7 @@ export class IrPaymentDetails {
               ></ir-date-picker>
             )}
           </td>
-          <td class={'border border-light border-bottom-0 text-center '}>
+          <td class={'border payments-height border-light border-bottom-0 text-center '}>
             {rowMode === 'normal' ? (
               <span class="sm-padding-right">${Number(item.amount).toFixed(2)}</span>
             ) : (
@@ -132,7 +129,7 @@ export class IrPaymentDetails {
               ></input>
             )}
           </td>
-          <td class={'border border-light border-bottom-0 text-center'}>
+          <td class={'border payments-height border-light border-bottom-0 text-center'}>
             {rowMode === 'normal' ? (
               <span class="sm-padding-left">{item.designation}</span>
             ) : (
@@ -143,7 +140,7 @@ export class IrPaymentDetails {
               ></input>
             )}
           </td>
-          <td rowSpan={2} class={'border border-light border-bottom-0 text-center'}>
+          <td rowSpan={2} class={'border payments-height border-light border-bottom-0 text-center'}>
             <ir-icon
               icon="ft-save color-ir-light-blue-hover h5 pointer sm-margin-right"
               onClick={
@@ -154,7 +151,14 @@ export class IrPaymentDetails {
                     }
                   : () => {}
               }
-            ></ir-icon>
+            >
+              <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
+                <path
+                  fill="#6b6f82"
+                  d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"
+                />
+              </svg>
+            </ir-icon>
             <span> &nbsp;</span>
             <ir-icon
               icon="ft-trash-2 danger h5 pointer"
@@ -170,13 +174,17 @@ export class IrPaymentDetails {
                       modal.openModal();
                     }
               }
-            ></ir-icon>
+            >
+              <svg slot="icon" fill="#ff2441" xmlns="http://www.w3.org/2000/svg" height="16" width="14.25" viewBox="0 0 448 512">
+                <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" />
+              </svg>
+            </ir-icon>
           </td>
         </tr>
         <tr>
-          <td colSpan={3} class={'border border-light border-bottom-0 text-center'}>
+          <td colSpan={3} class={'border border-light payments-height border-bottom-0 text-center'}>
             {rowMode === 'normal' ? (
-              <span class="sm-padding-left">{item.reference}</span>
+              <span class="sm-padding-left ">{item.reference}</span>
             ) : (
               <input
                 class="border-0 w-100  form-control py-0 m-0"
@@ -206,7 +214,6 @@ export class IrPaymentDetails {
           <strong class="mr-1">{this.defaultTexts.entries.Lcz_BookingGuarantee}</strong>
           <ir-icon
             id="drawer-icon"
-            icon={`${this.collapsedGuarantee ? 'ft-credit-card' : 'ft-credit-card'} h2 color-ir-light-blue-hover`}
             data-toggle="collapse"
             data-target={`.guarrantee`}
             aria-expanded="false"
@@ -218,7 +225,14 @@ export class IrPaymentDetails {
               }
               this.collapsedGuarantee = !this.collapsedGuarantee;
             }}
-          ></ir-icon>
+          >
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512">
+              <path
+                fill="#104064"
+                d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"
+              />
+            </svg>
+          </ir-icon>
         </div>
         <div class="collapse guarrantee ">
           {this.bookingDetails.is_direct ? (
@@ -278,7 +292,6 @@ export class IrPaymentDetails {
                     <strong class="mr-1">{this.defaultTexts.entries.Lcz_PaymentDueDates}</strong>
                     <ir-icon
                       id="drawer-icon"
-                      icon={`${this.collapsedPayment ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-light-blue-hover`}
                       data-toggle="collapse"
                       data-target={`.roomName`}
                       aria-expanded="false"
@@ -287,7 +300,26 @@ export class IrPaymentDetails {
                       onClick={() => {
                         this.collapsedPayment = !this.collapsedPayment;
                       }}
-                    ></ir-icon>
+                    >
+                      {!this.collapsedPayment ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#104064" height={20} width={20} slot="icon">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                          />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#104064" height={20} width={20} slot="icon">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
+                          />
+                        </svg>
+                      )}
+                    </ir-icon>
                   </div>
 
                   <table>{this.bookingDetails.financial.due_dates?.map(item => this._renderDueDate(item))}</table>
@@ -307,11 +339,15 @@ export class IrPaymentDetails {
                     <span class={'sr-only'}>payment actions</span>
                     <ir-icon
                       id="add-payment"
-                      icon="ft-plus font-weight-bold color-ir-light-blue-hover pointer p-0"
+                      icon="font-weight-bold p-0"
                       onClick={() => {
                         this.newTableRow = true;
                       }}
-                    ></ir-icon>
+                    >
+                      <svg height={14} width={14} slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                      </svg>
+                    </ir-icon>
                   </th>
                 </tr>
               </thead>

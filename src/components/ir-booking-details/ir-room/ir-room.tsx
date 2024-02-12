@@ -10,6 +10,7 @@ import { ILocale } from '@/stores/locales.store';
 @Component({
   tag: 'ir-room',
   styleUrl: 'ir-room.css',
+  scoped: true,
 })
 export class IrRoom {
   // Room Data
@@ -185,7 +186,6 @@ export class IrRoom {
       <div class="p-1 d-flex m-0">
         <ir-icon
           id="drawer-icon"
-          icon={`${this.collapsed ? 'ft-eye-off' : 'ft-eye'} h2 color-ir-dark-blue-hover`}
           data-toggle="collapse"
           data-target={`#roomCollapse-${this.item.identifier.split(' ').join('')}`}
           aria-expanded="false"
@@ -194,20 +194,52 @@ export class IrRoom {
           onClick={() => {
             this.collapsed = !this.collapsed;
           }}
-        ></ir-icon>
+        >
+          {!this.collapsed ? (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#104064" height={20} width={20} slot="icon">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+              />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#104064" height={20} width={20} slot="icon">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
+              />
+            </svg>
+          )}
+        </ir-icon>
         <div class="w-100 m-0">
-          <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-end justify-content-between">
             <div>
               <strong>{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName} {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
               {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
             </div>
-            <div>
+            <div class="d-flex">
               {/* <span class="mr-1">{this.item.TOTAL_AMOUNT + this.item.EXCLUDED_TAXES}</span> */}
-              <span class="mr-1">{_formatAmount(this.item.total, this.currency)}</span>
+              <p class="mr-1 p-0 m-0 ">{_formatAmount(this.item.total, this.currency)}</p>
               {this.hasRoomEdit && (
-                <ir-icon id={`roomEdit-${this.item.identifier}`} icon="ft-edit color-ir-dark-blue-hover h4 pointer" onClick={this.handleEditClick.bind(this)}></ir-icon>
+                <ir-icon id={`roomEdit-${this.item.identifier}`} class="pointer mr-1" onClick={this.handleEditClick.bind(this)}>
+                  <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
+                    <path
+                      fill="#6b6f82"
+                      d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"
+                    />
+                  </svg>
+                </ir-icon>
               )}
-              {this.hasRoomDelete && <ir-icon onClick={this.handleDeleteClick.bind(this)} id={`roomDelete-${this.item.identifier}`} icon="ft-trash-2 danger h4 pointer"></ir-icon>}
+              {this.hasRoomDelete && (
+                <ir-icon onClick={this.handleDeleteClick.bind(this)} id={`roomDelete-${this.item.identifier}`} class="pointer mr-1">
+                  <svg slot="icon" fill="#ff2441" xmlns="http://www.w3.org/2000/svg" height="16" width="14.25" viewBox="0 0 448 512">
+                    <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" />
+                  </svg>
+                </ir-icon>
+              )}
             </div>
           </div>
           <div>
