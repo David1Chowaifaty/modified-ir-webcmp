@@ -40,7 +40,16 @@
 .closeBtn:hover {
   background-color: #f6f6f6;
 }
-
+.dropdown-toggle::after {
+  content: none;
+  display: none;
+}
+.dropdown-toggle .caret-icon {
+  transition: transform 0.2s ease;
+}
+.show .caret-icon {
+  transform: rotate(-180deg);
+}
 .stickyHeader {
   position: -webkit-sticky;
   position: sticky;
