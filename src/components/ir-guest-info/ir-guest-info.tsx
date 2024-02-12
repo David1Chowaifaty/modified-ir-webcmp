@@ -82,7 +82,7 @@ export class GuestInfo {
               label={this.defaultTexts.entries.Lcz_FirstName}
               name="firstName"
               submited={this.submit}
-              value={this.guest.first_name}
+              value={this.guest?.first_name}
               required
               onTextChange={e => this.handleInputChange('first_name', e.detail)}
             ></ir-input-text>
@@ -91,7 +91,7 @@ export class GuestInfo {
               label={this.defaultTexts.entries.Lcz_LastName}
               name="lastName"
               submited={this.submit}
-              value={this.guest.last_name}
+              value={this.guest?.last_name}
               required
               onTextChange={e => this.handleInputChange('last_name', e.detail)}
             ></ir-input-text>
@@ -100,7 +100,7 @@ export class GuestInfo {
               label={this.defaultTexts.entries.Lcz_Email}
               name="email"
               submited={this.submit}
-              value={this.guest.email}
+              value={this.guest?.email}
               required
               onTextChange={e => this.handleInputChange('email', e.detail)}
             ></ir-input-text>
@@ -108,7 +108,7 @@ export class GuestInfo {
               placeholder=""
               label={this.defaultTexts.entries.Lcz_AlternativeEmail}
               name="altEmail"
-              value={this.guest.alternative_email}
+              value={this.guest?.alternative_email}
               onTextChange={e => this.handleInputChange('alternative_email', e.detail)}
             ></ir-input-text>
             {/* <ir-input-text label="Password" placeholder="" name="password" submited={this.submit} type="password" value={this.Model.password} required></ir-input-text> */}
@@ -118,7 +118,7 @@ export class GuestInfo {
               name="country"
               submited={this.submit}
               label={this.defaultTexts.entries.Lcz_Country}
-              selectedValue={this.guest.country_id.toString()}
+              selectedValue={this.guest.country_id?.toString() ?? ''}
               data={this.countries.map(item => {
                 return {
                   value: item.id.toString(),
