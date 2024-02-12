@@ -111,9 +111,9 @@ export class IglBookPropertyHeader {
   }
   getAdultChildConstraints() {
     return (
-      <div class={'mt-1 d-flex flex-column text-left'}>
-        <label class="d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label>
-        <div class="form-group  text-left d-flex align-items-center justify-content-between justify-content-sm-start">
+      <div class={'mt-1 mt-lg-0 d-flex flex-column text-left'}>
+        <label class="mb-1 d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label>
+        <div class="form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start">
           <fieldset>
             <div class="btn-group ">
               <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
@@ -205,7 +205,7 @@ export class IglBookPropertyHeader {
     return (
       <Host>
         {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
-        <div class={'d-lg-flex align-items-center'}>
+        <div class={'d-flex flex-column flex-lg-row align-items-lg-center mt-1'}>
           <fieldset class=" mt-1 mt-lg-0  ">
             <igl-date-range
               maxDate={moment().add(calendar_data.max_nights, 'days').format('YYYY-MM-DD')}
