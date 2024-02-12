@@ -401,7 +401,7 @@ export class IrBookingDetails {
               <div class="mb-1">
                 <div class={'d-flex w-100 mb-1 align-items-center justify-content-between'}>
                   <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>
-                  <ir-icon class="pointer mr-1" id="pickup">
+                  <ir-icon class="pointer " id="pickup">
                     <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                       <path
                         fill="#6b6f82"
