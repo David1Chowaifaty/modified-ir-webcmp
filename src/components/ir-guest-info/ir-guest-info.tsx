@@ -59,12 +59,24 @@ export class GuestInfo {
       return null;
     }
     return [
-      <h3>
-        <strong>{this.defaultTexts.entries.Lcz_GuestDetails}</strong>
-      </h3>,
-      <div class="card p-1">
+      <div class="p-0">
+        <div class="position-sticky mb-1 shadow-none p-0">
+          <div class="d-flex align-items-center justify-content-between ir-card-header py-1 p-0">
+            <h3 class="card-title text-left font-medium-2 px-1 my-0">{this.defaultTexts.entries.Lcz_GuestDetails}</h3>
+            <ir-icon
+              class="close close-icon px-1"
+              onIconClickHandler={() => {
+                this.closeSideBar.emit(null);
+              }}
+            >
+              <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={20} width={20}>
+                <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+              </svg>
+            </ir-icon>
+          </div>
+        </div>
         <div class="card-content collapse show">
-          <div class="card-body pt-0">
+          <div class="card-body pt-0 px-1">
             <ir-input-text
               placeholder=""
               label={this.defaultTexts.entries.Lcz_FirstName}

@@ -374,8 +374,8 @@ export class IrBookingDetails {
                     myRoomTypeFoodCat={myRoomTypeFoodCat}
                     mealCodeName={mealCodeName}
                     currency={this.bookingData.currency.code}
-                    hasRoomEdit={this.hasRoomEdit}
-                    hasRoomDelete={this.hasRoomDelete}
+                    hasRoomEdit={this.hasRoomEdit && this.bookingData.is_direct}
+                    hasRoomDelete={this.hasRoomDelete && this.bookingData.is_direct}
                     hasCheckIn={this.hasCheckIn}
                     hasCheckOut={this.hasCheckOut}
                     bookingEvent={this.bookingData}
@@ -388,7 +388,7 @@ export class IrBookingDetails {
                 ];
               })}
             </div>
-            {calendar_data.pickup_service.is_enabled && (
+            {calendar_data.pickup_service.is_enabled && this.bookingData.is_direct && (
               <div class="mb-1">
                 <div class={'d-flex w-100 mb-1 align-items-center justify-content-between'}>
                   <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>
@@ -450,7 +450,7 @@ export class IrBookingDetails {
           e.stopPropagation();
           this.sidebarState = null;
         }}
-        showCloseButton={this.sidebarState === 'pickup' ? false : true}
+        showCloseButton={false}
       >
         {this.sidebarState === 'guest' && (
           <ir-guest-info

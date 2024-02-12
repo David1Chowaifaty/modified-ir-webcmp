@@ -68,3 +68,10 @@
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+.ir-card-header {
+  width: 100%;
+  border-bottom: 1px solid #e4e5ec;
+}
+.close-icon {
+  margin: 0;
+}
