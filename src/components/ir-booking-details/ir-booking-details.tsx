@@ -359,7 +359,16 @@ export class IrBookingDetails {
                   ? ` ${this.defaultTexts.entries.Lcz_Nights}`
                   : ` ${this.defaultTexts.entries.Lcz_Night}`
               })`}
-              {this.hasRoomAdd && <ir-icon id="room-add" icon="ft-plus h3 color-ir-dark-blue-hover pointer"></ir-icon>}
+              {this.hasRoomAdd && (
+                <ir-icon id="room-add">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
+                    <path
+                      fill="#6b6f82"
+                      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                    />
+                  </svg>
+                </ir-icon>
+              )}
             </p>
             <div class="card p-0 mx-0">
               {this.bookingData.rooms.map((room: Room, index: number) => {
