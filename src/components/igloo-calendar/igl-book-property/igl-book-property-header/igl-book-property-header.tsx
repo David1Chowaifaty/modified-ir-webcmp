@@ -203,12 +203,12 @@ export class IglBookPropertyHeader {
   }
 
   render() {
-    console.log(calendar_data.max_nights);
+    const showSourceNode = this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? false : true;
     return (
       <Host>
-        {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
-        <div class={'d-flex flex-column flex-lg-row align-items-lg-center mt-1'}>
-          <fieldset class=" mt-1 mt-lg-0  ">
+        {showSourceNode && this.getSourceNode()}
+        <div class={`d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}`}>
+          <fieldset class="mt-lg-0  ">
             <igl-date-range
               maxDate={moment().add(calendar_data.max_nights, 'days').format('YYYY-MM-DD')}
               dateLabel={locales.entries.Lcz_Dates}

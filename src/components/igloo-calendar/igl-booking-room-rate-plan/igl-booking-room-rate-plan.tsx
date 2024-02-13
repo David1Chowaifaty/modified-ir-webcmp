@@ -97,6 +97,11 @@ export class IglBookingRoomRatePlan {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
+      this.dataUpdateEvent.emit({
+        key: 'roomRatePlanUpdate',
+        changedKey: 'physicalRooms',
+        data: this.selectedData,
+      });
     }
     if (this.defaultData && this.defaultData.isRateModified) {
       console.log('object');
@@ -110,7 +115,6 @@ export class IglBookingRoomRatePlan {
     } else {
       this.initialRateValue = this.selectedData.rate / this.dateDifference;
     }
-    console.log('initialRateValue', this.initialRateValue);
   }
   @Watch('ratePlanData')
   async ratePlanDataChanged(newData) {
