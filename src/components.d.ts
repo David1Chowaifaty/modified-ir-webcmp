@@ -16,7 +16,7 @@ import { checkboxes, selectOption } from "./common/models";
 import { selectOption as selectOption1 } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { Booking, IBookingPickupInfo } from "./models/booking.dto";
-import { ILocale as ILocale1 } from "./components.d";
+import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -30,7 +30,7 @@ export { checkboxes, selectOption } from "./common/models";
 export { selectOption as selectOption1 } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { Booking, IBookingPickupInfo } from "./models/booking.dto";
-export { ILocale as ILocale1 } from "./components.d";
+export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -1448,6 +1448,7 @@ declare global {
     };
     interface HTMLIrPaymentDetailsElementEventMap {
         "resetBookingData": null;
+        "toast": IToast;
     }
     interface HTMLIrPaymentDetailsElement extends Components.IrPaymentDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentDetailsElementEventMap>(type: K, listener: (this: HTMLIrPaymentDetailsElement, ev: IrPaymentDetailsCustomEvent<HTMLIrPaymentDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2163,6 +2164,7 @@ declare namespace LocalJSX {
         "bookingDetails"?: Booking;
         "defaultTexts"?: ILocale;
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
+        "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
     }
     interface IrPickup {
         "bookingNumber"?: string;

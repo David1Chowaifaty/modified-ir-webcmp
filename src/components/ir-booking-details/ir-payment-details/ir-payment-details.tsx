@@ -4,7 +4,7 @@ import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
 import { PaymentService } from '@/services/payment.service';
-import { ILocale } from '@/components';
+import { ILocale, IToast } from '@/components';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -28,7 +28,7 @@ export class IrPaymentDetails {
   @State() paymentExceptionMessage: string = '';
 
   @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
-
+  @Event({ bubbles: true }) toast: EventEmitter<IToast>;
   private itemToBeAdded: IPayment;
   private paymentService = new PaymentService();
 
@@ -54,25 +54,36 @@ export class IrPaymentDetails {
 
   async _handleSave() {
     try {
-      await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
-      this.initializeItemToBeAdded();
-      this.resetBookingData.emit(null);
+      console.log(this.itemToBeAdded);
+      if (this.itemToBeAdded.amount === null) {
+        this.toast.emit({
+          type: 'error',
+          title: '',
+          description: 'Select an amount',
+          position: 'top-right',
+        });
+        return;
+      }
+      // await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
+      // this.initializeItemToBeAdded();
+      // this.resetBookingData.emit(null);
     } catch (error) {
       console.log(error);
     }
   }
   handlePaymentInputChange(key: keyof IPayment, value: any, event?: InputEvent) {
     if (key === 'amount') {
-      if (!isNaN(value)) {
-        this.itemToBeAdded = { ...this.itemToBeAdded, [key]: value };
-      } else {
+      if (!isNaN(value) || value === '') {
+        if (value === '') {
+          this.itemToBeAdded = { ...this.itemToBeAdded, [key]: null };
+        } else {
+          this.itemToBeAdded = { ...this.itemToBeAdded, [key]: parseFloat(value) };
+        }
+      } else if (event && event.target) {
         let inputElement = event.target as HTMLInputElement;
         let inputValue = inputElement.value;
-        inputValue = inputValue.replace(/[^0-9]/g, '');
+        inputValue = inputValue.replace(/[^\d-]|(?<!^)-/g, '');
         inputElement.value = inputValue;
-        if (inputValue === '') {
-          this.itemToBeAdded = { ...this.itemToBeAdded, [key]: 0 };
-        }
       }
     } else {
       this.itemToBeAdded = { ...this.itemToBeAdded, [key]: value };
@@ -128,7 +139,7 @@ export class IrPaymentDetails {
             ) : (
               <input
                 class="border-0  form-control py-0 m-0 w-100"
-                value={this.itemToBeAdded.amount === 0 ? '' : Number(this.itemToBeAdded.amount).toFixed(2)}
+                value={this.itemToBeAdded.amount === null ? '' : Number(this.itemToBeAdded.amount).toFixed(2)}
                 onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value, event)}
                 type="text"
               ></input>
