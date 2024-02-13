@@ -212,7 +212,7 @@ export class IglPagetwo {
                 btn_styles="full-width align-items-center justify-content-center"
                 text={locales.entries.Lcz_Save}
               ></ir-button>
-              <button
+              {/* <button
                 disabled={this.isLoading === 'save'}
                 type="button"
                 class="btn btn-primary full-width"
@@ -223,7 +223,7 @@ export class IglPagetwo {
               >
                 {this.isLoading === 'save' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 {locales.entries.Lcz_Save}
-              </button>
+              </button> */}
             </div>
           </div>
         ) : (
