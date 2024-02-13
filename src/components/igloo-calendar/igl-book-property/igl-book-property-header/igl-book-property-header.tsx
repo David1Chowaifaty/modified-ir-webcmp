@@ -177,6 +177,8 @@ export class IglBookPropertyHeader {
           position: 'top-right',
         });
         return;
+      } else if (this.adultChildCount.adult === 0) {
+        this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
       } else {
         this.buttonClicked.emit({ key: 'check' });
       }

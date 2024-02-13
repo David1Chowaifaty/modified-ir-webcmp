@@ -146,7 +146,7 @@ export class GuestInfo {
             <div class="form-group mr-0">
               <div class="input-group row m-0 p-0">
                 <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
-                  <label class={`input-group-text  border-light flex-grow-1 text-dark  `}>
+                  <label class={`input-group-text  border-theme flex-grow-1 text-dark  `}>
                     {this.defaultTexts.entries.Lcz_MobilePhone}
                     {'*'}
                   </label>

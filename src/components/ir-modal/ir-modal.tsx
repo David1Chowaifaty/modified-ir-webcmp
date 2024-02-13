@@ -62,13 +62,14 @@ export class IrModal {
         }}
       ></div>,
       <div data-state={this.isOpen ? 'opened' : 'closed'} class={`ir-modal`} tabindex="-1">
-        <div class={`ir-alert-content`}>
-          <div class={`ir-alert-header align-items-center border-0 `}>
-            <div class="font-weight-bold d-flex align-items-center">
-              {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>}
-              {this.modalBody}
-            </div>
-            <div class="font-weight-bold d-flex align-items-center font-size-large">
+        <div class={`ir-alert-content p-2`}>
+          <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
+            <p class="font-weight-bold p-0 my-0 mb-1">
+              {/* {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} */}
+              {/* {this.modalBody} */}
+              {this.modalTitle}
+            </p>
+            {/* <div class="font-weight-bold d-flex align-items-center font-size-large my-0 py-0">
               <ir-icon
                 icon="ft-x"
                 style={{ cursor: 'pointer' }}
@@ -77,13 +78,13 @@ export class IrModal {
                   this.cancelModal.emit();
                 }}
               ></ir-icon>
-            </div>
-          </div>
-          {/* <div class="modal-body text-left">
-              <div>{this.modalBody}</div>
             </div> */}
+          </div>
+          <div class="modal-body text-left p-0 mb-2">
+            <div>{this.modalBody}</div>
+          </div>
 
-          <div class={`ir-alert-footer border-0 d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
+          <div class={`ir-alert-footer border-0  d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
             {this.leftBtnActive && <ir-button icon={''} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>}
             {this.rightBtnActive && <ir-button icon={''} btn_color={this.rightBtnColor} btn_block text={this.rightBtnText} name={this.rightBtnText}></ir-button>}
           </div>

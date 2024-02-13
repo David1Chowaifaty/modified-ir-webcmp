@@ -220,7 +220,7 @@ export class IrPickup {
                 <div class="form-group  mr-1">
                   <div class="input-group row m-0">
                     <div class={`input-group-prepend col-5 p-0 text-dark border-0`}>
-                      <label class={`input-group-text  flex-grow-1 text-dark border-light `}>{locales.entries.Lcz_ArrivalDate}</label>
+                      <label class={`input-group-text  flex-grow-1 text-dark border-theme `}>{locales.entries.Lcz_ArrivalDate}</label>
                     </div>
                     <div class="form-control form-control-md col-7 d-flex align-items-center pl-0">
                       <ir-date-picker
@@ -239,7 +239,7 @@ export class IrPickup {
                 <div class="form-group">
                   <div class="input-group  row m-0">
                     <div class={`input-group-prepend col-4 col-sm-3 p-0 text-dark border-0`}>
-                      <label htmlFor="pickup" class={`input-group-text flex-grow-1 text-dark border-light`}>
+                      <label htmlFor="pickup" class={`input-group-text flex-grow-1 text-dark border-theme`}>
                         {locales.entries.Lcz_Time}
                       </label>
                     </div>
@@ -277,7 +277,7 @@ export class IrPickup {
               ></ir-select>
               <div class={'d-flex flex-column flex-md-row'}>
                 <ir-select
-                  labelBorder="light"
+                  labelBorder="theme"
                   selectContainerStyle="mb-1"
                   onSelectChange={this.handleVehicleQuantityChange.bind(this)}
                   selectStyles={this.cause === 'number_of_vehicles' ? 'border-danger' : ''}
@@ -293,7 +293,7 @@ export class IrPickup {
                   }
                 ></ir-select>
                 <ir-input-text
-                  labelBorder="light"
+                  labelBorder="theme"
                   readonly
                   value={this.pickupData.due_upon_booking}
                   labelWidth={7}

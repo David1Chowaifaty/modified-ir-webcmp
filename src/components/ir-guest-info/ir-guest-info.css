@@ -75,3 +75,6 @@
 .close-icon {
   margin: 0;
 }
+.border-theme {
+  border: 1px solid #cacfe7;
+}

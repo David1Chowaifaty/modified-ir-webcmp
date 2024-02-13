@@ -2,6 +2,7 @@ import { Component, Prop, h, Event, EventEmitter, State, Watch } from '@stencil/
 
 @Component({
   tag: 'ir-input-text',
+  styleUrl: 'ir-input-text.css',
   scoped: true,
 })
 export class IrInputText {
@@ -21,9 +22,8 @@ export class IrInputText {
   @Prop() labelPosition: 'left' | 'right' | 'center' = 'left';
   @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null = null;
   @Prop() labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'dark';
-  @Prop() labelBorder: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'light';
+  @Prop() labelBorder: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'theme';
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
-
   @State() valid: boolean;
   @State() initial: boolean = true;
 

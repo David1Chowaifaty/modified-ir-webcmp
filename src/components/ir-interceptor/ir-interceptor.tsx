@@ -17,7 +17,7 @@ export class IrInterceptor {
     errorMessage: 'Something Went Wrong',
   };
 
-  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room'];
+  @Prop({ reflect: true }) handledEndpoints = ['/ReAllocate_Exposed_Room'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   @Event({ bubbles: true, composed: true }) fetchingIrInterceptorDataStatus: EventEmitter<'pending' | 'done'>;
   componentWillLoad() {
@@ -57,9 +57,9 @@ export class IrInterceptor {
   // }
 
   handleRequest(config) {
+    this.fetchingIrInterceptorDataStatus.emit('pending');
     if (this.isHandledEndpoint(config.url)) {
       this.isLoading = true;
-      this.fetchingIrInterceptorDataStatus.emit('pending');
       if (this.extractEndpoint(config.url) === '/ReAllocate_Exposed_Room') {
         this.defaultMessage.loadingMessage = 'Updating Event';
       } else if (this.extractEndpoint(config.url) === '/Get_Aggregated_UnAssigned_Rooms') {

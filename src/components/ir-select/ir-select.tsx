@@ -3,6 +3,7 @@ import { selectOption } from '../../common/models';
 
 @Component({
   tag: 'ir-select',
+  styleUrl: 'ir-select.css',
   scoped: true,
 })
 export class IrSelect {
@@ -22,7 +23,7 @@ export class IrSelect {
   @Prop() labelPosition: 'left' | 'right' | 'center' = 'left';
   @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null = null;
   @Prop() labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'dark';
-  @Prop() labelBorder: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'light';
+  @Prop() labelBorder: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'theme';
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
 
   @State() initial: boolean = true;
