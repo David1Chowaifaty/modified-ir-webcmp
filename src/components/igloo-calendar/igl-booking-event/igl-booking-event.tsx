@@ -588,7 +588,7 @@ export class IglBookingEvent {
       let bodyContainer = document.querySelector('.calendarScrollContainer');
       let bodyContainerRect: { [key: string]: any } = bodyContainer.getBoundingClientRect();
       let elementRect: { [key: string]: any } = this.element.getBoundingClientRect();
-      let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top;
+      let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top + 50;
       // let topDifference = elementRect.top - bodyContainerRect.top;
       // let bottomDifference = bodyContainerRect.bottom - elementRect.bottom;
 

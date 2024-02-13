@@ -206,6 +206,12 @@ export class IglPagetwo {
               ></ir-button>
             </div>
             <div class="flex-fill">
+              <ir-button
+                isLoading={this.isLoading === 'save'}
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'save' })}
+                btn_styles="full-width align-items-center justify-content-center"
+                text={locales.entries.Lcz_Save}
+              ></ir-button>
               <button
                 disabled={this.isLoading === 'save'}
                 type="button"
@@ -228,21 +234,33 @@ export class IglPagetwo {
               </button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill">
-              <button disabled={this.isLoading === 'book'} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
+              <ir-button
+                isLoading={this.isLoading === 'book'}
+                btn_styles="full-width align-items-center justify-content-center"
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'book' })}
+                text={locales.entries.Lcz_Book}
+              ></ir-button>
+              {/* <button disabled={this.isLoading === 'book'} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
                 {this.isLoading === 'book' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 {locales.entries.Lcz_Book}
-              </button>
+              </button> */}
             </div>
             {/* <div class="mt-1 mt-md-0 flex-fill">
-              <button
-                //disabled={this.isButtonDisabled('bookAndCheckIn')}
-                type="button"
-                class="btn btn-primary full-width"
-                onClick={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
-              >
-                {this.isLoading === 'bookAndCheckIn' && <i class="la la-circle-o-notch spinner mx-1"></i>}
-                {locales.entries.Lcz_BookAndChekcIn}
-              </button>
+              <ir-button
+                isLoading={this.isLoading === 'bookAndChekcIn'}
+                btn_styles="full-width align-items-center justify-content-center"
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
+                text={locales.entries.Lcz_BookAndChekcIn}
+              ></ir-button>
+              // <button
+              //   //disabled={this.isButtonDisabled('bookAndCheckIn')}
+              //   type="button"
+              //   class="btn btn-primary full-width"
+              //   onClick={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
+              // >
+              //   {this.isLoading === 'bookAndCheckIn' && <i class="la la-circle-o-notch spinner mx-1"></i>}
+              //   {locales.entries.Lcz_BookAndChekcIn}
+              // </button>
             </div> */}
           </div>
         )}

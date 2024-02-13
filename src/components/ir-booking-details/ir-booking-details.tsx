@@ -359,7 +359,7 @@ export class IrBookingDetails {
                   ? ` ${this.defaultTexts.entries.Lcz_Nights}`
                   : ` ${this.defaultTexts.entries.Lcz_Night}`
               })`}
-              {this.hasRoomAdd && (
+              {this.hasRoomAdd && this.bookingData.is_direct && (
                 <ir-icon id="room-add">
                   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
                     <path
