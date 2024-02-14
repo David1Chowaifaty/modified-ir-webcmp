@@ -260,19 +260,24 @@ export class IrRoomNights {
           )}
         </section>
         <section class={'d-flex align-items-center mt-2 px-2'}>
-          <button
-            disabled={this.isLoading}
-            type="button"
-            class={'btn btn-secondary full-width'}
-            onClick={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
-          >
-            {locales?.entries.Lcz_Cancel}
-          </button>
+          <ir-button
+            btn_color="secondary"
+            btn_disabled={this.isLoading}
+            text={locales?.entries.Lcz_Cancel}
+            class="full-width"
+            btn_styles="justify-content-center"
+            onClickHanlder={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
+          ></ir-button>
+
           {this.inventory > 0 && this.inventory !== null && (
-            <button disabled={this.isButtonDisabled()} type="button" class={'btn btn-primary ml-2 full-width'} onClick={this.handleRoomConfirmation.bind(this)}>
-              {this.isLoading && <i class="la la-circle-o-notch spinner mx-1"></i>}
-              {locales?.entries.Lcz_Confirm}
-            </button>
+            <ir-button
+              isLoading={this.isLoading}
+              text={locales?.entries.Lcz_Confirm}
+              btn_disabled={this.isButtonDisabled()}
+              class="ml-1 full-width"
+              btn_styles="justify-content-center"
+              onClickHanlder={this.handleRoomConfirmation.bind(this)}
+            ></ir-button>
           )}
         </section>
       </Host>
