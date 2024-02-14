@@ -17,6 +17,7 @@ export class IrChannelEditor {
     { id: 'mapping', name: 'Mapping', disabled: false },
     { id: 'channel_booking', name: 'Channel Booking', disabled: true },
   ];
+  @State() selectedRoomType = [];
 
   @Event() closeSideBar: EventEmitter<null>;
 

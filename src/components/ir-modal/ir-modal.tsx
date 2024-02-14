@@ -64,11 +64,13 @@ export class IrModal {
       <div data-state={this.isOpen ? 'opened' : 'closed'} class={`ir-modal`} tabindex="-1">
         <div class={`ir-alert-content p-2`}>
           <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
+            {/*
             <p class="font-weight-bold p-0 my-0 mb-1">
-              {/* {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} */}
-              {/* {this.modalBody} */}
+              {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} 
+               {this.modalBody} 
               {this.modalTitle}
             </p>
+            */}
             {/* <div class="font-weight-bold d-flex align-items-center font-size-large my-0 py-0">
               <ir-icon
                 icon="ft-x"

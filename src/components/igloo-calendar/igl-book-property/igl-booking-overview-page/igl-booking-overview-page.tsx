@@ -53,6 +53,7 @@ export class IglBookingOverviewPage {
         {/* {this.adultChildCount.adult === 0 && <p class={'col text-left'}>Please select the number of guests</p>} */}
         <div class=" text-left">
           {this.bookingData?.roomsInfo?.map(roomInfo => {
+            console.log(this.selectedRooms);
             return (
               <igl-booking-rooms
                 initialRoomIds={this.initialRoomIds}

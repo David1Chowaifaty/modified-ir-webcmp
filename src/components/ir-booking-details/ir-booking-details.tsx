@@ -23,7 +23,7 @@ export class IrBookingDetails {
   @Prop() bookingNumber: string = '';
   @Prop() baseurl: string = '';
   @Prop() propertyid: number;
-
+  @Prop() is_from_front_desk = false;
   // Booleans Conditions
   @Prop() hasPrint: boolean = false;
   @Prop() hasReceipt: boolean = false;
@@ -177,18 +177,6 @@ export class IrBookingDetails {
     this.tempStatus = (target as any).selectedValue;
   }
 
-  @Listen('clickHanlder')
-  async handleClick(e) {
-    const target = e.target;
-    const targetID = target.id;
-    switch (targetID) {
-      case 'update-status-btn':
-        await this.updateStatus();
-        await this.resetBookingData();
-        break;
-    }
-  }
-
   openEditSidebar() {
     const sidebar: any = document.querySelector('ir-sidebar#editGuestInfo');
     sidebar.open = true;
@@ -202,7 +190,7 @@ export class IrBookingDetails {
   }
 
   async updateStatus() {
-    if (this.tempStatus !== 'Select' && this.tempStatus !== null) {
+    if (this.tempStatus !== '' && this.tempStatus !== null) {
       try {
         this.isUpdateClicked = true;
         await axios.post(`/Change_Exposed_Booking_Status?Ticket=${this.ticket}`, {
@@ -215,6 +203,7 @@ export class IrBookingDetails {
           title: locales.entries.Lcz_StatusUpdatedSuccessfully,
           position: 'top-right',
         });
+        // await this.resetBookingData();
       } catch (error) {
         console.log(error);
       } finally {
@@ -275,8 +264,14 @@ export class IrBookingDetails {
     }
 
     return [
-      <ir-toast></ir-toast>,
-      <ir-interceptor></ir-interceptor>,
+      <Fragment>
+        {!this.is_from_front_desk && (
+          <Fragment>
+            <ir-toast></ir-toast>
+            <ir-interceptor></ir-interceptor>
+          </Fragment>
+        )}
+      </Fragment>,
       <div class="fluid-container p-1">
         <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between mt-1">
           <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0  d-flex justify-content-start align-items-end">
@@ -302,7 +297,15 @@ export class IrBookingDetails {
                   textSize="sm"
                   class="sm-padding-right m-0"
                 ></ir-select>
-                <ir-button btn_styles="h-28" isLoading={this.isUpdateClicked} btn_disabled={this.isUpdateClicked} id="update-status-btn" size="sm" text="Update"></ir-button>
+                <ir-button
+                  onClickHanlder={this.updateStatus.bind(this)}
+                  btn_styles="h-28"
+                  isLoading={this.isUpdateClicked}
+                  btn_disabled={this.isUpdateClicked}
+                  id="update-status-btn"
+                  size="sm"
+                  text="Update"
+                ></ir-button>
               </Fragment>
             )}
             {this.hasReceipt && (

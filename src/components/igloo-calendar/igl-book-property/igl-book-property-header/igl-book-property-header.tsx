@@ -1,9 +1,10 @@
-import { Component, Host, Prop, h, Event, EventEmitter, Listen, State } from '@stencil/core';
+import { Component, Host, Prop, h, Event, EventEmitter } from '@stencil/core';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../../models/igl-book-property';
 import { IToast } from '../../../ir-toast/toast';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import interceptor_requests from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -32,7 +33,6 @@ export class IglBookPropertyHeader {
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
   @Event() toast: EventEmitter<IToast>;
   @Event() spiltBookingSelected: EventEmitter<{ key: string; data: unknown }>;
-  @State() isLoading = false;
   private sourceOption: TSourceOption = {
     code: '',
     description: '',
@@ -100,15 +100,7 @@ export class IglBookPropertyHeader {
     }
     this.adultChild.emit(obj);
   }
-  @Listen('fetchingIrInterceptorDataStatus', { target: 'body' })
-  handleFetchingDataStatus(e: CustomEvent) {
-    const result = e.detail;
-    if (result === 'pending') {
-      this.isLoading = true;
-    } else {
-      this.isLoading = false;
-    }
-  }
+
   getAdultChildConstraints() {
     return (
       <div class={'mt-1 mt-lg-0 d-flex flex-column text-left'}>
@@ -136,7 +128,14 @@ export class IglBookPropertyHeader {
               </div>
             </fieldset>
           )}
-          <ir-button isLoading={this.isLoading} icon="" size="sm" class="ml-2" text={locales.entries.Lcz_Check} onClickHanlder={() => this.handleButtonClicked()}></ir-button>
+          <ir-button
+            isLoading={interceptor_requests.status === 'pending'}
+            icon=""
+            size="sm"
+            class="ml-2"
+            text={locales.entries.Lcz_Check}
+            onClickHanlder={() => this.handleButtonClicked()}
+          ></ir-button>
           {/* <button class={'btn btn-primary btn-sm  ml-2'} onClick={() => this.handleButtonClicked()}>
             {locales.entries.Lcz_Check}
           </button> */}

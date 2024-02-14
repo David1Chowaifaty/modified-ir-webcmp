@@ -17,6 +17,7 @@ export interface CalendarDataDetails {
   allowed_payment_methods: IAllowedPaymentMethods[];
   pickup_service: IPickupService;
   channels: IChannel[];
+  is_frontdesk_enabled: boolean;
 }
 
 export interface IChannel {

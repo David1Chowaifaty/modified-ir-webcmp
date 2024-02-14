@@ -43,6 +43,7 @@
     "@types/jest": "^27.5.2",
     "@types/jquery": "^3.5.25",
     "@types/node": "^16.18.11",
+    "@types/toastr": "^2.1.43",
     "@types/uuid": "^9.0.7",
     "jest": "^27.5.1",
     "jest-cli": "^27.5.1",

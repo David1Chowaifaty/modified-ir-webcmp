@@ -857,6 +857,7 @@ export class IglooCalendar {
             <ir-booking-details
               hasPrint
               hasReceipt
+              is_from_front_desk
               propertyid={this.propertyid}
               hasRoomEdit
               hasRoomDelete

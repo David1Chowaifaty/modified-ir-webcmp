@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
 import { TPropertyButtonsTypes } from '@/components';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-application-info',
@@ -122,7 +123,7 @@ export class IglApplicationInfo {
               />
             </div>
             <div class={'mt-1 mt-md-0 d-flex align-items-center flex-fill'}>
-              {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
+              {calendar_data.is_frontdesk_enabled && (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') ? (
                 <div class="mr-1 p-0 flex-fill  preference-select-container">
                   <select class={`form-control  input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}>
                     <option value="" selected={this.guestData.roomId === ''}>

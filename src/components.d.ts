@@ -259,6 +259,7 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
+        "is_from_front_desk": boolean;
         "language": string;
         "propertyid": number;
         "ticket": string;
@@ -550,9 +551,7 @@ export namespace Components {
         "text": string;
     }
     interface IrToast {
-        "hideToast": () => Promise<void>;
         "position": TPositions;
-        "showToast": () => Promise<void>;
     }
     interface IrTooltip {
         "message": string;
@@ -1448,7 +1447,6 @@ declare global {
     };
     interface HTMLIrInterceptorElementEventMap {
         "toast": IToast;
-        "fetchingIrInterceptorDataStatus": 'pending' | 'done';
     }
     interface HTMLIrInterceptorElement extends Components.IrInterceptor, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrInterceptorElementEventMap>(type: K, listener: (this: HTMLIrInterceptorElement, ev: IrInterceptorCustomEvent<HTMLIrInterceptorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2068,6 +2066,7 @@ declare namespace LocalJSX {
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
+        "is_from_front_desk"?: boolean;
         "language"?: string;
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
         "propertyid"?: number;
@@ -2231,7 +2230,6 @@ declare namespace LocalJSX {
     interface IrInterceptor {
         "defaultMessage"?: { loadingMessage: string; errorMessage: string; };
         "handledEndpoints"?: string[];
-        "onFetchingIrInterceptorDataStatus"?: (event: IrInterceptorCustomEvent<'pending' | 'done'>) => void;
         "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
     interface IrLabel {
