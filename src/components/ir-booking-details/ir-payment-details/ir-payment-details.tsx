@@ -58,15 +58,15 @@ export class IrPaymentDetails {
       if (this.itemToBeAdded.amount === null) {
         this.toast.emit({
           type: 'error',
-          title: '',
-          description: 'Select an amount',
+          title: this.defaultTexts.entries.Lcz_EnterAmount,
+          description: '',
           position: 'top-right',
         });
         return;
       }
-      // await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
-      // this.initializeItemToBeAdded();
-      // this.resetBookingData.emit(null);
+      await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
+      this.initializeItemToBeAdded();
+      this.resetBookingData.emit(null);
     } catch (error) {
       console.log(error);
     }

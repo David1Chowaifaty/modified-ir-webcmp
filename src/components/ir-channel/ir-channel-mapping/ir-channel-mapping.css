@@ -10,8 +10,13 @@
 .map-row span {
   width: 49%;
 }
-.mapped-to-text {
-  text-align: right;
+
+.submap-text {
+  padding-left: 10px;
+}
+.text-blue {
+  color: var(--blue);
+}
+.text-red {
   color: var(--red);
-  cursor: pointer;
 }

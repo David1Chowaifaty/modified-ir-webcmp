@@ -148,6 +148,7 @@ export type LocalizationStrings = {
   Lcz_NbrOfVehicles: string;
   Lcz_Pickup_YesFrom: string;
   Lcz_Pickup_NoThankYou: string;
+  Lcz_EnterAmount: string;
 };
 
 const initialState: ILocale = {

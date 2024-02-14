@@ -1,3 +1,4 @@
+import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Listen, State, h } from '@stencil/core';
 
 @Component({
@@ -69,7 +70,8 @@ export class IrChannelEditor {
           </div>
           <ir-channel-header class="mt-1 px-0" headerTitles={this.headerTitles}></ir-channel-header>
         </nav>
-        <section class="content pb-1">{this.renderTabScreen()}</section>
+        <section class="pb-1">{this.renderTabScreen()}</section>
+        <ir-button class="w-100 mt-3" btn_styles="justify-content-center" text={locales.entries.Lcz_Save}></ir-button>
       </Host>
     );
   }

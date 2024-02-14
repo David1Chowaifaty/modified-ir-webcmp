@@ -1,5 +1,6 @@
 import { RoomService } from '@/services/room.service';
 import calendar_data from '@/stores/calendar-data';
+import locales from '@/stores/locales.store';
 import { Component, Host, Prop, Watch, h, Element, State } from '@stencil/core';
 import axios from 'axios';
 
@@ -30,7 +31,11 @@ export class IrChannel {
   }
   async initializeApp() {
     try {
-      await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      const [_, languageTexts] = await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      if (!locales.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
+      }
     } catch (error) {
       console.error(error);
     }
@@ -103,7 +108,7 @@ export class IrChannel {
           }}
           open={this.channel_status !== null}
         >
-          <ir-channel-editor onCloseSideBar={() => (this.channel_status = null)}></ir-channel-editor>
+          {this.channel_status && <ir-channel-editor onCloseSideBar={() => (this.channel_status = null)}></ir-channel-editor>}
         </ir-sidebar>
       </Host>
     );
