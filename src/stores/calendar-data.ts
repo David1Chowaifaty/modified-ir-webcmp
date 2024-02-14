@@ -20,6 +20,7 @@ const initialState: CalendarDataDetails = {
   allowed_payment_methods: [],
   pickup_service: undefined,
   max_nights: 0,
+  channels: [],
 };
 export const { state: calendar_data, onChange: onCalendarDatesChange } = createStore<CalendarDataDetails>(initialState);
 

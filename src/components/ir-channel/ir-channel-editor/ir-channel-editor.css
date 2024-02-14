@@ -1,0 +1,6 @@
+:host {
+  display: block;
+}
+nav {
+  z-index: 10;
+}

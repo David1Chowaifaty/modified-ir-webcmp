@@ -276,6 +276,19 @@ export namespace Components {
         "text": any;
         "textSize": 'sm' | 'md' | 'lg';
     }
+    interface IrChannel {
+        "baseurl": string;
+        "language": string;
+        "propertyid": number;
+        "ticket": string;
+    }
+    interface IrChannelEditor {
+    }
+    interface IrChannelGeneral {
+    }
+    interface IrChannelHeader {
+        "headerTitles": { id: string; name: string; disabled: boolean }[];
+    }
     interface IrChannelManager {
         "allowed_MinStayTypes": selectOption[];
         "allowed_channels": selectOption[];
@@ -291,6 +304,8 @@ export namespace Components {
         "hostRoom": RoomType[];
         "listData": ChannelManager[];
         "mapReference": RoomType[];
+    }
+    interface IrChannelMapping {
     }
     interface IrCheckbox {
         "checked": boolean;
@@ -636,6 +651,14 @@ export interface IrBookingDetailsCustomEvent<T> extends CustomEvent<T> {
 export interface IrButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrButtonElement;
+}
+export interface IrChannelEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrChannelEditorElement;
+}
+export interface IrChannelHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrChannelHeaderElement;
 }
 export interface IrChannelManagerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1179,6 +1202,52 @@ declare global {
         prototype: HTMLIrButtonElement;
         new (): HTMLIrButtonElement;
     };
+    interface HTMLIrChannelElement extends Components.IrChannel, HTMLStencilElement {
+    }
+    var HTMLIrChannelElement: {
+        prototype: HTMLIrChannelElement;
+        new (): HTMLIrChannelElement;
+    };
+    interface HTMLIrChannelEditorElementEventMap {
+        "closeSideBar": null;
+    }
+    interface HTMLIrChannelEditorElement extends Components.IrChannelEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrChannelEditorElementEventMap>(type: K, listener: (this: HTMLIrChannelEditorElement, ev: IrChannelEditorCustomEvent<HTMLIrChannelEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrChannelEditorElementEventMap>(type: K, listener: (this: HTMLIrChannelEditorElement, ev: IrChannelEditorCustomEvent<HTMLIrChannelEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrChannelEditorElement: {
+        prototype: HTMLIrChannelEditorElement;
+        new (): HTMLIrChannelEditorElement;
+    };
+    interface HTMLIrChannelGeneralElement extends Components.IrChannelGeneral, HTMLStencilElement {
+    }
+    var HTMLIrChannelGeneralElement: {
+        prototype: HTMLIrChannelGeneralElement;
+        new (): HTMLIrChannelGeneralElement;
+    };
+    interface HTMLIrChannelHeaderElementEventMap {
+        "tabChanged": string;
+    }
+    interface HTMLIrChannelHeaderElement extends Components.IrChannelHeader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrChannelHeaderElementEventMap>(type: K, listener: (this: HTMLIrChannelHeaderElement, ev: IrChannelHeaderCustomEvent<HTMLIrChannelHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrChannelHeaderElementEventMap>(type: K, listener: (this: HTMLIrChannelHeaderElement, ev: IrChannelHeaderCustomEvent<HTMLIrChannelHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrChannelHeaderElement: {
+        prototype: HTMLIrChannelHeaderElement;
+        new (): HTMLIrChannelHeaderElement;
+    };
     interface HTMLIrChannelManagerElementEventMap {
         "fetchApi": ChannelManager[];
         "requestApiDelete": any;
@@ -1197,6 +1266,12 @@ declare global {
     var HTMLIrChannelManagerElement: {
         prototype: HTMLIrChannelManagerElement;
         new (): HTMLIrChannelManagerElement;
+    };
+    interface HTMLIrChannelMappingElement extends Components.IrChannelMapping, HTMLStencilElement {
+    }
+    var HTMLIrChannelMappingElement: {
+        prototype: HTMLIrChannelMappingElement;
+        new (): HTMLIrChannelMappingElement;
     };
     interface HTMLIrCheckboxElementEventMap {
         "checkboxChange": { name: string; value: string; checked: boolean };
@@ -1636,7 +1711,12 @@ declare global {
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-button": HTMLIrButtonElement;
+        "ir-channel": HTMLIrChannelElement;
+        "ir-channel-editor": HTMLIrChannelEditorElement;
+        "ir-channel-general": HTMLIrChannelGeneralElement;
+        "ir-channel-header": HTMLIrChannelHeaderElement;
         "ir-channel-manager": HTMLIrChannelManagerElement;
+        "ir-channel-mapping": HTMLIrChannelMappingElement;
         "ir-checkbox": HTMLIrCheckboxElement;
         "ir-checkboxes": HTMLIrCheckboxesElement;
         "ir-common": HTMLIrCommonElement;
@@ -1979,6 +2059,21 @@ declare namespace LocalJSX {
         "text"?: any;
         "textSize"?: 'sm' | 'md' | 'lg';
     }
+    interface IrChannel {
+        "baseurl"?: string;
+        "language"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+    }
+    interface IrChannelEditor {
+        "onCloseSideBar"?: (event: IrChannelEditorCustomEvent<null>) => void;
+    }
+    interface IrChannelGeneral {
+    }
+    interface IrChannelHeader {
+        "headerTitles"?: { id: string; name: string; disabled: boolean }[];
+        "onTabChanged"?: (event: IrChannelHeaderCustomEvent<string>) => void;
+    }
     interface IrChannelManager {
         "allowed_MinStayTypes"?: selectOption[];
         "allowed_channels"?: selectOption[];
@@ -1997,6 +2092,8 @@ declare namespace LocalJSX {
         "onFetchApi"?: (event: IrChannelManagerCustomEvent<ChannelManager[]>) => void;
         "onRequestApiDelete"?: (event: IrChannelManagerCustomEvent<any>) => void;
         "onRequestApiDestinationHierarchy"?: (event: IrChannelManagerCustomEvent<string>) => void;
+    }
+    interface IrChannelMapping {
     }
     interface IrCheckbox {
         "checked"?: boolean;
@@ -2300,7 +2397,12 @@ declare namespace LocalJSX {
         "ir-autocomplete": IrAutocomplete;
         "ir-booking-details": IrBookingDetails;
         "ir-button": IrButton;
+        "ir-channel": IrChannel;
+        "ir-channel-editor": IrChannelEditor;
+        "ir-channel-general": IrChannelGeneral;
+        "ir-channel-header": IrChannelHeader;
         "ir-channel-manager": IrChannelManager;
+        "ir-channel-mapping": IrChannelMapping;
         "ir-checkbox": IrCheckbox;
         "ir-checkboxes": IrCheckboxes;
         "ir-common": IrCommon;
@@ -2359,7 +2461,12 @@ declare module "@stencil/core" {
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
+            "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
+            "ir-channel-editor": LocalJSX.IrChannelEditor & JSXBase.HTMLAttributes<HTMLIrChannelEditorElement>;
+            "ir-channel-general": LocalJSX.IrChannelGeneral & JSXBase.HTMLAttributes<HTMLIrChannelGeneralElement>;
+            "ir-channel-header": LocalJSX.IrChannelHeader & JSXBase.HTMLAttributes<HTMLIrChannelHeaderElement>;
             "ir-channel-manager": LocalJSX.IrChannelManager & JSXBase.HTMLAttributes<HTMLIrChannelManagerElement>;
+            "ir-channel-mapping": LocalJSX.IrChannelMapping & JSXBase.HTMLAttributes<HTMLIrChannelMappingElement>;
             "ir-checkbox": LocalJSX.IrCheckbox & JSXBase.HTMLAttributes<HTMLIrCheckboxElement>;
             "ir-checkboxes": LocalJSX.IrCheckboxes & JSXBase.HTMLAttributes<HTMLIrCheckboxesElement>;
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;

@@ -275,6 +275,8 @@ export class IrBookingDetails {
     }
 
     return [
+      <ir-toast></ir-toast>,
+      <ir-interceptor></ir-interceptor>,
       <div class="fluid-container p-1">
         <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between mt-1">
           <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0  d-flex justify-content-start align-items-end">

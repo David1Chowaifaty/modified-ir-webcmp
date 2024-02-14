@@ -11,8 +11,10 @@
   <script src="assets/scripts/daterangepicker/moment.min.js"></script>
   <script src="assets/scripts/daterangepicker/daterangepicker.js"></script>
   <script src="assets/scripts/inputmask/jquery.inputmask.js"></script>
+  <!-- <script src="assets/scripts/switchery/switchery.js"></script> -->
   <script src="assets/scripts/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
+  <!-- <link rel="stylesheet" href="assets/scripts/switchery/switchery.css"> -->
 
   <style>
     body {
@@ -23,39 +25,43 @@
 
 <body>
   <ir-common></ir-common>
-  <!-- <igloo-calendar currency-name="USD" propertyid="42" language="en"
-    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar> -->
-  <ir-channel></ir-channel>
+  <igloo-calendar currency-name="USD" propertyid="42" language="en"
+    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+  <!-- <ir-channel propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-channel> -->
   <!-- <script src="assets/"></script> -->
   <!-- <ir-booking-details has-room-edit has-room-delete baseurl="https://gateway.igloorooms.com/IR" language="en"
     has-print="true" has-receipt></ir-booking-details> -->
 
   <script>
-    // var today = new Date();
-    // today.setDate(today.getDate() - 1);
-    // var _FROM_DATE = today.toISOString().substring(0, 10)
-    // today.setDate(today.getDate() + 60);
-    // var _TO_DATE = today.toISOString().substring(0, 10)
-    // const calendar = document.querySelector("igloo-calendar");
-    // calendar.from_date = _FROM_DATE;
-    // calendar.to_date = _TO_DATE;
-    //const bookingDetail = document.querySelector("ir-booking-details");
-    // setTimeout(() => {
-    //   sessionStorage.removeItem('token');
-    //   // Theo
-    //   // calendar.propertyid="235";
-    //   // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjE1MDMsIkNMQUlNLTAxIjoibk1nM0NIWDYzVjA9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.iKAxCG3kFTyHVhk7ugaSf0Rd-w2Ual69ocTyFq0IFXc";
+    var today = new Date();
+    today.setDate(today.getDate() - 1);
+    var _FROM_DATE = today.toISOString().substring(0, 10)
+    today.setDate(today.getDate() + 60);
+    var _TO_DATE = today.toISOString().substring(0, 10)
+    const calendar = document.querySelector("igloo-calendar");
+    calendar.from_date = _FROM_DATE;
+    calendar.to_date = _TO_DATE;
+    // const bookingDetail = document.querySelector("ir-booking-details");
+    // const irchannel = document.querySelector('ir-channel')
+    setTimeout(() => {
+      sessionStorage.removeItem('token');
+      const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDkwMzk3NDgsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiRThLMEFsdS9NdkU5eHpGSHo2SnQwZz09In0.GCFqI8rn4jbTSDytuHfwShDy43q8L_oXmbSrCYZGyR0";
+      // Theo
+      // calendar.propertyid="235";
+      // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjE1MDMsIkNMQUlNLTAxIjoibk1nM0NIWDYzVjA9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.iKAxCG3kFTyHVhk7ugaSf0Rd-w2Ual69ocTyFq0IFXc";
 
-    //   // Demo
-    //   calendar.propertyid = "42";
-    //   calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDkwMzk3NDgsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiRThLMEFsdS9NdkU5eHpGSHo2SnQwZz09In0.GCFqI8rn4jbTSDytuHfwShDy43q8L_oXmbSrCYZGyR0";
-    //   // Casa Mespilla
-    //   // calendar.propertyid = "229";
-    //   // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDA0OTEyNDEsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiZEMwZitSMk92c3A0S1YxY2JMak1Ob3FWSHZZSU1QTlp1QmtaWHNjY0R3RT0ifQ.l1xTiGkqS4zmgJilYfgQxVheC8Xt4wmQMfPNrH96V3g";
-    //   // bookingDetail.bookingNumber = "68226674"
-    //   // bookingDetail.propertyid = "42";
-    //   // bookingDetail.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDc4MjI0OTIsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiRThLMEFsdS9NdkY5OE1qU3ozZHVjdz09In0.fkF6OLMIk7LJYdtngCa2ddWjjVnSlAKE5nxFzpgTABU";
-    // }, 300)
+      // Demo
+      calendar.propertyid = "42";
+      calendar.ticket = ticket;
+      // irchannel.propertyid = "42";
+      // irchannel.ticket = ticket
+      // Casa Mespilla
+      // calendar.propertyid = "229";
+      // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDA0OTEyNDEsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiZEMwZitSMk92c3A0S1YxY2JMak1Ob3FWSHZZSU1QTlp1QmtaWHNjY0R3RT0ifQ.l1xTiGkqS4zmgJilYfgQxVheC8Xt4wmQMfPNrH96V3g";
+      // bookingDetail.bookingNumber = "65231376"
+      // bookingDetail.propertyid = "42";
+      // bookingDetail.ticket = ticket;
+    }, 300)
   </script>
 
 </body>

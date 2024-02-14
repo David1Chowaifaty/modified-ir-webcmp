@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+}
+.map-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.map-row span {
+  width: 49%;
+}
+.mapped-to-text {
+  text-align: right;
+  color: var(--red);
+  cursor: pointer;
+}

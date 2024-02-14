@@ -19,6 +19,7 @@ export class RoomService {
         calendar_data.is_vacation_rental = results.is_vacation_rental;
         calendar_data.pickup_service = results.pickup_service;
         calendar_data.max_nights = results.max_nights;
+        calendar_data.channels = results.channels;
         return data;
       }
     } catch (error) {

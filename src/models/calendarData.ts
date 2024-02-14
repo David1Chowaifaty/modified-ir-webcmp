@@ -16,6 +16,37 @@ export interface CalendarDataDetails {
   max_nights: number;
   allowed_payment_methods: IAllowedPaymentMethods[];
   pickup_service: IPickupService;
+  channels: IChannel[];
+}
+
+export interface IChannel {
+  id: number;
+  is_active: boolean;
+  map: IMap[];
+  name: string;
+  property: IChannelProperty;
+  title: string;
+}
+export interface IChannelProperty {
+  id: string;
+  name: string;
+  room_types: IChannelRoomTypes[];
+}
+export interface IChannelRoomTypes {
+  id: string;
+  name: string;
+  rate_plans: IChannelRatePlans[];
+}
+export interface IChannelRatePlans {
+  id: string;
+  name: string;
+}
+export interface IMap {
+  foreign_description: string;
+  foreign_id: string;
+  ir_description: string;
+  ir_id: string;
+  type: 'string';
 }
 export interface IPickupCurrency extends ICurrency {
   symbol: string;
