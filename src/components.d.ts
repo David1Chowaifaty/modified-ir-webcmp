@@ -579,6 +579,10 @@ export interface IglBookPropertyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookPropertyElement;
 }
+export interface IglBookPropertyContainerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBookPropertyContainerElement;
+}
 export interface IglBookPropertyFooterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookPropertyFooterElement;
@@ -818,7 +822,18 @@ declare global {
         prototype: HTMLIglBookPropertyElement;
         new (): HTMLIglBookPropertyElement;
     };
+    interface HTMLIglBookPropertyContainerElementEventMap {
+        "resetBookingData": null;
+    }
     interface HTMLIglBookPropertyContainerElement extends Components.IglBookPropertyContainer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBookPropertyContainerElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyContainerElement, ev: IglBookPropertyContainerCustomEvent<HTMLIglBookPropertyContainerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBookPropertyContainerElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyContainerElement, ev: IglBookPropertyContainerCustomEvent<HTMLIglBookPropertyContainerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIglBookPropertyContainerElement: {
         prototype: HTMLIglBookPropertyContainerElement;
@@ -1831,6 +1846,7 @@ declare namespace LocalJSX {
         "baseurl"?: string;
         "from_date"?: string;
         "language"?: string;
+        "onResetBookingData"?: (event: IglBookPropertyContainerCustomEvent<null>) => void;
         "propertyid"?: number;
         "ticket"?: string;
         "to_date"?: string;

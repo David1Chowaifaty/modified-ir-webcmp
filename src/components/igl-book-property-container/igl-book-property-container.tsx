@@ -2,7 +2,7 @@ import { IglBookPropertyPayloadPlusBooking } from '@/models/igl-book-property';
 import { BookingService } from '@/services/booking.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
-import { Component, Host, State, h, Prop, Watch } from '@stencil/core';
+import { Component, Host, State, h, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 import axios from 'axios';
 
 @Component({
@@ -22,6 +22,8 @@ export class IglBookPropertyContainer {
   @State() showPaymentDetails: any;
   @State() countryNodeList: any;
   @State() calendarData: any = {};
+
+  @Event() resetBookingData: EventEmitter<null>;
 
   private bookingService = new BookingService();
   private roomService = new RoomService();
@@ -116,6 +118,11 @@ export class IglBookPropertyContainer {
             language={this.language}
             propertyid={this.propertyid}
             bookingData={this.bookingItem}
+            onResetBookingData={(e: CustomEvent) => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.resetBookingData.emit(null);
+            }}
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
         )}

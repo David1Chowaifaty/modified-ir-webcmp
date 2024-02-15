@@ -37,7 +37,7 @@ export class IglBookProperty {
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
-  @Event({ bubbles: true, composed: true }) resetBookingData: EventEmitter<null>;
+  @Event() resetBookingData: EventEmitter<null>;
 
   private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private message: string = '';
