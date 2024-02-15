@@ -37,7 +37,7 @@ export class IglBookProperty {
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
-  @Event() resetBookingData: EventEmitter<null>;
+  @Event({ bubbles: true, composed: true }) resetBookingData: EventEmitter<null>;
 
   private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private message: string = '';
@@ -430,9 +430,7 @@ export class IglBookProperty {
       }
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
       await this.bookingService.bookUser(...serviceParams);
-      if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
-        this.resetBookingData.emit(null);
-      }
+      this.resetBookingData.emit(null);
     } catch (error) {
       // Handle error
     } finally {
