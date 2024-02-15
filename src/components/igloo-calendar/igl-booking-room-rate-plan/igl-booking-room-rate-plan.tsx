@@ -23,6 +23,7 @@ export class IglBookingRoomRatePlan {
   @Prop() isBookDisabled: boolean = false;
   @Prop() defaultRoomId;
   @Prop() selectedRoom;
+  @State() isInputFocused = false;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
@@ -264,16 +265,23 @@ export class IglBookingRoomRatePlan {
             <div class={'m-0 p-0 d-md-flex justify-content-between ml-md-1 '}>
               <div class=" d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   ">
                 <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
+                  <div class="input-group-prepend">
+                    <span data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text bg-white new-currency" id="basic-addon1">
+                      {getCurrencySymbol(this.currency.code)}
+                    </span>
+                  </div>
                   <input
+                    onFocus={() => (this.isInputFocused = true)}
+                    onBlur={() => (this.isInputFocused = false)}
                     disabled={this.disableForm()}
                     type="text"
-                    class="form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
+                    class="form-control pl-0 input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
                     value={this.renderRate()}
                     id={v4()}
                     placeholder={locales.entries.Lcz_Rate || 'Rate'}
                     onInput={(event: InputEvent) => this.handleInput(event)}
                   />
-                  <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
+                  {/* <span class="currency">{getCurrencySymbol(this.currency.code)}</span> */}
                 </fieldset>
                 <fieldset class="position-relative m-0 total-nights-container p-0 ">
                   <select

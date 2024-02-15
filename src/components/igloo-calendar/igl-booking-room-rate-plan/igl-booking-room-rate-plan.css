@@ -15,6 +15,7 @@
   line-height: 0;
   padding: 0;
   height: 0;
+  border-left: 0;
 }
 .rate-input-container {
   display: flex;
@@ -23,7 +24,19 @@
   box-sizing: border-box;
   flex: 1;
 }
-
+.new-currency {
+  color: #3b4781;
+  border: 1px solid #cacfe7;
+  font-size: 0.975rem;
+  height: 2rem;
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+.input-group-prepend span[data-state='focus'] {
+  border-color: var(--blue);
+}
 @media only screen and (min-width: 1200px) {
   .rateplan-name-container {
     width: 40%;
@@ -53,10 +66,6 @@
 
 .total-nights-container {
   width: max-content;
-}
-.rateInputBorder {
-  border-top-left-radius: 3px !important;
-  border-bottom-left-radius: 3px !important;
 }
 .nightBorder {
   border-left-width: 0;
