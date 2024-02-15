@@ -16,7 +16,6 @@ export interface CalendarDataDetails {
   max_nights: number;
   allowed_payment_methods: IAllowedPaymentMethods[];
   pickup_service: IPickupService;
-  connected_channels: IChannel[];
   is_frontdesk_enabled: boolean;
 }
 

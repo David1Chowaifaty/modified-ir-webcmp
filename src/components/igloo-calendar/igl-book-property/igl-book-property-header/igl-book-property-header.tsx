@@ -3,7 +3,6 @@ import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOp
 import { IToast } from '../../../ir-toast/toast';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 import interceptor_requests from '@/stores/ir-interceptor.store';
 
 @Component({
@@ -209,7 +208,6 @@ export class IglBookPropertyHeader {
         <div class={`d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}`}>
           <fieldset class="mt-lg-0  ">
             <igl-date-range
-              maxDate={moment().add(calendar_data.max_nights, 'days').format('YYYY-MM-DD')}
               dateLabel={locales.entries.Lcz_Dates}
               minDate={this.minDate}
               disabled={this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')}

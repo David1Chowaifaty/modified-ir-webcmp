@@ -1,5 +1,5 @@
 import { RoomService } from '@/services/room.service';
-import calendar_data from '@/stores/calendar-data';
+import channels_data from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, Watch, h, Element, State } from '@stencil/core';
 import axios from 'axios';
@@ -71,7 +71,7 @@ export class IrChannel {
                 </tr>
               </thead>
               <tbody>
-                {calendar_data.connected_channels?.map(channel => (
+                {channels_data.connected_channels?.map(channel => (
                   <tr key={channel.channel.id}>
                     <th scope="row" class="text-left">
                       {channel.title}
@@ -81,20 +81,20 @@ export class IrChannel {
                       <input data-switchery="true" type="checkbox" class="" checked={channel.is_active} />
                     </td>
                     <th>
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle text-primary" type="button" data-toggle="dropdown" aria-expanded="false">
+                      <div class="btn-group">
+                        <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Actions
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">
+                          <button class="dropdown-item" type="button">
                             Action
-                          </a>
-                          <a class="dropdown-item" href="#">
+                          </button>
+                          <button class="dropdown-item" type="button">
                             Another action
-                          </a>
-                          <a class="dropdown-item" href="#">
+                          </button>
+                          <button class="dropdown-item" type="button">
                             Something else here
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </th>

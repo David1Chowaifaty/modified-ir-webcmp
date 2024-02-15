@@ -1,9 +1,8 @@
-import { IExposedChannel } from '@/models/calendarData';
-import calendar_data from '@/stores/calendar-data';
+import channels_data from '@/stores/channel.store';
 
 export class IrMappingService {
-  public checkMappingExists(id: string, selected_channel: IExposedChannel) {
-    //return calendar_data.connected_channels.map.find(m => m.foreign_id === id);
+  public checkMappingExists(id: string) {
+    return channels_data.mappedChannel.find(m => m.channel_id === id);
   }
   // public getAppropriateRooms(isRoomType:boolean,room_type_id:string,selected_channel:IChannel) {
   //   if (isRoomType) {

@@ -23,7 +23,7 @@ export class RoomService {
         calendar_data.is_vacation_rental = results.is_vacation_rental;
         calendar_data.pickup_service = results.pickup_service;
         calendar_data.max_nights = results.max_nights;
-        calendar_data.connected_channels = results.connected_channels;
+        channels_data.connected_channels = results.connected_channels;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }
