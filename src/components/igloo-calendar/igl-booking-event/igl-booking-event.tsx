@@ -320,7 +320,10 @@ export class IglBookingEvent {
   }
 
   getBookedBy() {
-    return this.bookingEvent.NAME;
+    if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
+      return <p></p>;
+    }
+    return this.bookingEvent?.NAME;
   }
 
   getBookedRoomId() {
@@ -578,6 +581,9 @@ export class IglBookingEvent {
     this.updateEventData.emit(data);
   }
   renderEventBookingNumber() {
+    if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
+      return '';
+    }
     if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
       return '';
     }
