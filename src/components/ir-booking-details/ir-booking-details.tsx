@@ -274,10 +274,12 @@ export class IrBookingDetails {
       </Fragment>,
       <div class="fluid-container p-1">
         <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between mt-1">
-          <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0  d-flex justify-content-start align-items-end">
+          <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0  d-flex justify-content-start align-items-center">
             <p class="font-size-large m-0 p-0">{`${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`}</p>
-            <p class="m-0 p-0 header-date">
-              {!this.bookingData.is_direct ? this.bookingData.channel_booking_nbr : ''} {_formatDate(this.bookingData.booked_on.date)} {/* format time */}
+            <p class="m-0 p-0 ">
+              <span class="mx-1 m-0">
+                {!this.bookingData.is_direct ? this.bookingData.channel_booking_nbr : ''} {_formatDate(this.bookingData.booked_on.date)} {/* format time */}
+              </span>
               {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
             </p>
           </div>
