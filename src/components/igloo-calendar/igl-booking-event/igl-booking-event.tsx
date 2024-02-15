@@ -320,10 +320,7 @@ export class IglBookingEvent {
   }
 
   getBookedBy() {
-    if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
-      return <p></p>;
-    }
-    return this.bookingEvent?.NAME;
+    return this.bookingEvent.NAME;
   }
 
   getBookedRoomId() {
@@ -653,7 +650,8 @@ export class IglBookingEvent {
         {balanceNode ? <div class="legend_circle balanceIcon" style={{ backgroundColor: balanceNode.color }}></div> : null}
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
         <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
-          {`${this.getBookedBy()}${this.renderEventBookingNumber()}`}
+          {this.getBookedBy()}
+          {this.renderEventBookingNumber()}
         </div>
 
         <Fragment>
