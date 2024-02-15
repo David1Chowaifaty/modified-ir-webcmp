@@ -25,8 +25,15 @@
 
 <body>
   <ir-common></ir-common>
-  <igloo-calendar currency-name="USD" propertyid="42" language="en"
-    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+  <!-- <igloo-calendar currency-name="USD" propertyid="42" language="en"
+    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar> -->
+  <igl-book-property-container propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR">
+    <svg heigth="20" width="17.5" slot="trigger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+      <path
+        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+    </svg>
+
+  </igl-book-property-container>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
   <!-- <ir-channel propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-channel> -->
   <!-- <script src="assets/"></script> -->
@@ -39,11 +46,13 @@
     var _FROM_DATE = today.toISOString().substring(0, 10)
     today.setDate(today.getDate() + 60);
     var _TO_DATE = today.toISOString().substring(0, 10)
-    const calendar = document.querySelector("igloo-calendar");
-    calendar.from_date = _FROM_DATE;
-    calendar.to_date = _TO_DATE;
+    const book_container = document.querySelector('igl-book-property-container')
+    book_container.from_date = _FROM_DATE;
+    book_container.to_date = _TO_DATE;
     // const bookingDetail = document.querySelector("ir-booking-details");
     // const irchannel = document.querySelector('ir-channel')
+
+
     setTimeout(() => {
       sessionStorage.removeItem('token');
       const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDkwMzk3NDgsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiRThLMEFsdS9NdkU5eHpGSHo2SnQwZz09In0.GCFqI8rn4jbTSDytuHfwShDy43q8L_oXmbSrCYZGyR0";
@@ -52,8 +61,8 @@
       // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTk2MjE1MDMsIkNMQUlNLTAxIjoibk1nM0NIWDYzVjA9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0Ijoiek5Gdzc1RThFVjdNMWt3aTdZNStMbFQ5dGF6VkRyOFl2aE5NWll3QytwND0ifQ.iKAxCG3kFTyHVhk7ugaSf0Rd-w2Ual69ocTyFq0IFXc";
 
       // Demo
-      calendar.propertyid = "42";
-      calendar.ticket = ticket;
+      // calendar.propertyid = "42";
+      // calendar.ticket = ticket;
 
       // irchannel.propertyid = "42";
       // irchannel.ticket = ticket
@@ -61,8 +70,8 @@
       // calendar.propertyid = "229";
       // calendar.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDA0OTEyNDEsIkNMQUlNLTAxIjoiaU45QjZWZURNTkk9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiZEMwZitSMk92c3A0S1YxY2JMak1Ob3FWSHZZSU1QTlp1QmtaWHNjY0R3RT0ifQ.l1xTiGkqS4zmgJilYfgQxVheC8Xt4wmQMfPNrH96V3g";
       // bookingDetail.bookingNumber = "65231376"
-      // bookingDetail.propertyid = "42";
-      // bookingDetail.ticket = ticket;
+      book_container.propertyid = "42";
+      book_container.ticket = ticket;
     }, 300)
   </script>
 
