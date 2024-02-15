@@ -266,7 +266,7 @@ export class IglBookingRoomRatePlan {
               <div class=" d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   ">
                 <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
                   <div class="input-group-prepend">
-                    <span data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text bg-white new-currency" id="basic-addon1">
+                    <span data-disabled={this.disableForm()} data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text new-currency" id="basic-addon1">
                       {getCurrencySymbol(this.currency.code)}
                     </span>
                   </div>
