@@ -16,17 +16,20 @@ export interface CalendarDataDetails {
   max_nights: number;
   allowed_payment_methods: IAllowedPaymentMethods[];
   pickup_service: IPickupService;
-  channels: IChannel[];
+  connected_channels: IChannel[];
   is_frontdesk_enabled: boolean;
 }
 
 export interface IChannel {
-  id: number;
+  channel: IExposedChannel;
   is_active: boolean;
   map: IMap[];
+  title: string;
+}
+export interface IExposedChannel {
+  id: number;
   name: string;
   property: IChannelProperty;
-  title: string;
 }
 export interface IChannelProperty {
   id: string;
@@ -43,11 +46,8 @@ export interface IChannelRatePlans {
   name: string;
 }
 export interface IMap {
-  foreign_description: string;
-  foreign_id: string;
-  ir_description: string;
+  channel_id: string;
   ir_id: string;
-  type: 'string';
 }
 export interface IPickupCurrency extends ICurrency {
   symbol: string;

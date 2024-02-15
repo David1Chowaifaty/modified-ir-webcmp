@@ -2,6 +2,7 @@ import { Component, Host, Prop, h, State, Event, EventEmitter, Watch, Fragment }
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 @Component({
   tag: 'igl-booking-room-rate-plan',
   styleUrl: 'igl-booking-room-rate-plan.css',
@@ -44,7 +45,7 @@ export class IglBookingRoomRatePlan {
     if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
       return false;
     } else {
-      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || this.selectedData.physicalRooms.length === 0;
+      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || (calendar_data.is_frontdesk_enabled && this.selectedData.physicalRooms.length === 0);
     }
   }
 

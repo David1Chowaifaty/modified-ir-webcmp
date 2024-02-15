@@ -12,7 +12,7 @@ import axios from 'axios';
 export class IrChannel {
   @Element() el: HTMLElement;
 
-  @Prop() ticket: string;
+  @Prop() ticket: string = '';
   @Prop() propertyid: number;
   @Prop() language: string;
   @Prop() baseurl: string;
@@ -21,7 +21,7 @@ export class IrChannel {
 
   private roomService = new RoomService();
 
-  componentDidLoad() {
+  componentWillLoad() {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -31,7 +31,12 @@ export class IrChannel {
   }
   async initializeApp() {
     try {
-      const [_, languageTexts] = await Promise.all([this.roomService.fetchData(this.propertyid, this.language), this.roomService.fetchLanguage(this.language)]);
+      const [, , languageTexts] = await Promise.all([
+        this.roomService.fetchData(this.propertyid, this.language),
+        this.roomService.getExposedChannels(),
+        this.roomService.fetchLanguage(this.language),
+      ]);
+      console.log(languageTexts);
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
@@ -66,12 +71,12 @@ export class IrChannel {
                 </tr>
               </thead>
               <tbody>
-                {calendar_data.channels?.map(channel => (
-                  <tr key={channel.id}>
+                {calendar_data.connected_channels?.map(channel => (
+                  <tr key={channel.channel.id}>
                     <th scope="row" class="text-left">
                       {channel.title}
                     </th>
-                    <th scope="row">{channel.name}</th>
+                    <th scope="row">{channel.channel.name}</th>
                     <td>
                       <input data-switchery="true" type="checkbox" class="" checked={channel.is_active} />
                     </td>

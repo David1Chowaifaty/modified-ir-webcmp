@@ -14,6 +14,8 @@
   <script src="assets/scripts/bootstrap.bundle.min.js"></script>
   <script src="assets/scripts/toastr/toastr.min.js"></script>
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
+
+
   <style>
     body {
       overflow-x: hidden;
@@ -23,23 +25,14 @@
 
 <body>
   <ir-common></ir-common>
-  <igloo-calendar currency-name="USD" propertyid="42" language="en"
-    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+  <ir-channel propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-channel>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
-
   <script>
-    var today = new Date();
-    today.setDate(today.getDate() - 1);
-    var _FROM_DATE = today.toISOString().substring(0, 10)
-    today.setDate(today.getDate() + 60);
-    var _TO_DATE = today.toISOString().substring(0, 10)
-    const calendar = document.querySelector("igloo-calendar");
-    calendar.from_date = _FROM_DATE;
-    calendar.to_date = _TO_DATE;
+    const irchannel = document.querySelector('ir-channel')
     setTimeout(() => {
       const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDkwMzk3NDgsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiRThLMEFsdS9NdkU5eHpGSHo2SnQwZz09In0.GCFqI8rn4jbTSDytuHfwShDy43q8L_oXmbSrCYZGyR0";
-      calendar.propertyid = "42";
-      calendar.ticket = ticket;
+      irchannel.propertyid = "42";
+      irchannel.ticket = ticket
     }, 300)
   </script>
 

@@ -1,3 +1,4 @@
+import { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Listen, State, h } from '@stencil/core';
 
@@ -14,7 +15,7 @@ export class IrChannelEditor {
       name: 'General Settings',
       disabled: false,
     },
-    { id: 'mapping', name: 'Mapping', disabled: false },
+    { id: 'mapping', name: 'Mapping', disabled: true },
     { id: 'channel_booking', name: 'Channel Booking', disabled: true },
   ];
   @State() selectedRoomType = [];
@@ -23,6 +24,11 @@ export class IrChannelEditor {
 
   componentWillLoad() {
     this.selectedTab = this.headerTitles[0].id;
+    onChannelChange('selectedChannel', newValue => {
+      if (!!newValue) {
+        this.enableAllHeaders();
+      }
+    });
   }
 
   @Listen('tabChanged')
