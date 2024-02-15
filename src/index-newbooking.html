@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html>
 
 <head>
     <meta charset="utf-8" />
@@ -14,7 +14,7 @@
     <script src="assets/scripts/bootstrap.bundle.min.js"></script>
     <script src="assets/scripts/toastr/toastr.min.js"></script>
     <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
-    <!-- <link rel="stylesheet" href="assets/scripts/switchery/switchery.css"> -->
+
 
     <style>
         body {
@@ -25,13 +25,30 @@
 
 <body>
     <ir-common></ir-common>
+    <igl-book-property-container propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR">
+        <svg heigth="20" width="17.5" slot="trigger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+        </svg>
 
+    </igl-book-property-container>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
-
-
     <script>
+        var today = new Date();
+        today.setDate(today.getDate() - 1);
+        var _FROM_DATE = today.toISOString().substring(0, 10)
+        today.setDate(today.getDate() + 60);
+        var _TO_DATE = today.toISOString().substring(0, 10)
+        const book_container = document.querySelector('igl-book-property-container')
+        book_container.from_date = _FROM_DATE;
+        book_container.to_date = _TO_DATE;
 
-
+        setTimeout(() => {
+            sessionStorage.removeItem('token');
+            const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDkwMzk3NDgsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiRThLMEFsdS9NdkU5eHpGSHo2SnQwZz09In0.GCFqI8rn4jbTSDytuHfwShDy43q8L_oXmbSrCYZGyR0";
+            book_container.propertyid = "42";
+            book_container.ticket = ticket;
+        }, 300)
     </script>
 
 </body>

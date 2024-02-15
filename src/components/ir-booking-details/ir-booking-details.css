@@ -30,6 +30,9 @@
 .pickup-margin {
   margin-bottom: 7px !important;
 }
+.header-date {
+  padding-left: 5px !important;
+}
 
 .pointer {
   cursor: pointer;
