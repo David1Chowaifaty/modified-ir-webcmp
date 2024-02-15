@@ -4,8 +4,8 @@
 }
 :host {
   display: flex;
-  /* align-items: center; */
   margin-bottom: 5px;
+  gap: 5px;
 }
 .icon {
   margin-left: 3px;

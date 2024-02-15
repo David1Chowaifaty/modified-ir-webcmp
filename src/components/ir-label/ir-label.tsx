@@ -25,9 +25,9 @@ export class IrLabel {
     }
 
     return (
-      <Host>
+      <Host class={this.imageSrc ? 'align-items-center' : ''}>
         <strong>{this.label}</strong>
-        {this.imageSrc && <img src={this.imageSrc} />}
+        {this.imageSrc && <img src={this.imageSrc} class="p-0 m-0" />}
         <p>{this.value}</p>
         {this.iconShown && (
           <div class="icon-container">
