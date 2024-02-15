@@ -577,7 +577,15 @@ export class IglBookingEvent {
   updateData(data: any) {
     this.updateEventData.emit(data);
   }
-
+  renderEventBookingNumber() {
+    if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
+      return '';
+    }
+    if (!this.bookingEvent.is_direct) {
+      return ` - ${this.bookingEvent.channel_booking_nbr}`;
+    }
+    return ` - ${this.bookingEvent.BOOKING_NUMBER}`;
+  }
   showEventInfo(showInfo) {
     if (this.isHighlightEventType() || this.bookingEvent.hideBubble) {
       return null;
@@ -639,7 +647,7 @@ export class IglBookingEvent {
         {balanceNode ? <div class="legend_circle balanceIcon" style={{ backgroundColor: balanceNode.color }}></div> : null}
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
         <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
-          {this.getBookedBy()}
+          {`${this.getBookedBy()}${this.renderEventBookingNumber()}`}
         </div>
 
         <Fragment>
