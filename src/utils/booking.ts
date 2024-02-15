@@ -189,8 +189,8 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
     //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
     // }
   };
-
-  data.rooms.forEach(room => {
+  const rooms = data.rooms.filter(room => !!room['assigned_units_pool']);
+  rooms.forEach(room => {
     bookings.push({
       ID: room['assigned_units_pool'],
       TO_DATE: room.to_date,
