@@ -267,24 +267,26 @@ export class IrRoom {
               </Fragment>
             ) : (
               <Fragment>
-                {(() => {
-                  const filtered_data = this.item.ota_atxes.filter(tx => tx.amount > 0);
-                  return filtered_data.map((tax, index) => {
-                    if (!tax.is_exlusive) {
+                <div class={'tax-width '}>
+                  {(() => {
+                    const filtered_data = this.item.ota_atxes.filter(tx => tx.amount > 0);
+                    return filtered_data.map((tax, index) => {
+                      if (!tax.is_exlusive) {
+                        return (
+                          <span class={`p-0 m-0 `}>
+                            {' '}
+                            {this.defaultTexts.entries.Lcz_Including} {tax.name} {tax.currency.symbol + tax.amount} {index < filtered_data.length - 1 ? ' - ' : ''}
+                          </span>
+                        );
+                      }
                       return (
-                        <span class={`p-0 m-0 `}>
-                          {' '}
-                          {this.defaultTexts.entries.Lcz_Including} {tax.name} {tax.currency.symbol + tax.amount} {index < filtered_data.length - 1 ? ' - ' : ''}
+                        <span class={`p-0 m-0`}>
+                          {this.defaultTexts.entries.Lcz_Excluding} {tax.name} {tax.currency.symbol + tax.amount} {index < filtered_data.length - 1 ? ' - ' : ''}
                         </span>
                       );
-                    }
-                    return (
-                      <span class={`p-0 m-0`}>
-                        {this.defaultTexts.entries.Lcz_Excluding} {tax.name} {tax.currency.symbol + tax.amount} {index < filtered_data.length - 1 ? ' - ' : ''}
-                      </span>
-                    );
-                  });
-                })()}
+                    });
+                  })()}
+                </div>
               </Fragment>
             )}
             <p class="p-0 m-0 ml-1 font-weight-bold">{_formatAmount(this.item['gross_total'], this.currency)}</p>
