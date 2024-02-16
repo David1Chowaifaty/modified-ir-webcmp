@@ -10,18 +10,20 @@ export class IrChannelGeneral {
   render() {
     return (
       <Host>
-        <ir-select
-          selectContainerStyle="mb-1"
-          onSelectChange={(e: CustomEvent) => selectChannel(e.detail)}
-          class={'m-0 mb-1'}
-          LabelAvailable={false}
+        <p>Channel</p>
+        <ir-combobox
+          value={channels_data.selectedChannel?.name}
+          onComboboxValueChange={(e: CustomEvent) => {
+            selectChannel(e.detail.data.toString());
+          }}
+          placeholder="Choose channel from list"
           data={
             channels_data.channels.map(channel => ({
-              value: channel.id,
-              text: channel.name,
+              id: channel.id,
+              name: channel.name,
             })) as any
           }
-        ></ir-select>
+        ></ir-combobox>
       </Host>
     );
   }

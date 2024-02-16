@@ -149,6 +149,8 @@ export type LocalizationStrings = {
   Lcz_Pickup_YesFrom: string;
   Lcz_Pickup_NoThankYou: string;
   Lcz_EnterAmount: string;
+  Lcz_Excluding: string;
+  Lcz_Including: string;
 };
 
 const initialState: ILocale = {

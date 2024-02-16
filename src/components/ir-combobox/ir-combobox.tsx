@@ -1,4 +1,5 @@
 import { IToast } from '@/components';
+import locales from '@/stores/locales.store';
 import { Component, Prop, State, h, Element, Event, EventEmitter, Listen } from '@stencil/core';
 
 @Component({
@@ -7,22 +8,35 @@ import { Component, Prop, State, h, Element, Event, EventEmitter, Listen } from 
   scoped: true,
 })
 export class IrCombobox {
-  @Prop({ mutable: true }) data: { id: number; name: string }[] = [];
+  @Prop({ mutable: true }) data: { id: string; name: string }[] = [];
   @Prop() duration: number = 300;
+  @Prop() placeholder: string;
+  @Prop() value: string;
+  @Prop() autoFocus: boolean = false;
 
   @State() selectedIndex: number = -1;
   @State() isComboBoxVisible: boolean = false;
   @State() isLoading: boolean = true;
   @State() isItemSelected: boolean;
   @State() inputValue: string = '';
+  @State() filteredData: { id: string; name: string }[] = [];
 
   @Element() el: HTMLElement;
-  @Event({ bubbles: true, composed: true }) comboboxValue: EventEmitter<{ key: string; data: unknown }>;
+  @Event({ bubbles: true, composed: true }) comboboxValueChange: EventEmitter<{ key: string; data: unknown }>;
   @Event() inputCleared: EventEmitter<null>;
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
+
   private inputRef: HTMLInputElement;
   private debounceTimer: any;
-
+  private blurTimout: NodeJS.Timeout;
+  componentWillLoad() {
+    this.filteredData = this.data;
+  }
+  componentDidLoad() {
+    if (this.autoFocus) {
+      this.inputRef.focus();
+    }
+  }
   handleKeyDown(event: KeyboardEvent) {
     const dataSize = this.data.length;
     const itemHeight = this.getHeightOfPElement();
@@ -75,9 +89,10 @@ export class IrCombobox {
   }
 
   selectItem(index) {
-    if (this.data[index]) {
+    console.log('clicked');
+    if (this.filteredData[index]) {
       this.isItemSelected = true;
-      // this.comboboxValue.emit({ key: 'select', data: this.data[index] });
+      this.comboboxValueChange.emit({ key: 'select', data: this.filteredData[index].id });
       this.inputValue = '';
       this.resetCombobox();
     }
@@ -101,13 +116,13 @@ export class IrCombobox {
     if (withblur) {
       this.inputRef?.blur();
     }
-    this.data = [];
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
   }
   async fetchData() {
     try {
       this.isLoading = true;
+      this.filteredData = this.data.filter(d => d.name.toLowerCase().startsWith(this.inputValue));
     } catch (error) {
       console.log('error', error);
     } finally {
@@ -120,8 +135,7 @@ export class IrCombobox {
     if (this.inputValue) {
       this.debounceFetchData();
     } else {
-      clearTimeout(this.debounceTimer);
-      this.resetCombobox(false);
+      this.filteredData = this.data;
     }
   }
 
@@ -134,15 +148,14 @@ export class IrCombobox {
   }
 
   handleBlur() {
-    setTimeout(() => {
+    this.blurTimout = setTimeout(() => {
       if (!this.isItemSelected) {
-        this.comboboxValue.emit({ key: 'blur', data: this.inputValue });
         this.inputValue = '';
         this.resetCombobox();
       } else {
         this.isItemSelected = false;
       }
-    }, 200);
+    }, 300);
   }
   isDropdownItem(element) {
     return element && element.closest('.combobox');
@@ -150,6 +163,7 @@ export class IrCombobox {
 
   disconnectedCallback() {
     clearTimeout(this.debounceTimer);
+    clearTimeout(this.blurTimout);
     this.inputRef?.removeEventListener('blur', this.handleBlur);
     this.inputRef?.removeEventListener('click', this.selectItem);
     this.inputRef?.removeEventListener('keydown', this.handleKeyDown);
@@ -167,13 +181,45 @@ export class IrCombobox {
       return;
     }
   }
+  renderDropdown() {
+    if (!this.isComboBoxVisible) {
+      return null;
+    }
+    return (
+      <ul>
+        {this.filteredData?.map((d, index) => (
+          <li
+            role="button"
+            key={d.id}
+            onKeyDown={e => this.handleItemKeyDown(e, index)}
+            data-selected={this.selectedIndex === index}
+            tabIndex={0}
+            onClick={() => this.selectItem(index)}
+          >
+            {d.name}
+          </li>
+        ))}
+
+        {this.filteredData.length === 0 && !this.isLoading && <span class={'text-center'}>{locales.entries.Lcz_NoResultsFound}</span>}
+      </ul>
+    );
+  }
   render() {
     return (
       <fieldset class="m-0 p-0">
-        <input type="text" class="form-control" />
-        <ul class="">
-          <p>Room 1</p>
-        </ul>
+        <input
+          autoFocus={this.autoFocus}
+          ref={el => (this.inputRef = el)}
+          type="text"
+          value={this.value}
+          placeholder={this.placeholder}
+          class="form-control"
+          onKeyDown={this.handleKeyDown.bind(this)}
+          onBlur={this.handleBlur.bind(this)}
+          onInput={this.handleInputChange.bind(this)}
+          onFocus={this.handleFocus.bind(this)}
+        />
+        {this.renderDropdown()}
       </fieldset>
     );
   }

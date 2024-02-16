@@ -1,4 +1,4 @@
-import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Watch } from '@stencil/core';
+import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Watch, Host, Fragment } from '@stencil/core';
 import { _formatAmount, _formatDate, _getDay } from '../functions';
 import { Booking, IUnit, Room } from '../../../models/booking.dto';
 import { TIglBookPropertyPayload } from '../../../models/igl-book-property';
@@ -184,7 +184,7 @@ export class IrRoom {
   }
   render() {
     return (
-      <div class="p-1 d-flex m-0">
+      <Host class="p-1 d-flex m-0">
         <ir-icon
           id="drawer-icon"
           data-toggle="collapse"
@@ -212,17 +212,16 @@ export class IrRoom {
             </svg>
           )}
         </ir-icon>
-        <div class="w-100 m-0">
-          <div class="d-flex align-items-end justify-content-between">
-            <div>
-              <strong>{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName} {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
-              {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
-            </div>
-            <div class="d-flex">
-              {/* <span class="mr-1">{this.item.TOTAL_AMOUNT + this.item.EXCLUDED_TAXES}</span> */}
-              <p class="mr-1 p-0 m-0 ">{_formatAmount(this.item.total, this.currency)}</p>
+        <div class="flex-fill m-0 ">
+          <div class="d-flex align-items-start justify-content-between">
+            <p class="m-0 p-0">
+              <strong class="m-0 p-0">{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName}{' '}
+              {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
+            </p>
+            {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
+            <div class="d-flex m-0 p-0">
               {this.hasRoomEdit && (
-                <ir-icon id={`roomEdit-${this.item.identifier}`} class="pointer mr-1" onClick={this.handleEditClick.bind(this)}>
+                <ir-icon id={`roomEdit-${this.item.identifier}`} class="pointer mx-1" onClick={this.handleEditClick.bind(this)}>
                   <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
                     <path
                       fill="#6b6f82"
@@ -232,7 +231,7 @@ export class IrRoom {
                 </ir-icon>
               )}
               {this.hasRoomDelete && (
-                <ir-icon onClick={this.handleDeleteClick.bind(this)} id={`roomDelete-${this.item.identifier}`} class="pointer mr-1">
+                <ir-icon onClick={this.handleDeleteClick.bind(this)} id={`roomDelete-${this.item.identifier}`} class="pointer">
                   <svg slot="icon" fill="#ff2441" xmlns="http://www.w3.org/2000/svg" height="16" width="14.25" viewBox="0 0 448 512">
                     <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" />
                   </svg>
@@ -240,9 +239,55 @@ export class IrRoom {
               )}
             </div>
           </div>
-          <div>
-            <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
-            {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>}
+          <div class="py-1 d-flex w-full align-items-center justify-content-end">
+            {this.bookingEvent.is_direct ? (
+              <Fragment>
+                <div class={'tax-width '}>
+                  {(() => {
+                    const filtered_data = calendar_data.taxes.filter(tx => tx.pct > 0);
+                    return filtered_data.map((tax, index) => {
+                      if (!tax.is_exlusive) {
+                        return (
+                          <span class={`p-0 m-0 `}>
+                            {' '}
+                            {this.defaultTexts.entries.Lcz_Including} {tax.name} ({tax.pct.toFixed(0)}%) {_formatAmount(this.item.total * (tax.pct / 100), this.currency)}{' '}
+                            {index < filtered_data.length - 1 ? ' - ' : ''}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span class={`p-0 m-0`}>
+                          {this.defaultTexts.entries.Lcz_Excluding} {tax.name} ({tax.pct.toFixed(0)}%) {_formatAmount(this.item.total * (tax.pct / 100), this.currency)}{' '}
+                          {index < filtered_data.length - 1 ? ' - ' : ''}
+                        </span>
+                      );
+                    });
+                  })()}
+                </div>
+              </Fragment>
+            ) : (
+              <Fragment>
+                {(() => {
+                  const filtered_data = this.item.ota_atxes.filter(tx => tx.amount > 0);
+                  return filtered_data.map((tax, index) => {
+                    if (!tax.is_exlusive) {
+                      return (
+                        <span class={`p-0 m-0 `}>
+                          {' '}
+                          {this.defaultTexts.entries.Lcz_Including} {tax.name} {tax.currency.symbol + tax.amount} {index < filtered_data.length - 1 ? ' - ' : ''}
+                        </span>
+                      );
+                    }
+                    return (
+                      <span class={`p-0 m-0`}>
+                        {this.defaultTexts.entries.Lcz_Excluding} {tax.name} {tax.currency.symbol + tax.amount} {index < filtered_data.length - 1 ? ' - ' : ''}
+                      </span>
+                    );
+                  });
+                })()}
+              </Fragment>
+            )}
+            <p class="p-0 m-0 ml-1 font-weight-bold">{_formatAmount(this.item['gross_total'], this.currency)}</p>
           </div>
           <div class="d-flex align-items-center">
             <span class=" mr-1">
@@ -251,6 +296,10 @@ export class IrRoom {
             {calendar_data.is_frontdesk_enabled && this.item.unit && <span class="light-blue-bg mr-2 ">{(this.item.unit as IUnit).name}</span>}
             {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
+          </div>
+          <div>
+            <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
+            {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.item.identifier.split(' ').join('')}`}>
             <div class="d-flex">
@@ -288,7 +337,7 @@ export class IrRoom {
             this.defaultTexts.entries.Lcz_FromThisBooking
           }`}
         ></ir-modal>
-      </div>
+      </Host>
     );
   }
 }

@@ -20,7 +20,7 @@
 .sidebar-right {
   position: fixed;
   top: 0;
-  right: -100%;
+  right: -120%;
   bottom: 0;
   width: var(--sidebar-width, 40rem);
   max-width: 100%;

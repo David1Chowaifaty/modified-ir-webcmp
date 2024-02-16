@@ -282,7 +282,8 @@ export class IrBookingDetails {
                   {this.bookingData.channel_booking_nbr} {/* format time */}
                 </span>
               )}
-              {_formatDate(this.bookingData.booked_on.date)}
+              <span class="date-margin">{_formatDate(this.bookingData.booked_on.date)}</span>
+
               {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
             </p>
           </div>

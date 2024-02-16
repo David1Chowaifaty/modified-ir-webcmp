@@ -1,14 +1,25 @@
+import calendar_data from '@/stores/calendar-data';
 import channels_data from '@/stores/channel.store';
 
 export class IrMappingService {
   public checkMappingExists(id: string) {
     return channels_data.mappedChannel.find(m => m.channel_id === id);
   }
-  // public getAppropriateRooms(isRoomType:boolean,room_type_id:string,selected_channel:IChannel) {
-  //   if (isRoomType) {
-  //     return calendar_data.roomsInfo.filter(room=>selected_channel.map.find(m=>m.ir_id===room.id.toString()))
-  //   }
-  //   const
+  public getAppropriateRooms(isRoomType: boolean, roomTypeId?: string) {
+    if (isRoomType) {
+      const filteredRoomTypes = calendar_data.roomsInfo.filter(
+        room => channels_data.mappedChannel.find(m => m.ir_id.toString() === room.id.toString()) === undefined && room.is_active,
+      );
+      return filteredRoomTypes.map(room => ({ id: room.id.toString(), name: room.name }));
+    }
+    if (!roomTypeId) {
+      throw new Error('Missing roomType id');
+    }
+    //find the selected roomType
+    const selectedRoomType = calendar_data.roomsInfo.filter(room => channels_data.mappedChannel.find(m => m.channel_id.toString() === roomTypeId) && room.is_active);
+    console.log(selectedRoomType);
 
-  // }
+    // console.log(filteredRoomTypes);
+    //filter all the room types that are taken
+  }
 }

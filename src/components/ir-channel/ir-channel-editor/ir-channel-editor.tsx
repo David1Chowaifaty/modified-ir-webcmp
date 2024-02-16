@@ -60,7 +60,7 @@ export class IrChannelEditor {
 
   render() {
     return (
-      <Host class="px-1">
+      <Host class="px-1 d-flex flex-column h-100">
         <nav class="position-sticky sticky-top py-1 top-0 bg-white">
           <div class="d-flex align-items-center  justify-content-between">
             <h3 class="text-left font-medium-2  py-0 my-0">Create Channel</h3>
@@ -77,8 +77,8 @@ export class IrChannelEditor {
           </div>
           <ir-channel-header class="mt-1 px-0" headerTitles={this.headerTitles}></ir-channel-header>
         </nav>
-        <section class="pb-1">{this.renderTabScreen()}</section>
-        <ir-button class="w-100 mt-3" btn_styles="justify-content-center" text={locales.entries.Lcz_Save}></ir-button>
+        <section class="pb-1 flex-fill">{this.renderTabScreen()}</section>
+        <ir-button class="w-100" btn_styles="justify-content-center" text={locales.entries.Lcz_Save}></ir-button>
       </Host>
     );
   }

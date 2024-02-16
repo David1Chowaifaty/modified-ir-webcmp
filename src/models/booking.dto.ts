@@ -133,6 +133,18 @@ export interface Room {
   total: number;
   identifier: string;
   unit: string | number | IUnit | null;
+  ota_atxes: IOtaTax[];
+}
+export interface IOtaTax {
+  amount: number;
+  currency: IOtaTaxCurrency;
+  is_exlusive: boolean;
+  name: string;
+}
+export interface IOtaTaxCurrency {
+  code: string;
+  id: number;
+  symbol: string;
 }
 export interface IUnit {
   calendar_cell: null;

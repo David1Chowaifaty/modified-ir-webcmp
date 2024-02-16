@@ -4,14 +4,11 @@ import { locales } from '@/stores/locales.store';
 import axios from 'axios';
 
 export class RoomService {
-  private token: string;
-  constructor() {
-    this.token = JSON.parse(sessionStorage.getItem('token'));
-  }
   public async fetchData(id: number, language: string) {
     try {
-      if (this.token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Property?Ticket=${this.token}`, { id, language });
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Property?Ticket=${token}`, { id, language });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -23,7 +20,9 @@ export class RoomService {
         calendar_data.is_vacation_rental = results.is_vacation_rental;
         calendar_data.pickup_service = results.pickup_service;
         calendar_data.max_nights = results.max_nights;
+        calendar_data.roomsInfo = results.roomtypes;
         channels_data.connected_channels = results.connected_channels;
+        calendar_data.taxes = results.taxes;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }
@@ -34,8 +33,9 @@ export class RoomService {
   }
   public async getExposedChannels() {
     try {
-      if (this.token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${this.token}`, {});
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${token}`, {});
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -50,8 +50,9 @@ export class RoomService {
   }
   public async fetchLanguage(code: string) {
     try {
-      if (this.token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${this.token}`, { code });
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
