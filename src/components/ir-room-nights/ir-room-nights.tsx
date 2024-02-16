@@ -32,6 +32,7 @@ export class IrRoomNights {
   @State() inventory: number | null = null;
   @State() isEndDateBeforeFromDate: boolean = false;
   @State() defaultTotalNights = 0;
+  @State() isInputFocused = -1;
 
   @Event() closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
 
@@ -144,19 +145,31 @@ export class IrRoomNights {
       this.initialLoading = false;
     }
   }
+
   renderInputField(index: number, currency_symbol: string, day: Day) {
     return (
       <fieldset class="col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container">
+        <div class="input-group-prepend">
+          <span
+            data-disabled={this.inventory === 0 || this.inventory === null}
+            data-state={this.isInputFocused === index ? 'focus' : ''}
+            class="input-group-text new-currency"
+            id="basic-addon1"
+          >
+            {currency_symbol}
+          </span>
+        </div>
         <input
+          onFocus={() => (this.isInputFocused = index)}
+          onBlur={() => (this.isInputFocused = -1)}
           disabled={this.inventory === 0 || this.inventory === null}
           type="text"
-          class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
+          class="form-control pl-0 input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
           id={v4()}
           value={day.amount > 0 ? day.amount : ''}
           placeholder={locales.entries.Lcz_Rate || 'Rate'}
           onInput={event => this.handleInput(event, index)}
         />
-        <span class="currency">{currency_symbol}</span>
       </fieldset>
     );
   }
