@@ -158,7 +158,7 @@ export class GuestInfo {
                 >
                   <option value={null}>...</option>
                   {this.countries.map(item => (
-                    <option selected={this.guest.country_id.toString() === item.id.toString()} value={item.id}>
+                    <option selected={this.guest.country_id?.toString() === item.id.toString()} value={item.id}>
                       {item.phone_prefix}
                     </option>
                   ))}
