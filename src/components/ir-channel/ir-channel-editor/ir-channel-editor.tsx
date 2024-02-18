@@ -65,7 +65,7 @@ export class IrChannelEditor {
           <div class="d-flex align-items-center  justify-content-between">
             <h3 class="text-left font-medium-2  py-0 my-0">Create Channel</h3>
             <ir-icon
-              class={'m-0 p-0'}
+              class={'m-0 p-0 close'}
               onIconClickHandler={() => {
                 this.closeSideBar.emit(null);
               }}
@@ -78,7 +78,8 @@ export class IrChannelEditor {
           <ir-channel-header class="mt-1 px-0" headerTitles={this.headerTitles}></ir-channel-header>
         </nav>
         <section class="pb-1 flex-fill">{this.renderTabScreen()}</section>
-        <ir-button class="w-100" btn_styles="justify-content-center" text={locales.entries.Lcz_Save}></ir-button>
+
+        <ir-button class="py-1 top-border " btn_styles="w-100  justify-content-center" text={locales.entries.Lcz_Save}></ir-button>
       </Host>
     );
   }

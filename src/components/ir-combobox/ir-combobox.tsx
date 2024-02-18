@@ -1,6 +1,6 @@
 import { IToast } from '@/components';
 import locales from '@/stores/locales.store';
-import { Component, Prop, State, h, Element, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch } from '@stencil/core';
 
 @Component({
   tag: 'ir-combobox',
@@ -25,7 +25,7 @@ export class IrCombobox {
   @Event({ bubbles: true, composed: true }) comboboxValueChange: EventEmitter<{ key: string; data: unknown }>;
   @Event() inputCleared: EventEmitter<null>;
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
-
+  @State() componentShouldAutoFocus: boolean = false;
   private inputRef: HTMLInputElement;
   private debounceTimer: any;
   private blurTimout: NodeJS.Timeout;
@@ -34,7 +34,14 @@ export class IrCombobox {
   }
   componentDidLoad() {
     if (this.autoFocus) {
-      this.inputRef.focus();
+      this.focusInput();
+    }
+  }
+
+  @Watch('isComboBoxVisible')
+  watchHandler(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue && newValue === true) {
+      this.focusInput();
     }
   }
   handleKeyDown(event: KeyboardEvent) {
@@ -73,6 +80,11 @@ export class IrCombobox {
     }
     return 0;
   }
+  focusInput() {
+    requestAnimationFrame(() => {
+      this.inputRef?.focus();
+    });
+  }
   adjustScrollPosition(itemHeight, visibleHeight = 250) {
     const combobox = this.el.querySelector('.combobox');
     if (combobox) {
@@ -89,12 +101,14 @@ export class IrCombobox {
   }
 
   selectItem(index) {
-    console.log('clicked');
     if (this.filteredData[index]) {
       this.isItemSelected = true;
       this.comboboxValueChange.emit({ key: 'select', data: this.filteredData[index].id });
       this.inputValue = '';
       this.resetCombobox();
+      if (this.autoFocus) {
+        this.focusInput();
+      }
     }
   }
 
@@ -208,7 +222,6 @@ export class IrCombobox {
     return (
       <fieldset class="m-0 p-0">
         <input
-          autoFocus={this.autoFocus}
           ref={el => (this.inputRef = el)}
           type="text"
           value={this.value}
@@ -218,6 +231,7 @@ export class IrCombobox {
           onBlur={this.handleBlur.bind(this)}
           onInput={this.handleInputChange.bind(this)}
           onFocus={this.handleFocus.bind(this)}
+          autoFocus={this.autoFocus}
         />
         {this.renderDropdown()}
       </fieldset>

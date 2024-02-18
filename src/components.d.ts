@@ -413,6 +413,27 @@ export namespace Components {
         "defaultMessage": { loadingMessage: string; errorMessage: string; };
         "handledEndpoints": string[];
     }
+    interface IrJquerySwitch {
+        "baseClass"?: string;
+        "classOn"?: string;
+        "colorOn"?: string;
+        "disabled"?: boolean;
+        "handleWidth"?: string | 'auto';
+        "indeterminate"?: boolean;
+        "inverse"?: boolean;
+        "labelOff": string;
+        "labelOn": string;
+        "labelText"?: string;
+        "labelWidth"?: string | 'auto';
+        "offClass"?: string;
+        "offColor"?: string;
+        "radioAllOff"?: boolean;
+        "readonly"?: boolean;
+        "size"?: string | 'mini' | 'small' | 'normal' | 'large';
+        "switch_animate"?: boolean;
+        "value": boolean;
+        "wrapperClass"?: string;
+    }
     interface IrLabel {
         "iconShown": boolean;
         "imageSrc": string;
@@ -534,25 +555,9 @@ export namespace Components {
         "text": any;
     }
     interface IrSwitch {
-        "baseClass"?: string;
-        "classOn"?: string;
-        "colorOn"?: string;
-        "disabled"?: boolean;
-        "handleWidth"?: string | 'auto';
-        "indeterminate"?: boolean;
-        "inverse"?: boolean;
-        "labelOff": string;
-        "labelOn": string;
-        "labelText"?: string;
-        "labelWidth"?: string | 'auto';
-        "offClass"?: string;
-        "offColor"?: string;
-        "radioAllOff"?: boolean;
-        "readonly"?: boolean;
-        "size"?: string | 'mini' | 'small' | 'normal' | 'large';
-        "switch_animate"?: boolean;
-        "value": boolean;
-        "wrapperClass"?: string;
+        "checked": boolean;
+        "disabled": boolean;
+        "switchId": string;
     }
     interface IrTextarea {
         "cols": number;
@@ -721,6 +726,10 @@ export interface IrInputTextCustomEvent<T> extends CustomEvent<T> {
 export interface IrInterceptorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrInterceptorElement;
+}
+export interface IrJquerySwitchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrJquerySwitchElement;
 }
 export interface IrLabelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1494,6 +1503,23 @@ declare global {
         prototype: HTMLIrInterceptorElement;
         new (): HTMLIrInterceptorElement;
     };
+    interface HTMLIrJquerySwitchElementEventMap {
+        "valueChange": boolean;
+    }
+    interface HTMLIrJquerySwitchElement extends Components.IrJquerySwitch, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrJquerySwitchElementEventMap>(type: K, listener: (this: HTMLIrJquerySwitchElement, ev: IrJquerySwitchCustomEvent<HTMLIrJquerySwitchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrJquerySwitchElementEventMap>(type: K, listener: (this: HTMLIrJquerySwitchElement, ev: IrJquerySwitchCustomEvent<HTMLIrJquerySwitchElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrJquerySwitchElement: {
+        prototype: HTMLIrJquerySwitchElement;
+        new (): HTMLIrJquerySwitchElement;
+    };
     interface HTMLIrLabelElementEventMap {
         "editSidebar": any;
     }
@@ -1692,7 +1718,7 @@ declare global {
         new (): HTMLIrSpanElement;
     };
     interface HTMLIrSwitchElementEventMap {
-        "valueChange": boolean;
+        "checkChange": boolean;
     }
     interface HTMLIrSwitchElement extends Components.IrSwitch, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrSwitchElementEventMap>(type: K, listener: (this: HTMLIrSwitchElement, ev: IrSwitchCustomEvent<HTMLIrSwitchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1786,6 +1812,7 @@ declare global {
         "ir-icon": HTMLIrIconElement;
         "ir-input-text": HTMLIrInputTextElement;
         "ir-interceptor": HTMLIrInterceptorElement;
+        "ir-jquery-switch": HTMLIrJquerySwitchElement;
         "ir-label": HTMLIrLabelElement;
         "ir-list-item": HTMLIrListItemElement;
         "ir-loader": HTMLIrLoaderElement;
@@ -2277,6 +2304,28 @@ declare namespace LocalJSX {
         "handledEndpoints"?: string[];
         "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
+    interface IrJquerySwitch {
+        "baseClass"?: string;
+        "classOn"?: string;
+        "colorOn"?: string;
+        "disabled"?: boolean;
+        "handleWidth"?: string | 'auto';
+        "indeterminate"?: boolean;
+        "inverse"?: boolean;
+        "labelOff"?: string;
+        "labelOn"?: string;
+        "labelText"?: string;
+        "labelWidth"?: string | 'auto';
+        "offClass"?: string;
+        "offColor"?: string;
+        "onValueChange"?: (event: IrJquerySwitchCustomEvent<boolean>) => void;
+        "radioAllOff"?: boolean;
+        "readonly"?: boolean;
+        "size"?: string | 'mini' | 'small' | 'normal' | 'large';
+        "switch_animate"?: boolean;
+        "value"?: boolean;
+        "wrapperClass"?: string;
+    }
     interface IrLabel {
         "iconShown"?: boolean;
         "imageSrc"?: string;
@@ -2413,26 +2462,10 @@ declare namespace LocalJSX {
         "text"?: any;
     }
     interface IrSwitch {
-        "baseClass"?: string;
-        "classOn"?: string;
-        "colorOn"?: string;
+        "checked"?: boolean;
         "disabled"?: boolean;
-        "handleWidth"?: string | 'auto';
-        "indeterminate"?: boolean;
-        "inverse"?: boolean;
-        "labelOff"?: string;
-        "labelOn"?: string;
-        "labelText"?: string;
-        "labelWidth"?: string | 'auto';
-        "offClass"?: string;
-        "offColor"?: string;
-        "onValueChange"?: (event: IrSwitchCustomEvent<boolean>) => void;
-        "radioAllOff"?: boolean;
-        "readonly"?: boolean;
-        "size"?: string | 'mini' | 'small' | 'normal' | 'large';
-        "switch_animate"?: boolean;
-        "value"?: boolean;
-        "wrapperClass"?: string;
+        "onCheckChange"?: (event: IrSwitchCustomEvent<boolean>) => void;
+        "switchId"?: string;
     }
     interface IrTextarea {
         "cols"?: number;
@@ -2493,6 +2526,7 @@ declare namespace LocalJSX {
         "ir-icon": IrIcon;
         "ir-input-text": IrInputText;
         "ir-interceptor": IrInterceptor;
+        "ir-jquery-switch": IrJquerySwitch;
         "ir-label": IrLabel;
         "ir-list-item": IrListItem;
         "ir-loader": IrLoader;
@@ -2559,6 +2593,7 @@ declare module "@stencil/core" {
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;
+            "ir-jquery-switch": LocalJSX.IrJquerySwitch & JSXBase.HTMLAttributes<HTMLIrJquerySwitchElement>;
             "ir-label": LocalJSX.IrLabel & JSXBase.HTMLAttributes<HTMLIrLabelElement>;
             "ir-list-item": LocalJSX.IrListItem & JSXBase.HTMLAttributes<HTMLIrListItemElement>;
             "ir-loader": LocalJSX.IrLoader & JSXBase.HTMLAttributes<HTMLIrLoaderElement>;

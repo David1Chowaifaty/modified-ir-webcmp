@@ -29,4 +29,7 @@ export function addMapping(ir_id: string, fr_id: string) {
     ir_id,
   });
 }
+export function removedMapping(ir_id: string) {
+  channels_data.mappedChannel = channels_data.mappedChannel.filter(c => c.ir_id !== ir_id);
+}
 export default channels_data;

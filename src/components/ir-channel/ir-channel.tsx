@@ -78,7 +78,7 @@ export class IrChannel {
                     </th>
                     <th scope="row">{channel.channel.name}</th>
                     <td>
-                      <input data-switchery="true" type="checkbox" class="" checked={channel.is_active} />
+                      <ir-switch checked={channel.is_active}></ir-switch>
                     </td>
                     <th>
                       <div class="btn-group">
