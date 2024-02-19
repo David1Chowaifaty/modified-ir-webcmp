@@ -194,8 +194,8 @@ export class IrRoom {
             </svg>
           )}
         </ir-icon>
-        <div class="pl-1 flex-fill m-0 ">
-          <div class="d-flex align-items-start justify-content-between">
+        <div class="flex-fill m-0 ">
+          <div class="d-flex align-items-start justify-content-between sm-mb-1">
             <p class="m-0 p-0">
               <strong class="m-0 p-0">{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName}{' '}
               {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
@@ -222,7 +222,7 @@ export class IrRoom {
               )}
             </div>
           </div>
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center sm-mb-1">
             <span class=" mr-1">
               {_formatDate(this.item.from_date)} - {_formatDate(this.item.to_date)}
             </span>
@@ -235,7 +235,7 @@ export class IrRoom {
             {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.item.identifier.split(' ').join('')}`}>
-            <div class="d-flex">
+            <div class="d-flex sm-mb-1 sm-mt-1">
               <div class=" sm-padding-top">
                 <strong class="sm-padding-right">{`${this.defaultTexts.entries.Lcz_Breakdown}:`}</strong>
               </div>
@@ -290,8 +290,8 @@ export class IrRoom {
                 </table>
               </div>
             </div>
-            <div innerHTML={this.item.rateplan.cancelation || ''}></div>
-            <div innerHTML={this.item.rateplan.guarantee || ''}></div>
+            <div class="sm-mb-1" innerHTML={this.item.rateplan.cancelation || ''}></div>
+            <div class="sm-mb-1" innerHTML={this.item.rateplan.guarantee || ''}></div>
             {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
             <ir-label label={`${this.defaultTexts.entries.Lcz_MealPlan}:`} value={this.mealCodeName}></ir-label>
