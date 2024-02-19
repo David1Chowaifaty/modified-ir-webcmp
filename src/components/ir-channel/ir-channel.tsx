@@ -92,14 +92,20 @@ export class IrChannel {
                           </svg>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                          <button class="dropdown-item" type="button">
-                            Action
+                          <button class="dropdown-item border-bottom border-light" type="button">
+                            Edit
+                          </button>
+                          <button class="dropdown-item border-bottom border-light" type="button">
+                            View logs
+                          </button>
+                          <button class="dropdown-item border-bottom border-light" type="button">
+                            Full Sync
+                          </button>
+                          <button class="dropdown-item border-bottom border-light" type="button">
+                            Pull Future Reservations
                           </button>
                           <button class="dropdown-item" type="button">
-                            Another action
-                          </button>
-                          <button class="dropdown-item" type="button">
-                            Something else here
+                            Remove
                           </button>
                         </div>
                       </div>

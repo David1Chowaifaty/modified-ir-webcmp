@@ -151,6 +151,7 @@ export type LocalizationStrings = {
   Lcz_EnterAmount: string;
   Lcz_Excluding: string;
   Lcz_Including: string;
+  Lcz_SubTotal: string;
 };
 
 const initialState: ILocale = {

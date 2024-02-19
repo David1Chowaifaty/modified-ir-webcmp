@@ -248,7 +248,7 @@ export class IrRoom {
                       </tr>
                     ))}
                   <tr>
-                    <th class="text-right pr-2">Subtotal</th>
+                    <th class="text-right pr-2">{this.defaultTexts.entries.Lcz_SubTotal}</th>
                     <th class="text-right">{_formatAmount(this.item.total, this.currency)}</th>
                   </tr>
                   {this.bookingEvent.is_direct ? (
@@ -259,7 +259,7 @@ export class IrRoom {
                           return (
                             <tr>
                               <td class="text-right pr-2">
-                                {d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including} {d.name}
+                                {d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including} {d.name} ({d.pct}%)
                               </td>
                               <td class="text-right">{_formatAmount((this.item.total * d.pct) / 100, this.currency)}</td>
                             </tr>
