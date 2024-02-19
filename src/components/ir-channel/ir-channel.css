@@ -18,3 +18,6 @@
 .show .caret-icon {
   transform: rotate(-180deg);
 }
+.dropdown-divider {
+  border-color: #e4e5ec;
+}

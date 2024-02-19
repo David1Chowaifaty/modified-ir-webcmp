@@ -330,6 +330,7 @@ export namespace Components {
     interface IrCombobox {
         "autoFocus": boolean;
         "data": { id: string; name: string }[];
+        "disabled": boolean;
         "duration": number;
         "placeholder": string;
         "value": string;
@@ -2207,6 +2208,7 @@ declare namespace LocalJSX {
     interface IrCombobox {
         "autoFocus"?: boolean;
         "data"?: { id: string; name: string }[];
+        "disabled"?: boolean;
         "duration"?: number;
         "onComboboxValueChange"?: (event: IrComboboxCustomEvent<{ key: string; data: unknown }>) => void;
         "onInputCleared"?: (event: IrComboboxCustomEvent<null>) => void;

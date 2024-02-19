@@ -54,6 +54,7 @@ export interface IChannelRatePlans {
 export interface IMap {
   channel_id: string;
   ir_id: string;
+  type: 'room_type' | 'rate_plan';
 }
 export interface IPickupCurrency extends ICurrency {
   symbol: string;

@@ -21,7 +21,6 @@ export class RoomService {
         calendar_data.pickup_service = results.pickup_service;
         calendar_data.max_nights = results.max_nights;
         calendar_data.roomsInfo = results.roomtypes;
-        channels_data.connected_channels = results.connected_channels;
         calendar_data.taxes = results.taxes;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
@@ -60,6 +59,21 @@ export class RoomService {
         locales.entries = entries;
         locales.direction = data.My_Result.direction;
         return { entries, direction: data.My_Result.direction };
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+  public async getExposedConnectedChannels(property_id: number) {
+    try {
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_Connected_Channels?Ticket=${token}`, { property_id });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        channels_data.connected_channels = data.My_Result;
       }
     } catch (error) {
       console.log(error);

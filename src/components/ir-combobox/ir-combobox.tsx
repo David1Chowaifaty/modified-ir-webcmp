@@ -12,6 +12,7 @@ export class IrCombobox {
   @Prop() duration: number = 300;
   @Prop() placeholder: string;
   @Prop() value: string;
+  @Prop() disabled: boolean = false;
   @Prop() autoFocus: boolean = false;
 
   @State() selectedIndex: number = -1;
@@ -224,9 +225,10 @@ export class IrCombobox {
         <input
           ref={el => (this.inputRef = el)}
           type="text"
+          disabled={this.disabled}
           value={this.value}
           placeholder={this.placeholder}
-          class="form-control"
+          class="form-control bg-white"
           onKeyDown={this.handleKeyDown.bind(this)}
           onBlur={this.handleBlur.bind(this)}
           onInput={this.handleInputChange.bind(this)}

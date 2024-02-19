@@ -15,7 +15,7 @@ export class IrChannelGeneral {
             Channel:
           </label>
           <ir-combobox
-            // disabled={channels_data.isConnectedToChannel}
+            disabled={channels_data.isConnectedToChannel}
             class="flex-fill"
             value={channels_data.selectedChannel?.name}
             onComboboxValueChange={(e: CustomEvent) => {
@@ -75,7 +75,7 @@ export class IrChannelGeneral {
               </div>
             </fieldset>
             <div class={'connection-testing-container'}>
-              <span></span>
+              <span>{channels_data.isConnectedToChannel ? 'Connected Channel' : ''}</span>
               <button class="btn btn-outline-secondary btn-sm" onClick={() => testConnection()}>
                 Test Connection
               </button>

@@ -2,20 +2,28 @@ import calendar_data from '@/stores/calendar-data';
 import channels_data from '@/stores/channel.store';
 
 export class IrMappingService {
+  public removedMapping(ir_id: string, isRoomType: boolean) {
+    let selectedChannels = [...channels_data.mappedChannels];
+    if (isRoomType) {
+      const toBeRemovedRoomType = calendar_data.roomsInfo.find(room => room.id.toString() === ir_id);
+      selectedChannels = selectedChannels.filter(c => toBeRemovedRoomType.rateplans.find(rate_plan => rate_plan.id.toString() === c.ir_id) === undefined);
+    }
+    channels_data.mappedChannels = selectedChannels.filter(c => c.ir_id !== ir_id);
+  }
   public checkMappingExists(id: string, isRoomType: boolean, roomTypeId?: string) {
     const mapped_id = channels_data.mappedChannels.find(m => m.channel_id === id);
-
     if (!mapped_id) {
       if (!isRoomType) {
         const matchingRoomType = channels_data.mappedChannels.find(m => m.channel_id.toString() === roomTypeId);
         if (!matchingRoomType) {
-          return { hide: true, result: undefined };
+          return { hide: true, result: undefined, occupancy: undefined };
         }
       }
-      return { hide: false, result: undefined };
+      return { hide: false, result: undefined, occupancy: undefined };
     }
     if (isRoomType) {
-      return { hide: false, result: calendar_data.roomsInfo.find(room => room.id.toString() === mapped_id.ir_id) };
+      const room_type = calendar_data.roomsInfo.find(room => room.id.toString() === mapped_id.ir_id);
+      return { hide: false, occupancy: room_type.occupancy_default.adult_nbr, result: room_type };
     }
     if (!roomTypeId) {
       throw new Error('Missing room type id');
@@ -25,7 +33,7 @@ export class IrMappingService {
     if (!room_type) {
       throw new Error('Invalid Room type');
     }
-    return { hide: false, result: room_type.rateplans.find(r => r.id.toString() === mapped_id.ir_id) };
+    return { hide: false, occupancy: room_type.occupancy_default.adult_nbr, result: room_type.rateplans.find(r => r.id.toString() === mapped_id.ir_id) };
   }
   public getAppropriateRooms(isRoomType: boolean, roomTypeId?: string) {
     if (isRoomType) {
