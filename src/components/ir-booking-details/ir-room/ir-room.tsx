@@ -194,7 +194,7 @@ export class IrRoom {
             </svg>
           )}
         </ir-icon>
-        <div class="flex-fill m-0 ">
+        <div class="pl-1 flex-fill m-0 ">
           <div class="d-flex align-items-start justify-content-between">
             <p class="m-0 p-0">
               <strong class="m-0 p-0">{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName}{' '}
@@ -291,6 +291,7 @@ export class IrRoom {
               </div>
             </div>
             <div innerHTML={this.item.rateplan.cancelation || ''}></div>
+            <div innerHTML={this.item.rateplan.guarantee || ''}></div>
             {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
             <ir-label label={`${this.defaultTexts.entries.Lcz_MealPlan}:`} value={this.mealCodeName}></ir-label>
@@ -306,7 +307,7 @@ export class IrRoom {
           leftBtnColor="secondary"
           rightBtnColor="danger"
           modalTitle={this.defaultTexts.entries.Lcz_Confirmation}
-          modalBody={`${this.defaultTexts.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${this.item.unit && (this.item.unit as IUnit).name} ${
+          modalBody={`${this.defaultTexts.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${this.item.unit ? (this.item.unit as IUnit).name : ''} ${
             this.defaultTexts.entries.Lcz_FromThisBooking
           }`}
         ></ir-modal>

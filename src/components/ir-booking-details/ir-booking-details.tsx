@@ -203,7 +203,7 @@ export class IrBookingDetails {
           title: locales.entries.Lcz_StatusUpdatedSuccessfully,
           position: 'top-right',
         });
-        // await this.resetBookingData();
+        await this.resetBookingData();
       } catch (error) {
         console.log(error);
       } finally {
@@ -403,8 +403,8 @@ export class IrBookingDetails {
                     myRoomTypeFoodCat={myRoomTypeFoodCat}
                     mealCodeName={mealCodeName}
                     currency={this.bookingData.currency.code}
-                    hasRoomEdit={this.hasRoomEdit && this.bookingData.is_direct}
-                    hasRoomDelete={this.hasRoomDelete && this.bookingData.is_direct}
+                    hasRoomEdit={this.hasRoomEdit && this.bookingData.status.code !== '003' && this.bookingData.is_direct}
+                    hasRoomDelete={this.hasRoomDelete && this.bookingData.status.code !== '003' && this.bookingData.is_direct}
                     hasCheckIn={this.hasCheckIn}
                     hasCheckOut={this.hasCheckOut}
                     bookingEvent={this.bookingData}

@@ -14,7 +14,7 @@
   <script src="assets/scripts/bootstrap.bundle.min.js"></script>
   <script src="assets/scripts/toastr/toastr.min.js"></script>
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
-
+  <!-- <link rel="stylesheet" href="assets/scripts/switchery/switchery.css"> -->
 
   <style>
     body {
@@ -25,15 +25,17 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-channel propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-channel>
+  <ir-booking-details has-room-edit has-room-delete baseurl="https://gateway.igloorooms.com/IR" language="en"
+    has-print="true" has-receipt></ir-booking-details>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
   <script>
-    const irchannel = document.querySelector('ir-channel')
+    const bookingDetail = document.querySelector("ir-booking-details");
     setTimeout(() => {
       sessionStorage.removeItem('token');
       const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDkyODgwMzYsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiRThLMEFsdS9NdkdsTGxBVmgzSkFXQT09In0._JKYBQDYVBCZPDBo6XxHOehzpI0NO3JJDwE25dJg5Bg";
-      irchannel.propertyid = "42";
-      irchannel.ticket = ticket
+      bookingDetail.bookingNumber = "63231616"
+      bookingDetail.propertyid = "42";
+      bookingDetail.ticket = ticket;
     }, 300)
   </script>
 
