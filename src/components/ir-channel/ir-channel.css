@@ -21,3 +21,19 @@
 .dropdown-divider {
   border-color: #e4e5ec;
 }
+.dropdown-item {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6b6f82;
+}
+.dropdown-item svg path {
+  fill: #6b6f82;
+}
+.danger {
+  color: var(--red);
+}
+.danger svg path {
+  fill: var(--red);
+}

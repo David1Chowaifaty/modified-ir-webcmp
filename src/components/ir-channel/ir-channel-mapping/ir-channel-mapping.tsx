@@ -44,7 +44,7 @@ export class IrChannelMapping {
     if (mappedField.result) {
       return (
         <Fragment>
-          <span class="px-2 d-sm-none text-blue d-flex align-items-center">
+          <span class="px-2 d-md-none text-blue d-flex align-items-center">
             <span class="m-0 p-0 d-flex align-items-center selected-map">
               <span class="selected-map-title">{mappedField.result.name}</span>
               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
@@ -64,7 +64,7 @@ export class IrChannelMapping {
               </svg>
             </ir-icon>
           </span>
-          <span class="px-2 d-none text-blue d-sm-flex align-items-center">
+          <span class="px-2 d-none text-blue d-md-flex align-items-center">
             <span class="m-0 p-0 d-flex align-items-center selected-map">
               {mappedField.result.name}
               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">

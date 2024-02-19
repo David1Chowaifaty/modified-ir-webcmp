@@ -21,12 +21,14 @@ const initialState: IChannelStore = {
   channel_settings: null,
 };
 export const { state: channels_data, onChange: onChannelChange, dispose } = createStore<IChannelStore>(initialState);
+
 export function selectChannel(channel_id: string) {
   if (channel_id === '') {
     channels_data.selectedChannel = null;
     return;
   }
   const selectedChannel = channels_data.channels.find(c => c.id.toString() === channel_id);
+  console.log(selectedChannel);
   channels_data.selectedChannel = selectedChannel;
   setMappedChannel();
 }
