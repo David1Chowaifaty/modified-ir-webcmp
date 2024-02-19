@@ -7,6 +7,10 @@ export class IrMappingService {
     if (!mapped_id) {
       return undefined;
     }
+    if (!isRoomType) {
+      console.log('object');
+      return undefined;
+    }
     if (isRoomType) {
       return calendar_data.roomsInfo.find(room => room.id.toString() === mapped_id.ir_id);
     }
@@ -14,9 +18,11 @@ export class IrMappingService {
       throw new Error('Missing room type id');
     }
     const room_type = calendar_data.roomsInfo.find(room => room.id.toString() === roomTypeId);
+    console.log(room_type);
     if (!room_type) {
       throw new Error('Invalid Room type');
     }
+    console.log(room_type);
     return room_type.rateplans.find(r => r.id.toString() === mapped_id.ir_id);
   }
   public getAppropriateRooms(isRoomType: boolean, roomTypeId?: string) {
@@ -29,7 +35,7 @@ export class IrMappingService {
     if (!roomTypeId) {
       throw new Error('Missing roomType id');
     }
-
+    console.log(roomTypeId);
     const selectedRoomType = calendar_data.roomsInfo.filter(room => channels_data.mappedChannel.find(m => m.channel_id.toString() === roomTypeId) && room.is_active);
     console.log(selectedRoomType);
 

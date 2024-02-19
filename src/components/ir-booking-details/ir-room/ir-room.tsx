@@ -34,7 +34,7 @@ export class IrRoom {
   @Prop() hasRoomAdd: boolean = false;
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
-  @Element() element;
+  @Element() element: any;
   // Event Emitters
   @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
@@ -48,7 +48,6 @@ export class IrRoom {
     if (this.bookingEvent) {
       this.item = this.bookingEvent.rooms[this.bookingIndex];
     }
-    //console.log("item",this.item)
   }
   @Watch('bookingEvent')
   handleBookingEventChange() {
@@ -67,23 +66,6 @@ export class IrRoom {
     }
   }
 
-  // _getFoodArrangeCat(catCode: string) {
-  //   // get the category from the foodArrangeCats array
-  //   const cat = this.mealCode.find((cat: any) => cat.CODE_NAME === catCode);
-  //   // return the category
-  //   return cat.CODE_VALUE_EN;
-  // }
-  /*
-  
-  bookingEvent.defaultDateRange = {};
-      bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
-      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
-      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.fromDate.getTime();
-      bookingEvent.defaultDateRange.toDate = new Date(bookingEvent.TO_DATE + 'T00:00:00');
-      bookingEvent.defaultDateRange.toDateStr = this.getDateStr(bookingEvent.defaultDateRange.toDate);
-      bookingEvent.defaultDateRange.toDateTimeStamp = bookingEvent.defaultDateRange.toDate.getTime();
-      bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
-  */
   getDateStr(date, locale = 'default') {
     return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
   }
@@ -219,7 +201,8 @@ export class IrRoom {
               {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
             </p>
             {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
-            <div class="d-flex m-0 p-0">
+            <div class="d-flex m-0 p-0 align-items-center">
+              <span class="p-0 m-0 ml-1 font-weight-bold">{_formatAmount(this.item['gross_total'], this.currency)}</span>
               {this.hasRoomEdit && (
                 <ir-icon id={`roomEdit-${this.item.identifier}`} class="pointer mx-1" onClick={this.handleEditClick.bind(this)}>
                   <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
@@ -238,58 +221,6 @@ export class IrRoom {
                 </ir-icon>
               )}
             </div>
-          </div>
-          <div class="py-1 d-flex w-full align-items-center justify-content-end">
-            {this.bookingEvent.is_direct ? (
-              <Fragment>
-                <div class={'tax-width '}>
-                  {(() => {
-                    const filtered_data = calendar_data.taxes.filter(tx => tx.pct > 0);
-                    return filtered_data.map((tax, index) => {
-                      if (!tax.is_exlusive) {
-                        return (
-                          <span class={`p-0 m-0 `}>
-                            {' '}
-                            {this.defaultTexts.entries.Lcz_Including} {tax.name} ({tax.pct.toFixed(0)}%) {_formatAmount(this.item.total * (tax.pct / 100), this.currency)}{' '}
-                            {index < filtered_data.length - 1 ? ' - ' : ''}
-                          </span>
-                        );
-                      }
-                      return (
-                        <span class={`p-0 m-0`}>
-                          {this.defaultTexts.entries.Lcz_Excluding} {tax.name} ({tax.pct.toFixed(0)}%) {_formatAmount(this.item.total * (tax.pct / 100), this.currency)}{' '}
-                          {index < filtered_data.length - 1 ? ' - ' : ''}
-                        </span>
-                      );
-                    });
-                  })()}
-                </div>
-              </Fragment>
-            ) : (
-              <Fragment>
-                <div class={'tax-width '}>
-                  {(() => {
-                    const filtered_data = this.item.ota_atxes.filter(tx => tx.amount > 0);
-                    return filtered_data.map((tax, index) => {
-                      if (!tax.is_exlusive) {
-                        return (
-                          <span class={`p-0 m-0 `}>
-                            {' '}
-                            {this.defaultTexts.entries.Lcz_Including} {tax.name} {tax.currency.symbol + tax.amount} {index < filtered_data.length - 1 ? ' - ' : ''}
-                          </span>
-                        );
-                      }
-                      return (
-                        <span class={`p-0 m-0`}>
-                          {this.defaultTexts.entries.Lcz_Excluding} {tax.name} {tax.currency.symbol + tax.amount} {index < filtered_data.length - 1 ? ' - ' : ''}
-                        </span>
-                      );
-                    });
-                  })()}
-                </div>
-              </Fragment>
-            )}
-            <p class="p-0 m-0 ml-1 font-weight-bold">{_formatAmount(this.item['gross_total'], this.currency)}</p>
           </div>
           <div class="d-flex align-items-center">
             <span class=" mr-1">
@@ -313,9 +244,49 @@ export class IrRoom {
                   {this.item.days.length > 0 &&
                     this.item.days.map(item => (
                       <tr>
-                        <td class={'pr-2'}>{_getDay(item.date)}</td> <td>{_formatAmount(item.amount, this.currency)}</td>
+                        <td class={'pr-2 text-right'}>{_getDay(item.date)}</td> <td class="text-right">{_formatAmount(item.amount, this.currency)}</td>
                       </tr>
                     ))}
+                  <tr>
+                    <th class="text-right pr-2">Subtotal</th>
+                    <th class="text-right">{_formatAmount(this.item.total, this.currency)}</th>
+                  </tr>
+                  {this.bookingEvent.is_direct ? (
+                    <Fragment>
+                      {(() => {
+                        const filtered_data = calendar_data.taxes.filter(tx => tx.pct > 0);
+                        return filtered_data.map(d => {
+                          return (
+                            <tr>
+                              <td class="text-right pr-2">
+                                {d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including} {d.name}
+                              </td>
+                              <td class="text-right">{_formatAmount((this.item.total * d.pct) / 100, this.currency)}</td>
+                            </tr>
+                          );
+                        });
+                      })()}
+                    </Fragment>
+                  ) : (
+                    <Fragment>
+                      {(() => {
+                        const filtered_data = this.item.ota_atxes.filter(tx => tx.amount > 0);
+                        return filtered_data.map(d => {
+                          return (
+                            <tr>
+                              <td class="text-right pr-2">
+                                {d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including} {d.name}
+                              </td>
+                              <td class="text-right">
+                                {d.currency.symbol}
+                                {d.amount}
+                              </td>
+                            </tr>
+                          );
+                        });
+                      })()}
+                    </Fragment>
+                  )}
                 </table>
               </div>
             </div>

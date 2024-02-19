@@ -20,3 +20,8 @@
 .text-red {
   color: var(--red);
 }
+.refresh-btn {
+  all: unset;
+  color: var(--blue);
+  cursor: pointer;
+}

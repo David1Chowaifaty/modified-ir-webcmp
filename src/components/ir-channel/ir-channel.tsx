@@ -1,5 +1,5 @@
 import { RoomService } from '@/services/room.service';
-import channels_data from '@/stores/channel.store';
+import channels_data, { resetStore } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, Watch, h, Element, State } from '@stencil/core';
 import axios from 'axios';
@@ -116,11 +116,20 @@ export class IrChannel {
             e.stopImmediatePropagation();
             e.stopPropagation();
             this.channel_status = null;
+            resetStore();
           }}
           open={this.channel_status !== null}
         >
-          {this.channel_status && <ir-channel-editor onCloseSideBar={() => (this.channel_status = null)}></ir-channel-editor>}
+          {this.channel_status && (
+            <ir-channel-editor
+              onCloseSideBar={() => {
+                this.channel_status = null;
+                resetStore();
+              }}
+            ></ir-channel-editor>
+          )}
         </ir-sidebar>
+        <ir-modal></ir-modal>
       </Host>
     );
   }
