@@ -270,7 +270,7 @@ export class IrRoom {
                   ) : (
                     <Fragment>
                       {(() => {
-                        const filtered_data = this.item.ota_atxes.filter(tx => tx.amount > 0);
+                        const filtered_data = this.item.ota_taxes.filter(tx => tx.amount > 0);
                         return filtered_data.map(d => {
                           return (
                             <tr>
