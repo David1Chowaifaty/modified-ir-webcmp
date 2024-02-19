@@ -14,6 +14,7 @@ export class IrChannelMapping {
   private mappingService = new IrMappingService();
 
   setActiveField(id: string, isRoomType: boolean, roomTypeId?: string) {
+    console.log(isRoomType, roomTypeId);
     const availableRooms = this.mappingService.getAppropriateRooms(isRoomType, roomTypeId);
     if (availableRooms) {
       this.availableRooms = availableRooms;
