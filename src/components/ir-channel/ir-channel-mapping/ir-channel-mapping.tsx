@@ -1,6 +1,7 @@
 import { Component, Host, State, h } from '@stencil/core';
 import { IrMappingService } from './ir-mapping.service';
 import channels_data, { addMapping, removedMapping, setMappedChannel } from '@/stores/channel.store';
+import { RoomDetail, RatePlanDetail } from '@/models/IBooking';
 
 @Component({
   tag: 'ir-channel-mapping',
@@ -14,7 +15,6 @@ export class IrChannelMapping {
   private mappingService = new IrMappingService();
 
   setActiveField(id: string, isRoomType: boolean, roomTypeId?: string) {
-    console.log(isRoomType, roomTypeId);
     const availableRooms = this.mappingService.getAppropriateRooms(isRoomType, roomTypeId);
     if (availableRooms) {
       this.availableRooms = availableRooms;
@@ -22,13 +22,37 @@ export class IrChannelMapping {
     this.activeMapField = id;
   }
 
-  renderMappingStatus(id: string, isRoomType: boolean, roomTypeId?: string) {
-    const mappedField = this.mappingService.checkMappingExists(id, isRoomType, roomTypeId);
-    if (mappedField) {
+  renderMappingStatus(
+    mappedField:
+      | {
+          hide: boolean;
+          result: RoomDetail;
+        }
+      | {
+          hide: boolean;
+          result: RatePlanDetail;
+        },
+    id: string,
+    isRoomType: boolean,
+    roomTypeId?: string,
+  ) {
+    if (mappedField.hide) {
+      return <span></span>;
+    }
+    if (mappedField.result) {
       return (
         <span class="px-2 text-blue d-flex align-items-center">
-          <span class="m-0 p-0 flex-fill">{mappedField.name}</span>
-          <ir-icon class="m-0 p-0" onIconClickHandler={() => removedMapping(mappedField.id.toString())}>
+          <span class="m-0 p-0 d-flex align-items-center selected-map">
+            <span class="selected-map-title">{mappedField.result.name}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
+              <path
+                fill={'var(--blue)'}
+                d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
+              />
+            </svg>
+            {/* {mappedField.result['occupancy_default']?.adult_nbr} */}2
+          </span>
+          <ir-icon class="ml-1 p-0" onIconClickHandler={() => removedMapping(mappedField.result.id.toString())}>
             <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
               <path
                 fill={'var(--blue)'}
@@ -81,31 +105,39 @@ export class IrChannelMapping {
             </svg>
             <span class="font-weight-bold px-2">Igloorooms</span>
           </li>
-          {channels_data.selectedChannel.property.room_types.map(room_type => (
-            <li key={room_type.id} class="mb-1">
-              <div class="map-row">
-                <span>{room_type.name}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
-                  <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
-                </svg>
-                {this.renderMappingStatus(room_type.id, true)}
-              </div>
-              <ul class="m-0 p-0">
-                {room_type.rate_plans.map(rate_plan => (
-                  <li class="map-row" key={rate_plan.id}>
-                    <span class="submap-text">{rate_plan.name}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
-                      <path
-                        fill="currentColor"
-                        d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
-                      />
-                    </svg>
-                    {this.renderMappingStatus(rate_plan.id, false, room_type.id)}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
+          {channels_data.selectedChannel.property?.room_types?.map(room_type => {
+            const mappedRoomType = this.mappingService.checkMappingExists(room_type.id, true);
+            return (
+              <li key={room_type.id} class="mb-1">
+                <div class="map-row">
+                  <span>{room_type.name}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
+                    <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
+                  </svg>
+                  {this.renderMappingStatus(mappedRoomType, room_type.id, true)}
+                </div>
+                <ul class="m-0 p-0">
+                  {room_type.rate_plans.map(rate_plan => {
+                    const mappedRatePlan = this.mappingService.checkMappingExists(rate_plan.id, false, room_type.id);
+                    return (
+                      <li class="map-row" key={rate_plan.id}>
+                        <span class="submap-text">{rate_plan.name}</span>
+                        {!mappedRatePlan.hide && (
+                          <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
+                            <path
+                              fill="currentColor"
+                              d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"
+                            />
+                          </svg>
+                        )}
+                        {this.renderMappingStatus(mappedRatePlan, rate_plan.id, false, room_type.id)}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          })}
         </ul>
       </Host>
     );

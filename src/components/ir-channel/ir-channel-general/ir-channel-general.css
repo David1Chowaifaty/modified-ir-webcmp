@@ -4,3 +4,12 @@
 .label-style {
   width: 100px;
 }
+.connection-testing-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px !important;
+}
+.connection-title {
+  border-bottom: 1px solid #e4e5ec;
+}

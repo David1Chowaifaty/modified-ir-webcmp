@@ -24,7 +24,7 @@ export class IrChannelEditor {
 
   componentWillLoad() {
     this.selectedTab = this.headerTitles[0].id;
-    onChannelChange('selectedChannel', newValue => {
+    onChannelChange('isConnectedToChannel', newValue => {
       if (!!newValue) {
         this.enableAllHeaders();
       }
@@ -77,7 +77,7 @@ export class IrChannelEditor {
           </div>
           <ir-channel-header class="mt-1 px-0" headerTitles={this.headerTitles}></ir-channel-header>
         </nav>
-        <section class="pb-1 flex-fill tab-container px-1">{this.renderTabScreen()}</section>
+        <section class="py-1 flex-fill tab-container px-1">{this.renderTabScreen()}</section>
 
         <ir-button class="px-1 py-1 top-border" btn_styles="w-100  justify-content-center" text={locales.entries.Lcz_Save}></ir-button>
       </Host>

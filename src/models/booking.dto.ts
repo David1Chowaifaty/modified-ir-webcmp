@@ -123,6 +123,7 @@ export interface Room {
   days: Day[];
   from_date: string;
   guest: Guest;
+  occupancy_default: number;
   notes: string | null;
   occupancy: Occupancy;
   physicalroom: null;
@@ -133,7 +134,7 @@ export interface Room {
   total: number;
   identifier: string;
   unit: string | number | IUnit | null;
-  ota_atxes: IOtaTax[];
+  ota_taxes: IOtaTax[];
 }
 export interface IOtaTax {
   amount: number;

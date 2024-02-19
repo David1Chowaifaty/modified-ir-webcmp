@@ -25,3 +25,14 @@
   color: var(--blue);
   cursor: pointer;
 }
+.selected-map svg {
+  margin: 0 10px 0 0 !important;
+  flex-wrap: wrap;
+}
+.selected-map {
+  flex: 1;
+}
+.selected-map-title {
+  flex: 1;
+  /* background: #000; */
+}
