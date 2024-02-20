@@ -10,7 +10,22 @@ export class IrChannelGeneral {
   @Prop() channel_status: 'create' | 'edit' | null = null;
 
   @State() buttonClicked: boolean = false;
-
+  @State() connection_status_message = '';
+  componentWillLoad() {
+    if (this.channel_status !== 'create') {
+      return;
+    }
+    this.connection_status_message = channels_data.isConnectedToChannel ? 'Connected Channel' : '';
+  }
+  handleTestConnectionClicked() {
+    this.buttonClicked = true;
+    if (this.channel_status !== 'create' || !channels_data.channel_settings?.hotel_id || channels_data.isConnectedToChannel) {
+      return;
+    }
+    const status = testConnection();
+    this.connection_status_message = status ? 'Connected Channel' : 'Incorrect Connection';
+    this.buttonClicked = false;
+  }
   render() {
     return (
       <Host>
@@ -69,19 +84,8 @@ export class IrChannelGeneral {
                 </div>
               </fieldset>
               <div class={'connection-testing-container'}>
-                {this.channel_status === 'create' ? <span>{channels_data.isConnectedToChannel ? 'Connected Channel' : ''}</span> : <span></span>}
-                <button
-                  class="btn btn-outline-secondary btn-sm"
-                  onClick={() => {
-                    this.buttonClicked = true;
-                    if (this.channel_status !== 'create' || !channels_data.channel_settings?.hotel_id) {
-                      return;
-                    }
-
-                    testConnection();
-                    this.buttonClicked = false;
-                  }}
-                >
+                <span>{this.connection_status_message}</span>
+                <button class="btn btn-outline-secondary btn-sm" onClick={this.handleTestConnectionClicked.bind(this)}>
                   Test Connection
                 </button>
               </div>
