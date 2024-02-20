@@ -17,7 +17,8 @@ export class IrChannelGeneral {
     }
     this.connection_status_message = channels_data.isConnectedToChannel ? 'Connected Channel' : '';
   }
-  handleTestConnectionClicked() {
+  handleTestConnectionClicked(e: Event) {
+    e.preventDefault();
     this.buttonClicked = true;
     if (this.channel_status !== 'create' || !channels_data.channel_settings?.hotel_id || channels_data.isConnectedToChannel) {
       return;
@@ -66,7 +67,7 @@ export class IrChannelGeneral {
           </fieldset>
         </section>
         {channels_data.selectedChannel && (
-          <section class="mt-3 connection-container">
+          <form onSubmit={this.handleTestConnectionClicked.bind(this)} class="mt-3 connection-container">
             <h3 class="text-left font-medium-2  py-0 my-0 connection-title py-1 mb-2">Connection Settings</h3>
             <div class="ml-18">
               <fieldset class="d-flex align-items-center my-1">
@@ -85,12 +86,12 @@ export class IrChannelGeneral {
               </fieldset>
               <div class={'connection-testing-container'}>
                 <span>{this.connection_status_message}</span>
-                <button class="btn btn-outline-secondary btn-sm" onClick={this.handleTestConnectionClicked.bind(this)}>
+                <button class="btn btn-outline-secondary btn-sm" type="submit">
                   Test Connection
                 </button>
               </div>
             </div>
-          </section>
+          </form>
         )}
       </Host>
     );
