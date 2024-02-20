@@ -1,3 +1,4 @@
+import calendar_data from '@/stores/calendar-data';
 import channels_data, { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
@@ -70,11 +71,12 @@ export class IrChannelEditor {
     try {
       this.isLoading = true;
       const body = {
-        id: channels_data.selectedChannel.id,
+        // id: channels_data.selectedChannel.id,
+        id: -1,
         title: channels_data.channel_settings.hotel_title,
         is_active: false,
         channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
-        property: { id: channels_data.selectedChannel.property.id, name: channels_data.selectedChannel.property.name },
+        property: { id: calendar_data.id, name: calendar_data.name },
         map: channels_data.mappedChannels,
         is_remove: false,
       };

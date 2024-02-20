@@ -22,6 +22,8 @@ export class RoomService {
         calendar_data.max_nights = results.max_nights;
         calendar_data.roomsInfo = results.roomtypes;
         calendar_data.taxes = results.taxes;
+        calendar_data.id = results.id;
+        calendar_data.name = results.name;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }

@@ -1,88 +1,14 @@
 {
-  "id": 3,
-  "title": "SmartLink-Title",
+  "id": -1,
+  "title": "SmartLink-Test",
   "is_active": false,
   "channel": {
     "id": 3,
     "name": "SmartLink"
   },
   "property": {
-    "id": "prop-01",
-    "name": "Property 01",
-    "room_types": [
-      {
-        "id": "room-type-0",
-        "name": "Room Type 0",
-        "rate_plans": [
-          {
-            "id": "rate-plan-0-0",
-            "name": "Rate Plan 0-0"
-          },
-          {
-            "id": "rate-plan-0-1",
-            "name": "Rate Plan 0-1"
-          },
-          {
-            "id": "rate-plan-0-2",
-            "name": "Rate Plan 0-2"
-          }
-        ]
-      },
-      {
-        "id": "room-type-1",
-        "name": "Room Type 1",
-        "rate_plans": [
-          {
-            "id": "rate-plan-1-0",
-            "name": "Rate Plan 1-0"
-          },
-          {
-            "id": "rate-plan-1-1",
-            "name": "Rate Plan 1-1"
-          },
-          {
-            "id": "rate-plan-1-2",
-            "name": "Rate Plan 1-2"
-          }
-        ]
-      },
-      {
-        "id": "room-type-2",
-        "name": "Room Type 2",
-        "rate_plans": [
-          {
-            "id": "rate-plan-2-0",
-            "name": "Rate Plan 2-0"
-          },
-          {
-            "id": "rate-plan-2-1",
-            "name": "Rate Plan 2-1"
-          },
-          {
-            "id": "rate-plan-2-2",
-            "name": "Rate Plan 2-2"
-          }
-        ]
-      },
-      {
-        "id": "room-type-3",
-        "name": "Room Type 3",
-        "rate_plans": [
-          {
-            "id": "rate-plan-3-0",
-            "name": "Rate Plan 3-0"
-          },
-          {
-            "id": "rate-plan-3-1",
-            "name": "Rate Plan 3-1"
-          },
-          {
-            "id": "rate-plan-3-2",
-            "name": "Rate Plan 3-2"
-          }
-        ]
-      }
-    ]
+    "id": 42,
+    "name": "igloorooms Demo Hotel"
   },
   "map": [
     {
@@ -124,26 +50,7 @@
       "channel_id": "rate-plan-1-1",
       "ir_id": "3755",
       "type": "rate_plan"
-    },
-    {
-      "channel_id": "room-type-2",
-      "ir_id": "112",
-      "type": "room_type"
-    },
-    {
-      "channel_id": "rate-plan-2-0",
-      "ir_id": "125",
-      "type": "rate_plan"
-    },
-    {
-      "channel_id": "room-type-3",
-      "ir_id": "2352",
-      "type": "room_type"
-    },
-    {
-      "channel_id": "rate-plan-3-0",
-      "ir_id": "3766",
-      "type": "rate_plan"
     }
-  ]
+  ],
+  "is_remove": false
 }
