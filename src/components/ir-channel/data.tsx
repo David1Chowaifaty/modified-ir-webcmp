@@ -1,5 +1,5 @@
 import { IChannel } from '@/models/calendarData';
-import { selectChannel } from '@/stores/channel.store';
+import { selectChannel, testConnection, updateChannelSettings } from '@/stores/channel.store';
 import { LocalizationStrings } from '@/stores/locales.store';
 import { h } from '@stencil/core';
 
@@ -13,7 +13,11 @@ export const actions = (entries: LocalizationStrings) => [
       </svg>
     ),
     action: (params: IChannel) => {
+      const selectedProperty = params.map.find(m => m.type === 'property');
+      updateChannelSettings('hotel_id', selectedProperty.channel_id);
+      updateChannelSettings('hotel_title', params.title);
       selectChannel(params.channel.id.toString());
+      testConnection();
     },
   },
   {

@@ -38,6 +38,7 @@ export class IrChannel {
         this.roomService.getExposedConnectedChannels(this.propertyid),
         this.roomService.fetchLanguage(this.language),
       ]);
+      channels_data.property_id = this.propertyid;
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
@@ -59,7 +60,7 @@ export class IrChannel {
           <div class="d-flex w-100 justify-content-end mb-2">
             <ir-button text={'Create'} size="sm" onClickHanlder={() => (this.channel_status = 'create')}></ir-button>
           </div>
-          <div>
+          <div class="table-container">
             <table class="table table-hover">
               <thead>
                 <tr>
@@ -139,6 +140,8 @@ export class IrChannel {
         >
           {this.channel_status && (
             <ir-channel-editor
+              class="p-1"
+              channel_status={this.channel_status}
               onCloseSideBar={() => {
                 this.channel_status = null;
                 resetStore();

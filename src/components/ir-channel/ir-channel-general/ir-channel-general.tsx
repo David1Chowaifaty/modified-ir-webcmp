@@ -1,5 +1,5 @@
 import channels_data, { selectChannel, testConnection, updateChannelSettings } from '@/stores/channel.store';
-import { Component, Host, h } from '@stencil/core';
+import { Component, Host, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-channel-general',
@@ -7,15 +7,20 @@ import { Component, Host, h } from '@stencil/core';
   scoped: true,
 })
 export class IrChannelGeneral {
+  @Prop() channel_status: 'create' | 'edit' | null = null;
+
+  @State() buttonClicked: boolean = false;
+
   render() {
     return (
       <Host>
         <section class="ml-18">
           <fieldset class="d-flex align-items-center">
-            <label htmlFor="" class="m-0 p-0 label-style">
+            <label htmlFor="hotel_channels" class="m-0 p-0 label-style">
               Channel:
             </label>
             <ir-combobox
+              input_id="hotel_channels"
               disabled={channels_data.isConnectedToChannel}
               class="flex-fill"
               value={channels_data.selectedChannel?.name}
@@ -32,11 +37,12 @@ export class IrChannelGeneral {
             ></ir-combobox>
           </fieldset>
           <fieldset class="d-flex align-items-center mt-1">
-            <label htmlFor="" class="m-0 p-0 label-style">
+            <label htmlFor="hotel_title" class="m-0 p-0 label-style">
               Title:
             </label>
             <div class="flex-fill">
               <input
+                id="hotel_title"
                 value={channels_data.channel_settings?.hotel_title}
                 onInput={e => updateChannelSettings('hotel_title', (e.target as HTMLInputElement).value)}
                 class="form-control  flex-fill"
@@ -49,21 +55,33 @@ export class IrChannelGeneral {
             <h3 class="text-left font-medium-2  py-0 my-0 connection-title py-1 mb-2">Connection Settings</h3>
             <div class="ml-18">
               <fieldset class="d-flex align-items-center my-1">
-                <label htmlFor="" class="m-0 p-0 label-style">
+                <label htmlFor="hotel_id" class="m-0 p-0 label-style">
                   Hotel ID:
                 </label>
                 <div class="flex-fill">
                   <input
+                    id="hotel_id"
                     disabled={channels_data.isConnectedToChannel}
-                    class="form-control  flex-fill bg-white"
+                    class={`form-control  flex-fill bg-white ${this.buttonClicked && !channels_data.channel_settings?.hotel_id && 'border-danger'}`}
                     value={channels_data.channel_settings?.hotel_id}
                     onInput={e => updateChannelSettings('hotel_id', (e.target as HTMLInputElement).value)}
                   />
                 </div>
               </fieldset>
               <div class={'connection-testing-container'}>
-                <span>{channels_data.isConnectedToChannel ? 'Connected Channel' : ''}</span>
-                <button class="btn btn-outline-secondary btn-sm" onClick={() => testConnection()}>
+                {this.channel_status === 'create' ? <span>{channels_data.isConnectedToChannel ? 'Connected Channel' : ''}</span> : <span></span>}
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  onClick={() => {
+                    this.buttonClicked = true;
+                    if (this.channel_status !== 'create' || !channels_data.channel_settings?.hotel_id) {
+                      return;
+                    }
+
+                    testConnection();
+                    this.buttonClicked = false;
+                  }}
+                >
                   Test Connection
                 </button>
               </div>

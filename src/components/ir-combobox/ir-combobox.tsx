@@ -14,6 +14,7 @@ export class IrCombobox {
   @Prop() value: string;
   @Prop() disabled: boolean = false;
   @Prop() autoFocus: boolean = false;
+  @Prop() input_id: string = '';
 
   @State() selectedIndex: number = -1;
   @State() isComboBoxVisible: boolean = false;
@@ -230,6 +231,7 @@ export class IrCombobox {
     return (
       <form onSubmit={this.handleSubmit.bind(this)} class="m-0 p-0">
         <input
+          id={this.input_id}
           ref={el => (this.inputRef = el)}
           type="text"
           disabled={this.disabled}

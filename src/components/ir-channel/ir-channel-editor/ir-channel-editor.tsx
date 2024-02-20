@@ -1,6 +1,6 @@
 import { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, Host, Listen, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-channel-editor',
@@ -8,6 +8,7 @@ import { Component, Event, EventEmitter, Host, Listen, State, h } from '@stencil
   scoped: true,
 })
 export class IrChannelEditor {
+  @Prop() channel_status: 'create' | 'edit' | null = null;
   @State() selectedTab: string = '';
   @State() headerTitles = [
     {
@@ -23,6 +24,9 @@ export class IrChannelEditor {
   @Event() closeSideBar: EventEmitter<null>;
 
   componentWillLoad() {
+    if (this.channel_status === 'edit') {
+      this.enableAllHeaders();
+    }
     this.selectedTab = this.headerTitles[0].id;
     onChannelChange('isConnectedToChannel', newValue => {
       if (!!newValue) {
@@ -41,7 +45,7 @@ export class IrChannelEditor {
   renderTabScreen() {
     switch (this.selectedTab) {
       case 'general_settings':
-        return <ir-channel-general></ir-channel-general>;
+        return <ir-channel-general channel_status={this.channel_status}></ir-channel-general>;
       case 'mapping':
         return <ir-channel-mapping></ir-channel-mapping>;
       case 'channel_booking':
@@ -63,7 +67,7 @@ export class IrChannelEditor {
       <Host class=" d-flex flex-column h-100">
         <nav class="px-1 position-sticky sticky-top py-1 top-0 bg-white">
           <div class="d-flex align-items-center  justify-content-between">
-            <h3 class="text-left font-medium-2  py-0 my-0">Create Channel</h3>
+            <h3 class="text-left font-medium-2  py-0 my-0">{this.channel_status === 'create' ? 'Create Channel' : 'Edit Channel'}</h3>
             <ir-icon
               class={'m-0 p-0 close'}
               onIconClickHandler={() => {

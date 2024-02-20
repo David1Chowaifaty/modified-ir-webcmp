@@ -11,6 +11,7 @@ export interface IChannelStore {
   mappedChannels: IMap[];
   isConnectedToChannel: boolean;
   channel_settings: IChannelSettings | null;
+  property_id: number | null;
 }
 const initialState: IChannelStore = {
   channels: [],
@@ -19,6 +20,7 @@ const initialState: IChannelStore = {
   connected_channels: [],
   isConnectedToChannel: false,
   channel_settings: null,
+  property_id: null,
 };
 export const { state: channels_data, onChange: onChannelChange, dispose } = createStore<IChannelStore>(initialState);
 
@@ -28,8 +30,15 @@ export function selectChannel(channel_id: string) {
     return;
   }
   const selectedChannel = channels_data.channels.find(c => c.id.toString() === channel_id);
-  console.log(selectedChannel);
-  channels_data.selectedChannel = selectedChannel;
+  if (selectedChannel) {
+    channels_data.selectedChannel = selectedChannel;
+  } else {
+    channels_data.selectedChannel = {
+      id: channel_id,
+      name: '',
+      properties: [],
+    };
+  }
   setMappedChannel();
 }
 export function updateChannelSettings(key: keyof IChannelSettings, value: string) {
@@ -44,7 +53,8 @@ export function updateChannelSettings(key: keyof IChannelSettings, value: string
 export function setMappedChannel() {
   let selectedChannelMap = channels_data.connected_channels.find(c => c.channel.id.toString() === channels_data.selectedChannel.id.toString());
   if (!selectedChannelMap) {
-    throw new Error('Invalid Channel');
+    channels_data.mappedChannels = [];
+    return;
   }
   channels_data.mappedChannels = [...selectedChannelMap.map];
 }
@@ -60,7 +70,6 @@ export function addMapping(ir_id: string, fr_id: string, isRoomType: boolean) {
     ir_id,
     type: isRoomType ? 'room_type' : 'rate_plan',
   });
-  console.log(channels_data.mappedChannels);
 }
 export function testConnection() {
   // const hotelConnection = channels_data.selectedChannel.properties.find(property => property.id === 'd09e6374-1ebf-45e0-a130-64c8c9930987');
@@ -69,6 +78,9 @@ export function testConnection() {
     return;
   }
   channels_data.selectedChannel.property = hotelConnection;
+  if (channels_data.mappedChannels.length === 0) {
+    channels_data.mappedChannels.push({ ir_id: (channels_data.property_id ?? -1).toString(), channel_id: channels_data.channel_settings.hotel_id, type: 'property' });
+  }
   channels_data.isConnectedToChannel = true;
 }
 export default channels_data;

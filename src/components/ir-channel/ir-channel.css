@@ -37,3 +37,10 @@
 .danger svg path {
   fill: var(--red);
 }
+
+.table thead tr {
+  height: 50px !important;
+}
+.table-container {
+  border-radius: 30px;
+}

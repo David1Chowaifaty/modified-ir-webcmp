@@ -292,8 +292,10 @@ export namespace Components {
         "ticket": string;
     }
     interface IrChannelEditor {
+        "channel_status": 'create' | 'edit' | null;
     }
     interface IrChannelGeneral {
+        "channel_status": 'create' | 'edit' | null;
     }
     interface IrChannelHeader {
         "headerTitles": { id: string; name: string; disabled: boolean }[];
@@ -332,6 +334,7 @@ export namespace Components {
         "data": { id: string; name: string }[];
         "disabled": boolean;
         "duration": number;
+        "input_id": string;
         "placeholder": string;
         "value": string;
     }
@@ -2163,9 +2166,11 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrChannelEditor {
+        "channel_status"?: 'create' | 'edit' | null;
         "onCloseSideBar"?: (event: IrChannelEditorCustomEvent<null>) => void;
     }
     interface IrChannelGeneral {
+        "channel_status"?: 'create' | 'edit' | null;
     }
     interface IrChannelHeader {
         "headerTitles"?: { id: string; name: string; disabled: boolean }[];
@@ -2210,6 +2215,7 @@ declare namespace LocalJSX {
         "data"?: { id: string; name: string }[];
         "disabled"?: boolean;
         "duration"?: number;
+        "input_id"?: string;
         "onComboboxValueChange"?: (event: IrComboboxCustomEvent<{ key: string; data: unknown }>) => void;
         "onInputCleared"?: (event: IrComboboxCustomEvent<null>) => void;
         "onToast"?: (event: IrComboboxCustomEvent<IToast>) => void;
