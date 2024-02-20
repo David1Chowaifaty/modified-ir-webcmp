@@ -73,15 +73,16 @@ export class IrChannelEditor {
         id: channels_data.selectedChannel.id,
         title: channels_data.channel_settings.hotel_title,
         is_active: false,
-        channel: channels_data.selectedChannel,
-        property: channels_data.selectedChannel.property,
+        channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
+        property: { id: channels_data.selectedChannel.property.id, name: channels_data.selectedChannel.property.name },
         map: channels_data.mappedChannels,
+        is_remove: false,
       };
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (!token) {
         throw new Error('Invalid Token');
       }
-      const { data } = await axios.post(`/Exposed_Connected_Channel?Ticket=${token}`, body);
+      const { data } = await axios.post(`/Handle_Connected_Channel?Ticket=${token}`, body);
       this.saveChannelFinished.emit();
       console.log(data);
     } catch (error) {

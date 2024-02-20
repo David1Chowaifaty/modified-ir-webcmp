@@ -1,180 +1,149 @@
 {
-  "assign_units": true,
-  "check_in": false,
-  "is_pms": true,
-  "is_direct": true,
-  "booking": {
-    "booking_nbr": "48228322",
-    "from_date": "2024-02-14",
-    "to_date": "2024-02-17",
-    "remark": null,
-    "property": {
-      "id": 42
-    },
-    "source": {
-      "code": "003",
-      "description": "Phone/Email",
-      "id": null,
-      "tag": "",
-      "type": null
-    },
-    "currency": {
-      "code": "USD",
-      "id": 4,
-      "symbol": "US$"
-    },
-    "arrival": {
-      "code": "001"
-    },
-    "guest": {
-      "address": "",
-      "cci": null,
-      "city": null,
-      "country_id": 555,
-      "dob": null,
-      "email": "test@gmail.com",
-      "first_name": "test",
-      "id": 195932,
-      "last_name": "test",
-      "mobile": "123456789",
-      "subscribe_to_news_letter": true
-    },
-    "rooms": [
+  "id": 3,
+  "title": "SmartLink-Title",
+  "is_active": false,
+  "channel": {
+    "id": 3,
+    "name": "SmartLink"
+  },
+  "property": {
+    "id": "prop-01",
+    "name": "Property 01",
+    "room_types": [
       {
-        "identifier": "69aae9ca-9073-4317-beaa-32f0e122a447",
-        "roomtype": {
-          "id": 111,
-          "name": "Premium Suites",
-          "physicalrooms": null,
-          "rateplans": null,
-          "availabilities": null,
-          "inventory": 3,
-          "rate": 53.333333333333336
-        },
-        "rateplan": {
-          "id": 124,
-          "name": "Premium Suites/Bed-&-breakfast",
-          "rate_restrictions": null,
-          "variations": null,
-          "cancelation": "<u><b>Cancellation</b></u>: One night (of the total price will be charged) if cancelled before  Friday, 9 Feb 2024, 22:00.\r\n100% of the total price will be charged if cancelled after Friday, 9 Feb 2024, 22:00 or in case of no show.\r\n",
-          "guarantee": "<u><b>Guarantee</b></u>: First night from your booking will be charged."
-        },
-        "unit": {
-          "id": 2
-        },
-        "occupancy": {
-          "adult_nbr": 1,
-          "children_nbr": 0,
-          "infant_nbr": null
-        },
-        "bed_preference": 2,
-        "from_date": "2024-02-14",
-        "to_date": "2024-02-17",
-        "notes": null,
-        "days": [
+        "id": "room-type-0",
+        "name": "Room Type 0",
+        "rate_plans": [
           {
-            "date": "2024-02-14",
-            "amount": 53.333333333333336
+            "id": "rate-plan-0-0",
+            "name": "Rate Plan 0-0"
           },
           {
-            "date": "2024-02-15",
-            "amount": 53.333333333333336
+            "id": "rate-plan-0-1",
+            "name": "Rate Plan 0-1"
           },
           {
-            "date": "2024-02-16",
-            "amount": 53.333333333333336
+            "id": "rate-plan-0-2",
+            "name": "Rate Plan 0-2"
           }
-        ],
-        "guest": {
-          "email": null,
-          "first_name": "popop",
-          "last_name": null,
-          "country_id": null,
-          "city": null,
-          "mobile": null,
-          "address": null,
-          "dob": null,
-          "subscribe_to_news_letter": null
-        }
+        ]
       },
       {
-        "assigned_units_pool": "e9420c1a-0fe1-46b5-829c-439ca6b6ac8b",
-        "bed_preference": "1",
-        "days": [
+        "id": "room-type-1",
+        "name": "Room Type 1",
+        "rate_plans": [
           {
-            "amount": 40,
-            "date": "2024-02-14"
+            "id": "rate-plan-1-0",
+            "name": "Rate Plan 1-0"
           },
           {
-            "amount": 40,
-            "date": "2024-02-15"
+            "id": "rate-plan-1-1",
+            "name": "Rate Plan 1-1"
           },
           {
-            "amount": 40,
-            "date": "2024-02-16"
+            "id": "rate-plan-1-2",
+            "name": "Rate Plan 1-2"
           }
-        ],
-        "from_date": "2024-02-14",
-        "guest": {
-          "address": null,
-          "cci": null,
-          "city": null,
-          "country_id": null,
-          "dob": null,
-          "email": null,
-          "first_name": "test1",
-          "id": null,
-          "last_name": null,
-          "mobile": null,
-          "subscribe_to_news_letter": null
-        },
-        "identifier": "a6964eeb-a4b7-4d97-9441-4ffccf8ac062",
-        "notes": null,
-        "occupancy": {
-          "adult_nbr": 1,
-          "children_nbr": 0,
-          "infant_nbr": null
-        },
-        "rateplan": {
-          "assignable_units": null,
-          "cancelation": "<u><b>Cancellation</b></u>: One night (of the total price will be charged) if cancelled before  Friday, 9 Feb 2024, 22:00.\r\n100% of the total price will be charged if cancelled after Friday, 9 Feb 2024, 22:00 or in case of no show.\r\n",
-          "custom_text": null,
-          "guarantee": "<u><b>Guarantee</b></u>: First night from your booking will be charged.",
-          "id": 123,
-          "is_active": null,
-          "is_closed": null,
-          "is_non_refundable": false,
-          "is_targeting_travel_agency": null,
-          "name": "Bed-&-breakfast",
-          "rate_restrictions": null,
-          "selected_variation": {
-            "adult_child_offering": "1 adult",
-            "adult_nbr": 1,
-            "amount": null,
-            "child_nbr": 0
+        ]
+      },
+      {
+        "id": "room-type-2",
+        "name": "Room Type 2",
+        "rate_plans": [
+          {
+            "id": "rate-plan-2-0",
+            "name": "Rate Plan 2-0"
           },
-          "variations": null
-        },
-        "roomtype": {
-          "availabilities": null,
-          "exposed_inventory": null,
-          "id": 110,
-          "inventory": null,
-          "is_active": null,
-          "name": "Standard Rooms",
-          "occupancy_default": null,
-          "physicalrooms": null,
-          "rate": null,
-          "rateplans": null
-        },
-        "to_date": "2024-02-17",
-        "total": 120,
-        "unit": {
-          "calendar_cell": null,
-          "id": 17,
-          "name": "06"
-        }
+          {
+            "id": "rate-plan-2-1",
+            "name": "Rate Plan 2-1"
+          },
+          {
+            "id": "rate-plan-2-2",
+            "name": "Rate Plan 2-2"
+          }
+        ]
+      },
+      {
+        "id": "room-type-3",
+        "name": "Room Type 3",
+        "rate_plans": [
+          {
+            "id": "rate-plan-3-0",
+            "name": "Rate Plan 3-0"
+          },
+          {
+            "id": "rate-plan-3-1",
+            "name": "Rate Plan 3-1"
+          },
+          {
+            "id": "rate-plan-3-2",
+            "name": "Rate Plan 3-2"
+          }
+        ]
       }
     ]
-  }
+  },
+  "map": [
+    {
+      "ir_id": "42",
+      "channel_id": "prop-01",
+      "type": "property"
+    },
+    {
+      "channel_id": "room-type-0",
+      "ir_id": "110",
+      "type": "room_type"
+    },
+    {
+      "channel_id": "rate-plan-0-0",
+      "ir_id": "123",
+      "type": "rate_plan"
+    },
+    {
+      "channel_id": "rate-plan-0-1",
+      "ir_id": "2001",
+      "type": "rate_plan"
+    },
+    {
+      "channel_id": "rate-plan-0-2",
+      "ir_id": "3156",
+      "type": "rate_plan"
+    },
+    {
+      "channel_id": "room-type-1",
+      "ir_id": "111",
+      "type": "room_type"
+    },
+    {
+      "channel_id": "rate-plan-1-0",
+      "ir_id": "124",
+      "type": "rate_plan"
+    },
+    {
+      "channel_id": "rate-plan-1-1",
+      "ir_id": "3755",
+      "type": "rate_plan"
+    },
+    {
+      "channel_id": "room-type-2",
+      "ir_id": "112",
+      "type": "room_type"
+    },
+    {
+      "channel_id": "rate-plan-2-0",
+      "ir_id": "125",
+      "type": "rate_plan"
+    },
+    {
+      "channel_id": "room-type-3",
+      "ir_id": "2352",
+      "type": "room_type"
+    },
+    {
+      "channel_id": "rate-plan-3-0",
+      "ir_id": "3766",
+      "type": "rate_plan"
+    }
+  ]
 }
