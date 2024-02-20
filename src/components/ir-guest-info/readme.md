@@ -32,6 +32,7 @@
 
 ### Depends on
 
+- [ir-icon](../ir-icon)
 - [ir-input-text](../ir-input-text)
 - [ir-select](../ir-select)
 - [ir-button](../ir-button)
@@ -39,6 +40,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button

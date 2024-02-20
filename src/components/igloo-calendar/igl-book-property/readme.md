@@ -33,12 +33,14 @@
 
 ### Used by
 
+ - [igl-book-property-container](../../igl-book-property-container)
  - [igloo-calendar](..)
  - [ir-booking-details](../../ir-booking-details)
 
 ### Depends on
 
 - [igl-block-dates-view](../igl-block-dates-view)
+- [ir-icon](../../ir-icon)
 - [igl-booking-overview-page](igl-booking-overview-page)
 - [igl-pagetwo](../igl-pagetwo)
 
@@ -46,6 +48,7 @@
 ```mermaid
 graph TD;
   igl-book-property --> igl-block-dates-view
+  igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo
   igl-booking-overview-page --> igl-book-property-header
@@ -62,6 +65,7 @@ graph TD;
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  igl-book-property-container --> igl-book-property
   igloo-calendar --> igl-book-property
   ir-booking-details --> igl-book-property
   style igl-book-property fill:#f9f,stroke:#333,stroke-width:4px

@@ -43,7 +43,6 @@ graph TD;
   ir-list-item --> ir-icon
   ir-list-item --> ir-modal
   ir-dropdown --> ir-icon
-  ir-modal --> ir-icon
   ir-modal --> ir-button
   ir-channel-manager --> ir-list-item
   style ir-list-item fill:#f9f,stroke:#333,stroke-width:4px

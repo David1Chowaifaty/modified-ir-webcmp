@@ -7,22 +7,23 @@
 
 ## Properties
 
-| Property        | Attribute         | Description | Type      | Default     |
-| --------------- | ----------------- | ----------- | --------- | ----------- |
-| `baseurl`       | `baseurl`         |             | `string`  | `''`        |
-| `bookingNumber` | `booking-number`  |             | `string`  | `''`        |
-| `hasCheckIn`    | `has-check-in`    |             | `boolean` | `false`     |
-| `hasCheckOut`   | `has-check-out`   |             | `boolean` | `false`     |
-| `hasDelete`     | `has-delete`      |             | `boolean` | `false`     |
-| `hasMenu`       | `has-menu`        |             | `boolean` | `false`     |
-| `hasPrint`      | `has-print`       |             | `boolean` | `false`     |
-| `hasReceipt`    | `has-receipt`     |             | `boolean` | `false`     |
-| `hasRoomAdd`    | `has-room-add`    |             | `boolean` | `false`     |
-| `hasRoomDelete` | `has-room-delete` |             | `boolean` | `false`     |
-| `hasRoomEdit`   | `has-room-edit`   |             | `boolean` | `false`     |
-| `language`      | `language`        |             | `string`  | `''`        |
-| `propertyid`    | `propertyid`      |             | `number`  | `undefined` |
-| `ticket`        | `ticket`          |             | `string`  | `''`        |
+| Property             | Attribute            | Description | Type      | Default     |
+| -------------------- | -------------------- | ----------- | --------- | ----------- |
+| `baseurl`            | `baseurl`            |             | `string`  | `''`        |
+| `bookingNumber`      | `booking-number`     |             | `string`  | `''`        |
+| `hasCheckIn`         | `has-check-in`       |             | `boolean` | `false`     |
+| `hasCheckOut`        | `has-check-out`      |             | `boolean` | `false`     |
+| `hasDelete`          | `has-delete`         |             | `boolean` | `false`     |
+| `hasMenu`            | `has-menu`           |             | `boolean` | `false`     |
+| `hasPrint`           | `has-print`          |             | `boolean` | `false`     |
+| `hasReceipt`         | `has-receipt`        |             | `boolean` | `false`     |
+| `hasRoomAdd`         | `has-room-add`       |             | `boolean` | `false`     |
+| `hasRoomDelete`      | `has-room-delete`    |             | `boolean` | `false`     |
+| `hasRoomEdit`        | `has-room-edit`      |             | `boolean` | `false`     |
+| `is_from_front_desk` | `is_from_front_desk` |             | `boolean` | `false`     |
+| `language`           | `language`           |             | `string`  | `''`        |
+| `propertyid`         | `propertyid`         |             | `number`  | `undefined` |
+| `ticket`             | `ticket`             |             | `string`  | `''`        |
 
 
 ## Events
@@ -40,6 +41,8 @@
 
 ### Depends on
 
+- [ir-toast](../ir-toast)
+- [ir-interceptor](../ir-interceptor)
 - [ir-select](../ir-select)
 - [ir-button](../ir-button)
 - [ir-icon](../ir-icon)
@@ -54,6 +57,8 @@
 ### Graph
 ```mermaid
 graph TD;
+  ir-booking-details --> ir-toast
+  ir-booking-details --> ir-interceptor
   ir-booking-details --> ir-select
   ir-booking-details --> ir-button
   ir-booking-details --> ir-icon
@@ -64,25 +69,28 @@ graph TD;
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
+  ir-interceptor --> ir-loading-screen
   ir-label --> ir-icon
   ir-room --> ir-icon
   ir-room --> ir-button
   ir-room --> ir-label
   ir-room --> ir-modal
-  ir-modal --> ir-icon
   ir-modal --> ir-button
   ir-payment-details --> ir-date-picker
   ir-payment-details --> ir-icon
   ir-payment-details --> ir-modal
   ir-sidebar --> ir-icon
+  ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button
+  ir-pickup --> ir-icon
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
   ir-pickup --> ir-button
   igl-book-property --> igl-block-dates-view
+  igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo
   igl-booking-overview-page --> igl-book-property-header

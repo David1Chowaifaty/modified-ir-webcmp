@@ -43,7 +43,6 @@ graph TD;
   ir-general-settings --> ir-select
   ir-general-settings --> ir-input-text
   ir-general-settings --> ir-modal
-  ir-modal --> ir-icon
   ir-modal --> ir-button
   ir-channel-manager --> ir-general-settings
   style ir-general-settings fill:#f9f,stroke:#333,stroke-width:4px

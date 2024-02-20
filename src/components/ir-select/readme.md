@@ -7,26 +7,26 @@
 
 ## Properties
 
-| Property               | Attribute                | Description | Type                                                                                                      | Default     |
-| ---------------------- | ------------------------ | ----------- | --------------------------------------------------------------------------------------------------------- | ----------- |
-| `LabelAvailable`       | `label-available`        |             | `boolean`                                                                                                 | `true`      |
-| `data`                 | --                       |             | `selectOption[]`                                                                                          | `undefined` |
-| `firstOption`          | `first-option`           |             | `string`                                                                                                  | `'Select'`  |
-| `label`                | `label`                  |             | `string`                                                                                                  | `'<label>'` |
-| `labelBackground`      | `label-background`       |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`           | `null`      |
-| `labelBorder`          | `label-border`           |             | `"danger" \| "dark" \| "info" \| "light" \| "none" \| "primary" \| "secondary" \| "success" \| "warning"` | `'light'`   |
-| `labelColor`           | `label-color`            |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`           | `'dark'`    |
-| `labelPosition`        | `label-position`         |             | `"center" \| "left" \| "right"`                                                                           | `'left'`    |
-| `labelWidth`           | `label-width`            |             | `1 \| 10 \| 11 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9`                                                   | `3`         |
-| `name`                 | `name`                   |             | `string`                                                                                                  | `undefined` |
-| `required`             | `required`               |             | `boolean`                                                                                                 | `undefined` |
-| `selectContainerStyle` | `select-container-style` |             | `string`                                                                                                  | `undefined` |
-| `selectStyle`          | `select-style`           |             | `boolean`                                                                                                 | `true`      |
-| `selectStyles`         | `select-styles`          |             | `string`                                                                                                  | `undefined` |
-| `selectedValue`        | `selected-value`         |             | `any`                                                                                                     | `null`      |
-| `size`                 | `size`                   |             | `"lg" \| "md" \| "sm"`                                                                                    | `'md'`      |
-| `submited`             | `submited`               |             | `boolean`                                                                                                 | `false`     |
-| `textSize`             | `text-size`              |             | `"lg" \| "md" \| "sm"`                                                                                    | `'md'`      |
+| Property               | Attribute                | Description | Type                                                                                                                 | Default     |
+| ---------------------- | ------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `LabelAvailable`       | `label-available`        |             | `boolean`                                                                                                            | `true`      |
+| `data`                 | --                       |             | `selectOption[]`                                                                                                     | `undefined` |
+| `firstOption`          | `first-option`           |             | `string`                                                                                                             | `'Select'`  |
+| `label`                | `label`                  |             | `string`                                                                                                             | `'<label>'` |
+| `labelBackground`      | `label-background`       |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`                      | `null`      |
+| `labelBorder`          | `label-border`           |             | `"danger" \| "dark" \| "info" \| "light" \| "none" \| "primary" \| "secondary" \| "success" \| "theme" \| "warning"` | `'theme'`   |
+| `labelColor`           | `label-color`            |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`                      | `'dark'`    |
+| `labelPosition`        | `label-position`         |             | `"center" \| "left" \| "right"`                                                                                      | `'left'`    |
+| `labelWidth`           | `label-width`            |             | `1 \| 10 \| 11 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9`                                                              | `3`         |
+| `name`                 | `name`                   |             | `string`                                                                                                             | `undefined` |
+| `required`             | `required`               |             | `boolean`                                                                                                            | `undefined` |
+| `selectContainerStyle` | `select-container-style` |             | `string`                                                                                                             | `undefined` |
+| `selectStyle`          | `select-style`           |             | `boolean`                                                                                                            | `true`      |
+| `selectStyles`         | `select-styles`          |             | `string`                                                                                                             | `undefined` |
+| `selectedValue`        | `selected-value`         |             | `any`                                                                                                                | `null`      |
+| `size`                 | `size`                   |             | `"lg" \| "md" \| "sm"`                                                                                               | `'md'`      |
+| `submited`             | `submited`               |             | `boolean`                                                                                                            | `false`     |
+| `textSize`             | `text-size`              |             | `"lg" \| "md" \| "sm"`                                                                                               | `'md'`      |
 
 
 ## Events
@@ -41,7 +41,7 @@
 ### Used by
 
  - [ir-booking-details](../ir-booking-details)
- - [ir-general-settings](../ir-channel/ir-general-settings)
+ - [ir-general-settings](../old-ir-channel/ir-general-settings)
  - [ir-guest-info](../ir-guest-info)
  - [ir-pickup](../ir-booking-details/ir-pickup)
 

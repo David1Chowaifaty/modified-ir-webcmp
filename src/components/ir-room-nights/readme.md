@@ -36,11 +36,13 @@
 ### Depends on
 
 - [ir-icon](../ir-icon)
+- [ir-button](../ir-button)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-room-nights --> ir-icon
+  ir-room-nights --> ir-button
   igloo-calendar --> ir-room-nights
   style ir-room-nights fill:#f9f,stroke:#333,stroke-width:4px
 ```
