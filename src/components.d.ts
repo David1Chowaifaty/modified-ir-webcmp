@@ -1261,6 +1261,7 @@ declare global {
         new (): HTMLIrChannelElement;
     };
     interface HTMLIrChannelEditorElementEventMap {
+        "saveChannelFinished": null;
         "closeSideBar": null;
     }
     interface HTMLIrChannelEditorElement extends Components.IrChannelEditor, HTMLStencilElement {
@@ -2168,6 +2169,7 @@ declare namespace LocalJSX {
     interface IrChannelEditor {
         "channel_status"?: 'create' | 'edit' | null;
         "onCloseSideBar"?: (event: IrChannelEditorCustomEvent<null>) => void;
+        "onSaveChannelFinished"?: (event: IrChannelEditorCustomEvent<null>) => void;
     }
     interface IrChannelGeneral {
         "channel_status"?: 'create' | 'edit' | null;

@@ -1,6 +1,7 @@
-import { onChannelChange } from '@/stores/channel.store';
+import channels_data, { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
+import axios from 'axios';
 
 @Component({
   tag: 'ir-channel-editor',
@@ -10,6 +11,7 @@ import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@s
 export class IrChannelEditor {
   @Prop() channel_status: 'create' | 'edit' | null = null;
   @State() selectedTab: string = '';
+  @State() isLoading: boolean = false;
   @State() headerTitles = [
     {
       id: 'general_settings',
@@ -21,6 +23,7 @@ export class IrChannelEditor {
   ];
   @State() selectedRoomType = [];
 
+  @Event() saveChannelFinished: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
 
   componentWillLoad() {
@@ -58,8 +61,34 @@ export class IrChannelEditor {
   enableAllHeaders() {
     this.headerTitles = this.headerTitles.map((title, index) => (index < this.headerTitles.length - 1 ? { ...title, disabled: false } : title));
   }
+
   disableNonFirstTabs() {
     this.headerTitles = this.headerTitles.map((title, index) => (index > 0 ? { ...title, disabled: true } : title));
+  }
+
+  async saveConnectedChannel() {
+    try {
+      this.isLoading = true;
+      const body = {
+        id: channels_data.selectedChannel.id,
+        title: channels_data.channel_settings.hotel_title,
+        is_active: false,
+        channel: channels_data.selectedChannel,
+        property: channels_data.selectedChannel.property,
+        map: channels_data.mappedChannels,
+      };
+      const token = JSON.parse(sessionStorage.getItem('token'));
+      if (!token) {
+        throw new Error('Invalid Token');
+      }
+      const { data } = await axios.post(`/Exposed_Connected_Channel?Ticket=${token}`, body);
+      this.saveChannelFinished.emit();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   render() {
@@ -83,7 +112,13 @@ export class IrChannelEditor {
         </nav>
         <section class="py-1 flex-fill tab-container px-1">{this.renderTabScreen()}</section>
 
-        <ir-button class="px-1 py-1 top-border" btn_styles="w-100  justify-content-center" text={locales.entries.Lcz_Save}></ir-button>
+        <ir-button
+          isLoading={this.isLoading}
+          onClickHanlder={() => this.saveConnectedChannel()}
+          class="px-1 py-1 top-border"
+          btn_styles="w-100  justify-content-center align-items-center"
+          text={locales.entries.Lcz_Save}
+        ></ir-button>
       </Host>
     );
   }

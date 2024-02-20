@@ -21,7 +21,7 @@
   margin: 0;
   width: var(--ir-root-width);
   height: var(--ir-root-height);
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--red);
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 10px;
   --webkit-tap-highlight-color: rgba(0, 0, 0, 0);

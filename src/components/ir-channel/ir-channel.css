@@ -44,3 +44,11 @@
 .table-container {
   border-radius: 30px;
 }
+.table thead {
+  background: #fafafa;
+  border-top-width: 0;
+}
+.actions-theader {
+  width: 35% !important;
+  text-align: end;
+}
