@@ -1,11 +1,12 @@
 import { RoomService } from '@/services/room.service';
-import channels_data, { resetStore } from '@/stores/channel.store';
+import channels_data, { resetStore, selectChannel, setChannelIdAndActiveState, testConnection, updateChannelSettings } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, Watch, h, Element, State, Fragment, Listen } from '@stencil/core';
 import axios from 'axios';
 import { actions } from './data';
 import { IModalCause } from './types';
 import { ChannelService } from '@/services/channel.service';
+import { IChannel } from '@/models/calendarData';
 @Component({
   tag: 'ir-channel',
   styleUrl: 'ir-channel.css',
@@ -42,12 +43,17 @@ export class IrChannel {
       return;
     }
     await this.modal_cause.action();
+    if (this.modal_cause.cause === 'remove') {
+      await this.refreshChannels();
+    }
     this.modal_cause = null;
   }
   openModal() {
     this.irModalRef.openModal();
   }
-
+  async refreshChannels() {
+    const [, ,] = await Promise.all([this.channelService.getExposedChannels(), this.channelService.getExposedConnectedChannels(this.propertyid)]);
+  }
   async initializeApp() {
     try {
       const [, , , languageTexts] = await Promise.all([
@@ -105,12 +111,23 @@ export class IrChannel {
     resetStore();
   }
   @Listen('saveChannelFinished')
-  handleSaveChange(e: CustomEvent) {
+  async handleSaveChange(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
+    await this.refreshChannels();
     this.resetSideBar();
   }
-
+  async handleCheckChange(check: boolean, params: IChannel) {
+    const selectedProperty = params.map.find(m => m.type === 'property');
+    setChannelIdAndActiveState(params.id, check);
+    updateChannelSettings('hotel_id', selectedProperty.channel_id);
+    updateChannelSettings('hotel_title', params.title);
+    selectChannel(params.channel.id.toString());
+    testConnection();
+    await this.channelService.saveConnectedChannel(false);
+    resetStore();
+    this.refreshChannels();
+  }
   render() {
     return (
       <Host class="h-100 ">
@@ -148,7 +165,7 @@ export class IrChannel {
                       {channel.channel.name} {channel?.title ?? ''}
                     </th>
                     <td>
-                      <ir-switch checked={channel.is_active}></ir-switch>
+                      <ir-switch checked={channel.is_active} onCheckChange={e => this.handleCheckChange(e.detail, channel)}></ir-switch>
                     </td>
                     <th>
                       <div class="d-flex justify-content-end">

@@ -12,7 +12,7 @@ export class ChannelService {
           throw new Error(data.ExceptionMsg);
         }
         const results = data.My_Result;
-        channels_data.channels = results;
+        channels_data.channels = [...results];
         return data;
       }
     } catch (error) {
@@ -28,7 +28,7 @@ export class ChannelService {
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
-        channels_data.connected_channels = data.My_Result;
+        channels_data.connected_channels = [...data.My_Result];
       }
     } catch (error) {
       console.log(error);
