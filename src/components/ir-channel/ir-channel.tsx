@@ -7,6 +7,7 @@ import { actions } from './data';
 import { IModalCause } from './types';
 import { ChannelService } from '@/services/channel.service';
 import { IChannel } from '@/models/calendarData';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-channel',
@@ -23,6 +24,7 @@ export class IrChannel {
 
   @State() channel_status: 'create' | 'edit' | null = null;
   @State() modal_cause: IModalCause | null = null;
+  @State() isLoading = false;
 
   private roomService = new RoomService();
   private channelService = new ChannelService();
@@ -34,6 +36,7 @@ export class IrChannel {
       axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
+      calendar_data.token = this.ticket;
       this.channelService.setToken(this.ticket);
       this.roomService.setToken(this.ticket);
       this.initializeApp();
@@ -61,13 +64,14 @@ export class IrChannel {
   }
   async initializeApp() {
     try {
+      this.isLoading = true;
       const [, , , languageTexts] = await Promise.all([
         this.roomService.fetchData(this.propertyid, this.language),
         this.channelService.getExposedChannels(),
         this.channelService.getExposedConnectedChannels(this.propertyid),
         this.roomService.fetchLanguage(this.language, ['_CHANNEL_FRONT']),
       ]);
-      console.log(languageTexts);
+
       channels_data.property_id = this.propertyid;
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
@@ -75,12 +79,14 @@ export class IrChannel {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      this.isLoading = false;
     }
   }
 
   @Watch('ticket')
   async ticketChanged() {
-    sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    calendar_data.token = this.ticket;
     this.roomService.setToken(this.ticket);
     this.channelService.setToken(this.ticket);
     this.initializeApp();
@@ -136,6 +142,17 @@ export class IrChannel {
     this.refreshChannels();
   }
   render() {
+    if (this.isLoading) {
+      return (
+        <Host class="h-100 d-flex align-items-center justify-content-center">
+          <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </Host>
+      );
+    }
     return (
       <Host class="h-100 ">
         <section class="p-2 px-lg-5 py-0 h-100 d-flex flex-column">

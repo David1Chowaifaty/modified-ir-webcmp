@@ -1,5 +1,6 @@
 import { IChannel } from '@/models/calendarData';
 import { ChannelService } from '@/services/channel.service';
+import calendar_data from '@/stores/calendar-data';
 import { selectChannel, setChannelIdAndActiveState, testConnection, updateChannelSettings } from '@/stores/channel.store';
 import { LocalizationChannelFrontEntries, LocalizationStrings } from '@/stores/locales.store';
 import { h } from '@stencil/core';
@@ -96,7 +97,9 @@ export const actions = (entries: LocalizationStrings & LocalizationChannelFrontE
       return {
         cause: 'remove',
         action: async () => {
-          await new ChannelService().saveConnectedChannel(true);
+          const channel_service = new ChannelService();
+          channel_service.setToken(calendar_data.token);
+          await channel_service.saveConnectedChannel(true);
         },
         title: '',
         message: entries?.Lcz_ThisActionWillDelete,
