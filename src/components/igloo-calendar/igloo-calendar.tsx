@@ -527,14 +527,15 @@ export class IglooCalendar {
         monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
         bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
       };
+      const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
+      this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
+      this.unassignedDates = {
+        fromDate,
+        toDate,
+        data,
+      };
+      addUnassingedDates(data);
     }
-    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
-    this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
-    this.unassignedDates = {
-      fromDate,
-      toDate,
-      data,
-    };
   }
   async handleDateSearch(dates: { start: Moment; end: Moment }) {
     const startDate = moment(dates.start).toDate();
