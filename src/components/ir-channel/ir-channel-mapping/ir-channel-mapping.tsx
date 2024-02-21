@@ -102,7 +102,7 @@ export class IrChannelMapping {
           ></ir-combobox>
         ) : (
           <span class="cursor-pointer text-danger" onClick={() => this.setActiveField(id, isRoomType, roomTypeId)}>
-            Not mapped
+            {locales.entries.Lcz_NotMapped}
           </span>
         )}
       </span>
@@ -118,7 +118,7 @@ export class IrChannelMapping {
             }}
             class="btn refresh-btn"
           >
-            Refresh
+            {locales.entries?.Lcz_Refresh}
           </button>
         </div>
         <ul class="m-0 p-0">

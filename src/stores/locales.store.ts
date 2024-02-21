@@ -161,6 +161,7 @@ export type LocalizationChannelFrontEntries = {
   Lcz_Confirm: string;
   Lcz_ConnectedChannel: string;
   Lcz_ConnectionSettings: string;
+  Lcz_NotMapped: string;
   Lcz_CreateChannel: string;
   Lcz_Delete: string;
   Lcz_Edit: string;
@@ -181,6 +182,8 @@ export type LocalizationChannelFrontEntries = {
   Lcz_Title: string;
   Lcz_UnSavedChangesWillBeLost: string;
   Lcz_ViewLogs: string;
+  Lcz_TestConnection: string;
+  Lcz_NoChannelsAreConnected: string;
 };
 
 const initialState: ILocale = {

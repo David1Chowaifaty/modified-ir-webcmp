@@ -87,7 +87,7 @@ export class IrChannelGeneral {
               <div class={'connection-testing-container'}>
                 <span>{this.connection_status_message}</span>
                 <button class="btn btn-outline-secondary btn-sm" type="submit">
-                  Test Connection
+                  {locales.entries?.Lcz_TestConnection}
                 </button>
               </div>
             </div>

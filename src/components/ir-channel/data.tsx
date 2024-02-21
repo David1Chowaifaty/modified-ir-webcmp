@@ -57,7 +57,7 @@ export const actions = (entries: LocalizationStrings & LocalizationChannelFrontE
           alert('full sync');
         },
         title: '',
-        message: entries?.Lcz_FullSync,
+        message: entries?.Lcz_ScheduleFullSync,
         main_color: 'primary',
       };
     },
