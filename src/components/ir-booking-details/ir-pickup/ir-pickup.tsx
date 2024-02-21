@@ -117,10 +117,10 @@ export class IrPickup {
         oncomplete: () => {
           this.updatePickupData('arrival_time', (input as any).value);
         },
-        oncleared: function () {
+        oncleared: () => {
           this.updatePickupData('arrival_time', '');
         },
-        onincomplete: function () {
+        onincomplete: () => {
           this.updatePickupData('arrival_time', (input as any).value);
         },
       }).mask(input as HTMLElement);
