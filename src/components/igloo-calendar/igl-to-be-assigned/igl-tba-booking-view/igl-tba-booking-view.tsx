@@ -2,6 +2,7 @@ import { Component, Host, Prop, h, Event, EventEmitter, Listen, State } from '@s
 import { ToBeAssignedService } from '../../../../services/toBeAssigned.service';
 import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-tba-booking-view',
@@ -54,6 +55,7 @@ export class IglTbaBookingView {
   }
 
   componentWillLoad() {
+    this.toBeAssignedService.setToken(calendar_data.token);
     if (this.categoryIndex === 0 && this.eventIndex === 0) {
       setTimeout(() => {
         this.handleHighlightAvailability();

@@ -5,6 +5,7 @@ import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
 import { PaymentService } from '@/services/payment.service';
 import { ILocale, IToast } from '@/components';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -34,6 +35,8 @@ export class IrPaymentDetails {
 
   async componentWillLoad() {
     try {
+      this.paymentService.setToken(calendar_data.token);
+
       this.initializeItemToBeAdded();
     } catch (error) {
       if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {

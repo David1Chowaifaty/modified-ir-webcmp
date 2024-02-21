@@ -7,6 +7,7 @@ import { IRoomNightsDataEventPayload } from '../../models/property-types';
 import { v4 } from 'uuid';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-room-nights',
@@ -39,6 +40,8 @@ export class IrRoomNights {
   private bookingService = new BookingService();
 
   componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
+
     if (this.baseUrl) {
       axios.defaults.baseURL = this.baseUrl;
     }

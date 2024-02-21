@@ -20,6 +20,7 @@ export interface CalendarDataDetails {
   is_frontdesk_enabled: boolean;
   id: number;
   name: string;
+  token: string;
 }
 export interface ITaxes {
   is_exlusive: boolean;

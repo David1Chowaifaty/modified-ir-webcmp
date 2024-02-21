@@ -5,11 +5,12 @@ import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthTyp
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
 import { Booking, Day, Guest } from '../models/booking.dto';
+import { Token } from '@/models/Token';
 
-export class BookingService {
+export class BookingService extends Token {
   public async getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{ [key: string]: any }> {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Calendar?Ticket=${token}`, {
           propertyid,
@@ -59,7 +60,7 @@ export class BookingService {
   }
   public async fetchGuest(email: string): Promise<Guest> {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
         if (data.ExceptionMsg !== '') {
@@ -74,7 +75,7 @@ export class BookingService {
   }
   public async editExposedGuest(guest: Guest, book_nbr: string): Promise<any> {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Edit_Exposed_Guest?Ticket=${token}`, { ...guest, book_nbr });
         if (data.ExceptionMsg !== '') {
@@ -97,7 +98,7 @@ export class BookingService {
     currency: { id: number; code: string },
   ): Promise<BookingDetails> {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
           propertyid,
@@ -124,7 +125,7 @@ export class BookingService {
 
   public async getCountries(language: string): Promise<ICountry[]> {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Exposed_Countries?Ticket=${token}`, {
           language,
@@ -142,7 +143,7 @@ export class BookingService {
 
   public async fetchSetupEntries(): Promise<ISetupEntries> {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, {
           TBL_NAMES: ['_ARRIVAL_TIME', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
@@ -165,7 +166,7 @@ export class BookingService {
   }
   public async getBlockedInfo(): Promise<IEntries[]> {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, { TBL_NAMES: ['_CALENDAR_BLOCKED_TILL'] });
         if (data.ExceptionMsg !== '') {
@@ -180,7 +181,7 @@ export class BookingService {
   }
   public async getUserDefaultCountry() {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Country_By_IP?Ticket=${token}`, {
           IP: '',
@@ -197,7 +198,7 @@ export class BookingService {
   }
   public async blockUnit(params: IBlockUnit) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Block_Exposed_Unit?Ticket=${token}`, params);
         if (data.ExceptionMsg !== '') {
@@ -214,7 +215,7 @@ export class BookingService {
 
   public async getUserInfo(email: string) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/GET_EXPOSED_GUEST?Ticket=${token}`, {
           email,
@@ -233,7 +234,7 @@ export class BookingService {
   }
   public async getExposedBooking(booking_nbr: string, language: string): Promise<Booking> {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Exposed_Booking?Ticket=${token}`, {
           booking_nbr,
@@ -273,7 +274,7 @@ export class BookingService {
   }
   public async fetchExposedGuest(email: string, property_id: number) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Fetch_Exposed_Guests?Ticket=${token}`, {
           email,
@@ -293,7 +294,7 @@ export class BookingService {
   }
   public async fetchExposedBookings(booking_nbr: string, property_id: number, from_date: string, to_date: string) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Fetch_Exposed_Bookings?Ticket=${token}`, {
           booking_nbr,
@@ -315,7 +316,7 @@ export class BookingService {
   }
   public async getPCICardInfoURL(BOOK_NBR: string) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_PCI_Card_Info_URL?Ticket=${token}`, {
           BOOK_NBR,
@@ -351,7 +352,7 @@ export class BookingService {
   ) {
     console.log(arrivalTime);
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const fromDateStr = dateToFormattedString(fromDate);
         const toDateStr = dateToFormattedString(toDate);

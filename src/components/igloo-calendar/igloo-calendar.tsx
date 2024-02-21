@@ -65,9 +65,14 @@ export class IglooCalendar {
   private toBeAssignedService = new ToBeAssignedService();
   private socket: Socket;
   private reachedEndOfCalendar = false;
+
   @Watch('ticket')
   ticketChanged() {
-    sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    calendar_data.token = this.ticket;
+    this.bookingService.setToken(this.ticket);
+    this.roomService.setToken(this.ticket);
+    this.eventsService.setToken(this.ticket);
+    this.toBeAssignedService.setToken(this.ticket);
     this.initializeApp();
   }
   private availabilityTimeout;
@@ -76,8 +81,12 @@ export class IglooCalendar {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
-
     if (this.ticket !== '') {
+      calendar_data.token = this.ticket;
+      this.bookingService.setToken(this.ticket);
+      this.roomService.setToken(this.ticket);
+      this.eventsService.setToken(this.ticket);
+      this.toBeAssignedService.setToken(this.ticket);
       this.initializeApp();
     }
   }

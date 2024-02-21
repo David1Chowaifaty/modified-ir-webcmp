@@ -3,6 +3,7 @@ import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-cal-header',
@@ -29,6 +30,7 @@ export class IglCalHeader {
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
   componentWillLoad() {
+    this.toBeAssignedService.setToken(calendar_data.token);
     try {
       this.initializeRoomsList();
 

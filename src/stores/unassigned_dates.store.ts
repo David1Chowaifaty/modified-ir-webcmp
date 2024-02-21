@@ -15,6 +15,28 @@ const initialState: UnassignedDates = {};
 let { state: unassigned_dates } = createStore<UnassignedDates>(initialState);
 export function addUnassingedDates(data: UnassignedDates) {
   unassigned_dates = { ...unassigned_dates, ...data };
+  /*
+   try {
+      //console.log("called")
+      let categorisedRooms = {};
+      const result = await this.toBeAssignedService.getUnassignedRooms(
+        this.propertyid,
+        dateToFormattedString(new Date(+key)),
+        calendarData.roomsInfo,
+        calendarData.formattedLegendData,
+      );
+      result.forEach(room => {
+        if (!categorisedRooms.hasOwnProperty(room.RT_ID)) {
+          categorisedRooms[room.RT_ID] = [room];
+        } else {
+          categorisedRooms[room.RT_ID].push(room);
+        }
+      });
+      this.unassignedDates[key].categories = categorisedRooms;
+    } catch (error) {
+      //  toastr.error(error);
+    }
+  */
 }
 export function getUnassignedDates() {
   return unassigned_dates;

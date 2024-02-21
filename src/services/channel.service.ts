@@ -1,11 +1,12 @@
+import { Token } from '@/models/Token';
 import calendar_data from '@/stores/calendar-data';
 import channels_data from '@/stores/channel.store';
 import axios from 'axios';
 
-export class ChannelService {
+export class ChannelService extends Token {
   public async getExposedChannels() {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${token}`, {});
         if (data.ExceptionMsg !== '') {
@@ -22,7 +23,7 @@ export class ChannelService {
   }
   public async getExposedConnectedChannels(property_id: number) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Connected_Channels?Ticket=${token}`, { property_id });
         if (data.ExceptionMsg !== '') {
@@ -46,7 +47,7 @@ export class ChannelService {
         map: channels_data.mappedChannels,
         is_remove,
       };
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (!token) {
         throw new Error('Invalid Token');
       }

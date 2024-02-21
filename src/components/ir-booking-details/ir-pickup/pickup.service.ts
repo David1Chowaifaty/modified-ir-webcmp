@@ -5,14 +5,10 @@ import { IBookingPickupInfo } from '@/components';
 import { renderTime } from '@/utils/utils';
 
 export class PickupService {
-  token: string | null;
-  constructor() {
-    this.token = JSON.parse(sessionStorage.getItem('token'));
-  }
   public async savePickup(params: TPickupData, booking_nbr: string, is_remove: boolean) {
     try {
       const splitTime = params.arrival_time.split(':');
-      await axios.post(`/Do_Pickup?Ticket=${this.token}`, {
+      await axios.post(`/Do_Pickup?Ticket=${calendar_data.token}`, {
         booking_nbr,
         is_remove,
         currency: params.currency,

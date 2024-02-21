@@ -7,6 +7,7 @@ import { actions } from './data';
 import { IModalCause } from './types';
 import { ChannelService } from '@/services/channel.service';
 import { IChannel } from '@/models/calendarData';
+
 @Component({
   tag: 'ir-channel',
   styleUrl: 'ir-channel.css',
@@ -24,14 +25,17 @@ export class IrChannel {
   @State() modal_cause: IModalCause | null = null;
 
   private roomService = new RoomService();
-  private irModalRef: HTMLIrModalElement;
   private channelService = new ChannelService();
+
+  private irModalRef: HTMLIrModalElement;
 
   componentWillLoad() {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
+      this.channelService.setToken(this.ticket);
+      this.roomService.setToken(this.ticket);
       this.initializeApp();
     }
   }
@@ -44,6 +48,7 @@ export class IrChannel {
     }
     await this.modal_cause.action();
     if (this.modal_cause.cause === 'remove') {
+      resetStore();
       await this.refreshChannels();
     }
     this.modal_cause = null;
@@ -76,6 +81,8 @@ export class IrChannel {
   @Watch('ticket')
   async ticketChanged() {
     sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    this.roomService.setToken(this.ticket);
+    this.channelService.setToken(this.ticket);
     this.initializeApp();
   }
 
@@ -227,7 +234,9 @@ export class IrChannel {
           onIrSidebarToggle={this.handleSidebarClose.bind(this)}
           open={this.channel_status !== null}
         >
-          {this.channel_status && <ir-channel-editor class="p-1" channel_status={this.channel_status} onCloseSideBar={this.handleSidebarClose.bind(this)}></ir-channel-editor>}
+          {this.channel_status && (
+            <ir-channel-editor ticket={this.ticket} class="p-1" channel_status={this.channel_status} onCloseSideBar={this.handleSidebarClose.bind(this)}></ir-channel-editor>
+          )}
         </ir-sidebar>
 
         <ir-modal

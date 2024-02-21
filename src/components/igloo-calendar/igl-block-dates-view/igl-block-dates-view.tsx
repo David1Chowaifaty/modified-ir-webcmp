@@ -3,6 +3,7 @@ import { BookingService } from '../../../services/booking.service';
 import { IEntries } from '../../../models/IBooking';
 import { formatDate } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-block-dates-view',
@@ -30,6 +31,7 @@ export class IglBlockDatesView {
 
   async componentWillLoad() {
     try {
+      this.bookingService.setToken(calendar_data.token);
       this.releaseList = await this.bookingService.getBlockedInfo();
       if (this.defaultData) {
         this.blockDatesData = { ...this.defaultData };

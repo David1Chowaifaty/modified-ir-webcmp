@@ -10,6 +10,8 @@ import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@s
 })
 export class IrChannelEditor {
   @Prop() channel_status: 'create' | 'edit' | null = null;
+  @Prop() ticket: string;
+
   @State() selectedTab: string = '';
   @State() isLoading: boolean = false;
   @State() headerTitles = [
@@ -26,7 +28,11 @@ export class IrChannelEditor {
   @Event() saveChannelFinished: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
 
+  private channelService = new ChannelService();
   componentWillLoad() {
+    if (this.ticket) {
+      this.channelService.setToken(this.ticket);
+    }
     if (this.channel_status === 'edit') {
       this.enableAllHeaders();
     }
@@ -69,7 +75,7 @@ export class IrChannelEditor {
   async saveConnectedChannel() {
     try {
       this.isLoading = true;
-      await new ChannelService().saveConnectedChannel(false);
+      await this.channelService.saveConnectedChannel(false);
       this.saveChannelFinished.emit();
     } catch (error) {
       console.error(error);

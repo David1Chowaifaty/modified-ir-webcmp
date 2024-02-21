@@ -3,6 +3,7 @@ import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, Room
 import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   const myBookings: any[] = [];
@@ -48,7 +49,7 @@ export function formatName(firstName: string | null, lastName: string | null) {
 }
 async function getStayStatus() {
   try {
-    const token = JSON.parse(sessionStorage.getItem('token'));
+    const token = calendar_data.token;
     if (token) {
       const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi?Ticket=${token}`, {
         TBL_NAMES: ['_STAY_STATUS'],

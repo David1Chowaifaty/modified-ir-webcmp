@@ -293,6 +293,7 @@ export namespace Components {
     }
     interface IrChannelEditor {
         "channel_status": 'create' | 'edit' | null;
+        "ticket": string;
     }
     interface IrChannelGeneral {
         "channel_status": 'create' | 'edit' | null;
@@ -2170,6 +2171,7 @@ declare namespace LocalJSX {
         "channel_status"?: 'create' | 'edit' | null;
         "onCloseSideBar"?: (event: IrChannelEditorCustomEvent<null>) => void;
         "onSaveChannelFinished"?: (event: IrChannelEditorCustomEvent<null>) => void;
+        "ticket"?: string;
     }
     interface IrChannelGeneral {
         "channel_status"?: 'create' | 'edit' | null;
