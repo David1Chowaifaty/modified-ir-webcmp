@@ -268,7 +268,14 @@ export class IglToBeAssigned {
               {Object.keys(this.data).length === 0 ? (
                 <p>{locales.entries.Lcz_AllBookingsAreAssigned}</p>
               ) : this.isLoading ? (
-                <p>{this.loadingMessage}</p>
+                <p class="d-flex align-items-center">
+                  <span class="p-0">{this.loadingMessage}</span>
+                  <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                  </div>
+                </p>
               ) : (
                 <Fragment>
                   {this.orderedDatesList.length ? (
