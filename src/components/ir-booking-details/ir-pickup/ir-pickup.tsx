@@ -90,6 +90,9 @@ export class IrPickup {
   }
   initializeInputMask() {
     const input = this.el.querySelector('#pickup-time');
+    // if (this.pickupData) {
+    //   (input as HTMLInputElement).value = this.pickupData.arrival_time;
+    // }
     if (input) {
       Inputmask('Hh:mm', {
         placeholder: 'HH:mm',
@@ -140,6 +143,11 @@ export class IrPickup {
         })
         .toFixed(2),
     };
+  }
+  componentDidLoad() {
+    if (this.defaultPickupData) {
+      this.initializeInputMask();
+    }
   }
   handleVehicleTypeChange(e: CustomEvent) {
     if (e.detail === '') {
