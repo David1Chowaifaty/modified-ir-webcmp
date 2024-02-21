@@ -266,8 +266,8 @@ export class IrPickup {
                     </div>
 
                     <input
-                      value={this.pickupData.arrival_time}
                       type="text"
+                      value={this.pickupData.arrival_time}
                       id="pickup-time"
                       class={`form-control col-8 col-sm-4 ${this.cause === 'arrival_time' && 'border-danger'}`}
                     />
