@@ -1,5 +1,4 @@
 import calendar_data from '@/stores/calendar-data';
-import channels_data from '@/stores/channel.store';
 import { locales } from '@/stores/locales.store';
 import axios from 'axios';
 
@@ -32,28 +31,12 @@ export class RoomService {
       throw new Error(error);
     }
   }
-  public async getExposedChannels() {
+
+  public async fetchLanguage(code: string, sections: string[] = ['_PMS_FRONT']) {
     try {
       const token = JSON.parse(sessionStorage.getItem('token'));
       if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${token}`, {});
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        const results = data.My_Result;
-        channels_data.channels = results;
-        return data;
-      }
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
-  public async fetchLanguage(code: string) {
-    try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code });
+        const { data } = await axios.post(`/Get_Exposed_Language?Ticket=${token}`, { code, sections });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
@@ -67,21 +50,7 @@ export class RoomService {
       throw new Error(error);
     }
   }
-  public async getExposedConnectedChannels(property_id: number) {
-    try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Connected_Channels?Ticket=${token}`, { property_id });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        channels_data.connected_channels = data.My_Result;
-      }
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
+
   private transformArrayToObject(data: any) {
     let object: any = {};
     for (const d of data) {

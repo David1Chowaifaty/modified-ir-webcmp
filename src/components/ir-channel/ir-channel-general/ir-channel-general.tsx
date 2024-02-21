@@ -1,4 +1,5 @@
 import channels_data, { selectChannel, testConnection, updateChannelSettings } from '@/stores/channel.store';
+import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, h } from '@stencil/core';
 
 @Component({
@@ -15,7 +16,7 @@ export class IrChannelGeneral {
     if (this.channel_status !== 'create') {
       return;
     }
-    this.connection_status_message = channels_data.isConnectedToChannel ? 'Connected Channel' : '';
+    this.connection_status_message = channels_data.isConnectedToChannel ? locales.entries?.Lcz_ConnectedChannel : '';
   }
   handleTestConnectionClicked(e: Event) {
     e.preventDefault();
@@ -24,7 +25,7 @@ export class IrChannelGeneral {
       return;
     }
     const status = testConnection();
-    this.connection_status_message = status ? 'Connected Channel' : 'Incorrect Connection';
+    this.connection_status_message = status ? locales.entries?.Lcz_ConnectedChannel : locales.entries?.Lcz_IncorrectConnection;
     this.buttonClicked = false;
   }
   render() {
@@ -33,7 +34,7 @@ export class IrChannelGeneral {
         <section class="ml-18">
           <fieldset class="d-flex align-items-center">
             <label htmlFor="hotel_channels" class="m-0 p-0 label-style">
-              Channel:
+              {locales.entries?.Lcz_Channel}
             </label>
             <ir-combobox
               input_id="hotel_channels"
@@ -43,7 +44,6 @@ export class IrChannelGeneral {
               onComboboxValueChange={(e: CustomEvent) => {
                 selectChannel(e.detail.data.toString());
               }}
-              placeholder="Choose channel from list"
               data={
                 channels_data.channels.map(channel => ({
                   id: channel.id,
@@ -54,7 +54,7 @@ export class IrChannelGeneral {
           </fieldset>
           <fieldset class="d-flex align-items-center mt-1">
             <label htmlFor="hotel_title" class="m-0 p-0 label-style">
-              Title:
+              {locales.entries?.Lcz_Title}
             </label>
             <div class="flex-fill">
               <input
@@ -68,11 +68,11 @@ export class IrChannelGeneral {
         </section>
         {channels_data.selectedChannel && (
           <form onSubmit={this.handleTestConnectionClicked.bind(this)} class="mt-3 connection-container">
-            <h3 class="text-left font-medium-2  py-0 my-0 connection-title py-1 mb-2">Connection Settings</h3>
+            <h3 class="text-left font-medium-2  py-0 my-0 connection-title py-1 mb-2">{locales.entries?.Lcz_ConnectionSettings}</h3>
             <div class="ml-18">
               <fieldset class="d-flex align-items-center my-1">
                 <label htmlFor="hotel_id" class="m-0 p-0 label-style">
-                  Hotel ID:
+                  {locales.entries?.Lcz_HotelID}
                 </label>
                 <div class="flex-fill">
                   <input

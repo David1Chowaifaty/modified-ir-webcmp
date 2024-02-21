@@ -9,6 +9,7 @@ import { RoomService } from '../../services/room.service';
 import locales, { ILocale } from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
+import { renderTime } from '@/utils/utils';
 
 @Component({
   tag: 'ir-booking-details',
@@ -438,7 +439,8 @@ export class IrBookingDetails {
                           {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('ddd, DD MM YYYY')}</span>
                         </p>
                         <p class={'font-weight-bold flex-fill py-0 my-0'}>
-                          {locales.entries.Lcz_Time}:<span class={'font-weight-normal'}> {`${this.bookingData.pickup_info.hour}:${this.bookingData.pickup_info.minute}`}</span>
+                          {locales.entries.Lcz_Time}:
+                          <span class={'font-weight-normal'}> {`${renderTime(this.bookingData.pickup_info.hour)}:${renderTime(this.bookingData.pickup_info.minute)}`}</span>
                         </p>
                         <p class={'font-weight-bold py-0 my-0'}>
                           {locales.entries.Lcz_DueUponBooking}:{' '}

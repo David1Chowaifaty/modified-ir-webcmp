@@ -1,9 +1,9 @@
 import { IChannel } from '@/models/calendarData';
 import { selectChannel, testConnection, updateChannelSettings } from '@/stores/channel.store';
-import { LocalizationStrings } from '@/stores/locales.store';
+import { LocalizationChannelFrontEntries, LocalizationStrings } from '@/stores/locales.store';
 import { h } from '@stencil/core';
 
-export const actions = (entries: LocalizationStrings) => [
+export const actions = (entries: LocalizationStrings & LocalizationChannelFrontEntries) => [
   {
     id: 'edit',
     name: 'Edit',
@@ -50,17 +50,32 @@ export const actions = (entries: LocalizationStrings) => [
     ),
     action: () => {
       return {
-        cause: 'view_logs',
+        cause: 'full_sync',
         action: () => {
-          alert('view logs clicked');
+          alert('full sync');
         },
-        title: 'ok',
-        message: 'ok',
+        title: '',
+        message: entries?.Lcz_FullSync,
         main_color: 'primary',
       };
     },
   },
-  { id: 'pull_future_reservation', name: 'Pull Future Reservations', icon: () => null, action: () => {} },
+  {
+    id: 'pull_future_reservation',
+    name: 'Pull Future Reservations',
+    icon: () => null,
+    action: () => {
+      return {
+        cause: 'pull_future_reservation',
+        action: () => {
+          alert('pull_future_reservation');
+        },
+        title: '',
+        message: entries?.Lcz_ScheduleFullSync,
+        main_color: 'primary',
+      };
+    },
+  },
   {
     id: 'remove',
     name: entries.Lcz_Delete,
@@ -80,8 +95,8 @@ export const actions = (entries: LocalizationStrings) => [
             }, 500);
           });
         },
-        title: 'ok',
-        message: 'ok',
+        title: '',
+        message: entries?.Lcz_ThisActionWillDelete,
         main_color: 'danger',
       };
     },

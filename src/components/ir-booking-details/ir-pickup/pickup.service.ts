@@ -2,6 +2,7 @@ import axios from 'axios';
 import { TDueParams, TPickupData } from './types';
 import calendar_data from '@/stores/calendar-data';
 import { IBookingPickupInfo } from '@/components';
+import { renderTime } from '@/utils/utils';
 
 export class PickupService {
   token: string | null;
@@ -27,10 +28,12 @@ export class PickupService {
       console.log(error);
     }
   }
+
   public transformDefaultPickupData(data: IBookingPickupInfo): TPickupData {
+    const arrival_time = renderTime(data.hour) + ':' + renderTime(data.minute);
     return {
       arrival_date: data.date,
-      arrival_time: data.hour + ':' + data.minute,
+      arrival_time,
       currency: data.currency,
       due_upon_booking: data.total.toFixed(2),
       flight_details: data.details,
