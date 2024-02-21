@@ -116,7 +116,7 @@ export class IrChannel {
       <Host class="h-100 ">
         <section class="p-2 px-lg-5 py-0 h-100 d-flex flex-column">
           <div class="d-flex w-100 justify-content-between mb-2 align-items-center">
-            <h3 class="font-weight-bold m-0 p-0">iSWITCH</h3>
+            <h3 class="font-weight-bold m-0 p-0">{locales.entries?.Lcz_iSWITCH}</h3>
             <ir-button text={'Create channel'} size="sm" onClickHanlder={() => (this.channel_status = 'create')}>
               <svg slot="icon" stroke-width={3} width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -129,7 +129,7 @@ export class IrChannel {
             </ir-button>
           </div>
           <div class="card p-1 flex-fill m-0">
-            <table class="table table-hover">
+            <table class="table table-striped table-bordered no-footer dataTable">
               <thead>
                 <tr>
                   <th scope="col" class="text-left">

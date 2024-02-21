@@ -1,8 +1,7 @@
-import calendar_data from '@/stores/calendar-data';
-import channels_data, { onChannelChange } from '@/stores/channel.store';
+import { ChannelService } from '@/services/channel.service';
+import { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
-import axios from 'axios';
 
 @Component({
   tag: 'ir-channel-editor',
@@ -70,23 +69,8 @@ export class IrChannelEditor {
   async saveConnectedChannel() {
     try {
       this.isLoading = true;
-      const body = {
-        // id: channels_data.selectedChannel.id,
-        id: -1,
-        title: channels_data.channel_settings.hotel_title,
-        is_active: false,
-        channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
-        property: { id: calendar_data.id, name: calendar_data.name },
-        map: channels_data.mappedChannels,
-        is_remove: false,
-      };
-      const token = JSON.parse(sessionStorage.getItem('token'));
-      if (!token) {
-        throw new Error('Invalid Token');
-      }
-      const { data } = await axios.post(`/Handle_Connected_Channel?Ticket=${token}`, body);
+      await new ChannelService().saveConnectedChannel(false);
       this.saveChannelFinished.emit();
-      console.log(data);
     } catch (error) {
       console.error(error);
     } finally {

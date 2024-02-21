@@ -28,6 +28,7 @@ export interface ITaxes {
 }
 
 export interface IChannel {
+  id: number;
   channel: IExposedChannel;
   is_active: boolean;
   map: IMap[];

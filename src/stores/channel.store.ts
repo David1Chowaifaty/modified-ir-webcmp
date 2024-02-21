@@ -12,6 +12,8 @@ export interface IChannelStore {
   isConnectedToChannel: boolean;
   channel_settings: IChannelSettings | null;
   property_id: number | null;
+  channel_id: number;
+  is_active: boolean;
 }
 const initialState: IChannelStore = {
   channels: [],
@@ -21,9 +23,14 @@ const initialState: IChannelStore = {
   isConnectedToChannel: false,
   channel_settings: null,
   property_id: null,
+  channel_id: -1,
+  is_active: false,
 };
 export const { state: channels_data, onChange: onChannelChange, dispose } = createStore<IChannelStore>(initialState);
-
+export function setChannelIdAndActiveState(id: number, is_active: boolean) {
+  channels_data.channel_id = id;
+  channels_data.is_active = is_active;
+}
 export function selectChannel(channel_id: string) {
   if (channel_id === '') {
     channels_data.selectedChannel = null;
