@@ -525,7 +525,7 @@ export class IglooCalendar {
         ...this.calendarData,
         days: this.days,
         monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
-        bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
+        bookingEvents: [...this.calendarData.bookingEvents, ...bookings],
       };
       const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
       this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
