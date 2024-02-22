@@ -79,6 +79,7 @@ export class IglooCalendar {
   private availabilityTimeout;
 
   componentWillLoad() {
+    console.info('without session storage');
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
