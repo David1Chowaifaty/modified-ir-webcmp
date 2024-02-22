@@ -108,6 +108,7 @@ export class IglBookProperty {
     this.dateRangeData = { ...this.defaultData.defaultDateRange };
     try {
       const setupEntries = await this.fetchSetupEntries();
+      console.log(setupEntries);
       this.setSourceOptions(this.allowedBookingSources);
       this.setOtherProperties(setupEntries);
 
@@ -142,6 +143,7 @@ export class IglBookProperty {
   }
 
   async fetchSetupEntries() {
+    console.log('fetch setup entries');
     return await this.bookingService.fetchSetupEntries();
   }
   isGuestDataIncomplete() {
