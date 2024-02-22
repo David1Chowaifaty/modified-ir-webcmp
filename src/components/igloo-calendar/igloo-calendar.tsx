@@ -14,7 +14,7 @@ import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
-import { addUnassingedDates, removeUnassignedDates } from '@/stores/unassigned_dates.store';
+import { addUnassingedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
 
 @Component({
   tag: 'igloo-calendar',
@@ -90,6 +90,12 @@ export class IglooCalendar {
       this.toBeAssignedService.setToken(this.ticket);
       this.initializeApp();
     }
+    handleUnAssignedDatesChange('unassigned_dates', newValue => {
+      console.log(newValue, Object.keys(newValue));
+      if (Object.keys(newValue).length === 0 && this.toBeAssignedDate !== '') {
+        this.toBeAssignedDate = '';
+      }
+    });
   }
   setUpCalendarData(roomResp, bookingResp) {
     this.calendarData.currency = roomResp['My_Result'].currency;
@@ -468,13 +474,13 @@ export class IglooCalendar {
         } else {
           this.editBookingItem = opt.data;
         }
-
         break;
       case 'gotoToday':
         this.scrollToElement(this.today);
         break;
       case 'closeSideMenu':
         this.closeSideMenu();
+        this.toBeAssignedDate = '';
         this.showBookProperty = false;
         break;
     }

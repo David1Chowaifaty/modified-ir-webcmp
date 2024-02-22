@@ -4,6 +4,7 @@ import { dateToFormattedString } from '../../../utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import { handleUnAssignedDatesChange } from '@/stores/unassigned_dates.store';
 
 @Component({
   tag: 'igl-cal-header',
@@ -34,8 +35,12 @@ export class IglCalHeader {
     try {
       this.initializeRoomsList();
 
-      if (!this.calendarData.is_vacation_rental && Object.keys(this.unassignedDates).length > 0) {
-        this.fetchAndAssignUnassignedRooms();
+      if (!this.calendarData.is_vacation_rental) {
+        handleUnAssignedDatesChange('unassigned_dates', newValue => {
+          if (Object.keys(newValue).length > 0) {
+            this.fetchAndAssignUnassignedRooms();
+          }
+        });
       }
     } catch (error) {
       console.error('Error in componentWillLoad:', error);
@@ -75,7 +80,8 @@ export class IglCalHeader {
           );
           this.unassignedRoomsNumber[selectedDate] = result.length;
         } else if (this.unassignedRoomsNumber[selectedDate]) {
-          this.unassignedRoomsNumber[selectedDate] = this.unassignedRoomsNumber[selectedDate] - 1;
+          const res = this.unassignedRoomsNumber[selectedDate] - 1;
+          this.unassignedRoomsNumber[selectedDate] = res < 0 ? 0 : res;
         }
         endDate = moment(endDate).add(1, 'days').toDate().getTime();
         this.renderView();
