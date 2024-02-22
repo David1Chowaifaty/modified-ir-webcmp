@@ -11,19 +11,9 @@ export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear:
 }
 
 export function convertDateToTime(dayWithWeekday: string, monthWithYear: string): number {
-  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-
-  const [_, day] = dayWithWeekday.split(' ');
-  const [month, year] = monthWithYear.split(' ');
-
-  const monthIndex = months.indexOf(month);
-  if (monthIndex !== -1) {
-    let date = new Date(`${year}-${monthIndex + 1}-${day}`);
-    date.setHours(0, 0, 0, 0);
-    return date.getTime();
-  } else {
-    throw new Error('Invalid Month');
-  }
+  const date = moment(dayWithWeekday + ' ' + monthWithYear, 'ddd DD MMM YYYY').toDate();
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
 }
 export function dateDifference(FROM_DATE: string, TO_DATE: string): number {
   const startDate = new Date(FROM_DATE);
