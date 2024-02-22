@@ -273,11 +273,12 @@ export class IglooCalendar {
       selectedDate.setHours(0);
       //find the selected day
       const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
-      if (index > 0) {
+      if (index != -1) {
         console.log('found the date');
+        console.log(queue.room_type_id);
         //find room_type_id
         const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
-        if (room_type_index > 0) {
+        if (room_type_index != -1) {
           console.log('found the room id');
           days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
         }
