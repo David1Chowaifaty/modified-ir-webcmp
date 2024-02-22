@@ -143,3 +143,6 @@ export function getDaysArray(date1: string, date2: string) {
 
   return dates;
 }
+export function renderTime(time: number) {
+  return time < 10 ? time.toString().padStart(2, '0') : time.toString();
+}

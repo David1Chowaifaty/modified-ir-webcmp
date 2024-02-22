@@ -7,16 +7,19 @@
 
 ## Properties
 
-| Property            | Attribute       | Description | Type                        | Default          |
-| ------------------- | --------------- | ----------- | --------------------------- | ---------------- |
-| `bedPreferenceType` | --              |             | `any[]`                     | `[]`             |
-| `bookingType`       | `booking-type`  |             | `string`                    | `'PLUS_BOOKING'` |
-| `currency`          | `currency`      |             | `any`                       | `undefined`      |
-| `guestInfo`         | --              |             | `{ [key: string]: any; }`   | `undefined`      |
-| `guestRefKey`       | `guest-ref-key` |             | `string`                    | `undefined`      |
-| `index`             | `index`         |             | `number`                    | `undefined`      |
-| `roomsList`         | --              |             | `{ [key: string]: any; }[]` | `[]`             |
-| `selectedUnits`     | --              |             | `number[]`                  | `[]`             |
+| Property                 | Attribute                  | Description | Type                        | Default          |
+| ------------------------ | -------------------------- | ----------- | --------------------------- | ---------------- |
+| `bedPreferenceType`      | --                         |             | `any[]`                     | `[]`             |
+| `bookingType`            | `booking-type`             |             | `string`                    | `'PLUS_BOOKING'` |
+| `currency`               | `currency`                 |             | `any`                       | `undefined`      |
+| `dateDifference`         | `date-difference`          |             | `number`                    | `undefined`      |
+| `defaultGuestPreference` | `default-guest-preference` |             | `number`                    | `undefined`      |
+| `defaultGuestRoomId`     | `default-guest-room-id`    |             | `number`                    | `undefined`      |
+| `guestInfo`              | --                         |             | `{ [key: string]: any; }`   | `undefined`      |
+| `guestRefKey`            | `guest-ref-key`            |             | `string`                    | `undefined`      |
+| `index`                  | `index`                    |             | `number`                    | `undefined`      |
+| `roomsList`              | --                         |             | `{ [key: string]: any; }[]` | `[]`             |
+| `selectedUnits`          | --                         |             | `number[]`                  | `[]`             |
 
 
 ## Events

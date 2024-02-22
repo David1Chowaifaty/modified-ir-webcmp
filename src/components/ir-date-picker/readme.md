@@ -19,6 +19,7 @@
 | `format`           | `format`             |             | `string`                                                        | `'MMM DD, YYYY'`                                                                                                             |
 | `fromDate`         | --                   |             | `Date`                                                          | `undefined`                                                                                                                  |
 | `fromLabel`        | `from-label`         |             | `string`                                                        | `'Form'`                                                                                                                     |
+| `maxDate`          | `max-date`           |             | `string`                                                        | `undefined`                                                                                                                  |
 | `maxSpan`          | `max-span`           |             | `Duration \| DurationInputObject \| FromTo \| number \| string` | `{     days: 240,   }`                                                                                                       |
 | `minDate`          | `min-date`           |             | `string`                                                        | `undefined`                                                                                                                  |
 | `monthNames`       | --                   |             | `string[]`                                                      | `['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']` |
@@ -44,6 +45,7 @@
  - [igl-cal-header](../igloo-calendar/igl-cal-header)
  - [igl-date-range](../igloo-calendar/igl-date-range)
  - [ir-payment-details](../ir-booking-details/ir-payment-details)
+ - [ir-pickup](../ir-booking-details/ir-pickup)
 
 ### Graph
 ```mermaid
@@ -51,6 +53,7 @@ graph TD;
   igl-cal-header --> ir-date-picker
   igl-date-range --> ir-date-picker
   ir-payment-details --> ir-date-picker
+  ir-pickup --> ir-date-picker
   style ir-date-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -3,6 +3,7 @@ import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOp
 import { IToast } from '../../../ir-toast/toast';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import interceptor_requests from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -101,9 +102,9 @@ export class IglBookPropertyHeader {
 
   getAdultChildConstraints() {
     return (
-      <div class={'mt-1 d-flex flex-column text-left'}>
-        <label class="d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label>
-        <div class="form-group  text-left d-flex align-items-center justify-content-between justify-content-sm-start">
+      <div class={'mt-1 mt-lg-0 d-flex flex-column text-left'}>
+        <label class="mb-1 d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label>
+        <div class="form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start">
           <fieldset>
             <div class="btn-group ">
               <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
@@ -115,7 +116,7 @@ export class IglBookPropertyHeader {
             </div>
           </fieldset>
           {this.adultChildConstraints.child_max_nbr > 0 && (
-            <fieldset class={'ml-1'}>
+            <fieldset>
               <div class="btn-group ml-1">
                 <select class="form-control input-sm" id="xChildrenSmallSelect" onChange={evt => this.handleAdultChildChange('child', evt)}>
                   <option value={''}>{this.renderChildCaption()}</option>
@@ -126,9 +127,17 @@ export class IglBookPropertyHeader {
               </div>
             </fieldset>
           )}
-          <button class={'btn btn-primary btn-sm ml-2 '} onClick={() => this.handleButtonClicked()}>
+          <ir-button
+            isLoading={interceptor_requests.status === 'pending'}
+            icon=""
+            size="sm"
+            class="ml-2"
+            text={locales.entries.Lcz_Check}
+            onClickHanlder={() => this.handleButtonClicked()}
+          ></ir-button>
+          {/* <button class={'btn btn-primary btn-sm  ml-2'} onClick={() => this.handleButtonClicked()}>
             {locales.entries.Lcz_Check}
-          </button>
+          </button> */}
         </div>
       </div>
     );
@@ -150,10 +159,34 @@ export class IglBookPropertyHeader {
         description: '',
         position: 'top-right',
       });
+    } else if (this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING')) {
+      const initialToDate = moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date));
+      const initialFromDate = moment(new Date(this.bookedByInfoData.from_date || this.defaultDaterange.from_date));
+      const selectedFromDate = moment(new Date(this.dateRangeData.fromDate));
+      const selectedToDate = moment(new Date(this.dateRangeData.toDate));
+      if (selectedToDate.isBefore(initialFromDate) || selectedFromDate.isAfter(initialToDate)) {
+        this.toast.emit({
+          type: 'error',
+          title: `${locales.entries.Lcz_CheckInDateShouldBeMAx.replace(
+            '%1',
+            moment(new Date(this.bookedByInfoData.from_date || this.defaultDaterange.from_date)).format('ddd, DD MMM YYYY'),
+          ).replace('%2', moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY'))}  `,
+          description: '',
+          position: 'top-right',
+        });
+        return;
+      } else if (this.adultChildCount.adult === 0) {
+        this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
+      } else {
+        this.buttonClicked.emit({ key: 'check' });
+      }
     } else if (this.minDate && new Date(this.dateRangeData.fromDate).getTime() > new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date).getTime()) {
       this.toast.emit({
         type: 'error',
-        title: `${locales.entries.Lcz_CheckInDateShouldBeMAx} ${moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY')} `,
+        title: `${locales.entries.Lcz_CheckInDateShouldBeMAx.replace(
+          '%1',
+          moment(new Date(this.bookedByInfoData.from_date || this.defaultDaterange.from_date)).format('ddd, DD MMM YYYY'),
+        ).replace('%2', moment(new Date(this.bookedByInfoData.to_date || this.defaultDaterange.to_date)).format('ddd, DD MMM YYYY'))}  `,
         description: '',
         position: 'top-right',
       });
@@ -168,11 +201,12 @@ export class IglBookPropertyHeader {
   }
 
   render() {
+    const showSourceNode = this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? false : true;
     return (
       <Host>
-        {this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? null : this.getSourceNode()}
-        <div class={'d-lg-flex align-items-center'}>
-          <fieldset class=" mt-1 mt-lg-0  ">
+        {showSourceNode && this.getSourceNode()}
+        <div class={`d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}`}>
+          <fieldset class="mt-lg-0  ">
             <igl-date-range
               dateLabel={locales.entries.Lcz_Dates}
               minDate={this.minDate}

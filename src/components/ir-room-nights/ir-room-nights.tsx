@@ -7,6 +7,7 @@ import { IRoomNightsDataEventPayload } from '../../models/property-types';
 import { v4 } from 'uuid';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-room-nights',
@@ -32,12 +33,15 @@ export class IrRoomNights {
   @State() inventory: number | null = null;
   @State() isEndDateBeforeFromDate: boolean = false;
   @State() defaultTotalNights = 0;
+  @State() isInputFocused = -1;
 
   @Event() closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
 
   private bookingService = new BookingService();
 
   componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
+
     if (this.baseUrl) {
       axios.defaults.baseURL = this.baseUrl;
     }
@@ -144,19 +148,31 @@ export class IrRoomNights {
       this.initialLoading = false;
     }
   }
+
   renderInputField(index: number, currency_symbol: string, day: Day) {
     return (
       <fieldset class="col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container">
+        <div class="input-group-prepend">
+          <span
+            data-disabled={this.inventory === 0 || this.inventory === null}
+            data-state={this.isInputFocused === index ? 'focus' : ''}
+            class="input-group-text new-currency"
+            id="basic-addon1"
+          >
+            {currency_symbol}
+          </span>
+        </div>
         <input
+          onFocus={() => (this.isInputFocused = index)}
+          onBlur={() => (this.isInputFocused = -1)}
           disabled={this.inventory === 0 || this.inventory === null}
           type="text"
-          class="form-control input-sm rate-input py-0 m-0 rateInputBorder"
+          class="form-control pl-0 input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
           id={v4()}
           value={day.amount > 0 ? day.amount : ''}
           placeholder={locales.entries.Lcz_Rate || 'Rate'}
           onInput={event => this.handleInput(event, index)}
         />
-        <span class="currency">{currency_symbol}</span>
       </fieldset>
     );
   }
@@ -260,19 +276,24 @@ export class IrRoomNights {
           )}
         </section>
         <section class={'d-flex align-items-center mt-2 px-2'}>
-          <button
-            disabled={this.isLoading}
-            type="button"
-            class={'btn btn-secondary full-width'}
-            onClick={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
-          >
-            {locales?.entries.Lcz_Cancel}
-          </button>
+          <ir-button
+            btn_color="secondary"
+            btn_disabled={this.isLoading}
+            text={locales?.entries.Lcz_Cancel}
+            class="full-width"
+            btn_styles="justify-content-center"
+            onClickHanlder={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
+          ></ir-button>
+
           {this.inventory > 0 && this.inventory !== null && (
-            <button disabled={this.isButtonDisabled()} type="button" class={'btn btn-primary ml-2 full-width'} onClick={this.handleRoomConfirmation.bind(this)}>
-              {this.isLoading && <i class="la la-circle-o-notch spinner mx-1"></i>}
-              {locales?.entries.Lcz_Confirm}
-            </button>
+            <ir-button
+              isLoading={this.isLoading}
+              text={locales?.entries.Lcz_Confirm}
+              btn_disabled={this.isButtonDisabled()}
+              class="ml-1 full-width"
+              btn_styles="justify-content-center"
+              onClickHanlder={this.handleRoomConfirmation.bind(this)}
+            ></ir-button>
           )}
         </section>
       </Host>

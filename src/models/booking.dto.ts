@@ -1,4 +1,4 @@
-import { ICurrency } from './calendarData';
+import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 
 export interface Booking {
   arrival: Arrival;
@@ -23,6 +23,17 @@ export interface Booking {
   channel_booking_nbr: string | null;
   is_direct: boolean;
   financial: IFinancials;
+  pickup_info: IBookingPickupInfo | null;
+}
+export interface IBookingPickupInfo {
+  currency: IPickupCurrency;
+  date: string;
+  details: string;
+  hour: number;
+  minute: number;
+  nbr_of_units: number;
+  selected_option: IAllowedOptions;
+  total: number;
 }
 export interface IAllowedActions {
   code: string;
@@ -112,6 +123,7 @@ export interface Room {
   days: Day[];
   from_date: string;
   guest: Guest;
+  occupancy_default: number;
   notes: string | null;
   occupancy: Occupancy;
   physicalroom: null;
@@ -122,6 +134,18 @@ export interface Room {
   total: number;
   identifier: string;
   unit: string | number | IUnit | null;
+  ota_taxes: IOtaTax[];
+}
+export interface IOtaTax {
+  amount: number;
+  currency: IOtaTaxCurrency;
+  is_exlusive: boolean;
+  name: string;
+}
+export interface IOtaTaxCurrency {
+  code: string;
+  id: number;
+  symbol: string;
 }
 export interface IUnit {
   calendar_cell: null;

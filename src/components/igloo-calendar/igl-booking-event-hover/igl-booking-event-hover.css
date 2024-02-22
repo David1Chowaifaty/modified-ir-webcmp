@@ -1,6 +1,3 @@
-@import url('../../../assets/feather/style.min.css');
-@import url('../../../assets/fontawesome/css/all.css');
-@import url('../../../assets/line-awesome/css/line-awesome.min.css');
 :host {
   display: block;
   position: relative;
@@ -11,7 +8,15 @@
   padding-left: 4px !important;
   padding-right: 4px !important;
 }
-
+.user-notes {
+  margin-left: 4px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+  max-width: 100%;
+  height: auto;
+}
 .pointerContainer {
   position: absolute;
   left: 50%;

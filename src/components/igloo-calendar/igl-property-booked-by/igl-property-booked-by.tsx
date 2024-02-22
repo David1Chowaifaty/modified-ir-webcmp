@@ -4,6 +4,7 @@ import { IEntries, ICountry } from '../../../models/IBooking';
 import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import { TPropertyButtonsTypes } from '@/components';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-property-booked-by',
@@ -45,6 +46,7 @@ export class IglPropertyBookedBy {
   };
 
   async componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
     this.assignCountryCode();
     this.initializeExpiryYears();
     this.initializeDateData();

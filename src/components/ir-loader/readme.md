@@ -16,7 +16,7 @@
 
 ### Used by
 
- - [ir-channel-manager](../ir-channel/ir-channel-manager)
+ - [ir-channel-manager](../old-ir-channel/ir-channel-manager)
 
 ### Graph
 ```mermaid

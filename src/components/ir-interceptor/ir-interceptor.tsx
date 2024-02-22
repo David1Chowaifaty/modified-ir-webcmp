@@ -1,6 +1,7 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import axios from 'axios';
 import { IToast } from '../ir-toast/toast';
+import interceptor_requests from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-interceptor',
@@ -17,7 +18,7 @@ export class IrInterceptor {
     errorMessage: 'Something Went Wrong',
   };
 
-  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room'];
+  @Prop({ reflect: true }) handledEndpoints = ['/ReAllocate_Exposed_Room'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -37,6 +38,7 @@ export class IrInterceptor {
   }
 
   handleRequest(config) {
+    interceptor_requests.status = 'pending';
     if (this.isHandledEndpoint(config.url)) {
       this.isLoading = true;
       if (this.extractEndpoint(config.url) === '/ReAllocate_Exposed_Room') {
@@ -46,18 +48,18 @@ export class IrInterceptor {
       } else {
         this.defaultMessage.loadingMessage = 'Fetching Data';
       }
-      this.showToast();
     }
     return config;
   }
 
   handleResponse(response) {
-    this.isLoading = false;
+    if (this.isHandledEndpoint(response.config.url)) {
+      this.isLoading = false;
+    }
+    interceptor_requests.status = 'done';
     if (response.data.ExceptionMsg?.trim()) {
       this.handleError(response.data.ExceptionMsg);
       throw new Error(response.data.ExceptionMsg);
-    } else {
-      this.hideToastAfterDelay(true);
     }
     return response;
   }
@@ -66,8 +68,6 @@ export class IrInterceptor {
     if (this.isUnassignedUnit) {
       this.isUnassignedUnit = false;
     }
-
-    this.hideToastAfterDelay(true);
     this.toast.emit({
       type: 'error',
       title: error,
@@ -77,29 +77,13 @@ export class IrInterceptor {
     return Promise.reject(error);
   }
 
-  showToast() {
-    this.isShown = true;
-  }
-
-  hideToastAfterDelay(isSuccess: boolean) {
-    if (this.isUnassignedUnit) {
-      this.isShown = false;
-      this.isUnassignedUnit = false;
-    } else {
-      const delay = isSuccess ? 0 : 5000;
-      setTimeout(() => {
-        this.isShown = false;
-      }, delay);
-    }
-  }
-
   renderMessage(): string {
     return this.defaultMessage.errorMessage;
   }
   render() {
     return (
       <Host>
-        {this.isLoading && this.isShown && (
+        {this.isLoading && (
           <div class="loadingScreenContainer">
             <div class="loadingContainer">
               <ir-loading-screen></ir-loading-screen>

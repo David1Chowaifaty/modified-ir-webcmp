@@ -12,6 +12,7 @@ export class IglDateRange {
   @Prop({ reflect: true }) disabled: boolean = false;
   @Prop() minDate: string;
   @Prop() dateLabel;
+  @Prop() maxDate: string;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
   @Event() toast: EventEmitter<IToast>;
@@ -89,6 +90,7 @@ export class IglDateRange {
           <div class={'d-flex align-items-center mr-lg-1'}>
             <div class="iglRangePicker form-control input-sm " data-state={this.disabled ? 'disabled' : 'active'}>
               <ir-date-picker
+                maxDate={this.maxDate}
                 class={'date-range-input'}
                 disabled={this.disabled}
                 fromDate={this.fromDate}

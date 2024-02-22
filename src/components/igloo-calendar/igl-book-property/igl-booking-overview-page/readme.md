@@ -52,6 +52,7 @@ graph TD;
   igl-booking-overview-page --> igl-booking-rooms
   igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
+  igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
   igl-booking-rooms --> igl-booking-room-rate-plan

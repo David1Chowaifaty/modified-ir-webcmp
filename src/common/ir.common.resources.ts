@@ -42,10 +42,10 @@ export const onlineResources: IrOnlineResource[] = [
     isCSS: true,
     link: 'https://x.igloorooms.com/app-assets/css/pages/login-register.css',
   },
-  {
-    isCSS: true,
-    link: 'https://x.igloorooms.com/manage/micro/app-assets/required/assets/scripts/daterangepicker/daterangepicker.css',
-  },
+  // {
+  //   isCSS: true,
+  //   link: 'https://x.igloorooms.com/manage/micro/app-assets/required/assets/scripts/daterangepicker/daterangepicker.css',
+  // },
 
   // {
   //   isJS: true,

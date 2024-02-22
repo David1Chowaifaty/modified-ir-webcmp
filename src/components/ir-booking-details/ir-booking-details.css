@@ -1,3 +1,6 @@
+:host {
+  overflow-x: hidden;
+}
 .confirmed {
   color: #fff;
   display: flex;
@@ -5,15 +8,33 @@
 }
 .bg-ir-green {
   background: #629a4c;
+  height: 28px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important ;
+}
+.h-28 {
+  height: 2rem;
 }
 .bg-ir-red {
   background: #ff4961;
+  height: 28px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important ;
 }
 .bg-ir-orange {
   background: #ff9149;
+  height: 28px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important ;
 }
-ir-select#update-status {
-  transform: translateY(0.5rem);
+.date-margin {
+  margin-right: 5px;
+}
+.pickup-margin {
+  margin-bottom: 7px !important;
+}
+.header-date {
+  padding-left: 5px !important;
 }
 
 .pointer {

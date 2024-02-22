@@ -9,6 +9,7 @@
 
 | Property         | Attribute          | Description | Type                                                      | Default     |
 | ---------------- | ------------------ | ----------- | --------------------------------------------------------- | ----------- |
+| `danger_border`  | `danger_border`    |             | `boolean`                                                 | `undefined` |
 | `disabled`       | `disabled`         |             | `boolean`                                                 | `false`     |
 | `duration`       | `duration`         |             | `number`                                                  | `300`       |
 | `from_date`      | `from_date`        |             | `string`                                                  | `''`        |

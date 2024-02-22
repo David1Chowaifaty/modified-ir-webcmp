@@ -1,11 +1,12 @@
-@import url('../../../assets/feather/style.min.css');
-@import url('../../../assets/fontawesome/css/all.css');
-@import url('../../../assets/line-awesome/css/line-awesome.min.css');
 :host {
   display: block;
   position: absolute;
   top: 0;
   height: 100%;
+}
+.svg-icon {
+  height: 20px;
+  width: 20px;
 }
 .darkGrey {
   background: #ececec;
@@ -93,6 +94,9 @@
   font-size: 1.75em;
   line-height: 1em;
   padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .caledarBtns .la {

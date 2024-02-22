@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+:host {
+  display: flex;
+  margin-bottom: 5px;
+  gap: 5px;
+}
+.icon {
+  margin-left: 3px;
+  padding: 0;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+}
+p {
+  margin: 0 3px;
+  padding: 0;
+}
+.icon-container {
+  margin: 0;
+  padding: 0;
+}
+svg {
+  margin: 0;
+  padding: 0;
+}

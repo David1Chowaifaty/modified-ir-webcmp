@@ -12,8 +12,10 @@
 | `btn_block`    | `btn_block`    |             | `boolean`                                                                                       | `true`      |
 | `btn_color`    | `btn_color`    |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
 | `btn_disabled` | `btn_disabled` |             | `boolean`                                                                                       | `false`     |
+| `btn_styles`   | `btn_styles`   |             | `string`                                                                                        | `undefined` |
 | `btn_type`     | `btn_type`     |             | `string`                                                                                        | `'button'`  |
 | `icon`         | `icon`         |             | `string`                                                                                        | `'ft-save'` |
+| `isLoading`    | `is-loading`   |             | `boolean`                                                                                       | `false`     |
 | `name`         | `name`         |             | `string`                                                                                        | `undefined` |
 | `size`         | `size`         |             | `"lg" \| "md" \| "sm"`                                                                          | `'md'`      |
 | `text`         | `text`         |             | `any`                                                                                           | `undefined` |
@@ -31,16 +33,30 @@
 
 ### Used by
 
+ - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
+ - [igl-pagetwo](../igloo-calendar/igl-pagetwo)
+ - [ir-booking-details](../ir-booking-details)
+ - [ir-channel](../ir-channel)
+ - [ir-channel-editor](../ir-channel/ir-channel-editor)
  - [ir-guest-info](../ir-guest-info)
  - [ir-modal](../ir-modal)
+ - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-room](../ir-booking-details/ir-room)
+ - [ir-room-nights](../ir-room-nights)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-book-property-header --> ir-button
+  igl-pagetwo --> ir-button
+  ir-booking-details --> ir-button
+  ir-channel --> ir-button
+  ir-channel-editor --> ir-button
   ir-guest-info --> ir-button
   ir-modal --> ir-button
+  ir-pickup --> ir-button
   ir-room --> ir-button
+  ir-room-nights --> ir-button
   style ir-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

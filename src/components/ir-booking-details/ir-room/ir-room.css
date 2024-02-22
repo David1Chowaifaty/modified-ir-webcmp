@@ -1,3 +1,34 @@
-@import url('../../../assets/feather/style.min.css');
-@import url('../../../assets/fontawesome/css/all.css');
-@import url('../../../assets/line-awesome/css/line-awesome.min.css');
+.light-blue-bg {
+  background: #acecff;
+  padding: 0.2rem 0.3rem;
+  border-radius: 5px;
+}
+.payment-container {
+  position: absolute;
+  right: 1rem;
+  height: fit-content;
+}
+:host {
+  position: relative;
+}
+.sm-mr {
+  margin-right: 3px;
+}
+
+/* .cancelation {
+  max-width: 30%;
+} */
+.mx-0-5 {
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+}
+.tax-width {
+  font-size: 10px;
+  /* flex-wrap: wrap; */
+}
+.sm-mb-1 {
+  margin-bottom: 5px !important;
+}
+.sm-mt-1 {
+  margin-top: 5px !important;
+}

@@ -7,6 +7,7 @@ import moment from 'moment';
 import { IToast } from '@components/ir-toast/toast';
 import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-booking-event',
@@ -70,6 +71,9 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
+    this.eventsService.setToken(calendar_data.token);
+
     window.addEventListener('click', this.handleClickOutsideBind);
   }
 
@@ -233,7 +237,9 @@ export class IglBookingEvent {
             return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           } else {
             return {
-              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent?.origin?.Label}. ${locales.entries.Lcz_SameRatesWillBeKept}`,
+              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${
+                locales.entries.Lcz_SameRatesWillBeKept
+              }`,
               status: '200',
             };
           }
@@ -575,7 +581,18 @@ export class IglBookingEvent {
   updateData(data: any) {
     this.updateEventData.emit(data);
   }
-
+  renderEventBookingNumber() {
+    if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
+      return '';
+    }
+    if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
+      return '';
+    }
+    if (!this.bookingEvent.is_direct) {
+      return ` - ${this.bookingEvent.channel_booking_nbr}`;
+    }
+    return ` - ${this.bookingEvent.BOOKING_NUMBER}`;
+  }
   showEventInfo(showInfo) {
     if (this.isHighlightEventType() || this.bookingEvent.hideBubble) {
       return null;
@@ -586,7 +603,7 @@ export class IglBookingEvent {
       let bodyContainer = document.querySelector('.calendarScrollContainer');
       let bodyContainerRect: { [key: string]: any } = bodyContainer.getBoundingClientRect();
       let elementRect: { [key: string]: any } = this.element.getBoundingClientRect();
-      let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top;
+      let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top + 50;
       // let topDifference = elementRect.top - bodyContainerRect.top;
       // let bottomDifference = bodyContainerRect.bottom - elementRect.bottom;
 
@@ -638,6 +655,7 @@ export class IglBookingEvent {
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
         <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
           {this.getBookedBy()}
+          {this.renderEventBookingNumber()}
         </div>
 
         <Fragment>

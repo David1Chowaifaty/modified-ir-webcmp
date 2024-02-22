@@ -7,35 +7,32 @@
 
 ## Properties
 
-| Property         | Attribute        | Description | Type      | Default     |
-| ---------------- | ---------------- | ----------- | --------- | ----------- |
-| `baseClass`      | `base-class`     |             | `string`  | `undefined` |
-| `classOn`        | `class-on`       |             | `string`  | `undefined` |
-| `colorOn`        | `color-on`       |             | `string`  | `undefined` |
-| `disabled`       | `disabled`       |             | `boolean` | `undefined` |
-| `handleWidth`    | `handle-width`   |             | `string`  | `undefined` |
-| `indeterminate`  | `indeterminate`  |             | `boolean` | `undefined` |
-| `inverse`        | `inverse`        |             | `boolean` | `undefined` |
-| `labelOff`       | `label-off`      |             | `string`  | `undefined` |
-| `labelOn`        | `label-on`       |             | `string`  | `undefined` |
-| `labelText`      | `label-text`     |             | `string`  | `undefined` |
-| `labelWidth`     | `label-width`    |             | `string`  | `undefined` |
-| `offClass`       | `off-class`      |             | `string`  | `undefined` |
-| `offColor`       | `off-color`      |             | `string`  | `undefined` |
-| `radioAllOff`    | `radio-all-off`  |             | `boolean` | `undefined` |
-| `readonly`       | `readonly`       |             | `boolean` | `undefined` |
-| `size`           | `size`           |             | `string`  | `undefined` |
-| `switch_animate` | `switch_animate` |             | `boolean` | `undefined` |
-| `value`          | `value`          |             | `boolean` | `false`     |
-| `wrapperClass`   | `wrapper-class`  |             | `string`  | `undefined` |
+| Property   | Attribute   | Description | Type      | Default     |
+| ---------- | ----------- | ----------- | --------- | ----------- |
+| `checked`  | `checked`   |             | `boolean` | `false`     |
+| `disabled` | `disabled`  |             | `boolean` | `false`     |
+| `switchId` | `switch-id` |             | `string`  | `undefined` |
 
 
 ## Events
 
 | Event         | Description | Type                   |
 | ------------- | ----------- | ---------------------- |
-| `valueChange` |             | `CustomEvent<boolean>` |
+| `checkChange` |             | `CustomEvent<boolean>` |
 
+
+## Dependencies
+
+### Used by
+
+ - [ir-channel](../ir-channel)
+
+### Graph
+```mermaid
+graph TD;
+  ir-channel --> ir-switch
+  style ir-switch fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

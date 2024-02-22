@@ -8,6 +8,12 @@ dependencies:
   '@stencil/core':
     specifier: ^4.7.0
     version: 4.7.0
+  '@types/inputmask':
+    specifier: ^5.0.7
+    version: 5.0.7
+  '@types/switchery':
+    specifier: ^0.8.32
+    version: 0.8.32
   add:
     specifier: ^2.0.6
     version: 2.0.6
@@ -46,6 +52,9 @@ devDependencies:
   '@types/node':
     specifier: ^16.18.11
     version: 16.18.60
+  '@types/toastr':
+    specifier: ^2.1.43
+    version: 2.1.43
   '@types/uuid':
     specifier: ^9.0.7
     version: 9.0.7
@@ -727,6 +736,10 @@ packages:
       '@types/node': 16.18.60
     dev: true
 
+  /@types/inputmask@5.0.7:
+    resolution: {integrity: sha512-uojbVPWzBQ/n/0jc/d16fLqmGasFIptbrLD2WrCPWArlk+5PgblOqH4EDkI3AoobXLAlOK5yF01V8jMmvMG5qg==}
+    dev: false
+
   /@types/istanbul-lib-coverage@2.0.5:
     resolution: {integrity: sha512-zONci81DZYCZjiLe0r6equvZut0b+dBRPBN5kBDjsONnutYNtJMoWQ9uR2RkL1gLG9NMTzvf+29e5RFfPbeKhQ==}
     dev: true
@@ -770,6 +783,16 @@ packages:
 
   /@types/stack-utils@2.0.2:
     resolution: {integrity: sha512-g7CK9nHdwjK2n0ymT2CW698FuWJRIx+RP6embAzZ2Qi8/ilIrA1Imt2LVSeHUzKvpoi7BhmmQcXz95eS0f2JXw==}
+    dev: true
+
+  /@types/switchery@0.8.32:
+    resolution: {integrity: sha512-IyAYozFJ5s8J9YbPo+ePvcPhPGgZ6xY7WpmrMlCaiYLEq76HNASPHV4101bXyt9p1nLup2YXS8LySqopNeSnug==}
+    dev: false
+
+  /@types/toastr@2.1.43:
+    resolution: {integrity: sha512-sLC2fr2OXeE1iyhUixpQ64wQ2tA26awmLidn4tXTLBz4yP/VhtYUKHpmiIyDtztKkHjucdiTLH8F5uRRyhNi2Q==}
+    dependencies:
+      '@types/jquery': 3.5.25
     dev: true
 
   /@types/uuid@9.0.7:

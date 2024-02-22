@@ -8,6 +8,7 @@ import { IglBookPropertyService } from './igl-book-property.service';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../models/igl-book-property';
 import { EventsService } from '../../../services/events.service';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-book-property',
@@ -23,17 +24,25 @@ export class IglBookProperty {
   @Prop() currency: { id: number; code: string };
   @Prop({ reflect: true, mutable: true }) bookingData: { [key: string]: any };
   @Prop() adultChildConstraints: TAdultChildConstraints;
+
   @State() adultChildCount: { adult: number; child: number } = {
     adult: 0,
     child: 0,
   };
   @State() renderAgain: boolean = false;
+  @State() dateRangeData: { [key: string]: any };
   @State() defaultData: any;
   @State() isLoading: string;
+  @State() buttonName = '';
+
+  @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
+  @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
+  @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
+  @Event() resetBookingData: EventEmitter<null>;
+
   private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private message: string = '';
   private sourceOption: TSourceOption;
-  @State() dateRangeData: { [key: string]: any };
   private page: string;
   private showSplitBookingOption: boolean = false;
   private sourceOptions: TSourceOptions[] = [];
@@ -47,11 +56,7 @@ export class IglBookProperty {
   private bookPropertyService = new IglBookPropertyService();
   private eventsService = new EventsService();
   private defaultDateRange: { from_date: string; to_date: string };
-  @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
-  @Event() bookingCreated: EventEmitter<{ pool?: string; data: RoomBookingDetails[] }>;
-  @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
-  @Event() resetBookingData: EventEmitter<null>;
-  @State() buttonName = '';
+
   handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       this.closeWindow();
@@ -92,6 +97,8 @@ export class IglBookProperty {
     }
   }
   async componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
+    this.eventsService.setToken(calendar_data.token);
     this.defaultDateRange = { from_date: this.bookingData.FROM_DATE, to_date: this.bookingData.TO_DATE };
     this.handleKeyDown = this.handleKeyDown.bind(this);
     if (!this.bookingData.defaultDateRange) {
@@ -138,11 +145,12 @@ export class IglBookProperty {
     return await this.bookingService.fetchSetupEntries();
   }
   isGuestDataIncomplete() {
+    //|| data.roomId === '' || data.roomId === 0 if the roomId is required
     if (this.guestData.length === 0) {
       return true;
     }
     for (const data of this.guestData) {
-      if (data.guestName === '' || data.preference === '' || data.preference === 0 || data.roomId === '' || data.roomId === 0) {
+      if (data.guestName === '' || data.preference === '' || data.preference === 0) {
         return true;
       }
     }
@@ -200,7 +208,7 @@ export class IglBookProperty {
   }
 
   setOtherProperties(res: any) {
-    this.ratePricingMode = res.ratePricingMode;
+    this.ratePricingMode = res?.ratePricingMode;
     this.bookedByInfoData.arrivalTime = res.arrivalTime;
     this.bedPreferenceType = res.bedPreferenceType;
   }
@@ -425,9 +433,7 @@ export class IglBookProperty {
       }
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
       await this.bookingService.bookUser(...serviceParams);
-      if (this.isEventType('EDIT_BOOKING')) {
-        this.resetBookingData.emit(null);
-      }
+      this.resetBookingData.emit(null);
     } catch (error) {
       // Handle error
     } finally {
@@ -477,9 +483,16 @@ export class IglBookProperty {
               <h3 class="card-title text-left pb-1 font-medium-2 px-2 px-md-3">
                 {this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}
               </h3>
-              <button type="button" class="close close-icon" onClick={() => this.closeWindow()}>
-                <i class="ft-x"></i>
-              </button>
+              <ir-icon
+                class="close close-icon"
+                onIconClickHandler={() => {
+                  this.closeWindow();
+                }}
+              >
+                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={20} width={20}>
+                  <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                </svg>
+              </ir-icon>
             </div>
           </div>
           <div class="px-2 px-md-3">

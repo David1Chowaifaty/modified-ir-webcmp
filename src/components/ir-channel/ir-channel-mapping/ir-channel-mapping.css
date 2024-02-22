@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+}
+.map-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px !important;
+}
+.map-row span {
+  width: 49%;
+}
+.submap-text {
+  padding-left: 10px;
+}
+.text-blue {
+  color: var(--blue);
+}
+.text-red {
+  color: var(--red);
+}
+.refresh-btn {
+  all: unset;
+  color: var(--blue);
+  cursor: pointer;
+}
+.selected-map svg {
+  margin: 0 10px !important;
+  flex-wrap: wrap;
+}
+.selected-map {
+  flex: 1;
+}
+.selected-map-title {
+  flex: 1;
+  /* background: #000; */
+}

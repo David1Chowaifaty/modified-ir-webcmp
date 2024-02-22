@@ -3,6 +3,7 @@ import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-cal-header',
@@ -29,6 +30,7 @@ export class IglCalHeader {
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
   componentWillLoad() {
+    this.toBeAssignedService.setToken(calendar_data.token);
     try {
       this.initializeRoomsList();
 
@@ -197,11 +199,23 @@ export class IglCalHeader {
                 data-placement="bottom"
                 title={locales.entries.Lcz_UnassignedUnitsTooltip}
               >
-                <i class="la la-tasks"></i>
+                {/* <i class="la la-tasks"></i> */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon">
+                  <path
+                    fill="#6b6f82"
+                    d="M448 160H320V128H448v32zM48 64C21.5 64 0 85.5 0 112v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zM448 352v32H192V352H448zM48 288c-26.5 0-48 21.5-48 48v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V336c0-26.5-21.5-48-48-48H48z"
+                  />
+                </svg>
               </div>
             )}
             <div class="caledarBtns" onClick={() => this.handleOptionEvent('calendar')} data-toggle="tooltip" data-placement="bottom" title={locales.entries.Lcz_Navigate}>
-              <i class="la la-calendar-o"></i>
+              {/* <i class="la la-calendar-o"></i> */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class={'svg-icon'}>
+                <path
+                  fill="#6b6f82"
+                  d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"
+                />
+              </svg>
               {/* <input  type="date" onChange={this.handleDateSelect.bind(this)} title="" /> */}
               <ir-date-picker
                 minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
@@ -215,7 +229,13 @@ export class IglCalHeader {
               ></ir-date-picker>
             </div>
             <div class="caledarBtns" onClick={() => this.handleOptionEvent('gotoToday')} data-toggle="tooltip" data-placement="bottom" title={locales.entries.Lcz_Today}>
-              <i class="la la-clock-o"></i>
+              {/* <i class="la la-clock-o"></i> */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon">
+                <path
+                  fill="#6b6f82"
+                  d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                />
+              </svg>
             </div>
             <div
               class="caledarBtns"
@@ -224,7 +244,13 @@ export class IglCalHeader {
               data-placement="bottom"
               title={locales.entries.Lcz_CreateNewBooking}
             >
-              <i class="la la-plus"></i>
+              {/* <i class="la la-plus"></i> */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-icon">
+                <path
+                  fill="#6b6f82"
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                />
+              </svg>
             </div>
           </div>
           <div class="row justify-content-around no-gutters searchContiner">

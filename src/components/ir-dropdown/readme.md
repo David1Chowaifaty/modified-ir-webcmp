@@ -24,7 +24,7 @@
 
 ### Used by
 
- - [ir-list-item](../ir-channel/ir-listItems)
+ - [ir-list-item](../old-ir-channel/ir-listItems)
 
 ### Depends on
 

@@ -36,7 +36,6 @@
 
 - [ir-toast](../ir-toast)
 - [ir-interceptor](../ir-interceptor)
-- [ir-common](../ir-common)
 - [igl-to-be-assigned](igl-to-be-assigned)
 - [igl-legends](igl-legends)
 - [igl-cal-header](igl-cal-header)
@@ -54,7 +53,6 @@
 graph TD;
   igloo-calendar --> ir-toast
   igloo-calendar --> ir-interceptor
-  igloo-calendar --> ir-common
   igloo-calendar --> igl-to-be-assigned
   igloo-calendar --> igl-legends
   igloo-calendar --> igl-cal-header
@@ -68,49 +66,63 @@ graph TD;
   igloo-calendar --> ir-modal
   ir-interceptor --> ir-loading-screen
   igl-to-be-assigned --> igl-tba-category-view
+  igl-to-be-assigned --> ir-icon
   igl-tba-category-view --> igl-tba-booking-view
   igl-cal-header --> ir-date-picker
   igl-cal-body --> igl-booking-event
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> igl-block-dates-view
   igl-book-property --> igl-block-dates-view
+  igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-booking-rooms
   igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
+  igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
+  igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   ir-sidebar --> ir-icon
   ir-room-nights --> ir-icon
-  ir-booking-details --> ir-common
-  ir-booking-details --> ir-label
+  ir-room-nights --> ir-button
+  ir-booking-details --> ir-toast
+  ir-booking-details --> ir-interceptor
+  ir-booking-details --> ir-select
+  ir-booking-details --> ir-button
   ir-booking-details --> ir-icon
+  ir-booking-details --> ir-label
   ir-booking-details --> ir-room
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
   ir-booking-details --> ir-guest-info
+  ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
   ir-label --> ir-icon
   ir-room --> ir-icon
   ir-room --> ir-button
   ir-room --> ir-label
   ir-room --> ir-modal
-  ir-modal --> ir-icon
   ir-modal --> ir-button
   ir-payment-details --> ir-date-picker
   ir-payment-details --> ir-icon
   ir-payment-details --> ir-modal
+  ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button
+  ir-pickup --> ir-icon
+  ir-pickup --> ir-select
+  ir-pickup --> ir-date-picker
+  ir-pickup --> ir-input-text
+  ir-pickup --> ir-button
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

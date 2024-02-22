@@ -3,6 +3,7 @@ import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, Room
 import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   const myBookings: any[] = [];
@@ -48,7 +49,7 @@ export function formatName(firstName: string | null, lastName: string | null) {
 }
 async function getStayStatus() {
   try {
-    const token = JSON.parse(sessionStorage.getItem('token'));
+    const token = calendar_data.token;
     if (token) {
       const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi?Ticket=${token}`, {
         TBL_NAMES: ['_STAY_STATUS'],
@@ -114,6 +115,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     NOTES: cell.booking.remark,
     is_direct: cell.booking.is_direct,
     BALANCE: cell.booking.financial?.due_amount,
+    channel_booking_nbr: cell.booking.channel_booking_nbr,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -126,7 +128,6 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     // RATE_TYPE: 1,
     // ADULTS_COUNT: cell.room.occupancy.adult_nbr,
     // CHILDREN_COUNT: cell.room.occupancy.children_nbr,
-    // channel_booking_nbr: cell.booking.channel_booking_nbr,
     // origin: cell.booking.origin,
     // GUEST: cell.booking.guest,
     // ROOMS: cell.booking.rooms,
@@ -189,8 +190,8 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
     //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
     // }
   };
-
-  data.rooms.forEach(room => {
+  const rooms = data.rooms.filter(room => !!room['assigned_units_pool']);
+  rooms.forEach(room => {
     bookings.push({
       ID: room['assigned_units_pool'],
       TO_DATE: room.to_date,

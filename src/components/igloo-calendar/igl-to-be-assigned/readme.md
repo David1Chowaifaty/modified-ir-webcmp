@@ -36,11 +36,13 @@
 ### Depends on
 
 - [igl-tba-category-view](igl-tba-category-view)
+- [ir-icon](../../ir-icon)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-to-be-assigned --> igl-tba-category-view
+  igl-to-be-assigned --> ir-icon
   igl-tba-category-view --> igl-tba-booking-view
   igloo-calendar --> igl-to-be-assigned
   style igl-to-be-assigned fill:#f9f,stroke:#333,stroke-width:4px

@@ -3,11 +3,15 @@ import { selectOption } from '../../common/models';
 
 @Component({
   tag: 'ir-select',
+  styleUrl: 'ir-select.css',
+  scoped: true,
 })
 export class IrSelect {
   @Prop() name: string;
   @Prop() data: selectOption[];
   @Prop() label = '<label>';
+  @Prop() selectStyles: string;
+  @Prop() selectContainerStyle: string;
   @Prop({ reflect: true, mutable: true }) selectedValue = null;
   @Prop() required: boolean;
   @Prop() LabelAvailable: boolean = true;
@@ -17,9 +21,9 @@ export class IrSelect {
   @Prop() size: 'sm' | 'md' | 'lg' = 'md';
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
   @Prop() labelPosition: 'left' | 'right' | 'center' = 'left';
-  @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'light';
+  @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null = null;
   @Prop() labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'dark';
-  @Prop() labelBorder: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'none';
+  @Prop() labelBorder: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'theme';
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
 
   @State() initial: boolean = true;
@@ -57,10 +61,10 @@ export class IrSelect {
   render() {
     let className = 'form-control';
     let label = (
-      <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor} border-${this.labelBorder}`}>
+      <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
         <label
-          class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} bg-${
-            this.labelBackground
+          class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
+            this.labelBackground ? 'bg-' + this.labelBackground : ''
           } flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} `}
         >
           {this.label}
@@ -80,15 +84,15 @@ export class IrSelect {
     }
 
     return (
-      <div class="form-group">
+      <div class={`form-group m-0 ${this.selectContainerStyle}`}>
         <div class="input-group row m-0">
           {label}
           <select
-            class={`${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}
+            class={`${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}
             onInput={this.handleSelectChange.bind(this)}
             required={this.required}
           >
-            <option value={null}>{this.firstOption}</option>
+            <option value={''}>{this.firstOption}</option>
             {this.data.map(item => {
               if (this.selectedValue === item.value) {
                 return (

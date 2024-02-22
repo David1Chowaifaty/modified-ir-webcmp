@@ -153,22 +153,24 @@ export class IglBookPropertyService {
   private getBookingPreferenceRoomId(bookingData) {
     return (bookingData.hasOwnProperty('PR_ID') && bookingData.PR_ID) || null;
   }
-  private getRoomCategoryByRoomId(roomId, bookingData) {
+  private getRoomCategoryByRoomId(bookingData) {
     return bookingData.roomsInfo?.find(roomCategory => {
-      return roomCategory.physicalrooms.find(room => room.id === +roomId);
+      return roomCategory.id === bookingData.RATE_TYPE;
     });
   }
   public setEditingRoomInfo(bookingData, selectedUnits) {
-    const category = this.getRoomCategoryByRoomId(this.getBookingPreferenceRoomId(bookingData), bookingData);
-    const room_id = `c_${category.id}`;
+    console.log(bookingData, bookingData.roomsInfo);
+    console.log(this.getBookingPreferenceRoomId(bookingData));
+    const category = this.getRoomCategoryByRoomId(bookingData);
+    const room_id = !category ? '' : `c_${category?.id}`;
     const ratePlanId = `p_${bookingData.RATE_PLAN_ID}`;
     const data = {
       adultCount: bookingData.ADULTS_COUNT,
       rate: bookingData.RATE,
       rateType: bookingData.RATE_TYPE,
       ratePlanId: bookingData.RATE_PLAN_ID,
-      roomCategoryId: category.id,
-      roomCategoryName: category.name,
+      roomCategoryId: category ? category.id : '',
+      roomCategoryName: category ? category.name : '',
       totalRooms: 1,
       ratePlanName: bookingData.RATE_PLAN,
       roomId: bookingData.PR_ID,

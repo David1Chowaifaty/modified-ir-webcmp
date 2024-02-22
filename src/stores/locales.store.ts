@@ -1,6 +1,6 @@
 import { createStore } from '@stencil/store';
 export interface ILocale {
-  entries: LocalizationStrings | null;
+  entries: (LocalizationStrings & LocalizationChannelFrontEntries) | null;
   direction: 'ltr' | 'rtl';
 }
 export type LocalizationStrings = {
@@ -139,6 +139,51 @@ export type LocalizationStrings = {
   Lcz_Stay: string;
   Lcz_BedConfiguration: string;
   Lcz_SelectStatus: string;
+  Lcz_StatusUpdatedSuccessfully: string;
+  Lcz_Pickup: string;
+  Lcz_ArrivalDate: string;
+  Lcz_Time: string;
+  Lcz_FlightDetails: string;
+  Lcz_DueUponBooking: string;
+  Lcz_NbrOfVehicles: string;
+  Lcz_Pickup_YesFrom: string;
+  Lcz_Pickup_NoThankYou: string;
+  Lcz_EnterAmount: string;
+  Lcz_Excluding: string;
+  Lcz_Including: string;
+  Lcz_SubTotal: string;
+};
+export type LocalizationChannelFrontEntries = {
+  Lcz_Actions: string;
+  Lcz_Cancel: string;
+  Lcz_Channel: string;
+  Lcz_ChannelBooking: string;
+  Lcz_Confirm: string;
+  Lcz_ConnectedChannel: string;
+  Lcz_ConnectionSettings: string;
+  Lcz_NotMapped: string;
+  Lcz_CreateChannel: string;
+  Lcz_Delete: string;
+  Lcz_Edit: string;
+  Lcz_EditChannel: string;
+  Lcz_FullSync: string;
+  Lcz_GeneralSettings: string;
+  Lcz_HotelID: string;
+  Lcz_IncorrectConnection: string;
+  Lcz_iSWITCH: string;
+  Lcz_Mapping: string;
+  Lcz_Ok: string;
+  Lcz_PullFutureReservations: string;
+  Lcz_Refresh: string;
+  Lcz_Save: string;
+  Lcz_ScheduleFullSync: string;
+  Lcz_Status: string;
+  Lcz_ThisActionWillDelete: string;
+  Lcz_Title: string;
+  Lcz_UnSavedChangesWillBeLost: string;
+  Lcz_ViewLogs: string;
+  Lcz_TestConnection: string;
+  Lcz_NoChannelsAreConnected: string;
 };
 
 const initialState: ILocale = {

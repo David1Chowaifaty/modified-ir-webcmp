@@ -20,7 +20,6 @@ import { CalendarService } from '@/services/calendar.service';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
->>>>>>> main
 
 @Component({
   tag: 'igloo-calendar',
@@ -71,9 +70,14 @@ export class IglooCalendar {
   private toBeAssignedService = new ToBeAssignedService();
   private socket: Socket;
   private reachedEndOfCalendar = false;
+
   @Watch('ticket')
   ticketChanged() {
-    sessionStorage.setItem('token', JSON.stringify(this.ticket));
+    calendar_data.token = this.ticket;
+    this.bookingService.setToken(this.ticket);
+    this.roomService.setToken(this.ticket);
+    this.eventsService.setToken(this.ticket);
+    this.toBeAssignedService.setToken(this.ticket);
     this.initializeApp();
   }
   private availabilityTimeout;
@@ -82,8 +86,12 @@ export class IglooCalendar {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
-
     if (this.ticket !== '') {
+      calendar_data.token = this.ticket;
+      this.bookingService.setToken(this.ticket);
+      this.roomService.setToken(this.ticket);
+      this.eventsService.setToken(this.ticket);
+      this.toBeAssignedService.setToken(this.ticket);
       this.initializeApp();
     }
   }
@@ -96,7 +104,14 @@ export class IglooCalendar {
     this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
     this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
     this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
-    this.calendarData.bookingEvents = bookingResp.myBookings || [];
+    let bookings = bookingResp.myBookings || [];
+    bookings = bookings.filter(bookingEvent => {
+      const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+      const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+      return !toDate.isSame(fromDate);
+    });
+    this.calendarData.bookingEvents = bookings;
+
     this.calendarData.toBeAssignedEvents = [];
   }
   private calendarService = new CalendarService();
@@ -143,6 +158,7 @@ export class IglooCalendar {
         const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
         this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: { ...this.unassignedDates, ...data } };
         this.calendarData = { ...this.calendarData, unassignedDates: data };
+        addUnassingedDates(data);
       }
       this.socket = io('https://realtime.igloorooms.com/');
       this.socket.on('MSG', async msg => {
@@ -193,13 +209,16 @@ export class IglooCalendar {
                   dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                   dateToFormattedString(new Date(parsedResult.TO_DATE)),
                 );
+                addUnassingedDates(data);
                 this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
                 this.unassignedDates = {
                   fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
+                console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
+                  removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
                     fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                     toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
@@ -222,6 +241,21 @@ export class IglooCalendar {
                   ...this.calendarData.bookingEvents.map(event => {
                     if (result.pools.includes(event.ID)) {
                       return { ...event, BALANCE: result.due_amount };
+                    }
+                    return event;
+                  }),
+                ],
+              };
+            } else if (REASON === 'CHANGE_IN_BOOK_STATUS') {
+              this.calendarData = {
+                ...this.calendarData,
+                bookingEvents: [
+                  ...this.calendarData.bookingEvents.map(event => {
+                    if (result.pools.includes(event.ID)) {
+                      return {
+                        ...event,
+                        STATUS: event.STATUS !== 'IN-HOUSE' ? bookingStatus[result.status_code] : result.status_code === '001' ? bookingStatus[result.status_code] : 'IN-HOUSE',
+                      };
                     }
                     return event;
                   }),
@@ -277,6 +311,7 @@ export class IglooCalendar {
     );
   }
   updateBookingEventsDateRange(eventData) {
+    const now = moment();
     eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
       bookingEvent.defaultDateRange = {};
@@ -290,18 +325,19 @@ export class IglooCalendar {
 
       bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
       bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
-      if (!isBlockUnit(bookingEvent.STAY_STATUS_CODE)) {
-        const now = moment();
+      if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
         const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
         const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
-        if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
-          bookingEvent.STATUS = bookingStatus['000'];
-        } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-          bookingEvent.STATUS = bookingStatus['000'];
-        } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
-          bookingEvent.STATUS = bookingStatus['000'];
-        } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
-          bookingEvent.STATUS = bookingStatus['003'];
+        if (bookingEvent.STATUS !== 'PENDING') {
+          if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+            bookingEvent.STATUS = bookingStatus['003'];
+          }
         }
       }
     });
@@ -517,16 +553,17 @@ export class IglooCalendar {
         ...this.calendarData,
         days: this.days,
         monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
-        bookingEvents: [...this.calendarData.bookingEvents, ...newBookings],
+        bookingEvents: [...this.calendarData.bookingEvents, ...bookings],
       };
+      const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
+      this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
+      this.unassignedDates = {
+        fromDate,
+        toDate,
+        data,
+      };
+      addUnassingedDates(data);
     }
-    const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
-    this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
-    this.unassignedDates = {
-      fromDate,
-      toDate,
-      data,
-    };
   }
   async handleDateSearch(dates: { start: Moment; end: Moment }) {
     const startDate = moment(dates.start).toDate();
@@ -770,7 +807,6 @@ export class IglooCalendar {
       <Host>
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
-        <ir-common></ir-common>
         <div id="iglooCalendar" class="igl-calendar">
           {this.shouldRenderCalendarView() ? (
             [
@@ -850,6 +886,7 @@ export class IglooCalendar {
             <ir-booking-details
               hasPrint
               hasReceipt
+              is_from_front_desk
               propertyid={this.propertyid}
               hasRoomEdit
               hasRoomDelete
@@ -857,6 +894,7 @@ export class IglooCalendar {
               ticket={this.ticket}
               baseurl={this.baseurl}
               language={this.language}
+              hasRoomAdd
             ></ir-booking-details>
           )}
         </ir-sidebar>

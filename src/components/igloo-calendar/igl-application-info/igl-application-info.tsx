@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
 import { TPropertyButtonsTypes } from '@/components';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-application-info',
@@ -20,18 +21,26 @@ export class IglApplicationInfo {
   @Prop() defaultGuestPreference: number | null;
   @Prop() index: number;
   @Prop() defaultGuestRoomId: number;
+  @Prop() dateDifference: number;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @State() filterdRoomList = [];
   @State() isButtonPressed = false;
   @State() guestData: { [key: string]: any };
+  private userRate = 0;
 
   componentWillLoad() {
+    console.log(this.guestInfo);
+    if (this.guestInfo.isRateModified && this.guestInfo.rateType === 2) {
+      this.userRate = this.guestInfo.rate * this.dateDifference;
+    } else {
+      this.userRate = this.guestInfo.rate;
+    }
     this.guestData = this.guestInfo ? { ...this.guestInfo } : {};
     this.guestData.roomId = '';
     if (this.defaultGuestRoomId && this.roomsList.filter(e => e.id.toString() === this.defaultGuestRoomId.toString()).length > 0) {
       this.guestData.roomId = this.defaultGuestRoomId;
     }
-    this.guestData.preference = +this.defaultGuestPreference;
+    this.guestData.preference = +this.defaultGuestPreference || '';
     this.updateRoomList();
   }
 
@@ -114,13 +123,9 @@ export class IglApplicationInfo {
               />
             </div>
             <div class={'mt-1 mt-md-0 d-flex align-items-center flex-fill'}>
-              {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING' ? (
+              {calendar_data.is_frontdesk_enabled && (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') ? (
                 <div class="mr-1 p-0 flex-fill  preference-select-container">
-                  <select
-                    class={`form-control  input-sm pr-0 ${this.isButtonPressed && (this.guestData.roomId === '' || this.guestData.roomId === 0) && 'border-danger'}`}
-                    id={v4()}
-                    onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}
-                  >
+                  <select class={`form-control  input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('roomId', (event.target as HTMLInputElement).value)}>
                     <option value="" selected={this.guestData.roomId === ''}>
                       {locales.entries.Lcz_Assignunits}
                     </option>
@@ -150,7 +155,7 @@ export class IglApplicationInfo {
                 </select>
               </div>
               <div class="">
-                {getCurrencySymbol(this.currency.code) + Number(this.guestInfo.rate).toFixed(2)}/{locales.entries.Lcz_Stay}
+                {getCurrencySymbol(this.currency.code) + Number(this.userRate).toFixed(2)}/{locales.entries.Lcz_Stay}
               </div>
             </div>
           </div>

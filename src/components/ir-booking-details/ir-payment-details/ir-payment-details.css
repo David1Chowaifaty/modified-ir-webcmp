@@ -9,10 +9,16 @@
   width: 100px;
   padding: 0 5px;
 }
+.payments-height {
+  height: 30px;
+}
 .payment_date {
   width: 100px;
 }
 .iframeHeight {
   height: max-content;
   height: 22.5rem;
+}
+.designation {
+  width: 120px;
 }

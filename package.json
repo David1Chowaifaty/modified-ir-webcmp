@@ -27,6 +27,8 @@
   },
   "dependencies": {
     "@stencil/core": "^4.7.0",
+    "@types/inputmask": "^5.0.7",
+    "@types/switchery": "^0.8.32",
     "add": "^2.0.6",
     "axios": "^1.6.0",
     "bootstrap-switch": "^3.4.0",
@@ -41,6 +43,7 @@
     "@types/jest": "^27.5.2",
     "@types/jquery": "^3.5.25",
     "@types/node": "^16.18.11",
+    "@types/toastr": "^2.1.43",
     "@types/uuid": "^9.0.7",
     "jest": "^27.5.1",
     "jest-cli": "^27.5.1",

@@ -3,6 +3,8 @@ import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
 import { dateToFormattedString } from '../../../utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import { getUnassignedDates } from '@/stores/unassigned_dates.store';
+import calendar_data from '@/stores/calendar-data';
 //import { updateCategories } from '../../../utils/events.utils';
 
 @Component({
@@ -36,6 +38,7 @@ export class IglToBeAssigned {
   private toBeAssignedService: ToBeAssignedService = new ToBeAssignedService();
   private unassignedDates: any;
   componentWillLoad() {
+    this.toBeAssignedService.setToken(calendar_data.token);
     this.reArrangeData();
     this.loadingMessage = locales.entries.Lcz_FetchingUnAssignedUnits;
   }
@@ -136,7 +139,8 @@ export class IglToBeAssigned {
 
       this.selectedDate = null;
       //this.unassignedDates = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
-      this.unassignedDates = this.calendarData.unassignedDates;
+      this.unassignedDates = getUnassignedDates();
+      console.log(this.unassignedDates);
 
       this.data = this.unassignedDates;
       this.orderedDatesList = Object.keys(this.data).sort((a, b) => parseInt(a) - parseInt(b));
@@ -249,16 +253,31 @@ export class IglToBeAssigned {
       <Host class="tobeAssignedContainer pr-1 text-left">
         <div>
           <div>
-            <div class="stickyHeader">
-              <div class="tobeAssignedHeader pt-1">{locales.entries.Lcz_Assignments}</div>
-              <div class="closeBtn pt-1" onClick={() => this.handleOptionEvent('closeSideMenu')}>
+            <div class="stickyHeader pt-1">
+              <p class="tobeAssignedHeader ">{locales.entries.Lcz_Assignments}</p>
+              {/* <div class="closeBtn pt-1" onClick={() => this.handleOptionEvent('closeSideMenu')}>
                 <i class="ft-chevrons-left"></i>
-              </div>
+              </div> */}
+              <ir-icon class="closeBtn pt-2" onIconClickHandler={() => this.handleOptionEvent('closeSideMenu')}>
+                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height={18} width={18}>
+                  <path
+                    fill="#6b6f82"
+                    d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"
+                  />
+                </svg>
+              </ir-icon>
               <hr />
               {Object.keys(this.data).length === 0 ? (
                 <p>{locales.entries.Lcz_AllBookingsAreAssigned}</p>
               ) : this.isLoading ? (
-                <p>{this.loadingMessage}</p>
+                <p class="d-flex align-items-center">
+                  <span class="p-0">{this.loadingMessage}</span>
+                  <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                  </div>
+                </p>
               ) : (
                 <Fragment>
                   {this.orderedDatesList.length ? (
@@ -274,7 +293,12 @@ export class IglToBeAssigned {
                         //onClick={() => this.showUnassignedDate()}
                       >
                         <span class="font-weight-bold">{this.data[this.selectedDate].dateStr}</span>
-                        {/* <i class="la la-angle-down ml-2"></i> */}
+                        <svg class={'caret-icon'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={14} width={14}>
+                          <path
+                            fill="#6b6f82"
+                            d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+                          />
+                        </svg>
                       </div>
                       <div class="dropdown-menu dropdown-menu-right full-width" aria-labelledby="dropdownMenuButton">
                         {this.orderedDatesList?.map(ordDate => (

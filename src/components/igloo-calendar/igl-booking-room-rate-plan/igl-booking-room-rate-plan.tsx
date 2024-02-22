@@ -2,6 +2,7 @@ import { Component, Host, Prop, h, State, Event, EventEmitter, Watch, Fragment }
 import { v4 } from 'uuid';
 import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 @Component({
   tag: 'igl-booking-room-rate-plan',
   styleUrl: 'igl-booking-room-rate-plan.css',
@@ -22,6 +23,7 @@ export class IglBookingRoomRatePlan {
   @Prop() isBookDisabled: boolean = false;
   @Prop() defaultRoomId;
   @Prop() selectedRoom;
+  @State() isInputFocused = false;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
@@ -37,13 +39,14 @@ export class IglBookingRoomRatePlan {
     return result;
   }
   componentWillLoad() {
+    console.log('default data', this.defaultData);
     this.updateSelectedRatePlan(this.ratePlanData);
   }
   disableForm() {
     if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
       return false;
     } else {
-      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || this.selectedData.physicalRooms.length === 0;
+      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || (calendar_data.is_frontdesk_enabled && this.selectedData.physicalRooms.length === 0);
     }
   }
 
@@ -89,21 +92,31 @@ export class IglBookingRoomRatePlan {
       index: this.index,
       is_closed: data.is_closed,
       physicalRooms: this.setAvailableRooms(this.ratePlanData.assignable_units),
+      dateDifference: this.dateDifference,
     };
 
     if (this.defaultData) {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
-      (this.selectedData.rateType = 1),
-        this.dataUpdateEvent.emit({
-          key: 'roomRatePlanUpdate',
-          changedKey: 'totalRooms',
-          data: this.selectedData,
-        });
+      this.dataUpdateEvent.emit({
+        key: 'roomRatePlanUpdate',
+        changedKey: 'physicalRooms',
+        data: this.selectedData,
+      });
     }
-
-    this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    if (this.defaultData && this.defaultData.isRateModified) {
+      console.log('object');
+      if (this.selectedData.rateType === 1) {
+        console.log('object1');
+        this.initialRateValue = this.selectedData.rate;
+      } else {
+        console.log('object2');
+        this.initialRateValue = this.selectedData.rate * this.dateDifference;
+      }
+    } else {
+      this.initialRateValue = this.selectedData.rate / this.dateDifference;
+    }
   }
   @Watch('ratePlanData')
   async ratePlanDataChanged(newData) {
@@ -115,6 +128,7 @@ export class IglBookingRoomRatePlan {
       rate: this.handleRateDaysUpdate(),
       physicalRooms: this.setAvailableRooms(newData.assignable_units),
     };
+    this.initialRateValue = this.selectedData.rateType === 2 ? this.selectedData.rate / this.dateDifference : this.selectedData.rate;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -197,7 +211,7 @@ export class IglBookingRoomRatePlan {
       ...this.selectedData,
       rate: numericValue,
       totalRooms: value === '' ? 0 : this.selectedData.totalRooms,
-      defaultSelectedRate: this.selectedData.rateType === 1 ? numericValue / this.dateDifference : numericValue,
+      defaultSelectedRate: this.selectedData.rateType === 2 ? numericValue / this.dateDifference : numericValue,
     };
   }
 
@@ -215,6 +229,7 @@ export class IglBookingRoomRatePlan {
 
   renderRate(): string | number | string[] {
     if (this.selectedData.isRateModified) {
+      console.log('selectedData.rate', this.selectedData.rate);
       return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
     return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);
@@ -250,16 +265,23 @@ export class IglBookingRoomRatePlan {
             <div class={'m-0 p-0 d-md-flex justify-content-between ml-md-1 '}>
               <div class=" d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   ">
                 <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
+                  <div class="input-group-prepend">
+                    <span data-disabled={this.disableForm()} data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text new-currency" id="basic-addon1">
+                      {getCurrencySymbol(this.currency.code)}
+                    </span>
+                  </div>
                   <input
+                    onFocus={() => (this.isInputFocused = true)}
+                    onBlur={() => (this.isInputFocused = false)}
                     disabled={this.disableForm()}
                     type="text"
-                    class="form-control input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
+                    class="form-control pl-0 input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
                     value={this.renderRate()}
                     id={v4()}
                     placeholder={locales.entries.Lcz_Rate || 'Rate'}
                     onInput={(event: InputEvent) => this.handleInput(event)}
                   />
-                  <span class="currency">{getCurrencySymbol(this.currency.code)}</span>
+                  {/* <span class="currency">{getCurrencySymbol(this.currency.code)}</span> */}
                 </fieldset>
                 <fieldset class="position-relative m-0 total-nights-container p-0 ">
                   <select
