@@ -144,7 +144,7 @@ export class IrChannel {
   render() {
     if (this.isLoading) {
       return (
-        <div class="h-screen d-flex flex-column align-items-center justify-content-center">
+        <div class="h-screen bg-white d-flex flex-column align-items-center justify-content-center">
           {/* <div class="dots">
             <div class="dot"></div>
             <div class="dot"></div>
@@ -245,9 +245,9 @@ export class IrChannel {
         </section>
 
         <ir-sidebar
-          sidebarStyles={{
-            width: '60rem',
-          }}
+          // sidebarStyles={{
+          //   width: '60rem',
+          // }}
           showCloseButton={false}
           onIrSidebarToggle={this.handleSidebarClose.bind(this)}
           open={this.channel_status !== null}
