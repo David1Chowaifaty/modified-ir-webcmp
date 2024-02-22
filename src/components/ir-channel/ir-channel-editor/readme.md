@@ -7,16 +7,18 @@
 
 ## Properties
 
-| Property         | Attribute        | Description | Type                 | Default |
-| ---------------- | ---------------- | ----------- | -------------------- | ------- |
-| `channel_status` | `channel_status` |             | `"create" \| "edit"` | `null`  |
+| Property         | Attribute        | Description | Type                 | Default     |
+| ---------------- | ---------------- | ----------- | -------------------- | ----------- |
+| `channel_status` | `channel_status` |             | `"create" \| "edit"` | `null`      |
+| `ticket`         | `ticket`         |             | `string`             | `undefined` |
 
 
 ## Events
 
-| Event          | Description | Type                |
-| -------------- | ----------- | ------------------- |
-| `closeSideBar` |             | `CustomEvent<null>` |
+| Event                 | Description | Type                |
+| --------------------- | ----------- | ------------------- |
+| `closeSideBar`        |             | `CustomEvent<null>` |
+| `saveChannelFinished` |             | `CustomEvent<null>` |
 
 
 ## Dependencies

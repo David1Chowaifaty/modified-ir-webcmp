@@ -6,11 +6,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 14px !important;
 }
 .map-row span {
   width: 49%;
 }
-
 .submap-text {
   padding-left: 10px;
 }

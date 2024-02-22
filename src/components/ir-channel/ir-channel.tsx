@@ -32,6 +32,7 @@ export class IrChannel {
   private irModalRef: HTMLIrModalElement;
 
   componentWillLoad() {
+    this.isLoading = true;
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -64,7 +65,6 @@ export class IrChannel {
   }
   async initializeApp() {
     try {
-      this.isLoading = true;
       const [, , , languageTexts] = await Promise.all([
         this.roomService.fetchData(this.propertyid, this.language),
         this.channelService.getExposedChannels(),
@@ -144,13 +144,14 @@ export class IrChannel {
   render() {
     if (this.isLoading) {
       return (
-        <Host class="h-100 d-flex align-items-center justify-content-center">
-          <div class="dots">
+        <div class="h-screen d-flex flex-column align-items-center justify-content-center">
+          {/* <div class="dots">
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
-          </div>
-        </Host>
+          </div> */}
+          <ir-loading-screen></ir-loading-screen>
+        </div>
       );
     }
     return (
