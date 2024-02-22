@@ -54,6 +54,7 @@ export class IglooCalendar {
   @Event({ bubbles: true, composed: true })
   reduceAvailableUnitEvent: EventEmitter<{ fromDate: string; toDate: string }>;
   @Event({ bubbles: true }) revertBooking: EventEmitter;
+  @State() toBeAssignedDate: string;
 
   private bookingService: BookingService = new BookingService();
   private countryNodeList: ICountry[] = [];
@@ -450,8 +451,12 @@ export class IglooCalendar {
         if (opt.data.start !== undefined && opt.data.end !== undefined) {
           this.handleDateSearch(opt.data);
         } else {
+          //scroll to unassigned dates
           let dt = new Date(opt.data);
-          this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+          dt.setDate(dt.getDate() + 1);
+          this.toBeAssignedDate = this.transformDateForScroll(dt);
+
+          // this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
         }
         break;
       case 'search':
@@ -820,6 +825,7 @@ export class IglooCalendar {
                     countryNodeList={this.countryNodeList}
                     currency={this.calendarData.currency}
                     today={this.today}
+                    toBeAssignedDate={this.toBeAssignedDate}
                     isScrollViewDragging={this.scrollViewDragging}
                     calendarData={this.calendarData}
                   ></igl-cal-body>
