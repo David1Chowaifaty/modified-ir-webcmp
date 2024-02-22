@@ -129,6 +129,7 @@ export class IglBookingRooms {
             }
             return (
               <igl-booking-room-rate-plan
+                is_bed_configuration_enabled={this.roomTypeData.is_bed_configuration_enabled}
                 index={index}
                 isBookDisabled={this.isBookDisabled}
                 key={`rate-plan-${ratePlan.id}`}

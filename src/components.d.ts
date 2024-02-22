@@ -135,6 +135,7 @@ export namespace Components {
         "fullyBlocked": boolean;
         "index": number;
         "isBookDisabled": boolean;
+        "is_bed_configuration_enabled": boolean;
         "physicalrooms": any;
         "ratePlanData": { [key: string]: any };
         "ratePricingMode": any[];
@@ -1969,6 +1970,7 @@ declare namespace LocalJSX {
         "fullyBlocked"?: boolean;
         "index"?: number;
         "isBookDisabled"?: boolean;
+        "is_bed_configuration_enabled"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "onGotoSplitPageTwoEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "physicalrooms"?: any;

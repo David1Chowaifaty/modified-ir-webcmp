@@ -138,22 +138,24 @@ export class IglApplicationInfo {
                 </div>
               ) : null}
 
-              <div class="mr-1 flex-fill">
-                <select
-                  class={`form-control input-sm ${this.isButtonPressed && (this.guestData.preference === '' || this.guestData.preference === 0) && 'border-danger'}`}
-                  id={v4()}
-                  onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}
-                >
-                  <option value="" selected={this.guestData.preference === ''}>
-                    {locales.entries.Lcz_BedConfiguration}
-                  </option>
-                  {this.bedPreferenceType.map(data => (
-                    <option value={+data.CODE_NAME} selected={this.guestData.preference === +data.CODE_NAME}>
-                      {data.CODE_VALUE_EN}
+              {this.guestData.is_bed_configuration_enabled && (
+                <div class="mr-1 flex-fill">
+                  <select
+                    class={`form-control input-sm ${this.isButtonPressed && (this.guestData.preference === '' || this.guestData.preference === 0) && 'border-danger'}`}
+                    id={v4()}
+                    onChange={event => this.handleDataChange('preference', (event.target as HTMLInputElement).value)}
+                  >
+                    <option value="" selected={this.guestData.preference === ''}>
+                      {locales.entries.Lcz_BedConfiguration}
                     </option>
-                  ))}
-                </select>
-              </div>
+                    {this.bedPreferenceType.map(data => (
+                      <option value={+data.CODE_NAME} selected={this.guestData.preference === +data.CODE_NAME}>
+                        {data.CODE_VALUE_EN}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div class="">
                 {getCurrencySymbol(this.currency.code) + Number(this.userRate).toFixed(2)}/{locales.entries.Lcz_Stay}
               </div>

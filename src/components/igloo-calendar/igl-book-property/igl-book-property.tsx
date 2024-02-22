@@ -149,8 +149,9 @@ export class IglBookProperty {
     if (this.guestData.length === 0) {
       return true;
     }
+    console.log(this.guestData);
     for (const data of this.guestData) {
-      if (data.guestName === '' || data.preference === '' || data.preference === 0) {
+      if (data.guestName === '' || ((data.preference === '' || data.preference === 0) && data.is_bed_configuration_enabled)) {
         return true;
       }
     }
