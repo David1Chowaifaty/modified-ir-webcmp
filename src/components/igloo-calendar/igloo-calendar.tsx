@@ -92,7 +92,7 @@ export class IglooCalendar {
       this.initializeApp();
     }
     handleUnAssignedDatesChange('unassigned_dates', newValue => {
-      console.log(newValue, Object.keys(newValue));
+      // console.log(newValue, Object.keys(newValue));
       if (Object.keys(newValue).length === 0 && this.toBeAssignedDate !== '') {
         this.toBeAssignedDate = '';
       }
@@ -155,6 +155,8 @@ export class IglooCalendar {
         if (msgAsObject) {
           const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
           if (KEY.toString() === this.propertyid.toString()) {
+            console.log('default property_id', this.propertyid);
+            console.log('socket property id', KEY.toString());
             let result: any;
             if (REASON === 'DELETE_CALENDAR_POOL' || REASON === 'GET_UNASSIGNED_DATES') {
               result = PAYLOAD;
@@ -272,9 +274,11 @@ export class IglooCalendar {
       //find the selected day
       const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
       if (index > 0) {
+        console.log('found the date');
         //find room_type_id
         const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
         if (room_type_index > 0) {
+          console.log('found the room id');
           days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
         }
       }

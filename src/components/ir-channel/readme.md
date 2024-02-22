@@ -19,6 +19,7 @@
 
 ### Depends on
 
+- [ir-loading-screen](../ir-loading-screen)
 - [ir-button](../ir-button)
 - [ir-switch](../ir-switch)
 - [ir-sidebar](../ir-sidebar)
@@ -28,6 +29,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  ir-channel --> ir-loading-screen
   ir-channel --> ir-button
   ir-channel --> ir-switch
   ir-channel --> ir-sidebar

@@ -14,6 +14,7 @@
 | `currency`             | `currency`                |             | `any`                     | `undefined` |
 | `isScrollViewDragging` | `is-scroll-view-dragging` |             | `boolean`                 | `undefined` |
 | `language`             | `language`                |             | `string`                  | `undefined` |
+| `toBeAssignedDate`     | `to-be-assigned-date`     |             | `string`                  | `undefined` |
 | `today`                | --                        |             | `String`                  | `undefined` |
 
 
