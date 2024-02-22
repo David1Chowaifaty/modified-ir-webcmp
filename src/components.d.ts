@@ -5,9 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
-import { Languages } from "./redux/features/languages";
 import { IToast, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 import { IToast as IToast1 } from "./components/ir-toast/toast";
@@ -16,18 +15,12 @@ import { ChannelManager, RoomType } from "./sample/channel/data";
 import { checkboxes, selectOption } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { selectOption as selectOption1 } from "./common/models";
-<<<<<<< HEAD
-import { Languages as Languages1 } from "./components.d";
-import { Booking } from "./models/booking.dto";
-=======
 import { ILocale } from "./stores/locales.store";
 import { Booking, IBookingPickupInfo } from "./models/booking.dto";
->>>>>>> main
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
-export { TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
-export { Languages } from "./redux/features/languages";
 export { IToast, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 export { IToast as IToast1 } from "./components/ir-toast/toast";
@@ -36,13 +29,8 @@ export { ChannelManager, RoomType } from "./sample/channel/data";
 export { checkboxes, selectOption } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { selectOption as selectOption1 } from "./common/models";
-<<<<<<< HEAD
-export { Languages as Languages1 } from "./components.d";
-export { Booking } from "./models/booking.dto";
-=======
 export { ILocale } from "./stores/locales.store";
 export { Booking, IBookingPickupInfo } from "./models/booking.dto";
->>>>>>> main
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -50,13 +38,9 @@ export namespace Components {
         "bedPreferenceType": any[];
         "bookingType": string;
         "currency": any;
-<<<<<<< HEAD
-        "defaultTexts": any;
-=======
         "dateDifference": number;
         "defaultGuestPreference": number | null;
         "defaultGuestRoomId": number;
->>>>>>> main
         "guestInfo": { [key: string]: any };
         "guestRefKey": string;
         "index": number;
@@ -91,7 +75,6 @@ export namespace Components {
         "to_date": string;
     }
     interface IglBookPropertyFooter {
-        "defaultTexts": any;
         "disabled": boolean;
         "eventType": string;
     }
@@ -103,7 +86,6 @@ export namespace Components {
         "bookingDataDefaultDateRange": { [key: string]: any };
         "dateRangeData": any;
         "defaultDaterange": { from_date: string; to_date: string };
-        "defaultTexts": Languages;
         "message": string;
         "minDate": string;
         "propertyId": number;
@@ -150,7 +132,6 @@ export namespace Components {
         "dateDifference": number;
         "defaultData": { [key: string]: any };
         "defaultRoomId": any;
-        "defaultTexts": any;
         "fullyBlocked": boolean;
         "index": number;
         "isBookDisabled": boolean;
@@ -166,11 +147,10 @@ export namespace Components {
         "currency": any;
         "dateDifference": number;
         "defaultData": Map<string, any>;
-        "defaultTexts": any;
         "initialRoomIds": any;
         "isBookDisabled": boolean;
         "ratePricingMode": any[];
-        "roomInfoId": number|null;
+        "roomInfoId": number | null;
         "roomTypeData": { [key: string]: any };
     }
     interface IglCalBody {
@@ -200,7 +180,6 @@ export namespace Components {
         "minDate": string;
     }
     interface IglLegends {
-        "defaultTexts": any;
         "legendData": { [key: string]: any };
     }
     interface IglPagetwo {
@@ -210,6 +189,7 @@ export namespace Components {
         "countryNodeList": any;
         "currency": any;
         "dateRangeData": { [key: string]: any };
+        "defaultGuestData": IglBookPropertyPayloadEditBooking;
         "isEditOrAddRoomEvent": boolean;
         "isLoading": string;
         "language": string;
@@ -222,7 +202,6 @@ export namespace Components {
     interface IglPropertyBookedBy {
         "countryNodeList": ICountry[];
         "defaultData": { [key: string]: any };
-        "defaultTexts": any;
         "language": string;
         "propertyId": number;
         "showPaymentDetails": boolean;
@@ -262,6 +241,7 @@ export namespace Components {
         "to_date": string;
     }
     interface IrAutocomplete {
+        "danger_border": boolean;
         "disabled": boolean;
         "duration": number;
         "from_date": string;
@@ -290,12 +270,6 @@ export namespace Components {
         "is_from_front_desk": boolean;
         "language": string;
         "propertyid": number;
-<<<<<<< HEAD
-        "setupDataCountries": selectOption[];
-        "setupDataCountriesCode": selectOption[];
-        "statusCodes": any;
-=======
->>>>>>> main
         "ticket": string;
     }
     interface IrButton {
@@ -411,7 +385,7 @@ export namespace Components {
     }
     interface IrGuestInfo {
         "booking_nbr": string;
-        "defaultTexts": Languages;
+        "defaultTexts": ILocale;
         "email": string;
         "language": string;
         "setupDataCountries": selectOption[];
@@ -520,24 +494,18 @@ export namespace Components {
     }
     interface IrPaymentDetails {
         "bookingDetails": Booking;
-<<<<<<< HEAD
-        "defaultTexts": Languages;
-        "item": any;
-        "paymentExceptionMessage": string;
-=======
         "defaultTexts": ILocale;
     }
     interface IrPickup {
         "bookingNumber": string;
         "defaultPickupData": IBookingPickupInfo | null;
         "numberOfPersons": number;
->>>>>>> main
     }
     interface IrRoom {
         "bookingEvent": Booking1;
         "bookingIndex": number;
         "currency": string;
-        "defaultTexts": any;
+        "defaultTexts": ILocale;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
         "hasRoomAdd": boolean;
@@ -1254,19 +1222,7 @@ declare global {
         new (): HTMLIrAutocompleteElement;
     };
     interface HTMLIrBookingDetailsElementEventMap {
-<<<<<<< HEAD
-        "sendDataToServer": guestInfo;
-        "handlePrintClick": any;
-        "handleReceiptClick": any;
-        "handleDeleteClick": any;
-        "handleMenuClick": any;
-        "handleRoomAdd": any;
-        "handleRoomEdit": any;
-        "handleRoomDelete": any;
-        "handleAddPayment": any;
-=======
         "toast": IToast;
->>>>>>> main
     }
     interface HTMLIrBookingDetailsElement extends Components.IrBookingDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingDetailsElementEventMap>(type: K, listener: (this: HTMLIrBookingDetailsElement, ev: IrBookingDetailsCustomEvent<HTMLIrBookingDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1888,13 +1844,9 @@ declare namespace LocalJSX {
         "bedPreferenceType"?: any[];
         "bookingType"?: string;
         "currency"?: any;
-<<<<<<< HEAD
-        "defaultTexts"?: any;
-=======
         "dateDifference"?: number;
         "defaultGuestPreference"?: number | null;
         "defaultGuestRoomId"?: number;
->>>>>>> main
         "guestInfo"?: { [key: string]: any };
         "guestRefKey"?: string;
         "index"?: number;
@@ -1936,7 +1888,6 @@ declare namespace LocalJSX {
         "to_date"?: string;
     }
     interface IglBookPropertyFooter {
-        "defaultTexts"?: any;
         "disabled"?: boolean;
         "eventType"?: string;
         "onButtonClicked"?: (event: IglBookPropertyFooterCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
@@ -1949,7 +1900,6 @@ declare namespace LocalJSX {
         "bookingDataDefaultDateRange"?: { [key: string]: any };
         "dateRangeData"?: any;
         "defaultDaterange"?: { from_date: string; to_date: string };
-        "defaultTexts"?: Languages;
         "message"?: string;
         "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
@@ -2015,7 +1965,6 @@ declare namespace LocalJSX {
         "dateDifference"?: number;
         "defaultData"?: { [key: string]: any };
         "defaultRoomId"?: any;
-        "defaultTexts"?: any;
         "fullyBlocked"?: boolean;
         "index"?: number;
         "isBookDisabled"?: boolean;
@@ -2033,12 +1982,11 @@ declare namespace LocalJSX {
         "currency"?: any;
         "dateDifference"?: number;
         "defaultData"?: Map<string, any>;
-        "defaultTexts"?: any;
         "initialRoomIds"?: any;
         "isBookDisabled"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomsCustomEvent<{ [key: string]: any }>) => void;
         "ratePricingMode"?: any[];
-        "roomInfoId"?: number|null;
+        "roomInfoId"?: number | null;
         "roomTypeData"?: { [key: string]: any };
     }
     interface IglCalBody {
@@ -2081,7 +2029,6 @@ declare namespace LocalJSX {
         "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
     }
     interface IglLegends {
-        "defaultTexts"?: any;
         "legendData"?: { [key: string]: any };
         "onOptionEvent"?: (event: IglLegendsCustomEvent<{ [key: string]: any }>) => void;
     }
@@ -2092,6 +2039,7 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: any;
         "dateRangeData"?: { [key: string]: any };
+        "defaultGuestData"?: IglBookPropertyPayloadEditBooking;
         "isEditOrAddRoomEvent"?: boolean;
         "isLoading"?: string;
         "language"?: string;
@@ -2109,7 +2057,6 @@ declare namespace LocalJSX {
     interface IglPropertyBookedBy {
         "countryNodeList"?: ICountry[];
         "defaultData"?: { [key: string]: any };
-        "defaultTexts"?: any;
         "language"?: string;
         "onDataUpdateEvent"?: (event: IglPropertyBookedByCustomEvent<{ [key: string]: any }>) => void;
         "propertyId"?: number;
@@ -2165,6 +2112,7 @@ declare namespace LocalJSX {
         "to_date"?: string;
     }
     interface IrAutocomplete {
+        "danger_border"?: boolean;
         "disabled"?: boolean;
         "duration"?: number;
         "from_date"?: string;
@@ -2195,27 +2143,8 @@ declare namespace LocalJSX {
         "hasRoomEdit"?: boolean;
         "is_from_front_desk"?: boolean;
         "language"?: string;
-<<<<<<< HEAD
-        "languageAbreviation"?: string;
-        "onHandleAddPayment"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleDeleteClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleMenuClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandlePrintClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleReceiptClick"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleRoomAdd"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleRoomDelete"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onHandleRoomEdit"?: (event: IrBookingDetailsCustomEvent<any>) => void;
-        "onSendDataToServer"?: (event: IrBookingDetailsCustomEvent<guestInfo>) => void;
-        "paymentDetailsUrl"?: string;
-        "paymentExceptionMessage"?: string;
-        "propertyid"?: number;
-        "setupDataCountries"?: selectOption[];
-        "setupDataCountriesCode"?: selectOption[];
-        "statusCodes"?: any;
-=======
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
         "propertyid"?: number;
->>>>>>> main
         "ticket"?: string;
     }
     interface IrButton {
@@ -2350,7 +2279,7 @@ declare namespace LocalJSX {
     }
     interface IrGuestInfo {
         "booking_nbr"?: string;
-        "defaultTexts"?: Languages;
+        "defaultTexts"?: ILocale;
         "email"?: string;
         "language"?: string;
         "onCloseSideBar"?: (event: IrGuestInfoCustomEvent<null>) => void;
@@ -2469,13 +2398,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
-<<<<<<< HEAD
-        "defaultTexts"?: Languages;
-        "item"?: any;
-        "onCreditCardPressHandler"?: (event: IrPaymentDetailsCustomEvent<any>) => void;
-=======
         "defaultTexts"?: ILocale;
->>>>>>> main
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
     }
@@ -2490,7 +2413,7 @@ declare namespace LocalJSX {
         "bookingEvent"?: Booking1;
         "bookingIndex"?: number;
         "currency"?: string;
-        "defaultTexts"?: any;
+        "defaultTexts"?: ILocale;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
         "hasRoomAdd"?: boolean;

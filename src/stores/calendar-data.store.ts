@@ -17,6 +17,14 @@ const { state: calendarDataState } = createStore<CalendarDataDetails>({
   startingDate: 0,
   language: '',
   toBeAssignedEvents: [],
+  taxes: [],
+  max_nights: 0,
+  allowed_payment_methods: [],
+  pickup_service: undefined,
+  is_frontdesk_enabled: false,
+  id: 0,
+  name: '',
+  token: '',
 });
 
 export default calendarDataState;

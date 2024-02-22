@@ -11,15 +11,10 @@ import { ToBeAssignedService } from '../../services/toBeAssigned.service';
 import { bookingStatus, calculateDaysBetweenDates, transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from '../../models/property-types';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
-<<<<<<< HEAD
-import { Languages } from '@/components';
-import { store } from '@/redux/store';
-import { addLanguages } from '@/redux/features/languages';
-import { CalendarService } from '@/services/calendar.service';
-=======
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import { addUnassingedDates, removeUnassignedDates } from '@/stores/unassigned_dates.store';
 
 @Component({
   tag: 'igloo-calendar',
@@ -114,21 +109,8 @@ export class IglooCalendar {
 
     this.calendarData.toBeAssignedEvents = [];
   }
-  private calendarService = new CalendarService();
   async initializeApp() {
     try {
-<<<<<<< HEAD
-      // const [defaultTexts, roomResp, bookingResp, countryNodeList] = await Promise.all([
-      //   this.roomService.fetchLanguage(this.language),
-      //   this.roomService.fetchData(this.propertyid, this.language),
-      //   this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date),
-      //   this.bookingService.getCountries(this.language),
-      // ]);
-      const { defaultTexts, roomResp, bookingResp, countryNodeList } = await this.calendarService.Init(this.language, this.propertyid, this.from_date, this.to_date);
-      this.defaultTexts = defaultTexts as Languages;
-      console.log('languages', this.defaultTexts);
-      store.dispatch(addLanguages({ ...defaultTexts } as Languages));
-=======
       const [_, roomResp, bookingResp, countryNodeList] = await Promise.all([
         this.roomService.fetchLanguage(this.language),
         this.roomService.fetchData(this.propertyid, this.language),
@@ -137,7 +119,6 @@ export class IglooCalendar {
       ]);
       calendar_dates.days = bookingResp.days;
       calendar_dates.months = bookingResp.months;
->>>>>>> main
       this.setRoomsData(roomResp);
       this.countryNodeList = countryNodeList;
       this.setUpCalendarData(roomResp, bookingResp);
