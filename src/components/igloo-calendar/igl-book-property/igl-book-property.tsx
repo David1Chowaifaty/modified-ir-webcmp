@@ -182,11 +182,11 @@ export class IglBookProperty {
     };
     return (
       isValidProperty(this.guestData, 'guestName', '') ||
-      isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
-      isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
+      // isValidProperty(this.bookedByInfoData, 'isdCode', '') ||
+      // isValidProperty(this.bookedByInfoData, 'contactNumber', '') ||
       isValidProperty(this.bookedByInfoData, 'firstName', '') ||
       isValidProperty(this.bookedByInfoData, 'lastName', '') ||
-      isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
+      // isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
       isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '') ||
       isValidProperty(this.bookedByInfoData, 'email', '')
     );
