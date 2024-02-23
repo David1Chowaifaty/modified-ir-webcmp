@@ -34,8 +34,7 @@ export class IrInterceptor {
 
   handleRequest(config: AxiosRequestConfig) {
     const extractedUrl = this.extractEndpoint(config.url);
-    interceptor_requests.status = 'pending';
-    interceptor_requests.url = extractedUrl;
+    interceptor_requests[extractedUrl] = 'pending';
     if (this.isHandledEndpoint(extractedUrl)) {
       this.isLoading = true;
     }
@@ -47,8 +46,7 @@ export class IrInterceptor {
     if (this.isHandledEndpoint(extractedUrl)) {
       this.isLoading = false;
     }
-    interceptor_requests.status = 'done';
-    interceptor_requests.url = '';
+    interceptor_requests[extractedUrl] = 'done';
     if (response.data.ExceptionMsg?.trim()) {
       this.handleError(response.data.ExceptionMsg);
       throw new Error(response.data.ExceptionMsg);

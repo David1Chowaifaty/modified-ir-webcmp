@@ -3,7 +3,7 @@ import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOp
 import { IToast } from '../../../ir-toast/toast';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
-import interceptor_requests from '@/stores/ir-interceptor.store';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 import calendar_data from '@/stores/calendar-data';
 
 @Component({
@@ -130,7 +130,7 @@ export class IglBookPropertyHeader {
           )}
           <ir-button
             btn_id="check_availability"
-            isLoading={interceptor_requests.status === 'pending' && interceptor_requests.url === '/Get_Exposed_Booking_Availability'}
+            isLoading={isRequestPending('/Get_Exposed_Booking_Availability')}
             icon=""
             size="sm"
             class="ml-2"
