@@ -130,7 +130,7 @@ export class IglBookPropertyHeader {
           )}
           <ir-button
             btn_id="check_availability"
-            isLoading={interceptor_requests.status === 'pending'}
+            isLoading={interceptor_requests.status === 'pending' && interceptor_requests.url === '/Get_Exposed_Booking_Availability'}
             icon=""
             size="sm"
             class="ml-2"

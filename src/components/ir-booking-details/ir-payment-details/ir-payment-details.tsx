@@ -142,10 +142,10 @@ export class IrPaymentDetails {
               <span class="sm-padding-right">${Number(item.amount).toFixed(2)}</span>
             ) : (
               <input
+                type="text"
                 class="border-0  form-control py-0 m-0 w-100"
                 value={this.itemToBeAdded.amount === null ? '' : Number(this.itemToBeAdded.amount).toFixed(2)}
                 onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value, event)}
-                type="text"
               ></input>
             )}
           </td>

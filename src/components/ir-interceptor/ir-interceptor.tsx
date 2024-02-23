@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { IToast } from '../ir-toast/toast';
 import interceptor_requests from '@/stores/ir-interceptor.store';
 
@@ -13,12 +13,7 @@ export class IrInterceptor {
   @State() isLoading = false;
   @State() isUnassignedUnit = false;
 
-  @Prop({ reflect: true, mutable: true }) defaultMessage = {
-    loadingMessage: 'Fetching Data',
-    errorMessage: 'Something Went Wrong',
-  };
-
-  @Prop({ reflect: true }) handledEndpoints = ['/ReAllocate_Exposed_Room'];
+  @Prop({ reflect: true }) handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -34,29 +29,26 @@ export class IrInterceptor {
   }
 
   isHandledEndpoint(url: string): boolean {
-    return this.handledEndpoints.includes(this.extractEndpoint(url));
+    return this.handledEndpoints.includes(url);
   }
 
-  handleRequest(config) {
+  handleRequest(config: AxiosRequestConfig) {
+    const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests.status = 'pending';
-    if (this.isHandledEndpoint(config.url)) {
+    interceptor_requests.url = extractedUrl;
+    if (this.isHandledEndpoint(extractedUrl)) {
       this.isLoading = true;
-      if (this.extractEndpoint(config.url) === '/ReAllocate_Exposed_Room') {
-        this.defaultMessage.loadingMessage = 'Updating Event';
-      } else if (this.extractEndpoint(config.url) === '/Get_Aggregated_UnAssigned_Rooms') {
-        this.isUnassignedUnit = true;
-      } else {
-        this.defaultMessage.loadingMessage = 'Fetching Data';
-      }
     }
     return config;
   }
 
-  handleResponse(response) {
-    if (this.isHandledEndpoint(response.config.url)) {
+  handleResponse(response: AxiosResponse) {
+    const extractedUrl = this.extractEndpoint(response.config.url);
+    if (this.isHandledEndpoint(extractedUrl)) {
       this.isLoading = false;
     }
     interceptor_requests.status = 'done';
+    interceptor_requests.url = '';
     if (response.data.ExceptionMsg?.trim()) {
       this.handleError(response.data.ExceptionMsg);
       throw new Error(response.data.ExceptionMsg);
@@ -64,10 +56,7 @@ export class IrInterceptor {
     return response;
   }
 
-  handleError(error) {
-    if (this.isUnassignedUnit) {
-      this.isUnassignedUnit = false;
-    }
+  handleError(error: string) {
     this.toast.emit({
       type: 'error',
       title: error,
@@ -75,10 +64,6 @@ export class IrInterceptor {
       position: 'top-right',
     });
     return Promise.reject(error);
-  }
-
-  renderMessage(): string {
-    return this.defaultMessage.errorMessage;
   }
   render() {
     return (

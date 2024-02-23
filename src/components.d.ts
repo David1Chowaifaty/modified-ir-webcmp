@@ -418,7 +418,6 @@ export namespace Components {
         "value": any;
     }
     interface IrInterceptor {
-        "defaultMessage": { loadingMessage: string; errorMessage: string; };
         "handledEndpoints": string[];
     }
     interface IrJquerySwitch {
@@ -2331,7 +2330,6 @@ declare namespace LocalJSX {
         "value"?: any;
     }
     interface IrInterceptor {
-        "defaultMessage"?: { loadingMessage: string; errorMessage: string; };
         "handledEndpoints"?: string[];
         "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
