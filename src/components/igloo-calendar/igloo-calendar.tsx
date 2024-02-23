@@ -155,8 +155,6 @@ export class IglooCalendar {
         if (msgAsObject) {
           const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
           if (KEY.toString() === this.propertyid.toString()) {
-            console.log('default property_id', this.propertyid);
-            console.log('socket property id', KEY.toString());
             let result: any;
             if (REASON === 'DELETE_CALENDAR_POOL' || REASON === 'GET_UNASSIGNED_DATES') {
               result = PAYLOAD;
@@ -207,7 +205,7 @@ export class IglooCalendar {
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
-                console.log(this.calendarData.unassignedDates, this.unassignedDates);
+                // console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
                   removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
@@ -274,12 +272,9 @@ export class IglooCalendar {
       //find the selected day
       const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
       if (index != -1) {
-        console.log('found the date');
-        console.log(queue.room_type_id);
         //find room_type_id
         const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
         if (room_type_index != -1) {
-          console.log('found the room id');
           days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
         }
       }

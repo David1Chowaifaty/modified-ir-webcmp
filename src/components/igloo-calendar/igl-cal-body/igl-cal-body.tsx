@@ -296,8 +296,9 @@ export class IglCalBody {
           class={`cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`}
           onClick={() => this.toggleCategory(roomCategory)}
         >
-          <div class={'categoryName'}>{this.getCategoryName(roomCategory)}</div>
-
+          <div class={'categoryName'}>
+            <ir-popover popoverTitle={this.getCategoryName(roomCategory)}></ir-popover>
+          </div>
           {roomCategory.expanded ? (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={14} width={14}>
               <path
@@ -332,7 +333,9 @@ export class IglCalBody {
           class={`cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${'room_' + this.getRoomId(room)}`}
           data-room={this.getRoomId(room)}
         >
-          <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div>
+          {/* <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div> */}
+
+          <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover>
         </div>
         {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory)}
       </div>

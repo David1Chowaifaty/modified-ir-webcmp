@@ -69,7 +69,9 @@ export class IglCalHeader {
       dt.setMinutes(0);
       dt.setSeconds(0);
       let endDate = dt.getTime();
+      //console.log('unassigned Dates', this.unassignedDates);
       while (endDate <= new Date(toDate).getTime()) {
+        //console.log('end date:', endDate);
         const selectedDate = moment(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(
