@@ -199,6 +199,7 @@ export interface RoomDetail {
   name: string;
   rate: number;
   is_active: boolean;
+  is_bed_configuration_enabled: boolean;
   rateplans: RatePlanDetail[];
   physicalrooms: PhysicalRoomDetail[];
   exposed_inventory: null;

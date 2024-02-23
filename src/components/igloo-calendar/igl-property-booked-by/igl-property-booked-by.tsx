@@ -295,11 +295,7 @@ export class IglPropertyBookedBy {
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_Country}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
-                  <select
-                    class={`form-control input-sm pr-0 ${this.isButtonPressed && this.bookedByData.countryId === '' && 'border-danger'}`}
-                    id={v4()}
-                    onChange={event => this.handleDataChange('countryId', event)}
-                  >
+                  <select class={`form-control input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
                     <option value="" selected={this.bookedByData.countryId === ''}>
                       {locales.entries.Lcz_Select}
                     </option>
@@ -316,11 +312,7 @@ export class IglPropertyBookedBy {
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
                 <div class="p-0 m-0  d-flex  controlContainer flex-fill">
                   <div class=" p-0 m-0">
-                    <select
-                      class={`form-control input-sm pr-0 ${this.isButtonPressed && this.bookedByData.isdCode === '' && 'border-danger'}`}
-                      id={v4()}
-                      onChange={event => this.handleDataChange('isdCode', event)}
-                    >
+                    <select class={`form-control input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('isdCode', event)}>
                       <option value="" selected={this.bookedByData.isdCode === ''}>
                         {locales.entries.Lcz_Isd}
                       </option>
@@ -333,7 +325,9 @@ export class IglPropertyBookedBy {
                   </div>
                   <div class="flex-fill p-0 m-0">
                     <input
-                      class={`form-control ${this.isButtonPressed && this.bookedByData.contactNumber === '' && 'border-danger'}`}
+                      class={`form-control
+                     
+                      `}
                       type="tel"
                       placeholder={locales.entries.Lcz_ContactNumber}
                       id={v4()}

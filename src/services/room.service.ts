@@ -24,6 +24,7 @@ export class RoomService extends Token {
         calendar_data.taxes = results.taxes;
         calendar_data.id = results.id;
         calendar_data.name = results.name;
+        calendar_data.tax_statement = results.tax_statement;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
         return data;
       }

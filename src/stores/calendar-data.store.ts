@@ -1,7 +1,7 @@
 import { CalendarDataDetails } from '@/models/calendarData';
 import { createStore } from '@stencil/store';
 
-const initialState: CalendarDataDetails = {
+const { state: calendarDataState } = createStore<CalendarDataDetails>({
   adultChildConstraints: {
     adult_max_nbr: 0,
     child_max_nbr: 0,
@@ -17,16 +17,15 @@ const initialState: CalendarDataDetails = {
   startingDate: 0,
   language: '',
   toBeAssignedEvents: [],
+  taxes: [],
+  max_nights: 0,
   allowed_payment_methods: [],
   pickup_service: undefined,
-  max_nights: 0,
   is_frontdesk_enabled: false,
-  taxes: [],
-  id: null,
+  id: 0,
   name: '',
   token: '',
   tax_statement: '',
-};
-export const { state: calendar_data, onChange: onCalendarDatesChange } = createStore<CalendarDataDetails>(initialState);
+});
 
-export default calendar_data;
+export default calendarDataState;

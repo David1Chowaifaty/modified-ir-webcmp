@@ -21,6 +21,7 @@ export interface CalendarDataDetails {
   id: number;
   name: string;
   token: string;
+  tax_statement: string;
 }
 export interface ITaxes {
   is_exlusive: boolean;

@@ -23,6 +23,7 @@ export class IglBookingRoomRatePlan {
   @Prop() isBookDisabled: boolean = false;
   @Prop() defaultRoomId;
   @Prop() selectedRoom;
+  @Prop() is_bed_configuration_enabled: boolean;
   @State() isInputFocused = false;
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
@@ -77,6 +78,7 @@ export class IglBookingRoomRatePlan {
 
   updateSelectedRatePlan(data) {
     this.selectedData = {
+      is_bed_configuration_enabled: this.is_bed_configuration_enabled,
       ratePlanId: data.id,
       adult_child_offering: data.variations[data.variations.length - 1].adult_child_offering,
       rateType: 1,

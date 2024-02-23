@@ -1,6 +1,7 @@
 import { IglBookPropertyPayloadPlusBooking } from '@/models/igl-book-property';
 import { BookingService } from '@/services/booking.service';
 import { RoomService } from '@/services/room.service';
+import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
 import { Component, Host, State, h, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 import axios from 'axios';
@@ -61,11 +62,12 @@ export class IglBookPropertyContainer {
       console.error('Error initializing app:', error);
     }
   }
-  componentDidLoad() {
+  componentWillLoad() {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
+      calendar_data.token = this.ticket;
       this.bookingService.setToken(this.ticket);
       this.roomService.setToken(this.ticket);
       this.initializeApp();
@@ -73,8 +75,10 @@ export class IglBookPropertyContainer {
   }
   @Watch('ticket')
   async ticketChanged() {
+    calendar_data.token = this.ticket;
     this.bookingService.setToken(this.ticket);
     this.roomService.setToken(this.ticket);
+
     this.initializeApp();
   }
   handleCloseBookingWindow() {

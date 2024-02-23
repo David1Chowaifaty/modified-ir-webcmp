@@ -32,11 +32,12 @@ export class IrPaymentDetails {
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
   private itemToBeAdded: IPayment;
   private paymentService = new PaymentService();
+  private bookingService = new BookingService();
 
   async componentWillLoad() {
     try {
       this.paymentService.setToken(calendar_data.token);
-
+      this.bookingService.setToken(calendar_data.token);
       this.initializeItemToBeAdded();
     } catch (error) {
       if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
@@ -141,10 +142,10 @@ export class IrPaymentDetails {
               <span class="sm-padding-right">${Number(item.amount).toFixed(2)}</span>
             ) : (
               <input
+                type="text"
                 class="border-0  form-control py-0 m-0 w-100"
                 value={this.itemToBeAdded.amount === null ? '' : Number(this.itemToBeAdded.amount).toFixed(2)}
                 onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value, event)}
-                type="text"
               ></input>
             )}
           </td>
@@ -239,7 +240,7 @@ export class IrPaymentDetails {
             class="sm-padding-right pointer"
             onClick={async () => {
               if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
-                this.paymentDetailsUrl = await new BookingService().getPCICardInfoURL(this.bookingDetails.booking_nbr);
+                this.paymentDetailsUrl = await this.bookingService.getPCICardInfoURL(this.bookingDetails.booking_nbr);
               }
               this.collapsedGuarantee = !this.collapsedGuarantee;
             }}

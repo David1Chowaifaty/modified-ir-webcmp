@@ -14,7 +14,7 @@ import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
-import { addUnassingedDates, removeUnassignedDates } from '@/stores/unassigned_dates.store';
+import { addUnassingedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
 
 @Component({
   tag: 'igloo-calendar',
@@ -54,6 +54,7 @@ export class IglooCalendar {
   @Event({ bubbles: true, composed: true })
   reduceAvailableUnitEvent: EventEmitter<{ fromDate: string; toDate: string }>;
   @Event({ bubbles: true }) revertBooking: EventEmitter;
+  @State() toBeAssignedDate: string;
 
   private bookingService: BookingService = new BookingService();
   private countryNodeList: ICountry[] = [];
@@ -78,6 +79,7 @@ export class IglooCalendar {
   private availabilityTimeout;
 
   componentWillLoad() {
+    console.info('without session storage');
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -89,6 +91,12 @@ export class IglooCalendar {
       this.toBeAssignedService.setToken(this.ticket);
       this.initializeApp();
     }
+    handleUnAssignedDatesChange('unassigned_dates', newValue => {
+      // console.log(newValue, Object.keys(newValue));
+      if (Object.keys(newValue).length === 0 && this.toBeAssignedDate !== '') {
+        this.toBeAssignedDate = '';
+      }
+    });
   }
   setUpCalendarData(roomResp, bookingResp) {
     this.calendarData.currency = roomResp['My_Result'].currency;
@@ -197,7 +205,7 @@ export class IglooCalendar {
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
-                console.log(this.calendarData.unassignedDates, this.unassignedDates);
+                // console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
                   removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
@@ -263,10 +271,10 @@ export class IglooCalendar {
       selectedDate.setHours(0);
       //find the selected day
       const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
-      if (index > 0) {
+      if (index != -1) {
         //find room_type_id
         const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
-        if (room_type_index > 0) {
+        if (room_type_index != -1) {
           days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
         }
       }
@@ -450,8 +458,12 @@ export class IglooCalendar {
         if (opt.data.start !== undefined && opt.data.end !== undefined) {
           this.handleDateSearch(opt.data);
         } else {
+          //scroll to unassigned dates
           let dt = new Date(opt.data);
-          this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+          dt.setDate(dt.getDate() + 1);
+          this.toBeAssignedDate = this.transformDateForScroll(dt);
+
+          // this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
         }
         break;
       case 'search':
@@ -463,13 +475,13 @@ export class IglooCalendar {
         } else {
           this.editBookingItem = opt.data;
         }
-
         break;
       case 'gotoToday':
         this.scrollToElement(this.today);
         break;
       case 'closeSideMenu':
         this.closeSideMenu();
+        this.toBeAssignedDate = '';
         this.showBookProperty = false;
         break;
     }
@@ -820,6 +832,7 @@ export class IglooCalendar {
                     countryNodeList={this.countryNodeList}
                     currency={this.calendarData.currency}
                     today={this.today}
+                    toBeAssignedDate={this.toBeAssignedDate}
                     isScrollViewDragging={this.scrollViewDragging}
                     calendarData={this.calendarData}
                   ></igl-cal-body>

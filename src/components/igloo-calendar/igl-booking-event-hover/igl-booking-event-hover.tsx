@@ -321,7 +321,7 @@ export class IglBookingEventHover {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class="row p-0 m-0 pb-1">
-          <div class="pl-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center">
+          <div class="px-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center">
             <img src={this.bookingEvent?.origin?.Icon} alt="icon" class={'icon-image'} />
             <p class={'p-0 m-0'}>{!this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER}</p>
           </div>
@@ -331,7 +331,7 @@ export class IglBookingEventHover {
           </div>
         </div>
         <div class="row p-0 m-0">
-          <div class="pl-0 pr-0 col-12">
+          <div class="px-0 pr-0 col-12">
             <span class="font-weight-bold">{locales.entries.Lcz_In}: </span>
             {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')} - <span class="font-weight-bold">{locales.entries.Lcz_Out}: </span>
             {formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD')}
@@ -339,7 +339,7 @@ export class IglBookingEventHover {
         </div>
         {this.getArrivalTime() && (
           <div class="row p-0 m-0">
-            <div class="pl-0 pr-0 col-12">
+            <div class="px-0 col-12">
               <span class="font-weight-bold">{locales.entries.Lcz_ArrivalTime}: </span>
               {this.getArrivalTime()}
             </div>
@@ -347,7 +347,7 @@ export class IglBookingEventHover {
         )}
         {this.getTotalOccupants() && (
           <div class="row p-0 m-0">
-            <div class="pl-0 pr-0 col-12">
+            <div class="px-0  col-12">
               <span class="font-weight-bold">{locales.entries.Lcz_Occupancy}: </span>
               {this.getTotalOccupants()}
             </div>
@@ -355,7 +355,7 @@ export class IglBookingEventHover {
         )}
         {this.getPhoneNumber() && (
           <div class="row p-0 m-0">
-            <div class="pl-0 pr-0 col-12 text-wrap">
+            <div class="px-0  col-12 text-wrap">
               <span class="font-weight-bold">{locales.entries.Lcz_Phone}: </span>
               {this.renderPhone()}
             </div>
@@ -363,7 +363,7 @@ export class IglBookingEventHover {
         )}
         {this.getRatePlan() && (
           <div class="row p-0 m-0">
-            <div class="pl-0 pr-0 col-12">
+            <div class="px-0  col-12">
               <span class="font-weight-bold">{locales.entries.Lcz_RatePlan}: </span>
               {this.getRatePlan()}
             </div>
@@ -371,7 +371,7 @@ export class IglBookingEventHover {
         )}
         {this.getGuestNote() ? (
           <div class="row p-0 m-0">
-            <div class="col-12 pl-0 pr-0 text-wrap d-flex">
+            <div class="col-12 px-0 text-wrap d-flex">
               <sapn class="font-weight-bold">{locales.entries.Lcz_Note}: </sapn>
               {this.getGuestNote()}
             </div>
@@ -379,7 +379,7 @@ export class IglBookingEventHover {
         ) : null}
         {this.getInternalNote() ? (
           <div class="row p-0 m-0">
-            <div class="col-12 pl-0 pr-0 text-wrap">
+            <div class="col-12 px-0 text-wrap">
               <span class="font-weight-bold">{locales.entries.Lcz_InternalRemark}: </span>
               {this.getInternalNote()}
             </div>
