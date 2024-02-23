@@ -25,6 +25,7 @@ const { state: calendarDataState } = createStore<CalendarDataDetails>({
   id: 0,
   name: '',
   token: '',
+  tax_statement: '',
 });
 
 export default calendarDataState;

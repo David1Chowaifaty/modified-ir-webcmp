@@ -41,7 +41,6 @@ export class IglBookProperty {
   @Event() resetBookingData: EventEmitter<null>;
 
   private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
-  private message: string = '';
   private sourceOption: TSourceOption;
   private page: string;
   private showSplitBookingOption: boolean = false;
@@ -227,8 +226,6 @@ export class IglBookProperty {
     try {
       const room_type_ids = this.defaultData.roomsInfo.map(room => room.id);
       const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.adultChildCount, this.language, room_type_ids, this.currency);
-      this.message = '';
-      this.message = data.tax_statement;
       if (!this.isEventType('EDIT_BOOKING')) {
         this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
         this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
@@ -264,7 +261,6 @@ export class IglBookProperty {
       this.dateRangeData = opt.data;
       if (this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING')) {
         this.defaultData.roomsInfo = [];
-        this.message = '';
       } else if (this.adultChildCount.adult !== 0) {
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
       }
@@ -507,7 +503,6 @@ export class IglBookProperty {
                 eventType={this.defaultData.event_type}
                 selectedRooms={this.selectedUnits}
                 currency={this.currency}
-                message={this.message}
                 showSplitBookingOption={this.showSplitBookingOption}
                 ratePricingMode={this.ratePricingMode}
                 dateRangeData={this.dateRangeData}

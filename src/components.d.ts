@@ -278,6 +278,7 @@ export namespace Components {
         "btn_block": boolean;
         "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "btn_disabled": boolean;
+        "btn_id": string;
         "btn_styles": string;
         "btn_type": string;
         "icon": string;
@@ -887,6 +888,7 @@ declare global {
         "buttonClicked": { key: TPropertyButtonsTypes };
         "toast": IToast;
         "spiltBookingSelected": { key: string; data: unknown };
+        "animateIrButton": string;
     }
     interface HTMLIglBookPropertyHeaderElement extends Components.IglBookPropertyHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyHeaderElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyHeaderElement, ev: IglBookPropertyHeaderCustomEvent<HTMLIglBookPropertyHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1916,6 +1918,7 @@ declare namespace LocalJSX {
         "message"?: string;
         "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
+        "onAnimateIrButton"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onButtonClicked"?: (event: IglBookPropertyHeaderCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
         "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onSourceDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
@@ -2166,6 +2169,7 @@ declare namespace LocalJSX {
         "btn_block"?: boolean;
         "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "btn_disabled"?: boolean;
+        "btn_id"?: string;
         "btn_styles"?: string;
         "btn_type"?: string;
         "icon"?: string;

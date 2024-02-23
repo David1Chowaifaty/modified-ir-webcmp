@@ -4,6 +4,7 @@ import { IToast } from '../../../ir-toast/toast';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import interceptor_requests from '@/stores/ir-interceptor.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -32,12 +33,12 @@ export class IglBookPropertyHeader {
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
   @Event() toast: EventEmitter<IToast>;
   @Event() spiltBookingSelected: EventEmitter<{ key: string; data: unknown }>;
+  @Event({ bubbles: true, composed: true }) animateIrButton: EventEmitter<string>;
   private sourceOption: TSourceOption = {
     code: '',
     description: '',
     tag: '',
   };
-
   getSplitBookingList() {
     return (
       <fieldset class="form-group  text-left">
@@ -128,6 +129,7 @@ export class IglBookPropertyHeader {
             </fieldset>
           )}
           <ir-button
+            btn_id="check_availability"
             isLoading={interceptor_requests.status === 'pending'}
             icon=""
             size="sm"
@@ -216,7 +218,7 @@ export class IglBookPropertyHeader {
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
         </div>
-        <p class="text-right mt-1 message-label">{this.message}</p>
+        <p class="text-right mt-1 message-label">{calendar_data.tax_statement}</p>
       </Host>
     );
   }

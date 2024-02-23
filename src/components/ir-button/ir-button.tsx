@@ -1,8 +1,10 @@
-import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h, Listen } from '@stencil/core';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-button',
   styleUrl: 'ir-button.css',
+  scoped: true,
 })
 export class IrButton {
   @Prop() name: string;
@@ -16,15 +18,28 @@ export class IrButton {
   @Prop() btn_type = 'button';
   @Prop() isLoading: boolean = false;
   @Prop() btn_styles: string;
+  @Prop() btn_id: string = v4();
 
-  connectedCallback() {}
-  disconnectedCallback() {}
   @Event({ bubbles: true, composed: true }) clickHanlder: EventEmitter<any>;
 
+  private buttonEl: HTMLButtonElement;
+  @Listen('animateIrButton', { target: 'body' })
+  handleButtonAnimation(e: CustomEvent) {
+    if (!this.buttonEl || e.detail !== this.btn_id) {
+      return;
+    }
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.buttonEl.classList.remove('bounce-3');
+    void this.buttonEl.offsetWidth;
+    this.buttonEl.classList.add('bounce-3');
+  }
   render() {
     let blockClass = this.btn_block ? 'btn-block' : '';
     return (
       <button
+        id={this.btn_id}
+        ref={el => (this.buttonEl = el)}
         onClick={() => this.clickHanlder.emit()}
         class={`btn btn-${this.btn_color} ${this.btn_styles} d-flex align-items-center btn-${this.size} text-${this.textSize} ${blockClass}`}
         type={this.btn_type}
