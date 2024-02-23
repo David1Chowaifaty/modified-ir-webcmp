@@ -50,10 +50,10 @@ export function getUnassignedDates() {
 export function removeUnassignedDates(from_date: string, to_date: string) {
   const fromTimestamp = convertToDateTimestamp(from_date);
   const toTimestamp = convertToDateTimestamp(to_date);
-  Object.keys(unassigned_dates).forEach(key => {
+  Object.keys(unassigned_dates.unassigned_dates).forEach(key => {
     const keyTimestamp = parseInt(key);
     if (fromTimestamp <= keyTimestamp && keyTimestamp <= toTimestamp) {
-      delete unassigned_dates[key];
+      delete unassigned_dates.unassigned_dates[key];
     }
   });
 }
