@@ -254,11 +254,7 @@ export class IglCalBody {
   getGeneralCategoryDayColumns(addClass: string, isCategory: boolean = false, index: number) {
     return calendar_dates.days.map(dayInfo => {
       return (
-        <div
-          class={`cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${
-            dayInfo.day === this.today || dayInfo.day === this.toBeAssignedDate ? 'currentDay' : ''
-          }`}
-        >
+        <div class={`cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`}>
           {isCategory ? (
             <span class={'categoryName'}>
               {dayInfo.rate[index].exposed_inventory.rts}
@@ -277,7 +273,7 @@ export class IglCalBody {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
     return this.calendarData.days.map(dayInfo => (
       <div
-        class={`cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.toBeAssignedDate ? 'currentDay' : ''} ${
+        class={`cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''} ${
           this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''
         } ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`}
         onClick={() => this.clickCell(roomId, dayInfo, roomCategory)}

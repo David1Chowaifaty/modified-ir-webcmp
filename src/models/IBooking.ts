@@ -1,4 +1,4 @@
-import { Booking, IFormat, Room, Origin, Arrival } from './booking.dto';
+import { Booking, IFormat, Room, Origin, Arrival, IOtaNotes } from './booking.dto';
 import { IRoomService } from './property-types';
 
 export default interface IBooking {
@@ -293,6 +293,7 @@ export interface RoomBookingDetails {
   NOTES: string;
   SOURCE: ISource;
   ROOMS: Room[];
+  ota_notes: IOtaNotes[];
 }
 export interface ISource {
   code: string;

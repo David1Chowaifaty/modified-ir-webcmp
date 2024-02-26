@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+:host {
+  display: flex;
+  margin-bottom: 5px;
+  gap: 5px;
+}
+strong {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  margin: 0 3px;
+  padding: 0;
+  flex: 1;
+}
+li {
+  margin: 0;
+  padding: 0;
+}

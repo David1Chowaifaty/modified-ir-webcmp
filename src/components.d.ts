@@ -16,7 +16,7 @@ import { checkboxes, selectOption } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { selectOption as selectOption1 } from "./common/models";
 import { ILocale } from "./stores/locales.store";
-import { Booking, IBookingPickupInfo } from "./models/booking.dto";
+import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -30,7 +30,7 @@ export { checkboxes, selectOption } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { selectOption as selectOption1 } from "./common/models";
 export { ILocale } from "./stores/locales.store";
-export { Booking, IBookingPickupInfo } from "./models/booking.dto";
+export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -584,6 +584,10 @@ export namespace Components {
         "message": string;
     }
     interface IrTopbar {
+    }
+    interface OtaLabel {
+        "label": string;
+        "remarks": IOtaNotes[];
     }
 }
 export interface IglApplicationInfoCustomEvent<T> extends CustomEvent<T> {
@@ -1788,6 +1792,12 @@ declare global {
         prototype: HTMLIrTopbarElement;
         new (): HTMLIrTopbarElement;
     };
+    interface HTMLOtaLabelElement extends Components.OtaLabel, HTMLStencilElement {
+    }
+    var HTMLOtaLabelElement: {
+        prototype: HTMLOtaLabelElement;
+        new (): HTMLOtaLabelElement;
+    };
     interface HTMLElementTagNameMap {
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
@@ -1851,6 +1861,7 @@ declare global {
         "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-topbar": HTMLIrTopbarElement;
+        "ota-label": HTMLOtaLabelElement;
     }
 }
 declare namespace LocalJSX {
@@ -2516,6 +2527,10 @@ declare namespace LocalJSX {
     interface IrTopbar {
         "onOpenSidebar"?: (event: IrTopbarCustomEvent<any>) => void;
     }
+    interface OtaLabel {
+        "label"?: string;
+        "remarks"?: IOtaNotes[];
+    }
     interface IntrinsicElements {
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
@@ -2579,6 +2594,7 @@ declare namespace LocalJSX {
         "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
         "ir-topbar": IrTopbar;
+        "ota-label": OtaLabel;
     }
 }
 export { LocalJSX as JSX };
@@ -2647,6 +2663,7 @@ declare module "@stencil/core" {
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-topbar": LocalJSX.IrTopbar & JSXBase.HTMLAttributes<HTMLIrTopbarElement>;
+            "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
         }
     }
 }
