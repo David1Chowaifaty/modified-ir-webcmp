@@ -11,7 +11,7 @@ export class IglDateRange {
   @Prop() defaultData: { [key: string]: any };
   @Prop({ reflect: true }) disabled: boolean = false;
   @Prop() minDate: string;
-  @Prop() dateLabel;
+  @Prop() dateLabel: string;
   @Prop() maxDate: string;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
@@ -24,7 +24,7 @@ export class IglDateRange {
   private toDateStr: string = 'to';
   dateRangeInput: HTMLElement;
 
-  getStringDateFormat(dt) {
+  getStringDateFormat(dt: Date) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
 
@@ -85,30 +85,34 @@ export class IglDateRange {
   render() {
     return (
       <Host>
-        <div class="calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center ">
-          {/* <span class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.dateLabel}:</span> */}
-          <div class={'d-flex align-items-center mr-lg-1'}>
-            <div class="iglRangePicker form-control input-sm " data-state={this.disabled ? 'disabled' : 'active'}>
-              <ir-date-picker
-                maxDate={this.maxDate}
-                class={'date-range-input'}
-                disabled={this.disabled}
-                fromDate={this.fromDate}
-                toDate={this.toDate}
-                minDate={this.minDate}
-                autoApply
-                onDateChanged={evt => {
-                  this.handleDateChange(evt);
-                }}
-              ></ir-date-picker>
-            </div>
-            {this.totalNights ? (
-              <span class="iglRangeNights ml-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
-            ) : (
-              ''
-            )}
-          </div>
+        <div class="calendarPickerContainer form-control input-sm" data-state={this.disabled ? 'disabled' : 'active'}>
+          <ir-date-picker
+            maxDate={this.maxDate}
+            class={'date-range-input'}
+            disabled={this.disabled}
+            fromDate={this.fromDate}
+            toDate={this.toDate}
+            minDate={this.minDate}
+            autoApply
+            onDateChanged={evt => {
+              this.handleDateChange(evt);
+            }}
+          ></ir-date-picker>
+          <ir-date-view
+            data-state={this.disabled ? 'disabled' : 'active'}
+            showDateDifference={this.disabled}
+            class="date-view"
+            from_date={this.fromDate}
+            to_date={this.toDate}
+          ></ir-date-view>
         </div>
+        <span>
+          {this.totalNights && !this.disabled ? (
+            <span class="iglRangeNights ml-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
+          ) : (
+            ''
+          )}
+        </span>
       </Host>
     );
   }

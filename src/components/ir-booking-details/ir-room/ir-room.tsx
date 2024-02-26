@@ -223,16 +223,7 @@ export class IrRoom {
             </div>
           </div>
           <div class="d-flex align-items-center sm-mb-1">
-            <p class="p-0  m-0 mr-1 d-flex align-items-center">
-              <span>{_formatDate(this.item.from_date)}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="mx-01" height="14" width="14" viewBox="0 0 512 512">
-                <path
-                  fill="currentColor"
-                  d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
-                />
-              </svg>
-              <span>{_formatDate(this.item.to_date)}</span>
-            </p>
+            <ir-date-view class="mr-1" from_date={this.item.from_date} to_date={this.item.to_date} showDateDifference={false}></ir-date-view>
             {calendar_data.is_frontdesk_enabled && this.item.unit && <span class="light-blue-bg mr-2 ">{(this.item.unit as IUnit).name}</span>}
             {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
