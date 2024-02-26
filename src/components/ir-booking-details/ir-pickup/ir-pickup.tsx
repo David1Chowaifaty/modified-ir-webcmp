@@ -94,14 +94,21 @@ export class IrPickup {
     //   (input as HTMLInputElement).value = this.pickupData.arrival_time;
     // }
     if (input) {
-      Inputmask('Hh:mm', {
+      Inputmask('Hh:Mm', {
         placeholder: 'HH:mm',
         definitions: {
           H: {
-            validator: '[0-1]',
+            validator: '[0-2]',
           },
           h: {
-            validator: '[0-9]',
+            validator: function (ch, maskset, pos) {
+              var firstDigit = maskset.buffer[pos - 1];
+              if (firstDigit === '2') {
+                return /[0-3]/.test(ch);
+              } else {
+                return /[0-9]/.test(ch);
+              }
+            },
           },
           M: {
             validator: '[0-5]',

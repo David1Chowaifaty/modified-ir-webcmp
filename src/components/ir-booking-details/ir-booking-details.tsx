@@ -445,7 +445,7 @@ export class IrBookingDetails {
                     <div class={'p-1'}>
                       <div class={'d-flex align-items-center py-0 my-0 pickup-margin'}>
                         <p class={'font-weight-bold mr-1 py-0 my-0'}>
-                          {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('ddd, DD MM YYYY')}</span>
+                          {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</span>
                         </p>
                         <p class={'font-weight-bold flex-fill py-0 my-0'}>
                           {locales.entries.Lcz_Time}:
