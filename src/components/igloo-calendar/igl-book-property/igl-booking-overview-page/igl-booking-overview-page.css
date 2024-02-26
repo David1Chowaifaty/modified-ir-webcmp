@@ -14,7 +14,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60vh;
+  height: 100%;
+  background: white;
+  position: absolute;
+  inset: 0;
 }
 .loader {
   width: 1.25rem;

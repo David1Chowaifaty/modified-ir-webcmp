@@ -35,13 +35,16 @@
 
 ### Depends on
 
+- [ir-popover](../../ir-popover)
 - [igl-booking-event](../igl-booking-event)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-cal-body --> ir-popover
   igl-cal-body --> igl-booking-event
   igl-booking-event --> igl-booking-event-hover
+  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> igl-block-dates-view
   igloo-calendar --> igl-cal-body
   style igl-cal-body fill:#f9f,stroke:#333,stroke-width:4px

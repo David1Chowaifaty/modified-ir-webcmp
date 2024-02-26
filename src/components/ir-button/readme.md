@@ -12,6 +12,7 @@
 | `btn_block`    | `btn_block`    |             | `boolean`                                                                                       | `true`      |
 | `btn_color`    | `btn_color`    |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
 | `btn_disabled` | `btn_disabled` |             | `boolean`                                                                                       | `false`     |
+| `btn_id`       | `btn_id`       |             | `string`                                                                                        | `v4()`      |
 | `btn_styles`   | `btn_styles`   |             | `string`                                                                                        | `undefined` |
 | `btn_type`     | `btn_type`     |             | `string`                                                                                        | `'button'`  |
 | `icon`         | `icon`         |             | `string`                                                                                        | `'ft-save'` |

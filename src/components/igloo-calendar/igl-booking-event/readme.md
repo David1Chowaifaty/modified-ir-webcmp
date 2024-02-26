@@ -44,6 +44,7 @@
 ```mermaid
 graph TD;
   igl-booking-event --> igl-booking-event-hover
+  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> igl-block-dates-view
   igl-cal-body --> igl-booking-event
   style igl-booking-event fill:#f9f,stroke:#333,stroke-width:4px

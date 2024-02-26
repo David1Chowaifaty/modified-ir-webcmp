@@ -47,6 +47,7 @@
 - [ir-button](../ir-button)
 - [ir-icon](../ir-icon)
 - [ir-label](../ir-label)
+- [ota-label](../ota-label)
 - [ir-room](ir-room)
 - [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)
@@ -63,6 +64,7 @@ graph TD;
   ir-booking-details --> ir-button
   ir-booking-details --> ir-icon
   ir-booking-details --> ir-label
+  ir-booking-details --> ota-label
   ir-booking-details --> ir-room
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar

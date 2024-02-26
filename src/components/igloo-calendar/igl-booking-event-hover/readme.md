@@ -34,11 +34,13 @@
 
 ### Depends on
 
+- [ota-label](../../ota-label)
 - [igl-block-dates-view](../igl-block-dates-view)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> igl-block-dates-view
   igl-booking-event --> igl-booking-event-hover
   style igl-booking-event-hover fill:#f9f,stroke:#333,stroke-width:4px

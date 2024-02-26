@@ -48,8 +48,8 @@ export class IrButton {
         <span class="button-icon" data-state={this.isLoading ? 'loading' : ''}>
           <slot name="icon"></slot>
         </span>
-        {this.isLoading && <div class="loader m-0 p-0"></div>}
         {this.text && <span class="button-text m-0">{this.text}</span>}
+        {this.isLoading && <div class="loader m-0 p-0"></div>}
       </button>
     );
   }
