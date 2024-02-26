@@ -144,7 +144,7 @@ export class IrChannel {
   render() {
     if (this.isLoading) {
       return (
-        <div class="h-screen d-flex flex-column align-items-center justify-content-center">
+        <div class="h-screen bg-white d-flex flex-column align-items-center justify-content-center">
           {/* <div class="dots">
             <div class="dot"></div>
             <div class="dot"></div>
@@ -186,16 +186,16 @@ export class IrChannel {
               <tbody class="">
                 {channels_data.connected_channels?.map(channel => (
                   <tr key={channel.channel.id}>
-                    <th scope="row" class="text-left">
-                      {channel.channel.name} {channel?.title ?? ''}
-                    </th>
+                    <td class="text-left">
+                      {channel.channel.name} {channel.title ? `(${channel.title})` : '' ?? ''}
+                    </td>
                     <td>
                       <ir-switch checked={channel.is_active} onCheckChange={e => this.handleCheckChange(e.detail, channel)}></ir-switch>
                     </td>
                     <th>
                       <div class="d-flex justify-content-end">
                         <div class="btn-group">
-                          <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <button type="button" class="btn  dropdown-toggle px-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-1"> {locales.entries?.Lcz_Actions}</span>
                             <svg class={'caret-icon'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={14} width={14}>
                               <path
@@ -245,9 +245,9 @@ export class IrChannel {
         </section>
 
         <ir-sidebar
-          sidebarStyles={{
-            width: '60rem',
-          }}
+          // sidebarStyles={{
+          //   width: '60rem',
+          // }}
           showCloseButton={false}
           onIrSidebarToggle={this.handleSidebarClose.bind(this)}
           open={this.channel_status !== null}
