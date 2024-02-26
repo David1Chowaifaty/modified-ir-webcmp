@@ -5,7 +5,6 @@ import { Token } from '@/models/Token';
 
 export class EventsService extends Token {
   private readonly bookingService: BookingService = new BookingService();
-
   async reallocateEvent(pool: string, destination_pr_id: number, from_date: string, to_date: string) {
     try {
       const token = this.getToken();
@@ -51,6 +50,7 @@ export class EventsService extends Token {
       if (token) {
         const releaseData = getReleaseHoursString(+bookingEvent.RELEASE_AFTER_HOURS);
         await this.deleteEvent(bookingEvent.POOL);
+        this.bookingService.setToken(token);
         const result = await this.bookingService.blockUnit({
           from_date: this.formatDate(bookingEvent.FROM_DATE),
           to_date: this.formatDate(bookingEvent.TO_DATE),
