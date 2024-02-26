@@ -18,6 +18,7 @@
   background: white;
   position: absolute;
   inset: 0;
+  z-index: 100;
 }
 .loader {
   width: 1.25rem;
