@@ -372,16 +372,28 @@ export class IglBookingEventHover {
         {this.getGuestNote() ? (
           <div class="row p-0 m-0">
             <div class="col-12 px-0 text-wrap d-flex">
-              <sapn class="font-weight-bold">{locales.entries.Lcz_Note}: </sapn>
-              {this.getGuestNote()}
+              {this.bookingEvent.is_direct ? (
+                <Fragment>
+                  <sapn class="font-weight-bold">{locales.entries.Lcz_Note}: </sapn>
+                  {this.getGuestNote()}
+                </Fragment>
+              ) : (
+                <ota-label label={`${locales.entries.Lcz_Note}:`} remarks={this.bookingEvent.ota_notes}></ota-label>
+              )}
             </div>
           </div>
         ) : null}
         {this.getInternalNote() ? (
           <div class="row p-0 m-0">
             <div class="col-12 px-0 text-wrap">
-              <span class="font-weight-bold">{locales.entries.Lcz_InternalRemark}: </span>
-              {this.getInternalNote()}
+              {this.bookingEvent.is_direct ? (
+                <Fragment>
+                  <span class="font-weight-bold">{locales.entries.Lcz_InternalRemark}: </span>
+                  {this.getInternalNote()}
+                </Fragment>
+              ) : (
+                <ota-label label={`${locales.entries.Lcz_InternalRemark}:`} remarks={this.bookingEvent.ota_notes}></ota-label>
+              )}
             </div>
           </div>
         ) : null}

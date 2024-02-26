@@ -47,6 +47,8 @@ export class IglooCalendar {
   @State() renderAgain = false;
   @State() showBookProperty: boolean = false;
   @State() totalAvailabilityQueue: { room_type_id: number; date: string; availability: number }[] = [];
+  @State() toBeAssignedDate: string;
+
   @Event({ bubbles: true, composed: true })
   dragOverHighlightElement: EventEmitter;
   @Event({ bubbles: true, composed: true }) moveBookingTo: EventEmitter;
@@ -54,18 +56,20 @@ export class IglooCalendar {
   @Event({ bubbles: true, composed: true })
   reduceAvailableUnitEvent: EventEmitter<{ fromDate: string; toDate: string }>;
   @Event({ bubbles: true }) revertBooking: EventEmitter;
-  @State() toBeAssignedDate: string;
 
   private bookingService: BookingService = new BookingService();
+  private roomService: RoomService = new RoomService();
+  private eventsService = new EventsService();
+  private toBeAssignedService = new ToBeAssignedService();
+
   private countryNodeList: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
   private scrollContainer: HTMLElement;
   private today: String = '';
-  private roomService: RoomService = new RoomService();
-  private eventsService = new EventsService();
-  private toBeAssignedService = new ToBeAssignedService();
-  private socket: Socket;
   private reachedEndOfCalendar = false;
+
+  private socket: Socket;
+  private availabilityTimeout: NodeJS.Timeout;
 
   @Watch('ticket')
   ticketChanged() {
@@ -76,7 +80,6 @@ export class IglooCalendar {
     this.toBeAssignedService.setToken(this.ticket);
     this.initializeApp();
   }
-  private availabilityTimeout;
 
   componentWillLoad() {
     console.info('without session storage');
@@ -161,7 +164,7 @@ export class IglooCalendar {
             } else {
               result = JSON.parse(PAYLOAD);
             }
-            console.log(result, REASON);
+            // console.log(result, REASON);
             const resasons: bookingReasons[] = ['DORESERVATION', 'BLOCK_EXPOSED_UNIT', 'ASSIGN_EXPOSED_ROOM', 'REALLOCATE_EXPOSED_ROOM_BLOCK'];
             if (resasons.includes(REASON)) {
               let transformedBooking: RoomBookingDetails[] | RoomBlockDetails[];
@@ -199,14 +202,16 @@ export class IglooCalendar {
                   dateToFormattedString(new Date(parsedResult.TO_DATE)),
                 );
                 addUnassingedDates(data);
-                this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
+                // this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
                 this.unassignedDates = {
                   fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
+                console.log(data);
                 // console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
+                  console.log('clear data');
                   removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
                     fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
@@ -455,16 +460,17 @@ export class IglooCalendar {
         this.showToBeAssigned = false;
         break;
       case 'calendar':
+        let dt = new Date();
         if (opt.data.start !== undefined && opt.data.end !== undefined) {
+          dt = opt.data.start.toDate();
           this.handleDateSearch(opt.data);
         } else {
           //scroll to unassigned dates
-          let dt = new Date(opt.data);
-          dt.setDate(dt.getDate() + 1);
-          this.toBeAssignedDate = this.transformDateForScroll(dt);
-
           // this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+          dt = new Date(opt.data);
+          dt.setDate(dt.getDate() + 1);
         }
+        this.toBeAssignedDate = this.transformDateForScroll(dt);
         break;
       case 'search':
         break;
@@ -588,12 +594,10 @@ export class IglooCalendar {
   dragScrollContent(event: MouseEvent) {
     this.scrollViewDragging = false;
     let isPreventPageScroll = event && event.target ? this.hasAncestorWithClass(event.target as HTMLElement, 'preventPageScroll') : false;
-    if (!isPreventPageScroll) {
+    if (!isPreventPageScroll && event.buttons === 1) {
       this.scrollViewDragPos = {
-        // The current scroll
         left: this.scrollContainer.scrollLeft,
         top: this.scrollContainer.scrollTop,
-        // Get the current mouse position
         x: event.clientX,
         y: event.clientY,
       };
@@ -603,11 +607,13 @@ export class IglooCalendar {
   }
 
   onScrollContentMoveHandler: EventListener = (event: MouseEvent) => {
-    // How far the mouse has been moved
+    if (event.buttons !== 1) {
+      return;
+    }
+
     const dx = event.clientX - this.scrollViewDragPos.x;
     const dy = event.clientY - this.scrollViewDragPos.y;
 
-    // Scroll the element
     this.scrollContainer.scrollTop = this.scrollViewDragPos.top - dy;
     this.scrollContainer.scrollLeft = this.scrollViewDragPos.left - dx;
     if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {

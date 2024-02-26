@@ -27,6 +27,7 @@ export class IglApplicationInfo {
   @State() isButtonPressed = false;
   @State() guestData: { [key: string]: any };
   private userRate = 0;
+  private timeout: NodeJS.Timeout;
 
   componentWillLoad() {
     console.log(this.guestInfo);
@@ -42,6 +43,14 @@ export class IglApplicationInfo {
     }
     this.guestData.preference = +this.defaultGuestPreference || '';
     this.updateRoomList();
+  }
+  componentDidLoad() {
+    this.timeout = setTimeout(() => {
+      this.updateData();
+    }, 200);
+  }
+  disconnectedCallback() {
+    clearTimeout(this.timeout);
   }
 
   @Watch('selectedUnits')

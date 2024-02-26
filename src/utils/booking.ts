@@ -230,6 +230,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       is_direct: data.is_direct,
       NOTES: data.remark,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
+      ota_notes: data.ota_notes,
     });
   });
 

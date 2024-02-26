@@ -156,7 +156,7 @@ export class IrRoomNights {
           <span
             data-disabled={this.inventory === 0 || this.inventory === null}
             data-state={this.isInputFocused === index ? 'focus' : ''}
-            class="input-group-text new-currency"
+            class="input-group-text new-currency bg-white"
             id="basic-addon1"
           >
             {currency_symbol}
