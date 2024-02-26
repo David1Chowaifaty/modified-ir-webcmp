@@ -17,6 +17,11 @@
   max-width: 100%;
   height: auto;
 }
+.mx-01 {
+  --m: 5px;
+  margin-left: var(--m) !important;
+  margin-right: var(--m) !important;
+}
 .pointerContainer {
   position: absolute;
   left: 50%;

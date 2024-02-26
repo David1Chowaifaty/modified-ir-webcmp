@@ -334,9 +334,18 @@ export class IglBookingEventHover {
         </div>
         <div class="row p-0 m-0">
           <div class="px-0 pr-0 col-12">
-            <span class="font-weight-bold">{locales.entries.Lcz_In}: </span>
-            {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')} - <span class="font-weight-bold">{locales.entries.Lcz_Out}: </span>
-            {formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD')}
+            <div class="w-fill d-flex align-items-center">
+              <span>{formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="mx-01" height="14" width="14" viewBox="0 0 512 512">
+                <path
+                  fill="currentColor"
+                  d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
+                />
+              </svg>
+              {/* <span class="font-weight-bold">{locales.entries.Lcz_Out}: </span> */}
+              <span>{formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD')}</span>
+            </div>
+            {/* <span class="font-weight-bold">{locales.entries.Lcz_In}: </span> */}
           </div>
         </div>
         {this.getArrivalTime() && (

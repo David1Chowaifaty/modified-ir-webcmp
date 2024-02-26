@@ -40,7 +40,7 @@ export class IglBookingRoomRatePlan {
     return result;
   }
   componentWillLoad() {
-    console.log('default data', this.defaultData);
+    // console.log('default data', this.defaultData);
     this.updateSelectedRatePlan(this.ratePlanData);
   }
   disableForm() {

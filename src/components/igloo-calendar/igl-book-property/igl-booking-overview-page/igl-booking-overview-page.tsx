@@ -60,7 +60,7 @@ export class IglBookingOverviewPage {
           ) : (
             <Fragment>
               {this.bookingData?.roomsInfo?.map(roomInfo => {
-                console.log(this.selectedRooms);
+                //console.log(this.selectedRooms);
                 return (
                   <igl-booking-rooms
                     initialRoomIds={this.initialRoomIds}

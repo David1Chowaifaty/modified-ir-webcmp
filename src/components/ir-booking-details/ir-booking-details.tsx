@@ -380,15 +380,26 @@ export class IrBookingDetails {
                 )}
               </div>
             </div>
-            <p class="font-size-large d-flex justify-content-between align-items-center mb-1">
-              {`${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(
-                this.bookingData.from_date,
-                this.bookingData.to_date,
-              )} ${
-                this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
-                  ? ` ${this.defaultTexts.entries.Lcz_Nights}`
-                  : ` ${this.defaultTexts.entries.Lcz_Night}`
-              })`}
+            <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
+              <p class={'m-0 p-0 d-flex align-items-center'}>
+                <span>{_formatDate(this.bookingData.from_date)}</span>{' '}
+                <svg xmlns="http://www.w3.org/2000/svg" class="mx-01" height="14" width="14" viewBox="0 0 512 512">
+                  <path
+                    fill="currentColor"
+                    d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
+                  />
+                </svg>
+                <span>
+                  {_formatDate(this.bookingData.to_date)}{' '}
+                  <span class="mx-01">
+                    {this._calculateNights(this.bookingData.from_date, this.bookingData.to_date)}
+                    {'   '}
+                    {this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
+                      ? ` ${this.defaultTexts.entries.Lcz_Nights}`
+                      : ` ${this.defaultTexts.entries.Lcz_Night}`}
+                  </span>
+                </span>
+              </p>
               {this.hasRoomAdd && this.bookingData.is_direct && (
                 <ir-icon id="room-add">
                   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
@@ -399,7 +410,7 @@ export class IrBookingDetails {
                   </svg>
                 </ir-icon>
               )}
-            </p>
+            </div>
             <div class="card p-0 mx-0">
               {this.bookingData.rooms.map((room: Room, index: number) => {
                 const mealCodeName = room.rateplan.name;

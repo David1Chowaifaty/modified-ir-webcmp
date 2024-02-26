@@ -86,7 +86,7 @@ export class IglDateRange {
     return (
       <Host>
         <div class="calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center ">
-          <span class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.dateLabel}:</span>
+          {/* <span class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.dateLabel}:</span> */}
           <div class={'d-flex align-items-center mr-lg-1'}>
             <div class="iglRangePicker form-control input-sm " data-state={this.disabled ? 'disabled' : 'active'}>
               <ir-date-picker
@@ -103,7 +103,7 @@ export class IglDateRange {
               ></ir-date-picker>
             </div>
             {this.totalNights ? (
-              <span class="iglRangeNights ml-1">({this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)})</span>
+              <span class="iglRangeNights ml-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
             ) : (
               ''
             )}

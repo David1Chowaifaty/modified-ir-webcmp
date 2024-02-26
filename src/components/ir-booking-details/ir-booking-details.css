@@ -15,6 +15,11 @@
 .h-28 {
   height: 2rem;
 }
+.mx-01 {
+  --m: 5px;
+  margin-right: var(--m) !important;
+  margin-left: var(--m) !important;
+}
 .bg-ir-red {
   background: #ff4961;
   height: 28px;

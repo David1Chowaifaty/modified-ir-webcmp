@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, h, Element, Prop, Event, EventEmitter, Host } from '@stencil/core';
 import moment from 'moment';
 
 @Component({
@@ -17,7 +17,7 @@ export class IrDatePicker {
   @Prop() monthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   @Prop() daysOfWeek: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
   @Prop() format: string = 'MMM DD, YYYY';
-  @Prop() separator: string = ' - ';
+  @Prop() separator: string = '       ';
   @Prop() applyLabel: string = 'Apply';
   @Prop() cancelLabel: string = 'Cancel';
   @Prop() fromLabel: string = 'Form';
@@ -69,6 +69,18 @@ export class IrDatePicker {
   }
 
   render() {
-    return <input class="date-range-input" type="text" disabled={this.disabled} />;
+    return (
+      <Host>
+        {!this.singleDatePicker && (
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" height="14" width="14" viewBox="0 0 512 512">
+            <path
+              fill="currentColor"
+              d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
+            />
+          </svg>
+        )}
+        <input class="date-range-input" type="text" disabled={this.disabled} />
+      </Host>
+    );
   }
 }
