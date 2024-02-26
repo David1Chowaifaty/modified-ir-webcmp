@@ -15,6 +15,7 @@ ul {
   margin: 0 3px;
   padding: 0;
   flex: 1;
+  list-style: none;
 }
 li {
   margin: 0;
