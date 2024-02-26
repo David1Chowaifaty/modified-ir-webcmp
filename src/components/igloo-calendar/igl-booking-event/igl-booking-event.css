@@ -11,7 +11,12 @@
   transform: skewX(-22deg);
   border-radius: 4px;
 }
-
+.bookingEvent {
+  cursor: pointer;
+}
+.bookingEventBase {
+  cursor: pointer;
+}
 .bookingEventHiddenBase {
   position: absolute;
   top: 0;
@@ -66,6 +71,7 @@
   -webkit-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
+  cursor: pointer;
 }
 
 .legend_circle {

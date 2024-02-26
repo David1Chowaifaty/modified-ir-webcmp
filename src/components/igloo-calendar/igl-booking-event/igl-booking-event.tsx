@@ -633,13 +633,13 @@ export class IglBookingEvent {
 
     return (
       <Host
-        class={`bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `}
+        class={`bookingEvent  ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `}
         style={this.getPosition()}
         id={'event_' + this.getBookingId()}
       >
         {/* onMouseOver={() =>this.showEventInfo(true)}  */}
         <div
-          class={`bookingEventBase ${
+          class={`bookingEventBase  ${
             !this.bookingEvent.is_direct &&
             !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
             this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
