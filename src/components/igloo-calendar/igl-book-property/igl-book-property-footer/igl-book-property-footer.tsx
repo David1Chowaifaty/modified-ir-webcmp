@@ -1,6 +1,7 @@
 import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
 import { FooterButtonType, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 import locales from '@/stores/locales.store';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'igl-book-property-footer',
@@ -46,7 +47,7 @@ export class IglBookPropertyFooter {
           {this.isEventType('EDIT_BOOKING') ? (
             <Fragment>
               {this.renderButton('cancel', locales.entries.Lcz_Cancel)}
-              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next} >>`)}
+              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next} >>`, isRequestPending('/Get_Exposed_Booking_Availability'))}
             </Fragment>
           ) : (
             <Fragment>
