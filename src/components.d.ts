@@ -165,10 +165,12 @@ export namespace Components {
     }
     interface IglCalFooter {
         "calendarData": { [key: string]: any };
+        "toBeAssignedDate": string;
         "today": String;
     }
     interface IglCalHeader {
         "calendarData": { [key: string]: any };
+        "highlightedDay": string;
         "propertyid": number;
         "to_date": string;
         "today": String;
@@ -2044,10 +2046,12 @@ declare namespace LocalJSX {
     interface IglCalFooter {
         "calendarData"?: { [key: string]: any };
         "onOptionEvent"?: (event: IglCalFooterCustomEvent<{ [key: string]: any }>) => void;
+        "toBeAssignedDate"?: string;
         "today"?: String;
     }
     interface IglCalHeader {
         "calendarData"?: { [key: string]: any };
+        "highlightedDay"?: string;
         "onGotoRoomEvent"?: (event: IglCalHeaderCustomEvent<{
     [key: string]: any;
   }>) => void;
