@@ -398,8 +398,8 @@ export class IglBookProperty {
         }
         this.toast.emit({
           type: 'error',
-          description: 'Choose a rate plan',
-          title: 'Choose a rate plan',
+          description: locales.entries.Lcz_SelectRatePlan,
+          title: locales.entries.Lcz_SelectRatePlan,
         });
         break;
       case 'check':
