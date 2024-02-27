@@ -9,6 +9,7 @@ import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOp
 import { EventsService } from '../../../services/events.service';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import { IToast } from '@/components/ir-toast/toast';
 
 @Component({
   tag: 'igl-book-property',
@@ -42,6 +43,7 @@ export class IglBookProperty {
 
   @Event({ bubbles: true, composed: true }) animateIrButton: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) animateIrSelect: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
 
   private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private sourceOption: TSourceOption;
@@ -394,6 +396,11 @@ export class IglBookProperty {
             break;
           }
         }
+        this.toast.emit({
+          type: 'error',
+          description: 'Choose a rate plan',
+          title: 'Choose a rate plan',
+        });
         break;
       case 'check':
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));

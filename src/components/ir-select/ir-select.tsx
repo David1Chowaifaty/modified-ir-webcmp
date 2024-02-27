@@ -55,13 +55,12 @@ export class IrSelect {
     console.log('first1');
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.selectEl.classList.remove('bounce-3');
-    void this.selectEl.offsetWidth;
-    this.selectEl.classList.add('bounce-3');
+    this.selectEl.classList.add('border-danger');
   }
   componentwillload() {}
   disconnectedCallback() {}
   handleSelectChange(event) {
+    this.selectEl.classList.remove('border-danger');
     if (this.required) {
       this.initial = false;
       this.valid = event.target.checkValidity();
