@@ -188,13 +188,6 @@ export class IrBookingDetails {
     sidebar.open = true;
   }
 
-  _calculateNights(fromDate: string, toDate: string) {
-    // calculate the difference between the two dates
-    const diff = moment(toDate).diff(moment(fromDate), 'days');
-    // return the difference
-    return diff;
-  }
-
   async updateStatus() {
     if (this.tempStatus !== '' && this.tempStatus !== null) {
       try {

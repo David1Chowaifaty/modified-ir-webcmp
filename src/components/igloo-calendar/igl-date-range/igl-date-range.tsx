@@ -1,6 +1,8 @@
 import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/core';
 import { IToast } from '../../ir-toast/toast';
 import locales from '@/stores/locales.store';
+import { calculateDaysBetweenDates } from '@/utils/booking';
+import moment from 'moment';
 
 @Component({
   tag: 'igl-date-range',
@@ -57,7 +59,7 @@ export class IglDateRange {
   }
 
   calculateTotalNights() {
-    this.totalNights = Math.floor((this.toDate.getTime() - this.fromDate.getTime()) / 86400000);
+    this.totalNights = calculateDaysBetweenDates(moment(this.fromDate).format('YYYY-MM-DD'), moment(this.toDate).format('YYYY-MM-DD'));
   }
   getFormattedDateString(dt) {
     return dt.getDate() + ' ' + dt.toLocaleString('default', { month: 'short' }).toLowerCase() + ' ' + dt.getFullYear();
