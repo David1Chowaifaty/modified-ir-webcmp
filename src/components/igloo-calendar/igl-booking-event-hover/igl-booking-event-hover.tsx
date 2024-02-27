@@ -318,6 +318,33 @@ export class IglBookingEventHover {
       currentInfoBubbleId: this.getBookingId(),
     });
   }
+  renderNote() {
+    const { is_direct, ota_notes } = this.bookingEvent;
+    const guestNote = this.getGuestNote();
+    const noteLabel = locales.entries.Lcz_Note + ':';
+
+    if (!is_direct && ota_notes) {
+      return (
+        <div class="row p-0 m-0">
+          <div class="col-12 px-0 text-wrap d-flex">
+            <ota-label label={noteLabel} remarks={ota_notes}></ota-label>
+          </div>
+        </div>
+      );
+    } else if (is_direct && guestNote) {
+      return (
+        <div class="row p-0 m-0">
+          <div class="col-12 px-0 text-wrap d-flex">
+            <Fragment>
+              <span class="font-weight-bold">{noteLabel} </span>
+              {guestNote}
+            </Fragment>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
 
   getInfoElement() {
     return (
@@ -370,20 +397,7 @@ export class IglBookingEventHover {
             </div>
           </div>
         )}
-        {this.getGuestNote() ? (
-          <div class="row p-0 m-0">
-            <div class="col-12 px-0 text-wrap d-flex">
-              {this.bookingEvent.is_direct ? (
-                <Fragment>
-                  <sapn class="font-weight-bold">{locales.entries.Lcz_Note}: </sapn>
-                  {this.getGuestNote()}
-                </Fragment>
-              ) : (
-                <ota-label label={`${locales.entries.Lcz_Note}:`} remarks={this.bookingEvent.ota_notes}></ota-label>
-              )}
-            </div>
-          </div>
-        ) : null}
+        {this.renderNote()}
         {this.getInternalNote() ? (
           <div class="row p-0 m-0">
             <div class="col-12 px-0 text-wrap">

@@ -17,7 +17,7 @@ export class IglCalBody {
   @Prop() countryNodeList;
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
-  @Prop() toBeAssignedDate: string;
+  @Prop() highlightedDate: string;
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
 
   private selectedRooms: { [key: string]: any } = {};
@@ -256,7 +256,7 @@ export class IglCalBody {
       return (
         <div
           class={`cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${
-            dayInfo.day === this.today || dayInfo.day === this.toBeAssignedDate ? 'currentDay' : ''
+            dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''
           }`}
         >
           {isCategory ? (
@@ -277,7 +277,7 @@ export class IglCalBody {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
     return this.calendarData.days.map(dayInfo => (
       <div
-        class={`cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.toBeAssignedDate ? 'currentDay' : ''} ${
+        class={`cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''} ${
           this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''
         } ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`}
         onClick={() => this.clickCell(roomId, dayInfo, roomCategory)}
