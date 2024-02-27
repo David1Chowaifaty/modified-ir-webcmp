@@ -831,6 +831,7 @@ export class IglooCalendar {
                     propertyid={this.propertyid}
                     today={this.today}
                     calendarData={this.calendarData}
+                    //toBeAssignedDate={this.toBeAssignedDate}
                     onOptionEvent={evt => this.onOptionSelect(evt)}
                   ></igl-cal-header>
                   <igl-cal-body
@@ -842,7 +843,12 @@ export class IglooCalendar {
                     isScrollViewDragging={this.scrollViewDragging}
                     calendarData={this.calendarData}
                   ></igl-cal-body>
-                  <igl-cal-footer today={this.today} calendarData={this.calendarData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-cal-footer>
+                  <igl-cal-footer
+                    //toBeAssignedDate={this.toBeAssignedDate}
+                    today={this.today}
+                    calendarData={this.calendarData}
+                    onOptionEvent={evt => this.onOptionSelect(evt)}
+                  ></igl-cal-footer>
                 </div>
               </div>,
             ]
