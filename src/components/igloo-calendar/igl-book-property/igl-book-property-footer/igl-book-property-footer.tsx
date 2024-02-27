@@ -52,7 +52,7 @@ export class IglBookPropertyFooter {
           ) : (
             <Fragment>
               {this.renderButton('cancel', locales.entries.Lcz_Cancel)}
-              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next} >>`, this.disabled)}
+              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next} >>`)}
             </Fragment>
           )}
         </div>

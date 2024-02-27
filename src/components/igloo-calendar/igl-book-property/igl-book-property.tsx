@@ -40,6 +40,9 @@ export class IglBookProperty {
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
   @Event() resetBookingData: EventEmitter<null>;
 
+  @Event({ bubbles: true, composed: true }) animateIrButton: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true }) animateIrSelect: EventEmitter<string>;
+
   private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private sourceOption: TSourceOption;
   private page: string;
@@ -378,9 +381,23 @@ export class IglBookProperty {
       case 'next':
         event.stopImmediatePropagation();
         event.stopPropagation();
-        this.gotoPage('page_two');
+        if (!this.adultChildCount?.adult) {
+          this.animateIrSelect.emit('adult_child_select');
+          break;
+        }
+        if (this.selectedUnits.size > 0) {
+          this.gotoPage('page_two');
+          break;
+        } else {
+          if (this.defaultData?.roomsInfo.length === 0) {
+            this.animateIrButton.emit('check_availability');
+            break;
+          }
+        }
+        break;
       case 'check':
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
+        break;
       default:
         break;
     }

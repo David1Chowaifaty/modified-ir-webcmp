@@ -557,6 +557,7 @@ export namespace Components {
         "selectContainerStyle": string;
         "selectStyle": boolean;
         "selectStyles": string;
+        "select_id": string;
         "selectedValue": any;
         "size": 'sm' | 'md' | 'lg';
         "submited": boolean;
@@ -842,6 +843,8 @@ declare global {
         "bookingCreated": { pool?: string; data: RoomBookingDetails[] };
         "blockedCreated": RoomBlockDetails;
         "resetBookingData": null;
+        "animateIrButton": string;
+        "animateIrSelect": string;
     }
     interface HTMLIglBookPropertyElement extends Components.IglBookProperty, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyElement, ev: IglBookPropertyCustomEvent<HTMLIglBookPropertyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -900,6 +903,7 @@ declare global {
         "toast": IToast;
         "spiltBookingSelected": { key: string; data: unknown };
         "animateIrButton": string;
+        "animateIrSelect": string;
     }
     interface HTMLIglBookPropertyHeaderElement extends Components.IglBookPropertyHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyHeaderElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyHeaderElement, ev: IglBookPropertyHeaderCustomEvent<HTMLIglBookPropertyHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1911,6 +1915,8 @@ declare namespace LocalJSX {
         "countryNodeList"?: any;
         "currency"?: { id: number; code: string };
         "language"?: string;
+        "onAnimateIrButton"?: (event: IglBookPropertyCustomEvent<string>) => void;
+        "onAnimateIrSelect"?: (event: IglBookPropertyCustomEvent<string>) => void;
         "onBlockedCreated"?: (event: IglBookPropertyCustomEvent<RoomBlockDetails>) => void;
         "onBookingCreated"?: (event: IglBookPropertyCustomEvent<{ pool?: string; data: RoomBookingDetails[] }>) => void;
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
@@ -1944,6 +1950,7 @@ declare namespace LocalJSX {
         "minDate"?: string;
         "onAdultChild"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onAnimateIrButton"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
+        "onAnimateIrSelect"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onButtonClicked"?: (event: IglBookPropertyHeaderCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
         "onCheckClicked"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
         "onSourceDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
@@ -2512,6 +2519,7 @@ declare namespace LocalJSX {
         "selectContainerStyle"?: string;
         "selectStyle"?: boolean;
         "selectStyles"?: string;
+        "select_id"?: string;
         "selectedValue"?: any;
         "size"?: 'sm' | 'md' | 'lg';
         "submited"?: boolean;
