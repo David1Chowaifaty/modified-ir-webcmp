@@ -112,7 +112,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
-    NOTES: cell.booking.remark,
+    NOTES: cell.booking.is_direct ? cell.booking.remark : null,
     is_direct: cell.booking.is_direct,
     BALANCE: cell.booking.financial?.due_amount,
     channel_booking_nbr: cell.booking.channel_booking_nbr,
@@ -228,7 +228,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       origin: data.origin,
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
-      NOTES: data.remark,
+      NOTES: data.is_direct ? data.remark : null,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
       ota_notes: data.ota_notes,
     });

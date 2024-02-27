@@ -24,6 +24,7 @@ export class IglCalHeader {
   @Prop() propertyid: number;
   @Prop() unassignedDates;
   @Prop() to_date: string;
+  @Prop() highlightedDate: string;
   @State() renderAgain: boolean = false;
   @State() unassignedRoomsNumber: any = {};
   private searchValue: string = '';
@@ -304,7 +305,10 @@ export class IglCalHeader {
             ))}
           </div>
           {this.calendarData.days.map(dayInfo => (
-            <div class={`headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`} data-day={dayInfo.day}>
+            <div
+              class={`headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''}`}
+              data-day={dayInfo.day}
+            >
               {!this.calendarData.is_vacation_rental && (
                 <div class="preventPageScroll">
                   <span

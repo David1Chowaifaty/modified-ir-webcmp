@@ -47,7 +47,7 @@ export class IglooCalendar {
   @State() renderAgain = false;
   @State() showBookProperty: boolean = false;
   @State() totalAvailabilityQueue: { room_type_id: number; date: string; availability: number }[] = [];
-  @State() toBeAssignedDate: string;
+  @State() highlightedDate: string;
 
   @Event({ bubbles: true, composed: true })
   dragOverHighlightElement: EventEmitter;
@@ -96,8 +96,8 @@ export class IglooCalendar {
     }
     handleUnAssignedDatesChange('unassigned_dates', newValue => {
       // console.log(newValue, Object.keys(newValue));
-      if (Object.keys(newValue).length === 0 && this.toBeAssignedDate !== '') {
-        this.toBeAssignedDate = '';
+      if (Object.keys(newValue).length === 0 && this.highlightedDate !== '') {
+        this.highlightedDate = '';
       }
     });
   }
@@ -434,7 +434,6 @@ export class IglooCalendar {
       bookingEvents: bookings,
     };
   }
-
   shouldRenderCalendarView() {
     // console.log("rendering...")
     return this.calendarData && this.calendarData.days && this.calendarData.days.length;
@@ -470,7 +469,7 @@ export class IglooCalendar {
           dt = new Date(opt.data);
           dt.setDate(dt.getDate() + 1);
         }
-        this.toBeAssignedDate = this.transformDateForScroll(dt);
+        this.highlightedDate = this.transformDateForScroll(dt);
         break;
       case 'search':
         break;
@@ -487,7 +486,7 @@ export class IglooCalendar {
         break;
       case 'closeSideMenu':
         this.closeSideMenu();
-        this.toBeAssignedDate = '';
+        this.highlightedDate = '';
         this.showBookProperty = false;
         break;
     }
@@ -628,6 +627,16 @@ export class IglooCalendar {
 
   calendarScrolling() {
     if (this.scrollContainer) {
+      if (this.highlightedDate) {
+        const highlightedElement = document.querySelector(`.day-${this.highlightedDate}`);
+        if (highlightedElement) {
+          const { left, right } = highlightedElement.getBoundingClientRect();
+          const isVisible = left >= 0 && right <= window.innerWidth;
+          if (!isVisible) {
+            this.highlightedDate = '';
+          }
+        }
+      }
       const containerRect = this.scrollContainer.getBoundingClientRect();
       let leftSideMenuSize = 170;
       let maxWidth = containerRect.width - leftSideMenuSize;
@@ -831,7 +840,7 @@ export class IglooCalendar {
                     propertyid={this.propertyid}
                     today={this.today}
                     calendarData={this.calendarData}
-                    //toBeAssignedDate={this.toBeAssignedDate}
+                    highlightedDate={this.highlightedDate}
                     onOptionEvent={evt => this.onOptionSelect(evt)}
                   ></igl-cal-header>
                   <igl-cal-body
@@ -839,12 +848,12 @@ export class IglooCalendar {
                     countryNodeList={this.countryNodeList}
                     currency={this.calendarData.currency}
                     today={this.today}
-                    toBeAssignedDate={this.toBeAssignedDate}
+                    highlightedDate={this.highlightedDate}
                     isScrollViewDragging={this.scrollViewDragging}
                     calendarData={this.calendarData}
                   ></igl-cal-body>
                   <igl-cal-footer
-                    //toBeAssignedDate={this.toBeAssignedDate}
+                    highlightedDate={this.highlightedDate}
                     today={this.today}
                     calendarData={this.calendarData}
                     onOptionEvent={evt => this.onOptionSelect(evt)}

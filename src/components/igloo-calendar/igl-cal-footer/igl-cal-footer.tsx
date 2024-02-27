@@ -10,6 +10,7 @@ export class IglCalFooter {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
+  @Prop() highlightedDate: string;
 
   // private isOnline:boolean = false;
 
@@ -32,7 +33,9 @@ export class IglCalFooter {
         </div>
         {this.calendarData.days.map(dayInfo => (
           <div class="footerCell align-items-center">
-            <div class={`dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}`}>{dayInfo.dayDisplayName}</div>
+            <div class={`dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}`}>
+              {dayInfo.dayDisplayName}
+            </div>
 
             {/* <div class="dayTitle">{dayInfo.dayDisplayName}</div>
               <div class="dayCapacityPercent">28.57%</div>

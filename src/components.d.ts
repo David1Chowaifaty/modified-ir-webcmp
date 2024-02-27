@@ -158,17 +158,19 @@ export namespace Components {
         "calendarData": { [key: string]: any };
         "countryNodeList": any;
         "currency": any;
+        "highlightedDate": string;
         "isScrollViewDragging": boolean;
         "language": string;
-        "toBeAssignedDate": string;
         "today": String;
     }
     interface IglCalFooter {
         "calendarData": { [key: string]: any };
+        "highlightedDate": string;
         "today": String;
     }
     interface IglCalHeader {
         "calendarData": { [key: string]: any };
+        "highlightedDate": string;
         "propertyid": number;
         "to_date": string;
         "today": String;
@@ -2033,21 +2035,23 @@ declare namespace LocalJSX {
         "calendarData"?: { [key: string]: any };
         "countryNodeList"?: any;
         "currency"?: any;
+        "highlightedDate"?: string;
         "isScrollViewDragging"?: boolean;
         "language"?: string;
         "onAddBookingDatasEvent"?: (event: IglCalBodyCustomEvent<any[]>) => void;
         "onScrollPageToRoom"?: (event: IglCalBodyCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglCalBodyCustomEvent<any>) => void;
-        "toBeAssignedDate"?: string;
         "today"?: String;
     }
     interface IglCalFooter {
         "calendarData"?: { [key: string]: any };
+        "highlightedDate"?: string;
         "onOptionEvent"?: (event: IglCalFooterCustomEvent<{ [key: string]: any }>) => void;
         "today"?: String;
     }
     interface IglCalHeader {
         "calendarData"?: { [key: string]: any };
+        "highlightedDate"?: string;
         "onGotoRoomEvent"?: (event: IglCalHeaderCustomEvent<{
     [key: string]: any;
   }>) => void;
