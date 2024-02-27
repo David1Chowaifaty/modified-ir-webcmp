@@ -110,7 +110,7 @@ export class IglDateRange {
         </div>
         <span>
           {this.totalNights && !this.disabled ? (
-            <span class="iglRangeNights ml-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
+            <span class="iglRangeNights mx-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
           ) : (
             ''
           )}
