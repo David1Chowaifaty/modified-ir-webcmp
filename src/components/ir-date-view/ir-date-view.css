@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+.mx-01 {
+  --m: 5px;
+  margin-right: var(--m) !important;
+  margin-left: var(--m) !important;
+}

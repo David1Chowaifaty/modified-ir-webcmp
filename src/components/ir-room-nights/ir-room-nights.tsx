@@ -242,7 +242,7 @@ export class IrRoomNights {
   }
   render() {
     if (!this.bookingEvent) {
-      return <p>{locales.entries.Lcz_Loading}</p>;
+      return <ir-loading-screen></ir-loading-screen>;
     }
     return (
       <Host>
