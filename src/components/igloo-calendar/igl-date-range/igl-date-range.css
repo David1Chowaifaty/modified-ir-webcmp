@@ -25,6 +25,13 @@
   margin-left: 1rem;
   margin-right: 1rem;
   font-size: 0.975rem !important;
+  display: flex;
+  align-items: center;
+}
+.date-view svg {
+  padding: 0 !important;
+  margin: 0;
+  margin-right: 10px;
 }
 .calendarPickerContainer {
   display: flex !important;
@@ -34,12 +41,14 @@
   padding: 0 !important;
   margin: 0;
   border: 1px solid #379ff2;
-  width: 220px;
+  width: 240px;
 }
 .calendarPickerContainer[data-state='disabled'] {
   border: 0px;
   width: 280px;
 }
-.date-view[data-state='disabled'] {
+.date-view[data-state='disabled'],
+.date-range-input[data-state='disabled'] {
   margin: 0;
+  cursor: default;
 }

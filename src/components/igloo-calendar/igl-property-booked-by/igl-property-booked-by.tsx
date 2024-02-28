@@ -254,7 +254,7 @@ export class IglPropertyBookedBy {
                 type="email"
                 value={this.bookedByData.email}
                 required
-                placeholder={locales.entries.Lcz_EmailAddress}
+                placeholder={locales.entries.Lcz_FindEmailAddress}
                 onInputCleared={() => this.clearEvent()}
               ></ir-autocomplete>
             </div>

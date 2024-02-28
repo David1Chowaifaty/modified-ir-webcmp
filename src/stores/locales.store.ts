@@ -21,6 +21,8 @@ export type LocalizationStrings = {
   Lcz_Assign: string;
   Lcz_Assignments: string;
   Lcz_AssignUnit: string;
+  Lcz_SelectRatePlan: string;
+  Lcz_FindEmailAddress: string;
   Lcz_Assignunits: string;
   Lcz_AssignUnitToExistingBooking: string;
   Lcz_AutomaticReleaseIn: string;
