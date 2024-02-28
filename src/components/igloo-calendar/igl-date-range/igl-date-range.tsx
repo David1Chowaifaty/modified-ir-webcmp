@@ -15,6 +15,7 @@ export class IglDateRange {
   @Prop() minDate: string;
   @Prop() dateLabel: string;
   @Prop() maxDate: string;
+  @Prop() withDateDifference: boolean = true;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
   @Event() toast: EventEmitter<IToast>;
@@ -111,13 +112,15 @@ export class IglDateRange {
             <ir-date-view showDateDifference={this.disabled} from_date={this.fromDate} to_date={this.toDate}></ir-date-view>
           </div>
         </div>
-        <span>
-          {this.totalNights && !this.disabled ? (
-            <span class="iglRangeNights mx-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
-          ) : (
-            ''
-          )}
-        </span>
+        {this.withDateDifference && (
+          <span>
+            {this.totalNights && !this.disabled ? (
+              <span class="iglRangeNights mx-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
+            ) : (
+              ''
+            )}
+          </span>
+        )}
       </Host>
     );
   }

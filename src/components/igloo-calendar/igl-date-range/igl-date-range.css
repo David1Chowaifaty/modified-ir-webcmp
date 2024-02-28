@@ -40,8 +40,12 @@
   align-items: center !important;
   padding: 0 !important;
   margin: 0;
-  border: 1px solid #379ff2;
-  width: 240px;
+  border: 1px solid var(--ir-date-range-border, #379ff2);
+  width: var(--ir-date-range-width, 250px);
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+.calendarPickerContainer:focus-within {
+  border-color: #379ff2;
 }
 .calendarPickerContainer[data-state='disabled'] {
   border: 0px;

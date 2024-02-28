@@ -18,6 +18,7 @@ export class IrSelect {
   @Prop() LabelAvailable: boolean = true;
   @Prop() firstOption: string = 'Select';
   @Prop() selectStyle: boolean = true;
+  @Prop() showFirstOption: boolean = true;
   @Prop() submited: boolean = false;
   @Prop() size: 'sm' | 'md' | 'lg' = 'md';
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
@@ -110,7 +111,7 @@ export class IrSelect {
             onInput={this.handleSelectChange.bind(this)}
             required={this.required}
           >
-            <option value={''}>{this.firstOption}</option>
+            {this.showFirstOption && <option value={''}>{this.firstOption}</option>}
             {this.data.map(item => {
               if (this.selectedValue === item.value) {
                 return (

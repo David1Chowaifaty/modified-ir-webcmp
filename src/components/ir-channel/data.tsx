@@ -2,10 +2,10 @@ import { IChannel } from '@/models/calendarData';
 import { ChannelService } from '@/services/channel.service';
 import calendar_data from '@/stores/calendar-data';
 import { selectChannel, setChannelIdAndActiveState, testConnection, updateChannelSettings } from '@/stores/channel.store';
-import { LocalizationChannelFrontEntries, LocalizationStrings } from '@/stores/locales.store';
+import { TLocaleEntries } from '@/stores/locales.store';
 import { h } from '@stencil/core';
 
-export const actions = (entries: LocalizationStrings & LocalizationChannelFrontEntries) => [
+export const actions = (entries: TLocaleEntries) => [
   {
     id: 'edit',
     name: entries.Lcz_Edit,
