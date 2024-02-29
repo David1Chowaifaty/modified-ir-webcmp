@@ -53,7 +53,7 @@ export class IrListingHeader {
               />
             </svg>
           </ir-input-text>
-          <h5 class="m-0">{locales.entries.Lcz_Or}</h5>
+          <h5 class="m-0 font-weight-bold">{locales.entries.Lcz_Or}</h5>
         </form>
         <section class="d-flex align-items-center flex-wrap filters-container justify-content-lg-start mt-1">
           <fieldset class="flex-fill-sm-none">
@@ -61,9 +61,9 @@ export class IrListingHeader {
             <ir-select
               onSelectChange={e => updateUserSelection('filter_type', e.detail)}
               showFirstOption={false}
-              data={booking_listing?.types.map(channel => ({
-                value: channel.name,
-                text: channel.name,
+              data={booking_listing?.types.map(t => ({
+                value: t.id.toString(),
+                text: t.name,
               }))}
               select_id="dateTo"
               LabelAvailable={false}
@@ -85,16 +85,16 @@ export class IrListingHeader {
             <ir-select
               onSelectChange={e => updateUserSelection('booking_status', e.detail)}
               showFirstOption={false}
-              data={booking_listing?.statuses.map(channel => ({
-                value: channel.name,
-                text: channel.name,
+              data={booking_listing?.statuses.map(status => ({
+                value: status.code,
+                text: status.name,
               }))}
               select_id="booking_status"
               LabelAvailable={false}
             ></ir-select>
           </fieldset>
           <fieldset class="flex-fill-sm-none">
-            <label htmlFor="channels">{locales.entries.Lcz_Channel}</label>
+            <label htmlFor="channels">{locales.entries.Lcz_Channels}</label>
             <ir-select
               onSelectChange={e => updateUserSelection('channel', e.detail)}
               showFirstOption={false}
@@ -107,19 +107,19 @@ export class IrListingHeader {
             ></ir-select>
           </fieldset>
           <fieldset class="flex-fill-sm-none">
-            <label htmlFor="payment_status">{locales.entries.Lcz_Payments} Status</label>
+            <label htmlFor="payment_status">{locales.entries.Lcz_Payments}</label>
             <ir-select
               showFirstOption={false}
-              data={booking_listing?.settlement_methods.map(channel => ({
-                value: channel.name,
-                text: channel.name,
+              data={booking_listing?.settlement_methods.map(method => ({
+                value: method.code,
+                text: method.name,
               }))}
               select_id="payment_status"
               LabelAvailable={false}
             ></ir-select>
           </fieldset>
           <div class="d-flex align-items-end m-0 mt-2 buttons-container">
-            <ir-icon onIconClickHandler={() => this.handleSearchClicked()}>
+            <ir-icon title={locales.entries.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked()}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                 <path
                   fill="currentColor"
@@ -127,7 +127,7 @@ export class IrListingHeader {
                 />
               </svg>
             </ir-icon>
-            <ir-icon>
+            <ir-icon title={locales.entries.Lcz_Erase}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512">
                 <path
                   fill="currentColor"
@@ -135,11 +135,11 @@ export class IrListingHeader {
                 />
               </svg>
             </ir-icon>
-            <ir-icon>
-              <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512">
+            <ir-icon title={locales.entries.Lcz_ExportToExcel}>
+              <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
                 <path
                   fill="currentColor"
-                  d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V288H216c-13.3 0-24 10.7-24 24s10.7 24 24 24H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zM384 336V288H494.1l-39-39c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l80 80c9.4 9.4 9.4 24.6 0 33.9l-80 80c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l39-39H384zm0-208H256V0L384 128z"
+                  d="M48 448V64c0-8.8 7.2-16 16-16H224v80c0 17.7 14.3 32 32 32h80V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16zM64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V154.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5 0 229.5 0H64zm90.9 233.3c-8.1-10.5-23.2-12.3-33.7-4.2s-12.3 23.2-4.2 33.7L161.6 320l-44.5 57.3c-8.1 10.5-6.3 25.5 4.2 33.7s25.5 6.3 33.7-4.2L192 359.1l37.1 47.6c8.1 10.5 23.2 12.3 33.7 4.2s12.3-23.2 4.2-33.7L222.4 320l44.5-57.3c8.1-10.5 6.3-25.5-4.2-33.7s-25.5-6.3-33.7 4.2L192 280.9l-37.1-47.6z"
                 />
               </svg>
             </ir-icon>

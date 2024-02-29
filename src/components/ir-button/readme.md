@@ -37,9 +37,11 @@
  - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
  - [igl-pagetwo](../igloo-calendar/igl-pagetwo)
  - [ir-booking-details](../ir-booking-details)
+ - [ir-booking-listing](../ir-booking-listing)
  - [ir-channel](../ir-channel)
  - [ir-channel-editor](../ir-channel/ir-channel-editor)
  - [ir-guest-info](../ir-guest-info)
+ - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-modal](../ir-modal)
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-room](../ir-booking-details/ir-room)
@@ -51,9 +53,11 @@ graph TD;
   igl-book-property-header --> ir-button
   igl-pagetwo --> ir-button
   ir-booking-details --> ir-button
+  ir-booking-listing --> ir-button
   ir-channel --> ir-button
   ir-channel-editor --> ir-button
   ir-guest-info --> ir-button
+  ir-listing-modal --> ir-button
   ir-modal --> ir-button
   ir-pickup --> ir-button
   ir-room --> ir-button

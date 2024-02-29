@@ -73,7 +73,9 @@ graph TD;
   igl-cal-body --> igl-booking-event
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> ota-label
+  igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> igl-block-dates-view
+  igl-block-dates-view --> ir-date-view
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
@@ -82,17 +84,21 @@ graph TD;
   igl-booking-overview-page --> igl-booking-rooms
   igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
+  igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
+  igl-date-range --> ir-date-view
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
+  igl-pagetwo --> ir-date-view
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   ir-sidebar --> ir-icon
+  ir-room-nights --> ir-loading-screen
   ir-room-nights --> ir-icon
   ir-room-nights --> ir-button
   ir-booking-details --> ir-toast
@@ -102,6 +108,7 @@ graph TD;
   ir-booking-details --> ir-icon
   ir-booking-details --> ir-label
   ir-booking-details --> ota-label
+  ir-booking-details --> ir-date-view
   ir-booking-details --> ir-room
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
@@ -110,6 +117,7 @@ graph TD;
   ir-booking-details --> igl-book-property
   ir-label --> ir-icon
   ir-room --> ir-icon
+  ir-room --> ir-date-view
   ir-room --> ir-button
   ir-room --> ir-label
   ir-room --> ir-modal

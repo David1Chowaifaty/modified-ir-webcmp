@@ -172,7 +172,8 @@ export type BookingListingCodes = {
   Lcz_JustDelete: string;
   Lcz_OK: string;
   Lcz_Or: string;
-  Lcz_PriceBalance: string;
+  Lcz_Price: string;
+  Lcz_Balance: string;
   Lcz_RecoverAndDelete: string;
   Lcz_Services: string;
   Lcz_Status: string;
@@ -180,6 +181,14 @@ export type BookingListingCodes = {
   Lcz_Until: string;
   Lcz_View: string;
   Lcz_WantToRecoverAllotment: string;
+  Lcz_MarkBookingAsPaid: string;
+  Lcz_Dates: string;
+  Lcz_Confirm: string;
+  Lcz_P: string;
+  Lcz_Of: string;
+  Lcz_ExportToExcel: string;
+  Lcz_Erase: string;
+  Lcz_Search: string;
 };
 
 export type LocalizationChannelFrontEntries = {

@@ -12,9 +12,9 @@
 | `calendarData`         | --                        |             | `{ [key: string]: any; }` | `undefined` |
 | `countryNodeList`      | `country-node-list`       |             | `any`                     | `undefined` |
 | `currency`             | `currency`                |             | `any`                     | `undefined` |
+| `highlightedDate`      | `highlighted-date`        |             | `string`                  | `undefined` |
 | `isScrollViewDragging` | `is-scroll-view-dragging` |             | `boolean`                 | `undefined` |
 | `language`             | `language`                |             | `string`                  | `undefined` |
-| `toBeAssignedDate`     | `to-be-assigned-date`     |             | `string`                  | `undefined` |
 | `today`                | --                        |             | `String`                  | `undefined` |
 
 
@@ -45,7 +45,9 @@ graph TD;
   igl-cal-body --> igl-booking-event
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> ota-label
+  igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> igl-block-dates-view
+  igl-block-dates-view --> ir-date-view
   igloo-calendar --> igl-cal-body
   style igl-cal-body fill:#f9f,stroke:#333,stroke-width:4px
 ```

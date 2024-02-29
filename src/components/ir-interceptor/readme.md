@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property           | Attribute | Description | Type       | Default                                       |
-| ------------------ | --------- | ----------- | ---------- | --------------------------------------------- |
-| `handledEndpoints` | --        |             | `string[]` | `['/ReAllocate_Exposed_Room', '/Do_Payment']` |
+| Property           | Attribute | Description | Type       | Default                                                                |
+| ------------------ | --------- | ----------- | ---------- | ---------------------------------------------------------------------- |
+| `handledEndpoints` | --        |             | `string[]` | `['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings']` |
 
 
 ## Events
@@ -26,6 +26,7 @@
  - [igl-book-property-container](../igl-book-property-container)
  - [igloo-calendar](../igloo-calendar)
  - [ir-booking-details](../ir-booking-details)
+ - [ir-booking-listing](../ir-booking-listing)
 
 ### Depends on
 
@@ -38,6 +39,7 @@ graph TD;
   igl-book-property-container --> ir-interceptor
   igloo-calendar --> ir-interceptor
   ir-booking-details --> ir-interceptor
+  ir-booking-listing --> ir-interceptor
   style ir-interceptor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

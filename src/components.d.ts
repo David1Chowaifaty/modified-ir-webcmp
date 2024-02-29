@@ -420,6 +420,12 @@ export namespace Components {
     }
     interface IrListingHeader {
     }
+    interface IrListingModal {
+        "closeModal": () => Promise<void>;
+        "editBooking": { booking: Booking; cause: 'edit' | 'payment' | 'delete' };
+        "modalTitle": string;
+        "openModal": () => Promise<void>;
+    }
     interface IrLoader {
         "size": string;
     }
@@ -685,6 +691,10 @@ export interface IrInterceptorCustomEvent<T> extends CustomEvent<T> {
 export interface IrLabelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrLabelElement;
+}
+export interface IrListingModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrListingModalElement;
 }
 export interface IrModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1446,6 +1456,24 @@ declare global {
         prototype: HTMLIrListingHeaderElement;
         new (): HTMLIrListingHeaderElement;
     };
+    interface HTMLIrListingModalElementEventMap {
+        "modalClosed": null;
+        "resetData": null;
+    }
+    interface HTMLIrListingModalElement extends Components.IrListingModal, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrListingModalElementEventMap>(type: K, listener: (this: HTMLIrListingModalElement, ev: IrListingModalCustomEvent<HTMLIrListingModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrListingModalElementEventMap>(type: K, listener: (this: HTMLIrListingModalElement, ev: IrListingModalCustomEvent<HTMLIrListingModalElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrListingModalElement: {
+        prototype: HTMLIrListingModalElement;
+        new (): HTMLIrListingModalElement;
+    };
     interface HTMLIrLoaderElement extends Components.IrLoader, HTMLStencilElement {
     }
     var HTMLIrLoaderElement: {
@@ -1681,6 +1709,7 @@ declare global {
         "ir-interceptor": HTMLIrInterceptorElement;
         "ir-label": HTMLIrLabelElement;
         "ir-listing-header": HTMLIrListingHeaderElement;
+        "ir-listing-modal": HTMLIrListingModalElement;
         "ir-loader": HTMLIrLoaderElement;
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-modal": HTMLIrModalElement;
@@ -2181,6 +2210,12 @@ declare namespace LocalJSX {
     }
     interface IrListingHeader {
     }
+    interface IrListingModal {
+        "editBooking"?: { booking: Booking; cause: 'edit' | 'payment' | 'delete' };
+        "modalTitle"?: string;
+        "onModalClosed"?: (event: IrListingModalCustomEvent<null>) => void;
+        "onResetData"?: (event: IrListingModalCustomEvent<null>) => void;
+    }
     interface IrLoader {
         "size"?: string;
     }
@@ -2354,6 +2389,7 @@ declare namespace LocalJSX {
         "ir-interceptor": IrInterceptor;
         "ir-label": IrLabel;
         "ir-listing-header": IrListingHeader;
+        "ir-listing-modal": IrListingModal;
         "ir-loader": IrLoader;
         "ir-loading-screen": IrLoadingScreen;
         "ir-modal": IrModal;
@@ -2420,6 +2456,7 @@ declare module "@stencil/core" {
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;
             "ir-label": LocalJSX.IrLabel & JSXBase.HTMLAttributes<HTMLIrLabelElement>;
             "ir-listing-header": LocalJSX.IrListingHeader & JSXBase.HTMLAttributes<HTMLIrListingHeaderElement>;
+            "ir-listing-modal": LocalJSX.IrListingModal & JSXBase.HTMLAttributes<HTMLIrListingModalElement>;
             "ir-loader": LocalJSX.IrLoader & JSXBase.HTMLAttributes<HTMLIrLoaderElement>;
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;

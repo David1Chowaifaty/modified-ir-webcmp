@@ -22,10 +22,6 @@
 
 ## Dependencies
 
-### Used by
-
- - [ir-list-item](../old-ir-channel/ir-listItems)
-
 ### Depends on
 
 - [ir-icon](../ir-icon)
@@ -34,7 +30,6 @@
 ```mermaid
 graph TD;
   ir-dropdown --> ir-icon
-  ir-list-item --> ir-dropdown
   style ir-dropdown fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

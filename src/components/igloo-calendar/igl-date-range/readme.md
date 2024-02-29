@@ -7,13 +7,14 @@
 
 ## Properties
 
-| Property      | Attribute    | Description | Type                      | Default     |
-| ------------- | ------------ | ----------- | ------------------------- | ----------- |
-| `dateLabel`   | `date-label` |             | `any`                     | `undefined` |
-| `defaultData` | --           |             | `{ [key: string]: any; }` | `undefined` |
-| `disabled`    | `disabled`   |             | `boolean`                 | `false`     |
-| `maxDate`     | `max-date`   |             | `string`                  | `undefined` |
-| `minDate`     | `min-date`   |             | `string`                  | `undefined` |
+| Property             | Attribute              | Description | Type                      | Default     |
+| -------------------- | ---------------------- | ----------- | ------------------------- | ----------- |
+| `dateLabel`          | `date-label`           |             | `string`                  | `undefined` |
+| `defaultData`        | --                     |             | `{ [key: string]: any; }` | `undefined` |
+| `disabled`           | `disabled`             |             | `boolean`                 | `false`     |
+| `maxDate`            | `max-date`             |             | `string`                  | `undefined` |
+| `minDate`            | `min-date`             |             | `string`                  | `undefined` |
+| `withDateDifference` | `with-date-difference` |             | `boolean`                 | `true`      |
 
 
 ## Events
@@ -29,16 +30,20 @@
 ### Used by
 
  - [igl-book-property-header](../igl-book-property/igl-book-property-header)
+ - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
 
 ### Depends on
 
 - [ir-date-picker](../../ir-date-picker)
+- [ir-date-view](../../ir-date-view)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-date-range --> ir-date-picker
+  igl-date-range --> ir-date-view
   igl-book-property-header --> igl-date-range
+  ir-listing-header --> igl-date-range
   style igl-date-range fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

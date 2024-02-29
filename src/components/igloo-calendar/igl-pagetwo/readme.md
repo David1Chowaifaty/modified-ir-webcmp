@@ -42,6 +42,7 @@
 
 ### Depends on
 
+- [ir-date-view](../../ir-date-view)
 - [igl-application-info](../igl-application-info)
 - [igl-property-booked-by](../igl-property-booked-by)
 - [ir-button](../../ir-button)
@@ -49,6 +50,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-pagetwo --> ir-date-view
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
   igl-pagetwo --> ir-button

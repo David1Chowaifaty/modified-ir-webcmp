@@ -47,6 +47,8 @@ export interface IFinancials {
   due_amount: number;
   due_dates: IDueDate[];
   payments: IPayment[] | null;
+  total_amount: number;
+  gross_total: number;
 }
 export interface IPayment {
   id: number | null;
