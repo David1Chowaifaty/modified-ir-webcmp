@@ -68,7 +68,8 @@ export function initializeUserSelection() {
     filter_type: booking_listing.types[0].id,
     book_nbr: '',
     name: '',
-    total_count: 0,
+    start_row: 0,
+    end_row: 20,
   };
 }
 export function updateUserSelection(key: keyof IUserListingSelection, value: any) {

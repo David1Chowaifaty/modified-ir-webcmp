@@ -1,5 +1,5 @@
 import { BookingListingService } from '@/services/booking_listing.service';
-import booking_listing, { updateUserSelection } from '@/stores/booking_listing.store';
+import booking_listing, { initializeUserSelection, updateUserSelection } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Listen, Prop, State, h } from '@stencil/core';
 
@@ -50,6 +50,10 @@ export class IrListingHeader {
       this.downloadUrlTag.click();
       booking_listing.download_url = null;
     }
+  }
+  async handleClearUserField() {
+    initializeUserSelection();
+    await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export: false });
   }
   render() {
     return (
@@ -204,8 +208,5 @@ export class IrListingHeader {
         </section>
       </Host>
     );
-  }
-  handleClearUserField(): void {
-    throw new Error('Method not implemented.');
   }
 }
