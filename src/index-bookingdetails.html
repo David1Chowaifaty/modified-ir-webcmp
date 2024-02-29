@@ -15,7 +15,7 @@
     <script src="assets/scripts/toastr/toastr.min.js"></script>
     <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
     <!-- <link rel="stylesheet" href="assets/scripts/switchery/switchery.css"> -->
-
+    <script src="index.js"></script>
     <style>
         body {
             overflow-x: hidden;
@@ -32,9 +32,9 @@
         const bookingDetail = document.querySelector("ir-booking-details");
         setTimeout(() => {
             sessionStorage.removeItem('token');
-            const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDkyODgwMzYsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiRThLMEFsdS9NdkdsTGxBVmgzSkFXQT09In0._JKYBQDYVBCZPDBo6XxHOehzpI0NO3JJDwE25dJg5Bg";
+            const ticket = getToken();
             bookingDetail.bookingNumber = "16231632"
-            bookingDetail.propertyid = "42";
+            bookingDetail.propertyid = getId();
             bookingDetail.ticket = ticket;
         }, 300)
     </script>
