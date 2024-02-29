@@ -41,7 +41,7 @@
   padding: 0 !important;
   margin: 0;
   border: 1px solid var(--ir-date-range-border, #379ff2);
-  width: var(--ir-date-range-width, 250px);
+  width: var(--ir-date-range-width, 242px);
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
 .calendarPickerContainer:focus-within {

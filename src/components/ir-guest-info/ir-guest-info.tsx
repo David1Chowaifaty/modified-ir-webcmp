@@ -24,6 +24,7 @@ export class GuestInfo {
   @State() guest: Guest | null = null;
   @State() isLoading: boolean = false;
   @Event() closeSideBar: EventEmitter<null>;
+  @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
 
   private bookingService = new BookingService();
 
@@ -50,6 +51,7 @@ export class GuestInfo {
       this.isLoading = true;
       await this.bookingService.editExposedGuest(this.guest, this.booking_nbr);
       this.closeSideBar.emit(null);
+      this.resetBookingData.emit(null);
     } catch (error) {
       console.log(error);
     } finally {

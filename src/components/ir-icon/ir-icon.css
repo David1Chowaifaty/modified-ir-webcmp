@@ -6,7 +6,9 @@
   all: unset;
   margin: 0;
   padding: 0;
+  color: #104064;
 }
 .icon-button:hover {
   cursor: pointer;
+  color: #1a6aa7;
 }

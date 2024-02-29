@@ -419,6 +419,9 @@ export namespace Components {
         "value": string;
     }
     interface IrListingHeader {
+        "baseurl": string;
+        "language": string;
+        "propertyId": number;
     }
     interface IrListingModal {
         "closeModal": () => Promise<void>;
@@ -1367,6 +1370,7 @@ declare global {
     };
     interface HTMLIrGuestInfoElementEventMap {
         "closeSideBar": null;
+        "resetBookingData": null;
     }
     interface HTMLIrGuestInfoElement extends Components.IrGuestInfo, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrGuestInfoElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoElement, ev: IrGuestInfoCustomEvent<HTMLIrGuestInfoElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2166,6 +2170,7 @@ declare namespace LocalJSX {
         "email"?: string;
         "language"?: string;
         "onCloseSideBar"?: (event: IrGuestInfoCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
     }
@@ -2209,6 +2214,9 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface IrListingHeader {
+        "baseurl"?: string;
+        "language"?: string;
+        "propertyId"?: number;
     }
     interface IrListingModal {
         "editBooking"?: { booking: Booking; cause: 'edit' | 'payment' | 'delete' };

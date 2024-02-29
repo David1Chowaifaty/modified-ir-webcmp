@@ -4,12 +4,19 @@
   padding: 0;
   --ir-date-range-border: #cacfe7;
   --ir-date-range-width: 242px;
+  position: relative;
 }
 h3 {
   margin: 0;
 }
 ir-input-text {
   width: 300px;
+}
+.booking-search-field {
+  margin-left: 0px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 .booking-container {
   gap: 14px;
@@ -27,6 +34,19 @@ ir-input-text {
     max-width: 100%;
   }
 } */
+.new-booking-container {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+.new-booking-btn {
+  all: unset;
+  cursor: pointer;
+  color: #104064;
+}
+.new-booking-btn:hover {
+  color: #0b2538;
+}
 @media (max-width: 575.98px) {
   :host {
     --ir-date-range-width: 360px;
@@ -35,10 +55,11 @@ ir-input-text {
     flex: 1 1 auto;
   }
 }
-
-/* Reapply flex-fill for md screens and above */
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
   .flex-fill-sm-none {
     flex: 0 0 auto;
+  }
+  .booking-search-field {
+    margin-left: 40px;
   }
 }

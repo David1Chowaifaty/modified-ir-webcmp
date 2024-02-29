@@ -128,8 +128,8 @@ export class IrBookingListing {
       <Host>
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
-        <div class="p-1 main-container">
-          <ir-listing-header></ir-listing-header>
+        <div class="p-2 main-container">
+          <ir-listing-header propertyId={this.propertyid} language={this.language} baseurl={this.baseurl}></ir-listing-header>
           <section>
             <div class="card p-1 flex-fill m-0 mt-2">
               <table class="table table-striped table-bordered no-footer dataTable">

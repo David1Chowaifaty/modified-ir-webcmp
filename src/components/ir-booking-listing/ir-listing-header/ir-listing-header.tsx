@@ -1,7 +1,7 @@
 import { BookingListingService } from '@/services/booking_listing.service';
 import booking_listing, { updateUserSelection } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
-import { Component, Host, Listen, State, h } from '@stencil/core';
+import { Component, Host, Listen, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-listing-header',
@@ -9,6 +9,10 @@ import { Component, Host, Listen, State, h } from '@stencil/core';
   scoped: true,
 })
 export class IrListingHeader {
+  @Prop() propertyId: number;
+  @Prop() language: string;
+  @Prop() baseurl: string;
+
   @State() inputValue: string = '';
   private bookingListingService = new BookingListingService();
 
@@ -43,18 +47,49 @@ export class IrListingHeader {
   render() {
     return (
       <Host>
-        <form class="d-flex align-items-center booking-container">
-          <h3>{locales.entries.Lcz_Bookings}</h3>
-          <ir-input-text value={this.inputValue} onTextChange={e => (this.inputValue = e.detail)} variant="icon" class="ml-md-5" placeholder="Find booking number/name">
-            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="12" width="12" viewBox="0 0 512 512">
-              <path
-                fill="currentColor"
-                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-              />
-            </svg>
-          </ir-input-text>
-          <h5 class="m-0 font-weight-bold">{locales.entries.Lcz_Or}</h5>
-        </form>
+        <section class="d-flex align-items-center ">
+          <div class="d-flex flex-fill flex-column flex-md-row align-items-md-center booking-container">
+            <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
+              <h3 class="flex-fill">{locales.entries.Lcz_Bookings}</h3>
+              <div>
+                <igl-book-property-container propertyid={this.propertyId} language={this.language} baseurl={this.baseurl} ticket={booking_listing.token}>
+                  <button slot="trigger" class={'new-booking-btn'}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
+                      <path
+                        fill="currentColor"
+                        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                      />
+                    </svg>
+                  </button>
+                </igl-book-property-container>
+              </div>
+            </div>
+            <h3 class="d-none d-md-block">{locales.entries.Lcz_Bookings}</h3>
+            <div class="booking-search-field">
+              <ir-input-text value={this.inputValue} onTextChange={e => (this.inputValue = e.detail)} variant="icon" placeholder="Find booking number/name">
+                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
+                  <path
+                    fill="currentColor"
+                    d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                  />
+                </svg>
+              </ir-input-text>
+              <h5 class="m-0 font-weight-bold">{locales.entries.Lcz_Or}</h5>
+            </div>
+          </div>
+          <div class="d-none d-md-block">
+            <igl-book-property-container propertyid={this.propertyId} language={this.language} baseurl={this.baseurl} ticket={booking_listing.token}>
+              <button slot="trigger" class={'new-booking-btn'}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
+                  <path
+                    fill="currentColor"
+                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                  />
+                </svg>
+              </button>
+            </igl-book-property-container>
+          </div>
+        </section>
         <section class="d-flex align-items-center flex-wrap filters-container justify-content-lg-start mt-1">
           <fieldset class="flex-fill-sm-none">
             <label htmlFor="dateTo">{locales.entries.Lcz_DateOf}</label>
@@ -70,7 +105,7 @@ export class IrListingHeader {
             ></ir-select>
           </fieldset>
           <fieldset class="flex-fill-sm-none">
-            <label htmlFor="dates">Dates</label>
+            <label htmlFor="dates">{locales.entries.Lcz_Dates}</label>
             <igl-date-range
               minDate="2000-01-01"
               withDateDifference={false}
@@ -106,8 +141,8 @@ export class IrListingHeader {
               LabelAvailable={false}
             ></ir-select>
           </fieldset>
-          <fieldset class="flex-fill-sm-none">
-            <label htmlFor="payment_status">{locales.entries.Lcz_Payments}</label>
+          {/* <fieldset class="flex-fill-sm-none">
+            <label htmlFor="payment_status">{locales.entries.Lcz_PaymentStatus}</label>
             <ir-select
               showFirstOption={false}
               data={booking_listing?.settlement_methods.map(method => ({
@@ -117,7 +152,7 @@ export class IrListingHeader {
               select_id="payment_status"
               LabelAvailable={false}
             ></ir-select>
-          </fieldset>
+          </fieldset> */}
           <div class="d-flex align-items-end m-0 mt-2 buttons-container">
             <ir-icon title={locales.entries.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked()}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
