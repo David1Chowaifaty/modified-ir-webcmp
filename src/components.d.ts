@@ -429,9 +429,6 @@ export namespace Components {
         "modalTitle": string;
         "openModal": () => Promise<void>;
     }
-    interface IrLoader {
-        "size": string;
-    }
     interface IrLoadingScreen {
         "message": string;
     }
@@ -1478,12 +1475,6 @@ declare global {
         prototype: HTMLIrListingModalElement;
         new (): HTMLIrListingModalElement;
     };
-    interface HTMLIrLoaderElement extends Components.IrLoader, HTMLStencilElement {
-    }
-    var HTMLIrLoaderElement: {
-        prototype: HTMLIrLoaderElement;
-        new (): HTMLIrLoaderElement;
-    };
     interface HTMLIrLoadingScreenElement extends Components.IrLoadingScreen, HTMLStencilElement {
     }
     var HTMLIrLoadingScreenElement: {
@@ -1714,7 +1705,6 @@ declare global {
         "ir-label": HTMLIrLabelElement;
         "ir-listing-header": HTMLIrListingHeaderElement;
         "ir-listing-modal": HTMLIrListingModalElement;
-        "ir-loader": HTMLIrLoaderElement;
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-modal": HTMLIrModalElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
@@ -2224,9 +2214,6 @@ declare namespace LocalJSX {
         "onModalClosed"?: (event: IrListingModalCustomEvent<null>) => void;
         "onResetData"?: (event: IrListingModalCustomEvent<null>) => void;
     }
-    interface IrLoader {
-        "size"?: string;
-    }
     interface IrLoadingScreen {
         "message"?: string;
     }
@@ -2398,7 +2385,6 @@ declare namespace LocalJSX {
         "ir-label": IrLabel;
         "ir-listing-header": IrListingHeader;
         "ir-listing-modal": IrListingModal;
-        "ir-loader": IrLoader;
         "ir-loading-screen": IrLoadingScreen;
         "ir-modal": IrModal;
         "ir-payment-details": IrPaymentDetails;
@@ -2465,7 +2451,6 @@ declare module "@stencil/core" {
             "ir-label": LocalJSX.IrLabel & JSXBase.HTMLAttributes<HTMLIrLabelElement>;
             "ir-listing-header": LocalJSX.IrListingHeader & JSXBase.HTMLAttributes<HTMLIrListingHeaderElement>;
             "ir-listing-modal": LocalJSX.IrListingModal & JSXBase.HTMLAttributes<HTMLIrListingModalElement>;
-            "ir-loader": LocalJSX.IrLoader & JSXBase.HTMLAttributes<HTMLIrLoaderElement>;
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;

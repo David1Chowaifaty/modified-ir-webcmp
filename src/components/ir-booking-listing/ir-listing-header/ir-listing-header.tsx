@@ -19,7 +19,7 @@ export class IrListingHeader {
   componentWillLoad() {
     this.bookingListingService.setToken(booking_listing.token);
   }
-
+  private downloadUrlTag: HTMLAnchorElement;
   @Listen('dateChanged')
   handleDateRangeChange(e: CustomEvent) {
     e.stopImmediatePropagation();
@@ -31,7 +31,7 @@ export class IrListingHeader {
       to: end.format('YYYY-MM-DD'),
     };
   }
-  async handleSearchClicked() {
+  async handleSearchClicked(is_to_export: boolean) {
     if (this.inputValue !== '') {
       if (/^-?\d+$/.test(this.inputValue)) {
         updateUserSelection('book_nbr', this.inputValue);
@@ -41,12 +41,22 @@ export class IrListingHeader {
         updateUserSelection('name', this.inputValue);
       }
     }
-    await this.bookingListingService.getExposedBookings(booking_listing.userSelection);
+    await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export });
     this.inputValue = '';
+    if (booking_listing.download_url) {
+      const url = booking_listing.download_url;
+      this.downloadUrlTag.href = url;
+      this.downloadUrlTag.download = url;
+      this.downloadUrlTag.click();
+      booking_listing.download_url = null;
+    }
   }
   render() {
     return (
       <Host>
+        <a ref={el => (this.downloadUrlTag = el)}>
+          <p class="sr-only">download url</p>
+        </a>
         <section class="d-flex align-items-center ">
           <div class="d-flex flex-fill flex-column flex-md-row align-items-md-center booking-container">
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
@@ -154,7 +164,7 @@ export class IrListingHeader {
             ></ir-select>
           </fieldset> */}
           <div class="d-flex align-items-end m-0 mt-2 buttons-container">
-            <ir-icon title={locales.entries.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked()}>
+            <ir-icon title={locales.entries.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked(false)}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                 <path
                   fill="currentColor"
@@ -162,7 +172,7 @@ export class IrListingHeader {
                 />
               </svg>
             </ir-icon>
-            <ir-icon title={locales.entries.Lcz_Erase}>
+            <ir-icon title={locales.entries.Lcz_Erase} onIconClickHandler={() => this.handleClearUserField()}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512">
                 <path
                   fill="currentColor"
@@ -170,7 +180,7 @@ export class IrListingHeader {
                 />
               </svg>
             </ir-icon>
-            <ir-icon title={locales.entries.Lcz_ExportToExcel}>
+            <ir-icon onIconClickHandler={() => this.handleSearchClicked(true)} title={locales.entries.Lcz_ExportToExcel}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
                 <path
                   fill="currentColor"
@@ -182,5 +192,8 @@ export class IrListingHeader {
         </section>
       </Host>
     );
+  }
+  handleClearUserField(): void {
+    throw new Error('Method not implemented.');
   }
 }

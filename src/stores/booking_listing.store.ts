@@ -7,6 +7,7 @@ export interface IBookingListingStore extends IExposedBookingsCriteria {
   token: string;
   userSelection: IUserListingSelection;
   bookings: Booking[];
+  download_url: string | null;
 }
 export interface IUserListingSelection {
   channel: string;
@@ -54,6 +55,7 @@ const initialState: IBookingListingStore = {
     is_combined_view: false,
     is_to_export: false,
   },
+  download_url: null,
 };
 
 export const { state: booking_listing, onChange: onBookingListingChange } = createStore<IBookingListingStore>(initialState);

@@ -34,5 +34,6 @@ export class BookingListingService extends Token {
       name: '',
       total_count: header.total_count,
     };
+    booking_listing.download_url = header.exported_data_url;
   }
 }
