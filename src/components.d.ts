@@ -71,6 +71,7 @@ export namespace Components {
         "propertyid": number;
         "ticket": string;
         "to_date": string;
+        "withIrToastAndInterceptor": boolean;
     }
     interface IglBookPropertyFooter {
         "disabled": boolean;
@@ -1459,7 +1460,7 @@ declare global {
     };
     interface HTMLIrListingModalElementEventMap {
         "modalClosed": null;
-        "resetData": null;
+        "resetData": string;
     }
     interface HTMLIrListingModalElement extends Components.IrListingModal, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrListingModalElementEventMap>(type: K, listener: (this: HTMLIrListingModalElement, ev: IrListingModalCustomEvent<HTMLIrListingModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1772,6 +1773,7 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "ticket"?: string;
         "to_date"?: string;
+        "withIrToastAndInterceptor"?: boolean;
     }
     interface IglBookPropertyFooter {
         "disabled"?: boolean;
@@ -2212,7 +2214,7 @@ declare namespace LocalJSX {
         "editBooking"?: { booking: Booking; cause: 'edit' | 'payment' | 'delete' };
         "modalTitle"?: string;
         "onModalClosed"?: (event: IrListingModalCustomEvent<null>) => void;
-        "onResetData"?: (event: IrListingModalCustomEvent<null>) => void;
+        "onResetData"?: (event: IrListingModalCustomEvent<string>) => void;
     }
     interface IrLoadingScreen {
         "message"?: string;

@@ -343,7 +343,7 @@ export class IrBookingListing {
           showCloseButton={this.editBookingItem !== null}
           sidebarStyles={{ width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: '#F2F3F8' }}
         >
-          {this.editBookingItem && (
+          {this.editBookingItem?.cause === 'edit' && (
             <ir-booking-details
               hasPrint
               hasReceipt

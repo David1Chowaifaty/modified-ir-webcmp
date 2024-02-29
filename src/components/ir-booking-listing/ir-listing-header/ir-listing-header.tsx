@@ -62,7 +62,13 @@ export class IrListingHeader {
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
               <h3 class="flex-fill">{locales.entries.Lcz_Bookings}</h3>
               <div>
-                <igl-book-property-container propertyid={this.propertyId} language={this.language} baseurl={this.baseurl} ticket={booking_listing.token}>
+                <igl-book-property-container
+                  withIrToastAndInterceptor={false}
+                  propertyid={this.propertyId}
+                  language={this.language}
+                  baseurl={this.baseurl}
+                  ticket={booking_listing.token}
+                >
                   <button slot="trigger" class={'new-booking-btn'}>
                     <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
                       <path
@@ -88,7 +94,13 @@ export class IrListingHeader {
             </div>
           </div>
           <div class="d-none d-md-block">
-            <igl-book-property-container propertyid={this.propertyId} language={this.language} baseurl={this.baseurl} ticket={booking_listing.token}>
+            <igl-book-property-container
+              withIrToastAndInterceptor={false}
+              propertyid={this.propertyId}
+              language={this.language}
+              baseurl={this.baseurl}
+              ticket={booking_listing.token}
+            >
               <button slot="trigger" class={'new-booking-btn'}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
                   <path

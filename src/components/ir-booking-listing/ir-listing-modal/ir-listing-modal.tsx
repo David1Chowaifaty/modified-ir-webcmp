@@ -18,6 +18,7 @@ export class IrListingModal {
   @State() isOpen: boolean = false;
   @State() deletionStage = 1;
   @State() selectedDesignation: string;
+  @State() loadingBtn: 'confirm' | 'just_delete' | 'recover_and_delete' | null = null;
 
   private bookingListingsService = new BookingListingService();
   private paymentService = new PaymentService();
@@ -29,7 +30,7 @@ export class IrListingModal {
   }
 
   @Event() modalClosed: EventEmitter<null>;
-  @Event() resetData: EventEmitter<null>;
+  @Event() resetData: EventEmitter<string>;
   @Method()
   async closeModal() {
     this.isOpen = false;
@@ -40,6 +41,9 @@ export class IrListingModal {
   @Method()
   async openModal() {
     this.isOpen = true;
+  }
+  filterBookings() {
+    booking_listing.bookings = booking_listing.bookings.filter(booking => booking.booking_nbr !== this.editBooking.booking.booking_nbr);
   }
 
   @Listen('clickHanlder')
@@ -60,22 +64,35 @@ export class IrListingModal {
             },
             this.editBooking.booking.booking_nbr,
           );
-          this.resetData.emit(null);
+          this.resetData.emit(this.editBooking.booking.booking_nbr);
           this.closeModal();
         } else {
+          if (this.deletionStage === 2) {
+            this.loadingBtn = 'recover_and_delete';
+            await this.bookingListingsService.removeExposedBooking(this.editBooking.booking.booking_nbr, true);
+            this.filterBookings();
+          }
           if (this.deletionStage === 1) {
             this.deletionStage = 2;
           }
         }
       }
+      if (name === 'cancel') {
+        if (this.deletionStage === 2) {
+          this.loadingBtn = 'just_delete';
+          await this.bookingListingsService.removeExposedBooking(this.editBooking.booking.booking_nbr, false);
+          this.filterBookings();
+        } else {
+          this.closeModal();
+        }
+      }
     } catch (error) {
       console.error(error);
-    }
-    if (name === 'cancel') {
-      if (this.deletionStage === 2) {
-        return;
+    } finally {
+      if (this.loadingBtn) {
+        this.loadingBtn = null;
+        this.closeModal();
       }
-      this.closeModal();
     }
   }
 
@@ -154,8 +171,15 @@ export class IrListingModal {
           </div>
 
           <div class={`ir-alert-footer border-0 d-flex justify-content-end`}>
-            <ir-button icon={''} btn_color={'secondary'} btn_block text={this.renderCancelationTitle()} name={'cancel'}></ir-button>
-            <ir-button icon={''} btn_color={'primary'} btn_block text={this.renderConfirmationTitle()} name={'confirm'}></ir-button>
+            <ir-button isLoading={this.loadingBtn === 'just_delete'} icon={''} btn_color={'secondary'} btn_block text={this.renderCancelationTitle()} name={'cancel'}></ir-button>
+            <ir-button
+              isLoading={this.loadingBtn === 'recover_and_delete'}
+              icon={''}
+              btn_color={'primary'}
+              btn_block
+              text={this.renderConfirmationTitle()}
+              name={'confirm'}
+            ></ir-button>
           </div>
         </div>
       </div>,
