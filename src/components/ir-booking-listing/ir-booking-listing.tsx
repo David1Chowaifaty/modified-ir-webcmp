@@ -103,6 +103,25 @@ export class IrBookingListing {
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
   }
 
+  @Listen('resetBookingData')
+  async handleResetStoreData(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
+  }
+  @Listen('bookingChanged')
+  handleBookingChanged(e: CustomEvent<Booking>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    booking_listing.bookings = [
+      ...booking_listing.bookings.map(b => {
+        if (b.booking_nbr === e.detail.booking_nbr) {
+          return e.detail;
+        }
+        return b;
+      }),
+    ];
+  }
   renderItemRange() {
     const { endItem, startItem, totalCount } = this.getPaginationBounds();
     booking_listing.userSelection = {
@@ -164,6 +183,11 @@ export class IrBookingListing {
                   </tr>
                 </thead>
                 <tbody class="">
+                  {booking_listing.bookings.length === 0 && (
+                    <tr>
+                      <td colSpan={8}>{locales.entries?.Lcz_NoDataAvailable}</td>
+                    </tr>
+                  )}
                   {booking_listing.bookings?.map(booking => {
                     let confirmationBG: string = '';
                     switch (booking.status.code) {

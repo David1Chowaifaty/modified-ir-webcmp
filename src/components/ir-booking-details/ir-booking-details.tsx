@@ -57,8 +57,11 @@ export class IrBookingDetails {
 
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
+  @Event() bookingChanged: EventEmitter<Booking>;
+
   private bookingService = new BookingService();
   private roomService = new RoomService();
+
   componentDidLoad() {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
@@ -227,6 +230,7 @@ export class IrBookingDetails {
     try {
       const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       this.bookingData = { ...booking };
+      this.bookingChanged.emit(this.bookingData);
     } catch (error) {
       console.log(error);
     }

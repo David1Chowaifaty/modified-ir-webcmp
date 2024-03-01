@@ -11,12 +11,12 @@ import { IToast } from "./components/ir-toast/toast";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
+import { Booking } from "./models/booking.dto";
 import { checkboxes, selectOption as selectOption1 } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
-import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
-import { Booking as Booking1 } from "./models/booking.dto";
+import { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
@@ -24,12 +24,12 @@ export { IToast } from "./components/ir-toast/toast";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
+export { Booking } from "./models/booking.dto";
 export { checkboxes, selectOption as selectOption1 } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
-export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
-export { Booking as Booking1 } from "./models/booking.dto";
+export { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
     interface IglApplicationInfo {
@@ -463,7 +463,7 @@ export namespace Components {
         "popoverTitle": string;
     }
     interface IrRoom {
-        "bookingEvent": Booking1;
+        "bookingEvent": Booking;
         "bookingIndex": number;
         "currency": string;
         "defaultTexts": ILocale;
@@ -1173,6 +1173,7 @@ declare global {
     };
     interface HTMLIrBookingDetailsElementEventMap {
         "toast": IToast1;
+        "bookingChanged": Booking;
     }
     interface HTMLIrBookingDetailsElement extends Components.IrBookingDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingDetailsElementEventMap>(type: K, listener: (this: HTMLIrBookingDetailsElement, ev: IrBookingDetailsCustomEvent<HTMLIrBookingDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2038,6 +2039,7 @@ declare namespace LocalJSX {
         "hasRoomEdit"?: boolean;
         "is_from_front_desk"?: boolean;
         "language"?: string;
+        "onBookingChanged"?: (event: IrBookingDetailsCustomEvent<Booking>) => void;
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast1>) => void;
         "propertyid"?: number;
         "ticket"?: string;
@@ -2253,7 +2255,7 @@ declare namespace LocalJSX {
         "popoverTitle"?: string;
     }
     interface IrRoom {
-        "bookingEvent"?: Booking1;
+        "bookingEvent"?: Booking;
         "bookingIndex"?: number;
         "currency"?: string;
         "defaultTexts"?: ILocale;
