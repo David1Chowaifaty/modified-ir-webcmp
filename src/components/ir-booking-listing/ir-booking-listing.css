@@ -45,3 +45,14 @@
 .buttons-container {
   gap: 10px;
 }
+td ul {
+  width: max-content !important;
+}
+td {
+  width: max-content !important ;
+}
+.date-p {
+  width: max-content !important;
+  min-width: 100%;
+  text-align: center !important;
+}

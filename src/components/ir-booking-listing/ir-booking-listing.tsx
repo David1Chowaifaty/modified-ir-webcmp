@@ -177,7 +177,7 @@ export class IrBookingListing {
                         </p>
                       </ir-tooltip>
                     </th>
-                    <th scope="col" class="text-left">
+                    <th scope="col" class="text-left services-cell">
                       {locales.entries?.Lcz_Services}
                     </th>
                     <th scope="col" class="in-out">
@@ -208,7 +208,7 @@ export class IrBookingListing {
                           </div>
                         </td>
                         <td>
-                          <p class="p-0 m-0">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
+                          <p class="p-0 m-0 date-p">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
                           <p class="p-0 m-0 secondary-p">
                             {booking.booked_on.hour}:{booking.booked_on.minute}
                           </p>
@@ -242,8 +242,8 @@ export class IrBookingListing {
                           </ul>
                         </td>
                         <td>
-                          <p class="p-0 m-0">{moment(booking.from_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
-                          <p class="p-0 m-0">{moment(booking.to_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
+                          <p class="p-0 m-0 date-p">{moment(booking.from_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
+                          <p class="p-0 m-0 date-p">{moment(booking.to_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
                         </td>
                         <td>
                           <p class={`m-0 badge ${confirmationBG}`}>{booking.status.description}</p>
