@@ -1,3 +1,41 @@
 :host {
   display: block;
 }
+.circle {
+  display: inline-flex;
+  border-radius: 50%;
+}
+.green {
+  background: #629a4c;
+}
+.red {
+  background: #ff4961;
+}
+.orange {
+  background: #ff9149;
+}
+/* td,
+th {
+  font-size: 12px !important;
+} */
+.black {
+  background: #000;
+}
+.smallcircle {
+  height: 7px;
+  width: 7px;
+}
+.bigcircle {
+  height: 7px;
+  width: 7px;
+}
+
+.status-container,
+.action-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-container p {
+  margin: 0;
+}
