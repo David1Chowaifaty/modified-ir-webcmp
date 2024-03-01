@@ -190,6 +190,7 @@ export type BookingListingCodes = {
   Lcz_Erase: string;
   Lcz_Search: string;
   Lcz_PaymentStatus: string;
+  Lcz_FindBookNbrorName: string;
 };
 
 export type LocalizationChannelFrontEntries = {

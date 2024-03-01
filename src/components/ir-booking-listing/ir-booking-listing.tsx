@@ -79,6 +79,15 @@ export class IrBookingListing {
       }
     }
   }
+
+  getPaginationBounds() {
+    const totalCount = booking_listing.userSelection.total_count;
+    const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
+    let endItem = this.currentPage * this.itemsPerPage;
+    endItem = endItem > totalCount ? totalCount : endItem;
+    return { startItem, endItem, totalCount };
+  }
+
   openModal() {
     if (!this.listingModal) {
       this.listingModal = this.el.querySelector('ir-listing-modal');
@@ -86,17 +95,16 @@ export class IrBookingListing {
     this.listingModal.editBooking = this.editBookingItem;
     this.listingModal.openModal();
   }
+
   @Listen('resetData')
   async handleResetData(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
   }
+
   renderItemRange() {
-    const totalCount = booking_listing.userSelection.total_count;
-    const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
-    let endItem = this.currentPage * this.itemsPerPage;
-    endItem = endItem > totalCount ? totalCount : endItem;
+    const { endItem, startItem, totalCount } = this.getPaginationBounds();
     booking_listing.userSelection = {
       ...booking_listing.userSelection,
       start_row: startItem - 1,
@@ -104,11 +112,9 @@ export class IrBookingListing {
     };
     return `${locales.entries.Lcz_View} ${startItem} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
   }
+
   async updateData() {
-    const { total_count } = booking_listing.userSelection;
-    let endItem = this.currentPage * this.itemsPerPage;
-    endItem = endItem > total_count ? total_count : endItem;
-    const startItem = (this.currentPage - 1) * this.itemsPerPage;
+    const { endItem, startItem } = this.getPaginationBounds();
     await this.bookingListingService.getExposedBookings({
       ...booking_listing.userSelection,
       is_to_export: false,
@@ -116,6 +122,7 @@ export class IrBookingListing {
       end_row: endItem,
     });
   }
+
   render() {
     if (this.isLoading) {
       return (

@@ -1,4 +1,4 @@
-import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/core';
+import { Component, Host, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
 import { IToast } from '../../ir-toast/toast';
 import locales from '@/stores/locales.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
@@ -30,8 +30,7 @@ export class IglDateRange {
   getStringDateFormat(dt: Date) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
-
-  componentWillLoad() {
+  initializeDates() {
     let dt = new Date();
     dt.setHours(0, 0, 0, 0);
     dt.setDate(dt.getDate() + 1);
@@ -56,6 +55,15 @@ export class IglDateRange {
         toDateStr: this.toDateStr,
         dateDifference: this.totalNights,
       });
+    }
+  }
+  componentWillLoad() {
+    this.initializeDates();
+  }
+  @Watch('defaultData')
+  handleDataChange(newValue: any, oldValue: any) {
+    if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+      this.initializeDates();
     }
   }
 

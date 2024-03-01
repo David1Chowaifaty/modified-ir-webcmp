@@ -86,7 +86,7 @@ export class IrListingHeader {
             </div>
             <h3 class="d-none d-md-block">{locales.entries.Lcz_Bookings}</h3>
             <div class="booking-search-field">
-              <ir-input-text value={this.inputValue} onTextChange={e => (this.inputValue = e.detail)} variant="icon" placeholder="Find booking number/name">
+              <ir-input-text value={this.inputValue} onTextChange={e => (this.inputValue = e.detail)} variant="icon" placeholder={locales.entries.Lcz_FindBookNbrorName}>
                 <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
                   <path
                     fill="currentColor"

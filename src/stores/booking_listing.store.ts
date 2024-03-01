@@ -68,6 +68,8 @@ export function initializeUserSelection() {
     filter_type: booking_listing.types[0].id,
     book_nbr: '',
     name: '',
+    from: moment().add(-7, 'days').format('YYYY-MM-DD'),
+    to: moment().format('YYYY-MM-DD'),
     start_row: 0,
     end_row: 20,
   };
