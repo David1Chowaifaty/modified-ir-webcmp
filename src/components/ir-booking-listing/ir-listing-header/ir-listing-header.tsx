@@ -42,7 +42,6 @@ export class IrListingHeader {
       }
     }
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export });
-    this.inputValue = '';
     if (booking_listing.download_url) {
       const url = booking_listing.download_url;
       this.downloadUrlTag.href = url;
@@ -53,6 +52,9 @@ export class IrListingHeader {
   }
   async handleClearUserField() {
     initializeUserSelection();
+    if (this.inputValue) {
+      this.inputValue = '';
+    }
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export: false });
   }
   render() {

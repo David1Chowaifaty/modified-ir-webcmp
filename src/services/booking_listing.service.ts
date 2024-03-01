@@ -30,8 +30,6 @@ export class BookingListingService extends Token {
     booking_listing.bookings = [...result];
     booking_listing.userSelection = {
       ...booking_listing.userSelection,
-      book_nbr: '',
-      name: '',
       total_count: header.total_count,
     };
     booking_listing.download_url = header.exported_data_url;

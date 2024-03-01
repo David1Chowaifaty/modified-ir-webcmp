@@ -84,6 +84,7 @@ export class IrInputText {
             disabled={this.disabled}
             class={`form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${this.error && 'danger-border'}`}
             id={id}
+            value={this.value}
             placeholder={this.placeholder}
             onInput={this.handleInputChange.bind(this)}
           />
