@@ -53,6 +53,15 @@ export class IrHousekeeping {
     }
   }
   render() {
-    return <Host></Host>;
+    if (this.isLoading) {
+      return <ir-loading-screen></ir-loading-screen>;
+    }
+    return (
+      <Host>
+        <ir-interceptor></ir-interceptor>
+        <ir-toast></ir-toast>
+        <section class="p-1"></section>
+      </Host>
+    );
   }
 }

@@ -10,10 +10,8 @@ export class IrLoadingScreen {
   render() {
     return (
       <Host>
-        <div class="loaderContainer">
-          <span class="loader"></span>
-          {/* {this.message && <p class={'m-0'}>{this.message}</p>} */}
-        </div>
+        <span class="loader"></span>
+        {/* {this.message && <p class={'m-0'}>{this.message}</p>} */}
       </Host>
     );
   }

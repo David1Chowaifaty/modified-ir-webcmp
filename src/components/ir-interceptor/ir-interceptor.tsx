@@ -68,8 +68,8 @@ export class IrInterceptor {
       <Host>
         {this.isLoading && (
           <div class="loadingScreenContainer">
-            <div class="loadingContainer">
-              <ir-loading-screen></ir-loading-screen>
+            <div class="loaderContainer">
+              <span class="loader"></span>
             </div>
           </div>
         )}
