@@ -384,6 +384,12 @@ export namespace Components {
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
     }
+    interface IrHousekeeping {
+        "baseurl": string;
+        "language": string;
+        "propertyid": number;
+        "ticket": string;
+    }
     interface IrIcon {
         "icon": string;
     }
@@ -1387,6 +1393,12 @@ declare global {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
     };
+    interface HTMLIrHousekeepingElement extends Components.IrHousekeeping, HTMLStencilElement {
+    }
+    var HTMLIrHousekeepingElement: {
+        prototype: HTMLIrHousekeepingElement;
+        new (): HTMLIrHousekeepingElement;
+    };
     interface HTMLIrIconElementEventMap {
         "iconClickHandler": any;
     }
@@ -1703,6 +1715,7 @@ declare global {
         "ir-date-view": HTMLIrDateViewElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-housekeeping": HTMLIrHousekeepingElement;
         "ir-icon": HTMLIrIconElement;
         "ir-input-text": HTMLIrInputTextElement;
         "ir-interceptor": HTMLIrInterceptorElement;
@@ -2170,6 +2183,12 @@ declare namespace LocalJSX {
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
     }
+    interface IrHousekeeping {
+        "baseurl"?: string;
+        "language"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+    }
     interface IrIcon {
         "icon"?: string;
         "onIconClickHandler"?: (event: IrIconCustomEvent<any>) => void;
@@ -2387,6 +2406,7 @@ declare namespace LocalJSX {
         "ir-date-view": IrDateView;
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
+        "ir-housekeeping": IrHousekeeping;
         "ir-icon": IrIcon;
         "ir-input-text": IrInputText;
         "ir-interceptor": IrInterceptor;
@@ -2453,6 +2473,7 @@ declare module "@stencil/core" {
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-housekeeping": LocalJSX.IrHousekeeping & JSXBase.HTMLAttributes<HTMLIrHousekeepingElement>;
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;

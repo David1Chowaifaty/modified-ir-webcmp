@@ -144,17 +144,13 @@ export class IrBookingListing {
 
   render() {
     if (this.isLoading) {
-      return (
-        <div class="h-screen bg-white d-flex flex-column align-items-center justify-content-center">
-          <ir-loading-screen></ir-loading-screen>
-        </div>
-      );
+      return <ir-loading-screen></ir-loading-screen>;
     }
     return (
       <Host>
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
-        <div class="p-2 main-container">
+        <div class="p-1 main-container">
           <ir-listing-header propertyId={this.propertyid} language={this.language} baseurl={this.baseurl}></ir-listing-header>
           <section>
             <div class="card p-1 flex-fill m-0 mt-2">
@@ -162,7 +158,7 @@ export class IrBookingListing {
                 <thead>
                   <tr>
                     <th scope="col" class="text-left">
-                      {locales.entries?.Lcz_Booking}#
+                      {locales.entries?.Lcz_Bookings}#
                     </th>
                     <th scope="col">{locales.entries?.Lcz_BookedOn}</th>
                     <th scope="col">{locales.entries?.Lcz_GuestSource}</th>
