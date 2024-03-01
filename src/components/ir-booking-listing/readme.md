@@ -45,7 +45,6 @@ graph TD;
   ir-booking-listing --> ir-listing-modal
   ir-booking-listing --> ir-sidebar
   ir-booking-listing --> ir-booking-details
-  ir-interceptor --> ir-loading-screen
   ir-listing-header --> igl-book-property-container
   ir-listing-header --> ir-input-text
   ir-listing-header --> ir-select

@@ -24,14 +24,14 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-housekeeping baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-housekeeping>
+  <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
-    const housekeepingEl = document.querySelector("ir-housekeeping");
-    if (housekeepingEl) {
-      housekeepingEl.propertyid = getId();
-      housekeepingEl.ticket = getToken();
+    const booking_listing = document.querySelector("ir-booking-listing");
+    if (booking_listing) {
+      booking_listing.propertyid = getId();
+      booking_listing.ticket = getToken();
     } 
   </script>
 

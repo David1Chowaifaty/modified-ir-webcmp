@@ -75,7 +75,6 @@ graph TD;
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
-  ir-interceptor --> ir-loading-screen
   ir-label --> ir-icon
   ir-room --> ir-icon
   ir-room --> ir-date-view

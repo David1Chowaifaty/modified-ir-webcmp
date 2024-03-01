@@ -39,7 +39,6 @@ graph TD;
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property
-  ir-interceptor --> ir-loading-screen
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
