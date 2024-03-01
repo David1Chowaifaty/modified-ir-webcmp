@@ -162,7 +162,7 @@ export class IrBookingListing {
                 <thead>
                   <tr>
                     <th scope="col" class="text-left">
-                      {locales.entries?.Lcz_Booking}#
+                      {locales.entries?.Lcz_Bookings}#
                     </th>
                     <th scope="col">{locales.entries?.Lcz_BookedOn}</th>
                     <th scope="col">{locales.entries?.Lcz_GuestSource}</th>

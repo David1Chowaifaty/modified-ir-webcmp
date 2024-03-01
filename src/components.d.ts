@@ -385,6 +385,10 @@ export namespace Components {
         "setupDataCountriesCode": selectOption[];
     }
     interface IrHousekeeping {
+        "baseurl": string;
+        "language": string;
+        "propertyid": number;
+        "ticket": string;
     }
     interface IrIcon {
         "icon": string;
@@ -2180,6 +2184,10 @@ declare namespace LocalJSX {
         "setupDataCountriesCode"?: selectOption[];
     }
     interface IrHousekeeping {
+        "baseurl"?: string;
+        "language"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
     }
     interface IrIcon {
         "icon"?: string;
