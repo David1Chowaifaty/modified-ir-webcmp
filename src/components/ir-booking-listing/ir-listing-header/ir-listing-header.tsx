@@ -87,8 +87,14 @@ export class IrListingHeader {
               </div>
             </div>
             <h3 class="d-none d-md-block">{locales.entries.Lcz_Bookings}</h3>
-            <div class="booking-search-field">
-              <ir-input-text value={this.inputValue} onTextChange={e => (this.inputValue = e.detail)} variant="icon" placeholder={locales.entries.Lcz_FindBookNbrorName}>
+            <div class="booking-search-field width-fill">
+              <ir-input-text
+                class={'flex-fill'}
+                value={this.inputValue}
+                onTextChange={e => (this.inputValue = e.detail)}
+                variant="icon"
+                placeholder={locales.entries.Lcz_FindBookNbrorName}
+              >
                 <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
                   <path
                     fill="currentColor"
@@ -96,7 +102,7 @@ export class IrListingHeader {
                   />
                 </svg>
               </ir-input-text>
-              <h5 class="m-0 font-weight-bold">{locales.entries.Lcz_Or}</h5>
+              <h5 class="m-0 font-weight-bold d-none d-sm-block">{locales.entries.Lcz_Or}</h5>
             </div>
           </div>
           <div class="d-none d-md-block">
@@ -118,8 +124,13 @@ export class IrListingHeader {
             </igl-book-property-container>
           </div>
         </section>
-        <section class="d-flex align-items-center flex-wrap filters-container justify-content-lg-start mt-1">
-          <fieldset class="flex-fill-sm-none">
+        <section class="d-flex align-items-center justify-evenly seperator-container d-sm-none">
+          <span></span>
+          <h5 class="m-0 font-weight-bold">{locales.entries.Lcz_Or}</h5>
+          <span></span>
+        </section>
+        <section class="d-flex flex-column align-items-sm-center flex-sm-row flex-sm-wrap filters-container justify-content-lg-start mt-1">
+          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
             <label htmlFor="dateTo">{locales.entries.Lcz_DateOf}</label>
             <ir-select
               onSelectChange={e => updateUserSelection('filter_type', e.detail)}
@@ -128,13 +139,16 @@ export class IrListingHeader {
                 value: t.id.toString(),
                 text: t.name,
               }))}
+              class="flex-fill"
+              selectedValue={booking_listing.userSelection.filter_type}
               select_id="dateTo"
               LabelAvailable={false}
             ></ir-select>
           </fieldset>
-          <fieldset class="flex-fill-sm-none">
+          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
             <label htmlFor="dates">{locales.entries.Lcz_Dates}</label>
             <igl-date-range
+              class="flex-fill"
               minDate="2000-01-01"
               withDateDifference={false}
               defaultData={{
@@ -143,9 +157,11 @@ export class IrListingHeader {
               }}
             ></igl-date-range>
           </fieldset>
-          <fieldset class="flex-fill-sm-none">
+          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
             <label htmlFor="booking_status">{locales.entries.Lcz_BookingStatus}</label>
             <ir-select
+              class="flex-fill"
+              selectedValue={booking_listing.userSelection.booking_status}
               onSelectChange={e => updateUserSelection('booking_status', e.detail)}
               showFirstOption={false}
               data={booking_listing?.statuses.map(status => ({
@@ -156,9 +172,11 @@ export class IrListingHeader {
               LabelAvailable={false}
             ></ir-select>
           </fieldset>
-          <fieldset class="flex-fill-sm-none">
+          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
             <label htmlFor="channels">{locales.entries.Lcz_Channels}</label>
             <ir-select
+              class="flex-fill"
+              selectedValue={booking_listing.userSelection.channel}
               onSelectChange={e => updateUserSelection('channel', e.detail)}
               showFirstOption={false}
               data={booking_listing?.channels.map(channel => ({
@@ -181,7 +199,7 @@ export class IrListingHeader {
               LabelAvailable={false}
             ></ir-select>
           </fieldset> */}
-          <div class="d-flex align-items-end m-0 mt-2 buttons-container">
+          <div class="d-flex flex-fill align-items-end m-0 mt-2 buttons-container">
             <ir-icon title={locales.entries.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked(false)}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                 <path

@@ -47,15 +47,42 @@ ir-input-text {
 .new-booking-btn:hover {
   color: #0b2538;
 }
+.seperator-container {
+  margin-top: 10px;
+  justify-content: center !important;
+  gap: 14px;
+}
+.seperator-container span {
+  display: block;
+  height: 1px;
+  background: var(--gray);
+  width: 45%;
+  max-width: 200px;
+  margin: 0;
+}
 @media (max-width: 575.98px) {
   :host {
-    --ir-date-range-width: 360px;
+    --ir-date-range-width: 100%;
   }
   .flex-fill-sm-none {
     flex: 1 1 auto;
   }
+  .flex-fill-sm-none label {
+    width: 100px;
+  }
+  .buttons-container {
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 40px;
+  }
 }
 @media (min-width: 1200px) {
+  .booking-search-field {
+    margin-left: 40px;
+  }
+}
+
+@media (min-width: 1600px) {
   .flex-fill-sm-none {
     flex: 0 0 auto;
   }

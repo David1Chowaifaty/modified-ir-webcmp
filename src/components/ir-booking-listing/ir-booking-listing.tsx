@@ -170,7 +170,7 @@ export class IrBookingListing {
                       <p class={'m-0'}>{locales.entries?.Lcz_Price}</p>
                       <ir-tooltip
                         customSlot
-                        message={`<span style="width:100%;display:block;">${locales.entries?.Lcz_BookingBalance}</span><span>${locales.entries.Lcz_ClickToSettle}</span>`}
+                        message={`<span style="width:100%;display:block;">${locales.entries?.Lcz_BookingBalance}</span><span>${locales.entries?.Lcz_ClickToSettle}</span>`}
                       >
                         <p slot="tooltip-trigger" class={'m-0 btn due-btn'}>
                           {locales.entries?.Lcz_Balance}
