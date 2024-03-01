@@ -41,6 +41,13 @@ export class IrListingHeader {
         updateUserSelection('name', this.inputValue);
       }
     }
+    if (this.inputValue === '' && (booking_listing.userSelection.book_nbr !== '' || booking_listing.userSelection.name !== '')) {
+      booking_listing.userSelection = {
+        ...booking_listing.userSelection,
+        name: '',
+        book_nbr: '',
+      };
+    }
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export });
     if (booking_listing.download_url) {
       const url = booking_listing.download_url;
@@ -90,6 +97,7 @@ export class IrListingHeader {
             <form
               onSubmit={e => {
                 e.preventDefault();
+                console.log(this.inputValue);
                 this.handleSearchClicked(false);
               }}
               class="booking-search-field width-fill"
