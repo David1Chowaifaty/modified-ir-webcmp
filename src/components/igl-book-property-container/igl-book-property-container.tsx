@@ -47,7 +47,6 @@ export class IglBookPropertyContainer {
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
       ]);
-      console.log(languageTexts);
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;

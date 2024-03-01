@@ -137,51 +137,53 @@ export class IrListingModal {
         }}
       ></div>,
       <div data-state={this.isOpen ? 'opened' : 'closed'} class={`ir-modal`} tabindex="-1">
-        <div class={`ir-alert-content p-2`}>
-          <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
-            <p class="font-weight-bold p-0 my-0 mb-1">{this.renderTitle()}</p>
-            <ir-icon
-              class="exit-icon"
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                this.closeModal();
-              }}
-            >
-              <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="10.5" viewBox="0 0 384 512">
-                <path
-                  fill="currentColor"
-                  d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
-                />
-              </svg>
-            </ir-icon>
-          </div>
-          <div class="modal-body text-left p-0 mb-2">
-            {this.editBooking.cause === 'payment' ? (
-              <ir-select
-                selectedValue={this.selectedDesignation}
-                onSelectChange={e => (this.selectedDesignation = e.detail)}
-                showFirstOption={false}
-                LabelAvailable={false}
-                data={booking_listing.settlement_methods.map(m => ({
-                  value: m.name,
-                  text: m.name,
-                }))}
-              ></ir-select>
-            ) : null}
-          </div>
+        {this.isOpen && (
+          <div class={`ir-alert-content p-2`}>
+            <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
+              <p class="font-weight-bold p-0 my-0 mb-1">{this.renderTitle()}</p>
+              <ir-icon
+                class="exit-icon"
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  this.closeModal();
+                }}
+              >
+                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="10.5" viewBox="0 0 384 512">
+                  <path
+                    fill="currentColor"
+                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                  />
+                </svg>
+              </ir-icon>
+            </div>
+            <div class="modal-body text-left p-0 mb-2">
+              {this.editBooking.cause === 'payment' ? (
+                <ir-select
+                  selectedValue={this.selectedDesignation}
+                  onSelectChange={e => (this.selectedDesignation = e.detail)}
+                  showFirstOption={false}
+                  LabelAvailable={false}
+                  data={booking_listing.settlement_methods.map(m => ({
+                    value: m.name,
+                    text: m.name,
+                  }))}
+                ></ir-select>
+              ) : null}
+            </div>
 
-          <div class={`ir-alert-footer border-0 d-flex justify-content-end`}>
-            <ir-button isLoading={this.loadingBtn === 'just_delete'} icon={''} btn_color={'secondary'} btn_block text={this.renderCancelationTitle()} name={'cancel'}></ir-button>
-            <ir-button
-              isLoading={this.loadingBtn === 'recover_and_delete'}
-              icon={''}
-              btn_color={'primary'}
-              btn_block
-              text={this.renderConfirmationTitle()}
-              name={'confirm'}
-            ></ir-button>
+            <div class={`ir-alert-footer border-0 d-flex justify-content-end`}>
+              <ir-button isLoading={this.loadingBtn === 'just_delete'} icon={''} btn_color={'secondary'} btn_block text={this.renderCancelationTitle()} name={'cancel'}></ir-button>
+              <ir-button
+                isLoading={this.loadingBtn === 'recover_and_delete'}
+                icon={''}
+                btn_color={'primary'}
+                btn_block
+                text={this.renderConfirmationTitle()}
+                name={'confirm'}
+              ></ir-button>
+            </div>
           </div>
-        </div>
+        )}
       </div>,
     ];
   }
