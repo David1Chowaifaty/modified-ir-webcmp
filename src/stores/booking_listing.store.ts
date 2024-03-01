@@ -39,7 +39,7 @@ const initialState: IBookingListingStore = {
   userSelection: {
     from: moment().add(-7, 'days').format('YYYY-MM-DD'),
     to: moment().format('YYYY-MM-DD'),
-    channel: undefined,
+    channel: '',
     property_id: null,
     start_row: 0,
     end_row: 20,

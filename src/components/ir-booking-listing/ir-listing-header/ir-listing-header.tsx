@@ -87,7 +87,13 @@ export class IrListingHeader {
               </div>
             </div>
             <h3 class="d-none d-md-block">{locales.entries.Lcz_Bookings}</h3>
-            <div class="booking-search-field width-fill">
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                this.handleSearchClicked(false);
+              }}
+              class="booking-search-field width-fill"
+            >
               <ir-input-text
                 class={'flex-fill'}
                 value={this.inputValue}
@@ -103,7 +109,7 @@ export class IrListingHeader {
                 </svg>
               </ir-input-text>
               <h5 class="m-0 font-weight-bold d-none d-sm-block">{locales.entries.Lcz_Or}</h5>
-            </div>
+            </form>
           </div>
           <div class="d-none d-md-block">
             <igl-book-property-container
@@ -178,13 +184,13 @@ export class IrListingHeader {
               class="flex-fill"
               selectedValue={booking_listing.userSelection.channel}
               onSelectChange={e => updateUserSelection('channel', e.detail)}
-              showFirstOption={false}
+              LabelAvailable={false}
               data={booking_listing?.channels.map(channel => ({
                 value: channel.name,
                 text: channel.name,
               }))}
               select_id="channels"
-              LabelAvailable={false}
+              firstOption={locales.entries.Lcz_All}
             ></ir-select>
           </fieldset>
           {/* <fieldset class="flex-fill-sm-none">

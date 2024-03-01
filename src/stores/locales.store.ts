@@ -194,6 +194,7 @@ export type BookingListingCodes = {
   Lcz_ClickToSettle: string;
   Lcz_BookingBalance: string;
   Lcz_NoDataAvailable: string;
+  Lcz_All: string;
 };
 
 export type LocalizationChannelFrontEntries = {
