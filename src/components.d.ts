@@ -538,7 +538,9 @@ export namespace Components {
         "position": TPositions;
     }
     interface IrTooltip {
+        "customSlot": boolean;
         "message": string;
+        "withHtml": boolean;
     }
     interface OtaLabel {
         "label": string;
@@ -2337,7 +2339,9 @@ declare namespace LocalJSX {
         "position"?: TPositions;
     }
     interface IrTooltip {
+        "customSlot"?: boolean;
         "message"?: string;
+        "withHtml"?: boolean;
     }
     interface OtaLabel {
         "label"?: string;

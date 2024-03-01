@@ -192,6 +192,7 @@ export type BookingListingCodes = {
   Lcz_PaymentStatus: string;
   Lcz_FindBookNbrorName: string;
   Lcz_ClickToSettle: string;
+  Lcz_BookingBalance: string;
   Lcz_NoDataAvailable: string;
 };
 

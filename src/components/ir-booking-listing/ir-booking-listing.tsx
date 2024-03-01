@@ -31,6 +31,12 @@ export class IrBookingListing {
   private roomService = new RoomService();
   private listingModal: HTMLIrListingModalElement;
   private itemsPerPage = 20;
+  private statusColors = {
+    '001': 'badge-warning',
+    '002': 'badge-success',
+    '003': 'badge-danger',
+    '004': 'badge-danger',
+  };
 
   componentWillLoad() {
     if (this.baseurl) {
@@ -47,8 +53,6 @@ export class IrBookingListing {
       if (newTotal && this.totalPages !== newTotal) {
         this.totalPages = Math.round(newTotal / this.itemsPerPage);
       }
-      if (newValue.start_row !== this.oldStartValue) {
-      }
     });
   }
   @Watch('ticket')
@@ -60,6 +64,7 @@ export class IrBookingListing {
       this.initializeApp();
     }
   }
+
   async initializeApp() {
     try {
       this.isLoading = true;
@@ -72,11 +77,10 @@ export class IrBookingListing {
       this.isLoading = false;
     }
   }
+
   handleSideBarToggle(e: CustomEvent<boolean>) {
-    if (e.detail) {
-      if (this.editBookingItem) {
-        this.editBookingItem = null;
-      }
+    if (e.detail && this.editBookingItem) {
+      this.editBookingItem = null;
     }
   }
 
@@ -122,13 +126,9 @@ export class IrBookingListing {
       }),
     ];
   }
+
   renderItemRange() {
     const { endItem, startItem, totalCount } = this.getPaginationBounds();
-    booking_listing.userSelection = {
-      ...booking_listing.userSelection,
-      start_row: startItem - 1,
-      end_row: endItem,
-    };
     return `${locales.entries.Lcz_View} ${startItem} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
   }
 
@@ -168,7 +168,14 @@ export class IrBookingListing {
                     <th scope="col">{locales.entries?.Lcz_GuestSource}</th>
                     <th scope="col">
                       <p class={'m-0'}>{locales.entries?.Lcz_Price}</p>
-                      <p class={'m-0 btn due-btn'}>{locales.entries?.Lcz_Balance}</p>
+                      <ir-tooltip
+                        customSlot
+                        message={`<span style="width:100%;display:block;">${locales.entries?.Lcz_BookingBalance}</span><span>${locales.entries.Lcz_ClickToSettle}</span>`}
+                      >
+                        <p slot="tooltip-trigger" class={'m-0 btn due-btn'}>
+                          {locales.entries?.Lcz_Balance}
+                        </p>
+                      </ir-tooltip>
                     </th>
                     <th scope="col" class="text-left">
                       {locales.entries?.Lcz_Services}
@@ -189,19 +196,7 @@ export class IrBookingListing {
                     </tr>
                   )}
                   {booking_listing.bookings?.map(booking => {
-                    let confirmationBG: string = '';
-                    switch (booking.status.code) {
-                      case '001':
-                        confirmationBG = 'badge-warning';
-                        break;
-                      case '002':
-                        confirmationBG = 'badge-success';
-                        break;
-                      case '003':
-                      case '004':
-                        confirmationBG = 'badge-danger';
-                        break;
-                    }
+                    let confirmationBG: string = this.statusColors[booking.status.code];
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
@@ -226,7 +221,7 @@ export class IrBookingListing {
                           <p class="p-0 m-0 secondary-p">{booking.origin.Label}</p>
                         </td>
                         <td>
-                          <p class="p-0 m-0">{formatAmount(booking.currency.code, booking.financial.gross_total)}</p>
+                          <p class="p-0 m-0">{formatAmount(booking.currency.code, booking.financial?.gross_total ?? 0)}</p>
                           {booking.financial.due_amount > 0 && (
                             <buuton
                               onClick={() => {
@@ -308,6 +303,7 @@ export class IrBookingListing {
                       btn_disabled={this.currentPage === 1}
                       onClickHanlder={async () => {
                         this.currentPage = this.currentPage - 1;
+                        console.log(this.currentPage);
                         await this.updateData();
                       }}
                     >
@@ -351,6 +347,7 @@ export class IrBookingListing {
                       btn_disabled={this.currentPage === this.totalPages}
                       onClickHanlder={async () => {
                         this.currentPage = this.totalPages;
+                        console.log(this.currentPage);
                         await this.updateData();
                       }}
                     >
