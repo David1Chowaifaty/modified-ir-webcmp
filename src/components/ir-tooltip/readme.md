@@ -7,9 +7,11 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type     | Default     |
-| --------- | --------- | ----------- | -------- | ----------- |
-| `message` | `message` |             | `string` | `undefined` |
+| Property     | Attribute     | Description | Type      | Default     |
+| ------------ | ------------- | ----------- | --------- | ----------- |
+| `customSlot` | `custom-slot` |             | `boolean` | `false`     |
+| `message`    | `message`     |             | `string`  | `undefined` |
+| `withHtml`   | `with-html`   |             | `boolean` | `true`      |
 
 
 ## Dependencies
@@ -18,12 +20,14 @@
 
  - [igl-application-info](../igloo-calendar/igl-application-info)
  - [igl-booking-room-rate-plan](../igloo-calendar/igl-booking-room-rate-plan)
+ - [ir-booking-listing](../ir-booking-listing)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-application-info --> ir-tooltip
   igl-booking-room-rate-plan --> ir-tooltip
+  ir-booking-listing --> ir-tooltip
   style ir-tooltip fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

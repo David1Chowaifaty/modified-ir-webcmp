@@ -28,9 +28,10 @@
 
 ## Events
 
-| Event   | Description | Type                                                                                                 |
-| ------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `toast` |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+| Event            | Description | Type                                                                                                 |
+| ---------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `bookingChanged` |             | `CustomEvent<Booking>`                                                                               |
+| `toast`          |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies

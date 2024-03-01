@@ -15,10 +15,10 @@
 
 ## Events
 
-| Event         | Description | Type                |
-| ------------- | ----------- | ------------------- |
-| `modalClosed` |             | `CustomEvent<null>` |
-| `resetData`   |             | `CustomEvent<null>` |
+| Event         | Description | Type                  |
+| ------------- | ----------- | --------------------- |
+| `modalClosed` |             | `CustomEvent<null>`   |
+| `resetData`   |             | `CustomEvent<string>` |
 
 
 ## Methods
