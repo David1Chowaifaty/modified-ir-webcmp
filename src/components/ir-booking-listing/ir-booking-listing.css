@@ -1,6 +1,6 @@
 :host {
   display: block;
-  height: 100vh;
+  height: 100%;
 }
 .card {
   overflow-x: auto;
@@ -9,10 +9,10 @@
   font-size: 12px !important;
 }
 .h-screen {
-  height: 100vh;
+  height: 100%;
 }
 .main-container {
-  height: 100vh;
+  height: 100%;
   overflow-y: auto;
 }
 .bg-ir-red {

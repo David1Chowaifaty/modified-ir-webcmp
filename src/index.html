@@ -19,13 +19,35 @@
     body {
       overflow-x: hidden;
     }
+
+    header {
+      height: 80px;
+      background: red;
+    }
+
+    footer {
+      background: green;
+      height: 40px;
+    }
   </style>
 </head>
 
 <body>
+  <!-- <header>
+    <h1>hello</h1>
+  </header> -->
+  <!-- <div class="app-content">
+    <div class="content-wrapper">
+      <div class="content-body">
+      </div>
+    </div> -->
   <ir-common></ir-common>
-  <ir-booking-listing row-count="3" baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
+  <ir-booking-listing row-count="10" baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+  </div>
+  <!-- <footer>
+    <h2>Yo</h2>
+  </footer> -->
 
   <script>
     setTimeout(() => {
@@ -33,9 +55,35 @@
       if (booking_listing) {
         booking_listing.propertyid = getId();
         booking_listing.ticket = getToken();
+        // const body = document.querySelector('body');
+        // body.style.display = "flex";
+        // body.style.flexDirection = "column";
+        // body.style.height = "100vh";
+
+        // const app_content = document.querySelector('.app-content');
+        // app_content.style.width = "100%";
+        // app_content.style.padding = "0";
+        // app_content.style.margin = "0";
+        // app_content.style.minHeight = "0";
+        // app_content.style.flex = "1";
+
+        // const content_wrapper = document.querySelector('.content-wrapper');
+        // content_wrapper.style.width = "100%";
+        // content_wrapper.style.padding = "0";
+        // content_wrapper.style.height = "100%";
+
+        // const content_body = document.querySelector('.content-body');
+        // content_body.style.width = "100%";
+        // content_body.style.padding = "0";
+        // content_body.style.height = "100%";
       }
     }, 300)
 
+    /*
+    
+    
+    
+    */
   </script>
 
 </body>
