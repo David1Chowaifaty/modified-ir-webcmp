@@ -20,6 +20,7 @@ export class IrBookingListing {
   @Prop() ticket: string = '';
   @Prop() baseurl: string = '';
   @Prop() propertyid: number;
+  @Prop() rowCount: number = 10;
 
   @State() isLoading = false;
   @State() currentPage = 1;
@@ -30,7 +31,7 @@ export class IrBookingListing {
   private bookingListingService = new BookingListingService();
   private roomService = new RoomService();
   private listingModal: HTMLIrListingModalElement;
-  private itemsPerPage = 20;
+  private listingModalTimeout: NodeJS.Timeout;
   private statusColors = {
     '001': 'badge-warning',
     '002': 'badge-success',
@@ -39,6 +40,8 @@ export class IrBookingListing {
   };
 
   componentWillLoad() {
+    updateUserSelection('end_row', this.rowCount);
+    booking_listing.rowCount = this.rowCount;
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -51,7 +54,7 @@ export class IrBookingListing {
     onBookingListingChange('userSelection', async newValue => {
       const newTotal = newValue.total_count;
       if (newTotal && this.totalPages !== newTotal) {
-        this.totalPages = Math.round(newTotal / this.itemsPerPage);
+        this.totalPages = Math.round(newTotal / this.rowCount);
       }
     });
   }
@@ -86,20 +89,22 @@ export class IrBookingListing {
 
   getPaginationBounds() {
     const totalCount = booking_listing.userSelection.total_count;
-    const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
-    let endItem = this.currentPage * this.itemsPerPage;
+    const startItem = (this.currentPage - 1) * this.rowCount;
+    let endItem = this.currentPage * this.rowCount;
     endItem = endItem > totalCount ? totalCount : endItem;
     return { startItem, endItem, totalCount };
   }
 
   openModal() {
-    if (!this.listingModal) {
+    this.listingModalTimeout = setTimeout(() => {
       this.listingModal = this.el.querySelector('ir-listing-modal');
-    }
-    this.listingModal.editBooking = this.editBookingItem;
-    this.listingModal.openModal();
+      this.listingModal.editBooking = this.editBookingItem;
+      this.listingModal.openModal();
+    }, 100);
   }
-
+  disconnectedCallback() {
+    clearTimeout(this.listingModalTimeout);
+  }
   @Listen('resetData')
   async handleResetData(e: CustomEvent) {
     e.stopImmediatePropagation();
@@ -143,7 +148,7 @@ export class IrBookingListing {
   }
 
   render() {
-    if (this.isLoading) {
+    if (this.isLoading || this.ticket === '') {
       return <ir-loading-screen></ir-loading-screen>;
     }
     return (
@@ -360,7 +365,7 @@ export class IrBookingListing {
             </div>
           </section>
         </div>
-        <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>
+        {this.editBookingItem && <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.editBookingItem !== null && this.editBookingItem.cause === 'edit'}

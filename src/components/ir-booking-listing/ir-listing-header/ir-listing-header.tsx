@@ -75,22 +75,24 @@ export class IrListingHeader {
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
               <h3 class="flex-fill">{locales.entries?.Lcz_Bookings}</h3>
               <div>
-                <igl-book-property-container
-                  withIrToastAndInterceptor={false}
-                  propertyid={this.propertyId}
-                  language={this.language}
-                  baseurl={this.baseurl}
-                  ticket={booking_listing.token}
-                >
-                  <button slot="trigger" class={'new-booking-btn'}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
-                      <path
-                        fill="currentColor"
-                        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                      />
-                    </svg>
-                  </button>
-                </igl-book-property-container>
+                {booking_listing.token && (
+                  <igl-book-property-container
+                    withIrToastAndInterceptor={false}
+                    propertyid={this.propertyId}
+                    language={this.language}
+                    baseurl={this.baseurl}
+                    ticket={booking_listing.token}
+                  >
+                    <button slot="trigger" class={'new-booking-btn'}>
+                      <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
+                        <path
+                          fill="currentColor"
+                          d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                        />
+                      </svg>
+                    </button>
+                  </igl-book-property-container>
+                )}
               </div>
             </div>
             <h3 class="d-none d-md-block">{locales.entries?.Lcz_Bookings}</h3>
@@ -120,22 +122,24 @@ export class IrListingHeader {
             </form>
           </div>
           <div class="d-none d-md-block">
-            <igl-book-property-container
-              withIrToastAndInterceptor={false}
-              propertyid={this.propertyId}
-              language={this.language}
-              baseurl={this.baseurl}
-              ticket={booking_listing.token}
-            >
-              <button slot="trigger" class={'new-booking-btn'}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
-                  <path
-                    fill="currentColor"
-                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                  />
-                </svg>
-              </button>
-            </igl-book-property-container>
+            {booking_listing.token && (
+              <igl-book-property-container
+                withIrToastAndInterceptor={false}
+                propertyid={this.propertyId}
+                language={this.language}
+                baseurl={this.baseurl}
+                ticket={booking_listing.token}
+              >
+                <button slot="trigger" class={'new-booking-btn'}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
+                    <path
+                      fill="currentColor"
+                      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                    />
+                  </svg>
+                </button>
+              </igl-book-property-container>
+            )}
           </div>
         </section>
         <section class="d-flex align-items-center justify-evenly seperator-container d-sm-none">
@@ -202,7 +206,7 @@ export class IrListingHeader {
             ></ir-select>
           </fieldset>
           {/* <fieldset class="flex-fill-sm-none">
-            <label htmlFor="payment_status">{locales.entries.Lcz_PaymentStatus}</label>
+            <label htmlFor="payment_status">{locales.entries?.Lcz_PaymentStatus}</label>
             <ir-select
               showFirstOption={false}
               data={booking_listing?.settlement_methods.map(method => ({
