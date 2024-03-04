@@ -172,6 +172,7 @@ export type BookingListingCodes = {
   Lcz_JustDelete: string;
   Lcz_OK: string;
   Lcz_Or: string;
+  Lcz_CreateNewBooking: string;
   Lcz_Price: string;
   Lcz_Balance: string;
   Lcz_RecoverAndDelete: string;

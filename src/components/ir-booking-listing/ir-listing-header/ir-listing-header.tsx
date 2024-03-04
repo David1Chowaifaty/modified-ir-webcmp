@@ -80,7 +80,7 @@ export class IrListingHeader {
                     withIrToastAndInterceptor={false}
                     propertyid={this.propertyId}
                     language={this.language}
-                    title="Create new booking"
+                    title={locales.entries.Lcz_CreateNewBooking}
                     baseurl={this.baseurl}
                     ticket={booking_listing.token}
                   >
@@ -128,7 +128,7 @@ export class IrListingHeader {
                 withIrToastAndInterceptor={false}
                 propertyid={this.propertyId}
                 language={this.language}
-                title="Create new booking"
+                title={locales.entries.Lcz_CreateNewBooking}
                 baseurl={this.baseurl}
                 ticket={booking_listing.token}
               >

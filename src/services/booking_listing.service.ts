@@ -3,12 +3,14 @@ import booking_listing, { IUserListingSelection, initializeUserSelection } from 
 import axios from 'axios';
 
 export class BookingListingService extends Token {
-  public async getExposedBookingsCriteria() {
+  public async getExposedBookingsCriteria(property_id: number) {
     const token = this.getToken();
     if (!token) {
       throw new Error('Invalid token');
     }
-    const { data } = await axios.post(`/Get_Exposed_Bookings_Criteria?Ticket=${token}`);
+    const { data } = await axios.post(`/Get_Exposed_Bookings_Criteria?Ticket=${token}`, {
+      property_id,
+    });
 
     const result = data.My_Result;
 

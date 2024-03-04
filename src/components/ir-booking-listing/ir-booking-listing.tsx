@@ -70,7 +70,7 @@ export class IrBookingListing {
     try {
       this.isLoading = true;
       updateUserSelection('property_id', this.propertyid);
-      await Promise.all([this.bookingListingService.getExposedBookingsCriteria(), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])]);
+      await Promise.all([this.bookingListingService.getExposedBookingsCriteria(this.propertyid), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])]);
       await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
     } catch (error) {
       console.error(error);
