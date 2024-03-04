@@ -53,9 +53,7 @@ export class IrBookingListing {
     }
     onBookingListingChange('userSelection', async newValue => {
       const newTotal = newValue.total_count;
-      if (newTotal && this.totalPages !== newTotal) {
-        this.totalPages = Math.round(newTotal / this.rowCount);
-      }
+      this.totalPages = Math.round(newTotal / this.rowCount);
     });
   }
   @Watch('ticket')
@@ -72,7 +70,7 @@ export class IrBookingListing {
     try {
       this.isLoading = true;
       updateUserSelection('property_id', this.propertyid);
-      await Promise.all([this.bookingListingService.getExposedBookingsCriteria(), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])]);
+      await Promise.all([this.bookingListingService.getExposedBookingsCriteria(this.propertyid), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])]);
       await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
     } catch (error) {
       console.error(error);
@@ -168,14 +166,15 @@ export class IrBookingListing {
                     <th scope="col">{locales.entries?.Lcz_BookedOn}</th>
                     <th scope="col">{locales.entries?.Lcz_GuestSource}</th>
                     <th scope="col">
-                      <p class={'m-0'}>{locales.entries?.Lcz_Price}</p>
+                      <span class="price-span">{locales.entries?.Lcz_Price}</span>
+
                       <ir-tooltip
                         customSlot
                         message={`<span style="width:100%;display:block;">${locales.entries?.Lcz_BookingBalance}</span><span>${locales.entries?.Lcz_ClickToSettle}</span>`}
                       >
-                        <p slot="tooltip-trigger" class={'m-0 btn due-btn'}>
+                        <span slot="tooltip-trigger" class={'m-0 btn due-btn'}>
                           {locales.entries?.Lcz_Balance}
-                        </p>
+                        </span>
                       </ir-tooltip>
                     </th>
                     <th scope="col" class="text-left services-cell">
