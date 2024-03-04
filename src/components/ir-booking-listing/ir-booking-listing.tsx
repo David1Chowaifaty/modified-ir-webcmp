@@ -7,6 +7,7 @@ import { formatAmount } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
 import axios from 'axios';
 import moment from 'moment';
+import { _formatTime } from '../ir-booking-details/functions';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -209,9 +210,7 @@ export class IrBookingListing {
                         </td>
                         <td>
                           <p class="p-0 m-0 date-p">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
-                          <p class="p-0 m-0 secondary-p">
-                            {booking.booked_on.hour}:{booking.booked_on.minute}
-                          </p>
+                          <p class="p-0 m-0 secondary-p">{_formatTime(booking.booked_on.hour.toString(), +' ' + booking.booked_on.minute.toString())}</p>
                         </td>
                         <td>
                           <p class="p-0 m-0">

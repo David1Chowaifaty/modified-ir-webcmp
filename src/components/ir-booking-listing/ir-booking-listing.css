@@ -30,6 +30,7 @@
   color: #ff4961;
   cursor: pointer;
   padding: 1px 0.25rem !important;
+  font-size: 12px !important;
 }
 .due-btn:hover {
   background: #ff4961;
