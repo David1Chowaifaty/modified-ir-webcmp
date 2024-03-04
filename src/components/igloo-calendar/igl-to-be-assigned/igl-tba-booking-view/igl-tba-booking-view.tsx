@@ -3,6 +3,7 @@ import { ToBeAssignedService } from '../../../../services/toBeAssigned.service';
 import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'igl-tba-booking-view',
@@ -94,7 +95,7 @@ export class IglTbaBookingView {
   handleHighlightAvailability() {
     this.highlightToBeAssignedBookingEvent.emit({
       key: 'highlightBookingId',
-      data: { bookingId: this.eventData.ID },
+      data: { bookingId: this.eventData.ID, fromDate: this.eventData.FROM_DATE },
     });
     if (!this.selectedDate) {
       return;
@@ -175,26 +176,28 @@ export class IglTbaBookingView {
             {`Book# ${this.eventData.BOOKING_NUMBER} - ${this.eventData.NAME}`}
           </div>
           <div class="row m-0 p-0 actionsContainer">
-            <div class="d-inline-block p-0 selectContainer">
-              <select class="form-control input-sm" id={v4()} onChange={evt => this.onSelectRoom(evt)}>
-                <option value="" selected={this.selectedRoom == -1}>
-                  {locales.entries.Lcz_AssignUnit}
+            <select class="form-control input-sm room-select" id={v4()} onChange={evt => this.onSelectRoom(evt)}>
+              <option value="" selected={this.selectedRoom == -1}>
+                {locales.entries.Lcz_AssignUnit}
+              </option>
+              {this.allRoomsList.map(room => (
+                <option value={room.id} selected={this.selectedRoom == room.id}>
+                  {room.name}
                 </option>
-                {this.allRoomsList.map(room => (
-                  <option value={room.id} selected={this.selectedRoom == room.id}>
-                    {room.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+              ))}
+            </select>
             {this.highlightSection ? (
-              <div class="d-inline-block text-right buttonsContainer">
+              <div class="d-flex buttonsContainer">
                 <button type="button" class="btn btn-secondary btn-sm" onClick={evt => this.handleCloseAssignment(evt)}>
                   X
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onClick={evt => this.handleAssignUnit(evt)} disabled={this.selectedRoom === -1}>
-                  {locales.entries.Lcz_Assign}
-                </button>
+                <ir-button
+                  isLoading={isRequestPending('/Assign_Exposed_Room')}
+                  size="sm"
+                  text={locales.entries.Lcz_Assign}
+                  onClickHanlder={evt => this.handleAssignUnit(evt)}
+                  btn_disabled={this.selectedRoom === -1}
+                ></ir-button>
               </div>
             ) : null}
           </div>
