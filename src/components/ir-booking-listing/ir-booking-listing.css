@@ -11,6 +11,10 @@
 .h-screen {
   height: 100%;
 }
+.price-span {
+  margin: 0;
+  margin-right: 5px;
+}
 .main-container {
   height: 100%;
   overflow-y: auto;
@@ -26,7 +30,6 @@
   color: #ff4961;
   cursor: pointer;
   padding: 1px 0.25rem !important;
-  font-size: 12px !important;
 }
 .due-btn:hover {
   background: #ff4961;
