@@ -384,6 +384,8 @@ export namespace Components {
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
     }
+    interface IrHkTeam {
+    }
     interface IrHousekeeping {
         "baseurl": string;
         "language": string;
@@ -547,6 +549,8 @@ export namespace Components {
         "customSlot": boolean;
         "message": string;
         "withHtml": boolean;
+    }
+    interface IrUnitStatus {
     }
     interface OtaLabel {
         "label": string;
@@ -1393,6 +1397,12 @@ declare global {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
     };
+    interface HTMLIrHkTeamElement extends Components.IrHkTeam, HTMLStencilElement {
+    }
+    var HTMLIrHkTeamElement: {
+        prototype: HTMLIrHkTeamElement;
+        new (): HTMLIrHkTeamElement;
+    };
     interface HTMLIrHousekeepingElement extends Components.IrHousekeeping, HTMLStencilElement {
     }
     var HTMLIrHousekeepingElement: {
@@ -1669,6 +1679,12 @@ declare global {
         prototype: HTMLIrTooltipElement;
         new (): HTMLIrTooltipElement;
     };
+    interface HTMLIrUnitStatusElement extends Components.IrUnitStatus, HTMLStencilElement {
+    }
+    var HTMLIrUnitStatusElement: {
+        prototype: HTMLIrUnitStatusElement;
+        new (): HTMLIrUnitStatusElement;
+    };
     interface HTMLOtaLabelElement extends Components.OtaLabel, HTMLStencilElement {
     }
     var HTMLOtaLabelElement: {
@@ -1715,6 +1731,7 @@ declare global {
         "ir-date-view": HTMLIrDateViewElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-hk-team": HTMLIrHkTeamElement;
         "ir-housekeeping": HTMLIrHousekeepingElement;
         "ir-icon": HTMLIrIconElement;
         "ir-input-text": HTMLIrInputTextElement;
@@ -1736,6 +1753,7 @@ declare global {
         "ir-textarea": HTMLIrTextareaElement;
         "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
+        "ir-unit-status": HTMLIrUnitStatusElement;
         "ota-label": HTMLOtaLabelElement;
     }
 }
@@ -2183,6 +2201,8 @@ declare namespace LocalJSX {
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
     }
+    interface IrHkTeam {
+    }
     interface IrHousekeeping {
         "baseurl"?: string;
         "language"?: string;
@@ -2362,6 +2382,8 @@ declare namespace LocalJSX {
         "message"?: string;
         "withHtml"?: boolean;
     }
+    interface IrUnitStatus {
+    }
     interface OtaLabel {
         "label"?: string;
         "remarks"?: IOtaNotes[];
@@ -2406,6 +2428,7 @@ declare namespace LocalJSX {
         "ir-date-view": IrDateView;
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
+        "ir-hk-team": IrHkTeam;
         "ir-housekeeping": IrHousekeeping;
         "ir-icon": IrIcon;
         "ir-input-text": IrInputText;
@@ -2427,6 +2450,7 @@ declare namespace LocalJSX {
         "ir-textarea": IrTextarea;
         "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
+        "ir-unit-status": IrUnitStatus;
         "ota-label": OtaLabel;
     }
 }
@@ -2473,6 +2497,7 @@ declare module "@stencil/core" {
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;
             "ir-housekeeping": LocalJSX.IrHousekeeping & JSXBase.HTMLAttributes<HTMLIrHousekeepingElement>;
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
@@ -2494,6 +2519,7 @@ declare module "@stencil/core" {
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
+            "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
         }
     }

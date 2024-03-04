@@ -1,5 +1,6 @@
 import { Token } from '@/models/Token';
 import { IExposedHouseKeepingSetup, IInspectionMode } from '@/models/housekeeping';
+import { updateHKStore } from '@/stores/housekeeping.store';
 import axios from 'axios';
 
 export class HouseKeepingService extends Token {
@@ -11,6 +12,7 @@ export class HouseKeepingService extends Token {
     const { data } = await axios.post(`/Get_Exposed_HK_Setup?Ticket=${token}`, {
       property_id,
     });
+    updateHKStore('hk_criteria', data['My_Result']);
     return data['My_Result'];
   }
 
