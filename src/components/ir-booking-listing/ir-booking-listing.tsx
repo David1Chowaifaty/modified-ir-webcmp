@@ -31,6 +31,7 @@ export class IrBookingListing {
   private roomService = new RoomService();
   private listingModal: HTMLIrListingModalElement;
   private itemsPerPage = 20;
+  private listingModalTimeout: NodeJS.Timeout;
   private statusColors = {
     '001': 'badge-warning',
     '002': 'badge-success',
@@ -93,13 +94,15 @@ export class IrBookingListing {
   }
 
   openModal() {
-    if (!this.listingModal) {
+    this.listingModalTimeout = setTimeout(() => {
       this.listingModal = this.el.querySelector('ir-listing-modal');
-    }
-    this.listingModal.editBooking = this.editBookingItem;
-    this.listingModal.openModal();
+      this.listingModal.editBooking = this.editBookingItem;
+      this.listingModal.openModal();
+    }, 100);
   }
-
+  disconnectedCallback() {
+    clearTimeout(this.listingModalTimeout);
+  }
   @Listen('resetData')
   async handleResetData(e: CustomEvent) {
     e.stopImmediatePropagation();
@@ -360,7 +363,7 @@ export class IrBookingListing {
             </div>
           </section>
         </div>
-        <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>
+        {this.editBookingItem && <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.editBookingItem !== null && this.editBookingItem.cause === 'edit'}
