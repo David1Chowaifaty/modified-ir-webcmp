@@ -280,6 +280,7 @@ export namespace Components {
         "baseurl": string;
         "language": string;
         "propertyid": number;
+        "rowCount": number;
         "ticket": string;
     }
     interface IrButton {
@@ -2063,6 +2064,7 @@ declare namespace LocalJSX {
         "baseurl"?: string;
         "language"?: string;
         "propertyid"?: number;
+        "rowCount"?: number;
         "ticket"?: string;
     }
     interface IrButton {
