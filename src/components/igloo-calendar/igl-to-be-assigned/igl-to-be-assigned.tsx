@@ -17,8 +17,14 @@ export class IglToBeAssigned {
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
-  @State() loadingMessage: string;
   @Prop({ mutable: true }) calendarData: { [key: string]: any };
+
+  @State() loadingMessage: string;
+  @State() showDatesList: boolean = false;
+  @State() renderAgain: boolean = false;
+  @State() orderedDatesList: any[] = [];
+  @State() noScroll = false;
+
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Event({ bubbles: true, composed: true })
   reduceAvailableUnitEvent: EventEmitter<{ [key: string]: any }>;
@@ -26,9 +32,7 @@ export class IglToBeAssigned {
   @Event({ bubbles: true, composed: true }) addToBeAssignedEvent: EventEmitter;
   @Event({ bubbles: true, composed: true })
   highlightToBeAssignedBookingEvent: EventEmitter;
-  @State() showDatesList: boolean = false;
-  @State() renderAgain: boolean = false;
-  @State() orderedDatesList: any[] = [];
+
   private isGotoToBeAssignedDate: boolean = false;
   private isLoading: boolean = true;
   private selectedDate = null;
@@ -37,6 +41,7 @@ export class IglToBeAssigned {
   private categoriesData: { [key: string]: any } = {};
   private toBeAssignedService: ToBeAssignedService = new ToBeAssignedService();
   private unassignedDates: any;
+
   componentWillLoad() {
     this.toBeAssignedService.setToken(calendar_data.token);
     this.reArrangeData();
@@ -81,6 +86,7 @@ export class IglToBeAssigned {
     if (opt.key === 'assignUnit') {
       if (Object.keys(this.data[data.selectedDate].categories).length === 1) {
         this.isLoading = true;
+        this.noScroll = true;
       }
       this.data[data.selectedDate].categories[data.RT_ID] = this.data[data.selectedDate].categories[data.RT_ID].filter(eventData => eventData.ID != data.assignEvent.ID);
       this.calendarData = data.calendarData;
@@ -184,6 +190,7 @@ export class IglToBeAssigned {
       this.showBookingPopup.emit({
         key: 'calendar',
         data: parseInt(dateStamp) - 86400000,
+        noScroll: this.noScroll,
       });
       if (this.isGotoToBeAssignedDate) {
         this.isGotoToBeAssignedDate = false;
