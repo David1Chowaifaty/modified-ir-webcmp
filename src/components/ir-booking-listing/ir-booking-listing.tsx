@@ -146,7 +146,7 @@ export class IrBookingListing {
   }
 
   render() {
-    if (this.isLoading) {
+    if (this.isLoading || this.ticket === '') {
       return <ir-loading-screen></ir-loading-screen>;
     }
     return (

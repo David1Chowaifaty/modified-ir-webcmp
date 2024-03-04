@@ -28,11 +28,14 @@
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
-    const booking_listing = document.querySelector("ir-booking-listing");
-    if (booking_listing) {
-      booking_listing.propertyid = getId();
-      booking_listing.ticket = getToken();
-    } 
+    setTimeout(() => {
+      const booking_listing = document.querySelector("ir-booking-listing");
+      if (booking_listing) {
+        booking_listing.propertyid = getId();
+        booking_listing.ticket = getToken();
+      }
+    }, 300)
+
   </script>
 
 </body>
