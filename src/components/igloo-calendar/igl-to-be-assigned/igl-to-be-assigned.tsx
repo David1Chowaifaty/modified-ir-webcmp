@@ -176,7 +176,18 @@ export class IglToBeAssigned {
     this.showDatesList = false;
     this.renderView();
   }
-
+  @Listen('assignUnitEvent')
+  handleToBeAssignedDate(e: CustomEvent) {
+    console.log(e.detail);
+    if (this.noScroll) {
+      this.noScroll = !this.noScroll;
+      // this.showBookingPopup.emit({
+      //   key: 'calendar',
+      //   data: parseInt(dateStamp) - 86400000,
+      //   noScroll: this.noScroll,
+      // });
+    }
+  }
   async showForDate(dateStamp, withLoading = true) {
     try {
       if (withLoading) {
