@@ -73,7 +73,7 @@ export class IrListingHeader {
         <section class="d-flex align-items-center ">
           <div class="d-flex flex-fill flex-column flex-md-row align-items-md-center booking-container">
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
-              <h3 class="flex-fill">{locales.entries.Lcz_Bookings}</h3>
+              <h3 class="flex-fill">{locales.entries?.Lcz_Bookings}</h3>
               <div>
                 <igl-book-property-container
                   withIrToastAndInterceptor={false}
@@ -93,7 +93,7 @@ export class IrListingHeader {
                 </igl-book-property-container>
               </div>
             </div>
-            <h3 class="d-none d-md-block">{locales.entries.Lcz_Bookings}</h3>
+            <h3 class="d-none d-md-block">{locales.entries?.Lcz_Bookings}</h3>
             <form
               onSubmit={e => {
                 e.preventDefault();
@@ -107,7 +107,7 @@ export class IrListingHeader {
                 value={this.inputValue}
                 onTextChange={e => (this.inputValue = e.detail)}
                 variant="icon"
-                placeholder={locales.entries.Lcz_FindBookNbrorName}
+                placeholder={locales.entries?.Lcz_FindBookNbrorName}
               >
                 <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
                   <path
@@ -116,7 +116,7 @@ export class IrListingHeader {
                   />
                 </svg>
               </ir-input-text>
-              <h5 class="m-0 font-weight-bold d-none d-sm-block">{locales.entries.Lcz_Or}</h5>
+              <h5 class="m-0 font-weight-bold d-none d-sm-block">{locales.entries?.Lcz_Or}</h5>
             </form>
           </div>
           <div class="d-none d-md-block">
@@ -140,12 +140,12 @@ export class IrListingHeader {
         </section>
         <section class="d-flex align-items-center justify-evenly seperator-container d-sm-none">
           <span></span>
-          <h5 class="m-0 font-weight-bold">{locales.entries.Lcz_Or}</h5>
+          <h5 class="m-0 font-weight-bold">{locales.entries?.Lcz_Or}</h5>
           <span></span>
         </section>
         <section class="d-flex flex-column align-items-sm-center flex-sm-row flex-sm-wrap filters-container justify-content-lg-start mt-1">
           <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="dateTo">{locales.entries.Lcz_DateOf}</label>
+            <label htmlFor="dateTo">{locales.entries?.Lcz_DateOf}</label>
             <ir-select
               onSelectChange={e => updateUserSelection('filter_type', e.detail)}
               showFirstOption={false}
@@ -160,7 +160,7 @@ export class IrListingHeader {
             ></ir-select>
           </fieldset>
           <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="dates">{locales.entries.Lcz_Dates}</label>
+            <label htmlFor="dates">{locales.entries?.Lcz_Dates}</label>
             <igl-date-range
               class="flex-fill"
               minDate="2000-01-01"
@@ -172,7 +172,7 @@ export class IrListingHeader {
             ></igl-date-range>
           </fieldset>
           <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="booking_status">{locales.entries.Lcz_BookingStatus}</label>
+            <label htmlFor="booking_status">{locales.entries?.Lcz_BookingStatus}</label>
             <ir-select
               class="flex-fill"
               selectedValue={booking_listing.userSelection.booking_status}
@@ -187,7 +187,7 @@ export class IrListingHeader {
             ></ir-select>
           </fieldset>
           <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="channels">{locales.entries.Lcz_Channels}</label>
+            <label htmlFor="channels">{locales.entries?.Lcz_Channels}</label>
             <ir-select
               class="flex-fill"
               selectedValue={booking_listing.userSelection.channel}
@@ -198,7 +198,7 @@ export class IrListingHeader {
                 text: channel.name,
               }))}
               select_id="channels"
-              firstOption={locales.entries.Lcz_All}
+              firstOption={locales.entries?.Lcz_All}
             ></ir-select>
           </fieldset>
           {/* <fieldset class="flex-fill-sm-none">
@@ -214,7 +214,7 @@ export class IrListingHeader {
             ></ir-select>
           </fieldset> */}
           <div class="d-flex flex-fill align-items-end m-0 mt-2 buttons-container">
-            <ir-icon title={locales.entries.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked(false)}>
+            <ir-icon title={locales.entries?.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked(false)}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                 <path
                   fill="currentColor"
@@ -222,7 +222,7 @@ export class IrListingHeader {
                 />
               </svg>
             </ir-icon>
-            <ir-icon title={locales.entries.Lcz_Erase} onIconClickHandler={() => this.handleClearUserField()}>
+            <ir-icon title={locales.entries?.Lcz_Erase} onIconClickHandler={() => this.handleClearUserField()}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512">
                 <path
                   fill="currentColor"
@@ -230,7 +230,7 @@ export class IrListingHeader {
                 />
               </svg>
             </ir-icon>
-            <ir-icon onIconClickHandler={() => this.handleSearchClicked(true)} title={locales.entries.Lcz_ExportToExcel}>
+            <ir-icon onIconClickHandler={() => this.handleSearchClicked(true)} title={locales.entries?.Lcz_ExportToExcel}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
                 <path
                   fill="currentColor"
