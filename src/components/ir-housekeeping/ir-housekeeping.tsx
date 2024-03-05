@@ -27,7 +27,7 @@ export class IrHousekeeping {
     if (this.ticket !== '') {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      updateHKStore('token', this.ticket);
+      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
   }
@@ -36,7 +36,7 @@ export class IrHousekeeping {
     if (newValue !== oldValue) {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      updateHKStore('token', this.ticket);
+      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
   }
@@ -44,7 +44,7 @@ export class IrHousekeeping {
   async initializeApp() {
     try {
       this.isLoading = true;
-      await Promise.all([this.houseKeepingService.getExposedHKSetup(this.propertyid)]);
+      await Promise.all([this.houseKeepingService.getExposedHKSetup(this.propertyid), this.roomService.fetchData(this.propertyid, this.language)]);
     } catch (error) {
       console.error(error);
     } finally {

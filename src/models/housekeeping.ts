@@ -1,8 +1,9 @@
 export interface IExposedHouseKeepingSetup {
   statuses: IHKStatuses[];
   housekeepers: IHouseKeepers[];
-  units_assignments: IUnitAssignments[];
+  units_assignments: IUnitAssignments;
 }
+
 export interface IHouseKeepers {
   id: number;
   is_active: boolean;
@@ -15,6 +16,7 @@ export interface IHouseKeepers {
   username: string;
   assigned_units: IUnit[];
 }
+export type THKUser = Omit<IHouseKeepers, 'is_soft_deleted' | 'is_active' | 'assigned_units'>;
 export interface IUnit {
   calendar_cell: string | null;
   housekeeper: null;
@@ -43,3 +45,18 @@ export interface IInspectionMode {
   window: number;
 }
 export type TShape = 'smallcircle' | 'bigcircle';
+
+export interface ICauseBase {
+  type: string;
+}
+export interface IUnassignedUnitsCause extends ICauseBase {
+  type: 'unassigned_units';
+  unassignedUnitsCount: number;
+}
+export interface IUserCause extends ICauseBase {
+  type: 'user';
+  isEdit: boolean;
+  user: THKUser | null;
+}
+
+export type THousekeepingTrigger = IUnassignedUnitsCause | IUserCause;

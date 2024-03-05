@@ -38,3 +38,37 @@ table {
 .text-center {
   text-align: center !important;
 }
+
+.assignments-container,
+.unassigned-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.font-semibold {
+  font-weight: 700;
+}
+.unassigned-container {
+  gap: 4px;
+}
+.justify-between {
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.assignments-container p,
+h4 {
+  margin: 0;
+}
+.outline-btn {
+  background: white;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 1px 0.25rem !important;
+  margin: 0;
+}
+.outline-btn:hover {
+  color: white;
+  background: var(--blue);
+}

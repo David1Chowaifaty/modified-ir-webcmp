@@ -1,6 +1,6 @@
-import { IHouseKeepers } from '@/models/housekeeping';
+import { IHouseKeepers, THousekeepingTrigger } from '@/models/housekeeping';
 import housekeeping_store from '@/stores/housekeeping.store';
-import { Component, Host, State, h } from '@stencil/core';
+import { Component, Host, Listen, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-hk-team',
@@ -8,24 +8,64 @@ import { Component, Host, State, h } from '@stencil/core';
   scoped: true,
 })
 export class IrHkTeam {
-  @State() hkData = false;
+  @State() currentTrigger: THousekeepingTrigger | null = null;
 
   renderAssignedUnits(hk: IHouseKeepers) {
     if (hk.assigned_units.length === 0) {
-      return <span>0 - Assign</span>;
+      return (
+        <span>
+          0 - <button class="outline-btn">Assign</button>
+        </span>
+      );
     }
-    return <span>{hk.assigned_units.length} - Edit</span>;
+    return (
+      <span>
+        {hk.assigned_units.length} - <button class="outline-btn">Edit</button>
+      </span>
+    );
+  }
+  renderCurrentTrigger() {
+    switch (this.currentTrigger?.type) {
+      case 'unassigned_units':
+        return <ir-hk-unassigned-units></ir-hk-unassigned-units>;
+      case 'user':
+        return <ir-hk-user user={this.currentTrigger.user} isEdit={this.currentTrigger.isEdit}></ir-hk-user>;
+      default:
+        return null;
+    }
+  }
+
+  @Listen('closeSideBar')
+  handleCloseSideBar(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.currentTrigger = null;
   }
 
   render() {
+    const { assigned, total, un_assigned } = housekeeping_store.hk_criteria.units_assignments;
+
     return (
       <Host class="card p-1">
         <section>
-          <div>
+          <div class="assignments-container justify-between">
             <h4>Room or Unit Status</h4>
-            <div></div>
+            <div class="assignments-container">
+              <p>
+                {total} <span class="font-semibold">Total units</span>
+              </p>
+              <p>
+                {assigned} <span class="font-semibold">Assigned</span>
+              </p>
+              <div class="unassigned-container">
+                <p>{un_assigned}</p>{' '}
+                <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', unassignedUnitsCount: 2 })}>
+                  Unassigned
+                </button>
+              </div>
+            </div>
           </div>
-          <p>As an option,create housekeepers (as inividuals or teams) and assign units to them to notify them seperatlely.</p>
+          <p>As an option, create housekeepers (as inividuals or teams) and assign units to them to notify them seperatlely.</p>
         </section>
         <section class="table-container">
           <table class="table">
@@ -34,11 +74,18 @@ export class IrHkTeam {
                 <th>Name</th>
                 <th>Mobile</th>
                 <th>Username</th>
-                <th>Password</th>
                 <th>Note</th>
                 <th>Units assigned</th>
                 <th class="text-center">
-                  <ir-icon onIconClickHandler={() => (this.hkData = true)}>
+                  <ir-icon
+                    onIconClickHandler={() => {
+                      this.currentTrigger = {
+                        type: 'user',
+                        isEdit: false,
+                        user: null,
+                      };
+                    }}
+                  >
                     <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
                       <path
                         fill="currentColor"
@@ -55,18 +102,25 @@ export class IrHkTeam {
                   <td>{hk.name}</td>
                   <td>{hk.mobile}</td>
                   <td>{hk.username}</td>
-                  <td>
-                    <input type="password" value={hk.password} />
-                  </td>
                   <td>{hk.note}</td>
                   <td>{this.renderAssignedUnits(hk)}</td>
-                  <td>
+                  <td class="text-center">
                     <div class="icons-container">
-                      <ir-icon onIconClickHandler={() => (this.hkData = true)} icon="ft-save color-ir-light-blue-hover h5 pointer sm-margin-right">
-                        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="16" width="14.25" viewBox="0 0 448 512">
+                      <ir-icon
+                        onIconClickHandler={() => {
+                          const { assigned_units, is_soft_deleted, is_active, ...user } = hk;
+                          this.currentTrigger = {
+                            type: 'user',
+                            isEdit: true,
+                            user,
+                          };
+                        }}
+                        icon="ft-save color-ir-light-blue-hover h5 pointer sm-margin-right"
+                      >
+                        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                           <path
                             fill="#6b6f82"
-                            d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                            d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"
                           />
                         </svg>
                       </ir-icon>
@@ -83,8 +137,8 @@ export class IrHkTeam {
             </tbody>
           </table>
         </section>
-        <ir-sidebar open={this.hkData} onIrSidebarToggle={() => (this.hkData = false)}>
-          <h1>Hello</h1>
+        <ir-sidebar showCloseButton={false} open={this.currentTrigger !== null} onIrSidebarToggle={() => (this.currentTrigger = null)}>
+          {this.renderCurrentTrigger()}
         </ir-sidebar>
       </Host>
     );

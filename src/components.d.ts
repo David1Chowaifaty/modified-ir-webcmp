@@ -16,6 +16,7 @@ import { checkboxes, selectOption as selectOption1 } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
+import { THKUser } from "./models/housekeeping";
 import { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -29,6 +30,7 @@ export { checkboxes, selectOption as selectOption1 } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
+export { THKUser } from "./models/housekeeping";
 export { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -327,7 +329,7 @@ export namespace Components {
     }
     interface IrCombobox {
         "autoFocus": boolean;
-        "data": { id: string; name: string }[];
+        "data": { id: string; name: string; image?: string }[];
         "disabled": boolean;
         "duration": number;
         "input_id": string;
@@ -385,6 +387,12 @@ export namespace Components {
         "setupDataCountriesCode": selectOption[];
     }
     interface IrHkTeam {
+    }
+    interface IrHkUnassignedUnits {
+    }
+    interface IrHkUser {
+        "isEdit": boolean;
+        "user": THKUser | null;
     }
     interface IrHousekeeping {
         "baseurl": string;
@@ -460,6 +468,15 @@ export namespace Components {
     interface IrPaymentDetails {
         "bookingDetails": Booking;
         "defaultTexts": ILocale;
+    }
+    interface IrPhoneInput {
+        "default_country": number;
+        "disabled": boolean;
+        "error": boolean;
+        "label": string;
+        "language": string;
+        "token": string;
+        "value": string;
     }
     interface IrPickup {
         "bookingNumber": string;
@@ -689,6 +706,10 @@ export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrGuestInfoElement;
 }
+export interface IrHkUserCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrHkUserElement;
+}
 export interface IrIconCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrIconElement;
@@ -716,6 +737,10 @@ export interface IrModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrPaymentDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPaymentDetailsElement;
+}
+export interface IrPhoneInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPhoneInputElement;
 }
 export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1403,6 +1428,30 @@ declare global {
         prototype: HTMLIrHkTeamElement;
         new (): HTMLIrHkTeamElement;
     };
+    interface HTMLIrHkUnassignedUnitsElement extends Components.IrHkUnassignedUnits, HTMLStencilElement {
+    }
+    var HTMLIrHkUnassignedUnitsElement: {
+        prototype: HTMLIrHkUnassignedUnitsElement;
+        new (): HTMLIrHkUnassignedUnitsElement;
+    };
+    interface HTMLIrHkUserElementEventMap {
+        "resetData": null;
+        "closeSideBar": null;
+    }
+    interface HTMLIrHkUserElement extends Components.IrHkUser, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrHkUserElementEventMap>(type: K, listener: (this: HTMLIrHkUserElement, ev: IrHkUserCustomEvent<HTMLIrHkUserElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrHkUserElementEventMap>(type: K, listener: (this: HTMLIrHkUserElement, ev: IrHkUserCustomEvent<HTMLIrHkUserElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrHkUserElement: {
+        prototype: HTMLIrHkUserElement;
+        new (): HTMLIrHkUserElement;
+    };
     interface HTMLIrHousekeepingElement extends Components.IrHousekeeping, HTMLStencilElement {
     }
     var HTMLIrHousekeepingElement: {
@@ -1542,6 +1591,23 @@ declare global {
     var HTMLIrPaymentDetailsElement: {
         prototype: HTMLIrPaymentDetailsElement;
         new (): HTMLIrPaymentDetailsElement;
+    };
+    interface HTMLIrPhoneInputElementEventMap {
+        "textChange": string;
+    }
+    interface HTMLIrPhoneInputElement extends Components.IrPhoneInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPhoneInputElementEventMap>(type: K, listener: (this: HTMLIrPhoneInputElement, ev: IrPhoneInputCustomEvent<HTMLIrPhoneInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPhoneInputElementEventMap>(type: K, listener: (this: HTMLIrPhoneInputElement, ev: IrPhoneInputCustomEvent<HTMLIrPhoneInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPhoneInputElement: {
+        prototype: HTMLIrPhoneInputElement;
+        new (): HTMLIrPhoneInputElement;
     };
     interface HTMLIrPickupElementEventMap {
         "closeModal": null;
@@ -1732,6 +1798,8 @@ declare global {
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
         "ir-hk-team": HTMLIrHkTeamElement;
+        "ir-hk-unassigned-units": HTMLIrHkUnassignedUnitsElement;
+        "ir-hk-user": HTMLIrHkUserElement;
         "ir-housekeeping": HTMLIrHousekeepingElement;
         "ir-icon": HTMLIrIconElement;
         "ir-input-text": HTMLIrInputTextElement;
@@ -1742,6 +1810,7 @@ declare global {
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-modal": HTMLIrModalElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
+        "ir-phone-input": HTMLIrPhoneInputElement;
         "ir-pickup": HTMLIrPickupElement;
         "ir-popover": HTMLIrPopoverElement;
         "ir-room": HTMLIrRoomElement;
@@ -2134,7 +2203,7 @@ declare namespace LocalJSX {
     }
     interface IrCombobox {
         "autoFocus"?: boolean;
-        "data"?: { id: string; name: string }[];
+        "data"?: { id: string; name: string; image?: string }[];
         "disabled"?: boolean;
         "duration"?: number;
         "input_id"?: string;
@@ -2202,6 +2271,14 @@ declare namespace LocalJSX {
         "setupDataCountriesCode"?: selectOption[];
     }
     interface IrHkTeam {
+    }
+    interface IrHkUnassignedUnits {
+    }
+    interface IrHkUser {
+        "isEdit"?: boolean;
+        "onCloseSideBar"?: (event: IrHkUserCustomEvent<null>) => void;
+        "onResetData"?: (event: IrHkUserCustomEvent<null>) => void;
+        "user"?: THKUser | null;
     }
     interface IrHousekeeping {
         "baseurl"?: string;
@@ -2283,6 +2360,16 @@ declare namespace LocalJSX {
         "defaultTexts"?: ILocale;
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
+    }
+    interface IrPhoneInput {
+        "default_country"?: number;
+        "disabled"?: boolean;
+        "error"?: boolean;
+        "label"?: string;
+        "language"?: string;
+        "onTextChange"?: (event: IrPhoneInputCustomEvent<string>) => void;
+        "token"?: string;
+        "value"?: string;
     }
     interface IrPickup {
         "bookingNumber"?: string;
@@ -2429,6 +2516,8 @@ declare namespace LocalJSX {
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
         "ir-hk-team": IrHkTeam;
+        "ir-hk-unassigned-units": IrHkUnassignedUnits;
+        "ir-hk-user": IrHkUser;
         "ir-housekeeping": IrHousekeeping;
         "ir-icon": IrIcon;
         "ir-input-text": IrInputText;
@@ -2439,6 +2528,7 @@ declare namespace LocalJSX {
         "ir-loading-screen": IrLoadingScreen;
         "ir-modal": IrModal;
         "ir-payment-details": IrPaymentDetails;
+        "ir-phone-input": IrPhoneInput;
         "ir-pickup": IrPickup;
         "ir-popover": IrPopover;
         "ir-room": IrRoom;
@@ -2498,6 +2588,8 @@ declare module "@stencil/core" {
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
             "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;
+            "ir-hk-unassigned-units": LocalJSX.IrHkUnassignedUnits & JSXBase.HTMLAttributes<HTMLIrHkUnassignedUnitsElement>;
+            "ir-hk-user": LocalJSX.IrHkUser & JSXBase.HTMLAttributes<HTMLIrHkUserElement>;
             "ir-housekeeping": LocalJSX.IrHousekeeping & JSXBase.HTMLAttributes<HTMLIrHousekeepingElement>;
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
@@ -2508,6 +2600,7 @@ declare module "@stencil/core" {
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
+            "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
