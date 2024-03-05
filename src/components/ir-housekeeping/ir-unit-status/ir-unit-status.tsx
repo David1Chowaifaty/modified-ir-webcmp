@@ -15,7 +15,7 @@ export class IrUnitStatus {
           <thead>
             <tr>
               <th>Status</th>
-              <th>Code</th>
+              <th class={'text-center'}>Code</th>
               <th>Action</th>
             </tr>
           </thead>

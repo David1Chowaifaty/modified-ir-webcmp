@@ -48,7 +48,7 @@ export class IrHkTeam {
     return (
       <Host class="card p-1">
         <section>
-          <div class="assignments-container justify-between">
+          <div class="assignments-container align-items-start align-items-md-center flex-column flex-md-row justify-between">
             <h4>Room or Unit Status</h4>
             <div class="assignments-container">
               <p>

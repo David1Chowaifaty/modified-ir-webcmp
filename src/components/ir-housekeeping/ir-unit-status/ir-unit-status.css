@@ -1,5 +1,6 @@
 :host {
   display: block;
+  overflow-x: auto;
 }
 .circle {
   display: inline-flex;
@@ -21,6 +22,14 @@ th {
 .black {
   background: #000;
 }
+table {
+  width: max-content;
+}
+td {
+  min-width: 140px;
+  text-align: center;
+}
+
 .smallcircle {
   height: 7px;
   width: 7px;
