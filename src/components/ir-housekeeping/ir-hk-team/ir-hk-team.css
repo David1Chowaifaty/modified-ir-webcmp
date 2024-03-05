@@ -1,3 +1,40 @@
 :host {
   display: block;
 }
+th,
+td {
+  text-align: left !important;
+  width: fit-content !important;
+}
+input {
+  border: none;
+  margin: 0;
+  width: 120px;
+}
+input:focus {
+  outline: none;
+}
+.table-container {
+  border-top: 1px solid var(--gray);
+  padding: 10px 0;
+  overflow-x: auto;
+}
+.table,
+th,
+td {
+  border-color: white !important;
+}
+thead {
+  border: 0 !important;
+}
+table {
+  border: 0 !important;
+}
+.icons-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.text-center {
+  text-align: center !important;
+}
