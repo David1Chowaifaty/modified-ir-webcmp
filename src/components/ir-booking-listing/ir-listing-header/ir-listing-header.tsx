@@ -157,7 +157,7 @@ export class IrListingHeader {
             showFirstOption={false}
             data={booking_listing?.types.map(t => ({
               value: t.id.toString(),
-              text: locales.entries?.Lcz_DateOf + ' ' + t.name,
+              text: t.name,
             }))}
             class="flex-sm-wrap"
             selectedValue={booking_listing.userSelection.filter_type}
