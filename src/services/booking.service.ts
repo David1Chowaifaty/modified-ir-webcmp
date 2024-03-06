@@ -350,7 +350,6 @@ export class BookingService extends Token {
     pr_id?: number,
     identifier?: string,
   ) {
-    console.log(arrivalTime);
     try {
       const token = this.getToken();
       if (token) {
@@ -393,11 +392,8 @@ export class BookingService extends Token {
             },
             source,
             currency,
-            arrival: arrivalTime
-              ? { code: arrivalTime }
-              : {
-                  ...bookedByInfoData.selectedArrivalTime,
-                },
+            arrival: { code: arrivalTime ? arrivalTime : bookedByInfoData.selectedArrivalTime },
+
             guest: defaultGuest || guest,
             rooms: [
               ...guestData.map(data => ({

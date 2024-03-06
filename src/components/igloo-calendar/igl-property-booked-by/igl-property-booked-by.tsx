@@ -104,6 +104,7 @@ export class IglPropertyBookedBy {
         isdCode: event.target.value,
       };
     }
+    console.log(this.bookedByData);
   }
 
   handleNumberInput(key, event: InputEvent) {
