@@ -282,6 +282,7 @@ export namespace Components {
         "baseurl": string;
         "language": string;
         "propertyid": number;
+        "rowCount": number;
         "ticket": string;
     }
     interface IrButton {
@@ -571,6 +572,7 @@ export namespace Components {
     }
     interface OtaLabel {
         "label": string;
+        "maxVisibleItems": number;
         "remarks": IOtaNotes[];
     }
 }
@@ -2150,6 +2152,7 @@ declare namespace LocalJSX {
         "baseurl"?: string;
         "language"?: string;
         "propertyid"?: number;
+        "rowCount"?: number;
         "ticket"?: string;
     }
     interface IrButton {
@@ -2473,6 +2476,7 @@ declare namespace LocalJSX {
     }
     interface OtaLabel {
         "label"?: string;
+        "maxVisibleItems"?: number;
         "remarks"?: IOtaNotes[];
     }
     interface IntrinsicElements {

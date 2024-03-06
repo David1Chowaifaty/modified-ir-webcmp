@@ -46,6 +46,7 @@
  - [ir-booking-details](../ir-booking-details)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-guest-info](../ir-guest-info)
+ - [ir-housekeeping](../ir-housekeeping)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-pickup](../ir-booking-details/ir-pickup)
@@ -57,6 +58,7 @@ graph TD;
   ir-booking-details --> ir-select
   ir-booking-listing --> ir-select
   ir-guest-info --> ir-select
+  ir-housekeeping --> ir-select
   ir-listing-header --> ir-select
   ir-listing-modal --> ir-select
   ir-pickup --> ir-select

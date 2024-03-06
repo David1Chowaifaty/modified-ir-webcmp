@@ -8,6 +8,7 @@ export interface IBookingListingStore extends IExposedBookingsCriteria {
   userSelection: IUserListingSelection;
   bookings: Booking[];
   download_url: string | null;
+  rowCount: number;
 }
 export interface IUserListingSelection {
   channel: string;
@@ -35,11 +36,12 @@ const initialState: IBookingListingStore = {
   statuses: [],
   types: [],
   token: '',
+  rowCount: 10,
   bookings: [],
   userSelection: {
     from: moment().add(-7, 'days').format('YYYY-MM-DD'),
     to: moment().format('YYYY-MM-DD'),
-    channel: undefined,
+    channel: '',
     property_id: null,
     start_row: 0,
     end_row: 20,
@@ -71,7 +73,7 @@ export function initializeUserSelection() {
     from: moment().add(-7, 'days').format('YYYY-MM-DD'),
     to: moment().format('YYYY-MM-DD'),
     start_row: 0,
-    end_row: 20,
+    end_row: booking_listing.rowCount,
   };
 }
 export function updateUserSelection(key: keyof IUserListingSelection, value: any) {

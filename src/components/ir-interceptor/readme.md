@@ -27,19 +27,16 @@
  - [igloo-calendar](../igloo-calendar)
  - [ir-booking-details](../ir-booking-details)
  - [ir-booking-listing](../ir-booking-listing)
-
-### Depends on
-
-- [ir-loading-screen](../ir-loading-screen)
+ - [ir-housekeeping](../ir-housekeeping)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-interceptor --> ir-loading-screen
   igl-book-property-container --> ir-interceptor
   igloo-calendar --> ir-interceptor
   ir-booking-details --> ir-interceptor
   ir-booking-listing --> ir-interceptor
+  ir-housekeeping --> ir-interceptor
   style ir-interceptor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -64,7 +64,6 @@ graph TD;
   igloo-calendar --> ir-room-nights
   igloo-calendar --> ir-booking-details
   igloo-calendar --> ir-modal
-  ir-interceptor --> ir-loading-screen
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-icon
   igl-tba-category-view --> igl-tba-booking-view

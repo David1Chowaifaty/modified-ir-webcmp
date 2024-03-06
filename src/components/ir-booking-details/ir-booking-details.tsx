@@ -9,7 +9,6 @@ import { RoomService } from '../../services/room.service';
 import locales, { ILocale } from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
-import { renderTime } from '@/utils/utils';
 
 @Component({
   tag: 'ir-booking-details',
@@ -368,7 +367,7 @@ export class IrBookingDetails {
                 {this.bookingData.is_direct ? (
                   <ir-label label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
                 ) : (
-                  <ota-label label={`${this.defaultTexts.entries.Lcz_Note}:`} remarks={this.bookingData.ota_notes}></ota-label>
+                  <ota-label label={`${this.defaultTexts.entries.Lcz_Note}:`} remarks={this.bookingData.ota_notes} maxVisibleItems={this.bookingData.ota_notes.length}></ota-label>
                 )}
               </div>
             </div>
@@ -434,7 +433,10 @@ export class IrBookingDetails {
                         </p>
                         <p class={'font-weight-bold flex-fill py-0 my-0'}>
                           {locales.entries.Lcz_Time}:
-                          <span class={'font-weight-normal'}> {`${renderTime(this.bookingData.pickup_info.hour)}:${renderTime(this.bookingData.pickup_info.minute)}`}</span>
+                          <span class={'font-weight-normal'}>
+                            {' '}
+                            {_formatTime(this.bookingData.pickup_info.hour.toString(), +' ' + this.bookingData.pickup_info.minute.toString())}
+                          </span>
                         </p>
                         <p class={'font-weight-bold py-0 my-0'}>
                           {locales.entries.Lcz_DueUponBooking}:{' '}

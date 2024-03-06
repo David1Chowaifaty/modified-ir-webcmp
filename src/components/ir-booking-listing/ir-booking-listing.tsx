@@ -7,6 +7,7 @@ import { formatAmount } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
 import axios from 'axios';
 import moment from 'moment';
+import { _formatTime } from '../ir-booking-details/functions';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -20,6 +21,7 @@ export class IrBookingListing {
   @Prop() ticket: string = '';
   @Prop() baseurl: string = '';
   @Prop() propertyid: number;
+  @Prop() rowCount: number = 10;
 
   @State() isLoading = false;
   @State() currentPage = 1;
@@ -30,7 +32,7 @@ export class IrBookingListing {
   private bookingListingService = new BookingListingService();
   private roomService = new RoomService();
   private listingModal: HTMLIrListingModalElement;
-  private itemsPerPage = 20;
+  private listingModalTimeout: NodeJS.Timeout;
   private statusColors = {
     '001': 'badge-warning',
     '002': 'badge-success',
@@ -39,6 +41,8 @@ export class IrBookingListing {
   };
 
   componentWillLoad() {
+    updateUserSelection('end_row', this.rowCount);
+    booking_listing.rowCount = this.rowCount;
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
     }
@@ -50,9 +54,7 @@ export class IrBookingListing {
     }
     onBookingListingChange('userSelection', async newValue => {
       const newTotal = newValue.total_count;
-      if (newTotal && this.totalPages !== newTotal) {
-        this.totalPages = Math.round(newTotal / this.itemsPerPage);
-      }
+      this.totalPages = Math.ceil(newTotal / this.rowCount);
     });
   }
   @Watch('ticket')
@@ -69,7 +71,7 @@ export class IrBookingListing {
     try {
       this.isLoading = true;
       updateUserSelection('property_id', this.propertyid);
-      await Promise.all([this.bookingListingService.getExposedBookingsCriteria(), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])]);
+      await Promise.all([this.bookingListingService.getExposedBookingsCriteria(this.propertyid), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])]);
       await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
     } catch (error) {
       console.error(error);
@@ -86,20 +88,22 @@ export class IrBookingListing {
 
   getPaginationBounds() {
     const totalCount = booking_listing.userSelection.total_count;
-    const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
-    let endItem = this.currentPage * this.itemsPerPage;
+    const startItem = (this.currentPage - 1) * this.rowCount;
+    let endItem = this.currentPage * this.rowCount;
     endItem = endItem > totalCount ? totalCount : endItem;
     return { startItem, endItem, totalCount };
   }
 
   openModal() {
-    if (!this.listingModal) {
+    this.listingModalTimeout = setTimeout(() => {
       this.listingModal = this.el.querySelector('ir-listing-modal');
-    }
-    this.listingModal.editBooking = this.editBookingItem;
-    this.listingModal.openModal();
+      this.listingModal.editBooking = this.editBookingItem;
+      this.listingModal.openModal();
+    }, 100);
   }
-
+  disconnectedCallback() {
+    clearTimeout(this.listingModalTimeout);
+  }
   @Listen('resetData')
   async handleResetData(e: CustomEvent) {
     e.stopImmediatePropagation();
@@ -129,7 +133,7 @@ export class IrBookingListing {
 
   renderItemRange() {
     const { endItem, startItem, totalCount } = this.getPaginationBounds();
-    return `${locales.entries.Lcz_View} ${startItem} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
+    return `${locales.entries.Lcz_View} ${startItem + 1} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
   }
 
   async updateData() {
@@ -143,7 +147,7 @@ export class IrBookingListing {
   }
 
   render() {
-    if (this.isLoading) {
+    if (this.isLoading || this.ticket === '') {
       return <ir-loading-screen></ir-loading-screen>;
     }
     return (
@@ -163,17 +167,18 @@ export class IrBookingListing {
                     <th scope="col">{locales.entries?.Lcz_BookedOn}</th>
                     <th scope="col">{locales.entries?.Lcz_GuestSource}</th>
                     <th scope="col">
-                      <p class={'m-0'}>{locales.entries?.Lcz_Price}</p>
+                      <span class="price-span">{locales.entries?.Lcz_Price}</span>
+
                       <ir-tooltip
                         customSlot
                         message={`<span style="width:100%;display:block;">${locales.entries?.Lcz_BookingBalance}</span><span>${locales.entries?.Lcz_ClickToSettle}</span>`}
                       >
-                        <p slot="tooltip-trigger" class={'m-0 btn due-btn'}>
+                        <span slot="tooltip-trigger" class={'m-0 btn due-btn'}>
                           {locales.entries?.Lcz_Balance}
-                        </p>
+                        </span>
                       </ir-tooltip>
                     </th>
-                    <th scope="col" class="text-left">
+                    <th scope="col" class="text-left services-cell">
                       {locales.entries?.Lcz_Services}
                     </th>
                     <th scope="col" class="in-out">
@@ -204,10 +209,8 @@ export class IrBookingListing {
                           </div>
                         </td>
                         <td>
-                          <p class="p-0 m-0">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
-                          <p class="p-0 m-0 secondary-p">
-                            {booking.booked_on.hour}:{booking.booked_on.minute}
-                          </p>
+                          <p class="p-0 m-0 date-p">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
+                          <p class="p-0 m-0 secondary-p">{_formatTime(booking.booked_on.hour.toString(), +' ' + booking.booked_on.minute.toString())}</p>
                         </td>
                         <td>
                           <p class="p-0 m-0">
@@ -238,8 +241,8 @@ export class IrBookingListing {
                           </ul>
                         </td>
                         <td>
-                          <p class="p-0 m-0">{moment(booking.from_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
-                          <p class="p-0 m-0">{moment(booking.to_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
+                          <p class="p-0 m-0 date-p">{moment(booking.from_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
+                          <p class="p-0 m-0 date-p">{moment(booking.to_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
                         </td>
                         <td>
                           <p class={`m-0 badge ${confirmationBG}`}>{booking.status.description}</p>
@@ -360,7 +363,7 @@ export class IrBookingListing {
             </div>
           </section>
         </div>
-        <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>
+        {this.editBookingItem && <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.editBookingItem !== null && this.editBookingItem.cause === 'edit'}

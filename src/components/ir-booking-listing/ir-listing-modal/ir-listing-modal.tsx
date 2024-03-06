@@ -107,14 +107,10 @@ export class IrListingModal {
     }
   }
   renderConfirmationTitle() {
-    if (this.editBooking.cause === 'payment') {
-      return locales.entries.Lcz_Confirm;
-    } else {
-      if (this.deletionStage === 1) {
-        return locales.entries.Lcz_OK;
-      }
+    if (this.deletionStage === 2) {
       return locales.entries.Lcz_RecoverAndDelete;
     }
+    return locales.entries.Lcz_Confirm;
   }
   renderCancelationTitle() {
     if (this.deletionStage === 2) {
@@ -140,7 +136,7 @@ export class IrListingModal {
         {this.isOpen && (
           <div class={`ir-alert-content p-2`}>
             <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
-              <p class="font-weight-bold p-0 my-0 mb-1">{this.renderTitle()}</p>
+              <p class="p-0 my-0 mb-1">{this.renderTitle()}</p>
               <ir-icon
                 class="exit-icon"
                 style={{ cursor: 'pointer' }}

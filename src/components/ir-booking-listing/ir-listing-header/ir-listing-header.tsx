@@ -41,6 +41,13 @@ export class IrListingHeader {
         updateUserSelection('name', this.inputValue);
       }
     }
+    if (this.inputValue === '' && (booking_listing.userSelection.book_nbr !== '' || booking_listing.userSelection.name !== '')) {
+      booking_listing.userSelection = {
+        ...booking_listing.userSelection,
+        name: '',
+        book_nbr: '',
+      };
+    }
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export });
     if (booking_listing.download_url) {
       const url = booking_listing.download_url;
@@ -66,34 +73,44 @@ export class IrListingHeader {
         <section class="d-flex align-items-center ">
           <div class="d-flex flex-fill flex-column flex-md-row align-items-md-center booking-container">
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
-              <h3 class="flex-fill">{locales.entries.Lcz_Bookings}</h3>
+              <h3 class="flex-fill">{locales.entries?.Lcz_Bookings}</h3>
               <div>
-                <igl-book-property-container
-                  withIrToastAndInterceptor={false}
-                  propertyid={this.propertyId}
-                  language={this.language}
-                  baseurl={this.baseurl}
-                  ticket={booking_listing.token}
-                >
-                  <button slot="trigger" class={'new-booking-btn'}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
-                      <path
-                        fill="currentColor"
-                        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                      />
-                    </svg>
-                  </button>
-                </igl-book-property-container>
+                {booking_listing.token && (
+                  <igl-book-property-container
+                    withIrToastAndInterceptor={false}
+                    propertyid={this.propertyId}
+                    language={this.language}
+                    title={locales.entries.Lcz_CreateNewBooking}
+                    baseurl={this.baseurl}
+                    ticket={booking_listing.token}
+                  >
+                    <button slot="trigger" class={'new-booking-btn'}>
+                      <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
+                        <path
+                          fill="currentColor"
+                          d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                        />
+                      </svg>
+                    </button>
+                  </igl-book-property-container>
+                )}
               </div>
             </div>
-            <h3 class="d-none d-md-block">{locales.entries.Lcz_Bookings}</h3>
-            <div class="booking-search-field width-fill">
+            <h3 class="d-none d-md-block">{locales.entries?.Lcz_Bookings}</h3>
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                console.log(this.inputValue);
+                this.handleSearchClicked(false);
+              }}
+              class="booking-search-field width-fill"
+            >
               <ir-input-text
                 class={'flex-fill'}
                 value={this.inputValue}
                 onTextChange={e => (this.inputValue = e.detail)}
                 variant="icon"
-                placeholder={locales.entries.Lcz_FindBookNbrorName}
+                placeholder={locales.entries?.Lcz_FindBookNbrorName}
               >
                 <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
                   <path
@@ -102,93 +119,96 @@ export class IrListingHeader {
                   />
                 </svg>
               </ir-input-text>
-              <h5 class="m-0 font-weight-bold d-none d-sm-block">{locales.entries.Lcz_Or}</h5>
-            </div>
+              <h5 class="m-0 font-weight-bold d-none d-sm-block">{locales.entries?.Lcz_Or}</h5>
+            </form>
           </div>
           <div class="d-none d-md-block">
-            <igl-book-property-container
-              withIrToastAndInterceptor={false}
-              propertyid={this.propertyId}
-              language={this.language}
-              baseurl={this.baseurl}
-              ticket={booking_listing.token}
-            >
-              <button slot="trigger" class={'new-booking-btn'}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
-                  <path
-                    fill="currentColor"
-                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                  />
-                </svg>
-              </button>
-            </igl-book-property-container>
+            {booking_listing.token && (
+              <igl-book-property-container
+                withIrToastAndInterceptor={false}
+                propertyid={this.propertyId}
+                language={this.language}
+                title={locales.entries.Lcz_CreateNewBooking}
+                baseurl={this.baseurl}
+                ticket={booking_listing.token}
+              >
+                <button slot="trigger" class={'new-booking-btn'}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
+                    <path
+                      fill="currentColor"
+                      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                    />
+                  </svg>
+                </button>
+              </igl-book-property-container>
+            )}
           </div>
         </section>
         <section class="d-flex align-items-center justify-evenly seperator-container d-sm-none">
           <span></span>
-          <h5 class="m-0 font-weight-bold">{locales.entries.Lcz_Or}</h5>
+          <h5 class="m-0 font-weight-bold">{locales.entries?.Lcz_Or}</h5>
           <span></span>
         </section>
         <section class="d-flex flex-column align-items-sm-center flex-sm-row flex-sm-wrap filters-container justify-content-lg-start mt-1">
+          {/* <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
+            <label htmlFor="dateTo"></label> */}
+          <ir-select
+            onSelectChange={e => updateUserSelection('filter_type', e.detail)}
+            showFirstOption={false}
+            data={booking_listing?.types.map(t => ({
+              value: t.id.toString(),
+              text: locales.entries?.Lcz_DateOf + ' ' + t.name,
+            }))}
+            class="flex-sm-wrap"
+            selectedValue={booking_listing.userSelection.filter_type}
+            select_id="dateTo"
+            LabelAvailable={false}
+          ></ir-select>
+          {/* </fieldset> */}
+          {/* <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
+            <label htmlFor="dates">{locales.entries?.Lcz_Dates}</label> */}
+          <igl-date-range
+            class="flex-sm-wrap"
+            minDate="2000-01-01"
+            withDateDifference={false}
+            defaultData={{
+              fromDate: booking_listing.userSelection.from,
+              toDate: booking_listing.userSelection.to,
+            }}
+          ></igl-date-range>
+          {/* </fieldset> */}
+          {/* <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
+            <label htmlFor="booking_status">{locales.entries?.Lcz_BookingStatus}</label> */}
+          <ir-select
+            class="flex-sm-wrap"
+            selectedValue={booking_listing.userSelection.booking_status}
+            onSelectChange={e => updateUserSelection('booking_status', e.detail)}
+            showFirstOption={false}
+            data={booking_listing?.statuses.map(status => ({
+              value: status.code,
+              text: status.name,
+            }))}
+            select_id="booking_status"
+            LabelAvailable={false}
+          ></ir-select>
+          {/* </fieldset>
           <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="dateTo">{locales.entries.Lcz_DateOf}</label>
-            <ir-select
-              onSelectChange={e => updateUserSelection('filter_type', e.detail)}
-              showFirstOption={false}
-              data={booking_listing?.types.map(t => ({
-                value: t.id.toString(),
-                text: t.name,
-              }))}
-              class="flex-fill"
-              selectedValue={booking_listing.userSelection.filter_type}
-              select_id="dateTo"
-              LabelAvailable={false}
-            ></ir-select>
-          </fieldset>
-          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="dates">{locales.entries.Lcz_Dates}</label>
-            <igl-date-range
-              class="flex-fill"
-              minDate="2000-01-01"
-              withDateDifference={false}
-              defaultData={{
-                fromDate: booking_listing.userSelection.from,
-                toDate: booking_listing.userSelection.to,
-              }}
-            ></igl-date-range>
-          </fieldset>
-          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="booking_status">{locales.entries.Lcz_BookingStatus}</label>
-            <ir-select
-              class="flex-fill"
-              selectedValue={booking_listing.userSelection.booking_status}
-              onSelectChange={e => updateUserSelection('booking_status', e.detail)}
-              showFirstOption={false}
-              data={booking_listing?.statuses.map(status => ({
-                value: status.code,
-                text: status.name,
-              }))}
-              select_id="booking_status"
-              LabelAvailable={false}
-            ></ir-select>
-          </fieldset>
-          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="channels">{locales.entries.Lcz_Channels}</label>
-            <ir-select
-              class="flex-fill"
-              selectedValue={booking_listing.userSelection.channel}
-              onSelectChange={e => updateUserSelection('channel', e.detail)}
-              showFirstOption={false}
-              data={booking_listing?.channels.map(channel => ({
-                value: channel.name,
-                text: channel.name,
-              }))}
-              select_id="channels"
-              LabelAvailable={false}
-            ></ir-select>
-          </fieldset>
+            <label htmlFor="channels">{locales.entries?.Lcz_Channels}</label> */}
+          <ir-select
+            class="flex-sm-wrap"
+            selectedValue={booking_listing.userSelection.channel}
+            onSelectChange={e => updateUserSelection('channel', e.detail)}
+            LabelAvailable={false}
+            data={booking_listing?.channels.map(channel => ({
+              value: channel.name,
+              text: channel.name,
+            }))}
+            select_id="channels"
+            firstOption={locales.entries?.Lcz_All + ' ' + locales.entries?.Lcz_Channels}
+          ></ir-select>
+          {/* </fieldset> */}
           {/* <fieldset class="flex-fill-sm-none">
-            <label htmlFor="payment_status">{locales.entries.Lcz_PaymentStatus}</label>
+            <label htmlFor="payment_status">{locales.entries?.Lcz_PaymentStatus}</label>
             <ir-select
               showFirstOption={false}
               data={booking_listing?.settlement_methods.map(method => ({
@@ -199,8 +219,8 @@ export class IrListingHeader {
               LabelAvailable={false}
             ></ir-select>
           </fieldset> */}
-          <div class="d-flex flex-fill align-items-end m-0 mt-2 buttons-container">
-            <ir-icon title={locales.entries.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked(false)}>
+          <div class="d-flex flex-fill align-items-end m-0  buttons-container">
+            <ir-icon title={locales.entries?.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked(false)}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                 <path
                   fill="currentColor"
@@ -208,7 +228,7 @@ export class IrListingHeader {
                 />
               </svg>
             </ir-icon>
-            <ir-icon title={locales.entries.Lcz_Erase} onIconClickHandler={() => this.handleClearUserField()}>
+            <ir-icon title={locales.entries?.Lcz_Erase} onIconClickHandler={() => this.handleClearUserField()}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512">
                 <path
                   fill="currentColor"
@@ -216,7 +236,7 @@ export class IrListingHeader {
                 />
               </svg>
             </ir-icon>
-            <ir-icon onIconClickHandler={() => this.handleSearchClicked(true)} title={locales.entries.Lcz_ExportToExcel}>
+            <ir-icon onIconClickHandler={() => this.handleSearchClicked(true)} title={locales.entries?.Lcz_ExportToExcel}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
                 <path
                   fill="currentColor"

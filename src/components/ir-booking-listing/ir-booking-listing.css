@@ -1,6 +1,6 @@
 :host {
   display: block;
-  height: 100vh;
+  height: 100%;
 }
 .card {
   overflow-x: auto;
@@ -9,10 +9,14 @@
   font-size: 12px !important;
 }
 .h-screen {
-  height: 100vh;
+  height: 100%;
+}
+.price-span {
+  margin: 0;
+  margin-right: 5px;
 }
 .main-container {
-  height: 100vh;
+  height: 100%;
   overflow-y: auto;
 }
 .bg-ir-red {
@@ -44,4 +48,15 @@
 }
 .buttons-container {
   gap: 10px;
+}
+td ul {
+  width: max-content !important;
+}
+td {
+  width: max-content !important ;
+}
+.date-p {
+  width: max-content !important;
+  min-width: 100%;
+  text-align: center !important;
 }

@@ -435,7 +435,7 @@ export class IglBookingEventHover {
                 {locales.entries.Lcz_Edit}
               </span>
             </button>
-            {this.bookingEvent.IS_EDITABLE && !this.hideButtons && (
+            {this.bookingEvent.is_direct && this.bookingEvent.IS_EDITABLE && !this.hideButtons && (
               <button
                 type="button"
                 class={`btn btn-primary d-flex align-items-center justify-content-center ${!this.shouldHideUnassignUnit ? 'mr-1' : 'w-50'}`}
