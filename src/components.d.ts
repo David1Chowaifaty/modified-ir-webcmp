@@ -14,9 +14,9 @@ import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking } from "./models/booking.dto";
 import { checkboxes, selectOption as selectOption1 } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
+import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
-import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -28,9 +28,9 @@ export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking } from "./models/booking.dto";
 export { checkboxes, selectOption as selectOption1 } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
+export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
-export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -368,6 +368,11 @@ export namespace Components {
         "showDateDifference": boolean;
         "to_date": string | Date | moment.Moment;
     }
+    interface IrDeleteModal {
+        "closeModal": () => Promise<void>;
+        "openModal": () => Promise<void>;
+        "user": IHouseKeepers;
+    }
     interface IrDropdown {
         "data": {
     name: string;
@@ -701,6 +706,10 @@ export interface IrComboboxCustomEvent<T> extends CustomEvent<T> {
 export interface IrDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDatePickerElement;
+}
+export interface IrDeleteModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDeleteModalElement;
 }
 export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1395,6 +1404,24 @@ declare global {
         prototype: HTMLIrDateViewElement;
         new (): HTMLIrDateViewElement;
     };
+    interface HTMLIrDeleteModalElementEventMap {
+        "modalClosed": null;
+        "resetData": string;
+    }
+    interface HTMLIrDeleteModalElement extends Components.IrDeleteModal, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrDeleteModalElementEventMap>(type: K, listener: (this: HTMLIrDeleteModalElement, ev: IrDeleteModalCustomEvent<HTMLIrDeleteModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrDeleteModalElementEventMap>(type: K, listener: (this: HTMLIrDeleteModalElement, ev: IrDeleteModalCustomEvent<HTMLIrDeleteModalElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrDeleteModalElement: {
+        prototype: HTMLIrDeleteModalElement;
+        new (): HTMLIrDeleteModalElement;
+    };
     interface HTMLIrDropdownElementEventMap {
         "dropdownItemCLicked": { name: string; object: any };
     }
@@ -1815,6 +1842,7 @@ declare global {
         "ir-common": HTMLIrCommonElement;
         "ir-date-picker": HTMLIrDatePickerElement;
         "ir-date-view": HTMLIrDateViewElement;
+        "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
         "ir-hk-team": HTMLIrHkTeamElement;
@@ -2269,6 +2297,11 @@ declare namespace LocalJSX {
         "showDateDifference"?: boolean;
         "to_date"?: string | Date | moment.Moment;
     }
+    interface IrDeleteModal {
+        "onModalClosed"?: (event: IrDeleteModalCustomEvent<null>) => void;
+        "onResetData"?: (event: IrDeleteModalCustomEvent<string>) => void;
+        "user"?: IHouseKeepers;
+    }
     interface IrDropdown {
         "data"?: {
     name: string;
@@ -2539,6 +2572,7 @@ declare namespace LocalJSX {
         "ir-common": IrCommon;
         "ir-date-picker": IrDatePicker;
         "ir-date-view": IrDateView;
+        "ir-delete-modal": IrDeleteModal;
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
         "ir-hk-team": IrHkTeam;
@@ -2611,6 +2645,7 @@ declare module "@stencil/core" {
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
+            "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
             "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;

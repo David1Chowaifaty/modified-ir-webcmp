@@ -1,6 +1,6 @@
 import { IHouseKeepers, THousekeepingTrigger } from '@/models/housekeeping';
 import housekeeping_store from '@/stores/housekeeping.store';
-import { Component, Host, Listen, State, h } from '@stencil/core';
+import { Component, Host, Listen, State, h, Element } from '@stencil/core';
 
 @Component({
   tag: 'ir-hk-team',
@@ -8,8 +8,10 @@ import { Component, Host, Listen, State, h } from '@stencil/core';
   scoped: true,
 })
 export class IrHkTeam {
+  @Element() el: HTMLElement;
   @State() currentTrigger: THousekeepingTrigger | null = null;
 
+  private deletionTimout: NodeJS.Timeout;
   renderAssignedUnits(hk: IHouseKeepers) {
     if (hk.assigned_units.length === 0) {
       return (
@@ -47,7 +49,17 @@ export class IrHkTeam {
     e.stopPropagation();
     this.currentTrigger = null;
   }
-
+  handleDeletion(user) {
+    this.currentTrigger = { type: 'delete', user };
+    this.deletionTimout = setTimeout(() => {
+      const modal = this.el.querySelector('ir-delete-modal');
+      if (!modal) return;
+      modal.openModal();
+    }, 100);
+  }
+  disconnectedCallback() {
+    clearTimeout(this.deletionTimout);
+  }
   render() {
     const { assigned, total, un_assigned } = housekeeping_store.hk_criteria.units_assignments;
 
@@ -131,7 +143,7 @@ export class IrHkTeam {
                         </svg>
                       </ir-icon>
                       <span> &nbsp;</span>
-                      <ir-icon icon="ft-trash-2 danger h5 pointer">
+                      <ir-icon icon="ft-trash-2 danger h5 pointer" onIconClickHandler={() => this.handleDeletion(hk)}>
                         <svg slot="icon" fill="#ff2441" xmlns="http://www.w3.org/2000/svg" height="16" width="14.25" viewBox="0 0 448 512">
                           <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" />
                         </svg>
@@ -148,11 +160,12 @@ export class IrHkTeam {
             maxWidth: this.currentTrigger?.type === 'unassigned_units' ? 'max-content' : '100%',
           }}
           showCloseButton={false}
-          open={this.currentTrigger !== null}
+          open={this.currentTrigger !== null && this.currentTrigger.type !== 'delete'}
           onIrSidebarToggle={() => (this.currentTrigger = null)}
         >
           {this.renderCurrentTrigger()}
         </ir-sidebar>
+        {this.currentTrigger?.type === 'delete' && <ir-delete-modal user={this.currentTrigger.user}></ir-delete-modal>}
       </Host>
     );
   }

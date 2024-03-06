@@ -59,8 +59,12 @@ export interface IUserCause extends ICauseBase {
   isEdit: boolean;
   user: THKUser | null;
 }
+export interface IDeleteCause extends ICauseBase {
+  type: 'delete';
+  user: IHouseKeepers;
+}
 
-export type THousekeepingTrigger = IUnassignedUnitsCause | IUserCause;
+export type THousekeepingTrigger = IUnassignedUnitsCause | IUserCause | IDeleteCause;
 export interface IPropertyHousekeepingAssignment {
   hkm_id: number;
   unit_id: number;
