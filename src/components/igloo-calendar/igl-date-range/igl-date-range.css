@@ -1,6 +1,7 @@
 :host {
   display: flex;
   align-items: center !important;
+  font-size: 11px !important;
 }
 .date-range-input {
   margin: 0;
@@ -11,6 +12,7 @@
   width: 220px !important;
   opacity: 0;
   user-select: none;
+  font-size: 11px !important;
 }
 .iglRangeNights {
   margin: 0;
@@ -24,7 +26,7 @@
   display: block;
   margin-left: 1rem;
   margin-right: 1rem;
-  font-size: 0.975rem !important;
+  font-size: 13.65px !important;
   display: flex;
   align-items: center;
 }
