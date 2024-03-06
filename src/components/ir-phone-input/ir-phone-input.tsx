@@ -51,7 +51,7 @@ export class IrPhoneInput {
     inputValue = inputValue.replace(/[^+\d]+/g, '');
     inputElement.value = inputValue;
     this.inputValue = inputValue;
-    this.textChange.emit(this.inputValue);
+    this.textChange.emit(this.currentCountry?.phone_prefix + this.inputValue);
   }
   setCurrentCountry(id: number) {
     const country = this.countries.find(country => country.id === id);
@@ -59,6 +59,7 @@ export class IrPhoneInput {
       throw new Error('Invalid country id');
     }
     this.currentCountry = { ...country };
+    this.textChange.emit(this.currentCountry?.phone_prefix + this.inputValue);
   }
   render() {
     return (
@@ -66,9 +67,11 @@ export class IrPhoneInput {
         <div class="form-group mr-0">
           {/* <p class="mb-0">Phone</p> */}
           <div class="input-group row m-0 p-0 position-relative">
-            <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
-              <label class={`input-group-text  border-theme flex-grow-1 text-dark  `}>{'Mobile'}</label>
-            </div>
+            {this.label && (
+              <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
+                <label class={`input-group-text  border-theme flex-grow-1 text-dark  `}>{this.label}</label>
+              </div>
+            )}
             <div class={'form-control  input-container  flex-fill' + (this.error ? 'is-invalid' : '')}>
               <button onClick={() => (this.isDropdownVisible = !this.isDropdownVisible)} class="dropdown-trigger">
                 <img src={this.currentCountry?.flag} class="flag" />
