@@ -1,6 +1,7 @@
 import { Component, Host, Prop, State, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { IOtaNotes } from '@/models/booking.dto';
+import locales from '@/stores/locales.store';
 @Component({
   tag: 'ota-label',
   styleUrl: 'ota-label.css',
@@ -32,7 +33,7 @@ export class OtaLabel {
             <li key={v4()}>
               - {remark.statement}{' '}
               {this.remarks.length > this.maxVisibleItems && index === displayedRemarks.length - 1 && (
-                <button onClick={this.toggleShowAll}>{this.showAll ? 'show less' : 'show more'}</button>
+                <button onClick={this.toggleShowAll}>{this.showAll ? locales.entries.Lcz_ShowLess : locales.entries.Lcz_ShowMore}</button>
               )}
             </li>
           ))}
