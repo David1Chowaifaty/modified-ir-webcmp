@@ -1,7 +1,7 @@
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
 import { updateHKStore } from '@/stores/housekeeping.store';
-import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import axios from 'axios';
 
 @Component({
@@ -30,6 +30,12 @@ export class IrHousekeeping {
       updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
+  }
+  @Listen('resetData')
+  async handleResetData(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    await this.houseKeepingService.getExposedHKSetup(this.propertyid);
   }
   @Watch('ticket')
   async ticketChanged(newValue: string, oldValue: string) {

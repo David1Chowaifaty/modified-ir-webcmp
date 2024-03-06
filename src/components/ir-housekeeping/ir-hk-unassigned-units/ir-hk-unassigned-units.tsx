@@ -1,6 +1,8 @@
 import { IHouseKeepers, IPropertyHousekeepingAssignment } from '@/models/housekeeping';
+import { HouseKeepingService } from '@/services/housekeeping.service';
 import calendar_data from '@/stores/calendar-data';
 import housekeeping_store from '@/stores/housekeeping.store';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 
 @Component({
@@ -11,31 +13,57 @@ import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/c
 export class IrHkUnassignedUnits {
   @Prop() user: IHouseKeepers | null = null;
 
-  @State() assignedUnits: Map<number, IPropertyHousekeepingAssignment> = new Map();
+  @State() renderAgain = false;
 
   @Event() closeSideBar: EventEmitter<null>;
+  @Event() resetData: EventEmitter<null>;
 
-  handleSwitchChange(checked: boolean, unit_id: number, hk_id: number | null, remove: boolean) {
-    if (checked) {
-      this.assignUnit(unit_id, hk_id);
-    }
-  }
-  assignUnit(unit_id: number, hk_id: number | null) {
-    if (this.assignedUnits.has(unit_id) && !hk_id) {
-      this.assignedUnits.delete(unit_id);
-      return;
-    }
-    this.assignedUnits.set(unit_id, {
-      property_id: housekeeping_store.default_properties.property_id,
-      hkm_id: hk_id,
-      is_to_assign: true,
-      unit_id,
-    });
-    console.log(this.assignedUnits);
+  private assignedUnits: Map<number, IPropertyHousekeepingAssignment> = new Map();
+  private housekeepingService = new HouseKeepingService();
+
+  componentWillLoad() {
+    this.housekeepingService.setToken(housekeeping_store.default_properties.token);
   }
 
-  assignUnits() {
-    console.log([...this.assignedUnits.values()]);
+  assignUnit(unit_id: number, hk_id: number | null, checked: boolean) {
+    if (this.user) {
+      const userUnit = this.user.assigned_units.find(unit => unit.id === unit_id);
+      if ((checked && userUnit) || (!checked && !userUnit)) {
+        this.assignedUnits.delete(unit_id);
+      } else if (!checked && userUnit) {
+        this.assignedUnits.set(unit_id, { hkm_id: hk_id, is_to_assign: false, unit_id });
+      } else if (checked) {
+        const assignment: IPropertyHousekeepingAssignment = {
+          hkm_id: hk_id,
+          is_to_assign: true,
+          unit_id,
+        };
+        this.assignedUnits.set(unit_id, assignment);
+      }
+    } else {
+      if (this.assignedUnits.has(unit_id) && !hk_id) {
+        this.assignedUnits.delete(unit_id);
+        return;
+      } else {
+        this.assignedUnits.set(unit_id, {
+          hkm_id: hk_id,
+          is_to_assign: true,
+          unit_id,
+        });
+      }
+    }
+    this.renderAgain = !this.renderAgain;
+  }
+
+  async assignUnits() {
+    try {
+      await this.housekeepingService.manageExposedAssignedUnitToHKM(housekeeping_store.default_properties.property_id, [...this.assignedUnits.values()]);
+      this.resetData.emit(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.closeSideBar.emit(null);
+    }
   }
   renderRooms() {
     if (!this.user) {
@@ -44,7 +72,6 @@ export class IrHkUnassignedUnits {
           <p class="mr-2">{unit.name}</p>
           <ir-select
             class="ml-4"
-            // selectedValue={}
             onSelectChange={e => {
               let hk_id = e.detail;
               if (hk_id === '') {
@@ -52,7 +79,7 @@ export class IrHkUnassignedUnits {
               } else {
                 hk_id = +hk_id;
               }
-              this.assignUnit(unit.id, hk_id);
+              this.assignUnit(unit.id, hk_id, false);
             }}
             LabelAvailable={false}
             data={housekeeping_store.hk_criteria.housekeepers.map(hk => ({ text: hk.name, value: hk.id.toString() }))}
@@ -65,17 +92,29 @@ export class IrHkUnassignedUnits {
         return null;
       }
       return roomType.physicalrooms.map(physical_room => {
-        const taken = !housekeeping_store.hk_criteria.units_assignments.unassigned_units.find(unit => unit.id === physical_room.id);
+        let taken = !housekeeping_store.hk_criteria.units_assignments.unassigned_units.find(unit => unit.id === physical_room.id);
         let housekeeper = [];
-        if (taken) {
-          housekeeper = housekeeping_store.hk_criteria.housekeepers.filter(hk => hk.assigned_units.find(unit => unit.id === physical_room.id));
+        const assignedRoom = this.assignedUnits.get(physical_room.id);
+        if (assignedRoom && assignedRoom.is_to_assign) {
+          housekeeper = [this.user];
+          taken = true;
+        } else {
+          if (taken) {
+            housekeeper = housekeeping_store.hk_criteria.housekeepers.filter(hk => hk.assigned_units.find(unit => unit.id === physical_room.id));
+          }
         }
         return (
           <li key={physical_room.id}>
             <div class="d-flex mr-3">
               <p class="mr-2">{physical_room.name}</p> <span>{taken ? housekeeper[0].name : ''}</span>
             </div>
-            <ir-switch checked={taken}></ir-switch>
+            <ir-switch
+              onCheckChange={e => {
+                const checked = e.detail;
+                this.assignUnit(physical_room.id, this.user.id, checked);
+              }}
+              checked={taken && housekeeper[0].id === this.user.id}
+            ></ir-switch>
           </li>
         );
       });
@@ -108,7 +147,7 @@ export class IrHkUnassignedUnits {
               text={'Cancel'}
             ></ir-button>
             <ir-button
-              // isLoading={this.isLoading}
+              isLoading={isRequestPending('/Manage_Exposed_Assigned_Unit_To_HKM')}
               onClickHanlder={this.assignUnits.bind(this)}
               class="flex-fill ml-md-1"
               btn_styles="w-100  justify-content-center align-items-center mt-1 mt-md-0"

@@ -1,5 +1,5 @@
 import { Token } from '@/models/Token';
-import { IExposedHouseKeepingSetup, IInspectionMode, THKUser } from '@/models/housekeeping';
+import { IExposedHouseKeepingSetup, IInspectionMode, IPropertyHousekeepingAssignment, THKUser } from '@/models/housekeeping';
 import { updateHKStore } from '@/stores/housekeeping.store';
 import axios from 'axios';
 
@@ -24,6 +24,17 @@ export class HouseKeepingService extends Token {
     const { data } = await axios.post(`/Set_Exposed_Inspection_Mode?Ticket=${token}`, {
       property_id,
       mode,
+    });
+    return data['My_Result'];
+  }
+  public async manageExposedAssignedUnitToHKM(property_id: number, assignments: IPropertyHousekeepingAssignment[]) {
+    const token = this.getToken();
+    if (!token) {
+      throw new Error('Missing token');
+    }
+    const { data } = await axios.post(`/Manage_Exposed_Assigned_Unit_To_HKM?Ticket=${token}`, {
+      property_id,
+      links: assignments,
     });
     return data['My_Result'];
   }

@@ -61,7 +61,6 @@ export interface IUserCause extends ICauseBase {
 
 export type THousekeepingTrigger = IUnassignedUnitsCause | IUserCause;
 export interface IPropertyHousekeepingAssignment {
-  property_id: number;
   hkm_id: number;
   unit_id: number;
   is_to_assign: boolean;

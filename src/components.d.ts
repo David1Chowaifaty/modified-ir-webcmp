@@ -1437,6 +1437,7 @@ declare global {
     };
     interface HTMLIrHkUnassignedUnitsElementEventMap {
         "closeSideBar": null;
+        "resetData": null;
     }
     interface HTMLIrHkUnassignedUnitsElement extends Components.IrHkUnassignedUnits, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrHkUnassignedUnitsElementEventMap>(type: K, listener: (this: HTMLIrHkUnassignedUnitsElement, ev: IrHkUnassignedUnitsCustomEvent<HTMLIrHkUnassignedUnitsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2293,6 +2294,7 @@ declare namespace LocalJSX {
     }
     interface IrHkUnassignedUnits {
         "onCloseSideBar"?: (event: IrHkUnassignedUnitsCustomEvent<null>) => void;
+        "onResetData"?: (event: IrHkUnassignedUnitsCustomEvent<null>) => void;
         "user"?: IHouseKeepers | null;
     }
     interface IrHkUser {
