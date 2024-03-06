@@ -16,7 +16,7 @@ import { checkboxes, selectOption as selectOption1 } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
-import { THKUser } from "./models/housekeeping";
+import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -30,7 +30,7 @@ export { checkboxes, selectOption as selectOption1 } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
-export { THKUser } from "./models/housekeeping";
+export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -390,7 +390,7 @@ export namespace Components {
     interface IrHkTeam {
     }
     interface IrHkUnassignedUnits {
-        "assignUnassignedRooms": boolean;
+        "user": IHouseKeepers | null;
     }
     interface IrHkUser {
         "isEdit": boolean;
@@ -708,6 +708,10 @@ export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
 export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrGuestInfoElement;
+}
+export interface IrHkUnassignedUnitsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrHkUnassignedUnitsElement;
 }
 export interface IrHkUserCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1431,7 +1435,18 @@ declare global {
         prototype: HTMLIrHkTeamElement;
         new (): HTMLIrHkTeamElement;
     };
+    interface HTMLIrHkUnassignedUnitsElementEventMap {
+        "closeSideBar": null;
+    }
     interface HTMLIrHkUnassignedUnitsElement extends Components.IrHkUnassignedUnits, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrHkUnassignedUnitsElementEventMap>(type: K, listener: (this: HTMLIrHkUnassignedUnitsElement, ev: IrHkUnassignedUnitsCustomEvent<HTMLIrHkUnassignedUnitsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrHkUnassignedUnitsElementEventMap>(type: K, listener: (this: HTMLIrHkUnassignedUnitsElement, ev: IrHkUnassignedUnitsCustomEvent<HTMLIrHkUnassignedUnitsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrHkUnassignedUnitsElement: {
         prototype: HTMLIrHkUnassignedUnitsElement;
@@ -2277,7 +2292,8 @@ declare namespace LocalJSX {
     interface IrHkTeam {
     }
     interface IrHkUnassignedUnits {
-        "assignUnassignedRooms"?: boolean;
+        "onCloseSideBar"?: (event: IrHkUnassignedUnitsCustomEvent<null>) => void;
+        "user"?: IHouseKeepers | null;
     }
     interface IrHkUser {
         "isEdit"?: boolean;

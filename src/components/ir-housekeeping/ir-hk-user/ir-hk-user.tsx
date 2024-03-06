@@ -23,6 +23,7 @@ export class IrHkUser {
     property_id: null,
     username: '',
   };
+  @State() errors: string[] = [];
 
   @Event() resetData: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
@@ -32,6 +33,7 @@ export class IrHkUser {
     token: '',
     language: '',
   };
+
   async componentWillLoad() {
     const { token, language } = getDefaultProperties();
     this.default_properties = { token, language };
@@ -49,13 +51,28 @@ export class IrHkUser {
   async addUser() {
     try {
       this.isLoading = true;
-      await this.housekeepingService.editExposedHKM(this.userInfo);
+      let errors = [];
+      console.log(this.userInfo.mobile);
+      if (this.userInfo.name === '' || this.userInfo.mobile === '') {
+        if (this.userInfo.name === '') {
+          errors.push('name');
+        } else if (this.userInfo.mobile === '') {
+          errors.push('mobile');
+        }
+        this.errors = [...errors];
+        console.log(this.errors);
+        return;
+      }
+      if (this.errors) {
+        this.errors = [];
+      }
+      //await this.housekeepingService.editExposedHKM(this.userInfo);
+      this.resetData.emit(null);
+      //this.closeSideBar.emit(null);
     } catch (error) {
       console.error(error);
     } finally {
       this.isLoading = false;
-      this.resetData.emit(null);
-      this.closeSideBar.emit(null);
     }
   }
 
@@ -76,8 +93,15 @@ export class IrHkUser {
           </ir-icon>
         </div>
         <section class="pt-3 border-top">
-          <ir-input-text label="Name" placeholder="" onTextChange={e => this.updateUserField('name', e.detail)} value={this.userInfo.name}></ir-input-text>
+          <ir-input-text
+            inputStyles={this.errors.includes('name') && 'border-danger'}
+            label="Name"
+            placeholder=""
+            onTextChange={e => this.updateUserField('name', e.detail)}
+            value={this.userInfo.name}
+          ></ir-input-text>
           <ir-phone-input
+            error={this.errors.includes('mobile')}
             language={this.default_properties.language}
             token={this.default_properties.token}
             default_country={calendar_data.country.id}

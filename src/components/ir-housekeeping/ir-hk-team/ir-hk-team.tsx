@@ -14,20 +14,26 @@ export class IrHkTeam {
     if (hk.assigned_units.length === 0) {
       return (
         <span>
-          0 - <button class="outline-btn">Assign</button>
+          0 -{' '}
+          <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: hk })}>
+            Assign
+          </button>
         </span>
       );
     }
     return (
       <span>
-        {hk.assigned_units.length} - <button class="outline-btn">Edit</button>
+        {hk.assigned_units.length} -{' '}
+        <button onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: hk })} class="outline-btn">
+          Edit
+        </button>
       </span>
     );
   }
   renderCurrentTrigger() {
     switch (this.currentTrigger?.type) {
       case 'unassigned_units':
-        return <ir-hk-unassigned-units></ir-hk-unassigned-units>;
+        return <ir-hk-unassigned-units user={this.currentTrigger.user}></ir-hk-unassigned-units>;
       case 'user':
         return <ir-hk-user user={this.currentTrigger.user} isEdit={this.currentTrigger.isEdit}></ir-hk-user>;
       default:
@@ -59,7 +65,7 @@ export class IrHkTeam {
               </p>
               <div class="unassigned-container">
                 <p>{un_assigned}</p>{' '}
-                <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', unassignedUnitsCount: 2 })}>
+                <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: null })}>
                   Unassigned
                 </button>
               </div>
@@ -137,7 +143,16 @@ export class IrHkTeam {
             </tbody>
           </table>
         </section>
-        <ir-sidebar showCloseButton={false} open={this.currentTrigger !== null} onIrSidebarToggle={() => (this.currentTrigger = null)}>
+        <ir-sidebar
+          sidebarStyles={
+            this.currentTrigger?.type === 'unassigned_units' && {
+              maxWidth: 'max-content',
+            }
+          }
+          showCloseButton={false}
+          open={this.currentTrigger !== null}
+          onIrSidebarToggle={() => (this.currentTrigger = null)}
+        >
           {this.renderCurrentTrigger()}
         </ir-sidebar>
       </Host>

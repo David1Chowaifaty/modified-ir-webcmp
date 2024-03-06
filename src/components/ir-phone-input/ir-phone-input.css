@@ -45,3 +45,6 @@
   width: 24px;
   border-radius: 3px;
 }
+.is-invalid {
+  border-color: #ff4961;
+}
