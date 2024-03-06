@@ -132,7 +132,7 @@ export class IrBookingListing {
 
   renderItemRange() {
     const { endItem, startItem, totalCount } = this.getPaginationBounds();
-    return `${locales.entries.Lcz_View} ${startItem} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
+    return `${locales.entries.Lcz_View} ${startItem + 1} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
   }
 
   async updateData() {
