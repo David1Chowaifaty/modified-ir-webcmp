@@ -390,6 +390,7 @@ export namespace Components {
     interface IrHkTeam {
     }
     interface IrHkUnassignedUnits {
+        "assignUnassignedRooms": boolean;
     }
     interface IrHkUser {
         "isEdit": boolean;
@@ -2276,6 +2277,7 @@ declare namespace LocalJSX {
     interface IrHkTeam {
     }
     interface IrHkUnassignedUnits {
+        "assignUnassignedRooms"?: boolean;
     }
     interface IrHkUser {
         "isEdit"?: boolean;
