@@ -34,11 +34,11 @@ export class IrListingHeader {
   async handleSearchClicked(is_to_export: boolean) {
     if (this.inputValue !== '') {
       if (/^-?\d+$/.test(this.inputValue)) {
-        updateUserSelection('book_nbr', this.inputValue);
+        updateUserSelection('book_nbr', this.inputValue.trim());
       } else if (this.inputValue[3] === '-') {
-        updateUserSelection('book_nbr', this.inputValue);
+        updateUserSelection('book_nbr', this.inputValue.trim());
       } else {
-        updateUserSelection('name', this.inputValue);
+        updateUserSelection('name', this.inputValue.trim());
       }
     }
     if (this.inputValue === '' && (booking_listing.userSelection.book_nbr !== '' || booking_listing.userSelection.name !== '')) {
