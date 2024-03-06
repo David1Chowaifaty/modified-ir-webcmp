@@ -367,7 +367,7 @@ export class IrBookingDetails {
                 {this.bookingData.is_direct ? (
                   <ir-label label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
                 ) : (
-                  <ota-label label={`${this.defaultTexts.entries.Lcz_Note}:`} remarks={this.bookingData.ota_notes}></ota-label>
+                  <ota-label label={`${this.defaultTexts.entries.Lcz_Note}:`} remarks={this.bookingData.ota_notes} maxVisibleItems={this.bookingData.ota_notes.length}></ota-label>
                 )}
               </div>
             </div>

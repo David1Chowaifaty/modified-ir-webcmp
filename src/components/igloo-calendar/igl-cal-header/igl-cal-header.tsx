@@ -299,7 +299,7 @@ export class IglCalHeader {
         <div class="stickyCell headersContainer">
           <div class="monthsContainer">
             {this.calendarData.monthsInfo.map(monthInfo => (
-              <div class="monthCell" style={{ width: monthInfo.daysCount * 70 + 'px' }}>
+              <div class="monthCell" style={{ width: monthInfo.daysCount * 58 + 'px' }}>
                 <div class="monthTitle">{monthInfo.monthName}</div>
               </div>
             ))}

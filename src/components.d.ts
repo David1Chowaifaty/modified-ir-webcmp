@@ -551,6 +551,7 @@ export namespace Components {
     }
     interface OtaLabel {
         "label": string;
+        "maxVisibleItems": number;
         "remarks": IOtaNotes[];
     }
 }
@@ -2366,6 +2367,7 @@ declare namespace LocalJSX {
     }
     interface OtaLabel {
         "label"?: string;
+        "maxVisibleItems"?: number;
         "remarks"?: IOtaNotes[];
     }
     interface IntrinsicElements {
