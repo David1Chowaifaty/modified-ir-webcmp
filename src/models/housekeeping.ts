@@ -13,6 +13,7 @@ export interface IHouseKeepers {
   note: string;
   password: string;
   property_id: number;
+  phone_prefix: string;
   username: string;
   assigned_units: IUnit[];
 }

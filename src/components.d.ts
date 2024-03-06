@@ -477,6 +477,7 @@ export namespace Components {
         "error": boolean;
         "label": string;
         "language": string;
+        "phone_prefix": string | null;
         "token": string;
         "value": string;
     }
@@ -1612,7 +1613,7 @@ declare global {
         new (): HTMLIrPaymentDetailsElement;
     };
     interface HTMLIrPhoneInputElementEventMap {
-        "textChange": string;
+        "textChange": { phone_prefix: string; mobile: string };
     }
     interface HTMLIrPhoneInputElement extends Components.IrPhoneInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPhoneInputElementEventMap>(type: K, listener: (this: HTMLIrPhoneInputElement, ev: IrPhoneInputCustomEvent<HTMLIrPhoneInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2390,7 +2391,8 @@ declare namespace LocalJSX {
         "error"?: boolean;
         "label"?: string;
         "language"?: string;
-        "onTextChange"?: (event: IrPhoneInputCustomEvent<string>) => void;
+        "onTextChange"?: (event: IrPhoneInputCustomEvent<{ phone_prefix: string; mobile: string }>) => void;
+        "phone_prefix"?: string | null;
         "token"?: string;
         "value"?: string;
     }

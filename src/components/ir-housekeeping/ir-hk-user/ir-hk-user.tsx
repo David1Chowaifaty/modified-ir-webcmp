@@ -22,7 +22,9 @@ export class IrHkUser {
     password: '',
     property_id: null,
     username: '',
+    phone_prefix: null,
   };
+
   @State() errors: string[] = [];
 
   @Event() resetData: EventEmitter<null>;
@@ -45,14 +47,12 @@ export class IrHkUser {
 
   updateUserField(key: keyof THKUser, value: any) {
     this.userInfo = { ...this.userInfo, [key]: value };
-    console.log(this.userInfo);
   }
 
   async addUser() {
     try {
       this.isLoading = true;
       let errors = [];
-      console.log(this.userInfo.mobile);
       if (this.userInfo.name === '' || this.userInfo.mobile === '') {
         if (this.userInfo.name === '') {
           errors.push('name');
@@ -60,15 +60,14 @@ export class IrHkUser {
           errors.push('mobile');
         }
         this.errors = [...errors];
-        console.log(this.errors);
         return;
       }
       if (this.errors) {
         this.errors = [];
       }
-      //await this.housekeepingService.editExposedHKM(this.userInfo);
+      await this.housekeepingService.editExposedHKM(this.userInfo);
       this.resetData.emit(null);
-      //this.closeSideBar.emit(null);
+      this.closeSideBar.emit(null);
     } catch (error) {
       console.error(error);
     } finally {
@@ -105,9 +104,13 @@ export class IrHkUser {
             language={this.default_properties.language}
             token={this.default_properties.token}
             default_country={calendar_data.country.id}
+            phone_prefix={this.user?.phone_prefix}
             label="Mobile"
             value={this.userInfo.mobile}
-            onTextChange={e => this.updateUserField('mobile', e.detail)}
+            onTextChange={e => {
+              this.updateUserField('phone_prefix', e.detail.phone_prefix);
+              this.updateUserField('mobile', e.detail.mobile);
+            }}
           ></ir-phone-input>
           <ir-input-text label="Username" placeholder="" value={this.userInfo.username} onTextChange={e => this.updateUserField('username', e.detail)}></ir-input-text>
           <ir-input-text

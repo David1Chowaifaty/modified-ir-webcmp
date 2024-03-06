@@ -16,8 +16,9 @@ export class IrPhoneInput {
   @Prop() token: string;
   @Prop() language: string;
   @Prop() default_country: number = null;
+  @Prop() phone_prefix: string | null = null;
 
-  @Event() textChange: EventEmitter<string>;
+  @Event() textChange: EventEmitter<{ phone_prefix: string; mobile: string }>;
   @State() inputValue: string = '';
   @State() isDropdownVisible: boolean = false;
   @State() currentCountry: ICountry;
@@ -33,8 +34,12 @@ export class IrPhoneInput {
     this.bookingService.setToken(this.token);
     const countries = await this.bookingService.getCountries(this.language);
     this.countries = countries;
-    if (this.default_country) {
-      this.setCurrentCountry(this.default_country);
+    if (this.phone_prefix) {
+      this.setCountryFromPhonePrefix();
+    } else {
+      if (this.default_country) {
+        this.setCurrentCountry(this.default_country);
+      }
     }
     this.inputValue = this.value;
   }
@@ -51,7 +56,15 @@ export class IrPhoneInput {
     inputValue = inputValue.replace(/[^+\d]+/g, '');
     inputElement.value = inputValue;
     this.inputValue = inputValue;
-    this.textChange.emit(this.currentCountry?.phone_prefix + this.inputValue);
+    this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
+  }
+  setCountryFromPhonePrefix() {
+    const country = this.countries.find(country => country.phone_prefix === this.phone_prefix);
+    if (!country) {
+      throw new Error('Invalid country id');
+    }
+    this.currentCountry = { ...country };
+    this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
   }
   setCurrentCountry(id: number) {
     const country = this.countries.find(country => country.id === id);
@@ -59,7 +72,7 @@ export class IrPhoneInput {
       throw new Error('Invalid country id');
     }
     this.currentCountry = { ...country };
-    this.textChange.emit(this.currentCountry?.phone_prefix + this.inputValue);
+    this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
   }
   render() {
     return (
