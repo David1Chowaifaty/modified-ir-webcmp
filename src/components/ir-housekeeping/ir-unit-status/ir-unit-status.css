@@ -1,6 +1,5 @@
 :host {
   display: block;
-  overflow-x: auto;
 }
 .circle {
   display: inline-flex;
@@ -14,6 +13,10 @@
 }
 .orange {
   background: #ff9149;
+}
+.table-container {
+  width: 100%;
+  overflow-x: auto;
 }
 /* td,
 th {
