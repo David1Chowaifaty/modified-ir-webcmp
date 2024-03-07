@@ -37,12 +37,16 @@ export class IrHkUser {
   };
 
   async componentWillLoad() {
-    const { token, language } = getDefaultProperties();
+    const { token, language, property_id } = getDefaultProperties();
     this.default_properties = { token, language };
     this.housekeepingService.setToken(token);
+    if (!this.user) {
+      this.userInfo['property_id'] = property_id;
+    }
     if (this.user) {
       this.userInfo = { ...this.user };
     }
+    console.log(this.userInfo);
   }
 
   updateUserField(key: keyof THKUser, value: any) {
@@ -53,6 +57,7 @@ export class IrHkUser {
     try {
       this.isLoading = true;
       let errors = [];
+      console.log(this.userInfo);
       if (this.userInfo.name === '' || this.userInfo.mobile === '') {
         if (this.userInfo.name === '') {
           errors.push('name');
