@@ -84,6 +84,7 @@ export class IrModal {
           </div>
           <div class="modal-body text-left p-0 mb-2">
             <div>{this.modalBody}</div>
+            <slot name="modal-body"></slot>
           </div>
 
           <div class={`ir-alert-footer border-0  d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
