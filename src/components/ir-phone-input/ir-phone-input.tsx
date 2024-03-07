@@ -85,7 +85,7 @@ export class IrPhoneInput {
                 <label class={`input-group-text  border-theme flex-grow-1 text-dark  `}>{this.label}</label>
               </div>
             )}
-            <div class={'form-control  input-container  flex-fill' + (this.error ? 'is-invalid' : '')}>
+            <div class={'form-control  input-container  flex-fill' + (this.error ? ' is-invalid' : '')}>
               <button onClick={() => (this.isDropdownVisible = !this.isDropdownVisible)} class="dropdown-trigger">
                 <img src={this.currentCountry?.flag} class="flag" />
                 <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">

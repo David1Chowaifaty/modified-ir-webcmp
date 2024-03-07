@@ -17,6 +17,9 @@
   border-bottom-right-radius: 0;
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
+input:focus {
+  border-color: #1e9ff2 !important;
+}
 .input-container {
   display: flex;
   align-items: center;

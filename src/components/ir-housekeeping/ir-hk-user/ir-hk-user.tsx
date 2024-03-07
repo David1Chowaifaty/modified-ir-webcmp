@@ -2,6 +2,7 @@ import { THKUser } from '@/models/housekeeping';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import calendar_data from '@/stores/calendar-data';
 import { getDefaultProperties } from '@/stores/housekeeping.store';
+import { ValidationRule, validateForm } from '@/utils/validation';
 import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 
 @Component({
@@ -25,7 +26,7 @@ export class IrHkUser {
     phone_prefix: null,
   };
 
-  @State() errors: string[] = [];
+  @State() errors: { [P in keyof THKUser]?: any } | null = null;
 
   @Event() resetData: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
@@ -56,19 +57,18 @@ export class IrHkUser {
   async addUser() {
     try {
       this.isLoading = true;
-      let errors = [];
-      console.log(this.userInfo);
-      if (this.userInfo.name === '' || this.userInfo.mobile === '') {
-        if (this.userInfo.name === '') {
-          errors.push('name');
-        } else if (this.userInfo.mobile === '') {
-          errors.push('mobile');
-        }
-        this.errors = [...errors];
+      const validationRules: { [P in keyof THKUser]?: ValidationRule } = {
+        name: { required: true },
+        mobile: { required: true },
+        password: { minLength: 5 },
+      };
+      const validationResult = validateForm(this.userInfo, validationRules);
+      if (!validationResult.isValid) {
+        this.errors = validationResult.errors;
         return;
       }
       if (this.errors) {
-        this.errors = [];
+        this.errors = null;
       }
       await this.housekeepingService.editExposedHKM(this.userInfo);
       this.resetData.emit(null);
@@ -98,14 +98,14 @@ export class IrHkUser {
         </div>
         <section class="pt-3 border-top">
           <ir-input-text
-            inputStyles={this.errors.includes('name') && 'border-danger'}
+            error={this.errors?.name?.length > 0}
             label="Name"
             placeholder=""
             onTextChange={e => this.updateUserField('name', e.detail)}
             value={this.userInfo.name}
           ></ir-input-text>
           <ir-phone-input
-            error={this.errors.includes('mobile')}
+            error={this.errors?.mobile?.length > 0}
             language={this.default_properties.language}
             token={this.default_properties.token}
             default_country={calendar_data.country.id}
@@ -123,6 +123,7 @@ export class IrHkUser {
             placeholder=""
             value={this.userInfo.password}
             type="password"
+            error={this.errors?.password?.length > 0}
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
           <ir-input-text label="Note" placeholder="" value={this.userInfo.note} onTextChange={e => this.updateUserField('note', e.detail)}></ir-input-text>

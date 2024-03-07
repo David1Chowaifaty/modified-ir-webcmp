@@ -121,9 +121,9 @@ export class IrInputText {
           <input
             readOnly={this.readonly}
             type={this.type}
-            class={`${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12} ${this.readonly && 'bg-white'} ${
-              this.inputStyles
-            }`}
+            class={`${className} ${this.error ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12} ${
+              this.readonly && 'bg-white'
+            } ${this.inputStyles}`}
             placeholder={this.placeholder}
             value={this.value}
             onInput={this.handleInputChange.bind(this)}
