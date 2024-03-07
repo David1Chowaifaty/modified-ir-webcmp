@@ -162,7 +162,7 @@ export class IrBookingListing {
                 <thead>
                   <tr>
                     <th scope="col" class="text-left">
-                      {locales.entries?.Lcz_Bookings}#
+                      {locales.entries?.Lcz_Booking}#
                     </th>
                     <th scope="col">{locales.entries?.Lcz_BookedOn}</th>
                     <th scope="col">{locales.entries?.Lcz_GuestSource}</th>
@@ -201,23 +201,25 @@ export class IrBookingListing {
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
-                          <div class="h-100 d-flex align-items-center justify-content-between">
-                            <button onClick={() => (this.editBookingItem = { booking, cause: 'edit' })} class="booking_number">
-                              {booking.booking_nbr}
-                            </button>{' '}
-                            <img class="ml-2" src={booking.origin.Icon} alt="logo" />
-                          </div>
+                          <button onClick={() => (this.editBookingItem = { booking, cause: 'edit' })} class="booking_number">
+                            {booking.booking_nbr}
+                          </button>
                         </td>
                         <td>
                           <p class="p-0 m-0 date-p">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
                           <p class="p-0 m-0 secondary-p">{_formatTime(booking.booked_on.hour.toString(), +' ' + booking.booked_on.minute.toString())}</p>
                         </td>
                         <td>
-                          <p class="p-0 m-0">
-                            {booking.guest.first_name} {booking.guest.last_name ?? ''} {booking.occupancy.adult_nbr}
-                            {locales.entries.Lcz_P}
-                          </p>
-                          <p class="p-0 m-0 secondary-p">{booking.origin.Label}</p>
+                          <div class="h-100 d-flex align-items-center ">
+                            <img class="mr-2" src={booking.origin.Icon} alt="logo" />
+                            <div class="text-left">
+                              <p class="p-0 m-0">
+                                {booking.guest.first_name} {booking.guest.last_name ?? ''} {booking.occupancy.adult_nbr}
+                                {locales.entries.Lcz_P}
+                              </p>
+                              <p class="p-0 m-0 secondary-p">{booking.origin.Label}</p>
+                            </div>
+                          </div>
                         </td>
                         <td>
                           <p class="p-0 m-0">{formatAmount(booking.currency.code, booking.financial?.gross_total ?? 0)}</p>
