@@ -136,7 +136,7 @@ export class IrListingModal {
         {this.isOpen && (
           <div class={`ir-alert-content p-2`}>
             <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
-              <p class="font-weight-bold p-0 my-0 mb-1">{this.renderTitle()}</p>
+              <p class="p-0 my-0 mb-1">{this.renderTitle()}</p>
               <ir-icon
                 class="exit-icon"
                 style={{ cursor: 'pointer' }}

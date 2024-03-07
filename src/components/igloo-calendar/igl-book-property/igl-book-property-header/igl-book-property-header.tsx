@@ -46,9 +46,9 @@ export class IglBookPropertyHeader {
 
   getSplitBookingList() {
     return (
-      <fieldset class="form-group  text-left">
-        <label class="h5">{locales.entries.Lcz_Tobooking}# </label>
-        <div class="btn-group ml-1">
+      <fieldset class="d-flex flex-column text-left mb-1  flex-lg-row align-items-lg-center">
+        <label class="mr-lg-1">{locales.entries.Lcz_Tobooking}# </label>
+        <div class="btn-group mt-1 mt-lg-0 sourceContainer">
           <ir-autocomplete
             value={
               Object.keys(this.bookedByInfoData).length > 1 ? `${this.bookedByInfoData.bookingNumber} ${this.bookedByInfoData.firstName} ${this.bookedByInfoData.lastName}` : ''
@@ -233,12 +233,13 @@ export class IglBookPropertyHeader {
     const showSourceNode = this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? false : true;
     return (
       <Host>
+        {this.isEventType('SPLIT_BOOKING') && this.getSplitBookingList()}
         {showSourceNode && this.getSourceNode()}
         <div class={`d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}`}>
           <fieldset class="mt-lg-0  ">
             <igl-date-range
               dateLabel={locales.entries.Lcz_Dates}
-              minDate={this.minDate}
+              minDate={this.isEventType('PLUS_BOOKING') ? moment().add(-1, 'months').startOf('month').format('YYYY-MM-DD') : this.minDate}
               disabled={this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')}
               defaultData={this.bookingDataDefaultDateRange}
             ></igl-date-range>

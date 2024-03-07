@@ -34,11 +34,11 @@ export class IrListingHeader {
   async handleSearchClicked(is_to_export: boolean) {
     if (this.inputValue !== '') {
       if (/^-?\d+$/.test(this.inputValue)) {
-        updateUserSelection('book_nbr', this.inputValue);
+        updateUserSelection('book_nbr', this.inputValue.trim());
       } else if (this.inputValue[3] === '-') {
-        updateUserSelection('book_nbr', this.inputValue);
+        updateUserSelection('book_nbr', this.inputValue.trim());
       } else {
-        updateUserSelection('name', this.inputValue);
+        updateUserSelection('name', this.inputValue.trim());
       }
     }
     if (this.inputValue === '' && (booking_listing.userSelection.book_nbr !== '' || booking_listing.userSelection.name !== '')) {
@@ -80,6 +80,7 @@ export class IrListingHeader {
                     withIrToastAndInterceptor={false}
                     propertyid={this.propertyId}
                     language={this.language}
+                    title={locales.entries.Lcz_CreateNewBooking}
                     baseurl={this.baseurl}
                     ticket={booking_listing.token}
                   >
@@ -127,6 +128,7 @@ export class IrListingHeader {
                 withIrToastAndInterceptor={false}
                 propertyid={this.propertyId}
                 language={this.language}
+                title={locales.entries.Lcz_CreateNewBooking}
                 baseurl={this.baseurl}
                 ticket={booking_listing.token}
               >
@@ -148,63 +150,63 @@ export class IrListingHeader {
           <span></span>
         </section>
         <section class="d-flex flex-column align-items-sm-center flex-sm-row flex-sm-wrap filters-container justify-content-lg-start mt-1">
+          {/* <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
+            <label htmlFor="dateTo"></label> */}
+          <ir-select
+            onSelectChange={e => updateUserSelection('filter_type', e.detail)}
+            showFirstOption={false}
+            data={booking_listing?.types.map(t => ({
+              value: t.id.toString(),
+              text: t.name,
+            }))}
+            class="flex-sm-wrap"
+            selectedValue={booking_listing.userSelection.filter_type}
+            select_id="dateTo"
+            LabelAvailable={false}
+          ></ir-select>
+          {/* </fieldset> */}
+          {/* <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
+            <label htmlFor="dates">{locales.entries?.Lcz_Dates}</label> */}
+          <igl-date-range
+            class="flex-sm-wrap"
+            minDate="2000-01-01"
+            withDateDifference={false}
+            defaultData={{
+              fromDate: booking_listing.userSelection.from,
+              toDate: booking_listing.userSelection.to,
+            }}
+          ></igl-date-range>
+          {/* </fieldset> */}
+          {/* <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
+            <label htmlFor="booking_status">{locales.entries?.Lcz_BookingStatus}</label> */}
+          <ir-select
+            class="flex-sm-wrap"
+            selectedValue={booking_listing.userSelection.booking_status}
+            onSelectChange={e => updateUserSelection('booking_status', e.detail)}
+            showFirstOption={false}
+            data={booking_listing?.statuses.map(status => ({
+              value: status.code,
+              text: status.name,
+            }))}
+            select_id="booking_status"
+            LabelAvailable={false}
+          ></ir-select>
+          {/* </fieldset>
           <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="dateTo">{locales.entries?.Lcz_DateOf}</label>
-            <ir-select
-              onSelectChange={e => updateUserSelection('filter_type', e.detail)}
-              showFirstOption={false}
-              data={booking_listing?.types.map(t => ({
-                value: t.id.toString(),
-                text: t.name,
-              }))}
-              class="flex-fill"
-              selectedValue={booking_listing.userSelection.filter_type}
-              select_id="dateTo"
-              LabelAvailable={false}
-            ></ir-select>
-          </fieldset>
-          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="dates">{locales.entries?.Lcz_Dates}</label>
-            <igl-date-range
-              class="flex-fill"
-              minDate="2000-01-01"
-              withDateDifference={false}
-              defaultData={{
-                fromDate: booking_listing.userSelection.from,
-                toDate: booking_listing.userSelection.to,
-              }}
-            ></igl-date-range>
-          </fieldset>
-          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="booking_status">{locales.entries?.Lcz_BookingStatus}</label>
-            <ir-select
-              class="flex-fill"
-              selectedValue={booking_listing.userSelection.booking_status}
-              onSelectChange={e => updateUserSelection('booking_status', e.detail)}
-              showFirstOption={false}
-              data={booking_listing?.statuses.map(status => ({
-                value: status.code,
-                text: status.name,
-              }))}
-              select_id="booking_status"
-              LabelAvailable={false}
-            ></ir-select>
-          </fieldset>
-          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="channels">{locales.entries?.Lcz_Channels}</label>
-            <ir-select
-              class="flex-fill"
-              selectedValue={booking_listing.userSelection.channel}
-              onSelectChange={e => updateUserSelection('channel', e.detail)}
-              LabelAvailable={false}
-              data={booking_listing?.channels.map(channel => ({
-                value: channel.name,
-                text: channel.name,
-              }))}
-              select_id="channels"
-              firstOption={locales.entries?.Lcz_All}
-            ></ir-select>
-          </fieldset>
+            <label htmlFor="channels">{locales.entries?.Lcz_Channels}</label> */}
+          <ir-select
+            class="flex-sm-wrap"
+            selectedValue={booking_listing.userSelection.channel}
+            onSelectChange={e => updateUserSelection('channel', e.detail)}
+            LabelAvailable={false}
+            data={booking_listing?.channels.map(channel => ({
+              value: channel.name,
+              text: channel.name,
+            }))}
+            select_id="channels"
+            firstOption={locales.entries?.Lcz_All + ' ' + locales.entries?.Lcz_Channels}
+          ></ir-select>
+          {/* </fieldset> */}
           {/* <fieldset class="flex-fill-sm-none">
             <label htmlFor="payment_status">{locales.entries?.Lcz_PaymentStatus}</label>
             <ir-select
@@ -217,7 +219,7 @@ export class IrListingHeader {
               LabelAvailable={false}
             ></ir-select>
           </fieldset> */}
-          <div class="d-flex flex-fill align-items-end m-0 mt-2 buttons-container">
+          <div class="d-flex flex-fill align-items-end m-0  buttons-container">
             <ir-icon title={locales.entries?.Lcz_Search} onIconClickHandler={() => this.handleSearchClicked(false)}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                 <path

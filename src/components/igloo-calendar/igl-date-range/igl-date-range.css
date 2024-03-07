@@ -1,6 +1,7 @@
 :host {
   display: flex;
   align-items: center !important;
+  font-size: 14px !important;
 }
 .date-range-input {
   margin: 0;
@@ -11,6 +12,7 @@
   width: 220px !important;
   opacity: 0;
   user-select: none;
+  font-size: 14px !important;
 }
 .iglRangeNights {
   margin: 0;
@@ -22,9 +24,9 @@
   pointer-events: none;
   cursor: pointer;
   display: block;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  font-size: 0.975rem !important;
+  margin-left: 14px;
+  margin-right: 14px;
+  font-size: 13.65px !important;
   display: flex;
   align-items: center;
 }
@@ -41,7 +43,7 @@
   padding: 0 !important;
   margin: 0;
   border: 1px solid var(--ir-date-range-border, #379ff2);
-  width: var(--ir-date-range-width, 242px);
+  width: var(--ir-date-range-width, 245px);
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
 .calendarPickerContainer:focus-within {

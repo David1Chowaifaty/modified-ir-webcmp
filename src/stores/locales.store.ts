@@ -155,6 +155,8 @@ export type LocalizationStrings = {
   Lcz_Excluding: string;
   Lcz_Including: string;
   Lcz_SubTotal: string;
+  Lcz_ShowLess: string;
+  Lcz_ShowMore: string;
 };
 export type BookingListingCodes = {
   Lcz_BookedOn: string;
@@ -172,6 +174,7 @@ export type BookingListingCodes = {
   Lcz_JustDelete: string;
   Lcz_OK: string;
   Lcz_Or: string;
+  Lcz_CreateNewBooking: string;
   Lcz_Price: string;
   Lcz_Balance: string;
   Lcz_RecoverAndDelete: string;
