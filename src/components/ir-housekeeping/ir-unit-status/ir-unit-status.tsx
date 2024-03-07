@@ -1,3 +1,5 @@
+import { IInspectionMode } from '@/models/housekeeping';
+import { HouseKeepingService } from '@/services/housekeeping.service';
 import housekeeping_store from '@/stores/housekeeping.store';
 import { Component, Host, h } from '@stencil/core';
 
@@ -7,6 +9,28 @@ import { Component, Host, h } from '@stencil/core';
   scoped: true,
 })
 export class IrUnitStatus {
+  private housekeepingService = new HouseKeepingService();
+  componentWillLoad() {
+    this.housekeepingService.setToken(housekeeping_store.default_properties.token);
+  }
+  async handleSelectChange(e: CustomEvent) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    const window = e.detail;
+    let mode: IInspectionMode;
+    if (window === '') {
+      mode = {
+        is_active: false,
+        window: -1,
+      };
+    } else {
+      mode = {
+        is_active: true,
+        window: +window,
+      };
+    }
+    await this.housekeepingService.setExposedInspectionMode(housekeeping_store.default_properties.property_id, mode);
+  }
   render() {
     return (
       <Host class="card p-1">
@@ -36,8 +60,10 @@ export class IrUnitStatus {
                       {status.inspection_mode?.is_active && (
                         <div>
                           <ir-select
+                            //selectedValue={status.inspection_mode?.window.toString()}
                             LabelAvailable={false}
                             firstOption="No"
+                            onSelectChange={this.handleSelectChange.bind(this)}
                             data={Array.from(Array(status.inspection_mode.window + 1), (_, i) => i).map(i => {
                               const text = i === 0 ? 'Yes on the same day.' : i.toString() + ' day prior.';
                               return {
