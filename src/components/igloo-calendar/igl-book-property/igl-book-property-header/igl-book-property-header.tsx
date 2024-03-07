@@ -239,7 +239,7 @@ export class IglBookPropertyHeader {
           <fieldset class="mt-lg-0  ">
             <igl-date-range
               dateLabel={locales.entries.Lcz_Dates}
-              minDate={this.minDate}
+              minDate={this.isEventType('PLUS_BOOKING') ? moment().add(-1, 'months').startOf('month').format('YYYY-MM-DD') : this.minDate}
               disabled={this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')}
               defaultData={this.bookingDataDefaultDateRange}
             ></igl-date-range>
