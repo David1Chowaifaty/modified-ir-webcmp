@@ -9,6 +9,7 @@ import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookProp
 import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { IToast } from "./components/ir-toast/toast";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
+import { ICurrency } from "./models/calendarData";
 import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking } from "./models/booking.dto";
@@ -22,6 +23,7 @@ export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookProp
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { IToast } from "./components/ir-toast/toast";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
+export { ICurrency } from "./models/calendarData";
 export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking } from "./models/booking.dto";
@@ -97,7 +99,7 @@ export namespace Components {
         "allBookingEvents": { [key: string]: any };
         "bookingEvent": { [key: string]: any };
         "countryNodeList": any;
-        "currency": any;
+        "currency": ICurrency;
         "is_vacation_rental": boolean;
         "language": string;
     }
@@ -1827,7 +1829,7 @@ declare namespace LocalJSX {
         "allBookingEvents"?: { [key: string]: any };
         "bookingEvent"?: { [key: string]: any };
         "countryNodeList"?: any;
-        "currency"?: any;
+        "currency"?: ICurrency;
         "is_vacation_rental"?: boolean;
         "language"?: string;
         "onDragOverEventData"?: (event: IglBookingEventCustomEvent<any>) => void;

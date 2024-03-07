@@ -8,6 +8,7 @@ import { IToast } from '@components/ir-toast/toast';
 import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import { ICurrency } from '@/models/calendarData';
 
 @Component({
   tag: 'igl-booking-event',
@@ -17,30 +18,32 @@ import calendar_data from '@/stores/calendar-data';
 export class IglBookingEvent {
   @Element() private element: HTMLElement;
 
-  @Prop() currency;
+  @Prop() currency: ICurrency;
   @Prop() is_vacation_rental: boolean = false;
   @Prop() language: string;
   @Prop({ mutable: true }) bookingEvent: { [key: string]: any };
   @Prop() allBookingEvents: { [key: string]: any } = [];
   @Prop() countryNodeList;
 
+  @State() renderElement: boolean = false;
+  @State() position: { [key: string]: any };
+  @State() isShrinking: boolean | null = null;
+
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
+
   @Event() updateEventData: EventEmitter;
   @Event() dragOverEventData: EventEmitter;
+
   @Event() showRoomNightsDialog: EventEmitter<IRoomNightsData>;
   @Event() showDialog: EventEmitter<IReallocationPayload>;
   @Event() resetStreachedBooking: EventEmitter<string>;
   @Event() toast: EventEmitter<IToast>;
 
-  @State() renderElement: boolean = false;
-  @State() position: { [key: string]: any };
-  @State() isShrinking: boolean | null = null;
-
   dayWidth: number = 0;
   eventSpace: number = 8;
-
   vertSpace: number = 10;
 
+  private initialPR_ID: number = null;
   /* show bubble */
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
@@ -64,6 +67,7 @@ export class IglBookingEvent {
   isTouchStart: boolean;
   moveDiffereneX: number;
   moveDiffereneY: number;
+
   private animationFrameId: number | null = null;
 
   handleMouseMoveBind = this.handleMouseMove.bind(this);
@@ -71,6 +75,7 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
+    this.initialPR_ID = this.bookingEvent.PR_ID;
     this.bookingService.setToken(calendar_data.token);
     this.eventsService.setToken(calendar_data.token);
 
@@ -100,6 +105,7 @@ export class IglBookingEvent {
       console.error(error);
     }
   }
+
   componentDidLoad() {
     if (this.isNewEvent()) {
       if (!this.bookingEvent.hideBubble) {
@@ -150,7 +156,6 @@ export class IglBookingEvent {
         this.showEventInfo(false);
         return;
       }
-
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
@@ -160,10 +165,6 @@ export class IglBookingEvent {
           } else if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
             await this.fetchAndAssignBookingData();
           }
-        } else {
-          this.animationFrameId = requestAnimationFrame(() => {
-            this.resetBookingToInitialPosition();
-          });
         }
       } else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
@@ -175,24 +176,26 @@ export class IglBookingEvent {
         } else {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
           if (pool) {
-            if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
-              await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
+            if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+              this.animationFrameId = requestAnimationFrame(() => {
                 this.resetBookingToInitialPosition();
               });
+              throw new Error('Overlapping Dates');
             } else {
-              if (this.isShrinking || !this.isStreatch) {
-                const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
-                let hideConfirmButton = false;
-                if (status === '400') {
-                  hideConfirmButton = true;
-                }
-                this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
+              if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
+                await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
+                  this.resetBookingToInitialPosition();
+                });
               } else {
-                if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
-                  this.animationFrameId = requestAnimationFrame(() => {
-                    this.resetBookingToInitialPosition();
-                  });
-                  throw new Error('Overlapping Dates');
+                if (this.isShrinking || !this.isStreatch) {
+                  if (toRoomId !== this.bookingEvent.PR_ID.toString()) {
+                    const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
+                    let hideConfirmButton = false;
+                    if (status === '400') {
+                      hideConfirmButton = true;
+                    }
+                    this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
+                  }
                 } else {
                   this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
                 }
@@ -201,6 +204,15 @@ export class IglBookingEvent {
             this.isShrinking = null;
           }
         }
+      }
+      if (event.detail.fromRoomId === this.getBookedRoomId()) {
+        // Temporarily set to some other title and revert it.. as refresh issue is happening when there minimum change in top / left.
+        this.onMoveUpdateBooking({ toRoomId: this.bookingEvent.PR_ID, moveToDay: '01_01_2023' });
+        this.renderAgain();
+        setTimeout(() => {
+          this.onMoveUpdateBooking(event.detail);
+          this.renderAgain();
+        }, 20);
       }
     } catch (error) {
       this.toast.emit({
@@ -211,6 +223,13 @@ export class IglBookingEvent {
       });
       console.log('something went wrong');
     }
+  }
+  onMoveUpdateBooking(data) {
+    this.bookingEvent.PR_ID = data.toRoomId;
+    this.bookingEvent.FROM_DATE = data.moveToDay.split('_').reverse().join('/');
+    let tempDate = new Date(this.bookingEvent.FROM_DATE);
+    tempDate.setDate(tempDate.getDate() + this.getStayDays());
+    this.bookingEvent.TO_DATE = tempDate.getFullYear() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getDate();
   }
   private setModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string } {
     const findRoomType = (roomId: number) => {
@@ -271,6 +290,7 @@ export class IglBookingEvent {
       this.finalWidth = this.initialWidth;
       this.isShrinking = null;
     } else {
+      this.bookingEvent.PR_ID = this.initialPR_ID;
       this.element.style.top = `${this.dragInitPos.top}px`;
       this.element.style.left = `${this.dragInitPos.left}px`;
     }
