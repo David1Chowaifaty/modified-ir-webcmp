@@ -43,6 +43,7 @@ export class IglBookingEvent {
   eventSpace: number = 8;
   vertSpace: number = 10;
 
+  private initialPR_ID: number = null;
   /* show bubble */
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
@@ -74,6 +75,7 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
+    this.initialPR_ID = this.bookingEvent.PR_ID;
     this.bookingService.setToken(calendar_data.token);
     this.eventsService.setToken(calendar_data.token);
 
@@ -154,7 +156,6 @@ export class IglBookingEvent {
         this.showEventInfo(false);
         return;
       }
-      console.log('here');
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
@@ -188,7 +189,6 @@ export class IglBookingEvent {
               } else {
                 if (this.isShrinking || !this.isStreatch) {
                   if (toRoomId !== this.bookingEvent.PR_ID.toString()) {
-                    console.log(toRoomId === this.bookingEvent.PR_ID, toRoomId, this.bookingEvent.PR_ID);
                     const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
                     let hideConfirmButton = false;
                     if (status === '400') {
@@ -290,6 +290,7 @@ export class IglBookingEvent {
       this.finalWidth = this.initialWidth;
       this.isShrinking = null;
     } else {
+      this.bookingEvent.PR_ID = this.initialPR_ID;
       this.element.style.top = `${this.dragInitPos.top}px`;
       this.element.style.left = `${this.dragInitPos.left}px`;
     }
@@ -645,7 +646,6 @@ export class IglBookingEvent {
   }
 
   render() {
-    console.count('render');
     // onMouseLeave={()=>this.showEventInfo(false)}
     let legend = this.getEventLegend();
     let noteNode = this.getNoteNode();
