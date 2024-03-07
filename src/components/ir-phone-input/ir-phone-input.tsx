@@ -64,7 +64,7 @@ export class IrPhoneInput {
       throw new Error('Invalid country id');
     }
     this.currentCountry = { ...country };
-    this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
+    this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.value });
   }
   setCurrentCountry(id: number) {
     const country = this.countries.find(country => country.id === id);
@@ -72,7 +72,7 @@ export class IrPhoneInput {
       throw new Error('Invalid country id');
     }
     this.currentCountry = { ...country };
-    this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
+    this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.value });
   }
   render() {
     return (

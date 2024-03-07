@@ -886,6 +886,7 @@ export class IglooCalendar {
         >
           {this.roomNightsData && (
             <ir-room-nights
+              slot="sidebar-body"
               pool={this.roomNightsData.pool}
               onCloseRoomNightsDialog={this.handleRoomNightsDialogClose.bind(this)}
               language={this.language}
@@ -899,6 +900,7 @@ export class IglooCalendar {
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
             <ir-booking-details
+              slot="sidebar-body"
               hasPrint
               hasReceipt
               is_from_front_desk

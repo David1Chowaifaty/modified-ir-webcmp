@@ -12,7 +12,7 @@ export class IrDeleteModal {
   @Prop() user: IHouseKeepers;
 
   @State() isOpen: boolean = false;
-  @State() selectedId: string;
+  @State() selectedId: string = '';
   @State() loadingBtn: 'confirm' | null = null;
 
   @Event() modalClosed: EventEmitter<null>;
@@ -48,8 +48,8 @@ export class IrDeleteModal {
           await this.housekeepingService.manageExposedAssignedUnitToHKM(housekeeping_store.default_properties.property_id, newAssignedUnits);
           const { assigned_units, is_soft_deleted, is_active, ...user } = this.user;
           await this.housekeepingService.editExposedHKM(user, true);
-          this.resetData.emit(null);
         }
+        this.resetData.emit(null);
       }
       if (name === 'cancel') {
         this.closeModal();
@@ -96,13 +96,16 @@ export class IrDeleteModal {
             </div>
             <div class="modal-body text-left p-0 mb-2">
               <ir-select
+                firstOption="nobody"
                 selectedValue={this.selectedId}
                 onSelectChange={e => (this.selectedId = e.detail)}
                 LabelAvailable={false}
-                data={housekeeping_store.hk_criteria.housekeepers.map(m => ({
-                  value: m.id.toString(),
-                  text: m.name,
-                }))}
+                data={housekeeping_store.hk_criteria.housekeepers
+                  .filter(hk => hk.id !== this.user.id)
+                  .map(m => ({
+                    value: m.id.toString(),
+                    text: m.name,
+                  }))}
               ></ir-select>
             </div>
 

@@ -91,7 +91,7 @@ export class IrHkUnassignedUnits {
       if (!roomType.is_active) {
         return null;
       }
-      return roomType.physicalrooms.map(physical_room => {
+      return roomType.physicalrooms?.map(physical_room => {
         let taken = !housekeeping_store.hk_criteria.units_assignments.unassigned_units.find(unit => unit.id === physical_room.id);
         let housekeeper = [];
         const assignedRoom = this.assignedUnits.get(physical_room.id);
@@ -106,14 +106,14 @@ export class IrHkUnassignedUnits {
         return (
           <li key={physical_room.id}>
             <div class="d-flex mr-3">
-              <p class="mr-2">{physical_room.name}</p> <span>{taken ? housekeeper[0].name : ''}</span>
+              <p class="mr-2">{physical_room.name}</p> <span>{taken ? housekeeper[0]?.name : ''}</span>
             </div>
             <ir-switch
               onCheckChange={e => {
                 const checked = e.detail;
                 this.assignUnit(physical_room.id, this.user.id, checked);
               }}
-              checked={taken && housekeeper[0].id === this.user.id}
+              checked={taken && housekeeper[0]?.id === this.user.id}
             ></ir-switch>
           </li>
         );

@@ -481,6 +481,7 @@ export class IrBookingDetails {
       >
         {this.sidebarState === 'guest' && (
           <ir-guest-info
+            slot="sidebar-body"
             booking_nbr={this.bookingNumber}
             defaultTexts={this.defaultTexts}
             email={this.bookingData?.guest.email}
@@ -490,6 +491,7 @@ export class IrBookingDetails {
         )}
         {this.sidebarState === 'pickup' && (
           <ir-pickup
+            slot="sidebar-body"
             defaultPickupData={this.bookingData.pickup_info}
             bookingNumber={this.bookingData.booking_nbr}
             numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}

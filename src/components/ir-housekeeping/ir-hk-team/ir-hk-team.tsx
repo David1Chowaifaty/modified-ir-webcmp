@@ -35,9 +35,9 @@ export class IrHkTeam {
   renderCurrentTrigger() {
     switch (this.currentTrigger?.type) {
       case 'unassigned_units':
-        return <ir-hk-unassigned-units user={this.currentTrigger.user}></ir-hk-unassigned-units>;
+        return <ir-hk-unassigned-units slot="sidebar-body" user={this.currentTrigger.user}></ir-hk-unassigned-units>;
       case 'user':
-        return <ir-hk-user user={this.currentTrigger.user} isEdit={this.currentTrigger.isEdit}></ir-hk-user>;
+        return <ir-hk-user slot="sidebar-body" user={this.currentTrigger.user} isEdit={this.currentTrigger.isEdit}></ir-hk-user>;
       default:
         return null;
     }
