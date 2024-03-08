@@ -12,6 +12,7 @@
 | `baseurl`    | `baseurl`    |             | `string` | `''`        |
 | `language`   | `language`   |             | `string` | `''`        |
 | `propertyid` | `propertyid` |             | `number` | `undefined` |
+| `rowCount`   | `row-count`  |             | `number` | `10`        |
 | `ticket`     | `ticket`     |             | `string` | `''`        |
 
 

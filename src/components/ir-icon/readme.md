@@ -29,8 +29,12 @@
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-channel-editor](../ir-channel/ir-channel-editor)
  - [ir-channel-mapping](../ir-channel/ir-channel-mapping)
+ - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
  - [ir-dropdown](../ir-dropdown)
  - [ir-guest-info](../ir-guest-info)
+ - [ir-hk-team](../ir-housekeeping/ir-hk-team)
+ - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
+ - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-label](../ir-label)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
@@ -49,8 +53,12 @@ graph TD;
   ir-booking-listing --> ir-icon
   ir-channel-editor --> ir-icon
   ir-channel-mapping --> ir-icon
+  ir-delete-modal --> ir-icon
   ir-dropdown --> ir-icon
   ir-guest-info --> ir-icon
+  ir-hk-team --> ir-icon
+  ir-hk-unassigned-units --> ir-icon
+  ir-hk-user --> ir-icon
   ir-label --> ir-icon
   ir-listing-header --> ir-icon
   ir-listing-modal --> ir-icon

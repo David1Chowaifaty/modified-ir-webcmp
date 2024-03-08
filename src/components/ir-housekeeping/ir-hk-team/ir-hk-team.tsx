@@ -83,7 +83,7 @@ export class IrHkTeam {
               </div>
             </div>
           </div>
-          <p>As an option, create housekeepers (as inividuals or teams) and assign units to them to notify them seperatlely.</p>
+          <p>As an option, create housekeepers (as individuals or teams) and assign units to them to notify them separately.</p>
         </section>
         <section class="table-container">
           <table class="table">

@@ -40,7 +40,10 @@
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-channel](../ir-channel)
  - [ir-channel-editor](../ir-channel/ir-channel-editor)
+ - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
  - [ir-guest-info](../ir-guest-info)
+ - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
+ - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-modal](../ir-modal)
  - [ir-pickup](../ir-booking-details/ir-pickup)
@@ -56,7 +59,10 @@ graph TD;
   ir-booking-listing --> ir-button
   ir-channel --> ir-button
   ir-channel-editor --> ir-button
+  ir-delete-modal --> ir-button
   ir-guest-info --> ir-button
+  ir-hk-unassigned-units --> ir-button
+  ir-hk-user --> ir-button
   ir-listing-modal --> ir-button
   ir-modal --> ir-button
   ir-pickup --> ir-button

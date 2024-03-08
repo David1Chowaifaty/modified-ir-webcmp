@@ -124,9 +124,9 @@ export class IrHkUnassignedUnits {
     return (
       <Host class="px-1">
         <div class="d-flex align-items-center py-1 justify-content-between">
-          <h3 class="text-left font-medium-2  py-0 my-0">{!this.user ? 'Assingn Units' : `Assignment for ${this.user.name}`}</h3>
+          <h3 class="text-left font-medium-2 title py-0 my-0">{!this.user ? 'Assingn Units' : `Assignment for ${this.user.name}`}</h3>
           <ir-icon
-            class={'m-0 p-0 close'}
+            class={'ml-1 m-0 p-0 close'}
             onIconClickHandler={() => {
               this.closeSideBar.emit(null);
             }}

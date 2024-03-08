@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type          | Default     |
-| --------- | --------- | ----------- | ------------- | ----------- |
-| `label`   | `label`   |             | `string`      | `undefined` |
-| `remarks` | --        |             | `IOtaNotes[]` | `undefined` |
+| Property          | Attribute           | Description | Type          | Default     |
+| ----------------- | ------------------- | ----------- | ------------- | ----------- |
+| `label`           | `label`             |             | `string`      | `undefined` |
+| `maxVisibleItems` | `max-visible-items` |             | `number`      | `3`         |
+| `remarks`         | --                  |             | `IOtaNotes[]` | `undefined` |
 
 
 ## Dependencies

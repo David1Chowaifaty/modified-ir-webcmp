@@ -7,15 +7,15 @@
 
 ## Properties
 
-| Property      | Attribute     | Description | Type                              | Default     |
-| ------------- | ------------- | ----------- | --------------------------------- | ----------- |
-| `autoFocus`   | `auto-focus`  |             | `boolean`                         | `false`     |
-| `data`        | --            |             | `{ id: string; name: string; }[]` | `[]`        |
-| `disabled`    | `disabled`    |             | `boolean`                         | `false`     |
-| `duration`    | `duration`    |             | `number`                          | `300`       |
-| `input_id`    | `input_id`    |             | `string`                          | `''`        |
-| `placeholder` | `placeholder` |             | `string`                          | `undefined` |
-| `value`       | `value`       |             | `string`                          | `undefined` |
+| Property      | Attribute     | Description | Type                                              | Default     |
+| ------------- | ------------- | ----------- | ------------------------------------------------- | ----------- |
+| `autoFocus`   | `auto-focus`  |             | `boolean`                                         | `false`     |
+| `data`        | --            |             | `{ id: string; name: string; image?: string; }[]` | `[]`        |
+| `disabled`    | `disabled`    |             | `boolean`                                         | `false`     |
+| `duration`    | `duration`    |             | `number`                                          | `300`       |
+| `input_id`    | `input_id`    |             | `string`                                          | `v4()`      |
+| `placeholder` | `placeholder` |             | `string`                                          | `undefined` |
+| `value`       | `value`       |             | `string`                                          | `undefined` |
 
 
 ## Events
@@ -33,12 +33,14 @@
 
  - [ir-channel-general](../ir-channel/ir-channel-general)
  - [ir-channel-mapping](../ir-channel/ir-channel-mapping)
+ - [ir-phone-input](../ir-phone-input)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-channel-general --> ir-combobox
   ir-channel-mapping --> ir-combobox
+  ir-phone-input --> ir-combobox
   style ir-combobox fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

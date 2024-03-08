@@ -45,11 +45,13 @@
  - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
  - [ir-booking-details](../ir-booking-details)
  - [ir-booking-listing](../ir-booking-listing)
+ - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
  - [ir-guest-info](../ir-guest-info)
- - [ir-housekeeping](../ir-housekeeping)
+ - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-pickup](../ir-booking-details/ir-pickup)
+ - [ir-unit-status](../ir-housekeeping/ir-unit-status)
 
 ### Graph
 ```mermaid
@@ -57,11 +59,13 @@ graph TD;
   igl-book-property-header --> ir-select
   ir-booking-details --> ir-select
   ir-booking-listing --> ir-select
+  ir-delete-modal --> ir-select
   ir-guest-info --> ir-select
-  ir-housekeeping --> ir-select
+  ir-hk-unassigned-units --> ir-select
   ir-listing-header --> ir-select
   ir-listing-modal --> ir-select
   ir-pickup --> ir-select
+  ir-unit-status --> ir-select
   style ir-select fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
