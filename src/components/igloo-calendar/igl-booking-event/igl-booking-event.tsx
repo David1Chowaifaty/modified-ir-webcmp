@@ -207,7 +207,7 @@ export class IglBookingEvent {
       }
       if (event.detail.fromRoomId === this.getBookedRoomId()) {
         // Temporarily set to some other title and revert it.. as refresh issue is happening when there minimum change in top / left.
-        this.onMoveUpdateBooking({ toRoomId: this.bookingEvent.PR_ID, moveToDay: '01_01_2023' });
+        this.onMoveUpdateBooking({ toRoomId: 'X', moveToDay: '01_01_2023' });
         this.renderAgain();
         setTimeout(() => {
           this.onMoveUpdateBooking(event.detail);
