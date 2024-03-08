@@ -34,7 +34,7 @@ export class IrUnitStatus {
   render() {
     return (
       <Host class="card p-1">
-        <h4>Room or Unit Status</h4>
+        <h4 class="mb-1">Room or Unit Status</h4>
         <div class="table-container">
           <table>
             <thead>

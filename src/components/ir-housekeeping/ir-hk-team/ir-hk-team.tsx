@@ -68,19 +68,14 @@ export class IrHkTeam {
         <section>
           <div class="assignments-container align-items-start align-items-md-center flex-column flex-md-row justify-between">
             <h4>Room or Unit Status</h4>
-            <div class="assignments-container">
-              <p>
-                {total} <span class="font-semibold">Total units</span>
-              </p>
+            <div class="assignments-container ">
+              <p class="font-weight-bold">{total} Total units</p>
               <p>
                 {assigned} <span class="font-semibold">Assigned</span>
               </p>
-              <div class="unassigned-container">
-                <p>{un_assigned}</p>{' '}
-                <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: null })}>
-                  Unassigned
-                </button>
-              </div>
+              <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: null })}>
+                {un_assigned} Unassigned
+              </button>
             </div>
           </div>
           <p>As an option, create housekeepers (as individuals or teams) and assign units to them to notify them separately.</p>
@@ -118,7 +113,9 @@ export class IrHkTeam {
               {housekeeping_store.hk_criteria.housekeepers.map(hk => (
                 <tr key={hk.id}>
                   <td>{hk.name}</td>
-                  <td>{hk.mobile}</td>
+                  <td>
+                    {hk.phone_prefix} {hk.mobile}
+                  </td>
                   <td>{hk.username}</td>
                   <td>{hk.note}</td>
                   <td>{this.renderAssignedUnits(hk)}</td>

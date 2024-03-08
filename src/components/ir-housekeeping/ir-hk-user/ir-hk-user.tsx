@@ -60,7 +60,7 @@ export class IrHkUser {
       const validationRules: { [P in keyof THKUser]?: ValidationRule } = {
         name: { required: true },
         mobile: { required: true },
-        password: { minLength: 5 },
+        //password: { minLength: 5 },
       };
       const validationResult = validateForm(this.userInfo, validationRules);
       if (!validationResult.isValid) {

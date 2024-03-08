@@ -48,8 +48,11 @@ table {
   align-items: center;
   gap: 8px;
 }
+.assignments-container {
+  gap: 16px;
+}
 .font-semibold {
-  font-weight: 700;
+  font-weight: 600;
 }
 .unassigned-container {
   gap: 4px;

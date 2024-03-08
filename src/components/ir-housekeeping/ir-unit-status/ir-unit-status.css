@@ -6,10 +6,10 @@
   border-radius: 50%;
 }
 .green {
-  background: #629a4c;
+  background: #57f707;
 }
 .red {
-  background: #ff4961;
+  background: rgb(199, 139, 36);
 }
 .orange {
   background: #ff9149;
@@ -23,7 +23,7 @@ th {
   font-size: 12px !important;
 } */
 .black {
-  background: #000;
+  background: #ff4961;
 }
 table {
   width: max-content;
@@ -31,6 +31,7 @@ table {
 td {
   min-width: 140px;
   text-align: center;
+  height: 2rem;
 }
 
 .smallcircle {
