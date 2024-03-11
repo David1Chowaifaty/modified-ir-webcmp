@@ -66,4 +66,11 @@ export class HouseKeepingService extends Token {
     updateHKStore('pending_housekeepers', [...data['My_Result']]);
     return data['My_Result'];
   }
+  public async executeHKAction(params) {
+    const token = this.getToken();
+    if (!token) {
+      throw new Error('Missing token');
+    }
+    await axios.post(`/Execute_HK_Action?Ticket=${token}`, { ...params });
+  }
 }

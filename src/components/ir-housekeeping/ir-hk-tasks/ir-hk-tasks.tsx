@@ -43,6 +43,21 @@ export class IrHkTasks {
   async handleResetData(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
+    const { arrival, arrival_time, housekeeper, unit, status } = this.selectedRoom;
+    this.houseKeepingService.executeHKAction({
+      property_id: this.propertyid,
+      arrival,
+      arrival_time,
+      housekeeper: {
+        id: housekeeper.id,
+      },
+      status: {
+        code: status.code,
+      },
+      unit: {
+        id: unit.id,
+      },
+    });
     await this.houseKeepingService.getExposedHKSetup(this.propertyid);
   }
 
@@ -98,6 +113,18 @@ export class IrHkTasks {
       this.isLoading = false;
     }
   }
+  async handleConfirm(e: CustomEvent) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    try {
+      await this.getPendingActions();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.selectedRoom = null;
+    }
+  }
   render() {
     if (this.isLoading) {
       return <ir-loading-screen></ir-loading-screen>;
@@ -143,36 +170,42 @@ export class IrHkTasks {
             ></ir-select>
           </div>
           <div class="card p-1">
-            <table>
-              <thead>
-                <th>Unit</th>
-                <th>Status</th>
-                <th>Arrival</th>
-                <th>Arrival Time</th>
-                <th>Housekeeper</th>
-                <th class="text-center">Done?</th>
-              </thead>
-              <tbody>
-                {housekeeping_store.pending_housekeepers?.map(action => (
-                  <tr key={action.housekeeper.id}>
-                    <td>{action.unit.name}</td>
-                    <td>{action.status.description}</td>
-                    <td>{action.arrival}</td>
-                    <td>{action.arrival_time}</td>
-                    <td>{action.housekeeper.name}</td>
-                    <td>
-                      <div class="checkbox-container">
-                        <ir-checkbox onCheckChange={e => this.handleCheckChange(e, action)} checked={this.selectedRoom?.unit.id === action.unit.id}></ir-checkbox>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <th>Unit</th>
+                  <th>Status</th>
+                  <th>Arrival</th>
+                  <th>Arrival Time</th>
+                  <th>Housekeeper</th>
+                  <th class="text-center">Done?</th>
+                </thead>
+                <tbody>
+                  {housekeeping_store.pending_housekeepers?.map(action => (
+                    <tr key={action.housekeeper.id}>
+                      <td>{action.unit.name}</td>
+                      <td>{action.status.description}</td>
+                      <td>{action.arrival}</td>
+                      <td>{action.arrival_time}</td>
+                      <td>{action.housekeeper.name}</td>
+                      <td>
+                        <div class="checkbox-container">
+                          <ir-checkbox onCheckChange={e => this.handleCheckChange(e, action)} checked={this.selectedRoom?.unit.id === action.unit.id}></ir-checkbox>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
         {this.selectedRoom && (
-          <ir-modal onCancelModal={() => (this.selectedRoom = null)} modalBody={`Are you sure that room ${this.selectedRoom.unit.name} is cleaned?`}></ir-modal>
+          <ir-modal
+            onConfirmModal={this.handleConfirm.bind(this)}
+            onCancelModal={() => (this.selectedRoom = null)}
+            modalBody={`Are you sure that room ${this.selectedRoom.unit.name} is cleaned?`}
+          ></ir-modal>
         )}
       </Host>
     );
