@@ -51,9 +51,6 @@ table {
 .gap-16 {
   gap: 16px;
 }
-.font-semibold {
-  font-weight: 600;
-}
 .unassigned-container {
   gap: 4px;
 }

@@ -73,7 +73,7 @@ export class IrHkTeam {
                 {total} {locales.entries.Lcz_TotalUnits}
               </p>
               <p class={'m-0 p-0'}>
-                {assigned} <span class="font-semibold">{locales.entries.Lcz_Assigned}</span>
+                {assigned} <span>{locales.entries.Lcz_Assigned}</span>
               </p>
               {un_assigned > 0 && (
                 <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: null })}>
@@ -88,7 +88,7 @@ export class IrHkTeam {
           <table class="table">
             <thead>
               <tr>
-                <th>{locales.entries.Lcz_Name}</th>
+                <th class="text-left">{locales.entries.Lcz_Name}</th>
                 <th>{locales.entries.Lcz_Mobile}</th>
                 <th>{locales.entries.Lcz_Username}</th>
                 <th>{locales.entries.Lcz_Note}</th>
@@ -117,7 +117,7 @@ export class IrHkTeam {
             <tbody>
               {housekeeping_store.hk_criteria.housekeepers.map(hk => (
                 <tr key={hk.id}>
-                  <td>{hk.name}</td>
+                  <td class="text-left">{hk.name}</td>
                   <td>
                     {hk.phone_prefix} {hk.mobile}
                   </td>

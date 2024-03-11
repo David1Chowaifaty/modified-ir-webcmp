@@ -23,7 +23,7 @@ export class IrHkUser {
     note: '',
     password: '',
     property_id: null,
-    username: '',
+    username: null,
     phone_prefix: null,
   };
 
@@ -62,7 +62,6 @@ export class IrHkUser {
         name: { required: true },
         mobile: { required: true },
         password: { required: true, minLength: 5 },
-        username: { required: true },
       };
       const validationResult = validateForm(this.userInfo, validationRules);
       if (!validationResult.isValid) {
@@ -86,7 +85,7 @@ export class IrHkUser {
     return (
       <Host class="px-1">
         <ir-title displayContext="sidebar" label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : locales.entries.Lcz_CreateHousekeeperProfile}></ir-title>
-        <section class="pt-1">
+        <section>
           <ir-input-text
             error={this.errors?.name?.length > 0}
             label={locales.entries.Lcz_Name}
@@ -108,13 +107,15 @@ export class IrHkUser {
               this.updateUserField('mobile', e.detail.mobile);
             }}
           ></ir-phone-input>
-          <ir-input-text
-            disabled={this.user !== null}
-            label={locales.entries.Lcz_Username}
-            placeholder={locales.entries.Lcz_Username}
-            value={this.userInfo.username}
-            onTextChange={e => this.updateUserField('username', e.detail)}
-          ></ir-input-text>
+          {this.user && (
+            <ir-input-text
+              disabled={this.user !== null}
+              label={locales.entries.Lcz_Username}
+              placeholder={locales.entries.Lcz_Username}
+              value={this.userInfo.username}
+              onTextChange={e => this.updateUserField('username', e.detail)}
+            ></ir-input-text>
+          )}
           <ir-input-text
             label={locales.entries.Lcz_Password}
             placeholder={locales.entries.Lcz_MinimumCharacter}
