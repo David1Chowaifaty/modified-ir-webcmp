@@ -318,12 +318,11 @@ export namespace Components {
     interface IrChannelMapping {
     }
     interface IrCheckbox {
+        "checkboxId": string;
         "checked": boolean;
         "disabled": boolean;
         "label": string;
-        "labelPosition": 'before' | 'after';
         "name": string;
-        "value": string;
     }
     interface IrCheckboxes {
         "checkboxes": checkboxes[];
@@ -391,6 +390,12 @@ export namespace Components {
         "language": string;
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
+    }
+    interface IrHkTasks {
+        "baseurl": string;
+        "language": string;
+        "propertyid": number;
+        "ticket": string;
     }
     interface IrHkTeam {
     }
@@ -1347,7 +1352,7 @@ declare global {
         new (): HTMLIrChannelMappingElement;
     };
     interface HTMLIrCheckboxElementEventMap {
-        "checkboxChange": { name: string; value: string; checked: boolean };
+        "checkChange": boolean;
     }
     interface HTMLIrCheckboxElement extends Components.IrCheckbox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrCheckboxElementEventMap>(type: K, listener: (this: HTMLIrCheckboxElement, ev: IrCheckboxCustomEvent<HTMLIrCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1483,6 +1488,12 @@ declare global {
     var HTMLIrGuestInfoElement: {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
+    };
+    interface HTMLIrHkTasksElement extends Components.IrHkTasks, HTMLStencilElement {
+    }
+    var HTMLIrHkTasksElement: {
+        prototype: HTMLIrHkTasksElement;
+        new (): HTMLIrHkTasksElement;
     };
     interface HTMLIrHkTeamElement extends Components.IrHkTeam, HTMLStencilElement {
     }
@@ -1900,6 +1911,7 @@ declare global {
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-hk-tasks": HTMLIrHkTasksElement;
         "ir-hk-team": HTMLIrHkTeamElement;
         "ir-hk-unassigned-units": HTMLIrHkUnassignedUnitsElement;
         "ir-hk-user": HTMLIrHkUserElement;
@@ -2294,13 +2306,12 @@ declare namespace LocalJSX {
     interface IrChannelMapping {
     }
     interface IrCheckbox {
+        "checkboxId"?: string;
         "checked"?: boolean;
         "disabled"?: boolean;
         "label"?: string;
-        "labelPosition"?: 'before' | 'after';
         "name"?: string;
-        "onCheckboxChange"?: (event: IrCheckboxCustomEvent<{ name: string; value: string; checked: boolean }>) => void;
-        "value"?: string;
+        "onCheckChange"?: (event: IrCheckboxCustomEvent<boolean>) => void;
     }
     interface IrCheckboxes {
         "checkboxes"?: checkboxes[];
@@ -2379,6 +2390,12 @@ declare namespace LocalJSX {
         "onResetBookingData"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
+    }
+    interface IrHkTasks {
+        "baseurl"?: string;
+        "language"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
     }
     interface IrHkTeam {
     }
@@ -2652,6 +2669,7 @@ declare namespace LocalJSX {
         "ir-delete-modal": IrDeleteModal;
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
+        "ir-hk-tasks": IrHkTasks;
         "ir-hk-team": IrHkTeam;
         "ir-hk-unassigned-units": IrHkUnassignedUnits;
         "ir-hk-user": IrHkUser;
@@ -2726,6 +2744,7 @@ declare module "@stencil/core" {
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;
             "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;
             "ir-hk-unassigned-units": LocalJSX.IrHkUnassignedUnits & JSXBase.HTMLAttributes<HTMLIrHkUnassignedUnitsElement>;
             "ir-hk-user": LocalJSX.IrHkUser & JSXBase.HTMLAttributes<HTMLIrHkUserElement>;

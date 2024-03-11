@@ -18,6 +18,23 @@ export interface IHouseKeepers {
   assigned_units: IUnit[];
 }
 export type THKUser = Omit<IHouseKeepers, 'is_soft_deleted' | 'is_active' | 'assigned_units'>;
+export type TPendingHkSetupParams = {
+  property_id: number;
+  bracket: {
+    code: string;
+  };
+  housekeeper: {
+    id: number;
+  };
+};
+export interface IHKTasks {
+  brackets: IBrackets[];
+  housekeepers: IHouseKeepers[];
+}
+export interface IBrackets {
+  code: string;
+  description: string;
+}
 export interface IUnit {
   calendar_cell: string | null;
   housekeeper: null;
@@ -69,4 +86,11 @@ export interface IPropertyHousekeepingAssignment {
   hkm_id: number;
   unit_id: number;
   is_to_assign: boolean;
+}
+export interface IPendingActions {
+  arrival: string;
+  arrival_time: string;
+  housekeeper: IHouseKeepers;
+  status: IHKStatuses;
+  unit: IUnit;
 }

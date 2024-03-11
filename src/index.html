@@ -24,12 +24,12 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-housekeeping baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-housekeeping>
+  <ir-hk-tasks baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-hk-tasks>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
     checkBrowserValidity()
-    const housekeepingEl = document.querySelector("ir-housekeeping");
+    const housekeepingEl = document.querySelector("ir-hk-tasks");
     if (housekeepingEl) {
       housekeepingEl.propertyid = getId();
       housekeepingEl.ticket = getToken();
