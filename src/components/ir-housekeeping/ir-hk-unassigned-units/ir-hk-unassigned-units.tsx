@@ -73,7 +73,6 @@ export class IrHkUnassignedUnits {
           <td class="sr-only"></td>
           <td>
             <ir-select
-              class="ml-4"
               onSelectChange={e => {
                 let hk_id = e.detail;
                 if (hk_id === '') {
