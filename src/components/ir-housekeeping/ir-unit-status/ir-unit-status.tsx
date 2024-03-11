@@ -23,7 +23,7 @@ export class IrUnitStatus {
       let mode: IInspectionMode;
       if (window === '') {
         mode = {
-          is_active: true,
+          is_active: false,
           window: -1,
         };
       } else {
@@ -64,10 +64,10 @@ export class IrUnitStatus {
                   <td>
                     <div class="action-container">
                       <p class={'m-0'}>{status.action}</p>
-                      {status.inspection_mode?.is_active && (
+                      {status.code === 'VAC' && (
                         <div>
                           <ir-select
-                            selectedValue={status.inspection_mode?.window.toString()}
+                            selectedValue={status.inspection_mode.is_active ? status.inspection_mode?.window.toString() : ''}
                             LabelAvailable={false}
                             firstOption={locales.entries.Lcz_No}
                             onSelectChange={this.handleSelectChange.bind(this)}
