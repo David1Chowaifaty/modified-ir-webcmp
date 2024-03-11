@@ -159,12 +159,12 @@ export class IrHkTeam {
           </table>
         </section>
         <ir-sidebar
-          sidebarStyles={{
-            maxWidth: this.currentTrigger?.type === 'unassigned_units' ? 'max-content' : '100%',
-          }}
           showCloseButton={false}
           open={this.currentTrigger !== null && this.currentTrigger.type !== 'delete'}
           onIrSidebarToggle={() => (this.currentTrigger = null)}
+          style={{
+            '--sidebar-width': this.currentTrigger ? (this.currentTrigger.type === 'unassigned_units' ? 'max-content' : '40rem') : 'max-content',
+          }}
         >
           {this.renderCurrentTrigger()}
         </ir-sidebar>

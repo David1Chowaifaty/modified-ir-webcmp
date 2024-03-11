@@ -68,23 +68,26 @@ export class IrHkUnassignedUnits {
   renderRooms() {
     if (!this.user) {
       return housekeeping_store.hk_criteria.units_assignments.unassigned_units.map(unit => (
-        <li key={unit.id}>
-          <p class="mr-2">{unit.name}</p>
-          <ir-select
-            class="ml-4"
-            onSelectChange={e => {
-              let hk_id = e.detail;
-              if (hk_id === '') {
-                hk_id = null;
-              } else {
-                hk_id = +hk_id;
-              }
-              this.assignUnit(unit.id, hk_id, false);
-            }}
-            LabelAvailable={false}
-            data={housekeeping_store.hk_criteria.housekeepers.map(hk => ({ text: hk.name, value: hk.id.toString() }))}
-          ></ir-select>
-        </li>
+        <tr key={unit.id}>
+          <td class="mr-2">{unit.name}</td>
+          <td class="sr-only"></td>
+          <td>
+            <ir-select
+              class="ml-4"
+              onSelectChange={e => {
+                let hk_id = e.detail;
+                if (hk_id === '') {
+                  hk_id = null;
+                } else {
+                  hk_id = +hk_id;
+                }
+                this.assignUnit(unit.id, hk_id, false);
+              }}
+              LabelAvailable={false}
+              data={housekeeping_store.hk_criteria.housekeepers.map(hk => ({ text: hk.name, value: hk.id.toString() }))}
+            ></ir-select>
+          </td>
+        </tr>
       ));
     }
     return calendar_data.roomsInfo.map(roomType => {
@@ -104,18 +107,19 @@ export class IrHkUnassignedUnits {
           }
         }
         return (
-          <li key={physical_room.id}>
-            <div class="d-flex mr-3">
-              <p class="mr-2">{physical_room.name}</p> <span>{taken ? housekeeper[0]?.name : ''}</span>
-            </div>
-            <ir-switch
-              onCheckChange={e => {
-                const checked = e.detail;
-                this.assignUnit(physical_room.id, this.user.id, checked);
-              }}
-              checked={taken && housekeeper[0]?.id === this.user.id}
-            ></ir-switch>
-          </li>
+          <tr key={physical_room.id}>
+            <td>{physical_room.name}</td>
+            <td>{taken ? housekeeper[0]?.name : ''}</td>
+            <td>
+              <ir-switch
+                onCheckChange={e => {
+                  const checked = e.detail;
+                  this.assignUnit(physical_room.id, this.user.id, checked);
+                }}
+                checked={taken && housekeeper[0]?.id === this.user.id}
+              ></ir-switch>
+            </td>
+          </tr>
         );
       });
     });
@@ -125,7 +129,14 @@ export class IrHkUnassignedUnits {
       <Host class="px-1">
         <ir-title class="title" displayContext="sidebar" label={!this.user ? 'Assingn Units' : `Assignment for ${this.user.name}`}></ir-title>
         <section class="pt-1 pb-1">
-          <ul>{this.renderRooms()}</ul>
+          <table>
+            <thead>
+              <th class="sr-only">room name</th>
+              <th class="sr-only">housekeeper name</th>
+              <th class="sr-only">actions</th>
+            </thead>
+            <tbody>{this.renderRooms()}</tbody>
+          </table>
           <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
             <ir-button
               onClickHanlder={() => this.closeSideBar.emit(null)}
