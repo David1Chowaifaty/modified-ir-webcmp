@@ -76,9 +76,11 @@ export class IrHkTeam {
                 <p class={'m-0 p-0'}>
                   {assigned} <span class="font-semibold">{locales.entries.Lcz_Assigned}</span>
                 </p>
-                <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: null })}>
-                  {un_assigned} {locales.entries.Lcz_Unassigned}
-                </button>
+                {un_assigned > 0 && (
+                  <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: null })}>
+                    {un_assigned} {locales.entries.Lcz_Unassigned}
+                  </button>
+                )}
               </div>
             </ir-title>
           </div>

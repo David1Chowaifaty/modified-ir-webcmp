@@ -92,7 +92,7 @@ export class IrHkUnassignedUnits {
         return null;
       }
       return roomType.physicalrooms?.map(physical_room => {
-        let taken = !housekeeping_store.hk_criteria.units_assignments.unassigned_units.find(unit => unit.id === physical_room.id);
+        let taken = !housekeeping_store.hk_criteria.units_assignments.unassigned_units?.find(unit => unit.id === physical_room.id);
         let housekeeper = [];
         const assignedRoom = this.assignedUnits.get(physical_room.id);
         if (assignedRoom && assignedRoom.is_to_assign) {
