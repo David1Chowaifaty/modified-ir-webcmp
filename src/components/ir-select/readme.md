@@ -47,6 +47,7 @@
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
  - [ir-guest-info](../ir-guest-info)
+ - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
@@ -61,6 +62,7 @@ graph TD;
   ir-booking-listing --> ir-select
   ir-delete-modal --> ir-select
   ir-guest-info --> ir-select
+  ir-hk-tasks --> ir-select
   ir-hk-unassigned-units --> ir-select
   ir-listing-header --> ir-select
   ir-listing-modal --> ir-select

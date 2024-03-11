@@ -27,6 +27,7 @@ export class IrModal {
   @Method()
   async closeModal() {
     this.isOpen = false;
+    this.cancelModal.emit();
   }
   @Method()
   async openModal() {

@@ -33,17 +33,20 @@ graph TD;
   ir-housekeeping --> ir-toast
   ir-housekeeping --> ir-unit-status
   ir-housekeeping --> ir-hk-team
+  ir-unit-status --> ir-title
   ir-unit-status --> ir-select
+  ir-title --> ir-icon
   ir-hk-team --> ir-hk-unassigned-units
   ir-hk-team --> ir-hk-user
+  ir-hk-team --> ir-title
   ir-hk-team --> ir-icon
   ir-hk-team --> ir-sidebar
   ir-hk-team --> ir-delete-modal
   ir-hk-unassigned-units --> ir-select
   ir-hk-unassigned-units --> ir-switch
-  ir-hk-unassigned-units --> ir-icon
+  ir-hk-unassigned-units --> ir-title
   ir-hk-unassigned-units --> ir-button
-  ir-hk-user --> ir-icon
+  ir-hk-user --> ir-title
   ir-hk-user --> ir-input-text
   ir-hk-user --> ir-phone-input
   ir-hk-user --> ir-button

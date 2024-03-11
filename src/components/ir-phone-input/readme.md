@@ -15,6 +15,7 @@
 | `label`           | `label`           |             | `string`  | `undefined` |
 | `language`        | `language`        |             | `string`  | `undefined` |
 | `phone_prefix`    | `phone_prefix`    |             | `string`  | `null`      |
+| `placeholder`     | `placeholder`     |             | `string`  | `undefined` |
 | `token`           | `token`           |             | `string`  | `undefined` |
 | `value`           | `value`           |             | `string`  | `''`        |
 

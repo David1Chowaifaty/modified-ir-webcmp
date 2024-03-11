@@ -42,6 +42,7 @@
  - [ir-channel-editor](../ir-channel/ir-channel-editor)
  - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
  - [ir-guest-info](../ir-guest-info)
+ - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
@@ -61,6 +62,7 @@ graph TD;
   ir-channel-editor --> ir-button
   ir-delete-modal --> ir-button
   ir-guest-info --> ir-button
+  ir-hk-tasks --> ir-button
   ir-hk-unassigned-units --> ir-button
   ir-hk-user --> ir-button
   ir-listing-modal --> ir-button

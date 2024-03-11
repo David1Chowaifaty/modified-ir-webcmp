@@ -30,7 +30,7 @@
 
 - [ir-select](../../ir-select)
 - [ir-switch](../../ir-switch)
-- [ir-icon](../../ir-icon)
+- [ir-title](../../ir-title)
 - [ir-button](../../ir-button)
 
 ### Graph
@@ -38,8 +38,9 @@
 graph TD;
   ir-hk-unassigned-units --> ir-select
   ir-hk-unassigned-units --> ir-switch
-  ir-hk-unassigned-units --> ir-icon
+  ir-hk-unassigned-units --> ir-title
   ir-hk-unassigned-units --> ir-button
+  ir-title --> ir-icon
   ir-hk-team --> ir-hk-unassigned-units
   style ir-hk-unassigned-units fill:#f9f,stroke:#333,stroke-width:4px
 ```

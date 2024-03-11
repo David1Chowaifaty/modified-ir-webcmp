@@ -29,7 +29,7 @@
 
 ### Depends on
 
-- [ir-icon](../../ir-icon)
+- [ir-title](../../ir-title)
 - [ir-input-text](../../ir-input-text)
 - [ir-phone-input](../../ir-phone-input)
 - [ir-button](../../ir-button)
@@ -37,10 +37,11 @@
 ### Graph
 ```mermaid
 graph TD;
-  ir-hk-user --> ir-icon
+  ir-hk-user --> ir-title
   ir-hk-user --> ir-input-text
   ir-hk-user --> ir-phone-input
   ir-hk-user --> ir-button
+  ir-title --> ir-icon
   ir-phone-input --> ir-combobox
   ir-hk-team --> ir-hk-user
   style ir-hk-user fill:#f9f,stroke:#333,stroke-width:4px
