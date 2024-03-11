@@ -134,10 +134,14 @@ export class IrHkTasks {
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <section class="p-2">
-          <ir-title label="Housekeeping Tasks" justifyContent="space-between">
+          <ir-title class="d-none d-md-flex" label="Housekeeping Tasks" justifyContent="space-between">
             <ir-button slot="title-body" text={'Archive'} size="sm"></ir-button>
           </ir-title>
-          <div class="d-flex align-items-center mb-1">
+          <div class="d-flex align-items-center mb-2 justify-content-between d-md-none">
+            <ir-title class="mb-0" label="Housekeeping Tasks" justifyContent="space-between"></ir-title>
+            <ir-button slot="title-body" text={'Archive'} size="sm"></ir-button>
+          </div>
+          <div class="d-flex flex-column flex-sm-row align-items-center mb-1  select-container">
             <ir-select
               selectedValue={this.selectedDuration}
               onSelectChange={e => {
@@ -148,6 +152,7 @@ export class IrHkTasks {
                 text: bracket.description,
                 value: bracket.code,
               }))}
+              class="mb-1 w-100 mb-sm-0"
               showFirstOption={false}
               LabelAvailable={false}
             ></ir-select>
@@ -166,7 +171,7 @@ export class IrHkTasks {
               ]}
               showFirstOption={false}
               LabelAvailable={false}
-              class="ml-2"
+              class="ml-sm-2 w-100"
             ></ir-select>
           </div>
           <div class="card p-1">
