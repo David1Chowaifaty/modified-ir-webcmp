@@ -135,7 +135,7 @@ export class IrHkTasks {
         <ir-interceptor></ir-interceptor>
         <section class="p-2">
           <ir-title label="Housekeeping Tasks" justifyContent="space-between">
-            <ir-button slot="title-body" text={'Create task'} size="sm"></ir-button>
+            <ir-button slot="title-body" text={'Archive'} size="sm"></ir-button>
           </ir-title>
           <div class="d-flex align-items-center mb-1">
             <ir-select
@@ -171,23 +171,25 @@ export class IrHkTasks {
           </div>
           <div class="card p-1">
             <div class="table-container">
-              <table>
+              <table class="table">
                 <thead>
-                  <th>Unit</th>
-                  <th>Status</th>
-                  <th>Arrival</th>
-                  <th>Arrival Time</th>
-                  <th>Housekeeper</th>
-                  <th class="text-center">Done?</th>
+                  <tr>
+                    <th class="text-left">Unit</th>
+                    <th class="text-left">Status</th>
+                    <th class="text-left">Arrival date</th>
+                    <th class="text-left">Arrival time</th>
+                    <th class="text-left">Housekeeper</th>
+                    <th class="text-center">Done?</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {housekeeping_store.pending_housekeepers?.map(action => (
                     <tr key={action.housekeeper.id}>
-                      <td>{action.unit.name}</td>
-                      <td>{action.status.description}</td>
-                      <td>{action.arrival}</td>
-                      <td>{action.arrival_time}</td>
-                      <td>{action.housekeeper.name}</td>
+                      <td class="text-left">{action.unit.name}</td>
+                      <td class="text-left">{action.status.description}</td>
+                      <td class="text-left">{action.arrival}</td>
+                      <td class="text-left">{action.arrival_time}</td>
+                      <td class="text-left">{action.housekeeper.name}</td>
                       <td>
                         <div class="checkbox-container">
                           <ir-checkbox onCheckChange={e => this.handleCheckChange(e, action)} checked={this.selectedRoom?.unit.id === action.unit.id}></ir-checkbox>
@@ -204,7 +206,7 @@ export class IrHkTasks {
           <ir-modal
             onConfirmModal={this.handleConfirm.bind(this)}
             onCancelModal={() => (this.selectedRoom = null)}
-            modalBody={`Are you sure that room ${this.selectedRoom.unit.name} is cleaned?`}
+            modalBody={`Is ${this.selectedRoom.unit.name} cleaned?`}
           ></ir-modal>
         )}
       </Host>
