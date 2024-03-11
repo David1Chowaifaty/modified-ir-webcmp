@@ -27,7 +27,6 @@ export class IrModal {
   @Method()
   async closeModal() {
     this.isOpen = false;
-    this.cancelModal.emit();
   }
   @Method()
   async openModal() {
@@ -59,6 +58,7 @@ export class IrModal {
       <div
         class={`backdropModal ${this.isOpen ? 'active' : ''}`}
         onClick={() => {
+          this.cancelModal.emit();
           this.closeModal();
         }}
       ></div>,
