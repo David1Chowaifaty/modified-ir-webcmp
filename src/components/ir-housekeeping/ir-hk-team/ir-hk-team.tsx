@@ -67,23 +67,21 @@ export class IrHkTeam {
     return (
       <Host class="card p-1">
         <section>
-          <div class="assignments-container align-items-start align-items-md-center flex-column flex-md-row justify-between">
-            <ir-title label={locales.entries.Lcz_HousekeepingTeam} justifyContent="space-between">
-              <div slot="title-body" class="assignments-container gap-16 ">
-                <p class="font-weight-bold m-0 p-0">
-                  {total} {locales.entries.Lcz_TotalUnits}
-                </p>
-                <p class={'m-0 p-0'}>
-                  {assigned} <span class="font-semibold">{locales.entries.Lcz_Assigned}</span>
-                </p>
-                {un_assigned > 0 && (
-                  <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: null })}>
-                    {un_assigned} {locales.entries.Lcz_Unassigned}
-                  </button>
-                )}
-              </div>
-            </ir-title>
-          </div>
+          <ir-title label={locales.entries.Lcz_HousekeepingTeam} justifyContent="space-between">
+            <div slot="title-body" class="assignments-container gap-16 m-0">
+              <p class="font-weight-bold m-0 p-0">
+                {total} {locales.entries.Lcz_TotalUnits}
+              </p>
+              <p class={'m-0 p-0'}>
+                {assigned} <span class="font-semibold">{locales.entries.Lcz_Assigned}</span>
+              </p>
+              {un_assigned > 0 && (
+                <button class="outline-btn" onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: null })}>
+                  {un_assigned} {locales.entries.Lcz_Unassigned}
+                </button>
+              )}
+            </div>
+          </ir-title>
           <p class={'m-0 p-0'}>{locales.entries.Lcz_AsAnOption}</p>
         </section>
         <section class="table-container">
