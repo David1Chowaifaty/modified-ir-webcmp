@@ -3,7 +3,8 @@ export interface ILocale {
   entries: TLocaleEntries;
   direction: 'ltr' | 'rtl';
 }
-export type TLocaleEntries = (LocalizationStrings & LocalizationChannelFrontEntries & BookingListingCodes) | null;
+export type TLocaleEntries = (LocalizationStrings & LocalizationChannelFrontEntries & BookingListingCodes & HousekeepingLocalizedWords) | null;
+
 export type LocalizationStrings = {
   Lcz_Adding: string;
   Lcz_AddingRoomNightsTo: string;
@@ -198,6 +199,43 @@ export type BookingListingCodes = {
   Lcz_BookingBalance: string;
   Lcz_NoDataAvailable: string;
   Lcz_All: string;
+};
+export type HousekeepingLocalizedWords = {
+  Lcz_Action: string;
+  Lcz_AsAnOption: string;
+  Lcz_Assign: string;
+  Lcz_Assigned: string;
+  Lcz_AssignmentFor: string;
+  Lcz_AssignUnitsTo: string;
+  Lcz_Cancel: string;
+  Lcz_Code: string;
+  Lcz_Confirm: string;
+  Lcz_CreateHousekeeper: string;
+  Lcz_CreateHousekeeperProfile: string;
+  Lcz_DayPrior: string;
+  Lcz_DaysPrior: string;
+  Lcz_DeleteHousekeeper: string;
+  Lcz_Edit: string;
+  Lcz_EditHousekeeper: string;
+  Lcz_EditHousekeeperProfile: string;
+  Lcz_HousekeepingTeam: string;
+  Lcz_MinimumCharacter: string;
+  Lcz_Mobile: string;
+  Lcz_Name: string;
+  Lcz_No: string;
+  Lcz_nobody: string;
+  Lcz_Note: string;
+  Lcz_Password: string;
+  Lcz_RoomOnUnitStatus: string;
+  Lcz_RoomOrUnitStatus: string;
+  Lcz_Save: string;
+  Lcz_Select: string;
+  Lcz_Status: string;
+  Lcz_TotalUnits: string;
+  Lcz_Unassigned: string;
+  Lcz_UnitsAssigned: string;
+  Lcz_Username: string;
+  Lcz_YesOnTheSameDay: string;
 };
 
 export type LocalizationChannelFrontEntries = {

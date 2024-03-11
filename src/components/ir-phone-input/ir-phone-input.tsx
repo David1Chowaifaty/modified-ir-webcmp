@@ -17,6 +17,7 @@ export class IrPhoneInput {
   @Prop() language: string;
   @Prop() default_country: number = null;
   @Prop() phone_prefix: string | null = null;
+  @Prop() placeholder: string;
 
   @Event() textChange: EventEmitter<{ phone_prefix: string; mobile: string }>;
   @State() inputValue: string = '';
@@ -94,7 +95,7 @@ export class IrPhoneInput {
               </button>
 
               <label>{this.currentCountry?.phone_prefix}</label>
-              <input type="text" required value={this.inputValue} disabled={this.disabled} onInput={e => this.handleInputChange(e)} />
+              <input type="text" placeholder={this.placeholder} required value={this.inputValue} disabled={this.disabled} onInput={e => this.handleInputChange(e)} />
             </div>{' '}
             {this.isDropdownVisible && (
               <div class="ir-dropdown-container">
@@ -114,7 +115,7 @@ export class IrPhoneInput {
               </div>
             )}
           </div>
-          {this.error && <div class="invalid-feedback">Please enter a valid phone number.</div>}
+          {/* {this.error && <div class="invalid-feedback">Please enter a valid phone number.</div>} */}
         </div>
       </Host>
     );

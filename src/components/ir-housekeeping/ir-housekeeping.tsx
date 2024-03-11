@@ -50,7 +50,11 @@ export class IrHousekeeping {
   async initializeApp() {
     try {
       this.isLoading = true;
-      await Promise.all([this.houseKeepingService.getExposedHKSetup(this.propertyid), this.roomService.fetchData(this.propertyid, this.language)]);
+      await Promise.all([
+        this.houseKeepingService.getExposedHKSetup(this.propertyid),
+        this.roomService.fetchData(this.propertyid, this.language),
+        this.roomService.fetchLanguage(this.language, ['_HK_FRONT']),
+      ]);
     } catch (error) {
       console.error(error);
     } finally {

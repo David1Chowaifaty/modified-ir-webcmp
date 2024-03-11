@@ -483,6 +483,7 @@ export namespace Components {
         "label": string;
         "language": string;
         "phone_prefix": string | null;
+        "placeholder": string;
         "token": string;
         "value": string;
     }
@@ -566,6 +567,24 @@ export namespace Components {
         "placeholder": string;
         "rows": number;
         "text": string;
+    }
+    interface IrTitle {
+        "displayContext": 'default' | 'sidebar';
+        "justifyContent": | 'center'
+    | 'start'
+    | 'end'
+    | 'flex-start'
+    | 'flex-end'
+    | 'left'
+    | 'right'
+    | 'normal'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+    | 'stretch'
+    | 'safe center'
+    | 'unsafe center';
+        "label": string;
     }
     interface IrToast {
         "position": TPositions;
@@ -782,6 +801,14 @@ export interface IrSidebarCustomEvent<T> extends CustomEvent<T> {
 export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSwitchElement;
+}
+export interface IrTitleCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTitleElement;
+}
+export interface IrUnitStatusCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrUnitStatusElement;
 }
 declare global {
     interface HTMLIglApplicationInfoElementEventMap {
@@ -1780,6 +1807,23 @@ declare global {
         prototype: HTMLIrTextareaElement;
         new (): HTMLIrTextareaElement;
     };
+    interface HTMLIrTitleElementEventMap {
+        "closeSideBar": null;
+    }
+    interface HTMLIrTitleElement extends Components.IrTitle, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTitleElementEventMap>(type: K, listener: (this: HTMLIrTitleElement, ev: IrTitleCustomEvent<HTMLIrTitleElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTitleElementEventMap>(type: K, listener: (this: HTMLIrTitleElement, ev: IrTitleCustomEvent<HTMLIrTitleElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrTitleElement: {
+        prototype: HTMLIrTitleElement;
+        new (): HTMLIrTitleElement;
+    };
     interface HTMLIrToastElement extends Components.IrToast, HTMLStencilElement {
     }
     var HTMLIrToastElement: {
@@ -1792,7 +1836,18 @@ declare global {
         prototype: HTMLIrTooltipElement;
         new (): HTMLIrTooltipElement;
     };
+    interface HTMLIrUnitStatusElementEventMap {
+        "resetData": null;
+    }
     interface HTMLIrUnitStatusElement extends Components.IrUnitStatus, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrUnitStatusElementEventMap>(type: K, listener: (this: HTMLIrUnitStatusElement, ev: IrUnitStatusCustomEvent<HTMLIrUnitStatusElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrUnitStatusElementEventMap>(type: K, listener: (this: HTMLIrUnitStatusElement, ev: IrUnitStatusCustomEvent<HTMLIrUnitStatusElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrUnitStatusElement: {
         prototype: HTMLIrUnitStatusElement;
@@ -1868,6 +1923,7 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-textarea": HTMLIrTextareaElement;
+        "ir-title": HTMLIrTitleElement;
         "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-unit-status": HTMLIrUnitStatusElement;
@@ -2426,6 +2482,7 @@ declare namespace LocalJSX {
         "language"?: string;
         "onTextChange"?: (event: IrPhoneInputCustomEvent<{ phone_prefix: string; mobile: string }>) => void;
         "phone_prefix"?: string | null;
+        "placeholder"?: string;
         "token"?: string;
         "value"?: string;
     }
@@ -2519,6 +2576,25 @@ declare namespace LocalJSX {
         "rows"?: number;
         "text"?: string;
     }
+    interface IrTitle {
+        "displayContext"?: 'default' | 'sidebar';
+        "justifyContent"?: | 'center'
+    | 'start'
+    | 'end'
+    | 'flex-start'
+    | 'flex-end'
+    | 'left'
+    | 'right'
+    | 'normal'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+    | 'stretch'
+    | 'safe center'
+    | 'unsafe center';
+        "label"?: string;
+        "onCloseSideBar"?: (event: IrTitleCustomEvent<null>) => void;
+    }
     interface IrToast {
         "position"?: TPositions;
     }
@@ -2528,6 +2604,7 @@ declare namespace LocalJSX {
         "withHtml"?: boolean;
     }
     interface IrUnitStatus {
+        "onResetData"?: (event: IrUnitStatusCustomEvent<null>) => void;
     }
     interface OtaLabel {
         "label"?: string;
@@ -2598,6 +2675,7 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-switch": IrSwitch;
         "ir-textarea": IrTextarea;
+        "ir-title": IrTitle;
         "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
         "ir-unit-status": IrUnitStatus;
@@ -2671,6 +2749,7 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
+            "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;

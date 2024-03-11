@@ -128,6 +128,7 @@ export class IrInputText {
             value={this.value}
             onInput={this.handleInputChange.bind(this)}
             required={this.required}
+            disabled={this.disabled}
           />
         </div>
       </div>

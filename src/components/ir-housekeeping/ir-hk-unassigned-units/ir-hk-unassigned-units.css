@@ -21,6 +21,5 @@ ul li p {
   width: min-content;
 }
 .title {
-  width: max-content;
-  padding-right: 10px;
+  min-width: 230px !important;
 }

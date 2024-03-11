@@ -46,9 +46,9 @@ table {
 .unassigned-container {
   display: flex;
   align-items: center;
-  gap: 8px;
 }
-.assignments-container {
+
+.gap-16 {
   gap: 16px;
 }
 .font-semibold {
@@ -82,10 +82,11 @@ h4 {
 @media only screen and (min-width: 900px) {
   td {
     min-width: 140px !important;
+    width: max-content !important;
   }
 }
 @media only screen and (max-width: 900px) {
   .table-container {
-    width: 100%;
+    width: max-content !important;
   }
 }
