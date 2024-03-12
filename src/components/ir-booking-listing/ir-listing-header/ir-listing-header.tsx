@@ -34,11 +34,11 @@ export class IrListingHeader {
   async handleSearchClicked(is_to_export: boolean) {
     if (this.inputValue !== '') {
       if (/^-?\d+$/.test(this.inputValue)) {
-        updateUserSelection('book_nbr', this.inputValue);
+        updateUserSelection('book_nbr', this.inputValue.trim());
       } else if (this.inputValue[3] === '-') {
-        updateUserSelection('book_nbr', this.inputValue);
+        updateUserSelection('book_nbr', this.inputValue.trim());
       } else {
-        updateUserSelection('name', this.inputValue);
+        updateUserSelection('name', this.inputValue.trim());
       }
     }
     if (this.inputValue === '' && (booking_listing.userSelection.book_nbr !== '' || booking_listing.userSelection.name !== '')) {
@@ -157,7 +157,7 @@ export class IrListingHeader {
             showFirstOption={false}
             data={booking_listing?.types.map(t => ({
               value: t.id.toString(),
-              text: locales.entries?.Lcz_DateOf + ' ' + t.name,
+              text: t.name,
             }))}
             class="flex-sm-wrap"
             selectedValue={booking_listing.userSelection.filter_type}
