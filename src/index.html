@@ -15,7 +15,6 @@
   <script src="assets/scripts/toastr/toastr.min.js"></script>
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
   <script src="index.js"></script>
-
   <style>
     body {
       overflow-x: hidden;
@@ -25,15 +24,16 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-channel propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-channel>
+  <ir-hk-tasks baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-hk-tasks>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+
   <script>
-    const irchannel = document.querySelector('ir-channel')
-    setTimeout(() => {
-      const ticket = getToken()
-      irchannel.propertyid = getId();
-      irchannel.ticket = ticket
-    }, 300)
+    checkBrowserValidity()
+    const housekeepingEl = document.querySelector("ir-hk-tasks");
+    if (housekeepingEl) {
+      housekeepingEl.propertyid = getId();
+      housekeepingEl.ticket = getToken();
+    } 
   </script>
 
 </body>
