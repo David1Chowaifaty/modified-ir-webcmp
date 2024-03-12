@@ -90,11 +90,12 @@ graph TD;
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button
-  ir-pickup --> ir-icon
+  ir-pickup --> ir-title
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
   ir-pickup --> ir-button
+  ir-title --> ir-icon
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page

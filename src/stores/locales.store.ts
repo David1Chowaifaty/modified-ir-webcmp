@@ -236,6 +236,15 @@ export type HousekeepingLocalizedWords = {
   Lcz_UnitsAssigned: string;
   Lcz_Username: string;
   Lcz_YesOnTheSameDay: string;
+  Lcz_Unit: string;
+  Lcz_Arrivaldate: string;
+  Lcz_Arrivaltime: string;
+  Lcz_Housekeeper: string;
+  Lcz_Done: string;
+  Lcz_Allhousekeepers: string;
+  Lcz_Archive: string;
+  Lcz_Yes: string;
+  Lcz_IsCleaned: string;
 };
 
 export type LocalizationChannelFrontEntries = {

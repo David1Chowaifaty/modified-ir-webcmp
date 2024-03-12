@@ -25,10 +25,12 @@
 
 ### Used by
 
+ - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-team](../ir-housekeeping/ir-hk-team)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
+ - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-unit-status](../ir-housekeeping/ir-unit-status)
 
 ### Depends on
@@ -39,10 +41,12 @@
 ```mermaid
 graph TD;
   ir-title --> ir-icon
+  ir-hk-archive --> ir-title
   ir-hk-tasks --> ir-title
   ir-hk-team --> ir-title
   ir-hk-unassigned-units --> ir-title
   ir-hk-user --> ir-title
+  ir-pickup --> ir-title
   ir-unit-status --> ir-title
   style ir-title fill:#f9f,stroke:#333,stroke-width:4px
 ```

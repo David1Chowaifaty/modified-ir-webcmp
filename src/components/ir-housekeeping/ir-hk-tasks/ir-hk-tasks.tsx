@@ -2,6 +2,7 @@ import { IPendingActions } from '@/models/housekeeping';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
 import housekeeping_store, { updateHKStore } from '@/stores/housekeeping.store';
+import locales from '@/stores/locales.store';
 import { Component, Host, Listen, Prop, State, Watch, h, Element } from '@stencil/core';
 import axios from 'axios';
 
@@ -82,6 +83,12 @@ export class IrHkTasks {
       }, 50);
     }
   }
+  @Listen('closeSideBar')
+  handleCloseSidebar(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.archiveOpened = false;
+  }
   disconnectedCallback() {
     if (this.modalOpenTimeOut) {
       clearTimeout(this.modalOpenTimeOut);
@@ -136,11 +143,11 @@ export class IrHkTasks {
         <ir-interceptor></ir-interceptor>
         <section class="p-2">
           <ir-title class="d-none d-md-flex" label="Housekeeping Tasks" justifyContent="space-between">
-            <ir-button slot="title-body" text={'Archive'} size="sm"></ir-button>
+            <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm"></ir-button>
           </ir-title>
           <div class="d-flex align-items-center mb-2 justify-content-between d-md-none">
             <ir-title class="mb-0" label="Housekeeping Tasks" justifyContent="space-between"></ir-title>
-            <ir-button slot="title-body" text={'Archive'} size="sm" onClickHanlder={() => (this.archiveOpened = true)}></ir-button>
+            <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm" onClickHanlder={() => (this.archiveOpened = true)}></ir-button>
           </div>
           <div class="d-flex flex-column flex-sm-row align-items-center mb-1  select-container">
             <ir-select
@@ -180,12 +187,12 @@ export class IrHkTasks {
               <table class="table">
                 <thead>
                   <tr>
-                    <th class="text-left">Unit</th>
-                    <th class="text-left">Status</th>
-                    <th class="text-left">Arrival date</th>
-                    <th class="text-left">Arrival time</th>
-                    <th class="text-left">Housekeeper</th>
-                    <th class="text-center">Done?</th>
+                    <th class="text-left">{locales.entries.Lcz_Unit}</th>
+                    <th class="text-left">{locales.entries.Lcz_Status}</th>
+                    <th class="text-left">{locales.entries.Lcz_Arrivaldate}</th>
+                    <th class="text-left">{locales.entries.Lcz_ArrivalTime}</th>
+                    <th class="text-left">{locales.entries.Lcz_Housekeeper}</th>
+                    <th class="text-center">{locales.entries.Lcz_Done}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -210,14 +217,16 @@ export class IrHkTasks {
         </section>
         {this.selectedRoom && (
           <ir-modal
+            leftBtnText={locales.entries.Lcz_No}
+            rightBtnText={locales.entries.Lcz_Yes}
             onConfirmModal={this.handleConfirm.bind(this)}
             onCancelModal={() => (this.selectedRoom = null)}
             modalBody={`Is ${this.selectedRoom.unit.name} cleaned?`}
           ></ir-modal>
         )}
-        <ir-sidebar open={this.archiveOpened} showCloseButton={false} onIrSidebarToggle={() => (this.archiveOpened = false)}>
+        {/* <ir-sidebar open={this.archiveOpened} showCloseButton={false} onIrSidebarToggle={() => (this.archiveOpened = false)}>
           {this.archiveOpened && <ir-hk-archive slot="sidebar-body"></ir-hk-archive>}
-        </ir-sidebar>
+        </ir-sidebar> */}
       </Host>
     );
   }
