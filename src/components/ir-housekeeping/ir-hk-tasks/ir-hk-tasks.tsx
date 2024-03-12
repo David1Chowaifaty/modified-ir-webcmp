@@ -22,6 +22,7 @@ export class IrHkTasks {
   @State() selectedDuration = '';
   @State() selectedHouseKeeper = '0';
   @State() selectedRoom: IPendingActions | null = null;
+  @State() archiveOpened = false;
 
   private modalOpenTimeOut: NodeJS.Timeout;
   private roomService = new RoomService();
@@ -139,7 +140,7 @@ export class IrHkTasks {
           </ir-title>
           <div class="d-flex align-items-center mb-2 justify-content-between d-md-none">
             <ir-title class="mb-0" label="Housekeeping Tasks" justifyContent="space-between"></ir-title>
-            <ir-button slot="title-body" text={'Archive'} size="sm"></ir-button>
+            <ir-button slot="title-body" text={'Archive'} size="sm" onClickHanlder={() => (this.archiveOpened = true)}></ir-button>
           </div>
           <div class="d-flex flex-column flex-sm-row align-items-center mb-1  select-container">
             <ir-select
@@ -214,6 +215,9 @@ export class IrHkTasks {
             modalBody={`Is ${this.selectedRoom.unit.name} cleaned?`}
           ></ir-modal>
         )}
+        <ir-sidebar open={this.archiveOpened} showCloseButton={false} onIrSidebarToggle={() => (this.archiveOpened = false)}>
+          {this.archiveOpened && <ir-hk-archive slot="sidebar-body"></ir-hk-archive>}
+        </ir-sidebar>
       </Host>
     );
   }

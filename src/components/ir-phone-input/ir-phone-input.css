@@ -10,6 +10,9 @@
 .input-container:focus-within {
   border-color: #1e9ff2;
 }
+.border-theme {
+  border-color: #cacfe7;
+}
 .input-container input {
   flex: 1;
   border: 0;

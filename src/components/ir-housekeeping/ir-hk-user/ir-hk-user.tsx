@@ -83,9 +83,9 @@ export class IrHkUser {
 
   render() {
     return (
-      <Host class="px-1">
-        <ir-title displayContext="sidebar" label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : locales.entries.Lcz_CreateHousekeeperProfile}></ir-title>
-        <section>
+      <Host>
+        <ir-title class="px-1" displayContext="sidebar" label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : locales.entries.Lcz_CreateHousekeeperProfile}></ir-title>
+        <section class="px-1">
           <ir-input-text
             error={this.errors?.name?.length > 0}
             label={locales.entries.Lcz_Name}

@@ -125,9 +125,9 @@ export class IrHkUnassignedUnits {
   }
   render() {
     return (
-      <Host class="px-1">
-        <ir-title class="title" displayContext="sidebar" label={!this.user ? 'Assingn Units' : `Assignment for ${this.user.name}`}></ir-title>
-        <section>
+      <Host>
+        <ir-title class="title px-1" displayContext="sidebar" label={!this.user ? 'Assingn Units' : `Assignment for ${this.user.name}`}></ir-title>
+        <section class="px-1">
           <table>
             <thead>
               <th class="sr-only">room name</th>

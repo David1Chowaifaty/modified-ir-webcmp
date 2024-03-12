@@ -391,6 +391,8 @@ export namespace Components {
         "setupDataCountries": selectOption[];
         "setupDataCountriesCode": selectOption[];
     }
+    interface IrHkArchive {
+    }
     interface IrHkTasks {
         "baseurl": string;
         "language": string;
@@ -1489,6 +1491,12 @@ declare global {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
     };
+    interface HTMLIrHkArchiveElement extends Components.IrHkArchive, HTMLStencilElement {
+    }
+    var HTMLIrHkArchiveElement: {
+        prototype: HTMLIrHkArchiveElement;
+        new (): HTMLIrHkArchiveElement;
+    };
     interface HTMLIrHkTasksElement extends Components.IrHkTasks, HTMLStencilElement {
     }
     var HTMLIrHkTasksElement: {
@@ -1911,6 +1919,7 @@ declare global {
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-hk-archive": HTMLIrHkArchiveElement;
         "ir-hk-tasks": HTMLIrHkTasksElement;
         "ir-hk-team": HTMLIrHkTeamElement;
         "ir-hk-unassigned-units": HTMLIrHkUnassignedUnitsElement;
@@ -2391,6 +2400,8 @@ declare namespace LocalJSX {
         "setupDataCountries"?: selectOption[];
         "setupDataCountriesCode"?: selectOption[];
     }
+    interface IrHkArchive {
+    }
     interface IrHkTasks {
         "baseurl"?: string;
         "language"?: string;
@@ -2669,6 +2680,7 @@ declare namespace LocalJSX {
         "ir-delete-modal": IrDeleteModal;
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
+        "ir-hk-archive": IrHkArchive;
         "ir-hk-tasks": IrHkTasks;
         "ir-hk-team": IrHkTeam;
         "ir-hk-unassigned-units": IrHkUnassignedUnits;
@@ -2744,6 +2756,7 @@ declare module "@stencil/core" {
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
             "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;
             "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;
             "ir-hk-unassigned-units": LocalJSX.IrHkUnassignedUnits & JSXBase.HTMLAttributes<HTMLIrHkUnassignedUnitsElement>;
