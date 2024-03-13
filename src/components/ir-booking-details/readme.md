@@ -13,6 +13,7 @@
 | `bookingNumber`      | `booking-number`     |             | `string`  | `''`        |
 | `hasCheckIn`         | `has-check-in`       |             | `boolean` | `false`     |
 | `hasCheckOut`        | `has-check-out`      |             | `boolean` | `false`     |
+| `hasCloseButton`     | `has-close-button`   |             | `boolean` | `false`     |
 | `hasDelete`          | `has-delete`         |             | `boolean` | `false`     |
 | `hasMenu`            | `has-menu`           |             | `boolean` | `false`     |
 | `hasPrint`           | `has-print`          |             | `boolean` | `false`     |
@@ -31,6 +32,7 @@
 | Event            | Description | Type                                                                                                 |
 | ---------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
 | `bookingChanged` |             | `CustomEvent<Booking>`                                                                               |
+| `closeSidebar`   |             | `CustomEvent<null>`                                                                                  |
 | `toast`          |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 

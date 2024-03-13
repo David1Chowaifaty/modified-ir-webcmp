@@ -80,6 +80,15 @@ export class IrHkUser {
       this.isLoading = false;
     }
   }
+  async handleBlur(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    if (this.user || !this.userInfo.name) {
+      return;
+    }
+    const usermame = await this.housekeepingService.generateUserName(this.userInfo.name);
+    this.updateUserField('username', usermame);
+  }
 
   render() {
     return (
@@ -92,6 +101,7 @@ export class IrHkUser {
             placeholder={locales.entries.Lcz_Name}
             onTextChange={e => this.updateUserField('name', e.detail)}
             value={this.userInfo.name}
+            onBlur={this.handleBlur.bind(this)}
           ></ir-input-text>
           <ir-phone-input
             placeholder={locales.entries.Lcz_Mobile}
@@ -107,15 +117,15 @@ export class IrHkUser {
               this.updateUserField('mobile', e.detail.mobile);
             }}
           ></ir-phone-input>
-          {this.user && (
-            <ir-input-text
-              disabled={this.user !== null}
-              label={locales.entries.Lcz_Username}
-              placeholder={locales.entries.Lcz_Username}
-              value={this.userInfo.username}
-              onTextChange={e => this.updateUserField('username', e.detail)}
-            ></ir-input-text>
-          )}
+
+          <ir-input-text
+            disabled={this.user !== null}
+            label={locales.entries.Lcz_Username}
+            placeholder={locales.entries.Lcz_Username}
+            value={this.userInfo.username}
+            onTextChange={e => this.updateUserField('username', e.detail)}
+          ></ir-input-text>
+
           <ir-input-text
             label={locales.entries.Lcz_Password}
             placeholder={locales.entries.Lcz_MinimumCharacter}

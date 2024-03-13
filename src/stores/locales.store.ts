@@ -245,9 +245,11 @@ export type HousekeepingLocalizedWords = {
   Lcz_Archive: string;
   Lcz_Yes: string;
   Lcz_IsCleaned: string;
+  Lcz_ConfirmDeletion: string;
 };
 
 export type LocalizationChannelFrontEntries = {
+  Lcz_HousekeepingTasks: string;
   Lcz_Actions: string;
   Lcz_Cancel: string;
   Lcz_Channel: string;

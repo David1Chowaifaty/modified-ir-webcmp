@@ -34,6 +34,7 @@ export class IrInputText {
   @State() inputFocused: boolean = false;
 
   @Event({ bubbles: true, composed: true }) textChange: EventEmitter<any>;
+  @Event() blur: EventEmitter<FocusEvent>;
   connectedCallback() {}
   disconnectedCallback() {}
 
@@ -124,6 +125,7 @@ export class IrInputText {
             class={`${className} ${this.error ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12} ${
               this.readonly && 'bg-white'
             } ${this.inputStyles}`}
+            onBlur={e => this.blur.emit(e)}
             placeholder={this.placeholder}
             value={this.value}
             onInput={this.handleInputChange.bind(this)}

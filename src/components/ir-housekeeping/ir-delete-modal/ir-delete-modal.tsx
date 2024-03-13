@@ -2,6 +2,7 @@ import { Component, EventEmitter, Listen, Method, Prop, State, h, Event } from '
 import housekeeping_store from '@/stores/housekeeping.store';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { IHouseKeepers } from '@/models/housekeeping';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-delete-modal',
@@ -78,7 +79,7 @@ export class IrDeleteModal {
         {this.isOpen && (
           <div class={`ir-alert-content p-2`}>
             <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
-              <p class="p-0 my-0 mb-1">{this.user.assigned_units.length > 0 ? 'Assign units to' : 'Confirm deletion!'}</p>
+              <p class="p-0 my-0 mb-1">{this.user.assigned_units.length > 0 ? locales.entries.Lcz_AssignUnitsTo : locales.entries.Lcz_ConfirmDeletion}</p>
               <ir-icon
                 class="exit-icon"
                 style={{ cursor: 'pointer' }}
@@ -97,7 +98,7 @@ export class IrDeleteModal {
             {this.user.assigned_units.length > 0 && (
               <div class="modal-body text-left p-0 mb-2">
                 <ir-select
-                  firstOption="nobody"
+                  firstOption={locales.entries.Lcz_nobody}
                   selectedValue={this.selectedId}
                   onSelectChange={e => (this.selectedId = e.detail)}
                   LabelAvailable={false}
@@ -112,8 +113,8 @@ export class IrDeleteModal {
             )}
 
             <div class={`ir-alert-footer border-0 d-flex justify-content-end`}>
-              <ir-button icon={''} btn_color={'secondary'} btn_block text={'Cancel'} name={'cancel'}></ir-button>
-              <ir-button isLoading={this.loadingBtn === 'confirm'} icon={''} btn_color={'primary'} btn_block text={'confirm'} name={'confirm'}></ir-button>
+              <ir-button icon={''} btn_color={'secondary'} btn_block text={locales.entries.Lcz_Cancel} name={'cancel'}></ir-button>
+              <ir-button isLoading={this.loadingBtn === 'confirm'} icon={''} btn_color={'primary'} btn_block text={locales.entries.Lcz_Confirm} name={'confirm'}></ir-button>
             </div>
           </div>
         )}
