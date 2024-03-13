@@ -266,6 +266,7 @@ export namespace Components {
         "bookingNumber": string;
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
+        "hasCloseButton": boolean;
         "hasDelete": boolean;
         "hasMenu": boolean;
         "hasPrint": boolean;
@@ -1262,6 +1263,7 @@ declare global {
     interface HTMLIrBookingDetailsElementEventMap {
         "toast": IToast1;
         "bookingChanged": Booking;
+        "closeSidebar": null;
     }
     interface HTMLIrBookingDetailsElement extends Components.IrBookingDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingDetailsElementEventMap>(type: K, listener: (this: HTMLIrBookingDetailsElement, ev: IrBookingDetailsCustomEvent<HTMLIrBookingDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2257,6 +2259,7 @@ declare namespace LocalJSX {
         "bookingNumber"?: string;
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
+        "hasCloseButton"?: boolean;
         "hasDelete"?: boolean;
         "hasMenu"?: boolean;
         "hasPrint"?: boolean;
@@ -2267,6 +2270,7 @@ declare namespace LocalJSX {
         "is_from_front_desk"?: boolean;
         "language"?: string;
         "onBookingChanged"?: (event: IrBookingDetailsCustomEvent<Booking>) => void;
+        "onCloseSidebar"?: (event: IrBookingDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast1>) => void;
         "propertyid"?: number;
         "ticket"?: string;

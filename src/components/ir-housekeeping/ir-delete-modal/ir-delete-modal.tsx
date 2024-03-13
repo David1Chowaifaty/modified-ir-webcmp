@@ -78,7 +78,7 @@ export class IrDeleteModal {
         {this.isOpen && (
           <div class={`ir-alert-content p-2`}>
             <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
-              <p class="p-0 my-0 mb-1">{'Assign units to'}</p>
+              <p class="p-0 my-0 mb-1">{this.user.assigned_units.length > 0 ? 'Assign units to' : 'Confirm deletion!'}</p>
               <ir-icon
                 class="exit-icon"
                 style={{ cursor: 'pointer' }}
@@ -94,20 +94,22 @@ export class IrDeleteModal {
                 </svg>
               </ir-icon>
             </div>
-            <div class="modal-body text-left p-0 mb-2">
-              <ir-select
-                firstOption="nobody"
-                selectedValue={this.selectedId}
-                onSelectChange={e => (this.selectedId = e.detail)}
-                LabelAvailable={false}
-                data={housekeeping_store.hk_criteria.housekeepers
-                  .filter(hk => hk.id !== this.user.id)
-                  .map(m => ({
-                    value: m.id.toString(),
-                    text: m.name,
-                  }))}
-              ></ir-select>
-            </div>
+            {this.user.assigned_units.length > 0 && (
+              <div class="modal-body text-left p-0 mb-2">
+                <ir-select
+                  firstOption="nobody"
+                  selectedValue={this.selectedId}
+                  onSelectChange={e => (this.selectedId = e.detail)}
+                  LabelAvailable={false}
+                  data={housekeeping_store.hk_criteria.housekeepers
+                    .filter(hk => hk.id !== this.user.id)
+                    .map(m => ({
+                      value: m.id.toString(),
+                      text: m.name,
+                    }))}
+                ></ir-select>
+              </div>
+            )}
 
             <div class={`ir-alert-footer border-0 d-flex justify-content-end`}>
               <ir-button icon={''} btn_color={'secondary'} btn_block text={'Cancel'} name={'cancel'}></ir-button>
