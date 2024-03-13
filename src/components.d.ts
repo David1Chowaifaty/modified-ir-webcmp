@@ -1572,7 +1572,7 @@ declare global {
     };
     interface HTMLIrInputTextElementEventMap {
         "textChange": any;
-        "blur": FocusEvent;
+        "inputBlur": FocusEvent;
     }
     interface HTMLIrInputTextElement extends Components.IrInputText, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrInputTextElementEventMap>(type: K, listener: (this: HTMLIrInputTextElement, ev: IrInputTextCustomEvent<HTMLIrInputTextElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2449,7 +2449,7 @@ declare namespace LocalJSX {
         "labelPosition"?: 'left' | 'right' | 'center';
         "labelWidth"?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
         "name"?: string;
-        "onBlur"?: (event: IrInputTextCustomEvent<FocusEvent>) => void;
+        "onInputBlur"?: (event: IrInputTextCustomEvent<FocusEvent>) => void;
         "onTextChange"?: (event: IrInputTextCustomEvent<any>) => void;
         "placeholder"?: string;
         "readonly"?: boolean;

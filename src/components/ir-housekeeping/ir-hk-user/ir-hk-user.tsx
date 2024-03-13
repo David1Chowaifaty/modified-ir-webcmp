@@ -101,7 +101,7 @@ export class IrHkUser {
             placeholder={locales.entries.Lcz_Name}
             onTextChange={e => this.updateUserField('name', e.detail)}
             value={this.userInfo.name}
-            onBlur={this.handleBlur.bind(this)}
+            onInputBlur={this.handleBlur.bind(this)}
           ></ir-input-text>
           <ir-phone-input
             placeholder={locales.entries.Lcz_Mobile}
