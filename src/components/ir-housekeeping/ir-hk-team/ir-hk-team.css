@@ -1,0 +1,89 @@
+:host {
+  display: block;
+}
+th,
+td {
+  text-align: left !important;
+  width: fit-content !important;
+}
+input {
+  border: none;
+  margin: 0;
+  width: 120px;
+}
+input:focus {
+  outline: none;
+}
+.table-container {
+  padding: 10px 0;
+  overflow-x: auto;
+  max-width: 100%;
+  width: max-content;
+}
+.table,
+th,
+td {
+  border-color: white !important;
+}
+
+thead {
+  border: 0 !important;
+}
+table {
+  border: 0 !important;
+}
+.icons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.text-center {
+  text-align: center !important;
+}
+
+.assignments-container,
+.unassigned-container {
+  display: flex;
+  align-items: center;
+}
+
+.gap-16 {
+  gap: 16px;
+}
+.unassigned-container {
+  gap: 4px;
+}
+.justify-between {
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.assignments-container p,
+h4 {
+  margin: 0;
+}
+.outline-btn {
+  background: white;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 1px 0.25rem !important;
+  margin: 0;
+}
+.outline-btn:hover {
+  color: white;
+  background: var(--blue);
+}
+
+@media only screen and (min-width: 900px) {
+  td {
+    min-width: 140px !important;
+    width: max-content !important;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .table-container {
+    width: max-content !important;
+  }
+}

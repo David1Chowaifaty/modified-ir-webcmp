@@ -34,6 +34,7 @@ export class IrInputText {
   @State() inputFocused: boolean = false;
 
   @Event({ bubbles: true, composed: true }) textChange: EventEmitter<any>;
+  @Event() inputBlur: EventEmitter<FocusEvent>;
   connectedCallback() {}
   disconnectedCallback() {}
 
@@ -80,7 +81,10 @@ export class IrInputText {
             type="text"
             onFocus={() => (this.inputFocused = true)}
             required={this.required}
-            onBlur={() => (this.inputFocused = false)}
+            onBlur={e => {
+              this.inputFocused = false;
+              this.inputBlur.emit(e);
+            }}
             disabled={this.disabled}
             class={`form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${this.error && 'danger-border'}`}
             id={id}
@@ -121,13 +125,15 @@ export class IrInputText {
           <input
             readOnly={this.readonly}
             type={this.type}
-            class={`${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12} ${this.readonly && 'bg-white'} ${
-              this.inputStyles
-            }`}
+            class={`${className} ${this.error ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12} ${
+              this.readonly && 'bg-white'
+            } ${this.inputStyles}`}
+            onBlur={e => this.inputBlur.emit(e)}
             placeholder={this.placeholder}
             value={this.value}
             onInput={this.handleInputChange.bind(this)}
             required={this.required}
+            disabled={this.disabled}
           />
         </div>
       </div>

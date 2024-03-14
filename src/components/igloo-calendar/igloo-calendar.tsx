@@ -883,11 +883,12 @@ export class IglooCalendar {
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING')}
-          showCloseButton={this.editBookingItem !== null}
+          showCloseButton={false}
           sidebarStyles={{ width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: this.roomNightsData ? 'white' : '#F2F3F8' }}
         >
           {this.roomNightsData && (
             <ir-room-nights
+              slot="sidebar-body"
               pool={this.roomNightsData.pool}
               onCloseRoomNightsDialog={this.handleRoomNightsDialogClose.bind(this)}
               language={this.language}
@@ -901,8 +902,11 @@ export class IglooCalendar {
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
             <ir-booking-details
+              slot="sidebar-body"
               hasPrint
               hasReceipt
+              hasCloseButton
+              onCloseSidebar={() => (this.editBookingItem = null)}
               is_from_front_desk
               propertyid={this.propertyid}
               hasRoomEdit

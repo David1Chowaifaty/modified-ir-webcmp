@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  --ir-root-active-color: #1e9ff2;
+  --ir-root-inactive-color: #d2d2d2;
+}
+table {
+  width: 100%;
+}
+td {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+td:last-child {
+  text-align: end;
+}
+.title {
+  min-width: 230px !important;
+}

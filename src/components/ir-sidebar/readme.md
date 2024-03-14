@@ -44,6 +44,7 @@ Type: `Promise<void>`
  - [ir-booking-details](../ir-booking-details)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-channel](../ir-channel)
+ - [ir-hk-team](../ir-housekeeping/ir-hk-team)
 
 ### Depends on
 
@@ -57,6 +58,7 @@ graph TD;
   ir-booking-details --> ir-sidebar
   ir-booking-listing --> ir-sidebar
   ir-channel --> ir-sidebar
+  ir-hk-team --> ir-sidebar
   style ir-sidebar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

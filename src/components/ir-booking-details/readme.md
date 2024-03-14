@@ -13,6 +13,7 @@
 | `bookingNumber`      | `booking-number`     |             | `string`  | `''`        |
 | `hasCheckIn`         | `has-check-in`       |             | `boolean` | `false`     |
 | `hasCheckOut`        | `has-check-out`      |             | `boolean` | `false`     |
+| `hasCloseButton`     | `has-close-button`   |             | `boolean` | `false`     |
 | `hasDelete`          | `has-delete`         |             | `boolean` | `false`     |
 | `hasMenu`            | `has-menu`           |             | `boolean` | `false`     |
 | `hasPrint`           | `has-print`          |             | `boolean` | `false`     |
@@ -31,6 +32,7 @@
 | Event            | Description | Type                                                                                                 |
 | ---------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
 | `bookingChanged` |             | `CustomEvent<Booking>`                                                                               |
+| `closeSidebar`   |             | `CustomEvent<null>`                                                                                  |
 | `toast`          |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
@@ -90,11 +92,12 @@ graph TD;
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button
-  ir-pickup --> ir-icon
+  ir-pickup --> ir-title
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
   ir-pickup --> ir-button
+  ir-title --> ir-icon
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page

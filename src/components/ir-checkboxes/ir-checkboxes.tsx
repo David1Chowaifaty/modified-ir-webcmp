@@ -31,7 +31,7 @@ export class IrCheckBoxes {
     return (
       <div>
         {this.checkboxes.map((checkbox, index) => (
-          <ir-checkbox name={index.toString()} label={checkbox.text} value={checkbox.value} checked={checkbox.checked || false}></ir-checkbox>
+          <ir-checkbox name={index.toString()} label={checkbox.text} checked={checkbox.checked || false}></ir-checkbox>
         ))}
       </div>
     );

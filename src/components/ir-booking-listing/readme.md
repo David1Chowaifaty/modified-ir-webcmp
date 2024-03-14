@@ -12,6 +12,7 @@
 | `baseurl`    | `baseurl`    |             | `string` | `''`        |
 | `language`   | `language`   |             | `string` | `''`        |
 | `propertyid` | `propertyid` |             | `number` | `undefined` |
+| `rowCount`   | `row-count`  |             | `number` | `10`        |
 | `ticket`     | `ticket`     |             | `string` | `''`        |
 
 
@@ -107,11 +108,12 @@ graph TD;
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button
-  ir-pickup --> ir-icon
+  ir-pickup --> ir-title
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
   ir-pickup --> ir-button
+  ir-title --> ir-icon
   style ir-booking-listing fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

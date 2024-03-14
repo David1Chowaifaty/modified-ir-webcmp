@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+.circle {
+  display: inline-flex;
+  border-radius: 50%;
+}
+.green {
+  background: #57f707;
+}
+.red {
+  background: rgb(199, 139, 36);
+}
+.orange {
+  background: #ff9149;
+}
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+/* td,
+th {
+  font-size: 12px !important;
+} */
+.black {
+  background: #ff4961;
+}
+table {
+  width: max-content;
+}
+td {
+  min-width: 140px;
+  text-align: center;
+  height: 2rem;
+}
+
+.smallcircle {
+  height: 7px;
+  width: 7px;
+}
+.bigcircle {
+  height: 7px;
+  width: 7px;
+}
+
+.status-container,
+.action-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-container p {
+  margin: 0;
+}

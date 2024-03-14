@@ -36,6 +36,7 @@ export class IrBookingDetails {
   @Prop() hasRoomAdd: boolean = false;
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
+  @Prop() hasCloseButton = false;
 
   @State() bookingItem: TIglBookPropertyPayload | null = null;
   @State() statusData = [];
@@ -57,6 +58,7 @@ export class IrBookingDetails {
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
+  @Event() closeSidebar: EventEmitter<null>;
 
   private bookingService = new BookingService();
   private roomService = new RoomService();
@@ -124,6 +126,9 @@ export class IrBookingDetails {
     switch (target.id) {
       case 'pickup':
         this.sidebarState = 'pickup';
+        return;
+      case 'close':
+        this.closeSidebar.emit(null);
         return;
       case 'print':
         window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
@@ -342,6 +347,17 @@ export class IrBookingDetails {
                 </svg>
               </ir-icon>
             )}
+            {this.hasCloseButton && (
+              <ir-icon id="close" class="m-0 ml-2 pointer" onIconClickHandler={() => this.closeSidebar.emit(null)}>
+                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={24} width={24}>
+                  <path
+                    fill="#104064"
+                    class="currentColor"
+                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                  />
+                </svg>
+              </ir-icon>
+            )}
           </div>
         </div>
       </div>,
@@ -481,6 +497,7 @@ export class IrBookingDetails {
       >
         {this.sidebarState === 'guest' && (
           <ir-guest-info
+            slot="sidebar-body"
             booking_nbr={this.bookingNumber}
             defaultTexts={this.defaultTexts}
             email={this.bookingData?.guest.email}
@@ -490,6 +507,7 @@ export class IrBookingDetails {
         )}
         {this.sidebarState === 'pickup' && (
           <ir-pickup
+            slot="sidebar-body"
             defaultPickupData={this.bookingData.pickup_info}
             bookingNumber={this.bookingData.booking_nbr}
             numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}

@@ -7,21 +7,20 @@
 
 ## Properties
 
-| Property        | Attribute        | Description | Type                  | Default     |
-| --------------- | ---------------- | ----------- | --------------------- | ----------- |
-| `checked`       | `checked`        |             | `boolean`             | `false`     |
-| `disabled`      | `disabled`       |             | `boolean`             | `false`     |
-| `label`         | `label`          |             | `string`              | `'<label>'` |
-| `labelPosition` | `label-position` |             | `"after" \| "before"` | `'after'`   |
-| `name`          | `name`           |             | `string`              | `undefined` |
-| `value`         | `value`          |             | `string`              | `undefined` |
+| Property     | Attribute     | Description | Type      | Default     |
+| ------------ | ------------- | ----------- | --------- | ----------- |
+| `checkboxId` | `checkbox-id` |             | `string`  | `v4()`      |
+| `checked`    | `checked`     |             | `boolean` | `false`     |
+| `disabled`   | `disabled`    |             | `boolean` | `undefined` |
+| `label`      | `label`       |             | `string`  | `undefined` |
+| `name`       | `name`        |             | `string`  | `undefined` |
 
 
 ## Events
 
-| Event            | Description | Type                                                              |
-| ---------------- | ----------- | ----------------------------------------------------------------- |
-| `checkboxChange` |             | `CustomEvent<{ name: string; value: string; checked: boolean; }>` |
+| Event         | Description | Type                   |
+| ------------- | ----------- | ---------------------- |
+| `checkChange` |             | `CustomEvent<boolean>` |
 
 
 ## Dependencies
@@ -29,11 +28,13 @@
 ### Used by
 
  - [ir-checkboxes](../ir-checkboxes)
+ - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-checkboxes --> ir-checkbox
+  ir-hk-tasks --> ir-checkbox
   style ir-checkbox fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

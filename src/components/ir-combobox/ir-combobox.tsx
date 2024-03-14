@@ -1,6 +1,7 @@
 import { IToast } from '@/components';
 import locales from '@/stores/locales.store';
 import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch } from '@stencil/core';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-combobox',
@@ -8,15 +9,16 @@ import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch 
   scoped: true,
 })
 export class IrCombobox {
-  @Prop({ mutable: true }) data: { id: string; name: string }[] = [];
+  @Prop({ mutable: true }) data: { id: string; name: string; image?: string }[] = [];
   @Prop() duration: number = 300;
   @Prop() placeholder: string;
   @Prop() value: string;
   @Prop() disabled: boolean = false;
   @Prop() autoFocus: boolean = false;
-  @Prop() input_id: string = '';
+  @Prop() input_id: string = v4();
 
   @State() selectedIndex: number = -1;
+  @State() actualIndex: number = -1;
   @State() isComboBoxVisible: boolean = false;
   @State() isLoading: boolean = true;
   @State() isItemSelected: boolean;
@@ -47,19 +49,18 @@ export class IrCombobox {
     }
   }
   handleKeyDown(event: KeyboardEvent) {
-    const dataSize = this.data.length;
-    const itemHeight = this.getHeightOfPElement();
+    const dataSize = this.filteredData.length;
     if (dataSize > 0) {
       switch (event.key) {
         case 'ArrowUp':
           event.preventDefault();
           this.selectedIndex = (this.selectedIndex - 1 + dataSize) % dataSize;
-          this.adjustScrollPosition(itemHeight);
+          this.adjustScrollPosition();
           break;
         case 'ArrowDown':
           event.preventDefault();
           this.selectedIndex = (this.selectedIndex + 1) % dataSize;
-          this.adjustScrollPosition(itemHeight);
+          this.adjustScrollPosition();
           break;
         // case 'Enter':
         // case ' ':
@@ -74,32 +75,19 @@ export class IrCombobox {
       }
     }
   }
-  getHeightOfPElement() {
-    const combobox = this.el.querySelector('.combobox');
-    if (combobox) {
-      const pItem = combobox.querySelector('p');
-      return pItem ? pItem.offsetHeight : 0;
-    }
-    return 0;
-  }
+
   focusInput() {
     requestAnimationFrame(() => {
       this.inputRef?.focus();
     });
   }
-  adjustScrollPosition(itemHeight, visibleHeight = 250) {
-    const combobox = this.el.querySelector('.combobox');
-    if (combobox) {
-      const margin = 2;
-      const itemTotalHeight = itemHeight + margin;
-      const selectedPosition = itemTotalHeight * this.selectedIndex;
-      let newScrollTop = selectedPosition - visibleHeight / 2 + itemHeight / 2;
-      newScrollTop = Math.max(0, Math.min(newScrollTop, combobox.scrollHeight - visibleHeight));
-      combobox.scrollTo({
-        top: newScrollTop,
-        behavior: 'auto',
-      });
-    }
+
+  adjustScrollPosition() {
+    const selectedItem = this.el?.querySelector(`[data-selected]`);
+    if (!selectedItem) return;
+    selectedItem.scrollIntoView({
+      block: 'center',
+    });
   }
 
   selectItem(index) {
@@ -139,6 +127,7 @@ export class IrCombobox {
     try {
       this.isLoading = true;
       this.filteredData = this.data.filter(d => d.name.toLowerCase().startsWith(this.inputValue));
+      this.selectedIndex = -1;
     } catch (error) {
       console.log('error', error);
     } finally {
@@ -203,6 +192,7 @@ export class IrCombobox {
       <ul>
         {this.filteredData?.map((d, index) => (
           <li
+            onMouseEnter={() => (this.selectedIndex = index)}
             role="button"
             key={d.id}
             onKeyDown={e => this.handleItemKeyDown(e, index)}
@@ -231,19 +221,20 @@ export class IrCombobox {
     return (
       <form onSubmit={this.handleSubmit.bind(this)} class="m-0 p-0">
         <input
+          type="text"
+          class="form-control bg-white"
           id={this.input_id}
           ref={el => (this.inputRef = el)}
-          type="text"
           disabled={this.disabled}
           value={this.value}
           placeholder={this.placeholder}
-          class="form-control bg-white"
           onKeyDown={this.handleKeyDown.bind(this)}
           onBlur={this.handleBlur.bind(this)}
           onInput={this.handleInputChange.bind(this)}
           onFocus={this.handleFocus.bind(this)}
           autoFocus={this.autoFocus}
         />
+
         {this.renderDropdown()}
       </form>
     );

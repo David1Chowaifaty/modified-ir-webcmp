@@ -34,9 +34,10 @@
 
 ## Events
 
-| Event        | Description | Type               |
-| ------------ | ----------- | ------------------ |
-| `textChange` |             | `CustomEvent<any>` |
+| Event        | Description | Type                      |
+| ------------ | ----------- | ------------------------- |
+| `inputBlur`  |             | `CustomEvent<FocusEvent>` |
+| `textChange` |             | `CustomEvent<any>`        |
 
 
 ## Dependencies
@@ -44,6 +45,7 @@
 ### Used by
 
  - [ir-guest-info](../ir-guest-info)
+ - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-pickup](../ir-booking-details/ir-pickup)
 
@@ -51,6 +53,7 @@
 ```mermaid
 graph TD;
   ir-guest-info --> ir-input-text
+  ir-hk-user --> ir-input-text
   ir-listing-header --> ir-input-text
   ir-pickup --> ir-input-text
   style ir-input-text fill:#f9f,stroke:#333,stroke-width:4px

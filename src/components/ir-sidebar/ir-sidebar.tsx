@@ -85,7 +85,7 @@ export class IrSidebar {
             </svg>
           </ir-icon>
         )}
-        <slot />
+        <slot name="sidebar-body" />
       </div>,
     ];
   }

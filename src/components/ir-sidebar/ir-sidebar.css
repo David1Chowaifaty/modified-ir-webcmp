@@ -30,7 +30,7 @@
   overflow-y: hidden;
   color: var(--sidebar-color, #000);
   background-color: var(--sidebar-backgound, #fff);
-  padding: 0.5rem;
+  padding: 0.5rem 0;
 }
 .sidebar-right.active {
   right: 0;

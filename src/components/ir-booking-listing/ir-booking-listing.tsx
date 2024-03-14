@@ -374,6 +374,7 @@ export class IrBookingListing {
         >
           {this.editBookingItem?.cause === 'edit' && (
             <ir-booking-details
+              slot="sidebar-body"
               hasPrint
               hasReceipt
               is_from_front_desk
