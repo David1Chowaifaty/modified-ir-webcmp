@@ -242,7 +242,11 @@ export class IrRoomNights {
   }
   render() {
     if (!this.bookingEvent) {
-      return <ir-loading-screen></ir-loading-screen>;
+      return (
+        <div class="loading-container">
+          <ir-loading-screen></ir-loading-screen>;
+        </div>
+      );
     }
     return (
       <Host>

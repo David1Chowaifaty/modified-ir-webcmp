@@ -34,9 +34,10 @@
 
 ## Events
 
-| Event        | Description | Type               |
-| ------------ | ----------- | ------------------ |
-| `textChange` |             | `CustomEvent<any>` |
+| Event        | Description | Type                      |
+| ------------ | ----------- | ------------------------- |
+| `inputBlur`  |             | `CustomEvent<FocusEvent>` |
+| `textChange` |             | `CustomEvent<any>`        |
 
 
 ## Dependencies
