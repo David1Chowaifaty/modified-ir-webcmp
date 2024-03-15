@@ -9,6 +9,7 @@ import { RoomService } from '../../services/room.service';
 import locales, { ILocale } from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
+import { ICountry } from '@/models/IBooking';
 
 @Component({
   tag: 'ir-booking-details',
@@ -45,7 +46,7 @@ export class IrBookingDetails {
 
   @State() showPaymentDetails: any;
   @State() bookingData: Booking;
-  @State() countryNodeList: any;
+  @State() countryNodeList: ICountry[];
   @State() calendarData: any = {};
   // Guest Data
   @State() guestData: Guest = null;
@@ -245,6 +246,22 @@ export class IrBookingDetails {
     e.stopImmediatePropagation();
     await this.resetBookingData();
   }
+  renderPhoneNumber() {
+    const { mobile, country_id } = this.bookingData.guest;
+    if (!mobile) {
+      return null;
+    }
+    if (this.bookingData.is_direct) {
+      if (country_id) {
+        const selectedCountry = this.countryNodeList.find(c => c.id === country_id);
+        if (!selectedCountry) {
+          throw new Error('Invalid country id');
+        }
+        return selectedCountry.phone_prefix + ' ' + mobile;
+      }
+    }
+    return mobile;
+  }
   render() {
     if (!this.bookingData) {
       return null;
@@ -373,7 +390,7 @@ export class IrBookingDetails {
                   value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`}
                   iconShown={true}
                 ></ir-label>
-                <ir-label label={`${this.defaultTexts.entries.Lcz_Phone}:`} value={this.bookingData.guest.mobile}></ir-label>
+                {this.bookingData.guest.mobile && <ir-label label={`${this.defaultTexts.entries.Lcz_Phone}:`} value={this.renderPhoneNumber()}></ir-label>}
                 <ir-label label={`${this.defaultTexts.entries.Lcz_Email}:`} value={this.bookingData.guest.email}></ir-label>
                 {this.bookingData.guest.alternative_email && (
                   <ir-label label={`${this.defaultTexts.entries.Lcz_AlternativeEmail}:`} value={this.bookingData.guest.alternative_email}></ir-label>
