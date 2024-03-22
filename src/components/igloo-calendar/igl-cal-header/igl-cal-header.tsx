@@ -66,13 +66,9 @@ export class IglCalHeader {
     try {
       const { fromDate, toDate, data } = this.unassignedDates;
       let dt = new Date(fromDate);
-      dt.setHours(0);
-      dt.setMinutes(0);
-      dt.setSeconds(0);
+      dt.setHours(0, 0, 0, 0);
       let endDate = dt.getTime();
-      //console.log('unassigned Dates', this.unassignedDates);
       while (endDate <= new Date(toDate).getTime()) {
-        //console.log('end date:', endDate);
         const selectedDate = moment(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(
@@ -86,7 +82,9 @@ export class IglCalHeader {
           const res = this.unassignedRoomsNumber[selectedDate] - 1;
           this.unassignedRoomsNumber[selectedDate] = res < 0 ? 0 : res;
         }
-        endDate = moment(endDate).add(1, 'days').toDate().getTime();
+        const newEndDate = moment(endDate).add(1, 'days').toDate();
+        newEndDate.setHours(0, 0, 0, 0);
+        endDate = newEndDate.getTime();
         this.renderView();
       }
     } catch (error) {
