@@ -297,11 +297,15 @@ export class IrPaymentDetails {
     return [
       <div class="card m-0">
         <div class="p-1">
+          {this.bookingDetails.cost > 0 && this.bookingDetails.cost !== null && (
+            <div class="mb-2 h4">
+              {this.defaultTexts.entries.Lcz_DueBalance}: <span>{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
+            </div>
+          )}
           <div class="mb-2 h4">
             {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
             <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
           </div>
-
           {this.bookingGuarantee()}
           <div class="mt-2">
             <div>

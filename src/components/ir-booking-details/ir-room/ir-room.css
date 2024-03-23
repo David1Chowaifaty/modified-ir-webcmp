@@ -14,7 +14,9 @@
 .sm-mr {
   margin-right: 3px;
 }
-
+.night-cost {
+  color: #1c4262;
+}
 /* .cancelation {
   max-width: 30%;
 } */

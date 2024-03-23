@@ -165,6 +165,7 @@ export class IrRoom {
     }
   }
   render() {
+    console.log(this.item);
     return (
       <Host class="p-1 d-flex m-0">
         <ir-icon
@@ -240,11 +241,15 @@ export class IrRoom {
               <div class={'flex-fill'}>
                 <table>
                   {this.item.days.length > 0 &&
-                    this.item.days.map(item => (
-                      <tr>
-                        <td class={'pr-2 text-right'}>{_getDay(item.date)}</td> <td class="text-right">{_formatAmount(item.amount, this.currency)}</td>
-                      </tr>
-                    ))}
+                    this.item.days.map(item => {
+                      return (
+                        <tr>
+                          <td class={'pr-2 text-right'}>{_getDay(item.date)}</td>
+                          <td class="text-right">{_formatAmount(item.amount, this.currency)}</td>
+                          {item.cost > 0 && item.cost !== null && <td class="pl-2 text-right night-cost">{_formatAmount(item.cost, this.currency)}</td>}
+                        </tr>
+                      );
+                    })}
                   <tr>
                     <th class="text-right pr-2">{this.defaultTexts.entries.Lcz_SubTotal}</th>
                     <th class="text-right">{_formatAmount(this.item.total, this.currency)}</th>

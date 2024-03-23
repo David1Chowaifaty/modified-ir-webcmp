@@ -75,6 +75,7 @@ export class IrRoomNights {
             ...newDatesArr.map(day => ({
               amount,
               date: day,
+              cost: null,
             })),
             ...this.selectedRoom.days,
           ];
@@ -91,6 +92,7 @@ export class IrRoomNights {
             ...newDatesArr.map(day => ({
               amount,
               date: day,
+              cost: null,
             })),
           ];
         }
