@@ -29,7 +29,6 @@ export class IglBookingRoomRatePlan {
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
   @State() ratePlanChangedState: boolean = false;
-  private initialRateValue: number = 0;
   getAvailableRooms(assignable_units: any[]) {
     let result = [];
     assignable_units.forEach(unit => {
@@ -103,18 +102,6 @@ export class IglBookingRoomRatePlan {
       }
       this.selectedData['rateType'] = 1;
     }
-    if (this.defaultData && this.defaultData.isRateModified) {
-      console.log('object');
-      if (this.selectedData.rateType === 1) {
-        console.log('object1');
-        this.initialRateValue = this.selectedData.rate;
-      } else {
-        console.log('object2');
-        this.initialRateValue = this.selectedData.rate * this.dateDifference;
-      }
-    } else {
-      this.initialRateValue = this.selectedData.rate / this.dateDifference;
-    }
   }
   componentDidLoad() {
     if (this.defaultData) {
@@ -135,7 +122,6 @@ export class IglBookingRoomRatePlan {
       rate: this.handleRateDaysUpdate(),
       physicalRooms: this.setAvailableRooms(newData.assignable_units),
     };
-    this.initialRateValue = this.selectedData.rateType === 2 ? this.selectedData.rate / this.dateDifference : this.selectedData.rate;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -239,7 +225,7 @@ export class IglBookingRoomRatePlan {
       console.log('selectedData.rate', this.selectedData.rate);
       return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
-    return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);
+    return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.selectedData.rate / this.dateDifference).toFixed(2);
   }
   render() {
     return (
