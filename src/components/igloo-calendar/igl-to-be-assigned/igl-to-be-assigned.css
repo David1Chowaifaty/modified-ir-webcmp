@@ -1,6 +1,3 @@
-@import url('../../../assets/feather/style.min.css');
-@import url('../../../assets/fontawesome/css/all.css');
-@import url('../../../assets/line-awesome/css/line-awesome.min.css');
 :host {
   display: block;
 }
@@ -36,7 +33,6 @@
   top: 0;
   right: 0;
   cursor: pointer;
-  font-size: 1.75em;
   line-height: 1em;
   padding: 0.4rem;
 }
@@ -44,7 +40,16 @@
 .closeBtn:hover {
   background-color: #f6f6f6;
 }
-
+.dropdown-toggle::after {
+  content: none;
+  display: none;
+}
+.dropdown-toggle .caret-icon {
+  transition: transform 0.2s ease;
+}
+.show .caret-icon {
+  transform: rotate(-180deg);
+}
 .stickyHeader {
   position: -webkit-sticky;
   position: sticky;
@@ -55,4 +60,39 @@
 
 .pointer {
   cursor: pointer;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 3px;
+  padding: 0;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  margin: 5px 4px 0;
+  background-color: #6b6f82;
+  border-radius: 50%;
+  animation: dotFlashing 1s infinite linear alternate;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
 }

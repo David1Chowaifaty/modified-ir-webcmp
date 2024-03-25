@@ -3,6 +3,7 @@ import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, Room
 import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   const myBookings: any[] = [];
@@ -41,14 +42,14 @@ export const bookingStatus: Record<string, STATUS> = {
 
 export function formatName(firstName: string | null, lastName: string | null) {
   if (firstName === null && lastName === null) return '';
-  if (lastName !== null) {
+  if (lastName !== null && lastName !== '') {
     return `${firstName ?? ''} , ${lastName ?? ''}`;
   }
   return firstName;
 }
 async function getStayStatus() {
   try {
-    const token = JSON.parse(sessionStorage.getItem('token'));
+    const token = calendar_data.token;
     if (token) {
       const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi?Ticket=${token}`, {
         TBL_NAMES: ['_STAY_STATUS'],
@@ -100,6 +101,12 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     };
   }
   //console.log('booking', cell);
+  // if (!cell.booking.is_direct) {
+  //   console.log(formatName(cell.room.guest.first_name, cell.room.guest.last_name), cell.booking.channel_booking_nbr);
+  // }
+  if (cell.booking.booking_nbr === '88237899') {
+    console.log(cell);
+  }
   return {
     ID: cell.POOL,
     TO_DATE: cell.DATE,
@@ -111,9 +118,10 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
-    NOTES: cell.booking.remark,
+    NOTES: cell.booking.is_direct ? cell.booking.remark : null,
     is_direct: cell.booking.is_direct,
     BALANCE: cell.booking.financial?.due_amount,
+    channel_booking_nbr: cell.booking.channel_booking_nbr,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -126,7 +134,6 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     // RATE_TYPE: 1,
     // ADULTS_COUNT: cell.room.occupancy.adult_nbr,
     // CHILDREN_COUNT: cell.room.occupancy.children_nbr,
-    // channel_booking_nbr: cell.booking.channel_booking_nbr,
     // origin: cell.booking.origin,
     // GUEST: cell.booking.guest,
     // ROOMS: cell.booking.rooms,
@@ -189,8 +196,8 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
     //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
     // }
   };
-
-  data.rooms.forEach(room => {
+  const rooms = data.rooms.filter(room => !!room['assigned_units_pool']);
+  rooms.forEach(room => {
     bookings.push({
       ID: room['assigned_units_pool'],
       TO_DATE: room.to_date,
@@ -218,7 +225,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,
       guarantee: room.rateplan.guarantee,
-      TOTAL_PRICE: room.total,
+      TOTAL_PRICE: room.gross_total,
       COUNTRY: data.guest.country_id,
       FROM_DATE_STR: data.format.from_date,
       TO_DATE_STR: data.format.to_date,
@@ -227,8 +234,9 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       origin: data.origin,
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
-      NOTES: data.remark,
+      NOTES: data.is_direct ? data.remark : null,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
+      ota_notes: data.ota_notes,
     });
   });
 

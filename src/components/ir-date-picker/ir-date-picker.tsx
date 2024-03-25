@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, h, Element, Prop, Event, EventEmitter, Host } from '@stencil/core';
 import moment from 'moment';
 
 @Component({
@@ -27,6 +27,7 @@ export class IrDatePicker {
   @Prop() disabled: boolean = false;
   @Prop() singleDatePicker = false;
   @Prop() minDate: string;
+  @Prop() maxDate: string;
   @Prop() maxSpan: moment.DurationInputArg1 = {
     days: 240,
   };
@@ -44,6 +45,7 @@ export class IrDatePicker {
         startDate: moment(this.fromDate),
         endDate: moment(this.toDate),
         minDate: moment(this.minDate || moment(new Date()).format('YYYY-MM-DD')),
+        maxDate: this.maxDate ? moment(this.maxDate) : undefined,
         maxSpan: this.maxSpan,
         autoApply: this.autoApply,
         locale: {
@@ -67,6 +69,10 @@ export class IrDatePicker {
   }
 
   render() {
-    return <input class="date-range-input" type="text" disabled={this.disabled} />;
+    return (
+      <Host>
+        <input class="date-range-input" type="text" disabled={this.disabled} />
+      </Host>
+    );
   }
 }

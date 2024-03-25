@@ -1,6 +1,3 @@
-@import url('../../../assets/feather/style.min.css');
-@import url('../../../assets/fontawesome/css/all.css');
-@import url('../../../assets/line-awesome/css/line-awesome.min.css');
 :host {
   display: block;
   margin-bottom: 0.5rem;
@@ -18,6 +15,7 @@
   line-height: 0;
   padding: 0;
   height: 0;
+  border-left: 0;
 }
 .rate-input-container {
   display: flex;
@@ -25,46 +23,56 @@
   justify-content: flex-start;
   box-sizing: border-box;
   flex: 1;
-
 }
-
-@media  only screen and (min-width: 1200px) { 
+.new-currency {
+  color: #3b4781;
+  border: 1px solid #cacfe7;
+  font-size: 0.975rem;
+  height: 2rem;
+  background: white;
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+.input-group-prepend span[data-state='focus'] {
+  border-color: var(--blue);
+}
+.input-group-prepend span[data-disabled] {
+  background-color: #eceff1;
+  border-color: rgba(118, 118, 118, 0.3);
+}
+@media only screen and (min-width: 1200px) {
   .rateplan-name-container {
     width: 40%;
   }
-  .rateplan-container{
+  .rateplan-container {
     width: 40%;
   }
-  
 }
-@media only screen and  (min-width: 991px)  { 
-  
-  .max-w-300{
+@media only screen and (min-width: 991px) {
+  .max-w-300 {
     max-width: 200px;
-  } 
-  .rate-input-container{
+  }
+  .rate-input-container {
     max-width: 100px;
   }
 }
-@media only screen and  (min-width: 991px) and (max-width: 1300px) { 
+@media only screen and (min-width: 991px) and (max-width: 1300px) {
   .rateplan-name-container {
     width: 35%;
   }
 }
-@media only screen and   (max-width: 768px) { 
-  .booking-btn{
+@media only screen and (max-width: 768px) {
+  .booking-btn {
     width: 100%;
   }
 }
 
-.total-nights-container{
+.total-nights-container {
   width: max-content;
 }
-.rateInputBorder{
-  border-top-left-radius: 3px !important;
-  border-bottom-left-radius: 3px !important;
-}
-.nightBorder{
+.nightBorder {
   border-left-width: 0;
   border-top-right-radius: 3px !important;
   border-bottom-right-radius: 3px !important;

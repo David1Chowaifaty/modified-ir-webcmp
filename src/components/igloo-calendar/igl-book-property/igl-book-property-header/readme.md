@@ -30,6 +30,8 @@
 | Event                        | Description | Type                                                                                                 |
 | ---------------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
 | `adultChild`                 |             | `CustomEvent<any>`                                                                                   |
+| `animateIrButton`            |             | `CustomEvent<string>`                                                                                |
+| `animateIrSelect`            |             | `CustomEvent<string>`                                                                                |
 | `buttonClicked`              |             | `CustomEvent<{ key: TPropertyButtonsTypes; }>`                                                       |
 | `checkClicked`               |             | `CustomEvent<any>`                                                                                   |
 | `sourceDropDownChange`       |             | `CustomEvent<string>`                                                                                |
@@ -47,14 +49,19 @@
 ### Depends on
 
 - [ir-autocomplete](../../../ir-autocomplete)
+- [ir-select](../../../ir-select)
+- [ir-button](../../../ir-button)
 - [igl-date-range](../../igl-date-range)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-book-property-header --> ir-autocomplete
+  igl-book-property-header --> ir-select
+  igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
+  igl-date-range --> ir-date-view
   igl-booking-overview-page --> igl-book-property-header
   style igl-book-property-header fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -1,0 +1,20 @@
+:host {
+  display: block;
+  margin: 0;
+  padding: 0;
+  letter-spacing: 0px !important;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.45 !important;
+  color: #6b6f82 !important;
+  text-align: left !important;
+}
+.book-container {
+  width: min-content;
+  margin: 0;
+  padding: 0;
+}
+h3 {
+  font-size: 1rem;
+}

@@ -3,6 +3,7 @@ import { Component, Prop, h, Event, EventEmitter } from '@stencil/core';
 @Component({
   tag: 'ir-icon',
   styleUrl: 'ir-icon.css',
+  scoped: true,
 })
 export class IrIcon {
   @Prop() icon = 'ft-check';
@@ -11,12 +12,9 @@ export class IrIcon {
 
   render() {
     return (
-      <i
-        onClick={() => {
-          this.iconClickHandler.emit();
-        }}
-        class={this.icon}
-      ></i>
+      <button class="icon-button" onClick={() => this.iconClickHandler.emit()}>
+        <slot name="icon"></slot>
+      </button>
     );
   }
 }

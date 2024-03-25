@@ -1,0 +1,17 @@
+.border-theme {
+  border: 1px solid #cacfe7;
+}
+@keyframes bounce {
+  0%,
+  100% {
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: scale(1.2);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+.bounce-3 {
+  animation: bounce 1s 1;
+}

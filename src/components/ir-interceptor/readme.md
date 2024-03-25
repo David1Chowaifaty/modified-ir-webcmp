@@ -7,10 +7,9 @@
 
 ## Properties
 
-| Property           | Attribute | Description | Type                                                | Default                                                                                |
-| ------------------ | --------- | ----------- | --------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `defaultMessage`   | --        |             | `{ loadingMessage: string; errorMessage: string; }` | `{     loadingMessage: 'Fetching Data',     errorMessage: 'Something Went Wrong',   }` |
-| `handledEndpoints` | --        |             | `string[]`                                          | `['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room']`                    |
+| Property           | Attribute | Description | Type       | Default                                                                |
+| ------------------ | --------- | ----------- | ---------- | ---------------------------------------------------------------------- |
+| `handledEndpoints` | --        |             | `string[]` | `['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings']` |
 
 
 ## Events
@@ -24,17 +23,22 @@
 
 ### Used by
 
+ - [igl-book-property-container](../igl-book-property-container)
  - [igloo-calendar](../igloo-calendar)
-
-### Depends on
-
-- [ir-loading-screen](../ir-loading-screen)
+ - [ir-booking-details](../ir-booking-details)
+ - [ir-booking-listing](../ir-booking-listing)
+ - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
+ - [ir-housekeeping](../ir-housekeeping)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-interceptor --> ir-loading-screen
+  igl-book-property-container --> ir-interceptor
   igloo-calendar --> ir-interceptor
+  ir-booking-details --> ir-interceptor
+  ir-booking-listing --> ir-interceptor
+  ir-hk-tasks --> ir-interceptor
+  ir-housekeeping --> ir-interceptor
   style ir-interceptor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

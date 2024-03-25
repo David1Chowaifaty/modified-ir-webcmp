@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+.label-style {
+  width: 100px;
+  text-align: end;
+  padding-right: 10px !important;
+}
+.connection-testing-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px !important;
+}
+.connection-title {
+  border-bottom: 1px solid #e4e5ec;
+}
+.ml-18 {
+  margin-left: 18% !important;
+}
+svg {
+  margin-right: 5px;
+}

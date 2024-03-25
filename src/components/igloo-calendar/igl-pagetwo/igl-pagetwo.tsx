@@ -1,7 +1,7 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
 import { IPageTwoDataUpdateProps } from '../../../models/models';
 import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../models/igl-book-property';
-import { formatDate, getCurrencySymbol } from '../../../utils/utils';
+import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
 @Component({
   tag: 'igl-pagetwo',
@@ -141,12 +141,12 @@ export class IglPagetwo {
     return (
       <Host>
         <div class="d-flex flex-wrap">
-          <div class="flex-fill text-left p-0">
-            <span class="mr-1 font-weight-bold font-medium-1">
-              {formatDate(this.dateRangeData.fromDateStr)} - {formatDate(this.dateRangeData.toDateStr)}
-            </span>
-            {this.dateRangeData.dateDifference} {+this.dateRangeData.dateDifference > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`}
-          </div>
+          <ir-date-view
+            class="mr-1 flex-fill font-weight-bold font-medium-1"
+            from_date={this.dateRangeData.fromDateStr}
+            to_date={this.dateRangeData.toDateStr}
+            dateOption="DD MMM YYYY"
+          ></ir-date-view>
           {this.guestData.length > 1 && (
             <div class="mt-1 mt-md-0 text-right">
               {locales.entries.Lcz_TotalPrice} <span class="font-weight-bold font-medium-1">{getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
@@ -157,6 +157,7 @@ export class IglPagetwo {
         {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
+              dateDifference={this.dateRangeData.dateDifference}
               defaultGuestPreference={this.defaultGuestData.bed_preference}
               defaultGuestRoomId={this.defaultGuestData.PR_ID}
               currency={this.currency}
@@ -192,12 +193,26 @@ export class IglPagetwo {
         {this.isEditOrAddRoomEvent ? (
           <div class="d-flex p-0 mb-1 mt-2">
             <div class="flex-fill mr-2">
-              <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'cancel' })}>
+              {/* <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'cancel' })}>
                 {locales.entries.Lcz_Cancel}
-              </button>
+              </button> */}
+              <ir-button
+                icon=""
+                text={locales.entries.Lcz_Back}
+                class="full-width"
+                btn_color="secondary"
+                btn_styles="justify-content-center"
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'back' })}
+              ></ir-button>
             </div>
             <div class="flex-fill">
-              <button
+              <ir-button
+                isLoading={this.isLoading === 'save'}
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'save' })}
+                btn_styles="full-width align-items-center justify-content-center"
+                text={locales.entries.Lcz_Save}
+              ></ir-button>
+              {/* <button
                 disabled={this.isLoading === 'save'}
                 type="button"
                 class="btn btn-primary full-width"
@@ -208,7 +223,7 @@ export class IglPagetwo {
               >
                 {this.isLoading === 'save' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 {locales.entries.Lcz_Save}
-              </button>
+              </button> */}
             </div>
           </div>
         ) : (
@@ -219,21 +234,33 @@ export class IglPagetwo {
               </button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill">
-              <button disabled={this.isLoading === 'book'} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
+              <ir-button
+                isLoading={this.isLoading === 'book'}
+                btn_styles="full-width align-items-center justify-content-center"
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'book' })}
+                text={locales.entries.Lcz_Book}
+              ></ir-button>
+              {/* <button disabled={this.isLoading === 'book'} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
                 {this.isLoading === 'book' && <i class="la la-circle-o-notch spinner mx-1"></i>}
                 {locales.entries.Lcz_Book}
-              </button>
+              </button> */}
             </div>
             {/* <div class="mt-1 mt-md-0 flex-fill">
-              <button
-                //disabled={this.isButtonDisabled('bookAndCheckIn')}
-                type="button"
-                class="btn btn-primary full-width"
-                onClick={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
-              >
-                {this.isLoading === 'bookAndCheckIn' && <i class="la la-circle-o-notch spinner mx-1"></i>}
-                {locales.entries.Lcz_BookAndChekcIn}
-              </button>
+              <ir-button
+                isLoading={this.isLoading === 'bookAndChekcIn'}
+                btn_styles="full-width align-items-center justify-content-center"
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
+                text={locales.entries.Lcz_BookAndChekcIn}
+              ></ir-button>
+              // <button
+              //   //disabled={this.isButtonDisabled('bookAndCheckIn')}
+              //   type="button"
+              //   class="btn btn-primary full-width"
+              //   onClick={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
+              // >
+              //   {this.isLoading === 'bookAndCheckIn' && <i class="la la-circle-o-notch spinner mx-1"></i>}
+              //   {locales.entries.Lcz_BookAndChekcIn}
+              // </button>
             </div> */}
           </div>
         )}

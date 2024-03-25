@@ -1,38 +1,60 @@
-@import url('../../../assets/feather/style.min.css');
-@import url('../../../assets/fontawesome/css/all.css');
-@import url('../../../assets/line-awesome/css/line-awesome.min.css');
 :host {
   display: flex;
-  text-align: left;
-  align-items: center;
+  align-items: center !important;
+  font-size: 14px !important;
 }
-
 .date-range-input {
   margin: 0;
   padding: 0;
   display: flex;
   flex: 1;
+  cursor: pointer;
+  width: 220px !important;
+  opacity: 0;
+  user-select: none;
+  font-size: 14px !important;
 }
 .iglRangeNights {
   margin: 0;
   padding: 0;
 }
-.iglRangePicker[data-state='disabled'] {
-  border: 0;
-  padding-left: 0;
-  padding-right: 0;
-  width: 180px;
-  margin-right: 0;
-}
-.iglRangePicker {
-  margin: 0;
-  border: 1px solid #379ff2;
-  box-sizing: border-box;
-  width: 200px;
-  margin-right: 10px;
+.date-view {
+  position: absolute;
+  background: white;
+  pointer-events: none;
+  cursor: pointer;
+  display: block;
+  margin-left: 14px;
+  margin-right: 14px;
+  font-size: 13.65px !important;
   display: flex;
   align-items: center;
 }
+.date-view svg {
+  padding: 0 !important;
+  margin: 0;
+  margin-right: 10px;
+}
 .calendarPickerContainer {
-  display: flex;
+  display: flex !important;
+  position: relative !important;
+  text-align: left;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0;
+  border: 1px solid var(--ir-date-range-border, #379ff2);
+  width: var(--ir-date-range-width, 245px);
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+.calendarPickerContainer:focus-within {
+  border-color: #379ff2;
+}
+.calendarPickerContainer[data-state='disabled'] {
+  border: 0px;
+  width: 280px;
+}
+.date-view[data-state='disabled'],
+.date-range-input[data-state='disabled'] {
+  margin: 0;
+  cursor: default;
 }

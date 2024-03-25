@@ -10,6 +10,7 @@ export class IglCalFooter {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
+  @Prop() highlightedDate: string;
 
   // private isOnline:boolean = false;
 
@@ -24,6 +25,7 @@ export class IglCalFooter {
           <div class="legendBtn" onClick={() => this.handleOptionEvent('showLegend')}>
             <i class="la la-square"></i>
             <u>{locales.entries.Lcz_Legend}</u>
+            <span> - v37</span>
           </div>
           {/* <div class={`${this.isOnline ? 'isOnline' : 'isOffline'}`}>
             <i class="la la-share-alt isOffline"></i><span>{this.isOnline ? "Connected": "Offline"}</span>
@@ -31,7 +33,9 @@ export class IglCalFooter {
         </div>
         {this.calendarData.days.map(dayInfo => (
           <div class="footerCell align-items-center">
-            <div class={`dayTitle full-height align-items-center ${dayInfo.day === this.today ? 'currentDay' : ''}`}>{dayInfo.dayDisplayName}</div>
+            <div class={`dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}`}>
+              {dayInfo.dayDisplayName}
+            </div>
 
             {/* <div class="dayTitle">{dayInfo.dayDisplayName}</div>
               <div class="dayCapacityPercent">28.57%</div>

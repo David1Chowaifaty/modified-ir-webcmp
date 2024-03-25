@@ -1,6 +1,6 @@
 input {
   all: unset;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
   padding: 0;
   margin: 0;
   width: 100%;
@@ -9,4 +9,15 @@ input {
 input:disabled {
   text-align: start;
   font-size: 14px;
+  width: 100%;
+}
+:host {
+  position: relative;
+  box-sizing: border-box;
+}
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

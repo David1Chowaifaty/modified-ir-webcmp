@@ -7,6 +7,7 @@ import moment from 'moment';
 import { IToast } from '@components/ir-toast/toast';
 import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-booking-event',
@@ -70,6 +71,9 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
+    this.bookingService.setToken(calendar_data.token);
+    this.eventsService.setToken(calendar_data.token);
+
     window.addEventListener('click', this.handleClickOutsideBind);
   }
 
@@ -160,6 +164,7 @@ export class IglBookingEvent {
           this.animationFrameId = requestAnimationFrame(() => {
             this.resetBookingToInitialPosition();
           });
+          return;
         }
       } else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
@@ -170,6 +175,12 @@ export class IglBookingEvent {
           }
         } else {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
+          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+            this.animationFrameId = requestAnimationFrame(() => {
+              this.resetBookingToInitialPosition();
+            });
+            throw new Error('Overlapping Dates');
+          }
           if (pool) {
             if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
               await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
@@ -177,6 +188,16 @@ export class IglBookingEvent {
               });
             } else {
               if (this.isShrinking || !this.isStreatch) {
+                console.log(this.bookingEvent.PR_ID.toString() === toRoomId.toString(), this.bookingEvent.PR_ID.toString(), toRoomId.toString());
+                try {
+                  if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
+                    await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+                    return;
+                  }
+                } catch (error) {
+                  this.resetBookingToInitialPosition();
+                  return;
+                }
                 const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
                 let hideConfirmButton = false;
                 if (status === '400') {
@@ -184,14 +205,14 @@ export class IglBookingEvent {
                 }
                 this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
               } else {
-                if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
-                  this.animationFrameId = requestAnimationFrame(() => {
-                    this.resetBookingToInitialPosition();
-                  });
-                  throw new Error('Overlapping Dates');
-                } else {
-                  this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
-                }
+                // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+                //   this.animationFrameId = requestAnimationFrame(() => {
+                //     this.resetBookingToInitialPosition();
+                //   });
+                //   throw new Error('Overlapping Dates');
+                // } else {
+                this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
+                // }
               }
             }
             this.isShrinking = null;
@@ -233,7 +254,9 @@ export class IglBookingEvent {
             return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           } else {
             return {
-              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent?.origin?.Label}. ${locales.entries.Lcz_SameRatesWillBeKept}`,
+              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${
+                locales.entries.Lcz_SameRatesWillBeKept
+              }`,
               status: '200',
             };
           }
@@ -575,7 +598,18 @@ export class IglBookingEvent {
   updateData(data: any) {
     this.updateEventData.emit(data);
   }
-
+  renderEventBookingNumber() {
+    if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
+      return '';
+    }
+    if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
+      return '';
+    }
+    if (!this.bookingEvent.is_direct) {
+      return ` - ${this.bookingEvent.channel_booking_nbr}`;
+    }
+    return ` - ${this.bookingEvent.BOOKING_NUMBER}`;
+  }
   showEventInfo(showInfo) {
     if (this.isHighlightEventType() || this.bookingEvent.hideBubble) {
       return null;
@@ -586,7 +620,7 @@ export class IglBookingEvent {
       let bodyContainer = document.querySelector('.calendarScrollContainer');
       let bodyContainerRect: { [key: string]: any } = bodyContainer.getBoundingClientRect();
       let elementRect: { [key: string]: any } = this.element.getBoundingClientRect();
-      let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top;
+      let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top + 50;
       // let topDifference = elementRect.top - bodyContainerRect.top;
       // let bottomDifference = bodyContainerRect.bottom - elementRect.bottom;
 
@@ -616,13 +650,13 @@ export class IglBookingEvent {
 
     return (
       <Host
-        class={`bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `}
+        class={`bookingEvent  ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `}
         style={this.getPosition()}
         id={'event_' + this.getBookingId()}
       >
         {/* onMouseOver={() =>this.showEventInfo(true)}  */}
         <div
-          class={`bookingEventBase ${
+          class={`bookingEventBase  ${
             !this.bookingEvent.is_direct &&
             !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
             this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
@@ -638,6 +672,7 @@ export class IglBookingEvent {
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
         <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
           {this.getBookedBy()}
+          {this.renderEventBookingNumber()}
         </div>
 
         <Fragment>

@@ -1,6 +1,7 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { IToast } from '../ir-toast/toast';
+import interceptor_requests from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-interceptor',
@@ -12,12 +13,7 @@ export class IrInterceptor {
   @State() isLoading = false;
   @State() isUnassignedUnit = false;
 
-  @Prop({ reflect: true, mutable: true }) defaultMessage = {
-    loadingMessage: 'Fetching Data',
-    errorMessage: 'Something Went Wrong',
-  };
-
-  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Booking_Availability', '/ReAllocate_Exposed_Room'];
+  @Prop({ reflect: true }) handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -33,41 +29,32 @@ export class IrInterceptor {
   }
 
   isHandledEndpoint(url: string): boolean {
-    return this.handledEndpoints.includes(this.extractEndpoint(url));
+    return this.handledEndpoints.includes(url);
   }
 
-  handleRequest(config) {
-    if (this.isHandledEndpoint(config.url)) {
+  handleRequest(config: AxiosRequestConfig) {
+    const extractedUrl = this.extractEndpoint(config.url);
+    interceptor_requests[extractedUrl] = 'pending';
+    if (this.isHandledEndpoint(extractedUrl)) {
       this.isLoading = true;
-      if (this.extractEndpoint(config.url) === '/ReAllocate_Exposed_Room') {
-        this.defaultMessage.loadingMessage = 'Updating Event';
-      } else if (this.extractEndpoint(config.url) === '/Get_Aggregated_UnAssigned_Rooms') {
-        this.isUnassignedUnit = true;
-      } else {
-        this.defaultMessage.loadingMessage = 'Fetching Data';
-      }
-      this.showToast();
     }
     return config;
   }
 
-  handleResponse(response) {
-    this.isLoading = false;
+  handleResponse(response: AxiosResponse) {
+    const extractedUrl = this.extractEndpoint(response.config.url);
+    if (this.isHandledEndpoint(extractedUrl)) {
+      this.isLoading = false;
+    }
+    interceptor_requests[extractedUrl] = 'done';
     if (response.data.ExceptionMsg?.trim()) {
       this.handleError(response.data.ExceptionMsg);
       throw new Error(response.data.ExceptionMsg);
-    } else {
-      this.hideToastAfterDelay(true);
     }
     return response;
   }
 
-  handleError(error) {
-    if (this.isUnassignedUnit) {
-      this.isUnassignedUnit = false;
-    }
-
-    this.hideToastAfterDelay(true);
+  handleError(error: string) {
     this.toast.emit({
       type: 'error',
       title: error,
@@ -76,33 +63,13 @@ export class IrInterceptor {
     });
     return Promise.reject(error);
   }
-
-  showToast() {
-    this.isShown = true;
-  }
-
-  hideToastAfterDelay(isSuccess: boolean) {
-    if (this.isUnassignedUnit) {
-      this.isShown = false;
-      this.isUnassignedUnit = false;
-    } else {
-      const delay = isSuccess ? 0 : 5000;
-      setTimeout(() => {
-        this.isShown = false;
-      }, delay);
-    }
-  }
-
-  renderMessage(): string {
-    return this.defaultMessage.errorMessage;
-  }
   render() {
     return (
       <Host>
-        {this.isLoading && this.isShown && (
+        {this.isLoading && (
           <div class="loadingScreenContainer">
-            <div class="loadingContainer">
-              <ir-loading-screen></ir-loading-screen>
+            <div class="loaderContainer">
+              <span class="loader"></span>
             </div>
           </div>
         )}

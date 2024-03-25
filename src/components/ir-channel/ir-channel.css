@@ -1,0 +1,91 @@
+:host {
+  display: block;
+}
+.dropdown-toggle {
+  color: var(--blue);
+}
+.dropdown-toggle::after {
+  content: none;
+  display: none;
+}
+.dropdown-toggle .caret-icon {
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
+    -webkit-box-shadow 0.15s ease-in-out;
+}
+.btn:hover .caret-icon path {
+  fill: #6b6f82;
+}
+.show .caret-icon {
+  transform: rotate(-180deg);
+}
+.dropdown-divider {
+  border-color: #e4e5ec;
+}
+.dropdown-item {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6b6f82;
+}
+.dropdown-item svg path {
+  fill: #6b6f82;
+}
+.danger {
+  color: var(--red);
+}
+.danger svg path {
+  fill: var(--red);
+}
+
+.table thead tr {
+  height: 50px !important;
+}
+.table-container {
+  border-radius: 30px;
+}
+.table thead {
+  background: #fafafa;
+  border-top-width: 0;
+}
+.actions-theader {
+  width: 35% !important;
+  text-align: end;
+}
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 3px;
+  padding: 0;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  margin: 0px 4px;
+  background-color: #6b6f82;
+  border-radius: 50%;
+  animation: dotFlashing 1s infinite linear alternate;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.h-screen {
+  height: 100vh !important;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}

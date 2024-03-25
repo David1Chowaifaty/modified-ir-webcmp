@@ -42,7 +42,9 @@ Type: `Promise<void>`
 
  - [igloo-calendar](../igloo-calendar)
  - [ir-booking-details](../ir-booking-details)
- - [ir-channel-manager](../ir-channel/ir-channel-manager)
+ - [ir-booking-listing](../ir-booking-listing)
+ - [ir-channel](../ir-channel)
+ - [ir-hk-team](../ir-housekeeping/ir-hk-team)
 
 ### Depends on
 
@@ -54,7 +56,9 @@ graph TD;
   ir-sidebar --> ir-icon
   igloo-calendar --> ir-sidebar
   ir-booking-details --> ir-sidebar
-  ir-channel-manager --> ir-sidebar
+  ir-booking-listing --> ir-sidebar
+  ir-channel --> ir-sidebar
+  ir-hk-team --> ir-sidebar
   style ir-sidebar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

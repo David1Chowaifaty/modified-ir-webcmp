@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+.custom-card-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e4e5ec;
+}
+.card-title {
+  flex: 1;
+}
+.border-theme {
+  border: 1px solid #cacfe7;
+}

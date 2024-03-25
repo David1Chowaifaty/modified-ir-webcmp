@@ -7,20 +7,18 @@
 
 ## Properties
 
-| Property                  | Attribute                   | Description | Type      | Default     |
-| ------------------------- | --------------------------- | ----------- | --------- | ----------- |
-| `bookingDetails`          | --                          |             | `Booking` | `undefined` |
-| `defaultTexts`            | --                          |             | `ILocale` | `undefined` |
-| `item`                    | `item`                      |             | `any`     | `undefined` |
-| `paymentExceptionMessage` | `payment-exception-message` |             | `string`  | `''`        |
+| Property         | Attribute | Description | Type      | Default     |
+| ---------------- | --------- | ----------- | --------- | ----------- |
+| `bookingDetails` | --        |             | `Booking` | `undefined` |
+| `defaultTexts`   | --        |             | `ILocale` | `undefined` |
 
 
 ## Events
 
-| Event                    | Description | Type                |
-| ------------------------ | ----------- | ------------------- |
-| `creditCardPressHandler` |             | `CustomEvent<any>`  |
-| `resetBookingData`       |             | `CustomEvent<null>` |
+| Event              | Description | Type                                                                                                 |
+| ------------------ | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `resetBookingData` |             | `CustomEvent<null>`                                                                                  |
+| `toast`            |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies
@@ -41,7 +39,6 @@ graph TD;
   ir-payment-details --> ir-date-picker
   ir-payment-details --> ir-icon
   ir-payment-details --> ir-modal
-  ir-modal --> ir-icon
   ir-modal --> ir-button
   ir-booking-details --> ir-payment-details
   style ir-payment-details fill:#f9f,stroke:#333,stroke-width:4px

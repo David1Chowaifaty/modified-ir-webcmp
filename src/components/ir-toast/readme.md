@@ -12,39 +12,26 @@
 | `position` | `position` |             | `"bottom-left" \| "bottom-right" \| "top-left" \| "top-right"` | `'bottom-left'` |
 
 
-## Methods
-
-### `hideToast() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `showToast() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-
 ## Dependencies
 
 ### Used by
 
+ - [igl-book-property-container](../igl-book-property-container)
  - [igloo-calendar](../igloo-calendar)
+ - [ir-booking-details](../ir-booking-details)
+ - [ir-booking-listing](../ir-booking-listing)
+ - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
+ - [ir-housekeeping](../ir-housekeeping)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-book-property-container --> ir-toast
   igloo-calendar --> ir-toast
+  ir-booking-details --> ir-toast
+  ir-booking-listing --> ir-toast
+  ir-hk-tasks --> ir-toast
+  ir-housekeeping --> ir-toast
   style ir-toast fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

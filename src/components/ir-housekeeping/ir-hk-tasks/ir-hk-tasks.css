@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  width: max-content;
+}
+.table,
+th,
+td {
+  border-color: white !important;
+}
+
+.select-container {
+  max-width: 500px;
+}
+
+@media only screen and (min-width: 900px) {
+  td {
+    min-width: 140px !important;
+    width: max-content !important;
+  }
+}
+@media only screen and (max-width: 900px) {
+  td {
+    min-width: 100px !important;
+  }
+  .table-container {
+    width: max-content !important;
+  }
+}

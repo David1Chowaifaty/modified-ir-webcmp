@@ -17,6 +17,7 @@ export class IglCalBody {
   @Prop() countryNodeList;
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
+  @Prop() highlightedDate: string;
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
 
   private selectedRooms: { [key: string]: any } = {};
@@ -253,7 +254,11 @@ export class IglCalBody {
   getGeneralCategoryDayColumns(addClass: string, isCategory: boolean = false, index: number) {
     return calendar_dates.days.map(dayInfo => {
       return (
-        <div class={`cellData pl-0 font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`}>
+        <div
+          class={`cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${
+            dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''
+          }`}
+        >
           {isCategory ? (
             <span class={'categoryName'}>
               {dayInfo.rate[index].exposed_inventory.rts}
@@ -272,7 +277,7 @@ export class IglCalBody {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
     return this.calendarData.days.map(dayInfo => (
       <div
-        class={`cellData pl-0 ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''} ${
+        class={`cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''} ${
           this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''
         } ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`}
         onClick={() => this.clickCell(roomId, dayInfo, roomCategory)}
@@ -295,7 +300,25 @@ export class IglCalBody {
           class={`cellData text-left align-items-center roomHeaderCell categoryTitle ${'category_' + this.getCategoryId(roomCategory)}`}
           onClick={() => this.toggleCategory(roomCategory)}
         >
-          <div class={'categoryName'}>{this.getCategoryName(roomCategory)}</div> <i class={`la la-angle-${roomCategory.expanded ? 'down' : 'right'}`}></i>
+          <div class={'categoryName'}>
+            <ir-popover popoverTitle={this.getCategoryName(roomCategory)}></ir-popover>
+          </div>
+          {roomCategory.expanded ? (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={14} width={14}>
+              <path
+                fill="#6b6f82"
+                d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+              />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" height={14} width={14}>
+              <path
+                fill="#6b6f82"
+                d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
+              />
+            </svg>
+          )}
+          {/* <i class={`la la-angle-${roomCategory.expanded ? 'down' : 'right'}`}></i> */}
         </div>
         {this.getGeneralCategoryDayColumns('category_' + this.getCategoryId(roomCategory), true, index)}
       </div>
@@ -314,7 +337,9 @@ export class IglCalBody {
           class={`cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${'room_' + this.getRoomId(room)}`}
           data-room={this.getRoomId(room)}
         >
-          <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div>
+          {/* <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div> */}
+
+          <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover>
         </div>
         {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory)}
       </div>

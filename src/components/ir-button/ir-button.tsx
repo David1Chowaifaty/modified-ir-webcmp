@@ -1,8 +1,10 @@
-import { Component, Prop, Event, EventEmitter, h, Fragment } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h, Listen } from '@stencil/core';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-button',
   styleUrl: 'ir-button.css',
+  scoped: true,
 })
 export class IrButton {
   @Prop() name: string;
@@ -15,35 +17,39 @@ export class IrButton {
   @Prop() btn_disabled = false;
   @Prop() btn_type = 'button';
   @Prop() isLoading: boolean = false;
+  @Prop() btn_styles: string;
+  @Prop() btn_id: string = v4();
 
-  connectedCallback() {}
-  disconnectedCallback() {}
   @Event({ bubbles: true, composed: true }) clickHanlder: EventEmitter<any>;
 
-  render() {
-    let block = '';
-    if (this.btn_block) {
-      block = 'btn-block';
+  private buttonEl: HTMLButtonElement;
+  @Listen('animateIrButton', { target: 'body' })
+  handleButtonAnimation(e: CustomEvent) {
+    if (!this.buttonEl || e.detail !== this.btn_id) {
+      return;
     }
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.buttonEl.classList.remove('bounce-3');
+    void this.buttonEl.offsetWidth;
+    this.buttonEl.classList.add('bounce-3');
+  }
+  render() {
+    let blockClass = this.btn_block ? 'btn-block' : '';
     return (
       <button
-        onClick={() => {
-          this.clickHanlder.emit();
-        }}
-        class={`m-0 btn btn-${this.btn_color} d-flex btn-${this.size} text-${this.textSize} ${block}`}
+        id={this.btn_id}
+        ref={el => (this.buttonEl = el)}
+        onClick={() => this.clickHanlder.emit()}
+        class={`btn btn-${this.btn_color} ${this.btn_styles} d-flex align-items-center btn-${this.size} text-${this.textSize} ${blockClass}`}
         type={this.btn_type}
+        disabled={this.btn_disabled}
       >
-        {this.icon && !this.isLoading && (
-          <span>
-            <i class={`${this.icon} font-small-3`}></i>&nbsp;
-          </span>
-        )}
-        {this.isLoading && (
-          <Fragment>
-            <span class={'m-0 p-0 loader'}></span>&nbsp;
-          </Fragment>
-        )}
-        <span class={'m-0 p-0 button-text'}>{this.text}</span>
+        <span class="button-icon" data-state={this.isLoading ? 'loading' : ''}>
+          <slot name="icon"></slot>
+        </span>
+        {this.text && <span class="button-text m-0">{this.text}</span>}
+        {this.isLoading && <div class="loader m-0 p-0"></div>}
       </button>
     );
   }

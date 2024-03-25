@@ -3,6 +3,7 @@ import { Component, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 @Component({
   tag: 'ir-dropdown',
   styleUrl: 'ir-dropdown.css',
+  scoped: true,
 })
 export class IrDropdown {
   @Prop({ reflect: true }) data: {

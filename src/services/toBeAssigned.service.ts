@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { IAvailableRoom, IRoomCategory, IUnassignedDates, InnerRecord } from '../models/tobeassigned';
 import { dateDifference, dateToFormattedString } from '../utils/utils';
+import { Token } from '@/models/Token';
 
-export class ToBeAssignedService {
+export class ToBeAssignedService extends Token {
   public async getUnassignedDates(propertyid: number, from_date: string, to_date: string) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_UnAssigned_Dates?Ticket=${token}`, {
           propertyid,
@@ -26,7 +27,7 @@ export class ToBeAssignedService {
   }
   public async getUnassignedRooms(propertyid: number, specific_date: string, roomInfo: any, formattedLegendData: any) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Aggregated_UnAssigned_Rooms?Ticket=${token}`, {
           propertyid,
@@ -46,7 +47,7 @@ export class ToBeAssignedService {
   }
   public async assignUnit(booking_nbr: string, identifier: string, pr_id: number) {
     try {
-      const token = JSON.parse(sessionStorage.getItem('token'));
+      const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Assign_Exposed_Room?Ticket=${token}`, {
           booking_nbr,

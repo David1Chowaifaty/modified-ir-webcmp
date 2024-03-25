@@ -1,10 +1,5 @@
-@import url("../../../assets/feather/style.min.css");
-@import url("../../../assets/fontawesome/css/all.css");
-@import url("../../../assets/line-awesome/css/line-awesome.min.css");
 :host {
   display: block;
-  
-  
 }
 
 .card-title {
@@ -63,7 +58,7 @@
 }
 
 button:not(:disabled),
-[type="button"]:not(:disabled) {
+[type='button']:not(:disabled) {
   cursor: pointer;
 }
 

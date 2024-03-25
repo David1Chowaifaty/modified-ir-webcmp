@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  height: 100%;
+}
+.card {
+  overflow-x: auto;
+}
+.secondary-p {
+  font-size: 12px !important;
+}
+.h-screen {
+  height: 100%;
+}
+.price-span {
+  margin: 0;
+  margin-right: 5px;
+}
+.main-container {
+  height: 100%;
+  overflow-y: auto;
+}
+.bg-ir-red {
+  background: #ff4961;
+  height: 28px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important ;
+}
+.due-btn {
+  border: 1px solid #ff4961;
+  color: #ff4961;
+  cursor: pointer;
+  padding: 1px 0.25rem !important;
+  font-size: 12px !important;
+}
+.due-btn:hover {
+  background: #ff4961;
+  color: white;
+}
+.booking_number {
+  all: unset;
+  cursor: pointer;
+}
+.booking_number:hover {
+  color: #1e9ff2;
+}
+.in-out {
+  width: 150px !important;
+}
+.buttons-container {
+  gap: 10px;
+}
+td ul {
+  width: max-content !important;
+}
+td {
+  width: max-content !important ;
+}
+.date-p {
+  width: max-content !important;
+  min-width: 100%;
+  text-align: center !important;
+}

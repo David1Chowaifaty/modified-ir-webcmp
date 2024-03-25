@@ -32,9 +32,14 @@
  - [igl-book-property](../igl-book-property)
  - [igl-booking-event-hover](../igl-booking-event-hover)
 
+### Depends on
+
+- [ir-date-view](../../ir-date-view)
+
 ### Graph
 ```mermaid
 graph TD;
+  igl-block-dates-view --> ir-date-view
   igl-book-property --> igl-block-dates-view
   igl-booking-event-hover --> igl-block-dates-view
   style igl-block-dates-view fill:#f9f,stroke:#333,stroke-width:4px

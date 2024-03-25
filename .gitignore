@@ -25,3 +25,5 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 .env
 payload.json
+bun.lockb
+pnpm-lock.yaml

@@ -1,0 +1,29 @@
+:host {
+  padding: 0px 0;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+:host([display-context='sidebar']) {
+  padding: 15px 0;
+  justify-content: space-between !important;
+  width: 100% !important;
+  border-bottom: 1px solid #e4e5ec !important;
+  border-color: #e4e5ec !important ;
+}
+.title-body {
+  margin: 0;
+  padding: 0;
+}
+
+@media only screen and (max-width: 641px) {
+  :host {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  :host([display-context='sidebar']) {
+    flex-direction: row;
+  }
+}

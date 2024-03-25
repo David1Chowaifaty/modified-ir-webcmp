@@ -19,9 +19,8 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null,
       copy: [
-        { src: 'assets/fontawesome/webfonts', dest: 'webfonts' },
-        { src: 'assets/feather/fonts', dest: 'fonts' },
-        { src: 'assets/line-awesome/fonts', dest: 'fonts' },
+        { src: 'assets', dest: 'assets' },
+        { src: 'index.js', dest: 'index.js' },
       ],
     },
   ],

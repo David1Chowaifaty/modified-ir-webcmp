@@ -1,6 +1,14 @@
-@import url('../../assets/feather/style.min.css');
-@import url('../../assets/fontawesome/css/all.css');
-@import url('../../assets/line-awesome/css/line-awesome.min.css');
 :host {
   margin: 0;
+  padding: 0;
+}
+.icon-button {
+  all: unset;
+  margin: 0;
+  padding: 0;
+  color: #104064;
+}
+.icon-button:hover {
+  cursor: pointer;
+  color: #1a6aa7;
 }

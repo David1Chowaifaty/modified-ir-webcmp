@@ -59,26 +59,22 @@ Type: `Promise<void>`
 ### Used by
 
  - [igloo-calendar](../igloo-calendar)
- - [ir-channel-manager](../ir-channel/ir-channel-manager)
- - [ir-general-settings](../ir-channel/ir-general-settings)
- - [ir-list-item](../ir-channel/ir-listItems)
+ - [ir-channel](../ir-channel)
+ - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-payment-details](../ir-booking-details/ir-payment-details)
  - [ir-room](../ir-booking-details/ir-room)
 
 ### Depends on
 
-- [ir-icon](../ir-icon)
 - [ir-button](../ir-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-modal --> ir-icon
   ir-modal --> ir-button
   igloo-calendar --> ir-modal
-  ir-channel-manager --> ir-modal
-  ir-general-settings --> ir-modal
-  ir-list-item --> ir-modal
+  ir-channel --> ir-modal
+  ir-hk-tasks --> ir-modal
   ir-payment-details --> ir-modal
   ir-room --> ir-modal
   style ir-modal fill:#f9f,stroke:#333,stroke-width:4px
