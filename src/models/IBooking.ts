@@ -338,4 +338,5 @@ export interface ISelectedRatePlan {
   index: number;
   is_closed: boolean;
   physicalRooms: { name: string; id: number }[];
+  is_bed_configuration_enabled: boolean;
 }
