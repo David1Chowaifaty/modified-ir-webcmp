@@ -1,6 +1,7 @@
 import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
 import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-book-property';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import moment from 'moment';
 @Component({
   tag: 'igl-booking-overview-page',
   styleUrl: 'igl-booking-overview-page.css',
@@ -31,6 +32,17 @@ export class IglBookingOverviewPage {
   isEventType(event: string) {
     return event === this.eventType;
   }
+  setMinDate() {
+    if (!this.isEventType('EDIT_BOOKING')) {
+      return;
+    }
+    const from_date = moment(this.bookingData.FROM_DATE, 'YYYY-MM-DD');
+    const today = moment();
+    if (from_date.isAfter(today)) {
+      return today.add(-2, 'weeks').format('YYYY-MM-DD');
+    }
+    return from_date.add(-2, 'weeks').format('YYYY-MM-DD');
+  }
   render() {
     //console.log(this.bookingData);
     return (
@@ -39,6 +51,7 @@ export class IglBookingOverviewPage {
           bookedByInfoData={this.bookedByInfoData}
           defaultDaterange={this.defaultDaterange}
           dateRangeData={this.dateRangeData}
+          minDate={this.setMinDate()}
           // minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
           adultChildCount={this.adultChildCount}
           splitBookingId={this.showSplitBookingOption}
