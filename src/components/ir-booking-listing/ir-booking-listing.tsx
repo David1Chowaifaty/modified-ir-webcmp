@@ -182,7 +182,7 @@ export class IrBookingListing {
                       </ir-tooltip>
                     </th>
                     {this.showCost && (
-                      <th scope="col" class="text-left services-cell">
+                      <th scope="col" class="services-cell">
                         {/* {locales.entries?.Lcz_Services} */}
                         Cost
                       </th>
@@ -244,7 +244,7 @@ export class IrBookingListing {
                             </buuton>
                           )}
                         </td>
-                        {this.showCost && <td>{booking.cost !== null && booking.cost > 0 ? '_' : booking.cost}</td>}
+                        {this.showCost && <td>{booking.cost !== null && booking.cost === 0 ? '_' : formatAmount(booking.currency.code, booking.cost)}</td>}
                         <td>
                           <ul>
                             {booking.rooms.map(room => (

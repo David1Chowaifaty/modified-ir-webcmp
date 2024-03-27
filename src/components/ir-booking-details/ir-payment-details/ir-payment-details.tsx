@@ -299,7 +299,7 @@ export class IrPaymentDetails {
         <div class="p-1">
           {this.bookingDetails.cost > 0 && this.bookingDetails.cost !== null && (
             <div class="mb-2 h4">
-              {this.defaultTexts.entries.Lcz_DueBalance}: <span>{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
+              Total cost: <span>{_formatAmount(this.bookingDetails.cost, this.bookingDetails.currency.code)}</span>
             </div>
           )}
           <div class="mb-2 h4">
