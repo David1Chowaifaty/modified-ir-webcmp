@@ -191,8 +191,8 @@ export class IglBookProperty {
       isValidProperty(this.bookedByInfoData, 'firstName', '') ||
       isValidProperty(this.bookedByInfoData, 'lastName', '') ||
       // isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
-      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '') ||
-      isValidProperty(this.bookedByInfoData, 'email', '')
+      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '')
+      // || isValidProperty(this.bookedByInfoData, 'email', '')
     );
   }
 
