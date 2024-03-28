@@ -57,7 +57,7 @@ export class IrBookingListing {
       this.totalPages = Math.ceil(newTotal / this.rowCount);
     });
     onBookingListingChange('bookings', async newValue => {
-      this.showCost = newValue.some(booking => booking.cost !== null && booking.cost > 0);
+      this.showCost = newValue.some(booking => booking.financial.gross_cost !== null && booking.financial.gross_cost > 0);
     });
   }
   @Watch('ticket')
@@ -183,8 +183,7 @@ export class IrBookingListing {
                     </th>
                     {this.showCost && (
                       <th scope="col" class="services-cell">
-                        {/* {locales.entries?.Lcz_Services} */}
-                        Cost
+                        {locales.entries?.Lcz_Cost}
                       </th>
                     )}
                     <th scope="col" class="text-left services-cell">
@@ -244,7 +243,11 @@ export class IrBookingListing {
                             </buuton>
                           )}
                         </td>
-                        {this.showCost && <td>{booking.cost !== null && booking.cost === 0 ? '_' : formatAmount(booking.currency.code, booking.cost)}</td>}
+                        {this.showCost && (
+                          <td>
+                            {booking.financial.gross_cost !== null && booking.financial.gross_cost === 0 ? '_' : formatAmount(booking.currency.code, booking.financial.gross_cost)}
+                          </td>
+                        )}
                         <td>
                           <ul>
                             {booking.rooms.map(room => (

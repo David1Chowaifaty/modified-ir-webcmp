@@ -50,6 +50,7 @@ export interface IFinancials {
   payments: IPayment[] | null;
   total_amount: number;
   gross_total: number;
+  gross_cost: number;
 }
 export interface IPayment {
   id: number | null;
@@ -143,6 +144,7 @@ export interface Room {
   unit: string | number | IUnit | null;
   ota_taxes: IOtaTax[];
   cost: number | null;
+  gross_cost: number;
 }
 export interface IOtaTax {
   amount: number;
