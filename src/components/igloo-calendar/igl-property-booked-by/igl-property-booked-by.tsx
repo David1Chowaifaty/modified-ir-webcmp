@@ -34,7 +34,7 @@ export class IglPropertyBookedBy {
     isdCode: '',
     contactNumber: '',
     selectedArrivalTime: '',
-    emailGuest: true,
+    emailGuest: false,
     message: '',
     cardNumber: '',
     cardHolderName: '',
@@ -224,7 +224,7 @@ export class IglPropertyBookedBy {
         <div class="text-left mt-3">
           <div class="form-group d-flex flex-column flex-md-row align-items-md-center text-left ">
             <label class="p-0 m-0 label-control mr-1 font-weight-bold">{locales.entries.Lcz_BookedBy}</label>
-            <div class="bookedByEmailContainer mt-1 mt-md-0">
+            <div class="bookedByEmailContainer mt-1 mt-md-0 d-flex align-items-center">
               {/* <input
                 id={v4()}
                 type="email"
@@ -237,15 +237,16 @@ export class IglPropertyBookedBy {
                 onBlur={() => this.checkUser()}
               /> */}
               <ir-autocomplete
-                danger_border={this.isButtonPressed && this.bookedByData.email === ''}
                 onComboboxValue={this.handleComboboxChange.bind(this)}
                 propertyId={this.propertyId}
                 type="email"
                 value={this.bookedByData.email}
                 required
+                class={'flex-fill'}
                 placeholder={locales.entries.Lcz_FindEmailAddress}
                 onInputCleared={() => this.clearEvent()}
               ></ir-autocomplete>
+              <ir-tooltip class={'ml-1'} message="Leave empty if email is unavailable"></ir-tooltip>
             </div>
           </div>
         </div>
