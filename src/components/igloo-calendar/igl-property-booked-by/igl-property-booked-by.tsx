@@ -237,7 +237,6 @@ export class IglPropertyBookedBy {
                 onBlur={() => this.checkUser()}
               /> */}
               <ir-autocomplete
-                danger_border={this.isButtonPressed && this.bookedByData.email === ''}
                 onComboboxValue={this.handleComboboxChange.bind(this)}
                 propertyId={this.propertyId}
                 type="email"
