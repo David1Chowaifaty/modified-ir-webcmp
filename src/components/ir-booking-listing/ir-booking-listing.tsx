@@ -28,7 +28,7 @@ export class IrBookingListing {
   @State() totalPages = 1;
   @State() oldStartValue = 0;
   @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' } | null = null;
-
+  @State() showCost = false;
   private bookingListingService = new BookingListingService();
   private roomService = new RoomService();
   private listingModal: HTMLIrListingModalElement;
@@ -55,6 +55,9 @@ export class IrBookingListing {
     onBookingListingChange('userSelection', async newValue => {
       const newTotal = newValue.total_count;
       this.totalPages = Math.ceil(newTotal / this.rowCount);
+    });
+    onBookingListingChange('bookings', async newValue => {
+      this.showCost = newValue.some(booking => booking.financial.gross_cost !== null && booking.financial.gross_cost > 0);
     });
   }
   @Watch('ticket')
@@ -178,6 +181,11 @@ export class IrBookingListing {
                         </span>
                       </ir-tooltip>
                     </th>
+                    {this.showCost && (
+                      <th scope="col" class="services-cell">
+                        {locales.entries?.Lcz_Cost}
+                      </th>
+                    )}
                     <th scope="col" class="text-left services-cell">
                       {locales.entries?.Lcz_Services}
                     </th>
@@ -235,6 +243,11 @@ export class IrBookingListing {
                             </buuton>
                           )}
                         </td>
+                        {this.showCost && (
+                          <td>
+                            {booking.financial.gross_cost !== null && booking.financial.gross_cost === 0 ? '_' : formatAmount(booking.currency.code, booking.financial.gross_cost)}
+                          </td>
+                        )}
                         <td>
                           <ul>
                             {booking.rooms.map(room => (

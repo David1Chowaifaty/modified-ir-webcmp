@@ -36,6 +36,7 @@
 
  - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
  - [igl-pagetwo](../igloo-calendar/igl-pagetwo)
+ - [igl-tba-booking-view](../igloo-calendar/igl-to-be-assigned/igl-tba-booking-view)
  - [ir-booking-details](../ir-booking-details)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-channel](../ir-channel)
@@ -56,6 +57,7 @@
 graph TD;
   igl-book-property-header --> ir-button
   igl-pagetwo --> ir-button
+  igl-tba-booking-view --> ir-button
   ir-booking-details --> ir-button
   ir-booking-listing --> ir-button
   ir-channel --> ir-button

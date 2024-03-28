@@ -38,6 +38,7 @@
 ```mermaid
 graph TD;
   igl-tba-category-view --> igl-tba-booking-view
+  igl-tba-booking-view --> ir-button
   igl-to-be-assigned --> igl-tba-category-view
   style igl-tba-category-view fill:#f9f,stroke:#333,stroke-width:4px
 ```

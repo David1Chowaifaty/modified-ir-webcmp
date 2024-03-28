@@ -25,6 +25,7 @@ export interface Booking {
   is_direct: boolean;
   financial: IFinancials;
   pickup_info: IBookingPickupInfo | null;
+  cost: number | null;
 }
 export interface IOtaNotes {
   statement: string;
@@ -49,6 +50,7 @@ export interface IFinancials {
   payments: IPayment[] | null;
   total_amount: number;
   gross_total: number;
+  gross_cost: number;
 }
 export interface IPayment {
   id: number | null;
@@ -141,6 +143,8 @@ export interface Room {
   identifier: string;
   unit: string | number | IUnit | null;
   ota_taxes: IOtaTax[];
+  cost: number | null;
+  gross_cost: number;
 }
 export interface IOtaTax {
   amount: number;
@@ -161,6 +165,7 @@ export interface IUnit {
 export interface Day {
   amount: number;
   date: string;
+  cost: number | null;
 }
 
 export interface RatePlan {

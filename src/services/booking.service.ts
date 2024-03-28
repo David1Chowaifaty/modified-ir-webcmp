@@ -260,6 +260,7 @@ export class BookingService extends Token {
       days.push({
         date: startDate.toISOString().split('T')[0],
         amount: amount,
+        cost: null,
       });
       startDate.setDate(startDate.getDate() + 1);
     }
