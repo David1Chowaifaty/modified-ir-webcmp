@@ -253,7 +253,7 @@ export class IrRoom {
                   <tr>
                     <th class="text-right pr-2">{this.defaultTexts.entries.Lcz_SubTotal}</th>
                     <th class="text-right">{_formatAmount(this.item.total, this.currency)}</th>
-                    {this.item.gross_cost > 0 && this.item.gross_cost !== null && <th class="pl-2 text-left night-cost">{_formatAmount(this.item.gross_cost, this.currency)}</th>}
+                    {this.item.gross_cost > 0 && this.item.gross_cost !== null && <th class="pl-2 text-right night-cost">{_formatAmount(this.item.cost, this.currency)}</th>}
                   </tr>
                   {this.bookingEvent.is_direct ? (
                     <Fragment>
@@ -266,6 +266,9 @@ export class IrRoom {
                                 {d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including} {d.name} ({d.pct}%)
                               </td>
                               <td class="text-right">{_formatAmount((this.item.total * d.pct) / 100, this.currency)}</td>
+                              {this.item.gross_cost > 0 && this.item.gross_cost !== null && (
+                                <td class="pl-2 text-right night-cost">{_formatAmount((this.item.cost * d.pct) / 100, this.currency)}</td>
+                              )}
                             </tr>
                           );
                         });
