@@ -275,5 +275,5 @@ export function calculateDaysBetweenDates(from_date: string, to_date: string) {
   const startDate = moment(from_date, 'YYYY-MM-DD');
   const endDate = moment(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
-  return daysDiff;
+  return daysDiff || 1;
 }
