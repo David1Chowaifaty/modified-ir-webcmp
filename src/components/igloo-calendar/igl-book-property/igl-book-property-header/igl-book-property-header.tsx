@@ -70,9 +70,9 @@ export class IglBookPropertyHeader {
   }
   getSourceNode() {
     return (
-      <fieldset class="d-flex flex-column text-left flex-lg-row align-items-lg-center">
-        <label class="mr-lg-1">{locales.entries.Lcz_Source} </label>
-        <div class="btn-group mt-1 mt-lg-0 sourceContainer">
+      <fieldset class="d-flex text-left  align-items-center">
+        <label class="mr-1">{locales.entries.Lcz_Source} </label>
+        <div class="btn-group mt-0 flex-fill sourceContainer">
           <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}>
             {this.sourceOptions.map(option => {
               if (option.type === 'LABEL') {
@@ -109,7 +109,7 @@ export class IglBookPropertyHeader {
   getAdultChildConstraints() {
     return (
       <div class={'mt-1 mt-lg-0 d-flex flex-column text-left'}>
-        <label class="mb-1 d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label>
+        {/* <label class="mb-1 d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label> */}
         <div class="form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start">
           <fieldset>
             <div class="btn-group ">

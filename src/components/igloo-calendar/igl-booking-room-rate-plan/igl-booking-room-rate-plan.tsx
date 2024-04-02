@@ -255,8 +255,8 @@ export class IglBookingRoomRatePlan {
                 </select>
               </fieldset>
             </div>
-            <div class={'m-0 p-0 d-md-flex justify-content-between ml-md-1 '}>
-              <div class=" d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   ">
+            <div class={'m-0 p-0 d-flex justify-content-between ml-md-1 '}>
+              <div class=" d-flex  m-0 p-0 rate-total-night-view mt-1  ">
                 <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
                   <div class="input-group-prepend">
                     <span data-disabled={this.disableForm()} data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text new-currency" id="basic-addon1">
@@ -293,7 +293,7 @@ export class IglBookingRoomRatePlan {
               </div>
 
               {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (
-                <div class="flex-lg-fill  mt-lg-0 ml-md-2 m-0 mt-1 p-0">
+                <div class="flex-fill  mt-lg-0 ml-1 m-0 mt-1 p-0">
                   <fieldset class="position-relative">
                     <select
                       disabled={this.selectedData.rate === 0 || this.disableForm()}
