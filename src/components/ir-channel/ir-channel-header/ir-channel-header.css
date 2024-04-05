@@ -11,6 +11,9 @@ ul {
   gap: 2rem;
   padding: 0;
 }
+li {
+  list-style: none !important;
+}
 .tab {
   font-size: 0.95rem;
   font-weight: 600;

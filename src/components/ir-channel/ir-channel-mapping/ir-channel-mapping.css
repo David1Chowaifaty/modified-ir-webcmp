@@ -20,6 +20,9 @@
 .text-red {
   color: var(--red);
 }
+li {
+  list-style: none !important;
+}
 .refresh-btn {
   all: unset;
   color: var(--blue);
