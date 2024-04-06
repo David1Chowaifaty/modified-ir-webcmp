@@ -61,6 +61,7 @@ graph TD;
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  igl-property-booked-by --> ir-tooltip
   ir-booking-listing --> ir-listing-header
   style ir-listing-header fill:#f9f,stroke:#333,stroke-width:4px
 ```

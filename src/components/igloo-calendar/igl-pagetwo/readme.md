@@ -56,6 +56,7 @@ graph TD;
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  igl-property-booked-by --> ir-tooltip
   igl-book-property --> igl-pagetwo
   style igl-pagetwo fill:#f9f,stroke:#333,stroke-width:4px
 ```

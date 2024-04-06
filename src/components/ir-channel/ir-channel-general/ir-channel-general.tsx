@@ -33,7 +33,7 @@ export class IrChannelGeneral {
   }
   render() {
     return (
-      <Host>
+      <Host class="px-1">
         <section class="ml-18">
           <fieldset class="d-flex align-items-center">
             <label htmlFor="hotel_channels" class="m-0 p-0 label-style">

@@ -3,14 +3,19 @@
   box-sizing: border-box;
   font-size: 14px !important;
 }
-.map-row {
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+/* .map-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .map-row span {
   width: 49%;
-}
+} */
 .submap-text {
   padding-left: 10px;
 }
@@ -28,14 +33,47 @@ li {
   color: var(--blue);
   cursor: pointer;
 }
-.selected-map svg {
+/* .selected-map svg {
   margin: 0 10px !important;
   flex-wrap: wrap;
-}
+} */
 .selected-map {
   flex: 1;
 }
 .selected-map-title {
   flex: 1;
   /* background: #000; */
+}
+/* lg */
+
+.mapped_row {
+  display: flex;
+  align-items: center;
+}
+.mapped_item + svg {
+  display: block;
+  flex: 0 0 4.166666666666666%;
+  max-width: 4.166666666666666%;
+  margin: 0;
+}
+.mapped_row .mapped_item {
+  flex: 0 0 45.83333333333333%;
+  display: block;
+  max-width: 45.83333333333333%;
+}
+.mapped_item {
+  margin: 0;
+  padding: 0;
+  line-height: 22px;
+}
+.mapped_name {
+  margin-right: 5px;
+}
+.gap-3 {
+  gap: 5px;
+}
+.channel_name {
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  font-weight: 700;
 }

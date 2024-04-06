@@ -245,9 +245,10 @@ export class IrChannel {
         </section>
 
         <ir-sidebar
-          // sidebarStyles={{
-          //   width: '60rem',
-          // }}
+          sidebarStyles={{
+            // width: '60rem',
+            padding: '0',
+          }}
           showCloseButton={false}
           onIrSidebarToggle={this.handleSidebarClose.bind(this)}
           open={this.channel_status !== null}
@@ -256,7 +257,6 @@ export class IrChannel {
             <ir-channel-editor
               slot="sidebar-body"
               ticket={this.ticket}
-              class="p-1"
               channel_status={this.channel_status}
               onCloseSideBar={this.handleSidebarClose.bind(this)}
             ></ir-channel-editor>

@@ -1,5 +1,6 @@
 :host {
   display: block;
+  --ir-sidebar-padding: 0;
 }
 .dropdown-toggle {
   color: var(--blue);
@@ -87,5 +88,11 @@
   50%,
   100% {
     opacity: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host {
+    --sidebar-width: 820px;
   }
 }

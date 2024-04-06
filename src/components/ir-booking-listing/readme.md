@@ -76,6 +76,7 @@ graph TD;
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  igl-property-booked-by --> ir-tooltip
   ir-listing-modal --> ir-icon
   ir-listing-modal --> ir-select
   ir-listing-modal --> ir-button

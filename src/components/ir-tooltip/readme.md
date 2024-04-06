@@ -20,6 +20,7 @@
 
  - [igl-application-info](../igloo-calendar/igl-application-info)
  - [igl-booking-room-rate-plan](../igloo-calendar/igl-booking-room-rate-plan)
+ - [igl-property-booked-by](../igloo-calendar/igl-property-booked-by)
  - [ir-booking-listing](../ir-booking-listing)
 
 ### Graph
@@ -27,6 +28,7 @@
 graph TD;
   igl-application-info --> ir-tooltip
   igl-booking-room-rate-plan --> ir-tooltip
+  igl-property-booked-by --> ir-tooltip
   ir-booking-listing --> ir-tooltip
   style ir-tooltip fill:#f9f,stroke:#333,stroke-width:4px
 ```

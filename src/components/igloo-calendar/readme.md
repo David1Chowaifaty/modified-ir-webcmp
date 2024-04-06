@@ -97,6 +97,7 @@ graph TD;
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  igl-property-booked-by --> ir-tooltip
   ir-sidebar --> ir-icon
   ir-room-nights --> ir-loading-screen
   ir-room-nights --> ir-icon

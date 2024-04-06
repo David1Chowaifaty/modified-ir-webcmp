@@ -87,8 +87,8 @@ export class IrChannelEditor {
   render() {
     return (
       <Host class=" d-flex flex-column h-100">
-        <nav class="px-1 position-sticky sticky-top pb-1 top-0 bg-white">
-          <div class="d-flex align-items-center  justify-content-between">
+        <nav class="position-sticky sticky-top pb-1 top-0 bg-white ">
+          <div class="d-flex align-items-center px-1 py-1  justify-content-between">
             <h3 class="text-left font-medium-2  py-0 my-0">{this.channel_status === 'create' ? locales.entries?.Lcz_CreateChannel : locales.entries?.Lcz_EditChannel}</h3>
             <ir-icon
               class={'m-0 p-0 close'}
@@ -103,7 +103,7 @@ export class IrChannelEditor {
           </div>
           <ir-channel-header class="mt-1 px-0" headerTitles={this.headerTitles}></ir-channel-header>
         </nav>
-        <section class="py-1 flex-fill tab-container px-1">{this.renderTabScreen()}</section>
+        <section class="flex-fill tab-container px-1">{this.renderTabScreen()}</section>
 
         <ir-button
           isLoading={this.isLoading}

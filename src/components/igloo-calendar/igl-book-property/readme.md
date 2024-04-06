@@ -72,6 +72,7 @@ graph TD;
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  igl-property-booked-by --> ir-tooltip
   igl-book-property-container --> igl-book-property
   igloo-calendar --> igl-book-property
   ir-booking-details --> igl-book-property

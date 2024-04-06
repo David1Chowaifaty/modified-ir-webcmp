@@ -120,6 +120,7 @@ graph TD;
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  igl-property-booked-by --> ir-tooltip
   igloo-calendar --> ir-booking-details
   ir-booking-listing --> ir-booking-details
   style ir-booking-details fill:#f9f,stroke:#333,stroke-width:4px
