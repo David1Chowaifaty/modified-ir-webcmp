@@ -1,6 +1,6 @@
 import { IToast } from '@/components';
 import locales from '@/stores/locales.store';
-import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch } from '@stencil/core';
+import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
 
 @Component({
@@ -9,7 +9,7 @@ import { v4 } from 'uuid';
   scoped: true,
 })
 export class IrCombobox {
-  @Prop({ mutable: true }) data: { id: string; name: string; image?: string }[] = [];
+  @Prop({ mutable: true }) data: { id: string; name: string; image?: string; occupancy?: number }[] = [];
   @Prop() duration: number = 300;
   @Prop() placeholder: string;
   @Prop() value: string;
@@ -23,7 +23,7 @@ export class IrCombobox {
   @State() isLoading: boolean = true;
   @State() isItemSelected: boolean;
   @State() inputValue: string = '';
-  @State() filteredData: { id: string; name: string }[] = [];
+  @State() filteredData: { id: string; name: string; occupancy?: number }[] = [];
 
   @Element() el: HTMLElement;
   @Event({ bubbles: true, composed: true }) comboboxValueChange: EventEmitter<{ key: string; data: unknown }>;
@@ -188,8 +188,9 @@ export class IrCombobox {
     if (!this.isComboBoxVisible) {
       return null;
     }
+    console.log(this.filteredData);
     return (
-      <ul>
+      <ul data-position={this.filteredData.length > 0 && this.filteredData[0].occupancy ? 'bottom-right' : 'bottom-left'}>
         {this.filteredData?.map((d, index) => (
           <li
             onMouseEnter={() => (this.selectedIndex = index)}
@@ -200,7 +201,18 @@ export class IrCombobox {
             tabIndex={0}
             onClick={() => this.selectItem(index)}
           >
-            {d.name}
+            <p>{d.name}</p>
+            {d.occupancy && (
+              <Fragment>
+                <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
+                  <path
+                    fill={'currentColor'}
+                    d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
+                  />
+                </svg>
+                <p>{d.occupancy}</p>
+              </Fragment>
+            )}
           </li>
         ))}
 

@@ -40,7 +40,7 @@ export class IrMappingService {
       const filteredRoomTypes = calendar_data.roomsInfo.filter(
         room => channels_data.mappedChannels.find(m => m.ir_id.toString() === room.id.toString()) === undefined && room.is_active,
       );
-      return filteredRoomTypes.map(room => ({ id: room.id.toString(), name: room.name }));
+      return filteredRoomTypes.map(room => ({ id: room.id.toString(), name: room.name, occupancy: room.occupancy_default.adult_nbr }));
     }
     if (!roomTypeId) {
       throw new Error('Missing roomType id');
@@ -54,7 +54,8 @@ export class IrMappingService {
       .filter(rate_plan => channels_data.mappedChannels.find(r => rate_plan.id.toString() === r.ir_id) === undefined)
       .map(rate_plan => ({
         id: rate_plan.id.toString(),
-        name: rate_plan.name,
+        name: rate_plan['short_name'],
+        occupancy: selectedRoomType.occupancy_default.adult_nbr,
       }));
   }
 }

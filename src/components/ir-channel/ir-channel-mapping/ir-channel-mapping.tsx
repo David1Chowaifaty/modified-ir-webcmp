@@ -47,7 +47,7 @@ export class IrChannelMapping {
         <Fragment>
           <div class="pl-2 flex-fill d-sm-none mapped_item text-blue d-flex align-items-center">
             <span class="m-0 p-0 d-flex align-items-center selected-map">
-              <span class="selected-map-title">{mappedField.result.name}</span>
+              <span class="selected-map-title">{isRoomType ? mappedField.result.name : mappedField.result['short_name']}</span>
               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
                 <path
                   fill={'var(--blue)'}
@@ -66,7 +66,7 @@ export class IrChannelMapping {
             </ir-icon>
           </div>
           <div class="pl-2 flex-fill d-none mapped_item text-blue d-sm-flex align-items-center">
-            <span class="mapped_name">{mappedField.result.name}</span>
+            <span class="mapped_name">{isRoomType ? mappedField.result.name : mappedField.result['short_name']}</span>
             <div class="d-flex align-items-center gap-3 flex-fill">
               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
                 <path
