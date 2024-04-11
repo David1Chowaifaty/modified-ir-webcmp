@@ -17,7 +17,8 @@ import calendar_data from '@/stores/calendar-data';
 export class IrChannel {
   @Element() el: HTMLElement;
 
-  @Prop() ticket: string = '';
+  @Prop() ticket: string =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTQwNDAyNjMsIkNMQUlNLTAxIjoicGM1VTVydTMxamM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoicUxHWllZcVA3SzNPNE9IMXpvZHovVG5vNnlEVlMvdm1wSDU4aDFsU0psQ1VnalRRRXNlNnU3QUo4V1c3Z2IvaGtURU5QTU1yV0NkVmEyZjFqZDVqcFZ5WlhWMTMwL3BIMysxdlA5ZGkxMzExMjRSaDdNdzNERDZSZmxmR1NPdlBSVXBET0IwdlZGRkU1NVRueEc4YXA3ZVo0alpzYWRVQlNPdmxXeFJHYzFxclkxUHJVSldHYlZDbXZyQ01YWEdZRTRGWWFIR1VTUFoza2I0L3Y5VHJrZz09In0.RdVCamw6xkx4tWvgXvELHf28j3OzcnrpJWOPwt8wbdg';
   @Prop() propertyid: number;
   @Prop() language: string;
   @Prop() baseurl: string;

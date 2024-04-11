@@ -147,6 +147,7 @@ export class IrChannelMapping {
 
                   {room_type.rate_plans.map(rate_plan => {
                     const mappedRatePlan = this.mappingService.checkMappingExists(rate_plan.id, false, room_type.id);
+                    // console.log(mappedRatePlan);
                     return (
                       <div key={rate_plan.id} class=" mapped_row mb-1">
                         <p class="pl-1 submap-text mapped_item">{rate_plan.name}</p>

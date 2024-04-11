@@ -51,7 +51,7 @@ export class IrMappingService {
     }
     const selectedRoomType = calendar_data.roomsInfo.find(room => room.id.toString() === matchingRoomType.ir_id);
     return selectedRoomType.rateplans
-      .filter(rate_plan => channels_data.mappedChannels.find(r => rate_plan.id.toString() === r.ir_id) === undefined)
+      .filter(rate_plan => channels_data.mappedChannels.find(r => rate_plan.id.toString() === r.ir_id) === undefined && rate_plan['is_active'])
       .map(rate_plan => ({
         id: rate_plan.id.toString(),
         name: rate_plan['short_name'],

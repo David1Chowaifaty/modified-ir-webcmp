@@ -188,7 +188,6 @@ export class IrCombobox {
     if (!this.isComboBoxVisible) {
       return null;
     }
-    console.log(this.filteredData);
     return (
       <ul data-position={this.filteredData.length > 0 && this.filteredData[0].occupancy ? 'bottom-right' : 'bottom-left'}>
         {this.filteredData?.map((d, index) => (
