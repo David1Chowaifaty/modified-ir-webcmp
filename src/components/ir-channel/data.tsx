@@ -88,18 +88,12 @@ export const actions = (entries: TLocaleEntries) => [
       </svg>
     ),
     action: (params: IChannel) => {
-      const selectedProperty = params.map.find(m => m.type === 'property');
-      setChannelIdAndActiveState(params.id, params.is_active);
-      updateChannelSettings('hotel_id', selectedProperty.channel_id);
-      updateChannelSettings('hotel_title', params.title);
-      selectChannel(params.channel.id.toString());
-      testConnection();
       return {
         cause: 'remove',
         action: async () => {
           const channel_service = new ChannelService();
           channel_service.setToken(calendar_data.token);
-          await channel_service.saveConnectedChannel(true);
+          await channel_service.saveConnectedChannel(params.id, true);
         },
         title: '',
         message: entries?.Lcz_ThisActionWillDelete,

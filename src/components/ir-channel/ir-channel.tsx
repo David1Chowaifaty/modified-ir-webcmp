@@ -137,7 +137,7 @@ export class IrChannel {
     updateChannelSettings('hotel_title', params.title);
     selectChannel(params.channel.id.toString());
     testConnection();
-    await this.channelService.saveConnectedChannel(false);
+    await this.channelService.saveConnectedChannel(null, false);
     resetStore();
     this.refreshChannels();
   }
