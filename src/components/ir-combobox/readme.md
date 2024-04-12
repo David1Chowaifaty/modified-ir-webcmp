@@ -7,15 +7,15 @@
 
 ## Properties
 
-| Property      | Attribute     | Description | Type                                              | Default     |
-| ------------- | ------------- | ----------- | ------------------------------------------------- | ----------- |
-| `autoFocus`   | `auto-focus`  |             | `boolean`                                         | `false`     |
-| `data`        | --            |             | `{ id: string; name: string; image?: string; }[]` | `[]`        |
-| `disabled`    | `disabled`    |             | `boolean`                                         | `false`     |
-| `duration`    | `duration`    |             | `number`                                          | `300`       |
-| `input_id`    | `input_id`    |             | `string`                                          | `v4()`      |
-| `placeholder` | `placeholder` |             | `string`                                          | `undefined` |
-| `value`       | `value`       |             | `string`                                          | `undefined` |
+| Property      | Attribute     | Description | Type                                                                  | Default     |
+| ------------- | ------------- | ----------- | --------------------------------------------------------------------- | ----------- |
+| `autoFocus`   | `auto-focus`  |             | `boolean`                                                             | `false`     |
+| `data`        | --            |             | `{ id: string; name: string; image?: string; occupancy?: number; }[]` | `[]`        |
+| `disabled`    | `disabled`    |             | `boolean`                                                             | `false`     |
+| `duration`    | `duration`    |             | `number`                                                              | `300`       |
+| `input_id`    | `input_id`    |             | `string`                                                              | `v4()`      |
+| `placeholder` | `placeholder` |             | `string`                                                              | `undefined` |
+| `value`       | `value`       |             | `string`                                                              | `undefined` |
 
 
 ## Events
