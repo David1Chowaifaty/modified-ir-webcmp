@@ -502,7 +502,7 @@ export class IglBookProperty {
     return (
       <Host>
         <div class="background-overlay" onClick={() => this.closeWindow()}></div>
-        <div class={'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '')}>
+        <div class={'sideWindow pb-5 pb-md-0 ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '')}>
           <div class="card position-sticky mb-0 shadow-none p-0 ">
             <div class="d-flex mt-2 align-items-center justify-content-between  ">
               <h3 class="card-title text-left pb-1 font-medium-2 px-2 px-md-3">

@@ -15,7 +15,6 @@
   <script src="assets/scripts/toastr/toastr.min.js"></script>
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
   <script src="index.js"></script>
-
   <style>
     body {
       overflow-x: hidden;
@@ -25,43 +24,24 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-channel propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-channel>
+  <igloo-calendar currency-name="USD" propertyid="42" language="en"
+    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
-  <script>
-    const irchannel = document.querySelector('ir-channel')
-    setTimeout(() => {
-      const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTQwNDAyNjMsIkNMQUlNLTAxIjoicGM1VTVydTMxamM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoicUxHWllZcVA3SzNPNE9IMXpvZHovVG5vNnlEVlMvdm1wSDU4aDFsU0psQ1VnalRRRXNlNnU3QUo4V1c3Z2IvaGtURU5QTU1yV0NkVmEyZjFqZDVqcFZ5WlhWMTMwL3BIMysxdlA5ZGkxMzExMjRSaDdNdzNERDZSZmxmR1NPdlBSVXBET0IwdlZGRkU1NVRueEc4YXA3ZVo0alpzYWRVQlNPdmxXeFJHYzFxclkxUHJVSldHYlZDbXZyQ01YWEdZRTRGWWFIR1VTUFoza2I0L3Y5VHJrZz09In0.RdVCamw6xkx4tWvgXvELHf28j3OzcnrpJWOPwt8wbdg"
-      irchannel.propertyid = 42;
-      // irchannel.propertyid = 520;
-      irchannel.ticket = ticket
-    }, 300)
 
-    /*{
-    "id": 7,
-    "title": "",
-    "is_active": false,
-    "channel": {
-        "id": 7,
-        "name": "SmartLink"
-    },
-    "property": {
-        "id": 42,
-        "name": "igloorooms Demo Hotel"
-    },
-    "map": [
-        {
-            "ir_id": "42",
-            "channel_id": "29",
-            "type": "property"
-        },
-        {
-            "channel_id": "1106",
-            "ir_id": "110",
-            "type": "room_type"
-        }
-    ],
-    "is_remove": false
-}*/
+  <script>
+    var today = new Date();
+    today.setDate(today.getDate() - 1);
+    var _FROM_DATE = today.toISOString().substring(0, 10)
+    today.setDate(today.getDate() + 60);
+    var _TO_DATE = today.toISOString().substring(0, 10)
+    const calendar = document.querySelector("igloo-calendar");
+    calendar.from_date = _FROM_DATE;
+    calendar.to_date = _TO_DATE;
+    setTimeout(() => {
+      const ticket = getToken();
+      calendar.propertyid = getId();
+      calendar.ticket = ticket;
+    }, 300)
   </script>
 
 </body>

@@ -243,8 +243,8 @@ export class IglBookingRoomRatePlan {
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
           </div>
 
-          <div class={'d-md-flex justify-content-md-end  align-items-md-center  flex-fill rateplan-container'}>
-            <div class="mt-1 mt-lg-0 flex-fill max-w-300">
+          <div class={'d-md-flex justify-content-md-end  align-items-md-center flex-fill rateplan-container'}>
+            <div class="mt-1 mt-md-0 flex-fill max-w-300">
               <fieldset class="position-relative">
                 <select disabled={this.disableForm()} class="form-control  input-sm" id={v4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
                   {this.ratePlanData.variations.map(variation => (
@@ -255,8 +255,8 @@ export class IglBookingRoomRatePlan {
                 </select>
               </fieldset>
             </div>
-            <div class={'m-0 p-0 d-flex justify-content-between ml-md-1 '}>
-              <div class=" d-flex  m-0 p-0 rate-total-night-view mt-1  ">
+            <div class={'m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1 '}>
+              <div class=" d-flex  m-0 p-0 rate-total-night-view  mt-0">
                 <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
                   <div class="input-group-prepend">
                     <span data-disabled={this.disableForm()} data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text new-currency" id="basic-addon1">
@@ -279,7 +279,7 @@ export class IglBookingRoomRatePlan {
                 <fieldset class="position-relative m-0 total-nights-container p-0 ">
                   <select
                     disabled={this.disableForm()}
-                    class="form-control input-sm m-0 nightBorder rounded-0  py-0"
+                    class="form-control input-sm m-0 nightBorder rounded-0 m-0  py-0"
                     id={v4()}
                     onChange={evt => this.handleDataChange('rateType', evt)}
                   >
@@ -293,7 +293,7 @@ export class IglBookingRoomRatePlan {
               </div>
 
               {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (
-                <div class="flex-fill  mt-lg-0 ml-1 m-0 mt-1 p-0">
+                <div class="flex-fill  mt-lg-0 ml-1 m-0 mt-md-0 p-0">
                   <fieldset class="position-relative">
                     <select
                       disabled={this.selectedData.rate === 0 || this.disableForm()}
