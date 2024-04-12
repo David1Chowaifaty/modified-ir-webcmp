@@ -123,19 +123,19 @@ export class IrChannelMapping {
           </button>
         </div>
         <section class="w-100">
-          <div class="py-1 mapped_row">
+          <div class="pt-1 mapped_row">
             <p class="mapped_item channel_name">{channels_data.selectedChannel?.name}</p>
             <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
               <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
             </svg>
-            <p class="pl-2 mapped_item channel_name">Igloorooms</p>
+            <p class="pl-2 mapped_item channel_name">igloorooms</p>
           </div>
           <div>
             {channels_data.selectedChannel?.property?.room_types?.map(room_type => {
               const mappedRoomType = this.mappingService.checkMappingExists(room_type.id, true);
               return (
                 <Fragment>
-                  <div key={room_type.id} class="mb-1 mapped_row">
+                  <div key={room_type.id} class="mapped_row room_type">
                     <p class="mapped_item">{room_type.name}</p>
 
                     <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
@@ -149,7 +149,7 @@ export class IrChannelMapping {
                     const mappedRatePlan = this.mappingService.checkMappingExists(rate_plan.id, false, room_type.id);
                     // console.log(mappedRatePlan);
                     return (
-                      <div key={rate_plan.id} class=" mapped_row mb-1">
+                      <div key={rate_plan.id} class=" mapped_row rate_plan">
                         <p class="pl-1 submap-text mapped_item">{rate_plan.name}</p>
 
                         {!mappedRatePlan.hide && (

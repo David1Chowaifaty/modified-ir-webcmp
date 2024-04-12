@@ -1,7 +1,8 @@
 :host {
   display: block;
   box-sizing: border-box;
-  font-size: 14px !important;
+  font-size: 12px !important;
+  line-height: 14px !important;
 }
 * {
   padding: 0;
@@ -76,4 +77,8 @@ li {
   color: rgba(0, 0, 0, 0.88);
   font-size: 14px;
   font-weight: 700;
+}
+.mapped_row.rate_plan,
+.mapped_row.room_type {
+  margin-bottom: 0px;
 }
