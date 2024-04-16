@@ -139,7 +139,7 @@ export class IrPaymentDetails {
           </td>
           <td class={'border payments-height border-light border-bottom-0 text-center '}>
             {rowMode === 'normal' ? (
-              <span class="sm-padding-right">${Number(item.amount).toFixed(2)}</span>
+              <span class="sm-padding-right">{_formatAmount(item.amount, this.bookingDetails.currency.code)}</span>
             ) : (
               <input
                 type="text"
