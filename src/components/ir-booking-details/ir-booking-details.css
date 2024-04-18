@@ -77,12 +77,12 @@
 }
 .btn-outline {
   background: transparent;
-  border: 1px solid var(--blue);
-  color: var(--blue);
+  border: 1px solid #104064;
+  color: #104064;
 }
 .btn-outline:hover,
 .btn-outline:active {
-  background: var(--blue);
+  background: #104064;
   color: white;
 }
 .dialog-title {
