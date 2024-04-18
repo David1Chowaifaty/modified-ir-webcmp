@@ -373,6 +373,11 @@ export namespace Components {
         "openModal": () => Promise<void>;
         "user": IHouseKeepers;
     }
+    interface IrDialog {
+        "closeModal": () => Promise<void>;
+        "open": boolean;
+        "openModal": () => Promise<void>;
+    }
     interface IrDropdown {
         "data": {
     name: string;
@@ -737,6 +742,10 @@ export interface IrDatePickerCustomEvent<T> extends CustomEvent<T> {
 export interface IrDeleteModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDeleteModalElement;
+}
+export interface IrDialogCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDialogElement;
 }
 export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1458,6 +1467,23 @@ declare global {
         prototype: HTMLIrDeleteModalElement;
         new (): HTMLIrDeleteModalElement;
     };
+    interface HTMLIrDialogElementEventMap {
+        "openChange": boolean;
+    }
+    interface HTMLIrDialogElement extends Components.IrDialog, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrDialogElementEventMap>(type: K, listener: (this: HTMLIrDialogElement, ev: IrDialogCustomEvent<HTMLIrDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrDialogElementEventMap>(type: K, listener: (this: HTMLIrDialogElement, ev: IrDialogCustomEvent<HTMLIrDialogElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrDialogElement: {
+        prototype: HTMLIrDialogElement;
+        new (): HTMLIrDialogElement;
+    };
     interface HTMLIrDropdownElementEventMap {
         "dropdownItemCLicked": { name: string; object: any };
     }
@@ -1920,6 +1946,7 @@ declare global {
         "ir-date-picker": HTMLIrDatePickerElement;
         "ir-date-view": HTMLIrDateViewElement;
         "ir-delete-modal": HTMLIrDeleteModalElement;
+        "ir-dialog": HTMLIrDialogElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
@@ -2383,6 +2410,10 @@ declare namespace LocalJSX {
         "onResetData"?: (event: IrDeleteModalCustomEvent<string>) => void;
         "user"?: IHouseKeepers;
     }
+    interface IrDialog {
+        "onOpenChange"?: (event: IrDialogCustomEvent<boolean>) => void;
+        "open"?: boolean;
+    }
     interface IrDropdown {
         "data"?: {
     name: string;
@@ -2684,6 +2715,7 @@ declare namespace LocalJSX {
         "ir-date-picker": IrDatePicker;
         "ir-date-view": IrDateView;
         "ir-delete-modal": IrDeleteModal;
+        "ir-dialog": IrDialog;
         "ir-dropdown": IrDropdown;
         "ir-guest-info": IrGuestInfo;
         "ir-hk-archive": IrHkArchive;
@@ -2760,6 +2792,7 @@ declare module "@stencil/core" {
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
+            "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;

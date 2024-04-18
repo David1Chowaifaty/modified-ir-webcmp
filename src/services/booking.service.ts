@@ -4,7 +4,7 @@ import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthTyp
 
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
-import { Booking, Day, Guest } from '../models/booking.dto';
+import { Booking, Day, Guest, IPmsLog } from '../models/booking.dto';
 import { Token } from '@/models/Token';
 
 export class BookingService extends Token {
@@ -63,6 +63,21 @@ export class BookingService extends Token {
       const token = this.getToken();
       if (token !== null) {
         const { data } = await axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data.My_Result;
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+  public async fetchPMSLogs(booking_nbr: string | number): Promise<IPmsLog> {
+    try {
+      const token = this.getToken();
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_PMS_Logs?Ticket=${token}`, { booking_nbr });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }

@@ -26,6 +26,7 @@ export interface Booking {
   financial: IFinancials;
   pickup_info: IBookingPickupInfo | null;
   cost: number | null;
+  is_pms_enabled: boolean;
 }
 export interface IOtaNotes {
   statement: string;
@@ -206,4 +207,12 @@ export interface Source {
 export interface Status {
   code: string;
   description: string;
+}
+
+export interface IPmsLog {
+  is_acknowledged: boolean;
+  is_sent: boolean;
+  sent_date: string;
+  sent_hour: number;
+  sent_minute: number;
 }

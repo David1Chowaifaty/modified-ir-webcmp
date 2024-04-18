@@ -1,7 +1,7 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import moment from 'moment';
 import { _formatDate, _formatTime } from './functions';
-import { Booking, Guest, Room } from '../../models/booking.dto';
+import { Booking, Guest, IPmsLog, Room } from '../../models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '../../models/igl-book-property';
@@ -56,6 +56,8 @@ export class IrBookingDetails {
   @State() sidebarState: 'guest' | 'pickup' | null = null;
   @State() isUpdateClicked = false;
 
+  @State() pms_status: IPmsLog;
+  @State() isPMSLogLoading: boolean = false;
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
@@ -63,6 +65,8 @@ export class IrBookingDetails {
 
   private bookingService = new BookingService();
   private roomService = new RoomService();
+
+  private dialogRef: HTMLIrDialogElement;
 
   componentDidLoad() {
     if (this.baseurl) {
@@ -221,6 +225,21 @@ export class IrBookingDetails {
       });
     }
   }
+  async openPMSLogsDialog() {
+    try {
+      this.dialogRef?.openModal();
+      if (!this.pms_status) {
+        this.isPMSLogLoading = true;
+        this.pms_status = await this.bookingService.fetchPMSLogs(this.bookingData.booking_nbr);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      if (this.isPMSLogLoading) {
+        this.isPMSLogLoading = false;
+      }
+    }
+  }
   @Listen('editInitiated')
   handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
     this.bookingItem = e.detail;
@@ -313,14 +332,14 @@ export class IrBookingDetails {
               <Fragment>
                 <ir-select
                   selectContainerStyle="h-28"
-                  selectStyles="d-flex align-items-center h-28"
+                  selectStyles="d-flex status-select align-items-center h-28"
                   firstOption={locales.entries.Lcz_Select}
                   id="update-status"
                   size="sm"
                   label-available="false"
                   data={this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code }))}
                   textSize="sm"
-                  class="sm-padding-right m-0"
+                  class="sm-padding-right m-0 "
                 ></ir-select>
                 <ir-button
                   onClickHanlder={this.updateStatus.bind(this)}
@@ -332,6 +351,11 @@ export class IrBookingDetails {
                   text="Update"
                 ></ir-button>
               </Fragment>
+            )}
+            {calendar_data.is_pms_enabled && (
+              <button type="button" class="btn btn-outline btn-sm ml-1" onClick={this.openPMSLogsDialog.bind(this)}>
+                {locales.entries.Lcz_pms}
+              </button>
             )}
             {this.hasReceipt && (
               <ir-icon id="receipt" class="mx-1">
@@ -365,7 +389,7 @@ export class IrBookingDetails {
               </ir-icon>
             )}
             {this.hasCloseButton && (
-              <ir-icon id="close" class="m-0 ml-2 pointer" onIconClickHandler={() => this.closeSidebar.emit(null)}>
+              <ir-icon id="close" class="m-0 ml-2 pointer " onIconClickHandler={() => this.closeSidebar.emit(null)}>
                 <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={24} width={24}>
                   <path
                     fill="#104064"
@@ -546,6 +570,33 @@ export class IrBookingDetails {
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
         )}
+      </Fragment>,
+      <Fragment>
+        <ir-dialog ref={el => (this.dialogRef = el)}>
+          <div slot="modal-body" class="p-1">
+            <h3 class=" text-left mb-1 dialog-title ">{locales.entries.Lcz_PMS_Logs}</h3>
+            {!this.isPMSLogLoading && (
+              <Fragment>
+                <div class="d-flex align-items-center">
+                  <p class="list-title">{locales.entries.Lcz_SentAt}</p>
+                  {this.pms_status?.sent_date ? (
+                    <p class="list-item">
+                      {this.pms_status?.sent_date} {_formatTime(this.pms_status?.sent_hour.toString(), this.pms_status?.sent_minute.toString())}
+                    </p>
+                  ) : (
+                    <p class={`list-item ${this.pms_status?.sent_date ? 'green' : 'red'}`}>{this.pms_status?.is_acknowledged ? locales.entries.Lcz_YES : locales.entries.Lcz_NO}</p>
+                  )}
+                </div>
+                <div class="d-flex align-items-center">
+                  <h4 class="list-title">{locales.entries.Lcz_Acknowledged}</h4>
+                  <p class={`list-item ${this.pms_status?.is_acknowledged ? 'green' : 'red'}`}>
+                    {this.pms_status?.is_acknowledged ? locales.entries.Lcz_YES : locales.entries.Lcz_NO}
+                  </p>
+                </div>
+              </Fragment>
+            )}
+          </div>
+        </ir-dialog>
       </Fragment>,
     ];
   }

@@ -1,5 +1,6 @@
 :host {
   overflow-x: hidden;
+  --ir-dialog-max-width: 20rem;
 }
 .confirmed {
   color: #fff;
@@ -73,4 +74,39 @@
 }
 .iframeHeight {
   height: 17.5rem;
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+}
+.btn-outline:hover,
+.btn-outline:active {
+  background: var(--blue);
+  color: white;
+}
+.dialog-title {
+  width: fit-content;
+}
+.list-title {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: bold;
+  width: fit-content;
+}
+.list-item {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  margin-left: 5px;
+  width: fit-content;
+}
+.list-item.green {
+  color: #629a4c;
+  font-weight: 600;
+}
+.list-item.red {
+  color: #ff4961;
+  font-weight: 600;
 }

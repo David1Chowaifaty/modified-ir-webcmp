@@ -23,6 +23,7 @@ export interface CalendarDataDetails {
   token: string;
   tax_statement: string;
   country: ICountry;
+  is_pms_enabled: boolean;
 }
 export interface ITaxes {
   is_exlusive: boolean;

@@ -160,6 +160,12 @@ export type LocalizationStrings = {
   Lcz_ShowMore: string;
   Lcz_TotalCost: string;
   Lcz_Cost: string;
+  Lcz_pms: string;
+  Lcz_YES: string;
+  Lcz_NO: string;
+  Lcz_Acknowledged: string;
+  Lcz_SentAt: string;
+  Lcz_PMS_Logs: string;
 };
 export type BookingListingCodes = {
   Lcz_TotalCost: string;
