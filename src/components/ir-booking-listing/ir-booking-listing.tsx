@@ -215,7 +215,7 @@ export class IrBookingListing {
                         </td>
                         <td>
                           <p class="p-0 m-0 date-p">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
-                          <p class="p-0 m-0 secondary-p">{_formatTime(booking.booked_on.hour.toString(), +' ' + booking.booked_on.minute.toString())}</p>
+                          <p class="p-0 m-0 secondary-p">{_formatTime(booking.booked_on.hour.toString(), booking.booked_on.minute.toString())}</p>
                         </td>
                         <td>
                           <div class="h-100 d-flex align-items-center ">

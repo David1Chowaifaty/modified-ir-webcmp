@@ -238,7 +238,7 @@ export class IglBookingRoomRatePlan {
                 <span>/{this.ratePlanData.name.split('/')[1]}</span>
               </Fragment>
             ) : (
-              <span>{this.ratePlanData.name}</span>
+              <span>{this.ratePlanData.short_name}</span>
             )}
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
           </div>

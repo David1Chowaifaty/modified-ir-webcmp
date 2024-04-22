@@ -120,6 +120,7 @@ export class IrBookingDetails {
       this.guestData = bookingDetails.guest;
       this.bookingData = bookingDetails;
       this.rerenderFlag = !this.rerenderFlag;
+      console.log(this.bookingData);
     } catch (error) {
       console.error('Error initializing app:', error);
     }
@@ -322,7 +323,7 @@ export class IrBookingDetails {
               )}
               <span class="date-margin">{_formatDate(this.bookingData.booked_on.date)}</span>
 
-              {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
+              {_formatTime(this.bookingData.booked_on.hour.toString(), this.bookingData.booked_on.minute.toString())}
             </p>
           </div>
 
@@ -490,10 +491,7 @@ export class IrBookingDetails {
                         </p>
                         <p class={'font-weight-bold flex-fill py-0 my-0'}>
                           {locales.entries.Lcz_Time}:
-                          <span class={'font-weight-normal'}>
-                            {' '}
-                            {_formatTime(this.bookingData.pickup_info.hour.toString(), +' ' + this.bookingData.pickup_info.minute.toString())}
-                          </span>
+                          <span class={'font-weight-normal'}> {_formatTime(this.bookingData.pickup_info.hour.toString(), this.bookingData.pickup_info.minute.toString())}</span>
                         </p>
                         <p class={'font-weight-bold py-0 my-0'}>
                           {locales.entries.Lcz_DueUponBooking}:{' '}
