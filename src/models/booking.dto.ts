@@ -27,6 +27,8 @@ export interface Booking {
   pickup_info: IBookingPickupInfo | null;
   cost: number | null;
   is_pms_enabled: boolean;
+  promo_key: string | null;
+  is_in_loyalty_mode: boolean;
 }
 export interface IOtaNotes {
   statement: string;

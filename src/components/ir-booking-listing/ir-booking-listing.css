@@ -60,3 +60,6 @@ td {
   min-width: 100%;
   text-align: center !important;
 }
+.booking-label-gap {
+  gap: 5px;
+}
