@@ -421,9 +421,9 @@ export class IrBookingDetails {
                   <ir-label label={`${this.defaultTexts.entries.Lcz_AlternativeEmail}:`} value={this.bookingData.guest.alternative_email}></ir-label>
                 )}
                 <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>
-                {this.bookingData.promo_key && <ir-label label={`${this.defaultTexts.entries.Lcz_Coupon}:`} value={this.bookingData.promo_key}></ir-label>}
                 {this.bookingData.is_direct && <ir-label label={`${this.defaultTexts.entries.Lcz_ArrivalTime}:`} value={this.bookingData.arrival.description}></ir-label>}
-                {this.bookingData.is_in_loyalty_mode && (
+                {this.bookingData.promo_key && <ir-label label={`${this.defaultTexts.entries.Lcz_Coupon}:`} value={this.bookingData.promo_key}></ir-label>}
+                {this.bookingData.is_in_loyalty_mode && !this.bookingData.promo_key && (
                   <div class="d-flex align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height={18} width={18}>
                       <path

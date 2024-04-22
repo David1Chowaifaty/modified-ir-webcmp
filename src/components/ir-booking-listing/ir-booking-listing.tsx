@@ -227,7 +227,7 @@ export class IrBookingListing {
                               </p>
                               <div class={'d-flex align-items-center booking-label-gap'}>
                                 <p class="p-0 m-0 secondary-p">{booking.origin.Label}</p>
-                                {booking.is_in_loyalty_mode && (
+                                {booking.is_in_loyalty_mode && !booking.promo_key && (
                                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height={18} width={18}>
                                     <path
                                       fill="#fc6c85"
