@@ -245,7 +245,7 @@ export class IrBookingListing {
                                   </svg>
                                 )}
                               </div>
-                              {booking.agent && <p class="m-0">Agent:HUTCH</p>}
+                              {booking.agent && <p class="m-0 secondary-p">{locales.entries.Lcz_AgentCode.replace('%1', booking.agent.name)}</p>}
                             </div>
                           </div>
                         </td>

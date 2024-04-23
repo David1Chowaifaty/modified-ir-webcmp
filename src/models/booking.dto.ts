@@ -2,9 +2,9 @@ import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 
 export interface Booking {
   agent: {
-    code: null;
+    code: string;
     id: number;
-    name: null;
+    name: string;
     verification_mode: null;
   } | null;
   arrival: Arrival;

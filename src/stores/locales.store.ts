@@ -212,6 +212,7 @@ export type BookingListingCodes = {
   Lcz_BookingBalance: string;
   Lcz_NoDataAvailable: string;
   Lcz_All: string;
+  Lcz_AgentCode: string;
 };
 export type HousekeepingLocalizedWords = {
   Lcz_Action: string;
