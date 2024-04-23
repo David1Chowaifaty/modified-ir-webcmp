@@ -67,6 +67,7 @@ export class IrBookingDetails {
   private roomService = new RoomService();
 
   private dialogRef: HTMLIrDialogElement;
+  private agent: any;
 
   componentDidLoad() {
     if (this.baseurl) {
@@ -120,7 +121,14 @@ export class IrBookingDetails {
       this.guestData = bookingDetails.guest;
       this.bookingData = bookingDetails;
       this.rerenderFlag = !this.rerenderFlag;
-      console.log(this.bookingData);
+      if (this.bookingData.agent) {
+        const currentAgent = roomResponse.My_Result.agents.find(a => this.bookingData.agent.id === a.id);
+        if (currentAgent) {
+          this.agent = currentAgent.code;
+        }
+        // roomResponse.
+      }
+      console.log(roomResponse);
     } catch (error) {
       console.error('Error initializing app:', error);
     }
@@ -420,9 +428,10 @@ export class IrBookingDetails {
                 {this.bookingData.guest.alternative_email && (
                   <ir-label label={`${this.defaultTexts.entries.Lcz_AlternativeEmail}:`} value={this.bookingData.guest.alternative_email}></ir-label>
                 )}
-                <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>
+                {this.bookingData.guest.address && <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>}
                 {this.bookingData.is_direct && <ir-label label={`${this.defaultTexts.entries.Lcz_ArrivalTime}:`} value={this.bookingData.arrival.description}></ir-label>}
                 {this.bookingData.promo_key && <ir-label label={`${this.defaultTexts.entries.Lcz_Coupon}:`} value={this.bookingData.promo_key}></ir-label>}
+                {this.bookingData.agent && <ir-label label={`${this.defaultTexts.entries.Lcz_BookingCode}:`} value={this.agent}></ir-label>}
                 {this.bookingData.is_in_loyalty_mode && !this.bookingData.promo_key && (
                   <div class="d-flex align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height={18} width={18}>

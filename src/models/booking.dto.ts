@@ -1,6 +1,12 @@
 import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 
 export interface Booking {
+  agent: {
+    code: null;
+    id: number;
+    name: null;
+    verification_mode: null;
+  } | null;
   arrival: Arrival;
   allowed_actions: IAllowedActions[];
   system_id: number;

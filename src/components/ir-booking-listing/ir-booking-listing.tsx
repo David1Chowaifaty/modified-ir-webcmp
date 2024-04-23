@@ -245,6 +245,7 @@ export class IrBookingListing {
                                   </svg>
                                 )}
                               </div>
+                              {booking.agent && <p class="m-0">Agent:HUTCH</p>}
                             </div>
                           </div>
                         </td>
