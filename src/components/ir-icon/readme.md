@@ -30,6 +30,7 @@
  - [ir-channel-editor](../ir-channel/ir-channel-editor)
  - [ir-channel-mapping](../ir-channel/ir-channel-mapping)
  - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
+ - [ir-dialog](../ir-dialog)
  - [ir-dropdown](../ir-dropdown)
  - [ir-guest-info](../ir-guest-info)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
@@ -53,6 +54,7 @@ graph TD;
   ir-channel-editor --> ir-icon
   ir-channel-mapping --> ir-icon
   ir-delete-modal --> ir-icon
+  ir-dialog --> ir-icon
   ir-dropdown --> ir-icon
   ir-guest-info --> ir-icon
   ir-hk-archive --> ir-icon

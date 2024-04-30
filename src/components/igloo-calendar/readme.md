@@ -116,6 +116,7 @@ graph TD;
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
+  ir-booking-details --> ir-dialog
   ir-label --> ir-icon
   ir-room --> ir-icon
   ir-room --> ir-date-view
@@ -136,6 +137,7 @@ graph TD;
   ir-pickup --> ir-input-text
   ir-pickup --> ir-button
   ir-title --> ir-icon
+  ir-dialog --> ir-icon
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

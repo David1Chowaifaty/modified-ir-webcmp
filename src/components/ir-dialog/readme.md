@@ -5,6 +5,13 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property | Attribute | Description | Type      | Default |
+| -------- | --------- | ----------- | --------- | ------- |
+| `open`   | `open`    |             | `boolean` | `false` |
+
+
 ## Events
 
 | Event        | Description | Type                   |
@@ -39,16 +46,17 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [ir-nav](../../ir-nav)
- - [ir-popover](../ir-popover)
- - [ir-property-gallery](../../ir-property-gallery)
+ - [ir-booking-details](../ir-booking-details)
+
+### Depends on
+
+- [ir-icon](../ir-icon)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-nav --> ir-dialog
-  ir-popover --> ir-dialog
-  ir-property-gallery --> ir-dialog
+  ir-dialog --> ir-icon
+  ir-booking-details --> ir-dialog
   style ir-dialog fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

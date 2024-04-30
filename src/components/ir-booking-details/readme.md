@@ -59,6 +59,7 @@
 - [ir-guest-info](../ir-guest-info)
 - [ir-pickup](ir-pickup)
 - [igl-book-property](../igloo-calendar/igl-book-property)
+- [ir-dialog](../ir-dialog)
 
 ### Graph
 ```mermaid
@@ -77,6 +78,7 @@ graph TD;
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
+  ir-booking-details --> ir-dialog
   ir-label --> ir-icon
   ir-room --> ir-icon
   ir-room --> ir-date-view
@@ -121,6 +123,7 @@ graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
+  ir-dialog --> ir-icon
   igloo-calendar --> ir-booking-details
   ir-booking-listing --> ir-booking-details
   style ir-booking-details fill:#f9f,stroke:#333,stroke-width:4px
