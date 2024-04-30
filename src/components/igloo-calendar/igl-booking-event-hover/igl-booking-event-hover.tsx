@@ -1,10 +1,11 @@
 import { Component, Host, h, Prop, Event, EventEmitter, State, Element, Fragment } from '@stencil/core';
-import { findCountry, getCurrencySymbol } from '../../../utils/utils';
+import { findCountry } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import { _formatAmount } from '@/components/ir-booking-details/functions';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -354,10 +355,7 @@ export class IglBookingEventHover {
             <img src={this.bookingEvent?.origin?.Icon} alt="icon" class={'icon-image'} />
             <p class={'p-0 m-0'}>{!this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER}</p>
           </div>
-          <div class="pr-0 col-4 text-right">
-            {getCurrencySymbol(this.currency.code)}
-            {this.getTotalPrice()}
-          </div>
+          <div class="pr-0 col-4 text-right">{_formatAmount(this.getTotalPrice(), this.currency.code)}</div>
         </div>
         <div class="row p-0 m-0">
           <div class="px-0 pr-0 col-12">
