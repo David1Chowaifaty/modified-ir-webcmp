@@ -30,7 +30,7 @@
 
   <script>
     var today = new Date();
-    today.setDate(today.getDate() - 3);
+    today.setDate(today.getDate() - 4);
     var _FROM_DATE = today.toISOString().substring(0, 10)
     today.setDate(today.getDate() + 60);
     var _TO_DATE = today.toISOString().substring(0, 10)
@@ -38,8 +38,8 @@
     calendar.from_date = _FROM_DATE;
     calendar.to_date = _TO_DATE;
     setTimeout(() => {
-      const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTU3NTY5NjEsIkNMQUlNLTAxIjoiNG1UZkFZZHNqS1E9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiQUVxVnRCMm1kWTg9IiwiQ0xBSU0tMDUiOiJFQTEzejA3ejBUcWRkM2gwNElyYThBcklIUzg2aEpCQSJ9.eIgz2diWCYsBb8Zy06QFa9DaQw8dd2f68GwVRzH2RKs" || getToken();
-      calendar.propertyid = 561 || getId();
+      const ticket = getToken();
+      calendar.propertyid = getId();
       calendar.ticket = ticket;
     }, 300)
   </script>

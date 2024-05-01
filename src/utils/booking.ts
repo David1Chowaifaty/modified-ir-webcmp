@@ -73,6 +73,8 @@ function renderBlock003Date(date, hour, minute) {
 }
 function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
   if (isBlockUnit(cell.STAY_STATUS_CODE)) {
+    const blockedFromDate = moment(cell.My_Block_Info.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.My_Block_Info.from_date : cell.DATE;
+    const blockedToDate = moment(cell.My_Block_Info.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.My_Block_Info.to_date : cell.DATE;
     return {
       ID: cell.POOL,
       NOTES: '',
@@ -89,9 +91,9 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       ENTRY_HOUR: cell.My_Block_Info.BLOCKED_TILL_HOUR,
       ENTRY_MINUTE: cell.My_Block_Info.BLOCKED_TILL_MINUTE,
       OPTIONAL_REASON: cell.My_Block_Info.NOTES,
-      FROM_DATE: cell.DATE,
-      TO_DATE: cell.DATE,
-      NO_OF_DAYS: 1,
+      FROM_DATE: blockedFromDate,
+      TO_DATE: blockedToDate,
+      NO_OF_DAYS: dateDifference(blockedFromDate, blockedToDate),
       STATUS: status[cell.STAY_STATUS_CODE],
       POOL: cell.POOL,
       STATUS_CODE: cell.STAY_STATUS_CODE,
@@ -100,18 +102,19 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
     };
   }
-  //console.log('booking', cell);
-  // if (!cell.booking.is_direct) {
-  //   console.log(formatName(cell.room.guest.first_name, cell.room.guest.last_name), cell.booking.channel_booking_nbr);
-  // }
-  if (cell.booking.booking_nbr === '88237899') {
+  // console.log('booking', cell);
+  if (cell.booking.booking_nbr === '57243250') {
+    console.log('cell');
+    console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
     console.log(cell);
   }
+  const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
+  const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
   return {
     ID: cell.POOL,
-    TO_DATE: cell.DATE,
-    FROM_DATE: cell.DATE,
-    NO_OF_DAYS: 1,
+    FROM_DATE: bookingFromDate,
+    TO_DATE: bookingToDate,
+    NO_OF_DAYS: dateDifference(bookingFromDate, bookingToDate),
     STATUS: bookingStatus[cell.booking?.status.code],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
     IDENTIFIER: cell.room.identifier,
@@ -122,6 +125,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     is_direct: cell.booking.is_direct,
     BALANCE: cell.booking.financial?.due_amount,
     channel_booking_nbr: cell.booking.channel_booking_nbr,
+    ARRIVAL_TIME: cell.booking.arrival.description,
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,
@@ -148,28 +152,31 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
   };
 }
 
-function updateBookingWithStayData(data: any, cell: CellType): any {
-  data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
-  data.TO_DATE = cell.DATE;
-  if (cell.booking) {
-    const { arrival } = cell.booking;
-    Object.assign(data, {
-      ARRIVAL_TIME: arrival.description,
-    });
-  }
-  return data;
-}
+// function updateBookingWithStayData(data: any, cell: CellType): any {
+//   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
+//   data.TO_DATE = cell.DATE;
+//   if (cell.booking) {
+//     const { arrival } = cell.booking;
+//     if (cell.booking.booking_nbr === '88231897') {
+//       console.log(data.NO_OF_DAYS, data.TO_DATE);
+//     }
+//     Object.assign(data, {
+//       ARRIVAL_TIME: arrival.description,
+//     });
+//   }
+//   return data;
+// }
 
 function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { code: string; value: string }[]): void {
   const index = myBookings.findIndex(booking => booking.POOL === cell.POOL);
-
   if (index === -1) {
     const newData = getDefaultData(cell, stayStatus);
     myBookings.push(newData);
-  } else {
-    const updatedData = updateBookingWithStayData(myBookings[index], cell);
-    myBookings[index] = updatedData;
   }
+  //else {
+  //   const updatedData = updateBookingWithStayData(myBookings[index], cell);
+  //   myBookings[index] = updatedData;
+  // }
 }
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];

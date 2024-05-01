@@ -52,6 +52,7 @@ export class IrRoomNights {
     return this.isLoading || this.rates.some(rate => rate.amount === -1) || this.inventory === 0 || this.inventory === null;
   }
   async init() {
+    console.log(this.fromDate, this.toDate);
     try {
       this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
 
@@ -73,12 +74,13 @@ export class IrRoomNights {
           this.rates;
           this.rates = [
             ...newDatesArr.map(day => ({
-              amount,
+              amount: amount / newDatesArr.length,
               date: day,
               cost: null,
             })),
             ...this.selectedRoom.days,
           ];
+          this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
         } else {
           const amount = await this.fetchBookingAvailability(
             lastDay.date,
@@ -90,13 +92,12 @@ export class IrRoomNights {
           this.rates = [
             ...this.selectedRoom.days,
             ...newDatesArr.map(day => ({
-              amount,
+              amount: amount / newDatesArr.length,
               date: day,
               cost: null,
             })),
           ];
         }
-        this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
       }
     } catch (error) {
       console.log(error);
@@ -142,7 +143,11 @@ export class IrRoomNights {
       );
       this.inventory = bookingAvailability.roomtypes[0].inventory;
       const rate_plan_index = bookingAvailability.roomtypes[0].rateplans.find(rate => rate.id === rate_plan_id);
-      const { amount } = rate_plan_index.variations.find(variation => variation.adult_child_offering === selected_variation);
+      if (!rate_plan_index || !rate_plan_index.variations) {
+        this.inventory = null;
+        return null;
+      }
+      const { amount } = rate_plan_index.variations?.find(variation => variation.adult_child_offering === selected_variation);
       return amount;
     } catch (error) {
       console.log(error);

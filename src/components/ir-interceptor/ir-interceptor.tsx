@@ -12,6 +12,7 @@ export class IrInterceptor {
   @State() isShown = false;
   @State() isLoading = false;
   @State() isUnassignedUnit = false;
+  @State() endpointsCount = 0;
 
   @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
@@ -35,8 +36,11 @@ export class IrInterceptor {
   handleRequest(config: AxiosRequestConfig) {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
-    if (this.isHandledEndpoint(extractedUrl)) {
+    if (this.isHandledEndpoint(extractedUrl) && this.endpointsCount > 0) {
       this.isLoading = true;
+    }
+    if (extractedUrl === '/Get_Exposed_Calendar') {
+      this.endpointsCount = this.endpointsCount + 1;
     }
     return config;
   }
