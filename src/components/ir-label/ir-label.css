@@ -22,6 +22,11 @@ p {
   margin: 0;
   padding: 0;
 }
+.country {
+  height: 16px;
+  width: 23px;
+  border-radius: 3px;
+}
 svg {
   margin: 0;
   padding: 0;

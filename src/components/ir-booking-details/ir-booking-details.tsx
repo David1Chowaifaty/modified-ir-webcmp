@@ -58,6 +58,7 @@ export class IrBookingDetails {
 
   @State() pms_status: IPmsLog;
   @State() isPMSLogLoading: boolean = false;
+  @State() userCountry: ICountry | null = null;
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
@@ -110,7 +111,9 @@ export class IrBookingDetails {
       }
       this.defaultTexts = languageTexts;
       this.countryNodeList = countriesList;
-
+      if (bookingDetails.guest?.country_id) {
+        this.userCountry = this.countryNodeList.find(country => country.id === bookingDetails.guest.country_id) || null;
+      }
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
       this.setRoomsData(roomResponse);
@@ -419,7 +422,10 @@ export class IrBookingDetails {
                 {this.bookingData.guest.alternative_email && (
                   <ir-label label={`${this.defaultTexts.entries.Lcz_AlternativeEmail}:`} value={this.bookingData.guest.alternative_email}></ir-label>
                 )}
-                {this.bookingData.guest.address && <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>}
+                {this.bookingData?.guest?.address && <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>}
+                {this.userCountry && (
+                  <ir-label label={`${this.defaultTexts.entries.Lcz_Country}:`} value={this.userCountry.name} country imageSrc={this.userCountry.flag}></ir-label>
+                )}
                 {this.bookingData.is_direct && <ir-label label={`${this.defaultTexts.entries.Lcz_ArrivalTime}:`} value={this.bookingData.arrival.description}></ir-label>}
                 {this.bookingData.promo_key && <ir-label label={`${this.defaultTexts.entries.Lcz_Coupon}:`} value={this.bookingData.promo_key}></ir-label>}
                 {this.bookingData.agent && <ir-label label={`${this.defaultTexts.entries.Lcz_AgentCode?.split(':')[0]}:`} value={this.bookingData.agent.name}></ir-label>}

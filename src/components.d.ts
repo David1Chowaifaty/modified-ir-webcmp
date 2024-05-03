@@ -450,8 +450,10 @@ export namespace Components {
         "handledEndpoints": string[];
     }
     interface IrLabel {
+        "country": boolean;
         "iconShown": boolean;
         "imageSrc": string;
+        "imageStyle": string;
         "label": string;
         "value": string;
     }
@@ -2497,8 +2499,10 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrInterceptorCustomEvent<IToast1>) => void;
     }
     interface IrLabel {
+        "country"?: boolean;
         "iconShown"?: boolean;
         "imageSrc"?: string;
+        "imageStyle"?: string;
         "label"?: string;
         "onEditSidebar"?: (event: IrLabelCustomEvent<any>) => void;
         "value"?: string;

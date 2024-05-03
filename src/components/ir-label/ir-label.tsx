@@ -11,6 +11,8 @@ export class IrLabel {
   @Prop() value: string;
   @Prop() iconShown = false;
   @Prop() imageSrc: string;
+  @Prop() country: boolean = false;
+  @Prop() imageStyle: string = '';
 
   // Events
   @Event() editSidebar: EventEmitter;
@@ -27,7 +29,7 @@ export class IrLabel {
     return (
       <Host class={this.imageSrc ? 'align-items-center' : ''}>
         <strong>{this.label}</strong>
-        {this.imageSrc && <img src={this.imageSrc} class="p-0 m-0" />}
+        {this.imageSrc && <img src={this.imageSrc} class={`p-0 m-0 ${this.country ? 'country' : ''} ${this.imageStyle}`} />}
         <p>{this.value}</p>
         {this.iconShown && (
           <div class="icon-container">
