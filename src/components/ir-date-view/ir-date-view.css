@@ -1,6 +1,7 @@
 :host {
   display: block;
   font-size: 13.65px !important;
+  width: 100%;
 }
 .mx-01 {
   --m: 5px;

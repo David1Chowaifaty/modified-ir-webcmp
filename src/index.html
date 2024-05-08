@@ -24,24 +24,15 @@
 
 <body>
   <ir-common></ir-common>
-  <igloo-calendar currency-name="USD" propertyid="42" language="en"
-    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+  <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
-    var today = new Date();
-    today.setDate(today.getDate() - 4);
-    var _FROM_DATE = today.toISOString().substring(0, 10)
-    today.setDate(today.getDate() + 60);
-    var _TO_DATE = today.toISOString().substring(0, 10)
-    const calendar = document.querySelector("igloo-calendar");
-    calendar.from_date = _FROM_DATE;
-    calendar.to_date = _TO_DATE;
-    setTimeout(() => {
-      const ticket = getToken();
-      calendar.propertyid = getId();
-      calendar.ticket = ticket;
-    }, 300)
+    const booking_listing = document.querySelector("ir-booking-listing");
+    if (booking_listing) {
+      booking_listing.propertyid = getId();
+      booking_listing.ticket = getToken();
+    } 
   </script>
 
 </body>

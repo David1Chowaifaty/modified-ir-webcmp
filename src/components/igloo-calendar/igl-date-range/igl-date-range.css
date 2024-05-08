@@ -29,6 +29,7 @@
   font-size: 13.65px !important;
   display: flex;
   align-items: center;
+  inset: 0;
 }
 .date-view svg {
   padding: 0 !important;
