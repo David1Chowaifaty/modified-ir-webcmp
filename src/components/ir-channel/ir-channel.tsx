@@ -156,6 +156,7 @@ export class IrChannel {
     }
     return (
       <Host class="h-100 ">
+        <ir-toast></ir-toast>
         <section class="p-2 px-lg-5 py-0 h-100 d-flex flex-column">
           <div class="d-flex w-100 justify-content-between mb-2 align-items-center">
             <h3 class="font-weight-bold m-0 p-0">{locales.entries?.Lcz_iSWITCH}</h3>

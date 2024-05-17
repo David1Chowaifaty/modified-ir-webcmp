@@ -294,6 +294,7 @@ export type LocalizationChannelFrontEntries = {
   Lcz_ViewLogs: string;
   Lcz_TestConnection: string;
   Lcz_NoChannelsAreConnected: string;
+  Lcz_InvalidCredentials: string;
 };
 
 const initialState: ILocale = {

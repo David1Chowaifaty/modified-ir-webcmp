@@ -1,6 +1,6 @@
 import channels_data, { selectChannel, testConnection, updateChannelSettings } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
-import { Component, Host, Prop, State, h } from '@stencil/core';
+import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'ir-channel-general',
@@ -13,6 +13,7 @@ export class IrChannelGeneral {
   @State() buttonClicked: boolean = false;
   @State() connection_status_message = '';
   @State() status: boolean = false;
+  @Event() connectionStatus: EventEmitter<boolean>;
   componentWillLoad() {
     if (this.channel_status !== 'create' || !channels_data.isConnectedToChannel) {
       return;
@@ -30,6 +31,7 @@ export class IrChannelGeneral {
     this.status = status;
     this.connection_status_message = status ? locales.entries?.Lcz_ConnectedChannel : locales.entries?.Lcz_IncorrectConnection;
     this.buttonClicked = false;
+    this.connectionStatus.emit(this.status);
   }
   render() {
     return (

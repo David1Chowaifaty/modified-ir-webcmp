@@ -1,3 +1,4 @@
+import { IToast } from '@/components/ir-toast/toast';
 import { ChannelService } from '@/services/channel.service';
 import { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
@@ -14,6 +15,7 @@ export class IrChannelEditor {
 
   @State() selectedTab: string = '';
   @State() isLoading: boolean = false;
+  @State() status: boolean = false;
   @State() headerTitles = [
     {
       id: 'general_settings',
@@ -27,6 +29,7 @@ export class IrChannelEditor {
 
   @Event() saveChannelFinished: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
+  @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
 
   private channelService = new ChannelService();
   componentWillLoad() {
@@ -54,7 +57,7 @@ export class IrChannelEditor {
   renderTabScreen() {
     switch (this.selectedTab) {
       case 'general_settings':
-        return <ir-channel-general channel_status={this.channel_status}></ir-channel-general>;
+        return <ir-channel-general channel_status={this.channel_status} onConnectionStatus={e => (this.status = e.detail)}></ir-channel-general>;
       case 'mapping':
         return <ir-channel-mapping></ir-channel-mapping>;
       case 'channel_booking':
@@ -107,7 +110,17 @@ export class IrChannelEditor {
 
         <ir-button
           isLoading={this.isLoading}
-          onClickHanlder={() => this.saveConnectedChannel()}
+          onClickHanlder={() => {
+            if (!this.status) {
+              this.toast.emit({
+                type: 'error',
+                description: locales.entries.Lcz_InvalidCredentials,
+                title: locales.entries.Lcz_InvalidCredentials,
+              });
+              return;
+            }
+            this.saveConnectedChannel();
+          }}
           class="px-1 py-1 top-border"
           btn_styles="w-100  justify-content-center align-items-center"
           text={locales.entries.Lcz_Save}
