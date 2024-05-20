@@ -1,6 +1,6 @@
 import { IToast } from '@/components/ir-toast/toast';
 import { ChannelService } from '@/services/channel.service';
-import { onChannelChange } from '@/stores/channel.store';
+import channels_data, { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 
@@ -43,6 +43,8 @@ export class IrChannelEditor {
     onChannelChange('isConnectedToChannel', newValue => {
       if (!!newValue) {
         this.enableAllHeaders();
+      } else {
+        this.disableNonFirstTabs();
       }
     });
   }
@@ -111,7 +113,7 @@ export class IrChannelEditor {
         <ir-button
           isLoading={this.isLoading}
           onClickHanlder={() => {
-            if (!this.status) {
+            if (!channels_data.isConnectedToChannel) {
               this.toast.emit({
                 type: 'error',
                 description: locales.entries.Lcz_InvalidCredentials,

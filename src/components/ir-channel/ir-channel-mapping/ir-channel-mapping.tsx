@@ -93,7 +93,7 @@ export class IrChannelMapping {
         {this.activeMapField === id ? (
           <ir-combobox
             autoFocus
-            placeholder={locales.entries?.Lcz_ConnectedChannel}
+            placeholder={locales.entries?.Lcz_NotMapped}
             data={this.availableRooms}
             onComboboxValueChange={e => {
               addMapping(e.detail.data as string, this.activeMapField, isRoomType);
@@ -111,7 +111,7 @@ export class IrChannelMapping {
 
   render() {
     return (
-      <Host class="py-md-1 px-md-2">
+      <Host class="py-md-2 px-md-2">
         <div class="d-flex p-0 m-0 w-100 justify-content-end">
           <button
             onClick={() => {
@@ -135,7 +135,7 @@ export class IrChannelMapping {
               const mappedRoomType = this.mappingService.checkMappingExists(room_type.id, true);
               return (
                 <Fragment>
-                  <div key={room_type.id} class="mapped_row room_type">
+                  <div key={room_type.id} class="mapped_row room_type pt-1">
                     <p class="mapped_item">{room_type.name}</p>
 
                     <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">

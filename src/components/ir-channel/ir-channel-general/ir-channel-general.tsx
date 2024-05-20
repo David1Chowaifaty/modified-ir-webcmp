@@ -15,21 +15,25 @@ export class IrChannelGeneral {
   @State() status: boolean = false;
   @Event() connectionStatus: EventEmitter<boolean>;
   componentWillLoad() {
-    if (this.channel_status !== 'create' || !channels_data.isConnectedToChannel) {
+    if (this.channel_status === 'create' || !channels_data.isConnectedToChannel) {
       return;
     }
-    this.connection_status_message = channels_data.isConnectedToChannel ? locales.entries?.Lcz_ConnectedChannel : '';
+    this.connection_status_message = channels_data.isConnectedToChannel
+      ? channels_data.selectedChannel.properties.find(property => property.id === channels_data.channel_settings.hotel_id)?.name
+      : '';
     this.status = true;
   }
   handleTestConnectionClicked(e: Event) {
     e.preventDefault();
     this.buttonClicked = true;
-    if (this.channel_status !== 'create' || !channels_data.channel_settings?.hotel_id || channels_data.isConnectedToChannel) {
+    if (!channels_data.channel_settings?.hotel_id) {
       return;
     }
     const status = testConnection();
     this.status = status;
-    this.connection_status_message = status ? locales.entries?.Lcz_ConnectedChannel : locales.entries?.Lcz_IncorrectConnection;
+    this.connection_status_message = status
+      ? channels_data.selectedChannel.properties.find(property => property.id === channels_data.channel_settings.hotel_id)?.name
+      : locales.entries?.Lcz_IncorrectConnection;
     this.buttonClicked = false;
     this.connectionStatus.emit(this.status);
   }
@@ -82,31 +86,18 @@ export class IrChannelGeneral {
                 <div class="flex-fill">
                   <input
                     id="hotel_id"
-                    disabled={channels_data.isConnectedToChannel}
+                    // disabled={channels_data.isConnectedToChannel}
                     class={`form-control  flex-fill bg-white ${this.buttonClicked && !channels_data.channel_settings?.hotel_id && 'border-danger'}`}
                     value={channels_data.channel_settings?.hotel_id}
                     onInput={e => updateChannelSettings('hotel_id', (e.target as HTMLInputElement).value)}
                   />
                 </div>
               </fieldset>
-              <div class={'connection-testing-container'}>
-                <div class="d-flex align-items-center">
+
+              <div class="connection-status">
+                <div class="status-message">
                   {this.connection_status_message &&
-                    (this.status ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" viewBox="0 0 512 512">
-                        <path
-                          fill="var(--green)"
-                          d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"
-                        />
-                      </svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" viewBox="0 0 512 512">
-                        <path
-                          fill="var(--yellow)"
-                          d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
-                        />
-                      </svg>
-                    ))}
+                    (this.status ? <ir-icons name="circle_check" style={{ color: 'green' }}></ir-icons> : <ir-icons name="danger" style={{ color: 'yellow' }}></ir-icons>)}
                   <span>{this.connection_status_message}</span>
                 </div>
                 <button class="btn btn-outline-secondary btn-sm" type="submit">

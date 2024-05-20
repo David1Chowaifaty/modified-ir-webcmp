@@ -82,6 +82,9 @@ export function testConnection() {
   // const hotelConnection = channels_data.selectedChannel.properties.find(property => property.id === 'd09e6374-1ebf-45e0-a130-64c8c9930987');
   const hotelConnection = channels_data.selectedChannel.properties.find(property => property.id === channels_data.channel_settings.hotel_id);
   if (!hotelConnection) {
+    if (channels_data.isConnectedToChannel) {
+      channels_data.isConnectedToChannel = false;
+    }
     return false;
   }
   channels_data.selectedChannel.property = hotelConnection;
