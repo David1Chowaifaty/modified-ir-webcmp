@@ -15,10 +15,11 @@
 
 ## Events
 
-| Event                 | Description | Type                |
-| --------------------- | ----------- | ------------------- |
-| `closeSideBar`        |             | `CustomEvent<null>` |
-| `saveChannelFinished` |             | `CustomEvent<null>` |
+| Event                 | Description | Type                                                                                                 |
+| --------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `closeSideBar`        |             | `CustomEvent<null>`                                                                                  |
+| `saveChannelFinished` |             | `CustomEvent<null>`                                                                                  |
+| `toast`               |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies
@@ -44,6 +45,7 @@ graph TD;
   ir-channel-editor --> ir-channel-header
   ir-channel-editor --> ir-button
   ir-channel-general --> ir-combobox
+  ir-channel-general --> ir-icons
   ir-channel-mapping --> ir-icon
   ir-channel-mapping --> ir-combobox
   ir-channel --> ir-channel-editor

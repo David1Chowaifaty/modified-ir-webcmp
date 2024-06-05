@@ -20,6 +20,7 @@
 ### Depends on
 
 - [ir-loading-screen](../ir-loading-screen)
+- [ir-toast](../ir-toast)
 - [ir-button](../ir-button)
 - [ir-switch](../ir-switch)
 - [ir-sidebar](../ir-sidebar)
@@ -30,6 +31,7 @@
 ```mermaid
 graph TD;
   ir-channel --> ir-loading-screen
+  ir-channel --> ir-toast
   ir-channel --> ir-button
   ir-channel --> ir-switch
   ir-channel --> ir-sidebar
@@ -42,6 +44,7 @@ graph TD;
   ir-channel-editor --> ir-channel-header
   ir-channel-editor --> ir-button
   ir-channel-general --> ir-combobox
+  ir-channel-general --> ir-icons
   ir-channel-mapping --> ir-icon
   ir-channel-mapping --> ir-combobox
   ir-modal --> ir-button

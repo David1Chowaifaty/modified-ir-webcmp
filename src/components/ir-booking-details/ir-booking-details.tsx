@@ -507,10 +507,12 @@ export class IrBookingDetails {
                         <p class={'font-weight-bold mr-1 py-0 my-0'}>
                           {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</span>
                         </p>
-                        <p class={'font-weight-bold flex-fill py-0 my-0'}>
-                          {locales.entries.Lcz_Time}:
-                          <span class={'font-weight-normal'}> {_formatTime(this.bookingData.pickup_info.hour.toString(), this.bookingData.pickup_info.minute.toString())}</span>
-                        </p>
+                        {this.bookingData.pickup_info.hour && this.bookingData.pickup_info.minute && (
+                          <p class={'font-weight-bold flex-fill py-0 my-0'}>
+                            {locales.entries.Lcz_Time}:
+                            <span class={'font-weight-normal'}> {_formatTime(this.bookingData.pickup_info.hour.toString(), this.bookingData.pickup_info.minute.toString())}</span>
+                          </p>
+                        )}
                         <p class={'font-weight-bold py-0 my-0'}>
                           {locales.entries.Lcz_DueUponBooking}:{' '}
                           <span class={'font-weight-normal'}>

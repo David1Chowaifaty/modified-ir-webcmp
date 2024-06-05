@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property           | Attribute | Description | Type       | Default                                                                |
-| ------------------ | --------- | ----------- | ---------- | ---------------------------------------------------------------------- |
-| `handledEndpoints` | --        |             | `string[]` | `['/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings']` |
+| Property           | Attribute | Description | Type       | Default                                                                                         |
+| ------------------ | --------- | ----------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| `handledEndpoints` | --        |             | `string[]` | `['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings']` |
 
 
 ## Events
