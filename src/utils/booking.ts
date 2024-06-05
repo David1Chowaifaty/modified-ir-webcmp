@@ -103,11 +103,12 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     };
   }
   // console.log('booking', cell);
-  if (cell.booking.booking_nbr === '57243250') {
-    console.log('cell');
-    console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
-    console.log(cell);
-  }
+
+  // if (cell.booking.booking_nbr === '61249849') {
+  //   console.log('cell');
+  //   console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
+  //   console.log(cell);
+  // }
   const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
   const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
   return {
@@ -126,6 +127,10 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     BALANCE: cell.booking.financial?.due_amount,
     channel_booking_nbr: cell.booking.channel_booking_nbr,
     ARRIVAL_TIME: cell.booking.arrival.description,
+    defaultDates: {
+      from_date: cell.room.from_date,
+      to_date: cell.room.to_date,
+    },
     ///from here
     //ENTRY_DATE: cell.booking.booked_on.date,
     // IS_EDITABLE: cell.booking.is_editable,

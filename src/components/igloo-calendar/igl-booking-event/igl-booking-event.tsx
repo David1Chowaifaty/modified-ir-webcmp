@@ -657,7 +657,17 @@ export class IglBookingEvent {
       >
         {/* onMouseOver={() =>this.showEventInfo(true)}  */}
         <div
-          class={`bookingEventBase  ${
+          class={`bookingEventBase ${
+            !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE))
+              ? 'skewedLeft'
+              : ''
+          }
+          ${
+            !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE))
+              ? 'skewedRight'
+              : ''
+          }
+          ${
             !this.bookingEvent.is_direct &&
             !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
             this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
@@ -678,12 +688,30 @@ export class IglBookingEvent {
 
         <Fragment>
           <div
-            class="bookingEventDragHandle leftSide"
+            class={`bookingEventDragHandle leftSide ${
+              !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE))
+                ? 'skewedLeft'
+                : ''
+            }
+            ${
+              !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE))
+                ? 'skewedRight'
+                : ''
+            }`}
             onTouchStart={event => this.startDragging(event, 'leftSide')}
             onMouseDown={event => this.startDragging(event, 'leftSide')}
           ></div>
           <div
-            class="bookingEventDragHandle rightSide"
+            class={`bookingEventDragHandle rightSide ${
+              !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE))
+                ? 'skewedLeft'
+                : ''
+            }
+              ${
+                !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE))
+                  ? 'skewedRight'
+                  : ''
+              }`}
             onTouchStart={event => this.startDragging(event, 'rightSide')}
             onMouseDown={event => this.startDragging(event, 'rightSide')}
           ></div>
