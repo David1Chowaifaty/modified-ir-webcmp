@@ -93,7 +93,7 @@ export class IglBookingEvent {
         }
         const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...others } = transformNewBooking(data)[0];
 
-        this.bookingEvent = { ...this.bookingEvent, ...others };
+        this.bookingEvent = { ...others, ...this.bookingEvent };
         this.showEventInfo(true);
       }
     } catch (error) {
@@ -412,8 +412,19 @@ export class IglBookingEvent {
       let boundingRect = startingCell.getBoundingClientRect();
       this.dayWidth = this.dayWidth || boundingRect.width;
       pos.top = boundingRect.top + boundingRect.height / 2 - this.vertSpace - bodyContainerRect.top + 'px';
-      pos.left = boundingRect.left + this.dayWidth / 2 + this.eventSpace / 2 - bodyContainerRect.left + 'px';
-      pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
+      // pos.left = boundingRect.left + this.dayWidth / 2 + this.eventSpace / 2 - bodyContainerRect.left + 'px';
+      // pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
+      pos.left =
+        boundingRect.left +
+        (!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 0 : this.dayWidth / 2) +
+        this.eventSpace / 2 -
+        bodyContainerRect.left +
+        'px';
+      pos.width =
+        (this.getStayDays() + (!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 0.5 : 0)) *
+          this.dayWidth -
+        this.eventSpace +
+        'px';
     } else {
       console.log(this.bookingEvent);
       console.log('Locating event cell failed ', startingCellClass);
@@ -648,7 +659,7 @@ export class IglBookingEvent {
     let legend = this.getEventLegend();
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
-
+    // console.log(this.bookingEvent.BOOKING_NUMBER === '46231881' ? this.bookingEvent : '');
     return (
       <Host
         class={`bookingEvent  ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `}
@@ -658,15 +669,9 @@ export class IglBookingEvent {
         {/* onMouseOver={() =>this.showEventInfo(true)}  */}
         <div
           class={`bookingEventBase ${
-            !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE))
-              ? 'skewedLeft'
-              : ''
+            !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
           }
-          ${
-            !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE))
-              ? 'skewedRight'
-              : ''
-          }
+          ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}
           ${
             !this.bookingEvent.is_direct &&
             !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
@@ -674,7 +679,7 @@ export class IglBookingEvent {
             this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
             'border border-dark'
           }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
-          style={{ backgroundColor: legend.color }}
+          style={{ 'backgroundColor': legend.color, '--ir-event-bg': legend.color }}
           onTouchStart={event => this.startDragging(event, 'move')}
           onMouseDown={event => this.startDragging(event, 'move')}
         ></div>
@@ -689,29 +694,17 @@ export class IglBookingEvent {
         <Fragment>
           <div
             class={`bookingEventDragHandle leftSide ${
-              !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE))
-                ? 'skewedLeft'
-                : ''
+              !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
             }
-            ${
-              !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE))
-                ? 'skewedRight'
-                : ''
-            }`}
+            ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}`}
             onTouchStart={event => this.startDragging(event, 'leftSide')}
             onMouseDown={event => this.startDragging(event, 'leftSide')}
           ></div>
           <div
             class={`bookingEventDragHandle rightSide ${
-              !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE))
-                ? 'skewedLeft'
-                : ''
+              !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
             }
-              ${
-                !isBlockUnit(this.bookingEvent.STATUS_CODE) && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE))
-                  ? 'skewedRight'
-                  : ''
-              }`}
+              ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}`}
             onTouchStart={event => this.startDragging(event, 'rightSide')}
             onMouseDown={event => this.startDragging(event, 'rightSide')}
           ></div>

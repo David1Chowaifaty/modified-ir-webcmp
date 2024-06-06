@@ -514,6 +514,7 @@ export class IglooCalendar {
       bookings = bookings.filter(newBooking => {
         const existingBookingIndex = this.calendarData.bookingEvents.findIndex(event => event.ID === newBooking.ID);
         if (existingBookingIndex !== -1) {
+          console.log(this.calendarData.bookingEvents[existingBookingIndex]);
           this.calendarData.bookingEvents[existingBookingIndex].FROM_DATE = newBooking.FROM_DATE;
           this.calendarData.bookingEvents[existingBookingIndex].NO_OF_DAYS = calculateDaysBetweenDates(
             newBooking.FROM_DATE,

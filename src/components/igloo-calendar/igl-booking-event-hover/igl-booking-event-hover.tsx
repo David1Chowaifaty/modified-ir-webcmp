@@ -359,7 +359,7 @@ export class IglBookingEventHover {
         </div>
         <div class="row p-0 m-0">
           <div class="px-0 pr-0 col-12">
-            <ir-date-view from_date={this.bookingEvent.FROM_DATE} to_date={this.bookingEvent.TO_DATE} showDateDifference={false}></ir-date-view>
+            <ir-date-view from_date={this.bookingEvent.defaultDates.from_date} to_date={this.bookingEvent.defaultDates.to_date} showDateDifference={false}></ir-date-view>
             {/* <span class="font-weight-bold">{locales.entries.Lcz_In}: </span> */}
           </div>
         </div>
@@ -551,8 +551,8 @@ export class IglBookingEventHover {
           entryHour={this.bookingEvent.ENTRY_HOUR}
           entryMinute={this.bookingEvent.ENTRY_MINUTE}
           defaultData={this.bookingEvent}
-          fromDate={moment(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD').format('DD MM YYYY')}
-          toDate={moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').format('DD MM YYYY')}
+          fromDate={moment(this.bookingEvent.defaultDates.from_date, 'YYYY-MM-DD').format('DD MM YYYY')}
+          toDate={moment(this.bookingEvent.defaultDates.to_date, 'YYYY-MM-DD').format('DD MM YYYY')}
           entryDate={this.getEntryDate()}
           onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>
