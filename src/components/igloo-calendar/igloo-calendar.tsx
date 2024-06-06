@@ -304,100 +304,6 @@ export class IglooCalendar {
       //toastr.error(error);
     }
   }
-  checkBookingAvailability(data) {
-    return this.calendarData.bookingEvents.some(
-      booking => booking.ID === data.ID || (booking.FROM_DATE === data.FROM_DATE && booking.TO_DATE === data.TO_DATE && booking.PR_ID === data.PR_ID),
-    );
-  }
-  updateBookingEventsDateRange(eventData) {
-    const now = moment();
-    eventData.forEach(bookingEvent => {
-      bookingEvent.legendData = this.calendarData.formattedLegendData;
-      bookingEvent.defaultDateRange = {};
-      bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
-      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
-      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.fromDate.getTime();
-
-      bookingEvent.defaultDateRange.toDate = new Date(bookingEvent.TO_DATE + 'T00:00:00');
-      bookingEvent.defaultDateRange.toDateStr = this.getDateStr(bookingEvent.defaultDateRange.toDate);
-      bookingEvent.defaultDateRange.toDateTimeStamp = bookingEvent.defaultDateRange.toDate.getTime();
-
-      bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
-      bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
-      if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
-        const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
-        const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
-        if (bookingEvent.STATUS !== 'PENDING') {
-          if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
-            bookingEvent.STATUS = bookingStatus['000'];
-          } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-            bookingEvent.STATUS = bookingStatus['000'];
-          } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
-            bookingEvent.STATUS = bookingStatus['000'];
-          } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
-            bookingEvent.STATUS = bookingStatus['003'];
-          }
-        }
-      }
-    });
-  }
-  setRoomsData(roomServiceResp) {
-    let roomsData: RoomDetail[] = new Array();
-    if (roomServiceResp.My_Result?.roomtypes?.length) {
-      roomsData = roomServiceResp.My_Result.roomtypes;
-      roomServiceResp.My_Result.roomtypes.forEach(roomCategory => {
-        roomCategory.expanded = true;
-      });
-    }
-    calendar_data.roomsInfo = roomsData;
-    this.calendarData.roomsInfo = roomsData;
-  }
-
-  getLegendData(aData) {
-    return aData['My_Result'].calendar_legends;
-  }
-
-  getDateStr(date, locale = 'default') {
-    return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
-  }
-  scrollToElement(goToDate) {
-    this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
-    const topLeftCell = this.element.querySelector('.topLeftCell');
-    const gotoDay = this.element.querySelector('.day-' + goToDate);
-    if (gotoDay) {
-      this.scrollContainer.scrollTo({ left: 0 });
-      const gotoRect = gotoDay.getBoundingClientRect();
-      const containerRect = this.scrollContainer.getBoundingClientRect();
-      const topLeftCellRect = topLeftCell.getBoundingClientRect();
-      this.scrollContainer.scrollTo({
-        left: gotoRect.left - containerRect.left - topLeftCellRect.width - gotoRect.width,
-      });
-    }
-  }
-  private AddOrUpdateRoomBookings(data: RoomBlockDetails[] | RoomBookingDetails[], pool: string | undefined) {
-    let bookings = [...this.calendarData.bookingEvents];
-    data.forEach(d => {
-      if (!this.checkBookingAvailability(d)) {
-        bookings = bookings.filter(booking => booking.ID !== d.ID);
-      }
-    });
-    this.updateBookingEventsDateRange(data);
-    if (pool) {
-      bookings = bookings.filter(booking => booking.POOL === pool);
-    }
-    data.forEach(d => {
-      if (!bookings.some(booking => booking.ID === d.ID)) {
-        bookings.push(d);
-      }
-    });
-    this.calendarData = {
-      ...this.calendarData,
-      bookingEvents: bookings,
-    };
-  }
-  private transformDateForScroll(date: Date) {
-    return moment(date).format('D_M_YYYY');
-  }
   @Listen('scrollPageToRoom', { target: 'window' })
   scrollPageToRoom(event: CustomEvent) {
     let targetScrollClass = event.detail.refClass;
@@ -439,6 +345,172 @@ export class IglooCalendar {
       bookingEvents: bookings,
     };
   }
+  @Listen('updateBookingEvent')
+  handleUpdateBookingEvent(e: CustomEvent) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    const newBookingEvent = e.detail;
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: this.calendarData.bookingEvents.map(event => {
+        if (newBookingEvent.ID === event.ID) {
+          return newBookingEvent;
+        }
+        return event;
+      }),
+    };
+  }
+  @Listen('showBookingPopup', { target: 'window' })
+  showBookingPopupEventDataHandler(event: CustomEvent) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    this.onOptionSelect(event);
+    //console.log("show booking event", event);
+  }
+
+  @Listen('updateEventData')
+  updateEventDataHandler(event: CustomEvent) {
+    let bookedData = this.calendarData.bookingEvents.find(bookedEvent => bookedEvent.id === event.detail.id);
+    if (bookedData && event.detail && event.detail.data) {
+      Object.entries(event.detail.data).forEach(([key, value]) => {
+        bookedData[key] = value;
+      });
+    }
+  }
+
+  @Listen('dragOverEventData')
+  dragOverEventDataHandler(event: CustomEvent) {
+    if (event.detail.id === 'CALCULATE_DRAG_OVER_BOUNDS') {
+      let topLeftCell = document.querySelector('igl-cal-header .topLeftCell') as HTMLElement;
+      let containerDays = document.querySelectorAll('.headersContainer .headerCell');
+      let containerRooms = document.querySelectorAll('.bodyContainer .roomRow .roomTitle');
+      this.visibleCalendarCells = { x: [], y: [] };
+
+      containerDays.forEach(element => {
+        const htmlElement = element as HTMLElement;
+        this.visibleCalendarCells.x.push({
+          left: htmlElement.offsetLeft + topLeftCell.offsetWidth,
+          width: htmlElement.offsetWidth,
+          id: htmlElement.getAttribute('data-day'),
+        });
+      });
+
+      containerRooms.forEach(element => {
+        const htmlElement = element as HTMLElement;
+        this.visibleCalendarCells.y.push({
+          top: htmlElement.offsetTop,
+          height: htmlElement.offsetHeight,
+          id: htmlElement.getAttribute('data-room'),
+        });
+      });
+      this.highlightDragOver(true, event.detail.data);
+    } else if (event.detail.id === 'DRAG_OVER') {
+      this.highlightDragOver(true, event.detail.data);
+    } else if (event.detail.id === 'DRAG_OVER_END') {
+      this.highlightDragOver(false, event.detail.data);
+    } else if (event.detail.id === 'STRETCH_OVER_END') {
+      this.highlightDragOver(false, event.detail.data);
+    }
+  }
+
+  checkBookingAvailability(data) {
+    return this.calendarData.bookingEvents.some(
+      booking => booking.ID === data.ID || (booking.FROM_DATE === data.FROM_DATE && booking.TO_DATE === data.TO_DATE && booking.PR_ID === data.PR_ID),
+    );
+  }
+
+  updateBookingEventsDateRange(eventData) {
+    const now = moment();
+    eventData.forEach(bookingEvent => {
+      bookingEvent.legendData = this.calendarData.formattedLegendData;
+      bookingEvent.defaultDateRange = {};
+      bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
+      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.fromDate.getTime();
+
+      bookingEvent.defaultDateRange.toDate = new Date(bookingEvent.TO_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.toDateStr = this.getDateStr(bookingEvent.defaultDateRange.toDate);
+      bookingEvent.defaultDateRange.toDateTimeStamp = bookingEvent.defaultDateRange.toDate.getTime();
+
+      bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
+      bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
+      if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
+        const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+        const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+        if (bookingEvent.STATUS !== 'PENDING') {
+          if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+            bookingEvent.STATUS = bookingStatus['003'];
+          }
+        }
+      }
+    });
+  }
+
+  setRoomsData(roomServiceResp) {
+    let roomsData: RoomDetail[] = new Array();
+    if (roomServiceResp.My_Result?.roomtypes?.length) {
+      roomsData = roomServiceResp.My_Result.roomtypes;
+      roomServiceResp.My_Result.roomtypes.forEach(roomCategory => {
+        roomCategory.expanded = true;
+      });
+    }
+    calendar_data.roomsInfo = roomsData;
+    this.calendarData.roomsInfo = roomsData;
+  }
+
+  getLegendData(aData) {
+    return aData['My_Result'].calendar_legends;
+  }
+
+  getDateStr(date, locale = 'default') {
+    return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
+  }
+
+  scrollToElement(goToDate) {
+    this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
+    const topLeftCell = this.element.querySelector('.topLeftCell');
+    const gotoDay = this.element.querySelector('.day-' + goToDate);
+    if (gotoDay) {
+      this.scrollContainer.scrollTo({ left: 0 });
+      const gotoRect = gotoDay.getBoundingClientRect();
+      const containerRect = this.scrollContainer.getBoundingClientRect();
+      const topLeftCellRect = topLeftCell.getBoundingClientRect();
+      this.scrollContainer.scrollTo({
+        left: gotoRect.left - containerRect.left - topLeftCellRect.width - gotoRect.width,
+      });
+    }
+  }
+  private AddOrUpdateRoomBookings(data: RoomBlockDetails[] | RoomBookingDetails[], pool: string | undefined) {
+    let bookings = [...this.calendarData.bookingEvents];
+    data.forEach(d => {
+      if (!this.checkBookingAvailability(d)) {
+        bookings = bookings.filter(booking => booking.ID !== d.ID);
+      }
+    });
+    this.updateBookingEventsDateRange(data);
+    if (pool) {
+      bookings = bookings.filter(booking => booking.POOL === pool);
+    }
+    data.forEach(d => {
+      if (!bookings.some(booking => booking.ID === d.ID)) {
+        bookings.push(d);
+      }
+    });
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: bookings,
+    };
+  }
+  private transformDateForScroll(date: Date) {
+    return moment(date).format('D_M_YYYY');
+  }
+
   shouldRenderCalendarView() {
     // console.log("rendering...")
     return this.calendarData && this.calendarData.days && this.calendarData.days.length;
@@ -498,6 +570,7 @@ export class IglooCalendar {
         break;
     }
   }
+
   async addDatesToCalendar(fromDate: string, toDate: string) {
     const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
     const newBookings = results.myBookings || [];
@@ -699,59 +772,6 @@ export class IglooCalendar {
       currentElement = currentElement.parentElement;
     }
     return false;
-  }
-
-  @Listen('showBookingPopup', { target: 'window' })
-  showBookingPopupEventDataHandler(event: CustomEvent) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    this.onOptionSelect(event);
-    //console.log("show booking event", event);
-  }
-
-  @Listen('updateEventData')
-  updateEventDataHandler(event: CustomEvent) {
-    let bookedData = this.calendarData.bookingEvents.find(bookedEvent => bookedEvent.id === event.detail.id);
-    if (bookedData && event.detail && event.detail.data) {
-      Object.entries(event.detail.data).forEach(([key, value]) => {
-        bookedData[key] = value;
-      });
-    }
-  }
-
-  @Listen('dragOverEventData')
-  dragOverEventDataHandler(event: CustomEvent) {
-    if (event.detail.id === 'CALCULATE_DRAG_OVER_BOUNDS') {
-      let topLeftCell = document.querySelector('igl-cal-header .topLeftCell') as HTMLElement;
-      let containerDays = document.querySelectorAll('.headersContainer .headerCell');
-      let containerRooms = document.querySelectorAll('.bodyContainer .roomRow .roomTitle');
-      this.visibleCalendarCells = { x: [], y: [] };
-
-      containerDays.forEach(element => {
-        const htmlElement = element as HTMLElement;
-        this.visibleCalendarCells.x.push({
-          left: htmlElement.offsetLeft + topLeftCell.offsetWidth,
-          width: htmlElement.offsetWidth,
-          id: htmlElement.getAttribute('data-day'),
-        });
-      });
-
-      containerRooms.forEach(element => {
-        const htmlElement = element as HTMLElement;
-        this.visibleCalendarCells.y.push({
-          top: htmlElement.offsetTop,
-          height: htmlElement.offsetHeight,
-          id: htmlElement.getAttribute('data-room'),
-        });
-      });
-      this.highlightDragOver(true, event.detail.data);
-    } else if (event.detail.id === 'DRAG_OVER') {
-      this.highlightDragOver(true, event.detail.data);
-    } else if (event.detail.id === 'DRAG_OVER_END') {
-      this.highlightDragOver(false, event.detail.data);
-    } else if (event.detail.id === 'STRETCH_OVER_END') {
-      this.highlightDragOver(false, event.detail.data);
-    }
   }
 
   async highlightDragOver(hightLightElement, currentPosition) {

@@ -33,7 +33,7 @@ export class IglBookingEventHover {
   private hideButtons = false;
   @State() shouldHideUnassignUnit = false;
   componentWillLoad() {
-    console.log('this.bookingEvent', this.bookingEvent);
+    // console.log('this.bookingEvent', this.bookingEvent);
     this.eventService.setToken(calendar_data.token);
     let selectedRt = this.bookingEvent.roomsInfo.find(r => r.id === this.bookingEvent.RATE_TYPE);
     if (selectedRt) {
@@ -605,7 +605,7 @@ export class IglBookingEventHover {
                 />
               </svg>
               <span>
-                &nbsp;
+                `` &nbsp;
                 {locales.entries.Lcz_Delete}
               </span>
             </button>
