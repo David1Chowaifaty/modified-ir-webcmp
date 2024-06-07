@@ -24,6 +24,8 @@
   transform-origin: right;
   transform: skewX(22deg);
   border-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .bookingEventBase.skewedRight::before {
   content: '';
@@ -37,10 +39,13 @@
   transform-origin: left;
   transform: skewX(22deg);
   border-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .bookingEventBase.border.skewedLeft::before {
   border: 1px solid #424242;
   border-right: 0;
+  border-left: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   top: -1px;
@@ -50,6 +55,7 @@
 .bookingEventBase.border.skewedRight::before {
   border: 1px solid #424242;
   border-left: 0;
+  border-right: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   top: -1px;
