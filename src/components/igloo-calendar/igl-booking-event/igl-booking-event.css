@@ -15,9 +15,9 @@
 .bookingEventBase.skewedLeft::before {
   content: '';
   position: absolute;
-  top: 0;
+  top: 0px;
   bottom: 0;
-  left: -3px;
+  left: -4px;
   width: 50%;
   height: 100%;
   background-color: var(--ir-event-bg);
@@ -30,13 +30,31 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  right: -3px;
+  right: -4px;
   width: 50%;
   height: 100%;
   background-color: var(--ir-event-bg);
   transform-origin: left;
   transform: skewX(22deg);
   border-radius: 4px;
+}
+.bookingEventBase.border.skewedLeft::before {
+  border: 1px solid #424242;
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  top: -1px;
+  height: 20px;
+  left: -4px;
+}
+.bookingEventBase.border.skewedRight::before {
+  border: 1px solid #424242;
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  top: -1px;
+  height: 20px;
+  right: -4px;
 }
 .bookingEvent {
   cursor: pointer;
