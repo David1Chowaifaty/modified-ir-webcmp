@@ -124,6 +124,7 @@ export class BookingService extends Token {
           language,
           currency_ref: currency.code,
           room_type_ids,
+          is_backend: true,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);

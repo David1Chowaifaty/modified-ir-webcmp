@@ -112,6 +112,8 @@ export class IglooCalendar {
     this.calendarData.adultChildConstraints = roomResp['My_Result'].adult_child_constraints;
     this.calendarData.legendData = this.getLegendData(roomResp);
     this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
+    this.calendarData.from_date = bookingResp.My_Params_Get_Rooming_Data.FROM;
+    this.calendarData.to_date = bookingResp.My_Params_Get_Rooming_Data.TO;
     this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
     this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
     this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
@@ -577,6 +579,7 @@ export class IglooCalendar {
     this.updateBookingEventsDateRange(newBookings);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
+      this.calendarData.from_date = fromDate;
       this.days = [...results.days, ...this.days];
       let newMonths = [...results.months];
       if (this.calendarData.monthsInfo[0].monthName === results.months[results.months.length - 1].monthName) {
@@ -606,6 +609,7 @@ export class IglooCalendar {
       };
     } else {
       this.calendarData.endingDate = new Date(toDate).getTime();
+      this.calendarData.to_date = toDate;
       let newMonths = [...results.months];
       this.days = [...this.days, ...results.days];
       if (this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].monthName === results.months[0].monthName) {

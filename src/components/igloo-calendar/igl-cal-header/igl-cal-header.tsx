@@ -72,6 +72,7 @@ export class IglCalHeader {
         const selectedDate = moment(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(
+            { from_date: this.calendarData.from_date, to_date: this.calendarData.to_date },
             this.propertyid,
             dateToFormattedString(new Date(endDate)),
             this.calendarData.roomsInfo,
