@@ -419,7 +419,7 @@ export class IglBookingEventHover {
               onClick={_ => {
                 this.handleEditBooking();
               }}
-              disabled={!this.bookingEvent.IS_EDITABLE}
+              // disabled={!this.bookingEvent.IS_EDITABLE}
             >
               {/* <i class="ft ft-edit font-small-3"></i> */}
               <svg class="p-0 m-0" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" height="12" width="12" viewBox="0 0 512 512">
@@ -482,7 +482,7 @@ export class IglBookingEventHover {
                     onClick={_ => {
                       this.handleDeleteEvent();
                     }}
-                    // disabled={!this.bookingEvent.IS_EDITABLE || this.is_vacation_rental}
+                    disabled={!this.bookingEvent.IS_EDITABLE || this.is_vacation_rental}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" height="12" width="8.75" class="p-0 m-0" viewBox="0 0 384 512">
                       <path
