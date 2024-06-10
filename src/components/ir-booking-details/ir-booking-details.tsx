@@ -59,6 +59,7 @@ export class IrBookingDetails {
   @State() pms_status: IPmsLog;
   @State() isPMSLogLoading: boolean = false;
   @State() userCountry: ICountry | null = null;
+  @State() isVactationRental: boolean;
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
@@ -105,6 +106,7 @@ export class IrBookingDetails {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
+      this.isVactationRental = roomResponse['My_Result'].is_vacation_rental;
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
@@ -331,7 +333,7 @@ export class IrBookingDetails {
 
           <div class="d-flex justify-content-end align-items-center">
             <span class={`confirmed btn-sm m-0 mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
-            {this.bookingData.allowed_actions.length > 0 && (
+            {this.bookingData.allowed_actions.length > 0 && !this.isVactationRental && this.bookingData.is_editable && (
               <Fragment>
                 <ir-select
                   selectContainerStyle="h-28"
@@ -449,7 +451,7 @@ export class IrBookingDetails {
             </div>
             <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
               <ir-date-view from_date={this.bookingData.from_date} to_date={this.bookingData.to_date}></ir-date-view>
-              {this.hasRoomAdd && this.bookingData.is_direct && (
+              {this.hasRoomAdd && this.bookingData.is_direct && !this.isVactationRental && this.bookingData.is_editable && (
                 <ir-icon id="room-add">
                   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
                     <path
@@ -467,6 +469,7 @@ export class IrBookingDetails {
 
                 return [
                   <ir-room
+                    isEditable={this.bookingData.is_editable && !this.isVactationRental}
                     defaultTexts={this.defaultTexts}
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
@@ -487,7 +490,7 @@ export class IrBookingDetails {
                 ];
               })}
             </div>
-            {calendar_data.pickup_service.is_enabled && this.bookingData.is_direct && (
+            {calendar_data.pickup_service.is_enabled && this.bookingData.is_direct && this.bookingData.is_editable && !this.isVactationRental && (
               <div class="mb-1">
                 <div class={'d-flex w-100 mb-1 align-items-center justify-content-between'}>
                   <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>

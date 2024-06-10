@@ -527,6 +527,7 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
+        "isEditable": boolean;
         "legendData": any;
         "mealCodeName": string;
         "myRoomTypeFoodCat": string;
@@ -2613,6 +2614,7 @@ declare namespace LocalJSX {
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
+        "isEditable"?: boolean;
         "legendData"?: any;
         "mealCodeName"?: string;
         "myRoomTypeFoodCat"?: string;
