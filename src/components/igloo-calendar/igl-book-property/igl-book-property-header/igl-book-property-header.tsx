@@ -42,6 +42,8 @@ export class IglBookPropertyHeader {
     code: '',
     description: '',
     tag: '',
+    id: '',
+    type: '',
   };
 
   getSplitBookingList() {

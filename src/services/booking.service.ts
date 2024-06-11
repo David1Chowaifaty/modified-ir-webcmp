@@ -103,27 +103,26 @@ export class BookingService extends Token {
       throw new Error(error);
     }
   }
-  public async getBookingAvailability(
-    from_date: string,
-    to_date: string,
-    propertyid: number,
-    adultChildCount: { adult: number; child: number },
-    language: string,
-    room_type_ids: number[],
-    currency: { id: number; code: string },
-  ): Promise<BookingDetails> {
+  public async getBookingAvailability(props: {
+    from_date: string;
+    to_date: string;
+    propertyid: number;
+    adultChildCount: { adult: number; child: number };
+    language: string;
+    room_type_ids: number[];
+    currency: { id: number; code: string };
+    is_in_agent_mode?: boolean;
+    agent_id?: string | number;
+  }): Promise<BookingDetails> {
     try {
       const token = this.getToken();
       if (token) {
+        const { adultChildCount, currency, ...rest } = props;
         const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
-          propertyid,
-          from_date,
-          to_date,
+          ...rest,
           adult_nbr: adultChildCount.adult,
           child_nbr: adultChildCount.child,
-          language,
           currency_ref: currency.code,
-          room_type_ids,
           is_backend: true,
         });
         if (data.ExceptionMsg !== '') {

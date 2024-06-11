@@ -68,6 +68,7 @@ export class IglBookProperty {
   }
   componentDidLoad() {
     document.addEventListener('keydown', this.handleKeyDown);
+    console.log(this.allowedBookingSources);
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
@@ -198,7 +199,7 @@ export class IglBookProperty {
 
   setSourceOptions(bookingSource: any[]) {
     this.sourceOptions = bookingSource.map(source => ({
-      id: source.code,
+      id: source.id,
       value: source.description,
       tag: source.tag,
       type: source.type,
@@ -210,6 +211,8 @@ export class IglBookProperty {
         code: bookingSource[0].code,
         description: bookingSource[0].description,
         tag: bookingSource[0].tag,
+        type: bookingSource[0].type,
+        id: bookingSource[0].id,
       };
     }
   }
@@ -228,9 +231,21 @@ export class IglBookProperty {
   }
 
   async initializeBookingAvailability(from_date: string, to_date: string) {
+    console.log(this.sourceOption);
+    const is_in_agent_mode = this.sourceOption['type'] === 'TRAVEL_AGENCY';
     try {
       const room_type_ids = this.defaultData.roomsInfo.map(room => room.id);
-      const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.adultChildCount, this.language, room_type_ids, this.currency);
+      const data = await this.bookingService.getBookingAvailability({
+        from_date,
+        to_date,
+        propertyid: this.propertyid,
+        adultChildCount: this.adultChildCount,
+        language: this.language,
+        room_type_ids,
+        currency: this.currency,
+        agent_id: is_in_agent_mode ? this.sourceOption['tag'] : null,
+        is_in_agent_mode,
+      });
       if (!this.isEventType('EDIT_BOOKING')) {
         this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
         this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
@@ -309,6 +324,8 @@ export class IglBookProperty {
       code: value,
       description: selectedSource.value || '',
       tag: selectedSource.tag,
+      id: selectedSource.id,
+      type: selectedSource.type,
     };
   }
   renderPage() {

@@ -129,18 +129,18 @@ export class IrRoomNights {
   async fetchBookingAvailability(from_date: string, to_date: string, rate_plan_id: number, selected_variation: string) {
     try {
       this.initialLoading = true;
-      const bookingAvailability = await this.bookingService.getBookingAvailability(
+      const bookingAvailability = await this.bookingService.getBookingAvailability({
         from_date,
         to_date,
-        this.propertyId,
-        {
+        propertyid: this.propertyId,
+        adultChildCount: {
           adult: this.selectedRoom.rateplan.selected_variation.adult_nbr,
           child: this.selectedRoom.rateplan.selected_variation.child_nbr,
         },
-        this.language,
-        [this.selectedRoom.roomtype.id],
-        this.bookingEvent.currency,
-      );
+        language: this.language,
+        currency: this.bookingEvent.currency,
+        room_type_ids: [this.selectedRoom.roomtype.id],
+      });
       this.inventory = bookingAvailability.roomtypes[0].inventory;
       const rate_plan_index = bookingAvailability.roomtypes[0].rateplans.find(rate => rate.id === rate_plan_id);
       if (!rate_plan_index || !rate_plan_index.variations) {

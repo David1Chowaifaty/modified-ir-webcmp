@@ -19,7 +19,7 @@ export type BookUserParams = [
   string | undefined,
 ];
 export type TPropertyButtonsTypes = 'cancel' | 'save' | 'back' | 'book' | 'bookAndCheckIn' | 'next' | 'check';
-export type TSourceOption = { code: string; description: string; tag: string };
+export type TSourceOption = { code: string; description: string; tag: string; id?: string; type?: string };
 export type TSourceOptions = { id: string; value: string; tag: string; type: string };
 export type TAdultChildConstraints = { adult_max_nbr: number | null; child_max_nbr: number | null; child_max_age: number | null };
 export type TEventType = 'BLOCK_DATES' | 'SPLIT_BOOKING' | 'BAR_BOOKING' | 'ADD_ROOM' | 'EDIT_BOOKING' | 'PLUS_BOOKING';
