@@ -102,8 +102,8 @@ export class IglBookingEvent {
 
       const transformedBooking = transformNewBooking(data)[0];
       const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...otherBookingData } = transformedBooking;
-
-      this.bookingEvent = { ...otherBookingData, ...this.bookingEvent };
+      console.log(otherBookingData.PHONE_PREFIX);
+      this.bookingEvent = { ...otherBookingData, ...this.bookingEvent, PHONE_PREFIX: otherBookingData.PHONE_PREFIX };
       this.updateBookingEvent.emit(this.bookingEvent);
       this.showEventInfo(true);
     } catch (error) {
@@ -200,15 +200,15 @@ export class IglBookingEvent {
             } else {
               if (this.isShrinking || !this.isStreatch) {
                 console.log(this.bookingEvent.PR_ID.toString() === toRoomId.toString(), this.bookingEvent.PR_ID.toString(), toRoomId.toString());
-                try {
-                  if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
-                    await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
-                    return;
-                  }
-                } catch (error) {
-                  this.resetBookingToInitialPosition();
-                  return;
-                }
+                // try {
+                //   if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
+                //     await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+                //     return;
+                //   }
+                // } catch (error) {
+                //   this.resetBookingToInitialPosition();
+                //   return;
+                // }
                 const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
                 let hideConfirmButton = false;
                 if (status === '400') {
@@ -288,7 +288,7 @@ export class IglBookingEvent {
           };
         }
       }
-      return { description: locales.entries.Lcz_BalanceWillBeCalculated, status: '200' };
+      return { description: locales.entries.Lcz_ConfrmModiication, status: '200' };
     }
   }
   private resetBookingToInitialPosition() {

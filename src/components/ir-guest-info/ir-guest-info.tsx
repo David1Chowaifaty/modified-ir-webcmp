@@ -133,7 +133,7 @@ export class GuestInfo {
               firstOption={'...'}
               onSelectChange={e => this.handleInputChange('country_id', e.detail)}
             ></ir-select>
-            <ir-input-text
+            {/* <ir-input-text
               placeholder=""
               label={this.defaultTexts.entries.Lcz_City}
               name="city"
@@ -146,7 +146,7 @@ export class GuestInfo {
               name="address"
               value={this.guest.address}
               onTextChange={e => this.handleInputChange('address', e.detail)}
-            ></ir-input-text>
+            ></ir-input-text> */}
 
             <div class="form-group mr-0">
               <div class="input-group row m-0 p-0">
@@ -158,12 +158,12 @@ export class GuestInfo {
                 </div>
                 <select
                   class={` form-control text-md  col-2 py-0 mobilePrefixSelect`}
-                  onInput={e => this.handleInputChange('country_id', (e.target as HTMLSelectElement).value)}
+                  onInput={e => this.handleInputChange('country_phone_prefix', (e.target as HTMLSelectElement).value)}
                   required
                 >
                   <option value={null}>...</option>
                   {this.countries.map(item => (
-                    <option selected={this.guest.country_id?.toString() === item.id.toString()} value={item.id}>
+                    <option selected={this.guest.country_phone_prefix?.toString() === item.phone_prefix.toString()} value={item.phone_prefix}>
                       {item.phone_prefix}
                     </option>
                   ))}

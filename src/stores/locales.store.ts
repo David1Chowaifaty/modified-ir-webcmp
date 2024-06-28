@@ -169,6 +169,7 @@ export type LocalizationStrings = {
   Lcz_PMS_Logs: string;
   Lcz_LoyaltyDiscountApplied: string;
   Lcz_Coupon: string;
+  Lcz_ConfrmModiication: string;
 };
 export type BookingListingCodes = {
   Lcz_TotalCost: string;

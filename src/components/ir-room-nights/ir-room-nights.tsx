@@ -251,7 +251,7 @@ export class IrRoomNights {
     if (!this.bookingEvent) {
       return (
         <div class="loading-container">
-          <ir-loading-screen></ir-loading-screen>;
+          <ir-loading-screen></ir-loading-screen>
         </div>
       );
     }

@@ -106,6 +106,7 @@ export interface Guest {
   id: number;
   last_name: string | null;
   mobile: string | null;
+  country_phone_prefix: string | null;
   subscribe_to_news_letter: boolean | null;
   cci?: ICCI | null;
   alternative_email?: string;

@@ -266,6 +266,7 @@ export interface RoomBookingDetails {
   STATUS: STATUS;
   NAME: string;
   PHONE: string;
+  PHONE_PREFIX: string;
   ENTRY_DATE: string;
   RATE: number;
   RATE_PLAN: string;

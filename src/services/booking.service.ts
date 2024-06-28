@@ -378,6 +378,7 @@ export class BookingService extends Token {
           country_id: bookedByInfoData.countryId === '' ? null : bookedByInfoData.countryId,
           city: null,
           mobile: bookedByInfoData.contactNumber === null ? '' : bookedByInfoData.contactNumber,
+          phone_prefix: null,
           address: '',
           dob: null,
           subscribe_to_news_letter: bookedByInfoData.emailGuest || false,

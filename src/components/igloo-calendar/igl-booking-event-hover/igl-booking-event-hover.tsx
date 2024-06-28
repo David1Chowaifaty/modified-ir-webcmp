@@ -81,6 +81,10 @@ export class IglBookingEventHover {
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).name;
   }
   getPhoneCode() {
+    console.log(this.bookingEvent);
+    if (this.bookingEvent.PHONE_PREFIX) {
+      return this.bookingEvent.PHONE_PREFIX;
+    }
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).phone_prefix;
   }
   renderPhone() {

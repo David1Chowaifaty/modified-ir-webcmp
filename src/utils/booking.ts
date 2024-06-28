@@ -137,6 +137,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     },
     ///from here
     ENTRY_DATE: cell.booking.booked_on.date,
+    PHONE_PREFIX: cell.booking.guest.country_phone_prefix,
     IS_EDITABLE: cell.booking.is_editable,
     ARRIVAL: cell.booking.arrival,
     PHONE: cell.booking.guest.mobile ?? '',
@@ -226,6 +227,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       NAME: formatName(room.guest.first_name, room.guest.last_name),
       PHONE: data.guest.mobile ?? '',
       ENTRY_DATE: '12-12-2023',
+      PHONE_PREFIX: data.guest.country_phone_prefix,
       RATE: room.total,
       RATE_PLAN: room.rateplan.name,
       SPLIT_BOOKING: false,

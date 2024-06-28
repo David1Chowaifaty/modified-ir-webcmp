@@ -271,11 +271,14 @@ export class IrBookingDetails {
     await this.resetBookingData();
   }
   renderPhoneNumber() {
-    const { mobile, country_id } = this.bookingData.guest;
+    const { mobile, country_phone_prefix, country_id } = this.bookingData.guest;
     if (!mobile) {
       return null;
     }
     if (this.bookingData.is_direct) {
+      if (country_phone_prefix) {
+        return country_phone_prefix + ' ' + mobile;
+      }
       if (country_id) {
         const selectedCountry = this.countryNodeList.find(c => c.id === country_id);
         if (!selectedCountry) {
