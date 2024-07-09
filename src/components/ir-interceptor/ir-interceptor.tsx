@@ -36,8 +36,14 @@ export class IrInterceptor {
   handleRequest(config: AxiosRequestConfig) {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
-    if (this.isHandledEndpoint(extractedUrl) && this.endpointsCount > 0) {
-      this.isLoading = true;
+    if (this.isHandledEndpoint(extractedUrl)) {
+      if (extractedUrl === '/Do_Payment') {
+        this.isLoading = true;
+      } else {
+        if (this.endpointsCount > 0) {
+          this.isLoading = true;
+        }
+      }
     }
     if (extractedUrl === '/Get_Exposed_Calendar') {
       this.endpointsCount = this.endpointsCount + 1;

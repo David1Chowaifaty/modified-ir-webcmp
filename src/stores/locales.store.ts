@@ -170,6 +170,8 @@ export type LocalizationStrings = {
   Lcz_LoyaltyDiscountApplied: string;
   Lcz_Coupon: string;
   Lcz_ConfrmModiication: string;
+  Lcz_EnteringAmountGreaterThanDue: string;
+  Lcz_IfDeletedPermantlyLost: string;
 };
 export type BookingListingCodes = {
   Lcz_TotalCost: string;
