@@ -10,7 +10,7 @@ export class IrLabel {
   @Prop() label: string;
   @Prop() value: string;
   @Prop() iconShown = false;
-  @Prop() imageSrc: string;
+  @Prop() image: { src: string; alt: string; style?: string } | null;
   @Prop() country: boolean = false;
   @Prop() imageStyle: string = '';
 
@@ -27,9 +27,9 @@ export class IrLabel {
     }
 
     return (
-      <Host class={this.imageSrc ? 'align-items-center' : ''}>
+      <Host class={this.image ? 'align-items-center' : ''}>
         <strong>{this.label}</strong>
-        {this.imageSrc && <img src={this.imageSrc} class={`p-0 m-0 ${this.country ? 'country' : ''} ${this.imageStyle}`} />}
+        {this.image && <img src={this.image.src} class={`p-0 m-0 ${this.country ? 'country' : 'logo'} ${this.image.style}`} alt={this.image.src} />}
         <p>{this.value}</p>
         {this.iconShown && (
           <div class="icon-container">

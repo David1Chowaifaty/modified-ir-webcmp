@@ -458,7 +458,7 @@ export namespace Components {
     interface IrLabel {
         "country": boolean;
         "iconShown": boolean;
-        "imageSrc": string;
+        "image": { src: string; alt: string; style?: string } | null;
         "imageStyle": string;
         "label": string;
         "value": string;
@@ -2539,7 +2539,7 @@ declare namespace LocalJSX {
     interface IrLabel {
         "country"?: boolean;
         "iconShown"?: boolean;
-        "imageSrc"?: string;
+        "image"?: { src: string; alt: string; style?: string } | null;
         "imageStyle"?: string;
         "label"?: string;
         "onEditSidebar"?: (event: IrLabelCustomEvent<any>) => void;

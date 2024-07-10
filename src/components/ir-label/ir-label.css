@@ -2,6 +2,10 @@
   margin: 0;
   padding: 0;
 }
+.logo {
+  height: 1.5rem;
+  width: 1.5rem;
+}
 :host {
   display: flex;
   margin-bottom: 5px;

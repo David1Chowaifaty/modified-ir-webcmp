@@ -219,7 +219,7 @@ export class IrBookingListing {
                         </td>
                         <td>
                           <div class="h-100 d-flex align-items-center ">
-                            <img class="mr-2" src={booking.origin.Icon} alt="logo" />
+                            <img class="mr-2 logo" src={booking.origin.Icon} alt={booking.origin.Label} />
                             <div class="text-left">
                               <p class="p-0 m-0">
                                 {booking.guest.first_name} {booking.guest.last_name ?? ''} {booking.occupancy.adult_nbr}

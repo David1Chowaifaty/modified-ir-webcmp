@@ -416,7 +416,11 @@ export class IrBookingDetails {
             <div class="card">
               <div class="p-1">
                 {this.bookingData.property.name || ''}
-                <ir-label label={`${this.defaultTexts.entries.Lcz_Source}:`} value={this.bookingData.origin.Label} imageSrc={this.bookingData.origin.Icon}></ir-label>
+                <ir-label
+                  label={`${this.defaultTexts.entries.Lcz_Source}:`}
+                  value={this.bookingData.origin.Label}
+                  image={{ src: this.bookingData.origin.Icon, alt: this.bookingData.origin.Label }}
+                ></ir-label>
                 <ir-label
                   label={`${this.defaultTexts.entries.Lcz_BookedBy}:`}
                   value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`}
@@ -429,7 +433,12 @@ export class IrBookingDetails {
                 )}
                 {this.bookingData?.guest?.address && <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>}
                 {this.userCountry && (
-                  <ir-label label={`${this.defaultTexts.entries.Lcz_Country}:`} value={this.userCountry.name} country imageSrc={this.userCountry.flag}></ir-label>
+                  <ir-label
+                    label={`${this.defaultTexts.entries.Lcz_Country}:`}
+                    value={this.userCountry.name}
+                    country
+                    image={{ src: this.userCountry.flag, alt: this.userCountry.name }}
+                  ></ir-label>
                 )}
                 {this.bookingData.is_direct && <ir-label label={`${this.defaultTexts.entries.Lcz_ArrivalTime}:`} value={this.bookingData.arrival.description}></ir-label>}
                 {this.bookingData.promo_key && <ir-label label={`${this.defaultTexts.entries.Lcz_Coupon}:`} value={this.bookingData.promo_key}></ir-label>}
