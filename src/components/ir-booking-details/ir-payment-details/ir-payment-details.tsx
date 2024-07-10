@@ -420,9 +420,9 @@ export class IrPaymentDetails {
         iconAvailable={true}
         icon="ft-alert-triangle danger h1"
         leftBtnText={this.defaultTexts.entries.Lcz_Cancel}
-        rightBtnText={this.defaultTexts.entries.Lcz_Delete}
+        rightBtnText={this.modal_mode === 'delete' ? this.defaultTexts.entries.Lcz_Delete : this.defaultTexts.entries.Lcz_Confirm}
         leftBtnColor="secondary"
-        rightBtnColor="danger"
+        rightBtnColor={this.modal_mode === 'delete' ? 'danger' : 'primary'}
         onConfirmModal={this.handleConfirmModal.bind(this)}
         onCancelModal={this.handleCancelModal.bind(this)}
       ></ir-modal>,
