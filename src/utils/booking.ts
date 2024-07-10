@@ -73,6 +73,8 @@ function renderBlock003Date(date, hour, minute) {
 }
 function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
   if (isBlockUnit(cell.STAY_STATUS_CODE)) {
+    const blockedFromDate = moment(cell.My_Block_Info.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.My_Block_Info.from_date : cell.DATE;
+    const blockedToDate = moment(cell.My_Block_Info.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.My_Block_Info.to_date : cell.DATE;
     return {
       ID: cell.POOL,
       NOTES: '',
@@ -89,81 +91,102 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       ENTRY_HOUR: cell.My_Block_Info.BLOCKED_TILL_HOUR,
       ENTRY_MINUTE: cell.My_Block_Info.BLOCKED_TILL_MINUTE,
       OPTIONAL_REASON: cell.My_Block_Info.NOTES,
-      FROM_DATE: cell.DATE,
-      TO_DATE: cell.DATE,
-      NO_OF_DAYS: 1,
+      FROM_DATE: blockedFromDate,
+      TO_DATE: blockedToDate,
+      NO_OF_DAYS: dateDifference(blockedFromDate, blockedToDate),
       STATUS: status[cell.STAY_STATUS_CODE],
       POOL: cell.POOL,
       STATUS_CODE: cell.STAY_STATUS_CODE,
       OUT_OF_SERVICE: cell.STAY_STATUS_CODE === '004',
       FROM_DATE_STR: cell.My_Block_Info.format.from_date,
       TO_DATE_STR: cell.My_Block_Info.format.to_date,
+      defaultDates: {
+        from_date: cell.My_Block_Info.from_date,
+        to_date: cell.My_Block_Info.to_date,
+      },
     };
   }
-  //console.log('booking', cell);
+  // console.log('booking', cell);
+
+  // if (cell.booking.booking_nbr === '61249849') {
+  //   console.log('cell');
+  //   console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
+  //   console.log(cell);
+  // }
+  const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
+  const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
   return {
     ID: cell.POOL,
-    TO_DATE: cell.DATE,
-    FROM_DATE: cell.DATE,
-    NO_OF_DAYS: 1,
+    FROM_DATE: bookingFromDate,
+    TO_DATE: bookingToDate,
+    NO_OF_DAYS: dateDifference(bookingFromDate, bookingToDate),
     STATUS: bookingStatus[cell.booking?.status.code],
     NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
-    NOTES: cell.booking.remark,
+    NOTES: cell.booking.is_direct ? cell.booking.remark : null,
     is_direct: cell.booking.is_direct,
     BALANCE: cell.booking.financial?.due_amount,
     channel_booking_nbr: cell.booking.channel_booking_nbr,
+    ARRIVAL_TIME: cell.booking.arrival.description,
+    defaultDates: {
+      from_date: cell.room.from_date,
+      to_date: cell.room.to_date,
+    },
     ///from here
-    //ENTRY_DATE: cell.booking.booked_on.date,
-    // IS_EDITABLE: cell.booking.is_editable,
-    // ARRIVAL: cell.booking.arrival,
-    // PHONE: cell.booking.guest.mobile ?? '',
-    // RATE: cell.room.total,
-    // RATE_PLAN: cell.room.rateplan.name,
-    // SPLIT_BOOKING: false,
-    // RATE_PLAN_ID: cell.room.rateplan.id,
-    // RATE_TYPE: 1,
-    // ADULTS_COUNT: cell.room.occupancy.adult_nbr,
-    // CHILDREN_COUNT: cell.room.occupancy.children_nbr,
-    // origin: cell.booking.origin,
-    // GUEST: cell.booking.guest,
-    // ROOMS: cell.booking.rooms,
-    // cancelation: cell.room.rateplan.cancelation,
-    // guarantee: cell.room.rateplan.guarantee,
-    // TOTAL_PRICE: cell.room.total,
-    // COUNTRY: cell.booking.guest.country_id,
-    // FROM_DATE_STR: cell.booking.format.from_date,
-    // TO_DATE_STR: cell.booking.format.to_date,
-    // adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
-    // SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
+    ENTRY_DATE: cell.booking.booked_on.date,
+    PHONE_PREFIX: cell.booking.guest.country_phone_prefix,
+    IS_EDITABLE: cell.booking.is_editable,
+    ARRIVAL: cell.booking.arrival,
+    PHONE: cell.booking.guest.mobile ?? '',
+    RATE: cell.room.total,
+    RATE_PLAN: cell.room.rateplan.name,
+    SPLIT_BOOKING: false,
+    RATE_PLAN_ID: cell.room.rateplan.id,
+    RATE_TYPE: 1,
+    ADULTS_COUNT: cell.room.occupancy.adult_nbr,
+    CHILDREN_COUNT: cell.room.occupancy.children_nbr,
+    origin: cell.booking.origin,
+    GUEST: cell.booking.guest,
+    ROOMS: cell.booking.rooms,
+    cancelation: cell.room.rateplan.cancelation,
+    guarantee: cell.room.rateplan.guarantee,
+    TOTAL_PRICE: cell.room.total,
+    COUNTRY: cell.booking.guest.country_id,
+    FROM_DATE_STR: cell.booking.format.from_date,
+    TO_DATE_STR: cell.booking.format.to_date,
+    adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
+    SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
   };
 }
 
-function updateBookingWithStayData(data: any, cell: CellType): any {
-  data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
-  data.TO_DATE = cell.DATE;
-  if (cell.booking) {
-    const { arrival } = cell.booking;
-    Object.assign(data, {
-      ARRIVAL_TIME: arrival.description,
-    });
-  }
-  return data;
-}
+// function updateBookingWithStayData(data: any, cell: CellType): any {
+//   data.NO_OF_DAYS = dateDifference(data.FROM_DATE, cell.DATE);
+//   data.TO_DATE = cell.DATE;
+//   if (cell.booking) {
+//     const { arrival } = cell.booking;
+//     if (cell.booking.booking_nbr === '88231897') {
+//       console.log(data.NO_OF_DAYS, data.TO_DATE);
+//     }
+//     Object.assign(data, {
+//       ARRIVAL_TIME: arrival.description,
+//     });
+//   }
+//   return data;
+// }
 
 function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { code: string; value: string }[]): void {
   const index = myBookings.findIndex(booking => booking.POOL === cell.POOL);
-
   if (index === -1) {
     const newData = getDefaultData(cell, stayStatus);
     myBookings.push(newData);
-  } else {
-    const updatedData = updateBookingWithStayData(myBookings[index], cell);
-    myBookings[index] = updatedData;
   }
+  //else {
+  //   const updatedData = updateBookingWithStayData(myBookings[index], cell);
+  //   myBookings[index] = updatedData;
+  // }
 }
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
@@ -204,6 +227,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       NAME: formatName(room.guest.first_name, room.guest.last_name),
       PHONE: data.guest.mobile ?? '',
       ENTRY_DATE: '12-12-2023',
+      PHONE_PREFIX: data.guest.country_phone_prefix,
       RATE: room.total,
       RATE_PLAN: room.rateplan.name,
       SPLIT_BOOKING: false,
@@ -219,7 +243,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,
       guarantee: room.rateplan.guarantee,
-      TOTAL_PRICE: room.total,
+      TOTAL_PRICE: room.gross_total,
       COUNTRY: data.guest.country_id,
       FROM_DATE_STR: data.format.from_date,
       TO_DATE_STR: data.format.to_date,
@@ -228,8 +252,13 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       origin: data.origin,
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
-      NOTES: data.remark,
+      NOTES: data.is_direct ? data.remark : null,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
+      ota_notes: data.ota_notes,
+      defaultDates: {
+        from_date: room.from_date,
+        to_date: room.to_date,
+      },
     });
   });
 
@@ -262,11 +291,15 @@ export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDeta
     OUT_OF_SERVICE: data.STAY_STATUS_CODE === '004',
     FROM_DATE_STR: data.format.from_date,
     TO_DATE_STR: data.format.to_date,
+    defaultDates: {
+      from_date: data.from_date,
+      to_date: data.to_date,
+    },
   };
 }
 export function calculateDaysBetweenDates(from_date: string, to_date: string) {
   const startDate = moment(from_date, 'YYYY-MM-DD');
   const endDate = moment(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
-  return daysDiff;
+  return daysDiff || 1;
 }

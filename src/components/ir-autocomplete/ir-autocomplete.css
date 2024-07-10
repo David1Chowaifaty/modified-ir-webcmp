@@ -10,6 +10,25 @@
 input {
   width: 100%;
   position: relative;
+  border-top-left-radius: 0px !important;
+  border-left: 0 !important;
+  border-bottom-left-radius: 0px !important;
+}
+label {
+  margin: 0;
+  border-top-right-radius: 0px !important;
+  border-right: 0 !important;
+  border-bottom-right-radius: 0px !important;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+
+  padding-right: 3px !important;
+  justify-content: center;
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+label[data-state='focused'] {
+  border-color: var(--blue);
 }
 
 .combobox {

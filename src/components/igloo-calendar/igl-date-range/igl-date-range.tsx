@@ -1,6 +1,8 @@
-import { Component, Host, h, State, Event, EventEmitter, Prop } from '@stencil/core';
+import { Component, Host, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
 import { IToast } from '../../ir-toast/toast';
 import locales from '@/stores/locales.store';
+import { calculateDaysBetweenDates } from '@/utils/booking';
+import moment from 'moment';
 
 @Component({
   tag: 'igl-date-range',
@@ -11,8 +13,9 @@ export class IglDateRange {
   @Prop() defaultData: { [key: string]: any };
   @Prop({ reflect: true }) disabled: boolean = false;
   @Prop() minDate: string;
-  @Prop() dateLabel;
+  @Prop() dateLabel: string;
   @Prop() maxDate: string;
+  @Prop() withDateDifference: boolean = true;
   @Event() dateSelectEvent: EventEmitter<{ [key: string]: any }>;
   @State() renderAgain: boolean = false;
   @Event() toast: EventEmitter<IToast>;
@@ -24,11 +27,10 @@ export class IglDateRange {
   private toDateStr: string = 'to';
   dateRangeInput: HTMLElement;
 
-  getStringDateFormat(dt) {
+  getStringDateFormat(dt: Date) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
-
-  componentWillLoad() {
+  initializeDates() {
     let dt = new Date();
     dt.setHours(0, 0, 0, 0);
     dt.setDate(dt.getDate() + 1);
@@ -55,9 +57,18 @@ export class IglDateRange {
       });
     }
   }
+  componentWillLoad() {
+    this.initializeDates();
+  }
+  @Watch('defaultData')
+  handleDataChange(newValue: any, oldValue: any) {
+    if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+      this.initializeDates();
+    }
+  }
 
   calculateTotalNights() {
-    this.totalNights = Math.floor((this.toDate.getTime() - this.fromDate.getTime()) / 86400000);
+    this.totalNights = calculateDaysBetweenDates(moment(this.fromDate).format('YYYY-MM-DD'), moment(this.toDate).format('YYYY-MM-DD'));
   }
   getFormattedDateString(dt) {
     return dt.getDate() + ' ' + dt.toLocaleString('default', { month: 'short' }).toLowerCase() + ' ' + dt.getFullYear();
@@ -85,30 +96,39 @@ export class IglDateRange {
   render() {
     return (
       <Host>
-        <div class="calendarPickerContainer ml-0 d-flex flex-column flex-lg-row align-items-lg-center ">
-          <span class="mt-0 mb-1 mb-lg-0 mr-lg-1 text-left">{this.dateLabel}:</span>
-          <div class={'d-flex align-items-center mr-lg-1'}>
-            <div class="iglRangePicker form-control input-sm " data-state={this.disabled ? 'disabled' : 'active'}>
-              <ir-date-picker
-                maxDate={this.maxDate}
-                class={'date-range-input'}
-                disabled={this.disabled}
-                fromDate={this.fromDate}
-                toDate={this.toDate}
-                minDate={this.minDate}
-                autoApply
-                onDateChanged={evt => {
-                  this.handleDateChange(evt);
-                }}
-              ></ir-date-picker>
-            </div>
-            {this.totalNights ? (
-              <span class="iglRangeNights ml-1">({this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)})</span>
+        <div class="calendarPickerContainer form-control input-sm" data-state={this.disabled ? 'disabled' : 'active'}>
+          <ir-date-picker
+            maxDate={this.maxDate}
+            class={'date-range-input'}
+            disabled={this.disabled}
+            fromDate={this.fromDate}
+            toDate={this.toDate}
+            minDate={this.minDate}
+            autoApply
+            data-state={this.disabled ? 'disabled' : 'active'}
+            onDateChanged={evt => {
+              this.handleDateChange(evt);
+            }}
+          ></ir-date-picker>
+          <div data-state={this.disabled ? 'disabled' : 'active'} class="date-view">
+            <svg xmlns="http://www.w3.org/2000/svg" height="12" width="10.5" viewBox="0 0 448 512">
+              <path
+                fill="currentColor"
+                d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"
+              />
+            </svg>
+            <ir-date-view showDateDifference={this.disabled} from_date={this.fromDate} to_date={this.toDate}></ir-date-view>
+          </div>
+        </div>
+        {this.withDateDifference && (
+          <span>
+            {this.totalNights && !this.disabled ? (
+              <span class="iglRangeNights mx-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
             ) : (
               ''
             )}
-          </div>
-        </div>
+          </span>
+        )}
       </Host>
     );
   }

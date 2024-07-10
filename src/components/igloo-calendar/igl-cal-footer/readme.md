@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property       | Attribute | Description | Type                      | Default     |
-| -------------- | --------- | ----------- | ------------------------- | ----------- |
-| `calendarData` | --        |             | `{ [key: string]: any; }` | `undefined` |
-| `today`        | --        |             | `String`                  | `undefined` |
+| Property          | Attribute          | Description | Type                      | Default     |
+| ----------------- | ------------------ | ----------- | ------------------------- | ----------- |
+| `calendarData`    | --                 |             | `{ [key: string]: any; }` | `undefined` |
+| `highlightedDate` | `highlighted-date` |             | `string`                  | `undefined` |
+| `today`           | --                 |             | `String`                  | `undefined` |
 
 
 ## Events

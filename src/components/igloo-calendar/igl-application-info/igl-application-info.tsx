@@ -27,6 +27,7 @@ export class IglApplicationInfo {
   @State() isButtonPressed = false;
   @State() guestData: { [key: string]: any };
   private userRate = 0;
+  private timeout: NodeJS.Timeout;
 
   componentWillLoad() {
     console.log(this.guestInfo);
@@ -43,6 +44,14 @@ export class IglApplicationInfo {
     this.guestData.preference = +this.defaultGuestPreference || '';
     this.updateRoomList();
   }
+  componentDidLoad() {
+    this.timeout = setTimeout(() => {
+      this.updateData();
+    }, 200);
+  }
+  disconnectedCallback() {
+    clearTimeout(this.timeout);
+  }
 
   @Watch('selectedUnits')
   async handleSelctedUnits() {
@@ -51,7 +60,7 @@ export class IglApplicationInfo {
   updateRoomList() {
     const units = [...this.selectedUnits];
     units[this.index] = -1;
-    this.filterdRoomList = this.roomsList.filter(e => !units.includes(e.id));
+    this.filterdRoomList = this.roomsList.filter(e => !units.includes(e.id) || e.name === '');
   }
   updateData() {
     this.dataUpdateEvent.emit({

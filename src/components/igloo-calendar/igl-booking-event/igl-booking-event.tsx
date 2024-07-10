@@ -31,6 +31,7 @@ export class IglBookingEvent {
   @Event() showDialog: EventEmitter<IReallocationPayload>;
   @Event() resetStreachedBooking: EventEmitter<string>;
   @Event() toast: EventEmitter<IToast>;
+  @Event() updateBookingEvent: EventEmitter<{ [key: string]: any }>;
 
   @State() renderElement: boolean = false;
   @State() position: { [key: string]: any };
@@ -80,26 +81,36 @@ export class IglBookingEvent {
   async fetchAndAssignBookingData() {
     try {
       console.log('clicked on book#', this.bookingEvent.BOOKING_NUMBER);
-      if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
-        const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
-        let dataForTransformation = data.rooms.filter(d => d['assigned_units_pool'] === this.bookingEvent.ID);
-        data.rooms = dataForTransformation;
-        if (data.rooms.length === 0) {
-          throw new Error(`"booking#${this.bookingEvent.BOOKING_NUMBER} have empty array"`);
-        } else {
-          if (data.rooms.some(r => r['assigned_units_pool'] === null)) {
-            throw new Error(`"booking#${this.bookingEvent.BOOKING_NUMBER} have empty pool"`);
-          }
-        }
-        const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...others } = transformNewBooking(data)[0];
 
-        this.bookingEvent = { ...this.bookingEvent, ...others };
-        this.showEventInfo(true);
+      const validStatuses = ['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'];
+      if (!validStatuses.includes(this.bookingEvent.STATUS)) {
+        return;
       }
+
+      const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
+      const filteredRooms = data.rooms.filter(room => room['assigned_units_pool'] === this.bookingEvent.ID);
+
+      if (filteredRooms.length === 0) {
+        throw new Error(`booking#${this.bookingEvent.BOOKING_NUMBER} has an empty array`);
+      }
+
+      if (filteredRooms.some(room => room['assigned_units_pool'] === null)) {
+        throw new Error(`booking#${this.bookingEvent.BOOKING_NUMBER} has an empty pool`);
+      }
+
+      data.rooms = filteredRooms;
+
+      const transformedBooking = transformNewBooking(data)[0];
+      const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...otherBookingData } = transformedBooking;
+      console.log(otherBookingData.PHONE_PREFIX);
+      this.bookingEvent = { ...otherBookingData, ...this.bookingEvent, PHONE_PREFIX: otherBookingData.PHONE_PREFIX };
+      this.updateBookingEvent.emit(this.bookingEvent);
+      this.showEventInfo(true);
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     }
   }
+
   componentDidLoad() {
     if (this.isNewEvent()) {
       if (!this.bookingEvent.hideBubble) {
@@ -164,6 +175,7 @@ export class IglBookingEvent {
           this.animationFrameId = requestAnimationFrame(() => {
             this.resetBookingToInitialPosition();
           });
+          return;
         }
       } else {
         if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
@@ -174,6 +186,12 @@ export class IglBookingEvent {
           }
         } else {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
+          if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+            this.animationFrameId = requestAnimationFrame(() => {
+              this.resetBookingToInitialPosition();
+            });
+            throw new Error('Overlapping Dates');
+          }
           if (pool) {
             if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
               await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
@@ -181,6 +199,16 @@ export class IglBookingEvent {
               });
             } else {
               if (this.isShrinking || !this.isStreatch) {
+                console.log(this.bookingEvent.PR_ID.toString() === toRoomId.toString(), this.bookingEvent.PR_ID.toString(), toRoomId.toString());
+                // try {
+                //   if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
+                //     await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
+                //     return;
+                //   }
+                // } catch (error) {
+                //   this.resetBookingToInitialPosition();
+                //   return;
+                // }
                 const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
                 let hideConfirmButton = false;
                 if (status === '400') {
@@ -188,14 +216,14 @@ export class IglBookingEvent {
                 }
                 this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton });
               } else {
-                if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
-                  this.animationFrameId = requestAnimationFrame(() => {
-                    this.resetBookingToInitialPosition();
-                  });
-                  throw new Error('Overlapping Dates');
-                } else {
-                  this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
-                }
+                // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
+                //   this.animationFrameId = requestAnimationFrame(() => {
+                //     this.resetBookingToInitialPosition();
+                //   });
+                //   throw new Error('Overlapping Dates');
+                // } else {
+                this.showRoomNightsDialog.emit({ bookingNumber: this.bookingEvent.BOOKING_NUMBER, identifier: this.bookingEvent.IDENTIFIER, to_date, pool, from_date });
+                // }
               }
             }
             this.isShrinking = null;
@@ -260,7 +288,7 @@ export class IglBookingEvent {
           };
         }
       }
-      return { description: locales.entries.Lcz_BalanceWillBeCalculated, status: '200' };
+      return { description: locales.entries.Lcz_ConfrmModiication, status: '200' };
     }
   }
   private resetBookingToInitialPosition() {
@@ -368,7 +396,7 @@ export class IglBookingEvent {
   }
 
   getBalanceNode() {
-    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE > 0) {
+    if (this.bookingEvent.BALANCE !== null && this.bookingEvent.BALANCE >= 1) {
       return this.getLegendOfStatus('OUTSTANDING-BALANCE');
     }
     return null;
@@ -395,9 +423,21 @@ export class IglBookingEvent {
       let boundingRect = startingCell.getBoundingClientRect();
       this.dayWidth = this.dayWidth || boundingRect.width;
       pos.top = boundingRect.top + boundingRect.height / 2 - this.vertSpace - bodyContainerRect.top + 'px';
-      pos.left = boundingRect.left + this.dayWidth / 2 + this.eventSpace / 2 - bodyContainerRect.left + 'px';
-      pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
+      // pos.left = boundingRect.left + this.dayWidth / 2 + this.eventSpace / 2 - bodyContainerRect.left + 'px';
+      // pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
+      pos.left =
+        boundingRect.left +
+        (!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 0 : this.dayWidth / 2) +
+        this.eventSpace / 2 -
+        bodyContainerRect.left +
+        'px';
+      pos.width =
+        (this.getStayDays() + (!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 0.5 : 0)) *
+          this.dayWidth -
+        this.eventSpace +
+        'px';
     } else {
+      console.log(this.bookingEvent);
       console.log('Locating event cell failed ', startingCellClass);
     }
     //console.log(pos);
@@ -630,23 +670,27 @@ export class IglBookingEvent {
     let legend = this.getEventLegend();
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
-
+    // console.log(this.bookingEvent.BOOKING_NUMBER === '46231881' ? this.bookingEvent : '');
     return (
       <Host
-        class={`bookingEvent ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `}
+        class={`bookingEvent  ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `}
         style={this.getPosition()}
         id={'event_' + this.getBookingId()}
       >
         {/* onMouseOver={() =>this.showEventInfo(true)}  */}
         <div
           class={`bookingEventBase ${
+            !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
+          }
+          ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}
+          ${
             !this.bookingEvent.is_direct &&
             !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
             this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
             this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
             'border border-dark'
           }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
-          style={{ backgroundColor: legend.color }}
+          style={{ 'backgroundColor': legend.color, '--ir-event-bg': legend.color }}
           onTouchStart={event => this.startDragging(event, 'move')}
           onMouseDown={event => this.startDragging(event, 'move')}
         ></div>
@@ -660,12 +704,18 @@ export class IglBookingEvent {
 
         <Fragment>
           <div
-            class="bookingEventDragHandle leftSide"
+            class={`bookingEventDragHandle leftSide ${
+              !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
+            }
+            ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}`}
             onTouchStart={event => this.startDragging(event, 'leftSide')}
             onMouseDown={event => this.startDragging(event, 'leftSide')}
           ></div>
           <div
-            class="bookingEventDragHandle rightSide"
+            class={`bookingEventDragHandle rightSide ${
+              !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
+            }
+              ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}`}
             onTouchStart={event => this.startDragging(event, 'rightSide')}
             onMouseDown={event => this.startDragging(event, 'rightSide')}
           ></div>

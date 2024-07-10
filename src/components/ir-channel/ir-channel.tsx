@@ -137,14 +137,14 @@ export class IrChannel {
     updateChannelSettings('hotel_title', params.title);
     selectChannel(params.channel.id.toString());
     testConnection();
-    await this.channelService.saveConnectedChannel(false);
+    await this.channelService.saveConnectedChannel(null, false);
     resetStore();
     this.refreshChannels();
   }
   render() {
     if (this.isLoading) {
       return (
-        <div class="h-screen d-flex flex-column align-items-center justify-content-center">
+        <div class="h-screen bg-white d-flex flex-column align-items-center justify-content-center">
           {/* <div class="dots">
             <div class="dot"></div>
             <div class="dot"></div>
@@ -156,6 +156,7 @@ export class IrChannel {
     }
     return (
       <Host class="h-100 ">
+        <ir-toast></ir-toast>
         <section class="p-2 px-lg-5 py-0 h-100 d-flex flex-column">
           <div class="d-flex w-100 justify-content-between mb-2 align-items-center">
             <h3 class="font-weight-bold m-0 p-0">{locales.entries?.Lcz_iSWITCH}</h3>
@@ -186,16 +187,16 @@ export class IrChannel {
               <tbody class="">
                 {channels_data.connected_channels?.map(channel => (
                   <tr key={channel.channel.id}>
-                    <th scope="row" class="text-left">
-                      {channel.channel.name} {channel?.title ?? ''}
-                    </th>
+                    <td class="text-left">
+                      {channel.channel.name} {channel.title ? `(${channel.title})` : '' ?? ''}
+                    </td>
                     <td>
                       <ir-switch checked={channel.is_active} onCheckChange={e => this.handleCheckChange(e.detail, channel)}></ir-switch>
                     </td>
                     <th>
                       <div class="d-flex justify-content-end">
                         <div class="btn-group">
-                          <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <button type="button" class="btn  dropdown-toggle px-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-1"> {locales.entries?.Lcz_Actions}</span>
                             <svg class={'caret-icon'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={14} width={14}>
                               <path
@@ -246,14 +247,20 @@ export class IrChannel {
 
         <ir-sidebar
           sidebarStyles={{
-            width: '60rem',
+            // width: '60rem',
+            padding: '0',
           }}
           showCloseButton={false}
           onIrSidebarToggle={this.handleSidebarClose.bind(this)}
           open={this.channel_status !== null}
         >
           {this.channel_status && (
-            <ir-channel-editor ticket={this.ticket} class="p-1" channel_status={this.channel_status} onCloseSideBar={this.handleSidebarClose.bind(this)}></ir-channel-editor>
+            <ir-channel-editor
+              slot="sidebar-body"
+              ticket={this.ticket}
+              channel_status={this.channel_status}
+              onCloseSideBar={this.handleSidebarClose.bind(this)}
+            ></ir-channel-editor>
           )}
         </ir-sidebar>
 

@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, h, Element, Prop, Event, EventEmitter, Host } from '@stencil/core';
 import moment from 'moment';
 
 @Component({
@@ -69,6 +69,10 @@ export class IrDatePicker {
   }
 
   render() {
-    return <input class="date-range-input" type="text" disabled={this.disabled} />;
+    return (
+      <Host>
+        <input class="date-range-input" type="text" disabled={this.disabled} />
+      </Host>
+    );
   }
 }

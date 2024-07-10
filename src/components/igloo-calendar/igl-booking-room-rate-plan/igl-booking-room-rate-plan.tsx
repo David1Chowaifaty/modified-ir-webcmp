@@ -29,7 +29,6 @@ export class IglBookingRoomRatePlan {
   @Event() gotoSplitPageTwoEvent: EventEmitter<{ [key: string]: any }>;
   @State() selectedData: { [key: string]: any };
   @State() ratePlanChangedState: boolean = false;
-  private initialRateValue: number = 0;
   getAvailableRooms(assignable_units: any[]) {
     let result = [];
     assignable_units.forEach(unit => {
@@ -40,7 +39,7 @@ export class IglBookingRoomRatePlan {
     return result;
   }
   componentWillLoad() {
-    console.log('default data', this.defaultData);
+    // console.log('default data', this.defaultData);
     this.updateSelectedRatePlan(this.ratePlanData);
   }
   disableForm() {
@@ -101,23 +100,16 @@ export class IglBookingRoomRatePlan {
       for (const [key, value] of Object.entries(this.defaultData)) {
         this.selectedData[key] = value;
       }
+      this.selectedData['rateType'] = 1;
+    }
+  }
+  componentDidLoad() {
+    if (this.defaultData) {
       this.dataUpdateEvent.emit({
         key: 'roomRatePlanUpdate',
         changedKey: 'physicalRooms',
         data: this.selectedData,
       });
-    }
-    if (this.defaultData && this.defaultData.isRateModified) {
-      console.log('object');
-      if (this.selectedData.rateType === 1) {
-        console.log('object1');
-        this.initialRateValue = this.selectedData.rate;
-      } else {
-        console.log('object2');
-        this.initialRateValue = this.selectedData.rate * this.dateDifference;
-      }
-    } else {
-      this.initialRateValue = this.selectedData.rate / this.dateDifference;
     }
   }
   @Watch('ratePlanData')
@@ -130,7 +122,6 @@ export class IglBookingRoomRatePlan {
       rate: this.handleRateDaysUpdate(),
       physicalRooms: this.setAvailableRooms(newData.assignable_units),
     };
-    this.initialRateValue = this.selectedData.rateType === 2 ? this.selectedData.rate / this.dateDifference : this.selectedData.rate;
     this.dataUpdateEvent.emit({
       key: 'roomRatePlanUpdate',
       changedKey: 'rate',
@@ -234,7 +225,7 @@ export class IglBookingRoomRatePlan {
       console.log('selectedData.rate', this.selectedData.rate);
       return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     }
-    return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.initialRateValue).toFixed(2);
+    return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.selectedData.rate / this.dateDifference).toFixed(2);
   }
   render() {
     return (
@@ -247,13 +238,13 @@ export class IglBookingRoomRatePlan {
                 <span>/{this.ratePlanData.name.split('/')[1]}</span>
               </Fragment>
             ) : (
-              <span>{this.ratePlanData.name}</span>
+              <span>{this.ratePlanData.short_name}</span>
             )}
             <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
           </div>
 
-          <div class={'d-md-flex justify-content-md-end  align-items-md-center  flex-fill rateplan-container'}>
-            <div class="mt-1 mt-lg-0 flex-fill max-w-300">
+          <div class={'d-md-flex justify-content-md-end  align-items-md-center flex-fill rateplan-container'}>
+            <div class="mt-1 mt-md-0 flex-fill max-w-300">
               <fieldset class="position-relative">
                 <select disabled={this.disableForm()} class="form-control  input-sm" id={v4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
                   {this.ratePlanData.variations.map(variation => (
@@ -264,8 +255,8 @@ export class IglBookingRoomRatePlan {
                 </select>
               </fieldset>
             </div>
-            <div class={'m-0 p-0 d-md-flex justify-content-between ml-md-1 '}>
-              <div class=" d-flex mt-1  mt-lg-0 m-0 p-0 rate-total-night-view   ">
+            <div class={'m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1 '}>
+              <div class=" d-flex  m-0 p-0 rate-total-night-view  mt-0">
                 <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
                   <div class="input-group-prepend">
                     <span data-disabled={this.disableForm()} data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text new-currency" id="basic-addon1">
@@ -288,7 +279,7 @@ export class IglBookingRoomRatePlan {
                 <fieldset class="position-relative m-0 total-nights-container p-0 ">
                   <select
                     disabled={this.disableForm()}
-                    class="form-control input-sm m-0 nightBorder rounded-0  py-0"
+                    class="form-control input-sm m-0 nightBorder rounded-0 m-0  py-0"
                     id={v4()}
                     onChange={evt => this.handleDataChange('rateType', evt)}
                   >
@@ -302,7 +293,7 @@ export class IglBookingRoomRatePlan {
               </div>
 
               {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (
-                <div class="flex-lg-fill  mt-lg-0 ml-md-2 m-0 mt-1 p-0">
+                <div class="flex-fill  mt-lg-0 ml-1 m-0 mt-md-0 p-0">
                   <fieldset class="position-relative">
                     <select
                       disabled={this.selectedData.rate === 0 || this.disableForm()}

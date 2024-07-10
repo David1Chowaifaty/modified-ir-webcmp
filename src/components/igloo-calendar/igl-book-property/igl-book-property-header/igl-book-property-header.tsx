@@ -26,6 +26,7 @@ export class IglBookPropertyHeader {
   @Prop() bookedByInfoData: any;
   @Prop() defaultDaterange: { from_date: string; to_date: string };
   @Prop() propertyId: number;
+
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
   @Event() adultChild: EventEmitter<any>;
@@ -33,17 +34,23 @@ export class IglBookPropertyHeader {
   @Event() buttonClicked: EventEmitter<{ key: TPropertyButtonsTypes }>;
   @Event() toast: EventEmitter<IToast>;
   @Event() spiltBookingSelected: EventEmitter<{ key: string; data: unknown }>;
+
   @Event({ bubbles: true, composed: true }) animateIrButton: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true }) animateIrSelect: EventEmitter<string>;
+
   private sourceOption: TSourceOption = {
     code: '',
     description: '',
     tag: '',
+    id: '',
+    type: '',
   };
+
   getSplitBookingList() {
     return (
-      <fieldset class="form-group  text-left">
-        <label class="h5">{locales.entries.Lcz_Tobooking}# </label>
-        <div class="btn-group ml-1">
+      <fieldset class="d-flex flex-column text-left mb-1  flex-lg-row align-items-lg-center">
+        <label class="mr-lg-1">{locales.entries.Lcz_Tobooking}# </label>
+        <div class="btn-group mt-1 mt-lg-0 sourceContainer">
           <ir-autocomplete
             value={
               Object.keys(this.bookedByInfoData).length > 1 ? `${this.bookedByInfoData.bookingNumber} ${this.bookedByInfoData.firstName} ${this.bookedByInfoData.lastName}` : ''
@@ -65,9 +72,9 @@ export class IglBookPropertyHeader {
   }
   getSourceNode() {
     return (
-      <fieldset class="d-flex flex-column text-left flex-lg-row align-items-lg-center">
-        <label class="mr-lg-1">{locales.entries.Lcz_Source} </label>
-        <div class="btn-group mt-1 mt-lg-0 sourceContainer">
+      <fieldset class="d-flex text-left  align-items-center">
+        <label class="mr-1">{locales.entries.Lcz_Source} </label>
+        <div class="btn-group mt-0 flex-fill sourceContainer">
           <select class="form-control input-sm" id="xSmallSelect" onChange={evt => this.sourceDropDownChange.emit((evt.target as HTMLSelectElement).value)}>
             {this.sourceOptions.map(option => {
               if (option.type === 'LABEL') {
@@ -84,8 +91,8 @@ export class IglBookPropertyHeader {
       </fieldset>
     );
   }
-  handleAdultChildChange(key: string, event: Event) {
-    const value = (event.target as HTMLSelectElement).value;
+  handleAdultChildChange(key: string, value: string) {
+    //const value = (event.target as HTMLSelectElement).value;
     let obj = {};
     if (value === '') {
       obj = {
@@ -104,27 +111,47 @@ export class IglBookPropertyHeader {
   getAdultChildConstraints() {
     return (
       <div class={'mt-1 mt-lg-0 d-flex flex-column text-left'}>
-        <label class="mb-1 d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label>
+        {/* <label class="mb-1 d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label> */}
         <div class="form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start">
           <fieldset>
             <div class="btn-group ">
-              <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
+              {/* <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
                 <option value="">{locales.entries.Lcz_AdultsCaption}</option>
                 {Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (
                   <option value={option}>{option}</option>
                 ))}
-              </select>
+              </select> */}
+              <ir-select
+                onSelectChange={e => this.handleAdultChildChange('adult', e.detail)}
+                select_id="adult_child_select"
+                firstOption={locales.entries.Lcz_AdultsCaption}
+                LabelAvailable={false}
+                data={Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => ({
+                  text: option.toString(),
+                  value: option.toString(),
+                }))}
+              ></ir-select>
             </div>
           </fieldset>
           {this.adultChildConstraints.child_max_nbr > 0 && (
             <fieldset>
               <div class="btn-group ml-1">
-                <select class="form-control input-sm" id="xChildrenSmallSelect" onChange={evt => this.handleAdultChildChange('child', evt)}>
+                {/* <select class="form-control input-sm" id="xChildrenSmallSelect" onChange={evt => this.handleAdultChildChange('child', evt)}>
                   <option value={''}>{this.renderChildCaption()}</option>
                   {Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (
                     <option value={option}>{option}</option>
                   ))}
-                </select>
+                </select> */}
+                <ir-select
+                  onSelectChange={e => this.handleAdultChildChange('child', e.detail)}
+                  select_id="child_select"
+                  firstOption={this.renderChildCaption()}
+                  LabelAvailable={false}
+                  data={Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => ({
+                    text: option.toString(),
+                    value: option.toString(),
+                  }))}
+                ></ir-select>
               </div>
             </fieldset>
           )}
@@ -179,6 +206,7 @@ export class IglBookPropertyHeader {
         return;
       } else if (this.adultChildCount.adult === 0) {
         this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
+        this.animateIrSelect.emit('adult_child_select');
       } else {
         this.buttonClicked.emit({ key: 'check' });
       }
@@ -193,6 +221,7 @@ export class IglBookPropertyHeader {
         position: 'top-right',
       });
     } else if (this.adultChildCount.adult === 0) {
+      this.animateIrSelect.emit('adult_child_select');
       this.toast.emit({ type: 'error', title: locales.entries.Lcz_PlzSelectNumberOfGuests, description: '', position: 'top-right' });
     } else {
       this.buttonClicked.emit({ key: 'check' });
@@ -206,12 +235,13 @@ export class IglBookPropertyHeader {
     const showSourceNode = this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? false : true;
     return (
       <Host>
+        {this.isEventType('SPLIT_BOOKING') && this.getSplitBookingList()}
         {showSourceNode && this.getSourceNode()}
         <div class={`d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}`}>
           <fieldset class="mt-lg-0  ">
             <igl-date-range
               dateLabel={locales.entries.Lcz_Dates}
-              minDate={this.minDate}
+              minDate={this.isEventType('PLUS_BOOKING') ? moment().add(-1, 'months').startOf('month').format('YYYY-MM-DD') : this.minDate}
               disabled={this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')}
               defaultData={this.bookingDataDefaultDateRange}
             ></igl-date-range>

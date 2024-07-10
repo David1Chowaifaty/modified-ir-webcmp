@@ -17,6 +17,7 @@ export class IrRoom {
   // Room Data
   @Prop() bookingEvent: Booking;
   @Prop() bookingIndex: number;
+  @Prop() isEditable: boolean;
   // Meal Code names
   @Prop() mealCodeName: string;
   @Prop() myRoomTypeFoodCat: string;
@@ -165,6 +166,7 @@ export class IrRoom {
     }
   }
   render() {
+    console.log(this.item);
     return (
       <Host class="p-1 d-flex m-0">
         <ir-icon
@@ -203,7 +205,7 @@ export class IrRoom {
             {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
             <div class="d-flex m-0 p-0 align-items-center">
               <span class="p-0 m-0 ml-1 font-weight-bold">{_formatAmount(this.item['gross_total'], this.currency)}</span>
-              {this.hasRoomEdit && (
+              {this.hasRoomEdit && this.isEditable && (
                 <ir-icon id={`roomEdit-${this.item.identifier}`} class="pointer mx-1" onClick={this.handleEditClick.bind(this)}>
                   <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
                     <path
@@ -213,7 +215,7 @@ export class IrRoom {
                   </svg>
                 </ir-icon>
               )}
-              {this.hasRoomDelete && (
+              {this.hasRoomDelete && this.isEditable && (
                 <ir-icon onClick={this.handleDeleteClick.bind(this)} id={`roomDelete-${this.item.identifier}`} class="pointer">
                   <svg slot="icon" fill="#ff2441" xmlns="http://www.w3.org/2000/svg" height="16" width="14.25" viewBox="0 0 448 512">
                     <path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" />
@@ -223,9 +225,7 @@ export class IrRoom {
             </div>
           </div>
           <div class="d-flex align-items-center sm-mb-1">
-            <span class=" mr-1">
-              {_formatDate(this.item.from_date)} - {_formatDate(this.item.to_date)}
-            </span>
+            <ir-date-view class="mr-1" from_date={this.item.from_date} to_date={this.item.to_date} showDateDifference={false}></ir-date-view>
             {calendar_data.is_frontdesk_enabled && this.item.unit && <span class="light-blue-bg mr-2 ">{(this.item.unit as IUnit).name}</span>}
             {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
@@ -242,14 +242,19 @@ export class IrRoom {
               <div class={'flex-fill'}>
                 <table>
                   {this.item.days.length > 0 &&
-                    this.item.days.map(item => (
-                      <tr>
-                        <td class={'pr-2 text-right'}>{_getDay(item.date)}</td> <td class="text-right">{_formatAmount(item.amount, this.currency)}</td>
-                      </tr>
-                    ))}
+                    this.item.days.map(item => {
+                      return (
+                        <tr>
+                          <td class={'pr-2 text-right'}>{_getDay(item.date)}</td>
+                          <td class="text-right">{_formatAmount(item.amount, this.currency)}</td>
+                          {item.cost > 0 && item.cost !== null && <td class="pl-2 text-left night-cost">{_formatAmount(item.cost, this.currency)}</td>}
+                        </tr>
+                      );
+                    })}
                   <tr>
                     <th class="text-right pr-2">{this.defaultTexts.entries.Lcz_SubTotal}</th>
                     <th class="text-right">{_formatAmount(this.item.total, this.currency)}</th>
+                    {this.item.gross_cost > 0 && this.item.gross_cost !== null && <th class="pl-2 text-right night-cost">{_formatAmount(this.item.cost, this.currency)}</th>}
                   </tr>
                   {this.bookingEvent.is_direct ? (
                     <Fragment>
@@ -262,6 +267,9 @@ export class IrRoom {
                                 {d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including} {d.name} ({d.pct}%)
                               </td>
                               <td class="text-right">{_formatAmount((this.item.total * d.pct) / 100, this.currency)}</td>
+                              {this.item.gross_cost > 0 && this.item.gross_cost !== null && (
+                                <td class="pl-2 text-right night-cost">{_formatAmount((this.item.cost * d.pct) / 100, this.currency)}</td>
+                              )}
                             </tr>
                           );
                         });

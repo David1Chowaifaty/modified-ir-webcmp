@@ -1,5 +1,6 @@
+import { IToast } from '@/components/ir-toast/toast';
 import { ChannelService } from '@/services/channel.service';
-import { onChannelChange } from '@/stores/channel.store';
+import channels_data, { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 
@@ -14,6 +15,7 @@ export class IrChannelEditor {
 
   @State() selectedTab: string = '';
   @State() isLoading: boolean = false;
+  @State() status: boolean = false;
   @State() headerTitles = [
     {
       id: 'general_settings',
@@ -27,6 +29,7 @@ export class IrChannelEditor {
 
   @Event() saveChannelFinished: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
+  @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
 
   private channelService = new ChannelService();
   componentWillLoad() {
@@ -40,6 +43,8 @@ export class IrChannelEditor {
     onChannelChange('isConnectedToChannel', newValue => {
       if (!!newValue) {
         this.enableAllHeaders();
+      } else {
+        this.disableNonFirstTabs();
       }
     });
   }
@@ -54,7 +59,7 @@ export class IrChannelEditor {
   renderTabScreen() {
     switch (this.selectedTab) {
       case 'general_settings':
-        return <ir-channel-general channel_status={this.channel_status}></ir-channel-general>;
+        return <ir-channel-general channel_status={this.channel_status} onConnectionStatus={e => (this.status = e.detail)}></ir-channel-general>;
       case 'mapping':
         return <ir-channel-mapping></ir-channel-mapping>;
       case 'channel_booking':
@@ -75,7 +80,7 @@ export class IrChannelEditor {
   async saveConnectedChannel() {
     try {
       this.isLoading = true;
-      await this.channelService.saveConnectedChannel(false);
+      await this.channelService.saveConnectedChannel(null, false);
       this.saveChannelFinished.emit();
     } catch (error) {
       console.error(error);
@@ -87,8 +92,8 @@ export class IrChannelEditor {
   render() {
     return (
       <Host class=" d-flex flex-column h-100">
-        <nav class="px-1 position-sticky sticky-top py-1 top-0 bg-white">
-          <div class="d-flex align-items-center  justify-content-between">
+        <nav class="position-sticky sticky-top pb-1 top-0 bg-white ">
+          <div class="d-flex align-items-center px-1 py-1  justify-content-between">
             <h3 class="text-left font-medium-2  py-0 my-0">{this.channel_status === 'create' ? locales.entries?.Lcz_CreateChannel : locales.entries?.Lcz_EditChannel}</h3>
             <ir-icon
               class={'m-0 p-0 close'}
@@ -103,11 +108,21 @@ export class IrChannelEditor {
           </div>
           <ir-channel-header class="mt-1 px-0" headerTitles={this.headerTitles}></ir-channel-header>
         </nav>
-        <section class="py-1 flex-fill tab-container px-1">{this.renderTabScreen()}</section>
+        <section class="flex-fill tab-container px-1">{this.renderTabScreen()}</section>
 
         <ir-button
           isLoading={this.isLoading}
-          onClickHanlder={() => this.saveConnectedChannel()}
+          onClickHanlder={() => {
+            if (!channels_data.isConnectedToChannel) {
+              this.toast.emit({
+                type: 'error',
+                description: locales.entries.Lcz_InvalidCredentials,
+                title: locales.entries.Lcz_InvalidCredentials,
+              });
+              return;
+            }
+            this.saveConnectedChannel();
+          }}
           class="px-1 py-1 top-border"
           btn_styles="w-100  justify-content-center align-items-center"
           text={locales.entries.Lcz_Save}

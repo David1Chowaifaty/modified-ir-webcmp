@@ -27,6 +27,7 @@ export class IrPaymentDetails {
 
   @State() paymentDetailsUrl: string = '';
   @State() paymentExceptionMessage: string = '';
+  @State() modal_mode: 'delete' | 'save' | null = null;
 
   @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
@@ -56,18 +57,26 @@ export class IrPaymentDetails {
     };
   }
 
+  async _processPaymentSave() {
+    if (this.itemToBeAdded.amount === null) {
+      this.toast.emit({
+        type: 'error',
+        title: this.defaultTexts.entries.Lcz_EnterAmount,
+        description: '',
+        position: 'top-right',
+      });
+      return;
+    }
+    if (Number(this.itemToBeAdded.amount) > Number(this.bookingDetails.financial.due_amount)) {
+      this.modal_mode = 'save';
+      this.openModal();
+      return;
+    }
+    this._handleSave();
+  }
+
   async _handleSave() {
     try {
-      console.log(this.itemToBeAdded);
-      if (this.itemToBeAdded.amount === null) {
-        this.toast.emit({
-          type: 'error',
-          title: this.defaultTexts.entries.Lcz_EnterAmount,
-          description: '',
-          position: 'top-right',
-        });
-        return;
-      }
       await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
       this.initializeItemToBeAdded();
       this.resetBookingData.emit(null);
@@ -93,9 +102,7 @@ export class IrPaymentDetails {
       this.itemToBeAdded = { ...this.itemToBeAdded, [key]: value };
     }
   }
-  async handleConfirmModal(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+  async cancelPayment() {
     try {
       await this.paymentService.CancelPayment(this.toBeDeletedItem.id);
       const newPaymentArray = this.bookingDetails.financial.payments.filter((item: IPayment) => item.id !== this.toBeDeletedItem.id);
@@ -103,6 +110,31 @@ export class IrPaymentDetails {
       this.confirmModal = !this.confirmModal;
       this.resetBookingData.emit(null);
       this.toBeDeletedItem = null;
+      this.modal_mode = null;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async handleConfirmModal(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    if (this.modal_mode === 'delete') {
+      await this.cancelPayment();
+    } else {
+      await this._handleSave();
+    }
+  }
+  openModal() {
+    const modal: any = document.querySelector('.delete-record-modal');
+    modal.openModal();
+  }
+  async handleCancelModal(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    try {
+      if (this.modal_mode === 'save') {
+        this.initializeItemToBeAdded();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -139,7 +171,7 @@ export class IrPaymentDetails {
           </td>
           <td class={'border payments-height border-light border-bottom-0 text-center '}>
             {rowMode === 'normal' ? (
-              <span class="sm-padding-right">${Number(item.amount).toFixed(2)}</span>
+              <span class="sm-padding-right">{_formatAmount(item.amount, this.bookingDetails.currency.code)}</span>
             ) : (
               <input
                 type="text"
@@ -166,7 +198,7 @@ export class IrPaymentDetails {
               onClick={
                 rowMode === 'add'
                   ? () => {
-                      this._handleSave();
+                      this._processPaymentSave();
                     }
                   : () => {}
               }
@@ -188,9 +220,9 @@ export class IrPaymentDetails {
                       this.initializeItemToBeAdded();
                     }
                   : () => {
+                      this.modal_mode = 'delete';
                       this.toBeDeletedItem = item;
-                      const modal: any = document.querySelector('.delete-record-modal');
-                      modal.openModal();
+                      this.openModal();
                     }
               }
             >
@@ -297,11 +329,15 @@ export class IrPaymentDetails {
     return [
       <div class="card m-0">
         <div class="p-1">
+          {this.bookingDetails.financial.gross_cost > 0 && this.bookingDetails.financial.gross_cost !== null && (
+            <div class="mb-2 h4 total-cost-container">
+              {this.defaultTexts.entries.Lcz_TotalCost}: <span>{_formatAmount(this.bookingDetails.financial.gross_cost, this.bookingDetails.currency.code)}</span>
+            </div>
+          )}
           <div class="mb-2 h4">
             {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
             <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
           </div>
-
           {this.bookingGuarantee()}
           <div class="mt-2">
             <div>
@@ -375,18 +411,20 @@ export class IrPaymentDetails {
           </div>
         </div>
       </div>,
+
       <ir-modal
         item={this.toBeDeletedItem}
         class={'delete-record-modal'}
         modalTitle={this.defaultTexts.entries.Lcz_Confirmation}
-        modalBody="If deleted it will be permnantly lost!"
+        modalBody={this.modal_mode === 'delete' ? this.defaultTexts.entries.Lcz_IfDeletedPermantlyLost : this.defaultTexts.entries.Lcz_EnteringAmountGreaterThanDue}
         iconAvailable={true}
         icon="ft-alert-triangle danger h1"
         leftBtnText={this.defaultTexts.entries.Lcz_Cancel}
-        rightBtnText={this.defaultTexts.entries.Lcz_Delete}
+        rightBtnText={this.modal_mode === 'delete' ? this.defaultTexts.entries.Lcz_Delete : this.defaultTexts.entries.Lcz_Confirm}
         leftBtnColor="secondary"
-        rightBtnColor="danger"
+        rightBtnColor={this.modal_mode === 'delete' ? 'danger' : 'primary'}
         onConfirmModal={this.handleConfirmModal.bind(this)}
+        onCancelModal={this.handleCancelModal.bind(this)}
       ></ir-modal>,
     ];
   }

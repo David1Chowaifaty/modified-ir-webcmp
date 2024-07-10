@@ -2,6 +2,10 @@
   margin: 0;
   padding: 0;
 }
+.logo {
+  height: 1.5rem;
+  width: 1.5rem;
+}
 :host {
   display: flex;
   margin-bottom: 5px;
@@ -21,6 +25,11 @@ p {
 .icon-container {
   margin: 0;
   padding: 0;
+}
+.country {
+  height: 16px;
+  width: 23px;
+  border-radius: 3px;
 }
 svg {
   margin: 0;

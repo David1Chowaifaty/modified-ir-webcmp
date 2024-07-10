@@ -40,14 +40,14 @@ export class IrChannelMapping {
     roomTypeId?: string,
   ) {
     if (mappedField.hide) {
-      return <span></span>;
+      return <div></div>;
     }
     if (mappedField.result) {
       return (
         <Fragment>
-          <span class="px-2 d-md-none text-blue d-flex align-items-center">
+          <div class="pl-2 flex-fill d-sm-none mapped_item text-blue d-flex align-items-center">
             <span class="m-0 p-0 d-flex align-items-center selected-map">
-              <span class="selected-map-title">{mappedField.result.name}</span>
+              <span class="selected-map-title">{isRoomType ? mappedField.result.name : mappedField.result['short_name']}</span>
               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
                 <path
                   fill={'var(--blue)'}
@@ -64,18 +64,18 @@ export class IrChannelMapping {
                 />
               </svg>
             </ir-icon>
-          </span>
-          <span class="px-2 d-none text-blue d-md-flex align-items-center">
-            <span class="m-0 p-0 d-flex align-items-center selected-map">
-              {mappedField.result.name}
+          </div>
+          <div class="pl-2 flex-fill d-none mapped_item text-blue d-sm-flex align-items-center">
+            <span class="mapped_name">{isRoomType ? mappedField.result.name : mappedField.result['short_name']}</span>
+            <div class="d-flex align-items-center gap-3 flex-fill">
               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
                 <path
                   fill={'var(--blue)'}
                   d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
                 />
               </svg>
-              {mappedField.occupancy}
-            </span>
+              <span>{mappedField.occupancy}</span>
+            </div>
             <ir-icon class="ml-1 p-0" onIconClickHandler={() => this.mappingService.removedMapping(mappedField.result.id.toString(), isRoomType)}>
               <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
                 <path
@@ -84,16 +84,16 @@ export class IrChannelMapping {
                 />
               </svg>
             </ir-icon>
-          </span>
+          </div>
         </Fragment>
       );
     }
     return (
-      <span class="px-2">
+      <div class="pl-2  flex-fill mapped_item">
         {this.activeMapField === id ? (
           <ir-combobox
             autoFocus
-            placeholder={locales.entries?.Lcz_ConnectedChannel}
+            placeholder={locales.entries?.Lcz_NotMapped}
             data={this.availableRooms}
             onComboboxValueChange={e => {
               addMapping(e.detail.data as string, this.activeMapField, isRoomType);
@@ -105,13 +105,14 @@ export class IrChannelMapping {
             {locales.entries.Lcz_NotMapped}
           </span>
         )}
-      </span>
+      </div>
     );
   }
+
   render() {
     return (
-      <Host>
-        <div class="d-flex w-100 justify-content-end">
+      <Host class="py-md-2 px-md-2">
+        <div class="d-flex p-0 m-0 w-100 justify-content-end">
           <button
             onClick={() => {
               setMappedChannel();
@@ -121,31 +122,36 @@ export class IrChannelMapping {
             {locales.entries?.Lcz_Refresh}
           </button>
         </div>
-        <ul class="m-0 p-0">
-          <li class="map-row my-1">
-            <span class="font-weight-bold">{channels_data.selectedChannel?.name}</span>
+        <section class="w-100">
+          <div class="pt-1 mapped_row">
+            <p class="mapped_item channel_name">{channels_data.selectedChannel?.name}</p>
             <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
               <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
             </svg>
-            <span class="font-weight-bold px-2">Igloorooms</span>
-          </li>
-          {channels_data.selectedChannel?.property?.room_types?.map(room_type => {
-            const mappedRoomType = this.mappingService.checkMappingExists(room_type.id, true);
-            return (
-              <li key={room_type.id} class="mb-1">
-                <div class="map-row ">
-                  <span>{room_type.name}</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
-                    <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
-                  </svg>
-                  {this.renderMappingStatus(mappedRoomType, room_type.id, true)}
-                </div>
-                <ul class="m-0 p-0">
+            <p class="pl-2 mapped_item channel_name">igloorooms</p>
+          </div>
+          <div>
+            {channels_data.selectedChannel?.property?.room_types?.map(room_type => {
+              const mappedRoomType = this.mappingService.checkMappingExists(room_type.id, true);
+              return (
+                <Fragment>
+                  <div key={room_type.id} class="mapped_row room_type pt-1">
+                    <p class="mapped_item">{room_type.name}</p>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
+                      <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
+                    </svg>
+
+                    {this.renderMappingStatus(mappedRoomType, room_type.id, true)}
+                  </div>
+
                   {room_type.rate_plans.map(rate_plan => {
                     const mappedRatePlan = this.mappingService.checkMappingExists(rate_plan.id, false, room_type.id);
+                    // console.log(mappedRatePlan);
                     return (
-                      <li class="map-row" key={rate_plan.id}>
-                        <span class="submap-text">{rate_plan.name}</span>
+                      <div key={rate_plan.id} class=" mapped_row rate_plan">
+                        <p class="pl-1 submap-text mapped_item">{rate_plan.name}</p>
+
                         {!mappedRatePlan.hide && (
                           <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
                             <path
@@ -154,15 +160,21 @@ export class IrChannelMapping {
                             />
                           </svg>
                         )}
+
                         {this.renderMappingStatus(mappedRatePlan, rate_plan.id, false, room_type.id)}
-                      </li>
+                      </div>
                     );
                   })}
-                </ul>
-              </li>
-            );
-          })}
-        </ul>
+                  {/* <tdivr>
+                    <td class="py-1"></td>
+                    <td></td>
+                    <td></td>
+                  </tdivr> */}
+                </Fragment>
+              );
+            })}
+          </div>
+        </section>
       </Host>
     );
   }

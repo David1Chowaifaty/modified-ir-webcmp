@@ -1,7 +1,6 @@
 import { Component, Host, h, Prop, State, Event, EventEmitter } from '@stencil/core';
 import { BookingService } from '../../../services/booking.service';
 import { IEntries } from '../../../models/IBooking';
-import { formatDate } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 
@@ -93,16 +92,12 @@ export class IglBlockDatesView {
   }
 
   render() {
+    console.log(this.fromDate);
     return (
       <Host>
         <div class={`m-0 p-0 mb-1`}>
           <div class="text-left p-0">
-            <span class="pr-1">
-              <span class="text-bold-700 font-medium-1">{locales.entries.Lcz_From}: </span>
-              {formatDate(this.fromDate)}
-            </span>
-            <span class="text-bold-700 font-medium-1">{locales.entries.Lcz_To}: </span>
-            {formatDate(this.toDate)}
+            <ir-date-view from_date={this.fromDate} dateOption="DD MMM YYYY" showDateDifference={false} to_date={this.toDate}></ir-date-view>
           </div>
         </div>
         <div class={` mb-1 text-left ${this.isEventHover && 'p-0'}`}>

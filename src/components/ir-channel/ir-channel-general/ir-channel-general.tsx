@@ -1,6 +1,6 @@
 import channels_data, { selectChannel, testConnection, updateChannelSettings } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
-import { Component, Host, Prop, State, h } from '@stencil/core';
+import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'ir-channel-general',
@@ -12,25 +12,34 @@ export class IrChannelGeneral {
 
   @State() buttonClicked: boolean = false;
   @State() connection_status_message = '';
+  @State() status: boolean = false;
+  @Event() connectionStatus: EventEmitter<boolean>;
   componentWillLoad() {
-    if (this.channel_status !== 'create') {
+    if (this.channel_status === 'create' || !channels_data.isConnectedToChannel) {
       return;
     }
-    this.connection_status_message = channels_data.isConnectedToChannel ? locales.entries?.Lcz_ConnectedChannel : '';
+    this.connection_status_message = channels_data.isConnectedToChannel
+      ? channels_data.selectedChannel.properties.find(property => property.id === channels_data.channel_settings.hotel_id)?.name
+      : '';
+    this.status = true;
   }
   handleTestConnectionClicked(e: Event) {
     e.preventDefault();
     this.buttonClicked = true;
-    if (this.channel_status !== 'create' || !channels_data.channel_settings?.hotel_id || channels_data.isConnectedToChannel) {
+    if (!channels_data.channel_settings?.hotel_id) {
       return;
     }
     const status = testConnection();
-    this.connection_status_message = status ? locales.entries?.Lcz_ConnectedChannel : locales.entries?.Lcz_IncorrectConnection;
+    this.status = status;
+    this.connection_status_message = status
+      ? channels_data.selectedChannel.properties.find(property => property.id === channels_data.channel_settings.hotel_id)?.name
+      : locales.entries?.Lcz_IncorrectConnection;
     this.buttonClicked = false;
+    this.connectionStatus.emit(this.status);
   }
   render() {
     return (
-      <Host>
+      <Host class="px-1">
         <section class="ml-18">
           <fieldset class="d-flex align-items-center">
             <label htmlFor="hotel_channels" class="m-0 p-0 label-style">
@@ -77,15 +86,20 @@ export class IrChannelGeneral {
                 <div class="flex-fill">
                   <input
                     id="hotel_id"
-                    disabled={channels_data.isConnectedToChannel}
+                    // disabled={channels_data.isConnectedToChannel}
                     class={`form-control  flex-fill bg-white ${this.buttonClicked && !channels_data.channel_settings?.hotel_id && 'border-danger'}`}
                     value={channels_data.channel_settings?.hotel_id}
                     onInput={e => updateChannelSettings('hotel_id', (e.target as HTMLInputElement).value)}
                   />
                 </div>
               </fieldset>
-              <div class={'connection-testing-container'}>
-                <span>{this.connection_status_message}</span>
+
+              <div class="connection-status">
+                <div class="status-message">
+                  {this.connection_status_message &&
+                    (this.status ? <ir-icons name="circle_check" style={{ color: 'green' }}></ir-icons> : <ir-icons name="danger" style={{ color: 'yellow' }}></ir-icons>)}
+                  <span>{this.connection_status_message}</span>
+                </div>
                 <button class="btn btn-outline-secondary btn-sm" type="submit">
                   {locales.entries?.Lcz_TestConnection}
                 </button>

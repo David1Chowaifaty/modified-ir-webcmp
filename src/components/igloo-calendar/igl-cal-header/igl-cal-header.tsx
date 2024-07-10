@@ -24,6 +24,7 @@ export class IglCalHeader {
   @Prop() propertyid: number;
   @Prop() unassignedDates;
   @Prop() to_date: string;
+  @Prop() highlightedDate: string;
   @State() renderAgain: boolean = false;
   @State() unassignedRoomsNumber: any = {};
   private searchValue: string = '';
@@ -65,16 +66,13 @@ export class IglCalHeader {
     try {
       const { fromDate, toDate, data } = this.unassignedDates;
       let dt = new Date(fromDate);
-      dt.setHours(0);
-      dt.setMinutes(0);
-      dt.setSeconds(0);
+      dt.setHours(0, 0, 0, 0);
       let endDate = dt.getTime();
-      //console.log('unassigned Dates', this.unassignedDates);
       while (endDate <= new Date(toDate).getTime()) {
-        //console.log('end date:', endDate);
         const selectedDate = moment(endDate).format('D_M_YYYY');
         if (data[endDate]) {
           const result = await this.toBeAssignedService.getUnassignedRooms(
+            { from_date: this.calendarData.from_date, to_date: this.calendarData.to_date },
             this.propertyid,
             dateToFormattedString(new Date(endDate)),
             this.calendarData.roomsInfo,
@@ -85,7 +83,9 @@ export class IglCalHeader {
           const res = this.unassignedRoomsNumber[selectedDate] - 1;
           this.unassignedRoomsNumber[selectedDate] = res < 0 ? 0 : res;
         }
-        endDate = moment(endDate).add(1, 'days').toDate().getTime();
+        const newEndDate = moment(endDate).add(1, 'days').toDate();
+        newEndDate.setHours(0, 0, 0, 0);
+        endDate = newEndDate.getTime();
         this.renderView();
       }
     } catch (error) {
@@ -298,13 +298,16 @@ export class IglCalHeader {
         <div class="stickyCell headersContainer">
           <div class="monthsContainer">
             {this.calendarData.monthsInfo.map(monthInfo => (
-              <div class="monthCell" style={{ width: monthInfo.daysCount * 70 + 'px' }}>
+              <div class="monthCell" style={{ width: monthInfo.daysCount * 58 + 'px' }}>
                 <div class="monthTitle">{monthInfo.monthName}</div>
               </div>
             ))}
           </div>
           {this.calendarData.days.map(dayInfo => (
-            <div class={`headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today ? 'currentDay' : ''}`} data-day={dayInfo.day}>
+            <div
+              class={`headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''}`}
+              data-day={dayInfo.day}
+            >
               {!this.calendarData.is_vacation_rental && (
                 <div class="preventPageScroll">
                   <span

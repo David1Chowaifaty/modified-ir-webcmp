@@ -17,6 +17,11 @@
   max-width: 100%;
   height: auto;
 }
+.mx-01 {
+  --m: 5px;
+  margin-left: var(--m) !important;
+  margin-right: var(--m) !important;
+}
 .pointerContainer {
   position: absolute;
   left: 50%;
@@ -82,5 +87,7 @@
   margin-right: 4px;
 }
 .icon-image {
+  height: 1.5rem;
+  width: 1.5rem;
   margin-right: 5px;
 }

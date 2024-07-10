@@ -33,11 +33,8 @@ export class IglPropertyBookedBy {
     countryId: '',
     isdCode: '',
     contactNumber: '',
-    selectedArrivalTime: {
-      code: '',
-      description: '',
-    },
-    emailGuest: true,
+    selectedArrivalTime: '',
+    emailGuest: false,
     message: '',
     cardNumber: '',
     cardHolderName: '',
@@ -73,27 +70,18 @@ export class IglPropertyBookedBy {
   private populateBookedByData() {
     this.bookedByData = this.defaultData ? { ...this.bookedByData, ...this.defaultData } : {};
     this.arrivalTimeList = this.defaultData?.arrivalTime || [];
-    this.bookedByData = { ...this.bookedByData, selectedArrivalTime: { code: this.arrivalTimeList[0].CODE_NAME, description: this.arrivalTimeList[0].CODE_VALUE_EN } };
+    this.bookedByData = { ...this.bookedByData, selectedArrivalTime: this.arrivalTimeList[0].CODE_NAME };
     if (!this.bookedByData.expiryMonth) {
       this.bookedByData.expiryMonth = this.currentMonth;
     }
     if (!this.bookedByData.expiryYear) {
       this.bookedByData.expiryYear = new Date().getFullYear();
     }
+    console.log('initial bookedby data', this.bookedByData);
   }
 
   handleDataChange(key, event) {
-    const foundTime = this.arrivalTimeList.find(time => time.CODE_NAME === event.target.value);
-
-    this.bookedByData[key] =
-      key === 'emailGuest'
-        ? event.target.checked
-        : key === 'arrivalTime'
-        ? {
-            code: event.target.value,
-            description: (foundTime && foundTime.CODE_VALUE_EN) || '',
-          }
-        : event.target.value;
+    this.bookedByData[key] = key === 'emailGuest' ? event.target.checked : event.target.value;
     this.dataUpdateEvent.emit({
       key: 'bookedByInfoUpdated',
       data: { ...this.bookedByData },
@@ -104,6 +92,7 @@ export class IglPropertyBookedBy {
         isdCode: event.target.value,
       };
     }
+    console.log(this.bookedByData);
   }
 
   handleNumberInput(key, event: InputEvent) {
@@ -235,7 +224,7 @@ export class IglPropertyBookedBy {
         <div class="text-left mt-3">
           <div class="form-group d-flex flex-column flex-md-row align-items-md-center text-left ">
             <label class="p-0 m-0 label-control mr-1 font-weight-bold">{locales.entries.Lcz_BookedBy}</label>
-            <div class="bookedByEmailContainer mt-1 mt-md-0">
+            <div class="bookedByEmailContainer mt-1 mt-md-0 d-flex align-items-center">
               {/* <input
                 id={v4()}
                 type="email"
@@ -248,15 +237,16 @@ export class IglPropertyBookedBy {
                 onBlur={() => this.checkUser()}
               /> */}
               <ir-autocomplete
-                danger_border={this.isButtonPressed && this.bookedByData.email === ''}
                 onComboboxValue={this.handleComboboxChange.bind(this)}
                 propertyId={this.propertyId}
                 type="email"
                 value={this.bookedByData.email}
                 required
-                placeholder={locales.entries.Lcz_EmailAddress}
+                class={'flex-fill'}
+                placeholder={locales.entries.Lcz_FindEmailAddress}
                 onInputCleared={() => this.clearEvent()}
               ></ir-autocomplete>
+              <ir-tooltip class={'ml-1'} message="Leave empty if email is unavailable"></ir-tooltip>
             </div>
           </div>
         </div>

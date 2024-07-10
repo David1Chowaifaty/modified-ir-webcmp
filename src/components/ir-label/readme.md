@@ -7,12 +7,14 @@
 
 ## Properties
 
-| Property    | Attribute    | Description | Type      | Default     |
-| ----------- | ------------ | ----------- | --------- | ----------- |
-| `iconShown` | `icon-shown` |             | `boolean` | `false`     |
-| `imageSrc`  | `image-src`  |             | `string`  | `undefined` |
-| `label`     | `label`      |             | `string`  | `undefined` |
-| `value`     | `value`      |             | `string`  | `undefined` |
+| Property     | Attribute     | Description | Type      | Default     |
+| ------------ | ------------- | ----------- | --------- | ----------- |
+| `country`    | `country`     |             | `boolean` | `false`     |
+| `iconShown`  | `icon-shown`  |             | `boolean` | `false`     |
+| `imageSrc`   | `image-src`   |             | `string`  | `undefined` |
+| `imageStyle` | `image-style` |             | `string`  | `''`        |
+| `label`      | `label`       |             | `string`  | `undefined` |
+| `value`      | `value`       |             | `string`  | `undefined` |
 
 
 ## Events

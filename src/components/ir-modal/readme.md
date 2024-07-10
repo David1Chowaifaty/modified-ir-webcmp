@@ -60,9 +60,7 @@ Type: `Promise<void>`
 
  - [igloo-calendar](../igloo-calendar)
  - [ir-channel](../ir-channel)
- - [ir-channel-manager](../old-ir-channel/ir-channel-manager)
- - [ir-general-settings](../old-ir-channel/ir-general-settings)
- - [ir-list-item](../old-ir-channel/ir-listItems)
+ - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-payment-details](../ir-booking-details/ir-payment-details)
  - [ir-room](../ir-booking-details/ir-room)
 
@@ -76,9 +74,7 @@ graph TD;
   ir-modal --> ir-button
   igloo-calendar --> ir-modal
   ir-channel --> ir-modal
-  ir-channel-manager --> ir-modal
-  ir-general-settings --> ir-modal
-  ir-list-item --> ir-modal
+  ir-hk-tasks --> ir-modal
   ir-payment-details --> ir-modal
   ir-room --> ir-modal
   style ir-modal fill:#f9f,stroke:#333,stroke-width:4px

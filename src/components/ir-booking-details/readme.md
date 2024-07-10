@@ -13,6 +13,7 @@
 | `bookingNumber`      | `booking-number`     |             | `string`  | `''`        |
 | `hasCheckIn`         | `has-check-in`       |             | `boolean` | `false`     |
 | `hasCheckOut`        | `has-check-out`      |             | `boolean` | `false`     |
+| `hasCloseButton`     | `has-close-button`   |             | `boolean` | `false`     |
 | `hasDelete`          | `has-delete`         |             | `boolean` | `false`     |
 | `hasMenu`            | `has-menu`           |             | `boolean` | `false`     |
 | `hasPrint`           | `has-print`          |             | `boolean` | `false`     |
@@ -28,9 +29,11 @@
 
 ## Events
 
-| Event   | Description | Type                                                                                                 |
-| ------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `toast` |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+| Event            | Description | Type                                                                                                 |
+| ---------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `bookingChanged` |             | `CustomEvent<Booking>`                                                                               |
+| `closeSidebar`   |             | `CustomEvent<null>`                                                                                  |
+| `toast`          |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies
@@ -38,6 +41,7 @@
 ### Used by
 
  - [igloo-calendar](../igloo-calendar)
+ - [ir-booking-listing](../ir-booking-listing)
 
 ### Depends on
 
@@ -47,12 +51,15 @@
 - [ir-button](../ir-button)
 - [ir-icon](../ir-icon)
 - [ir-label](../ir-label)
+- [ota-label](../ota-label)
+- [ir-date-view](../ir-date-view)
 - [ir-room](ir-room)
 - [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)
 - [ir-guest-info](../ir-guest-info)
 - [ir-pickup](ir-pickup)
 - [igl-book-property](../igloo-calendar/igl-book-property)
+- [ir-dialog](../ir-dialog)
 
 ### Graph
 ```mermaid
@@ -63,15 +70,18 @@ graph TD;
   ir-booking-details --> ir-button
   ir-booking-details --> ir-icon
   ir-booking-details --> ir-label
+  ir-booking-details --> ota-label
+  ir-booking-details --> ir-date-view
   ir-booking-details --> ir-room
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
-  ir-interceptor --> ir-loading-screen
+  ir-booking-details --> ir-dialog
   ir-label --> ir-icon
   ir-room --> ir-icon
+  ir-room --> ir-date-view
   ir-room --> ir-button
   ir-room --> ir-label
   ir-room --> ir-modal
@@ -84,30 +94,38 @@ graph TD;
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button
-  ir-pickup --> ir-icon
+  ir-pickup --> ir-title
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
   ir-pickup --> ir-button
+  ir-title --> ir-icon
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo
+  igl-block-dates-view --> ir-date-view
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-booking-rooms
   igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
+  igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
+  igl-date-range --> ir-date-view
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
+  igl-pagetwo --> ir-date-view
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
   igl-pagetwo --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
+  igl-property-booked-by --> ir-tooltip
+  ir-dialog --> ir-icon
   igloo-calendar --> ir-booking-details
+  ir-booking-listing --> ir-booking-details
   style ir-booking-details fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

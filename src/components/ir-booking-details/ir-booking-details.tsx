@@ -1,7 +1,7 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import moment from 'moment';
 import { _formatDate, _formatTime } from './functions';
-import { Booking, Guest, Room } from '../../models/booking.dto';
+import { Booking, Guest, IPmsLog, Room } from '../../models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '../../services/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '../../models/igl-book-property';
@@ -9,7 +9,7 @@ import { RoomService } from '../../services/room.service';
 import locales, { ILocale } from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
-import { renderTime } from '@/utils/utils';
+import { ICountry } from '@/models/IBooking';
 
 @Component({
   tag: 'ir-booking-details',
@@ -37,6 +37,7 @@ export class IrBookingDetails {
   @Prop() hasRoomAdd: boolean = false;
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
+  @Prop() hasCloseButton = false;
 
   @State() bookingItem: TIglBookPropertyPayload | null = null;
   @State() statusData = [];
@@ -45,7 +46,7 @@ export class IrBookingDetails {
 
   @State() showPaymentDetails: any;
   @State() bookingData: Booking;
-  @State() countryNodeList: any;
+  @State() countryNodeList: ICountry[];
   @State() calendarData: any = {};
   // Guest Data
   @State() guestData: Guest = null;
@@ -55,10 +56,20 @@ export class IrBookingDetails {
   @State() sidebarState: 'guest' | 'pickup' | null = null;
   @State() isUpdateClicked = false;
 
+  @State() pms_status: IPmsLog;
+  @State() isPMSLogLoading: boolean = false;
+  @State() userCountry: ICountry | null = null;
+
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
+  @Event() bookingChanged: EventEmitter<Booking>;
+  @Event() closeSidebar: EventEmitter<null>;
+
   private bookingService = new BookingService();
   private roomService = new RoomService();
+
+  private dialogRef: HTMLIrDialogElement;
+
   componentDidLoad() {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
@@ -95,20 +106,19 @@ export class IrBookingDetails {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
-      console.log(languageTexts);
+
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
       }
       this.defaultTexts = languageTexts;
-      console.log(this.defaultTexts);
       this.countryNodeList = countriesList;
-
+      if (bookingDetails.guest?.country_id) {
+        this.userCountry = this.countryNodeList.find(country => country.id === bookingDetails.guest.country_id) || null;
+      }
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
-      console.log(this.calendarData);
       this.setRoomsData(roomResponse);
-      // console.log(this.calendarData);
       const paymentCodesToShow = ['001', '004'];
       this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
 
@@ -126,6 +136,9 @@ export class IrBookingDetails {
     switch (target.id) {
       case 'pickup':
         this.sidebarState = 'pickup';
+        return;
+      case 'close':
+        this.closeSidebar.emit(null);
         return;
       case 'print':
         window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
@@ -188,13 +201,6 @@ export class IrBookingDetails {
     sidebar.open = true;
   }
 
-  _calculateNights(fromDate: string, toDate: string) {
-    // calculate the difference between the two dates
-    const diff = moment(toDate).diff(moment(fromDate), 'days');
-    // return the difference
-    return diff;
-  }
-
   async updateStatus() {
     if (this.tempStatus !== '' && this.tempStatus !== null) {
       try {
@@ -224,6 +230,21 @@ export class IrBookingDetails {
       });
     }
   }
+  async openPMSLogsDialog() {
+    try {
+      this.dialogRef?.openModal();
+      if (!this.pms_status) {
+        this.isPMSLogLoading = true;
+        this.pms_status = await this.bookingService.fetchPMSLogs(this.bookingData.booking_nbr);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      if (this.isPMSLogLoading) {
+        this.isPMSLogLoading = false;
+      }
+    }
+  }
   @Listen('editInitiated')
   handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
     this.bookingItem = e.detail;
@@ -238,6 +259,7 @@ export class IrBookingDetails {
     try {
       const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       this.bookingData = { ...booking };
+      this.bookingChanged.emit(this.bookingData);
     } catch (error) {
       console.log(error);
     }
@@ -248,11 +270,29 @@ export class IrBookingDetails {
     e.stopImmediatePropagation();
     await this.resetBookingData();
   }
+  renderPhoneNumber() {
+    const { mobile, country_phone_prefix, country_id } = this.bookingData.guest;
+    if (!mobile) {
+      return null;
+    }
+    if (this.bookingData.is_direct) {
+      if (country_phone_prefix) {
+        return country_phone_prefix + ' ' + mobile;
+      }
+      if (country_id) {
+        const selectedCountry = this.countryNodeList.find(c => c.id === country_id);
+        if (!selectedCountry) {
+          throw new Error('Invalid country id');
+        }
+        return selectedCountry.phone_prefix + ' ' + mobile;
+      }
+    }
+    return mobile;
+  }
   render() {
     if (!this.bookingData) {
       return null;
     }
-
     let confirmationBG: string = '';
     switch (this.bookingData.status.code) {
       case '001':
@@ -290,24 +330,24 @@ export class IrBookingDetails {
               )}
               <span class="date-margin">{_formatDate(this.bookingData.booked_on.date)}</span>
 
-              {_formatTime(this.bookingData.booked_on.hour.toString(), +' ' + this.bookingData.booked_on.minute.toString())}
+              {_formatTime(this.bookingData.booked_on.hour.toString(), this.bookingData.booked_on.minute.toString())}
             </p>
           </div>
 
           <div class="d-flex justify-content-end align-items-center">
             <span class={`confirmed btn-sm m-0 mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
-            {this.bookingData.allowed_actions.length > 0 && (
+            {this.bookingData.allowed_actions.length > 0 && this.bookingData.is_editable && (
               <Fragment>
                 <ir-select
                   selectContainerStyle="h-28"
-                  selectStyles="d-flex align-items-center h-28"
+                  selectStyles="d-flex status-select align-items-center h-28"
                   firstOption={locales.entries.Lcz_Select}
                   id="update-status"
                   size="sm"
                   label-available="false"
                   data={this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code }))}
                   textSize="sm"
-                  class="sm-padding-right m-0"
+                  class="sm-padding-right m-0 "
                 ></ir-select>
                 <ir-button
                   onClickHanlder={this.updateStatus.bind(this)}
@@ -319,6 +359,11 @@ export class IrBookingDetails {
                   text="Update"
                 ></ir-button>
               </Fragment>
+            )}
+            {calendar_data.is_pms_enabled && (
+              <button type="button" class="btn btn-outline btn-sm ml-1" onClick={this.openPMSLogsDialog.bind(this)}>
+                {locales.entries.Lcz_pms}
+              </button>
             )}
             {this.hasReceipt && (
               <ir-icon id="receipt" class="mx-1">
@@ -351,6 +396,17 @@ export class IrBookingDetails {
                 </svg>
               </ir-icon>
             )}
+            {this.hasCloseButton && (
+              <ir-icon id="close" class="m-0 ml-2 pointer " onIconClickHandler={() => this.closeSidebar.emit(null)}>
+                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={24} width={24}>
+                  <path
+                    fill="#104064"
+                    class="currentColor"
+                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                  />
+                </svg>
+              </ir-icon>
+            )}
           </div>
         </div>
       </div>,
@@ -360,32 +416,54 @@ export class IrBookingDetails {
             <div class="card">
               <div class="p-1">
                 {this.bookingData.property.name || ''}
-                <ir-label label={`${this.defaultTexts.entries.Lcz_Source}:`} value={this.bookingData.origin.Label} imageSrc={this.bookingData.origin.Icon}></ir-label>
+                <ir-label
+                  label={`${this.defaultTexts.entries.Lcz_Source}:`}
+                  value={this.bookingData.origin.Label}
+                  image={{ src: this.bookingData.origin.Icon, alt: this.bookingData.origin.Label }}
+                ></ir-label>
                 <ir-label
                   label={`${this.defaultTexts.entries.Lcz_BookedBy}:`}
                   value={`${this.bookingData.guest.first_name} ${this.bookingData.guest.last_name}`}
                   iconShown={true}
                 ></ir-label>
-                <ir-label label={`${this.defaultTexts.entries.Lcz_Phone}:`} value={this.bookingData.guest.mobile}></ir-label>
+                {this.bookingData.guest.mobile && <ir-label label={`${this.defaultTexts.entries.Lcz_Phone}:`} value={this.renderPhoneNumber()}></ir-label>}
                 <ir-label label={`${this.defaultTexts.entries.Lcz_Email}:`} value={this.bookingData.guest.email}></ir-label>
                 {this.bookingData.guest.alternative_email && (
                   <ir-label label={`${this.defaultTexts.entries.Lcz_AlternativeEmail}:`} value={this.bookingData.guest.alternative_email}></ir-label>
                 )}
-                <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>
+                {this.bookingData?.guest?.address && <ir-label label={`${this.defaultTexts.entries.Lcz_Address}:`} value={this.bookingData.guest.address}></ir-label>}
+                {this.userCountry && (
+                  <ir-label
+                    label={`${this.defaultTexts.entries.Lcz_Country}:`}
+                    value={this.userCountry.name}
+                    country
+                    image={{ src: this.userCountry.flag, alt: this.userCountry.name }}
+                  ></ir-label>
+                )}
                 {this.bookingData.is_direct && <ir-label label={`${this.defaultTexts.entries.Lcz_ArrivalTime}:`} value={this.bookingData.arrival.description}></ir-label>}
-                <ir-label label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
+                {this.bookingData.promo_key && <ir-label label={`${this.defaultTexts.entries.Lcz_Coupon}:`} value={this.bookingData.promo_key}></ir-label>}
+                {this.bookingData.agent && <ir-label label={`${this.defaultTexts.entries.Lcz_AgentCode?.split(':')[0]}:`} value={this.bookingData.agent.name}></ir-label>}
+                {this.bookingData.is_in_loyalty_mode && !this.bookingData.promo_key && (
+                  <div class="d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height={18} width={18}>
+                      <path
+                        fill="#fc6c85"
+                        d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"
+                      />
+                    </svg>
+                    <p class="m-0 p-0 ml-1">{this.defaultTexts.entries.Lcz_LoyaltyDiscountApplied}</p>
+                  </div>
+                )}
+                {this.bookingData.is_direct ? (
+                  <ir-label label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
+                ) : (
+                  <ota-label label={`${this.defaultTexts.entries.Lcz_Note}:`} remarks={this.bookingData.ota_notes} maxVisibleItems={this.bookingData.ota_notes?.length}></ota-label>
+                )}
               </div>
             </div>
-            <p class="font-size-large d-flex justify-content-between align-items-center mb-1">
-              {`${_formatDate(this.bookingData.from_date)} - ${_formatDate(this.bookingData.to_date)} (${this._calculateNights(
-                this.bookingData.from_date,
-                this.bookingData.to_date,
-              )} ${
-                this._calculateNights(this.bookingData.from_date, this.bookingData.to_date) > 1
-                  ? ` ${this.defaultTexts.entries.Lcz_Nights}`
-                  : ` ${this.defaultTexts.entries.Lcz_Night}`
-              })`}
-              {this.hasRoomAdd && this.bookingData.is_direct && (
+            <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
+              <ir-date-view from_date={this.bookingData.from_date} to_date={this.bookingData.to_date}></ir-date-view>
+              {this.hasRoomAdd && this.bookingData.is_direct && this.bookingData.is_editable && (
                 <ir-icon id="room-add">
                   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
                     <path
@@ -395,7 +473,7 @@ export class IrBookingDetails {
                   </svg>
                 </ir-icon>
               )}
-            </p>
+            </div>
             <div class="card p-0 mx-0">
               {this.bookingData.rooms.map((room: Room, index: number) => {
                 const mealCodeName = room.rateplan.name;
@@ -403,6 +481,7 @@ export class IrBookingDetails {
 
                 return [
                   <ir-room
+                    isEditable={this.bookingData.is_editable}
                     defaultTexts={this.defaultTexts}
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
@@ -423,7 +502,7 @@ export class IrBookingDetails {
                 ];
               })}
             </div>
-            {calendar_data.pickup_service.is_enabled && this.bookingData.is_direct && (
+            {calendar_data.pickup_service.is_enabled && this.bookingData.is_direct && this.bookingData.is_editable && (
               <div class="mb-1">
                 <div class={'d-flex w-100 mb-1 align-items-center justify-content-between'}>
                   <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>
@@ -441,12 +520,14 @@ export class IrBookingDetails {
                     <div class={'p-1'}>
                       <div class={'d-flex align-items-center py-0 my-0 pickup-margin'}>
                         <p class={'font-weight-bold mr-1 py-0 my-0'}>
-                          {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('ddd, DD MM YYYY')}</span>
+                          {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</span>
                         </p>
-                        <p class={'font-weight-bold flex-fill py-0 my-0'}>
-                          {locales.entries.Lcz_Time}:
-                          <span class={'font-weight-normal'}> {`${renderTime(this.bookingData.pickup_info.hour)}:${renderTime(this.bookingData.pickup_info.minute)}`}</span>
-                        </p>
+                        {this.bookingData.pickup_info.hour && this.bookingData.pickup_info.minute && (
+                          <p class={'font-weight-bold flex-fill py-0 my-0'}>
+                            {locales.entries.Lcz_Time}:
+                            <span class={'font-weight-normal'}> {_formatTime(this.bookingData.pickup_info.hour.toString(), this.bookingData.pickup_info.minute.toString())}</span>
+                          </p>
+                        )}
                         <p class={'font-weight-bold py-0 my-0'}>
                           {locales.entries.Lcz_DueUponBooking}:{' '}
                           <span class={'font-weight-normal'}>
@@ -490,6 +571,7 @@ export class IrBookingDetails {
       >
         {this.sidebarState === 'guest' && (
           <ir-guest-info
+            slot="sidebar-body"
             booking_nbr={this.bookingNumber}
             defaultTexts={this.defaultTexts}
             email={this.bookingData?.guest.email}
@@ -499,6 +581,7 @@ export class IrBookingDetails {
         )}
         {this.sidebarState === 'pickup' && (
           <ir-pickup
+            slot="sidebar-body"
             defaultPickupData={this.bookingData.pickup_info}
             bookingNumber={this.bookingData.booking_nbr}
             numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
@@ -520,6 +603,33 @@ export class IrBookingDetails {
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
         )}
+      </Fragment>,
+      <Fragment>
+        <ir-dialog ref={el => (this.dialogRef = el)}>
+          <div slot="modal-body" class="p-1">
+            <h3 class=" text-left mb-1 dialog-title ">{locales.entries.Lcz_PMS_Logs}</h3>
+            {!this.isPMSLogLoading && (
+              <Fragment>
+                <div class="d-flex align-items-center">
+                  <p class="list-title">{locales.entries.Lcz_SentAt}</p>
+                  {this.pms_status?.sent_date ? (
+                    <p class="list-item">
+                      {this.pms_status?.sent_date} {_formatTime(this.pms_status?.sent_hour.toString(), this.pms_status?.sent_minute.toString())}
+                    </p>
+                  ) : (
+                    <p class={`list-item ${this.pms_status?.sent_date ? 'green' : 'red'}`}>{this.pms_status?.is_acknowledged ? locales.entries.Lcz_YES : locales.entries.Lcz_NO}</p>
+                  )}
+                </div>
+                <div class="d-flex align-items-center">
+                  <h4 class="list-title">{locales.entries.Lcz_Acknowledged}</h4>
+                  <p class={`list-item ${this.pms_status?.is_acknowledged ? 'green' : 'red'}`}>
+                    {this.pms_status?.is_acknowledged ? locales.entries.Lcz_YES : locales.entries.Lcz_NO}
+                  </p>
+                </div>
+              </Fragment>
+            )}
+          </div>
+        </ir-dialog>
       </Fragment>,
     ];
   }

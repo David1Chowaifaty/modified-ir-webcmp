@@ -136,3 +136,8 @@ export function getDaysArray(date1: string, date2: string) {
 export function renderTime(time: number) {
   return time < 10 ? time.toString().padStart(2, '0') : time.toString();
 }
+
+export function formatAmount(currency: string, amount: number) {
+  const symbol = getCurrencySymbol(currency);
+  return symbol + amount.toFixed(2);
+}

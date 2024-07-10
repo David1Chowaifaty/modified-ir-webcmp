@@ -23,9 +23,11 @@ export class RoomService extends Token {
         calendar_data.roomsInfo = results.roomtypes;
         calendar_data.taxes = results.taxes;
         calendar_data.id = results.id;
+        calendar_data.country = results.country;
         calendar_data.name = results.name;
         calendar_data.tax_statement = results.tax_statement;
         calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
+        calendar_data.is_pms_enabled = results.is_pms_enabled;
         return data;
       }
     } catch (error) {
@@ -43,7 +45,7 @@ export class RoomService extends Token {
           throw new Error(data.ExceptionMsg);
         }
         let entries = this.transformArrayToObject(data.My_Result.entries);
-        locales.entries = entries;
+        locales.entries = { ...locales.entries, ...entries };
         locales.direction = data.My_Result.direction;
         return { entries, direction: data.My_Result.direction };
       }

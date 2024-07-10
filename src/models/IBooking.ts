@@ -1,4 +1,4 @@
-import { Booking, IFormat, Room, Origin, Arrival } from './booking.dto';
+import { Booking, IFormat, Room, Origin, Arrival, IOtaNotes } from './booking.dto';
 import { IRoomService } from './property-types';
 
 export default interface IBooking {
@@ -57,6 +57,7 @@ export interface ICountry {
   id: number;
   name: string;
   phone_prefix: string;
+  flag: string;
 }
 export interface IEntries {
   CODE_NAME: string;
@@ -265,6 +266,7 @@ export interface RoomBookingDetails {
   STATUS: STATUS;
   NAME: string;
   PHONE: string;
+  PHONE_PREFIX: string;
   ENTRY_DATE: string;
   RATE: number;
   RATE_PLAN: string;
@@ -293,6 +295,11 @@ export interface RoomBookingDetails {
   NOTES: string;
   SOURCE: ISource;
   ROOMS: Room[];
+  ota_notes: IOtaNotes[];
+  defaultDates: {
+    from_date: string;
+    to_date: string;
+  };
 }
 export interface ISource {
   code: string;
@@ -319,4 +326,8 @@ export interface RoomBlockDetails {
   OUT_OF_SERVICE: boolean;
   FROM_DATE_STR: string;
   TO_DATE_STR: string;
+  defaultDates: {
+    from_date: string;
+    to_date: string;
+  };
 }

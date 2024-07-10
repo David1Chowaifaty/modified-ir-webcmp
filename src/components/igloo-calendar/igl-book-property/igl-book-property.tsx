@@ -9,6 +9,7 @@ import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOp
 import { EventsService } from '../../../services/events.service';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import { IToast } from '@/components/ir-toast/toast';
 
 @Component({
   tag: 'igl-book-property',
@@ -40,6 +41,10 @@ export class IglBookProperty {
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
   @Event() resetBookingData: EventEmitter<null>;
 
+  @Event({ bubbles: true, composed: true }) animateIrButton: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true }) animateIrSelect: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
+
   private initialRoomIds: { roomName: string; ratePlanId: number; roomId: string; roomTypeId: string } | null = null;
   private sourceOption: TSourceOption;
   private page: string;
@@ -63,6 +68,7 @@ export class IglBookProperty {
   }
   componentDidLoad() {
     document.addEventListener('keydown', this.handleKeyDown);
+    console.log(this.allowedBookingSources);
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
@@ -186,14 +192,14 @@ export class IglBookProperty {
       isValidProperty(this.bookedByInfoData, 'firstName', '') ||
       isValidProperty(this.bookedByInfoData, 'lastName', '') ||
       // isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
-      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '') ||
-      isValidProperty(this.bookedByInfoData, 'email', '')
+      isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '')
+      // || isValidProperty(this.bookedByInfoData, 'email', '')
     );
   }
 
   setSourceOptions(bookingSource: any[]) {
     this.sourceOptions = bookingSource.map(source => ({
-      id: source.code,
+      id: source.id,
       value: source.description,
       tag: source.tag,
       type: source.type,
@@ -205,6 +211,8 @@ export class IglBookProperty {
         code: bookingSource[0].code,
         description: bookingSource[0].description,
         tag: bookingSource[0].tag,
+        type: bookingSource[0].type,
+        id: bookingSource[0].id,
       };
     }
   }
@@ -223,9 +231,21 @@ export class IglBookProperty {
   }
 
   async initializeBookingAvailability(from_date: string, to_date: string) {
+    console.log(this.sourceOption);
+    const is_in_agent_mode = this.sourceOption['type'] === 'TRAVEL_AGENCY';
     try {
       const room_type_ids = this.defaultData.roomsInfo.map(room => room.id);
-      const data = await this.bookingService.getBookingAvailability(from_date, to_date, this.propertyid, this.adultChildCount, this.language, room_type_ids, this.currency);
+      const data = await this.bookingService.getBookingAvailability({
+        from_date,
+        to_date,
+        propertyid: this.propertyid,
+        adultChildCount: this.adultChildCount,
+        language: this.language,
+        room_type_ids,
+        currency: this.currency,
+        agent_id: is_in_agent_mode ? this.sourceOption['tag'] : null,
+        is_in_agent_mode,
+      });
       if (!this.isEventType('EDIT_BOOKING')) {
         this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
         this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
@@ -304,6 +324,8 @@ export class IglBookProperty {
       code: value,
       description: selectedSource.value || '',
       tag: selectedSource.tag,
+      id: selectedSource.id,
+      type: selectedSource.type,
     };
   }
   renderPage() {
@@ -378,9 +400,28 @@ export class IglBookProperty {
       case 'next':
         event.stopImmediatePropagation();
         event.stopPropagation();
-        this.gotoPage('page_two');
+        if (!this.adultChildCount?.adult) {
+          this.animateIrSelect.emit('adult_child_select');
+          break;
+        }
+        if (this.selectedUnits.size > 0) {
+          this.gotoPage('page_two');
+          break;
+        } else {
+          if (this.defaultData?.roomsInfo.length === 0) {
+            this.animateIrButton.emit('check_availability');
+            break;
+          }
+        }
+        this.toast.emit({
+          type: 'error',
+          description: locales.entries.Lcz_SelectRatePlan,
+          title: locales.entries.Lcz_SelectRatePlan,
+        });
+        break;
       case 'check':
         this.initializeBookingAvailability(dateToFormattedString(new Date(this.dateRangeData.fromDate)), dateToFormattedString(new Date(this.dateRangeData.toDate)));
+        break;
       default:
         break;
     }
@@ -412,6 +453,7 @@ export class IglBookProperty {
 
   async bookUser(check_in: boolean) {
     this.setLoadingState(check_in);
+    console.log('edit save clicked');
     if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
       if (this.isGuestDataIncomplete()) {
         this.isLoading = '';
@@ -424,6 +466,7 @@ export class IglBookProperty {
       }
     }
     try {
+      console.log('clicked');
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);
       }
@@ -476,7 +519,7 @@ export class IglBookProperty {
     return (
       <Host>
         <div class="background-overlay" onClick={() => this.closeWindow()}></div>
-        <div class={'sideWindow ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '')}>
+        <div class={'sideWindow pb-5 pb-md-0 ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '')}>
           <div class="card position-sticky mb-0 shadow-none p-0 ">
             <div class="d-flex mt-2 align-items-center justify-content-between  ">
               <h3 class="card-title text-left pb-1 font-medium-2 px-2 px-md-3">

@@ -36,17 +36,26 @@ export class ChannelService extends Token {
       throw new Error(error);
     }
   }
-  public async saveConnectedChannel(is_remove: boolean) {
+  public async saveConnectedChannel(id: number = null, is_remove: boolean) {
     try {
-      const body = {
-        id: channels_data.channel_id,
-        title: channels_data.channel_settings.hotel_title,
-        is_active: channels_data.is_active,
-        channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
-        property: { id: calendar_data.id, name: calendar_data.name },
-        map: channels_data.mappedChannels,
-        is_remove,
-      };
+      let body: any = {};
+      if (is_remove) {
+        body = {
+          id,
+          is_remove,
+        };
+      } else {
+        body = {
+          id: channels_data.channel_id,
+          title: channels_data.channel_settings.hotel_title,
+          is_active: channels_data.is_active,
+          channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
+          property: { id: calendar_data.id, name: calendar_data.name },
+          map: channels_data.mappedChannels,
+          is_remove,
+        };
+      }
+
       const token = this.getToken();
       if (!token) {
         throw new Error('Invalid Token');

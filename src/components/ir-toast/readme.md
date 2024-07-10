@@ -19,6 +19,10 @@
  - [igl-book-property-container](../igl-book-property-container)
  - [igloo-calendar](../igloo-calendar)
  - [ir-booking-details](../ir-booking-details)
+ - [ir-booking-listing](../ir-booking-listing)
+ - [ir-channel](../ir-channel)
+ - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
+ - [ir-housekeeping](../ir-housekeeping)
 
 ### Graph
 ```mermaid
@@ -26,6 +30,10 @@ graph TD;
   igl-book-property-container --> ir-toast
   igloo-calendar --> ir-toast
   ir-booking-details --> ir-toast
+  ir-booking-listing --> ir-toast
+  ir-channel --> ir-toast
+  ir-hk-tasks --> ir-toast
+  ir-housekeeping --> ir-toast
   style ir-toast fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

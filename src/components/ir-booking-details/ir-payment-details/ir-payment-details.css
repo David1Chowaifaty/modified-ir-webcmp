@@ -22,3 +22,9 @@
 .designation {
   width: 120px;
 }
+.total-cost-container {
+  background: #7cbebe;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 5px;
+}

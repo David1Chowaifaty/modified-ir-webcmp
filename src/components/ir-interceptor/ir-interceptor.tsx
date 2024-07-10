@@ -12,8 +12,9 @@ export class IrInterceptor {
   @State() isShown = false;
   @State() isLoading = false;
   @State() isUnassignedUnit = false;
+  @State() endpointsCount = 0;
 
-  @Prop({ reflect: true }) handledEndpoints = ['/ReAllocate_Exposed_Room', '/Do_Payment'];
+  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -36,7 +37,16 @@ export class IrInterceptor {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
     if (this.isHandledEndpoint(extractedUrl)) {
-      this.isLoading = true;
+      if (extractedUrl === '/Do_Payment') {
+        this.isLoading = true;
+      } else {
+        if (this.endpointsCount > 0) {
+          this.isLoading = true;
+        }
+      }
+    }
+    if (extractedUrl === '/Get_Exposed_Calendar') {
+      this.endpointsCount = this.endpointsCount + 1;
     }
     return config;
   }
@@ -68,8 +78,8 @@ export class IrInterceptor {
       <Host>
         {this.isLoading && (
           <div class="loadingScreenContainer">
-            <div class="loadingContainer">
-              <ir-loading-screen></ir-loading-screen>
+            <div class="loaderContainer">
+              <span class="loader"></span>
             </div>
           </div>
         )}

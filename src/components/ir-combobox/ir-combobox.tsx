@@ -1,6 +1,7 @@
 import { IToast } from '@/components';
 import locales from '@/stores/locales.store';
-import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch } from '@stencil/core';
+import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch, Fragment } from '@stencil/core';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-combobox',
@@ -8,20 +9,21 @@ import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch 
   scoped: true,
 })
 export class IrCombobox {
-  @Prop({ mutable: true }) data: { id: string; name: string }[] = [];
+  @Prop({ mutable: true }) data: { id: string; name: string; image?: string; occupancy?: number }[] = [];
   @Prop() duration: number = 300;
   @Prop() placeholder: string;
   @Prop() value: string;
   @Prop() disabled: boolean = false;
   @Prop() autoFocus: boolean = false;
-  @Prop() input_id: string = '';
+  @Prop() input_id: string = v4();
 
   @State() selectedIndex: number = -1;
+  @State() actualIndex: number = -1;
   @State() isComboBoxVisible: boolean = false;
   @State() isLoading: boolean = true;
   @State() isItemSelected: boolean;
   @State() inputValue: string = '';
-  @State() filteredData: { id: string; name: string }[] = [];
+  @State() filteredData: { id: string; name: string; occupancy?: number }[] = [];
 
   @Element() el: HTMLElement;
   @Event({ bubbles: true, composed: true }) comboboxValueChange: EventEmitter<{ key: string; data: unknown }>;
@@ -47,19 +49,18 @@ export class IrCombobox {
     }
   }
   handleKeyDown(event: KeyboardEvent) {
-    const dataSize = this.data.length;
-    const itemHeight = this.getHeightOfPElement();
+    const dataSize = this.filteredData.length;
     if (dataSize > 0) {
       switch (event.key) {
         case 'ArrowUp':
           event.preventDefault();
           this.selectedIndex = (this.selectedIndex - 1 + dataSize) % dataSize;
-          this.adjustScrollPosition(itemHeight);
+          this.adjustScrollPosition();
           break;
         case 'ArrowDown':
           event.preventDefault();
           this.selectedIndex = (this.selectedIndex + 1) % dataSize;
-          this.adjustScrollPosition(itemHeight);
+          this.adjustScrollPosition();
           break;
         // case 'Enter':
         // case ' ':
@@ -74,32 +75,19 @@ export class IrCombobox {
       }
     }
   }
-  getHeightOfPElement() {
-    const combobox = this.el.querySelector('.combobox');
-    if (combobox) {
-      const pItem = combobox.querySelector('p');
-      return pItem ? pItem.offsetHeight : 0;
-    }
-    return 0;
-  }
+
   focusInput() {
     requestAnimationFrame(() => {
       this.inputRef?.focus();
     });
   }
-  adjustScrollPosition(itemHeight, visibleHeight = 250) {
-    const combobox = this.el.querySelector('.combobox');
-    if (combobox) {
-      const margin = 2;
-      const itemTotalHeight = itemHeight + margin;
-      const selectedPosition = itemTotalHeight * this.selectedIndex;
-      let newScrollTop = selectedPosition - visibleHeight / 2 + itemHeight / 2;
-      newScrollTop = Math.max(0, Math.min(newScrollTop, combobox.scrollHeight - visibleHeight));
-      combobox.scrollTo({
-        top: newScrollTop,
-        behavior: 'auto',
-      });
-    }
+
+  adjustScrollPosition() {
+    const selectedItem = this.el?.querySelector(`[data-selected]`);
+    if (!selectedItem) return;
+    selectedItem.scrollIntoView({
+      block: 'center',
+    });
   }
 
   selectItem(index) {
@@ -139,6 +127,7 @@ export class IrCombobox {
     try {
       this.isLoading = true;
       this.filteredData = this.data.filter(d => d.name.toLowerCase().startsWith(this.inputValue));
+      this.selectedIndex = -1;
     } catch (error) {
       console.log('error', error);
     } finally {
@@ -200,9 +189,10 @@ export class IrCombobox {
       return null;
     }
     return (
-      <ul>
+      <ul data-position={this.filteredData.length > 0 && this.filteredData[0].occupancy ? 'bottom-right' : 'bottom-left'}>
         {this.filteredData?.map((d, index) => (
           <li
+            onMouseEnter={() => (this.selectedIndex = index)}
             role="button"
             key={d.id}
             onKeyDown={e => this.handleItemKeyDown(e, index)}
@@ -210,7 +200,18 @@ export class IrCombobox {
             tabIndex={0}
             onClick={() => this.selectItem(index)}
           >
-            {d.name}
+            <p>{d.name}</p>
+            {d.occupancy && (
+              <Fragment>
+                <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
+                  <path
+                    fill={'currentColor'}
+                    d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
+                  />
+                </svg>
+                <p>{d.occupancy}</p>
+              </Fragment>
+            )}
           </li>
         ))}
 
@@ -231,19 +232,20 @@ export class IrCombobox {
     return (
       <form onSubmit={this.handleSubmit.bind(this)} class="m-0 p-0">
         <input
+          type="text"
+          class="form-control bg-white"
           id={this.input_id}
           ref={el => (this.inputRef = el)}
-          type="text"
           disabled={this.disabled}
           value={this.value}
           placeholder={this.placeholder}
-          class="form-control bg-white"
           onKeyDown={this.handleKeyDown.bind(this)}
           onBlur={this.handleBlur.bind(this)}
           onInput={this.handleInputChange.bind(this)}
           onFocus={this.handleFocus.bind(this)}
           autoFocus={this.autoFocus}
         />
+
         {this.renderDropdown()}
       </form>
     );

@@ -4,7 +4,7 @@ import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthTyp
 
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
-import { Booking, Day, Guest } from '../models/booking.dto';
+import { Booking, Day, Guest, IPmsLog } from '../models/booking.dto';
 import { Token } from '@/models/Token';
 
 export class BookingService extends Token {
@@ -73,6 +73,21 @@ export class BookingService extends Token {
       throw new Error(error);
     }
   }
+  public async fetchPMSLogs(booking_nbr: string | number): Promise<IPmsLog> {
+    try {
+      const token = this.getToken();
+      if (token !== null) {
+        const { data } = await axios.post(`/Get_Exposed_PMS_Logs?Ticket=${token}`, { booking_nbr });
+        if (data.ExceptionMsg !== '') {
+          throw new Error(data.ExceptionMsg);
+        }
+        return data.My_Result;
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
   public async editExposedGuest(guest: Guest, book_nbr: string): Promise<any> {
     try {
       const token = this.getToken();
@@ -88,27 +103,27 @@ export class BookingService extends Token {
       throw new Error(error);
     }
   }
-  public async getBookingAvailability(
-    from_date: string,
-    to_date: string,
-    propertyid: number,
-    adultChildCount: { adult: number; child: number },
-    language: string,
-    room_type_ids: number[],
-    currency: { id: number; code: string },
-  ): Promise<BookingDetails> {
+  public async getBookingAvailability(props: {
+    from_date: string;
+    to_date: string;
+    propertyid: number;
+    adultChildCount: { adult: number; child: number };
+    language: string;
+    room_type_ids: number[];
+    currency: { id: number; code: string };
+    is_in_agent_mode?: boolean;
+    agent_id?: string | number;
+  }): Promise<BookingDetails> {
     try {
       const token = this.getToken();
       if (token) {
+        const { adultChildCount, currency, ...rest } = props;
         const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
-          propertyid,
-          from_date,
-          to_date,
+          ...rest,
           adult_nbr: adultChildCount.adult,
           child_nbr: adultChildCount.child,
-          language,
           currency_ref: currency.code,
-          room_type_ids,
+          is_backend: true,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -260,6 +275,7 @@ export class BookingService extends Token {
       days.push({
         date: startDate.toISOString().split('T')[0],
         amount: amount,
+        cost: null,
       });
       startDate.setDate(startDate.getDate() + 1);
     }
@@ -350,19 +366,19 @@ export class BookingService extends Token {
     pr_id?: number,
     identifier?: string,
   ) {
-    console.log(arrivalTime);
     try {
       const token = this.getToken();
       if (token) {
         const fromDateStr = dateToFormattedString(fromDate);
         const toDateStr = dateToFormattedString(toDate);
         let guest: any = {
-          email: bookedByInfoData.email || null,
+          email: bookedByInfoData.email === '' ? null : bookedByInfoData.email || null,
           first_name: bookedByInfoData.firstName,
           last_name: bookedByInfoData.lastName,
           country_id: bookedByInfoData.countryId === '' ? null : bookedByInfoData.countryId,
           city: null,
           mobile: bookedByInfoData.contactNumber === null ? '' : bookedByInfoData.contactNumber,
+          phone_prefix: null,
           address: '',
           dob: null,
           subscribe_to_news_letter: bookedByInfoData.emailGuest || false,
@@ -375,6 +391,9 @@ export class BookingService extends Token {
               }
             : null,
         };
+        if (defaultGuest) {
+          guest = { ...defaultGuest, email: defaultGuest.email === '' ? null : defaultGuest.email };
+        }
         if (bookedByInfoData.id) {
           guest = { ...guest, id: bookedByInfoData.id };
         }
@@ -383,6 +402,8 @@ export class BookingService extends Token {
           check_in,
           is_pms: true,
           is_direct: true,
+          is_in_loyalty_mode: false,
+          promo_key: null,
           booking: {
             booking_nbr: bookingNumber || '',
             from_date: fromDateStr,
@@ -393,12 +414,9 @@ export class BookingService extends Token {
             },
             source,
             currency,
-            arrival: arrivalTime
-              ? { code: arrivalTime }
-              : {
-                  ...bookedByInfoData.selectedArrivalTime,
-                },
-            guest: defaultGuest || guest,
+            arrival: { code: arrivalTime ? arrivalTime : bookedByInfoData.selectedArrivalTime },
+
+            guest,
             rooms: [
               ...guestData.map(data => ({
                 identifier: identifier || null,

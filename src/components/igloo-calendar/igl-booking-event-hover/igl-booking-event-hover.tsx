@@ -1,9 +1,11 @@
 import { Component, Host, h, Prop, Event, EventEmitter, State, Element, Fragment } from '@stencil/core';
-import { findCountry, formatDate, getCurrencySymbol } from '../../../utils/utils';
+import { findCountry } from '../../../utils/utils';
 import { ICountry } from '../../../models/IBooking';
 import { EventsService } from '../../../services/events.service';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
+import { _formatAmount } from '@/components/ir-booking-details/functions';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -31,7 +33,8 @@ export class IglBookingEventHover {
   private hideButtons = false;
   @State() shouldHideUnassignUnit = false;
   componentWillLoad() {
-    console.log('this.bookingEvent', this.bookingEvent);
+    // console.log('this.bookingEvent', this.bookingEvent);
+    this.eventService.setToken(calendar_data.token);
     let selectedRt = this.bookingEvent.roomsInfo.find(r => r.id === this.bookingEvent.RATE_TYPE);
     if (selectedRt) {
       console.log(selectedRt.physicalrooms.length === 1);
@@ -78,6 +81,10 @@ export class IglBookingEventHover {
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).name;
   }
   getPhoneCode() {
+    console.log(this.bookingEvent);
+    if (this.bookingEvent.PHONE_PREFIX) {
+      return this.bookingEvent.PHONE_PREFIX;
+    }
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).phone_prefix;
   }
   renderPhone() {
@@ -316,25 +323,48 @@ export class IglBookingEventHover {
       currentInfoBubbleId: this.getBookingId(),
     });
   }
+  renderNote() {
+    const { is_direct, ota_notes } = this.bookingEvent;
+    const guestNote = this.getGuestNote();
+    const noteLabel = locales.entries.Lcz_Note + ':';
+
+    if (!is_direct && ota_notes) {
+      return (
+        <div class="row p-0 m-0">
+          <div class="col-12 px-0 text-wrap d-flex">
+            <ota-label label={noteLabel} remarks={ota_notes}></ota-label>
+          </div>
+        </div>
+      );
+    } else if (is_direct && guestNote) {
+      return (
+        <div class="row p-0 m-0">
+          <div class="col-12 px-0 text-wrap d-flex">
+            <Fragment>
+              <span class="font-weight-bold">{noteLabel} </span>
+              {guestNote}
+            </Fragment>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
 
   getInfoElement() {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class="row p-0 m-0 pb-1">
           <div class="px-0 col-8 font-weight-bold font-medium-1 d-flex align-items-center">
-            <img src={this.bookingEvent?.origin?.Icon} alt="icon" class={'icon-image'} />
+            <img src={this.bookingEvent?.origin?.Icon} alt={this.bookingEvent?.origin?.Label} class={'icon-image'} />
             <p class={'p-0 m-0'}>{!this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER}</p>
           </div>
-          <div class="pr-0 col-4 text-right">
-            {getCurrencySymbol(this.currency.code)}
-            {this.getTotalPrice()}
-          </div>
+          <div class="pr-0 col-4 text-right">{_formatAmount(this.getTotalPrice(), this.currency.code)}</div>
         </div>
         <div class="row p-0 m-0">
           <div class="px-0 pr-0 col-12">
-            <span class="font-weight-bold">{locales.entries.Lcz_In}: </span>
-            {formatDate(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')} - <span class="font-weight-bold">{locales.entries.Lcz_Out}: </span>
-            {formatDate(this.bookingEvent.TO_DATE, 'YYYY-MM-DD')}
+            <ir-date-view from_date={this.bookingEvent.defaultDates.from_date} to_date={this.bookingEvent.defaultDates.to_date} showDateDifference={false}></ir-date-view>
+            {/* <span class="font-weight-bold">{locales.entries.Lcz_In}: </span> */}
           </div>
         </div>
         {this.getArrivalTime() && (
@@ -369,19 +399,18 @@ export class IglBookingEventHover {
             </div>
           </div>
         )}
-        {this.getGuestNote() ? (
-          <div class="row p-0 m-0">
-            <div class="col-12 px-0 text-wrap d-flex">
-              <sapn class="font-weight-bold">{locales.entries.Lcz_Note}: </sapn>
-              {this.getGuestNote()}
-            </div>
-          </div>
-        ) : null}
+        {this.renderNote()}
         {this.getInternalNote() ? (
           <div class="row p-0 m-0">
             <div class="col-12 px-0 text-wrap">
-              <span class="font-weight-bold">{locales.entries.Lcz_InternalRemark}: </span>
-              {this.getInternalNote()}
+              {this.bookingEvent.is_direct ? (
+                <Fragment>
+                  <span class="font-weight-bold">{locales.entries.Lcz_InternalRemark}: </span>
+                  {this.getInternalNote()}
+                </Fragment>
+              ) : (
+                <ota-label label={`${locales.entries.Lcz_InternalRemark}:`} remarks={this.bookingEvent.ota_notes}></ota-label>
+              )}
             </div>
           </div>
         ) : null}
@@ -394,7 +423,7 @@ export class IglBookingEventHover {
               onClick={_ => {
                 this.handleEditBooking();
               }}
-              disabled={!this.bookingEvent.IS_EDITABLE}
+              // disabled={!this.bookingEvent.IS_EDITABLE}
             >
               {/* <i class="ft ft-edit font-small-3"></i> */}
               <svg class="p-0 m-0" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" height="12" width="12" viewBox="0 0 512 512">
@@ -408,7 +437,7 @@ export class IglBookingEventHover {
                 {locales.entries.Lcz_Edit}
               </span>
             </button>
-            {this.bookingEvent.IS_EDITABLE && !this.hideButtons && (
+            {this.bookingEvent.is_direct && this.bookingEvent.IS_EDITABLE && !this.hideButtons && (
               <button
                 type="button"
                 class={`btn btn-primary d-flex align-items-center justify-content-center ${!this.shouldHideUnassignUnit ? 'mr-1' : 'w-50'}`}
@@ -457,7 +486,7 @@ export class IglBookingEventHover {
                     onClick={_ => {
                       this.handleDeleteEvent();
                     }}
-                    disabled={!this.bookingEvent.IS_EDITABLE || this.is_vacation_rental}
+                    // disabled={!this.bookingEvent.IS_EDITABLE || this.is_vacation_rental}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" height="12" width="8.75" class="p-0 m-0" viewBox="0 0 384 512">
                       <path
@@ -526,8 +555,8 @@ export class IglBookingEventHover {
           entryHour={this.bookingEvent.ENTRY_HOUR}
           entryMinute={this.bookingEvent.ENTRY_MINUTE}
           defaultData={this.bookingEvent}
-          fromDate={moment(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD').format('DD MM YYYY')}
-          toDate={moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').format('DD MM YYYY')}
+          fromDate={moment(this.bookingEvent.defaultDates.from_date, 'YYYY-MM-DD').format('DD MM YYYY')}
+          toDate={moment(this.bookingEvent.defaultDates.to_date, 'YYYY-MM-DD').format('DD MM YYYY')}
           entryDate={this.getEntryDate()}
           onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>
@@ -580,7 +609,7 @@ export class IglBookingEventHover {
                 />
               </svg>
               <span>
-                &nbsp;
+                `` &nbsp;
                 {locales.entries.Lcz_Delete}
               </span>
             </button>

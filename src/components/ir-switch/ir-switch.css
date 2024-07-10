@@ -21,7 +21,7 @@
   margin: 0;
   width: var(--ir-root-width);
   height: var(--ir-root-height);
-  background-color: var(--red);
+  background-color: var(--ir-root-inactive-color, #ff4961);
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 10px;
   --webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -32,11 +32,11 @@
   opacity: 80%;
 }
 .SwitchRoot:focus-visible {
-  outline: 1px solid rgba(55, 188, 155, 0.2);
+  outline: 1px solid var(--ir-root-active-color, rgb(55, 188, 155));
   outline-offset: 1px;
 }
 .SwitchRoot[data-state='checked'] {
-  background-color: rgb(55, 188, 155);
+  background-color: var(--ir-root-active-color, rgb(55, 188, 155));
 }
 .SwitchThumb {
   padding: 0;

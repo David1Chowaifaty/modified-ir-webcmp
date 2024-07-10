@@ -58,6 +58,7 @@ export class IrModal {
       <div
         class={`backdropModal ${this.isOpen ? 'active' : ''}`}
         onClick={() => {
+          this.cancelModal.emit();
           this.closeModal();
         }}
       ></div>,

@@ -1,7 +1,7 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
 import { IPageTwoDataUpdateProps } from '../../../models/models';
 import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../models/igl-book-property';
-import { formatDate, getCurrencySymbol } from '../../../utils/utils';
+import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
 @Component({
   tag: 'igl-pagetwo',
@@ -141,12 +141,12 @@ export class IglPagetwo {
     return (
       <Host>
         <div class="d-flex flex-wrap">
-          <div class="flex-fill text-left p-0">
-            <span class="mr-1 font-weight-bold font-medium-1">
-              {formatDate(this.dateRangeData.fromDateStr)} - {formatDate(this.dateRangeData.toDateStr)}
-            </span>
-            {this.dateRangeData.dateDifference} {+this.dateRangeData.dateDifference > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`}
-          </div>
+          <ir-date-view
+            class="mr-1 flex-fill font-weight-bold font-medium-1"
+            from_date={this.dateRangeData.fromDateStr}
+            to_date={this.dateRangeData.toDateStr}
+            dateOption="DD MMM YYYY"
+          ></ir-date-view>
           {this.guestData.length > 1 && (
             <div class="mt-1 mt-md-0 text-right">
               {locales.entries.Lcz_TotalPrice} <span class="font-weight-bold font-medium-1">{getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00'}</span>

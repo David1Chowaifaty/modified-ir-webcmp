@@ -32,17 +32,22 @@ hr {
 }
 
 .actionsContainer {
+  display: flex;
+  align-items: center;
   padding: 5px !important;
-  padding-right: 0px !important;
+  width: 100%;
+  gap: 16px;
 }
-
+.room-select {
+  flex: 1;
+}
 .selectContainer {
   width: 195px;
   margin-right: 8px;
 }
 
 .buttonsContainer {
-  width: 100px;
+  box-sizing: border-box;
 }
 .btn-secondary {
   margin-right: 8px !important;

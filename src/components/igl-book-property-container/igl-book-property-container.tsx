@@ -3,7 +3,7 @@ import { BookingService } from '@/services/booking.service';
 import { RoomService } from '@/services/room.service';
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
-import { Component, Host, State, h, Prop, Watch, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, State, h, Prop, Watch, Event, EventEmitter, Fragment } from '@stencil/core';
 import axios from 'axios';
 
 @Component({
@@ -18,6 +18,7 @@ export class IglBookPropertyContainer {
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
+  @Prop() withIrToastAndInterceptor: boolean = true;
 
   @State() bookingItem: IglBookPropertyPayloadPlusBooking | null;
   @State() showPaymentDetails: any;
@@ -46,7 +47,6 @@ export class IglBookPropertyContainer {
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
       ]);
-      console.log(languageTexts);
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
@@ -110,8 +110,13 @@ export class IglBookPropertyContainer {
   render() {
     return (
       <Host>
-        <ir-toast></ir-toast>
-        <ir-interceptor></ir-interceptor>
+        {this.withIrToastAndInterceptor && (
+          <Fragment>
+            <ir-toast></ir-toast>
+            <ir-interceptor></ir-interceptor>
+          </Fragment>
+        )}
+
         <div class="book-container" onClick={this.handleTriggerClicked.bind(this)}>
           <slot name="trigger"></slot>
         </div>

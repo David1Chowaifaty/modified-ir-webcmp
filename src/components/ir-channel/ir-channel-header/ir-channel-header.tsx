@@ -49,7 +49,7 @@ export class IrChannelHeader {
   render() {
     return (
       <Host>
-        <ul>
+        <ul class="px-1">
           {this.headerTitles.map((title, index) => (
             <li
               class={`tab ${title.disabled ? 'text-light' : ''}`}

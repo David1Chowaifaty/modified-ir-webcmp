@@ -2,6 +2,7 @@ import axios from 'axios';
 import { IAvailableRoom, IRoomCategory, IUnassignedDates, InnerRecord } from '../models/tobeassigned';
 import { dateDifference, dateToFormattedString } from '../utils/utils';
 import { Token } from '@/models/Token';
+import moment from 'moment';
 
 export class ToBeAssignedService extends Token {
   public async getUnassignedDates(propertyid: number, from_date: string, to_date: string) {
@@ -25,7 +26,7 @@ export class ToBeAssignedService extends Token {
       throw new Error(error);
     }
   }
-  public async getUnassignedRooms(propertyid: number, specific_date: string, roomInfo: any, formattedLegendData: any) {
+  public async getUnassignedRooms(calendarFromDates: { from_date: string; to_date: string }, propertyid: number, specific_date: string, roomInfo: any, formattedLegendData: any) {
     try {
       const token = this.getToken();
       if (token) {
@@ -36,7 +37,7 @@ export class ToBeAssignedService extends Token {
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
-        return this.transformToAssignable(data, roomInfo, formattedLegendData);
+        return this.transformToAssignable(calendarFromDates, data, roomInfo, formattedLegendData);
       } else {
         throw new Error('Invalid Token');
       }
@@ -72,7 +73,7 @@ export class ToBeAssignedService extends Token {
     return str.replace(regex, '');
   }
 
-  private transformToAssignable(data: any, roomInfo, formattedLegendData): IRoomCategory[] {
+  private transformToAssignable(calendarFromDates: { from_date: string; to_date: string }, data: any, roomInfo, formattedLegendData): IRoomCategory[] {
     const result: IRoomCategory[] = [];
     data.My_Result.forEach((customer: any) => {
       customer.unassigned_rooms.forEach((room: any) => {
@@ -100,7 +101,7 @@ export class ToBeAssignedService extends Token {
           availableRooms: [],
           RT_ID: this.getRoomTypeId(room.room_type_name, roomInfo),
         };
-        this.updateAvailableRooms(room, roomCategory, formattedLegendData, roomInfo);
+        this.updateAvailableRooms(calendarFromDates, room, roomCategory, formattedLegendData, roomInfo);
         this.addDefaultDateRange(roomCategory);
         result.push(roomCategory);
       });
@@ -121,18 +122,24 @@ export class ToBeAssignedService extends Token {
   private getRoomTypeId(roomName: string, roomInfo: any) {
     return roomInfo.find(room => this.cleanSpacesAndSpecialChars(room.name) === this.cleanSpacesAndSpecialChars(roomName)).id || null;
   }
-  private updateAvailableRooms(room: any, roomCategory: IRoomCategory, formattedLegendData, roomsInfo): void {
+  private updateAvailableRooms(calendarFromDates: { from_date: string; to_date: string }, room: any, roomCategory: IRoomCategory, formattedLegendData, roomsInfo): void {
     const rooms: IAvailableRoom[] = [];
     room.assignable_units.forEach((unit: any) => {
       if (unit.Is_Fully_Available && !unit.Is_Not_Available) {
         const days = dateDifference(unit.from_date, unit.to_date);
+        const fromDate = moment(new Date(calendarFromDates.from_date)).isAfter(moment(new Date(unit.from_date))) ? calendarFromDates.from_date : unit.from_date;
+        const toDate =
+          moment(new Date(calendarFromDates.to_date)).isBefore(moment(new Date(unit.to_date))) &&
+          moment(new Date(calendarFromDates.to_date)).isAfter(moment(new Date(unit.from_date)))
+            ? calendarFromDates.to_date
+            : unit.to_date;
         rooms.push({
           RT_ID: roomCategory.RT_ID,
           STATUS: 'PENDING-CONFIRMATION',
-          FROM_DATE: unit.from_date,
+          FROM_DATE: fromDate,
           roomName: unit.name,
           PR_ID: unit.pr_id,
-          TO_DATE: unit.to_date,
+          TO_DATE: toDate,
           NO_OF_DAYS: days,
           ID: 'NEW_TEMP_EVENT',
           NAME: '',

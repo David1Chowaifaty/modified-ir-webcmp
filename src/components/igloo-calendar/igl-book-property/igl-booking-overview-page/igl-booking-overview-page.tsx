@@ -1,5 +1,7 @@
-import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
 import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-book-property';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
+import moment from 'moment';
 @Component({
   tag: 'igl-booking-overview-page',
   styleUrl: 'igl-booking-overview-page.css',
@@ -30,6 +32,17 @@ export class IglBookingOverviewPage {
   isEventType(event: string) {
     return event === this.eventType;
   }
+  setMinDate() {
+    if (!this.isEventType('EDIT_BOOKING')) {
+      return;
+    }
+    const from_date = moment(this.bookingData.FROM_DATE, 'YYYY-MM-DD');
+    const today = moment();
+    if (from_date.isAfter(today)) {
+      return today.add(-2, 'weeks').format('YYYY-MM-DD');
+    }
+    return from_date.add(-2, 'weeks').format('YYYY-MM-DD');
+  }
   render() {
     //console.log(this.bookingData);
     return (
@@ -38,6 +51,7 @@ export class IglBookingOverviewPage {
           bookedByInfoData={this.bookedByInfoData}
           defaultDaterange={this.defaultDaterange}
           dateRangeData={this.dateRangeData}
+          minDate={this.setMinDate()}
           // minDate={this.isEventType('ADD_ROOM') || this.isEventType('SPLIT_BOOKING') ? this.bookedByInfoData.from_date || this.bookingData.FROM_DATE : undefined}
           adultChildCount={this.adultChildCount}
           splitBookingId={this.showSplitBookingOption}
@@ -52,25 +66,33 @@ export class IglBookingOverviewPage {
         ></igl-book-property-header>
         {/* {this.adultChildCount.adult === 0 && <p class={'col text-left'}>Please select the number of guests</p>} */}
         <div class=" text-left">
-          {this.bookingData?.roomsInfo?.map(roomInfo => {
-            console.log(this.selectedRooms);
-            return (
-              <igl-booking-rooms
-                initialRoomIds={this.initialRoomIds}
-                isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
-                key={`room-info-${roomInfo.id}`}
-                currency={this.currency}
-                ratePricingMode={this.ratePricingMode}
-                dateDifference={this.dateRangeData.dateDifference}
-                bookingType={this.bookingData.event_type}
-                roomTypeData={roomInfo}
-                class="mt-2 mb-1 p-0"
-                roomInfoId={this.selectedRooms.has(`c_${roomInfo.id}`) ? roomInfo.id : null}
-                defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
-                onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
-              ></igl-booking-rooms>
-            );
-          })}
+          {isRequestPending('/Get_Exposed_Booking_Availability') && this.isEventType('EDIT_BOOKING') ? (
+            <div class="loading-container">
+              <div class="loader"></div>
+            </div>
+          ) : (
+            <Fragment>
+              {this.bookingData?.roomsInfo?.map(roomInfo => {
+                //console.log(this.selectedRooms);
+                return (
+                  <igl-booking-rooms
+                    initialRoomIds={this.initialRoomIds}
+                    isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
+                    key={`room-info-${roomInfo.id}`}
+                    currency={this.currency}
+                    ratePricingMode={this.ratePricingMode}
+                    dateDifference={this.dateRangeData.dateDifference}
+                    bookingType={this.bookingData.event_type}
+                    roomTypeData={roomInfo}
+                    class="mt-2 mb-1 p-0"
+                    roomInfoId={this.selectedRooms.has(`c_${roomInfo.id}`) ? roomInfo.id : null}
+                    defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
+                    onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
+                  ></igl-booking-rooms>
+                );
+              })}
+            </Fragment>
+          )}
         </div>
 
         <igl-book-property-footer class={'p-0 mb-1 mt-3'} eventType={this.bookingData.event_type} disabled={this.selectedRooms.size === 0}></igl-book-property-footer>

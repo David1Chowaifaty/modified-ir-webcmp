@@ -1,9 +1,12 @@
 import { createStore } from '@stencil/store';
 export interface ILocale {
-  entries: (LocalizationStrings & LocalizationChannelFrontEntries) | null;
+  entries: TLocaleEntries;
   direction: 'ltr' | 'rtl';
 }
+export type TLocaleEntries = (LocalizationStrings & LocalizationChannelFrontEntries & BookingListingCodes & HousekeepingLocalizedWords) | null;
+
 export type LocalizationStrings = {
+  Lcz_BookingCode: string;
   Lcz_Adding: string;
   Lcz_AddingRoomNightsTo: string;
   Lcz_AddingUnitToBooking: string;
@@ -21,6 +24,8 @@ export type LocalizationStrings = {
   Lcz_Assign: string;
   Lcz_Assignments: string;
   Lcz_AssignUnit: string;
+  Lcz_SelectRatePlan: string;
+  Lcz_FindEmailAddress: string;
   Lcz_Assignunits: string;
   Lcz_AssignUnitToExistingBooking: string;
   Lcz_AutomaticReleaseIn: string;
@@ -152,8 +157,116 @@ export type LocalizationStrings = {
   Lcz_Excluding: string;
   Lcz_Including: string;
   Lcz_SubTotal: string;
+  Lcz_ShowLess: string;
+  Lcz_ShowMore: string;
+  Lcz_TotalCost: string;
+  Lcz_Cost: string;
+  Lcz_pms: string;
+  Lcz_YES: string;
+  Lcz_NO: string;
+  Lcz_Acknowledged: string;
+  Lcz_SentAt: string;
+  Lcz_PMS_Logs: string;
+  Lcz_LoyaltyDiscountApplied: string;
+  Lcz_Coupon: string;
+  Lcz_ConfrmModiication: string;
+  Lcz_EnteringAmountGreaterThanDue: string;
+  Lcz_IfDeletedPermantlyLost: string;
 };
+export type BookingListingCodes = {
+  Lcz_TotalCost: string;
+  Lcz_Cost: string;
+  Lcz_BookedOn: string;
+  Lcz_Booking: string;
+  Lcz_BookingNbr: string;
+  Lcz_BookingNbrGuestname: string;
+  Lcz_Bookings: string;
+  Lcz_BookingStatus: string;
+  Lcz_Cancel: string;
+  Lcz_Channels: string;
+  Lcz_DateOf: string;
+  Lcz_From: string;
+  Lcz_GuestSource: string;
+  Lcz_InOut: string;
+  Lcz_JustDelete: string;
+  Lcz_OK: string;
+  Lcz_Or: string;
+  Lcz_CreateNewBooking: string;
+  Lcz_Price: string;
+  Lcz_Balance: string;
+  Lcz_RecoverAndDelete: string;
+  Lcz_Services: string;
+  Lcz_Status: string;
+  Lcz_SureYouWantToDeleteBookingNbr: string;
+  Lcz_Until: string;
+  Lcz_View: string;
+  Lcz_WantToRecoverAllotment: string;
+  Lcz_MarkBookingAsPaid: string;
+  Lcz_Dates: string;
+  Lcz_Confirm: string;
+  Lcz_P: string;
+  Lcz_Of: string;
+  Lcz_ExportToExcel: string;
+  Lcz_Erase: string;
+  Lcz_Search: string;
+  Lcz_PaymentStatus: string;
+  Lcz_FindBookNbrorName: string;
+  Lcz_ClickToSettle: string;
+  Lcz_BookingBalance: string;
+  Lcz_NoDataAvailable: string;
+  Lcz_All: string;
+  Lcz_AgentCode: string;
+};
+export type HousekeepingLocalizedWords = {
+  Lcz_Action: string;
+  Lcz_AsAnOption: string;
+  Lcz_Assign: string;
+  Lcz_Assigned: string;
+  Lcz_AssignmentFor: string;
+  Lcz_AssignUnitsTo: string;
+  Lcz_Cancel: string;
+  Lcz_Code: string;
+  Lcz_Confirm: string;
+  Lcz_CreateHousekeeper: string;
+  Lcz_CreateHousekeeperProfile: string;
+  Lcz_DayPrior: string;
+  Lcz_DaysPrior: string;
+  Lcz_DeleteHousekeeper: string;
+  Lcz_Edit: string;
+  Lcz_EditHousekeeper: string;
+  Lcz_EditHousekeeperProfile: string;
+  Lcz_HousekeepingTeam: string;
+  Lcz_MinimumCharacter: string;
+  Lcz_Mobile: string;
+  Lcz_Name: string;
+  Lcz_No: string;
+  Lcz_nobody: string;
+  Lcz_Note: string;
+  Lcz_Password: string;
+  Lcz_RoomOnUnitStatus: string;
+  Lcz_RoomOrUnitStatus: string;
+  Lcz_Save: string;
+  Lcz_Select: string;
+  Lcz_Status: string;
+  Lcz_TotalUnits: string;
+  Lcz_Unassigned: string;
+  Lcz_UnitsAssigned: string;
+  Lcz_Username: string;
+  Lcz_YesOnTheSameDay: string;
+  Lcz_Unit: string;
+  Lcz_Arrivaldate: string;
+  Lcz_Arrivaltime: string;
+  Lcz_Housekeeper: string;
+  Lcz_Done: string;
+  Lcz_Allhousekeepers: string;
+  Lcz_Archive: string;
+  Lcz_Yes: string;
+  Lcz_IsCleaned: string;
+  Lcz_ConfirmDeletion: string;
+};
+
 export type LocalizationChannelFrontEntries = {
+  Lcz_HousekeepingTasks: string;
   Lcz_Actions: string;
   Lcz_Cancel: string;
   Lcz_Channel: string;
@@ -184,6 +297,7 @@ export type LocalizationChannelFrontEntries = {
   Lcz_ViewLogs: string;
   Lcz_TestConnection: string;
   Lcz_NoChannelsAreConnected: string;
+  Lcz_InvalidCredentials: string;
 };
 
 const initialState: ILocale = {

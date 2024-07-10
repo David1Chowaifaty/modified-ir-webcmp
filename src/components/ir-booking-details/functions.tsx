@@ -18,4 +18,5 @@ export const _getDay = (date: string) => {
 export const _formatTime = (hour: string, minute: string) => {
   // format them as AM/PM using moment.js
   return moment(`${hour}:${minute}`, 'HH:mm').format('hh:mm A');
+  // return moment(`${hour}:${minute}`, 'HH:mm').format('HH:mm');
 };

@@ -1,6 +1,12 @@
 import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 
 export interface Booking {
+  agent: {
+    code: string;
+    id: number;
+    name: string;
+    verification_mode: null;
+  } | null;
   arrival: Arrival;
   allowed_actions: IAllowedActions[];
   system_id: number;
@@ -13,6 +19,7 @@ export interface Booking {
   origin: Origin;
   property: Property;
   remark: string;
+  ota_notes: IOtaNotes[];
   rooms: Room[];
   source: Source;
   status: Status;
@@ -24,6 +31,13 @@ export interface Booking {
   is_direct: boolean;
   financial: IFinancials;
   pickup_info: IBookingPickupInfo | null;
+  cost: number | null;
+  is_pms_enabled: boolean;
+  promo_key: string | null;
+  is_in_loyalty_mode: boolean;
+}
+export interface IOtaNotes {
+  statement: string;
 }
 export interface IBookingPickupInfo {
   currency: IPickupCurrency;
@@ -43,6 +57,9 @@ export interface IFinancials {
   due_amount: number;
   due_dates: IDueDate[];
   payments: IPayment[] | null;
+  total_amount: number;
+  gross_total: number;
+  gross_cost: number;
 }
 export interface IPayment {
   id: number | null;
@@ -89,6 +106,7 @@ export interface Guest {
   id: number;
   last_name: string | null;
   mobile: string | null;
+  country_phone_prefix: string | null;
   subscribe_to_news_letter: boolean | null;
   cci?: ICCI | null;
   alternative_email?: string;
@@ -135,6 +153,8 @@ export interface Room {
   identifier: string;
   unit: string | number | IUnit | null;
   ota_taxes: IOtaTax[];
+  cost: number | null;
+  gross_cost: number;
 }
 export interface IOtaTax {
   amount: number;
@@ -155,6 +175,7 @@ export interface IUnit {
 export interface Day {
   amount: number;
   date: string;
+  cost: number | null;
 }
 
 export interface RatePlan {
@@ -195,4 +216,12 @@ export interface Source {
 export interface Status {
   code: string;
   description: string;
+}
+
+export interface IPmsLog {
+  is_acknowledged: boolean;
+  is_sent: boolean;
+  sent_date: string;
+  sent_hour: number;
+  sent_minute: number;
 }
