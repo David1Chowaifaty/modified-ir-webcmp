@@ -169,6 +169,12 @@ export class IrBookingListing {
                     </th>
                     <th scope="col">{locales.entries?.Lcz_BookedOn}</th>
                     <th scope="col">{locales.entries?.Lcz_GuestSource}</th>
+                    <th scope="col" class="text-left services-cell">
+                      {locales.entries?.Lcz_Services}
+                    </th>
+                    <th scope="col" class="in-out">
+                      {locales.entries?.Lcz_InOut}
+                    </th>
                     <th scope="col">
                       <span class="price-span">{locales.entries?.Lcz_Price}</span>
 
@@ -186,12 +192,6 @@ export class IrBookingListing {
                         {locales.entries?.Lcz_Cost}
                       </th>
                     )}
-                    <th scope="col" class="text-left services-cell">
-                      {locales.entries?.Lcz_Services}
-                    </th>
-                    <th scope="col" class="in-out">
-                      {locales.entries?.Lcz_InOut}
-                    </th>
                     <th scope="col">{locales.entries?.Lcz_Status}</th>
                     <th scope="col">
                       <p class="sr-only">actions</p>
