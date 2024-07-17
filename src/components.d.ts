@@ -12,12 +12,12 @@ import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking } from "./models/booking.dto";
+import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption as selectOption1 } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
-import { TIcons } from "./components/ui/ir-icons/icons";
 import { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -27,12 +27,12 @@ export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking } from "./models/booking.dto";
+export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption as selectOption1 } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
-export { TIcons } from "./components/ui/ir-icons/icons";
 export { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -296,11 +296,13 @@ export namespace Components {
         "btn_styles": string;
         "btn_type": string;
         "icon": string;
+        "icon_name": TIcons;
         "isLoading": boolean;
         "name": string;
         "size": 'sm' | 'md' | 'lg';
         "text": any;
         "textSize": 'sm' | 'md' | 'lg';
+        "variant": 'default' | 'icon';
     }
     interface IrChannel {
         "baseurl": string;
@@ -2352,12 +2354,14 @@ declare namespace LocalJSX {
         "btn_styles"?: string;
         "btn_type"?: string;
         "icon"?: string;
+        "icon_name"?: TIcons;
         "isLoading"?: boolean;
         "name"?: string;
         "onClickHanlder"?: (event: IrButtonCustomEvent<any>) => void;
         "size"?: 'sm' | 'md' | 'lg';
         "text"?: any;
         "textSize"?: 'sm' | 'md' | 'lg';
+        "variant"?: 'default' | 'icon';
     }
     interface IrChannel {
         "baseurl"?: string;

@@ -1,5 +1,6 @@
 import { Component, Prop, Event, EventEmitter, h, Listen } from '@stencil/core';
 import { v4 } from 'uuid';
+import { TIcons } from '../ui/ir-icons/icons';
 
 @Component({
   tag: 'ir-button',
@@ -19,6 +20,8 @@ export class IrButton {
   @Prop() isLoading: boolean = false;
   @Prop() btn_styles: string;
   @Prop() btn_id: string = v4();
+  @Prop() variant: 'default' | 'icon' = 'default';
+  @Prop() icon_name: TIcons;
 
   @Event({ bubbles: true, composed: true }) clickHanlder: EventEmitter<any>;
 
@@ -35,6 +38,13 @@ export class IrButton {
     this.buttonEl.classList.add('bounce-3');
   }
   render() {
+    if (this.variant === 'icon') {
+      return (
+        <button id={this.btn_id} class="icon-button" ref={el => (this.buttonEl = el)} onClick={() => this.clickHanlder.emit()} type={this.btn_type} disabled={this.btn_disabled}>
+          {this.isLoading ? <span class="icon-loader"></span> : <ir-icons name={this.icon_name}></ir-icons>}
+        </button>
+      );
+    }
     let blockClass = this.btn_block ? 'btn-block' : '';
     return (
       <button
