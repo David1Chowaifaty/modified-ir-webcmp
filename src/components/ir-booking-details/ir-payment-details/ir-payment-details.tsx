@@ -7,6 +7,7 @@ import { PaymentService } from '@/services/payment.service';
 import { ILocale, IToast } from '@/components';
 import calendar_data from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -194,36 +195,40 @@ export class IrPaymentDetails {
             )}
           </td>
           <td rowSpan={2} class={'border payments-height border-light border-bottom-0 text-center'}>
-            <ir-button
-              variant="icon"
-              icon_name="save"
-              style={colorVariants.secondary}
-              onClickHanlder={
-                rowMode === 'add'
-                  ? () => {
-                      this._processPaymentSave();
-                    }
-                  : () => {}
-              }
-            ></ir-button>
-            <span> &nbsp;</span>
-            <ir-button
-              variant="icon"
-              icon_name="trash"
-              style={colorVariants.danger}
-              onClickHanlder={
-                rowMode === 'add'
-                  ? () => {
-                      this.newTableRow = false;
-                      this.initializeItemToBeAdded();
-                    }
-                  : () => {
-                      this.modal_mode = 'delete';
-                      this.toBeDeletedItem = item;
-                      this.openModal();
-                    }
-              }
-            ></ir-button>
+            <div class={'payment-actions'}>
+              <ir-button
+                variant="icon"
+                icon_name="save"
+                style={colorVariants.secondary}
+                isLoading={rowMode === 'add' && isRequestPending('/Do_Payment')}
+                class={'m-0'}
+                onClickHanlder={
+                  rowMode === 'add'
+                    ? () => {
+                        this._processPaymentSave();
+                      }
+                    : () => {}
+                }
+              ></ir-button>
+              <ir-button
+                variant="icon"
+                icon_name="trash"
+                style={colorVariants.danger}
+                isLoading={rowMode === 'normal' && isRequestPending('/Cancel_Payment')}
+                onClickHanlder={
+                  rowMode === 'add'
+                    ? () => {
+                        this.newTableRow = false;
+                        this.initializeItemToBeAdded();
+                      }
+                    : () => {
+                        this.modal_mode = 'delete';
+                        this.toBeDeletedItem = item;
+                        this.openModal();
+                      }
+                }
+              ></ir-button>
+            </div>
           </td>
         </tr>
         <tr>

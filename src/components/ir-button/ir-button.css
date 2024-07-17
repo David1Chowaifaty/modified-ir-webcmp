@@ -54,7 +54,9 @@
 }
 /* HTML: <div class="loader"></div> */
 .icon-loader {
-  width: 1rem;
+  margin-top: 10px;
+  width: 1.25rem;
+  height: 1.25rem;
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(farthest-side, var(--icon-button-color) 94%, #0000) top/2px 2px no-repeat, conic-gradient(#0000 30%, var(--icon-button-color));
