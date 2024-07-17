@@ -10,6 +10,7 @@ import locales, { ILocale } from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
 import { ICountry } from '@/models/IBooking';
+import { colorVariants } from '../ui/ir-icons/icons';
 
 @Component({
   tag: 'ir-booking-details',
@@ -130,7 +131,7 @@ export class IrBookingDetails {
     }
   }
 
-  @Listen('iconClickHandler')
+  @Listen('clickHanlder')
   handleIconClick(e) {
     const target = e.target;
     switch (target.id) {
@@ -365,47 +366,24 @@ export class IrBookingDetails {
                 {locales.entries.Lcz_pms}
               </button>
             )}
-            {this.hasReceipt && (
-              <ir-icon id="receipt" class="mx-1">
-                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" stroke="#104064" height="24" width="19" viewBox="0 0 384 512">
-                  <path
-                    fill="#104064"
-                    d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM80 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm0 32v64H288V256H96zM240 416h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16s7.2-16 16-16z"
-                  />
-                </svg>
-              </ir-icon>
-            )}
-            {this.hasPrint && (
-              <ir-icon id="print" icon="ft-printer h1 color-ir-dark-blue-hover m-0 ml-1  pointer">
-                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512">
-                  <path
-                    fill="#104064"
-                    d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zM432 248a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"
-                  />
-                </svg>
-              </ir-icon>
-            )}
-            {this.hasDelete && <ir-icon id="book-delete" icon="ft-trash-2 h1 danger m-0 ml-1 pointer"></ir-icon>}
-            {this.hasMenu && (
-              <ir-icon id="menu" class="m-0 ml-1 pointer">
-                <svg slot="icon" height={24} width={24} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                  <path
-                    fill="#104064"
-                    d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"
-                  />
-                </svg>
-              </ir-icon>
-            )}
+            {this.hasReceipt && <ir-button variant="icon" id="receipt" icon_name="reciept" class="mx-1" style={{ '--icon-size': '1.65rem' }}></ir-button>}
+            {this.hasPrint && <ir-button variant="icon" id="print" icon_name="print" class="mr-1" style={{ '--icon-size': '1.65rem' }}></ir-button>}
+            {this.hasDelete && <ir-button variant="icon" id="book-delete" icon_name="trash" class="mr-1" style={{ ...colorVariants.danger, '--icon-size': '1.65rem' }}></ir-button>}
+            {this.hasMenu && <ir-button variant="icon" class="mr-1" id="menu" icon_name="menu_list" style={{ '--icon-size': '1.65rem' }}></ir-button>}
+
             {this.hasCloseButton && (
-              <ir-icon id="close" class="m-0 ml-2 pointer " onIconClickHandler={() => this.closeSidebar.emit(null)}>
-                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={24} width={24}>
-                  <path
-                    fill="#104064"
-                    class="currentColor"
-                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
-                  />
-                </svg>
-              </ir-icon>
+              <ir-button
+                id="close"
+                variant="icon"
+                style={{ '--icon-size': '1.65rem' }}
+                icon_name="xmark"
+                class="ml-2"
+                onClickHanlder={e => {
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+                  this.closeSidebar.emit(null);
+                }}
+              ></ir-button>
             )}
           </div>
         </div>
@@ -464,14 +442,15 @@ export class IrBookingDetails {
             <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
               <ir-date-view from_date={this.bookingData.from_date} to_date={this.bookingData.to_date}></ir-date-view>
               {this.hasRoomAdd && this.bookingData.is_direct && this.bookingData.is_editable && (
-                <ir-icon id="room-add">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
-                    <path
-                      fill="#6b6f82"
-                      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                    />
-                  </svg>
-                </ir-icon>
+                <ir-button id="room-add" icon_name="plus" variant="icon" style={colorVariants.secondary}></ir-button>
+                // <ir-icon id="room-add">
+                //   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
+                //     <path
+                //       fill="#6b6f82"
+                //       d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                //     />
+                //   </svg>
+                // </ir-icon>
               )}
             </div>
             <div class="card p-0 mx-0">
@@ -506,14 +485,15 @@ export class IrBookingDetails {
               <div class="mb-1">
                 <div class={'d-flex w-100 mb-1 align-items-center justify-content-between'}>
                   <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>
-                  <ir-icon class="pointer " id="pickup">
+                  {/*<ir-icon class="pointer " id="pickup">
                     <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
                       <path
                         fill="#6b6f82"
                         d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"
                       />
                     </svg>
-                  </ir-icon>
+                  </ir-icon>*/}
+                  <ir-button id="pickup" variant="icon" icon_name="edit" style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}></ir-button>
                 </div>
                 {this.bookingData.pickup_info && (
                   <div class={'card'}>
