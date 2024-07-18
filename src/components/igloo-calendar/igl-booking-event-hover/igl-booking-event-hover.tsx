@@ -360,16 +360,18 @@ export class IglBookingEventHover {
   getInfoElement() {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
-        <div class="row p-0 m-0 pb-0">
+        <div class={`row p-0 m-0  ${this.bookingEvent.BALANCE > 1 ? 'pb-0' : 'pb-1'}`}>
           <div class="px-0  col-8 font-weight-bold font-medium-1 d-flex align-items-center">
             <img src={this.bookingEvent?.origin?.Icon} alt={this.bookingEvent?.origin?.Label} class={'icon-image'} />
             <p class={'p-0 m-0'}>{!this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER}</p>
           </div>
           <div class="pr-0 col-4 text-right">{_formatAmount(this.getTotalPrice(), this.currency.code)}</div>
         </div>
-        <p class="pr-0 m-0 p-0 text-right balance_amount">
-          {locales.entries.Lcz_Balance}: {_formatAmount(this.bookingEvent.BALANCE, this.currency.code)}
-        </p>
+        {this.bookingEvent.BALANCE > 1 && (
+          <p class="pr-0 m-0 p-0 text-right balance_amount">
+            {locales.entries.Lcz_Balance}: {_formatAmount(this.bookingEvent.BALANCE, this.currency.code)}
+          </p>
+        )}
         <div class="row p-0 m-0">
           <div class="px-0 pr-0 col-12">
             <ir-date-view from_date={this.bookingEvent.defaultDates.from_date} to_date={this.bookingEvent.defaultDates.to_date} showDateDifference={false}></ir-date-view>
