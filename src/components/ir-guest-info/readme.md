@@ -45,6 +45,7 @@ graph TD;
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
   ir-guest-info --> ir-button
+  ir-button --> ir-icons
   ir-booking-details --> ir-guest-info
   style ir-guest-info fill:#f9f,stroke:#333,stroke-width:4px
 ```

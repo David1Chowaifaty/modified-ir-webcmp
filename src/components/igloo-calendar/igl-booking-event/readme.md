@@ -27,6 +27,7 @@
 | `showDialog`            |             | `CustomEvent<IReallocationPayload>`                                                                  |
 | `showRoomNightsDialog`  |             | `CustomEvent<IRoomNightsData>`                                                                       |
 | `toast`                 |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+| `updateBookingEvent`    |             | `CustomEvent<{ [key: string]: any; }>`                                                               |
 | `updateEventData`       |             | `CustomEvent<any>`                                                                                   |
 
 

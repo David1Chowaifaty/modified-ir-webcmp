@@ -7,20 +7,22 @@
 
 ## Properties
 
-| Property       | Attribute      | Description | Type                                                                                            | Default     |
-| -------------- | -------------- | ----------- | ----------------------------------------------------------------------------------------------- | ----------- |
-| `btn_block`    | `btn_block`    |             | `boolean`                                                                                       | `true`      |
-| `btn_color`    | `btn_color`    |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"` | `'primary'` |
-| `btn_disabled` | `btn_disabled` |             | `boolean`                                                                                       | `false`     |
-| `btn_id`       | `btn_id`       |             | `string`                                                                                        | `v4()`      |
-| `btn_styles`   | `btn_styles`   |             | `string`                                                                                        | `undefined` |
-| `btn_type`     | `btn_type`     |             | `string`                                                                                        | `'button'`  |
-| `icon`         | `icon`         |             | `string`                                                                                        | `'ft-save'` |
-| `isLoading`    | `is-loading`   |             | `boolean`                                                                                       | `false`     |
-| `name`         | `name`         |             | `string`                                                                                        | `undefined` |
-| `size`         | `size`         |             | `"lg" \| "md" \| "sm"`                                                                          | `'md'`      |
-| `text`         | `text`         |             | `any`                                                                                           | `undefined` |
-| `textSize`     | `text-size`    |             | `"lg" \| "md" \| "sm"`                                                                          | `'md'`      |
+| Property       | Attribute      | Description | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Default     |
+| -------------- | -------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `btn_block`    | `btn_block`    |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `true`      |
+| `btn_color`    | `btn_color`    |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`                                                                                                                                                                                                                                                                                                                                                                                     | `'primary'` |
+| `btn_disabled` | `btn_disabled` |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `false`     |
+| `btn_id`       | `btn_id`       |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `v4()`      |
+| `btn_styles`   | `btn_styles`   |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `undefined` |
+| `btn_type`     | `btn_type`     |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `'button'`  |
+| `icon`         | `icon`         |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `'ft-save'` |
+| `icon_name`    | `icon_name`    |             | `"print" \| "save" \| "check" \| "user" \| "search" \| "danger" \| "clock" \| "bell" \| "burger_menu" \| "home" \| "xmark" \| "minus" \| "heart" \| "user_group" \| "arrow_right" \| "arrow_left" \| "circle_info" \| "calendar" \| "globe" \| "facebook" \| "twitter" \| "whatsapp" \| "instagram" \| "youtube" \| "angle_left" \| "circle_check" \| "eraser" \| "file" \| "edit" \| "trash" \| "plus" \| "reciept" \| "menu_list" \| "credit_card" \| "closed_eye" \| "open_eye"` | `undefined` |
+| `isLoading`    | `is-loading`   |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `false`     |
+| `name`         | `name`         |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `undefined` |
+| `size`         | `size`         |             | `"lg" \| "md" \| "sm"`                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `'md'`      |
+| `text`         | `text`         |             | `any`                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `undefined` |
+| `textSize`     | `text-size`    |             | `"lg" \| "md" \| "sm"`                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `'md'`      |
+| `variant`      | `variant`      |             | `"default" \| "icon"`                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `'default'` |
 
 
 ## Events
@@ -46,15 +48,23 @@
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
+ - [ir-label](../ir-label)
+ - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-modal](../ir-modal)
+ - [ir-payment-details](../ir-booking-details/ir-payment-details)
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-room](../ir-booking-details/ir-room)
  - [ir-room-nights](../ir-room-nights)
 
+### Depends on
+
+- [ir-icons](../ui/ir-icons)
+
 ### Graph
 ```mermaid
 graph TD;
+  ir-button --> ir-icons
   igl-book-property-header --> ir-button
   igl-pagetwo --> ir-button
   igl-tba-booking-view --> ir-button
@@ -67,8 +77,11 @@ graph TD;
   ir-hk-tasks --> ir-button
   ir-hk-unassigned-units --> ir-button
   ir-hk-user --> ir-button
+  ir-label --> ir-button
+  ir-listing-header --> ir-button
   ir-listing-modal --> ir-button
   ir-modal --> ir-button
+  ir-payment-details --> ir-button
   ir-pickup --> ir-button
   ir-room --> ir-button
   ir-room-nights --> ir-button

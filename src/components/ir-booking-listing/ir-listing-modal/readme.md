@@ -62,6 +62,7 @@ graph TD;
   ir-listing-modal --> ir-icon
   ir-listing-modal --> ir-select
   ir-listing-modal --> ir-button
+  ir-button --> ir-icons
   ir-booking-listing --> ir-listing-modal
   style ir-listing-modal fill:#f9f,stroke:#333,stroke-width:4px
 ```

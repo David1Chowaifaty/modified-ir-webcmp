@@ -18,6 +18,7 @@
 | `hasRoomAdd`        | `has-room-add`          |             | `boolean` | `false`     |
 | `hasRoomDelete`     | `has-room-delete`       |             | `boolean` | `false`     |
 | `hasRoomEdit`       | `has-room-edit`         |             | `boolean` | `false`     |
+| `isEditable`        | `is-editable`           |             | `boolean` | `undefined` |
 | `legendData`        | `legend-data`           |             | `any`     | `undefined` |
 | `mealCodeName`      | `meal-code-name`        |             | `string`  | `undefined` |
 | `myRoomTypeFoodCat` | `my-room-type-food-cat` |             | `string`  | `undefined` |
@@ -43,21 +44,20 @@
 
 ### Depends on
 
-- [ir-icon](../../ir-icon)
-- [ir-date-view](../../ir-date-view)
 - [ir-button](../../ir-button)
+- [ir-date-view](../../ir-date-view)
 - [ir-label](../../ir-label)
 - [ir-modal](../../ir-modal)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-room --> ir-icon
-  ir-room --> ir-date-view
   ir-room --> ir-button
+  ir-room --> ir-date-view
   ir-room --> ir-label
   ir-room --> ir-modal
-  ir-label --> ir-icon
+  ir-button --> ir-icons
+  ir-label --> ir-button
   ir-modal --> ir-button
   ir-booking-details --> ir-room
   style ir-room fill:#f9f,stroke:#333,stroke-width:4px

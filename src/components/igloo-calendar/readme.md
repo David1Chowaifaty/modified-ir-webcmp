@@ -68,6 +68,7 @@ graph TD;
   igl-to-be-assigned --> ir-icon
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
+  ir-button --> ir-icons
   igl-cal-header --> ir-date-picker
   igl-cal-body --> ir-popover
   igl-cal-body --> igl-booking-event
@@ -106,7 +107,6 @@ graph TD;
   ir-booking-details --> ir-interceptor
   ir-booking-details --> ir-select
   ir-booking-details --> ir-button
-  ir-booking-details --> ir-icon
   ir-booking-details --> ir-label
   ir-booking-details --> ota-label
   ir-booking-details --> ir-date-view
@@ -117,15 +117,14 @@ graph TD;
   ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
   ir-booking-details --> ir-dialog
-  ir-label --> ir-icon
-  ir-room --> ir-icon
-  ir-room --> ir-date-view
+  ir-label --> ir-button
   ir-room --> ir-button
+  ir-room --> ir-date-view
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button
   ir-payment-details --> ir-date-picker
-  ir-payment-details --> ir-icon
+  ir-payment-details --> ir-button
   ir-payment-details --> ir-modal
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text

@@ -45,6 +45,7 @@ graph TD;
   igl-to-be-assigned --> ir-icon
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
+  ir-button --> ir-icons
   igloo-calendar --> igl-to-be-assigned
   style igl-to-be-assigned fill:#f9f,stroke:#333,stroke-width:4px
 ```

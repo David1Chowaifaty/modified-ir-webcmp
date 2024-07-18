@@ -43,6 +43,7 @@ graph TD;
   ir-hk-user --> ir-button
   ir-title --> ir-icon
   ir-phone-input --> ir-combobox
+  ir-button --> ir-icons
   ir-hk-team --> ir-hk-user
   style ir-hk-user fill:#f9f,stroke:#333,stroke-width:4px
 ```

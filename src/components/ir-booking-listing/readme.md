@@ -25,7 +25,6 @@
 - [ir-toast](../ir-toast)
 - [ir-listing-header](ir-listing-header)
 - [ir-tooltip](../ir-tooltip)
-- [ir-icon](../ir-icon)
 - [ir-button](../ir-button)
 - [ir-select](../ir-select)
 - [ir-listing-modal](ir-listing-modal)
@@ -40,17 +39,16 @@ graph TD;
   ir-booking-listing --> ir-toast
   ir-booking-listing --> ir-listing-header
   ir-booking-listing --> ir-tooltip
-  ir-booking-listing --> ir-icon
   ir-booking-listing --> ir-button
   ir-booking-listing --> ir-select
   ir-booking-listing --> ir-listing-modal
   ir-booking-listing --> ir-sidebar
   ir-booking-listing --> ir-booking-details
   ir-listing-header --> igl-book-property-container
+  ir-listing-header --> ir-button
   ir-listing-header --> ir-input-text
   ir-listing-header --> ir-select
   ir-listing-header --> igl-date-range
-  ir-listing-header --> ir-icon
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property
@@ -66,6 +64,7 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
+  ir-button --> ir-icons
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-booking-rooms --> igl-booking-room-rate-plan
@@ -85,7 +84,6 @@ graph TD;
   ir-booking-details --> ir-interceptor
   ir-booking-details --> ir-select
   ir-booking-details --> ir-button
-  ir-booking-details --> ir-icon
   ir-booking-details --> ir-label
   ir-booking-details --> ota-label
   ir-booking-details --> ir-date-view
@@ -96,15 +94,14 @@ graph TD;
   ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
   ir-booking-details --> ir-dialog
-  ir-label --> ir-icon
-  ir-room --> ir-icon
-  ir-room --> ir-date-view
+  ir-label --> ir-button
   ir-room --> ir-button
+  ir-room --> ir-date-view
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button
   ir-payment-details --> ir-date-picker
-  ir-payment-details --> ir-icon
+  ir-payment-details --> ir-button
   ir-payment-details --> ir-modal
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
