@@ -244,12 +244,13 @@ export class IglCalHeader {
                 data-placement="bottom"
                 title={locales.entries.Lcz_UnassignedUnitsTooltip}
                 onClickHanlder={() => this.handleOptionEvent('showAssigned')}
-                class="caledarBtns"
+                btn_styles="caledarBtns"
                 visibleBackgroundOnHover
               ></ir-button>
             )}
             <ir-button
-              class="caledarBtns"
+              btn_styles="caledarBtns"
+              class={'date_btn'}
               variant="icon"
               icon_name="calendar"
               style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
@@ -273,7 +274,8 @@ export class IglCalHeader {
 
             <ir-button
               variant="icon"
-              class="caledarBtns"
+              btn_styles="caledarBtns"
+              class={'pointer'}
               icon_name="clock"
               visibleBackgroundOnHover
               style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
@@ -284,7 +286,7 @@ export class IglCalHeader {
             ></ir-button>
             <ir-button
               variant="icon"
-              class="caledarBtns"
+              btn_styles="caledarBtns"
               icon_name="plus"
               data-toggle="tooltip"
               data-placement="bottom"

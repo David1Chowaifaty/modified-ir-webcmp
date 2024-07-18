@@ -43,7 +43,7 @@ export class IrButton {
       return (
         <button
           id={this.btn_id}
-          class={`icon-button ${this.visibleBackgroundOnHover ? 'hovered_bg' : ''}`}
+          class={`icon-button ${this.btn_styles} ${this.visibleBackgroundOnHover ? 'hovered_bg' : ''}`}
           ref={el => (this.buttonEl = el)}
           onClick={() => this.clickHanlder.emit()}
           type={this.btn_type}
