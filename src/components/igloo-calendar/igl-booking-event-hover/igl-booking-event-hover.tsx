@@ -358,7 +358,6 @@ export class IglBookingEventHover {
   }
 
   getInfoElement() {
-    //TODO:REMOVE HARD CODED BALANCE
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class="row p-0 m-0 pb-0">
@@ -370,7 +369,7 @@ export class IglBookingEventHover {
         </div>
         {this.bookingEvent.BALANCE > 1 && (
           <p class="pr-0 m-0 p-0 text-right balance_amount">
-            {locales.entries.Lcz_Balance || 'Balance'}:{_formatAmount(this.bookingEvent.BALANCE, this.currency.code)}
+            {locales.entries.Lcz_Balance}: {_formatAmount(this.bookingEvent.BALANCE, this.currency.code)}
           </p>
         )}
         <div class="row p-0 m-0">

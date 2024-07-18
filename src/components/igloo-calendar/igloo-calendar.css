@@ -12,9 +12,9 @@
   height: 100%;
 }
 
-.calendarScrollContainer div {
+/* .calendarScrollContainer div {
   position: relative;
-}
+} */
 
 .calendarScrollContainer {
   width: 100%;
@@ -34,9 +34,9 @@
   position: absolute;
 }
 
-div {
+/* div {
   position: relative;
-}
+} */
 
 .legendContainer,
 .tobeAssignedContainer {
