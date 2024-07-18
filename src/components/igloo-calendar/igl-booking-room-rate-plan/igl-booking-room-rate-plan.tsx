@@ -79,13 +79,13 @@ export class IglBookingRoomRatePlan {
     this.selectedData = {
       is_bed_configuration_enabled: this.is_bed_configuration_enabled,
       ratePlanId: data.id,
-      adult_child_offering: data.variations[data.variations.length - 1].adult_child_offering,
+      adult_child_offering: data.variations[0].adult_child_offering,
       rateType: 1,
       totalRooms: 0,
-      rate: data.variations[data.variations.length - 1].amount ?? 0,
+      rate: data.variations[0].amount ?? 0,
       ratePlanName: data.name,
-      adultCount: data.variations[data.variations.length - 1].adult_nbr,
-      childrenCount: data.variations[data.variations.length - 1].child_nbr,
+      adultCount: data.variations[0].adult_nbr,
+      childrenCount: data.variations[0].child_nbr,
       cancelation: data.cancelation,
       guarantee: data.guarantee,
       isRateModified: false,
@@ -116,9 +116,9 @@ export class IglBookingRoomRatePlan {
   async ratePlanDataChanged(newData) {
     this.selectedData = {
       ...this.selectedData,
-      adult_child_offering: newData.variations[newData.variations.length - 1].adult_child_offering,
-      adultCount: newData.variations[newData.variations.length - 1].adult_nbr,
-      childrenCount: newData.variations[newData.variations.length - 1].child_nbr,
+      adult_child_offering: newData.variations[0].adult_child_offering,
+      adultCount: newData.variations[0].adult_nbr,
+      childrenCount: newData.variations[0].child_nbr,
       rate: this.handleRateDaysUpdate(),
       physicalRooms: this.setAvailableRooms(newData.assignable_units),
     };

@@ -49,7 +49,7 @@ export class IrButton {
           <slot name="icon"></slot>
         </span>
         {this.text && <span class="button-text m-0">{this.text}</span>}
-        {this.isLoading && <div class="loader m-0 p-0"></div>}
+        {this.isLoading && <div class="btn-loader m-0 p-0"></div>}
       </button>
     );
   }

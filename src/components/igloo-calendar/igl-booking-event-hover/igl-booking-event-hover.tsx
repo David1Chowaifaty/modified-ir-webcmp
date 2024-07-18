@@ -620,7 +620,7 @@ export class IglBookingEventHover {
                 />
               </svg>
               <span>
-                `` &nbsp;
+                &nbsp;
                 {locales.entries.Lcz_Delete}
               </span>
             </button>

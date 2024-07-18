@@ -33,7 +33,7 @@
   }
 }
 /* HTML: */
-.loader {
+.btn-loader {
   width: 15px;
   height: 10px;
   --c: no-repeat linear-gradient(#ffffff 0 0);
