@@ -7,6 +7,8 @@ export type TLocaleEntries = (LocalizationStrings & LocalizationChannelFrontEntr
 
 export type LocalizationStrings = {
   Lcz_BookingCode: string;
+  Lcz_Single_Adult: string;
+  Lcz_Single_Child: string;
   Lcz_Adding: string;
   Lcz_AddingRoomNightsTo: string;
   Lcz_AddingUnitToBooking: string;

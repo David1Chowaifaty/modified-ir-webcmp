@@ -70,7 +70,13 @@ export class IglBookingEventHover {
   }
 
   getTotalOccupants() {
-    return this.bookingEvent.ADULTS_COUNT;
+    const { CHILDREN_COUNT, ADULTS_COUNT } = this.bookingEvent;
+    if (CHILDREN_COUNT === 0) {
+      return `${ADULTS_COUNT} ${ADULTS_COUNT > 1 ? locales.entries.Lcz_AdultsCaption.toLowerCase() : locales.entries.Lcz_Single_Adult?.toLowerCase()}`;
+    }
+    return `${ADULTS_COUNT} ${ADULTS_COUNT > 1 ? locales.entries.Lcz_AdultsCaption.toLowerCase() : locales.entries.Lcz_Single_Adult?.toLowerCase()}, ${CHILDREN_COUNT} ${
+      CHILDREN_COUNT > 1 ? locales.entries.Lcz_ChildCaption.toLowerCase() : locales.entries.Lcz_Single_Child?.toLowerCase()
+    }`;
   }
 
   getPhoneNumber() {
