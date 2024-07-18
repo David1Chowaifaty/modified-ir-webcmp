@@ -91,16 +91,10 @@
 .caledarBtns {
   position: relative;
   cursor: pointer;
-  font-size: 1.75em;
-  line-height: 1em;
   padding: 0.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.caledarBtns .la {
-  font-size: 1.1em;
 }
 
 .caledarBtns:hover {

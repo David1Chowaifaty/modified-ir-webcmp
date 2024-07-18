@@ -358,7 +358,6 @@ export class IglBookingEventHover {
   }
 
   getInfoElement() {
-    //TODO:REMOVE HARD CODED BALANCE
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class="row p-0 m-0 pb-0">

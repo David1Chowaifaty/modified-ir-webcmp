@@ -49,6 +49,9 @@
   color: var(--icon-button-hover-color);
   /* background: #eaecf0; */
 }
+.icon-button:hover.hovered_bg {
+  background: var('--ir-icon-bg-hover', #f6f6f6);
+}
 .icon-button:disabled {
   pointer-events: none;
 }

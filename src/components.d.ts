@@ -303,6 +303,7 @@ export namespace Components {
         "text": any;
         "textSize": 'sm' | 'md' | 'lg';
         "variant": 'default' | 'icon';
+        "visibleBackgroundOnHover": boolean;
     }
     interface IrChannel {
         "baseurl": string;
@@ -2364,6 +2365,7 @@ declare namespace LocalJSX {
         "text"?: any;
         "textSize"?: 'sm' | 'md' | 'lg';
         "variant"?: 'default' | 'icon';
+        "visibleBackgroundOnHover"?: boolean;
     }
     interface IrChannel {
         "baseurl"?: string;

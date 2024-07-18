@@ -22,6 +22,7 @@ export class IrButton {
   @Prop() btn_id: string = v4();
   @Prop() variant: 'default' | 'icon' = 'default';
   @Prop() icon_name: TIcons;
+  @Prop() visibleBackgroundOnHover: boolean = false;
 
   @Event({ bubbles: true, composed: true }) clickHanlder: EventEmitter<any>;
 
@@ -40,7 +41,14 @@ export class IrButton {
   render() {
     if (this.variant === 'icon') {
       return (
-        <button id={this.btn_id} class="icon-button" ref={el => (this.buttonEl = el)} onClick={() => this.clickHanlder.emit()} type={this.btn_type} disabled={this.btn_disabled}>
+        <button
+          id={this.btn_id}
+          class={`icon-button ${this.visibleBackgroundOnHover ? 'hovered_bg' : ''}`}
+          ref={el => (this.buttonEl = el)}
+          onClick={() => this.clickHanlder.emit()}
+          type={this.btn_type}
+          disabled={this.btn_disabled}
+        >
           {this.isLoading ? <span class="icon-loader"></span> : <ir-icons name={this.icon_name}></ir-icons>}
         </button>
       );
