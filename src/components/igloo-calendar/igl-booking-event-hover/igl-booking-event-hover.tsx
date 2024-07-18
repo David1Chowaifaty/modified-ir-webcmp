@@ -367,11 +367,9 @@ export class IglBookingEventHover {
           </div>
           <div class="pr-0 col-4 text-right">{_formatAmount(this.getTotalPrice(), this.currency.code)}</div>
         </div>
-        {this.bookingEvent.BALANCE > 1 && (
-          <p class="pr-0 m-0 p-0 text-right balance_amount">
-            {locales.entries.Lcz_Balance}: {_formatAmount(this.bookingEvent.BALANCE, this.currency.code)}
-          </p>
-        )}
+        <p class="pr-0 m-0 p-0 text-right balance_amount">
+          {locales.entries.Lcz_Balance}: {_formatAmount(this.bookingEvent.BALANCE, this.currency.code)}
+        </p>
         <div class="row p-0 m-0">
           <div class="px-0 pr-0 col-12">
             <ir-date-view from_date={this.bookingEvent.defaultDates.from_date} to_date={this.bookingEvent.defaultDates.to_date} showDateDifference={false}></ir-date-view>
