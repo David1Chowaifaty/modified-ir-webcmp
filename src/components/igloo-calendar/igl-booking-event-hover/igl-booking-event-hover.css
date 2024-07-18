@@ -8,6 +8,10 @@
   padding-left: 4px !important;
   padding-right: 4px !important;
 }
+.balance_amount {
+  color: #ff4961;
+  font-size: 0.75rem;
+}
 .user-notes {
   margin-left: 4px;
   display: -webkit-box;
