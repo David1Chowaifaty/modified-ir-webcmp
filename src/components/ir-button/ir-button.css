@@ -1,43 +1,33 @@
-/* .loader {
-  width: 11px;
-  height: 11px;
-  border: 2px solid #fff;
-  border-bottom-color: transparent;
-  border-radius: 50%;
-  margin: 0;
-  padding: 0;
-  display: inline-flex;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-} */
 :host {
   --icon-button-color: #104064;
   --icon-button-hover-color: #1a6aa7;
 }
+
 .button-icon {
   padding: 0;
   margin-top: 0;
 }
+
 .button-icon[data-state='loading'] {
   display: none;
 }
+
 .button-text {
   padding: 0 5px;
 }
+
 .bounce-3 {
   animation: bounce 1s 1;
 }
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+
+.ir-button-class {
+  display: inline-flex !important;
+  justify-content: center;
+  align-items: center;
 }
+
 .icon-button {
   all: unset;
-  /* padding: 0.625rem; */
   border-radius: 0.25rem;
   display: inline-flex;
   align-items: center;
@@ -47,7 +37,6 @@
 }
 .icon-button:hover {
   color: var(--icon-button-hover-color);
-  /* background: #eaecf0; */
 }
 .icon-button:hover.hovered_bg {
   background: var('--ir-icon-bg-hover', #f6f6f6);
@@ -55,7 +44,7 @@
 .icon-button:disabled {
   pointer-events: none;
 }
-/* HTML: <div class="loader"></div> */
+
 .icon-loader {
   margin-top: 10px;
   width: 1.25rem;
@@ -64,15 +53,11 @@
   border-radius: 50%;
   background: radial-gradient(farthest-side, var(--icon-button-color) 94%, #0000) top/2px 2px no-repeat, conic-gradient(#0000 30%, var(--icon-button-color));
   -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 2px), var(--icon-button-color) 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 2px), var(--icon-button-color) 0);
   animation: l13 1s infinite linear;
 }
-@keyframes l13 {
-  100% {
-    transform: rotate(1turn);
-  }
-}
-/* HTML: */
-.loader {
+
+.btn_loader {
   width: 15px;
   height: 10px;
   --c: no-repeat linear-gradient(#ffffff 0 0);
@@ -80,6 +65,13 @@
   background-size: 20% 100%;
   animation: l1 1s infinite linear;
 }
+
+@keyframes l13 {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
 @keyframes l1 {
   0% {
     background-size: 20% 100%, 20% 100%, 20% 100%;
@@ -112,5 +104,13 @@
   75%,
   100% {
     transform: scale(1.2);
+  }
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

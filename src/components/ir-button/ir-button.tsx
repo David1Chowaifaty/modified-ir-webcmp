@@ -59,7 +59,7 @@ export class IrButton {
         id={this.btn_id}
         ref={el => (this.buttonEl = el)}
         onClick={() => this.clickHanlder.emit()}
-        class={`btn btn-${this.btn_color} ${this.btn_styles} d-flex align-items-center btn-${this.size} text-${this.textSize} ${blockClass}`}
+        class={`btn btn-${this.btn_color} ${this.btn_styles} ir-button-class  btn-${this.size} text-${this.textSize} ${blockClass}`}
         type={this.btn_type}
         disabled={this.btn_disabled}
       >
@@ -67,7 +67,7 @@ export class IrButton {
           <slot name="icon"></slot>
         </span>
         {this.text && <span class="button-text m-0">{this.text}</span>}
-        {this.isLoading && <div class="loader m-0 p-0"></div>}
+        {this.isLoading && <div class="btn_loader m-0 p-0"></div>}
       </button>
     );
   }
