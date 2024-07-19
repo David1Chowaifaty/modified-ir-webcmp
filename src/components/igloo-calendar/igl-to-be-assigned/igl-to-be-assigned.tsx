@@ -275,6 +275,7 @@ export class IglToBeAssigned {
                 <ir-button
                   class="close_btn"
                   variant="icon"
+                  btn_styles="close_btn_style"
                   icon_name="double_caret_left"
                   style={colorVariants.secondary}
                   onClickHanlder={() => this.handleOptionEvent('closeSideMenu')}

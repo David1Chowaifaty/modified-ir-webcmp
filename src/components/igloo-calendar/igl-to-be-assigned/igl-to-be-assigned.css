@@ -15,7 +15,12 @@
   align-items: center;
   gap: 10px;
 }
-
+.close_btn_style {
+  padding: 0.4rem;
+}
+.close_btn_style:hover {
+  background-color: #f6f6f6;
+}
 .dropdown-menu {
   max-height: 250px;
   overflow-y: auto;
@@ -34,18 +39,6 @@
   padding-top: 5px;
   margin-bottom: 1rem;
 }
-.closeBtn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
-  line-height: 1em;
-  padding: 0.4rem;
-}
-
-.closeBtn:hover {
-  background-color: #f6f6f6;
-}
 .dropdown-toggle::after {
   content: none;
   display: none;
@@ -63,7 +56,6 @@
   background-color: #ffffff;
   z-index: 1;
 }
-
 .pointer {
   cursor: pointer;
 }
@@ -75,7 +67,6 @@
   margin: 0 3px;
   padding: 0;
 }
-
 .dot {
   width: 5px;
   height: 5px;
@@ -84,11 +75,9 @@
   border-radius: 50%;
   animation: dotFlashing 1s infinite linear alternate;
 }
-
 .dot:nth-child(2) {
   animation-delay: 0.2s;
 }
-
 .dot:nth-child(3) {
   animation-delay: 0.4s;
 }
