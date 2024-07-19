@@ -16,6 +16,7 @@ export class IrLabel {
   @Prop() imageStyle: string = '';
   @Prop() icon_name: TIcons = 'edit';
   @Prop() icon_style: string;
+  @Prop() ignore_value: boolean = false;
 
   // Events
   @Event() editSidebar: EventEmitter;
@@ -25,7 +26,7 @@ export class IrLabel {
   }
 
   render() {
-    if (!this.value) {
+    if (!this.value && !this.ignore_value) {
       return null;
     }
 

@@ -51,7 +51,8 @@ export type bookingReasons =
   | 'GET_UNASSIGNED_DATES'
   | 'UPDATE_CALENDAR_AVAILABILITY'
   | 'CHANGE_IN_DUE_AMOUNT'
-  | 'CHANGE_IN_BOOK_STATUS';
+  | 'CHANGE_IN_BOOK_STATUS'
+  | 'NON_TECHNICAL_CHANGE_IN_BOOKING';
 export interface ICountry {
   cities: string[];
   id: number;

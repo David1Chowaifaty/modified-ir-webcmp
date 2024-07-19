@@ -262,6 +262,8 @@ export class IglooCalendar {
                   }),
                 ],
               };
+            } else if (REASON === 'NON_TECHNICAL_CHANGE_IN_BOOKING') {
+              console.log('result for change in booking', result);
             } else {
               return;
             }

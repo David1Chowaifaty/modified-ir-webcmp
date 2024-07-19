@@ -1,11 +1,11 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import moment from 'moment';
 import { _formatDate, _formatTime } from './functions';
-import { Booking, Guest, IPmsLog, Room } from '../../models/booking.dto';
+import { Booking, Guest, IPmsLog, Room } from '@/models/booking.dto';
 import axios from 'axios';
-import { BookingService } from '../../services/booking.service';
-import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '../../models/igl-book-property';
-import { RoomService } from '../../services/room.service';
+import { BookingService } from '@/services/booking.service';
+import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
+import { RoomService } from '@/services/room.service';
 import locales, { ILocale } from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
@@ -54,7 +54,7 @@ export class IrBookingDetails {
   @State() defaultTexts: ILocale;
   // Rerender Flag
   @State() rerenderFlag = false;
-  @State() sidebarState: 'guest' | 'pickup' | null = null;
+  @State() sidebarState: 'guest' | 'pickup' | 'extra_note' | null = null;
   @State() isUpdateClicked = false;
 
   @State() pms_status: IPmsLog;
@@ -393,7 +393,7 @@ export class IrBookingDetails {
           <div class="col-12 p-0 mx-0 pr-lg-1 col-lg-6">
             <div class="card">
               <div class="p-1">
-                {this.bookingData.property.name || ''}
+                <p>{this.bookingData.property.name || ''}</p>
                 <ir-label
                   label={`${this.defaultTexts.entries.Lcz_Source}:`}
                   value={this.bookingData.origin.Label}
@@ -433,10 +433,28 @@ export class IrBookingDetails {
                   </div>
                 )}
                 {this.bookingData.is_direct ? (
-                  <ir-label label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
+                  <ir-label class={'m-0 p-0'} label={`${this.defaultTexts.entries.Lcz_Note}:`} value={this.bookingData.remark}></ir-label>
                 ) : (
-                  <ota-label label={`${this.defaultTexts.entries.Lcz_Note}:`} remarks={this.bookingData.ota_notes} maxVisibleItems={this.bookingData.ota_notes?.length}></ota-label>
+                  <ota-label
+                    class={'m-0 p-0'}
+                    label={`${this.defaultTexts.entries.Lcz_Note}:`}
+                    remarks={this.bookingData.ota_notes}
+                    maxVisibleItems={this.bookingData.ota_notes?.length}
+                  ></ota-label>
                 )}
+                <div class="d-flex align-items-center justify-content-between">
+                  <ir-label label="Special notes:" value="" ignore_value></ir-label>
+                  <ir-button
+                    variant="icon"
+                    icon_name="edit"
+                    style={colorVariants.secondary}
+                    onClickHanlder={e => {
+                      e.stopImmediatePropagation();
+                      e.stopPropagation();
+                      this.sidebarState = 'extra_note';
+                    }}
+                  ></ir-button>
+                </div>
               </div>
             </div>
             <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
@@ -549,25 +567,7 @@ export class IrBookingDetails {
         }}
         showCloseButton={false}
       >
-        {this.sidebarState === 'guest' && (
-          <ir-guest-info
-            slot="sidebar-body"
-            booking_nbr={this.bookingNumber}
-            defaultTexts={this.defaultTexts}
-            email={this.bookingData?.guest.email}
-            language={this.language}
-            onCloseSideBar={() => (this.sidebarState = null)}
-          ></ir-guest-info>
-        )}
-        {this.sidebarState === 'pickup' && (
-          <ir-pickup
-            slot="sidebar-body"
-            defaultPickupData={this.bookingData.pickup_info}
-            bookingNumber={this.bookingData.booking_nbr}
-            numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
-            onCloseModal={() => (this.sidebarState = null)}
-          ></ir-pickup>
-        )}
+        {this.renderSidbarContent()}
       </ir-sidebar>,
       <Fragment>
         {this.bookingItem && (
@@ -612,5 +612,34 @@ export class IrBookingDetails {
         </ir-dialog>
       </Fragment>,
     ];
+  }
+  renderSidbarContent() {
+    switch (this.sidebarState) {
+      case 'guest':
+        return (
+          <ir-guest-info
+            slot="sidebar-body"
+            booking_nbr={this.bookingNumber}
+            defaultTexts={this.defaultTexts}
+            email={this.bookingData?.guest.email}
+            language={this.language}
+            onCloseSideBar={() => (this.sidebarState = null)}
+          ></ir-guest-info>
+        );
+      case 'pickup':
+        return (
+          <ir-pickup
+            slot="sidebar-body"
+            defaultPickupData={this.bookingData.pickup_info}
+            bookingNumber={this.bookingData.booking_nbr}
+            numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
+            onCloseModal={() => (this.sidebarState = null)}
+          ></ir-pickup>
+        );
+      case 'extra_note':
+        return <ir-booking-extra-note slot="sidebar-body" onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
+      default:
+        return null;
+    }
   }
 }
