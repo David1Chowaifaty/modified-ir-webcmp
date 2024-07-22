@@ -24,6 +24,7 @@
   display: inline-flex !important;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .icon-button {

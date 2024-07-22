@@ -42,6 +42,8 @@ export class IglBookPropertyFooter {
           }}
           icon_name={icon_name}
           iconPostion="right"
+          style={{ '--icon-size': '1rem' }}
+          icon_style={{ paddingBottom: '1.9px' }}
         ></ir-button>
       </div>
     );

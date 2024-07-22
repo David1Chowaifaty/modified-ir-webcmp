@@ -106,7 +106,7 @@ export class IrBookingDetails {
         this.roomService.fetchData(this.propertyid, this.language),
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
-        this.bookingService.getExposedBooking(this.bookingNumber, this.language, [{ key: 'private_note', value: '' }]),
+        this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
@@ -258,7 +258,7 @@ export class IrBookingDetails {
   }
   async resetBookingData() {
     try {
-      const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language, [{ key: 'private_note', value: '' }]);
+      const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       this.bookingData = { ...booking };
       this.bookingChanged.emit(this.bookingData);
     } catch (error) {

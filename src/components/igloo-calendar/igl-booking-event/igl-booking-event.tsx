@@ -87,7 +87,7 @@ export class IglBookingEvent {
         return;
       }
 
-      const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en', [{ key: 'private_note', value: '' }]);
+      const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
       const filteredRooms = data.rooms.filter(room => room['assigned_units_pool'] === this.bookingEvent.ID);
 
       if (filteredRooms.length === 0) {

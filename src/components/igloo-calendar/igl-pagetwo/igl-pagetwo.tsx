@@ -233,10 +233,13 @@ export class IglPagetwo {
                 <span class={'d-none d-md-inline-flex'}> &lt;&lt;</span> {locales.entries.Lcz_Back}
               </button> */}
               <ir-button
-                isLoading={this.isLoading === 'book'}
+                icon_name="angles_left"
+                btn_color="secondary"
                 btn_styles="full-width align-items-center justify-content-center"
-                onClickHanlder={() => this.buttonClicked.emit({ key: 'book' })}
-                text={locales.entries.Lcz_Book}
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'back' })}
+                text={locales.entries.Lcz_Back}
+                style={{ '--icon-size': '1rem' }}
+                icon_style={{ paddingBottom: '1.9px' }}
               ></ir-button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill">

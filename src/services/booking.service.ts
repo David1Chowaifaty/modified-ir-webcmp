@@ -1,9 +1,7 @@
-import { Extras } from './../models/booking.dto';
 import { DayData } from '../models/DayType';
 import axios from 'axios';
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType } from '../models/IBooking';
-
-import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString } from '../utils/utils';
+import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString, extras } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
 import { Booking, Day, Guest, IPmsLog } from '../models/booking.dto';
 import { Token } from '@/models/Token';
@@ -17,7 +15,7 @@ export class BookingService extends Token {
           propertyid,
           from_date,
           to_date,
-          extras: [{ key: 'private_note', value: '' }],
+          extras,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -249,14 +247,14 @@ export class BookingService extends Token {
       throw new Error(error);
     }
   }
-  public async getExposedBooking(booking_nbr: string, language: string, extras: Extras[] | null = null): Promise<Booking> {
+  public async getExposedBooking(booking_nbr: string, language: string, withExtras: boolean = true): Promise<Booking> {
     try {
       const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Exposed_Booking?Ticket=${token}`, {
           booking_nbr,
           language,
-          extras,
+          extras: withExtras ? extras : null,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -357,7 +355,7 @@ export class BookingService extends Token {
     if (!token) {
       throw new Error('Missing token');
     }
-    const { data } = await axios.post(`/DoReservation?Ticket=${token}`, { ...body, extras: body.extras ? body.extras : [{ key: 'private_note', value: '' }] });
+    const { data } = await axios.post(`/DoReservation?Ticket=${token}`, { ...body, extras: body.extras ? body.extras : extras });
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
     }

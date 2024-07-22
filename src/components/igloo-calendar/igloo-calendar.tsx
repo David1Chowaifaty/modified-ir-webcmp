@@ -215,10 +215,8 @@ export class IglooCalendar {
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
-                console.log(data);
                 // console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
-                  console.log('clear data');
                   removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
                     fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
@@ -234,7 +232,6 @@ export class IglooCalendar {
               this.availabilityTimeout = setTimeout(() => {
                 this.updateTotalAvailability();
               }, 1000);
-              console.log(result);
             } else if (REASON === 'CHANGE_IN_DUE_AMOUNT') {
               this.calendarData = {
                 ...this.calendarData,
@@ -263,8 +260,6 @@ export class IglooCalendar {
                 ],
               };
             } else if (REASON === 'NON_TECHNICAL_CHANGE_IN_BOOKING') {
-              console.log('result for change in booking', result, this.calendarData.bookingEvents);
-
               this.calendarData = {
                 ...this.calendarData,
                 bookingEvents: [
@@ -283,7 +278,7 @@ export class IglooCalendar {
         }
       });
     } catch (error) {
-      console.log('Initializing Calendar Error', error);
+      console.error('Initializing Calendar Error', error);
     }
   }
 
@@ -604,7 +599,6 @@ export class IglooCalendar {
       bookings = bookings.filter(newBooking => {
         const existingBookingIndex = this.calendarData.bookingEvents.findIndex(event => event.ID === newBooking.ID);
         if (existingBookingIndex !== -1) {
-          console.log(this.calendarData.bookingEvents[existingBookingIndex]);
           this.calendarData.bookingEvents[existingBookingIndex].FROM_DATE = newBooking.FROM_DATE;
           this.calendarData.bookingEvents[existingBookingIndex].NO_OF_DAYS = calculateDaysBetweenDates(
             newBooking.FROM_DATE,

@@ -127,7 +127,6 @@ export class IglBookPropertyService {
       } else if (context.isEventType('EDIT_BOOKING')) {
         rooms = context.defaultData.ROOMS.filter(room => room.identifier !== context.bookingData.IDENTIFIER);
       }
-      console.log('rooms', rooms);
 
       return [
         context.bookedByInfoData,
@@ -147,7 +146,7 @@ export class IglBookPropertyService {
         context.bookingData.IDENTIFIER,
       ];
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
   // private getBookingPreferenceRoomId(bookingData) {

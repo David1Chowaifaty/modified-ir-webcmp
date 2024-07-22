@@ -301,6 +301,7 @@ export namespace Components {
         "icon": string;
         "iconPostion": 'left' | 'right';
         "icon_name": TIcons;
+        "icon_style": any;
         "isLoading": boolean;
         "name": string;
         "size": 'sm' | 'md' | 'lg';
@@ -2409,6 +2410,7 @@ declare namespace LocalJSX {
         "icon"?: string;
         "iconPostion"?: 'left' | 'right';
         "icon_name"?: TIcons;
+        "icon_style"?: any;
         "isLoading"?: boolean;
         "name"?: string;
         "onClickHanlder"?: (event: IrButtonCustomEvent<any>) => void;

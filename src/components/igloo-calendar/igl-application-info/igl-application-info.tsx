@@ -30,7 +30,6 @@ export class IglApplicationInfo {
   private timeout: NodeJS.Timeout;
 
   componentWillLoad() {
-    console.log(this.guestInfo);
     if (this.guestInfo.isRateModified && this.guestInfo.rateType === 2) {
       this.userRate = this.guestInfo.rate * this.dateDifference;
     } else {
@@ -78,7 +77,7 @@ export class IglApplicationInfo {
     if (key === 'roomId' && value !== '') {
       this.guestData['roomName'] = this.filterdRoomList.find(room => room.id === +value).name || '';
     }
-    console.log('guest data', this.guestData);
+
     this.updateData();
   }
 

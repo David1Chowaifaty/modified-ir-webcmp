@@ -92,7 +92,6 @@ export class IglBlockDatesView {
   }
 
   render() {
-    console.log(this.fromDate);
     return (
       <Host>
         <div class={`m-0 p-0 mb-1`}>

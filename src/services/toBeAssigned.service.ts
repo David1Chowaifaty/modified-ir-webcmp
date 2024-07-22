@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { IAvailableRoom, IRoomCategory, IUnassignedDates, InnerRecord } from '../models/tobeassigned';
-import { dateDifference, dateToFormattedString } from '../utils/utils';
+import { dateDifference, dateToFormattedString, extras } from '../utils/utils';
 import { Token } from '@/models/Token';
 import moment from 'moment';
 
@@ -54,6 +54,7 @@ export class ToBeAssignedService extends Token {
           booking_nbr,
           identifier,
           pr_id,
+          extras,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
