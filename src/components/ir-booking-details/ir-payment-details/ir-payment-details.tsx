@@ -196,21 +196,23 @@ export class IrPaymentDetails {
           </td>
           <td rowSpan={2} class={'border payments-height border-light border-bottom-0 text-center'}>
             <div class={'payment-actions'}>
-              <ir-button
-                variant="icon"
-                icon_name="save"
-                style={colorVariants.secondary}
-                isLoading={rowMode === 'add' && isRequestPending('/Do_Payment')}
-                class={'m-0'}
-                onClickHanlder={() => {
-                  this._processPaymentSave();
-                }}
-              ></ir-button>
+              {rowMode === 'add' && (
+                <ir-button
+                  variant="icon"
+                  icon_name="save"
+                  style={colorVariants.secondary}
+                  isLoading={rowMode === 'add' && isRequestPending('/Do_Payment')}
+                  class={'m-0'}
+                  onClickHanlder={() => {
+                    this._processPaymentSave();
+                  }}
+                ></ir-button>
+              )}
               <ir-button
                 variant="icon"
                 icon_name="trash"
                 style={colorVariants.danger}
-                isLoading={rowMode === 'normal' && isRequestPending('/Cancel_Payment')}
+                isLoading={this.toBeDeletedItem?.id === item?.id && isRequestPending('/Cancel_Payment')}
                 onClickHanlder={
                   rowMode === 'add'
                     ? () => {
@@ -274,27 +276,6 @@ export class IrPaymentDetails {
               this.collapsedGuarantee = !this.collapsedGuarantee;
             }}
           ></ir-button>
-          {/* <ir-icon
-            id="drawer-icon"
-            data-toggle="collapse"
-            data-target={`.guarrantee`}
-            aria-expanded="false"
-            aria-controls="myCollapse"
-            class="sm-padding-right pointer"
-            onClick={async () => {
-              if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
-                this.paymentDetailsUrl = await this.bookingService.getPCICardInfoURL(this.bookingDetails.booking_nbr);
-              }
-              this.collapsedGuarantee = !this.collapsedGuarantee;
-            }}
-          >
-            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="22.5" viewBox="0 0 576 512">
-              <path
-                fill="#104064"
-                d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"
-              />
-            </svg>
-          </ir-icon> */}
         </div>
         <div class="collapse guarrantee ">
           {this.bookingDetails.is_direct ? (

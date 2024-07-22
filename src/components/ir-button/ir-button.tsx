@@ -61,11 +61,12 @@ export class IrButton {
         onClick={() => this.clickHanlder.emit()}
         class={`btn btn-${this.btn_color} ${this.btn_styles} ir-button-class  btn-${this.size} text-${this.textSize} ${blockClass}`}
         type={this.btn_type}
-        disabled={this.btn_disabled||this.isLoading}
+        disabled={this.btn_disabled || this.isLoading}
       >
-        <span class="button-icon" data-state={this.isLoading ? 'loading' : ''}>
+        {/* <span class="button-icon" data-state={this.isLoading ? 'loading' : ''}>
           <slot name="icon"></slot>
-        </span>
+        </span> */}
+        {this.icon_name && <ir-icons name={this.icon_name}></ir-icons>}
         {this.text && <span class="button-text m-0">{this.text}</span>}
         {this.isLoading && <div class="btn_loader m-0 p-0"></div>}
       </button>

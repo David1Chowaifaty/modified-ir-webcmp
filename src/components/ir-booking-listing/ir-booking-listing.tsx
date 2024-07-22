@@ -85,7 +85,7 @@ export class IrBookingListing {
   }
 
   handleSideBarToggle(e: CustomEvent<boolean>) {
-    if (e.detail && this.editBookingItem) {
+    if (e.detail) {
       this.editBookingItem = null;
     }
   }
@@ -222,9 +222,9 @@ export class IrBookingListing {
                           <div class="h-100 d-flex align-items-center ">
                             <img class="mr-2 logo" src={booking.origin.Icon} alt={booking.origin.Label} />
                             <div class="text-left">
-                              <p class="p-0 m-0">
+                              <p class="p-0 m-0 booking_name">
                                 {booking.guest.first_name} {booking.guest.last_name ?? ''} {booking.occupancy.adult_nbr}
-                                {locales.entries.Lcz_P}
+                                {locales.entries.Lcz_P} {getPrivateNote(booking.extras) && <span class="yellow_dot"></span>}
                               </p>
                               <div class={'d-flex align-items-center booking-label-gap'}>
                                 <p class="p-0 m-0 secondary-p">{booking.origin.Label}</p>
@@ -250,7 +250,6 @@ export class IrBookingListing {
                               </div>
                               {booking.agent && <p class="m-0 secondary-p">{locales.entries.Lcz_AgentCode.replace('%1', booking.agent.name)}</p>}
                             </div>
-                            {getPrivateNote(booking.extras) && <div class="yellow_dot"></div>}
                           </div>
                         </td>
 
@@ -286,7 +285,7 @@ export class IrBookingListing {
                         )}
 
                         <td>
-                          <p class={`m-0 badge ${confirmationBG}`}>{booking.status.description}</p>
+                          <p class={`m-0 badge ${confirmationBG} ct_ir_badge`}>{booking.status.description}</p>
                         </td>
                         <td>
                           <div class="d-flex justify-content-center align-items-center" style={{ gap: '8px' }}>
@@ -319,14 +318,9 @@ export class IrBookingListing {
                         this.currentPage = 1;
                         await this.updateData();
                       }}
-                    >
-                      <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
-                        <path
-                          fill="white"
-                          d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"
-                        />
-                      </svg>
-                    </ir-button>
+                      icon_name="angles_left"
+                      style={{ '--icon-size': '0.875rem' }}
+                    ></ir-button>
                     <ir-button
                       size="sm"
                       btn_disabled={this.currentPage === 1}
@@ -335,14 +329,9 @@ export class IrBookingListing {
                         console.log(this.currentPage);
                         await this.updateData();
                       }}
-                    >
-                      <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
-                        <path
-                          fill="white"
-                          d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
-                        />
-                      </svg>
-                    </ir-button>
+                      icon_name="angle_left"
+                      style={{ '--icon-size': '0.875rem' }}
+                    ></ir-button>
                     <ir-select
                       selectedValue={this.currentPage.toString()}
                       LabelAvailable={false}
@@ -363,14 +352,9 @@ export class IrBookingListing {
                         this.currentPage = this.currentPage + 1;
                         await this.updateData();
                       }}
-                    >
-                      <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
-                        <path
-                          fill="white"
-                          d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
-                        />
-                      </svg>
-                    </ir-button>
+                      icon_name="angle_right"
+                      style={{ '--icon-size': '0.875rem' }}
+                    ></ir-button>
                     <ir-button
                       size="sm"
                       btn_disabled={this.currentPage === this.totalPages}
@@ -379,14 +363,9 @@ export class IrBookingListing {
                         console.log(this.currentPage);
                         await this.updateData();
                       }}
-                    >
-                      <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
-                        <path
-                          fill="white"
-                          d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"
-                        />
-                      </svg>
-                    </ir-button>
+                      icon_name="angles_right"
+                      style={{ '--icon-size': '0.875rem' }}
+                    ></ir-button>
                   </div>
                 </section>
               )}
@@ -410,6 +389,7 @@ export class IrBookingListing {
               hasRoomEdit
               hasRoomDelete
               hasCloseButton
+              onCloseSidebar={() => (this.editBookingItem = null)}
               bookingNumber={this.editBookingItem.booking.booking_nbr}
               ticket={this.ticket}
               baseurl={this.baseurl}

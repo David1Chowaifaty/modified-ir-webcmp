@@ -14,7 +14,7 @@ export class IrInterceptor {
   @State() isUnassignedUnit = false;
   @State() endpointsCount = 0;
 
-  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
+  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   componentWillLoad() {
     this.setupAxiosInterceptors();

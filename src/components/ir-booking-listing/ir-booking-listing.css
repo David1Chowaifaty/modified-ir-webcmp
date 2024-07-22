@@ -23,6 +23,9 @@
   height: 100%;
   overflow-y: auto;
 }
+.badge.ct_ir_badge {
+  padding: 0.2rem 0.3rem;
+}
 .yellow_dot {
   height: 0.5rem;
   width: 0.5rem;
@@ -31,6 +34,14 @@
   border-radius: 50%;
   background: rgb(244, 213, 82);
   margin-left: 0.5rem;
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+}
+.booking_name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 .bg-ir-red {
   background: #ff4961;
