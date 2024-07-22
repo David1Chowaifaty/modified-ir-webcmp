@@ -192,14 +192,14 @@ export class IrRoom {
               {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
             </p>
             {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
-            <div class="d-flex m-0 p-0 align-items-center">
-              <span class="p-0 m-0 ml-1 font-weight-bold">{_formatAmount(this.item['gross_total'], this.currency)}</span>
+            <div class="d-flex m-0 p-0 align-items-center room_actions_btns">
+              <span class="p-0 m-0 font-weight-bold">{_formatAmount(this.item['gross_total'], this.currency)}</span>
               {this.hasRoomEdit && this.isEditable && (
                 <ir-button
                   id={`roomEdit-${this.item.identifier}`}
                   variant="icon"
                   icon_name="edit"
-                  class="mx-1"
+                  // class="mx-1"
                   style={colorVariants.secondary}
                   onClickHanlder={this.handleEditClick.bind(this)}
                 ></ir-button>

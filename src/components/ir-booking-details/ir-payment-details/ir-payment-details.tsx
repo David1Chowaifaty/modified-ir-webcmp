@@ -202,13 +202,9 @@ export class IrPaymentDetails {
                 style={colorVariants.secondary}
                 isLoading={rowMode === 'add' && isRequestPending('/Do_Payment')}
                 class={'m-0'}
-                onClickHanlder={
-                  rowMode === 'add'
-                    ? () => {
-                        this._processPaymentSave();
-                      }
-                    : () => {}
-                }
+                onClickHanlder={() => {
+                  this._processPaymentSave();
+                }}
               ></ir-button>
               <ir-button
                 variant="icon"
@@ -381,7 +377,18 @@ export class IrPaymentDetails {
             </div>
           </div>
           <div class="mt-2 d-flex  flex-column rounded payment-container">
-            <strong>{this.defaultTexts.entries.Lcz_Payments}</strong>
+            <div class="d-flex align-items-center justify-content-between">
+              <strong>{this.defaultTexts.entries.Lcz_Payments}</strong>
+              <ir-button
+                id="add-payment"
+                variant="icon"
+                icon_name="square_plus"
+                style={{ '--icon-size': '1.5rem' }}
+                onClickHanlder={() => {
+                  this.newTableRow = true;
+                }}
+              ></ir-button>
+            </div>
             <table class="mt-1">
               <thead>
                 <tr>
@@ -390,14 +397,14 @@ export class IrPaymentDetails {
                   <th class={'border border-light border-bottom-0 text-center designation'}>{this.defaultTexts.entries.Lcz_Designation}</th>
                   <th class={'border border-light border-bottom-0 text-center action_icons'}>
                     <span class={'sr-only'}>payment actions</span>
-                    <ir-button
+                    {/* <ir-button
                       id="add-payment"
                       variant="icon"
-                      icon_name="plus"
+                      icon_name="square_plus"
                       onClickHanlder={() => {
                         this.newTableRow = true;
                       }}
-                    ></ir-button>
+                    ></ir-button> */}
                   </th>
                 </tr>
               </thead>

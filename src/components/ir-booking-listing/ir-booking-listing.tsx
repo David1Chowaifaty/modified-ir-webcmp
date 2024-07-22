@@ -8,6 +8,7 @@ import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stenci
 import axios from 'axios';
 import moment from 'moment';
 import { _formatTime } from '../ir-booking-details/functions';
+import { getPrivateNote } from '@/utils/booking';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -249,6 +250,7 @@ export class IrBookingListing {
                               </div>
                               {booking.agent && <p class="m-0 secondary-p">{locales.entries.Lcz_AgentCode.replace('%1', booking.agent.name)}</p>}
                             </div>
+                            {getPrivateNote(booking.extras) && <div class="yellow_dot"></div>}
                           </div>
                         </td>
 
@@ -395,7 +397,7 @@ export class IrBookingListing {
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.editBookingItem !== null && this.editBookingItem.cause === 'edit'}
-          showCloseButton={this.editBookingItem !== null}
+          showCloseButton={false}
           sidebarStyles={{ width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: '#F2F3F8' }}
         >
           {this.editBookingItem?.cause === 'edit' && (
@@ -407,6 +409,7 @@ export class IrBookingListing {
               propertyid={this.propertyid}
               hasRoomEdit
               hasRoomDelete
+              hasCloseButton
               bookingNumber={this.editBookingItem.booking.booking_nbr}
               ticket={this.ticket}
               baseurl={this.baseurl}

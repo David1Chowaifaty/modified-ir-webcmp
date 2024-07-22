@@ -8,7 +8,7 @@ import { EventsService } from '../../services/events.service';
 import { ICountry, RoomBlockDetails, RoomBookingDetails, RoomDetail, bookingReasons } from '../../models/IBooking';
 import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '../../services/toBeAssigned.service';
-import { bookingStatus, calculateDaysBetweenDates, transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
+import { bookingStatus, calculateDaysBetweenDates, getPrivateNote, transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from '../../models/property-types';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
@@ -263,7 +263,19 @@ export class IglooCalendar {
                 ],
               };
             } else if (REASON === 'NON_TECHNICAL_CHANGE_IN_BOOKING') {
-              console.log('result for change in booking', result);
+              console.log('result for change in booking', result, this.calendarData.bookingEvents);
+
+              this.calendarData = {
+                ...this.calendarData,
+                bookingEvents: [
+                  ...this.calendarData.bookingEvents.map(event => {
+                    if (event.BOOKING_NUMBER === result.booking_nbr) {
+                      return { ...event, PRIVATE_NOTE: getPrivateNote(result.extras) };
+                    }
+                    return event;
+                  }),
+                ],
+              };
             } else {
               return;
             }

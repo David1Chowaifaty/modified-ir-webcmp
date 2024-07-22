@@ -287,7 +287,7 @@ export class IglCalHeader {
             <ir-button
               variant="icon"
               btn_styles="caledarBtns"
-              icon_name="plus"
+              icon_name="square_plus"
               data-toggle="tooltip"
               data-placement="bottom"
               title={locales.entries.Lcz_CreateNewBooking}

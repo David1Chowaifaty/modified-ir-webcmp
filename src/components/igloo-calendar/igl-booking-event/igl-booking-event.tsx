@@ -87,7 +87,7 @@ export class IglBookingEvent {
         return;
       }
 
-      const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
+      const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en', [{ key: 'private_note', value: '' }]);
       const filteredRooms = data.rooms.filter(room => room['assigned_units_pool'] === this.bookingEvent.ID);
 
       if (filteredRooms.length === 0) {
@@ -102,8 +102,7 @@ export class IglBookingEvent {
 
       const transformedBooking = transformNewBooking(data)[0];
       const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...otherBookingData } = transformedBooking;
-      console.log(otherBookingData.PHONE_PREFIX);
-      this.bookingEvent = { ...otherBookingData, ...this.bookingEvent, PHONE_PREFIX: otherBookingData.PHONE_PREFIX };
+      this.bookingEvent = { ...otherBookingData, ...this.bookingEvent, PHONE_PREFIX: otherBookingData.PHONE_PREFIX, PRIVATE_NOTE: otherBookingData.PRIVATE_NOTE };
       this.updateBookingEvent.emit(this.bookingEvent);
       this.showEventInfo(true);
     } catch (error) {
@@ -389,7 +388,7 @@ export class IglBookingEvent {
   }
 
   getNoteNode() {
-    if (this.bookingEvent.NOTES || this.bookingEvent.INTERNAL_NOTE) {
+    if (this.bookingEvent.NOTES || this.bookingEvent.INTERNAL_NOTE || this.bookingEvent.PRIVATE_NOTE) {
       return this.getLegendOfStatus('NOTES');
     }
     return null;

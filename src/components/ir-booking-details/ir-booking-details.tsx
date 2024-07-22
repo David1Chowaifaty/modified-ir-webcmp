@@ -11,6 +11,7 @@ import { IToast } from '../ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
 import { ICountry } from '@/models/IBooking';
 import { colorVariants } from '../ui/ir-icons/icons';
+import { getPrivateNote } from '@/utils/booking';
 
 @Component({
   tag: 'ir-booking-details',
@@ -105,9 +106,8 @@ export class IrBookingDetails {
         this.roomService.fetchData(this.propertyid, this.language),
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
-        this.bookingService.getExposedBooking(this.bookingNumber, this.language),
+        this.bookingService.getExposedBooking(this.bookingNumber, this.language, [{ key: 'private_note', value: '' }]),
       ]);
-
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
@@ -266,9 +266,12 @@ export class IrBookingDetails {
     }
   }
   @Listen('resetBookingData')
-  async handleResetBookingData(e: CustomEvent) {
+  async handleResetBookingData(e: CustomEvent<Booking | null>) {
     e.stopPropagation();
     e.stopImmediatePropagation();
+    if (e.detail) {
+      return (this.bookingData = e.detail);
+    }
     await this.resetBookingData();
   }
   renderPhoneNumber() {
@@ -443,7 +446,7 @@ export class IrBookingDetails {
                   ></ota-label>
                 )}
                 <div class="d-flex align-items-center justify-content-between">
-                  <ir-label label="Special notes:" value="" ignore_value></ir-label>
+                  <ir-label label={`${locales.entries.Lcz_PrivateNote}:`} value={getPrivateNote(this.bookingData.extras)} ignore_value></ir-label>
                   <ir-button
                     variant="icon"
                     icon_name="edit"
@@ -460,7 +463,7 @@ export class IrBookingDetails {
             <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
               <ir-date-view from_date={this.bookingData.from_date} to_date={this.bookingData.to_date}></ir-date-view>
               {this.hasRoomAdd && this.bookingData.is_direct && this.bookingData.is_editable && (
-                <ir-button id="room-add" icon_name="plus" variant="icon" style={colorVariants.secondary}></ir-button>
+                <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
                 // <ir-icon id="room-add">
                 //   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
                 //     <path
@@ -637,7 +640,7 @@ export class IrBookingDetails {
           ></ir-pickup>
         );
       case 'extra_note':
-        return <ir-booking-extra-note slot="sidebar-body" onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
+        return <ir-booking-extra-note slot="sidebar-body" booking={this.bookingData} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
       default:
         return null;
     }

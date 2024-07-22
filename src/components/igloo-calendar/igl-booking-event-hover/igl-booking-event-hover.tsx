@@ -87,7 +87,6 @@ export class IglBookingEventHover {
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).name;
   }
   getPhoneCode() {
-    console.log(this.bookingEvent);
     if (this.bookingEvent.PHONE_PREFIX) {
       return this.bookingEvent.PHONE_PREFIX;
     }
@@ -407,6 +406,14 @@ export class IglBookingEventHover {
             <div class="px-0  col-12">
               <span class="font-weight-bold">{locales.entries.Lcz_RatePlan}: </span>
               {this.getRatePlan()}
+            </div>
+          </div>
+        )}
+        {this.bookingEvent.PRIVATE_NOTE && (
+          <div class="row p-0 m-0">
+            <div class="px-0  col-12 text-wrap">
+              <span class="font-weight-bold">{locales.entries.Lcz_PrivateNote}: </span>
+              {this.bookingEvent.PRIVATE_NOTE}
             </div>
           </div>
         )}

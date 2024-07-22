@@ -24,7 +24,6 @@
 ### Used by
 
  - [igl-book-property](../igloo-calendar/igl-book-property)
- - [igl-to-be-assigned](../igloo-calendar/igl-to-be-assigned)
  - [ir-channel-editor](../ir-channel/ir-channel-editor)
  - [ir-channel-mapping](../ir-channel/ir-channel-mapping)
  - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
@@ -42,7 +41,6 @@
 ```mermaid
 graph TD;
   igl-book-property --> ir-icon
-  igl-to-be-assigned --> ir-icon
   ir-channel-editor --> ir-icon
   ir-channel-mapping --> ir-icon
   ir-delete-modal --> ir-icon

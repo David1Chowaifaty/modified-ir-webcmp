@@ -1,3 +1,4 @@
+import { Extras } from './../models/booking.dto';
 import { DayData } from '../models/DayType';
 import axios from 'axios';
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType } from '../models/IBooking';
@@ -16,6 +17,7 @@ export class BookingService extends Token {
           propertyid,
           from_date,
           to_date,
+          extras: [{ key: 'private_note', value: '' }],
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
@@ -247,13 +249,14 @@ export class BookingService extends Token {
       throw new Error(error);
     }
   }
-  public async getExposedBooking(booking_nbr: string, language: string): Promise<Booking> {
+  public async getExposedBooking(booking_nbr: string, language: string, extras: Extras[] | null = null): Promise<Booking> {
     try {
       const token = this.getToken();
       if (token) {
         const { data } = await axios.post(`/Get_Exposed_Booking?Ticket=${token}`, {
           booking_nbr,
           language,
+          extras,
         });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);

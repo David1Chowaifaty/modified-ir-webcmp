@@ -3,25 +3,26 @@ import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/c
 import { Booking } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import calendar_data from '@/stores/calendar-data';
+import { getPrivateNote } from '@/utils/booking';
 @Component({
   tag: 'ir-booking-extra-note',
   styleUrl: 'ir-booking-extra-note.css',
   scoped: true,
 })
 export class IrBookingExtraNote {
-  @Prop() private_note: string;
   @Prop() booking: Booking;
 
   @State() isLoading = false;
   @State() note = '';
 
   @Event() closeModal: EventEmitter<null>;
+  @Event() resetBookingData: EventEmitter<Booking | null>;
 
   private bookingService = new BookingService();
   componentWillLoad() {
     this.bookingService.setToken(calendar_data.token);
-    if (this.private_note) {
-      this.setNote(this.private_note);
+    if (this.booking.extras) {
+      this.setNote(getPrivateNote(this.booking.extras));
     }
   }
 
@@ -31,13 +32,32 @@ export class IrBookingExtraNote {
   private async savePrivateNote() {
     try {
       this.isLoading = true;
-      await this.bookingService.doReservation({
-        ...this.booking,
-        Is_Non_Technical_Change: false,
-        extras: [{}],
+      let prevExtras = this.booking.extras || [];
+      const newExtraObj = { key: 'private_note', value: this.note };
+      if (prevExtras.length === 0) {
+        prevExtras.push(newExtraObj);
+      } else {
+        const oldPrivateNoteIndex = prevExtras.findIndex(e => e.key === 'private_note');
+        if (oldPrivateNoteIndex === -1) {
+          prevExtras.push(newExtraObj);
+        } else {
+          prevExtras[oldPrivateNoteIndex] = newExtraObj;
+        }
+      }
+      const res = await this.bookingService.doReservation({
+        assign_units: true,
+        is_pms: true,
+        is_direct: true,
+        is_in_loyalty_mode: false,
+        promo_key: null,
+        booking: this.booking,
+        Is_Non_Technical_Change: true,
+        extras: prevExtras,
       });
+      this.resetBookingData.emit(res);
+      this.closeModal.emit(null);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       this.isLoading = false;
     }
@@ -45,7 +65,7 @@ export class IrBookingExtraNote {
   render() {
     return (
       <Host class={'px-0'}>
-        <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={'Private note'} displayContext="sidebar"></ir-title>
+        <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={locales.entries.Lcz_PrivateNote} displayContext="sidebar"></ir-title>
         <form
           class={'px-1'}
           onSubmit={e => {
@@ -53,7 +73,7 @@ export class IrBookingExtraNote {
             this.savePrivateNote();
           }}
         >
-          <ir-textarea placeholder="" label="" value={this.note} maxLength={150} onTextChange={e => this.setNote(e.detail)}></ir-textarea>
+          <ir-textarea placeholder={locales.entries.Lcz_PrivateNote_MaxChar} label="" value={this.note} maxLength={150} onTextChange={e => this.setNote(e.detail)}></ir-textarea>
           <div class={'d-flex flex-column flex-sm-row mt-3'}>
             <ir-button
               onClickHanlder={() => this.closeModal.emit(null)}

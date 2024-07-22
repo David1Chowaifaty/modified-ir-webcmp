@@ -55,10 +55,11 @@
 - [ir-room](ir-room)
 - [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)
-- [ir-guest-info](../ir-guest-info)
-- [ir-pickup](ir-pickup)
 - [igl-book-property](../igloo-calendar/igl-book-property)
 - [ir-dialog](../ir-dialog)
+- [ir-guest-info](../ir-guest-info)
+- [ir-pickup](ir-pickup)
+- [ir-booking-extra-note](../ir-booking-extra-note)
 
 ### Graph
 ```mermaid
@@ -73,10 +74,11 @@ graph TD;
   ir-booking-details --> ir-room
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
-  ir-booking-details --> ir-guest-info
-  ir-booking-details --> ir-pickup
   ir-booking-details --> igl-book-property
   ir-booking-details --> ir-dialog
+  ir-booking-details --> ir-guest-info
+  ir-booking-details --> ir-pickup
+  ir-booking-details --> ir-booking-extra-note
   ir-button --> ir-icons
   ir-label --> ir-button
   ir-room --> ir-button
@@ -88,16 +90,6 @@ graph TD;
   ir-payment-details --> ir-button
   ir-payment-details --> ir-modal
   ir-sidebar --> ir-icon
-  ir-guest-info --> ir-icon
-  ir-guest-info --> ir-input-text
-  ir-guest-info --> ir-select
-  ir-guest-info --> ir-button
-  ir-pickup --> ir-title
-  ir-pickup --> ir-select
-  ir-pickup --> ir-date-picker
-  ir-pickup --> ir-input-text
-  ir-pickup --> ir-button
-  ir-title --> ir-icon
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
@@ -122,6 +114,19 @@ graph TD;
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
   ir-dialog --> ir-icon
+  ir-guest-info --> ir-icon
+  ir-guest-info --> ir-input-text
+  ir-guest-info --> ir-select
+  ir-guest-info --> ir-button
+  ir-pickup --> ir-title
+  ir-pickup --> ir-select
+  ir-pickup --> ir-date-picker
+  ir-pickup --> ir-input-text
+  ir-pickup --> ir-button
+  ir-title --> ir-icon
+  ir-booking-extra-note --> ir-title
+  ir-booking-extra-note --> ir-textarea
+  ir-booking-extra-note --> ir-button
   igloo-calendar --> ir-booking-details
   ir-booking-listing --> ir-booking-details
   style ir-booking-details fill:#f9f,stroke:#333,stroke-width:4px

@@ -14,6 +14,9 @@
 .sm-mr {
   margin-right: 3px;
 }
+.room_actions_btns {
+  gap: 0.5rem;
+}
 .night-cost {
   color: #7cbebe;
 }

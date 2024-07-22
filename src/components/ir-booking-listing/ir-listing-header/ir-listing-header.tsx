@@ -88,7 +88,7 @@ export class IrListingHeader {
                     baseurl={this.baseurl}
                     ticket={booking_listing.token}
                   >
-                    <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="plus"></ir-button>
+                    <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
                   </igl-book-property-container>
                 )}
               </div>
@@ -129,7 +129,7 @@ export class IrListingHeader {
                 baseurl={this.baseurl}
                 ticket={booking_listing.token}
               >
-                <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="plus"></ir-button>
+                <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
               </igl-book-property-container>
             )}
           </div>

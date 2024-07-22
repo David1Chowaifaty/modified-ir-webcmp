@@ -32,9 +32,10 @@ export class IrLabel {
 
     return (
       <Host class={this.image ? 'align-items-center' : ''}>
-        <strong>{this.label}</strong>
+        <strong class="label_title">{this.label}</strong>
+
         {this.image && <img src={this.image.src} class={`p-0 m-0 ${this.country ? 'country' : 'logo'} ${this.image.style}`} alt={this.image.src} />}
-        <p>{this.value}</p>
+        <p class={'label_message'}>{this.value}</p>
         {this.iconShown && (
           <div class="icon-container">
             <ir-button

@@ -264,6 +264,7 @@ export interface RoomBookingDetails {
   FROM_DATE: string;
   NO_OF_DAYS: number;
   IS_EDITABLE: boolean;
+  PRIVATE_NOTE: string;
   STATUS: STATUS;
   NAME: string;
   PHONE: string;
