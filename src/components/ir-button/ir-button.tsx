@@ -23,6 +23,7 @@ export class IrButton {
   @Prop() variant: 'default' | 'icon' = 'default';
   @Prop() icon_name: TIcons;
   @Prop() visibleBackgroundOnHover: boolean = false;
+  @Prop() iconPostion: 'left' | 'right' = 'left';
 
   @Event({ bubbles: true, composed: true }) clickHanlder: EventEmitter<any>;
 
@@ -66,9 +67,10 @@ export class IrButton {
         {/* <span class="button-icon" data-state={this.isLoading ? 'loading' : ''}>
           <slot name="icon"></slot>
         </span> */}
-        {this.icon_name && <ir-icons name={this.icon_name}></ir-icons>}
+        {this.icon_name && this.iconPostion === 'left' && <ir-icons name={this.icon_name}></ir-icons>}
         {this.text && <span class="button-text m-0">{this.text}</span>}
-        {this.isLoading && <div class="btn_loader m-0 p-0"></div>}
+
+        {this.isLoading ? <div class="btn_loader m-0 p-0"></div> : this.icon_name && this.iconPostion === 'right' && <ir-icons name={this.icon_name}></ir-icons>}
       </button>
     );
   }

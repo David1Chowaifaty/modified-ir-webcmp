@@ -226,8 +226,8 @@ export class IrRoomNights {
         is_direct: true,
         booking: {
           booking_nbr: this.bookingNumber,
-          from_date: this.fromDate,
-          to_date: this.toDate,
+          from_date: this.rates[0].date,
+          to_date: this.rates[this.rates.length - 1].date,
           remark: this.bookingEvent.remark,
           property: this.bookingEvent.property,
           source: this.bookingEvent.source,
@@ -237,10 +237,7 @@ export class IrRoomNights {
           rooms: oldRooms,
         },
       };
-      const { data } = await axios.post(`/DoReservation?Ticket=${this.ticket}`, body);
-      if (data.ExceptionMsg !== '') {
-        throw new Error(data.ExceptionMsg);
-      }
+      await this.bookingService.doReservation(body);
       this.closeRoomNightsDialog.emit({ type: 'confirm', pool: this.pool });
     } catch (error) {
     } finally {

@@ -299,6 +299,7 @@ export namespace Components {
         "btn_styles": string;
         "btn_type": string;
         "icon": string;
+        "iconPostion": 'left' | 'right';
         "icon_name": TIcons;
         "isLoading": boolean;
         "name": string;
@@ -2406,6 +2407,7 @@ declare namespace LocalJSX {
         "btn_styles"?: string;
         "btn_type"?: string;
         "icon"?: string;
+        "iconPostion"?: 'left' | 'right';
         "icon_name"?: TIcons;
         "isLoading"?: boolean;
         "name"?: string;

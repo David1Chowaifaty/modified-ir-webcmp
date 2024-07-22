@@ -17,9 +17,16 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
+  line-clamp: 5;
   overflow: hidden;
   max-width: 100%;
   height: auto;
+}
+.events_btns {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 .mx-01 {
   --m: 5px;

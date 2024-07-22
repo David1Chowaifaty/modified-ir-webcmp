@@ -357,7 +357,7 @@ export class BookingService extends Token {
     if (!token) {
       throw new Error('Missing token');
     }
-    const { data } = await axios.post(`/DoReservation?Ticket=${token}`, body);
+    const { data } = await axios.post(`/DoReservation?Ticket=${token}`, { ...body, extras: body.extras ? body.extras : [{ key: 'private_note', value: '' }] });
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
     }

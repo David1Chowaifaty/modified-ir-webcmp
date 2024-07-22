@@ -229,9 +229,15 @@ export class IglPagetwo {
         ) : (
           <div class="d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center">
             <div class="flex-fill mr-md-1">
-              <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'back' })}>
+              {/* <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'back' })}>
                 <span class={'d-none d-md-inline-flex'}> &lt;&lt;</span> {locales.entries.Lcz_Back}
-              </button>
+              </button> */}
+              <ir-button
+                isLoading={this.isLoading === 'book'}
+                btn_styles="full-width align-items-center justify-content-center"
+                onClickHanlder={() => this.buttonClicked.emit({ key: 'book' })}
+                text={locales.entries.Lcz_Book}
+              ></ir-button>
             </div>
             <div class="mt-1 mt-md-0 flex-fill">
               <ir-button

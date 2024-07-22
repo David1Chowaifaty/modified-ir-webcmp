@@ -258,7 +258,7 @@ export class IrBookingDetails {
   }
   async resetBookingData() {
     try {
-      const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
+      const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language, [{ key: 'private_note', value: '' }]);
       this.bookingData = { ...booking };
       this.bookingChanged.emit(this.bookingData);
     } catch (error) {
