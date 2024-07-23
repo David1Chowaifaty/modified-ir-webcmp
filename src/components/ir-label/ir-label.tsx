@@ -17,6 +17,7 @@ export class IrLabel {
   @Prop() icon_name: TIcons = 'edit';
   @Prop() icon_style: string;
   @Prop() ignore_value: boolean = false;
+  @Prop() placeholder: string;
 
   // Events
   @Event() editSidebar: EventEmitter;
@@ -26,7 +27,7 @@ export class IrLabel {
   }
 
   render() {
-    if (!this.value && !this.ignore_value) {
+    if (!this.placeholder && !this.value && !this.ignore_value) {
       return null;
     }
 
@@ -35,7 +36,7 @@ export class IrLabel {
         <strong class="label_title">{this.label}</strong>
 
         {this.image && <img src={this.image.src} class={`p-0 m-0 ${this.country ? 'country' : 'logo'} ${this.image.style}`} alt={this.image.src} />}
-        <p class={'label_message'}>{this.value}</p>
+        {this.value ? <p class={'label_message'}>{this.value}</p> : <p class={'label_placeholder'}>{this.placeholder}</p>}
         {this.iconShown && (
           <div class="icon-container">
             <ir-button

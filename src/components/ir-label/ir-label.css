@@ -6,6 +6,7 @@
   display: flex;
   margin-bottom: 5px;
   gap: 5px;
+  align-items: center;
 }
 .icon {
   margin-left: 3px;
@@ -20,6 +21,9 @@
 }
 .label_title {
   min-width: max-content;
+}
+.label_placeholder {
+  color: #cacfe7;
 }
 .icon-container {
   margin: 0;

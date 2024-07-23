@@ -7,6 +7,7 @@ export type TLocaleEntries = (LocalizationStrings & LocalizationChannelFrontEntr
 
 export type LocalizationStrings = {
   Lcz_PrivateNote_MaxChar: string;
+  Lcz_VisibleToHotelOnly: string;
   Lcz_PrivateNote: string;
   Lcz_BookingCode: string;
   Lcz_Single_Adult: string;

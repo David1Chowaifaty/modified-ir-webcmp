@@ -446,7 +446,12 @@ export class IrBookingDetails {
                   ></ota-label>
                 )}
                 <div class="d-flex align-items-center justify-content-between">
-                  <ir-label label={`${locales.entries.Lcz_PrivateNote}:`} value={getPrivateNote(this.bookingData.extras)} ignore_value></ir-label>
+                  <ir-label
+                    label={`${locales.entries.Lcz_PrivateNote}:`}
+                    placeholder={locales.entries.Lcz_VisibleToHotelOnly}
+                    value={getPrivateNote(this.bookingData.extras)}
+                    ignore_value
+                  ></ir-label>
                   <ir-button
                     variant="icon"
                     icon_name="edit"

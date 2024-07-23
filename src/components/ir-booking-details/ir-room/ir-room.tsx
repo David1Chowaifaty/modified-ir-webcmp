@@ -217,10 +217,15 @@ export class IrRoom {
           </div>
           <div class="d-flex align-items-center sm-mb-1">
             <ir-date-view class="mr-1" from_date={this.item.from_date} to_date={this.item.to_date} showDateDifference={false}></ir-date-view>
-            {calendar_data.is_frontdesk_enabled && this.item.unit && <span class="light-blue-bg mr-2 ">{(this.item.unit as IUnit).name}</span>}
             {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
           </div>
+          <div class={'d-flex justify-content-end'}>
+            {calendar_data.is_frontdesk_enabled && this.item.unit && (
+              <span class={`light-blue-bg ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>{(this.item.unit as IUnit).name}</span>
+            )}
+          </div>
+
           <div>
             <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
             {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>}
@@ -242,9 +247,9 @@ export class IrRoom {
                         </tr>
                       );
                     })}
-                  <tr>
-                    <th class="text-right pr-2">{this.defaultTexts.entries.Lcz_SubTotal}</th>
-                    <th class="text-right">{_formatAmount(this.item.total, this.currency)}</th>
+                  <tr class={''}>
+                    <th class="text-right pr-2 subtotal_row">{this.defaultTexts.entries.Lcz_SubTotal}</th>
+                    <th class="text-right subtotal_row">{_formatAmount(this.item.total, this.currency)}</th>
                     {this.item.gross_cost > 0 && this.item.gross_cost !== null && <th class="pl-2 text-right night-cost">{_formatAmount(this.item.cost, this.currency)}</th>}
                   </tr>
                   {this.bookingEvent.is_direct ? (

@@ -1,7 +1,9 @@
 .light-blue-bg {
   background: #acecff;
-  padding: 0.2rem 0.3rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 5px;
+
+  /* max-width: max-content; */
 }
 .payment-container {
   position: absolute;
@@ -13,6 +15,9 @@
 }
 .sm-mr {
   margin-right: 3px;
+}
+.subtotal_row {
+  padding-top: 8px;
 }
 .room_actions_btns {
   gap: 0.5rem;

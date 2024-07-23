@@ -472,6 +472,7 @@ export namespace Components {
         "image": { src: string; alt: string; style?: string } | null;
         "imageStyle": string;
         "label": string;
+        "placeholder": string;
         "value": string;
     }
     interface IrListingHeader {
@@ -2607,6 +2608,7 @@ declare namespace LocalJSX {
         "imageStyle"?: string;
         "label"?: string;
         "onEditSidebar"?: (event: IrLabelCustomEvent<any>) => void;
+        "placeholder"?: string;
         "value"?: string;
     }
     interface IrListingHeader {
