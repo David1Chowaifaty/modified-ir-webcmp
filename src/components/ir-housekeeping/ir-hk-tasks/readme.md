@@ -40,6 +40,7 @@ graph TD;
   ir-hk-tasks --> ir-checkbox
   ir-hk-tasks --> ir-modal
   ir-title --> ir-icon
+  ir-button --> ir-icons
   ir-modal --> ir-button
   style ir-hk-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```

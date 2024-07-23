@@ -23,19 +23,19 @@
 ### Depends on
 
 - [igl-book-property-container](../../igl-book-property-container)
+- [ir-button](../../ir-button)
 - [ir-input-text](../../ir-input-text)
 - [ir-select](../../ir-select)
 - [igl-date-range](../../igloo-calendar/igl-date-range)
-- [ir-icon](../../ir-icon)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-listing-header --> igl-book-property-container
+  ir-listing-header --> ir-button
   ir-listing-header --> ir-input-text
   ir-listing-header --> ir-select
   ir-listing-header --> igl-date-range
-  ir-listing-header --> ir-icon
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property
@@ -51,6 +51,7 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
+  ir-button --> ir-icons
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-booking-rooms --> igl-booking-room-rate-plan

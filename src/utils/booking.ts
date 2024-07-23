@@ -1,9 +1,11 @@
+import { Extras } from './../models/booking.dto';
 import moment from 'moment';
 import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, RoomBlockDetails } from '../models/IBooking';
 import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import calendar_dates from '@/stores/calendar-dates.store';
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   const myBookings: any[] = [];
@@ -106,7 +108,9 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       },
     };
   }
-  // console.log('booking', cell);
+  if (cell.booking.booking_nbr.toString() === '23080178267') {
+    console.log('booking', cell);
+  }
 
   // if (cell.booking.booking_nbr === '61249849') {
   //   console.log('cell');
@@ -127,6 +131,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     POOL: cell.POOL,
     BOOKING_NUMBER: cell.booking.booking_nbr,
     NOTES: cell.booking.is_direct ? cell.booking.remark : null,
+    PRIVATE_NOTE: getPrivateNote(cell.booking.extras),
     is_direct: cell.booking.is_direct,
     BALANCE: cell.booking.financial?.due_amount,
     channel_booking_nbr: cell.booking.channel_booking_nbr,
@@ -188,6 +193,12 @@ function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { cod
   //   myBookings[index] = updatedData;
   // }
 }
+export function getPrivateNote(extras: Extras[] | null) {
+  if (!extras) {
+    return null;
+  }
+  return extras.find(e => e.key === 'private_note')?.value || null;
+}
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
   //console.log(data);
@@ -215,10 +226,14 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
   };
   const rooms = data.rooms.filter(room => !!room['assigned_units_pool']);
   rooms.forEach(room => {
+    const bookingFromDate = moment(room.from_date, 'YYYY-MM-DD').isAfter(calendar_dates.fromDate) ? room.from_date : calendar_dates.fromDate;
+    const bookingToDate = moment(room.to_date, 'YYYY-MM-DD').isAfter(calendar_dates.toDate) ? room.to_date : calendar_dates.toDate;
+    console.log(bookingToDate, bookingFromDate, room.from_date, room.to_date);
     bookings.push({
       ID: room['assigned_units_pool'],
-      TO_DATE: room.to_date,
-      FROM_DATE: room.from_date,
+      TO_DATE: bookingToDate,
+      FROM_DATE: bookingFromDate,
+      PRIVATE_NOTE: getPrivateNote(data.extras),
       NO_OF_DAYS: room.days.length,
       ARRIVAL: data.arrival,
       IS_EDITABLE: true,
@@ -261,7 +276,6 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       },
     });
   });
-
   return bookings;
 }
 export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDetails> {

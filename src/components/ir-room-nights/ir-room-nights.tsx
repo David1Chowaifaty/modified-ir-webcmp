@@ -34,6 +34,7 @@ export class IrRoomNights {
   @State() isEndDateBeforeFromDate: boolean = false;
   @State() defaultTotalNights = 0;
   @State() isInputFocused = -1;
+  @State() dates: { from_date: Date; to_date: Date } = { from_date: new Date(), to_date: new Date() };
 
   @Event() closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
 
@@ -45,6 +46,7 @@ export class IrRoomNights {
     if (this.baseUrl) {
       axios.defaults.baseURL = this.baseUrl;
     }
+    this.dates = { from_date: new Date(this.fromDate), to_date: new Date(this.toDate) };
     this.init();
   }
 
@@ -98,6 +100,16 @@ export class IrRoomNights {
             })),
           ];
         }
+      }
+      if (moment(this.rates[0].date).isAfter(this.fromDate)) {
+        this.dates.from_date = new Date(this.fromDate);
+      } else {
+        this.dates.from_date = new Date(this.rates[0].date);
+      }
+      if (moment(this.rates[this.rates.length - 1].date).isBefore(this.toDate)) {
+        this.dates.to_date = new Date(this.toDate);
+      } else {
+        this.dates.to_date = new Date(this.rates[this.rates.length - 1].date);
       }
     } catch (error) {
       console.log(error);
@@ -218,7 +230,12 @@ export class IrRoomNights {
       if (selectedRoomIndex === -1) {
         throw new Error('Invalid Pool');
       }
-      oldRooms[selectedRoomIndex] = { ...oldRooms[selectedRoomIndex], days: this.rates, to_date: this.toDate, from_date: this.fromDate };
+      oldRooms[selectedRoomIndex] = {
+        ...oldRooms[selectedRoomIndex],
+        days: this.rates,
+        to_date: moment(this.dates.to_date).format('YYYY-MM-DD'),
+        from_date: moment(this.dates.from_date).format('YYYY-MM-DD'),
+      };
       const body = {
         assign_units: true,
         check_in: true,
@@ -226,8 +243,8 @@ export class IrRoomNights {
         is_direct: true,
         booking: {
           booking_nbr: this.bookingNumber,
-          from_date: this.fromDate,
-          to_date: this.toDate,
+          from_date: moment(this.dates.from_date).format('YYYY-MM-DD'),
+          to_date: moment(this.dates.to_date).format('YYYY-MM-DD'),
           remark: this.bookingEvent.remark,
           property: this.bookingEvent.property,
           source: this.bookingEvent.source,
@@ -237,10 +254,7 @@ export class IrRoomNights {
           rooms: oldRooms,
         },
       };
-      const { data } = await axios.post(`/DoReservation?Ticket=${this.ticket}`, body);
-      if (data.ExceptionMsg !== '') {
-        throw new Error(data.ExceptionMsg);
-      }
+      await this.bookingService.doReservation(body);
       this.closeRoomNightsDialog.emit({ type: 'confirm', pool: this.pool });
     } catch (error) {
     } finally {
@@ -271,11 +285,14 @@ export class IrRoomNights {
           <p class={'font-medium-1'}>
             {`${locales.entries.Lcz_Booking}#`} {this.bookingNumber}
           </p>
-          <p class={'font-weight-bold font-medium-1'}>{`${formatDate(this.fromDate, 'YYYY-MM-DD')} - ${formatDate(this.toDate, 'YYYY-MM-DD')}`}</p>
           {this.initialLoading ? (
             <p class={'mt-2 text-secondary'}>{locales.entries['Lcz_CheckingRoomAvailability ']}</p>
           ) : (
             <Fragment>
+              <p class={'font-weight-bold font-medium-1'}>{`${formatDate(moment(this.dates.from_date).format('YYYY-MM-DD'), 'YYYY-MM-DD')} - ${formatDate(
+                moment(this.dates.to_date).format('YYYY-MM-DD'),
+                'YYYY-MM-DD',
+              )}`}</p>
               <p class={'font-medium-1 mb-0'}>
                 {`${this.selectedRoom.rateplan.name}`} {this.selectedRoom.rateplan.is_non_refundable && <span class={'irfontgreen'}>{locales.entries.Lcz_NonRefundable}</span>}
               </p>

@@ -25,6 +25,7 @@
 
 ### Used by
 
+ - [ir-booking-extra-note](../ir-booking-extra-note)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-team](../ir-housekeeping/ir-hk-team)
@@ -41,6 +42,7 @@
 ```mermaid
 graph TD;
   ir-title --> ir-icon
+  ir-booking-extra-note --> ir-title
   ir-hk-archive --> ir-title
   ir-hk-tasks --> ir-title
   ir-hk-team --> ir-title

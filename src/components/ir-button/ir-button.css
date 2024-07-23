@@ -1,39 +1,66 @@
-/* .loader {
-  width: 11px;
-  height: 11px;
-  border: 2px solid #fff;
-  border-bottom-color: transparent;
-  border-radius: 50%;
-  margin: 0;
-  padding: 0;
-  display: inline-flex;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-} */
+:host {
+  --icon-button-color: #6b6f82;
+  --icon-button-hover-color: #104064;
+}
 
 .button-icon {
   padding: 0;
   margin-top: 0;
 }
+
 .button-icon[data-state='loading'] {
   display: none;
 }
+
 .button-text {
   padding: 0 5px;
 }
+
 .bounce-3 {
   animation: bounce 1s 1;
 }
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+
+.ir-button-class {
+  display: inline-flex !important;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }
-/* HTML: */
-.btn-loader {
+
+.icon-button {
+  all: unset;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--icon-button-color);
+  padding: 0.2rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+.icon-button:hover {
+  color: var(--icon-button-hover-color);
+}
+.icon-button:hover.hovered_bg {
+  background: var('--ir-icon-bg-hover', #f6f6f6);
+}
+.icon-button:disabled {
+  pointer-events: none;
+}
+
+.icon-loader {
+  margin: 0;
+  padding: 0;
+  width: var(--icon-size, 1.25rem);
+  height: var(--icon-size, 1.25rem);
+  border-radius: 50%;
+  background: radial-gradient(farthest-side, var(--icon-button-color) 94%, #0000) top/2px 2px no-repeat, conic-gradient(#0000 30%, var(--icon-button-color));
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 2px), var(--icon-button-color) 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 2px), var(--icon-button-color) 0);
+  animation: l13 1s infinite linear;
+}
+
+.btn_loader {
   width: 15px;
   height: 10px;
   --c: no-repeat linear-gradient(#ffffff 0 0);
@@ -41,6 +68,13 @@
   background-size: 20% 100%;
   animation: l1 1s infinite linear;
 }
+
+@keyframes l13 {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
 @keyframes l1 {
   0% {
     background-size: 20% 100%, 20% 100%, 20% 100%;
@@ -73,5 +107,13 @@
   75%,
   100% {
     transform: scale(1.2);
+  }
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

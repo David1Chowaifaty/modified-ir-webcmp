@@ -8,7 +8,7 @@ import { EventsService } from '../../services/events.service';
 import { ICountry, RoomBlockDetails, RoomBookingDetails, RoomDetail, bookingReasons } from '../../models/IBooking';
 import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '../../services/toBeAssigned.service';
-import { bookingStatus, calculateDaysBetweenDates, transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
+import { bookingStatus, calculateDaysBetweenDates, getPrivateNote, transformNewBLockedRooms, transformNewBooking } from '../../utils/booking';
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from '../../models/property-types';
 import { TIglBookPropertyPayload } from '../../models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
@@ -150,6 +150,8 @@ export class IglooCalendar {
       this.days = bookingResp.days;
       this.calendarData.days = this.days;
       this.calendarData.monthsInfo = bookingResp.months;
+      calendar_dates.fromDate = this.calendarData.from_date;
+      calendar_dates.toDate = this.calendarData.to_date;
       setTimeout(() => {
         this.scrollToElement(this.today);
       }, 200);
@@ -166,6 +168,7 @@ export class IglooCalendar {
           const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
           if (KEY.toString() === this.propertyid.toString()) {
             let result: any;
+            console.log(REASON);
             if (REASON === 'DELETE_CALENDAR_POOL' || REASON === 'GET_UNASSIGNED_DATES') {
               result = PAYLOAD;
             } else {
@@ -179,9 +182,11 @@ export class IglooCalendar {
                 transformedBooking = [await transformNewBLockedRooms(result)];
               } else {
                 transformedBooking = transformNewBooking(result);
+                console.log(transformedBooking);
               }
               this.AddOrUpdateRoomBookings(transformedBooking, undefined);
             } else if (REASON === 'DELETE_CALENDAR_POOL') {
+              console.log('delete calendar pool');
               this.calendarData = {
                 ...this.calendarData,
                 bookingEvents: this.calendarData.bookingEvents.filter(e => e.POOL !== result),
@@ -215,10 +220,8 @@ export class IglooCalendar {
                   toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
                   data,
                 };
-                console.log(data);
                 // console.log(this.calendarData.unassignedDates, this.unassignedDates);
                 if (Object.keys(data).length === 0) {
-                  console.log('clear data');
                   removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
                   this.reduceAvailableUnitEvent.emit({
                     fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
@@ -234,7 +237,6 @@ export class IglooCalendar {
               this.availabilityTimeout = setTimeout(() => {
                 this.updateTotalAvailability();
               }, 1000);
-              console.log(result);
             } else if (REASON === 'CHANGE_IN_DUE_AMOUNT') {
               this.calendarData = {
                 ...this.calendarData,
@@ -262,6 +264,18 @@ export class IglooCalendar {
                   }),
                 ],
               };
+            } else if (REASON === 'NON_TECHNICAL_CHANGE_IN_BOOKING') {
+              this.calendarData = {
+                ...this.calendarData,
+                bookingEvents: [
+                  ...this.calendarData.bookingEvents.map(event => {
+                    if (event.BOOKING_NUMBER === result.booking_nbr) {
+                      return { ...event, PRIVATE_NOTE: getPrivateNote(result.extras) };
+                    }
+                    return event;
+                  }),
+                ],
+              };
             } else {
               return;
             }
@@ -269,7 +283,7 @@ export class IglooCalendar {
         }
       });
     } catch (error) {
-      console.log('Initializing Calendar Error', error);
+      console.error('Initializing Calendar Error', error);
     }
   }
 
@@ -580,6 +594,7 @@ export class IglooCalendar {
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
       this.calendarData.from_date = fromDate;
+      calendar_dates.fromDate = this.calendarData.from_date;
       this.days = [...results.days, ...this.days];
       let newMonths = [...results.months];
       if (this.calendarData.monthsInfo[0].monthName === results.months[results.months.length - 1].monthName) {
@@ -590,7 +605,6 @@ export class IglooCalendar {
       bookings = bookings.filter(newBooking => {
         const existingBookingIndex = this.calendarData.bookingEvents.findIndex(event => event.ID === newBooking.ID);
         if (existingBookingIndex !== -1) {
-          console.log(this.calendarData.bookingEvents[existingBookingIndex]);
           this.calendarData.bookingEvents[existingBookingIndex].FROM_DATE = newBooking.FROM_DATE;
           this.calendarData.bookingEvents[existingBookingIndex].NO_OF_DAYS = calculateDaysBetweenDates(
             newBooking.FROM_DATE,
@@ -610,6 +624,7 @@ export class IglooCalendar {
     } else {
       this.calendarData.endingDate = new Date(toDate).getTime();
       this.calendarData.to_date = toDate;
+      calendar_dates.toDate = this.calendarData.to_date;
       let newMonths = [...results.months];
       this.days = [...this.days, ...results.days];
       if (this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].monthName === results.months[0].monthName) {

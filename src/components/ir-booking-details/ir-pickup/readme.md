@@ -45,6 +45,7 @@ graph TD;
   ir-pickup --> ir-input-text
   ir-pickup --> ir-button
   ir-title --> ir-icon
+  ir-button --> ir-icons
   ir-booking-details --> ir-pickup
   style ir-pickup fill:#f9f,stroke:#333,stroke-width:4px
 ```

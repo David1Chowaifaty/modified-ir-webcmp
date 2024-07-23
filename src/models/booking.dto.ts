@@ -15,6 +15,7 @@ export interface Booking {
   currency: Currency;
   from_date: string;
   guest: Guest;
+  extras: Extras[] | null;
   occupancy: Occupancy;
   origin: Origin;
   property: Property;
@@ -35,6 +36,10 @@ export interface Booking {
   is_pms_enabled: boolean;
   promo_key: string | null;
   is_in_loyalty_mode: boolean;
+}
+export interface Extras {
+  key: string;
+  value: any;
 }
 export interface IOtaNotes {
   statement: string;

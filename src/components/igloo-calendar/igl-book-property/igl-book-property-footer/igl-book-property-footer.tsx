@@ -2,6 +2,7 @@ import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stenci
 import { FooterButtonType, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 import locales from '@/stores/locales.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { TIcons } from '@/components/ui/ir-icons/icons';
 
 @Component({
   tag: 'igl-book-property-footer',
@@ -26,12 +27,24 @@ export class IglBookPropertyFooter {
     return 'flex-fill';
   }
 
-  private renderButton(type: FooterButtonType, label: string, disabled = false) {
+  private renderButton(type: FooterButtonType, label: string, disabled = false, icon_name?: TIcons) {
     return (
       <div class={this.shouldRenderTwoButtons() ? ` ${this.editNext(label)}` : 'flex-fill'}>
-        <button class={`btn btn-${type === 'cancel' ? 'secondary' : 'primary'} full-width`} onClick={() => this.buttonClicked.emit({ key: type })} disabled={disabled}>
+        {/* <button class={`btn btn-${type === 'cancel' ? 'secondary' : 'primary'} full-width`} onClick={() => this.buttonClicked.emit({ key: type })} disabled={disabled}>
           {label}
-        </button>
+        </button> */}
+        <ir-button
+          btn_color={type === 'cancel' ? 'secondary' : 'primary'}
+          text={label}
+          btn_disabled={disabled}
+          onClickHanlder={() => {
+            this.buttonClicked.emit({ key: type });
+          }}
+          icon_name={icon_name}
+          iconPostion="right"
+          style={{ '--icon-size': '1rem' }}
+          icon_style={{ paddingBottom: '1.9px' }}
+        ></ir-button>
       </div>
     );
   }
@@ -47,12 +60,12 @@ export class IglBookPropertyFooter {
           {this.isEventType('EDIT_BOOKING') ? (
             <Fragment>
               {this.renderButton('cancel', locales.entries.Lcz_Cancel)}
-              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next} >>`, isRequestPending('/Get_Exposed_Booking_Availability'))}
+              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next}`, isRequestPending('/Get_Exposed_Booking_Availability'), 'angles_right')}
             </Fragment>
           ) : (
             <Fragment>
               {this.renderButton('cancel', locales.entries.Lcz_Cancel)}
-              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next} >>`)}
+              {this.shouldRenderTwoButtons() && this.renderButton('next', `${locales.entries.Lcz_Next}`, false, 'angles_right')}
             </Fragment>
           )}
         </div>

@@ -11,14 +11,14 @@ import { IToast } from "./components/ir-toast/toast";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
-import { Booking } from "./models/booking.dto";
+import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
+import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption as selectOption1 } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
-import { TIcons } from "./components/ui/ir-icons/icons";
-import { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
+import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
@@ -26,14 +26,14 @@ export { IToast } from "./components/ir-toast/toast";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
-export { Booking } from "./models/booking.dto";
+export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
+export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption as selectOption1 } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
-export { TIcons } from "./components/ui/ir-icons/icons";
-export { Booking as Booking1, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
+export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
     interface IglApplicationInfo {
@@ -281,6 +281,9 @@ export namespace Components {
         "propertyid": number;
         "ticket": string;
     }
+    interface IrBookingExtraNote {
+        "booking": Booking;
+    }
     interface IrBookingListing {
         "baseurl": string;
         "language": string;
@@ -296,11 +299,16 @@ export namespace Components {
         "btn_styles": string;
         "btn_type": string;
         "icon": string;
+        "iconPostion": 'left' | 'right';
+        "icon_name": TIcons;
+        "icon_style": any;
         "isLoading": boolean;
         "name": string;
         "size": 'sm' | 'md' | 'lg';
         "text": any;
         "textSize": 'sm' | 'md' | 'lg';
+        "variant": 'default' | 'icon';
+        "visibleBackgroundOnHover": boolean;
     }
     interface IrChannel {
         "baseurl": string;
@@ -458,6 +466,9 @@ export namespace Components {
     interface IrLabel {
         "country": boolean;
         "iconShown": boolean;
+        "icon_name": TIcons;
+        "icon_style": string;
+        "ignore_value": boolean;
         "image": { src: string; alt: string; style?: string } | null;
         "imageStyle": string;
         "label": string;
@@ -518,7 +529,7 @@ export namespace Components {
         "popoverTitle": string;
     }
     interface IrRoom {
-        "bookingEvent": Booking;
+        "bookingEvent": Booking1;
         "bookingIndex": number;
         "currency": string;
         "defaultTexts": ILocale;
@@ -586,9 +597,11 @@ export namespace Components {
     interface IrTextarea {
         "cols": number;
         "label": string;
+        "maxLength": number;
         "placeholder": string;
         "rows": number;
         "text": string;
+        "value": string;
     }
     interface IrTitle {
         "displayContext": 'default' | 'sidebar';
@@ -720,6 +733,10 @@ export interface IrBookingDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingDetailsElement;
 }
+export interface IrBookingExtraNoteCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingExtraNoteElement;
+}
 export interface IrButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrButtonElement;
@@ -831,6 +848,10 @@ export interface IrSidebarCustomEvent<T> extends CustomEvent<T> {
 export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSwitchElement;
+}
+export interface IrTextareaCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTextareaElement;
 }
 export interface IrTitleCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1301,6 +1322,24 @@ declare global {
     var HTMLIrBookingDetailsElement: {
         prototype: HTMLIrBookingDetailsElement;
         new (): HTMLIrBookingDetailsElement;
+    };
+    interface HTMLIrBookingExtraNoteElementEventMap {
+        "closeModal": null;
+        "resetBookingData": Booking | null;
+    }
+    interface HTMLIrBookingExtraNoteElement extends Components.IrBookingExtraNote, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingExtraNoteElementEventMap>(type: K, listener: (this: HTMLIrBookingExtraNoteElement, ev: IrBookingExtraNoteCustomEvent<HTMLIrBookingExtraNoteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingExtraNoteElementEventMap>(type: K, listener: (this: HTMLIrBookingExtraNoteElement, ev: IrBookingExtraNoteCustomEvent<HTMLIrBookingExtraNoteElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBookingExtraNoteElement: {
+        prototype: HTMLIrBookingExtraNoteElement;
+        new (): HTMLIrBookingExtraNoteElement;
     };
     interface HTMLIrBookingListingElement extends Components.IrBookingListing, HTMLStencilElement {
     }
@@ -1881,7 +1920,18 @@ declare global {
         prototype: HTMLIrSwitchElement;
         new (): HTMLIrSwitchElement;
     };
+    interface HTMLIrTextareaElementEventMap {
+        "textChange": string;
+    }
     interface HTMLIrTextareaElement extends Components.IrTextarea, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTextareaElementEventMap>(type: K, listener: (this: HTMLIrTextareaElement, ev: IrTextareaCustomEvent<HTMLIrTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTextareaElementEventMap>(type: K, listener: (this: HTMLIrTextareaElement, ev: IrTextareaCustomEvent<HTMLIrTextareaElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrTextareaElement: {
         prototype: HTMLIrTextareaElement;
@@ -1964,6 +2014,7 @@ declare global {
         "igloo-calendar": HTMLIglooCalendarElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
+        "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
         "ir-button": HTMLIrButtonElement;
         "ir-channel": HTMLIrChannelElement;
@@ -2337,6 +2388,11 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "ticket"?: string;
     }
+    interface IrBookingExtraNote {
+        "booking"?: Booking;
+        "onCloseModal"?: (event: IrBookingExtraNoteCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IrBookingExtraNoteCustomEvent<Booking | null>) => void;
+    }
     interface IrBookingListing {
         "baseurl"?: string;
         "language"?: string;
@@ -2352,12 +2408,17 @@ declare namespace LocalJSX {
         "btn_styles"?: string;
         "btn_type"?: string;
         "icon"?: string;
+        "iconPostion"?: 'left' | 'right';
+        "icon_name"?: TIcons;
+        "icon_style"?: any;
         "isLoading"?: boolean;
         "name"?: string;
         "onClickHanlder"?: (event: IrButtonCustomEvent<any>) => void;
         "size"?: 'sm' | 'md' | 'lg';
         "text"?: any;
         "textSize"?: 'sm' | 'md' | 'lg';
+        "variant"?: 'default' | 'icon';
+        "visibleBackgroundOnHover"?: boolean;
     }
     interface IrChannel {
         "baseurl"?: string;
@@ -2539,6 +2600,9 @@ declare namespace LocalJSX {
     interface IrLabel {
         "country"?: boolean;
         "iconShown"?: boolean;
+        "icon_name"?: TIcons;
+        "icon_style"?: string;
+        "ignore_value"?: boolean;
         "image"?: { src: string; alt: string; style?: string } | null;
         "imageStyle"?: string;
         "label"?: string;
@@ -2605,7 +2669,7 @@ declare namespace LocalJSX {
         "popoverTitle"?: string;
     }
     interface IrRoom {
-        "bookingEvent"?: Booking;
+        "bookingEvent"?: Booking1;
         "bookingIndex"?: number;
         "currency"?: string;
         "defaultTexts"?: ILocale;
@@ -2680,9 +2744,12 @@ declare namespace LocalJSX {
     interface IrTextarea {
         "cols"?: number;
         "label"?: string;
+        "maxLength"?: number;
+        "onTextChange"?: (event: IrTextareaCustomEvent<string>) => void;
         "placeholder"?: string;
         "rows"?: number;
         "text"?: string;
+        "value"?: string;
     }
     interface IrTitle {
         "displayContext"?: 'default' | 'sidebar';
@@ -2744,6 +2811,7 @@ declare namespace LocalJSX {
         "igloo-calendar": IglooCalendar;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking-details": IrBookingDetails;
+        "ir-booking-extra-note": IrBookingExtraNote;
         "ir-booking-listing": IrBookingListing;
         "ir-button": IrButton;
         "ir-channel": IrChannel;
@@ -2822,6 +2890,7 @@ declare module "@stencil/core" {
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
+            "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
             "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;

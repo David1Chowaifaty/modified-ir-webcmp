@@ -68,7 +68,6 @@ export class IglBookProperty {
   }
   componentDidLoad() {
     document.addEventListener('keydown', this.handleKeyDown);
-    console.log(this.allowedBookingSources);
   }
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleKeyDown);
@@ -113,7 +112,7 @@ export class IglBookProperty {
     this.dateRangeData = { ...this.defaultData.defaultDateRange };
     try {
       const setupEntries = await this.fetchSetupEntries();
-      console.log(setupEntries);
+
       this.setSourceOptions(this.allowedBookingSources);
       this.setOtherProperties(setupEntries);
 
@@ -148,7 +147,6 @@ export class IglBookProperty {
   }
 
   async fetchSetupEntries() {
-    console.log('fetch setup entries');
     return await this.bookingService.fetchSetupEntries();
   }
   isGuestDataIncomplete() {
@@ -156,7 +154,7 @@ export class IglBookProperty {
     if (this.guestData.length === 0) {
       return true;
     }
-    console.log(this.guestData);
+
     for (const data of this.guestData) {
       if (data.guestName === '' || ((data.preference === '' || data.preference === 0) && data.is_bed_configuration_enabled)) {
         return true;
@@ -231,7 +229,6 @@ export class IglBookProperty {
   }
 
   async initializeBookingAvailability(from_date: string, to_date: string) {
-    console.log(this.sourceOption);
     const is_in_agent_mode = this.sourceOption['type'] === 'TRAVEL_AGENCY';
     try {
       const room_type_ids = this.defaultData.roomsInfo.map(room => room.id);
@@ -453,7 +450,7 @@ export class IglBookProperty {
 
   async bookUser(check_in: boolean) {
     this.setLoadingState(check_in);
-    console.log('edit save clicked');
+
     if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
       if (this.isGuestDataIncomplete()) {
         this.isLoading = '';
@@ -466,7 +463,6 @@ export class IglBookProperty {
       }
     }
     try {
-      console.log('clicked');
       if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
         this.eventsService.deleteEvent(this.defaultData.POOL);
       }

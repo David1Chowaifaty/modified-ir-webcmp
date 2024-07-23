@@ -14,7 +14,7 @@ export class IrInterceptor {
   @State() isUnassignedUnit = false;
   @State() endpointsCount = 0;
 
-  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Do_Payment', '/Get_Exposed_Bookings'];
+  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -37,12 +37,8 @@ export class IrInterceptor {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
     if (this.isHandledEndpoint(extractedUrl)) {
-      if (extractedUrl === '/Do_Payment') {
+      if (this.endpointsCount > 0) {
         this.isLoading = true;
-      } else {
-        if (this.endpointsCount > 0) {
-          this.isLoading = true;
-        }
       }
     }
     if (extractedUrl === '/Get_Exposed_Calendar') {

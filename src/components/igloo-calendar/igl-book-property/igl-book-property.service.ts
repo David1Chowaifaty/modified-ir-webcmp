@@ -127,7 +127,6 @@ export class IglBookPropertyService {
       } else if (context.isEventType('EDIT_BOOKING')) {
         rooms = context.defaultData.ROOMS.filter(room => room.identifier !== context.bookingData.IDENTIFIER);
       }
-      console.log('rooms', rooms);
 
       return [
         context.bookedByInfoData,
@@ -147,20 +146,18 @@ export class IglBookPropertyService {
         context.bookingData.IDENTIFIER,
       ];
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
-  private getBookingPreferenceRoomId(bookingData) {
-    return (bookingData.hasOwnProperty('PR_ID') && bookingData.PR_ID) || null;
-  }
+  // private getBookingPreferenceRoomId(bookingData) {
+  //   return (bookingData.hasOwnProperty('PR_ID') && bookingData.PR_ID) || null;
+  // }
   private getRoomCategoryByRoomId(bookingData) {
     return bookingData.roomsInfo?.find(roomCategory => {
       return roomCategory.id === bookingData.RATE_TYPE;
     });
   }
   public setEditingRoomInfo(bookingData, selectedUnits) {
-    console.log(bookingData, bookingData.roomsInfo);
-    console.log(this.getBookingPreferenceRoomId(bookingData));
     const category = this.getRoomCategoryByRoomId(bookingData);
     const room_id = !category ? '' : `c_${category?.id}`;
     const ratePlanId = `p_${bookingData.RATE_PLAN_ID}`;

@@ -45,6 +45,7 @@ graph TD;
   ir-room-nights --> ir-loading-screen
   ir-room-nights --> ir-icon
   ir-room-nights --> ir-button
+  ir-button --> ir-icons
   igloo-calendar --> ir-room-nights
   style ir-room-nights fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -34,6 +34,7 @@ graph TD;
   ir-hk-unassigned-units --> ir-title
   ir-hk-unassigned-units --> ir-button
   ir-title --> ir-icon
+  ir-button --> ir-icons
   ir-hk-user --> ir-title
   ir-hk-user --> ir-input-text
   ir-hk-user --> ir-phone-input

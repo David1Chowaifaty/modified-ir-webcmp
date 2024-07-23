@@ -26,6 +26,12 @@
 .text-red {
   color: var(--red);
 }
+.not_mapped_btn {
+  color: #ff4961;
+}
+.not_mapped_btn:hover {
+  color: #ff1635;
+}
 li {
   list-style: none !important;
 }
@@ -33,6 +39,9 @@ li {
   all: unset;
   color: var(--blue);
   cursor: pointer;
+}
+.refresh-btn:hover {
+  color: #104064;
 }
 /* .selected-map svg {
   margin: 0 10px !important;

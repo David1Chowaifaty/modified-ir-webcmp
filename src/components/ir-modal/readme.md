@@ -72,6 +72,7 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   ir-modal --> ir-button
+  ir-button --> ir-icons
   igloo-calendar --> ir-modal
   ir-channel --> ir-modal
   ir-hk-tasks --> ir-modal

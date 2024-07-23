@@ -141,3 +141,9 @@ export function formatAmount(currency: string, amount: number) {
   const symbol = getCurrencySymbol(currency);
   return symbol + amount.toFixed(2);
 }
+export const extras = [
+  {
+    key: 'private_note',
+    value: '',
+  },
+];

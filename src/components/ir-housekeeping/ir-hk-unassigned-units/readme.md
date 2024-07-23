@@ -41,6 +41,7 @@ graph TD;
   ir-hk-unassigned-units --> ir-title
   ir-hk-unassigned-units --> ir-button
   ir-title --> ir-icon
+  ir-button --> ir-icons
   ir-hk-team --> ir-hk-unassigned-units
   style ir-hk-unassigned-units fill:#f9f,stroke:#333,stroke-width:4px
 ```
