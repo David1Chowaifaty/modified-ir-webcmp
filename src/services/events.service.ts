@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BookingService } from './booking.service';
-import { getReleaseHoursString } from '../utils/utils';
+import { extras, getReleaseHoursString } from '../utils/utils';
 import { Token } from '@/models/Token';
 
 export class EventsService extends Token {
@@ -10,7 +10,7 @@ export class EventsService extends Token {
       const token = this.getToken();
       if (token) {
         console.log(pool, destination_pr_id, from_date, to_date);
-        const { data } = await axios.post(`/ReAllocate_Exposed_Room?Ticket=${token}`, { pool, destination_pr_id, from_date, to_date });
+        const { data } = await axios.post(`/ReAllocate_Exposed_Room?Ticket=${token}`, { pool, destination_pr_id, from_date, to_date, extras });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }
