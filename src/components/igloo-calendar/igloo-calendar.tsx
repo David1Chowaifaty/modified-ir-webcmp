@@ -150,6 +150,8 @@ export class IglooCalendar {
       this.days = bookingResp.days;
       this.calendarData.days = this.days;
       this.calendarData.monthsInfo = bookingResp.months;
+      calendar_dates.fromDate = this.calendarData.from_date;
+      calendar_dates.toDate = this.calendarData.to_date;
       setTimeout(() => {
         this.scrollToElement(this.today);
       }, 200);
@@ -166,6 +168,7 @@ export class IglooCalendar {
           const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
           if (KEY.toString() === this.propertyid.toString()) {
             let result: any;
+
             if (REASON === 'DELETE_CALENDAR_POOL' || REASON === 'GET_UNASSIGNED_DATES') {
               result = PAYLOAD;
             } else {
@@ -179,9 +182,11 @@ export class IglooCalendar {
                 transformedBooking = [await transformNewBLockedRooms(result)];
               } else {
                 transformedBooking = transformNewBooking(result);
+                console.log(transformedBooking);
               }
               this.AddOrUpdateRoomBookings(transformedBooking, undefined);
             } else if (REASON === 'DELETE_CALENDAR_POOL') {
+              console.log('delete calendar pool');
               this.calendarData = {
                 ...this.calendarData,
                 bookingEvents: this.calendarData.bookingEvents.filter(e => e.POOL !== result),
@@ -589,6 +594,7 @@ export class IglooCalendar {
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
       this.calendarData.startingDate = new Date(fromDate).getTime();
       this.calendarData.from_date = fromDate;
+      calendar_dates.fromDate = this.calendarData.from_date;
       this.days = [...results.days, ...this.days];
       let newMonths = [...results.months];
       if (this.calendarData.monthsInfo[0].monthName === results.months[results.months.length - 1].monthName) {
@@ -618,6 +624,7 @@ export class IglooCalendar {
     } else {
       this.calendarData.endingDate = new Date(toDate).getTime();
       this.calendarData.to_date = toDate;
+      calendar_dates.toDate = this.calendarData.to_date;
       let newMonths = [...results.months];
       this.days = [...this.days, ...results.days];
       if (this.calendarData.monthsInfo[this.calendarData.monthsInfo.length - 1].monthName === results.months[0].monthName) {

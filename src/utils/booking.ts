@@ -5,6 +5,7 @@ import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import calendar_dates from '@/stores/calendar-dates.store';
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   const myBookings: any[] = [];
@@ -225,10 +226,13 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
   };
   const rooms = data.rooms.filter(room => !!room['assigned_units_pool']);
   rooms.forEach(room => {
+    const bookingFromDate = moment(room.from_date, 'YYYY-MM-DD').isAfter(calendar_dates.fromDate) ? room.from_date : calendar_dates.fromDate;
+    const bookingToDate = moment(room.to_date, 'YYYY-MM-DD').isAfter(calendar_dates.toDate) ? room.to_date : calendar_dates.toDate;
+    console.log(bookingToDate, bookingFromDate, room.from_date, room.to_date);
     bookings.push({
       ID: room['assigned_units_pool'],
-      TO_DATE: room.to_date,
-      FROM_DATE: room.from_date,
+      TO_DATE: bookingToDate,
+      FROM_DATE: bookingFromDate,
       PRIVATE_NOTE: getPrivateNote(data.extras),
       NO_OF_DAYS: room.days.length,
       ARRIVAL: data.arrival,

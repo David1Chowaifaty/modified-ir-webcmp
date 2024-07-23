@@ -193,7 +193,11 @@ export class IglBookingEvent {
           }
           if (pool) {
             if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
-              await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date).catch(() => {
+              let fromDate = moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(moment(new Date(from_date)))
+                ? this.bookingEvent.defaultDates.from_date
+                : from_date;
+              console.log('room', fromDate, this.bookingEvent.defaultDates.from_date, from_date);
+              await this.eventsService.reallocateEvent(pool, toRoomId, fromDate, to_date).catch(() => {
                 this.resetBookingToInitialPosition();
               });
             } else {
