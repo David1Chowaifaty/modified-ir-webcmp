@@ -158,7 +158,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     ROOMS: cell.booking.rooms,
     cancelation: cell.room.rateplan.cancelation,
     guarantee: cell.room.rateplan.guarantee,
-    TOTAL_PRICE: cell.room.total,
+    TOTAL_PRICE: cell.booking.financial?.gross_total,
     COUNTRY: cell.booking.guest.country_id,
     FROM_DATE_STR: cell.booking.format.from_date,
     TO_DATE_STR: cell.booking.format.to_date,

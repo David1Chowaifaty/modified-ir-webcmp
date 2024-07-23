@@ -291,6 +291,14 @@ export namespace Components {
         "rowCount": number;
         "ticket": string;
     }
+    interface IrBookingPrinting {
+        "baseurl": string;
+        "bookingNumber": string;
+        "language": string;
+        "mode": 'invoice' | 'default';
+        "propertyid": number;
+        "ticket": string;
+    }
     interface IrButton {
         "btn_block": boolean;
         "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
@@ -1348,6 +1356,12 @@ declare global {
         prototype: HTMLIrBookingListingElement;
         new (): HTMLIrBookingListingElement;
     };
+    interface HTMLIrBookingPrintingElement extends Components.IrBookingPrinting, HTMLStencilElement {
+    }
+    var HTMLIrBookingPrintingElement: {
+        prototype: HTMLIrBookingPrintingElement;
+        new (): HTMLIrBookingPrintingElement;
+    };
     interface HTMLIrButtonElementEventMap {
         "clickHanlder": any;
     }
@@ -2017,6 +2031,7 @@ declare global {
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
+        "ir-booking-printing": HTMLIrBookingPrintingElement;
         "ir-button": HTMLIrButtonElement;
         "ir-channel": HTMLIrChannelElement;
         "ir-channel-editor": HTMLIrChannelEditorElement;
@@ -2399,6 +2414,14 @@ declare namespace LocalJSX {
         "language"?: string;
         "propertyid"?: number;
         "rowCount"?: number;
+        "ticket"?: string;
+    }
+    interface IrBookingPrinting {
+        "baseurl"?: string;
+        "bookingNumber"?: string;
+        "language"?: string;
+        "mode"?: 'invoice' | 'default';
+        "propertyid"?: number;
         "ticket"?: string;
     }
     interface IrButton {
@@ -2815,6 +2838,7 @@ declare namespace LocalJSX {
         "ir-booking-details": IrBookingDetails;
         "ir-booking-extra-note": IrBookingExtraNote;
         "ir-booking-listing": IrBookingListing;
+        "ir-booking-printing": IrBookingPrinting;
         "ir-button": IrButton;
         "ir-channel": IrChannel;
         "ir-channel-editor": IrChannelEditor;
@@ -2894,6 +2918,7 @@ declare module "@stencil/core" {
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
+            "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
             "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
             "ir-channel-editor": LocalJSX.IrChannelEditor & JSXBase.HTMLAttributes<HTMLIrChannelEditorElement>;
