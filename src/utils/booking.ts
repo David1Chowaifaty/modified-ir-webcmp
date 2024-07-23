@@ -258,7 +258,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       BOOKING_NUMBER: data.booking_nbr,
       cancelation: room.rateplan.cancelation,
       guarantee: room.rateplan.guarantee,
-      TOTAL_PRICE: room.gross_total,
+      TOTAL_PRICE: data.financial?.gross_total,
       COUNTRY: data.guest.country_id,
       FROM_DATE_STR: data.format.from_date,
       TO_DATE_STR: data.format.to_date,
