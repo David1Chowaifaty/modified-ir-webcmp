@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <title>Igloo Calendar</title>
+    <script src="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/collection/assets/scripts/daterangepicker/moment.min.js"></script>
+    <script
+        src="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/collection/assets/scripts/jquery.min.js"></script>
+    <script
+        src="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/collection/assets/scripts/daterangepicker/daterangepicker.js"></script>
+    <script
+        src="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/collection/assets/scripts/bootstrap.bundle.min.js"></script>
+    <script
+        src="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/collection/assets/scripts/inputmask/jquery.inputmask.js"></script>
+    <script
+        src="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/collection/assets/scripts/toastr/toastr.min.js"></script>
+    <script type="module"
+        src="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/ir-webcmp/ir-webcmp.esm.js"></script>
+    <link rel="stylesheet"
+        href="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/collection/assets/scripts/daterangepicker/daterangepicker.css">
+    <script src="src/index.js"></script>
+    <style>
+        .active a {
+            color: var(--blue) !important
+        }
+    </style>
+</head>
+
+<body>
+    <ir-common></ir-common>
+    <igloo-calendar currency-name="USD" propertyid="42" language="en"
+        baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <link rel="stylesheet"
+        href="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/collection/assets/scripts/toastr/toastr.css"
+        type="text/css">
+
+    <script>
+        //http://localhost:7741/test.html
+        var today = new Date();
+        today.setDate(today.getDate() - 1);
+        var _FROM_DATE = today.toISOString().substring(0, 10)
+        today.setDate(today.getDate() + 60);
+        var _TO_DATE = today.toISOString().substring(0, 10)
+        const calendar = document.querySelector("igloo-calendar");
+        calendar.from_date = _FROM_DATE;
+        calendar.to_date = _TO_DATE;
+        setTimeout(() => {
+            const ticket = getToken();
+            calendar.propertyid = getId();
+            calendar.ticket = ticket;
+        }, 300)
+    </script>
+</body>
+
+</html>

@@ -76,6 +76,7 @@ graph TD;
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-date-view
+  igl-booking-event-hover --> ir-icons
   igl-booking-event-hover --> igl-block-dates-view
   igl-block-dates-view --> ir-date-view
   igl-book-property --> igl-block-dates-view
@@ -93,6 +94,7 @@ graph TD;
   igl-date-range --> ir-date-view
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
+  igl-book-property-footer --> ir-button
   igl-pagetwo --> ir-date-view
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by

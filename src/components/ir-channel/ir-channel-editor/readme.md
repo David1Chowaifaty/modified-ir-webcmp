@@ -47,6 +47,7 @@ graph TD;
   ir-channel-general --> ir-combobox
   ir-channel-general --> ir-icons
   ir-channel-mapping --> ir-icon
+  ir-channel-mapping --> ir-button
   ir-channel-mapping --> ir-combobox
   ir-button --> ir-icons
   ir-channel --> ir-channel-editor

@@ -212,7 +212,7 @@ export class IglBookingEvent {
                 //   this.resetBookingToInitialPosition();
                 //   return;
                 // }
-                const { description, status } = this.setModalDescription(toRoomId, from_date, to_date);
+                const { description, status } = this.getModalDescription(toRoomId, from_date, to_date);
                 let hideConfirmButton = false;
                 if (status === '400') {
                   hideConfirmButton = true;
@@ -243,7 +243,18 @@ export class IglBookingEvent {
       console.log('something went wrong');
     }
   }
-  private setModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string } {
+  private getModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string } {
+    console.log(
+      `toRoomId: ${toRoomId}`,
+      '\n',
+      `new from_date: ${from_date}`,
+      '\n',
+      `old from_date: ${this.bookingEvent.FROM_DATE}`,
+      '\n',
+      `new to_date: ${to_date}`,
+      '\n',
+      `old to_date: ${this.bookingEvent.TO_DATE}`,
+    );
     const findRoomType = (roomId: number) => {
       let roomType = this.bookingEvent.roomsInfo.filter(room => room.physicalrooms.some(r => r.id === +roomId));
       if (roomType.length) {

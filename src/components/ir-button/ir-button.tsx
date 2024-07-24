@@ -65,11 +65,9 @@ export class IrButton {
         type={this.btn_type}
         disabled={this.btn_disabled || this.isLoading}
       >
-        {/* <span class="button-icon" data-state={this.isLoading ? 'loading' : ''}>
-          <slot name="icon"></slot>
-        </span>*/}
+        {this.icon_name && this.iconPostion === 'left' && <ir-icons name={this.icon_name} style={this.icon_style}></ir-icons>}
         {this.text && <span class="button-text m-0">{this.text}</span>}
-        {this.isLoading && <div class="btn_loader m-0 p-0"></div>}
+        {this.isLoading ? <div class="btn_loader m-0 p-0"></div> : this.iconPostion === 'right' && <ir-icons style={this.icon_style} name={this.icon_name}></ir-icons>}
       </button>
     );
   }

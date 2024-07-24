@@ -26,9 +26,15 @@
 
  - [igl-booking-overview-page](../igl-booking-overview-page)
 
+### Depends on
+
+- [ir-button](../../../ir-button)
+
 ### Graph
 ```mermaid
 graph TD;
+  igl-book-property-footer --> ir-button
+  ir-button --> ir-icons
   igl-booking-overview-page --> igl-book-property-footer
   style igl-book-property-footer fill:#f9f,stroke:#333,stroke-width:4px
 ```

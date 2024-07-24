@@ -106,6 +106,7 @@ graph TD;
   igl-date-range --> ir-date-view
   igl-booking-rooms --> igl-booking-room-rate-plan
   igl-booking-room-rate-plan --> ir-tooltip
+  igl-book-property-footer --> ir-button
   igl-pagetwo --> ir-date-view
   igl-pagetwo --> igl-application-info
   igl-pagetwo --> igl-property-booked-by
