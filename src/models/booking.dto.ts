@@ -65,6 +65,7 @@ export interface IFinancials {
   total_amount: number;
   gross_total: number;
   gross_cost: number;
+  invoice_nbr: string;
 }
 export interface IPayment {
   id: number | null;

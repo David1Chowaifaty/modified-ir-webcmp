@@ -1,3 +1,120 @@
+p,
+div,
+section,
+span {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 :host {
   display: block;
+  font-size: 16px;
+  background: white;
+
+  font-weight: 600;
+  color: rgb(102, 102, 102);
+  box-sizing: border-box;
+}
+.main-container {
+  padding: 30px 15px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: white;
+}
+.label-title {
+  padding: 0;
+  margin: 0;
+  color: rgb(51, 51, 51);
+  font-weight: 700;
+}
+.label-value {
+  padding-left: 4px;
+  color: rgb(102, 102, 102);
+  font-weight: 600;
+}
+.booking-details {
+  padding: 15px 0;
+  border-top: 1px solid rgb(128, 128, 128);
+  border-bottom: 1px solid rgb(128, 128, 128);
+}
+.accommodation-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+}
+.booking-dates {
+  color: rgb(51, 51, 51);
+  font-weight: 700;
+  padding: 0;
+  margin: 0;
+}
+
+.roomtype-title td {
+  padding-top: 25px;
+  padding-right: 10px;
+}
+.policies {
+  font-size: 14px;
+}
+.policies-container {
+  padding: 10px 1px 15px 1px;
+}
+.policies {
+  padding-inline: 1px;
+}
+.room_amount_day {
+  padding: 5px;
+}
+.room_amount_day.amount {
+  font-weight: 700;
+}
+.room_amount_day.rate {
+  font-weight: 700;
+  color: rgb(51, 51, 51);
+}
+.pricing-summary {
+  width: 100%;
+  text-align: end;
+  padding-left: 10px;
+  padding-bottom: 15px;
+}
+.pricing-breakdown {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.property_name,
+.booked_on_date,
+.invoice_reference {
+  color: rgb(51, 51, 51);
+  font-size: 14px;
+  font-weight: 700;
+}
+.booking-number {
+  font-size: 20px;
+  font-weight: 600;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 15px;
+}
+.booked_on_date {
+  font-weight: 600;
+}
+.reservation-details {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.origin-icon {
+  height: 40px;
+  width: 40px;
+}
+.invoice_reference {
+  text-align: end;
 }
