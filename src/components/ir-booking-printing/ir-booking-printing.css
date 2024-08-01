@@ -9,8 +9,7 @@ span {
 :host {
   display: block;
   font-size: 16px;
-  background: white;
-
+  /* background: white; */
   font-weight: 600;
   color: rgb(102, 102, 102);
   box-sizing: border-box;
@@ -20,8 +19,7 @@ span {
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
-
-  background: white;
+  /* background: white; */
 }
 .label-title {
   padding: 0;
@@ -34,7 +32,8 @@ span {
   color: rgb(102, 102, 102);
   font-weight: 600;
 }
-.booking-details {
+.booking-details,
+.pickup-container {
   padding: 15px 0;
   border-top: 1px solid rgb(128, 128, 128);
   border-bottom: 1px solid rgb(128, 128, 128);
@@ -44,6 +43,8 @@ span {
   align-items: center;
   justify-content: space-between;
   padding: 15px 0;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 .booking-dates {
   color: rgb(51, 51, 51);
@@ -70,6 +71,7 @@ span {
 }
 .room_amount_day.amount {
   font-weight: 700;
+  text-transform: capitalize;
 }
 .room_amount_day.rate {
   font-weight: 700;
@@ -81,10 +83,19 @@ span {
   padding-left: 10px;
   padding-bottom: 15px;
 }
+
+.room_amount.date {
+  color: #333;
+  background: #efefef;
+}
+.room_amount.amount {
+  margin-bottom: 10px;
+}
 .pricing-breakdown {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 4px;
 }
 .property_name,
@@ -117,4 +128,86 @@ span {
 }
 .invoice_reference {
   text-align: end;
+}
+.billing_header {
+  /* padding: 10px; */
+  color: #333;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+.billing_cell {
+  /* padding: 10px; */
+  text-align: left;
+}
+.billing_table {
+  padding: 10px 0;
+}
+.billing_table caption {
+  text-align: start;
+  font-size: 18px;
+  padding: 10px 0px 15px;
+}
+.pickup-details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pickup_title {
+  padding: 10px 0px 15px;
+}
+.car_name {
+  color: #333;
+  font-weight: bold;
+  padding-right: 10px;
+}
+.pickup-details .label-title {
+  padding-right: 10px;
+}
+.billing_reference {
+  width: 40px;
+}
+.room_amount_container {
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+}
+.room_amount {
+  padding: 2px;
+  min-width: 70px;
+}
+.room_amount_empty {
+  color: white;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  display: none;
+}
+.room_amount_rate {
+  display: none;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+}
+.room_amount_main_container {
+  display: flex;
+  flex-wrap: wrap;
+  /* gap: 5px; */
+}
+@media only screen and (min-width: 768px) {
+  .room_amount_container {
+    flex-direction: column;
+  }
+  .billing_header,
+  .billing_cell {
+    padding: 10px;
+  }
+  .billing_reference {
+    width: auto;
+  }
+  .room_amount_empty {
+    display: block;
+  }
+  .room_amount_rate {
+    display: block;
+  }
 }

@@ -174,7 +174,7 @@ export class IrRoom {
           variant="icon"
           id="drawer-icon"
           data-toggle="collapse"
-          data-target={`#roomCollapse-${this.item.identifier.split(' ').join('')}`}
+          data-target={`#roomCollapse-${this.item.identifier?.split(' ').join('')}`}
           aria-expanded="false"
           aria-controls="collapseExample"
           class="mr-1"
@@ -230,7 +230,7 @@ export class IrRoom {
             <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
             {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>}
           </div>
-          <div class="collapse" id={`roomCollapse-${this.item.identifier.split(' ').join('')}`}>
+          <div class="collapse" id={`roomCollapse-${this.item.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">
               <div class=" sm-padding-top">
                 <strong class="sm-padding-right">{`${this.defaultTexts.entries.Lcz_Breakdown}:`}</strong>
