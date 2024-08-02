@@ -816,6 +816,10 @@ export interface IrLabelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrLabelElement;
 }
+export interface IrListingHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrListingHeaderElement;
+}
 export interface IrListingModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrListingModalElement;
@@ -1732,7 +1736,18 @@ declare global {
         prototype: HTMLIrLabelElement;
         new (): HTMLIrLabelElement;
     };
+    interface HTMLIrListingHeaderElementEventMap {
+        "preventPageLoad": string;
+    }
     interface HTMLIrListingHeaderElement extends Components.IrListingHeader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrListingHeaderElementEventMap>(type: K, listener: (this: HTMLIrListingHeaderElement, ev: IrListingHeaderCustomEvent<HTMLIrListingHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrListingHeaderElementEventMap>(type: K, listener: (this: HTMLIrListingHeaderElement, ev: IrListingHeaderCustomEvent<HTMLIrListingHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrListingHeaderElement: {
         prototype: HTMLIrListingHeaderElement;
@@ -2633,6 +2648,7 @@ declare namespace LocalJSX {
     interface IrListingHeader {
         "baseurl"?: string;
         "language"?: string;
+        "onPreventPageLoad"?: (event: IrListingHeaderCustomEvent<string>) => void;
         "propertyId"?: number;
     }
     interface IrListingModal {

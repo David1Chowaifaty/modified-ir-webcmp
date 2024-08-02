@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { IToast } from '../ir-toast/toast';
 import interceptor_requests from '@/stores/ir-interceptor.store';
@@ -13,9 +13,16 @@ export class IrInterceptor {
   @State() isLoading = false;
   @State() isUnassignedUnit = false;
   @State() endpointsCount = 0;
+  @State() isPageLoadingStoped: string | null = null;
 
   @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
+
+  @Listen('preventPageLoad', { target: 'body' })
+  handleStopPageLoading(e: CustomEvent) {
+    this.isLoading = false;
+    this.isPageLoadingStoped = e.detail;
+  }
   componentWillLoad() {
     this.setupAxiosInterceptors();
   }
@@ -36,7 +43,7 @@ export class IrInterceptor {
   handleRequest(config: AxiosRequestConfig) {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
-    if (this.isHandledEndpoint(extractedUrl)) {
+    if (this.isHandledEndpoint(extractedUrl) && this.isPageLoadingStoped !== extractedUrl) {
       if (extractedUrl !== '/Get_Exposed_Calendar') {
         this.isLoading = true;
       } else {
@@ -55,6 +62,7 @@ export class IrInterceptor {
     const extractedUrl = this.extractEndpoint(response.config.url);
     if (this.isHandledEndpoint(extractedUrl)) {
       this.isLoading = false;
+      this.isPageLoadingStoped = null;
     }
     interceptor_requests[extractedUrl] = 'done';
     if (response.data.ExceptionMsg?.trim()) {
@@ -76,10 +84,18 @@ export class IrInterceptor {
   render() {
     return (
       <Host>
-        {this.isLoading && (
+        {/* {this.isLoading && !this.isPageLoadingStoped && (
           <div class="loadingScreenContainer">
             <div class="loaderContainer">
               <span class="loader"></span>
+              <p>Fetching bookings.</p>
+            </div>
+          </div>
+        )} */}
+        {this.isLoading && !this.isPageLoadingStoped && (
+          <div class="loadingScreenContainer">
+            <div class="loaderContainer">
+              <span class="page-loader"></span>
             </div>
           </div>
         )}

@@ -187,7 +187,7 @@ export class IrBookingPrinting {
       });
     }
     const filtered_data = this.convertedProperty.taxes.filter(tx => tx.pct > 0);
-    return filtered_data.map((d, index) => {
+    return filtered_data?.map((d, index) => {
       const amount = (room.total * d.pct) / 100;
       return (
         <Fragment>
@@ -294,7 +294,7 @@ export class IrBookingPrinting {
                       <p class="room_amount room_amount_empty">Dates</p>
                       <p class="room_amount room_amount_rate">Rate</p>
                     </div> */}
-                    {room.days.map(d => (
+                    {room.days?.map(d => (
                       <div class={'room_amount_container'}>
                         <p class="room_amount date">{this.formatDate(moment(d.date, 'YYYY-MM-DD'))}</p>
                         <p class="room_amount amount">{_formatAmount(d.amount, this.currency)}</p>
@@ -334,34 +334,36 @@ export class IrBookingPrinting {
             </div>
           </section>
         )}
-        <section>
-          <table class="billing_table">
-            <caption>Billing</caption>
-            <thead>
-              <th class="billing_header">Date</th>
-              <th class="billing_header">Amount</th>
-              <th class="billing_header">Designation</th>
-              {/* <th class="billing_header">Reference</th> */}
-            </thead>
-            <tbody>
-              {this.convertedBooking.financial.payments.map(p => (
-                <Fragment>
-                  <tr key={p.id}>
-                    <td class="billing_cell">{moment(p.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</td>
-                    <td class="billing_cell">{_formatAmount(p.amount, p.currency.code)}</td>
-                    <td class="billing_cell">{p.designation || '_'}</td>
-                    {/* <td class="billing_cell billing_reference">{p.reference || '_'}</td> */}
-                  </tr>
-                  {p.reference && (
-                    <tr>
-                      <td colSpan={3}>Ref:{p.reference}</td>
+        {this.convertedBooking.financial?.payments && (
+          <section>
+            <table class="billing_table">
+              <caption>Billing</caption>
+              <thead>
+                <th class="billing_header">Date</th>
+                <th class="billing_header">Amount</th>
+                <th class="billing_header">Designation</th>
+                {/* <th class="billing_header">Reference</th> */}
+              </thead>
+              <tbody>
+                {this.convertedBooking.financial?.payments?.map(p => (
+                  <Fragment>
+                    <tr key={p.id}>
+                      <td class="billing_cell">{moment(p.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</td>
+                      <td class="billing_cell">{_formatAmount(p.amount, p.currency.code)}</td>
+                      <td class="billing_cell">{p.designation || '_'}</td>
+                      {/* <td class="billing_cell billing_reference">{p.reference || '_'}</td> */}
                     </tr>
-                  )}
-                </Fragment>
-              ))}
-            </tbody>
-          </table>
-        </section>
+                    {p.reference && (
+                      <tr>
+                        <td colSpan={3}>Ref:{p.reference}</td>
+                      </tr>
+                    )}
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        )}
       </div>
     );
   }

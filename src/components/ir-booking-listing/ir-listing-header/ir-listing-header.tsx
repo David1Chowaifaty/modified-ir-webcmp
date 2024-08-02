@@ -1,7 +1,7 @@
 import { BookingListingService } from '@/services/booking_listing.service';
 import booking_listing, { initializeUserSelection, updateUserSelection } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
-import { Component, Host, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-listing-header',
@@ -15,6 +15,9 @@ export class IrListingHeader {
 
   @State() inputValue: string = '';
   @State() isLoading: 'search' | 'excel' = null;
+
+  @Event() preventPageLoad: EventEmitter<string>;
+
   private bookingListingService = new BookingListingService();
 
   componentWillLoad() {
@@ -51,6 +54,7 @@ export class IrListingHeader {
       };
     }
     this.isLoading = is_to_export ? 'excel' : 'search';
+    this.preventPageLoad.emit('/Get_Exposed_Bookings');
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export });
     this.isLoading = null;
     if (booking_listing.download_url) {
