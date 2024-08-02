@@ -1,4 +1,4 @@
-import { BookUserParams } from '../../../models/igl-book-property';
+import { IBookingParams } from '@/services/booking.service';
 //import { BookingService } from '../../../services/booking.service';
 
 export class IglBookPropertyService {
@@ -101,7 +101,7 @@ export class IglBookPropertyService {
     }
     selectedUnits.set(roomCategoryKey, new Map().set(ratePlanKey, res));
   }
-  async prepareBookUserServiceParams(context, check_in, sourceOption): Promise<BookUserParams> {
+  async prepareBookUserServiceParams(context, check_in, sourceOption): Promise<IBookingParams> {
     try {
       const arrivalTime = context.isEventType('EDIT_BOOKING')
         ? context.getArrivalTimeForBooking()
@@ -128,23 +128,25 @@ export class IglBookPropertyService {
         rooms = context.defaultData.ROOMS.filter(room => room.identifier !== context.bookingData.IDENTIFIER);
       }
 
-      return [
-        context.bookedByInfoData,
+      return {
+        bookedByInfoData: context.bookedByInfoData,
         check_in,
-        new Date(context.dateRangeData.fromDate),
-        new Date(context.dateRangeData.toDate),
-        context.guestData,
-        context.dateRangeData.dateDifference,
-        sourceOption,
-        context.propertyid,
+        fromDate: new Date(context.dateRangeData.fromDate),
+        toDate: new Date(context.dateRangeData.toDate),
+        guestData: context.guestData,
+        totalNights: context.dateRangeData.dateDifference,
+        source: sourceOption,
+        propertyid: context.propertyid,
         rooms,
-        context.currency,
+        pickup_info: context.bookingData.PICKUP_INFO || null,
+        currency: context.currency,
         bookingNumber,
-        context.bookingData.GUEST,
+        defaultGuest: context.bookingData.GUEST,
         arrivalTime,
         pr_id,
-        context.bookingData.IDENTIFIER,
-      ];
+        identifier: context.bookingData.IDENTIFIER,
+        extras: null,
+      };
     } catch (error) {
       console.error(error);
     }

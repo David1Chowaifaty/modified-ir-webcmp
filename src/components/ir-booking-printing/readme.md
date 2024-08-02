@@ -7,14 +7,12 @@
 
 ## Properties
 
-| Property        | Attribute        | Description | Type                     | Default     |
-| --------------- | ---------------- | ----------- | ------------------------ | ----------- |
-| `baseurl`       | `baseurl`        |             | `string`                 | `''`        |
-| `bookingNumber` | `booking-number` |             | `string`                 | `''`        |
-| `language`      | `language`       |             | `string`                 | `''`        |
-| `mode`          | `mode`           |             | `"default" \| "invoice"` | `'default'` |
-| `propertyid`    | `propertyid`     |             | `number`                 | `undefined` |
-| `ticket`        | `ticket`         |             | `string`                 | `''`        |
+| Property    | Attribute   | Description | Type                     | Default     |
+| ----------- | ----------- | ----------- | ------------------------ | ----------- |
+| `booking`   | `booking`   |             | `any`                    | `undefined` |
+| `countries` | `countries` |             | `any`                    | `undefined` |
+| `mode`      | `mode`      |             | `"default" \| "invoice"` | `'default'` |
+| `property`  | `property`  |             | `any`                    | `undefined` |
 
 
 ----------------------------------------------

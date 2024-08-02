@@ -125,6 +125,7 @@ export class IrRoom {
       legendData: this.legendData,
       roomsInfo: this.roomsInfo,
       roomName: (this.item.unit as IUnit)?.name || '',
+      PICKUP_INFO: this.bookingEvent.pickup_info,
     });
   }
   handleDeleteClick() {

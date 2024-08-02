@@ -1,23 +1,6 @@
-import { Arrival } from './booking.dto';
+import { Arrival, IBookingPickupInfo } from './booking.dto';
 
 export type FooterButtonType = 'cancel' | 'next';
-export type BookUserParams = [
-  any,
-  boolean,
-  Date,
-  Date,
-  any,
-  number,
-  { code: string; description: string },
-  number,
-  any[],
-  { id: number; code: string },
-  string | undefined,
-  any | undefined,
-  any | undefined,
-  number | undefined,
-  string | undefined,
-];
 export type TPropertyButtonsTypes = 'cancel' | 'save' | 'back' | 'book' | 'bookAndCheckIn' | 'next' | 'check';
 export type TSourceOption = { code: string; description: string; tag: string; id?: string; type?: string };
 export type TSourceOptions = { id: string; value: string; tag: string; type: string };
@@ -98,6 +81,7 @@ interface IglBookPropertyPayloadEditBooking extends IglBookPropertyPayload {
   legendData: any;
   roomsInfo: any;
   roomName: string;
+  PICKUP_INFO: IBookingPickupInfo | null;
 }
 
 interface IglBookPropertyPayloadAddRoom extends IglBookPropertyPayload {

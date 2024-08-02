@@ -67,6 +67,7 @@ export class IglBookProperty {
     } else return;
   }
   componentDidLoad() {
+    console.log('booking_data', this.bookingData);
     document.addEventListener('keydown', this.handleKeyDown);
   }
   disconnectedCallback() {
@@ -470,7 +471,7 @@ export class IglBookProperty {
         this.bookedByInfoData.message = this.defaultData.NOTES;
       }
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams(this, check_in, this.sourceOption);
-      await this.bookingService.bookUser(...serviceParams);
+      await this.bookingService.bookUser(serviceParams);
       this.resetBookingData.emit(null);
     } catch (error) {
       // Handle error

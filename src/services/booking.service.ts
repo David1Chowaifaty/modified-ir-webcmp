@@ -3,9 +3,27 @@ import axios from 'axios';
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType } from '../models/IBooking';
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString, extras } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
-import { Booking, Day, Guest, IPmsLog } from '../models/booking.dto';
+import { Booking, Day, Guest, IBookingPickupInfo, IPmsLog } from '../models/booking.dto';
 import { Token } from '@/models/Token';
-
+export interface IBookingParams {
+  bookedByInfoData: any;
+  check_in: boolean;
+  fromDate: Date;
+  toDate: Date;
+  guestData;
+  totalNights: number;
+  source: { code: string; description: string };
+  propertyid: number;
+  rooms: any[];
+  currency: { id: number; code: string };
+  pickup_info: IBookingPickupInfo | null;
+  bookingNumber?: string;
+  defaultGuest?: any;
+  arrivalTime?: any;
+  pr_id?: number;
+  identifier?: string;
+  extras: { key: string; value: string }[] | null;
+}
 export class BookingService extends Token {
   public async getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{ [key: string]: any }> {
     try {
@@ -363,24 +381,25 @@ export class BookingService extends Token {
     return data['My_Result'];
   }
 
-  public async bookUser(
+  public async bookUser({
     bookedByInfoData,
-    check_in: boolean,
-    fromDate: Date,
-    toDate: Date,
+    check_in,
+    currency,
+    extras = null,
+    fromDate,
     guestData,
-    totalNights: number,
-    source: { code: string; description: string },
-    propertyid: number,
-    rooms: any[],
-    currency: { id: number; code: string },
-    bookingNumber?: string,
-    defaultGuest?: any,
-    arrivalTime?: any,
-    pr_id?: number,
-    identifier?: string,
-    extras: { key: string; value: string }[] | null = null,
-  ) {
+    pickup_info,
+    propertyid,
+    rooms,
+    source,
+    toDate,
+    totalNights,
+    arrivalTime,
+    bookingNumber,
+    defaultGuest,
+    identifier,
+    pr_id,
+  }: IBookingParams) {
     try {
       const token = this.getToken();
       if (token) {
@@ -479,6 +498,7 @@ export class BookingService extends Token {
               ...rooms,
             ],
           },
+          pickup_info,
         };
         console.log('book user payload', body);
         const result = await this.doReservation(body);

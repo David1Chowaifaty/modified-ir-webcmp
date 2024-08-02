@@ -18,9 +18,9 @@ export class IrBookingPrinting {
   // @Prop() baseurl: string = '';
   // @Prop() propertyid: number;
   @Prop() mode: 'invoice' | 'default' = 'default';
-  @Prop() property: string;
-  @Prop() booking: string;
-  @Prop() countries: string;
+  @Prop() property: any;
+  @Prop() booking: any;
+  @Prop() countries: any;
 
   @State() convertedBooking: Booking;
   @State() convertedProperty: IProperty;
@@ -68,11 +68,12 @@ export class IrBookingPrinting {
       //   locales.entries = languageTexts.entries;
       //   locales.direction = languageTexts.direction;
       // }
-      const countries = JSON.parse(this.countries);
-
+      console.log(this.property, this.booking, this.countries);
+      const countries = this.countries;
+      this.convertedProperty = this.property;
+      this.convertedBooking = this.booking;
+      console.log(countries, this.convertedBooking, this.convertedProperty, countries);
       this.setUserCountry(countries, this.convertedBooking.guest.country_id);
-      this.convertedProperty = JSON.parse(this.property);
-      this.convertedBooking = JSON.parse(this.booking);
       this.currency = this.convertedBooking.currency.code;
       this.totalPersons = this.convertedBooking?.occupancy.adult_nbr + this.convertedBooking?.occupancy.children_nbr;
       this.totalNights = calculateDaysBetweenDates(this.convertedBooking.from_date, this.convertedBooking.to_date);
