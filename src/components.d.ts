@@ -281,6 +281,19 @@ export namespace Components {
         "propertyid": number;
         "ticket": string;
     }
+    interface IrBookingDetailsHeader {
+        "booking": Booking;
+        "hasCheckIn": boolean;
+        "hasCheckOut": boolean;
+        "hasCloseButton": boolean;
+        "hasDelete": boolean;
+        "hasMenu": boolean;
+        "hasPrint": boolean;
+        "hasReceipt": boolean;
+        "hasRoomAdd": boolean;
+        "hasRoomDelete": boolean;
+        "hasRoomEdit": boolean;
+    }
     interface IrBookingExtraNote {
         "booking": Booking;
     }
@@ -741,6 +754,10 @@ export interface IrAutocompleteCustomEvent<T> extends CustomEvent<T> {
 export interface IrBookingDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingDetailsElement;
+}
+export interface IrBookingDetailsHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingDetailsHeaderElement;
 }
 export interface IrBookingExtraNoteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1335,6 +1352,26 @@ declare global {
     var HTMLIrBookingDetailsElement: {
         prototype: HTMLIrBookingDetailsElement;
         new (): HTMLIrBookingDetailsElement;
+    };
+    interface HTMLIrBookingDetailsHeaderElementEventMap {
+        "closeSidebar": null;
+        "toast": IToast;
+        "resetBookingData": null;
+        "openPMSLogsDialog": null;
+    }
+    interface HTMLIrBookingDetailsHeaderElement extends Components.IrBookingDetailsHeader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingDetailsHeaderElementEventMap>(type: K, listener: (this: HTMLIrBookingDetailsHeaderElement, ev: IrBookingDetailsHeaderCustomEvent<HTMLIrBookingDetailsHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingDetailsHeaderElementEventMap>(type: K, listener: (this: HTMLIrBookingDetailsHeaderElement, ev: IrBookingDetailsHeaderCustomEvent<HTMLIrBookingDetailsHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBookingDetailsHeaderElement: {
+        prototype: HTMLIrBookingDetailsHeaderElement;
+        new (): HTMLIrBookingDetailsHeaderElement;
     };
     interface HTMLIrBookingExtraNoteElementEventMap {
         "closeModal": null;
@@ -2044,6 +2081,7 @@ declare global {
         "igloo-calendar": HTMLIglooCalendarElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
+        "ir-booking-details-header": HTMLIrBookingDetailsHeaderElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
@@ -2418,6 +2456,23 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast1>) => void;
         "propertyid"?: number;
         "ticket"?: string;
+    }
+    interface IrBookingDetailsHeader {
+        "booking"?: Booking;
+        "hasCheckIn"?: boolean;
+        "hasCheckOut"?: boolean;
+        "hasCloseButton"?: boolean;
+        "hasDelete"?: boolean;
+        "hasMenu"?: boolean;
+        "hasPrint"?: boolean;
+        "hasReceipt"?: boolean;
+        "hasRoomAdd"?: boolean;
+        "hasRoomDelete"?: boolean;
+        "hasRoomEdit"?: boolean;
+        "onCloseSidebar"?: (event: IrBookingDetailsHeaderCustomEvent<null>) => void;
+        "onOpenPMSLogsDialog"?: (event: IrBookingDetailsHeaderCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IrBookingDetailsHeaderCustomEvent<null>) => void;
+        "onToast"?: (event: IrBookingDetailsHeaderCustomEvent<IToast>) => void;
     }
     interface IrBookingExtraNote {
         "booking"?: Booking;
@@ -2852,6 +2907,7 @@ declare namespace LocalJSX {
         "igloo-calendar": IglooCalendar;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking-details": IrBookingDetails;
+        "ir-booking-details-header": IrBookingDetailsHeader;
         "ir-booking-extra-note": IrBookingExtraNote;
         "ir-booking-listing": IrBookingListing;
         "ir-booking-printing": IrBookingPrinting;
@@ -2932,6 +2988,7 @@ declare module "@stencil/core" {
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
+            "ir-booking-details-header": LocalJSX.IrBookingDetailsHeader & JSXBase.HTMLAttributes<HTMLIrBookingDetailsHeaderElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;

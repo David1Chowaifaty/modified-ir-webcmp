@@ -1,6 +1,6 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import moment from 'moment';
-import { _formatDate, _formatTime } from './functions';
+import { _formatTime } from './functions';
 import { Booking, Guest, IPmsLog, Room } from '@/models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '@/services/booking.service';
@@ -43,8 +43,6 @@ export class IrBookingDetails {
 
   @State() bookingItem: TIglBookPropertyPayload | null = null;
   @State() statusData = [];
-  // Temp Status Before Save
-  @State() tempStatus: string = null;
 
   @State() showPaymentDetails: any;
   @State() bookingData: Booking;
@@ -53,7 +51,7 @@ export class IrBookingDetails {
   // Guest Data
   @State() guestData: Guest = null;
   @State() defaultTexts: ILocale;
-  // Rerender Flag
+
   @State() rerenderFlag = false;
   @State() sidebarState: 'guest' | 'pickup' | 'extra_note' | null = null;
   @State() isUpdateClicked = false;
@@ -62,7 +60,6 @@ export class IrBookingDetails {
   @State() isPMSLogLoading: boolean = false;
   @State() userCountry: ICountry | null = null;
 
-  // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
   @Event() closeSidebar: EventEmitter<null>;
@@ -70,7 +67,6 @@ export class IrBookingDetails {
   private bookingService = new BookingService();
   private roomService = new RoomService();
   private property: any;
-
   private dialogRef: HTMLIrDialogElement;
 
   componentDidLoad() {
@@ -193,13 +189,6 @@ export class IrBookingDetails {
   handleEditSidebar() {
     this.sidebarState = 'guest';
   }
-  @Listen('selectChange')
-  handleSelectChange(e: CustomEvent<any>) {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    const target = e.target;
-    this.tempStatus = (target as any).selectedValue;
-  }
 
   openEditSidebar() {
     const sidebar: any = document.querySelector('ir-sidebar#editGuestInfo');
@@ -210,21 +199,24 @@ export class IrBookingDetails {
     const bookingJson = JSON.stringify(this.bookingData);
     const propertyJson = JSON.stringify(this.property);
     const countriesJson = JSON.stringify(this.countryNodeList);
-
-    var htmlContent = `
+    const pageTitle = `Booking#${this.bookingNumber} | igloorooms`;
+    const src = 'https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/ir-webcmp/ir-webcmp.esm.js';
+    const htmlContent = `
             <!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Generated Page</title>
+                <title>${pageTitle}</title>
+                <link rel="shortcut icon" type="image/x-icon" href="https://x.igloorooms.com/app-assets/images/ico/favicon.ico">
                 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@100..400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-                <script type="module" src="https://david1chowaifaty.github.io/igloo-calendar-main-web/dist/ir-webcmp/ir-webcmp.esm.js"></script>
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@100..400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+                <script type="module" src='${src}'></script>
                 <style>
-                body{
-                 font-family: "Roboto", sans-serif;}
+                   body{
+                      font-family: "Roboto", sans-serif;
+                      }
                 </style>
             </head>
             <body>
@@ -241,50 +233,16 @@ export class IrBookingDetails {
             `;
 
     try {
-      // Create a Blob from the HTML string
-      var blob = new Blob([htmlContent], { type: 'text/html' });
-
-      // Create an object URL from the Blob
-      var url = URL.createObjectURL(blob);
-
-      // Open the URL in a new window or tab
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
       window.open(url);
     } catch (error) {
       console.error('Error creating or opening the generated HTML page:', error);
       alert('Failed to generate and open the HTML page. Check the console for details.');
     }
   }
-
-  async updateStatus() {
-    if (this.tempStatus !== '' && this.tempStatus !== null) {
-      try {
-        this.isUpdateClicked = true;
-        await axios.post(`/Change_Exposed_Booking_Status?Ticket=${this.ticket}`, {
-          book_nbr: this.bookingNumber,
-          status: this.tempStatus,
-        });
-        this.toast.emit({
-          type: 'success',
-          description: '',
-          title: locales.entries.Lcz_StatusUpdatedSuccessfully,
-          position: 'top-right',
-        });
-        await this.resetBookingData();
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.isUpdateClicked = false;
-      }
-    } else {
-      this.toast.emit({
-        type: 'error',
-        description: '',
-        title: locales.entries.Lcz_SelectStatus,
-        position: 'top-right',
-      });
-    }
-  }
-  async openPMSLogsDialog() {
+  @Listen('openPMSLogsDialog')
+  async handleOpenPMSLogsDialog() {
     try {
       this.dialogRef?.openModal();
       if (!this.pms_status) {
@@ -350,22 +308,6 @@ export class IrBookingDetails {
     if (!this.bookingData) {
       return null;
     }
-    let confirmationBG: string = '';
-    switch (this.bookingData.status.code) {
-      case '001':
-        confirmationBG = 'bg-ir-orange';
-        break;
-      case '002':
-        confirmationBG = 'bg-ir-green';
-        break;
-      case '003':
-        confirmationBG = 'bg-ir-red';
-        break;
-      case '004':
-        confirmationBG = 'bg-ir-red';
-        break;
-    }
-
     return [
       <Fragment>
         {!this.is_from_front_desk && (
@@ -375,75 +317,19 @@ export class IrBookingDetails {
           </Fragment>
         )}
       </Fragment>,
-      <div class="fluid-container p-1">
-        <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between mt-1">
-          <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0  d-flex justify-content-start align-items-center">
-            <p class="font-size-large m-0 p-0">{`${this.defaultTexts.entries.Lcz_Booking}#${this.bookingNumber}`}</p>
-            <p class="m-0 p-0 ml-1">
-              {!this.bookingData.is_direct && (
-                <span class="mr-1 m-0">
-                  {this.bookingData.channel_booking_nbr} {/* format time */}
-                </span>
-              )}
-              <span class="date-margin">{_formatDate(this.bookingData.booked_on.date)}</span>
-
-              {_formatTime(this.bookingData.booked_on.hour.toString(), this.bookingData.booked_on.minute.toString())}
-            </p>
-          </div>
-
-          <div class="d-flex justify-content-end align-items-center">
-            <span class={`confirmed btn-sm m-0 mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
-            {this.bookingData.allowed_actions.length > 0 && this.bookingData.is_editable && (
-              <Fragment>
-                <ir-select
-                  selectContainerStyle="h-28"
-                  selectStyles="d-flex status-select align-items-center h-28"
-                  firstOption={locales.entries.Lcz_Select}
-                  id="update-status"
-                  size="sm"
-                  label-available="false"
-                  data={this.bookingData.allowed_actions.map(b => ({ text: b.description, value: b.code }))}
-                  textSize="sm"
-                  class="sm-padding-right m-0 "
-                ></ir-select>
-                <ir-button
-                  onClickHanlder={this.updateStatus.bind(this)}
-                  btn_styles="h-28"
-                  isLoading={this.isUpdateClicked}
-                  btn_disabled={this.isUpdateClicked}
-                  id="update-status-btn"
-                  size="sm"
-                  text="Update"
-                ></ir-button>
-              </Fragment>
-            )}
-            {calendar_data.is_pms_enabled && (
-              <button type="button" class="btn btn-outline btn-sm ml-1" onClick={this.openPMSLogsDialog.bind(this)}>
-                {locales.entries.Lcz_pms}
-              </button>
-            )}
-            {this.hasReceipt && <ir-button variant="icon" id="receipt" icon_name="reciept" class="mx-1" style={{ '--icon-size': '1.65rem' }}></ir-button>}
-            {this.hasPrint && <ir-button variant="icon" id="print" icon_name="print" class="mr-1" style={{ '--icon-size': '1.65rem' }}></ir-button>}
-            {this.hasDelete && <ir-button variant="icon" id="book-delete" icon_name="trash" class="mr-1" style={{ ...colorVariants.danger, '--icon-size': '1.65rem' }}></ir-button>}
-            {this.hasMenu && <ir-button variant="icon" class="mr-1" id="menu" icon_name="menu_list" style={{ '--icon-size': '1.65rem' }}></ir-button>}
-
-            {this.hasCloseButton && (
-              <ir-button
-                id="close"
-                variant="icon"
-                style={{ '--icon-size': '1.65rem' }}
-                icon_name="xmark"
-                class="ml-2"
-                onClickHanlder={e => {
-                  e.stopPropagation();
-                  e.stopImmediatePropagation();
-                  this.closeSidebar.emit(null);
-                }}
-              ></ir-button>
-            )}
-          </div>
-        </div>
-      </div>,
+      <ir-booking-details-header
+        hasCheckIn={this.hasCheckIn}
+        hasCloseButton={this.hasCloseButton}
+        hasCheckOut={this.hasCheckOut}
+        booking={this.bookingData}
+        hasDelete={this.hasDelete}
+        hasMenu={this.hasMenu}
+        hasPrint={this.hasPrint}
+        hasReceipt={this.hasReceipt}
+        hasRoomAdd={this.hasRoomAdd}
+        hasRoomDelete={this.hasRoomDelete}
+        hasRoomEdit={this.hasRoomEdit}
+      ></ir-booking-details-header>,
       <div class="fluid-container p-1 text-left mx-0">
         <div class="row m-0">
           <div class="col-12 p-0 mx-0 pr-lg-1 col-lg-6">
@@ -522,14 +408,6 @@ export class IrBookingDetails {
               <ir-date-view from_date={this.bookingData.from_date} to_date={this.bookingData.to_date}></ir-date-view>
               {this.hasRoomAdd && this.bookingData.is_direct && this.bookingData.is_editable && (
                 <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
-                // <ir-icon id="room-add">
-                //   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
-                //     <path
-                //       fill="#6b6f82"
-                //       d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                //     />
-                //   </svg>
-                // </ir-icon>
               )}
             </div>
             <div class="card p-0 mx-0">

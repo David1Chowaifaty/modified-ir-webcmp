@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+.list-item.green {
+  color: #629a4c;
+  font-weight: 600;
+}
+.list-item.red {
+  color: #ff4961;
+  font-weight: 600;
+}
+.badge {
+  padding: 0.2rem 0.3rem;
+}
+.badge.green {
+  background: #629a4c;
+}
+.badge.red {
+  background: #ff4961;
+}
+.badge.orange {
+  background: #ff9149;
+}
