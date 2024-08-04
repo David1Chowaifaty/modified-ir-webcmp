@@ -46,6 +46,7 @@ export class IrRoom {
   @State() isLoading: boolean = false;
   @State() isModelOpen: boolean = false;
   private modal: IrModal;
+  irModalRef: HTMLIrModalElement;
   componentWillLoad() {
     if (this.bookingEvent) {
       this.item = this.bookingEvent.rooms[this.bookingIndex];
@@ -161,6 +162,7 @@ export class IrRoom {
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }
+      this.irModalRef.closeModal();
       this.deleteFinished.emit(this.item.identifier);
     } catch (error) {
     } finally {
@@ -304,6 +306,9 @@ export class IrRoom {
           </div>
         </div>
         <ir-modal
+          autoClose={false}
+          ref={el => (this.irModalRef = el)}
+          isLoading={this.isLoading}
           onConfirmModal={this.deleteRoom.bind(this)}
           iconAvailable={true}
           icon="ft-alert-triangle danger h1"

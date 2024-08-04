@@ -496,10 +496,12 @@ export namespace Components {
         "message": string;
     }
     interface IrModal {
+        "autoClose": boolean;
         "btnPosition": 'left' | 'right' | 'center';
         "closeModal": () => Promise<void>;
         "icon": string;
         "iconAvailable": boolean;
+        "isLoading": boolean;
         "item": any;
         "leftBtnActive": boolean;
         "leftBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
@@ -2661,9 +2663,11 @@ declare namespace LocalJSX {
         "message"?: string;
     }
     interface IrModal {
+        "autoClose"?: boolean;
         "btnPosition"?: 'left' | 'right' | 'center';
         "icon"?: string;
         "iconAvailable"?: boolean;
+        "isLoading"?: boolean;
         "item"?: any;
         "leftBtnActive"?: boolean;
         "leftBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';

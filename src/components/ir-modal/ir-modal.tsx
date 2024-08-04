@@ -15,6 +15,9 @@ export class IrModal {
   @Prop() rightBtnText: string = 'Confirm';
   @Prop() leftBtnText: string = 'Close';
 
+  @Prop() isLoading: boolean = false;
+  @Prop() autoClose: boolean = true;
+
   @Prop() rightBtnColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'primary';
   @Prop() leftBtnColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'secondary';
 
@@ -47,7 +50,9 @@ export class IrModal {
     } else if (name === this.rightBtnText) {
       this.confirmModal.emit(this.item);
       this.item = {};
-      this.closeModal();
+      if (this.autoClose) {
+        this.closeModal();
+      }
     }
   }
 
@@ -59,7 +64,9 @@ export class IrModal {
         class={`backdropModal ${this.isOpen ? 'active' : ''}`}
         onClick={() => {
           this.cancelModal.emit();
-          this.closeModal();
+          if (this.autoClose && !this.isLoading) {
+            this.closeModal();
+          }
         }}
       ></div>,
       <div data-state={this.isOpen ? 'opened' : 'closed'} class={`ir-modal`} tabindex="-1">
@@ -88,8 +95,20 @@ export class IrModal {
           </div>
 
           <div class={`ir-alert-footer border-0  d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
-            {this.leftBtnActive && <ir-button icon={''} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>}
-            {this.rightBtnActive && <ir-button icon={''} btn_color={this.rightBtnColor} btn_block text={this.rightBtnText} name={this.rightBtnText}></ir-button>}
+            {this.leftBtnActive && (
+              <ir-button btn_disabled={this.isLoading} icon={''} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>
+            )}
+            {this.rightBtnActive && (
+              <ir-button
+                icon={''}
+                btn_color={this.rightBtnColor}
+                btn_disabled={this.isLoading}
+                isLoading={this.isLoading}
+                btn_block
+                text={this.rightBtnText}
+                name={this.rightBtnText}
+              ></ir-button>
+            )}
           </div>
         </div>
       </div>,
