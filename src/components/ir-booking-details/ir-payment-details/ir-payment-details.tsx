@@ -43,6 +43,9 @@ export class IrPaymentDetails {
       this.bookingService.setToken(calendar_data.token);
       this.initializeItemToBeAdded();
     } catch (error) {
+      if (this.bookingDetails.guest.cci) {
+        return;
+      }
       if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
         this.paymentExceptionMessage = error;
       }
@@ -264,13 +267,13 @@ export class IrPaymentDetails {
             id="drawer-icon"
             data-toggle="collapse"
             data-target={`.guarrantee`}
-            aria-expanded="false"
+            aria-expanded={this.collapsedGuarantee ? 'true' : 'false'}
             aria-controls="myCollapse"
             class="sm-padding-right pointer"
             variant="icon"
             icon_name="credit_card"
             onClickHanlder={async () => {
-              if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr) {
+              if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr && !this.bookingDetails.guest.cci) {
                 this.paymentDetailsUrl = await this.bookingService.getPCICardInfoURL(this.bookingDetails.booking_nbr);
               }
               this.collapsedGuarantee = !this.collapsedGuarantee;
@@ -278,7 +281,7 @@ export class IrPaymentDetails {
           ></ir-button>
         </div>
         <div class="collapse guarrantee ">
-          {this.bookingDetails.is_direct ? (
+          {this.bookingDetails.guest.cci ? (
             [
               <div>
                 {this.bookingDetails?.guest?.cci && 'Card:'} <span>{this.bookingDetails?.guest?.cci?.nbr || ''}</span> {this.bookingDetails?.guest?.cci?.expiry_month && 'Expiry: '}
@@ -341,7 +344,7 @@ export class IrPaymentDetails {
                       id="drawer-icon"
                       data-toggle="collapse"
                       data-target={`.roomName`}
-                      aria-expanded="false"
+                      aria-expanded={this.collapsedPayment ? 'true' : 'false'}
                       aria-controls="myCollapse"
                       variant="icon"
                       icon_name={this.collapsedPayment ? 'closed_eye' : 'open_eye'}

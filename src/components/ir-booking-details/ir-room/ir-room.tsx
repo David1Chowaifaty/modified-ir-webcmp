@@ -178,8 +178,8 @@ export class IrRoom {
           id="drawer-icon"
           data-toggle="collapse"
           data-target={`#roomCollapse-${this.item.identifier?.split(' ').join('')}`}
-          aria-expanded="false"
-          aria-controls="collapseExample"
+          aria-expanded={this.collapsed ? 'true' : 'false'}
+          aria-controls="myCollapse"
           class="mr-1"
           icon_name={this.collapsed ? 'closed_eye' : 'open_eye'}
           onClickHanlder={() => {
