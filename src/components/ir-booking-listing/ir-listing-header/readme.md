@@ -14,6 +14,13 @@
 | `propertyId` | `property-id` |             | `number` | `undefined` |
 
 
+## Events
+
+| Event             | Description | Type                  |
+| ----------------- | ----------- | --------------------- |
+| `preventPageLoad` |             | `CustomEvent<string>` |
+
+
 ## Dependencies
 
 ### Used by

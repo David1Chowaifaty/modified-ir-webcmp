@@ -9,9 +9,11 @@
 
 | Property         | Attribute          | Description | Type                                                                                            | Default         |
 | ---------------- | ------------------ | ----------- | ----------------------------------------------------------------------------------------------- | --------------- |
+| `autoClose`      | `auto-close`       |             | `boolean`                                                                                       | `true`          |
 | `btnPosition`    | `btn-position`     |             | `"center" \| "left" \| "right"`                                                                 | `'right'`       |
 | `icon`           | `icon`             |             | `string`                                                                                        | `''`            |
 | `iconAvailable`  | `icon-available`   |             | `boolean`                                                                                       | `false`         |
+| `isLoading`      | `is-loading`       |             | `boolean`                                                                                       | `false`         |
 | `item`           | `item`             |             | `any`                                                                                           | `{}`            |
 | `leftBtnActive`  | `left-btn-active`  |             | `boolean`                                                                                       | `true`          |
 | `leftBtnColor`   | `left-btn-color`   |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"` | `'secondary'`   |

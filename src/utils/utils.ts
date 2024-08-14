@@ -146,4 +146,8 @@ export const extras = [
     key: 'private_note',
     value: '',
   },
+  {
+    key: 'is_backend',
+    value: true,
+  },
 ];

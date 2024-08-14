@@ -194,7 +194,7 @@ export class IrListingHeader {
             onSelectChange={e => updateUserSelection('channel', e.detail)}
             LabelAvailable={false}
             data={booking_listing?.channels.map(channel => ({
-              value: channel.name,
+              value: channel.value,
               text: channel.name,
             }))}
             select_id="channels"
