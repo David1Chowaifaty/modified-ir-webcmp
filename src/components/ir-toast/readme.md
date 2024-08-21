@@ -23,6 +23,7 @@
  - [ir-channel](../ir-channel)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-housekeeping](../ir-housekeeping)
+ - [ir-login](../ir-login)
 
 ### Graph
 ```mermaid
@@ -34,6 +35,7 @@ graph TD;
   ir-channel --> ir-toast
   ir-hk-tasks --> ir-toast
   ir-housekeeping --> ir-toast
+  ir-login --> ir-toast
   style ir-toast fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

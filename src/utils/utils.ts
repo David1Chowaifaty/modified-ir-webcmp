@@ -151,3 +151,30 @@ export const extras = [
     value: true,
   },
 ];
+export function manageAnchorSession(data: Record<string, unknown>, mode: 'add' | 'remove' = 'add') {
+  const anchor = JSON.parse(sessionStorage.getItem('anchor'));
+  if (anchor) {
+    if (mode === 'add') {
+      return sessionStorage.setItem('anchor', JSON.stringify({ ...anchor, ...data }));
+    } else if (mode === 'remove') {
+      const keys = Object.keys(data);
+      keys.forEach(key => {
+        if (key in anchor) {
+          delete anchor[key];
+        }
+      });
+      return sessionStorage.setItem('anchor', JSON.stringify(anchor));
+    }
+  } else {
+    if (mode === 'add') {
+      return sessionStorage.setItem('anchor', JSON.stringify({ ...data }));
+    }
+  }
+}
+export function checkUserAuthState() {
+  const anchor = JSON.parse(sessionStorage.getItem('anchor'));
+  if (anchor) {
+    return anchor.login || null;
+  }
+  return null;
+}

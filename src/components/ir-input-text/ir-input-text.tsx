@@ -78,7 +78,7 @@ export class IrInputText {
             </span>
           </label>
           <input
-            type="text"
+            type={this.type}
             onFocus={() => (this.inputFocused = true)}
             required={this.required}
             onBlur={e => {

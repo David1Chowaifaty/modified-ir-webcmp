@@ -263,6 +263,11 @@ export namespace Components {
         "type": 'email' | 'text' | 'password' | 'number' | 'search';
         "value": string;
     }
+    interface IrBooking {
+        "baseurl": string;
+        "bookingNumber": string;
+        "propertyid": number;
+    }
     interface IrBookingDetails {
         "baseurl": string;
         "bookingNumber": string;
@@ -299,7 +304,7 @@ export namespace Components {
     }
     interface IrButton {
         "btn_block": boolean;
-        "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline';
         "btn_disabled": boolean;
         "btn_id": string;
         "btn_styles": string;
@@ -494,6 +499,9 @@ export namespace Components {
     }
     interface IrLoadingScreen {
         "message": string;
+    }
+    interface IrLogin {
+        "baseurl": string;
     }
     interface IrModal {
         "autoClose": boolean;
@@ -825,6 +833,10 @@ export interface IrListingHeaderCustomEvent<T> extends CustomEvent<T> {
 export interface IrListingModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrListingModalElement;
+}
+export interface IrLoginCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrLoginElement;
 }
 export interface IrModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1317,6 +1329,12 @@ declare global {
         prototype: HTMLIrAutocompleteElement;
         new (): HTMLIrAutocompleteElement;
     };
+    interface HTMLIrBookingElement extends Components.IrBooking, HTMLStencilElement {
+    }
+    var HTMLIrBookingElement: {
+        prototype: HTMLIrBookingElement;
+        new (): HTMLIrBookingElement;
+    };
     interface HTMLIrBookingDetailsElementEventMap {
         "toast": IToast1;
         "bookingChanged": Booking;
@@ -1779,6 +1797,26 @@ declare global {
         prototype: HTMLIrLoadingScreenElement;
         new (): HTMLIrLoadingScreenElement;
     };
+    interface HTMLIrLoginElementEventMap {
+        "authFinish": {
+    token: string;
+    code: 'succsess' | 'error';
+  };
+    }
+    interface HTMLIrLoginElement extends Components.IrLogin, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrLoginElementEventMap>(type: K, listener: (this: HTMLIrLoginElement, ev: IrLoginCustomEvent<HTMLIrLoginElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrLoginElementEventMap>(type: K, listener: (this: HTMLIrLoginElement, ev: IrLoginCustomEvent<HTMLIrLoginElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrLoginElement: {
+        prototype: HTMLIrLoginElement;
+        new (): HTMLIrLoginElement;
+    };
     interface HTMLIrModalElementEventMap {
         "confirmModal": any;
         "cancelModal": any;
@@ -2043,6 +2081,7 @@ declare global {
         "igl-to-be-assigned": HTMLIglToBeAssignedElement;
         "igloo-calendar": HTMLIglooCalendarElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
+        "ir-booking": HTMLIrBookingElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
@@ -2077,6 +2116,7 @@ declare global {
         "ir-listing-header": HTMLIrListingHeaderElement;
         "ir-listing-modal": HTMLIrListingModalElement;
         "ir-loading-screen": HTMLIrLoadingScreenElement;
+        "ir-login": HTMLIrLoginElement;
         "ir-modal": HTMLIrModalElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
         "ir-phone-input": HTMLIrPhoneInputElement;
@@ -2398,6 +2438,11 @@ declare namespace LocalJSX {
         "type"?: 'email' | 'text' | 'password' | 'number' | 'search';
         "value"?: string;
     }
+    interface IrBooking {
+        "baseurl"?: string;
+        "bookingNumber"?: string;
+        "propertyid"?: number;
+    }
     interface IrBookingDetails {
         "baseurl"?: string;
         "bookingNumber"?: string;
@@ -2439,7 +2484,7 @@ declare namespace LocalJSX {
     }
     interface IrButton {
         "btn_block"?: boolean;
-        "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline';
         "btn_disabled"?: boolean;
         "btn_id"?: string;
         "btn_styles"?: string;
@@ -2662,6 +2707,13 @@ declare namespace LocalJSX {
     interface IrLoadingScreen {
         "message"?: string;
     }
+    interface IrLogin {
+        "baseurl"?: string;
+        "onAuthFinish"?: (event: IrLoginCustomEvent<{
+    token: string;
+    code: 'succsess' | 'error';
+  }>) => void;
+    }
     interface IrModal {
         "autoClose"?: boolean;
         "btnPosition"?: 'left' | 'right' | 'center';
@@ -2851,6 +2903,7 @@ declare namespace LocalJSX {
         "igl-to-be-assigned": IglToBeAssigned;
         "igloo-calendar": IglooCalendar;
         "ir-autocomplete": IrAutocomplete;
+        "ir-booking": IrBooking;
         "ir-booking-details": IrBookingDetails;
         "ir-booking-extra-note": IrBookingExtraNote;
         "ir-booking-listing": IrBookingListing;
@@ -2885,6 +2938,7 @@ declare namespace LocalJSX {
         "ir-listing-header": IrListingHeader;
         "ir-listing-modal": IrListingModal;
         "ir-loading-screen": IrLoadingScreen;
+        "ir-login": IrLogin;
         "ir-modal": IrModal;
         "ir-payment-details": IrPaymentDetails;
         "ir-phone-input": IrPhoneInput;
@@ -2931,6 +2985,7 @@ declare module "@stencil/core" {
             "igl-to-be-assigned": LocalJSX.IglToBeAssigned & JSXBase.HTMLAttributes<HTMLIglToBeAssignedElement>;
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
+            "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
@@ -2965,6 +3020,7 @@ declare module "@stencil/core" {
             "ir-listing-header": LocalJSX.IrListingHeader & JSXBase.HTMLAttributes<HTMLIrListingHeaderElement>;
             "ir-listing-modal": LocalJSX.IrListingModal & JSXBase.HTMLAttributes<HTMLIrListingModalElement>;
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
+            "ir-login": LocalJSX.IrLogin & JSXBase.HTMLAttributes<HTMLIrLoginElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
             "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;

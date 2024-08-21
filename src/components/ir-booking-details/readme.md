@@ -41,6 +41,7 @@
 ### Used by
 
  - [igloo-calendar](../igloo-calendar)
+ - [ir-booking](../ir-booking)
  - [ir-booking-listing](../ir-booking-listing)
 
 ### Depends on
@@ -129,6 +130,7 @@ graph TD;
   ir-booking-extra-note --> ir-textarea
   ir-booking-extra-note --> ir-button
   igloo-calendar --> ir-booking-details
+  ir-booking --> ir-booking-details
   ir-booking-listing --> ir-booking-details
   style ir-booking-details fill:#f9f,stroke:#333,stroke-width:4px
 ```

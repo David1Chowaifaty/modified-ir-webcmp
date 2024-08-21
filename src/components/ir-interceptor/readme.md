@@ -29,6 +29,7 @@
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-housekeeping](../ir-housekeeping)
+ - [ir-login](../ir-login)
 
 ### Graph
 ```mermaid
@@ -39,6 +40,7 @@ graph TD;
   ir-booking-listing --> ir-interceptor
   ir-hk-tasks --> ir-interceptor
   ir-housekeeping --> ir-interceptor
+  ir-login --> ir-interceptor
   style ir-interceptor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
