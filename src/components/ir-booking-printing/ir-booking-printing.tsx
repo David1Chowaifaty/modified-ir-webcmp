@@ -5,6 +5,10 @@ import { _formatAmount, _formatTime } from '../ir-booking-details/functions';
 import { IProperty } from '@/models/property';
 import { calculateDaysBetweenDates } from '@/utils/booking';
 import BeLogoFooter from '@/assets/be_logo_footer';
+import { BookingService } from '@/services/booking.service';
+import { RoomService } from '@/services/room.service';
+import axios from 'axios';
+// import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-booking-printing',
@@ -12,11 +16,12 @@ import BeLogoFooter from '@/assets/be_logo_footer';
   shadow: true,
 })
 export class IrBookingPrinting {
-  // @Prop() language: string = '';
   // @Prop() ticket: string = '';
-  // @Prop() bookingNumber: string = '';
-  // @Prop() baseurl: string = '';
-  // @Prop() propertyid: number;
+  @Prop() bookingNumber: string = '';
+  @Prop() baseurl: string = 'https://gateway.igloorooms.com/IR';
+  @Prop() language: string = 'en';
+  @Prop() propertyid: number;
+
   @Prop() mode: 'invoice' | 'default' = 'default';
   @Prop() property: any;
   @Prop() booking: any;
@@ -26,15 +31,17 @@ export class IrBookingPrinting {
   @State() convertedProperty: IProperty;
   @State() guestCountryName: string;
   @State() isLoading: boolean;
+  @State() token: string;
 
-  // private bookingService = new BookingService();
-  // private roomService = new RoomService();
+  private bookingService = new BookingService();
+  private roomService = new RoomService();
+
   private currency: string;
   private totalNights: number;
   private totalPersons: number;
 
   componentWillLoad() {
-    // axios.defaults.baseURL = this.baseurl;
+    axios.defaults.baseURL = this.baseurl;
     document.body.style.background = 'white';
     // if (this.ticket) {
     this.init();
@@ -47,29 +54,40 @@ export class IrBookingPrinting {
   //     this.init();
   //   }
   // }
+
+  private applyTokenToServices() {
+    this.bookingService.setToken(this.token);
+    this.roomService.setToken(this.token);
+  }
+
   private init() {
-    // this.bookingService.setToken(this.ticket);
-    // this.roomService.setToken(this.ticket);
+    this.applyTokenToServices();
     this.initializeRequests();
   }
+
   async initializeRequests() {
     try {
       this.isLoading = true;
-      // if (!this.bookingNumber) {
-      //   throw new Error('Missing booking number');
-      // }
-      // const [property, languageTexts, booking, countries] = await Promise.all([
-      //   this.roomService.fetchData(this.propertyid, this.language),
-      //   this.roomService.fetchLanguage(this.language),
-      //   this.bookingService.getExposedBooking(this.bookingNumber, this.language),
-      //   this.bookingService.getCountries(this.language),
-      // ]);
-      // if (!locales.entries) {
-      //   locales.entries = languageTexts.entries;
-      //   locales.direction = languageTexts.direction;
-      // }
-      console.log(this.property, this.booking, this.countries);
-      const countries = this.countries;
+      if (!this.bookingNumber) {
+        throw new Error('Missing booking number');
+      }
+      let countries: any;
+      if (!this.countries || !this.property || !this.booking) {
+        // const [property, languageTexts, booking, fetchedCountries] = await Promise.all([
+        //   this.roomService.fetchData(this.propertyid, this.language),
+        //   this.roomService.fetchLanguage(this.language),
+        //   this.bookingService.getExposedBooking(this.bookingNumber, this.language),
+        //   this.bookingService.getCountries(this.language),
+        // ]);
+        // if (!locales.entries) {
+        //   locales.entries = languageTexts.entries;
+        //   locales.direction = languageTexts.direction;
+        // }
+        // this.property = property;
+        // this.booking = booking;
+      }
+
+      countries = this.countries;
       this.convertedProperty = this.property;
       this.convertedBooking = this.booking;
       console.log(countries, this.convertedBooking, this.convertedProperty, countries);

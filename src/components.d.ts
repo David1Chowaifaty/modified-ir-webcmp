@@ -297,10 +297,14 @@ export namespace Components {
         "ticket": string;
     }
     interface IrBookingPrinting {
+        "baseurl": string;
         "booking": any;
+        "bookingNumber": string;
         "countries": any;
+        "language": string;
         "mode": 'invoice' | 'default';
         "property": any;
+        "propertyid": number;
     }
     interface IrButton {
         "btn_block": boolean;
@@ -2477,10 +2481,14 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrBookingPrinting {
+        "baseurl"?: string;
         "booking"?: any;
+        "bookingNumber"?: string;
         "countries"?: any;
+        "language"?: string;
         "mode"?: 'invoice' | 'default';
         "property"?: any;
+        "propertyid"?: number;
     }
     interface IrButton {
         "btn_block"?: boolean;
