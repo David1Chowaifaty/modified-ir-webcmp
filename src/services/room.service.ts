@@ -4,11 +4,11 @@ import { locales } from '@/stores/locales.store';
 import axios from 'axios';
 
 export class RoomService extends Token {
-  public async fetchData(id: number, language: string) {
+  public async fetchData(id: number, language: string, is_backend: boolean = false) {
     try {
       const token = this.getToken();
       if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Property?Ticket=${token}`, { id, language });
+        const { data } = await axios.post(`/Get_Exposed_Property?Ticket=${token}`, { id, language, is_backend });
         if (data.ExceptionMsg !== '') {
           throw new Error(data.ExceptionMsg);
         }

@@ -15,6 +15,7 @@
   <script src="assets/scripts/toastr/toastr.min.js"></script>
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
   <script src="index.js"></script>
+
   <style>
     body {
       overflow-x: hidden;
@@ -24,13 +25,15 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-booking baseurl="https://gateway.igloorooms.com/IR"></ir-booking>
+  <ir-channel propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-channel>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
-
   <script>
-    const booking = document.querySelector("ir-booking");
-    booking.propertyid = getId();
-    booking.bookingNumber = "23080178267"
+    const irchannel = document.querySelector('ir-channel')
+    setTimeout(() => {
+      const ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MjU1NDY0NjgsIkNMQUlNLTAxIjoiY1I1R1l0UlFaMzg9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiQUVxVnRCMm1kWTg9IiwiQ0xBSU0tMDUiOiJFQTEzejA3ejBUcWRkM2gwNElyYThKTGVjQkN2Wm1LaCIsIkNMQUlNLTA2IjoiQUVxVnRCMm1kWTg9In0.m7_PSYU9b6ixIWIaXsu7BgcaOuLWSi6NKOtRrl8Ei54" || getToken()
+      irchannel.propertyid = 389;
+      irchannel.ticket = ticket
+    }, 300)
   </script>
 
 </body>

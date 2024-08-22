@@ -28,14 +28,14 @@
     <ir-booking-printing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-printing>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
     <script>
-        const bookingPrinting = document.querySelector("ir-booking-priting");
-        setTimeout(() => {
-            sessionStorage.removeItem('token');
-            const ticket = getToken();
-            bookingPrinting.bookingNumber = "23080178267"
-            bookingPrinting.propertyid = getId();
-            bookingPrinting.ticket = ticket;
-        }, 300)
+        const bookingPrinting = document.querySelector("ir-booking-printing");
+
+        sessionStorage.removeItem('token');
+        const ticket = getToken();
+        bookingPrinting.bookingNumber = "23080178267"
+        bookingPrinting.propertyid = getId();
+        bookingPrinting.token = ticket;
+
     </script>
 
 </body>

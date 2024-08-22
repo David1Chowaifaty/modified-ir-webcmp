@@ -1,5 +1,5 @@
 import { Booking, Guest, Room } from '@/models/booking.dto';
-import { Component, Fragment, Prop, State, h } from '@stencil/core';
+import { Component, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import moment, { Moment } from 'moment';
 import { _formatAmount, _formatTime } from '../ir-booking-details/functions';
 import { IProperty } from '@/models/property';
@@ -8,7 +8,7 @@ import BeLogoFooter from '@/assets/be_logo_footer';
 import { BookingService } from '@/services/booking.service';
 import { RoomService } from '@/services/room.service';
 import axios from 'axios';
-// import locales from '@/stores/locales.store';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-booking-printing',
@@ -16,22 +16,21 @@ import axios from 'axios';
   shadow: true,
 })
 export class IrBookingPrinting {
-  // @Prop() ticket: string = '';
+  @Prop() token: string = '';
   @Prop() bookingNumber: string = '';
   @Prop() baseurl: string = 'https://gateway.igloorooms.com/IR';
   @Prop() language: string = 'en';
   @Prop() propertyid: number;
 
   @Prop() mode: 'invoice' | 'default' = 'default';
-  @Prop() property: any;
-  @Prop() booking: any;
+
   @Prop() countries: any;
 
-  @State() convertedBooking: Booking;
-  @State() convertedProperty: IProperty;
+  @State() booking: Booking;
+  @State() property: IProperty;
   @State() guestCountryName: string;
   @State() isLoading: boolean;
-  @State() token: string;
+  // @State() token: string;
 
   private bookingService = new BookingService();
   private roomService = new RoomService();
@@ -43,17 +42,17 @@ export class IrBookingPrinting {
   componentWillLoad() {
     axios.defaults.baseURL = this.baseurl;
     document.body.style.background = 'white';
-    // if (this.ticket) {
-    this.init();
-    // }
+    if (this.token) {
+      this.init();
+    }
   }
 
-  // @Watch('ticket')
-  // async ticketChanged(newValue: string, oldValue: string) {
-  //   if (newValue !== oldValue) {
-  //     this.init();
-  //   }
-  // }
+  @Watch('token')
+  async ticketChanged(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      this.init();
+    }
+  }
 
   private applyTokenToServices() {
     this.bookingService.setToken(this.token);
@@ -68,33 +67,30 @@ export class IrBookingPrinting {
   async initializeRequests() {
     try {
       this.isLoading = true;
-      if (!this.bookingNumber) {
-        throw new Error('Missing booking number');
-      }
+      // if (!this.bookingNumber) {
+      //   throw new Error('Missing booking number');
+      // }
       let countries: any;
-      if (!this.countries || !this.property || !this.booking) {
-        // const [property, languageTexts, booking, fetchedCountries] = await Promise.all([
-        //   this.roomService.fetchData(this.propertyid, this.language),
-        //   this.roomService.fetchLanguage(this.language),
-        //   this.bookingService.getExposedBooking(this.bookingNumber, this.language),
-        //   this.bookingService.getCountries(this.language),
-        // ]);
-        // if (!locales.entries) {
-        //   locales.entries = languageTexts.entries;
-        //   locales.direction = languageTexts.direction;
-        // }
-        // this.property = property;
-        // this.booking = booking;
+
+      const [property, languageTexts, booking, fetchedCountries] = await Promise.all([
+        this.roomService.fetchData(this.propertyid, this.language),
+        this.roomService.fetchLanguage(this.language),
+        this.bookingService.getExposedBooking(this.bookingNumber, this.language),
+        this.bookingService.getCountries(this.language),
+      ]);
+      if (!locales.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
       }
 
-      countries = this.countries;
-      this.convertedProperty = this.property;
-      this.convertedBooking = this.booking;
-      console.log(countries, this.convertedBooking, this.convertedProperty, countries);
-      this.setUserCountry(countries, this.convertedBooking.guest.country_id);
-      this.currency = this.convertedBooking.currency.code;
-      this.totalPersons = this.convertedBooking?.occupancy.adult_nbr + this.convertedBooking?.occupancy.children_nbr;
-      this.totalNights = calculateDaysBetweenDates(this.convertedBooking.from_date, this.convertedBooking.to_date);
+      this.property = property['My_Result'];
+      // this.booking = booking;
+      countries = fetchedCountries;
+      this.booking = booking;
+      this.setUserCountry(countries, this.booking.guest.country_id);
+      this.currency = this.booking.currency.code;
+      this.totalPersons = this.booking?.occupancy.adult_nbr + this.booking?.occupancy.children_nbr;
+      this.totalNights = calculateDaysBetweenDates(this.booking.from_date, this.booking.to_date);
     } catch (error) {
       console.error(error);
     } finally {
@@ -136,13 +132,13 @@ export class IrBookingPrinting {
   private renderBookingDetails() {
     return (
       <Fragment>
-        <p class="booking-number">Booking#{this.convertedBooking.booking_nbr}</p>
+        <p class="booking-number">Booking#{this.booking.booking_nbr}</p>
         <div class={'reservation-details'}>
           <p class="booked_on_date">
-            {moment(this.convertedBooking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}{' '}
-            {_formatTime(this.convertedBooking.booked_on.hour.toString(), this.convertedBooking.booked_on.minute.toString())} |
+            {moment(this.booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}{' '}
+            {_formatTime(this.booking.booked_on.hour.toString(), this.booking.booked_on.minute.toString())} |
           </p>
-          <img src={this.convertedBooking.origin.Icon} alt={this.convertedBooking.origin.Label} class="origin-icon" />
+          <img src={this.booking.origin.Icon} alt={this.booking.origin.Label} class="origin-icon" />
         </div>
       </Fragment>
     );
@@ -154,24 +150,24 @@ export class IrBookingPrinting {
           <div>
             <p>
               Address:
-              <span> {this.convertedProperty?.address}</span>
+              <span> {this.property?.address}</span>
             </p>
             <p>
               Phone:
               <span>
                 {' '}
-                +{this.convertedProperty?.country?.phone_prefix.replace('+', '') + '-' || ''}
-                {this.convertedProperty?.phone}
+                +{this.property?.country?.phone_prefix.replace('+', '') + '-' || ''}
+                {this.property?.phone}
               </span>
             </p>
             <p>
-              Tax ID:<span>{this.convertedProperty.tax_nbr}</span>
+              Tax ID:<span>{this.property.tax_nbr}</span>
             </p>
-            <p class="property_name">{this.convertedProperty.name}</p>
+            <p class="property_name">{this.property.name}</p>
           </div>
           <div>
             {this.renderBookingDetails()}
-            <p class={'invoice_reference'}>Invoice Reference:{this.convertedBooking.financial.invoice_nbr}</p>
+            <p class={'invoice_reference'}>Invoice Reference:{this.booking.financial.invoice_nbr}</p>
           </div>
         </Fragment>
       );
@@ -180,14 +176,14 @@ export class IrBookingPrinting {
       <Fragment>
         <div>
           <BeLogoFooter width={120} height={30} />
-          <p class="property_name">{this.convertedProperty.name}</p>
+          <p class="property_name">{this.property.name}</p>
         </div>
         <div>{this.renderBookingDetails()}</div>
       </Fragment>
     );
   }
   private getTaxAmount(room: Room) {
-    if (!this.convertedBooking.is_direct) {
+    if (!this.booking.is_direct) {
       const filtered_data = room.ota_taxes.filter(tx => tx.amount > 0);
       return filtered_data.map((d, index) => {
         return (
@@ -204,7 +200,7 @@ export class IrBookingPrinting {
         );
       });
     }
-    const filtered_data = this.convertedProperty.taxes.filter(tx => tx.pct > 0);
+    const filtered_data = this.property?.taxes?.filter(tx => tx.pct > 0);
     return filtered_data?.map((d, index) => {
       const amount = (room.total * d.pct) / 100;
       return (
@@ -222,10 +218,10 @@ export class IrBookingPrinting {
     });
   }
   render() {
-    if (this.isLoading || (!this.isLoading && (!this.convertedBooking || !this.convertedProperty))) {
+    if (this.isLoading || (!this.isLoading && (!this.booking || !this.property))) {
       return null;
     }
-    console.log(this.convertedBooking.pickup_info);
+    console.log(this.booking.pickup_info);
 
     return (
       <div class="main-container">
@@ -235,43 +231,43 @@ export class IrBookingPrinting {
             <p class="label-title">
               Booked by:
               <span class="label-value">
-                {this.formatGuestName(this.convertedBooking?.guest)} - {this.totalPersons} {this.totalPersons > 1 ? 'persons' : 'person'}
+                {this.formatGuestName(this.booking?.guest)} - {this.totalPersons} {this.totalPersons > 1 ? 'persons' : 'person'}
               </span>
             </p>
             <p class="label-title">
-              Phone:<span class="label-value">{this.formatPhoneNumber(this.convertedBooking?.guest, this.convertedBooking?.is_direct)}</span>
+              Phone:<span class="label-value">{this.formatPhoneNumber(this.booking?.guest, this.booking?.is_direct)}</span>
             </p>
             <p class="label-title">
-              Email:<span class="label-value">{this.convertedBooking?.guest?.email}</span>
+              Email:<span class="label-value">{this.booking?.guest?.email}</span>
             </p>
             {this.guestCountryName && (
               <p class="label-title">
                 Country:<span class="label-value">{this.guestCountryName}</span>
               </p>
             )}
-            {this.convertedBooking.guest.city && (
+            {this.booking.guest.city && (
               <p class="label-title">
-                City:<span class="label-value">{this.convertedBooking?.guest?.city}</span>
+                City:<span class="label-value">{this.booking?.guest?.city}</span>
               </p>
             )}
             <p class="label-title">
-              Arrival Time:<span class="label-value">{this.convertedBooking?.arrival?.description}</span>
+              Arrival Time:<span class="label-value">{this.booking?.arrival?.description}</span>
             </p>
           </section>
           <section>
             <div class="accommodation-summary">
               <p class="accommodation-title">ACCOMMODATION</p>
-              <p class="booking-dates">{this.formatBookingDates(this.convertedBooking?.from_date)}</p>
-              <p class="booking-dates">{this.formatBookingDates(this.convertedBooking?.to_date)}</p>
+              <p class="booking-dates">{this.formatBookingDates(this.booking?.from_date)}</p>
+              <p class="booking-dates">{this.formatBookingDates(this.booking?.to_date)}</p>
               <p class="number-of-nights">
                 {this.totalNights} {this.totalNights === 1 ? 'night' : 'nights'}
               </p>
               <p class="vat-exclusion">
-                <i>{this.convertedProperty.tax_statement}</i>
+                <i>{this.property.tax_statement}</i>
               </p>
             </div>
             <div>
-              {this.convertedBooking?.rooms?.map(room => (
+              {this.booking?.rooms?.map(room => (
                 <Fragment>
                   <table>
                     <tr class={'roomtype-title'}>
@@ -324,35 +320,35 @@ export class IrBookingPrinting {
             </div>
           </section>
         </section>
-        {this.convertedBooking.pickup_info && (
+        {this.booking.pickup_info && (
           <section class="pickup-container">
-            <p class="pickup_title">PICKUP Yes,from {this.convertedBooking.pickup_info.selected_option.location.description}</p>
+            <p class="pickup_title">PICKUP Yes,from {this.booking.pickup_info.selected_option.location.description}</p>
             <div class={'pickup-details'}>
               <p class="label-title">
-                Arrival date:<span class="label-value">{moment(this.convertedBooking?.pickup_info.date, 'YYYY-MM-DD').format('ddd, DD MMM YYYY')}</span>
+                Arrival date:<span class="label-value">{moment(this.booking?.pickup_info.date, 'YYYY-MM-DD').format('ddd, DD MMM YYYY')}</span>
               </p>
               <p class="label-title">
-                Time:<span class="label-value">{_formatTime(this.convertedBooking.pickup_info.hour.toString(), this.convertedBooking.pickup_info.minute.toString())}</span>
+                Time:<span class="label-value">{_formatTime(this.booking.pickup_info.hour.toString(), this.booking.pickup_info.minute.toString())}</span>
               </p>
               <p class="label-title">
-                Fight details:<span class="label-value">{this.convertedBooking?.pickup_info.details}</span>
+                Fight details:<span class="label-value">{this.booking?.pickup_info.details}</span>
               </p>
 
               <p class="car_name">
-                {this.convertedBooking.pickup_info.selected_option.vehicle.description}
+                {this.booking.pickup_info.selected_option.vehicle.description}
                 <span> - </span>
-                {_formatAmount(this.convertedBooking.pickup_info.selected_option.amount, this.convertedBooking.pickup_info.selected_option.currency.code)}
+                {_formatAmount(this.booking.pickup_info.selected_option.amount, this.booking.pickup_info.selected_option.currency.code)}
               </p>
               <p class="label-title">
-                No. of Vehicles:<span class="label-value">{this.convertedBooking?.pickup_info.nbr_of_units}</span>
+                No. of Vehicles:<span class="label-value">{this.booking?.pickup_info.nbr_of_units}</span>
               </p>
               <p class="label-title">
-                Due upon booking:<span class="label-value">{_formatAmount(this.convertedBooking?.pickup_info.total, this.convertedBooking.pickup_info.currency.code)}</span>
+                Due upon booking:<span class="label-value">{_formatAmount(this.booking?.pickup_info.total, this.booking.pickup_info.currency.code)}</span>
               </p>
             </div>
           </section>
         )}
-        {this.convertedBooking.financial?.payments && (
+        {this.booking.financial?.payments && (
           <section>
             <table class="billing_table">
               <caption>Billing</caption>
@@ -363,7 +359,7 @@ export class IrBookingPrinting {
                 {/* <th class="billing_header">Reference</th> */}
               </thead>
               <tbody>
-                {this.convertedBooking.financial?.payments?.map(p => (
+                {this.booking.financial?.payments?.map(p => (
                   <Fragment>
                     <tr key={p.id}>
                       <td class="billing_cell">{moment(p.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</td>
