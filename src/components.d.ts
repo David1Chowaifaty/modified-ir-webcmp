@@ -18,6 +18,7 @@ import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
+import { PaymentOption } from "./models/payment-options";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -33,6 +34,7 @@ export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
+export { PaymentOption } from "./models/payment-options";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -525,6 +527,7 @@ export namespace Components {
         "rightBtnText": string;
     }
     interface IrOptionDetails {
+        "selectedOption": PaymentOption | null;
     }
     interface IrPaymentDetails {
         "bookingDetails": Booking;
@@ -2760,6 +2763,7 @@ declare namespace LocalJSX {
         "rightBtnText"?: string;
     }
     interface IrOptionDetails {
+        "selectedOption"?: PaymentOption | null;
     }
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
