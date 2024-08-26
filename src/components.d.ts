@@ -524,9 +524,16 @@ export namespace Components {
         "rightBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "rightBtnText": string;
     }
+    interface IrOptionDetails {
+    }
     interface IrPaymentDetails {
         "bookingDetails": Booking;
         "defaultTexts": ILocale;
+    }
+    interface IrPaymentOption {
+        "baseurl": string;
+        "propertyid": string;
+        "ticket": string;
     }
     interface IrPhoneInput {
         "default_country": number;
@@ -1838,6 +1845,12 @@ declare global {
         prototype: HTMLIrModalElement;
         new (): HTMLIrModalElement;
     };
+    interface HTMLIrOptionDetailsElement extends Components.IrOptionDetails, HTMLStencilElement {
+    }
+    var HTMLIrOptionDetailsElement: {
+        prototype: HTMLIrOptionDetailsElement;
+        new (): HTMLIrOptionDetailsElement;
+    };
     interface HTMLIrPaymentDetailsElementEventMap {
         "resetBookingData": null;
         "toast": IToast;
@@ -1855,6 +1868,12 @@ declare global {
     var HTMLIrPaymentDetailsElement: {
         prototype: HTMLIrPaymentDetailsElement;
         new (): HTMLIrPaymentDetailsElement;
+    };
+    interface HTMLIrPaymentOptionElement extends Components.IrPaymentOption, HTMLStencilElement {
+    }
+    var HTMLIrPaymentOptionElement: {
+        prototype: HTMLIrPaymentOptionElement;
+        new (): HTMLIrPaymentOptionElement;
     };
     interface HTMLIrPhoneInputElementEventMap {
         "textChange": { phone_prefix: string; mobile: string };
@@ -2121,7 +2140,9 @@ declare global {
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-login": HTMLIrLoginElement;
         "ir-modal": HTMLIrModalElement;
+        "ir-option-details": HTMLIrOptionDetailsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
+        "ir-payment-option": HTMLIrPaymentOptionElement;
         "ir-phone-input": HTMLIrPhoneInputElement;
         "ir-pickup": HTMLIrPickupElement;
         "ir-popover": HTMLIrPopoverElement;
@@ -2738,11 +2759,18 @@ declare namespace LocalJSX {
         "rightBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "rightBtnText"?: string;
     }
+    interface IrOptionDetails {
+    }
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
         "defaultTexts"?: ILocale;
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
+    }
+    interface IrPaymentOption {
+        "baseurl"?: string;
+        "propertyid"?: string;
+        "ticket"?: string;
     }
     interface IrPhoneInput {
         "default_country"?: number;
@@ -2946,7 +2974,9 @@ declare namespace LocalJSX {
         "ir-loading-screen": IrLoadingScreen;
         "ir-login": IrLogin;
         "ir-modal": IrModal;
+        "ir-option-details": IrOptionDetails;
         "ir-payment-details": IrPaymentDetails;
+        "ir-payment-option": IrPaymentOption;
         "ir-phone-input": IrPhoneInput;
         "ir-pickup": IrPickup;
         "ir-popover": IrPopover;
@@ -3028,7 +3058,9 @@ declare module "@stencil/core" {
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-login": LocalJSX.IrLogin & JSXBase.HTMLAttributes<HTMLIrLoginElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
+            "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
+            "ir-payment-option": LocalJSX.IrPaymentOption & JSXBase.HTMLAttributes<HTMLIrPaymentOptionElement>;
             "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;

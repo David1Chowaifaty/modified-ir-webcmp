@@ -10,6 +10,7 @@ import { EventsService } from '../../../services/events.service';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { IToast } from '@/components/ir-toast/toast';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'igl-book-property',
@@ -354,13 +355,8 @@ export class IglBookProperty {
           onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>
         <div class="p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between">
-          <button class="btn btn-secondary flex-fill" onClick={() => this.closeWindow()}>
-            {locales.entries.Lcz_Cancel}
-          </button>
-
-          <button class="btn btn-primary flex-fill" onClick={() => this.handleBlockDate()}>
-            {locales.entries.Lcz_Blockdates}
-          </button>
+          <ir-button text={locales.entries.Lcz_Cancel} btn_color="secondary" class="flex-fill" onClick={() => this.closeWindow()}></ir-button>
+          <ir-button text={locales.entries.Lcz_Blockdates} isLoading={isRequestPending('/Block_Exposed_Unit')} class="flex-fill" onClick={() => this.handleBlockDate()}></ir-button>
         </div>
       </Fragment>
     );
@@ -518,18 +514,19 @@ export class IglBookProperty {
         <div class="background-overlay" onClick={() => this.closeWindow()}></div>
         <div class={'sideWindow pb-5 pb-md-0 ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '')}>
           <div class="card position-sticky mb-0 shadow-none p-0 ">
-            <div class="d-flex mt-2 align-items-center justify-content-between  ">
-              <h3 class="card-title text-left pb-1 font-medium-2 px-2 px-md-3">
-                {this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}
-              </h3>
+            <div class="card-header-container mb-2">
+              <h3 class=" text-left font-medium-2 px-2 px-md-3">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h3>
               <ir-icon
-                class="close close-icon"
+                class={'px-2'}
                 onIconClickHandler={() => {
                   this.closeWindow();
                 }}
               >
                 <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={20} width={20}>
-                  <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                  <path
+                    fill="currentColor"
+                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                  />
                 </svg>
               </ir-icon>
             </div>

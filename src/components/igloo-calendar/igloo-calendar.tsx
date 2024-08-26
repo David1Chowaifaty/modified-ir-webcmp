@@ -83,7 +83,6 @@ export class IglooCalendar {
   }
 
   componentWillLoad() {
-    console.info('without session storage');
     this.calDates = {
       from: this.from_date,
       to: this.to_date,
