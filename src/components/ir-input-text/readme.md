@@ -48,6 +48,7 @@
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-login](../ir-login)
+ - [ir-option-details](../ir-payment-option/ir-option-details)
  - [ir-pickup](../ir-booking-details/ir-pickup)
 
 ### Graph
@@ -57,6 +58,7 @@ graph TD;
   ir-hk-user --> ir-input-text
   ir-listing-header --> ir-input-text
   ir-login --> ir-input-text
+  ir-option-details --> ir-input-text
   ir-pickup --> ir-input-text
   style ir-input-text fill:#f9f,stroke:#333,stroke-width:4px
 ```

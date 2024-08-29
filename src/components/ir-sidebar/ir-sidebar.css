@@ -52,7 +52,17 @@
   background: var(--sidebar-backgound, #fff);
   padding: var(--ir-sidebar-padding, 0.5rem 0);
 }
-
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-bottom: 1px solid #e4e5ec;
+}
+.sidebar-title p {
+  font-weight: 500;
+  font-size: 1.2rem;
+}
 .sidebar-left.active {
   left: 0;
   overflow-y: scroll;

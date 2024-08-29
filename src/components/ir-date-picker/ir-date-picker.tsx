@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Event, EventEmitter, Host } from '@stencil/core';
+import { Component, h, Element, Prop, Event, EventEmitter, Host, Watch, Method } from '@stencil/core';
 import moment from 'moment';
 
 @Component({
@@ -31,13 +31,34 @@ export class IrDatePicker {
   @Prop() maxSpan: moment.DurationInputArg1 = {
     days: 240,
   };
+
+  private openDatePickerTimeout: NodeJS.Timeout;
+
   @Event() dateChanged: EventEmitter<{
     start: moment.Moment;
     end: moment.Moment;
   }>;
   dateRangeInput: HTMLElement;
+
+  @Watch('minDate')
+  handleMinDateChange() {
+    $(this.dateRangeInput).data('daterangepicker').remove();
+    this.initializeDateRangePicker();
+  }
+  @Method()
+  async openDatePicker() {
+    console.log('opening date');
+    this.openDatePickerTimeout = setTimeout(() => {
+      this.dateRangeInput.click();
+    }, 20);
+  }
+
   componentDidLoad() {
     this.dateRangeInput = this.element.querySelector('.date-range-input');
+    this.initializeDateRangePicker();
+  }
+
+  initializeDateRangePicker() {
     $(this.dateRangeInput).daterangepicker(
       {
         singleDatePicker: this.singleDatePicker,
@@ -67,7 +88,12 @@ export class IrDatePicker {
       },
     );
   }
-
+  disconnectedCallback() {
+    if (this.openDatePickerTimeout) {
+      clearTimeout(this.openDatePickerTimeout);
+    }
+    $(this.dateRangeInput).data('daterangepicker').remove();
+  }
   render() {
     return (
       <Host>

@@ -33,6 +33,8 @@ export class IrInputText {
   @State() initial: boolean = true;
   @State() inputFocused: boolean = false;
 
+  @State() isError: boolean = false;
+
   @Event({ bubbles: true, composed: true }) textChange: EventEmitter<any>;
   @Event() inputBlur: EventEmitter<FocusEvent>;
   connectedCallback() {}
@@ -50,6 +52,14 @@ export class IrInputText {
       this.initial = false;
     }
   }
+  @Watch('aria-invalid')
+  handleAriaInvalidChange(newValue) {
+    if (newValue === 'true') {
+      this.isError = true;
+    } else {
+      this.isError = false;
+    }
+  }
 
   handleInputChange(event) {
     this.initial = false;
@@ -63,6 +73,7 @@ export class IrInputText {
   }
 
   render() {
+    console.log(this.isError);
     const id = v4();
     if (this.variant === 'icon') {
       return (
@@ -71,7 +82,7 @@ export class IrInputText {
             <span
               data-disabled={this.disabled}
               data-state={this.inputFocused ? 'focus' : ''}
-              class={`input-group-text icon-container bg-white ${this.error && 'danger-border'}`}
+              class={`input-group-text icon-container bg-white ${(this.error || this.isError) && 'danger-border'}`}
               id="basic-addon1"
             >
               <slot name="icon"></slot>
@@ -86,7 +97,7 @@ export class IrInputText {
               this.inputBlur.emit(e);
             }}
             disabled={this.disabled}
-            class={`form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${this.error && 'danger-border'}`}
+            class={`form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${(this.error || this.isError) && 'danger-border'}`}
             id={id}
             value={this.value}
             placeholder={this.placeholder}
@@ -125,9 +136,9 @@ export class IrInputText {
           <input
             readOnly={this.readonly}
             type={this.type}
-            class={`${className} ${this.error ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12} ${
-              this.readonly && 'bg-white'
-            } ${this.inputStyles}`}
+            class={`${className} ${this.error || this.isError ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${
+              this.LabelAvailable ? 12 - this.labelWidth : 12
+            } ${this.readonly && 'bg-white'} ${this.inputStyles}`}
             onBlur={e => this.inputBlur.emit(e)}
             placeholder={this.placeholder}
             value={this.value}

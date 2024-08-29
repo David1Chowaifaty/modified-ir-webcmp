@@ -381,6 +381,7 @@ export namespace Components {
         "maxSpan": moment.DurationInputArg1;
         "minDate": string;
         "monthNames": string[];
+        "openDatePicker": () => Promise<void>;
         "opens": 'left' | 'right' | 'center';
         "separator": string;
         "singleDatePicker": boolean;
@@ -527,7 +528,7 @@ export namespace Components {
         "rightBtnText": string;
     }
     interface IrOptionDetails {
-        "selectedOption": PaymentOption | null;
+        "propertyId": string;
     }
     interface IrPaymentDetails {
         "bookingDetails": Booking;
@@ -535,6 +536,7 @@ export namespace Components {
     }
     interface IrPaymentOption {
         "baseurl": string;
+        "language": string;
         "propertyid": string;
         "ticket": string;
     }
@@ -609,6 +611,7 @@ export namespace Components {
         "textSize": 'sm' | 'md' | 'lg';
     }
     interface IrSidebar {
+        "label": string;
         "name": string;
         "open": boolean;
         "showCloseButton": boolean;
@@ -631,6 +634,7 @@ export namespace Components {
         "placeholder": string;
         "rows": number;
         "text": string;
+        "textareaClassname": string;
         "value": string;
     }
     interface IrTitle {
@@ -854,6 +858,10 @@ export interface IrLoginCustomEvent<T> extends CustomEvent<T> {
 export interface IrModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrModalElement;
+}
+export interface IrOptionDetailsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrOptionDetailsElement;
 }
 export interface IrPaymentDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1848,7 +1856,19 @@ declare global {
         prototype: HTMLIrModalElement;
         new (): HTMLIrModalElement;
     };
+    interface HTMLIrOptionDetailsElementEventMap {
+        "closeModal": PaymentOption | null;
+        "toast": IToast1;
+    }
     interface HTMLIrOptionDetailsElement extends Components.IrOptionDetails, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrOptionDetailsElementEventMap>(type: K, listener: (this: HTMLIrOptionDetailsElement, ev: IrOptionDetailsCustomEvent<HTMLIrOptionDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrOptionDetailsElementEventMap>(type: K, listener: (this: HTMLIrOptionDetailsElement, ev: IrOptionDetailsCustomEvent<HTMLIrOptionDetailsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrOptionDetailsElement: {
         prototype: HTMLIrOptionDetailsElement;
@@ -2763,7 +2783,9 @@ declare namespace LocalJSX {
         "rightBtnText"?: string;
     }
     interface IrOptionDetails {
-        "selectedOption"?: PaymentOption | null;
+        "onCloseModal"?: (event: IrOptionDetailsCustomEvent<PaymentOption | null>) => void;
+        "onToast"?: (event: IrOptionDetailsCustomEvent<IToast1>) => void;
+        "propertyId"?: string;
     }
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
@@ -2773,6 +2795,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentOption {
         "baseurl"?: string;
+        "language"?: string;
         "propertyid"?: string;
         "ticket"?: string;
     }
@@ -2856,6 +2879,7 @@ declare namespace LocalJSX {
         "textSize"?: 'sm' | 'md' | 'lg';
     }
     interface IrSidebar {
+        "label"?: string;
         "name"?: string;
         "onIrSidebarToggle"?: (event: IrSidebarCustomEvent<any>) => void;
         "open"?: boolean;
@@ -2880,6 +2904,7 @@ declare namespace LocalJSX {
         "placeholder"?: string;
         "rows"?: number;
         "text"?: string;
+        "textareaClassname"?: string;
         "value"?: string;
     }
     interface IrTitle {

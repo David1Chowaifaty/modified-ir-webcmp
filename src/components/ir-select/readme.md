@@ -52,6 +52,7 @@
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
+ - [ir-option-details](../ir-payment-option/ir-option-details)
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-unit-status](../ir-housekeeping/ir-unit-status)
 
@@ -68,6 +69,7 @@ graph TD;
   ir-hk-unassigned-units --> ir-select
   ir-listing-header --> ir-select
   ir-listing-modal --> ir-select
+  ir-option-details --> ir-select
   ir-pickup --> ir-select
   ir-unit-status --> ir-select
   style ir-select fill:#f9f,stroke:#333,stroke-width:4px

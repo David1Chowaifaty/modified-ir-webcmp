@@ -24,6 +24,7 @@
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-housekeeping](../ir-housekeeping)
  - [ir-login](../ir-login)
+ - [ir-payment-option](../ir-payment-option)
 
 ### Graph
 ```mermaid
@@ -36,6 +37,7 @@ graph TD;
   ir-hk-tasks --> ir-toast
   ir-housekeeping --> ir-toast
   ir-login --> ir-toast
+  ir-payment-option --> ir-toast
   style ir-toast fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

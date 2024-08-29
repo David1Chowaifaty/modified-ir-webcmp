@@ -58,6 +58,7 @@ graph TD;
   ir-payment-details --> ir-modal
   ir-sidebar --> ir-icon
   igl-book-property --> igl-block-dates-view
+  igl-book-property --> ir-button
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-pagetwo

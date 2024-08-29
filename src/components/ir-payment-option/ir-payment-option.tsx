@@ -1,6 +1,9 @@
 import { PaymentOption } from '@/models/payment-options';
 import { PaymentOptionService } from '@/services/payment_option.service';
-import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { RoomService } from '@/services/room.service';
+import locales from '@/stores/locales.store';
+import payment_option_store from '@/stores/payment-option.store';
+import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import axios from 'axios';
 
 @Component({
@@ -12,12 +15,17 @@ export class IrPaymentOption {
   @Prop() baseurl: string;
   @Prop() propertyid: string;
   @Prop() ticket: string;
+  @Prop() language: string = 'en';
 
   @State() paymentOptions: PaymentOption[] = [];
   @State() isLoading: boolean = false;
+  @State() selectedOption: PaymentOption | null = null;
 
   private paymentOptionService = new PaymentOptionService();
-  @State() selectedOption: PaymentOption | null = null;
+  private roomService = new RoomService();
+
+  private propertyOptionsById: Map<string | number, PaymentOption>;
+  private propertyOptionsByCode: Map<string | number, PaymentOption>;
 
   componentWillLoad() {
     axios.defaults.baseURL = this.baseurl;
@@ -35,129 +43,178 @@ export class IrPaymentOption {
     this.initServices();
     this.fetchData();
   }
-  async fetchData() {
+  @Listen('closeModal')
+  handleCloseModal(e: CustomEvent) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    console.log(e.detail);
+    this.closeModal(e.detail);
+  }
+  private closeModal(newOption: PaymentOption | null) {
+    if (newOption) {
+      this.modifyPaymentList(newOption);
+      if (newOption.is_payment_gateway) {
+        this.propertyOptionsById.set(newOption.id, newOption);
+      } else {
+        this.propertyOptionsByCode.set(newOption.code, newOption);
+      }
+    } else {
+      if (!this.propertyOptionsByCode.has(payment_option_store.selectedOption?.code) && !this.propertyOptionsById.has(payment_option_store.selectedOption?.id)) {
+        this.modifyPaymentList({ ...payment_option_store.selectedOption, is_active: false });
+      }
+    }
+    payment_option_store.selectedOption = null;
+    payment_option_store.mode = null;
+  }
+  private async fetchData() {
     try {
       this.isLoading = true;
-      const [paymentOptions] = await Promise.all([this.paymentOptionService.GetExposedPaymentMethods()]);
-      this.paymentOptions = paymentOptions;
+      const [paymentOptions, propertyOptions, languageTexts] = await Promise.all([
+        this.paymentOptionService.GetExposedPaymentMethods(),
+        this.paymentOptionService.GetPropertyPaymentMethods(this.propertyid),
+        this.roomService.fetchLanguage(this.language, ['_PAYMENT_BACK']),
+      ]);
+      locales.entries = languageTexts.entries;
+      locales.direction = languageTexts.direction;
+      this.propertyOptionsById = new Map(propertyOptions.map(o => [o.id, o]));
+      this.propertyOptionsByCode = new Map(propertyOptions.map(o => [o.code, o]));
+      this.paymentOptions = paymentOptions?.map(option => {
+        if (option.is_payment_gateway) {
+          return this.propertyOptionsById.get(option.id) || option;
+        }
+        return this.propertyOptionsByCode.get(option.code) || option;
+      });
     } catch (error) {
       console.log(error);
     } finally {
       this.isLoading = false;
     }
   }
-  initServices() {
+
+  private initServices() {
+    payment_option_store.token = this.ticket;
     this.paymentOptionService.setToken(this.ticket);
+    this.roomService.setToken(this.ticket);
+  }
+  private modifyPaymentList(paymentOption: PaymentOption) {
+    this.paymentOptions = [
+      ...this.paymentOptions.map(p => {
+        if ((paymentOption.is_payment_gateway && p.id === paymentOption.id) || (paymentOption.code === '005' && p.code === '005')) {
+          return paymentOption;
+        }
+        return p;
+      }),
+    ];
+  }
+  private async handleCheckChange(e: CustomEvent, po: PaymentOption) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    const is_active = e.detail;
+    const newOption = { ...po, is_active, property_id: this.propertyid };
+
+    if (po.code !== '005' && !po.is_payment_gateway) {
+      await this.paymentOptionService.HandlePaymentMethod(newOption);
+      this.modifyPaymentList(newOption);
+      return;
+    }
+
+    if (!this.showEditButton(po)) {
+      this.modifyPaymentList(newOption);
+      return;
+    }
+    if (is_active && po.data?.some(d => d.value === null)) {
+      payment_option_store.mode = 'create';
+      payment_option_store.selectedOption = newOption;
+    } else {
+      await this.paymentOptionService.HandlePaymentMethod(newOption);
+    }
+    this.modifyPaymentList(newOption);
+  }
+  private showEditButton(po: PaymentOption) {
+    if (!po.is_payment_gateway && po.code !== '005') {
+      return false;
+    }
+
+    return po.code === '005' || (po.is_payment_gateway && po.data?.length > 0);
   }
   render() {
-    if (this.isLoading) {
-      return <p>loading</p>;
+    if (this.isLoading || this.paymentOptions.length == 0) {
+      return (
+        <div class="h-screen bg-white d-flex flex-column align-items-center justify-content-center">
+          <ir-loading-screen></ir-loading-screen>
+        </div>
+      );
     }
-    const showEditButton = (po: PaymentOption, ignoreActive = false) => {
-      if (!po.is_active && !ignoreActive) {
-        return false;
-      }
-
-      return po.code === '005' || (po.is_payment_gateway && po.data?.length > 0);
-    };
     return (
-      <Host>
+      <Host class="p-2">
+        <ir-toast></ir-toast>
+        <ir-interceptor></ir-interceptor>
         <div class="card p-1 flex-fill m-0">
-          <table class="table table-striped table-bordered no-footer dataTable">
-            <thead>
-              <tr>
-                <th scope="col" class="text-left">
-                  Payment method
-                  {/* {locales.entries?.Lcz_Channel} */}
-                </th>
-                <th scope="col">Status{/* {locales.entries?.Lcz_Status} */}</th>
-                <th scope="col" class="actions-theader">
-                  Action
-                  {/* {locales.entries?.Lcz_Actions} */}
-                </th>
-              </tr>
-            </thead>
-            <tbody class="">
-              {this.paymentOptions?.map(po => (
-                <tr key={po.id}>
-                  <td>{po.description}</td>
-                  <td>
-                    <ir-switch
-                      checked={po.is_active}
-                      onCheckChange={() => {
-                        if (showEditButton(po, true)) {
-                          this.selectedOption = po;
-                        }
-                      }}
-                    ></ir-switch>
-                  </td>
-                  <td>{showEditButton(po) && <ir-button variant="icon" icon_name="edit"></ir-button>}</td>
+          <div class="d-flex align-items-center mb-2">
+            <div class="p-0 m-0 mr-1">
+              <ir-icons name="credit_card"></ir-icons>
+            </div>
+            <h3 class={'m-0 p-0'}>{locales.entries.Lcz_PaymentOptions}</h3>
+          </div>
+          <div class="payment-table-container">
+            <table class="table table-striped table-bordered no-footer dataTable">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-left">
+                    {locales.entries.Lcz_PaymentMethod}
+                  </th>
+                  <th scope="col">{locales.entries.Lcz_Status}</th>
+                  <th scope="col" class="actions-header">
+                    {locales.entries.Lcz_Action}
+                  </th>
                 </tr>
-              ))}
-              {/* {channels_data.connected_channels?.map(channel => (
-                  <tr key={channel.channel.id}>
-                    <td class="text-left">
-                      {channel.channel.name} {channel.title ? `(${channel.title})` : ''}
-                    </td>
-                    <td>
-                      <ir-switch checked={channel.is_active} onCheckChange={e => this.handleCheckChange(e.detail, channel)}></ir-switch>
-                    </td>
-                    <th>
-                      <div class="d-flex justify-content-end">
-                        <div class="btn-group">
-                          <button type="button" class="btn  dropdown-toggle px-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-1"> {locales.entries?.Lcz_Actions}</span>
-                            <svg class={'caret-icon'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={14} width={14}>
-                              <path
-                                fill="var(--blue)"
-                                d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
-                              />
-                            </svg>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            {actions(locales.entries).map((a, index) => (
-                              <Fragment>
-                                <button
-                                  onClick={() => {
-                                    if (a.id === 'pull_future_reservation' || a.id === 'view_logs') {
-                                      return;
-                                    }
-                                    a.action(channel);
-                                    if (a.id === 'edit') {
-                                      setTimeout(() => {
-                                        this.channel_status = 'edit';
-                                      }, 300);
-                                    } else {
-                                      this.modal_cause = a.action(channel) as any;
-                                      this.openModal();
-                                    }
-                                  }}
-                                  key={a.id + '_item'}
-                                  class={`dropdown-item my-0 ${a.id === 'remove' ? 'danger' : ''}`}
-                                  type="button"
-                                >
-                                  {a.icon()}
-                                  {a.name}
-                                </button>
-                                {index < actions(locales.entries).length - 1 && <div key={a.id + '_divider'} class="dropdown-divider my-0"></div>}
-                              </Fragment>
-                            ))}
-                          </div>
+              </thead>
+              <tbody class="">
+                {this.paymentOptions?.map(po => {
+                  if (po.code === '004') {
+                    return null;
+                  }
+                  return (
+                    <tr key={po.id}>
+                      <td class={'text-left po-description'}>
+                        <div class="po-view">
+                          <span class={'p-0 m-0'}>{po.description}</span>
+                          {/* <img src="https://www.jccsmart.com/assets/images/app-logo.svg" alt="" class="payment-img" /> */}
                         </div>
-                      </div>
-                    </th>
-                  </tr>
-                ))} */}
-            </tbody>
-          </table>
+                      </td>
+
+                      <td>
+                        <ir-switch checked={po.is_active} onCheckChange={e => this.handleCheckChange(e, po)}></ir-switch>
+                      </td>
+                      <td class="payment-action">
+                        {this.showEditButton(po) && (
+                          <ir-button
+                            title={locales.entries.Lcz_Edit}
+                            variant="icon"
+                            icon_name="edit"
+                            onClickHanlder={() => {
+                              payment_option_store.selectedOption = po;
+                              payment_option_store.mode = 'edit';
+                            }}
+                          ></ir-button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
         <ir-sidebar
           onIrSidebarToggle={() => {
-            this.selectedOption = null;
+            this.closeModal(null);
           }}
-          open={this.selectedOption !== null}
+          label={locales.entries.Lcz_Information.replace('%1', payment_option_store.selectedOption?.description)}
+          open={payment_option_store.selectedOption !== null}
         >
-          <ir-option-details slot="sidebar-body" selectedOption={this.selectedOption}></ir-option-details>
+          {payment_option_store.selectedOption && <ir-option-details propertyId={this.propertyid} slot="sidebar-body"></ir-option-details>}
         </ir-sidebar>
       </Host>
     );

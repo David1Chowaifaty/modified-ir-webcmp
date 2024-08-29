@@ -16,7 +16,7 @@ export class IrIcons {
       return null;
     }
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox={svgPath.viewBox} class={'icon ${this.svgClassName}'}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox={svgPath.viewBox} class={`icon ${this.svgClassName}`}>
         <path fill="currentColor" d={svgPath.d}></path>
       </svg>
     );

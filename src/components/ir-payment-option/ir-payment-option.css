@@ -2,3 +2,43 @@
 :host {
   display: block;
 }
+.payment-table-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.po-view {
+  padding: 0;
+  margin: 0;
+}
+.payment-img {
+  height: 18px;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .po-view {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .dataTable {
+    width: 70%;
+  }
+  .payment-img {
+    display: block;
+  }
+  .actions-header {
+    width: max-content !important;
+  }
+  .payment-table-container {
+    justify-content: flex-start;
+  }
+}
+@media (min-width: 1280px) {
+  .dataTable {
+    width: 50%;
+  }
+}
