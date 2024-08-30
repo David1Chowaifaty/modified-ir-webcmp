@@ -155,6 +155,7 @@ export class IrOptionDetails {
                       id={`input_${d.key}`}
                       label={d.key}
                       placeholder=""
+                      labelWidth={4}
                       aria-invalid={this.invalid && (d.value === null || (d.value ?? '')?.trim() === '') ? 'true' : 'false'}
                     ></ir-input-text>
                   </fieldset>
