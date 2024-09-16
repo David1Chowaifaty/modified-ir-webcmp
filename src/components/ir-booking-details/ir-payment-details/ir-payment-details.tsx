@@ -1,9 +1,9 @@
-import { Component, h, Prop, State, Event, EventEmitter, Fragment, Watch } from '@stencil/core';
+import { Component, h, Prop, State, Event, EventEmitter, Fragment, Watch, Listen } from '@stencil/core';
 import { _formatAmount, _formatDate } from '../functions';
 import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
-import { PaymentService } from '@/services/payment.service';
+import { PaymentService, IPaymentAction } from '@/services/payment.service';
 import { ILocale, IToast } from '@/components';
 import calendar_data from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
@@ -17,6 +17,8 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
 export class IrPaymentDetails {
   @Prop({ mutable: true }) bookingDetails: Booking;
   @Prop() defaultTexts: ILocale;
+  @Prop() paymentActions: IPaymentAction[];
+
   @State() newTableRow: boolean = false;
 
   @State() collapsedPayment: boolean = false;
@@ -33,10 +35,19 @@ export class IrPaymentDetails {
 
   @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
-  private itemToBeAdded: IPayment;
+
+  @State() itemToBeAdded: IPayment;
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
+  private paymentBackground = 'white';
 
+  @Listen('generatePayment')
+  handlePaymentGeneration(e: CustomEvent) {
+    const value = e.detail;
+    this.newTableRow = true;
+    this.itemToBeAdded = { ...this.itemToBeAdded, amount: value.amount, date: value.due_on };
+    this.paymentBackground = 'rgba(250, 253, 174)';
+  }
   async componentWillLoad() {
     try {
       this.paymentService.setToken(calendar_data.token);
@@ -60,6 +71,7 @@ export class IrPaymentDetails {
       designation: '',
       reference: '',
     };
+    this.paymentBackground = 'white';
   }
 
   async _processPaymentSave() {
@@ -81,6 +93,7 @@ export class IrPaymentDetails {
   }
 
   async _handleSave() {
+    this.paymentBackground = 'white';
     try {
       await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
       this.initializeItemToBeAdded();
@@ -90,6 +103,7 @@ export class IrPaymentDetails {
     }
   }
   handlePaymentInputChange(key: keyof IPayment, value: any, event?: InputEvent) {
+    this.paymentBackground = 'white';
     if (key === 'amount') {
       if (!isNaN(value) || value === '') {
         if (value === '') {
@@ -121,6 +135,7 @@ export class IrPaymentDetails {
     }
   }
   async handleConfirmModal(e: CustomEvent) {
+    this.paymentBackground = 'white';
     e.stopImmediatePropagation();
     e.stopPropagation();
     if (this.modal_mode === 'delete') {
@@ -137,6 +152,7 @@ export class IrPaymentDetails {
     e.stopImmediatePropagation();
     e.stopPropagation();
     try {
+      this.paymentBackground = 'white';
       if (this.modal_mode === 'save') {
         this.initializeItemToBeAdded();
       }
@@ -159,6 +175,7 @@ export class IrPaymentDetails {
     this.handlePaymentInputChange('date', e.detail.end.format('YYYY-MM-DD'));
   }
   _renderTableRow(item: IPayment, rowMode: 'add' | 'normal' = 'normal') {
+    console.log(this.itemToBeAdded);
     return (
       <Fragment>
         <tr>
@@ -167,6 +184,7 @@ export class IrPaymentDetails {
               <span class="sm-padding-left">{_formatDate(item.date)}</span>
             ) : (
               <ir-date-picker
+                date={this.itemToBeAdded?.date ? new Date(this.itemToBeAdded.date) : new Date()}
                 minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
                 singleDatePicker
                 autoApply
@@ -306,6 +324,7 @@ export class IrPaymentDetails {
   }
 
   _renderDueDate(item: IDueDate) {
+    console.log(item);
     return (
       <tr>
         <td class={'pr-1'}>{_formatDate(item.date)}</td>
@@ -329,12 +348,22 @@ export class IrPaymentDetails {
               {this.defaultTexts.entries.Lcz_TotalCost}: <span>{_formatAmount(this.bookingDetails.financial.gross_cost, this.bookingDetails.currency.code)}</span>
             </div>
           )}
-          <div class="mb-2 h4">
-            {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
-            <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
+          <div class=" h4">
+            {/* {this.defaultTexts.entries.Lcz_DueBalance}:{' '} */}
+            Balance: <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
           </div>
+          <div class="mb-2 h4">
+            Collected:{' '}
+            <span class="">
+              {_formatAmount(
+                this.bookingDetails.financial.payments ? this.bookingDetails.financial.payments.reduce((prev, curr) => prev + curr.amount, 0) : 0,
+                this.bookingDetails.currency.code,
+              )}
+            </span>
+          </div>
+
           {this.bookingGuarantee()}
-          <div class="mt-2">
+          {/* <div class="mt-2">
             <div>
               {this.bookingDetails.financial?.due_dates?.length > 0 && (
                 <Fragment>
@@ -359,10 +388,11 @@ export class IrPaymentDetails {
                 </Fragment>
               )}
             </div>
-          </div>
+          </div> */}
+          <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails}></ir-payment-actions>
           <div class="mt-2 d-flex  flex-column rounded payment-container">
             <div class="d-flex align-items-center justify-content-between">
-              <strong>{this.defaultTexts.entries.Lcz_Payments}</strong>
+              <strong>{this.defaultTexts.entries.Lcz_Payments} history</strong>
               <ir-button
                 id="add-payment"
                 variant="icon"
@@ -373,7 +403,7 @@ export class IrPaymentDetails {
                 }}
               ></ir-button>
             </div>
-            <table class="mt-1">
+            <table class="mt-1" style={{ backgroundColor: this.paymentBackground }}>
               <thead>
                 <tr>
                   <th class={'border border-light border-bottom-0 text-center payment_date'}>{this.defaultTexts.entries.Lcz_Dates}</th>

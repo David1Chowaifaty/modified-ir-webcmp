@@ -33,27 +33,28 @@
   margin-left: var(--m) !important;
   margin-right: var(--m) !important;
 }
-.pointerContainer {
-  position: absolute;
-  left: 50%;
-  height: 10px;
-  width: 350px;
-  transform: translate(-50%, 0);
-}
 
 .pointerContainerTop {
   top: -26px;
 }
 
+.pointerContainer {
+  position: absolute;
+  height: 10px;
+  width: 350px;
+  left: var(--el-left, 50%);
+  transform: translateX(-50%);
+}
+
 .iglPopOver {
   /* max-width: 350px; */
+  position: absolute;
   background-color: #fff;
   padding: 10px;
   border: 1px solid #656ee7;
   border-radius: 6px;
-  position: absolute;
-  transform: translate(-50%, 10px);
-  left: 50%;
+  left: var(--el-left, 50%);
+  transform: translateX(-50%) translateY(10px);
   box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.2);
 }
 

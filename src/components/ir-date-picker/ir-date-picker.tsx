@@ -10,6 +10,7 @@ export class IrDatePicker {
   @Element() private element: HTMLElement;
   @Prop() fromDate: Date;
   @Prop() toDate: Date;
+  @Prop() date: Date;
 
   @Prop() opens: 'left' | 'right' | 'center';
   @Prop() autoApply: boolean;
@@ -45,17 +46,39 @@ export class IrDatePicker {
     $(this.dateRangeInput).data('daterangepicker').remove();
     this.initializeDateRangePicker();
   }
+  @Watch('date')
+  datePropChanged() {
+    this.updateDateRangePickerDates();
+  }
   @Method()
   async openDatePicker() {
-    console.log('opening date');
     this.openDatePickerTimeout = setTimeout(() => {
       this.dateRangeInput.click();
     }, 20);
   }
+  updateDateRangePickerDates() {
+    const picker = $(this.dateRangeInput).data('daterangepicker');
+    if (!picker) {
+      console.error('Date range picker not initialized.');
+      return;
+    }
 
+    // Adjust how dates are set based on whether it's a single date picker or range picker.
+    if (this.singleDatePicker) {
+      const newDate = this.date ? moment(this.date) : moment();
+      picker.setStartDate(newDate);
+      picker.setEndDate(newDate); // For single date picker, start and end date might be the same.
+    } else {
+      const newStartDate = this.fromDate ? moment(this.fromDate) : moment();
+      const newEndDate = this.toDate ? moment(this.toDate) : newStartDate.clone().add(1, 'days');
+      picker.setStartDate(newStartDate);
+      picker.setEndDate(newEndDate);
+    }
+  }
   componentDidLoad() {
     this.dateRangeInput = this.element.querySelector('.date-range-input');
     this.initializeDateRangePicker();
+    this.updateDateRangePickerDates();
   }
 
   initializeDateRangePicker() {

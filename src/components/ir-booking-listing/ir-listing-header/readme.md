@@ -33,7 +33,7 @@
 - [ir-button](../../ir-button)
 - [ir-input-text](../../ir-input-text)
 - [ir-select](../../ir-select)
-- [igl-date-range](../../igloo-calendar/igl-date-range)
+- [ir-date-picker](../../ir-date-picker)
 
 ### Graph
 ```mermaid
@@ -42,7 +42,7 @@ graph TD;
   ir-listing-header --> ir-button
   ir-listing-header --> ir-input-text
   ir-listing-header --> ir-select
-  ir-listing-header --> igl-date-range
+  ir-listing-header --> ir-date-picker
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property

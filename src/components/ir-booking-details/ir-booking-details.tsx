@@ -12,7 +12,7 @@ import calendar_data from '@/stores/calendar-data';
 import { ICountry } from '@/models/IBooking';
 import { colorVariants } from '../ui/ir-icons/icons';
 import { getPrivateNote } from '@/utils/booking';
-
+import { IPaymentAction, PaymentService } from '@/services/payment.service';
 @Component({
   tag: 'ir-booking-details',
   styleUrl: 'ir-booking-details.css',
@@ -61,6 +61,7 @@ export class IrBookingDetails {
   @State() pms_status: IPmsLog;
   @State() isPMSLogLoading: boolean = false;
   @State() userCountry: ICountry | null = null;
+  @State() paymentActions: IPaymentAction[];
 
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
@@ -69,7 +70,7 @@ export class IrBookingDetails {
 
   private bookingService = new BookingService();
   private roomService = new RoomService();
-  private property: any;
+  private paymentService = new PaymentService();
 
   private dialogRef: HTMLIrDialogElement;
 
@@ -87,6 +88,7 @@ export class IrBookingDetails {
   @Watch('ticket')
   async ticketChanged() {
     calendar_data.token = this.ticket;
+    this.paymentService.setToken(this.ticket);
     this.bookingService.setToken(this.ticket);
     this.roomService.setToken(this.ticket);
     this.initializeApp();
@@ -109,7 +111,9 @@ export class IrBookingDetails {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
-      this.property = roomResponse.My_Result;
+      this.paymentService.setToken(this.ticket);
+      this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: bookingDetails.booking_nbr, currency_id: bookingDetails.currency.id });
+
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
@@ -204,56 +208,6 @@ export class IrBookingDetails {
   openEditSidebar() {
     const sidebar: any = document.querySelector('ir-sidebar#editGuestInfo');
     sidebar.open = true;
-  }
-
-  printBooking(mode: 'invoice' | 'default' = 'default') {
-    const bookingJson = JSON.stringify(this.bookingData);
-    const propertyJson = JSON.stringify(this.property);
-    const countriesJson = JSON.stringify(this.countryNodeList);
-    const pageTitle = `Booking#${this.bookingNumber} | igloorooms`;
-    const src = 'https://wb-cmp.igloorooms.com/backend/dist/ir-webcmp/ir-webcmp.esm.js';
-
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${pageTitle}</title>
-          <link rel="shortcut icon" type="image/x-icon" href="https://x.igloorooms.com/app-assets/images/ico/favicon.ico">
-          <link rel="preconnect" href="https://fonts.googleapis.com">
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-          <link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@100..400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-          <script type="module" src="${src}"></script>
-          <style>
-            body {
-              font-family: "Roboto", sans-serif;
-            }
-          </style>
-        </head>
-        <body>
-          <ir-booking-printing></ir-booking-printing>
-          <script>
-            document.addEventListener("DOMContentLoaded", function() {
-              const bookingDetail = document.querySelector("ir-booking-printing");
-              bookingDetail.booking = ${bookingJson};
-              bookingDetail.property = ${propertyJson};
-              bookingDetail.countries = ${countriesJson};
-              bookingDetail.mode = '${mode}';
-            });
-          </script>
-        </body>
-      </html>
-    `;
-
-    try {
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      window.open(url);
-    } catch (error) {
-      console.error('Error creating or opening the generated HTML page:', error);
-      alert('Failed to generate and open the HTML page. Please try again.');
-    }
   }
 
   async updateStatus() {
@@ -614,7 +568,7 @@ export class IrBookingDetails {
             )}
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
-            <ir-payment-details defaultTexts={this.defaultTexts} bookingDetails={this.bookingData}></ir-payment-details>
+            <ir-payment-details paymentActions={this.paymentActions} defaultTexts={this.defaultTexts} bookingDetails={this.bookingData}></ir-payment-details>
           </div>
         </div>
       </div>,

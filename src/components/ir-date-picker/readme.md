@@ -38,12 +38,26 @@
 | `dateChanged` |             | `CustomEvent<{ start: Moment; end: Moment; }>` |
 
 
+## Methods
+
+### `openDatePicker() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Used by
 
  - [igl-cal-header](../igloo-calendar/igl-cal-header)
  - [igl-date-range](../igloo-calendar/igl-date-range)
+ - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-payment-details](../ir-booking-details/ir-payment-details)
  - [ir-pickup](../ir-booking-details/ir-pickup)
 
@@ -52,6 +66,7 @@
 graph TD;
   igl-cal-header --> ir-date-picker
   igl-date-range --> ir-date-picker
+  ir-listing-header --> ir-date-picker
   ir-payment-details --> ir-date-picker
   ir-pickup --> ir-date-picker
   style ir-date-picker fill:#f9f,stroke:#333,stroke-width:4px

@@ -1,5 +1,8 @@
 :host {
   display: block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 .icon {
   height: var(--icon-size, 1.25rem);

@@ -19,6 +19,7 @@ import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { PaymentOption } from "./models/payment-options";
+import { IPaymentAction } from "./services/payment.service";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
@@ -35,6 +36,7 @@ export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { PaymentOption } from "./models/payment-options";
+export { IPaymentAction } from "./services/payment.service";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
 export namespace Components {
@@ -371,6 +373,7 @@ export namespace Components {
         "autoApply": boolean;
         "cancelLabel": string;
         "customRangeLabel": string;
+        "date": Date;
         "daysOfWeek": string[];
         "disabled": boolean;
         "firstDay": number;
@@ -530,9 +533,14 @@ export namespace Components {
     interface IrOptionDetails {
         "propertyId": string;
     }
+    interface IrPaymentActions {
+        "booking": Booking;
+        "paymentAction": IPaymentAction[];
+    }
     interface IrPaymentDetails {
         "bookingDetails": Booking;
         "defaultTexts": ILocale;
+        "paymentActions": IPaymentAction[];
     }
     interface IrPaymentOption {
         "baseurl": string;
@@ -862,6 +870,10 @@ export interface IrModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrOptionDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrOptionDetailsElement;
+}
+export interface IrPaymentActionsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPaymentActionsElement;
 }
 export interface IrPaymentDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1874,6 +1886,23 @@ declare global {
         prototype: HTMLIrOptionDetailsElement;
         new (): HTMLIrOptionDetailsElement;
     };
+    interface HTMLIrPaymentActionsElementEventMap {
+        "generatePayment": IPaymentAction;
+    }
+    interface HTMLIrPaymentActionsElement extends Components.IrPaymentActions, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPaymentActionsElementEventMap>(type: K, listener: (this: HTMLIrPaymentActionsElement, ev: IrPaymentActionsCustomEvent<HTMLIrPaymentActionsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPaymentActionsElementEventMap>(type: K, listener: (this: HTMLIrPaymentActionsElement, ev: IrPaymentActionsCustomEvent<HTMLIrPaymentActionsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPaymentActionsElement: {
+        prototype: HTMLIrPaymentActionsElement;
+        new (): HTMLIrPaymentActionsElement;
+    };
     interface HTMLIrPaymentDetailsElementEventMap {
         "resetBookingData": null;
         "toast": IToast;
@@ -2164,6 +2193,7 @@ declare global {
         "ir-login": HTMLIrLoginElement;
         "ir-modal": HTMLIrModalElement;
         "ir-option-details": HTMLIrOptionDetailsElement;
+        "ir-payment-actions": HTMLIrPaymentActionsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
         "ir-payment-option": HTMLIrPaymentOptionElement;
         "ir-phone-input": HTMLIrPhoneInputElement;
@@ -2607,6 +2637,7 @@ declare namespace LocalJSX {
         "autoApply"?: boolean;
         "cancelLabel"?: string;
         "customRangeLabel"?: string;
+        "date"?: Date;
         "daysOfWeek"?: string[];
         "disabled"?: boolean;
         "firstDay"?: number;
@@ -2787,11 +2818,17 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrOptionDetailsCustomEvent<IToast1>) => void;
         "propertyId"?: string;
     }
+    interface IrPaymentActions {
+        "booking"?: Booking;
+        "onGeneratePayment"?: (event: IrPaymentActionsCustomEvent<IPaymentAction>) => void;
+        "paymentAction"?: IPaymentAction[];
+    }
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
         "defaultTexts"?: ILocale;
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
+        "paymentActions"?: IPaymentAction[];
     }
     interface IrPaymentOption {
         "baseurl"?: string;
@@ -3004,6 +3041,7 @@ declare namespace LocalJSX {
         "ir-login": IrLogin;
         "ir-modal": IrModal;
         "ir-option-details": IrOptionDetails;
+        "ir-payment-actions": IrPaymentActions;
         "ir-payment-details": IrPaymentDetails;
         "ir-payment-option": IrPaymentOption;
         "ir-phone-input": IrPhoneInput;
@@ -3088,6 +3126,7 @@ declare module "@stencil/core" {
             "ir-login": LocalJSX.IrLogin & JSXBase.HTMLAttributes<HTMLIrLoginElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
+            "ir-payment-actions": LocalJSX.IrPaymentActions & JSXBase.HTMLAttributes<HTMLIrPaymentActionsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
             "ir-payment-option": LocalJSX.IrPaymentOption & JSXBase.HTMLAttributes<HTMLIrPaymentOptionElement>;
             "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;

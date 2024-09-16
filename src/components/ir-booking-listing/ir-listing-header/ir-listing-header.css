@@ -62,9 +62,14 @@ ir-input-text {
   align-items: center;
   gap: 5px;
   flex-shrink: 0;
+  cursor: pointer;
+}
+.date-picker-wrapper:hover .date-display {
+  color: var(--blue);
 }
 .date-picker-wrapper[data-option='from-date'] {
   padding-right: 0;
+  cursor: pointer;
 }
 .date-display {
   background: inherit;
@@ -78,6 +83,7 @@ ir-input-text {
   color: #3b4781;
   white-space: nowrap;
   padding-right: 5px;
+  cursor: pointer;
 }
 
 .hidden-date-picker {

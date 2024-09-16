@@ -10,6 +10,7 @@
 | Property     | Attribute    | Description | Type     | Default     |
 | ------------ | ------------ | ----------- | -------- | ----------- |
 | `baseurl`    | `baseurl`    |             | `string` | `undefined` |
+| `language`   | `language`   |             | `string` | `'en'`      |
 | `propertyid` | `propertyid` |             | `string` | `undefined` |
 | `ticket`     | `ticket`     |             | `string` | `undefined` |
 
