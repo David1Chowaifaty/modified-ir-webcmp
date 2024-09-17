@@ -140,9 +140,10 @@ export class IrPaymentOption {
     return po.code === '005' || (po.is_payment_gateway && po.data?.length > 0);
   }
   render() {
+    console.log('isLoading', this.isLoading, 'paymentOptions', this.paymentOptions);
     if (this.isLoading || this.paymentOptions.length == 0) {
       return (
-        <div class="h-screen bg-white d-flex flex-column align-items-center justify-content-center">
+        <div class={`loading-container ${this.defaultStyles ? 'default' : ''}`}>
           <ir-loading-screen></ir-loading-screen>
         </div>
       );
@@ -151,7 +152,7 @@ export class IrPaymentOption {
       <Host class={this.defaultStyles ? 'p-2' : ''}>
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
-        <div class={`${this.defaultStyles ? 'card p-1' : ''} flex-fill m-0`}>
+        <div class={`${this.defaultStyles ? 'card ' : ''} p-1 flex-fill m-0`}>
           <div class="d-flex align-items-center mb-2">
             <div class="p-0 m-0 mr-1">
               <ir-icons name="credit_card"></ir-icons>

@@ -22,9 +22,21 @@
   </style>
 </head>
 
-<body>
+<body class="p-2">
   <ir-common></ir-common>
-  <ir-payment-option propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-payment-option>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="row">
+          <div class="col-xl-12 col-cus-12 col-lg-12">
+            <ir-payment-option language="en" default-styles="false"
+              baseurl="https://gateway.igloorooms.com/IR"></ir-payment-option>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
