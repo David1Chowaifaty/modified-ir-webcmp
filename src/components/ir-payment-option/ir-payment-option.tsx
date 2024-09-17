@@ -16,6 +16,7 @@ export class IrPaymentOption {
   @Prop() propertyid: string;
   @Prop() ticket: string;
   @Prop() language: string = 'en';
+  @Prop() defaultStyles: boolean = true;
 
   @State() paymentOptions: PaymentOption[] = [];
   @State() isLoading: boolean = false;
@@ -147,10 +148,10 @@ export class IrPaymentOption {
       );
     }
     return (
-      <Host class="">
+      <Host class={this.defaultStyles ? 'p-2' : ''}>
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
-        <div class="flex-fill m-0">
+        <div class={`${this.defaultStyles ? 'card p-1' : ''} flex-fill m-0`}>
           <div class="d-flex align-items-center mb-2">
             <div class="p-0 m-0 mr-1">
               <ir-icons name="credit_card"></ir-icons>

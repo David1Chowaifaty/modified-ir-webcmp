@@ -544,6 +544,7 @@ export namespace Components {
     }
     interface IrPaymentOption {
         "baseurl": string;
+        "defaultStyles": boolean;
         "language": string;
         "propertyid": string;
         "ticket": string;
@@ -2834,6 +2835,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentOption {
         "baseurl"?: string;
+        "defaultStyles"?: boolean;
         "language"?: string;
         "propertyid"?: string;
         "ticket"?: string;
