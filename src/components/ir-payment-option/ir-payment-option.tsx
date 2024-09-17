@@ -143,9 +143,11 @@ export class IrPaymentOption {
     console.log('isLoading', this.isLoading, 'paymentOptions', this.paymentOptions);
     if (this.isLoading || this.paymentOptions.length == 0) {
       return (
-        <div class={`loading-container ${this.defaultStyles ? 'default' : ''}`}>
-          <ir-loading-screen></ir-loading-screen>
-        </div>
+        <Host class={this.defaultStyles ? 'p-2' : ''}>
+          <div class={`loading-container ${this.defaultStyles ? 'default' : ''}`}>
+            <span class="payment-option-loader"></span>
+          </div>
+        </Host>
       );
     }
     return (
