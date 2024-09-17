@@ -565,6 +565,9 @@ export namespace Components {
         "defaultPickupData": IBookingPickupInfo | null;
         "numberOfPersons": number;
     }
+    interface IrPickupView {
+        "booking": Booking;
+    }
     interface IrPopover {
         "irPopoverLeft": string;
         "popoverTitle": string;
@@ -630,6 +633,12 @@ export namespace Components {
     }
     interface IrSpan {
         "text": any;
+    }
+    interface IrSpinner {
+        "borderWidth": number;
+        "color": string;
+        "size": number;
+        "unit": 'px' | 'rem';
     }
     interface IrSwitch {
         "checked": boolean;
@@ -1964,6 +1973,12 @@ declare global {
         prototype: HTMLIrPickupElement;
         new (): HTMLIrPickupElement;
     };
+    interface HTMLIrPickupViewElement extends Components.IrPickupView, HTMLStencilElement {
+    }
+    var HTMLIrPickupViewElement: {
+        prototype: HTMLIrPickupViewElement;
+        new (): HTMLIrPickupViewElement;
+    };
     interface HTMLIrPopoverElement extends Components.IrPopover, HTMLStencilElement {
     }
     var HTMLIrPopoverElement: {
@@ -2046,6 +2061,12 @@ declare global {
     var HTMLIrSpanElement: {
         prototype: HTMLIrSpanElement;
         new (): HTMLIrSpanElement;
+    };
+    interface HTMLIrSpinnerElement extends Components.IrSpinner, HTMLStencilElement {
+    }
+    var HTMLIrSpinnerElement: {
+        prototype: HTMLIrSpinnerElement;
+        new (): HTMLIrSpinnerElement;
     };
     interface HTMLIrSwitchElementEventMap {
         "checkChange": boolean;
@@ -2200,12 +2221,14 @@ declare global {
         "ir-payment-option": HTMLIrPaymentOptionElement;
         "ir-phone-input": HTMLIrPhoneInputElement;
         "ir-pickup": HTMLIrPickupElement;
+        "ir-pickup-view": HTMLIrPickupViewElement;
         "ir-popover": HTMLIrPopoverElement;
         "ir-room": HTMLIrRoomElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-select": HTMLIrSelectElement;
         "ir-sidebar": HTMLIrSidebarElement;
         "ir-span": HTMLIrSpanElement;
+        "ir-spinner": HTMLIrSpinnerElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
@@ -2859,6 +2882,9 @@ declare namespace LocalJSX {
         "onCloseModal"?: (event: IrPickupCustomEvent<null>) => void;
         "onResetBookingData"?: (event: IrPickupCustomEvent<null>) => void;
     }
+    interface IrPickupView {
+        "booking"?: Booking;
+    }
     interface IrPopover {
         "irPopoverLeft"?: string;
         "popoverTitle"?: string;
@@ -2930,6 +2956,12 @@ declare namespace LocalJSX {
     }
     interface IrSpan {
         "text"?: any;
+    }
+    interface IrSpinner {
+        "borderWidth"?: number;
+        "color"?: string;
+        "size"?: number;
+        "unit"?: 'px' | 'rem';
     }
     interface IrSwitch {
         "checked"?: boolean;
@@ -3050,12 +3082,14 @@ declare namespace LocalJSX {
         "ir-payment-option": IrPaymentOption;
         "ir-phone-input": IrPhoneInput;
         "ir-pickup": IrPickup;
+        "ir-pickup-view": IrPickupView;
         "ir-popover": IrPopover;
         "ir-room": IrRoom;
         "ir-room-nights": IrRoomNights;
         "ir-select": IrSelect;
         "ir-sidebar": IrSidebar;
         "ir-span": IrSpan;
+        "ir-spinner": IrSpinner;
         "ir-switch": IrSwitch;
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
@@ -3135,12 +3169,14 @@ declare module "@stencil/core" {
             "ir-payment-option": LocalJSX.IrPaymentOption & JSXBase.HTMLAttributes<HTMLIrPaymentOptionElement>;
             "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
+            "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;
             "ir-sidebar": LocalJSX.IrSidebar & JSXBase.HTMLAttributes<HTMLIrSidebarElement>;
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
+            "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
