@@ -140,7 +140,6 @@ export class IrPaymentOption {
     return po.code === '005' || (po.is_payment_gateway && po.data?.length > 0);
   }
   render() {
-    console.log('isLoading', this.isLoading, 'paymentOptions', this.paymentOptions);
     if (this.isLoading || this.paymentOptions.length == 0) {
       return (
         <Host class={this.defaultStyles ? 'p-2' : ''}>
