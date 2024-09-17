@@ -34,6 +34,7 @@ export class IrPaymentDetails {
   @State() modal_mode: 'delete' | 'save' | null = null;
 
   @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
+  @Event({ bubbles: true }) resetExposedCancelationDueAmount: EventEmitter<null>;
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
 
   @State() itemToBeAdded: IPayment;
@@ -98,6 +99,7 @@ export class IrPaymentDetails {
       await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
       this.initializeItemToBeAdded();
       this.resetBookingData.emit(null);
+      this.resetExposedCancelationDueAmount.emit(null);
     } catch (error) {
       console.log(error);
     }
@@ -128,6 +130,7 @@ export class IrPaymentDetails {
       this.bookingDetails = { ...this.bookingDetails, financial: { ...this.bookingDetails.financial, payments: newPaymentArray } };
       this.confirmModal = !this.confirmModal;
       this.resetBookingData.emit(null);
+      this.resetExposedCancelationDueAmount.emit(null);
       this.toBeDeletedItem = null;
       this.modal_mode = null;
     } catch (error) {
@@ -175,7 +178,6 @@ export class IrPaymentDetails {
     this.handlePaymentInputChange('date', e.detail.end.format('YYYY-MM-DD'));
   }
   _renderTableRow(item: IPayment, rowMode: 'add' | 'normal' = 'normal') {
-    console.log(this.itemToBeAdded);
     return (
       <Fragment>
         <tr>
@@ -198,8 +200,11 @@ export class IrPaymentDetails {
             ) : (
               <input
                 type="text"
-                class="border-0  form-control py-0 m-0 w-100"
-                value={this.itemToBeAdded.amount === null ? '' : Number(this.itemToBeAdded.amount).toFixed(2)}
+                class="border-0 text-center form-control py-0 m-0 w-100"
+                value={this.itemToBeAdded.amount}
+                onBlur={e => {
+                  (e.target as HTMLInputElement).value = Number(this.itemToBeAdded.amount).toFixed(2);
+                }}
                 onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value, event)}
               ></input>
             )}
@@ -324,7 +329,6 @@ export class IrPaymentDetails {
   }
 
   _renderDueDate(item: IDueDate) {
-    console.log(item);
     return (
       <tr>
         <td class={'pr-1'}>{_formatDate(item.date)}</td>
@@ -348,11 +352,16 @@ export class IrPaymentDetails {
               {this.defaultTexts.entries.Lcz_TotalCost}: <span>{_formatAmount(this.bookingDetails.financial.gross_cost, this.bookingDetails.currency.code)}</span>
             </div>
           )}
-          <div class=" h4">
-            {/* {this.defaultTexts.entries.Lcz_DueBalance}:{' '} */}
+          {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
+          {/* <div class=" h4">
             Balance: <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
+          </div> */}
+          <div class=" h4">
+            {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
+            <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
           </div>
-          <div class="mb-2 h4">
+          {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
+          {/* <div class="mb-2 h4">
             Collected:{' '}
             <span class="">
               {_formatAmount(
@@ -360,10 +369,10 @@ export class IrPaymentDetails {
                 this.bookingDetails.currency.code,
               )}
             </span>
-          </div>
+          </div> */}
 
           {this.bookingGuarantee()}
-          {/* <div class="mt-2">
+          <div class="mt-2">
             <div>
               {this.bookingDetails.financial?.due_dates?.length > 0 && (
                 <Fragment>
@@ -388,8 +397,9 @@ export class IrPaymentDetails {
                 </Fragment>
               )}
             </div>
-          </div> */}
-          <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails}></ir-payment-actions>
+          </div>
+          {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
+          {/* <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails}></ir-payment-actions> */}
           <div class="mt-2 d-flex  flex-column rounded payment-container">
             <div class="d-flex align-items-center justify-content-between">
               <strong>{this.defaultTexts.entries.Lcz_Payments} history</strong>

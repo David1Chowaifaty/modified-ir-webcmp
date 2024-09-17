@@ -1905,6 +1905,7 @@ declare global {
     };
     interface HTMLIrPaymentDetailsElementEventMap {
         "resetBookingData": null;
+        "resetExposedCancelationDueAmount": null;
         "toast": IToast;
     }
     interface HTMLIrPaymentDetailsElement extends Components.IrPaymentDetails, HTMLStencilElement {
@@ -2827,6 +2828,7 @@ declare namespace LocalJSX {
         "bookingDetails"?: Booking;
         "defaultTexts"?: ILocale;
         "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
+        "onResetExposedCancelationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
         "paymentActions"?: IPaymentAction[];
     }

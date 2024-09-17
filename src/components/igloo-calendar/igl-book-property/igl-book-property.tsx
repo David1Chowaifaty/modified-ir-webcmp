@@ -68,7 +68,7 @@ export class IglBookProperty {
     } else return;
   }
   componentDidLoad() {
-    console.log('booking_data', this.bookingData);
+    // console.log('booking_data', this.bookingData);
     document.addEventListener('keydown', this.handleKeyDown);
   }
   disconnectedCallback() {

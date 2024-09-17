@@ -73,7 +73,6 @@ export class IrInputText {
   }
 
   render() {
-    console.log(this.isError);
     const id = v4();
     if (this.variant === 'icon') {
       return (

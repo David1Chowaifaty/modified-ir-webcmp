@@ -170,7 +170,6 @@ export class IrRoom {
     }
   }
   render() {
-    console.log(this.item);
     return (
       <Host class="p-1 d-flex m-0">
         <ir-button

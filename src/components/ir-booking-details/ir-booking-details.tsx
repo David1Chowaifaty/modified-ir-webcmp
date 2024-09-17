@@ -111,8 +111,9 @@ export class IrBookingDetails {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
-      this.paymentService.setToken(this.ticket);
-      this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: bookingDetails.booking_nbr, currency_id: bookingDetails.currency.id });
+      //TODO:Add this when reimplementing payment actions
+      // this.paymentService.setToken(this.ticket);
+      // this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: bookingDetails.booking_nbr, currency_id: bookingDetails.currency.id });
 
       if (!locales.entries) {
         locales.entries = languageTexts.entries;
@@ -196,6 +197,13 @@ export class IrBookingDetails {
   @Listen('editSidebar')
   handleEditSidebar() {
     this.sidebarState = 'guest';
+  }
+  @Listen('resetExposedCancelationDueAmount')
+  async handleResetExposedCancelationDueAmount(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    //TODO:Impement when payment action is on
+    // this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: this.bookingData.booking_nbr, currency_id: this.bookingData.currency.id });
   }
   @Listen('selectChange')
   handleSelectChange(e: CustomEvent<any>) {
