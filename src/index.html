@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-  <title>Stencil Component Starter</title>
+  <title>Payment Option</title>
   <script type="module" src="/build/ir-webcmp.esm.js"></script>
   <script nomodule src="/build/ir-webcmp.js"></script>
   <script src="assets/scripts/jquery.min.js"></script>
@@ -24,15 +24,16 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
+  <ir-payment-option propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-payment-option>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
-    const booking_listing = document.querySelector("ir-booking-listing");
-    if (booking_listing) {
-      booking_listing.propertyid = getId();
-      booking_listing.ticket = getToken();
-    } 
+    const paymentOption = document.querySelector("ir-payment-option");
+    setTimeout(() => {
+      const ticket = getToken();
+      paymentOption.propertyid = getId();
+      paymentOption.ticket = ticket;
+    }, 300)
   </script>
 
 </body>

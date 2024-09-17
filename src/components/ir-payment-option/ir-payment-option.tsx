@@ -147,10 +147,10 @@ export class IrPaymentOption {
       );
     }
     return (
-      <Host class="p-2">
+      <Host class="">
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
-        <div class="card p-1 flex-fill m-0">
+        <div class="flex-fill m-0">
           <div class="d-flex align-items-center mb-2">
             <div class="p-0 m-0 mr-1">
               <ir-icons name="credit_card"></ir-icons>
