@@ -232,7 +232,14 @@ export class IrListingHeader {
               <p class="date-display" title="from date">
                 {moment(new Date(booking_listing.userSelection.from)).format('MMM DD, yyyy')}
               </p>
-              <ir-date-picker class="hidden-date-picker" autoApply singleDatePicker minDate="2000-01-01" onDateChanged={this.handleFromDateChange.bind(this)}></ir-date-picker>
+              <ir-date-picker
+                date={new Date(booking_listing.userSelection.from)}
+                class="hidden-date-picker"
+                autoApply
+                singleDatePicker
+                minDate="2000-01-01"
+                onDateChanged={this.handleFromDateChange.bind(this)}
+              ></ir-date-picker>
             </div>
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" height="14" width="14" viewBox="0 0 512 512">
@@ -247,6 +254,7 @@ export class IrListingHeader {
                 {moment(new Date(booking_listing.userSelection.to)).format('MMM DD, YYYY')}
               </p>
               <ir-date-picker
+                date={new Date(booking_listing.userSelection.to)}
                 class="hidden-date-picker"
                 ref={el => (this.toDateRef = el)}
                 autoApply
