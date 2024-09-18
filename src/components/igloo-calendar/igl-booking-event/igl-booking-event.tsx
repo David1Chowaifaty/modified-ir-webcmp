@@ -635,6 +635,25 @@ export class IglBookingEvent {
   updateData(data: any) {
     this.updateEventData.emit(data);
   }
+  private calculateHoverPosition() {
+    const barRect = this.element.getBoundingClientRect();
+    const barWidth = barRect.width;
+    const barLeft = barRect.left;
+    const screenWidth = window.innerWidth;
+
+    let hoverLeft;
+
+    if (barWidth <= screenWidth) {
+      hoverLeft = barWidth / 2;
+    } else {
+      hoverLeft = screenWidth / 2 - barLeft;
+    }
+    return {
+      position: 'absolute',
+      left: `${hoverLeft}px`,
+      transform: 'translateX(-50%)',
+    };
+  }
   renderEventBookingNumber() {
     if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
       return '';
@@ -648,6 +667,35 @@ export class IglBookingEvent {
     return ` - ${this.bookingEvent.BOOKING_NUMBER}`;
   }
   showEventInfo(showInfo) {
+    // if (this.isHighlightEventType() || this.bookingEvent.hideBubble) {
+    //   return null;
+    // }
+
+    // if (showInfo) {
+    //   // Calculate which side we need to show the bubble, top side or bottom.
+    //   let bodyContainer = document.querySelector('.calendarScrollContainer');
+    //   let bodyContainerRect: { [key: string]: any } = bodyContainer.getBoundingClientRect();
+    //   let elementRect: { [key: string]: any } = this.element.getBoundingClientRect();
+    //   let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top + 50;
+    //   // let topDifference = elementRect.top - bodyContainerRect.top;
+    //   // let bottomDifference = bodyContainerRect.bottom - elementRect.bottom;
+
+    //   if (elementRect.top < midPoint) {
+    //     this.bubbleInfoTopSide = false;
+    //   } else {
+    //     this.bubbleInfoTopSide = true;
+    //   }
+    // }
+
+    // // showInfo = true;
+    // if (showInfo) {
+    //   this.hideBubbleInfo.emit({
+    //     key: 'hidePopup',
+    //     currentInfoBubbleId: this.getBookingId(),
+    //   });
+    // }
+    // this.showInfoPopup = showInfo;
+    // this.renderAgain();
     if (this.isHighlightEventType() || this.bookingEvent.hideBubble) {
       return null;
     }
@@ -658,8 +706,6 @@ export class IglBookingEvent {
       let bodyContainerRect: { [key: string]: any } = bodyContainer.getBoundingClientRect();
       let elementRect: { [key: string]: any } = this.element.getBoundingClientRect();
       let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top + 50;
-      // let topDifference = elementRect.top - bodyContainerRect.top;
-      // let bottomDifference = bodyContainerRect.bottom - elementRect.bottom;
 
       if (elementRect.top < midPoint) {
         this.bubbleInfoTopSide = false;
@@ -668,7 +714,6 @@ export class IglBookingEvent {
       }
     }
 
-    // showInfo = true;
     if (showInfo) {
       this.hideBubbleInfo.emit({
         key: 'hidePopup',
@@ -743,6 +788,7 @@ export class IglBookingEvent {
             class="top"
             bookingEvent={this.bookingEvent}
             bubbleInfoTop={this.bubbleInfoTopSide}
+            style={this.calculateHoverPosition()}
           ></igl-booking-event-hover>
         ) : null}
       </Host>
