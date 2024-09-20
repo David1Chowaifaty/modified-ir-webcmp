@@ -74,6 +74,8 @@ export class IrBookingDetails {
 
   private dialogRef: HTMLIrDialogElement;
 
+  private printingBaseUrl = 'https://bookingmystay.com/%1/printing?id=%2';
+
   componentDidLoad() {
     if (this.baseurl) {
       axios.defaults.baseURL = this.baseurl;
@@ -127,6 +129,7 @@ export class IrBookingDetails {
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
       this.setRoomsData(roomResponse);
+      this.printingBaseUrl = this.printingBaseUrl.replace('%1', roomResponse.My_Result.aname).replace('%2', this.bookingNumber);
       const paymentCodesToShow = ['001', '004'];
       this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
 
@@ -150,11 +153,13 @@ export class IrBookingDetails {
         return;
       case 'print':
         // this.printBooking();
-        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
+        // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
+        window.open(this.printingBaseUrl);
         return;
       case 'receipt':
         // this.printBooking('invoice');
-        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
+        // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
+        window.open(`${this.printingBaseUrl}&mode=invoice`);
         return;
       case 'book-delete':
         return;
