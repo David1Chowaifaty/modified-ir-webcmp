@@ -72,6 +72,7 @@ export class IrBookingDetails {
   private paymentService = new PaymentService();
 
   private dialogRef: HTMLIrDialogElement;
+  private printingBaseUrl = 'https://bookingmystay.com/%1/printing?id=%2';
   private confirmationBG = {
     '001': 'bg-ir-orange',
     '002': 'bg-ir-green',
@@ -111,10 +112,12 @@ export class IrBookingDetails {
         this.closeSidebar.emit(null);
         return;
       case 'print':
-        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
+        // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
+        window.open(this.printingBaseUrl);
         return;
       case 'receipt':
-        window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
+        // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
+        window.open(`${this.printingBaseUrl}&mode=invoice`);
         return;
       case 'book-delete':
         return;
@@ -224,7 +227,8 @@ export class IrBookingDetails {
       this.userCountry = guestCountryId ? this.countryNodeList.find(country => country.id === guestCountryId) || null : null;
       const myResult = roomResponse?.My_Result;
       if (myResult) {
-        const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = myResult;
+        const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends, aname } = myResult;
+        this.printingBaseUrl = this.printingBaseUrl.replace('%1', aname).replace('%2', this.bookingNumber);
         this.calendarData = {
           currency,
           allowed_booking_sources,
