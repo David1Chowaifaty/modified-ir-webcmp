@@ -113,11 +113,13 @@ export class IrBookingDetails {
         return;
       case 'print':
         // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
-        window.open(this.printingBaseUrl);
+        // window.open(this.printingBaseUrl);
+        this.openPrintingScreen();
         return;
       case 'receipt':
         // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
-        window.open(`${this.printingBaseUrl}&mode=invoice`);
+        // window.open(`${this.printingBaseUrl}&mode=invoice`);
+        this.openPrintingScreen('invoice');
         return;
       case 'book-delete':
         return;
@@ -295,12 +297,26 @@ export class IrBookingDetails {
     }
   }
 
+  private async openPrintingScreen(mode: 'invoice' | 'print' = 'print') {
+    let url = this.printingBaseUrl;
+    if (mode === 'invoice') {
+      url = url + '&mode=invoice';
+    }
+    const { data } = await axios.post(`Get_ShortLiving_Token?Ticket=${this.ticket}`);
+    if (!data.ExceptionMsg) {
+      url = url + `&token=${data.My_Result}`;
+    }
+    window.open(url);
+  }
+
   private handleCloseBookingWindow() {
     this.bookingItem = null;
   }
+
   private handleDeleteFinish(e: CustomEvent) {
     this.bookingData = { ...this.bookingData, rooms: this.bookingData.rooms.filter(room => room.identifier !== e.detail) };
   }
+
   private async resetBookingData() {
     try {
       const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
