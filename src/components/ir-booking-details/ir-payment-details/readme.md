@@ -7,18 +7,20 @@
 
 ## Properties
 
-| Property         | Attribute | Description | Type      | Default     |
-| ---------------- | --------- | ----------- | --------- | ----------- |
-| `bookingDetails` | --        |             | `Booking` | `undefined` |
-| `defaultTexts`   | --        |             | `ILocale` | `undefined` |
+| Property         | Attribute | Description | Type               | Default     |
+| ---------------- | --------- | ----------- | ------------------ | ----------- |
+| `bookingDetails` | --        |             | `Booking`          | `undefined` |
+| `defaultTexts`   | --        |             | `ILocale`          | `undefined` |
+| `paymentActions` | --        |             | `IPaymentAction[]` | `undefined` |
 
 
 ## Events
 
-| Event              | Description | Type                                                                                                 |
-| ------------------ | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `resetBookingData` |             | `CustomEvent<null>`                                                                                  |
-| `toast`            |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+| Event                              | Description | Type                                                                                                 |
+| ---------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `resetBookingData`                 |             | `CustomEvent<null>`                                                                                  |
+| `resetExposedCancelationDueAmount` |             | `CustomEvent<null>`                                                                                  |
+| `toast`                            |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies

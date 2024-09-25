@@ -74,7 +74,8 @@ export class IrBookingDetails {
 
   private dialogRef: HTMLIrDialogElement;
 
-  private printingBaseUrl = 'http://localhost:7742/%1/printing?id=%2';
+  // private printingBaseUrl = 'https://bookingmystay.com/%1/printing?id=%2';
+  private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
 
   componentDidLoad() {
     if (this.baseurl) {

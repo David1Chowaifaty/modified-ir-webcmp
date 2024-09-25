@@ -21,7 +21,6 @@
  - [ir-channel](../ir-channel)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-housekeeping](../ir-housekeeping)
- - [ir-payment-option](../ir-payment-option)
  - [ir-room-nights](../ir-room-nights)
 
 ### Graph
@@ -32,7 +31,6 @@ graph TD;
   ir-channel --> ir-loading-screen
   ir-hk-tasks --> ir-loading-screen
   ir-housekeeping --> ir-loading-screen
-  ir-payment-option --> ir-loading-screen
   ir-room-nights --> ir-loading-screen
   style ir-loading-screen fill:#f9f,stroke:#333,stroke-width:4px
 ```

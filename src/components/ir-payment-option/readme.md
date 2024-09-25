@@ -7,19 +7,19 @@
 
 ## Properties
 
-| Property     | Attribute    | Description | Type     | Default     |
-| ------------ | ------------ | ----------- | -------- | ----------- |
-| `baseurl`    | `baseurl`    |             | `string` | `undefined` |
-| `language`   | `language`   |             | `string` | `'en'`      |
-| `propertyid` | `propertyid` |             | `string` | `undefined` |
-| `ticket`     | `ticket`     |             | `string` | `undefined` |
+| Property        | Attribute        | Description | Type      | Default     |
+| --------------- | ---------------- | ----------- | --------- | ----------- |
+| `baseurl`       | `baseurl`        |             | `string`  | `undefined` |
+| `defaultStyles` | `default-styles` |             | `boolean` | `true`      |
+| `language`      | `language`       |             | `string`  | `'en'`      |
+| `propertyid`    | `propertyid`     |             | `string`  | `undefined` |
+| `ticket`        | `ticket`         |             | `string`  | `undefined` |
 
 
 ## Dependencies
 
 ### Depends on
 
-- [ir-loading-screen](../ir-loading-screen)
 - [ir-toast](../ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [ir-icons](../ui/ir-icons)
@@ -31,7 +31,6 @@
 ### Graph
 ```mermaid
 graph TD;
-  ir-payment-option --> ir-loading-screen
   ir-payment-option --> ir-toast
   ir-payment-option --> ir-interceptor
   ir-payment-option --> ir-icons
