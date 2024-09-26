@@ -72,7 +72,7 @@ export class IrBookingDetails {
   private paymentService = new PaymentService();
 
   private dialogRef: HTMLIrDialogElement;
-  private printingBaseUrl = 'https://bookingmystay.com/%1/printing?id=%2';
+  private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
   private confirmationBG = {
     '001': 'bg-ir-orange',
     '002': 'bg-ir-green',
@@ -112,13 +112,9 @@ export class IrBookingDetails {
         this.closeSidebar.emit(null);
         return;
       case 'print':
-        // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
-        // window.open(this.printingBaseUrl);
         this.openPrintingScreen();
         return;
       case 'receipt':
-        // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
-        // window.open(`${this.printingBaseUrl}&mode=invoice`);
         this.openPrintingScreen('invoice');
         return;
       case 'book-delete':
@@ -297,7 +293,13 @@ export class IrBookingDetails {
     }
   }
 
-  private async openPrintingScreen(mode: 'invoice' | 'print' = 'print') {
+  private async openPrintingScreen(mode: 'invoice' | 'print' = 'print', version: 'old' | 'new' = 'new') {
+    if (version === 'old') {
+      if (mode === 'invoice') {
+        return window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
+      }
+      return window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
+    }
     let url = this.printingBaseUrl;
     if (mode === 'invoice') {
       url = url + '&mode=invoice';
