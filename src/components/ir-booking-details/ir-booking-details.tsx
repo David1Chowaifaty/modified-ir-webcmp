@@ -72,9 +72,13 @@ export class IrBookingDetails {
   private paymentService = new PaymentService();
 
   private dialogRef: HTMLIrDialogElement;
-
-  // private printingBaseUrl = 'https://bookingmystay.com/%1/printing?id=%2';
   private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
+  private confirmationBG = {
+    '001': 'bg-ir-orange',
+    '002': 'bg-ir-green',
+    '003': 'bg-ir-red',
+    '004': 'bg-ir-red',
+  };
 
   componentDidLoad() {
     if (this.baseurl) {
@@ -96,63 +100,7 @@ export class IrBookingDetails {
     this.roomService.setToken(this.ticket);
     this.initializeApp();
   }
-  setRoomsData(roomServiceResp) {
-    let roomsData: { [key: string]: any }[] = new Array();
-    if (roomServiceResp.My_Result?.roomtypes?.length) {
-      roomsData = roomServiceResp.My_Result.roomtypes;
-      roomServiceResp.My_Result.roomtypes.forEach(roomCategory => {
-        roomCategory.expanded = true;
-      });
-    }
-    this.calendarData.roomsInfo = roomsData;
-  }
-  async initializeApp() {
-    try {
-      const [roomResponse, languageTexts, countriesList, bookingDetails] = await Promise.all([
-        this.roomService.fetchData(this.propertyid, this.language),
-        this.roomService.fetchLanguage(this.language),
-        this.bookingService.getCountries(this.language),
-        this.bookingService.getExposedBooking(this.bookingNumber, this.language),
-      ]);
-      //TODO:Add this when reimplementing payment actions
-      // this.paymentService.setToken(this.ticket);
-      // this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: bookingDetails.booking_nbr, currency_id: bookingDetails.currency.id });
 
-      if (!locales.entries) {
-        locales.entries = languageTexts.entries;
-        locales.direction = languageTexts.direction;
-      }
-      this.defaultTexts = languageTexts;
-      this.countryNodeList = countriesList;
-      if (bookingDetails.guest?.country_id) {
-        this.userCountry = this.countryNodeList.find(country => country.id === bookingDetails.guest.country_id) || null;
-      }
-      const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
-      this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
-      this.setRoomsData(roomResponse);
-      this.printingBaseUrl = this.printingBaseUrl.replace('%1', roomResponse.My_Result.aname).replace('%2', this.bookingNumber);
-      const paymentCodesToShow = ['001', '004'];
-      this.showPaymentDetails = paymentMethods.some(method => paymentCodesToShow.includes(method.code));
-
-      this.guestData = bookingDetails.guest;
-      this.bookingData = bookingDetails;
-      this.rerenderFlag = !this.rerenderFlag;
-    } catch (error) {
-      console.error('Error initializing app:', error);
-    }
-  }
-
-  private async openPrinting(mode: 'invoice' | 'print' = 'print') {
-    let url = this.printingBaseUrl;
-    if (mode === 'invoice') {
-      url = url + '&mode=invoice';
-    }
-    const { data } = await axios.post(`Get_ShortLiving_Token?Ticket=${this.ticket}`);
-    if (!data.ExceptionMsg) {
-      url = url + `&token=${data.My_Result}`;
-    }
-    window.open(url);
-  }
   @Listen('clickHanlder')
   handleIconClick(e: CustomEvent) {
     const target = e.target as HTMLIrButtonElement;
@@ -164,16 +112,10 @@ export class IrBookingDetails {
         this.closeSidebar.emit(null);
         return;
       case 'print':
-        // this.printBooking();
-        // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
-        // window.open(this.printingBaseUrl);
-        this.openPrinting();
+        this.openPrintingScreen();
         return;
       case 'receipt':
-        // this.printBooking('invoice');
-        // window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
-        this.openPrinting('invoice');
-        // window.open(`${this.printingBaseUrl}&mode=invoice`);
+        this.openPrintingScreen('invoice');
         return;
       case 'book-delete':
         return;
@@ -221,8 +163,9 @@ export class IrBookingDetails {
   async handleResetExposedCancelationDueAmount(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    const paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: this.bookingData.booking_nbr, currency_id: this.bookingData.currency.id });
-    this.paymentActions = [...paymentActions];
+    //TOTO: Payment action
+    // const paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: this.bookingData.booking_nbr, currency_id: this.bookingData.currency.id });
+    // this.paymentActions = [...paymentActions];
   }
   @Listen('selectChange')
   handleSelectChange(e: CustomEvent<any>) {
@@ -265,14 +208,15 @@ export class IrBookingDetails {
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
       this.paymentService.setToken(this.ticket);
-      if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
-        this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({
-          booking_nbr: bookingDetails.booking_nbr,
-          currency_id: bookingDetails.currency.id,
-        });
-      } else {
-        console.warn('Booking details are incomplete for payment actions.');
-      }
+      //TODO:Reenable payment actions
+      // if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
+      //   this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({
+      //     booking_nbr: bookingDetails.booking_nbr,
+      //     currency_id: bookingDetails.currency.id,
+      //   });
+      // } else {
+      //   console.warn('Booking details are incomplete for payment actions.');
+      // }
       if (!locales?.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;

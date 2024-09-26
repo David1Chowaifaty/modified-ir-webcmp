@@ -353,15 +353,15 @@ export class IrPaymentDetails {
             </div>
           )}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
-          <div class=" h4">
-            Balance: <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
-          </div>
           {/* <div class=" h4">
+            Balance: <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
+          </div> */}
+          <div class=" h4">
             {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
             <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
-          </div> */}
+          </div>
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
-          <div class="mb-2 h4">
+          {/* <div class="mb-2 h4">
             Collected:{' '}
             <span class="">
               {_formatAmount(
@@ -369,10 +369,10 @@ export class IrPaymentDetails {
                 this.bookingDetails.currency.code,
               )}
             </span>
-          </div>
+          </div> */}
 
           {this.bookingGuarantee()}
-          {/* <div class="mt-2">
+          <div class="mt-2">
             <div>
               {this.bookingDetails.financial?.due_dates?.length > 0 && (
                 <Fragment>
@@ -397,9 +397,9 @@ export class IrPaymentDetails {
                 </Fragment>
               )}
             </div>
-          </div> */}
+          </div>
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
-          <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails}></ir-payment-actions>
+          {/* <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails}></ir-payment-actions> */}
           <div class="mt-2 d-flex  flex-column rounded payment-container">
             <div class="d-flex align-items-center justify-content-between">
               <strong>{this.defaultTexts.entries.Lcz_Payments} history</strong>
