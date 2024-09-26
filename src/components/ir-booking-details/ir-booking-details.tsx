@@ -1,5 +1,4 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
-import moment from 'moment';
 import { _formatDate, _formatTime } from './functions';
 import { Booking, Guest, IPmsLog, Room } from '@/models/booking.dto';
 import axios from 'axios';
@@ -88,6 +87,7 @@ export class IrBookingDetails {
       this.initializeApp();
     }
   }
+
   @Watch('ticket')
   async ticketChanged() {
     calendar_data.token = this.ticket;
@@ -154,8 +154,8 @@ export class IrBookingDetails {
     window.open(url);
   }
   @Listen('clickHanlder')
-  handleIconClick(e) {
-    const target = e.target;
+  handleIconClick(e: CustomEvent) {
+    const target = e.target as HTMLIrButtonElement;
     switch (target.id) {
       case 'pickup':
         this.sidebarState = 'pickup';
@@ -221,8 +221,8 @@ export class IrBookingDetails {
   async handleResetExposedCancelationDueAmount(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    //TODO:Impement when payment action is on
-    // this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: this.bookingData.booking_nbr, currency_id: this.bookingData.currency.id });
+    const paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: this.bookingData.booking_nbr, currency_id: this.bookingData.currency.id });
+    this.paymentActions = [...paymentActions];
   }
   @Listen('selectChange')
   handleSelectChange(e: CustomEvent<any>) {
@@ -231,13 +231,82 @@ export class IrBookingDetails {
     const target = e.target;
     this.tempStatus = (target as any).selectedValue;
   }
-
-  openEditSidebar() {
-    const sidebar: any = document.querySelector('ir-sidebar#editGuestInfo');
-    sidebar.open = true;
+  @Listen('editInitiated')
+  handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
+    this.bookingItem = e.detail;
   }
 
-  async updateStatus() {
+  @Listen('resetBookingData')
+  async handleResetBookingData(e: CustomEvent<Booking | null>) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    if (e.detail) {
+      return (this.bookingData = e.detail);
+    }
+    await this.resetBookingData();
+  }
+
+  private setRoomsData(roomServiceResp) {
+    let roomsData: { [key: string]: any }[] = new Array();
+    if (roomServiceResp.My_Result?.roomtypes?.length) {
+      roomsData = roomServiceResp.My_Result.roomtypes;
+      roomServiceResp.My_Result.roomtypes.forEach(roomCategory => {
+        roomCategory.expanded = true;
+      });
+    }
+    this.calendarData.roomsInfo = roomsData;
+  }
+  private async initializeApp() {
+    try {
+      const [roomResponse, languageTexts, countriesList, bookingDetails] = await Promise.all([
+        this.roomService.fetchData(this.propertyid, this.language),
+        this.roomService.fetchLanguage(this.language),
+        this.bookingService.getCountries(this.language),
+        this.bookingService.getExposedBooking(this.bookingNumber, this.language),
+      ]);
+      this.paymentService.setToken(this.ticket);
+      if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
+        this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({
+          booking_nbr: bookingDetails.booking_nbr,
+          currency_id: bookingDetails.currency.id,
+        });
+      } else {
+        console.warn('Booking details are incomplete for payment actions.');
+      }
+      if (!locales?.entries) {
+        locales.entries = languageTexts.entries;
+        locales.direction = languageTexts.direction;
+      }
+      this.defaultTexts = languageTexts;
+      this.countryNodeList = countriesList;
+      const guestCountryId = bookingDetails?.guest?.country_id;
+      this.userCountry = guestCountryId ? this.countryNodeList.find(country => country.id === guestCountryId) || null : null;
+      const myResult = roomResponse?.My_Result;
+      if (myResult) {
+        const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends, aname } = myResult;
+        this.printingBaseUrl = this.printingBaseUrl.replace('%1', aname).replace('%2', this.bookingNumber);
+        this.calendarData = {
+          currency,
+          allowed_booking_sources,
+          adult_child_constraints,
+          legendData: calendar_legends,
+        };
+        this.setRoomsData(roomResponse);
+        const paymentCodesToShow = ['001', '004'];
+        this.showPaymentDetails = paymentMethods?.some(method => paymentCodesToShow.includes(method.code));
+      } else {
+        console.warn("Room response is missing 'My_Result'.");
+      }
+
+      // Set guest and booking data
+      this.guestData = bookingDetails.guest;
+      this.bookingData = bookingDetails;
+    } catch (error) {
+      console.error('Error initializing app:', error);
+    }
+  }
+
+  private async updateStatus() {
     if (this.tempStatus !== '' && this.tempStatus !== null) {
       try {
         this.isUpdateClicked = true;
@@ -266,7 +335,7 @@ export class IrBookingDetails {
       });
     }
   }
-  async openPMSLogsDialog() {
+  private async openPMSLogsDialog() {
     try {
       this.dialogRef?.openModal();
       if (!this.pms_status) {
@@ -281,17 +350,34 @@ export class IrBookingDetails {
       }
     }
   }
-  @Listen('editInitiated')
-  handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
-    this.bookingItem = e.detail;
+
+  private async openPrintingScreen(mode: 'invoice' | 'print' = 'print', version: 'old' | 'new' = 'new') {
+    if (version === 'old') {
+      if (mode === 'invoice') {
+        return window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=I&TK=${this.ticket}`);
+      }
+      return window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.bookingData.system_id}&&PM=B&TK=${this.ticket}`);
+    }
+    let url = this.printingBaseUrl;
+    if (mode === 'invoice') {
+      url = url + '&mode=invoice';
+    }
+    const { data } = await axios.post(`Get_ShortLiving_Token?Ticket=${this.ticket}`);
+    if (!data.ExceptionMsg) {
+      url = url + `&token=${data.My_Result}`;
+    }
+    window.open(url);
   }
-  handleCloseBookingWindow() {
+
+  private handleCloseBookingWindow() {
     this.bookingItem = null;
   }
-  handleDeleteFinish(e: CustomEvent) {
+
+  private handleDeleteFinish(e: CustomEvent) {
     this.bookingData = { ...this.bookingData, rooms: this.bookingData.rooms.filter(room => room.identifier !== e.detail) };
   }
-  async resetBookingData() {
+
+  private async resetBookingData() {
     try {
       const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       this.bookingData = { ...booking };
@@ -300,16 +386,8 @@ export class IrBookingDetails {
       console.log(error);
     }
   }
-  @Listen('resetBookingData')
-  async handleResetBookingData(e: CustomEvent<Booking | null>) {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    if (e.detail) {
-      return (this.bookingData = e.detail);
-    }
-    await this.resetBookingData();
-  }
-  renderPhoneNumber() {
+
+  private renderPhoneNumber() {
     const { mobile, country_phone_prefix, country_id } = this.bookingData.guest;
     if (!mobile) {
       return null;
@@ -328,26 +406,43 @@ export class IrBookingDetails {
     }
     return mobile;
   }
+  private renderSidbarContent() {
+    switch (this.sidebarState) {
+      case 'guest':
+        return (
+          <ir-guest-info
+            slot="sidebar-body"
+            booking_nbr={this.bookingNumber}
+            defaultTexts={this.defaultTexts}
+            email={this.bookingData?.guest.email}
+            language={this.language}
+            onCloseSideBar={() => (this.sidebarState = null)}
+          ></ir-guest-info>
+        );
+      case 'pickup':
+        return (
+          <ir-pickup
+            slot="sidebar-body"
+            defaultPickupData={this.bookingData.pickup_info}
+            bookingNumber={this.bookingData.booking_nbr}
+            numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
+            onCloseModal={() => (this.sidebarState = null)}
+          ></ir-pickup>
+        );
+      case 'extra_note':
+        return <ir-booking-extra-note slot="sidebar-body" booking={this.bookingData} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
+      default:
+        return null;
+    }
+  }
   render() {
     if (!this.bookingData) {
-      return null;
+      return (
+        <div class={'loading-container'}>
+          <ir-spinner></ir-spinner>
+        </div>
+      );
     }
-    let confirmationBG: string = '';
-    switch (this.bookingData.status.code) {
-      case '001':
-        confirmationBG = 'bg-ir-orange';
-        break;
-      case '002':
-        confirmationBG = 'bg-ir-green';
-        break;
-      case '003':
-        confirmationBG = 'bg-ir-red';
-        break;
-      case '004':
-        confirmationBG = 'bg-ir-red';
-        break;
-    }
-
     return [
       <Fragment>
         {!this.is_from_front_desk && (
@@ -374,7 +469,7 @@ export class IrBookingDetails {
           </div>
 
           <div class="d-flex justify-content-end align-items-center">
-            <span class={`confirmed btn-sm m-0 mr-2 ${confirmationBG}`}>{this.bookingData.status.description}</span>
+            <span class={`confirmed btn-sm m-0 mr-2 ${this.confirmationBG[this.bookingData.status.code]}`}>{this.bookingData.status.description}</span>
             {this.bookingData.allowed_actions.length > 0 && this.bookingData.is_editable && (
               <Fragment>
                 <ir-select
@@ -504,29 +599,18 @@ export class IrBookingDetails {
               <ir-date-view from_date={this.bookingData.from_date} to_date={this.bookingData.to_date}></ir-date-view>
               {this.hasRoomAdd && this.bookingData.is_direct && this.bookingData.is_editable && (
                 <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
-                // <ir-icon id="room-add">
-                //   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512" slot="icon">
-                //     <path
-                //       fill="#6b6f82"
-                //       d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                //     />
-                //   </svg>
-                // </ir-icon>
               )}
             </div>
             <div class="card p-0 mx-0">
               {this.bookingData.rooms.map((room: Room, index: number) => {
-                const mealCodeName = room.rateplan.name;
-                const myRoomTypeFoodCat = room.roomtype.name;
-
                 return [
                   <ir-room
                     isEditable={this.bookingData.is_editable}
                     defaultTexts={this.defaultTexts}
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
-                    myRoomTypeFoodCat={myRoomTypeFoodCat}
-                    mealCodeName={mealCodeName}
+                    myRoomTypeFoodCat={room.roomtype.name}
+                    mealCodeName={room.rateplan.name}
                     currency={this.bookingData.currency.code}
                     hasRoomEdit={this.hasRoomEdit && this.bookingData.status.code !== '003' && this.bookingData.is_direct}
                     hasRoomDelete={this.hasRoomDelete && this.bookingData.status.code !== '003' && this.bookingData.is_direct}
@@ -537,62 +621,11 @@ export class IrBookingDetails {
                     ticket={this.ticket}
                     onDeleteFinished={this.handleDeleteFinish.bind(this)}
                   />,
-                  // add separator if not last item with marginHorizontal and alignCenter
                   index !== this.bookingData.rooms.length - 1 && <hr class="mr-2 ml-2 my-0 p-0" />,
                 ];
               })}
             </div>
-            {calendar_data.pickup_service.is_enabled && this.bookingData.is_direct && this.bookingData.is_editable && (
-              <div class="mb-1">
-                <div class={'d-flex w-100 mb-1 align-items-center justify-content-between'}>
-                  <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>
-                  {/*<ir-icon class="pointer " id="pickup">
-                    <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
-                      <path
-                        fill="#6b6f82"
-                        d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"
-                      />
-                    </svg>
-                  </ir-icon>*/}
-                  <ir-button id="pickup" variant="icon" icon_name="edit" style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}></ir-button>
-                </div>
-                {this.bookingData.pickup_info && (
-                  <div class={'card'}>
-                    <div class={'p-1'}>
-                      <div class={'d-flex align-items-center py-0 my-0 pickup-margin'}>
-                        <p class={'font-weight-bold mr-1 py-0 my-0'}>
-                          {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.bookingData.pickup_info.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</span>
-                        </p>
-                        {this.bookingData.pickup_info.hour && this.bookingData.pickup_info.minute && (
-                          <p class={'font-weight-bold flex-fill py-0 my-0'}>
-                            {locales.entries.Lcz_Time}:
-                            <span class={'font-weight-normal'}> {_formatTime(this.bookingData.pickup_info.hour.toString(), this.bookingData.pickup_info.minute.toString())}</span>
-                          </p>
-                        )}
-                        <p class={'font-weight-bold py-0 my-0'}>
-                          {locales.entries.Lcz_DueUponBooking}:{' '}
-                          <span class={'font-weight-normal'}>
-                            {this.bookingData.pickup_info.currency.symbol}
-                            {this.bookingData.pickup_info.total}
-                          </span>
-                        </p>
-                      </div>
-                      <p class={'font-weight-bold py-0 my-0'}>
-                        {locales.entries.Lcz_FlightDetails}:<span class={'font-weight-normal'}> {`${this.bookingData.pickup_info.details}`}</span>
-                      </p>
-                      <p class={'py-0 my-0 pickup-margin'}>{`${this.bookingData.pickup_info.selected_option.vehicle.description}`}</p>
-                      <p class={'font-weight-bold py-0 my-0 pickup-margin'}>
-                        {locales.entries.Lcz_NbrOfVehicles}:<span class={'font-weight-normal'}> {`${this.bookingData.pickup_info.nbr_of_units}`}</span>
-                      </p>
-                      <p class={'small py-0 my-0 pickup-margin'}>
-                        {calendar_data.pickup_service.pickup_instruction.description}
-                        {calendar_data.pickup_service.pickup_cancelation_prepayment.description}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+            <ir-pickup-view booking={this.bookingData}></ir-pickup-view>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details paymentActions={this.paymentActions} defaultTexts={this.defaultTexts} bookingDetails={this.bookingData}></ir-payment-details>
@@ -655,34 +688,5 @@ export class IrBookingDetails {
         </ir-dialog>
       </Fragment>,
     ];
-  }
-  renderSidbarContent() {
-    switch (this.sidebarState) {
-      case 'guest':
-        return (
-          <ir-guest-info
-            slot="sidebar-body"
-            booking_nbr={this.bookingNumber}
-            defaultTexts={this.defaultTexts}
-            email={this.bookingData?.guest.email}
-            language={this.language}
-            onCloseSideBar={() => (this.sidebarState = null)}
-          ></ir-guest-info>
-        );
-      case 'pickup':
-        return (
-          <ir-pickup
-            slot="sidebar-body"
-            defaultPickupData={this.bookingData.pickup_info}
-            bookingNumber={this.bookingData.booking_nbr}
-            numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
-            onCloseModal={() => (this.sidebarState = null)}
-          ></ir-pickup>
-        );
-      case 'extra_note':
-        return <ir-booking-extra-note slot="sidebar-body" booking={this.bookingData} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
-      default:
-        return null;
-    }
   }
 }

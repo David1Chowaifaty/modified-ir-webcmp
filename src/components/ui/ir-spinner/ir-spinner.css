@@ -1,0 +1,19 @@
+:host {
+  width: var(--ir-spinner-size, 1.25rem);
+  height: var(--ir-spinner-size, 1.25rem);
+  border: var(--ir-spinner-border-width, 2.5px) solid var(--ir-spinner-color, #3f3f3f);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
