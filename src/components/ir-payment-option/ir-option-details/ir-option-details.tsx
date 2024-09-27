@@ -31,7 +31,7 @@ export class IrOptionDetails {
     this.selectedLanguage = payment_option_store.languages[0].id.toString();
     this.localizationIdx =
       payment_option_store.selectedOption.code === '005'
-        ? payment_option_store.selectedOption.localizables.findIndex(l => l.language.id.toString() === this.selectedLanguage)
+        ? payment_option_store.selectedOption?.localizables?.findIndex(l => l.language.id.toString() === this.selectedLanguage)
         : null;
   }
 
@@ -116,6 +116,7 @@ export class IrOptionDetails {
     if (!payment_option_store.selectedOption) {
       return null;
     }
+    console.log(this.localizationIdx);
     return (
       <Host>
         <form class={'p-1 mt-2'} onSubmit={this.saveOption.bind(this)}>
@@ -140,7 +141,7 @@ export class IrOptionDetails {
                   textareaClassname="money-transfer-form"
                   label=""
                   onTextChange={this.handleTextAreaChange.bind(this)}
-                  value={payment_option_store.selectedOption.localizables[this.localizationIdx].description ?? ''}
+                  value={this.localizationIdx ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
                 ></ir-textarea>
               </div>
             </div>

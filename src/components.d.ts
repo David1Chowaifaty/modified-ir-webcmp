@@ -889,6 +889,10 @@ export interface IrPaymentDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPaymentDetailsElement;
 }
+export interface IrPaymentOptionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPaymentOptionElement;
+}
 export interface IrPhoneInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPhoneInputElement;
@@ -1932,7 +1936,18 @@ declare global {
         prototype: HTMLIrPaymentDetailsElement;
         new (): HTMLIrPaymentDetailsElement;
     };
+    interface HTMLIrPaymentOptionElementEventMap {
+        "toast": IToast1;
+    }
     interface HTMLIrPaymentOptionElement extends Components.IrPaymentOption, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPaymentOptionElementEventMap>(type: K, listener: (this: HTMLIrPaymentOptionElement, ev: IrPaymentOptionCustomEvent<HTMLIrPaymentOptionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPaymentOptionElementEventMap>(type: K, listener: (this: HTMLIrPaymentOptionElement, ev: IrPaymentOptionCustomEvent<HTMLIrPaymentOptionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrPaymentOptionElement: {
         prototype: HTMLIrPaymentOptionElement;
@@ -2860,6 +2875,7 @@ declare namespace LocalJSX {
         "baseurl"?: string;
         "defaultStyles"?: boolean;
         "language"?: string;
+        "onToast"?: (event: IrPaymentOptionCustomEvent<IToast1>) => void;
         "propertyid"?: string;
         "ticket"?: string;
     }

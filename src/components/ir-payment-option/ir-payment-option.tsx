@@ -3,8 +3,9 @@ import { PaymentOptionService } from '@/services/payment_option.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import payment_option_store from '@/stores/payment-option.store';
-import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import axios from 'axios';
+import { IToast } from '../ir-toast/toast';
 
 @Component({
   tag: 'ir-payment-option',
@@ -21,6 +22,8 @@ export class IrPaymentOption {
   @State() paymentOptions: PaymentOption[] = [];
   @State() isLoading: boolean = false;
   @State() selectedOption: PaymentOption | null = null;
+
+  @Event() toast: EventEmitter<IToast>;
 
   private paymentOptionService = new PaymentOptionService();
   private roomService = new RoomService();
@@ -113,7 +116,14 @@ export class IrPaymentOption {
 
     const is_active = e.detail;
     const newOption = { ...po, is_active, property_id: this.propertyid };
-
+    if (po.code === '000' && is_active && this.paymentOptions.every(p => !p.is_active)) {
+      this.toast.emit({
+        type: 'success',
+        description: '',
+        title: 'You need to select "No deposit required" from your Pre-payment options since you have no means of charging guests before arrival.',
+        position: 'top-right',
+      });
+    }
     if (po.code !== '005' && !po.is_payment_gateway) {
       await this.paymentOptionService.HandlePaymentMethod(newOption);
       this.modifyPaymentList(newOption);
