@@ -183,6 +183,7 @@ export class IrPaymentOption {
       );
     }
     this.log('rendering the payment option');
+    // debugger;
     return (
       <Host class={this.defaultStyles ? 'p-2' : ''}>
         <ir-toast></ir-toast>
@@ -192,18 +193,18 @@ export class IrPaymentOption {
             <div class="p-0 m-0 mr-1">
               <ir-icons name="credit_card"></ir-icons>
             </div>
-            <h3 class={'m-0 p-0'}>{locales.entries.Lcz_PaymentOptions}</h3>
+            <h3 class={'m-0 p-0'}>{locales?.entries?.Lcz_PaymentOptions}</h3>
           </div>
           <div class="payment-table-container">
             <table class="table table-striped table-bordered no-footer dataTable">
               <thead>
                 <tr>
                   <th scope="col" class="text-left">
-                    {locales.entries.Lcz_PaymentMethod}
+                    {locales?.entries?.Lcz_PaymentMethod}
                   </th>
-                  <th scope="col">{locales.entries.Lcz_Status}</th>
+                  <th scope="col">{locales?.entries?.Lcz_Status}</th>
                   <th scope="col" class="actions-header">
-                    {locales.entries.Lcz_Action}
+                    {locales?.entries?.Lcz_Action}
                   </th>
                 </tr>
               </thead>
@@ -216,7 +217,7 @@ export class IrPaymentOption {
                     <tr key={po.id}>
                       <td class={'text-left po-description'}>
                         <div class="po-view">
-                          <span class={'p-0 m-0'}>{po.description}</span>
+                          <span class={'p-0 m-0'}>{po?.description}</span>
                           {/* <img src="https://www.jccsmart.com/assets/images/app-logo.svg" alt="" class="payment-img" /> */}
                         </div>
                       </td>
@@ -227,7 +228,7 @@ export class IrPaymentOption {
                       <td class="payment-action">
                         {this.showEditButton(po) && (
                           <ir-button
-                            title={locales.entries.Lcz_Edit}
+                            title={locales?.entries?.Lcz_Edit}
                             variant="icon"
                             icon_name="edit"
                             onClickHanlder={() => {
@@ -248,7 +249,7 @@ export class IrPaymentOption {
           onIrSidebarToggle={() => {
             this.closeModal(null);
           }}
-          label={locales?.entries.Lcz_Information.replace('%1', payment_option_store.selectedOption?.description)}
+          label={locales?.entries.Lcz_Information?.replace('%1', payment_option_store.selectedOption?.description)}
           open={payment_option_store?.selectedOption !== null}
         >
           {payment_option_store?.selectedOption && <ir-option-details propertyId={this.propertyid} slot="sidebar-body"></ir-option-details>}
