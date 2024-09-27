@@ -172,7 +172,7 @@ export class IrPaymentOption {
     this.log('paymentOptions', this.paymentOptions);
     this.log('----loading conditions----');
 
-    if (this.isLoading || this.paymentOptions.length == 0) {
+    if (this.isLoading === true || (this.paymentOptions && this.paymentOptions.length === 0)) {
       this.log('rendering the loading view');
       return (
         <Host class={this.defaultStyles ? 'p-2' : ''}>
