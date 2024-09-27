@@ -545,6 +545,7 @@ export namespace Components {
     interface IrPaymentOption {
         "baseurl": string;
         "defaultStyles": boolean;
+        "hideLogs": boolean;
         "language": string;
         "propertyid": string;
         "ticket": string;
@@ -2874,6 +2875,7 @@ declare namespace LocalJSX {
     interface IrPaymentOption {
         "baseurl"?: string;
         "defaultStyles"?: boolean;
+        "hideLogs"?: boolean;
         "language"?: string;
         "onToast"?: (event: IrPaymentOptionCustomEvent<IToast1>) => void;
         "propertyid"?: string;

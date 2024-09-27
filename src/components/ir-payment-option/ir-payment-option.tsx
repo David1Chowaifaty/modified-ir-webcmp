@@ -18,6 +18,7 @@ export class IrPaymentOption {
   @Prop() ticket: string;
   @Prop() language: string = 'en';
   @Prop() defaultStyles: boolean = true;
+  @Prop() hideLogs: boolean = false;
 
   @State() paymentOptions: PaymentOption[] = [];
   @State() isLoading: boolean = false;
@@ -54,6 +55,14 @@ export class IrPaymentOption {
     console.log(e.detail);
     this.closeModal(e.detail);
   }
+
+  private log(message?: any, ...optionalParams: any[]): void {
+    if (this.hideLogs) {
+      return;
+    }
+    console.log(message, ...optionalParams);
+  }
+
   private closeModal(newOption: PaymentOption | null) {
     if (newOption) {
       this.modifyPaymentList(newOption);
@@ -72,12 +81,19 @@ export class IrPaymentOption {
   }
   private async fetchData() {
     try {
+      this.log('start fetching data');
       this.isLoading = true;
       const [paymentOptions, propertyOptions, languageTexts] = await Promise.all([
         this.paymentOptionService.GetExposedPaymentMethods(),
         this.paymentOptionService.GetPropertyPaymentMethods(this.propertyid),
         this.roomService.fetchLanguage(this.language, ['_PAYMENT_BACK']),
       ]);
+
+      this.log('---feteched data---');
+      this.log('paymentOptions', paymentOptions);
+      this.log('propertyOptions', propertyOptions);
+      this.log('languageTexts', languageTexts);
+      this.log('---feteched data---');
       locales.entries = languageTexts.entries;
       locales.direction = languageTexts.direction;
       this.propertyOptionsById = new Map(propertyOptions.map(o => [o.id, o]));
@@ -89,9 +105,10 @@ export class IrPaymentOption {
         return this.propertyOptionsByCode.get(option.code) || option;
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       this.isLoading = false;
+      this.log('end fetching data');
     }
   }
 
@@ -150,7 +167,13 @@ export class IrPaymentOption {
     return po.code === '005' || (po.is_payment_gateway && po.data?.length > 0);
   }
   render() {
+    this.log('----loading conditions----');
+    this.log('isLoading', this.isLoading);
+    this.log('paymentOptions', this.paymentOptions);
+    this.log('----loading conditions----');
+
     if (this.isLoading || this.paymentOptions.length == 0) {
+      this.log('rendering the loading view');
       return (
         <Host class={this.defaultStyles ? 'p-2' : ''}>
           <div class={`loading-container ${this.defaultStyles ? 'default' : ''}`}>
@@ -159,6 +182,7 @@ export class IrPaymentOption {
         </Host>
       );
     }
+    this.log('rendering the payment option');
     return (
       <Host class={this.defaultStyles ? 'p-2' : ''}>
         <ir-toast></ir-toast>
@@ -224,10 +248,10 @@ export class IrPaymentOption {
           onIrSidebarToggle={() => {
             this.closeModal(null);
           }}
-          label={locales.entries.Lcz_Information.replace('%1', payment_option_store.selectedOption?.description)}
-          open={payment_option_store.selectedOption !== null}
+          label={locales?.entries.Lcz_Information.replace('%1', payment_option_store.selectedOption?.description)}
+          open={payment_option_store?.selectedOption !== null}
         >
-          {payment_option_store.selectedOption && <ir-option-details propertyId={this.propertyid} slot="sidebar-body"></ir-option-details>}
+          {payment_option_store?.selectedOption && <ir-option-details propertyId={this.propertyid} slot="sidebar-body"></ir-option-details>}
         </ir-sidebar>
       </Host>
     );
