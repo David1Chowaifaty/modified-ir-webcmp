@@ -96,8 +96,8 @@ export class IrPaymentOption {
       this.log('---feteched data---');
       locales.entries = languageTexts.entries;
       locales.direction = languageTexts.direction;
-      this.propertyOptionsById = new Map(propertyOptions.map(o => [o.id, o]));
-      this.propertyOptionsByCode = new Map(propertyOptions.map(o => [o.code, o]));
+      this.propertyOptionsById = new Map(propertyOptions?.map(o => [o.id, o]));
+      this.propertyOptionsByCode = new Map(propertyOptions?.map(o => [o.code, o]));
       this.paymentOptions = paymentOptions?.map(option => {
         if (option.is_payment_gateway) {
           return this.propertyOptionsById.get(option.id) || option;
@@ -184,6 +184,16 @@ export class IrPaymentOption {
     }
     this.log('rendering the payment option');
     // debugger;
+    if (this.propertyid.toString() === '42') {
+      return (
+        <div>
+          <p>Testing</p>
+          <p>locale.entries: {JSON.stringify(locales?.entries)}</p>
+          <p>payment options: {JSON.stringify(this.paymentOptions)}</p>
+          <p>Loading:{JSON.stringify(this.isLoading)}</p>
+        </div>
+      );
+    }
     return (
       <Host class={this.defaultStyles ? 'p-2' : ''}>
         <ir-toast></ir-toast>
