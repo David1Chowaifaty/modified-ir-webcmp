@@ -18,7 +18,7 @@ export class IrPaymentOption {
   @Prop() ticket: string;
   @Prop() language: string = 'en';
   @Prop() defaultStyles: boolean = true;
-  @Prop() hideLogs: boolean = false;
+  @Prop() hideLogs: boolean = true;
 
   @State() paymentOptions: PaymentOption[] = [];
   @State() isLoading: boolean = false;
@@ -183,17 +183,6 @@ export class IrPaymentOption {
       );
     }
     this.log('rendering the payment option');
-    // debugger;
-    if (this.propertyid.toString() === '42') {
-      return (
-        <div>
-          <p>Testing</p>
-          <p>locale.entries: {JSON.stringify(locales?.entries)}</p>
-          <p>payment options: {JSON.stringify(this.paymentOptions)}</p>
-          <p>Loading:{JSON.stringify(this.isLoading)}</p>
-        </div>
-      );
-    }
     return (
       <Host class={this.defaultStyles ? 'p-2' : ''}>
         <ir-toast></ir-toast>
