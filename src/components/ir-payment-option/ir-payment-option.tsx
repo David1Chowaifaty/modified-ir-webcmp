@@ -118,14 +118,13 @@ export class IrPaymentOption {
     this.roomService.setToken(this.ticket);
   }
   private modifyPaymentList(paymentOption: PaymentOption) {
-    this.paymentOptions = [
-      ...this.paymentOptions.map(p => {
-        if ((paymentOption.is_payment_gateway && p.id === paymentOption.id) || (paymentOption.code === '005' && p.code === '005')) {
-          return paymentOption;
-        }
-        return p;
-      }),
-    ];
+    let prevPaymentOptions = [...this.paymentOptions];
+    let index = prevPaymentOptions.findIndex(p => p.code === paymentOption.code);
+    if (index === -1) {
+      throw new Error('Invalid code');
+    }
+    prevPaymentOptions[index] = { ...paymentOption };
+    this.paymentOptions = [...prevPaymentOptions];
   }
   private async handleCheckChange(e: CustomEvent, po: PaymentOption) {
     e.stopPropagation();
@@ -133,17 +132,17 @@ export class IrPaymentOption {
 
     const is_active = e.detail;
     const newOption = { ...po, is_active, property_id: this.propertyid };
-    if (po.code === '000' && is_active && this.paymentOptions.every(p => !p.is_active)) {
-      this.toast.emit({
-        type: 'success',
-        description: '',
-        title: 'You need to select "No deposit required" from your Pre-payment options since you have no means of charging guests before arrival.',
-        position: 'top-right',
-      });
-    }
     if (po.code !== '005' && !po.is_payment_gateway) {
       await this.paymentOptionService.HandlePaymentMethod(newOption);
       this.modifyPaymentList(newOption);
+      if (po.code === '000' && is_active && this.paymentOptions.filter(p => p.code !== '000').every(p => p.is_active === false || p.is_active === null)) {
+        this.toast.emit({
+          type: 'success',
+          description: '',
+          title: 'You need to select "No deposit required" from your Pre-payment options since you have no means of charging guests before arrival.',
+          position: 'top-right',
+        });
+      }
       return;
     }
 
