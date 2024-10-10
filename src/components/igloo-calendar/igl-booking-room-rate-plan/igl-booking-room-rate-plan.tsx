@@ -1,6 +1,5 @@
 import { Component, Host, Prop, h, State, Event, EventEmitter, Watch, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
-import { getCurrencySymbol } from '../../../utils/utils';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 @Component({
@@ -260,7 +259,8 @@ export class IglBookingRoomRatePlan {
                 <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
                   <div class="input-group-prepend">
                     <span data-disabled={this.disableForm()} data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text new-currency" id="basic-addon1">
-                      {getCurrencySymbol(this.currency.code)}
+                      {/* {getCurrencySymbol(this.currency.code)} */}
+                      {this.currency.symbol}
                     </span>
                   </div>
                   <input

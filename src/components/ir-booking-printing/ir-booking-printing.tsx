@@ -1,7 +1,7 @@
 import { Booking, Guest, Room } from '@/models/booking.dto';
 import { Component, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import moment, { Moment } from 'moment';
-import { _formatAmount, _formatTime } from '../ir-booking-details/functions';
+import { _formatTime } from '../ir-booking-details/functions';
 import { IProperty } from '@/models/property';
 import { calculateDaysBetweenDates } from '@/utils/booking';
 import BeLogoFooter from '@/assets/be_logo_footer';
@@ -9,6 +9,7 @@ import { BookingService } from '@/services/booking.service';
 import { RoomService } from '@/services/room.service';
 import axios from 'axios';
 import locales from '@/stores/locales.store';
+import { formatAmount } from '@/utils/utils';
 
 @Component({
   tag: 'ir-booking-printing',
@@ -88,7 +89,7 @@ export class IrBookingPrinting {
       countries = fetchedCountries;
       this.booking = booking;
       this.setUserCountry(countries, this.booking.guest.country_id);
-      this.currency = this.booking.currency.code;
+      this.currency = this.booking.currency.symbol;
       this.totalPersons = this.booking?.occupancy.adult_nbr + this.booking?.occupancy.children_nbr;
       this.totalNights = calculateDaysBetweenDates(this.booking.from_date, this.booking.to_date);
     } catch (error) {
@@ -209,7 +210,7 @@ export class IrBookingPrinting {
             {d.is_exlusive ? 'Excluding' : 'Including'} {d.name}
           </p>
           <p>
-            {d.pct}%: {_formatAmount(amount, this.currency)}
+            {d.pct}%: {formatAmount(this.currency, amount)}
           </p>
           {/* {room.gross_cost > 0 && room.gross_cost !== null && <span>{_formatAmount((room.cost * d.pct) / 100, this.currency)}</span>} */}
           {index < filtered_data.length - 1 && <span>-</span>}
@@ -289,16 +290,16 @@ export class IrBookingPrinting {
                   <div class="pricing-summary">
                     <div class={'pricing-breakdown'}>
                       <p class="label-title">
-                        Total:<span class="label-value">{_formatAmount(room.total, this.currency)}</span>
+                        Total:<span class="label-value">{formatAmount(this.currency, room.total)}</span>
                       </p>
                       <span>-</span>
                       {this.getTaxAmount(room)}
                     </div>
                     <p class="label-title">
-                      Grand total:<span class="label-value">{_formatAmount(room.gross_total, this.currency)}</span>
+                      Grand total:<span class="label-value">{formatAmount(this.currency, room.gross_total)}</span>
                     </p>
                     <p class="label-title">
-                      Due upon booking:<span class="label-value">{_formatAmount(room.gross_guarantee, this.currency)}</span>
+                      Due upon booking:<span class="label-value">{formatAmount(this.currency, room.gross_guarantee)}</span>
                     </p>
                   </div>
 
@@ -311,7 +312,7 @@ export class IrBookingPrinting {
                     {room.days?.map(d => (
                       <div class={'room_amount_container'}>
                         <p class="room_amount date">{this.formatDate(moment(d.date, 'YYYY-MM-DD'))}</p>
-                        <p class="room_amount amount">{_formatAmount(d.amount, this.currency)}</p>
+                        <p class="room_amount amount">{formatAmount(this.currency, d.amount)}</p>
                       </div>
                     ))}
                   </div>
@@ -337,13 +338,13 @@ export class IrBookingPrinting {
               <p class="car_name">
                 {this.booking.pickup_info.selected_option.vehicle.description}
                 <span> - </span>
-                {_formatAmount(this.booking.pickup_info.selected_option.amount, this.booking.pickup_info.selected_option.currency.code)}
+                {formatAmount(this.booking.pickup_info.selected_option.currency.code, this.booking.pickup_info.selected_option.amount)}
               </p>
               <p class="label-title">
                 No. of Vehicles:<span class="label-value">{this.booking?.pickup_info.nbr_of_units}</span>
               </p>
               <p class="label-title">
-                Due upon booking:<span class="label-value">{_formatAmount(this.booking?.pickup_info.total, this.booking.pickup_info.currency.code)}</span>
+                Due upon booking:<span class="label-value">{formatAmount(this.booking.pickup_info.currency.code, this.booking?.pickup_info.total)}</span>
               </p>
             </div>
           </section>
@@ -363,7 +364,7 @@ export class IrBookingPrinting {
                   <Fragment>
                     <tr key={p.id}>
                       <td class="billing_cell">{moment(p.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</td>
-                      <td class="billing_cell">{_formatAmount(p.amount, p.currency.code)}</td>
+                      <td class="billing_cell">{formatAmount(p.currency.code, p.amount)}</td>
                       <td class="billing_cell">{p.designation || '_'}</td>
                       {/* <td class="billing_cell billing_reference">{p.reference || '_'}</td> */}
                     </tr>

@@ -11,7 +11,7 @@
 | ------------------------ | -------------------------- | ----------- | --------------------------- | ---------------- |
 | `bedPreferenceType`      | --                         |             | `any[]`                     | `[]`             |
 | `bookingType`            | `booking-type`             |             | `string`                    | `'PLUS_BOOKING'` |
-| `currency`               | `currency`                 |             | `any`                       | `undefined`      |
+| `currency`               | --                         |             | `ICurrency`                 | `undefined`      |
 | `dateDifference`         | `date-difference`          |             | `number`                    | `undefined`      |
 | `defaultGuestPreference` | `default-guest-preference` |             | `number`                    | `undefined`      |
 | `defaultGuestRoomId`     | `default-guest-room-id`    |             | `number`                    | `undefined`      |

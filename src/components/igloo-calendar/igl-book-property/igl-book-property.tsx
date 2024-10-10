@@ -11,7 +11,7 @@ import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { IToast } from '@/components/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
-
+import { ICurrency } from '@/models/calendarData';
 @Component({
   tag: 'igl-book-property',
   styleUrls: ['igl-book-property.css'],
@@ -23,7 +23,7 @@ export class IglBookProperty {
   @Prop() language: string;
   @Prop() countryNodeList;
   @Prop() showPaymentDetails: boolean = false;
-  @Prop() currency: { id: number; code: string };
+  @Prop() currency: ICurrency;
   @Prop({ reflect: true, mutable: true }) bookingData: { [key: string]: any };
   @Prop() adultChildConstraints: TAdultChildConstraints;
 
@@ -193,6 +193,8 @@ export class IglBookProperty {
       isValidProperty(this.bookedByInfoData, 'lastName', '') ||
       // isValidProperty(this.bookedByInfoData, 'countryId', -1) ||
       isValidProperty(this.bookedByInfoData, 'selectedArrivalTime', '')
+      // ||
+      // validateEmail(this.bookedByInfoData?.email)
       // || isValidProperty(this.bookedByInfoData, 'email', '')
     );
   }
@@ -454,6 +456,7 @@ export class IglBookProperty {
         return;
       }
     } else {
+      console.log(this.isButtonDisabled());
       if (this.isButtonDisabled()) {
         this.isLoading = '';
         return;

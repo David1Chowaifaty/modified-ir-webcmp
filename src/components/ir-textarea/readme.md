@@ -31,13 +31,11 @@
 ### Used by
 
  - [ir-booking-extra-note](../ir-booking-extra-note)
- - [ir-option-details](../ir-payment-option/ir-option-details)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-booking-extra-note --> ir-textarea
-  ir-option-details --> ir-textarea
   style ir-textarea fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

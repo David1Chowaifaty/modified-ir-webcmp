@@ -5,11 +5,6 @@ export const _formatDate = (date: string) => {
   return moment(date).format('MMM DD, YYYY');
 };
 
-export const _formatAmount = (amount: any, currency: string = 'USD') => {
-  // format the amount using accounting.js
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(amount);
-};
-
 export const _getDay = (date: string) => {
   // formate it as day number/month number and day name
   return moment(date).format('DD/MM ddd');

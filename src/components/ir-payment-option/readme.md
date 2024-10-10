@@ -11,9 +11,17 @@
 | --------------- | ---------------- | ----------- | --------- | ----------- |
 | `baseurl`       | `baseurl`        |             | `string`  | `undefined` |
 | `defaultStyles` | `default-styles` |             | `boolean` | `true`      |
+| `hideLogs`      | `hide-logs`      |             | `boolean` | `true`      |
 | `language`      | `language`       |             | `string`  | `'en'`      |
 | `propertyid`    | `propertyid`     |             | `string`  | `undefined` |
 | `ticket`        | `ticket`         |             | `string`  | `undefined` |
+
+
+## Events
+
+| Event   | Description | Type                                                                                                 |
+| ------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `toast` |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies
@@ -41,7 +49,7 @@ graph TD;
   ir-button --> ir-icons
   ir-sidebar --> ir-icon
   ir-option-details --> ir-select
-  ir-option-details --> ir-textarea
+  ir-option-details --> ir-text-editor
   ir-option-details --> ir-input-text
   ir-option-details --> ir-button
   style ir-payment-option fill:#f9f,stroke:#333,stroke-width:4px

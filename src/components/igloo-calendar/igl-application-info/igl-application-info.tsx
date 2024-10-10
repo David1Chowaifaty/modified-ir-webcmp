@@ -1,9 +1,10 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Watch, State, Listen } from '@stencil/core';
 import { v4 } from 'uuid';
-import { getCurrencySymbol } from '../../../utils/utils';
+import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { TPropertyButtonsTypes } from '@/components';
 import calendar_data from '@/stores/calendar-data';
+import { ICurrency } from '@/models/calendarData';
 
 @Component({
   tag: 'igl-application-info',
@@ -12,7 +13,7 @@ import calendar_data from '@/stores/calendar-data';
 })
 export class IglApplicationInfo {
   @Prop() guestInfo: { [key: string]: any };
-  @Prop() currency;
+  @Prop() currency: ICurrency;
   @Prop({ reflect: true, mutable: true }) roomsList: { [key: string]: any }[] = [];
   @Prop() guestRefKey: string;
   @Prop() bedPreferenceType = [];
@@ -165,7 +166,7 @@ export class IglApplicationInfo {
                 </div>
               )}
               <div class="">
-                {getCurrencySymbol(this.currency.code) + Number(this.userRate).toFixed(2)}/{locales.entries.Lcz_Stay}
+                {formatAmount(this.currency.symbol, this.userRate)}/{locales.entries.Lcz_Stay}
               </div>
             </div>
           </div>

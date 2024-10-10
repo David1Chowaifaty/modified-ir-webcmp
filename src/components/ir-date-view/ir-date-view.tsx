@@ -45,7 +45,9 @@ export class IrDateView {
       to_date: '',
       date_diffrence: 0,
     };
-
+    if (!date) {
+      return;
+    }
     if (typeof date === 'string') {
       this.dates[key] = moment(date, this.dateOption).format('MMM DD, YYYY');
     } else if (date instanceof Date) {

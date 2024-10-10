@@ -5,6 +5,8 @@ import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import { TPropertyButtonsTypes } from '@/components';
 import calendar_data from '@/stores/calendar-data';
+import { z } from 'zod';
+import { validateEmail } from '@/utils/utils';
 
 @Component({
   tag: 'igl-property-booked-by',
@@ -92,7 +94,7 @@ export class IglPropertyBookedBy {
         isdCode: event.target.value,
       };
     }
-    console.log(this.bookedByData);
+    // console.log(this.bookedByData);
   }
 
   handleNumberInput(key, event: InputEvent) {
@@ -111,17 +113,17 @@ export class IglPropertyBookedBy {
     }
   }
 
-  async handleEmailInput(key, event: InputEvent) {
-    const inputElement = event.target as HTMLInputElement;
-    const inputValue = inputElement.value;
-    if (this.isValidEmail(inputValue)) {
-      this.handleDataChange(key, event);
-    }
-  }
+  // async handleEmailInput(key, event: InputEvent) {
+  //   const inputElement = event.target as HTMLInputElement;
+  //   const inputValue = inputElement.value;
+  //   if (z.string().email().safeParse(inputValue).success) {
+  //     this.handleDataChange(key, event);
+  //   }
+  // }
   async checkUser() {
     try {
       const email = this.bookedByData.email;
-      if (this.isValidEmail(email)) {
+      if (z.string().email().safeParse(email).success) {
         const res = await this.bookingService.getUserInfo(email);
         if (res !== null) {
           this.bookedByData = {
@@ -134,39 +136,43 @@ export class IglPropertyBookedBy {
             isdCode: res.country_id.toString(),
           };
         } else {
-          this.bookedByData = {
-            ...this.bookedByData,
-            id: undefined,
-            firstName: '',
-            lastName: '',
-            contactNumber: '',
-            countryId: '',
-            isdCode: '',
-          };
+          let prevBookedByData = { ...this.bookedByData };
+          prevBookedByData = { ...prevBookedByData, email };
+          this.bookedByData = { ...prevBookedByData };
         }
-        this.dataUpdateEvent.emit({
-          key: 'bookedByInfoUpdated',
-          data: { ...this.bookedByData },
-        });
+      } else {
+        let prevBookedByData = { ...this.bookedByData };
+        prevBookedByData = { ...prevBookedByData, email: '' };
+        this.bookedByData = { ...prevBookedByData };
       }
+      this.dataUpdateEvent.emit({
+        key: 'bookedByInfoUpdated',
+        data: { ...this.bookedByData },
+      });
     } catch (error) {
       //   toastr.error(error);
     }
-  }
-  isValidEmail(emailId) {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(emailId);
   }
   handleComboboxChange(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const { key, data } = e.detail;
+    console.log('data', data, 'key', key);
     switch (key) {
       case 'blur':
         if (data !== '') {
           this.bookedByData.email = data;
           this.checkUser();
+        } else {
+          let prevBookedByData = { ...this.bookedByData };
+          prevBookedByData = { ...prevBookedByData, email: '' };
+          this.bookedByData = { ...prevBookedByData };
+          this.dataUpdateEvent.emit({
+            key: 'bookedByInfoUpdated',
+            data: { ...this.bookedByData },
+          });
         }
+
         break;
       case 'select':
         this.bookedByData.email = data.email;
@@ -189,7 +195,6 @@ export class IglPropertyBookedBy {
     }
   }
   clearEvent() {
-    this.bookedByData.email = '';
     this.bookedByData = {
       ...this.bookedByData,
       id: '',
@@ -245,6 +250,7 @@ export class IglPropertyBookedBy {
                 class={'flex-fill'}
                 placeholder={locales.entries.Lcz_FindEmailAddress}
                 onInputCleared={() => this.clearEvent()}
+                danger_border={this.isButtonPressed && this.bookedByData.email !== '' && validateEmail(this.bookedByData.email)}
               ></ir-autocomplete>
               <ir-tooltip class={'ml-1'} message="Leave empty if email is unavailable"></ir-tooltip>
             </div>

@@ -127,6 +127,7 @@ export interface IAllowedBookingSources {
 export interface ICurrency {
   code: string;
   id: number;
+  symbol: string;
 }
 export interface IFormattedLegendData {
   legendData: ILegendData[];

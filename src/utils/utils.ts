@@ -1,5 +1,6 @@
 import moment from 'moment';
 import IBooking, { ICountry, PhysicalRoomType } from '../models/IBooking';
+import { z } from 'zod';
 
 export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear: string): string {
   const dateStr = `${dayWithWeekday.split(' ')[1]} ${monthWithYear}`;
@@ -136,10 +137,16 @@ export function getDaysArray(date1: string, date2: string) {
 export function renderTime(time: number) {
   return time < 10 ? time.toString().padStart(2, '0') : time.toString();
 }
-
+export function validateEmail(email: string) {
+  if (email === '') {
+    return true;
+  }
+  const parsedEmailResults = z.string().email().safeParse(email);
+  return !parsedEmailResults.success;
+}
 export function formatAmount(currency: string, amount: number) {
-  const symbol = getCurrencySymbol(currency);
-  return symbol + amount.toFixed(2);
+  // const symbol = getCurrencySymbol(currency);
+  return currency + amount.toFixed(2);
 }
 export const extras = [
   {

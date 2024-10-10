@@ -5,11 +5,13 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { ICurrency } from "./models/calendarData";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
-import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
+import { ICountry as ICountry1, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { IToast } from "./components/ir-toast/toast";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
+import { ICountry } from "./models/IBooking";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { TIcons } from "./components/ui/ir-icons/icons";
@@ -22,11 +24,14 @@ import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { IRoomNightsDataEventPayload } from "./models/property-types";
+import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
+export { ICurrency } from "./models/calendarData";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
-export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
+export { ICountry as ICountry1, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { IToast } from "./components/ir-toast/toast";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
+export { ICountry } from "./models/IBooking";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { TIcons } from "./components/ui/ir-icons/icons";
@@ -39,11 +44,12 @@ export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { Booking as Booking1 } from "./models/booking.dto";
 export { IRoomNightsDataEventPayload } from "./models/property-types";
+export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
     interface IglApplicationInfo {
         "bedPreferenceType": any[];
         "bookingType": string;
-        "currency": any;
+        "currency": ICurrency;
         "dateDifference": number;
         "defaultGuestPreference": number | null;
         "defaultGuestRoomId": number;
@@ -67,7 +73,7 @@ export namespace Components {
         "allowedBookingSources": any;
         "bookingData": { [key: string]: any };
         "countryNodeList": any;
-        "currency": { id: number; code: string };
+        "currency": ICurrency;
         "language": string;
         "propertyid": number;
         "showPaymentDetails": boolean;
@@ -199,7 +205,7 @@ export namespace Components {
         "bookedByInfoData": { [key: string]: any };
         "bookingData": { [key: string]: any };
         "countryNodeList": any;
-        "currency": any;
+        "currency": ICurrency;
         "dateRangeData": { [key: string]: any };
         "defaultGuestData": IglBookPropertyPayloadEditBooking;
         "isEditOrAddRoomEvent": boolean;
@@ -212,7 +218,7 @@ export namespace Components {
         "showSplitBookingOption": boolean;
     }
     interface IglPropertyBookedBy {
-        "countryNodeList": ICountry[];
+        "countryNodeList": ICountry1[];
         "defaultData": { [key: string]: any };
         "language": string;
         "propertyId": number;
@@ -646,6 +652,15 @@ export namespace Components {
         "disabled": boolean;
         "switchId": string;
     }
+    interface IrTextEditor {
+        "error": boolean;
+        "placeholder": string;
+        "plugins": (string | PluginConstructor)[];
+        "pluginsMode": 'replace' | 'add';
+        "toolbarItems": ToolbarConfigItem[];
+        "toolbarItemsMode": 'replace' | 'add';
+        "value": string;
+    }
     interface IrTextarea {
         "cols": number;
         "label": string;
@@ -921,6 +936,10 @@ export interface IrSidebarCustomEvent<T> extends CustomEvent<T> {
 export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSwitchElement;
+}
+export interface IrTextEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTextEditorElement;
 }
 export interface IrTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2101,6 +2120,23 @@ declare global {
         prototype: HTMLIrSwitchElement;
         new (): HTMLIrSwitchElement;
     };
+    interface HTMLIrTextEditorElementEventMap {
+        "textChange": string;
+    }
+    interface HTMLIrTextEditorElement extends Components.IrTextEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTextEditorElementEventMap>(type: K, listener: (this: HTMLIrTextEditorElement, ev: IrTextEditorCustomEvent<HTMLIrTextEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTextEditorElementEventMap>(type: K, listener: (this: HTMLIrTextEditorElement, ev: IrTextEditorCustomEvent<HTMLIrTextEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrTextEditorElement: {
+        prototype: HTMLIrTextEditorElement;
+        new (): HTMLIrTextEditorElement;
+    };
     interface HTMLIrTextareaElementEventMap {
         "textChange": string;
     }
@@ -2246,6 +2282,7 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-switch": HTMLIrSwitchElement;
+        "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
         "ir-toast": HTMLIrToastElement;
@@ -2258,7 +2295,7 @@ declare namespace LocalJSX {
     interface IglApplicationInfo {
         "bedPreferenceType"?: any[];
         "bookingType"?: string;
-        "currency"?: any;
+        "currency"?: ICurrency;
         "dateDifference"?: number;
         "defaultGuestPreference"?: number | null;
         "defaultGuestRoomId"?: number;
@@ -2284,7 +2321,7 @@ declare namespace LocalJSX {
         "allowedBookingSources"?: any;
         "bookingData"?: { [key: string]: any };
         "countryNodeList"?: any;
-        "currency"?: { id: number; code: string };
+        "currency"?: ICurrency;
         "language"?: string;
         "onAnimateIrButton"?: (event: IglBookPropertyCustomEvent<string>) => void;
         "onAnimateIrSelect"?: (event: IglBookPropertyCustomEvent<string>) => void;
@@ -2464,7 +2501,7 @@ declare namespace LocalJSX {
         "bookedByInfoData"?: { [key: string]: any };
         "bookingData"?: { [key: string]: any };
         "countryNodeList"?: any;
-        "currency"?: any;
+        "currency"?: ICurrency;
         "dateRangeData"?: { [key: string]: any };
         "defaultGuestData"?: IglBookPropertyPayloadEditBooking;
         "isEditOrAddRoomEvent"?: boolean;
@@ -2482,7 +2519,7 @@ declare namespace LocalJSX {
         "showSplitBookingOption"?: boolean;
     }
     interface IglPropertyBookedBy {
-        "countryNodeList"?: ICountry[];
+        "countryNodeList"?: ICountry1[];
         "defaultData"?: { [key: string]: any };
         "language"?: string;
         "onDataUpdateEvent"?: (event: IglPropertyBookedByCustomEvent<{ [key: string]: any }>) => void;
@@ -2987,6 +3024,16 @@ declare namespace LocalJSX {
         "onCheckChange"?: (event: IrSwitchCustomEvent<boolean>) => void;
         "switchId"?: string;
     }
+    interface IrTextEditor {
+        "error"?: boolean;
+        "onTextChange"?: (event: IrTextEditorCustomEvent<string>) => void;
+        "placeholder"?: string;
+        "plugins"?: (string | PluginConstructor)[];
+        "pluginsMode"?: 'replace' | 'add';
+        "toolbarItems"?: ToolbarConfigItem[];
+        "toolbarItemsMode"?: 'replace' | 'add';
+        "value"?: string;
+    }
     interface IrTextarea {
         "cols"?: number;
         "label"?: string;
@@ -3109,6 +3156,7 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-spinner": IrSpinner;
         "ir-switch": IrSwitch;
+        "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
         "ir-toast": IrToast;
@@ -3196,6 +3244,7 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
+            "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;

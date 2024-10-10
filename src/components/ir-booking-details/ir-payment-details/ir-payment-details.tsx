@@ -1,5 +1,5 @@
 import { Component, h, Prop, State, Event, EventEmitter, Fragment, Watch, Listen } from '@stencil/core';
-import { _formatAmount, _formatDate } from '../functions';
+import { _formatDate } from '../functions';
 import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
@@ -8,6 +8,7 @@ import { ILocale, IToast } from '@/components';
 import calendar_data from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { formatAmount } from '@/utils/utils';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -196,7 +197,7 @@ export class IrPaymentDetails {
           </td>
           <td class={'border payments-height border-light border-bottom-0 text-center '}>
             {rowMode === 'normal' ? (
-              <span class="sm-padding-right">{_formatAmount(item.amount, this.bookingDetails.currency.code)}</span>
+              <span class="sm-padding-right">{formatAmount(this.bookingDetails.currency.symbol, item.amount)}</span>
             ) : (
               <input
                 type="text"
@@ -332,7 +333,7 @@ export class IrPaymentDetails {
     return (
       <tr>
         <td class={'pr-1'}>{_formatDate(item.date)}</td>
-        <td class={'pr-1'}>{_formatAmount(item.amount, this.bookingDetails.currency.code)}</td>
+        <td class={'pr-1'}>{formatAmount(this.bookingDetails.currency.symbol, item.amount)}</td>
         <td class={'pr-1'}>{item.description}</td>
         <td class="collapse font-size-small roomName">{item.room}</td>
       </tr>
@@ -349,7 +350,7 @@ export class IrPaymentDetails {
         <div class="p-1">
           {this.bookingDetails.financial.gross_cost > 0 && this.bookingDetails.financial.gross_cost !== null && (
             <div class="mb-2 h4 total-cost-container">
-              {this.defaultTexts.entries.Lcz_TotalCost}: <span>{_formatAmount(this.bookingDetails.financial.gross_cost, this.bookingDetails.currency.code)}</span>
+              {this.defaultTexts.entries.Lcz_TotalCost}: <span>{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.gross_cost)}</span>
             </div>
           )}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
@@ -358,7 +359,7 @@ export class IrPaymentDetails {
           </div> */}
           <div class=" h4">
             {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
-            <span class="danger font-weight-bold">{_formatAmount(this.bookingDetails.financial.due_amount, this.bookingDetails.currency.code)}</span>
+            <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
           </div>
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
           {/* <div class="mb-2 h4">

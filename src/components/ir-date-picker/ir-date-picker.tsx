@@ -75,6 +75,18 @@ export class IrDatePicker {
       picker.setEndDate(newEndDate);
     }
   }
+  componentWillLoad() {
+    if (!document.getElementById('ir-daterangepicker-style')) {
+      const style = document.createElement('style');
+      style.id = 'ir-daterangepicker-style';
+      style.textContent = `
+        .daterangepicker {
+          margin-top: 14px;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
   componentDidLoad() {
     this.dateRangeInput = this.element.querySelector('.date-range-input');
     this.initializeDateRangePicker();

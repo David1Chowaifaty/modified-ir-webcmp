@@ -1,5 +1,5 @@
 import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Watch, Host, Fragment } from '@stencil/core';
-import { _formatAmount, _formatDate, _getDay } from '../functions';
+import { _formatDate, _getDay } from '../functions';
 import { Booking, IUnit, Room } from '../../../models/booking.dto';
 import { TIglBookPropertyPayload } from '../../../models/igl-book-property';
 import { formatName } from '../../../utils/booking';
@@ -8,6 +8,7 @@ import axios from 'axios';
 import { ILocale } from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
+import { formatAmount } from '@/utils/utils';
 
 @Component({
   tag: 'ir-room',
@@ -195,7 +196,7 @@ export class IrRoom {
             </p>
             {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
             <div class="d-flex m-0 p-0 align-items-center room_actions_btns">
-              <span class="p-0 m-0 font-weight-bold">{_formatAmount(this.item['gross_total'], this.currency)}</span>
+              <span class="p-0 m-0 font-weight-bold">{formatAmount(this.currency, this.item['gross_total'])}</span>
               {this.hasRoomEdit && this.isEditable && (
                 <ir-button
                   id={`roomEdit-${this.item.identifier}`}
@@ -244,15 +245,15 @@ export class IrRoom {
                       return (
                         <tr>
                           <td class={'pr-2 text-right'}>{_getDay(item.date)}</td>
-                          <td class="text-right">{_formatAmount(item.amount, this.currency)}</td>
-                          {item.cost > 0 && item.cost !== null && <td class="pl-2 text-left night-cost">{_formatAmount(item.cost, this.currency)}</td>}
+                          <td class="text-right">{formatAmount(this.currency, item.amount)}</td>
+                          {item.cost > 0 && item.cost !== null && <td class="pl-2 text-left night-cost">{formatAmount(this.currency, item.cost)}</td>}
                         </tr>
                       );
                     })}
                   <tr class={''}>
                     <th class="text-right pr-2 subtotal_row">{this.defaultTexts.entries.Lcz_SubTotal}</th>
-                    <th class="text-right subtotal_row">{_formatAmount(this.item.total, this.currency)}</th>
-                    {this.item.gross_cost > 0 && this.item.gross_cost !== null && <th class="pl-2 text-right night-cost">{_formatAmount(this.item.cost, this.currency)}</th>}
+                    <th class="text-right subtotal_row">{formatAmount(this.currency, this.item.total)}</th>
+                    {this.item.gross_cost > 0 && this.item.gross_cost !== null && <th class="pl-2 text-right night-cost">{formatAmount(this.currency, this.item.cost)}</th>}
                   </tr>
                   {this.bookingEvent.is_direct ? (
                     <Fragment>
@@ -264,9 +265,9 @@ export class IrRoom {
                               <td class="text-right pr-2">
                                 {d.is_exlusive ? this.defaultTexts.entries.Lcz_Excluding : this.defaultTexts.entries.Lcz_Including} {d.name} ({d.pct}%)
                               </td>
-                              <td class="text-right">{_formatAmount((this.item.total * d.pct) / 100, this.currency)}</td>
+                              <td class="text-right">{formatAmount(this.currency, (this.item.total * d.pct) / 100)}</td>
                               {this.item.gross_cost > 0 && this.item.gross_cost !== null && (
-                                <td class="pl-2 text-right night-cost">{_formatAmount((this.item.cost * d.pct) / 100, this.currency)}</td>
+                                <td class="pl-2 text-right night-cost">{formatAmount(this.currency, (this.item.cost * d.pct) / 100)}</td>
                               )}
                             </tr>
                           );

@@ -55,12 +55,12 @@
     max-width: 200px;
   }
   .rate-input-container {
-    max-width: 100px;
+    max-width: 150px;
   }
 }
 @media only screen and (min-width: 991px) and (max-width: 1300px) {
   .rateplan-name-container {
-    width: 35%;
+    width: 20%;
   }
 }
 @media only screen and (max-width: 768px) {

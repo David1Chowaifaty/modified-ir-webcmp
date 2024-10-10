@@ -119,6 +119,7 @@ export class IrPaymentOption {
   }
   private modifyPaymentList(paymentOption: PaymentOption) {
     let prevPaymentOptions = [...this.paymentOptions];
+    console.log(paymentOption);
     let index = prevPaymentOptions.findIndex(p => p.code === paymentOption.code);
     if (index === -1) {
       throw new Error('Invalid code');

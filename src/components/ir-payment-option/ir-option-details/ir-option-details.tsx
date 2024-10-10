@@ -5,6 +5,7 @@ import payment_option_store from '@/stores/payment-option.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 import { IToast } from '../../ir-toast/toast';
 import locales from '@/stores/locales.store';
+import { Link } from 'ckeditor5';
 @Component({
   tag: 'ir-option-details',
   styleUrl: 'ir-option-details.css',
@@ -33,6 +34,7 @@ export class IrOptionDetails {
       payment_option_store.selectedOption.code === '005'
         ? payment_option_store.selectedOption?.localizables?.findIndex(l => l.language.id.toString() === this.selectedLanguage)
         : null;
+    console.log(this.localizationIdx, this.selectedLanguage);
   }
 
   async saveOption(e: Event) {
@@ -135,14 +137,24 @@ export class IrOptionDetails {
               </div>
               <div>
                 {this.invalid && <p class="text-danger p-0 m-0">{locales.entries.Lcz_YouMustFillEnglishField}</p>}
-                <ir-textarea
+                {/* <ir-textarea
                   placeholder=""
                   aria-invalid={this.invalid ? 'true' : 'false'}
                   textareaClassname="money-transfer-form"
                   label=""
                   onTextChange={this.handleTextAreaChange.bind(this)}
-                  value={this.localizationIdx ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
-                ></ir-textarea>
+                  value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
+                ></ir-textarea> */}
+                <ir-text-editor
+                  plugins={[Link]}
+                  pluginsMode="add"
+                  toolbarItemsMode="add"
+                  toolbarItems={['|', 'link']}
+                  style={{ '--ir-editor-height': '250px' }}
+                  error={this.invalid}
+                  value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
+                  onTextChange={this.handleTextAreaChange.bind(this)}
+                ></ir-text-editor>
               </div>
             </div>
           ) : (
@@ -154,7 +166,7 @@ export class IrOptionDetails {
                       value={d.value}
                       onTextChange={e => this.handlePaymentGatewayInfoChange(e, idx)}
                       id={`input_${d.key}`}
-                      label={d.key}
+                      label={d.key.replace(/_/g, ' ')}
                       placeholder=""
                       labelWidth={4}
                       aria-invalid={this.invalid && (d.value === null || (d.value ?? '')?.trim() === '') ? 'true' : 'false'}

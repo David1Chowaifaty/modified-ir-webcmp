@@ -1,8 +1,9 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
-import { IPageTwoDataUpdateProps } from '../../../models/models';
+import { IPageTwoDataUpdateProps } from '@/models/models';
 import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../models/igl-book-property';
-import { getCurrencySymbol } from '../../../utils/utils';
+import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
+import { ICurrency } from '@/models/calendarData';
 @Component({
   tag: 'igl-pagetwo',
   styleUrl: 'igl-pagetwo.css',
@@ -10,7 +11,7 @@ import locales from '@/stores/locales.store';
 })
 export class IglPagetwo {
   @Prop() showPaymentDetails: boolean;
-  @Prop() currency;
+  @Prop() currency: ICurrency;
   @Prop({ reflect: true }) isEditOrAddRoomEvent: boolean;
   @Prop() dateRangeData: { [key: string]: any };
   @Prop() bookingData: { [key: string]: any };
@@ -149,7 +150,7 @@ export class IglPagetwo {
           ></ir-date-view>
           {this.guestData.length > 1 && (
             <div class="mt-1 mt-md-0 text-right">
-              {locales.entries.Lcz_TotalPrice} <span class="font-weight-bold font-medium-1">{getCurrencySymbol(this.currency.code) + this.bookingData.TOTAL_PRICE || '$0.00'}</span>
+              {locales.entries.Lcz_TotalPrice} <span class="font-weight-bold font-medium-1">{formatAmount(this.currency.symbol, this.bookingData.TOTAL_PRICE || '0')}</span>
             </div>
           )}
         </div>
@@ -185,7 +186,10 @@ export class IglPagetwo {
               //   key: "propertyBookedBy",
               //   value: event.detail,
               // })
-              this.handleEventData(event, 'propertyBookedBy', 0)
+              {
+                console.log('user info details', event.detail);
+                this.handleEventData(event, 'propertyBookedBy', 0);
+              }
             }
           ></igl-property-booked-by>
         )}

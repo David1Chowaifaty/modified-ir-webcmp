@@ -555,7 +555,7 @@ export class IrBookingDetails {
                     roomsInfo={this.calendarData.roomsInfo}
                     myRoomTypeFoodCat={room.roomtype.name}
                     mealCodeName={room.rateplan.name}
-                    currency={this.bookingData.currency.code}
+                    currency={this.bookingData.currency.symbol}
                     hasRoomEdit={this.hasRoomEdit && this.bookingData.status.code !== '003' && this.bookingData.is_direct}
                     hasRoomDelete={this.hasRoomDelete && this.bookingData.status.code !== '003' && this.bookingData.is_direct}
                     hasCheckIn={this.hasCheckIn}

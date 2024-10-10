@@ -13,7 +13,7 @@
 | `bookedByInfoData`       | --                          |             | `{ [key: string]: any; }`           | `undefined` |
 | `bookingData`            | --                          |             | `{ [key: string]: any; }`           | `undefined` |
 | `countryNodeList`        | `country-node-list`         |             | `any`                               | `undefined` |
-| `currency`               | `currency`                  |             | `any`                               | `undefined` |
+| `currency`               | --                          |             | `ICurrency`                         | `undefined` |
 | `dateRangeData`          | --                          |             | `{ [key: string]: any; }`           | `undefined` |
 | `defaultGuestData`       | --                          |             | `IglBookPropertyPayloadEditBooking` | `undefined` |
 | `isEditOrAddRoomEvent`   | `is-edit-or-add-room-event` |             | `boolean`                           | `undefined` |

@@ -29,7 +29,7 @@
 ### Depends on
 
 - [ir-select](../../ir-select)
-- [ir-textarea](../../ir-textarea)
+- [ir-text-editor](../../ui/ir-text-editor)
 - [ir-input-text](../../ir-input-text)
 - [ir-button](../../ir-button)
 
@@ -37,7 +37,7 @@
 ```mermaid
 graph TD;
   ir-option-details --> ir-select
-  ir-option-details --> ir-textarea
+  ir-option-details --> ir-text-editor
   ir-option-details --> ir-input-text
   ir-option-details --> ir-button
   ir-button --> ir-icons

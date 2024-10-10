@@ -265,7 +265,7 @@ export class IrBookingListing {
                           <p class="p-0 m-0 date-p">{moment(booking.to_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
                         </td>
                         <td>
-                          <p class="p-0 m-0">{formatAmount(booking.currency.code, booking.financial?.gross_total ?? 0)}</p>
+                          <p class="p-0 m-0">{formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}</p>
                           {booking.financial.due_amount > 0 && (
                             <buuton
                               onClick={() => {
@@ -274,13 +274,15 @@ export class IrBookingListing {
                               }}
                               class="btn p-0 m-0 due-btn"
                             >
-                              {formatAmount(booking.currency.code, booking.financial.due_amount)}
+                              {formatAmount(booking.currency.symbol, booking.financial.due_amount)}
                             </buuton>
                           )}
                         </td>
                         {this.showCost && (
                           <td>
-                            {booking.financial.gross_cost !== null && booking.financial.gross_cost === 0 ? '_' : formatAmount(booking.currency.code, booking.financial.gross_cost)}
+                            {booking.financial.gross_cost !== null && booking.financial.gross_cost === 0
+                              ? '_'
+                              : formatAmount(booking.currency.symbol, booking.financial.gross_cost)}
                           </td>
                         )}
 

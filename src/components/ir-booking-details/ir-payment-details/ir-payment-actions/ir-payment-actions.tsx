@@ -45,7 +45,7 @@ export class IrPaymentActions {
               }
               return (
                 <tr class={'action-container'}>
-                  <td class={'amount_action'}>{formatAmount(pa.currency.code, pa.amount)}</td>
+                  <td class={'amount_action'}>{formatAmount(pa.currency.symbol, pa.amount)}</td>
                   <td class={'date_action'}>{moment(new Date(pa.due_on)).format('ddd, DD MMM YYYY')}</td>
                   {pa.amount > 0 && (
                     <td>
