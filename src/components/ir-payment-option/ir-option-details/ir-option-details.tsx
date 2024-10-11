@@ -1,4 +1,4 @@
-import { PaymentOption } from '@/models/payment-options';
+import { ILanguages, PaymentOption } from '@/models/payment-options';
 import { PaymentOptionService } from '@/services/payment_option.service';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import payment_option_store from '@/stores/payment-option.store';
@@ -25,16 +25,36 @@ export class IrOptionDetails {
 
   async componentWillLoad() {
     this.paymentOptionService.setToken(payment_option_store.token);
+    if (payment_option_store.selectedOption.code !== '005') {
+      return;
+    }
     if (!payment_option_store.languages) {
       const result = await this.paymentOptionService.GetExposedLanguages();
       payment_option_store.languages = result;
     }
+    const localizables = payment_option_store.selectedOption.localizables ?? [];
+    const newLocalizables = payment_option_store.languages.map(l => {
+      const lzb = localizables.find(lz => lz.language.id === l.id);
+      if (lzb) {
+        return lzb;
+      }
+      return this.createBankTransferInfoObject(l);
+    });
     this.selectedLanguage = payment_option_store.languages[0].id.toString();
-    this.localizationIdx =
-      payment_option_store.selectedOption.code === '005'
-        ? payment_option_store.selectedOption?.localizables?.findIndex(l => l.language.id.toString() === this.selectedLanguage)
-        : null;
+    this.localizationIdx = payment_option_store.selectedOption.code === '005' ? newLocalizables?.findIndex(l => l.language.id.toString() === this.selectedLanguage) : null;
+    payment_option_store.selectedOption = {
+      ...payment_option_store.selectedOption,
+      localizables: newLocalizables,
+    };
     console.log(this.localizationIdx, this.selectedLanguage);
+  }
+  private createBankTransferInfoObject(l: ILanguages): any {
+    return {
+      code: 'BANK_TRANSFER_INFO',
+      description: '',
+      id: null,
+      language: l,
+    };
   }
 
   async saveOption(e: Event) {
@@ -104,6 +124,7 @@ export class IrOptionDetails {
       ...payment_option_store.selectedOption,
       localizables: oldLocalizables,
     };
+    console.log(payment_option_store.selectedOption.localizables);
   }
   private handlePaymentGatewayInfoChange(e: CustomEvent, idx: number): void {
     const value = e.detail;

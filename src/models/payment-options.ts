@@ -12,7 +12,7 @@ export interface PaymentOption {
 export interface ILocalizable {
   code: string;
   description: string;
-  id: number;
+  id: number | null;
   language: ILanguages;
 }
 
