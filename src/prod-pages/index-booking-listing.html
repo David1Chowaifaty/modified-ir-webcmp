@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Booking listing</title>
+    <script src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/jquery.min.js"></script>
+    <script
+        src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/daterangepicker/moment.min.js"></script>
+    <script
+        src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/daterangepicker/daterangepicker.js"></script>
+    <script
+        src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/inputmask/jquery.inputmask.js"></script>
+    <script src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/bootstrap.bundle.min.js"></script>
+    <script src="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/toastr/toastr.min.js"></script>
+    <link rel="stylesheet"
+        href="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/daterangepicker/daterangepicker.css">
+    <script type="module" src="https://wb-cmp.igloorooms.com/backend/dist/ir-webcmp/ir-webcmp.esm.js"></script>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <ir-common></ir-common>
+    <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
+    <link rel="stylesheet" href="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/toastr/toastr.css"
+        type="text/css">
+
+    <script>
+        /**
+        * Function to authenticate a user with a username and password.
+        * Sends a POST request to the authentication endpoint and retrieves a result token.
+        *
+         * @param {string} username - The username of the user.
+         * @param {string} password - The password of the user.
+         * @returns {Promise<string|null>} - Returns the authentication token (`My_Result`) if successful, or null in case of an error.
+         */
+        const authenticate = async (username, password) => {
+            try {
+                // Make a POST request to the authentication API
+                const res = await fetch('https://gateway.igloorooms.com/IR/Authenticate', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        username,
+                        password
+                    })
+                });
+
+                // Parse the response as JSON and return the token from `My_Result`
+                const data = await res.json();
+                return data.My_Result;
+            } catch (error) {
+                // Log any errors that occur during the request
+                console.error(error);
+                return null;
+            }
+        };
+
+        /**
+         * Function to initialize the booking listing with authentication and property details.
+         * Authenticates the user and sets the `propertyid` and `ticket` properties of the `ir-booking-listing` element.
+         *
+         * @async
+         */
+        const init = async () => {
+            // Define the username, password, and property ID
+            const username = "A35";
+            const password = "12345";
+            const property_id = 42;
+
+            // Authenticate the user and retrieve the token
+            const token = await authenticate(username, password);
+
+            // Get the `ir-booking-listing` custom element from the DOM
+            const booking_listing = document.querySelector("ir-booking-listing");
+
+            // If the booking listing element exists, set the `propertyid` and `ticket` attributes
+            if (booking_listing) {
+                booking_listing.propertyid = property_id;
+                booking_listing.ticket = token;
+            }
+        };
+        // Call the initialization function to authenticate and set up the booking listing
+        init();
+    </script>
+
+</body>
+
+</html>
