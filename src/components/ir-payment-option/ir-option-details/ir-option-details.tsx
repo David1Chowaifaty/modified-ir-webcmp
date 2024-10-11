@@ -80,7 +80,6 @@ export class IrOptionDetails {
         return;
       }
     }
-    console.log(payment_option_store.selectedOption.localizables);
     await this.paymentOptionService.HandlePaymentMethod(selectedOption);
     this.toast.emit({
       type: 'success',
