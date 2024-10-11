@@ -140,7 +140,7 @@ export class IrPaymentOption {
         this.toast.emit({
           type: 'success',
           description: '',
-          title: 'You need to select "No deposit required" from your Pre-payment options since you have no means of charging guests before arrival.',
+          title: locales.entries['Lcz_YouNeedToSelect'],
           position: 'top-right',
         });
       }
