@@ -28,7 +28,6 @@ export class IrHousekeeping {
     if (this.ticket !== '') {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
   }
@@ -43,7 +42,6 @@ export class IrHousekeeping {
     if (newValue !== oldValue) {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
   }
@@ -61,13 +59,13 @@ export class IrHousekeeping {
         });
         propertyId = propertyData.My_Result.id;
       }
-
+      updateHKStore('default_properties', { token: this.ticket, property_id: propertyId, language: this.language });
       const requests = [this.houseKeepingService.getExposedHKSetup(propertyId), this.roomService.fetchLanguage(this.language, ['_HK_FRONT'])];
 
       if (this.propertyid) {
         requests.unshift(
           this.roomService.getExposedProperty({
-            id: this.propertyid,
+            id: propertyId,
             language: this.language,
             is_backend: true,
           }),
