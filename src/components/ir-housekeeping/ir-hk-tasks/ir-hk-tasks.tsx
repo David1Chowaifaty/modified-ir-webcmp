@@ -25,6 +25,7 @@ export class IrHkTasks {
   @State() selectedHouseKeeper = '0';
   @State() selectedRoom: IPendingActions | null = null;
   @State() archiveOpened = false;
+  @State() property_id: number;
 
   private modalOpenTimeOut: NodeJS.Timeout;
   private roomService = new RoomService();
@@ -37,7 +38,6 @@ export class IrHkTasks {
     if (this.ticket !== '') {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
   }
@@ -61,7 +61,7 @@ export class IrHkTasks {
         id: unit.id,
       },
     });
-    await this.houseKeepingService.getExposedHKSetup(this.propertyid);
+    await this.houseKeepingService.getExposedHKSetup(this.property_id);
   }
 
   @Watch('ticket')
@@ -69,7 +69,6 @@ export class IrHkTasks {
     if (newValue !== oldValue) {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);
-      updateHKStore('default_properties', { token: this.ticket, property_id: this.propertyid, language: this.language });
       this.initializeApp();
     }
   }
@@ -97,7 +96,7 @@ export class IrHkTasks {
   }
   async getPendingActions() {
     await this.houseKeepingService.getHKPendingActions({
-      property_id: this.propertyid,
+      property_id: this.property_id,
       bracket: {
         code: this.selectedDuration,
       },
@@ -119,13 +118,14 @@ export class IrHkTasks {
         });
         propertyId = propertyData.My_Result.id;
       }
-
+      this.property_id = propertyId;
+      updateHKStore('default_properties', { token: this.ticket, property_id: propertyId, language: this.language });
       const requests = [this.houseKeepingService.getExposedHKStatusCriteria(propertyId), this.roomService.fetchLanguage(this.language, ['_HK_FRONT'])];
 
       if (this.propertyid) {
         requests.unshift(
           this.roomService.getExposedProperty({
-            id: this.propertyid,
+            id: propertyId,
             language: this.language,
             is_backend: true,
           }),

@@ -10,6 +10,7 @@ import axios from 'axios';
 export class IrBooking {
   @Prop() baseurl = '';
   @Prop() propertyid: number;
+  @Prop() p: string;
   @Prop() bookingNumber: string;
 
   @State() token: string;
@@ -36,6 +37,7 @@ export class IrBooking {
     return (
       <Host>
         <ir-booking-details
+          p={this.p}
           hasPrint
           hasReceipt
           propertyid={this.propertyid}

@@ -278,6 +278,7 @@ export namespace Components {
     interface IrBooking {
         "baseurl": string;
         "bookingNumber": string;
+        "p": string;
         "propertyid": number;
     }
     interface IrBookingDetails {
@@ -2608,6 +2609,7 @@ declare namespace LocalJSX {
     interface IrBooking {
         "baseurl"?: string;
         "bookingNumber"?: string;
+        "p"?: string;
         "propertyid"?: number;
     }
     interface IrBookingDetails {
