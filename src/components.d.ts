@@ -82,6 +82,7 @@ export namespace Components {
         "baseurl": string;
         "from_date": string;
         "language": string;
+        "p": string;
         "propertyid": number;
         "ticket": string;
         "to_date": string;
@@ -254,6 +255,7 @@ export namespace Components {
         "from_date": string;
         "language": string;
         "loadingMessage": string;
+        "p": string;
         "propertyid": number;
         "ticket": string;
         "to_date": string;
@@ -293,6 +295,7 @@ export namespace Components {
         "hasRoomEdit": boolean;
         "is_from_front_desk": boolean;
         "language": string;
+        "p": string;
         "propertyid": number;
         "ticket": string;
     }
@@ -302,6 +305,7 @@ export namespace Components {
     interface IrBookingListing {
         "baseurl": string;
         "language": string;
+        "p": string;
         "propertyid": number;
         "rowCount": number;
         "ticket": string;
@@ -337,6 +341,7 @@ export namespace Components {
     interface IrChannel {
         "baseurl": string;
         "language": string;
+        "p": string;
         "propertyid": number;
         "ticket": string;
     }
@@ -438,6 +443,7 @@ export namespace Components {
     interface IrHkTasks {
         "baseurl": string;
         "language": string;
+        "p": string;
         "propertyid": number;
         "ticket": string;
     }
@@ -453,6 +459,7 @@ export namespace Components {
     interface IrHousekeeping {
         "baseurl": string;
         "language": string;
+        "p": string;
         "propertyid": number;
         "ticket": string;
     }
@@ -488,6 +495,7 @@ export namespace Components {
     }
     interface IrInterceptor {
         "handledEndpoints": string[];
+        "ticket": string;
     }
     interface IrLabel {
         "country": boolean;
@@ -504,6 +512,7 @@ export namespace Components {
     interface IrListingHeader {
         "baseurl": string;
         "language": string;
+        "p": string;
         "propertyId": number;
     }
     interface IrListingModal {
@@ -553,6 +562,7 @@ export namespace Components {
         "defaultStyles": boolean;
         "hideLogs": boolean;
         "language": string;
+        "p": string;
         "propertyid": string;
         "ticket": string;
     }
@@ -2338,6 +2348,7 @@ declare namespace LocalJSX {
         "from_date"?: string;
         "language"?: string;
         "onResetBookingData"?: (event: IglBookPropertyContainerCustomEvent<null>) => void;
+        "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
         "to_date"?: string;
@@ -2571,6 +2582,7 @@ declare namespace LocalJSX {
         "onMoveBookingTo"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onReduceAvailableUnitEvent"?: (event: IglooCalendarCustomEvent<{ fromDate: string; toDate: string }>) => void;
         "onRevertBooking"?: (event: IglooCalendarCustomEvent<any>) => void;
+        "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
         "to_date"?: string;
@@ -2616,6 +2628,7 @@ declare namespace LocalJSX {
         "onBookingChanged"?: (event: IrBookingDetailsCustomEvent<Booking>) => void;
         "onCloseSidebar"?: (event: IrBookingDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast1>) => void;
+        "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
     }
@@ -2627,6 +2640,7 @@ declare namespace LocalJSX {
     interface IrBookingListing {
         "baseurl"?: string;
         "language"?: string;
+        "p"?: string;
         "propertyid"?: number;
         "rowCount"?: number;
         "ticket"?: string;
@@ -2663,6 +2677,7 @@ declare namespace LocalJSX {
     interface IrChannel {
         "baseurl"?: string;
         "language"?: string;
+        "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
     }
@@ -2779,6 +2794,7 @@ declare namespace LocalJSX {
     interface IrHkTasks {
         "baseurl"?: string;
         "language"?: string;
+        "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
     }
@@ -2798,6 +2814,7 @@ declare namespace LocalJSX {
     interface IrHousekeeping {
         "baseurl"?: string;
         "language"?: string;
+        "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
     }
@@ -2837,6 +2854,7 @@ declare namespace LocalJSX {
     interface IrInterceptor {
         "handledEndpoints"?: string[];
         "onToast"?: (event: IrInterceptorCustomEvent<IToast1>) => void;
+        "ticket"?: string;
     }
     interface IrLabel {
         "country"?: boolean;
@@ -2855,6 +2873,7 @@ declare namespace LocalJSX {
         "baseurl"?: string;
         "language"?: string;
         "onPreventPageLoad"?: (event: IrListingHeaderCustomEvent<string>) => void;
+        "p"?: string;
         "propertyId"?: number;
     }
     interface IrListingModal {
@@ -2915,6 +2934,7 @@ declare namespace LocalJSX {
         "hideLogs"?: boolean;
         "language"?: string;
         "onToast"?: (event: IrPaymentOptionCustomEvent<IToast1>) => void;
+        "p"?: string;
         "propertyid"?: string;
         "ticket"?: string;
     }

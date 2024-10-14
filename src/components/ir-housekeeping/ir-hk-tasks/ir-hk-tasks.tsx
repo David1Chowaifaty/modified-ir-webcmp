@@ -18,6 +18,7 @@ export class IrHkTasks {
   @Prop() ticket: string = '';
   @Prop() baseurl: string = '';
   @Prop() propertyid: number;
+  @Prop() p: string;
 
   @State() isLoading = false;
   @State() selectedDuration = '';
@@ -108,11 +109,29 @@ export class IrHkTasks {
   async initializeApp() {
     try {
       this.isLoading = true;
-      await Promise.all([
-        this.houseKeepingService.getExposedHKStatusCriteria(this.propertyid),
-        this.roomService.fetchData(this.propertyid, this.language),
-        this.roomService.fetchLanguage(this.language, ['_HK_FRONT']),
-      ]);
+      let propertyId = this.propertyid;
+      if (!propertyId) {
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+        });
+        propertyId = propertyData.My_Result.id;
+      }
+
+      const requests = [this.houseKeepingService.getExposedHKStatusCriteria(propertyId), this.roomService.fetchLanguage(this.language, ['_HK_FRONT'])];
+
+      if (this.propertyid) {
+        requests.unshift(
+          this.roomService.getExposedProperty({
+            id: this.propertyid,
+            language: this.language,
+            is_backend: true,
+          }),
+        );
+      }
+      await Promise.all(requests);
       this.selectedDuration = housekeeping_store.hk_tasks.brackets[0].code;
       await this.getPendingActions();
     } catch (error) {

@@ -16,6 +16,7 @@ export class IrPaymentOption {
   @Prop() baseurl: string;
   @Prop() propertyid: string;
   @Prop() ticket: string;
+  @Prop() p: string;
   @Prop() language: string = 'en';
   @Prop() defaultStyles: boolean = true;
   @Prop() hideLogs: boolean = true;
@@ -81,11 +82,24 @@ export class IrPaymentOption {
   }
   private async fetchData() {
     try {
-      this.log('start fetching data');
+      if (!this.propertyid && !this.p) {
+        throw new Error('Property ID or username is required');
+      }
       this.isLoading = true;
+      let propertyId = this.propertyid;
+      console.log('pror id', propertyId);
+      if (!propertyId) {
+        console.log('fetching property id');
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+        });
+        propertyId = propertyData.My_Result.id;
+      }
       const [paymentOptions, propertyOptions, languageTexts] = await Promise.all([
         this.paymentOptionService.GetExposedPaymentMethods(),
-        this.paymentOptionService.GetPropertyPaymentMethods(this.propertyid),
+        this.paymentOptionService.GetPropertyPaymentMethods(propertyId),
         this.roomService.fetchLanguage(this.language, ['_PAYMENT_BACK']),
       ]);
 

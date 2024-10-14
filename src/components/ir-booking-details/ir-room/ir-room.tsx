@@ -159,7 +159,7 @@ export class IrRoom {
       };
       console.log('body:', body);
 
-      const { data } = await axios.post(`/DoReservation?Ticket=${this.ticket}`, body);
+      const { data } = await axios.post(`/DoReservation`, body);
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }

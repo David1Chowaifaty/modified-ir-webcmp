@@ -9,6 +9,7 @@ import interceptor_requests from '@/stores/ir-interceptor.store';
   scoped: true,
 })
 export class IrInterceptor {
+  @Prop() ticket: string;
   @State() isShown = false;
   @State() isLoading = false;
   @State() isUnassignedUnit = false;
@@ -43,6 +44,10 @@ export class IrInterceptor {
   handleRequest(config: AxiosRequestConfig) {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
+    config.params = config.params || {};
+    // if (this.ticket) {
+    //   config.params.Ticket = this.ticket;
+    // }
     if (this.isHandledEndpoint(extractedUrl) && this.isPageLoadingStoped !== extractedUrl) {
       if (extractedUrl !== '/Get_Exposed_Calendar') {
         this.isLoading = true;

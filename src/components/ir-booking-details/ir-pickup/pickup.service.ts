@@ -8,7 +8,7 @@ export class PickupService {
   public async savePickup(params: TPickupData, booking_nbr: string, is_remove: boolean) {
     try {
       const splitTime = params.arrival_time.split(':');
-      await axios.post(`/Do_Pickup?Ticket=${calendar_data.token}`, {
+      await axios.post(`/Do_Pickup`, {
         booking_nbr,
         is_remove,
         currency: params.currency,

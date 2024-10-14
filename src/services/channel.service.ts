@@ -6,16 +6,13 @@ import axios from 'axios';
 export class ChannelService extends Token {
   public async getExposedChannels() {
     try {
-      const token = this.getToken();
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Channels?Ticket=${token}`, {});
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        const results = data.My_Result;
-        channels_data.channels = [...results];
-        return data;
+      const { data } = await axios.post(`/Get_Exposed_Channels`, {});
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      const results = data.My_Result;
+      channels_data.channels = [...results];
+      return data;
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -23,14 +20,11 @@ export class ChannelService extends Token {
   }
   public async getExposedConnectedChannels(property_id: number) {
     try {
-      const token = this.getToken();
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Connected_Channels?Ticket=${token}`, { property_id });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        channels_data.connected_channels = [...data.My_Result];
+      const { data } = await axios.post(`/Get_Exposed_Connected_Channels`, { property_id });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      channels_data.connected_channels = [...data.My_Result];
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -56,11 +50,7 @@ export class ChannelService extends Token {
         };
       }
 
-      const token = this.getToken();
-      if (!token) {
-        throw new Error('Invalid Token');
-      }
-      const { data } = await axios.post(`/Handle_Connected_Channel?Ticket=${token}`, body);
+      const { data } = await axios.post(`/Handle_Connected_Channel`, body);
 
       return data;
     } catch (error) {

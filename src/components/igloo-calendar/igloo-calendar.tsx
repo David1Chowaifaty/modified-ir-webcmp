@@ -30,10 +30,12 @@ export class IglooCalendar {
   @Prop() loadingMessage: string;
   @Prop() currencyName: string;
   @Prop({ reflect: true }) ticket: string = '';
+  @Prop() p: string;
 
   @Element() private element: HTMLElement;
 
   @State() calendarData: { [key: string]: any } = new Object();
+  @State() property_id: number;
   @State() days: { [key: string]: any }[] = new Array();
   @State() scrollViewDragging: boolean = false;
   @State() dialogData: IReallocationPayload | null = null;
@@ -106,6 +108,7 @@ export class IglooCalendar {
     });
   }
   setUpCalendarData(roomResp, bookingResp) {
+    console.log(roomResp);
     this.calendarData.currency = roomResp['My_Result'].currency;
     this.calendarData.allowedBookingSources = roomResp['My_Result'].allowed_booking_sources;
     this.calendarData.adultChildConstraints = roomResp['My_Result'].adult_child_constraints;
@@ -128,12 +131,51 @@ export class IglooCalendar {
   }
   async initializeApp() {
     try {
-      const [_, roomResp, bookingResp, countryNodeList] = await Promise.all([
-        this.roomService.fetchLanguage(this.language),
-        this.roomService.fetchData(this.propertyid, this.language),
-        this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date),
+      let propertyId = this.propertyid;
+      if (!this.propertyid && !this.p) {
+        throw new Error('Property ID or username is required');
+      }
+      let roomResp = null;
+      if (!propertyId) {
+        console.log(propertyId);
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+        });
+        roomResp = propertyData;
+        propertyId = propertyData.My_Result.id;
+      }
+      this.property_id = propertyId;
+      const requests = [
+        this.bookingService.getCalendarData(propertyId, this.from_date, this.to_date),
         this.bookingService.getCountries(this.language),
-      ]);
+        this.roomService.fetchLanguage(this.language),
+      ];
+
+      if (this.propertyid) {
+        requests.push(
+          this.roomService.getExposedProperty({
+            id: this.propertyid,
+            language: this.language,
+            is_backend: true,
+          }),
+        );
+      }
+
+      const results = await Promise.all(requests);
+
+      // const [_, , bookingResp, countryNodeList] = await Promise.all([
+      //   this.roomService.fetchData(this.propertyid, this.language),
+      //   this.roomService.fetchLanguage(this.language),
+      //   this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date),
+      //   this.bookingService.getCountries(this.language),
+      // ]);
+      if (!roomResp) {
+        roomResp = results[results.length - 1];
+      }
+      const [bookingResp, countryNodeList] = results as any;
       calendar_dates.days = bookingResp.days;
       calendar_dates.months = bookingResp.months;
       this.setRoomsData(roomResp);
@@ -155,7 +197,7 @@ export class IglooCalendar {
         this.scrollToElement(this.today);
       }, 200);
       if (!this.calendarData.is_vacation_rental) {
-        const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, dateToFormattedString(new Date()), this.to_date);
+        const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, dateToFormattedString(new Date()), this.to_date);
         this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: { ...this.unassignedDates, ...data } };
         this.calendarData = { ...this.calendarData, unassignedDates: data };
         addUnassingedDates(data);
@@ -165,7 +207,7 @@ export class IglooCalendar {
         let msgAsObject = JSON.parse(msg);
         if (msgAsObject) {
           const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
-          if (KEY.toString() === this.propertyid.toString()) {
+          if (KEY.toString() === this.property_id.toString()) {
             let result: any;
             console.log(REASON);
             if (REASON === 'DELETE_CALENDAR_POOL' || REASON === 'GET_UNASSIGNED_DATES') {
@@ -208,7 +250,7 @@ export class IglooCalendar {
                 new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate
               ) {
                 const data = await this.toBeAssignedService.getUnassignedDates(
-                  this.propertyid,
+                  this.property_id,
                   dateToFormattedString(new Date(parsedResult.FROM_DATE)),
                   dateToFormattedString(new Date(parsedResult.TO_DATE)),
                 );
@@ -587,7 +629,7 @@ export class IglooCalendar {
   }
 
   async addDatesToCalendar(fromDate: string, toDate: string) {
-    const results = await this.bookingService.getCalendarData(this.propertyid, fromDate, toDate);
+    const results = await this.bookingService.getCalendarData(this.property_id, fromDate, toDate);
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
@@ -652,7 +694,7 @@ export class IglooCalendar {
         monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
         bookingEvents: [...this.calendarData.bookingEvents, ...bookings],
       };
-      const data = await this.toBeAssignedService.getUnassignedDates(this.propertyid, fromDate, toDate);
+      const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, fromDate, toDate);
       this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
       this.unassignedDates = {
         fromDate,
@@ -861,7 +903,7 @@ export class IglooCalendar {
     return (
       <Host>
         <ir-toast></ir-toast>
-        <ir-interceptor></ir-interceptor>
+        <ir-interceptor ticket={this.ticket}></ir-interceptor>
         <div id="iglooCalendar" class="igl-calendar">
           {this.shouldRenderCalendarView() ? (
             [
@@ -870,7 +912,7 @@ export class IglooCalendar {
                   unassignedDatesProp={this.unassignedDates}
                   to_date={this.to_date}
                   from_date={this.from_date}
-                  propertyid={this.propertyid}
+                  propertyid={this.property_id}
                   class="tobeAssignedContainer"
                   calendarData={this.calendarData}
                   onOptionEvent={evt => this.onOptionSelect(evt)}
@@ -884,7 +926,7 @@ export class IglooCalendar {
                   <igl-cal-header
                     unassignedDates={this.unassignedDates}
                     to_date={this.to_date}
-                    propertyid={this.propertyid}
+                    propertyid={this.property_id}
                     today={this.today}
                     calendarData={this.calendarData}
                     highlightedDate={this.highlightedDate}
@@ -920,7 +962,7 @@ export class IglooCalendar {
             countryNodeList={this.countryNodeList}
             currency={this.calendarData.currency}
             language={this.language}
-            propertyid={this.propertyid}
+            propertyid={this.property_id}
             bookingData={this.bookingItem}
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>
@@ -942,7 +984,7 @@ export class IglooCalendar {
               toDate={this.roomNightsData.to_date}
               fromDate={this.roomNightsData.from_date}
               ticket={this.ticket}
-              propertyId={this.propertyid}
+              propertyId={this.property_id}
             ></ir-room-nights>
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
@@ -953,7 +995,7 @@ export class IglooCalendar {
               hasCloseButton
               onCloseSidebar={() => (this.editBookingItem = null)}
               is_from_front_desk
-              propertyid={this.propertyid}
+              propertyid={this.property_id}
               hasRoomEdit
               hasRoomDelete
               bookingNumber={this.editBookingItem.BOOKING_NUMBER}

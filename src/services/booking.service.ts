@@ -27,65 +27,59 @@ export interface IBookingParams {
 export class BookingService extends Token {
   public async getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{ [key: string]: any }> {
     try {
-      const token = this.getToken();
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Calendar?Ticket=${token}`, {
-          propertyid,
-          from_date,
-          to_date,
-          extras,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        const months: MonthType[] = data.My_Result.months;
-        const customMonths: { daysCount: number; monthName: string }[] = [];
-        const myBooking = await getMyBookings(months);
-        const days: DayData[] = months
-          .map(month => {
-            customMonths.push({
-              daysCount: month.days.length,
-              monthName: month.description,
-            });
-            return month.days.map(day => ({
-              day: convertDateToCustomFormat(day.description, month.description),
-              currentDate: convertDateToTime(day.description, month.description),
-              dayDisplayName: day.description,
-              rate: day.room_types,
-              unassigned_units_nbr: day.unassigned_units_nbr,
-              occupancy: day.occupancy,
-            }));
-          })
-          .flat();
-
-        return Promise.resolve({
-          ExceptionCode: null,
-          ExceptionMsg: '',
-          My_Params_Get_Rooming_Data: {
-            AC_ID: propertyid,
-            FROM: data.My_Params_Get_Exposed_Calendar.from_date,
-            TO: data.My_Params_Get_Exposed_Calendar.to_date,
-          },
-          days,
-          months: customMonths,
-          myBookings: myBooking,
-          defaultMonths: months,
-        });
+      const { data } = await axios.post(`/Get_Exposed_Calendar`, {
+        propertyid,
+        from_date,
+        to_date,
+        extras,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      const months: MonthType[] = data.My_Result.months;
+      const customMonths: { daysCount: number; monthName: string }[] = [];
+      const myBooking = await getMyBookings(months);
+      const days: DayData[] = months
+        .map(month => {
+          customMonths.push({
+            daysCount: month.days.length,
+            monthName: month.description,
+          });
+          return month.days.map(day => ({
+            day: convertDateToCustomFormat(day.description, month.description),
+            currentDate: convertDateToTime(day.description, month.description),
+            dayDisplayName: day.description,
+            rate: day.room_types,
+            unassigned_units_nbr: day.unassigned_units_nbr,
+            occupancy: day.occupancy,
+          }));
+        })
+        .flat();
+
+      return Promise.resolve({
+        ExceptionCode: null,
+        ExceptionMsg: '',
+        My_Params_Get_Rooming_Data: {
+          AC_ID: propertyid,
+          FROM: data.My_Params_Get_Exposed_Calendar.from_date,
+          TO: data.My_Params_Get_Exposed_Calendar.to_date,
+        },
+        days,
+        months: customMonths,
+        myBookings: myBooking,
+        defaultMonths: months,
+      });
     } catch (error) {
       console.error(error);
     }
   }
   public async fetchGuest(email: string): Promise<Guest> {
     try {
-      const token = this.getToken();
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_Guest?Ticket=${token}`, { email });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
+      const { data } = await axios.post(`/Get_Exposed_Guest`, { email });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data.My_Result;
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -93,14 +87,11 @@ export class BookingService extends Token {
   }
   public async fetchPMSLogs(booking_nbr: string | number): Promise<IPmsLog> {
     try {
-      const token = this.getToken();
-      if (token !== null) {
-        const { data } = await axios.post(`/Get_Exposed_PMS_Logs?Ticket=${token}`, { booking_nbr });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
+      const { data } = await axios.post(`/Get_Exposed_PMS_Logs`, { booking_nbr });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data.My_Result;
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -108,14 +99,11 @@ export class BookingService extends Token {
   }
   public async editExposedGuest(guest: Guest, book_nbr: string): Promise<any> {
     try {
-      const token = this.getToken();
-      if (token !== null) {
-        const { data } = await axios.post(`/Edit_Exposed_Guest?Ticket=${token}`, { ...guest, book_nbr });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
+      const { data } = await axios.post(`/Edit_Exposed_Guest`, { ...guest, book_nbr });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data.My_Result;
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -133,23 +121,18 @@ export class BookingService extends Token {
     agent_id?: string | number;
   }): Promise<BookingDetails> {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { adultChildCount, currency, ...rest } = props;
-        const { data } = await axios.post(`/Get_Exposed_Booking_Availability?Ticket=${token}`, {
-          ...rest,
-          adult_nbr: adultChildCount.adult,
-          child_nbr: adultChildCount.child,
-          currency_ref: currency.code,
-          is_backend: true,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data['My_Result'];
-      } else {
-        throw new Error("Token doesn't exist");
+      const { adultChildCount, currency, ...rest } = props;
+      const { data } = await axios.post(`/Get_Exposed_Booking_Availability`, {
+        ...rest,
+        adult_nbr: adultChildCount.adult,
+        child_nbr: adultChildCount.child,
+        currency_ref: currency.code,
+        is_backend: true,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data['My_Result'];
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -158,16 +141,13 @@ export class BookingService extends Token {
 
   public async getCountries(language: string): Promise<ICountry[]> {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Get_Exposed_Countries?Ticket=${token}`, {
-          language,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
+      const { data } = await axios.post(`/Get_Exposed_Countries`, {
+        language,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data.My_Result;
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -176,22 +156,19 @@ export class BookingService extends Token {
 
   public async fetchSetupEntries(): Promise<ISetupEntries> {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, {
-          TBL_NAMES: ['_ARRIVAL_TIME', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        const res: any[] = data.My_Result;
-        return {
-          arrivalTime: res.filter(e => e.TBL_NAME === '_ARRIVAL_TIME'),
-
-          ratePricingMode: res.filter(e => e.TBL_NAME === '_RATE_PRICING_MODE'),
-          bedPreferenceType: res.filter(e => e.TBL_NAME === '_BED_PREFERENCE_TYPE'),
-        };
+      const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI`, {
+        TBL_NAMES: ['_ARRIVAL_TIME', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      const res: any[] = data.My_Result;
+      return {
+        arrivalTime: res.filter(e => e.TBL_NAME === '_ARRIVAL_TIME'),
+
+        ratePricingMode: res.filter(e => e.TBL_NAME === '_RATE_PRICING_MODE'),
+        bedPreferenceType: res.filter(e => e.TBL_NAME === '_BED_PREFERENCE_TYPE'),
+      };
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -199,14 +176,11 @@ export class BookingService extends Token {
   }
   public async getBlockedInfo(): Promise<IEntries[]> {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI?Ticket=${token}`, { TBL_NAMES: ['_CALENDAR_BLOCKED_TILL'] });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
+      const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI`, { TBL_NAMES: ['_CALENDAR_BLOCKED_TILL'] });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data.My_Result;
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -214,16 +188,13 @@ export class BookingService extends Token {
   }
   public async getUserDefaultCountry() {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Get_Country_By_IP?Ticket=${token}`, {
-          IP: '',
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data['My_Result'];
+      const { data } = await axios.post(`/Get_Country_By_IP`, {
+        IP: '',
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data['My_Result'];
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -231,15 +202,12 @@ export class BookingService extends Token {
   }
   public async blockUnit(params: IBlockUnit) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Block_Exposed_Unit?Ticket=${token}`, params);
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data);
-        return data['My_Params_Block_Exposed_Unit'];
+      const { data } = await axios.post(`/Block_Exposed_Unit`, params);
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      console.log(data);
+      return data['My_Params_Block_Exposed_Unit'];
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -248,18 +216,13 @@ export class BookingService extends Token {
 
   public async getUserInfo(email: string) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/GET_EXPOSED_GUEST?Ticket=${token}`, {
-          email,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
-      } else {
-        throw new Error('Invalid Token');
+      const { data } = await axios.post(`/GET_EXPOSED_GUEST`, {
+        email,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data.My_Result;
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -267,20 +230,15 @@ export class BookingService extends Token {
   }
   public async getExposedBooking(booking_nbr: string, language: string, withExtras: boolean = true): Promise<Booking> {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Get_Exposed_Booking?Ticket=${token}`, {
-          booking_nbr,
-          language,
-          extras: withExtras ? extras : null,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
-      } else {
-        throw new Error('Invalid Token');
+      const { data } = await axios.post(`/Get_Exposed_Booking`, {
+        booking_nbr,
+        language,
+        extras: withExtras ? extras : null,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data.My_Result;
     } catch (error) {
       console.error(error);
     }
@@ -309,19 +267,14 @@ export class BookingService extends Token {
   }
   public async fetchExposedGuest(email: string, property_id: number) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Fetch_Exposed_Guests?Ticket=${token}`, {
-          email,
-          property_id,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data['My_Result'];
-      } else {
-        throw new Error("Token doesn't exist");
+      const { data } = await axios.post(`/Fetch_Exposed_Guests`, {
+        email,
+        property_id,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data['My_Result'];
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -329,21 +282,16 @@ export class BookingService extends Token {
   }
   public async fetchExposedBookings(booking_nbr: string, property_id: number, from_date: string, to_date: string) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Fetch_Exposed_Bookings?Ticket=${token}`, {
-          booking_nbr,
-          property_id,
-          from_date,
-          to_date,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data['My_Result'];
-      } else {
-        throw new Error("Token doesn't exist");
+      const { data } = await axios.post(`/Fetch_Exposed_Bookings`, {
+        booking_nbr,
+        property_id,
+        from_date,
+        to_date,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data['My_Result'];
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -351,29 +299,20 @@ export class BookingService extends Token {
   }
   public async getPCICardInfoURL(BOOK_NBR: string) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Get_PCI_Card_Info_URL?Ticket=${token}`, {
-          BOOK_NBR,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data['My_Result'];
-      } else {
-        throw new Error("Token doesn't exist");
+      const { data } = await axios.post(`/Get_PCI_Card_Info_URL`, {
+        BOOK_NBR,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data['My_Result'];
     } catch (error) {
       console.error(error);
       throw new Error(error);
     }
   }
   public async doReservation(body: any) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Missing token');
-    }
-    const { data } = await axios.post(`/DoReservation?Ticket=${token}`, { ...body, extras: body.extras ? body.extras : extras });
+    const { data } = await axios.post(`/DoReservation`, { ...body, extras: body.extras ? body.extras : extras });
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
     }

@@ -21,6 +21,7 @@ export class IrChannel {
   @Prop() propertyid: number;
   @Prop() language: string;
   @Prop() baseurl: string;
+  @Prop() p: string;
 
   @State() channel_status: 'create' | 'edit' | null = null;
   @State() modal_cause: IModalCause | null = null;
@@ -64,13 +65,39 @@ export class IrChannel {
     const [, ,] = await Promise.all([this.channelService.getExposedChannels(), this.channelService.getExposedConnectedChannels(this.propertyid)]);
   }
   async initializeApp() {
+    if (!this.propertyid && !this.p) {
+      throw new Error('Property ID or username is required');
+    }
     try {
-      const [, , , languageTexts] = await Promise.all([
-        this.roomService.fetchData(this.propertyid, this.language, true),
+      let propertyId = this.propertyid;
+      if (!propertyId) {
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+        });
+        propertyId = propertyData.My_Result.id;
+      }
+
+      const requests = [
         this.channelService.getExposedChannels(),
-        this.channelService.getExposedConnectedChannels(this.propertyid),
+        this.channelService.getExposedConnectedChannels(propertyId),
         this.roomService.fetchLanguage(this.language, ['_CHANNEL_FRONT']),
-      ]);
+      ];
+
+      if (this.propertyid) {
+        requests.unshift(
+          this.roomService.getExposedProperty({
+            id: this.propertyid,
+            language: this.language,
+            is_backend: true,
+          }),
+        );
+      }
+
+      const results = await Promise.all(requests);
+      const languageTexts = results[results.length - 1];
 
       channels_data.property_id = this.propertyid;
       if (!locales.entries) {

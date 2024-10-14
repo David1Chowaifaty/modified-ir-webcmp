@@ -15,6 +15,7 @@ export class IglBookPropertyContainer {
   @Prop() language: string = '';
   @Prop() ticket: string = '';
   @Prop() baseurl: string = '';
+  @Prop() p: string;
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
@@ -42,8 +43,11 @@ export class IglBookPropertyContainer {
   }
   async initializeApp() {
     try {
+      if (!this.propertyid && !this.p) {
+        throw new Error('Property ID or username is required');
+      }
       const [roomResponse, languageTexts, countriesList] = await Promise.all([
-        this.roomService.fetchData(this.propertyid, this.language),
+        this.roomService.getExposedProperty({ id: this.propertyid, language: this.language, aname: this.p }),
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
       ]);

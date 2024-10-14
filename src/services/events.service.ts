@@ -7,18 +7,13 @@ export class EventsService extends Token {
   private readonly bookingService: BookingService = new BookingService();
   async reallocateEvent(pool: string, destination_pr_id: number, from_date: string, to_date: string) {
     try {
-      const token = this.getToken();
-      if (token) {
-        console.log(pool, destination_pr_id, from_date, to_date);
-        const { data } = await axios.post(`/ReAllocate_Exposed_Room?Ticket=${token}`, { pool, destination_pr_id, from_date, to_date, extras });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data);
-        return data;
-      } else {
-        throw new Error('Invalid Token');
+      console.log(pool, destination_pr_id, from_date, to_date);
+      const { data } = await axios.post(`/ReAllocate_Exposed_Room`, { pool, destination_pr_id, from_date, to_date, extras });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      console.log(data);
+      return data;
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -26,18 +21,13 @@ export class EventsService extends Token {
   }
   public async deleteEvent(POOL: string) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/UnBlock_Exposed_Unit?Ticket=${token}`, {
-          POOL,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return data.My_Result;
-      } else {
-        throw new Error('Invalid Token');
+      const { data } = await axios.post(`/UnBlock_Exposed_Unit`, {
+        POOL,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return data.My_Result;
     } catch (error) {
       console.log(error);
       throw new Error(error);

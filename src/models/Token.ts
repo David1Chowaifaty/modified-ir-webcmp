@@ -1,15 +1,35 @@
+import axios from 'axios';
+
 export class Token {
-  private token: string | null;
+  private static token: string | null = '';
+
+  private static isInterceptorAdded = false;
+
   constructor() {
-    this.token = '';
+    if (!Token.isInterceptorAdded) {
+      axios.interceptors.request.use(config => {
+        if (Token.token) {
+          config.params = config.params || {};
+          config.params.Ticket = Token.token;
+        }
+        return config;
+      });
+      Token.isInterceptorAdded = true;
+    }
   }
+
   public setToken(token: string) {
-    this.token = token;
+    Token.token = token;
   }
+
   public getToken() {
-    return this.token;
+    if (!Token.token) {
+      throw new MissingTokenError();
+    }
+    return Token.token;
   }
 }
+
 export class MissingTokenError extends Error {
   constructor(message = 'Missing token!!') {
     super(message);

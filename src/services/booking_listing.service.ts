@@ -5,16 +5,10 @@ import axios from 'axios';
 
 export class BookingListingService extends Token {
   public async getExposedBookingsCriteria(property_id: number) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Invalid token');
-    }
-    const { data } = await axios.post(`/Get_Exposed_Bookings_Criteria?Ticket=${token}`, {
+    const { data } = await axios.post(`/Get_Exposed_Bookings_Criteria`, {
       property_id,
     });
-
     const result = data.My_Result;
-
     booking_listing.channels = result.channels;
     booking_listing.settlement_methods = result.settlement_methods;
     booking_listing.statuses = result.statuses;
@@ -23,11 +17,7 @@ export class BookingListingService extends Token {
   }
 
   public async getExposedBookings(params: IUserListingSelection) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Invalid token');
-    }
-    const { data } = await axios.post(`/Get_Exposed_Bookings?Ticket=${token}`, { ...params, extras });
+    const { data } = await axios.post(`/Get_Exposed_Bookings`, { ...params, extras });
     const result = data.My_Result;
     const header = data.My_Params_Get_Exposed_Bookings;
     booking_listing.bookings = [...result];
@@ -38,11 +28,7 @@ export class BookingListingService extends Token {
     booking_listing.download_url = header.exported_data_url;
   }
   public async removeExposedBooking(booking_nbr: string, is_to_revover: boolean) {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Invalid token');
-    }
-    await axios.post(`/Remove_Exposed_Booking?Ticket=${token}`, {
+    await axios.post(`/Remove_Exposed_Booking`, {
       booking_nbr,
       is_to_revover,
     });

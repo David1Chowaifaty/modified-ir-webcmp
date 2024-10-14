@@ -14,6 +14,7 @@ export class IrHousekeeping {
   @Prop() ticket: string = '';
   @Prop() baseurl: string = '';
   @Prop() propertyid: number;
+  @Prop() p: string;
 
   @State() isLoading = false;
 
@@ -50,11 +51,30 @@ export class IrHousekeeping {
   async initializeApp() {
     try {
       this.isLoading = true;
-      await Promise.all([
-        this.houseKeepingService.getExposedHKSetup(this.propertyid),
-        this.roomService.fetchData(this.propertyid, this.language),
-        this.roomService.fetchLanguage(this.language, ['_HK_FRONT']),
-      ]);
+      let propertyId = this.propertyid;
+      if (!propertyId) {
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+        });
+        propertyId = propertyData.My_Result.id;
+      }
+
+      const requests = [this.houseKeepingService.getExposedHKSetup(propertyId), this.roomService.fetchLanguage(this.language, ['_HK_FRONT'])];
+
+      if (this.propertyid) {
+        requests.unshift(
+          this.roomService.getExposedProperty({
+            id: this.propertyid,
+            language: this.language,
+            is_backend: true,
+          }),
+        );
+      }
+
+      await Promise.all(requests);
     } catch (error) {
       console.error(error);
     } finally {

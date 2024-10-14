@@ -13,6 +13,7 @@ export class IrListingHeader {
   @Prop() propertyId: number;
   @Prop() language: string;
   @Prop() baseurl: string;
+  @Prop() p: string;
 
   @State() inputValue: string = '';
   @State() isLoading: 'search' | 'excel' = null;
@@ -98,6 +99,7 @@ export class IrListingHeader {
               <div>
                 {booking_listing.token && (
                   <igl-book-property-container
+                    p={this.p}
                     withIrToastAndInterceptor={false}
                     propertyid={this.propertyId}
                     language={this.language}
@@ -139,6 +141,7 @@ export class IrListingHeader {
           <div class="d-none d-md-block">
             {booking_listing.token && (
               <igl-book-property-container
+                p={this.p}
                 withIrToastAndInterceptor={false}
                 propertyid={this.propertyId}
                 language={this.language}

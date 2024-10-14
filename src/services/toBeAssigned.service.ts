@@ -7,20 +7,15 @@ import moment from 'moment';
 export class ToBeAssignedService extends Token {
   public async getUnassignedDates(propertyid: number, from_date: string, to_date: string) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Get_UnAssigned_Dates?Ticket=${token}`, {
-          propertyid,
-          from_date,
-          to_date,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return this.convertUnassignedDates(data.My_Result);
-      } else {
-        throw new Error('Invalid Token');
+      const { data } = await axios.post(`/Get_UnAssigned_Dates`, {
+        propertyid,
+        from_date,
+        to_date,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return this.convertUnassignedDates(data.My_Result);
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -28,19 +23,14 @@ export class ToBeAssignedService extends Token {
   }
   public async getUnassignedRooms(calendarFromDates: { from_date: string; to_date: string }, propertyid: number, specific_date: string, roomInfo: any, formattedLegendData: any) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Get_Aggregated_UnAssigned_Rooms?Ticket=${token}`, {
-          propertyid,
-          specific_date,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        return this.transformToAssignable(calendarFromDates, data, roomInfo, formattedLegendData);
-      } else {
-        throw new Error('Invalid Token');
+      const { data } = await axios.post(`/Get_Aggregated_UnAssigned_Rooms`, {
+        propertyid,
+        specific_date,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      return this.transformToAssignable(calendarFromDates, data, roomInfo, formattedLegendData);
     } catch (error) {
       console.error(error);
       throw new Error(error);
@@ -48,22 +38,17 @@ export class ToBeAssignedService extends Token {
   }
   public async assignUnit(booking_nbr: string, identifier: string, pr_id: number) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const { data } = await axios.post(`/Assign_Exposed_Room?Ticket=${token}`, {
-          booking_nbr,
-          identifier,
-          pr_id,
-          extras,
-        });
-        if (data.ExceptionMsg !== '') {
-          throw new Error(data.ExceptionMsg);
-        }
-        console.log(data);
-        return data['My_Result'];
-      } else {
-        throw new Error('Invalid token');
+      const { data } = await axios.post(`/Assign_Exposed_Room`, {
+        booking_nbr,
+        identifier,
+        pr_id,
+        extras,
+      });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
       }
+      console.log(data);
+      return data['My_Result'];
     } catch (error) {
       console.error(error);
       throw new Error(error);

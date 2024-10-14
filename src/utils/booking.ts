@@ -53,7 +53,7 @@ async function getStayStatus() {
   try {
     const token = calendar_data.token;
     if (token) {
-      const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi?Ticket=${token}`, {
+      const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi`, {
         TBL_NAMES: ['_STAY_STATUS'],
       });
       return data.My_Result.map(d => ({
