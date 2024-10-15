@@ -380,7 +380,6 @@ export class IglooCalendar {
   @Listen('showDialog')
   handleShowDialog(event: CustomEvent) {
     this.dialogData = event.detail;
-    console.log('dialogData', this.dialogData);
     let modal = this.element.querySelector('ir-modal');
     if (modal) {
       modal.openModal();
