@@ -1,9 +1,9 @@
 import { Component, Host, Prop, State, h, Event, EventEmitter, Fragment } from '@stencil/core';
 import axios from 'axios';
-import { BookingService } from '../../services/booking.service';
-import { convertDatePrice, formatDate, getCurrencySymbol, getDaysArray } from '../../utils/utils';
-import { Booking, Day, IUnit, Room } from '../../models/booking.dto';
-import { IRoomNightsDataEventPayload } from '../../models/property-types';
+import { BookingService } from '@/services/booking.service';
+import { convertDatePrice, formatDate, getCurrencySymbol, getDaysArray } from '@/utils/utils';
+import { Booking, Day, IUnit, Room } from '@/models/booking.dto';
+import { IRoomNightsDataEventPayload } from '@/models/property-types';
 import { v4 } from 'uuid';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
@@ -24,6 +24,7 @@ export class IrRoomNights {
   @Prop() fromDate: string;
   @Prop() pool: string;
   @Prop() ticket: string;
+  @Prop() defaultDates: { from_date: string; to_date: string };
 
   @State() bookingEvent: Booking;
   @State() selectedRoom: Room;
@@ -54,14 +55,18 @@ export class IrRoomNights {
     return this.isLoading || this.rates.some(rate => rate.amount === -1) || this.inventory === 0 || this.inventory === null;
   }
   async init() {
-    console.log(this.fromDate, this.toDate);
     try {
+      const { from_date } = this.defaultDates;
+      if (moment(from_date, 'YYYY-MM-DD').isBefore(moment(this.fromDate, 'YYYY-MM-DD'))) {
+        this.dates.from_date = new Date(from_date);
+      } else {
+        this.dates.from_date = new Date(this.fromDate);
+      }
+      this.dates.to_date = new Date(this.toDate);
       this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
-
       if (this.bookingEvent) {
         const filteredRooms = this.bookingEvent.rooms.filter(room => room.identifier === this.identifier);
         this.selectedRoom = filteredRooms[0];
-
         const lastDay = this.selectedRoom?.days[this.selectedRoom.days.length - 1];
         //let first_rate = this.selectedRoom.days[0].amount;
         if (moment(this.toDate).add(-1, 'days').isSame(moment(lastDay.date))) {
@@ -101,16 +106,6 @@ export class IrRoomNights {
           ];
         }
       }
-      if (moment(this.rates[0].date).isAfter(this.fromDate)) {
-        this.dates.from_date = new Date(this.fromDate);
-      } else {
-        this.dates.from_date = new Date(this.rates[0].date);
-      }
-      if (moment(this.rates[this.rates.length - 1].date).isBefore(this.toDate)) {
-        this.dates.to_date = new Date(this.toDate);
-      } else {
-        this.dates.to_date = new Date(this.rates[this.rates.length - 1].date);
-      }
     } catch (error) {
       console.log(error);
     }
@@ -136,7 +131,6 @@ export class IrRoomNights {
       }
     }
     this.rates = days;
-    console.log(this.rates);
   }
   async fetchBookingAvailability(from_date: string, to_date: string, rate_plan_id: number, selected_variation: string) {
     try {

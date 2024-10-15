@@ -380,6 +380,7 @@ export class IglooCalendar {
   @Listen('showDialog')
   handleShowDialog(event: CustomEvent) {
     this.dialogData = event.detail;
+    console.log('dialogData', this.dialogData);
     let modal = this.element.querySelector('ir-modal');
     if (modal) {
       modal.openModal();
@@ -983,6 +984,7 @@ export class IglooCalendar {
               identifier={this.roomNightsData.identifier}
               toDate={this.roomNightsData.to_date}
               fromDate={this.roomNightsData.from_date}
+              defaultDates={this.roomNightsData.defaultDates}
               ticket={this.ticket}
               propertyId={this.property_id}
             ></ir-room-nights>

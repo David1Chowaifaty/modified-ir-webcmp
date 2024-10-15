@@ -1,5 +1,5 @@
 import { Component, Prop, h, EventEmitter, Event, Host } from '@stencil/core';
-import { colorVariants, TIcons } from '../ui/ir-icons/icons';
+import { colorVariants, TIcons } from '../ir-icons/icons';
 
 @Component({
   tag: 'ir-label',
@@ -25,7 +25,7 @@ export class IrLabel {
   openEditSidebar() {
     this.editSidebar.emit();
   }
-
+  å;
   render() {
     if (!this.placeholder && !this.value && !this.ignore_value) {
       return null;

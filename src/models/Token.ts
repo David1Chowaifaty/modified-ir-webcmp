@@ -7,6 +7,7 @@ export class Token {
 
   constructor() {
     if (!Token.isInterceptorAdded) {
+      // axios.defaults.withCredentials = true;
       axios.interceptors.request.use(config => {
         if (Token.token) {
           config.params = config.params || {};

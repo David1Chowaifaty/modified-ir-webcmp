@@ -10,7 +10,7 @@ import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookProp
 import { ICountry as ICountry1, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { IToast } from "./components/ir-toast/toast";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
-import { IReallocationPayload, IRoomNightsData } from "./models/property-types";
+import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { ICountry } from "./models/IBooking";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
@@ -23,14 +23,13 @@ import { ILocale } from "./stores/locales.store";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { Booking as Booking1 } from "./models/booking.dto";
-import { IRoomNightsDataEventPayload } from "./models/property-types";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { ICurrency } from "./models/calendarData";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { ICountry as ICountry1, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { IToast } from "./components/ir-toast/toast";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
-export { IReallocationPayload, IRoomNightsData } from "./models/property-types";
+export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { ICountry } from "./models/IBooking";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
@@ -43,7 +42,6 @@ export { ILocale } from "./stores/locales.store";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { Booking as Booking1 } from "./models/booking.dto";
-export { IRoomNightsDataEventPayload } from "./models/property-types";
 export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
     interface IglApplicationInfo {
@@ -610,6 +608,7 @@ export namespace Components {
     interface IrRoomNights {
         "baseUrl": string;
         "bookingNumber": string;
+        "defaultDates": { from_date: string; to_date: string };
         "fromDate": string;
         "identifier": string;
         "language": string;
@@ -2990,6 +2989,7 @@ declare namespace LocalJSX {
     interface IrRoomNights {
         "baseUrl"?: string;
         "bookingNumber"?: string;
+        "defaultDates"?: { from_date: string; to_date: string };
         "fromDate"?: string;
         "identifier"?: string;
         "language"?: string;

@@ -60,4 +60,5 @@ export interface IRoomNightsData {
   to_date: string;
   pool: string;
   from_date: string;
+  defaultDates: { from_date: string; to_date: string };
 }
