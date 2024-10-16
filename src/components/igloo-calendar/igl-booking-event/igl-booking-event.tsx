@@ -202,7 +202,6 @@ export class IglBookingEvent {
               });
             } else {
               if (this.isShrinking || !this.isStreatch) {
-                console.log(this.bookingEvent.PR_ID.toString() === toRoomId.toString(), this.bookingEvent.PR_ID.toString(), toRoomId.toString());
                 // try {
                 //   if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
                 //     await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
@@ -219,26 +218,36 @@ export class IglBookingEvent {
                 }
                 const oldFromDate = this.bookingEvent.defaultDates.from_date;
                 const oldToDate = this.bookingEvent.defaultDates.to_date;
+                const defaultDiffDays = moment(oldToDate, 'YYYY-MM-DD').diff(moment(oldFromDate, 'YYYY-MM-DD'), 'days');
 
                 let shrinkingDirection = null;
                 let fromDate = oldFromDate;
                 let toDate = oldToDate;
-
-                if (moment(from_date, 'YYYY-MM-DD').isAfter(moment(oldFromDate, 'YYYY-MM-DD')) && moment(to_date, 'YYYY-MM-DD').isBefore(moment(oldToDate, 'YYYY-MM-DD'))) {
-                  fromDate = oldFromDate;
-                  toDate = to_date;
-                } else {
-                  shrinkingDirection = moment(from_date, 'YYYY-MM-DD').isAfter(moment(oldFromDate, 'YYYY-MM-DD'))
-                    ? 'left'
-                    : moment(to_date, 'YYYY-MM-DD').isBefore(moment(oldToDate, 'YYYY-MM-DD'))
-                    ? 'right'
-                    : null;
-                  if (shrinkingDirection === 'left') {
-                    fromDate = from_date;
-                  }
-
-                  if (shrinkingDirection === 'right') {
+                if (this.isShrinking) {
+                  if (moment(from_date, 'YYYY-MM-DD').isAfter(moment(oldFromDate, 'YYYY-MM-DD')) && moment(to_date, 'YYYY-MM-DD').isBefore(moment(oldToDate, 'YYYY-MM-DD'))) {
+                    fromDate = oldFromDate;
                     toDate = to_date;
+                  } else {
+                    shrinkingDirection = moment(from_date, 'YYYY-MM-DD').isAfter(moment(oldFromDate, 'YYYY-MM-DD'))
+                      ? 'left'
+                      : moment(to_date, 'YYYY-MM-DD').isBefore(moment(oldToDate, 'YYYY-MM-DD'))
+                      ? 'right'
+                      : null;
+                    if (shrinkingDirection === 'left') {
+                      fromDate = from_date;
+                    }
+
+                    if (shrinkingDirection === 'right') {
+                      toDate = to_date;
+                    }
+                  }
+                } else {
+                  if (moment(from_date, 'YYYY-MM-DD').isBefore(moment(oldFromDate, 'YYYY-MM-DD'))) {
+                    fromDate = from_date;
+                    toDate = moment(from_date, 'YYYY-MM-DD').add(defaultDiffDays, 'days').format('YYYY-MM-DD');
+                  } else if (moment(to_date, 'YYYY-MM-DD').isAfter(moment(oldToDate, 'YYYY-MM-DD'))) {
+                    toDate = to_date;
+                    fromDate = moment(to_date, 'YYYY-MM-DD').subtract(defaultDiffDays, 'days').format('YYYY-MM-DD');
                   }
                 }
                 this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton, from_date: fromDate, to_date: toDate });
