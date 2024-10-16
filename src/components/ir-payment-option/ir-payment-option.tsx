@@ -4,7 +4,6 @@ import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import payment_option_store from '@/stores/payment-option.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
-import axios from 'axios';
 import { IToast } from '../ir-toast/toast';
 
 @Component({
@@ -13,7 +12,6 @@ import { IToast } from '../ir-toast/toast';
   scoped: true,
 })
 export class IrPaymentOption {
-  @Prop() baseurl: string;
   @Prop() propertyid: string;
   @Prop() ticket: string;
   @Prop() p: string;
@@ -34,7 +32,6 @@ export class IrPaymentOption {
   private propertyOptionsByCode: Map<string | number, PaymentOption>;
 
   componentWillLoad() {
-    axios.defaults.baseURL = this.baseurl;
     if (this.ticket) {
       this.init();
     }

@@ -5,7 +5,6 @@ import booking_listing, { updateUserSelection, onBookingListingChange } from '@/
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
-import axios from 'axios';
 import moment from 'moment';
 import { _formatTime } from '../ir-booking-details/functions';
 import { getPrivateNote } from '@/utils/booking';
@@ -20,7 +19,6 @@ export class IrBookingListing {
 
   @Prop() language: string = '';
   @Prop() ticket: string = '';
-  @Prop() baseurl: string = '';
   @Prop() propertyid: number;
   @Prop() rowCount: number = 10;
   @Prop() p: string;
@@ -45,9 +43,6 @@ export class IrBookingListing {
   componentWillLoad() {
     updateUserSelection('end_row', this.rowCount);
     booking_listing.rowCount = this.rowCount;
-    if (this.baseurl) {
-      axios.defaults.baseURL = this.baseurl;
-    }
     if (this.ticket !== '') {
       this.bookingListingService.setToken(this.ticket);
       this.roomService.setToken(this.ticket);
@@ -186,7 +181,7 @@ export class IrBookingListing {
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
         <div class="p-1 main-container">
-          <ir-listing-header propertyId={this.propertyid} p={this.p} language={this.language} baseurl={this.baseurl}></ir-listing-header>
+          <ir-listing-header propertyId={this.propertyid} p={this.p} language={this.language}></ir-listing-header>
           <section>
             <div class="card p-1 flex-fill m-0 mt-2">
               <table class="table table-striped table-bordered no-footer dataTable">
@@ -422,7 +417,6 @@ export class IrBookingListing {
               onCloseSidebar={() => (this.editBookingItem = null)}
               bookingNumber={this.editBookingItem.booking.booking_nbr}
               ticket={this.ticket}
-              baseurl={this.baseurl}
               language={this.language}
               hasRoomAdd
             ></ir-booking-details>

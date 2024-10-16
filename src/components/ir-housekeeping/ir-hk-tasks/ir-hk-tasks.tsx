@@ -4,7 +4,6 @@ import { RoomService } from '@/services/room.service';
 import housekeeping_store, { updateHKStore } from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Listen, Prop, State, Watch, h, Element } from '@stencil/core';
-import axios from 'axios';
 
 @Component({
   tag: 'ir-hk-tasks',
@@ -16,7 +15,6 @@ export class IrHkTasks {
 
   @Prop() language: string = '';
   @Prop() ticket: string = '';
-  @Prop() baseurl: string = '';
   @Prop() propertyid: number;
   @Prop() p: string;
 
@@ -32,9 +30,6 @@ export class IrHkTasks {
   private houseKeepingService = new HouseKeepingService();
 
   componentWillLoad() {
-    if (this.baseurl) {
-      axios.defaults.baseURL = this.baseurl;
-    }
     if (this.ticket !== '') {
       this.roomService.setToken(this.ticket);
       this.houseKeepingService.setToken(this.ticket);

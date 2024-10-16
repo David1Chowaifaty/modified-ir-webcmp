@@ -1,4 +1,4 @@
-import { Token } from '@/models/Token';
+import Token from '@/models/Token';
 import { IExposedHouseKeepingSetup, IInspectionMode, IPropertyHousekeepingAssignment, THKUser, TPendingHkSetupParams } from '@/models/housekeeping';
 import { updateHKStore } from '@/stores/housekeeping.store';
 import axios from 'axios';

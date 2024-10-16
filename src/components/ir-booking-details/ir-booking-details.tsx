@@ -23,7 +23,6 @@ export class IrBookingDetails {
   @Prop() language: string = '';
   @Prop() ticket: string = '';
   @Prop() bookingNumber: string = '';
-  @Prop() baseurl: string = '';
   @Prop() propertyid: number;
   @Prop() is_from_front_desk = false;
   @Prop() p: string;
@@ -83,9 +82,6 @@ export class IrBookingDetails {
   };
 
   componentDidLoad() {
-    if (this.baseurl) {
-      axios.defaults.baseURL = this.baseurl;
-    }
     if (this.ticket !== '') {
       calendar_data.token = this.ticket;
       this.bookingService.setToken(this.ticket);

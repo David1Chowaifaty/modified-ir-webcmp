@@ -1,11 +1,13 @@
 import axios from 'axios';
+import Auth from './Auth';
 
-export class Token {
+class Token extends Auth {
   private static token: string | null = '';
 
   private static isInterceptorAdded = false;
 
   constructor() {
+    super();
     if (!Token.isInterceptorAdded) {
       // axios.defaults.withCredentials = true;
       axios.interceptors.request.use(config => {
@@ -22,7 +24,9 @@ export class Token {
   public setToken(token: string) {
     Token.token = token;
   }
-
+  public isAuthenticated() {
+    return super.isAuthenticated();
+  }
   public getToken() {
     if (!Token.token) {
       throw new MissingTokenError();
@@ -30,7 +34,7 @@ export class Token {
     return Token.token;
   }
 }
-
+export default Token;
 export class MissingTokenError extends Error {
   constructor(message = 'Missing token!!') {
     super(message);

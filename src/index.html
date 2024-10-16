@@ -24,8 +24,7 @@
 
 <body>
   <ir-common></ir-common>
-  <igloo-calendar currency-name="USD" propertyid="42" language="en"
-    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+  <igloo-calendar currency-name="USD" propertyid="42" language="en"></igloo-calendar>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
@@ -40,7 +39,7 @@
     setTimeout(() => {
       const ticket = getToken();
       calendar.propertyid = getId();
-      calendar.ticket = ticket;
+      // calendar.ticket = ticket;
     }, 300)
   </script>
 

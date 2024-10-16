@@ -1,4 +1,4 @@
-import { Token } from '@/models/Token';
+import Token from '@/models/Token';
 import calendar_data from '@/stores/calendar-data';
 import { locales } from '@/stores/locales.store';
 import axios from 'axios';

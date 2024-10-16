@@ -7,7 +7,6 @@ import { calculateDaysBetweenDates } from '@/utils/booking';
 import BeLogoFooter from '@/assets/be_logo_footer';
 import { BookingService } from '@/services/booking.service';
 import { RoomService } from '@/services/room.service';
-import axios from 'axios';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
 
@@ -19,7 +18,6 @@ import { formatAmount } from '@/utils/utils';
 export class IrBookingPrinting {
   @Prop() token: string = '';
   @Prop() bookingNumber: string = '';
-  @Prop() baseurl: string = 'https://gateway.igloorooms.com/IR';
   @Prop() language: string = 'en';
   @Prop() propertyid: number;
 
@@ -41,7 +39,6 @@ export class IrBookingPrinting {
   private totalPersons: number;
 
   componentWillLoad() {
-    axios.defaults.baseURL = this.baseurl;
     document.body.style.background = 'white';
     if (this.token) {
       this.init();

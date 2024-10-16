@@ -1,4 +1,4 @@
-import { Token } from '@/models/Token';
+import Token from '@/models/Token';
 import axios from 'axios';
 import { PaymentOption } from '@/models/payment-options';
 

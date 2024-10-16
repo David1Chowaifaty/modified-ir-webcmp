@@ -1,4 +1,4 @@
-import { Token } from '@/models/Token';
+import Token from '@/models/Token';
 import calendar_data from '@/stores/calendar-data';
 import channels_data from '@/stores/channel.store';
 import axios from 'axios';

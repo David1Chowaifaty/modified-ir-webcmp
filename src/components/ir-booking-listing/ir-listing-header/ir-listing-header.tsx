@@ -12,7 +12,6 @@ import moment from 'moment';
 export class IrListingHeader {
   @Prop() propertyId: number;
   @Prop() language: string;
-  @Prop() baseurl: string;
   @Prop() p: string;
 
   @State() inputValue: string = '';
@@ -104,7 +103,6 @@ export class IrListingHeader {
                     propertyid={this.propertyId}
                     language={this.language}
                     title={locales.entries.Lcz_CreateNewBooking}
-                    baseurl={this.baseurl}
                     ticket={booking_listing.token}
                   >
                     <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
@@ -146,7 +144,6 @@ export class IrListingHeader {
                 propertyid={this.propertyId}
                 language={this.language}
                 title={locales.entries.Lcz_CreateNewBooking}
-                baseurl={this.baseurl}
                 ticket={booking_listing.token}
               >
                 <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>

@@ -4,7 +4,7 @@ import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthTyp
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString, extras } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
 import { Booking, Day, Guest, IBookingPickupInfo, IPmsLog } from '../models/booking.dto';
-import { Token } from '@/models/Token';
+import Token from '@/models/Token';
 export interface IBookingParams {
   bookedByInfoData: any;
   check_in: boolean;

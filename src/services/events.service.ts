@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BookingService } from './booking.service';
 import { extras, getReleaseHoursString } from '../utils/utils';
-import { Token } from '@/models/Token';
+import Token from '@/models/Token';
 
 export class EventsService extends Token {
   private readonly bookingService: BookingService = new BookingService();

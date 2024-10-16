@@ -1,5 +1,4 @@
 import { Component, Host, Prop, State, h, Event, EventEmitter, Fragment } from '@stencil/core';
-import axios from 'axios';
 import { BookingService } from '@/services/booking.service';
 import { convertDatePrice, formatDate, getCurrencySymbol, getDaysArray } from '@/utils/utils';
 import { Booking, Day, IUnit, Room } from '@/models/booking.dto';
@@ -16,7 +15,6 @@ import calendar_data from '@/stores/calendar-data';
 })
 export class IrRoomNights {
   @Prop() bookingNumber: string;
-  @Prop() baseUrl: string;
   @Prop() propertyId: number;
   @Prop() language: string;
   @Prop() identifier: string;
@@ -43,10 +41,6 @@ export class IrRoomNights {
 
   componentWillLoad() {
     this.bookingService.setToken(calendar_data.token);
-
-    if (this.baseUrl) {
-      axios.defaults.baseURL = this.baseUrl;
-    }
     this.dates = { from_date: new Date(this.fromDate), to_date: new Date(this.toDate) };
     this.init();
   }

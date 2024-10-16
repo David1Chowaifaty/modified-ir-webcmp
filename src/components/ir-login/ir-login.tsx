@@ -1,7 +1,6 @@
 import { AuthService } from '@/services/authenticate.service';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import axios from 'axios';
+import { Component, Event, EventEmitter, Host, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-login',
@@ -9,8 +8,6 @@ import axios from 'axios';
   scoped: true,
 })
 export class IrLogin {
-  @Prop() baseurl: string;
-
   @State() username: string;
   @State() password: string;
   @State() showPassword: boolean = false;
@@ -21,9 +18,6 @@ export class IrLogin {
 
   private authService = new AuthService();
 
-  componentWillLoad() {
-    axios.defaults.baseURL = this.baseurl;
-  }
   private async handleSignIn(e: Event) {
     e.preventDefault();
     try {

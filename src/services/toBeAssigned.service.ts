@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IAvailableRoom, IRoomCategory, IUnassignedDates, InnerRecord } from '../models/tobeassigned';
 import { dateDifference, dateToFormattedString, extras } from '../utils/utils';
-import { Token } from '@/models/Token';
+import Token from '@/models/Token';
 import moment from 'moment';
 
 export class ToBeAssignedService extends Token {

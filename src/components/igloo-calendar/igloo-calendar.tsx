@@ -26,7 +26,6 @@ export class IglooCalendar {
   @Prop({ mutable: true }) from_date: string;
   @Prop() to_date: string;
   @Prop() language: string;
-  @Prop() baseurl: string;
   @Prop() loadingMessage: string;
   @Prop() currencyName: string;
   @Prop({ reflect: true }) ticket: string = '';
@@ -90,9 +89,6 @@ export class IglooCalendar {
       to: this.to_date,
     };
     axios.defaults.withCredentials = true;
-    if (this.baseurl) {
-      axios.defaults.baseURL = this.baseurl;
-    }
     if (this.ticket !== '') {
       calendar_data.token = this.ticket;
       this.bookingService.setToken(this.ticket);
@@ -901,6 +897,10 @@ export class IglooCalendar {
     this.bookingItem = null;
   }
   render() {
+    if (!this.roomService.isAuthenticated()) {
+      return <p>Login</p>;
+    }
+
     return (
       <Host>
         <ir-toast></ir-toast>
@@ -1002,7 +1002,6 @@ export class IglooCalendar {
               hasRoomDelete
               bookingNumber={this.editBookingItem.BOOKING_NUMBER}
               ticket={this.ticket}
-              baseurl={this.baseurl}
               language={this.language}
               hasRoomAdd
             ></ir-booking-details>
