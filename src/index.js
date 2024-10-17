@@ -4,6 +4,48 @@ function getToken() {
 function getId() {
     return "42"
 }
+const authenticate = async (username = "A35", password = "12345") => {
+    try {
+        const res = await fetch('https://gateway.igloorooms.com/IR/Authenticate', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            credentials: 'include', // This ensures that cookies are sent and received
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        const data = await res.json();
+        return data.My_Result;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+const logout = async () => {
+    try {
+        console.log("logout")
+        const res = await fetch('https://gateway.igloorooms.com/IR/Logout', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            credentials: 'include', // This ensures that cookies are sent and received
+            body: JSON.stringify({
+
+            })
+        });
+
+        const data = await res.json();
+        return data.My_Result;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
 
 function getBrowserInfo() {
     var ua = navigator.userAgent, tem,

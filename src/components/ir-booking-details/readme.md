@@ -9,7 +9,6 @@
 
 | Property             | Attribute            | Description | Type      | Default     |
 | -------------------- | -------------------- | ----------- | --------- | ----------- |
-| `baseurl`            | `baseurl`            |             | `string`  | `''`        |
 | `bookingNumber`      | `booking-number`     |             | `string`  | `''`        |
 | `hasCheckIn`         | `has-check-in`       |             | `boolean` | `false`     |
 | `hasCheckOut`        | `has-check-out`      |             | `boolean` | `false`     |
@@ -23,6 +22,7 @@
 | `hasRoomEdit`        | `has-room-edit`      |             | `boolean` | `false`     |
 | `is_from_front_desk` | `is_from_front_desk` |             | `boolean` | `false`     |
 | `language`           | `language`           |             | `string`  | `''`        |
+| `p`                  | `p`                  |             | `string`  | `undefined` |
 | `propertyid`         | `propertyid`         |             | `number`  | `undefined` |
 | `ticket`             | `ticket`             |             | `string`  | `''`        |
 
@@ -54,7 +54,7 @@
 - [ir-interceptor](../ir-interceptor)
 - [ir-select](../ir-select)
 - [ir-button](../ir-button)
-- [ir-label](../ir-label)
+- [ir-label](../ui/ir-label)
 - [ota-label](../ota-label)
 - [ir-date-view](../ir-date-view)
 - [ir-room](ir-room)

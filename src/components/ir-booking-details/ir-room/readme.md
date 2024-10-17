@@ -46,7 +46,7 @@
 
 - [ir-button](../../ir-button)
 - [ir-date-view](../../ir-date-view)
-- [ir-label](../../ir-label)
+- [ir-label](../../ui/ir-label)
 - [ir-modal](../../ir-modal)
 
 ### Graph

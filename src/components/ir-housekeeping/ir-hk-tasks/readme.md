@@ -9,8 +9,8 @@
 
 | Property     | Attribute    | Description | Type     | Default     |
 | ------------ | ------------ | ----------- | -------- | ----------- |
-| `baseurl`    | `baseurl`    |             | `string` | `''`        |
 | `language`   | `language`   |             | `string` | `''`        |
+| `p`          | `p`          |             | `string` | `undefined` |
 | `propertyid` | `propertyid` |             | `number` | `undefined` |
 | `ticket`     | `ticket`     |             | `string` | `''`        |
 

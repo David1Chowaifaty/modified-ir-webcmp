@@ -32,12 +32,12 @@
 
 ### Used by
 
- - [ir-booking-details](../ir-booking-details)
- - [ir-room](../ir-booking-details/ir-room)
+ - [ir-booking-details](../../ir-booking-details)
+ - [ir-room](../../ir-booking-details/ir-room)
 
 ### Depends on
 
-- [ir-button](../ir-button)
+- [ir-button](../../ir-button)
 
 ### Graph
 ```mermaid

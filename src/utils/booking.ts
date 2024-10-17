@@ -4,7 +4,6 @@ import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, Room
 import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 import calendar_dates from '@/stores/calendar-dates.store';
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
@@ -51,18 +50,13 @@ export function formatName(firstName: string | null, lastName: string | null) {
 }
 async function getStayStatus() {
   try {
-    const token = calendar_data.token;
-    if (token) {
-      const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi`, {
-        TBL_NAMES: ['_STAY_STATUS'],
-      });
-      return data.My_Result.map(d => ({
-        code: d.CODE_NAME,
-        value: d.CODE_VALUE_EN,
-      }));
-    } else {
-      throw new Error('Invalid Token');
-    }
+    const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi`, {
+      TBL_NAMES: ['_STAY_STATUS'],
+    });
+    return data.My_Result.map(d => ({
+      code: d.CODE_NAME,
+      value: d.CODE_VALUE_EN,
+    }));
   } catch (error) {
     console.log(error);
   }

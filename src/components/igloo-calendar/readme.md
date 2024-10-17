@@ -9,11 +9,11 @@
 
 | Property         | Attribute         | Description | Type     | Default     |
 | ---------------- | ----------------- | ----------- | -------- | ----------- |
-| `baseurl`        | `baseurl`         |             | `string` | `undefined` |
 | `currencyName`   | `currency-name`   |             | `string` | `undefined` |
 | `from_date`      | `from_date`       |             | `string` | `undefined` |
 | `language`       | `language`        |             | `string` | `undefined` |
 | `loadingMessage` | `loading-message` |             | `string` | `undefined` |
+| `p`              | `p`               |             | `string` | `undefined` |
 | `propertyid`     | `propertyid`      |             | `number` | `undefined` |
 | `ticket`         | `ticket`          |             | `string` | `''`        |
 | `to_date`        | `to_date`         |             | `string` | `undefined` |
@@ -34,6 +34,7 @@
 
 ### Depends on
 
+- [ir-login](../ir-login)
 - [ir-toast](../ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [igl-to-be-assigned](igl-to-be-assigned)
@@ -44,13 +45,14 @@
 - [ir-loading-screen](../ir-loading-screen)
 - [igl-book-property](igl-book-property)
 - [ir-sidebar](../ir-sidebar)
-- [ir-room-nights](../ir-room-nights)
+- [ir-room-nights](ir-room-nights)
 - [ir-booking-details](../ir-booking-details)
 - [ir-modal](../ir-modal)
 
 ### Graph
 ```mermaid
 graph TD;
+  igloo-calendar --> ir-login
   igloo-calendar --> ir-toast
   igloo-calendar --> ir-interceptor
   igloo-calendar --> igl-to-be-assigned
@@ -64,11 +66,16 @@ graph TD;
   igloo-calendar --> ir-room-nights
   igloo-calendar --> ir-booking-details
   igloo-calendar --> ir-modal
+  ir-login --> ir-interceptor
+  ir-login --> ir-toast
+  ir-login --> ir-input-text
+  ir-login --> ir-icons
+  ir-login --> ir-button
+  ir-button --> ir-icons
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-button
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
-  ir-button --> ir-icons
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
   igl-cal-body --> ir-popover

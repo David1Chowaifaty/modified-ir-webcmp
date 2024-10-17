@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property  | Attribute | Description | Type     | Default     |
-| --------- | --------- | ----------- | -------- | ----------- |
-| `baseurl` | `baseurl` |             | `string` | `undefined` |
-
-
 ## Events
 
 | Event        | Description | Type                                                           |
@@ -23,6 +16,7 @@
 
 ### Used by
 
+ - [igloo-calendar](../igloo-calendar)
  - [ir-booking](../ir-booking)
 
 ### Depends on
@@ -42,6 +36,7 @@ graph TD;
   ir-login --> ir-icons
   ir-login --> ir-button
   ir-button --> ir-icons
+  igloo-calendar --> ir-login
   ir-booking --> ir-login
   style ir-login fill:#f9f,stroke:#333,stroke-width:4px
 ```

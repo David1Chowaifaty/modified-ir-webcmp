@@ -29,9 +29,6 @@ export class IrPhoneInput {
   private bookingService: BookingService = new BookingService();
 
   async componentWillLoad() {
-    if (!this.token) {
-      throw new Error('Missing token');
-    }
     this.bookingService.setToken(this.token);
     const countries = await this.bookingService.getCountries(this.language);
     this.countries = countries;

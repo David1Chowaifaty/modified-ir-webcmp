@@ -9,10 +9,10 @@
 
 | Property        | Attribute        | Description | Type      | Default     |
 | --------------- | ---------------- | ----------- | --------- | ----------- |
-| `baseurl`       | `baseurl`        |             | `string`  | `undefined` |
 | `defaultStyles` | `default-styles` |             | `boolean` | `true`      |
 | `hideLogs`      | `hide-logs`      |             | `boolean` | `true`      |
 | `language`      | `language`       |             | `string`  | `'en'`      |
+| `p`             | `p`              |             | `string`  | `undefined` |
 | `propertyid`    | `propertyid`     |             | `string`  | `undefined` |
 | `ticket`        | `ticket`         |             | `string`  | `undefined` |
 

@@ -306,7 +306,7 @@ export class IglBookingEventHover {
         return `${locales.entries.Lcz_NewBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
     }
   }
-  handleBookingOption(eventType, roomData = null) {
+  private handleBookingOption(eventType, roomData = null) {
     const roomInfo = this.getRoomInfo();
     let data = roomData ? roomData : this.bookingEvent;
     data.event_type = eventType;
@@ -314,6 +314,9 @@ export class IglBookingEventHover {
 
     if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
       data.roomsInfo = [roomInfo.ROOMS_INFO];
+    }
+    if (eventType === 'BAR_BOOKING') {
+      this.handleDeleteEvent();
     }
     this.showBookingPopup.emit({
       key: 'add',

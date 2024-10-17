@@ -340,111 +340,106 @@ export class BookingService extends Token {
     pr_id,
   }: IBookingParams) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const fromDateStr = dateToFormattedString(fromDate);
-        const toDateStr = dateToFormattedString(toDate);
-        let guest: any = {
-          email: bookedByInfoData.email === '' ? null : bookedByInfoData.email || null,
-          first_name: bookedByInfoData.firstName,
-          last_name: bookedByInfoData.lastName,
-          country_id: bookedByInfoData.countryId === '' ? null : bookedByInfoData.countryId,
-          city: null,
-          mobile: bookedByInfoData.contactNumber === null ? '' : bookedByInfoData.contactNumber,
-          phone_prefix: null,
-          address: '',
-          dob: null,
-          subscribe_to_news_letter: bookedByInfoData.emailGuest || false,
-          cci: bookedByInfoData.cardNumber
-            ? {
-                nbr: bookedByInfoData.cardNumber,
-                holder_name: bookedByInfoData.cardHolderName,
-                expiry_month: bookedByInfoData.expiryMonth,
-                expiry_year: bookedByInfoData.expiryYear,
-              }
-            : null,
-        };
-        if (defaultGuest) {
-          guest = { ...defaultGuest, email: defaultGuest.email === '' ? null : defaultGuest.email };
-        }
-        if (bookedByInfoData.id) {
-          guest = { ...guest, id: bookedByInfoData.id };
-        }
-        const body = {
-          assign_units: true,
-          check_in,
-          is_pms: true,
-          is_direct: true,
-          is_in_loyalty_mode: false,
-          promo_key: null,
-          extras,
-          booking: {
-            booking_nbr: bookingNumber || '',
-            from_date: fromDateStr,
-            to_date: toDateStr,
-            remark: bookedByInfoData.message || null,
-            property: {
-              id: propertyid,
-            },
-            source,
-            currency,
-            arrival: { code: arrivalTime ? arrivalTime : bookedByInfoData.selectedArrivalTime },
-
-            guest,
-            rooms: [
-              ...guestData.map(data => ({
-                identifier: identifier || null,
-                roomtype: {
-                  id: data.roomCategoryId,
-                  name: data.roomCategoryName,
-                  physicalrooms: null,
-                  rateplans: null,
-                  availabilities: null,
-                  inventory: data.inventory,
-                  rate: data.rate / totalNights,
-                },
-                rateplan: {
-                  id: data.ratePlanId,
-                  name: data.ratePlanName,
-                  rate_restrictions: null,
-                  variations: null,
-                  cancelation: data.cancelation,
-                  guarantee: data.guarantee,
-                },
-                unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: +pr_id || +data.roomId },
-                occupancy: {
-                  adult_nbr: data.adultCount,
-                  children_nbr: data.childrenCount,
-                  infant_nbr: null,
-                },
-                bed_preference: data.preference,
-                from_date: fromDateStr,
-                to_date: toDateStr,
-                notes: null,
-                days: this.generateDays(fromDateStr, toDateStr, this.calculateTotalRate(data.rate, totalNights, data.isRateModified, data.rateType)),
-                guest: {
-                  email: null,
-                  first_name: data.guestName,
-                  last_name: null,
-                  country_id: null,
-                  city: null,
-                  mobile: null,
-                  address: null,
-                  dob: null,
-                  subscribe_to_news_letter: null,
-                },
-              })),
-              ...rooms,
-            ],
-          },
-          pickup_info,
-        };
-        console.log('book user payload', body);
-        const result = await this.doReservation(body);
-        return result;
-      } else {
-        throw new Error('Invalid token');
+      const fromDateStr = dateToFormattedString(fromDate);
+      const toDateStr = dateToFormattedString(toDate);
+      let guest: any = {
+        email: bookedByInfoData.email === '' ? null : bookedByInfoData.email || null,
+        first_name: bookedByInfoData.firstName,
+        last_name: bookedByInfoData.lastName,
+        country_id: bookedByInfoData.countryId === '' ? null : bookedByInfoData.countryId,
+        city: null,
+        mobile: bookedByInfoData.contactNumber === null ? '' : bookedByInfoData.contactNumber,
+        phone_prefix: null,
+        address: '',
+        dob: null,
+        subscribe_to_news_letter: bookedByInfoData.emailGuest || false,
+        cci: bookedByInfoData.cardNumber
+          ? {
+              nbr: bookedByInfoData.cardNumber,
+              holder_name: bookedByInfoData.cardHolderName,
+              expiry_month: bookedByInfoData.expiryMonth,
+              expiry_year: bookedByInfoData.expiryYear,
+            }
+          : null,
+      };
+      if (defaultGuest) {
+        guest = { ...defaultGuest, email: defaultGuest.email === '' ? null : defaultGuest.email };
       }
+      if (bookedByInfoData.id) {
+        guest = { ...guest, id: bookedByInfoData.id };
+      }
+      const body = {
+        assign_units: true,
+        check_in,
+        is_pms: true,
+        is_direct: true,
+        is_in_loyalty_mode: false,
+        promo_key: null,
+        extras,
+        booking: {
+          booking_nbr: bookingNumber || '',
+          from_date: fromDateStr,
+          to_date: toDateStr,
+          remark: bookedByInfoData.message || null,
+          property: {
+            id: propertyid,
+          },
+          source,
+          currency,
+          arrival: { code: arrivalTime ? arrivalTime : bookedByInfoData.selectedArrivalTime },
+
+          guest,
+          rooms: [
+            ...guestData.map(data => ({
+              identifier: identifier || null,
+              roomtype: {
+                id: data.roomCategoryId,
+                name: data.roomCategoryName,
+                physicalrooms: null,
+                rateplans: null,
+                availabilities: null,
+                inventory: data.inventory,
+                rate: data.rate / totalNights,
+              },
+              rateplan: {
+                id: data.ratePlanId,
+                name: data.ratePlanName,
+                rate_restrictions: null,
+                variations: null,
+                cancelation: data.cancelation,
+                guarantee: data.guarantee,
+              },
+              unit: typeof pr_id === 'undefined' && data.roomId === '' ? null : { id: +pr_id || +data.roomId },
+              occupancy: {
+                adult_nbr: data.adultCount,
+                children_nbr: data.childrenCount,
+                infant_nbr: null,
+              },
+              bed_preference: data.preference,
+              from_date: fromDateStr,
+              to_date: toDateStr,
+              notes: null,
+              days: this.generateDays(fromDateStr, toDateStr, this.calculateTotalRate(data.rate, totalNights, data.isRateModified, data.rateType)),
+              guest: {
+                email: null,
+                first_name: data.guestName,
+                last_name: null,
+                country_id: null,
+                city: null,
+                mobile: null,
+                address: null,
+                dob: null,
+                subscribe_to_news_letter: null,
+              },
+            })),
+            ...rooms,
+          ],
+        },
+        pickup_info,
+      };
+      console.log('book user payload', body);
+      const result = await this.doReservation(body);
+      return result;
     } catch (error) {
       console.error(error);
       throw new Error(error);

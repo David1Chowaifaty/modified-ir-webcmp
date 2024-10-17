@@ -3,7 +3,6 @@ import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking.service';
 import { addTwoMonthToDate, computeEndDate, convertDMYToISO, dateToFormattedString, formatLegendColors, getNextDay, isBlockUnit } from '@/utils/utils';
 import io, { Socket } from 'socket.io-client';
-import axios from 'axios';
 import { EventsService } from '@/services/events.service';
 import { ICountry, RoomBlockDetails, RoomBookingDetails, RoomDetail, bookingReasons } from '@/models/IBooking';
 import moment, { Moment } from 'moment';
@@ -15,6 +14,7 @@ import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { addUnassingedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
+// import Auth from '@/models/Auth';
 
 @Component({
   tag: 'igloo-calendar',
@@ -28,7 +28,7 @@ export class IglooCalendar {
   @Prop() language: string;
   @Prop() loadingMessage: string;
   @Prop() currencyName: string;
-  @Prop({ reflect: true }) ticket: string = '';
+  @Prop() ticket: string = '';
   @Prop() p: string;
 
   @Element() private element: HTMLElement;
@@ -50,6 +50,7 @@ export class IglooCalendar {
   @State() totalAvailabilityQueue: { room_type_id: number; date: string; availability: number }[] = [];
   @State() highlightedDate: string;
   @State() calDates: { from: string; to: string };
+  @State() isAuthenticated = false;
 
   @Event({ bubbles: true, composed: true })
   dragOverHighlightElement: EventEmitter;
@@ -63,7 +64,7 @@ export class IglooCalendar {
   private roomService: RoomService = new RoomService();
   private eventsService = new EventsService();
   private toBeAssignedService = new ToBeAssignedService();
-
+  // private auth = new Auth();
   private countryNodeList: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
   private scrollContainer: HTMLElement;
@@ -88,7 +89,6 @@ export class IglooCalendar {
       from: this.from_date,
       to: this.to_date,
     };
-    axios.defaults.withCredentials = true;
     if (this.ticket !== '') {
       calendar_data.token = this.ticket;
       this.bookingService.setToken(this.ticket);
@@ -97,8 +97,11 @@ export class IglooCalendar {
       this.toBeAssignedService.setToken(this.ticket);
       this.initializeApp();
     }
+    this.calDates = {
+      from: this.from_date,
+      to: this.to_date,
+    };
     handleUnAssignedDatesChange('unassigned_dates', newValue => {
-      // console.log(newValue, Object.keys(newValue));
       if (Object.keys(newValue).length === 0 && this.highlightedDate !== '') {
         this.highlightedDate = '';
       }
@@ -897,10 +900,9 @@ export class IglooCalendar {
     this.bookingItem = null;
   }
   render() {
-    if (!this.roomService.isAuthenticated()) {
-      return <p>Login</p>;
-    }
-
+    // if (!this.isAuthenticated) {
+    //   return <ir-login onAuthFinish={() => this.auth.setIsAuthenticated(true)}></ir-login>;
+    // }
     return (
       <Host>
         <ir-toast></ir-toast>

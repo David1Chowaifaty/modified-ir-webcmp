@@ -36,24 +36,18 @@ export class EventsService extends Token {
 
   public async updateBlockedEvent(bookingEvent: any) {
     try {
-      const token = this.getToken();
-      if (token) {
-        const releaseData = getReleaseHoursString(+bookingEvent.RELEASE_AFTER_HOURS);
-        await this.deleteEvent(bookingEvent.POOL);
-        this.bookingService.setToken(token);
-        const result = await this.bookingService.blockUnit({
-          from_date: this.formatDate(bookingEvent.FROM_DATE),
-          to_date: this.formatDate(bookingEvent.TO_DATE),
-          pr_id: bookingEvent.PR_ID,
-          STAY_STATUS_CODE: bookingEvent.OUT_OF_SERVICE ? '004' : bookingEvent.RELEASE_AFTER_HOURS === 0 ? '002' : '003',
-          DESCRIPTION: bookingEvent.RELEASE_AFTER_HOURS || '',
-          NOTES: bookingEvent.OPTIONAL_REASON || '',
-          ...releaseData,
-        });
-        return result;
-      } else {
-        throw new Error('Invalid Token');
-      }
+      const releaseData = getReleaseHoursString(+bookingEvent.RELEASE_AFTER_HOURS);
+      await this.deleteEvent(bookingEvent.POOL);
+      const result = await this.bookingService.blockUnit({
+        from_date: this.formatDate(bookingEvent.FROM_DATE),
+        to_date: this.formatDate(bookingEvent.TO_DATE),
+        pr_id: bookingEvent.PR_ID,
+        STAY_STATUS_CODE: bookingEvent.OUT_OF_SERVICE ? '004' : bookingEvent.RELEASE_AFTER_HOURS === 0 ? '002' : '003',
+        DESCRIPTION: bookingEvent.RELEASE_AFTER_HOURS || '',
+        NOTES: bookingEvent.OPTIONAL_REASON || '',
+        ...releaseData,
+      });
+      return result;
     } catch (error) {
       console.error(error);
       throw new Error(error);

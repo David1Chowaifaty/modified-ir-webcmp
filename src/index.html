@@ -23,24 +23,30 @@
 </head>
 
 <body>
+  <button onclick="logout()">Logout</button>
   <ir-common></ir-common>
-  <igloo-calendar currency-name="USD" propertyid="42" language="en"></igloo-calendar>
+  <!-- <igloo-calendar currency-name="USD" propertyid="42" language="en"></igloo-calendar> -->
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
+
+    // authenticate().then(() => {
+    const calendar = document.createElement('igloo-calendar');
+
     var today = new Date();
     today.setDate(today.getDate() - 1);
     var _FROM_DATE = today.toISOString().substring(0, 10)
     today.setDate(today.getDate() + 60);
     var _TO_DATE = today.toISOString().substring(0, 10)
-    const calendar = document.querySelector("igloo-calendar");
+
+    calendar.ticket = getToken()
+    calendar.language = "en"
     calendar.from_date = _FROM_DATE;
     calendar.to_date = _TO_DATE;
-    setTimeout(() => {
-      const ticket = getToken();
-      calendar.propertyid = getId();
-      // calendar.ticket = ticket;
-    }, 300)
+    calendar.propertyid = getId();
+
+    document.body.appendChild(calendar)
+    // });
   </script>
 
 </body>

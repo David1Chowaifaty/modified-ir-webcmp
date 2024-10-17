@@ -9,8 +9,8 @@
 
 | Property        | Attribute        | Description | Type     | Default     |
 | --------------- | ---------------- | ----------- | -------- | ----------- |
-| `baseurl`       | `baseurl`        |             | `string` | `''`        |
 | `bookingNumber` | `booking-number` |             | `string` | `undefined` |
+| `p`             | `p`              |             | `string` | `undefined` |
 | `propertyid`    | `propertyid`     |             | `number` | `undefined` |
 
 

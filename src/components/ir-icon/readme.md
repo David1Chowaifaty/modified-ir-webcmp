@@ -33,7 +33,7 @@
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-team](../ir-housekeeping/ir-hk-team)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
- - [ir-room-nights](../ir-room-nights)
+ - [ir-room-nights](../igloo-calendar/ir-room-nights)
  - [ir-sidebar](../ir-sidebar)
  - [ir-title](../ir-title)
 

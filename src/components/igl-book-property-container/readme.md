@@ -9,9 +9,9 @@
 
 | Property                    | Attribute                       | Description | Type      | Default     |
 | --------------------------- | ------------------------------- | ----------- | --------- | ----------- |
-| `baseurl`                   | `baseurl`                       |             | `string`  | `''`        |
 | `from_date`                 | `from_date`                     |             | `string`  | `undefined` |
 | `language`                  | `language`                      |             | `string`  | `''`        |
+| `p`                         | `p`                             |             | `string`  | `undefined` |
 | `propertyid`                | `propertyid`                    |             | `number`  | `undefined` |
 | `ticket`                    | `ticket`                        |             | `string`  | `''`        |
 | `to_date`                   | `to_date`                       |             | `string`  | `undefined` |

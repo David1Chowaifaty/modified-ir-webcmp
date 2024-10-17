@@ -21,7 +21,7 @@
  - [ir-channel](../ir-channel)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-housekeeping](../ir-housekeeping)
- - [ir-room-nights](../ir-room-nights)
+ - [ir-room-nights](../igloo-calendar/ir-room-nights)
 
 ### Graph
 ```mermaid

@@ -57,7 +57,7 @@
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
- - [ir-label](../ir-label)
+ - [ir-label](../ui/ir-label)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-login](../ir-login)
@@ -69,7 +69,7 @@
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-pickup-view](../ir-booking-details/ir-pickup-view)
  - [ir-room](../ir-booking-details/ir-room)
- - [ir-room-nights](../ir-room-nights)
+ - [ir-room-nights](../igloo-calendar/ir-room-nights)
 
 ### Depends on
 
