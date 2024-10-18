@@ -297,8 +297,34 @@ export class IrRoom {
                 </table>
               </div>
             </div>
-            <div class="sm-mb-1" innerHTML={this.item.rateplan.cancelation || ''}></div>
-            <div class="sm-mb-1" innerHTML={this.item.rateplan.guarantee || ''}></div>
+            {this.item.rateplan.cancelation && (
+              // <div class="sm-mb-1 room_statements">
+              //   <span>
+              //     <b>
+              //       <u>{this.defaultTexts.entries.Lcz_Cancellation}: </u>
+              //     </b>
+              //   </span>
+              //   <span>
+              //     njfsdnfjsfsdfdsfnijsnfijnfjsnfjsdnfjsnfkjsdnfjksdnfkjsdnfjksnfjksfnkjsdnfjksfnjksdnfjksdnfjsdnfjksnfjksdnfkjsdnfjksnfjksddnfjksnfjksddnfjsdnfjksf js
+              //     jnjnsjnfjksfnjsdfnjdskfnsddjfnsifnj
+              //   </span>
+              // </div>
+              <div class="room_statements">
+                <span>
+                  <b>{this.defaultTexts.entries.Lcz_Cancellation}:</b>
+                  <span innerHTML={this.item.rateplan.cancelation || ''}></span>
+                </span>
+              </div>
+            )}
+            {this.item.rateplan.guarantee && (
+              <div class="sm-mb-1">
+                <span>
+                  <b>{this.defaultTexts.entries.Lcz_Guarantee}: </b>
+                  <span innerHTML={this.item.rateplan.guarantee || ''}></span>
+                </span>
+              </div>
+            )}
+
             {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
             {this.bookingEvent.is_direct && <ir-label label={`${this.defaultTexts.entries.Lcz_MealPlan}:`} value={this.mealCodeName}></ir-label>}

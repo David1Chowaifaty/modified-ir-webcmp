@@ -6,6 +6,7 @@ export interface ILocale {
 export type TLocaleEntries = (LocalizationStrings & LocalizationChannelFrontEntries & BookingListingCodes & HousekeepingLocalizedWords & LocalizationPAYMENTBACK) | null;
 
 export type LocalizationStrings = {
+  Lcz_Guarantee: string;
   Lcz_PrivateNote_MaxChar: string;
   Lcz_VisibleToHotelOnly: string;
   Lcz_PrivateNote: string;
