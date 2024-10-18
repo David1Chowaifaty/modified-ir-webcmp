@@ -121,7 +121,9 @@ graph TD;
   ir-pickup-view --> ir-button
   ir-payment-details --> ir-date-picker
   ir-payment-details --> ir-button
+  ir-payment-details --> ir-payment-actions
   ir-payment-details --> ir-modal
+  ir-payment-actions --> ir-button
   ir-dialog --> ir-icon
   style ir-booking-listing fill:#f9f,stroke:#333,stroke-width:4px
 ```

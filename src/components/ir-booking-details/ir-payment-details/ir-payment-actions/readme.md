@@ -22,6 +22,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [ir-payment-details](..)
+
 ### Depends on
 
 - [ir-button](../../../ir-button)
@@ -31,6 +35,7 @@
 graph TD;
   ir-payment-actions --> ir-button
   ir-button --> ir-icons
+  ir-payment-details --> ir-payment-actions
   style ir-payment-actions fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

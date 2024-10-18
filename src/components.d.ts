@@ -249,6 +249,7 @@ export namespace Components {
     interface IglooCalendar {
         "currencyName": string;
         "from_date": string;
+        "isSameSite": boolean;
         "language": string;
         "loadingMessage": string;
         "p": string;
@@ -2562,6 +2563,7 @@ declare namespace LocalJSX {
     interface IglooCalendar {
         "currencyName"?: string;
         "from_date"?: string;
+        "isSameSite"?: boolean;
         "language"?: string;
         "loadingMessage"?: string;
         "onCalculateUnassignedDates"?: (event: IglooCalendarCustomEvent<any>) => void;

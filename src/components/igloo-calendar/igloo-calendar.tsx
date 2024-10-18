@@ -14,6 +14,7 @@ import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { addUnassingedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
+import Token from '@/models/Token';
 // import Auth from '@/models/Auth';
 
 @Component({
@@ -30,6 +31,7 @@ export class IglooCalendar {
   @Prop() currencyName: string;
   @Prop() ticket: string = '';
   @Prop() p: string;
+  @Prop() isSameSite: boolean = false;
 
   @Element() private element: HTMLElement;
 
@@ -70,6 +72,7 @@ export class IglooCalendar {
   private scrollContainer: HTMLElement;
   private today: String = '';
   private reachedEndOfCalendar = false;
+  private token = new Token();
 
   private socket: Socket;
   private availabilityTimeout: NodeJS.Timeout;
@@ -89,12 +92,14 @@ export class IglooCalendar {
       from: this.from_date,
       to: this.to_date,
     };
+    this.token.setIsSameSite(this.isSameSite);
     if (this.ticket !== '') {
-      calendar_data.token = this.ticket;
-      this.bookingService.setToken(this.ticket);
-      this.roomService.setToken(this.ticket);
-      this.eventsService.setToken(this.ticket);
-      this.toBeAssignedService.setToken(this.ticket);
+      this.token.setToken(this.ticket);
+      // calendar_data.token = this.ticket;
+      // this.bookingService.setToken(this.ticket);
+      // this.roomService.setToken(this.ticket);
+      // this.eventsService.setToken(this.ticket);
+      // this.toBeAssignedService.setToken(this.ticket);
       this.initializeApp();
     }
     this.calDates = {

@@ -4,26 +4,33 @@ import Auth from './Auth';
 
 class Token extends Auth {
   private static token: string | null = '';
+  private static isSameSite: boolean;
 
   private static isInterceptorAdded = false;
 
   constructor() {
     super();
     if (!Token.isInterceptorAdded) {
-      // axios.defaults.withCredentials = true;
-      axios.interceptors.request.use(config => {
-        if (Token.token) {
-          config.params = config.params || {};
-          config.params.Ticket = Token.token;
-        }
-        return config;
-      });
+      if (Token.isSameSite) {
+        axios.defaults.withCredentials = true;
+      } else {
+        axios.interceptors.request.use(config => {
+          if (Token.token) {
+            config.params = config.params || {};
+            config.params.Ticket = Token.token;
+          }
+          return config;
+        });
+      }
       Token.isInterceptorAdded = true;
     }
   }
 
   public setToken(token: string) {
     Token.token = token;
+  }
+  public setIsSameSite(val: boolean) {
+    Token.isSameSite = val;
   }
   public isAuthenticated() {
     return super.isAuthenticated();

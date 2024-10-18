@@ -81,7 +81,7 @@ export class IrBookingDetails {
     '004': 'bg-ir-red',
   };
 
-  componentDidLoad() {
+  componentWillLoad() {
     if (this.ticket !== '') {
       calendar_data.token = this.ticket;
       this.bookingService.setToken(this.ticket);
@@ -161,9 +161,9 @@ export class IrBookingDetails {
   async handleResetExposedCancelationDueAmount(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    //TOTO: Payment action
-    // const paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: this.bookingData.booking_nbr, currency_id: this.bookingData.currency.id });
-    // this.paymentActions = [...paymentActions];
+    //TODO: Payment action
+    const paymentActions = await this.paymentService.GetExposedCancelationDueAmount({ booking_nbr: this.bookingData.booking_nbr, currency_id: this.bookingData.currency.id });
+    this.paymentActions = [...paymentActions];
   }
   @Listen('selectChange')
   handleSelectChange(e: CustomEvent<any>) {
@@ -208,14 +208,14 @@ export class IrBookingDetails {
       this.paymentService.setToken(this.ticket);
       this.property_id = roomResponse?.My_Result?.id;
       //TODO:Reenable payment actions
-      // if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
-      //   this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({
-      //     booking_nbr: bookingDetails.booking_nbr,
-      //     currency_id: bookingDetails.currency.id,
-      //   });
-      // } else {
-      //   console.warn('Booking details are incomplete for payment actions.');
-      // }
+      if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
+        this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({
+          booking_nbr: bookingDetails.booking_nbr,
+          currency_id: bookingDetails.currency.id,
+        });
+      } else {
+        console.warn('Booking details are incomplete for payment actions.');
+      }
       if (!locales?.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;

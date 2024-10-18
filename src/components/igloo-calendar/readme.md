@@ -34,7 +34,6 @@
 
 ### Depends on
 
-- [ir-login](../ir-login)
 - [ir-toast](../ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [igl-to-be-assigned](igl-to-be-assigned)
@@ -52,7 +51,6 @@
 ### Graph
 ```mermaid
 graph TD;
-  igloo-calendar --> ir-login
   igloo-calendar --> ir-toast
   igloo-calendar --> ir-interceptor
   igloo-calendar --> igl-to-be-assigned
@@ -66,16 +64,11 @@ graph TD;
   igloo-calendar --> ir-room-nights
   igloo-calendar --> ir-booking-details
   igloo-calendar --> ir-modal
-  ir-login --> ir-interceptor
-  ir-login --> ir-toast
-  ir-login --> ir-input-text
-  ir-login --> ir-icons
-  ir-login --> ir-button
-  ir-button --> ir-icons
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-button
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
+  ir-button --> ir-icons
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
   igl-cal-body --> ir-popover
@@ -153,7 +146,9 @@ graph TD;
   ir-pickup-view --> ir-button
   ir-payment-details --> ir-date-picker
   ir-payment-details --> ir-button
+  ir-payment-details --> ir-payment-actions
   ir-payment-details --> ir-modal
+  ir-payment-actions --> ir-button
   ir-dialog --> ir-icon
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```
