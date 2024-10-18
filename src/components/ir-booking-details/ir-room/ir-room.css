@@ -5,6 +5,22 @@
 
   /* max-width: max-content; */
 }
+.room_statements {
+  display: block;
+  width: 100%;
+}
+
+.room_statements span {
+  display: inline;
+  white-space: normal;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.room_statements b {
+  display: inline;
+  margin-right: 5px;
+}
 .payment-container {
   position: absolute;
   right: 1rem;
