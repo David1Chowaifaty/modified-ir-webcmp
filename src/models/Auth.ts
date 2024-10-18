@@ -12,7 +12,7 @@ class Auth {
     }
   }
   public async init() {
-    // axios.defaults.withCredentials = true;
+    axios.defaults.withCredentials = true;
     axios.defaults.baseURL = this.baseUrl;
     // Auth.isAuthUsed = true;
     // const { data } = await axios.post('/Is_Already_Athenticated');
