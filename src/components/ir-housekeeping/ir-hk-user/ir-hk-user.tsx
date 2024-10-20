@@ -41,7 +41,6 @@ export class IrHkUser {
   async componentWillLoad() {
     const { token, language, property_id } = getDefaultProperties();
     this.default_properties = { token, language };
-    this.housekeepingService.setToken(token);
     if (!this.user) {
       this.userInfo['property_id'] = property_id;
     }

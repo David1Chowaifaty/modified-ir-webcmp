@@ -1,10 +1,9 @@
 import { Component, Host, h, Prop, Event, EventEmitter, State, Fragment, Listen } from '@stencil/core';
-import { BookingService } from '../../../services/booking.service';
-import { IEntries, ICountry } from '../../../models/IBooking';
+import { BookingService } from '@/services/booking.service';
+import { IEntries, ICountry } from '@/models/IBooking';
 import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import { TPropertyButtonsTypes } from '@/components';
-import calendar_data from '@/stores/calendar-data';
 import { z } from 'zod';
 import { validateEmail } from '@/utils/utils';
 
@@ -45,7 +44,6 @@ export class IglPropertyBookedBy {
   };
 
   async componentWillLoad() {
-    this.bookingService.setToken(calendar_data.token);
     this.assignCountryCode();
     this.initializeExpiryYears();
     this.initializeDateData();

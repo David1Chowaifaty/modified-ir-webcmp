@@ -1,5 +1,5 @@
-import { HouseKeepingService } from '@/services/housekeeping.service';
-import housekeeping_store from '@/stores/housekeeping.store';
+// import { HouseKeepingService } from '@/services/housekeeping.service';
+// import housekeeping_store from '@/stores/housekeeping.store';
 import { Component, Host, Listen, State, h } from '@stencil/core';
 import moment from 'moment';
 
@@ -17,10 +17,9 @@ export class IrHkArchive {
     end: moment().format('YYYY-MM-DD'),
   };
 
-  private houseKeepingService = new HouseKeepingService();
+  // private houseKeepingService = new HouseKeepingService();
 
   componentWillLoad() {
-    this.houseKeepingService.setToken(housekeeping_store.default_properties.token);
     this.initializeData();
   }
   async initializeData() {}

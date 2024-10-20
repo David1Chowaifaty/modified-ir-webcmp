@@ -1,9 +1,8 @@
-import Token from '@/models/Token';
 import { IExposedHouseKeepingSetup, IInspectionMode, IPropertyHousekeepingAssignment, THKUser, TPendingHkSetupParams } from '@/models/housekeeping';
 import { updateHKStore } from '@/stores/housekeeping.store';
 import axios from 'axios';
 
-export class HouseKeepingService extends Token {
+export class HouseKeepingService {
   public async getExposedHKSetup(property_id: number): Promise<IExposedHouseKeepingSetup> {
     const { data } = await axios.post(`/Get_Exposed_HK_Setup`, {
       property_id,

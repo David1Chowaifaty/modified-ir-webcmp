@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { IAvailableRoom, IRoomCategory, IUnassignedDates, InnerRecord } from '../models/tobeassigned';
 import { dateDifference, dateToFormattedString, extras } from '../utils/utils';
-import Token from '@/models/Token';
 import moment from 'moment';
 
-export class ToBeAssignedService extends Token {
+export class ToBeAssignedService {
   public async getUnassignedDates(propertyid: number, from_date: string, to_date: string) {
     try {
       const { data } = await axios.post(`/Get_UnAssigned_Dates`, {

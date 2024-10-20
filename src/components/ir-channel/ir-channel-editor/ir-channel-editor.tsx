@@ -33,9 +33,6 @@ export class IrChannelEditor {
 
   private channelService = new ChannelService();
   componentWillLoad() {
-    if (this.ticket) {
-      this.channelService.setToken(this.ticket);
-    }
     if (this.channel_status === 'edit') {
       this.enableAllHeaders();
     }

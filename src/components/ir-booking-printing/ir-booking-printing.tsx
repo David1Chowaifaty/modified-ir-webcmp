@@ -52,13 +52,7 @@ export class IrBookingPrinting {
     }
   }
 
-  private applyTokenToServices() {
-    this.bookingService.setToken(this.token);
-    this.roomService.setToken(this.token);
-  }
-
   private init() {
-    this.applyTokenToServices();
     this.initializeRequests();
   }
 

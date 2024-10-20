@@ -1,12 +1,11 @@
 import { Component, Host, h, Prop, Event, EventEmitter, State, Listen, Fragment, Watch } from '@stencil/core';
-import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
-import { dateToFormattedString } from '../../../utils/utils';
+import { ToBeAssignedService } from '@/services/toBeAssigned.service';
+import { dateToFormattedString } from '@/utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { getUnassignedDates } from '@/stores/unassigned_dates.store';
-import calendar_data from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
-//import { updateCategories } from '../../../utils/events.utils';
+//import { updateCategories } from '@/utils/events.utils';
 
 @Component({
   tag: 'igl-to-be-assigned',
@@ -44,7 +43,6 @@ export class IglToBeAssigned {
   private unassignedDates: any;
 
   componentWillLoad() {
-    this.toBeAssignedService.setToken(calendar_data.token);
     this.reArrangeData();
     this.loadingMessage = locales.entries.Lcz_FetchingUnAssignedUnits;
   }

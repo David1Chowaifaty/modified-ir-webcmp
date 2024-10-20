@@ -1,9 +1,8 @@
-import Token from '@/models/Token';
 import calendar_data from '@/stores/calendar-data';
 import { locales } from '@/stores/locales.store';
 import axios from 'axios';
 
-export class RoomService extends Token {
+export class RoomService {
   public async getExposedProperty(params: { id: number | null; language: string; is_backend?: boolean; aname?: string }) {
     try {
       const { data } = await axios.post(`/Get_Exposed_Property`, params);

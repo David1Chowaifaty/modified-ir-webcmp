@@ -2,7 +2,6 @@ import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
-import calendar_data from '@/stores/calendar-data';
 import { getPrivateNote } from '@/utils/booking';
 @Component({
   tag: 'ir-booking-extra-note',
@@ -20,7 +19,6 @@ export class IrBookingExtraNote {
 
   private bookingService = new BookingService();
   componentWillLoad() {
-    this.bookingService.setToken(calendar_data.token);
     if (this.booking.extras) {
       this.setNote(getPrivateNote(this.booking.extras));
     }

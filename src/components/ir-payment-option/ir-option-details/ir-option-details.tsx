@@ -24,7 +24,6 @@ export class IrOptionDetails {
   private paymentOptionService = new PaymentOptionService();
 
   async componentWillLoad() {
-    this.paymentOptionService.setToken(payment_option_store.token);
     if (payment_option_store.selectedOption.code !== '005') {
       return;
     }

@@ -4,7 +4,6 @@ import { ICountry } from '@/models/IBooking';
 import { EventsService } from '@/services/events.service';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -32,8 +31,6 @@ export class IglBookingEventHover {
   private hideButtons = false;
   @State() shouldHideUnassignUnit = false;
   componentWillLoad() {
-    // console.log('this.bookingEvent', this.bookingEvent);
-    this.eventService.setToken(calendar_data.token);
     let selectedRt = this.bookingEvent.roomsInfo.find(r => r.id === this.bookingEvent.RATE_TYPE);
     if (selectedRt) {
       console.log(selectedRt.physicalrooms.length === 1);

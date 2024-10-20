@@ -1,3 +1,4 @@
+import Token from '@/models/Token';
 import { AuthService } from '@/services/authenticate.service';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { Component, Event, EventEmitter, Host, State, h } from '@stencil/core';
@@ -17,6 +18,7 @@ export class IrLogin {
   }>;
 
   private authService = new AuthService();
+  private token = new Token();
 
   private async handleSignIn(e: Event) {
     e.preventDefault();
@@ -25,6 +27,7 @@ export class IrLogin {
         password: this.password,
         username: this.username,
       });
+      this.token.setToken(token);
       this.authFinish.emit({ token, code: 'succsess' });
     } catch (error) {
       console.log(error.message);

@@ -22,9 +22,6 @@ export class IrListingHeader {
   private bookingListingService = new BookingListingService();
   private toDateRef: HTMLIrDatePickerElement;
 
-  componentWillLoad() {
-    this.bookingListingService.setToken(booking_listing.token);
-  }
   private downloadUrlTag: HTMLAnchorElement;
   @Listen('dateChanged')
   handleDateRangeChange(e: CustomEvent) {

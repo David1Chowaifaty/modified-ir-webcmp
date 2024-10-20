@@ -6,12 +6,12 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { ICurrency } from "./models/calendarData";
-import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
-import { ICountry as ICountry1, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
+import { TAdultChildConstraints } from "./models/igl-book-property.d";
+import { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 import { IToast } from "./components/ir-toast/toast";
+import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
-import { ICountry } from "./models/IBooking";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { TIcons } from "./components/ui/ir-icons/icons";
@@ -25,12 +25,12 @@ import { IPaymentAction } from "./services/payment.service";
 import { Booking as Booking1 } from "./models/booking.dto";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { ICurrency } from "./models/calendarData";
-export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
-export { ICountry as ICountry1, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
+export { TAdultChildConstraints } from "./models/igl-book-property.d";
+export { ICountry, RoomBlockDetails, RoomBookingDetails } from "./models/IBooking";
 export { IToast } from "./components/ir-toast/toast";
+export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
-export { ICountry } from "./models/IBooking";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { TIcons } from "./components/ui/ir-icons/icons";
@@ -90,7 +90,7 @@ export namespace Components {
         "eventType": string;
     }
     interface IglBookPropertyHeader {
-        "adultChildConstraints": TAdultChildConstraints;
+        "adultChildConstraints": TAdultChildConstraints1;
         "adultChildCount": { adult: number; child: number };
         "bookedByInfoData": any;
         "bookingData": any;
@@ -121,7 +121,7 @@ export namespace Components {
         "is_vacation_rental": boolean;
     }
     interface IglBookingOverviewPage {
-        "adultChildConstraints": TAdultChildConstraints;
+        "adultChildConstraints": TAdultChildConstraints1;
         "adultChildCount": { adult: number; child: number };
         "bookedByInfoData": any;
         "bookingData": any;
@@ -216,7 +216,7 @@ export namespace Components {
         "showSplitBookingOption": boolean;
     }
     interface IglPropertyBookedBy {
-        "countryNodeList": ICountry1[];
+        "countryNodeList": ICountry[];
         "defaultData": { [key: string]: any };
         "language": string;
         "propertyId": number;
@@ -2349,7 +2349,7 @@ declare namespace LocalJSX {
         "onButtonClicked"?: (event: IglBookPropertyFooterCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
     }
     interface IglBookPropertyHeader {
-        "adultChildConstraints"?: TAdultChildConstraints;
+        "adultChildConstraints"?: TAdultChildConstraints1;
         "adultChildCount"?: { adult: number; child: number };
         "bookedByInfoData"?: any;
         "bookingData"?: any;
@@ -2401,7 +2401,7 @@ declare namespace LocalJSX {
         "onShowBookingPopup"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
     }
     interface IglBookingOverviewPage {
-        "adultChildConstraints"?: TAdultChildConstraints;
+        "adultChildConstraints"?: TAdultChildConstraints1;
         "adultChildCount"?: { adult: number; child: number };
         "bookedByInfoData"?: any;
         "bookingData"?: any;
@@ -2519,7 +2519,7 @@ declare namespace LocalJSX {
         "showSplitBookingOption"?: boolean;
     }
     interface IglPropertyBookedBy {
-        "countryNodeList"?: ICountry1[];
+        "countryNodeList"?: ICountry[];
         "defaultData"?: { [key: string]: any };
         "language"?: string;
         "onDataUpdateEvent"?: (event: IglPropertyBookedByCustomEvent<{ [key: string]: any }>) => void;

@@ -29,7 +29,6 @@ export class IrPhoneInput {
   private bookingService: BookingService = new BookingService();
 
   async componentWillLoad() {
-    this.bookingService.setToken(this.token);
     const countries = await this.bookingService.getCountries(this.language);
     this.countries = countries;
     if (this.phone_prefix) {

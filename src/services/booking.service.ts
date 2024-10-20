@@ -4,7 +4,6 @@ import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthTyp
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString, extras } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
 import { Booking, Day, Guest, IBookingPickupInfo, IPmsLog } from '../models/booking.dto';
-import Token from '@/models/Token';
 export interface IBookingParams {
   bookedByInfoData: any;
   check_in: boolean;
@@ -24,7 +23,7 @@ export interface IBookingParams {
   identifier?: string;
   extras: { key: string; value: string }[] | null;
 }
-export class BookingService extends Token {
+export class BookingService {
   public async getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{ [key: string]: any }> {
     try {
       const { data } = await axios.post(`/Get_Exposed_Calendar`, {

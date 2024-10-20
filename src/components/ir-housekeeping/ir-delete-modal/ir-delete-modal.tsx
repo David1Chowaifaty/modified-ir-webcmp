@@ -21,10 +21,6 @@ export class IrDeleteModal {
 
   private housekeepingService = new HouseKeepingService();
 
-  componentWillLoad() {
-    this.housekeepingService.setToken(housekeeping_store.default_properties.token);
-  }
-
   @Method()
   async closeModal() {
     this.isOpen = false;

@@ -5,7 +5,6 @@ import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
 import { PaymentService, IPaymentAction } from '@/services/payment.service';
 import { ILocale, IToast } from '@/components';
-import calendar_data from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { formatAmount } from '@/utils/utils';
@@ -52,8 +51,6 @@ export class IrPaymentDetails {
   }
   async componentWillLoad() {
     try {
-      this.paymentService.setToken(calendar_data.token);
-      this.bookingService.setToken(calendar_data.token);
       this.initializeItemToBeAdded();
     } catch (error) {
       if (this.bookingDetails.guest.cci) {

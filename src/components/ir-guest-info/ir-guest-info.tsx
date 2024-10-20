@@ -4,7 +4,6 @@ import { Guest } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import { ICountry } from '@/components';
 import { ILocale } from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-guest-info',
@@ -29,8 +28,6 @@ export class GuestInfo {
   private bookingService = new BookingService();
 
   async componentWillLoad() {
-    this.bookingService.setToken(calendar_data.token);
-
     await this.init();
   }
   async init() {

@@ -7,7 +7,7 @@ import { actions } from './data';
 import { IModalCause } from './types';
 import { ChannelService } from '@/services/channel.service';
 import { IChannel } from '@/models/calendarData';
-import calendar_data from '@/stores/calendar-data';
+import Token from '@/models/Token';
 
 @Component({
   tag: 'ir-channel',
@@ -29,6 +29,7 @@ export class IrChannel {
 
   private roomService = new RoomService();
   private channelService = new ChannelService();
+  private token = new Token();
 
   private irModalRef: HTMLIrModalElement;
 
@@ -38,9 +39,7 @@ export class IrChannel {
       axios.defaults.baseURL = this.baseurl;
     }
     if (this.ticket !== '') {
-      calendar_data.token = this.ticket;
-      this.channelService.setToken(this.ticket);
-      this.roomService.setToken(this.ticket);
+      this.token.setToken(this.ticket);
       this.initializeApp();
     }
   }
@@ -113,9 +112,7 @@ export class IrChannel {
 
   @Watch('ticket')
   async ticketChanged() {
-    calendar_data.token = this.ticket;
-    this.roomService.setToken(this.ticket);
-    this.channelService.setToken(this.ticket);
+    this.token.setToken(this.ticket);
     this.initializeApp();
   }
 

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { IPayment } from '@/models/booking.dto';
-import Token from '@/models/Token';
 export interface IPaymentAction {
   amount: number;
   currency: {
@@ -11,7 +10,7 @@ export interface IPaymentAction {
   due_on: string;
   type: 'overdue' | 'future';
 }
-export class PaymentService extends Token {
+export class PaymentService {
   public async AddPayment(payment: IPayment, book_nbr: string): Promise<any> {
     try {
       const { data } = await axios.post(`/Do_Payment`, { payment: { ...payment, book_nbr } });

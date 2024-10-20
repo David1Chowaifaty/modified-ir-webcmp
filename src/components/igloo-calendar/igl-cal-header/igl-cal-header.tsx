@@ -1,9 +1,8 @@
 import { Component, Event, EventEmitter, Host, Prop, h, State, Listen, Watch } from '@stencil/core';
-import { ToBeAssignedService } from '../../../services/toBeAssigned.service';
-import { dateToFormattedString } from '../../../utils/utils';
+import { ToBeAssignedService } from '@/services/toBeAssigned.service';
+import { dateToFormattedString } from '@/utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 import { handleUnAssignedDatesChange } from '@/stores/unassigned_dates.store';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 
@@ -33,7 +32,6 @@ export class IglCalHeader {
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
   componentWillLoad() {
-    this.toBeAssignedService.setToken(calendar_data.token);
     try {
       this.initializeRoomsList();
 

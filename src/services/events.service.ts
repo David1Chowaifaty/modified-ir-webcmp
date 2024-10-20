@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { BookingService } from './booking.service';
 import { extras, getReleaseHoursString } from '../utils/utils';
-import Token from '@/models/Token';
 
-export class EventsService extends Token {
+export class EventsService {
   private readonly bookingService: BookingService = new BookingService();
   async reallocateEvent(pool: string, destination_pr_id: number, from_date: string, to_date: string) {
     try {

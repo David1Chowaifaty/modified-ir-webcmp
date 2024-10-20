@@ -5,6 +5,7 @@ import locales from '@/stores/locales.store';
 import payment_option_store from '@/stores/payment-option.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { IToast } from '../ir-toast/toast';
+import Token from '@/models/Token';
 
 @Component({
   tag: 'ir-payment-option',
@@ -27,6 +28,7 @@ export class IrPaymentOption {
 
   private paymentOptionService = new PaymentOptionService();
   private roomService = new RoomService();
+  private token = new Token();
 
   private propertyOptionsById: Map<string | number, PaymentOption>;
   private propertyOptionsByCode: Map<string | number, PaymentOption>;
@@ -124,9 +126,7 @@ export class IrPaymentOption {
   }
 
   private initServices() {
-    payment_option_store.token = this.ticket;
-    this.paymentOptionService.setToken(this.ticket);
-    this.roomService.setToken(this.ticket);
+    this.token.setToken(this.ticket);
   }
   private modifyPaymentList(paymentOption: PaymentOption) {
     let prevPaymentOptions = [...this.paymentOptions];

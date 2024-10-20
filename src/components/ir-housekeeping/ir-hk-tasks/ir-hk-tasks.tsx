@@ -1,4 +1,5 @@
 import { IPendingActions } from '@/models/housekeeping';
+import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
 import housekeeping_store, { updateHKStore } from '@/stores/housekeeping.store';
@@ -28,11 +29,11 @@ export class IrHkTasks {
   private modalOpenTimeOut: NodeJS.Timeout;
   private roomService = new RoomService();
   private houseKeepingService = new HouseKeepingService();
+  private token = new Token();
 
   componentWillLoad() {
     if (this.ticket !== '') {
-      this.roomService.setToken(this.ticket);
-      this.houseKeepingService.setToken(this.ticket);
+      this.token.setToken(this.ticket);
       this.initializeApp();
     }
   }
@@ -62,8 +63,7 @@ export class IrHkTasks {
   @Watch('ticket')
   async ticketChanged(newValue: string, oldValue: string) {
     if (newValue !== oldValue) {
-      this.roomService.setToken(this.ticket);
-      this.houseKeepingService.setToken(this.ticket);
+      this.token.setToken(this.ticket);
       this.initializeApp();
     }
   }

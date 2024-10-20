@@ -21,10 +21,6 @@ export class IrHkUnassignedUnits {
   private assignedUnits: Map<number, IPropertyHousekeepingAssignment> = new Map();
   private housekeepingService = new HouseKeepingService();
 
-  componentWillLoad() {
-    this.housekeepingService.setToken(housekeeping_store.default_properties.token);
-  }
-
   assignUnit(unit_id: number, hk_id: number | null, checked: boolean) {
     if (this.user) {
       const userUnit = this.user.assigned_units.find(unit => unit.id === unit_id);

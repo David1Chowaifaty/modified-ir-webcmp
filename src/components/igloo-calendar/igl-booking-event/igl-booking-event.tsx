@@ -7,7 +7,6 @@ import moment from 'moment';
 import { IToast } from '@components/ir-toast/toast';
 import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-booking-event',
@@ -72,9 +71,6 @@ export class IglBookingEvent {
   handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   componentWillLoad() {
-    this.bookingService.setToken(calendar_data.token);
-    this.eventsService.setToken(calendar_data.token);
-
     window.addEventListener('click', this.handleClickOutsideBind);
   }
 

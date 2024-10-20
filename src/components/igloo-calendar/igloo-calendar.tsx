@@ -72,18 +72,14 @@ export class IglooCalendar {
   private scrollContainer: HTMLElement;
   private today: String = '';
   private reachedEndOfCalendar = false;
-  private token = new Token();
 
   private socket: Socket;
   private availabilityTimeout: NodeJS.Timeout;
+  private token = new Token();
 
   @Watch('ticket')
   ticketChanged() {
-    calendar_data.token = this.ticket;
-    this.bookingService.setToken(this.ticket);
-    this.roomService.setToken(this.ticket);
-    this.eventsService.setToken(this.ticket);
-    this.toBeAssignedService.setToken(this.ticket);
+    this.token.setToken(this.ticket);
     this.initializeApp();
   }
 
@@ -92,14 +88,9 @@ export class IglooCalendar {
       from: this.from_date,
       to: this.to_date,
     };
-    this.token.setIsSameSite(this.isSameSite);
+    // this.token.setIsSameSite(this.isSameSite);
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
-      // calendar_data.token = this.ticket;
-      // this.bookingService.setToken(this.ticket);
-      // this.roomService.setToken(this.ticket);
-      // this.eventsService.setToken(this.ticket);
-      // this.toBeAssignedService.setToken(this.ticket);
       this.initializeApp();
     }
     this.calDates = {

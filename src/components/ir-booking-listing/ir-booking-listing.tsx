@@ -8,6 +8,7 @@ import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stenci
 import moment from 'moment';
 import { _formatTime } from '../ir-booking-details/functions';
 import { getPrivateNote } from '@/utils/booking';
+import Token from '@/models/Token';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -29,8 +30,11 @@ export class IrBookingListing {
   @State() oldStartValue = 0;
   @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' } | null = null;
   @State() showCost = false;
+
   private bookingListingService = new BookingListingService();
   private roomService = new RoomService();
+  private token = new Token();
+
   private listingModal: HTMLIrListingModalElement;
   private listingModalTimeout: NodeJS.Timeout;
   private statusColors = {
@@ -44,9 +48,7 @@ export class IrBookingListing {
     updateUserSelection('end_row', this.rowCount);
     booking_listing.rowCount = this.rowCount;
     if (this.ticket !== '') {
-      this.bookingListingService.setToken(this.ticket);
-      this.roomService.setToken(this.ticket);
-      booking_listing.token = this.ticket;
+      this.token.setToken(this.ticket);
       this.initializeApp();
     }
     onBookingListingChange('userSelection', async newValue => {
@@ -60,9 +62,7 @@ export class IrBookingListing {
   @Watch('ticket')
   async ticketChanged(newValue: string, oldValue: string) {
     if (newValue !== oldValue) {
-      this.bookingListingService.setToken(this.ticket);
-      this.roomService.setToken(this.ticket);
-      booking_listing.token = this.ticket;
+      this.token.setToken(this.ticket);
       this.initializeApp();
     }
   }

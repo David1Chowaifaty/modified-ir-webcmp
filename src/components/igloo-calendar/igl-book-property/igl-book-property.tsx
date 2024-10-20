@@ -1,14 +1,13 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h, Listen, Fragment } from '@stencil/core';
-import { BookingService } from '../../../services/booking.service';
-import { dateToFormattedString, getReleaseHoursString } from '../../../utils/utils';
-import { IEntries, RoomBlockDetails, RoomBookingDetails } from '../../../models/IBooking';
-import { IPageTwoDataUpdateProps } from '../../../models/models';
-import { transformNewBLockedRooms } from '../../../utils/booking';
+import { BookingService } from '@/services/booking.service';
+import { dateToFormattedString, getReleaseHoursString } from '@/utils/utils';
+import { IEntries, RoomBlockDetails, RoomBookingDetails } from '@/models/IBooking';
+import { IPageTwoDataUpdateProps } from '@/models/models';
+import { transformNewBLockedRooms } from '@/utils/booking';
 import { IglBookPropertyService } from './igl-book-property.service';
-import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../models/igl-book-property';
-import { EventsService } from '../../../services/events.service';
+import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '@/models/igl-book-property';
+import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 import { IToast } from '@/components/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { ICurrency } from '@/models/calendarData';
@@ -103,8 +102,6 @@ export class IglBookProperty {
     }
   }
   async componentWillLoad() {
-    this.bookingService.setToken(calendar_data.token);
-    this.eventsService.setToken(calendar_data.token);
     this.defaultDateRange = { from_date: this.bookingData.FROM_DATE, to_date: this.bookingData.TO_DATE };
     this.handleKeyDown = this.handleKeyDown.bind(this);
     if (!this.bookingData.defaultDateRange) {

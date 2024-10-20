@@ -1,9 +1,8 @@
-import Token from '@/models/Token';
 import calendar_data from '@/stores/calendar-data';
 import channels_data from '@/stores/channel.store';
 import axios from 'axios';
 
-export class ChannelService extends Token {
+export class ChannelService {
   public async getExposedChannels() {
     try {
       const { data } = await axios.post(`/Get_Exposed_Channels`, {});

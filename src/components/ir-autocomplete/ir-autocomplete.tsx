@@ -3,7 +3,6 @@ import { v4 } from 'uuid';
 import { BookingService } from '../../services/booking.service';
 import { IToast } from '../ir-toast/toast';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-autocomplete',
@@ -43,7 +42,6 @@ export class IrAutocomplete {
   private bookingService = new BookingService();
   private no_result_found = '';
   componentWillLoad() {
-    this.bookingService.setToken(calendar_data.token);
     this.no_result_found = locales.entries.Lcz_NoResultsFound;
   }
 

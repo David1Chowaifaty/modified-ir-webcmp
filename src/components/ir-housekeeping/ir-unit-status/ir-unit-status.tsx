@@ -12,9 +12,7 @@ import { Component, Event, EventEmitter, Host, h } from '@stencil/core';
 export class IrUnitStatus {
   private housekeepingService = new HouseKeepingService();
   @Event() resetData: EventEmitter<null>;
-  componentWillLoad() {
-    this.housekeepingService.setToken(housekeeping_store.default_properties.token);
-  }
+
   async handleSelectChange(e: CustomEvent) {
     try {
       e.stopPropagation();

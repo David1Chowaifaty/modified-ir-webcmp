@@ -12,6 +12,7 @@ import { ICountry } from '@/models/IBooking';
 import { colorVariants } from '../ui/ir-icons/icons';
 import { getPrivateNote } from '@/utils/booking';
 import { IPaymentAction, PaymentService } from '@/services/payment.service';
+import Token from '@/models/Token';
 @Component({
   tag: 'ir-booking-details',
   styleUrl: 'ir-booking-details.css',
@@ -71,6 +72,7 @@ export class IrBookingDetails {
   private bookingService = new BookingService();
   private roomService = new RoomService();
   private paymentService = new PaymentService();
+  private token = new Token();
 
   private dialogRef: HTMLIrDialogElement;
   private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
@@ -83,20 +85,15 @@ export class IrBookingDetails {
 
   componentWillLoad() {
     if (this.ticket !== '') {
-      calendar_data.token = this.ticket;
-      this.bookingService.setToken(this.ticket);
-      this.roomService.setToken(this.ticket);
       this.initializeApp();
+      this.token.setToken(this.ticket);
     }
   }
 
   @Watch('ticket')
   async ticketChanged() {
-    calendar_data.token = this.ticket;
-    this.paymentService.setToken(this.ticket);
-    this.bookingService.setToken(this.ticket);
-    this.roomService.setToken(this.ticket);
     this.initializeApp();
+    this.token.setToken(this.ticket);
   }
 
   @Listen('clickHanlder')
@@ -205,7 +202,6 @@ export class IrBookingDetails {
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
       ]);
-      this.paymentService.setToken(this.ticket);
       this.property_id = roomResponse?.My_Result?.id;
       //TODO:Reenable payment actions
       if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {

@@ -24,8 +24,6 @@ export class IrListingModal {
   private paymentService = new PaymentService();
 
   componentWillLoad() {
-    this.bookingListingsService.setToken(booking_listing.token);
-    this.paymentService.setToken(booking_listing.token);
     this.selectedDesignation = booking_listing.settlement_methods[0].name;
   }
 
