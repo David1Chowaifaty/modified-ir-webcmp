@@ -9,7 +9,6 @@ import interceptor_requests from '@/stores/ir-interceptor.store';
   scoped: true,
 })
 export class IrInterceptor {
-  @Prop() ticket: string;
   @State() isShown = false;
   @State() isLoading = false;
   @State() isUnassignedUnit = false;

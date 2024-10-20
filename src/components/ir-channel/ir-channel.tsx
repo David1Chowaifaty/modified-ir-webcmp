@@ -22,6 +22,7 @@ export class IrChannel {
   @Prop() language: string;
   @Prop() baseurl: string;
   @Prop() p: string;
+  @Prop() isSameSite: boolean;
 
   @State() channel_status: 'create' | 'edit' | null = null;
   @State() modal_cause: IModalCause | null = null;
@@ -32,6 +33,7 @@ export class IrChannel {
   private token = new Token();
 
   private irModalRef: HTMLIrModalElement;
+  private initializedApp: boolean = false;
 
   componentWillLoad() {
     this.isLoading = true;
@@ -64,6 +66,7 @@ export class IrChannel {
     const [, ,] = await Promise.all([this.channelService.getExposedChannels(), this.channelService.getExposedConnectedChannels(this.propertyid)]);
   }
   async initializeApp() {
+    this.initializedApp = true;
     if (!this.propertyid && !this.p) {
       throw new Error('Property ID or username is required');
     }
@@ -111,9 +114,22 @@ export class IrChannel {
   }
 
   @Watch('ticket')
-  async ticketChanged() {
+  ticketChanged(newValue: string, oldValue: string) {
+    if (newValue === oldValue) {
+      return;
+    }
     this.token.setToken(this.ticket);
     this.initializeApp();
+  }
+  @Watch('isSameSite')
+  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.token.setIsSameSite(newValue);
+    if (!this.initializedApp) {
+      this.initializeApp();
+    }
   }
 
   handleCancelModal(e: CustomEvent) {

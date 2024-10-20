@@ -76,278 +76,10 @@ export class IglooCalendar {
   private socket: Socket;
   private availabilityTimeout: NodeJS.Timeout;
   private token = new Token();
-
-  @Watch('ticket')
-  ticketChanged() {
-    this.token.setToken(this.ticket);
-    this.initializeApp();
-  }
+  private initializedApp: boolean = false;
 
   componentWillLoad() {
-    this.calDates = {
-      from: this.from_date,
-      to: this.to_date,
-    };
-    // this.token.setIsSameSite(this.isSameSite);
-    if (this.ticket !== '') {
-      this.token.setToken(this.ticket);
-      this.initializeApp();
-    }
-    this.calDates = {
-      from: this.from_date,
-      to: this.to_date,
-    };
-    handleUnAssignedDatesChange('unassigned_dates', newValue => {
-      if (Object.keys(newValue).length === 0 && this.highlightedDate !== '') {
-        this.highlightedDate = '';
-      }
-    });
-  }
-  setUpCalendarData(roomResp, bookingResp) {
-    console.log(roomResp);
-    this.calendarData.currency = roomResp['My_Result'].currency;
-    this.calendarData.allowedBookingSources = roomResp['My_Result'].allowed_booking_sources;
-    this.calendarData.adultChildConstraints = roomResp['My_Result'].adult_child_constraints;
-    console.log(this.calendarData.allowedBookingSources);
-    this.calendarData.legendData = this.getLegendData(roomResp);
-    this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
-    this.calendarData.from_date = bookingResp.My_Params_Get_Rooming_Data.FROM;
-    this.calendarData.to_date = bookingResp.My_Params_Get_Rooming_Data.TO;
-    this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
-    this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
-    this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
-    let bookings = bookingResp.myBookings || [];
-    bookings = bookings.filter(bookingEvent => {
-      const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
-      const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
-      return !toDate.isSame(fromDate);
-    });
-    this.calendarData.bookingEvents = bookings;
-
-    this.calendarData.toBeAssignedEvents = [];
-  }
-  async initializeApp() {
-    try {
-      let propertyId = this.propertyid;
-      if (!this.propertyid && !this.p) {
-        throw new Error('Property ID or username is required');
-      }
-      let roomResp = null;
-      if (!propertyId) {
-        console.log(propertyId);
-        const propertyData = await this.roomService.getExposedProperty({
-          id: 0,
-          aname: this.p,
-          language: this.language,
-          is_backend: true,
-        });
-        roomResp = propertyData;
-        propertyId = propertyData.My_Result.id;
-      }
-      this.property_id = propertyId;
-      const requests = [
-        this.bookingService.getCalendarData(propertyId, this.from_date, this.to_date),
-        this.bookingService.getCountries(this.language),
-        this.roomService.fetchLanguage(this.language),
-      ];
-
-      if (this.propertyid) {
-        requests.push(
-          this.roomService.getExposedProperty({
-            id: this.propertyid,
-            language: this.language,
-            is_backend: true,
-          }),
-        );
-      }
-
-      const results = await Promise.all(requests);
-
-      // const [_, , bookingResp, countryNodeList] = await Promise.all([
-      //   this.roomService.fetchData(this.propertyid, this.language),
-      //   this.roomService.fetchLanguage(this.language),
-      //   this.bookingService.getCalendarData(this.propertyid, this.from_date, this.to_date),
-      //   this.bookingService.getCountries(this.language),
-      // ]);
-      if (!roomResp) {
-        roomResp = results[results.length - 1];
-      }
-      const [bookingResp, countryNodeList] = results as any;
-      calendar_dates.days = bookingResp.days;
-      calendar_dates.months = bookingResp.months;
-      this.setRoomsData(roomResp);
-      this.countryNodeList = countryNodeList;
-      this.setUpCalendarData(roomResp, bookingResp);
-      let paymentMethods = roomResp['My_Result']['allowed_payment_methods'] as any[];
-      this.showPaymentDetails = paymentMethods.some(item => item.code === '001' || item.code === '004');
-      this.updateBookingEventsDateRange(this.calendarData.bookingEvents);
-      this.updateBookingEventsDateRange(this.calendarData.toBeAssignedEvents);
-      this.today = this.transformDateForScroll(new Date());
-      let startingDay: Date = new Date(this.calendarData.startingDate);
-      startingDay.setHours(0, 0, 0, 0);
-      this.days = bookingResp.days;
-      this.calendarData.days = this.days;
-      this.calendarData.monthsInfo = bookingResp.months;
-      calendar_dates.fromDate = this.calendarData.from_date;
-      calendar_dates.toDate = this.calendarData.to_date;
-      setTimeout(() => {
-        this.scrollToElement(this.today);
-      }, 200);
-      if (!this.calendarData.is_vacation_rental) {
-        const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, dateToFormattedString(new Date()), this.to_date);
-        this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: { ...this.unassignedDates, ...data } };
-        this.calendarData = { ...this.calendarData, unassignedDates: data };
-        addUnassingedDates(data);
-      }
-      this.socket = io('https://realtime.igloorooms.com/');
-      this.socket.on('MSG', async msg => {
-        let msgAsObject = JSON.parse(msg);
-        if (!msgAsObject) {
-          return;
-        }
-        const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
-
-        if (KEY.toString() !== this.property_id.toString()) {
-          return;
-        }
-
-        let result: any;
-        // console.log(REASON);
-        if (REASON === 'DELETE_CALENDAR_POOL' || REASON === 'GET_UNASSIGNED_DATES') {
-          result = PAYLOAD;
-        } else {
-          result = JSON.parse(PAYLOAD);
-        }
-        const resasons: bookingReasons[] = ['DORESERVATION', 'BLOCK_EXPOSED_UNIT', 'ASSIGN_EXPOSED_ROOM', 'REALLOCATE_EXPOSED_ROOM_BLOCK'];
-        if (resasons.includes(REASON)) {
-          let transformedBooking: RoomBookingDetails[] | RoomBlockDetails[];
-          if (REASON === 'BLOCK_EXPOSED_UNIT' || REASON === 'REALLOCATE_EXPOSED_ROOM_BLOCK') {
-            transformedBooking = [await transformNewBLockedRooms(result)];
-          } else {
-            console.log(result, REASON);
-            transformedBooking = transformNewBooking(result);
-            console.log(transformedBooking);
-          }
-          this.AddOrUpdateRoomBookings(transformedBooking, undefined);
-        } else if (REASON === 'DELETE_CALENDAR_POOL') {
-          console.log('delete calendar pool');
-          this.calendarData = {
-            ...this.calendarData,
-            bookingEvents: this.calendarData.bookingEvents.filter(e => e.POOL !== result),
-          };
-        } else if (REASON === 'GET_UNASSIGNED_DATES') {
-          function parseDateRange(str: string): Record<string, string> {
-            const result: Record<string, string> = {};
-            const pairs = str.split('|');
-
-            pairs.forEach(pair => {
-              const res = pair.split(':');
-              result[res[0]] = res[1];
-            });
-            return result;
-          }
-          const parsedResult = parseDateRange(result);
-          if (
-            !this.calendarData.is_vacation_rental &&
-            new Date(parsedResult.FROM_DATE).getTime() >= this.calendarData.startingDate &&
-            new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate
-          ) {
-            const data = await this.toBeAssignedService.getUnassignedDates(
-              this.property_id,
-              dateToFormattedString(new Date(parsedResult.FROM_DATE)),
-              dateToFormattedString(new Date(parsedResult.TO_DATE)),
-            );
-            addUnassingedDates(data);
-            // this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
-            this.unassignedDates = {
-              fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
-              toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
-              data,
-            };
-            // console.log(this.calendarData.unassignedDates, this.unassignedDates);
-            if (Object.keys(data).length === 0) {
-              removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
-              this.reduceAvailableUnitEvent.emit({
-                fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
-                toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
-              });
-            }
-          }
-        } else if (REASON === 'UPDATE_CALENDAR_AVAILABILITY') {
-          this.totalAvailabilityQueue.push(result);
-          if (this.totalAvailabilityQueue.length > 0) {
-            clearTimeout(this.availabilityTimeout);
-          }
-          this.availabilityTimeout = setTimeout(() => {
-            this.updateTotalAvailability();
-          }, 1000);
-        } else if (REASON === 'CHANGE_IN_DUE_AMOUNT') {
-          this.calendarData = {
-            ...this.calendarData,
-            bookingEvents: [
-              ...this.calendarData.bookingEvents.map(event => {
-                if (result.pools.includes(event.ID)) {
-                  return { ...event, BALANCE: result.due_amount };
-                }
-                return event;
-              }),
-            ],
-          };
-        } else if (REASON === 'CHANGE_IN_BOOK_STATUS') {
-          this.calendarData = {
-            ...this.calendarData,
-            bookingEvents: [
-              ...this.calendarData.bookingEvents.map(event => {
-                if (result.pools.includes(event.ID)) {
-                  return {
-                    ...event,
-                    STATUS: event.STATUS !== 'IN-HOUSE' ? bookingStatus[result.status_code] : result.status_code === '001' ? bookingStatus[result.status_code] : 'IN-HOUSE',
-                  };
-                }
-                return event;
-              }),
-            ],
-          };
-        } else if (REASON === 'NON_TECHNICAL_CHANGE_IN_BOOKING') {
-          this.calendarData = {
-            ...this.calendarData,
-            bookingEvents: [
-              ...this.calendarData.bookingEvents.map(event => {
-                if (event.BOOKING_NUMBER === result.booking_nbr) {
-                  return { ...event, PRIVATE_NOTE: getPrivateNote(result.extras) };
-                }
-                return event;
-              }),
-            ],
-          };
-        } else {
-          return;
-        }
-      });
-    } catch (error) {
-      console.error('Initializing Calendar Error', error);
-    }
-  }
-
-  private updateTotalAvailability() {
-    let days = [...calendar_dates.days];
-    this.totalAvailabilityQueue.forEach(queue => {
-      let selectedDate = new Date(queue.date);
-      selectedDate.setMilliseconds(0);
-      selectedDate.setSeconds(0);
-      selectedDate.setMinutes(0);
-      selectedDate.setHours(0);
-      //find the selected day
-      const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
-      if (index != -1) {
-        //find room_type_id
-        const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
-        if (room_type_index != -1) {
-          days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
-        }
-      }
-    });
-    calendar_dates.days = [...days];
+    this.init();
   }
   componentDidLoad() {
     this.scrollToElement(this.today);
@@ -471,13 +203,311 @@ export class IglooCalendar {
     }
   }
 
-  checkBookingAvailability(data) {
+  @Watch('ticket')
+  ticketChanged(newValue: string, oldValue: string) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.token.setToken(this.ticket);
+    this.initializeApp();
+  }
+  @Watch('isSameSite')
+  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.token.setIsSameSite(newValue);
+    if (!this.initializedApp) {
+      this.initializeApp();
+    }
+  }
+
+  private init() {
+    this.calDates = {
+      from: this.from_date,
+      to: this.to_date,
+    };
+    if (this.isSameSite) {
+      this.token.setIsSameSite(this.isSameSite);
+    }
+    if (this.ticket !== '') {
+      this.token.setToken(this.ticket);
+    }
+    if (this.ticket !== '' || this.isSameSite) {
+      this.initializeApp();
+    }
+    this.calDates = {
+      from: this.from_date,
+      to: this.to_date,
+    };
+    handleUnAssignedDatesChange('unassigned_dates', newValue => {
+      if (Object.keys(newValue).length === 0 && this.highlightedDate !== '') {
+        this.highlightedDate = '';
+      }
+    });
+  }
+  private setUpCalendarData(roomResp, bookingResp) {
+    console.log(roomResp);
+    this.calendarData.currency = roomResp['My_Result'].currency;
+    this.calendarData.allowedBookingSources = roomResp['My_Result'].allowed_booking_sources;
+    this.calendarData.adultChildConstraints = roomResp['My_Result'].adult_child_constraints;
+    console.log(this.calendarData.allowedBookingSources);
+    this.calendarData.legendData = this.getLegendData(roomResp);
+    this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
+    this.calendarData.from_date = bookingResp.My_Params_Get_Rooming_Data.FROM;
+    this.calendarData.to_date = bookingResp.My_Params_Get_Rooming_Data.TO;
+    this.calendarData.startingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.FROM).getTime();
+    this.calendarData.endingDate = new Date(bookingResp.My_Params_Get_Rooming_Data.TO).getTime();
+    this.calendarData.formattedLegendData = formatLegendColors(this.calendarData.legendData);
+    let bookings = bookingResp.myBookings || [];
+    bookings = bookings.filter(bookingEvent => {
+      const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+      const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+      return !toDate.isSame(fromDate);
+    });
+    this.calendarData.bookingEvents = bookings;
+
+    this.calendarData.toBeAssignedEvents = [];
+  }
+
+  async initializeApp() {
+    try {
+      this.initializedApp = true;
+      let propertyId = this.propertyid;
+      if (!this.propertyid && !this.p) {
+        throw new Error('Property ID or username is required');
+      }
+      let roomResp = null;
+      if (!propertyId) {
+        console.log(propertyId);
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+        });
+        roomResp = propertyData;
+        propertyId = propertyData.My_Result.id;
+      }
+      this.property_id = propertyId;
+      const requests = [
+        this.bookingService.getCalendarData(propertyId, this.from_date, this.to_date),
+        this.bookingService.getCountries(this.language),
+        this.roomService.fetchLanguage(this.language),
+      ];
+
+      if (this.propertyid) {
+        requests.push(
+          this.roomService.getExposedProperty({
+            id: this.propertyid,
+            language: this.language,
+            is_backend: true,
+          }),
+        );
+      }
+
+      const results = await Promise.all(requests);
+      if (!roomResp) {
+        roomResp = results[results.length - 1];
+      }
+      const [bookingResp, countryNodeList] = results as any;
+      calendar_dates.days = bookingResp.days;
+      calendar_dates.months = bookingResp.months;
+      this.setRoomsData(roomResp);
+      this.countryNodeList = countryNodeList;
+      this.setUpCalendarData(roomResp, bookingResp);
+      let paymentMethods = roomResp['My_Result']['allowed_payment_methods'] as any[];
+      this.showPaymentDetails = paymentMethods.some(item => item.code === '001' || item.code === '004');
+      this.updateBookingEventsDateRange(this.calendarData.bookingEvents);
+      this.updateBookingEventsDateRange(this.calendarData.toBeAssignedEvents);
+      this.today = this.transformDateForScroll(new Date());
+      let startingDay: Date = new Date(this.calendarData.startingDate);
+      startingDay.setHours(0, 0, 0, 0);
+      this.days = bookingResp.days;
+      this.calendarData.days = this.days;
+      this.calendarData.monthsInfo = bookingResp.months;
+      calendar_dates.fromDate = this.calendarData.from_date;
+      calendar_dates.toDate = this.calendarData.to_date;
+      setTimeout(() => {
+        this.scrollToElement(this.today);
+      }, 200);
+      if (!this.calendarData.is_vacation_rental) {
+        const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, dateToFormattedString(new Date()), this.to_date);
+        this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: { ...this.unassignedDates, ...data } };
+        this.calendarData = { ...this.calendarData, unassignedDates: data };
+        addUnassingedDates(data);
+      }
+      this.socket = io('https://realtime.igloorooms.com/');
+      this.socket.on('MSG', async msg => {
+        await this.handleSocketMessage(msg);
+      });
+    } catch (error) {
+      console.error('Initializing Calendar Error', error);
+    }
+  }
+
+  private async handleSocketMessage(msg: string) {
+    const msgAsObject = JSON.parse(msg);
+    if (!msgAsObject) {
+      return;
+    }
+
+    const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
+
+    if (KEY.toString() !== this.property_id.toString()) {
+      return;
+    }
+
+    let result: any;
+    if (['DELETE_CALENDAR_POOL', 'GET_UNASSIGNED_DATES'].includes(REASON)) {
+      result = PAYLOAD;
+    } else {
+      result = JSON.parse(PAYLOAD);
+    }
+
+    const reasonHandlers: { [key: string]: Function } = {
+      DORESERVATION: this.handleDoReservation,
+      BLOCK_EXPOSED_UNIT: this.handleBlockExposedUnit,
+      ASSIGN_EXPOSED_ROOM: this.handleAssignExposedRoom,
+      REALLOCATE_EXPOSED_ROOM_BLOCK: this.handleReallocateExposedRoomBlock,
+      DELETE_CALENDAR_POOL: this.handleDeleteCalendarPool,
+      GET_UNASSIGNED_DATES: this.handleGetUnassignedDates,
+      UPDATE_CALENDAR_AVAILABILITY: this.handleUpdateCalendarAvailability,
+      CHANGE_IN_DUE_AMOUNT: this.handleChangeInDueAmount,
+      CHANGE_IN_BOOK_STATUS: this.handleChangeInBookStatus,
+      NON_TECHNICAL_CHANGE_IN_BOOKING: this.handleNonTechnicalChangeInBooking,
+    };
+
+    const handler = reasonHandlers[REASON];
+    if (handler) {
+      await handler.call(this, result);
+    } else {
+      console.warn(`Unhandled REASON: ${REASON}`);
+    }
+  }
+
+  private async handleDoReservation(result: any) {
+    const transformedBooking = transformNewBooking(result);
+    this.AddOrUpdateRoomBookings(transformedBooking);
+  }
+
+  private async handleBlockExposedUnit(result: any) {
+    const transformedBooking = [await transformNewBLockedRooms(result)];
+    this.AddOrUpdateRoomBookings(transformedBooking);
+  }
+
+  private async handleAssignExposedRoom(result: any) {
+    const transformedBooking = transformNewBooking(result);
+    this.AddOrUpdateRoomBookings(transformedBooking);
+  }
+
+  private async handleReallocateExposedRoomBlock(result: any) {
+    await this.handleBlockExposedUnit(result);
+  }
+
+  private async handleDeleteCalendarPool(result: any) {
+    console.log('delete calendar pool');
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: this.calendarData.bookingEvents.filter(e => e.POOL !== result),
+    };
+  }
+
+  private async handleGetUnassignedDates(result: any) {
+    const parsedResult = this.parseDateRange(result);
+    if (
+      !this.calendarData.is_vacation_rental &&
+      new Date(parsedResult.FROM_DATE).getTime() >= this.calendarData.startingDate &&
+      new Date(parsedResult.TO_DATE).getTime() <= this.calendarData.endingDate
+    ) {
+      const data = await this.toBeAssignedService.getUnassignedDates(
+        this.property_id,
+        dateToFormattedString(new Date(parsedResult.FROM_DATE)),
+        dateToFormattedString(new Date(parsedResult.TO_DATE)),
+      );
+      addUnassingedDates(data);
+      this.unassignedDates = {
+        fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
+        toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
+        data,
+      };
+      if (Object.keys(data).length === 0) {
+        removeUnassignedDates(dateToFormattedString(new Date(parsedResult.FROM_DATE)), dateToFormattedString(new Date(parsedResult.TO_DATE)));
+        this.reduceAvailableUnitEvent.emit({
+          fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
+          toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
+        });
+      }
+    }
+  }
+
+  private parseDateRange(str: string): Record<string, string> {
+    const result: Record<string, string> = {};
+    const pairs = str.split('|');
+
+    pairs.forEach(pair => {
+      const res = pair.split(':');
+      result[res[0]] = res[1];
+    });
+    return result;
+  }
+
+  private handleUpdateCalendarAvailability(result: any) {
+    this.totalAvailabilityQueue.push(result);
+    if (this.totalAvailabilityQueue.length > 0) {
+      clearTimeout(this.availabilityTimeout);
+    }
+    this.availabilityTimeout = setTimeout(() => {
+      this.updateTotalAvailability();
+    }, 1000);
+  }
+
+  private handleChangeInDueAmount(result: any) {
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: this.calendarData.bookingEvents.map(event => {
+        if (result.pools.includes(event.ID)) {
+          return { ...event, BALANCE: result.due_amount };
+        }
+        return event;
+      }),
+    };
+  }
+
+  private handleChangeInBookStatus(result: any) {
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: this.calendarData.bookingEvents.map(event => {
+        if (result.pools.includes(event.ID)) {
+          return {
+            ...event,
+            STATUS: event.STATUS !== 'IN-HOUSE' ? bookingStatus[result.status_code] : result.status_code === '001' ? bookingStatus[result.status_code] : 'IN-HOUSE',
+          };
+        }
+        return event;
+      }),
+    };
+  }
+
+  private handleNonTechnicalChangeInBooking(result: any) {
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: this.calendarData.bookingEvents.map(event => {
+        if (event.BOOKING_NUMBER === result.booking_nbr) {
+          return { ...event, PRIVATE_NOTE: getPrivateNote(result.extras) };
+        }
+        return event;
+      }),
+    };
+  }
+
+  private checkBookingAvailability(data) {
     return this.calendarData.bookingEvents.some(
       booking => booking.ID === data.ID || (booking.FROM_DATE === data.FROM_DATE && booking.TO_DATE === data.TO_DATE && booking.PR_ID === data.PR_ID),
     );
   }
 
-  updateBookingEventsDateRange(eventData) {
+  private updateBookingEventsDateRange(eventData) {
     const now = moment();
     eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
@@ -510,7 +540,28 @@ export class IglooCalendar {
     });
   }
 
-  setRoomsData(roomServiceResp) {
+  private updateTotalAvailability() {
+    let days = [...calendar_dates.days];
+    this.totalAvailabilityQueue.forEach(queue => {
+      let selectedDate = new Date(queue.date);
+      selectedDate.setMilliseconds(0);
+      selectedDate.setSeconds(0);
+      selectedDate.setMinutes(0);
+      selectedDate.setHours(0);
+      //find the selected day
+      const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
+      if (index != -1) {
+        //find room_type_id
+        const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
+        if (room_type_index != -1) {
+          days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
+        }
+      }
+    });
+    calendar_dates.days = [...days];
+  }
+
+  private setRoomsData(roomServiceResp) {
     let roomsData: RoomDetail[] = new Array();
     if (roomServiceResp.My_Result?.roomtypes?.length) {
       roomsData = roomServiceResp.My_Result.roomtypes;
@@ -522,15 +573,15 @@ export class IglooCalendar {
     this.calendarData.roomsInfo = roomsData;
   }
 
-  getLegendData(aData) {
+  private getLegendData(aData) {
     return aData['My_Result'].calendar_legends;
   }
 
-  getDateStr(date, locale = 'default') {
+  private getDateStr(date, locale = 'default') {
     return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
   }
 
-  scrollToElement(goToDate) {
+  private scrollToElement(goToDate) {
     this.scrollContainer = this.scrollContainer || this.element.querySelector('.calendarScrollContainer');
     const topLeftCell = this.element.querySelector('.topLeftCell');
     const gotoDay = this.element.querySelector('.day-' + goToDate);
@@ -544,7 +595,7 @@ export class IglooCalendar {
       });
     }
   }
-  private AddOrUpdateRoomBookings(data: RoomBlockDetails[] | RoomBookingDetails[], pool: string | undefined) {
+  private AddOrUpdateRoomBookings(data: RoomBlockDetails[] | RoomBookingDetails[], pool: string | undefined = undefined) {
     let bookings = [...this.calendarData.bookingEvents];
     data.forEach(d => {
       if (!this.checkBookingAvailability(d)) {
@@ -629,7 +680,7 @@ export class IglooCalendar {
     }
   }
 
-  async addDatesToCalendar(fromDate: string, toDate: string) {
+  private async addDatesToCalendar(fromDate: string, toDate: string) {
     const results = await this.bookingService.getCalendarData(this.property_id, fromDate, toDate);
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
@@ -907,7 +958,7 @@ export class IglooCalendar {
     return (
       <Host>
         <ir-toast></ir-toast>
-        <ir-interceptor ticket={this.ticket}></ir-interceptor>
+        <ir-interceptor></ir-interceptor>
         <div id="iglooCalendar" class="igl-calendar">
           {this.shouldRenderCalendarView() ? (
             [

@@ -23,6 +23,7 @@ export class IrBookingListing {
   @Prop() propertyid: number;
   @Prop() rowCount: number = 10;
   @Prop() p: string;
+  @Prop() isSameSite: boolean;
 
   @State() isLoading = false;
   @State() currentPage = 1;
@@ -43,12 +44,18 @@ export class IrBookingListing {
     '003': 'badge-danger',
     '004': 'badge-danger',
   };
+  private initializedApp: boolean = false;
 
   componentWillLoad() {
     updateUserSelection('end_row', this.rowCount);
     booking_listing.rowCount = this.rowCount;
+    if (this.isSameSite) {
+      this.token.setIsSameSite(this.isSameSite);
+    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
+    }
+    if (this.ticket !== '' || this.isSameSite) {
       this.initializeApp();
     }
     onBookingListingChange('userSelection', async newValue => {
@@ -60,15 +67,27 @@ export class IrBookingListing {
     });
   }
   @Watch('ticket')
-  async ticketChanged(newValue: string, oldValue: string) {
-    if (newValue !== oldValue) {
-      this.token.setToken(this.ticket);
+  ticketChanged(newValue: string, oldValue: string) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.token.setToken(this.ticket);
+    this.initializeApp();
+  }
+  @Watch('isSameSite')
+  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.token.setIsSameSite(newValue);
+    if (!this.initializedApp) {
       this.initializeApp();
     }
   }
 
   async initializeApp() {
     try {
+      this.initializedApp = true;
       this.isLoading = true;
       if (!this.propertyid && !this.p) {
         throw new Error('Property ID or username is required');

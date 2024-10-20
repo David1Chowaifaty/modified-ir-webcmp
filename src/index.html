@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html dir="ltr" lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -14,7 +14,6 @@
   <script src="assets/scripts/bootstrap.bundle.min.js"></script>
   <script src="assets/scripts/toastr/toastr.min.js"></script>
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
-
   <script src="index.js"></script>
   <style>
     body {
@@ -25,28 +24,24 @@
 
 <body>
   <ir-common></ir-common>
-  <igl-book-property-container propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR">
-    <svg heigth="20" width="17.5" slot="trigger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-      <path
-        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-    </svg>
-
-  </igl-book-property-container>
+  <igloo-calendar currency-name="USD" propertyid="42" language="en"
+    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+
   <script>
     var today = new Date();
     today.setDate(today.getDate() - 1);
     var _FROM_DATE = today.toISOString().substring(0, 10)
     today.setDate(today.getDate() + 60);
     var _TO_DATE = today.toISOString().substring(0, 10)
-    const book_container = document.querySelector('igl-book-property-container')
-    book_container.from_date = _FROM_DATE;
-    book_container.to_date = _TO_DATE;
-
+    const calendar = document.querySelector("igloo-calendar");
+    calendar.from_date = _FROM_DATE;
+    calendar.to_date = _TO_DATE;
     setTimeout(() => {
       const ticket = getToken();
-      book_container.propertyid = getId();
-      book_container.ticket = ticket;
+      calendar.propertyid = getId();
+      // calendar.isSameSite = true
+      calendar.ticket = ticket;
     }, 300)
   </script>
 

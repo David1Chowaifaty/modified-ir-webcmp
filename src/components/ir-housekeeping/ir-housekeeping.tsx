@@ -3,7 +3,6 @@ import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
 import { updateHKStore } from '@/stores/housekeeping.store';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
-import axios from 'axios';
 
 @Component({
   tag: 'ir-housekeeping',
@@ -16,6 +15,7 @@ export class IrHousekeeping {
   @Prop() baseurl: string = '';
   @Prop() propertyid: number;
   @Prop() p: string;
+  @Prop() isSameSite: boolean;
 
   @State() isLoading = false;
 
@@ -23,12 +23,16 @@ export class IrHousekeeping {
   private houseKeepingService = new HouseKeepingService();
   private token = new Token();
 
+  private initializedApp: boolean = false;
+
   componentWillLoad() {
-    if (this.baseurl) {
-      axios.defaults.baseURL = this.baseurl;
+    if (this.isSameSite) {
+      this.token.setIsSameSite(this.isSameSite);
     }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
+    }
+    if (this.ticket !== '' || this.isSameSite) {
       this.initializeApp();
     }
   }
@@ -39,15 +43,27 @@ export class IrHousekeeping {
     await this.houseKeepingService.getExposedHKSetup(this.propertyid);
   }
   @Watch('ticket')
-  async ticketChanged(newValue: string, oldValue: string) {
-    if (newValue !== oldValue) {
-      this.token.setToken(this.ticket);
+  ticketChanged(newValue: string, oldValue: string) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.token.setToken(this.ticket);
+    this.initializeApp();
+  }
+  @Watch('isSameSite')
+  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.token.setIsSameSite(newValue);
+    if (!this.initializedApp) {
       this.initializeApp();
     }
   }
 
   async initializeApp() {
     try {
+      this.initializedApp = true;
       this.isLoading = true;
       let propertyId = this.propertyid;
       if (!propertyId) {
