@@ -78,7 +78,6 @@ export namespace Components {
     }
     interface IglBookPropertyContainer {
         "from_date": string;
-        "isSameSite": boolean;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -250,7 +249,6 @@ export namespace Components {
     interface IglooCalendar {
         "currencyName": string;
         "from_date": string;
-        "isSameSite": boolean;
         "language": string;
         "loadingMessage": string;
         "p": string;
@@ -290,7 +288,6 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
-        "isSameSite": boolean;
         "is_from_front_desk": boolean;
         "language": string;
         "p": string;
@@ -301,7 +298,6 @@ export namespace Components {
         "booking": Booking;
     }
     interface IrBookingListing {
-        "isSameSite": boolean;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -337,7 +333,6 @@ export namespace Components {
     }
     interface IrChannel {
         "baseurl": string;
-        "isSameSite": boolean;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -439,7 +434,6 @@ export namespace Components {
     interface IrHkArchive {
     }
     interface IrHkTasks {
-        "isSameSite": boolean;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -455,8 +449,6 @@ export namespace Components {
         "user": THKUser | null;
     }
     interface IrHousekeeping {
-        "baseurl": string;
-        "isSameSite": boolean;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -556,7 +548,6 @@ export namespace Components {
     interface IrPaymentOption {
         "defaultStyles": boolean;
         "hideLogs": boolean;
-        "isSameSite": boolean;
         "language": string;
         "p": string;
         "propertyid": string;
@@ -2341,7 +2332,6 @@ declare namespace LocalJSX {
     }
     interface IglBookPropertyContainer {
         "from_date"?: string;
-        "isSameSite"?: boolean;
         "language"?: string;
         "onResetBookingData"?: (event: IglBookPropertyContainerCustomEvent<null>) => void;
         "p"?: string;
@@ -2570,7 +2560,6 @@ declare namespace LocalJSX {
     interface IglooCalendar {
         "currencyName"?: string;
         "from_date"?: string;
-        "isSameSite"?: boolean;
         "language"?: string;
         "loadingMessage"?: string;
         "onCalculateUnassignedDates"?: (event: IglooCalendarCustomEvent<any>) => void;
@@ -2618,7 +2607,6 @@ declare namespace LocalJSX {
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
-        "isSameSite"?: boolean;
         "is_from_front_desk"?: boolean;
         "language"?: string;
         "onBookingChanged"?: (event: IrBookingDetailsCustomEvent<Booking>) => void;
@@ -2634,7 +2622,6 @@ declare namespace LocalJSX {
         "onResetBookingData"?: (event: IrBookingExtraNoteCustomEvent<Booking | null>) => void;
     }
     interface IrBookingListing {
-        "isSameSite"?: boolean;
         "language"?: string;
         "p"?: string;
         "propertyid"?: number;
@@ -2671,7 +2658,6 @@ declare namespace LocalJSX {
     }
     interface IrChannel {
         "baseurl"?: string;
-        "isSameSite"?: boolean;
         "language"?: string;
         "p"?: string;
         "propertyid"?: number;
@@ -2788,7 +2774,6 @@ declare namespace LocalJSX {
     interface IrHkArchive {
     }
     interface IrHkTasks {
-        "isSameSite"?: boolean;
         "language"?: string;
         "p"?: string;
         "propertyid"?: number;
@@ -2808,8 +2793,6 @@ declare namespace LocalJSX {
         "user"?: THKUser | null;
     }
     interface IrHousekeeping {
-        "baseurl"?: string;
-        "isSameSite"?: boolean;
         "language"?: string;
         "p"?: string;
         "propertyid"?: number;
@@ -2925,7 +2908,6 @@ declare namespace LocalJSX {
     interface IrPaymentOption {
         "defaultStyles"?: boolean;
         "hideLogs"?: boolean;
-        "isSameSite"?: boolean;
         "language"?: string;
         "onToast"?: (event: IrPaymentOptionCustomEvent<IToast1>) => void;
         "p"?: string;

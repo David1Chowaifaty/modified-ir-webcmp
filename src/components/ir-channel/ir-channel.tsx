@@ -2,7 +2,6 @@ import { RoomService } from '@/services/room.service';
 import channels_data, { resetStore, selectChannel, setChannelIdAndActiveState, testConnection, updateChannelSettings } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, Watch, h, Element, State, Fragment, Listen } from '@stencil/core';
-import axios from 'axios';
 import { actions } from './data';
 import { IModalCause } from './types';
 import { ChannelService } from '@/services/channel.service';
@@ -22,7 +21,6 @@ export class IrChannel {
   @Prop() language: string;
   @Prop() baseurl: string;
   @Prop() p: string;
-  @Prop() isSameSite: boolean;
 
   @State() channel_status: 'create' | 'edit' | null = null;
   @State() modal_cause: IModalCause | null = null;
@@ -33,13 +31,9 @@ export class IrChannel {
   private token = new Token();
 
   private irModalRef: HTMLIrModalElement;
-  private initializedApp: boolean = false;
 
   componentWillLoad() {
     this.isLoading = true;
-    if (this.baseurl) {
-      axios.defaults.baseURL = this.baseurl;
-    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
       this.initializeApp();
@@ -66,7 +60,6 @@ export class IrChannel {
     const [, ,] = await Promise.all([this.channelService.getExposedChannels(), this.channelService.getExposedConnectedChannels(this.propertyid)]);
   }
   async initializeApp() {
-    this.initializedApp = true;
     if (!this.propertyid && !this.p) {
       throw new Error('Property ID or username is required');
     }
@@ -120,16 +113,6 @@ export class IrChannel {
     }
     this.token.setToken(this.ticket);
     this.initializeApp();
-  }
-  @Watch('isSameSite')
-  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
-    if (newValue === oldValue) {
-      return;
-    }
-    this.token.setIsSameSite(newValue);
-    if (!this.initializedApp) {
-      this.initializeApp();
-    }
   }
 
   handleCancelModal(e: CustomEvent) {

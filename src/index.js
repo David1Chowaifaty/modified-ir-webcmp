@@ -25,6 +25,46 @@ const authenticate = async (username = "A35", password = "12345") => {
         return null;
     }
 };
+/* Helper function to calculate a date range based on a starting date (can be a Date object or a string) and a maximum span of months.
+* 
+* This function accepts a `fromDate` (either a Date object or a string in YYYY-MM-DD format) and a maximum number of months to generate a date range.
+* The function returns an object containing the calculated `_FROM_DATE` (the start date) and `_TO_DATE` 
+* (the end date, calculated by adding the specified number of months).
+* 
+* @param {Date|string} fromDate - The starting date as a Date object or a string in YYYY-MM-DD format (e.g., "2024-10-01").
+* @param {number} maxMonths - The maximum number of months to calculate the `toDate` (e.g., 3 for 3 months).
+* 
+* @returns {Object} An object containing:
+*   - `_FROM_DATE`: The provided `fromDate` in YYYY-MM-DD format.
+*   - `_TO_DATE`: The calculated date after adding the specified months, in YYYY-MM-DD format.
+* 
+* Example usage:
+*   const { _FROM_DATE, _TO_DATE } = calculateDateRange("2024-10-01", 3);
+*   console.log(_FROM_DATE);  // "2024-10-01"
+*   console.log(_TO_DATE);    // "2025-01-01" (approximately 3 months later)
+*/
+function calculateDateRange(fromDate, maxMonths) {
+    // If fromDate is a string, convert it to a Date object
+    const startDate = typeof fromDate === 'string' ? new Date(fromDate) : fromDate;
+
+    // Ensure the fromDate is a valid Date object
+    if (isNaN(startDate)) {
+        throw new Error("Invalid start date. Please provide a valid Date object or a string in YYYY-MM-DD format.");
+    }
+
+    // Set the _FROM_DATE to the provided fromDate
+    const _FROM_DATE = startDate.toISOString().substring(0, 10);
+
+    // Calculate the _TO_DATE by adding the specified number of months
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + maxMonths);
+    const _TO_DATE = endDate.toISOString().substring(0, 10);
+
+    return {
+        _FROM_DATE,
+        _TO_DATE
+    };
+}
 const logout = async () => {
     try {
         console.log("logout")

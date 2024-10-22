@@ -19,7 +19,6 @@ export class IrPaymentOption {
   @Prop() language: string = 'en';
   @Prop() defaultStyles: boolean = true;
   @Prop() hideLogs: boolean = true;
-  @Prop() isSameSite: boolean;
 
   @State() paymentOptions: PaymentOption[] = [];
   @State() isLoading: boolean = false;
@@ -33,16 +32,10 @@ export class IrPaymentOption {
 
   private propertyOptionsById: Map<string | number, PaymentOption>;
   private propertyOptionsByCode: Map<string | number, PaymentOption>;
-  private initializedApp: boolean = false;
 
   componentWillLoad() {
-    if (this.isSameSite) {
-      this.token.setIsSameSite(this.isSameSite);
-    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
-    }
-    if (this.ticket !== '' || this.isSameSite) {
       this.init();
     }
   }
@@ -55,18 +48,7 @@ export class IrPaymentOption {
     this.init();
   }
 
-  @Watch('isSameSite')
-  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
-    if (newValue === oldValue) {
-      return;
-    }
-    this.token.setIsSameSite(newValue);
-    if (!this.initializedApp) {
-      this.init();
-    }
-  }
   init() {
-    this.initializedApp = true;
     this.initServices();
     this.fetchData();
   }

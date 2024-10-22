@@ -4,20 +4,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>Booking listing</title>
+    <title>Front desk</title>
     <!-- This script file contains functions for injecting required scripts and handling authentication -->
     <script src="https://www.igloorooms.com/backend-cmp-injector.js"></script>
 </head>
 
 <body>
+
     <ir-common></ir-common>
-    <ir-booking-listing language="en"></ir-booking-listing>
+    <igloo-calendar language="en"></igloo-calendar>
     <link rel="stylesheet" href="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/toastr/toastr.css"
         type="text/css">
 
     <script>
         /**
-        * Initializes the Booking listing component by setting necessary properties and authenticating the user.
+        * Initializes the calendar component by setting necessary properties and authenticating the user.
         * 
         * This function attempts to authenticate the user using their username and password. If the user
         * is authenticated successfully, the authentication token (ticket) will be retrieved and assigned
@@ -38,8 +39,8 @@
                 const password = "password";  // Replace with the actual password and store it securely
                 // const aName = "propertyAname";  // Replace with the actual property aName, required when logging in as MPO
 
-                // Select the ir-booking-listing component from the DOM
-                const booking_listing = document.querySelector("ir-booking-listing");
+                // Select the igloo-calendar component from the DOM
+                const calendar = document.querySelector("igloo-calendar");
 
                 // Standard login to obtain a token (ticket)
                 const token = await login(username, password);
@@ -49,9 +50,18 @@
 
 
                 // If the booking listing component exists, set its `propertyid` and `ticket` attributes
-                if (booking_listing) {
-                    booking_listing.p = username;  // Sets the `p` (propertyid or username) attribute
-                    booking_listing.ticket = token;  // Sets the `ticket` (authentication token) attribute
+                if (calendar) {
+                    const from_date = new Date();
+                    from_date.setDate(from_date.getDate() - 1);
+                    /*
+                     * Helper function to calculate a date range based on a starting date (can be a Date object or a string) and a maximum span of months. 
+                     * For more information about this method check https://www.igloorooms.com/backend-cmp-injector.js
+                    */
+                    const { _FROM_DATE, _TO_DATE } = calculateDateRange(from_date, 3);
+                    calendar.from_date = _FROM_DATE;
+                    calendar.to_date = _TO_DATE;
+                    calendar.p = username;  // Sets the `p` (username) attribute
+                    calendar.ticket = token;  // Sets the `ticket` (authentication token) attribute
                 }
 
             } catch (error) {
@@ -60,6 +70,7 @@
         };
         // Initialize the booking listing on page load
         init();
+
     </script>
 
 </body>

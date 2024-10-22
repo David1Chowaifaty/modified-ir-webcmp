@@ -93,18 +93,16 @@ export class IrListingHeader {
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
               <h3 class="flex-fill">{locales.entries?.Lcz_Bookings}</h3>
               <div>
-                {booking_listing.token && (
-                  <igl-book-property-container
-                    p={this.p}
-                    withIrToastAndInterceptor={false}
-                    propertyid={this.propertyId}
-                    language={this.language}
-                    title={locales.entries.Lcz_CreateNewBooking}
-                    ticket={booking_listing.token}
-                  >
-                    <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
-                  </igl-book-property-container>
-                )}
+                <igl-book-property-container
+                  p={this.p}
+                  withIrToastAndInterceptor={false}
+                  propertyid={this.propertyId}
+                  language={this.language}
+                  title={locales.entries.Lcz_CreateNewBooking}
+                  ticket={booking_listing.token}
+                >
+                  <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
+                </igl-book-property-container>
               </div>
             </div>
             <h3 class="d-none d-md-block">{locales.entries?.Lcz_Bookings}</h3>
@@ -134,18 +132,16 @@ export class IrListingHeader {
             </form>
           </div>
           <div class="d-none d-md-block">
-            {booking_listing.token && (
-              <igl-book-property-container
-                p={this.p}
-                withIrToastAndInterceptor={false}
-                propertyid={this.propertyId}
-                language={this.language}
-                title={locales.entries.Lcz_CreateNewBooking}
-                ticket={booking_listing.token}
-              >
-                <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
-              </igl-book-property-container>
-            )}
+            <igl-book-property-container
+              p={this.p}
+              withIrToastAndInterceptor={false}
+              propertyid={this.propertyId}
+              language={this.language}
+              title={locales.entries.Lcz_CreateNewBooking}
+              ticket={booking_listing.token}
+            >
+              <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
+            </igl-book-property-container>
           </div>
         </section>
         <section class="d-flex align-items-center justify-evenly seperator-container d-sm-none">

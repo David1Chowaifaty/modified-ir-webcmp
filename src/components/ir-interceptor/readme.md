@@ -10,7 +10,6 @@
 | Property           | Attribute | Description | Type       | Default                                                                          |
 | ------------------ | --------- | ----------- | ---------- | -------------------------------------------------------------------------------- |
 | `handledEndpoints` | --        |             | `string[]` | `['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings']` |
-| `ticket`           | `ticket`  |             | `string`   | `undefined`                                                                      |
 
 
 ## Events

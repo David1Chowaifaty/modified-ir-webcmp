@@ -17,7 +17,6 @@ export class IglBookPropertyContainer {
   @Prop() propertyid: number;
   @Prop() from_date: string;
   @Prop() to_date: string;
-  @Prop() isSameSite: boolean;
   @Prop() withIrToastAndInterceptor: boolean = true;
 
   @State() bookingItem: IglBookPropertyPayloadPlusBooking | null;
@@ -30,7 +29,6 @@ export class IglBookPropertyContainer {
   private bookingService = new BookingService();
   private roomService = new RoomService();
   private token = new Token();
-  private initializedApp: boolean = false;
 
   setRoomsData(roomServiceResp) {
     let roomsData: { [key: string]: any }[] = new Array();
@@ -44,7 +42,6 @@ export class IglBookPropertyContainer {
   }
   async initializeApp() {
     try {
-      this.initializedApp = true;
       if (!this.propertyid && !this.p) {
         throw new Error('Property ID or username is required');
       }
@@ -69,13 +66,8 @@ export class IglBookPropertyContainer {
     }
   }
   componentWillLoad() {
-    if (this.isSameSite) {
-      this.token.setIsSameSite(this.isSameSite);
-    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
-    }
-    if (this.ticket !== '' || this.isSameSite) {
       this.initializeApp();
     }
   }
@@ -86,16 +78,6 @@ export class IglBookPropertyContainer {
     }
     this.token.setToken(this.ticket);
     this.initializeApp();
-  }
-  @Watch('isSameSite')
-  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
-    if (newValue === oldValue) {
-      return;
-    }
-    this.token.setIsSameSite(newValue);
-    if (!this.initializedApp) {
-      this.initializeApp();
-    }
   }
   handleCloseBookingWindow() {
     this.bookingItem = null;

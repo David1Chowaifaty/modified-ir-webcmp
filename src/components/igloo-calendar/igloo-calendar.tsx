@@ -31,7 +31,6 @@ export class IglooCalendar {
   @Prop() currencyName: string;
   @Prop() ticket: string = '';
   @Prop() p: string;
-  @Prop() isSameSite: boolean = false;
 
   @Element() private element: HTMLElement;
 
@@ -76,7 +75,6 @@ export class IglooCalendar {
   private socket: Socket;
   private availabilityTimeout: NodeJS.Timeout;
   private token = new Token();
-  private initializedApp: boolean = false;
 
   componentWillLoad() {
     this.init();
@@ -211,29 +209,14 @@ export class IglooCalendar {
     this.token.setToken(this.ticket);
     this.initializeApp();
   }
-  @Watch('isSameSite')
-  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
-    if (newValue === oldValue) {
-      return;
-    }
-    this.token.setIsSameSite(newValue);
-    if (!this.initializedApp) {
-      this.initializeApp();
-    }
-  }
 
   private init() {
     this.calDates = {
       from: this.from_date,
       to: this.to_date,
     };
-    if (this.isSameSite) {
-      this.token.setIsSameSite(this.isSameSite);
-    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
-    }
-    if (this.ticket !== '' || this.isSameSite) {
       this.initializeApp();
     }
     this.calDates = {
@@ -272,7 +255,6 @@ export class IglooCalendar {
 
   async initializeApp() {
     try {
-      this.initializedApp = true;
       let propertyId = this.propertyid;
       if (!this.propertyid && !this.p) {
         throw new Error('Property ID or username is required');

@@ -27,7 +27,6 @@ export class IrBookingDetails {
   @Prop() propertyid: number;
   @Prop() is_from_front_desk = false;
   @Prop() p: string;
-  @Prop() isSameSite: boolean = false;
   // Booleans Conditions
   @Prop() hasPrint: boolean = false;
   @Prop() hasReceipt: boolean = false;
@@ -83,16 +82,10 @@ export class IrBookingDetails {
     '003': 'bg-ir-red',
     '004': 'bg-ir-red',
   };
-  private initializedApp: boolean = false;
 
   componentWillLoad() {
-    if (this.isSameSite) {
-      this.token.setIsSameSite(this.isSameSite);
-    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
-    }
-    if (this.ticket !== '' || this.isSameSite) {
       this.initializeApp();
     }
   }
@@ -104,16 +97,6 @@ export class IrBookingDetails {
     }
     this.token.setToken(this.ticket);
     this.initializeApp();
-  }
-  @Watch('isSameSite')
-  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
-    if (newValue === oldValue) {
-      return;
-    }
-    this.token.setIsSameSite(newValue);
-    if (!this.initializedApp) {
-      this.initializeApp();
-    }
   }
 
   @Listen('clickHanlder')
@@ -216,7 +199,6 @@ export class IrBookingDetails {
   }
   private async initializeApp() {
     try {
-      this.initializedApp = true;
       const [roomResponse, languageTexts, countriesList, bookingDetails] = await Promise.all([
         this.roomService.getExposedProperty({ id: this.propertyid || 0, language: this.language, aname: this.p }),
         this.roomService.fetchLanguage(this.language),

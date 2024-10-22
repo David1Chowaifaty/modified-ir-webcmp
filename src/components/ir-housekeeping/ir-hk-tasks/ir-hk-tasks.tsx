@@ -18,7 +18,6 @@ export class IrHkTasks {
   @Prop() ticket: string = '';
   @Prop() propertyid: number;
   @Prop() p: string;
-  @Prop() isSameSite: boolean;
 
   @State() isLoading = false;
   @State() selectedDuration = '';
@@ -32,16 +31,9 @@ export class IrHkTasks {
   private houseKeepingService = new HouseKeepingService();
   private token = new Token();
 
-  private initializedApp: boolean = false;
-
   componentWillLoad() {
-    if (this.isSameSite) {
-      this.token.setIsSameSite(this.isSameSite);
-    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
-    }
-    if (this.ticket !== '' || this.isSameSite) {
       this.initializeApp();
     }
   }
@@ -75,16 +67,6 @@ export class IrHkTasks {
     }
     this.token.setToken(this.ticket);
     this.initializeApp();
-  }
-  @Watch('isSameSite')
-  async isSameSiteChanged(newValue: boolean, oldValue: boolean) {
-    if (newValue === oldValue) {
-      return;
-    }
-    this.token.setIsSameSite(newValue);
-    if (!this.initializedApp) {
-      this.initializeApp();
-    }
   }
   handleCheckChange(e: CustomEvent, action: IPendingActions) {
     if (e.detail) {
@@ -121,7 +103,6 @@ export class IrHkTasks {
   }
   async initializeApp() {
     try {
-      this.initializedApp = true;
       this.isLoading = true;
       let propertyId = this.propertyid;
       if (!propertyId) {
