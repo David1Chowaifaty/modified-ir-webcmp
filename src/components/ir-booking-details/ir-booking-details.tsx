@@ -55,7 +55,7 @@ export class IrBookingDetails {
   @State() defaultTexts: ILocale;
   // Rerender Flag
   @State() rerenderFlag = false;
-  @State() sidebarState: 'guest' | 'pickup' | 'extra_note' | null = null;
+  @State() sidebarState: 'guest' | 'pickup' | 'extra_note' | 'amenity' | null = null;
   @State() isUpdateClicked = false;
 
   @State() pms_status: IPmsLog;
@@ -63,6 +63,8 @@ export class IrBookingDetails {
   @State() userCountry: ICountry | null = null;
   @State() paymentActions: IPaymentAction[];
   @State() property_id: number;
+  // TODO:Implement the Amenity type
+  @State() selectedAmenity: 'Amenity' | null = null;
 
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
@@ -105,6 +107,9 @@ export class IrBookingDetails {
     switch (target.id) {
       case 'pickup':
         this.sidebarState = 'pickup';
+        return;
+      case 'amenity-add':
+        this.sidebarState = 'amenity';
         return;
       case 'close':
         this.closeSidebar.emit(null);
@@ -373,6 +378,14 @@ export class IrBookingDetails {
         );
       case 'extra_note':
         return <ir-booking-extra-note slot="sidebar-body" booking={this.bookingData} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
+      case 'amenity':
+        return (
+          <ir-amenities-config
+            booking={{ from_date: this.bookingData.from_date, to_date: this.bookingData.to_date, currency: this.bookingData.currency }}
+            slot="sidebar-body"
+            onCloseModal={() => (this.sidebarState = null)}
+          ></ir-amenities-config>
+        );
       default:
         return null;
     }
@@ -568,6 +581,10 @@ export class IrBookingDetails {
               })}
             </div>
             <ir-pickup-view booking={this.bookingData}></ir-pickup-view>
+            <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
+              <p class={'font-size-large p-0 m-0 '}>Extra Services</p>
+              <ir-button id="amenity-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
+            </div>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details paymentActions={this.paymentActions} defaultTexts={this.defaultTexts} bookingDetails={this.bookingData}></ir-payment-details>

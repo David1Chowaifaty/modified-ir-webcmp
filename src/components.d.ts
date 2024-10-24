@@ -256,6 +256,11 @@ export namespace Components {
         "ticket": string;
         "to_date": string;
     }
+    interface IrAmenitiesConfig {
+        "booking": Pick<Booking, 'from_date' | 'to_date' | 'currency'>;
+    }
+    interface IrAmenity {
+    }
     interface IrAutocomplete {
         "danger_border": boolean;
         "disabled": boolean;
@@ -422,6 +427,8 @@ export namespace Components {
     }[];
   };
         "object": any;
+    }
+    interface IrExtraAmenities {
     }
     interface IrGuestInfo {
         "booking_nbr": string;
@@ -789,6 +796,10 @@ export interface IglToBeAssignedCustomEvent<T> extends CustomEvent<T> {
 export interface IglooCalendarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglooCalendarElement;
+}
+export interface IrAmenitiesConfigCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrAmenitiesConfigElement;
 }
 export interface IrAutocompleteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1374,6 +1385,30 @@ declare global {
         prototype: HTMLIglooCalendarElement;
         new (): HTMLIglooCalendarElement;
     };
+    interface HTMLIrAmenitiesConfigElementEventMap {
+        "closeModal": null;
+        "resetBookingData": null;
+    }
+    interface HTMLIrAmenitiesConfigElement extends Components.IrAmenitiesConfig, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrAmenitiesConfigElementEventMap>(type: K, listener: (this: HTMLIrAmenitiesConfigElement, ev: IrAmenitiesConfigCustomEvent<HTMLIrAmenitiesConfigElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrAmenitiesConfigElementEventMap>(type: K, listener: (this: HTMLIrAmenitiesConfigElement, ev: IrAmenitiesConfigCustomEvent<HTMLIrAmenitiesConfigElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrAmenitiesConfigElement: {
+        prototype: HTMLIrAmenitiesConfigElement;
+        new (): HTMLIrAmenitiesConfigElement;
+    };
+    interface HTMLIrAmenityElement extends Components.IrAmenity, HTMLStencilElement {
+    }
+    var HTMLIrAmenityElement: {
+        prototype: HTMLIrAmenityElement;
+        new (): HTMLIrAmenityElement;
+    };
     interface HTMLIrAutocompleteElementEventMap {
         "comboboxValue": { key: string; data: unknown };
         "inputCleared": null;
@@ -1666,6 +1701,12 @@ declare global {
     var HTMLIrDropdownElement: {
         prototype: HTMLIrDropdownElement;
         new (): HTMLIrDropdownElement;
+    };
+    interface HTMLIrExtraAmenitiesElement extends Components.IrExtraAmenities, HTMLStencilElement {
+    }
+    var HTMLIrExtraAmenitiesElement: {
+        prototype: HTMLIrExtraAmenitiesElement;
+        new (): HTMLIrExtraAmenitiesElement;
     };
     interface HTMLIrGuestInfoElementEventMap {
         "closeSideBar": null;
@@ -2226,6 +2267,8 @@ declare global {
         "igl-tba-category-view": HTMLIglTbaCategoryViewElement;
         "igl-to-be-assigned": HTMLIglToBeAssignedElement;
         "igloo-calendar": HTMLIglooCalendarElement;
+        "ir-amenities-config": HTMLIrAmenitiesConfigElement;
+        "ir-amenity": HTMLIrAmenityElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
@@ -2247,6 +2290,7 @@ declare global {
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dialog": HTMLIrDialogElement;
         "ir-dropdown": HTMLIrDropdownElement;
+        "ir-extra-amenities": HTMLIrExtraAmenitiesElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
         "ir-hk-tasks": HTMLIrHkTasksElement;
@@ -2572,6 +2616,13 @@ declare namespace LocalJSX {
         "ticket"?: string;
         "to_date"?: string;
     }
+    interface IrAmenitiesConfig {
+        "booking"?: Pick<Booking, 'from_date' | 'to_date' | 'currency'>;
+        "onCloseModal"?: (event: IrAmenitiesConfigCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IrAmenitiesConfigCustomEvent<null>) => void;
+    }
+    interface IrAmenity {
+    }
     interface IrAutocomplete {
         "danger_border"?: boolean;
         "disabled"?: boolean;
@@ -2760,6 +2811,8 @@ declare namespace LocalJSX {
   };
         "object"?: any;
         "onDropdownItemCLicked"?: (event: IrDropdownCustomEvent<{ name: string; object: any }>) => void;
+    }
+    interface IrExtraAmenities {
     }
     interface IrGuestInfo {
         "booking_nbr"?: string;
@@ -3099,6 +3152,8 @@ declare namespace LocalJSX {
         "igl-tba-category-view": IglTbaCategoryView;
         "igl-to-be-assigned": IglToBeAssigned;
         "igloo-calendar": IglooCalendar;
+        "ir-amenities-config": IrAmenitiesConfig;
+        "ir-amenity": IrAmenity;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking": IrBooking;
         "ir-booking-details": IrBookingDetails;
@@ -3120,6 +3175,7 @@ declare namespace LocalJSX {
         "ir-delete-modal": IrDeleteModal;
         "ir-dialog": IrDialog;
         "ir-dropdown": IrDropdown;
+        "ir-extra-amenities": IrExtraAmenities;
         "ir-guest-info": IrGuestInfo;
         "ir-hk-archive": IrHkArchive;
         "ir-hk-tasks": IrHkTasks;
@@ -3187,6 +3243,8 @@ declare module "@stencil/core" {
             "igl-tba-category-view": LocalJSX.IglTbaCategoryView & JSXBase.HTMLAttributes<HTMLIglTbaCategoryViewElement>;
             "igl-to-be-assigned": LocalJSX.IglToBeAssigned & JSXBase.HTMLAttributes<HTMLIglToBeAssignedElement>;
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
+            "ir-amenities-config": LocalJSX.IrAmenitiesConfig & JSXBase.HTMLAttributes<HTMLIrAmenitiesConfigElement>;
+            "ir-amenity": LocalJSX.IrAmenity & JSXBase.HTMLAttributes<HTMLIrAmenityElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
@@ -3208,6 +3266,7 @@ declare module "@stencil/core" {
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
+            "ir-extra-amenities": LocalJSX.IrExtraAmenities & JSXBase.HTMLAttributes<HTMLIrExtraAmenitiesElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
             "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;

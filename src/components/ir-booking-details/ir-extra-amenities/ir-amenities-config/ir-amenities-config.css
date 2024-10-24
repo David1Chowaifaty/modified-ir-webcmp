@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+.currency-ph {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 0 0.25rem;
+  border-top: 1px solid #cacfe7;
+  border-bottom: 1px solid #cacfe7;
+  border-left: 1px solid transparent;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+.price-input-group:focus-within .currency-ph,
+.cost-input-group:focus-within .currency-ph {
+  border-top: 1px solid #1e9ff2;
+  border-bottom: 1px solid #1e9ff2;
+  border-left: 1px solid #1e9ff2;
+}
+.price-input:focus {
+  border-right-width: 1px !important;
+}
+
+.is-invalid {
+  background-image: none !important;
+}
+.price-input,
+.cost-input {
+  border-left: 0;
+}
+@media (min-width: 640px) {
+  .row-group {
+    display: flex;
+    align-items: center;
+  }
+  .until-prepend,
+  .cost-input-placeholder {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+  .date-from,
+  .price-input {
+    border-right-width: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}
