@@ -157,7 +157,7 @@ export class IglBookPropertyHeader {
           )}
           <ir-button
             btn_id="check_availability"
-            isLoading={isRequestPending('/Get_Exposed_Booking_Availability')}
+            isLoading={isRequestPending('/Check_Availability')}
             icon=""
             size="sm"
             class="ml-2"

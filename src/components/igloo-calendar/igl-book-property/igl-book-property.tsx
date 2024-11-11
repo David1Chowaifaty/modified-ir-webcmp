@@ -244,11 +244,12 @@ export class IglBookProperty {
         agent_id: is_in_agent_mode ? this.sourceOption['tag'] : null,
         is_in_agent_mode,
       });
+      console.log(data);
       if (!this.isEventType('EDIT_BOOKING')) {
         this.defaultData.defaultDateRange.fromDate = new Date(this.dateRangeData.fromDate);
         this.defaultData.defaultDateRange.toDate = new Date(this.dateRangeData.toDate);
       }
-      this.defaultData = { ...this.defaultData, roomsInfo: data.roomtypes };
+      this.defaultData = { ...this.defaultData, roomsInfo: data };
     } catch (error) {
       // toastr.error(error);
     }

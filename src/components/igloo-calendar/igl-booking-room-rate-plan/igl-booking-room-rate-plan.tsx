@@ -30,7 +30,7 @@ export class IglBookingRoomRatePlan {
   @State() ratePlanChangedState: boolean = false;
   getAvailableRooms(assignable_units: any[]) {
     let result = [];
-    assignable_units.forEach(unit => {
+    assignable_units?.forEach(unit => {
       if (unit.Is_Fully_Available) {
         result.push({ name: unit.name, id: unit.pr_id });
       }
@@ -45,11 +45,16 @@ export class IglBookingRoomRatePlan {
     if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
       return false;
     } else {
-      return this.selectedData.is_closed || this.totalAvailableRooms === 0 || (calendar_data.is_frontdesk_enabled && this.selectedData.physicalRooms.length === 0);
+      return (
+        !this.ratePlanData.is_available_to_book ||
+        this.selectedData.is_closed ||
+        this.totalAvailableRooms === 0 ||
+        (calendar_data.is_frontdesk_enabled && this.selectedData.physicalRooms.length === 0)
+      );
     }
   }
 
-  setAvailableRooms(data) {
+  private setAvailableRooms(data) {
     let availableRooms = this.getAvailableRooms(data);
     if (this.bookingType === 'EDIT_BOOKING' && this.shouldBeDisabled) {
       if (this.selectedRoom) {
@@ -70,21 +75,25 @@ export class IglBookingRoomRatePlan {
     }
     return availableRooms;
   }
-  getSelectedOffering(value: any) {
-    return this.ratePlanData.variations.find(variation => variation.adult_child_offering === value);
+  private generateAdultChildOfferingValue(variation) {
+    // return `${variation.adult_nbr}a_${variation.child_nbr}_c`;
+    return this.formatVariation(variation);
+  }
+  private getSelectedOffering(value: any) {
+    return this.ratePlanData.variations.find(variation => this.generateAdultChildOfferingValue(variation) === value);
   }
 
   updateSelectedRatePlan(data) {
     this.selectedData = {
       is_bed_configuration_enabled: this.is_bed_configuration_enabled,
       ratePlanId: data.id,
-      adult_child_offering: data.variations[0].adult_child_offering,
+      adult_child_offering: this.generateAdultChildOfferingValue(data.variations[0]),
       rateType: 1,
       totalRooms: 0,
-      rate: data.variations[0].amount ?? 0,
+      rate: data.variations[0]?.amount ?? 0,
       ratePlanName: data.name,
-      adultCount: data.variations[0].adult_nbr,
-      childrenCount: data.variations[0].child_nbr,
+      adultCount: data.variations[0]?.adult_nbr,
+      childrenCount: data.variations[0]?.child_nbr,
       cancelation: data.cancelation,
       guarantee: data.guarantee,
       isRateModified: false,
@@ -115,7 +124,7 @@ export class IglBookingRoomRatePlan {
   async ratePlanDataChanged(newData) {
     this.selectedData = {
       ...this.selectedData,
-      adult_child_offering: newData.variations[0].adult_child_offering,
+      adult_child_offering: this.generateAdultChildOfferingValue(newData.variations[0]),
       adultCount: newData.variations[0].adult_nbr,
       childrenCount: newData.variations[0].child_nbr,
       rate: this.handleRateDaysUpdate(),
@@ -226,7 +235,32 @@ export class IglBookingRoomRatePlan {
     }
     return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.selectedData.rate / this.dateDifference).toFixed(2);
   }
+  private formatVariation(v: any): any {
+    const adults = `${v?.adult_nbr} ${v?.adult_nbr === 1 ? locales.entries['Lcz_Adult']?.toLowerCase() : locales.entries['Lcz_Adults']?.toLowerCase()}`;
+    const children =
+      v?.child_nbr > 0 ? `${v?.child_nbr}  ${v?.child_nbr > 1 ? locales.entries['Lcz_Children']?.toLowerCase() : locales.entries['Lcz_Child']?.toLowerCase()}` : null;
+    return children ? `${adults} ${children}` : adults;
+  }
+  private getTooltipMessages() {
+    const selectedRatePlan = this.ratePlanData?.variations?.find(variation => this.selectedData?.adult_child_offering === this.generateAdultChildOfferingValue(variation));
+    if (!selectedRatePlan) {
+      return;
+    }
+    const cancellationMessage = selectedRatePlan.applicable_policies?.find(p => p.type === 'cancelation')?.combined_statement;
+    const guaranteeMessage = selectedRatePlan.applicable_policies?.find(p => p.type === 'guarantee')?.combined_statement;
+    if (cancellationMessage && guaranteeMessage) {
+      return `<b><u>Cancellation:</u></b> ${cancellationMessage}<br/><b><u>Guarantee:</u></b> ${guaranteeMessage}`;
+    }
+    if (!cancellationMessage && guaranteeMessage) {
+      return guaranteeMessage;
+    }
+    return cancellationMessage;
+  }
   render() {
+    console.log(this.ratePlanData);
+    if (!this.ratePlanData.is_available_to_book) {
+      return null;
+    }
     return (
       <Host>
         <div class="d-flex flex-column m-0 p-0 flex-lg-row align-items-lg-center justify-content-lg-between ">
@@ -239,115 +273,122 @@ export class IglBookingRoomRatePlan {
             ) : (
               <span>{this.ratePlanData.short_name}</span>
             )}
-            <ir-tooltip message={this.ratePlanData.cancelation + this.ratePlanData.guarantee}></ir-tooltip>
+            <ir-tooltip message={this.getTooltipMessages()}></ir-tooltip>
           </div>
 
-          <div class={'d-md-flex justify-content-md-end  align-items-md-center flex-fill rateplan-container'}>
-            <div class="mt-1 mt-md-0 flex-fill max-w-300">
-              <fieldset class="position-relative">
-                <select disabled={this.disableForm()} class="form-control  input-sm" id={v4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
-                  {this.ratePlanData.variations.map(variation => (
-                    <option value={variation.adult_child_offering} selected={this.selectedData.adult_child_offering === variation.adult_child_offering}>
-                      {variation.adult_child_offering}
-                    </option>
-                  ))}
-                </select>
-              </fieldset>
-            </div>
-            <div class={'m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1 '}>
-              <div class=" d-flex  m-0 p-0 rate-total-night-view  mt-0">
-                <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
-                  <div class="input-group-prepend">
-                    <span data-disabled={this.disableForm()} data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text new-currency" id="basic-addon1">
-                      {/* {getCurrencySymbol(this.currency.code)} */}
-                      {this.currency.symbol}
-                    </span>
-                  </div>
-                  <input
-                    onFocus={() => (this.isInputFocused = true)}
-                    onBlur={() => (this.isInputFocused = false)}
-                    disabled={this.disableForm()}
-                    type="text"
-                    class="form-control pl-0 input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
-                    value={this.renderRate()}
-                    id={v4()}
-                    placeholder={locales.entries.Lcz_Rate || 'Rate'}
-                    onInput={(event: InputEvent) => this.handleInput(event)}
-                  />
-                  {/* <span class="currency">{getCurrencySymbol(this.currency.code)}</span> */}
-                </fieldset>
-                <fieldset class="position-relative m-0 total-nights-container p-0 ">
-                  <select
-                    disabled={this.disableForm()}
-                    class="form-control input-sm m-0 nightBorder rounded-0 m-0  py-0"
-                    id={v4()}
-                    onChange={evt => this.handleDataChange('rateType', evt)}
-                  >
-                    {this.ratePricingMode.map(data => (
-                      <option value={data.CODE_NAME} selected={this.selectedData.rateType === +data.CODE_NAME}>
-                        {data.CODE_VALUE_EN}
+          {this.ratePlanData.is_available_to_book ? (
+            <div class={'d-md-flex justify-content-md-end  align-items-md-center flex-fill rateplan-container'}>
+              <div class="mt-1 mt-md-0 flex-fill max-w-300">
+                <fieldset class="position-relative">
+                  <select disabled={this.disableForm()} class="form-control  input-sm" id={v4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
+                    {this.ratePlanData.variations.map(variation => (
+                      <option
+                        value={this.generateAdultChildOfferingValue(variation)}
+                        selected={this.selectedData.adult_child_offering === this.generateAdultChildOfferingValue(variation)}
+                      >
+                        {this.formatVariation(variation)}
                       </option>
                     ))}
                   </select>
                 </fieldset>
               </div>
-
-              {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (
-                <div class="flex-fill  mt-lg-0 ml-1 m-0 mt-md-0 p-0">
-                  <fieldset class="position-relative">
-                    <select
-                      disabled={this.selectedData.rate === 0 || this.disableForm()}
-                      class="form-control input-sm"
+              <div class={'m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1 '}>
+                <div class=" d-flex  m-0 p-0 rate-total-night-view  mt-0">
+                  <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container  ">
+                    <div class="input-group-prepend">
+                      <span data-disabled={this.disableForm()} data-state={this.isInputFocused ? 'focus' : ''} class="input-group-text new-currency" id="basic-addon1">
+                        {/* {getCurrencySymbol(this.currency.code)} */}
+                        {this.currency.symbol}
+                      </span>
+                    </div>
+                    <input
+                      onFocus={() => (this.isInputFocused = true)}
+                      onBlur={() => (this.isInputFocused = false)}
+                      disabled={this.disableForm()}
+                      type="text"
+                      class="form-control pl-0 input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
+                      value={this.renderRate()}
                       id={v4()}
-                      onChange={evt => this.handleDataChange('totalRooms', evt)}
+                      placeholder={locales.entries.Lcz_Rate || 'Rate'}
+                      onInput={(event: InputEvent) => this.handleInput(event)}
+                    />
+                    {/* <span class="currency">{getCurrencySymbol(this.currency.code)}</span> */}
+                  </fieldset>
+                  <fieldset class="position-relative m-0 total-nights-container p-0 ">
+                    <select
+                      disabled={this.disableForm()}
+                      class="form-control input-sm m-0 nightBorder rounded-0 m-0  py-0"
+                      id={v4()}
+                      onChange={evt => this.handleDataChange('rateType', evt)}
                     >
-                      {Array.from({ length: this.totalAvailableRooms + 1 }, (_, i) => i).map(i => (
-                        <option value={i} selected={this.selectedData.totalRooms === i}>
-                          {i}
+                      {this.ratePricingMode.map(data => (
+                        <option value={data.CODE_NAME} selected={this.selectedData.rateType === +data.CODE_NAME}>
+                          {data.CODE_VALUE_EN}
                         </option>
                       ))}
                     </select>
                   </fieldset>
                 </div>
-              ) : null}
-            </div>
 
-            {this.bookingType === 'EDIT_BOOKING' ? (
-              <Fragment>
-                <div class=" m-0 p-0  mt-lg-0  ml-md-1 mt-md-1 d-none d-md-block">
-                  <fieldset class="position-relative">
-                    <input
-                      disabled={this.disableForm()}
-                      type="radio"
-                      name="ratePlanGroup"
-                      value="1"
-                      onChange={evt => this.handleDataChange('totalRooms', evt)}
-                      checked={this.selectedData.totalRooms === 1}
-                    />
-                  </fieldset>
-                </div>
+                {this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' ? (
+                  <div class="flex-fill  mt-lg-0 ml-1 m-0 mt-md-0 p-0">
+                    <fieldset class="position-relative">
+                      <select
+                        disabled={this.selectedData.rate === 0 || this.disableForm()}
+                        class="form-control input-sm"
+                        id={v4()}
+                        onChange={evt => this.handleDataChange('totalRooms', evt)}
+                      >
+                        {Array.from({ length: this.totalAvailableRooms + 1 }, (_, i) => i).map(i => (
+                          <option value={i} selected={this.selectedData.totalRooms === i}>
+                            {i}
+                          </option>
+                        ))}
+                      </select>
+                    </fieldset>
+                  </div>
+                ) : null}
+              </div>
+
+              {this.bookingType === 'EDIT_BOOKING' ? (
+                <Fragment>
+                  <div class=" m-0 p-0  mt-lg-0  ml-md-1 mt-md-1 d-none d-md-block">
+                    <fieldset class="position-relative">
+                      <input
+                        disabled={this.disableForm()}
+                        type="radio"
+                        name="ratePlanGroup"
+                        value="1"
+                        onChange={evt => this.handleDataChange('totalRooms', evt)}
+                        checked={this.selectedData.totalRooms === 1}
+                      />
+                    </fieldset>
+                  </div>
+                  <button
+                    disabled={this.selectedData.rate === -1 || this.disableForm()}
+                    type="button"
+                    class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 d-md-none "
+                    onClick={() => this.bookProperty()}
+                  >
+                    {this.selectedData.totalRooms === 1 ? locales.entries.Lcz_Current : locales.entries.Lcz_Select}
+                  </button>
+                </Fragment>
+              ) : null}
+
+              {this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (
                 <button
-                  disabled={this.selectedData.rate === -1 || this.disableForm()}
+                  disabled={this.selectedData.rate === -1 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
                   type="button"
-                  class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 d-md-none "
+                  class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 "
                   onClick={() => this.bookProperty()}
                 >
-                  {this.selectedData.totalRooms === 1 ? locales.entries.Lcz_Current : locales.entries.Lcz_Select}
+                  {locales.entries.Lcz_Book}
                 </button>
-              </Fragment>
-            ) : null}
-
-            {this.bookingType === 'BAR_BOOKING' || this.bookingType === 'SPLIT_BOOKING' ? (
-              <button
-                disabled={this.selectedData.rate === -1 || this.disableForm() || (this.bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
-                type="button"
-                class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1  mt-1 "
-                onClick={() => this.bookProperty()}
-              >
-                {locales.entries.Lcz_Book}
-              </button>
-            ) : null}
-          </div>
+              ) : null}
+            </div>
+          ) : (
+            <p>Not available</p>
+          )}
         </div>
       </Host>
     );

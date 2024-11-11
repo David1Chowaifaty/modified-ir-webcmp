@@ -121,7 +121,7 @@ export class BookingService {
   }): Promise<BookingDetails> {
     try {
       const { adultChildCount, currency, ...rest } = props;
-      const { data } = await axios.post(`/Get_Exposed_Booking_Availability`, {
+      const { data } = await axios.post(`/Check_Availability`, {
         ...rest,
         adult_nbr: adultChildCount.adult,
         child_nbr: adultChildCount.child,
@@ -131,13 +131,58 @@ export class BookingService {
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }
-      return data['My_Result'];
+      return this.modifyRateplans(this.sortRoomTypes(data['My_Result'], { adult_nbr: Number(adultChildCount.adult), child_nbr: Number(adultChildCount.child) }));
     } catch (error) {
       console.error(error);
       throw new Error(error);
     }
   }
+  private sortRoomTypes(roomTypes, userCriteria: { adult_nbr: number; child_nbr: number }) {
+    return roomTypes.sort((a, b) => {
+      // Priority to available rooms
+      if (a.is_available_to_book && !b.is_available_to_book) return -1;
+      if (!a.is_available_to_book && b.is_available_to_book) return 1;
 
+      // Check for variations where is_calculated is true and amount is 0 or null
+      const zeroCalculatedA = a.rateplans?.some(plan => plan.variations?.some(variation => variation.discounted_amount === 0 || variation.discounted_amount === null));
+      const zeroCalculatedB = b.rateplans?.some(plan => plan.variations?.some(variation => variation.discounted_amount === 0 || variation.discounted_amount === null));
+
+      // Prioritize these types to be before inventory 0 but after all available ones
+      if (zeroCalculatedA && !zeroCalculatedB) return 1;
+      if (!zeroCalculatedA && zeroCalculatedB) return -1;
+
+      // Check for exact matching variations based on user criteria
+      const matchA = a.rateplans?.some(plan =>
+        plan.variations?.some(variation => variation.adult_nbr === userCriteria.adult_nbr && variation.child_nbr === userCriteria.child_nbr),
+      );
+      const matchB = b.rateplans?.some(plan =>
+        plan.variations?.some(variation => variation.adult_nbr === userCriteria.adult_nbr && variation.child_nbr === userCriteria.child_nbr),
+      );
+
+      if (matchA && !matchB) return -1;
+      if (!matchA && matchB) return 1;
+
+      // Sort by the highest variation amount
+      const maxVariationA = Math.max(...a.rateplans.flatMap(plan => plan.variations?.map(variation => variation.discounted_amount ?? 0)));
+      const maxVariationB = Math.max(...b.rateplans.flatMap(plan => plan.variations?.map(variation => variation.discounted_amount ?? 0)));
+
+      if (maxVariationA < maxVariationB) return -1;
+      if (maxVariationA > maxVariationB) return 1;
+
+      return 0;
+    });
+  }
+  private modifyRateplans(roomTypes) {
+    return roomTypes?.map(rt => ({ ...rt, rateplans: rt.rateplans?.map(rp => ({ ...rp, variations: this.sortVariations(rp?.variations ?? []) })) }));
+  }
+  private sortVariations(variations) {
+    return variations.sort((a, b) => {
+      if (a.adult_nbr !== b.adult_nbr) {
+        return b.adult_nbr - a.adult_nbr;
+      }
+      return b.child_nbr - a.child_nbr;
+    });
+  }
   public async getCountries(language: string): Promise<ICountry[]> {
     try {
       const { data } = await axios.post(`/Get_Exposed_Countries`, {

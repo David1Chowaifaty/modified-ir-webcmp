@@ -62,12 +62,7 @@ export class IrRoomNights {
         const lastDay = this.selectedRoom?.days[this.selectedRoom.days.length - 1];
         //let first_rate = this.selectedRoom.days[0].amount;
         if (moment(this.toDate).add(-1, 'days').isSame(moment(lastDay.date))) {
-          const amount = await this.fetchBookingAvailability(
-            this.fromDate,
-            this.selectedRoom.days[0].date,
-            this.selectedRoom.rateplan.id,
-            this.selectedRoom.rateplan.selected_variation.adult_child_offering,
-          );
+          const amount = await this.fetchBookingAvailability(this.fromDate, this.selectedRoom.days[0].date, this.selectedRoom.rateplan.id);
           const newDatesArr = getDaysArray(this.selectedRoom.days[0].date, this.fromDate);
           this.isEndDateBeforeFromDate = true;
           this.rates;
@@ -81,12 +76,7 @@ export class IrRoomNights {
           ];
           this.defaultTotalNights = this.rates.length - this.selectedRoom.days.length;
         } else {
-          const amount = await this.fetchBookingAvailability(
-            lastDay.date,
-            moment(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'),
-            this.selectedRoom.rateplan.id,
-            this.selectedRoom.rateplan.selected_variation.adult_child_offering,
-          );
+          const amount = await this.fetchBookingAvailability(lastDay.date, moment(this.toDate, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'), this.selectedRoom.rateplan.id);
           const newDatesArr = getDaysArray(lastDay.date, this.toDate);
           this.rates = [
             ...this.selectedRoom.days,
@@ -124,7 +114,7 @@ export class IrRoomNights {
     }
     this.rates = days;
   }
-  async fetchBookingAvailability(from_date: string, to_date: string, rate_plan_id: number, selected_variation: string) {
+  async fetchBookingAvailability(from_date: string, to_date: string, rate_plan_id: number) {
     try {
       this.initialLoading = true;
       const bookingAvailability = await this.bookingService.getBookingAvailability({
@@ -139,16 +129,22 @@ export class IrRoomNights {
         currency: this.bookingEvent.currency,
         room_type_ids: [this.selectedRoom.roomtype.id],
       });
-      this.inventory = bookingAvailability.roomtypes[0].inventory;
-      const rate_plan_index = bookingAvailability.roomtypes[0].rateplans.find(rate => rate.id === rate_plan_id);
-      if (!rate_plan_index || !rate_plan_index.variations) {
+      this.inventory = bookingAvailability[0].inventory;
+      const rate_plan = bookingAvailability[0].rateplans.find(rate => rate.id === rate_plan_id);
+      if (!rate_plan || !rate_plan.variations) {
         this.inventory = null;
         return null;
       }
-      const { amount } = rate_plan_index.variations?.find(variation => variation.adult_child_offering === selected_variation);
-      return amount;
+      const selected_variation = rate_plan.variations?.find(
+        variation =>
+          variation.adult_nbr === this.selectedRoom.rateplan.selected_variation.adult_nbr && variation.child_nbr === this.selectedRoom.rateplan.selected_variation.child_nbr,
+      );
+      if (!selected_variation) {
+        return null;
+      }
+      return selected_variation.amount;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       this.initialLoading = false;
     }
