@@ -12,6 +12,8 @@ import { IToast } from "./components/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
+import { RatePlan, RoomType, Variation } from "./models/property";
+import { IRatePlanSelection } from "./stores/booking.store";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { TIcons } from "./components/ui/ir-icons/icons";
@@ -31,6 +33,8 @@ export { IToast } from "./components/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
+export { RatePlan, RoomType, Variation } from "./models/property";
+export { IRatePlanSelection } from "./stores/booking.store";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { TIcons } from "./components/ui/ir-icons/icons";
@@ -141,29 +145,36 @@ export namespace Components {
         "bookingType": string;
         "currency": any;
         "dateDifference": number;
-        "defaultData": { [key: string]: any };
         "defaultRoomId": any;
         "fullyBlocked": boolean;
         "index": number;
         "isBookDisabled": boolean;
         "is_bed_configuration_enabled": boolean;
         "physicalrooms": any;
-        "ratePlanData": { [key: string]: any };
+        "ratePlan": RatePlan;
         "ratePricingMode": any[];
+        "roomTypeId": number;
+        "roomTypeInventory": number;
         "selectedRoom": any;
         "shouldBeDisabled": boolean;
         "totalAvailableRooms": number;
+        "visibleInventory"?: | IRatePlanSelection
+    | {
+        reserved: number;
+        visibleInventory?: number;
+        selected_variation: Variation;
+        // view_mode: 'stay' | 'night';
+      };
     }
     interface IglBookingRooms {
         "bookingType": string;
         "currency": any;
         "dateDifference": number;
-        "defaultData": Map<string, any>;
         "initialRoomIds": any;
         "isBookDisabled": boolean;
         "ratePricingMode": any[];
         "roomInfoId": number | null;
-        "roomTypeData": { [key: string]: any };
+        "roomType": RoomType;
     }
     interface IglCalBody {
         "calendarData": { [key: string]: any };
@@ -1129,7 +1140,6 @@ declare global {
         new (): HTMLIglBookingOverviewPageElement;
     };
     interface HTMLIglBookingRoomRatePlanElementEventMap {
-        "dataUpdateEvent": { [key: string]: any };
         "gotoSplitPageTwoEvent": { [key: string]: any };
     }
     interface HTMLIglBookingRoomRatePlanElement extends Components.IglBookingRoomRatePlan, HTMLStencilElement {
@@ -2419,32 +2429,38 @@ declare namespace LocalJSX {
         "bookingType"?: string;
         "currency"?: any;
         "dateDifference"?: number;
-        "defaultData"?: { [key: string]: any };
         "defaultRoomId"?: any;
         "fullyBlocked"?: boolean;
         "index"?: number;
         "isBookDisabled"?: boolean;
         "is_bed_configuration_enabled"?: boolean;
-        "onDataUpdateEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "onGotoSplitPageTwoEvent"?: (event: IglBookingRoomRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "physicalrooms"?: any;
-        "ratePlanData"?: { [key: string]: any };
+        "ratePlan"?: RatePlan;
         "ratePricingMode"?: any[];
+        "roomTypeId"?: number;
+        "roomTypeInventory"?: number;
         "selectedRoom"?: any;
         "shouldBeDisabled"?: boolean;
         "totalAvailableRooms"?: number;
+        "visibleInventory"?: | IRatePlanSelection
+    | {
+        reserved: number;
+        visibleInventory?: number;
+        selected_variation: Variation;
+        // view_mode: 'stay' | 'night';
+      };
     }
     interface IglBookingRooms {
         "bookingType"?: string;
         "currency"?: any;
         "dateDifference"?: number;
-        "defaultData"?: Map<string, any>;
         "initialRoomIds"?: any;
         "isBookDisabled"?: boolean;
         "onDataUpdateEvent"?: (event: IglBookingRoomsCustomEvent<{ [key: string]: any }>) => void;
         "ratePricingMode"?: any[];
         "roomInfoId"?: number | null;
-        "roomTypeData"?: { [key: string]: any };
+        "roomType"?: RoomType;
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };

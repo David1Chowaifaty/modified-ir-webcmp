@@ -11,6 +11,7 @@ import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { ICurrency } from '@/models/calendarData';
+import { resetBookingStore } from '@/stores/booking.store';
 @Component({
   tag: 'igl-book-property',
   styleUrls: ['igl-book-property.css'],
@@ -232,7 +233,8 @@ export class IglBookProperty {
   async initializeBookingAvailability(from_date: string, to_date: string) {
     const is_in_agent_mode = this.sourceOption['type'] === 'TRAVEL_AGENCY';
     try {
-      const room_type_ids = this.defaultData.roomsInfo.map(room => room.id);
+      const room_type_ids_to_update = this.isEventType('EDIT_BOOKING') ? [this.defaultData.RATE_TYPE] : [];
+      const room_type_ids = this.isEventType('BAR_BOOKING') ? this.defaultData.roomsInfo.map(room => room.id) : [];
       const data = await this.bookingService.getBookingAvailability({
         from_date,
         to_date,
@@ -243,6 +245,7 @@ export class IglBookProperty {
         currency: this.currency,
         agent_id: is_in_agent_mode ? this.sourceOption['tag'] : null,
         is_in_agent_mode,
+        room_type_ids_to_update,
       });
       console.log(data);
       if (!this.isEventType('EDIT_BOOKING')) {
@@ -264,7 +267,7 @@ export class IglBookProperty {
     return (this.defaultData.hasOwnProperty('splitBookingEvents') && this.defaultData.splitBookingEvents) || [];
   }
   closeWindow() {
-    this.dateRangeData = {};
+    resetBookingStore();
     this.closeBookingWindow.emit();
     document.removeEventListener('keydown', this.handleKeyDown);
   }

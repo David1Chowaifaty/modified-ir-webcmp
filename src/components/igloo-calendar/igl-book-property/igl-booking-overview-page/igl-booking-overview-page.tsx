@@ -2,6 +2,7 @@ import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stenci
 import { TAdultChildConstraints, TSourceOptions } from '../../../../models/igl-book-property';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import moment from 'moment';
+import booking_store from '@/stores/booking.store';
 @Component({
   tag: 'igl-booking-overview-page',
   styleUrl: 'igl-booking-overview-page.css',
@@ -44,7 +45,6 @@ export class IglBookingOverviewPage {
     return from_date.add(-2, 'weeks').format('YYYY-MM-DD');
   }
   render() {
-    //console.log(this.bookingData);
     return (
       <Host>
         <igl-book-property-header
@@ -66,31 +66,27 @@ export class IglBookingOverviewPage {
         ></igl-book-property-header>
         {/* {this.adultChildCount.adult === 0 && <p class={'col text-left'}>Please select the number of guests</p>} */}
         <div class=" text-left">
-          {isRequestPending('/Get_Exposed_Booking_Availability') && this.isEventType('EDIT_BOOKING') ? (
+          {isRequestPending('/Check_Availability') && this.isEventType('EDIT_BOOKING') ? (
             <div class="loading-container">
               <div class="loader"></div>
             </div>
           ) : (
             <Fragment>
-              {this.bookingData?.roomsInfo?.map(roomInfo => {
-                //console.log(this.selectedRooms);
-                return (
-                  <igl-booking-rooms
-                    initialRoomIds={this.initialRoomIds}
-                    isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
-                    key={`room-info-${roomInfo.id}`}
-                    currency={this.currency}
-                    ratePricingMode={this.ratePricingMode}
-                    dateDifference={this.dateRangeData.dateDifference}
-                    bookingType={this.bookingData.event_type}
-                    roomTypeData={roomInfo}
-                    class="mt-2 mb-1 p-0"
-                    roomInfoId={this.selectedRooms.has(`c_${roomInfo.id}`) ? roomInfo.id : null}
-                    defaultData={this.selectedRooms.get(`c_${roomInfo.id}`)}
-                    onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
-                  ></igl-booking-rooms>
-                );
-              })}
+              {booking_store.roomTypes?.map(roomType => (
+                <igl-booking-rooms
+                  initialRoomIds={this.initialRoomIds}
+                  isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
+                  key={`room-info-${roomType.id}`}
+                  currency={this.currency}
+                  ratePricingMode={this.ratePricingMode}
+                  dateDifference={this.dateRangeData.dateDifference}
+                  bookingType={this.bookingData.event_type}
+                  roomType={roomType}
+                  class="mt-2 mb-1 p-0"
+                  roomInfoId={this.selectedRooms.has(`c_${roomType.id}`) ? roomType.id : null}
+                  onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
+                ></igl-booking-rooms>
+              ))}
             </Fragment>
           )}
         </div>

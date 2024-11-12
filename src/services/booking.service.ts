@@ -4,6 +4,7 @@ import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthTyp
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString, extras } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
 import { Booking, Day, Guest, IBookingPickupInfo, IPmsLog } from '../models/booking.dto';
+import booking_store from '@/stores/booking.store';
 export interface IBookingParams {
   bookedByInfoData: any;
   check_in: boolean;
@@ -115,6 +116,7 @@ export class BookingService {
     adultChildCount: { adult: number; child: number };
     language: string;
     room_type_ids: number[];
+    room_type_ids_to_update?: number[];
     currency: { id: number; code: string };
     is_in_agent_mode?: boolean;
     agent_id?: string | number;
@@ -131,7 +133,10 @@ export class BookingService {
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }
-      return this.modifyRateplans(this.sortRoomTypes(data['My_Result'], { adult_nbr: Number(adultChildCount.adult), child_nbr: Number(adultChildCount.child) }));
+      const results = this.modifyRateplans(this.sortRoomTypes(data['My_Result'], { adult_nbr: Number(adultChildCount.adult), child_nbr: Number(adultChildCount.child) }));
+      booking_store.roomTypes = [...results];
+      booking_store.tax_statement = { message: data.My_Result.tax_statement };
+      return results;
     } catch (error) {
       console.error(error);
       throw new Error(error);
