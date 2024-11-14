@@ -205,6 +205,7 @@ export interface IVariations {
   adult_nbr: number;
   amount: number | null;
   child_nbr: number;
+  infant_nbr: number;
 }
 export interface RoomType {
   availabilities: null;
