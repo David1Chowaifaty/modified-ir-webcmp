@@ -52,6 +52,7 @@ export class IglBookingRooms {
                 currency={this.currency}
                 dateDifference={this.dateDifference}
                 ratePlan={ratePlan}
+                roomTypeId={this.roomType.id}
                 totalAvailableRooms={this.roomsDistributions[index]}
                 bookingType={this.bookingType}
                 shouldBeDisabled={shouldBeDisabled}

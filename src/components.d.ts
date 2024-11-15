@@ -12,7 +12,7 @@ import { IToast } from "./components/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
-import { RatePlan, RoomType, Variation } from "./models/property";
+import { RatePlan, RoomType } from "./models/property";
 import { IRatePlanSelection } from "./stores/booking.store";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
@@ -33,7 +33,7 @@ export { IToast } from "./components/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
-export { RatePlan, RoomType, Variation } from "./models/property";
+export { RatePlan, RoomType } from "./models/property";
 export { IRatePlanSelection } from "./stores/booking.store";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
@@ -158,13 +158,7 @@ export namespace Components {
         "selectedRoom": any;
         "shouldBeDisabled": boolean;
         "totalAvailableRooms": number;
-        "visibleInventory"?: | IRatePlanSelection
-    | {
-        reserved: number;
-        visibleInventory?: number;
-        selected_variation: Variation;
-        // view_mode: 'stay' | 'night';
-      };
+        "visibleInventory"?: IRatePlanSelection;
     }
     interface IglBookingRooms {
         "bookingType": string;
@@ -2443,13 +2437,7 @@ declare namespace LocalJSX {
         "selectedRoom"?: any;
         "shouldBeDisabled"?: boolean;
         "totalAvailableRooms"?: number;
-        "visibleInventory"?: | IRatePlanSelection
-    | {
-        reserved: number;
-        visibleInventory?: number;
-        selected_variation: Variation;
-        // view_mode: 'stay' | 'night';
-      };
+        "visibleInventory"?: IRatePlanSelection;
     }
     interface IglBookingRooms {
         "bookingType"?: string;

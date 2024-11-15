@@ -707,6 +707,7 @@ export interface Variation {
   amount: number;
   child_nbr: number;
   amount_per_night: string;
+  amount_per_night_gross: number;
   discount_pct: number;
   is_lmd: boolean;
   nights_nbr: number;

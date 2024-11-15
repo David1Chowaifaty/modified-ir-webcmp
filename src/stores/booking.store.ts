@@ -12,7 +12,8 @@ export interface IRatePlanSelection {
   checkoutVariations: Variation[];
   checkoutBedSelection: string[];
   is_amount_modified?: boolean;
-  view_mode: 'stay' | 'night';
+  view_mode: '002' | '001';
+  rp_amount: number;
   checkoutSmokingSelection: string[];
   roomtype: {
     id: number;
@@ -119,7 +120,8 @@ onRoomTypeChange('roomTypes', (newValue: RoomType[]) => {
             }
           : {
               reserved: 0,
-              view_mode: 'stay',
+              rp_amount: 0,
+              view_mode: '001',
               visibleInventory: roomType.inventory === 1 ? 2 : roomType.inventory,
               selected_variation: ratePlan?.variations[0] ?? null,
               ratePlan,
@@ -201,7 +203,8 @@ export function reserveRooms(roomTypeId: number, ratePlanId: number, rooms: numb
     booking_store.ratePlanSelections[roomTypeId][ratePlanId] = {
       guestName: null,
       reserved: 0,
-      view_mode: 'stay',
+      view_mode: '001',
+      rp_amount: 0,
       is_bed_configuration_enabled: roomType.is_bed_configuration_enabled,
       visibleInventory: 0,
       selected_variation: null,
@@ -233,9 +236,22 @@ export function reserveRooms(roomTypeId: number, ratePlanId: number, rooms: numb
   updateInventory(roomTypeId);
 }
 
-export function getVisibleInventory(roomTypeId: number, ratePlanId: number) {
+export function getVisibleInventory(roomTypeId: number, ratePlanId: number): IRatePlanSelection {
   if (!booking_store.ratePlanSelections || !booking_store.ratePlanSelections[roomTypeId]) {
-    return { reserved: 0, visibleInventory: 0, selected_variation: null };
+    return {
+      reserved: 0,
+      visibleInventory: 0,
+      selected_variation: null,
+      ratePlan: null,
+      guestName: [],
+      is_bed_configuration_enabled: false,
+      checkoutVariations: [],
+      checkoutBedSelection: [],
+      checkoutSmokingSelection: [],
+      rp_amount: 0,
+      view_mode: '001',
+      roomtype: null,
+    };
   }
   return booking_store.ratePlanSelections[roomTypeId][ratePlanId];
 }

@@ -26,14 +26,8 @@ export class IglBookingRoomRatePlan {
   @Prop() isBookDisabled: boolean = false;
   @Prop() defaultRoomId;
   @Prop() selectedRoom;
-  @Prop() visibleInventory?:
-    | IRatePlanSelection
-    | {
-        reserved: number;
-        visibleInventory?: number;
-        selected_variation: Variation;
-        // view_mode: 'stay' | 'night';
-      };
+  @Prop() visibleInventory?: IRatePlanSelection;
+
   @Prop() is_bed_configuration_enabled: boolean;
 
   @State() isInputFocused = false;
@@ -95,7 +89,15 @@ export class IglBookingRoomRatePlan {
     if (inputValue) {
       // this.selectedData.isRateModified = true;
       // this.handleDataChange('rate', event);
+      this.updateRateplanSelection({
+        is_amount_modified: true,
+        rp_amount: Number(inputValue),
+      });
     } else {
+      this.updateRateplanSelection({
+        is_amount_modified: true,
+        rp_amount: 0,
+      });
       // this.selectedData = {
       //   ...this.selectedData,
       //   rate: -1,
@@ -108,7 +110,18 @@ export class IglBookingRoomRatePlan {
       // });
     }
   }
-
+  private updateRateplanSelection(props: Partial<IRatePlanSelection>) {
+    booking_store.ratePlanSelections = {
+      ...booking_store.ratePlanSelections,
+      [this.roomTypeId]: {
+        ...booking_store.ratePlanSelections[this.roomTypeId],
+        [this.ratePlan.id]: {
+          ...booking_store.ratePlanSelections[this.roomTypeId][this.ratePlan.id],
+          ...props,
+        },
+      },
+    };
+  }
   handleDataChange(key, evt) {
     const value = evt.target.value;
     switch (key) {
@@ -118,6 +131,7 @@ export class IglBookingRoomRatePlan {
         this.handleVariationChange(value);
         break;
       case 'rate':
+        this.updateRateplanSelection({ view_mode: value });
         break;
       default:
         reserveRooms(this.roomTypeId, this.ratePlan.id, Number(value));
@@ -156,7 +170,11 @@ export class IglBookingRoomRatePlan {
     //   return this.selectedData.rate === -1 ? '' : this.selectedData.rate;
     // }
     // return this.selectedData.rateType === 1 ? Number(this.selectedData.rate).toFixed(2) : Number(this.selectedData.rate / this.dateDifference).toFixed(2);
-    return this.visibleInventory?.selected_variation?.discounted_amount?.toString();
+    if (this.visibleInventory.is_amount_modified) {
+      return this.visibleInventory.rp_amount;
+    }
+    const { selected_variation, view_mode } = this.visibleInventory;
+    return view_mode === '001' ? Number(selected_variation?.discounted_gross_amount)?.toString() : Number(selected_variation.amount_per_night_gross).toString();
   }
   private formatVariation(v: Variation): any {
     const adults = `${v?.adult_nbr} ${v?.adult_nbr === 1 ? locales.entries['Lcz_Adult']?.toLowerCase() : locales.entries['Lcz_Adults']?.toLowerCase()}`;
@@ -259,10 +277,10 @@ export class IglBookingRoomRatePlan {
                       disabled={this.disableForm()}
                       class="form-control input-sm m-0 nightBorder rounded-0 m-0  py-0"
                       id={v4()}
-                      onChange={evt => this.handleDataChange('rateType', evt)}
+                      onChange={evt => this.updateRateplanSelection({ view_mode: (evt.target as HTMLSelectElement).value as any })}
                     >
                       {this.ratePricingMode.map(data => (
-                        <option value={data.CODE_NAME} selected={0 === +data.CODE_NAME}>
+                        <option value={data.CODE_NAME} selected={this.visibleInventory.view_mode === data.CODE_NAME}>
                           {data.CODE_VALUE_EN}
                         </option>
                       ))}

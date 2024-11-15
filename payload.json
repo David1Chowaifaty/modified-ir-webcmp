@@ -1,116 +1,14 @@
 {
-  "assign_units": true,
-  "check_in": false,
-  "is_pms": true,
-  "is_direct": true,
-  "is_in_loyalty_mode": false,
-  "promo_key": null,
-  "extras": [
-    {
-      "key": "private_note",
-      "value": ""
-    },
-    {
-      "key": "is_backend",
-      "value": true
-    },
-    {
-      "key": "ERROR_EMAIL",
-      "value": ""
-    }
-  ],
-  "booking": {
-    "booking_nbr": "",
-    "from_date": "2024-12-09",
-    "to_date": "2024-12-11",
-    "remark": null,
-    "property": {
-      "id": 42
-    },
-    "source": {
-      "code": "003",
-      "description": "Phone/Email",
-      "tag": "",
-      "type": "SETUP",
-      "id": "7527caf6-6f26-42d4-9634-02b5b5abbd15"
-    },
-    "currency": {
-      "code": "USD",
-      "id": 4,
-      "symbol": "US$"
-    },
-    "arrival": {
-      "code": "001"
-    },
-    "guest": {
-      "email": "test@gmail.com",
-      "first_name": "test",
-      "last_name": "test",
-      "country_id": 2,
-      "city": null,
-      "mobile": "123456667887",
-      "phone_prefix": null,
-      "address": "",
-      "dob": null,
-      "subscribe_to_news_letter": false,
-      "cci": null,
-      "id": 195932
-    },
-    "rooms": [
-      {
-        "identifier": null,
-        "roomtype": {
-          "id": 111,
-          "name": "Premium Suites",
-          "physicalrooms": null,
-          "rateplans": null,
-          "availabilities": null,
-          "inventory": 3,
-          "rate": 135
-        },
-        "rateplan": {
-          "id": 3755,
-          "name": "Premium Suites/Breakfast & dinner/Half-board",
-          "rate_restrictions": null,
-          "variations": null,
-          "cancelation": null,
-          "guarantee": null
-        },
-        "unit": null,
-        "occupancy": {
-          "adult_nbr": 2,
-          "children_nbr": 2,
-          "infant_nbr": null
-        },
-        "bed_preference": "",
-        "from_date": "2024-12-09",
-        "to_date": "2024-12-11",
-        "notes": null,
-        "days": [
-          {
-            "date": "2024-12-09",
-            "amount": 135,
-            "cost": null
-          },
-          {
-            "date": "2024-12-10",
-            "amount": 135,
-            "cost": null
-          }
-        ],
-        "guest": {
-          "email": null,
-          "first_name": "test",
-          "last_name": null,
-          "country_id": null,
-          "city": null,
-          "mobile": null,
-          "address": null,
-          "dob": null,
-          "subscribe_to_news_letter": null
-        }
-      }
-    ]
-  },
-  "pickup_info": null
+  "from_date": "2024-11-15",
+  "to_date": "2024-11-16",
+  "propertyid": 42,
+  "language": "en",
+  "room_type_ids": [],
+  "agent_id": null,
+  "is_in_agent_mode": false,
+  "room_type_ids_to_update": [],
+  "adult_nbr": "2",
+  "child_nbr": 0,
+  "currency_ref": "USD",
+  "is_backend": true
 }

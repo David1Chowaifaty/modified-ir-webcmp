@@ -219,6 +219,7 @@ export class IglBookProperty {
 
   setOtherProperties(res: any) {
     this.ratePricingMode = res?.ratePricingMode;
+    console.log(this.ratePricingMode);
     this.bookedByInfoData.arrivalTime = res.arrivalTime;
     this.bedPreferenceType = res.bedPreferenceType;
   }
