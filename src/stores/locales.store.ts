@@ -24,6 +24,8 @@ export type LocalizationStrings = {
   Lcz_AlternativeEmail: string;
   Lcz_Amount: string;
   Lcz_AnyMessageForUs: string;
+  Lcz_Infant: string;
+  Lcz_Infants: string;
   Lcz_AreYouSureDoYouWantToRemove: string;
   Lcz_AreYouSureWantToMoveAnotherUnit: string;
   Lcz_ArrivalTime: string;
