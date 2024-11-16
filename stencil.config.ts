@@ -19,8 +19,8 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null,
       copy: [
-        { src: 'assets', dest: 'assets' },
-        { src: 'index.js', dest: 'index.js' },
+        { src: 'assets' },
+        { src: 'scripts' },
       ],
     },
   ],
