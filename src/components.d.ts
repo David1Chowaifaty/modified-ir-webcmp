@@ -198,6 +198,7 @@ export namespace Components {
         "disabled": boolean;
         "maxDate": string;
         "minDate": string;
+        "variant": 'booking' | 'default';
         "withDateDifference": boolean;
     }
     interface IglLegends {
@@ -2491,6 +2492,7 @@ declare namespace LocalJSX {
         "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
         "onToast"?: (event: IglDateRangeCustomEvent<IToast1>) => void;
+        "variant"?: 'booking' | 'default';
         "withDateDifference"?: boolean;
     }
     interface IglLegends {

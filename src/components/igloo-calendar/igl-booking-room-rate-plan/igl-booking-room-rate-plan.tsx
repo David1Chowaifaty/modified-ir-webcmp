@@ -292,7 +292,7 @@ export class IglBookingRoomRatePlan {
                   <div class="flex-fill  mt-lg-0 ml-1 m-0 mt-md-0 p-0">
                     <fieldset class="position-relative">
                       <select
-                        // disabled={this.selectedData.rate === 0 || this.disableForm()}
+                        disabled={this.visibleInventory.visibleInventory === 0}
                         class="form-control input-sm"
                         id={v4()}
                         onChange={evt => this.handleDataChange('totalRooms', evt)}

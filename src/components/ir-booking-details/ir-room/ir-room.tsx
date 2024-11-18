@@ -83,6 +83,8 @@ export class IrRoom {
       REFERENCE_TYPE: '',
       FROM_DATE: this.bookingEvent.from_date,
       TO_DATE: this.bookingEvent.to_date,
+      booking: this.bookingEvent,
+      currentRoomType: this.item,
       TITLE: `${this.defaultTexts.entries.Lcz_EditBookingFor} ${this.item?.roomtype?.name} ${(this.item?.unit as IUnit)?.name || ''}`,
       defaultDateRange: {
         dateDifference: this.item.days.length,

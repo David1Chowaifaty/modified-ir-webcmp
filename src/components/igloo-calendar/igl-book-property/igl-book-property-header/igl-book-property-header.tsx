@@ -240,6 +240,7 @@ export class IglBookPropertyHeader {
         <div class={`d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}`}>
           <fieldset class="mt-lg-0  ">
             <igl-date-range
+              variant="booking"
               dateLabel={locales.entries.Lcz_Dates}
               minDate={this.isEventType('PLUS_BOOKING') ? moment().add(-1, 'months').startOf('month').format('YYYY-MM-DD') : this.minDate}
               disabled={this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')}
