@@ -20,6 +20,7 @@ export class IglApplicationInfo {
   @Prop() bedPreferenceType = [];
   @Prop() bookingType: string = 'PLUS_BOOKING';
   @Prop() roomIndex: number;
+  @Prop() totalNights: number = 1;
 
   @State() isButtonPressed = false;
 
@@ -90,7 +91,7 @@ export class IglApplicationInfo {
 
   private getAmount(): number {
     if (this.rateplanSelection.is_amount_modified) {
-      return this.rateplanSelection.view_mode === '001' ? this.rateplanSelection.rp_amount : this.rateplanSelection.rp_amount * 2;
+      return this.rateplanSelection.view_mode === '001' ? this.rateplanSelection.rp_amount : this.rateplanSelection.rp_amount * this.totalNights;
     }
     return this.rateplanSelection.selected_variation.discounted_gross_amount;
   }

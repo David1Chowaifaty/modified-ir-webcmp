@@ -183,6 +183,7 @@ export class IglBookingForm {
 
             return [...new Array(rp.reserved)].map((_, i) => (
               <igl-application-info
+                totalNights={Number(this.dateRangeData.dateDifference)}
                 bedPreferenceType={this.bedPreferenceType}
                 currency={this.currency}
                 guestInfo={rp.guest ? rp.guest[i] : null}

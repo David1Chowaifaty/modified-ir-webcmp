@@ -487,8 +487,8 @@ export class BookingService {
         pickup_info,
       };
       console.log('book user payload', body);
-      const result = await this.doReservation(body);
-      return result;
+      // const result = await this.doReservation(body);
+      // return result;
     } catch (error) {
       console.error(error);
       throw new Error(error);

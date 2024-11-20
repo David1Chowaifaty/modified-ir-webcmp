@@ -55,6 +55,7 @@ export namespace Components {
         "guestInfo": RatePlanGuest | null;
         "rateplanSelection": IRatePlanSelection;
         "roomIndex": number;
+        "totalNights": number;
     }
     interface IglBlockDatesView {
         "defaultData": { [key: string]: any };
@@ -2271,6 +2272,7 @@ declare namespace LocalJSX {
         "guestInfo"?: RatePlanGuest | null;
         "rateplanSelection"?: IRatePlanSelection;
         "roomIndex"?: number;
+        "totalNights"?: number;
     }
     interface IglBlockDatesView {
         "defaultData"?: { [key: string]: any };
