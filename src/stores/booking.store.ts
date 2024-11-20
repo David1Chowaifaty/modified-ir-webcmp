@@ -7,6 +7,7 @@ export interface IRatePlanSelection {
   visibleInventory: number;
   selected_variation: Variation | null;
   ratePlan: RatePlan;
+  guest: RatePlanGuest[] | null;
   guestName: string[];
   is_bed_configuration_enabled: boolean;
   checkoutVariations: Variation[];
@@ -25,7 +26,14 @@ export interface IRatePlanSelection {
     rate: number;
     smoking_option: ISmokingOption;
     bedding_setup: BeddingSetup[];
+    is_bed_configuration_enabled: boolean;
   };
+}
+export interface RatePlanGuest {
+  name: string;
+  unit: string | null;
+  bed_preference: string | null;
+  infant_nbr: number | null;
 }
 
 export interface IRoomTypeSelection {
@@ -122,6 +130,7 @@ onRoomTypeChange('roomTypes', (newValue: RoomType[]) => {
               reserved: 0,
               rp_amount: 0,
               view_mode: '001',
+              guest: null,
               visibleInventory: roomType.inventory === 1 ? 2 : roomType.inventory,
               selected_variation: ratePlan?.variations[0] ?? null,
               ratePlan,
@@ -205,6 +214,7 @@ export function reserveRooms(roomTypeId: number, ratePlanId: number, rooms: numb
       reserved: 0,
       view_mode: '001',
       rp_amount: 0,
+      guest: Array.from({ length: rooms }, () => ({ name: '', unit: null, bed_preference: null, infant_nbr: null })),
       is_bed_configuration_enabled: roomType.is_bed_configuration_enabled,
       visibleInventory: 0,
       selected_variation: null,
@@ -222,6 +232,7 @@ export function reserveRooms(roomTypeId: number, ratePlanId: number, rooms: numb
         rate: roomType.rate,
         bedding_setup: roomType.bedding_setup,
         smoking_option: roomType.smoking_option,
+        is_bed_configuration_enabled: roomType.is_bed_configuration_enabled,
       },
     };
   }
@@ -230,7 +241,12 @@ export function reserveRooms(roomTypeId: number, ratePlanId: number, rooms: numb
     ...booking_store.ratePlanSelections,
     [Number(roomTypeId)]: {
       ...booking_store.ratePlanSelections[Number(roomTypeId)],
-      [ratePlanId]: { ...booking_store.ratePlanSelections[roomTypeId][ratePlanId], reserved: rooms, checkoutVariations: [] },
+      [ratePlanId]: {
+        ...booking_store.ratePlanSelections[roomTypeId][ratePlanId],
+        reserved: rooms,
+        checkoutVariations: [],
+        guest: Array.from({ length: rooms }, () => ({ name: '', unit: null, bed_preference: null, infant_nbr: null })),
+      },
     },
   };
   updateInventory(roomTypeId);
@@ -240,6 +256,7 @@ export function getVisibleInventory(roomTypeId: number, ratePlanId: number): IRa
   if (!booking_store.ratePlanSelections || !booking_store.ratePlanSelections[roomTypeId]) {
     return {
       reserved: 0,
+      guest: null,
       visibleInventory: 0,
       selected_variation: null,
       ratePlan: null,

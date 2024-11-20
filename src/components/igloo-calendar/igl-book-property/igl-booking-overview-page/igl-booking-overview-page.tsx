@@ -73,7 +73,7 @@ export class IglBookingOverviewPage {
           ) : (
             <Fragment>
               {booking_store.roomTypes?.map(roomType => (
-                <igl-booking-rooms
+                <igl-room-type
                   initialRoomIds={this.initialRoomIds}
                   isBookDisabled={Object.keys(this.bookedByInfoData).length <= 1}
                   key={`room-info-${roomType.id}`}
@@ -85,13 +85,13 @@ export class IglBookingOverviewPage {
                   class="mt-2 mb-1 p-0"
                   roomInfoId={this.selectedRooms.has(`c_${roomType.id}`) ? roomType.id : null}
                   onDataUpdateEvent={evt => this.roomsDataUpdate.emit(evt.detail)}
-                ></igl-booking-rooms>
+                ></igl-room-type>
               ))}
             </Fragment>
           )}
         </div>
 
-        <igl-book-property-footer class={'p-0 mb-1 mt-3'} eventType={this.bookingData.event_type} disabled={this.selectedRooms.size === 0}></igl-book-property-footer>
+        <igl-book-property-footer class={'p-0 mb-1 mt-3'} eventType={this.bookingData.event_type}></igl-book-property-footer>
       </Host>
     );
   }

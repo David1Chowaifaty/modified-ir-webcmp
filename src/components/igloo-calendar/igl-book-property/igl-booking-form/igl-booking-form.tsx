@@ -1,15 +1,16 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
 import { IPageTwoDataUpdateProps } from '@/models/models';
-import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../models/igl-book-property';
+import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { ICurrency } from '@/models/calendarData';
+import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 @Component({
-  tag: 'igl-pagetwo',
-  styleUrl: 'igl-pagetwo.css',
+  tag: 'igl-booking-form',
+  styleUrl: 'igl-booking-form.css',
   scoped: true,
 })
-export class IglPagetwo {
+export class IglBookingForm {
   @Prop() showPaymentDetails: boolean;
   @Prop() currency: ICurrency;
   @Prop({ reflect: true }) isEditOrAddRoomEvent: boolean;
@@ -155,7 +156,7 @@ export class IglPagetwo {
           )}
         </div>
 
-        {this.guestData.map((roomInfo, index) => {
+        {/* {this.guestData.map((roomInfo, index) => {
           return (
             <igl-application-info
               dateDifference={this.dateRangeData.dateDifference}
@@ -172,7 +173,27 @@ export class IglPagetwo {
               onDataUpdateEvent={event => this.handleEventData(event, 'application-info', index)}
             ></igl-application-info>
           );
-        })}
+        })} */}
+        {Object.values(booking_store.ratePlanSelections).map(val =>
+          Object.values(val).map(ratePlan => {
+            const rp = ratePlan as IRatePlanSelection;
+            if (rp.reserved === 0) {
+              return null;
+            }
+
+            return [...new Array(rp.reserved)].map((_, i) => (
+              <igl-application-info
+                bedPreferenceType={this.bedPreferenceType}
+                currency={this.currency}
+                guestInfo={rp.guest ? rp.guest[i] : null}
+                bookingType={this.bookingData.event_type}
+                rateplanSelection={rp}
+                key={`${rp.ratePlan.id}_${i}`}
+                roomIndex={i}
+              ></igl-application-info>
+            ));
+          }),
+        )}
 
         {this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (
           <igl-property-booked-by
