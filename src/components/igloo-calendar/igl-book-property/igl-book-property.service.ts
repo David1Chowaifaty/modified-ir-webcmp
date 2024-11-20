@@ -1,5 +1,4 @@
 import { TSourceOption } from '@/models/igl-book-property';
-import { IBookingParams } from '@/services/booking.service';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
 import moment from 'moment';
@@ -240,7 +239,10 @@ export class IglBookPropertyService {
           const newRooms = generateNewRooms(currentRoomType.identifier);
           newBooking = {
             ...booking,
-            rooms: [...filteredRooms, ...newRooms],
+            booking: {
+              ...booking.booking,
+              rooms: [...filteredRooms, ...newRooms],
+            },
           };
           break;
         }
@@ -251,7 +253,14 @@ export class IglBookPropertyService {
 
           newBooking = {
             ...booking,
-            rooms: newRooms,
+            from_date: moment(fromDate).format('YYYY-MM-DD'),
+            to_date: moment(toDate).format('YYYY-MM-DD'),
+            booking: {
+              ...booking.booking,
+              from_date: moment(fromDate).format('YYYY-MM-DD'),
+              to_date: moment(toDate).format('YYYY-MM-DD'),
+              rooms: newRooms,
+            },
           };
           break;
         }
