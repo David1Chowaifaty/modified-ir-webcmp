@@ -109,6 +109,7 @@ export class IglBookProperty {
     const { key, data } = e.detail;
     if (key === 'select' || (key === 'blur' && data !== '')) {
       const res = await this.bookingService.getExposedBooking((data as any).booking_nbr || (data as string), this.language);
+      this.defaultData = { ...this.defaultData, booking: res };
       this.bookPropertyService.setBookingInfoFromAutoComplete(this, res);
       this.sourceOption = res.source;
       this.renderPage();

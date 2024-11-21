@@ -140,6 +140,7 @@ export class IrBookingDetails {
             message: '',
           },
           event_type: 'ADD_ROOM',
+          booking: this.bookingData,
           BOOKING_NUMBER: this.bookingData.booking_nbr,
           ADD_ROOM_TO_BOOKING: this.bookingData.booking_nbr,
           GUEST: this.bookingData.guest,

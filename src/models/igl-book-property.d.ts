@@ -98,6 +98,7 @@ interface IglBookPropertyPayloadAddRoom extends IglBookPropertyPayload {
   };
   ROOMS?: Array<{}>;
   ARRIVAL: Arrival;
+  booking: Booking;
 }
 
 interface IglBookPropertyPayloadBarBooking extends IglBookPropertyPayload {
@@ -138,6 +139,7 @@ interface IglBookPropertyPayloadSplitBooking extends IglBookPropertyPayload {
   INTERNAL_NOTE?: string;
   BLOCK_DATES_TITLE?: string;
   splitBookingEvents?: boolean;
+  booking: Booking;
 }
 
 interface IglBookPropertyPayloadBlockDates extends IglBookPropertyPayload {

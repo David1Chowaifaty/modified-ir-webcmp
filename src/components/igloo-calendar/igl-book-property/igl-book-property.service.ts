@@ -1,3 +1,4 @@
+import { Booking, Room } from '@/models/booking.dto';
 import { TSourceOption } from '@/models/igl-book-property';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
@@ -209,14 +210,6 @@ export class IglBookPropertyService {
       const fromDate = new Date(context.dateRangeData.fromDate);
       const toDate = new Date(context.dateRangeData.toDate);
 
-      const arrivalTime = context.isEventType('EDIT_BOOKING')
-        ? context.getArrivalTimeForBooking()
-        : context.isEventType('ADD_ROOM')
-        ? context.bookingData.ARRIVAL.code
-        : context.isEventType('SPLIT_BOOKING')
-        ? context.bookedByInfoData.selectedArrivalTime.code
-        : '';
-
       const generateNewRooms = (identifier = null) => {
         return this.getBookedRooms({
           check_in: fromDate,
@@ -228,6 +221,19 @@ export class IglBookPropertyService {
         });
       };
 
+      const modifyBookingDetails = (booking: Booking, rooms: Room[]) => {
+        return {
+          from_date: moment(fromDate).format('YYYY-MM-DD'),
+          to_date: moment(toDate).format('YYYY-MM-DD'),
+          booking: {
+            ...booking,
+            from_date: moment(fromDate).format('YYYY-MM-DD'),
+            to_date: moment(toDate).format('YYYY-MM-DD'),
+            rooms,
+          },
+        };
+      };
+
       let newBooking = null;
 
       switch (context.defaultData.event_type) {
@@ -237,31 +243,14 @@ export class IglBookPropertyService {
           const filteredRooms = booking.rooms.filter(r => r.identifier !== currentRoomType.identifier);
 
           const newRooms = generateNewRooms(currentRoomType.identifier);
-          newBooking = {
-            ...booking,
-            booking: {
-              ...booking.booking,
-              rooms: [...filteredRooms, ...newRooms],
-            },
-          };
+          newBooking = modifyBookingDetails(booking, [...filteredRooms, ...newRooms]);
           break;
         }
         case 'ADD_ROOM':
         case 'SPLIT_BOOKING': {
           const { booking } = context.defaultData;
           const newRooms = generateNewRooms();
-
-          newBooking = {
-            ...booking,
-            from_date: moment(fromDate).format('YYYY-MM-DD'),
-            to_date: moment(toDate).format('YYYY-MM-DD'),
-            booking: {
-              ...booking.booking,
-              from_date: moment(fromDate).format('YYYY-MM-DD'),
-              to_date: moment(toDate).format('YYYY-MM-DD'),
-              rooms: newRooms,
-            },
-          };
+          newBooking = modifyBookingDetails(booking, [...booking.rooms, ...newRooms]);
           break;
         }
         default: {
@@ -278,10 +267,15 @@ export class IglBookPropertyService {
               property: {
                 id: context.propertyid,
               },
+              booked_on: {
+                date: moment().format('YYYY-MM-DD'),
+                hour: new Date().getHours(),
+                minute: new Date().getMinutes(),
+              },
               source: sourceOption,
               rooms: newRooms,
               currency: context.currency,
-              arrival: arrivalTime,
+              arrival: context.bookedByInfoData.selectedArrivalTime.code,
               guest: {
                 email: bookedByInfoData.email === '' ? null : bookedByInfoData.email || null,
                 first_name: bookedByInfoData.firstName,
@@ -307,7 +301,6 @@ export class IglBookPropertyService {
           break;
         }
       }
-      console.log(newBooking);
       return newBooking;
     } catch (error) {
       console.error(error);
