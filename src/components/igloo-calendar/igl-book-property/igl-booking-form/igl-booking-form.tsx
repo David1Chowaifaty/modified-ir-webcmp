@@ -5,7 +5,6 @@ import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
-import moment from 'moment';
 @Component({
   tag: 'igl-booking-form',
   styleUrl: 'igl-booking-form.css',

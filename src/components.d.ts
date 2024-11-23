@@ -15,7 +15,7 @@ import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { RatePlan, RoomType } from "./models/property";
-import { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
+import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption as selectOption1 } from "./common/models";
 import { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
@@ -35,7 +35,7 @@ export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { RatePlan, RoomType } from "./models/property";
-export { Booking, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
+export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption as selectOption1 } from "./common/models";
 export { ILocale as ILocale1, IToast as IToast2 } from "./components.d";
@@ -414,6 +414,18 @@ export namespace Components {
     }[];
   };
         "object": any;
+    }
+    interface IrExtraService {
+        "bookingNumber": string;
+        "currencySymbol": string;
+        "service": ExtraService;
+    }
+    interface IrExtraServiceConfig {
+        "booking": Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
+        "service": ExtraService;
+    }
+    interface IrExtraServices {
+        "booking": Pick<Booking, 'currency' | 'extra_services' | 'booking_nbr'>;
     }
     interface IrGuestInfo {
         "booking_nbr": string;
@@ -833,6 +845,14 @@ export interface IrDialogCustomEvent<T> extends CustomEvent<T> {
 export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDropdownElement;
+}
+export interface IrExtraServiceCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrExtraServiceElement;
+}
+export interface IrExtraServiceConfigCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrExtraServiceConfigElement;
 }
 export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1642,6 +1662,48 @@ declare global {
         prototype: HTMLIrDropdownElement;
         new (): HTMLIrDropdownElement;
     };
+    interface HTMLIrExtraServiceElementEventMap {
+        "editExtraService": ExtraService;
+        "resetBookingData": null;
+    }
+    interface HTMLIrExtraServiceElement extends Components.IrExtraService, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrExtraServiceElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceElement, ev: IrExtraServiceCustomEvent<HTMLIrExtraServiceElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrExtraServiceElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceElement, ev: IrExtraServiceCustomEvent<HTMLIrExtraServiceElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrExtraServiceElement: {
+        prototype: HTMLIrExtraServiceElement;
+        new (): HTMLIrExtraServiceElement;
+    };
+    interface HTMLIrExtraServiceConfigElementEventMap {
+        "closeModal": null;
+        "resetBookingData": null;
+    }
+    interface HTMLIrExtraServiceConfigElement extends Components.IrExtraServiceConfig, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrExtraServiceConfigElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceConfigElement, ev: IrExtraServiceConfigCustomEvent<HTMLIrExtraServiceConfigElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrExtraServiceConfigElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceConfigElement, ev: IrExtraServiceConfigCustomEvent<HTMLIrExtraServiceConfigElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrExtraServiceConfigElement: {
+        prototype: HTMLIrExtraServiceConfigElement;
+        new (): HTMLIrExtraServiceConfigElement;
+    };
+    interface HTMLIrExtraServicesElement extends Components.IrExtraServices, HTMLStencilElement {
+    }
+    var HTMLIrExtraServicesElement: {
+        prototype: HTMLIrExtraServicesElement;
+        new (): HTMLIrExtraServicesElement;
+    };
     interface HTMLIrGuestInfoElementEventMap {
         "closeSideBar": null;
         "resetBookingData": null;
@@ -2222,6 +2284,9 @@ declare global {
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dialog": HTMLIrDialogElement;
         "ir-dropdown": HTMLIrDropdownElement;
+        "ir-extra-service": HTMLIrExtraServiceElement;
+        "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
+        "ir-extra-services": HTMLIrExtraServicesElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
         "ir-hk-tasks": HTMLIrHkTasksElement;
@@ -2723,6 +2788,22 @@ declare namespace LocalJSX {
         "object"?: any;
         "onDropdownItemCLicked"?: (event: IrDropdownCustomEvent<{ name: string; object: any }>) => void;
     }
+    interface IrExtraService {
+        "bookingNumber"?: string;
+        "currencySymbol"?: string;
+        "onEditExtraService"?: (event: IrExtraServiceCustomEvent<ExtraService>) => void;
+        "onResetBookingData"?: (event: IrExtraServiceCustomEvent<null>) => void;
+        "service"?: ExtraService;
+    }
+    interface IrExtraServiceConfig {
+        "booking"?: Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
+        "onCloseModal"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
+        "service"?: ExtraService;
+    }
+    interface IrExtraServices {
+        "booking"?: Pick<Booking, 'currency' | 'extra_services' | 'booking_nbr'>;
+    }
     interface IrGuestInfo {
         "booking_nbr"?: string;
         "defaultTexts"?: ILocale;
@@ -3082,6 +3163,9 @@ declare namespace LocalJSX {
         "ir-delete-modal": IrDeleteModal;
         "ir-dialog": IrDialog;
         "ir-dropdown": IrDropdown;
+        "ir-extra-service": IrExtraService;
+        "ir-extra-service-config": IrExtraServiceConfig;
+        "ir-extra-services": IrExtraServices;
         "ir-guest-info": IrGuestInfo;
         "ir-hk-archive": IrHkArchive;
         "ir-hk-tasks": IrHkTasks;
@@ -3170,6 +3254,9 @@ declare module "@stencil/core" {
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
+            "ir-extra-service": LocalJSX.IrExtraService & JSXBase.HTMLAttributes<HTMLIrExtraServiceElement>;
+            "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;
+            "ir-extra-services": LocalJSX.IrExtraServices & JSXBase.HTMLAttributes<HTMLIrExtraServicesElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
             "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;

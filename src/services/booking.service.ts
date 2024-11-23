@@ -3,7 +3,7 @@ import axios from 'axios';
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType } from '../models/IBooking';
 import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString, extras } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
-import { Booking, Day, Guest, IBookingPickupInfo, IPmsLog } from '../models/booking.dto';
+import { Booking, Day, ExtraService, Guest, IBookingPickupInfo, IPmsLog } from '../models/booking.dto';
 import booking_store from '@/stores/booking.store';
 export interface IBookingParams {
   bookedByInfoData: any;
@@ -222,6 +222,13 @@ export class BookingService {
       console.error(error);
       throw new Error(error);
     }
+  }
+  public async doBookingExtraService({ booking_nbr, service, is_remove }: { service: ExtraService; booking_nbr: number | string; is_remove: boolean }) {
+    const { data } = await axios.post(`/Do_Booking_Extra_Service`, { ...service, booking_nbr, is_remove });
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
   }
   public async getBlockedInfo(): Promise<IEntries[]> {
     try {
