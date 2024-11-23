@@ -96,7 +96,7 @@ export class IrExtraServiceConfig {
                   singleDatePicker
                   minDate={this.booking.from_date}
                   maxDate={this.booking.to_date}
-                  onDateChanged={e => this.updateService({ end_date: e.detail.start.format('YYYY-MM-DD') })}
+                  onDateChanged={e => this.updateService({ start_date: e.detail.start.format('YYYY-MM-DD') })}
                 ></ir-date-picker>
               </div>
             </div>
@@ -134,6 +134,7 @@ export class IrExtraServiceConfig {
                 type="number"
                 aria-label="Price"
                 aria-describedby="amenity price"
+                value={this.s_service.price}
               />
             </div>
             <div class="input-group cost-input-group  mb-1 mb-sm-0">
@@ -142,6 +143,7 @@ export class IrExtraServiceConfig {
               </div>
               <span class="currency-ph">{this.booking.currency.symbol}</span>
               <input
+                value={this.s_service.cost}
                 type="number"
                 onInput={e => this.updateService({ cost: Number((e.target as HTMLInputElement).value) })}
                 class="form-control cost-input"

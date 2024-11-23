@@ -10,7 +10,7 @@ export class IrExtraServices {
 
   render() {
     return (
-      <Host class={'card p-0 m-0'}>
+      <Host class={'card p-0 '}>
         {this.booking.extra_services?.map((service, index) => (
           <Fragment>
             <ir-extra-service

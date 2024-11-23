@@ -1,6 +1,6 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import { _formatDate, _formatTime } from './functions';
-import { Booking, Guest, IPmsLog, Room } from '@/models/booking.dto';
+import { Booking, ExtraService, Guest, IPmsLog, Room } from '@/models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '@/services/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
@@ -63,7 +63,7 @@ export class IrBookingDetails {
   @State() userCountry: ICountry | null = null;
   @State() paymentActions: IPaymentAction[];
   @State() property_id: number;
-
+  @State() selectedService: ExtraService;
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
@@ -189,6 +189,11 @@ export class IrBookingDetails {
       return (this.bookingData = e.detail);
     }
     await this.resetBookingData();
+  }
+  @Listen('editExtraService')
+  handleEditExtraService(e: CustomEvent) {
+    this.selectedService = e.detail;
+    this.sidebarState = 'extra_service';
   }
 
   private setRoomsData(roomServiceResp) {
@@ -383,6 +388,7 @@ export class IrBookingDetails {
       case 'extra_service':
         return (
           <ir-extra-service-config
+            service={this.selectedService}
             booking={{ from_date: this.bookingData.from_date, to_date: this.bookingData.to_date, booking_nbr: this.bookingData.booking_nbr, currency: this.bookingData.currency }}
             slot="sidebar-body"
             onCloseModal={handleClose}

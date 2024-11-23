@@ -42,17 +42,17 @@ export class IrExtraService {
           <div class={'extra-service-container'}>
             <p class="extra-service-description">{this.service.description}</p>
             <div class="extra-service-actions">
-              {this.service.price && <p class="extra-service-price font-weight-bold">{formatAmount(this.currencySymbol, this.service.price)}</p>}
+              {this.service.price && <p class="extra-service-price p-0 m-0 font-weight-bold">{formatAmount(this.currencySymbol, this.service.price)}</p>}
               <ir-button
                 id={`serviceEdit-${this.service.booking_system_id}`}
-                class="extra-service-edit-btn"
+                class="extra-service-edit-btn m-0 p-0"
                 variant="icon"
                 icon_name="edit"
                 style={colorVariants.secondary}
                 onClickHanlder={() => this.editExtraService.emit(this.service)}
               ></ir-button>
               <ir-button
-                class="extra-service-delete-btn"
+                class="extra-service-delete-btn m-0 p-0"
                 variant="icon"
                 onClickHanlder={() => this.irModalRef.openModal()}
                 id={`roomDelete-${this.service.booking_system_id}`}
