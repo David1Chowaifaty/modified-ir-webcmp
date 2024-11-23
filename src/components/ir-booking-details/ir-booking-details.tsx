@@ -391,7 +391,12 @@ export class IrBookingDetails {
             service={this.selectedService}
             booking={{ from_date: this.bookingData.from_date, to_date: this.bookingData.to_date, booking_nbr: this.bookingData.booking_nbr, currency: this.bookingData.currency }}
             slot="sidebar-body"
-            onCloseModal={handleClose}
+            onCloseModal={() => {
+              handleClose();
+              if (this.selectedService) {
+                this.selectedService = null;
+              }
+            }}
           ></ir-extra-service-config>
         );
       default:
