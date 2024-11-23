@@ -98,7 +98,7 @@ export class IglBookingEvent {
 
       const transformedBooking = transformNewBooking(data)[0];
       const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...otherBookingData } = transformedBooking;
-      this.bookingEvent = { ...otherBookingData, ...this.bookingEvent, PHONE_PREFIX: otherBookingData.PHONE_PREFIX, PRIVATE_NOTE: otherBookingData.PRIVATE_NOTE };
+      this.bookingEvent = { ...otherBookingData, ...this.bookingEvent, booking: data, PHONE_PREFIX: otherBookingData.PHONE_PREFIX, PRIVATE_NOTE: otherBookingData.PRIVATE_NOTE };
       this.updateBookingEvent.emit(this.bookingEvent);
       this.showEventInfo(true);
     } catch (error) {

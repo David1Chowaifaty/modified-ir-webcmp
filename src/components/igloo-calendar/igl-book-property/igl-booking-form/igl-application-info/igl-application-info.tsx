@@ -1,7 +1,7 @@
 import { Component, Host, h, Prop, State, Listen } from '@stencil/core';
 import { TPropertyButtonsTypes } from '@/components';
 import { ICurrency } from '@/models/calendarData';
-import booking_store, { IRatePlanSelection, RatePlanGuest } from '@/stores/booking.store';
+import booking_store, { IRatePlanSelection, modifyBookingStore, RatePlanGuest } from '@/stores/booking.store';
 import { Variation } from '@/models/property';
 import locales from '@/stores/locales.store';
 import { v4 } from 'uuid';
@@ -21,6 +21,7 @@ export class IglApplicationInfo {
   @Prop() bookingType: string = 'PLUS_BOOKING';
   @Prop() roomIndex: number;
   @Prop() totalNights: number = 1;
+  @Prop() baseData: { unit: { id: string; name: string }; roomtypeId: number };
 
   @State() isButtonPressed = false;
 
@@ -104,24 +105,41 @@ export class IglApplicationInfo {
       }
     });
     const filteredGuestsRoom = this.rateplanSelection.guest.filter((_, i) => i !== this.roomIndex).map(r => r.unit);
-    return result.filter(r => !filteredGuestsRoom.includes(r.id.toString()));
+    const filteredResults = result.filter(r => !filteredGuestsRoom.includes(r.id.toString()));
+    return this.bookingType === 'EDIT_BOOKING'
+      ? [...filteredResults, this.rateplanSelection.roomtype.id === this.baseData?.roomtypeId ? this.baseData?.unit : null]
+          .filter(f => !!f)
+          .sort((a, b) => a.name.localeCompare(b.name))
+      : filteredResults;
   }
 
   render() {
     const filteredRoomList = this.filterRooms();
     return (
-      <Host class={'my-2 flex flex-col'}>
-        <div class="d-flex align-items-center " style={{ marginBottom: '0.5rem' }}>
+      <Host class={'my-2'}>
+        <div class="booking-header">
           {(this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
-            <span class="h5 mr-1 my-0 py-0">{this.rateplanSelection.roomtype.name}</span>
+            <span class="booking-roomtype-title">{this.rateplanSelection.roomtype.name}</span>
           )}
-          <div class="my-0 py-0 d-flex align-items-center" style={{ gap: '0.5rem' }}>
-            <p class="my-0 py-0 font-weight-bold">{this.rateplanSelection.ratePlan.short_name}</p>
-            <ir-tooltip class="my-0 py-0 mr-1" message={this.getTooltipMessages()}></ir-tooltip>
+          <div class="booking-details-container">
+            <div class="booking-rateplan">
+              <p class="booking-rateplan-name">{this.rateplanSelection.ratePlan.short_name}</p>
+              <ir-tooltip class="booking-tooltip" message={this.getTooltipMessages()}></ir-tooltip>
+            </div>
+            <p class="booking-variation">{this.formatVariation(this.rateplanSelection.selected_variation)}</p>
           </div>
-          <p class="m-0 p-0">{this.formatVariation(this.rateplanSelection.selected_variation)}</p>
+          <p class="booking-price">
+            {formatAmount(this.currency?.symbol, this.getAmount())}/{locales.entries.Lcz_Stay}
+          </p>
         </div>
-        <div class="d-flex flex-column flex-md-row  p-0 align-items-md-center aplicationInfoContainer" style={{ marginBottom: '0.5rem' }}>
+        <div class="booking-footer">
+          <div class="booking-rateplan">
+            <p class="booking-rateplan-name">{this.rateplanSelection.ratePlan.short_name}</p>
+            <ir-tooltip class="booking-tooltip" message={this.getTooltipMessages()}></ir-tooltip>
+          </div>
+          <p class="booking-variation">{this.formatVariation(this.rateplanSelection.selected_variation)}</p>
+        </div>
+        <div class="d-flex flex-column flex-md-row  p-0 align-items-md-center aplicationInfoContainer">
           <div class="mr-1 flex-fill guest-info-container">
             <input
               id={v4()}
@@ -129,7 +147,16 @@ export class IglApplicationInfo {
               class={`form-control ${this.isButtonPressed && this.guestInfo?.name === '' && 'border-danger'}`}
               placeholder={locales.entries.Lcz_GuestFirstnameAndLastname}
               name="guestName"
-              onInput={event => this.updateGuest({ name: (event.target as HTMLInputElement).value })}
+              onInput={event => {
+                const name = (event.target as HTMLInputElement).value;
+                this.updateGuest({ name });
+                if (booking_store.event_type.type === 'EDIT_BOOKING') {
+                  modifyBookingStore('guest', {
+                    ...booking_store.guest,
+                    name,
+                  });
+                }
+              }}
               required
               value={this.guestInfo?.name}
             />
@@ -168,9 +195,9 @@ export class IglApplicationInfo {
               </select>
             </div>
           )}
-          <div>
+          <p class="rate_amount">
             {formatAmount(this.currency?.symbol, this.getAmount())}/{locales.entries.Lcz_Stay}
-          </div>
+          </p>
         </div>
         {this.rateplanSelection.selected_variation.child_nbr > 0 && (
           <div style={{ gap: '0.5rem' }} class="d-flex  flex-row m-0 p-0 align-items-center aplicationInfoContainer">

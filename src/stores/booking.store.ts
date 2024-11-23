@@ -1,4 +1,5 @@
 import { Booking } from '@/models/booking.dto';
+import { TEventType } from '@/models/igl-book-property';
 import { BeddingSetup, ISmokingOption, RatePlan, RoomType, Variation } from '@/models/property';
 import { createStore } from '@stencil/store';
 
@@ -59,6 +60,8 @@ interface BookingStore {
   roomTypes: RoomType[];
   enableBooking: boolean;
   ratePlanSelections: { [roomTypeId: number]: IRoomTypeSelection };
+  event_type: { type: TEventType };
+  guest: RatePlanGuest;
   bookingAvailabilityParams: IBookinAvailabilityParams;
   booking: Booking;
   resetBooking: boolean;
@@ -67,6 +70,7 @@ interface BookingStore {
 }
 
 const initialState: BookingStore = {
+  guest: null,
   tax_statement: null,
   roomTypes: [],
   enableBooking: false,
@@ -82,6 +86,7 @@ const initialState: BookingStore = {
   },
   booking: null,
   fictus_booking_nbr: null,
+  event_type: { type: 'PLUS_BOOKING' },
 };
 
 export let { state: booking_store, onChange: onRoomTypeChange, reset } = createStore<BookingStore>(initialState);
@@ -196,7 +201,7 @@ export function updateRoomParams({ ratePlanId, roomTypeId, params }: { roomTypeI
   console.log(booking_store.ratePlanSelections);
 }
 
-export function reserveRooms(roomTypeId: number, ratePlanId: number, rooms: number) {
+export function reserveRooms({ ratePlanId, roomTypeId, rooms, guest }: { roomTypeId: number; ratePlanId: number; rooms: number; guest?: RatePlanGuest[] }) {
   if (!booking_store.ratePlanSelections[roomTypeId]) {
     booking_store.ratePlanSelections[roomTypeId] = {};
   }
@@ -208,13 +213,20 @@ export function reserveRooms(roomTypeId: number, ratePlanId: number, rooms: numb
   if (!ratePlan) {
     throw new Error('Invalid rate plan');
   }
+  let newGuest = Array.from({ length: rooms }, () => ({ name: '', unit: null, bed_preference: null, infant_nbr: null }));
+  console.log('guest', guest);
+  if (guest) {
+    newGuest = guest;
+  }
+  console.log('newGuest', newGuest);
   if (!booking_store.ratePlanSelections[roomTypeId][ratePlanId]) {
+    console.log('new guest', newGuest);
     booking_store.ratePlanSelections[roomTypeId][ratePlanId] = {
       guestName: null,
       reserved: 0,
       view_mode: '001',
       rp_amount: 0,
-      guest: Array.from({ length: rooms }, () => ({ name: '', unit: null, bed_preference: null, infant_nbr: null })),
+      guest: newGuest,
       is_bed_configuration_enabled: roomType.is_bed_configuration_enabled,
       visibleInventory: 0,
       selected_variation: null,
@@ -245,7 +257,7 @@ export function reserveRooms(roomTypeId: number, ratePlanId: number, rooms: numb
         ...booking_store.ratePlanSelections[roomTypeId][ratePlanId],
         reserved: rooms,
         checkoutVariations: [],
-        guest: Array.from({ length: rooms }, () => ({ name: '', unit: null, bed_preference: null, infant_nbr: null })),
+        guest: newGuest,
       },
     },
   };

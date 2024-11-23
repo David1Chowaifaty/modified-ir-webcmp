@@ -7,10 +7,10 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 import { ICurrency } from "./models/calendarData";
-import { TAdultChildConstraints } from "./models/igl-book-property.d";
+import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 import { ICountry, RoomBlockDetails } from "./models/IBooking";
 import { IToast } from "./components/ir-toast/toast";
-import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
@@ -24,14 +24,13 @@ import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
-import { Booking as Booking1 } from "./models/booking.dto";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
-export { TAdultChildConstraints } from "./models/igl-book-property.d";
+export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 export { ICountry, RoomBlockDetails } from "./models/IBooking";
 export { IToast } from "./components/ir-toast/toast";
-export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TIglBookPropertyPayload, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
+export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
@@ -45,10 +44,10 @@ export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
-export { Booking as Booking1 } from "./models/booking.dto";
 export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
     interface IglApplicationInfo {
+        "baseData": { unit: { id: string; name: string }; roomtypeId: number };
         "bedPreferenceType": any[];
         "bookingType": string;
         "currency": ICurrency;
@@ -570,7 +569,7 @@ export namespace Components {
         "popoverTitle": string;
     }
     interface IrRoom {
-        "bookingEvent": Booking1;
+        "bookingEvent": Booking;
         "bookingIndex": number;
         "currency": string;
         "defaultTexts": ILocale;
@@ -2266,6 +2265,7 @@ declare global {
 }
 declare namespace LocalJSX {
     interface IglApplicationInfo {
+        "baseData"?: { unit: { id: string; name: string }; roomtypeId: number };
         "bedPreferenceType"?: any[];
         "bookingType"?: string;
         "currency"?: ICurrency;
@@ -2903,7 +2903,7 @@ declare namespace LocalJSX {
         "popoverTitle"?: string;
     }
     interface IrRoom {
-        "bookingEvent"?: Booking1;
+        "bookingEvent"?: Booking;
         "bookingIndex"?: number;
         "currency"?: string;
         "defaultTexts"?: ILocale;

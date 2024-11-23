@@ -58,14 +58,15 @@ export class IglDateRange {
     }
     if (this.fromDate && this.toDate) {
       this.calculateTotalNights();
-      this.handleDateSelectEvent('selectedDateRange', {
-        fromDate: this.fromDate.getTime(),
-        toDate: this.toDate.getTime(),
-        fromDateStr: this.fromDateStr,
-        toDateStr: this.toDateStr,
-        dateDifference: this.totalNights,
-      });
+      // this.handleDateSelectEvent('selectedDateRange', {
+      //   fromDate: this.fromDate.getTime(),
+      //   toDate: this.toDate.getTime(),
+      //   fromDateStr: this.fromDateStr,
+      //   toDateStr: this.toDateStr,
+      //   dateDifference: this.totalNights,
+      // });
     }
+    return [this.fromDateStr, this.toDateStr];
   }
 
   private calculateTotalNights() {

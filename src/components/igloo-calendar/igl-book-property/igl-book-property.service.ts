@@ -2,6 +2,7 @@ import { Booking, Room } from '@/models/booking.dto';
 import { TSourceOption } from '@/models/igl-book-property';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
+import { extras } from '@/utils/utils';
 import moment from 'moment';
 
 export class IglBookPropertyService {
@@ -150,7 +151,6 @@ export class IglBookPropertyService {
   }) {
     const rooms = [];
     const total_days = calculateDaysBetweenDates(moment(check_in).format('YYYY-MM-DD'), moment(check_out).format('YYYY-MM-DD'));
-    console.log(total_days);
     const calculateAmount = ({ is_amount_modified, selected_variation, view_mode, rp_amount }: IRatePlanSelection) => {
       if (is_amount_modified) {
         return view_mode === '002' ? rp_amount : rp_amount / total_days;
@@ -169,7 +169,7 @@ export class IglBookPropertyService {
               roomtype: rateplan.roomtype,
               rateplan: rateplan.ratePlan,
               prepayment_amount_gross: 0,
-              unit: override_unit ? unit : rateplan.guest[i].unit ? { id: rateplan.guest[i].unit } : null,
+              unit: override_unit ? { id: unit } : rateplan.guest[i].unit ? { id: rateplan.guest[i].unit } : null,
               occupancy: {
                 adult_nbr: rateplan.selected_variation.adult_nbr,
                 children_nbr: rateplan.selected_variation.child_nbr,
@@ -200,7 +200,7 @@ export class IglBookPropertyService {
     return rooms;
   }
 
-  async prepareBookUserServiceParams(context: any, sourceOption: TSourceOption) {
+  async prepareBookUserServiceParams({ context, sourceOption, check_in }: { context: any; sourceOption: TSourceOption; check_in: boolean }) {
     try {
       // Validate context structure
       if (!context || !context.dateRangeData) {
@@ -221,16 +221,20 @@ export class IglBookPropertyService {
         });
       };
 
-      const modifyBookingDetails = (booking: Booking, rooms: Room[]) => {
+      const modifyBookingDetails = ({ pickup_info, is_direct, is_in_loyalty_mode, promo_key, extras, ...rest }: Booking, rooms: Room[]) => {
         return {
-          from_date: moment(fromDate).format('YYYY-MM-DD'),
-          to_date: moment(toDate).format('YYYY-MM-DD'),
+          assign_untis: true,
+          check_in: false,
+          is_pms: true,
+          is_direct,
+          is_in_loyalty_mode,
+          promo_key,
+          extras,
           booking: {
-            ...booking,
-            from_date: moment(fromDate).format('YYYY-MM-DD'),
-            to_date: moment(toDate).format('YYYY-MM-DD'),
+            ...rest,
             rooms,
           },
+          pickup_info,
         };
       };
 
@@ -249,16 +253,25 @@ export class IglBookPropertyService {
         case 'ADD_ROOM':
         case 'SPLIT_BOOKING': {
           const { booking } = context.defaultData;
+          if (!booking) {
+            throw new Error('Missing booking');
+          }
+          console.log(booking);
           const newRooms = generateNewRooms();
-          newBooking = modifyBookingDetails(booking, [...booking.rooms, ...newRooms]);
+          newBooking = modifyBookingDetails(booking, [...booking?.rooms, ...newRooms]);
           break;
         }
         default: {
           const newRooms = generateNewRooms();
           const { bookedByInfoData } = context;
           newBooking = {
-            from_date: moment(fromDate).format('YYYY-MM-DD'),
-            to_date: moment(toDate).format('YYYY-MM-DD'),
+            assign_untis: true,
+            check_in,
+            is_pms: true,
+            is_direct: true,
+            is_in_loyalty_mode: false,
+            promo_key: null,
+            extras,
             booking: {
               from_date: moment(fromDate).format('YYYY-MM-DD'),
               to_date: moment(toDate).format('YYYY-MM-DD'),
@@ -275,7 +288,7 @@ export class IglBookPropertyService {
               source: sourceOption,
               rooms: newRooms,
               currency: context.currency,
-              arrival: context.bookedByInfoData.selectedArrivalTime.code,
+              arrival: { code: bookedByInfoData.selectedArrivalTime },
               guest: {
                 email: bookedByInfoData.email === '' ? null : bookedByInfoData.email || null,
                 first_name: bookedByInfoData.firstName,
@@ -297,6 +310,7 @@ export class IglBookPropertyService {
                   : null,
               },
             },
+            pickup_info: null,
           };
           break;
         }

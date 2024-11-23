@@ -72,7 +72,11 @@ export class IglRatePlan {
     } else if (key === 'rate') {
       this.updateRateplanSelection({ view_mode: value as any });
     } else if (key === 'totalRooms') {
-      reserveRooms(this.roomTypeId, this.ratePlan.id, Number(value));
+      reserveRooms({
+        roomTypeId: this.roomTypeId,
+        ratePlanId: this.ratePlan.id,
+        rooms: Number(value),
+      });
     }
   }
 
@@ -260,9 +264,21 @@ export class IglRatePlan {
                         type="radio"
                         name="ratePlanGroup"
                         value="1"
-                        onChange={evt => {
+                        onChange={() => {
                           this.resetReserved();
-                          this.handleDataChange('totalRooms', evt);
+                          reserveRooms({
+                            roomTypeId: this.roomTypeId,
+                            ratePlanId: this.ratePlan.id,
+                            rooms: 1,
+                            guest: [
+                              {
+                                name: booking_store.guest.name,
+                                unit: null,
+                                bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest.bed_preference : null,
+                                infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest.infant_nbr : null,
+                              },
+                            ],
+                          });
                         }}
                         checked={visibleInventory.reserved === 1}
                       />
@@ -274,7 +290,19 @@ export class IglRatePlan {
                     class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1 mt-1 d-md-none"
                     onClick={() => {
                       this.resetReserved();
-                      reserveRooms(this.roomTypeId, this.ratePlan.id, 1);
+                      reserveRooms({
+                        roomTypeId: this.roomTypeId,
+                        ratePlanId: this.ratePlan.id,
+                        rooms: 1,
+                        guest: [
+                          {
+                            name: booking_store.guest.name,
+                            unit: null,
+                            bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest.bed_preference : null,
+                            infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest.infant_nbr : null,
+                          },
+                        ],
+                      });
                       this.bookProperty();
                     }}
                   >
