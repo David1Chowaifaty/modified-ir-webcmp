@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h } from '@stencil/core';
+import { Component, Fragment, Host, Prop, h } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
 @Component({
   tag: 'ir-extra-services',
@@ -10,14 +10,17 @@ export class IrExtraServices {
 
   render() {
     return (
-      <Host>
-        {this.booking.extra_services?.map(service => (
-          <ir-extra-service
-            bookingNumber={this.booking.booking_nbr}
-            currencySymbol={this.booking.currency.symbol}
-            key={service.booking_system_id}
-            service={service}
-          ></ir-extra-service>
+      <Host class={'card p-0 m-0'}>
+        {this.booking.extra_services?.map((service, index) => (
+          <Fragment>
+            <ir-extra-service
+              bookingNumber={this.booking.booking_nbr}
+              currencySymbol={this.booking.currency.symbol}
+              key={service.booking_system_id}
+              service={service}
+            ></ir-extra-service>
+            {index !== this.booking.extra_services.length - 1 && <hr class="mr-2 ml-2 my-0 p-0" />}
+          </Fragment>
         ))}
       </Host>
     );

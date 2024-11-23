@@ -38,7 +38,7 @@ export class IrExtraService {
   render() {
     return (
       <Host>
-        <div class=" card p-1">
+        <div class="p-1">
           <div class={'extra-service-container'}>
             <p class="extra-service-description">{this.service.description}</p>
             <div class="extra-service-actions">
