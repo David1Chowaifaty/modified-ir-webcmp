@@ -173,7 +173,7 @@ export class IglBookPropertyHeader {
     if (maxAge === 1) {
       years = locales.entries.Lcz_Year;
     }
-    return `${locales.entries.Lcz_ChildCaption} < ${this.adultChildConstraints.child_max_age} ${years}`;
+    return `${locales.entries.Lcz_ChildCaption} 0 - ${this.adultChildConstraints.child_max_age} ${years}`;
   }
   handleButtonClicked() {
     if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length <= 1) {
