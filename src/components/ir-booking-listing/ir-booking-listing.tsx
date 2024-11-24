@@ -1,4 +1,4 @@
-import { Booking } from '@/models/booking.dto';
+import { Booking, IUnit } from '@/models/booking.dto';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { RoomService } from '@/services/room.service';
 import booking_listing, { updateUserSelection, onBookingListingChange } from '@/stores/booking_listing.store';
@@ -281,8 +281,23 @@ export class IrBookingListing {
                         <td>
                           <ul>
                             {booking.rooms.map(room => (
-                              <li>{room.roomtype.name}</li>
+                              <li>
+                                <div class={'room-service'}>
+                                  <p class={'m-0 p-0'}>{room.roomtype.name}</p>
+                                  {room.unit &&
+                                    ((room.unit as IUnit).name.length > 4 ? (
+                                      <ir-tooltip customSlot message={(room.unit as IUnit).name}>
+                                        <p class={'room-name-container cursor-pointer m-0'} slot="tooltip-trigger">
+                                          {(room.unit as IUnit)?.name.substring(0, 4)}
+                                        </p>
+                                      </ir-tooltip>
+                                    ) : (
+                                      <p class={'room-name-container  m-0'}>{(room.unit as IUnit)?.name.substring(0, 4)}</p>
+                                    ))}
+                                </div>
+                              </li>
                             ))}
+                            {booking.extra_services && <li>Extra services</li>}
                           </ul>
                         </td>
                         <td>
