@@ -20,6 +20,9 @@
   border-bottom: 1px solid #1e9ff2;
   border-left: 1px solid #1e9ff2;
 }
+.currency-ph[data-state='error'] {
+  border-color: var(--red, #ff4961);
+}
 .price-input:focus {
   border-right-width: 1px !important;
 }

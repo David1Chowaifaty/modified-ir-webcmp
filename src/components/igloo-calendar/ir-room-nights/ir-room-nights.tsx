@@ -6,6 +6,7 @@ import { IRoomNightsDataEventPayload } from '@/models/property-types';
 import { v4 } from 'uuid';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import { Variation } from '@/models/property';
 
 @Component({
   tag: 'ir-room-nights',
@@ -135,14 +136,14 @@ export class IrRoomNights {
         this.inventory = null;
         return null;
       }
-      const selected_variation = rate_plan.variations?.find(
+      const selected_variation: Variation = rate_plan.variations?.find(
         variation =>
           variation.adult_nbr === this.selectedRoom.rateplan.selected_variation.adult_nbr && variation.child_nbr === this.selectedRoom.rateplan.selected_variation.child_nbr,
       );
       if (!selected_variation) {
         return null;
       }
-      return selected_variation.amount;
+      return selected_variation.discounted_gross_amount;
     } catch (error) {
       console.error(error);
     } finally {

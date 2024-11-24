@@ -33,13 +33,13 @@ export class IrExtraServiceConfig {
   private async saveAmenity() {
     try {
       ExtraServiceSchema.parse(this.s_service);
-      await this.bookingService.doBookingExtraService({
-        service: this.s_service,
-        booking_nbr: this.booking.booking_nbr,
-        is_remove: false,
-      });
-      this.resetBookingData.emit(null);
-      this.closeModal.emit(null);
+      // await this.bookingService.doBookingExtraService({
+      //   service: this.s_service,
+      //   booking_nbr: this.booking.booking_nbr,
+      //   is_remove: false,
+      // });
+      // this.resetBookingData.emit(null);
+      // this.closeModal.emit(null);
     } catch (error) {
       if (error instanceof ZodError) {
         this.error = true;
@@ -127,9 +127,11 @@ export class IrExtraServiceConfig {
               <div class="input-group-prepend">
                 <span class="input-group-text">Price</span>
               </div>
-              <span class="currency-ph">{this.booking.currency.symbol}</span>
+              <span class="currency-ph" data-state={this.error && this.s_service.price === null ? 'error' : ''}>
+                {this.booking.currency.symbol}
+              </span>
               <input
-                class="form-control price-input"
+                class={`form-control price-input ${this.error && this.s_service.price === null ? 'is-invalid' : ''}`}
                 onInput={e => this.updateService({ price: Number((e.target as HTMLInputElement).value) })}
                 type="number"
                 aria-label="Price"
