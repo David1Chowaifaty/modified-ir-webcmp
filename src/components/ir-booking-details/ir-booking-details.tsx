@@ -217,10 +217,14 @@ export class IrBookingDetails {
       this.property_id = roomResponse?.My_Result?.id;
       //TODO:Reenable payment actions
       if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
-        this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({
-          booking_nbr: bookingDetails.booking_nbr,
-          currency_id: bookingDetails.currency.id,
-        });
+        this.paymentService
+          .GetExposedCancelationDueAmount({
+            booking_nbr: bookingDetails.booking_nbr,
+            currency_id: bookingDetails.currency.id,
+          })
+          .then(res => {
+            this.paymentActions = res;
+          });
       } else {
         console.warn('Booking details are incomplete for payment actions.');
       }
