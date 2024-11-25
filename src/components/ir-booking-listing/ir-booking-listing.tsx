@@ -9,6 +9,7 @@ import moment from 'moment';
 import { _formatTime } from '../ir-booking-details/functions';
 import { getPrivateNote } from '@/utils/booking';
 import Token from '@/models/Token';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -34,6 +35,7 @@ export class IrBookingListing {
   private bookingListingService = new BookingListingService();
   private roomService = new RoomService();
   private token = new Token();
+  private roomHistory: Record<number, boolean> = {};
 
   private listingModal: HTMLIrListingModalElement;
   private listingModalTimeout: NodeJS.Timeout;
@@ -174,7 +176,19 @@ export class IrBookingListing {
       end_row: endItem,
     });
   }
-
+  private isSingleUnit(id: number) {
+    if (this.roomHistory[id]) {
+      return this.roomHistory[id];
+    }
+    const roomtype = calendar_data.roomsInfo.find(r => r.id === id);
+    if (!roomtype) {
+      console.warn(`Room type not found for ID: ${id}`);
+      return false;
+    }
+    const result = roomtype.physicalrooms?.length <= 1;
+    this.roomHistory[id] = result;
+    return result;
+  }
   render() {
     if (this.isLoading || this.ticket === '') {
       return <ir-loading-screen></ir-loading-screen>;
@@ -285,14 +299,15 @@ export class IrBookingListing {
                                 <div class={'room-service'}>
                                   <p class={'m-0 p-0'}>{room.roomtype.name}</p>
                                   {room.unit &&
-                                    ((room.unit as IUnit).name.length > 4 ? (
-                                      <ir-tooltip customSlot message={(room.unit as IUnit).name}>
+                                    !this.isSingleUnit(room.roomtype.id) &&
+                                    ((room.unit as IUnit)?.name?.length > 4 ? (
+                                      <ir-tooltip customSlot message={(room.unit as IUnit)?.name}>
                                         <p class={'room-name-container cursor-pointer m-0'} slot="tooltip-trigger">
-                                          {(room.unit as IUnit)?.name.substring(0, 4)}
+                                          {(room.unit as IUnit)?.name?.substring(0, 4)}
                                         </p>
                                       </ir-tooltip>
                                     ) : (
-                                      <p class={'room-name-container  m-0'}>{(room.unit as IUnit)?.name.substring(0, 4)}</p>
+                                      <p class={'room-name-container  m-0'}>{(room.unit as IUnit)?.name?.substring(0, 4)}</p>
                                     ))}
                                 </div>
                               </li>
