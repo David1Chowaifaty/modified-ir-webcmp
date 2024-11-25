@@ -201,7 +201,7 @@ export class IglApplicationInfo {
         </div>
         {this.rateplanSelection.selected_variation.child_nbr > 0 && (
           <div style={{ gap: '0.5rem', marginTop: '0.5rem' }} class="d-flex  flex-row  p-0 align-items-center aplicationInfoContainer">
-            <p class={'m-0 p-0'}>Any of the children below 3 years?</p>
+            <p class={'m-0 p-0 text-danger'}>Any of the children below 3 years?</p>
             <div class="mr-1 flex-fill">
               <select
                 class={`form-control input-sm ${this.isButtonPressed && this.guestInfo?.bed_preference === '' && 'border-danger'}`}

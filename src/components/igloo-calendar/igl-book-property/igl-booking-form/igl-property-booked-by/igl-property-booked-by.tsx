@@ -242,7 +242,7 @@ export class IglPropertyBookedBy {
               <ir-autocomplete
                 onComboboxValue={this.handleComboboxChange.bind(this)}
                 propertyId={this.propertyId}
-                type="email"
+                type="text"
                 value={this.bookedByData.email}
                 required
                 class={'flex-fill'}
