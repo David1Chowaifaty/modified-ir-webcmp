@@ -33,13 +33,13 @@ export class IrExtraServiceConfig {
   private async saveAmenity() {
     try {
       ExtraServiceSchema.parse(this.s_service);
-      // await this.bookingService.doBookingExtraService({
-      //   service: this.s_service,
-      //   booking_nbr: this.booking.booking_nbr,
-      //   is_remove: false,
-      // });
-      // this.resetBookingData.emit(null);
-      // this.closeModal.emit(null);
+      await this.bookingService.doBookingExtraService({
+        service: this.s_service,
+        booking_nbr: this.booking.booking_nbr,
+        is_remove: false,
+      });
+      this.resetBookingData.emit(null);
+      this.closeModal.emit(null);
     } catch (error) {
       if (error instanceof ZodError) {
         this.error = true;

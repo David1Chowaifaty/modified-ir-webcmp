@@ -49,6 +49,7 @@
 - [ir-guest-info](../ir-guest-info)
 - [ir-pickup](ir-pickup)
 - [ir-booking-extra-note](../ir-booking-extra-note)
+- [ir-extra-service-config](./ir-extra-services/ir-extra-service-config)
 - [ir-spinner](../ui/ir-spinner)
 - [ir-toast](../ir-toast)
 - [ir-interceptor](../ir-interceptor)
@@ -59,6 +60,7 @@
 - [ir-date-view](../ir-date-view)
 - [ir-room](ir-room)
 - [ir-pickup-view](ir-pickup-view)
+- [ir-extra-services](ir-extra-services)
 - [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)
 - [igl-book-property](../igloo-calendar/igl-book-property)
@@ -70,6 +72,7 @@ graph TD;
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> ir-booking-extra-note
+  ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
   ir-booking-details --> ir-interceptor
@@ -80,6 +83,7 @@ graph TD;
   ir-booking-details --> ir-date-view
   ir-booking-details --> ir-room
   ir-booking-details --> ir-pickup-view
+  ir-booking-details --> ir-extra-services
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
@@ -98,6 +102,9 @@ graph TD;
   ir-booking-extra-note --> ir-title
   ir-booking-extra-note --> ir-textarea
   ir-booking-extra-note --> ir-button
+  ir-extra-service-config --> ir-title
+  ir-extra-service-config --> ir-date-picker
+  ir-extra-service-config --> ir-button
   ir-label --> ir-button
   ir-room --> ir-button
   ir-room --> ir-date-view
@@ -105,6 +112,10 @@ graph TD;
   ir-room --> ir-modal
   ir-modal --> ir-button
   ir-pickup-view --> ir-button
+  ir-extra-services --> ir-extra-service
+  ir-extra-service --> ir-button
+  ir-extra-service --> ir-date-view
+  ir-extra-service --> ir-modal
   ir-payment-details --> ir-date-picker
   ir-payment-details --> ir-button
   ir-payment-details --> ir-payment-actions
@@ -115,10 +126,10 @@ graph TD;
   igl-book-property --> ir-button
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
-  igl-book-property --> igl-pagetwo
+  igl-book-property --> igl-booking-form
   igl-block-dates-view --> ir-date-view
   igl-booking-overview-page --> igl-book-property-header
-  igl-booking-overview-page --> igl-booking-rooms
+  igl-booking-overview-page --> igl-room-type
   igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
   igl-book-property-header --> ir-select
@@ -126,13 +137,13 @@ graph TD;
   igl-book-property-header --> igl-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
-  igl-booking-rooms --> igl-booking-room-rate-plan
-  igl-booking-room-rate-plan --> ir-tooltip
+  igl-room-type --> igl-rate-plan
+  igl-rate-plan --> ir-tooltip
   igl-book-property-footer --> ir-button
-  igl-pagetwo --> ir-date-view
-  igl-pagetwo --> igl-application-info
-  igl-pagetwo --> igl-property-booked-by
-  igl-pagetwo --> ir-button
+  igl-booking-form --> ir-date-view
+  igl-booking-form --> igl-application-info
+  igl-booking-form --> igl-property-booked-by
+  igl-booking-form --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip

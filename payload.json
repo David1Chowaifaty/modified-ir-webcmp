@@ -1,14 +1,775 @@
 {
-  "from_date": "2024-11-15",
-  "to_date": "2024-11-16",
-  "propertyid": 42,
-  "language": "en",
-  "room_type_ids": [],
-  "agent_id": null,
-  "is_in_agent_mode": false,
-  "room_type_ids_to_update": [],
-  "adult_nbr": "2",
-  "child_nbr": 0,
-  "currency_ref": "USD",
-  "is_backend": true
+  "assign_untis": true,
+  "check_in": true,
+  "is_pms": true,
+  "is_direct": true,
+  "is_in_loyalty_mode": false,
+  "promo_key": null,
+  "extras": [
+    {
+      "key": "private_note",
+      "value": ""
+    },
+    {
+      "key": "is_backend",
+      "value": true
+    },
+    {
+      "key": "ERROR_EMAIL",
+      "value": ""
+    }
+  ],
+  "booking": {
+    "from_date": "2024-11-30",
+    "to_date": "2024-12-01",
+    "remark": "",
+    "booking_nbr": "",
+    "property": {
+      "id": 42
+    },
+    "booked_on": {
+      "date": "2024-11-25",
+      "hour": 9,
+      "minute": 23
+    },
+    "source": {
+      "code": "003",
+      "description": "Phone/Email",
+      "tag": "",
+      "type": "SETUP",
+      "id": "86e8e9f9-68e0-4f86-b805-bc3a68828f08"
+    },
+    "rooms": [
+      {
+        "identifier": null,
+        "roomtype": {
+          "amenities": [
+            {
+              "amenity_type": "room",
+              "code": "amenities",
+              "description": "Welcome amenities"
+            },
+            {
+              "amenity_type": "room",
+              "code": "viewslopes",
+              "description": "Slopes view"
+            },
+            {
+              "amenity_type": "room",
+              "code": "soundproof",
+              "description": "Soundproof"
+            }
+          ],
+          "availabilities": null,
+          "bedding_setup": [
+            {
+              "code": "kingsizebed",
+              "count": 1,
+              "name": "King size bed"
+            },
+            {
+              "code": "singlebed",
+              "count": 1,
+              "name": "Single bed"
+            }
+          ],
+          "description": "Our Modern and Classic Rooms averages 322 square feet with custom furnishings,every room in Hotel High Season includes the finest attention to detail, from the triple-sheeted 300 thread count sheets to the one-touch “Goodnight” button.Each room will be everything you are looking for in a Lebanon hotel, and drastically more than you thought possible and our custom beds by will make you want to snooze through your morning plans.When you enter our Modern and Classic Room, you’ll only have one thought: this is what all hotels at Lebanon should be like. ",
+          "exposed_inventory": null,
+          "id": 110,
+          "images": [
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_235.jpg"
+            },
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_251.jpg"
+            },
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_225.jpg"
+            },
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_236.jpg"
+            },
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_238.jpg"
+            },
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_241.jpg"
+            },
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_231.jpg"
+            },
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_226.jpg"
+            },
+            {
+              "tooltip": "Standard Rooms",
+              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_229.jpg"
+            }
+          ],
+          "inventory": 2,
+          "is_active": true,
+          "is_available_to_book": true,
+          "is_bed_configuration_enabled": false,
+          "main_image": {
+            "tooltip": "Standard Rooms",
+            "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_235.jpg"
+          },
+          "name": "Standard Rooms",
+          "not_available_reason": null,
+          "occupancy_default": {
+            "adult_nbr": 2,
+            "children_nbr": 0,
+            "infant_nbr": null
+          },
+          "occupancy_max": {
+            "adult_nbr": 2,
+            "children_nbr": 0,
+            "infant_nbr": 0
+          },
+          "physicalrooms": null,
+          "rate": null,
+          "rateplans": null,
+          "size": 25,
+          "smoking_option": {
+            "allowed_smoking_options": [
+              {
+                "code": "002",
+                "description": "Non-smoking"
+              }
+            ],
+            "code": "003",
+            "description": "Non smoking"
+          }
+        },
+        "rateplan": {
+          "agents": [],
+          "assignable_units": [
+            {
+              "Is_Fully_Available": false,
+              "Is_Not_Available": true,
+              "Is_Partially_Available": false,
+              "from_date": "2024-11-30",
+              "name": "01",
+              "pr_id": 24,
+              "prs_entries": [],
+              "to_date": "2024-12-01"
+            },
+            {
+              "Is_Fully_Available": false,
+              "Is_Not_Available": true,
+              "Is_Partially_Available": false,
+              "from_date": "2024-11-30",
+              "name": "02",
+              "pr_id": 25,
+              "prs_entries": [],
+              "to_date": "2024-12-01"
+            },
+            {
+              "Is_Fully_Available": true,
+              "Is_Not_Available": false,
+              "Is_Partially_Available": false,
+              "from_date": "2024-11-30",
+              "name": "03",
+              "pr_id": 14,
+              "prs_entries": [
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-11-30",
+                  "PRS_ID": null,
+                  "PR_ID": 14,
+                  "STAY_SHIFT_CODE": "002",
+                  "STAY_STATUS_CODE": null
+                },
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-12-01",
+                  "PRS_ID": null,
+                  "PR_ID": 14,
+                  "STAY_SHIFT_CODE": "001",
+                  "STAY_STATUS_CODE": null
+                }
+              ],
+              "to_date": "2024-12-01"
+            },
+            {
+              "Is_Fully_Available": true,
+              "Is_Not_Available": false,
+              "Is_Partially_Available": false,
+              "from_date": "2024-11-30",
+              "name": "04",
+              "pr_id": 15,
+              "prs_entries": [
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-11-30",
+                  "PRS_ID": null,
+                  "PR_ID": 15,
+                  "STAY_SHIFT_CODE": "002",
+                  "STAY_STATUS_CODE": null
+                },
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-12-01",
+                  "PRS_ID": null,
+                  "PR_ID": 15,
+                  "STAY_SHIFT_CODE": "001",
+                  "STAY_STATUS_CODE": null
+                }
+              ],
+              "to_date": "2024-12-01"
+            },
+            {
+              "Is_Fully_Available": true,
+              "Is_Not_Available": false,
+              "Is_Partially_Available": false,
+              "from_date": "2024-11-30",
+              "name": "05",
+              "pr_id": 16,
+              "prs_entries": [
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-11-30",
+                  "PRS_ID": null,
+                  "PR_ID": 16,
+                  "STAY_SHIFT_CODE": "002",
+                  "STAY_STATUS_CODE": null
+                },
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-12-01",
+                  "PRS_ID": null,
+                  "PR_ID": 16,
+                  "STAY_SHIFT_CODE": "001",
+                  "STAY_STATUS_CODE": null
+                }
+              ],
+              "to_date": "2024-12-01"
+            },
+            {
+              "Is_Fully_Available": true,
+              "Is_Not_Available": false,
+              "Is_Partially_Available": false,
+              "from_date": "2024-11-30",
+              "name": "06",
+              "pr_id": 17,
+              "prs_entries": [
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-11-30",
+                  "PRS_ID": null,
+                  "PR_ID": 17,
+                  "STAY_SHIFT_CODE": "002",
+                  "STAY_STATUS_CODE": null
+                },
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-12-01",
+                  "PRS_ID": null,
+                  "PR_ID": 17,
+                  "STAY_SHIFT_CODE": "001",
+                  "STAY_STATUS_CODE": null
+                }
+              ],
+              "to_date": "2024-12-01"
+            },
+            {
+              "Is_Fully_Available": true,
+              "Is_Not_Available": false,
+              "Is_Partially_Available": false,
+              "from_date": "2024-11-30",
+              "name": "07",
+              "pr_id": 26,
+              "prs_entries": [
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-11-30",
+                  "PRS_ID": null,
+                  "PR_ID": 26,
+                  "STAY_SHIFT_CODE": "002",
+                  "STAY_STATUS_CODE": null
+                },
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-12-01",
+                  "PRS_ID": null,
+                  "PR_ID": 26,
+                  "STAY_SHIFT_CODE": "001",
+                  "STAY_STATUS_CODE": null
+                }
+              ],
+              "to_date": "2024-12-01"
+            },
+            {
+              "Is_Fully_Available": true,
+              "Is_Not_Available": false,
+              "Is_Partially_Available": false,
+              "from_date": "2024-11-30",
+              "name": "08",
+              "pr_id": 28,
+              "prs_entries": [
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-11-30",
+                  "PRS_ID": null,
+                  "PR_ID": 28,
+                  "STAY_SHIFT_CODE": "002",
+                  "STAY_STATUS_CODE": null
+                },
+                {
+                  "BLOCKED_TILL_DATE": null,
+                  "BLOCKED_TILL_HOUR": null,
+                  "BLOCKED_TILL_MINUTE": null,
+                  "BOOK_NBR": null,
+                  "BSA_REF": null,
+                  "DESCRIPTION": null,
+                  "ENTRY_DATE": null,
+                  "ENTRY_USER_ID": null,
+                  "EXTRA_DATA": null,
+                  "EXTRA_DATA_TYPE": null,
+                  "IS_CONTINUITY": null,
+                  "My_Pr": null,
+                  "NOTES": null,
+                  "OWNER_ID": null,
+                  "POOL": null,
+                  "PRS_DATE": "2024-12-01",
+                  "PRS_ID": null,
+                  "PR_ID": 28,
+                  "STAY_SHIFT_CODE": "001",
+                  "STAY_STATUS_CODE": null
+                }
+              ],
+              "to_date": "2024-12-01"
+            }
+          ],
+          "cancelation": null,
+          "custom_text": null,
+          "extra_bed_for_code": "002",
+          "extra_bed_max": 0,
+          "extra_bed_rate_per_night": 0,
+          "extra_bed_rate_per_night_additional_child": 0,
+          "extra_bed_rate_per_night_first_child": 0,
+          "guarantee": null,
+          "id": 2001,
+          "is_active": true,
+          "is_available_to_book": true,
+          "is_booking_engine_enabled": true,
+          "is_channel_enabled": true,
+          "is_closed": null,
+          "is_extra_bed_free_for_children": false,
+          "is_non_refundable": true,
+          "is_targeting_travel_agency": false,
+          "name": "Standard Rooms/Bed-&-breakfast/Non-ref.",
+          "not_available_reason": null,
+          "pre_payment_amount": null,
+          "pre_payment_amount_gross": null,
+          "rate_restrictions": null,
+          "selected_variation": null,
+          "sell_mode": {
+            "code": "001",
+            "description": "Per Room"
+          },
+          "short_name": "Bed & breakfast",
+          "sleeps": 2,
+          "variations": [
+            {
+              "IS_MLS_VIOLATED": false,
+              "MLS_ALERT": null,
+              "MLS_ALERT_VALUE": null,
+              "adult_child_offering": null,
+              "adult_nbr": 2,
+              "amount": 80,
+              "amount_gross": 88.8,
+              "amount_per_night": 64,
+              "amount_per_night_gross": 71.04,
+              "applicable_policies": [
+                {
+                  "brackets": [
+                    {
+                      "amount": 64,
+                      "amount_formatted": "US$64.00",
+                      "code": "004",
+                      "currency_id": 4,
+                      "due_on": "2024-11-25",
+                      "due_on_formatted": "Monday, 25 Nov 2024, 14:00",
+                      "gross_amount": 71.04,
+                      "gross_amount_formatted": "US$71.04",
+                      "statement": "100% of the total price"
+                    }
+                  ],
+                  "combined_statement": "100% of the total price",
+                  "type": "cancelation"
+                },
+                {
+                  "brackets": [
+                    {
+                      "amount": 64,
+                      "amount_formatted": "US$64.00",
+                      "code": "001",
+                      "currency_id": 4,
+                      "due_on": "2024-11-25",
+                      "due_on_formatted": null,
+                      "gross_amount": 71.04,
+                      "gross_amount_formatted": "US$71.04",
+                      "statement": "Your full stay will be charged."
+                    }
+                  ],
+                  "combined_statement": "Your full stay will be charged.",
+                  "type": "guarantee"
+                }
+              ],
+              "bed_preference_code": "001",
+              "child_nbr": 0,
+              "discount_pct": 20,
+              "discounted_amount": 64,
+              "discounted_gross_amount": 71.04,
+              "extra_bed_free_nbr": 0,
+              "extra_bed_nbr": 0,
+              "extra_bed_rate_per_night": 0,
+              "food_nbr_upsell": 0,
+              "infant_nbr": null,
+              "is_lmd": null,
+              "nights": [
+                {
+                  "amount": 80,
+                  "applied_promotion": {
+                    "from": "2024-11-11",
+                    "id": 23028,
+                    "is_last_minute_discount": false,
+                    "is_loyalty": null,
+                    "key": "",
+                    "mode": "Percent",
+                    "to": "2025-02-26",
+                    "type": "Anytime",
+                    "value": 20
+                  },
+                  "discounted_amount": 64,
+                  "discounted_gross_amount": 71.04,
+                  "extra_bed_nbr": 0,
+                  "extra_bed_nbr_child": 0,
+                  "extra_bed_nbr_child_addi": 0,
+                  "extra_bed_rate_per_night": 0,
+                  "extra_bed_rate_per_night_child": 0,
+                  "extra_bed_rate_per_night_child_addi": 0,
+                  "gross_amount": 88.8,
+                  "night": "2024-11-30"
+                }
+              ],
+              "nights_nbr": 1,
+              "prepayment_amount": 64,
+              "prepayment_amount_gross": 71.04,
+              "rate_plan_id": 2001,
+              "smoking_code": "001",
+              "total_before_discount": null
+            },
+            {
+              "IS_MLS_VIOLATED": false,
+              "MLS_ALERT": null,
+              "MLS_ALERT_VALUE": null,
+              "adult_child_offering": null,
+              "adult_nbr": 1,
+              "amount": 80,
+              "amount_gross": 88.8,
+              "amount_per_night": 64,
+              "amount_per_night_gross": 71.04,
+              "applicable_policies": [
+                {
+                  "brackets": [
+                    {
+                      "amount": 64,
+                      "amount_formatted": "US$64.00",
+                      "code": "004",
+                      "currency_id": 4,
+                      "due_on": "2024-11-25",
+                      "due_on_formatted": "Monday, 25 Nov 2024, 14:00",
+                      "gross_amount": 71.04,
+                      "gross_amount_formatted": "US$71.04",
+                      "statement": "100% of the total price"
+                    }
+                  ],
+                  "combined_statement": "100% of the total price",
+                  "type": "cancelation"
+                },
+                {
+                  "brackets": [
+                    {
+                      "amount": 64,
+                      "amount_formatted": "US$64.00",
+                      "code": "001",
+                      "currency_id": 4,
+                      "due_on": "2024-11-25",
+                      "due_on_formatted": null,
+                      "gross_amount": 71.04,
+                      "gross_amount_formatted": "US$71.04",
+                      "statement": "Your full stay will be charged."
+                    }
+                  ],
+                  "combined_statement": "Your full stay will be charged.",
+                  "type": "guarantee"
+                }
+              ],
+              "bed_preference_code": "001",
+              "child_nbr": 0,
+              "discount_pct": 20,
+              "discounted_amount": 64,
+              "discounted_gross_amount": 71.04,
+              "extra_bed_free_nbr": 0,
+              "extra_bed_nbr": 0,
+              "extra_bed_rate_per_night": 0,
+              "food_nbr_upsell": 0,
+              "infant_nbr": null,
+              "is_lmd": null,
+              "nights": [
+                {
+                  "amount": 80,
+                  "applied_promotion": {
+                    "from": "2024-11-11",
+                    "id": 23028,
+                    "is_last_minute_discount": false,
+                    "is_loyalty": null,
+                    "key": "",
+                    "mode": "Percent",
+                    "to": "2025-02-26",
+                    "type": "Anytime",
+                    "value": 20
+                  },
+                  "discounted_amount": 64,
+                  "discounted_gross_amount": 71.04,
+                  "extra_bed_nbr": 0,
+                  "extra_bed_nbr_child": 0,
+                  "extra_bed_nbr_child_addi": 0,
+                  "extra_bed_rate_per_night": 0,
+                  "extra_bed_rate_per_night_child": 0,
+                  "extra_bed_rate_per_night_child_addi": 0,
+                  "gross_amount": 88.8,
+                  "night": "2024-11-30"
+                }
+              ],
+              "nights_nbr": 1,
+              "prepayment_amount": 64,
+              "prepayment_amount_gross": 71.04,
+              "rate_plan_id": 2001,
+              "smoking_code": "001",
+              "total_before_discount": null
+            }
+          ]
+        },
+        "prepayment_amount_gross": 0,
+        "unit": {
+          "id": 14
+        },
+        "occupancy": {
+          "adult_nbr": 2,
+          "children_nbr": 0,
+          "infant_nbr": null
+        },
+        "bed_preference": null,
+        "from_date": "2024-11-30",
+        "to_date": "2024-12-01",
+        "notes": "",
+        "days": [
+          {
+            "date": "2024-11-30",
+            "amount": 71.04,
+            "cost": null
+          }
+        ],
+        "guest": {
+          "email": null,
+          "first_name": "test",
+          "last_name": null,
+          "country_id": null,
+          "city": null,
+          "mobile": null,
+          "address": null,
+          "dob": null,
+          "subscribe_to_news_letter": null,
+          "cci": null
+        }
+      }
+    ],
+    "currency": {
+      "code": "USD",
+      "id": 4,
+      "symbol": "US$"
+    },
+    "arrival": {
+      "code": "001"
+    },
+    "guest": {
+      "email": "estest.test@gmail.com",
+      "first_name": "test",
+      "last_name": "test5",
+      "country_id": 486,
+      "city": null,
+      "mobile": "12345678",
+      "phone_prefix": null,
+      "address": "",
+      "dob": null,
+      "subscribe_to_news_letter": false,
+      "cci": null
+    }
+  },
+  "pickup_info": null
 }

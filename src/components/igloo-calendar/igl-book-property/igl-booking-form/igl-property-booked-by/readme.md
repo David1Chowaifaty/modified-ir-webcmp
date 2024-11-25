@@ -27,19 +27,19 @@
 
 ### Used by
 
- - [igl-pagetwo](../igl-pagetwo)
+ - [igl-booking-form](..)
 
 ### Depends on
 
-- [ir-autocomplete](../../ir-autocomplete)
-- [ir-tooltip](../../ir-tooltip)
+- [ir-autocomplete](../../../../ir-autocomplete)
+- [ir-tooltip](../../../../ir-tooltip)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
-  igl-pagetwo --> igl-property-booked-by
+  igl-booking-form --> igl-property-booked-by
   style igl-property-booked-by fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

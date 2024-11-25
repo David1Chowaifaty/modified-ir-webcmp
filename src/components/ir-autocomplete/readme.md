@@ -38,7 +38,7 @@
 ### Used by
 
  - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
- - [igl-property-booked-by](../igloo-calendar/igl-property-booked-by)
+ - [igl-property-booked-by](../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
 
 ### Graph
 ```mermaid

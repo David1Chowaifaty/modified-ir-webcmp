@@ -26,6 +26,7 @@
 ### Used by
 
  - [ir-booking-extra-note](../ir-booking-extra-note)
+ - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-team](../ir-housekeeping/ir-hk-team)
@@ -43,6 +44,7 @@
 graph TD;
   ir-title --> ir-icon
   ir-booking-extra-note --> ir-title
+  ir-extra-service-config --> ir-title
   ir-hk-archive --> ir-title
   ir-hk-tasks --> ir-title
   ir-hk-team --> ir-title

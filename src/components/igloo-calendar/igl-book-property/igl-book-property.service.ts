@@ -223,7 +223,7 @@ export class IglBookPropertyService {
 
       const modifyBookingDetails = ({ pickup_info, is_direct, is_in_loyalty_mode, promo_key, extras, ...rest }: Booking, rooms: Room[]) => {
         return {
-          assign_untis: true,
+          assign_units: true,
           check_in: false,
           is_pms: true,
           is_direct,
@@ -265,7 +265,7 @@ export class IglBookPropertyService {
           const newRooms = generateNewRooms();
           const { bookedByInfoData } = context;
           newBooking = {
-            assign_untis: true,
+            assign_units: true,
             check_in,
             is_pms: true,
             is_direct: true,

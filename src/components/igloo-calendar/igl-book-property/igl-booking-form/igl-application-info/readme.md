@@ -7,43 +7,33 @@
 
 ## Properties
 
-| Property                 | Attribute                  | Description | Type                        | Default          |
-| ------------------------ | -------------------------- | ----------- | --------------------------- | ---------------- |
-| `bedPreferenceType`      | --                         |             | `any[]`                     | `[]`             |
-| `bookingType`            | `booking-type`             |             | `string`                    | `'PLUS_BOOKING'` |
-| `currency`               | --                         |             | `ICurrency`                 | `undefined`      |
-| `dateDifference`         | `date-difference`          |             | `number`                    | `undefined`      |
-| `defaultGuestPreference` | `default-guest-preference` |             | `number`                    | `undefined`      |
-| `defaultGuestRoomId`     | `default-guest-room-id`    |             | `number`                    | `undefined`      |
-| `guestInfo`              | --                         |             | `{ [key: string]: any; }`   | `undefined`      |
-| `guestRefKey`            | `guest-ref-key`            |             | `string`                    | `undefined`      |
-| `index`                  | `index`                    |             | `number`                    | `undefined`      |
-| `roomsList`              | --                         |             | `{ [key: string]: any; }[]` | `[]`             |
-| `selectedUnits`          | --                         |             | `number[]`                  | `[]`             |
-
-
-## Events
-
-| Event             | Description | Type                                   |
-| ----------------- | ----------- | -------------------------------------- |
-| `dataUpdateEvent` |             | `CustomEvent<{ [key: string]: any; }>` |
+| Property            | Attribute      | Description | Type                                                           | Default          |
+| ------------------- | -------------- | ----------- | -------------------------------------------------------------- | ---------------- |
+| `baseData`          | --             |             | `{ unit: { id: string; name: string; }; roomtypeId: number; }` | `undefined`      |
+| `bedPreferenceType` | --             |             | `any[]`                                                        | `[]`             |
+| `bookingType`       | `booking-type` |             | `string`                                                       | `'PLUS_BOOKING'` |
+| `currency`          | --             |             | `ICurrency`                                                    | `undefined`      |
+| `guestInfo`         | --             |             | `RatePlanGuest`                                                | `undefined`      |
+| `rateplanSelection` | --             |             | `IRatePlanSelection`                                           | `undefined`      |
+| `roomIndex`         | `room-index`   |             | `number`                                                       | `undefined`      |
+| `totalNights`       | `total-nights` |             | `number`                                                       | `1`              |
 
 
 ## Dependencies
 
 ### Used by
 
- - [igl-pagetwo](../igl-pagetwo)
+ - [igl-booking-form](..)
 
 ### Depends on
 
-- [ir-tooltip](../../ir-tooltip)
+- [ir-tooltip](../../../../ir-tooltip)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-application-info --> ir-tooltip
-  igl-pagetwo --> igl-application-info
+  igl-booking-form --> igl-application-info
   style igl-application-info fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
