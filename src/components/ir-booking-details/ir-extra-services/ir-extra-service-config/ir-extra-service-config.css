@@ -1,19 +1,43 @@
 :host {
   display: block;
+  --ir-input-border-color: #cacfe7;
+}
+
+:host .input-group-text {
+  border-color: var(--ir-input-border-color);
 }
 .currency-ph {
   padding: 0;
   margin: 0;
+  color: #3b4781;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 0 0 0.25rem;
-  border-top: 1px solid #cacfe7;
-  border-bottom: 1px solid #cacfe7;
+  border-top: 1px solid var(--ir-input-border-color);
+  border-bottom: 1px solid var(--ir-input-border-color);
   border-left: 1px solid transparent;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
+
+.service-description-input {
+  height: 70px !important;
+}
+
+.service-description .input-group-prepend {
+  background-color: #f4f5fa;
+  border: 1px solid var(--ir-input-border-color);
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.service-description .input-group-text {
+  height: fit-content;
+  border: 0;
+  padding-top: 0.75rem !important;
+}
+
 .price-input-group:focus-within .currency-ph,
 .cost-input-group:focus-within .currency-ph {
   border-top: 1px solid #1e9ff2;

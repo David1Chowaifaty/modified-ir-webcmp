@@ -67,19 +67,19 @@ export class IrExtraServiceConfig {
         <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={'Extra Services'} displayContext="sidebar"></ir-title>
         <section class={'px-1'}>
           {/* Description */}
-          <div class="input-group mb-1 mt-3">
+          <fieldset class="input-group mb-1 mt-3 service-description">
             <div class="input-group-prepend">
               <span class="input-group-text">Description</span>
             </div>
             <textarea
               value={this.s_service?.description}
-              class={`form-control ${this.error && !this.s_service?.description ? 'is-invalid' : ''}`}
+              class={`form-control service-description-input ${this.error && !this.s_service?.description ? 'is-invalid' : ''}`}
               style={{ height: '7rem' }}
               maxLength={250}
               onChange={e => this.updateService({ description: (e.target as HTMLTextAreaElement).value })}
               aria-label="Amenity description"
             ></textarea>
-          </div>
+          </fieldset>
           {/* Dates */}
           <div class={'row-group mb-1'}>
             <div class="input-group mb-1 mb-sm-0">
@@ -132,8 +132,15 @@ export class IrExtraServiceConfig {
               </span>
               <input
                 class={`form-control price-input ${this.error && this.s_service.price === null ? 'is-invalid' : ''}`}
-                onInput={e => this.updateService({ price: Number((e.target as HTMLInputElement).value) })}
+                onInput={e => this.updateService({ price: parseFloat((e.target as HTMLInputElement).value) })}
+                onBlur={e => {
+                  const input = e.target as HTMLInputElement;
+                  const formattedValue = parseFloat(input.value).toFixed(2);
+                  input.value = formattedValue;
+                  this.updateService({ price: parseFloat(formattedValue) });
+                }}
                 type="number"
+                step="0.01"
                 aria-label="Price"
                 aria-describedby="amenity price"
                 value={this.s_service?.price}
@@ -146,7 +153,14 @@ export class IrExtraServiceConfig {
               <span class="currency-ph">{this.booking.currency.symbol}</span>
               <input
                 type="number"
-                onInput={e => this.updateService({ cost: Number((e.target as HTMLInputElement).value) })}
+                onInput={e => this.updateService({ cost: parseFloat((e.target as HTMLInputElement).value) })}
+                onBlur={e => {
+                  const input = e.target as HTMLInputElement;
+                  const formattedValue = parseFloat(input.value).toFixed(2);
+                  input.value = formattedValue;
+                  this.updateService({ cost: parseFloat(formattedValue) });
+                }}
+                step={'0.01'}
                 class="form-control cost-input"
                 aria-label="Cost"
                 aria-describedby="amenity cost"
