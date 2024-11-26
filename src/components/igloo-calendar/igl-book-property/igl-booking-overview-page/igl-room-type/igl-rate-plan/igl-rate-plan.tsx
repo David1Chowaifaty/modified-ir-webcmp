@@ -198,7 +198,7 @@ export class IglRatePlan {
               </div>
               <div class="m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1">
                 <div class="d-flex m-0 p-0 rate-total-night-view mt-0">
-                  <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container">
+                  {/* <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container">
                     <div class="input-group-prepend">
                       <span data-disabled={disableForm} data-state={isInputFocused ? 'focus' : ''} class="input-group-text new-currency">
                         {currency.symbol}
@@ -214,7 +214,22 @@ export class IglRatePlan {
                       placeholder={locales.entries.Lcz_Rate || 'Rate'}
                       onInput={this.handleInput.bind(this)}
                     />
-                  </fieldset>
+                  </fieldset> */}
+                  <ir-price-input
+                    disabled={disableForm}
+                    onTextChange={e =>
+                      this.updateRateplanSelection({
+                        is_amount_modified: true,
+                        rp_amount: Number(e.detail),
+                      })
+                    }
+                    aria-label={`${this.visibleInventory.roomtype.name} ${this.ratePlan.short_name}'s rate`}
+                    aria-describedby={`${this.ratePlan.short_name}'s rate`}
+                    class="ir-br-input-none"
+                    currency={currency.symbol}
+                    value={this.renderRate()}
+                    placeholder={locales.entries.Lcz_Rate || 'Rate'}
+                  ></ir-price-input>
                   <fieldset class="position-relative m-0 total-nights-container p-0">
                     <select
                       disabled={disableForm}

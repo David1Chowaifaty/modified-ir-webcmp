@@ -24,6 +24,7 @@ import { selectOption } from "./common/models";
 import { ILocale } from "./stores/locales.store";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
+import { ZodType } from "zod";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
@@ -44,6 +45,7 @@ export { selectOption } from "./common/models";
 export { ILocale } from "./stores/locales.store";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
+export { ZodType } from "zod";
 export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
     interface IglApplicationInfo {
@@ -580,6 +582,52 @@ export namespace Components {
         "irPopoverLeft": string;
         "popoverTitle": string;
     }
+    interface IrPriceInput {
+        /**
+          * The AutoValidate for the input, optional
+         */
+        "autoValidate"?: boolean;
+        /**
+          * The Currency for the input, optional
+         */
+        "currency"?: string;
+        /**
+          * The disbaled for the input, optional
+         */
+        "disabled"?: boolean;
+        /**
+          * The label for the input, optional
+         */
+        "label"?: string;
+        /**
+          * Maximum value for the price
+         */
+        "maxValue"?: number;
+        /**
+          * Minimum value for the price
+         */
+        "minValue"?: number;
+        /**
+          * Placeholder text for the input
+         */
+        "placeholder": string;
+        /**
+          * Whether the input is required
+         */
+        "required": boolean;
+        /**
+          * Initial value for the input
+         */
+        "value": string;
+        /**
+          * Indicates the key to wrap the value (e.g., 'price' or 'cost')
+         */
+        "wrapKey"?: string;
+        /**
+          * A Zod schema for validating the input Example: z.coerce.number()
+         */
+        "zod"?: ZodType<any, any>;
+    }
     interface IrRoom {
         "bookingEvent": Booking;
         "bookingIndex": number;
@@ -921,6 +969,10 @@ export interface IrPhoneInputCustomEvent<T> extends CustomEvent<T> {
 export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPickupElement;
+}
+export interface IrPriceInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPriceInputElement;
 }
 export interface IrRoomCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2054,6 +2106,25 @@ declare global {
         prototype: HTMLIrPopoverElement;
         new (): HTMLIrPopoverElement;
     };
+    interface HTMLIrPriceInputElementEventMap {
+        "textChange": string;
+        "onBlur": string;
+        "onFocus": void;
+    }
+    interface HTMLIrPriceInputElement extends Components.IrPriceInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPriceInputElementEventMap>(type: K, listener: (this: HTMLIrPriceInputElement, ev: IrPriceInputCustomEvent<HTMLIrPriceInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPriceInputElementEventMap>(type: K, listener: (this: HTMLIrPriceInputElement, ev: IrPriceInputCustomEvent<HTMLIrPriceInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPriceInputElement: {
+        prototype: HTMLIrPriceInputElement;
+        new (): HTMLIrPriceInputElement;
+    };
     interface HTMLIrRoomElementEventMap {
         "deleteFinished": string;
         "pressCheckIn": any;
@@ -2312,6 +2383,7 @@ declare global {
         "ir-pickup": HTMLIrPickupElement;
         "ir-pickup-view": HTMLIrPickupViewElement;
         "ir-popover": HTMLIrPopoverElement;
+        "ir-price-input": HTMLIrPriceInputElement;
         "ir-room": HTMLIrRoomElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-select": HTMLIrSelectElement;
@@ -2983,6 +3055,64 @@ declare namespace LocalJSX {
         "irPopoverLeft"?: string;
         "popoverTitle"?: string;
     }
+    interface IrPriceInput {
+        /**
+          * The AutoValidate for the input, optional
+         */
+        "autoValidate"?: boolean;
+        /**
+          * The Currency for the input, optional
+         */
+        "currency"?: string;
+        /**
+          * The disbaled for the input, optional
+         */
+        "disabled"?: boolean;
+        /**
+          * The label for the input, optional
+         */
+        "label"?: string;
+        /**
+          * Maximum value for the price
+         */
+        "maxValue"?: number;
+        /**
+          * Minimum value for the price
+         */
+        "minValue"?: number;
+        /**
+          * Emits the current value on blur
+         */
+        "onOnBlur"?: (event: IrPriceInputCustomEvent<string>) => void;
+        /**
+          * Emits the current value on focus
+         */
+        "onOnFocus"?: (event: IrPriceInputCustomEvent<void>) => void;
+        /**
+          * Emits the current value on change
+         */
+        "onTextChange"?: (event: IrPriceInputCustomEvent<string>) => void;
+        /**
+          * Placeholder text for the input
+         */
+        "placeholder"?: string;
+        /**
+          * Whether the input is required
+         */
+        "required"?: boolean;
+        /**
+          * Initial value for the input
+         */
+        "value"?: string;
+        /**
+          * Indicates the key to wrap the value (e.g., 'price' or 'cost')
+         */
+        "wrapKey"?: string;
+        /**
+          * A Zod schema for validating the input Example: z.coerce.number()
+         */
+        "zod"?: ZodType<any, any>;
+    }
     interface IrRoom {
         "bookingEvent"?: Booking;
         "bookingIndex"?: number;
@@ -3191,6 +3321,7 @@ declare namespace LocalJSX {
         "ir-pickup": IrPickup;
         "ir-pickup-view": IrPickupView;
         "ir-popover": IrPopover;
+        "ir-price-input": IrPriceInput;
         "ir-room": IrRoom;
         "ir-room-nights": IrRoomNights;
         "ir-select": IrSelect;
@@ -3282,6 +3413,7 @@ declare module "@stencil/core" {
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
             "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
+            "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;

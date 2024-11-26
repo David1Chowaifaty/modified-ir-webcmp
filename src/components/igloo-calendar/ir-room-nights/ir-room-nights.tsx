@@ -151,49 +151,37 @@ export class IrRoomNights {
     }
   }
 
-  renderInputField(index: number, currency_symbol: string, day: Day) {
+  renderInputField(currency_symbol: string, day: Day) {
     return (
-      <fieldset class="col-2 ml-1 position-relative has-icon-left m-0 p-0 rate-input-container">
-        <div class="input-group-prepend bg-white">
-          <span
-            data-disabled={this.inventory === 0 || this.inventory === null}
-            data-state={this.isInputFocused === index ? 'focus' : ''}
-            class="input-group-text new-currency bg-white"
-            id="basic-addon1"
-          >
-            {currency_symbol}
-          </span>
-        </div>
-        <input
-          onFocus={() => (this.isInputFocused = index)}
-          onBlur={() => (this.isInputFocused = -1)}
+      <div class="col-3 ml-1 position-relative  m-0 p-0 rate-input-container">
+        <ir-price-input
+          value={day.amount > 0 ? day.amount.toString() : ''}
           disabled={this.inventory === 0 || this.inventory === null}
-          type="text"
-          class="form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder"
-          id={v4()}
-          value={day.amount > 0 ? day.amount : ''}
-          placeholder={locales.entries.Lcz_Rate || 'Rate'}
-          onInput={event => this.handleInput(event, index)}
-        />
-      </fieldset>
+          currency={currency_symbol}
+          aria-label="rate"
+          aria-describedby="rate cost"
+        ></ir-price-input>
+      </div>
     );
   }
+
   renderReadOnlyField(currency_symbol: string, day: Day) {
     return <p class="col-9 ml-1 m-0 p-0">{`${currency_symbol}${Number(day.amount).toFixed(2)}`}</p>;
   }
   renderRateFields(index: number, currency_symbol: string, day: Day) {
     if (this.isEndDateBeforeFromDate) {
       if (index < this.defaultTotalNights) {
-        return this.renderInputField(index, currency_symbol, day);
+        return this.renderInputField(currency_symbol, day);
       } else {
         return this.renderReadOnlyField(currency_symbol, day);
       }
     } else {
-      return index < this.selectedRoom.days.length ? this.renderReadOnlyField(currency_symbol, day) : this.renderInputField(index, currency_symbol, day);
+      return index < this.selectedRoom.days.length ? this.renderReadOnlyField(currency_symbol, day) : this.renderInputField(currency_symbol, day);
     }
   }
   renderDates() {
-    const currency_symbol = getCurrencySymbol(this.bookingEvent.currency.code);
+    const currency_symbol = this.bookingEvent.currency.symbol;
+    // const currency_symbol = getCurrencySymbol(this.bookingEvent.currency.code);
     return (
       <div class={'mt-2 m-0'}>
         {this.rates?.map((day, index) => (

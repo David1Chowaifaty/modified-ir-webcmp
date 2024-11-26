@@ -61,6 +61,16 @@ export class IrExtraServiceConfig {
     }
     this.s_service = { ...prevService, ...params };
   }
+  private validatePrice(): boolean {
+    if (this.s_service?.price === undefined || this.s_service?.price?.toString() === '') {
+      console.log('here');
+      return false;
+    }
+    console.log('here', this.s_service.price);
+    const priceSchema = ExtraServiceSchema.pick({ price: true });
+    const result = priceSchema.safeParse({ price: this.s_service?.price });
+    return result.success;
+  }
   render() {
     return (
       <Host class={'p-0'}>
@@ -103,7 +113,7 @@ export class IrExtraServiceConfig {
             <div class="input-group mb-1 mb-sm-0 ">
               <div class="input-group-prepend ">
                 <span class="input-group-text until-prepend" id="basic-addon1">
-                  and until
+                  till and including
                 </span>
               </div>
               <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center">
@@ -123,50 +133,31 @@ export class IrExtraServiceConfig {
           </div>
           {/* Prices and cost */}
           <div class={'row-group'}>
-            <div class="input-group price-input-group  mb-1 mb-sm-0">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Price</span>
-              </div>
-              <span class="currency-ph" data-state={this.error && this.s_service.price === null ? 'error' : ''}>
-                {this.booking.currency.symbol}
-              </span>
-              <input
-                class={`form-control price-input ${this.error && this.s_service.price === null ? 'is-invalid' : ''}`}
-                onInput={e => this.updateService({ price: parseFloat((e.target as HTMLInputElement).value) })}
-                onBlur={e => {
-                  const input = e.target as HTMLInputElement;
-                  const formattedValue = parseFloat(input.value).toFixed(2);
-                  input.value = formattedValue;
-                  this.updateService({ price: parseFloat(formattedValue) });
-                }}
-                type="number"
-                step="0.01"
-                aria-label="Price"
-                aria-describedby="amenity price"
-                value={this.s_service?.price}
-              />
-            </div>
-            <div class="input-group cost-input-group  mb-1 mb-sm-0">
-              <div class="input-group-prepend ">
-                <span class="input-group-text cost-input-placeholder">Cost</span>
-              </div>
-              <span class="currency-ph">{this.booking.currency.symbol}</span>
-              <input
-                type="number"
-                onInput={e => this.updateService({ cost: parseFloat((e.target as HTMLInputElement).value) })}
-                onBlur={e => {
-                  const input = e.target as HTMLInputElement;
-                  const formattedValue = parseFloat(input.value).toFixed(2);
-                  input.value = formattedValue;
-                  this.updateService({ cost: parseFloat(formattedValue) });
-                }}
-                step={'0.01'}
-                class="form-control cost-input"
-                aria-label="Cost"
-                aria-describedby="amenity cost"
-                value={this.s_service?.cost}
-              />
-            </div>
+            <ir-price-input
+              label="Price"
+              currency={this.booking.currency.symbol}
+              class="ir-br-input-none"
+              value={this.s_service?.price?.toString()}
+              zod={ExtraServiceSchema.pick({ price: true })}
+              aria-label="Price"
+              wrapKey="price"
+              aria-describedby="service price"
+              autoValidate={false}
+              data-state={this.error && !this.validatePrice() ? 'error' : ''}
+              onTextChange={e => this.updateService({ price: parseFloat(e.detail) })}
+            ></ir-price-input>
+            <ir-price-input
+              autoValidate={false}
+              label="Cost"
+              currency={this.booking.currency.symbol}
+              class="ir-bl-lbl-none ir-bl-none"
+              value={this.s_service?.cost?.toString()}
+              zod={ExtraServiceSchema.pick({ cost: true })}
+              onTextChange={e => this.updateService({ cost: parseFloat(e.detail) })}
+              wrapKey="cost"
+              aria-label="Cost"
+              aria-describedby="service cost"
+            ></ir-price-input>
           </div>
           <div class={'d-flex flex-column flex-sm-row mt-3'}>
             <ir-button
