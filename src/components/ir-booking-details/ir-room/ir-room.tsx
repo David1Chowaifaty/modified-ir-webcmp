@@ -46,20 +46,26 @@ export class IrRoom {
   @State() item: Room;
   @State() isLoading: boolean = false;
   @State() isModelOpen: boolean = false;
+
   private modal: IrModal;
-  irModalRef: HTMLIrModalElement;
+  private roomHistory: Record<number, boolean> = {};
+  private irModalRef: HTMLIrModalElement;
+
   componentWillLoad() {
     if (this.bookingEvent) {
       this.item = this.bookingEvent.rooms[this.bookingIndex];
     }
   }
+
+  componentDidLoad() {
+    this.modal = this.element.querySelector('ir-modal');
+  }
+
   @Watch('bookingEvent')
   handleBookingEventChange() {
     this.item = this.bookingEvent.rooms[this.bookingIndex];
   }
-  componentDidLoad() {
-    this.modal = this.element.querySelector('ir-modal');
-  }
+
   @Listen('clickHanlder')
   handleClick(e) {
     let target = e.target;
@@ -196,6 +202,19 @@ export class IrRoom {
     // Join non-empty parts with spaces
     return parts.filter(Boolean).join(' ');
   }
+  private isSingleUnit(id: number) {
+    if (this.roomHistory[id]) {
+      return this.roomHistory[id];
+    }
+    const roomtype = calendar_data.roomsInfo.find(r => r.id === id);
+    if (!roomtype) {
+      console.warn(`Room type not found for ID: ${id}`);
+      return false;
+    }
+    const result = roomtype.physicalrooms?.length <= 1;
+    this.roomHistory[id] = result;
+    return result;
+  }
   render() {
     return (
       <Host class="p-1 d-flex m-0">
@@ -249,11 +268,11 @@ export class IrRoom {
             {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
           </div>
-          <div class={'d-flex justify-content-end'}>
-            {calendar_data.is_frontdesk_enabled && this.item.unit && (
+          {!this.isSingleUnit(this.item.roomtype.id) && calendar_data.is_frontdesk_enabled && this.item.unit && (
+            <div class={'d-flex justify-content-end'}>
               <span class={`light-blue-bg ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>{(this.item.unit as IUnit).name}</span>
-            )}
-          </div>
+            </div>
+          )}
 
           <div>
             <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>

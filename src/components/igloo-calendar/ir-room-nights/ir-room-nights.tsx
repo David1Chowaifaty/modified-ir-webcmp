@@ -1,9 +1,8 @@
 import { Component, Host, Prop, State, h, Event, EventEmitter, Fragment } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
-import { convertDatePrice, formatDate, getCurrencySymbol, getDaysArray } from '@/utils/utils';
+import { convertDatePrice, formatDate, getDaysArray } from '@/utils/utils';
 import { Booking, Day, IUnit, Room } from '@/models/booking.dto';
 import { IRoomNightsDataEventPayload } from '@/models/property-types';
-import { v4 } from 'uuid';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { Variation } from '@/models/property';
@@ -93,22 +92,13 @@ export class IrRoomNights {
       console.log(error);
     }
   }
-  handleInput(event: InputEvent, index: number) {
-    let inputElement = event.target as HTMLInputElement;
-    let inputValue = inputElement.value;
+  private handleInput(event: string, index: number) {
+    let inputValue = event;
     let days = [...this.rates];
     inputValue = inputValue.replace(/[^0-9.]/g, '');
     if (inputValue === '') {
       days[index].amount = -1;
     } else {
-      const decimalCheck = inputValue.split('.');
-      if (decimalCheck.length > 2) {
-        inputValue = inputValue.substring(0, inputValue.length - 1);
-        inputElement.value = inputValue;
-      } else if (decimalCheck.length === 2 && decimalCheck[1].length > 2) {
-        inputValue = `${decimalCheck[0]}.${decimalCheck[1].substring(0, 2)}`;
-        inputElement.value = inputValue;
-      }
       if (!isNaN(Number(inputValue))) {
         days[index].amount = Number(inputValue);
       }
@@ -151,7 +141,7 @@ export class IrRoomNights {
     }
   }
 
-  renderInputField(currency_symbol: string, day: Day) {
+  private renderInputField(index: number, currency_symbol: string, day: Day) {
     return (
       <div class="col-3 ml-1 position-relative  m-0 p-0 rate-input-container">
         <ir-price-input
@@ -160,23 +150,24 @@ export class IrRoomNights {
           currency={currency_symbol}
           aria-label="rate"
           aria-describedby="rate cost"
+          onTextChange={e => this.handleInput(e.detail, index)}
         ></ir-price-input>
       </div>
     );
   }
 
-  renderReadOnlyField(currency_symbol: string, day: Day) {
+  private renderReadOnlyField(currency_symbol: string, day: Day) {
     return <p class="col-9 ml-1 m-0 p-0">{`${currency_symbol}${Number(day.amount).toFixed(2)}`}</p>;
   }
-  renderRateFields(index: number, currency_symbol: string, day: Day) {
+  private renderRateFields(index: number, currency_symbol: string, day: Day) {
     if (this.isEndDateBeforeFromDate) {
       if (index < this.defaultTotalNights) {
-        return this.renderInputField(currency_symbol, day);
+        return this.renderInputField(index, currency_symbol, day);
       } else {
         return this.renderReadOnlyField(currency_symbol, day);
       }
     } else {
-      return index < this.selectedRoom.days.length ? this.renderReadOnlyField(currency_symbol, day) : this.renderInputField(currency_symbol, day);
+      return index < this.selectedRoom.days.length ? this.renderReadOnlyField(currency_symbol, day) : this.renderInputField(index, currency_symbol, day);
     }
   }
   renderDates() {
