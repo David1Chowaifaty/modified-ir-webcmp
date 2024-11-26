@@ -221,7 +221,7 @@ export class IglBookPropertyService {
         });
       };
 
-      const modifyBookingDetails = ({ pickup_info, is_direct, is_in_loyalty_mode, promo_key, extras, ...rest }: Booking, rooms: Room[]) => {
+      const modifyBookingDetails = ({ pickup_info, extra_services, is_direct, is_in_loyalty_mode, promo_key, extras, ...rest }: Booking, rooms: Room[]) => {
         return {
           assign_units: true,
           check_in: false,
@@ -234,6 +234,7 @@ export class IglBookPropertyService {
             ...rest,
             rooms,
           },
+          extra_services,
           pickup_info,
         };
       };

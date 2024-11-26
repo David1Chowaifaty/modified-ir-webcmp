@@ -99,15 +99,30 @@ export class IrExtraServiceConfig {
                 </span>
               </div>
               <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center date-from">
-                <ir-date-picker
-                  date={this.s_service?.start_date ? new Date(this.s_service?.start_date) : new Date(this.booking.from_date)}
-                  class="hidden-date-picker"
-                  autoApply
-                  singleDatePicker
-                  minDate={this.booking.from_date}
-                  maxDate={this.booking.to_date}
-                  onDateChanged={e => this.updateService({ start_date: e.detail.start.format('YYYY-MM-DD') })}
-                ></ir-date-picker>
+                <div class="service-date-container">
+                  <ir-date-picker
+                    date={this.s_service?.start_date ? new Date(this.s_service?.start_date) : new Date(this.booking.from_date)}
+                    class="hidden-date-picker"
+                    autoApply
+                    singleDatePicker
+                    minDate={this.booking.from_date}
+                    maxDate={this.booking.to_date}
+                    onDateChanged={e => this.updateService({ start_date: e.detail.start.format('YYYY-MM-DD') })}
+                  ></ir-date-picker>
+                  {this.s_service?.start_date && (
+                    <div class="btn-container">
+                      <ir-button
+                        title="clear"
+                        id="close"
+                        variant="icon"
+                        style={{ '--icon-size': '0.875rem' }}
+                        icon_name="xmark-fill"
+                        class="ml-2"
+                        onClickHanlder={() => this.updateService({ start_date: null })}
+                      ></ir-button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div class="input-group mb-1 mb-sm-0 ">
@@ -117,17 +132,33 @@ export class IrExtraServiceConfig {
                 </span>
               </div>
               <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center">
-                <ir-date-picker
-                  date={this.s_service?.end_date ? new Date(this.s_service?.end_date) : new Date(this.booking.to_date)}
-                  class="hidden-date-picker"
-                  autoApply
-                  singleDatePicker
-                  minDate={this.booking.from_date}
-                  maxDate={this.booking.to_date}
-                  onDateChanged={e => {
-                    this.updateService({ end_date: e.detail.start.format('YYYY-MM-DD') });
-                  }}
-                ></ir-date-picker>
+                <div class="service-date-container">
+                  <ir-date-picker
+                    date={this.s_service?.end_date ? new Date(this.s_service?.end_date) : new Date(this.booking.to_date)}
+                    class="hidden-date-picker"
+                    autoApply
+                    singleDatePicker
+                    minDate={this.booking.from_date}
+                    maxDate={this.booking.to_date}
+                    onDateChanged={e => {
+                      this.updateService({ end_date: e.detail.start.format('YYYY-MM-DD') });
+                    }}
+                  ></ir-date-picker>
+
+                  {this.s_service?.end_date && (
+                    <div class="btn-container">
+                      <ir-button
+                        title="clear"
+                        id="close"
+                        variant="icon"
+                        style={{ '--icon-size': '0.875rem' }}
+                        icon_name="xmark-fill"
+                        class="ml-2"
+                        onClickHanlder={() => this.updateService({ end_date: null })}
+                      ></ir-button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
