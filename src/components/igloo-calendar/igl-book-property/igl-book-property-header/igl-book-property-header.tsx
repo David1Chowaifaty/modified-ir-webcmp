@@ -112,16 +112,11 @@ export class IglBookPropertyHeader {
     return (
       <div class={'mt-1 mt-lg-0 d-flex flex-column text-left'}>
         {/* <label class="mb-1 d-lg-none">{locales.entries.Lcz_NumberOfGuests} </label> */}
-        <div class="form-group my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start">
+        <div class="form-group  my-lg-0 text-left d-flex align-items-center justify-content-between justify-content-sm-start">
           <fieldset>
-            <div class="btn-group ">
-              {/* <select class="form-control input-sm" id="xAdultSmallSelect" onChange={evt => this.handleAdultChildChange('adult', evt)}>
-                <option value="">{locales.entries.Lcz_AdultsCaption}</option>
-                {Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => (
-                  <option value={option}>{option}</option>
-                ))}
-              </select> */}
+            <div class="btn-group ml-0">
               <ir-select
+                class={'m-0'}
                 onSelectChange={e => this.handleAdultChildChange('adult', e.detail)}
                 select_id="adult_child_select"
                 firstOption={locales.entries.Lcz_AdultsCaption}
@@ -135,7 +130,7 @@ export class IglBookPropertyHeader {
           </fieldset>
           {this.adultChildConstraints.child_max_nbr > 0 && (
             <fieldset>
-              <div class="btn-group ml-1">
+              <div class="btn-group ml-1 p-0">
                 {/* <select class="form-control input-sm" id="xChildrenSmallSelect" onChange={evt => this.handleAdultChildChange('child', evt)}>
                   <option value={''}>{this.renderChildCaption()}</option>
                   {Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => (
@@ -157,7 +152,7 @@ export class IglBookPropertyHeader {
           )}
           <ir-button
             btn_id="check_availability"
-            isLoading={isRequestPending('/Get_Exposed_Booking_Availability')}
+            isLoading={isRequestPending('/Check_Availability')}
             icon=""
             size="sm"
             class="ml-2"
@@ -178,7 +173,7 @@ export class IglBookPropertyHeader {
     if (maxAge === 1) {
       years = locales.entries.Lcz_Year;
     }
-    return `${locales.entries.Lcz_ChildCaption} < ${this.adultChildConstraints.child_max_age} ${years}`;
+    return `${locales.entries.Lcz_ChildCaption} 0 - ${this.adultChildConstraints.child_max_age} ${years}`;
   }
   handleButtonClicked() {
     if (this.isEventType('SPLIT_BOOKING') && Object.keys(this.bookedByInfoData).length <= 1) {
@@ -238,8 +233,9 @@ export class IglBookPropertyHeader {
         {this.isEventType('SPLIT_BOOKING') && this.getSplitBookingList()}
         {showSourceNode && this.getSourceNode()}
         <div class={`d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}`}>
-          <fieldset class="mt-lg-0  ">
+          <fieldset class="mt-lg-0 mr-1 ">
             <igl-date-range
+              variant="booking"
               dateLabel={locales.entries.Lcz_Dates}
               minDate={this.isEventType('PLUS_BOOKING') ? moment().add(-1, 'months').startOf('month').format('YYYY-MM-DD') : this.minDate}
               disabled={this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')}

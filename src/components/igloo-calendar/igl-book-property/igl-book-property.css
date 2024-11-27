@@ -94,10 +94,10 @@ button:not(:disabled),
   cursor: pointer;
 }
 
-.row {
+/* .row {
   padding: 0 0 0 15px;
   margin: 0;
-}
+} */
 @media only screen and (min-width: 1200px) {
   .sideWindow {
     max-width: 70%;

@@ -1,18 +1,18 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { IglPagetwo } from '../igl-pagetwo';
+import { IrExtraService } from '../ir-extra-service';
 
-describe('igl-pagetwo', () => {
+describe('ir-extra-service', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [IglPagetwo],
-      html: `<igl-pagetwo></igl-pagetwo>`,
+      components: [IrExtraService],
+      html: `<ir-extra-service></ir-extra-service>`,
     });
     expect(page.root).toEqualHtml(`
-      <igl-pagetwo>
+      <ir-extra-service>
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
-      </igl-pagetwo>
+      </ir-extra-service>
     `);
   });
 });

@@ -14,6 +14,7 @@
 | `disabled`           | `disabled`             |             | `boolean`                 | `false`     |
 | `maxDate`            | `max-date`             |             | `string`                  | `undefined` |
 | `minDate`            | `min-date`             |             | `string`                  | `undefined` |
+| `variant`            | `variant`              |             | `"booking" \| "default"`  | `'default'` |
 | `withDateDifference` | `with-date-difference` |             | `boolean`                 | `true`      |
 
 

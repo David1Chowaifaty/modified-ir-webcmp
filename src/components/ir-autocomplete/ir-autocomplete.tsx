@@ -278,6 +278,7 @@ export class IrAutocomplete {
             value={this.value || this.inputValue}
             placeholder={this.placeholder}
             onBlur={this.handleBlur.bind(this)}
+            autoComplete="off"
             onInput={this.handleInputChange.bind(this)}
             onFocus={this.handleFocus.bind(this)}
             ref={el => (this.inputRef = el)}

@@ -19,7 +19,7 @@ const initialState: IUnassignedDatesStore = {
 };
 export let { state: unassigned_dates, onChange: handleUnAssignedDatesChange } = createStore<IUnassignedDatesStore>(initialState);
 
-export function addUnassingedDates(data: UnassignedDates) {
+export function addUnassignedDates(data: UnassignedDates) {
   unassigned_dates.unassigned_dates = { ...unassigned_dates.unassigned_dates, ...data };
   /*
    try {
@@ -43,7 +43,7 @@ export function addUnassingedDates(data: UnassignedDates) {
       //  toastr.error(error);
     }
   */
-  console.log(unassigned_dates.unassigned_dates);
+  // console.log(unassigned_dates.unassigned_dates);
 }
 export function getUnassignedDates() {
   return unassigned_dates.unassigned_dates;

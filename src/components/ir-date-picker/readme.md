@@ -58,6 +58,7 @@ Type: `Promise<void>`
 
  - [igl-cal-header](../igloo-calendar/igl-cal-header)
  - [igl-date-range](../igloo-calendar/igl-date-range)
+ - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-payment-details](../ir-booking-details/ir-payment-details)
  - [ir-pickup](../ir-booking-details/ir-pickup)
@@ -67,6 +68,7 @@ Type: `Promise<void>`
 graph TD;
   igl-cal-header --> ir-date-picker
   igl-date-range --> ir-date-picker
+  ir-extra-service-config --> ir-date-picker
   ir-listing-header --> ir-date-picker
   ir-payment-details --> ir-date-picker
   ir-pickup --> ir-date-picker

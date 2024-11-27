@@ -1,0 +1,102 @@
+:host {
+  display: block;
+}
+.rate_amount {
+  display: none;
+  padding: 0;
+  margin: 0;
+}
+
+.booking-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+}
+
+.booking-roomtype-title {
+  font-size: 1.25rem;
+  margin-right: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.booking-details-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+}
+
+.booking-rateplan {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.booking-rateplan-name {
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.booking-tooltip {
+  margin-right: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.booking-variation {
+  margin: 0;
+  padding: 0;
+}
+
+.booking-price {
+  margin: 0;
+  padding: 0;
+}
+
+.booking-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
+
+.booking-details-container {
+  display: none;
+}
+
+/*md*/
+@media (min-width: 768px) {
+  .booking-header {
+    justify-content: flex-start;
+  }
+  .booking-footer,
+  .booking-price {
+    display: none;
+  }
+  .booking-details-container,
+  .rate_amount {
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+}
+
+@media only screen and (min-width: 908px) {
+  .aplicationInfoContainer {
+    max-width: 80%;
+  }
+  .guest-info-container {
+    max-width: 300px;
+  }
+
+  .preference-select-container {
+    max-width: 250px;
+  }
+}

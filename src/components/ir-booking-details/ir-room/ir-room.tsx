@@ -1,12 +1,12 @@
 import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Watch, Host, Fragment } from '@stencil/core';
 import { _formatDate, _getDay } from '../functions';
-import { Booking, IUnit, Room } from '../../../models/booking.dto';
-import { TIglBookPropertyPayload } from '../../../models/igl-book-property';
-import { formatName } from '../../../utils/booking';
+import { Booking, IUnit, IVariations, Occupancy, Room } from '@/models/booking.dto';
+import { TIglBookPropertyPayload } from '@/models/igl-book-property';
+import { formatName } from '@/utils/booking';
 import { IrModal } from '@/components/ir-modal/ir-modal';
 import axios from 'axios';
-import { ILocale } from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
+import locales, { ILocale } from '@/stores/locales.store';
+import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { formatAmount } from '@/utils/utils';
 
@@ -46,20 +46,25 @@ export class IrRoom {
   @State() item: Room;
   @State() isLoading: boolean = false;
   @State() isModelOpen: boolean = false;
+
   private modal: IrModal;
-  irModalRef: HTMLIrModalElement;
+  private irModalRef: HTMLIrModalElement;
+
   componentWillLoad() {
     if (this.bookingEvent) {
       this.item = this.bookingEvent.rooms[this.bookingIndex];
     }
   }
+
+  componentDidLoad() {
+    this.modal = this.element.querySelector('ir-modal');
+  }
+
   @Watch('bookingEvent')
   handleBookingEventChange() {
     this.item = this.bookingEvent.rooms[this.bookingIndex];
   }
-  componentDidLoad() {
-    this.modal = this.element.querySelector('ir-modal');
-  }
+
   @Listen('clickHanlder')
   handleClick(e) {
     let target = e.target;
@@ -128,12 +133,14 @@ export class IrRoom {
       roomsInfo: this.roomsInfo,
       roomName: (this.item.unit as IUnit)?.name || '',
       PICKUP_INFO: this.bookingEvent.pickup_info,
+      booking: this.bookingEvent,
+      currentRoomType: this.item,
     });
   }
   handleDeleteClick() {
     this.modal.openModal();
   }
-  async deleteRoom() {
+  private async deleteRoom() {
     try {
       this.isLoading = true;
       let oldRooms = [...this.bookingEvent.rooms];
@@ -169,6 +176,30 @@ export class IrRoom {
     } finally {
       this.isLoading = false;
     }
+  }
+  // private formatVariation({ adult_nbr, child_nbr, infant_nbr }: IVariations) {
+  //   const adultLabel = adult_nbr > 1 ? locales.entries.Lcz_Adults.toLowerCase() : locales.entries.Lcz_Adult.toLowerCase();
+  //   const childLabel = child_nbr > 1 ? locales.entries.Lcz_Children.toLowerCase() : locales.entries.Lcz_Child.toLowerCase();
+  //   const infantLabel = infant_nbr > 1 ? 'infants' : 'infant';
+
+  //   const parts = [`${adult_nbr} ${adultLabel}`, child_nbr ? `${child_nbr} ${childLabel}` : '', infant_nbr ? `${infant_nbr} ${infantLabel}` : ''];
+
+  //   return parts.filter(Boolean).join(' ');
+  // }
+  private formatVariation({ adult_nbr, child_nbr }: IVariations, { infant_nbr }: Occupancy) {
+    // Adjust child number based on infants
+    const adjustedChildNbr = child_nbr ? Math.max(child_nbr - infant_nbr, 0) : 0;
+
+    // Define labels based on singular/plural rules
+    const adultLabel = adult_nbr > 1 ? locales.entries.Lcz_Adults.toLowerCase() : locales.entries.Lcz_Adult.toLowerCase();
+    const childLabel = adjustedChildNbr > 1 ? locales.entries.Lcz_Children.toLowerCase() : locales.entries.Lcz_Child.toLowerCase();
+    const infantLabel = infant_nbr > 1 ? locales.entries.Lcz_Infants.toLowerCase() : locales.entries.Lcz_Infant.toLowerCase();
+
+    // Construct parts with the updated child number
+    const parts = [`${adult_nbr} ${adultLabel}`, adjustedChildNbr ? `${adjustedChildNbr} ${childLabel}` : '', infant_nbr ? `${infant_nbr} ${infantLabel}` : ''];
+
+    // Join non-empty parts with spaces
+    return parts.filter(Boolean).join(' ');
   }
   render() {
     return (
@@ -223,15 +254,16 @@ export class IrRoom {
             {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
           </div>
-          <div class={'d-flex justify-content-end'}>
-            {calendar_data.is_frontdesk_enabled && this.item.unit && (
+          {!isSingleUnit(this.item.roomtype.id) && calendar_data.is_frontdesk_enabled && this.item.unit && (
+            <div class={'d-flex justify-content-end'}>
               <span class={`light-blue-bg ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>{(this.item.unit as IUnit).name}</span>
-            )}
-          </div>
+            </div>
+          )}
 
           <div>
             <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
-            {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>}
+            {/* {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>} */}
+            {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.formatVariation(this.item.rateplan.selected_variation, this.item.occupancy)}</span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.item.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">

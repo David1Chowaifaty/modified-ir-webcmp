@@ -1,0 +1,94 @@
+:host {
+  display: block;
+  --ir-input-border-color: #cacfe7;
+  flex: 1 1 0%;
+}
+
+:host .input-group-text {
+  border-color: var(--ir-input-border-color);
+}
+:host .form-control,
+.currency-label {
+  font-size: 14px !important;
+}
+
+.ir-bl-lbl-none,
+.ir-bl-input-none {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+.ir-br-lbl-none,
+.ir-br-input-none {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.ir-br-none {
+  border-right: none;
+}
+.ir-bl-none {
+  border-left: none;
+}
+
+.rate-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  flex: 1;
+  padding: 0 !important;
+}
+:host([class='special-style']) .rate-input {
+  background: black !important;
+}
+.rate-input {
+  font-size: 0.875rem;
+  line-height: 0;
+  padding: 0;
+  height: 0;
+  box-sizing: border-box;
+  border-left: 0;
+  padding-left: 0px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.currency-label.with-label {
+  border-radius: 0;
+}
+
+.currency-label {
+  box-sizing: border-box;
+  color: #3b4781;
+  border: 1px solid #cacfe7;
+  font-size: 0.875rem;
+  height: 2rem;
+  background: white;
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  pointer-events: none;
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+.currency-label.disabled,
+.rate-input:disabled {
+  background-color: #eceff1;
+  border-color: rgba(118, 118, 118, 0.3);
+}
+
+.price-input-group:focus-within .currency-label {
+  border-top: 1px solid #1e9ff2;
+  border-bottom: 1px solid #1e9ff2;
+  border-left: 1px solid #1e9ff2;
+}
+:host([data-state='error']) .currency-label,
+:host([data-state='error']) .rate-input,
+.error {
+  border-color: var(--red, #ff4961) !important;
+}
+.price-input:focus {
+  border-right-width: 1px !important;
+}
+
+.is-invalid {
+  background-image: none !important;
+}

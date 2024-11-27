@@ -1,11 +1,11 @@
 import { newE2EPage } from '@stencil/core/testing';
 
-describe('igl-pagetwo', () => {
+describe('ir-extra-service', () => {
   it('renders', async () => {
     const page = await newE2EPage();
-    await page.setContent('<igl-pagetwo></igl-pagetwo>');
+    await page.setContent('<ir-extra-service></ir-extra-service>');
 
-    const element = await page.find('igl-pagetwo');
+    const element = await page.find('ir-extra-service');
     expect(element).toHaveClass('hydrated');
   });
 });

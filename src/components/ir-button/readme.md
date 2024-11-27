@@ -17,7 +17,7 @@
 | `btn_type`                 | `btn_type`                    |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `'button'`  |
 | `icon`                     | `icon`                        |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `'ft-save'` |
 | `iconPostion`              | `icon-postion`                |             | `"left" \| "right"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `'left'`    |
-| `icon_name`                | `icon_name`                   |             | `"print" \| "key" \| "save" \| "check" \| "user" \| "search" \| "file" \| "edit" \| "danger" \| "clock" \| "bell" \| "burger_menu" \| "home" \| "xmark" \| "minus" \| "heart" \| "user_group" \| "arrow_right" \| "arrow_left" \| "circle_info" \| "calendar" \| "globe" \| "facebook" \| "twitter" \| "whatsapp" \| "instagram" \| "youtube" \| "angle_left" \| "circle_check" \| "eraser" \| "trash" \| "plus" \| "reciept" \| "menu_list" \| "credit_card" \| "closed_eye" \| "open_eye" \| "server" \| "double_caret_left" \| "square_plus" \| "angles_left" \| "angle_right" \| "angles_right" \| "outline_user" \| "unlock" \| "circle_plus"` | `undefined` |
+| `icon_name`                | `icon_name`                   |             | `"print" \| "key" \| "search" \| "save" \| "check" \| "user" \| "file" \| "edit" \| "danger" \| "clock" \| "bell" \| "burger_menu" \| "home" \| "xmark" \| "minus" \| "heart" \| "user_group" \| "arrow_right" \| "arrow_left" \| "circle_info" \| "calendar" \| "globe" \| "facebook" \| "twitter" \| "whatsapp" \| "instagram" \| "youtube" \| "angle_left" \| "circle_check" \| "eraser" \| "trash" \| "plus" \| "reciept" \| "menu_list" \| "credit_card" \| "closed_eye" \| "open_eye" \| "server" \| "double_caret_left" \| "square_plus" \| "angles_left" \| "angle_right" \| "angles_right" \| "outline_user" \| "unlock" \| "circle_plus"` | `undefined` |
 | `icon_style`               | `icon_style`                  |             | `any`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `undefined` |
 | `isLoading`                | `is-loading`                  |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `false`     |
 | `name`                     | `name`                        |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `undefined` |
@@ -42,8 +42,8 @@
  - [igl-book-property](../igloo-calendar/igl-book-property)
  - [igl-book-property-footer](../igloo-calendar/igl-book-property/igl-book-property-footer)
  - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
+ - [igl-booking-form](../igloo-calendar/igl-book-property/igl-booking-form)
  - [igl-cal-header](../igloo-calendar/igl-cal-header)
- - [igl-pagetwo](../igloo-calendar/igl-pagetwo)
  - [igl-tba-booking-view](../igloo-calendar/igl-to-be-assigned/igl-tba-booking-view)
  - [igl-to-be-assigned](../igloo-calendar/igl-to-be-assigned)
  - [ir-booking-details](../ir-booking-details)
@@ -53,6 +53,8 @@
  - [ir-channel-editor](../ir-channel/ir-channel-editor)
  - [ir-channel-mapping](../ir-channel/ir-channel-mapping)
  - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
+ - [ir-extra-service](../ir-booking-details/ir-extra-services/ir-extra-service)
+ - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info](../ir-guest-info)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
@@ -82,8 +84,8 @@ graph TD;
   igl-book-property --> ir-button
   igl-book-property-footer --> ir-button
   igl-book-property-header --> ir-button
+  igl-booking-form --> ir-button
   igl-cal-header --> ir-button
-  igl-pagetwo --> ir-button
   igl-tba-booking-view --> ir-button
   igl-to-be-assigned --> ir-button
   ir-booking-details --> ir-button
@@ -93,6 +95,8 @@ graph TD;
   ir-channel-editor --> ir-button
   ir-channel-mapping --> ir-button
   ir-delete-modal --> ir-button
+  ir-extra-service --> ir-button
+  ir-extra-service-config --> ir-button
   ir-guest-info --> ir-button
   ir-hk-tasks --> ir-button
   ir-hk-unassigned-units --> ir-button

@@ -24,6 +24,8 @@ export type LocalizationStrings = {
   Lcz_AlternativeEmail: string;
   Lcz_Amount: string;
   Lcz_AnyMessageForUs: string;
+  Lcz_Infant: string;
+  Lcz_Infants: string;
   Lcz_AreYouSureDoYouWantToRemove: string;
   Lcz_AreYouSureWantToMoveAnotherUnit: string;
   Lcz_ArrivalTime: string;
@@ -37,6 +39,10 @@ export type LocalizationStrings = {
   Lcz_AutomaticReleaseIn: string;
   Lcz_Back: string;
   Lcz_BalanceWillBeCalculated: string;
+  Lcz_Adults: string;
+  Lcz_Adult: string;
+  Lcz_Child: string;
+  Lcz_Children: string;
   Lcz_Blockdates: string;
   Lcz_BlockDatesFor: string;
   Lcz_BlockedTill: string;

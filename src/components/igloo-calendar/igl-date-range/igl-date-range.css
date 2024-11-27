@@ -59,3 +59,31 @@
   margin: 0;
   cursor: default;
 }
+.date-range-container-cn {
+  position: relative;
+  width: fit-content;
+}
+.date-range-container-cn:focus-within .date-range-container {
+  border: 1px solid #379ff2;
+}
+.date-range-container {
+  position: relative;
+  gap: 1rem;
+  font-size: 0.975rem;
+  line-height: 1.45;
+  border-radius: 0.21rem;
+  border: 1px solid #cacfe7;
+  color: #3b4781;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box !important;
+  font-weight: 400;
+  background-color: #fff;
+  background-clip: padding-box;
+  height: 2rem;
+  pointer-events: none;
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+.date-range-container-cn .date-range-input {
+  position: absolute;
+  width: 100% !important;
+}

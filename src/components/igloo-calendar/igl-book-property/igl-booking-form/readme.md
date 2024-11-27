@@ -1,4 +1,4 @@
-# igl-pagetwo
+# igl-booking-form
 
 
 
@@ -38,28 +38,28 @@
 
 ### Used by
 
- - [igl-book-property](../igl-book-property)
+ - [igl-book-property](..)
 
 ### Depends on
 
-- [ir-date-view](../../ir-date-view)
-- [igl-application-info](../igl-application-info)
-- [igl-property-booked-by](../igl-property-booked-by)
-- [ir-button](../../ir-button)
+- [ir-date-view](../../../ir-date-view)
+- [igl-application-info](igl-application-info)
+- [igl-property-booked-by](igl-property-booked-by)
+- [ir-button](../../../ir-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-pagetwo --> ir-date-view
-  igl-pagetwo --> igl-application-info
-  igl-pagetwo --> igl-property-booked-by
-  igl-pagetwo --> ir-button
+  igl-booking-form --> ir-date-view
+  igl-booking-form --> igl-application-info
+  igl-booking-form --> igl-property-booked-by
+  igl-booking-form --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
   ir-button --> ir-icons
-  igl-book-property --> igl-pagetwo
-  style igl-pagetwo fill:#f9f,stroke:#333,stroke-width:4px
+  igl-book-property --> igl-booking-form
+  style igl-booking-form fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

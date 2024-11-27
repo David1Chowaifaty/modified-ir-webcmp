@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 
 export interface Booking {
@@ -13,6 +14,7 @@ export interface Booking {
   booked_on: DateTime;
   booking_nbr: string;
   currency: Currency;
+  extra_services: ExtraService[] | null;
   from_date: string;
   guest: Guest;
   extras: Extras[] | null;
@@ -37,6 +39,19 @@ export interface Booking {
   promo_key: string | null;
   is_in_loyalty_mode: boolean;
 }
+
+export const ExtraServiceSchema = z.object({
+  booking_system_id: z.number().optional(),
+  cost: z.coerce.number().nullable(),
+  currency_id: z.number().min(1),
+  description: z.string().min(1),
+  end_date: z.string().nullable(),
+  price: z.coerce.number(),
+  start_date: z.string().nullable(),
+  system_id: z.number().optional(),
+});
+
+export type ExtraService = z.infer<typeof ExtraServiceSchema>;
 export interface Extras {
   key: string;
   value: any;

@@ -1,4 +1,4 @@
-import { Booking } from '@/models/booking.dto';
+import { Booking, IUnit } from '@/models/booking.dto';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { RoomService } from '@/services/room.service';
 import booking_listing, { updateUserSelection, onBookingListingChange } from '@/stores/booking_listing.store';
@@ -9,6 +9,7 @@ import moment from 'moment';
 import { _formatTime } from '../ir-booking-details/functions';
 import { getPrivateNote } from '@/utils/booking';
 import Token from '@/models/Token';
+import { isSingleUnit } from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -281,8 +282,24 @@ export class IrBookingListing {
                         <td>
                           <ul>
                             {booking.rooms.map(room => (
-                              <li>{room.roomtype.name}</li>
+                              <li>
+                                <div class={'room-service'}>
+                                  <p class={'m-0 p-0'}>{room.roomtype.name}</p>
+                                  {room.unit &&
+                                    !isSingleUnit(room.roomtype.id) &&
+                                    ((room.unit as IUnit)?.name?.length > 4 ? (
+                                      <ir-tooltip customSlot message={(room.unit as IUnit)?.name}>
+                                        <p class={'room-name-container cursor-pointer m-0'} slot="tooltip-trigger">
+                                          {(room.unit as IUnit)?.name?.substring(0, 4)}
+                                        </p>
+                                      </ir-tooltip>
+                                    ) : (
+                                      <p class={'room-name-container  m-0'}>{(room.unit as IUnit)?.name?.substring(0, 4)}</p>
+                                    ))}
+                                </div>
+                              </li>
                             ))}
+                            {booking.extra_services && <li>Extra services</li>}
                           </ul>
                         </td>
                         <td>

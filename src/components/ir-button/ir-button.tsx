@@ -51,7 +51,7 @@ export class IrButton {
           type={this.btn_type}
           disabled={this.btn_disabled}
         >
-          {this.isLoading ? <span class="icon-loader"></span> : <ir-icons name={this.icon_name}></ir-icons>}
+          {this.isLoading ? <span class="icon-loader"></span> : <ir-icons class={'m-0 p-0'} name={this.icon_name}></ir-icons>}
         </button>
       );
     }

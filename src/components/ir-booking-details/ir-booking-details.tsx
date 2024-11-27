@@ -1,6 +1,6 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
 import { _formatDate, _formatTime } from './functions';
-import { Booking, Guest, IPmsLog, Room } from '@/models/booking.dto';
+import { Booking, ExtraService, Guest, IPmsLog, Room } from '@/models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '@/services/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
@@ -55,7 +55,7 @@ export class IrBookingDetails {
   @State() defaultTexts: ILocale;
   // Rerender Flag
   @State() rerenderFlag = false;
-  @State() sidebarState: 'guest' | 'pickup' | 'extra_note' | null = null;
+  @State() sidebarState: 'guest' | 'pickup' | 'extra_note' | 'extra_service' | null = null;
   @State() isUpdateClicked = false;
 
   @State() pms_status: IPmsLog;
@@ -63,7 +63,7 @@ export class IrBookingDetails {
   @State() userCountry: ICountry | null = null;
   @State() paymentActions: IPaymentAction[];
   @State() property_id: number;
-
+  @State() selectedService: ExtraService;
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
@@ -140,6 +140,7 @@ export class IrBookingDetails {
             message: '',
           },
           event_type: 'ADD_ROOM',
+          booking: this.bookingData,
           BOOKING_NUMBER: this.bookingData.booking_nbr,
           ADD_ROOM_TO_BOOKING: this.bookingData.booking_nbr,
           GUEST: this.bookingData.guest,
@@ -147,6 +148,9 @@ export class IrBookingDetails {
           SOURCE: this.bookingData.source,
           ROOMS: this.bookingData.rooms,
         };
+        return;
+      case 'extra_service_btn':
+        this.sidebarState = 'extra_service';
         return;
       case 'add-payment':
         return;
@@ -186,6 +190,11 @@ export class IrBookingDetails {
     }
     await this.resetBookingData();
   }
+  @Listen('editExtraService')
+  handleEditExtraService(e: CustomEvent) {
+    this.selectedService = e.detail;
+    this.sidebarState = 'extra_service';
+  }
 
   private setRoomsData(roomServiceResp) {
     let roomsData: { [key: string]: any }[] = new Array();
@@ -208,10 +217,14 @@ export class IrBookingDetails {
       this.property_id = roomResponse?.My_Result?.id;
       //TODO:Reenable payment actions
       if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
-        this.paymentActions = await this.paymentService.GetExposedCancelationDueAmount({
-          booking_nbr: bookingDetails.booking_nbr,
-          currency_id: bookingDetails.currency.id,
-        });
+        this.paymentService
+          .GetExposedCancelationDueAmount({
+            booking_nbr: bookingDetails.booking_nbr,
+            currency_id: bookingDetails.currency.id,
+          })
+          .then(res => {
+            this.paymentActions = res;
+          });
       } else {
         console.warn('Booking details are incomplete for payment actions.');
       }
@@ -349,6 +362,9 @@ export class IrBookingDetails {
     return mobile;
   }
   private renderSidbarContent() {
+    const handleClose = () => {
+      this.sidebarState = null;
+    };
     switch (this.sidebarState) {
       case 'guest':
         return (
@@ -358,7 +374,7 @@ export class IrBookingDetails {
             defaultTexts={this.defaultTexts}
             email={this.bookingData?.guest.email}
             language={this.language}
-            onCloseSideBar={() => (this.sidebarState = null)}
+            onCloseSideBar={handleClose}
           ></ir-guest-info>
         );
       case 'pickup':
@@ -368,11 +384,25 @@ export class IrBookingDetails {
             defaultPickupData={this.bookingData.pickup_info}
             bookingNumber={this.bookingData.booking_nbr}
             numberOfPersons={this.bookingData.occupancy.adult_nbr + this.bookingData.occupancy.children_nbr}
-            onCloseModal={() => (this.sidebarState = null)}
+            onCloseModal={handleClose}
           ></ir-pickup>
         );
       case 'extra_note':
         return <ir-booking-extra-note slot="sidebar-body" booking={this.bookingData} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
+      case 'extra_service':
+        return (
+          <ir-extra-service-config
+            service={this.selectedService}
+            booking={{ from_date: this.bookingData.from_date, to_date: this.bookingData.to_date, booking_nbr: this.bookingData.booking_nbr, currency: this.bookingData.currency }}
+            slot="sidebar-body"
+            onCloseModal={() => {
+              handleClose();
+              if (this.selectedService) {
+                this.selectedService = null;
+              }
+            }}
+          ></ir-extra-service-config>
+        );
       default:
         return null;
     }
@@ -568,6 +598,15 @@ export class IrBookingDetails {
               })}
             </div>
             <ir-pickup-view booking={this.bookingData}></ir-pickup-view>
+            <section>
+              <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
+                <p class={'font-size-large p-0 m-0 '}>Extra Services</p>
+                <ir-button id="extra_service_btn" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
+              </div>
+              <ir-extra-services
+                booking={{ booking_nbr: this.bookingData.booking_nbr, currency: this.bookingData.currency, extra_services: this.bookingData.extra_services }}
+              ></ir-extra-services>
+            </section>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details paymentActions={this.paymentActions} defaultTexts={this.defaultTexts} bookingDetails={this.bookingData}></ir-payment-details>

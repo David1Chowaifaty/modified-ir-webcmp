@@ -13,7 +13,7 @@ import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
-import { addUnassingedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
+import { addUnassignedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
 import Token from '@/models/Token';
 // import Auth from '@/models/Auth';
 
@@ -317,7 +317,7 @@ export class IglooCalendar {
         const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, dateToFormattedString(new Date()), this.to_date);
         this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: { ...this.unassignedDates, ...data } };
         this.calendarData = { ...this.calendarData, unassignedDates: data };
-        addUnassingedDates(data);
+        addUnassignedDates(data);
       }
       this.socket = io('https://realtime.igloorooms.com/');
       this.socket.on('MSG', async msg => {
@@ -407,7 +407,7 @@ export class IglooCalendar {
         dateToFormattedString(new Date(parsedResult.FROM_DATE)),
         dateToFormattedString(new Date(parsedResult.TO_DATE)),
       );
-      addUnassingedDates(data);
+      addUnassignedDates(data);
       this.unassignedDates = {
         fromDate: dateToFormattedString(new Date(parsedResult.FROM_DATE)),
         toDate: dateToFormattedString(new Date(parsedResult.TO_DATE)),
@@ -735,7 +735,7 @@ export class IglooCalendar {
         toDate,
         data,
       };
-      addUnassingedDates(data);
+      addUnassignedDates(data);
     }
   }
   async handleDateSearch(dates: { start: Moment; end: Moment }) {

@@ -1,0 +1,107 @@
+:host {
+  display: block;
+  --ir-input-border-color: #cacfe7;
+}
+
+:host .input-group-text {
+  border-color: var(--ir-input-border-color);
+}
+.currency-ph {
+  padding: 0;
+  margin: 0;
+  color: #3b4781;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 0 0.25rem;
+  border-top: 1px solid var(--ir-input-border-color);
+  border-bottom: 1px solid var(--ir-input-border-color);
+  border-left: 1px solid transparent;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+
+.service-description-input {
+  height: 70px !important;
+}
+
+.service-description .input-group-prepend {
+  background-color: #f4f5fa;
+  border: 1px solid var(--ir-input-border-color);
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+.service-date-container {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  justify-content: center;
+}
+.service-date-container .btn-container {
+  position: absolute;
+  right: 5px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.service-description .input-group-text {
+  height: fit-content;
+  border: 0;
+  padding-top: 0.75rem !important;
+}
+
+.price-input-group:focus-within .currency-ph,
+.cost-input-group:focus-within .currency-ph {
+  border-top: 1px solid #1e9ff2;
+  border-bottom: 1px solid #1e9ff2;
+  border-left: 1px solid #1e9ff2;
+}
+.currency-ph[data-state='error'] {
+  border-color: var(--red, #ff4961);
+}
+.price-input:focus {
+  border-right-width: 1px !important;
+}
+
+.is-invalid {
+  background-image: none !important;
+}
+.price-input,
+.cost-input {
+  border-left: 0;
+}
+
+.row-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .row-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+  }
+  .cost-label {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+  }
+  .until-prepend,
+  .cost-input-placeholder {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+  .date-from,
+  .price-input {
+    border-right-width: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}

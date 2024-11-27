@@ -1,15 +1,16 @@
 import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
 import { IPageTwoDataUpdateProps } from '@/models/models';
-import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../models/igl-book-property';
+import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { ICurrency } from '@/models/calendarData';
+import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 @Component({
-  tag: 'igl-pagetwo',
-  styleUrl: 'igl-pagetwo.css',
+  tag: 'igl-booking-form',
+  styleUrl: 'igl-booking-form.css',
   scoped: true,
 })
-export class IglPagetwo {
+export class IglBookingForm {
   @Prop() showPaymentDetails: boolean;
   @Prop() currency: ICurrency;
   @Prop({ reflect: true }) isEditOrAddRoomEvent: boolean;
@@ -25,15 +26,16 @@ export class IglPagetwo {
   @Prop() countryNodeList;
   @Prop() selectedGuestData;
   @Prop() defaultGuestData: IglBookPropertyPayloadEditBooking;
+
+  @State() selectedBookedByData;
+  @State() guestData: any;
+  @State() selectedUnits: { [key: string]: any } = {};
+
   @Event() dataUpdateEvent: EventEmitter<IPageTwoDataUpdateProps>;
   @Event() buttonClicked: EventEmitter<{
     key: TPropertyButtonsTypes;
     data?: CustomEvent;
   }>;
-  @State() selectedBookedByData;
-  @State() guestData: any;
-
-  @State() selectedUnits: { [key: string]: any } = {};
 
   componentWillLoad() {
     this.initializeGuestData();
@@ -112,10 +114,6 @@ export class IglPagetwo {
       if (property === this.selectedGuestData) {
         return this.isGuestDataIncomplete();
       }
-      // const isCardDetails = ['cardNumber', 'cardHolderName', 'expiryMonth', 'expiryYear'].includes(key);
-      // if (!this.showPaymentDetails && isCardDetails) {
-      //   return false;
-      // }
       if (key === 'selectedArrivalTime') {
         if (property[key] !== undefined) {
           return property[key].code === '';
@@ -139,13 +137,14 @@ export class IglPagetwo {
   }
 
   render() {
+    console.log(this.dateRangeData);
     return (
       <Host>
         <div class="d-flex flex-wrap">
           <ir-date-view
             class="mr-1 flex-fill font-weight-bold font-medium-1"
-            from_date={this.dateRangeData.fromDateStr}
-            to_date={this.dateRangeData.toDateStr}
+            from_date={new Date(this.dateRangeData.fromDate)}
+            to_date={new Date(this.dateRangeData.toDate)}
             dateOption="DD MMM YYYY"
           ></ir-date-view>
           {this.guestData.length > 1 && (
@@ -154,25 +153,35 @@ export class IglPagetwo {
             </div>
           )}
         </div>
+        {Object.values(booking_store.ratePlanSelections).map(val =>
+          Object.values(val).map(ratePlan => {
+            const rp = ratePlan as IRatePlanSelection;
+            if (rp.reserved === 0) {
+              return null;
+            }
 
-        {this.guestData.map((roomInfo, index) => {
-          return (
-            <igl-application-info
-              dateDifference={this.dateRangeData.dateDifference}
-              defaultGuestPreference={this.defaultGuestData.bed_preference}
-              defaultGuestRoomId={this.defaultGuestData.PR_ID}
-              currency={this.currency}
-              bedPreferenceType={this.bedPreferenceType}
-              index={index}
-              selectedUnits={this.selectedUnits[`c_${roomInfo.roomCategoryId}`]}
-              guestInfo={roomInfo}
-              guestRefKey={index}
-              bookingType={this.bookingData.event_type}
-              roomsList={roomInfo.physicalRooms}
-              onDataUpdateEvent={event => this.handleEventData(event, 'application-info', index)}
-            ></igl-application-info>
-          );
-        })}
+            return [...new Array(rp.reserved)].map((_, i) => (
+              <igl-application-info
+                totalNights={Number(this.dateRangeData.dateDifference)}
+                bedPreferenceType={this.bedPreferenceType}
+                currency={this.currency}
+                guestInfo={rp.guest ? rp.guest[i] : null}
+                bookingType={this.bookingData.event_type}
+                rateplanSelection={rp}
+                key={`${rp.ratePlan.id}_${i}`}
+                roomIndex={i}
+                baseData={
+                  this.bookingData.event_type === 'EDIT_BOOKING'
+                    ? {
+                        roomtypeId: this.bookingData.currentRoomType.roomtype.id,
+                        unit: this.bookingData.currentRoomType.unit,
+                      }
+                    : undefined
+                }
+              ></igl-application-info>
+            ));
+          }),
+        )}
 
         {this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (
           <igl-property-booked-by
@@ -181,25 +190,15 @@ export class IglPagetwo {
             language={this.language}
             showPaymentDetails={this.showPaymentDetails}
             defaultData={this.bookedByInfoData}
-            onDataUpdateEvent={event =>
-              // this.dataUpdateEvent.emit({
-              //   key: "propertyBookedBy",
-              //   value: event.detail,
-              // })
-              {
-                console.log('user info details', event.detail);
-                this.handleEventData(event, 'propertyBookedBy', 0);
-              }
-            }
+            onDataUpdateEvent={event => {
+              this.handleEventData(event, 'propertyBookedBy', 0);
+            }}
           ></igl-property-booked-by>
         )}
 
         {this.isEditOrAddRoomEvent ? (
           <div class="d-flex p-0 mb-1 mt-2">
             <div class="flex-fill mr-2">
-              {/* <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'cancel' })}>
-                {locales.entries.Lcz_Cancel}
-              </button> */}
               <ir-button
                 icon=""
                 text={locales.entries.Lcz_Back}
@@ -216,26 +215,11 @@ export class IglPagetwo {
                 btn_styles="full-width align-items-center justify-content-center"
                 text={locales.entries.Lcz_Save}
               ></ir-button>
-              {/* <button
-                disabled={this.isLoading === 'save'}
-                type="button"
-                class="btn btn-primary full-width"
-                onClick={() => {
-                  console.log('save button clicked');
-                  this.buttonClicked.emit({ key: 'save' });
-                }}
-              >
-                {this.isLoading === 'save' && <i class="la la-circle-o-notch spinner mx-1"></i>}
-                {locales.entries.Lcz_Save}
-              </button> */}
             </div>
           </div>
         ) : (
           <div class="d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center">
             <div class="flex-fill mr-md-1">
-              {/* <button type="button" class="btn btn-secondary full-width" onClick={() => this.buttonClicked.emit({ key: 'back' })}>
-                <span class={'d-none d-md-inline-flex'}> &lt;&lt;</span> {locales.entries.Lcz_Back}
-              </button> */}
               <ir-button
                 icon_name="angles_left"
                 btn_color="secondary"
@@ -253,28 +237,7 @@ export class IglPagetwo {
                 onClickHanlder={() => this.buttonClicked.emit({ key: 'book' })}
                 text={locales.entries.Lcz_Book}
               ></ir-button>
-              {/* <button disabled={this.isLoading === 'book'} type="button" class="btn btn-primary full-width" onClick={() => this.buttonClicked.emit({ key: 'book' })}>
-                {this.isLoading === 'book' && <i class="la la-circle-o-notch spinner mx-1"></i>}
-                {locales.entries.Lcz_Book}
-              </button> */}
             </div>
-            {/* <div class="mt-1 mt-md-0 flex-fill">
-              <ir-button
-                isLoading={this.isLoading === 'bookAndChekcIn'}
-                btn_styles="full-width align-items-center justify-content-center"
-                onClickHanlder={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
-                text={locales.entries.Lcz_BookAndChekcIn}
-              ></ir-button>
-              // <button
-              //   //disabled={this.isButtonDisabled('bookAndCheckIn')}
-              //   type="button"
-              //   class="btn btn-primary full-width"
-              //   onClick={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
-              // >
-              //   {this.isLoading === 'bookAndCheckIn' && <i class="la la-circle-o-notch spinner mx-1"></i>}
-              //   {locales.entries.Lcz_BookAndChekcIn}
-              // </button>
-            </div> */}
           </div>
         )}
       </Host>

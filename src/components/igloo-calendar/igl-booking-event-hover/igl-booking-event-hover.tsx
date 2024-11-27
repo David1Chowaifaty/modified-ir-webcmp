@@ -214,7 +214,7 @@ export class IglBookingEventHover {
     //toDate.setDate(toDate.getDate() + 1);
     toDate.setHours(0, 0, 0, 0);
     let to_date_str = this.getStringDateFormat(toDate);
-    //console.log(this.bookingEvent);
+    // console.log(this.bookingEvent);
     let eventData = {
       ID: '',
       NAME: '',
@@ -230,11 +230,12 @@ export class IglBookingEventHover {
       GUEST: this.bookingEvent.GUEST,
       message: this.bookingEvent.NOTES,
       SOURCE: this.bookingEvent.SOURCE,
+      booking: this.bookingEvent?.booking,
       defaultDateRange: {
-        fromDate: fromDate, //new Date("2023-09-10"),
-        fromDateStr: '', //"10 Sep 2023",
-        toDate: toDate, //new Date("2023-09-15"),
-        toDateStr: '', // "15 Sep 2023",
+        fromDate: fromDate,
+        fromDateStr: '',
+        toDate: toDate,
+        toDateStr: '',
         dateDifference: 0,
         editabled: true,
         message: 'Including 5.00% City Tax - Excluding 11.00% VAT',
