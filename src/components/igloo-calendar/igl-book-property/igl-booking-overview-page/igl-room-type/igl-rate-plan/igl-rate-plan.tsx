@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h, State, Event, EventEmitter, Fragment } from '@stencil/core';
+import { Component, Host, Prop, h, Event, EventEmitter, Fragment } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
@@ -21,8 +21,6 @@ export class IglRatePlan {
   @Prop() isBookDisabled: boolean = false;
   @Prop() visibleInventory!: IRatePlanSelection;
 
-  @State() isInputFocused = false;
-
   @Event() gotoSplitPageTwoEvent!: EventEmitter<{ [key: string]: any }>;
 
   // Determine if the form inputs should be disabled
@@ -32,19 +30,6 @@ export class IglRatePlan {
       return false;
     }
     return !ratePlan.is_available_to_book || visibleInventory?.visibleInventory === 0 || !calendar_data.is_frontdesk_enabled;
-  }
-
-  // Handle input change for the rate amount
-  private handleInput(event: InputEvent): void {
-    const inputElement = event.target as HTMLInputElement;
-    const sanitizedValue = inputElement.value.replace(/[^0-9.]/g, '');
-    inputElement.value = sanitizedValue;
-
-    const amount = sanitizedValue ? parseFloat(sanitizedValue) : 0;
-    this.updateRateplanSelection({
-      is_amount_modified: true,
-      rp_amount: amount,
-    });
   }
 
   // Update the rate plan selection in the booking store
@@ -160,7 +145,7 @@ export class IglRatePlan {
   }
 
   render() {
-    const { ratePlan, bookingType, currency, ratePricingMode, visibleInventory, isInputFocused } = this;
+    const { ratePlan, bookingType, currency, ratePricingMode, visibleInventory } = this;
     const isAvailableToBook = ratePlan.is_available_to_book;
     const disableForm = this.disableForm();
     const selectedVariation = visibleInventory?.selected_variation;
@@ -198,23 +183,6 @@ export class IglRatePlan {
               </div>
               <div class="m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1">
                 <div class="d-flex m-0 p-0 rate-total-night-view mt-0">
-                  {/* <fieldset class="position-relative has-icon-left m-0 p-0 rate-input-container">
-                    <div class="input-group-prepend">
-                      <span data-disabled={disableForm} data-state={isInputFocused ? 'focus' : ''} class="input-group-text new-currency">
-                        {currency.symbol}
-                      </span>
-                    </div>
-                    <input
-                      onFocus={() => (this.isInputFocused = true)}
-                      onBlur={() => (this.isInputFocused = false)}
-                      disabled={disableForm}
-                      type="text"
-                      class="form-control pl-0 input-sm rate-input py-0 m-0 rounded-0 rateInputBorder"
-                      value={this.renderRate()}
-                      placeholder={locales.entries.Lcz_Rate || 'Rate'}
-                      onInput={this.handleInput.bind(this)}
-                    />
-                  </fieldset> */}
                   <ir-price-input
                     disabled={disableForm}
                     onTextChange={e =>
