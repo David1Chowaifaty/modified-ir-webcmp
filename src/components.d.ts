@@ -2613,9 +2613,9 @@ declare namespace LocalJSX {
         "currency": { symbol: string };
         "isBookDisabled"?: boolean;
         "onGotoSplitPageTwoEvent"?: (event: IglRatePlanCustomEvent<{ [key: string]: any }>) => void;
-        "ratePlan": RatePlan;
+        "ratePlan"?: RatePlan;
         "ratePricingMode"?: Array<{ CODE_NAME: string; CODE_VALUE_EN: string }>;
-        "roomTypeId": number;
+        "roomTypeId"?: number;
         "shouldBeDisabled": boolean;
         "visibleInventory": IRatePlanSelection;
     }

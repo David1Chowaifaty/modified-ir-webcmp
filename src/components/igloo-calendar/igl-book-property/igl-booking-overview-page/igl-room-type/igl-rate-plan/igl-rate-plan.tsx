@@ -12,8 +12,8 @@ import booking_store, { IRatePlanSelection, reserveRooms, updateRoomParams } fro
 })
 export class IglRatePlan {
   // Used Props with type annotations
-  @Prop() ratePlan!: RatePlan;
-  @Prop() roomTypeId!: number;
+  @Prop() ratePlan: RatePlan;
+  @Prop() roomTypeId: number;
   @Prop() ratePricingMode: Array<{ CODE_NAME: string; CODE_VALUE_EN: string }> = [];
   @Prop() currency!: { symbol: string };
   @Prop() shouldBeDisabled!: boolean;
@@ -217,7 +217,6 @@ export class IglRatePlan {
                     </select>
                   </fieldset>
                 </div>
-
                 {(bookingType === 'PLUS_BOOKING' || bookingType === 'ADD_ROOM') && (
                   <div class="flex-fill mt-lg-0 ml-1 m-0 mt-md-0 p-0">
                     <fieldset class="position-relative">
