@@ -41,6 +41,7 @@
 graph TD;
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-tooltip
+  igl-rate-plan --> ir-price-input
   igl-booking-overview-page --> igl-room-type
   style igl-room-type fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -600,7 +600,7 @@ export class IrBookingDetails {
             <ir-pickup-view booking={this.bookingData}></ir-pickup-view>
             <section>
               <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
-                <p class={'font-size-large p-0 m-0 '}>Extra Services</p>
+                <p class={'font-size-large p-0 m-0 '}>{this.defaultTexts.entries.Lcz_ExtraServices}</p>
                 <ir-button id="extra_service_btn" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
               </div>
               <ir-extra-services

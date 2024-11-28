@@ -117,6 +117,7 @@ export class BookingService {
     language: string;
     room_type_ids: number[];
     room_type_ids_to_update?: number[];
+    rate_plan_ids?: number[];
     currency: { id: number; code: string };
     is_in_agent_mode?: boolean;
     agent_id?: string | number;

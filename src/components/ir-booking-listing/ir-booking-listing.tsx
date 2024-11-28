@@ -299,7 +299,7 @@ export class IrBookingListing {
                                 </div>
                               </li>
                             ))}
-                            {booking.extra_services && <li>Extra services</li>}
+                            {booking.extra_services && <li>{locales.entries.Lcz_ExtraServices}</li>}
                           </ul>
                         </td>
                         <td>

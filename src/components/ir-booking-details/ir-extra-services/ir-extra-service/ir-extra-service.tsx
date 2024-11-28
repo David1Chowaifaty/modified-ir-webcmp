@@ -81,7 +81,7 @@ export class IrExtraService {
           leftBtnColor="secondary"
           rightBtnColor="danger"
           modalTitle={locales.entries.Lcz_Confirmation}
-          modalBody={`${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${locales.entries.Lcz_FromThisBooking}`}
+          modalBody={`${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${locales.entries.Lcz_ThisService} ${locales.entries.Lcz_FromThisBooking}`}
         ></ir-modal>
       </Host>
     );

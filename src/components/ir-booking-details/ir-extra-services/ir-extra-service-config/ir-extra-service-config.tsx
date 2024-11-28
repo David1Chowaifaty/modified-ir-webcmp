@@ -63,10 +63,8 @@ export class IrExtraServiceConfig {
   }
   private validatePrice(): boolean {
     if (this.s_service?.price === undefined || this.s_service?.price?.toString() === '') {
-      console.log('here');
       return false;
     }
-    console.log('here', this.s_service.price);
     const priceSchema = ExtraServiceSchema.pick({ price: true });
     const result = priceSchema.safeParse({ price: this.s_service?.price });
     return result.success;
@@ -74,12 +72,12 @@ export class IrExtraServiceConfig {
   render() {
     return (
       <Host class={'p-0'}>
-        <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={'Extra Services'} displayContext="sidebar"></ir-title>
+        <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={locales.entries.Lcz_ExtraServices} displayContext="sidebar"></ir-title>
         <section class={'px-1'}>
           {/* Description */}
           <fieldset class="input-group mb-1 mt-3 service-description">
             <div class="input-group-prepend">
-              <span class="input-group-text">Description</span>
+              <span class="input-group-text">{locales.entries.Lcz_Description}</span>
             </div>
             <textarea
               value={this.s_service?.description}
@@ -95,7 +93,7 @@ export class IrExtraServiceConfig {
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">
-                  Dates on
+                  {locales.entries.Lcz_DatesOn}
                 </span>
               </div>
               <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center date-from">
@@ -128,7 +126,7 @@ export class IrExtraServiceConfig {
             <div class="input-group">
               <div class="input-group-prepend ">
                 <span class="input-group-text until-prepend" id="basic-addon1">
-                  till and including
+                  {locales.entries.Lcz_TillAndIncluding}
                 </span>
               </div>
               <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center">
@@ -170,7 +168,7 @@ export class IrExtraServiceConfig {
               class="ir-br-input-none"
               value={this.s_service?.price?.toString()}
               zod={ExtraServiceSchema.pick({ price: true })}
-              aria-label="Price"
+              aria-label={locales.entries.Lcz_Price}
               wrapKey="price"
               aria-describedby="service price"
               autoValidate={false}
@@ -179,7 +177,7 @@ export class IrExtraServiceConfig {
             ></ir-price-input>
             <ir-price-input
               autoValidate={false}
-              label="Cost"
+              label={locales.entries.Lcz_Cost}
               labelStyle="cost-label"
               currency={this.booking.currency.symbol}
               // class="ir-bl-lbl-none ir-bl-none"

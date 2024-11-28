@@ -64,6 +64,7 @@ graph TD;
   igl-date-range --> ir-date-view
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-tooltip
+  igl-rate-plan --> ir-price-input
   igl-book-property-footer --> ir-button
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info

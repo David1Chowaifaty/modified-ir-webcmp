@@ -70,6 +70,7 @@ graph TD;
   igl-date-range --> ir-date-view
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-tooltip
+  igl-rate-plan --> ir-price-input
   igl-book-property-footer --> ir-button
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
@@ -117,6 +118,7 @@ graph TD;
   ir-extra-service-config --> ir-title
   ir-extra-service-config --> ir-date-picker
   ir-extra-service-config --> ir-button
+  ir-extra-service-config --> ir-price-input
   ir-label --> ir-button
   ir-room --> ir-button
   ir-room --> ir-date-view

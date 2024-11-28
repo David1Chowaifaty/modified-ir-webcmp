@@ -35,6 +35,7 @@
 
 ### Depends on
 
+- [ir-price-input](../../ui/ir-price-input)
 - [ir-loading-screen](../../ir-loading-screen)
 - [ir-icon](../../ir-icon)
 - [ir-button](../../ir-button)
@@ -42,6 +43,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  ir-room-nights --> ir-price-input
   ir-room-nights --> ir-loading-screen
   ir-room-nights --> ir-icon
   ir-room-nights --> ir-button

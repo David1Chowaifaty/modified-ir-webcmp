@@ -32,6 +32,7 @@
 - [ir-title](../../../ir-title)
 - [ir-date-picker](../../../ir-date-picker)
 - [ir-button](../../../ir-button)
+- [ir-price-input](../../../ui/ir-price-input)
 
 ### Graph
 ```mermaid
@@ -39,6 +40,7 @@ graph TD;
   ir-extra-service-config --> ir-title
   ir-extra-service-config --> ir-date-picker
   ir-extra-service-config --> ir-button
+  ir-extra-service-config --> ir-price-input
   ir-title --> ir-icon
   ir-button --> ir-icons
   ir-booking-details --> ir-extra-service-config

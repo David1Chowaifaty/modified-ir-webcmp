@@ -12,9 +12,9 @@
 | `bookingType`                   | `booking-type`       |             | `string`                                          | `'PLUS_BOOKING'` |
 | `currency` _(required)_         | --                   |             | `{ symbol: string; }`                             | `undefined`      |
 | `isBookDisabled`                | `is-book-disabled`   |             | `boolean`                                         | `false`          |
-| `ratePlan` _(required)_         | --                   |             | `RatePlan`                                        | `undefined`      |
+| `ratePlan`                      | --                   |             | `RatePlan`                                        | `undefined`      |
 | `ratePricingMode`               | --                   |             | `{ CODE_NAME: string; CODE_VALUE_EN: string; }[]` | `[]`             |
-| `roomTypeId` _(required)_       | `room-type-id`       |             | `number`                                          | `undefined`      |
+| `roomTypeId`                    | `room-type-id`       |             | `number`                                          | `undefined`      |
 | `shouldBeDisabled` _(required)_ | `should-be-disabled` |             | `boolean`                                         | `undefined`      |
 | `visibleInventory` _(required)_ | --                   |             | `IRatePlanSelection`                              | `undefined`      |
 
@@ -35,11 +35,13 @@
 ### Depends on
 
 - [ir-tooltip](../../../../../ir-tooltip)
+- [ir-price-input](../../../../../ui/ir-price-input)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-rate-plan --> ir-tooltip
+  igl-rate-plan --> ir-price-input
   igl-room-type --> igl-rate-plan
   style igl-rate-plan fill:#f9f,stroke:#333,stroke-width:4px
 ```
