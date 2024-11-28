@@ -199,7 +199,7 @@ export class IrRoom {
     const parts = [`${adult_nbr} ${adultLabel}`, adjustedChildNbr ? `${adjustedChildNbr} ${childLabel}` : '', infant_nbr ? `${infant_nbr} ${infantLabel}` : ''];
 
     // Join non-empty parts with spaces
-    return parts.filter(Boolean).join(' ');
+    return parts.filter(Boolean).join('  ');
   }
   render() {
     return (
