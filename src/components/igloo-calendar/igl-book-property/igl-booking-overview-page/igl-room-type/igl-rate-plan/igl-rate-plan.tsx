@@ -149,6 +149,7 @@ export class IglRatePlan {
     const disableForm = this.disableForm();
     const selectedVariation = visibleInventory?.selected_variation;
     const formattedVariations = ratePlan.variations?.map(v => this.formatVariation(v));
+    console.log(visibleInventory);
     // if (!this.visibleInventory) {
     //   return null;
     // }
