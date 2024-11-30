@@ -106,7 +106,10 @@ export class IglApplicationInfo {
 
   private filterRooms(): { name: string; id: number }[] {
     const result = [];
-    this.rateplanSelection.ratePlan?.assignable_units.forEach(unit => {
+    if (!calendar_data.is_frontdesk_enabled) {
+      return result;
+    }
+    this.rateplanSelection.ratePlan?.assignable_units?.forEach(unit => {
       if (unit.Is_Fully_Available) {
         result.push({ name: unit.name, id: unit.pr_id });
       }

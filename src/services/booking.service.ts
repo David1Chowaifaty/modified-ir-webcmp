@@ -5,6 +5,7 @@ import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString, ex
 import { getMyBookings } from '../utils/booking';
 import { Booking, Day, ExtraService, Guest, IBookingPickupInfo, IPmsLog } from '../models/booking.dto';
 import booking_store from '@/stores/booking.store';
+import calendar_data from '@/stores/calendar-data';
 export interface IBookingParams {
   bookedByInfoData: any;
   check_in: boolean;
@@ -129,6 +130,7 @@ export class BookingService {
         adult_nbr: adultChildCount.adult,
         child_nbr: adultChildCount.child,
         currency_ref: currency.code,
+        skip_getting_assignable_units: !calendar_data.is_frontdesk_enabled,
         is_backend: true,
       });
       if (data.ExceptionMsg !== '') {
