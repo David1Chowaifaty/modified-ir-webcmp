@@ -133,7 +133,9 @@ export class IglApplicationInfo {
           )}
           <div class="booking-details-container">
             <div class="booking-rateplan">
-              <p class="booking-rateplan-name">{this.rateplanSelection.ratePlan.short_name}</p>
+              <p class="booking-rateplan-name">
+                {this.rateplanSelection.ratePlan.short_name} {this.rateplanSelection.ratePlan.is_non_refundable && <span class={'non-ref-span'}>Non Refundable</span>}
+              </p>
               <ir-tooltip class="booking-tooltip" message={this.getTooltipMessages()}></ir-tooltip>
             </div>
             <p class="booking-variation">{this.formatVariation(this.rateplanSelection.selected_variation)}</p>

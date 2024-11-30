@@ -164,7 +164,9 @@ export class IglRatePlan {
                 <span>/{ratePlan.name.split('/')[1]}</span>
               </Fragment>
             ) : (
-              <span>{ratePlan.short_name}</span>
+              <span>
+                {ratePlan.short_name} {ratePlan.is_non_refundable && <span class="non-ref-span">Non Refundable</span>}
+              </span>
             )}
             {isAvailableToBook && <ir-tooltip message={this.getTooltipMessages()}></ir-tooltip>}
           </div>
