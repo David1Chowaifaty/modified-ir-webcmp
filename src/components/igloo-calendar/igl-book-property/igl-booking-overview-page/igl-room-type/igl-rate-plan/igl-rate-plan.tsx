@@ -1,7 +1,6 @@
 import { Component, Host, Prop, h, Event, EventEmitter, Fragment } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
 import { RatePlan, Variation } from '@/models/property';
 import booking_store, { IRatePlanSelection, reserveRooms, updateRoomParams } from '@/stores/booking.store';
 
