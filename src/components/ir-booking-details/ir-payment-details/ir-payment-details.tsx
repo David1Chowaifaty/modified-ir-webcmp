@@ -8,6 +8,7 @@ import { ILocale, IToast } from '@/components';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { formatAmount } from '@/utils/utils';
+import locales from '@/stores/locales.store';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -287,7 +288,7 @@ export class IrPaymentDetails {
       <div>
         <div class="d-flex align-items-center">
           <strong class="mr-1">
-            {this.defaultTexts.entries.Lcz_BookingGuarantee} {this.hasAgentWithCode001 && '(on credit)'}
+            {this.defaultTexts.entries.Lcz_BookingGuarantee} {this.hasAgentWithCode001 && `(${locales.entries.Lcz_OnCredit})`}
           </strong>
           <ir-button
             id="drawer-icon"

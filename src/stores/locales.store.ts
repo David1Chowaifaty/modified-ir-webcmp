@@ -12,8 +12,9 @@ export type LocalizationStrings = {
   Lcz_Price: string;
   Lcz_DatesOn: string;
   Lcz_TillAndIncluding: string;
-  Lcz_Description: string;
   Lcz_ExtraServices: string;
+  Lcz_OnCredit: string;
+  Lcz_Description: string;
   Lcz_Guarantee: string;
   Lcz_PrivateNote_MaxChar: string;
   Lcz_VisibleToHotelOnly: string;

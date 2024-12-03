@@ -98,7 +98,7 @@ export class IglDateRange {
   render() {
     if (this.variant === 'booking') {
       return (
-        <div class={'p-0 m-0 date-range-container-cn'}>
+        <div class={`p-0 m-0 date-range-container-cn`}>
           <ir-date-picker
             maxDate={this.maxDate}
             class={'date-range-input'}
@@ -112,7 +112,7 @@ export class IglDateRange {
               this.handleDateChange(evt);
             }}
           ></ir-date-picker>
-          <div class={'d-flex align-items-center m-0  date-range-container'}>
+          <div class={`d-flex align-items-center m-0  date-range-container ${this.disabled ? 'disabled' : ''}`}>
             <svg xmlns="http://www.w3.org/2000/svg" class="m-0 p-0" height="14" width="14" viewBox="0 0 448 512">
               <path
                 fill="currentColor"

@@ -313,7 +313,19 @@ export class IglBookingEventHover {
     if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
       data.roomsInfo = [roomInfo.ROOMS_INFO];
     }
-    if (eventType === 'BAR_BOOKING') {
+    if (eventType === 'BAR_BOOKING' && this.bookingEvent.STATUS !== 'TEMP-EVENT') {
+      const { FROM_DATE, TO_DATE, PR_ID, ENTRY_DATE, OPTIONAL_REASON, ENTRY_MINUTE, ENTRY_HOUR, STATUS_CODE } = this.bookingEvent;
+      data.block_exposed_unit_props = {
+        from_date: FROM_DATE,
+        to_date: TO_DATE,
+        NOTES: OPTIONAL_REASON,
+        pr_id: PR_ID,
+        STAY_STATUS_CODE: STATUS_CODE,
+        DESCRIPTION: '',
+        BLOCKED_TILL_DATE: ENTRY_DATE,
+        BLOCKED_TILL_HOUR: ENTRY_HOUR,
+        BLOCKED_TILL_MINUTE: ENTRY_MINUTE,
+      };
       this.handleDeleteEvent();
     }
     this.showBookingPopup.emit({
@@ -577,7 +589,7 @@ export class IglBookingEventHover {
             <button
               type="button"
               class="btn btn-primary events_btns"
-              onClick={_ => {
+              onClick={() => {
                 this.handleConvertBlockedDateToBooking();
               }}
             >

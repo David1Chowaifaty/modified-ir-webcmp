@@ -3,10 +3,8 @@ import { BookingService } from '@/services/booking.service';
 import { dateToFormattedString, getReleaseHoursString } from '@/utils/utils';
 import { IEntries, RoomBlockDetails } from '@/models/IBooking';
 import { IPageTwoDataUpdateProps } from '@/models/models';
-import { transformNewBLockedRooms } from '@/utils/booking';
 import { IglBookPropertyService } from './igl-book-property.service';
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TEventType, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '@/models/igl-book-property';
-import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
@@ -64,10 +62,11 @@ export class IglBookProperty {
   private bedPreferenceType: IEntries[] = [];
   private bookingService: BookingService = new BookingService();
   private bookPropertyService = new IglBookPropertyService();
-  private eventsService = new EventsService();
   private defaultDateRange: { from_date: string; to_date: string };
   private updatedBooking: boolean = false;
   private MAX_HISTORY_LENGTH: number = 2;
+  private didReservation: boolean;
+  private wasBlockedUnit: boolean;
 
   async componentWillLoad() {
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -76,8 +75,9 @@ export class IglBookProperty {
     if (!this.bookingData.defaultDateRange) {
       return;
     }
-
+    // console.log(this.bookingData);
     this.initializeDefaultData();
+    this.wasBlockedUnit = this.defaultData.hasOwnProperty('block_exposed_unit_props');
     modifyBookingStore('event_type', { type: this.defaultData.event_type });
     await this.fetchSetupEntriesAndInitialize();
     this.initializeEventData();
@@ -453,10 +453,38 @@ export class IglBookProperty {
       console.error(error);
     }
   }
-
-  private closeWindow() {
+  private async checkAndBlockDate() {
+    try {
+      const { block_exposed_unit_props } = this.defaultData;
+      await this.bookingService.getBookingAvailability({
+        from_date: block_exposed_unit_props.from_date,
+        to_date: block_exposed_unit_props.to_date,
+        propertyid: this.propertyid,
+        adultChildCount: {
+          adult: 2,
+          child: 0,
+        },
+        language: this.language,
+        room_type_ids: this.defaultData.roomsInfo.map(room => room.id),
+        currency: this.currency,
+      });
+      const isAvailable = booking_store.roomTypes.every(rt => rt.is_available_to_book);
+      if (isAvailable) {
+        await this.handleBlockDate(false);
+      } else {
+        console.log('Blocked date is unavailable. Continuing...');
+      }
+    } catch (error) {
+      console.error('Error checking and blocking date:', error);
+    }
+  }
+  private async closeWindow() {
     resetBookingStore();
     this.closeBookingWindow.emit();
+
+    if (this.wasBlockedUnit && !this.didReservation) {
+      await this.checkAndBlockDate();
+    }
     document.removeEventListener('keydown', this.handleKeyDown);
   }
 
@@ -528,20 +556,25 @@ export class IglBookProperty {
     }
   }
 
-  private async handleBlockDate() {
-    const releaseData = getReleaseHoursString(+this.blockDatesData.RELEASE_AFTER_HOURS);
-    const result = await this.bookingService.blockUnit({
-      from_date: dateToFormattedString(this.defaultData.defaultDateRange.fromDate),
-      to_date: dateToFormattedString(this.defaultData.defaultDateRange.toDate),
-      NOTES: this.blockDatesData.OPTIONAL_REASON || '',
-      pr_id: this.defaultData.PR_ID.toString(),
-      STAY_STATUS_CODE: this.blockDatesData.OUT_OF_SERVICE ? '004' : this.blockDatesData.RELEASE_AFTER_HOURS === 0 ? '002' : '003',
-      DESCRIPTION: this.blockDatesData.RELEASE_AFTER_HOURS || '',
-      ...releaseData,
-    });
-    const blockedUnit = await transformNewBLockedRooms(result);
-    this.blockedCreated.emit(blockedUnit);
-    this.closeWindow();
+  private async handleBlockDate(auto_close = true) {
+    const props = this.wasBlockedUnit
+      ? this.defaultData.block_exposed_unit_props
+      : (() => {
+          const releaseData = getReleaseHoursString(+this.blockDatesData.RELEASE_AFTER_HOURS);
+          return {
+            from_date: dateToFormattedString(this.defaultData.defaultDateRange.fromDate),
+            to_date: dateToFormattedString(this.defaultData.defaultDateRange.toDate),
+            NOTES: this.blockDatesData.OPTIONAL_REASON || '',
+            pr_id: this.defaultData.PR_ID.toString(),
+            STAY_STATUS_CODE: this.blockDatesData.OUT_OF_SERVICE ? '004' : this.blockDatesData.RELEASE_AFTER_HOURS === 0 ? '002' : '003',
+            DESCRIPTION: this.blockDatesData.RELEASE_AFTER_HOURS || '',
+            ...releaseData,
+          };
+        })();
+    await this.bookingService.blockUnit(props);
+    // const blockedUnit = await transformNewBLockedRooms(result);
+    // this.blockedCreated.emit(blockedUnit);
+    if (auto_close) this.closeWindow();
   }
 
   private async bookUser(check_in: boolean) {
@@ -558,12 +591,10 @@ export class IglBookProperty {
     }
 
     try {
-      if (['003', '002', '004'].includes(this.defaultData.STATUS_CODE)) {
-        this.eventsService.deleteEvent(this.defaultData.POOL);
-      }
       if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
         this.bookedByInfoData.message = this.defaultData.NOTES;
       }
+      this.didReservation = true;
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams({
         context: this,
         sourceOption: this.sourceOption,
