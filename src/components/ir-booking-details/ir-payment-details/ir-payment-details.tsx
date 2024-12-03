@@ -41,6 +41,7 @@ export class IrPaymentDetails {
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
   private paymentBackground = 'white';
+  private hasAgentWithCode001: boolean;
 
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
@@ -51,6 +52,8 @@ export class IrPaymentDetails {
   }
   async componentWillLoad() {
     try {
+      const hasAgent = this.bookingDetails.agent && this.bookingDetails.extras?.find(e => e.key === 'agent_payment_mode');
+      this.hasAgentWithCode001 = hasAgent?.value === '001';
       this.initializeItemToBeAdded();
     } catch (error) {
       if (this.bookingDetails.guest.cci) {
@@ -276,14 +279,16 @@ export class IrPaymentDetails {
     );
   }
 
-  bookingGuarantee() {
+  private bookingGuarantee() {
     if (this.bookingDetails.is_direct && !this.bookingDetails.guest.cci) {
       return null;
     }
     return (
       <div>
         <div class="d-flex align-items-center">
-          <strong class="mr-1">{this.defaultTexts.entries.Lcz_BookingGuarantee}</strong>
+          <strong class="mr-1">
+            {this.defaultTexts.entries.Lcz_BookingGuarantee} {this.hasAgentWithCode001 && '(on credit)'}
+          </strong>
           <ir-button
             id="drawer-icon"
             data-toggle="collapse"

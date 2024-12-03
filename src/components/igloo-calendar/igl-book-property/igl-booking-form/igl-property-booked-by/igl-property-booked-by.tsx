@@ -6,6 +6,7 @@ import locales from '@/stores/locales.store';
 import { TPropertyButtonsTypes } from '@/components';
 import { z } from 'zod';
 import { validateEmail } from '@/utils/utils';
+import booking_store, { BookingStore, modifyBookingStore } from '@/stores/booking.store';
 
 @Component({
   tag: 'igl-property-booked-by',
@@ -151,6 +152,9 @@ export class IglPropertyBookedBy {
       //   toastr.error(error);
     }
   }
+  private updateGuest(props: Partial<BookingStore['checkout_guest']>) {
+    modifyBookingStore('checkout_guest', { ...(booking_store.checkout_guest ?? {}), ...props });
+  }
   handleComboboxChange(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -266,7 +270,10 @@ export class IglPropertyBookedBy {
                     placeholder={locales.entries.Lcz_FirstName}
                     id={v4()}
                     value={this.bookedByData.firstName}
-                    onInput={event => this.handleDataChange('firstName', event)}
+                    onInput={event => {
+                      this.updateGuest({ first_name: (event.target as HTMLInputElement).value });
+                      this.handleDataChange('firstName', event);
+                    }}
                     required
                   />
                 </div>

@@ -161,6 +161,10 @@ export const extras = [
     key: 'ERROR_EMAIL',
     value: '',
   },
+  {
+    key: 'agent_payment_mode',
+    value: '',
+  },
 ];
 export function manageAnchorSession(data: Record<string, unknown>, mode: 'add' | 'remove' = 'add') {
   const anchor = JSON.parse(sessionStorage.getItem('backend_anchor'));
