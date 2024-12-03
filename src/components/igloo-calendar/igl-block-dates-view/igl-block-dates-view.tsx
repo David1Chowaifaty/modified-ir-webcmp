@@ -125,7 +125,7 @@ export class IglBlockDatesView {
                 <div class="d-inline-block">
                   <select class="form-control input-sm" id="zSmallSelect" onChange={evt => this.handleReleaseAfterChange(evt)}>
                     {this.releaseList.map(releaseItem => (
-                      <option value={+releaseItem.CODE_NAME} selected={this.blockDatesData.RELEASE_AFTER_HOURS == +releaseItem.CODE_NAME}>
+                      <option value={+releaseItem.CODE_NAME} selected={Number(this.blockDatesData.RELEASE_AFTER_HOURS) == Number(releaseItem.CODE_NAME)}>
                         {releaseItem.CODE_VALUE_EN}
                       </option>
                     ))}
