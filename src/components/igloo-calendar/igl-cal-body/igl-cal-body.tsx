@@ -1,6 +1,10 @@
 import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
+import { RoomType } from '@/models/booking.dto';
+
+export type RoomCategory = RoomType & { expanded: boolean };
+
 @Component({
   tag: 'igl-cal-body',
   styleUrl: 'igl-cal-body.css',
@@ -81,7 +85,7 @@ export class IglCalBody {
     return this.getCategoryRooms(roomCategory).length;
   }
 
-  getCategoryRooms(roomCategory) {
+  getCategoryRooms(roomCategory: RoomCategory) {
     return (roomCategory && roomCategory.physicalrooms) || [];
   }
 
@@ -273,7 +277,7 @@ export class IglCalBody {
     });
   }
 
-  getGeneralRoomDayColumns(roomId: string, roomCategory) {
+  getGeneralRoomDayColumns(roomId: string, roomCategory: RoomCategory) {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
     return this.calendarData.days.map(dayInfo => (
       <div
@@ -285,13 +289,13 @@ export class IglCalBody {
     ));
   }
 
-  toggleCategory(roomCategory) {
+  toggleCategory(roomCategory: RoomCategory) {
     roomCategory.expanded = !roomCategory.expanded;
     this.renderElement();
   }
 
-  getRoomCategoryRow(roomCategory, index) {
-    if (this.getTotalPhysicalRooms(roomCategory) <= 1) {
+  getRoomCategoryRow(roomCategory: RoomCategory, index: number) {
+    if (this.getTotalPhysicalRooms(roomCategory) <= 1 || !roomCategory.is_active) {
       return null;
     }
     return (
@@ -325,29 +329,41 @@ export class IglCalBody {
     );
   }
 
-  getRoomsByCategory(roomCategory) {
+  /**
+   * Renders a list of active rooms for an expanded room category. Returns an array of JSX elements, including headers and day columns, or an empty array if the category is collapsed or contains no active rooms.
+   *
+   * @param {RoomCategory} roomCategory - The category containing room details.
+   * @returns {JSX.Element[]} - JSX elements for the active rooms or an empty array.
+   */
+  private getRoomsByCategory(roomCategory: RoomCategory) {
     // Check accordion is expanded.
     if (!roomCategory.expanded) {
       return [];
     }
 
-    return this.getCategoryRooms(roomCategory)?.map(room => (
-      <div class="roomRow">
-        <div
-          class={`cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${'room_' + this.getRoomId(room)}`}
-          data-room={this.getRoomId(room)}
-        >
-          {/* <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div> */}
-
-          <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover>
+    return this.getCategoryRooms(roomCategory)?.map(room => {
+      if (!room.is_active) {
+        return null;
+      }
+      return (
+        <div class="roomRow">
+          <div
+            class={`cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${
+              'room_' + this.getRoomId(room)
+            }`}
+            data-room={this.getRoomId(room)}
+          >
+            {/* <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div> */}
+            <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover>
+          </div>
+          {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory)}
         </div>
-        {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory)}
-      </div>
-    ));
+      );
+    });
   }
 
   getRoomRows() {
-    return this.calendarData.roomsInfo.map((roomCategory, index) => {
+    return this.calendarData.roomsInfo?.map((roomCategory, index) => {
       if (roomCategory.is_active) {
         return [this.getRoomCategoryRow(roomCategory, index), this.getRoomsByCategory(roomCategory)];
       } else {
