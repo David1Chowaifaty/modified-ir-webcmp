@@ -137,7 +137,6 @@ export class IglBookingForm {
   }
 
   render() {
-    console.log(this.dateRangeData);
     return (
       <Host>
         <div class="d-flex flex-wrap">
