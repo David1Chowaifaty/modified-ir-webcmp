@@ -301,8 +301,8 @@ export class IglPropertyBookedBy {
                   </select>
                 </div>
               </div>
-
-              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+              {/* Phone Input */}
+              {/* <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
                 <div class="p-0 m-0  d-flex  controlContainer flex-fill">
                   <div class=" p-0 m-0">
@@ -330,6 +330,10 @@ export class IglPropertyBookedBy {
                     />
                   </div>
                 </div>
+              </div> */}
+              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+                <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
+                <ir-phone-input value={this.bookedByData.contactNumber} default_country={this.bookedByData.isdCode} class="phone-input" language={this.language}></ir-phone-input>
               </div>
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">

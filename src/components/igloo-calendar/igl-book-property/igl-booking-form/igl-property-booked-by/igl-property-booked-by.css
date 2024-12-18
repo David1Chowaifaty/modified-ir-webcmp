@@ -17,8 +17,8 @@
   max-width: 125px;
 }
 
-.bookedDetailsForm .controlContainer {
-  /* width: calc(100% - 127px); */
+.phone-input {
+  flex: 1 1 0%;
 }
 
 .bookedDetailsForm .form-group {

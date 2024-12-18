@@ -559,6 +559,9 @@ export namespace Components {
         "propertyid": string;
         "ticket": string;
     }
+    interface IrPhoneCombobox {
+        "options": { id: string | number; value: string | number }[];
+    }
     interface IrPhoneInput {
         "default_country": number;
         "disabled": boolean;
@@ -2067,6 +2070,12 @@ declare global {
         prototype: HTMLIrPaymentOptionElement;
         new (): HTMLIrPaymentOptionElement;
     };
+    interface HTMLIrPhoneComboboxElement extends Components.IrPhoneCombobox, HTMLStencilElement {
+    }
+    var HTMLIrPhoneComboboxElement: {
+        prototype: HTMLIrPhoneComboboxElement;
+        new (): HTMLIrPhoneComboboxElement;
+    };
     interface HTMLIrPhoneInputElementEventMap {
         "textChange": { phone_prefix: string; mobile: string };
     }
@@ -2387,6 +2396,7 @@ declare global {
         "ir-payment-actions": HTMLIrPaymentActionsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
         "ir-payment-option": HTMLIrPaymentOptionElement;
+        "ir-phone-combobox": HTMLIrPhoneComboboxElement;
         "ir-phone-input": HTMLIrPhoneInputElement;
         "ir-pickup": HTMLIrPickupElement;
         "ir-pickup-view": HTMLIrPickupViewElement;
@@ -3037,6 +3047,9 @@ declare namespace LocalJSX {
         "propertyid"?: string;
         "ticket"?: string;
     }
+    interface IrPhoneCombobox {
+        "options"?: { id: string | number; value: string | number }[];
+    }
     interface IrPhoneInput {
         "default_country"?: number;
         "disabled"?: boolean;
@@ -3333,6 +3346,7 @@ declare namespace LocalJSX {
         "ir-payment-actions": IrPaymentActions;
         "ir-payment-details": IrPaymentDetails;
         "ir-payment-option": IrPaymentOption;
+        "ir-phone-combobox": IrPhoneCombobox;
         "ir-phone-input": IrPhoneInput;
         "ir-pickup": IrPickup;
         "ir-pickup-view": IrPickupView;
@@ -3425,6 +3439,7 @@ declare module "@stencil/core" {
             "ir-payment-actions": LocalJSX.IrPaymentActions & JSXBase.HTMLAttributes<HTMLIrPaymentActionsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
             "ir-payment-option": LocalJSX.IrPaymentOption & JSXBase.HTMLAttributes<HTMLIrPaymentOptionElement>;
+            "ir-phone-combobox": LocalJSX.IrPhoneCombobox & JSXBase.HTMLAttributes<HTMLIrPhoneComboboxElement>;
             "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
             "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;

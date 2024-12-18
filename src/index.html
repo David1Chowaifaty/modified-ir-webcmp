@@ -23,12 +23,27 @@
 </head>
 
 <body>
-  <ir-common></ir-common>
+  <!-- <ir-common></ir-common>
   <igloo-calendar currency-name="USD" propertyid="42" language="en"
     baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
-  <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
-
+  <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css"> -->
+  <ir-phone-combobox placeholder="Choose a fruit"></ir-phone-combobox>
   <script>
+    const calendar = document.querySelector("ir-phone-combobox");
+    calendar.options = [
+      { id: 1, value: "A" },
+      { id: 2, value: "B" },
+      { id: "3", value: 100 },
+      { id: 4, value: "C" },
+      { id: "5", value: 200 },
+      { id: 6, value: "D" },
+      { id: "7", value: 300 },
+      { id: 8, value: "E" },
+      { id: 9, value: "F" },
+      { id: "10", value: 400 },
+    ]
+  </script>
+  <!-- <script>
     //backend-cmp-injector
     //aname - username -password
     var today = new Date();
@@ -44,7 +59,7 @@
       calendar.propertyid = getId();
       calendar.ticket = ticket;
     }, 300)
-  </script>
+  </script> -->
 
 </body>
 

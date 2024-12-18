@@ -46,8 +46,23 @@
 .flag {
   height: 18px;
   width: 24px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .is-invalid {
   border-color: #ff4961;
+}
+
+.dropdown-menu {
+  max-height: 300px;
+  overflow: auto;
+}
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.dropdown-item * {
+  margin: 0;
+  padding: 0;
 }

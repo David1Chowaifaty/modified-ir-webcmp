@@ -191,7 +191,7 @@ export class BookingService {
       return b.child_nbr - a.child_nbr;
     });
   }
-  public async getCountries(language: string): Promise<ICountry[]> {
+  public async getCountries(language: string = 'en'): Promise<ICountry[]> {
     try {
       const { data } = await axios.post(`/Get_Exposed_Countries`, {
         language,
