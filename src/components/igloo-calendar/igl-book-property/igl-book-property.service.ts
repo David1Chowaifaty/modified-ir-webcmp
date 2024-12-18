@@ -155,7 +155,7 @@ export class IglBookPropertyService {
       if (is_amount_modified) {
         return view_mode === '002' ? rp_amount : rp_amount / total_days;
       }
-      return Number(selected_variation.discounted_gross_amount) / total_days;
+      return Number(selected_variation.discounted_amount) / total_days;
     };
     for (const roomTypeId in booking_store.ratePlanSelections) {
       const roomtype = booking_store.ratePlanSelections[roomTypeId];
@@ -172,7 +172,7 @@ export class IglBookPropertyService {
               unit: override_unit ? { id: unit } : rateplan.guest[i].unit ? { id: rateplan.guest[i].unit } : null,
               occupancy: {
                 adult_nbr: rateplan.selected_variation.adult_nbr,
-                children_nbr: rateplan.selected_variation.child_nbr,
+                children_nbr: rateplan.selected_variation.child_nbr - Math.max(rateplan.guest[i].infant_nbr, 0),
                 infant_nbr: rateplan.guest[i].infant_nbr,
               },
               bed_preference: rateplan.guest[i].bed_preference,

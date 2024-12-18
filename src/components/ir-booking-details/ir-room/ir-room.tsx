@@ -188,7 +188,7 @@ export class IrRoom {
   // }
   private formatVariation({ adult_nbr, child_nbr }: IVariations, { infant_nbr }: Occupancy) {
     // Adjust child number based on infants
-    const adjustedChildNbr = child_nbr ? Math.max(child_nbr - infant_nbr, 0) : 0;
+    const adjustedChildNbr = child_nbr;
 
     // Define labels based on singular/plural rules
     const adultLabel = adult_nbr > 1 ? locales.entries.Lcz_Adults.toLowerCase() : locales.entries.Lcz_Adult.toLowerCase();
