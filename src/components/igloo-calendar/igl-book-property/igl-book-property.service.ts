@@ -1,11 +1,13 @@
 import { Booking, Room } from '@/models/booking.dto';
 import { TSourceOption } from '@/models/igl-book-property';
+import VariationService from '@/services/variation.service';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
 import { extras } from '@/utils/utils';
 import moment from 'moment';
 
 export class IglBookPropertyService {
+  private variationService: VariationService;
   public setBookingInfoFromAutoComplete(context, res) {
     context.bookedByInfoData = {
       id: res.guest.id,
@@ -151,11 +153,18 @@ export class IglBookPropertyService {
   }) {
     const rooms = [];
     const total_days = calculateDaysBetweenDates(moment(check_in).format('YYYY-MM-DD'), moment(check_out).format('YYYY-MM-DD'));
-    const calculateAmount = ({ is_amount_modified, selected_variation, view_mode, rp_amount }: IRatePlanSelection) => {
+    const calculateAmount = ({ is_amount_modified, selected_variation, view_mode, rp_amount, ratePlan }: IRatePlanSelection, infants: number) => {
       if (is_amount_modified) {
         return view_mode === '002' ? rp_amount : rp_amount / total_days;
       }
-      return Number(selected_variation.discounted_amount) / total_days;
+      let variation = selected_variation;
+      if (infants > 0) {
+        if (!this.variationService) {
+          this.variationService = new VariationService();
+        }
+        variation = this.variationService.getVariationBasedOnInfants({ variations: ratePlan.variations, baseVariation: selected_variation, infants });
+      }
+      return Number(variation.discounted_amount) / total_days;
     };
     for (const roomTypeId in booking_store.ratePlanSelections) {
       const roomtype = booking_store.ratePlanSelections[roomTypeId];
@@ -179,7 +188,7 @@ export class IglBookPropertyService {
               from_date: moment(check_in).format('YYYY-MM-DD'),
               to_date: moment(check_out).format('YYYY-MM-DD'),
               notes,
-              days: this.generateDailyRates(check_in, check_out, calculateAmount(rateplan)),
+              days: this.generateDailyRates(check_in, check_out, calculateAmount(rateplan, rateplan.guest[i].infant_nbr)),
               guest: {
                 email: null,
                 first_name,

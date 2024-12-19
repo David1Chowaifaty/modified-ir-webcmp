@@ -2,11 +2,11 @@ import { Component, Host, h, Prop, State, Listen } from '@stencil/core';
 import { TPropertyButtonsTypes } from '@/components';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { IRatePlanSelection, modifyBookingStore, RatePlanGuest } from '@/stores/booking.store';
-import { Variation } from '@/models/property';
 import locales from '@/stores/locales.store';
 import { v4 } from 'uuid';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { formatAmount } from '@/utils/utils';
+import VariationService from '@/services/variation.service';
 
 @Component({
   tag: 'igl-application-info',
@@ -24,6 +24,8 @@ export class IglApplicationInfo {
   @Prop() baseData: { unit: { id: string; name: string }; roomtypeId: number };
 
   @State() isButtonPressed = false;
+
+  private variationService = new VariationService();
 
   componentWillLoad() {
     if (isSingleUnit(this.rateplanSelection.roomtype.id)) {
@@ -65,22 +67,20 @@ export class IglApplicationInfo {
     }
   }
 
-  private formatVariation(variation: Variation): string {
-    if (!variation) return '';
-    const adults = `${variation.adult_nbr} ${variation.adult_nbr === 1 ? locales.entries['Lcz_Adult']?.toLowerCase() : locales.entries['Lcz_Adults']?.toLowerCase()}`;
-    const children =
-      variation.child_nbr > 0
-        ? `${variation.child_nbr} ${variation.child_nbr > 1 ? locales.entries['Lcz_Children']?.toLowerCase() : locales.entries['Lcz_Child']?.toLowerCase()}`
-        : '';
-    return children ? `${adults} ${children}` : adults;
-  }
-
   private getTooltipMessages(): string | undefined {
     const { ratePlan, selected_variation } = this.rateplanSelection;
-    const selectedVariation = selected_variation;
+    let selectedVariation = selected_variation;
+    if (this.guestInfo?.infant_nbr) {
+      selectedVariation = this.variationService.getVariationBasedOnInfants({
+        variations: ratePlan.variations,
+        baseVariation: selected_variation,
+        infants: this.guestInfo?.infant_nbr,
+      });
+    }
+
     if (!selectedVariation) return;
 
-    const matchingVariation = ratePlan.variations?.find(variation => this.formatVariation(variation) === this.formatVariation(selectedVariation));
+    const matchingVariation = ratePlan.variations?.find(variation => variation.adult_nbr === selectedVariation.adult_nbr && variation.child_nbr === selectedVariation.child_nbr);
 
     if (!matchingVariation) return;
 
@@ -101,7 +101,15 @@ export class IglApplicationInfo {
     if (this.rateplanSelection.is_amount_modified) {
       return this.rateplanSelection.view_mode === '001' ? this.rateplanSelection.rp_amount : this.rateplanSelection.rp_amount * this.totalNights;
     }
-    return this.rateplanSelection.selected_variation.discounted_gross_amount;
+    let variation = this.rateplanSelection.selected_variation;
+    if (this.guestInfo?.infant_nbr) {
+      variation = this.variationService.getVariationBasedOnInfants({
+        variations: this.rateplanSelection.ratePlan.variations,
+        baseVariation: this.rateplanSelection.selected_variation,
+        infants: this.guestInfo?.infant_nbr,
+      });
+    }
+    return variation.discounted_gross_amount;
   }
 
   private filterRooms(): { name: string; id: number }[] {
@@ -125,6 +133,11 @@ export class IglApplicationInfo {
 
   render() {
     const filteredRoomList = this.filterRooms();
+    const formattedVariation = this.variationService.formatVariationBasedOnInfants({
+      baseVariation: this.rateplanSelection.selected_variation,
+      infants: this.guestInfo.infant_nbr,
+      variations: this.rateplanSelection.ratePlan.variations,
+    });
     return (
       <Host class={'my-2'}>
         <div class="booking-header">
@@ -138,7 +151,7 @@ export class IglApplicationInfo {
               </p>
               <ir-tooltip class="booking-tooltip" message={this.getTooltipMessages()}></ir-tooltip>
             </div>
-            <p class="booking-variation">{this.formatVariation(this.rateplanSelection.selected_variation)}</p>
+            <p class="booking-variation" innerHTML={formattedVariation}></p>
           </div>
           <p class="booking-price">
             {formatAmount(this.currency?.symbol, this.getAmount())}/{locales.entries.Lcz_Stay}
@@ -149,7 +162,7 @@ export class IglApplicationInfo {
             <p class="booking-rateplan-name">{this.rateplanSelection.ratePlan.short_name}</p>
             <ir-tooltip class="booking-tooltip" message={this.getTooltipMessages()}></ir-tooltip>
           </div>
-          <p class="booking-variation">{this.formatVariation(this.rateplanSelection.selected_variation)}</p>
+          <p class="booking-variation" innerHTML={formattedVariation}></p>
         </div>
         <div class="d-flex flex-column flex-md-row  p-0 align-items-md-center aplicationInfoContainer">
           <div class="mr-1 flex-fill guest-info-container">

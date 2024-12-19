@@ -199,7 +199,7 @@ export class IrRoom {
     const parts = [`${adult_nbr} ${adultLabel}`, adjustedChildNbr ? `${adjustedChildNbr} ${childLabel}` : '', infant_nbr ? `${infant_nbr} ${infantLabel}` : ''];
 
     // Join non-empty parts with spaces
-    return parts.filter(Boolean).join('  ');
+    return parts.filter(Boolean).join('&nbsp&nbsp&nbsp&nbsp');
   }
   render() {
     return (
@@ -263,7 +263,7 @@ export class IrRoom {
           <div>
             <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
             {/* {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>} */}
-            {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.formatVariation(this.item.rateplan.selected_variation, this.item.occupancy)}</span>}
+            {this.item.rateplan.selected_variation.adult_nbr > 0 && <span innerHTML={this.formatVariation(this.item.rateplan.selected_variation, this.item.occupancy)}> </span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.item.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">

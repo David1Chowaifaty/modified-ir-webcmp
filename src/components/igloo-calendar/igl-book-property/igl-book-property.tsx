@@ -75,6 +75,7 @@ export class IglBookProperty {
     if (!this.bookingData.defaultDateRange) {
       return;
     }
+    console.log('testing');
     // console.log(this.bookingData);
     this.initializeDefaultData();
     this.wasBlockedUnit = this.defaultData.hasOwnProperty('block_exposed_unit_props');
@@ -606,6 +607,7 @@ export class IglBookProperty {
     } catch (error) {
       console.error('Error booking user:', error);
     } finally {
+      // this.isLoading = null;
       this.resetLoadingState();
     }
   }
