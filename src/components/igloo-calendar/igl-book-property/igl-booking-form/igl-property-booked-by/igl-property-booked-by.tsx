@@ -159,42 +159,72 @@ export class IglPropertyBookedBy {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const { key, data } = e.detail;
-    console.log('data', data, 'key', key);
-    switch (key) {
-      case 'blur':
-        if (data !== '') {
-          this.bookedByData.email = data;
-          this.checkUser();
-        } else {
-          let prevBookedByData = { ...this.bookedByData };
-          prevBookedByData = { ...prevBookedByData, email: '' };
-          this.bookedByData = { ...prevBookedByData };
-          this.dataUpdateEvent.emit({
-            key: 'bookedByInfoUpdated',
-            data: { ...this.bookedByData },
-          });
-        }
-
-        break;
-      case 'select':
-        this.bookedByData.email = data.email;
-        this.bookedByData = {
-          ...this.bookedByData,
-          id: data.id,
-          firstName: data.first_name,
-          lastName: data.last_name,
-          contactNumber: data.mobile,
-          countryId: data.country_id,
-          isdCode: data.country_id.toString(),
-        };
-        this.dataUpdateEvent.emit({
-          key: 'bookedByInfoUpdated',
-          data: this.bookedByData,
-        });
-        break;
-      default:
-        break;
+    console.log(key, data);
+    if (key === 'blur') {
+      if (z.string().email().safeParse(data).success) {
+        this.bookedByData.email = data;
+        this.checkUser();
+      } else if (this.bookedByData.email !== '' && data == '') {
+        this.bookedByData.email = '';
+      }
+      this.dataUpdateEvent.emit({
+        key: 'bookedByInfoUpdated',
+        data: this.bookedByData,
+      });
     }
+    if (key === 'select') {
+      this.bookedByData.email = data.email;
+      this.bookedByData = {
+        ...this.bookedByData,
+        id: data.id,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        contactNumber: data.mobile,
+        countryId: data.country_id,
+        isdCode: data.country_id.toString(),
+      };
+      this.dataUpdateEvent.emit({
+        key: 'bookedByInfoUpdated',
+        data: this.bookedByData,
+      });
+    }
+
+    // console.log('data', data, 'key', key);
+    // switch (key) {
+    //   case 'blur':
+    //     if (data !== '') {
+    //       this.bookedByData.email = data;
+    //       this.checkUser();
+    //     } else {
+    //       let prevBookedByData = { ...this.bookedByData };
+    //       prevBookedByData = { ...prevBookedByData, email: '' };
+    //       this.bookedByData = { ...prevBookedByData };
+    //       this.dataUpdateEvent.emit({
+    //         key: 'bookedByInfoUpdated',
+    //         data: { ...this.bookedByData },
+    //       });
+    //     }
+
+    //     break;
+    //   case 'select':
+    //     this.bookedByData.email = data.email;
+    //     this.bookedByData = {
+    //       ...this.bookedByData,
+    //       id: data.id,
+    //       firstName: data.first_name,
+    //       lastName: data.last_name,
+    //       contactNumber: data.mobile,
+    //       countryId: data.country_id,
+    //       isdCode: data.country_id.toString(),
+    //     };
+    //     this.dataUpdateEvent.emit({
+    //       key: 'bookedByInfoUpdated',
+    //       data: this.bookedByData,
+    //     });
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
   clearEvent() {
     this.bookedByData = {
