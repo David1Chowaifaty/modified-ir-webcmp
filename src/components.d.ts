@@ -25,6 +25,7 @@ import { ILocale } from "./stores/locales.store";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { ZodType } from "zod";
+import { BookingDetailsSidebarEvents } from "./components/ir-booking-details/ir-booking-details";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
@@ -46,6 +47,7 @@ export { ILocale } from "./stores/locales.store";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { ZodType } from "zod";
+export { BookingDetailsSidebarEvents } from "./components/ir-booking-details/ir-booking-details";
 export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
     interface IglApplicationInfo {
@@ -494,16 +496,38 @@ export namespace Components {
         "handledEndpoints": string[];
     }
     interface IrLabel {
-        "country": boolean;
-        "iconShown": boolean;
-        "icon_name": TIcons;
-        "icon_style": string;
-        "ignore_value": boolean;
-        "image": { src: string; alt: string; style?: string } | null;
+        /**
+          * The main text or HTML content to display
+         */
+        "content": string;
+        /**
+          * If true, label will ignore checking for an empty content
+         */
+        "ignoreEmptyContent": boolean;
+        /**
+          * Object representing the image used within the label
+         */
+        "image"?: { src: string; alt: string; style?: string } | null;
+        /**
+          * Additional CSS classes or style for the image
+         */
         "imageStyle": string;
-        "label": string;
+        /**
+          * Renders a country-type image style (vs. a 'logo')
+         */
+        "isCountryImage": boolean;
+        /**
+          * The text to display as the label's title
+         */
+        "labelText": string;
+        /**
+          * Placeholder text to display if content is empty
+         */
         "placeholder": string;
-        "value": string;
+        /**
+          * If true, will render `content` as HTML
+         */
+        "renderContentAsHtml": boolean;
     }
     interface IrListingHeader {
         "language": string;
@@ -635,6 +659,10 @@ export namespace Components {
           * A Zod schema for validating the input Example: z.coerce.number()
          */
         "zod"?: ZodType<any, any>;
+    }
+    interface IrReservationInformation {
+        "booking": Booking;
+        "countries": ICountry[];
     }
     interface IrRoom {
         "bookingEvent": Booking;
@@ -934,10 +962,6 @@ export interface IrInterceptorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrInterceptorElement;
 }
-export interface IrLabelCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLIrLabelElement;
-}
 export interface IrListingHeaderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrListingHeaderElement;
@@ -981,6 +1005,10 @@ export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
 export interface IrPriceInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPriceInputElement;
+}
+export interface IrReservationInformationCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrReservationInformationElement;
 }
 export interface IrRoomCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1900,18 +1928,7 @@ declare global {
         prototype: HTMLIrInterceptorElement;
         new (): HTMLIrInterceptorElement;
     };
-    interface HTMLIrLabelElementEventMap {
-        "editSidebar": any;
-    }
     interface HTMLIrLabelElement extends Components.IrLabel, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIrLabelElementEventMap>(type: K, listener: (this: HTMLIrLabelElement, ev: IrLabelCustomEvent<HTMLIrLabelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIrLabelElementEventMap>(type: K, listener: (this: HTMLIrLabelElement, ev: IrLabelCustomEvent<HTMLIrLabelElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrLabelElement: {
         prototype: HTMLIrLabelElement;
@@ -2132,6 +2149,23 @@ declare global {
     var HTMLIrPriceInputElement: {
         prototype: HTMLIrPriceInputElement;
         new (): HTMLIrPriceInputElement;
+    };
+    interface HTMLIrReservationInformationElementEventMap {
+        "editBookingClick": { type: BookingDetailsSidebarEvents };
+    }
+    interface HTMLIrReservationInformationElement extends Components.IrReservationInformation, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrReservationInformationElementEventMap>(type: K, listener: (this: HTMLIrReservationInformationElement, ev: IrReservationInformationCustomEvent<HTMLIrReservationInformationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrReservationInformationElementEventMap>(type: K, listener: (this: HTMLIrReservationInformationElement, ev: IrReservationInformationCustomEvent<HTMLIrReservationInformationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrReservationInformationElement: {
+        prototype: HTMLIrReservationInformationElement;
+        new (): HTMLIrReservationInformationElement;
     };
     interface HTMLIrRoomElementEventMap {
         "deleteFinished": string;
@@ -2392,6 +2426,7 @@ declare global {
         "ir-pickup-view": HTMLIrPickupViewElement;
         "ir-popover": HTMLIrPopoverElement;
         "ir-price-input": HTMLIrPriceInputElement;
+        "ir-reservation-information": HTMLIrReservationInformationElement;
         "ir-room": HTMLIrRoomElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-select": HTMLIrSelectElement;
@@ -2959,17 +2994,38 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrInterceptorCustomEvent<IToast1>) => void;
     }
     interface IrLabel {
-        "country"?: boolean;
-        "iconShown"?: boolean;
-        "icon_name"?: TIcons;
-        "icon_style"?: string;
-        "ignore_value"?: boolean;
+        /**
+          * The main text or HTML content to display
+         */
+        "content"?: string;
+        /**
+          * If true, label will ignore checking for an empty content
+         */
+        "ignoreEmptyContent"?: boolean;
+        /**
+          * Object representing the image used within the label
+         */
         "image"?: { src: string; alt: string; style?: string } | null;
+        /**
+          * Additional CSS classes or style for the image
+         */
         "imageStyle"?: string;
-        "label"?: string;
-        "onEditSidebar"?: (event: IrLabelCustomEvent<any>) => void;
+        /**
+          * Renders a country-type image style (vs. a 'logo')
+         */
+        "isCountryImage"?: boolean;
+        /**
+          * The text to display as the label's title
+         */
+        "labelText"?: string;
+        /**
+          * Placeholder text to display if content is empty
+         */
         "placeholder"?: string;
-        "value"?: string;
+        /**
+          * If true, will render `content` as HTML
+         */
+        "renderContentAsHtml"?: boolean;
     }
     interface IrListingHeader {
         "language"?: string;
@@ -3128,6 +3184,11 @@ declare namespace LocalJSX {
           * A Zod schema for validating the input Example: z.coerce.number()
          */
         "zod"?: ZodType<any, any>;
+    }
+    interface IrReservationInformation {
+        "booking"?: Booking;
+        "countries"?: ICountry[];
+        "onEditBookingClick"?: (event: IrReservationInformationCustomEvent<{ type: BookingDetailsSidebarEvents }>) => void;
     }
     interface IrRoom {
         "bookingEvent"?: Booking;
@@ -3338,6 +3399,7 @@ declare namespace LocalJSX {
         "ir-pickup-view": IrPickupView;
         "ir-popover": IrPopover;
         "ir-price-input": IrPriceInput;
+        "ir-reservation-information": IrReservationInformation;
         "ir-room": IrRoom;
         "ir-room-nights": IrRoomNights;
         "ir-select": IrSelect;
@@ -3430,6 +3492,7 @@ declare module "@stencil/core" {
             "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
+            "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;

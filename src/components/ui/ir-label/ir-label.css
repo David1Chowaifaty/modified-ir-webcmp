@@ -21,6 +21,9 @@
 }
 .label_title {
   min-width: max-content;
+  padding: 0;
+  margin: 0;
+  font-weight: 600;
 }
 .label_placeholder {
   color: #cacfe7;
