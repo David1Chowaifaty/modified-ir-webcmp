@@ -34,6 +34,7 @@
 }
 .subtotal_row {
   padding-top: 8px;
+  font-weight: 600;
 }
 .room_actions_btns {
   gap: 0.5rem;

@@ -427,6 +427,9 @@ export namespace Components {
   };
         "object": any;
     }
+    interface IrEventsLog {
+        "bookingNumber": string;
+    }
     interface IrExtraService {
         "bookingNumber": string;
         "currencySymbol": string;
@@ -674,9 +677,6 @@ export namespace Components {
     interface IrReservationInformation {
         "booking": Booking;
         "countries": ICountry[];
-    }
-    interface IrRevisions {
-        "bookingNumber": string;
     }
     interface IrRoom {
         "bookingEvent": Booking;
@@ -1788,6 +1788,12 @@ declare global {
         prototype: HTMLIrDropdownElement;
         new (): HTMLIrDropdownElement;
     };
+    interface HTMLIrEventsLogElement extends Components.IrEventsLog, HTMLStencilElement {
+    }
+    var HTMLIrEventsLogElement: {
+        prototype: HTMLIrEventsLogElement;
+        new (): HTMLIrEventsLogElement;
+    };
     interface HTMLIrExtraServiceElementEventMap {
         "editExtraService": ExtraService;
         "resetBookingData": null;
@@ -2211,12 +2217,6 @@ declare global {
         prototype: HTMLIrReservationInformationElement;
         new (): HTMLIrReservationInformationElement;
     };
-    interface HTMLIrRevisionsElement extends Components.IrRevisions, HTMLStencilElement {
-    }
-    var HTMLIrRevisionsElement: {
-        prototype: HTMLIrRevisionsElement;
-        new (): HTMLIrRevisionsElement;
-    };
     interface HTMLIrRoomElementEventMap {
         "deleteFinished": string;
         "pressCheckIn": any;
@@ -2448,6 +2448,7 @@ declare global {
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dialog": HTMLIrDialogElement;
         "ir-dropdown": HTMLIrDropdownElement;
+        "ir-events-log": HTMLIrEventsLogElement;
         "ir-extra-service": HTMLIrExtraServiceElement;
         "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
         "ir-extra-services": HTMLIrExtraServicesElement;
@@ -2479,7 +2480,6 @@ declare global {
         "ir-popover": HTMLIrPopoverElement;
         "ir-price-input": HTMLIrPriceInputElement;
         "ir-reservation-information": HTMLIrReservationInformationElement;
-        "ir-revisions": HTMLIrRevisionsElement;
         "ir-room": HTMLIrRoomElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-select": HTMLIrSelectElement;
@@ -2968,6 +2968,9 @@ declare namespace LocalJSX {
         "object"?: any;
         "onDropdownItemCLicked"?: (event: IrDropdownCustomEvent<{ name: string; object: any }>) => void;
     }
+    interface IrEventsLog {
+        "bookingNumber"?: string;
+    }
     interface IrExtraService {
         "bookingNumber"?: string;
         "currencySymbol"?: string;
@@ -3258,9 +3261,6 @@ declare namespace LocalJSX {
         "countries"?: ICountry[];
         "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent>) => void;
     }
-    interface IrRevisions {
-        "bookingNumber"?: string;
-    }
     interface IrRoom {
         "bookingEvent"?: Booking;
         "bookingIndex"?: number;
@@ -3442,6 +3442,7 @@ declare namespace LocalJSX {
         "ir-delete-modal": IrDeleteModal;
         "ir-dialog": IrDialog;
         "ir-dropdown": IrDropdown;
+        "ir-events-log": IrEventsLog;
         "ir-extra-service": IrExtraService;
         "ir-extra-service-config": IrExtraServiceConfig;
         "ir-extra-services": IrExtraServices;
@@ -3473,7 +3474,6 @@ declare namespace LocalJSX {
         "ir-popover": IrPopover;
         "ir-price-input": IrPriceInput;
         "ir-reservation-information": IrReservationInformation;
-        "ir-revisions": IrRevisions;
         "ir-room": IrRoom;
         "ir-room-nights": IrRoomNights;
         "ir-select": IrSelect;
@@ -3538,6 +3538,7 @@ declare module "@stencil/core" {
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
+            "ir-events-log": LocalJSX.IrEventsLog & JSXBase.HTMLAttributes<HTMLIrEventsLogElement>;
             "ir-extra-service": LocalJSX.IrExtraService & JSXBase.HTMLAttributes<HTMLIrExtraServiceElement>;
             "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;
             "ir-extra-services": LocalJSX.IrExtraServices & JSXBase.HTMLAttributes<HTMLIrExtraServicesElement>;
@@ -3569,7 +3570,6 @@ declare module "@stencil/core" {
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
             "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;
-            "ir-revisions": LocalJSX.IrRevisions & JSXBase.HTMLAttributes<HTMLIrRevisionsElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;

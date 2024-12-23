@@ -21,7 +21,7 @@ export class IrPaymentActions {
     return (
       <Host>
         <div class={'my-1'}>
-          <strong>Payment actions</strong>
+          <span class={'font-medium'}>Payment actions</span>
         </div>
         <table>
           <thead>

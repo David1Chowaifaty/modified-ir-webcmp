@@ -1,4 +1,4 @@
-import { Component, Fragment, h, Prop, State } from '@stencil/core';
+import { Component, h, Prop, State } from '@stencil/core';
 import { _formatTime } from '../../functions';
 import locales from '@/stores/locales.store';
 import { IPmsLog } from '@/models/booking.dto';
@@ -39,9 +39,9 @@ export class IrPmsLogs {
             <ir-spinner></ir-spinner>
           </div>
         ) : (
-          <Fragment>
-            <div class="d-flex align-items-center dialog-container-height">
-              <p class="list-title">{locales.entries.Lcz_SentAt}</p>
+          <div class={'dialog-container-height'}>
+            <div class="d-flex align-items-center pb-1">
+              <p class="list-title p-0 m-0">{locales.entries.Lcz_SentAt}</p>
               {this.pmsLogs?.sent_date ? (
                 <p class="list-item">
                   {this.pmsLogs?.sent_date} {_formatTime(this.pmsLogs?.sent_hour.toString(), this.pmsLogs?.sent_minute.toString())}
@@ -50,11 +50,11 @@ export class IrPmsLogs {
                 <p class={`list-item ${this.pmsLogs?.sent_date ? 'green' : 'red'}`}>{this.pmsLogs?.is_acknowledged ? locales.entries.Lcz_YES : locales.entries.Lcz_NO}</p>
               )}
             </div>
-            <div class="d-flex align-items-center">
-              <h4 class="list-title">{locales.entries.Lcz_Acknowledged}</h4>
-              <p class={`list-item ${this.pmsLogs?.is_acknowledged ? 'green' : 'red'}`}>{this.pmsLogs?.is_acknowledged ? locales.entries.Lcz_YES : locales.entries.Lcz_NO}</p>
+            <div class="d-flex align-items-center p-0 m-0">
+              <h4 class="list-title p-0 m-0">{locales.entries.Lcz_Acknowledged}</h4>
+              <p class={`list-item  ${this.pmsLogs?.is_acknowledged ? 'green' : 'red'}`}>{this.pmsLogs?.is_acknowledged ? locales.entries.Lcz_YES : locales.entries.Lcz_NO}</p>
             </div>
-          </Fragment>
+          </div>
         )}
       </div>
     );

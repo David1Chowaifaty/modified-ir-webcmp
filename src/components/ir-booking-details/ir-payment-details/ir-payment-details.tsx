@@ -287,9 +287,9 @@ export class IrPaymentDetails {
     return (
       <div>
         <div class="d-flex align-items-center">
-          <strong class="mr-1">
+          <span class="mr-1 font-medium">
             {this.defaultTexts.entries.Lcz_BookingGuarantee} {this.hasAgentWithCode001 && `(${locales.entries.Lcz_OnCredit})`}
-          </strong>
+          </span>
           <ir-button
             id="drawer-icon"
             data-toggle="collapse"
@@ -411,7 +411,7 @@ export class IrPaymentDetails {
           )}
           <div class="mt-2 d-flex  flex-column rounded payment-container">
             <div class="d-flex align-items-center justify-content-between">
-              <strong>{this.defaultTexts.entries.Lcz_Payments} history</strong>
+              <span class={'font-medium'}>{this.defaultTexts.entries.Lcz_Payments} history</span>
               <ir-button
                 id="add-payment"
                 variant="icon"

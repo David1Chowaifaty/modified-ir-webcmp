@@ -214,8 +214,10 @@ export class IrRoom {
         <div class="flex-fill m-0 ">
           <div class="d-flex align-items-start justify-content-between sm-mb-1">
             <p class="m-0 p-0">
-              <strong class="m-0 p-0">{this.myRoomTypeFoodCat || ''} </strong> {this.mealCodeName}{' '}
-              {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
+              <span class="m-0 p-0" style={{ fontWeight: '600' }}>
+                {this.myRoomTypeFoodCat || ''}{' '}
+              </span>{' '}
+              {this.mealCodeName} {this.item.rateplan.is_non_refundable && ` - ${this.defaultTexts.entries.Lcz_NonRefundable}`}{' '}
             </p>
             {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
             <div class="d-flex m-0 p-0 align-items-center room_actions_btns">
@@ -260,7 +262,7 @@ export class IrRoom {
           <div class="collapse" id={`roomCollapse-${this.item.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">
               <div class=" sm-padding-top">
-                <strong class="sm-padding-right">{`${this.defaultTexts.entries.Lcz_Breakdown}:`}</strong>
+                <p class="sm-padding-right" style={{ fontWeight: '600' }}>{`${this.defaultTexts.entries.Lcz_Breakdown}:`}</p>
               </div>
               <div class={'flex-fill'}>
                 <table>
@@ -322,33 +324,11 @@ export class IrRoom {
               </div>
             </div>
             {this.item.rateplan.cancelation && (
-              // <div class="sm-mb-1 room_statements">
-              //   <span>
-              //     <b>
-              //       <u>{this.defaultTexts.entries.Lcz_Cancellation}: </u>
-              //     </b>
-              //   </span>
-              //   <span>
-              //     njfsdnfjsfsdfdsfnijsnfijnfjsnfjsdnfjsnfkjsdnfjksdnfkjsdnfjksnfjksfnkjsdnfjksfnjksdnfjksdnfjsdnfjksnfjksdnfkjsdnfjksnfjksddnfjksnfjksddnfjsdnfjksf js
-              //     jnjnsjnfjksfnjsdfnjdskfnsddjfnsifnj
-              //   </span>
-              // </div>
-              <div class="room_statements">
-                <span>
-                  <b>{this.defaultTexts.entries.Lcz_Cancellation}:</b>
-                  <span innerHTML={this.item.rateplan.cancelation || ''}></span>
-                </span>
-              </div>
+              <ir-label labelText={`${this.defaultTexts.entries.Lcz_Cancellation}:`} content={this.item.rateplan.cancelation || ''} renderContentAsHtml></ir-label>
             )}
             {this.item.rateplan.guarantee && (
-              <div class="sm-mb-1">
-                <span>
-                  <b>{this.defaultTexts.entries.Lcz_Guarantee}: </b>
-                  <span innerHTML={this.item.rateplan.guarantee || ''}></span>
-                </span>
-              </div>
+              <ir-label labelText={`${this.defaultTexts.entries.Lcz_Guarantee}:`} content={this.item.rateplan.guarantee || ''} renderContentAsHtml></ir-label>
             )}
-
             {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
             <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
             {this.bookingEvent.is_direct && <ir-label labelText={`${this.defaultTexts.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>}

@@ -82,8 +82,8 @@ export class IrBookingHeader {
     switch (this.currentDialogStatus) {
       case 'pms':
         return <ir-pms-logs slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-pms-logs>;
-      case 'revisions':
-        return <ir-revisions slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-revisions>;
+      case 'events-log':
+        return <ir-events-log slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-events-log>;
     }
   }
 
@@ -96,7 +96,7 @@ export class IrBookingHeader {
             <p class="m-0 p-0">{!this.booking.is_direct && <span class="mr-1 m-0">{this.booking.channel_booking_nbr}</span>}</p>
           </div>
 
-          <div class="d-flex justify-content-end align-items-center" style={{ gap: '1rem' }}>
+          <div class="d-flex justify-content-end align-items-center" style={{ gap: '1rem', flexWrap: 'wrap' }}>
             <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.status.code]}`}>{this.booking.status.description}</span>
             {this.booking.allowed_actions.length > 0 && this.booking.is_editable && (
               <div class="m-0 p-0 d-flex align-items-center" style={{ gap: '0.25rem' }}>
@@ -122,8 +122,8 @@ export class IrBookingHeader {
                 ></ir-button>
               </div>
             )}
-            <button type="button" class="btn btn-outline btn-sm m-0" onClick={() => this.openDialog({ type: 'revisions' })}>
-              {'Revisions'}
+            <button type="button" class="btn btn-outline btn-sm m-0" onClick={() => this.openDialog({ type: 'events-log' })}>
+              {'Events log'}
             </button>
             {calendar_data.is_pms_enabled && (
               <button type="button" class="btn btn-outline btn-sm m-0" onClick={() => this.openDialog({ type: 'pms' })}>
@@ -157,6 +157,7 @@ export class IrBookingHeader {
               this.currentDialogStatus = null;
             }
           }}
+          style={this.currentDialogStatus === 'events-log' && { '--ir-dialog-max-width': '400px' }}
           ref={el => (this.dialogRef = el)}
         >
           {this.renderDialogBody()}

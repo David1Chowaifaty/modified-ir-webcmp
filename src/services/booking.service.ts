@@ -31,6 +31,7 @@ export interface ExposedBookingEvent {
   id: number;
   minute: number;
   second: number;
+  user: string;
   type: string;
 }
 export class BookingService {
