@@ -5,7 +5,7 @@ import { getPrivateNote } from '@/utils/booking';
 import { Component, Event, EventEmitter, Prop, h } from '@stencil/core';
 import { ICountry } from '@/models/IBooking';
 import { _formatDate, _formatTime } from '../functions';
-import { BookingDetailsSidebarEvents } from '../ir-booking-details';
+import { BookingDetailsSidebarEvents, OpenSidebarEvent } from '../types';
 
 @Component({
   tag: 'ir-reservation-information',
@@ -16,12 +16,12 @@ export class IrReservationInformation {
   @Prop() booking: Booking;
   @Prop() countries: ICountry[];
 
-  @Event() editBookingClick: EventEmitter<{ type: BookingDetailsSidebarEvents }>;
+  @Event() openSidebar: EventEmitter<OpenSidebarEvent>;
 
   private handleEditClick(e: CustomEvent, type: BookingDetailsSidebarEvents) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.editBookingClick.emit({ type });
+    this.openSidebar.emit({ type });
   }
 
   private renderPhoneNumber() {

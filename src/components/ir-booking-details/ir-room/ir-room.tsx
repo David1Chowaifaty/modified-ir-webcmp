@@ -177,15 +177,7 @@ export class IrRoom {
       this.isLoading = false;
     }
   }
-  // private formatVariation({ adult_nbr, child_nbr, infant_nbr }: IVariations) {
-  //   const adultLabel = adult_nbr > 1 ? locales.entries.Lcz_Adults.toLowerCase() : locales.entries.Lcz_Adult.toLowerCase();
-  //   const childLabel = child_nbr > 1 ? locales.entries.Lcz_Children.toLowerCase() : locales.entries.Lcz_Child.toLowerCase();
-  //   const infantLabel = infant_nbr > 1 ? 'infants' : 'infant';
 
-  //   const parts = [`${adult_nbr} ${adultLabel}`, child_nbr ? `${child_nbr} ${childLabel}` : '', infant_nbr ? `${infant_nbr} ${infantLabel}` : ''];
-
-  //   return parts.filter(Boolean).join(' ');
-  // }
   private formatVariation({ adult_nbr, child_nbr }: IVariations, { infant_nbr }: Occupancy) {
     // Adjust child number based on infants
     const adjustedChildNbr = child_nbr;

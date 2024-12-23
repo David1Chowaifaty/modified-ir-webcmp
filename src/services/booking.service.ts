@@ -86,6 +86,17 @@ export class BookingService {
       throw new Error(error);
     }
   }
+  public async changeExposedBookingStatus(props: { book_nbr: string; status: string }) {
+    try {
+      const { data } = await axios.post(`/Change_Exposed_Booking_Status`, props);
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
+      }
+      return data.My_Result;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
   public async fetchPMSLogs(booking_nbr: string | number): Promise<IPmsLog> {
     try {
       const { data } = await axios.post(`/Get_Exposed_PMS_Logs`, { booking_nbr });
