@@ -676,6 +676,7 @@ export namespace Components {
         "countries": ICountry[];
     }
     interface IrRevisions {
+        "bookingNumber": string;
     }
     interface IrRoom {
         "bookingEvent": Booking;
@@ -3258,6 +3259,7 @@ declare namespace LocalJSX {
         "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent>) => void;
     }
     interface IrRevisions {
+        "bookingNumber"?: string;
     }
     interface IrRoom {
         "bookingEvent"?: Booking;

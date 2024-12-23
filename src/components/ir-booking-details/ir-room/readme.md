@@ -57,7 +57,6 @@ graph TD;
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-button --> ir-icons
-  ir-label --> ir-button
   ir-modal --> ir-button
   ir-booking-details --> ir-room
   style ir-room fill:#f9f,stroke:#333,stroke-width:4px

@@ -20,11 +20,15 @@
 ### Used by
 
  - [ir-booking-details](../../ir-booking-details)
+ - [ir-pms-logs](../../ir-booking-details/ir-booking-header/ir-pms-logs)
+ - [ir-revisions](../../ir-booking-details/ir-booking-header/ir-revisions)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-booking-details --> ir-spinner
+  ir-pms-logs --> ir-spinner
+  ir-revisions --> ir-spinner
   style ir-spinner fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

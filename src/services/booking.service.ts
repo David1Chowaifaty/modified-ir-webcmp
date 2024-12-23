@@ -25,6 +25,14 @@ export interface IBookingParams {
   identifier?: string;
   extras: { key: string; value: string }[] | null;
 }
+export interface ExposedBookingEvent {
+  date: string;
+  hour: number;
+  id: number;
+  minute: number;
+  second: number;
+  type: string;
+}
 export class BookingService {
   public async getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{ [key: string]: any }> {
     try {
@@ -100,6 +108,18 @@ export class BookingService {
   public async fetchPMSLogs(booking_nbr: string | number): Promise<IPmsLog> {
     try {
       const { data } = await axios.post(`/Get_Exposed_PMS_Logs`, { booking_nbr });
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
+      }
+      return data.My_Result;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+  public async getExposedBookingEvents(booking_nbr: string | number): Promise<ExposedBookingEvent[] | null> {
+    try {
+      const { data } = await axios.post(`/Get_Exposed_Booking_Events`, { booking_nbr });
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }

@@ -53,18 +53,16 @@
 - [ir-spinner](../ui/ir-spinner)
 - [ir-toast](../ir-toast)
 - [ir-interceptor](../ir-interceptor)
-- [ir-select](../ir-select)
-- [ir-button](../ir-button)
-- [ir-label](../ui/ir-label)
-- [ota-label](../ota-label)
+- [ir-booking-header](ir-booking-header)
+- [ir-reservation-information](ir-reservation-information)
 - [ir-date-view](../ir-date-view)
+- [ir-button](../ir-button)
 - [ir-room](ir-room)
 - [ir-pickup-view](ir-pickup-view)
 - [ir-extra-services](ir-extra-services)
 - [ir-payment-details](ir-payment-details)
 - [ir-sidebar](../ir-sidebar)
 - [igl-book-property](../igloo-calendar/igl-book-property)
-- [ir-dialog](../ir-dialog)
 
 ### Graph
 ```mermaid
@@ -76,18 +74,16 @@ graph TD;
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
   ir-booking-details --> ir-interceptor
-  ir-booking-details --> ir-select
-  ir-booking-details --> ir-button
-  ir-booking-details --> ir-label
-  ir-booking-details --> ota-label
+  ir-booking-details --> ir-booking-header
+  ir-booking-details --> ir-reservation-information
   ir-booking-details --> ir-date-view
+  ir-booking-details --> ir-button
   ir-booking-details --> ir-room
   ir-booking-details --> ir-pickup-view
   ir-booking-details --> ir-extra-services
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
-  ir-booking-details --> ir-dialog
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
@@ -106,7 +102,17 @@ graph TD;
   ir-extra-service-config --> ir-date-picker
   ir-extra-service-config --> ir-button
   ir-extra-service-config --> ir-price-input
-  ir-label --> ir-button
+  ir-booking-header --> ir-pms-logs
+  ir-booking-header --> ir-revisions
+  ir-booking-header --> ir-select
+  ir-booking-header --> ir-button
+  ir-booking-header --> ir-dialog
+  ir-pms-logs --> ir-spinner
+  ir-revisions --> ir-spinner
+  ir-dialog --> ir-icon
+  ir-reservation-information --> ir-label
+  ir-reservation-information --> ir-button
+  ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
   ir-room --> ir-label
@@ -149,7 +155,6 @@ graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
-  ir-dialog --> ir-icon
   igloo-calendar --> ir-booking-details
   ir-booking --> ir-booking-details
   ir-booking-listing --> ir-booking-details

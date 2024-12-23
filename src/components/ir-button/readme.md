@@ -48,6 +48,7 @@
  - [igl-to-be-assigned](../igloo-calendar/igl-to-be-assigned)
  - [ir-booking-details](../ir-booking-details)
  - [ir-booking-extra-note](../ir-booking-extra-note)
+ - [ir-booking-header](../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-channel](../ir-channel)
  - [ir-channel-editor](../ir-channel/ir-channel-editor)
@@ -59,7 +60,6 @@
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
- - [ir-label](../ui/ir-label)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-login](../ir-login)
@@ -70,6 +70,7 @@
  - [ir-payment-option](../ir-payment-option)
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-pickup-view](../ir-booking-details/ir-pickup-view)
+ - [ir-reservation-information](../ir-booking-details/ir-reservation-information)
  - [ir-room](../ir-booking-details/ir-room)
  - [ir-room-nights](../igloo-calendar/ir-room-nights)
 
@@ -90,6 +91,7 @@ graph TD;
   igl-to-be-assigned --> ir-button
   ir-booking-details --> ir-button
   ir-booking-extra-note --> ir-button
+  ir-booking-header --> ir-button
   ir-booking-listing --> ir-button
   ir-channel --> ir-button
   ir-channel-editor --> ir-button
@@ -101,7 +103,6 @@ graph TD;
   ir-hk-tasks --> ir-button
   ir-hk-unassigned-units --> ir-button
   ir-hk-user --> ir-button
-  ir-label --> ir-button
   ir-listing-header --> ir-button
   ir-listing-modal --> ir-button
   ir-login --> ir-button
@@ -112,6 +113,7 @@ graph TD;
   ir-payment-option --> ir-button
   ir-pickup --> ir-button
   ir-pickup-view --> ir-button
+  ir-reservation-information --> ir-button
   ir-room --> ir-button
   ir-room-nights --> ir-button
   style ir-button fill:#f9f,stroke:#333,stroke-width:4px

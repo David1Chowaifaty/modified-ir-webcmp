@@ -46,7 +46,7 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [ir-booking-details](../ir-booking-details)
+ - [ir-booking-header](../ir-booking-details/ir-booking-header)
 
 ### Depends on
 
@@ -56,7 +56,7 @@ Type: `Promise<void>`
 ```mermaid
 graph TD;
   ir-dialog --> ir-icon
-  ir-booking-details --> ir-dialog
+  ir-booking-header --> ir-dialog
   style ir-dialog fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

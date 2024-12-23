@@ -116,18 +116,16 @@ graph TD;
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
   ir-booking-details --> ir-interceptor
-  ir-booking-details --> ir-select
-  ir-booking-details --> ir-button
-  ir-booking-details --> ir-label
-  ir-booking-details --> ota-label
+  ir-booking-details --> ir-booking-header
+  ir-booking-details --> ir-reservation-information
   ir-booking-details --> ir-date-view
+  ir-booking-details --> ir-button
   ir-booking-details --> ir-room
   ir-booking-details --> ir-pickup-view
   ir-booking-details --> ir-extra-services
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
-  ir-booking-details --> ir-dialog
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
@@ -145,7 +143,17 @@ graph TD;
   ir-extra-service-config --> ir-date-picker
   ir-extra-service-config --> ir-button
   ir-extra-service-config --> ir-price-input
-  ir-label --> ir-button
+  ir-booking-header --> ir-pms-logs
+  ir-booking-header --> ir-revisions
+  ir-booking-header --> ir-select
+  ir-booking-header --> ir-button
+  ir-booking-header --> ir-dialog
+  ir-pms-logs --> ir-spinner
+  ir-revisions --> ir-spinner
+  ir-dialog --> ir-icon
+  ir-reservation-information --> ir-label
+  ir-reservation-information --> ir-button
+  ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
   ir-room --> ir-label
@@ -161,7 +169,6 @@ graph TD;
   ir-payment-details --> ir-payment-actions
   ir-payment-details --> ir-modal
   ir-payment-actions --> ir-button
-  ir-dialog --> ir-icon
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

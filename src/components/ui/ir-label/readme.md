@@ -7,44 +7,29 @@
 
 ## Properties
 
-| Property       | Attribute      | Description | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Default     |
-| -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `country`      | `country`      |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `false`     |
-| `iconShown`    | `icon-shown`   |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `false`     |
-| `icon_name`    | `icon_name`    |             | `"print" \| "key" \| "search" \| "save" \| "check" \| "user" \| "file" \| "edit" \| "danger" \| "clock" \| "bell" \| "burger_menu" \| "home" \| "xmark" \| "minus" \| "heart" \| "user_group" \| "arrow_right" \| "arrow_left" \| "circle_info" \| "calendar" \| "xmark-fill" \| "globe" \| "facebook" \| "twitter" \| "whatsapp" \| "instagram" \| "youtube" \| "angle_left" \| "circle_check" \| "eraser" \| "trash" \| "plus" \| "reciept" \| "menu_list" \| "credit_card" \| "closed_eye" \| "open_eye" \| "server" \| "double_caret_left" \| "square_plus" \| "angles_left" \| "angle_right" \| "angles_right" \| "outline_user" \| "unlock" \| "circle_plus"` | `'edit'`    |
-| `icon_style`   | `icon_style`   |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `undefined` |
-| `ignore_value` | `ignore_value` |             | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `false`     |
-| `image`        | --             |             | `{ src: string; alt: string; style?: string; }`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `undefined` |
-| `imageStyle`   | `image-style`  |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `''`        |
-| `label`        | `label`        |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `undefined` |
-| `placeholder`  | `placeholder`  |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `undefined` |
-| `value`        | `value`        |             | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `undefined` |
-
-
-## Events
-
-| Event         | Description | Type               |
-| ------------- | ----------- | ------------------ |
-| `editSidebar` |             | `CustomEvent<any>` |
+| Property              | Attribute                | Description                                              | Type                                            | Default     |
+| --------------------- | ------------------------ | -------------------------------------------------------- | ----------------------------------------------- | ----------- |
+| `content`             | `content`                | The main text or HTML content to display                 | `string`                                        | `undefined` |
+| `ignoreEmptyContent`  | `ignore-empty-content`   | If true, label will ignore checking for an empty content | `boolean`                                       | `false`     |
+| `image`               | --                       | Object representing the image used within the label      | `{ src: string; alt: string; style?: string; }` | `null`      |
+| `imageStyle`          | `image-style`            | Additional CSS classes or style for the image            | `string`                                        | `''`        |
+| `isCountryImage`      | `is-country-image`       | Renders a country-type image style (vs. a 'logo')        | `boolean`                                       | `false`     |
+| `labelText`           | `label-text`             | The text to display as the label's title                 | `string`                                        | `undefined` |
+| `placeholder`         | `placeholder`            | Placeholder text to display if content is empty          | `string`                                        | `undefined` |
+| `renderContentAsHtml` | `render-content-as-html` | If true, will render `content` as HTML                   | `boolean`                                       | `false`     |
 
 
 ## Dependencies
 
 ### Used by
 
- - [ir-booking-details](../../ir-booking-details)
+ - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
-
-### Depends on
-
-- [ir-button](../../ir-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-label --> ir-button
-  ir-button --> ir-icons
-  ir-booking-details --> ir-label
+  ir-reservation-information --> ir-label
   ir-room --> ir-label
   style ir-label fill:#f9f,stroke:#333,stroke-width:4px
 ```
