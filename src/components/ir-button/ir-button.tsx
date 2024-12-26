@@ -26,7 +26,7 @@ export class IrButton {
   @Prop() iconPostion: 'left' | 'right' = 'left';
   @Prop() icon_style: any;
 
-  @Event({ bubbles: true, composed: true }) clickHanlder: EventEmitter<any>;
+  @Event({ bubbles: true, composed: true }) clickHandler: EventEmitter<any>;
 
   private buttonEl: HTMLButtonElement;
   @Listen('animateIrButton', { target: 'body' })
@@ -47,7 +47,7 @@ export class IrButton {
           id={this.btn_id}
           class={`icon-button ${this.btn_styles} ${this.visibleBackgroundOnHover ? 'hovered_bg' : ''}`}
           ref={el => (this.buttonEl = el)}
-          onClick={() => this.clickHanlder.emit()}
+          onClick={() => this.clickHandler.emit()}
           type={this.btn_type}
           disabled={this.btn_disabled}
         >
@@ -60,7 +60,7 @@ export class IrButton {
       <button
         id={this.btn_id}
         ref={el => (this.buttonEl = el)}
-        onClick={() => this.clickHanlder.emit()}
+        onClick={() => this.clickHandler.emit()}
         class={`btn btn-${this.btn_color} ${this.btn_styles} ir-button-class  btn-${this.size} text-${this.textSize} ${blockClass}`}
         type={this.btn_type}
         disabled={this.btn_disabled || this.isLoading}

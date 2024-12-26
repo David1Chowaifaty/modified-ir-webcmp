@@ -38,7 +38,7 @@ export class IrModal {
   @Event({ bubbles: true, composed: true }) confirmModal: EventEmitter<any>;
   @Event({ bubbles: true, composed: true }) cancelModal: EventEmitter<any>;
 
-  @Listen('clickHanlder')
+  @Listen('clickHandler')
   btnClickHandler(event: CustomEvent) {
     let target = event.target as HTMLInputElement;
     let name = target.name;

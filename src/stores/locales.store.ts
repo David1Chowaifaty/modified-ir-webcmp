@@ -9,6 +9,7 @@ export type LocalizationStrings = {
   Lcz_AnyInfant: string;
   Lcz_No: string;
   Lcz_ThisService: string;
+  Lcz_EventsLog: string;
   Lcz_Price: string;
   Lcz_DatesOn: string;
   Lcz_TillAndIncluding: string;

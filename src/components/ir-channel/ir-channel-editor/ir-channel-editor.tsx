@@ -109,7 +109,7 @@ export class IrChannelEditor {
 
         <ir-button
           isLoading={this.isLoading}
-          onClickHanlder={() => {
+          onClickHandler={() => {
             if (!channels_data.isConnectedToChannel) {
               this.toast.emit({
                 type: 'error',

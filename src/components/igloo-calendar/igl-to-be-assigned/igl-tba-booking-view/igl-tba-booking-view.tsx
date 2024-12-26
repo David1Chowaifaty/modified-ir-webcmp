@@ -199,7 +199,7 @@ export class IglTbaBookingView {
                   isLoading={isRequestPending('/Assign_Exposed_Room')}
                   size="sm"
                   text={locales.entries.Lcz_Assign}
-                  onClickHanlder={evt => this.handleAssignUnit(evt)}
+                  onClickHandler={evt => this.handleAssignUnit(evt)}
                   btn_disabled={this.selectedRoom === -1}
                 ></ir-button>
               </div>

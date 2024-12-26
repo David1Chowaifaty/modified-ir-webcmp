@@ -231,7 +231,7 @@ export class IrPaymentDetails {
                   style={colorVariants.secondary}
                   isLoading={rowMode === 'add' && isRequestPending('/Do_Payment')}
                   class={'m-0'}
-                  onClickHanlder={() => {
+                  onClickHandler={() => {
                     this._processPaymentSave();
                   }}
                 ></ir-button>
@@ -241,7 +241,7 @@ export class IrPaymentDetails {
                 icon_name="trash"
                 style={colorVariants.danger}
                 isLoading={this.toBeDeletedItem?.id === item?.id && isRequestPending('/Cancel_Payment')}
-                onClickHanlder={
+                onClickHandler={
                   rowMode === 'add'
                     ? () => {
                         this.newTableRow = false;
@@ -299,7 +299,7 @@ export class IrPaymentDetails {
             class="sm-padding-right pointer"
             variant="icon"
             icon_name="credit_card"
-            onClickHanlder={async () => {
+            onClickHandler={async () => {
               if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr && !this.bookingDetails.guest.cci) {
                 this.paymentDetailsUrl = await this.bookingService.getPCICardInfoURL(this.bookingDetails.booking_nbr);
               }
@@ -390,7 +390,7 @@ export class IrPaymentDetails {
                       aria-controls="myCollapse"
                       variant="icon"
                       icon_name={this.collapsedPayment ? 'closed_eye' : 'open_eye'}
-                      onClickHanlder={() => {
+                      onClickHandler={() => {
                         this.collapsedPayment = !this.collapsedPayment;
                       }}
                       style={{ '--icon-size': '1.5rem' }}
@@ -417,7 +417,7 @@ export class IrPaymentDetails {
                 variant="icon"
                 icon_name="square_plus"
                 style={{ '--icon-size': '1.5rem' }}
-                onClickHanlder={() => {
+                onClickHandler={() => {
                   this.newTableRow = true;
                 }}
               ></ir-button>
@@ -434,7 +434,7 @@ export class IrPaymentDetails {
                       id="add-payment"
                       variant="icon"
                       icon_name="square_plus"
-                      onClickHanlder={() => {
+                      onClickHandler={() => {
                         this.newTableRow = true;
                       }}
                     ></ir-button> */}

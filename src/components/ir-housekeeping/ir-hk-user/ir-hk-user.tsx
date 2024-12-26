@@ -141,7 +141,7 @@ export class IrHkUser {
           ></ir-input-text>
           <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
             <ir-button
-              onClickHanlder={() => this.closeSideBar.emit(null)}
+              onClickHandler={() => this.closeSideBar.emit(null)}
               class="flex-fill"
               btn_styles="w-100  justify-content-center align-items-center"
               btn_color="secondary"
@@ -149,7 +149,7 @@ export class IrHkUser {
             ></ir-button>
             <ir-button
               isLoading={this.isLoading}
-              onClickHanlder={this.addUser.bind(this)}
+              onClickHandler={this.addUser.bind(this)}
               class="flex-fill ml-md-1"
               btn_styles="w-100  justify-content-center align-items-center mt-1 mt-md-0"
               text={locales.entries.Lcz_Save}

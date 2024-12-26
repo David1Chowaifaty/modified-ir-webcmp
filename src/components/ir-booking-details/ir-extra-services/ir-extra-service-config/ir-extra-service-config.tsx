@@ -116,7 +116,7 @@ export class IrExtraServiceConfig {
                         style={{ '--icon-size': '0.875rem' }}
                         icon_name="xmark-fill"
                         class="ml-2"
-                        onClickHanlder={() => this.updateService({ start_date: null })}
+                        onClickHandler={() => this.updateService({ start_date: null })}
                       ></ir-button>
                     </div>
                   )}
@@ -152,7 +152,7 @@ export class IrExtraServiceConfig {
                         style={{ '--icon-size': '0.875rem' }}
                         icon_name="xmark-fill"
                         class="ml-2"
-                        onClickHanlder={() => this.updateService({ end_date: null })}
+                        onClickHandler={() => this.updateService({ end_date: null })}
                       ></ir-button>
                     </div>
                   )}

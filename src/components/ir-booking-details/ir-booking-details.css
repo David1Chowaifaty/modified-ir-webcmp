@@ -2,6 +2,9 @@
   overflow-x: hidden;
   --ir-dialog-max-width: 20rem;
 }
+:host * {
+  font-family: inherit !important;
+}
 .confirmed {
   color: #fff;
   display: flex;

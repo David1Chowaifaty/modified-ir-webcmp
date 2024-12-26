@@ -1570,7 +1570,7 @@ declare global {
         new (): HTMLIrBookingPrintingElement;
     };
     interface HTMLIrButtonElementEventMap {
-        "clickHanlder": any;
+        "clickHandler": any;
     }
     interface HTMLIrButtonElement extends Components.IrButton, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrButtonElementEventMap>(type: K, listener: (this: HTMLIrButtonElement, ev: IrButtonCustomEvent<HTMLIrButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2856,7 +2856,7 @@ declare namespace LocalJSX {
         "icon_style"?: any;
         "isLoading"?: boolean;
         "name"?: string;
-        "onClickHanlder"?: (event: IrButtonCustomEvent<any>) => void;
+        "onClickHandler"?: (event: IrButtonCustomEvent<any>) => void;
         "size"?: 'sm' | 'md' | 'lg';
         "text"?: any;
         "textSize"?: 'sm' | 'md' | 'lg';

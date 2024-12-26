@@ -67,12 +67,12 @@ graph TD;
   ir-extra-service-config --> ir-button
   ir-extra-service-config --> ir-price-input
   ir-booking-header --> ir-pms-logs
-  ir-booking-header --> ir-revisions
+  ir-booking-header --> ir-events-log
   ir-booking-header --> ir-select
   ir-booking-header --> ir-button
   ir-booking-header --> ir-dialog
   ir-pms-logs --> ir-spinner
-  ir-revisions --> ir-spinner
+  ir-events-log --> ir-spinner
   ir-dialog --> ir-icon
   ir-reservation-information --> ir-label
   ir-reservation-information --> ir-button

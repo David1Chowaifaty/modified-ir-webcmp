@@ -157,7 +157,7 @@ export class IglBookPropertyHeader {
             size="sm"
             class="ml-2"
             text={locales.entries.Lcz_Check}
-            onClickHanlder={() => this.handleButtonClicked()}
+            onClickHandler={() => this.handleButtonClicked()}
           ></ir-button>
           {/* <button class={'btn btn-primary btn-sm  ml-2'} onClick={() => this.handleButtonClicked()}>
             {locales.entries.Lcz_Check}

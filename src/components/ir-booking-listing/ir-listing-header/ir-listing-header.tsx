@@ -328,15 +328,15 @@ export class IrListingHeader {
               variant="icon"
               icon_name="search"
               isLoading={this.isLoading === 'search'}
-              onClickHanlder={() => this.handleSearchClicked(false)}
+              onClickHandler={() => this.handleSearchClicked(false)}
             ></ir-button>
-            <ir-button title={locales.entries?.Lcz_Erase} variant="icon" icon_name="eraser" onClickHanlder={() => this.handleClearUserField()}></ir-button>
+            <ir-button title={locales.entries?.Lcz_Erase} variant="icon" icon_name="eraser" onClickHandler={() => this.handleClearUserField()}></ir-button>
             <ir-button
               title={locales.entries?.Lcz_ExportToExcel}
               variant="icon"
               icon_name="file"
               isLoading={this.isLoading === 'excel'}
-              onClickHanlder={() => this.handleSearchClicked(true)}
+              onClickHandler={() => this.handleSearchClicked(true)}
             ></ir-button>
           </div>
         </section>

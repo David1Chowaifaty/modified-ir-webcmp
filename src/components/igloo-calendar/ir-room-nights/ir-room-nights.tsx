@@ -280,7 +280,7 @@ export class IrRoomNights {
             text={locales?.entries.Lcz_Cancel}
             class="full-width"
             btn_styles="justify-content-center"
-            onClickHanlder={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
+            onClickHandler={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
           ></ir-button>
 
           {this.inventory > 0 && this.inventory !== null && (
@@ -290,7 +290,7 @@ export class IrRoomNights {
               btn_disabled={this.isButtonDisabled()}
               class="ml-1 full-width"
               btn_styles="justify-content-center"
-              onClickHanlder={this.handleRoomConfirmation.bind(this)}
+              onClickHandler={this.handleRoomConfirmation.bind(this)}
             ></ir-button>
           )}
         </section>

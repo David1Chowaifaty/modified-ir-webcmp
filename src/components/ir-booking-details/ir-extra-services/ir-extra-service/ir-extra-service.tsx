@@ -49,12 +49,12 @@ export class IrExtraService {
                 variant="icon"
                 icon_name="edit"
                 style={colorVariants.secondary}
-                onClickHanlder={() => this.editExtraService.emit(this.service)}
+                onClickHandler={() => this.editExtraService.emit(this.service)}
               ></ir-button>
               <ir-button
                 class="extra-service-delete-btn m-0 p-0"
                 variant="icon"
-                onClickHanlder={() => this.irModalRef.openModal()}
+                onClickHandler={() => this.irModalRef.openModal()}
                 id={`roomDelete-${this.service.booking_system_id}`}
                 icon_name="trash"
                 style={colorVariants.danger}

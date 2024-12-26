@@ -37,7 +37,7 @@ export class IglBookPropertyFooter {
           btn_color={type === 'cancel' ? 'secondary' : 'primary'}
           text={label}
           btn_disabled={disabled}
-          onClickHanlder={() => {
+          onClickHandler={() => {
             this.buttonClicked.emit({ key: type });
           }}
           icon_name={icon_name}

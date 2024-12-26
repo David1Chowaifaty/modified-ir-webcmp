@@ -78,7 +78,7 @@ export class IrChannelMapping {
             </div>
             <ir-button
               variant="icon"
-              onClickHanlder={() => this.mappingService.removedMapping(mappedField.result.id.toString(), isRoomType)}
+              onClickHandler={() => this.mappingService.removedMapping(mappedField.result.id.toString(), isRoomType)}
               icon_name="trash"
               style={{ '--icon-size': '1rem', '--icon-button-color': '#1e9ff2', '--icon-button-hover-color': '#104064 ' }}
             ></ir-button>

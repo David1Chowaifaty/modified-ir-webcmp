@@ -1,6 +1,7 @@
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { Component, Fragment, Prop, State, h } from '@stencil/core';
 import { BookingService, ExposedBookingEvent } from '@/services/booking.service';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-events-log',
@@ -30,7 +31,7 @@ export class IrEventsLog {
     return (
       <div class="p-1">
         <div class="d-flex  align-items-center" style={{ gap: '0.5rem' }}>
-          <h3 class=" text-left p-0 m-0  dialog-title ">Events log</h3>
+          <h3 class=" text-left p-0 m-0  dialog-title ">{locales.entries.Lcz_EventsLog}</h3>
           <span class="m-0 beta">Beta</span>
         </div>
 
@@ -44,7 +45,6 @@ export class IrEventsLog {
               <thead style={{ opacity: '0' }}>
                 <tr>
                   <th>date</th>
-                  <th>time</th>
                   <th>user</th>
                   <th>status</th>
                 </tr>
@@ -52,12 +52,11 @@ export class IrEventsLog {
               <tbody>
                 {this.bookingEvents?.map(e => (
                   <tr key={e.id} class="pb-1">
-                    <td class="pb-1">{e.date}</td>
-                    <td class=" pb-1 pl-1">
-                      {String(e.hour).padStart(2, '0')}:{String(e.minute).padStart(2, '0')}:{String(e.second).padStart(2, '0')}
+                    <td class="event-row">
+                      {e.date} {String(e.hour).padStart(2, '0')}:{String(e.minute).padStart(2, '0')}:{String(e.second).padStart(2, '0')}
                     </td>
-                    <td class="pl-1 pb-1 ">{e.user}</td>
-                    <td class="pl-3 pb-1 ">{e.type}</td>
+                    <td class="pl-3 event-row ">{e.type}</td>
+                    <td class="pl-1 event-row ">{e.user}</td>
                   </tr>
                 ))}
               </tbody>

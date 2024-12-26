@@ -36,7 +36,7 @@
 ### Depends on
 
 - [ir-pms-logs](ir-pms-logs)
-- [ir-revisions](ir-revisions)
+- [ir-events-log](events-log)
 - [ir-select](../../ir-select)
 - [ir-button](../../ir-button)
 - [ir-dialog](../../ir-dialog)
@@ -45,12 +45,12 @@
 ```mermaid
 graph TD;
   ir-booking-header --> ir-pms-logs
-  ir-booking-header --> ir-revisions
+  ir-booking-header --> ir-events-log
   ir-booking-header --> ir-select
   ir-booking-header --> ir-button
   ir-booking-header --> ir-dialog
   ir-pms-logs --> ir-spinner
-  ir-revisions --> ir-spinner
+  ir-events-log --> ir-spinner
   ir-button --> ir-icons
   ir-dialog --> ir-icon
   ir-booking-details --> ir-booking-header

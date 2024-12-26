@@ -49,7 +49,7 @@ export class IrPaymentActions {
                   <td class={'date_action'}>{moment(new Date(pa.due_on)).format('ddd, DD MMM YYYY')}</td>
                   {pa.amount > 0 && (
                     <td>
-                      <ir-button btn_color="outline" text={'Pay'} size="sm" onClickHanlder={() => this.generatePayment.emit(pa)}></ir-button>
+                      <ir-button btn_color="outline" text={'Pay'} size="sm" onClickHandler={() => this.generatePayment.emit(pa)}></ir-button>
                     </td>
                   )}
                   {pa.type === 'overdue' && pa.amount > 0 && (

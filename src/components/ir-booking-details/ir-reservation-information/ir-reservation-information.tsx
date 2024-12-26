@@ -67,7 +67,7 @@ export class IrReservationInformation {
               variant="icon"
               icon_name={'edit'}
               style={{ ...colorVariants.secondary, '--icon-size': '1.1rem' }}
-              onClickHanlder={e => this.handleEditClick(e, 'guest')}
+              onClickHandler={e => this.handleEditClick(e, 'guest')}
             ></ir-button>
           </ir-label>
           {this.booking.guest.mobile && <ir-label labelText={`${locales.entries.Lcz_Phone}:`} content={this.renderPhoneNumber()}></ir-label>}
@@ -103,7 +103,7 @@ export class IrReservationInformation {
               content={getPrivateNote(this.booking.extras)}
               // ignore_content
             ></ir-label>
-            <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary} onClickHanlder={e => this.handleEditClick(e, 'extra_note')}></ir-button>
+            <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary} onClickHandler={e => this.handleEditClick(e, 'extra_note')}></ir-button>
           </div>
         </div>
       </div>

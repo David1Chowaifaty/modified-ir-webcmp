@@ -241,7 +241,7 @@ export class IglCalHeader {
                 data-toggle="tooltip"
                 data-placement="bottom"
                 title={locales.entries.Lcz_UnassignedUnitsTooltip}
-                onClickHanlder={() => this.handleOptionEvent('showAssigned')}
+                onClickHandler={() => this.handleOptionEvent('showAssigned')}
                 btn_styles="caledarBtns"
                 visibleBackgroundOnHover
               ></ir-button>
@@ -255,7 +255,7 @@ export class IglCalHeader {
               data-toggle="tooltip"
               data-placement="bottom"
               title={locales.entries.Lcz_Navigate}
-              onClickHanlder={() => this.handleOptionEvent('calendar')}
+              onClickHandler={() => this.handleOptionEvent('calendar')}
               visibleBackgroundOnHover
             >
               <ir-date-picker
@@ -280,7 +280,7 @@ export class IglCalHeader {
               data-toggle="tooltip"
               data-placement="bottom"
               title={locales.entries.Lcz_Today}
-              onClickHanlder={() => this.handleOptionEvent('gotoToday')}
+              onClickHandler={() => this.handleOptionEvent('gotoToday')}
             ></ir-button>
             <ir-button
               variant="icon"
@@ -291,7 +291,7 @@ export class IglCalHeader {
               title={locales.entries.Lcz_CreateNewBooking}
               visibleBackgroundOnHover
               style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
-              onClickHanlder={() => this.handleOptionEvent('add', this.getNewBookingModel())}
+              onClickHandler={() => this.handleOptionEvent('add', this.getNewBookingModel())}
             ></ir-button>
             {/* <div
               class="caledarBtns"

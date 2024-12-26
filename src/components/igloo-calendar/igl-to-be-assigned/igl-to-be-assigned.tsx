@@ -276,7 +276,7 @@ export class IglToBeAssigned {
                   btn_styles="close_btn_style"
                   icon_name="double_caret_left"
                   style={colorVariants.secondary}
-                  onClickHanlder={() => this.handleOptionEvent('closeSideMenu')}
+                  onClickHandler={() => this.handleOptionEvent('closeSideMenu')}
                   visibleBackgroundOnHover
                 ></ir-button>
               </div>

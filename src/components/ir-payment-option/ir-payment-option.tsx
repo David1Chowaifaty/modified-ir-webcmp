@@ -245,7 +245,7 @@ export class IrPaymentOption {
                             title={locales?.entries?.Lcz_Edit}
                             variant="icon"
                             icon_name="edit"
-                            onClickHanlder={() => {
+                            onClickHandler={() => {
                               payment_option_store.selectedOption = po;
                               payment_option_store.mode = 'edit';
                             }}

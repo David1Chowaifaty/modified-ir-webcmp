@@ -112,7 +112,7 @@ export class IrBookingHeader {
                   class="sm-padding-right m-0 "
                 ></ir-select>
                 <ir-button
-                  onClickHanlder={this.updateStatus.bind(this)}
+                  onClickHandler={this.updateStatus.bind(this)}
                   btn_styles="h-28"
                   isLoading={isRequestPending('/Change_Exposed_Booking_Status')}
                   btn_disabled={isRequestPending('/Change_Exposed_Booking_Status')}
@@ -122,13 +122,27 @@ export class IrBookingHeader {
                 ></ir-button>
               </div>
             )}
-            <button type="button" class="btn btn-outline btn-sm m-0" onClick={() => this.openDialog({ type: 'events-log' })}>
-              {'Events log'}
-            </button>
+            <ir-button
+              size="sm"
+              btn_color="outline"
+              text={locales.entries.Lcz_EventsLog}
+              onClickHandler={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.openDialog({ type: 'events-log' });
+              }}
+            ></ir-button>
             {calendar_data.is_pms_enabled && (
-              <button type="button" class="btn btn-outline btn-sm m-0" onClick={() => this.openDialog({ type: 'pms' })}>
-                {locales.entries.Lcz_pms}
-              </button>
+              <ir-button
+                size="sm"
+                btn_color="outline"
+                text={locales.entries.Lcz_pms}
+                onClickHandler={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.openDialog({ type: 'pms' });
+                }}
+              ></ir-button>
             )}
             {this.hasReceipt && <ir-button variant="icon" id="receipt" icon_name="reciept" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
             {this.hasPrint && <ir-button variant="icon" id="print" icon_name="print" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
@@ -142,7 +156,7 @@ export class IrBookingHeader {
                 style={{ '--icon-size': '1.65rem' }}
                 icon_name="xmark"
                 class="ml-2"
-                onClickHanlder={e => {
+                onClickHandler={e => {
                   e.stopPropagation();
                   e.stopImmediatePropagation();
                   this.closeSidebar.emit(null);

@@ -95,7 +95,7 @@ export class IrBookingDetails {
     this.sidebarState = e.detail.type;
   }
 
-  @Listen('clickHanlder')
+  @Listen('clickHandler')
   handleIconClick(e: CustomEvent) {
     const target = e.target as HTMLIrButtonElement;
     switch (target.id) {

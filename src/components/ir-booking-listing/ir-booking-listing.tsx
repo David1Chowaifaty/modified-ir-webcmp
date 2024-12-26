@@ -333,13 +333,13 @@ export class IrBookingListing {
                         </td>
                         <td>
                           <div class="d-flex justify-content-center align-items-center" style={{ gap: '8px' }}>
-                            <ir-button title="Edit booking" variant="icon" icon_name="edit" onClickHanlder={() => (this.editBookingItem = { booking, cause: 'edit' })}></ir-button>
+                            <ir-button title="Edit booking" variant="icon" icon_name="edit" onClickHandler={() => (this.editBookingItem = { booking, cause: 'edit' })}></ir-button>
                             <ir-button
                               title="Delete booking"
                               style={{ '--icon-button-color': '#ff4961', '--icon-button-hover-color': '#FF1635' }}
                               variant="icon"
                               icon_name="trash"
-                              onClickHanlder={() => {
+                              onClickHandler={() => {
                                 this.editBookingItem = { booking, cause: 'delete' };
                                 this.openModal();
                               }}
@@ -358,7 +358,7 @@ export class IrBookingListing {
                     <ir-button
                       size="sm"
                       btn_disabled={this.currentPage === 1}
-                      onClickHanlder={async () => {
+                      onClickHandler={async () => {
                         this.currentPage = 1;
                         await this.updateData();
                       }}
@@ -368,7 +368,7 @@ export class IrBookingListing {
                     <ir-button
                       size="sm"
                       btn_disabled={this.currentPage === 1}
-                      onClickHanlder={async () => {
+                      onClickHandler={async () => {
                         this.currentPage = this.currentPage - 1;
                         console.log(this.currentPage);
                         await this.updateData();
@@ -392,7 +392,7 @@ export class IrBookingListing {
                     <ir-button
                       size="sm"
                       btn_disabled={this.currentPage === this.totalPages}
-                      onClickHanlder={async () => {
+                      onClickHandler={async () => {
                         this.currentPage = this.currentPage + 1;
                         await this.updateData();
                       }}
@@ -402,7 +402,7 @@ export class IrBookingListing {
                     <ir-button
                       size="sm"
                       btn_disabled={this.currentPage === this.totalPages}
-                      onClickHanlder={async () => {
+                      onClickHandler={async () => {
                         this.currentPage = this.totalPages;
                         console.log(this.currentPage);
                         await this.updateData();

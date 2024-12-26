@@ -31,7 +31,7 @@ export class IrDeleteModal {
     this.isOpen = true;
   }
 
-  @Listen('clickHanlder')
+  @Listen('clickHandler')
   async btnClickHandler(event: CustomEvent) {
     let target = event.target as HTMLInputElement;
     let name = target.name;

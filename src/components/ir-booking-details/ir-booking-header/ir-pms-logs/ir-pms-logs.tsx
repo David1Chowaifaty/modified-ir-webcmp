@@ -40,7 +40,7 @@ export class IrPmsLogs {
           </div>
         ) : (
           <div class={'dialog-container-height'}>
-            <div class="d-flex align-items-center pb-1">
+            <div class="d-flex align-items-center " style={{ paddingBottom: '0.5rem' }}>
               <p class="list-title p-0 m-0">{locales.entries.Lcz_SentAt}</p>
               {this.pmsLogs?.sent_date ? (
                 <p class="list-item">

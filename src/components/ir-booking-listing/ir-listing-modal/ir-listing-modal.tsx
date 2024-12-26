@@ -44,7 +44,7 @@ export class IrListingModal {
     booking_listing.bookings = booking_listing.bookings.filter(booking => booking.booking_nbr !== this.editBooking.booking.booking_nbr);
   }
 
-  @Listen('clickHanlder')
+  @Listen('clickHandler')
   async btnClickHandler(event: CustomEvent) {
     let target = event.target as HTMLInputElement;
     let name = target.name;

@@ -194,7 +194,7 @@ export class GuestInfo {
               btn_disabled={this.isLoading}
               btn_styles="d-flex align-items-center justify-content-center"
               text={this.defaultTexts.entries.Lcz_Save}
-              onClickHanlder={this.editGuest.bind(this)}
+              onClickHandler={this.editGuest.bind(this)}
               color="btn-primary"
             ></ir-button>
           </div>

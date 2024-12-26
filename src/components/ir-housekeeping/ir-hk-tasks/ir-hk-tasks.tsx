@@ -162,7 +162,7 @@ export class IrHkTasks {
           </ir-title>
           <div class="d-flex align-items-center mb-2 justify-content-between d-md-none">
             <ir-title class="mb-0" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between"></ir-title>
-            <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm" onClickHanlder={() => (this.archiveOpened = true)}></ir-button>
+            <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm" onClickHandler={() => (this.archiveOpened = true)}></ir-button>
           </div>
           <div class="d-flex flex-column flex-sm-row align-items-center mb-1  select-container">
             <ir-select

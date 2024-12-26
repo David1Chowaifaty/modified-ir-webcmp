@@ -204,13 +204,13 @@ export class IglBookingForm {
                 class="full-width"
                 btn_color="secondary"
                 btn_styles="justify-content-center"
-                onClickHanlder={() => this.buttonClicked.emit({ key: 'back' })}
+                onClickHandler={() => this.buttonClicked.emit({ key: 'back' })}
               ></ir-button>
             </div>
             <div class="flex-fill">
               <ir-button
                 isLoading={this.isLoading === 'save'}
-                onClickHanlder={() => this.buttonClicked.emit({ key: 'save' })}
+                onClickHandler={() => this.buttonClicked.emit({ key: 'save' })}
                 btn_styles="full-width align-items-center justify-content-center"
                 text={locales.entries.Lcz_Save}
               ></ir-button>
@@ -223,7 +223,7 @@ export class IglBookingForm {
                 icon_name="angles_left"
                 btn_color="secondary"
                 btn_styles="full-width align-items-center justify-content-center"
-                onClickHanlder={() => this.buttonClicked.emit({ key: 'back' })}
+                onClickHandler={() => this.buttonClicked.emit({ key: 'back' })}
                 text={locales.entries.Lcz_Back}
                 style={{ '--icon-size': '1rem' }}
                 icon_style={{ paddingBottom: '1.9px' }}
@@ -233,7 +233,7 @@ export class IglBookingForm {
               <ir-button
                 isLoading={this.isLoading === 'book'}
                 btn_styles="full-width align-items-center justify-content-center"
-                onClickHanlder={() => this.buttonClicked.emit({ key: 'book' })}
+                onClickHandler={() => this.buttonClicked.emit({ key: 'book' })}
                 text={locales.entries.Lcz_Book}
               ></ir-button>
             </div>

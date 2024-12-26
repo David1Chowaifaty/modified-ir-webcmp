@@ -65,7 +65,7 @@ export class IrRoom {
     this.item = this.bookingEvent.rooms[this.bookingIndex];
   }
 
-  @Listen('clickHanlder')
+  @Listen('clickHandler')
   handleClick(e) {
     let target = e.target;
     if (target.id == 'checkin') {
@@ -205,7 +205,7 @@ export class IrRoom {
           aria-controls="myCollapse"
           class="mr-1"
           icon_name={this.collapsed ? 'closed_eye' : 'open_eye'}
-          onClickHanlder={() => {
+          onClickHandler={() => {
             this.collapsed = !this.collapsed;
           }}
           style={{ '--icon-size': '1.6rem' }}
@@ -229,13 +229,13 @@ export class IrRoom {
                   icon_name="edit"
                   // class="mx-1"
                   style={colorVariants.secondary}
-                  onClickHanlder={this.handleEditClick.bind(this)}
+                  onClickHandler={this.handleEditClick.bind(this)}
                 ></ir-button>
               )}
               {this.hasRoomDelete && this.isEditable && (
                 <ir-button
                   variant="icon"
-                  onClickHanlder={this.handleDeleteClick.bind(this)}
+                  onClickHandler={this.handleDeleteClick.bind(this)}
                   id={`roomDelete-${this.item.identifier}`}
                   icon_name="trash"
                   style={colorVariants.danger}
