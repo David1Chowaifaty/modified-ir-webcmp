@@ -1517,7 +1517,7 @@ declare global {
     };
     interface HTMLIrBookingExtraNoteElementEventMap {
         "closeModal": null;
-        "resetBookingData": Booking | null;
+        "resetbooking": Booking | null;
     }
     interface HTMLIrBookingExtraNoteElement extends Components.IrBookingExtraNote, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingExtraNoteElementEventMap>(type: K, listener: (this: HTMLIrBookingExtraNoteElement, ev: IrBookingExtraNoteCustomEvent<HTMLIrBookingExtraNoteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2810,7 +2810,7 @@ declare namespace LocalJSX {
     interface IrBookingExtraNote {
         "booking"?: Booking;
         "onCloseModal"?: (event: IrBookingExtraNoteCustomEvent<null>) => void;
-        "onResetBookingData"?: (event: IrBookingExtraNoteCustomEvent<Booking | null>) => void;
+        "onResetbooking"?: (event: IrBookingExtraNoteCustomEvent<Booking | null>) => void;
     }
     interface IrBookingHeader {
         "booking"?: Booking;
