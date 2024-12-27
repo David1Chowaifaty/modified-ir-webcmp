@@ -133,6 +133,8 @@ export interface Guest {
   subscribe_to_news_letter: boolean | null;
   cci?: ICCI | null;
   alternative_email?: string;
+  nbr_confirmed_bookings: number;
+  notes: string;
 }
 export interface ICCI {
   nbr: string | number;

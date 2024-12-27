@@ -10,7 +10,6 @@
 | Property         | Attribute | Description | Type               | Default     |
 | ---------------- | --------- | ----------- | ------------------ | ----------- |
 | `bookingDetails` | --        |             | `Booking`          | `undefined` |
-| `defaultTexts`   | --        |             | `ILocale`          | `undefined` |
 | `paymentActions` | --        |             | `IPaymentAction[]` | `undefined` |
 
 

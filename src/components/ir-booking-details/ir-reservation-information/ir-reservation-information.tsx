@@ -2,7 +2,7 @@ import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { Booking } from '@/models/booking.dto';
 import locales from '@/stores/locales.store';
 import { getPrivateNote } from '@/utils/booking';
-import { Component, Event, EventEmitter, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 import { ICountry } from '@/models/IBooking';
 import { _formatDate, _formatTime } from '../functions';
 import { BookingDetailsSidebarEvents, OpenSidebarEvent } from '../types';
@@ -16,8 +16,12 @@ export class IrReservationInformation {
   @Prop() booking: Booking;
   @Prop() countries: ICountry[];
 
+  @State() userCountry: ICountry | null = null;
   @Event() openSidebar: EventEmitter<OpenSidebarEvent>;
-
+  componentWillLoad() {
+    const guestCountryId = this.booking?.guest?.country_id;
+    this.userCountry = guestCountryId ? this.countries?.find(country => country.id === guestCountryId) || null : null;
+  }
   private handleEditClick(e: CustomEvent, type: BookingDetailsSidebarEvents) {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -55,13 +59,25 @@ export class IrReservationInformation {
           ></ir-label>
           <ir-label
             renderContentAsHtml
-            labelText={`Booked on:`}
+            labelText={`${locales.entries.Lcz_BookedOn}:`}
             content={`${_formatDate(this.booking.booked_on.date)}&nbsp&nbsp&nbsp&nbsp${_formatTime(
               this.booking.booked_on.hour.toString(),
               this.booking.booked_on.minute.toString(),
             )}`}
           ></ir-label>
           <ir-label labelText={`${locales.entries.Lcz_BookedBy}:`} content={`${this.booking.guest.first_name} ${this.booking.guest.last_name}`}>
+            {this.booking.guest?.nbr_confirmed_bookings > 0 && (
+              <div class={'m-0 p-0'} slot="prefix">
+                <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())} customSlot>
+                  <div class="d-flex align-items-center m-0 p-0" slot="tooltip-trigger" style={{ gap: '0.25rem' }}>
+                    <p class={'p-0 m-0'} style={{ color: '#FB0AAD' }}>
+                      {this.booking.guest.nbr_confirmed_bookings}
+                    </p>
+                    <ir-icons style={{ '--icon-size': '1rem' }} color="#FB0AAD" name="heart-fill"></ir-icons>
+                  </div>
+                </ir-tooltip>
+              </div>
+            )}
             <ir-button
               slot="suffix"
               variant="icon"
@@ -74,9 +90,15 @@ export class IrReservationInformation {
           <ir-label labelText={`${locales.entries.Lcz_Email}:`} content={this.booking.guest.email}></ir-label>
           {this.booking.guest.alternative_email && <ir-label labelText={`${locales.entries.Lcz_AlternativeEmail}:`} content={this.booking.guest.alternative_email}></ir-label>}
           {this.booking?.guest?.address && <ir-label labelText={`${locales.entries.Lcz_Address}:`} content={this.booking.guest.address}></ir-label>}
-          {/* {this.userCountry && (
-            <ir-label label={`${locales.entries.Lcz_Country}:`} content={this.userCountry.name} country image={{ src: this.userCountry.flag, alt: this.userCountry.name }}></ir-label>
-          )} */}
+          {this.userCountry && (
+            <ir-label
+              labelText={`${locales.entries.Lcz_Country}:`}
+              isCountryImage
+              content={this.userCountry.name}
+              image={{ src: this.userCountry.flag, alt: this.userCountry.name }}
+            ></ir-label>
+          )}
+          {this.booking.guest?.notes && <ir-label labelText={`${locales.entries.Lcz_GuestPrivateNote}:`} content={this.booking.guest?.notes}></ir-label>}
           {this.booking.is_direct && <ir-label labelText={`${locales.entries.Lcz_ArrivalTime}:`} content={this.booking.arrival.description}></ir-label>}
           {this.booking.promo_key && <ir-label labelText={`${locales.entries.Lcz_Coupon}:`} content={this.booking.promo_key}></ir-label>}
           {this.booking.agent && <ir-label labelText={`${locales.entries.Lcz_AgentCode?.split(':')[0]}:`} content={this.booking.agent.name}></ir-label>}

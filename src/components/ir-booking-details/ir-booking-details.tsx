@@ -4,7 +4,7 @@ import axios from 'axios';
 import { BookingService } from '@/services/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { RoomService } from '@/services/room.service';
-import locales, { ILocale } from '@/stores/locales.store';
+import locales from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
 import { ICountry } from '@/models/IBooking';
 import { IPaymentAction, PaymentService } from '@/services/payment.service';
@@ -41,8 +41,6 @@ export class IrBookingDetails {
 
   @State() bookingItem: TIglBookPropertyPayload | null = null;
   @State() statusData = [];
-  // Temp Status Before Save
-  @State() tempStatus: string = null;
 
   @State() showPaymentDetails: any;
   @State() booking: Booking;
@@ -50,7 +48,6 @@ export class IrBookingDetails {
   @State() calendarData: any = {};
   // Guest Data
   @State() guestData: Guest = null;
-  @State() defaultTexts: ILocale;
   // Rerender Flag
   @State() rerenderFlag = false;
   @State() sidebarState: BookingDetailsSidebarEvents | null = null;
@@ -58,7 +55,6 @@ export class IrBookingDetails {
 
   @State() pms_status: IPmsLog;
   @State() isPMSLogLoading: boolean = false;
-  @State() userCountry: ICountry | null = null;
   @State() paymentActions: IPaymentAction[];
   @State() property_id: number;
   @State() selectedService: ExtraService;
@@ -217,10 +213,7 @@ export class IrBookingDetails {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
       }
-      this.defaultTexts = languageTexts;
       this.countryNodeList = countriesList;
-      const guestCountryId = bookingDetails?.guest?.country_id;
-      this.userCountry = guestCountryId ? this.countryNodeList.find(country => country.id === guestCountryId) || null : null;
       const myResult = roomResponse?.My_Result;
       if (myResult) {
         const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends, aname } = myResult;
@@ -290,9 +283,9 @@ export class IrBookingDetails {
       case 'guest':
         return (
           <ir-guest-info
+            headerShown
             slot="sidebar-body"
             booking_nbr={this.bookingNumber}
-            defaultTexts={this.defaultTexts}
             email={this.booking?.guest.email}
             language={this.language}
             onCloseSideBar={handleClose}
@@ -368,7 +361,6 @@ export class IrBookingDetails {
                 return [
                   <ir-room
                     isEditable={this.booking.is_editable}
-                    defaultTexts={this.defaultTexts}
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
                     myRoomTypeFoodCat={room.roomtype.name}
@@ -380,7 +372,6 @@ export class IrBookingDetails {
                     hasCheckOut={this.hasCheckOut}
                     bookingEvent={this.booking}
                     bookingIndex={index}
-                    ticket={this.ticket}
                     onDeleteFinished={this.handleDeleteFinish.bind(this)}
                   />,
                   index !== this.booking.rooms.length - 1 && <hr class="mr-2 ml-2 my-0 p-0" />,
@@ -390,7 +381,7 @@ export class IrBookingDetails {
             <ir-pickup-view booking={this.booking}></ir-pickup-view>
             <section>
               <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
-                <p class={'font-size-large p-0 m-0 '}>{this.defaultTexts.entries.Lcz_ExtraServices}</p>
+                <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_ExtraServices}</p>
                 <ir-button id="extra_service_btn" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
               </div>
               <ir-extra-services
@@ -399,7 +390,7 @@ export class IrBookingDetails {
             </section>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
-            <ir-payment-details paymentActions={this.paymentActions} defaultTexts={this.defaultTexts} bookingDetails={this.booking}></ir-payment-details>
+            <ir-payment-details paymentActions={this.paymentActions} bookingDetails={this.booking}></ir-payment-details>
           </div>
         </div>
       </div>,

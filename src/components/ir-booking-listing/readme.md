@@ -103,6 +103,7 @@ graph TD;
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
+  ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
   ir-pickup --> ir-title
   ir-pickup --> ir-select
@@ -126,6 +127,8 @@ graph TD;
   ir-events-log --> ir-spinner
   ir-dialog --> ir-icon
   ir-reservation-information --> ir-label
+  ir-reservation-information --> ir-tooltip
+  ir-reservation-information --> ir-icons
   ir-reservation-information --> ir-button
   ir-reservation-information --> ota-label
   ir-room --> ir-button

@@ -34,6 +34,8 @@ export class guestInfo {
 }
 
 export class guestInfoValidation implements Guest {
+  nbr_confirmed_bookings: number;
+  notes: string;
   country_phone_prefix: string;
   cci?: ICCI;
   alternative_email?: string;

@@ -10,9 +10,9 @@ export class IrTextArea {
   @Prop() label = '<label>';
   @Prop() placeholder = '<placeholder>';
   @Prop() value = '';
-  @Prop() maxLength: number;
+  @Prop() maxLength: number = 250;
   @Prop() textareaClassname: string;
-
+  @Prop() variant: 'default' | 'prepend' = 'default';
   @State() error = false;
 
   @Event() textChange: EventEmitter<string>;
@@ -24,6 +24,23 @@ export class IrTextArea {
   connectedCallback() {}
   disconnectedCallback() {}
   render() {
+    if (this.variant === 'prepend') {
+      return (
+        <fieldset class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">{this.label}</span>
+          </div>
+          <textarea
+            value={this.value}
+            class={`form-control`}
+            style={{ height: '7rem' }}
+            maxLength={this.maxLength}
+            onChange={e => this.textChange.emit((e.target as HTMLTextAreaElement).value)}
+            aria-label={this.label}
+          ></textarea>
+        </fieldset>
+      );
+    }
     return (
       <div class={'form-group'}>
         <label>{this.label}</label>

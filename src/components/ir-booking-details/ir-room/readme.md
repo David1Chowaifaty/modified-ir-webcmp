@@ -12,7 +12,6 @@
 | `bookingEvent`      | --                      |             | `Booking` | `undefined` |
 | `bookingIndex`      | `booking-index`         |             | `number`  | `undefined` |
 | `currency`          | `currency`              |             | `string`  | `'USD'`     |
-| `defaultTexts`      | --                      |             | `ILocale` | `undefined` |
 | `hasCheckIn`        | `has-check-in`          |             | `boolean` | `false`     |
 | `hasCheckOut`       | `has-check-out`         |             | `boolean` | `false`     |
 | `hasRoomAdd`        | `has-room-add`          |             | `boolean` | `false`     |
@@ -23,7 +22,6 @@
 | `mealCodeName`      | `meal-code-name`        |             | `string`  | `undefined` |
 | `myRoomTypeFoodCat` | `my-room-type-food-cat` |             | `string`  | `undefined` |
 | `roomsInfo`         | `rooms-info`            |             | `any`     | `undefined` |
-| `ticket`            | `ticket`                |             | `any`     | `undefined` |
 
 
 ## Events

@@ -7,22 +7,21 @@
 
 ## Properties
 
-| Property                 | Attribute     | Description | Type             | Default     |
-| ------------------------ | ------------- | ----------- | ---------------- | ----------- |
-| `booking_nbr`            | `booking_nbr` |             | `string`         | `undefined` |
-| `defaultTexts`           | --            |             | `ILocale`        | `undefined` |
-| `email`                  | `email`       |             | `string`         | `undefined` |
-| `language`               | `language`    |             | `string`         | `undefined` |
-| `setupDataCountries`     | --            |             | `selectOption[]` | `null`      |
-| `setupDataCountriesCode` | --            |             | `selectOption[]` | `null`      |
+| Property      | Attribute      | Description | Type      | Default     |
+| ------------- | -------------- | ----------- | --------- | ----------- |
+| `booking_nbr` | `booking_nbr`  |             | `string`  | `undefined` |
+| `email`       | `email`        |             | `string`  | `undefined` |
+| `headerShown` | `header-shown` |             | `boolean` | `undefined` |
+| `language`    | `language`     |             | `string`  | `undefined` |
+| `ticket`      | `ticket`       |             | `string`  | `undefined` |
 
 
 ## Events
 
-| Event              | Description | Type                |
-| ------------------ | ----------- | ------------------- |
-| `closeSideBar`     |             | `CustomEvent<null>` |
-| `resetBookingData` |             | `CustomEvent<null>` |
+| Event          | Description | Type                |
+| -------------- | ----------- | ------------------- |
+| `closeSideBar` |             | `CustomEvent<null>` |
+| `resetbooking` |             | `CustomEvent<null>` |
 
 
 ## Dependencies
@@ -36,6 +35,7 @@
 - [ir-icon](../ir-icon)
 - [ir-input-text](../ir-input-text)
 - [ir-select](../ir-select)
+- [ir-textarea](../ir-textarea)
 - [ir-button](../ir-button)
 
 ### Graph
@@ -44,6 +44,7 @@ graph TD;
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
+  ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
   ir-button --> ir-icons
   ir-booking-details --> ir-guest-info

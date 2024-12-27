@@ -4,11 +4,11 @@ import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
 import { PaymentService, IPaymentAction } from '@/services/payment.service';
-import { ILocale, IToast } from '@/components';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
+import { IToast } from '@/components/ir-toast/toast';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -17,7 +17,6 @@ import locales from '@/stores/locales.store';
 })
 export class IrPaymentDetails {
   @Prop({ mutable: true }) bookingDetails: Booking;
-  @Prop() defaultTexts: ILocale;
   @Prop() paymentActions: IPaymentAction[];
 
   @State() newTableRow: boolean = false;
@@ -33,12 +32,12 @@ export class IrPaymentDetails {
   @State() paymentDetailsUrl: string = '';
   @State() paymentExceptionMessage: string = '';
   @State() modal_mode: 'delete' | 'save' | null = null;
+  @State() itemToBeAdded: IPayment;
 
   @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
   @Event({ bubbles: true }) resetExposedCancelationDueAmount: EventEmitter<null>;
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
 
-  @State() itemToBeAdded: IPayment;
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
   private paymentBackground = 'white';
@@ -81,7 +80,7 @@ export class IrPaymentDetails {
     if (this.itemToBeAdded.amount === null) {
       this.toast.emit({
         type: 'error',
-        title: this.defaultTexts.entries.Lcz_EnterAmount,
+        title: locales.entries.Lcz_EnterAmount,
         description: '',
         position: 'top-right',
       });
@@ -288,7 +287,7 @@ export class IrPaymentDetails {
       <div>
         <div class="d-flex align-items-center">
           <span class="mr-1 font-medium">
-            {this.defaultTexts.entries.Lcz_BookingGuarantee} {this.hasAgentWithCode001 && `(${locales.entries.Lcz_OnCredit})`}
+            {locales.entries.Lcz_BookingGuarantee} {this.hasAgentWithCode001 && `(${locales.entries.Lcz_OnCredit})`}
           </span>
           <ir-button
             id="drawer-icon"
@@ -353,7 +352,7 @@ export class IrPaymentDetails {
         <div class="p-1">
           {this.bookingDetails.financial.gross_cost > 0 && this.bookingDetails.financial.gross_cost !== null && (
             <div class="mb-2 h4 total-cost-container">
-              {this.defaultTexts.entries.Lcz_TotalCost}: <span>{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.gross_cost)}</span>
+              {locales.entries.Lcz_TotalCost}: <span>{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.gross_cost)}</span>
             </div>
           )}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
@@ -361,7 +360,7 @@ export class IrPaymentDetails {
             Balance: <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
           </div>
           {/* <div class=" h4">
-            {this.defaultTexts.entries.Lcz_DueBalance}:{' '}
+            {locales.entries.Lcz_DueBalance}:{' '}
             <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
           </div> */}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
@@ -381,7 +380,7 @@ export class IrPaymentDetails {
               {this.bookingDetails.financial?.due_dates?.length > 0 && (
                 <Fragment>
                   <div class="d-flex align-items-center">
-                    <strong class="mr-1">{this.defaultTexts.entries.Lcz_PaymentDueDates}</strong>
+                    <strong class="mr-1">{locales.entries.Lcz_PaymentDueDates}</strong>
                     <ir-button
                       id="drawer-icon"
                       data-toggle="collapse"
@@ -411,7 +410,7 @@ export class IrPaymentDetails {
           )}
           <div class="mt-2 d-flex  flex-column rounded payment-container">
             <div class="d-flex align-items-center justify-content-between">
-              <span class={'font-medium'}>{this.defaultTexts.entries.Lcz_Payments} history</span>
+              <span class={'font-medium'}>{locales.entries.Lcz_Payments} history</span>
               <ir-button
                 id="add-payment"
                 variant="icon"
@@ -425,9 +424,9 @@ export class IrPaymentDetails {
             <table class="mt-1" style={{ backgroundColor: this.paymentBackground }}>
               <thead>
                 <tr>
-                  <th class={'border border-light border-bottom-0 text-center payment_date'}>{this.defaultTexts.entries.Lcz_Dates}</th>
-                  <th class={'border border-light border-bottom-0 text-center w-60'}>{this.defaultTexts.entries.Lcz_Amount}</th>
-                  <th class={'border border-light border-bottom-0 text-center designation'}>{this.defaultTexts.entries.Lcz_Designation}</th>
+                  <th class={'border border-light border-bottom-0 text-center payment_date'}>{locales.entries.Lcz_Dates}</th>
+                  <th class={'border border-light border-bottom-0 text-center w-60'}>{locales.entries.Lcz_Amount}</th>
+                  <th class={'border border-light border-bottom-0 text-center designation'}>{locales.entries.Lcz_Designation}</th>
                   <th class={'border border-light border-bottom-0 text-center action_icons'}>
                     <span class={'sr-only'}>payment actions</span>
                     {/* <ir-button
@@ -453,12 +452,12 @@ export class IrPaymentDetails {
       <ir-modal
         item={this.toBeDeletedItem}
         class={'delete-record-modal'}
-        modalTitle={this.defaultTexts.entries.Lcz_Confirmation}
-        modalBody={this.modal_mode === 'delete' ? this.defaultTexts.entries.Lcz_IfDeletedPermantlyLost : this.defaultTexts.entries.Lcz_EnteringAmountGreaterThanDue}
+        modalTitle={locales.entries.Lcz_Confirmation}
+        modalBody={this.modal_mode === 'delete' ? locales.entries.Lcz_IfDeletedPermantlyLost : locales.entries.Lcz_EnteringAmountGreaterThanDue}
         iconAvailable={true}
         icon="ft-alert-triangle danger h1"
-        leftBtnText={this.defaultTexts.entries.Lcz_Cancel}
-        rightBtnText={this.modal_mode === 'delete' ? this.defaultTexts.entries.Lcz_Delete : this.defaultTexts.entries.Lcz_Confirm}
+        leftBtnText={locales.entries.Lcz_Cancel}
+        rightBtnText={this.modal_mode === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
         leftBtnColor="secondary"
         rightBtnColor={this.modal_mode === 'delete' ? 'danger' : 'primary'}
         onConfirmModal={this.handleConfirmModal.bind(this)}

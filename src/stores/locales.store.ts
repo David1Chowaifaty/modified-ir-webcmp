@@ -143,12 +143,16 @@ export type LocalizationStrings = {
   Lcz_Refundable: string;
   Lcz_SameRatesWillBeKept: string;
   Lcz_Save: string;
+  Lcz_BookedOn: string;
+  Lcz_GuestPrivateNote: string;
   Lcz_Select: string;
   Lcz_Source: string;
   Lcz_SpecialRate: string;
   Lcz_TheBooking: string;
   Lcz_To: string;
   Lcz_Tobooking: string;
+  Lcz_Collected: string;
+  Lcz_BookingsNbr: string;
   Lcz_Today: string;
   Lcz_TotalAvailability: string;
   Lcz_TotalPrice: string;
