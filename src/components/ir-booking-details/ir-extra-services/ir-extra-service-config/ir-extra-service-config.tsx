@@ -100,7 +100,7 @@ export class IrExtraServiceConfig {
                 <div class="service-date-container">
                   <ir-date-picker
                     date={this.s_service?.start_date ? new Date(this.s_service?.start_date) : new Date(this.booking.from_date)}
-                    class={`hidden-date-picker ${!this.s_service?.start_date ? 'hidden-dates' : ''}`}
+                    class={`hidden-date-picker ${!this.s_service?.start_date ? 'hidden-date s' : ''}`}
                     autoApply
                     singleDatePicker
                     minDate={this.booking.from_date}
