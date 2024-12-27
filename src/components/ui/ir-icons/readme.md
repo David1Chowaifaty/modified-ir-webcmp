@@ -19,6 +19,7 @@
 ### Used by
 
  - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
+ - [ir-booking-listing](../../ir-booking-listing)
  - [ir-button](../../ir-button)
  - [ir-channel-general](../../ir-channel/ir-channel-general)
  - [ir-login](../../ir-login)
@@ -29,6 +30,7 @@
 ```mermaid
 graph TD;
   igl-booking-event-hover --> ir-icons
+  ir-booking-listing --> ir-icons
   ir-button --> ir-icons
   ir-channel-general --> ir-icons
   ir-login --> ir-icons

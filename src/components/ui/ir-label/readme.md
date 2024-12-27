@@ -10,6 +10,7 @@
 | Property              | Attribute                | Description                                              | Type                                            | Default     |
 | --------------------- | ------------------------ | -------------------------------------------------------- | ----------------------------------------------- | ----------- |
 | `content`             | `content`                | The main text or HTML content to display                 | `string`                                        | `undefined` |
+| `display`             | `display`                |                                                          | `"flex" \| "inline"`                            | `'flex'`    |
 | `ignoreEmptyContent`  | `ignore-empty-content`   | If true, label will ignore checking for an empty content | `boolean`                                       | `false`     |
 | `image`               | --                       | Object representing the image used within the label      | `{ src: string; alt: string; style?: string; }` | `null`      |
 | `imageStyle`          | `image-style`            | Additional CSS classes or style for the image            | `string`                                        | `''`        |

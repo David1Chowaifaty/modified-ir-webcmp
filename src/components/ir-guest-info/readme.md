@@ -29,6 +29,7 @@
 ### Used by
 
  - [ir-booking-details](../ir-booking-details)
+ - [ir-booking-listing](../ir-booking-listing)
 
 ### Depends on
 
@@ -48,6 +49,7 @@ graph TD;
   ir-guest-info --> ir-button
   ir-button --> ir-icons
   ir-booking-details --> ir-guest-info
+  ir-booking-listing --> ir-guest-info
   style ir-guest-info fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

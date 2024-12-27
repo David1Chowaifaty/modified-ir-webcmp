@@ -48,6 +48,7 @@ export class IrReservationInformation {
     return mobile;
   }
   render() {
+    const privateNote = getPrivateNote(this.booking.extras);
     return (
       <div class="card">
         <div class="p-1">
@@ -98,10 +99,10 @@ export class IrReservationInformation {
               image={{ src: this.userCountry.flag, alt: this.userCountry.name }}
             ></ir-label>
           )}
-          {this.booking.guest?.notes && <ir-label labelText={`${locales.entries.Lcz_GuestPrivateNote}:`} content={this.booking.guest?.notes}></ir-label>}
+          {this.booking.guest?.notes && <ir-label display="inline" labelText={`${locales.entries.Lcz_GuestPrivateNote}:`} content={this.booking.guest?.notes}></ir-label>}
           {this.booking.is_direct && <ir-label labelText={`${locales.entries.Lcz_ArrivalTime}:`} content={this.booking.arrival.description}></ir-label>}
           {this.booking.promo_key && <ir-label labelText={`${locales.entries.Lcz_Coupon}:`} content={this.booking.promo_key}></ir-label>}
-          {this.booking.agent && <ir-label labelText={`${locales.entries.Lcz_AgentCode?.split(':')[0]}:`} content={this.booking.agent.name}></ir-label>}
+          {/* {this.booking.agent && <ir-label labelText={`${locales.entries.Lcz_AgentCode?.split(':')[0]}:`} content={this.booking.agent.name}></ir-label>} */}
           {this.booking.is_in_loyalty_mode && !this.booking.promo_key && (
             <div class="d-flex align-items-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height={18} width={18}>
@@ -114,7 +115,7 @@ export class IrReservationInformation {
             </div>
           )}
           {this.booking.is_direct ? (
-            <ir-label class={'m-0 p-0'} labelText={`${locales.entries.Lcz_Note}:`} content={this.booking.remark}></ir-label>
+            <ir-label labelText={`${locales.entries.Lcz_Note}:`} display="inline" content={this.booking.remark}></ir-label>
           ) : (
             <ota-label class={'m-0 p-0'} label={`${locales.entries.Lcz_Note}:`} remarks={this.booking.ota_notes} maxVisibleItems={this.booking.ota_notes?.length}></ota-label>
           )}
@@ -122,7 +123,8 @@ export class IrReservationInformation {
             <ir-label
               labelText={`${locales.entries.Lcz_PrivateNote}:`}
               placeholder={locales.entries.Lcz_VisibleToHotelOnly}
-              content={getPrivateNote(this.booking.extras)}
+              content={privateNote}
+              display={privateNote ? 'inline' : 'flex'}
               // ignore_content
             ></ir-label>
             <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary} onClickHandler={e => this.handleEditClick(e, 'extra_note')}></ir-button>

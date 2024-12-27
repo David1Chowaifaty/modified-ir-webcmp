@@ -203,7 +203,7 @@ export class GuestInfo {
                 variant="prepend"
                 onTextChange={e => this.handleInputChange('notes', e.detail)}
                 value={this.guest?.notes}
-                label={locales.entries.Lcz_GuestPrivateNote}
+                label={locales.entries.Lcz_PrivateNote}
               ></ir-textarea>
             </div>
             <div class={'p-0 m-0'}>

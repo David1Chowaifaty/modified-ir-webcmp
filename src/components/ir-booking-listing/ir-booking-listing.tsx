@@ -29,7 +29,7 @@ export class IrBookingListing {
   @State() currentPage = 1;
   @State() totalPages = 1;
   @State() oldStartValue = 0;
-  @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' } | null = null;
+  @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' } | null = null;
   @State() showCost = false;
 
   private bookingListingService = new BookingListingService();
@@ -245,13 +245,29 @@ export class IrBookingListing {
                           <p class="p-0 m-0 secondary-p">{_formatTime(booking.booked_on.hour.toString(), booking.booked_on.minute.toString())}</p>
                         </td>
                         <td>
-                          <div class="h-100 d-flex align-items-center ">
+                          <div class="h-100 d-flex align-items-center " style={{ width: 'max-content' }}>
                             <img class="mr-2 logo" src={booking.origin.Icon} alt={booking.origin.Label} />
                             <div class="text-left">
-                              <p class="p-0 m-0 booking_name">
-                                {booking.guest.first_name} {booking.guest.last_name ?? ''} {booking.occupancy.adult_nbr}
-                                {locales.entries.Lcz_P} {getPrivateNote(booking.extras) && <span class="yellow_dot"></span>}
-                              </p>
+                              <div class="d-flex align-items-center">
+                                {booking.guest.nbr_confirmed_bookings > 0 && (
+                                  <div class="m-0 p-0">
+                                    <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', booking.guest.nbr_confirmed_bookings.toString())} customSlot>
+                                      <div class="d-flex align-items-center my-0 p-0" slot="tooltip-trigger" style={{ marginRight: '0.5rem' }}>
+                                        <ir-icons style={{ '--icon-size': '0.875rem' }} color="#FB0AAD" name="heart-fill"></ir-icons>
+                                      </div>
+                                    </ir-tooltip>
+                                  </div>
+                                )}
+                                <button
+                                  class="booking_number p-0 m-0 booking_name"
+                                  onClick={() => {
+                                    this.editBookingItem = { booking, cause: 'guest' };
+                                  }}
+                                >
+                                  {booking.guest.first_name} {booking.guest.last_name ?? ''} {booking.occupancy.adult_nbr}
+                                  {locales.entries.Lcz_P} {getPrivateNote(booking.extras) && <span class="yellow_dot"></span>}
+                                </button>
+                              </div>
                               <div class={'d-flex align-items-center booking-label-gap'}>
                                 <p class="p-0 m-0 secondary-p">{booking.origin.Label}</p>
                                 {booking.is_in_loyalty_mode && !booking.promo_key && (
@@ -274,7 +290,7 @@ export class IrBookingListing {
                                   </svg>
                                 )}
                               </div>
-                              {booking.agent && <p class="m-0 secondary-p">{locales.entries.Lcz_AgentCode.replace('%1', booking.agent.name)}</p>}
+                              {/* {booking.agent && <p class="m-0 secondary-p">{locales.entries.Lcz_AgentCode.replace('%1', booking.agent.name)}</p>} */}
                             </div>
                           </div>
                         </td>
@@ -370,7 +386,6 @@ export class IrBookingListing {
                       btn_disabled={this.currentPage === 1}
                       onClickHandler={async () => {
                         this.currentPage = this.currentPage - 1;
-                        console.log(this.currentPage);
                         await this.updateData();
                       }}
                       icon_name="angle_left"
@@ -419,9 +434,11 @@ export class IrBookingListing {
         {this.editBookingItem && <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
-          open={this.editBookingItem !== null && this.editBookingItem.cause === 'edit'}
+          open={this.editBookingItem !== null && ['edit', 'guest'].includes(this.editBookingItem.cause)}
           showCloseButton={false}
-          sidebarStyles={{ width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: '#F2F3F8' }}
+          sidebarStyles={
+            this.editBookingItem?.cause === 'guest' ? { background: 'white' } : { width: this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)', background: '#F2F3F8' }
+          }
         >
           {this.editBookingItem?.cause === 'edit' && (
             <ir-booking-details
@@ -440,6 +457,16 @@ export class IrBookingListing {
               language={this.language}
               hasRoomAdd
             ></ir-booking-details>
+          )}
+          {this.editBookingItem?.cause === 'guest' && (
+            <ir-guest-info
+              slot="sidebar-body"
+              headerShown
+              booking_nbr={this.editBookingItem?.booking?.booking_nbr}
+              email={this.editBookingItem?.booking?.guest.email}
+              language={this.language}
+              onCloseSideBar={() => (this.editBookingItem = null)}
+            ></ir-guest-info>
           )}
         </ir-sidebar>
       </Host>

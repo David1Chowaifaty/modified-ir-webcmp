@@ -100,7 +100,7 @@ export class IrExtraServiceConfig {
                 <div class="service-date-container">
                   <ir-date-picker
                     date={this.s_service?.start_date ? new Date(this.s_service?.start_date) : new Date(this.booking.from_date)}
-                    class="hidden-date-picker"
+                    class={`hidden-date-picker ${!this.s_service?.start_date ? 'hidden-dates' : ''}`}
                     autoApply
                     singleDatePicker
                     minDate={this.booking.from_date}
@@ -116,7 +116,11 @@ export class IrExtraServiceConfig {
                         style={{ '--icon-size': '0.875rem' }}
                         icon_name="xmark-fill"
                         class="ml-2"
-                        onClickHandler={() => this.updateService({ start_date: null })}
+                        onClickHandler={e => {
+                          e.stopImmediatePropagation();
+                          e.stopPropagation();
+                          this.updateService({ start_date: null });
+                        }}
                       ></ir-button>
                     </div>
                   )}
@@ -133,12 +137,14 @@ export class IrExtraServiceConfig {
                 <div class="service-date-container">
                   <ir-date-picker
                     date={this.s_service?.end_date ? new Date(this.s_service?.end_date) : new Date(this.booking.to_date)}
-                    class="hidden-date-picker"
+                    class={`hidden-date-picker ${!this.s_service?.end_date ? 'hidden-dates' : ''}`}
                     autoApply
                     singleDatePicker
                     minDate={this.booking.from_date}
                     maxDate={this.booking.to_date}
                     onDateChanged={e => {
+                      e.stopImmediatePropagation();
+                      e.stopPropagation();
                       this.updateService({ end_date: e.detail.start.format('YYYY-MM-DD') });
                     }}
                   ></ir-date-picker>
@@ -152,7 +158,11 @@ export class IrExtraServiceConfig {
                         style={{ '--icon-size': '0.875rem' }}
                         icon_name="xmark-fill"
                         class="ml-2"
-                        onClickHandler={() => this.updateService({ end_date: null })}
+                        onClickHandler={e => {
+                          e.stopImmediatePropagation();
+                          e.stopPropagation();
+                          this.updateService({ end_date: null });
+                        }}
                       ></ir-button>
                     </div>
                   )}

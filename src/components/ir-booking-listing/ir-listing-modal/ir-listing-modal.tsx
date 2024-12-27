@@ -13,7 +13,7 @@ import moment from 'moment';
 })
 export class IrListingModal {
   @Prop() modalTitle: string = 'Modal Title';
-  @Prop() editBooking: { booking: Booking; cause: 'edit' | 'payment' | 'delete' };
+  @Prop() editBooking: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' };
 
   @State() isOpen: boolean = false;
   @State() deletionStage = 1;

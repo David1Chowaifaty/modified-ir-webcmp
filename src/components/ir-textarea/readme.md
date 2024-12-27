@@ -7,17 +7,18 @@
 
 ## Properties
 
-| Property            | Attribute            | Description | Type                     | Default           |
-| ------------------- | -------------------- | ----------- | ------------------------ | ----------------- |
-| `cols`              | `cols`               |             | `number`                 | `5`               |
-| `label`             | `label`              |             | `string`                 | `'<label>'`       |
-| `maxLength`         | `max-length`         |             | `number`                 | `250`             |
-| `placeholder`       | `placeholder`        |             | `string`                 | `'<placeholder>'` |
-| `rows`              | `rows`               |             | `number`                 | `3`               |
-| `text`              | `text`               |             | `string`                 | `''`              |
-| `textareaClassname` | `textarea-classname` |             | `string`                 | `undefined`       |
-| `value`             | `value`              |             | `string`                 | `''`              |
-| `variant`           | `variant`            |             | `"default" \| "prepend"` | `'default'`       |
+| Property            | Attribute            | Description | Type                                                    | Default           |
+| ------------------- | -------------------- | ----------- | ------------------------------------------------------- | ----------------- |
+| `cols`              | `cols`               |             | `number`                                                | `5`               |
+| `label`             | `label`              |             | `string`                                                | `'<label>'`       |
+| `labelWidth`        | `label-width`        |             | `1 \| 10 \| 11 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9` | `3`               |
+| `maxLength`         | `max-length`         |             | `number`                                                | `250`             |
+| `placeholder`       | `placeholder`        |             | `string`                                                | `'<placeholder>'` |
+| `rows`              | `rows`               |             | `number`                                                | `3`               |
+| `text`              | `text`               |             | `string`                                                | `''`              |
+| `textareaClassname` | `textarea-classname` |             | `string`                                                | `undefined`       |
+| `value`             | `value`              |             | `string`                                                | `''`              |
+| `variant`           | `variant`            |             | `"default" \| "prepend"`                                | `'default'`       |
 
 
 ## Events

@@ -13,6 +13,8 @@ export class IrLabel {
   /** The main text or HTML content to display */
   @Prop() content: string;
 
+  @Prop() display: 'inline' | 'flex' = 'flex';
+
   /** If true, will render `content` as HTML */
   @Prop() renderContentAsHtml: boolean = false;
 
@@ -40,36 +42,38 @@ export class IrLabel {
     return (
       <Host class={this.image ? 'align-items-center' : ''}>
         {/* Label title */}
-        {this.labelText && <p class="label_title">{this.labelText}</p>}
+        <div class={`${this.display === 'inline' ? 'label_wrapper_inline' : 'label_wrapper_flex'}`}>
+          {this.labelText && <p class="label_title">{this.labelText}</p>}
 
-        {/* Slot BEFORE content (prefix slot) */}
-        <slot name="prefix" />
+          {/* Slot BEFORE content (prefix slot) */}
+          <slot name="prefix" />
 
-        {/* Optional image */}
-        {this.image && (
-          <img
-            src={this.image.src}
-            alt={this.image.alt ?? this.image.src}
-            class={`p-0 m-0 ${this.isCountryImage ? 'country' : 'logo'} ${this.image.style ?? ''} ${this.imageStyle ?? ''}`}
-          />
-        )}
+          {/* Optional image */}
+          {this.image && (
+            <img
+              src={this.image.src}
+              alt={this.image.alt ?? this.image.src}
+              class={`p-0 m-0 ${this.isCountryImage ? 'country' : 'logo'} ${this.image.style ?? ''} ${this.imageStyle ?? ''}`}
+            />
+          )}
 
-        {/* Main content or placeholder */}
-        {this.content ? (
-          this.renderContentAsHtml ? (
-            <p class="label_message" innerHTML={this.content}></p>
+          {/* Main content or placeholder */}
+          {this.content ? (
+            this.renderContentAsHtml ? (
+              <p class="label_message" innerHTML={this.content}></p>
+            ) : (
+              <p class="label_message">{this.content}</p>
+            )
           ) : (
-            <p class="label_message">{this.content}</p>
-          )
-        ) : (
-          <p class="label_placeholder">{this.placeholder}</p>
-        )}
+            <p class="label_placeholder">{this.placeholder}</p>
+          )}
 
-        {/* Default slot goes after the main content, but before suffix */}
-        <slot />
+          {/* Default slot goes after the main content, but before suffix */}
+          <slot />
 
-        {/* Slot AFTER content (suffix slot) */}
-        <slot name="suffix" />
+          {/* Slot AFTER content (suffix slot) */}
+          <slot name="suffix" />
+        </div>
       </Host>
     );
   }

@@ -6,6 +6,9 @@
 :host .input-group-text {
   border-color: var(--ir-input-border-color);
 }
+.hidden-date-picker.hidden-dates .date-range-input {
+  opacity: 0;
+}
 .currency-ph {
   padding: 0;
   margin: 0;

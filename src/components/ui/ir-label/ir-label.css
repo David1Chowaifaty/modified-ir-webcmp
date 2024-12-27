@@ -4,7 +4,6 @@
 }
 :host {
   display: flex;
-  margin-bottom: 5px;
   gap: 5px;
   align-items: center;
 }
@@ -42,4 +41,29 @@
 svg {
   margin: 0;
   padding: 0;
+}
+.label_wrapper_inline {
+  display: inline;
+  max-width: 100%;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+.label_wrapper_flex {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  margin-bottom: 5px;
+}
+
+.label_title {
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline;
+}
+
+.label_message {
+  display: inline; /* Keeps the message inline */
+  white-space: normal; /* Allows wrapping of the message text */
+  word-break: break-word; /* Breaks long words/URLs to prevent overflow */
 }

@@ -13,6 +13,7 @@ export class IrTextArea {
   @Prop() maxLength: number = 250;
   @Prop() textareaClassname: string;
   @Prop() variant: 'default' | 'prepend' = 'default';
+  @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
   @State() error = false;
 
   @Event() textChange: EventEmitter<string>;
@@ -27,7 +28,7 @@ export class IrTextArea {
     if (this.variant === 'prepend') {
       return (
         <fieldset class="input-group">
-          <div class="input-group-prepend">
+          <div class={`input-group-prepend col-${this.labelWidth} pl-0`}>
             <span class="input-group-text">{this.label}</span>
           </div>
           <textarea
