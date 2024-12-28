@@ -258,15 +258,21 @@ export class IrBookingListing {
                                     </ir-tooltip>
                                   </div>
                                 )}
-                                <button
-                                  class="booking_number p-0 m-0 booking_name"
-                                  onClick={() => {
-                                    this.editBookingItem = { booking, cause: 'guest' };
-                                  }}
-                                >
-                                  {booking.guest.first_name} {booking.guest.last_name ?? ''} {booking.occupancy.adult_nbr}
-                                  {locales.entries.Lcz_P} {getPrivateNote(booking.extras) && <span class="yellow_dot"></span>}
-                                </button>
+                                <div class="booking_name m-0 p-0">
+                                  <button
+                                    class="booking_number p-0 m-0 "
+                                    onClick={() => {
+                                      this.editBookingItem = { booking, cause: 'guest' };
+                                    }}
+                                  >
+                                    {booking.guest.first_name} {booking.guest.last_name ?? ''}
+                                  </button>
+                                  <span class={'p-0 m-0'}>
+                                    {booking.occupancy.adult_nbr}
+                                    {locales.entries.Lcz_P}
+                                  </span>
+                                  {getPrivateNote(booking.extras) && <span class="yellow_dot"></span>}
+                                </div>
                               </div>
                               <div class={'d-flex align-items-center booking-label-gap'}>
                                 <p class="p-0 m-0 secondary-p">{booking.origin.Label}</p>
