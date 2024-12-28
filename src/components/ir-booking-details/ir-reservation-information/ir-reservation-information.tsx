@@ -115,13 +115,18 @@ export class IrReservationInformation {
             </div>
           )}
           {this.booking.is_direct ? (
-            <ir-label labelText={`${locales.entries.Lcz_Note}:`} display="inline" content={this.booking.remark}></ir-label>
+            <ir-label labelText={`${locales.entries.Lcz_GuestRemark}:`} display="inline" content={this.booking.remark}></ir-label>
           ) : (
-            <ota-label class={'m-0 p-0'} label={`${locales.entries.Lcz_Note}:`} remarks={this.booking.ota_notes} maxVisibleItems={this.booking.ota_notes?.length}></ota-label>
+            <ota-label
+              class={'m-0 p-0'}
+              label={`${locales.entries.Lcz_GuestRemark}:`}
+              remarks={this.booking.ota_notes}
+              maxVisibleItems={this.booking.ota_notes?.length}
+            ></ota-label>
           )}
           <div class="d-flex align-items-center justify-content-between">
             <ir-label
-              labelText={`${locales.entries.Lcz_PrivateNote}:`}
+              labelText={`${locales.entries.Lcz_BookingPrivateNote}:`}
               placeholder={locales.entries.Lcz_VisibleToHotelOnly}
               content={privateNote}
               display={privateNote ? 'inline' : 'flex'}
