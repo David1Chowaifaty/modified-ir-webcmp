@@ -4,3 +4,25 @@
 .dialog-container-height {
   height: 4rem;
 }
+.list-title {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: bold;
+  width: fit-content;
+}
+.list-item {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  margin-left: 5px;
+  width: fit-content;
+}
+.list-item.green {
+  color: #629a4c;
+  font-weight: 600;
+}
+.list-item.red {
+  color: #ff4961;
+  font-weight: 600;
+}

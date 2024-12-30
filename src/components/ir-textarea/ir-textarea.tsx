@@ -31,7 +31,7 @@ export class IrTextArea {
       return (
         <fieldset class="input-group">
           <div class={`input-group-prepend col-${this.labelWidth} prepend-textarea`}>
-            <span class="input-group-text">{this.label}</span>
+            <span class="input-group-text ta-prepend-text">{this.label}</span>
           </div>
           <textarea
             value={this.value}
