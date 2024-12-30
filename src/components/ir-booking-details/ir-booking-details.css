@@ -5,11 +5,7 @@
 :host * {
   font-family: inherit !important;
 }
-.confirmed {
-  color: #fff;
-  display: flex;
-  align-items: center;
-}
+
 .font-medium {
   font-weight: 600;
 }
@@ -76,16 +72,7 @@
 .iframeHeight {
   height: 17.5rem;
 }
-.btn-outline {
-  background: transparent;
-  border: 1px solid #104064;
-  color: #104064;
-}
-.btn-outline:hover,
-.btn-outline:active {
-  background: #104064;
-  color: white;
-}
+
 .dialog-title {
   width: fit-content;
 }

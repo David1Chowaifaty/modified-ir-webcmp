@@ -1,6 +1,11 @@
 :host {
   display: block;
 }
+.confirmed {
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
 .bg-ir-green {
   background: #629a4c;
   padding: 0.2rem 0.3rem;

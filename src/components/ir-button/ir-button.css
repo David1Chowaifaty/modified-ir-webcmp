@@ -26,7 +26,16 @@
   align-items: center;
   box-sizing: border-box;
 }
-
+.btn-outline {
+  background: transparent;
+  border: 1px solid #104064;
+  color: #104064;
+}
+.btn-outline:hover,
+.btn-outline:active {
+  background: #104064;
+  color: white;
+}
 .icon-button {
   all: unset;
   box-sizing: border-box;

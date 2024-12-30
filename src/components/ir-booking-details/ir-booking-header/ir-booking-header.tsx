@@ -123,27 +123,27 @@ export class IrBookingHeader {
                 ></ir-button>
               </div>
             )}
-            <button
-              class={'btn btn-sm btn-outline'}
-              onClick={e => {
+            <ir-button
+              size="sm"
+              btn_color="outline"
+              text={locales.entries.Lcz_EventsLog}
+              onClickHandler={e => {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
                 this.openDialog({ type: 'events-log' });
               }}
-            >
-              {locales.entries.Lcz_EventsLog}
-            </button>
+            ></ir-button>
             {calendar_data.is_pms_enabled && (
-              <button
-                class="btn btn-sm btn-outline"
+              <ir-button
+                size="sm"
+                btn_color="outline"
+                text={locales.entries.Lcz_pms}
                 onClick={e => {
                   e.stopImmediatePropagation();
                   e.stopPropagation();
                   this.openDialog({ type: 'pms' });
                 }}
-              >
-                {locales.entries.Lcz_pms}
-              </button>
+              ></ir-button>
             )}
             {this.hasReceipt && <ir-button variant="icon" id="receipt" icon_name="reciept" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
             {this.hasPrint && <ir-button variant="icon" id="print" icon_name="print" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
