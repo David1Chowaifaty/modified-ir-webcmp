@@ -249,7 +249,7 @@ export class IrBookingListing {
                             <img class="mr-2 logo" src={booking.origin.Icon} alt={booking.origin.Label} />
                             <div class="text-left">
                               <div class="d-flex align-items-center">
-                                {booking.guest.nbr_confirmed_bookings > 0 && (
+                                {booking.guest.nbr_confirmed_bookings > 1 && (
                                   <div class="m-0 p-0">
                                     <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', booking.guest.nbr_confirmed_bookings.toString())} customSlot>
                                       <div class="d-flex align-items-center my-0 p-0" slot="tooltip-trigger" style={{ marginRight: '0.5rem' }}>

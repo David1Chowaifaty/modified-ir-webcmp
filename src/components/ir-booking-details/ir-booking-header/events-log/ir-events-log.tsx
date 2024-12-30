@@ -52,8 +52,11 @@ export class IrEventsLog {
               <tbody>
                 {this.bookingEvents?.map(e => (
                   <tr key={e.id} class="pb-1">
-                    <td class="event-row">
-                      {e.date} {String(e.hour).padStart(2, '0')}:{String(e.minute).padStart(2, '0')}:{String(e.second).padStart(2, '0')}
+                    <td class="event-row dates-row">
+                      <span>{e.date}</span>
+                      <span>
+                        {String(e.hour).padStart(2, '0')}:{String(e.minute).padStart(2, '0')}:{String(e.second).padStart(2, '0')}
+                      </span>
                     </td>
                     <td class="pl-3 event-row ">{e.type}</td>
                     <td class="pl-1 event-row ">{e.user}</td>

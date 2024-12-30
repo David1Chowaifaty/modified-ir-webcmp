@@ -35,3 +35,8 @@
   color: #ff4961;
   font-weight: 600;
 }
+.dates-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
