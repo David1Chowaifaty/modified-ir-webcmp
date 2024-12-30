@@ -2,6 +2,8 @@ import { Component, Event, EventEmitter, Prop, State, Watch, h } from '@stencil/
 
 @Component({
   tag: 'ir-textarea',
+  styleUrl: 'ir-textarea.css',
+  scoped: true,
 })
 export class IrTextArea {
   @Prop() rows = 3;
@@ -28,7 +30,7 @@ export class IrTextArea {
     if (this.variant === 'prepend') {
       return (
         <fieldset class="input-group">
-          <div class={`input-group-prepend col-${this.labelWidth} pl-0`}>
+          <div class={`input-group-prepend col-${this.labelWidth} prepend-textarea`}>
             <span class="input-group-text">{this.label}</span>
           </div>
           <textarea

@@ -21,7 +21,7 @@ export class IrBookingHeader {
   @Prop() hasMenu: boolean;
   @Prop() hasCloseButton: boolean;
 
-  @State() bookingStatus: string | null;
+  @State() bookingStatus: string | null = null;
   @State() currentDialogStatus: BookingDetailsDialogEvents;
 
   @Event() toast: EventEmitter<IToast>;
@@ -47,30 +47,30 @@ export class IrBookingHeader {
     this.bookingStatus = (target as any).selectedValue;
   }
   private async updateStatus() {
-    if (this.bookingStatus !== '' && this.bookingStatus !== null) {
-      try {
-        await this.bookingService.changeExposedBookingStatus({
-          book_nbr: this.booking.booking_nbr,
-          status: this.bookingStatus,
-        });
-        this.toast.emit({
-          type: 'success',
-          description: '',
-          title: locales.entries.Lcz_StatusUpdatedSuccessfully,
-          position: 'top-right',
-        });
-        this.resetbooking.emit(null);
-      } catch (error) {
-        console.log(error);
-      } finally {
-      }
-    } else {
+    if (!this.bookingStatus || this.bookingStatus === '-1') {
       this.toast.emit({
         type: 'error',
         description: '',
         title: locales.entries.Lcz_SelectStatus,
         position: 'top-right',
       });
+      return;
+    }
+    try {
+      await this.bookingService.changeExposedBookingStatus({
+        book_nbr: this.booking.booking_nbr,
+        status: this.bookingStatus,
+      });
+      this.toast.emit({
+        type: 'success',
+        description: '',
+        title: locales.entries.Lcz_StatusUpdatedSuccessfully,
+        position: 'top-right',
+      });
+      this.bookingStatus = null;
+      this.resetbooking.emit(null);
+    } catch (error) {
+      console.log(error);
     }
   }
   private openDialog(e: OpenDialogEvent) {
@@ -110,6 +110,7 @@ export class IrBookingHeader {
                   data={this.booking.allowed_actions.map(b => ({ text: b.description, value: b.code }))}
                   textSize="sm"
                   class="sm-padding-right m-0 "
+                  selectedValue={this.bookingStatus}
                 ></ir-select>
                 <ir-button
                   onClickHandler={this.updateStatus.bind(this)}
