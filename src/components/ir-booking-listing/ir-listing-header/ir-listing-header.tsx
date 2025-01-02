@@ -1,7 +1,7 @@
 import { BookingListingService } from '@/services/booking_listing.service';
 import booking_listing, { initializeUserSelection, updateUserSelection } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import moment from 'moment';
 
 @Component({
@@ -23,18 +23,8 @@ export class IrListingHeader {
   private toDateRef: HTMLIrDatePickerElement;
 
   private downloadUrlTag: HTMLAnchorElement;
-  @Listen('dateChanged')
-  handleDateRangeChange(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    const { start, end } = e.detail;
-    booking_listing.userSelection = {
-      ...booking_listing.userSelection,
-      from: start.format('YYYY-MM-DD'),
-      to: end.format('YYYY-MM-DD'),
-    };
-  }
-  async handleSearchClicked(is_to_export: boolean) {
+
+  private async handleSearchClicked(is_to_export: boolean) {
     if (this.inputValue !== '') {
       if (/^-?\d+$/.test(this.inputValue.trim())) {
         updateUserSelection('book_nbr', this.inputValue.trim());
@@ -63,7 +53,7 @@ export class IrListingHeader {
       booking_listing.download_url = null;
     }
   }
-  async handleClearUserField() {
+  private async handleClearUserField() {
     initializeUserSelection();
     if (this.inputValue) {
       this.inputValue = '';
@@ -164,52 +154,6 @@ export class IrListingHeader {
             select_id="dateTo"
             LabelAvailable={false}
           ></ir-select>
-          {/* </fieldset> */}
-          {/* <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="dates">{locales.entries?.Lcz_Dates}</label> */}
-          {/* <div class={'dates-ctr'}>
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox={'0 0 448 512'} style={{ height: '14px', width: '14px' }}>
-                <path
-                  fill="currentColor"
-                  d={
-                    'M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z'
-                  }
-                ></path>
-              </svg>
-            </span>
-            <div class="date-picker-ctr">
-              <div class="date-view" data-option="from-date">
-                {moment(new Date(booking_listing.userSelection.from)).format('MMM DD, yyyy')}
-              </div>
-              <ir-date-picker class="date-view-picker" autoApply singleDatePicker minDate="2000-01-01" onDateChanged={this.handleFromDateChange.bind(this)}></ir-date-picker>
-            </div>
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="mx-01" height="14" width="14" viewBox="0 0 512 512">
-                <path
-                  fill="currentColor"
-                  d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
-                />
-              </svg>
-            </span>
-            <div class="date-picker-ctr">
-              <div class="date-view" data-option="to-date">
-                {moment(new Date(booking_listing.userSelection.to)).format('MMM DD, YYYY')}
-              </div>
-              <ir-date-picker
-                class="date-view-picker"
-                ref={el => (this.toDateRef = el)}
-                autoApply
-                singleDatePicker
-                minDate={booking_listing.userSelection.from}
-                onDateChanged={e => {
-                  e.stopImmediatePropagation();
-                  e.stopPropagation();
-                  booking_listing.userSelection = { ...booking_listing.userSelection, to: e.detail.start.format('YYYY-MM-DD') };
-                }}
-              ></ir-date-picker>
-            </div>
-          </div> */}
           <div class={'booking-dates-container'}>
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox={'0 0 448 512'} style={{ height: '14px', width: '14px' }}>
@@ -261,27 +205,6 @@ export class IrListingHeader {
               ></ir-date-picker>
             </div>
           </div>
-          {/* <igl-date-range
-            class="flex-sm-wrap"
-            minDate="2000-01-01"
-            withDateDifference={false}
-            defaultData={{
-              fromDate: booking_listing.userSelection.from,
-              toDate: booking_listing.userSelection.to,
-            }}
-          ></igl-date-range> */}
-          {/* <igl-date-range
-            class="flex-sm-wrap"
-            minDate="2000-01-01"
-            withDateDifference={false}
-            defaultData={{
-              fromDate: booking_listing.userSelection.from,
-              toDate: booking_listing.userSelection.to,
-            }}
-          ></igl-date-range> */}
-          {/* </fieldset> */}
-          {/* <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="booking_status">{locales.entries?.Lcz_BookingStatus}</label> */}
           <ir-select
             class="flex-sm-wrap"
             selectedValue={booking_listing.userSelection.booking_status}
@@ -294,9 +217,7 @@ export class IrListingHeader {
             select_id="booking_status"
             LabelAvailable={false}
           ></ir-select>
-          {/* </fieldset>
-          <fieldset class="d-flex align-items-center flex-sm-column align-items-sm-start flex-fill-sm-none">
-            <label htmlFor="channels">{locales.entries?.Lcz_Channels}</label> */}
+
           <ir-select
             class="flex-sm-wrap"
             selectedValue={booking_listing.userSelection.channel}
@@ -309,19 +230,6 @@ export class IrListingHeader {
             select_id="channels"
             firstOption={locales.entries?.Lcz_All + ' ' + locales.entries?.Lcz_Channels}
           ></ir-select>
-          {/* </fieldset> */}
-          {/* <fieldset class="flex-fill-sm-none">
-            <label htmlFor="payment_status">{locales.entries?.Lcz_PaymentStatus}</label>
-            <ir-select
-              showFirstOption={false}
-              data={booking_listing?.settlement_methods.map(method => ({
-                value: method.code,
-                text: method.name,
-              }))}
-              select_id="payment_status"
-              LabelAvailable={false}
-            ></ir-select>
-          </fieldset> */}
           <div class="d-flex flex-fill align-items-end m-0  buttons-container">
             <ir-button
               title={locales.entries?.Lcz_Search}
