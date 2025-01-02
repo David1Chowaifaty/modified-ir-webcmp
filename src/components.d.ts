@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 import { ICurrency } from "./models/calendarData";
 import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
-import { ICountry, RoomBlockDetails } from "./models/IBooking";
+import { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
 import { IToast } from "./components/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
@@ -28,7 +28,7 @@ import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
 export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
-export { ICountry, RoomBlockDetails } from "./models/IBooking";
+export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
 export { IToast } from "./components/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
@@ -675,6 +675,7 @@ export namespace Components {
         "countries": ICountry[];
     }
     interface IrRoom {
+        "bedPreferences": IEntries[];
         "bookingEvent": Booking;
         "bookingIndex": number;
         "currency": string;
@@ -684,6 +685,7 @@ export namespace Components {
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
         "isEditable": boolean;
+        "language": string;
         "legendData": any;
         "mealCodeName": string;
         "myRoomTypeFoodCat": string;
@@ -3258,6 +3260,7 @@ declare namespace LocalJSX {
         "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent>) => void;
     }
     interface IrRoom {
+        "bedPreferences"?: IEntries[];
         "bookingEvent"?: Booking;
         "bookingIndex"?: number;
         "currency"?: string;
@@ -3267,6 +3270,7 @@ declare namespace LocalJSX {
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
         "isEditable"?: boolean;
+        "language"?: string;
         "legendData"?: any;
         "mealCodeName"?: string;
         "myRoomTypeFoodCat"?: string;

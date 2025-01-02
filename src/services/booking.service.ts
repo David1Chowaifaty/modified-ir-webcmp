@@ -238,6 +238,17 @@ export class BookingService {
     }
   }
 
+  public async getBedPreferences(): Promise<IEntries[]> {
+    const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME`, {
+      TBL_NAME: '_BED_PREFERENCE_TYPE',
+    });
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    const res: any[] = data.My_Result;
+    return res;
+  }
+
   public async fetchSetupEntries(): Promise<ISetupEntries> {
     try {
       const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI`, {

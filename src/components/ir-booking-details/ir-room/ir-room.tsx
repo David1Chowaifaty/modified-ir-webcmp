@@ -8,6 +8,7 @@ import locales from '@/stores/locales.store';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { formatAmount } from '@/utils/utils';
+import { IEntries } from '@/models/IBooking';
 
 @Component({
   tag: 'ir-room',
@@ -25,24 +26,26 @@ export class IrRoom {
   @Prop() myRoomTypeFoodCat: string;
   // Currency
   @Prop() currency: string = 'USD';
+  @Prop() language: string = 'en';
   @Prop() legendData;
   @Prop() roomsInfo;
-  @State() collapsed: boolean = false;
-
+  @Prop() bedPreferences: IEntries[];
   // Booleans Conditions
   @Prop() hasRoomEdit: boolean = false;
   @Prop() hasRoomDelete: boolean = false;
   @Prop() hasRoomAdd: boolean = false;
   @Prop() hasCheckIn: boolean = false;
   @Prop() hasCheckOut: boolean = false;
+
+  @State() collapsed: boolean = false;
+  @State() item: Room;
+  @State() isLoading: boolean = false;
+  @State() isModelOpen: boolean = false;
   // Event Emitters
   @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
   @Event({ bubbles: true, composed: true }) pressCheckOut: EventEmitter;
   @Event({ bubbles: true, composed: true }) editInitiated: EventEmitter<TIglBookPropertyPayload>;
-  @State() item: Room;
-  @State() isLoading: boolean = false;
-  @State() isModelOpen: boolean = false;
 
   private modal: HTMLIrModalElement;
 
@@ -185,6 +188,13 @@ export class IrRoom {
     // Join non-empty parts with spaces
     return parts.filter(Boolean).join('&nbsp&nbsp&nbsp&nbsp');
   }
+  private getBedName() {
+    const bed = this.bedPreferences.find(p => p.CODE_NAME === this.item.bed_preference.toString());
+    if (!bed) {
+      throw new Error(`bed with code ${this.item.bed_preference} not found`);
+    }
+    return bed[`CODE_VALUE_${this.language}`] ?? bed.CODE_VALUE_EN;
+  }
   render() {
     return (
       <Host class="p-1 d-flex m-0">
@@ -250,6 +260,7 @@ export class IrRoom {
             <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
             {/* {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>} */}
             {this.item.rateplan.selected_variation.adult_nbr > 0 && <span innerHTML={this.formatVariation(this.item.rateplan.selected_variation, this.item.occupancy)}> </span>}
+            {this.item.bed_preference && <span>({this.getBedName()})</span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.item.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">

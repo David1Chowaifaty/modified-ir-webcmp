@@ -6,7 +6,7 @@ import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { IToast } from '../ir-toast/toast';
-import { ICountry } from '@/models/IBooking';
+import { ICountry, IEntries } from '@/models/IBooking';
 import { IPaymentAction, PaymentService } from '@/services/payment.service';
 import Token from '@/models/Token';
 import { BookingDetailsSidebarEvents, OpenSidebarEvent } from './types';
@@ -58,6 +58,7 @@ export class IrBookingDetails {
   @State() paymentActions: IPaymentAction[];
   @State() property_id: number;
   @State() selectedService: ExtraService;
+  @State() bedPreference: IEntries[];
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
@@ -189,13 +190,15 @@ export class IrBookingDetails {
   }
   private async initializeApp() {
     try {
-      const [roomResponse, languageTexts, countriesList, bookingDetails] = await Promise.all([
+      const [roomResponse, languageTexts, countriesList, bookingDetails, bedPreference] = await Promise.all([
         this.roomService.getExposedProperty({ id: this.propertyid || 0, language: this.language, aname: this.p }),
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
+        this.bookingService.getBedPreferences(),
       ]);
       this.property_id = roomResponse?.My_Result?.id;
+      this.bedPreference = bedPreference;
       //TODO:Reenable payment actions
       if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
         this.paymentService
@@ -360,6 +363,8 @@ export class IrBookingDetails {
               {this.booking.rooms.map((room: Room, index: number) => {
                 return [
                   <ir-room
+                    language={this.language}
+                    bedPreferences={this.bedPreference}
                     isEditable={this.booking.is_editable}
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
