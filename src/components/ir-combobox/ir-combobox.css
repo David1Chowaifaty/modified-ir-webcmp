@@ -23,6 +23,12 @@ ul {
 ul[data-position='bottom-right'] {
   right: 0;
 }
+.list-item-image {
+  height: 1rem;
+  aspect-ratio: 4/3;
+  border-radius: 4px;
+  margin-right: 10px;
+}
 .dropdown-item {
   cursor: pointer;
 }

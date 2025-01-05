@@ -169,7 +169,7 @@ export class GuestInfo {
               firstOption={'...'}
               onSelectChange={e => this.handleInputChange('country_id', e.detail)}
             ></ir-select>
-            <div class="form-group mr-0">
+            {/* <div class="form-group mr-0">
               <div class="input-group row m-0 p-0">
                 <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
                   <label class={`input-group-text  border-theme flex-grow-1 text-dark  `}>
@@ -178,7 +178,7 @@ export class GuestInfo {
                   </label>
                 </div>
                 <select
-                  class={` form-control text-md  col-2 py-0 mobilePrefixSelect`}
+                  class={`form-control text-md  col-2 py-0 mobilePrefixSelect`}
                   onInput={e => this.handleInputChange('country_phone_prefix', (e.target as HTMLSelectElement).value)}
                   required
                 >
@@ -197,7 +197,21 @@ export class GuestInfo {
                   onInput={e => this.handleInputChange('mobile', (e.target as HTMLInputElement).value)}
                 />
               </div>
-            </div>
+            </div> */}
+
+            <ir-phone-input
+              onTextChange={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                const { mobile, phone_prefix } = e.detail;
+                this.handleInputChange('mobile', mobile);
+                this.handleInputChange('country_phone_prefix', phone_prefix);
+              }}
+              phone_prefix={this.guest.country_phone_prefix}
+              value={this.guest.mobile}
+              language={this.language}
+              label={locales.entries.Lcz_MobilePhone}
+            />
             <div class="mb-2">
               <ir-textarea
                 variant="prepend"

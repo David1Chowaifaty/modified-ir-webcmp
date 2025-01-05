@@ -1,6 +1,7 @@
 import { ICountry } from '@/components';
 import { BookingService } from '@/services/booking.service';
-import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
+import locales from '@/stores/locales.store';
+import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-phone-input',
@@ -40,6 +41,18 @@ export class IrPhoneInput {
     }
     this.inputValue = this.value;
   }
+  @Watch('value')
+  handleValueChange(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      this.inputValue = newValue;
+    }
+  }
+  @Watch('phone_prefix')
+  handlePhoneChange(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      this.setCountryFromPhonePrefix();
+    }
+  }
   @Listen('click', { target: 'document' })
   handleDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
@@ -55,10 +68,13 @@ export class IrPhoneInput {
     this.inputValue = inputValue;
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
   }
-  setCountryFromPhonePrefix() {
-    const country = this.countries.find(country => country.phone_prefix === this.phone_prefix);
+  private setCountryFromPhonePrefix() {
+    let country = this.countries.find(country => country.phone_prefix === this.phone_prefix);
     if (!country) {
-      throw new Error('Invalid country id');
+      country = this.countries.find(c => c.id.toString() === this.phone_prefix);
+      if (!country) {
+        return;
+      }
     }
     this.currentCountry = { ...country };
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.value });
@@ -84,13 +100,13 @@ export class IrPhoneInput {
             )}
             <div class={'form-control  input-container  flex-fill' + (this.error ? ' is-invalid' : '')}>
               <button onClick={() => (this.isDropdownVisible = !this.isDropdownVisible)} class="dropdown-trigger">
-                <img src={this.currentCountry?.flag} class="flag" />
+                {this.currentCountry ? <img src={this.currentCountry?.flag} class="flag" /> : <p class="p-0 m-0 ">{locales.entries.Lcz_Select}</p>}
                 <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
                   <path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
                 </svg>
               </button>
 
-              <label>{this.currentCountry?.phone_prefix}</label>
+              <p class={'phone_prefix_label'}>{this.currentCountry?.phone_prefix}</p>
               <input type="text" placeholder={this.placeholder} required value={this.inputValue} disabled={this.disabled} onInput={e => this.handleInputChange(e)} />
             </div>{' '}
             {this.isDropdownVisible && (
@@ -106,6 +122,7 @@ export class IrPhoneInput {
                   data={this.countries.map(c => ({
                     id: c.id.toString(),
                     name: `${c.name} (${c.phone_prefix})`,
+                    image: c.flag,
                   }))}
                 ></ir-combobox>
               </div>

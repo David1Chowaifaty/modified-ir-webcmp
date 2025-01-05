@@ -132,8 +132,9 @@ export class IglPropertyBookedBy {
             lastName: res.last_name,
             contactNumber: res.mobile,
             countryId: res.country_id,
-            isdCode: res.country_id.toString(),
+            isdCode: res?.country_phone_prefix ?? res.isdCode.toString(),
           };
+          console.log(this.bookedByData);
         } else {
           let prevBookedByData = { ...this.bookedByData };
           prevBookedByData = { ...prevBookedByData, email };
@@ -181,7 +182,7 @@ export class IglPropertyBookedBy {
         lastName: data.last_name,
         contactNumber: data.mobile,
         countryId: data.country_id,
-        isdCode: data.country_id.toString(),
+        isdCode: data.country_id,
       };
       this.dataUpdateEvent.emit({
         key: 'bookedByInfoUpdated',
@@ -339,7 +340,7 @@ export class IglPropertyBookedBy {
                 </div>
               </div>
 
-              <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
+              {/* <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
                 <div class="p-0 m-0  d-flex  controlContainer flex-fill">
                   <div class=" p-0 m-0">
@@ -367,8 +368,23 @@ export class IglPropertyBookedBy {
                     />
                   </div>
                 </div>
+              </div> */}
+              <div class="form-group p-0 d-flex flex-column flex-md-row align-items-md-center">
+                <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
+                <div class="p-0 m-0 controlContainer flex-fill">
+                  <ir-phone-input
+                    language={this.language}
+                    // label={locales.entries.Lcz_MobilePhone}
+                    value={this.bookedByData.contactNumber}
+                    phone_prefix={this.bookedByData.isdCode}
+                    default_country={this.bookedByData.countryId}
+                    onTextChange={e => {
+                      this.handleDataChange('isdCode', { target: { value: e.detail.phone_prefix } });
+                      this.handleDataChange('contactNumber', { target: { value: e.detail.mobile } });
+                    }}
+                  ></ir-phone-input>
+                </div>
               </div>
-
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_YourArrivalTime}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">

@@ -19,6 +19,7 @@ import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/b
 import { OpenSidebarEvent } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
+import { ComboboxItem } from "./components/ir-combobox/ir-combobox";
 import { IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { PaymentOption } from "./models/payment-options";
@@ -39,6 +40,7 @@ export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/b
 export { OpenSidebarEvent } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
+export { ComboboxItem } from "./components/ir-combobox/ir-combobox";
 export { IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { PaymentOption } from "./models/payment-options";
@@ -362,7 +364,7 @@ export namespace Components {
     }
     interface IrCombobox {
         "autoFocus": boolean;
-        "data": { id: string; name: string; image?: string; occupancy?: number }[];
+        "data": ComboboxItem[];
         "disabled": boolean;
         "duration": number;
         "input_id": string;
@@ -2899,7 +2901,7 @@ declare namespace LocalJSX {
     }
     interface IrCombobox {
         "autoFocus"?: boolean;
-        "data"?: { id: string; name: string; image?: string; occupancy?: number }[];
+        "data"?: ComboboxItem[];
         "disabled"?: boolean;
         "duration"?: number;
         "input_id"?: string;

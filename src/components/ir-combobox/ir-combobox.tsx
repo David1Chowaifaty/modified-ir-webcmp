@@ -3,13 +3,14 @@ import locales from '@/stores/locales.store';
 import { Component, Prop, State, h, Element, Event, EventEmitter, Listen, Watch, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
 
+export type ComboboxItem = { id: string; name: string; image?: string; occupancy?: number };
 @Component({
   tag: 'ir-combobox',
   styleUrl: 'ir-combobox.css',
   scoped: true,
 })
 export class IrCombobox {
-  @Prop({ mutable: true }) data: { id: string; name: string; image?: string; occupancy?: number }[] = [];
+  @Prop({ mutable: true }) data: ComboboxItem[] = [];
   @Prop() duration: number = 300;
   @Prop() placeholder: string;
   @Prop() value: string;
@@ -23,7 +24,7 @@ export class IrCombobox {
   @State() isLoading: boolean = true;
   @State() isItemSelected: boolean;
   @State() inputValue: string = '';
-  @State() filteredData: { id: string; name: string; occupancy?: number }[] = [];
+  @State() filteredData: ComboboxItem[] = [];
 
   @Element() el: HTMLElement;
   @Event({ bubbles: true, composed: true }) comboboxValueChange: EventEmitter<{ key: string; data: unknown }>;
@@ -200,6 +201,7 @@ export class IrCombobox {
             tabIndex={0}
             onClick={() => this.selectItem(index)}
           >
+            {d.image && <img src={d.image} class={'list-item-image'}></img>}
             <p>{d.name}</p>
             {d.occupancy && (
               <Fragment>
