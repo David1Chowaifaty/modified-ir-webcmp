@@ -182,7 +182,7 @@ export class IglPropertyBookedBy {
         lastName: data.last_name,
         contactNumber: data.mobile,
         countryId: data.country_id,
-        isdCode: data.country_id,
+        isdCode: data['country_phone_prefix'] ?? data?.country_id,
       };
       this.dataUpdateEvent.emit({
         key: 'bookedByInfoUpdated',
