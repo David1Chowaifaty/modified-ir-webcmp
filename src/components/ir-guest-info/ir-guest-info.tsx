@@ -76,8 +76,8 @@ export class GuestInfo {
       console.log(error);
     }
   }
-  handleInputChange(key: keyof Guest, value: any) {
-    this.guest = { ...this.guest, [key]: value };
+  private handleInputChange(params: Partial<Guest>) {
+    this.guest = { ...this.guest, ...params };
   }
 
   async editGuest() {
@@ -125,7 +125,7 @@ export class GuestInfo {
               submited={this.submit}
               value={this.guest?.first_name}
               required
-              onTextChange={e => this.handleInputChange('first_name', e.detail)}
+              onTextChange={e => this.handleInputChange({ first_name: e.detail })}
             ></ir-input-text>
             <ir-input-text
               placeholder=""
@@ -134,7 +134,7 @@ export class GuestInfo {
               submited={this.submit}
               value={this.guest?.last_name}
               required
-              onTextChange={e => this.handleInputChange('last_name', e.detail)}
+              onTextChange={e => this.handleInputChange({ last_name: e.detail })}
             ></ir-input-text>
             <ir-input-text
               placeholder=""
@@ -143,14 +143,14 @@ export class GuestInfo {
               submited={this.submit}
               value={this.guest?.email}
               required
-              onTextChange={e => this.handleInputChange('email', e.detail)}
+              onTextChange={e => this.handleInputChange({ email: e.detail })}
             ></ir-input-text>
             <ir-input-text
               placeholder=""
               label={locales.entries.Lcz_AlternativeEmail}
               name="altEmail"
               value={this.guest?.alternative_email}
-              onTextChange={e => this.handleInputChange('alternative_email', e.detail)}
+              onTextChange={e => this.handleInputChange({ alternative_email: e.detail })}
             ></ir-input-text>
             {/* <ir-input-text label="Password" placeholder="" name="password" submited={this.submit} type="password" value={this.Model.password} required></ir-input-text> */}
             <ir-select
@@ -167,7 +167,7 @@ export class GuestInfo {
                 };
               })}
               firstOption={'...'}
-              onSelectChange={e => this.handleInputChange('country_id', e.detail)}
+              onSelectChange={e => this.handleInputChange({ country_id: e.detail })}
             ></ir-select>
             {/* <div class="form-group mr-0">
               <div class="input-group row m-0 p-0">
@@ -204,8 +204,10 @@ export class GuestInfo {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
                 const { mobile, phone_prefix } = e.detail;
-                this.handleInputChange('mobile', mobile);
-                this.handleInputChange('country_phone_prefix', phone_prefix);
+                if (mobile !== this.guest.mobile) {
+                  this.handleInputChange({ mobile });
+                }
+                if (phone_prefix !== this.guest.country_phone_prefix) this.handleInputChange({ country_phone_prefix: phone_prefix });
               }}
               phone_prefix={this.guest.country_phone_prefix}
               value={this.guest.mobile}
@@ -215,7 +217,7 @@ export class GuestInfo {
             <div class="mb-2">
               <ir-textarea
                 variant="prepend"
-                onTextChange={e => this.handleInputChange('notes', e.detail)}
+                onTextChange={e => this.handleInputChange({ notes: e.detail })}
                 value={this.guest?.notes}
                 label={locales.entries.Lcz_PrivateNote}
               ></ir-textarea>
@@ -227,7 +229,7 @@ export class GuestInfo {
                   type="checkbox"
                   name="newsletter"
                   checked={this.guest.subscribe_to_news_letter}
-                  onInput={e => this.handleInputChange('subscribe_to_news_letter', (e.target as HTMLInputElement).checked)}
+                  onInput={e => this.handleInputChange({ subscribe_to_news_letter: (e.target as HTMLInputElement).checked })}
                 />
                 <span class="checkmark m-0 p-0"></span>
                 <span class={'m-0 p-0  check-label'}>{locales.entries.Lcz_Newsletter}</span>
