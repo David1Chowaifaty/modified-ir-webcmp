@@ -67,7 +67,7 @@ export class IrReservationInformation {
             )}`}
           ></ir-label>
           <ir-label labelText={`${locales.entries.Lcz_BookedBy}:`} content={`${this.booking.guest.first_name} ${this.booking.guest.last_name}`}>
-            {this.booking.guest?.nbr_confirmed_bookings > 1 && (
+            {this.booking.guest?.nbr_confirmed_bookings > 1 && !this.booking.agent && (
               <div class={'m-0 p-0'} slot="prefix">
                 <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())} customSlot>
                   <div class="d-flex align-items-center m-0 p-0" slot="tooltip-trigger" style={{ gap: '0.25rem' }}>
