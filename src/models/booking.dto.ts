@@ -264,6 +264,7 @@ export interface RatePlan {
   is_non_refundable: boolean;
   custom_text: string | null;
   is_active: boolean;
+  short_name: string;
 }
 export interface IVariations {
   adult_child_offering: string;

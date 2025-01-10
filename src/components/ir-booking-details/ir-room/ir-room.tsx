@@ -330,14 +330,17 @@ export class IrRoom {
                 </table>
               </div>
             </div>
-            {this.item.rateplan.cancelation && (
-              <ir-label labelText={`${locales.entries.Lcz_Cancellation}:`} content={this.item.rateplan.cancelation || ''} renderContentAsHtml></ir-label>
+            {this.bookingEvent.is_direct && (
+              <Fragment>
+                {this.item.rateplan.cancelation && (
+                  <ir-label labelText={`${locales.entries.Lcz_Cancellation}:`} content={this.item.rateplan.cancelation || ''} renderContentAsHtml></ir-label>
+                )}
+                {this.item.rateplan.guarantee && (
+                  <ir-label labelText={`${locales.entries.Lcz_Guarantee}:`} content={this.item.rateplan.guarantee || ''} renderContentAsHtml></ir-label>
+                )}
+              </Fragment>
             )}
-            {this.item.rateplan.guarantee && <ir-label labelText={`${locales.entries.Lcz_Guarantee}:`} content={this.item.rateplan.guarantee || ''} renderContentAsHtml></ir-label>}
-            {/* <ir-label label="PrePayment:" value={this.item.My_Room_type.My_Translated_Prepayment_Policy || ''}></ir-label>
-            <ir-label label="Smoking Preference:" value={this.item.My_Room_type.My_Translated_Cancelation_Policy || ''}></ir-label> */}
-            {this.bookingEvent.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>}
-            {/* <ir-label label={`${locales.entries.Lcz_SpecialRate}:`} value="Non-refundable"></ir-label> */}
+            {/* {this.bookingEvent.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>} */}
           </div>
         </div>
         <ir-modal

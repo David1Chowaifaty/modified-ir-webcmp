@@ -48,7 +48,7 @@
 
 - [ir-guest-info](../ir-guest-info)
 - [ir-pickup](ir-pickup)
-- [ir-booking-extra-note](../ir-booking-extra-note)
+- [ir-booking-extra-note](ir-booking-extra-note)
 - [ir-extra-service-config](./ir-extra-services/ir-extra-service-config)
 - [ir-spinner](../ui/ir-spinner)
 - [ir-toast](../ir-toast)
@@ -87,8 +87,10 @@ graph TD;
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
+  ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-phone-input --> ir-combobox
   ir-button --> ir-icons
   ir-pickup --> ir-title
   ir-pickup --> ir-select
@@ -158,6 +160,7 @@ graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
+  igl-property-booked-by --> ir-phone-input
   igloo-calendar --> ir-booking-details
   ir-booking --> ir-booking-details
   ir-booking-listing --> ir-booking-details

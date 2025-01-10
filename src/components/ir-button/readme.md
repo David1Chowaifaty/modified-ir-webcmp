@@ -47,7 +47,7 @@
  - [igl-tba-booking-view](../igloo-calendar/igl-to-be-assigned/igl-tba-booking-view)
  - [igl-to-be-assigned](../igloo-calendar/igl-to-be-assigned)
  - [ir-booking-details](../ir-booking-details)
- - [ir-booking-extra-note](../ir-booking-extra-note)
+ - [ir-booking-extra-note](../ir-booking-details/ir-booking-extra-note)
  - [ir-booking-header](../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-channel](../ir-channel)

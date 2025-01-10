@@ -199,8 +199,7 @@ export class IrBookingDetails {
       ]);
       this.property_id = roomResponse?.My_Result?.id;
       this.bedPreference = bedPreference;
-      //TODO:Reenable payment actions
-      if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id) {
+      if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id && bookingDetails.is_direct) {
         this.paymentService
           .GetExposedCancellationDueAmount({
             booking_nbr: bookingDetails.booking_nbr,
@@ -209,8 +208,6 @@ export class IrBookingDetails {
           .then(res => {
             this.paymentActions = res;
           });
-      } else {
-        console.warn('Booking details are incomplete for payment actions.');
       }
       if (!locales?.entries) {
         locales.entries = languageTexts.entries;
@@ -369,7 +366,7 @@ export class IrBookingDetails {
                     legendData={this.calendarData.legendData}
                     roomsInfo={this.calendarData.roomsInfo}
                     myRoomTypeFoodCat={room.roomtype.name}
-                    mealCodeName={room.rateplan.name}
+                    mealCodeName={room.rateplan.short_name}
                     currency={this.booking.currency.symbol}
                     hasRoomEdit={this.hasRoomEdit && this.booking.status.code !== '003' && this.booking.is_direct}
                     hasRoomDelete={this.hasRoomDelete && this.booking.status.code !== '003' && this.booking.is_direct}

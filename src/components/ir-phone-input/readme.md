@@ -31,6 +31,8 @@
 
 ### Used by
 
+ - [igl-property-booked-by](../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
+ - [ir-guest-info](../ir-guest-info)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
 
 ### Depends on
@@ -41,6 +43,8 @@
 ```mermaid
 graph TD;
   ir-phone-input --> ir-combobox
+  igl-property-booked-by --> ir-phone-input
+  ir-guest-info --> ir-phone-input
   ir-hk-user --> ir-phone-input
   style ir-phone-input fill:#f9f,stroke:#333,stroke-width:4px
 ```

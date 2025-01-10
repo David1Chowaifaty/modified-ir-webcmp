@@ -83,6 +83,8 @@ graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
+  igl-property-booked-by --> ir-phone-input
+  ir-phone-input --> ir-combobox
   ir-listing-modal --> ir-icon
   ir-listing-modal --> ir-select
   ir-listing-modal --> ir-button
@@ -107,6 +109,7 @@ graph TD;
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
+  ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
   ir-pickup --> ir-title

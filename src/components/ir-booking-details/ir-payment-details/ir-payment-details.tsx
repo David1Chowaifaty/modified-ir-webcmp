@@ -402,7 +402,7 @@ export class IrPaymentDetails {
             </div>
           </div> */}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
-          {this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && (
+          {this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.bookingDetails.is_direct && (
             <div class="payment_action_beta_container">
               <p class="beta">Beta</p>
               <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails}></ir-payment-actions>

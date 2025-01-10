@@ -8,6 +8,7 @@ export type TLocaleEntries = (LocalizationStrings & LocalizationChannelFrontEntr
 export type LocalizationStrings = {
   Lcz_AnyInfant: string;
   Lcz_No: string;
+  Lcz_ChannelNotes: string;
   Lcz_ThisService: string;
   Lcz_BookingPrivateNote: string;
   Lcz_GuestRemark: string;

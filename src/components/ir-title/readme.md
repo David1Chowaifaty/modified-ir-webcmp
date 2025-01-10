@@ -25,7 +25,7 @@
 
 ### Used by
 
- - [ir-booking-extra-note](../ir-booking-extra-note)
+ - [ir-booking-extra-note](../ir-booking-details/ir-booking-extra-note)
  - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)

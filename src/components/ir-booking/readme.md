@@ -52,8 +52,10 @@ graph TD;
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
+  ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
@@ -122,6 +124,7 @@ graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
+  igl-property-booked-by --> ir-phone-input
   style ir-booking fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

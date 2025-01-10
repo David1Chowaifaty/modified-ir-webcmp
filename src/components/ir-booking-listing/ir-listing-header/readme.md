@@ -73,6 +73,8 @@ graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
+  igl-property-booked-by --> ir-phone-input
+  ir-phone-input --> ir-combobox
   ir-booking-listing --> ir-listing-header
   style ir-listing-header fill:#f9f,stroke:#333,stroke-width:4px
 ```
