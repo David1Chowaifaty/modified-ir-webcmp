@@ -3,13 +3,13 @@ import { _getDay } from '../functions';
 import { Booking, IUnit, IVariations, Occupancy, Room } from '@/models/booking.dto';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { formatName } from '@/utils/booking';
-import axios from 'axios';
 import locales from '@/stores/locales.store';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { formatAmount } from '@/utils/utils';
 import { IEntries } from '@/models/IBooking';
-
+import { BookingService } from '@/services/booking.service';
+export type RoomModalReason = 'delete' | 'checkin' | 'checkout' | null;
 @Component({
   tag: 'ir-room',
   styleUrl: 'ir-room.css',
@@ -40,7 +40,7 @@ export class IrRoom {
   @State() collapsed: boolean = false;
   @State() item: Room;
   @State() isLoading: boolean = false;
-  @State() isModelOpen: boolean = false;
+  @State() modalReason: RoomModalReason = null;
   // Event Emitters
   @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
@@ -48,6 +48,7 @@ export class IrRoom {
   @Event({ bubbles: true, composed: true }) editInitiated: EventEmitter<TIglBookPropertyPayload>;
 
   private modal: HTMLIrModalElement;
+  private bookingService = new BookingService();
 
   componentWillLoad() {
     if (this.bookingEvent) {
@@ -132,45 +133,70 @@ export class IrRoom {
       currentRoomType: this.item,
     });
   }
-  handleDeleteClick() {
+  private openModal(reason: RoomModalReason) {
+    if (!reason) {
+      return;
+    }
+    this.modalReason = reason;
     this.modal.openModal();
   }
-  private async deleteRoom() {
+  private async handleModalConfirmation(e: CustomEvent) {
     try {
-      this.isLoading = true;
-      let oldRooms = [...this.bookingEvent.rooms];
-      oldRooms = oldRooms.filter(room => room.identifier !== this.item.identifier);
-
-      const body = {
-        assign_units: true,
-        check_in: true,
-        is_pms: true,
-        is_direct: true,
-        booking: {
-          booking_nbr: this.bookingEvent.booking_nbr,
-          from_date: this.bookingEvent.from_date,
-          to_date: this.bookingEvent.to_date,
-          remark: this.bookingEvent.remark,
-          property: this.bookingEvent.property,
-          source: this.bookingEvent.source,
-          currency: this.bookingEvent.currency,
-          arrival: this.bookingEvent.arrival,
-          guest: this.bookingEvent.guest,
-          rooms: oldRooms,
-        },
-      };
-      console.log('body:', body);
-
-      const { data } = await axios.post(`/DoReservation`, body);
-      if (data.ExceptionMsg !== '') {
-        throw new Error(data.ExceptionMsg);
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if (!this.modalReason) {
+        return;
       }
-      this.modal.closeModal();
-      this.deleteFinished.emit(this.item.identifier);
+      this.isLoading = true;
+      switch (this.modalReason) {
+        case 'delete':
+          await this.deleteRoom();
+          break;
+        case 'checkin':
+        case 'checkout':
+          await this.bookingService.handleExposedRoomInOut({
+            booking_nbr: this.bookingEvent.booking_nbr,
+            room_identifier: this.item.identifier,
+            status: this.modalReason === 'checkin' ? '001' : '002',
+          });
+          break;
+        default:
+          break;
+      }
     } catch (error) {
+      console.log(error);
     } finally {
       this.isLoading = false;
+      this.modalReason = null;
+      this.modal.closeModal();
     }
+  }
+  private async deleteRoom() {
+    let oldRooms = [...this.bookingEvent.rooms];
+    oldRooms = oldRooms.filter(room => room.identifier !== this.item.identifier);
+
+    const body = {
+      assign_units: true,
+      check_in: true,
+      is_pms: true,
+      is_direct: true,
+      booking: {
+        booking_nbr: this.bookingEvent.booking_nbr,
+        from_date: this.bookingEvent.from_date,
+        to_date: this.bookingEvent.to_date,
+        remark: this.bookingEvent.remark,
+        property: this.bookingEvent.property,
+        source: this.bookingEvent.source,
+        currency: this.bookingEvent.currency,
+        arrival: this.bookingEvent.arrival,
+        guest: this.bookingEvent.guest,
+        rooms: oldRooms,
+      },
+      extras: this.bookingEvent.extras,
+      pickup_info: this.bookingEvent.pickup_info,
+    };
+    await this.bookingService.doReservation(body);
+    this.deleteFinished.emit(this.item.identifier);
   }
 
   private formatVariation({ adult_nbr, child_nbr }: IVariations, { infant_nbr }: Occupancy) {
@@ -194,6 +220,20 @@ export class IrRoom {
       throw new Error(`bed with code ${this.item.bed_preference} not found`);
     }
     return bed[`CODE_VALUE_${this.language}`] ?? bed.CODE_VALUE_EN;
+  }
+  private renderModalMessage() {
+    switch (this.modalReason) {
+      case 'delete':
+        return `${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${this.item.unit ? (this.item.unit as IUnit).name : ''} ${
+          locales.entries.Lcz_FromThisBooking
+        }`;
+      case 'checkin':
+        return `Check in ${this.item.roomtype.name} ${this.item.unit ? (this.item.unit as IUnit).name : ''} ${locales.entries.Lcz_FromThisBooking}`;
+      case 'checkout':
+        return `Checkout ${this.item.roomtype.name} ${this.item.unit ? (this.item.unit as IUnit).name : ''} ${locales.entries.Lcz_FromThisBooking}`;
+      default:
+        return '';
+    }
   }
   render() {
     return (
@@ -237,7 +277,7 @@ export class IrRoom {
               {this.hasRoomDelete && this.isEditable && (
                 <ir-button
                   variant="icon"
-                  onClickHandler={this.handleDeleteClick.bind(this)}
+                  onClickHandler={this.openModal.bind(this, 'delete')}
                   id={`roomDelete-${this.item.identifier}`}
                   icon_name="trash"
                   style={colorVariants.danger}
@@ -246,9 +286,20 @@ export class IrRoom {
             </div>
           </div>
           <div class="d-flex align-items-center sm-mb-1">
-            <ir-date-view class="mr-1" from_date={this.item.from_date} to_date={this.item.to_date} showDateDifference={false}></ir-date-view>
-            {this.hasCheckIn && <ir-button id="checkin" icon="edit" btn_color="outline" size="sm" text="Check in" style={{ width: '110px' }}></ir-button>}
-            {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
+            <ir-date-view
+              class="mr-1  flex-grow-1"
+              style={{ width: 'fit-content' }}
+              from_date={this.item.from_date}
+              to_date={this.item.to_date}
+              showDateDifference={false}
+            ></ir-date-view>
+
+            {this.hasCheckIn && (
+              <ir-button onClickHandler={this.openModal.bind(this, 'checkin')} id="checkin" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckIn}></ir-button>
+            )}
+            {this.hasCheckOut && (
+              <ir-button onClickHandler={this.openModal.bind(this, 'checkout')} id="checkout" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckOut}></ir-button>
+            )}
           </div>
           {!isSingleUnit(this.item.roomtype.id) && calendar_data.is_frontdesk_enabled && this.item.unit && (
             <div class={'d-flex justify-content-end'}>
@@ -347,17 +398,15 @@ export class IrRoom {
           autoClose={false}
           ref={el => (this.modal = el)}
           isLoading={this.isLoading}
-          onConfirmModal={this.deleteRoom.bind(this)}
+          onConfirmModal={this.handleModalConfirmation.bind(this)}
           iconAvailable={true}
           icon="ft-alert-triangle danger h1"
           leftBtnText={locales.entries.Lcz_Cancel}
-          rightBtnText={locales.entries.Lcz_Delete}
+          rightBtnText={this.modalReason === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
           leftBtnColor="secondary"
-          rightBtnColor="danger"
+          rightBtnColor={this.modalReason === 'delete' ? 'danger' : 'primary'}
           modalTitle={locales.entries.Lcz_Confirmation}
-          modalBody={`${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${this.item.unit ? (this.item.unit as IUnit).name : ''} ${
-            locales.entries.Lcz_FromThisBooking
-          }`}
+          modalBody={this.renderModalMessage()}
         ></ir-modal>
       </Host>
     );

@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, 
 import { BookingService } from '@/services/booking.service';
 import { transformNewBooking } from '@/utils/booking';
 import { isBlockUnit } from '@/utils/utils';
-import { IReallocationPayload, IRoomNightsData } from '@/models/property-types';
+import { IRoomNightsData, CalendarModalEvent } from '@/models/property-types';
 import moment from 'moment';
 import { IToast } from '@components/ir-toast/toast';
 import { EventsService } from '@/services/events.service';
@@ -27,7 +27,7 @@ export class IglBookingEvent {
   @Event() updateEventData: EventEmitter;
   @Event() dragOverEventData: EventEmitter;
   @Event() showRoomNightsDialog: EventEmitter<IRoomNightsData>;
-  @Event() showDialog: EventEmitter<IReallocationPayload>;
+  @Event() showDialog: EventEmitter<CalendarModalEvent>;
   @Event() resetStreachedBooking: EventEmitter<string>;
   @Event() toast: EventEmitter<IToast>;
   @Event() updateBookingEvent: EventEmitter<{ [key: string]: any }>;
@@ -246,7 +246,7 @@ export class IglBookingEvent {
                     fromDate = moment(to_date, 'YYYY-MM-DD').subtract(defaultDiffDays, 'days').format('YYYY-MM-DD');
                   }
                 }
-                this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton, from_date: fromDate, to_date: toDate });
+                this.showDialog.emit({ reason: 'reallocate', ...event.detail, description, title: '', hideConfirmButton, from_date: fromDate, to_date: toDate });
               } else {
                 // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
                 //   this.animationFrameId = requestAnimationFrame(() => {

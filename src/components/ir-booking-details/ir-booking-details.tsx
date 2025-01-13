@@ -431,7 +431,10 @@ export class IrBookingDetails {
   }
   private handleRoomCheckout(room: Room): boolean {
     // throw new Error('Method not implemented.');
-    return false;
+    if (!calendar_data.checkin_enabled) {
+      return false;
+    }
+    return room.in_out.code === '001';
   }
   private handleRoomCheckin(room: Room): boolean {
     if (!calendar_data.checkin_enabled) {
@@ -452,9 +455,9 @@ export class IrBookingDetails {
     }
     console.log();
     //TODO
-    // if (this.isCheckedIn() || this.isCheckedOut()) {
-    //   return false;
-    // }
+    if (room.in_out && room.in_out.code !== '000') {
+      return false;
+    }
     if (fromTimeStamp <= todayTimeStamp && todayTimeStamp <= toTimeStamp) {
       return true;
     } else {

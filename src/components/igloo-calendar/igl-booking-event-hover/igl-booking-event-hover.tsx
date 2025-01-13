@@ -5,6 +5,7 @@ import { EventsService } from '@/services/events.service';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
+import { CalendarModalEvent } from '@/models/property-types';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -28,7 +29,7 @@ export class IglBookingEventHover {
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: any[] }>;
-
+  @Event() showDialog: EventEmitter<CalendarModalEvent>;
   private fromTimeStamp: number;
   private toTimeStamp: number;
   private todayTimeStamp: number = new Date().setHours(0, 0, 0, 0);
@@ -260,11 +261,11 @@ export class IglBookingEventHover {
   }
 
   private handleCustomerCheckIn() {
-    console.log('Handle Customer Check In');
+    this.showDialog.emit({ reason: 'checkin', bookingNumber: this.bookingEvent.BOOKING_NUMBER, roomIdentifier: this.bookingEvent.IDENTIFIER, roomName: '', roomUnit: '' });
   }
 
   private handleCustomerCheckOut() {
-    console.log('Handle Customer Check Out');
+    this.showDialog.emit({ reason: 'checkout', bookingNumber: this.bookingEvent.BOOKING_NUMBER, roomIdentifier: this.bookingEvent.IDENTIFIER, roomName: '', roomUnit: '' });
   }
 
   private handleDeleteEvent() {

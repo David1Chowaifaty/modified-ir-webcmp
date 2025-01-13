@@ -8,7 +8,7 @@ import { ICountry, RoomBlockDetails, RoomBookingDetails, RoomDetail, bookingReas
 import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '@/services/toBeAssigned.service';
 import { bookingStatus, calculateDaysBetweenDates, getPrivateNote, transformNewBLockedRooms, transformNewBooking } from '@/utils/booking';
-import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from '@/models/property-types';
+import { IRoomNightsData, IRoomNightsDataEventPayload, CalendarModalEvent } from '@/models/property-types';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
@@ -38,7 +38,7 @@ export class IglooCalendar {
   @State() property_id: number;
   @State() days: { [key: string]: any }[] = new Array();
   @State() scrollViewDragging: boolean = false;
-  @State() dialogData: IReallocationPayload | null = null;
+  @State() dialogData: CalendarModalEvent | null = null;
   @State() bookingItem: TIglBookPropertyPayload | null = null;
   @State() editBookingItem: TIglBookPropertyPayload | null = null;
   @State() showLegend: boolean = false;
@@ -229,6 +229,26 @@ export class IglooCalendar {
       }
     });
   }
+  private renderModalBody() {
+    switch (this.dialogData?.reason) {
+      case 'checkin': {
+        const name = this.dialogData?.roomName || '';
+        const unit = this.dialogData?.roomUnit || '';
+        const fromThisBooking = locales?.entries?.Lcz_FromThisBooking || 'from this booking';
+        return `Are you sure you want to check in ${name} ${unit} ${fromThisBooking}?`;
+      }
+      case 'checkout': {
+        const name = this.dialogData?.roomName || '';
+        const unit = this.dialogData?.roomUnit || '';
+        const fromThisBooking = locales?.entries?.Lcz_FromThisBooking || 'from this booking';
+        return `Are you sure you want to check out ${name} ${unit} ${fromThisBooking}?`;
+      }
+      case 'reallocate':
+        return this.dialogData?.description || '';
+      default:
+        return 'Unknown modal content';
+    }
+  }
   private setUpCalendarData(roomResp, bookingResp) {
     console.log(roomResp);
     this.calendarData.currency = roomResp['My_Result'].currency;
@@ -358,6 +378,7 @@ export class IglooCalendar {
       CHANGE_IN_DUE_AMOUNT: this.handleChangeInDueAmount,
       CHANGE_IN_BOOK_STATUS: this.handleChangeInBookStatus,
       NON_TECHNICAL_CHANGE_IN_BOOKING: this.handleNonTechnicalChangeInBooking,
+      ROOM_STATUS_CHANGED: this.handleRoomStatusChanged,
     };
 
     const handler = reasonHandlers[REASON];
@@ -367,7 +388,20 @@ export class IglooCalendar {
       console.warn(`Unhandled REASON: ${REASON}`);
     }
   }
-
+  private handleRoomStatusChanged(result: any) {
+    console.log(result);
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: [
+        ...this.calendarData.bookingEvents.map(e => {
+          if (e.IDENTIFIER === result.room_identifier) {
+            return { ...e, CHECKIN: result.status === '001', CHECKOUT: result.status === '002', STATUS: bookingStatus[result.status === '001' ? '000' : '003'] };
+          }
+          return e;
+        }),
+      ],
+    };
+  }
   private async handleDoReservation(result: any) {
     const transformedBooking = transformNewBooking(result);
     this.AddOrUpdateRoomBookings(transformedBooking);
@@ -904,18 +938,52 @@ export class IglooCalendar {
     }
   }
   private handleModalConfirm() {
-    const { pool, toRoomId, from_date, to_date } = this.dialogData;
-    this.eventsService
-      .reallocateEvent(pool, toRoomId, from_date, to_date)
-      .then(() => {
-        this.dialogData = null;
-      })
-      .catch(() => {
-        this.revertBooking.emit(pool);
-      });
+    // Helper to reset modal state
+    const resetModalState = () => {
+      this.dialogData = null;
+    };
+
+    try {
+      switch (this.dialogData?.reason) {
+        case 'checkin':
+        case 'checkout': {
+          const { bookingNumber, roomIdentifier } = this.dialogData;
+          const status = this.dialogData.reason === 'checkin' ? '001' : '002';
+          this.bookingService.handleExposedRoomInOut({ booking_nbr: bookingNumber, room_identifier: roomIdentifier, status }).finally(resetModalState);
+          break;
+        }
+        case 'reallocate': {
+          if (!this.dialogData) {
+            console.warn('No dialog data available for reallocation.');
+            return;
+          }
+          const { pool, toRoomId, from_date, to_date } = this.dialogData;
+
+          // Handle room reallocation
+          this.eventsService
+            .reallocateEvent(pool, toRoomId, from_date, to_date)
+            .then(resetModalState)
+            .catch(() => {
+              console.error('Reallocation failed. Reverting booking.');
+              this.revertBooking.emit(pool);
+            })
+            .finally(resetModalState);
+          break;
+        }
+
+        default:
+          resetModalState();
+          break;
+      }
+    } catch (error) {
+      console.error('Error handling modal confirm:', error);
+      resetModalState();
+    }
   }
   private handleModalCancel() {
-    this.revertBooking.emit(this.dialogData.pool);
+    if (this.dialogData?.reason === 'reallocate') {
+      this.revertBooking.emit(this.dialogData.pool);
+    }
     this.dialogData = null;
   }
   private handleRoomNightsDialogClose(e: CustomEvent<IRoomNightsDataEventPayload>) {
@@ -933,7 +1001,7 @@ export class IglooCalendar {
         this.revertBooking.emit(this.roomNightsData.pool);
         this.roomNightsData = null;
       }
-      if (this.dialogData) {
+      if (this.dialogData?.reason === 'reallocate') {
         this.revertBooking.emit(this.dialogData.pool);
         this.dialogData = null;
       }
@@ -1054,10 +1122,10 @@ export class IglooCalendar {
         </ir-sidebar>
         <ir-modal
           modalTitle={''}
-          rightBtnActive={this.dialogData ? !this.dialogData.hideConfirmButton : true}
+          rightBtnActive={this.dialogData?.reason === 'reallocate' ? !this.dialogData.hideConfirmButton : true}
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Confirm}
-          modalBody={this.dialogData ? this.dialogData.description : ''}
+          modalBody={this.renderModalBody()}
           onConfirmModal={this.handleModalConfirm.bind(this)}
           onCancelModal={this.handleModalCancel.bind(this)}
         ></ir-modal>

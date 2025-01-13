@@ -12,7 +12,7 @@ import { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
 import { IToast } from "./components/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
-import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
+import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { RatePlan, RoomType } from "./models/property";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
@@ -33,7 +33,7 @@ export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
 export { IToast } from "./components/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
-export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
+export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { RatePlan, RoomType } from "./models/property";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
@@ -1174,7 +1174,7 @@ declare global {
         "updateEventData": any;
         "dragOverEventData": any;
         "showRoomNightsDialog": IRoomNightsData;
-        "showDialog": IReallocationPayload;
+        "showDialog": CalendarModalEvent;
         "resetStreachedBooking": string;
         "toast": IToast;
         "updateBookingEvent": { [key: string]: any };
@@ -1198,6 +1198,7 @@ declare global {
         "hideBubbleInfo": any;
         "deleteButton": string;
         "bookingCreated": { pool?: string; data: any[] };
+        "showDialog": CalendarModalEvent;
     }
     interface HTMLIglBookingEventHoverElement extends Components.IglBookingEventHover, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookingEventHoverElementEventMap>(type: K, listener: (this: HTMLIglBookingEventHoverElement, ev: IglBookingEventHoverCustomEvent<HTMLIglBookingEventHoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2583,7 +2584,7 @@ declare namespace LocalJSX {
         "onDragOverEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onResetStreachedBooking"?: (event: IglBookingEventCustomEvent<string>) => void;
-        "onShowDialog"?: (event: IglBookingEventCustomEvent<IReallocationPayload>) => void;
+        "onShowDialog"?: (event: IglBookingEventCustomEvent<CalendarModalEvent>) => void;
         "onShowRoomNightsDialog"?: (event: IglBookingEventCustomEvent<IRoomNightsData>) => void;
         "onToast"?: (event: IglBookingEventCustomEvent<IToast>) => void;
         "onUpdateBookingEvent"?: (event: IglBookingEventCustomEvent<{ [key: string]: any }>) => void;
@@ -2599,6 +2600,7 @@ declare namespace LocalJSX {
         "onDeleteButton"?: (event: IglBookingEventHoverCustomEvent<string>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
+        "onShowDialog"?: (event: IglBookingEventHoverCustomEvent<CalendarModalEvent>) => void;
     }
     interface IglBookingForm {
         "bedPreferenceType"?: any;
