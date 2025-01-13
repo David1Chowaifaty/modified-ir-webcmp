@@ -32,7 +32,7 @@ export class IrEventsLog {
       <div class="p-1">
         <div class="d-flex  align-items-center" style={{ gap: '0.5rem' }}>
           <h3 class=" text-left p-0 m-0  dialog-title ">{locales.entries.Lcz_EventsLog}</h3>
-          <span class="m-0 beta">Beta</span>
+          {/* <span class="m-0 beta">Beta</span> */}
         </div>
 
         {isRequestPending('/Get_Exposed_Booking_Events') ? (
