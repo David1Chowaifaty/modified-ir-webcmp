@@ -1,7 +1,7 @@
 import { CalendarDataDetails } from '@/models/calendarData';
 import { createStore } from '@stencil/store';
 
-type CalendarStore = CalendarDataDetails & { roomHistory: Record<string, boolean> };
+type CalendarStore = CalendarDataDetails & { roomHistory: Record<string, boolean>; checkin_enabled: boolean };
 const initialState: CalendarStore = {
   adultChildConstraints: {
     adult_max_nbr: 0,
@@ -20,6 +20,7 @@ const initialState: CalendarStore = {
   toBeAssignedEvents: [],
   allowed_payment_methods: [],
   pickup_service: undefined,
+  checkin_enabled: true,
   max_nights: 0,
   is_frontdesk_enabled: false,
   taxes: [],

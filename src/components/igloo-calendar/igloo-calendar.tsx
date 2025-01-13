@@ -505,17 +505,26 @@ export class IglooCalendar {
       bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
       bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
       if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
-        const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
-        const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
-        if (bookingEvent.STATUS !== 'PENDING') {
-          if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
-            bookingEvent.STATUS = bookingStatus['000'];
-          } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-            bookingEvent.STATUS = bookingStatus['000'];
-          } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
-            bookingEvent.STATUS = bookingStatus['000'];
-          } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+        if (calendar_data.checkin_enabled) {
+          if (bookingEvent.CHECKOUT) {
             bookingEvent.STATUS = bookingStatus['003'];
+          }
+          if (bookingEvent.CHECKIN) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          }
+        } else {
+          const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+          const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+          if (bookingEvent.STATUS !== 'PENDING') {
+            if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+              bookingEvent.STATUS = bookingStatus['000'];
+            } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+              bookingEvent.STATUS = bookingStatus['000'];
+            } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+              bookingEvent.STATUS = bookingStatus['000'];
+            } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+              bookingEvent.STATUS = bookingStatus['003'];
+            }
           }
         }
       }

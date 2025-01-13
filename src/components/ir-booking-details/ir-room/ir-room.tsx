@@ -247,7 +247,7 @@ export class IrRoom {
           </div>
           <div class="d-flex align-items-center sm-mb-1">
             <ir-date-view class="mr-1" from_date={this.item.from_date} to_date={this.item.to_date} showDateDifference={false}></ir-date-view>
-            {this.hasCheckIn && <ir-button id="checkin" icon="" class="mr-1" btn_color="info" size="sm" text="Check in"></ir-button>}
+            {this.hasCheckIn && <ir-button id="checkin" icon="edit" btn_color="outline" size="sm" text="Check in" style={{ width: '110px' }}></ir-button>}
             {this.hasCheckOut && <ir-button id="checkout" icon="" btn_color="info" size="sm" text="Check out"></ir-button>}
           </div>
           {!isSingleUnit(this.item.roomtype.id) && calendar_data.is_frontdesk_enabled && this.item.unit && (

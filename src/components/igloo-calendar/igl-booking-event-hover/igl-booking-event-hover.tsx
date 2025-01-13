@@ -4,6 +4,7 @@ import { ICountry } from '@/models/IBooking';
 import { EventsService } from '@/services/events.service';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -12,28 +13,31 @@ import locales from '@/stores/locales.store';
   scoped: true,
 })
 export class IglBookingEventHover {
+  @Element() element: HTMLIglBookingEventHoverElement;
+
   @Prop({ mutable: true }) bookingEvent: { [key: string]: any };
   @Prop() bubbleInfoTop: boolean = false;
   @Prop() currency;
   @Prop() countryNodeList: ICountry[];
   @Prop() is_vacation_rental: boolean = false;
+
   @State() isLoading: string;
+  @State() shouldHideUnassignUnit = false;
 
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: any[] }>;
-  @Element() element;
+
   private fromTimeStamp: number;
   private toTimeStamp: number;
   private todayTimeStamp: number = new Date().setHours(0, 0, 0, 0);
   private eventService = new EventsService();
   private hideButtons = false;
-  @State() shouldHideUnassignUnit = false;
+
   componentWillLoad() {
     let selectedRt = this.bookingEvent.roomsInfo.find(r => r.id === this.bookingEvent.RATE_TYPE);
     if (selectedRt) {
-      console.log(selectedRt.physicalrooms.length === 1);
       this.shouldHideUnassignUnit = selectedRt.physicalrooms.length === 1;
     }
     if (moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(moment())) {
@@ -42,30 +46,32 @@ export class IglBookingEventHover {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      this.hideBubble();
-    } else return;
+  componentDidLoad() {
+    document.addEventListener('keydown', this.handleKeyDown);
   }
 
-  hideBubble() {
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  private getBookingId() {
+    return this.bookingEvent.ID;
+  }
+  private hideBubble() {
     this.hideBubbleInfo.emit({
       key: 'hidebubble',
       currentInfoBubbleId: this.getBookingId(),
     });
     document.removeEventListener('keydown', this.handleKeyDown);
   }
-  componentDidLoad() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
-  disconnectedCallback() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
-  getBookingId() {
-    return this.bookingEvent.ID;
+
+  private handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.hideBubble();
+    } else return;
   }
 
-  getTotalOccupants() {
+  private getTotalOccupants() {
     const { CHILDREN_COUNT, ADULTS_COUNT } = this.bookingEvent;
     if (CHILDREN_COUNT === 0) {
       return `${ADULTS_COUNT} ${ADULTS_COUNT > 1 ? locales.entries.Lcz_AdultsCaption.toLowerCase() : locales.entries.Lcz_Single_Adult?.toLowerCase()}`;
@@ -75,90 +81,94 @@ export class IglBookingEventHover {
     }`;
   }
 
-  getPhoneNumber() {
+  private getPhoneNumber() {
     return this.bookingEvent.PHONE;
   }
 
-  getCountry() {
+  private getCountry() {
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).name;
   }
-  getPhoneCode() {
+  private getPhoneCode() {
     if (this.bookingEvent.PHONE_PREFIX) {
       return this.bookingEvent.PHONE_PREFIX;
     }
     return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).phone_prefix;
   }
-  renderPhone() {
+  private renderPhone() {
     return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct ? this.getPhoneCode() + '-' : ''}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
   }
 
-  getGuestNote() {
+  private getGuestNote() {
     return this.bookingEvent.NOTES && <p class={'user-notes p-0 my-0'}>{this.bookingEvent.NOTES}</p>;
   }
 
-  getInternalNote() {
+  private getInternalNote() {
     return this.bookingEvent.INTERNAL_NOTE;
   }
 
-  getTotalPrice() {
+  private getTotalPrice() {
     return this.bookingEvent.TOTAL_PRICE;
   }
 
-  getCheckInDate() {
+  private getCheckInDate() {
     return this.bookingEvent.FROM_DATE_STR;
   }
 
-  getCheckOutDate() {
+  private getCheckOutDate() {
     return this.bookingEvent.TO_DATE_STR;
   }
 
-  getArrivalTime() {
+  private getArrivalTime() {
     return this.bookingEvent.ARRIVAL_TIME;
   }
 
-  getRatePlan() {
+  private getRatePlan() {
     return this.bookingEvent.RATE_PLAN;
   }
 
-  getEntryDate() {
+  private getEntryDate() {
     return this.bookingEvent.ENTRY_DATE;
   }
 
-  getReleaseAfterHours() {
-    return this.bookingEvent.RELEASE_AFTER_HOURS;
-  }
+  // private getReleaseAfterHours() {
+  //   return this.bookingEvent.RELEASE_AFTER_HOURS;
+  // }
 
-  isNewBooking() {
+  private isNewBooking() {
     return this.getBookingId() === 'NEW_TEMP_EVENT';
   }
 
-  isCheckedIn() {
-    return this.bookingEvent.STATUS === 'CHECKED-IN';
+  private isCheckedIn() {
+    console.log(this.bookingEvent.STATUS);
+    return this.bookingEvent.STATUS === 'IN-HOUSE';
   }
 
-  isCheckedOut() {
+  private isCheckedOut() {
     return this.bookingEvent.STATUS === 'CHECKED-OUT';
   }
 
-  isBlockedDateEvent() {
+  private isBlockedDateEvent() {
     return this.bookingEvent.STATUS === 'BLOCKED' || this.bookingEvent.STATUS === 'BLOCKED-WITH-DATES';
   }
 
-  getRoomId() {
-    return this.bookingEvent.PR_ID;
-  }
+  // private getRoomId() {
+  //   return this.bookingEvent.PR_ID;
+  // }
 
-  getCategoryByRoomId(roomId) {
-    // console.log("room id ",roomId)
-    // console.log("booking event",this.bookingEvent)
-    return this.bookingEvent.roomsInfo.find(roomCategory => roomCategory.physicalrooms.find(room => room.id === roomId));
-  }
+  // private getCategoryByRoomId(roomId) {
+  //   // console.log("room id ",roomId)
+  //   // console.log("booking event",this.bookingEvent)
+  //   return this.bookingEvent.roomsInfo.find(roomCategory => roomCategory.physicalrooms.find(room => room.id === roomId));
+  // }
 
-  hasSplitBooking() {
+  private hasSplitBooking() {
     return this.bookingEvent.hasOwnProperty('splitBookingEvents') && this.bookingEvent.splitBookingEvents;
   }
 
-  canCheckIn() {
+  private canCheckIn() {
+    if (!calendar_data.checkin_enabled) {
+      return false;
+    }
     if (!this.fromTimeStamp) {
       let dt = new Date(this.getCheckInDate());
       dt.setHours(0, 0, 0, 0);
@@ -179,7 +189,11 @@ export class IglBookingEventHover {
     }
   }
 
-  canCheckOut() {
+  private canCheckOut() {
+    if (!calendar_data.checkin_enabled) {
+      return false;
+    }
+    console.log(this.isCheckedIn());
     if (this.isCheckedIn() && this.todayTimeStamp <= this.toTimeStamp) {
       return true;
     } else {
@@ -187,7 +201,7 @@ export class IglBookingEventHover {
     }
   }
 
-  handleBlockDateUpdate(event: CustomEvent<{ [key: string]: any }>) {
+  private handleBlockDateUpdate(event: CustomEvent<{ [key: string]: any }>) {
     event.stopImmediatePropagation();
     event.stopPropagation();
     const opt: { [key: string]: any } = event.detail;
@@ -195,17 +209,17 @@ export class IglBookingEventHover {
     //console.log("blocked date booking event", this.bookingEvent);
   }
 
-  handleEditBooking() {
+  private handleEditBooking() {
     // console.log("Edit booking");
     this.bookingEvent.TITLE = locales.entries.Lcz_EditBookingFor;
     this.handleBookingOption('EDIT_BOOKING');
   }
 
-  getStringDateFormat(dt) {
+  private getStringDateFormat(dt) {
     return dt.getFullYear() + '-' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '-' + (dt.getDate() <= 9 ? '0' : '') + dt.getDate();
   }
 
-  handleAddRoom() {
+  private handleAddRoom() {
     let fromDate = new Date(this.bookingEvent.FROM_DATE);
     fromDate.setHours(0, 0, 0, 0);
     let from_date_str = this.getStringDateFormat(fromDate);
@@ -245,20 +259,21 @@ export class IglBookingEventHover {
     this.handleBookingOption('ADD_ROOM', eventData);
   }
 
-  handleCustomerCheckIn() {
+  private handleCustomerCheckIn() {
     console.log('Handle Customer Check In');
   }
 
-  handleCustomerCheckOut() {
+  private handleCustomerCheckOut() {
     console.log('Handle Customer Check Out');
   }
-  handleDeleteEvent() {
+
+  private handleDeleteEvent() {
     this.hideBubble();
     this.deleteButton.emit(this.bookingEvent.POOL);
     console.log('Delete Event');
   }
 
-  async handleUpdateBlockedDates() {
+  private async handleUpdateBlockedDates() {
     try {
       this.isLoading = 'update';
       setTimeout(() => {
@@ -271,11 +286,11 @@ export class IglBookingEventHover {
     }
   }
 
-  handleConvertBlockedDateToBooking() {
+  private handleConvertBlockedDateToBooking() {
     this.handleBookingOption('BAR_BOOKING');
   }
 
-  getRoomInfo() {
+  private getRoomInfo() {
     const roomIdToFind = +this.bookingEvent.PR_ID;
     let selectedRoom: any = {};
 
@@ -292,7 +307,7 @@ export class IglBookingEventHover {
 
     return selectedRoom;
   }
-  renderTitle(eventType, roomInfo) {
+  private renderTitle(eventType, roomInfo) {
     switch (eventType) {
       case 'EDIT_BOOKING':
         return `${locales.entries.Lcz_EditBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
@@ -340,7 +355,7 @@ export class IglBookingEventHover {
       currentInfoBubbleId: this.getBookingId(),
     });
   }
-  renderNote() {
+  private renderNote() {
     const { is_direct, ota_notes } = this.bookingEvent;
     const guestNote = this.getGuestNote();
     const noteLabel = locales.entries.Lcz_Note + ':';
@@ -368,7 +383,7 @@ export class IglBookingEventHover {
     return null;
   }
 
-  getInfoElement() {
+  private getInfoElement() {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class={`row p-0 m-0  ${this.bookingEvent.BALANCE > 1 ? 'pb-0' : 'pb-1'}`}>
@@ -470,30 +485,33 @@ export class IglBookingEventHover {
                 <span>{locales.entries.Lcz_AddRoom}</span>
               </button>
             )}
-            {/* {this.canCheckIn() ? (
+
+            {this.canCheckIn() ? (
               <button
                 type="button"
-                class="btn btn-primary p-0 mr-1"
+                class="btn btn-primary p-0 mr-1 events_btns"
                 onClick={_ => {
                   this.handleCustomerCheckIn();
                 }}
                 disabled={!this.bookingEvent.IS_EDITABLE}
               >
-                <i class="ft ft-edit font-small-3"></i> {locales.entries.Lcz_CheckIn}
+                <ir-icons name="edit" style={{ '--icon-size': '0.875rem' }}></ir-icons>
+                <span> {locales.entries.Lcz_CheckIn}</span>
               </button>
             ) : null}
             {this.canCheckOut() ? (
               <button
                 type="button"
-                class="btn btn-primary p-0 mr-1"
+                class="btn btn-primary events_btns p-0 mr-1"
                 onClick={_ => {
                   this.handleCustomerCheckOut();
                 }}
                 disabled={!this.bookingEvent.IS_EDITABLE}
               >
-                <i class="ft ft-log-out font-small-3"></i> {locales.entries.Lcz_CheckOut}
+                <ir-icons name="arrow-right-from-bracket" style={{ '--icon-size': '0.875rem' }}></ir-icons>
+                <span>{locales.entries.Lcz_CheckOut}</span>
               </button>
-            ) : null} */}
+            ) : null}
 
             {this.hideButtons
               ? null
@@ -516,7 +534,7 @@ export class IglBookingEventHover {
     );
   }
 
-  getNewBookingOptions() {
+  private getNewBookingOptions() {
     const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);
     return (
       <div class={`iglPopOver newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
@@ -559,7 +577,7 @@ export class IglBookingEventHover {
     );
   }
 
-  getBlockedView() {
+  private getBlockedView() {
     // let defaultData = {RELEASE_AFTER_HOURS: 0, OPTIONAL_REASON: "", OUT_OF_SERVICE: false};
     return (
       <div class={`iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>

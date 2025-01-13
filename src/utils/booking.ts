@@ -158,6 +158,9 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     TO_DATE_STR: cell.booking.format.to_date,
     adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
     SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
+    //TODO:Implement checkin-checkout
+    CHECKIN: true,
+    CHECKOUT: false,
   };
 }
 
@@ -235,6 +238,8 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
     }
     // console.log('bookingToDate:', bookingToDate, 'bookingFromDate:', bookingFromDate, 'room from date:', room.from_date, 'room to date', room.to_date);
     bookings.push({
+      CHECKIN: false,
+      CHECKOUT: false,
       ID: room['assigned_units_pool'],
       TO_DATE: bookingToDate,
       FROM_DATE: bookingFromDate,

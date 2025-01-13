@@ -10,6 +10,7 @@ import { ICountry, IEntries } from '@/models/IBooking';
 import { IPaymentAction, PaymentService } from '@/services/payment.service';
 import Token from '@/models/Token';
 import { BookingDetailsSidebarEvents, OpenSidebarEvent } from './types';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-booking-details',
@@ -358,6 +359,8 @@ export class IrBookingDetails {
             </div>
             <div class="card p-0 mx-0">
               {this.booking.rooms.map((room: Room, index: number) => {
+                const showCheckin = this.handleRoomCheckin(room);
+                const showCheckout = this.handleRoomCheckout(room);
                 return [
                   <ir-room
                     language={this.language}
@@ -370,8 +373,8 @@ export class IrBookingDetails {
                     currency={this.booking.currency.symbol}
                     hasRoomEdit={this.hasRoomEdit && this.booking.status.code !== '003' && this.booking.is_direct}
                     hasRoomDelete={this.hasRoomDelete && this.booking.status.code !== '003' && this.booking.is_direct}
-                    hasCheckIn={this.hasCheckIn}
-                    hasCheckOut={this.hasCheckOut}
+                    hasCheckIn={showCheckin}
+                    hasCheckOut={showCheckout}
                     bookingEvent={this.booking}
                     bookingIndex={index}
                     onDeleteFinished={this.handleDeleteFinish.bind(this)}
@@ -425,5 +428,37 @@ export class IrBookingDetails {
         )}
       </Fragment>,
     ];
+  }
+  private handleRoomCheckout(room: Room): boolean {
+    // throw new Error('Method not implemented.');
+    return false;
+  }
+  private handleRoomCheckin(room: Room): boolean {
+    if (!calendar_data.checkin_enabled) {
+      return false;
+    }
+    const todayTimeStamp = new Date().getTime();
+    let fromTimeStamp: number;
+    let toTimeStamp: number;
+    if (!fromTimeStamp) {
+      let dt = new Date(room.from_date);
+      dt.setHours(0, 0, 0, 0);
+      fromTimeStamp = dt.getTime();
+    }
+    if (!toTimeStamp) {
+      let dt = new Date(room.to_date);
+      dt.setHours(0, 0, 0, 0);
+      toTimeStamp = dt.getTime();
+    }
+    console.log();
+    //TODO
+    // if (this.isCheckedIn() || this.isCheckedOut()) {
+    //   return false;
+    // }
+    if (fromTimeStamp <= todayTimeStamp && todayTimeStamp <= toTimeStamp) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
