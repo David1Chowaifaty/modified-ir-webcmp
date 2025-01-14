@@ -9,6 +9,7 @@ import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { formatAmount } from '@/utils/utils';
 import { IEntries } from '@/models/IBooking';
 import { BookingService } from '@/services/booking.service';
+import { OpenSidebarEvent, RoomGuestsPayload } from '../types';
 export type RoomModalReason = 'delete' | 'checkin' | 'checkout' | null;
 @Component({
   tag: 'ir-room',
@@ -18,9 +19,10 @@ export type RoomModalReason = 'delete' | 'checkin' | 'checkout' | null;
 export class IrRoom {
   @Element() element: HTMLIrRoomElement;
   // Room Data
-  @Prop() bookingEvent: Booking;
+  @Prop() booking: Booking;
   @Prop() bookingIndex: number;
   @Prop() isEditable: boolean;
+  @Prop() room: Room;
   // Meal Code names
   @Prop() mealCodeName: string;
   @Prop() myRoomTypeFoodCat: string;
@@ -38,7 +40,6 @@ export class IrRoom {
   @Prop() hasCheckOut: boolean = false;
 
   @State() collapsed: boolean = false;
-  @State() item: Room;
   @State() isLoading: boolean = false;
   @State() modalReason: RoomModalReason = null;
   // Event Emitters
@@ -47,28 +48,23 @@ export class IrRoom {
   @Event({ bubbles: true, composed: true }) pressCheckOut: EventEmitter;
   @Event({ bubbles: true, composed: true }) editInitiated: EventEmitter<TIglBookPropertyPayload>;
   @Event() resetbooking: EventEmitter<null>;
+  @Event() openSidebar: EventEmitter<OpenSidebarEvent<RoomGuestsPayload>>;
 
   private modal: HTMLIrModalElement;
   private bookingService = new BookingService();
 
-  componentWillLoad() {
-    if (this.bookingEvent) {
-      this.item = this.bookingEvent.rooms[this.bookingIndex];
-    }
-  }
-
-  @Watch('bookingEvent')
-  handleBookingEventChange() {
-    this.item = this.bookingEvent.rooms[this.bookingIndex];
+  @Watch('booking')
+  handlebookingChange() {
+    this.room = this.booking.rooms[this.bookingIndex];
   }
 
   @Listen('clickHandler')
   handleClick(e) {
     let target = e.target;
     if (target.id == 'checkin') {
-      this.pressCheckIn.emit(this.item);
+      this.pressCheckIn.emit(this.room);
     } else if (target.id == 'checkout') {
-      this.pressCheckOut.emit(this.item);
+      this.pressCheckOut.emit(this.room);
     }
   }
 
@@ -78,60 +74,60 @@ export class IrRoom {
   handleEditClick() {
     this.editInitiated.emit({
       event_type: 'EDIT_BOOKING',
-      ID: this.item['assigned_units_pool'],
-      NAME: formatName(this.item.guest.first_name, this.item.guest.last_name),
-      EMAIL: this.bookingEvent.guest.email,
-      PHONE: this.bookingEvent.guest.mobile,
+      ID: this.room['assigned_units_pool'],
+      NAME: formatName(this.room.guest.first_name, this.room.guest.last_name),
+      EMAIL: this.booking.guest.email,
+      PHONE: this.booking.guest.mobile,
       REFERENCE_TYPE: '',
-      FROM_DATE: this.bookingEvent.from_date,
-      TO_DATE: this.bookingEvent.to_date,
-      TITLE: `${locales.entries.Lcz_EditBookingFor} ${this.item?.roomtype?.name} ${(this.item?.unit as IUnit)?.name || ''}`,
+      FROM_DATE: this.booking.from_date,
+      TO_DATE: this.booking.to_date,
+      TITLE: `${locales.entries.Lcz_EditBookingFor} ${this.room?.roomtype?.name} ${(this.room?.unit as IUnit)?.name || ''}`,
       defaultDateRange: {
-        dateDifference: this.item.days.length,
-        fromDate: new Date(this.item.from_date + 'T00:00:00'),
-        fromDateStr: this.getDateStr(new Date(this.item.from_date + 'T00:00:00')),
-        toDate: new Date(this.item.to_date + 'T00:00:00'),
-        toDateStr: this.getDateStr(new Date(this.item.to_date + 'T00:00:00')),
+        dateDifference: this.room.days.length,
+        fromDate: new Date(this.room.from_date + 'T00:00:00'),
+        fromDateStr: this.getDateStr(new Date(this.room.from_date + 'T00:00:00')),
+        toDate: new Date(this.room.to_date + 'T00:00:00'),
+        toDateStr: this.getDateStr(new Date(this.room.to_date + 'T00:00:00')),
         message: '',
       },
-      bed_preference: this.item.bed_preference,
-      adult_child_offering: this.item.rateplan.selected_variation.adult_child_offering,
-      ADULTS_COUNT: this.item.rateplan.selected_variation.adult_nbr,
-      ARRIVAL: this.bookingEvent.arrival,
-      ARRIVAL_TIME: this.bookingEvent.arrival.description,
-      BOOKING_NUMBER: this.bookingEvent.booking_nbr,
-      cancelation: this.item.rateplan.cancelation,
-      channel_booking_nbr: this.bookingEvent.channel_booking_nbr,
-      CHILDREN_COUNT: this.item.rateplan.selected_variation.child_nbr,
-      COUNTRY: this.bookingEvent.guest.country_id,
-      ENTRY_DATE: this.bookingEvent.from_date,
-      FROM_DATE_STR: this.bookingEvent.format.from_date,
-      guarantee: this.item.rateplan.guarantee,
-      GUEST: this.bookingEvent.guest,
-      IDENTIFIER: this.item.identifier,
-      is_direct: this.bookingEvent.is_direct,
-      IS_EDITABLE: this.bookingEvent.is_editable,
-      NO_OF_DAYS: this.item.days.length,
-      NOTES: this.bookingEvent.remark,
-      origin: this.bookingEvent.origin,
-      POOL: this.item['assigned_units_pool'],
-      PR_ID: (this.item.unit as IUnit)?.id,
-      RATE: this.item.total,
-      RATE_PLAN: this.item.rateplan.name,
-      RATE_PLAN_ID: this.item.rateplan.id,
-      RATE_TYPE: this.item.roomtype.id,
-      ROOMS: this.bookingEvent.rooms,
-      SOURCE: this.bookingEvent.source,
+      bed_preference: this.room.bed_preference,
+      adult_child_offering: this.room.rateplan.selected_variation.adult_child_offering,
+      ADULTS_COUNT: this.room.rateplan.selected_variation.adult_nbr,
+      ARRIVAL: this.booking.arrival,
+      ARRIVAL_TIME: this.booking.arrival.description,
+      BOOKING_NUMBER: this.booking.booking_nbr,
+      cancelation: this.room.rateplan.cancelation,
+      channel_booking_nbr: this.booking.channel_booking_nbr,
+      CHILDREN_COUNT: this.room.rateplan.selected_variation.child_nbr,
+      COUNTRY: this.booking.guest.country_id,
+      ENTRY_DATE: this.booking.from_date,
+      FROM_DATE_STR: this.booking.format.from_date,
+      guarantee: this.room.rateplan.guarantee,
+      GUEST: this.booking.guest,
+      IDENTIFIER: this.room.identifier,
+      is_direct: this.booking.is_direct,
+      IS_EDITABLE: this.booking.is_editable,
+      NO_OF_DAYS: this.room.days.length,
+      NOTES: this.booking.remark,
+      origin: this.booking.origin,
+      POOL: this.room['assigned_units_pool'],
+      PR_ID: (this.room.unit as IUnit)?.id,
+      RATE: this.room.total,
+      RATE_PLAN: this.room.rateplan.name,
+      RATE_PLAN_ID: this.room.rateplan.id,
+      RATE_TYPE: this.room.roomtype.id,
+      ROOMS: this.booking.rooms,
+      SOURCE: this.booking.source,
       SPLIT_BOOKING: false,
       STATUS: 'IN-HOUSE',
-      TO_DATE_STR: this.bookingEvent.format.to_date,
-      TOTAL_PRICE: this.bookingEvent.total,
+      TO_DATE_STR: this.booking.format.to_date,
+      TOTAL_PRICE: this.booking.total,
       legendData: this.legendData,
       roomsInfo: this.roomsInfo,
-      roomName: (this.item.unit as IUnit)?.name || '',
-      PICKUP_INFO: this.bookingEvent.pickup_info,
-      booking: this.bookingEvent,
-      currentRoomType: this.item,
+      roomName: (this.room.unit as IUnit)?.name || '',
+      PICKUP_INFO: this.booking.pickup_info,
+      booking: this.booking,
+      currentRoomType: this.room,
     });
   }
   private openModal(reason: RoomModalReason) {
@@ -156,8 +152,8 @@ export class IrRoom {
         case 'checkin':
         case 'checkout':
           await this.bookingService.handleExposedRoomInOut({
-            booking_nbr: this.bookingEvent.booking_nbr,
-            room_identifier: this.item.identifier,
+            booking_nbr: this.booking.booking_nbr,
+            room_identifier: this.room.identifier,
             status: this.modalReason === 'checkin' ? '001' : '002',
           });
           this.resetbooking.emit(null);
@@ -174,8 +170,8 @@ export class IrRoom {
     }
   }
   private async deleteRoom() {
-    let oldRooms = [...this.bookingEvent.rooms];
-    oldRooms = oldRooms.filter(room => room.identifier !== this.item.identifier);
+    let oldRooms = [...this.booking.rooms];
+    oldRooms = oldRooms.filter(room => room.identifier !== this.room.identifier);
 
     const body = {
       assign_units: true,
@@ -183,22 +179,22 @@ export class IrRoom {
       is_pms: true,
       is_direct: true,
       booking: {
-        booking_nbr: this.bookingEvent.booking_nbr,
-        from_date: this.bookingEvent.from_date,
-        to_date: this.bookingEvent.to_date,
-        remark: this.bookingEvent.remark,
-        property: this.bookingEvent.property,
-        source: this.bookingEvent.source,
-        currency: this.bookingEvent.currency,
-        arrival: this.bookingEvent.arrival,
-        guest: this.bookingEvent.guest,
+        booking_nbr: this.booking.booking_nbr,
+        from_date: this.booking.from_date,
+        to_date: this.booking.to_date,
+        remark: this.booking.remark,
+        property: this.booking.property,
+        source: this.booking.source,
+        currency: this.booking.currency,
+        arrival: this.booking.arrival,
+        guest: this.booking.guest,
         rooms: oldRooms,
       },
-      extras: this.bookingEvent.extras,
-      pickup_info: this.bookingEvent.pickup_info,
+      extras: this.booking.extras,
+      pickup_info: this.booking.pickup_info,
     };
     await this.bookingService.doReservation(body);
-    this.deleteFinished.emit(this.item.identifier);
+    this.deleteFinished.emit(this.room.identifier);
   }
 
   private formatVariation({ adult_nbr, child_nbr }: IVariations, { infant_nbr }: Occupancy) {
@@ -217,22 +213,22 @@ export class IrRoom {
     return parts.filter(Boolean).join('&nbsp&nbsp&nbsp&nbsp');
   }
   private getBedName() {
-    const bed = this.bedPreferences.find(p => p.CODE_NAME === this.item.bed_preference.toString());
+    const bed = this.bedPreferences.find(p => p.CODE_NAME === this.room.bed_preference.toString());
     if (!bed) {
-      throw new Error(`bed with code ${this.item.bed_preference} not found`);
+      throw new Error(`bed with code ${this.room.bed_preference} not found`);
     }
     return bed[`CODE_VALUE_${this.language}`] ?? bed.CODE_VALUE_EN;
   }
   private renderModalMessage() {
     switch (this.modalReason) {
       case 'delete':
-        return `${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.item.roomtype.name} ${this.item.unit ? (this.item.unit as IUnit).name : ''} ${
+        return `${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${this.room.roomtype.name} ${this.room.unit ? (this.room.unit as IUnit).name : ''} ${
           locales.entries.Lcz_FromThisBooking
         }`;
       case 'checkin':
-        return `Check in ${this.item.roomtype.name} ${this.item.unit ? (this.item.unit as IUnit).name : ''} ${locales.entries.Lcz_FromThisBooking}`;
+        return `Check in ${this.room.roomtype.name} ${this.room.unit ? (this.room.unit as IUnit).name : ''} ${locales.entries.Lcz_FromThisBooking}`;
       case 'checkout':
-        return `Checkout ${this.item.roomtype.name} ${this.item.unit ? (this.item.unit as IUnit).name : ''} ${locales.entries.Lcz_FromThisBooking}`;
+        return `Checkout ${this.room.roomtype.name} ${this.room.unit ? (this.room.unit as IUnit).name : ''} ${locales.entries.Lcz_FromThisBooking}`;
       default:
         return '';
     }
@@ -244,7 +240,7 @@ export class IrRoom {
           variant="icon"
           id="drawer-icon"
           data-toggle="collapse"
-          data-target={`#roomCollapse-${this.item.identifier?.split(' ').join('')}`}
+          data-target={`#roomCollapse-${this.room.identifier?.split(' ').join('')}`}
           aria-expanded={this.collapsed ? 'true' : 'false'}
           aria-controls="myCollapse"
           class="mr-1"
@@ -256,19 +252,19 @@ export class IrRoom {
         ></ir-button>
 
         <div class="flex-fill m-0 ">
-          <div class="d-flex align-items-start justify-content-between sm-mb-1">
+          <div class="d-flex align-rooms-start justify-content-between sm-mb-1">
             <p class="m-0 p-0">
               <span class="m-0 p-0" style={{ fontWeight: '600' }}>
                 {this.myRoomTypeFoodCat || ''}{' '}
               </span>{' '}
-              {this.mealCodeName} {this.item.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
+              {this.mealCodeName} {this.room.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
             </p>
-            {/*this.item.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
-            <div class="d-flex m-0 p-0 align-items-center room_actions_btns">
-              <span class="p-0 m-0 font-weight-bold">{formatAmount(this.currency, this.item['gross_total'])}</span>
+            {/*this.room.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
+            <div class="d-flex m-0 p-0 align-rooms-center room_actions_btns">
+              <span class="p-0 m-0 font-weight-bold">{formatAmount(this.currency, this.room['gross_total'])}</span>
               {this.hasRoomEdit && this.isEditable && (
                 <ir-button
-                  id={`roomEdit-${this.item.identifier}`}
+                  id={`roomEdit-${this.room.identifier}`}
                   variant="icon"
                   icon_name="edit"
                   // class="mx-1"
@@ -280,22 +276,26 @@ export class IrRoom {
                 <ir-button
                   variant="icon"
                   onClickHandler={this.openModal.bind(this, 'delete')}
-                  id={`roomDelete-${this.item.identifier}`}
+                  id={`roomDelete-${this.room.identifier}`}
                   icon_name="trash"
                   style={colorVariants.danger}
                 ></ir-button>
               )}
             </div>
           </div>
-          <div class="d-flex align-items-center sm-mb-1">
+          <div class="d-flex align-rooms-center sm-mb-1">
             <ir-date-view
               class="mr-1  flex-grow-1"
               style={{ width: 'fit-content' }}
-              from_date={this.item.from_date}
-              to_date={this.item.to_date}
+              from_date={this.room.from_date}
+              to_date={this.room.to_date}
               showDateDifference={false}
             ></ir-date-view>
-
+            {!isSingleUnit(this.room.roomtype.id) && calendar_data.is_frontdesk_enabled && this.room.unit && (
+              <div class={'d-flex justify-content-end'} title={(this.room.unit as IUnit).name}>
+                <span class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>{(this.room.unit as IUnit).name}</span>
+              </div>
+            )}
             {this.hasCheckIn && (
               <ir-button onClickHandler={this.openModal.bind(this, 'checkin')} id="checkin" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckIn}></ir-button>
             )}
@@ -303,45 +303,43 @@ export class IrRoom {
               <ir-button onClickHandler={this.openModal.bind(this, 'checkout')} id="checkout" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckOut}></ir-button>
             )}
           </div>
-          {!isSingleUnit(this.item.roomtype.id) && calendar_data.is_frontdesk_enabled && this.item.unit && (
-            <div class={'d-flex justify-content-end'}>
-              <span class={`light-blue-bg ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>{(this.item.unit as IUnit).name}</span>
-            </div>
-          )}
 
           <div>
-            <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
-            {/* {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>} */}
-            {this.item.rateplan.selected_variation.adult_nbr > 0 && (
-              <span class="mr-1" innerHTML={this.formatVariation(this.item.rateplan.selected_variation, this.item.occupancy)}>
-                {' '}
-              </span>
+            <span class="mr-1">{`${this.room.guest.first_name || ''} ${this.room.guest.last_name || ''}`}</span>
+            {/* {this.room.rateplan.selected_variation.adult_nbr > 0 && <span> {this.room.rateplan.selected_variation.adult_child_offering}</span>} */}
+            {this.room.rateplan.selected_variation.adult_nbr > 0 && (
+              <ir-button
+                btn_color="link"
+                onClickHandler={() => this.showGuestModal()}
+                size="sm"
+                text={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}
+              ></ir-button>
             )}
-            {this.item.bed_preference && <span>({this.getBedName()})</span>}
+            {this.room.bed_preference && <span>({this.getBedName()})</span>}
           </div>
-          <div class="collapse" id={`roomCollapse-${this.item.identifier?.split(' ').join('')}`}>
+          <div class="collapse" id={`roomCollapse-${this.room.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">
               <div class=" sm-padding-top">
                 <p class="sm-padding-right" style={{ fontWeight: '600' }}>{`${locales.entries.Lcz_Breakdown}:`}</p>
               </div>
               <div class={'flex-fill'}>
                 <table>
-                  {this.item.days.length > 0 &&
-                    this.item.days.map(item => {
+                  {this.room.days.length > 0 &&
+                    this.room.days.map(room => {
                       return (
                         <tr>
-                          <td class={'pr-2 text-right'}>{_getDay(item.date)}</td>
-                          <td class="text-right">{formatAmount(this.currency, item.amount)}</td>
-                          {item.cost > 0 && item.cost !== null && <td class="pl-2 text-left night-cost">{formatAmount(this.currency, item.cost)}</td>}
+                          <td class={'pr-2 text-right'}>{_getDay(room.date)}</td>
+                          <td class="text-right">{formatAmount(this.currency, room.amount)}</td>
+                          {room.cost > 0 && room.cost !== null && <td class="pl-2 text-left night-cost">{formatAmount(this.currency, room.cost)}</td>}
                         </tr>
                       );
                     })}
                   <tr class={''}>
                     <th class="text-right pr-2 subtotal_row">{locales.entries.Lcz_SubTotal}</th>
-                    <th class="text-right subtotal_row">{formatAmount(this.currency, this.item.total)}</th>
-                    {this.item.gross_cost > 0 && this.item.gross_cost !== null && <th class="pl-2 text-right night-cost">{formatAmount(this.currency, this.item.cost)}</th>}
+                    <th class="text-right subtotal_row">{formatAmount(this.currency, this.room.total)}</th>
+                    {this.room.gross_cost > 0 && this.room.gross_cost !== null && <th class="pl-2 text-right night-cost">{formatAmount(this.currency, this.room.cost)}</th>}
                   </tr>
-                  {this.bookingEvent.is_direct ? (
+                  {this.booking.is_direct ? (
                     <Fragment>
                       {(() => {
                         const filtered_data = calendar_data.taxes.filter(tx => tx.pct > 0);
@@ -351,9 +349,9 @@ export class IrRoom {
                               <td class="text-right pr-2">
                                 {d.is_exlusive ? locales.entries.Lcz_Excluding : locales.entries.Lcz_Including} {d.name} ({d.pct}%)
                               </td>
-                              <td class="text-right">{formatAmount(this.currency, (this.item.total * d.pct) / 100)}</td>
-                              {this.item.gross_cost > 0 && this.item.gross_cost !== null && (
-                                <td class="pl-2 text-right night-cost">{formatAmount(this.currency, (this.item.cost * d.pct) / 100)}</td>
+                              <td class="text-right">{formatAmount(this.currency, (this.room.total * d.pct) / 100)}</td>
+                              {this.room.gross_cost > 0 && this.room.gross_cost !== null && (
+                                <td class="pl-2 text-right night-cost">{formatAmount(this.currency, (this.room.cost * d.pct) / 100)}</td>
                               )}
                             </tr>
                           );
@@ -363,7 +361,7 @@ export class IrRoom {
                   ) : (
                     <Fragment>
                       {(() => {
-                        const filtered_data = this.item.ota_taxes.filter(tx => tx.amount > 0);
+                        const filtered_data = this.room.ota_taxes.filter(tx => tx.amount > 0);
                         return filtered_data.map(d => {
                           return (
                             <tr>
@@ -383,17 +381,17 @@ export class IrRoom {
                 </table>
               </div>
             </div>
-            {this.bookingEvent.is_direct && (
+            {this.booking.is_direct && (
               <Fragment>
-                {this.item.rateplan.cancelation && (
-                  <ir-label labelText={`${locales.entries.Lcz_Cancellation}:`} content={this.item.rateplan.cancelation || ''} renderContentAsHtml></ir-label>
+                {this.room.rateplan.cancelation && (
+                  <ir-label labelText={`${locales.entries.Lcz_Cancellation}:`} content={this.room.rateplan.cancelation || ''} renderContentAsHtml></ir-label>
                 )}
-                {this.item.rateplan.guarantee && (
-                  <ir-label labelText={`${locales.entries.Lcz_Guarantee}:`} content={this.item.rateplan.guarantee || ''} renderContentAsHtml></ir-label>
+                {this.room.rateplan.guarantee && (
+                  <ir-label labelText={`${locales.entries.Lcz_Guarantee}:`} content={this.room.rateplan.guarantee || ''} renderContentAsHtml></ir-label>
                 )}
               </Fragment>
             )}
-            {/* {this.bookingEvent.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>} */}
+            {/* {this.booking.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>} */}
           </div>
         </div>
         <ir-modal
@@ -412,5 +410,16 @@ export class IrRoom {
         ></ir-modal>
       </Host>
     );
+  }
+  private showGuestModal(): void {
+    const { adult_nbr, children_nbr, infant_nbr } = this.room.occupancy;
+    this.openSidebar.emit({
+      type: 'room-guest',
+      payload: {
+        roomName: (this.room.unit as IUnit).name,
+        sharing_persons: this.room.sharing_persons,
+        totalGuests: adult_nbr + children_nbr + infant_nbr,
+      },
+    });
   }
 }

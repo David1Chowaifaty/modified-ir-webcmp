@@ -27,7 +27,7 @@ export class IrBookingHeader {
   @Event() toast: EventEmitter<IToast>;
   @Event() closeSidebar: EventEmitter<null>;
   @Event() resetbooking: EventEmitter<null>;
-  @Event() openSidebar: EventEmitter<OpenSidebarEvent>;
+  @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
 
   private confirmationBG = {
     '001': 'bg-ir-orange',

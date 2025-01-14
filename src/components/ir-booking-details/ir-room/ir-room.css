@@ -2,8 +2,19 @@
   background: #acecff;
   padding: 0.1rem 0.3rem;
   border-radius: 5px;
+  display: block;
+  max-width: 100px;
+  box-sizing: border-box;
+  display: inline-block;
+  overflow: hidden;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  /* max-width: max-content; */
+.room_statements {
+  display: block;
+  width: 100%; /* Ensure the container uses the full width */
 }
 .room_statements {
   display: block;

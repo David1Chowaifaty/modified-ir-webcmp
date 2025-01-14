@@ -11,6 +11,7 @@ import { IPaymentAction, PaymentService } from '@/services/payment.service';
 import Token from '@/models/Token';
 import { BookingDetailsSidebarEvents, OpenSidebarEvent } from './types';
 import calendar_data from '@/stores/calendar-data';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-booking-details',
@@ -52,6 +53,7 @@ export class IrBookingDetails {
   // Rerender Flag
   @State() rerenderFlag = false;
   @State() sidebarState: BookingDetailsSidebarEvents | null = null;
+  @State() sidebarPayload: any;
   @State() isUpdateClicked = false;
 
   @State() pms_status: IPmsLog;
@@ -60,6 +62,7 @@ export class IrBookingDetails {
   @State() property_id: number;
   @State() selectedService: ExtraService;
   @State() bedPreference: IEntries[];
+  @State() roomGuest: any;
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
@@ -89,8 +92,9 @@ export class IrBookingDetails {
   }
 
   @Listen('openSidebar')
-  handleSideBarEvents(e: CustomEvent<OpenSidebarEvent>) {
+  handleSideBarEvents(e: CustomEvent<OpenSidebarEvent<unknown>>) {
     this.sidebarState = e.detail.type;
+    this.sidebarPayload = e.detail.payload;
   }
 
   @Listen('clickHandler')
@@ -318,6 +322,16 @@ export class IrBookingDetails {
             }}
           ></ir-extra-service-config>
         );
+      case 'room-guest':
+        return (
+          <ir-room-guests
+            roomName={this.sidebarPayload?.roomName}
+            totalGuests={this.sidebarPayload?.totalGuests}
+            sharedPersons={this.sidebarPayload?.sharing_persons}
+            slot="sidebar-body"
+            onCloseModal={handleClose}
+          ></ir-room-guests>
+        );
       default:
         return null;
     }
@@ -363,6 +377,7 @@ export class IrBookingDetails {
                 const showCheckout = this.handleRoomCheckout(room);
                 return [
                   <ir-room
+                    room={room}
                     language={this.language}
                     bedPreferences={this.bedPreference}
                     isEditable={this.booking.is_editable}
@@ -375,7 +390,7 @@ export class IrBookingDetails {
                     hasRoomDelete={this.hasRoomDelete && this.booking.status.code !== '003' && this.booking.is_direct}
                     hasCheckIn={showCheckin}
                     hasCheckOut={showCheckout}
-                    bookingEvent={this.booking}
+                    booking={this.booking}
                     bookingIndex={index}
                     onDeleteFinished={this.handleDeleteFinish.bind(this)}
                   />,
@@ -430,7 +445,6 @@ export class IrBookingDetails {
     ];
   }
   private handleRoomCheckout(room: Room): boolean {
-    // throw new Error('Method not implemented.');
     if (!calendar_data.checkin_enabled) {
       return false;
     }
@@ -440,28 +454,12 @@ export class IrBookingDetails {
     if (!calendar_data.checkin_enabled) {
       return false;
     }
-    const todayTimeStamp = new Date().getTime();
-    let fromTimeStamp: number;
-    let toTimeStamp: number;
-    if (!fromTimeStamp) {
-      let dt = new Date(room.from_date);
-      dt.setHours(0, 0, 0, 0);
-      fromTimeStamp = dt.getTime();
-    }
-    if (!toTimeStamp) {
-      let dt = new Date(room.to_date);
-      dt.setHours(0, 0, 0, 0);
-      toTimeStamp = dt.getTime();
-    }
-    console.log();
-    //TODO
     if (room.in_out && room.in_out.code !== '000') {
       return false;
     }
-    if (fromTimeStamp <= todayTimeStamp && todayTimeStamp <= toTimeStamp) {
+    if (moment(new Date()).isSameOrAfter(new Date(room.from_date), 'days') && moment(new Date()).isBefore(new Date(room.to_date), 'days')) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }

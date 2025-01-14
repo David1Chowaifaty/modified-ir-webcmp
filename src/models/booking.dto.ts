@@ -2,6 +2,53 @@ import { z } from 'zod';
 import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 import { TSourceOption } from './igl-book-property';
 
+interface IDType {
+  code: string;
+  description: string;
+}
+
+interface IDInfo {
+  type: IDType;
+  number: string;
+}
+
+export interface SharedPerson {
+  address: null;
+  alternative_email: null;
+  cci: null;
+  city: null;
+  country: Country;
+  country_id: null;
+  country_phone_prefix: null;
+  dob: string;
+  email: null;
+  first_name: null;
+  full_name: string;
+  id: number;
+  id_info: IDInfo;
+  is_main?: boolean;
+  last_name: null;
+  mobile: null;
+  nbr_confirmed_bookings: number;
+  notes: null;
+  password: null;
+  subscribe_to_news_letter: null;
+}
+
+interface Country {
+  cities: null;
+  code: string;
+  currency: null;
+  flag: null;
+  id: number;
+  name: string;
+  phone_prefix: null;
+}
+export interface HandleExposedRoomGuestsRequest {
+  booking_nbr: string;
+  identifier: string;
+  guests: SharedPerson[];
+}
 export interface Booking {
   agent: {
     code: string;
@@ -218,6 +265,7 @@ export interface Room {
   occupancy: Occupancy;
   physicalroom: null;
   in_out: RoomInOut | null;
+  sharing_persons: SharedPerson[] | null;
   bed_preference: number | null;
   rateplan: RatePlan;
   roomtype: RoomType;

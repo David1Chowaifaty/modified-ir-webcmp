@@ -11,7 +11,7 @@ export class IrButton {
   @Prop() name: string;
   @Prop() text;
   @Prop() icon = 'ft-save';
-  @Prop() btn_color: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' = 'primary';
+  @Prop() btn_color: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link' = 'primary';
   @Prop() size: 'sm' | 'md' | 'lg' = 'md';
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
   @Prop() btn_block = true;

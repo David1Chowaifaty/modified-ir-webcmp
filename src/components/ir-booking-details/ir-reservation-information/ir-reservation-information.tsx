@@ -17,7 +17,7 @@ export class IrReservationInformation {
   @Prop() countries: ICountry[];
 
   @State() userCountry: ICountry | null = null;
-  @Event() openSidebar: EventEmitter<OpenSidebarEvent>;
+  @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
   componentWillLoad() {
     const guestCountryId = this.booking?.guest?.country_id;
     this.userCountry = guestCountryId ? this.countries?.find(country => country.id === guestCountryId) || null : null;

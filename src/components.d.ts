@@ -15,13 +15,14 @@ import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { RatePlan, RoomType } from "./models/property";
-import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
-import { OpenSidebarEvent } from "./components/ir-booking-details/types";
+import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, Room, SharedPerson } from "./models/booking.dto";
+import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ir-combobox/ir-combobox";
 import { IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
+import { FactoryArg } from "imask";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { ZodType } from "zod";
@@ -36,13 +37,14 @@ export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { RatePlan, RoomType } from "./models/property";
-export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
-export { OpenSidebarEvent } from "./components/ir-booking-details/types";
+export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, Room, SharedPerson } from "./models/booking.dto";
+export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ir-combobox/ir-combobox";
 export { IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
+export { FactoryArg } from "imask";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { ZodType } from "zod";
@@ -316,7 +318,7 @@ export namespace Components {
     }
     interface IrButton {
         "btn_block": boolean;
-        "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline';
+        "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
         "btn_disabled": boolean;
         "btn_id": string;
         "btn_styles": string;
@@ -490,6 +492,7 @@ export namespace Components {
         "labelColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition": 'left' | 'right' | 'center';
         "labelWidth": 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+        "mask": FactoryArg;
         "name": string;
         "placeholder": string;
         "readonly": boolean;
@@ -678,7 +681,7 @@ export namespace Components {
     }
     interface IrRoom {
         "bedPreferences": IEntries[];
-        "bookingEvent": Booking;
+        "booking": Booking;
         "bookingIndex": number;
         "currency": string;
         "hasCheckIn": boolean;
@@ -691,7 +694,13 @@ export namespace Components {
         "legendData": any;
         "mealCodeName": string;
         "myRoomTypeFoodCat": string;
+        "room": Room;
         "roomsInfo": any;
+    }
+    interface IrRoomGuests {
+        "roomName": string;
+        "sharedPersons": SharedPerson[];
+        "totalGuests": number;
     }
     interface IrRoomNights {
         "bookingNumber": string;
@@ -1031,6 +1040,10 @@ export interface IrReservationInformationCustomEvent<T> extends CustomEvent<T> {
 export interface IrRoomCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrRoomElement;
+}
+export interface IrRoomGuestsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrRoomGuestsElement;
 }
 export interface IrRoomNightsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1542,7 +1555,7 @@ declare global {
         "toast": IToast;
         "closeSidebar": null;
         "resetbooking": null;
-        "openSidebar": OpenSidebarEvent;
+        "openSidebar": OpenSidebarEvent<any>;
     }
     interface HTMLIrBookingHeaderElement extends Components.IrBookingHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingHeaderElementEventMap>(type: K, listener: (this: HTMLIrBookingHeaderElement, ev: IrBookingHeaderCustomEvent<HTMLIrBookingHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2202,7 +2215,7 @@ declare global {
         new (): HTMLIrPriceInputElement;
     };
     interface HTMLIrReservationInformationElementEventMap {
-        "openSidebar": OpenSidebarEvent;
+        "openSidebar": OpenSidebarEvent<any>;
     }
     interface HTMLIrReservationInformationElement extends Components.IrReservationInformation, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrReservationInformationElementEventMap>(type: K, listener: (this: HTMLIrReservationInformationElement, ev: IrReservationInformationCustomEvent<HTMLIrReservationInformationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2224,6 +2237,7 @@ declare global {
         "pressCheckOut": any;
         "editInitiated": TIglBookPropertyPayload;
         "resetbooking": null;
+        "openSidebar": OpenSidebarEvent<RoomGuestsPayload>;
     }
     interface HTMLIrRoomElement extends Components.IrRoom, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomElementEventMap>(type: K, listener: (this: HTMLIrRoomElement, ev: IrRoomCustomEvent<HTMLIrRoomElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2238,6 +2252,24 @@ declare global {
     var HTMLIrRoomElement: {
         prototype: HTMLIrRoomElement;
         new (): HTMLIrRoomElement;
+    };
+    interface HTMLIrRoomGuestsElementEventMap {
+        "closeModal": null;
+        "resetbooking": null;
+    }
+    interface HTMLIrRoomGuestsElement extends Components.IrRoomGuests, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrRoomGuestsElementEventMap>(type: K, listener: (this: HTMLIrRoomGuestsElement, ev: IrRoomGuestsCustomEvent<HTMLIrRoomGuestsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrRoomGuestsElementEventMap>(type: K, listener: (this: HTMLIrRoomGuestsElement, ev: IrRoomGuestsCustomEvent<HTMLIrRoomGuestsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrRoomGuestsElement: {
+        prototype: HTMLIrRoomGuestsElement;
+        new (): HTMLIrRoomGuestsElement;
     };
     interface HTMLIrRoomNightsElementEventMap {
         "closeRoomNightsDialog": IRoomNightsDataEventPayload;
@@ -2483,6 +2515,7 @@ declare global {
         "ir-price-input": HTMLIrPriceInputElement;
         "ir-reservation-information": HTMLIrReservationInformationElement;
         "ir-room": HTMLIrRoomElement;
+        "ir-room-guests": HTMLIrRoomGuestsElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-select": HTMLIrSelectElement;
         "ir-sidebar": HTMLIrSidebarElement;
@@ -2827,7 +2860,7 @@ declare namespace LocalJSX {
         "hasPrint"?: boolean;
         "hasReceipt"?: boolean;
         "onCloseSidebar"?: (event: IrBookingHeaderCustomEvent<null>) => void;
-        "onOpenSidebar"?: (event: IrBookingHeaderCustomEvent<OpenSidebarEvent>) => void;
+        "onOpenSidebar"?: (event: IrBookingHeaderCustomEvent<OpenSidebarEvent<any>>) => void;
         "onResetbooking"?: (event: IrBookingHeaderCustomEvent<null>) => void;
         "onToast"?: (event: IrBookingHeaderCustomEvent<IToast>) => void;
     }
@@ -2848,7 +2881,7 @@ declare namespace LocalJSX {
     }
     interface IrButton {
         "btn_block"?: boolean;
-        "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline';
+        "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
         "btn_disabled"?: boolean;
         "btn_id"?: string;
         "btn_styles"?: string;
@@ -3047,6 +3080,7 @@ declare namespace LocalJSX {
         "labelColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "labelPosition"?: 'left' | 'right' | 'center';
         "labelWidth"?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+        "mask"?: FactoryArg;
         "name"?: string;
         "onInputBlur"?: (event: IrInputTextCustomEvent<FocusEvent>) => void;
         "onTextChange"?: (event: IrInputTextCustomEvent<any>) => void;
@@ -3262,11 +3296,11 @@ declare namespace LocalJSX {
     interface IrReservationInformation {
         "booking"?: Booking;
         "countries"?: ICountry[];
-        "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent>) => void;
+        "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent<any>>) => void;
     }
     interface IrRoom {
         "bedPreferences"?: IEntries[];
-        "bookingEvent"?: Booking;
+        "booking"?: Booking;
         "bookingIndex"?: number;
         "currency"?: string;
         "hasCheckIn"?: boolean;
@@ -3281,10 +3315,19 @@ declare namespace LocalJSX {
         "myRoomTypeFoodCat"?: string;
         "onDeleteFinished"?: (event: IrRoomCustomEvent<string>) => void;
         "onEditInitiated"?: (event: IrRoomCustomEvent<TIglBookPropertyPayload>) => void;
+        "onOpenSidebar"?: (event: IrRoomCustomEvent<OpenSidebarEvent<RoomGuestsPayload>>) => void;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
         "onResetbooking"?: (event: IrRoomCustomEvent<null>) => void;
+        "room"?: Room;
         "roomsInfo"?: any;
+    }
+    interface IrRoomGuests {
+        "onCloseModal"?: (event: IrRoomGuestsCustomEvent<null>) => void;
+        "onResetbooking"?: (event: IrRoomGuestsCustomEvent<null>) => void;
+        "roomName"?: string;
+        "sharedPersons"?: SharedPerson[];
+        "totalGuests"?: number;
     }
     interface IrRoomNights {
         "bookingNumber"?: string;
@@ -3481,6 +3524,7 @@ declare namespace LocalJSX {
         "ir-price-input": IrPriceInput;
         "ir-reservation-information": IrReservationInformation;
         "ir-room": IrRoom;
+        "ir-room-guests": IrRoomGuests;
         "ir-room-nights": IrRoomNights;
         "ir-select": IrSelect;
         "ir-sidebar": IrSidebar;
@@ -3577,6 +3621,7 @@ declare module "@stencil/core" {
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
             "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
+            "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;
             "ir-sidebar": LocalJSX.IrSidebar & JSXBase.HTMLAttributes<HTMLIrSidebarElement>;
