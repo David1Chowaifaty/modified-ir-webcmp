@@ -2223,6 +2223,7 @@ declare global {
         "pressCheckIn": any;
         "pressCheckOut": any;
         "editInitiated": TIglBookPropertyPayload;
+        "resetbooking": null;
     }
     interface HTMLIrRoomElement extends Components.IrRoom, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomElementEventMap>(type: K, listener: (this: HTMLIrRoomElement, ev: IrRoomCustomEvent<HTMLIrRoomElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3282,6 +3283,7 @@ declare namespace LocalJSX {
         "onEditInitiated"?: (event: IrRoomCustomEvent<TIglBookPropertyPayload>) => void;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
+        "onResetbooking"?: (event: IrRoomCustomEvent<null>) => void;
         "roomsInfo"?: any;
     }
     interface IrRoomNights {

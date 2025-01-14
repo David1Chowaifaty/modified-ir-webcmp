@@ -46,6 +46,7 @@ export class IrRoom {
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
   @Event({ bubbles: true, composed: true }) pressCheckOut: EventEmitter;
   @Event({ bubbles: true, composed: true }) editInitiated: EventEmitter<TIglBookPropertyPayload>;
+  @Event() resetbooking: EventEmitter<null>;
 
   private modal: HTMLIrModalElement;
   private bookingService = new BookingService();
@@ -159,6 +160,7 @@ export class IrRoom {
             room_identifier: this.item.identifier,
             status: this.modalReason === 'checkin' ? '001' : '002',
           });
+          this.resetbooking.emit(null);
           break;
         default:
           break;

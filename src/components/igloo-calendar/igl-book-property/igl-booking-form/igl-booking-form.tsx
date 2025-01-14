@@ -5,6 +5,7 @@ import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
+import calendar_data from '@/stores/calendar-data';
 @Component({
   tag: 'igl-booking-form',
   styleUrl: 'igl-booking-form.css',
@@ -229,7 +230,7 @@ export class IglBookingForm {
                 icon_style={{ paddingBottom: '1.9px' }}
               ></ir-button>
             </div>
-            <div class="mt-1 mt-md-0 flex-fill">
+            <div class={`mt-1 mt-md-0 flex-fill ${calendar_data.checkin_enabled ? 'mr-md-1' : ''}`}>
               <ir-button
                 isLoading={this.isLoading === 'book'}
                 btn_styles="full-width align-items-center justify-content-center"
@@ -237,6 +238,16 @@ export class IglBookingForm {
                 text={locales.entries.Lcz_Book}
               ></ir-button>
             </div>
+            {calendar_data.checkin_enabled && (
+              <div class="mt-1 mt-md-0 flex-fill">
+                <ir-button
+                  isLoading={this.isLoading === 'bookAndCheckIn'}
+                  btn_styles="full-width align-items-center justify-content-center"
+                  onClickHandler={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
+                  text={locales.entries.Lcz_BookAndChekcIn}
+                ></ir-button>
+              </div>
+            )}
           </div>
         )}
       </Host>

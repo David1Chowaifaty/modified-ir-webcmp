@@ -18,12 +18,13 @@
 
 ## Events
 
-| Event              | Description | Type                                           |
-| ------------------ | ----------- | ---------------------------------------------- |
-| `bookingCreated`   |             | `CustomEvent<{ pool?: string; data: any[]; }>` |
-| `deleteButton`     |             | `CustomEvent<string>`                          |
-| `hideBubbleInfo`   |             | `CustomEvent<any>`                             |
-| `showBookingPopup` |             | `CustomEvent<any>`                             |
+| Event              | Description | Type                                                                                                                                                                                       |
+| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `bookingCreated`   |             | `CustomEvent<{ pool?: string; data: any[]; }>`                                                                                                                                             |
+| `deleteButton`     |             | `CustomEvent<string>`                                                                                                                                                                      |
+| `hideBubbleInfo`   |             | `CustomEvent<any>`                                                                                                                                                                         |
+| `showBookingPopup` |             | `CustomEvent<any>`                                                                                                                                                                         |
+| `showDialog`       |             | `CustomEvent<{ reason: "checkin" \| "checkout"; bookingNumber: string; roomIdentifier: string; roomUnit: string; roomName: string; } \| { reason: "reallocate"; } & IReallocationPayload>` |
 
 
 ## Dependencies

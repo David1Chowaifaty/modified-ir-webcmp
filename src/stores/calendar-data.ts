@@ -20,7 +20,7 @@ const initialState: CalendarStore = {
   toBeAssignedEvents: [],
   allowed_payment_methods: [],
   pickup_service: undefined,
-  checkin_enabled: false,
+  checkin_enabled: true,
   max_nights: 0,
   is_frontdesk_enabled: false,
   taxes: [],

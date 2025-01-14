@@ -599,7 +599,7 @@ export class IglBookProperty {
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams({
         context: this,
         sourceOption: this.sourceOption,
-        check_in: this.isEventType('BAR_BOOKING'),
+        check_in,
       });
       // console.log(serviceParams);
       await this.bookingService.doReservation(serviceParams);

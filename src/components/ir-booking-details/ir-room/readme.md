@@ -34,6 +34,7 @@
 | `editInitiated`  |             | `CustomEvent<IglBookPropertyPayloadAddRoom \| IglBookPropertyPayloadBarBooking \| IglBookPropertyPayloadBlockDates \| IglBookPropertyPayloadEditBooking \| IglBookPropertyPayloadPlusBooking \| IglBookPropertyPayloadSplitBooking>` |
 | `pressCheckIn`   |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
 | `pressCheckOut`  |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
+| `resetbooking`   |             | `CustomEvent<null>`                                                                                                                                                                                                                  |
 
 
 ## Dependencies
