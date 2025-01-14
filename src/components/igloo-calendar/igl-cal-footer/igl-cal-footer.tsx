@@ -25,7 +25,7 @@ export class IglCalFooter {
           <div class="legendBtn" onClick={() => this.handleOptionEvent('showLegend')}>
             <i class="la la-square"></i>
             <u>{locales.entries.Lcz_Legend}</u>
-            <span> - v99.13</span>
+            <span> - v99.14</span>
           </div>
           {/* <div class={`${this.isOnline ? 'isOnline' : 'isOffline'}`}>
             <i class="la la-share-alt isOffline"></i><span>{this.isOnline ? "Connected": "Offline"}</span>
