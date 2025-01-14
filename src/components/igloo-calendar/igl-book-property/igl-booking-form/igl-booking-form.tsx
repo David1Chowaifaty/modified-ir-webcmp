@@ -6,6 +6,7 @@ import locales from '@/stores/locales.store';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
+import moment from 'moment';
 @Component({
   tag: 'igl-booking-form',
   styleUrl: 'igl-booking-form.css',
@@ -138,6 +139,7 @@ export class IglBookingForm {
   }
 
   render() {
+    const showBookAndCheckin = calendar_data.checkin_enabled && moment(new Date(this.dateRangeData?.fromDate)).isSame(new Date(), 'day');
     return (
       <Host>
         <div class="d-flex flex-wrap">
@@ -230,7 +232,7 @@ export class IglBookingForm {
                 icon_style={{ paddingBottom: '1.9px' }}
               ></ir-button>
             </div>
-            <div class={`mt-1 mt-md-0 flex-fill ${calendar_data.checkin_enabled ? 'mr-md-1' : ''}`}>
+            <div class={`mt-1 mt-md-0 flex-fill ${showBookAndCheckin ? 'mr-md-1' : ''}`}>
               <ir-button
                 isLoading={this.isLoading === 'book'}
                 btn_styles="full-width align-items-center justify-content-center"
@@ -238,7 +240,7 @@ export class IglBookingForm {
                 text={locales.entries.Lcz_Book}
               ></ir-button>
             </div>
-            {calendar_data.checkin_enabled && (
+            {showBookAndCheckin && (
               <div class="mt-1 mt-md-0 flex-fill">
                 <ir-button
                   isLoading={this.isLoading === 'bookAndCheckIn'}
