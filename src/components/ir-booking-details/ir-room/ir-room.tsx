@@ -292,7 +292,7 @@ export class IrRoom {
               showDateDifference={false}
             ></ir-date-view>
             {!isSingleUnit(this.room.roomtype.id) && calendar_data.is_frontdesk_enabled && this.room.unit && (
-              <div class={'d-flex justify-content-end'} title={(this.room.unit as IUnit).name}>
+              <div class={'d-flex justify-content-center align-items-center'} title={(this.room.unit as IUnit).name}>
                 <span class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>{(this.room.unit as IUnit).name}</span>
               </div>
             )}
@@ -304,7 +304,7 @@ export class IrRoom {
             )}
           </div>
 
-          <div>
+          <div class={'d-flex align-items-center'}>
             <span class="mr-1">{`${this.room.guest.first_name || ''} ${this.room.guest.last_name || ''}`}</span>
             {/* {this.room.rateplan.selected_variation.adult_nbr > 0 && <span> {this.room.rateplan.selected_variation.adult_child_offering}</span>} */}
             {this.room.rateplan.selected_variation.adult_nbr > 0 && (
