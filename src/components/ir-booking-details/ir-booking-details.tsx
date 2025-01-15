@@ -21,7 +21,7 @@ import moment from 'moment';
 export class IrBookingDetails {
   @Element() element: HTMLElement;
   // Setup Data
-  @Prop() language: string = '';
+  @Prop() language: string = 'en';
   @Prop() ticket: string = '';
   @Prop() bookingNumber: string = '';
   @Prop() propertyid: number;
@@ -46,7 +46,7 @@ export class IrBookingDetails {
 
   @State() showPaymentDetails: any;
   @State() booking: Booking;
-  @State() countryNodeList: ICountry[];
+  @State() countries: ICountry[];
   @State() calendarData: any = {};
   // Guest Data
   @State() guestData: Guest = null;
@@ -200,7 +200,7 @@ export class IrBookingDetails {
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
-        this.bookingService.getBedPreferences(),
+        this.bookingService.getSetupEntriesByTableName('_BED_PREFERENCE_TYPE'),
       ]);
       this.property_id = roomResponse?.My_Result?.id;
       this.bedPreference = bedPreference;
@@ -218,7 +218,7 @@ export class IrBookingDetails {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
       }
-      this.countryNodeList = countriesList;
+      this.countries = countriesList;
       const myResult = roomResponse?.My_Result;
       if (myResult) {
         const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends, aname } = myResult;
@@ -325,6 +325,8 @@ export class IrBookingDetails {
       case 'room-guest':
         return (
           <ir-room-guests
+            countries={this.countries}
+            language={this.language}
             roomName={this.sidebarPayload?.roomName}
             totalGuests={this.sidebarPayload?.totalGuests}
             sharedPersons={this.sidebarPayload?.sharing_persons}
@@ -364,7 +366,7 @@ export class IrBookingDetails {
       <div class="fluid-container p-1 text-left mx-0">
         <div class="row m-0">
           <div class="col-12 p-0 mx-0 pr-lg-1 col-lg-6">
-            <ir-reservation-information countries={this.countryNodeList} booking={this.booking}></ir-reservation-information>
+            <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
             <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
               <ir-date-view from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
               {this.hasRoomAdd && this.booking.is_direct && this.booking.is_editable && (
@@ -418,6 +420,7 @@ export class IrBookingDetails {
         open={this.sidebarState !== null}
         side={'right'}
         id="editGuestInfo"
+        style={{ '--sidebar-width': this.sidebarState === 'room-guest' ? '60rem' : undefined }}
         onIrSidebarToggle={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
@@ -433,7 +436,7 @@ export class IrBookingDetails {
             allowedBookingSources={this.calendarData.allowed_booking_sources}
             adultChildConstraints={this.calendarData.adult_child_constraints}
             showPaymentDetails={this.showPaymentDetails}
-            countryNodeList={this.countryNodeList}
+            countryNodeList={this.countries}
             currency={this.calendarData.currency}
             language={this.language}
             propertyid={this.property_id}

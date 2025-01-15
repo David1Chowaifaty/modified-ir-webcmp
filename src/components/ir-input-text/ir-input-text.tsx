@@ -1,6 +1,7 @@
 import { Component, Prop, h, Event, EventEmitter, State, Watch } from '@stencil/core';
 import { v4 } from 'uuid';
-import IMask, { FactoryArg } from 'imask';
+import IMask, { FactoryArg, InputMask } from 'imask';
+import { ZodType } from 'zod';
 
 @Component({
   tag: 'ir-input-text',
@@ -8,30 +9,103 @@ import IMask, { FactoryArg } from 'imask';
   scoped: true,
 })
 export class IrInputText {
+  /** Name attribute for the input field */
   @Prop() name: string;
-  @Prop() value;
-  @Prop() label = '<label>';
-  @Prop() placeholder = '<placeholder>';
+
+  /** Value of the input field */
+  @Prop() value: string;
+
+  /** Label text for the input */
+  @Prop() label = '';
+
+  /** Placeholder text for the input */
+  @Prop() placeholder = '';
+
+  /** Additional inline styles for the input */
   @Prop() inputStyles = '';
+
+  /** Whether the input field is required */
   @Prop() required: boolean;
+
+  /** Determines if the label is displayed */
   @Prop() LabelAvailable: boolean = true;
+
+  /** Whether the input field is read-only */
   @Prop() readonly: boolean = false;
-  @Prop() type = 'text';
-  @Prop() submited: boolean = false;
+
+  /** Input type (e.g., text, password, email) */
+  @Prop() type:
+    | 'text'
+    | 'password'
+    | 'email'
+    | 'number'
+    | 'tel'
+    | 'url'
+    | 'search'
+    | 'date'
+    | 'datetime-local'
+    | 'month'
+    | 'week'
+    | 'time'
+    | 'color'
+    | 'file'
+    | 'hidden'
+    | 'checkbox'
+    | 'radio'
+    | 'range'
+    | 'button'
+    | 'reset'
+    | 'submit'
+    | 'image' = 'text';
+
+  /** Whether the form has been submitted */
+  @Prop() submitted: boolean = false;
+
+  /** Whether to apply default input styling */
   @Prop() inputStyle: boolean = true;
+
+  /** Size of the input field: small (sm), medium (md), or large (lg) */
   @Prop() size: 'sm' | 'md' | 'lg' = 'md';
+
+  /** Text size inside the input field */
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
+
+  /** Position of the label: left, right, or center */
   @Prop() labelPosition: 'left' | 'right' | 'center' = 'left';
+
+  /** Background color of the label */
   @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null = null;
+
+  /** Text color of the label */
   @Prop() labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'dark';
+
+  /** Border color/style of the label */
   @Prop() labelBorder: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'theme';
+
+  /** Label width as a fraction of 12 columns (1-11) */
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
+
+  /** Variant of the input: default or icon */
   @Prop() variant: 'default' | 'icon' = 'default';
+
+  /** Whether the input is disabled */
   @Prop() disabled: boolean = false;
-  @Prop() error: boolean = false;
+
+  /** Whether the input has an error */
+  @Prop({ mutable: true }) error: boolean = false;
+
+  /** Mask for the input field (optional) */
   @Prop() mask: FactoryArg;
 
-  @State() valid: boolean;
+  /** Whether the input should auto-validate */
+  @Prop() autoValidate?: boolean = true;
+
+  /** A Zod schema for validating the input */
+  @Prop() zod?: ZodType<any, any>;
+
+  /** Key to wrap the value (e.g., 'price' or 'cost') */
+  @Prop() wrapKey?: string;
+
   @State() initial: boolean = true;
   @State() inputFocused: boolean = false;
 
@@ -39,19 +113,13 @@ export class IrInputText {
 
   @Event({ bubbles: true, composed: true }) textChange: EventEmitter<any>;
   @Event() inputBlur: EventEmitter<FocusEvent>;
-  inputRef: HTMLInputElement;
-  maskInstance: any;
+  @Event() inputFocus: EventEmitter<FocusEvent>;
+
+  private inputRef: HTMLInputElement;
+  private maskInstance: InputMask<FactoryArg>;
+
   componentDidLoad() {
     if (this.mask) this.initMask();
-  }
-  connectedCallback() {}
-  disconnectedCallback() {}
-
-  @Watch('value')
-  watchHandler(newValue: string) {
-    if (newValue !== '' && this.required) {
-      this.valid = true;
-    }
   }
 
   @Watch('mask')
@@ -59,14 +127,22 @@ export class IrInputText {
     this.initMask();
   }
 
-  @Watch('submited')
+  @Watch('submitted')
   watchHandler2(newValue: boolean) {
     if (newValue && this.required) {
       this.initial = false;
     }
   }
+
+  @Watch('error')
+  handleErrorChange(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue) {
+      this.validateInput(this.value, true);
+    }
+  }
+
   @Watch('aria-invalid')
-  handleAriaInvalidChange(newValue) {
+  handleAriaInvalidChange(newValue: string) {
     if (newValue === 'true') {
       this.isError = true;
     } else {
@@ -74,29 +150,30 @@ export class IrInputText {
     }
   }
 
-  // private handleInputChange(event) {
-  //   this.initial = false;
-  //   if (this.required) {
-  //     this.valid = event.target.checkValidity();
-  //     const value = event.target.value;
-  //     this.textChange.emit(value);
-  //   } else {
-  //     this.textChange.emit(event.target.value);
-  //   }
-  // }
-  private handleInputChange(event) {
+  private validateInput(value: string, forceValidation: boolean = false): void {
+    if (!this.autoValidate && !forceValidation) {
+      return;
+    }
+    if (this.zod) {
+      try {
+        this.zod.parse(this.wrapKey ? { [this.wrapKey]: value } : value); // Validate the value using the Zod schema
+        this.error = false; // Clear the error if valid
+      } catch (error) {
+        console.log(error);
+        this.error = true; // Set the error message
+      }
+    }
+  }
+
+  private handleInputChange(event: InputEvent) {
     this.initial = false;
-
+    const value = (event.target as HTMLInputElement).value;
     if (this.maskInstance) {
-      this.maskInstance.value = event.target.value; // Sync input value with mask
+      this.maskInstance.value = value;
     }
-
-    const maskedValue = this.maskInstance ? this.maskInstance.value : event.target.value;
-
-    if (this.required) {
-      this.valid = event.target.checkValidity();
-    }
-    this.textChange.emit(maskedValue); // Emit the masked value
+    const maskedValue = this.maskInstance ? this.maskInstance.value : value;
+    console.log(maskedValue);
+    this.textChange.emit(maskedValue);
   }
 
   private initMask() {
@@ -111,6 +188,13 @@ export class IrInputText {
       this.inputRef.value = this.maskInstance.value; // Update the input field
       this.textChange.emit(this.maskInstance.value); // Emit the masked value
     });
+  }
+  // Function that handles the blur events
+  // it validates the input and emits the blur event
+  private handleBlur(e: FocusEvent) {
+    this.validateInput(this.value, this.submitted);
+    this.inputFocused = false;
+    this.inputBlur.emit(e);
   }
 
   render() {
@@ -131,12 +215,12 @@ export class IrInputText {
           <input
             ref={el => (this.inputRef = el)}
             type={this.type}
-            onFocus={() => (this.inputFocused = true)}
-            required={this.required}
-            onBlur={e => {
-              this.inputFocused = false;
-              this.inputBlur.emit(e);
+            onFocus={e => {
+              this.inputFocused = true;
+              this.inputFocus.emit(e);
             }}
+            required={this.required}
+            onBlur={this.handleBlur.bind(this)}
             disabled={this.disabled}
             class={`form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${(this.error || this.isError) && 'danger-border'}`}
             id={id}
@@ -166,7 +250,7 @@ export class IrInputText {
     if (this.inputStyle === false) {
       className = '';
     }
-    if (this.required && !this.valid && !this.initial) {
+    if (this.required && !this.initial) {
       className = `${className} border-danger`;
     }
 
@@ -181,7 +265,11 @@ export class IrInputText {
             class={`${className} ${this.error || this.isError ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${
               this.LabelAvailable ? 12 - this.labelWidth : 12
             } ${this.readonly && 'bg-white'} ${this.inputStyles}`}
-            onBlur={e => this.inputBlur.emit(e)}
+            onBlur={this.handleBlur.bind(this)}
+            onFocus={e => {
+              this.inputFocused = true;
+              this.inputFocus.emit(e);
+            }}
             placeholder={this.placeholder}
             value={this.value}
             onInput={this.handleInputChange.bind(this)}

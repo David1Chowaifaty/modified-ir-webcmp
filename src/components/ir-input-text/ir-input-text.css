@@ -1,6 +1,7 @@
 :host {
   margin: 0;
   padding: 0;
+  display: inline;
 }
 .border-theme {
   border: 1px solid #cacfe7;

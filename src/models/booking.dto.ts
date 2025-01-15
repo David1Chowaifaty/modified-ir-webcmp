@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 import { TSourceOption } from './igl-book-property';
+import { ICountry } from './IBooking';
+import moment from 'moment';
 
 interface IDType {
   code: string;
@@ -17,8 +19,8 @@ export interface SharedPerson {
   alternative_email: null;
   cci: null;
   city: null;
-  country: Country;
-  country_id: null;
+  country: ICountry;
+  country_id: string;
   country_phone_prefix: null;
   dob: string;
   email: null;
@@ -34,16 +36,22 @@ export interface SharedPerson {
   password: null;
   subscribe_to_news_letter: null;
 }
+export const ZIdInfo = z.object({
+  type: z.object({
+    code: z.string().min(3),
+    description: z.string(),
+  }),
+  number: z.string().min(2),
+});
+export const ZSharedPerson = z.object({
+  id: z.number(),
+  full_name: z.string().min(2),
+  country_id: z.coerce.number().min(0),
+  dob: z.coerce.date().transform(date => moment(date).format('YYYY-MM-DD')),
+  id_info: ZIdInfo,
+});
+export const ZSharedPersons = z.array(ZSharedPerson);
 
-interface Country {
-  cities: null;
-  code: string;
-  currency: null;
-  flag: null;
-  id: number;
-  name: string;
-  phone_prefix: null;
-}
 export interface HandleExposedRoomGuestsRequest {
   booking_nbr: string;
   identifier: string;

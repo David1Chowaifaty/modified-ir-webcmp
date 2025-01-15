@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+.combobox-menu {
+  max-height: 200px;
+  overflow: auto;
+}

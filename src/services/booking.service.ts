@@ -244,15 +244,14 @@ export class BookingService {
       throw new Error(error);
     }
   }
-
-  public async getBedPreferences(): Promise<IEntries[]> {
+  public async getSetupEntriesByTableName(TBL_NAME: string) {
     const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME`, {
-      TBL_NAME: '_BED_PREFERENCE_TYPE',
+      TBL_NAME,
     });
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
     }
-    const res: any[] = data.My_Result;
+    const res: IEntries[] = data.My_Result;
     return res;
   }
 

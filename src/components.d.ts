@@ -23,9 +23,9 @@ import { ComboboxItem } from "./components/ir-combobox/ir-combobox";
 import { IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
+import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
-import { ZodType } from "zod";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
@@ -45,9 +45,9 @@ export { ComboboxItem } from "./components/ir-combobox/ir-combobox";
 export { IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
+export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
-export { ZodType } from "zod";
 export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
     interface IglApplicationInfo {
@@ -376,6 +376,11 @@ export namespace Components {
     interface IrCommon {
         "extraResources": string;
     }
+    interface IrCountryPicker {
+        "countries": ICountry[];
+        "country": ICountry;
+        "error": boolean;
+    }
     interface IrDatePicker {
         "applyLabel": string;
         "autoApply": boolean;
@@ -481,28 +486,127 @@ export namespace Components {
         "svgClassName": string;
     }
     interface IrInputText {
+        /**
+          * Determines if the label is displayed
+         */
         "LabelAvailable": boolean;
+        /**
+          * Whether the input should auto-validate
+         */
+        "autoValidate"?: boolean;
+        /**
+          * Whether the input is disabled
+         */
         "disabled": boolean;
+        /**
+          * Whether the input has an error
+         */
         "error": boolean;
+        /**
+          * Whether to apply default input styling
+         */
         "inputStyle": boolean;
+        /**
+          * Additional inline styles for the input
+         */
         "inputStyles": string;
+        /**
+          * Label text for the input
+         */
         "label": string;
+        /**
+          * Background color of the label
+         */
         "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
+        /**
+          * Border color/style of the label
+         */
         "labelBorder": 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
+        /**
+          * Text color of the label
+         */
         "labelColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Position of the label: left, right, or center
+         */
         "labelPosition": 'left' | 'right' | 'center';
+        /**
+          * Label width as a fraction of 12 columns (1-11)
+         */
         "labelWidth": 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+        /**
+          * Mask for the input field (optional)
+         */
         "mask": FactoryArg;
+        /**
+          * Name attribute for the input field
+         */
         "name": string;
+        /**
+          * Placeholder text for the input
+         */
         "placeholder": string;
+        /**
+          * Whether the input field is read-only
+         */
         "readonly": boolean;
+        /**
+          * Whether the input field is required
+         */
         "required": boolean;
+        /**
+          * Size of the input field: small (sm), medium (md), or large (lg)
+         */
         "size": 'sm' | 'md' | 'lg';
-        "submited": boolean;
+        /**
+          * Whether the form has been submitted
+         */
+        "submitted": boolean;
+        /**
+          * Text size inside the input field
+         */
         "textSize": 'sm' | 'md' | 'lg';
-        "type": string;
-        "value": any;
+        /**
+          * Input type (e.g., text, password, email)
+         */
+        "type": | 'text'
+    | 'password'
+    | 'email'
+    | 'number'
+    | 'tel'
+    | 'url'
+    | 'search'
+    | 'date'
+    | 'datetime-local'
+    | 'month'
+    | 'week'
+    | 'time'
+    | 'color'
+    | 'file'
+    | 'hidden'
+    | 'checkbox'
+    | 'radio'
+    | 'range'
+    | 'button'
+    | 'reset'
+    | 'submit'
+    | 'image';
+        /**
+          * Value of the input field
+         */
+        "value": string;
+        /**
+          * Variant of the input: default or icon
+         */
         "variant": 'default' | 'icon';
+        /**
+          * Key to wrap the value (e.g., 'price' or 'cost')
+         */
+        "wrapKey"?: string;
+        /**
+          * A Zod schema for validating the input
+         */
+        "zod"?: ZodType<any, any>;
     }
     interface IrInterceptor {
         "handledEndpoints": string[];
@@ -698,6 +802,8 @@ export namespace Components {
         "roomsInfo": any;
     }
     interface IrRoomGuests {
+        "countries": ICountry[];
+        "language": string;
         "roomName": string;
         "sharedPersons": SharedPerson[];
         "totalGuests": number;
@@ -940,6 +1046,10 @@ export interface IrCheckboxesCustomEvent<T> extends CustomEvent<T> {
 export interface IrComboboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrComboboxElement;
+}
+export interface IrCountryPickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrCountryPickerElement;
 }
 export interface IrDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1724,6 +1834,23 @@ declare global {
         prototype: HTMLIrCommonElement;
         new (): HTMLIrCommonElement;
     };
+    interface HTMLIrCountryPickerElementEventMap {
+        "countryChange": ICountry;
+    }
+    interface HTMLIrCountryPickerElement extends Components.IrCountryPicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrCountryPickerElementEventMap>(type: K, listener: (this: HTMLIrCountryPickerElement, ev: IrCountryPickerCustomEvent<HTMLIrCountryPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrCountryPickerElementEventMap>(type: K, listener: (this: HTMLIrCountryPickerElement, ev: IrCountryPickerCustomEvent<HTMLIrCountryPickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrCountryPickerElement: {
+        prototype: HTMLIrCountryPickerElement;
+        new (): HTMLIrCountryPickerElement;
+    };
     interface HTMLIrDatePickerElementEventMap {
         "dateChanged": {
     start: moment.Moment;
@@ -1954,6 +2081,7 @@ declare global {
     interface HTMLIrInputTextElementEventMap {
         "textChange": any;
         "inputBlur": FocusEvent;
+        "inputFocus": FocusEvent;
     }
     interface HTMLIrInputTextElement extends Components.IrInputText, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrInputTextElementEventMap>(type: K, listener: (this: HTMLIrInputTextElement, ev: IrInputTextCustomEvent<HTMLIrInputTextElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2477,6 +2605,7 @@ declare global {
         "ir-checkboxes": HTMLIrCheckboxesElement;
         "ir-combobox": HTMLIrComboboxElement;
         "ir-common": HTMLIrCommonElement;
+        "ir-country-picker": HTMLIrCountryPickerElement;
         "ir-date-picker": HTMLIrDatePickerElement;
         "ir-date-view": HTMLIrDateViewElement;
         "ir-delete-modal": HTMLIrDeleteModalElement;
@@ -2950,6 +3079,12 @@ declare namespace LocalJSX {
     interface IrCommon {
         "extraResources"?: string;
     }
+    interface IrCountryPicker {
+        "countries"?: ICountry[];
+        "country"?: ICountry;
+        "error"?: boolean;
+        "onCountryChange"?: (event: IrCountryPickerCustomEvent<ICountry>) => void;
+    }
     interface IrDatePicker {
         "applyLabel"?: string;
         "autoApply"?: boolean;
@@ -3069,30 +3204,130 @@ declare namespace LocalJSX {
         "svgClassName"?: string;
     }
     interface IrInputText {
+        /**
+          * Determines if the label is displayed
+         */
         "LabelAvailable"?: boolean;
+        /**
+          * Whether the input should auto-validate
+         */
+        "autoValidate"?: boolean;
+        /**
+          * Whether the input is disabled
+         */
         "disabled"?: boolean;
+        /**
+          * Whether the input has an error
+         */
         "error"?: boolean;
+        /**
+          * Whether to apply default input styling
+         */
         "inputStyle"?: boolean;
+        /**
+          * Additional inline styles for the input
+         */
         "inputStyles"?: string;
+        /**
+          * Label text for the input
+         */
         "label"?: string;
+        /**
+          * Background color of the label
+         */
         "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
+        /**
+          * Border color/style of the label
+         */
         "labelBorder"?: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
+        /**
+          * Text color of the label
+         */
         "labelColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Position of the label: left, right, or center
+         */
         "labelPosition"?: 'left' | 'right' | 'center';
+        /**
+          * Label width as a fraction of 12 columns (1-11)
+         */
         "labelWidth"?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+        /**
+          * Mask for the input field (optional)
+         */
         "mask"?: FactoryArg;
+        /**
+          * Name attribute for the input field
+         */
         "name"?: string;
         "onInputBlur"?: (event: IrInputTextCustomEvent<FocusEvent>) => void;
+        "onInputFocus"?: (event: IrInputTextCustomEvent<FocusEvent>) => void;
         "onTextChange"?: (event: IrInputTextCustomEvent<any>) => void;
+        /**
+          * Placeholder text for the input
+         */
         "placeholder"?: string;
+        /**
+          * Whether the input field is read-only
+         */
         "readonly"?: boolean;
+        /**
+          * Whether the input field is required
+         */
         "required"?: boolean;
+        /**
+          * Size of the input field: small (sm), medium (md), or large (lg)
+         */
         "size"?: 'sm' | 'md' | 'lg';
-        "submited"?: boolean;
+        /**
+          * Whether the form has been submitted
+         */
+        "submitted"?: boolean;
+        /**
+          * Text size inside the input field
+         */
         "textSize"?: 'sm' | 'md' | 'lg';
-        "type"?: string;
-        "value"?: any;
+        /**
+          * Input type (e.g., text, password, email)
+         */
+        "type"?: | 'text'
+    | 'password'
+    | 'email'
+    | 'number'
+    | 'tel'
+    | 'url'
+    | 'search'
+    | 'date'
+    | 'datetime-local'
+    | 'month'
+    | 'week'
+    | 'time'
+    | 'color'
+    | 'file'
+    | 'hidden'
+    | 'checkbox'
+    | 'radio'
+    | 'range'
+    | 'button'
+    | 'reset'
+    | 'submit'
+    | 'image';
+        /**
+          * Value of the input field
+         */
+        "value"?: string;
+        /**
+          * Variant of the input: default or icon
+         */
         "variant"?: 'default' | 'icon';
+        /**
+          * Key to wrap the value (e.g., 'price' or 'cost')
+         */
+        "wrapKey"?: string;
+        /**
+          * A Zod schema for validating the input
+         */
+        "zod"?: ZodType<any, any>;
     }
     interface IrInterceptor {
         "handledEndpoints"?: string[];
@@ -3323,6 +3558,8 @@ declare namespace LocalJSX {
         "roomsInfo"?: any;
     }
     interface IrRoomGuests {
+        "countries"?: ICountry[];
+        "language"?: string;
         "onCloseModal"?: (event: IrRoomGuestsCustomEvent<null>) => void;
         "onResetbooking"?: (event: IrRoomGuestsCustomEvent<null>) => void;
         "roomName"?: string;
@@ -3486,6 +3723,7 @@ declare namespace LocalJSX {
         "ir-checkboxes": IrCheckboxes;
         "ir-combobox": IrCombobox;
         "ir-common": IrCommon;
+        "ir-country-picker": IrCountryPicker;
         "ir-date-picker": IrDatePicker;
         "ir-date-view": IrDateView;
         "ir-delete-modal": IrDeleteModal;
@@ -3583,6 +3821,7 @@ declare module "@stencil/core" {
             "ir-checkboxes": LocalJSX.IrCheckboxes & JSXBase.HTMLAttributes<HTMLIrCheckboxesElement>;
             "ir-combobox": LocalJSX.IrCombobox & JSXBase.HTMLAttributes<HTMLIrComboboxElement>;
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
+            "ir-country-picker": LocalJSX.IrCountryPicker & JSXBase.HTMLAttributes<HTMLIrCountryPickerElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;

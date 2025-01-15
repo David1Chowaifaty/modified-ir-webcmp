@@ -122,7 +122,7 @@ export class GuestInfo {
               placeholder=""
               label={locales.entries.Lcz_FirstName}
               name="firstName"
-              submited={this.submit}
+              submitted={this.submit}
               value={this.guest?.first_name}
               required
               onTextChange={e => this.handleInputChange({ first_name: e.detail })}
@@ -131,7 +131,7 @@ export class GuestInfo {
               placeholder=""
               label={locales.entries.Lcz_LastName}
               name="lastName"
-              submited={this.submit}
+              submitted={this.submit}
               value={this.guest?.last_name}
               required
               onTextChange={e => this.handleInputChange({ last_name: e.detail })}
@@ -140,7 +140,7 @@ export class GuestInfo {
               placeholder=""
               label={locales.entries.Lcz_Email}
               name="email"
-              submited={this.submit}
+              submitted={this.submit}
               value={this.guest?.email}
               required
               onTextChange={e => this.handleInputChange({ email: e.detail })}
