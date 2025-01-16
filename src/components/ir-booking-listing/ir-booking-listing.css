@@ -86,8 +86,11 @@
 }
 .booking_guest_name {
   width: fit-content;
-  padding: 0;
+  padding: 0 !important;
   margin: 0;
+}
+.booking_guest_name .button-text {
+  padding: 0 !important;
 }
 .buttons-container {
   gap: 10px;
