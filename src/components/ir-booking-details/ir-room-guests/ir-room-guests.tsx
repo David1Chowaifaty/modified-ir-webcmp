@@ -26,7 +26,7 @@ export class IrRoomGuests {
 
   /**
    * An array of people sharing the room.
-   * Contains information about the main guest and additional guests, such as their name, date of birth, nationality, and ID details.
+   * Contains information about the {locales.entries.Lcz_MainGuest} and additional guests, such as their name, date of birth, {locales.entries.Lcz_Nationality}, and ID details.
    */
   @Prop() sharedPersons: SharedPerson[] = [];
 
@@ -38,7 +38,7 @@ export class IrRoomGuests {
 
   /**
    * A list of available countries.
-   * Used to populate dropdowns for selecting the nationality of guests.
+   * Used to populate dropdowns for selecting the {locales.entries.Lcz_Nationality} of guests.
    */
   @Prop() countries: ICountry[];
 
@@ -165,18 +165,18 @@ export class IrRoomGuests {
         <section class={'d-flex flex-column px-1 h-100 '}>
           <div class="">
             <div class="guest-grid guests-labels">
-              <p class="">Main Guest</p>
-              <p class=" ">D.O.B.</p>
-              <p class="">Nationality</p>
-              <p class=" ">Documents</p>
+              <p class="">{locales.entries.Lcz_MainGuest}</p>
+              <p class=" ">{locales.entries.Lcz_DOB}</p>
+              <p class="">{locales.entries.Lcz_Nationality}</p>
+              <p class=" ">{locales.entries.Lcz_Documents}</p>
             </div>
-            <h5 class="main_guest_heading">Main Guest</h5>
+            <h5 class="main_guest_heading">{locales.entries.Lcz_MainGuest}</h5>
             {this.guests.map((guest, idx) => (
               <Fragment>
                 {idx === 1 && (
                   <div class="d-flex mx-0 px-0">
-                    <h5 class="mx-0 px-0 sharing_persons_heading">Persons sharing room</h5>
-                    <p class="mx-0 px-0 sharing_persons_label">Persons sharing room</p>
+                    <h5 class="mx-0 px-0 sharing_persons_heading">{locales.entries.Lcz_PersonsSharingRoom}</h5>
+                    <p class="mx-0 px-0 sharing_persons_label">{locales.entries.Lcz_PersonsSharingRoom}</p>
                   </div>
                 )}
                 <div key={idx} class="guest-grid">
@@ -197,7 +197,7 @@ export class IrRoomGuests {
                     ></ir-input-text>
                   </div>
                   <div class="flex-grow-0 m-0 p-0 h-100 d-flex align-items-center">
-                    <p class="guest_label">D.O.B.</p>
+                    <p class="guest_label">{locales.entries.Lcz_DOB}</p>
                     <ir-input-text
                       class="flex-grow-1 h-100"
                       id={`dob_${idx}`}
@@ -216,12 +216,12 @@ export class IrRoomGuests {
                     ></ir-input-text>
                   </div>
                   <div class=" m-0 p-0 d-flex align-items-center">
-                    <p class="guest_label">Nationality</p>
+                    <p class="guest_label">{locales.entries.Lcz_Nationality}</p>
                     <div class="mx-0 flex-grow-1  h-100">
                       <ir-country-picker
                         class="h-100"
                         propertyCountry={this.propertyCountry}
-                        id={`nationality_${idx}`}
+                        id={`{locales.entries.Lcz_Nationality}_${idx}`}
                         error={this.error && !guest.country_id}
                         country={this.countries?.find(c => c.id?.toString() === guest.country?.id?.toString())}
                         onCountryChange={e => this.updateGuestInfo(idx, { country_id: e.detail.id.toString(), country: e.detail })}
@@ -230,7 +230,7 @@ export class IrRoomGuests {
                     </div>
                   </div>
                   <div class="flex-grow-1 m-0 p-0 d-flex align-items-center">
-                    <p class="guest_label">Documents</p>
+                    <p class="guest_label">{locales.entries.Lcz_Documents}</p>
                     <div class={' d-flex m-0 flex-grow-1 h-100'}>
                       <ir-select
                         selectStyles={'id-select'}

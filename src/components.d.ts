@@ -813,7 +813,7 @@ export namespace Components {
          */
         "checkIn": boolean;
         /**
-          * A list of available countries. Used to populate dropdowns for selecting the nationality of guests.
+          * A list of available countries. Used to populate dropdowns for selecting the {locales.entries.Lcz_Nationality} of guests.
          */
         "countries": ICountry[];
         /**
@@ -829,7 +829,7 @@ export namespace Components {
          */
         "roomName": string;
         /**
-          * An array of people sharing the room. Contains information about the main guest and additional guests, such as their name, date of birth, nationality, and ID details.
+          * An array of people sharing the room. Contains information about the {locales.entries.Lcz_MainGuest} and additional guests, such as their name, date of birth, {locales.entries.Lcz_Nationality}, and ID details.
          */
         "sharedPersons": SharedPerson[];
         /**
@@ -3598,7 +3598,7 @@ declare namespace LocalJSX {
          */
         "checkIn"?: boolean;
         /**
-          * A list of available countries. Used to populate dropdowns for selecting the nationality of guests.
+          * A list of available countries. Used to populate dropdowns for selecting the {locales.entries.Lcz_Nationality} of guests.
          */
         "countries"?: ICountry[];
         /**
@@ -3616,7 +3616,7 @@ declare namespace LocalJSX {
          */
         "roomName"?: string;
         /**
-          * An array of people sharing the room. Contains information about the main guest and additional guests, such as their name, date of birth, nationality, and ID details.
+          * An array of people sharing the room. Contains information about the {locales.entries.Lcz_MainGuest} and additional guests, such as their name, date of birth, {locales.entries.Lcz_Nationality}, and ID details.
          */
         "sharedPersons"?: SharedPerson[];
         /**

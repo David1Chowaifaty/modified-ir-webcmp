@@ -208,7 +208,7 @@ export class IglTbaBookingView {
                 isLoading={this.isLoading === 'checkin'}
                 size="sm"
                 class="flex-grow-1"
-                text={'Assign and check in'}
+                text={locales.entries.Lcz_AssignedAndChecIn}
                 onClickHandler={evt => this.handleAssignUnit(evt, true)}
                 btn_disabled={this.selectedRoom === -1}
               ></ir-button>
