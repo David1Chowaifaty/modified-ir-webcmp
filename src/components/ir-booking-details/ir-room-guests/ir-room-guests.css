@@ -2,6 +2,7 @@
   display: block;
   height: 100%;
   position: relative;
+  text-align: start !important;
 }
 .id-select {
   border-top-right-radius: 0;
@@ -54,10 +55,11 @@
   }
   .guest-grid {
     display: grid;
-    grid-template-columns: 3fr 2fr 3fr 4fr;
+    grid-template-columns: 3fr 2fr 2fr 5fr;
     gap: 0.5rem;
     align-items: flex-start;
   }
+
   .guest_label,
   .sharing_persons_heading,
   .main_guest_heading {

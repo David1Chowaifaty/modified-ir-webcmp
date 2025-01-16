@@ -1,16 +1,8 @@
-import {
-  Component,
-  Host,
-  Prop,
-  State,
-  h,
-  Event,
-  EventEmitter,
-} from "@stencil/core";
+import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 
 @Component({
-  tag: "igl-tba-category-view",
-  styleUrl: "igl-tba-category-view.css",
+  tag: 'igl-tba-category-view',
+  styleUrl: 'igl-tba-category-view.css',
   scoped: true,
 })
 export class IglTbaCategoryView {
@@ -34,12 +26,10 @@ export class IglTbaCategoryView {
     event.stopPropagation();
 
     const opt: { [key: string]: any } = event.detail;
-    this.eventDatas = this.eventDatas.filter(
-      (eventData) => eventData.ID != opt.data.ID
-    );
+    this.eventDatas = this.eventDatas.filter(eventData => eventData.ID != opt.data.ID);
     this.calendarData.bookingEvents.push(opt.data);
     this.assignUnitEvent.emit({
-      key: "assignUnit",
+      key: 'assignUnit',
       data: {
         RT_ID: this.categoryId,
         selectedDate: this.selectedDate,
@@ -62,7 +52,7 @@ export class IglTbaCategoryView {
         categoryId={categoryId}
         categoryIndex={this.categoryIndex}
         eventIndex={ind}
-        onAssignRoomEvent={(evt) => this.handleAssignRoomEvent(evt)}
+        onAssignRoomEvent={evt => this.handleAssignRoomEvent(evt)}
       ></igl-tba-booking-view>
     ));
   }
@@ -75,9 +65,7 @@ export class IglTbaCategoryView {
     return (
       <Host>
         <div class="sectionContainer">
-          <div class="font-weight-bold mt-1 font-small-3">
-            {this.categoriesData[this.categoryId].name}
-          </div>
+          <div class="font-weight-bold mt-1 font-small-3">{this.categoriesData[this.categoryId]?.name}</div>
           {this.getEventView(this.categoryId, this.eventDatas)}
         </div>
       </Host>

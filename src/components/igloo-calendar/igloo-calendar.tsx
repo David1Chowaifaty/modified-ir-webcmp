@@ -232,16 +232,10 @@ export class IglooCalendar {
   private renderModalBody() {
     switch (this.dialogData?.reason) {
       case 'checkin': {
-        const name = this.dialogData?.roomName || '';
-        const unit = this.dialogData?.roomUnit || '';
-        const fromThisBooking = locales?.entries?.Lcz_FromThisBooking || 'from this booking';
-        return `Are you sure you want to check in ${name} ${unit} ${fromThisBooking}?`;
+        return `Are you sure you want to Check In this unit?`;
       }
       case 'checkout': {
-        const name = this.dialogData?.roomName || '';
-        const unit = this.dialogData?.roomUnit || '';
-        const fromThisBooking = locales?.entries?.Lcz_FromThisBooking || 'from this booking';
-        return `Are you sure you want to check out ${name} ${unit} ${fromThisBooking}?`;
+        return 'Are you sure you want to Check Out this unit?';
       }
       case 'reallocate':
         return this.dialogData?.description || '';
@@ -366,7 +360,7 @@ export class IglooCalendar {
     } else {
       result = JSON.parse(PAYLOAD);
     }
-
+    console.log(KEY, result);
     const reasonHandlers: { [key: string]: Function } = {
       DORESERVATION: this.handleDoReservation,
       BLOCK_EXPOSED_UNIT: this.handleBlockExposedUnit,
@@ -413,6 +407,7 @@ export class IglooCalendar {
   }
 
   private async handleAssignExposedRoom(result: any) {
+    console.log(result);
     const transformedBooking = transformNewBooking(result);
     this.AddOrUpdateRoomBookings(transformedBooking);
   }

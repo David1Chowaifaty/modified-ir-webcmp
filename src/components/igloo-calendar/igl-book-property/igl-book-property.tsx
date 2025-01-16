@@ -601,7 +601,6 @@ export class IglBookProperty {
         sourceOption: this.sourceOption,
         check_in,
       });
-      // console.log(serviceParams);
       await this.bookingService.doReservation(serviceParams);
       this.resetBookingData.emit(null);
     } catch (error) {

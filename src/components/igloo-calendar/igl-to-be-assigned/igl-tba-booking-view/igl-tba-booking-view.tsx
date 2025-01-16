@@ -2,7 +2,8 @@ import { Component, Host, Prop, h, Event, EventEmitter, Listen, State } from '@s
 import { ToBeAssignedService } from '@/services/toBeAssigned.service';
 import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
-import { isRequestPending } from '@/stores/ir-interceptor.store';
+import calendar_data from '@/stores/calendar-data';
+import moment from 'moment';
 
 @Component({
   tag: 'igl-tba-booking-view',
@@ -10,12 +11,6 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
   scoped: true,
 })
 export class IglTbaBookingView {
-  // @Element() private element: HTMLElement;
-  @Event({ bubbles: true, composed: true })
-  highlightToBeAssignedBookingEvent: EventEmitter;
-  @Event({ bubbles: true, composed: true }) addToBeAssignedEvent: EventEmitter;
-  @Event({ bubbles: true, composed: true }) scrollPageToRoom: EventEmitter;
-  @Event() assignRoomEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() calendarData: { [key: string]: any };
   @Prop() selectedDate;
   @Prop() eventData: { [key: string]: any } = {};
@@ -23,30 +18,26 @@ export class IglTbaBookingView {
   @Prop() categoryId;
   @Prop() categoryIndex;
   @Prop() eventIndex;
-  @State() renderAgain: boolean = false;
 
+  @State() renderAgain: boolean = false;
   @State() selectedRoom: number = -1;
+  @State() isLoading: 'default' | 'checkin' | null = null;
+
   private highlightSection: boolean = false;
   private allRoomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
 
-  onSelectRoom(evt) {
-    if (evt.stopImmediatePropagation) {
-      evt.stopImmediatePropagation();
-      evt.stopPropagation();
-    }
-    this.selectedRoom = parseInt(evt.target.value);
-  }
-
-  // componentDidLoad(){
-  //   this.initializeToolTips();
-  // }
+  @Event({ bubbles: true, composed: true })
+  highlightToBeAssignedBookingEvent: EventEmitter;
+  @Event({ bubbles: true, composed: true }) addToBeAssignedEvent: EventEmitter;
+  @Event({ bubbles: true, composed: true }) scrollPageToRoom: EventEmitter;
+  @Event() assignRoomEvent: EventEmitter<{ [key: string]: any }>;
 
   componentShouldUpdate(newValue: string, oldValue: string, propName: string): boolean {
     if (propName === 'selectedDate' && newValue !== oldValue) {
       this.highlightSection = false;
       this.selectedRoom = -1;
-      return true; // Prevent update for a specific prop value
+      return true;
     } else if (propName === 'eventData' && newValue !== oldValue) {
       this.selectedRoom = -1;
       return true;
@@ -62,22 +53,34 @@ export class IglTbaBookingView {
     }
   }
 
-  async handleAssignUnit(event) {
+  @Listen('highlightToBeAssignedBookingEvent', { target: 'window' })
+  highlightBookingEvent(event: CustomEvent) {
+    let data = event.detail.data;
+    if (data.bookingId != this.eventData.ID) {
+      this.highlightSection = false;
+      this.selectedRoom = -1;
+      this.renderView();
+    } else {
+      this.highlightSection = true;
+      this.renderView();
+    }
+  }
+
+  private onSelectRoom(evt) {
+    if (evt.stopImmediatePropagation) {
+      evt.stopImmediatePropagation();
+      evt.stopPropagation();
+    }
+    this.selectedRoom = parseInt(evt.target.value);
+  }
+
+  private async handleAssignUnit(event: CustomEvent, check_in: boolean = false) {
     try {
       event.stopImmediatePropagation();
       event.stopPropagation();
       if (this.selectedRoom) {
-        await this.toBeAssignedService.assignUnit(this.eventData.BOOKING_NUMBER, this.eventData.ID, this.selectedRoom);
-        // //let assignEvent = transformNewBooking(result);
-        // const newEvent = { ...this.eventData, ID: this.eventData.ID };
-
-        // //this.calendarData.bookingEvents.push(newEvent);
-        // //console.log(newEvent);
-        // this.addToBeAssignedEvent.emit({
-        //   key: 'tobeAssignedEvents',
-        //   //data: [assignEvent[0]],
-        // });
-        //this.assignRoomEvent.emit({ key: 'assignRoom', data: newEvent });
+        this.isLoading = check_in ? 'checkin' : 'default';
+        await this.toBeAssignedService.assignUnit({ booking_nbr: this.eventData.BOOKING_NUMBER, identifier: this.eventData.ID, pr_id: this.selectedRoom, check_in });
         let assignEvent = { ...this.eventData, PR_ID: this.selectedRoom };
         this.addToBeAssignedEvent.emit({
           key: 'tobeAssignedEvents',
@@ -86,11 +89,13 @@ export class IglTbaBookingView {
         this.assignRoomEvent.emit({ key: 'assignRoom', data: assignEvent });
       }
     } catch (error) {
-      //   toastr.error(error);
+      console.log(error);
+    } finally {
+      this.isLoading = null;
     }
   }
 
-  handleHighlightAvailability() {
+  private handleHighlightAvailability() {
     this.highlightToBeAssignedBookingEvent.emit({
       key: 'highlightBookingId',
       data: { bookingId: this.eventData.ID, fromDate: this.eventData.FROM_DATE },
@@ -110,8 +115,6 @@ export class IglTbaBookingView {
         ...room,
         defaultDateRange: this.eventData.defaultDateRange,
         identifier: this.eventData.identifier,
-        // roomsInfo: this.eventData.roomsInfo,
-        // legendData: this.eventData.legendData,
       };
     });
     this.allRoomsList = allRoomsList;
@@ -125,12 +128,10 @@ export class IglTbaBookingView {
       id: this.categoryId,
       refClass: 'category_' + this.categoryId,
     });
-    // ID: "NEW_TEMP_EVENT",
-    // STATUS: "PENDING_CONFIRMATION"
     this.renderView();
   }
 
-  handleCloseAssignment(event) {
+  private handleCloseAssignment(event) {
     event.stopImmediatePropagation();
     event.stopPropagation();
     this.highlightSection = false;
@@ -144,24 +145,19 @@ export class IglTbaBookingView {
     this.renderView();
   }
 
-  @Listen('highlightToBeAssignedBookingEvent', { target: 'window' })
-  highlightBookingEvent(event: CustomEvent) {
-    let data = event.detail.data;
-    if (data.bookingId != this.eventData.ID) {
-      this.highlightSection = false;
-      this.selectedRoom = -1;
-      this.renderView();
-    } else {
-      this.highlightSection = true;
-      this.renderView();
-    }
-  }
-
-  renderView() {
+  private renderView() {
     this.renderAgain = !this.renderAgain;
-    // this.initializeToolTips();
   }
+  private canCheckIn() {
+    if (!calendar_data.checkin_enabled) {
+      return false;
+    }
 
+    if (moment(new Date()).isSameOrAfter(new Date(this.eventData.FROM_DATE), 'days') && moment(new Date()).isBefore(new Date(this.eventData.TO_DATE), 'days')) {
+      return true;
+    }
+    return false;
+  }
   render() {
     return (
       <Host>
@@ -175,7 +171,7 @@ export class IglTbaBookingView {
             {`Book# ${this.eventData.BOOKING_NUMBER} - ${this.eventData.NAME}`}
           </div>
           <div class="row m-0 p-0 actionsContainer">
-            <select class="form-control input-sm room-select" id={v4()} onChange={evt => this.onSelectRoom(evt)}>
+            <select class="form-control input-sm room-select flex-grow-1" id={v4()} onChange={evt => this.onSelectRoom(evt)}>
               <option value="" selected={this.selectedRoom == -1}>
                 {locales.entries.Lcz_AssignUnit}
               </option>
@@ -186,8 +182,8 @@ export class IglTbaBookingView {
               ))}
             </select>
             {this.highlightSection ? (
-              <div class="d-flex buttonsContainer">
-                <button type="button" class="btn btn-secondary btn-sm" onClick={evt => this.handleCloseAssignment(evt)}>
+              <div class="buttonsContainer bg-red">
+                <button type="button" class="btn btn-secondary btn-sm mx-0" onClick={evt => this.handleCloseAssignment(evt)}>
                   <svg class="m-0 p-0" xmlns="http://www.w3.org/2000/svg" height="12" width="9" viewBox="0 0 384 512">
                     <path
                       fill="currentColor"
@@ -195,15 +191,28 @@ export class IglTbaBookingView {
                     />
                   </svg>
                 </button>
-                <ir-button
-                  isLoading={isRequestPending('/Assign_Exposed_Room')}
-                  size="sm"
-                  text={locales.entries.Lcz_Assign}
-                  onClickHandler={evt => this.handleAssignUnit(evt)}
-                  btn_disabled={this.selectedRoom === -1}
-                ></ir-button>
               </div>
             ) : null}
+          </div>
+          <div class="d-flex align-items-center " style={{ gap: '0.5rem', paddingInline: '5px' }}>
+            <ir-button
+              isLoading={this.isLoading === 'default'}
+              size="sm"
+              class="flex-grow-1"
+              text={locales.entries.Lcz_Assign}
+              onClickHandler={evt => this.handleAssignUnit(evt)}
+              btn_disabled={this.selectedRoom === -1}
+            ></ir-button>
+            {this.canCheckIn() && (
+              <ir-button
+                isLoading={this.isLoading === 'checkin'}
+                size="sm"
+                class="flex-grow-1"
+                text={'Assign and check in'}
+                onClickHandler={evt => this.handleAssignUnit(evt, true)}
+                btn_disabled={this.selectedRoom === -1}
+              ></ir-button>
+            )}
           </div>
           <hr />
         </div>

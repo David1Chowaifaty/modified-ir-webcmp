@@ -48,7 +48,10 @@ hr {
 
 .buttonsContainer {
   box-sizing: border-box;
-}
-.btn-secondary {
-  margin-right: 8px !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+  margin: 0;
+  gap: 0.5rem;
 }

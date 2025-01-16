@@ -162,7 +162,6 @@ export class IglBookingEventHover {
     if (!calendar_data.checkin_enabled) {
       return false;
     }
-    console.log(this.isCheckedIn());
     if (this.isCheckedIn() && this.canCheckInOrCheckout) {
       return true;
     } else {
