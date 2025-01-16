@@ -452,6 +452,7 @@ export namespace Components {
         "booking_nbr": string;
         "email": string;
         "headerShown": boolean;
+        "isInSideBar": boolean;
         "language": string;
         "ticket": string;
     }
@@ -803,13 +804,37 @@ export namespace Components {
         "roomsInfo": any;
     }
     interface IrRoomGuests {
+        /**
+          * A unique booking number associated with the room. This is used for backend operations like saving guest information or checking in the room.
+         */
         "bookingNumber": string;
+        /**
+          * A boolean indicating whether the room is in the process of being checked in. If true, additional actions like saving the room state as "checked in" are performed.
+         */
         "checkIn": boolean;
+        /**
+          * A list of available countries. Used to populate dropdowns for selecting the nationality of guests.
+         */
         "countries": ICountry[];
+        /**
+          * A unique identifier for the room. This is used to distinguish between rooms, especially when performing operations like saving or checking in guests.
+         */
         "identifier": string;
+        /**
+          * The language used for displaying text content in the component. Defaults to English ('en'), but can be set to other supported languages.
+         */
         "language": string;
+        /**
+          * The name of the room currently being displayed. Used to label the room in the user interface for clarity.
+         */
         "roomName": string;
+        /**
+          * An array of people sharing the room. Contains information about the main guest and additional guests, such as their name, date of birth, nationality, and ID details.
+         */
         "sharedPersons": SharedPerson[];
+        /**
+          * The total number of guests for the room. Determines how many guest input forms to display in the UI.
+         */
         "totalGuests": number;
     }
     interface IrRoomNights {
@@ -3167,6 +3192,7 @@ declare namespace LocalJSX {
         "booking_nbr"?: string;
         "email"?: string;
         "headerShown"?: boolean;
+        "isInSideBar"?: boolean;
         "language"?: string;
         "onCloseSideBar"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "onResetbooking"?: (event: IrGuestInfoCustomEvent<null>) => void;
@@ -3563,15 +3589,39 @@ declare namespace LocalJSX {
         "roomsInfo"?: any;
     }
     interface IrRoomGuests {
+        /**
+          * A unique booking number associated with the room. This is used for backend operations like saving guest information or checking in the room.
+         */
         "bookingNumber"?: string;
+        /**
+          * A boolean indicating whether the room is in the process of being checked in. If true, additional actions like saving the room state as "checked in" are performed.
+         */
         "checkIn"?: boolean;
+        /**
+          * A list of available countries. Used to populate dropdowns for selecting the nationality of guests.
+         */
         "countries"?: ICountry[];
+        /**
+          * A unique identifier for the room. This is used to distinguish between rooms, especially when performing operations like saving or checking in guests.
+         */
         "identifier"?: string;
+        /**
+          * The language used for displaying text content in the component. Defaults to English ('en'), but can be set to other supported languages.
+         */
         "language"?: string;
         "onCloseModal"?: (event: IrRoomGuestsCustomEvent<null>) => void;
         "onResetbooking"?: (event: IrRoomGuestsCustomEvent<null>) => void;
+        /**
+          * The name of the room currently being displayed. Used to label the room in the user interface for clarity.
+         */
         "roomName"?: string;
+        /**
+          * An array of people sharing the room. Contains information about the main guest and additional guests, such as their name, date of birth, nationality, and ID details.
+         */
         "sharedPersons"?: SharedPerson[];
+        /**
+          * The total number of guests for the room. Determines how many guest input forms to display in the UI.
+         */
         "totalGuests"?: number;
     }
     interface IrRoomNights {

@@ -221,12 +221,20 @@ export class IrRoom {
           locales.entries.Lcz_FromThisBooking
         }`;
       case 'checkin':
-        return `Check in ${this.room.roomtype.name} ${this.room.unit ? (this.room.unit as IUnit).name : ''} ${locales.entries.Lcz_FromThisBooking}`;
+        return `Are you sure you want to Check In this unit?
+`;
       case 'checkout':
-        return `Checkout ${this.room.roomtype.name} ${this.room.unit ? (this.room.unit as IUnit).name : ''} ${locales.entries.Lcz_FromThisBooking}`;
+        return `Are you sure you want to Check Out this unit?`;
       default:
         return '';
     }
+  }
+  private handleCheckIn() {
+    const { adult_nbr, children_nbr, infant_nbr } = this.room.occupancy;
+    if (this.room.sharing_persons.length < adult_nbr + children_nbr + infant_nbr) {
+      return this.showGuestModal();
+    }
+    return this.renderModalMessage();
   }
   render() {
     return (
@@ -292,7 +300,7 @@ export class IrRoom {
               </div>
             )}
             {this.hasCheckIn && (
-              <ir-button onClickHandler={this.openModal.bind(this, 'checkin')} id="checkin" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckIn}></ir-button>
+              <ir-button onClickHandler={this.handleCheckIn.bind(this)} id="checkin" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckIn}></ir-button>
             )}
             {this.hasCheckOut && (
               <ir-button onClickHandler={this.openModal.bind(this, 'checkout')} id="checkout" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckOut}></ir-button>

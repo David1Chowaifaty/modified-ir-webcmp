@@ -5,6 +5,7 @@ import { ICountry } from '@/components';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import Token from '@/models/Token';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-guest-info',
@@ -17,6 +18,7 @@ export class GuestInfo {
   @Prop() email: string;
   @Prop() booking_nbr: string;
   @Prop() ticket: string;
+  @Prop() isInSideBar: boolean;
 
   @State() countries: ICountry[];
   @State() submit: boolean = false;
@@ -34,7 +36,7 @@ export class GuestInfo {
     if (this.ticket) {
       this.token.setToken(this.ticket);
     }
-    if (!!this.token.getToken()) await this.init();
+    if (!!this.token.getToken()) this.init();
   }
 
   @Watch('ticket')
@@ -45,18 +47,11 @@ export class GuestInfo {
     this.token.setToken(this.ticket);
     this.init();
   }
-  // async init() {
-  //   try {
 
-  //     const [guest, countries] = await Promise.all([this.bookingService.fetchGuest(this.email), this.bookingService.getCountries(this.language)]);
-  //     this.countries = countries;
-  //     this.guest = guest;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
   async init() {
     try {
+      console.log('first');
+      this.isLoading = true;
       const [guest, countries, fetchedLocales] = await Promise.all([
         this.bookingService.fetchGuest(this.email),
         this.bookingService.getCountries(this.language),
@@ -74,6 +69,8 @@ export class GuestInfo {
       this.guest = guest;
     } catch (error) {
       console.log(error);
+    } finally {
+      this.isLoading = false;
     }
   }
   private handleInputChange(params: Partial<Guest>) {
@@ -82,19 +79,20 @@ export class GuestInfo {
 
   async editGuest() {
     try {
-      this.isLoading = true;
       await this.bookingService.editExposedGuest(this.guest, this.booking_nbr ?? null);
       this.closeSideBar.emit(null);
       this.resetbooking.emit(null);
     } catch (error) {
       console.log(error);
-    } finally {
-      this.isLoading = false;
-      console.log('done');
     }
   }
   render() {
-    if (!this.guest) {
+    if (this.isLoading && this.isInSideBar) {
+      <div class={'loading-container'}>
+        <ir-spinner></ir-spinner>
+      </div>;
+    }
+    if (this.isLoading) {
       return null;
     }
     return [
@@ -159,8 +157,8 @@ export class GuestInfo {
               name="country"
               submited={this.submit}
               label={locales.entries.Lcz_Country}
-              selectedValue={this.guest.country_id?.toString() ?? ''}
-              data={this.countries.map(item => {
+              selectedValue={this.guest?.country_id?.toString() ?? ''}
+              data={this.countries?.map(item => {
                 return {
                   value: item.id.toString(),
                   text: item.name,
@@ -169,36 +167,6 @@ export class GuestInfo {
               firstOption={'...'}
               onSelectChange={e => this.handleInputChange({ country_id: e.detail })}
             ></ir-select>
-            {/* <div class="form-group mr-0">
-              <div class="input-group row m-0 p-0">
-                <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
-                  <label class={`input-group-text  border-theme flex-grow-1 text-dark  `}>
-                    {locales.entries.Lcz_MobilePhone}
-                    {'*'}
-                  </label>
-                </div>
-                <select
-                  class={`form-control text-md  col-2 py-0 mobilePrefixSelect`}
-                  onInput={e => this.handleInputChange('country_phone_prefix', (e.target as HTMLSelectElement).value)}
-                  required
-                >
-                  <option value={null}>...</option>
-                  {this.countries.map(item => (
-                    <option selected={this.guest.country_phone_prefix?.toString() === item.phone_prefix.toString()} value={item.phone_prefix}>
-                      {item.phone_prefix}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  required
-                  value={this.guest.mobile}
-                  class={'form-control flex-fill mobilePrefixInput'}
-                  onInput={e => this.handleInputChange('mobile', (e.target as HTMLInputElement).value)}
-                />
-              </div>
-            </div> */}
-
             <ir-phone-input
               onTextChange={e => {
                 e.stopImmediatePropagation();
@@ -238,7 +206,7 @@ export class GuestInfo {
 
             <hr />
             <ir-button
-              isLoading={this.isLoading}
+              isLoading={isRequestPending('/Edit_Exposed_Guest')}
               btn_disabled={this.isLoading}
               btn_styles="d-flex align-items-center justify-content-center"
               text={locales.entries.Lcz_Save}

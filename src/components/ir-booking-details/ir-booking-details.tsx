@@ -288,6 +288,7 @@ export class IrBookingDetails {
       case 'guest':
         return (
           <ir-guest-info
+            isInSideBar
             headerShown
             slot="sidebar-body"
             booking_nbr={this.bookingNumber}

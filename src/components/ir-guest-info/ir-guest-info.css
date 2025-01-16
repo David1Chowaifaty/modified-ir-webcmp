@@ -78,3 +78,12 @@
 .border-theme {
   border: 1px solid #cacfe7;
 }
+.loading-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
