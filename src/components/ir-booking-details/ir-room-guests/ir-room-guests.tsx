@@ -13,16 +13,20 @@ import { ICountry, IEntries } from '@/models/IBooking';
 })
 export class IrRoomGuests {
   @Prop() roomName: string;
+  @Prop() identifier: string;
   @Prop() sharedPersons: SharedPerson[] = [];
   @Prop() totalGuests: number = 0;
   @Prop() countries: ICountry[];
+  @Prop() checkIn: boolean;
   @Prop() language: string = 'en';
+  @Prop() bookingNumber: string;
 
   @State() guests: SharedPerson[] = [];
   @State() idTypes: IEntries[] = [];
   @State() error: boolean = false;
   @State() isLoading: boolean;
   @State() submitted: boolean;
+  @State() propertyCountry: ICountry;
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetbooking: EventEmitter<null>;
@@ -37,7 +41,11 @@ export class IrRoomGuests {
   private async init() {
     try {
       this.isLoading = true;
-      this.idTypes = await this.bookingService.getSetupEntriesByTableName('_ID_TYPE');
+      const [country, idTypes] = await Promise.all([this.bookingService.getUserDefaultCountry(), this.bookingService.getSetupEntriesByTableName('_ID_TYPE')]);
+      this.idTypes = idTypes;
+      if (country) {
+        this.propertyCountry = this.countries.find(c => c.id === country.COUNTRY_ID);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -78,12 +86,24 @@ export class IrRoomGuests {
     this.guests = [...tempGuests];
   }
 
-  private saveGuests() {
+  private async saveGuests() {
     try {
       this.submitted = true;
       this.error = false;
 
       ZSharedPersons.parse(this.guests);
+      await this.bookingService.handleExposedRoomGuests({
+        booking_nbr: this.bookingNumber,
+        identifier: this.identifier,
+        guests: this.guests,
+      });
+      if (this.checkIn) {
+        await this.bookingService.handleExposedRoomInOut({
+          booking_nbr: this.bookingNumber,
+          room_identifier: this.identifier,
+          status: '001',
+        });
+      }
     } catch (error) {
       console.log(error);
       this.error = true;
@@ -92,29 +112,38 @@ export class IrRoomGuests {
 
   render() {
     if (this.isLoading) {
-      return null;
+      return (
+        <div class={'loading-container'}>
+          <ir-spinner></ir-spinner>
+        </div>
+      );
     }
     return (
       <div class="h-100 d-flex flex-column" style={{ minWidth: '300px' }}>
         <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={`Room ${this.roomName}`} displayContext="sidebar"></ir-title>
         <section class={'d-flex flex-column px-1 h-100 '}>
-          <div class="h-100 flex-grow-1">
-            <div class="guest-grid">
+          <div class="">
+            <div class="guest-grid guests-labels">
               <p class="">Main Guest</p>
               <p class=" ">D.O.B.</p>
               <p class="">Nationality</p>
-              <p class=" ">Passport or ID number</p>
+              <p class=" ">Documents</p>
             </div>
+            <h5 class="main_guest_heading">Main Guest</h5>
             {this.guests.map((guest, idx) => (
               <Fragment>
                 {idx === 1 && (
                   <div class="d-flex mx-0 px-0">
-                    <p class="mx-0 px-0">Persons sharing room</p>
+                    <h5 class="mx-0 px-0 sharing_persons_heading">Persons sharing room</h5>
+                    <p class="mx-0 px-0 sharing_persons_label">Persons sharing room</p>
                   </div>
                 )}
                 <div key={idx} class="guest-grid">
-                  <div class={'m-0 p-0'}>
+                  <div class={'m-0 p-0 d-flex align-items-center h-100'}>
+                    <p class="guest_label">Full name</p>
                     <ir-input-text
+                      class="flex-grow-1 h-100"
+                      id={`full_name_${idx}`}
                       zod={ZSharedPerson.pick({ full_name: true })}
                       error={this.error}
                       autoValidate={false}
@@ -126,8 +155,11 @@ export class IrRoomGuests {
                       value={guest.full_name}
                     ></ir-input-text>
                   </div>
-                  <div class="flex-grow-0 m-0 p-0">
+                  <div class="flex-grow-0 m-0 p-0 h-100 d-flex align-items-center">
+                    <p class="guest_label">D.O.B.</p>
                     <ir-input-text
+                      class="flex-grow-1 h-100"
+                      id={`dob_${idx}`}
                       zod={ZSharedPerson.pick({ dob: true })}
                       error={this.error}
                       autoValidate={false}
@@ -142,16 +174,23 @@ export class IrRoomGuests {
                       value={guest.dob}
                     ></ir-input-text>
                   </div>
-                  <div class=" m-0 p-0">
-                    <ir-country-picker
-                      error={this.error && !guest.country_id}
-                      country={this.countries?.find(c => c.id?.toString() === guest.country?.id?.toString())}
-                      onCountryChange={e => this.updateGuestInfo(idx, { country_id: e.detail.id.toString(), country: e.detail })}
-                      countries={this.countries}
-                    ></ir-country-picker>
+                  <div class=" m-0 p-0 d-flex align-items-center">
+                    <p class="guest_label">Nationality</p>
+                    <div class="mx-0 flex-grow-1  h-100">
+                      <ir-country-picker
+                        class="h-100"
+                        propertyCountry={this.propertyCountry}
+                        id={`nationality_${idx}`}
+                        error={this.error && !guest.country_id}
+                        country={this.countries?.find(c => c.id?.toString() === guest.country?.id?.toString())}
+                        onCountryChange={e => this.updateGuestInfo(idx, { country_id: e.detail.id.toString(), country: e.detail })}
+                        countries={this.countries}
+                      ></ir-country-picker>
+                    </div>
                   </div>
-                  <div class=" flex-grow-1 m-0 p-0">
-                    <div class={'input-group d-flex m-0'}>
+                  <div class="flex-grow-1 m-0 p-0 d-flex align-items-center">
+                    <p class="guest_label">Documents</p>
+                    <div class={' d-flex m-0 flex-grow-1 h-100'}>
                       <ir-select
                         selectStyles={'id-select'}
                         onSelectChange={e => {
@@ -171,6 +210,7 @@ export class IrRoomGuests {
                         data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
                       ></ir-select>
                       <ir-input-text
+                        class="flex-grow-1"
                         type="text"
                         value={guest.id_info.number}
                         zod={ZIdInfo.pick({ number: true })}
@@ -209,8 +249,8 @@ export class IrRoomGuests {
               btn_styles="justify-content-center align-items-center"
               class={'m-0 flex-fill text-center'}
               icon=""
-              isLoading={isRequestPending('/Do_Booking_Extra_Service')}
-              text={locales.entries.Lcz_Save}
+              isLoading={isRequestPending('/Handle_Exposed_Room_Guests')}
+              text={this.checkIn ? locales.entries.Lcz_CheckIn : locales.entries.Lcz_Save}
               btn_color="primary"
               onClickHandler={this.saveGuests.bind(this)}
             ></ir-button>

@@ -1,5 +1,8 @@
 :host {
   display: block;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 .combobox-menu {
   max-height: 200px;

@@ -1,3 +1,4 @@
+import { HandleExposedRoomGuestsRequest } from './../models/booking.dto';
 import { DayData } from '../models/DayType';
 import axios from 'axios';
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType } from '../models/IBooking';
@@ -89,6 +90,13 @@ export class BookingService {
     } catch (error) {
       console.error(error);
     }
+  }
+  public async handleExposedRoomGuests(props: HandleExposedRoomGuestsRequest) {
+    const { data } = await axios.post('/Handle_Exposed_Room_Guests', props);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data;
   }
   public async fetchGuest(email: string): Promise<Guest> {
     try {

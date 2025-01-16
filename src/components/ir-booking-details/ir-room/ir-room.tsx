@@ -1,4 +1,4 @@
-import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Watch, Host, Fragment } from '@stencil/core';
+import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Host, Fragment } from '@stencil/core';
 import { _getDay } from '../functions';
 import { Booking, IUnit, IVariations, Occupancy, Room } from '@/models/booking.dto';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
@@ -52,11 +52,6 @@ export class IrRoom {
 
   private modal: HTMLIrModalElement;
   private bookingService = new BookingService();
-
-  @Watch('booking')
-  handlebookingChange() {
-    this.room = this.booking.rooms[this.bookingIndex];
-  }
 
   @Listen('clickHandler')
   handleClick(e) {
@@ -419,6 +414,8 @@ export class IrRoom {
         roomName: (this.room.unit as IUnit).name,
         sharing_persons: this.room.sharing_persons,
         totalGuests: adult_nbr + children_nbr + infant_nbr,
+        checkin: this.hasCheckIn,
+        identifier: this.room.identifier,
       },
     });
   }

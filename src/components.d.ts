@@ -380,6 +380,7 @@ export namespace Components {
         "countries": ICountry[];
         "country": ICountry;
         "error": boolean;
+        "propertyCountry": ICountry;
     }
     interface IrDatePicker {
         "applyLabel": string;
@@ -802,7 +803,10 @@ export namespace Components {
         "roomsInfo": any;
     }
     interface IrRoomGuests {
+        "bookingNumber": string;
+        "checkIn": boolean;
         "countries": ICountry[];
+        "identifier": string;
         "language": string;
         "roomName": string;
         "sharedPersons": SharedPerson[];
@@ -3084,6 +3088,7 @@ declare namespace LocalJSX {
         "country"?: ICountry;
         "error"?: boolean;
         "onCountryChange"?: (event: IrCountryPickerCustomEvent<ICountry>) => void;
+        "propertyCountry"?: ICountry;
     }
     interface IrDatePicker {
         "applyLabel"?: string;
@@ -3558,7 +3563,10 @@ declare namespace LocalJSX {
         "roomsInfo"?: any;
     }
     interface IrRoomGuests {
+        "bookingNumber"?: string;
+        "checkIn"?: boolean;
         "countries"?: ICountry[];
+        "identifier"?: string;
         "language"?: string;
         "onCloseModal"?: (event: IrRoomGuestsCustomEvent<null>) => void;
         "onResetbooking"?: (event: IrRoomGuestsCustomEvent<null>) => void;

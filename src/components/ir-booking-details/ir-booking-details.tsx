@@ -327,10 +327,13 @@ export class IrBookingDetails {
           <ir-room-guests
             countries={this.countries}
             language={this.language}
+            identifier={this.sidebarPayload?.identifier}
+            bookingNumber={this.booking.booking_nbr}
             roomName={this.sidebarPayload?.roomName}
             totalGuests={this.sidebarPayload?.totalGuests}
             sharedPersons={this.sidebarPayload?.sharing_persons}
             slot="sidebar-body"
+            checkIn={this.sidebarPayload?.checkin}
             onCloseModal={handleClose}
           ></ir-room-guests>
         );

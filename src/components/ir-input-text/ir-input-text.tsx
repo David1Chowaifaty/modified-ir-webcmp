@@ -1,4 +1,4 @@
-import { Component, Prop, h, Event, EventEmitter, State, Watch } from '@stencil/core';
+import { Component, Prop, h, Event, EventEmitter, State, Watch, Element } from '@stencil/core';
 import { v4 } from 'uuid';
 import IMask, { FactoryArg, InputMask } from 'imask';
 import { ZodType } from 'zod';
@@ -9,6 +9,7 @@ import { ZodType } from 'zod';
   scoped: true,
 })
 export class IrInputText {
+  @Element() el: HTMLIrInputTextElement;
   /** Name attribute for the input field */
   @Prop() name: string;
 
@@ -117,7 +118,15 @@ export class IrInputText {
 
   private inputRef: HTMLInputElement;
   private maskInstance: InputMask<FactoryArg>;
-
+  /**Input Id */
+  private id: string;
+  componentWillLoad() {
+    if (this.el.id) {
+      this.id = this.el.id;
+    } else {
+      this.id = v4();
+    }
+  }
   componentDidLoad() {
     if (this.mask) this.initMask();
   }
@@ -172,7 +181,6 @@ export class IrInputText {
       this.maskInstance.value = value;
     }
     const maskedValue = this.maskInstance ? this.maskInstance.value : value;
-    console.log(maskedValue);
     this.textChange.emit(maskedValue);
   }
 
@@ -198,11 +206,10 @@ export class IrInputText {
   }
 
   render() {
-    const id = v4();
     if (this.variant === 'icon') {
       return (
         <fieldset class="position-relative has-icon-left input-container">
-          <label htmlFor={id} class="input-group-prepend bg-white m-0">
+          <label htmlFor={this.id} class="input-group-prepend bg-white m-0">
             <span
               data-disabled={this.disabled}
               data-state={this.inputFocused ? 'focus' : ''}
@@ -223,7 +230,7 @@ export class IrInputText {
             onBlur={this.handleBlur.bind(this)}
             disabled={this.disabled}
             class={`form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${(this.error || this.isError) && 'danger-border'}`}
-            id={id}
+            id={this.id}
             value={this.value}
             placeholder={this.placeholder}
             onInput={this.handleInputChange.bind(this)}
@@ -235,6 +242,7 @@ export class IrInputText {
     let label = (
       <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
         <label
+          htmlFor={this.id}
           class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
             this.labelBackground ? 'bg-' + this.labelBackground : ''
           } flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} `}
@@ -259,6 +267,7 @@ export class IrInputText {
         <div class="input-group row m-0">
           {label}
           <input
+            id={this.id}
             ref={el => (this.inputRef = el)}
             readOnly={this.readonly}
             type={this.type}

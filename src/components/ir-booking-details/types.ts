@@ -15,4 +15,6 @@ export type RoomGuestsPayload = {
   roomName: string;
   sharing_persons: SharedPerson[];
   totalGuests: number;
+  checkin: boolean;
+  identifier: string;
 };
