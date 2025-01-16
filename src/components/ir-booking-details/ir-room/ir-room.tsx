@@ -295,8 +295,12 @@ export class IrRoom {
               showDateDifference={false}
             ></ir-date-view>
             {!isSingleUnit(this.room.roomtype.id) && calendar_data.is_frontdesk_enabled && this.room.unit && (
-              <div class={'d-flex justify-content-center align-items-center'} title={(this.room.unit as IUnit).name}>
-                <span class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>{(this.room.unit as IUnit).name}</span>
+              <div class={'d-flex justify-content-center align-items-center'}>
+                <ir-tooltip message={(this.room.unit as IUnit).name} customSlot>
+                  <span slot="tooltip-trigger" class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>
+                    {(this.room.unit as IUnit).name}
+                  </span>
+                </ir-tooltip>
               </div>
             )}
             {this.hasCheckIn && (

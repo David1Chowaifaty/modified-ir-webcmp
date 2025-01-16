@@ -84,6 +84,11 @@
 .in-out {
   width: 150px !important;
 }
+.booking_guest_name {
+  width: fit-content;
+  padding: 0;
+  margin: 0;
+}
 .buttons-container {
   gap: 10px;
 }

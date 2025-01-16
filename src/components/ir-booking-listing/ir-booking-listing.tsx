@@ -236,9 +236,7 @@ export class IrBookingListing {
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
-                          <button onClick={() => (this.editBookingItem = { booking, cause: 'edit' })} class="booking_number">
-                            {booking.booking_nbr}
-                          </button>
+                          <ir-button btn_color="link" onClickHandler={() => (this.editBookingItem = { booking, cause: 'edit' })} text={booking.booking_nbr}></ir-button>
                         </td>
                         <td>
                           <p class="p-0 m-0 date-p">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
@@ -259,14 +257,18 @@ export class IrBookingListing {
                                   </div>
                                 )}
                                 <div class="booking_name m-0 p-0">
-                                  <button
+                                  <ir-button
+                                    btn_color="link"
+                                    onClickHandler={() => (this.editBookingItem = { booking, cause: 'guest' })}
+                                    text={`${booking.guest.first_name} ${booking.guest.last_name ?? ''}`}
+                                    btn_styles="booking_guest_name"
+                                  ></ir-button>
+                                  {/* <button
                                     class="booking_number p-0 m-0 "
                                     onClick={() => {
                                       this.editBookingItem = { booking, cause: 'guest' };
                                     }}
-                                  >
-                                    {booking.guest.first_name} {booking.guest.last_name ?? ''}
-                                  </button>
+                                  ></button> */}
                                   <span class={'p-0 m-0'}>
                                     {booking.occupancy.adult_nbr}
                                     {locales.entries.Lcz_P}
@@ -467,6 +469,7 @@ export class IrBookingListing {
           {this.editBookingItem?.cause === 'guest' && (
             <ir-guest-info
               slot="sidebar-body"
+              isInSideBar={true}
               headerShown
               booking_nbr={this.editBookingItem?.booking?.booking_nbr}
               email={this.editBookingItem?.booking?.guest.email}
