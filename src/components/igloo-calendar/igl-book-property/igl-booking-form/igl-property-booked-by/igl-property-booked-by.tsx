@@ -81,7 +81,7 @@ export class IglPropertyBookedBy {
     console.log('initial bookedby data', this.bookedByData);
   }
 
-  handleDataChange(key, event) {
+  private handleDataChange(key, event) {
     this.bookedByData[key] = key === 'emailGuest' ? event.target.checked : event.target.value;
     this.dataUpdateEvent.emit({
       key: 'bookedByInfoUpdated',
@@ -95,8 +95,20 @@ export class IglPropertyBookedBy {
     }
     // console.log(this.bookedByData);
   }
+  private handleCountryChange(value) {
+    this.bookedByData = {
+      ...this.bookedByData,
+      isdCode: value,
+      countryId: value,
+    };
+    this.dataUpdateEvent.emit({
+      key: 'bookedByInfoUpdated',
+      data: { ...this.bookedByData },
+    });
+    // console.log(this.bookedByData);
+  }
 
-  handleNumberInput(key, event: InputEvent) {
+  private handleNumberInput(key, event: InputEvent) {
     const inputElement = event.target as HTMLInputElement;
     const inputValue = inputElement.value;
 
@@ -326,8 +338,14 @@ export class IglPropertyBookedBy {
 
               <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_Country}</label>
-                <div class="p-0 m-0  controlContainer flex-fill">
-                  <select class={`form-control input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
+                {/* <div class="p-0 m-0  controlContainer flex-fill"> */}
+                <ir-country-picker
+                  class="flex-grow-1 m-0"
+                  onCountryChange={e => this.handleCountryChange(e.detail.id)}
+                  countries={this.countryNodeList}
+                  country={this.countryNodeList.find(c => c.id === this.bookedByData.countryId)}
+                ></ir-country-picker>
+                {/* <select class={`form-control input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
                     <option value="" selected={this.bookedByData.countryId === ''}>
                       {locales.entries.Lcz_Select}
                     </option>
@@ -336,8 +354,8 @@ export class IglPropertyBookedBy {
                         {countryNode.name}
                       </option>
                     ))}
-                  </select>
-                </div>
+                  </select> */}
+                {/* </div> */}
               </div>
 
               {/* <div class="form-group  p-0 d-flex flex-column flex-md-row align-items-md-center">

@@ -384,6 +384,7 @@ export namespace Components {
         "countries": ICountry[];
         "country": ICountry;
         "error": boolean;
+        "label": string;
         "propertyCountry": ICountry;
     }
     interface IrDatePicker {
@@ -3120,6 +3121,7 @@ declare namespace LocalJSX {
         "countries"?: ICountry[];
         "country"?: ICountry;
         "error"?: boolean;
+        "label"?: string;
         "onCountryChange"?: (event: IrCountryPickerCustomEvent<ICountry>) => void;
         "propertyCountry"?: ICountry;
     }

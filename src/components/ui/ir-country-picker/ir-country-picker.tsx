@@ -11,6 +11,7 @@ export class IrCountryPicker {
   @Prop() country: ICountry;
   @Prop({ mutable: true }) error: boolean;
   @Prop() propertyCountry: ICountry;
+  @Prop() label: string;
 
   @State() inputValue: string;
   @State() selectedCountry: ICountry;
@@ -77,12 +78,13 @@ export class IrCountryPicker {
             this.inputValue = e.detail;
             this.filterCountries();
           }}
+          label={this.label}
           error={this.error}
           placeholder=""
           class="m-0 p-0"
           value={this.inputValue}
           id="dropdownMenuCombobox"
-          LabelAvailable={false}
+          LabelAvailable={!!this.label}
           data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"

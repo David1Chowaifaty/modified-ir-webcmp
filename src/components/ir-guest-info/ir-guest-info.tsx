@@ -21,7 +21,7 @@ export class GuestInfo {
   @Prop() isInSideBar: boolean;
 
   @State() countries: ICountry[];
-  @State() submit: boolean = false;
+  // @State() submit: boolean = false;
   @State() guest: Guest | null = null;
   @State() isLoading: boolean = false;
 
@@ -120,7 +120,7 @@ export class GuestInfo {
               placeholder=""
               label={locales.entries.Lcz_FirstName}
               name="firstName"
-              submitted={this.submit}
+              // submitted={this.submit}
               value={this.guest?.first_name}
               required
               onTextChange={e => this.handleInputChange({ first_name: e.detail })}
@@ -129,7 +129,7 @@ export class GuestInfo {
               placeholder=""
               label={locales.entries.Lcz_LastName}
               name="lastName"
-              submitted={this.submit}
+              // submitted={this.submit}
               value={this.guest?.last_name}
               required
               onTextChange={e => this.handleInputChange({ last_name: e.detail })}
@@ -138,7 +138,7 @@ export class GuestInfo {
               placeholder=""
               label={locales.entries.Lcz_Email}
               name="email"
-              submitted={this.submit}
+              // submitted={this.submit}
               value={this.guest?.email}
               required
               onTextChange={e => this.handleInputChange({ email: e.detail })}
@@ -151,7 +151,7 @@ export class GuestInfo {
               onTextChange={e => this.handleInputChange({ alternative_email: e.detail })}
             ></ir-input-text>
             {/* <ir-input-text label="Password" placeholder="" name="password" submited={this.submit} type="password" value={this.Model.password} required></ir-input-text> */}
-            <ir-select
+            {/* <ir-select
               selectContainerStyle="mb-1"
               required
               name="country"
@@ -166,7 +166,14 @@ export class GuestInfo {
               })}
               firstOption={'...'}
               onSelectChange={e => this.handleInputChange({ country_id: e.detail })}
-            ></ir-select>
+            ></ir-select> */}
+            <ir-country-picker
+              // error={this.submit && !this.guest.country_id}
+              country={this.countries.find(c => c.id === this.guest.country_id)}
+              label={locales.entries.Lcz_Country}
+              onCountryChange={e => this.handleInputChange({ country_id: e.detail.id })}
+              countries={this.countries}
+            ></ir-country-picker>
             <ir-phone-input
               onTextChange={e => {
                 e.stopImmediatePropagation();
