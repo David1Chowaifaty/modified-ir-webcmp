@@ -21,14 +21,18 @@
 
  - [ir-booking-details](../../ir-booking-details)
  - [ir-events-log](../../ir-booking-details/ir-booking-header/events-log)
+ - [ir-guest-info](../../ir-guest-info)
  - [ir-pms-logs](../../ir-booking-details/ir-booking-header/ir-pms-logs)
+ - [ir-room-guests](../../ir-booking-details/ir-room-guests)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-booking-details --> ir-spinner
   ir-events-log --> ir-spinner
+  ir-guest-info --> ir-spinner
   ir-pms-logs --> ir-spinner
+  ir-room-guests --> ir-spinner
   style ir-spinner fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

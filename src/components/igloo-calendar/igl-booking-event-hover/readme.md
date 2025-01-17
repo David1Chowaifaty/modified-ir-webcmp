@@ -37,7 +37,7 @@
 
 - [ota-label](../../ota-label)
 - [ir-date-view](../../ir-date-view)
-- [ir-icons](../../ui/ir-icons)
+- [ir-button](../../ir-button)
 - [igl-block-dates-view](../igl-block-dates-view)
 
 ### Graph
@@ -45,8 +45,9 @@
 graph TD;
   igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-date-view
-  igl-booking-event-hover --> ir-icons
+  igl-booking-event-hover --> ir-button
   igl-booking-event-hover --> igl-block-dates-view
+  ir-button --> ir-icons
   igl-block-dates-view --> ir-date-view
   igl-booking-event --> igl-booking-event-hover
   style igl-booking-event-hover fill:#f9f,stroke:#333,stroke-width:4px

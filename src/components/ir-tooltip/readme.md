@@ -23,6 +23,7 @@
  - [igl-rate-plan](../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-reservation-information](../ir-booking-details/ir-reservation-information)
+ - [ir-room](../ir-booking-details/ir-room)
 
 ### Graph
 ```mermaid
@@ -32,6 +33,7 @@ graph TD;
   igl-rate-plan --> ir-tooltip
   ir-booking-listing --> ir-tooltip
   ir-reservation-information --> ir-tooltip
+  ir-room --> ir-tooltip
   style ir-tooltip fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

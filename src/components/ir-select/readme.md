@@ -54,6 +54,7 @@
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-option-details](../ir-payment-option/ir-option-details)
  - [ir-pickup](../ir-booking-details/ir-pickup)
+ - [ir-room-guests](../ir-booking-details/ir-room-guests)
  - [ir-unit-status](../ir-housekeeping/ir-unit-status)
 
 ### Graph
@@ -71,6 +72,7 @@ graph TD;
   ir-listing-modal --> ir-select
   ir-option-details --> ir-select
   ir-pickup --> ir-select
+  ir-room-guests --> ir-select
   ir-unit-status --> ir-select
   style ir-select fill:#f9f,stroke:#333,stroke-width:4px
 ```

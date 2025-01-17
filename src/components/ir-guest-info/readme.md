@@ -7,13 +7,14 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type      | Default     |
-| ------------- | -------------- | ----------- | --------- | ----------- |
-| `booking_nbr` | `booking_nbr`  |             | `string`  | `undefined` |
-| `email`       | `email`        |             | `string`  | `undefined` |
-| `headerShown` | `header-shown` |             | `boolean` | `undefined` |
-| `language`    | `language`     |             | `string`  | `undefined` |
-| `ticket`      | `ticket`       |             | `string`  | `undefined` |
+| Property      | Attribute        | Description | Type      | Default     |
+| ------------- | ---------------- | ----------- | --------- | ----------- |
+| `booking_nbr` | `booking_nbr`    |             | `string`  | `undefined` |
+| `email`       | `email`          |             | `string`  | `undefined` |
+| `headerShown` | `header-shown`   |             | `boolean` | `undefined` |
+| `isInSideBar` | `is-in-side-bar` |             | `boolean` | `undefined` |
+| `language`    | `language`       |             | `string`  | `undefined` |
+| `ticket`      | `ticket`         |             | `string`  | `undefined` |
 
 
 ## Events
@@ -33,6 +34,7 @@
 
 ### Depends on
 
+- [ir-spinner](../ui/ir-spinner)
 - [ir-icon](../ir-icon)
 - [ir-input-text](../ir-input-text)
 - [ir-select](../ir-select)
@@ -43,6 +45,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  ir-guest-info --> ir-spinner
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select

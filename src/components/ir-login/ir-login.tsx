@@ -64,7 +64,7 @@ export class IrLogin {
               <ir-icons name={!this.showPassword ? 'open_eye' : 'closed_eye'}></ir-icons>
             </button>
           </div>
-          <ir-button isLoading={isRequestPending('/Authenticate')} btn_type="submit" iconPostion="left" icon_name="unlock" text={'Login'} size="md" class="login-btn"></ir-button>
+          <ir-button isLoading={isRequestPending('/Authenticate')} btn_type="submit" iconPosition="left" icon_name="unlock" text={'Login'} size="md" class="login-btn"></ir-button>
           <div class="card-body text-center p-0 app_links">
             <a href="https://apps.apple.com/lb/app/igloorooms/id1607846173" target="_new">
               <img src="https://x.igloorooms.com/assets/images/svg/AppStore_ios.svg" alt="Install igloorooms iOS App" />

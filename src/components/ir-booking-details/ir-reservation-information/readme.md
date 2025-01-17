@@ -15,9 +15,9 @@
 
 ## Events
 
-| Event         | Description | Type                                                                     |
-| ------------- | ----------- | ------------------------------------------------------------------------ |
-| `openSidebar` |             | `CustomEvent<{ type: BookingDetailsSidebarEvents; payload?: unknown; }>` |
+| Event         | Description | Type                                                                 |
+| ------------- | ----------- | -------------------------------------------------------------------- |
+| `openSidebar` |             | `CustomEvent<{ type: BookingDetailsSidebarEvents; payload?: any; }>` |
 
 
 ## Dependencies

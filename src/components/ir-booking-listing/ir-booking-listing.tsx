@@ -247,15 +247,6 @@ export class IrBookingListing {
                             <img class="mr-2 logo" src={booking.origin.Icon} alt={booking.origin.Label} />
                             <div class="text-left">
                               <div class="d-flex align-items-center">
-                                {booking.guest.nbr_confirmed_bookings > 1 && !booking.agent && (
-                                  <div class="m-0 p-0">
-                                    <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', booking.guest.nbr_confirmed_bookings.toString())} customSlot>
-                                      <div class="d-flex align-items-center my-0 p-0" slot="tooltip-trigger" style={{ marginRight: '0.5rem' }}>
-                                        <ir-icons style={{ '--icon-size': '0.875rem' }} color="#FB0AAD" name="heart-fill"></ir-icons>
-                                      </div>
-                                    </ir-tooltip>
-                                  </div>
-                                )}
                                 <div class="booking_name m-0 p-0">
                                   <ir-button
                                     btn_color="link"
@@ -263,6 +254,15 @@ export class IrBookingListing {
                                     text={`${booking.guest.first_name} ${booking.guest.last_name ?? ''}`}
                                     btn_styles="booking_guest_name"
                                   ></ir-button>
+                                  {booking.guest.nbr_confirmed_bookings > 1 && !booking.agent && (
+                                    <div class="m-0 p-0">
+                                      <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', booking.guest.nbr_confirmed_bookings.toString())} customSlot>
+                                        <div class="d-flex align-items-center my-0 p-0" slot="tooltip-trigger">
+                                          <ir-icons style={{ '--icon-size': '0.875rem' }} color="#FB0AAD" name="heart-fill"></ir-icons>
+                                        </div>
+                                      </ir-tooltip>
+                                    </div>
+                                  )}
                                   {/* <button
                                     class="booking_number p-0 m-0 "
                                     onClick={() => {

@@ -46,8 +46,9 @@ graph TD;
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-date-view
-  igl-booking-event-hover --> ir-icons
+  igl-booking-event-hover --> ir-button
   igl-booking-event-hover --> igl-block-dates-view
+  ir-button --> ir-icons
   igl-block-dates-view --> ir-date-view
   igloo-calendar --> igl-cal-body
   style igl-cal-body fill:#f9f,stroke:#333,stroke-width:4px

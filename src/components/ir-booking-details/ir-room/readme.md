@@ -10,7 +10,7 @@
 | Property            | Attribute               | Description | Type         | Default     |
 | ------------------- | ----------------------- | ----------- | ------------ | ----------- |
 | `bedPreferences`    | --                      |             | `IEntries[]` | `undefined` |
-| `bookingEvent`      | --                      |             | `Booking`    | `undefined` |
+| `booking`           | --                      |             | `Booking`    | `undefined` |
 | `bookingIndex`      | `booking-index`         |             | `number`     | `undefined` |
 | `currency`          | `currency`              |             | `string`     | `'USD'`     |
 | `hasCheckIn`        | `has-check-in`          |             | `boolean`    | `false`     |
@@ -23,6 +23,7 @@
 | `legendData`        | `legend-data`           |             | `any`        | `undefined` |
 | `mealCodeName`      | `meal-code-name`        |             | `string`     | `undefined` |
 | `myRoomTypeFoodCat` | `my-room-type-food-cat` |             | `string`     | `undefined` |
+| `room`              | --                      |             | `Room`       | `undefined` |
 | `roomsInfo`         | `rooms-info`            |             | `any`        | `undefined` |
 
 
@@ -32,6 +33,7 @@
 | ---------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `deleteFinished` |             | `CustomEvent<string>`                                                                                                                                                                                                                |
 | `editInitiated`  |             | `CustomEvent<IglBookPropertyPayloadAddRoom \| IglBookPropertyPayloadBarBooking \| IglBookPropertyPayloadBlockDates \| IglBookPropertyPayloadEditBooking \| IglBookPropertyPayloadPlusBooking \| IglBookPropertyPayloadSplitBooking>` |
+| `openSidebar`    |             | `CustomEvent<{ type: BookingDetailsSidebarEvents; payload?: RoomGuestsPayload; }>`                                                                                                                                                   |
 | `pressCheckIn`   |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
 | `pressCheckOut`  |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
 | `resetbooking`   |             | `CustomEvent<null>`                                                                                                                                                                                                                  |
@@ -47,6 +49,7 @@
 
 - [ir-button](../../ir-button)
 - [ir-date-view](../../ir-date-view)
+- [ir-tooltip](../../ir-tooltip)
 - [ir-label](../../ui/ir-label)
 - [ir-modal](../../ir-modal)
 
@@ -55,6 +58,7 @@
 graph TD;
   ir-room --> ir-button
   ir-room --> ir-date-view
+  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-button --> ir-icons

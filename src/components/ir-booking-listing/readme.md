@@ -25,8 +25,8 @@
 - [ir-toast](../ir-toast)
 - [ir-listing-header](ir-listing-header)
 - [ir-tooltip](../ir-tooltip)
-- [ir-icons](../ui/ir-icons)
 - [ir-button](../ir-button)
+- [ir-icons](../ui/ir-icons)
 - [ir-select](../ir-select)
 - [ir-listing-modal](ir-listing-modal)
 - [ir-sidebar](../ir-sidebar)
@@ -41,8 +41,8 @@ graph TD;
   ir-booking-listing --> ir-toast
   ir-booking-listing --> ir-listing-header
   ir-booking-listing --> ir-tooltip
-  ir-booking-listing --> ir-icons
   ir-booking-listing --> ir-button
+  ir-booking-listing --> ir-icons
   ir-booking-listing --> ir-select
   ir-booking-listing --> ir-listing-modal
   ir-booking-listing --> ir-sidebar
@@ -93,6 +93,7 @@ graph TD;
   ir-booking-details --> ir-pickup
   ir-booking-details --> ir-booking-extra-note
   ir-booking-details --> ir-extra-service-config
+  ir-booking-details --> ir-room-guests
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
   ir-booking-details --> ir-interceptor
@@ -106,6 +107,7 @@ graph TD;
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
+  ir-guest-info --> ir-spinner
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-select
@@ -125,6 +127,13 @@ graph TD;
   ir-extra-service-config --> ir-date-picker
   ir-extra-service-config --> ir-button
   ir-extra-service-config --> ir-price-input
+  ir-room-guests --> ir-spinner
+  ir-room-guests --> ir-title
+  ir-room-guests --> ir-input-text
+  ir-room-guests --> ir-country-picker
+  ir-room-guests --> ir-select
+  ir-room-guests --> ir-button
+  ir-country-picker --> ir-input-text
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-select
@@ -140,6 +149,7 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
+  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button

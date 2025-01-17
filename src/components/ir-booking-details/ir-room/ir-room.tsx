@@ -314,14 +314,19 @@ export class IrRoom {
           <div class={'d-flex align-items-center'}>
             <span class="mr-1">{`${this.room.guest.first_name || ''} ${this.room.guest.last_name || ''}`}</span>
             {/* {this.room.rateplan.selected_variation.adult_nbr > 0 && <span> {this.room.rateplan.selected_variation.adult_child_offering}</span>} */}
-            {this.room.rateplan.selected_variation.adult_nbr > 0 && (
-              <ir-button
-                btn_color="link"
-                onClickHandler={() => this.showGuestModal()}
-                size="sm"
-                text={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}
-              ></ir-button>
-            )}
+            {this.room.rateplan.selected_variation.adult_nbr > 0 &&
+              (this.room.unit ? (
+                <ir-button
+                  btn_color="link"
+                  renderContentAsHtml
+                  onClickHandler={() => this.showGuestModal()}
+                  size="sm"
+                  btn_styles="room_guest_name"
+                  text={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}
+                ></ir-button>
+              ) : (
+                <span innerHTML={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}></span>
+              ))}
             {this.room.bed_preference && <span>({this.getBedName()})</span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.room.identifier?.split(' ').join('')}`}>
@@ -423,7 +428,7 @@ export class IrRoom {
     this.openSidebar.emit({
       type: 'room-guest',
       payload: {
-        roomName: (this.room.unit as IUnit).name,
+        roomName: (this.room.unit as IUnit)?.name,
         sharing_persons: this.room.sharing_persons,
         totalGuests: adult_nbr + children_nbr + infant_nbr,
         checkin: this.hasCheckIn,

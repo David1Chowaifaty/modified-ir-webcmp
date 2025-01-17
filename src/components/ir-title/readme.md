@@ -33,6 +33,7 @@
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-pickup](../ir-booking-details/ir-pickup)
+ - [ir-room-guests](../ir-booking-details/ir-room-guests)
  - [ir-unit-status](../ir-housekeeping/ir-unit-status)
 
 ### Depends on
@@ -51,6 +52,7 @@ graph TD;
   ir-hk-unassigned-units --> ir-title
   ir-hk-user --> ir-title
   ir-pickup --> ir-title
+  ir-room-guests --> ir-title
   ir-unit-status --> ir-title
   style ir-title fill:#f9f,stroke:#333,stroke-width:4px
 ```
