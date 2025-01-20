@@ -333,10 +333,10 @@ export class IrRoom {
             {this.bookingEvent.is_direct && (
               <Fragment>
                 {this.item.rateplan.cancelation && (
-                  <ir-label labelText={`${locales.entries.Lcz_Cancellation}:`} content={this.item.rateplan.cancelation || ''} renderContentAsHtml></ir-label>
+                  <ir-label labelText={`${locales.entries.Lcz_Cancellation}:`} display="inline" content={this.item.rateplan.cancelation || ''} renderContentAsHtml></ir-label>
                 )}
                 {this.item.rateplan.guarantee && (
-                  <ir-label labelText={`${locales.entries.Lcz_Guarantee}:`} content={this.item.rateplan.guarantee || ''} renderContentAsHtml></ir-label>
+                  <ir-label labelText={`${locales.entries.Lcz_Guarantee}:`} display="inline" content={this.item.rateplan.guarantee || ''} renderContentAsHtml></ir-label>
                 )}
               </Fragment>
             )}
