@@ -36,20 +36,89 @@ export interface SharedPerson {
   password: null;
   subscribe_to_news_letter: null;
 }
+// export const ZIdInfo = z.object({
+//   type: z.object({
+//     code: z.string().min(3),
+//     description: z.string(),
+//   }),
+//   number: z.string().min(2),
+// });
+// export const ZSharedPerson = z.object({
+//   id: z.number(),
+//   full_name: z.string().min(2),
+//   country_id: z.coerce.number().min(0),
+//   dob: z.coerce.date().transform(date => moment(date).format('YYYY-MM-DD')),
+//   id_info: ZIdInfo,
+// });
+
+/**
+ * ZIdInfo schema:
+ * - `type.code`: Validates a non-empty string must be at least 3 chars.
+ *   If empty string or not provided, validation is skipped.
+ * - `type.description`: Same pattern for description (but no min length).
+ * - `number`: Validates if non-empty string it should be at least 2 chars.
+ */
 export const ZIdInfo = z.object({
   type: z.object({
-    code: z.string().min(3),
-    description: z.string(),
+    code: z
+      .union([
+        // If provided and non-empty, must have at least 3 chars
+        z.string().min(3),
+        // or it can be an empty string
+        z.literal(''),
+      ])
+      .optional(), // or undefined
+    description: z
+      .union([
+        // If provided and non-empty, no special min
+        z.string(),
+        // or it can be empty string
+        z.literal(''),
+      ])
+      .optional(),
   }),
-  number: z.string().min(2),
+  number: z
+    .union([
+      // If provided and non-empty, must have at least 2 chars
+      z.string().min(2),
+      // or it can be empty string
+      z.literal(''),
+    ])
+    .optional(),
 });
+
+/**
+ * ZSharedPerson schema:
+ * - `id`: Optional numeric field.
+ * - `full_name`: If provided and non-empty, must be at least 2 chars.
+ * - `country_id`: If provided, coerced to number, must be >= 0.
+ * - `dob`: If provided, coerced to Date and formatted. Otherwise skipped.
+ * - `id_info`: The nested object above; can also be omitted entirely.
+ */
 export const ZSharedPerson = z.object({
-  id: z.number(),
-  full_name: z.string().min(2),
-  country_id: z.coerce.number().min(0),
-  dob: z.coerce.date().transform(date => moment(date).format('YYYY-MM-DD')),
-  id_info: ZIdInfo,
+  id: z.number().optional(),
+  full_name: z
+    .union([
+      z.string().min(2), // if provided and non-empty, must have min length 2
+      z.literal(''), // or it can be empty string
+    ])
+    .optional(),
+  country_id: z.coerce
+    .number()
+    .min(0) // if provided, must be >= 0
+    .optional(),
+  dob: z
+    .string()
+    .optional()
+    .refine(value => value === undefined || moment(value, 'DD/MM/YYYY', true).isValid() || value === '', 'Invalid date format')
+    .transform(value => {
+      if (value === undefined || value === '') return null;
+      const isDDMMYYYY = moment(value, 'DD/MM/YYYY', true).isValid();
+      return isDDMMYYYY ? null : value;
+    }),
+  id_info: ZIdInfo.optional(),
 });
+
 export const ZSharedPersons = z.array(ZSharedPerson);
 
 export interface HandleExposedRoomGuestsRequest {
