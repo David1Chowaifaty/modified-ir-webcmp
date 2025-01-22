@@ -6,6 +6,7 @@ import moment from 'moment';
 import { dateMask, defaultGuest } from './data';
 import { BookingService } from '@/services/booking.service';
 import { ICountry, IEntries } from '@/models/IBooking';
+import { ZodError } from 'zod';
 @Component({
   tag: 'ir-room-guests',
   styleUrl: 'ir-room-guests.css',
@@ -62,7 +63,7 @@ export class IrRoomGuests {
 
   @State() guests: SharedPerson[] = [];
   @State() idTypes: IEntries[] = [];
-  @State() error: boolean = false;
+  @State() error: Record<string, boolean> = {};
   @State() isLoading: boolean;
   @State() submitted: boolean;
   @State() propertyCountry: ICountry;
@@ -128,8 +129,7 @@ export class IrRoomGuests {
   private async saveGuests() {
     try {
       this.submitted = true;
-      this.error = false;
-
+      this.error = {};
       ZSharedPersons.parse(this.guests);
       await this.bookingService.handleExposedRoomGuests({
         booking_nbr: this.bookingNumber,
@@ -147,7 +147,11 @@ export class IrRoomGuests {
       this.resetbooking.emit(null);
     } catch (error) {
       console.log(error);
-      this.error = true;
+      if (error instanceof ZodError) {
+        let errors = {};
+        error.issues.map(e => ({ [e.path[0].toString()]: true }));
+        this.error = { ...errors };
+      }
     }
   }
 
@@ -186,7 +190,7 @@ export class IrRoomGuests {
                       class="flex-grow-1 h-100"
                       id={`full_name_${idx}`}
                       zod={ZSharedPerson.pick({ full_name: true })}
-                      error={this.error}
+                      error={!!this.error['full_name']}
                       autoValidate={false}
                       wrapKey="full_name"
                       LabelAvailable={false}
@@ -202,7 +206,7 @@ export class IrRoomGuests {
                       class="flex-grow-1 h-100"
                       id={`dob_${idx}`}
                       zod={ZSharedPerson.pick({ dob: true })}
-                      error={this.error}
+                      error={!!this.error['dob']}
                       autoValidate={false}
                       wrapKey="dob"
                       submitted={this.submitted}
@@ -222,7 +226,7 @@ export class IrRoomGuests {
                         class="h-100"
                         propertyCountry={this.propertyCountry}
                         id={`{locales.entries.Lcz_Nationality}_${idx}`}
-                        error={this.error && !guest.country_id}
+                        error={!!this.error['country_id'] && !guest.country_id}
                         country={this.countries?.find(c => c.id?.toString() === guest.country?.id?.toString())}
                         onCountryChange={e => this.updateGuestInfo(idx, { country_id: e.detail.id.toString(), country: e.detail })}
                         countries={this.countries}
@@ -251,11 +255,12 @@ export class IrRoomGuests {
                         data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
                       ></ir-select>
                       <ir-input-text
+                        placeholder="12345"
                         class="flex-grow-1 guest_document"
                         type="text"
                         value={guest.id_info.number}
                         zod={ZIdInfo.pick({ number: true })}
-                        error={this.error}
+                        error={!!this.error['number']}
                         autoValidate={false}
                         wrapKey="number"
                         inputStyles="form-control"
