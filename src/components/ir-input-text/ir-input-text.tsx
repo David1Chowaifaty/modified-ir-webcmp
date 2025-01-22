@@ -220,6 +220,7 @@ export class IrInputText {
             </span>
           </label>
           <input
+            data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
             ref={el => (this.inputRef = el)}
             type={this.type}
             onFocus={e => {
@@ -229,7 +230,7 @@ export class IrInputText {
             required={this.required}
             onBlur={this.handleBlur.bind(this)}
             disabled={this.disabled}
-            class={`form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${(this.error || this.isError) && 'danger-border'}`}
+            class={`ir-input form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${(this.error || this.isError) && 'danger-border'}`}
             id={this.id}
             value={this.value}
             placeholder={this.placeholder}
@@ -243,7 +244,7 @@ export class IrInputText {
       <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
         <label
           htmlFor={this.id}
-          class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
+          class={` input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
             this.labelBackground ? 'bg-' + this.labelBackground : ''
           } flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} `}
         >
@@ -261,17 +262,17 @@ export class IrInputText {
     if (this.required && !this.initial) {
       className = `${className} border-danger`;
     }
-
     return (
       <div class="form-group">
         <div class="input-group row m-0">
           {label}
           <input
+            data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
             id={this.id}
             ref={el => (this.inputRef = el)}
             readOnly={this.readonly}
             type={this.type}
-            class={`${className} ${this.error || this.isError ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${
+            class={`ir-input ${className} ${this.error || this.isError ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${
               this.LabelAvailable ? 12 - this.labelWidth : 12
             } ${this.readonly && 'bg-white'} ${this.inputStyles}`}
             onBlur={this.handleBlur.bind(this)}
