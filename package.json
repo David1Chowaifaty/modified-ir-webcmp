@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@stencil/core": "^4.7.0",
+    "@tanstack/react-table": "^8.20.6",
     "@types/inputmask": "^5.0.7",
     "@types/switchery": "^0.8.32",
     "add": "^2.0.6",
