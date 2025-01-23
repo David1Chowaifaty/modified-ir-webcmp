@@ -286,7 +286,8 @@ export class IrPaymentDetails {
       <div class="mb-1">
         <div class="d-flex align-items-center">
           <span class="mr-1 font-medium">
-            {locales.entries.Lcz_BookingGuarantee}:{!!paymentMethod && <span> {paymentMethod}</span>}
+            {locales.entries.Lcz_BookingGuarantee}
+            {!!paymentMethod && <span>: {paymentMethod}</span>}
           </span>
           {(!this.bookingDetails.is_direct || (this.bookingDetails.is_direct && this.bookingDetails.guest.cci)) && (
             <ir-button
