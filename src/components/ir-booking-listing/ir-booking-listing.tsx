@@ -252,7 +252,14 @@ export class IrBookingListing {
                                     btn_color="link"
                                     onClickHandler={() => (this.editBookingItem = { booking, cause: 'guest' })}
                                     text={`${booking.guest.first_name} ${booking.guest.last_name ?? ''}`}
-                                    btn_styles="booking_guest_name"
+                                    btnStyle={{
+                                      width: 'fit-content',
+                                      padding: '0',
+                                      margin: '0',
+                                    }}
+                                    labelStyle={{
+                                      padding: '0',
+                                    }}
                                   ></ir-button>
                                   {booking.guest.nbr_confirmed_bookings > 1 && !booking.agent && (
                                     <div class="m-0 p-0">
