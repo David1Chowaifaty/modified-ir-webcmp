@@ -315,6 +315,7 @@ export namespace Components {
         "token": string;
     }
     interface IrButton {
+        "btnStyle": { [key: string]: string };
         "btn_block": boolean;
         "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
         "btn_disabled": boolean;
@@ -326,6 +327,7 @@ export namespace Components {
         "icon_name": TIcons;
         "icon_style": any;
         "isLoading": boolean;
+        "labelStyle": { [key: string]: string };
         "name": string;
         /**
           * If true, will render `content` as HTML
@@ -2848,6 +2850,7 @@ declare namespace LocalJSX {
         "token"?: string;
     }
     interface IrButton {
+        "btnStyle"?: { [key: string]: string };
         "btn_block"?: boolean;
         "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
         "btn_disabled"?: boolean;
@@ -2859,6 +2862,7 @@ declare namespace LocalJSX {
         "icon_name"?: TIcons;
         "icon_style"?: any;
         "isLoading"?: boolean;
+        "labelStyle"?: { [key: string]: string };
         "name"?: string;
         "onClickHandler"?: (event: IrButtonCustomEvent<any>) => void;
         /**
