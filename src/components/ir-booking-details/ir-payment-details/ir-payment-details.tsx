@@ -9,6 +9,7 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ir-toast/toast';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -41,7 +42,6 @@ export class IrPaymentDetails {
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
   private paymentBackground = 'white';
-  private hasAgentWithCode001: boolean;
 
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
@@ -52,8 +52,6 @@ export class IrPaymentDetails {
   }
   async componentWillLoad() {
     try {
-      const hasAgent = this.bookingDetails.agent && this.bookingDetails.extras?.find(e => e.key === 'agent_payment_mode');
-      this.hasAgentWithCode001 = hasAgent?.value === '001';
       this.initializeItemToBeAdded();
     } catch (error) {
       if (this.bookingDetails.guest.cci) {
@@ -280,31 +278,34 @@ export class IrPaymentDetails {
   }
 
   private bookingGuarantee() {
-    if (this.bookingDetails.is_direct && !this.bookingDetails.guest.cci) {
+    const paymentMethod = this.bookingDetails.is_direct ? this.getPaymentMethod() : null;
+    if (this.bookingDetails.is_direct && !paymentMethod && !this.bookingDetails.guest.cci) {
       return null;
     }
     return (
-      <div>
+      <div class="mb-1">
         <div class="d-flex align-items-center">
           <span class="mr-1 font-medium">
-            {locales.entries.Lcz_BookingGuarantee} {this.hasAgentWithCode001 && `(${locales.entries.Lcz_OnCredit})`}
+            {locales.entries.Lcz_BookingGuarantee}:{!!paymentMethod && <span> {paymentMethod}</span>}
           </span>
-          <ir-button
-            id="drawer-icon"
-            data-toggle="collapse"
-            data-target={`.guarrantee`}
-            aria-expanded={this.collapsedGuarantee ? 'true' : 'false'}
-            aria-controls="myCollapse"
-            class="sm-padding-right pointer"
-            variant="icon"
-            icon_name="credit_card"
-            onClickHandler={async () => {
-              if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr && !this.bookingDetails.guest.cci) {
-                this.paymentDetailsUrl = await this.bookingService.getPCICardInfoURL(this.bookingDetails.booking_nbr);
-              }
-              this.collapsedGuarantee = !this.collapsedGuarantee;
-            }}
-          ></ir-button>
+          {(!this.bookingDetails.is_direct || (this.bookingDetails.is_direct && this.bookingDetails.guest.cci)) && (
+            <ir-button
+              id="drawer-icon"
+              data-toggle="collapse"
+              data-target={`.guarrantee`}
+              aria-expanded={this.collapsedGuarantee ? 'true' : 'false'}
+              aria-controls="myCollapse"
+              class="sm-padding-right pointer"
+              variant="icon"
+              icon_name="credit_card"
+              onClickHandler={async () => {
+                if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr && !this.bookingDetails.guest.cci) {
+                  this.paymentDetailsUrl = await this.bookingService.getPCICardInfoURL(this.bookingDetails.booking_nbr);
+                }
+                this.collapsedGuarantee = !this.collapsedGuarantee;
+              }}
+            ></ir-button>
+          )}
         </div>
         <div class="collapse guarrantee ">
           {this.bookingDetails.guest.cci ? (
@@ -331,6 +332,27 @@ export class IrPaymentDetails {
     );
   }
 
+  private checkPaymentCode(value: string) {
+    console.log(calendar_data.allowed_payment_methods);
+    return calendar_data.allowed_payment_methods?.find(pm => pm.code === value)?.description ?? null;
+  }
+
+  private getPaymentMethod() {
+    let paymentMethod = null;
+    const payment_code = this.bookingDetails?.extras.find(e => e.key === 'payment_code');
+    if (this.bookingDetails.agent) {
+      const code = this.bookingDetails?.extras.find(e => e.key === 'agent_payment_mode');
+      if (code) {
+        paymentMethod = code.value === '001' ? locales.entries.Lcz_OnCredit : payment_code ? this.checkPaymentCode(payment_code.value) : null;
+      }
+    } else {
+      if (payment_code) {
+        paymentMethod = this.checkPaymentCode(payment_code.value);
+      }
+    }
+    return paymentMethod;
+  }
+
   _renderDueDate(item: IDueDate) {
     return (
       <tr>
@@ -346,7 +368,6 @@ export class IrPaymentDetails {
     if (!this.bookingDetails.financial) {
       return null;
     }
-
     return [
       <div class="card m-0">
         <div class="p-1">

@@ -19,7 +19,9 @@
 .bounce-3 {
   animation: bounce 1s 1;
 }
-
+.btn-link {
+  color: var(--blue, #1e9ff2);
+}
 .ir-button-class {
   display: inline-flex !important;
   justify-content: center;

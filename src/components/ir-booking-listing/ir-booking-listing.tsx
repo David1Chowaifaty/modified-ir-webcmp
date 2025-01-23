@@ -236,9 +236,7 @@ export class IrBookingListing {
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
-                          <button onClick={() => (this.editBookingItem = { booking, cause: 'edit' })} class="booking_number">
-                            {booking.booking_nbr}
-                          </button>
+                          <ir-button btn_color="link" onClickHandler={() => (this.editBookingItem = { booking, cause: 'edit' })} text={booking.booking_nbr}></ir-button>
                         </td>
                         <td>
                           <p class="p-0 m-0 date-p">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
@@ -249,24 +247,28 @@ export class IrBookingListing {
                             <img class="mr-2 logo" src={booking.origin.Icon} alt={booking.origin.Label} />
                             <div class="text-left">
                               <div class="d-flex align-items-center">
-                                {booking.guest.nbr_confirmed_bookings > 1 && !booking.agent && (
-                                  <div class="m-0 p-0">
-                                    <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', booking.guest.nbr_confirmed_bookings.toString())} customSlot>
-                                      <div class="d-flex align-items-center my-0 p-0" slot="tooltip-trigger" style={{ marginRight: '0.5rem' }}>
-                                        <ir-icons style={{ '--icon-size': '0.875rem' }} color="#FB0AAD" name="heart-fill"></ir-icons>
-                                      </div>
-                                    </ir-tooltip>
-                                  </div>
-                                )}
                                 <div class="booking_name m-0 p-0">
-                                  <button
+                                  <ir-button
+                                    btn_color="link"
+                                    onClickHandler={() => (this.editBookingItem = { booking, cause: 'guest' })}
+                                    text={`${booking.guest.first_name} ${booking.guest.last_name ?? ''}`}
+                                    btn_styles="booking_guest_name"
+                                  ></ir-button>
+                                  {booking.guest.nbr_confirmed_bookings > 1 && !booking.agent && (
+                                    <div class="m-0 p-0">
+                                      <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', booking.guest.nbr_confirmed_bookings.toString())} customSlot>
+                                        <div class="d-flex align-items-center my-0 p-0" slot="tooltip-trigger">
+                                          <ir-icons style={{ '--icon-size': '0.875rem' }} color="#FB0AAD" name="heart-fill"></ir-icons>
+                                        </div>
+                                      </ir-tooltip>
+                                    </div>
+                                  )}
+                                  {/* <button
                                     class="booking_number p-0 m-0 "
                                     onClick={() => {
                                       this.editBookingItem = { booking, cause: 'guest' };
                                     }}
-                                  >
-                                    {booking.guest.first_name} {booking.guest.last_name ?? ''}
-                                  </button>
+                                  ></button> */}
                                   <span class={'p-0 m-0'}>
                                     {booking.occupancy.adult_nbr}
                                     {locales.entries.Lcz_P}
@@ -467,6 +469,7 @@ export class IrBookingListing {
           {this.editBookingItem?.cause === 'guest' && (
             <ir-guest-info
               slot="sidebar-body"
+              // isInSideBar={true}
               headerShown
               booking_nbr={this.editBookingItem?.booking?.booking_nbr}
               email={this.editBookingItem?.booking?.guest.email}

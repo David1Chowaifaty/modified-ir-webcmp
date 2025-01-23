@@ -9,9 +9,9 @@ import { TIcons } from '../ui/ir-icons/icons';
 })
 export class IrButton {
   @Prop() name: string;
-  @Prop() text;
+  @Prop() text: string;
   @Prop() icon = 'ft-save';
-  @Prop() btn_color: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' = 'primary';
+  @Prop() btn_color: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link' = 'primary';
   @Prop() size: 'sm' | 'md' | 'lg' = 'md';
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
   @Prop() btn_block = true;
@@ -23,8 +23,10 @@ export class IrButton {
   @Prop() variant: 'default' | 'icon' = 'default';
   @Prop() icon_name: TIcons;
   @Prop() visibleBackgroundOnHover: boolean = false;
-  @Prop() iconPostion: 'left' | 'right' = 'left';
+  @Prop() iconPosition: 'left' | 'right' = 'left';
   @Prop() icon_style: any;
+  /** If true, will render `content` as HTML */
+  @Prop() renderContentAsHtml: boolean = false;
 
   @Event({ bubbles: true, composed: true }) clickHandler: EventEmitter<any>;
 
@@ -65,9 +67,9 @@ export class IrButton {
         type={this.btn_type}
         disabled={this.btn_disabled || this.isLoading}
       >
-        {this.icon_name && this.iconPostion === 'left' && <ir-icons name={this.icon_name} style={this.icon_style}></ir-icons>}
-        {this.text && <span class="button-text m-0">{this.text}</span>}
-        {this.isLoading ? <div class="btn_loader m-0 p-0"></div> : this.iconPostion === 'right' && <ir-icons style={this.icon_style} name={this.icon_name}></ir-icons>}
+        {this.icon_name && this.iconPosition === 'left' && <ir-icons name={this.icon_name} style={this.icon_style}></ir-icons>}
+        {this.text && this.renderContentAsHtml ? <span class="button-text m-0" innerHTML={this.text}></span> : <span class="button-text m-0">{this.text}</span>}
+        {this.isLoading ? <div class="btn_loader m-0 p-0"></div> : this.iconPosition === 'right' && <ir-icons style={this.icon_style} name={this.icon_name}></ir-icons>}
       </button>
     );
   }

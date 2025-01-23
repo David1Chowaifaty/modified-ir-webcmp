@@ -89,7 +89,7 @@ export class IrBookingHeader {
 
   render() {
     return (
-      <div class="fluid-container p-1">
+      <div class="fluid-container px-1">
         <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between mt-1">
           <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0">
             <p class="font-size-large m-0 p-0">{`${locales.entries.Lcz_Booking}#${this.booking.booking_nbr}`}</p>

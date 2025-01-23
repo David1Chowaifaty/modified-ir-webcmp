@@ -316,19 +316,23 @@ export namespace Components {
     }
     interface IrButton {
         "btn_block": boolean;
-        "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline';
+        "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
         "btn_disabled": boolean;
         "btn_id": string;
         "btn_styles": string;
         "btn_type": string;
         "icon": string;
-        "iconPostion": 'left' | 'right';
+        "iconPosition": 'left' | 'right';
         "icon_name": TIcons;
         "icon_style": any;
         "isLoading": boolean;
         "name": string;
+        /**
+          * If true, will render `content` as HTML
+         */
+        "renderContentAsHtml": boolean;
         "size": 'sm' | 'md' | 'lg';
-        "text": any;
+        "text": string;
         "textSize": 'sm' | 'md' | 'lg';
         "variant": 'default' | 'icon';
         "visibleBackgroundOnHover": boolean;
@@ -2845,20 +2849,24 @@ declare namespace LocalJSX {
     }
     interface IrButton {
         "btn_block"?: boolean;
-        "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline';
+        "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
         "btn_disabled"?: boolean;
         "btn_id"?: string;
         "btn_styles"?: string;
         "btn_type"?: string;
         "icon"?: string;
-        "iconPostion"?: 'left' | 'right';
+        "iconPosition"?: 'left' | 'right';
         "icon_name"?: TIcons;
         "icon_style"?: any;
         "isLoading"?: boolean;
         "name"?: string;
         "onClickHandler"?: (event: IrButtonCustomEvent<any>) => void;
+        /**
+          * If true, will render `content` as HTML
+         */
+        "renderContentAsHtml"?: boolean;
         "size"?: 'sm' | 'md' | 'lg';
-        "text"?: any;
+        "text"?: string;
         "textSize"?: 'sm' | 'md' | 'lg';
         "variant"?: 'default' | 'icon';
         "visibleBackgroundOnHover"?: boolean;
