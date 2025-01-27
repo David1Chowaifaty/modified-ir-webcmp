@@ -27,7 +27,7 @@ export class OtaLabel {
 
     return (
       <Host>
-        <strong>{this.label}</strong>
+        <p class={'label_title'}>{this.label}</p>
         <ul>
           {displayedRemarks.map((remark, index) => (
             <li key={v4()}>
