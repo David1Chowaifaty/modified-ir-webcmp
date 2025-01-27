@@ -9,7 +9,7 @@ export interface IHouseKeepingStore {
     language: string;
   };
   hk_tasks: IHKTasks;
-  pending_housekeepers: IPendingActions[];
+  pending_housekeepers: { original: IPendingActions; selected?: boolean }[];
 }
 
 const initialValue: IHouseKeepingStore = {

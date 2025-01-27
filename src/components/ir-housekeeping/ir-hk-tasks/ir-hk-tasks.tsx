@@ -148,6 +148,7 @@ export class IrHkTasks {
       this.selectedRoom = null;
     }
   }
+  private selectTask(params: { id: string; index: number }) {}
   render() {
     if (this.isLoading) {
       return <ir-loading-screen></ir-loading-screen>;
@@ -202,17 +203,41 @@ export class IrHkTasks {
               <table class="table">
                 <thead>
                   <tr>
-                    <th class="text-left">{locales.entries.Lcz_Unit}</th>
-                    <th class="text-left">{locales.entries.Lcz_Status}</th>
-                    <th class="text-left">{locales.entries.Lcz_Arrivaldate}</th>
-                    <th class="text-left">{locales.entries.Lcz_ArrivalTime}</th>
-                    <th class="text-left">{locales.entries.Lcz_Housekeeper}</th>
-                    <th class="text-center">{locales.entries.Lcz_Done}</th>
+                    <th scope="col">
+                      <div>
+                        <ir-checkbox class="m-0 p-0" aria-label="select all" aria-description="select all"></ir-checkbox>
+                      </div>
+                    </th>
+                    <th scope="col">
+                      <ir-button size="sm" text="Cleaned"></ir-button>
+                    </th>
+                    <th scope="col" class="text-left">
+                      {locales.entries.Lcz_Unit}
+                    </th>
+                    <th scope="col" class="text-left">
+                      {locales.entries.Lcz_Status}
+                    </th>
+                    <th scope="col" class="text-left">
+                      {locales.entries.Lcz_Arrivaldate}
+                    </th>
+                    <th scope="col" class="text-left">
+                      {locales.entries.Lcz_ArrivalTime}
+                    </th>
+                    <th scope="col" class="text-left">
+                      {locales.entries.Lcz_Housekeeper}
+                    </th>
+                    <th scope="col" class="text-center">
+                      {locales.entries.Lcz_Done}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {housekeeping_store.pending_housekeepers?.map(action => (
+                  {housekeeping_store.pending_housekeepers?.map(({ original: action, selected }, index) => (
                     <tr key={action.housekeeper.id}>
+                      <td>
+                        <ir-checkbox checked={selected} onCheckChange={e => this.selectTask({ id: action.status.code, index })}></ir-checkbox>
+                      </td>
+                      <td>20 jan</td>
                       <td class="text-left">{action.unit.name}</td>
                       <td class="text-left">{action.status.description}</td>
                       <td class="text-left">{action.arrival}</td>

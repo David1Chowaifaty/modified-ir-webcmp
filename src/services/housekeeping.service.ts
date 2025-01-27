@@ -38,7 +38,10 @@ export class HouseKeepingService {
   }
   public async getHKPendingActions(params: TPendingHkSetupParams) {
     const { data } = await axios.post(`/Get_HK_Pending_Actions`, { ...params });
-    updateHKStore('pending_housekeepers', [...data['My_Result']]);
+    updateHKStore(
+      'pending_housekeepers',
+      [...data['My_Result']].map(d => ({ original: d, selected: false })),
+    );
     return data['My_Result'];
   }
   public async executeHKAction(params) {
