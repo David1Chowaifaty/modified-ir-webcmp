@@ -21,6 +21,9 @@
 input:focus {
   border-color: #1e9ff2 !important;
 }
+.ir-input[data-state='empty'] {
+  color: #bbbfc6;
+}
 .input-container {
   display: flex;
   align-items: center;

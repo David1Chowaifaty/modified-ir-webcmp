@@ -255,6 +255,7 @@ export class IrRoomGuests {
                         data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
                       ></ir-select>
                       <ir-input-text
+                        placeholder="12345"
                         class="flex-grow-1 guest_document"
                         type="text"
                         value={guest.id_info.number}
