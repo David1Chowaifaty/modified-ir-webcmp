@@ -130,7 +130,7 @@ export class IglPropertyBookedBy {
             id: res.id,
             firstName: res.first_name,
             lastName: res.last_name,
-            contactNumber: res.mobile,
+            contactNumber: res.mobile_without_prefix,
             countryId: res.country_id,
             isdCode: res?.country_phone_prefix ?? res.isdCode.toString(),
           };
@@ -180,7 +180,7 @@ export class IglPropertyBookedBy {
         id: data.id,
         firstName: data.first_name,
         lastName: data.last_name,
-        contactNumber: data.mobile,
+        contactNumber: data.mobile_without_prefix,
         countryId: data.country_id,
         isdCode: data['country_phone_prefix'] ?? data?.country_id,
       };

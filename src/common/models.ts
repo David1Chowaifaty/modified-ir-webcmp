@@ -34,6 +34,7 @@ export class guestInfo {
 }
 
 export class guestInfoValidation implements Guest {
+  mobile_without_prefix: string;
   nbr_confirmed_bookings: number;
   notes: string;
   country_phone_prefix: string;
