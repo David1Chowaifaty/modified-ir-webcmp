@@ -33,6 +33,11 @@ export class IrLabel {
   /** Placeholder text to display if content is empty */
   @Prop() placeholder: string;
 
+  /** inline styles for the component container */
+  @Prop() containerStyle: {
+    [key: string]: string;
+  };
+
   render() {
     // If we have no content and no placeholder, and we are NOT ignoring the empty content, return null.
     if (!this.placeholder && !this.content && !this.ignoreEmptyContent) {
@@ -42,7 +47,7 @@ export class IrLabel {
     return (
       <Host class={this.image ? 'align-items-center' : ''}>
         {/* Label title */}
-        <div class={`${this.display === 'inline' ? 'label_wrapper_inline' : 'label_wrapper_flex'}`}>
+        <div class={`${this.display === 'inline' ? 'label_wrapper_inline' : 'label_wrapper_flex'} `} style={this.containerStyle}>
           {this.labelText && <p class="label_title">{this.labelText}</p>}
 
           {/* Slot BEFORE content (prefix slot) */}

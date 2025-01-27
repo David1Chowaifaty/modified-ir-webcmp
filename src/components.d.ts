@@ -512,6 +512,12 @@ export namespace Components {
     }
     interface IrLabel {
         /**
+          * inline styles for the component container
+         */
+        "containerStyle": {
+    [key: string]: string;
+  };
+        /**
           * The main text or HTML content to display
          */
         "content": string;
@@ -3075,6 +3081,12 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrInterceptorCustomEvent<IToast1>) => void;
     }
     interface IrLabel {
+        /**
+          * inline styles for the component container
+         */
+        "containerStyle"?: {
+    [key: string]: string;
+  };
         /**
           * The main text or HTML content to display
          */
