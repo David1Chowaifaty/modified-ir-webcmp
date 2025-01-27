@@ -213,6 +213,7 @@ export class GuestInfo {
               value={this.guest.mobile}
               language={this.language}
               label={locales.entries.Lcz_MobilePhone}
+              countries={this.countries}
             />
             <div class="mb-2">
               <ir-textarea
