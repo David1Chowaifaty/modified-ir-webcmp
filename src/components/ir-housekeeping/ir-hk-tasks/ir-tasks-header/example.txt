@@ -1,0 +1,359 @@
+import { Component, h, State } from '@stencil/core';
+
+/**
+ * Represents a single housekeeping task record.
+ */
+interface Task {
+  id: number;
+  date: string; // e.g. '2025-10-28'
+  unit: number; // e.g. 228, 501
+  status: string; // e.g. 'INHOUSE', 'CHECKIN', 'DUSTY'
+  hint?: string; // e.g. 'Noon-2PM'
+  a: number; // numeric field (example)
+  c: number; // numeric field (example)
+  i: number; // numeric field (example)
+  housekeeper: string; // e.g. 'Maria'
+}
+
+const initialData: Task[] = [
+  {
+    id: 1,
+    date: '2025-10-28',
+    unit: 228,
+    status: 'INHOUSE',
+    hint: '27 Oct - 3 Nov',
+    a: 4,
+    c: 2,
+    i: 1,
+    housekeeper: 'Maria',
+  },
+  {
+    id: 2,
+    date: '2025-10-28',
+    unit: 501,
+    status: 'CHECKIN',
+    hint: 'Noon-2PM',
+    a: 2,
+    c: 0,
+    i: 0,
+    housekeeper: 'Clean Plus',
+  },
+  {
+    id: 3,
+    date: '2025-10-28',
+    unit: 600,
+    status: 'VACANT',
+    hint: '',
+    a: 1,
+    c: 1,
+    i: 1,
+    housekeeper: 'Petros',
+  },
+  {
+    id: 4,
+    date: '2025-10-29',
+    unit: 102,
+    status: 'TURNOVER',
+    hint: '10PM-Midnight',
+    a: 1,
+    c: 1,
+    i: 1,
+    housekeeper: 'Clean Plus',
+  },
+  {
+    id: 5,
+    date: '2025-10-29',
+    unit: 109,
+    status: 'DUSTY',
+    hint: '',
+    a: 1,
+    c: 0,
+    i: 1,
+    housekeeper: 'Clean Plus',
+  },
+  {
+    id: 6,
+    date: '2025-10-30',
+    unit: 501,
+    status: 'CHECKOUT',
+    hint: '',
+    a: 2,
+    c: 2,
+    i: 2,
+    housekeeper: 'Clean Plus',
+  },
+  {
+    id: 7,
+    date: '2025-11-03',
+    unit: 228,
+    status: 'CHECKIN',
+    hint: 'Noon-2PM',
+    a: 4,
+    c: 2,
+    i: 1,
+    housekeeper: 'Maria',
+  },
+  {
+    id: 8,
+    date: '2025-11-06',
+    unit: 228,
+    status: 'CHECKOUT',
+    hint: '',
+    a: 4,
+    c: 2,
+    i: 1,
+    housekeeper: 'Maria',
+  },
+];
+
+/**
+ * HousekeepingTasks component in Stencil.js.
+ * Displays a table of tasks, allows sorting, selection, and confirmation to "clean" selected units.
+ */
+@Component({
+  tag: 'housekeeping-tasks',
+  styleUrl: 'housekeeping-tasks.css', // or remove if using inline or global CSS
+  shadow: false,
+})
+export class HousekeepingTasks {
+  /**
+   * The main list of tasks displayed in the table.
+   * In a real-world app, you might fetch this from an API or accept via @Prop().
+   */
+  @State() tasks: Task[] = [...initialData];
+
+  /**
+   * Tracks which task IDs are currently selected via checkboxes.
+   */
+  @State() selectedIds: number[] = [];
+
+  /**
+   * Controls whether the "Confirm Clean" modal is shown.
+   */
+  @State() showConfirmModal: boolean = false;
+
+  /**
+   * The key we are sorting by (e.g., "date", "unit", "status", "housekeeper").
+   */
+  @State() sortKey: string = 'date';
+
+  /**
+   * The sort direction: ASC or DESC.
+   */
+  @State() sortDirection: 'ASC' | 'DESC' = 'ASC';
+
+  /**
+   * Lifecycle: on component load, sort tasks by default (date ascending).
+   */
+  componentWillLoad() {
+    this.sortTasks('date', 'ASC');
+  }
+
+  /**
+   * Sorts the tasks by the given key. If no direction is provided,
+   * it toggles between ascending and descending.
+   */
+  private handleSort(key: string) {
+    let newDirection = this.sortDirection;
+    // If we're clicking the same column, flip the direction. If a new column, default to ASC.
+    if (this.sortKey === key) {
+      newDirection = this.sortDirection === 'ASC' ? 'DESC' : 'ASC';
+    } else {
+      newDirection = 'ASC';
+    }
+    this.sortTasks(key, newDirection);
+  }
+
+  /**
+   * Helper to sort tasks array in state.
+   */
+  private sortTasks(key: string, direction: 'ASC' | 'DESC') {
+    const sorted = [...this.tasks].sort((a, b) => {
+      if (a[key] < b[key]) return direction === 'ASC' ? -1 : 1;
+      if (a[key] > b[key]) return direction === 'ASC' ? 1 : -1;
+      return 0;
+    });
+    this.tasks = sorted;
+    this.sortKey = key;
+    this.sortDirection = direction;
+  }
+
+  /**
+   * Helper to toggle selection for a single row.
+   */
+  private toggleSelection(id: number) {
+    if (this.selectedIds.includes(id)) {
+      this.selectedIds = this.selectedIds.filter(item => item !== id);
+    } else {
+      this.selectedIds = [...this.selectedIds, id];
+    }
+  }
+
+  /**
+   * Checks if every row is selected.
+   */
+  private get allSelected(): boolean {
+    return this.tasks.length > 0 && this.selectedIds.length === this.tasks.length;
+  }
+
+  /**
+   * Toggles selection on all visible tasks at once.
+   */
+  private toggleSelectAll() {
+    if (this.allSelected) {
+      this.selectedIds = [];
+    } else {
+      this.selectedIds = this.tasks.map(task => task.id);
+    }
+  }
+
+  /**
+   * Trigger showing the confirmation modal if there is at least one selected row.
+   */
+  private handleMarkClean() {
+    if (this.selectedIds.length === 0) return;
+    this.showConfirmModal = true;
+  }
+
+  /**
+   * User confirms marking selected tasks as "clean."
+   * Simulate archiving them and remove them from the table.
+   */
+  private confirmMarkClean() {
+    // In a real app, you'd likely make an API call here to archive or update tasks.
+    const remainingTasks = this.tasks.filter(t => !this.selectedIds.includes(t.id));
+    this.tasks = remainingTasks;
+    this.selectedIds = [];
+    this.showConfirmModal = false;
+  }
+
+  /**
+   * User cancels the confirmation dialog.
+   */
+  private cancelMarkClean() {
+    this.showConfirmModal = false;
+  }
+
+  render() {
+    return (
+      <div class="container mt-4">
+        {/* Filters Section */}
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label>For today *</label>
+                <select class="form-control">
+                  <option>Until 29 Oct +10d</option>
+                  <option>All future dates</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label>All Housekeepers *</label>
+                <select class="form-control">
+                  <option>Maria</option>
+                  <option>Clean Plus</option>
+                  <option>Petros</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label>Daily cleaning *</label>
+                <select class="form-control">
+                  <option>Every other day</option>
+                  <option>On check-outs only</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label>Highlight check-ins</label>
+                <select class="form-control">
+                  <option>No</option>
+                  <option>2-10 days ago</option>
+                </select>
+              </div>
+            </div>
+            {/* Additional filters could go here */}
+          </div>
+        </div>
+
+        {/* Table of Tasks */}
+        <table class="table table-bordered table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>
+                <input type="checkbox" checked={this.allSelected} onChange={() => this.toggleSelectAll()} />
+              </th>
+              <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('date')}>
+                Date {this.sortKey === 'date' ? `(${this.sortDirection})` : ''}
+              </th>
+              <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('unit')}>
+                Unit {this.sortKey === 'unit' ? `(${this.sortDirection})` : ''}
+              </th>
+              <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('status')}>
+                Status {this.sortKey === 'status' ? `(${this.sortDirection})` : ''}
+              </th>
+              <th>Hint</th>
+              <th>A</th>
+              <th>C</th>
+              <th>I</th>
+              <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('housekeeper')}>
+                Housekeeper
+                {this.sortKey === 'housekeeper' ? `(${this.sortDirection})` : ''}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.tasks.map(task => {
+              const isSelected = this.selectedIds.includes(task.id);
+              return (
+                <tr key={task.id}>
+                  <td>
+                    <input type="checkbox" checked={isSelected} onChange={() => this.toggleSelection(task.id)} />
+                  </td>
+                  <td>{task.date}</td>
+                  <td>{task.unit}</td>
+                  <td>{task.status}</td>
+                  <td>{task.hint}</td>
+                  <td>{task.a}</td>
+                  <td>{task.c}</td>
+                  <td>{task.i}</td>
+                  <td>{task.housekeeper}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        {/* Button to mark selected tasks as Clean */}
+        <button class="btn btn-primary" disabled={this.selectedIds.length === 0} onClick={() => this.handleMarkClean()}>
+          Update selected unit(s) to Clean
+        </button>
+
+        {/* Confirmation Modal (Bootstrap style).
+            We show/hide based on this.showConfirmModal. */}
+        {this.showConfirmModal && (
+          <div class="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Confirm Update</h5>
+                  <button type="button" class="close" onClick={() => this.cancelMarkClean()}>
+                    <span>&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">Update selected unit(s) to Clean?</div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" onClick={() => this.cancelMarkClean()}>
+                    No
+                  </button>
+                  <button class="btn btn-primary" onClick={() => this.confirmMarkClean()}>
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+}

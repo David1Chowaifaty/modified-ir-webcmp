@@ -1,11 +1,107 @@
 import { IPendingActions } from '@/models/housekeeping';
-import Token from '@/models/Token';
-import { HouseKeepingService } from '@/services/housekeeping.service';
-import { RoomService } from '@/services/room.service';
-import housekeeping_store, { updateHKStore } from '@/stores/housekeeping.store';
-import locales from '@/stores/locales.store';
-import { Component, Host, Listen, Prop, State, Watch, h, Element } from '@stencil/core';
+import { Component, Host, Prop, State, h, Element } from '@stencil/core';
 
+export interface Task {
+  id: number;
+  date: string; // e.g. '2025-10-28'
+  unit: number; // e.g. 228, 501
+  status: string; // e.g. 'INHOUSE', 'CHECKIN', 'DUSTY'
+  hint?: string; // e.g. 'Noon-2PM'
+  a: number; // numeric field (example)
+  c: number; // numeric field (example)
+  i: number; // numeric field (example)
+  housekeeper: string; // e.g. 'Maria'
+}
+const initialData: Task[] = [
+  {
+    id: 1,
+    date: '2025-10-28',
+    unit: 228,
+    status: 'INHOUSE',
+    hint: '27 Oct - 3 Nov',
+    a: 4,
+    c: 2,
+    i: 1,
+    housekeeper: 'Maria',
+  },
+  {
+    id: 2,
+    date: '2025-10-28',
+    unit: 501,
+    status: 'CHECKIN',
+    hint: 'Noon-2PM',
+    a: 2,
+    c: 0,
+    i: 0,
+    housekeeper: 'Clean Plus',
+  },
+  {
+    id: 3,
+    date: '2025-10-28',
+    unit: 600,
+    status: 'VACANT',
+    hint: '',
+    a: 1,
+    c: 1,
+    i: 1,
+    housekeeper: 'Petros',
+  },
+  {
+    id: 4,
+    date: '2025-10-29',
+    unit: 102,
+    status: 'TURNOVER',
+    hint: '10PM-Midnight',
+    a: 1,
+    c: 1,
+    i: 1,
+    housekeeper: 'Clean Plus',
+  },
+  {
+    id: 5,
+    date: '2025-10-29',
+    unit: 109,
+    status: 'DUSTY',
+    hint: '',
+    a: 1,
+    c: 0,
+    i: 1,
+    housekeeper: 'Clean Plus',
+  },
+  {
+    id: 6,
+    date: '2025-10-30',
+    unit: 501,
+    status: 'CHECKOUT',
+    hint: '',
+    a: 2,
+    c: 2,
+    i: 2,
+    housekeeper: 'Clean Plus',
+  },
+  {
+    id: 7,
+    date: '2025-11-03',
+    unit: 228,
+    status: 'CHECKIN',
+    hint: 'Noon-2PM',
+    a: 4,
+    c: 2,
+    i: 1,
+    housekeeper: 'Maria',
+  },
+  {
+    id: 8,
+    date: '2025-11-06',
+    unit: 228,
+    status: 'CHECKOUT',
+    hint: '',
+    a: 4,
+    c: 2,
+    i: 1,
+    housekeeper: 'Maria',
+  },
+];
 @Component({
   tag: 'ir-hk-tasks',
   styleUrl: 'ir-hk-tasks.css',
@@ -26,129 +122,11 @@ export class IrHkTasks {
   @State() archiveOpened = false;
   @State() property_id: number;
 
-  private modalOpenTimeOut: NodeJS.Timeout;
-  private roomService = new RoomService();
-  private houseKeepingService = new HouseKeepingService();
-  private token = new Token();
+  // private modalOpenTimeOut: NodeJS.Timeout;
+  // private roomService = new RoomService();
+  // private houseKeepingService = new HouseKeepingService();
+  // private token = new Token();
 
-  componentWillLoad() {
-    if (this.ticket !== '') {
-      this.token.setToken(this.ticket);
-      this.initializeApp();
-    }
-  }
-
-  @Listen('resetData')
-  async handleResetData(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    const { arrival, arrival_time, housekeeper, unit, status } = this.selectedRoom;
-    this.houseKeepingService.executeHKAction({
-      property_id: this.propertyid,
-      arrival,
-      arrival_time,
-      housekeeper: {
-        id: housekeeper.id,
-      },
-      status: {
-        code: status.code,
-      },
-      unit: {
-        id: unit.id,
-      },
-    });
-    await this.houseKeepingService.getExposedHKSetup(this.property_id);
-  }
-
-  @Watch('ticket')
-  ticketChanged(newValue: string, oldValue: string) {
-    if (newValue === oldValue) {
-      return;
-    }
-    this.token.setToken(this.ticket);
-    this.initializeApp();
-  }
-  handleCheckChange(e: CustomEvent, action: IPendingActions) {
-    if (e.detail) {
-      this.selectedRoom = action;
-      this.modalOpenTimeOut = setTimeout(() => {
-        const modal = this.el.querySelector('ir-modal');
-        if (modal) {
-          (modal as HTMLIrModalElement).openModal();
-        }
-      }, 50);
-    }
-  }
-  @Listen('closeSideBar')
-  handleCloseSidebar(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    this.archiveOpened = false;
-  }
-  disconnectedCallback() {
-    if (this.modalOpenTimeOut) {
-      clearTimeout(this.modalOpenTimeOut);
-    }
-  }
-  async getPendingActions() {
-    await this.houseKeepingService.getHKPendingActions({
-      property_id: this.property_id,
-      bracket: {
-        code: this.selectedDuration,
-      },
-      housekeeper: {
-        id: +this.selectedHouseKeeper,
-      },
-    });
-  }
-  async initializeApp() {
-    try {
-      this.isLoading = true;
-      let propertyId = this.propertyid;
-      if (!propertyId) {
-        const propertyData = await this.roomService.getExposedProperty({
-          id: 0,
-          aname: this.p,
-          language: this.language,
-          is_backend: true,
-        });
-        propertyId = propertyData.My_Result.id;
-      }
-      this.property_id = propertyId;
-      updateHKStore('default_properties', { token: this.ticket, property_id: propertyId, language: this.language });
-      const requests = [this.houseKeepingService.getExposedHKStatusCriteria(propertyId), this.roomService.fetchLanguage(this.language, ['_HK_FRONT'])];
-
-      if (this.propertyid) {
-        requests.unshift(
-          this.roomService.getExposedProperty({
-            id: propertyId,
-            language: this.language,
-            is_backend: true,
-          }),
-        );
-      }
-      await Promise.all(requests);
-      this.selectedDuration = housekeeping_store.hk_tasks.brackets[0].code;
-      await this.getPendingActions();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      this.isLoading = false;
-    }
-  }
-  async handleConfirm(e: CustomEvent) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    try {
-      await this.getPendingActions();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      this.selectedRoom = null;
-    }
-  }
-  private selectTask(params: { id: string; index: number }) {}
   render() {
     if (this.isLoading) {
       return <ir-loading-screen></ir-loading-screen>;
@@ -158,115 +136,12 @@ export class IrHkTasks {
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <section class="p-2">
-          <ir-title class="d-none d-md-flex" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between">
-            <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm"></ir-button>
-          </ir-title>
-          <div class="d-flex align-items-center mb-2 justify-content-between d-md-none">
-            <ir-title class="mb-0" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between"></ir-title>
-            <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm" onClickHandler={() => (this.archiveOpened = true)}></ir-button>
-          </div>
-          <div class="d-flex flex-column flex-sm-row align-items-center mb-1  select-container">
-            <ir-select
-              selectedValue={this.selectedDuration}
-              onSelectChange={e => {
-                this.selectedDuration = e.detail;
-                this.getPendingActions();
-              }}
-              data={housekeeping_store.hk_tasks.brackets.map(bracket => ({
-                text: bracket.description,
-                value: bracket.code,
-              }))}
-              class="mb-1 w-100 mb-sm-0"
-              showFirstOption={false}
-              LabelAvailable={false}
-            ></ir-select>
-            <ir-select
-              onSelectChange={e => {
-                this.selectedHouseKeeper = e.detail;
-                this.getPendingActions();
-              }}
-              selectedValue={this.selectedHouseKeeper}
-              data={[
-                { text: 'All housekeepers', value: '0' },
-                ...housekeeping_store.hk_tasks.housekeepers.map(bracket => ({
-                  text: bracket.name,
-                  value: bracket.id.toString(),
-                })),
-              ]}
-              showFirstOption={false}
-              LabelAvailable={false}
-              class="ml-sm-2 w-100"
-            ></ir-select>
-          </div>
-          <div class="card p-1">
-            <div class="table-container">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">
-                      <div>
-                        <ir-checkbox class="m-0 p-0" aria-label="select all" aria-description="select all"></ir-checkbox>
-                      </div>
-                    </th>
-                    <th scope="col">
-                      <ir-button size="sm" text="Cleaned"></ir-button>
-                    </th>
-                    <th scope="col" class="text-left">
-                      {locales.entries.Lcz_Unit}
-                    </th>
-                    <th scope="col" class="text-left">
-                      {locales.entries.Lcz_Status}
-                    </th>
-                    <th scope="col" class="text-left">
-                      {locales.entries.Lcz_Arrivaldate}
-                    </th>
-                    <th scope="col" class="text-left">
-                      {locales.entries.Lcz_ArrivalTime}
-                    </th>
-                    <th scope="col" class="text-left">
-                      {locales.entries.Lcz_Housekeeper}
-                    </th>
-                    <th scope="col" class="text-center">
-                      {locales.entries.Lcz_Done}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {housekeeping_store.pending_housekeepers?.map(({ original: action, selected }, index) => (
-                    <tr key={action.housekeeper.id}>
-                      <td>
-                        <ir-checkbox checked={selected} onCheckChange={e => this.selectTask({ id: action.status.code, index })}></ir-checkbox>
-                      </td>
-                      <td>20 jan</td>
-                      <td class="text-left">{action.unit.name}</td>
-                      <td class="text-left">{action.status.description}</td>
-                      <td class="text-left">{action.arrival}</td>
-                      <td class="text-left">{action.arrival_time}</td>
-                      <td class="text-left">{action.housekeeper.name}</td>
-                      <td>
-                        <div class="checkbox-container">
-                          <ir-checkbox onCheckChange={e => this.handleCheckChange(e, action)} checked={this.selectedRoom?.unit.id === action.unit.id}></ir-checkbox>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <ir-tasks-header></ir-tasks-header>
+          <ir-tasks-table tasks={initialData}></ir-tasks-table>
         </section>
-        {this.selectedRoom && (
-          <ir-modal
-            leftBtnText={locales.entries.Lcz_No}
-            rightBtnText={locales.entries.Lcz_Yes}
-            onConfirmModal={this.handleConfirm.bind(this)}
-            onCancelModal={() => (this.selectedRoom = null)}
-            modalBody={`Is ${this.selectedRoom.unit.name} cleaned?`}
-          ></ir-modal>
-        )}
-        {/* <ir-sidebar open={this.archiveOpened} showCloseButton={false} onIrSidebarToggle={() => (this.archiveOpened = false)}>
-          {this.archiveOpened && <ir-hk-archive slot="sidebar-body"></ir-hk-archive>}
-        </ir-sidebar> */}
+        {/* <ir-title class="d-none d-md-flex" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between">
+            <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm"></ir-button>
+          </ir-title> */}
       </Host>
     );
   }

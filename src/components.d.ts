@@ -26,6 +26,7 @@ import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
+import { Task } from "./components/ir-housekeeping/ir-hk-tasks/ir-hk-tasks";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
@@ -48,6 +49,7 @@ export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
+export { Task } from "./components/ir-housekeeping/ir-hk-tasks/ir-hk-tasks";
 export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
     interface IglApplicationInfo {
@@ -897,6 +899,13 @@ export namespace Components {
         "checked": boolean;
         "disabled": boolean;
         "switchId": string;
+    }
+    interface IrTasksArchive {
+    }
+    interface IrTasksHeader {
+    }
+    interface IrTasksTable {
+        "tasks": Task[];
     }
     interface IrTextEditor {
         "error": boolean;
@@ -2513,6 +2522,24 @@ declare global {
         prototype: HTMLIrSwitchElement;
         new (): HTMLIrSwitchElement;
     };
+    interface HTMLIrTasksArchiveElement extends Components.IrTasksArchive, HTMLStencilElement {
+    }
+    var HTMLIrTasksArchiveElement: {
+        prototype: HTMLIrTasksArchiveElement;
+        new (): HTMLIrTasksArchiveElement;
+    };
+    interface HTMLIrTasksHeaderElement extends Components.IrTasksHeader, HTMLStencilElement {
+    }
+    var HTMLIrTasksHeaderElement: {
+        prototype: HTMLIrTasksHeaderElement;
+        new (): HTMLIrTasksHeaderElement;
+    };
+    interface HTMLIrTasksTableElement extends Components.IrTasksTable, HTMLStencilElement {
+    }
+    var HTMLIrTasksTableElement: {
+        prototype: HTMLIrTasksTableElement;
+        new (): HTMLIrTasksTableElement;
+    };
     interface HTMLIrTextEditorElementEventMap {
         "textChange": string;
     }
@@ -2685,6 +2712,9 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-switch": HTMLIrSwitchElement;
+        "ir-tasks-archive": HTMLIrTasksArchiveElement;
+        "ir-tasks-header": HTMLIrTasksHeaderElement;
+        "ir-tasks-table": HTMLIrTasksTableElement;
         "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
@@ -3693,6 +3723,13 @@ declare namespace LocalJSX {
         "onCheckChange"?: (event: IrSwitchCustomEvent<boolean>) => void;
         "switchId"?: string;
     }
+    interface IrTasksArchive {
+    }
+    interface IrTasksHeader {
+    }
+    interface IrTasksTable {
+        "tasks"?: Task[];
+    }
     interface IrTextEditor {
         "error"?: boolean;
         "onTextChange"?: (event: IrTextEditorCustomEvent<string>) => void;
@@ -3837,6 +3874,9 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-spinner": IrSpinner;
         "ir-switch": IrSwitch;
+        "ir-tasks-archive": IrTasksArchive;
+        "ir-tasks-header": IrTasksHeader;
+        "ir-tasks-table": IrTasksTable;
         "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
@@ -3935,6 +3975,9 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
+            "ir-tasks-archive": LocalJSX.IrTasksArchive & JSXBase.HTMLAttributes<HTMLIrTasksArchiveElement>;
+            "ir-tasks-header": LocalJSX.IrTasksHeader & JSXBase.HTMLAttributes<HTMLIrTasksHeaderElement>;
+            "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
