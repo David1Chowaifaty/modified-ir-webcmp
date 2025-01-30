@@ -66,7 +66,7 @@ export class GuestInfo {
 
       // Assign the fetched guest and countries
       this.countries = countries;
-      this.guest = guest;
+      this.guest = { ...guest, mobile: guest.mobile_without_prefix };
     } catch (error) {
       console.log(error);
     } finally {
@@ -188,6 +188,7 @@ export class GuestInfo {
               value={this.guest.mobile}
               language={this.language}
               label={locales.entries.Lcz_MobilePhone}
+              countries={this.countries}
             />
             <div class="mb-2">
               <ir-textarea

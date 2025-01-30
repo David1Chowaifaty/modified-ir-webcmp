@@ -19,19 +19,22 @@ export class IrPhoneInput {
   @Prop() default_country: number = null;
   @Prop() phone_prefix: string | null = null;
   @Prop() placeholder: string;
+  @Prop({ mutable: true }) countries: ICountry[] = [];
 
   @Event() textChange: EventEmitter<{ phone_prefix: string; mobile: string }>;
   @State() inputValue: string = '';
   @State() isDropdownVisible: boolean = false;
   @State() currentCountry: ICountry;
 
-  private countries: ICountry[] = [];
+  // private cmp_countries: ICountry[] = [];
 
   private bookingService: BookingService = new BookingService();
 
   async componentWillLoad() {
-    const countries = await this.bookingService.getCountries(this.language);
-    this.countries = countries;
+    if (this.countries.length === 0) {
+      const countries = await this.bookingService.getCountries(this.language);
+      this.countries = countries;
+    }
     if (this.phone_prefix) {
       this.setCountryFromPhonePrefix();
     } else {
@@ -69,6 +72,7 @@ export class IrPhoneInput {
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
   }
   private setCountryFromPhonePrefix() {
+    console.log(this.phone_prefix);
     let country = this.countries.find(country => country.phone_prefix === this.phone_prefix);
     if (!country) {
       country = this.countries.find(c => c.id.toString() === this.phone_prefix);
@@ -76,6 +80,7 @@ export class IrPhoneInput {
         return;
       }
     }
+    console.log(country);
     this.currentCountry = { ...country };
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.value });
   }

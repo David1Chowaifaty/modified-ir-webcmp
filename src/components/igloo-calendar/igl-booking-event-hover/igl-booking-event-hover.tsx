@@ -373,47 +373,70 @@ export class IglBookingEventHover {
           </div>
         </div>
         {this.getArrivalTime() && (
-          <div class="row p-0 m-0">
-            <div class="px-0 col-12">
-              <span class="font-weight-bold">{locales.entries.Lcz_ArrivalTime}: </span>
-              {this.getArrivalTime()}
-            </div>
-          </div>
+          // <div class="row p-0 m-0">
+          //   <div class="px-0 col-12">
+          //     <span class="font-weight-bold">{locales.entries.Lcz_ArrivalTime}: </span>
+          //     {this.getArrivalTime()}
+          //   </div>
+          // </div>
+          <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`${locales.entries.Lcz_ArrivalTime}:`} content={this.getArrivalTime()}></ir-label>
         )}
         {this.getTotalOccupants() && (
-          <div class="row p-0 m-0">
-            <div class="px-0  col-12">
-              <span class="font-weight-bold">{locales.entries.Lcz_Occupancy}: </span>
-              {this.getTotalOccupants()}
-            </div>
-          </div>
+          // <div class="row p-0 m-0">
+          //   <div class="px-0  col-12">
+          //     <span class="font-weight-bold">{locales.entries.Lcz_Occupancy}: </span>
+          //     {this.getTotalOccupants()}
+          //   </div>
+          // </div>
+
+          <ir-label class="m-0 p-0" containerStyle={{ padding: '0', margin: '0' }} labelText={`${locales.entries.Lcz_Occupancy}:`} content={this.getTotalOccupants()}></ir-label>
         )}
         {this.getPhoneNumber() && (
-          <div class="row p-0 m-0">
-            <div class="px-0  col-12 text-wrap">
-              <span class="font-weight-bold">{locales.entries.Lcz_Phone}: </span>
-              {this.renderPhone()}
-            </div>
-          </div>
+          // <div class="row p-0 m-0">
+          //   <div class="px-0  col-12 text-wrap">
+          //     <span class="font-weight-bold">{locales.entries.Lcz_Phone}: </span>
+          //     {this.renderPhone()}
+          //   </div>
+          // </div>
+          <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`${locales.entries.Lcz_Phone}:`} content={this.renderPhone()}></ir-label>
         )}
         {this.getRatePlan() && (
-          <div class="row p-0 m-0">
-            <div class="px-0  col-12">
-              <span class="font-weight-bold">{locales.entries.Lcz_RatePlan}: </span>
-              {this.getRatePlan()}
-            </div>
-          </div>
+          // <div class="row p-0 m-0">
+          //   <div class="px-0  col-12">
+          //     <span class="font-weight-bold">{locales.entries.Lcz_RatePlan}: </span>
+          //     {this.getRatePlan()}
+          //   </div>
+          // </div>
+          <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`${locales.entries.Lcz_RatePlan}:`} content={this.getRatePlan()}></ir-label>
         )}
         {this.bookingEvent.PRIVATE_NOTE && (
-          <div class="row p-0 m-0">
-            <div class="px-0  col-12 text-wrap">
-              <span class="font-weight-bold">{locales.entries.Lcz_PrivateNote}: </span>
-              {this.bookingEvent.PRIVATE_NOTE}
-            </div>
-          </div>
+          // <div class="row p-0 m-0">
+          //   <div class="px-0  col-12 text-wrap">
+          //     <span class="font-weight-bold">{locales.entries.Lcz_PrivateNote}: </span>
+          //     {this.bookingEvent.PRIVATE_NOTE}
+          //   </div>
+          // </div>
+          <ir-label
+            containerStyle={{ padding: '0', margin: '0' }}
+            class="m-0 p-0"
+            labelText={`${locales.entries.Lcz_BookingPrivateNote}:`}
+            display="inline"
+            content={this.bookingEvent.PRIVATE_NOTE}
+          ></ir-label>
         )}
-        {this.renderNote()}
-        {this.getInternalNote() ? (
+
+        {/* {this.renderNote()} */}
+        {this.bookingEvent.is_direct ? (
+          <ir-label containerStyle={{ padding: '0', margin: '0' }} labelText={`${locales.entries.Lcz_GuestRemark}:`} display="inline" content={this.bookingEvent.NOTES}></ir-label>
+        ) : (
+          <ota-label
+            class={'m-0 p-0'}
+            label={`${locales.entries.Lcz_ChannelNotes || 'Channel notes'}:`}
+            remarks={this.bookingEvent.ota_notes}
+            maxVisibleItems={this.bookingEvent.ota_notes?.length}
+          ></ota-label>
+        )}
+        {/* {this.getInternalNote() ? (
           <div class="row p-0 m-0">
             <div class="col-12 px-0 text-wrap">
               {this.bookingEvent.is_direct ? (
@@ -426,8 +449,8 @@ export class IglBookingEventHover {
               )}
             </div>
           </div>
-        ) : null}
-
+        ) : null} */}
+        {this.getInternalNote() && <ir-label labelText={`${locales.entries.Lcz_InternalRemark}:`} content={this.getInternalNote()}></ir-label>}
         <div class="row p-0 m-0 mt-2">
           <div class="full-width d-flex align-items-center" style={{ gap: '0.25rem' }} role="group">
             <ir-button
