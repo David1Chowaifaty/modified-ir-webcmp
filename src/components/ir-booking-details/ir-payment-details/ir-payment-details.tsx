@@ -340,9 +340,9 @@ export class IrPaymentDetails {
 
   private getPaymentMethod() {
     let paymentMethod = null;
-    const payment_code = this.bookingDetails?.extras.find(e => e.key === 'payment_code');
+    const payment_code = this.bookingDetails?.extras?.find(e => e.key === 'payment_code');
     if (this.bookingDetails.agent) {
-      const code = this.bookingDetails?.extras.find(e => e.key === 'agent_payment_mode');
+      const code = this.bookingDetails?.extras?.find(e => e.key === 'agent_payment_mode');
       if (code) {
         paymentMethod = code.value === '001' ? locales.entries.Lcz_OnCredit : payment_code ? this.checkPaymentCode(payment_code.value) : null;
       }
