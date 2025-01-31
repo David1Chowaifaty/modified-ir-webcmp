@@ -26,6 +26,7 @@ import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
+import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { Task } from "./components/ir-housekeeping/ir-hk-tasks/ir-hk-tasks";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
@@ -49,6 +50,7 @@ export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
+export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { Task } from "./components/ir-housekeeping/ir-hk-tasks/ir-hk-tasks";
 export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
@@ -319,6 +321,7 @@ export namespace Components {
         "token": string;
     }
     interface IrButton {
+        "bounce": () => Promise<void>;
         "btnStyle": { [key: string]: string };
         "btn_block": boolean;
         "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
@@ -911,7 +914,10 @@ export namespace Components {
     }
     interface IrTasksArchive {
     }
+    interface IrTasksFilters {
+    }
     interface IrTasksHeader {
+        "isCleanedEnabled": boolean;
     }
     interface IrTasksTable {
         "tasks": Task[];
@@ -1222,6 +1228,14 @@ export interface IrSidebarCustomEvent<T> extends CustomEvent<T> {
 export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSwitchElement;
+}
+export interface IrTasksFiltersCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTasksFiltersElement;
+}
+export interface IrTasksTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTasksTableElement;
 }
 export interface IrTextEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2537,13 +2551,42 @@ declare global {
         prototype: HTMLIrTasksArchiveElement;
         new (): HTMLIrTasksArchiveElement;
     };
+    interface HTMLIrTasksFiltersElementEventMap {
+        "applyClicked": TaskFilters;
+        "resetClicked": TaskFilters;
+    }
+    interface HTMLIrTasksFiltersElement extends Components.IrTasksFilters, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTasksFiltersElementEventMap>(type: K, listener: (this: HTMLIrTasksFiltersElement, ev: IrTasksFiltersCustomEvent<HTMLIrTasksFiltersElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTasksFiltersElementEventMap>(type: K, listener: (this: HTMLIrTasksFiltersElement, ev: IrTasksFiltersCustomEvent<HTMLIrTasksFiltersElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrTasksFiltersElement: {
+        prototype: HTMLIrTasksFiltersElement;
+        new (): HTMLIrTasksFiltersElement;
+    };
     interface HTMLIrTasksHeaderElement extends Components.IrTasksHeader, HTMLStencilElement {
     }
     var HTMLIrTasksHeaderElement: {
         prototype: HTMLIrTasksHeaderElement;
         new (): HTMLIrTasksHeaderElement;
     };
+    interface HTMLIrTasksTableElementEventMap {
+        "animateCleanedButton": null;
+    }
     interface HTMLIrTasksTableElement extends Components.IrTasksTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTasksTableElementEventMap>(type: K, listener: (this: HTMLIrTasksTableElement, ev: IrTasksTableCustomEvent<HTMLIrTasksTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTasksTableElementEventMap>(type: K, listener: (this: HTMLIrTasksTableElement, ev: IrTasksTableCustomEvent<HTMLIrTasksTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrTasksTableElement: {
         prototype: HTMLIrTasksTableElement;
@@ -2722,6 +2765,7 @@ declare global {
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-tasks-archive": HTMLIrTasksArchiveElement;
+        "ir-tasks-filters": HTMLIrTasksFiltersElement;
         "ir-tasks-header": HTMLIrTasksHeaderElement;
         "ir-tasks-table": HTMLIrTasksTableElement;
         "ir-text-editor": HTMLIrTextEditorElement;
@@ -3743,9 +3787,15 @@ declare namespace LocalJSX {
     }
     interface IrTasksArchive {
     }
+    interface IrTasksFilters {
+        "onApplyClicked"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
+        "onResetClicked"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
+    }
     interface IrTasksHeader {
+        "isCleanedEnabled"?: boolean;
     }
     interface IrTasksTable {
+        "onAnimateCleanedButton"?: (event: IrTasksTableCustomEvent<null>) => void;
         "tasks"?: Task[];
     }
     interface IrTextEditor {
@@ -3893,6 +3943,7 @@ declare namespace LocalJSX {
         "ir-spinner": IrSpinner;
         "ir-switch": IrSwitch;
         "ir-tasks-archive": IrTasksArchive;
+        "ir-tasks-filters": IrTasksFilters;
         "ir-tasks-header": IrTasksHeader;
         "ir-tasks-table": IrTasksTable;
         "ir-text-editor": IrTextEditor;
@@ -3994,6 +4045,7 @@ declare module "@stencil/core" {
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-tasks-archive": LocalJSX.IrTasksArchive & JSXBase.HTMLAttributes<HTMLIrTasksArchiveElement>;
+            "ir-tasks-filters": LocalJSX.IrTasksFilters & JSXBase.HTMLAttributes<HTMLIrTasksFiltersElement>;
             "ir-tasks-header": LocalJSX.IrTasksHeader & JSXBase.HTMLAttributes<HTMLIrTasksHeaderElement>;
             "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;

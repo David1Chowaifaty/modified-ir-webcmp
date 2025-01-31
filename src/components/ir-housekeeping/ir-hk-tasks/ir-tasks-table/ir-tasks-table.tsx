@@ -1,4 +1,4 @@
-import { Component, Host, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 import { Task } from '../ir-hk-tasks';
 
 @Component({
@@ -7,7 +7,7 @@ import { Task } from '../ir-hk-tasks';
   scoped: true,
 })
 export class IrTasksTable {
-  @Prop() tasks: Task[] = [];
+  @Prop({ mutable: true }) tasks: Task[] = [];
 
   /**
    * Tracks which task IDs are currently selected via checkboxes.
@@ -28,6 +28,8 @@ export class IrTasksTable {
    * The sort direction: ASC or DESC.
    */
   @State() sortDirection: 'ASC' | 'DESC' = 'ASC';
+
+  @Event({ bubbles: true, composed: true }) animateCleanedButton: EventEmitter<null>;
 
   componentWillLoad() {
     this.sortTasks('date', 'ASC');
@@ -69,6 +71,7 @@ export class IrTasksTable {
       this.selectedIds = this.selectedIds.filter(item => item !== id);
     } else {
       this.selectedIds = [...this.selectedIds, id];
+      this.animateCleanedButton.emit(null);
     }
   }
 
@@ -88,52 +91,26 @@ export class IrTasksTable {
     } else {
       this.selectedIds = this.tasks.map(task => task.id);
     }
-  }
-
-  /**
-   * Trigger showing the confirmation modal if there is at least one selected row.
-   */
-  private handleMarkClean() {
-    if (this.selectedIds.length === 0) return;
-    this.showConfirmModal = true;
-  }
-
-  /**
-   * User confirms marking selected tasks as "clean."
-   * Simulate archiving them and remove them from the table.
-   */
-  private confirmMarkClean() {
-    // In a real app, you'd likely make an API call here to archive or update tasks.
-    const remainingTasks = this.tasks.filter(t => !this.selectedIds.includes(t.id));
-    this.tasks = remainingTasks;
-    this.selectedIds = [];
-    this.showConfirmModal = false;
-  }
-
-  /**
-   * User cancels the confirmation dialog.
-   */
-  private cancelMarkClean() {
-    this.showConfirmModal = false;
+    console.log('here');
+    this.animateCleanedButton.emit(null);
   }
 
   render() {
     return (
-      <div class="container mt-4">
-        <table class="table table-bordered table-hover">
-          <thead class="thead-light">
+      <div class="card h-100 p-1 m-0">
+        <table class="">
+          <thead>
             <tr>
               <th>
-                <input type="checkbox" checked={this.allSelected} onChange={() => this.toggleSelectAll()} />
+                <ir-checkbox checked={this.allSelected} onCheckChange={() => this.toggleSelectAll()}></ir-checkbox>
               </th>
-              <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('date')}>
-                Date {this.sortKey === 'date' ? `(${this.sortDirection})` : ''}
-              </th>
+              <th>Period</th>
               <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('unit')}>
-                Unit {this.sortKey === 'unit' ? `(${this.sortDirection})` : ''}
+                {/* Unit {this.sortKey === 'unit' ? `(${this.sortDirection})` : ''} */}
+                Unit
               </th>
               <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('status')}>
-                Status {this.sortKey === 'status' ? `(${this.sortDirection})` : ''}
+                Status
               </th>
               <th>Hint</th>
               <th>A</th>
@@ -141,7 +118,6 @@ export class IrTasksTable {
               <th>I</th>
               <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('housekeeper')}>
                 Housekeeper
-                {this.sortKey === 'housekeeper' ? `(${this.sortDirection})` : ''}
               </th>
             </tr>
           </thead>
@@ -149,9 +125,9 @@ export class IrTasksTable {
             {this.tasks.map(task => {
               const isSelected = this.selectedIds.includes(task.id);
               return (
-                <tr key={task.id}>
+                <tr style={{ cursor: 'pointer' }} onClick={() => this.toggleSelection(task.id)} class={{ selected: isSelected }} key={task.id}>
                   <td>
-                    <input type="checkbox" checked={isSelected} onChange={() => this.toggleSelection(task.id)} />
+                    <ir-checkbox checked={isSelected} onCheckChange={() => this.toggleSelection(task.id)}></ir-checkbox>
                   </td>
                   <td>{task.date}</td>
                   <td>{task.unit}</td>
@@ -166,32 +142,6 @@ export class IrTasksTable {
             })}
           </tbody>
         </table>
-        <button class="btn btn-primary" disabled={this.selectedIds.length === 0} onClick={() => this.handleMarkClean()}>
-          Update selected unit(s) to Clean
-        </button>
-        {this.showConfirmModal && (
-          <div class="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Confirm Update</h5>
-                  <button type="button" class="close" onClick={() => this.cancelMarkClean()}>
-                    <span>&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">Update selected unit(s) to Clean?</div>
-                <div class="modal-footer">
-                  <button class="btn btn-secondary" onClick={() => this.cancelMarkClean()}>
-                    No
-                  </button>
-                  <button class="btn btn-primary" onClick={() => this.confirmMarkClean()}>
-                    Yes
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }

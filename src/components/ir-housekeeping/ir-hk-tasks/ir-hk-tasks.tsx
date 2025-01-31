@@ -135,9 +135,12 @@ export class IrHkTasks {
       <Host>
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
-        <section class="p-2">
+        <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
           <ir-tasks-header></ir-tasks-header>
-          <ir-tasks-table tasks={initialData}></ir-tasks-table>
+          <div class="d-flex flex-column flex-md-row mt-1 " style={{ gap: '1rem' }}>
+            <ir-tasks-filters></ir-tasks-filters>
+            <ir-tasks-table class="flex-grow-md-1 w-100" tasks={initialData}></ir-tasks-table>
+          </div>
         </section>
         {/* <ir-title class="d-none d-md-flex" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between">
             <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm"></ir-button>

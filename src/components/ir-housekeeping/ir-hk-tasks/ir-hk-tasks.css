@@ -1,25 +1,6 @@
 :host {
   display: block;
 }
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.table-container {
-  overflow-x: auto;
-  max-width: 100%;
-  width: max-content;
-}
-.table,
-th,
-td {
-  border-color: white !important;
-}
-
-.select-container {
-  max-width: 500px;
-}
 
 @media only screen and (min-width: 900px) {
   /* td {

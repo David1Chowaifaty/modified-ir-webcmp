@@ -1,4 +1,4 @@
-import { Component, Prop, Event, EventEmitter, h, Listen } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h, Listen, Method } from '@stencil/core';
 import { v4 } from 'uuid';
 import { TIcons } from '../ui/ir-icons/icons';
 
@@ -33,6 +33,7 @@ export class IrButton {
   @Event({ bubbles: true, composed: true }) clickHandler: EventEmitter<any>;
 
   private buttonEl: HTMLButtonElement;
+
   @Listen('animateIrButton', { target: 'body' })
   handleButtonAnimation(e: CustomEvent) {
     if (!this.buttonEl || e.detail !== this.btn_id) {
@@ -40,6 +41,12 @@ export class IrButton {
     }
     e.stopImmediatePropagation();
     e.stopPropagation();
+    this.buttonEl.classList.remove('bounce-3');
+    void this.buttonEl.offsetWidth;
+    this.buttonEl.classList.add('bounce-3');
+  }
+  @Method()
+  async bounce() {
     this.buttonEl.classList.remove('bounce-3');
     void this.buttonEl.offsetWidth;
     this.buttonEl.classList.add('bounce-3');
