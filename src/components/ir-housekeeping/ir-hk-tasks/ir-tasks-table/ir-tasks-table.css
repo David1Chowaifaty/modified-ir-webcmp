@@ -1,5 +1,6 @@
 :host {
-  display: block;
+  display: flex;
+  align-items: center;
 }
 .selected-row {
   background-color: rgba(0, 0, 255, 0.1);
@@ -14,20 +15,28 @@
 .sortable {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-td,
+.task-row {
+  padding: 0.25rem 0.5rem !important;
+  /* background: white; */
+}
+/* td,
 th {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   max-width: max-content !important;
-  padding: 0.25rem 0.5rem;
+ 
+  text-align: start;
 }
 tr {
   border-bottom: 1px solid #e0e0e0;
+} */
+.task-table-row {
+  background: white !important;
 }
-tr:has(td:hover) {
-  background: #e2e6ea3f;
+.task-table-row:hover {
+  background: #e2e6ea3f !important;
 }
 .selected {
-  background: #e3f3fa;
+  background: #e3f3fa !important;
 }
 .sortable:hover {
   color: #212529;

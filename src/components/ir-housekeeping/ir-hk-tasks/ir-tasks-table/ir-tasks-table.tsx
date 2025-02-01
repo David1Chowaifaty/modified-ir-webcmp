@@ -97,8 +97,8 @@ export class IrTasksTable {
 
   render() {
     return (
-      <div class="card h-100 p-1 m-0">
-        <table class="">
+      <div class="card h-100 p-1 m-0 table-responsive">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th>
@@ -116,7 +116,7 @@ export class IrTasksTable {
               <th>A</th>
               <th>C</th>
               <th>I</th>
-              <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('housekeeper')}>
+              <th style={{ cursor: 'pointer', textAlign: 'start' }} onClick={() => this.handleSort('housekeeper')}>
                 Housekeeper
               </th>
             </tr>
@@ -124,19 +124,22 @@ export class IrTasksTable {
           <tbody>
             {this.tasks.map(task => {
               const isSelected = this.selectedIds.includes(task.id);
+              console.log(isSelected);
               return (
-                <tr style={{ cursor: 'pointer' }} onClick={() => this.toggleSelection(task.id)} class={{ selected: isSelected }} key={task.id}>
-                  <td>
-                    <ir-checkbox checked={isSelected} onCheckChange={() => this.toggleSelection(task.id)}></ir-checkbox>
+                <tr style={{ cursor: 'pointer' }} onClick={() => this.toggleSelection(task.id)} class={{ 'selected': isSelected, 'task-table-row': true }} key={task.id}>
+                  <td class="task-row">
+                    <ir-checkbox checked={isSelected}></ir-checkbox>
                   </td>
-                  <td>{task.date}</td>
-                  <td>{task.unit}</td>
-                  <td>{task.status}</td>
-                  <td>{task.hint}</td>
-                  <td>{task.a}</td>
-                  <td>{task.c}</td>
-                  <td>{task.i}</td>
-                  <td>{task.housekeeper}</td>
+                  <td class="task-row">{task.date}</td>
+                  <td class="task-row">{task.unit}</td>
+                  <td class="task-row">{task.status}</td>
+                  <td class="task-row">{task.hint}</td>
+                  <td class="task-row">{task.a}</td>
+                  <td class="task-row">{task.c}</td>
+                  <td class="task-row">{task.i}</td>
+                  <td class="w-50 task-row" style={{ textAlign: 'start' }}>
+                    {task.housekeeper}
+                  </td>
                 </tr>
               );
             })}

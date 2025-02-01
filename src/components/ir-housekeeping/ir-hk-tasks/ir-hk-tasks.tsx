@@ -15,7 +15,7 @@ export interface Task {
 const initialData: Task[] = [
   {
     id: 1,
-    date: '2025-10-28',
+    date: '20 Jan',
     unit: 228,
     status: 'INHOUSE',
     hint: '27 Oct - 3 Nov',
@@ -26,7 +26,7 @@ const initialData: Task[] = [
   },
   {
     id: 2,
-    date: '2025-10-28',
+    date: '20 Jan',
     unit: 501,
     status: 'CHECKIN',
     hint: 'Noon-2PM',
@@ -37,7 +37,7 @@ const initialData: Task[] = [
   },
   {
     id: 3,
-    date: '2025-10-28',
+    date: '20 Jan',
     unit: 600,
     status: 'VACANT',
     hint: '',
@@ -48,7 +48,7 @@ const initialData: Task[] = [
   },
   {
     id: 4,
-    date: '2025-10-29',
+    date: '20 Jan',
     unit: 102,
     status: 'TURNOVER',
     hint: '10PM-Midnight',
@@ -59,7 +59,7 @@ const initialData: Task[] = [
   },
   {
     id: 5,
-    date: '2025-10-29',
+    date: '20 Jan',
     unit: 109,
     status: 'DUSTY',
     hint: '',
@@ -70,7 +70,7 @@ const initialData: Task[] = [
   },
   {
     id: 6,
-    date: '2025-10-30',
+    date: '20 Jan',
     unit: 501,
     status: 'CHECKOUT',
     hint: '',
@@ -81,7 +81,7 @@ const initialData: Task[] = [
   },
   {
     id: 7,
-    date: '2025-11-03',
+    date: '20 Jan',
     unit: 228,
     status: 'CHECKIN',
     hint: 'Noon-2PM',
@@ -92,7 +92,7 @@ const initialData: Task[] = [
   },
   {
     id: 8,
-    date: '2025-11-06',
+    date: '20 Jan',
     unit: 228,
     status: 'CHECKOUT',
     hint: '',
