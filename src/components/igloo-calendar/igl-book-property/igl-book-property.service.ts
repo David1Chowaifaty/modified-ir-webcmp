@@ -131,10 +131,10 @@ export class IglBookPropertyService {
     return days;
   }
 
-  private extractFirstNameAndLastName(name: string) {
-    const names = name.split(' ');
-    return { first_name: names[0] || null, last_name: names[1] || null };
-  }
+  // private extractFirstNameAndLastName(name: string) {
+  //   const names = name.split(' ');
+  //   return { first_name: names[0] || null, last_name: names[1] || null };
+  // }
 
   private getBookedRooms({
     check_in,
@@ -172,7 +172,7 @@ export class IglBookPropertyService {
         const rateplan = roomtype[rateplanId];
         if (rateplan.reserved > 0) {
           for (let i = 0; i < rateplan.reserved; i++) {
-            const { first_name, last_name } = this.extractFirstNameAndLastName(rateplan.guest[i].name);
+            const { first_name, last_name } = rateplan.guest[i];
             rooms.push({
               identifier,
               roomtype: rateplan.roomtype,

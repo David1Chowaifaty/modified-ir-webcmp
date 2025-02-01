@@ -339,7 +339,7 @@ export class IglBookProperty {
         const rateplan = roomtype[rateplanId];
         if (rateplan.reserved > 0) {
           for (const guest of rateplan.guest) {
-            if (guest.name === '') {
+            if (guest.first_name === '' || guest.last_name === '') {
               return true;
             }
           }
@@ -445,7 +445,8 @@ export class IglBookProperty {
           {
             bed_preference: currentRoomType.bed_preference?.toString(),
             infant_nbr: currentRoomType.occupancy.infant_nbr,
-            name: currentRoomType.guest.last_name ? currentRoomType.guest.first_name + ' ' + currentRoomType.guest.last_name : currentRoomType.guest.first_name,
+            last_name: currentRoomType.guest.last_name,
+            first_name: currentRoomType.guest.first_name,
             unit: (currentRoomType.unit as any)?.id?.toString(),
           },
         ],

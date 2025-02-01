@@ -165,16 +165,16 @@ export class IglApplicationInfo {
           <p class="booking-variation" innerHTML={formattedVariation}></p>
         </div>
         <div class="d-flex flex-column flex-md-row  p-0 align-items-md-center aplicationInfoContainer">
-          <div class="mr-1 flex-fill guest-info-container">
+          <div class="mr-1 mb-1 mb-md-0 flex-fill guest-info-container">
             <input
               id={v4()}
               type="email"
-              class={`form-control ${this.isButtonPressed && this.guestInfo?.name === '' && 'border-danger'}`}
-              placeholder={locales.entries.Lcz_GuestFirstnameAndLastname}
+              class={`form-control ${this.isButtonPressed && this.guestInfo?.first_name === '' && 'border-danger'}`}
+              placeholder={locales.entries['Lcz_GuestFirstname'] ?? 'Guest first name'}
               name="guestName"
               onInput={event => {
                 const name = (event.target as HTMLInputElement).value;
-                this.updateGuest({ name });
+                this.updateGuest({ first_name: name });
                 if (booking_store.event_type.type === 'EDIT_BOOKING') {
                   modifyBookingStore('guest', {
                     ...booking_store.guest,
@@ -183,7 +183,28 @@ export class IglApplicationInfo {
                 }
               }}
               required
-              value={this.guestInfo?.name}
+              value={this.guestInfo?.first_name}
+            />
+          </div>
+          <div class="mr-1 flex-fill guest-info-container">
+            <input
+              id={v4()}
+              type="email"
+              class={`form-control ${this.isButtonPressed && this.guestInfo?.last_name === '' && 'border-danger'}`}
+              placeholder={locales.entries['Lcz_GuestLastname'] ?? 'Guest last name'}
+              name="guestName"
+              onInput={event => {
+                const name = (event.target as HTMLInputElement).value;
+                this.updateGuest({ last_name: name });
+                if (booking_store.event_type.type === 'EDIT_BOOKING') {
+                  modifyBookingStore('guest', {
+                    ...booking_store.guest,
+                    name,
+                  });
+                }
+              }}
+              required
+              value={this.guestInfo?.last_name}
             />
           </div>
           <div class="mt-1 mt-md-0 d-flex align-items-center flex-fill">
