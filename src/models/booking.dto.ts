@@ -259,6 +259,7 @@ export interface Guest {
   alternative_email?: string;
   nbr_confirmed_bookings: number;
   notes: string;
+  mobile_without_prefix: string;
 }
 export interface ICCI {
   nbr: string | number;

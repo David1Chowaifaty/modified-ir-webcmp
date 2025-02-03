@@ -25,6 +25,8 @@ export class IrButton {
   @Prop() visibleBackgroundOnHover: boolean = false;
   @Prop() iconPosition: 'left' | 'right' = 'left';
   @Prop() icon_style: any;
+  @Prop() btnStyle: { [key: string]: string };
+  @Prop() labelStyle: { [key: string]: string };
   /** If true, will render `content` as HTML */
   @Prop() renderContentAsHtml: boolean = false;
 
@@ -65,10 +67,18 @@ export class IrButton {
         onClick={() => this.clickHandler.emit()}
         class={`btn btn-${this.btn_color} ${this.btn_styles} ir-button-class  btn-${this.size} text-${this.textSize} ${blockClass}`}
         type={this.btn_type}
+        style={this.btnStyle}
         disabled={this.btn_disabled || this.isLoading}
       >
         {this.icon_name && this.iconPosition === 'left' && <ir-icons name={this.icon_name} style={this.icon_style}></ir-icons>}
-        {this.text && this.renderContentAsHtml ? <span class="button-text m-0" innerHTML={this.text}></span> : <span class="button-text m-0">{this.text}</span>}
+        {this.text &&
+          (this.renderContentAsHtml ? (
+            <span class="button-text m-0" innerHTML={this.text} style={this.labelStyle}></span>
+          ) : (
+            <span style={this.labelStyle} class="button-text m-0">
+              {this.text}
+            </span>
+          ))}
         {this.isLoading ? <div class="btn_loader m-0 p-0"></div> : this.iconPosition === 'right' && <ir-icons style={this.icon_style} name={this.icon_name}></ir-icons>}
       </button>
     );

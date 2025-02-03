@@ -20,7 +20,7 @@ import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-det
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ir-combobox/ir-combobox";
-import { IToast as IToast2 } from "./components.d";
+import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
@@ -42,7 +42,7 @@ export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-det
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ir-combobox/ir-combobox";
-export { IToast as IToast2 } from "./components.d";
+export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
@@ -317,6 +317,7 @@ export namespace Components {
         "token": string;
     }
     interface IrButton {
+        "btnStyle": { [key: string]: string };
         "btn_block": boolean;
         "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
         "btn_disabled": boolean;
@@ -328,6 +329,7 @@ export namespace Components {
         "icon_name": TIcons;
         "icon_style": any;
         "isLoading": boolean;
+        "labelStyle": { [key: string]: string };
         "name": string;
         /**
           * If true, will render `content` as HTML
@@ -620,6 +622,12 @@ export namespace Components {
     }
     interface IrLabel {
         /**
+          * inline styles for the component container
+         */
+        "containerStyle": {
+    [key: string]: string;
+  };
+        /**
           * The main text or HTML content to display
          */
         "content": string;
@@ -707,6 +715,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrPhoneInput {
+        "countries": ICountry[];
         "default_country": number;
         "disabled": boolean;
         "error": boolean;
@@ -3043,6 +3052,7 @@ declare namespace LocalJSX {
         "token"?: string;
     }
     interface IrButton {
+        "btnStyle"?: { [key: string]: string };
         "btn_block"?: boolean;
         "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
         "btn_disabled"?: boolean;
@@ -3054,6 +3064,7 @@ declare namespace LocalJSX {
         "icon_name"?: TIcons;
         "icon_style"?: any;
         "isLoading"?: boolean;
+        "labelStyle"?: { [key: string]: string };
         "name"?: string;
         "onClickHandler"?: (event: IrButtonCustomEvent<any>) => void;
         /**
@@ -3376,6 +3387,12 @@ declare namespace LocalJSX {
     }
     interface IrLabel {
         /**
+          * inline styles for the component container
+         */
+        "containerStyle"?: {
+    [key: string]: string;
+  };
+        /**
           * The main text or HTML content to display
          */
         "content"?: string;
@@ -3475,6 +3492,7 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrPhoneInput {
+        "countries"?: ICountry[];
         "default_country"?: number;
         "disabled"?: boolean;
         "error"?: boolean;

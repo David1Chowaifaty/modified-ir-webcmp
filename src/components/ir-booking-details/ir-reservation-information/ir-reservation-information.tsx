@@ -29,23 +29,38 @@ export class IrReservationInformation {
   }
 
   private renderPhoneNumber() {
-    const { mobile, country_phone_prefix, country_id } = this.booking.guest;
-    if (!mobile) {
+    const { mobile_without_prefix, country_phone_prefix, country_id } = this.booking.guest;
+    if (!mobile_without_prefix) {
       return null;
     }
-    if (this.booking.is_direct) {
-      if (country_phone_prefix) {
-        return country_phone_prefix + ' ' + mobile;
-      }
-      if (country_id) {
-        const selectedCountry = this.countries.find(c => c.id === country_id);
-        if (!selectedCountry) {
-          throw new Error('Invalid country id');
-        }
-        return selectedCountry.phone_prefix + ' ' + mobile;
-      }
+    if (country_phone_prefix) {
+      return country_phone_prefix + ' ' + mobile_without_prefix;
     }
-    return mobile;
+    if (country_id) {
+      const selectedCountry = this.countries.find(c => c.id === country_id);
+      if (!selectedCountry) {
+        throw new Error('Invalid country id');
+      }
+      return selectedCountry.phone_prefix + ' ' + mobile_without_prefix;
+    }
+    return mobile_without_prefix;
+    // const { mobile, country_phone_prefix, country_id } = this.booking.guest;
+    // if (!mobile) {
+    //   return null;
+    // }
+    // if (this.booking.is_direct) {
+    //   if (country_phone_prefix) {
+    //     return country_phone_prefix + ' ' + mobile;
+    //   }
+    //   if (country_id) {
+    //     const selectedCountry = this.countries.find(c => c.id === country_id);
+    //     if (!selectedCountry) {
+    //       throw new Error('Invalid country id');
+    //     }
+    //     return selectedCountry.phone_prefix + ' ' + mobile;
+    //   }
+    // }
+    // return mobile;
   }
   render() {
     const privateNote = getPrivateNote(this.booking.extras);
