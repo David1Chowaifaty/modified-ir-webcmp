@@ -105,9 +105,9 @@ export class IglBookingEventHover {
     return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct ? this.getPhoneCode() + '-' : ''}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
   }
 
-  private getGuestNote() {
-    return this.bookingEvent.NOTES && <p class={'user-notes p-0 my-0'}>{this.bookingEvent.NOTES}</p>;
-  }
+  // private getGuestNote() {
+  //   return this.bookingEvent.NOTES && <p class={'user-notes p-0 my-0'}>{this.bookingEvent.NOTES}</p>;
+  // }
 
   private getInternalNote() {
     return this.bookingEvent.INTERNAL_NOTE;
@@ -323,33 +323,33 @@ export class IglBookingEventHover {
       currentInfoBubbleId: this.getBookingId(),
     });
   }
-  private renderNote() {
-    const { is_direct, ota_notes } = this.bookingEvent;
-    const guestNote = this.getGuestNote();
-    const noteLabel = locales.entries.Lcz_Note + ':';
+  // private renderNote() {
+  //   const { is_direct, ota_notes } = this.bookingEvent;
+  //   const guestNote = this.getGuestNote();
+  //   const noteLabel = locales.entries.Lcz_Note + ':';
 
-    if (!is_direct && ota_notes) {
-      return (
-        <div class="row p-0 m-0">
-          <div class="col-12 px-0 text-wrap d-flex">
-            <ota-label label={noteLabel} remarks={ota_notes}></ota-label>
-          </div>
-        </div>
-      );
-    } else if (is_direct && guestNote) {
-      return (
-        <div class="row p-0 m-0">
-          <div class="col-12 px-0 text-wrap d-flex">
-            <Fragment>
-              <span class="font-weight-bold">{noteLabel} </span>
-              {guestNote}
-            </Fragment>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  }
+  //   if (!is_direct && ota_notes) {
+  //     return (
+  //       <div class="row p-0 m-0">
+  //         <div class="col-12 px-0 text-wrap d-flex">
+  //           <ota-label label={noteLabel} remarks={ota_notes}></ota-label>
+  //         </div>
+  //       </div>
+  //     );
+  //   } else if (is_direct && guestNote) {
+  //     return (
+  //       <div class="row p-0 m-0">
+  //         <div class="col-12 px-0 text-wrap d-flex">
+  //           <Fragment>
+  //             <span class="font-weight-bold">{noteLabel} </span>
+  //             {guestNote}
+  //           </Fragment>
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  //   return null;
+  // }
 
   private getInfoElement() {
     return (

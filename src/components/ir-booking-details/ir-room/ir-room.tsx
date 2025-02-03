@@ -1,6 +1,6 @@
 import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Host, Fragment } from '@stencil/core';
 import { _getDay } from '../functions';
-import { Booking, IUnit, IVariations, Occupancy, Room } from '@/models/booking.dto';
+import { Booking, IUnit, IVariations, Occupancy, Room, SharedPerson } from '@/models/booking.dto';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { formatName } from '@/utils/booking';
 import locales from '@/stores/locales.store';
@@ -42,6 +42,7 @@ export class IrRoom {
   @State() collapsed: boolean = false;
   @State() isLoading: boolean = false;
   @State() modalReason: RoomModalReason = null;
+  @State() mainGuest: SharedPerson;
   // Event Emitters
   @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
@@ -53,6 +54,9 @@ export class IrRoom {
   private modal: HTMLIrModalElement;
   private bookingService = new BookingService();
 
+  componentWillLoad() {
+    this.mainGuest = this.getMainGuest();
+  }
   @Listen('clickHandler')
   handleClick(e) {
     let target = e.target;
@@ -63,14 +67,14 @@ export class IrRoom {
     }
   }
 
-  getDateStr(date, locale = 'default') {
+  private getDateStr(date, locale = 'default') {
     return date.getDate() + ' ' + date.toLocaleString(locale, { month: 'short' }) + ' ' + date.getFullYear();
   }
-  handleEditClick() {
+  private handleEditClick() {
     this.editInitiated.emit({
       event_type: 'EDIT_BOOKING',
       ID: this.room['assigned_units_pool'],
-      NAME: formatName(this.room.guest.first_name, this.room.guest.last_name),
+      NAME: formatName(this.mainGuest?.first_name, this.mainGuest?.last_name),
       EMAIL: this.booking.guest.email,
       PHONE: this.booking.guest.mobile,
       REFERENCE_TYPE: '',
@@ -236,6 +240,9 @@ export class IrRoom {
     }
     return this.renderModalMessage();
   }
+  private getMainGuest() {
+    return this.room.sharing_persons?.find(p => p.is_main);
+  }
   render() {
     return (
       <Host class="p-1 d-flex m-0">
@@ -312,7 +319,7 @@ export class IrRoom {
           </div>
 
           <div class={'d-flex align-items-center'}>
-            <span class="mr-1">{`${this.room.guest.first_name || ''} ${this.room.guest.last_name || ''}`}</span>
+            <span class="mr-1">{`${this.mainGuest?.first_name || ''} ${this.mainGuest?.last_name || ''}`}</span>
             {/* {this.room.rateplan.selected_variation.adult_nbr > 0 && <span> {this.room.rateplan.selected_variation.adult_child_offering}</span>} */}
             {this.room.rateplan.selected_variation.adult_nbr > 0 &&
               (this.room.unit ? (
