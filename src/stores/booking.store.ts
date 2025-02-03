@@ -217,7 +217,7 @@ export function reserveRooms({ ratePlanId, roomTypeId, rooms, guest }: { roomTyp
     throw new Error('Invalid rate plan');
   }
   let newGuest = Array.from({ length: rooms }, () => ({ first_name: '', last_name: '', unit: null, bed_preference: null, infant_nbr: null }));
-  // console.log('guest', guest);
+  console.log('guest', guest);
   if (guest) {
     newGuest = guest;
   }

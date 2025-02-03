@@ -24,12 +24,12 @@ export interface SharedPerson {
   country_phone_prefix: null;
   dob: string;
   email: null;
-  first_name: null;
+  first_name: string;
   full_name: string;
   id: number;
   id_info: IDInfo;
   is_main?: boolean;
-  last_name: null;
+  last_name: string;
   mobile: null;
   nbr_confirmed_bookings: number;
   notes: null;

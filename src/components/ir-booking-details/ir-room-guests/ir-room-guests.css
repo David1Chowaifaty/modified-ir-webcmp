@@ -41,6 +41,11 @@
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+.guests-labels *,
+.sharing_persons_label {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
+}
 
 /*sm*/
 @media (min-width: 640px) {

@@ -102,7 +102,7 @@ export class IrRoom {
       ENTRY_DATE: this.booking.from_date,
       FROM_DATE_STR: this.booking.format.from_date,
       guarantee: this.room.rateplan.guarantee,
-      GUEST: this.booking.guest,
+      GUEST: this.mainGuest,
       IDENTIFIER: this.room.identifier,
       is_direct: this.booking.is_direct,
       IS_EDITABLE: this.booking.is_editable,
