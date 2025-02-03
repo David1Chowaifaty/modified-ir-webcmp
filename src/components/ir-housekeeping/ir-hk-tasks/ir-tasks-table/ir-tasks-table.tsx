@@ -98,7 +98,7 @@ export class IrTasksTable {
   render() {
     return (
       <div class="card h-100 p-1 m-0 table-responsive">
-        <table class="table table-bordered">
+        <table class="table ">
           <thead>
             <tr>
               <th>

@@ -15,9 +15,16 @@
 .sortable {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-.task-row {
+.task-row,
+.table th,
+.table td {
   padding: 0.25rem 0.5rem !important;
   /* background: white; */
+}
+.table th,
+.table td {
+  max-width: max-content !important;
+  text-align: start;
 }
 /* td,
 th {
