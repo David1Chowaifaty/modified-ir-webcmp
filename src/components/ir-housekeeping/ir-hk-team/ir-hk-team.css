@@ -6,14 +6,14 @@ td {
   text-align: left !important;
   width: fit-content !important;
 }
-input {
+/* input {
   border: none;
   margin: 0;
   width: 120px;
 }
 input:focus {
   outline: none;
-}
+} */
 .table-container {
   padding: 10px 0;
   overflow-x: auto;

@@ -85,7 +85,7 @@ export class IrHousekeeping {
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
         <section class="p-1">
-          <ir-unit-status class="mb-1"></ir-unit-status>
+          {/*<ir-unit-status class="mb-1"></ir-unit-status>*/}
           <ir-hk-team class="mb-1"></ir-hk-team>
         </section>
       </Host>

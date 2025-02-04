@@ -62,6 +62,9 @@ export class IrHkTeam {
     clearTimeout(this.deletionTimout);
   }
   render() {
+    if (!housekeeping_store.hk_criteria) {
+      return null;
+    }
     const { assigned, total, un_assigned } = housekeeping_store.hk_criteria.units_assignments;
 
     return (
