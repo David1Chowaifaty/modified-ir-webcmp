@@ -1442,9 +1442,9 @@ declare global {
         new (): HTMLIglBookingOverviewPageElement;
     };
     interface HTMLIglCalBodyElementEventMap {
+        "addBookingDatasEvent": any[];
         "showBookingPopup": any;
         "scrollPageToRoom": any;
-        "addBookingDatasEvent": any[];
     }
     interface HTMLIglCalBodyElement extends Components.IglCalBody, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglCalBodyElementEventMap>(type: K, listener: (this: HTMLIglCalBodyElement, ev: IglCalBodyCustomEvent<HTMLIglCalBodyElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;

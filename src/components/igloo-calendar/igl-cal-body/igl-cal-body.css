@@ -19,7 +19,13 @@
   user-select: none;
   -webkit-user-drag: none;
 }
-
+.roomRow .room {
+  cursor: pointer;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.roomRow .room:hover {
+  background: #e0e0e0;
+}
 .cellData {
   width: 58px;
   height: 30px;
@@ -34,7 +40,7 @@
 }
 
 .cellData:last-child {
-  border-right: 1px solid #e0e0e0;
+  border-right: 1px solid rgba(186, 191, 199, 0.5);
 }
 
 .roomHeaderCell {

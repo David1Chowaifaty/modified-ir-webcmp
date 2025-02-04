@@ -3,6 +3,7 @@ import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 import { TSourceOption } from './igl-book-property';
 import { ICountry } from './IBooking';
 import moment from 'moment';
+import { IHouseKeepers } from './housekeeping';
 
 interface IDType {
   code: string;
@@ -404,10 +405,17 @@ export interface RoomType {
   id: number;
   inventory: number;
   name: string;
-  physicalrooms: null;
+  physicalrooms: PhysicalRoom[];
   rate: number;
   rateplans: null;
   is_active: boolean;
+}
+export interface PhysicalRoom {
+  calendar_cell: null;
+  housekeeper: IHouseKeepers;
+  id: number;
+  is_active: boolean;
+  name: string;
 }
 
 export interface Source {

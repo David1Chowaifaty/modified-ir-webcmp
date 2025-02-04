@@ -1,7 +1,7 @@
 import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
-import { RoomType } from '@/models/booking.dto';
+import { PhysicalRoom, RoomType } from '@/models/booking.dto';
 
 export type RoomCategory = RoomType & { expanded: boolean };
 
@@ -11,23 +11,27 @@ export type RoomCategory = RoomType & { expanded: boolean };
   scoped: true,
 })
 export class IglCalBody {
-  @Event() showBookingPopup: EventEmitter;
-  @Event({ bubbles: true, composed: true }) scrollPageToRoom: EventEmitter;
   @Prop() isScrollViewDragging: boolean;
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
   @Prop() currency;
   @Prop() language: string;
   @Prop() countryNodeList;
+  @Prop() highlightedDate: string;
+
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
-  @Prop() highlightedDate: string;
+  @State() selectedRoom: PhysicalRoom;
+
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
+  @Event() showBookingPopup: EventEmitter;
+  @Event({ bubbles: true, composed: true }) scrollPageToRoom: EventEmitter;
 
   private selectedRooms: { [key: string]: any } = {};
   private fromRoomId: number = -1;
   private newEvent: { [key: string]: any };
   private currentDate = new Date();
+  private hkModal: HTMLIrModalElement;
 
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
@@ -348,10 +352,14 @@ export class IglCalBody {
       return (
         <div class="roomRow">
           <div
-            class={`cellData text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${
+            class={`cellData room text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${
               'room_' + this.getRoomId(room)
             }`}
             data-room={this.getRoomId(room)}
+            onClick={() => {
+              this.selectedRoom = room;
+              this.hkModal.openModal();
+            }}
           >
             {/* <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div> */}
             <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover>
@@ -392,7 +400,21 @@ export class IglCalBody {
             ))}
           </div>
         </div>
+        <ir-modal
+          ref={el => (this.hkModal = el)}
+          modalTitle={''}
+          leftBtnText={locales?.entries?.Lcz_Cancel}
+          rightBtnText={locales?.entries?.Lcz_Update}
+          modalBody={this.renderModalBody()}
+          onConfirmModal={() => {
+            console.log('here');
+          }}
+          // onCancelModal={this.handleModalCancel.bind(this)}
+        ></ir-modal>
       </Host>
     );
+  }
+  renderModalBody() {
+    return <ir-select LabelAvailable={false} data={[{ text: 'hello', value: 'world' }]}></ir-select>;
   }
 }
