@@ -622,6 +622,12 @@ export namespace Components {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrInteractiveTitle {
+        "cropSize": number;
+        "hkStatus": boolean;
+        "irPopoverLeft": string;
+        "popoverTitle": string;
+    }
     interface IrInterceptor {
         "handledEndpoints": string[];
     }
@@ -699,6 +705,7 @@ export namespace Components {
         "rightBtnActive": boolean;
         "rightBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "rightBtnText": string;
+        "showTitle": boolean;
     }
     interface IrOptionDetails {
         "propertyId": string;
@@ -2163,6 +2170,12 @@ declare global {
         prototype: HTMLIrInputTextElement;
         new (): HTMLIrInputTextElement;
     };
+    interface HTMLIrInteractiveTitleElement extends Components.IrInteractiveTitle, HTMLStencilElement {
+    }
+    var HTMLIrInteractiveTitleElement: {
+        prototype: HTMLIrInteractiveTitleElement;
+        new (): HTMLIrInteractiveTitleElement;
+    };
     interface HTMLIrInterceptorElementEventMap {
         "toast": IToast1;
     }
@@ -2738,6 +2751,7 @@ declare global {
         "ir-icon": HTMLIrIconElement;
         "ir-icons": HTMLIrIconsElement;
         "ir-input-text": HTMLIrInputTextElement;
+        "ir-interactive-title": HTMLIrInteractiveTitleElement;
         "ir-interceptor": HTMLIrInterceptorElement;
         "ir-label": HTMLIrLabelElement;
         "ir-listing-header": HTMLIrListingHeaderElement;
@@ -3455,6 +3469,12 @@ declare namespace LocalJSX {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrInteractiveTitle {
+        "cropSize"?: number;
+        "hkStatus"?: boolean;
+        "irPopoverLeft"?: string;
+        "popoverTitle"?: string;
+    }
     interface IrInterceptor {
         "handledEndpoints"?: string[];
         "onToast"?: (event: IrInterceptorCustomEvent<IToast1>) => void;
@@ -3538,6 +3558,7 @@ declare namespace LocalJSX {
         "rightBtnActive"?: boolean;
         "rightBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         "rightBtnText"?: string;
+        "showTitle"?: boolean;
     }
     interface IrOptionDetails {
         "onCloseModal"?: (event: IrOptionDetailsCustomEvent<PaymentOption | null>) => void;
@@ -3916,6 +3937,7 @@ declare namespace LocalJSX {
         "ir-icon": IrIcon;
         "ir-icons": IrIcons;
         "ir-input-text": IrInputText;
+        "ir-interactive-title": IrInteractiveTitle;
         "ir-interceptor": IrInterceptor;
         "ir-label": IrLabel;
         "ir-listing-header": IrListingHeader;
@@ -4018,6 +4040,7 @@ declare module "@stencil/core" {
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-icons": LocalJSX.IrIcons & JSXBase.HTMLAttributes<HTMLIrIconsElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
+            "ir-interactive-title": LocalJSX.IrInteractiveTitle & JSXBase.HTMLAttributes<HTMLIrInteractiveTitleElement>;
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;
             "ir-label": LocalJSX.IrLabel & JSXBase.HTMLAttributes<HTMLIrLabelElement>;
             "ir-listing-header": LocalJSX.IrListingHeader & JSXBase.HTMLAttributes<HTMLIrListingHeaderElement>;

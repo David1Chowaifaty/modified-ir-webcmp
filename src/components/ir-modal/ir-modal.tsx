@@ -8,6 +8,7 @@ import { Component, h, State, Method, Event, EventEmitter, Prop, Listen } from '
 export class IrModal {
   @Prop() modalTitle: string = 'Modal Title';
   @Prop() modalBody: string = 'Modal Body';
+  @Prop() showTitle: boolean;
 
   @Prop() rightBtnActive: boolean = true;
   @Prop() leftBtnActive: boolean = true;
@@ -71,15 +72,16 @@ export class IrModal {
       ></div>,
       <div data-state={this.isOpen ? 'opened' : 'closed'} class={`ir-modal`} tabindex="-1">
         <div class={`ir-alert-content p-2`}>
-          <div class={`ir-alert-header align-items-center border-0 py-0 m-0 `}>
-            {/*
+          {this.showTitle && (
+            <div class={`ir-alert-header`}>
+              {/*
             <p class="font-weight-bold p-0 my-0 mb-1">
               {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} 
                {this.modalBody} 
               {this.modalTitle}
             </p>
             */}
-            {/* <div class="font-weight-bold d-flex align-items-center font-size-large my-0 py-0">
+              {/* <div class="font-weight-bold d-flex align-items-center font-size-large my-0 py-0">
               <ir-icon
                 icon="ft-x"
                 style={{ cursor: 'pointer' }}
@@ -89,7 +91,9 @@ export class IrModal {
                 }}
               ></ir-icon>
             </div> */}
-          </div>
+              <p>{this.modalTitle}</p>
+            </div>
+          )}
           <div class="modal-body text-left p-0 mb-2">
             <div>{this.modalBody}</div>
           </div>

@@ -416,6 +416,7 @@ export interface PhysicalRoom {
   id: number;
   is_active: boolean;
   name: string;
+  hk_status: '001' | '002' | '003';
 }
 
 export interface Source {

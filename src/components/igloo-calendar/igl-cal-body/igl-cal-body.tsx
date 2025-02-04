@@ -309,7 +309,8 @@ export class IglCalBody {
           onClick={() => this.toggleCategory(roomCategory)}
         >
           <div class={'categoryName'}>
-            <ir-popover popoverTitle={this.getCategoryName(roomCategory)}></ir-popover>
+            <ir-interactive-title popoverTitle={this.getCategoryName(roomCategory)}></ir-interactive-title>
+            {/* <ir-popover popoverTitle={this.getCategoryName(roomCategory)}></ir-popover> */}
           </div>
           {roomCategory.expanded ? (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={14} width={14}>
@@ -362,7 +363,11 @@ export class IglCalBody {
             }}
           >
             {/* <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div> */}
-            <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover>
+            {/* <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover> */}
+            <ir-interactive-title
+              hkStatus={room.hk_status !== '001'}
+              popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}
+            ></ir-interactive-title>
           </div>
           {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory)}
         </div>
@@ -402,7 +407,8 @@ export class IglCalBody {
         </div>
         <ir-modal
           ref={el => (this.hkModal = el)}
-          modalTitle={''}
+          showTitle
+          modalTitle={`Update room ${this.selectedRoom?.name} cleaning status`}
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Update}
           modalBody={this.renderModalBody()}

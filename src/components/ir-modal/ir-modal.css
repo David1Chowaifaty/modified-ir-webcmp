@@ -28,6 +28,11 @@
   background: white;
   border-radius: 5px;
 }
+.ir-alert-header {
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+}
 .modal {
   z-index: 1001 !important;
 }
