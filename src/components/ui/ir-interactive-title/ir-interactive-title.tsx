@@ -65,7 +65,7 @@ export class IrInteractiveTitle {
           </span>
           {/* {this.hkStatus && this.hkStatusColors[this.hkStatus] && <div title="occupied" style={{ '--dot-color': this.hkStatusColors[this.hkStatus] }} class={`hk-dot`}></div>} */}
           {this.hkStatus && (
-            <div title="occupied" class={`hk-dot`}>
+            <div title="This unit is dirty" class={`hk-dot`}>
               <svg xmlns="http://www.w3.org/2000/svg" height="12" width="13.5" viewBox="0 0 576 512">
                 <path
                   // fill="currentColor"

@@ -15,8 +15,23 @@ import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { addUnassignedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
 import Token from '@/models/Token';
+import { RoomHkStatus, RoomType } from '@/models/booking.dto';
 // import Auth from '@/models/Auth';
-
+export interface UnitHkStatusChangePayload {
+  PR_ID: number;
+  ROOM_CATEGORY_ID: number;
+  NAME: string;
+  DESCRIPTION: string;
+  ENTRY_USER_ID: number;
+  ENTRY_DATE: string;
+  OWNER_ID: number;
+  IS_ACTIVE: boolean;
+  HKS_CODE: RoomHkStatus;
+  HKM_ID: number;
+  CHECKLIST: null;
+  My_Room_category: null;
+  My_Hkm: null;
+}
 @Component({
   tag: 'igloo-calendar',
   styleUrl: 'igloo-calendar.css',
@@ -75,6 +90,7 @@ export class IglooCalendar {
   private socket: Socket;
   private availabilityTimeout: NodeJS.Timeout;
   private token = new Token();
+  calendarModalEl: HTMLIrModalElement;
 
   componentWillLoad() {
     this.init();
@@ -110,11 +126,10 @@ export class IglooCalendar {
   }
   @Listen('showDialog')
   handleShowDialog(event: CustomEvent) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
     this.dialogData = event.detail;
-    let modal = this.element.querySelector('ir-modal');
-    if (modal) {
-      modal.openModal();
-    }
+    this.calendarModalEl?.openModal();
   }
   @Listen('showRoomNightsDialog')
   handleShowRoomNightsDialog(event: CustomEvent<IRoomNightsData>) {
@@ -375,6 +390,7 @@ export class IglooCalendar {
       CHANGE_IN_BOOK_STATUS: this.handleChangeInBookStatus,
       NON_TECHNICAL_CHANGE_IN_BOOKING: this.handleNonTechnicalChangeInBooking,
       ROOM_STATUS_CHANGED: this.handleRoomStatusChanged,
+      UNIT_HK_STATUS_CHANGED: this.handleUnitHKStatusChanged,
     };
 
     const handler = reasonHandlers[REASON];
@@ -385,7 +401,7 @@ export class IglooCalendar {
     }
   }
   private handleRoomStatusChanged(result: any) {
-    console.log(result);
+    // console.log(result);
     this.calendarData = {
       ...this.calendarData,
       bookingEvents: [
@@ -397,6 +413,27 @@ export class IglooCalendar {
         }),
       ],
     };
+  }
+  private handleUnitHKStatusChanged(result: UnitHkStatusChangePayload) {
+    console.log('hk unit change', result);
+    const updatedRooms: RoomType[] = [...this.calendarData.roomsInfo];
+    const changedRoomTypeIdx = updatedRooms.findIndex((roomType: RoomType) => roomType.id === result.ROOM_CATEGORY_ID);
+    if (changedRoomTypeIdx !== -1) {
+      const changedRoomType = { ...updatedRooms[changedRoomTypeIdx] };
+      const changedPhysicalRoomIdx = changedRoomType.physicalrooms.findIndex(room => room.id === result.PR_ID);
+      if (changedPhysicalRoomIdx !== -1) {
+        const updatedPhysicalRooms = [...changedRoomType.physicalrooms];
+        const targetPhysicalRoom = { ...updatedPhysicalRooms[changedPhysicalRoomIdx] };
+        targetPhysicalRoom.hk_status = result.HKS_CODE;
+        updatedPhysicalRooms[changedPhysicalRoomIdx] = targetPhysicalRoom;
+        changedRoomType.physicalrooms = updatedPhysicalRooms;
+        updatedRooms[changedRoomTypeIdx] = changedRoomType;
+        this.calendarData = {
+          ...this.calendarData,
+          roomsInfo: updatedRooms,
+        };
+      }
+    }
   }
   private async handleDoReservation(result: any) {
     const transformedBooking = transformNewBooking(result);
@@ -1118,6 +1155,7 @@ export class IglooCalendar {
           )}
         </ir-sidebar>
         <ir-modal
+          ref={el => (this.calendarModalEl = el)}
           modalTitle={''}
           rightBtnActive={this.dialogData?.reason === 'reallocate' ? !this.dialogData.hideConfirmButton : true}
           leftBtnText={locales?.entries?.Lcz_Cancel}

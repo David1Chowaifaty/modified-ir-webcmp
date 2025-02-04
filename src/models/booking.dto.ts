@@ -422,13 +422,14 @@ export interface RoomType {
   rateplans: null;
   is_active: boolean;
 }
+export type RoomHkStatus = '001' | '002' | '003';
 export interface PhysicalRoom {
   calendar_cell: null;
   housekeeper: IHouseKeepers;
   id: number;
   is_active: boolean;
   name: string;
-  hk_status: '001' | '002' | '003';
+  hk_status: RoomHkStatus;
 }
 
 export interface Source {
