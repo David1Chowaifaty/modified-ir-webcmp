@@ -85,6 +85,24 @@ export class IrHousekeeping {
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
         <section class="p-1">
+          <div class="card p-1">
+            <ir-select
+              LabelAvailable={false}
+              showFirstOption={false}
+              onSelectChange={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.roomService.SetAutomaticCheckInOut({
+                  property_id: this.propertyid,
+                  flag: e.detail === 'auto',
+                });
+              }}
+              data={[
+                { text: 'Manual', value: 'manual' },
+                { text: 'Auto', value: 'auto' },
+              ]}
+            ></ir-select>
+          </div>
           {/*<ir-unit-status class="mb-1"></ir-unit-status>*/}
           <ir-hk-team class="mb-1"></ir-hk-team>
         </section>

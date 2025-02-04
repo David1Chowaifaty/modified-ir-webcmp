@@ -3,6 +3,14 @@ import { locales } from '@/stores/locales.store';
 import axios from 'axios';
 
 export class RoomService {
+  public async SetAutomaticCheckInOut(props: { property_id: number; flag: boolean }) {
+    const { data } = await axios.post(`/Set_Automatic_Check_In_Out`, props);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data;
+  }
+
   public async getExposedProperty(params: { id: number | null; language: string; is_backend?: boolean; aname?: string }) {
     try {
       const { data } = await axios.post(`/Get_Exposed_Property`, params);
