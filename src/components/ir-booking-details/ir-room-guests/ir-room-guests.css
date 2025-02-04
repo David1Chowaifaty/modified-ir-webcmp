@@ -41,6 +41,11 @@
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+.guests-labels *,
+.sharing_persons_label {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
+}
 
 /*sm*/
 @media (min-width: 640px) {
@@ -56,7 +61,7 @@
   }
   .guest-grid {
     display: grid;
-    grid-template-columns: 3fr 2fr 2fr 5fr;
+    grid-template-columns: 2fr 2fr 2fr 2fr 5fr;
     gap: 0.5rem;
     align-items: flex-start;
   }

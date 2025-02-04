@@ -25,12 +25,12 @@ export interface SharedPerson {
   country_phone_prefix: null;
   dob: string;
   email: null;
-  first_name: null;
+  first_name: string;
   full_name: string;
   id: number;
   id_info: IDInfo;
   is_main?: boolean;
-  last_name: null;
+  last_name: string;
   mobile: null;
   nbr_confirmed_bookings: number;
   notes: null;
@@ -98,7 +98,19 @@ export const ZIdInfo = z.object({
  */
 export const ZSharedPerson = z.object({
   id: z.number().optional(),
-  full_name: z
+  // full_name: z
+  //   .union([
+  //     z.string().min(2), // if provided and non-empty, must have min length 2
+  //     z.literal(''), // or it can be empty string
+  //   ])
+  //   .optional(),
+  first_name: z
+    .union([
+      z.string().min(2), // if provided and non-empty, must have min length 2
+      z.literal(''), // or it can be empty string
+    ])
+    .optional(),
+  last_name: z
     .union([
       z.string().min(2), // if provided and non-empty, must have min length 2
       z.literal(''), // or it can be empty string

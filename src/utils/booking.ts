@@ -114,13 +114,14 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
   // }
   const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
   const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
+  const mainGuest = cell.room.sharing_persons?.find(p => p.is_main);
   return {
     ID: cell.POOL,
     FROM_DATE: bookingFromDate,
     TO_DATE: bookingToDate,
     NO_OF_DAYS: dateDifference(bookingFromDate, bookingToDate),
     STATUS: bookingStatus[cell.booking?.status.code],
-    NAME: formatName(cell.room.guest.first_name, cell.room.guest.last_name),
+    NAME: formatName(mainGuest?.first_name, mainGuest.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
@@ -246,6 +247,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
     if (moment(room.to_date, 'YYYY-MM-DD').isBefore(moment(calendar_dates.fromDate, 'YYYY-MM-DD'))) {
       return;
     }
+    const mainGuest = room.sharing_persons?.find(p => p.is_main);
     // console.log('bookingToDate:', bookingToDate, 'bookingFromDate:', bookingFromDate, 'room from date:', room.from_date, 'room to date', room.to_date);
     bookings.push({
       CHECKIN: false,
@@ -259,7 +261,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       IS_EDITABLE: true,
       BALANCE: data.financial?.due_amount,
       STATUS: renderStatus(room),
-      NAME: formatName(room.guest.first_name, room.guest.last_name),
+      NAME: formatName(mainGuest?.first_name, mainGuest.last_name),
       PHONE: data.guest.mobile_without_prefix ?? '',
       ENTRY_DATE: '12-12-2023',
       PHONE_PREFIX: data.guest.country_phone_prefix,

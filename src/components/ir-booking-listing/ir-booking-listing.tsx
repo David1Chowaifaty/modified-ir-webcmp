@@ -476,7 +476,7 @@ export class IrBookingListing {
           {this.editBookingItem?.cause === 'guest' && (
             <ir-guest-info
               slot="sidebar-body"
-              // isInSideBar={true}
+              isInSideBar={true}
               headerShown
               booking_nbr={this.editBookingItem?.booking?.booking_nbr}
               email={this.editBookingItem?.booking?.guest.email}

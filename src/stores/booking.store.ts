@@ -31,7 +31,8 @@ export interface IRatePlanSelection {
   };
 }
 export interface RatePlanGuest {
-  name: string;
+  first_name: string;
+  last_name: string;
   unit: string | null;
   bed_preference: string | null;
   infant_nbr: number | null;
@@ -215,7 +216,7 @@ export function reserveRooms({ ratePlanId, roomTypeId, rooms, guest }: { roomTyp
   if (!ratePlan) {
     throw new Error('Invalid rate plan');
   }
-  let newGuest = Array.from({ length: rooms }, () => ({ name: '', unit: null, bed_preference: null, infant_nbr: null }));
+  let newGuest = Array.from({ length: rooms }, () => ({ first_name: '', last_name: '', unit: null, bed_preference: null, infant_nbr: null }));
   console.log('guest', guest);
   if (guest) {
     newGuest = guest;

@@ -170,6 +170,7 @@ export class IrRoomGuests {
           <div class="">
             <div class="guest-grid guests-labels">
               <p class="">{locales.entries.Lcz_MainGuest}</p>
+              <p class=""></p>
               <p class=" ">{locales.entries.Lcz_DOB}</p>
               <p class="">{locales.entries.Lcz_Nationality}</p>
               <p class=" ">{locales.entries.Lcz_Documents}</p>
@@ -185,19 +186,35 @@ export class IrRoomGuests {
                 )}
                 <div key={idx} class="guest-grid">
                   <div class={'m-0 p-0 d-flex align-items-center h-100'}>
-                    <p class="guest_label">Full name</p>
+                    <p class="guest_label">First name</p>
                     <ir-input-text
                       class="flex-grow-1 h-100"
-                      id={`full_name_${idx}`}
-                      zod={ZSharedPerson.pick({ full_name: true })}
-                      error={!!this.error['full_name']}
+                      id={`first_name_${idx}`}
+                      zod={ZSharedPerson.pick({ first_name: true })}
+                      error={!!this.error['first_name']}
                       autoValidate={false}
-                      wrapKey="full_name"
+                      wrapKey="first_name"
                       LabelAvailable={false}
                       submitted={this.submitted}
-                      placeholder=""
-                      onTextChange={e => this.updateGuestInfo(idx, { full_name: e.detail })}
-                      value={guest.full_name}
+                      placeholder="First name"
+                      onTextChange={e => this.updateGuestInfo(idx, { first_name: e.detail })}
+                      value={guest.first_name}
+                    ></ir-input-text>
+                  </div>
+                  <div class={'m-0 p-0 d-flex align-items-center h-100'}>
+                    <p class="guest_label">Last name</p>
+                    <ir-input-text
+                      class="flex-grow-1 h-100"
+                      id={`last_name_${idx}`}
+                      zod={ZSharedPerson.pick({ last_name: true })}
+                      error={!!this.error['last_name']}
+                      autoValidate={false}
+                      wrapKey="last_name"
+                      LabelAvailable={false}
+                      submitted={this.submitted}
+                      placeholder="Last name"
+                      onTextChange={e => this.updateGuestInfo(idx, { last_name: e.detail })}
+                      value={guest.last_name}
                     ></ir-input-text>
                   </div>
                   <div class="flex-grow-0 m-0 p-0 h-100 d-flex align-items-center">

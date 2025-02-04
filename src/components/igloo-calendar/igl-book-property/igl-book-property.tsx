@@ -301,12 +301,14 @@ export class IglBookProperty {
       roomId: this.defaultData.PR_ID,
       roomTypeId: this.defaultData.RATE_TYPE,
     };
-    const { currentRoomType } = this.defaultData as IglBookPropertyPayloadEditBooking;
-
+    const { currentRoomType, GUEST } = this.defaultData as IglBookPropertyPayloadEditBooking;
+    console.log(GUEST);
     modifyBookingStore('guest', {
       bed_preference: currentRoomType.bed_preference?.toString(),
       infant_nbr: currentRoomType.occupancy.infant_nbr,
-      name: currentRoomType.guest.last_name ? currentRoomType.guest.first_name + ' ' + currentRoomType.guest.last_name : currentRoomType.guest.first_name,
+      first_name: GUEST.first_name ?? '',
+      last_name: GUEST.last_name ?? '',
+      // name: currentRoomType.guest.last_name ? currentRoomType.guest.first_name + ' ' + currentRoomType.guest.last_name : currentRoomType.guest.first_name,
       unit: (currentRoomType.unit as any)?.id?.toString(),
     });
     this.checkBookingAvailability();
@@ -339,7 +341,7 @@ export class IglBookProperty {
         const rateplan = roomtype[rateplanId];
         if (rateplan.reserved > 0) {
           for (const guest of rateplan.guest) {
-            if (guest.name === '') {
+            if (guest.first_name === '' || guest.last_name === '') {
               return true;
             }
           }
@@ -434,7 +436,7 @@ export class IglBookProperty {
 
   private updateBooking() {
     try {
-      const { currentRoomType } = this.defaultData as IglBookPropertyPayloadEditBooking;
+      const { currentRoomType, GUEST } = this.defaultData as IglBookPropertyPayloadEditBooking;
       const roomtypeId = currentRoomType.roomtype.id;
       const rateplanId = currentRoomType.rateplan.id;
       reserveRooms({
@@ -445,7 +447,8 @@ export class IglBookProperty {
           {
             bed_preference: currentRoomType.bed_preference?.toString(),
             infant_nbr: currentRoomType.occupancy.infant_nbr,
-            name: currentRoomType.guest.last_name ? currentRoomType.guest.first_name + ' ' + currentRoomType.guest.last_name : currentRoomType.guest.first_name,
+            last_name: GUEST.last_name,
+            first_name: GUEST.first_name,
             unit: (currentRoomType.unit as any)?.id?.toString(),
           },
         ],
