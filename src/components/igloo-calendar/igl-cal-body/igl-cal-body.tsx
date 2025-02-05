@@ -1,7 +1,9 @@
 import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
-import { PhysicalRoom, RoomType } from '@/models/booking.dto';
+import { PhysicalRoom, RoomHkStatus, RoomType } from '@/models/booking.dto';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { HouseKeepingService } from '@/services/housekeeping.service';
 
 export type RoomCategory = RoomType & { expanded: boolean };
 
@@ -12,6 +14,7 @@ export type RoomCategory = RoomType & { expanded: boolean };
 })
 export class IglCalBody {
   @Prop() isScrollViewDragging: boolean;
+  @Prop() propertyId: number;
   @Prop() calendarData: { [key: string]: any };
   @Prop() today: String;
   @Prop() currency;
@@ -22,6 +25,7 @@ export class IglCalBody {
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
   @State() selectedRoom: PhysicalRoom;
+  @State() selectedHKStatus: RoomHkStatus;
 
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
   @Event() showBookingPopup: EventEmitter;
@@ -32,6 +36,7 @@ export class IglCalBody {
   private newEvent: { [key: string]: any };
   private currentDate = new Date();
   private hkModal: HTMLIrModalElement;
+  private housekeepingService = new HouseKeepingService();
 
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
@@ -412,15 +417,52 @@ export class IglCalBody {
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Update}
           modalBody={this.renderModalBody()}
-          onConfirmModal={() => {
-            console.log('here');
+          onConfirmModal={async e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            if (!this.selectedHKStatus) {
+              this.hkModal.closeModal();
+              return;
+            }
+            await this.housekeepingService.executeHKAction({
+              property_id: this.propertyId,
+              housekeeper: this.selectedRoom?.housekeeper ? { id: this.selectedRoom?.housekeeper?.id } : null,
+              status: {
+                code: this.selectedHKStatus,
+              },
+              unit: {
+                id: this.selectedRoom?.id,
+              },
+            });
+            this.selectedRoom = null;
+            this.selectedHKStatus = null;
+            this.hkModal.closeModal();
           }}
-          // onCancelModal={this.handleModalCancel.bind(this)}
+          autoClose={false}
+          isLoading={isRequestPending('/Execute_HK_Action')}
+          onCancelModal={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.selectedRoom = null;
+            this.selectedHKStatus = null;
+          }}
         ></ir-modal>
       </Host>
     );
   }
-  renderModalBody() {
-    return <ir-select LabelAvailable={false} data={[{ text: 'hello', value: 'world' }]}></ir-select>;
+
+  private renderModalBody() {
+    return (
+      <ir-select
+        LabelAvailable={false}
+        showFirstOption={false}
+        selectedValue={this.selectedRoom?.hk_status === '001' ? '001' : '002'}
+        data={[
+          { text: 'Clean', value: '001' },
+          { text: 'Dirty', value: '002' },
+        ]}
+        onSelectChange={e => (this.selectedHKStatus = e.detail)}
+      ></ir-select>
+    );
   }
 }
