@@ -41,6 +41,7 @@ export class IrRoom {
   @State() item: Room;
   @State() isLoading: boolean = false;
   @State() isModelOpen: boolean = false;
+
   // Event Emitters
   @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
@@ -188,14 +189,37 @@ export class IrRoom {
     // Join non-empty parts with spaces
     return parts.filter(Boolean).join('&nbsp&nbsp&nbsp&nbsp');
   }
-  private getBedName() {
-    const bed = this.bedPreferences.find(p => p.CODE_NAME === this.item.bed_preference.toString());
-    if (!bed) {
-      throw new Error(`bed with code ${this.item.bed_preference} not found`);
+
+  private getSmokingLabel() {
+    if (this.bookingEvent.is_direct) {
+      if (!this.item.smoking_option) {
+        return null;
+      }
+      const currRT = calendar_data.roomsInfo.find(rt => rt.id === this.item.roomtype.id);
+      if (currRT) {
+        const smoking_option = currRT['smoking_option']?.allowed_smoking_options;
+        if (smoking_option) {
+          return smoking_option.find(s => s.code === this.item.smoking_option)?.description;
+        }
+        return null;
+      }
+      return null;
     }
-    return bed[`CODE_VALUE_${this.language}`] ?? bed.CODE_VALUE_EN;
+    return this.item.ota_meta?.smoking_preferences;
+  }
+
+  private getBedName() {
+    if (this.bookingEvent.is_direct) {
+      const bed = this.bedPreferences.find(p => p.CODE_NAME === this.item.bed_preference.toString());
+      if (!bed) {
+        return;
+      }
+      return bed[`CODE_VALUE_${this.language}`] ?? bed.CODE_VALUE_EN;
+    }
+    return this.item.ota_meta?.bed_preferences;
   }
   render() {
+    const bed = this.getBedName();
     return (
       <Host class="p-1 d-flex m-0">
         <ir-button
@@ -264,7 +288,7 @@ export class IrRoom {
                 {' '}
               </span>
             )}
-            {this.item.bed_preference && <span>({this.getBedName()})</span>}
+            {bed && <span>(Preference: {bed})</span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.item.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">
@@ -330,6 +354,7 @@ export class IrRoom {
                 </table>
               </div>
             </div>
+            <ir-label labelText="Smoking Preference:" display="inline" content={this.getSmokingLabel()}></ir-label>
             {this.bookingEvent.is_direct && (
               <Fragment>
                 {this.item.rateplan.cancelation && (
@@ -339,6 +364,12 @@ export class IrRoom {
                   <ir-label labelText={`${locales.entries.Lcz_Guarantee}:`} display="inline" content={this.item.rateplan.guarantee || ''} renderContentAsHtml></ir-label>
                 )}
               </Fragment>
+            )}
+            {this.item.ota_meta && (
+              <div>
+                <ir-label labelText="Meal plan:" display="inline" content={this.item.ota_meta.meal_plan}></ir-label>
+                <ir-label labelText="Policies:" display="inline" content={this.item.ota_meta.policies}></ir-label>
+              </div>
             )}
             {/* {this.bookingEvent.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>} */}
           </div>

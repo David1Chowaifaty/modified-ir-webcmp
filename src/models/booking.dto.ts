@@ -1,7 +1,24 @@
 import { z } from 'zod';
 import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 import { TSourceOption } from './igl-book-property';
+export interface OtaGuarantee {
+  card_number: string;
+  card_type: string;
+  cardholder_name: string;
+  cvv: string;
+  expiration_date: string;
+  is_virtual: boolean;
+  meta: Meta;
+  token: string;
+}
 
+interface Meta {
+  virtual_card_currency_code: string;
+  virtual_card_current_balance: string;
+  virtual_card_decimal_places: string;
+  virtual_card_effective_date: string;
+  virtual_card_expiration_date: string;
+}
 export interface Booking {
   agent: {
     code: string;
@@ -21,6 +38,7 @@ export interface Booking {
   extras: Extras[] | null;
   occupancy: Occupancy;
   origin: Origin;
+  ota_guarante: OtaGuarantee;
   property: Property;
   remark: string;
   ota_notes: IOtaNotes[];
@@ -223,14 +241,23 @@ export interface Room {
   roomtype: RoomType;
   to_date: string;
   total: number;
+  smoking_option: string;
   identifier: string;
   unit: string | number | IUnit | null;
   ota_taxes: IOtaTax[];
+  ota_meta: OtaMeta;
   cost: number | null;
   gross_cost: number;
   gross_total: number;
   guarantee: number;
   gross_guarantee: number;
+}
+interface OtaMeta {
+  bed_preferences: string | null;
+  meal_plan: string | null;
+  parent_rate_plan_id: string | null;
+  policies: string | null;
+  smoking_preferences: string | null;
 }
 export interface IOtaTax {
   amount: number;
