@@ -35,16 +35,18 @@
 
 ### Depends on
 
-- [ota-label](../../ota-label)
 - [ir-date-view](../../ir-date-view)
+- [ir-label](../../ui/ir-label)
+- [ota-label](../../ota-label)
 - [ir-button](../../ir-button)
 - [igl-block-dates-view](../igl-block-dates-view)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-date-view
+  igl-booking-event-hover --> ir-label
+  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-button
   igl-booking-event-hover --> igl-block-dates-view
   ir-button --> ir-icons

@@ -53,10 +53,11 @@ graph TD;
   ir-guest-info --> ir-spinner
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
-  ir-guest-info --> ir-select
+  ir-guest-info --> ir-country-picker
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
   ir-pickup --> ir-select
@@ -77,7 +78,6 @@ graph TD;
   ir-room-guests --> ir-country-picker
   ir-room-guests --> ir-select
   ir-room-guests --> ir-button
-  ir-country-picker --> ir-input-text
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-select
@@ -134,6 +134,7 @@ graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
+  igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
   style ir-booking fill:#f9f,stroke:#333,stroke-width:4px
 ```

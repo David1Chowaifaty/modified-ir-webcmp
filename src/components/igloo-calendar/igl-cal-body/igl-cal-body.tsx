@@ -1,7 +1,7 @@
 import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
-import { PhysicalRoom, RoomHkStatus, RoomType } from '@/models/booking.dto';
+import { PhysicalRoom, RoomType } from '@/models/booking.dto';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 
@@ -25,7 +25,6 @@ export class IglCalBody {
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
   @State() selectedRoom: PhysicalRoom;
-  @State() selectedHKStatus: RoomHkStatus;
 
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
   @Event() showBookingPopup: EventEmitter;
@@ -412,30 +411,23 @@ export class IglCalBody {
         </div>
         <ir-modal
           ref={el => (this.hkModal = el)}
-          showTitle
-          modalTitle={`Update room ${this.selectedRoom?.name} cleaning status`}
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Update}
           modalBody={this.renderModalBody()}
           onConfirmModal={async e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
-            if (!this.selectedHKStatus) {
-              this.hkModal.closeModal();
-              return;
-            }
             await this.housekeepingService.executeHKAction({
               property_id: this.propertyId,
               housekeeper: this.selectedRoom?.housekeeper ? { id: this.selectedRoom?.housekeeper?.id } : null,
               status: {
-                code: this.selectedHKStatus,
+                code: this.selectedRoom?.hk_status === '001' ? '002' : '001',
               },
               unit: {
                 id: this.selectedRoom?.id,
               },
             });
             this.selectedRoom = null;
-            this.selectedHKStatus = null;
             this.hkModal.closeModal();
           }}
           autoClose={false}
@@ -444,7 +436,6 @@ export class IglCalBody {
             e.stopImmediatePropagation();
             e.stopPropagation();
             this.selectedRoom = null;
-            this.selectedHKStatus = null;
           }}
         ></ir-modal>
       </Host>
@@ -452,17 +443,23 @@ export class IglCalBody {
   }
 
   private renderModalBody() {
+    if (!this.selectedRoom) {
+      return null;
+    }
     return (
-      <ir-select
-        LabelAvailable={false}
-        showFirstOption={false}
-        selectedValue={this.selectedRoom?.hk_status === '001' ? '001' : '002'}
-        data={[
-          { text: 'Clean', value: '001' },
-          { text: 'Dirty', value: '002' },
-        ]}
-        onSelectChange={e => (this.selectedHKStatus = e.detail)}
-      ></ir-select>
+      <p>
+        Update unit {this.selectedRoom?.name} status to <b>{this.selectedRoom?.hk_status === '001' ? 'Dirty' : 'Clean'}</b>
+      </p>
+      // <ir-select
+      //   LabelAvailable={false}
+      //   showFirstOption={false}
+      //   selectedValue={this.selectedRoom?.hk_status === '001' ? '001' : '002'}
+      //   data={[
+      //     { text: 'Clean', value: '001' },
+      //     { text: 'Dirty', value: '002' },
+      //   ]}
+      //   onSelectChange={e => (this.selectedHKStatus = e.detail)}
+      // ></ir-select>
     );
   }
 }

@@ -139,7 +139,7 @@ export class IrHkTasks {
           <ir-tasks-header></ir-tasks-header>
           <div class="d-flex flex-column flex-md-row mt-1 " style={{ gap: '1rem' }}>
             <ir-tasks-filters></ir-tasks-filters>
-            <ir-tasks-table class="flex-grow-md-1 w-100" tasks={initialData}></ir-tasks-table>
+            <ir-tasks-table class="flex-grow-1 w-100" tasks={initialData}></ir-tasks-table>
           </div>
         </section>
         {/* <ir-title class="d-none d-md-flex" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between">

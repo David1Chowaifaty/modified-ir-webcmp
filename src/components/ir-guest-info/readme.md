@@ -37,7 +37,7 @@
 - [ir-spinner](../ui/ir-spinner)
 - [ir-icon](../ir-icon)
 - [ir-input-text](../ir-input-text)
-- [ir-select](../ir-select)
+- [ir-country-picker](../ui/ir-country-picker)
 - [ir-phone-input](../ir-phone-input)
 - [ir-textarea](../ir-textarea)
 - [ir-button](../ir-button)
@@ -48,10 +48,11 @@ graph TD;
   ir-guest-info --> ir-spinner
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
-  ir-guest-info --> ir-select
+  ir-guest-info --> ir-country-picker
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-button --> ir-icons
   ir-booking-details --> ir-guest-info

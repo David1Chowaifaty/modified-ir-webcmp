@@ -9,6 +9,7 @@
 
 | Property                   | Attribute                     | Description                            | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Default     |
 | -------------------------- | ----------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `btnStyle`                 | --                            |                                        | `{ [key: string]: string; }`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `undefined` |
 | `btn_block`                | `btn_block`                   |                                        | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `true`      |
 | `btn_color`                | `btn_color`                   |                                        | `"danger" \| "dark" \| "info" \| "light" \| "link" \| "outline" \| "primary" \| "secondary" \| "success" \| "warning"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `'primary'` |
 | `btn_disabled`             | `btn_disabled`                |                                        | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `false`     |
@@ -20,6 +21,7 @@
 | `icon_name`                | `icon_name`                   |                                        | `"print" \| "key" \| "search" \| "save" \| "check" \| "calendar" \| "user" \| "file" \| "edit" \| "danger" \| "clock" \| "heart-fill" \| "envelope-circle-check" \| "bell" \| "burger_menu" \| "home" \| "xmark" \| "minus" \| "heart" \| "user_group" \| "arrow_right" \| "arrow_left" \| "circle_info" \| "xmark-fill" \| "globe" \| "facebook" \| "twitter" \| "whatsapp" \| "instagram" \| "youtube" \| "angle_left" \| "circle_check" \| "eraser" \| "trash" \| "plus" \| "reciept" \| "menu_list" \| "credit_card" \| "closed_eye" \| "open_eye" \| "server" \| "double_caret_left" \| "square_plus" \| "angles_left" \| "angle_right" \| "angles_right" \| "outline_user" \| "unlock" \| "circle_plus" \| "arrow-right-from-bracket"` | `undefined` |
 | `icon_style`               | `icon_style`                  |                                        | `any`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `undefined` |
 | `isLoading`                | `is-loading`                  |                                        | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `false`     |
+| `labelStyle`               | --                            |                                        | `{ [key: string]: string; }`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `undefined` |
 | `name`                     | `name`                        |                                        | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `undefined` |
 | `renderContentAsHtml`      | `render-content-as-html`      | If true, will render `content` as HTML | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `false`     |
 | `size`                     | `size`                        |                                        | `"lg" \| "md" \| "sm"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `'md'`      |
@@ -34,6 +36,19 @@
 | Event          | Description | Type               |
 | -------------- | ----------- | ------------------ |
 | `clickHandler` |             | `CustomEvent<any>` |
+
+
+## Methods
+
+### `bounce() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 
 ## Dependencies
@@ -59,7 +74,6 @@
  - [ir-extra-service](../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info](../ir-guest-info)
- - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
@@ -76,6 +90,8 @@
  - [ir-room](../ir-booking-details/ir-room)
  - [ir-room-guests](../ir-booking-details/ir-room-guests)
  - [ir-room-nights](../igloo-calendar/ir-room-nights)
+ - [ir-tasks-filters](../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
+ - [ir-tasks-header](../ir-housekeeping/ir-hk-tasks/ir-tasks-header)
 
 ### Depends on
 
@@ -104,7 +120,6 @@ graph TD;
   ir-extra-service --> ir-button
   ir-extra-service-config --> ir-button
   ir-guest-info --> ir-button
-  ir-hk-tasks --> ir-button
   ir-hk-unassigned-units --> ir-button
   ir-hk-user --> ir-button
   ir-listing-header --> ir-button
@@ -121,6 +136,8 @@ graph TD;
   ir-room --> ir-button
   ir-room-guests --> ir-button
   ir-room-nights --> ir-button
+  ir-tasks-filters --> ir-button
+  ir-tasks-header --> ir-button
   style ir-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

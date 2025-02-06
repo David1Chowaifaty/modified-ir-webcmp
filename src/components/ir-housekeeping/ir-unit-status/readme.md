@@ -14,10 +14,6 @@
 
 ## Dependencies
 
-### Used by
-
- - [ir-housekeeping](..)
-
 ### Depends on
 
 - [ir-title](../../ir-title)
@@ -29,7 +25,6 @@ graph TD;
   ir-unit-status --> ir-title
   ir-unit-status --> ir-select
   ir-title --> ir-icon
-  ir-housekeeping --> ir-unit-status
   style ir-unit-status fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -15,6 +15,7 @@
 | `highlightedDate`      | `highlighted-date`        |             | `string`                  | `undefined` |
 | `isScrollViewDragging` | `is-scroll-view-dragging` |             | `boolean`                 | `undefined` |
 | `language`             | `language`                |             | `string`                  | `undefined` |
+| `propertyId`           | `property-id`             |             | `number`                  | `undefined` |
 | `today`                | --                        |             | `String`                  | `undefined` |
 
 
@@ -35,21 +36,27 @@
 
 ### Depends on
 
-- [ir-popover](../../ir-popover)
+- [ir-interactive-title](../../ui/ir-interactive-title)
 - [igl-booking-event](../igl-booking-event)
+- [ir-modal](../../ir-modal)
+- [ir-select](../../ir-select)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-cal-body --> ir-popover
+  igl-cal-body --> ir-interactive-title
   igl-cal-body --> igl-booking-event
+  igl-cal-body --> ir-modal
+  igl-cal-body --> ir-select
   igl-booking-event --> igl-booking-event-hover
-  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-date-view
+  igl-booking-event-hover --> ir-label
+  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-button
   igl-booking-event-hover --> igl-block-dates-view
   ir-button --> ir-icons
   igl-block-dates-view --> ir-date-view
+  ir-modal --> ir-button
   igloo-calendar --> igl-cal-body
   style igl-cal-body fill:#f9f,stroke:#333,stroke-width:4px
 ```

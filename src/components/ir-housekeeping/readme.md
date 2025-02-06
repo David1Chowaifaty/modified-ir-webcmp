@@ -22,7 +22,7 @@
 - [ir-loading-screen](../ir-loading-screen)
 - [ir-interceptor](../ir-interceptor)
 - [ir-toast](../ir-toast)
-- [ir-unit-status](ir-unit-status)
+- [ir-select](../ir-select)
 - [ir-hk-team](ir-hk-team)
 
 ### Graph
@@ -31,11 +31,8 @@ graph TD;
   ir-housekeeping --> ir-loading-screen
   ir-housekeeping --> ir-interceptor
   ir-housekeeping --> ir-toast
-  ir-housekeeping --> ir-unit-status
+  ir-housekeeping --> ir-select
   ir-housekeeping --> ir-hk-team
-  ir-unit-status --> ir-title
-  ir-unit-status --> ir-select
-  ir-title --> ir-icon
   ir-hk-team --> ir-hk-unassigned-units
   ir-hk-team --> ir-hk-user
   ir-hk-team --> ir-title
@@ -46,6 +43,7 @@ graph TD;
   ir-hk-unassigned-units --> ir-switch
   ir-hk-unassigned-units --> ir-title
   ir-hk-unassigned-units --> ir-button
+  ir-title --> ir-icon
   ir-button --> ir-icons
   ir-hk-user --> ir-title
   ir-hk-user --> ir-input-text

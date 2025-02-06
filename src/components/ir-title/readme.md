@@ -28,7 +28,6 @@
  - [ir-booking-extra-note](../ir-booking-details/ir-booking-extra-note)
  - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
- - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-team](../ir-housekeeping/ir-hk-team)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
@@ -47,7 +46,6 @@ graph TD;
   ir-booking-extra-note --> ir-title
   ir-extra-service-config --> ir-title
   ir-hk-archive --> ir-title
-  ir-hk-tasks --> ir-title
   ir-hk-team --> ir-title
   ir-hk-unassigned-units --> ir-title
   ir-hk-user --> ir-title

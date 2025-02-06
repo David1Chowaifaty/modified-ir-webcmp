@@ -33,6 +33,7 @@
 
 - [ir-autocomplete](../../../../ir-autocomplete)
 - [ir-tooltip](../../../../ir-tooltip)
+- [ir-country-picker](../../../../ui/ir-country-picker)
 - [ir-phone-input](../../../../ir-phone-input)
 
 ### Graph
@@ -40,7 +41,9 @@
 graph TD;
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
+  igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
+  ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   igl-booking-form --> igl-property-booked-by
   style igl-property-booked-by fill:#f9f,stroke:#333,stroke-width:4px

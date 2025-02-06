@@ -71,14 +71,18 @@ graph TD;
   ir-button --> ir-icons
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
-  igl-cal-body --> ir-popover
+  igl-cal-body --> ir-interactive-title
   igl-cal-body --> igl-booking-event
+  igl-cal-body --> ir-modal
+  igl-cal-body --> ir-select
   igl-booking-event --> igl-booking-event-hover
-  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-date-view
+  igl-booking-event-hover --> ir-label
+  igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-button
   igl-booking-event-hover --> igl-block-dates-view
   igl-block-dates-view --> ir-date-view
+  ir-modal --> ir-button
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-button
   igl-book-property --> ir-icon
@@ -104,7 +108,9 @@ graph TD;
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
+  igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
+  ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-sidebar --> ir-icon
   ir-room-nights --> ir-price-input
@@ -132,7 +138,7 @@ graph TD;
   ir-guest-info --> ir-spinner
   ir-guest-info --> ir-icon
   ir-guest-info --> ir-input-text
-  ir-guest-info --> ir-select
+  ir-guest-info --> ir-country-picker
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
@@ -155,7 +161,6 @@ graph TD;
   ir-room-guests --> ir-country-picker
   ir-room-guests --> ir-select
   ir-room-guests --> ir-button
-  ir-country-picker --> ir-input-text
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-select
@@ -174,7 +179,6 @@ graph TD;
   ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
-  ir-modal --> ir-button
   ir-pickup-view --> ir-button
   ir-extra-services --> ir-extra-service
   ir-extra-service --> ir-button

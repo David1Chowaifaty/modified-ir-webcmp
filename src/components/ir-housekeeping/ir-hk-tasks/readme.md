@@ -22,11 +22,9 @@
 - [ir-loading-screen](../../ir-loading-screen)
 - [ir-toast](../../ir-toast)
 - [ir-interceptor](../../ir-interceptor)
-- [ir-title](../../ir-title)
-- [ir-button](../../ir-button)
-- [ir-select](../../ir-select)
-- [ir-checkbox](../../ir-checkbox)
-- [ir-modal](../../ir-modal)
+- [ir-tasks-header](ir-tasks-header)
+- [ir-tasks-filters](ir-tasks-filters)
+- [ir-tasks-table](ir-tasks-table)
 
 ### Graph
 ```mermaid
@@ -34,14 +32,14 @@ graph TD;
   ir-hk-tasks --> ir-loading-screen
   ir-hk-tasks --> ir-toast
   ir-hk-tasks --> ir-interceptor
-  ir-hk-tasks --> ir-title
-  ir-hk-tasks --> ir-button
-  ir-hk-tasks --> ir-select
-  ir-hk-tasks --> ir-checkbox
-  ir-hk-tasks --> ir-modal
-  ir-title --> ir-icon
+  ir-hk-tasks --> ir-tasks-header
+  ir-hk-tasks --> ir-tasks-filters
+  ir-hk-tasks --> ir-tasks-table
+  ir-tasks-header --> ir-button
   ir-button --> ir-icons
-  ir-modal --> ir-button
+  ir-tasks-filters --> ir-select
+  ir-tasks-filters --> ir-button
+  ir-tasks-table --> ir-checkbox
   style ir-hk-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -43,36 +43,38 @@
 ### Used by
 
  - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
+ - [igl-cal-body](../igloo-calendar/igl-cal-body)
  - [ir-booking-header](../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
- - [ir-guest-info](../ir-guest-info)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
- - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
+ - [ir-housekeeping](../ir-housekeeping)
  - [ir-listing-header](../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
  - [ir-option-details](../ir-payment-option/ir-option-details)
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-room-guests](../ir-booking-details/ir-room-guests)
+ - [ir-tasks-filters](../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
  - [ir-unit-status](../ir-housekeeping/ir-unit-status)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-book-property-header --> ir-select
+  igl-cal-body --> ir-select
   ir-booking-header --> ir-select
   ir-booking-listing --> ir-select
   ir-delete-modal --> ir-select
-  ir-guest-info --> ir-select
   ir-hk-archive --> ir-select
-  ir-hk-tasks --> ir-select
   ir-hk-unassigned-units --> ir-select
+  ir-housekeeping --> ir-select
   ir-listing-header --> ir-select
   ir-listing-modal --> ir-select
   ir-option-details --> ir-select
   ir-pickup --> ir-select
   ir-room-guests --> ir-select
+  ir-tasks-filters --> ir-select
   ir-unit-status --> ir-select
   style ir-select fill:#f9f,stroke:#333,stroke-width:4px
 ```

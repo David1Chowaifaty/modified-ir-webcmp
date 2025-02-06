@@ -12,6 +12,7 @@
 | `countries`       | --        |             | `ICountry[]` | `[]`        |
 | `country`         | --        |             | `ICountry`   | `undefined` |
 | `error`           | `error`   |             | `boolean`    | `undefined` |
+| `label`           | `label`   |             | `string`     | `undefined` |
 | `propertyCountry` | --        |             | `ICountry`   | `undefined` |
 
 
@@ -26,6 +27,8 @@
 
 ### Used by
 
+ - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
+ - [ir-guest-info](../../ir-guest-info)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
 
 ### Depends on
@@ -36,6 +39,8 @@
 ```mermaid
 graph TD;
   ir-country-picker --> ir-input-text
+  igl-property-booked-by --> ir-country-picker
+  ir-guest-info --> ir-country-picker
   ir-room-guests --> ir-country-picker
   style ir-country-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```
