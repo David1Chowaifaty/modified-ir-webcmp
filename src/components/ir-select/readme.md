@@ -43,7 +43,6 @@
 ### Used by
 
  - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
- - [igl-cal-body](../igloo-calendar/igl-cal-body)
  - [ir-booking-header](../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
@@ -62,7 +61,6 @@
 ```mermaid
 graph TD;
   igl-book-property-header --> ir-select
-  igl-cal-body --> ir-select
   ir-booking-header --> ir-select
   ir-booking-listing --> ir-select
   ir-delete-modal --> ir-select

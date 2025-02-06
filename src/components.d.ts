@@ -435,6 +435,21 @@ export namespace Components {
         "open": boolean;
         "openModal": () => Promise<void>;
     }
+    interface IrDrawer {
+        "closeDrawer": () => Promise<void>;
+        /**
+          * The title of the drawer
+         */
+        "drawerTitle": string;
+        /**
+          * Is the drawer open?
+         */
+        "open": boolean;
+        /**
+          * The placement of the drawer
+         */
+        "placement": 'left' | 'right';
+    }
     interface IrDropdown {
         "data": {
     name: string;
@@ -952,6 +967,7 @@ export namespace Components {
         "variant": 'default' | 'prepend';
     }
     interface IrTitle {
+        "borderShown": boolean;
         "displayContext": 'default' | 'sidebar';
         "justifyContent": | 'center'
     | 'start'
@@ -1128,6 +1144,10 @@ export interface IrDeleteModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDialogElement;
+}
+export interface IrDrawerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDrawerElement;
 }
 export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1986,6 +2006,24 @@ declare global {
         prototype: HTMLIrDialogElement;
         new (): HTMLIrDialogElement;
     };
+    interface HTMLIrDrawerElementEventMap {
+        "drawerChange": boolean;
+        "drawerCloseRequested": void;
+    }
+    interface HTMLIrDrawerElement extends Components.IrDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrDrawerElementEventMap>(type: K, listener: (this: HTMLIrDrawerElement, ev: IrDrawerCustomEvent<HTMLIrDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrDrawerElementEventMap>(type: K, listener: (this: HTMLIrDrawerElement, ev: IrDrawerCustomEvent<HTMLIrDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrDrawerElement: {
+        prototype: HTMLIrDrawerElement;
+        new (): HTMLIrDrawerElement;
+    };
     interface HTMLIrDropdownElementEventMap {
         "dropdownItemCLicked": { name: string; object: any };
     }
@@ -2737,6 +2775,7 @@ declare global {
         "ir-date-view": HTMLIrDateViewElement;
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dialog": HTMLIrDialogElement;
+        "ir-drawer": HTMLIrDrawerElement;
         "ir-dropdown": HTMLIrDropdownElement;
         "ir-events-log": HTMLIrEventsLogElement;
         "ir-extra-service": HTMLIrExtraServiceElement;
@@ -3267,6 +3306,28 @@ declare namespace LocalJSX {
     interface IrDialog {
         "onOpenChange"?: (event: IrDialogCustomEvent<boolean>) => void;
         "open"?: boolean;
+    }
+    interface IrDrawer {
+        /**
+          * The title of the drawer
+         */
+        "drawerTitle"?: string;
+        /**
+          * Emitted when the drawer visibility changes.
+         */
+        "onDrawerChange"?: (event: IrDrawerCustomEvent<boolean>) => void;
+        /**
+          * Emitted when the drawer is requested to be closed via keyboard
+         */
+        "onDrawerCloseRequested"?: (event: IrDrawerCustomEvent<void>) => void;
+        /**
+          * Is the drawer open?
+         */
+        "open"?: boolean;
+        /**
+          * The placement of the drawer
+         */
+        "placement"?: 'left' | 'right';
     }
     interface IrDropdown {
         "data"?: {
@@ -3845,6 +3906,7 @@ declare namespace LocalJSX {
         "variant"?: 'default' | 'prepend';
     }
     interface IrTitle {
+        "borderShown"?: boolean;
         "displayContext"?: 'default' | 'sidebar';
         "justifyContent"?: | 'center'
     | 'start'
@@ -3924,6 +3986,7 @@ declare namespace LocalJSX {
         "ir-date-view": IrDateView;
         "ir-delete-modal": IrDeleteModal;
         "ir-dialog": IrDialog;
+        "ir-drawer": IrDrawer;
         "ir-dropdown": IrDropdown;
         "ir-events-log": IrEventsLog;
         "ir-extra-service": IrExtraService;
@@ -4027,6 +4090,7 @@ declare module "@stencil/core" {
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
+            "ir-drawer": LocalJSX.IrDrawer & JSXBase.HTMLAttributes<HTMLIrDrawerElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
             "ir-events-log": LocalJSX.IrEventsLog & JSXBase.HTMLAttributes<HTMLIrEventsLogElement>;
             "ir-extra-service": LocalJSX.IrExtraService & JSXBase.HTMLAttributes<HTMLIrExtraServiceElement>;

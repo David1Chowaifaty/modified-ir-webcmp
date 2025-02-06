@@ -776,7 +776,7 @@ export class IglBookingEvent {
       >
         {/* onMouseOver={() =>this.showEventInfo(true)}  */}
         <div
-          class={`bookingEventBase ${
+          class={`bookingEventBase  ${
             !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
           }
           ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}
@@ -785,7 +785,7 @@ export class IglBookingEvent {
             !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
             this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
             this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
-            'border border-dark'
+            'border border-dark ota-booking-event'
           }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
           style={{ 'backgroundColor': legend.color, '--ir-event-bg': legend.color }}
           onTouchStart={event => this.startDragging(event, 'move')}

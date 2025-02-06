@@ -9,6 +9,7 @@
 
 | Property         | Attribute         | Description | Type                                                                                                                                                                                                  | Default     |
 | ---------------- | ----------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `borderShown`    | `border-shown`    |             | `boolean`                                                                                                                                                                                             | `undefined` |
 | `displayContext` | `display-context` |             | `"default" \| "sidebar"`                                                                                                                                                                              | `'default'` |
 | `justifyContent` | `justify-content` |             | `"center" \| "end" \| "flex-end" \| "flex-start" \| "left" \| "normal" \| "right" \| "safe center" \| "space-around" \| "space-between" \| "space-evenly" \| "start" \| "stretch" \| "unsafe center"` | `'start'`   |
 | `label`          | `label`           |             | `string`                                                                                                                                                                                              | `undefined` |
@@ -31,6 +32,7 @@
  - [ir-hk-team](../ir-housekeeping/ir-hk-team)
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
+ - [ir-housekeeping](../ir-housekeeping)
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-room-guests](../ir-booking-details/ir-room-guests)
  - [ir-unit-status](../ir-housekeeping/ir-unit-status)
@@ -49,6 +51,7 @@ graph TD;
   ir-hk-team --> ir-title
   ir-hk-unassigned-units --> ir-title
   ir-hk-user --> ir-title
+  ir-housekeeping --> ir-title
   ir-pickup --> ir-title
   ir-room-guests --> ir-title
   ir-unit-status --> ir-title

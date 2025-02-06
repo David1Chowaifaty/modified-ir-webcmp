@@ -7,6 +7,7 @@ import { Component, Element, Event, EventEmitter, Host, Prop, Watch, h } from '@
 })
 export class IrTitle {
   @Prop() label: string;
+  @Prop({ reflect: true }) borderShown: boolean;
   @Prop({ reflect: true }) displayContext: 'default' | 'sidebar' = 'default';
   @Prop({ reflect: true }) justifyContent:
     | 'center'

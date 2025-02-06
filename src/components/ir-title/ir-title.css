@@ -5,6 +5,11 @@
   align-items: center;
   width: 100%;
 }
+:host([border-shown]) {
+  border-bottom: 1px solid #e4e5ec !important;
+  border-color: #e4e5ec !important ;
+  padding-bottom: 15px;
+}
 :host([display-context='sidebar']) {
   padding: 15px 0;
   justify-content: space-between !important;

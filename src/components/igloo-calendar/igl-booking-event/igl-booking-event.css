@@ -43,7 +43,7 @@
   border-bottom-right-radius: 0;
 }
 .bookingEventBase.border.skewedLeft::before {
-  border: 1px solid #424242;
+  border: 2px solid #424242;
   border-right: 0;
   border-left: 0;
   border-top-right-radius: 0;
@@ -52,8 +52,11 @@
   height: 20px;
   left: -4px;
 }
+.ota-booking-event {
+  border-width: 2px !important;
+}
 .bookingEventBase.border.skewedRight::before {
-  border: 1px solid #424242;
+  border: 2px solid #424242;
   border-left: 0;
   border-right: 0;
   border-top-left-radius: 0;

@@ -417,9 +417,9 @@ export class IglCalBody {
           onConfirmModal={async e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
-            await this.housekeepingService.executeHKAction({
+            await this.housekeepingService.setExposedUnitHKStatus({
               property_id: this.propertyId,
-              housekeeper: this.selectedRoom?.housekeeper ? { id: this.selectedRoom?.housekeeper?.id } : null,
+              // housekeeper: this.selectedRoom?.housekeeper ? { id: this.selectedRoom?.housekeeper?.id } : null,
               status: {
                 code: this.selectedRoom?.hk_status === '001' ? '002' : '001',
               },
@@ -431,7 +431,7 @@ export class IglCalBody {
             this.hkModal.closeModal();
           }}
           autoClose={false}
-          isLoading={isRequestPending('/Execute_HK_Action')}
+          isLoading={isRequestPending('/Set_Exposed_Unit_HK_Status')}
           onCancelModal={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();

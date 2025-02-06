@@ -39,7 +39,6 @@
 - [ir-interactive-title](../../ui/ir-interactive-title)
 - [igl-booking-event](../igl-booking-event)
 - [ir-modal](../../ir-modal)
-- [ir-select](../../ir-select)
 
 ### Graph
 ```mermaid
@@ -47,7 +46,6 @@ graph TD;
   igl-cal-body --> ir-interactive-title
   igl-cal-body --> igl-booking-event
   igl-cal-body --> ir-modal
-  igl-cal-body --> ir-select
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label

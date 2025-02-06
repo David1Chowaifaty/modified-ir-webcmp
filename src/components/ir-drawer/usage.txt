@@ -1,0 +1,42 @@
+import { Component, h, State } from '@stencil/core';
+
+@Component({
+  tag: 'my-component',
+  styleUrl: 'my-component.css',
+  scoped: true,
+})
+export class MyComponent {
+  @State() drawerOpen: boolean = false;
+
+  toggleDrawer = () => {
+    this.drawerOpen = !this.drawerOpen;
+  };
+
+  handleDrawerChange = (event: CustomEvent<boolean>) => {
+    this.drawerOpen = event.detail;
+  };
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.toggleDrawer}>Toggle Drawer</button>
+
+        <ir-drawer title="My Drawer" open={this.drawerOpen} onDrawerChange={this.handleDrawerChange}>
+          <div slot="header">
+            <h1>Custom Header</h1>
+            <button onClick={() => console.log('Header Button Clicked')}>Header Button</button>
+          </div>
+
+          <p>This is the main content of the drawer.</p>
+          <p style={{ height: '100vh' }}>You can put any content here.</p>
+          <ir-input-text label="test"></ir-input-text>
+
+          <div slot="footer">
+            <button onClick={() => console.log('Footer Button Clicked')}>Footer Button</button>
+            <button onClick={this.toggleDrawer}>Close</button>
+          </div>
+        </ir-drawer>
+      </div>
+    );
+  }
+}

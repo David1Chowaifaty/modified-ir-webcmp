@@ -19,11 +19,12 @@
 .table th,
 .table td {
   padding: 0.25rem 0.5rem !important;
+  white-space: nowrap;
+  max-width: max-content !important;
   /* background: white; */
 }
 .table th,
 .table td {
-  max-width: max-content !important;
   text-align: start;
 }
 /* td,

@@ -90,9 +90,9 @@ export class IrTasksTable {
       this.selectedIds = [];
     } else {
       this.selectedIds = this.tasks.map(task => task.id);
+      this.animateCleanedButton.emit(null);
     }
     console.log('here');
-    this.animateCleanedButton.emit(null);
   }
 
   render() {
@@ -105,19 +105,57 @@ export class IrTasksTable {
                 <ir-checkbox checked={this.allSelected} onCheckChange={() => this.toggleSelectAll()}></ir-checkbox>
               </th>
               <th>Period</th>
-              <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('unit')}>
+              <th>
                 {/* Unit {this.sortKey === 'unit' ? `(${this.sortDirection})` : ''} */}
-                Unit
+                <span>Unit</span>
               </th>
-              <th style={{ cursor: 'pointer' }} onClick={() => this.handleSort('status')}>
-                Status
+              <th class={'sortable'} onClick={() => this.handleSort('status')}>
+                <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+                  <span>Status</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-arrow-up-down"
+                  >
+                    <path d="m21 16-4 4-4-4" />
+                    <path d="M17 20V4" />
+                    <path d="m3 8 4-4 4 4" />
+                    <path d="M7 4v16" />
+                  </svg>
+                </div>
               </th>
               <th>Hint</th>
               <th>A</th>
               <th>C</th>
               <th>I</th>
-              <th style={{ cursor: 'pointer', textAlign: 'start' }} onClick={() => this.handleSort('housekeeper')}>
-                Housekeeper
+              <th style={{ textAlign: 'start' }} class={'sortable'} onClick={() => this.handleSort('housekeeper')}>
+                <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+                  <span>Housekeeper</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-arrow-up-down"
+                  >
+                    <path d="m21 16-4 4-4-4" />
+                    <path d="M17 20V4" />
+                    <path d="m3 8 4-4 4 4" />
+                    <path d="M7 4v16" />
+                  </svg>
+                </div>
               </th>
             </tr>
           </thead>

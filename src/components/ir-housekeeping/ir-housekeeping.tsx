@@ -1,6 +1,7 @@
 import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
+import calendar_data from '@/stores/calendar-data';
 import { updateHKStore } from '@/stores/housekeeping.store';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 
@@ -85,23 +86,29 @@ export class IrHousekeeping {
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
         <section class="p-1">
+          <h4 class="mb-2">Housekeeping & Check-In Setup</h4>
           <div class="card p-1">
-            <ir-select
-              LabelAvailable={false}
-              showFirstOption={false}
-              onSelectChange={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                this.roomService.SetAutomaticCheckInOut({
-                  property_id: this.propertyid,
-                  flag: e.detail === 'auto',
-                });
-              }}
-              data={[
-                { text: 'Manual', value: 'manual' },
-                { text: 'Auto', value: 'auto' },
-              ]}
-            ></ir-select>
+            <ir-title borderShown label="Check-In Mode"></ir-title>
+            <div class={'d-flex align-items-center'}>
+              <p class="my-0 py-0 mr-1  ">Check in & Check out guests automatically:</p>
+              <ir-select
+                LabelAvailable={false}
+                showFirstOption={false}
+                selectedValue={calendar_data.is_automatic_check_in_out ? 'auto' : 'manual'}
+                onSelectChange={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.roomService.SetAutomaticCheckInOut({
+                    property_id: this.propertyid,
+                    flag: e.detail === 'auto',
+                  });
+                }}
+                data={[
+                  { text: `Yes, as per the property's policy.`, value: 'auto' },
+                  { text: 'No, I will do it manually. ', value: 'manual' },
+                ]}
+              ></ir-select>
+            </div>
           </div>
           {/*<ir-unit-status class="mb-1"></ir-unit-status>*/}
           <ir-hk-team class="mb-1"></ir-hk-team>

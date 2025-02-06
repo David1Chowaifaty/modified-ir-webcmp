@@ -1,3 +1,4 @@
+import { RoomHkStatus } from '@/models/booking.dto';
 import { IExposedHouseKeepingSetup, IInspectionMode, IPropertyHousekeepingAssignment, THKUser, TPendingHkSetupParams } from '@/models/housekeeping';
 import { updateHKStore } from '@/stores/housekeeping.store';
 import axios from 'axios';
@@ -42,6 +43,18 @@ export class HouseKeepingService {
       'pending_housekeepers',
       [...data['My_Result']].map(d => ({ original: d, selected: false })),
     );
+    return data['My_Result'];
+  }
+  public async setExposedUnitHKStatus(params: {
+    property_id: number;
+    status: {
+      code: RoomHkStatus;
+    };
+    unit: {
+      id: number;
+    };
+  }) {
+    const { data } = await axios.post(`/Set_Exposed_Unit_HK_Status`, { ...params });
     return data['My_Result'];
   }
   public async executeHKAction(params) {

@@ -146,7 +146,7 @@ export class IglBookingEventHover {
   }
 
   private canCheckIn() {
-    if (!calendar_data.checkin_enabled) {
+    if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
       return false;
     }
     if (this.isCheckedIn()) {
@@ -159,7 +159,7 @@ export class IglBookingEventHover {
   }
 
   private canCheckOut() {
-    if (!calendar_data.checkin_enabled) {
+    if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
       return false;
     }
     if (this.isCheckedIn() && this.canCheckInOrCheckout) {

@@ -3,3 +3,8 @@
   /* min-width: 1vw; */
   height: 100%;
 }
+@media (min-width: 768px) {
+  .collapse-btn {
+    display: none;
+  }
+}
