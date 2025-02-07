@@ -21,14 +21,14 @@
 
 ### Depends on
 
-- [ir-select](../../../ir-select)
 - [ir-button](../../../ir-button)
+- [ir-select](../../../ir-select)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-tasks-filters --> ir-select
   ir-tasks-filters --> ir-button
+  ir-tasks-filters --> ir-select
   ir-button --> ir-icons
   ir-hk-tasks --> ir-tasks-filters
   style ir-tasks-filters fill:#f9f,stroke:#333,stroke-width:4px

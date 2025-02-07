@@ -1,5 +1,5 @@
-import { Component, Event, EventEmitter, Prop, State, h } from '@stencil/core';
-import { Task } from '../ir-hk-tasks';
+import { Component, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
+import { Task } from '@/models/housekeeping';
 
 @Component({
   tag: 'ir-tasks-table',
@@ -12,7 +12,7 @@ export class IrTasksTable {
   /**
    * Tracks which task IDs are currently selected via checkboxes.
    */
-  @State() selectedIds: number[] = [];
+  @State() selectedIds: Task['id'][] = [];
 
   /**
    * Controls whether the "Confirm Clean" modal is shown.
@@ -30,6 +30,7 @@ export class IrTasksTable {
   @State() sortDirection: 'ASC' | 'DESC' = 'ASC';
 
   @Event({ bubbles: true, composed: true }) animateCleanedButton: EventEmitter<null>;
+  @Event({ bubbles: true, composed: true }) rowSelectChange: EventEmitter<Task[]>;
 
   componentWillLoad() {
     this.sortTasks('date', 'ASC');
@@ -49,15 +50,46 @@ export class IrTasksTable {
     this.sortTasks(key, newDirection);
   }
 
+  @Listen('clearSelectedHkTasks', { target: 'body' })
+  handleClearSelectedHkTasks(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.selectedIds = [];
+  }
+
   /**
    * Helper to sort tasks array in state.
    */
+  /**
+   * Sorts the tasks by the given key in ASC or DESC order.
+   * If values for `key` are duplicates, it sorts by `date` ascending.
+   * If `date` is also the same, it finally sorts by `unit.name` ascending.
+   */
   private sortTasks(key: string, direction: 'ASC' | 'DESC') {
     const sorted = [...this.tasks].sort((a, b) => {
-      if (a[key] < b[key]) return direction === 'ASC' ? -1 : 1;
-      if (a[key] > b[key]) return direction === 'ASC' ? 1 : -1;
+      // Primary comparison: a[key] vs b[key]
+      const aPrimary = a[key];
+      const bPrimary = b[key];
+
+      if (aPrimary < bPrimary) {
+        return direction === 'ASC' ? -1 : 1;
+      }
+      if (aPrimary > bPrimary) {
+        return direction === 'ASC' ? 1 : -1;
+      }
+
+      // First tiebreaker: compare by date (always ascending)
+      if (a.date < b.date) return -1;
+      if (a.date > b.date) return 1;
+
+      // Second tiebreaker: compare by unit.name (always ascending)
+      if (a.unit?.name < b.unit?.name) return -1;
+      if (a.unit?.name > b.unit?.name) return 1;
+
       return 0;
     });
+
+    // Update component state
     this.tasks = sorted;
     this.sortKey = key;
     this.sortDirection = direction;
@@ -66,13 +98,20 @@ export class IrTasksTable {
   /**
    * Helper to toggle selection for a single row.
    */
-  private toggleSelection(id: number) {
+  private toggleSelection(id: Task['id']) {
     if (this.selectedIds.includes(id)) {
       this.selectedIds = this.selectedIds.filter(item => item !== id);
     } else {
       this.selectedIds = [...this.selectedIds, id];
       this.animateCleanedButton.emit(null);
     }
+    this.emitSelectedTasks();
+  }
+
+  private emitSelectedTasks() {
+    const filteredTasks = this.tasks.filter(t => this.selectedIds.includes(t.id));
+    console.log('filteredTasks', filteredTasks);
+    this.rowSelectChange.emit(filteredTasks);
   }
 
   /**
@@ -92,6 +131,7 @@ export class IrTasksTable {
       this.selectedIds = this.tasks.map(task => task.id);
       this.animateCleanedButton.emit(null);
     }
+    this.emitSelectedTasks();
     console.log('here');
   }
 
@@ -162,19 +202,18 @@ export class IrTasksTable {
           <tbody>
             {this.tasks.map(task => {
               const isSelected = this.selectedIds.includes(task.id);
-              console.log(isSelected);
               return (
                 <tr style={{ cursor: 'pointer' }} onClick={() => this.toggleSelection(task.id)} class={{ 'selected': isSelected, 'task-table-row': true }} key={task.id}>
                   <td class="task-row">
                     <ir-checkbox checked={isSelected}></ir-checkbox>
                   </td>
                   <td class="task-row">{task.date}</td>
-                  <td class="task-row">{task.unit}</td>
+                  <td class="task-row">{task.unit.name}</td>
                   <td class="task-row">{task.status}</td>
                   <td class="task-row">{task.hint}</td>
-                  <td class="task-row">{task.a}</td>
-                  <td class="task-row">{task.c}</td>
-                  <td class="task-row">{task.i}</td>
+                  <td class="task-row">{task.adult}</td>
+                  <td class="task-row">{task.child}</td>
+                  <td class="task-row">{task.infant}</td>
                   <td class="w-50 task-row" style={{ textAlign: 'start' }}>
                     {task.housekeeper}
                   </td>

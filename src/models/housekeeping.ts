@@ -94,3 +94,16 @@ export interface IPendingActions {
   status: IHKStatuses;
   unit: IUnit;
 }
+
+export interface Task {
+  id: string;
+  adult: number;
+  child: number;
+  date: string;
+  hint: string;
+  hkm_id: number;
+  infant: number;
+  status: string;
+  unit: IUnit;
+  housekeeper: string;
+}

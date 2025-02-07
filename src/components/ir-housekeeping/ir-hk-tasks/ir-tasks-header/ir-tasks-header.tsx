@@ -1,4 +1,4 @@
-import { Component, h, Listen, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Listen, Prop } from '@stencil/core';
 
 @Component({
   tag: 'ir-tasks-header',
@@ -9,6 +9,8 @@ export class IrTasksHeader {
   @Prop() isCleanedEnabled: boolean = false;
 
   private btnRef: HTMLIrButtonElement;
+
+  @Event() headerButtonPress: EventEmitter<{ name: 'cleaned' | 'export' }>;
 
   @Listen('animateCleanedButton', { target: 'body' })
   handleCleanedButtonAnimation(e: CustomEvent) {
@@ -22,8 +24,27 @@ export class IrTasksHeader {
       <div class="d-flex align-items-center justify-content-between">
         <h4>Housekeeping Tasks</h4>
         <div class="d-flex align-items-center" style={{ gap: '1rem' }}>
-          <ir-button size="sm" btn_color="outline" text="Export"></ir-button>
-          <ir-button size="sm" btn_disabled={!this.isCleanedEnabled} text="Cleaned" ref={el => (this.btnRef = el)}></ir-button>
+          <ir-button
+            size="sm"
+            btn_color="outline"
+            text="Export"
+            onClickHandler={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.headerButtonPress.emit({ name: 'export' });
+            }}
+          ></ir-button>
+          <ir-button
+            onClickHandler={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.headerButtonPress.emit({ name: 'cleaned' });
+            }}
+            size="sm"
+            btn_disabled={!this.isCleanedEnabled}
+            text="Cleaned"
+            ref={el => (this.btnRef = el)}
+          ></ir-button>
         </div>
       </div>
     );

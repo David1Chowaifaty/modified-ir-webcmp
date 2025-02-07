@@ -1,107 +1,14 @@
-import { IPendingActions } from '@/models/housekeeping';
-import { Component, Host, Prop, State, h, Element } from '@stencil/core';
+import { IPendingActions, Task } from '@/models/housekeeping';
+import Token from '@/models/Token';
+import { HouseKeepingService } from '@/services/housekeeping.service';
+import { RoomService } from '@/services/room.service';
+import housekeeping_store from '@/stores/housekeeping.store';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
+import locales from '@/stores/locales.store';
+import { Component, Host, Prop, State, h, Element, Watch, Event, EventEmitter } from '@stencil/core';
+import moment from 'moment';
+import { v4 } from 'uuid';
 
-export interface Task {
-  id: number;
-  date: string; // e.g. '2025-10-28'
-  unit: number; // e.g. 228, 501
-  status: string; // e.g. 'INHOUSE', 'CHECKIN', 'DUSTY'
-  hint?: string; // e.g. 'Noon-2PM'
-  a: number; // numeric field (example)
-  c: number; // numeric field (example)
-  i: number; // numeric field (example)
-  housekeeper: string; // e.g. 'Maria'
-}
-const initialData: Task[] = [
-  {
-    id: 1,
-    date: '20 Jan',
-    unit: 228,
-    status: 'INHOUSE',
-    hint: '27 Oct - 3 Nov',
-    a: 4,
-    c: 2,
-    i: 1,
-    housekeeper: 'Maria',
-  },
-  {
-    id: 2,
-    date: '20 Jan',
-    unit: 501,
-    status: 'CHECKIN',
-    hint: 'Noon-2PM',
-    a: 2,
-    c: 0,
-    i: 0,
-    housekeeper: 'Clean Plus',
-  },
-  {
-    id: 3,
-    date: '20 Jan',
-    unit: 600,
-    status: 'VACANT',
-    hint: '',
-    a: 1,
-    c: 1,
-    i: 1,
-    housekeeper: 'Petros',
-  },
-  {
-    id: 4,
-    date: '20 Jan',
-    unit: 102,
-    status: 'TURNOVER',
-    hint: '10PM-Midnight',
-    a: 1,
-    c: 1,
-    i: 1,
-    housekeeper: 'Clean Plus',
-  },
-  {
-    id: 5,
-    date: '20 Jan',
-    unit: 109,
-    status: 'DUSTY',
-    hint: '',
-    a: 1,
-    c: 0,
-    i: 1,
-    housekeeper: 'Clean Plus',
-  },
-  {
-    id: 6,
-    date: '20 Jan',
-    unit: 501,
-    status: 'CHECKOUT',
-    hint: '',
-    a: 2,
-    c: 2,
-    i: 2,
-    housekeeper: 'Clean Plus',
-  },
-  {
-    id: 7,
-    date: '20 Jan',
-    unit: 228,
-    status: 'CHECKIN',
-    hint: 'Noon-2PM',
-    a: 4,
-    c: 2,
-    i: 1,
-    housekeeper: 'Maria',
-  },
-  {
-    id: 8,
-    date: '20 Jan',
-    unit: 228,
-    status: 'CHECKOUT',
-    hint: '',
-    a: 4,
-    c: 2,
-    i: 1,
-    housekeeper: 'Maria',
-  },
-];
 @Component({
   tag: 'ir-hk-tasks',
   styleUrl: 'ir-hk-tasks.css',
@@ -121,11 +28,135 @@ export class IrHkTasks {
   @State() selectedRoom: IPendingActions | null = null;
   @State() archiveOpened = false;
   @State() property_id: number;
+  @State() tasks: Task[] = [];
+  @State() selectedTasks: Task[] = [];
 
-  // private modalOpenTimeOut: NodeJS.Timeout;
-  // private roomService = new RoomService();
-  // private houseKeepingService = new HouseKeepingService();
-  // private token = new Token();
+  @Event({ bubbles: true, composed: true }) clearSelectedHkTasks: EventEmitter<void>;
+
+  private hkNameCache: Record<number, string> = {};
+  private roomService = new RoomService();
+  private houseKeepingService = new HouseKeepingService();
+  private token = new Token();
+  private modal: HTMLIrModalElement;
+
+  componentWillLoad() {
+    if (this.ticket !== '') {
+      this.token.setToken(this.ticket);
+      this.init();
+    }
+  }
+
+  @Watch('ticket')
+  ticketChanged(newValue: string, oldValue: string) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.token.setToken(this.ticket);
+    this.init();
+  }
+
+  private async init() {
+    try {
+      this.isLoading = true;
+      let propertyId = this.propertyid;
+      if (!this.propertyid && !this.p) {
+        throw new Error('Property ID or username is required');
+      }
+      // let roomResp = null;
+      if (!propertyId) {
+        console.log(propertyId);
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+          include_units_hk_status: true,
+        });
+        // roomResp = propertyData;
+        propertyId = propertyData.My_Result.id;
+      }
+      this.property_id = propertyId;
+      const requests = [
+        this.houseKeepingService.getHkTasks({ property_id: this.property_id, from_date: moment().format('YYYY-MM-DD'), to_date: moment().add(2, 'days').format('YYYY-MM-DD') }),
+        this.houseKeepingService.getExposedHKSetup(this.property_id),
+        this.roomService.fetchLanguage(this.language),
+      ];
+      if (this.propertyid) {
+        requests.push(
+          this.roomService.getExposedProperty({
+            id: this.propertyid,
+            language: this.language,
+            is_backend: true,
+            include_units_hk_status: true,
+          }),
+        );
+      }
+
+      const results = await Promise.all(requests);
+      const tasks = results[0];
+      if (tasks) {
+        this.updateTasks(tasks);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  private buildHousekeeperNameCache() {
+    this.hkNameCache = {};
+    housekeeping_store.hk_criteria?.housekeepers?.forEach(hk => {
+      if (hk.id != null && hk.name != null) {
+        this.hkNameCache[hk.id] = hk.name;
+      }
+    });
+  }
+
+  private updateTasks(tasks) {
+    this.buildHousekeeperNameCache();
+    this.tasks = tasks.map(t => ({
+      ...t,
+      id: v4(),
+      housekeeper: (() => {
+        const name = this.hkNameCache[t.hkm_id];
+        if (name) {
+          return name;
+        }
+        const hkName = housekeeping_store.hk_criteria?.housekeepers?.find(hk => hk.id === t.hkm_id)?.name;
+        this.hkNameCache[t.hkm_id] = hkName;
+        return hkName;
+      })(),
+    }));
+  }
+
+  private handleHeaderButtonPress(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const { name } = e.detail;
+    switch (name) {
+      case 'cleaned':
+        this.modal?.openModal();
+        break;
+      case 'export':
+        break;
+    }
+  }
+
+  private async handleModalConfirmation(e: CustomEvent) {
+    try {
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      if (this.selectedTasks.length === 0) {
+        return;
+      }
+      await this.houseKeepingService.executeHKAction({ actions: this.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id, unit_id: t.unit.id })) });
+    } finally {
+      this.selectedTasks = [];
+      this.clearSelectedHkTasks.emit();
+      this.modal.closeModal();
+    }
+  }
 
   render() {
     if (this.isLoading) {
@@ -136,12 +167,34 @@ export class IrHkTasks {
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
-          <ir-tasks-header></ir-tasks-header>
+          <ir-tasks-header onHeaderButtonPress={this.handleHeaderButtonPress.bind(this)} isCleanedEnabled={this.selectedTasks.length > 0}></ir-tasks-header>
           <div class="d-flex flex-column flex-md-row mt-1 " style={{ gap: '1rem' }}>
             <ir-tasks-filters></ir-tasks-filters>
-            <ir-tasks-table class="flex-grow-1 w-100" tasks={initialData}></ir-tasks-table>
+            <ir-tasks-table
+              onRowSelectChange={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.selectedTasks = e.detail;
+              }}
+              class="flex-grow-1 w-100"
+              tasks={this.tasks}
+            ></ir-tasks-table>
           </div>
         </section>
+        <ir-modal
+          autoClose={false}
+          ref={el => (this.modal = el)}
+          isLoading={isRequestPending('/Execute_HK_Action')}
+          onConfirmModal={this.handleModalConfirmation.bind(this)}
+          iconAvailable={true}
+          icon="ft-alert-triangle danger h1"
+          leftBtnText={locales.entries.Lcz_NO}
+          rightBtnText={locales.entries.Lcz_Yes}
+          leftBtnColor="secondary"
+          rightBtnColor={'primary'}
+          modalTitle={locales.entries.Lcz_Confirmation}
+          modalBody={'Update selected unit(s) to Clean'}
+        ></ir-modal>
         {/* <ir-title class="d-none d-md-flex" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between">
             <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm"></ir-button>
           </ir-title> */}

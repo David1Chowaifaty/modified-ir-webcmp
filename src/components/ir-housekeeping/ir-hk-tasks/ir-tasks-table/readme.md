@@ -14,9 +14,10 @@
 
 ## Events
 
-| Event                  | Description | Type                |
-| ---------------------- | ----------- | ------------------- |
-| `animateCleanedButton` |             | `CustomEvent<null>` |
+| Event                  | Description | Type                  |
+| ---------------------- | ----------- | --------------------- |
+| `animateCleanedButton` |             | `CustomEvent<null>`   |
+| `rowSelectChange`      |             | `CustomEvent<Task[]>` |
 
 
 ## Dependencies

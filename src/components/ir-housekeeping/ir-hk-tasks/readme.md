@@ -15,6 +15,13 @@
 | `ticket`     | `ticket`     |             | `string` | `''`        |
 
 
+## Events
+
+| Event                  | Description | Type                |
+| ---------------------- | ----------- | ------------------- |
+| `clearSelectedHkTasks` |             | `CustomEvent<void>` |
+
+
 ## Dependencies
 
 ### Depends on
@@ -25,6 +32,7 @@
 - [ir-tasks-header](ir-tasks-header)
 - [ir-tasks-filters](ir-tasks-filters)
 - [ir-tasks-table](ir-tasks-table)
+- [ir-modal](../../ir-modal)
 
 ### Graph
 ```mermaid
@@ -35,11 +43,13 @@ graph TD;
   ir-hk-tasks --> ir-tasks-header
   ir-hk-tasks --> ir-tasks-filters
   ir-hk-tasks --> ir-tasks-table
+  ir-hk-tasks --> ir-modal
   ir-tasks-header --> ir-button
   ir-button --> ir-icons
-  ir-tasks-filters --> ir-select
   ir-tasks-filters --> ir-button
+  ir-tasks-filters --> ir-select
   ir-tasks-table --> ir-checkbox
+  ir-modal --> ir-button
   style ir-hk-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

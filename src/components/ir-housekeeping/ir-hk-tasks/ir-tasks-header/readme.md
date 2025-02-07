@@ -12,6 +12,13 @@
 | `isCleanedEnabled` | `is-cleaned-enabled` |             | `boolean` | `false` |
 
 
+## Events
+
+| Event               | Description | Type                                            |
+| ------------------- | ----------- | ----------------------------------------------- |
+| `headerButtonPress` |             | `CustomEvent<{ name: "cleaned" \| "export"; }>` |
+
+
 ## Dependencies
 
 ### Used by

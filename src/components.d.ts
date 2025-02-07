@@ -21,13 +21,12 @@ import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ir-combobox/ir-combobox";
 import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
-import { IHouseKeepers, THKUser } from "./models/housekeeping";
+import { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
-import { Task } from "./components/ir-housekeeping/ir-hk-tasks/ir-hk-tasks";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
@@ -45,13 +44,12 @@ export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ir-combobox/ir-combobox";
 export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
-export { IHouseKeepers, THKUser } from "./models/housekeeping";
+export { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
-export { Task } from "./components/ir-housekeeping/ir-hk-tasks/ir-hk-tasks";
 export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export namespace Components {
     interface IglApplicationInfo {
@@ -1165,6 +1163,10 @@ export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrGuestInfoElement;
 }
+export interface IrHkTasksCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrHkTasksElement;
+}
 export interface IrHkUnassignedUnitsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrHkUnassignedUnitsElement;
@@ -1260,6 +1262,10 @@ export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
 export interface IrTasksFiltersCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrTasksFiltersElement;
+}
+export interface IrTasksHeaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTasksHeaderElement;
 }
 export interface IrTasksTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2113,7 +2119,18 @@ declare global {
         prototype: HTMLIrHkArchiveElement;
         new (): HTMLIrHkArchiveElement;
     };
+    interface HTMLIrHkTasksElementEventMap {
+        "clearSelectedHkTasks": void;
+    }
     interface HTMLIrHkTasksElement extends Components.IrHkTasks, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrHkTasksElementEventMap>(type: K, listener: (this: HTMLIrHkTasksElement, ev: IrHkTasksCustomEvent<HTMLIrHkTasksElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrHkTasksElementEventMap>(type: K, listener: (this: HTMLIrHkTasksElement, ev: IrHkTasksCustomEvent<HTMLIrHkTasksElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrHkTasksElement: {
         prototype: HTMLIrHkTasksElement;
@@ -2621,7 +2638,18 @@ declare global {
         prototype: HTMLIrTasksFiltersElement;
         new (): HTMLIrTasksFiltersElement;
     };
+    interface HTMLIrTasksHeaderElementEventMap {
+        "headerButtonPress": { name: 'cleaned' | 'export' };
+    }
     interface HTMLIrTasksHeaderElement extends Components.IrTasksHeader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTasksHeaderElementEventMap>(type: K, listener: (this: HTMLIrTasksHeaderElement, ev: IrTasksHeaderCustomEvent<HTMLIrTasksHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTasksHeaderElementEventMap>(type: K, listener: (this: HTMLIrTasksHeaderElement, ev: IrTasksHeaderCustomEvent<HTMLIrTasksHeaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrTasksHeaderElement: {
         prototype: HTMLIrTasksHeaderElement;
@@ -2629,6 +2657,7 @@ declare global {
     };
     interface HTMLIrTasksTableElementEventMap {
         "animateCleanedButton": null;
+        "rowSelectChange": Task[];
     }
     interface HTMLIrTasksTableElement extends Components.IrTasksTable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksTableElementEventMap>(type: K, listener: (this: HTMLIrTasksTableElement, ev: IrTasksTableCustomEvent<HTMLIrTasksTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3374,6 +3403,7 @@ declare namespace LocalJSX {
     }
     interface IrHkTasks {
         "language"?: string;
+        "onClearSelectedHkTasks"?: (event: IrHkTasksCustomEvent<void>) => void;
         "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
@@ -3877,9 +3907,11 @@ declare namespace LocalJSX {
     }
     interface IrTasksHeader {
         "isCleanedEnabled"?: boolean;
+        "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' }>) => void;
     }
     interface IrTasksTable {
         "onAnimateCleanedButton"?: (event: IrTasksTableCustomEvent<null>) => void;
+        "onRowSelectChange"?: (event: IrTasksTableCustomEvent<Task[]>) => void;
         "tasks"?: Task[];
     }
     interface IrTextEditor {
