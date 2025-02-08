@@ -10,11 +10,10 @@ export class IrTasksHeader {
 
   private btnRef: HTMLIrButtonElement;
 
-  @Event() headerButtonPress: EventEmitter<{ name: 'cleaned' | 'export' }>;
+  @Event() headerButtonPress: EventEmitter<{ name: 'cleaned' | 'export' | 'archive' }>;
 
   @Listen('animateCleanedButton', { target: 'body' })
   handleCleanedButtonAnimation(e: CustomEvent) {
-    console.log('here');
     e.stopImmediatePropagation();
     e.stopPropagation();
     this.btnRef.bounce();
@@ -32,6 +31,16 @@ export class IrTasksHeader {
               e.stopImmediatePropagation();
               e.stopPropagation();
               this.headerButtonPress.emit({ name: 'export' });
+            }}
+          ></ir-button>
+          <ir-button
+            size="sm"
+            btn_color="outline"
+            text="Archive"
+            onClickHandler={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.headerButtonPress.emit({ name: 'archive' });
             }}
           ></ir-button>
           <ir-button

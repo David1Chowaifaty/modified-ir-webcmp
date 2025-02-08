@@ -15,7 +15,7 @@ export class IrTasksFilters {
     dusty_units: '',
     highlight_check_ins: '',
   };
-  @State() collapsed: boolean = true;
+  @State() collapsed: boolean = false;
 
   @Event() applyClicked: EventEmitter<TaskFilters>;
   @Event() resetClicked: EventEmitter<TaskFilters>;
@@ -53,7 +53,7 @@ export class IrTasksFilters {
             data-toggle="collapse"
             data-target="#hkTasksFiltersCollapse"
             aria-expanded={this.collapsed ? 'true' : 'false'}
-            aria-controls="myCollapse"
+            aria-controls="hkTasksFiltersCollapse"
             class="mr-1 collapse-btn"
             icon_name={this.collapsed ? 'closed_eye' : 'open_eye'}
             onClickHandler={() => {
@@ -62,7 +62,7 @@ export class IrTasksFilters {
             style={{ '--icon-size': '1.6rem' }}
           ></ir-button>
         </div>
-        <div class="m-0 p-0 " id="hkTasksFiltersCollapse">
+        <div class="m-0 p-0 collapse" id="hkTasksFiltersCollapse">
           <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
             <fieldset class="pt-1">
               <p class="m-0 p-0">Period</p>

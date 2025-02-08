@@ -7,4 +7,7 @@
   .collapse-btn {
     display: none;
   }
+  #hkTasksFiltersCollapse.collapse:not(.show) {
+    display: block;
+  }
 }

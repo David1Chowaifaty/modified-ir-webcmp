@@ -1,5 +1,6 @@
 // import { HouseKeepingService } from '@/services/housekeeping.service';
 // import housekeeping_store from '@/stores/housekeeping.store';
+import housekeeping_store from '@/stores/housekeeping.store';
 import { Component, Host, Listen, State, h } from '@stencil/core';
 import moment from 'moment';
 
@@ -16,6 +17,30 @@ export class IrHkArchive {
     start: moment().add(-90, 'days').format('YYYY-MM-DD'),
     end: moment().format('YYYY-MM-DD'),
   };
+  @State() data = [
+    {
+      id: 1,
+      date: '20 Jun (Mon)',
+      hk_id: 2,
+      housekeeper: 'Test',
+      unit: {
+        id: 2,
+        name: 'test',
+      },
+      booking_nbr: 15525610155,
+    },
+    {
+      id: 2,
+      date: '20 Jun (Mon)',
+      hk_id: 2,
+      housekeeper: 'Test aanjhjanjn ajna',
+      unit: {
+        id: 2,
+        name: 'test',
+      },
+      booking_nbr: 15525610155,
+    },
+  ];
 
   // private houseKeepingService = new HouseKeepingService();
 
@@ -49,7 +74,12 @@ export class IrHkArchive {
         <section class="px-1">
           <div class="d-flex">
             <ir-select class="w-100" LabelAvailable={false} data={[]} firstOption="All units"></ir-select>
-            <ir-select class="ml-1 w-100" LabelAvailable={false} data={[]} firstOption="All housekeepers"></ir-select>
+            <ir-select
+              class="ml-1 w-100"
+              LabelAvailable={false}
+              data={housekeeping_store.hk_criteria.housekeepers.map(hk => ({ text: hk.name, value: hk.id.toString() }))}
+              firstOption="All housekeepers"
+            ></ir-select>
           </div>
           <div class="d-flex mt-1 align-items-center">
             <igl-date-range
@@ -78,6 +108,41 @@ export class IrHkArchive {
               </svg>
             </ir-icon>
           </div>
+          {/* route to booking details */}
+          <table class="mt-2">
+            <thead>
+              <th class="sr-only">period</th>
+              <th class="sr-only">housekeeper name</th>
+              <th class="sr-only">unit</th>
+              <th class="sr-only">booking number</th>
+            </thead>
+            <tbody>
+              {this.data.map(d => (
+                <tr key={d.id}>
+                  <td class="pr-2">{d.date}</td>
+                  <td class="px-2">{d.housekeeper}</td>
+                  <td class="px-2">{d.unit?.name}</td>
+                  <td class="px-2">
+                    <ir-button
+                      btn_color="link"
+                      btnStyle={{
+                        width: 'fit-content',
+                        padding: '0',
+                        margin: '0',
+                      }}
+                      labelStyle={{
+                        padding: '0',
+                      }}
+                      text={d.booking_nbr.toString()}
+                      onClick={() => {
+                        window.open(`https://x.igloorooms.com/manage/acbookingeditV2.aspx?BN=${d.booking_nbr}`, '_blank');
+                      }}
+                    ></ir-button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </section>
       </Host>
     );

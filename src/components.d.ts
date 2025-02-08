@@ -933,8 +933,6 @@ export namespace Components {
         "disabled": boolean;
         "switchId": string;
     }
-    interface IrTasksArchive {
-    }
     interface IrTasksFilters {
     }
     interface IrTasksHeader {
@@ -2614,12 +2612,6 @@ declare global {
         prototype: HTMLIrSwitchElement;
         new (): HTMLIrSwitchElement;
     };
-    interface HTMLIrTasksArchiveElement extends Components.IrTasksArchive, HTMLStencilElement {
-    }
-    var HTMLIrTasksArchiveElement: {
-        prototype: HTMLIrTasksArchiveElement;
-        new (): HTMLIrTasksArchiveElement;
-    };
     interface HTMLIrTasksFiltersElementEventMap {
         "applyClicked": TaskFilters;
         "resetClicked": TaskFilters;
@@ -2639,7 +2631,7 @@ declare global {
         new (): HTMLIrTasksFiltersElement;
     };
     interface HTMLIrTasksHeaderElementEventMap {
-        "headerButtonPress": { name: 'cleaned' | 'export' };
+        "headerButtonPress": { name: 'cleaned' | 'export' | 'archive' };
     }
     interface HTMLIrTasksHeaderElement extends Components.IrTasksHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksHeaderElementEventMap>(type: K, listener: (this: HTMLIrTasksHeaderElement, ev: IrTasksHeaderCustomEvent<HTMLIrTasksHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2847,7 +2839,6 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-switch": HTMLIrSwitchElement;
-        "ir-tasks-archive": HTMLIrTasksArchiveElement;
         "ir-tasks-filters": HTMLIrTasksFiltersElement;
         "ir-tasks-header": HTMLIrTasksHeaderElement;
         "ir-tasks-table": HTMLIrTasksTableElement;
@@ -3899,15 +3890,13 @@ declare namespace LocalJSX {
         "onCheckChange"?: (event: IrSwitchCustomEvent<boolean>) => void;
         "switchId"?: string;
     }
-    interface IrTasksArchive {
-    }
     interface IrTasksFilters {
         "onApplyClicked"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
         "onResetClicked"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
     }
     interface IrTasksHeader {
         "isCleanedEnabled"?: boolean;
-        "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' }>) => void;
+        "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' | 'archive' }>) => void;
     }
     interface IrTasksTable {
         "onAnimateCleanedButton"?: (event: IrTasksTableCustomEvent<null>) => void;
@@ -4061,7 +4050,6 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-spinner": IrSpinner;
         "ir-switch": IrSwitch;
-        "ir-tasks-archive": IrTasksArchive;
         "ir-tasks-filters": IrTasksFilters;
         "ir-tasks-header": IrTasksHeader;
         "ir-tasks-table": IrTasksTable;
@@ -4165,7 +4153,6 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
-            "ir-tasks-archive": LocalJSX.IrTasksArchive & JSXBase.HTMLAttributes<HTMLIrTasksArchiveElement>;
             "ir-tasks-filters": LocalJSX.IrTasksFilters & JSXBase.HTMLAttributes<HTMLIrTasksFiltersElement>;
             "ir-tasks-header": LocalJSX.IrTasksHeader & JSXBase.HTMLAttributes<HTMLIrTasksHeaderElement>;
             "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;

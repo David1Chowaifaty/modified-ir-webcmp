@@ -5,7 +5,7 @@ import { RoomService } from '@/services/room.service';
 import housekeeping_store from '@/stores/housekeeping.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
-import { Component, Host, Prop, State, h, Element, Watch, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, Prop, State, h, Element, Watch, Event, EventEmitter, Listen } from '@stencil/core';
 import moment from 'moment';
 import { v4 } from 'uuid';
 
@@ -30,6 +30,7 @@ export class IrHkTasks {
   @State() property_id: number;
   @State() tasks: Task[] = [];
   @State() selectedTasks: Task[] = [];
+  @State() isSidebarOpen: boolean;
 
   @Event({ bubbles: true, composed: true }) clearSelectedHkTasks: EventEmitter<void>;
 
@@ -53,6 +54,13 @@ export class IrHkTasks {
     }
     this.token.setToken(this.ticket);
     this.init();
+  }
+
+  @Listen('closeSideBar')
+  handleCloseSidebar(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.isSidebarOpen = false;
   }
 
   private async init() {
@@ -140,6 +148,9 @@ export class IrHkTasks {
         break;
       case 'export':
         break;
+      case 'archive':
+        this.isSidebarOpen = true;
+        break;
     }
   }
 
@@ -195,6 +206,19 @@ export class IrHkTasks {
           modalTitle={locales.entries.Lcz_Confirmation}
           modalBody={'Update selected unit(s) to Clean'}
         ></ir-modal>
+        <ir-sidebar
+          open={this.isSidebarOpen}
+          side={'right'}
+          id="editGuestInfo"
+          onIrSidebarToggle={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.isSidebarOpen = false;
+          }}
+          showCloseButton={false}
+        >
+          <ir-hk-archive slot="sidebar-body"></ir-hk-archive>
+        </ir-sidebar>
         {/* <ir-title class="d-none d-md-flex" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between">
             <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm"></ir-button>
           </ir-title> */}
