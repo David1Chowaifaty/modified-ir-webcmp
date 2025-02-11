@@ -163,7 +163,7 @@ export class IrBookingDetails {
     this.bookingItem = e.detail;
   }
 
-  @Listen('resetbooking')
+  @Listen('resetBookingEvt')
   async handleResetBooking(e: CustomEvent<Booking | null>) {
     e.stopPropagation();
     e.stopImmediatePropagation();

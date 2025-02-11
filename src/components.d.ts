@@ -1104,7 +1104,7 @@ declare global {
     interface HTMLIglBookPropertyElementEventMap {
         "closeBookingWindow": { [key: string]: any };
         "blockedCreated": RoomBlockDetails;
-        "resetBookingData": null;
+        "resetBookingEvt": null;
         "animateIrButton": string;
         "animateIrSelect": string;
         "toast": IToast;
@@ -1124,7 +1124,7 @@ declare global {
         new (): HTMLIglBookPropertyElement;
     };
     interface HTMLIglBookPropertyContainerElementEventMap {
-        "resetBookingData": null;
+        "resetBookingEvt": null;
     }
     interface HTMLIglBookPropertyContainerElement extends Components.IglBookPropertyContainer, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyContainerElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyContainerElement, ev: IglBookPropertyContainerCustomEvent<HTMLIglBookPropertyContainerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1534,7 +1534,7 @@ declare global {
     };
     interface HTMLIrBookingExtraNoteElementEventMap {
         "closeModal": null;
-        "resetbooking": Booking | null;
+        "resetBookingEvt": Booking | null;
     }
     interface HTMLIrBookingExtraNoteElement extends Components.IrBookingExtraNote, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingExtraNoteElementEventMap>(type: K, listener: (this: HTMLIrBookingExtraNoteElement, ev: IrBookingExtraNoteCustomEvent<HTMLIrBookingExtraNoteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1553,7 +1553,7 @@ declare global {
     interface HTMLIrBookingHeaderElementEventMap {
         "toast": IToast;
         "closeSidebar": null;
-        "resetbooking": null;
+        "resetBookingEvt": null;
         "openSidebar": OpenSidebarEvent;
     }
     interface HTMLIrBookingHeaderElement extends Components.IrBookingHeader, HTMLStencilElement {
@@ -1809,7 +1809,7 @@ declare global {
     };
     interface HTMLIrExtraServiceElementEventMap {
         "editExtraService": ExtraService;
-        "resetBookingData": null;
+        "resetBookingEvt": null;
     }
     interface HTMLIrExtraServiceElement extends Components.IrExtraService, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrExtraServiceElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceElement, ev: IrExtraServiceCustomEvent<HTMLIrExtraServiceElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1827,7 +1827,7 @@ declare global {
     };
     interface HTMLIrExtraServiceConfigElementEventMap {
         "closeModal": null;
-        "resetBookingData": null;
+        "resetBookingEvt": null;
     }
     interface HTMLIrExtraServiceConfigElement extends Components.IrExtraServiceConfig, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrExtraServiceConfigElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceConfigElement, ev: IrExtraServiceConfigCustomEvent<HTMLIrExtraServiceConfigElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1851,7 +1851,7 @@ declare global {
     };
     interface HTMLIrGuestInfoElementEventMap {
         "closeSideBar": null;
-        "resetbooking": null;
+        "resetBookingEvt": null;
     }
     interface HTMLIrGuestInfoElement extends Components.IrGuestInfo, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrGuestInfoElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoElement, ev: IrGuestInfoCustomEvent<HTMLIrGuestInfoElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2106,7 +2106,7 @@ declare global {
         new (): HTMLIrPaymentActionsElement;
     };
     interface HTMLIrPaymentDetailsElementEventMap {
-        "resetBookingData": null;
+        "resetBookingEvt": null;
         "resetExposedCancelationDueAmount": null;
         "toast": IToast;
     }
@@ -2160,7 +2160,7 @@ declare global {
     };
     interface HTMLIrPickupElementEventMap {
         "closeModal": null;
-        "resetBookingData": null;
+        "resetBookingEvt": null;
     }
     interface HTMLIrPickupElement extends Components.IrPickup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPickupElementEventMap>(type: K, listener: (this: HTMLIrPickupElement, ev: IrPickupCustomEvent<HTMLIrPickupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2541,7 +2541,7 @@ declare namespace LocalJSX {
         "onAnimateIrSelect"?: (event: IglBookPropertyCustomEvent<string>) => void;
         "onBlockedCreated"?: (event: IglBookPropertyCustomEvent<RoomBlockDetails>) => void;
         "onCloseBookingWindow"?: (event: IglBookPropertyCustomEvent<{ [key: string]: any }>) => void;
-        "onResetBookingData"?: (event: IglBookPropertyCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IglBookPropertyCustomEvent<null>) => void;
         "onToast"?: (event: IglBookPropertyCustomEvent<IToast>) => void;
         "propertyid"?: number;
         "showPaymentDetails"?: boolean;
@@ -2549,7 +2549,7 @@ declare namespace LocalJSX {
     interface IglBookPropertyContainer {
         "from_date"?: string;
         "language"?: string;
-        "onResetBookingData"?: (event: IglBookPropertyContainerCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IglBookPropertyContainerCustomEvent<null>) => void;
         "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
@@ -2827,7 +2827,7 @@ declare namespace LocalJSX {
     interface IrBookingExtraNote {
         "booking"?: Booking;
         "onCloseModal"?: (event: IrBookingExtraNoteCustomEvent<null>) => void;
-        "onResetbooking"?: (event: IrBookingExtraNoteCustomEvent<Booking | null>) => void;
+        "onResetBookingEvt"?: (event: IrBookingExtraNoteCustomEvent<Booking | null>) => void;
     }
     interface IrBookingHeader {
         "booking"?: Booking;
@@ -2838,7 +2838,7 @@ declare namespace LocalJSX {
         "hasReceipt"?: boolean;
         "onCloseSidebar"?: (event: IrBookingHeaderCustomEvent<null>) => void;
         "onOpenSidebar"?: (event: IrBookingHeaderCustomEvent<OpenSidebarEvent>) => void;
-        "onResetbooking"?: (event: IrBookingHeaderCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrBookingHeaderCustomEvent<null>) => void;
         "onToast"?: (event: IrBookingHeaderCustomEvent<IToast>) => void;
     }
     interface IrBookingListing {
@@ -2994,13 +2994,13 @@ declare namespace LocalJSX {
         "bookingNumber"?: string;
         "currencySymbol"?: string;
         "onEditExtraService"?: (event: IrExtraServiceCustomEvent<ExtraService>) => void;
-        "onResetBookingData"?: (event: IrExtraServiceCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrExtraServiceCustomEvent<null>) => void;
         "service"?: ExtraService;
     }
     interface IrExtraServiceConfig {
         "booking"?: Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
         "onCloseModal"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
-        "onResetBookingData"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
         "service"?: ExtraService;
     }
     interface IrExtraServices {
@@ -3012,7 +3012,7 @@ declare namespace LocalJSX {
         "headerShown"?: boolean;
         "language"?: string;
         "onCloseSideBar"?: (event: IrGuestInfoCustomEvent<null>) => void;
-        "onResetbooking"?: (event: IrGuestInfoCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "ticket"?: string;
     }
     interface IrHkArchive {
@@ -3172,7 +3172,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
-        "onResetBookingData"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onResetExposedCancelationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
         "paymentActions"?: IPaymentAction[];
@@ -3204,7 +3204,7 @@ declare namespace LocalJSX {
         "defaultPickupData"?: IBookingPickupInfo | null;
         "numberOfPersons"?: number;
         "onCloseModal"?: (event: IrPickupCustomEvent<null>) => void;
-        "onResetBookingData"?: (event: IrPickupCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrPickupCustomEvent<null>) => void;
     }
     interface IrPickupView {
         "booking"?: Booking;

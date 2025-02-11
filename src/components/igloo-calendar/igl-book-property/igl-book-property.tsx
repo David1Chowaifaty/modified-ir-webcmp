@@ -44,7 +44,7 @@ export class IglBookProperty {
 
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
-  @Event() resetBookingData: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
   @Event({ bubbles: true, composed: true }) animateIrButton: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) animateIrSelect: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
@@ -603,7 +603,7 @@ export class IglBookProperty {
       });
       // console.log(serviceParams);
       await this.bookingService.doReservation(serviceParams);
-      this.resetBookingData.emit(null);
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       console.error('Error booking user:', error);
     } finally {

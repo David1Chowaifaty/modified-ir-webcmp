@@ -26,7 +26,7 @@ export class IrBookingHeader {
 
   @Event() toast: EventEmitter<IToast>;
   @Event() closeSidebar: EventEmitter<null>;
-  @Event() resetbooking: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
   @Event() openSidebar: EventEmitter<OpenSidebarEvent>;
 
   private confirmationBG = {
@@ -68,7 +68,7 @@ export class IrBookingHeader {
         position: 'top-right',
       });
       this.bookingStatus = null;
-      this.resetbooking.emit(null);
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
     }

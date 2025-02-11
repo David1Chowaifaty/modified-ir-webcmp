@@ -35,7 +35,7 @@ export class IrPaymentDetails {
   @State() modal_mode: 'delete' | 'save' | null = null;
   @State() itemToBeAdded: IPayment;
 
-  @Event({ bubbles: true }) resetBookingData: EventEmitter<null>;
+  @Event({ bubbles: true }) resetBookingEvt: EventEmitter<null>;
   @Event({ bubbles: true }) resetExposedCancelationDueAmount: EventEmitter<null>;
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
 
@@ -97,7 +97,7 @@ export class IrPaymentDetails {
     try {
       await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
       this.initializeItemToBeAdded();
-      this.resetBookingData.emit(null);
+      this.resetBookingEvt.emit(null);
       this.resetExposedCancelationDueAmount.emit(null);
     } catch (error) {
       console.log(error);
@@ -128,7 +128,7 @@ export class IrPaymentDetails {
       const newPaymentArray = this.bookingDetails.financial.payments.filter((item: IPayment) => item.id !== this.toBeDeletedItem.id);
       this.bookingDetails = { ...this.bookingDetails, financial: { ...this.bookingDetails.financial, payments: newPaymentArray } };
       this.confirmModal = !this.confirmModal;
-      this.resetBookingData.emit(null);
+      this.resetBookingEvt.emit(null);
       this.resetExposedCancelationDueAmount.emit(null);
       this.toBeDeletedItem = null;
       this.modal_mode = null;

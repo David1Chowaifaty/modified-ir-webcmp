@@ -141,7 +141,7 @@ export class IrBookingListing {
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
   }
 
-  @Listen('resetBookingData')
+  @Listen('resetBookingEvt')
   async handleResetStoreData(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();

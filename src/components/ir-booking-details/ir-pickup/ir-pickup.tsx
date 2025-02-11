@@ -36,7 +36,7 @@ export class IrPickup {
   @State() cause: keyof TPickupData | null = null;
 
   @Event() closeModal: EventEmitter<null>;
-  @Event() resetBookingData: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
 
   private pickupService = new PickupService();
 
@@ -201,7 +201,7 @@ export class IrPickup {
         this.cause = null;
       }
       await this.pickupService.savePickup(this.pickupData, this.bookingNumber, this.defaultPickupData !== null && this.pickupData.location === -1);
-      this.resetBookingData.emit(null);
+      this.resetBookingEvt.emit(null);
       this.closeModal.emit(null);
     } catch (error) {
       console.error(error);

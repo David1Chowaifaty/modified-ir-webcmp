@@ -20,7 +20,7 @@ export class IrExtraServiceConfig {
   @State() toDateClicked: boolean;
 
   @Event() closeModal: EventEmitter<null>;
-  @Event() resetBookingData: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
 
   private bookingService = new BookingService();
 
@@ -38,7 +38,7 @@ export class IrExtraServiceConfig {
         booking_nbr: this.booking.booking_nbr,
         is_remove: false,
       });
-      this.resetBookingData.emit(null);
+      this.resetBookingEvt.emit(null);
       this.closeModal.emit(null);
     } catch (error) {
       if (error instanceof ZodError) {
