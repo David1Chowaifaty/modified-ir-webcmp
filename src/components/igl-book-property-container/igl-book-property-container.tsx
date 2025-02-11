@@ -24,7 +24,7 @@ export class IglBookPropertyContainer {
   @State() countryNodeList: any;
   @State() calendarData: any = {};
 
-  @Event() resetBookingEvt: EventEmitter<null>;
+  @Event() resetBookingData: EventEmitter<null>;
 
   private bookingService = new BookingService();
   private roomService = new RoomService();
@@ -131,7 +131,7 @@ export class IglBookPropertyContainer {
             onResetBookingEvt={(e: CustomEvent) => {
               e.stopImmediatePropagation();
               e.stopPropagation();
-              this.resetBookingEvt.emit(null);
+              this.resetBookingData.emit(null);
             }}
             onCloseBookingWindow={() => this.handleCloseBookingWindow()}
           ></igl-book-property>

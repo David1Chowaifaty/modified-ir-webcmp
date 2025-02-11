@@ -1124,7 +1124,7 @@ declare global {
         new (): HTMLIglBookPropertyElement;
     };
     interface HTMLIglBookPropertyContainerElementEventMap {
-        "resetBookingEvt": null;
+        "resetBookingData": null;
     }
     interface HTMLIglBookPropertyContainerElement extends Components.IglBookPropertyContainer, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookPropertyContainerElementEventMap>(type: K, listener: (this: HTMLIglBookPropertyContainerElement, ev: IglBookPropertyContainerCustomEvent<HTMLIglBookPropertyContainerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2549,7 +2549,7 @@ declare namespace LocalJSX {
     interface IglBookPropertyContainer {
         "from_date"?: string;
         "language"?: string;
-        "onResetBookingEvt"?: (event: IglBookPropertyContainerCustomEvent<null>) => void;
+        "onResetBookingData"?: (event: IglBookPropertyContainerCustomEvent<null>) => void;
         "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
