@@ -4,7 +4,7 @@ import { transformNewBooking } from '@/utils/booking';
 import { isBlockUnit } from '@/utils/utils';
 import { IReallocationPayload, IRoomNightsData } from '@/models/property-types';
 import moment from 'moment';
-import { IToast } from '@components/ir-toast/toast';
+import { IToast } from '@components/ui/ir-toast/toast';
 import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
 

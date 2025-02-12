@@ -1,5 +1,5 @@
 import { Component, Listen, Prop, h, Event, EventEmitter } from '@stencil/core';
-import { checkboxes } from '../../common/models';
+import { checkboxes } from '@/common/models';
 
 @Component({
   tag: 'ir-checkboxes',

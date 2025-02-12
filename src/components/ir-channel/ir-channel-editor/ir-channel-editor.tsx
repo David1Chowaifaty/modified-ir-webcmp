@@ -1,4 +1,4 @@
-import { IToast } from '@/components/ir-toast/toast';
+import { IToast } from '@/components/ui/ir-toast/toast';
 import { ChannelService } from '@/services/channel.service';
 import channels_data, { onChannelChange } from '@/stores/channel.store';
 import locales from '@/stores/locales.store';

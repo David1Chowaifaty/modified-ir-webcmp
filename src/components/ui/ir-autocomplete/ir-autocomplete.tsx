@@ -1,6 +1,6 @@
 import { Component, Host, Prop, State, h, Event, EventEmitter, Listen, Element, Fragment } from '@stencil/core';
 import { v4 } from 'uuid';
-import { BookingService } from '../../services/booking.service';
+import { BookingService } from '../../../services/booking.service';
 import { IToast } from '../ir-toast/toast';
 import locales from '@/stores/locales.store';
 

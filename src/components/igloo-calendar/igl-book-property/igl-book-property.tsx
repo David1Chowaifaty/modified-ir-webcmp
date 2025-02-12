@@ -6,7 +6,7 @@ import { IPageTwoDataUpdateProps } from '@/models/models';
 import { IglBookPropertyService } from './igl-book-property.service';
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TEventType, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '@/models/igl-book-property';
 import locales from '@/stores/locales.store';
-import { IToast } from '@/components/ir-toast/toast';
+import { IToast } from '@/components/ui/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { calculateTotalRooms, modifyBookingStore, reserveRooms, resetBookingStore } from '@/stores/booking.store';

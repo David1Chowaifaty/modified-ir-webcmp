@@ -8,7 +8,7 @@ import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
-import { IToast } from '@/components/ir-toast/toast';
+import { IToast } from '@/components/ui/ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
 
 @Component({

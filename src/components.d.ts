@@ -9,17 +9,17 @@ import { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 import { ICurrency } from "./models/calendarData";
 import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 import { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
-import { IToast } from "./components/ir-toast/toast";
+import { IToast } from "./components/ui/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
-import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { RatePlan, RoomType } from "./models/property";
+import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 import { OpenSidebarEvent } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
-import { ComboboxItem } from "./components/ir-combobox/ir-combobox";
+import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { PaymentOption } from "./models/payment-options";
@@ -30,17 +30,17 @@ export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
 export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
-export { IToast } from "./components/ir-toast/toast";
+export { IToast } from "./components/ui/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
-export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { RatePlan, RoomType } from "./models/property";
+export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
 export { OpenSidebarEvent } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
-export { ComboboxItem } from "./components/ir-combobox/ir-combobox";
+export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { PaymentOption } from "./models/payment-options";
@@ -403,6 +403,8 @@ export namespace Components {
         "toDate": Date;
         "toLabel": string;
         "weekLabel": string;
+    }
+    interface IrDateRange {
     }
     interface IrDateView {
         "dateOption": string;
@@ -1163,7 +1165,7 @@ declare global {
         "adultChild": any;
         "checkClicked": any;
         "buttonClicked": { key: TPropertyButtonsTypes };
-        "toast": IToast1;
+        "toast": IToast;
         "spiltBookingSelected": { key: string; data: unknown };
         "animateIrButton": string;
         "animateIrSelect": string;
@@ -1325,7 +1327,7 @@ declare global {
     };
     interface HTMLIglDateRangeElementEventMap {
         "dateSelectEvent": { [key: string]: any };
-        "toast": IToast1;
+        "toast": IToast;
     }
     interface HTMLIglDateRangeElement extends Components.IglDateRange, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglDateRangeElementEventMap>(type: K, listener: (this: HTMLIglDateRangeElement, ev: IglDateRangeCustomEvent<HTMLIglDateRangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1514,7 +1516,7 @@ declare global {
         new (): HTMLIrBookingElement;
     };
     interface HTMLIrBookingDetailsElementEventMap {
-        "toast": IToast1;
+        "toast": IToast;
         "bookingChanged": Booking;
         "closeSidebar": null;
     }
@@ -1743,6 +1745,12 @@ declare global {
         prototype: HTMLIrDatePickerElement;
         new (): HTMLIrDatePickerElement;
     };
+    interface HTMLIrDateRangeElement extends Components.IrDateRange, HTMLStencilElement {
+    }
+    var HTMLIrDateRangeElement: {
+        prototype: HTMLIrDateRangeElement;
+        new (): HTMLIrDateRangeElement;
+    };
     interface HTMLIrDateViewElement extends Components.IrDateView, HTMLStencilElement {
     }
     var HTMLIrDateViewElement: {
@@ -1969,7 +1977,7 @@ declare global {
         new (): HTMLIrInputTextElement;
     };
     interface HTMLIrInterceptorElementEventMap {
-        "toast": IToast1;
+        "toast": IToast;
     }
     interface HTMLIrInterceptorElement extends Components.IrInterceptor, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrInterceptorElementEventMap>(type: K, listener: (this: HTMLIrInterceptorElement, ev: IrInterceptorCustomEvent<HTMLIrInterceptorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2072,7 +2080,7 @@ declare global {
     };
     interface HTMLIrOptionDetailsElementEventMap {
         "closeModal": PaymentOption | null;
-        "toast": IToast1;
+        "toast": IToast;
     }
     interface HTMLIrOptionDetailsElement extends Components.IrOptionDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrOptionDetailsElementEventMap>(type: K, listener: (this: HTMLIrOptionDetailsElement, ev: IrOptionDetailsCustomEvent<HTMLIrOptionDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2125,7 +2133,7 @@ declare global {
         new (): HTMLIrPaymentDetailsElement;
     };
     interface HTMLIrPaymentOptionElementEventMap {
-        "toast": IToast1;
+        "toast": IToast;
     }
     interface HTMLIrPaymentOptionElement extends Components.IrPaymentOption, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentOptionElementEventMap>(type: K, listener: (this: HTMLIrPaymentOptionElement, ev: IrPaymentOptionCustomEvent<HTMLIrPaymentOptionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2457,6 +2465,7 @@ declare global {
         "ir-combobox": HTMLIrComboboxElement;
         "ir-common": HTMLIrCommonElement;
         "ir-date-picker": HTMLIrDatePickerElement;
+        "ir-date-range": HTMLIrDateRangeElement;
         "ir-date-view": HTMLIrDateViewElement;
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-dialog": HTMLIrDialogElement;
@@ -2579,7 +2588,7 @@ declare namespace LocalJSX {
         "onSourceDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<string>) => void;
         "onSpiltBookingSelected"?: (event: IglBookPropertyHeaderCustomEvent<{ key: string; data: unknown }>) => void;
         "onSplitBookingDropDownChange"?: (event: IglBookPropertyHeaderCustomEvent<any>) => void;
-        "onToast"?: (event: IglBookPropertyHeaderCustomEvent<IToast1>) => void;
+        "onToast"?: (event: IglBookPropertyHeaderCustomEvent<IToast>) => void;
         "propertyId"?: number;
         "showSplitBookingOption"?: boolean;
         "sourceOptions"?: TSourceOptions[];
@@ -2693,7 +2702,7 @@ declare namespace LocalJSX {
         "maxDate"?: string;
         "minDate"?: string;
         "onDateSelectEvent"?: (event: IglDateRangeCustomEvent<{ [key: string]: any }>) => void;
-        "onToast"?: (event: IglDateRangeCustomEvent<IToast1>) => void;
+        "onToast"?: (event: IglDateRangeCustomEvent<IToast>) => void;
         "variant"?: 'booking' | 'default';
         "withDateDifference"?: boolean;
     }
@@ -2819,7 +2828,7 @@ declare namespace LocalJSX {
         "language"?: string;
         "onBookingChanged"?: (event: IrBookingDetailsCustomEvent<Booking>) => void;
         "onCloseSidebar"?: (event: IrBookingDetailsCustomEvent<null>) => void;
-        "onToast"?: (event: IrBookingDetailsCustomEvent<IToast1>) => void;
+        "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
         "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
@@ -2960,6 +2969,8 @@ declare namespace LocalJSX {
         "toLabel"?: string;
         "weekLabel"?: string;
     }
+    interface IrDateRange {
+    }
     interface IrDateView {
         "dateOption"?: string;
         "from_date"?: string | Date | moment.Moment;
@@ -3078,7 +3089,7 @@ declare namespace LocalJSX {
     }
     interface IrInterceptor {
         "handledEndpoints"?: string[];
-        "onToast"?: (event: IrInterceptorCustomEvent<IToast1>) => void;
+        "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
     }
     interface IrLabel {
         /**
@@ -3162,7 +3173,7 @@ declare namespace LocalJSX {
     }
     interface IrOptionDetails {
         "onCloseModal"?: (event: IrOptionDetailsCustomEvent<PaymentOption | null>) => void;
-        "onToast"?: (event: IrOptionDetailsCustomEvent<IToast1>) => void;
+        "onToast"?: (event: IrOptionDetailsCustomEvent<IToast>) => void;
         "propertyId"?: string;
     }
     interface IrPaymentActions {
@@ -3181,7 +3192,7 @@ declare namespace LocalJSX {
         "defaultStyles"?: boolean;
         "hideLogs"?: boolean;
         "language"?: string;
-        "onToast"?: (event: IrPaymentOptionCustomEvent<IToast1>) => void;
+        "onToast"?: (event: IrPaymentOptionCustomEvent<IToast>) => void;
         "p"?: string;
         "propertyid"?: string;
         "ticket"?: string;
@@ -3466,6 +3477,7 @@ declare namespace LocalJSX {
         "ir-combobox": IrCombobox;
         "ir-common": IrCommon;
         "ir-date-picker": IrDatePicker;
+        "ir-date-range": IrDateRange;
         "ir-date-view": IrDateView;
         "ir-delete-modal": IrDeleteModal;
         "ir-dialog": IrDialog;
@@ -3562,6 +3574,7 @@ declare module "@stencil/core" {
             "ir-combobox": LocalJSX.IrCombobox & JSXBase.HTMLAttributes<HTMLIrComboboxElement>;
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
+            "ir-date-range": LocalJSX.IrDateRange & JSXBase.HTMLAttributes<HTMLIrDateRangeElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;

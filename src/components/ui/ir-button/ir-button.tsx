@@ -1,6 +1,6 @@
 import { Component, Prop, Event, EventEmitter, h, Listen } from '@stencil/core';
 import { v4 } from 'uuid';
-import { TIcons } from '../ui/ir-icons/icons';
+import { TIcons } from '../ir-icons/icons';
 
 @Component({
   tag: 'ir-button',

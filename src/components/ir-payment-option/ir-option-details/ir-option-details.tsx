@@ -3,7 +3,7 @@ import { PaymentOptionService } from '@/services/payment_option.service';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import payment_option_store from '@/stores/payment-option.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
-import { IToast } from '../../ir-toast/toast';
+import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
 import { Link } from 'ckeditor5';
 @Component({

@@ -1,4 +1,4 @@
-import { IToast } from '@/components/ir-toast/toast';
+import { IToast } from '@/components/ui/ir-toast/toast';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { Booking } from '@/models/booking.dto';
 import calendar_data from '@/stores/calendar-data';

@@ -1,5 +1,5 @@
 import { Component, Host, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
-import { IToast } from '../../ir-toast/toast';
+import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
 import moment from 'moment';

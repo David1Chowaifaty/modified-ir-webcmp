@@ -5,7 +5,7 @@ import { BookingService } from '@/services/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
-import { IToast } from '../ir-toast/toast';
+import { IToast } from '@components/ui/ir-toast/toast';
 import { ICountry, IEntries } from '@/models/IBooking';
 import { IPaymentAction, PaymentService } from '@/services/payment.service';
 import Token from '@/models/Token';

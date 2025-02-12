@@ -1,5 +1,5 @@
 import { Component, Prop, h, Event, EventEmitter, State, Watch, Listen } from '@stencil/core';
-import { selectOption } from '../../common/models';
+import { selectOption } from '@/common/models';
 import { v4 } from 'uuid';
 
 @Component({
