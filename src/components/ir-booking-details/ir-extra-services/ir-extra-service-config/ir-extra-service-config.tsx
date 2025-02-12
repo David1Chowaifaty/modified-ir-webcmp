@@ -4,6 +4,7 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import { ZodError } from 'zod';
+import { _formatDate } from '../../functions';
 
 @Component({
   tag: 'ir-extra-service-config',
@@ -107,7 +108,7 @@ export class IrExtraServiceConfig {
                   >
                     <input
                       slot="trigger"
-                      value={this.s_service?.start_date}
+                      value={this.s_service?.start_date ? _formatDate(this.s_service.start_date) : null}
                       style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}
                       class="text-center form-control input-sm"
                     ></input>
@@ -153,7 +154,7 @@ export class IrExtraServiceConfig {
                   >
                     <input
                       slot="trigger"
-                      value={this.s_service?.end_date}
+                      value={this.s_service?.end_date ? _formatDate(this.s_service.end_date) : null}
                       style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}
                       class="text-center form-control input-sm"
                     ></input>
