@@ -18,6 +18,7 @@ export class IrPickup {
   @Prop() defaultPickupData: IBookingPickupInfo | null;
   @Prop() numberOfPersons: number = 0;
   @Prop() bookingNumber: string;
+  @Prop() bookingDates: { from: string; to: string };
 
   @State() isLoading = false;
   @State() allowedOptionsByLocation: IAllowedOptions[] = [];
@@ -235,14 +236,25 @@ export class IrPickup {
                     </div>
                     <div class="form-control form-control-md col-7 d-flex align-items-center pl-0">
                       <ir-date-picker
+                        date={this.pickupData.arrival_date}
+                        maxDate={this.bookingDates?.to}
                         minDate={moment().format('YYYY-MM-DD')}
+                        // customPicker={false}
                         // autoApply
                         // format="ddd, DD M YYYY"
                         // singleDatePicker
                         onDateChanged={evt => {
-                          this.updatePickupData('arrival_date', evt.detail.start.format('YYYY-MM-DD'));
+                          this.updatePickupData('arrival_date', evt.detail.start?.format('YYYY-MM-DD'));
                         }}
-                      ></ir-date-picker>
+                      >
+                        <input
+                          type="text"
+                          slot="trigger"
+                          value={moment(this.pickupData.arrival_date).format('MMM DD, YYYY')}
+                          class="form-control input-sm text-center"
+                          style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}
+                        ></input>
+                      </ir-date-picker>
                     </div>
                   </div>
                 </div>

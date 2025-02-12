@@ -99,12 +99,19 @@ export class IrExtraServiceConfig {
               <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center date-from">
                 <div class="service-date-container">
                   <ir-date-picker
-                    date={this.s_service?.start_date ? new Date(this.s_service?.start_date) : new Date(this.booking.from_date)}
-                    class={`hidden-date-picker ${!this.s_service?.start_date ? 'hidden-date s' : ''}`}
+                    emitEmptyDate
+                    date={this.s_service?.start_date}
                     minDate={this.booking.from_date}
                     maxDate={this.booking.to_date}
-                    onDateChanged={e => this.updateService({ start_date: e.detail.start.format('YYYY-MM-DD') })}
-                  ></ir-date-picker>
+                    onDateChanged={e => this.updateService({ start_date: e.detail.start?.format('YYYY-MM-DD') })}
+                  >
+                    <input
+                      slot="trigger"
+                      value={this.s_service?.start_date}
+                      style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}
+                      class="text-center form-control input-sm"
+                    ></input>
+                  </ir-date-picker>
                   {this.s_service?.start_date && (
                     <div class="btn-container">
                       <ir-button
@@ -134,16 +141,23 @@ export class IrExtraServiceConfig {
               <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center">
                 <div class="service-date-container">
                   <ir-date-picker
-                    date={this.s_service?.end_date ? new Date(this.s_service?.end_date) : new Date(this.booking.to_date)}
-                    class={`hidden-date-picker ${!this.s_service?.end_date ? 'hidden-dates' : ''}`}
-                    minDate={this.booking.from_date}
+                    emitEmptyDate
+                    date={this.s_service?.end_date}
+                    minDate={this.s_service?.start_date ?? this.booking.from_date}
                     maxDate={this.booking.to_date}
                     onDateChanged={e => {
                       e.stopImmediatePropagation();
                       e.stopPropagation();
-                      this.updateService({ end_date: e.detail.start.format('YYYY-MM-DD') });
+                      this.updateService({ end_date: e.detail.start?.format('YYYY-MM-DD') });
                     }}
-                  ></ir-date-picker>
+                  >
+                    <input
+                      slot="trigger"
+                      value={this.s_service?.end_date}
+                      style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}
+                      class="text-center form-control input-sm"
+                    ></input>
+                  </ir-date-picker>
 
                   {this.s_service?.end_date && (
                     <div class="btn-container">

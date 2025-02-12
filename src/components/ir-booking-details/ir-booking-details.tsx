@@ -294,6 +294,7 @@ export class IrBookingDetails {
       case 'pickup':
         return (
           <ir-pickup
+            bookingDates={{ from: this.booking.from_date, to: this.booking.to_date }}
             slot="sidebar-body"
             defaultPickupData={this.booking.pickup_info}
             bookingNumber={this.booking.booking_nbr}

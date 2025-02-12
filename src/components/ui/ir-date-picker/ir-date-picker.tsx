@@ -77,6 +77,15 @@ export class IrDatePicker {
   @Prop() selectOtherMonths: boolean = true;
 
   /**
+   * Controls how the date picker is triggered.
+   * - **`true`**: The picker can be triggered by custom UI elements (provided via a `<slot name="trigger">`).
+   * - **`false`**: A default button input is used to open the picker.
+   *
+   * Defaults to `true`.
+   */
+  @Prop() customPicker: boolean = true;
+
+  /**
    * Pass a container element if you need the date picker to be appended to a specific element
    * for styling or positioning (particularly for arrow rendering).
    * If not provided, it defaults to `this.el`.
@@ -90,6 +99,14 @@ export class IrDatePicker {
    * Defaults to `false`.
    */
   @Prop() forceDestroyOnUpdate: boolean = false;
+
+  /**
+   * If `true`, the component will emit a `dateChanged` event when the selected date becomes empty (null).
+   * Otherwise, empty-date changes will be ignored (no event emitted).
+   *
+   * Defaults to `false`.
+   */
+  @Prop() emitEmptyDate: boolean = false;
 
   @State() currentDate: Date | null = null;
 
@@ -205,9 +222,12 @@ export class IrDatePicker {
       selectOtherMonths: this.selectOtherMonths,
       onSelect: ({ date }) => {
         if (!date || !(date instanceof Date)) {
-          return;
-        }
-        if (this.isSameDates(this.currentDate, date)) {
+          if (this.emitEmptyDate) {
+            this.dateChanged.emit({
+              start: null,
+              end: null,
+            });
+          }
           return;
         }
         this.currentDate = date;
@@ -255,8 +275,8 @@ export class IrDatePicker {
   render() {
     return (
       <div class="ir-date-picker-trigger">
-        <slot name="trigger"></slot>
-        <input type="button" disabled={this.disabled} class="ir-date-picker-element" ref={el => (this.pickerRef = el)} />
+        {this.customPicker && <slot name="trigger"></slot>}
+        <input type="button" disabled={this.disabled} class={this.customPicker ? 'ir-date-picker-element' : 'form-control input-sm'} ref={el => (this.pickerRef = el)} />
       </div>
     );
   }

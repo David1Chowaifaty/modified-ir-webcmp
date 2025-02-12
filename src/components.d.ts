@@ -391,6 +391,10 @@ export namespace Components {
          */
         "container"?: HTMLElement;
         /**
+          * Controls how the date picker is triggered. - **`true`**: The picker can be triggered by custom UI elements (provided via a `<slot name="trigger">`). - **`false`**: A default button input is used to open the picker.  Defaults to `true`.
+         */
+        "customPicker": boolean;
+        /**
           * The initially selected date; can be a `Date` object or a string recognized by `AirDatepicker`.
          */
         "date": string | Date | null;
@@ -402,6 +406,10 @@ export namespace Components {
           * Disables the input and prevents interaction.
          */
         "disabled": boolean;
+        /**
+          * If `true`, the component will emit a `dateChanged` event when the selected date becomes empty (null). Otherwise, empty-date changes will be ignored (no event emitted).  Defaults to `false`.
+         */
+        "emitEmptyDate": boolean;
         /**
           * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`.
          */
@@ -677,6 +685,7 @@ export namespace Components {
         "value": string;
     }
     interface IrPickup {
+        "bookingDates": { from: string; to: string };
         "bookingNumber": string;
         "defaultPickupData": IBookingPickupInfo | null;
         "numberOfPersons": number;
@@ -3028,6 +3037,10 @@ declare namespace LocalJSX {
          */
         "container"?: HTMLElement;
         /**
+          * Controls how the date picker is triggered. - **`true`**: The picker can be triggered by custom UI elements (provided via a `<slot name="trigger">`). - **`false`**: A default button input is used to open the picker.  Defaults to `true`.
+         */
+        "customPicker"?: boolean;
+        /**
           * The initially selected date; can be a `Date` object or a string recognized by `AirDatepicker`.
          */
         "date"?: string | Date | null;
@@ -3039,6 +3052,10 @@ declare namespace LocalJSX {
           * Disables the input and prevents interaction.
          */
         "disabled"?: boolean;
+        /**
+          * If `true`, the component will emit a `dateChanged` event when the selected date becomes empty (null). Otherwise, empty-date changes will be ignored (no event emitted).  Defaults to `false`.
+         */
+        "emitEmptyDate"?: boolean;
         /**
           * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`.
          */
@@ -3347,6 +3364,7 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface IrPickup {
+        "bookingDates"?: { from: string; to: string };
         "bookingNumber"?: string;
         "defaultPickupData"?: IBookingPickupInfo | null;
         "numberOfPersons"?: number;
