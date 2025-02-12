@@ -21,12 +21,12 @@
 ### Depends on
 
 - [ir-loading-screen](../ir-loading-screen)
-- [ir-toast](../ir-toast)
-- [ir-button](../ir-button)
-- [ir-switch](../ir-switch)
-- [ir-sidebar](../ir-sidebar)
+- [ir-toast](../ui/ir-toast)
+- [ir-button](../ui/ir-button)
+- [ir-switch](../ui/ir-switch)
+- [ir-sidebar](../ui/ir-sidebar)
 - [ir-channel-editor](ir-channel-editor)
-- [ir-modal](../ir-modal)
+- [ir-modal](../ui/ir-modal)
 
 ### Graph
 ```mermaid

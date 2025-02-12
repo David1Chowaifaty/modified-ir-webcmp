@@ -7,17 +7,18 @@
 
 ## Properties
 
-| Property          | Attribute         | Description | Type      | Default     |
-| ----------------- | ----------------- | ----------- | --------- | ----------- |
-| `default_country` | `default_country` |             | `number`  | `null`      |
-| `disabled`        | `disabled`        |             | `boolean` | `false`     |
-| `error`           | `error`           |             | `boolean` | `false`     |
-| `label`           | `label`           |             | `string`  | `undefined` |
-| `language`        | `language`        |             | `string`  | `undefined` |
-| `phone_prefix`    | `phone_prefix`    |             | `string`  | `null`      |
-| `placeholder`     | `placeholder`     |             | `string`  | `undefined` |
-| `token`           | `token`           |             | `string`  | `undefined` |
-| `value`           | `value`           |             | `string`  | `''`        |
+| Property          | Attribute         | Description | Type         | Default     |
+| ----------------- | ----------------- | ----------- | ------------ | ----------- |
+| `countries`       | --                |             | `ICountry[]` | `[]`        |
+| `default_country` | `default_country` |             | `number`     | `null`      |
+| `disabled`        | `disabled`        |             | `boolean`    | `false`     |
+| `error`           | `error`           |             | `boolean`    | `false`     |
+| `label`           | `label`           |             | `string`     | `undefined` |
+| `language`        | `language`        |             | `string`     | `undefined` |
+| `phone_prefix`    | `phone_prefix`    |             | `string`     | `null`      |
+| `placeholder`     | `placeholder`     |             | `string`     | `undefined` |
+| `token`           | `token`           |             | `string`     | `undefined` |
+| `value`           | `value`           |             | `string`     | `''`        |
 
 
 ## Events
@@ -31,9 +32,9 @@
 
 ### Used by
 
- - [igl-property-booked-by](../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
- - [ir-guest-info](../ir-guest-info)
- - [ir-hk-user](../ir-housekeeping/ir-hk-user)
+ - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
+ - [ir-guest-info](../../ir-guest-info)
+ - [ir-hk-user](../../ir-housekeeping/ir-hk-user)
 
 ### Depends on
 

@@ -17,7 +17,7 @@
 
 ### Used by
 
- - [igl-cal-body](../igloo-calendar/igl-cal-body)
+ - [igl-cal-body](../../igloo-calendar/igl-cal-body)
 
 ### Graph
 ```mermaid

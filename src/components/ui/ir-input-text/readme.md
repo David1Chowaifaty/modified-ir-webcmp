@@ -44,12 +44,12 @@
 
 ### Used by
 
- - [ir-guest-info](../ir-guest-info)
- - [ir-hk-user](../ir-housekeeping/ir-hk-user)
- - [ir-listing-header](../ir-booking-listing/ir-listing-header)
- - [ir-login](../ir-login)
- - [ir-option-details](../ir-payment-option/ir-option-details)
- - [ir-pickup](../ir-booking-details/ir-pickup)
+ - [ir-guest-info](../../ir-guest-info)
+ - [ir-hk-user](../../ir-housekeeping/ir-hk-user)
+ - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
+ - [ir-login](../../ir-login)
+ - [ir-option-details](../../ir-payment-option/ir-option-details)
+ - [ir-pickup](../../ir-booking-details/ir-pickup)
 
 ### Graph
 ```mermaid

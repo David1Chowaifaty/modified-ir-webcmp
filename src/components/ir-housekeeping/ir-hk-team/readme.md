@@ -16,8 +16,8 @@
 - [ir-hk-unassigned-units](../ir-hk-unassigned-units)
 - [ir-hk-user](../ir-hk-user)
 - [ir-title](../../ir-title)
-- [ir-icon](../../ir-icon)
-- [ir-sidebar](../../ir-sidebar)
+- [ir-icon](../../ui/ir-icon)
+- [ir-sidebar](../../ui/ir-sidebar)
 - [ir-delete-modal](../ir-delete-modal)
 
 ### Graph

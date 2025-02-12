@@ -14,10 +14,10 @@
 
 ## Events
 
-| Event          | Description | Type                   |
-| -------------- | ----------- | ---------------------- |
-| `closeModal`   |             | `CustomEvent<null>`    |
-| `resetbooking` |             | `CustomEvent<Booking>` |
+| Event             | Description | Type                   |
+| ----------------- | ----------- | ---------------------- |
+| `closeModal`      |             | `CustomEvent<null>`    |
+| `resetBookingEvt` |             | `CustomEvent<Booking>` |
 
 
 ## Dependencies
@@ -29,8 +29,8 @@
 ### Depends on
 
 - [ir-title](../../ir-title)
-- [ir-textarea](../../ir-textarea)
-- [ir-button](../../ir-button)
+- [ir-textarea](../../ui/ir-textarea)
+- [ir-button](../../ui/ir-button)
 
 ### Graph
 ```mermaid

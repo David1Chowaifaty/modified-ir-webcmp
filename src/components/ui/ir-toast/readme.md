@@ -16,15 +16,15 @@
 
 ### Used by
 
- - [igl-book-property-container](../igl-book-property-container)
- - [igloo-calendar](../igloo-calendar)
- - [ir-booking-details](../ir-booking-details)
- - [ir-booking-listing](../ir-booking-listing)
- - [ir-channel](../ir-channel)
- - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
- - [ir-housekeeping](../ir-housekeeping)
- - [ir-login](../ir-login)
- - [ir-payment-option](../ir-payment-option)
+ - [igl-book-property-container](../../igl-book-property-container)
+ - [igloo-calendar](../../igloo-calendar)
+ - [ir-booking-details](../../ir-booking-details)
+ - [ir-booking-listing](../../ir-booking-listing)
+ - [ir-channel](../../ir-channel)
+ - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
+ - [ir-housekeeping](../../ir-housekeeping)
+ - [ir-login](../../ir-login)
+ - [ir-payment-option](../../ir-payment-option)
 
 ### Graph
 ```mermaid

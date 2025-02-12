@@ -31,8 +31,8 @@
 
 ### Used by
 
- - [ir-channel-general](../ir-channel/ir-channel-general)
- - [ir-channel-mapping](../ir-channel/ir-channel-mapping)
+ - [ir-channel-general](../../ir-channel/ir-channel-general)
+ - [ir-channel-mapping](../../ir-channel/ir-channel-mapping)
  - [ir-phone-input](../ir-phone-input)
 
 ### Graph

@@ -21,7 +21,7 @@
 
 - [ir-loading-screen](../ir-loading-screen)
 - [ir-interceptor](../ir-interceptor)
-- [ir-toast](../ir-toast)
+- [ir-toast](../ui/ir-toast)
 - [ir-unit-status](ir-unit-status)
 - [ir-hk-team](ir-hk-team)
 

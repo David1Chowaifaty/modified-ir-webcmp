@@ -46,7 +46,7 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [ir-booking-header](../ir-booking-details/ir-booking-header)
+ - [ir-booking-header](../../ir-booking-details/ir-booking-header)
 
 ### Depends on
 

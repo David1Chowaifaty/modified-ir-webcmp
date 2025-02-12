@@ -34,7 +34,7 @@
 
 ### Depends on
 
-- [ir-tooltip](../../../../../ir-tooltip)
+- [ir-tooltip](../../../../../ui/ir-tooltip)
 - [ir-price-input](../../../../../ui/ir-price-input)
 
 ### Graph

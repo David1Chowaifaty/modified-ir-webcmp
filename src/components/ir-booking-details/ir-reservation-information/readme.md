@@ -29,10 +29,10 @@
 ### Depends on
 
 - [ir-label](../../ui/ir-label)
-- [ir-tooltip](../../ir-tooltip)
+- [ir-tooltip](../../ui/ir-tooltip)
 - [ir-icons](../../ui/ir-icons)
-- [ir-button](../../ir-button)
-- [ota-label](../../ota-label)
+- [ir-button](../../ui/ir-button)
+- [ota-label](../../ui/ota-label)
 
 ### Graph
 ```mermaid

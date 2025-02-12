@@ -60,12 +60,12 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [igloo-calendar](../igloo-calendar)
- - [ir-channel](../ir-channel)
- - [ir-extra-service](../ir-booking-details/ir-extra-services/ir-extra-service)
- - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
- - [ir-payment-details](../ir-booking-details/ir-payment-details)
- - [ir-room](../ir-booking-details/ir-room)
+ - [igloo-calendar](../../igloo-calendar)
+ - [ir-channel](../../ir-channel)
+ - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
+ - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
+ - [ir-payment-details](../../ir-booking-details/ir-payment-details)
+ - [ir-room](../../ir-booking-details/ir-room)
 
 ### Depends on
 

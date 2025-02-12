@@ -22,14 +22,14 @@
 
 - [ir-loading-screen](../ir-loading-screen)
 - [ir-interceptor](../ir-interceptor)
-- [ir-toast](../ir-toast)
+- [ir-toast](../ui/ir-toast)
 - [ir-listing-header](ir-listing-header)
-- [ir-tooltip](../ir-tooltip)
+- [ir-tooltip](../ui/ir-tooltip)
+- [ir-button](../ui/ir-button)
 - [ir-icons](../ui/ir-icons)
-- [ir-button](../ir-button)
-- [ir-select](../ir-select)
+- [ir-select](../ui/ir-select)
 - [ir-listing-modal](ir-listing-modal)
-- [ir-sidebar](../ir-sidebar)
+- [ir-sidebar](../ui/ir-sidebar)
 - [ir-booking-details](../ir-booking-details)
 - [ir-guest-info](../ir-guest-info)
 
@@ -41,8 +41,8 @@ graph TD;
   ir-booking-listing --> ir-toast
   ir-booking-listing --> ir-listing-header
   ir-booking-listing --> ir-tooltip
-  ir-booking-listing --> ir-icons
   ir-booking-listing --> ir-button
+  ir-booking-listing --> ir-icons
   ir-booking-listing --> ir-select
   ir-booking-listing --> ir-listing-modal
   ir-booking-listing --> ir-sidebar
@@ -70,6 +70,7 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
+  igl-date-range --> ir-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-room-type --> igl-rate-plan

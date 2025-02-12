@@ -45,7 +45,7 @@
 - [ir-date-view](../../../ir-date-view)
 - [igl-application-info](igl-application-info)
 - [igl-property-booked-by](igl-property-booked-by)
-- [ir-button](../../../ir-button)
+- [ir-button](../../../ui/ir-button)
 
 ### Graph
 ```mermaid

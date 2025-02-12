@@ -25,9 +25,9 @@
 
 ### Used by
 
- - [ir-channel](../ir-channel)
- - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
- - [ir-payment-option](../ir-payment-option)
+ - [ir-channel](../../ir-channel)
+ - [ir-hk-unassigned-units](../../ir-housekeeping/ir-hk-unassigned-units)
+ - [ir-payment-option](../../ir-payment-option)
 
 ### Graph
 ```mermaid

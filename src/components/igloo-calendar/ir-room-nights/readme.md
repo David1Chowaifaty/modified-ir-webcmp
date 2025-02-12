@@ -37,8 +37,8 @@
 
 - [ir-price-input](../../ui/ir-price-input)
 - [ir-loading-screen](../../ir-loading-screen)
-- [ir-icon](../../ir-icon)
-- [ir-button](../../ir-button)
+- [ir-icon](../../ui/ir-icon)
+- [ir-button](../../ui/ir-button)
 
 ### Graph
 ```mermaid

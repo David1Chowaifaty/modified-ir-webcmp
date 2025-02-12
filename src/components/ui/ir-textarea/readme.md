@@ -32,8 +32,8 @@
 
 ### Used by
 
- - [ir-booking-extra-note](../ir-booking-details/ir-booking-extra-note)
- - [ir-guest-info](../ir-guest-info)
+ - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
+ - [ir-guest-info](../../ir-guest-info)
 
 ### Graph
 ```mermaid

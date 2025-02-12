@@ -28,7 +28,7 @@
 ### Used by
 
  - [ir-checkboxes](../ir-checkboxes)
- - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
+ - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
 
 ### Graph
 ```mermaid

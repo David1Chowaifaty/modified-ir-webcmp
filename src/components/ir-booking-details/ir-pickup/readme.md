@@ -7,19 +7,20 @@
 
 ## Properties
 
-| Property            | Attribute           | Description | Type                 | Default     |
-| ------------------- | ------------------- | ----------- | -------------------- | ----------- |
-| `bookingNumber`     | `booking-number`    |             | `string`             | `undefined` |
-| `defaultPickupData` | --                  |             | `IBookingPickupInfo` | `undefined` |
-| `numberOfPersons`   | `number-of-persons` |             | `number`             | `0`         |
+| Property            | Attribute           | Description | Type                            | Default     |
+| ------------------- | ------------------- | ----------- | ------------------------------- | ----------- |
+| `bookingDates`      | --                  |             | `{ from: string; to: string; }` | `undefined` |
+| `bookingNumber`     | `booking-number`    |             | `string`                        | `undefined` |
+| `defaultPickupData` | --                  |             | `IBookingPickupInfo`            | `undefined` |
+| `numberOfPersons`   | `number-of-persons` |             | `number`                        | `0`         |
 
 
 ## Events
 
-| Event              | Description | Type                |
-| ------------------ | ----------- | ------------------- |
-| `closeModal`       |             | `CustomEvent<null>` |
-| `resetBookingData` |             | `CustomEvent<null>` |
+| Event             | Description | Type                |
+| ----------------- | ----------- | ------------------- |
+| `closeModal`      |             | `CustomEvent<null>` |
+| `resetBookingEvt` |             | `CustomEvent<null>` |
 
 
 ## Dependencies
@@ -31,10 +32,10 @@
 ### Depends on
 
 - [ir-title](../../ir-title)
-- [ir-select](../../ir-select)
-- [ir-date-picker](../../ir-date-picker)
-- [ir-input-text](../../ir-input-text)
-- [ir-button](../../ir-button)
+- [ir-select](../../ui/ir-select)
+- [ir-date-picker](../../ui/ir-date-picker)
+- [ir-input-text](../../ui/ir-input-text)
+- [ir-button](../../ui/ir-button)
 
 ### Graph
 ```mermaid

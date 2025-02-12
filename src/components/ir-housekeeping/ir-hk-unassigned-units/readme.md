@@ -28,10 +28,10 @@
 
 ### Depends on
 
-- [ir-select](../../ir-select)
-- [ir-switch](../../ir-switch)
+- [ir-select](../../ui/ir-select)
+- [ir-switch](../../ui/ir-switch)
 - [ir-title](../../ir-title)
-- [ir-button](../../ir-button)
+- [ir-button](../../ui/ir-button)
 
 ### Graph
 ```mermaid

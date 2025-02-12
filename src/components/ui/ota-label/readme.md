@@ -18,8 +18,8 @@
 
 ### Used by
 
- - [igl-booking-event-hover](../igloo-calendar/igl-booking-event-hover)
- - [ir-reservation-information](../ir-booking-details/ir-reservation-information)
+ - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
+ - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
 
 ### Graph
 ```mermaid

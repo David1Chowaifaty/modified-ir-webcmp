@@ -18,11 +18,11 @@
 
 ### Used by
 
- - [igl-application-info](../igloo-calendar/igl-book-property/igl-booking-form/igl-application-info)
- - [igl-property-booked-by](../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
- - [igl-rate-plan](../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
- - [ir-booking-listing](../ir-booking-listing)
- - [ir-reservation-information](../ir-booking-details/ir-reservation-information)
+ - [igl-application-info](../../igloo-calendar/igl-book-property/igl-booking-form/igl-application-info)
+ - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
+ - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
+ - [ir-booking-listing](../../ir-booking-listing)
+ - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
 
 ### Graph
 ```mermaid

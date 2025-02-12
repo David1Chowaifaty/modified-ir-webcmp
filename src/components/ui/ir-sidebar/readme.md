@@ -41,12 +41,12 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [igloo-calendar](../igloo-calendar)
- - [ir-booking-details](../ir-booking-details)
- - [ir-booking-listing](../ir-booking-listing)
- - [ir-channel](../ir-channel)
- - [ir-hk-team](../ir-housekeeping/ir-hk-team)
- - [ir-payment-option](../ir-payment-option)
+ - [igloo-calendar](../../igloo-calendar)
+ - [ir-booking-details](../../ir-booking-details)
+ - [ir-booking-listing](../../ir-booking-listing)
+ - [ir-channel](../../ir-channel)
+ - [ir-hk-team](../../ir-housekeeping/ir-hk-team)
+ - [ir-payment-option](../../ir-payment-option)
 
 ### Depends on
 
