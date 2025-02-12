@@ -64,6 +64,9 @@ export class IrListingHeader {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const date = e.detail.start;
+    if (moment(booking_listing.userSelection.from, 'YYYY-MM-DD').isSame(date, 'days')) {
+      return;
+    }
     let fromDate = date;
     let toDate = moment(new Date(booking_listing.userSelection.to));
     if (fromDate.isAfter(toDate)) {
@@ -165,19 +168,18 @@ export class IrListingHeader {
                 ></path>
               </svg>
             </span>
-            <div class="date-picker-wrapper" data-option="from-date">
-              <p class="date-display" title="from date">
+            <ir-date-picker
+              id="fromDate"
+              class="date-picker-wrapper"
+              date={new Date(booking_listing.userSelection.from)}
+              minDate="2000-01-01"
+              onDateChanged={e => this.handleFromDateChange(e)}
+            >
+              <p slot="trigger" class="m-0 p-0 date-display">
                 {moment(new Date(booking_listing.userSelection.from)).format('MMM DD, yyyy')}
               </p>
-              <ir-date-picker
-                date={new Date(booking_listing.userSelection.from)}
-                class="hidden-date-picker"
-                autoApply
-                singleDatePicker
-                minDate="2000-01-01"
-                onDateChanged={this.handleFromDateChange.bind(this)}
-              ></ir-date-picker>
-            </div>
+            </ir-date-picker>
+
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" height="14" width="14" viewBox="0 0 512 512">
                 <path
@@ -186,24 +188,27 @@ export class IrListingHeader {
                 />
               </svg>
             </span>
-            <div data-option="to-date" class="date-picker-wrapper">
-              <p class="date-display" title="to date">
+            <ir-date-picker
+              id="toDate"
+              forceDestroyOnUpdate
+              class="date-picker-wrapper"
+              date={new Date(booking_listing.userSelection.to)}
+              ref={el => (this.toDateRef = el)}
+              minDate={new Date(booking_listing.userSelection.from)}
+              maxDate={moment().add(1, 'years').endOf('year').toDate()}
+              onDateChanged={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                if (e.detail.start.isSame(booking_listing.userSelection.to, 'days') || e.detail.start.isBefore(booking_listing.userSelection.from, 'days')) {
+                  return;
+                }
+                booking_listing.userSelection = { ...booking_listing.userSelection, to: e.detail.start.format('YYYY-MM-DD') };
+              }}
+            >
+              <p slot="trigger" class="m-0 p-0 date-display">
                 {moment(new Date(booking_listing.userSelection.to)).format('MMM DD, YYYY')}
               </p>
-              <ir-date-picker
-                date={new Date(booking_listing.userSelection.to)}
-                class="hidden-date-picker"
-                ref={el => (this.toDateRef = el)}
-                autoApply
-                singleDatePicker
-                minDate={booking_listing.userSelection.from}
-                onDateChanged={e => {
-                  e.stopImmediatePropagation();
-                  e.stopPropagation();
-                  booking_listing.userSelection = { ...booking_listing.userSelection, to: e.detail.start.format('YYYY-MM-DD') };
-                }}
-              ></ir-date-picker>
-            </div>
+            </ir-date-picker>
           </div>
           <ir-select
             class="flex-sm-wrap"

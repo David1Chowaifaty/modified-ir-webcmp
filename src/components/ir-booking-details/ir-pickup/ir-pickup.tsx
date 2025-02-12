@@ -236,9 +236,9 @@ export class IrPickup {
                     <div class="form-control form-control-md col-7 d-flex align-items-center pl-0">
                       <ir-date-picker
                         minDate={moment().format('YYYY-MM-DD')}
-                        autoApply
+                        // autoApply
                         // format="ddd, DD M YYYY"
-                        singleDatePicker
+                        // singleDatePicker
                         onDateChanged={evt => {
                           this.updatePickupData('arrival_date', evt.detail.start.format('YYYY-MM-DD'));
                         }}

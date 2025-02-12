@@ -187,8 +187,8 @@ export class IrPaymentDetails {
               <ir-date-picker
                 date={this.itemToBeAdded?.date ? new Date(this.itemToBeAdded.date) : new Date()}
                 minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
-                singleDatePicker
-                autoApply
+                // singleDatePicker
+                // autoApply
                 onDateChanged={this.handleDateChange.bind(this)}
               ></ir-date-picker>
             )}

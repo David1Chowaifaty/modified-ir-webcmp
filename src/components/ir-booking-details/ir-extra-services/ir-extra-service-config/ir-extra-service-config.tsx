@@ -101,8 +101,6 @@ export class IrExtraServiceConfig {
                   <ir-date-picker
                     date={this.s_service?.start_date ? new Date(this.s_service?.start_date) : new Date(this.booking.from_date)}
                     class={`hidden-date-picker ${!this.s_service?.start_date ? 'hidden-date s' : ''}`}
-                    autoApply
-                    singleDatePicker
                     minDate={this.booking.from_date}
                     maxDate={this.booking.to_date}
                     onDateChanged={e => this.updateService({ start_date: e.detail.start.format('YYYY-MM-DD') })}
@@ -138,8 +136,6 @@ export class IrExtraServiceConfig {
                   <ir-date-picker
                     date={this.s_service?.end_date ? new Date(this.s_service?.end_date) : new Date(this.booking.to_date)}
                     class={`hidden-date-picker ${!this.s_service?.end_date ? 'hidden-dates' : ''}`}
-                    autoApply
-                    singleDatePicker
                     minDate={this.booking.from_date}
                     maxDate={this.booking.to_date}
                     onDateChanged={e => {

@@ -381,6 +381,66 @@ export namespace Components {
         "extraResources": string;
     }
     interface IrDatePicker {
+        /**
+          * Closes the picker automatically after a date is selected.
+         */
+        "autoClose": boolean;
+        "clearDatePicker": () => Promise<void>;
+        /**
+          * Pass a container element if you need the date picker to be appended to a specific element for styling or positioning (particularly for arrow rendering). If not provided, it defaults to `this.el`.
+         */
+        "container"?: HTMLElement;
+        /**
+          * The initially selected date; can be a `Date` object or a string recognized by `AirDatepicker`.
+         */
+        "date": string | Date | null;
+        /**
+          * Format for the date as it appears in the input field. Follows the `AirDatepicker` format rules.
+         */
+        "dateFormat": string;
+        /**
+          * Disables the input and prevents interaction.
+         */
+        "disabled": boolean;
+        /**
+          * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`.
+         */
+        "forceDestroyOnUpdate": boolean;
+        /**
+          * Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.
+         */
+        "inline": boolean;
+        /**
+          * The latest date that can be selected.
+         */
+        "maxDate"?: string | Date;
+        /**
+          * The earliest date that can be selected.
+         */
+        "minDate"?: string | Date;
+        /**
+          * Enables multiple dates. If `true`, multiple selection is allowed. If you pass a number (e.g. 3), that is the maximum number of selectable dates.
+         */
+        "multipleDates": boolean | number;
+        "openDatePicker": () => Promise<void>;
+        /**
+          * Whether the picker should allow range selection (start and end date).
+         */
+        "range": boolean;
+        /**
+          * Allows selecting days from previous/next month shown in the current view.
+         */
+        "selectOtherMonths": boolean;
+        /**
+          * Shows days from previous/next month in the current month's calendar.
+         */
+        "showOtherMonths": boolean;
+        /**
+          * Enables the timepicker functionality (select hours and minutes).
+         */
+        "timepicker": boolean;
+    }
+    interface IrDateRange {
         "applyLabel": string;
         "autoApply": boolean;
         "cancelLabel": string;
@@ -392,9 +452,9 @@ export namespace Components {
         "format": string;
         "fromDate": Date;
         "fromLabel": string;
-        "maxDate": string;
+        "maxDate": string | Date;
         "maxSpan": moment.DurationInputArg1;
-        "minDate": string;
+        "minDate": string | Date;
         "monthNames": string[];
         "openDatePicker": () => Promise<void>;
         "opens": 'left' | 'right' | 'center';
@@ -403,8 +463,6 @@ export namespace Components {
         "toDate": Date;
         "toLabel": string;
         "weekLabel": string;
-    }
-    interface IrDateRange {
     }
     interface IrDateView {
         "dateOption": string;
@@ -950,6 +1008,10 @@ export interface IrComboboxCustomEvent<T> extends CustomEvent<T> {
 export interface IrDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDatePickerElement;
+}
+export interface IrDateRangeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDateRangeElement;
 }
 export interface IrDeleteModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1745,7 +1807,21 @@ declare global {
         prototype: HTMLIrDatePickerElement;
         new (): HTMLIrDatePickerElement;
     };
+    interface HTMLIrDateRangeElementEventMap {
+        "dateChanged": {
+    start: moment.Moment;
+    end: moment.Moment;
+  };
+    }
     interface HTMLIrDateRangeElement extends Components.IrDateRange, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrDateRangeElementEventMap>(type: K, listener: (this: HTMLIrDateRangeElement, ev: IrDateRangeCustomEvent<HTMLIrDateRangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrDateRangeElementEventMap>(type: K, listener: (this: HTMLIrDateRangeElement, ev: IrDateRangeCustomEvent<HTMLIrDateRangeElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrDateRangeElement: {
         prototype: HTMLIrDateRangeElement;
@@ -2943,6 +3019,68 @@ declare namespace LocalJSX {
         "extraResources"?: string;
     }
     interface IrDatePicker {
+        /**
+          * Closes the picker automatically after a date is selected.
+         */
+        "autoClose"?: boolean;
+        /**
+          * Pass a container element if you need the date picker to be appended to a specific element for styling or positioning (particularly for arrow rendering). If not provided, it defaults to `this.el`.
+         */
+        "container"?: HTMLElement;
+        /**
+          * The initially selected date; can be a `Date` object or a string recognized by `AirDatepicker`.
+         */
+        "date"?: string | Date | null;
+        /**
+          * Format for the date as it appears in the input field. Follows the `AirDatepicker` format rules.
+         */
+        "dateFormat"?: string;
+        /**
+          * Disables the input and prevents interaction.
+         */
+        "disabled"?: boolean;
+        /**
+          * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`.
+         */
+        "forceDestroyOnUpdate"?: boolean;
+        /**
+          * Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.
+         */
+        "inline"?: boolean;
+        /**
+          * The latest date that can be selected.
+         */
+        "maxDate"?: string | Date;
+        /**
+          * The earliest date that can be selected.
+         */
+        "minDate"?: string | Date;
+        /**
+          * Enables multiple dates. If `true`, multiple selection is allowed. If you pass a number (e.g. 3), that is the maximum number of selectable dates.
+         */
+        "multipleDates"?: boolean | number;
+        "onDateChanged"?: (event: IrDatePickerCustomEvent<{
+    start: moment.Moment;
+    end: moment.Moment;
+  }>) => void;
+        /**
+          * Whether the picker should allow range selection (start and end date).
+         */
+        "range"?: boolean;
+        /**
+          * Allows selecting days from previous/next month shown in the current view.
+         */
+        "selectOtherMonths"?: boolean;
+        /**
+          * Shows days from previous/next month in the current month's calendar.
+         */
+        "showOtherMonths"?: boolean;
+        /**
+          * Enables the timepicker functionality (select hours and minutes).
+         */
+        "timepicker"?: boolean;
+    }
+    interface IrDateRange {
         "applyLabel"?: string;
         "autoApply"?: boolean;
         "cancelLabel"?: string;
@@ -2954,11 +3092,11 @@ declare namespace LocalJSX {
         "format"?: string;
         "fromDate"?: Date;
         "fromLabel"?: string;
-        "maxDate"?: string;
+        "maxDate"?: string | Date;
         "maxSpan"?: moment.DurationInputArg1;
-        "minDate"?: string;
+        "minDate"?: string | Date;
         "monthNames"?: string[];
-        "onDateChanged"?: (event: IrDatePickerCustomEvent<{
+        "onDateChanged"?: (event: IrDateRangeCustomEvent<{
     start: moment.Moment;
     end: moment.Moment;
   }>) => void;
@@ -2968,8 +3106,6 @@ declare namespace LocalJSX {
         "toDate"?: Date;
         "toLabel"?: string;
         "weekLabel"?: string;
-    }
-    interface IrDateRange {
     }
     interface IrDateView {
         "dateOption"?: string;

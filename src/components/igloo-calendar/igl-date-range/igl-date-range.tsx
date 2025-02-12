@@ -99,7 +99,7 @@ export class IglDateRange {
     if (this.variant === 'booking') {
       return (
         <div class={`p-0 m-0 date-range-container-cn`}>
-          <ir-date-picker
+          <ir-date-range
             maxDate={this.maxDate}
             class={'date-range-input'}
             disabled={this.disabled}
@@ -111,7 +111,7 @@ export class IglDateRange {
             onDateChanged={evt => {
               this.handleDateChange(evt);
             }}
-          ></ir-date-picker>
+          ></ir-date-range>
           <div class={`d-flex align-items-center m-0  date-range-container ${this.disabled ? 'disabled' : ''}`}>
             <svg xmlns="http://www.w3.org/2000/svg" class="m-0 p-0" height="14" width="14" viewBox="0 0 448 512">
               <path
@@ -139,10 +139,10 @@ export class IglDateRange {
             maxDate={this.maxDate}
             class={'date-range-input'}
             disabled={this.disabled}
-            fromDate={this.fromDate}
-            toDate={this.toDate}
-            minDate={this.minDate}
-            autoApply
+            minDate={this.fromDate}
+            // minDate={this.toDate}
+            // maxDate={this.minDate}
+            // autoApply
             data-state={this.disabled ? 'disabled' : 'active'}
             onDateChanged={evt => {
               this.handleDateChange(evt);
