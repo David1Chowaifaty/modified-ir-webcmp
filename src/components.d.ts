@@ -11,21 +11,12 @@ import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-bo
 import { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
 import { IToast } from "./components/ui/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
-<<<<<<< HEAD
-import { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { RatePlan, RoomType } from "./models/property";
+import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, Room, SharedPerson } from "./models/booking.dto";
 import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
-=======
-import { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
-import { IPageTwoDataUpdateProps } from "./models/models";
-import { RatePlan, RoomType } from "./models/property";
-import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
-import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
-import { OpenSidebarEvent } from "./components/ir-booking-details/types";
->>>>>>> main
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -43,21 +34,12 @@ export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-bo
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
 export { IToast } from "./components/ui/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
-<<<<<<< HEAD
-export { IToast as IToast1, TPositions } from "./components/ir-toast/toast";
 export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { RatePlan, RoomType } from "./models/property";
+export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, Room, SharedPerson } from "./models/booking.dto";
 export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
-=======
-export { IReallocationPayload, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
-export { IPageTwoDataUpdateProps } from "./models/models";
-export { RatePlan, RoomType } from "./models/property";
-export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
-export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes } from "./models/booking.dto";
-export { OpenSidebarEvent } from "./components/ir-booking-details/types";
->>>>>>> main
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -1853,13 +1835,8 @@ declare global {
     interface HTMLIrBookingHeaderElementEventMap {
         "toast": IToast;
         "closeSidebar": null;
-<<<<<<< HEAD
-        "resetbooking": null;
-        "openSidebar": OpenSidebarEvent<any>;
-=======
         "resetBookingEvt": null;
-        "openSidebar": OpenSidebarEvent;
->>>>>>> main
+        "openSidebar": OpenSidebarEvent<any>;
     }
     interface HTMLIrBookingHeaderElement extends Components.IrBookingHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingHeaderElementEventMap>(type: K, listener: (this: HTMLIrBookingHeaderElement, ev: IrBookingHeaderCustomEvent<HTMLIrBookingHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3298,13 +3275,8 @@ declare namespace LocalJSX {
         "hasPrint"?: boolean;
         "hasReceipt"?: boolean;
         "onCloseSidebar"?: (event: IrBookingHeaderCustomEvent<null>) => void;
-<<<<<<< HEAD
         "onOpenSidebar"?: (event: IrBookingHeaderCustomEvent<OpenSidebarEvent<any>>) => void;
-        "onResetbooking"?: (event: IrBookingHeaderCustomEvent<null>) => void;
-=======
-        "onOpenSidebar"?: (event: IrBookingHeaderCustomEvent<OpenSidebarEvent>) => void;
         "onResetBookingEvt"?: (event: IrBookingHeaderCustomEvent<null>) => void;
->>>>>>> main
         "onToast"?: (event: IrBookingHeaderCustomEvent<IToast>) => void;
     }
     interface IrBookingListing {
