@@ -21,11 +21,11 @@ interface Meta {
 }
 export interface OtaService {
   name: string;
-  nights: string;
-  persons: string;
+  nights: number;
+  persons: number;
   price_mode: string;
-  price_per_unit: string;
-  total_price: string;
+  price_per_unit: number;
+  total_price: number;
 }
 export interface Booking {
   agent: {

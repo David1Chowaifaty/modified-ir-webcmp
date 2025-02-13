@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h } from '@stencil/core';
+import { Component, Prop, h } from '@stencil/core';
 import { OtaService } from '@/models/booking.dto';
 @Component({
   tag: 'ir-ota-service',
@@ -9,23 +9,30 @@ export class IrOtaService {
   @Prop() service: OtaService;
   render() {
     return (
-      <Host>
-        <div class="p-1">
-          <div class={'extra-channel-service-container'}>
-            <p class="extra-channel-service-description">{this.service.name}</p>
-            <div class="extra-channel-service-actions">
-              {/* {this.service.total_price && <p class="extra-channel-service-price p-0 m-0 font-weight-bold">{formatAmount(this.currencySymbol, this.service.price)}</p>} */}
-            </div>
-          </div>
-          <div class="extra-channel-service-conditional-date">
-            {/* {this.service.start_date && this.service.end_date ? (
-              <ir-date-view class="extra-channel-service-date-view mr-1" from_date={this.service.start_date} to_date={this.service.end_date} showDateDifference={false}></ir-date-view>
-            ) : (
-              this.service.start_date && <p class="extra-channel-service-date-view">{moment(new Date(this.service.start_date)).format('MMM DD, YYYY')}</p>
-            )} */}
-          </div>
+      <div class="p-1">
+        {/* <ir-label content={this.service?.name} labelText={`Name:`}></ir-label>
+        <ir-label content={this.service?.nights?.toString()} labelText={`Nights:`}></ir-label>
+        <ir-label content={this.service?.persons?.toString()} labelText={`Persons:`}></ir-label>
+        <ir-label content={this.service?.price_mode} labelText={`Price mode:`}></ir-label>
+        <ir-label content={this.service?.price_per_unit?.toString()} labelText={`Price per unit:`}></ir-label>
+        <ir-label content={this.service?.total_price?.toString()} labelText={`Total price:`}></ir-label> */}
+        <div class="m-0 p-0 d-flex align-items-center justify-content-between">
+          <p class="m-0 d-flex align-items-center" style={{ gap: '0.5rem' }}>
+            <b>{this.service.name}</b>
+            <span class="p-0 m-0">
+              {this.service?.persons?.toString()} {this.service.persons > 1 ? 'persons' : 'person'}
+            </span>
+            <span class="p-0 m-0">
+              {this.service?.nights?.toString()} {this.service.nights > 1 ? 'nights' : 'night'}
+            </span>
+          </p>
+          <b>{this.service.total_price}</b>
         </div>
-      </Host>
+        <div>
+          <ir-label containerStyle={{ margin: '0', padding: '0' }} content={this.service?.price_mode} labelText={`Price mode:`}></ir-label>
+          <ir-label containerStyle={{ margin: '0', padding: '0' }} class="m-0 p-0" content={this.service?.price_per_unit?.toString()} labelText={`Price per unit:`}></ir-label>
+        </div>
+      </div>
     );
   }
 }

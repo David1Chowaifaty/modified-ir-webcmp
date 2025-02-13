@@ -210,7 +210,7 @@ export class IrRoom {
 
   private getBedName() {
     if (this.bookingEvent.is_direct) {
-      const bed = this.bedPreferences.find(p => p.CODE_NAME === this.item.bed_preference.toString());
+      const bed = this.bedPreferences.find(p => p.CODE_NAME === this.item?.bed_preference?.toString());
       if (!bed) {
         return;
       }
