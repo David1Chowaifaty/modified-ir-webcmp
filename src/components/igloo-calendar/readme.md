@@ -77,12 +77,8 @@ graph TD;
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
-<<<<<<< HEAD
   igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-button
-=======
-  igl-booking-event-hover --> ir-icons
->>>>>>> main
   igl-booking-event-hover --> igl-block-dates-view
   igl-block-dates-view --> ir-date-view
   ir-modal --> ir-button

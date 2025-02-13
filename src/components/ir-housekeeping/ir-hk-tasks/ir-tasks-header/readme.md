@@ -14,9 +14,9 @@
 
 ## Events
 
-| Event               | Description | Type                                            |
-| ------------------- | ----------- | ----------------------------------------------- |
-| `headerButtonPress` |             | `CustomEvent<{ name: "cleaned" \| "export"; }>` |
+| Event               | Description | Type                                                         |
+| ------------------- | ----------- | ------------------------------------------------------------ |
+| `headerButtonPress` |             | `CustomEvent<{ name: "cleaned" \| "export" \| "archive"; }>` |
 
 
 ## Dependencies
@@ -27,7 +27,7 @@
 
 ### Depends on
 
-- [ir-button](../../../ir-button)
+- [ir-button](../../../ui/ir-button)
 
 ### Graph
 ```mermaid

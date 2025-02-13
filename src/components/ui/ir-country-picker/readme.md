@@ -33,7 +33,7 @@
 
 ### Depends on
 
-- [ir-input-text](../../ir-input-text)
+- [ir-input-text](../ir-input-text)
 
 ### Graph
 ```mermaid

@@ -49,7 +49,7 @@
 
 - [ir-button](../../ui/ir-button)
 - [ir-date-view](../../ir-date-view)
-- [ir-tooltip](../../ir-tooltip)
+- [ir-tooltip](../../ui/ir-tooltip)
 - [ir-label](../../ui/ir-label)
 - [ir-modal](../../ui/ir-modal)
 

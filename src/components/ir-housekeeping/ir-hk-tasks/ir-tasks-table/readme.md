@@ -28,7 +28,7 @@
 
 ### Depends on
 
-- [ir-checkbox](../../../ir-checkbox)
+- [ir-checkbox](../../../ui/ir-checkbox)
 
 ### Graph
 ```mermaid

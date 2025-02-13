@@ -28,11 +28,7 @@
 ### Used by
 
  - [ir-checkboxes](../ir-checkboxes)
-<<<<<<< HEAD:src/components/ir-checkbox/readme.md
- - [ir-tasks-table](../ir-housekeeping/ir-hk-tasks/ir-tasks-table)
-=======
- - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
->>>>>>> main:src/components/ui/ir-checkbox/readme.md
+ - [ir-tasks-table](../../ir-housekeeping/ir-hk-tasks/ir-tasks-table)
 
 ### Graph
 ```mermaid

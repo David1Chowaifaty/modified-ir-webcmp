@@ -45,6 +45,7 @@ Type: `Promise<void>`
  - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-channel](../../ir-channel)
+ - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-team](../../ir-housekeeping/ir-hk-team)
  - [ir-payment-option](../../ir-payment-option)
 
@@ -60,6 +61,7 @@ graph TD;
   ir-booking-details --> ir-sidebar
   ir-booking-listing --> ir-sidebar
   ir-channel --> ir-sidebar
+  ir-hk-tasks --> ir-sidebar
   ir-hk-team --> ir-sidebar
   ir-payment-option --> ir-sidebar
   style ir-sidebar fill:#f9f,stroke:#333,stroke-width:4px

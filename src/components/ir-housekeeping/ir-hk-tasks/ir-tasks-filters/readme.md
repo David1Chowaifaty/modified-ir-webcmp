@@ -21,8 +21,8 @@
 
 ### Depends on
 
-- [ir-button](../../../ir-button)
-- [ir-select](../../../ir-select)
+- [ir-button](../../../ui/ir-button)
+- [ir-select](../../../ui/ir-select)
 
 ### Graph
 ```mermaid

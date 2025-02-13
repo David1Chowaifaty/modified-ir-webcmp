@@ -18,20 +18,12 @@
 
 ### Used by
 
-<<<<<<< HEAD:src/components/ir-tooltip/readme.md
- - [igl-application-info](../igloo-calendar/igl-book-property/igl-booking-form/igl-application-info)
- - [igl-property-booked-by](../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
- - [igl-rate-plan](../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
- - [ir-booking-listing](../ir-booking-listing)
- - [ir-reservation-information](../ir-booking-details/ir-reservation-information)
- - [ir-room](../ir-booking-details/ir-room)
-=======
  - [igl-application-info](../../igloo-calendar/igl-book-property/igl-booking-form/igl-application-info)
  - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
  - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
->>>>>>> main:src/components/ui/ir-tooltip/readme.md
+ - [ir-room](../../ir-booking-details/ir-room)
 
 ### Graph
 ```mermaid

@@ -42,36 +42,20 @@
 
 ### Used by
 
-<<<<<<< HEAD:src/components/ir-select/readme.md
- - [igl-book-property-header](../igloo-calendar/igl-book-property/igl-book-property-header)
- - [ir-booking-header](../ir-booking-details/ir-booking-header)
- - [ir-booking-listing](../ir-booking-listing)
- - [ir-delete-modal](../ir-housekeeping/ir-delete-modal)
- - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
- - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
- - [ir-housekeeping](../ir-housekeeping)
- - [ir-listing-header](../ir-booking-listing/ir-listing-header)
- - [ir-listing-modal](../ir-booking-listing/ir-listing-modal)
- - [ir-option-details](../ir-payment-option/ir-option-details)
- - [ir-pickup](../ir-booking-details/ir-pickup)
- - [ir-room-guests](../ir-booking-details/ir-room-guests)
- - [ir-tasks-filters](../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
- - [ir-unit-status](../ir-housekeeping/ir-unit-status)
-=======
  - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-delete-modal](../../ir-housekeeping/ir-delete-modal)
- - [ir-guest-info](../../ir-guest-info)
  - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
- - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-unassigned-units](../../ir-housekeeping/ir-hk-unassigned-units)
+ - [ir-housekeeping](../../ir-housekeeping)
  - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../../ir-booking-listing/ir-listing-modal)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
+ - [ir-room-guests](../../ir-booking-details/ir-room-guests)
+ - [ir-tasks-filters](../../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
  - [ir-unit-status](../../ir-housekeeping/ir-unit-status)
->>>>>>> main:src/components/ui/ir-select/readme.md
 
 ### Graph
 ```mermaid

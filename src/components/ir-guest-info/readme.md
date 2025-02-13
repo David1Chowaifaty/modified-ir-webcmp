@@ -34,22 +34,13 @@
 
 ### Depends on
 
-<<<<<<< HEAD
 - [ir-spinner](../ui/ir-spinner)
-- [ir-icon](../ir-icon)
-- [ir-input-text](../ir-input-text)
-- [ir-country-picker](../ui/ir-country-picker)
-- [ir-phone-input](../ir-phone-input)
-- [ir-textarea](../ir-textarea)
-- [ir-button](../ir-button)
-=======
 - [ir-icon](../ui/ir-icon)
 - [ir-input-text](../ui/ir-input-text)
-- [ir-select](../ui/ir-select)
+- [ir-country-picker](../ui/ir-country-picker)
 - [ir-phone-input](../ui/ir-phone-input)
 - [ir-textarea](../ui/ir-textarea)
 - [ir-button](../ui/ir-button)
->>>>>>> main
 
 ### Graph
 ```mermaid

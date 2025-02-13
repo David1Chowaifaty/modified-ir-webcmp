@@ -49,23 +49,14 @@
 
 ### Used by
 
-<<<<<<< HEAD:src/components/ir-input-text/readme.md
- - [ir-country-picker](../ui/ir-country-picker)
- - [ir-guest-info](../ir-guest-info)
- - [ir-hk-user](../ir-housekeeping/ir-hk-user)
- - [ir-listing-header](../ir-booking-listing/ir-listing-header)
- - [ir-login](../ir-login)
- - [ir-option-details](../ir-payment-option/ir-option-details)
- - [ir-pickup](../ir-booking-details/ir-pickup)
- - [ir-room-guests](../ir-booking-details/ir-room-guests)
-=======
+ - [ir-country-picker](../ir-country-picker)
  - [ir-guest-info](../../ir-guest-info)
  - [ir-hk-user](../../ir-housekeeping/ir-hk-user)
  - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-login](../../ir-login)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
->>>>>>> main:src/components/ui/ir-input-text/readme.md
+ - [ir-room-guests](../../ir-booking-details/ir-room-guests)
 
 ### Graph
 ```mermaid

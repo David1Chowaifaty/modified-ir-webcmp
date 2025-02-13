@@ -31,16 +31,10 @@
 
 ### Depends on
 
-<<<<<<< HEAD
-- [ir-autocomplete](../../../../ir-autocomplete)
-- [ir-tooltip](../../../../ir-tooltip)
-- [ir-country-picker](../../../../ui/ir-country-picker)
-- [ir-phone-input](../../../../ir-phone-input)
-=======
 - [ir-autocomplete](../../../../ui/ir-autocomplete)
 - [ir-tooltip](../../../../ui/ir-tooltip)
+- [ir-country-picker](../../../../ui/ir-country-picker)
 - [ir-phone-input](../../../../ui/ir-phone-input)
->>>>>>> main
 
 ### Graph
 ```mermaid

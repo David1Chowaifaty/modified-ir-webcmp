@@ -29,18 +29,12 @@
 - [ir-loading-screen](../../ir-loading-screen)
 - [ir-toast](../../ui/ir-toast)
 - [ir-interceptor](../../ir-interceptor)
-<<<<<<< HEAD
 - [ir-tasks-header](ir-tasks-header)
 - [ir-tasks-filters](ir-tasks-filters)
 - [ir-tasks-table](ir-tasks-table)
-- [ir-modal](../../ir-modal)
-=======
-- [ir-title](../../ir-title)
-- [ir-button](../../ui/ir-button)
-- [ir-select](../../ui/ir-select)
-- [ir-checkbox](../../ui/ir-checkbox)
 - [ir-modal](../../ui/ir-modal)
->>>>>>> main
+- [ir-sidebar](../../ui/ir-sidebar)
+- [ir-hk-archive](ir-hk-archive)
 
 ### Graph
 ```mermaid
@@ -52,12 +46,24 @@ graph TD;
   ir-hk-tasks --> ir-tasks-filters
   ir-hk-tasks --> ir-tasks-table
   ir-hk-tasks --> ir-modal
+  ir-hk-tasks --> ir-sidebar
+  ir-hk-tasks --> ir-hk-archive
   ir-tasks-header --> ir-button
   ir-button --> ir-icons
   ir-tasks-filters --> ir-button
   ir-tasks-filters --> ir-select
   ir-tasks-table --> ir-checkbox
   ir-modal --> ir-button
+  ir-sidebar --> ir-icon
+  ir-hk-archive --> ir-title
+  ir-hk-archive --> ir-select
+  ir-hk-archive --> igl-date-range
+  ir-hk-archive --> ir-icon
+  ir-hk-archive --> ir-button
+  ir-title --> ir-icon
+  igl-date-range --> ir-date-range
+  igl-date-range --> ir-date-picker
+  igl-date-range --> ir-date-view
   style ir-hk-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
