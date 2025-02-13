@@ -52,9 +52,9 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [ir-icon](../../ir-icon)
-- [ir-select](../../ir-select)
-- [ir-button](../../ir-button)
+- [ir-icon](../../ui/ir-icon)
+- [ir-select](../../ui/ir-select)
+- [ir-button](../../ui/ir-button)
 
 ### Graph
 ```mermaid

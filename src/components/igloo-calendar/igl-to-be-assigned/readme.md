@@ -36,7 +36,7 @@
 ### Depends on
 
 - [igl-tba-category-view](igl-tba-category-view)
-- [ir-button](../../ir-button)
+- [ir-button](../../ui/ir-button)
 
 ### Graph
 ```mermaid

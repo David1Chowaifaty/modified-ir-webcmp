@@ -39,7 +39,7 @@
 
 ### Depends on
 
-- [ir-icon](../ir-icon)
+- [ir-icon](../ui/ir-icon)
 
 ### Graph
 ```mermaid

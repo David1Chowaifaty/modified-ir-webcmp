@@ -33,7 +33,7 @@
 
 ### Depends on
 
-- [ir-toast](../ir-toast)
+- [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [igl-book-property](../igloo-calendar/igl-book-property)
 
@@ -57,6 +57,7 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
+  igl-date-range --> ir-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-room-type --> igl-rate-plan

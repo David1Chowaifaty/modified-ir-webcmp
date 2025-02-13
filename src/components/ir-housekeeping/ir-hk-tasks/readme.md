@@ -27,12 +27,20 @@
 ### Depends on
 
 - [ir-loading-screen](../../ir-loading-screen)
-- [ir-toast](../../ir-toast)
+- [ir-toast](../../ui/ir-toast)
 - [ir-interceptor](../../ir-interceptor)
+<<<<<<< HEAD
 - [ir-tasks-header](ir-tasks-header)
 - [ir-tasks-filters](ir-tasks-filters)
 - [ir-tasks-table](ir-tasks-table)
 - [ir-modal](../../ir-modal)
+=======
+- [ir-title](../../ir-title)
+- [ir-button](../../ui/ir-button)
+- [ir-select](../../ui/ir-select)
+- [ir-checkbox](../../ui/ir-checkbox)
+- [ir-modal](../../ui/ir-modal)
+>>>>>>> main
 
 ### Graph
 ```mermaid

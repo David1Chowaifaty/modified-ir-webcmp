@@ -1,0 +1,35 @@
+@import url('../../../assets/air-datepicker.css');
+/* @import url('../../assets/tempus-dominus.min.css'); */
+:host {
+  display: block;
+}
+.air-datepicker {
+  font-size: auto;
+}
+.air-datepicker-body--day-name {
+  color: #000;
+  font-weight: 700;
+}
+.air-datepicker-cell.-selected-,
+.air-datepicker-cell.-selected-.-focus-,
+.air-datepicker-cell.-selected-.-current- {
+  background: #1e9ff2;
+}
+.air-datepicker-cell.-disabled- {
+  text-decoration: line-through;
+}
+.air-datepicker-cell.-current- {
+  color: #1e9ff2;
+}
+.ir-date-picker-trigger {
+  position: relative;
+  box-sizing: border-box;
+  width: fit-content;
+  height: fit-content;
+}
+.ir-date-picker-element {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}

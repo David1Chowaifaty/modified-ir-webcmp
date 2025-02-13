@@ -1,6 +1,6 @@
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { IToast } from '../ir-toast/toast';
+import { IToast } from '@components/ui/ir-toast/toast';
 import interceptor_requests from '@/stores/ir-interceptor.store';
 
 @Component({

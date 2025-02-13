@@ -35,10 +35,17 @@
 
 ### Depends on
 
+<<<<<<< HEAD
 - [ir-date-view](../../ir-date-view)
 - [ir-label](../../ui/ir-label)
 - [ota-label](../../ota-label)
 - [ir-button](../../ir-button)
+=======
+- [ota-label](../../ui/ota-label)
+- [ir-date-view](../../ir-date-view)
+- [ir-label](../../ui/ir-label)
+- [ir-icons](../../ui/ir-icons)
+>>>>>>> main
 - [igl-block-dates-view](../igl-block-dates-view)
 
 ### Graph
@@ -46,8 +53,12 @@
 graph TD;
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
+<<<<<<< HEAD
   igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-button
+=======
+  igl-booking-event-hover --> ir-icons
+>>>>>>> main
   igl-booking-event-hover --> igl-block-dates-view
   ir-button --> ir-icons
   igl-block-dates-view --> ir-date-view

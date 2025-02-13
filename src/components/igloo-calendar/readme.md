@@ -34,7 +34,7 @@
 
 ### Depends on
 
-- [ir-toast](../ir-toast)
+- [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [igl-to-be-assigned](igl-to-be-assigned)
 - [igl-legends](igl-legends)
@@ -43,10 +43,10 @@
 - [igl-cal-footer](igl-cal-footer)
 - [ir-loading-screen](../ir-loading-screen)
 - [igl-book-property](igl-book-property)
-- [ir-sidebar](../ir-sidebar)
+- [ir-sidebar](../ui/ir-sidebar)
 - [ir-room-nights](ir-room-nights)
 - [ir-booking-details](../ir-booking-details)
-- [ir-modal](../ir-modal)
+- [ir-modal](../ui/ir-modal)
 
 ### Graph
 ```mermaid
@@ -77,8 +77,12 @@ graph TD;
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
+<<<<<<< HEAD
   igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-button
+=======
+  igl-booking-event-hover --> ir-icons
+>>>>>>> main
   igl-booking-event-hover --> igl-block-dates-view
   igl-block-dates-view --> ir-date-view
   ir-modal --> ir-button
@@ -94,6 +98,7 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
+  igl-date-range --> ir-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-room-type --> igl-rate-plan

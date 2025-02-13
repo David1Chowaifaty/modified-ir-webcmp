@@ -30,9 +30,9 @@
 ### Depends on
 
 - [ir-title](../../ir-title)
-- [ir-input-text](../../ir-input-text)
-- [ir-phone-input](../../ir-phone-input)
-- [ir-button](../../ir-button)
+- [ir-input-text](../../ui/ir-input-text)
+- [ir-phone-input](../../ui/ir-phone-input)
+- [ir-button](../../ui/ir-button)
 
 ### Graph
 ```mermaid

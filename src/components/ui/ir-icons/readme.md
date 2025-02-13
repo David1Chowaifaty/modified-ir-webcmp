@@ -19,7 +19,7 @@
 ### Used by
 
  - [ir-booking-listing](../../ir-booking-listing)
- - [ir-button](../../ir-button)
+ - [ir-button](../ir-button)
  - [ir-channel-general](../../ir-channel/ir-channel-general)
  - [ir-login](../../ir-login)
  - [ir-payment-option](../../ir-payment-option)

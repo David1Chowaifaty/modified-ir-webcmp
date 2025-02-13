@@ -28,12 +28,12 @@
 
 ### Depends on
 
-- [ir-toast](../ir-toast)
+- [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [ir-icons](../ui/ir-icons)
-- [ir-switch](../ir-switch)
-- [ir-button](../ir-button)
-- [ir-sidebar](../ir-sidebar)
+- [ir-switch](../ui/ir-switch)
+- [ir-button](../ui/ir-button)
+- [ir-sidebar](../ui/ir-sidebar)
 - [ir-option-details](ir-option-details)
 
 ### Graph

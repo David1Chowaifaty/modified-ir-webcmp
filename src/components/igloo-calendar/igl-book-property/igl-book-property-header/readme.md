@@ -48,9 +48,9 @@
 
 ### Depends on
 
-- [ir-autocomplete](../../../ir-autocomplete)
-- [ir-select](../../../ir-select)
-- [ir-button](../../../ir-button)
+- [ir-autocomplete](../../../ui/ir-autocomplete)
+- [ir-select](../../../ui/ir-select)
+- [ir-button](../../../ui/ir-button)
 - [igl-date-range](../../igl-date-range)
 
 ### Graph
@@ -61,6 +61,7 @@ graph TD;
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   ir-button --> ir-icons
+  igl-date-range --> ir-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-booking-overview-page --> igl-book-property-header

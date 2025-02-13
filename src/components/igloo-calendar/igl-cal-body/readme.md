@@ -36,7 +36,11 @@
 
 ### Depends on
 
+<<<<<<< HEAD
 - [ir-interactive-title](../../ui/ir-interactive-title)
+=======
+- [ir-popover](../../ui/ir-popover)
+>>>>>>> main
 - [igl-booking-event](../igl-booking-event)
 - [ir-modal](../../ir-modal)
 
@@ -49,8 +53,12 @@ graph TD;
   igl-booking-event --> igl-booking-event-hover
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
+<<<<<<< HEAD
   igl-booking-event-hover --> ota-label
   igl-booking-event-hover --> ir-button
+=======
+  igl-booking-event-hover --> ir-icons
+>>>>>>> main
   igl-booking-event-hover --> igl-block-dates-view
   ir-button --> ir-icons
   igl-block-dates-view --> ir-date-view

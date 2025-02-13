@@ -1,4 +1,4 @@
-import { IToast } from '@/components/ir-toast/toast';
+import { IToast } from '@/components/ui/ir-toast/toast';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { Booking } from '@/models/booking.dto';
 import calendar_data from '@/stores/calendar-data';
@@ -26,8 +26,8 @@ export class IrBookingHeader {
 
   @Event() toast: EventEmitter<IToast>;
   @Event() closeSidebar: EventEmitter<null>;
-  @Event() resetbooking: EventEmitter<null>;
-  @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
+  @Event() resetBookingEvt: EventEmitter<null>;
+  @Event() openSidebar: EventEmitter<OpenSidebarEvent>;
 
   private confirmationBG = {
     '001': 'bg-ir-orange',
@@ -68,7 +68,7 @@ export class IrBookingHeader {
         position: 'top-right',
       });
       this.bookingStatus = null;
-      this.resetbooking.emit(null);
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
     }

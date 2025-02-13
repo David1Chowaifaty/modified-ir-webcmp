@@ -30,10 +30,10 @@
 ### Depends on
 
 - [igl-book-property-container](../../igl-book-property-container)
-- [ir-button](../../ir-button)
-- [ir-input-text](../../ir-input-text)
-- [ir-select](../../ir-select)
-- [ir-date-picker](../../ir-date-picker)
+- [ir-button](../../ui/ir-button)
+- [ir-input-text](../../ui/ir-input-text)
+- [ir-select](../../ui/ir-select)
+- [ir-date-picker](../../ui/ir-date-picker)
 
 ### Graph
 ```mermaid
@@ -60,6 +60,7 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
+  igl-date-range --> ir-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-room-type --> igl-rate-plan

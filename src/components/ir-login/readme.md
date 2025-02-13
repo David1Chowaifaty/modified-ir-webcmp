@@ -21,10 +21,10 @@
 ### Depends on
 
 - [ir-interceptor](../ir-interceptor)
-- [ir-toast](../ir-toast)
-- [ir-input-text](../ir-input-text)
+- [ir-toast](../ui/ir-toast)
+- [ir-input-text](../ui/ir-input-text)
 - [ir-icons](../ui/ir-icons)
-- [ir-button](../ir-button)
+- [ir-button](../ui/ir-button)
 
 ### Graph
 ```mermaid

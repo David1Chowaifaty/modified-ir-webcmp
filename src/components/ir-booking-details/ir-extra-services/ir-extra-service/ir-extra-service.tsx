@@ -18,7 +18,7 @@ export class IrExtraService {
   @Prop() currencySymbol: string;
 
   @Event() editExtraService: EventEmitter<ExtraService>;
-  @Event() resetBookingData: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
 
   private irModalRef: HTMLIrModalElement;
   private bookingService = new BookingService();
@@ -30,7 +30,7 @@ export class IrExtraService {
         is_remove: true,
         booking_nbr: this.bookingNumber,
       });
-      this.resetBookingData.emit(null);
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
     }

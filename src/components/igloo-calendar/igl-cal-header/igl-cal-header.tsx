@@ -31,6 +31,7 @@ export class IglCalHeader {
   private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
+  dateRef: HTMLIrButtonElement;
   componentWillLoad() {
     try {
       this.initializeRoomsList();
@@ -246,29 +247,31 @@ export class IglCalHeader {
                 visibleBackgroundOnHover
               ></ir-button>
             )}
-            <ir-button
-              btn_styles="caledarBtns"
+            <ir-date-picker
+              minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
+              // autoApply
+              // singleDatePicker
+              onDateChanged={evt => {
+                console.log('evt', evt);
+                this.handleDateSelect(evt);
+              }}
+              // class="datePickerHidden"
               class={'date_btn'}
-              variant="icon"
-              icon_name="calendar"
-              style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
+              title={locales.entries.Lcz_Navigate}
               data-toggle="tooltip"
               data-placement="bottom"
-              title={locales.entries.Lcz_Navigate}
-              onClickHandler={() => this.handleOptionEvent('calendar')}
-              visibleBackgroundOnHover
             >
-              <ir-date-picker
-                minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
-                autoApply
-                singleDatePicker
-                onDateChanged={evt => {
-                  console.log('evt', evt);
-                  this.handleDateSelect(evt);
-                }}
-                class="datePickerHidden"
-              ></ir-date-picker>
-            </ir-button>
+              <ir-button
+                slot="trigger"
+                btn_styles="caledarBtns"
+                variant="icon"
+                icon_name="calendar"
+                style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
+                onClickHandler={() => this.handleOptionEvent('calendar')}
+                visibleBackgroundOnHover
+                ref={el => (this.dateRef = el)}
+              ></ir-button>
+            </ir-date-picker>
 
             <ir-button
               variant="icon"

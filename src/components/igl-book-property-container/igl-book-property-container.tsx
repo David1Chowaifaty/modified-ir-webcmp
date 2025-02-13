@@ -128,7 +128,7 @@ export class IglBookPropertyContainer {
             language={this.language}
             propertyid={this.propertyid}
             bookingData={this.bookingItem}
-            onResetBookingData={(e: CustomEvent) => {
+            onResetBookingEvt={(e: CustomEvent) => {
               e.stopImmediatePropagation();
               e.stopPropagation();
               this.resetBookingData.emit(null);

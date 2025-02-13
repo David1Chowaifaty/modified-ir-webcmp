@@ -18,6 +18,7 @@ export class IrPickup {
   @Prop() defaultPickupData: IBookingPickupInfo | null;
   @Prop() numberOfPersons: number = 0;
   @Prop() bookingNumber: string;
+  @Prop() bookingDates: { from: string; to: string };
 
   @State() isLoading = false;
   @State() allowedOptionsByLocation: IAllowedOptions[] = [];
@@ -36,7 +37,7 @@ export class IrPickup {
   @State() cause: keyof TPickupData | null = null;
 
   @Event() closeModal: EventEmitter<null>;
-  @Event() resetBookingData: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
 
   private pickupService = new PickupService();
 
@@ -201,7 +202,7 @@ export class IrPickup {
         this.cause = null;
       }
       await this.pickupService.savePickup(this.pickupData, this.bookingNumber, this.defaultPickupData !== null && this.pickupData.location === -1);
-      this.resetBookingData.emit(null);
+      this.resetBookingEvt.emit(null);
       this.closeModal.emit(null);
     } catch (error) {
       console.error(error);
@@ -235,14 +236,25 @@ export class IrPickup {
                     </div>
                     <div class="form-control form-control-md col-7 d-flex align-items-center pl-0">
                       <ir-date-picker
+                        date={this.pickupData.arrival_date}
+                        maxDate={this.bookingDates?.to}
                         minDate={moment().format('YYYY-MM-DD')}
-                        autoApply
+                        // customPicker={false}
+                        // autoApply
                         // format="ddd, DD M YYYY"
-                        singleDatePicker
+                        // singleDatePicker
                         onDateChanged={evt => {
-                          this.updatePickupData('arrival_date', evt.detail.start.format('YYYY-MM-DD'));
+                          this.updatePickupData('arrival_date', evt.detail.start?.format('YYYY-MM-DD'));
                         }}
-                      ></ir-date-picker>
+                      >
+                        <input
+                          type="text"
+                          slot="trigger"
+                          value={moment(this.pickupData.arrival_date).format('MMM DD, YYYY')}
+                          class="form-control input-sm text-center"
+                          style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}
+                        ></input>
+                      </ir-date-picker>
                     </div>
                   </div>
                 </div>

@@ -34,8 +34,8 @@
 
 ### Depends on
 
-- [ir-button](../../ir-button)
-- [ir-date-picker](../../ir-date-picker)
+- [ir-button](../../ui/ir-button)
+- [ir-date-picker](../../ui/ir-date-picker)
 
 ### Graph
 ```mermaid
