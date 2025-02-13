@@ -15,10 +15,10 @@
 
 ## Events
 
-| Event              | Description | Type                |
-| ------------------ | ----------- | ------------------- |
-| `closeModal`       |             | `CustomEvent<null>` |
-| `resetBookingData` |             | `CustomEvent<null>` |
+| Event             | Description | Type                |
+| ----------------- | ----------- | ------------------- |
+| `closeModal`      |             | `CustomEvent<null>` |
+| `resetBookingEvt` |             | `CustomEvent<null>` |
 
 
 ## Dependencies
@@ -30,8 +30,8 @@
 ### Depends on
 
 - [ir-title](../../../ir-title)
-- [ir-date-picker](../../../ir-date-picker)
-- [ir-button](../../../ir-button)
+- [ir-date-picker](../../../ui/ir-date-picker)
+- [ir-button](../../../ui/ir-button)
 - [ir-price-input](../../../ui/ir-price-input)
 
 ### Graph

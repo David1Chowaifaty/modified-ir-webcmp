@@ -15,7 +15,7 @@ export class IrBookingExtraNote {
   @State() note = '';
 
   @Event() closeModal: EventEmitter<null>;
-  @Event() resetbooking: EventEmitter<Booking | null>;
+  @Event() resetBookingEvt: EventEmitter<Booking | null>;
 
   private bookingService = new BookingService();
   componentWillLoad() {
@@ -52,7 +52,7 @@ export class IrBookingExtraNote {
         Is_Non_Technical_Change: true,
         extras: prevExtras,
       });
-      this.resetbooking.emit(res);
+      this.resetBookingEvt.emit(res);
       this.closeModal.emit(null);
     } catch (error) {
       console.error(error);

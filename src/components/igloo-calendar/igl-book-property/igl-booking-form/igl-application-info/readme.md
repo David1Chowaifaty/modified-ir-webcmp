@@ -27,7 +27,7 @@
 
 ### Depends on
 
-- [ir-tooltip](../../../../ir-tooltip)
+- [ir-tooltip](../../../../ui/ir-tooltip)
 
 ### Graph
 ```mermaid

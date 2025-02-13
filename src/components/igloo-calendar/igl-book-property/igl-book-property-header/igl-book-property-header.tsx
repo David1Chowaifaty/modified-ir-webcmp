@@ -1,10 +1,11 @@
 import { Component, Host, Prop, h, Event, EventEmitter } from '@stencil/core';
 import { TAdultChildConstraints, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '../../../../models/igl-book-property';
-import { IToast } from '../../../ir-toast/toast';
+
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import calendar_data from '@/stores/calendar-data';
+import { IToast } from '@/components/ui/ir-toast/toast';
 
 @Component({
   tag: 'igl-book-property-header',

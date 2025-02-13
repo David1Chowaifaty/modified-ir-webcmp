@@ -6,7 +6,7 @@ import { IPageTwoDataUpdateProps } from '@/models/models';
 import { IglBookPropertyService } from './igl-book-property.service';
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TEventType, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '@/models/igl-book-property';
 import locales from '@/stores/locales.store';
-import { IToast } from '@/components/ir-toast/toast';
+import { IToast } from '@/components/ui/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { calculateTotalRooms, modifyBookingStore, reserveRooms, resetBookingStore } from '@/stores/booking.store';
@@ -44,7 +44,7 @@ export class IglBookProperty {
 
   @Event() closeBookingWindow: EventEmitter<{ [key: string]: any }>;
   @Event() blockedCreated: EventEmitter<RoomBlockDetails>;
-  @Event() resetBookingData: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
   @Event({ bubbles: true, composed: true }) animateIrButton: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) animateIrSelect: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
@@ -603,7 +603,7 @@ export class IglBookProperty {
       });
       // console.log(serviceParams);
       await this.bookingService.doReservation(serviceParams);
-      this.resetBookingData.emit(null);
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       console.error('Error booking user:', error);
     } finally {

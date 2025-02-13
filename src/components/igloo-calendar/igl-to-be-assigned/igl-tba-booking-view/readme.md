@@ -36,7 +36,7 @@
 
 ### Depends on
 
-- [ir-button](../../../ir-button)
+- [ir-button](../../../ui/ir-button)
 
 ### Graph
 ```mermaid

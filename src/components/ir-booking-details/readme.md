@@ -51,17 +51,17 @@
 - [ir-booking-extra-note](ir-booking-extra-note)
 - [ir-extra-service-config](./ir-extra-services/ir-extra-service-config)
 - [ir-spinner](../ui/ir-spinner)
-- [ir-toast](../ir-toast)
+- [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [ir-booking-header](ir-booking-header)
 - [ir-reservation-information](ir-reservation-information)
 - [ir-date-view](../ir-date-view)
-- [ir-button](../ir-button)
+- [ir-button](../ui/ir-button)
 - [ir-room](ir-room)
 - [ir-pickup-view](ir-pickup-view)
 - [ir-extra-services](ir-extra-services)
 - [ir-payment-details](ir-payment-details)
-- [ir-sidebar](../ir-sidebar)
+- [ir-sidebar](../ui/ir-sidebar)
 - [igl-book-property](../igloo-calendar/igl-book-property)
 
 ### Graph
@@ -147,6 +147,7 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
+  igl-date-range --> ir-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-room-type --> igl-rate-plan

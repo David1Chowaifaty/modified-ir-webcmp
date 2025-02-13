@@ -20,13 +20,13 @@
 ### Depends on
 
 - [ir-loading-screen](../../ir-loading-screen)
-- [ir-toast](../../ir-toast)
+- [ir-toast](../../ui/ir-toast)
 - [ir-interceptor](../../ir-interceptor)
 - [ir-title](../../ir-title)
-- [ir-button](../../ir-button)
-- [ir-select](../../ir-select)
-- [ir-checkbox](../../ir-checkbox)
-- [ir-modal](../../ir-modal)
+- [ir-button](../../ui/ir-button)
+- [ir-select](../../ui/ir-select)
+- [ir-checkbox](../../ui/ir-checkbox)
+- [ir-modal](../../ui/ir-modal)
 
 ### Graph
 ```mermaid

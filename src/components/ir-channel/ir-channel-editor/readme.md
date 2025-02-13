@@ -32,9 +32,9 @@
 
 - [ir-channel-general](../ir-channel-general)
 - [ir-channel-mapping](../ir-channel-mapping)
-- [ir-icon](../../ir-icon)
+- [ir-icon](../../ui/ir-icon)
 - [ir-channel-header](../ir-channel-header)
-- [ir-button](../../ir-button)
+- [ir-button](../../ui/ir-button)
 
 ### Graph
 ```mermaid

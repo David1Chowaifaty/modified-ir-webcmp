@@ -20,7 +20,7 @@
 
  - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
  - [ir-booking-listing](../../ir-booking-listing)
- - [ir-button](../../ir-button)
+ - [ir-button](../ir-button)
  - [ir-channel-general](../../ir-channel/ir-channel-general)
  - [ir-login](../../ir-login)
  - [ir-payment-option](../../ir-payment-option)

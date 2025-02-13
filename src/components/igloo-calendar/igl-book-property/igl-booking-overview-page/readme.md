@@ -56,6 +56,7 @@ graph TD;
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
   ir-button --> ir-icons
+  igl-date-range --> ir-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
   igl-room-type --> igl-rate-plan

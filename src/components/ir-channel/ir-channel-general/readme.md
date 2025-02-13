@@ -27,7 +27,7 @@
 
 ### Depends on
 
-- [ir-combobox](../../ir-combobox)
+- [ir-combobox](../../ui/ir-combobox)
 - [ir-icons](../../ui/ir-icons)
 
 ### Graph

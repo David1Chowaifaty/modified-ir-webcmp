@@ -9,6 +9,7 @@
 
 | Property              | Attribute                | Description                                              | Type                                            | Default     |
 | --------------------- | ------------------------ | -------------------------------------------------------- | ----------------------------------------------- | ----------- |
+| `containerStyle`      | --                       | inline styles for the component container                | `{ [key: string]: string; }`                    | `undefined` |
 | `content`             | `content`                | The main text or HTML content to display                 | `string`                                        | `undefined` |
 | `display`             | `display`                |                                                          | `"flex" \| "inline"`                            | `'flex'`    |
 | `ignoreEmptyContent`  | `ignore-empty-content`   | If true, label will ignore checking for an empty content | `boolean`                                       | `false`     |
@@ -24,12 +25,14 @@
 
 ### Used by
 
+ - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-booking-event-hover --> ir-label
   ir-reservation-information --> ir-label
   ir-room --> ir-label
   style ir-label fill:#f9f,stroke:#333,stroke-width:4px

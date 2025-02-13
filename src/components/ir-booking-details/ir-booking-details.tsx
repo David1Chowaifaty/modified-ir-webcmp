@@ -5,7 +5,7 @@ import { BookingService } from '@/services/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
-import { IToast } from '../ir-toast/toast';
+import { IToast } from '@components/ui/ir-toast/toast';
 import { ICountry, IEntries } from '@/models/IBooking';
 import { IPaymentAction, PaymentService } from '@/services/payment.service';
 import Token from '@/models/Token';
@@ -163,7 +163,7 @@ export class IrBookingDetails {
     this.bookingItem = e.detail;
   }
 
-  @Listen('resetbooking')
+  @Listen('resetBookingEvt')
   async handleResetBooking(e: CustomEvent<Booking | null>) {
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -294,6 +294,7 @@ export class IrBookingDetails {
       case 'pickup':
         return (
           <ir-pickup
+            bookingDates={{ from: this.booking.from_date, to: this.booking.to_date }}
             slot="sidebar-body"
             defaultPickupData={this.booking.pickup_info}
             bookingNumber={this.booking.booking_nbr}

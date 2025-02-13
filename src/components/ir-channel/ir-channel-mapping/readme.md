@@ -13,9 +13,9 @@
 
 ### Depends on
 
-- [ir-icon](../../ir-icon)
-- [ir-button](../../ir-button)
-- [ir-combobox](../../ir-combobox)
+- [ir-icon](../../ui/ir-icon)
+- [ir-button](../../ui/ir-button)
+- [ir-combobox](../../ui/ir-combobox)
 
 ### Graph
 ```mermaid
