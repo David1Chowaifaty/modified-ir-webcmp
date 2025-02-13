@@ -2,6 +2,14 @@ export interface IExposedHouseKeepingSetup {
   statuses: IHKStatuses[];
   housekeepers: IHouseKeepers[];
   units_assignments: IUnitAssignments;
+  cleaning_frequencies: ExposedHKSetup[];
+  cleaning_periods: ExposedHKSetup[];
+  dusty_periods: ExposedHKSetup[];
+  highlight_checkin_options: ExposedHKSetup[];
+}
+export interface ExposedHKSetup {
+  code: string;
+  description: string;
 }
 
 export interface IHouseKeepers {

@@ -109,8 +109,10 @@ export class IrTasksTable {
   }
 
   private emitSelectedTasks() {
+    if (this.tasks.length === 0) {
+      return;
+    }
     const filteredTasks = this.tasks.filter(t => this.selectedIds.includes(t.id));
-    console.log('filteredTasks', filteredTasks);
     this.rowSelectChange.emit(filteredTasks);
   }
 

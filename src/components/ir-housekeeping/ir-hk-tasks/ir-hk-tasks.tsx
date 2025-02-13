@@ -8,6 +8,7 @@ import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, h, Element, Watch, Event, EventEmitter, Listen } from '@stencil/core';
 import moment from 'moment';
 import { v4 } from 'uuid';
+import { TaskFilters } from './types';
 
 @Component({
   tag: 'ir-hk-tasks',
@@ -31,6 +32,8 @@ export class IrHkTasks {
   @State() tasks: Task[] = [];
   @State() selectedTasks: Task[] = [];
   @State() isSidebarOpen: boolean;
+  @State() isApplyFiltersLoading: boolean;
+  @State() filters: TaskFilters;
 
   @Event({ bubbles: true, composed: true }) clearSelectedHkTasks: EventEmitter<void>;
 
@@ -162,10 +165,36 @@ export class IrHkTasks {
         return;
       }
       await this.houseKeepingService.executeHKAction({ actions: this.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id, unit_id: t.unit.id })) });
+      await this.fetchTasksWithFilters();
     } finally {
       this.selectedTasks = [];
       this.clearSelectedHkTasks.emit();
       this.modal.closeModal();
+    }
+  }
+
+  private async applyFilters(e: CustomEvent) {
+    try {
+      this.isApplyFiltersLoading = true;
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      this.filters = { ...e.detail };
+      await this.fetchTasksWithFilters();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isApplyFiltersLoading = false;
+    }
+  }
+  private async fetchTasksWithFilters() {
+    const tasks = await this.houseKeepingService.getHkTasks({
+      ...this.filters,
+      property_id: this.property_id,
+      from_date: moment().format('YYYY-MM-DD'),
+      to_date: moment().add(2, 'days').format('YYYY-MM-DD'),
+    });
+    if (tasks) {
+      this.updateTasks(tasks);
     }
   }
 
@@ -180,7 +209,12 @@ export class IrHkTasks {
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
           <ir-tasks-header onHeaderButtonPress={this.handleHeaderButtonPress.bind(this)} isCleanedEnabled={this.selectedTasks.length > 0}></ir-tasks-header>
           <div class="d-flex flex-column flex-md-row mt-1 " style={{ gap: '1rem' }}>
-            <ir-tasks-filters></ir-tasks-filters>
+            <ir-tasks-filters
+              isLoading={this.isApplyFiltersLoading}
+              onApplyFilters={e => {
+                this.applyFilters(e);
+              }}
+            ></ir-tasks-filters>
             <ir-tasks-table
               onRowSelectChange={e => {
                 e.stopImmediatePropagation();

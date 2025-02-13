@@ -1003,6 +1003,7 @@ export namespace Components {
         "switchId": string;
     }
     interface IrTasksFilters {
+        "isLoading": boolean;
     }
     interface IrTasksHeader {
         "isCleanedEnabled": boolean;
@@ -2706,8 +2707,7 @@ declare global {
         new (): HTMLIrSwitchElement;
     };
     interface HTMLIrTasksFiltersElementEventMap {
-        "applyClicked": TaskFilters;
-        "resetClicked": TaskFilters;
+        "applyFilters": TaskFilters;
     }
     interface HTMLIrTasksFiltersElement extends Components.IrTasksFilters, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksFiltersElementEventMap>(type: K, listener: (this: HTMLIrTasksFiltersElement, ev: IrTasksFiltersCustomEvent<HTMLIrTasksFiltersElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4056,8 +4056,8 @@ declare namespace LocalJSX {
         "switchId"?: string;
     }
     interface IrTasksFilters {
-        "onApplyClicked"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
-        "onResetClicked"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
+        "isLoading"?: boolean;
+        "onApplyFilters"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
     }
     interface IrTasksHeader {
         "isCleanedEnabled"?: boolean;

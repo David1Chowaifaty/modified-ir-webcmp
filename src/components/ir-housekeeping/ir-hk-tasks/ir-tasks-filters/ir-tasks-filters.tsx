@@ -1,6 +1,6 @@
-import { Component, Event, EventEmitter, h, State } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import { TaskFilters } from '../types';
-import moment from 'moment';
+import housekeeping_store from '@/stores/housekeeping.store';
 
 @Component({
   tag: 'ir-tasks-filters',
@@ -8,31 +8,50 @@ import moment from 'moment';
   scoped: true,
 })
 export class IrTasksFilters {
+  @Prop() isLoading: boolean;
+
   @State() filters: TaskFilters = {
-    period: '',
-    housekeepers: '',
-    cleaning_frequency: '',
-    dusty_units: '',
-    highlight_check_ins: '',
+    cleaning_periods: {
+      code: '',
+    },
+    housekeepers: {
+      code: '',
+    },
+    cleaning_frequencies: { code: '' },
+    dusty_units: { code: '' },
+    highlight_check_ins: { code: '' },
   };
+
   @State() collapsed: boolean = false;
 
-  @Event() applyClicked: EventEmitter<TaskFilters>;
-  @Event() resetClicked: EventEmitter<TaskFilters>;
+  @Event() applyFilters: EventEmitter<TaskFilters>;
 
-  private generateDaysFilter() {
-    let list = [{ code: '0', value: 'Do not include' }];
-    for (let i = 3; i <= 7; i++) {
-      list.push({ code: i.toString(), value: `Cleaned ${i} ago` });
-    }
-    return list;
+  private baseFilters: TaskFilters;
+
+  componentWillLoad() {
+    this.baseFilters = {
+      cleaning_periods: housekeeping_store?.hk_criteria?.cleaning_periods[0],
+      housekeepers: { code: '000' },
+      cleaning_frequencies: housekeeping_store?.hk_criteria?.cleaning_frequencies[0],
+      dusty_units: housekeeping_store?.hk_criteria?.dusty_periods[0],
+      highlight_check_ins: housekeeping_store?.hk_criteria?.highlight_checkin_options[0],
+    };
+    this.filters = { ...this.baseFilters };
   }
-  private generateCheckinsDaysFilter() {
-    let list = [{ code: '0', value: 'No' }];
-    for (let i = 2; i <= 10; i++) {
-      list.push({ code: i.toString(), value: `Cleaned ${i} ago` });
-    }
-    return list;
+
+  private updateFilter(params: Partial<TaskFilters>) {
+    this.filters = { ...this.filters, ...params };
+  }
+  private applyFiltersEvt(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.applyFilters.emit(this.filters);
+  }
+  private resetFilters(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.filters = { ...this.baseFilters };
+    this.applyFilters.emit(this.filters);
   }
   render() {
     return (
@@ -67,38 +86,49 @@ export class IrTasksFilters {
             <fieldset class="pt-1">
               <p class="m-0 p-0">Period</p>
               <ir-select
+                selectedValue={this.filters?.cleaning_periods?.code}
                 LabelAvailable={false}
                 showFirstOption={false}
-                data={[
-                  { code: '001', value: 'For today' },
-                  { code: '002', value: `Until ${moment().format('DD MMM')}` },
-                  { code: '002', value: `Until ${moment().add(10, 'days').format('DD MMM')}` },
-                ].map(v => ({
-                  text: v.value,
+                data={housekeeping_store?.hk_criteria?.cleaning_periods.map(v => ({
+                  text: v.description,
                   value: v.code,
                 }))}
+                onSelectChange={e => {
+                  this.updateFilter({ cleaning_periods: { code: e.detail } });
+                }}
               ></ir-select>
             </fieldset>
             <fieldset>
               <p class="m-0 p-0">Housekeepers</p>
               <ir-select
+                selectedValue={this.filters?.housekeepers?.code}
                 LabelAvailable={false}
                 showFirstOption={false}
-                data={this.generateDaysFilter().map(v => ({
-                  text: v.value,
-                  value: v.code,
-                }))}
+                data={[
+                  { text: 'All housekeepers', value: '000' },
+                  ...housekeeping_store?.hk_criteria?.housekeepers.map(v => ({
+                    text: v.name,
+                    value: v.id.toString(),
+                  })),
+                ]}
+                onSelectChange={e => {
+                  this.updateFilter({ housekeepers: { code: e.detail } });
+                }}
               ></ir-select>
             </fieldset>
             <fieldset>
               <p class="m-0 p-0">Cleaning frequency</p>
               <ir-select
+                selectedValue={this.filters?.cleaning_frequencies?.code}
                 LabelAvailable={false}
                 showFirstOption={false}
-                data={this.generateDaysFilter().map(v => ({
-                  text: v.value,
+                data={housekeeping_store?.hk_criteria?.cleaning_frequencies.map(v => ({
+                  text: v.description,
                   value: v.code,
                 }))}
+                onSelectChange={e => {
+                  this.updateFilter({ cleaning_frequencies: { code: e.detail } });
+                }}
               ></ir-select>
             </fieldset>
             <fieldset>
@@ -108,17 +138,21 @@ export class IrTasksFilters {
             <fieldset class="mb-1">
               <p class="m-0 p-0">Highlight check-ins</p>
               <ir-select
+                selectedValue={this.filters?.highlight_check_ins?.code}
                 LabelAvailable={false}
                 showFirstOption={false}
-                data={this.generateCheckinsDaysFilter().map(v => ({
-                  text: v.value,
+                onSelectChange={e => {
+                  this.updateFilter({ highlight_check_ins: { code: e.detail } });
+                }}
+                data={housekeeping_store.hk_criteria?.highlight_checkin_options?.map(v => ({
+                  text: v.description,
                   value: v.code,
                 }))}
               ></ir-select>
             </fieldset>
             <div class="d-flex align-items-center justify-content-end" style={{ gap: '1rem' }}>
-              <ir-button text="Reset" size="sm" btn_color="outline"></ir-button>
-              <ir-button text="Apply" size="sm"></ir-button>
+              <ir-button text="Reset" size="sm" btn_color="outline" onClickHandler={e => this.applyFiltersEvt(e)}></ir-button>
+              <ir-button isLoading={this.isLoading} text="Apply" size="sm" onClickHandler={e => this.resetFilters(e)}></ir-button>
             </div>
           </div>
         </div>

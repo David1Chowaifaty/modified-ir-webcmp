@@ -1,7 +1,7 @@
 export type TaskFilters = {
-  period: string;
-  housekeepers: string;
-  cleaning_frequency: string;
-  dusty_units: string;
-  highlight_check_ins: string;
+  cleaning_periods: { code: string };
+  housekeepers: { code: string };
+  cleaning_frequencies: { code: string };
+  dusty_units: { code: string };
+  highlight_check_ins: { code: string };
 };
