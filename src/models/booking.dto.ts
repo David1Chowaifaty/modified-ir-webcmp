@@ -19,6 +19,14 @@ interface Meta {
   virtual_card_effective_date: string;
   virtual_card_expiration_date: string;
 }
+export interface OtaService {
+  name: string;
+  nights: string;
+  persons: string;
+  price_mode: string;
+  price_per_unit: string;
+  total_price: string;
+}
 export interface Booking {
   agent: {
     code: string;
@@ -26,6 +34,7 @@ export interface Booking {
     name: string;
     verification_mode: null;
   } | null;
+  ota_services: OtaService[];
   arrival: Arrival;
   allowed_actions: IAllowedActions[];
   system_id: number;
