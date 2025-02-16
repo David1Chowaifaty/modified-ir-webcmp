@@ -15,7 +15,7 @@ export class IrTasksFilters {
       code: '',
     },
     housekeepers: {
-      code: '',
+      ids: [],
     },
     cleaning_frequencies: { code: '' },
     dusty_units: { code: '' },
@@ -31,7 +31,7 @@ export class IrTasksFilters {
   componentWillLoad() {
     this.baseFilters = {
       cleaning_periods: housekeeping_store?.hk_criteria?.cleaning_periods[0],
-      housekeepers: { code: '000' },
+      housekeepers: { ids: housekeeping_store.hk_criteria.housekeepers?.map(h => h.id) },
       cleaning_frequencies: housekeeping_store?.hk_criteria?.cleaning_frequencies[0],
       dusty_units: housekeeping_store?.hk_criteria?.dusty_periods[0],
       highlight_check_ins: housekeeping_store?.hk_criteria?.highlight_checkin_options[0],
@@ -101,7 +101,9 @@ export class IrTasksFilters {
             <fieldset>
               <p class="m-0 p-0">Housekeepers</p>
               <ir-select
-                selectedValue={this.filters?.housekeepers?.code}
+                selectedValue={
+                  this.filters?.housekeepers?.ids.length === housekeeping_store.hk_criteria.housekeepers.length ? '000' : this.filters?.housekeepers?.ids[0].toString()
+                }
                 LabelAvailable={false}
                 showFirstOption={false}
                 data={[
@@ -112,7 +114,11 @@ export class IrTasksFilters {
                   })),
                 ]}
                 onSelectChange={e => {
-                  this.updateFilter({ housekeepers: { code: e.detail } });
+                  if (e.detail === '000') {
+                    this.updateFilter({ housekeepers: { ids: this.baseFilters?.housekeepers?.ids } });
+                  } else {
+                    this.updateFilter({ housekeepers: { ids: [e.detail] } });
+                  }
                 }}
               ></ir-select>
             </fieldset>
