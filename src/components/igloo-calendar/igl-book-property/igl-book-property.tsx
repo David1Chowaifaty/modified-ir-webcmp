@@ -534,8 +534,8 @@ export class IglBookProperty {
     return (
       <Fragment>
         <igl-block-dates-view
-          fromDate={this.dateRangeData.fromDateStr}
-          toDate={this.dateRangeData.toDateStr}
+          fromDate={this.defaultData.FROM_DATE}
+          toDate={this.defaultData.TO_DATE}
           entryDate={this.defaultData.ENTRY_DATE}
           onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>

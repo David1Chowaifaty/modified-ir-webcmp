@@ -539,7 +539,7 @@ export class IglBookingEventHover {
     );
   }
 
-  getNewBookingOptions() {
+  private getNewBookingOptions() {
     const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);
     return (
       <div class={`iglPopOver newBookingOptions ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
@@ -582,7 +582,8 @@ export class IglBookingEventHover {
     );
   }
 
-  getBlockedView() {
+  private getBlockedView() {
+    console.log('booking event', this.bookingEvent);
     // let defaultData = {RELEASE_AFTER_HOURS: 0, OPTIONAL_REASON: "", OUT_OF_SERVICE: false};
     return (
       <div class={`iglPopOver blockedView ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
@@ -591,8 +592,8 @@ export class IglBookingEventHover {
           entryHour={this.bookingEvent.ENTRY_HOUR}
           entryMinute={this.bookingEvent.ENTRY_MINUTE}
           defaultData={this.bookingEvent}
-          fromDate={moment(this.bookingEvent.defaultDates.from_date, 'YYYY-MM-DD').format('DD MM YYYY')}
-          toDate={moment(this.bookingEvent.defaultDates.to_date, 'YYYY-MM-DD').format('DD MM YYYY')}
+          fromDate={this.bookingEvent.defaultDates.from_date}
+          toDate={this.bookingEvent.defaultDates.to_date}
           entryDate={this.getEntryDate()}
           onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>
