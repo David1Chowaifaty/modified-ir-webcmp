@@ -236,7 +236,13 @@ export class IrBookingListing {
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
-                          <ir-button btn_color="link" onClickHandler={() => (this.editBookingItem = { booking, cause: 'edit' })} text={booking.booking_nbr}></ir-button>
+                          <ir-button
+                            btn_color="link"
+                            btnStyle={{ padding: '0', margin: '0' }}
+                            onClickHandler={() => (this.editBookingItem = { booking, cause: 'edit' })}
+                            text={booking.booking_nbr}
+                          ></ir-button>
+                          {booking.channel_booking_nbr && <p class="p-0 m-0 text-center secondary-p">{booking.channel_booking_nbr}</p>}
                         </td>
                         <td>
                           <p class="p-0 m-0 date-p">{moment(booking.booked_on.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
