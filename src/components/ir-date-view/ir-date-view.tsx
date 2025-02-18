@@ -13,10 +13,13 @@ export class IrDateView {
   @Prop() to_date: string | Date | moment.Moment;
   @Prop() showDateDifference: boolean = true;
   @Prop() dateOption: string = 'YYYY-MM-DD';
-  @State() dates: { from_date: string; to_date: string; date_diffrence: number };
+
+  @State() dates: { from_date: string; to_date: string; date_difference: number };
+
   componentWillLoad() {
     this.initializeDates();
   }
+
   @Watch('from_date')
   handleFromDateChange(newVal: any, oldVal: any) {
     if (newVal !== oldVal) {
@@ -31,19 +34,19 @@ export class IrDateView {
     }
   }
 
-  initializeDates() {
+  private initializeDates() {
     this.convertDate('from_date', this.from_date);
     this.convertDate('to_date', this.to_date);
     const fromDate = moment(this.dates.from_date, 'MMM DD, YYYY').format('YYYY-MM-DD');
     const toDate = moment(this.dates.to_date, 'MMM DD, YYYY').format('YYYY-MM-DD');
-    this.dates.date_diffrence = calculateDaysBetweenDates(fromDate, toDate);
+    this.dates.date_difference = calculateDaysBetweenDates(fromDate, toDate);
   }
 
-  convertDate(key: 'from_date' | 'to_date', date: string | Date | moment.Moment) {
+  private convertDate(key: 'from_date' | 'to_date', date: string | Date | moment.Moment) {
     this.dates = this.dates || {
       from_date: '',
       to_date: '',
-      date_diffrence: 0,
+      date_difference: 0,
     };
     if (!date) {
       return;
@@ -58,6 +61,7 @@ export class IrDateView {
       console.error('Unsupported date type');
     }
   }
+
   render() {
     return (
       <Host class="d-flex align-items-center">
@@ -72,9 +76,9 @@ export class IrDateView {
           {this.dates.to_date}{' '}
           {this.showDateDifference && (
             <span class="mx-01">
-              {this.dates.date_diffrence}
+              {this.dates.date_difference}
               {'   '}
-              {this.dates.date_diffrence > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`}
+              {this.dates.date_difference > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`}
             </span>
           )}
         </span>
