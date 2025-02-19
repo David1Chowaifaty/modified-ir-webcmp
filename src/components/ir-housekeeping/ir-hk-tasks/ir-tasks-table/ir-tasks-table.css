@@ -5,7 +5,6 @@
 .selected-row {
   background-color: rgba(0, 0, 255, 0.1);
 }
-
 .selected-row:hover {
   background-color: rgba(0, 0, 255, 0.15);
 }
@@ -14,6 +13,9 @@
 }
 .sortable {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.sortable svg {
+  color: var(--blue);
 }
 .task-row,
 .table th,

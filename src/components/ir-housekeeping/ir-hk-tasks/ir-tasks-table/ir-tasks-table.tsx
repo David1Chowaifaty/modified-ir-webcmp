@@ -141,7 +141,7 @@ export class IrTasksTable {
     return (
       <div class="card h-100 p-1 m-0 table-responsive">
         <table class="table ">
-          <thead>
+          <thead class="table-header">
             <tr>
               <th>
                 <ir-checkbox checked={this.allSelected} onCheckChange={() => this.toggleSelectAll()}></ir-checkbox>
@@ -201,7 +201,17 @@ export class IrTasksTable {
               </th>
             </tr>
           </thead>
+
           <tbody>
+            {this.tasks.length === 0 && (
+              <tr>
+                <td colSpan={9} class="text-center">
+                  <div style={{ height: '300px' }} class="d-flex align-items-center justify-content-center">
+                    <span> No Tasks Found</span>
+                  </div>
+                </td>
+              </tr>
+            )}
             {this.tasks.map(task => {
               const isSelected = this.selectedIds.includes(task.id);
               return (
