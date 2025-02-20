@@ -285,7 +285,20 @@ export class IrPaymentDetails {
       </Fragment>
     );
   }
-
+  private formatCurrency(amount: number, currency: string, locale: string = 'en-US'): string {
+    if (!currency) {
+      return;
+    }
+    if (amount >= 0) {
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(amount);
+    }
+    return;
+  }
   private bookingGuarantee() {
     const paymentMethod = this.bookingDetails.is_direct ? this.getPaymentMethod() : null;
     if (this.bookingDetails.is_direct && !paymentMethod && !this.bookingDetails.guest.cci) {
@@ -338,6 +351,26 @@ export class IrPaymentDetails {
             <div class="text-center">{this.paymentExceptionMessage}</div>
           )}
         </div>
+        {!this.bookingDetails.is_direct && this.bookingDetails.ota_guarante && (
+          <div>
+            <ir-label
+              content={this.bookingDetails.ota_guarante?.card_type + `${this.bookingDetails.ota_guarante?.is_virtual ? ' (virtual)' : ''}`}
+              labelText={`${locales.entries.Lcz_CardType}:`}
+            ></ir-label>
+            <ir-label content={this.bookingDetails.ota_guarante?.cardholder_name} labelText={`${locales.entries.Lcz_CardHolderName}:`}></ir-label>
+            <ir-label content={this.bookingDetails.ota_guarante?.card_number} labelText={`${locales.entries.Lcz_CardNumber}:`}></ir-label>
+            {/* <ir-label content={this.bookingDetails.ota_guarante?.cvv} labelText="Cvv:"></ir-label> */}
+            {/* <ir-label content={JSON.stringify(this.bookingDetails?.ota_guarante.is_virtual)} labelText="Is card virtual:"></ir-label> */}
+            {/* <ir-label content={this.bookingDetails.ota_guarante?.expiration_date} labelText="Expiration date:"></ir-label> */}
+            <ir-label
+              content={this.formatCurrency(
+                Number(this.bookingDetails.ota_guarante?.meta?.virtual_card_current_balance),
+                this.bookingDetails.ota_guarante?.meta?.virtual_card_currency_code,
+              )}
+              labelText={`${locales.entries.Lcz_CardBalance}:`}
+            ></ir-label>
+          </div>
+        )}
       </div>
     );
   }
@@ -388,7 +421,8 @@ export class IrPaymentDetails {
           )}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
           <div class=" h4">
-            Balance: <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
+            {locales.entries.Lcz_Balance}:{' '}
+            <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
           </div>
           {/* <div class=" h4">
             {locales.entries.Lcz_DueBalance}:{' '}
@@ -396,7 +430,7 @@ export class IrPaymentDetails {
           </div> */}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
           <div class="mb-2 h4">
-            Collected:{' '}
+            {locales.entries.Lcz_Collected}:{' '}
             <span class="">
               {formatAmount(
                 this.bookingDetails.currency.symbol,

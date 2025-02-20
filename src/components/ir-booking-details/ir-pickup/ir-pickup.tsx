@@ -238,11 +238,7 @@ export class IrPickup {
                       <ir-date-picker
                         date={this.pickupData.arrival_date}
                         maxDate={this.bookingDates?.to}
-                        minDate={moment().format('YYYY-MM-DD')}
-                        // customPicker={false}
-                        // autoApply
-                        // format="ddd, DD M YYYY"
-                        // singleDatePicker
+                        minDate={this.bookingDates.from}
                         onDateChanged={evt => {
                           this.updatePickupData('arrival_date', evt.detail.start?.format('YYYY-MM-DD'));
                         }}

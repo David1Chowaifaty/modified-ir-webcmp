@@ -43,6 +43,8 @@ export class IrRoom {
   @State() isLoading: boolean = false;
   @State() modalReason: RoomModalReason = null;
   @State() mainGuest: SharedPerson;
+  @State() isModelOpen: boolean = false;
+
   // Event Emitters
   @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
@@ -211,12 +213,33 @@ export class IrRoom {
     // Join non-empty parts with spaces
     return parts.filter(Boolean).join('&nbsp&nbsp&nbsp&nbsp');
   }
-  private getBedName() {
-    const bed = this.bedPreferences.find(p => p.CODE_NAME === this.room.bed_preference.toString());
-    if (!bed) {
-      throw new Error(`bed with code ${this.room.bed_preference} not found`);
+  private getSmokingLabel() {
+    if (this.booking.is_direct) {
+      if (!this.room.smoking_option) {
+        return null;
+      }
+      const currRT = calendar_data.roomsInfo.find(rt => rt.id === this.room.roomtype.id);
+      if (currRT) {
+        const smoking_option = currRT['smoking_option']?.allowed_smoking_options;
+        if (smoking_option) {
+          return smoking_option.find(s => s.code === this.room.smoking_option)?.description;
+        }
+        return null;
+      }
+      return null;
     }
-    return bed[`CODE_VALUE_${this.language}`] ?? bed.CODE_VALUE_EN;
+    return this.room.ota_meta?.smoking_preferences;
+  }
+
+  private getBedName() {
+    if (this.booking.is_direct) {
+      const bed = this.bedPreferences.find(p => p.CODE_NAME === this.room?.bed_preference?.toString());
+      if (!bed) {
+        return;
+      }
+      return bed[`CODE_VALUE_${this.language}`] ?? bed.CODE_VALUE_EN;
+    }
+    return this.room.ota_meta?.bed_preferences;
   }
   private renderModalMessage() {
     switch (this.modalReason) {
@@ -244,6 +267,7 @@ export class IrRoom {
     return this.room.sharing_persons?.find(p => p.is_main);
   }
   render() {
+    const bed = this.getBedName();
     return (
       <Host class="p-1 d-flex m-0">
         <ir-button
@@ -316,6 +340,7 @@ export class IrRoom {
             {this.hasCheckOut && (
               <ir-button onClickHandler={this.openModal.bind(this, 'checkout')} id="checkout" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckOut}></ir-button>
             )}
+            {bed && <span>(Preference: {bed})</span>}
           </div>
 
           <div class={'d-flex align-items-center'}>
@@ -400,6 +425,7 @@ export class IrRoom {
                 </table>
               </div>
             </div>
+            <ir-label labelText={`${locales.entries.Lcz_SmokingOptions}:`} display="inline" content={this.getSmokingLabel()}></ir-label>
             {this.booking.is_direct && (
               <Fragment>
                 {this.room.rateplan.cancelation && (
@@ -410,7 +436,13 @@ export class IrRoom {
                 )}
               </Fragment>
             )}
-            {/* {this.booking.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>} */}
+            {this.room.ota_meta && (
+              <div>
+                <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} display="inline" content={this.room.ota_meta.meal_plan}></ir-label>
+                <ir-label labelText={`${locales.entries.Lcz_Policies}:`} display="inline" content={this.room.ota_meta.policies}></ir-label>
+              </div>
+            )}
+            {/* {this.bookingEvent.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>} */}
           </div>
         </div>
         <ir-modal

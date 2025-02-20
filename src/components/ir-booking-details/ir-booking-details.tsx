@@ -405,6 +405,7 @@ export class IrBookingDetails {
                 ];
               })}
             </div>
+            {/* <ir-ota-services services={this.booking.ota_services}></ir-ota-services> */}
             <ir-pickup-view booking={this.booking}></ir-pickup-view>
             <section>
               <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
