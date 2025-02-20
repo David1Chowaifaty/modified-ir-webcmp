@@ -139,7 +139,14 @@ export class IrTasksFilters {
             </fieldset>
             <fieldset>
               <p class="m-0 p-0">Dusty units</p>
-              <ir-select showFirstOption={false} LabelAvailable={false} data={[{ text: 'test', value: 'hello' }]}></ir-select>
+              <ir-select
+                showFirstOption={false}
+                LabelAvailable={false}
+                data={housekeeping_store.hk_criteria?.dusty_periods?.map(v => ({
+                  text: v.description,
+                  value: v.code,
+                }))}
+              ></ir-select>
             </fieldset>
             <fieldset class="mb-1">
               <p class="m-0 p-0">Highlight check-ins</p>
@@ -157,8 +164,8 @@ export class IrTasksFilters {
               ></ir-select>
             </fieldset>
             <div class="d-flex align-items-center justify-content-end" style={{ gap: '1rem' }}>
-              <ir-button text="Reset" size="sm" btn_color="outline" onClickHandler={e => this.applyFiltersEvt(e)}></ir-button>
-              <ir-button isLoading={this.isLoading} text="Apply" size="sm" onClickHandler={e => this.resetFilters(e)}></ir-button>
+              <ir-button btn_type="button" text="Reset" size="sm" btn_color="outline" onClickHandler={e => this.resetFilters(e)}></ir-button>
+              <ir-button btn_type="button" isLoading={this.isLoading} text="Apply" size="sm" onClickHandler={e => this.applyFiltersEvt(e)}></ir-button>
             </div>
           </div>
         </div>

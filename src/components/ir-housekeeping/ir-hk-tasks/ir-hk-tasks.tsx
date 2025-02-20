@@ -88,7 +88,7 @@ export class IrHkTasks {
       }
       this.property_id = propertyId;
       const requests = [
-        this.houseKeepingService.getHkTasks({ property_id: this.property_id, from_date: moment().format('YYYY-MM-DD'), to_date: moment().add(2, 'days').format('YYYY-MM-DD') }),
+        this.houseKeepingService.getHkTasks({ property_id: this.property_id, from_date: moment().format('YYYY-MM-DD'), to_date: moment().format('YYYY-MM-DD') }),
         this.houseKeepingService.getExposedHKSetup(this.property_id),
         this.roomService.fetchLanguage(this.language),
       ];
@@ -187,11 +187,16 @@ export class IrHkTasks {
     }
   }
   private async fetchTasksWithFilters() {
+    console.log(this.filters);
+    const { cleaning_periods, housekeepers, cleaning_frequencies, dusty_units, highlight_check_ins } = this.filters;
     const tasks = await this.houseKeepingService.getHkTasks({
-      ...this.filters,
+      housekeepers,
+      cleaning_frequencies: cleaning_frequencies.code,
+      dusty_units: dusty_units.code,
+      highlight_check_ins: highlight_check_ins.code,
       property_id: this.property_id,
       from_date: moment().format('YYYY-MM-DD'),
-      to_date: moment().add(2, 'days').format('YYYY-MM-DD'),
+      to_date: cleaning_periods.code,
     });
     if (tasks) {
       this.updateTasks(tasks);

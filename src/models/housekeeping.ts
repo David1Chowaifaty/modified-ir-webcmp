@@ -111,7 +111,12 @@ export interface Task {
   hint: string;
   hkm_id: number;
   infant: number;
-  status: string;
+  status: TaskStatus;
   unit: IUnit;
   housekeeper: string;
 }
+export type TaskStatus = {
+  code: string;
+  description: string;
+};
+export type TaskStatusCode = 'IH' | 'CI' | 'CO' | 'VA';

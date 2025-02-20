@@ -221,13 +221,13 @@ export class IrTasksTable {
                   </td>
                   <td class="task-row">{task.date}</td>
                   <td class="task-row">{task.unit.name}</td>
-                  <td class="task-row">{task.status}</td>
+                  <td class="task-row">{task.status.description}</td>
                   <td class="task-row">{task.hint}</td>
                   <td class="task-row">{task.adult}</td>
                   <td class="task-row">{task.child}</td>
                   <td class="task-row">{task.infant}</td>
                   <td class="w-50 task-row" style={{ textAlign: 'start' }}>
-                    {task.housekeeper}
+                    {task.housekeeper ?? 'Unassigned'}
                   </td>
                 </tr>
               );

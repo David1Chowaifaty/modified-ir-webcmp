@@ -57,7 +57,15 @@ export class HouseKeepingService {
     const { data } = await axios.post(`/Set_Exposed_Unit_HK_Status`, { ...params });
     return data['My_Result'];
   }
-  public async getHkTasks(params: { property_id: number; from_date: string; to_date: string }) {
+  public async getHkTasks(params: {
+    property_id: number;
+    from_date: string;
+    to_date: string;
+    housekeepers?: { ids: number[] };
+    cleaning_frequencies?: string;
+    dusty_units?: string;
+    highlight_check_ins?: string;
+  }) {
     const { data } = await axios.post('/Get_HK_Tasks', params);
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
