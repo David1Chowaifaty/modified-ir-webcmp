@@ -32,6 +32,7 @@
 
 - [ir-date-picker](../../ui/ir-date-picker)
 - [ir-button](../../ui/ir-button)
+- [ir-label](../../ui/ir-label)
 - [ir-payment-actions](ir-payment-actions)
 - [ir-modal](../../ui/ir-modal)
 
@@ -40,6 +41,7 @@
 graph TD;
   ir-payment-details --> ir-date-picker
   ir-payment-details --> ir-button
+  ir-payment-details --> ir-label
   ir-payment-details --> ir-payment-actions
   ir-payment-details --> ir-modal
   ir-button --> ir-icons

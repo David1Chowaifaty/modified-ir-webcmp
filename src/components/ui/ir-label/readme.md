@@ -26,6 +26,8 @@
 ### Used by
 
  - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
+ - [ir-ota-service](../../ir-booking-details/ir-ota-services/ir-ota-service)
+ - [ir-payment-details](../../ir-booking-details/ir-payment-details)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
 
@@ -33,6 +35,8 @@
 ```mermaid
 graph TD;
   igl-booking-event-hover --> ir-label
+  ir-ota-service --> ir-label
+  ir-payment-details --> ir-label
   ir-reservation-information --> ir-label
   ir-room --> ir-label
   style ir-label fill:#f9f,stroke:#333,stroke-width:4px

@@ -195,7 +195,7 @@ export class IrHkTasks {
       housekeepers,
       cleaning_frequencies: cleaning_frequencies.code,
       dusty_units: dusty_units.code,
-      highlight_check_ins: highlight_check_ins.code,
+      highlight_window: highlight_check_ins.code,
       property_id: this.property_id,
       from_date: moment().format('YYYY-MM-DD'),
       to_date: cleaning_periods.code,

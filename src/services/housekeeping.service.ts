@@ -64,7 +64,7 @@ export class HouseKeepingService {
     housekeepers?: { ids: number[] };
     cleaning_frequencies?: string;
     dusty_units?: string;
-    highlight_check_ins?: string;
+    highlight_window?: string;
   }) {
     const { data } = await axios.post('/Get_HK_Tasks', params);
     if (data.ExceptionMsg !== '') {
