@@ -17,6 +17,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [ir-secure-tasks](../ir-secure-tasks)
+
 ### Depends on
 
 - [ir-loading-screen](../ir-loading-screen)
@@ -56,6 +60,7 @@ graph TD;
   ir-delete-modal --> ir-icon
   ir-delete-modal --> ir-select
   ir-delete-modal --> ir-button
+  ir-secure-tasks --> ir-housekeeping
   style ir-housekeeping fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

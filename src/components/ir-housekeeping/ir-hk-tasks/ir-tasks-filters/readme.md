@@ -5,12 +5,18 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property    | Attribute    | Description | Type      | Default     |
+| ----------- | ------------ | ----------- | --------- | ----------- |
+| `isLoading` | `is-loading` |             | `boolean` | `undefined` |
+
+
 ## Events
 
-| Event          | Description | Type                                                                                                                                   |
-| -------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `applyClicked` |             | `CustomEvent<{ period: string; housekeepers: string; cleaning_frequency: string; dusty_units: string; highlight_check_ins: string; }>` |
-| `resetClicked` |             | `CustomEvent<{ period: string; housekeepers: string; cleaning_frequency: string; dusty_units: string; highlight_check_ins: string; }>` |
+| Event          | Description | Type                                                                                                                                                                                                       |
+| -------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `applyFilters` |             | `CustomEvent<{ cleaning_periods: { code: string; }; housekeepers: { ids: number[]; }; cleaning_frequencies: { code: string; }; dusty_units: { code: string; }; highlight_check_ins: { code: string; }; }>` |
 
 
 ## Dependencies

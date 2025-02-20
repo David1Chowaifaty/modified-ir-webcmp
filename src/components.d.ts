@@ -957,6 +957,11 @@ export namespace Components {
         "ticket": string;
         "toDate": string;
     }
+    interface IrSecureTasks {
+        "bookingNumber": string;
+        "p": string;
+        "propertyid": number;
+    }
     interface IrSelect {
         "LabelAvailable": boolean;
         "data": selectOption[];
@@ -2643,6 +2648,12 @@ declare global {
         prototype: HTMLIrRoomNightsElement;
         new (): HTMLIrRoomNightsElement;
     };
+    interface HTMLIrSecureTasksElement extends Components.IrSecureTasks, HTMLStencilElement {
+    }
+    var HTMLIrSecureTasksElement: {
+        prototype: HTMLIrSecureTasksElement;
+        new (): HTMLIrSecureTasksElement;
+    };
     interface HTMLIrSelectElementEventMap {
         "selectChange": any;
     }
@@ -2928,6 +2939,7 @@ declare global {
         "ir-room": HTMLIrRoomElement;
         "ir-room-guests": HTMLIrRoomGuestsElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
+        "ir-secure-tasks": HTMLIrSecureTasksElement;
         "ir-select": HTMLIrSelectElement;
         "ir-sidebar": HTMLIrSidebarElement;
         "ir-span": HTMLIrSpanElement;
@@ -4008,6 +4020,11 @@ declare namespace LocalJSX {
         "ticket"?: string;
         "toDate"?: string;
     }
+    interface IrSecureTasks {
+        "bookingNumber"?: string;
+        "p"?: string;
+        "propertyid"?: number;
+    }
     interface IrSelect {
         "LabelAvailable"?: boolean;
         "data"?: selectOption[];
@@ -4211,6 +4228,7 @@ declare namespace LocalJSX {
         "ir-room": IrRoom;
         "ir-room-guests": IrRoomGuests;
         "ir-room-nights": IrRoomNights;
+        "ir-secure-tasks": IrSecureTasks;
         "ir-select": IrSelect;
         "ir-sidebar": IrSidebar;
         "ir-span": IrSpan;
@@ -4315,6 +4333,7 @@ declare module "@stencil/core" {
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
+            "ir-secure-tasks": LocalJSX.IrSecureTasks & JSXBase.HTMLAttributes<HTMLIrSecureTasksElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;
             "ir-sidebar": LocalJSX.IrSidebar & JSXBase.HTMLAttributes<HTMLIrSidebarElement>;
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;

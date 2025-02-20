@@ -799,24 +799,26 @@ export class IglBookingEvent {
           {this.renderEventBookingNumber()}
         </div>
 
-        <Fragment>
-          <div
-            class={`bookingEventDragHandle leftSide ${
-              !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
-            }
+        {(this.bookingEvent.is_direct || isBlockUnit(this.bookingEvent.STATUS_CODE)) && (
+          <Fragment>
+            <div
+              class={`bookingEventDragHandle leftSide ${
+                !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
+              }
             ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}`}
-            onTouchStart={event => this.startDragging(event, 'leftSide')}
-            onMouseDown={event => this.startDragging(event, 'leftSide')}
-          ></div>
-          <div
-            class={`bookingEventDragHandle rightSide ${
-              !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
-            }
+              onTouchStart={event => this.startDragging(event, 'leftSide')}
+              onMouseDown={event => this.startDragging(event, 'leftSide')}
+            ></div>
+            <div
+              class={`bookingEventDragHandle rightSide ${
+                !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
+              }
               ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}`}
-            onTouchStart={event => this.startDragging(event, 'rightSide')}
-            onMouseDown={event => this.startDragging(event, 'rightSide')}
-          ></div>
-        </Fragment>
+              onTouchStart={event => this.startDragging(event, 'rightSide')}
+              onMouseDown={event => this.startDragging(event, 'rightSide')}
+            ></div>
+          </Fragment>
+        )}
 
         {this.showInfoPopup ? (
           <igl-booking-event-hover

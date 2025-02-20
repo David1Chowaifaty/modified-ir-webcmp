@@ -17,6 +17,7 @@
 ### Used by
 
  - [ir-booking](../ir-booking)
+ - [ir-secure-tasks](../ir-secure-tasks)
 
 ### Depends on
 
@@ -36,6 +37,7 @@ graph TD;
   ir-login --> ir-button
   ir-button --> ir-icons
   ir-booking --> ir-login
+  ir-secure-tasks --> ir-login
   style ir-login fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

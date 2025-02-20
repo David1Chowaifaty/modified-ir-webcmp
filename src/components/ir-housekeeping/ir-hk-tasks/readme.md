@@ -24,6 +24,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [ir-secure-tasks](../../ir-secure-tasks)
+
 ### Depends on
 
 - [ir-loading-screen](../../ir-loading-screen)
@@ -64,6 +68,7 @@ graph TD;
   igl-date-range --> ir-date-range
   igl-date-range --> ir-date-picker
   igl-date-range --> ir-date-view
+  ir-secure-tasks --> ir-hk-tasks
   style ir-hk-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
