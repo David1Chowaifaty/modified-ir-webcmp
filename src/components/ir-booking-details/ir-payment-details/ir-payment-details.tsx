@@ -355,10 +355,10 @@ export class IrPaymentDetails {
           <div>
             <ir-label
               content={this.bookingDetails.ota_guarante?.card_type + `${this.bookingDetails.ota_guarante?.is_virtual ? ' (virtual)' : ''}`}
-              labelText="Card type:"
+              labelText={`${locales.entries.Lcz_CardType}:`}
             ></ir-label>
-            <ir-label content={this.bookingDetails.ota_guarante?.cardholder_name} labelText="Cardholder name:"></ir-label>
-            <ir-label content={this.bookingDetails.ota_guarante?.card_number} labelText="Card number:"></ir-label>
+            <ir-label content={this.bookingDetails.ota_guarante?.cardholder_name} labelText={`${locales.entries.Lcz_CardHolderName}:`}></ir-label>
+            <ir-label content={this.bookingDetails.ota_guarante?.card_number} labelText={`${locales.entries.Lcz_CardNumber}:`}></ir-label>
             {/* <ir-label content={this.bookingDetails.ota_guarante?.cvv} labelText="Cvv:"></ir-label> */}
             {/* <ir-label content={JSON.stringify(this.bookingDetails?.ota_guarante.is_virtual)} labelText="Is card virtual:"></ir-label> */}
             {/* <ir-label content={this.bookingDetails.ota_guarante?.expiration_date} labelText="Expiration date:"></ir-label> */}
@@ -367,7 +367,7 @@ export class IrPaymentDetails {
                 Number(this.bookingDetails.ota_guarante?.meta?.virtual_card_current_balance),
                 this.bookingDetails.ota_guarante?.meta?.virtual_card_currency_code,
               )}
-              labelText="Card balance:"
+              labelText={`${locales.entries.Lcz_CardBalance}:`}
             ></ir-label>
           </div>
         )}
@@ -421,7 +421,8 @@ export class IrPaymentDetails {
           )}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
           <div class=" h4">
-            Balance: <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
+            {locales.entries.Lcz_Balance}:{' '}
+            <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
           </div>
           {/* <div class=" h4">
             {locales.entries.Lcz_DueBalance}:{' '}
@@ -429,7 +430,7 @@ export class IrPaymentDetails {
           </div> */}
           {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
           <div class="mb-2 h4">
-            Collected:{' '}
+            {locales.entries.Lcz_Collected}:{' '}
             <span class="">
               {formatAmount(
                 this.bookingDetails.currency.symbol,

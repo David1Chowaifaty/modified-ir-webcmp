@@ -354,7 +354,7 @@ export class IrRoom {
                 </table>
               </div>
             </div>
-            <ir-label labelText="Smoking Preference:" display="inline" content={this.getSmokingLabel()}></ir-label>
+            <ir-label labelText={`${locales.entries.Lcz_SmokingOptions}:`} display="inline" content={this.getSmokingLabel()}></ir-label>
             {this.bookingEvent.is_direct && (
               <Fragment>
                 {this.item.rateplan.cancelation && (
@@ -367,8 +367,8 @@ export class IrRoom {
             )}
             {this.item.ota_meta && (
               <div>
-                <ir-label labelText="Meal plan:" display="inline" content={this.item.ota_meta.meal_plan}></ir-label>
-                <ir-label labelText="Policies:" display="inline" content={this.item.ota_meta.policies}></ir-label>
+                <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} display="inline" content={this.item.ota_meta.meal_plan}></ir-label>
+                <ir-label labelText={`${locales.entries.Lcz_Policies}:`} display="inline" content={this.item.ota_meta.policies}></ir-label>
               </div>
             )}
             {/* {this.bookingEvent.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>} */}
