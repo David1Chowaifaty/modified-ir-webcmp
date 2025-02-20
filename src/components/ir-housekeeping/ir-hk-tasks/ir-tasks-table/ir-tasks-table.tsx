@@ -68,8 +68,12 @@ export class IrTasksTable {
   private sortTasks(key: string, direction: 'ASC' | 'DESC') {
     const sorted = [...this.tasks].sort((a, b) => {
       // Primary comparison: a[key] vs b[key]
-      const aPrimary = a[key];
-      const bPrimary = b[key];
+      let aPrimary = a[key];
+      let bPrimary = b[key];
+      if (key === 'status') {
+        aPrimary = a[key].description;
+        bPrimary = b[key].description;
+      }
 
       if (aPrimary < bPrimary) {
         return direction === 'ASC' ? -1 : 1;
