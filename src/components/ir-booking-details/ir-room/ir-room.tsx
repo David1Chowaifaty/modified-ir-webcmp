@@ -340,12 +340,9 @@ export class IrRoom {
             {this.hasCheckOut && (
               <ir-button onClickHandler={this.openModal.bind(this, 'checkout')} id="checkout" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckOut}></ir-button>
             )}
-            {bed && <span>(Preference: {bed})</span>}
           </div>
-
-          <div class={'d-flex align-items-center'}>
-            <span class="mr-1">{`${this.mainGuest?.first_name || ''} ${this.mainGuest?.last_name || ''}`}</span>
-            {/* {this.room.rateplan.selected_variation.adult_nbr > 0 && <span> {this.room.rateplan.selected_variation.adult_child_offering}</span>} */}
+          <div class={'d-flex align-items-center'} style={{ gap: '1rem' }}>
+            <span>{`${this.room.guest.first_name || ''} ${this.room.guest.last_name || ''}`}</span>
             {this.room.rateplan.selected_variation.adult_nbr > 0 &&
               (this.room.unit ? (
                 <ir-button
@@ -353,13 +350,13 @@ export class IrRoom {
                   renderContentAsHtml
                   onClickHandler={() => this.showGuestModal()}
                   size="sm"
-                  btn_styles="room_guest_name"
+                  btnStyle={{ width: 'fit-content', margin: '0', padding: '0' }}
                   text={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}
                 ></ir-button>
               ) : (
                 <span innerHTML={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}></span>
               ))}
-            {this.room.bed_preference && <span>({this.getBedName()})</span>}
+            {bed && <span>(Preference: {bed})</span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.room.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">

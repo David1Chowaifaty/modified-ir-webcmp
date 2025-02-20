@@ -21,14 +21,6 @@
   display: block;
   width: 100%;
 }
-.room_guest_name {
-  width: fit-content;
-  padding: 0 !important;
-  margin: 0;
-}
-.room_guest_name .button-text {
-  padding: 0 !important;
-}
 .room_statements span {
   display: inline;
   white-space: normal;
