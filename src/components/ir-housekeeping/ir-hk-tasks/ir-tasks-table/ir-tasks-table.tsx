@@ -144,7 +144,7 @@ export class IrTasksTable {
   render() {
     return (
       <div class="card h-100 p-1 m-0 table-responsive">
-        <table class="table ">
+        <table class="table">
           <thead class="table-header">
             <tr>
               <th>
@@ -224,7 +224,9 @@ export class IrTasksTable {
                     <ir-checkbox checked={isSelected}></ir-checkbox>
                   </td>
                   <td class="task-row">{task.date}</td>
-                  <td class="task-row">{task.unit.name}</td>
+                  <td class="task-row">
+                    <span class={{ 'highlighted-unit': task.is_highlight }}>{task.unit.name}</span>
+                  </td>
                   <td class="task-row">{task.status.description}</td>
                   <td class="task-row">{task.hint}</td>
                   <td class="task-row">{task.adult}</td>

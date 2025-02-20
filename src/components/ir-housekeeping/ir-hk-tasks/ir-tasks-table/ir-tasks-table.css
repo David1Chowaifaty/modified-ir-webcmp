@@ -24,6 +24,13 @@
   white-space: nowrap;
   max-width: max-content !important;
   /* background: white; */
+  border: 0;
+}
+.highlighted-unit {
+  background: #000;
+  color: white;
+  padding: 0.2rem 0.3rem;
+  border-radius: 4px;
 }
 .table th,
 .table td {

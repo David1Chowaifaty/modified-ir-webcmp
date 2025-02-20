@@ -21,7 +21,7 @@ export class IrTasksHeader {
   render() {
     return (
       <div class="d-flex align-items-center justify-content-between">
-        <h4>Housekeeping Tasks</h4>
+        <h3>Housekeeping Tasks</h3>
         <div class="d-flex align-items-center" style={{ gap: '1rem' }}>
           <ir-button
             size="sm"

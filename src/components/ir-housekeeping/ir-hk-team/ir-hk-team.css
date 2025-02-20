@@ -24,6 +24,7 @@ input:focus {
 th,
 td {
   border-color: white !important;
+  white-space: nowrap;
 }
 
 thead {

@@ -1,6 +1,6 @@
 :host {
   display: block;
-  /* min-width: 1vw; */
+  min-width: 20vw;
   height: 100%;
 }
 @media (min-width: 768px) {

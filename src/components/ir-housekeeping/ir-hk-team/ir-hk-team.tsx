@@ -87,7 +87,8 @@ export class IrHkTeam {
           </ir-title>
           <p class={'m-0 p-0'}>{locales.entries.Lcz_AsAnOption}</p>
         </section>
-        <section class="table-container">
+
+        <section class=" table-responsive">
           <table class="table">
             <thead>
               <tr>
@@ -125,7 +126,15 @@ export class IrHkTeam {
                     {hk.phone_prefix} {hk.mobile}
                   </td>
                   <td>{hk.username}</td>
-                  <td>{hk.note}</td>
+                  <td>
+                    {hk.note.length > 50 ? (
+                      <ir-popover content={hk.note}>
+                        <span>{hk.note.slice(0, 50)}...</span>
+                      </ir-popover>
+                    ) : (
+                      hk.note
+                    )}
+                  </td>
                   <td>{this.renderAssignedUnits(hk)}</td>
                   <td class="text-center">
                     <div class="icons-container">

@@ -3,8 +3,8 @@ import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
 import calendar_data from '@/stores/calendar-data';
 import { updateHKStore } from '@/stores/housekeeping.store';
-import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
-
+import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { IToast } from '@components/ui/ir-toast/toast';
 @Component({
   tag: 'ir-housekeeping',
   styleUrl: 'ir-housekeeping.css',
@@ -18,6 +18,8 @@ export class IrHousekeeping {
   @Prop() p: string;
 
   @State() isLoading = false;
+
+  @Event() toast: EventEmitter<IToast>;
 
   private roomService = new RoomService();
   private houseKeepingService = new HouseKeepingService();
@@ -77,6 +79,24 @@ export class IrHousekeeping {
       this.isLoading = false;
     }
   }
+  private saveAutomaticCheckInCheckout(e: CustomEvent): void {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    try {
+      this.roomService.SetAutomaticCheckInOut({
+        property_id: this.propertyid,
+        flag: e.detail === 'auto',
+      });
+      this.toast.emit({
+        position: 'top-right',
+        title: 'Saved Successfully',
+        description: '',
+        type: 'success',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   render() {
     if (this.isLoading) {
       return <ir-loading-screen></ir-loading-screen>;
@@ -86,7 +106,7 @@ export class IrHousekeeping {
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
         <section class="p-1">
-          <h4 class="mb-2">Housekeeping & Check-In Setup</h4>
+          <h3 class="mb-2">Housekeeping & Check-In Setup</h3>
           <div class="card p-1">
             <ir-title borderShown label="Check-In Mode"></ir-title>
             <div class={'d-flex align-items-center'}>
@@ -95,14 +115,7 @@ export class IrHousekeeping {
                 LabelAvailable={false}
                 showFirstOption={false}
                 selectedValue={calendar_data.is_automatic_check_in_out ? 'auto' : 'manual'}
-                onSelectChange={e => {
-                  e.stopImmediatePropagation();
-                  e.stopPropagation();
-                  this.roomService.SetAutomaticCheckInOut({
-                    property_id: this.propertyid,
-                    flag: e.detail === 'auto',
-                  });
-                }}
+                onSelectChange={e => this.saveAutomaticCheckInCheckout(e)}
                 data={[
                   { text: `Yes, as per the property's policy.`, value: 'auto' },
                   { text: 'No, I will do it manually. ', value: 'manual' },

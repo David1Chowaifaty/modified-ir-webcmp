@@ -1,4 +1,4 @@
-import { PaymentOption } from '@/models/payment-options';
+import { ILocalizable, OptionField, PaymentOption } from '@/models/payment-options';
 import { PaymentOptionService } from '@/services/payment_option.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
@@ -149,7 +149,7 @@ export class IrPaymentOption {
     const is_active = e.detail;
     const newOption = { ...po, is_active, property_id: this.propertyid };
     if (po.code !== '005' && !po.is_payment_gateway) {
-      await this.paymentOptionService.HandlePaymentMethod(newOption);
+      await this.changePaymentMethod(newOption);
       this.modifyPaymentList(newOption);
       if (po.code === '000' && is_active && this.paymentOptions.filter(p => p.code !== '000').every(p => p.is_active === false || p.is_active === null)) {
         this.toast.emit({
@@ -170,10 +170,34 @@ export class IrPaymentOption {
       payment_option_store.mode = 'create';
       payment_option_store.selectedOption = newOption;
     } else {
-      await this.paymentOptionService.HandlePaymentMethod(newOption);
+      await this.changePaymentMethod(newOption);
     }
     this.modifyPaymentList(newOption);
   }
+  private async changePaymentMethod(newOption: {
+    is_active: any;
+    property_id: string;
+    code: string;
+    data: OptionField[] | null;
+    description: string;
+    id: null | number;
+    is_payment_gateway: boolean;
+    localizables: ILocalizable[] | null;
+    display_order?: number;
+  }) {
+    try {
+      await this.paymentOptionService.HandlePaymentMethod(newOption);
+      this.toast.emit({
+        position: 'top-right',
+        title: 'Saved Successfully',
+        description: '',
+        type: 'success',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   private showEditButton(po: PaymentOption) {
     if (!po.is_payment_gateway && po.code !== '005') {
       return false;

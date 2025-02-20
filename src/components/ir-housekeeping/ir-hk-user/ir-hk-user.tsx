@@ -133,12 +133,20 @@ export class IrHkUser {
             error={this.errors?.password?.length > 0}
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
-          <ir-input-text
+          {/* <ir-input-text
             label={locales.entries.Lcz_Note}
             placeholder={locales.entries.Lcz_Note}
             value={this.userInfo.note}
             onTextChange={e => this.updateUserField('note', e.detail)}
-          ></ir-input-text>
+          ></ir-input-text> */}
+          <ir-textarea
+            variant="prepend"
+            maxLength={250}
+            label={locales.entries.Lcz_Note}
+            placeholder={locales.entries.Lcz_Note}
+            value={this.userInfo.note}
+            onTextChange={e => this.updateUserField('note', e.detail)}
+          ></ir-textarea>
           <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
             <ir-button
               onClickHandler={() => this.closeSideBar.emit(null)}
