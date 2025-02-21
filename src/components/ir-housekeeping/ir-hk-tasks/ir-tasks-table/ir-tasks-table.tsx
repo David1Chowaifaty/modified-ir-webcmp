@@ -1,5 +1,6 @@
-import { Component, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { Task } from '@/models/housekeeping';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-tasks-table',
@@ -28,13 +29,18 @@ export class IrTasksTable {
    * The sort direction: ASC or DESC.
    */
   @State() sortDirection: 'ASC' | 'DESC' = 'ASC';
+  @State() checkableTasks: Task[] = [];
 
   @Event({ bubbles: true, composed: true }) animateCleanedButton: EventEmitter<null>;
   @Event({ bubbles: true, composed: true }) rowSelectChange: EventEmitter<Task[]>;
 
   componentWillLoad() {
     this.sortTasks('date', 'ASC');
+    if (this.tasks) {
+      this.assignCheckableTasks();
+    }
   }
+
   /**
    * Sorts the tasks by the given key. If no direction is provided,
    * it toggles between ascending and descending.
@@ -57,6 +63,13 @@ export class IrTasksTable {
     this.selectedIds = [];
   }
 
+  @Watch('tasks')
+  handleTasksChange(newTasks: Task[]) {
+    if (newTasks?.length) {
+      this.selectedIds = [];
+      this.assignCheckableTasks();
+    }
+  }
   /**
    * Helper to sort tasks array in state.
    */
@@ -124,7 +137,7 @@ export class IrTasksTable {
    * Checks if every row is selected.
    */
   private get allSelected(): boolean {
-    return this.tasks.length > 0 && this.selectedIds.length === this.tasks.length;
+    return this.checkableTasks.length > 0 && this.selectedIds.length === this.checkableTasks.length;
   }
 
   /**
@@ -134,27 +147,60 @@ export class IrTasksTable {
     if (this.allSelected) {
       this.selectedIds = [];
     } else {
-      this.selectedIds = this.tasks.map(task => task.id);
+      this.selectedIds = this.checkableTasks.map(t => t.id);
       this.animateCleanedButton.emit(null);
     }
     this.emitSelectedTasks();
-    console.log('here');
+  }
+
+  /**
+   * Assigns checkable tasks based on predefined criteria.
+   *
+   * This method filters tasks and determines which ones are eligible
+   * to be selected using checkboxes. A task is considered "checkable"
+   * if its date is today or earlier.
+   *
+   * The filtered tasks are stored in `this.checkableTasks`, ensuring
+   * only relevant tasks can be interacted with by users.
+   */
+  private assignCheckableTasks() {
+    const tasks = [];
+    this.tasks.forEach(task => {
+      if (this.isCheckable(task.date)) {
+        tasks.push(task);
+      }
+    });
+    this.checkableTasks = [...tasks];
+  }
+
+  /**
+   * Determines if a task is checkable.
+   *
+   * A task is considered checkable if its date is today or any day before.
+   * This prevents users from selecting tasks with future dates.
+   *
+   * @param {string} date - The task's date in 'YYYY-MM-DD' format.
+   * @returns {boolean} - Returns `true` if the task's date is today or earlier, otherwise `false`.
+   */
+  private isCheckable(date: string): boolean {
+    return moment(date, 'YYYY-MM-DD').isSameOrBefore(moment(), 'days');
   }
 
   render() {
     return (
-      <div class="card h-100 p-1 m-0 table-responsive">
+      <div class="card table-container h-100 p-1 m-0 table-responsive">
         <table class="table">
           <thead class="table-header">
             <tr>
               <th>
-                <ir-checkbox checked={this.allSelected} onCheckChange={() => this.toggleSelectAll()}></ir-checkbox>
+                <ir-checkbox
+                  indeterminate={this.selectedIds.length > 0 && this.selectedIds.length < this.checkableTasks.length}
+                  checked={this.allSelected}
+                  onCheckChange={() => this.toggleSelectAll()}
+                ></ir-checkbox>
               </th>
               <th>Period</th>
-              <th>
-                {/* Unit {this.sortKey === 'unit' ? `(${this.sortDirection})` : ''} */}
-                <span>Unit</span>
-              </th>
+              <th>Unit</th>
               <th class={'sortable'} onClick={() => this.handleSort('status')}>
                 <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
                   <span>Status</span>
@@ -220,10 +266,8 @@ export class IrTasksTable {
               const isSelected = this.selectedIds.includes(task.id);
               return (
                 <tr style={{ cursor: 'pointer' }} onClick={() => this.toggleSelection(task.id)} class={{ 'selected': isSelected, 'task-table-row': true }} key={task.id}>
-                  <td class="task-row">
-                    <ir-checkbox checked={isSelected}></ir-checkbox>
-                  </td>
-                  <td class="task-row">{task.date}</td>
+                  <td class="task-row">{this.isCheckable(task.date) && <ir-checkbox checked={isSelected}></ir-checkbox>}</td>
+                  <td class="task-row">{task.formatted_date}</td>
                   <td class="task-row">
                     <span class={{ 'highlighted-unit': task.is_highlight }}>{task.unit.name}</span>
                   </td>

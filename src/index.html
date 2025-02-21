@@ -24,14 +24,14 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-housekeeping baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-housekeeping>
+  <ir-hk-tasks baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-hk-tasks>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
-    const housekeepingEl = document.querySelector("ir-housekeeping");
+    const housekeepingEl = document.querySelector("ir-hk-tasks");
     if (housekeepingEl) {
-      housekeepingEl.propertyid = getId();
-      housekeepingEl.ticket = getToken();
+      housekeepingEl.propertyid = 162 || getId();
+      housekeepingEl.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NDEzMzUxNTYsIkNMQUlNLTAxIjoiS0RyWG53NkZnSTg9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiQUVxVnRCMm1kWTg9IiwiQ0xBSU0tMDUiOiJFQTEzejA3ejBUcWRkM2gwNElyYThLVGg2d2tEVzVFSiIsIkNMQUlNLTA2IjoiQUVxVnRCMm1kWTg9In0.YLRngRB-yPY3l0vOTe_Z7MKSd5INhHTQKE3GhBoC0Pw" || getToken();
     } 
   </script>
 

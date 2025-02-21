@@ -11,6 +11,7 @@ export class IrCheckbox {
   @Prop() label: string;
   @Prop() checkboxId = v4();
   @Prop() name: string;
+  @Prop() indeterminate: boolean;
   @Prop() disabled: boolean;
 
   @State() currentChecked = false;
@@ -50,7 +51,7 @@ export class IrCheckbox {
           name={this.name}
           onClick={this.handleCheckChange.bind(this)}
           id={this.checkboxId}
-          data-state={this.currentChecked ? 'checked' : 'unchecked'}
+          data-state={this.currentChecked || this.indeterminate ? 'checked' : 'unchecked'}
           value={'on'}
           ref={ref => (this.checkboxRef = ref)}
           type="button"
@@ -65,8 +66,13 @@ export class IrCheckbox {
               />
             </svg>
           )}
+          {this.indeterminate && (
+            <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
+              <path fill="currentColor" d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+            </svg>
+          )}
         </button>
-        <input type="checkbox" aria-hidden="true" tabindex="-1" value="on" checked={this.currentChecked} class="checkbox" />
+        <input type="checkbox" indeterminate={this.indeterminate} aria-hidden="true" tabindex="-1" value="on" checked={this.currentChecked} class="checkbox" />
         {this.label && <label htmlFor={this.checkboxId}>{this.label}</label>}
       </Host>
     );

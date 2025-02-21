@@ -368,6 +368,7 @@ export namespace Components {
         "checkboxId": string;
         "checked": boolean;
         "disabled": boolean;
+        "indeterminate": boolean;
         "label": string;
         "name": string;
     }
@@ -3397,6 +3398,7 @@ declare namespace LocalJSX {
         "checkboxId"?: string;
         "checked"?: boolean;
         "disabled"?: boolean;
+        "indeterminate"?: boolean;
         "label"?: string;
         "name"?: string;
         "onCheckChange"?: (event: IrCheckboxCustomEvent<boolean>) => void;

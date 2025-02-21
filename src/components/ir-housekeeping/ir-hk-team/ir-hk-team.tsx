@@ -127,7 +127,9 @@ export class IrHkTeam {
                   </td>
                   <td>{hk.username}</td>
                   <td>
-                    {hk.note.length > 50 ? (
+                    {!hk.note ? (
+                      'N/A'
+                    ) : hk.note.length > 50 ? (
                       <ir-popover content={hk.note}>
                         <span>{hk.note.slice(0, 50)}...</span>
                       </ir-popover>
