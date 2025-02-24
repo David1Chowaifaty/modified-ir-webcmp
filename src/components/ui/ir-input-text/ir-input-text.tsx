@@ -110,6 +110,9 @@ export class IrInputText {
   /** Forcing css style to the input */
   @Prop() inputForcedStyle?: { [key: string]: string };
 
+  /** Input id for testing purposes*/
+  @Prop() testId: string;
+
   @State() initial: boolean = true;
   @State() inputFocused: boolean = false;
 
@@ -223,6 +226,7 @@ export class IrInputText {
             </span>
           </label>
           <input
+            data-testid={this.testId}
             data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
             ref={el => (this.inputRef = el)}
             type={this.type}
@@ -270,6 +274,7 @@ export class IrInputText {
         <div class="input-group row m-0">
           {label}
           <input
+            data-testid={this.testId}
             style={this.inputForcedStyle}
             data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
             id={this.id}

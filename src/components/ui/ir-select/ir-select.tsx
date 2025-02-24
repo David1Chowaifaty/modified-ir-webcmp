@@ -29,6 +29,7 @@ export class IrSelect {
   @Prop() labelBorder: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'theme';
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
   @Prop() select_id: string = v4();
+  @Prop() testId: string;
 
   @State() initial: boolean = true;
   @State() valid: boolean = false;
@@ -106,6 +107,7 @@ export class IrSelect {
         <div class="input-group row m-0">
           {label}
           <select
+            data-testid={this.testId}
             style={this.selectForcedStyles}
             ref={el => (this.selectEl = el)}
             id={this.select_id}

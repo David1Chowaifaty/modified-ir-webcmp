@@ -210,7 +210,7 @@ export class IrHkTasks {
       return <ir-loading-screen></ir-loading-screen>;
     }
     return (
-      <Host>
+      <Host data-testid="hk_tasks_base">
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>

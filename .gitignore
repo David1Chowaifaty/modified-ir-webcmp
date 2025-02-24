@@ -30,3 +30,9 @@ pnpm-lock.yaml
 
 
 payloads
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

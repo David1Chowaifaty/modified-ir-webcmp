@@ -665,6 +665,10 @@ export namespace Components {
          */
         "submitted": boolean;
         /**
+          * Input id for testing purposes
+         */
+        "testId": string;
+        /**
           * Text size inside the input field
          */
         "textSize": 'sm' | 'md' | 'lg';
@@ -997,6 +1001,7 @@ export namespace Components {
         "showFirstOption": boolean;
         "size": 'sm' | 'md' | 'lg';
         "submited": boolean;
+        "testId": string;
         "textSize": 'sm' | 'md' | 'lg';
     }
     interface IrSidebar {
@@ -3735,6 +3740,10 @@ declare namespace LocalJSX {
          */
         "submitted"?: boolean;
         /**
+          * Input id for testing purposes
+         */
+        "testId"?: string;
+        /**
           * Text size inside the input field
          */
         "textSize"?: 'sm' | 'md' | 'lg';
@@ -4106,6 +4115,7 @@ declare namespace LocalJSX {
         "showFirstOption"?: boolean;
         "size"?: 'sm' | 'md' | 'lg';
         "submited"?: boolean;
+        "testId"?: string;
         "textSize"?: 'sm' | 'md' | 'lg';
     }
     interface IrSidebar {

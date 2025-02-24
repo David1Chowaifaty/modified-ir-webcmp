@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import { TaskFilters } from '../types';
 import housekeeping_store from '@/stores/housekeeping.store';
-
+export type ModifiedTaskFilters = Omit<TaskFilters, 'housekeepers'> & { housekeepers: string };
 @Component({
   tag: 'ir-tasks-filters',
   styleUrl: 'ir-tasks-filters.css',
@@ -10,13 +10,11 @@ import housekeeping_store from '@/stores/housekeeping.store';
 export class IrTasksFilters {
   @Prop() isLoading: boolean;
 
-  @State() filters: TaskFilters = {
+  @State() filters: ModifiedTaskFilters = {
     cleaning_periods: {
       code: '',
     },
-    housekeepers: {
-      ids: [],
-    },
+    housekeepers: '000',
     cleaning_frequencies: { code: '' },
     dusty_units: { code: '' },
     highlight_check_ins: { code: '' },
@@ -36,22 +34,32 @@ export class IrTasksFilters {
       dusty_units: housekeeping_store?.hk_criteria?.dusty_periods[0],
       highlight_check_ins: housekeeping_store?.hk_criteria?.highlight_checkin_options[0],
     };
-    this.filters = { ...this.baseFilters };
+    this.filters = { ...this.baseFilters, housekeepers: '000' };
   }
 
-  private updateFilter(params: Partial<TaskFilters>) {
+  private updateFilter(params: Partial<ModifiedTaskFilters>) {
     this.filters = { ...this.filters, ...params };
   }
   private applyFiltersEvt(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.applyFilters.emit(this.filters);
+    this.applyFilters.emit({
+      ...this.filters,
+      housekeepers: {
+        ids: this.filters.housekeepers === '000' ? this.baseFilters.housekeepers.ids : [Number(this.filters.housekeepers)],
+      },
+    });
   }
   private resetFilters(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.filters = { ...this.baseFilters };
-    this.applyFilters.emit(this.filters);
+    this.filters = { ...this.baseFilters, housekeepers: '000' };
+    this.applyFilters.emit({
+      ...this.filters,
+      housekeepers: {
+        ids: this.filters.housekeepers === '000' ? this.baseFilters.housekeepers.ids : [Number(this.filters.housekeepers)],
+      },
+    });
   }
   render() {
     return (
@@ -86,6 +94,7 @@ export class IrTasksFilters {
             <fieldset class="pt-1">
               <p class="m-0 p-0">Period</p>
               <ir-select
+                testId="period"
                 selectedValue={this.filters?.cleaning_periods?.code}
                 LabelAvailable={false}
                 showFirstOption={false}
@@ -101,9 +110,8 @@ export class IrTasksFilters {
             <fieldset>
               <p class="m-0 p-0">Housekeepers</p>
               <ir-select
-                selectedValue={
-                  this.filters?.housekeepers?.ids.length === housekeeping_store.hk_criteria.housekeepers.length ? '000' : this.filters?.housekeepers?.ids[0].toString()
-                }
+                testId="housekeepers"
+                selectedValue={this.filters?.housekeepers}
                 LabelAvailable={false}
                 showFirstOption={false}
                 data={[
@@ -114,17 +122,19 @@ export class IrTasksFilters {
                   })),
                 ]}
                 onSelectChange={e => {
-                  if (e.detail === '000') {
-                    this.updateFilter({ housekeepers: { ids: this.baseFilters?.housekeepers?.ids } });
-                  } else {
-                    this.updateFilter({ housekeepers: { ids: [e.detail] } });
-                  }
+                  // if (e.detail === '000') {
+                  //   this.updateFilter({ housekeepers: { ids: this.baseFilters?.housekeepers?.ids } });
+                  // } else {
+                  //   this.updateFilter({ housekeepers: { ids: [e.detail] } });
+                  // }
+                  this.updateFilter({ housekeepers: e.detail });
                 }}
               ></ir-select>
             </fieldset>
             <fieldset>
               <p class="m-0 p-0">Cleaning frequency</p>
               <ir-select
+                testId="cleaning_frequency"
                 selectedValue={this.filters?.cleaning_frequencies?.code}
                 LabelAvailable={false}
                 showFirstOption={false}
@@ -140,8 +150,10 @@ export class IrTasksFilters {
             <fieldset>
               <p class="m-0 p-0">Dusty units</p>
               <ir-select
+                testId="dusty_units"
                 showFirstOption={false}
                 LabelAvailable={false}
+                selectedValue={this.filters?.dusty_units?.code}
                 data={housekeeping_store.hk_criteria?.dusty_periods?.map(v => ({
                   text: v.description,
                   value: v.code,
@@ -156,6 +168,7 @@ export class IrTasksFilters {
             <fieldset class="mb-1">
               <p class="m-0 p-0">Highlight check-ins</p>
               <ir-select
+                testId="highlight_check_ins"
                 selectedValue={this.filters?.highlight_check_ins?.code}
                 LabelAvailable={false}
                 showFirstOption={false}
@@ -169,8 +182,8 @@ export class IrTasksFilters {
               ></ir-select>
             </fieldset>
             <div class="d-flex align-items-center justify-content-end" style={{ gap: '1rem' }}>
-              <ir-button btn_type="button" text="Reset" size="sm" btn_color="outline" onClickHandler={e => this.resetFilters(e)}></ir-button>
-              <ir-button btn_type="button" isLoading={this.isLoading} text="Apply" size="sm" onClickHandler={e => this.applyFiltersEvt(e)}></ir-button>
+              <ir-button btn_type="button" data-testid="reset" text="Reset" size="sm" btn_color="outline" onClickHandler={e => this.resetFilters(e)}></ir-button>
+              <ir-button btn_type="button" data-testid="apply" isLoading={this.isLoading} text="Apply" size="sm" onClickHandler={e => this.applyFiltersEvt(e)}></ir-button>
             </div>
           </div>
         </div>
