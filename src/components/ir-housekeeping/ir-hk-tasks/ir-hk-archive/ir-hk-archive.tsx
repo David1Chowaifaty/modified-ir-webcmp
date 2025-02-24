@@ -189,21 +189,25 @@ export class IrHkArchive {
                     <td class="px-2">{d.house_keeper}</td>
                     <td class="px-2">{d.unit}</td>
                     <td class="px-2">
-                      <ir-button
-                        btn_color="link"
-                        btnStyle={{
-                          width: 'fit-content',
-                          padding: '0',
-                          margin: '0',
-                        }}
-                        labelStyle={{
-                          padding: '0',
-                        }}
-                        text={d.booking_nbr.toString()}
-                        onClick={() => {
-                          window.open(`https://x.igloorooms.com/manage/acbookingeditV2.aspx?BN=${d.booking_nbr}`, '_blank');
-                        }}
-                      ></ir-button>
+                      {d.booking_nbr ? (
+                        <ir-button
+                          btn_color="link"
+                          btnStyle={{
+                            width: 'fit-content',
+                            padding: '0',
+                            margin: '0',
+                          }}
+                          labelStyle={{
+                            padding: '0',
+                          }}
+                          text={d.booking_nbr.toString()}
+                          onClick={() => {
+                            window.open(`https://x.igloorooms.com/manage/acbookingeditV2.aspx?BN=${d.booking_nbr}`, '_blank');
+                          }}
+                        ></ir-button>
+                      ) : (
+                        'N/A'
+                      )}
                     </td>
                   </tr>
                 ))}
