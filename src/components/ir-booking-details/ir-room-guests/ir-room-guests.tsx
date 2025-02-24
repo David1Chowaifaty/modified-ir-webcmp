@@ -254,7 +254,12 @@ export class IrRoomGuests {
                     <p class="guest_label">{locales.entries.Lcz_Documents}</p>
                     <div class={' d-flex m-0 flex-grow-1 h-100'}>
                       <ir-select
-                        selectStyles={'id-select'}
+                        selectForcedStyles={{
+                          borderTopRightRadius: '0px',
+                          borderBottomRightRadius: '0px',
+                          borderRight: '0',
+                        }}
+                        selectStyles={'rounded-top-0 rounded-bottom-0'}
                         onSelectChange={e => {
                           this.updateGuestInfo(idx, {
                             id_info: {
@@ -275,6 +280,7 @@ export class IrRoomGuests {
                         placeholder="12345"
                         class="flex-grow-1 guest_document"
                         type="text"
+                        inputForcedStyle={{ borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px' }}
                         value={guest.id_info.number}
                         zod={ZIdInfo.pick({ number: true })}
                         error={!!this.error['number']}

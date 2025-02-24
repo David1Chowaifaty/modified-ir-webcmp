@@ -1,5 +1,5 @@
 import { RoomHkStatus } from '@/models/booking.dto';
-import { IExposedHouseKeepingSetup, IInspectionMode, IPropertyHousekeepingAssignment, THKUser, TPendingHkSetupParams } from '@/models/housekeeping';
+import { ArchivedTask, IExposedHouseKeepingSetup, IInspectionMode, IPropertyHousekeepingAssignment, THKUser, TPendingHkSetupParams } from '@/models/housekeeping';
 import { updateHKStore } from '@/stores/housekeeping.store';
 import axios from 'axios';
 
@@ -12,11 +12,19 @@ export class HouseKeepingService {
     return data['My_Result'];
   }
   public async getExposedHKStatusCriteria(property_id: number): Promise<IExposedHouseKeepingSetup> {
-    const { data } = await axios.post(`/Get_Exposed_HK_Status_Criteria`, {
-      property_id,
-    });
+    const { data } = await axios.post(`/Get_Exposed_HK_Status_Criteria`, { property_id });
     updateHKStore('hk_tasks', data['My_Result']);
     return data['My_Result'];
+  }
+  public async getArchivedHKTasks(params: {
+    property_id: number;
+    from_date: string;
+    to_date: string;
+    filtered_by_hkm?: number[];
+    filtered_by_unit?: number[];
+  }): Promise<ArchivedTask[] | null> {
+    const { data } = await axios.post(`/Get_Archived_HK_Tasks`, params);
+    return data['My_Result'] ?? [];
   }
 
   public async setExposedInspectionMode(property_id: number, mode: IInspectionMode) {

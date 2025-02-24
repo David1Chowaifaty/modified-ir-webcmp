@@ -33,7 +33,7 @@ export class IrTasksHeader {
               this.headerButtonPress.emit({ name: 'export' });
             }}
           ></ir-button>
-          {/* <ir-button
+          <ir-button
             size="sm"
             btn_color="outline"
             text="Archive"
@@ -42,7 +42,7 @@ export class IrTasksHeader {
               e.stopPropagation();
               this.headerButtonPress.emit({ name: 'archive' });
             }}
-          ></ir-button> */}
+          ></ir-button>
           <ir-button
             onClickHandler={e => {
               e.stopImmediatePropagation();

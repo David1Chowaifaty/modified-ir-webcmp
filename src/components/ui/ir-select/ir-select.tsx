@@ -12,6 +12,7 @@ export class IrSelect {
   @Prop() data: selectOption[];
   @Prop() label = '<label>';
   @Prop() selectStyles: string;
+  @Prop() selectForcedStyles: { [key: string]: string };
   @Prop() selectContainerStyle: string;
   @Prop({ reflect: true, mutable: true }) selectedValue = null;
   @Prop() required: boolean;
@@ -105,6 +106,7 @@ export class IrSelect {
         <div class="input-group row m-0">
           {label}
           <select
+            style={this.selectForcedStyles}
             ref={el => (this.selectEl = el)}
             id={this.select_id}
             class={`${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}

@@ -20,7 +20,7 @@ export class IglRatePlan {
   @Prop() isBookDisabled: boolean = false;
   @Prop() visibleInventory!: IRatePlanSelection;
 
-  @Event() gotoSplitPageTwoEvent!: EventEmitter<{ [key: string]: any }>;
+  @Event() buttonClicked!: EventEmitter<{ [key: string]: any }>;
 
   // Determine if the form inputs should be disabled
   private disableForm(): boolean {
@@ -66,8 +66,7 @@ export class IglRatePlan {
 
   // Navigate to the next page for booking
   private bookProperty(): void {
-    this.handleDataChange('totalRooms', { target: { value: '1' } } as any);
-    this.gotoSplitPageTwoEvent.emit({ key: 'gotoSplitPage', data: '' });
+    this.buttonClicked.emit({ key: 'next' });
   }
 
   // Render the rate amount
@@ -242,7 +241,7 @@ export class IglRatePlan {
               </div>
               {bookingType === 'EDIT_BOOKING' && (
                 <Fragment>
-                  <div class="m-0 p-0 mt-lg-0 ml-md-1 mt-md-1 d-none d-md-block">
+                  <div class="m-0 p-0 ml-md-1 mt-md-0 d-none d-md-block">
                     <fieldset class="position-relative">
                       <input
                         disabled={disableForm}

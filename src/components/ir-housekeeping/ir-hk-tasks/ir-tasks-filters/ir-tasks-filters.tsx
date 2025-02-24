@@ -146,6 +146,11 @@ export class IrTasksFilters {
                   text: v.description,
                   value: v.code,
                 }))}
+                onSelectChange={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.updateFilter({ dusty_units: { code: e.detail } });
+                }}
               ></ir-select>
             </fieldset>
             <fieldset class="mb-1">

@@ -107,6 +107,9 @@ export class IrInputText {
   /** Key to wrap the value (e.g., 'price' or 'cost') */
   @Prop() wrapKey?: string;
 
+  /** Forcing css style to the input */
+  @Prop() inputForcedStyle?: { [key: string]: string };
+
   @State() initial: boolean = true;
   @State() inputFocused: boolean = false;
 
@@ -267,6 +270,7 @@ export class IrInputText {
         <div class="input-group row m-0">
           {label}
           <input
+            style={this.inputForcedStyle}
             data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
             id={this.id}
             ref={el => (this.inputRef = el)}

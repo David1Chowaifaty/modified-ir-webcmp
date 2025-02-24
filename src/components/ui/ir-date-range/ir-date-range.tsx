@@ -132,7 +132,7 @@ export class IrDateRange {
   render() {
     return (
       <Host>
-        <input class="date-range-input" type="text" disabled={this.disabled} />
+        <input class="date-range-input" type="button" disabled={this.disabled} />
       </Host>
     );
   }

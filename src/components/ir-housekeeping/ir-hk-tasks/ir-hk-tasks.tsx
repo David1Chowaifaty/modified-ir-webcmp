@@ -165,7 +165,7 @@ export class IrHkTasks {
         return;
       }
       await this.houseKeepingService.executeHKAction({
-        actions: this.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id === 0 ? null : t.hkm_id, unit_id: t.unit.id })),
+        actions: this.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id === 0 ? null : t.hkm_id, unit_id: t.unit.id, booking_nbr: t.booking_nbr })),
       });
       await this.fetchTasksWithFilters();
     } finally {
@@ -189,16 +189,16 @@ export class IrHkTasks {
     }
   }
   private async fetchTasksWithFilters() {
-    console.log(this.filters);
-    const { cleaning_periods, housekeepers, cleaning_frequencies, dusty_units, highlight_check_ins } = this.filters;
+    const { cleaning_periods, housekeepers, cleaning_frequencies, dusty_units, highlight_check_ins } = this.filters ?? {};
+
     const tasks = await this.houseKeepingService.getHkTasks({
       housekeepers,
-      cleaning_frequencies: cleaning_frequencies.code,
-      dusty_units: dusty_units.code,
-      highlight_window: highlight_check_ins.code,
+      cleaning_frequencies: cleaning_frequencies?.code,
+      dusty_units: dusty_units?.code,
+      highlight_window: highlight_check_ins?.code,
       property_id: this.property_id,
       from_date: moment().format('YYYY-MM-DD'),
-      to_date: cleaning_periods.code,
+      to_date: cleaning_periods?.code || moment().format('YYYY-MM-DD'),
     });
     if (tasks) {
       this.updateTasks(tasks);
@@ -258,7 +258,7 @@ export class IrHkTasks {
           }}
           showCloseButton={false}
         >
-          <ir-hk-archive slot="sidebar-body"></ir-hk-archive>
+          {this.isSidebarOpen && <ir-hk-archive propertyId={this.property_id} slot="sidebar-body"></ir-hk-archive>}
         </ir-sidebar>
         {/* <ir-title class="d-none d-md-flex" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between">
             <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm"></ir-button>

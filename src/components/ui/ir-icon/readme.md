@@ -30,7 +30,6 @@
  - [ir-dialog](../ir-dialog)
  - [ir-dropdown](../ir-dropdown)
  - [ir-guest-info](../../ir-guest-info)
- - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-team](../../ir-housekeeping/ir-hk-team)
  - [ir-listing-modal](../../ir-booking-listing/ir-listing-modal)
  - [ir-room-nights](../../igloo-calendar/ir-room-nights)
@@ -47,7 +46,6 @@ graph TD;
   ir-dialog --> ir-icon
   ir-dropdown --> ir-icon
   ir-guest-info --> ir-icon
-  ir-hk-archive --> ir-icon
   ir-hk-team --> ir-icon
   ir-listing-modal --> ir-icon
   ir-room-nights --> ir-icon

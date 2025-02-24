@@ -21,9 +21,9 @@
 
 ## Events
 
-| Event                   | Description | Type                                   |
-| ----------------------- | ----------- | -------------------------------------- |
-| `gotoSplitPageTwoEvent` |             | `CustomEvent<{ [key: string]: any; }>` |
+| Event           | Description | Type                                   |
+| --------------- | ----------- | -------------------------------------- |
+| `buttonClicked` |             | `CustomEvent<{ [key: string]: any; }>` |
 
 
 ## Dependencies

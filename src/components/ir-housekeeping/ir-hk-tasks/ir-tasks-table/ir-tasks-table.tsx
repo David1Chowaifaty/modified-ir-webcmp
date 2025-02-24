@@ -166,7 +166,7 @@ export class IrTasksTable {
   private assignCheckableTasks() {
     const tasks = [];
     this.tasks.forEach(task => {
-      if (this.isCheckable(task.date)) {
+      if (this.isCheckable(task)) {
         tasks.push(task);
       }
     });
@@ -182,8 +182,11 @@ export class IrTasksTable {
    * @param {string} date - The task's date in 'YYYY-MM-DD' format.
    * @returns {boolean} - Returns `true` if the task's date is today or earlier, otherwise `false`.
    */
-  private isCheckable(date: string): boolean {
-    return moment(date, 'YYYY-MM-DD').isSameOrBefore(moment(), 'days');
+  private isCheckable(task: Task): boolean {
+    if (!task.hkm_id) {
+      return false;
+    }
+    return moment(task.date, 'YYYY-MM-DD').isSameOrBefore(moment(), 'days');
   }
 
   render() {
@@ -264,9 +267,20 @@ export class IrTasksTable {
             )}
             {this.tasks.map(task => {
               const isSelected = this.selectedIds.includes(task.id);
+              const isCheckable = this.isCheckable(task);
               return (
-                <tr style={{ cursor: 'pointer' }} onClick={() => this.toggleSelection(task.id)} class={{ 'selected': isSelected, 'task-table-row': true }} key={task.id}>
-                  <td class="task-row">{this.isCheckable(task.date) && <ir-checkbox checked={isSelected}></ir-checkbox>}</td>
+                <tr
+                  style={isCheckable && { cursor: 'pointer' }}
+                  onClick={() => {
+                    if (!isCheckable) {
+                      return;
+                    }
+                    this.toggleSelection(task.id);
+                  }}
+                  class={{ 'selected': isSelected, 'task-table-row': true }}
+                  key={task.id}
+                >
+                  <td class="task-row">{isCheckable && <ir-checkbox checked={isSelected}></ir-checkbox>}</td>
                   <td class="task-row">{task.formatted_date}</td>
                   <td class="task-row">
                     <span class={{ 'highlighted-unit': task.is_highlight }}>{task.unit.name}</span>

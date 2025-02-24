@@ -62,12 +62,9 @@ graph TD;
   ir-hk-archive --> ir-title
   ir-hk-archive --> ir-select
   ir-hk-archive --> igl-date-range
-  ir-hk-archive --> ir-icon
   ir-hk-archive --> ir-button
   ir-title --> ir-icon
   igl-date-range --> ir-date-range
-  igl-date-range --> ir-date-picker
-  igl-date-range --> ir-date-view
   ir-secure-tasks --> ir-hk-tasks
   style ir-hk-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```

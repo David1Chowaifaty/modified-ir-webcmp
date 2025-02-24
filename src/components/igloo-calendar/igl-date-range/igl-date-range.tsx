@@ -134,39 +134,37 @@ export class IglDateRange {
     }
     return (
       <Host>
-        <div class="calendarPickerContainer form-control input-sm" data-state={this.disabled ? 'disabled' : 'active'}>
-          <ir-date-picker
+        <div class={`p-0 m-0 date-range-container-cn`}>
+          <ir-date-range
             maxDate={this.maxDate}
             class={'date-range-input'}
             disabled={this.disabled}
-            minDate={this.fromDate}
-            // minDate={this.toDate}
-            // maxDate={this.minDate}
-            // autoApply
+            fromDate={this.fromDate}
+            toDate={this.toDate}
+            minDate={this.minDate}
+            autoApply
             data-state={this.disabled ? 'disabled' : 'active'}
             onDateChanged={evt => {
               this.handleDateChange(evt);
             }}
-          ></ir-date-picker>
-          <div data-state={this.disabled ? 'disabled' : 'active'} class="date-view">
-            <svg xmlns="http://www.w3.org/2000/svg" height="12" width="10.5" viewBox="0 0 448 512">
+          ></ir-date-range>
+          <div class={`d-flex align-items-center m-0  date-range-container ${this.disabled ? 'disabled' : ''}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" class="m-0 p-0" height="14" width="14" viewBox="0 0 448 512">
               <path
                 fill="currentColor"
                 d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"
               />
             </svg>
-            <ir-date-view showDateDifference={this.disabled} from_date={this.fromDate} to_date={this.toDate}></ir-date-view>
+            <span>{moment(this.fromDate).format('MMM DD, YYYY')}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="m-0 p-0" height="14" width="14" viewBox="0 0 512 512">
+              <path
+                fill="currentColor"
+                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
+              />
+            </svg>
+            <span>{moment(this.toDate).format('MMM DD, YYYY')}</span>
           </div>
         </div>
-        {this.withDateDifference && (
-          <span>
-            {this.totalNights && !this.disabled ? (
-              <span class="iglRangeNights mx-1">{this.totalNights + (this.totalNights > 1 ? ` ${locales.entries.Lcz_Nights}` : ` ${locales.entries.Lcz_Night}`)}</span>
-            ) : (
-              ''
-            )}
-          </span>
-        )}
       </Host>
     );
   }

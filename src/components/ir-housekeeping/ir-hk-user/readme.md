@@ -32,6 +32,7 @@
 - [ir-title](../../ir-title)
 - [ir-input-text](../../ui/ir-input-text)
 - [ir-phone-input](../../ui/ir-phone-input)
+- [ir-textarea](../../ui/ir-textarea)
 - [ir-button](../../ui/ir-button)
 
 ### Graph
@@ -40,6 +41,7 @@ graph TD;
   ir-hk-user --> ir-title
   ir-hk-user --> ir-input-text
   ir-hk-user --> ir-phone-input
+  ir-hk-user --> ir-textarea
   ir-hk-user --> ir-button
   ir-title --> ir-icon
   ir-phone-input --> ir-combobox

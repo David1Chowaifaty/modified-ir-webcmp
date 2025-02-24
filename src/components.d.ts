@@ -552,6 +552,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrHkArchive {
+        "propertyId": string | number;
     }
     interface IrHkTasks {
         "language": string;
@@ -599,6 +600,10 @@ export namespace Components {
           * Whether the input has an error
          */
         "error": boolean;
+        /**
+          * Forcing css style to the input
+         */
+        "inputForcedStyle"?: { [key: string]: string };
         /**
           * Whether to apply default input styling
          */
@@ -984,6 +989,7 @@ export namespace Components {
         "name": string;
         "required": boolean;
         "selectContainerStyle": string;
+        "selectForcedStyles": { [key: string]: string };
         "selectStyle": boolean;
         "selectStyles": string;
         "select_id": string;
@@ -1677,7 +1683,7 @@ declare global {
         new (): HTMLIglPropertyBookedByElement;
     };
     interface HTMLIglRatePlanElementEventMap {
-        "gotoSplitPageTwoEvent": { [key: string]: any };
+        "buttonClicked": { [key: string]: any };
     }
     interface HTMLIglRatePlanElement extends Components.IglRatePlan, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglRatePlanElementEventMap>(type: K, listener: (this: HTMLIglRatePlanElement, ev: IglRatePlanCustomEvent<HTMLIglRatePlanElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3201,7 +3207,7 @@ declare namespace LocalJSX {
         "bookingType"?: string;
         "currency": { symbol: string };
         "isBookDisabled"?: boolean;
-        "onGotoSplitPageTwoEvent"?: (event: IglRatePlanCustomEvent<{ [key: string]: any }>) => void;
+        "onButtonClicked"?: (event: IglRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "ratePlan"?: RatePlan;
         "ratePricingMode"?: Array<{ CODE_NAME: string; CODE_VALUE_EN: string }>;
         "roomTypeId"?: number;
@@ -3606,6 +3612,7 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrHkArchive {
+        "propertyId"?: string | number;
     }
     interface IrHkTasks {
         "language"?: string;
@@ -3660,6 +3667,10 @@ declare namespace LocalJSX {
           * Whether the input has an error
          */
         "error"?: boolean;
+        /**
+          * Forcing css style to the input
+         */
+        "inputForcedStyle"?: { [key: string]: string };
         /**
           * Whether to apply default input styling
          */
@@ -4087,6 +4098,7 @@ declare namespace LocalJSX {
         "onSelectChange"?: (event: IrSelectCustomEvent<any>) => void;
         "required"?: boolean;
         "selectContainerStyle"?: string;
+        "selectForcedStyles"?: { [key: string]: string };
         "selectStyle"?: boolean;
         "selectStyles"?: string;
         "select_id"?: string;

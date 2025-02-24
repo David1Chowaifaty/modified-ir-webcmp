@@ -36,15 +36,11 @@
 ### Depends on
 
 - [ir-date-range](../../ui/ir-date-range)
-- [ir-date-picker](../../ui/ir-date-picker)
-- [ir-date-view](../../ir-date-view)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-date-range --> ir-date-range
-  igl-date-range --> ir-date-picker
-  igl-date-range --> ir-date-view
   igl-book-property-header --> igl-date-range
   ir-hk-archive --> igl-date-range
   style igl-date-range fill:#f9f,stroke:#333,stroke-width:4px

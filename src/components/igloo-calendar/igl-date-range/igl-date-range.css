@@ -9,8 +9,7 @@
   display: flex;
   flex: 1;
   cursor: pointer;
-  width: 220px !important;
-  opacity: 0;
+  width: 100%;
   user-select: none;
   font-size: 14px !important;
 }
@@ -86,6 +85,8 @@
 .date-range-container-cn .date-range-input {
   position: absolute;
   width: 100% !important;
+  inset: 0;
+  cursor: pointer;
 }
 .date-range-container.disabled {
   border: none;

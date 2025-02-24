@@ -7,13 +7,14 @@
 
 ## Properties
 
-| Property     | Attribute     | Description | Type      | Default     |
-| ------------ | ------------- | ----------- | --------- | ----------- |
-| `checkboxId` | `checkbox-id` |             | `string`  | `v4()`      |
-| `checked`    | `checked`     |             | `boolean` | `false`     |
-| `disabled`   | `disabled`    |             | `boolean` | `undefined` |
-| `label`      | `label`       |             | `string`  | `undefined` |
-| `name`       | `name`        |             | `string`  | `undefined` |
+| Property        | Attribute       | Description | Type      | Default     |
+| --------------- | --------------- | ----------- | --------- | ----------- |
+| `checkboxId`    | `checkbox-id`   |             | `string`  | `v4()`      |
+| `checked`       | `checked`       |             | `boolean` | `false`     |
+| `disabled`      | `disabled`      |             | `boolean` | `undefined` |
+| `indeterminate` | `indeterminate` |             | `boolean` | `undefined` |
+| `label`         | `label`         |             | `string`  | `undefined` |
+| `name`          | `name`          |             | `string`  | `undefined` |
 
 
 ## Events

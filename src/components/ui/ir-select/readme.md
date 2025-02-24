@@ -21,6 +21,7 @@
 | `name`                 | `name`                   |             | `string`                                                                                                             | `undefined` |
 | `required`             | `required`               |             | `boolean`                                                                                                            | `undefined` |
 | `selectContainerStyle` | `select-container-style` |             | `string`                                                                                                             | `undefined` |
+| `selectForcedStyles`   | --                       |             | `{ [key: string]: string; }`                                                                                         | `undefined` |
 | `selectStyle`          | `select-style`           |             | `boolean`                                                                                                            | `true`      |
 | `selectStyles`         | `select-styles`          |             | `string`                                                                                                             | `undefined` |
 | `select_id`            | `select_id`              |             | `string`                                                                                                             | `v4()`      |
