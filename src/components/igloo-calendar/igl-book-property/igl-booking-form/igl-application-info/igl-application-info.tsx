@@ -138,6 +138,7 @@ export class IglApplicationInfo {
       infants: this.guestInfo.infant_nbr,
       variations: this.rateplanSelection.ratePlan.variations,
     });
+    console.log({ guestInfo: this.guestInfo });
     return (
       <Host class={'my-2'}>
         <div class="booking-header">
@@ -165,13 +166,13 @@ export class IglApplicationInfo {
           <p class="booking-variation" innerHTML={formattedVariation}></p>
         </div>
         <div class="d-flex flex-column flex-md-row  p-0 align-items-md-center aplicationInfoContainer">
-          <div class="mr-1 mb-1 mb-md-0 flex-fill guest-info-container">
+          <div class="mr-md-1 mb-1 mb-md-0 flex-fill guest-info-container">
             <input
               id={v4()}
-              type="email"
+              type="text"
               class={`form-control ${this.isButtonPressed && this.guestInfo?.first_name === '' && 'border-danger'}`}
               placeholder={locales.entries['Lcz_GuestFirstname'] ?? 'Guest first name'}
-              name="guestName"
+              name="guestFirstName"
               onInput={event => {
                 const name = (event.target as HTMLInputElement).value;
                 this.updateGuest({ first_name: name });
@@ -186,13 +187,13 @@ export class IglApplicationInfo {
               value={this.guestInfo?.first_name}
             />
           </div>
-          <div class="mr-1 flex-fill guest-info-container">
+          <div class="mr-md-1 flex-fill guest-info-container">
             <input
               id={v4()}
-              type="email"
+              type="text"
               class={`form-control ${this.isButtonPressed && this.guestInfo?.last_name === '' && 'border-danger'}`}
               placeholder={locales.entries['Lcz_GuestLastname'] ?? 'Guest last name'}
-              name="guestName"
+              name="guestLastName"
               onInput={event => {
                 const name = (event.target as HTMLInputElement).value;
                 this.updateGuest({ last_name: name });
@@ -207,11 +208,11 @@ export class IglApplicationInfo {
               value={this.guestInfo?.last_name}
             />
           </div>
-          <div class="mt-1 mt-md-0 d-flex align-items-center flex-fill">
+          <div class="my-1 my-md-0 d-flex align-items-center flex-fill">
             {calendar_data.is_frontdesk_enabled &&
               !isSingleUnit(this.rateplanSelection.roomtype.id) &&
               (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
-                <div class="mr-1 p-0 flex-fill preference-select-container">
+                <div class="mr-md-1 p-0 flex-fill preference-select-container">
                   <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.updateGuest({ unit: (event.target as HTMLInputElement).value })}>
                     <option value="" selected={this.guestInfo?.unit === ''}>
                       {locales.entries.Lcz_Assignunits}
@@ -226,7 +227,7 @@ export class IglApplicationInfo {
               )}
           </div>
           {this.rateplanSelection.roomtype.is_bed_configuration_enabled && (
-            <div class="mr-1 flex-fill">
+            <div class="mr-md-1 flex-fill">
               <select
                 class={`form-control input-sm ${this.isButtonPressed && this.guestInfo?.bed_preference === '' && 'border-danger'}`}
                 id={v4()}

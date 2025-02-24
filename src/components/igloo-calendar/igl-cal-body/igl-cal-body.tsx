@@ -436,6 +436,7 @@ export class IglCalBody {
             e.stopImmediatePropagation();
             e.stopPropagation();
             this.selectedRoom = null;
+            this.hkModal.closeModal();
           }}
         ></ir-modal>
       </Host>

@@ -186,7 +186,7 @@ export class IglRatePlan {
                 </fieldset>
               </div>
               <div class="m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1">
-                <div class="d-flex m-0 p-0 rate-total-night-view mt-0">
+                <div class="d-flex m-0 p-0 rate-total-night-view mt-0 flex-grow-1">
                   <ir-price-input
                     disabled={disableForm}
                     onTextChange={e =>
@@ -197,7 +197,7 @@ export class IglRatePlan {
                     }
                     aria-label={`${this.visibleInventory?.roomtype?.name} ${this.ratePlan.short_name}'s rate`}
                     aria-describedby={`${this.ratePlan.short_name}'s rate`}
-                    class="ir-br-input-none"
+                    class="ir-br-input-none w-100 flex-grow-1"
                     currency={currency.symbol}
                     value={this.renderRate()}
                     placeholder={locales.entries.Lcz_Rate || 'Rate'}
@@ -240,7 +240,6 @@ export class IglRatePlan {
                   </div>
                 )}
               </div>
-
               {bookingType === 'EDIT_BOOKING' && (
                 <Fragment>
                   <div class="m-0 p-0 mt-lg-0 ml-md-1 mt-md-1 d-none d-md-block">

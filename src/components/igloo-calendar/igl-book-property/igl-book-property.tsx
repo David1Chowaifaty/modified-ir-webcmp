@@ -439,6 +439,7 @@ export class IglBookProperty {
       const { currentRoomType, GUEST } = this.defaultData as IglBookPropertyPayloadEditBooking;
       const roomtypeId = currentRoomType.roomtype.id;
       const rateplanId = currentRoomType.rateplan.id;
+      console.log({ GUEST });
       reserveRooms({
         roomTypeId: roomtypeId,
         ratePlanId: rateplanId,
