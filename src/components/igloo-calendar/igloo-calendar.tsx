@@ -7,7 +7,7 @@ import { EventsService } from '@/services/events.service';
 import { ICountry, RoomBlockDetails, RoomBookingDetails, RoomDetail, bookingReasons } from '@/models/IBooking';
 import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '@/services/toBeAssigned.service';
-import { bookingStatus, calculateDaysBetweenDates, getPrivateNote, transformNewBLockedRooms, transformNewBooking } from '@/utils/booking';
+import { bookingStatus, calculateDaysBetweenDates, getPrivateNote, getRoomStatus, transformNewBLockedRooms, transformNewBooking } from '@/utils/booking';
 import { IRoomNightsData, IRoomNightsDataEventPayload, CalendarModalEvent } from '@/models/property-types';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
@@ -413,13 +413,23 @@ export class IglooCalendar {
     }
   }
   private handleRoomStatusChanged(result: any) {
-    // console.log(result);
     this.calendarData = {
       ...this.calendarData,
       bookingEvents: [
         ...this.calendarData.bookingEvents.map(e => {
           if (e.IDENTIFIER === result.room_identifier) {
-            return { ...e, CHECKIN: result.status === '001', CHECKOUT: result.status === '002', STATUS: bookingStatus[result.status === '001' ? '000' : '003'] };
+            const STATUS = getRoomStatus({
+              from_date: e.FROM_DATE,
+              to_date: e.TO_DATE,
+              in_out: { ...e.ROOM_INFO.in_out, code: result.status },
+              status_code: e.BASE_STATUS_CODE,
+            });
+            return {
+              ...e,
+              CHECKIN: result.status === '001',
+              CHECKOUT: result.status === '002',
+              STATUS,
+            };
           }
           return e;
         }),
@@ -570,6 +580,7 @@ export class IglooCalendar {
   }
 
   private updateBookingEventsDateRange(eventData) {
+    console.log('updating booking event');
     const now = moment();
     eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
@@ -587,7 +598,18 @@ export class IglooCalendar {
       if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
         if (calendar_data.checkin_enabled) {
           if (bookingEvent.CHECKOUT) {
-            bookingEvent.STATUS = bookingStatus['003'];
+            if (!calendar_data.is_automatic_check_in_out) {
+              const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+              const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+
+              if (now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && now.hour() >= 12) {
+                bookingEvent.STATUS = bookingStatus['003'];
+              } else {
+                bookingEvent.STATUS = bookingStatus['002'];
+              }
+            } else {
+              bookingEvent.STATUS = bookingStatus['003'];
+            }
           }
           if (bookingEvent.CHECKIN) {
             bookingEvent.STATUS = bookingStatus['000'];

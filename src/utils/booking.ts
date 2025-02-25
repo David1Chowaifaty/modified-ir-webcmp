@@ -1,4 +1,4 @@
-import { Extras } from './../models/booking.dto';
+import { Extras, Room } from './../models/booking.dto';
 import moment from 'moment';
 import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, RoomBlockDetails } from '../models/IBooking';
 import { dateDifference, isBlockUnit } from './utils';
@@ -167,7 +167,9 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       occupancy: cell.room.occupancy,
       sharing_persons: cell.room.sharing_persons,
       unit: cell.room.unit,
+      in_out: cell.room.in_out,
     },
+    BASE_STATUS_CODE: cell.booking.status?.code,
   };
 }
 
@@ -185,7 +187,43 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
 //   }
 //   return data;
 // }
-
+export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_date'> & { status_code: string }) {
+  const { in_out, status_code, from_date, to_date } = params;
+  if (calendar_data.checkin_enabled) {
+    if (in_out?.code === '001') {
+      return bookingStatus['000'];
+    } else if (in_out?.code === '002') {
+      console.log(calendar_data.is_automatic_check_in_out);
+      if (!calendar_data.is_automatic_check_in_out) {
+        const now = moment();
+        const toDate = moment(to_date, 'YYYY-MM-DD');
+        const fromDate = moment(from_date, 'YYYY-MM-DD');
+        if (now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && now.hour() >= 12) {
+          return bookingStatus['003'];
+        } else {
+          return bookingStatus['002'];
+        }
+      }
+      return bookingStatus['003'];
+    }
+    return bookingStatus[status_code || '001'];
+  } else {
+    const now = moment();
+    const toDate = moment(to_date, 'YYYY-MM-DD');
+    const fromDate = moment(from_date, 'YYYY-MM-DD');
+    if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+      return bookingStatus['000'];
+    } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+      return bookingStatus['000'];
+    } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+      return bookingStatus['000'];
+    } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+      return bookingStatus['003'];
+    } else {
+      return bookingStatus[status_code || '001'];
+    }
+  }
+}
 function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { code: string; value: string }[]): void {
   const index = myBookings.findIndex(booking => booking.POOL === cell.POOL);
   if (index === -1) {
@@ -205,50 +243,6 @@ export function getPrivateNote(extras: Extras[] | null) {
 }
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
-  //console.log(data);
-  const renderStatus = room => {
-    if (calendar_data.checkin_enabled) {
-      if (room.in_out?.code === '001') {
-        return bookingStatus['000'];
-      } else if (room.in_out?.code === '002') {
-        console.log(calendar_data.is_automatic_check_in_out);
-        if (!calendar_data.is_automatic_check_in_out) {
-          const now = moment();
-          const toDate = moment(room.to_date, 'YYYY-MM-DD');
-          const fromDate = moment(room.from_date, 'YYYY-MM-DD');
-          console.log({ toDate: toDate.format('YYYY-MM-DD'), fromDate: fromDate.format('YYYY-MM-DD') });
-          if (now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && now.hour() >= 12) {
-            return bookingStatus['003'];
-          } else {
-            return bookingStatus['002'];
-          }
-        }
-        return bookingStatus['003'];
-      }
-      return bookingStatus[data?.status.code || '001'];
-    } else {
-      const now = moment();
-      const toDate = moment(room.to_date, 'YYYY-MM-DD');
-      const fromDate = moment(room.from_date, 'YYYY-MM-DD');
-
-      if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
-        return bookingStatus['000'];
-      } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-        return bookingStatus['000'];
-      } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
-        return bookingStatus['000'];
-      } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
-        return bookingStatus['003'];
-      } else {
-        return bookingStatus[data?.status.code || '001'];
-      }
-    }
-    // if (toDate.isBefore(now, 'day') || (toDate.isSame(now, 'day') && now.hour() >= 12)) {
-    //   return bookingStatus['003'];
-    // } else {
-    //   return bookingStatus[fromDate.isSameOrBefore(now, 'day') ? '000' : data?.status.code || '001'];
-    // }
-  };
   const rooms = data.rooms.filter(room => !!room['assigned_units_pool']);
   rooms.forEach(room => {
     const bookingFromDate = moment(room.from_date, 'YYYY-MM-DD').isAfter(moment(calendar_dates.fromDate, 'YYYY-MM-DD')) ? room.from_date : calendar_dates.fromDate;
@@ -269,7 +263,12 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       ARRIVAL: data.arrival,
       IS_EDITABLE: true,
       BALANCE: data.financial?.due_amount,
-      STATUS: renderStatus(room),
+      STATUS: getRoomStatus({
+        in_out: room.in_out,
+        from_date: room.from_date,
+        to_date: room.to_date,
+        status_code: data.status?.code,
+      }),
       NAME: formatName(mainGuest?.first_name, mainGuest.last_name),
       PHONE: data.guest.mobile_without_prefix ?? '',
       ENTRY_DATE: '12-12-2023',
@@ -309,7 +308,9 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
         occupancy: room.occupancy,
         sharing_persons: room.sharing_persons,
         unit: room.unit,
+        in_out: room.in_out,
       },
+      BASE_STATUS_CODE: data.status?.code,
     });
   });
   return bookings;

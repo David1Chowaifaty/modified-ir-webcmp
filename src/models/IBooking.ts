@@ -330,11 +330,8 @@ export interface RoomBookingDetails {
     from_date: string;
     to_date: string;
   };
-  ROOM_INFO: {
-    occupancy: Occupancy;
-    sharing_persons: SharedPerson[];
-    unit: IUnit;
-  };
+  BASE_STATUS_CODE: string;
+  ROOM_INFO: Pick<Room, 'occupancy' | 'sharing_persons' | 'unit' | 'in_out'>;
 }
 export interface ISource {
   code: string;
