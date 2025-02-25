@@ -14,6 +14,7 @@ import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChil
 import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { RatePlan, RoomType } from "./models/property";
+import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
 import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
@@ -37,6 +38,7 @@ export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChil
 export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { RatePlan, RoomType } from "./models/property";
+export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
 export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
@@ -1789,6 +1791,7 @@ declare global {
         "calculateUnassignedDates": any;
         "reduceAvailableUnitEvent": { fromDate: string; toDate: string };
         "revertBooking": any;
+        "openCalendarSidebar": CalendarSidebarState;
     }
     interface HTMLIglooCalendarElement extends Components.IglooCalendar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglooCalendarElementEventMap>(type: K, listener: (this: HTMLIglooCalendarElement, ev: IglooCalendarCustomEvent<HTMLIglooCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3276,6 +3279,7 @@ declare namespace LocalJSX {
         "onCalculateUnassignedDates"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onDragOverHighlightElement"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onMoveBookingTo"?: (event: IglooCalendarCustomEvent<any>) => void;
+        "onOpenCalendarSidebar"?: (event: IglooCalendarCustomEvent<CalendarSidebarState>) => void;
         "onReduceAvailableUnitEvent"?: (event: IglooCalendarCustomEvent<{ fromDate: string; toDate: string }>) => void;
         "onRevertBooking"?: (event: IglooCalendarCustomEvent<any>) => void;
         "p"?: string;

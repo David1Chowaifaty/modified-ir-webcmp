@@ -163,6 +163,11 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     //TODO:Implement checkin-checkout
     CHECKIN: cell.room.in_out?.code === '001',
     CHECKOUT: cell.room.in_out?.code === '002',
+    ROOM_INFO: {
+      occupancy: cell.room.occupancy,
+      sharing_persons: cell.room.sharing_persons,
+      unit: cell.room.unit,
+    },
   };
 }
 
@@ -299,6 +304,11 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       defaultDates: {
         from_date: room.from_date,
         to_date: room.to_date,
+      },
+      ROOM_INFO: {
+        occupancy: room.occupancy,
+        sharing_persons: room.sharing_persons,
+        unit: room.unit,
       },
     });
   });

@@ -228,7 +228,22 @@ export class IglBookingEventHover {
   }
 
   private handleCustomerCheckIn() {
-    this.showDialog.emit({ reason: 'checkin', bookingNumber: this.bookingEvent.BOOKING_NUMBER, roomIdentifier: this.bookingEvent.IDENTIFIER, roomName: '', roomUnit: '' });
+    const { adult_nbr, children_nbr, infant_nbr } = this.bookingEvent.ROOM_INFO.occupancy;
+    this.showDialog.emit({
+      reason: 'checkin',
+      bookingNumber: this.bookingEvent.BOOKING_NUMBER,
+      roomIdentifier: this.bookingEvent.IDENTIFIER,
+      roomName: '',
+      roomUnit: '',
+      sidebarPayload: {
+        identifier: this.bookingEvent.IDENTIFIER,
+        bookingNumber: this.bookingEvent.BOOKING_NUMBER,
+        checkin: false,
+        roomName: this.bookingEvent.ROOM_INFO.unit?.name ?? '',
+        sharing_persons: this.bookingEvent.ROOM_INFO.sharing_persons,
+        totalGuests: adult_nbr + children_nbr + infant_nbr,
+      },
+    });
   }
 
   private handleCustomerCheckOut() {

@@ -1,4 +1,4 @@
-import { Booking, IFormat, Room, Origin, Arrival, IOtaNotes } from './booking.dto';
+import { Booking, IFormat, Room, Origin, Arrival, IOtaNotes, IUnit, SharedPerson, Occupancy } from './booking.dto';
 import { TAdultChildConstraints } from './igl-book-property';
 import { Currency } from './property';
 import { IRoomService } from './property-types';
@@ -329,6 +329,11 @@ export interface RoomBookingDetails {
   defaultDates: {
     from_date: string;
     to_date: string;
+  };
+  ROOM_INFO: {
+    occupancy: Occupancy;
+    sharing_persons: SharedPerson[];
+    unit: IUnit;
   };
 }
 export interface ISource {
