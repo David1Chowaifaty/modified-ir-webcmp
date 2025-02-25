@@ -192,7 +192,7 @@ export class IrTasksTable {
   render() {
     return (
       <div class="card table-container h-100 p-1 m-0 table-responsive">
-        <table class="table" data-testid="hk-table">
+        <table class="table" data-testid="hk_tasks_table">
           <thead class="table-header">
             <tr>
               <th>
@@ -270,7 +270,9 @@ export class IrTasksTable {
               const isCheckable = this.isCheckable(task);
               return (
                 <tr
+                  data-date={task.date}
                   data-testid={`hk_task_row`}
+                  data-assigned={task.housekeeper ? 'true' : 'false'}
                   style={isCheckable && { cursor: 'pointer' }}
                   onClick={() => {
                     if (!isCheckable) {

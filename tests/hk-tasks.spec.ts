@@ -1,7 +1,9 @@
 import { test, expect, Locator } from '@playwright/test';
+import moment from 'moment';
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
+//Testing filters
 test.describe('IR Task Filters Component', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     testInfo['filtersComponent'] = page.locator('ir-tasks-filters');
@@ -111,5 +113,27 @@ test.describe('IR Task Filters Component', () => {
     await expect(testInfo['dusty_units'] as Locator).toHaveValue(dusty_units ?? '');
     await expect(testInfo['highlight_check_ins'] as Locator).toHaveValue(highlight_check_ins ?? '');
     await expect(testInfo['housekeepers'] as Locator).toHaveValue('000');
+  });
+});
+//Testing task table table
+test.describe('IR Task Table Component', () => {
+  test('checking table rows validity', async ({ page }) => {
+    const table = page.getByTestId('hk_tasks_table');
+    await expect(table).toBeVisible();
+    const rows = table.getByTestId('hk_task_row');
+    const rowCount = await rows.count();
+    console.log('row count', rowCount);
+    for (let i = 0; i < rowCount; i++) {
+      const row = rows.nth(i);
+      const dataDate = await row.getAttribute('data-date');
+      const isAssigned = await row.getAttribute('data-assigned');
+      if (moment(dataDate ?? '', 'YYYY-MM-DD').isSameOrBefore(moment(), 'days')) {
+        if (!JSON.parse(isAssigned ?? '')) {
+          await expect(row.locator('ir-checkbox')).toHaveCount(0);
+        } else {
+          await expect(row.locator('ir-checkbox')).toHaveCount(1);
+        }
+      }
+    }
   });
 });
