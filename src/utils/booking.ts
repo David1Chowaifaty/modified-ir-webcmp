@@ -193,18 +193,16 @@ export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_da
     if (in_out?.code === '001') {
       return bookingStatus['000'];
     } else if (in_out?.code === '002') {
-      console.log(calendar_data.is_automatic_check_in_out);
       if (!calendar_data.is_automatic_check_in_out) {
         const now = moment();
         const toDate = moment(to_date, 'YYYY-MM-DD');
         const fromDate = moment(from_date, 'YYYY-MM-DD');
-        if (now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && now.hour() >= 12) {
+        if ((now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && now.hour() >= 12) || now.isAfter(toDate, 'days')) {
           return bookingStatus['003'];
         } else {
           return bookingStatus['002'];
         }
       }
-      return bookingStatus['003'];
     }
     return bookingStatus[status_code || '001'];
   } else {

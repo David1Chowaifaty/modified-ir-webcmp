@@ -580,8 +580,6 @@ export class IglooCalendar {
   }
 
   private updateBookingEventsDateRange(eventData) {
-    console.log('updating booking event');
-    const now = moment();
     eventData.forEach(bookingEvent => {
       bookingEvent.legendData = this.calendarData.formattedLegendData;
       bookingEvent.defaultDateRange = {};
@@ -596,39 +594,12 @@ export class IglooCalendar {
       bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
       bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
       if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
-        if (calendar_data.checkin_enabled) {
-          if (bookingEvent.CHECKOUT) {
-            if (!calendar_data.is_automatic_check_in_out) {
-              const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
-              const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
-
-              if (now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && now.hour() >= 12) {
-                bookingEvent.STATUS = bookingStatus['003'];
-              } else {
-                bookingEvent.STATUS = bookingStatus['002'];
-              }
-            } else {
-              bookingEvent.STATUS = bookingStatus['003'];
-            }
-          }
-          if (bookingEvent.CHECKIN) {
-            bookingEvent.STATUS = bookingStatus['000'];
-          }
-        } else {
-          const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
-          const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
-          if (bookingEvent.STATUS !== 'PENDING') {
-            if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
-              bookingEvent.STATUS = bookingStatus['000'];
-            } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-              bookingEvent.STATUS = bookingStatus['000'];
-            } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
-              bookingEvent.STATUS = bookingStatus['000'];
-            } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
-              bookingEvent.STATUS = bookingStatus['003'];
-            }
-          }
-        }
+        bookingEvent.STATUS = getRoomStatus({
+          in_out: bookingEvent.ROOM_INFO.in_out,
+          from_date: bookingEvent.FROM_DATE,
+          to_date: bookingEvent.TO_DATE,
+          status_code: bookingEvent.BASE_STATUS_CODE,
+        });
       }
     });
   }
