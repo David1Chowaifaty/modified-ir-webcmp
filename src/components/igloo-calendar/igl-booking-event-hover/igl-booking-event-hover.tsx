@@ -19,7 +19,7 @@ export class IglBookingEventHover {
   @Prop({ mutable: true }) bookingEvent: { [key: string]: any };
   @Prop() bubbleInfoTop: boolean = false;
   @Prop() currency;
-  @Prop() countryNodeList: ICountry[];
+  @Prop() countries: ICountry[];
   @Prop() is_vacation_rental: boolean = false;
 
   @State() isLoading: string;
@@ -93,13 +93,13 @@ export class IglBookingEventHover {
   }
 
   private getCountry() {
-    return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).name;
+    return findCountry(this.bookingEvent.COUNTRY, this.countries).name;
   }
   private getPhoneCode() {
     if (this.bookingEvent.PHONE_PREFIX) {
       return this.bookingEvent.PHONE_PREFIX;
     }
-    return findCountry(this.bookingEvent.COUNTRY, this.countryNodeList).phone_prefix;
+    return findCountry(this.bookingEvent.COUNTRY, this.countries).phone_prefix;
   }
   private renderPhone() {
     return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct ? this.getPhoneCode() + '-' : ''}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();

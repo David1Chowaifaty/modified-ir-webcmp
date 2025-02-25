@@ -442,7 +442,7 @@ export class IrBookingDetails {
             allowedBookingSources={this.calendarData.allowed_booking_sources}
             adultChildConstraints={this.calendarData.adult_child_constraints}
             showPaymentDetails={this.showPaymentDetails}
-            countryNodeList={this.countries}
+            countries={this.countries}
             currency={this.calendarData.currency}
             language={this.language}
             propertyid={this.property_id}

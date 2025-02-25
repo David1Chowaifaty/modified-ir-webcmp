@@ -81,7 +81,7 @@ export class IglooCalendar {
   private eventsService = new EventsService();
   private toBeAssignedService = new ToBeAssignedService();
   // private auth = new Auth();
-  private countryNodeList: ICountry[] = [];
+  private countries: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
   private scrollContainer: HTMLElement;
   private today: String = '';
@@ -323,11 +323,11 @@ export class IglooCalendar {
       if (!roomResp) {
         roomResp = results[results.length - 1];
       }
-      const [bookingResp, countryNodeList] = results as any;
+      const [bookingResp, countries] = results as any;
       calendar_dates.days = bookingResp.days;
       calendar_dates.months = bookingResp.months;
       this.setRoomsData(roomResp);
-      this.countryNodeList = countryNodeList;
+      this.countries = countries;
       this.setUpCalendarData(roomResp, bookingResp);
       let paymentMethods = roomResp['My_Result']['allowed_payment_methods'] as any[];
       this.showPaymentDetails = paymentMethods.some(item => item.code === '001' || item.code === '004');
@@ -1083,7 +1083,7 @@ export class IglooCalendar {
                   <igl-cal-body
                     propertyId={this.property_id}
                     language={this.language}
-                    countryNodeList={this.countryNodeList}
+                    countries={this.countries}
                     currency={this.calendarData.currency}
                     today={this.today}
                     highlightedDate={this.highlightedDate}
@@ -1108,7 +1108,7 @@ export class IglooCalendar {
             allowedBookingSources={this.calendarData.allowedBookingSources}
             adultChildConstraints={this.calendarData.adultChildConstraints}
             showPaymentDetails={this.showPaymentDetails}
-            countryNodeList={this.countryNodeList}
+            countries={this.countries}
             currency={this.calendarData.currency}
             language={this.language}
             propertyid={this.property_id}
@@ -1154,6 +1154,18 @@ export class IglooCalendar {
               hasRoomAdd
             ></ir-booking-details>
           )}
+          {/* {<ir-room-guests
+            countries={this.countries}
+            language={this.language}
+            identifier={this.sidebarPayload?.identifier}
+            bookingNumber={this.booking.booking_nbr}
+            roomName={this.sidebarPayload?.roomName}
+            totalGuests={this.sidebarPayload?.totalGuests}
+            sharedPersons={this.sidebarPayload?.sharing_persons}
+            slot="sidebar-body"
+            checkIn={this.sidebarPayload?.checkin}
+            onCloseModal={handleClose}
+          ></ir-room-guests>} */}
         </ir-sidebar>
         <ir-modal
           ref={el => (this.calendarModalEl = el)}

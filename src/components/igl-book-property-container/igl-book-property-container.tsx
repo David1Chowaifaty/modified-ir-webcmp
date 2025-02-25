@@ -4,7 +4,7 @@ import { BookingService } from '@/services/booking.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { Component, Host, State, h, Prop, Watch, Event, EventEmitter, Fragment } from '@stencil/core';
-
+import { ICountry } from '@/models/IBooking';
 @Component({
   tag: 'igl-book-property-container',
   styleUrl: 'igl-book-property-container.css',
@@ -21,7 +21,7 @@ export class IglBookPropertyContainer {
 
   @State() bookingItem: IglBookPropertyPayloadPlusBooking | null;
   @State() showPaymentDetails: any;
-  @State() countryNodeList: any;
+  @State() countries: ICountry[];
   @State() calendarData: any = {};
 
   @Event() resetBookingData: EventEmitter<null>;
@@ -54,7 +54,7 @@ export class IglBookPropertyContainer {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;
       }
-      this.countryNodeList = countriesList;
+      this.countries = countriesList;
 
       const { allowed_payment_methods: paymentMethods, currency, allowed_booking_sources, adult_child_constraints, calendar_legends } = roomResponse['My_Result'];
       this.calendarData = { currency, allowed_booking_sources, adult_child_constraints, legendData: calendar_legends };
@@ -123,7 +123,7 @@ export class IglBookPropertyContainer {
             allowedBookingSources={this.calendarData.allowed_booking_sources}
             adultChildConstraints={this.calendarData.adult_child_constraints}
             showPaymentDetails={this.showPaymentDetails}
-            countryNodeList={this.countryNodeList}
+            countries={this.countries}
             currency={this.calendarData.currency}
             language={this.language}
             propertyid={this.propertyid}

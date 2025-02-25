@@ -7,6 +7,7 @@ import { ICurrency } from '@/models/calendarData';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
+import { ICountry } from '@/models/IBooking';
 @Component({
   tag: 'igl-booking-form',
   styleUrl: 'igl-booking-form.css',
@@ -25,7 +26,7 @@ export class IglBookingForm {
   @Prop() bedPreferenceType: any;
   @Prop() selectedRooms: Map<string, Map<string, any>>;
   @Prop({ reflect: true }) isLoading: string;
-  @Prop() countryNodeList;
+  @Prop() countries: ICountry[];
   @Prop() selectedGuestData;
   @Prop() defaultGuestData: IglBookPropertyPayloadEditBooking;
 
@@ -188,7 +189,7 @@ export class IglBookingForm {
         {this.isEditOrAddRoomEvent || this.showSplitBookingOption ? null : (
           <igl-property-booked-by
             propertyId={this.propertyId}
-            countryNodeList={this.countryNodeList}
+            countries={this.countries}
             language={this.language}
             showPaymentDetails={this.showPaymentDetails}
             defaultData={this.bookedByInfoData}

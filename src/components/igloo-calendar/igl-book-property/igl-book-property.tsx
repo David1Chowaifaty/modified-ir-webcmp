@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h, Listen, Fragment } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
 import { dateToFormattedString, getReleaseHoursString } from '@/utils/utils';
-import { IEntries, RoomBlockDetails } from '@/models/IBooking';
+import { ICountry, IEntries, RoomBlockDetails } from '@/models/IBooking';
 import { IPageTwoDataUpdateProps } from '@/models/models';
 import { IglBookPropertyService } from './igl-book-property.service';
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints, TEventType, TPropertyButtonsTypes, TSourceOption, TSourceOptions } from '@/models/igl-book-property';
@@ -25,7 +25,7 @@ export class IglBookProperty {
   @Prop() propertyid: number;
   @Prop() allowedBookingSources: any;
   @Prop() language: string;
-  @Prop() countryNodeList;
+  @Prop() countries: ICountry[];
   @Prop() showPaymentDetails: boolean = false;
   @Prop() currency: ICurrency;
   @Prop({ reflect: true, mutable: true }) bookingData: { [key: string]: any };
@@ -684,7 +684,7 @@ export class IglBookProperty {
                 propertyId={this.propertyid}
                 showPaymentDetails={this.showPaymentDetails}
                 selectedGuestData={this.guestData}
-                countryNodeList={this.countryNodeList}
+                countries={this.countries}
                 isLoading={this.isLoading}
                 selectedRooms={this.selectedUnits}
                 bedPreferenceType={this.bedPreferenceType}

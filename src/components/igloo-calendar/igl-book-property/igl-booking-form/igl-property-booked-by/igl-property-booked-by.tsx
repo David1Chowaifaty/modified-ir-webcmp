@@ -18,7 +18,7 @@ export class IglPropertyBookedBy {
   @Prop() showPaymentDetails: boolean = false;
   @Prop() defaultData: { [key: string]: any };
   @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
-  @Prop() countryNodeList: ICountry[] = [];
+  @Prop() countries: ICountry[] = [];
   @Prop() propertyId: number;
   @State() isButtonPressed: boolean = false;
   private bookingService: BookingService = new BookingService();
@@ -342,14 +342,14 @@ export class IglPropertyBookedBy {
                 <ir-country-picker
                   class="flex-grow-1 m-0"
                   onCountryChange={e => this.handleCountryChange(e.detail.id)}
-                  countries={this.countryNodeList}
-                  country={this.countryNodeList.find(c => c.id === this.bookedByData.countryId)}
+                  countries={this.countries}
+                  country={this.countries.find(c => c.id === this.bookedByData.countryId)}
                 ></ir-country-picker>
                 {/* <select class={`form-control input-sm pr-0`} id={v4()} onChange={event => this.handleDataChange('countryId', event)}>
                     <option value="" selected={this.bookedByData.countryId === ''}>
                       {locales.entries.Lcz_Select}
                     </option>
-                    {this.countryNodeList.map(countryNode => (
+                    {this.countries.map(countryNode => (
                       <option value={countryNode.id} selected={this.bookedByData.countryId === countryNode.id}>
                         {countryNode.name}
                       </option>
@@ -366,7 +366,7 @@ export class IglPropertyBookedBy {
                       <option value="" selected={this.bookedByData.isdCode === ''}>
                         {locales.entries.Lcz_Isd}
                       </option>
-                      {this.countryNodeList.map(country => (
+                      {this.countries.map(country => (
                         <option value={country.id} selected={this.bookedByData.isdCode === country.id.toString()}>
                           {country.phone_prefix}
                         </option>

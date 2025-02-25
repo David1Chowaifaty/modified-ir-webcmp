@@ -7,8 +7,8 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 import { ICurrency } from "./models/calendarData";
-import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 import { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
+import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 import { IToast } from "./components/ui/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
@@ -30,8 +30,8 @@ import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
-export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
+export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
 export { IToast } from "./components/ui/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
@@ -75,7 +75,7 @@ export namespace Components {
         "adultChildConstraints": TAdultChildConstraints;
         "allowedBookingSources": any;
         "bookingData": { [key: string]: any };
-        "countryNodeList": any;
+        "countries": ICountry[];
         "currency": ICurrency;
         "language": string;
         "propertyid": number;
@@ -113,7 +113,7 @@ export namespace Components {
     interface IglBookingEvent {
         "allBookingEvents": { [key: string]: any };
         "bookingEvent": { [key: string]: any };
-        "countryNodeList": any;
+        "countries": ICountry[];
         "currency": any;
         "is_vacation_rental": boolean;
         "language": string;
@@ -121,7 +121,7 @@ export namespace Components {
     interface IglBookingEventHover {
         "bookingEvent": { [key: string]: any };
         "bubbleInfoTop": boolean;
-        "countryNodeList": ICountry[];
+        "countries": ICountry[];
         "currency": any;
         "is_vacation_rental": boolean;
     }
@@ -129,7 +129,7 @@ export namespace Components {
         "bedPreferenceType": any;
         "bookedByInfoData": { [key: string]: any };
         "bookingData": { [key: string]: any };
-        "countryNodeList": any;
+        "countries": ICountry[];
         "currency": ICurrency;
         "dateRangeData": { [key: string]: any };
         "defaultGuestData": IglBookPropertyPayloadEditBooking;
@@ -161,7 +161,7 @@ export namespace Components {
     }
     interface IglCalBody {
         "calendarData": { [key: string]: any };
-        "countryNodeList": any;
+        "countries": ICountry[];
         "currency": any;
         "highlightedDate": string;
         "isScrollViewDragging": boolean;
@@ -195,7 +195,7 @@ export namespace Components {
         "legendData": { [key: string]: any };
     }
     interface IglPropertyBookedBy {
-        "countryNodeList": ICountry[];
+        "countries": ICountry[];
         "defaultData": { [key: string]: any };
         "language": string;
         "propertyId": number;
@@ -3035,7 +3035,7 @@ declare namespace LocalJSX {
         "adultChildConstraints"?: TAdultChildConstraints;
         "allowedBookingSources"?: any;
         "bookingData"?: { [key: string]: any };
-        "countryNodeList"?: any;
+        "countries"?: ICountry[];
         "currency"?: ICurrency;
         "language"?: string;
         "onAnimateIrButton"?: (event: IglBookPropertyCustomEvent<string>) => void;
@@ -3090,7 +3090,7 @@ declare namespace LocalJSX {
     interface IglBookingEvent {
         "allBookingEvents"?: { [key: string]: any };
         "bookingEvent"?: { [key: string]: any };
-        "countryNodeList"?: any;
+        "countries"?: ICountry[];
         "currency"?: any;
         "is_vacation_rental"?: boolean;
         "language"?: string;
@@ -3106,7 +3106,7 @@ declare namespace LocalJSX {
     interface IglBookingEventHover {
         "bookingEvent"?: { [key: string]: any };
         "bubbleInfoTop"?: boolean;
-        "countryNodeList"?: ICountry[];
+        "countries"?: ICountry[];
         "currency"?: any;
         "is_vacation_rental"?: boolean;
         "onBookingCreated"?: (event: IglBookingEventHoverCustomEvent<{ pool?: string; data: any[] }>) => void;
@@ -3119,7 +3119,7 @@ declare namespace LocalJSX {
         "bedPreferenceType"?: any;
         "bookedByInfoData"?: { [key: string]: any };
         "bookingData"?: { [key: string]: any };
-        "countryNodeList"?: any;
+        "countries"?: ICountry[];
         "currency"?: ICurrency;
         "dateRangeData"?: { [key: string]: any };
         "defaultGuestData"?: IglBookPropertyPayloadEditBooking;
@@ -3157,7 +3157,7 @@ declare namespace LocalJSX {
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };
-        "countryNodeList"?: any;
+        "countries"?: ICountry[];
         "currency"?: any;
         "highlightedDate"?: string;
         "isScrollViewDragging"?: boolean;
@@ -3205,7 +3205,7 @@ declare namespace LocalJSX {
         "onOptionEvent"?: (event: IglLegendsCustomEvent<{ [key: string]: any }>) => void;
     }
     interface IglPropertyBookedBy {
-        "countryNodeList"?: ICountry[];
+        "countries"?: ICountry[];
         "defaultData"?: { [key: string]: any };
         "language"?: string;
         "onDataUpdateEvent"?: (event: IglPropertyBookedByCustomEvent<{ [key: string]: any }>) => void;

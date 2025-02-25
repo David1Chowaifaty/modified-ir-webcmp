@@ -7,6 +7,7 @@ import moment from 'moment';
 import { IToast } from '@components/ui/ir-toast/toast';
 import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
+import { ICountry } from '@/models/IBooking';
 
 @Component({
   tag: 'igl-booking-event',
@@ -21,7 +22,7 @@ export class IglBookingEvent {
   @Prop() language: string;
   @Prop({ mutable: true }) bookingEvent: { [key: string]: any };
   @Prop() allBookingEvents: { [key: string]: any } = [];
-  @Prop() countryNodeList;
+  @Prop() countries: ICountry[];
 
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
   @Event() updateEventData: EventEmitter;
@@ -823,7 +824,7 @@ export class IglBookingEvent {
         {this.showInfoPopup ? (
           <igl-booking-event-hover
             is_vacation_rental={this.is_vacation_rental}
-            countryNodeList={this.countryNodeList}
+            countries={this.countries}
             currency={this.currency}
             class="top"
             bookingEvent={this.bookingEvent}

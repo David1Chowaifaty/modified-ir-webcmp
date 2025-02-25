@@ -4,6 +4,7 @@ import locales from '@/stores/locales.store';
 import { PhysicalRoom, RoomType } from '@/models/booking.dto';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { HouseKeepingService } from '@/services/housekeeping.service';
+import { ICountry } from '@/models/IBooking';
 
 export type RoomCategory = RoomType & { expanded: boolean };
 
@@ -19,7 +20,7 @@ export class IglCalBody {
   @Prop() today: String;
   @Prop() currency;
   @Prop() language: string;
-  @Prop() countryNodeList;
+  @Prop() countries: ICountry[];
   @Prop() highlightedDate: string;
 
   @State() dragOverElement: string = '';
@@ -400,7 +401,7 @@ export class IglCalBody {
               <igl-booking-event
                 language={this.language}
                 is_vacation_rental={this.calendarData.is_vacation_rental}
-                countryNodeList={this.countryNodeList}
+                countries={this.countries}
                 currency={this.currency}
                 data-component-id={bookingEvent.ID}
                 bookingEvent={bookingEvent}
