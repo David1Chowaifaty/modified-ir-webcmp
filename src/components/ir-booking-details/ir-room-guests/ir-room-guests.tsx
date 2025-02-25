@@ -199,11 +199,13 @@ export class IrRoomGuests {
                       placeholder="First name"
                       onTextChange={e => this.updateGuestInfo(idx, { first_name: e.detail })}
                       value={guest.first_name}
+                      maxLength={40}
                     ></ir-input-text>
                   </div>
                   <div class={'m-0 p-0 d-flex align-items-center h-100'}>
                     <p class="guest_label">Last name</p>
                     <ir-input-text
+                      maxLength={40}
                       class="flex-grow-1 h-100"
                       id={`last_name_${idx}`}
                       zod={ZSharedPerson.pick({ last_name: true })}
@@ -277,6 +279,7 @@ export class IrRoomGuests {
                         data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
                       ></ir-select>
                       <ir-input-text
+                        maxLength={18}
                         placeholder="12345"
                         class="flex-grow-1 guest_document"
                         type="text"

@@ -641,6 +641,10 @@ export namespace Components {
          */
         "mask": FactoryArg;
         /**
+          * Input max character length
+         */
+        "maxLength": number;
+        /**
           * Name attribute for the input field
          */
         "name": string;
@@ -3712,6 +3716,10 @@ declare namespace LocalJSX {
           * Mask for the input field (optional)
          */
         "mask"?: FactoryArg;
+        /**
+          * Input max character length
+         */
+        "maxLength"?: number;
         /**
           * Name attribute for the input field
          */

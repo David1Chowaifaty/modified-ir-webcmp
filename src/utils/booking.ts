@@ -206,6 +206,18 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       if (room.in_out?.code === '001') {
         return bookingStatus['000'];
       } else if (room.in_out?.code === '002') {
+        console.log(calendar_data.is_automatic_check_in_out);
+        if (!calendar_data.is_automatic_check_in_out) {
+          const now = moment();
+          const toDate = moment(room.to_date, 'YYYY-MM-DD');
+          const fromDate = moment(room.from_date, 'YYYY-MM-DD');
+          console.log({ toDate: toDate.format('YYYY-MM-DD'), fromDate: fromDate.format('YYYY-MM-DD') });
+          if (now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && now.hour() >= 12) {
+            return bookingStatus['003'];
+          } else {
+            return bookingStatus['002'];
+          }
+        }
         return bookingStatus['003'];
       }
       return bookingStatus[data?.status.code || '001'];
@@ -236,14 +248,6 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
   rooms.forEach(room => {
     const bookingFromDate = moment(room.from_date, 'YYYY-MM-DD').isAfter(moment(calendar_dates.fromDate, 'YYYY-MM-DD')) ? room.from_date : calendar_dates.fromDate;
     const bookingToDate = room.to_date;
-    console.log(
-      `
-  bookingFromDate:${bookingFromDate},\n
-  roomFromDate:${room.from_date},\n
-  bookingToDate:${bookingToDate},\n
-  roomToDate:${bookingToDate}\n
-      `,
-    );
     if (moment(room.to_date, 'YYYY-MM-DD').isBefore(moment(calendar_dates.fromDate, 'YYYY-MM-DD'))) {
       return;
     }

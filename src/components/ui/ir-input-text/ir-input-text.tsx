@@ -113,6 +113,9 @@ export class IrInputText {
   /** Input id for testing purposes*/
   @Prop() testId: string;
 
+  /** Input max character length*/
+  @Prop() maxLength: number;
+
   @State() initial: boolean = true;
   @State() inputFocused: boolean = false;
 
@@ -226,6 +229,7 @@ export class IrInputText {
             </span>
           </label>
           <input
+            maxLength={this.maxLength}
             data-testid={this.testId}
             data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
             ref={el => (this.inputRef = el)}
@@ -274,6 +278,7 @@ export class IrInputText {
         <div class="input-group row m-0">
           {label}
           <input
+            maxLength={this.maxLength}
             data-testid={this.testId}
             style={this.inputForcedStyle}
             data-state={!!this.value ? '' : this.mask ? 'empty' : ''}

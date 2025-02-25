@@ -24,20 +24,26 @@
 
 <body>
   <ir-common></ir-common>
-  <!-- <ir-housekeeping baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-housekeeping> -->
-  <ir-hk-tasks baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-hk-tasks>
+  <igloo-calendar currency-name="USD" propertyid="42" language="en"
+    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
   <script>
-    checkBrowserValidity()
-    // const housekeepingEl = document.querySelector("ir-housekeeping");
-    const housekeepingEl2 = document.querySelector("ir-hk-tasks");
-    if (housekeepingEl2) {
-      // housekeepingEl.propertyid = 20 || getId();
-      // housekeepingEl.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NDE1OTA4MjMsIkNMQUlNLTAxIjoiQXhSQUl1OTErTm89IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiQUVxVnRCMm1kWTg9IiwiQ0xBSU0tMDUiOiJFQTEzejA3ejBUcWRkM2gwNElyYThLVGg2d2tEVzVFSiIsIkNMQUlNLTA2IjoiQUVxVnRCMm1kWTg9In0.oHtexGjqjlmEbTK0ZQmUGs9gi5oQf3C5kRd81eORm8I" || getToken();
-      housekeepingEl2.propertyid = 20 || getId();
-      housekeepingEl2.ticket = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NDE1OTA4MjMsIkNMQUlNLTAxIjoiQXhSQUl1OTErTm89IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6Ilp3Tys5azJoTzUwPSIsIkNMQUlNLTA0IjoiQUVxVnRCMm1kWTg9IiwiQ0xBSU0tMDUiOiJFQTEzejA3ejBUcWRkM2gwNElyYThLVGg2d2tEVzVFSiIsIkNMQUlNLTA2IjoiQUVxVnRCMm1kWTg9In0.oHtexGjqjlmEbTK0ZQmUGs9gi5oQf3C5kRd81eORm8I" || getToken();
-    } 
+    //backend-cmp-injector
+    //aname - username -password
+    var today = new Date();
+    today.setDate(today.getDate() - 1);
+    var _FROM_DATE = today.toISOString().substring(0, 10)
+    today.setDate(today.getDate() + 60);
+    var _TO_DATE = today.toISOString().substring(0, 10)
+    const calendar = document.querySelector("igloo-calendar");
+    calendar.from_date = _FROM_DATE;
+    calendar.to_date = _TO_DATE;
+    setTimeout(() => {
+      const ticket = getToken();
+      calendar.propertyid = getId();
+      calendar.ticket = ticket;
+    }, 300)
   </script>
 
 </body>

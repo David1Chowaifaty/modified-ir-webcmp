@@ -73,6 +73,7 @@ type CheckinCheckoutEventPayload = {
   roomIdentifier: string;
   roomUnit: string;
   roomName: string;
+  sidebarPayload?: IRoomNightsData;
 };
 
 type ReallocateEventPayload = {
