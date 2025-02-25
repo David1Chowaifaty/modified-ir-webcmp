@@ -1,4 +1,4 @@
-import { Booking, IFormat, Room, Origin, Arrival, IOtaNotes, IUnit, SharedPerson, Occupancy } from './booking.dto';
+import { Booking, IFormat, Room, Origin, Arrival, IOtaNotes } from './booking.dto';
 import { TAdultChildConstraints } from './igl-book-property';
 import { Currency } from './property';
 import { IRoomService } from './property-types';
