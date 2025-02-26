@@ -1,22 +1,26 @@
-@import url('../../../assets/ckeditor5.css');
 :host {
   display: block;
-  margin: 0;
-  padding: 0;
-}
-@media print {
-  body {
-    margin: 0 !important;
-  }
-}
-.ck-content {
-  height: var(--ir-editor-height, 100%);
-}
-.ck-content p {
-  margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
+  --ir-editor-border-color: #cacfe7;
 }
 
-.error {
-  border-color: red !important;
+.editor-wrapper {
+  border-radius: 4px;
+  border: 1px solid var(--ir-editor-border-color, #cacfe7);
+  overflow: hidden;
+  height: var(--ir-editor-height, 300px);
+}
+.editor-container {
+  min-height: 300px;
+  padding: 10px;
+}
+.editor-wrapper.error {
+  border-color: var(--red, 'red') !important;
+}
+.ql-container,
+.ql-toolbar {
+  border: 0 !important;
+}
+.ql-toolbar {
+  border-bottom: 1px solid var(--ir-editor-border-color, #cacfe7) !important;
 }

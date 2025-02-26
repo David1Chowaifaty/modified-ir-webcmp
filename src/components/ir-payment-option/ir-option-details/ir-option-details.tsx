@@ -5,7 +5,6 @@ import payment_option_store from '@/stores/payment-option.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
-import { Link } from 'ckeditor5';
 @Component({
   tag: 'ir-option-details',
   styleUrl: 'ir-option-details.css',
@@ -168,14 +167,17 @@ export class IrOptionDetails {
                   aria-invalid={this.invalid ? 'true' : 'false'}
                   textareaClassname="money-transfer-form"
                   label=""
+                  styles={{ height: '200px', maxHeight: '250px' }}
                   onTextChange={this.handleTextAreaChange.bind(this)}
                   value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
                 ></ir-textarea> */}
                 <ir-text-editor
-                  plugins={[Link]}
-                  pluginsMode="add"
-                  toolbarItemsMode="add"
-                  toolbarItems={['|', 'link']}
+                  // plugins={[Link]}
+                  // pluginsMode="add"
+                  // toolbarItemsMode="add"
+                  // toolbarItems={['|', 'link']}
+                  maxLength={250}
+                  placeholder=""
                   style={{ '--ir-editor-height': '250px' }}
                   error={this.invalid}
                   value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}

@@ -34,7 +34,7 @@ export class IrPaymentOption {
   private propertyOptionsByCode: Map<string | number, PaymentOption>;
 
   componentWillLoad() {
-    if (this.ticket !== '') {
+    if (!!this.ticket) {
       this.token.setToken(this.ticket);
       this.init();
     }
@@ -56,17 +56,8 @@ export class IrPaymentOption {
   handleCloseModal(e: CustomEvent) {
     e.stopPropagation();
     e.stopImmediatePropagation();
-    console.log(e.detail);
     this.closeModal(e.detail);
   }
-
-  private log(message?: any, ...optionalParams: any[]): void {
-    if (this.hideLogs) {
-      return;
-    }
-    console.log(message, ...optionalParams);
-  }
-
   private closeModal(newOption: PaymentOption | null) {
     if (newOption) {
       this.modifyPaymentList(newOption);
@@ -90,7 +81,6 @@ export class IrPaymentOption {
       }
       this.isLoading = true;
       let propertyId = this.propertyid;
-      console.log('pror id', propertyId);
       if (!propertyId) {
         console.log('fetching property id');
         const propertyData = await this.roomService.getExposedProperty({
@@ -105,12 +95,6 @@ export class IrPaymentOption {
         this.paymentOptionService.GetPropertyPaymentMethods(propertyId),
         this.roomService.fetchLanguage(this.language, ['_PAYMENT_BACK']),
       ]);
-
-      this.log('---feteched data---');
-      this.log('paymentOptions', paymentOptions);
-      this.log('propertyOptions', propertyOptions);
-      this.log('languageTexts', languageTexts);
-      this.log('---feteched data---');
       locales.entries = languageTexts.entries;
       locales.direction = languageTexts.direction;
       this.propertyOptionsById = new Map(propertyOptions?.map(o => [o.id, o]));
@@ -125,7 +109,6 @@ export class IrPaymentOption {
       console.error(error);
     } finally {
       this.isLoading = false;
-      this.log('end fetching data');
     }
   }
 
@@ -206,13 +189,7 @@ export class IrPaymentOption {
     return po.code === '005' || (po.is_payment_gateway && po.data?.length > 0);
   }
   render() {
-    this.log('----loading conditions----');
-    this.log('isLoading', this.isLoading);
-    this.log('paymentOptions', this.paymentOptions);
-    this.log('----loading conditions----');
-
     if (this.isLoading === true || (this.paymentOptions && this.paymentOptions.length === 0)) {
-      this.log('rendering the loading view');
       return (
         <Host class={this.defaultStyles ? 'p-2' : ''}>
           <div class={`loading-container ${this.defaultStyles ? 'default' : ''}`}>
@@ -221,7 +198,6 @@ export class IrPaymentOption {
         </Host>
       );
     }
-    this.log('rendering the payment option');
     return (
       <Host class={this.defaultStyles ? 'p-2' : ''}>
         <ir-toast></ir-toast>

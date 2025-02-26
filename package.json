@@ -35,10 +35,10 @@
     "air-datepicker": "^3.5.3",
     "axios": "^1.6.0",
     "bootstrap-switch": "^3.4.0",
-    "ckeditor5": "^43.2.0",
     "imask": "^7.6.1",
     "jquery": "^3.7.1",
     "moment": "^2.29.4",
+    "quill": "^2.0.3",
     "socket.io-client": "^4.7.2",
     "uuid": "^9.0.0",
     "zod": "^3.23.8"

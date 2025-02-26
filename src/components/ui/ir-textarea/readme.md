@@ -15,6 +15,7 @@
 | `maxLength`         | `max-length`         |             | `number`                                                | `250`             |
 | `placeholder`       | `placeholder`        |             | `string`                                                | `'<placeholder>'` |
 | `rows`              | `rows`               |             | `number`                                                | `3`               |
+| `styles`            | --                   |             | `{ [key: string]: string; }`                            | `undefined`       |
 | `text`              | `text`               |             | `string`                                                | `''`              |
 | `textareaClassname` | `textarea-classname` |             | `string`                                                | `undefined`       |
 | `value`             | `value`              |             | `string`                                                | `''`              |
