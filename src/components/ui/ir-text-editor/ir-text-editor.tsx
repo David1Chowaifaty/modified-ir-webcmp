@@ -1,4 +1,4 @@
-import { Component, h, Element, Event, EventEmitter, Prop, Watch } from '@stencil/core';
+import { Component, h, Element, Event, EventEmitter, Prop, Watch, State } from '@stencil/core';
 import Quill, { QuillOptions } from 'quill';
 
 export type QuillToolbarButton = 'bold' | 'italic' | 'underline' | 'strike' | 'link' | 'image' | 'video' | 'clean';
@@ -72,6 +72,8 @@ export class IrTextEditor {
   /** Emits current HTML content whenever it changes */
   @Event() textChange: EventEmitter<string>;
 
+  @State() editorValue = '';
+
   /** Private, non-reactive Quill editor instance */
   private editor: Quill;
 
@@ -101,13 +103,14 @@ export class IrTextEditor {
         }
       }
       const html = this.editor.root.innerHTML;
+      this.editorValue = html;
       this.textChange.emit(html);
     });
   }
 
   @Watch('value')
   handleValueChange(newValue: string, oldValue: string) {
-    if (newValue !== oldValue) {
+    if (newValue !== oldValue && newValue !== this.editorValue) {
       this.setEditorValue(newValue);
     }
   }
