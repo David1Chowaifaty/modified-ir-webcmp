@@ -162,7 +162,7 @@ export class IrOptionDetails {
               </div>
               <div>
                 {this.invalid && <p class="text-danger p-0 m-0">{locales.entries.Lcz_YouMustFillEnglishField}</p>}
-                <ir-textarea
+                {/* <ir-textarea
                   placeholder=""
                   aria-invalid={this.invalid ? 'true' : 'false'}
                   textareaClassname="money-transfer-form"
@@ -170,17 +170,19 @@ export class IrOptionDetails {
                   styles={{ height: '200px', maxHeight: '250px' }}
                   onTextChange={this.handleTextAreaChange.bind(this)}
                   value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
-                ></ir-textarea>
-                {/* <ir-text-editor
-                  plugins={[Link]}
-                  pluginsMode="add"
-                  toolbarItemsMode="add"
-                  toolbarItems={['|', 'link']}
+                ></ir-textarea> */}
+                <ir-text-editor
+                  // plugins={[Link]}
+                  // pluginsMode="add"
+                  // toolbarItemsMode="add"
+                  // toolbarItems={['|', 'link']}
+                  maxLength={250}
+                  placeholder=""
                   style={{ '--ir-editor-height': '250px' }}
                   error={this.invalid}
                   value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
                   onTextChange={this.handleTextAreaChange.bind(this)}
-                ></ir-text-editor> */}
+                ></ir-text-editor>
               </div>
             </div>
           ) : (

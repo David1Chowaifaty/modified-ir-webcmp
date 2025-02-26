@@ -25,7 +25,7 @@ import { IHouseKeepers, THKUser } from "./models/housekeeping";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { ZodType } from "zod";
-import { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
+import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
 export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-book-property.d";
@@ -46,7 +46,7 @@ export { IHouseKeepers, THKUser } from "./models/housekeeping";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { ZodType } from "zod";
-export { PluginConstructor, ToolbarConfigItem } from "ckeditor5";
+export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export namespace Components {
     interface IglApplicationInfo {
         "baseData": { unit: { id: string; name: string }; roomtypeId: number };
@@ -839,11 +839,26 @@ export namespace Components {
     }
     interface IrTextEditor {
         "error": boolean;
+        "maxLength": number;
+        /**
+          * Placeholder text
+         */
         "placeholder": string;
-        "plugins": (string | PluginConstructor)[];
-        "pluginsMode": 'replace' | 'add';
-        "toolbarItems": ToolbarConfigItem[];
-        "toolbarItemsMode": 'replace' | 'add';
+        /**
+          * If true, makes the editor read-only
+         */
+        "readOnly": boolean;
+        /**
+          * Type-safe toolbar configuration. For example, you can pass:  {   bold: true,   italic: true,   underline: true,   strike: false,   link: true,   clean: true }
+         */
+        "toolbarConfig"?: ToolbarConfig;
+        /**
+          * Determines if the current user can edit the content
+         */
+        "userCanEdit": boolean;
+        /**
+          * Initial HTML content
+         */
         "value": string;
     }
     interface IrTextarea {
@@ -3561,12 +3576,30 @@ declare namespace LocalJSX {
     }
     interface IrTextEditor {
         "error"?: boolean;
+        "maxLength"?: number;
+        /**
+          * Emits current HTML content whenever it changes
+         */
         "onTextChange"?: (event: IrTextEditorCustomEvent<string>) => void;
+        /**
+          * Placeholder text
+         */
         "placeholder"?: string;
-        "plugins"?: (string | PluginConstructor)[];
-        "pluginsMode"?: 'replace' | 'add';
-        "toolbarItems"?: ToolbarConfigItem[];
-        "toolbarItemsMode"?: 'replace' | 'add';
+        /**
+          * If true, makes the editor read-only
+         */
+        "readOnly"?: boolean;
+        /**
+          * Type-safe toolbar configuration. For example, you can pass:  {   bold: true,   italic: true,   underline: true,   strike: false,   link: true,   clean: true }
+         */
+        "toolbarConfig"?: ToolbarConfig;
+        /**
+          * Determines if the current user can edit the content
+         */
+        "userCanEdit"?: boolean;
+        /**
+          * Initial HTML content
+         */
         "value"?: string;
     }
     interface IrTextarea {

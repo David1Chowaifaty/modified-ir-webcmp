@@ -1,166 +1,153 @@
-import { Component, h, Element, Event, EventEmitter, Host, Prop, Watch } from '@stencil/core';
-import {
-  ClassicEditor,
-  AccessibilityHelp,
-  Autoformat,
-  AutoLink,
-  Autosave,
-  Bold,
-  Essentials,
-  Italic,
-  Paragraph,
-  SelectAll,
-  TextTransformation,
-  Undo,
-  Underline,
-  PageBreak,
-  Enter,
-  EditorConfig,
-  GeneralHtmlSupport,
-  ShiftEnter,
-  SourceEditing,
-  FullPage,
-  PluginConstructor,
-  ToolbarConfigItem,
-} from 'ckeditor5';
+import { Component, h, Element, Event, EventEmitter, Prop, Watch } from '@stencil/core';
+import Quill, { QuillOptions } from 'quill';
+
+export type QuillToolbarButton = 'bold' | 'italic' | 'underline' | 'strike' | 'link' | 'image' | 'video' | 'clean';
+
+export interface ToolbarConfig {
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strike?: boolean;
+  link?: boolean;
+  image?: boolean;
+  video?: boolean;
+  clean?: boolean;
+}
+
+function buildToolbar(config: ToolbarConfig): any[] {
+  const toolbar = [];
+  const textFormats: string[] = [];
+  if (config.bold) textFormats.push('bold');
+  if (config.italic) textFormats.push('italic');
+  if (config.underline) textFormats.push('underline');
+  if (config.strike) textFormats.push('strike');
+  if (textFormats.length) {
+    toolbar.push(textFormats);
+  }
+  if (config.link) toolbar.push(['link']);
+  if (config.image) toolbar.push(['image']);
+  if (config.video) toolbar.push(['video']);
+  if (config.clean) toolbar.push(['clean']);
+  return toolbar;
+}
 @Component({
   tag: 'ir-text-editor',
-  styleUrl: 'ir-text-editor.css',
+  styleUrls: ['ir-text-editor.css', 'quill.snow.css'],
   shadow: false,
 })
 export class IrTextEditor {
   @Element() el: HTMLElement;
-  @Prop() value: string;
+
   @Prop() error: boolean;
+
+  @Prop() maxLength: number;
+
+  /** Initial HTML content */
+  @Prop() value: string = '';
+
+  /** If true, makes the editor read-only */
+  @Prop() readOnly: boolean = false;
+
+  /** Determines if the current user can edit the content */
+  @Prop() userCanEdit: boolean = true;
+
+  /** Placeholder text */
   @Prop() placeholder: string;
 
-  @Prop() plugins: (string | PluginConstructor)[] = [];
-  @Prop() pluginsMode: 'replace' | 'add' = 'add';
-  @Prop() toolbarItems: ToolbarConfigItem[] = [];
-  @Prop() toolbarItemsMode: 'replace' | 'add' = 'add';
+  /**
+   * Type-safe toolbar configuration.
+   * For example, you can pass:
+   *
+   * {
+   *   bold: true,
+   *   italic: true,
+   *   underline: true,
+   *   strike: false,
+   *   link: true,
+   *   clean: true
+   * }
+   */
+  @Prop() toolbarConfig?: ToolbarConfig;
 
+  /** Emits current HTML content whenever it changes */
   @Event() textChange: EventEmitter<string>;
 
-  private editorInstance: ClassicEditor;
-  private baseToolbarItems: ToolbarConfigItem[] = ['undo', 'redo', '|', 'sourceEditing', '|', 'bold', 'italic', 'underline'];
-  private basePlugins: (string | PluginConstructor)[] = [
-    SourceEditing,
-    GeneralHtmlSupport,
-    AccessibilityHelp,
-    Autoformat,
-    AutoLink,
-    Autosave,
-    Bold,
-    Underline,
-    PageBreak,
-    Essentials,
-    Enter,
-    Italic,
-    Paragraph,
-    SelectAll,
-    TextTransformation,
-    Undo,
-    ShiftEnter,
-    FullPage,
-  ];
+  /** Private, non-reactive Quill editor instance */
+  private editor: Quill;
+
+  private editorContainer!: HTMLDivElement;
+
   componentDidLoad() {
-    this.initEditor();
+    const options: QuillOptions = {
+      modules: {
+        toolbar: this.computedToolbar,
+      },
+      placeholder: this.placeholder,
+      readOnly: !this.userCanEdit || this.readOnly,
+      theme: 'snow',
+    };
+    this.editor = new Quill(this.editorContainer, options);
+    if (this.value) {
+      this.setEditorValue(this.value);
+    }
+    this.editor.on('text-change', (_, __, source) => {
+      if (source === 'user' && this.maxLength) {
+        const plainText = this.editor.getText();
+        const effectiveLength = plainText.endsWith('\n') ? plainText.length - 1 : plainText.length;
+        if (effectiveLength > this.maxLength) {
+          const excess = effectiveLength - this.maxLength;
+          this.editor.deleteText(this.maxLength, excess, 'user');
+          return;
+        }
+      }
+      const html = this.editor.root.innerHTML;
+      this.textChange.emit(html);
+    });
   }
 
   @Watch('value')
-  onValueChanged(newValue: string) {
-    if (this.editorInstance) {
-      const currentEditorValue = this.editorInstance.getData();
-      if (newValue !== currentEditorValue) {
-        this.editorInstance.setData(newValue);
-      }
-    }
-  }
-  @Watch('error')
-  onErrorChanged(newValue: boolean, oldValue: boolean) {
+  handleValueChange(newValue: string, oldValue: string) {
     if (newValue !== oldValue) {
-      const editorElement = this.el.querySelector('.ck-content') as HTMLDivElement;
-      if (editorElement) {
-        console.log('first');
-        editorElement.classList.toggle('error', newValue);
-      }
+      this.setEditorValue(newValue);
+    }
+  }
+  @Watch('readOnly')
+  onReadOnlyChange(newVal: boolean) {
+    if (this.editor) {
+      this.editor.enable(this.userCanEdit && !newVal);
     }
   }
 
-  async initEditor() {
-    const plugins = this.pluginsMode === 'replace' ? this.plugins : this.basePlugins.concat(this.plugins);
-    const items = this.toolbarItemsMode === 'replace' ? this.toolbarItems : this.baseToolbarItems.concat(this.toolbarItems);
-    const editorConfig: EditorConfig = {
-      toolbar: {
-        items,
-        shouldNotGroupWhenFull: false,
-      },
-      plugins,
-      initialData: this.value,
-      htmlSupport: {
-        allow: [
-          {
-            name: /^(b|strong|br|p)$/,
-            attributes: true,
-            classes: true,
-            styles: true,
-          },
-        ],
-      },
-      // licenseKey: '',
-      placeholder: this.placeholder,
-    };
-
-    if (this.editorInstance) {
-      return;
+  @Watch('userCanEdit')
+  onUserCanEditChange(newVal: boolean) {
+    if (this.editor) {
+      this.editor.enable(newVal && !this.readOnly);
     }
-
-    const editorElement = this.el.querySelector('#editor') as HTMLDivElement;
-
-    try {
-      this.editorInstance = await ClassicEditor.create(editorElement, editorConfig);
-      this.editorInstance.editing.view.document.on('clipboardInput', (evt, data) => {
-        const textData = data.dataTransfer.getData('text/plain');
-        const htmlRegex = /<\/?[a-z][\s\S]*>/i;
-
-        if (htmlRegex.test(textData)) {
-          // Process the text containing HTML tags
-          const fragment = this.editorInstance.data.htmlProcessor.toView(textData);
-          data.content = fragment;
-
-          // Prevent the default handling
-          evt.stop();
-
-          // Fire the 'inputTransformation' event manually
-          this.editorInstance.plugins.get('ClipboardPipeline').fire('inputTransformation', { content: fragment });
-        }
-      });
-      this.editorInstance.model.document.on('change:data', () => {
-        const editorData = this.editorInstance.getData();
-        this.handletextChange(editorData);
-      });
-      this.editorInstance.plugins.get('Enter').fire('');
-    } catch (error) {
-      console.error('There was a problem initializing the editor:', error);
-    }
-  }
-  handletextChange(data: string) {
-    this.textChange.emit(data);
   }
 
   disconnectedCallback() {
-    if (this.editorInstance) {
-      this.editorInstance.destroy().catch((error: any) => {
-        console.error('Error destroying editor:', error);
-      });
+    if (this.editor) {
+      this.editor = null;
     }
   }
-
+  private get computedToolbar() {
+    return this.toolbarConfig ? buildToolbar(this.toolbarConfig) : [['bold', 'italic', 'underline', 'strike'], ['link'], ['clean']];
+  }
+  private setEditorValue(value: string) {
+    if (!this.editor) {
+      return;
+    }
+    this.editor.clipboard.dangerouslyPasteHTML(value);
+    requestAnimationFrame(() => {
+      const length = this.editor.getLength();
+      this.editor.setSelection(length - 1, 0);
+    });
+  }
   render() {
     return (
-      <Host>
-        <div id="editor"></div>
-      </Host>
+      <div class={{ 'editor-wrapper': true, 'error': this.error }}>
+        <div ref={el => (this.editorContainer = el as HTMLDivElement)} class="editor-container"></div>
+      </div>
     );
   }
 }
