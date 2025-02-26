@@ -11,20 +11,20 @@
 | -------------------- | -------------------- | ----------- | ------------------------- | ----------- |
 | `bookingEvent`       | --                   |             | `{ [key: string]: any; }` | `undefined` |
 | `bubbleInfoTop`      | `bubble-info-top`    |             | `boolean`                 | `false`     |
-| `countryNodeList`    | --                   |             | `ICountry[]`              | `undefined` |
+| `countries`          | --                   |             | `ICountry[]`              | `undefined` |
 | `currency`           | `currency`           |             | `any`                     | `undefined` |
 | `is_vacation_rental` | `is_vacation_rental` |             | `boolean`                 | `false`     |
 
 
 ## Events
 
-| Event              | Description | Type                                                                                                                                                                                       |
-| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `bookingCreated`   |             | `CustomEvent<{ pool?: string; data: any[]; }>`                                                                                                                                             |
-| `deleteButton`     |             | `CustomEvent<string>`                                                                                                                                                                      |
-| `hideBubbleInfo`   |             | `CustomEvent<any>`                                                                                                                                                                         |
-| `showBookingPopup` |             | `CustomEvent<any>`                                                                                                                                                                         |
-| `showDialog`       |             | `CustomEvent<{ reason: "checkin" \| "checkout"; bookingNumber: string; roomIdentifier: string; roomUnit: string; roomName: string; } \| { reason: "reallocate"; } & IReallocationPayload>` |
+| Event              | Description | Type                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bookingCreated`   |             | `CustomEvent<{ pool?: string; data: any[]; }>`                                                                                                                                                                                                                                                                                                             |
+| `deleteButton`     |             | `CustomEvent<string>`                                                                                                                                                                                                                                                                                                                                      |
+| `hideBubbleInfo`   |             | `CustomEvent<any>`                                                                                                                                                                                                                                                                                                                                         |
+| `showBookingPopup` |             | `CustomEvent<any>`                                                                                                                                                                                                                                                                                                                                         |
+| `showDialog`       |             | `CustomEvent<{ reason: "checkin"; bookingNumber: string; roomIdentifier: string; roomUnit: string; roomName: string; sidebarPayload: RoomGuestsPayload & { bookingNumber: string; }; } \| { reason: "checkout"; bookingNumber: string; roomIdentifier: string; roomUnit: string; roomName: string; } \| { reason: "reallocate"; } & IReallocationPayload>` |
 
 
 ## Dependencies

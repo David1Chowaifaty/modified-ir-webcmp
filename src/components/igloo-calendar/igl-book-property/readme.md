@@ -12,7 +12,7 @@
 | `adultChildConstraints` | --                        |             | `{ adult_max_nbr: number; child_max_nbr: number; child_max_age: number; }` | `undefined` |
 | `allowedBookingSources` | `allowed-booking-sources` |             | `any`                                                                      | `undefined` |
 | `bookingData`           | --                        |             | `{ [key: string]: any; }`                                                  | `undefined` |
-| `countryNodeList`       | `country-node-list`       |             | `any`                                                                      | `undefined` |
+| `countries`             | --                        |             | `ICountry[]`                                                               | `undefined` |
 | `currency`              | --                        |             | `ICurrency`                                                                | `undefined` |
 | `language`              | `language`                |             | `string`                                                                   | `undefined` |
 | `propertyid`            | `propertyid`              |             | `number`                                                                   | `undefined` |

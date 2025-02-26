@@ -11,7 +11,7 @@
 | -------------------- | -------------------- | ----------- | ------------------------- | ----------- |
 | `allBookingEvents`   | --                   |             | `{ [key: string]: any; }` | `[]`        |
 | `bookingEvent`       | --                   |             | `{ [key: string]: any; }` | `undefined` |
-| `countryNodeList`    | `country-node-list`  |             | `any`                     | `undefined` |
+| `countries`          | --                   |             | `ICountry[]`              | `undefined` |
 | `currency`           | `currency`           |             | `any`                     | `undefined` |
 | `is_vacation_rental` | `is_vacation_rental` |             | `boolean`                 | `false`     |
 | `language`           | `language`           |             | `string`                  | `undefined` |
@@ -19,16 +19,16 @@
 
 ## Events
 
-| Event                   | Description | Type                                                                                                                                                                                       |
-| ----------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `dragOverEventData`     |             | `CustomEvent<any>`                                                                                                                                                                         |
-| `hideBubbleInfo`        |             | `CustomEvent<any>`                                                                                                                                                                         |
-| `resetStreachedBooking` |             | `CustomEvent<string>`                                                                                                                                                                      |
-| `showDialog`            |             | `CustomEvent<{ reason: "checkin" \| "checkout"; bookingNumber: string; roomIdentifier: string; roomUnit: string; roomName: string; } \| { reason: "reallocate"; } & IReallocationPayload>` |
-| `showRoomNightsDialog`  |             | `CustomEvent<IRoomNightsData>`                                                                                                                                                             |
-| `toast`                 |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>`                                                                                       |
-| `updateBookingEvent`    |             | `CustomEvent<{ [key: string]: any; }>`                                                                                                                                                     |
-| `updateEventData`       |             | `CustomEvent<any>`                                                                                                                                                                         |
+| Event                   | Description | Type                                                                                                                                                                                                                                                                                                                                                       |
+| ----------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dragOverEventData`     |             | `CustomEvent<any>`                                                                                                                                                                                                                                                                                                                                         |
+| `hideBubbleInfo`        |             | `CustomEvent<any>`                                                                                                                                                                                                                                                                                                                                         |
+| `resetStreachedBooking` |             | `CustomEvent<string>`                                                                                                                                                                                                                                                                                                                                      |
+| `showDialog`            |             | `CustomEvent<{ reason: "checkin"; bookingNumber: string; roomIdentifier: string; roomUnit: string; roomName: string; sidebarPayload: RoomGuestsPayload & { bookingNumber: string; }; } \| { reason: "checkout"; bookingNumber: string; roomIdentifier: string; roomUnit: string; roomName: string; } \| { reason: "reallocate"; } & IReallocationPayload>` |
+| `showRoomNightsDialog`  |             | `CustomEvent<IRoomNightsData>`                                                                                                                                                                                                                                                                                                                             |
+| `toast`                 |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>`                                                                                                                                                                                                                                                       |
+| `updateBookingEvent`    |             | `CustomEvent<{ [key: string]: any; }>`                                                                                                                                                                                                                                                                                                                     |
+| `updateEventData`       |             | `CustomEvent<any>`                                                                                                                                                                                                                                                                                                                                         |
 
 
 ## Dependencies

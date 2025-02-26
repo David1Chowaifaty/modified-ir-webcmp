@@ -9,7 +9,7 @@
 
 | Property  | Attribute | Description | Type                                                                                                                                                                                                                                     | Default     |
 | --------- | --------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `booking` | --        |             | `{ currency: Currency; booking_nbr: string; extra_services: { description?: string; booking_system_id?: number; cost?: number; currency_id?: number; end_date?: string; price?: number; start_date?: string; system_id?: number; }[]; }` | `undefined` |
+| `booking` | --        |             | `{ currency: Currency; booking_nbr: string; extra_services: { description?: string; cost?: number; booking_system_id?: number; currency_id?: number; end_date?: string; price?: number; start_date?: string; system_id?: number; }[]; }` | `undefined` |
 
 
 ## Dependencies

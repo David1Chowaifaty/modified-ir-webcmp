@@ -21,13 +21,14 @@
 
 ## Events
 
-| Event                      | Description | Type                                                 |
-| -------------------------- | ----------- | ---------------------------------------------------- |
-| `calculateUnassignedDates` |             | `CustomEvent<any>`                                   |
-| `dragOverHighlightElement` |             | `CustomEvent<any>`                                   |
-| `moveBookingTo`            |             | `CustomEvent<any>`                                   |
-| `reduceAvailableUnitEvent` |             | `CustomEvent<{ fromDate: string; toDate: string; }>` |
-| `revertBooking`            |             | `CustomEvent<any>`                                   |
+| Event                      | Description | Type                                                                                     |
+| -------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
+| `calculateUnassignedDates` |             | `CustomEvent<any>`                                                                       |
+| `dragOverHighlightElement` |             | `CustomEvent<any>`                                                                       |
+| `moveBookingTo`            |             | `CustomEvent<any>`                                                                       |
+| `openCalendarSidebar`      |             | `CustomEvent<{ type: "room-guests" \| "booking-details" \| "add-days"; payload: any; }>` |
+| `reduceAvailableUnitEvent` |             | `CustomEvent<{ fromDate: string; toDate: string; }>`                                     |
+| `revertBooking`            |             | `CustomEvent<any>`                                                                       |
 
 
 ## Dependencies
@@ -46,6 +47,7 @@
 - [ir-sidebar](../ui/ir-sidebar)
 - [ir-room-nights](ir-room-nights)
 - [ir-booking-details](../ir-booking-details)
+- [ir-room-guests](../ir-booking-details/ir-room-guests)
 - [ir-modal](../ui/ir-modal)
 
 ### Graph
@@ -63,6 +65,7 @@ graph TD;
   igloo-calendar --> ir-sidebar
   igloo-calendar --> ir-room-nights
   igloo-calendar --> ir-booking-details
+  igloo-calendar --> ir-room-guests
   igloo-calendar --> ir-modal
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-button

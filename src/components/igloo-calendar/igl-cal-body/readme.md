@@ -10,7 +10,7 @@
 | Property               | Attribute                 | Description | Type                      | Default     |
 | ---------------------- | ------------------------- | ----------- | ------------------------- | ----------- |
 | `calendarData`         | --                        |             | `{ [key: string]: any; }` | `undefined` |
-| `countryNodeList`      | `country-node-list`       |             | `any`                     | `undefined` |
+| `countries`            | --                        |             | `ICountry[]`              | `undefined` |
 | `currency`             | `currency`                |             | `any`                     | `undefined` |
 | `highlightedDate`      | `highlighted-date`        |             | `string`                  | `undefined` |
 | `isScrollViewDragging` | `is-scroll-view-dragging` |             | `boolean`                 | `undefined` |

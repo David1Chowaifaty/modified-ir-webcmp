@@ -29,6 +29,7 @@
 | `showFirstOption`      | `show-first-option`      |             | `boolean`                                                                                                            | `true`      |
 | `size`                 | `size`                   |             | `"lg" \| "md" \| "sm"`                                                                                               | `'md'`      |
 | `submited`             | `submited`               |             | `boolean`                                                                                                            | `false`     |
+| `testId`               | `test-id`                |             | `string`                                                                                                             | `undefined` |
 | `textSize`             | `text-size`              |             | `"lg" \| "md" \| "sm"`                                                                                               | `'md'`      |
 
 

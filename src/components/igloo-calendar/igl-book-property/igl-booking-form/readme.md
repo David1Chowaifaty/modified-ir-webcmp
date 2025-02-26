@@ -12,7 +12,7 @@
 | `bedPreferenceType`      | `bed-preference-type`       |             | `any`                               | `undefined` |
 | `bookedByInfoData`       | --                          |             | `{ [key: string]: any; }`           | `undefined` |
 | `bookingData`            | --                          |             | `{ [key: string]: any; }`           | `undefined` |
-| `countryNodeList`        | `country-node-list`         |             | `any`                               | `undefined` |
+| `countries`              | --                          |             | `ICountry[]`                        | `undefined` |
 | `currency`               | --                          |             | `ICurrency`                         | `undefined` |
 | `dateRangeData`          | --                          |             | `{ [key: string]: any; }`           | `undefined` |
 | `defaultGuestData`       | --                          |             | `IglBookPropertyPayloadEditBooking` | `undefined` |

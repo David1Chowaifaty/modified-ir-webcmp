@@ -9,7 +9,7 @@
 
 | Property             | Attribute              | Description | Type                      | Default     |
 | -------------------- | ---------------------- | ----------- | ------------------------- | ----------- |
-| `countryNodeList`    | --                     |             | `ICountry[]`              | `[]`        |
+| `countries`          | --                     |             | `ICountry[]`              | `[]`        |
 | `defaultData`        | --                     |             | `{ [key: string]: any; }` | `undefined` |
 | `language`           | `language`             |             | `string`                  | `undefined` |
 | `propertyId`         | `property-id`          |             | `number`                  | `undefined` |
