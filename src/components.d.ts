@@ -853,6 +853,7 @@ export namespace Components {
         "maxLength": number;
         "placeholder": string;
         "rows": number;
+        "styles": { [key: string]: string };
         "text": string;
         "textareaClassname": string;
         "value": string;
@@ -3576,6 +3577,7 @@ declare namespace LocalJSX {
         "onTextChange"?: (event: IrTextareaCustomEvent<string>) => void;
         "placeholder"?: string;
         "rows"?: number;
+        "styles"?: { [key: string]: string };
         "text"?: string;
         "textareaClassname"?: string;
         "value"?: string;

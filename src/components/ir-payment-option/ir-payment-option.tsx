@@ -1,4 +1,4 @@
-import { PaymentOption } from '@/models/payment-options';
+import { ILocalizable, OptionField, PaymentOption } from '@/models/payment-options';
 import { PaymentOptionService } from '@/services/payment_option.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
@@ -34,7 +34,7 @@ export class IrPaymentOption {
   private propertyOptionsByCode: Map<string | number, PaymentOption>;
 
   componentWillLoad() {
-    if (this.ticket !== '') {
+    if (!!this.ticket) {
       this.token.setToken(this.ticket);
       this.init();
     }
@@ -56,17 +56,8 @@ export class IrPaymentOption {
   handleCloseModal(e: CustomEvent) {
     e.stopPropagation();
     e.stopImmediatePropagation();
-    console.log(e.detail);
     this.closeModal(e.detail);
   }
-
-  private log(message?: any, ...optionalParams: any[]): void {
-    if (this.hideLogs) {
-      return;
-    }
-    console.log(message, ...optionalParams);
-  }
-
   private closeModal(newOption: PaymentOption | null) {
     if (newOption) {
       this.modifyPaymentList(newOption);
@@ -90,7 +81,6 @@ export class IrPaymentOption {
       }
       this.isLoading = true;
       let propertyId = this.propertyid;
-      console.log('pror id', propertyId);
       if (!propertyId) {
         console.log('fetching property id');
         const propertyData = await this.roomService.getExposedProperty({
@@ -105,12 +95,6 @@ export class IrPaymentOption {
         this.paymentOptionService.GetPropertyPaymentMethods(propertyId),
         this.roomService.fetchLanguage(this.language, ['_PAYMENT_BACK']),
       ]);
-
-      this.log('---feteched data---');
-      this.log('paymentOptions', paymentOptions);
-      this.log('propertyOptions', propertyOptions);
-      this.log('languageTexts', languageTexts);
-      this.log('---feteched data---');
       locales.entries = languageTexts.entries;
       locales.direction = languageTexts.direction;
       this.propertyOptionsById = new Map(propertyOptions?.map(o => [o.id, o]));
@@ -125,7 +109,6 @@ export class IrPaymentOption {
       console.error(error);
     } finally {
       this.isLoading = false;
-      this.log('end fetching data');
     }
   }
 
@@ -149,7 +132,7 @@ export class IrPaymentOption {
     const is_active = e.detail;
     const newOption = { ...po, is_active, property_id: this.propertyid };
     if (po.code !== '005' && !po.is_payment_gateway) {
-      await this.paymentOptionService.HandlePaymentMethod(newOption);
+      await this.changePaymentMethod(newOption);
       this.modifyPaymentList(newOption);
       if (po.code === '000' && is_active && this.paymentOptions.filter(p => p.code !== '000').every(p => p.is_active === false || p.is_active === null)) {
         this.toast.emit({
@@ -170,10 +153,34 @@ export class IrPaymentOption {
       payment_option_store.mode = 'create';
       payment_option_store.selectedOption = newOption;
     } else {
-      await this.paymentOptionService.HandlePaymentMethod(newOption);
+      await this.changePaymentMethod(newOption);
     }
     this.modifyPaymentList(newOption);
   }
+  private async changePaymentMethod(newOption: {
+    is_active: any;
+    property_id: string;
+    code: string;
+    data: OptionField[] | null;
+    description: string;
+    id: null | number;
+    is_payment_gateway: boolean;
+    localizables: ILocalizable[] | null;
+    display_order?: number;
+  }) {
+    try {
+      await this.paymentOptionService.HandlePaymentMethod(newOption);
+      this.toast.emit({
+        position: 'top-right',
+        title: 'Saved Successfully',
+        description: '',
+        type: 'success',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   private showEditButton(po: PaymentOption) {
     if (!po.is_payment_gateway && po.code !== '005') {
       return false;
@@ -182,13 +189,7 @@ export class IrPaymentOption {
     return po.code === '005' || (po.is_payment_gateway && po.data?.length > 0);
   }
   render() {
-    this.log('----loading conditions----');
-    this.log('isLoading', this.isLoading);
-    this.log('paymentOptions', this.paymentOptions);
-    this.log('----loading conditions----');
-
     if (this.isLoading === true || (this.paymentOptions && this.paymentOptions.length === 0)) {
-      this.log('rendering the loading view');
       return (
         <Host class={this.defaultStyles ? 'p-2' : ''}>
           <div class={`loading-container ${this.defaultStyles ? 'default' : ''}`}>
@@ -197,7 +198,6 @@ export class IrPaymentOption {
         </Host>
       );
     }
-    this.log('rendering the payment option');
     return (
       <Host class={this.defaultStyles ? 'p-2' : ''}>
         <ir-toast></ir-toast>

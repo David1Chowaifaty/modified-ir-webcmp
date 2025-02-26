@@ -5,7 +5,6 @@ import payment_option_store from '@/stores/payment-option.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
-import { Link } from 'ckeditor5';
 @Component({
   tag: 'ir-option-details',
   styleUrl: 'ir-option-details.css',
@@ -163,15 +162,16 @@ export class IrOptionDetails {
               </div>
               <div>
                 {this.invalid && <p class="text-danger p-0 m-0">{locales.entries.Lcz_YouMustFillEnglishField}</p>}
-                {/* <ir-textarea
+                <ir-textarea
                   placeholder=""
                   aria-invalid={this.invalid ? 'true' : 'false'}
                   textareaClassname="money-transfer-form"
                   label=""
+                  styles={{ height: '200px', maxHeight: '250px' }}
                   onTextChange={this.handleTextAreaChange.bind(this)}
                   value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
-                ></ir-textarea> */}
-                <ir-text-editor
+                ></ir-textarea>
+                {/* <ir-text-editor
                   plugins={[Link]}
                   pluginsMode="add"
                   toolbarItemsMode="add"
@@ -180,7 +180,7 @@ export class IrOptionDetails {
                   error={this.invalid}
                   value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
                   onTextChange={this.handleTextAreaChange.bind(this)}
-                ></ir-text-editor>
+                ></ir-text-editor> */}
               </div>
             </div>
           ) : (

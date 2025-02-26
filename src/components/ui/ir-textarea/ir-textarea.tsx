@@ -16,6 +16,8 @@ export class IrTextArea {
   @Prop() textareaClassname: string;
   @Prop() variant: 'default' | 'prepend' = 'default';
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
+  @Prop() styles: { [key: string]: string };
+
   @State() error = false;
 
   @Event() textChange: EventEmitter<string>;
@@ -36,7 +38,7 @@ export class IrTextArea {
           <textarea
             value={this.value}
             class={`form-control`}
-            style={{ height: '7rem' }}
+            style={{ height: '7rem', ...this.styles }}
             maxLength={this.maxLength}
             onChange={e => this.textChange.emit((e.target as HTMLTextAreaElement).value)}
             aria-label={this.label}
@@ -48,6 +50,7 @@ export class IrTextArea {
       <div class={'form-group'}>
         <label>{this.label}</label>
         <textarea
+          style={this.styles}
           maxLength={this.maxLength}
           rows={this.rows}
           value={this.value}
