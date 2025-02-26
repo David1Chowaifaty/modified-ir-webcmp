@@ -94,6 +94,7 @@ graph TD;
   ir-extra-service --> ir-modal
   ir-payment-details --> ir-date-picker
   ir-payment-details --> ir-button
+  ir-payment-details --> ir-label
   ir-payment-details --> ir-payment-actions
   ir-payment-details --> ir-modal
   ir-payment-actions --> ir-button

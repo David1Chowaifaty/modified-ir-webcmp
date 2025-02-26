@@ -7,22 +7,22 @@
 
 ## Properties
 
-| Property           | Attribute            | Description | Type                              | Default     |
-| ------------------ | -------------------- | ----------- | --------------------------------- | ----------- |
-| `error`            | `error`              |             | `boolean`                         | `undefined` |
-| `placeholder`      | `placeholder`        |             | `string`                          | `undefined` |
-| `plugins`          | --                   |             | `(string \| PluginConstructor)[]` | `[]`        |
-| `pluginsMode`      | `plugins-mode`       |             | `"add" \| "replace"`              | `'add'`     |
-| `toolbarItems`     | --                   |             | `ToolbarConfigItem[]`             | `[]`        |
-| `toolbarItemsMode` | `toolbar-items-mode` |             | `"add" \| "replace"`              | `'add'`     |
-| `value`            | `value`              |             | `string`                          | `undefined` |
+| Property        | Attribute       | Description                                                                                                                                                    | Type            | Default     |
+| --------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------- |
+| `error`         | `error`         |                                                                                                                                                                | `boolean`       | `undefined` |
+| `maxLength`     | `max-length`    |                                                                                                                                                                | `number`        | `undefined` |
+| `placeholder`   | `placeholder`   | Placeholder text                                                                                                                                               | `string`        | `undefined` |
+| `readOnly`      | `read-only`     | If true, makes the editor read-only                                                                                                                            | `boolean`       | `false`     |
+| `toolbarConfig` | --              | Type-safe toolbar configuration. For example, you can pass:  {   bold: true,   italic: true,   underline: true,   strike: false,   link: true,   clean: true } | `ToolbarConfig` | `undefined` |
+| `userCanEdit`   | `user-can-edit` | Determines if the current user can edit the content                                                                                                            | `boolean`       | `true`      |
+| `value`         | `value`         | Initial HTML content                                                                                                                                           | `string`        | `''`        |
 
 
 ## Events
 
-| Event        | Description | Type                  |
-| ------------ | ----------- | --------------------- |
-| `textChange` |             | `CustomEvent<string>` |
+| Event        | Description                                    | Type                  |
+| ------------ | ---------------------------------------------- | --------------------- |
+| `textChange` | Emits current HTML content whenever it changes | `CustomEvent<string>` |
 
 
 ## Dependencies
