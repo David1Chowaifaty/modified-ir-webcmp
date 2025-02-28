@@ -1,13 +1,22 @@
 import { CalendarDataDetails } from '@/models/calendarData';
 import { createStore } from '@stencil/store';
 
-type CalendarStore = CalendarDataDetails & { roomHistory: Record<string, boolean>; checkin_enabled: boolean };
+type CalendarStore = CalendarDataDetails & {
+  roomHistory: Record<string, boolean>;
+  checkin_enabled: boolean;
+  checkin_checkout_hours: {
+    hour: number;
+    minute: number;
+    offset: number;
+  };
+};
 const initialState: CalendarStore = {
   adultChildConstraints: {
     adult_max_nbr: 0,
     child_max_nbr: 0,
     child_max_age: 0,
   },
+  checkin_checkout_hours: null,
   allowedBookingSources: [],
   currency: undefined,
   endingDate: 0,

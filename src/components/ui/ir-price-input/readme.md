@@ -19,6 +19,7 @@
 | `minValue`     | `min-value`     | Minimum value for the price                                      | `number`                 | `undefined` |
 | `placeholder`  | `placeholder`   | Placeholder text for the input                                   | `string`                 | `''`        |
 | `required`     | `required`      | Whether the input is required                                    | `boolean`                | `false`     |
+| `testId`       | `test-id`       | Unique id for testing                                            | `string`                 | `undefined` |
 | `value`        | `value`         | Initial value for the input                                      | `string`                 | `''`        |
 | `wrapKey`      | `wrap-key`      | Indicates the key to wrap the value (e.g., 'price' or 'cost')    | `string`                 | `undefined` |
 | `zod`          | --              | A Zod schema for validating the input Example: z.coerce.number() | `ZodType<any, any, any>` | `undefined` |

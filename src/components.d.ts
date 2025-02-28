@@ -902,6 +902,10 @@ export namespace Components {
          */
         "required": boolean;
         /**
+          * Unique id for testing
+         */
+        "testId"?: string;
+        /**
           * Initial value for the input
          */
         "value": string;
@@ -4026,6 +4030,10 @@ declare namespace LocalJSX {
           * Whether the input is required
          */
         "required"?: boolean;
+        /**
+          * Unique id for testing
+         */
+        "testId"?: string;
         /**
           * Initial value for the input
          */

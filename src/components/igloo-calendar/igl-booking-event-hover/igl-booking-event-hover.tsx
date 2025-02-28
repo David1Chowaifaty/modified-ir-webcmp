@@ -6,6 +6,7 @@ import moment from 'moment';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { CalendarModalEvent } from '@/models/property-types';
+import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -43,8 +44,9 @@ export class IglBookingEventHover {
     if (moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(moment())) {
       this.hideButtons = true;
     }
-    this.canCheckInOrCheckout =
-      moment(new Date()).isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment(new Date()).isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
+
+    this.canCheckInOrCheckout = moment().isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment().isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
+
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
@@ -152,7 +154,12 @@ export class IglBookingEventHover {
     if (this.isCheckedIn()) {
       return false;
     }
-    if (this.canCheckInOrCheckout) {
+    const now = moment();
+    if (
+      this.canCheckInOrCheckout ||
+      (moment().isSame(new Date(this.bookingEvent.TO_DATE), 'days') &&
+        !compareTime(now.toDate(), createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour)))
+    ) {
       return true;
     }
     return false;
@@ -162,7 +169,7 @@ export class IglBookingEventHover {
     if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
       return false;
     }
-    if (this.isCheckedIn() && this.canCheckInOrCheckout) {
+    if (this.isCheckedIn()) {
       return true;
     } else {
       return false;
@@ -484,12 +491,14 @@ export class IglBookingEventHover {
                 text={locales.entries.Lcz_AddRoom}
                 icon_name="square_plus"
                 size="sm"
+                class={'w-100'}
                 btn_styles="h-100"
                 onClickHandler={() => this.handleAddRoom()}
               ></ir-button>
             )}
             {this.canCheckIn() && (
               <ir-button
+                class={'w-100'}
                 style={{ '--icon-size': '0.875rem' }}
                 text={locales.entries.Lcz_CheckIn}
                 onClickHandler={() => this.handleCustomerCheckIn()}
@@ -500,6 +509,7 @@ export class IglBookingEventHover {
             )}
             {this.canCheckOut() && (
               <ir-button
+                class={'w-100'}
                 btn_styles="h-100"
                 style={{ '--icon-size': '0.875rem' }}
                 text={locales.entries.Lcz_CheckOut}
@@ -512,6 +522,7 @@ export class IglBookingEventHover {
               ? null
               : !this.shouldHideUnassignUnit && (
                   <ir-button
+                    class={'w-100'}
                     btn_styles="h-100"
                     style={{ '--icon-size': '0.875rem' }}
                     size="sm"

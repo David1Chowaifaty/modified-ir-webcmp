@@ -291,6 +291,7 @@ export class IglCalHeader {
               icon_name="plus"
               data-toggle="tooltip"
               data-placement="bottom"
+              data-testid="new_booking_btn"
               title={locales.entries.Lcz_CreateNewBooking}
               visibleBackgroundOnHover
               style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}

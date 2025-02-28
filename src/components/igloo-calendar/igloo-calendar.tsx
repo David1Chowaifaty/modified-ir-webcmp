@@ -1063,51 +1063,54 @@ export class IglooCalendar {
         <ir-interceptor></ir-interceptor>
         <div id="iglooCalendar" class="igl-calendar">
           {this.shouldRenderCalendarView() ? (
-            [
-              this.showToBeAssigned ? (
-                <igl-to-be-assigned
-                  unassignedDatesProp={this.unassignedDates}
-                  to_date={this.to_date}
-                  from_date={this.from_date}
-                  propertyid={this.property_id}
-                  class="tobeAssignedContainer"
-                  calendarData={this.calendarData}
-                  onOptionEvent={evt => this.onOptionSelect(evt)}
-                ></igl-to-be-assigned>
-              ) : null,
-              this.showLegend ? (
-                <igl-legends class="legendContainer" legendData={this.calendarData.legendData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-legends>
-              ) : null,
-              <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
-                <div id="calendarContainer">
-                  <igl-cal-header
-                    unassignedDates={this.unassignedDates}
+            <div class="h-100 p-0 m-0" data-testid="ir-calendar">
+              {' '}
+              {[
+                this.showToBeAssigned ? (
+                  <igl-to-be-assigned
+                    unassignedDatesProp={this.unassignedDates}
                     to_date={this.to_date}
+                    from_date={this.from_date}
                     propertyid={this.property_id}
-                    today={this.today}
-                    calendarData={this.calendarData}
-                    highlightedDate={this.highlightedDate}
-                    onOptionEvent={evt => this.onOptionSelect(evt)}
-                  ></igl-cal-header>
-                  <igl-cal-body
-                    propertyId={this.property_id}
-                    language={this.language}
-                    countries={this.countries}
-                    currency={this.calendarData.currency}
-                    today={this.today}
-                    highlightedDate={this.highlightedDate}
-                    isScrollViewDragging={this.scrollViewDragging}
-                    calendarData={this.calendarData}
-                  ></igl-cal-body>
-                  <igl-cal-footer
-                    highlightedDate={this.highlightedDate}
-                    today={this.today}
+                    class="tobeAssignedContainer"
                     calendarData={this.calendarData}
                     onOptionEvent={evt => this.onOptionSelect(evt)}
-                  ></igl-cal-footer>
-                </div>
-              </div>,
-            ]
+                  ></igl-to-be-assigned>
+                ) : null,
+                this.showLegend ? (
+                  <igl-legends class="legendContainer" legendData={this.calendarData.legendData} onOptionEvent={evt => this.onOptionSelect(evt)}></igl-legends>
+                ) : null,
+                <div class="calendarScrollContainer" onMouseDown={event => this.dragScrollContent(event)} onScroll={() => this.calendarScrolling()}>
+                  <div id="calendarContainer">
+                    <igl-cal-header
+                      unassignedDates={this.unassignedDates}
+                      to_date={this.to_date}
+                      propertyid={this.property_id}
+                      today={this.today}
+                      calendarData={this.calendarData}
+                      highlightedDate={this.highlightedDate}
+                      onOptionEvent={evt => this.onOptionSelect(evt)}
+                    ></igl-cal-header>
+                    <igl-cal-body
+                      propertyId={this.property_id}
+                      language={this.language}
+                      countries={this.countries}
+                      currency={this.calendarData.currency}
+                      today={this.today}
+                      highlightedDate={this.highlightedDate}
+                      isScrollViewDragging={this.scrollViewDragging}
+                      calendarData={this.calendarData}
+                    ></igl-cal-body>
+                    <igl-cal-footer
+                      highlightedDate={this.highlightedDate}
+                      today={this.today}
+                      calendarData={this.calendarData}
+                      onOptionEvent={evt => this.onOptionSelect(evt)}
+                    ></igl-cal-footer>
+                  </div>
+                </div>,
+              ]}
+            </div>
           ) : (
             <ir-loading-screen message="Preparing Calendar Data"></ir-loading-screen>
           )}

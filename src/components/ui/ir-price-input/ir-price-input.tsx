@@ -52,6 +52,9 @@ export class IrPriceInput {
   /** Maximum value for the price */
   @Prop() maxValue?: number;
 
+  /** Unique id for testing */
+  @Prop() testId?: string;
+
   /** Error*/
   @State() error: boolean;
 
@@ -143,6 +146,7 @@ export class IrPriceInput {
             </div>
           )}
           <input
+            data-testid={this.testId}
             disabled={this.disabled}
             id={this.id}
             class={`form-control input-sm rate-input 

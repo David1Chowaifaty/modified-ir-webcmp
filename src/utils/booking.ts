@@ -197,7 +197,11 @@ export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_da
         const now = moment();
         const toDate = moment(to_date, 'YYYY-MM-DD');
         const fromDate = moment(from_date, 'YYYY-MM-DD');
-        if ((now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && now.hour() >= 12) || now.isAfter(toDate, 'days')) {
+        const isNowAfterOrSameAsHotelHour = compareTime(
+          now.toDate(),
+          createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour),
+        );
+        if ((now.isSame(toDate, 'days') && now.isAfter(fromDate, 'days') && isNowAfterOrSameAsHotelHour) || now.isAfter(toDate, 'days')) {
           return bookingStatus['003'];
         } else {
           return bookingStatus['002'];
@@ -209,13 +213,17 @@ export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_da
     const now = moment();
     const toDate = moment(to_date, 'YYYY-MM-DD');
     const fromDate = moment(from_date, 'YYYY-MM-DD');
-    if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+    const isNowAfterOrSameAsHotelHour = compareTime(
+      now.toDate(),
+      createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour),
+    );
+    if (fromDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
       return bookingStatus['000'];
     } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
       return bookingStatus['000'];
-    } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+    } else if (toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
       return bookingStatus['000'];
-    } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+    } else if ((toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) || toDate.isBefore(now, 'day')) {
       return bookingStatus['003'];
     } else {
       return bookingStatus[status_code || '001'];
@@ -351,4 +359,28 @@ export function calculateDaysBetweenDates(from_date: string, to_date: string) {
   const endDate = moment(to_date, 'YYYY-MM-DD');
   const daysDiff = endDate.diff(startDate, 'days');
   return daysDiff || 1;
+}
+export function compareTime(date1: Date, date2: Date) {
+  return date1.getHours() >= date2.getHours() && date1.getMinutes() >= date2.getMinutes();
+}
+/**
+ * Creates a Date object for today at the specified hour in a given time zone.
+ * The offset is the number of hours that the target time zone is ahead of UTC.
+ *
+ * For example, if offset = 3 and hour = 9, then the function returns a Date
+ * which, when converted to the target time zone, represents 9:00.
+ *
+ * @param offset - The timezone offset in hours (e.g., 2, 3, etc.)
+ * @param hour - The desired hour in the target time zone (0-23)
+ * @returns Date object representing the target time (in UTC)
+ */
+export function createDateWithOffsetAndHour(offset: number, hour: number): Date {
+  const now = new Date();
+  const offsetMs = offset * 60 * 60 * 1000;
+  const targetTzDate = new Date(now.getTime() + offsetMs);
+  const year = targetTzDate.getUTCFullYear();
+  const month = targetTzDate.getUTCMonth();
+  const day = targetTzDate.getUTCDate();
+  const utcHour = hour - offset;
+  return new Date(Date.UTC(year, month, day, utcHour));
 }
