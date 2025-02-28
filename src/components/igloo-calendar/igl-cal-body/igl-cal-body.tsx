@@ -399,6 +399,7 @@ export class IglCalBody {
           <div class="bookingEventsContainer preventPageScroll">
             {this.getBookingData()?.map(bookingEvent => (
               <igl-booking-event
+                data-testid={`booking_${bookingEvent.BOOKING_NUMBER}`}
                 language={this.language}
                 is_vacation_rental={this.calendarData.is_vacation_rental}
                 countries={this.countries}

@@ -69,7 +69,7 @@ export class IrRoomGuests {
   @State() propertyCountry: ICountry;
 
   @Event() closeModal: EventEmitter<null>;
-  @Event() resetbooking: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
 
   private bookingService = new BookingService();
 
@@ -115,7 +115,7 @@ export class IrRoomGuests {
       guests = [...this.sharedPersons];
     }
     guests = guests.map(g => ({ ...g, dob: new Date(g.dob).getFullYear() === 1900 ? null : g.dob }));
-    this.guests = guests.map(g => ({ ...g, dob: g.dob ? moment(new Date(g.dob)).format('DD/MM/YYYY') : '' }));
+    this.guests = guests.map(g => ({ ...g, dob: g.dob ? moment(new Date(g.dob)).format('DD/MM/YYYY') : '', country_id: g.country ? g.country.id : null }));
   }
 
   private updateGuestInfo(index: number, params: Partial<SharedPerson>) {
@@ -144,7 +144,7 @@ export class IrRoomGuests {
         });
       }
       this.closeModal.emit(null);
-      this.resetbooking.emit(null);
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
       if (error instanceof ZodError) {
@@ -231,7 +231,7 @@ export class IrRoomGuests {
                       submitted={this.submitted}
                       mask={dateMask}
                       LabelAvailable={false}
-                      placeholder="dd/mm/yyyy"
+                      placeholder=""
                       onTextChange={e => {
                         this.updateGuestInfo(idx, { dob: e.detail });
                       }}

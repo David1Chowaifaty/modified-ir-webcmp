@@ -2084,6 +2084,8 @@ declare global {
     start: moment.Moment;
     end: moment.Moment;
   };
+        "datePickerFocus": void;
+        "datePickerBlur": void;
     }
     interface HTMLIrDatePickerElement extends Components.IrDatePicker, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrDatePickerElementEventMap>(type: K, listener: (this: HTMLIrDatePickerElement, ev: IrDatePickerCustomEvent<HTMLIrDatePickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2689,7 +2691,7 @@ declare global {
     };
     interface HTMLIrRoomGuestsElementEventMap {
         "closeModal": null;
-        "resetbooking": null;
+        "resetBookingEvt": null;
     }
     interface HTMLIrRoomGuestsElement extends Components.IrRoomGuests, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomGuestsElementEventMap>(type: K, listener: (this: HTMLIrRoomGuestsElement, ev: IrRoomGuestsCustomEvent<HTMLIrRoomGuestsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3522,6 +3524,8 @@ declare namespace LocalJSX {
     start: moment.Moment;
     end: moment.Moment;
   }>) => void;
+        "onDatePickerBlur"?: (event: IrDatePickerCustomEvent<void>) => void;
+        "onDatePickerFocus"?: (event: IrDatePickerCustomEvent<void>) => void;
         /**
           * Whether the picker should allow range selection (start and end date).
          */
@@ -4098,7 +4102,7 @@ declare namespace LocalJSX {
          */
         "language"?: string;
         "onCloseModal"?: (event: IrRoomGuestsCustomEvent<null>) => void;
-        "onResetbooking"?: (event: IrRoomGuestsCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrRoomGuestsCustomEvent<null>) => void;
         /**
           * The name of the room currently being displayed. Used to label the room in the user interface for clarity.
          */

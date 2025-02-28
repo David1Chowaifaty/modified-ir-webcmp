@@ -108,3 +108,7 @@
     border-bottom-right-radius: 0 !important;
   }
 }
+
+.date-focused {
+  border-color: #1e9ff2;
+}

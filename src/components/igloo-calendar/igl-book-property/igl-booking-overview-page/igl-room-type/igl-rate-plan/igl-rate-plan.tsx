@@ -66,6 +66,20 @@ export class IglRatePlan {
 
   // Navigate to the next page for booking
   private bookProperty(): void {
+    reserveRooms({
+      roomTypeId: this.roomTypeId,
+      ratePlanId: this.ratePlan.id,
+      rooms: 1,
+      guest: [
+        {
+          last_name: booking_store?.guest?.last_name,
+          first_name: booking_store?.guest?.first_name,
+          unit: null,
+          bed_preference: this.visibleInventory?.roomtype?.is_bed_configuration_enabled ? booking_store?.guest?.bed_preference : null,
+          infant_nbr: this.visibleInventory?.selected_variation?.child_nbr > 0 ? booking_store?.guest?.infant_nbr : null,
+        },
+      ],
+    });
     this.buttonClicked.emit({ key: 'next' });
   }
 
@@ -172,7 +186,7 @@ export class IglRatePlan {
           </div>
 
           {isAvailableToBook ? (
-            <div class="d-md-flex justify-content-md-end align-items-md-center flex-fill rateplan-container">
+            <div class="d-md-flex  justify-content-md-end align-items-md-center flex-fill rateplan-container">
               <div class="mt-1 mt-md-0 flex-fill max-w-300">
                 <fieldset class="position-relative">
                   <select
@@ -229,7 +243,7 @@ export class IglRatePlan {
                   </fieldset>
                 </div>
                 {(bookingType === 'PLUS_BOOKING' || bookingType === 'ADD_ROOM') && (
-                  <div class="flex-fill mt-lg-0 ml-1 m-0 mt-md-0 p-0">
+                  <div class="flex-fill mt-0 ml-1 m-0 mt-md-0 p-0">
                     <fieldset class="position-relative">
                       <select
                         data-testid={'inventory_select'}
@@ -313,7 +327,7 @@ export class IglRatePlan {
                   data-testid="book"
                   disabled={disableForm || (bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
                   type="button"
-                  class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1 mt-1"
+                  class="btn btn-primary booking-btn mt-md-0 btn-sm ml-md-1 mt-1"
                   onClick={() => this.bookProperty()}
                 >
                   {locales.entries.Lcz_Book}

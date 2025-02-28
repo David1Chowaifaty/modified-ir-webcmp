@@ -1,6 +1,6 @@
 import { SharedPerson } from '@/models/booking.dto';
 import moment from 'moment';
-import IMask, { FactoryArg } from 'imask';
+import { FactoryArg, MaskedRange } from 'imask';
 
 export const defaultGuest: SharedPerson = {
   id: -1,
@@ -39,21 +39,22 @@ export const dateMask: FactoryArg = {
   format: date => moment(date).format('DD/MM/YYYY'),
   parse: str => moment(str, 'DD/MM/YYYY').toDate(),
   autofix: true,
+  placeholderChar: '_',
   blocks: {
     YYYY: {
-      mask: IMask.MaskedRange,
+      mask: MaskedRange,
       from: 1970,
       to: new Date().getFullYear(),
       placeholderChar: 'Y',
     },
     MM: {
-      mask: IMask.MaskedRange,
+      mask: MaskedRange,
       from: 1,
       to: 12,
       placeholderChar: 'M',
     },
     DD: {
-      mask: IMask.MaskedRange,
+      mask: MaskedRange,
       from: 1,
       to: 31,
       placeholderChar: 'D',

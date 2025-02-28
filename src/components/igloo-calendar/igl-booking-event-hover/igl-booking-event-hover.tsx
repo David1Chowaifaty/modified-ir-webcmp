@@ -171,9 +171,16 @@ export class IglBookingEventHover {
     }
     if (this.isCheckedIn()) {
       return true;
-    } else {
-      return false;
     }
+    const now = moment();
+    if (
+      this.bookingEvent.ROOM_INFO?.in_out?.code === '000' &&
+      moment().isSameOrAfter(new Date(this.bookingEvent.TO_DATE), 'days') &&
+      compareTime(now.toDate(), createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour))
+    ) {
+      return true;
+    }
+    return false;
   }
 
   private handleBlockDateUpdate(event: CustomEvent<{ [key: string]: any }>) {

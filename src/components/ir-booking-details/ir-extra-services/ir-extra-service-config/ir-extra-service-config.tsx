@@ -24,6 +24,10 @@ export class IrExtraServiceConfig {
   @Event() resetBookingEvt: EventEmitter<null>;
 
   private bookingService = new BookingService();
+  // private d1: HTMLDivElement;
+  // private d1_0: HTMLDivElement;
+  // private d2_0: HTMLDivElement;
+  // private d2: HTMLInputElement;
 
   componentWillLoad() {
     if (this.service) {
@@ -97,9 +101,21 @@ export class IrExtraServiceConfig {
                   {locales.entries.Lcz_DatesOn}
                 </span>
               </div>
-              <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center date-from">
+              <div
+                // ref={el => (this.d1_0 = el)}
+                class="form-control p-0 m-0 d-flex align-items-center justify-content-center date-from"
+              >
                 <div class="service-date-container">
                   <ir-date-picker
+                    // onDatePickerFocus={() => {
+                    //   this.d1?.classList.add('date-focused');
+                    //   this.d1_0?.classList.add('date-focused');
+                    // }}
+                    // onDatePickerBlur={() => {
+                    //   this.d1?.classList.remove('date-focused');
+                    //   this.d1_0?.classList.remove('date-focused');
+                    // }}
+                    // customPicker
                     emitEmptyDate
                     date={this.s_service?.start_date}
                     minDate={this.booking.from_date}
@@ -107,10 +123,12 @@ export class IrExtraServiceConfig {
                     onDateChanged={e => this.updateService({ start_date: e.detail.start?.format('YYYY-MM-DD') })}
                   >
                     <input
+                      // ref={el => (this.d1 = el)}
+                      type="text"
                       slot="trigger"
                       value={this.s_service?.start_date ? _formatDate(this.s_service.start_date) : null}
-                      style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}
-                      class="text-center form-control input-sm"
+                      style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%', borderRadius: '0' }}
+                      class="text-center w-100 form-control input-sm"
                     ></input>
                   </ir-date-picker>
                   {this.s_service?.start_date && (
@@ -139,9 +157,20 @@ export class IrExtraServiceConfig {
                   {locales.entries.Lcz_TillAndIncluding}
                 </span>
               </div>
-              <div class="form-control p-0 m-0 d-flex align-items-center justify-content-center">
+              <div
+                // ref={el => (this.d2_0 = el)}
+                class="form-control p-0 m-0 d-flex align-items-center justify-content-center"
+              >
                 <div class="service-date-container">
                   <ir-date-picker
+                    // onDatePickerFocus={() => {
+                    //   this.d2?.classList.add('date-focused');
+                    //   this.d2_0?.classList.add('date-focused');
+                    // }}
+                    // onDatePickerBlur={() => {
+                    //   this.d2?.classList.remove('date-focused');
+                    //   this.d2_0?.classList.remove('date-focused');
+                    // }}
                     emitEmptyDate
                     date={this.s_service?.end_date}
                     minDate={this.s_service?.start_date ?? this.booking.from_date}
@@ -153,6 +182,7 @@ export class IrExtraServiceConfig {
                     }}
                   >
                     <input
+                      // ref={el => (this.d2 = el)}
                       slot="trigger"
                       value={this.s_service?.end_date ? _formatDate(this.s_service.end_date) : null}
                       style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}

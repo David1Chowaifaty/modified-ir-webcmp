@@ -1,4 +1,4 @@
-import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Host, Fragment } from '@stencil/core';
+import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Host, Fragment, Watch } from '@stencil/core';
 import { _getDay } from '../functions';
 import { Booking, IUnit, IVariations, Occupancy, Room, SharedPerson } from '@/models/booking.dto';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
@@ -67,6 +67,10 @@ export class IrRoom {
     } else if (target.id == 'checkout') {
       this.pressCheckOut.emit(this.room);
     }
+  }
+  @Watch('room')
+  handleRoomDataChange() {
+    this.mainGuest = this.getMainGuest();
   }
 
   private getDateStr(date, locale = 'default') {
@@ -286,7 +290,7 @@ export class IrRoom {
         ></ir-button>
 
         <div class="flex-fill m-0 ">
-          <div class="d-flex align-rooms-start justify-content-between sm-mb-1">
+          <div class="d-flex align-items-start justify-content-between sm-mb-1">
             <p class="m-0 p-0">
               <span class="m-0 p-0" style={{ fontWeight: '600' }}>
                 {this.myRoomTypeFoodCat || ''}{' '}
@@ -294,7 +298,7 @@ export class IrRoom {
               {this.mealCodeName} {this.room.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
             </p>
             {/*this.room.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
-            <div class="d-flex m-0 p-0 align-rooms-center room_actions_btns">
+            <div class="d-flex m-0 p-0 align-items-center room_actions_btns">
               <span class="p-0 m-0 font-weight-bold">{formatAmount(this.currency, this.room['gross_total'])}</span>
               {this.hasRoomEdit && this.isEditable && (
                 <ir-button
@@ -317,7 +321,7 @@ export class IrRoom {
               )}
             </div>
           </div>
-          <div class="d-flex align-rooms-center sm-mb-1">
+          <div class="d-flex align-items-center sm-mb-1">
             <ir-date-view
               class="mr-1  flex-grow-1"
               style={{ width: 'fit-content' }}
@@ -342,7 +346,7 @@ export class IrRoom {
             )}
           </div>
           <div class={'d-flex align-items-center'} style={{ gap: '1rem' }}>
-            <span>{`${this.room.guest.first_name || ''} ${this.room.guest.last_name || ''}`}</span>
+            <span>{`${this.mainGuest.first_name || ''} ${this.mainGuest.last_name || ''}`}</span>
             {this.room.rateplan.selected_variation.adult_nbr > 0 &&
               (this.room.unit ? (
                 <ir-button

@@ -6,6 +6,7 @@ import moment from 'moment';
 import { IAllowedOptions } from '@/models/calendarData';
 import { PickupService } from './pickup.service';
 import { IBookingPickupInfo } from '@/models/booking.dto';
+import { MaskedRange } from 'imask';
 
 @Component({
   tag: 'ir-pickup',
@@ -255,7 +256,7 @@ export class IrPickup {
                   </div>
                 </div>
                 {/*Time Picker */}
-                <div class="form-group">
+                {/* <div class="form-group">
                   <div class="input-group  row m-0">
                     <div class={`input-group-prepend col-4 col-sm-3 p-0 text-dark border-0`}>
                       <label htmlFor="pickup" class={`input-group-text flex-grow-1 text-dark border-theme`}>
@@ -270,7 +271,33 @@ export class IrPickup {
                       class={`form-control col-8 col-sm-4 ${this.cause === 'arrival_time' && 'border-danger'}`}
                     />
                   </div>
-                </div>
+                </div> */}
+                <ir-input-text
+                  value={this.pickupData.arrival_time}
+                  error={this.cause === 'arrival_time' && !this.pickupData.arrival_time}
+                  label={locales.entries.Lcz_Time}
+                  inputStyles="col-sm-4"
+                  mask={{
+                    mask: 'HH:mm',
+                    blocks: {
+                      HH: {
+                        mask: MaskedRange,
+                        from: 0,
+                        to: 23,
+                        placeholderChar: 'H',
+                      },
+                      mm: {
+                        mask: MaskedRange,
+                        from: 0,
+                        to: 59,
+                        placeholderChar: 'm',
+                      },
+                    },
+                    lazy: false,
+                    placeholderChar: '_',
+                  }}
+                  onTextChange={e => this.updatePickupData('arrival_time', e.detail)}
+                ></ir-input-text>
               </div>
               <ir-input-text
                 value={this.pickupData.flight_details}
