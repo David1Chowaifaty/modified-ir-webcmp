@@ -1,4 +1,4 @@
-import { test, expect, Locator } from '@playwright/test';
+import { test, expect, Locator, Page } from '@playwright/test';
 import moment from 'moment';
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -23,53 +23,48 @@ test.describe('New Booking', () => {
     await expect(children_dropdown).toHaveValue('1');
 
     date_picker.click();
-    const datePickerCalendar = page.locator('.daterangepicker');
-    await expect(datePickerCalendar).toBeVisible();
-    await datePickerCalendar.getByText('28').nth(2).click();
-    await datePickerCalendar.getByText('3').nth(5).click();
-    await expect(datePickerCalendar).toBeHidden();
-    await page.getByText('Check').click();
-    // await expect(date_picker).toHaveText('Feb 28 2025');
-  });
-  test('getCustomDateClick', () => {
-    const fromDateLabel = moment().format('MMMM YYYY');
+
     const fromDate = '2025-12-05';
-    const toDate = '2026-01-05';
-    const toDateLabel = moment('2025-03-01', 'YYYY-MM-DD').format('MMMM YYYY');
-    console.log(getMonthClicksSeparateArrows({ fromDate, fromDateLabel, toDate, toDateLabel }));
+    const toDate = '2026-01-02';
+    await selectDates({ fromDate, toDate, page });
+    await page.getByText('Check').click();
+  });
+  test('a', () => {
+    console.log(moment('2025-12-05', 'YYYY-MM-DD').format('MMM DD, YYYY'));
   });
 });
 
-function getMonthClicksSeparateArrows({ fromDate, fromDateLabel, toDate, toDateLabel }: { fromDate: string; toDate: string; fromDateLabel: string; toDateLabel: string }) {
-  const fromMoment = moment(fromDate, 'YYYY-MM-DD');
-  const fromLabelMoment = moment(fromDateLabel, 'MMMM YYYY');
-  const toMoment = moment(toDate, 'YYYY-MM-DD');
-  const toLabelMoment = moment(toDateLabel, 'MMMM YYYY');
+async function selectDates({ fromDate, toDate, page }: { fromDate: string; toDate: string; page: Page }) {
+  const datePickerCalendar = page.locator('.daterangepicker');
+  await expect(datePickerCalendar).toBeVisible();
 
-  const fromDiff = fromMoment.diff(fromLabelMoment, 'months');
-  const toDiff = toMoment.diff(toLabelMoment, 'months');
+  const calMonths = datePickerCalendar.locator('.month');
+  const prevBtn = datePickerCalendar.locator('.prev');
+  const nextBtn = datePickerCalendar.locator('.next');
 
-  let leftPositionCount = 0;
-  let rightPositionCount = 0;
+  const fromDateLabel = moment(fromDate, 'YYYY-MM-DD').format('MMMM YYYY');
+  const toDateLabel = moment(toDate, 'YYYY-MM-DD').format('MMMM YYYY');
 
-  // For the "left" calendar
-  if (fromDiff < 0) {
-    leftPositionCount += Math.abs(fromDiff); // number of previous clicks
-  } else {
-    rightPositionCount += fromDiff; // number of next clicks
+  while ((await calMonths.nth(0).textContent()) !== fromDateLabel) {
+    if (moment(fromDateLabel, 'MMMM YYYY').isBefore(moment(await calMonths.nth(0).textContent(), 'MMMM YYYY'), 'months')) {
+      await prevBtn.click();
+    } else {
+      await nextBtn.click();
+    }
   }
+  await page.locator(`//div[contains(@class, 'drp-calendar left')]//td[@class='available' and text()=${moment(fromDate, 'YYYY-MM-DD').date().toString()}]`).click();
 
-  // For the "right" calendar
-  if (toDiff < 0) {
-    leftPositionCount += Math.abs(toDiff);
-  } else {
-    rightPositionCount += toDiff;
+  while ((await calMonths.nth(1).textContent()) !== toDateLabel) {
+    if (moment(toDateLabel, 'MMMM YYYY').isBefore(moment(await calMonths.nth(1).textContent(), 'MMMM YYYY'), 'months')) {
+      await prevBtn.click();
+    } else {
+      await nextBtn.click();
+    }
   }
+  await page.locator(`//div[contains(@class, 'drp-calendar right')]//td[@class='available' and text()=${moment(toDate, 'YYYY-MM-DD').date().toString()}]`).click();
 
-  // If no clicks are needed, return null or {0,0}
-  if (leftPositionCount === 0 && rightPositionCount === 0) {
-    return null;
-  }
+  await expect(datePickerCalendar).toBeHidden();
 
-  return { leftPositionCount, rightPositionCount };
+  await expect(page.locator("(//span[@class='sc-igl-date-range'])[1]")).toHaveText(moment(fromDate, 'YYYY-MM-DD').format('MMM DD, YYYY'));
+  await expect(page.locator("(//span[@class='sc-igl-date-range'])[2]")).toHaveText(moment(toDate, 'YYYY-MM-DD').format('MMM DD, YYYY'));
 }
