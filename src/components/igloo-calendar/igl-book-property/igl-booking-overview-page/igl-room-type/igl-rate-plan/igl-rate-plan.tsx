@@ -160,10 +160,12 @@ export class IglRatePlan {
         >
           <div class="rateplan-name-container d-flex align-items-center" style={{ gap: '0.5rem' }}>
             {bookingType === 'BAR_BOOKING' ? (
-              <Fragment>
-                <span class="font-weight-bold">{ratePlan.name.split('/')[0]}</span>
-                <span>/{ratePlan.name.split('/')[1]}</span>
-              </Fragment>
+              <p class="m-0 p-0 flex-grow-md-1">
+                {/* <span class="font-weight-bold">{ratePlan.name.split('/')[0]}</span> */}
+                <span>
+                  {ratePlan.name.split('/')[1]} {ratePlan.is_non_refundable && <span class="non-ref-span">Non Refundable</span>}
+                </span>
+              </p>
             ) : (
               <span>
                 {ratePlan.short_name} {ratePlan.is_non_refundable && <span class="non-ref-span">Non Refundable</span>}
