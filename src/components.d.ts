@@ -993,6 +993,10 @@ export namespace Components {
     interface IrSelect {
         "LabelAvailable": boolean;
         "data": selectOption[];
+        /**
+          * Whether the select has an error
+         */
+        "error": boolean;
         "firstOption": string;
         "label": string;
         "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
@@ -4136,6 +4140,10 @@ declare namespace LocalJSX {
     interface IrSelect {
         "LabelAvailable"?: boolean;
         "data"?: selectOption[];
+        /**
+          * Whether the select has an error
+         */
+        "error"?: boolean;
         "firstOption"?: string;
         "label"?: string;
         "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;

@@ -80,7 +80,7 @@ export class PickupService {
         ),
       flight_details: z.string().nonempty({ message: 'Flight details cannot be empty' }),
       vehicle_type_code: z.string().nonempty({ message: 'Vehicle type code cannot be empty' }),
-      number_of_vehicles: z.number().min(1, { message: 'At least one vehicle is required' }),
+      number_of_vehicles: z.coerce.number().min(1, { message: 'At least one vehicle is required' }),
     });
   }
   public validateForm(params: TPickupData, schema: any): { error: boolean; cause?: keyof TPickupData } {

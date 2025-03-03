@@ -176,10 +176,8 @@ export class IrInputText {
       try {
         this.zod.parse(this.wrapKey ? { [this.wrapKey]: value } : value); // Validate the value using the Zod schema
         this.error = false; // Clear the error if valid
-        this.el.removeAttribute('aria-invalid');
       } catch (error) {
         console.log(error);
-        this.el.setAttribute('aria-invalid', 'true');
         this.error = true; // Set the error message
       }
     }
@@ -232,6 +230,7 @@ export class IrInputText {
           </label>
           <input
             maxLength={this.maxLength}
+            aria-invalid={this.error ? 'true' : 'false'}
             data-testid={this.testId}
             data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
             ref={el => (this.inputRef = el)}
@@ -280,6 +279,7 @@ export class IrInputText {
         <div class="input-group row m-0">
           {label}
           <input
+            aria-invalid={this.error ? 'true' : 'false'}
             maxLength={this.maxLength}
             data-testid={this.testId}
             style={this.inputForcedStyle}

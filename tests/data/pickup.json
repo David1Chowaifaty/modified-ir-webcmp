@@ -1,10 +1,22 @@
 {
-  "location": 1,
-  "flight_details": "flight details",
-  "due_upon_booking": 50,
-  "number_of_vehicles": 1,
-  "vehicle_type_code": "002",
-  "currency": null,
-  "arrival_time": "1021",
-  "arrival_date": "2025-03-13"
+  "new_pickup": {
+    "location": 1,
+    "flight_details": "flight details",
+    "due_upon_booking": 50,
+    "number_of_vehicles": 1,
+    "vehicle_type_code": "002",
+    "currency": null,
+    "arrival_time": "1021",
+    "arrival_date": "2025-03-06"
+  },
+  "update_pickup": {
+    "location": 1,
+    "flight_details": "flight details",
+    "due_upon_booking": 50,
+    "number_of_vehicles": 2,
+    "vehicle_type_code": "003",
+    "currency": null,
+    "arrival_time": "1021",
+    "arrival_date": "2025-03-08"
+  }
 }

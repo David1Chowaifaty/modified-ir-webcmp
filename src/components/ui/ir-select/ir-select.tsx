@@ -30,6 +30,8 @@ export class IrSelect {
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
   @Prop() select_id: string = v4();
   @Prop() testId: string;
+  /** Whether the select has an error */
+  @Prop({ mutable: true }) error: boolean = false;
 
   @State() initial: boolean = true;
   @State() valid: boolean = false;
@@ -107,11 +109,14 @@ export class IrSelect {
         <div class="input-group row m-0">
           {label}
           <select
+            aria-invalid={this.error ? 'true' : 'false'}
             data-testid={this.testId}
             style={this.selectForcedStyles}
             ref={el => (this.selectEl = el)}
             id={this.select_id}
-            class={`${this.selectStyles} ${className} form-control-${this.size} text-${this.textSize} col-${this.LabelAvailable ? 12 - this.labelWidth : 12}`}
+            class={`${this.selectStyles} ${this.error ? 'border-danger' : ''} ${className} form-control-${this.size} text-${this.textSize} col-${
+              this.LabelAvailable ? 12 - this.labelWidth : 12
+            }`}
             onInput={this.handleSelectChange.bind(this)}
             required={this.required}
           >

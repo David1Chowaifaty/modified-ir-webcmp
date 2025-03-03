@@ -1,6 +1,6 @@
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
-import { Component, Element, Event, EventEmitter, Fragment, Host, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import { TPickupData } from './types';
 import moment from 'moment';
 import { IAllowedOptions } from '@/models/calendarData';
@@ -195,7 +195,7 @@ export class IrPickup {
             data={this.pickupService.getAvailableLocations(locales.entries.Lcz_Pickup_YesFrom) as any}
           ></ir-select>
           {this.pickupData.location > 0 && (
-            <Fragment>
+            <div class="m-0 p-0" data-testid="pickup_body">
               {/*Date and Time Picker container */}
               <div class={'d-flex'}>
                 {/*Date Picker */}
@@ -210,6 +210,8 @@ export class IrPickup {
                         date={this.pickupData.arrival_date}
                         minDate={this.bookingDates.from}
                         maxDate={this.bookingDates?.to}
+                        emitEmptyDate={true}
+                        aria-invalid={this.cause === 'arrival_date' && !this.pickupData.arrival_date ? 'true' : 'false'}
                         onDateChanged={evt => {
                           this.updatePickupData('arrival_date', evt.detail.start?.format('YYYY-MM-DD'));
                         }}
@@ -251,7 +253,7 @@ export class IrPickup {
               <ir-select
                 testId="pickup_vehicle_type_code"
                 selectContainerStyle="mb-1"
-                selectStyles={this.cause === 'vehicle_type_code' ? 'border-danger' : ''}
+                error={this.cause === 'vehicle_type_code'}
                 onSelectChange={this.handleVehicleTypeChange.bind(this)}
                 firstOption={locales.entries.Lcz_Select}
                 selectedValue={this.pickupData.vehicle_type_code}
@@ -266,12 +268,13 @@ export class IrPickup {
               ></ir-select>
               <div class={'d-flex flex-column flex-md-row'}>
                 <ir-select
+                  showFirstOption={false}
                   testId="pickup_number_of_vehicles"
                   labelBorder="theme"
                   selectContainerStyle="mb-1"
                   onSelectChange={this.handleVehicleQuantityChange.bind(this)}
-                  selectStyles={this.cause === 'number_of_vehicles' ? 'border-danger' : ''}
                   selectedValue={this.pickupData.number_of_vehicles}
+                  error={this.cause === 'number_of_vehicles'}
                   labelWidth={7}
                   class={'m-0  mb-md-0 mr-md-1 flex-fill'}
                   label={locales.entries.Lcz_NbrOfVehicles}
@@ -292,7 +295,7 @@ export class IrPickup {
                   class=""
                 ></ir-input-text>
               </div>
-            </Fragment>
+            </div>
           )}
           <div class={'d-flex flex-column flex-sm-row mt-3'}>
             <ir-button
