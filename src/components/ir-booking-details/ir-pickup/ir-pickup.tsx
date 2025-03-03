@@ -31,7 +31,7 @@ export class IrPickup {
     vehicle_type_code: '',
     currency: undefined,
     arrival_time: '',
-    arrival_date: moment().format('YYYY-MM-DD'),
+    arrival_date: null,
     selected_option: undefined,
   };
   @State() vehicleCapacity: number[] = [];
@@ -41,6 +41,27 @@ export class IrPickup {
   @Event() resetBookingEvt: EventEmitter<null>;
 
   private pickupService = new PickupService();
+  private pickupSchema;
+
+  private arrival_time_mask = {
+    mask: 'HH:mm',
+    blocks: {
+      HH: {
+        mask: MaskedRange,
+        from: 0,
+        to: 23,
+        placeholderChar: 'H',
+      },
+      mm: {
+        mask: MaskedRange,
+        from: 0,
+        to: 59,
+        placeholderChar: 'm',
+      },
+    },
+    lazy: false,
+    placeholderChar: '_',
+  };
 
   componentWillLoad() {
     if (this.defaultPickupData) {
@@ -49,8 +70,9 @@ export class IrPickup {
       this.allowedOptionsByLocation = calendar_data.pickup_service.allowed_options.filter(option => option.location.id === transformedData.location);
       this.pickupData = { ...transformedData };
     }
+    this.pickupSchema = this.pickupService.createPickupSchema(this.bookingDates.from, this.bookingDates.to);
   }
-  handleLocationChange(event: CustomEvent) {
+  private handleLocationChange(event: CustomEvent) {
     event.stopImmediatePropagation();
     event.stopPropagation();
     const value = event.detail;
@@ -82,60 +104,10 @@ export class IrPickup {
         currency: locationChoice.currency,
         // number_of_vehicles:this.pickupService
       };
-      const input = this.el.querySelector('#pickup-time');
-      if (!input) {
-        setTimeout(() => {
-          this.initializeInputMask();
-        }, 100);
-      }
     }
   }
-  initializeInputMask() {
-    const input = this.el.querySelector('#pickup-time');
-    // if (this.pickupData) {
-    //   (input as HTMLInputElement).value = this.pickupData.arrival_time;
-    // }
-    if (input) {
-      Inputmask('Hh:Mm', {
-        placeholder: 'HH:mm',
-        definitions: {
-          H: {
-            validator: '[0-2]',
-          },
-          h: {
-            validator: function (ch, maskset, pos) {
-              var firstDigit = maskset.buffer[pos - 1];
-              if (firstDigit === '2') {
-                return /[0-3]/.test(ch);
-              } else {
-                return /[0-9]/.test(ch);
-              }
-            },
-          },
-          M: {
-            validator: '[0-5]',
-          },
-          m: {
-            validator: '[0-9]',
-          },
-        },
-        insertMode: true,
-        showMaskOnHover: false,
-        inputmode: 'numeric',
-        alias: 'datetime',
-        oncomplete: () => {
-          this.updatePickupData('arrival_time', (input as any).value);
-        },
-        oncleared: () => {
-          this.updatePickupData('arrival_time', '');
-        },
-        onincomplete: () => {
-          this.updatePickupData('arrival_time', (input as any).value);
-        },
-      }).mask(input as HTMLElement);
-    }
-  }
-  handleVehicleQuantityChange(e: CustomEvent) {
+
+  private handleVehicleQuantityChange(e: CustomEvent) {
     if (e.detail === '') {
       return;
     }
@@ -153,12 +125,8 @@ export class IrPickup {
         .toFixed(2),
     };
   }
-  componentDidLoad() {
-    if (this.defaultPickupData) {
-      this.initializeInputMask();
-    }
-  }
-  handleVehicleTypeChange(e: CustomEvent) {
+
+  private handleVehicleTypeChange(e: CustomEvent) {
     if (e.detail === '') {
       this.pickupData = {
         ...this.pickupData,
@@ -188,13 +156,13 @@ export class IrPickup {
     };
   }
 
-  updatePickupData(key: keyof TPickupData, value: any) {
+  private updatePickupData(key: keyof TPickupData, value: any) {
     this.pickupData = { ...this.pickupData, [key]: value };
   }
-  async savePickup() {
+  private async savePickup() {
     try {
       this.isLoading = true;
-      const isValid = this.pickupService.validateForm(this.pickupData);
+      const isValid = this.pickupService.validateForm(this.pickupData, this.pickupSchema);
       if (isValid.error) {
         this.cause = isValid.cause;
         return;
@@ -217,6 +185,7 @@ export class IrPickup {
         <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={locales.entries.Lcz_Pickup} displayContext="sidebar"></ir-title>
         <section class={'px-1'}>
           <ir-select
+            testId="pickup_location"
             selectedValue={this.pickupData.location}
             selectContainerStyle="mb-1"
             onSelectChange={this.handleLocationChange.bind(this)}
@@ -235,11 +204,12 @@ export class IrPickup {
                     <div class={`input-group-prepend col-5 p-0 text-dark border-0`}>
                       <label class={`input-group-text  flex-grow-1 text-dark border-theme `}>{locales.entries.Lcz_ArrivalDate}</label>
                     </div>
-                    <div class="form-control form-control-md col-7 d-flex align-items-center pl-0">
+                    <div class="form-control  form-control-md col-7 d-flex align-items-center px-0 mx-0" style={{ border: '0' }}>
                       <ir-date-picker
+                        data-testid="pickup_arrival_date"
                         date={this.pickupData.arrival_date}
-                        maxDate={this.bookingDates?.to}
                         minDate={this.bookingDates.from}
+                        maxDate={this.bookingDates?.to}
                         onDateChanged={evt => {
                           this.updatePickupData('arrival_date', evt.detail.start?.format('YYYY-MM-DD'));
                         }}
@@ -247,66 +217,39 @@ export class IrPickup {
                         <input
                           type="text"
                           slot="trigger"
-                          value={moment(this.pickupData.arrival_date).format('MMM DD, YYYY')}
-                          class="form-control input-sm text-center"
-                          style={{ borderLeftWidth: '0', borderRightWidth: '0', width: '100%' }}
+                          value={this.pickupData.arrival_date ? moment(this.pickupData.arrival_date).format('MMM DD, YYYY') : null}
+                          class={`form-control input-sm ${this.cause === 'arrival_date' && !this.pickupData.arrival_date ? 'border-danger' : ''} text-center`}
+                          style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0', width: '100%' }}
                         ></input>
                       </ir-date-picker>
                     </div>
                   </div>
                 </div>
                 {/*Time Picker */}
-                {/* <div class="form-group">
-                  <div class="input-group  row m-0">
-                    <div class={`input-group-prepend col-4 col-sm-3 p-0 text-dark border-0`}>
-                      <label htmlFor="pickup" class={`input-group-text flex-grow-1 text-dark border-theme`}>
-                        {locales.entries.Lcz_Time}
-                      </label>
-                    </div>
-
-                    <input
-                      type="text"
-                      value={this.pickupData.arrival_time}
-                      id="pickup-time"
-                      class={`form-control col-8 col-sm-4 ${this.cause === 'arrival_time' && 'border-danger'}`}
-                    />
-                  </div>
-                </div> */}
                 <ir-input-text
+                  // error={this.cause === 'arrival_time'&&this.pickupSchema.pick({ arrival_time: true }).safeParse(this.pickupData.arrival_time)}
+                  wrapKey="arrival_time"
+                  testId="pickup_arrival_time"
+                  // autoValidate={false}
                   value={this.pickupData.arrival_time}
-                  error={this.cause === 'arrival_time' && !this.pickupData.arrival_time}
+                  zod={this.pickupSchema.pick({ arrival_time: true })}
                   label={locales.entries.Lcz_Time}
                   inputStyles="col-sm-4"
-                  mask={{
-                    mask: 'HH:mm',
-                    blocks: {
-                      HH: {
-                        mask: MaskedRange,
-                        from: 0,
-                        to: 23,
-                        placeholderChar: 'H',
-                      },
-                      mm: {
-                        mask: MaskedRange,
-                        from: 0,
-                        to: 59,
-                        placeholderChar: 'm',
-                      },
-                    },
-                    lazy: false,
-                    placeholderChar: '_',
-                  }}
+                  data-state={this.cause === 'arrival_time' ? 'error' : ''}
+                  mask={this.arrival_time_mask}
                   onTextChange={e => this.updatePickupData('arrival_time', e.detail)}
                 ></ir-input-text>
               </div>
               <ir-input-text
+                testId="pickup_flight_details"
                 value={this.pickupData.flight_details}
                 label={locales.entries.Lcz_FlightDetails}
                 onTextChange={e => this.updatePickupData('flight_details', e.detail)}
                 placeholder=""
-                inputStyles={this.cause === 'flight_details' ? 'border-danger' : ''}
+                error={this.cause === 'flight_details' && !this.pickupData.flight_details}
               ></ir-input-text>
               <ir-select
+                testId="pickup_vehicle_type_code"
                 selectContainerStyle="mb-1"
                 selectStyles={this.cause === 'vehicle_type_code' ? 'border-danger' : ''}
                 onSelectChange={this.handleVehicleTypeChange.bind(this)}
@@ -323,6 +266,7 @@ export class IrPickup {
               ></ir-select>
               <div class={'d-flex flex-column flex-md-row'}>
                 <ir-select
+                  testId="pickup_number_of_vehicles"
                   labelBorder="theme"
                   selectContainerStyle="mb-1"
                   onSelectChange={this.handleVehicleQuantityChange.bind(this)}

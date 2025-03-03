@@ -176,8 +176,10 @@ export class IrInputText {
       try {
         this.zod.parse(this.wrapKey ? { [this.wrapKey]: value } : value); // Validate the value using the Zod schema
         this.error = false; // Clear the error if valid
+        this.el.removeAttribute('aria-invalid');
       } catch (error) {
         console.log(error);
+        this.el.setAttribute('aria-invalid', 'true');
         this.error = true; // Set the error message
       }
     }

@@ -142,7 +142,6 @@ export class IrDatePicker {
 
     // Get the slot element
     const slotEl = this.el.querySelector('[slot="trigger"]') as HTMLSlotElement;
-    console.log('slotEl', slotEl);
     if (!slotEl) return;
 
     // We'll consider the first assigned element as our trigger

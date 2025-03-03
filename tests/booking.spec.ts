@@ -1,5 +1,25 @@
 import { test, expect, Locator, Page } from '@playwright/test';
 import moment from 'moment';
+import equal from 'fast-deep-equal/es6';
+import { loadTestFile } from './utils';
+
+interface TestData {
+  from_date: string;
+  to_date: string;
+  propertyid: number;
+  language: string;
+  room_type_ids: any[];
+  agent_id: null;
+  is_in_agent_mode: boolean;
+  room_type_ids_to_update: number[];
+  adult_nbr: string;
+  child_nbr: number;
+  currency_ref: string;
+  skip_getting_assignable_units: boolean;
+  is_backend: boolean;
+}
+
+const checkAvailabilityPayload = loadTestFile<TestData>('check_availability.json');
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
@@ -16,21 +36,15 @@ test.describe('New Booking', () => {
     const children_dropdown = page.getByTestId('child_number');
     const date_picker = page.getByTestId('date_picker');
     //select adults and children;
-    adult_dropdown.selectOption({ label: '2' });
-    children_dropdown.selectOption({ label: '1' });
+    adult_dropdown.selectOption({ label: checkAvailabilityPayload.adult_nbr });
+    children_dropdown.selectOption({ label: checkAvailabilityPayload.child_nbr.toString() });
 
-    await expect(adult_dropdown).toHaveValue('2');
-    await expect(children_dropdown).toHaveValue('1');
+    await expect(adult_dropdown).toHaveValue(checkAvailabilityPayload.adult_nbr?.toString());
+    await expect(children_dropdown).toHaveValue(checkAvailabilityPayload.child_nbr?.toString());
 
     date_picker.click();
-
-    const fromDate = '2025-12-05';
-    const toDate = '2026-01-02';
-    await selectDates({ fromDate, toDate, page });
+    await selectDates({ fromDate: checkAvailabilityPayload.from_date, toDate: checkAvailabilityPayload.to_date, page });
     await page.getByText('Check').click();
-  });
-  test('a', () => {
-    console.log(moment('2025-12-05', 'YYYY-MM-DD').format('MMM DD, YYYY'));
   });
 });
 
