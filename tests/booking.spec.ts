@@ -37,13 +37,43 @@ test.describe('New Booking', () => {
     const date_picker = page.getByTestId('date_picker');
     //select adults and children;
     adult_dropdown.selectOption({ label: checkAvailabilityPayload.adult_nbr });
-    children_dropdown.selectOption({ label: checkAvailabilityPayload.child_nbr.toString() });
+    if (checkAvailabilityPayload.child_nbr > 0) {
+      children_dropdown.selectOption({ label: checkAvailabilityPayload.child_nbr.toString() });
+      await expect(children_dropdown).toHaveValue(checkAvailabilityPayload.child_nbr?.toString());
+    }
 
     await expect(adult_dropdown).toHaveValue(checkAvailabilityPayload.adult_nbr?.toString());
-    await expect(children_dropdown).toHaveValue(checkAvailabilityPayload.child_nbr?.toString());
 
     date_picker.click();
     await selectDates({ fromDate: checkAvailabilityPayload.from_date, toDate: checkAvailabilityPayload.to_date, page });
+    await page.getByText('Check').click();
+  });
+  test('bar booking', async ({ page }) => {
+    const fromDate = '2025-03-05';
+    const toDate = '2025-03-08';
+    const roomName = '103';
+    await expect(page.getByTestId('ir-calendar')).toBeVisible();
+
+    //select the room
+    await page.locator(`//div[@data-date='${fromDate}' and @data-room-name='${roomName}']`).click();
+    await page.locator(`//div[@data-date='${toDate}' and @data-room-name='${roomName}']`).click();
+
+    await page.getByTestId('bar_booking_btn').click();
+
+    const sheet = page.getByTestId('book_property_sheet');
+    await expect(sheet).toBeVisible();
+    const adult_dropdown = page.getByTestId('adult_number');
+    const children_dropdown = page.getByTestId('child_number');
+
+    //select adults and children;
+    adult_dropdown.selectOption({ label: checkAvailabilityPayload.adult_nbr });
+    if (checkAvailabilityPayload.child_nbr > 0) {
+      children_dropdown.selectOption({ label: checkAvailabilityPayload.child_nbr.toString() });
+      await expect(children_dropdown).toHaveValue(checkAvailabilityPayload.child_nbr?.toString());
+    }
+
+    await expect(adult_dropdown).toHaveValue(checkAvailabilityPayload.adult_nbr?.toString());
+
     await page.getByText('Check').click();
   });
 });

@@ -556,6 +556,7 @@ export class IglBookingEventHover {
             <ir-button
               size="sm"
               btn_block
+              data-testid="bar_booking_btn"
               text={locales.entries.Lcz_CreateNewBooking}
               onClickHandler={_ => {
                 this.handleBookingOption('BAR_BOOKING');

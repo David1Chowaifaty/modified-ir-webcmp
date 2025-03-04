@@ -5,6 +5,7 @@ import { PhysicalRoom, RoomType } from '@/models/booking.dto';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { ICountry } from '@/models/IBooking';
+import moment from 'moment';
 
 export type RoomCategory = RoomType & { expanded: boolean };
 
@@ -286,16 +287,20 @@ export class IglCalBody {
     });
   }
 
-  getGeneralRoomDayColumns(roomId: string, roomCategory: RoomCategory) {
+  getGeneralRoomDayColumns(roomId: string, roomCategory: RoomCategory, roomName: string) {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
-    return this.calendarData.days.map(dayInfo => (
-      <div
-        class={`cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''} ${
-          this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''
-        } ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`}
-        onClick={() => this.clickCell(roomId, dayInfo, roomCategory)}
-      ></div>
-    ));
+    return this.calendarData.days.map(dayInfo => {
+      return (
+        <div
+          class={`cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''} ${
+            this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''
+          } ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`}
+          onClick={() => this.clickCell(roomId, dayInfo, roomCategory)}
+          data-date={moment(dayInfo.currentDate).format('YYYY-MM-DD')}
+          data-room-name={roomName}
+        ></div>
+      );
+    });
   }
 
   toggleCategory(roomCategory: RoomCategory) {
@@ -374,7 +379,7 @@ export class IglCalBody {
               popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}
             ></ir-interactive-title>
           </div>
-          {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory)}
+          {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory, room.name)}
         </div>
       );
     });
