@@ -112,8 +112,8 @@ export class IrPhoneInput {
               </button>
 
               <p class={'phone_prefix_label'}>{this.currentCountry?.phone_prefix}</p>
-              <input type="text" placeholder={this.placeholder} required value={this.inputValue} disabled={this.disabled} onInput={e => this.handleInputChange(e)} />
-            </div>{' '}
+              <input maxLength={14} type="text" placeholder={this.placeholder} required value={this.inputValue} disabled={this.disabled} onInput={e => this.handleInputChange(e)} />
+            </div>
             {this.isDropdownVisible && (
               <div class="ir-dropdown-container">
                 <ir-combobox

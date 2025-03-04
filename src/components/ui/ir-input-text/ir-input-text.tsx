@@ -116,6 +116,9 @@ export class IrInputText {
   /** Input max character length*/
   @Prop() maxLength: number;
 
+  /** To clear all the Input base styling*/
+  @Prop() clearBaseStyles: boolean;
+
   @State() initial: boolean = true;
   @State() inputFocused: boolean = false;
 
@@ -288,9 +291,13 @@ export class IrInputText {
             ref={el => (this.inputRef = el)}
             readOnly={this.readonly}
             type={this.type}
-            class={`ir-input ${className} ${this.error || this.isError ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${
-              this.LabelAvailable ? 12 - this.labelWidth : 12
-            } ${this.readonly && 'bg-white'} ${this.inputStyles}`}
+            class={
+              this.clearBaseStyles
+                ? `${this.inputStyles}`
+                : `ir-input ${className} ${this.error || this.isError ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${
+                    this.LabelAvailable ? 12 - this.labelWidth : 12
+                  } ${this.readonly && 'bg-white'} ${this.inputStyles}`
+            }
             onBlur={this.handleBlur.bind(this)}
             onFocus={e => {
               this.inputFocused = true;

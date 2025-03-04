@@ -595,6 +595,10 @@ export namespace Components {
          */
         "autoValidate"?: boolean;
         /**
+          * To clear all the Input base styling
+         */
+        "clearBaseStyles": boolean;
+        /**
           * Whether the input is disabled
          */
         "disabled": boolean;
@@ -858,6 +862,7 @@ export namespace Components {
         "content": string;
         "irPopoverLeft": string;
         "placement": 'top' | 'bottom' | 'left' | 'right' | 'auto';
+        "renderContentAsHtml": boolean;
         "trigger": 'focus' | 'click' | 'hover';
     }
     interface IrPriceInput {
@@ -3701,6 +3706,10 @@ declare namespace LocalJSX {
          */
         "autoValidate"?: boolean;
         /**
+          * To clear all the Input base styling
+         */
+        "clearBaseStyles"?: boolean;
+        /**
           * Whether the input is disabled
          */
         "disabled"?: boolean;
@@ -3983,6 +3992,7 @@ declare namespace LocalJSX {
         "content"?: string;
         "irPopoverLeft"?: string;
         "placement"?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
+        "renderContentAsHtml"?: boolean;
         "trigger"?: 'focus' | 'click' | 'hover';
     }
     interface IrPriceInput {

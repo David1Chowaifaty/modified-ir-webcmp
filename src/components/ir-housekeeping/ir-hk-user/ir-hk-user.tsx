@@ -3,8 +3,8 @@ import { HouseKeepingService } from '@/services/housekeeping.service';
 import calendar_data from '@/stores/calendar-data';
 import { getDefaultProperties } from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
-import { ValidationRule, validateForm } from '@/utils/validation';
 import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
+import { z, ZodError } from 'zod';
 
 @Component({
   tag: 'ir-hk-user',
@@ -37,6 +37,12 @@ export class IrHkUser {
     token: '',
     language: '',
   };
+  private housekeeperSchema = z.object({
+    name: z.string().min(2),
+    mobile: z.string().min(1).max(14),
+    password: z.string().min(5),
+    username: z.string().min(2),
+  });
 
   async componentWillLoad() {
     const { token, language, property_id } = getDefaultProperties();
@@ -57,16 +63,7 @@ export class IrHkUser {
   async addUser() {
     try {
       this.isLoading = true;
-      const validationRules: { [P in keyof THKUser]?: ValidationRule } = {
-        name: { required: true },
-        mobile: { required: true },
-        password: { required: true, minLength: 5 },
-      };
-      const validationResult = validateForm(this.userInfo, validationRules);
-      if (!validationResult.isValid) {
-        this.errors = validationResult.errors;
-        return;
-      }
+      this.housekeeperSchema.parse(this.userInfo);
       if (this.errors) {
         this.errors = null;
       }
@@ -74,6 +71,13 @@ export class IrHkUser {
       this.resetData.emit(null);
       this.closeSideBar.emit(null);
     } catch (error) {
+      const e: any = {};
+      if (error instanceof ZodError) {
+        error.issues.map(err => {
+          e[err.path[0]] = true;
+        });
+        this.errors = e;
+      }
       console.error(error);
     } finally {
       this.isLoading = false;
@@ -95,16 +99,19 @@ export class IrHkUser {
         <ir-title class="px-1" displayContext="sidebar" label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : locales.entries.Lcz_CreateHousekeeperProfile}></ir-title>
         <section class="px-1">
           <ir-input-text
-            error={this.errors?.name?.length > 0}
+            zod={this.housekeeperSchema.pick({ name: true })}
+            wrapKey="name"
+            error={this.errors?.name && !this.userInfo?.name}
             label={locales.entries.Lcz_Name}
             placeholder={locales.entries.Lcz_Name}
             onTextChange={e => this.updateUserField('name', e.detail)}
             value={this.userInfo.name}
             onInputBlur={this.handleBlur.bind(this)}
+            maxLength={40}
           ></ir-input-text>
           <ir-phone-input
             placeholder={locales.entries.Lcz_Mobile}
-            error={this.errors?.mobile?.length > 0}
+            error={this.errors?.mobile && !this.userInfo?.mobile}
             language={this.default_properties.language}
             token={this.default_properties.token}
             default_country={calendar_data.country.id}
@@ -118,7 +125,10 @@ export class IrHkUser {
           ></ir-phone-input>
 
           <ir-input-text
-            disabled={this.user !== null}
+            zod={this.housekeeperSchema.pick({ username: true })}
+            wrapKey="username"
+            error={this.errors?.username && !this.userInfo.username}
+            // disabled={this.user !== null}
             label={locales.entries.Lcz_Username}
             placeholder={locales.entries.Lcz_Username}
             value={this.userInfo.username}
@@ -130,7 +140,9 @@ export class IrHkUser {
             placeholder={locales.entries.Lcz_MinimumCharacter}
             value={this.userInfo.password}
             type="password"
-            error={this.errors?.password?.length > 0}
+            zod={this.housekeeperSchema.pick({ password: true })}
+            wrapKey="password"
+            error={this.errors?.password && !this.userInfo.password}
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
           {/* <ir-input-text

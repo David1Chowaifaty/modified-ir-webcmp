@@ -3,7 +3,7 @@ import { Component, Host, Prop, h, Element } from '@stencil/core';
 @Component({
   tag: 'ir-popover',
   styleUrl: 'ir-popover.css',
-  scoped: true,
+  shadow: false,
 })
 export class IrPopover {
   @Element() el: HTMLElement;
@@ -12,6 +12,7 @@ export class IrPopover {
   @Prop() irPopoverLeft: string = '10px';
   @Prop() placement: 'top' | 'bottom' | 'left' | 'right' | 'auto' = 'auto';
   @Prop() trigger: 'focus' | 'click' | 'hover' = 'focus';
+  @Prop() renderContentAsHtml: boolean = false;
 
   private initialized: boolean = false;
   private popoverTrigger: HTMLElement;
@@ -28,6 +29,7 @@ export class IrPopover {
       trigger: this.trigger,
       content: this.content,
       placement: this.placement,
+      html: this.renderContentAsHtml,
     });
     this.initialized = true;
   }

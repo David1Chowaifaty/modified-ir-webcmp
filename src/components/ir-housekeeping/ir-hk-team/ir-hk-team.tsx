@@ -88,7 +88,7 @@ export class IrHkTeam {
           <p class={'m-0 p-0'}>{locales.entries.Lcz_AsAnOption}</p>
         </section>
 
-        <section class=" table-responsive">
+        <section class="mt-1 table-responsive">
           <table class="table">
             <thead>
               <tr>
@@ -121,20 +121,24 @@ export class IrHkTeam {
             <tbody>
               {housekeeping_store.hk_criteria.housekeepers.map(hk => (
                 <tr key={hk.id}>
-                  <td class="text-left">{hk.name}</td>
+                  <td class="text-left">
+                    {hk.name?.length > 20 ? (
+                      <ir-popover trigger="hover" content={hk.name}>
+                        <span>{hk.name.slice(0, 20)}...</span>
+                      </ir-popover>
+                    ) : (
+                      hk.name
+                    )}
+                  </td>
                   <td>
                     {hk.phone_prefix} {hk.mobile}
                   </td>
                   <td>{hk.username}</td>
                   <td>
-                    {!hk.note ? (
-                      'N/A'
-                    ) : hk.note.length > 50 ? (
+                    {hk.note && (
                       <ir-popover content={hk.note}>
-                        <span>{hk.note.slice(0, 50)}...</span>
+                        <ir-button variant="icon" icon_name="note"></ir-button>
                       </ir-popover>
-                    ) : (
-                      hk.note
                     )}
                   </td>
                   <td>{this.renderAssignedUnits(hk)}</td>
