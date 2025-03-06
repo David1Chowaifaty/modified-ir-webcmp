@@ -202,12 +202,27 @@ export async function testRooms({ availabilityResponse, page, mode }: { availabi
 
 async function fillMainGuest({ page }: { page: Page }) {
   const mainGuest = payload.booking.main_guest;
-  await page.getByTestId('main_guest_email').pressSequentially(mainGuest.email);
-  const fetchedGuestInfoResponse = await page.waitForResponse(resp => resp.url().includes('Fetch_Exposed_Guests') && resp.request().method() === 'POST');
-  await page.locator(`//button[contains(@class, 'dropdown-item')][.//p[text()='${mainGuest.email}']]`).click();
-
+  await page.getByTestId('main_guest_email').pressSequentially(mainGuest.email, { delay: 300 });
+  const fetchedGuestInfoResponse = await page.waitForResponse(resp => {
+    if (resp.url().includes('Fetch_Exposed_Guests') && resp.request().method() === 'POST') {
+      const postData = resp.request().postData();
+      try {
+        if (!postData) {
+          return false;
+        }
+        const requestData = JSON.parse(postData);
+        return requestData.email && requestData.email.toLowerCase() === mainGuest.email.toLowerCase();
+      } catch (error) {
+        return false;
+      }
+    }
+    return false;
+  });
   const selectedUser = (await fetchedGuestInfoResponse.json()).My_Result?.find(u => u.email.toLowerCase() === mainGuest.email.toLowerCase());
 
+  const drpdownMail = page.locator(`//p[@role="button" and contains(@class, 'dropdown-item') and .//p[contains(., '${mainGuest.email}')]]`).nth(0);
+  await expect(drpdownMail).toBeVisible();
+  await drpdownMail.click();
   await expect(page.getByTestId('main_guest_first_name')).toHaveValue(selectedUser.first_name);
   await expect(page.getByTestId('main_guest_last_name')).toHaveValue(selectedUser.last_name);
   await expect(page.getByTestId('main_guest_phone')).toHaveValue(selectedUser.mobile_without_prefix);
