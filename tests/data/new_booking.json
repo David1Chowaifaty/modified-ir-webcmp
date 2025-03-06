@@ -17,11 +17,13 @@
   "booking": {
     "rp_id": 3755,
     "room_name": "103",
-    "total_rooms": 2,
+    "total_rooms": 3,
     "main_guest": {
       "email": "test@gmail.com",
       "first_name": "test",
-      "last_name": "test"
+      "last_name": "test",
+      "mobile": "1234567890",
+      "country_id": 1
     },
     "guests": [
       {
@@ -33,6 +35,11 @@
         "first_name": "test1",
         "last_name": "test1",
         "rp_id": 3755
+      },
+      {
+        "first_name": "test2",
+        "last_name": "test2",
+        "rp_id": 2001
       }
     ]
   }

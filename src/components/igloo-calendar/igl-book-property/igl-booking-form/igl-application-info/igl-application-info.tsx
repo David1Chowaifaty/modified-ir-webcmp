@@ -140,7 +140,7 @@ export class IglApplicationInfo {
     });
     console.log({ guestInfo: this.guestInfo });
     return (
-      <Host class={'my-2'} data-testid="room_info">
+      <Host class={'my-2'} data-testid={`room_info_${this.rateplanSelection.ratePlan.id}`}>
         <div class="booking-header">
           {(this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
             <span class="booking-roomtype-title">{this.rateplanSelection.roomtype.name}</span>
