@@ -268,6 +268,7 @@ export namespace Components {
         "placeholder": string;
         "propertyId": number;
         "required": boolean;
+        "testId": string;
         "to_date": string;
         "type": 'email' | 'text' | 'password' | 'number' | 'search';
         "value": string;
@@ -395,6 +396,7 @@ export namespace Components {
         "error": boolean;
         "label": string;
         "propertyCountry": ICountry;
+        "testId": string;
     }
     interface IrDatePicker {
         /**
@@ -843,6 +845,7 @@ export namespace Components {
         "language": string;
         "phone_prefix": string | null;
         "placeholder": string;
+        "testId": string;
         "token": string;
         "value": string;
     }
@@ -3332,6 +3335,7 @@ declare namespace LocalJSX {
         "placeholder"?: string;
         "propertyId"?: number;
         "required"?: boolean;
+        "testId"?: string;
         "to_date"?: string;
         "type"?: 'email' | 'text' | 'password' | 'number' | 'search';
         "value"?: string;
@@ -3479,6 +3483,7 @@ declare namespace LocalJSX {
         "label"?: string;
         "onCountryChange"?: (event: IrCountryPickerCustomEvent<ICountry>) => void;
         "propertyCountry"?: ICountry;
+        "testId"?: string;
     }
     interface IrDatePicker {
         /**
@@ -3971,6 +3976,7 @@ declare namespace LocalJSX {
         "onTextChange"?: (event: IrPhoneInputCustomEvent<{ phone_prefix: string; mobile: string }>) => void;
         "phone_prefix"?: string | null;
         "placeholder"?: string;
+        "testId"?: string;
         "token"?: string;
         "value"?: string;
     }

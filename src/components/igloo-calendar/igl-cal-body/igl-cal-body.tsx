@@ -402,18 +402,21 @@ export class IglCalBody {
         <div class="bodyContainer">
           {this.getRoomRows()}
           <div class="bookingEventsContainer preventPageScroll">
-            {this.getBookingData()?.map(bookingEvent => (
-              <igl-booking-event
-                data-testid={`booking_${bookingEvent.BOOKING_NUMBER}`}
-                language={this.language}
-                is_vacation_rental={this.calendarData.is_vacation_rental}
-                countries={this.countries}
-                currency={this.currency}
-                data-component-id={bookingEvent.ID}
-                bookingEvent={bookingEvent}
-                allBookingEvents={this.getBookingData()}
-              ></igl-booking-event>
-            ))}
+            {this.getBookingData()?.map(bookingEvent => {
+              return (
+                <igl-booking-event
+                  data-testid={`booking_${bookingEvent.BOOKING_NUMBER}`}
+                  data-room-name={bookingEvent.roomsInfo?.find(r => r.id === bookingEvent.RATE_TYPE)?.physicalrooms.find(r => r.id === bookingEvent.PR_ID)?.name}
+                  language={this.language}
+                  is_vacation_rental={this.calendarData.is_vacation_rental}
+                  countries={this.countries}
+                  currency={this.currency}
+                  data-component-id={bookingEvent.ID}
+                  bookingEvent={bookingEvent}
+                  allBookingEvents={this.getBookingData()}
+                ></igl-booking-event>
+              );
+            })}
           </div>
         </div>
         <ir-modal

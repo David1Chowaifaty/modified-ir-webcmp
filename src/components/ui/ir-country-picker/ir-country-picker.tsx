@@ -12,6 +12,7 @@ export class IrCountryPicker {
   @Prop({ mutable: true }) error: boolean;
   @Prop() propertyCountry: ICountry;
   @Prop() label: string;
+  @Prop() testId: string;
 
   @State() inputValue: string;
   @State() selectedCountry: ICountry;
@@ -78,6 +79,7 @@ export class IrCountryPicker {
             this.inputValue = e.detail;
             this.filterCountries();
           }}
+          testId={this.testId}
           label={this.label}
           error={this.error}
           placeholder=""

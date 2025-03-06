@@ -20,6 +20,7 @@ export class IrPhoneInput {
   @Prop() phone_prefix: string | null = null;
   @Prop() placeholder: string;
   @Prop({ mutable: true }) countries: ICountry[] = [];
+  @Prop() testId: string;
 
   @Event() textChange: EventEmitter<{ phone_prefix: string; mobile: string }>;
   @State() inputValue: string = '';
@@ -112,7 +113,16 @@ export class IrPhoneInput {
               </button>
 
               <p class={'phone_prefix_label'}>{this.currentCountry?.phone_prefix}</p>
-              <input maxLength={14} type="text" placeholder={this.placeholder} required value={this.inputValue} disabled={this.disabled} onInput={e => this.handleInputChange(e)} />
+              <input
+                data-testid={this.testId}
+                maxLength={14}
+                type="text"
+                placeholder={this.placeholder}
+                required
+                value={this.inputValue}
+                disabled={this.disabled}
+                onInput={e => this.handleInputChange(e)}
+              />
             </div>
             {this.isDropdownVisible && (
               <div class="ir-dropdown-container">

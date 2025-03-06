@@ -140,7 +140,7 @@ export class IglApplicationInfo {
     });
     console.log({ guestInfo: this.guestInfo });
     return (
-      <Host class={'my-2'}>
+      <Host class={'my-2'} data-testid="room_info">
         <div class="booking-header">
           {(this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
             <span class="booking-roomtype-title">{this.rateplanSelection.roomtype.name}</span>
@@ -170,6 +170,7 @@ export class IglApplicationInfo {
             <input
               id={v4()}
               type="text"
+              data-testid="guest_first_name"
               class={`form-control ${this.isButtonPressed && this.guestInfo?.first_name === '' && 'border-danger'}`}
               placeholder={locales.entries['Lcz_GuestFirstname'] ?? 'Guest first name'}
               name="guestFirstName"
@@ -194,6 +195,7 @@ export class IglApplicationInfo {
               class={`form-control ${this.isButtonPressed && this.guestInfo?.last_name === '' && 'border-danger'}`}
               placeholder={locales.entries['Lcz_GuestLastname'] ?? 'Guest last name'}
               name="guestLastName"
+              data-testid="guest_last_name"
               onInput={event => {
                 const name = (event.target as HTMLInputElement).value;
                 this.updateGuest({ last_name: name });
@@ -208,12 +210,12 @@ export class IglApplicationInfo {
               value={this.guestInfo?.last_name}
             />
           </div>
-          <div class="my-1 my-md-0 d-flex align-items-center flex-fill">
-            {calendar_data.is_frontdesk_enabled &&
-              !isSingleUnit(this.rateplanSelection.roomtype.id) &&
-              (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
+          {calendar_data.is_frontdesk_enabled &&
+            !isSingleUnit(this.rateplanSelection.roomtype.id) &&
+            (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
+              <div class="my-1 my-md-0 d-flex align-items-center flex-fill">
                 <div class="mr-md-1 p-0 flex-fill preference-select-container">
-                  <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.updateGuest({ unit: (event.target as HTMLInputElement).value })}>
+                  <select data-testid="unit" class="form-control input-sm pr-0" id={v4()} onChange={event => this.updateGuest({ unit: (event.target as HTMLInputElement).value })}>
                     <option value="" selected={this.guestInfo?.unit === ''}>
                       {locales.entries.Lcz_Assignunits}
                     </option>
@@ -224,11 +226,12 @@ export class IglApplicationInfo {
                     ))}
                   </select>
                 </div>
-              )}
-          </div>
+              </div>
+            )}
           {this.rateplanSelection.roomtype.is_bed_configuration_enabled && (
             <div class="mr-md-1 flex-fill">
               <select
+                data-testid="bed_configuration"
                 class={`form-control input-sm ${this.isButtonPressed && this.guestInfo?.bed_preference === '' && 'border-danger'}`}
                 id={v4()}
                 onChange={event => this.updateGuest({ bed_preference: (event.target as HTMLInputElement).value })}

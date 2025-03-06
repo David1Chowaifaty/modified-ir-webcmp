@@ -91,7 +91,7 @@ export class IglRatePlan {
       return visibleInventory.rp_amount.toString();
     }
     const { selected_variation, view_mode } = visibleInventory;
-    const amount = view_mode === '001' ? selected_variation?.discounted_gross_amount : selected_variation?.amount_per_night_gross;
+    const amount = view_mode === '001' ? selected_variation?.discounted_amount : selected_variation?.amount_per_night_gross;
     return amount?.toString() || '';
   }
 
@@ -171,12 +171,14 @@ export class IglRatePlan {
         <div
           class={`d-flex m-0 p-0 ${isAvailableToBook ? 'flex-column flex-lg-row align-items-lg-center justify-content-lg-between' : 'align-items-center justify-content-between'}`}
         >
-          <div class="rateplan-name-container d-flex align-items-center" style={{ gap: '0.5rem' }}>
+          <div data-testid={'rp_name'} class="rateplan-name-container d-flex align-items-center" style={{ gap: '0.5rem' }}>
             {bookingType === 'BAR_BOOKING' ? (
-              <Fragment>
-                <span class="font-weight-bold">{ratePlan.name.split('/')[0]}</span>
-                <span>/{ratePlan.name.split('/')[1]}</span>
-              </Fragment>
+              <p class="m-0 p-0">
+                {/* <span class="font-weight-bold">{ratePlan.name.split('/')[0]}</span> */}
+                <span>
+                  {ratePlan.name.split('/')[1]} {ratePlan.is_non_refundable && <span class="non-ref-span">Non Refundable</span>}
+                </span>
+              </p>
             ) : (
               <span>
                 {ratePlan.short_name} {ratePlan.is_non_refundable && <span class="non-ref-span">Non Refundable</span>}

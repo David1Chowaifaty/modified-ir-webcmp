@@ -1,0 +1,39 @@
+{
+  "check_availability": {
+    "from_date": "2025-03-10",
+    "to_date": "2025-03-11",
+    "propertyid": 42,
+    "language": "en",
+    "room_type_ids": [],
+    "agent_id": null,
+    "is_in_agent_mode": false,
+    "room_type_ids_to_update": [],
+    "adult_nbr": "4",
+    "child_nbr": 2,
+    "currency_ref": "USD",
+    "skip_getting_assignable_units": false,
+    "is_backend": true
+  },
+  "booking": {
+    "rp_id": 3755,
+    "room_name": "103",
+    "total_rooms": 2,
+    "main_guest": {
+      "email": "test@gmail.com",
+      "first_name": "test",
+      "last_name": "test"
+    },
+    "guests": [
+      {
+        "first_name": "test",
+        "last_name": "test",
+        "rp_id": 3755
+      },
+      {
+        "first_name": "test1",
+        "last_name": "test1",
+        "rp_id": 3755
+      }
+    ]
+  }
+}

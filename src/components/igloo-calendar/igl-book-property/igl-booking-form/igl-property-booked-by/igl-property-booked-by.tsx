@@ -287,6 +287,7 @@ export class IglPropertyBookedBy {
                 onBlur={() => this.checkUser()}
               /> */}
               <ir-autocomplete
+                testId={'main_guest_email'}
                 onComboboxValue={this.handleComboboxChange.bind(this)}
                 propertyId={this.propertyId}
                 type="text"
@@ -308,6 +309,7 @@ export class IglPropertyBookedBy {
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_FirstName}</label>
                 <div class="p-0 m-0  controlContainer flex-fill  ">
                   <input
+                    data-testid="main_guest_first_name"
                     class={`form-control flex-fill ${this.isButtonPressed && this.bookedByData.firstName === '' && 'border-danger'}`}
                     type="text"
                     placeholder={locales.entries.Lcz_FirstName}
@@ -326,6 +328,7 @@ export class IglPropertyBookedBy {
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_LastName}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
                   <input
+                    data-testid="main_guest_last_name"
                     class={`form-control ${this.isButtonPressed && this.bookedByData.lastName === '' && 'border-danger'}`}
                     type="text"
                     placeholder={locales.entries.Lcz_LastName}
@@ -340,6 +343,7 @@ export class IglPropertyBookedBy {
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_Country}</label>
                 {/* <div class="p-0 m-0  controlContainer flex-fill"> */}
                 <ir-country-picker
+                  testId="main_guest_country"
                   class="flex-grow-1 m-0"
                   onCountryChange={e => this.handleCountryChange(e.detail.id)}
                   countries={this.countries}
@@ -391,6 +395,7 @@ export class IglPropertyBookedBy {
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_MobilePhone}</label>
                 <div class="p-0 m-0 controlContainer flex-fill">
                   <ir-phone-input
+                    testId="main_guest_phone"
                     language={this.language}
                     // label={locales.entries.Lcz_MobilePhone}
                     value={this.bookedByData.contactNumber}
@@ -407,6 +412,7 @@ export class IglPropertyBookedBy {
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_YourArrivalTime}</label>
                 <div class="p-0 m-0  controlContainer flex-fill">
                   <select
+                    data-testid="arrival_time"
                     class={`form-control input-sm pr-0 ${this.isButtonPressed && this.bookedByData.selectedArrivalTime.code === '' && 'border-danger'}`}
                     id={v4()}
                     onChange={event => this.handleDataChange('selectedArrivalTime', event)}
@@ -428,6 +434,7 @@ export class IglPropertyBookedBy {
                 <label class="p-0 m-0 margin3">{locales.entries.Lcz_AnyMessageForUs}</label>
                 <div class="p-0 m-0  controlContainer flex-fill ">
                   <textarea
+                    data-testid="note"
                     id={v4()}
                     rows={4}
                     class="form-control "

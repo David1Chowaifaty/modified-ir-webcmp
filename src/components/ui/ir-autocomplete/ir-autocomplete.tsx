@@ -23,6 +23,7 @@ export class IrAutocomplete {
   @Prop() from_date: string = '';
   @Prop() to_date: string = '';
   @Prop() danger_border: boolean;
+  @Prop() testId: string;
 
   @State() inputValue: string = '';
   @State() data: any[] = [];
@@ -214,9 +215,16 @@ export class IrAutocomplete {
   renderDropdown() {
     if (this.inputValue !== '') {
       return (
-        <div class={`position-absolute border rounded combobox`}>
+        <div class={`position-absolute dropdown-menu  rounded combobox`}>
           {this.data?.map((d, index) => (
-            <p role="button" onKeyDown={e => this.handleItemKeyDown(e, index)} data-selected={this.selectedIndex === index} tabIndex={0} onClick={() => this.selectItem(index)}>
+            <p
+              role="button"
+              class="dropdown-item"
+              onKeyDown={e => this.handleItemKeyDown(e, index)}
+              data-selected={this.selectedIndex === index}
+              tabIndex={0}
+              onClick={() => this.selectItem(index)}
+            >
               {this.isSplitBooking ? (
                 <Fragment>{`${d.booking_nbr} ${d.guest.first_name} ${d.guest.last_name}`}</Fragment>
               ) : (
@@ -268,6 +276,7 @@ export class IrAutocomplete {
             </svg>
           </label>
           <input
+            data-testid={this.testId}
             required={this.required}
             disabled={this.disabled}
             id={this.inputId}

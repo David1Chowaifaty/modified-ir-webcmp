@@ -146,7 +146,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     RATE_PLAN: cell.room.rateplan.name,
     SPLIT_BOOKING: false,
     RATE_PLAN_ID: cell.room.rateplan.id,
-    RATE_TYPE: 1,
+    RATE_TYPE: cell.room?.roomtype?.id,
     ADULTS_COUNT: cell.room.occupancy.adult_nbr,
     CHILDREN_COUNT: cell.room.occupancy.children_nbr,
     origin: cell.booking.origin,
