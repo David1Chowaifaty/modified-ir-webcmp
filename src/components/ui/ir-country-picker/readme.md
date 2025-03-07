@@ -14,6 +14,7 @@
 | `error`           | `error`   |             | `boolean`    | `undefined` |
 | `label`           | `label`   |             | `string`     | `undefined` |
 | `propertyCountry` | --        |             | `ICountry`   | `undefined` |
+| `testId`          | `test-id` |             | `string`     | `undefined` |
 
 
 ## Events

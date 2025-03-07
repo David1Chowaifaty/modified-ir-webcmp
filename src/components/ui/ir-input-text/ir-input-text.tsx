@@ -147,7 +147,12 @@ export class IrInputText {
   handleMaskChange() {
     this.initMask();
   }
-
+  @Watch('value')
+  handleValueChange(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      this.validateInput(this.value);
+    }
+  }
   @Watch('submitted')
   watchHandler2(newValue: boolean) {
     if (newValue && this.required) {

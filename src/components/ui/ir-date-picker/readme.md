@@ -29,9 +29,11 @@
 
 ## Events
 
-| Event         | Description | Type                                           |
-| ------------- | ----------- | ---------------------------------------------- |
-| `dateChanged` |             | `CustomEvent<{ start: Moment; end: Moment; }>` |
+| Event             | Description | Type                                           |
+| ----------------- | ----------- | ---------------------------------------------- |
+| `dateChanged`     |             | `CustomEvent<{ start: Moment; end: Moment; }>` |
+| `datePickerBlur`  |             | `CustomEvent<void>`                            |
+| `datePickerFocus` |             | `CustomEvent<void>`                            |
 
 
 ## Methods

@@ -19,6 +19,7 @@
 | `placeholder`    | `placeholder`      |             | `string`                                                  | `''`        |
 | `propertyId`     | `property-id`      |             | `number`                                                  | `undefined` |
 | `required`       | `required`         |             | `boolean`                                                 | `false`     |
+| `testId`         | `test-id`          |             | `string`                                                  | `undefined` |
 | `to_date`        | `to_date`          |             | `string`                                                  | `''`        |
 | `type`           | `type`             |             | `"email" \| "number" \| "password" \| "search" \| "text"` | `'text'`    |
 | `value`          | `value`            |             | `string`                                                  | `undefined` |

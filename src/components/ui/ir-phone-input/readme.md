@@ -17,6 +17,7 @@
 | `language`        | `language`        |             | `string`     | `undefined` |
 | `phone_prefix`    | `phone_prefix`    |             | `string`     | `null`      |
 | `placeholder`     | `placeholder`     |             | `string`     | `undefined` |
+| `testId`          | `test-id`         |             | `string`     | `undefined` |
 | `token`           | `token`           |             | `string`     | `undefined` |
 | `value`           | `value`           |             | `string`     | `''`        |
 

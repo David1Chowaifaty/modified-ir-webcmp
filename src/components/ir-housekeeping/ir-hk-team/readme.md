@@ -18,6 +18,7 @@
 - [ir-title](../../ir-title)
 - [ir-icon](../../ui/ir-icon)
 - [ir-popover](../../ui/ir-popover)
+- [ir-button](../../ui/ir-button)
 - [ir-sidebar](../../ui/ir-sidebar)
 - [ir-delete-modal](../ir-delete-modal)
 
@@ -29,6 +30,7 @@ graph TD;
   ir-hk-team --> ir-title
   ir-hk-team --> ir-icon
   ir-hk-team --> ir-popover
+  ir-hk-team --> ir-button
   ir-hk-team --> ir-sidebar
   ir-hk-team --> ir-delete-modal
   ir-hk-unassigned-units --> ir-select

@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property        | Attribute         | Description | Type                                               | Default     |
-| --------------- | ----------------- | ----------- | -------------------------------------------------- | ----------- |
-| `content`       | `content`         |             | `string`                                           | `undefined` |
-| `irPopoverLeft` | `ir-popover-left` |             | `string`                                           | `'10px'`    |
-| `placement`     | `placement`       |             | `"auto" \| "bottom" \| "left" \| "right" \| "top"` | `'auto'`    |
-| `trigger`       | `trigger`         |             | `"click" \| "focus" \| "hover"`                    | `'focus'`   |
+| Property              | Attribute                | Description | Type                                               | Default     |
+| --------------------- | ------------------------ | ----------- | -------------------------------------------------- | ----------- |
+| `content`             | `content`                |             | `string`                                           | `undefined` |
+| `irPopoverLeft`       | `ir-popover-left`        |             | `string`                                           | `'10px'`    |
+| `placement`           | `placement`              |             | `"auto" \| "bottom" \| "left" \| "right" \| "top"` | `'auto'`    |
+| `renderContentAsHtml` | `render-content-as-html` |             | `boolean`                                          | `false`     |
+| `trigger`             | `trigger`                |             | `"click" \| "focus" \| "hover"`                    | `'focus'`   |
 
 
 ## Dependencies
