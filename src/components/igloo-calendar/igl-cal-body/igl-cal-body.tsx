@@ -459,7 +459,7 @@ export class IglCalBody {
     }
     return (
       <p>
-        Update unit {this.selectedRoom?.name} status to <b>{this.selectedRoom?.hk_status === '001' ? 'Dirty' : 'Clean'}?</b>
+        Update unit {this.selectedRoom?.name} to <b>{this.selectedRoom?.hk_status === '001' ? 'Dirty' : 'Clean'}?</b>
       </p>
       // <ir-select
       //   LabelAvailable={false}
