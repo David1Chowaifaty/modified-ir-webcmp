@@ -1,5 +1,5 @@
 import { Component, Host, Prop, h, Element } from '@stencil/core';
-
+import 'bootstrap';
 @Component({
   tag: 'ir-popover',
   styleUrl: 'ir-popover.css',
@@ -25,7 +25,7 @@ export class IrPopover {
   }
 
   initializePopover() {
-    ($(this.popoverTrigger) as any).popover({
+    $(this.popoverTrigger).popover({
       trigger: this.trigger,
       content: this.content,
       placement: this.placement,
@@ -35,7 +35,7 @@ export class IrPopover {
   }
 
   disconnectedCallback() {
-    ($(this.popoverTrigger) as any).popover('dispose');
+    $(this.popoverTrigger).popover('dispose');
   }
 
   render() {
@@ -55,7 +55,7 @@ export class IrPopover {
             <slot />
           </p>
         ) : (
-          <button class="popover-trigger" ref={el => (this.popoverTrigger = el)}>
+          <button tabindex="0" class="popover-trigger" ref={el => (this.popoverTrigger = el)}>
             <slot />
           </button>
         )}
