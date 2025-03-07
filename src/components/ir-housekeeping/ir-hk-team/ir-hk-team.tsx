@@ -122,25 +122,25 @@ export class IrHkTeam {
               {housekeeping_store.hk_criteria.housekeepers.map(hk => (
                 <tr key={hk.id}>
                   <td class="text-left">
-                    {hk.name?.length > 20 ? (
-                      <ir-popover trigger="hover" content={hk.name}>
-                        <span>{hk.name.slice(0, 20)}...</span>
-                      </ir-popover>
-                    ) : (
-                      hk.name
-                    )}
+                    <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+                      {hk.name?.length > 25 ? (
+                        <ir-popover trigger="hover" content={hk.name}>
+                          <span>{hk.name.slice(0, 25)}...</span>
+                        </ir-popover>
+                      ) : (
+                        hk.name
+                      )}
+                      {hk.note && (
+                        <ir-popover content={hk.note}>
+                          <ir-button variant="icon" icon_name="note" data-toggle="tooltip" data-placement="bottom" title="note"></ir-button>
+                        </ir-popover>
+                      )}
+                    </div>
                   </td>
                   <td>
                     {hk.phone_prefix} {hk.mobile}
                   </td>
                   <td>{hk.username}</td>
-                  <td>
-                    {hk.note && (
-                      <ir-popover content={hk.note}>
-                        <ir-button variant="icon" icon_name="note"></ir-button>
-                      </ir-popover>
-                    )}
-                  </td>
                   <td>{this.renderAssignedUnits(hk)}</td>
                   <td class="text-center">
                     <div class="icons-container">

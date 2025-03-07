@@ -44,7 +44,7 @@ export class IrPopover {
         {this.trigger !== 'focus' ? (
           <p
             ref={el => (this.popoverTrigger = el)}
-            class="popover-title"
+            class="popover-title m-0 p-0"
             style={{
               whiteSpace: 'nowrap',
               overflow: 'hidden',
