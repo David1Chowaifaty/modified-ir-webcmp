@@ -103,7 +103,8 @@ export class IrDeleteModal {
                     .map(m => ({
                       value: m.id.toString(),
                       text: m.name,
-                    }))}
+                    }))
+                    .sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()))}
                 ></ir-select>
               </div>
             )}

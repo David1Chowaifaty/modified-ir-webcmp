@@ -95,7 +95,7 @@ export class IrHkTeam {
                 <th class="text-left">{locales.entries.Lcz_Name}</th>
                 <th>{locales.entries.Lcz_Mobile}</th>
                 <th>{locales.entries.Lcz_Username}</th>
-                <th>{locales.entries.Lcz_Note}</th>
+                {/* <th>{locales.entries.Lcz_Note}</th> */}
                 <th>{locales.entries.Lcz_UnitsAssigned}</th>
                 <th class="text-center">
                   <ir-icon
