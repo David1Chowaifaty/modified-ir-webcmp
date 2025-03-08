@@ -51,16 +51,14 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [ir-icon](../../ui/ir-icon)
-- [ir-select](../../ui/ir-select)
 - [ir-button](../../ui/ir-button)
+- [ir-select](../../ui/ir-select)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-delete-modal --> ir-icon
-  ir-delete-modal --> ir-select
   ir-delete-modal --> ir-button
+  ir-delete-modal --> ir-select
   ir-button --> ir-icons
   ir-hk-team --> ir-delete-modal
   style ir-delete-modal fill:#f9f,stroke:#333,stroke-width:4px

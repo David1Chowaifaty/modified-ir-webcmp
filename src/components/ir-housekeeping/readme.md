@@ -67,9 +67,8 @@ graph TD;
   ir-hk-user --> ir-button
   ir-phone-input --> ir-combobox
   ir-sidebar --> ir-icon
-  ir-delete-modal --> ir-icon
-  ir-delete-modal --> ir-select
   ir-delete-modal --> ir-button
+  ir-delete-modal --> ir-select
   ir-secure-tasks --> ir-housekeeping
   style ir-housekeeping fill:#f9f,stroke:#333,stroke-width:4px
 ```

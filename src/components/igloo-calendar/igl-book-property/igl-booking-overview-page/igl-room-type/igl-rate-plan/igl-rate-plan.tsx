@@ -189,12 +189,12 @@ export class IglRatePlan {
 
           {isAvailableToBook ? (
             <div class="d-md-flex  justify-content-md-end align-items-md-center flex-fill rateplan-container">
-              <div class="mt-1 mt-md-0 flex-fill max-w-300">
-                <fieldset class="position-relative">
+              <div class="mt-1 mt-md-0 flex-fill max-w-300 flex-grow-1">
+                <fieldset class="position-relative flex-grow-1 w-100">
                   <select
                     disabled={disableForm}
                     data-testid="adult-child-offering"
-                    class="form-control input-sm"
+                    class="form-control input-sm flex-grow-1 w-100"
                     id={uuidv4()}
                     onChange={evt => this.handleDataChange('adult_child_offering', evt)}
                   >
@@ -219,7 +219,7 @@ export class IglRatePlan {
                     }
                     aria-label={`${this.visibleInventory?.roomtype?.name} ${this.ratePlan.short_name}'s rate`}
                     aria-describedby={`${this.ratePlan.short_name}'s rate`}
-                    class="ir-br-input-none w-100 flex-grow-1"
+                    class="ir-br-input-none price-amount w-100 flex-grow-1"
                     currency={currency.symbol}
                     value={this.renderRate()}
                     placeholder={locales.entries.Lcz_Rate || 'Rate'}
