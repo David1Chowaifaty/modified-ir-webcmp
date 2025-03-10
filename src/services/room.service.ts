@@ -11,7 +11,14 @@ export class RoomService {
     return data;
   }
 
-  public async getExposedProperty(params: { id: number | null; language: string; is_backend?: boolean; aname?: string; include_units_hk_status?: boolean }) {
+  public async getExposedProperty(params: {
+    id: number | null;
+    language: string;
+    is_backend?: boolean;
+    aname?: string;
+    include_units_hk_status?: boolean;
+    include_sales_rate_plans?: boolean;
+  }) {
     try {
       const { data } = await axios.post(`/Get_Exposed_Property`, params);
       if (data.ExceptionMsg !== '') {

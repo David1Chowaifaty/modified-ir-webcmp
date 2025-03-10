@@ -134,7 +134,7 @@ export class IrRoomGuests {
       await this.bookingService.handleExposedRoomGuests({
         booking_nbr: this.bookingNumber,
         identifier: this.identifier,
-        guests: this.guests,
+        guests: this.guests.map(g => ({ ...g, dob: g.dob ? moment(g.dob, 'DD/MM/YYYY').format('YYYY-MM-DD') : null })),
       });
       if (this.checkIn) {
         await this.bookingService.handleExposedRoomInOut({
@@ -247,7 +247,7 @@ export class IrRoomGuests {
                         id={`{locales.entries.Lcz_Nationality}_${idx}`}
                         error={!!this.error['country_id'] && !guest.country_id}
                         country={this.countries?.find(c => c.id?.toString() === guest.country?.id?.toString())}
-                        onCountryChange={e => this.updateGuestInfo(idx, { country_id: e.detail.id.toString(), country: e.detail })}
+                        onCountryChange={e => this.updateGuestInfo(idx, { country_id: e.detail?.id?.toString() ?? null, country: e.detail })}
                         countries={this.countries}
                       ></ir-country-picker>
                     </div>

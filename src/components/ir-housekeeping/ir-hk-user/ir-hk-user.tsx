@@ -40,7 +40,7 @@ export class IrHkUser {
   private housekeeperSchema = z.object({
     name: z.string().min(2),
     mobile: z.string().min(1).max(14),
-    password: z.string().min(5),
+    password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/),
     username: z.string().min(2),
   });
 
@@ -124,6 +124,22 @@ export class IrHkUser {
             }}
           ></ir-phone-input>
 
+          {/* <ir-input-text
+            label={locales.entries.Lcz_Note}
+            placeholder={locales.entries.Lcz_Note}
+            value={this.userInfo.note}
+            onTextChange={e => this.updateUserField('note', e.detail)}
+            ></ir-input-text> */}
+          <div class="mb-1">
+            <ir-textarea
+              variant="prepend"
+              maxLength={250}
+              label={locales.entries.Lcz_Note}
+              placeholder={locales.entries.Lcz_Note}
+              value={this.userInfo.note}
+              onTextChange={e => this.updateUserField('note', e.detail)}
+            ></ir-textarea>
+          </div>
           <ir-input-text
             zod={this.housekeeperSchema.pick({ username: true })}
             wrapKey="username"
@@ -140,25 +156,13 @@ export class IrHkUser {
             placeholder={locales.entries.Lcz_MinimumCharacter}
             value={this.userInfo.password}
             type="password"
+            maxLength={16}
             zod={this.housekeeperSchema.pick({ password: true })}
             wrapKey="password"
             error={this.errors?.password && !this.userInfo.password}
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
-          {/* <ir-input-text
-            label={locales.entries.Lcz_Note}
-            placeholder={locales.entries.Lcz_Note}
-            value={this.userInfo.note}
-            onTextChange={e => this.updateUserField('note', e.detail)}
-          ></ir-input-text> */}
-          <ir-textarea
-            variant="prepend"
-            maxLength={250}
-            label={locales.entries.Lcz_Note}
-            placeholder={locales.entries.Lcz_Note}
-            value={this.userInfo.note}
-            onTextChange={e => this.updateUserField('note', e.detail)}
-          ></ir-textarea>
+          <ir-password-validator password={this.userInfo.password}></ir-password-validator>
           <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
             <ir-button
               onClickHandler={() => this.closeSideBar.emit(null)}

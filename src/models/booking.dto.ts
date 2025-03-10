@@ -122,12 +122,13 @@ export const ZSharedPerson = z.object({
     .optional(),
   dob: z
     .string()
+    .nullable()
     .optional()
-    .refine(value => value === undefined || moment(value, 'DD/MM/YYYY', true).isValid() || value === '', 'Invalid date format')
+    .refine(value => value === undefined || moment(value, 'DD/MM/YYYY', true).isValid() || value === '' || value === null, 'Invalid date format')
     .transform(value => {
-      if (value === undefined || value === '') return null;
+      if (value === undefined || value === '' || value === null) return null;
       const isDDMMYYYY = moment(value, 'DD/MM/YYYY', true).isValid();
-      return isDDMMYYYY ? null : value;
+      return isDDMMYYYY ? null : moment(value, 'DD/MM/YYYY').format('YYYY-MM-DD');
     }),
   id_info: ZIdInfo.optional(),
 });

@@ -323,10 +323,14 @@ export class IglBookingEvent {
       }
     } else {
       if (!this.isShrinking) {
-        const initialRT = findRoomType(this.bookingEvent.PR_ID);
-        const targetRT = findRoomType(toRoomId);
+        const initialRT = findRoomType(Number(this.bookingEvent.PR_ID));
+        const targetRT = findRoomType(Number(toRoomId));
         if (initialRT === targetRT) {
           console.log('same rt');
+          if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
+            //TODO add the description
+            return { description: locales.entries.Lcz_ConfrmModiication + '.', status: '200' };
+          }
           return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         } else {
           return {

@@ -34,7 +34,7 @@ export class IrCountryPicker {
   @Watch('country')
   handleCountryChange(newCountry: ICountry, oldCountry: ICountry) {
     if (newCountry?.id !== oldCountry?.id) {
-      this.inputValue = this.country.name;
+      this.inputValue = this.country?.name;
       this.selectedCountry = newCountry;
     }
   }
@@ -55,7 +55,7 @@ export class IrCountryPicker {
 
   private selectCountry(c: ICountry | null) {
     this.selectedCountry = c;
-    this.inputValue = c.name;
+    this.inputValue = c?.name;
     this.filteredCountries = [...this.countries];
     this.countryChange.emit(c);
   }
@@ -91,7 +91,12 @@ export class IrCountryPicker {
           aria-haspopup="true"
           aria-expanded="false"
           onInputFocus={() => this.scrollToSelected()}
-          onInputBlur={() => (this.searching = false)}
+          onInputBlur={() => {
+            this.searching = false;
+            if (this.filteredCountries.length > 0 && this.inputValue && this.inputValue.trim() !== '') {
+              this.selectCountry(this.filteredCountries[0]);
+            }
+          }}
         ></ir-input-text>
 
         <div class="dropdown-menu combobox-menu" aria-labelledby="dropdownMenuCombobox">

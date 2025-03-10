@@ -86,10 +86,14 @@ export class IrHkUnassignedUnits {
       ));
     }
     return calendar_data.roomsInfo.map(roomType => {
+      console.log(roomType);
       if (!roomType.is_active) {
         return null;
       }
       return roomType.physicalrooms?.map(physical_room => {
+        if (!physical_room['is_active']) {
+          return null;
+        }
         let taken = !housekeeping_store.hk_criteria.units_assignments.unassigned_units?.find(unit => unit.id.toString() === physical_room.id.toString());
         let housekeeper = [];
         const assignedRoom = this.assignedUnits.get(physical_room.id);

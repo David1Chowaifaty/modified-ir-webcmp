@@ -132,7 +132,7 @@ export class IrHkTeam {
                       )}
                       {hk.note && (
                         <ir-popover content={hk.note}>
-                          <ir-button variant="icon" icon_name="note" data-toggle="tooltip" data-placement="bottom" title="note"></ir-button>
+                          <ir-button variant="icon" icon_name="note" data-toggle="tooltip" data-placement="bottom" title="Click to view note"></ir-button>
                         </ir-popover>
                       )}
                     </div>

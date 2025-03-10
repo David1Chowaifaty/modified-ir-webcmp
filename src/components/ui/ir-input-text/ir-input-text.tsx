@@ -194,10 +194,16 @@ export class IrInputText {
   private handleInputChange(event: InputEvent) {
     this.initial = false;
     const value = (event.target as HTMLInputElement).value;
+
+    // Check if the input is completely empty
+    const isEmpty = value === '';
+
     if (this.maskInstance) {
       this.maskInstance.value = value;
     }
-    const maskedValue = this.maskInstance ? this.maskInstance.value : value;
+
+    // If it's empty, emit null instead of the masked value
+    const maskedValue = isEmpty ? null : this.maskInstance ? this.maskInstance.value : value;
     this.textChange.emit(maskedValue);
   }
 
@@ -210,8 +216,16 @@ export class IrInputText {
 
     // Listen to mask changes to keep input value in sync
     this.maskInstance.on('accept', () => {
-      this.inputRef.value = this.maskInstance.value; // Update the input field
-      this.textChange.emit(this.maskInstance.value); // Emit the masked value
+      // Check if the raw input is empty
+      const isEmpty = this.inputRef.value.trim() === '' || this.maskInstance.unmaskedValue === '';
+
+      if (isEmpty) {
+        this.inputRef.value = ''; // Clear the input
+        this.textChange.emit(null); // Emit null
+      } else {
+        this.inputRef.value = this.maskInstance.value; // Update the input field
+        this.textChange.emit(this.maskInstance.value); // Emit the masked value
+      }
     });
   }
   // Function that handles the blur events

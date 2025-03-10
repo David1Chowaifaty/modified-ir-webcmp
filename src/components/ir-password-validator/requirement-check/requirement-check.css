@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  font-size: 0.875rem;
+}
+.valid {
+  color: var(--green);
+}
+.requirement {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
