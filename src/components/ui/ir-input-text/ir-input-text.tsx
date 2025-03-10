@@ -17,19 +17,16 @@ export class IrInputText {
   @Prop() value: string;
 
   /** Label text for the input */
-  @Prop() label = '';
+  @Prop() label: string;
 
   /** Placeholder text for the input */
-  @Prop() placeholder = '';
+  @Prop() placeholder: string;
 
   /** Additional inline styles for the input */
   @Prop() inputStyles = '';
 
   /** Whether the input field is required */
   @Prop() required: boolean;
-
-  /** Determines if the label is displayed */
-  @Prop() LabelAvailable: boolean = true;
 
   /** Whether the input field is read-only */
   @Prop() readonly: boolean = false;
@@ -64,9 +61,6 @@ export class IrInputText {
 
   /** Whether to apply default input styling */
   @Prop() inputStyle: boolean = true;
-
-  /** Size of the input field: small (sm), medium (md), or large (lg) */
-  @Prop() size: 'sm' | 'md' | 'lg' = 'md';
 
   /** Text size inside the input field */
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
@@ -125,10 +119,7 @@ export class IrInputText {
   /** To clear all the Input base styling*/
   @Prop() errorMessage: string;
 
-  @State() initial: boolean = true;
   @State() inputFocused: boolean = false;
-
-  @State() isError: boolean = false;
 
   @Event({ bubbles: true, composed: true }) textChange: EventEmitter<any>;
   @Event() inputBlur: EventEmitter<FocusEvent>;
@@ -136,8 +127,9 @@ export class IrInputText {
 
   private inputRef: HTMLInputElement;
   private maskInstance: InputMask<FactoryArg>;
-  /**Input Id */
+
   private id: string;
+
   componentWillLoad() {
     if (this.el.id) {
       this.id = this.el.id;
@@ -145,6 +137,7 @@ export class IrInputText {
       this.id = v4();
     }
   }
+
   componentDidLoad() {
     if (this.mask) this.initMask();
   }
@@ -152,18 +145,6 @@ export class IrInputText {
   @Watch('mask')
   handleMaskChange() {
     this.initMask();
-  }
-  @Watch('value')
-  handleValueChange(newValue: string, oldValue: string) {
-    if (newValue !== oldValue) {
-      this.validateInput(this.value);
-    }
-  }
-  @Watch('submitted')
-  watchHandler2(newValue: boolean) {
-    if (newValue && this.required) {
-      this.initial = false;
-    }
   }
 
   @Watch('error')
@@ -173,13 +154,29 @@ export class IrInputText {
     }
   }
 
-  @Watch('aria-invalid')
-  handleAriaInvalidChange(newValue: string) {
-    if (newValue === 'true') {
-      this.isError = true;
-    } else {
-      this.isError = false;
+  @Watch('value')
+  handleValueChange(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      this.validateInput(this.value);
     }
+  }
+
+  private initMask() {
+    if (!this.mask || this.maskInstance) {
+      return;
+    }
+
+    this.maskInstance = IMask(this.inputRef, this.mask);
+    this.maskInstance.on('accept', () => {
+      const isEmpty = this.inputRef.value.trim() === '' || this.maskInstance.unmaskedValue === '';
+      if (isEmpty) {
+        this.inputRef.value = '';
+        this.textChange.emit(null);
+      } else {
+        this.inputRef.value = this.maskInstance.value;
+        this.textChange.emit(this.maskInstance.value);
+      }
+    });
   }
 
   private async validateInput(value: string, forceValidation: boolean = false) {
@@ -189,57 +186,34 @@ export class IrInputText {
     if (this.zod) {
       try {
         if (!this.asyncParse) {
-          this.zod.parse(this.wrapKey ? { [this.wrapKey]: value } : value); // Validate the value using the Zod schema
+          this.zod.parse(this.wrapKey ? { [this.wrapKey]: value } : value);
         } else {
-          this.zod.parseAsync(this.wrapKey ? { [this.wrapKey]: value } : value); // Validate the value using the Zod schema
+          this.zod.parseAsync(this.wrapKey ? { [this.wrapKey]: value } : value);
         }
-        this.error = false; // Clear the error if valid
+        if (this.error) {
+          this.updateErrorState(false);
+        }
       } catch (error) {
-        console.log(error);
-        this.error = true; // Set the error message
+        this.updateErrorState(true);
       }
     }
   }
 
   private handleInputChange(event: InputEvent) {
-    this.initial = false;
     const value = (event.target as HTMLInputElement).value;
-
-    // Check if the input is completely empty
     const isEmpty = value === '';
-
     if (this.maskInstance) {
       this.maskInstance.value = value;
     }
-
-    // If it's empty, emit null instead of the masked value
     const maskedValue = isEmpty ? null : this.maskInstance ? this.maskInstance.value : value;
     this.textChange.emit(maskedValue);
   }
 
-  private initMask() {
-    if (!this.mask || this.maskInstance) {
-      return;
-    }
-
-    this.maskInstance = IMask(this.inputRef, this.mask);
-
-    // Listen to mask changes to keep input value in sync
-    this.maskInstance.on('accept', () => {
-      // Check if the raw input is empty
-      const isEmpty = this.inputRef.value.trim() === '' || this.maskInstance.unmaskedValue === '';
-
-      if (isEmpty) {
-        this.inputRef.value = ''; // Clear the input
-        this.textChange.emit(null); // Emit null
-      } else {
-        this.inputRef.value = this.maskInstance.value; // Update the input field
-        this.textChange.emit(this.maskInstance.value); // Emit the masked value
-      }
-    });
+  private updateErrorState(b: boolean) {
+    this.error = b;
+    this.inputRef.setAttribute('aria-invalid', b ? 'true' : 'false');
   }
-  // Function that handles the blur events
-  // it validates the input and emits the blur event
+
   private handleBlur(e: FocusEvent) {
     this.validateInput(this.value, this.submitted);
     this.inputFocused = false;
@@ -254,7 +228,7 @@ export class IrInputText {
             <span
               data-disabled={this.disabled}
               data-state={this.inputFocused ? 'focus' : ''}
-              class={`input-group-text icon-container bg-white ${(this.error || this.isError) && 'danger-border'}`}
+              class={`input-group-text icon-container bg-white ${this.error ? 'danger-border' : ''}`}
               id="basic-addon1"
             >
               <slot name="icon"></slot>
@@ -262,60 +236,49 @@ export class IrInputText {
           </label>
           <input
             maxLength={this.maxLength}
-            aria-invalid={this.error ? 'true' : 'false'}
             data-testid={this.testId}
-            data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
+            style={this.inputForcedStyle}
+            data-state={!!this.value ? undefined : this.mask ? 'empty' : undefined}
+            id={this.id}
             ref={el => (this.inputRef = el)}
+            readOnly={this.readonly}
             type={this.type}
+            class={`ir-input form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${this.error ? 'danger-border' : ''}`}
+            onBlur={this.handleBlur.bind(this)}
             onFocus={e => {
               this.inputFocused = true;
               this.inputFocus.emit(e);
             }}
-            required={this.required}
-            onBlur={this.handleBlur.bind(this)}
-            disabled={this.disabled}
-            class={`ir-input form-control bg-white pl-0 input-sm rate-input py-0 m-0 rateInputBorder ${(this.error || this.isError) && 'danger-border'}`}
-            id={this.id}
-            value={this.value}
             placeholder={this.placeholder}
+            value={this.value}
             onInput={this.handleInputChange.bind(this)}
+            required={this.required}
+            disabled={this.disabled}
           />
         </fieldset>
       );
     }
-    let className = 'form-control';
-    let label = (
-      <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
-        <label
-          htmlFor={this.id}
-          class={` input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
-            this.labelBackground ? 'bg-' + this.labelBackground : ''
-          } flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} `}
-        >
-          {this.label}
-          {this.required ? '*' : ''}
-        </label>
-      </div>
-    );
-    if (!this.LabelAvailable) {
-      label = '';
-    }
-    if (this.inputStyle === false) {
-      className = '';
-    }
-    if (this.required && !this.initial) {
-      className = `${className} border-danger`;
-    }
     return (
-      <div class="form-group">
+      <div class={'form-group'}>
         <div class="input-group row m-0">
-          {label}
+          {this.label && (
+            <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
+              <label
+                htmlFor={this.id}
+                class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
+                  this.labelBackground ? 'bg-' + this.labelBackground : ''
+                } flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} `}
+              >
+                {this.label}
+                {this.required ? '*' : ''}
+              </label>
+            </div>
+          )}
           <input
-            aria-invalid={this.error ? 'true' : 'false'}
             maxLength={this.maxLength}
             data-testid={this.testId}
             style={this.inputForcedStyle}
-            data-state={!!this.value ? '' : this.mask ? 'empty' : ''}
+            data-state={!!this.value ? undefined : this.mask ? 'empty' : undefined}
             id={this.id}
             ref={el => (this.inputRef = el)}
             readOnly={this.readonly}
@@ -323,9 +286,9 @@ export class IrInputText {
             class={
               this.clearBaseStyles
                 ? `${this.inputStyles}`
-                : `ir-input ${className} ${this.error || this.isError ? 'border-danger' : ''} form-control-${this.size} text-${this.textSize} col-${
-                    this.LabelAvailable ? 12 - this.labelWidth : 12
-                  } ${this.readonly && 'bg-white'} ${this.inputStyles}`
+                : `${this.error ? 'border-danger' : ''} form-control text-${this.textSize} col-${this.label ? 12 - this.labelWidth : 12} ${this.readonly ? 'bg-white' : ''} ${
+                    this.inputStyles
+                  }`
             }
             onBlur={this.handleBlur.bind(this)}
             onFocus={e => {

@@ -13,6 +13,7 @@ export class IrCountryPicker {
   @Prop() propertyCountry: ICountry;
   @Prop() label: string;
   @Prop() testId: string;
+  @Prop() autoValidate: boolean = false;
 
   @State() inputValue: string;
   @State() selectedCountry: ICountry;
@@ -80,13 +81,13 @@ export class IrCountryPicker {
             this.filterCountries();
           }}
           testId={this.testId}
+          autoValidate={this.autoValidate}
           label={this.label}
           error={this.error}
           placeholder=""
           class="m-0 p-0"
           value={this.inputValue}
           id="dropdownMenuCombobox"
-          LabelAvailable={!!this.label}
           data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"

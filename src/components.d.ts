@@ -391,6 +391,7 @@ export namespace Components {
         "extraResources": string;
     }
     interface IrCountryPicker {
+        "autoValidate": boolean;
         "countries": ICountry[];
         "country": ICountry;
         "error": boolean;
@@ -589,10 +590,6 @@ export namespace Components {
     }
     interface IrInputText {
         /**
-          * Determines if the label is displayed
-         */
-        "LabelAvailable": boolean;
-        /**
           * A Zod parse type for validating the input
          */
         "asyncParse"?: boolean;
@@ -676,10 +673,6 @@ export namespace Components {
           * Whether the input field is required
          */
         "required": boolean;
-        /**
-          * Size of the input field: small (sm), medium (md), or large (lg)
-         */
-        "size": 'sm' | 'md' | 'lg';
         /**
           * Whether the form has been submitted
          */
@@ -3524,6 +3517,7 @@ declare namespace LocalJSX {
         "extraResources"?: string;
     }
     interface IrCountryPicker {
+        "autoValidate"?: boolean;
         "countries"?: ICountry[];
         "country"?: ICountry;
         "error"?: boolean;
@@ -3750,10 +3744,6 @@ declare namespace LocalJSX {
     }
     interface IrInputText {
         /**
-          * Determines if the label is displayed
-         */
-        "LabelAvailable"?: boolean;
-        /**
           * A Zod parse type for validating the input
          */
         "asyncParse"?: boolean;
@@ -3840,10 +3830,6 @@ declare namespace LocalJSX {
           * Whether the input field is required
          */
         "required"?: boolean;
-        /**
-          * Size of the input field: small (sm), medium (md), or large (lg)
-         */
-        "size"?: 'sm' | 'md' | 'lg';
         /**
           * Whether the form has been submitted
          */

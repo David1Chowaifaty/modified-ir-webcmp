@@ -36,6 +36,7 @@ export class IrPickup {
   };
   @State() vehicleCapacity: number[] = [];
   @State() cause: keyof TPickupData | null = null;
+  @State() autoValidate = false;
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetBookingEvt: EventEmitter<null>;
@@ -162,6 +163,7 @@ export class IrPickup {
   private async savePickup() {
     try {
       this.isLoading = true;
+      this.autoValidate = true;
       const isValid = this.pickupService.validateForm(this.pickupData, this.pickupSchema);
       if (isValid.error) {
         this.cause = isValid.cause;
@@ -229,6 +231,7 @@ export class IrPickup {
                 </div>
                 {/*Time Picker */}
                 <ir-input-text
+                  autoValidate={this.autoValidate}
                   // error={this.cause === 'arrival_time'&&this.pickupSchema.pick({ arrival_time: true }).safeParse(this.pickupData.arrival_time)}
                   wrapKey="arrival_time"
                   testId="pickup_arrival_time"
@@ -243,6 +246,7 @@ export class IrPickup {
                 ></ir-input-text>
               </div>
               <ir-input-text
+                autoValidate={this.autoValidate}
                 testId="pickup_flight_details"
                 value={this.pickupData.flight_details}
                 label={locales.entries.Lcz_FlightDetails}

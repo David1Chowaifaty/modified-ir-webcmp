@@ -17,6 +17,8 @@ export class IrHkUser {
   @Prop() isEdit: boolean = false;
 
   @State() isLoading: boolean = false;
+  @State() autoValidate = false;
+
   @State() userInfo: THKUser = {
     id: -1,
     mobile: '',
@@ -77,6 +79,7 @@ export class IrHkUser {
   async addUser() {
     try {
       this.isLoading = true;
+      this.autoValidate = true;
       const toValidateUserInfo = { ...this.userInfo, password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password };
       console.log('toValidateUserInfo', toValidateUserInfo);
       await this.housekeeperSchema.parseAsync(toValidateUserInfo);
@@ -117,6 +120,7 @@ export class IrHkUser {
           <ir-input-text
             zod={this.housekeeperSchema.pick({ name: true })}
             wrapKey="name"
+            autoValidate={this.autoValidate}
             error={this.errors?.name && !this.userInfo?.name}
             label={locales.entries.Lcz_Name}
             placeholder={locales.entries.Lcz_Name}
@@ -161,17 +165,17 @@ export class IrHkUser {
             wrapKey="username"
             error={this.errors?.username}
             asyncParse
+            autoValidate={this.autoValidate}
             // disabled={this.user !== null}
             errorMessage={this.errors?.username && this.userInfo.username.length >= 3 ? 'Username already exists.' : undefined}
-            autoValidate={false}
             label={locales.entries.Lcz_Username}
             placeholder={locales.entries.Lcz_Username}
             value={this.userInfo.username}
             onTextChange={e => this.updateUserField('username', e.detail)}
           ></ir-input-text>
           <ir-input-text
+            autoValidate={this.autoValidate}
             label={locales.entries.Lcz_Password}
-            placeholder={''}
             value={this.userInfo.password}
             type="password"
             maxLength={16}

@@ -24,6 +24,7 @@ export class GuestInfo {
   // @State() submit: boolean = false;
   @State() guest: Guest | null = null;
   @State() isLoading: boolean = false;
+  @State() autoValidate = false;
 
   @Event() closeSideBar: EventEmitter<null>;
   @Event({ bubbles: true }) resetBookingEvt: EventEmitter<null>;
@@ -79,6 +80,8 @@ export class GuestInfo {
 
   async editGuest() {
     try {
+      this.autoValidate = true;
+
       await this.bookingService.editExposedGuest(this.guest, this.booking_nbr ?? null);
       this.closeSideBar.emit(null);
       this.resetBookingEvt.emit(null);
@@ -117,7 +120,7 @@ export class GuestInfo {
         <div class="card-content collapse show">
           <div class={this.headerShown ? 'card-body px-1' : 'pt-0'}>
             <ir-input-text
-              placeholder=""
+              autoValidate={this.autoValidate}
               label={locales.entries.Lcz_FirstName}
               name="firstName"
               // submitted={this.submit}
@@ -126,7 +129,7 @@ export class GuestInfo {
               onTextChange={e => this.handleInputChange({ first_name: e.detail })}
             ></ir-input-text>
             <ir-input-text
-              placeholder=""
+              autoValidate={this.autoValidate}
               label={locales.entries.Lcz_LastName}
               name="lastName"
               // submitted={this.submit}
@@ -135,7 +138,6 @@ export class GuestInfo {
               onTextChange={e => this.handleInputChange({ last_name: e.detail })}
             ></ir-input-text>
             <ir-input-text
-              placeholder=""
               label={locales.entries.Lcz_Email}
               name="email"
               // submitted={this.submit}
@@ -144,7 +146,6 @@ export class GuestInfo {
               onTextChange={e => this.handleInputChange({ email: e.detail })}
             ></ir-input-text>
             <ir-input-text
-              placeholder=""
               label={locales.entries.Lcz_AlternativeEmail}
               name="altEmail"
               value={this.guest?.alternative_email}

@@ -65,8 +65,8 @@ export class IrRoomGuests {
   @State() idTypes: IEntries[] = [];
   @State() error: Record<string, boolean> = {};
   @State() isLoading: boolean;
-  @State() submitted: boolean;
   @State() propertyCountry: ICountry;
+  @State() autoValidate = false;
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetBookingEvt: EventEmitter<null>;
@@ -128,8 +128,8 @@ export class IrRoomGuests {
 
   private async saveGuests() {
     try {
-      this.submitted = true;
       this.error = {};
+      this.autoValidate = true;
       ZSharedPersons.parse(this.guests);
       await this.bookingService.handleExposedRoomGuests({
         booking_nbr: this.bookingNumber,
@@ -192,10 +192,8 @@ export class IrRoomGuests {
                       id={`first_name_${idx}`}
                       zod={ZSharedPerson.pick({ first_name: true })}
                       error={!!this.error['first_name']}
-                      autoValidate={false}
+                      autoValidate={this.autoValidate}
                       wrapKey="first_name"
-                      LabelAvailable={false}
-                      submitted={this.submitted}
                       placeholder="First name"
                       onTextChange={e => this.updateGuestInfo(idx, { first_name: e.detail })}
                       value={guest.first_name}
@@ -210,10 +208,8 @@ export class IrRoomGuests {
                       id={`last_name_${idx}`}
                       zod={ZSharedPerson.pick({ last_name: true })}
                       error={!!this.error['last_name']}
-                      autoValidate={false}
+                      autoValidate={this.autoValidate}
                       wrapKey="last_name"
-                      LabelAvailable={false}
-                      submitted={this.submitted}
                       placeholder="Last name"
                       onTextChange={e => this.updateGuestInfo(idx, { last_name: e.detail })}
                       value={guest.last_name}
@@ -226,11 +222,9 @@ export class IrRoomGuests {
                       id={`dob_${idx}`}
                       zod={ZSharedPerson.pick({ dob: true })}
                       error={!!this.error['dob']}
-                      autoValidate={false}
+                      autoValidate={this.autoValidate}
                       wrapKey="dob"
-                      submitted={this.submitted}
                       mask={dateMask}
-                      LabelAvailable={false}
                       placeholder=""
                       onTextChange={e => {
                         this.updateGuestInfo(idx, { dob: e.detail });
@@ -275,10 +269,10 @@ export class IrRoomGuests {
                         }}
                         selectedValue={guest.id_info.type.code}
                         showFirstOption={false}
-                        LabelAvailable={false}
                         data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
                       ></ir-select>
                       <ir-input-text
+                        autoValidate={this.autoValidate}
                         maxLength={18}
                         placeholder="12345"
                         class="flex-grow-1 guest_document"
@@ -287,11 +281,8 @@ export class IrRoomGuests {
                         value={guest.id_info.number}
                         zod={ZIdInfo.pick({ number: true })}
                         error={!!this.error['number']}
-                        autoValidate={false}
                         wrapKey="number"
                         inputStyles="form-control"
-                        submitted={this.submitted}
-                        LabelAvailable={false}
                         onTextChange={e =>
                           this.updateGuestInfo(idx, {
                             id_info: {

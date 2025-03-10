@@ -45,7 +45,7 @@ export class IrLogin {
             <p>Sign in to manage your property</p>
             <div class="separator"></div>
           </div>
-          <ir-input-text value={this.username} onTextChange={e => (this.username = e.detail)} variant="icon" label="" LabelAvailable={false} placeholder="Username">
+          <ir-input-text value={this.username} onTextChange={e => (this.username = e.detail)} variant="icon" label="" placeholder="Username">
             <ir-icons name="user" slot="icon"></ir-icons>
           </ir-input-text>
           <div class={'position-relative'}>
@@ -53,7 +53,6 @@ export class IrLogin {
               value={this.password}
               onTextChange={e => (this.password = e.detail)}
               variant="icon"
-              LabelAvailable={false}
               label=""
               placeholder="Password"
               type={this.showPassword ? 'text' : 'password'}
