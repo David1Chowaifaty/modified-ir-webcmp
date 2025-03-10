@@ -188,7 +188,7 @@ export class IrInputText {
         if (!this.asyncParse) {
           this.zod.parse(this.wrapKey ? { [this.wrapKey]: value } : value);
         } else {
-          this.zod.parseAsync(this.wrapKey ? { [this.wrapKey]: value } : value);
+          await this.zod.parseAsync(this.wrapKey ? { [this.wrapKey]: value } : value);
         }
         if (this.error) {
           this.updateErrorState(false);

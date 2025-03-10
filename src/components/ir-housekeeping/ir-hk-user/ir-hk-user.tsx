@@ -68,18 +68,21 @@ export class IrHkUser {
       this.showPasswordValidation = true;
     }
     if (this.user) {
+      this.autoValidate = true;
       this.userInfo = { ...this.user, password: '' };
     }
   }
 
-  updateUserField(key: keyof THKUser, value: any) {
+  private updateUserField(key: keyof THKUser, value: any) {
     this.userInfo = { ...this.userInfo, [key]: value };
   }
 
-  async addUser() {
+  private async addUser() {
     try {
       this.isLoading = true;
-      this.autoValidate = true;
+      if (!this.autoValidate) {
+        this.autoValidate = true;
+      }
       const toValidateUserInfo = { ...this.userInfo, password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password };
       console.log('toValidateUserInfo', toValidateUserInfo);
       await this.housekeeperSchema.parseAsync(toValidateUserInfo);
@@ -102,7 +105,7 @@ export class IrHkUser {
       this.isLoading = false;
     }
   }
-  async handleBlur(e: CustomEvent) {
+  private async handleBlur(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     if (this.user || !this.userInfo.name) {
@@ -113,6 +116,7 @@ export class IrHkUser {
   }
 
   render() {
+    console.log(this.errors);
     return (
       <Host>
         <ir-title class="px-1" displayContext="sidebar" label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : locales.entries.Lcz_CreateHousekeeperProfile}></ir-title>
@@ -121,7 +125,7 @@ export class IrHkUser {
             zod={this.housekeeperSchema.pick({ name: true })}
             wrapKey="name"
             autoValidate={this.autoValidate}
-            error={this.errors?.name && !this.userInfo?.name}
+            error={this.errors?.name}
             label={locales.entries.Lcz_Name}
             placeholder={locales.entries.Lcz_Name}
             onTextChange={e => this.updateUserField('name', e.detail)}
@@ -165,23 +169,22 @@ export class IrHkUser {
             wrapKey="username"
             error={this.errors?.username}
             asyncParse
-            autoValidate={this.autoValidate}
-            // disabled={this.user !== null}
-            errorMessage={this.errors?.username && this.userInfo.username.length >= 3 ? 'Username already exists.' : undefined}
+            autoValidate={this.user ? (this.userInfo?.username !== this.user.username ? true : false) : this.autoValidate}
+            errorMessage={this.errors?.username && this.userInfo?.username?.length >= 3 ? 'Username already exists.' : undefined}
             label={locales.entries.Lcz_Username}
             placeholder={locales.entries.Lcz_Username}
             value={this.userInfo.username}
             onTextChange={e => this.updateUserField('username', e.detail)}
           ></ir-input-text>
           <ir-input-text
-            autoValidate={this.autoValidate}
+            autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
             label={locales.entries.Lcz_Password}
             value={this.userInfo.password}
             type="password"
             maxLength={16}
             zod={this.housekeeperSchema.pick({ password: true })}
             wrapKey="password"
-            error={this.errors?.password && !this.userInfo.password}
+            error={this.errors?.password}
             onInputFocus={() => (this.showPasswordValidation = true)}
             onInputBlur={() => {
               if (this.user) this.showPasswordValidation = false;
