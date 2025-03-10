@@ -104,6 +104,9 @@ export class IrInputText {
   /** A Zod schema for validating the input */
   @Prop() zod?: ZodType<any, any>;
 
+  /** A Zod parse type for validating the input */
+  @Prop() asyncParse?: boolean;
+
   /** Key to wrap the value (e.g., 'price' or 'cost') */
   @Prop() wrapKey?: string;
 
@@ -118,6 +121,9 @@ export class IrInputText {
 
   /** To clear all the Input base styling*/
   @Prop() clearBaseStyles: boolean;
+
+  /** To clear all the Input base styling*/
+  @Prop() errorMessage: string;
 
   @State() initial: boolean = true;
   @State() inputFocused: boolean = false;
@@ -176,13 +182,17 @@ export class IrInputText {
     }
   }
 
-  private validateInput(value: string, forceValidation: boolean = false): void {
+  private async validateInput(value: string, forceValidation: boolean = false) {
     if (!this.autoValidate && !forceValidation) {
       return;
     }
     if (this.zod) {
       try {
-        this.zod.parse(this.wrapKey ? { [this.wrapKey]: value } : value); // Validate the value using the Zod schema
+        if (!this.asyncParse) {
+          this.zod.parse(this.wrapKey ? { [this.wrapKey]: value } : value); // Validate the value using the Zod schema
+        } else {
+          this.zod.parseAsync(this.wrapKey ? { [this.wrapKey]: value } : value); // Validate the value using the Zod schema
+        }
         this.error = false; // Clear the error if valid
       } catch (error) {
         console.log(error);
@@ -329,6 +339,7 @@ export class IrInputText {
             disabled={this.disabled}
           />
         </div>
+        {this.errorMessage && this.error && <p class="error-message">{this.errorMessage}</p>}
       </div>
     );
   }

@@ -21,6 +21,12 @@
 input:focus {
   border-color: #1e9ff2 !important;
 }
+.error-message {
+  font-size: 0.875rem;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  color: var(--red, #ff4961);
+}
 .ir-input[data-state='empty'] {
   color: #bbbfc6;
 }
@@ -46,5 +52,5 @@ input:focus {
   border-color: rgba(118, 118, 118, 0.3);
 }
 .danger-border {
-  border-color: var(--red);
+  border-color: var(--red, #ff4961);
 }

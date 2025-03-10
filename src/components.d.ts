@@ -593,6 +593,10 @@ export namespace Components {
          */
         "LabelAvailable": boolean;
         /**
+          * A Zod parse type for validating the input
+         */
+        "asyncParse"?: boolean;
+        /**
           * Whether the input should auto-validate
          */
         "autoValidate"?: boolean;
@@ -608,6 +612,10 @@ export namespace Components {
           * Whether the input has an error
          */
         "error": boolean;
+        /**
+          * To clear all the Input base styling
+         */
+        "errorMessage": string;
         /**
           * Forcing css style to the input
          */
@@ -3737,6 +3745,10 @@ declare namespace LocalJSX {
          */
         "LabelAvailable"?: boolean;
         /**
+          * A Zod parse type for validating the input
+         */
+        "asyncParse"?: boolean;
+        /**
           * Whether the input should auto-validate
          */
         "autoValidate"?: boolean;
@@ -3752,6 +3764,10 @@ declare namespace LocalJSX {
           * Whether the input has an error
          */
         "error"?: boolean;
+        /**
+          * To clear all the Input base styling
+         */
+        "errorMessage"?: string;
         /**
           * Forcing css style to the input
          */

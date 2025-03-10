@@ -3,7 +3,7 @@
   font-size: 0.875rem;
 }
 .valid {
-  color: var(--green);
+  color: var(--green, #28d094);
 }
 .requirement {
   display: flex;

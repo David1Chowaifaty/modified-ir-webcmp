@@ -1,9 +1,11 @@
 import { THKUser } from '@/models/housekeeping';
 import { HouseKeepingService } from '@/services/housekeeping.service';
+import { UserService } from '@/services/user.service';
 import calendar_data from '@/stores/calendar-data';
 import { getDefaultProperties } from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
+import axios from 'axios';
 import { z, ZodError } from 'zod';
 
 @Component({
@@ -28,6 +30,8 @@ export class IrHkUser {
   };
 
   @State() errors: { [P in keyof THKUser]?: any } | null = null;
+  @State() showPasswordValidation: boolean = false;
+  @State() isUsernameTaken: boolean;
 
   @Event() resetData: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
@@ -41,7 +45,18 @@ export class IrHkUser {
     name: z.string().min(2),
     mobile: z.string().min(1).max(14),
     password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/),
-    username: z.string().min(2),
+    username: z
+      .string()
+      .min(3)
+      .refine(
+        async name => {
+          if (name.length >= 3) {
+            return !(await new UserService().checkUserExistence({ UserName: name }));
+          }
+          return true;
+        },
+        { message: 'Username already exists.' },
+      ),
   });
 
   async componentWillLoad() {
@@ -49,11 +64,11 @@ export class IrHkUser {
     this.default_properties = { token, language };
     if (!this.user) {
       this.userInfo['property_id'] = property_id;
+      this.showPasswordValidation = true;
     }
     if (this.user) {
-      this.userInfo = { ...this.user };
+      this.userInfo = { ...this.user, password: '' };
     }
-    console.log(this.userInfo);
   }
 
   updateUserField(key: keyof THKUser, value: any) {
@@ -63,11 +78,13 @@ export class IrHkUser {
   async addUser() {
     try {
       this.isLoading = true;
-      this.housekeeperSchema.parse(this.userInfo);
+      const toValidateUserInfo = { ...this.userInfo, password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password };
+      console.log('toValidateUserInfo', toValidateUserInfo);
+      await this.housekeeperSchema.parseAsync(toValidateUserInfo);
       if (this.errors) {
         this.errors = null;
       }
-      await this.housekeepingService.editExposedHKM(this.userInfo);
+      await this.housekeepingService.editExposedHKM(toValidateUserInfo);
       this.resetData.emit(null);
       this.closeSideBar.emit(null);
     } catch (error) {
@@ -143,26 +160,32 @@ export class IrHkUser {
           <ir-input-text
             zod={this.housekeeperSchema.pick({ username: true })}
             wrapKey="username"
-            error={this.errors?.username && !this.userInfo.username}
+            error={this.errors?.username}
+            asyncParse
             // disabled={this.user !== null}
+            errorMessage={this.errors?.username && this.userInfo.username.length >= 3 ? 'Username already exists.' : undefined}
+            autoValidate={false}
             label={locales.entries.Lcz_Username}
             placeholder={locales.entries.Lcz_Username}
             value={this.userInfo.username}
             onTextChange={e => this.updateUserField('username', e.detail)}
           ></ir-input-text>
-
           <ir-input-text
             label={locales.entries.Lcz_Password}
-            placeholder={locales.entries.Lcz_MinimumCharacter}
+            placeholder={''}
             value={this.userInfo.password}
             type="password"
             maxLength={16}
             zod={this.housekeeperSchema.pick({ password: true })}
             wrapKey="password"
             error={this.errors?.password && !this.userInfo.password}
+            onInputFocus={() => (this.showPasswordValidation = true)}
+            onInputBlur={() => {
+              if (this.user) this.showPasswordValidation = false;
+            }}
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
-          <ir-password-validator password={this.userInfo.password}></ir-password-validator>
+          {this.showPasswordValidation && <ir-password-validator password={this.userInfo.password}></ir-password-validator>}
           <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
             <ir-button
               onClickHandler={() => this.closeSideBar.emit(null)}
