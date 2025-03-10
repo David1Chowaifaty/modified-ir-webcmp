@@ -5,7 +5,6 @@ import calendar_data from '@/stores/calendar-data';
 import { getDefaultProperties } from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
-import axios from 'axios';
 import { z, ZodError } from 'zod';
 
 @Component({

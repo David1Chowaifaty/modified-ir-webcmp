@@ -1072,6 +1072,8 @@ export namespace Components {
     interface IrTasksTable {
         "tasks": Task[];
     }
+    interface IrTestCmp {
+    }
     interface IrTextEditor {
         "error": boolean;
         "maxLength": number;
@@ -2887,6 +2889,12 @@ declare global {
         prototype: HTMLIrTasksTableElement;
         new (): HTMLIrTasksTableElement;
     };
+    interface HTMLIrTestCmpElement extends Components.IrTestCmp, HTMLStencilElement {
+    }
+    var HTMLIrTestCmpElement: {
+        prototype: HTMLIrTestCmpElement;
+        new (): HTMLIrTestCmpElement;
+    };
     interface HTMLIrTextEditorElementEventMap {
         "textChange": string;
     }
@@ -3075,6 +3083,7 @@ declare global {
         "ir-tasks-filters": HTMLIrTasksFiltersElement;
         "ir-tasks-header": HTMLIrTasksHeaderElement;
         "ir-tasks-table": HTMLIrTasksTableElement;
+        "ir-test-cmp": HTMLIrTestCmpElement;
         "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
@@ -4271,6 +4280,8 @@ declare namespace LocalJSX {
         "onRowSelectChange"?: (event: IrTasksTableCustomEvent<Task[]>) => void;
         "tasks"?: Task[];
     }
+    interface IrTestCmp {
+    }
     interface IrTextEditor {
         "error"?: boolean;
         "maxLength"?: number;
@@ -4455,6 +4466,7 @@ declare namespace LocalJSX {
         "ir-tasks-filters": IrTasksFilters;
         "ir-tasks-header": IrTasksHeader;
         "ir-tasks-table": IrTasksTable;
+        "ir-test-cmp": IrTestCmp;
         "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
@@ -4564,6 +4576,7 @@ declare module "@stencil/core" {
             "ir-tasks-filters": LocalJSX.IrTasksFilters & JSXBase.HTMLAttributes<HTMLIrTasksFiltersElement>;
             "ir-tasks-header": LocalJSX.IrTasksHeader & JSXBase.HTMLAttributes<HTMLIrTasksHeaderElement>;
             "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;
+            "ir-test-cmp": LocalJSX.IrTestCmp & JSXBase.HTMLAttributes<HTMLIrTestCmpElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
