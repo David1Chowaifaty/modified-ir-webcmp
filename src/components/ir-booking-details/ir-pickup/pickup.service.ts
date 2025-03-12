@@ -83,14 +83,21 @@ export class PickupService {
       number_of_vehicles: z.coerce.number().min(1, { message: 'At least one vehicle is required' }),
     });
   }
-  public validateForm(params: TPickupData, schema: any): { error: boolean; cause?: keyof TPickupData } {
+  public validateForm(
+    params: TPickupData,
+    schema: any, // : { error: boolean; cause?: keyof TPickupData }
+  ) {
     try {
       schema.parse(params);
-      return { error: false };
+      return null;
     } catch (error) {
       console.log(error);
+      const err = {};
       if (error instanceof ZodError) {
-        return { error: true, cause: error.issues[0].path.toString() as keyof TPickupData };
+        error.issues.forEach(e => {
+          err[e.path[0]] = true;
+        });
+        return err;
       }
     }
     // if (params.arrival_time.split(':').length !== 2) {

@@ -36,6 +36,7 @@ export class IrPickup {
   };
   @State() vehicleCapacity: number[] = [];
   @State() cause: keyof TPickupData | null = null;
+  @State() errors: Record<string, boolean>;
   @State() autoValidate = false;
 
   @Event() closeModal: EventEmitter<null>;
@@ -164,13 +165,12 @@ export class IrPickup {
     try {
       this.isLoading = true;
       this.autoValidate = true;
-      const isValid = this.pickupService.validateForm(this.pickupData, this.pickupSchema);
-      if (isValid.error) {
-        this.cause = isValid.cause;
-        return;
+      if (this.errors) {
+        this.errors = null;
       }
-      if (this.cause) {
-        this.cause = null;
+      this.errors = this.pickupService.validateForm(this.pickupData, this.pickupSchema);
+      if (this.errors) {
+        return;
       }
       await this.pickupService.savePickup(this.pickupData, this.bookingNumber, this.defaultPickupData !== null && this.pickupData.location === -1);
       this.resetBookingEvt.emit(null);
@@ -213,7 +213,7 @@ export class IrPickup {
                         minDate={this.bookingDates.from}
                         maxDate={this.bookingDates?.to}
                         emitEmptyDate={true}
-                        aria-invalid={this.cause === 'arrival_date' && !this.pickupData.arrival_date ? 'true' : 'false'}
+                        aria-invalid={this.errors?.arrival_date && !this.pickupData.arrival_date ? 'true' : 'false'}
                         onDateChanged={evt => {
                           this.updatePickupData('arrival_date', evt.detail.start?.format('YYYY-MM-DD'));
                         }}
@@ -222,7 +222,7 @@ export class IrPickup {
                           type="text"
                           slot="trigger"
                           value={this.pickupData.arrival_date ? moment(this.pickupData.arrival_date).format('MMM DD, YYYY') : null}
-                          class={`form-control input-sm ${this.cause === 'arrival_date' && !this.pickupData.arrival_date ? 'border-danger' : ''} text-center`}
+                          class={`form-control input-sm ${this.errors?.arrival_date && !this.pickupData.arrival_date ? 'border-danger' : ''} text-center`}
                           style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0', width: '100%' }}
                         ></input>
                       </ir-date-picker>
@@ -232,10 +232,9 @@ export class IrPickup {
                 {/*Time Picker */}
                 <ir-input-text
                   autoValidate={this.autoValidate}
-                  // error={this.cause === 'arrival_time'&&this.pickupSchema.pick({ arrival_time: true }).safeParse(this.pickupData.arrival_time)}
                   wrapKey="arrival_time"
                   testId="pickup_arrival_time"
-                  // autoValidate={false}
+                  error={this.errors?.arrival_time}
                   value={this.pickupData.arrival_time}
                   zod={this.pickupSchema.pick({ arrival_time: true })}
                   label={locales.entries.Lcz_Time}
@@ -246,13 +245,15 @@ export class IrPickup {
                 ></ir-input-text>
               </div>
               <ir-input-text
+                wrapKey="flight_details"
+                zod={this.pickupSchema.pick({ flight_details: true })}
                 autoValidate={this.autoValidate}
                 testId="pickup_flight_details"
                 value={this.pickupData.flight_details}
                 label={locales.entries.Lcz_FlightDetails}
                 onTextChange={e => this.updatePickupData('flight_details', e.detail)}
                 placeholder=""
-                error={this.cause === 'flight_details' && !this.pickupData.flight_details}
+                error={this.errors?.flight_details}
               ></ir-input-text>
               <ir-select
                 testId="pickup_vehicle_type_code"
