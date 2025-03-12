@@ -1,0 +1,16 @@
+{
+  "new_user": {
+    "name": "Test",
+    "phone": "123456789",
+    "note": "",
+    "username": "Test_abc",
+    "password": "Abcd1234_12"
+  },
+  "update_user": {
+    "name": "Test",
+    "phone": "123456789",
+    "note": "hello",
+    "username": "Test_abcd",
+    "password": "Abcd1234_12"
+  }
+}

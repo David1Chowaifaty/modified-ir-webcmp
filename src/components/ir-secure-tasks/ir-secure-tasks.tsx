@@ -38,30 +38,41 @@ export class IrSecureTasks {
       );
     return (
       <Host>
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a
-              class={{ 'nav-link': true, 'active': this.currentPage === 'hk' }}
-              href="#"
-              onClick={() => {
-                this.currentPage = 'hk';
-              }}
-            >
-              Housekeepers
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class={{ 'nav-link': true, 'active': this.currentPage === 'tasks' }}
-              href="#"
-              onClick={() => {
-                this.currentPage = 'tasks';
-              }}
-            >
-              Tasks
-            </a>
-          </li>
-        </ul>
+        <div class="px-1 nav  d-flex align-items-center justify-content-between">
+          <ul class="nav nav-tabs">
+            <li class=" nav-item">
+              <a
+                class={{ 'nav-link': true, 'active': this.currentPage === 'hk' }}
+                href="#"
+                onClick={() => {
+                  this.currentPage = 'hk';
+                }}
+              >
+                Housekeepers
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class={{ 'nav-link': true, 'active': this.currentPage === 'tasks' }}
+                href="#"
+                onClick={() => {
+                  this.currentPage = 'tasks';
+                }}
+              >
+                Tasks
+              </a>
+            </li>
+          </ul>
+          <button
+            class="btn btn-sm btn-primary"
+            onClick={() => {
+              sessionStorage.removeItem('backend_anchor');
+              window.location.reload();
+            }}
+          >
+            Logout
+          </button>
+        </div>
         {this.currentPage === 'tasks' ? (
           <ir-hk-tasks p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-hk-tasks>
         ) : (

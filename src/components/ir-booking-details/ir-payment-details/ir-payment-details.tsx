@@ -103,7 +103,7 @@ export class IrPaymentDetails {
       console.log(error);
     }
   }
-  handlePaymentInputChange(key: keyof IPayment, value: any, event?: InputEvent) {
+  handlePaymentInputChange(key: keyof IPayment, value: any, event?: CustomEvent) {
     this.paymentBackground = 'white';
     if (key === 'amount') {
       if (!isNaN(value) || value === '') {
@@ -206,15 +206,20 @@ export class IrPaymentDetails {
             {rowMode === 'normal' ? (
               <span class="sm-padding-right">{formatAmount(this.bookingDetails.currency.symbol, item.amount)}</span>
             ) : (
-              <input
-                type="text"
-                class="border-0 text-center form-control py-0 m-0 w-100"
-                value={this.itemToBeAdded.amount}
-                onBlur={e => {
-                  (e.target as HTMLInputElement).value = Number(this.itemToBeAdded.amount).toFixed(2);
-                }}
-                onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value, event)}
-              ></input>
+              // <input
+              //   type="text"
+              //   class="border-0 text-center form-control py-0 m-0 w-100"
+              //   value={this.itemToBeAdded.amount}
+              //   onBlur={e => {
+              //     (e.target as HTMLInputElement).value = Number(this.itemToBeAdded.amount).toFixed(2);
+              //   }}
+              //   onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value, event)}
+              // ></input>
+              <ir-price-input
+                value={this.itemToBeAdded.amount?.toString()}
+                onTextChange={e => this.handlePaymentInputChange('amount', Number(e.detail), e)}
+                inputStyle="border-0 rounded-0 text-center py-0 m-0 w-100"
+              ></ir-price-input>
             )}
           </td>
           <td class={'border payments-height border-light border-bottom-0 text-center'}>

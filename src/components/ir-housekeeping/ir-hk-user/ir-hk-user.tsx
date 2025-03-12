@@ -122,6 +122,7 @@ export class IrHkUser {
         <ir-title class="px-1" displayContext="sidebar" label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : locales.entries.Lcz_CreateHousekeeperProfile}></ir-title>
         <section class="px-1">
           <ir-input-text
+            testId="name"
             zod={this.housekeeperSchema.pick({ name: true })}
             wrapKey="name"
             autoValidate={this.autoValidate}
@@ -134,6 +135,7 @@ export class IrHkUser {
             maxLength={40}
           ></ir-input-text>
           <ir-phone-input
+            testId="phone"
             placeholder={locales.entries.Lcz_Mobile}
             error={this.errors?.mobile && !this.userInfo?.mobile}
             language={this.default_properties.language}
@@ -156,6 +158,7 @@ export class IrHkUser {
             ></ir-input-text> */}
           <div class="mb-1">
             <ir-textarea
+              testId="note"
               variant="prepend"
               maxLength={250}
               label={locales.entries.Lcz_Note}
@@ -165,6 +168,7 @@ export class IrHkUser {
             ></ir-textarea>
           </div>
           <ir-input-text
+            testId="username"
             zod={this.housekeeperSchema.pick({ username: true })}
             wrapKey="username"
             error={this.errors?.username}
@@ -177,6 +181,7 @@ export class IrHkUser {
             onTextChange={e => this.updateUserField('username', e.detail)}
           ></ir-input-text>
           <ir-input-text
+            testId="password"
             autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
             label={locales.entries.Lcz_Password}
             value={this.userInfo.password}
@@ -194,6 +199,7 @@ export class IrHkUser {
           {this.showPasswordValidation && <ir-password-validator password={this.userInfo.password}></ir-password-validator>}
           <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
             <ir-button
+              data-testid="cancel"
               onClickHandler={() => this.closeSideBar.emit(null)}
               class="flex-fill"
               btn_styles="w-100  justify-content-center align-items-center"
@@ -201,6 +207,7 @@ export class IrHkUser {
               text={locales.entries.Lcz_Cancel}
             ></ir-button>
             <ir-button
+              data-testid="save"
               isLoading={this.isLoading}
               onClickHandler={this.addUser.bind(this)}
               class="flex-fill ml-md-1"

@@ -7,14 +7,15 @@
 
 ## Properties
 
-| Property          | Attribute | Description | Type         | Default     |
-| ----------------- | --------- | ----------- | ------------ | ----------- |
-| `countries`       | --        |             | `ICountry[]` | `[]`        |
-| `country`         | --        |             | `ICountry`   | `undefined` |
-| `error`           | `error`   |             | `boolean`    | `undefined` |
-| `label`           | `label`   |             | `string`     | `undefined` |
-| `propertyCountry` | --        |             | `ICountry`   | `undefined` |
-| `testId`          | `test-id` |             | `string`     | `undefined` |
+| Property          | Attribute       | Description | Type         | Default     |
+| ----------------- | --------------- | ----------- | ------------ | ----------- |
+| `autoValidate`    | `auto-validate` |             | `boolean`    | `false`     |
+| `countries`       | --              |             | `ICountry[]` | `[]`        |
+| `country`         | --              |             | `ICountry`   | `undefined` |
+| `error`           | `error`         |             | `boolean`    | `undefined` |
+| `label`           | `label`         |             | `string`     | `undefined` |
+| `propertyCountry` | --              |             | `ICountry`   | `undefined` |
+| `testId`          | `test-id`       |             | `string`     | `undefined` |
 
 
 ## Events

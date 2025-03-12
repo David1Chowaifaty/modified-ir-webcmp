@@ -43,8 +43,11 @@ graph TD;
   ir-hk-user --> ir-input-text
   ir-hk-user --> ir-phone-input
   ir-hk-user --> ir-textarea
+  ir-hk-user --> ir-password-validator
   ir-hk-user --> ir-button
   ir-phone-input --> ir-combobox
+  ir-password-validator --> requirement-check
+  requirement-check --> ir-icons
   ir-sidebar --> ir-icon
   ir-delete-modal --> ir-button
   ir-delete-modal --> ir-select

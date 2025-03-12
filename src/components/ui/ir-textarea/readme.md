@@ -16,6 +16,7 @@
 | `placeholder`       | `placeholder`        |             | `string`                                                | `'<placeholder>'` |
 | `rows`              | `rows`               |             | `number`                                                | `3`               |
 | `styles`            | --                   |             | `{ [key: string]: string; }`                            | `undefined`       |
+| `testId`            | `test-id`            |             | `string`                                                | `undefined`       |
 | `text`              | `text`               |             | `string`                                                | `''`              |
 | `textareaClassname` | `textarea-classname` |             | `string`                                                | `undefined`       |
 | `value`             | `value`              |             | `string`                                                | `''`              |

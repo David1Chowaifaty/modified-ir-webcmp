@@ -31,6 +31,7 @@
 ### Depends on
 
 - [ir-date-picker](../../ui/ir-date-picker)
+- [ir-price-input](../../ui/ir-price-input)
 - [ir-button](../../ui/ir-button)
 - [ir-label](../../ui/ir-label)
 - [ir-payment-actions](ir-payment-actions)
@@ -40,6 +41,7 @@
 ```mermaid
 graph TD;
   ir-payment-details --> ir-date-picker
+  ir-payment-details --> ir-price-input
   ir-payment-details --> ir-button
   ir-payment-details --> ir-label
   ir-payment-details --> ir-payment-actions

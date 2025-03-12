@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { ZodType } from 'zod';
-
+import IMask, { InputMask } from 'imask';
 @Component({
   tag: 'ir-price-input',
   styleUrl: 'ir-price-input.css',
@@ -69,12 +69,63 @@ export class IrPriceInput {
 
   private id: string;
 
+  private opts = {
+    mask: Number,
+    scale: 2,
+    radix: '.',
+    mapToRadix: [','],
+    normalizeZeros: true,
+    padFractionalZeros: true,
+    thousandsSeparator: ',',
+  };
+  private mask: InputMask<any>;
+  private inputRef: HTMLInputElement;
+
   componentWillLoad() {
     if (this.el.id) {
       this.id = this.el.id;
     } else {
       this.id = v4();
     }
+  }
+
+  componentDidLoad() {
+    if (!this.mask) {
+      this.initializeMask();
+    }
+  }
+
+  private initializeMask() {
+    // Create options object with min/max if provided
+    const maskOpts = {
+      ...this.opts,
+    };
+
+    if (this.minValue !== undefined) {
+      maskOpts['min'] = this.minValue;
+    }
+
+    if (this.maxValue !== undefined) {
+      maskOpts['max'] = this.maxValue;
+    }
+
+    this.mask = IMask(this.inputRef, maskOpts);
+
+    // Set initial value if provided
+    if (this.value) {
+      this.mask.value = this.value;
+    }
+
+    this.mask.on('accept', () => {
+      const isEmpty = this.inputRef.value.trim() === '' || this.mask.unmaskedValue === '';
+      if (isEmpty) {
+        this.value = '';
+        this.textChange.emit(null);
+      } else {
+        this.value = this.mask.unmaskedValue;
+        this.textChange.emit(this.value);
+      }
+    });
   }
 
   private hasSpecialClass(className: string): boolean {
@@ -96,19 +147,27 @@ export class IrPriceInput {
     }
   }
 
-  private handleInputChange = (event: Event): void => {
-    const target = event.target as HTMLInputElement;
-    this.value = target.value;
-    // Emit the change event
-    this.textChange.emit(this.value);
+  private handleInputChange = (): void => {
+    // The value is already being updated by the mask's 'accept' event
+    // Just validate here if needed
+    this.validateInput(this.value);
   };
 
   private handleBlur = (): void => {
     this.validateInput(this.value);
-    // Emit the blur event
+
+    // Format to 2 decimal places on blur
     if (this.value) {
-      this.value = parseFloat(this.value).toFixed(2);
+      const numValue = parseFloat(this.value);
+      this.value = numValue.toFixed(2);
+
+      // Update the mask value to show the formatted value
+      if (this.mask) {
+        this.mask.value = this.value;
+      }
     }
+
+    // Emit the blur event
     this.inputBlur.emit(this.value);
   };
 
@@ -146,6 +205,7 @@ export class IrPriceInput {
             </div>
           )}
           <input
+            ref={el => (this.inputRef = el)}
             data-testid={this.testId}
             disabled={this.disabled}
             id={this.id}
@@ -157,11 +217,10 @@ export class IrPriceInput {
             onInput={this.handleInputChange}
             onBlur={this.handleBlur}
             onFocus={this.handleFocus}
-            type="number"
-            step="0.01"
+            type="text"
+            placeholder={this.placeholder}
             aria-label={this.el.ariaLabel ?? 'price-input'}
             aria-describedby={this.el.ariaDescription ?? 'price-input'}
-            value={this.value}
           />
         </div>
       </fieldset>

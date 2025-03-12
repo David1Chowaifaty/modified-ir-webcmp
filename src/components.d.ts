@@ -1099,6 +1099,7 @@ export namespace Components {
         "placeholder": string;
         "rows": number;
         "styles": { [key: string]: string };
+        "testId": string;
         "text": string;
         "textareaClassname": string;
         "value": string;
@@ -4305,6 +4306,7 @@ declare namespace LocalJSX {
         "placeholder"?: string;
         "rows"?: number;
         "styles"?: { [key: string]: string };
+        "testId"?: string;
         "text"?: string;
         "textareaClassname"?: string;
         "value"?: string;

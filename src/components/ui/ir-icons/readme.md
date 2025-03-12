@@ -22,6 +22,7 @@
  - [ir-login](../../ir-login)
  - [ir-payment-option](../../ir-payment-option)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
+ - [requirement-check](../../ir-password-validator/requirement-check)
 
 ### Graph
 ```mermaid
@@ -32,6 +33,7 @@ graph TD;
   ir-login --> ir-icons
   ir-payment-option --> ir-icons
   ir-reservation-information --> ir-icons
+  requirement-check --> ir-icons
   style ir-icons fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -145,8 +145,7 @@ export function validateEmail(email: string) {
   return !parsedEmailResults.success;
 }
 export function formatAmount(currency: string, amount: number) {
-  // const symbol = getCurrencySymbol(currency);
-  return currency + amount.toFixed(2);
+  return currency + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 export const extras = [
   {

@@ -17,6 +17,7 @@ export class IrTextArea {
   @Prop() variant: 'default' | 'prepend' = 'default';
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
   @Prop() styles: { [key: string]: string };
+  @Prop() testId: string;
 
   @State() error = false;
 
@@ -36,6 +37,7 @@ export class IrTextArea {
             <span class="input-group-text ta-prepend-text">{this.label}</span>
           </div>
           <textarea
+            data-testid={this.testId}
             value={this.value}
             class={`form-control`}
             style={{ height: '7rem', ...this.styles }}
@@ -50,6 +52,7 @@ export class IrTextArea {
       <div class={'form-group'}>
         <label>{this.label}</label>
         <textarea
+          data-testid={this.testId}
           style={this.styles}
           maxLength={this.maxLength}
           rows={this.rows}

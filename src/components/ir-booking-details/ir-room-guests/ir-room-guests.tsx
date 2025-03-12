@@ -149,7 +149,9 @@ export class IrRoomGuests {
       console.log(error);
       if (error instanceof ZodError) {
         let errors = {};
-        error.issues.map(e => ({ [e.path[0].toString()]: true }));
+        error.issues.forEach(e => {
+          errors[e.path[1]] = true;
+        });
         this.error = { ...errors };
       }
     }
@@ -268,6 +270,7 @@ export class IrRoomGuests {
                           });
                         }}
                         selectedValue={guest.id_info.type.code}
+                        LabelAvailable={false}
                         showFirstOption={false}
                         data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
                       ></ir-select>
