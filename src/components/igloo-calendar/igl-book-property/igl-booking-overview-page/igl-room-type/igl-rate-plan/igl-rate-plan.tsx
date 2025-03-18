@@ -169,9 +169,11 @@ export class IglRatePlan {
     return (
       <Host data-testid={`rp-${this.ratePlan.id}`}>
         <div
-          class={`d-flex m-0 p-0 ${isAvailableToBook ? 'flex-column flex-lg-row align-items-lg-center justify-content-lg-between' : 'align-items-center justify-content-between'}`}
+          class={`d-flex mt-1  p-0 ${
+            isAvailableToBook ? 'flex-column flex-lg-row align-items-lg-center justify-content-lg-between' : 'align-items-center justify-content-between'
+          }`}
         >
-          <div data-testid={'rp_name'} class="rateplan-name-container d-flex align-items-center" style={{ gap: '0.5rem' }}>
+          <div data-testid={'rp_name'} class="rateplan-name-container m-0 p-0  d-flex align-items-center" style={{ gap: '0.5rem' }}>
             {bookingType === 'BAR_BOOKING' ? (
               <p class="m-0 p-0">
                 {/* <span class="font-weight-bold">{ratePlan.name.split('/')[0]}</span> */}
@@ -188,8 +190,8 @@ export class IglRatePlan {
           </div>
 
           {isAvailableToBook ? (
-            <div class="d-md-flex  justify-content-md-end align-items-md-center flex-fill rateplan-container">
-              <div class="mt-1 mt-md-0 flex-fill max-w-300 flex-grow-1">
+            <div class="d-md-flex m-md-0  justify-content-md-end align-items-md-center flex-fill rateplan-container">
+              <div class="flex-fill max-w-300 flex-grow-1">
                 <fieldset class="position-relative flex-grow-1 w-100">
                   <select
                     disabled={disableForm}

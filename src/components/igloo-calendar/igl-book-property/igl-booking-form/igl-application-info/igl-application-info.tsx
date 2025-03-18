@@ -213,7 +213,7 @@ export class IglApplicationInfo {
           {calendar_data.is_frontdesk_enabled &&
             !isSingleUnit(this.rateplanSelection.roomtype.id) &&
             (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
-              <div class="my-1 my-md-0 d-flex align-items-center flex-fill">
+              <div class="mt-1 mt-md-0 d-flex align-items-center flex-fill">
                 <div class="mr-md-1 p-0 flex-fill preference-select-container">
                   <select data-testid="unit" class="form-control input-sm pr-0" id={v4()} onChange={event => this.updateGuest({ unit: (event.target as HTMLInputElement).value })}>
                     <option value="" selected={this.guestInfo?.unit === ''}>
@@ -229,7 +229,7 @@ export class IglApplicationInfo {
               </div>
             )}
           {this.rateplanSelection.roomtype.is_bed_configuration_enabled && (
-            <div class="mr-md-1 flex-fill">
+            <div class="mt-1 mt-md-0 mr-md-1 flex-fill">
               <select
                 data-testid="bed_configuration"
                 class={`form-control input-sm ${this.isButtonPressed && this.guestInfo?.bed_preference === '' && 'border-danger'}`}
