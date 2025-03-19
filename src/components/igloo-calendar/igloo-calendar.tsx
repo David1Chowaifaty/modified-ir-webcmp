@@ -595,7 +595,7 @@ export class IglooCalendar {
       bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
       if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
         bookingEvent.STATUS = getRoomStatus({
-          in_out: bookingEvent.ROOM_INFO.in_out,
+          in_out: bookingEvent.ROOM_INFO?.in_out,
           from_date: bookingEvent.FROM_DATE,
           to_date: bookingEvent.TO_DATE,
           status_code: bookingEvent.BASE_STATUS_CODE,

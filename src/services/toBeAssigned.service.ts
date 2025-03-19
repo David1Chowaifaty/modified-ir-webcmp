@@ -2,6 +2,7 @@ import axios from 'axios';
 import { IAvailableRoom, IRoomCategory, IUnassignedDates, InnerRecord } from '../models/tobeassigned';
 import { dateDifference, dateToFormattedString, extras } from '../utils/utils';
 import moment from 'moment';
+import { Booking } from '@/models/booking.dto';
 
 export class ToBeAssignedService {
   public async getUnassignedDates(propertyid: number, from_date: string, to_date: string) {
@@ -35,7 +36,7 @@ export class ToBeAssignedService {
       throw new Error(error);
     }
   }
-  public async assignUnit(props: { booking_nbr: string; identifier: string; pr_id: number; check_in: boolean }) {
+  public async assignUnit(props: { booking_nbr: string; identifier: string; pr_id: number; check_in: boolean }): Promise<Booking> {
     try {
       const { data } = await axios.post(`/Assign_Exposed_Room`, {
         ...props,

@@ -1781,6 +1781,7 @@ declare global {
     };
     interface HTMLIglTbaBookingViewElementEventMap {
         "highlightToBeAssignedBookingEvent": any;
+        "openCalendarSidebar": CalendarSidebarState;
         "addToBeAssignedEvent": any;
         "scrollPageToRoom": any;
         "assignRoomEvent": { [key: string]: any };
@@ -3322,6 +3323,7 @@ declare namespace LocalJSX {
         "onAddToBeAssignedEvent"?: (event: IglTbaBookingViewCustomEvent<any>) => void;
         "onAssignRoomEvent"?: (event: IglTbaBookingViewCustomEvent<{ [key: string]: any }>) => void;
         "onHighlightToBeAssignedBookingEvent"?: (event: IglTbaBookingViewCustomEvent<any>) => void;
+        "onOpenCalendarSidebar"?: (event: IglTbaBookingViewCustomEvent<CalendarSidebarState>) => void;
         "onScrollPageToRoom"?: (event: IglTbaBookingViewCustomEvent<any>) => void;
         "selectedDate"?: any;
     }

@@ -2,8 +2,9 @@ import { Component, Host, Prop, h, Event, EventEmitter, Listen, State } from '@s
 import { ToBeAssignedService } from '@/services/toBeAssigned.service';
 import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
-import calendar_data from '@/stores/calendar-data';
-import moment from 'moment';
+import { CalendarSidebarState } from '@/components/igloo-calendar/igloo-calendar';
+import { canCheckIn } from '@/utils/utils';
+import { IUnit } from '@/models/booking.dto';
 
 @Component({
   tag: 'igl-tba-booking-view',
@@ -29,6 +30,7 @@ export class IglTbaBookingView {
 
   @Event({ bubbles: true, composed: true })
   highlightToBeAssignedBookingEvent: EventEmitter;
+  @Event() openCalendarSidebar: EventEmitter<CalendarSidebarState>;
   @Event({ bubbles: true, composed: true }) addToBeAssignedEvent: EventEmitter;
   @Event({ bubbles: true, composed: true }) scrollPageToRoom: EventEmitter;
   @Event() assignRoomEvent: EventEmitter<{ [key: string]: any }>;
@@ -80,7 +82,27 @@ export class IglTbaBookingView {
       event.stopPropagation();
       if (this.selectedRoom) {
         this.isLoading = check_in ? 'checkin' : 'default';
-        await this.toBeAssignedService.assignUnit({ booking_nbr: this.eventData.BOOKING_NUMBER, identifier: this.eventData.ID, pr_id: this.selectedRoom, check_in });
+        const booking = await this.toBeAssignedService.assignUnit({
+          booking_nbr: this.eventData.BOOKING_NUMBER,
+          identifier: this.eventData.ID,
+          pr_id: this.selectedRoom,
+          check_in,
+        });
+        const room = booking.rooms.find(r => r.identifier === this.eventData.identifier);
+        if (room) {
+          const { adult_nbr, children_nbr, infant_nbr } = room.occupancy;
+          this.openCalendarSidebar.emit({
+            type: 'room-guests',
+            payload: {
+              identifier: this.eventData.ID,
+              bookingNumber: this.eventData.BOOKING_NUMBER,
+              checkin: false,
+              roomName: (room.unit as IUnit)?.name ?? '',
+              sharing_persons: room.sharing_persons,
+              totalGuests: adult_nbr + children_nbr + infant_nbr,
+            },
+          });
+        }
         let assignEvent = { ...this.eventData, PR_ID: this.selectedRoom };
         this.addToBeAssignedEvent.emit({
           key: 'tobeAssignedEvents',
@@ -149,15 +171,24 @@ export class IglTbaBookingView {
     this.renderAgain = !this.renderAgain;
   }
   private canCheckIn() {
-    if (!calendar_data.checkin_enabled) {
-      return false;
-    }
-
-    if (moment(new Date()).isSameOrAfter(new Date(this.eventData.FROM_DATE), 'days') && moment(new Date()).isBefore(new Date(this.eventData.TO_DATE), 'days')) {
-      return true;
-    }
-    return false;
+    // if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
+    //   return false;
+    // }
+    // const now = moment();
+    // if (
+    //   (moment().isSameOrAfter(new Date(this.eventData.FROM_DATE), 'days') && moment().isBefore(new Date(this.eventData.TO_DATE), 'days')) ||
+    //   (moment().isSame(new Date(this.eventData.TO_DATE), 'days') &&
+    //     !compareTime(now.toDate(), createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour)))
+    // ) {
+    //   return true;
+    // }
+    // return false;
+    return canCheckIn({
+      from_date: this.eventData.FROM_DATE,
+      to_date: this.eventData.TO_DATE,
+    });
   }
+
   render() {
     return (
       <Host>

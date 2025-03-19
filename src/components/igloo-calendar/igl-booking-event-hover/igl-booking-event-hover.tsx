@@ -1,5 +1,5 @@
 import { Component, Host, h, Prop, Event, EventEmitter, State, Element, Fragment, Watch } from '@stencil/core';
-import { findCountry, formatAmount } from '@/utils/utils';
+import { canCheckIn, findCountry, formatAmount } from '@/utils/utils';
 import { ICountry } from '@/models/IBooking';
 import { EventsService } from '@/services/events.service';
 import moment from 'moment';
@@ -148,21 +148,26 @@ export class IglBookingEventHover {
   }
 
   private canCheckIn() {
-    if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
-      return false;
-    }
-    if (this.isCheckedIn()) {
-      return false;
-    }
-    const now = moment();
-    if (
-      this.canCheckInOrCheckout ||
-      (moment().isSame(new Date(this.bookingEvent.TO_DATE), 'days') &&
-        !compareTime(now.toDate(), createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour)))
-    ) {
-      return true;
-    }
-    return false;
+    // if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
+    //   return false;
+    // }
+    // if (this.isCheckedIn()) {
+    //   return false;
+    // }
+    // const now = moment();
+    // if (
+    //   this.canCheckInOrCheckout ||
+    //   (moment().isSame(new Date(this.bookingEvent.TO_DATE), 'days') &&
+    //     !compareTime(now.toDate(), createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour)))
+    // ) {
+    //   return true;
+    // }
+    // return false;
+    return canCheckIn({
+      from_date: this.bookingEvent.FROM_DATE,
+      to_date: this.bookingEvent.TO_DATE,
+      isCheckedIn: this.isCheckedIn(),
+    });
   }
 
   private canCheckOut() {
