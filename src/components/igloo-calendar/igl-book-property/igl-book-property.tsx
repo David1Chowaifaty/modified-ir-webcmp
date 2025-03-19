@@ -75,7 +75,6 @@ export class IglBookProperty {
     if (!this.bookingData.defaultDateRange) {
       return;
     }
-    console.log('testing');
     // console.log(this.bookingData);
     this.initializeDefaultData();
     this.wasBlockedUnit = this.defaultData.hasOwnProperty('block_exposed_unit_props');
@@ -403,6 +402,7 @@ export class IglBookProperty {
   }
 
   private async checkBookingAvailability() {
+    resetBookingStore();
     const from_date = moment(this.dateRangeData.fromDate).format('YYYY-MM-DD');
     const to_date = moment(this.dateRangeData.toDate).format('YYYY-MM-DD');
     const is_in_agent_mode = this.sourceOption['type'] === 'TRAVEL_AGENCY';

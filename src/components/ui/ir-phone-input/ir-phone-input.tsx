@@ -73,7 +73,6 @@ export class IrPhoneInput {
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
   }
   private setCountryFromPhonePrefix() {
-    console.log(this.phone_prefix);
     let country = this.countries.find(country => country.phone_prefix === this.phone_prefix);
     if (!country) {
       country = this.countries.find(c => c.id.toString() === this.phone_prefix);
@@ -81,7 +80,6 @@ export class IrPhoneInput {
         return;
       }
     }
-    console.log(country);
     this.currentCountry = { ...country };
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.value });
   }

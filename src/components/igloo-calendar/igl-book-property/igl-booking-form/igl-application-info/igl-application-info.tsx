@@ -138,7 +138,6 @@ export class IglApplicationInfo {
       infants: this.guestInfo.infant_nbr,
       variations: this.rateplanSelection.ratePlan.variations,
     });
-    console.log({ guestInfo: this.guestInfo });
     return (
       <Host class={'my-2'} data-testid={`room_info_${this.rateplanSelection.ratePlan.id}`}>
         <div class="booking-header">

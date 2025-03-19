@@ -66,6 +66,9 @@ export class IglRatePlan {
 
   // Navigate to the next page for booking
   private bookProperty(): void {
+    if (this.bookingType === 'BAR_BOOKING') {
+      this.resetReserved();
+    }
     reserveRooms({
       roomTypeId: this.roomTypeId,
       ratePlanId: this.ratePlan.id,
@@ -162,7 +165,6 @@ export class IglRatePlan {
     const disableForm = this.disableForm();
     const selectedVariation = visibleInventory?.selected_variation;
     const formattedVariations = ratePlan.variations?.map(v => this.formatVariation(v));
-    console.log(visibleInventory);
     // if (!this.visibleInventory) {
     //   return null;
     // }

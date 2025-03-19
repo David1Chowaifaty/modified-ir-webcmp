@@ -39,7 +39,6 @@ export class IglRoomType {
             //   roomId = this.initialRoomIds.roomId;
             // }
             const visibleInventory = getVisibleInventory(this.roomType.id, ratePlan.id);
-            console.log(visibleInventory);
             return (
               <igl-rate-plan
                 // is_bed_configuration_enabled={this.roomType.is_bed_configuration_enabled}

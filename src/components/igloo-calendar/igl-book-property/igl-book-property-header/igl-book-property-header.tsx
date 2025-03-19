@@ -6,6 +6,7 @@ import locales from '@/stores/locales.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import calendar_data from '@/stores/calendar-data';
 import { IToast } from '@/components/ui/ir-toast/toast';
+import { modifyBookingStore } from '@/stores/booking.store';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -106,6 +107,12 @@ export class IglBookPropertyHeader {
         [key]: value,
       };
     }
+    modifyBookingStore('bookingAvailabilityParams', {
+      from_date: this.bookingDataDefaultDateRange.fromDate,
+      to_date: this.bookingDataDefaultDateRange.toDate,
+      adult_nbr: obj?.['adult'] ?? 0,
+      child_nbr: obj?.['child'] ?? 0,
+    });
     this.adultChild.emit(obj);
   }
 
@@ -119,6 +126,7 @@ export class IglBookPropertyHeader {
               <ir-select
                 testId="adult_number"
                 class={'m-0'}
+                selectedValue={this.adultChildCount?.adult?.toString()}
                 onSelectChange={e => this.handleAdultChildChange('adult', e.detail)}
                 select_id="adult_select"
                 firstOption={locales.entries.Lcz_AdultsCaption}
@@ -140,6 +148,7 @@ export class IglBookPropertyHeader {
                   ))}
                 </select> */}
                 <ir-select
+                  selectedValue={this.adultChildCount?.child?.toString()}
                   testId="child_number"
                   onSelectChange={e => this.handleAdultChildChange('child', e.detail)}
                   select_id="child_select"
