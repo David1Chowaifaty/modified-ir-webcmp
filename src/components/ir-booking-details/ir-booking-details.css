@@ -1,9 +1,11 @@
 :host {
   overflow-x: hidden;
   --ir-dialog-max-width: 20rem;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
 }
 :host * {
   font-family: inherit !important;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
 }
 
 .font-medium {
