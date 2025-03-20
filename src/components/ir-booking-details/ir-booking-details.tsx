@@ -368,6 +368,7 @@ export class IrBookingDetails {
         hasMenu={this.hasMenu}
         hasPrint={this.hasPrint}
         hasReceipt={this.hasReceipt}
+        hasEmail={['001', '002'].includes(this.booking?.status?.code)}
       ></ir-booking-header>,
       <div class="fluid-container p-1 text-left mx-0">
         <div class="row m-0">
