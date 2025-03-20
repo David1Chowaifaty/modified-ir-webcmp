@@ -107,7 +107,11 @@ export class IrBookingDetails {
         this.closeSidebar.emit(null);
         return;
       case 'email':
-        this.modalState = { type: 'email', message: `Email this booking to ${this.booking.guest.email}.`, loading: isRequestPending('/Send_Booking_Confirmation_Email') };
+        this.modalState = {
+          type: 'email',
+          message: locales.entries.Lcz_EmailBookingto.replace('%1', this.booking.guest.email),
+          loading: isRequestPending('/Send_Booking_Confirmation_Email'),
+        };
         this.modalRef.openModal();
         return;
       case 'print':
@@ -421,7 +425,7 @@ export class IrBookingDetails {
         leftBtnText={locales.entries.Lcz_Cancel}
         rightBtnText={locales.entries.Lcz_Confirm}
         autoClose={false}
-        isLoading={this.modalState?.loading}
+        isLoading={isRequestPending('/Send_Booking_Confirmation_Email')}
         ref={el => (this.modalRef = el)}
         onConfirmModal={e => {
           this.handleModalConfirm(e);
