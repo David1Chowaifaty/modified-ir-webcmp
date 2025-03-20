@@ -175,19 +175,26 @@ export class IrRoom {
   }
 
   private formatVariation({ adult_nbr, child_nbr }: IVariations, { infant_nbr }: Occupancy) {
-    // Adjust child number based on infants
-    const adjustedChildNbr = child_nbr;
+    const adultCount = adult_nbr > 0 ? adult_nbr : 0;
+    const childCount = child_nbr > 0 ? child_nbr : 0;
+    const infantCount = infant_nbr > 0 ? infant_nbr : 0;
 
-    // Define labels based on singular/plural rules
-    const adultLabel = adult_nbr > 1 ? locales.entries.Lcz_Adults.toLowerCase() : locales.entries.Lcz_Adult.toLowerCase();
-    const childLabel = adjustedChildNbr > 1 ? locales.entries.Lcz_Children.toLowerCase() : locales.entries.Lcz_Child.toLowerCase();
-    const infantLabel = infant_nbr > 1 ? locales.entries.Lcz_Infants.toLowerCase() : locales.entries.Lcz_Infant.toLowerCase();
+    const adultLabel = adultCount > 1 ? locales.entries.Lcz_Adults.toLowerCase() : locales.entries.Lcz_Adult.toLowerCase();
+    const childLabel = childCount > 1 ? locales.entries.Lcz_Children.toLowerCase() : locales.entries.Lcz_Child.toLowerCase();
+    const infantLabel = infantCount > 1 ? locales.entries.Lcz_Infants.toLowerCase() : locales.entries.Lcz_Infant.toLowerCase();
 
-    // Construct parts with the updated child number
-    const parts = [`${adult_nbr} ${adultLabel}`, adjustedChildNbr ? `${adjustedChildNbr} ${childLabel}` : '', infant_nbr ? `${infant_nbr} ${infantLabel}` : ''];
+    const parts = [];
+    if (adultCount > 0) {
+      parts.push(`${adultCount} ${adultLabel}`);
+    }
+    if (childCount > 0) {
+      parts.push(`${childCount} ${childLabel}`);
+    }
+    if (infantCount > 0) {
+      parts.push(`${infantCount} ${infantLabel}`);
+    }
 
-    // Join non-empty parts with spaces
-    return parts.filter(Boolean).join('&nbsp&nbsp&nbsp&nbsp');
+    return parts.join('&nbsp&nbsp&nbsp&nbsp');
   }
 
   private getSmokingLabel() {
@@ -280,15 +287,11 @@ export class IrRoom {
             </div>
           )}
 
-          <div>
-            <span class="mr-1">{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
+          <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+            <span>{`${this.item.guest.first_name || ''} ${this.item.guest.last_name || ''}`}</span>
             {/* {this.item.rateplan.selected_variation.adult_nbr > 0 && <span> {this.item.rateplan.selected_variation.adult_child_offering}</span>} */}
-            {this.item.rateplan.selected_variation.adult_nbr > 0 && (
-              <span class="mr-1" innerHTML={this.formatVariation(this.item.rateplan.selected_variation, this.item.occupancy)}>
-                {' '}
-              </span>
-            )}
-            {bed && <span>(Preference: {bed})</span>}
+            {this.item.rateplan.selected_variation.adult_nbr > 0 && <span innerHTML={this.formatVariation(this.item.rateplan.selected_variation, this.item.occupancy)}> </span>}
+            {bed && <span>({bed})</span>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.item.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">

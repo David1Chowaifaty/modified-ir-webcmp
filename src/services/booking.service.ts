@@ -35,6 +35,17 @@ export interface ExposedBookingEvent {
   type: string;
 }
 export class BookingService {
+  public async sendBookingConfirmationEmail(booking_nbr: string, language: string) {
+    const { data } = await axios.post(`/Send_Booking_Confirmation_Email`, {
+      booking_nbr,
+      language,
+    });
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
+  }
+
   public async getCalendarData(propertyid: number, from_date: string, to_date: string): Promise<{ [key: string]: any }> {
     try {
       const { data } = await axios.post(`/Get_Exposed_Calendar`, {

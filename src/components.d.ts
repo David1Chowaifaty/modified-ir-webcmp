@@ -295,6 +295,7 @@ export namespace Components {
         "booking": Booking;
         "hasCloseButton": boolean;
         "hasDelete": boolean;
+        "hasEmail": boolean;
         "hasMenu": boolean;
         "hasPrint": boolean;
         "hasReceipt": boolean;
@@ -2963,6 +2964,7 @@ declare namespace LocalJSX {
         "booking"?: Booking;
         "hasCloseButton"?: boolean;
         "hasDelete"?: boolean;
+        "hasEmail"?: boolean;
         "hasMenu"?: boolean;
         "hasPrint"?: boolean;
         "hasReceipt"?: boolean;
