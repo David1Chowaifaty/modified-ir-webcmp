@@ -62,6 +62,7 @@
 - [ir-pickup-view](ir-pickup-view)
 - [ir-extra-services](ir-extra-services)
 - [ir-payment-details](ir-payment-details)
+- [ir-modal](../ui/ir-modal)
 - [ir-sidebar](../ui/ir-sidebar)
 - [igl-book-property](../igloo-calendar/igl-book-property)
 
@@ -84,6 +85,7 @@ graph TD;
   ir-booking-details --> ir-pickup-view
   ir-booking-details --> ir-extra-services
   ir-booking-details --> ir-payment-details
+  ir-booking-details --> ir-modal
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
   ir-guest-info --> ir-spinner

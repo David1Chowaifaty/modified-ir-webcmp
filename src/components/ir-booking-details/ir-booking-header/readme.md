@@ -12,6 +12,7 @@
 | `booking`        | --                 |             | `Booking` | `undefined` |
 | `hasCloseButton` | `has-close-button` |             | `boolean` | `undefined` |
 | `hasDelete`      | `has-delete`       |             | `boolean` | `undefined` |
+| `hasEmail`       | `has-email`        |             | `boolean` | `true`      |
 | `hasMenu`        | `has-menu`         |             | `boolean` | `undefined` |
 | `hasPrint`       | `has-print`        |             | `boolean` | `undefined` |
 | `hasReceipt`     | `has-receipt`      |             | `boolean` | `undefined` |
