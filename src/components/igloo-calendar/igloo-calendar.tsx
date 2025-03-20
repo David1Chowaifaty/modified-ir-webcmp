@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { RoomService } from '@/services/room.service';
 import { BookingService } from '@/services/booking.service';
 import { addTwoMonthToDate, computeEndDate, convertDMYToISO, dateToFormattedString, formatLegendColors, getNextDay, isBlockUnit } from '@/utils/utils';
@@ -1063,7 +1063,7 @@ export class IglooCalendar {
         <ir-interceptor></ir-interceptor>
         <div id="iglooCalendar" class={{ 'igl-calendar': true, 'showToBeAssigned': this.showToBeAssigned, 'showLegend': this.showLegend }}>
           {this.shouldRenderCalendarView() ? (
-            <div class="h-100 p-0 m-0" data-testid="ir-calendar">
+            <Fragment data-testid="ir-calendar">
               {this.showToBeAssigned && (
                 <igl-to-be-assigned
                   unassignedDatesProp={this.unassignedDates}
@@ -1105,7 +1105,7 @@ export class IglooCalendar {
                   ></igl-cal-footer>
                 </div>
               </div>
-            </div>
+            </Fragment>
           ) : (
             <ir-loading-screen message="Preparing Calendar Data"></ir-loading-screen>
           )}
