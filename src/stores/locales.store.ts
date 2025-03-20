@@ -13,6 +13,7 @@ export type LocalizationStrings = {
   Lcz_MainGuest: string;
   Lcz_DOB: string;
   Lcz_AnyInfant: string;
+  Lcz_EmailBookingto: string;
   Lcz_Policies: string;
   Lcz_SmokingOptions: string;
   Lcz_Balance: string;
