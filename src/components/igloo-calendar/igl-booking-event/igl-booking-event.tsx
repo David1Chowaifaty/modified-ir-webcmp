@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
-import { transformNewBooking } from '@/utils/booking';
+import { calculateDaysBetweenDates, transformNewBooking } from '@/utils/booking';
 import { isBlockUnit } from '@/utils/utils';
 import { IRoomNightsData, CalendarModalEvent } from '@/models/property-types';
 import moment from 'moment';
@@ -222,7 +222,7 @@ export class IglBookingEvent {
                 }
                 const oldFromDate = this.bookingEvent.defaultDates.from_date;
                 const oldToDate = this.bookingEvent.defaultDates.to_date;
-                const defaultDiffDays = moment(oldToDate, 'YYYY-MM-DD').diff(moment(oldFromDate, 'YYYY-MM-DD'), 'days');
+                const diffDays = calculateDaysBetweenDates(oldFromDate, oldToDate);
 
                 let shrinkingDirection = null;
                 let fromDate = oldFromDate;
@@ -248,12 +248,14 @@ export class IglBookingEvent {
                 } else {
                   if (moment(from_date, 'YYYY-MM-DD').isBefore(moment(oldFromDate, 'YYYY-MM-DD'))) {
                     fromDate = from_date;
-                    toDate = moment(from_date, 'YYYY-MM-DD').add(defaultDiffDays, 'days').format('YYYY-MM-DD');
+                    const newToDate = moment(from_date, 'YYYY-MM-DD').add(diffDays, 'days');
+                    toDate = newToDate.isBefore(moment(to_date, 'YYYY-MM-DD'), 'days') ? to_date : newToDate.format('YYYY-MM-DD');
                   } else if (moment(to_date, 'YYYY-MM-DD').isAfter(moment(oldToDate, 'YYYY-MM-DD'))) {
                     toDate = to_date;
-                    fromDate = moment(to_date, 'YYYY-MM-DD').subtract(defaultDiffDays, 'days').format('YYYY-MM-DD');
+                    fromDate = moment(to_date, 'YYYY-MM-DD').subtract(diffDays, 'days').format('YYYY-MM-DD');
                   }
                 }
+                console.warn({ fromDate, toDate });
                 this.showDialog.emit({ reason: 'reallocate', ...event.detail, description, title: '', hideConfirmButton, from_date: fromDate, to_date: toDate });
               } else {
                 // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {

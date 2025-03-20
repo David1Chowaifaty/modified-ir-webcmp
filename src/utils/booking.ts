@@ -355,8 +355,8 @@ export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDeta
   };
 }
 export function calculateDaysBetweenDates(from_date: string, to_date: string) {
-  const startDate = moment(from_date, 'YYYY-MM-DD');
-  const endDate = moment(to_date, 'YYYY-MM-DD');
+  const startDate = moment(from_date, 'YYYY-MM-DD').startOf('day');
+  const endDate = moment(to_date, 'YYYY-MM-DD').endOf('day');
   const daysDiff = endDate.diff(startDate, 'days');
   return daysDiff || 1;
 }

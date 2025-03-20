@@ -353,24 +353,25 @@ export class IrRoom {
             )}
           </div>
           <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-            <span>{`${this.mainGuest.first_name || ''} ${this.mainGuest.last_name || ''}`}</span>
+            <p class="m-0 p-0">{`${this.mainGuest.first_name || ''} ${this.mainGuest.last_name || ''}`}</p>
             {this.room.rateplan.selected_variation.adult_nbr > 0 &&
               (this.room.unit ? (
-                <ir-tooltip message={'View guests'} customSlot>
+                <ir-tooltip message={'View guests'} class="m-0 p-0" customSlot>
                   <ir-button
+                    class="m-0 p-0"
                     slot="tooltip-trigger"
                     btn_color="link"
                     renderContentAsHtml
                     onClickHandler={() => this.showGuestModal()}
                     size="sm"
-                    btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit' }}
+                    btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit', textAlign: 'center', lineHeight: '1.2' }}
                     text={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}
                   ></ir-button>
                 </ir-tooltip>
               ) : (
                 <span innerHTML={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}></span>
               ))}
-            {bed && <span>({bed})</span>}
+            {bed && <p class="m-0 p-0">({bed})</p>}
           </div>
           <div class="collapse" id={`roomCollapse-${this.room.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">
