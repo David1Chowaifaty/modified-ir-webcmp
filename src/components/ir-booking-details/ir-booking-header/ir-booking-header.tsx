@@ -148,7 +148,7 @@ export class IrBookingHeader {
             )}
             {this.hasReceipt && <ir-button variant="icon" id="receipt" icon_name="reciept" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
             {this.hasPrint && <ir-button variant="icon" id="print" icon_name="print" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
-            {this.hasEmail && <ir-button variant="icon" id="email" icon_name="email" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
+            {this.hasEmail && <ir-button variant="icon" id="email" title="Email this booking" icon_name="email" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
             {this.hasDelete && <ir-button variant="icon" id="book-delete" icon_name="trash" class="" style={{ ...colorVariants.danger, '--icon-size': '1.65rem' }}></ir-button>}
             {this.hasMenu && <ir-button variant="icon" class="mr-1" id="menu" icon_name="menu_list" style={{ '--icon-size': '1.65rem' }}></ir-button>}
 
