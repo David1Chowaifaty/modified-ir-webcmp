@@ -440,19 +440,20 @@ export class IglBookProperty {
       const roomtypeId = currentRoomType.roomtype.id;
       const rateplanId = currentRoomType.rateplan.id;
       console.log({ GUEST });
+      const guest = {
+        bed_preference: currentRoomType.bed_preference?.toString(),
+        infant_nbr: currentRoomType.occupancy.infant_nbr,
+        last_name: GUEST.last_name,
+        first_name: GUEST.first_name,
+        unit: (currentRoomType.unit as any)?.id?.toString(),
+        roomtype_id: currentRoomType.roomtype.id,
+      };
+      modifyBookingStore('guest', guest);
       reserveRooms({
         roomTypeId: roomtypeId,
         ratePlanId: rateplanId,
         rooms: 1,
-        guest: [
-          {
-            bed_preference: currentRoomType.bed_preference?.toString(),
-            infant_nbr: currentRoomType.occupancy.infant_nbr,
-            last_name: GUEST.last_name,
-            first_name: GUEST.first_name,
-            unit: (currentRoomType.unit as any)?.id?.toString(),
-          },
-        ],
+        guest: [guest],
       });
     } catch (error) {
       console.error(error);

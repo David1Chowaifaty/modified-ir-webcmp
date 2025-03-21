@@ -14,6 +14,7 @@
   <script src="assets/scripts/bootstrap.bundle.min.js"></script>
   <script src="assets/scripts/toastr/toastr.min.js"></script>
   <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
+  <!-- <link rel="stylesheet" href="assets/scripts/switchery/switchery.css"> -->
   <script src="scripts/index.js"></script>
   <style>
     body {
@@ -24,25 +25,17 @@
 
 <body>
   <ir-common></ir-common>
-  <igloo-calendar currency-name="USD" propertyid="42" language="en"
-    baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+  <ir-booking-details has-room-edit has-room-delete baseurl="https://gateway.igloorooms.com/IR" language="en"
+    has-print="true" has-receipt></ir-booking-details>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
-
   <script>
-    //backend-cmp-injector
-    //aname - username -password
-    var today = new Date();
-    today.setDate(today.getDate() - 1);
-    var _FROM_DATE = today.toISOString().substring(0, 10)
-    today.setDate(today.getDate() + 60);
-    var _TO_DATE = today.toISOString().substring(0, 10)
-    const calendar = document.querySelector("igloo-calendar");
-    calendar.from_date = _FROM_DATE;
-    calendar.to_date = _TO_DATE;
+    const bookingDetail = document.querySelector("ir-booking-details");
     setTimeout(() => {
+      sessionStorage.removeItem('token');
       const ticket = getToken();
-      calendar.propertyid = getId();
-      calendar.ticket = ticket;
+      bookingDetail.bookingNumber = "21183214751"
+      bookingDetail.propertyid = getId();
+      bookingDetail.ticket = ticket;
     }, 300)
   </script>
 

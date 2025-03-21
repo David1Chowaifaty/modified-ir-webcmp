@@ -69,23 +69,26 @@ export class IglRatePlan {
     if (this.bookingType === 'BAR_BOOKING') {
       this.resetReserved();
     }
+    this.reserveRoom();
+    this.buttonClicked.emit({ key: 'next' });
+  }
+
+  private reserveRoom() {
     reserveRooms({
       roomTypeId: this.roomTypeId,
       ratePlanId: this.ratePlan.id,
       rooms: 1,
       guest: [
         {
-          last_name: booking_store?.guest?.last_name,
-          first_name: booking_store?.guest?.first_name,
-          unit: null,
-          bed_preference: this.visibleInventory?.roomtype?.is_bed_configuration_enabled ? booking_store?.guest?.bed_preference : null,
-          infant_nbr: this.visibleInventory?.selected_variation?.child_nbr > 0 ? booking_store?.guest?.infant_nbr : null,
+          last_name: booking_store.guest?.last_name,
+          first_name: booking_store.guest?.first_name,
+          unit: this.roomTypeId === booking_store.guest.roomtype_id ? booking_store.guest.unit : null,
+          bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest?.bed_preference : null,
+          infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest.infant_nbr : null,
         },
       ],
     });
-    this.buttonClicked.emit({ key: 'next' });
   }
-
   // Render the rate amount
   private renderRate(): string {
     const { visibleInventory } = this;
@@ -280,20 +283,7 @@ export class IglRatePlan {
                         value="1"
                         onChange={() => {
                           this.resetReserved();
-                          reserveRooms({
-                            roomTypeId: this.roomTypeId,
-                            ratePlanId: this.ratePlan.id,
-                            rooms: 1,
-                            guest: [
-                              {
-                                last_name: booking_store.guest?.last_name,
-                                first_name: booking_store.guest?.first_name,
-                                unit: null,
-                                bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest?.bed_preference : null,
-                                infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest.infant_nbr : null,
-                              },
-                            ],
-                          });
+                          this.reserveRoom();
                         }}
                         checked={visibleInventory.reserved === 1}
                       />
@@ -306,20 +296,7 @@ export class IglRatePlan {
                     class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1 mt-1 d-md-none"
                     onClick={() => {
                       this.resetReserved();
-                      reserveRooms({
-                        roomTypeId: this.roomTypeId,
-                        ratePlanId: this.ratePlan.id,
-                        rooms: 1,
-                        guest: [
-                          {
-                            last_name: booking_store.guest?.last_name,
-                            first_name: booking_store.guest?.first_name,
-                            unit: null,
-                            bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest?.bed_preference : null,
-                            infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest?.infant_nbr : null,
-                          },
-                        ],
-                      });
+                      this.reserveRoom();
                       this.bookProperty();
                     }}
                   >
