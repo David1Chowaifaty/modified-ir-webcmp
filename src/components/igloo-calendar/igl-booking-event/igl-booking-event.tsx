@@ -315,13 +315,13 @@ export class IglBookingEvent {
           } else {
             return {
               description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${
-                locales.entries.Lcz_SameRatesWillBeKept
+                locales.entries.Lcz_SameRatesWillBeKept + '.'
               }`,
               status: '200',
             };
           }
         }
-        return { description: locales.entries.Lcz_CannotChangeCHBookings, status: '400' };
+        return { description: locales.entries.Lcz_CannotChangeCHBookings + '.', status: '400' };
       }
     } else {
       if (!this.isShrinking) {
@@ -336,12 +336,12 @@ export class IglBookingEvent {
           return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         } else {
           return {
-            description: locales.entries.Lcz_SameRatesWillBeKept,
+            description: locales.entries.Lcz_SameRatesWillBeKept + '.',
             status: '200',
           };
         }
       }
-      return { description: locales.entries.Lcz_ConfrmModiication, status: '200' };
+      return { description: locales.entries.Lcz_ConfrmModiication + '.', status: '200' };
     }
   }
   private resetBookingToInitialPosition() {

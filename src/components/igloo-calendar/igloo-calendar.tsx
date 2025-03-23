@@ -114,8 +114,9 @@ export class IglooCalendar {
       //toastr.error(error);
     }
   }
-  @Listen('openCalendarSidebar')
-  async handleCalendarSidbarEvents(ev: CustomEvent) {
+  @Listen('openCalendarSidebar', { target: 'window' })
+  async handleCalendarSidebarEvents(ev: CustomEvent) {
+    console.log('hit 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥');
     ev.stopImmediatePropagation();
     ev.stopPropagation();
     this.calendarSidebarState = ev.detail;

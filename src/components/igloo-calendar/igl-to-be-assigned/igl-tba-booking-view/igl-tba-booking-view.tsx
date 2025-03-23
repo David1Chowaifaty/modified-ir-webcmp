@@ -30,7 +30,7 @@ export class IglTbaBookingView {
 
   @Event({ bubbles: true, composed: true })
   highlightToBeAssignedBookingEvent: EventEmitter;
-  @Event() openCalendarSidebar: EventEmitter<CalendarSidebarState>;
+  @Event({ bubbles: true, composed: true }) openCalendarSidebar: EventEmitter<CalendarSidebarState>;
   @Event({ bubbles: true, composed: true }) addToBeAssignedEvent: EventEmitter;
   @Event({ bubbles: true, composed: true }) scrollPageToRoom: EventEmitter;
   @Event() assignRoomEvent: EventEmitter<{ [key: string]: any }>;
@@ -89,19 +89,27 @@ export class IglTbaBookingView {
           check_in,
         });
         const room = booking.rooms.find(r => r.identifier === this.eventData.identifier);
+        console.log('room=>', room);
         if (room) {
           const { adult_nbr, children_nbr, infant_nbr } = room.occupancy;
-          this.openCalendarSidebar.emit({
-            type: 'room-guests',
-            payload: {
-              identifier: this.eventData.ID,
-              bookingNumber: this.eventData.BOOKING_NUMBER,
-              checkin: false,
-              roomName: (room.unit as IUnit)?.name ?? '',
-              sharing_persons: room.sharing_persons,
-              totalGuests: adult_nbr + children_nbr + infant_nbr,
-            },
-          });
+          window.dispatchEvent(
+            new CustomEvent('openCalendarSidebar', {
+              detail: {
+                type: 'room-guests',
+                payload: {
+                  identifier: this.eventData.ID,
+                  bookingNumber: this.eventData.BOOKING_NUMBER,
+                  checkin: false,
+                  roomName: (room.unit as IUnit)?.name ?? '',
+                  sharing_persons: room.sharing_persons,
+                  totalGuests: adult_nbr + children_nbr + infant_nbr,
+                },
+              },
+              bubbles: true,
+              composed: true,
+            }),
+          );
+          console.log('event emitted directly to window 🔥');
         }
         let assignEvent = { ...this.eventData, PR_ID: this.selectedRoom };
         this.addToBeAssignedEvent.emit({

@@ -6,20 +6,16 @@ import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/c
   scoped: true,
 })
 export class IglTbaCategoryView {
-  @Event() assignUnitEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() calendarData: { [key: string]: any };
   @Prop() selectedDate;
   @Prop() categoriesData: { [key: string]: any } = {};
   @Prop() categoryId;
   @Prop({ mutable: true }) eventDatas;
   @Prop() categoryIndex;
+
   @State() renderAgain: boolean = false;
 
-  // private localEventDatas;
-
-  componentWillLoad() {
-    // this.localEventDatas = this.eventDatas;
-  }
+  @Event() assignUnitEvent: EventEmitter<{ [key: string]: any }>;
 
   handleAssignRoomEvent(event: CustomEvent<{ [key: string]: any }>) {
     event.stopImmediatePropagation();
