@@ -21,10 +21,11 @@
 
 ## Events
 
-| Event             | Description | Type                |
-| ----------------- | ----------- | ------------------- |
-| `closeModal`      |             | `CustomEvent<null>` |
-| `resetBookingEvt` |             | `CustomEvent<null>` |
+| Event              | Description | Type                                                           |
+| ------------------ | ----------- | -------------------------------------------------------------- |
+| `closeModal`       |             | `CustomEvent<null>`                                            |
+| `resetBookingEvt`  |             | `CustomEvent<null>`                                            |
+| `updateRoomGuests` |             | `CustomEvent<{ identifier: string; guests: SharedPerson[]; }>` |
 
 
 ## Dependencies

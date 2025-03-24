@@ -51,6 +51,9 @@ export class IrHkUser {
       .min(3)
       .refine(
         async name => {
+          if (this.user && this.user.username === name) {
+            return true;
+          }
           if (name.length >= 3) {
             return !(await new UserService().checkUserExistence({ UserName: name }));
           }
@@ -65,7 +68,7 @@ export class IrHkUser {
     this.default_properties = { token, language };
     if (!this.user) {
       this.userInfo['property_id'] = property_id;
-      this.showPasswordValidation = true;
+      // this.showPasswordValidation = true;
     }
     if (this.user) {
       this.autoValidate = true;
@@ -192,7 +195,7 @@ export class IrHkUser {
             error={this.errors?.password}
             onInputFocus={() => (this.showPasswordValidation = true)}
             onInputBlur={() => {
-              if (this.user) this.showPasswordValidation = false;
+              // if (this.user) this.showPasswordValidation = false;
             }}
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
