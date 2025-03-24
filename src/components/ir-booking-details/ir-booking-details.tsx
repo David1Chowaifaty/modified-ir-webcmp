@@ -1,5 +1,5 @@
 import { Component, Listen, h, Prop, Watch, State, Event, EventEmitter, Element, Fragment } from '@stencil/core';
-import { Booking, ExtraService, Guest, IPmsLog, Room } from '@/models/booking.dto';
+import { Booking, ExtraService, Guest, IPmsLog, Room, SharedPerson } from '@/models/booking.dto';
 import axios from 'axios';
 import { BookingService } from '@/services/booking.service';
 import { IglBookPropertyPayloadAddRoom, TIglBookPropertyPayload } from '@/models/igl-book-property';
@@ -178,6 +178,19 @@ export class IrBookingDetails {
   @Listen('editInitiated')
   handleEditInitiated(e: CustomEvent<TIglBookPropertyPayload>) {
     this.bookingItem = e.detail;
+  }
+  @Listen('updateRoomGuests')
+  handleRoomGuestsUpdate(e: CustomEvent<{ identifier: string; guests: SharedPerson[] }>) {
+    const { identifier, guests } = e.detail;
+    const rooms = [...this.booking.rooms];
+    let currentRoomIndex = rooms.findIndex(r => r.identifier === identifier);
+    if (currentRoomIndex === -1) {
+      return;
+    }
+    const currentRoom = rooms[currentRoomIndex];
+    const updatedRoom = { ...currentRoom, sharing_persons: guests };
+    rooms[currentRoomIndex] = updatedRoom;
+    this.booking = { ...this.booking, rooms: [...rooms] };
   }
 
   @Listen('resetBookingEvt')

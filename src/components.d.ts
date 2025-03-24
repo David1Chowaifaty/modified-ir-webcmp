@@ -2732,6 +2732,7 @@ declare global {
     interface HTMLIrRoomGuestsElementEventMap {
         "closeModal": null;
         "resetBookingEvt": null;
+        "updateRoomGuests": { identifier: string; guests: SharedPerson[] };
     }
     interface HTMLIrRoomGuestsElement extends Components.IrRoomGuests, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomGuestsElementEventMap>(type: K, listener: (this: HTMLIrRoomGuestsElement, ev: IrRoomGuestsCustomEvent<HTMLIrRoomGuestsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4175,6 +4176,7 @@ declare namespace LocalJSX {
         "language"?: string;
         "onCloseModal"?: (event: IrRoomGuestsCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrRoomGuestsCustomEvent<null>) => void;
+        "onUpdateRoomGuests"?: (event: IrRoomGuestsCustomEvent<{ identifier: string; guests: SharedPerson[] }>) => void;
         /**
           * The name of the room currently being displayed. Used to label the room in the user interface for clarity.
          */

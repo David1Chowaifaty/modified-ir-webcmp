@@ -54,7 +54,8 @@ export type bookingReasons =
   | 'UPDATE_CALENDAR_AVAILABILITY'
   | 'CHANGE_IN_DUE_AMOUNT'
   | 'CHANGE_IN_BOOK_STATUS'
-  | 'NON_TECHNICAL_CHANGE_IN_BOOKING';
+  | 'NON_TECHNICAL_CHANGE_IN_BOOKING'
+  | 'SHARING_PERSONS_UPDATED';
 export const validReasons = new Set<bookingReasons>([
   'DORESERVATION',
   'BLOCK_EXPOSED_UNIT',

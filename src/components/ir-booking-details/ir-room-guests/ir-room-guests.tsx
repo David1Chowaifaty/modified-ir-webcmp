@@ -70,6 +70,7 @@ export class IrRoomGuests {
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetBookingEvt: EventEmitter<null>;
+  @Event() updateRoomGuests: EventEmitter<{ identifier: string; guests: SharedPerson[] }>;
 
   private bookingService = new BookingService();
 
@@ -144,7 +145,8 @@ export class IrRoomGuests {
         });
       }
       this.closeModal.emit(null);
-      this.resetBookingEvt.emit(null);
+      this.updateRoomGuests.emit({ identifier: this.identifier, guests: this.guests });
+      this.resetBookingEvt.emit();
     } catch (error) {
       console.log(error);
       if (error instanceof ZodError) {

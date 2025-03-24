@@ -7,7 +7,7 @@ import { EventsService } from '@/services/events.service';
 import { ICountry, RoomBlockDetails, RoomBookingDetails, RoomDetail, bookingReasons } from '@/models/IBooking';
 import moment, { Moment } from 'moment';
 import { ToBeAssignedService } from '@/services/toBeAssigned.service';
-import { bookingStatus, calculateDaysBetweenDates, getPrivateNote, getRoomStatus, transformNewBLockedRooms, transformNewBooking } from '@/utils/booking';
+import { bookingStatus, calculateDaysBetweenDates, formatName, getPrivateNote, getRoomStatus, transformNewBLockedRooms, transformNewBooking } from '@/utils/booking';
 import { IRoomNightsData, IRoomNightsDataEventPayload, CalendarModalEvent } from '@/models/property-types';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import calendar_dates from '@/stores/calendar-dates.store';
@@ -404,6 +404,7 @@ export class IglooCalendar {
       NON_TECHNICAL_CHANGE_IN_BOOKING: this.handleNonTechnicalChangeInBooking,
       ROOM_STATUS_CHANGED: this.handleRoomStatusChanged,
       UNIT_HK_STATUS_CHANGED: this.handleUnitHKStatusChanged,
+      SHARING_PERSONS_UPDATED: this.handleSharingPersonsUpdated,
     };
 
     const handler = reasonHandlers[REASON];
@@ -412,6 +413,21 @@ export class IglooCalendar {
     } else {
       console.warn(`Unhandled REASON: ${REASON}`);
     }
+  }
+  private handleSharingPersonsUpdated(result: any) {
+    console.log('sharing persons updated', result);
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: [
+        ...this.calendarData.bookingEvents.map(e => {
+          if (e.IDENTIFIER === result.identifier) {
+            const mainGuest = result.guests?.find(p => p.is_main);
+            return { ...e, NAME: formatName(mainGuest.first_name, mainGuest.last_name), ROOM_INFO: { ...e.ROOM_INFO, sharing_persons: result.guests } };
+          }
+          return e;
+        }),
+      ],
+    };
   }
   private handleRoomStatusChanged(result: any) {
     this.calendarData = {
