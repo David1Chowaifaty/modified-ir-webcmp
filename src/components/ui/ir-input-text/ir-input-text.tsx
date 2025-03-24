@@ -146,13 +146,19 @@ export class IrInputText {
   handleMaskChange() {
     this.initMask();
   }
-
-  @Watch('error')
-  handleErrorChange(newValue: boolean, oldValue: boolean) {
-    if (newValue !== oldValue) {
-      this.validateInput(this.value, true);
-    }
+  @Watch('autoValidate')
+  handleMaskChange1() {
+    console.log(this.autoValidate);
   }
+
+  // @Watch('error')
+  // handleErrorChange(newValue: boolean, oldValue: boolean) {
+  //   if (newValue !== oldValue) {
+  //     if (this.autoValidate) {
+  //       this.validateInput(this.value, true);
+  //     }
+  //   }
+  // }
 
   @Watch('value')
   handleValueChange(newValue: string, oldValue: string) {
@@ -180,9 +186,15 @@ export class IrInputText {
   }
 
   private async validateInput(value: string, forceValidation: boolean = false) {
+    console.log('autoValidate=>', this.autoValidate);
     if (!this.autoValidate && !forceValidation) {
+      console.log('here', 'error', this.error);
+      if (this.error) {
+        this.updateErrorState(false);
+      }
       return;
     }
+    console.log('first');
     if (this.zod) {
       try {
         if (!this.asyncParse) {

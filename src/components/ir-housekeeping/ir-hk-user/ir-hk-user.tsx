@@ -45,7 +45,19 @@ export class IrHkUser {
   private housekeeperSchema = z.object({
     name: z.string().min(2),
     mobile: z.string().min(1).max(14),
-    password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/),
+    password: z
+      .string()
+      .nullable()
+      // .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/)
+      .refine(
+        password => {
+          if (this.user && !this.userInfo?.password) {
+            return true;
+          }
+          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/.test(password);
+        },
+        { message: 'Password must be at least 8 characters long.' },
+      ),
     username: z
       .string()
       .min(3)
