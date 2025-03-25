@@ -195,16 +195,16 @@ export class IrTasksTable {
         <table class="table" data-testid="hk_tasks_table">
           <thead class="table-header">
             <tr>
-              <th>
+              <th class={'task-row'}>
                 <ir-checkbox
                   indeterminate={this.selectedIds.length > 0 && this.selectedIds.length < this.checkableTasks.length}
                   checked={this.allSelected}
                   onCheckChange={() => this.toggleSelectAll()}
                 ></ir-checkbox>
               </th>
-              <th>Period</th>
-              <th>Unit</th>
-              <th class={'sortable'} onClick={() => this.handleSort('status')}>
+              <th class="extra-padding">Period</th>
+              <th class="extra-padding">Unit</th>
+              <th class={'sortable extra-padding'} onClick={() => this.handleSort('status')}>
                 <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
                   <span>Status</span>
                   <svg
@@ -226,11 +226,11 @@ export class IrTasksTable {
                   </svg>
                 </div>
               </th>
-              <th>Hint</th>
+              <th class="extra-padding">Hint</th>
               <th>A</th>
               <th>C</th>
               <th>I</th>
-              <th style={{ textAlign: 'start' }} class={'sortable'} onClick={() => this.handleSort('housekeeper')}>
+              <th style={{ textAlign: 'start' }} class={'sortable extra-padding'} onClick={() => this.handleSort('housekeeper')}>
                 <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
                   <span>Housekeeper</span>
                   <svg
@@ -283,17 +283,17 @@ export class IrTasksTable {
                   class={{ 'selected': isSelected, 'task-table-row': true }}
                   key={task.id}
                 >
-                  <td class="task-row">{isCheckable && <ir-checkbox checked={isSelected}></ir-checkbox>}</td>
-                  <td class="task-row">{task.formatted_date}</td>
-                  <td class="task-row">
+                  <td class="task-row ">{isCheckable && <ir-checkbox checked={isSelected}></ir-checkbox>}</td>
+                  <td class="task-row extra-padding">{task.formatted_date}</td>
+                  <td class="task-row extra-padding">
                     <span class={{ 'highlighted-unit': task.is_highlight }}>{task.unit.name}</span>
                   </td>
-                  <td class="task-row">{task.status.description}</td>
-                  <td class="task-row">{task.hint}</td>
+                  <td class="task-row extra-padding">{task.status.description}</td>
+                  <td class="task-row extra-padding">{task.hint}</td>
                   <td class="task-row">{task.adult}</td>
                   <td class="task-row">{task.child}</td>
                   <td class="task-row">{task.infant}</td>
-                  <td class="w-50 task-row" style={{ textAlign: 'start' }}>
+                  <td class="w-50 task-row extra-padding" style={{ textAlign: 'start' }}>
                     {task.housekeeper ?? 'Unassigned'}
                   </td>
                 </tr>

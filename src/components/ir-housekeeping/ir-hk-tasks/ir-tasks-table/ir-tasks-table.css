@@ -20,11 +20,16 @@
 .task-row,
 .table th,
 .table td {
-  padding: 0.25rem 0.5rem !important;
   white-space: nowrap;
   max-width: max-content !important;
   /* background: white; */
   border: 0;
+}
+.task-row {
+  padding: 0.25rem 0.5rem !important;
+}
+.extra-padding {
+  padding: 0.25rem 1rem !important;
 }
 .highlighted-unit {
   background: #000;

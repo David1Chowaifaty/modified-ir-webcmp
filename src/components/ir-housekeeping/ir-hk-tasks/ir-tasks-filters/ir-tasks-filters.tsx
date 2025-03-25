@@ -107,30 +107,32 @@ export class IrTasksFilters {
                 }}
               ></ir-select>
             </fieldset>
-            <fieldset>
-              <p class="m-0 p-0">Housekeepers</p>
-              <ir-select
-                testId="housekeepers"
-                selectedValue={this.filters?.housekeepers}
-                LabelAvailable={false}
-                showFirstOption={false}
-                data={[
-                  { text: 'All housekeepers', value: '000' },
-                  ...housekeeping_store?.hk_criteria?.housekeepers.map(v => ({
-                    text: v.name,
-                    value: v.id.toString(),
-                  })),
-                ]}
-                onSelectChange={e => {
-                  // if (e.detail === '000') {
-                  //   this.updateFilter({ housekeepers: { ids: this.baseFilters?.housekeepers?.ids } });
-                  // } else {
-                  //   this.updateFilter({ housekeepers: { ids: [e.detail] } });
-                  // }
-                  this.updateFilter({ housekeepers: e.detail });
-                }}
-              ></ir-select>
-            </fieldset>
+            {housekeeping_store?.hk_criteria?.housekeepers.length > 0 && (
+              <fieldset>
+                <p class="m-0 p-0">Housekeepers</p>
+                <ir-select
+                  testId="housekeepers"
+                  selectedValue={this.filters?.housekeepers}
+                  LabelAvailable={false}
+                  showFirstOption={false}
+                  data={[
+                    { text: 'All housekeepers', value: '000' },
+                    ...housekeeping_store?.hk_criteria?.housekeepers.map(v => ({
+                      text: v.name,
+                      value: v.id.toString(),
+                    })),
+                  ]}
+                  onSelectChange={e => {
+                    // if (e.detail === '000') {
+                    //   this.updateFilter({ housekeepers: { ids: this.baseFilters?.housekeepers?.ids } });
+                    // } else {
+                    //   this.updateFilter({ housekeepers: { ids: [e.detail] } });
+                    // }
+                    this.updateFilter({ housekeepers: e.detail });
+                  }}
+                ></ir-select>
+              </fieldset>
+            )}
             <fieldset>
               <p class="m-0 p-0">Cleaning frequency</p>
               <ir-select
@@ -166,7 +168,7 @@ export class IrTasksFilters {
               ></ir-select>
             </fieldset>
             <fieldset class="mb-1">
-              <p class="m-0 p-0">Highlight check-ins</p>
+              <p class="m-0 p-0">Highlight check-ins from</p>
               <ir-select
                 testId="highlight_check_ins"
                 selectedValue={this.filters?.highlight_check_ins?.code}
@@ -182,7 +184,7 @@ export class IrTasksFilters {
               ></ir-select>
             </fieldset>
             <div class="d-flex align-items-center justify-content-end" style={{ gap: '1rem' }}>
-              <ir-button btn_type="button" data-testid="reset" text="Reset" size="sm" btn_color="outline" onClickHandler={e => this.resetFilters(e)}></ir-button>
+              <ir-button btn_type="button" data-testid="reset" text="Reset" size="sm" btn_color="secondary" onClickHandler={e => this.resetFilters(e)}></ir-button>
               <ir-button btn_type="button" data-testid="apply" isLoading={this.isLoading} text="Apply" size="sm" onClickHandler={e => this.applyFiltersEvt(e)}></ir-button>
             </div>
           </div>

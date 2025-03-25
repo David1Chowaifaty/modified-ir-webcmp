@@ -32,11 +32,14 @@ export class IrTasksHeader {
               e.stopPropagation();
               this.headerButtonPress.emit({ name: 'export' });
             }}
+            iconPosition="right"
+            icon_name="file"
+            icon_style={{ '--icon-size': '14px' }}
           ></ir-button>
           <ir-button
             size="sm"
             btn_color="outline"
-            text="Archive"
+            text="Archives"
             onClickHandler={e => {
               e.stopImmediatePropagation();
               e.stopPropagation();
