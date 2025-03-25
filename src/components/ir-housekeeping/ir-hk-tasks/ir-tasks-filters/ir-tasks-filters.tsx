@@ -107,7 +107,7 @@ export class IrTasksFilters {
                 }}
               ></ir-select>
             </fieldset>
-            {housekeeping_store?.hk_criteria?.housekeepers.length > 0 && (
+            {housekeeping_store?.hk_criteria?.housekeepers.length > 1 && (
               <fieldset>
                 <p class="m-0 p-0">Housekeepers</p>
                 <ir-select
