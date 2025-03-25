@@ -33,6 +33,7 @@ export class IrTasksTable {
 
   @Event({ bubbles: true, composed: true }) animateCleanedButton: EventEmitter<null>;
   @Event({ bubbles: true, composed: true }) rowSelectChange: EventEmitter<Task[]>;
+  @Event({ bubbles: true, composed: true }) sortingChanged: EventEmitter<{ field: string; direction: 'ASC' | 'DESC' }>;
 
   componentWillLoad() {
     this.sortTasks('date', 'ASC');
@@ -53,6 +54,7 @@ export class IrTasksTable {
     } else {
       newDirection = 'ASC';
     }
+    this.sortingChanged.emit({ field: key, direction: newDirection });
     this.sortTasks(key, newDirection);
   }
 

@@ -2871,6 +2871,7 @@ declare global {
     interface HTMLIrTasksTableElementEventMap {
         "animateCleanedButton": null;
         "rowSelectChange": Task[];
+        "sortingChanged": { field: string; direction: 'ASC' | 'DESC' };
     }
     interface HTMLIrTasksTableElement extends Components.IrTasksTable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksTableElementEventMap>(type: K, listener: (this: HTMLIrTasksTableElement, ev: IrTasksTableCustomEvent<HTMLIrTasksTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4271,6 +4272,7 @@ declare namespace LocalJSX {
     interface IrTasksTable {
         "onAnimateCleanedButton"?: (event: IrTasksTableCustomEvent<null>) => void;
         "onRowSelectChange"?: (event: IrTasksTableCustomEvent<Task[]>) => void;
+        "onSortingChanged"?: (event: IrTasksTableCustomEvent<{ field: string; direction: 'ASC' | 'DESC' }>) => void;
         "tasks"?: Task[];
     }
     interface IrTestCmp {

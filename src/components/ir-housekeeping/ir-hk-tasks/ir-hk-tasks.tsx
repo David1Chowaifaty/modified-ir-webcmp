@@ -42,6 +42,7 @@ export class IrHkTasks {
   private roomService = new RoomService();
   private houseKeepingService = new HouseKeepingService();
   private token = new Token();
+  private table_sorting: Map<string, 'ASC' | 'DESC'> = new Map();
   private modal: HTMLIrModalElement;
 
   componentWillLoad() {
@@ -65,6 +66,17 @@ export class IrHkTasks {
     e.stopImmediatePropagation();
     e.stopPropagation();
     this.isSidebarOpen = false;
+  }
+  @Listen('sortingChanged')
+  handleSortingChanged(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const { field, direction } = e.detail;
+    console.log(e.detail);
+    if (field === 'date') {
+      return;
+    }
+    this.table_sorting.set(field, direction);
   }
 
   private async init() {
@@ -151,6 +163,11 @@ export class IrHkTasks {
         this.modal?.openModal();
         break;
       case 'export':
+        const sortingArray: { key: string; value: string }[] = Array.from(this.table_sorting.entries()).map(([key, value]) => ({
+          key,
+          value,
+        }));
+        console.log(sortingArray);
         downloadFile('');
         break;
       case 'archive':
