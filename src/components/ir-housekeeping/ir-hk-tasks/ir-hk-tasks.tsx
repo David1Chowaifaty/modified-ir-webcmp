@@ -9,6 +9,7 @@ import { Component, Host, Prop, State, h, Element, Watch, Event, EventEmitter, L
 import moment from 'moment';
 import { v4 } from 'uuid';
 import { TaskFilters } from './types';
+import { downloadFile } from '@/utils/utils';
 
 @Component({
   tag: 'ir-hk-tasks',
@@ -150,6 +151,7 @@ export class IrHkTasks {
         this.modal?.openModal();
         break;
       case 'export':
+        downloadFile('');
         break;
       case 'archive':
         this.isSidebarOpen = true;
