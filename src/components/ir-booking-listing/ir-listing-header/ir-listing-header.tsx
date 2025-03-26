@@ -1,6 +1,7 @@
 import { BookingListingService } from '@/services/booking_listing.service';
 import booking_listing, { initializeUserSelection, updateUserSelection } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
+import { downloadFile } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import moment from 'moment';
 
@@ -21,8 +22,6 @@ export class IrListingHeader {
 
   private bookingListingService = new BookingListingService();
   private toDateRef: HTMLIrDatePickerElement;
-
-  private downloadUrlTag: HTMLAnchorElement;
 
   private async handleSearchClicked(is_to_export: boolean) {
     if (this.inputValue !== '') {
@@ -46,11 +45,7 @@ export class IrListingHeader {
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export });
     this.isLoading = null;
     if (booking_listing.download_url) {
-      const url = booking_listing.download_url;
-      this.downloadUrlTag.href = url;
-      this.downloadUrlTag.download = url;
-      this.downloadUrlTag.click();
-      booking_listing.download_url = null;
+      downloadFile(booking_listing.download_url);
     }
   }
   private async handleClearUserField() {
@@ -78,9 +73,6 @@ export class IrListingHeader {
   render() {
     return (
       <Host>
-        <a ref={el => (this.downloadUrlTag = el)}>
-          <p class="sr-only">download url</p>
-        </a>
         <section class="d-flex align-items-center ">
           <div class="d-flex flex-fill flex-column flex-md-row align-items-md-center booking-container">
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">

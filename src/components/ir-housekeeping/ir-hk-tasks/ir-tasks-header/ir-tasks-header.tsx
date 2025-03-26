@@ -20,9 +20,9 @@ export class IrTasksHeader {
   }
   render() {
     return (
-      <div class="d-flex align-items-center justify-content-between">
-        <h3>Housekeeping Tasks</h3>
-        <div class="d-flex align-items-center" style={{ gap: '1rem' }}>
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+        <h3 class="mb-1 mb-md-0">Housekeeping Tasks</h3>
+        <div class="d-flex" style={{ gap: '1rem' }}>
           <ir-button
             size="sm"
             btn_color="outline"
@@ -32,6 +32,7 @@ export class IrTasksHeader {
               e.stopPropagation();
               this.headerButtonPress.emit({ name: 'export' });
             }}
+            btnStyle={{ height: '100%' }}
             iconPosition="right"
             icon_name="file"
             icon_style={{ '--icon-size': '14px' }}
@@ -40,6 +41,7 @@ export class IrTasksHeader {
             size="sm"
             btn_color="outline"
             text="Archives"
+            btnStyle={{ height: '100%' }}
             onClickHandler={e => {
               e.stopImmediatePropagation();
               e.stopPropagation();
@@ -52,6 +54,7 @@ export class IrTasksHeader {
               e.stopPropagation();
               this.headerButtonPress.emit({ name: 'cleaned' });
             }}
+            btnStyle={{ height: '100%' }}
             size="sm"
             btn_disabled={!this.isCleanedEnabled}
             text="Cleaned"
