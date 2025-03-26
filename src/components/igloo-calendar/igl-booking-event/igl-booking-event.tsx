@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
-import { transformNewBooking } from '@/utils/booking';
+import { calculateDaysBetweenDates, transformNewBooking } from '@/utils/booking';
 import { isBlockUnit } from '@/utils/utils';
 import { IReallocationPayload, IRoomNightsData } from '@/models/property-types';
 import moment from 'moment';
@@ -221,7 +221,7 @@ export class IglBookingEvent {
                 }
                 const oldFromDate = this.bookingEvent.defaultDates.from_date;
                 const oldToDate = this.bookingEvent.defaultDates.to_date;
-                const defaultDiffDays = moment(oldToDate, 'YYYY-MM-DD').diff(moment(oldFromDate, 'YYYY-MM-DD'), 'days');
+                const diffDays = calculateDaysBetweenDates(oldFromDate, oldToDate);
 
                 let shrinkingDirection = null;
                 let fromDate = oldFromDate;
@@ -247,13 +247,15 @@ export class IglBookingEvent {
                 } else {
                   if (moment(from_date, 'YYYY-MM-DD').isBefore(moment(oldFromDate, 'YYYY-MM-DD'))) {
                     fromDate = from_date;
-                    toDate = moment(from_date, 'YYYY-MM-DD').add(defaultDiffDays, 'days').format('YYYY-MM-DD');
+                    const newToDate = moment(from_date, 'YYYY-MM-DD').add(diffDays, 'days');
+                    toDate = newToDate.isBefore(moment(to_date, 'YYYY-MM-DD'), 'days') ? to_date : newToDate.format('YYYY-MM-DD');
                   } else if (moment(to_date, 'YYYY-MM-DD').isAfter(moment(oldToDate, 'YYYY-MM-DD'))) {
                     toDate = to_date;
-                    fromDate = moment(to_date, 'YYYY-MM-DD').subtract(defaultDiffDays, 'days').format('YYYY-MM-DD');
+                    fromDate = moment(to_date, 'YYYY-MM-DD').subtract(diffDays, 'days').format('YYYY-MM-DD');
                   }
                 }
-                this.showDialog.emit({ ...event.detail, description, title: '', hideConfirmButton, from_date: fromDate, to_date: toDate });
+                console.warn({ fromDate, toDate });
+                this.showDialog.emit({ reason: 'reallocate', ...event.detail, description, title: '', hideConfirmButton, from_date: fromDate, to_date: toDate });
               } else {
                 // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
                 //   this.animationFrameId = requestAnimationFrame(() => {
@@ -312,29 +314,33 @@ export class IglBookingEvent {
           } else {
             return {
               description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${
-                locales.entries.Lcz_SameRatesWillBeKept
+                locales.entries.Lcz_SameRatesWillBeKept + '.'
               }`,
               status: '200',
             };
           }
         }
-        return { description: locales.entries.Lcz_CannotChangeCHBookings, status: '400' };
+        return { description: locales.entries.Lcz_CannotChangeCHBookings + '.', status: '400' };
       }
     } else {
       if (!this.isShrinking) {
-        const initialRT = findRoomType(this.bookingEvent.PR_ID);
-        const targetRT = findRoomType(toRoomId);
+        const initialRT = findRoomType(Number(this.bookingEvent.PR_ID));
+        const targetRT = findRoomType(Number(toRoomId));
         if (initialRT === targetRT) {
           console.log('same rt');
+          if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
+            //TODO add the description
+            return { description: locales.entries.Lcz_ConfrmModiication + '.', status: '200' };
+          }
           return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         } else {
           return {
-            description: locales.entries.Lcz_SameRatesWillBeKept,
+            description: locales.entries.Lcz_SameRatesWillBeKept + '.',
             status: '200',
           };
         }
       }
-      return { description: locales.entries.Lcz_ConfrmModiication, status: '200' };
+      return { description: locales.entries.Lcz_ConfrmModiication + '.', status: '200' };
     }
   }
   private resetBookingToInitialPosition() {

@@ -186,7 +186,7 @@ export class IglApplicationInfo {
               value={this.guestInfo?.name}
             />
           </div>
-          <div class="mt-1 mt-md-0 d-flex align-items-center flex-fill">
+          <div class="my-1 my-md-0 d-flex align-items-center flex-fill">
             {calendar_data.is_frontdesk_enabled &&
               !isSingleUnit(this.rateplanSelection.roomtype.id) &&
               (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (

@@ -2,7 +2,6 @@ import { Booking, Room } from '@/models/booking.dto';
 import { TSourceOption } from '@/models/igl-book-property';
 import VariationService from '@/services/variation.service';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
-import { calculateDaysBetweenDates } from '@/utils/booking';
 import { extras } from '@/utils/utils';
 import moment from 'moment';
 
@@ -152,8 +151,8 @@ export class IglBookPropertyService {
     notes: string | null;
   }) {
     const rooms = [];
-    const total_days = calculateDaysBetweenDates(moment(check_in).format('YYYY-MM-DD'), moment(check_out).format('YYYY-MM-DD'));
     const calculateAmount = ({ is_amount_modified, selected_variation, view_mode, rp_amount, ratePlan }: IRatePlanSelection, infants: number) => {
+      const total_days = selected_variation.nights.length;
       if (is_amount_modified) {
         return view_mode === '002' ? rp_amount : rp_amount / total_days;
       }
@@ -188,7 +187,26 @@ export class IglBookPropertyService {
               from_date: moment(check_in).format('YYYY-MM-DD'),
               to_date: moment(check_out).format('YYYY-MM-DD'),
               notes,
-              days: this.generateDailyRates(check_in, check_out, calculateAmount(rateplan, rateplan.guest[i].infant_nbr)),
+              days: rateplan.is_amount_modified
+                ? this.generateDailyRates(check_in, check_out, calculateAmount(rateplan, rateplan.guest[i].infant_nbr))
+                : (() => {
+                    let variation = rateplan.selected_variation;
+                    if (rateplan.guest[i].infant_nbr > 0) {
+                      if (!this.variationService) {
+                        this.variationService = new VariationService();
+                      }
+                      variation = this.variationService.getVariationBasedOnInfants({
+                        variations: rateplan.ratePlan.variations,
+                        baseVariation: rateplan.selected_variation,
+                        infants: rateplan.guest[i].infant_nbr,
+                      });
+                    }
+                    return variation.nights.map(n => ({
+                      date: n.night,
+                      amount: n.discounted_amount,
+                      cost: null,
+                    }));
+                  })(),
               guest: {
                 email: null,
                 first_name,
