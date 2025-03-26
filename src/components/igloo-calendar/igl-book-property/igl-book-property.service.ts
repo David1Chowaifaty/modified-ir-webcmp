@@ -191,7 +191,26 @@ export class IglBookPropertyService {
               to_date: moment(check_out).format('YYYY-MM-DD'),
               notes,
               check_in: auto_check_in,
-              days: this.generateDailyRates(check_in, check_out, calculateAmount(rateplan, rateplan.guest[i].infant_nbr)),
+              days: rateplan.is_amount_modified
+                ? this.generateDailyRates(check_in, check_out, calculateAmount(rateplan, rateplan.guest[i].infant_nbr))
+                : (() => {
+                    let variation = rateplan.selected_variation;
+                    if (rateplan.guest[i].infant_nbr > 0) {
+                      if (!this.variationService) {
+                        this.variationService = new VariationService();
+                      }
+                      variation = this.variationService.getVariationBasedOnInfants({
+                        variations: rateplan.ratePlan.variations,
+                        baseVariation: rateplan.selected_variation,
+                        infants: rateplan.guest[i].infant_nbr,
+                      });
+                    }
+                    return variation.nights.map(n => ({
+                      date: n.night,
+                      amount: n.discounted_amount,
+                      cost: null,
+                    }));
+                  })(),
               guest: {
                 email: null,
                 first_name,
