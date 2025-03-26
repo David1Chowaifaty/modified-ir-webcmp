@@ -165,7 +165,7 @@ export class IglApplicationInfo {
           <p class="booking-variation" innerHTML={formattedVariation}></p>
         </div>
         <div class="d-flex flex-column flex-md-row  p-0 align-items-md-center aplicationInfoContainer">
-          <div class="mr-1 flex-fill guest-info-container">
+          <div class="mr-md-1 mb-1 mb-md-0 flex-fill guest-info-container">
             <input
               id={v4()}
               type="email"
@@ -186,26 +186,28 @@ export class IglApplicationInfo {
               value={this.guestInfo?.name}
             />
           </div>
-          <div class="my-1 my-md-0 d-flex align-items-center flex-fill">
-            {calendar_data.is_frontdesk_enabled &&
-              !isSingleUnit(this.rateplanSelection.roomtype.id) &&
-              (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
-                <div class="mr-1 p-0 flex-fill preference-select-container">
-                  <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.updateGuest({ unit: (event.target as HTMLInputElement).value })}>
-                    <option value="" selected={this.guestInfo?.unit === ''}>
-                      {locales.entries.Lcz_Assignunits}
-                    </option>
-                    {filteredRoomList?.map(room => (
-                      <option value={room.id} selected={this.guestInfo?.unit === room.id.toString()}>
-                        {room.name}
+          {calendar_data.is_frontdesk_enabled &&
+            !isSingleUnit(this.rateplanSelection.roomtype.id) &&
+            (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
+              <div class="mb-1 mt-0 my-md-0 d-flex align-items-center flex-fill unit-select-container">
+                <div class="d-flex align-items-center flex-fill">
+                  <div class="mr-md-1 p-0 flex-fill preference-select-container">
+                    <select class="form-control input-sm pr-0" id={v4()} onChange={event => this.updateGuest({ unit: (event.target as HTMLInputElement).value })}>
+                      <option value="" selected={this.guestInfo?.unit === ''}>
+                        {locales.entries.Lcz_Assignunits}
                       </option>
-                    ))}
-                  </select>
+                      {filteredRoomList?.map(room => (
+                        <option value={room.id} selected={this.guestInfo?.unit === room.id.toString()}>
+                          {room.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              )}
-          </div>
+              </div>
+            )}
           {this.rateplanSelection.roomtype.is_bed_configuration_enabled && (
-            <div class="mr-1 flex-fill">
+            <div class="mr-md-1 flex-fill bed-preference-container">
               <select
                 class={`form-control input-sm ${this.isButtonPressed && this.guestInfo?.bed_preference === '' && 'border-danger'}`}
                 id={v4()}

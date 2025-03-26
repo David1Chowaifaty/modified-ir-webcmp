@@ -6,6 +6,7 @@ import locales from '@/stores/locales.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import calendar_data from '@/stores/calendar-data';
 import { IToast } from '@/components/ui/ir-toast/toast';
+import { modifyBookingStore } from '@/stores/booking.store';
 
 @Component({
   tag: 'igl-book-property-header',
@@ -106,6 +107,12 @@ export class IglBookPropertyHeader {
         [key]: value,
       };
     }
+    modifyBookingStore('bookingAvailabilityParams', {
+      from_date: this.bookingDataDefaultDateRange.fromDate,
+      to_date: this.bookingDataDefaultDateRange.toDate,
+      adult_nbr: obj?.['adult'] ?? 0,
+      child_nbr: obj?.['child'] ?? 0,
+    });
     this.adultChild.emit(obj);
   }
 
@@ -117,9 +124,11 @@ export class IglBookPropertyHeader {
           <fieldset>
             <div class="btn-group ml-0">
               <ir-select
+                // testId="adult_number"
                 class={'m-0'}
+                selectedValue={this.adultChildCount?.adult?.toString()}
                 onSelectChange={e => this.handleAdultChildChange('adult', e.detail)}
-                select_id="adult_child_select"
+                select_id="adult_select"
                 firstOption={locales.entries.Lcz_AdultsCaption}
                 LabelAvailable={false}
                 data={Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => ({
@@ -139,6 +148,8 @@ export class IglBookPropertyHeader {
                   ))}
                 </select> */}
                 <ir-select
+                  selectedValue={this.adultChildCount?.child?.toString()}
+                  // testId="child_number"
                   onSelectChange={e => this.handleAdultChildChange('child', e.detail)}
                   select_id="child_select"
                   firstOption={this.renderChildCaption()}
@@ -236,6 +247,7 @@ export class IglBookPropertyHeader {
         <div class={`d-flex flex-column flex-lg-row align-items-lg-center ${showSourceNode ? 'mt-1' : ''}`}>
           <fieldset class="mt-lg-0 mr-1 ">
             <igl-date-range
+              data-testid="date_picker"
               variant="booking"
               dateLabel={locales.entries.Lcz_Dates}
               minDate={this.isEventType('PLUS_BOOKING') ? moment().add(-1, 'months').startOf('month').format('YYYY-MM-DD') : this.minDate}

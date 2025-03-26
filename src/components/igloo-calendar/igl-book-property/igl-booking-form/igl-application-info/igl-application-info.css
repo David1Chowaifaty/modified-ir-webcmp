@@ -92,14 +92,15 @@
 }
 
 @media only screen and (min-width: 908px) {
-  /* .aplicationInfoContainer {
-    max-width: 80%;
-  } */
-  .guest-info-container {
-    max-width: 300px;
+  .aplicationInfoContainer {
+    max-width: 100%;
   }
-
-  .preference-select-container {
+  .guest-info-container,
+  .bed-preference-container,
+  .unit-select-container {
     max-width: 250px;
   }
+  /* .preference-select-container {
+    max-width: 250px;
+  } */
 }

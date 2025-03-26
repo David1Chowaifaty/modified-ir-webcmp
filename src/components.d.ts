@@ -1472,7 +1472,7 @@ declare global {
         new (): HTMLIglPropertyBookedByElement;
     };
     interface HTMLIglRatePlanElementEventMap {
-        "gotoSplitPageTwoEvent": { [key: string]: any };
+        "buttonClicked": { [key: string]: any };
     }
     interface HTMLIglRatePlanElement extends Components.IglRatePlan, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglRatePlanElementEventMap>(type: K, listener: (this: HTMLIglRatePlanElement, ev: IglRatePlanCustomEvent<HTMLIglRatePlanElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2844,7 +2844,7 @@ declare namespace LocalJSX {
         "bookingType"?: string;
         "currency": { symbol: string };
         "isBookDisabled"?: boolean;
-        "onGotoSplitPageTwoEvent"?: (event: IglRatePlanCustomEvent<{ [key: string]: any }>) => void;
+        "onButtonClicked"?: (event: IglRatePlanCustomEvent<{ [key: string]: any }>) => void;
         "ratePlan"?: RatePlan;
         "ratePricingMode"?: Array<{ CODE_NAME: string; CODE_VALUE_EN: string }>;
         "roomTypeId"?: number;

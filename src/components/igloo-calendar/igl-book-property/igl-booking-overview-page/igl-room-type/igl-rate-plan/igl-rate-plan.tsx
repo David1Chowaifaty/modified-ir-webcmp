@@ -20,8 +20,8 @@ export class IglRatePlan {
   @Prop() isBookDisabled: boolean = false;
   @Prop() visibleInventory!: IRatePlanSelection;
 
-  @Event() gotoSplitPageTwoEvent!: EventEmitter<{ [key: string]: any }>;
-
+  // @Event() gotoSplitPageTwoEvent!: EventEmitter<{ [key: string]: any }>;
+  @Event() buttonClicked!: EventEmitter<{ [key: string]: any }>;
   // Determine if the form inputs should be disabled
   private disableForm(): boolean {
     const { bookingType, shouldBeDisabled, ratePlan, visibleInventory } = this;
@@ -66,10 +66,29 @@ export class IglRatePlan {
 
   // Navigate to the next page for booking
   private bookProperty(): void {
-    this.handleDataChange('totalRooms', { target: { value: '1' } } as any);
-    this.gotoSplitPageTwoEvent.emit({ key: 'gotoSplitPage', data: '' });
+    // this.handleDataChange('totalRooms', { target: { value: '1' } } as any);
+    // this.gotoSplitPageTwoEvent.emit({ key: 'gotoSplitPage', data: '' });
+    if (this.bookingType === 'BAR_BOOKING') {
+      this.resetReserved();
+    }
+    this.reserveRoom();
+    this.buttonClicked.emit({ key: 'next' });
   }
-
+  private reserveRoom() {
+    reserveRooms({
+      roomTypeId: this.roomTypeId,
+      ratePlanId: this.ratePlan.id,
+      rooms: 1,
+      guest: [
+        {
+          name: booking_store.guest?.name,
+          unit: this.roomTypeId === booking_store.guest?.roomtype_id ? booking_store.guest?.unit : null,
+          bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest?.bed_preference : null,
+          infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest.infant_nbr : null,
+        },
+      ],
+    });
+  }
   // Render the rate amount
   private renderRate(): string {
     const { visibleInventory } = this;
@@ -149,18 +168,20 @@ export class IglRatePlan {
     const disableForm = this.disableForm();
     const selectedVariation = visibleInventory?.selected_variation;
     const formattedVariations = ratePlan.variations?.map(v => this.formatVariation(v));
-    console.log(visibleInventory);
+    // console.log(visibleInventory);
     // if (!this.visibleInventory) {
     //   return null;
     // }
     return (
-      <Host>
+      <Host data-testid={`rp-${this.ratePlan.id}`}>
         <div
-          class={`d-flex m-0 p-0 ${isAvailableToBook ? 'flex-column flex-lg-row align-items-lg-center justify-content-lg-between' : 'align-items-center justify-content-between'}`}
+          class={`d-flex mt-1  p-0 ${
+            isAvailableToBook ? 'flex-column flex-lg-row align-items-lg-center justify-content-lg-between' : 'align-items-center justify-content-between'
+          }`}
         >
-          <div class="rateplan-name-container d-flex align-items-center" style={{ gap: '0.5rem' }}>
+          <div data-testid={'rp_name'} class="rateplan-name-container m-0 p-0  d-flex align-items-center" style={{ gap: '0.5rem' }}>
             {bookingType === 'BAR_BOOKING' ? (
-              <p class="m-0 p-0 flex-grow-md-1">
+              <p class="m-0 p-0">
                 {/* <span class="font-weight-bold">{ratePlan.name.split('/')[0]}</span> */}
                 <span>
                   {ratePlan.name.split('/')[1]} {ratePlan.is_non_refundable && <span class="non-ref-span">Non Refundable</span>}
@@ -175,10 +196,16 @@ export class IglRatePlan {
           </div>
 
           {isAvailableToBook ? (
-            <div class="d-md-flex justify-content-md-end align-items-md-center flex-fill rateplan-container">
-              <div class="mt-1 mt-md-0 flex-fill max-w-300">
-                <fieldset class="position-relative">
-                  <select disabled={disableForm} class="form-control input-sm" id={uuidv4()} onChange={evt => this.handleDataChange('adult_child_offering', evt)}>
+            <div class="d-md-flex m-md-0  justify-content-md-end align-items-md-center flex-fill rateplan-container">
+              <div class="flex-fill max-w-300 flex-grow-1">
+                <fieldset class="position-relative flex-grow-1 w-100">
+                  <select
+                    disabled={disableForm}
+                    data-testid="adult-child-offering"
+                    class="form-control input-sm flex-grow-1 w-100"
+                    id={uuidv4()}
+                    onChange={evt => this.handleDataChange('adult_child_offering', evt)}
+                  >
                     {formattedVariations?.map(variation => (
                       <option value={variation} selected={this.formatVariation(selectedVariation) === variation}>
                         {variation}
@@ -188,8 +215,9 @@ export class IglRatePlan {
                 </fieldset>
               </div>
               <div class="m-0 p-0 mt-1 mt-md-0 d-flex justify-content-between align-items-md-center ml-md-1">
-                <div class="d-flex m-0 p-0 rate-total-night-view mt-0">
+                <div class="d-flex m-0 p-0 rate-total-night-view mt-0 flex-grow-1">
                   <ir-price-input
+                    // testId={'amount_input'}
                     disabled={disableForm}
                     onTextChange={e =>
                       this.updateRateplanSelection({
@@ -199,13 +227,14 @@ export class IglRatePlan {
                     }
                     aria-label={`${this.visibleInventory?.roomtype?.name} ${this.ratePlan.short_name}'s rate`}
                     aria-describedby={`${this.ratePlan.short_name}'s rate`}
-                    class="ir-br-input-none"
+                    class="ir-br-input-none price-amount w-100 flex-grow-1"
                     currency={currency.symbol}
                     value={this.renderRate()}
                     placeholder={locales.entries.Lcz_Rate || 'Rate'}
                   ></ir-price-input>
                   <fieldset class="position-relative m-0 total-nights-container p-0">
                     <select
+                      data-testid={'nigh_stay_select'}
                       disabled={disableForm}
                       class="form-control input-sm m-0 nightBorder rounded-0 py-0"
                       id={uuidv4()}
@@ -224,9 +253,10 @@ export class IglRatePlan {
                   </fieldset>
                 </div>
                 {(bookingType === 'PLUS_BOOKING' || bookingType === 'ADD_ROOM') && (
-                  <div class="flex-fill mt-lg-0 ml-1 m-0 mt-md-0 p-0">
+                  <div class="flex-fill mt-0 ml-1 m-0 mt-md-0 p-0">
                     <fieldset class="position-relative">
                       <select
+                        data-testid={'inventory_select'}
                         disabled={visibleInventory.visibleInventory === 0}
                         class="form-control input-sm"
                         id={uuidv4()}
@@ -242,55 +272,32 @@ export class IglRatePlan {
                   </div>
                 )}
               </div>
-
               {bookingType === 'EDIT_BOOKING' && (
                 <Fragment>
-                  <div class="m-0 p-0 mt-lg-0 ml-md-1 mt-md-1 d-none d-md-block">
+                  <div class="m-0 p-0 ml-md-1 mt-md-0 d-none d-md-block">
                     <fieldset class="position-relative">
                       <input
+                        data-testid={'inventory_radio'}
                         disabled={disableForm}
                         type="radio"
                         name="ratePlanGroup"
                         value="1"
                         onChange={() => {
                           this.resetReserved();
-                          reserveRooms({
-                            roomTypeId: this.roomTypeId,
-                            ratePlanId: this.ratePlan.id,
-                            rooms: 1,
-                            guest: [
-                              {
-                                name: booking_store.guest.name,
-                                unit: null,
-                                bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest.bed_preference : null,
-                                infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest.infant_nbr : null,
-                              },
-                            ],
-                          });
+                          this.reserveRoom();
                         }}
                         checked={visibleInventory.reserved === 1}
                       />
                     </fieldset>
                   </div>
                   <button
+                    data-testid="book_property"
                     disabled={disableForm}
                     type="button"
                     class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1 mt-1 d-md-none"
                     onClick={() => {
                       this.resetReserved();
-                      reserveRooms({
-                        roomTypeId: this.roomTypeId,
-                        ratePlanId: this.ratePlan.id,
-                        rooms: 1,
-                        guest: [
-                          {
-                            name: booking_store.guest.name,
-                            unit: null,
-                            bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest.bed_preference : null,
-                            infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest.infant_nbr : null,
-                          },
-                        ],
-                      });
+                      this.reserveRoom();
                       this.bookProperty();
                     }}
                   >
@@ -301,9 +308,10 @@ export class IglRatePlan {
 
               {(bookingType === 'BAR_BOOKING' || bookingType === 'SPLIT_BOOKING') && (
                 <button
+                  data-testid="book"
                   disabled={disableForm || (bookingType === 'SPLIT_BOOKING' && this.isBookDisabled)}
                   type="button"
-                  class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1 mt-1"
+                  class="btn btn-primary booking-btn mt-md-0 btn-sm ml-md-1 mt-1"
                   onClick={() => this.bookProperty()}
                 >
                   {locales.entries.Lcz_Book}

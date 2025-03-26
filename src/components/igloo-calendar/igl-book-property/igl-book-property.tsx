@@ -401,6 +401,7 @@ export class IglBookProperty {
   }
 
   private async checkBookingAvailability() {
+    resetBookingStore();
     const from_date = moment(this.dateRangeData.fromDate).format('YYYY-MM-DD');
     const to_date = moment(this.dateRangeData.toDate).format('YYYY-MM-DD');
     const is_in_agent_mode = this.sourceOption['type'] === 'TRAVEL_AGENCY';
@@ -437,18 +438,19 @@ export class IglBookProperty {
       const { currentRoomType } = this.defaultData as IglBookPropertyPayloadEditBooking;
       const roomtypeId = currentRoomType.roomtype.id;
       const rateplanId = currentRoomType.rateplan.id;
+      const guest = {
+        bed_preference: currentRoomType.bed_preference?.toString(),
+        infant_nbr: currentRoomType.occupancy.infant_nbr,
+        name: currentRoomType.guest.last_name ? currentRoomType.guest.first_name + ' ' + currentRoomType.guest.last_name : currentRoomType.guest.first_name,
+        unit: (currentRoomType.unit as any)?.id?.toString(),
+        roomtype_id: roomtypeId,
+      };
+      modifyBookingStore('guest', guest);
       reserveRooms({
         roomTypeId: roomtypeId,
         ratePlanId: rateplanId,
         rooms: 1,
-        guest: [
-          {
-            bed_preference: currentRoomType.bed_preference?.toString(),
-            infant_nbr: currentRoomType.occupancy.infant_nbr,
-            name: currentRoomType.guest.last_name ? currentRoomType.guest.first_name + ' ' + currentRoomType.guest.last_name : currentRoomType.guest.first_name,
-            unit: (currentRoomType.unit as any)?.id?.toString(),
-          },
-        ],
+        guest: [guest],
       });
     } catch (error) {
       console.error(error);

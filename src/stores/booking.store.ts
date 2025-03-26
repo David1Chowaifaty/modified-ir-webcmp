@@ -35,6 +35,7 @@ export interface RatePlanGuest {
   unit: string | null;
   bed_preference: string | null;
   infant_nbr: number | null;
+  roomtype_id?: number | null;
 }
 
 export interface IRoomTypeSelection {
