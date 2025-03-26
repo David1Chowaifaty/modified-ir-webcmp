@@ -2,7 +2,7 @@ import { Booking, Room } from '@/models/booking.dto';
 import { TSourceOption } from '@/models/igl-book-property';
 import VariationService from '@/services/variation.service';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
-import { calculateDaysBetweenDates } from '@/utils/booking';
+
 import { extras } from '@/utils/utils';
 import moment from 'moment';
 
@@ -154,8 +154,8 @@ export class IglBookPropertyService {
     auto_check_in: boolean;
   }) {
     const rooms = [];
-    const total_days = calculateDaysBetweenDates(moment(check_in).format('YYYY-MM-DD'), moment(check_out).format('YYYY-MM-DD'));
     const calculateAmount = ({ is_amount_modified, selected_variation, view_mode, rp_amount, ratePlan }: IRatePlanSelection, infants: number) => {
+      const total_days = selected_variation.nights.length;
       if (is_amount_modified) {
         return view_mode === '002' ? rp_amount : rp_amount / total_days;
       }
