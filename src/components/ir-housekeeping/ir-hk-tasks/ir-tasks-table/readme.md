@@ -14,10 +14,11 @@
 
 ## Events
 
-| Event                  | Description | Type                  |
-| ---------------------- | ----------- | --------------------- |
-| `animateCleanedButton` |             | `CustomEvent<null>`   |
-| `rowSelectChange`      |             | `CustomEvent<Task[]>` |
+| Event                  | Description | Type                                                          |
+| ---------------------- | ----------- | ------------------------------------------------------------- |
+| `animateCleanedButton` |             | `CustomEvent<null>`                                           |
+| `rowSelectChange`      |             | `CustomEvent<Task[]>`                                         |
+| `sortingChanged`       |             | `CustomEvent<{ field: string; direction: "ASC" \| "DESC"; }>` |
 
 
 ## Dependencies

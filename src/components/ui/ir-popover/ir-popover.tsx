@@ -1,5 +1,5 @@
 import { Component, Host, Prop, h, Element } from '@stencil/core';
-import 'bootstrap';
+
 @Component({
   tag: 'ir-popover',
   styleUrl: 'ir-popover.css',
