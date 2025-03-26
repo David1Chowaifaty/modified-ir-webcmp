@@ -22,9 +22,10 @@ export class HouseKeepingService {
     to_date: string;
     filtered_by_hkm?: number[];
     filtered_by_unit?: number[];
-  }): Promise<ArchivedTask[] | null> {
+    is_export_to_excel?: boolean;
+  }): Promise<{ tasks: ArchivedTask[]; url: string } | null> {
     const { data } = await axios.post(`/Get_Archived_HK_Tasks`, params);
-    return data['My_Result'] ?? [];
+    return { url: data.My_Params_Get_Archived_HK_Tasks.Link_excel, tasks: data['My_Result'] ?? [] };
   }
 
   public async setExposedInspectionMode(property_id: number, mode: IInspectionMode) {
@@ -73,12 +74,13 @@ export class HouseKeepingService {
     cleaning_frequencies?: string;
     dusty_units?: string;
     highlight_window?: string;
+    is_export_to_excel?: boolean;
   }) {
     const { data } = await axios.post('/Get_HK_Tasks', params);
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
     }
-    return data.My_Result;
+    return { url: data.My_Params_Get_HK_Tasks?.Link_excel, tasks: data.My_Result };
   }
   public async executeHKAction(params: {
     actions: {

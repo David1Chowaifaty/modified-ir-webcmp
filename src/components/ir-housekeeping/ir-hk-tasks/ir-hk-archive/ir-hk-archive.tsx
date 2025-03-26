@@ -6,6 +6,7 @@ import calendar_data from '@/stores/calendar-data';
 import housekeeping_store from '@/stores/housekeeping.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
+import { downloadFile } from '@/utils/utils';
 import { Component, Host, Listen, Prop, State, h } from '@stencil/core';
 import moment from 'moment';
 import { v4 } from 'uuid';
@@ -51,9 +52,10 @@ export class IrHkArchive {
   private async initializeData() {
     await this.getArchivedTasks();
   }
-  private async getArchivedTasks() {
-    const res = await this.houseKeepingService.getArchivedHKTasks({ property_id: Number(this.propertyId), ...this.filters });
-    this.data = [...(res || [])]?.map(t => ({ ...t, id: v4() }));
+  private async getArchivedTasks(export_to_excel: boolean = false) {
+    const res = await this.houseKeepingService.getArchivedHKTasks({ property_id: Number(this.propertyId), ...this.filters, is_export_to_excel: export_to_excel });
+    this.data = [...(res?.tasks || [])]?.map(t => ({ ...t, id: v4() }));
+    return { tasks: res?.tasks, url: res?.url };
   }
 
   @Listen('dateChanged')
@@ -88,7 +90,8 @@ export class IrHkArchive {
       e.stopImmediatePropagation();
       e.stopPropagation();
       this.isLoading = 'excel';
-      this.getArchivedTasks();
+      const { url } = await this.getArchivedTasks(true);
+      downloadFile(url);
     } catch (error) {
       console.log(error);
     } finally {
