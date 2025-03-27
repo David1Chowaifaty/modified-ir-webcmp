@@ -1,4 +1,4 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, Watch, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-password-validator',
@@ -10,6 +10,8 @@ export class IrPasswordValidator {
    * The password string to validate
    */
   @Prop() password: string = '';
+
+  @Event({ bubbles: true, composed: true }) passwordValidationChange: EventEmitter<boolean>;
 
   private get validLength(): boolean {
     if (!this.password) {
@@ -45,7 +47,12 @@ export class IrPasswordValidator {
     }
     return /[!@#$%^&*()\-_=+]/.test(this.password);
   }
-
+  @Watch('password')
+  handlePasswordChange(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      this.passwordValidationChange.emit(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/.test(newValue));
+    }
+  }
   render() {
     return (
       <div class="m-0 p-0">
