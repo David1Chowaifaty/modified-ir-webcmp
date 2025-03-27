@@ -1,6 +1,7 @@
 import { Component, Event, EventEmitter, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { Task } from '@/models/housekeeping';
 import moment from 'moment';
+import housekeeping_store from '@/stores/housekeeping.store';
 
 @Component({
   tag: 'ir-tasks-table',
@@ -185,13 +186,14 @@ export class IrTasksTable {
    * @returns {boolean} - Returns `true` if the task's date is today or earlier, otherwise `false`.
    */
   private isCheckable(task: Task): boolean {
-    if (!task.hkm_id) {
-      return false;
-    }
+    // if (!task.hkm_id) {
+    //   return false;
+    // }
     return moment(task.date, 'YYYY-MM-DD').isSameOrBefore(moment(), 'days');
   }
 
   render() {
+    const haveManyHousekeepers = housekeeping_store?.hk_criteria?.housekeepers?.length > 1;
     return (
       <div class="card table-container h-100 p-1 m-0 table-responsive">
         <table class="table" data-testid="hk_tasks_table">
@@ -232,28 +234,30 @@ export class IrTasksTable {
               <th>A</th>
               <th>C</th>
               <th>I</th>
-              <th style={{ textAlign: 'start' }} class={'sortable extra-padding'} onClick={() => this.handleSort('housekeeper')}>
-                <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-                  <span>Housekeeper</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-arrow-up-down"
-                  >
-                    <path d="m21 16-4 4-4-4" />
-                    <path d="M17 20V4" />
-                    <path d="m3 8 4-4 4 4" />
-                    <path d="M7 4v16" />
-                  </svg>
-                </div>
-              </th>
+              {haveManyHousekeepers && (
+                <th style={{ textAlign: 'start' }} class={'sortable extra-padding'} onClick={() => this.handleSort('housekeeper')}>
+                  <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+                    <span>Housekeeper</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-arrow-up-down"
+                    >
+                      <path d="m21 16-4 4-4-4" />
+                      <path d="M17 20V4" />
+                      <path d="m3 8 4-4 4 4" />
+                      <path d="M7 4v16" />
+                    </svg>
+                  </div>
+                </th>
+              )}
             </tr>
           </thead>
 
@@ -295,9 +299,11 @@ export class IrTasksTable {
                   <td class="task-row">{task.adult}</td>
                   <td class="task-row">{task.child}</td>
                   <td class="task-row">{task.infant}</td>
-                  <td class="w-50 task-row extra-padding" style={{ textAlign: 'start' }}>
-                    {task.housekeeper ?? 'Unassigned'}
-                  </td>
+                  {haveManyHousekeepers && (
+                    <td class="w-50 task-row extra-padding" style={{ textAlign: 'start' }}>
+                      {task.housekeeper ?? 'Unassigned'}
+                    </td>
+                  )}
                 </tr>
               );
             })}

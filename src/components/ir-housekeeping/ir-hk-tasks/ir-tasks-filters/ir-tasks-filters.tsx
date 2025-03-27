@@ -150,7 +150,7 @@ export class IrTasksFilters {
               ></ir-select>
             </fieldset>
             <fieldset>
-              <p class="m-0 p-0">Dusty units</p>
+              <p class="m-0 p-0">Include dusty units</p>
               <ir-select
                 testId="dusty_units"
                 showFirstOption={false}
