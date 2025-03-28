@@ -54,7 +54,6 @@ export class IrPasswordValidator {
     }
     return /[!@#$%^&*()\-_=+]/.test(this.password);
   }
-
   render() {
     return (
       <div class="m-0 p-0">

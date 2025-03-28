@@ -95,11 +95,12 @@
   .aplicationInfoContainer {
     max-width: 100%;
   }
-  .guest-info-container {
-    max-width: 300px;
-  }
-
-  .preference-select-container {
+  .guest-info-container,
+  .bed-preference-container,
+  .unit-select-container {
     max-width: 250px;
   }
+  /* .preference-select-container {
+    max-width: 250px;
+  } */
 }

@@ -2,7 +2,6 @@ import { Booking, Room } from '@/models/booking.dto';
 import { TSourceOption } from '@/models/igl-book-property';
 import VariationService from '@/services/variation.service';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
-
 import { extras } from '@/utils/utils';
 import moment from 'moment';
 
