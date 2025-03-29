@@ -27,6 +27,7 @@ import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
+import { Moment } from "moment";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
@@ -51,6 +52,7 @@ export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
+export { Moment } from "moment";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export namespace Components {
@@ -934,6 +936,10 @@ export namespace Components {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrRangePicker {
+        "fromDate": Moment;
+        "toDate": Moment;
+    }
     interface IrReservationInformation {
         "booking": Booking;
         "countries": ICountry[];
@@ -1394,6 +1400,10 @@ export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
 export interface IrPriceInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPriceInputElement;
+}
+export interface IrRangePickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrRangePickerElement;
 }
 export interface IrReservationInformationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2705,6 +2715,23 @@ declare global {
         prototype: HTMLIrPriceInputElement;
         new (): HTMLIrPriceInputElement;
     };
+    interface HTMLIrRangePickerElementEventMap {
+        "dateRangeChanged": { fromDate: Moment; toDate: Moment };
+    }
+    interface HTMLIrRangePickerElement extends Components.IrRangePicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrRangePickerElementEventMap>(type: K, listener: (this: HTMLIrRangePickerElement, ev: IrRangePickerCustomEvent<HTMLIrRangePickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrRangePickerElementEventMap>(type: K, listener: (this: HTMLIrRangePickerElement, ev: IrRangePickerCustomEvent<HTMLIrRangePickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrRangePickerElement: {
+        prototype: HTMLIrRangePickerElement;
+        new (): HTMLIrRangePickerElement;
+    };
     interface HTMLIrReservationInformationElementEventMap {
         "openSidebar": OpenSidebarEvent<any>;
     }
@@ -3083,6 +3110,7 @@ declare global {
         "ir-pms-logs": HTMLIrPmsLogsElement;
         "ir-popover": HTMLIrPopoverElement;
         "ir-price-input": HTMLIrPriceInputElement;
+        "ir-range-picker": HTMLIrRangePickerElement;
         "ir-reservation-information": HTMLIrReservationInformationElement;
         "ir-room": HTMLIrRoomElement;
         "ir-room-guests": HTMLIrRoomGuestsElement;
@@ -4141,6 +4169,11 @@ declare namespace LocalJSX {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrRangePicker {
+        "fromDate"?: Moment;
+        "onDateRangeChanged"?: (event: IrRangePickerCustomEvent<{ fromDate: Moment; toDate: Moment }>) => void;
+        "toDate"?: Moment;
+    }
     interface IrReservationInformation {
         "booking"?: Booking;
         "countries"?: ICountry[];
@@ -4465,6 +4498,7 @@ declare namespace LocalJSX {
         "ir-pms-logs": IrPmsLogs;
         "ir-popover": IrPopover;
         "ir-price-input": IrPriceInput;
+        "ir-range-picker": IrRangePicker;
         "ir-reservation-information": IrReservationInformation;
         "ir-room": IrRoom;
         "ir-room-guests": IrRoomGuests;
@@ -4575,6 +4609,7 @@ declare module "@stencil/core" {
             "ir-pms-logs": LocalJSX.IrPmsLogs & JSXBase.HTMLAttributes<HTMLIrPmsLogsElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
+            "ir-range-picker": LocalJSX.IrRangePicker & JSXBase.HTMLAttributes<HTMLIrRangePickerElement>;
             "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;

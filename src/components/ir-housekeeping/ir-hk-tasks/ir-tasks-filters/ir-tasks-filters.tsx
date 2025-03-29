@@ -117,10 +117,12 @@ export class IrTasksFilters {
                   showFirstOption={false}
                   data={[
                     { text: 'All housekeepers', value: '000' },
-                    ...housekeeping_store?.hk_criteria?.housekeepers.map(v => ({
-                      text: v.name,
-                      value: v.id.toString(),
-                    })),
+                    ...housekeeping_store?.hk_criteria?.housekeepers
+                      .map(v => ({
+                        text: v.name,
+                        value: v.id.toString(),
+                      }))
+                      .sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase())),
                   ]}
                   onSelectChange={e => {
                     // if (e.detail === '000') {

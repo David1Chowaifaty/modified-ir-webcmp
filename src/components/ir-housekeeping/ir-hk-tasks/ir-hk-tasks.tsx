@@ -271,13 +271,15 @@ export class IrHkTasks {
         ></ir-modal>
         <ir-sidebar
           open={this.isSidebarOpen}
-          side={'right'}
           id="editGuestInfo"
           onIrSidebarToggle={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
             this.isSidebarOpen = false;
           }}
+          // sidebarStyles={{
+          //   width: '80vw',
+          // }}
           showCloseButton={false}
         >
           {this.isSidebarOpen && <ir-hk-archive propertyId={this.property_id} slot="sidebar-body"></ir-hk-archive>}

@@ -58,14 +58,14 @@ export class IrHkArchive {
     return { tasks: res?.tasks, url: res?.url };
   }
 
-  @Listen('dateChanged')
+  @Listen('dateRangeChanged')
   handleDateRangeChange(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    const { start, end } = e.detail;
+    const { fromDate, toDate } = e.detail;
     this.updateFilters({
-      from_date: start.format('YYYY-MM-DD'),
-      to_date: end.format('YYYY-MM-DD'),
+      from_date: fromDate.format('YYYY-MM-DD'),
+      to_date: toDate.format('YYYY-MM-DD'),
     });
   }
 
@@ -112,10 +112,12 @@ export class IrHkArchive {
               data={[
                 { text: 'All units', value: '000' },
                 ,
-                ...this.units?.map(v => ({
-                  text: v.name,
-                  value: v.id.toString(),
-                })),
+                ...this.units
+                  ?.map(v => ({
+                    text: v.name,
+                    value: v.id.toString(),
+                  }))
+                  .sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase())),
               ]}
               onSelectChange={e => {
                 e.stopImmediatePropagation();
@@ -127,29 +129,33 @@ export class IrHkArchive {
                 }
               }}
             ></ir-select>
-            <ir-select
-              class="ml-1 w-100"
-              selectedValue={this.filters?.filtered_by_hkm?.length === housekeeping_store.hk_criteria.housekeepers.length ? '000' : this.filters?.filtered_by_hkm[0]?.toString()}
-              LabelAvailable={false}
-              showFirstOption={false}
-              data={[
-                { text: 'All housekeepers', value: '000' },
-                ...housekeeping_store?.hk_criteria?.housekeepers.map(v => ({
-                  text: v.name,
-                  value: v.id.toString(),
-                })),
-              ]}
-              onSelectChange={e => {
-                if (e.detail === '000') {
-                  this.updateFilters({ filtered_by_hkm: [] });
-                } else {
-                  this.updateFilters({ filtered_by_hkm: [e.detail] });
-                }
-              }}
-            ></ir-select>
+            {housekeeping_store?.hk_criteria?.housekeepers.length > 1 && (
+              <ir-select
+                class="ml-1 w-100"
+                selectedValue={this.filters?.filtered_by_hkm?.length === housekeeping_store.hk_criteria.housekeepers.length ? '000' : this.filters?.filtered_by_hkm[0]?.toString()}
+                LabelAvailable={false}
+                showFirstOption={false}
+                data={[
+                  { text: 'All housekeepers', value: '000' },
+                  ...housekeeping_store?.hk_criteria?.housekeepers
+                    .map(v => ({
+                      text: v.name,
+                      value: v.id.toString(),
+                    }))
+                    .sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase())),
+                ]}
+                onSelectChange={e => {
+                  if (e.detail === '000') {
+                    this.updateFilters({ filtered_by_hkm: [] });
+                  } else {
+                    this.updateFilters({ filtered_by_hkm: [e.detail] });
+                  }
+                }}
+              ></ir-select>
+            )}
           </div>
           <div class="d-flex mt-1 align-items-center">
-            <igl-date-range
+            {/* <igl-date-range
               class="mr-1"
               dateLabel={locales.entries.Lcz_Dates}
               minDate={moment().add(-90, 'days').format('YYYY-MM-DD')}
@@ -157,7 +163,8 @@ export class IrHkArchive {
                 fromDate: this.filters.from_date,
                 toDate: this.filters.to_date,
               }}
-            ></igl-date-range>
+            ></igl-date-range> */}
+            <ir-range-picker fromDate={moment(this.filters.from_date, 'YYYY-MM-DD')} toDate={moment(this.filters.to_date, 'YYYY-MM-DD')}></ir-range-picker>
             <ir-button
               title={locales.entries?.Lcz_Search}
               variant="icon"
@@ -190,7 +197,13 @@ export class IrHkArchive {
                   <tr key={d.id}>
                     <td class="pr-2">{d.date}</td>
                     <td class="px-2">{d.house_keeper}</td>
-                    <td class="px-2">{d.unit}</td>
+                    <td class="px-2">
+                      <ir-tooltip message={d.unit} customSlot>
+                        <span slot="tooltip-trigger" class={`unit-name`}>
+                          {d.unit}
+                        </span>
+                      </ir-tooltip>
+                    </td>
                     <td class="px-2">
                       {d.booking_nbr ? (
                         <ir-button
