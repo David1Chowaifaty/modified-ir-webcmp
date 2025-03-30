@@ -21,15 +21,25 @@ export class IrRangePicker {
   async handleDateChanged(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    const selectedDate = moment(e.detail.start);
+    console.log(e.detail);
+    const selectedDate = e.detail.start ? moment(e.detail.start) : null;
     if ((e.target as HTMLElement).id === 'fromDate') {
       let updatedToDate = this.toDate;
+      if (!selectedDate) {
+        this.dateRangeChanged.emit({ fromDate: null, toDate: null });
+        return;
+      }
       if (!updatedToDate || updatedToDate.isBefore(selectedDate, 'day')) {
         updatedToDate = selectedDate;
       }
+
       this.dateRangeChanged.emit({ fromDate: selectedDate, toDate: updatedToDate });
       await this.toDatePicker.openDatePicker();
     } else {
+      if (!selectedDate) {
+        this.dateRangeChanged.emit({ fromDate: this.fromDate, toDate: this.fromDate });
+        return;
+      }
       this.dateRangeChanged.emit({ fromDate: this.fromDate, toDate: selectedDate });
     }
   }
@@ -47,9 +57,10 @@ export class IrRangePicker {
         maxDate={this.maxSelectableDate}
         date={date?.toDate()}
         id={id}
+        emitEmptyDate
         {...additionalProps}
       >
-        <ir-button btn_styles="p-0 m-0" slot="trigger" btn_color="link" text={date?.format('YYYY-MM-DD') ?? buttonText}></ir-button>
+        <ir-button class="range-picker__date-picker-button" btn_styles="p-0 m-0" slot="trigger" btn_color="link" text={date?.format('YYYY-MM-DD') ?? buttonText}></ir-button>
       </ir-date-picker>
     );
   }

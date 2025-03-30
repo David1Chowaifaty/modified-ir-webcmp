@@ -560,7 +560,9 @@ export namespace Components {
         "ticket": string;
     }
     interface IrHkArchive {
+        "language": string;
         "propertyId": string | number;
+        "ticket": string;
     }
     interface IrHkTasks {
         "language": string;
@@ -3754,7 +3756,9 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrHkArchive {
+        "language"?: string;
         "propertyId"?: string | number;
+        "ticket"?: string;
     }
     interface IrHkTasks {
         "language"?: string;

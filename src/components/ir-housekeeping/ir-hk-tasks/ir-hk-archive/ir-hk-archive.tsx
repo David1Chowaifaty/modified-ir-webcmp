@@ -7,7 +7,7 @@ import housekeeping_store from '@/stores/housekeeping.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
 import { downloadFile } from '@/utils/utils';
-import { Component, Host, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import moment from 'moment';
 import { v4 } from 'uuid';
 export type ArchivesFilters = {
@@ -23,21 +23,29 @@ export type ArchivesFilters = {
 })
 export class IrHkArchive {
   @Prop() propertyId: string | number;
+  @Prop() language: string = 'en';
+  @Prop() ticket: string;
 
   @State() filters: ArchivesFilters = {
-    from_date: moment().add(-90, 'days').format('YYYY-MM-DD'),
-    to_date: moment().format('YYYY-MM-DD'),
+    from_date: null,
+    to_date: null,
     filtered_by_hkm: [],
     filtered_by_unit: [],
   };
   @State() data: (ArchivedTask & { id: string })[] = [];
   @State() isLoading: 'search' | 'excel' | null = null;
+  @State() fetchedData: boolean = false;
+  @State() selectedBooking: number | string | null;
 
   private houseKeepingService = new HouseKeepingService();
   private units: { id: number; name: string }[] = [];
+  private handleSideBarToggle(e) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.selectedBooking = null;
+  }
 
   componentWillLoad() {
-    this.initializeData();
     this.setUpUnits();
   }
   private setUpUnits() {
@@ -49,12 +57,11 @@ export class IrHkArchive {
     });
     this.units = units;
   }
-  private async initializeData() {
-    await this.getArchivedTasks();
-  }
+
   private async getArchivedTasks(export_to_excel: boolean = false) {
     const res = await this.houseKeepingService.getArchivedHKTasks({ property_id: Number(this.propertyId), ...this.filters, is_export_to_excel: export_to_excel });
     this.data = [...(res?.tasks || [])]?.map(t => ({ ...t, id: v4() }));
+    this.fetchedData = true;
     return { tasks: res?.tasks, url: res?.url };
   }
 
@@ -64,8 +71,8 @@ export class IrHkArchive {
     e.stopPropagation();
     const { fromDate, toDate } = e.detail;
     this.updateFilters({
-      from_date: fromDate.format('YYYY-MM-DD'),
-      to_date: toDate.format('YYYY-MM-DD'),
+      from_date: fromDate ? fromDate.format('YYYY-MM-DD') : null,
+      to_date: toDate ? toDate.format('YYYY-MM-DD') : null,
     });
   }
 
@@ -164,7 +171,11 @@ export class IrHkArchive {
                 toDate: this.filters.to_date,
               }}
             ></igl-date-range> */}
-            <ir-range-picker fromDate={moment(this.filters.from_date, 'YYYY-MM-DD')} toDate={moment(this.filters.to_date, 'YYYY-MM-DD')}></ir-range-picker>
+            <ir-range-picker
+              class="mr-1"
+              fromDate={this.filters.from_date ? moment(this.filters.from_date, 'YYYY-MM-DD') : null}
+              toDate={this.filters.to_date ? moment(this.filters.to_date, 'YYYY-MM-DD') : null}
+            ></ir-range-picker>
             <ir-button
               title={locales.entries?.Lcz_Search}
               variant="icon"
@@ -181,56 +192,87 @@ export class IrHkArchive {
               onClickHandler={e => this.exportArchive(e)}
             ></ir-button>
           </div>
-          {/* route to booking details */}
-          {this.data?.length === 0 && !isRequestPending('/Get_Archived_HK_Tasks') ? (
-            <p class={'text-center mt-2'}>No Results Found</p>
-          ) : (
-            <table class="mt-2">
-              <thead>
-                <th class="sr-only">period</th>
-                <th class="sr-only">housekeeper name</th>
-                <th class="sr-only">unit</th>
-                <th class="sr-only">booking number</th>
-              </thead>
-              <tbody>
-                {this.data?.map(d => (
-                  <tr key={d.id}>
-                    <td class="pr-2">{d.date}</td>
-                    <td class="px-2">{d.house_keeper}</td>
-                    <td class="px-2">
-                      <ir-tooltip message={d.unit} customSlot>
-                        <span slot="tooltip-trigger" class={`unit-name`}>
-                          {d.unit}
-                        </span>
-                      </ir-tooltip>
-                    </td>
-                    <td class="px-2">
-                      {d.booking_nbr ? (
-                        <ir-button
-                          btn_color="link"
-                          btnStyle={{
-                            width: 'fit-content',
-                            padding: '0',
-                            margin: '0',
-                          }}
-                          labelStyle={{
-                            padding: '0',
-                          }}
-                          text={d.booking_nbr.toString()}
-                          onClick={() => {
-                            window.open(`https://x.igloorooms.com/manage/acbookingeditV2.aspx?BN=${d.booking_nbr}`, '_blank');
-                          }}
-                        ></ir-button>
-                      ) : (
-                        'N/A'
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {this.fetchedData && (
+            <Fragment>
+              {this.data?.length === 0 && !isRequestPending('/Get_Archived_HK_Tasks') ? (
+                <p class={'text-center mt-2'}>No Results Found</p>
+              ) : (
+                <table class="mt-2">
+                  <thead>
+                    <th class="sr-only">period</th>
+                    <th class="sr-only">housekeeper name</th>
+                    <th class="sr-only">unit</th>
+                    <th class="sr-only">booking number</th>
+                  </thead>
+                  <tbody>
+                    {this.data?.map(d => (
+                      <tr key={d.id}>
+                        <td class="pr-2">{d.date}</td>
+                        <td class="px-2">{d.house_keeper}</td>
+                        <td class="px-2">
+                          <ir-tooltip message={d.unit} customSlot>
+                            <span slot="tooltip-trigger" class={`unit-name`}>
+                              {d.unit}
+                            </span>
+                          </ir-tooltip>
+                        </td>
+                        <td class="px-2">
+                          {d.booking_nbr ? (
+                            <ir-button
+                              btn_color="link"
+                              btnStyle={{
+                                width: 'fit-content',
+                                padding: '0',
+                                margin: '0',
+                              }}
+                              labelStyle={{
+                                padding: '0',
+                              }}
+                              text={d.booking_nbr.toString()}
+                              onClick={() => {
+                                this.selectedBooking = d.booking_nbr;
+                                // window.open(`https://x.igloorooms.com/manage/acbookingeditV2.aspx?BN=${d.booking_nbr}`, '_blank');
+                              }}
+                            ></ir-button>
+                          ) : (
+                            'N/A'
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </Fragment>
           )}
         </section>
+        <ir-sidebar
+          onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
+          open={!!this.selectedBooking}
+          showCloseButton={false}
+          sidebarStyles={{
+            width: '80rem',
+            background: '#F2F3F8',
+          }}
+        >
+          {this.selectedBooking && (
+            <ir-booking-details
+              slot="sidebar-body"
+              hasPrint
+              hasReceipt
+              hasCloseButton
+              onCloseSidebar={() => (this.selectedBooking = null)}
+              is_from_front_desk
+              propertyid={Number(this.propertyId)}
+              hasRoomEdit
+              hasRoomDelete
+              bookingNumber={this.selectedBooking?.toString()}
+              language={this.language}
+              hasRoomAdd
+              ticket={this.ticket}
+            ></ir-booking-details>
+          )}
+        </ir-sidebar>
       </Host>
     );
   }

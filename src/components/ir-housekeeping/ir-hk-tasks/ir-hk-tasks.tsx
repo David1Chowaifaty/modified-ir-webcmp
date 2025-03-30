@@ -282,7 +282,7 @@ export class IrHkTasks {
           // }}
           showCloseButton={false}
         >
-          {this.isSidebarOpen && <ir-hk-archive propertyId={this.property_id} slot="sidebar-body"></ir-hk-archive>}
+          {this.isSidebarOpen && <ir-hk-archive ticket={this.token.getToken()} propertyId={this.property_id} slot="sidebar-body"></ir-hk-archive>}
         </ir-sidebar>
         {/* <ir-title class="d-none d-md-flex" label={locales.entries.Lcz_HousekeepingTasks} justifyContent="space-between">
             <ir-button slot="title-body" text={locales.entries.Lcz_Archive} size="sm"></ir-button>
