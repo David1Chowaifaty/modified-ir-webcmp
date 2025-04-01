@@ -1,13 +1,26 @@
 :host {
   display: block;
+  --ir-range-gap: 0.5rem;
 }
 
 .range-picker__container {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--ir-range-gap);
   box-sizing: border-box;
+}
+.range-picker__container.focused {
+  border-bottom-color: rgb(198, 206, 231);
+  border-left-color: rgb(198, 206, 231);
+  border-right-color: rgb(198, 206, 231);
+  border-top-color: rgb(198, 206, 231);
+  color: #4e5154;
+  background-color: #fff;
+  border-color: var(--blue, #1e9ff2);
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 .range-picker__icon--hidden,
@@ -25,6 +38,7 @@
   padding: 0;
   margin: 0;
   cursor: pointer;
+  gap: var(--ir-range-gap);
 }
 
 .range-picker__overlay--active {
@@ -32,13 +46,26 @@
   align-items: center;
   justify-content: flex-start;
   pointer-events: auto;
-  padding-inline: 1rem;
   border-radius: inherit;
+  padding-inline: 0.5rem;
 }
-
-.range-picker__date-picker-button:hover {
-  text-decoration: underline;
-  color: green;
+.range-picker__date-picker:hover .range-picker__date-picker-button,
+.range-picker__date-picker.focused .range-picker__date-picker-button {
+  color: var(--blue, #1e9ff2);
+}
+.range-picker__date-picker-button {
+  background: inherit;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  font-size: 0.975rem;
+  line-height: 1.45;
+  height: 2rem;
+  color: #3b4781;
+  white-space: nowrap;
+  cursor: pointer;
+  padding-inline: 0.5rem;
 }
 /* Optional: additional styles for the icons if needed */
 .range-picker__calendar-icon,

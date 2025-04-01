@@ -324,7 +324,7 @@ export class IrDatePicker {
     return (
       <div class="ir-date-picker-trigger">
         {this.customPicker && <slot name="trigger"></slot>}
-        <input type="button" disabled={this.disabled} class={this.customPicker ? 'ir-date-picker-element' : 'form-control input-sm'} ref={el => (this.pickerRef = el)} />
+        <input type="text" disabled={this.disabled} class={this.customPicker ? 'ir-date-picker-element' : 'form-control input-sm'} ref={el => (this.pickerRef = el)} />
       </div>
     );
   }

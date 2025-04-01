@@ -36,7 +36,7 @@ export class IrHkArchive {
   @State() isLoading: 'search' | 'excel' | null = null;
   @State() fetchedData: boolean = false;
   @State() selectedBooking: number | string | null;
-
+  private minSelectableDate = moment().subtract(90, 'days').toDate();
   private houseKeepingService = new HouseKeepingService();
   private units: { id: number; name: string }[] = [];
   private handleSideBarToggle(e) {
@@ -172,6 +172,7 @@ export class IrHkArchive {
               }}
             ></igl-date-range> */}
             <ir-range-picker
+              minDate={this.minSelectableDate}
               class="mr-1"
               fromDate={this.filters.from_date ? moment(this.filters.from_date, 'YYYY-MM-DD') : null}
               toDate={this.filters.to_date ? moment(this.filters.to_date, 'YYYY-MM-DD') : null}

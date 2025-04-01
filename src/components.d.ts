@@ -939,8 +939,30 @@ export namespace Components {
         "zod"?: ZodType<any, any>;
     }
     interface IrRangePicker {
+        /**
+          * Whether to all the emitted dates to be null.
+         */
+        "allowNullDates": boolean;
+        /**
+          * The start date of the range.
+         */
         "fromDate": Moment;
+        /**
+          * The latest date that can be selected.
+         */
+        "maxDate"?: string | Date;
+        /**
+          * The earliest date that can be selected.
+         */
+        "minDate"?: string | Date;
+        /**
+          * The end date of the range.
+         */
         "toDate": Moment;
+        /**
+          * Whether to show the overlay before the date is selected.
+         */
+        "withOverlay": boolean;
     }
     interface IrReservationInformation {
         "booking": Booking;
@@ -4174,9 +4196,31 @@ declare namespace LocalJSX {
         "zod"?: ZodType<any, any>;
     }
     interface IrRangePicker {
+        /**
+          * Whether to all the emitted dates to be null.
+         */
+        "allowNullDates"?: boolean;
+        /**
+          * The start date of the range.
+         */
         "fromDate"?: Moment;
+        /**
+          * The latest date that can be selected.
+         */
+        "maxDate"?: string | Date;
+        /**
+          * The earliest date that can be selected.
+         */
+        "minDate"?: string | Date;
         "onDateRangeChanged"?: (event: IrRangePickerCustomEvent<{ fromDate: Moment; toDate: Moment }>) => void;
+        /**
+          * The end date of the range.
+         */
         "toDate"?: Moment;
+        /**
+          * Whether to show the overlay before the date is selected.
+         */
+        "withOverlay"?: boolean;
     }
     interface IrReservationInformation {
         "booking"?: Booking;
