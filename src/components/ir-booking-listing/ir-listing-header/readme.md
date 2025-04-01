@@ -33,7 +33,7 @@
 - [ir-button](../../ui/ir-button)
 - [ir-input-text](../../ui/ir-input-text)
 - [ir-select](../../ui/ir-select)
-- [ir-date-picker](../../ui/ir-date-picker)
+- [ir-range-picker](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive/ir-range-picker)
 
 ### Graph
 ```mermaid
@@ -42,7 +42,7 @@ graph TD;
   ir-listing-header --> ir-button
   ir-listing-header --> ir-input-text
   ir-listing-header --> ir-select
-  ir-listing-header --> ir-date-picker
+  ir-listing-header --> ir-range-picker
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property
@@ -76,6 +76,7 @@ graph TD;
   igl-property-booked-by --> ir-phone-input
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
+  ir-range-picker --> ir-date-picker
   ir-booking-listing --> ir-listing-header
   style ir-listing-header fill:#f9f,stroke:#333,stroke-width:4px
 ```

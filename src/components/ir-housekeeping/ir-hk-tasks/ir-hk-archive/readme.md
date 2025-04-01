@@ -42,7 +42,6 @@ graph TD;
   ir-hk-archive --> ir-booking-details
   ir-title --> ir-icon
   ir-range-picker --> ir-date-picker
-  ir-range-picker --> ir-button
   ir-button --> ir-icons
   ir-sidebar --> ir-icon
   ir-booking-details --> ir-guest-info

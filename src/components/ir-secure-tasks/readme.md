@@ -58,7 +58,6 @@ graph TD;
   ir-hk-archive --> ir-booking-details
   ir-title --> ir-icon
   ir-range-picker --> ir-date-picker
-  ir-range-picker --> ir-button
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> ir-booking-extra-note

@@ -52,7 +52,7 @@ graph TD;
   ir-listing-header --> ir-button
   ir-listing-header --> ir-input-text
   ir-listing-header --> ir-select
-  ir-listing-header --> ir-date-picker
+  ir-listing-header --> ir-range-picker
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property
@@ -86,6 +86,7 @@ graph TD;
   igl-property-booked-by --> ir-phone-input
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
+  ir-range-picker --> ir-date-picker
   ir-listing-modal --> ir-icon
   ir-listing-modal --> ir-select
   ir-listing-modal --> ir-button

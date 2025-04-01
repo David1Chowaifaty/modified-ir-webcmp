@@ -16,8 +16,6 @@
 graph TD;
   ir-test-cmp --> ir-range-picker
   ir-range-picker --> ir-date-picker
-  ir-range-picker --> ir-button
-  ir-button --> ir-icons
   style ir-test-cmp fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
