@@ -31,7 +31,6 @@
 ### Used by
 
  - [igl-book-property-header](../igl-book-property/igl-book-property-header)
- - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
 
 ### Depends on
 
@@ -42,7 +41,6 @@
 graph TD;
   igl-date-range --> ir-date-range
   igl-book-property-header --> igl-date-range
-  ir-hk-archive --> igl-date-range
   style igl-date-range fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

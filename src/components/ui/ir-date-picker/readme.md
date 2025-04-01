@@ -68,6 +68,7 @@ Type: `Promise<void>`
  - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-payment-details](../../ir-booking-details/ir-payment-details)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
+ - [ir-range-picker](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive/ir-range-picker)
 
 ### Graph
 ```mermaid
@@ -77,6 +78,7 @@ graph TD;
   ir-listing-header --> ir-date-picker
   ir-payment-details --> ir-date-picker
   ir-pickup --> ir-date-picker
+  ir-range-picker --> ir-date-picker
   style ir-date-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

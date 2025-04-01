@@ -61,7 +61,6 @@
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
- - [ir-test-cmp](../../ir-test-cmp)
 
 ### Graph
 ```mermaid
@@ -74,7 +73,6 @@ graph TD;
   ir-option-details --> ir-input-text
   ir-pickup --> ir-input-text
   ir-room-guests --> ir-input-text
-  ir-test-cmp --> ir-input-text
   style ir-input-text fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

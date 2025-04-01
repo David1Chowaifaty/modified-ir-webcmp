@@ -12,6 +12,13 @@
 | `password` | `password` | The password string to validate | `string` | `''`    |
 
 
+## Events
+
+| Event                      | Description | Type                   |
+| -------------------------- | ----------- | ---------------------- |
+| `passwordValidationChange` |             | `CustomEvent<boolean>` |
+
+
 ## Dependencies
 
 ### Used by

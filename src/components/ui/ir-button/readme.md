@@ -86,6 +86,7 @@ Type: `Promise<void>`
  - [ir-payment-option](../../ir-payment-option)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
+ - [ir-range-picker](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive/ir-range-picker)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
@@ -134,6 +135,7 @@ graph TD;
   ir-payment-option --> ir-button
   ir-pickup --> ir-button
   ir-pickup-view --> ir-button
+  ir-range-picker --> ir-button
   ir-reservation-information --> ir-button
   ir-room --> ir-button
   ir-room-guests --> ir-button
