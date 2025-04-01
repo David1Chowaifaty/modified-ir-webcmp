@@ -663,6 +663,12 @@ export namespace Components {
     interface IrOtaServices {
         "services": OtaService[];
     }
+    interface IrPasswordValidator {
+        /**
+          * The password string to validate
+         */
+        "password": string;
+    }
     interface IrPaymentActions {
         "booking": Booking;
         "paymentAction": IPaymentAction[];
@@ -908,6 +914,16 @@ export namespace Components {
         "maxVisibleItems": number;
         "remarks": IOtaNotes[];
     }
+    interface RequirementCheck {
+        /**
+          * Whether this requirement has been satisfied (true/false).
+         */
+        "isValid": boolean;
+        /**
+          * The requirement text to display (e.g. "At least one lowercase letter").
+         */
+        "text": string;
+    }
 }
 export interface IglBlockDatesViewCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1108,6 +1124,10 @@ export interface IrModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrOptionDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrOptionDetailsElement;
+}
+export interface IrPasswordValidatorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPasswordValidatorElement;
 }
 export interface IrPaymentActionsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2216,6 +2236,23 @@ declare global {
         prototype: HTMLIrOtaServicesElement;
         new (): HTMLIrOtaServicesElement;
     };
+    interface HTMLIrPasswordValidatorElementEventMap {
+        "passwordValidationChange": boolean;
+    }
+    interface HTMLIrPasswordValidatorElement extends Components.IrPasswordValidator, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPasswordValidatorElementEventMap>(type: K, listener: (this: HTMLIrPasswordValidatorElement, ev: IrPasswordValidatorCustomEvent<HTMLIrPasswordValidatorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPasswordValidatorElementEventMap>(type: K, listener: (this: HTMLIrPasswordValidatorElement, ev: IrPasswordValidatorCustomEvent<HTMLIrPasswordValidatorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPasswordValidatorElement: {
+        prototype: HTMLIrPasswordValidatorElement;
+        new (): HTMLIrPasswordValidatorElement;
+    };
     interface HTMLIrPaymentActionsElementEventMap {
         "generatePayment": IPaymentAction;
     }
@@ -2544,6 +2581,12 @@ declare global {
         prototype: HTMLOtaLabelElement;
         new (): HTMLOtaLabelElement;
     };
+    interface HTMLRequirementCheckElement extends Components.RequirementCheck, HTMLStencilElement {
+    }
+    var HTMLRequirementCheckElement: {
+        prototype: HTMLRequirementCheckElement;
+        new (): HTMLRequirementCheckElement;
+    };
     interface HTMLElementTagNameMap {
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
@@ -2614,6 +2657,7 @@ declare global {
         "ir-option-details": HTMLIrOptionDetailsElement;
         "ir-ota-service": HTMLIrOtaServiceElement;
         "ir-ota-services": HTMLIrOtaServicesElement;
+        "ir-password-validator": HTMLIrPasswordValidatorElement;
         "ir-payment-actions": HTMLIrPaymentActionsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
         "ir-payment-option": HTMLIrPaymentOptionElement;
@@ -2638,6 +2682,7 @@ declare global {
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-unit-status": HTMLIrUnitStatusElement;
         "ota-label": HTMLOtaLabelElement;
+        "requirement-check": HTMLRequirementCheckElement;
     }
 }
 declare namespace LocalJSX {
@@ -3373,6 +3418,13 @@ declare namespace LocalJSX {
     interface IrOtaServices {
         "services"?: OtaService[];
     }
+    interface IrPasswordValidator {
+        "onPasswordValidationChange"?: (event: IrPasswordValidatorCustomEvent<boolean>) => void;
+        /**
+          * The password string to validate
+         */
+        "password"?: string;
+    }
     interface IrPaymentActions {
         "booking"?: Booking;
         "onGeneratePayment"?: (event: IrPaymentActionsCustomEvent<IPaymentAction>) => void;
@@ -3653,6 +3705,16 @@ declare namespace LocalJSX {
         "maxVisibleItems"?: number;
         "remarks"?: IOtaNotes[];
     }
+    interface RequirementCheck {
+        /**
+          * Whether this requirement has been satisfied (true/false).
+         */
+        "isValid"?: boolean;
+        /**
+          * The requirement text to display (e.g. "At least one lowercase letter").
+         */
+        "text"?: string;
+    }
     interface IntrinsicElements {
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
@@ -3723,6 +3785,7 @@ declare namespace LocalJSX {
         "ir-option-details": IrOptionDetails;
         "ir-ota-service": IrOtaService;
         "ir-ota-services": IrOtaServices;
+        "ir-password-validator": IrPasswordValidator;
         "ir-payment-actions": IrPaymentActions;
         "ir-payment-details": IrPaymentDetails;
         "ir-payment-option": IrPaymentOption;
@@ -3747,6 +3810,7 @@ declare namespace LocalJSX {
         "ir-tooltip": IrTooltip;
         "ir-unit-status": IrUnitStatus;
         "ota-label": OtaLabel;
+        "requirement-check": RequirementCheck;
     }
 }
 export { LocalJSX as JSX };
@@ -3822,6 +3886,7 @@ declare module "@stencil/core" {
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
             "ir-ota-service": LocalJSX.IrOtaService & JSXBase.HTMLAttributes<HTMLIrOtaServiceElement>;
             "ir-ota-services": LocalJSX.IrOtaServices & JSXBase.HTMLAttributes<HTMLIrOtaServicesElement>;
+            "ir-password-validator": LocalJSX.IrPasswordValidator & JSXBase.HTMLAttributes<HTMLIrPasswordValidatorElement>;
             "ir-payment-actions": LocalJSX.IrPaymentActions & JSXBase.HTMLAttributes<HTMLIrPaymentActionsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
             "ir-payment-option": LocalJSX.IrPaymentOption & JSXBase.HTMLAttributes<HTMLIrPaymentOptionElement>;
@@ -3846,6 +3911,7 @@ declare module "@stencil/core" {
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
+            "requirement-check": LocalJSX.RequirementCheck & JSXBase.HTMLAttributes<HTMLRequirementCheckElement>;
         }
     }
 }
