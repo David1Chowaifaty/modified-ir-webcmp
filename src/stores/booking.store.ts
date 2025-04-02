@@ -336,4 +336,15 @@ export function calculateTotalRooms() {
     );
   }, 0);
 }
+export function resetReserved(): void {
+  const updatedSelections = Object.entries(booking_store.ratePlanSelections).reduce((acc, [roomTypeId, ratePlans]) => {
+    const roomType = booking_store.roomTypes.find(rt => rt.id.toString() === roomTypeId.toString());
+    acc[roomTypeId] = Object.entries(ratePlans).reduce((rpAcc, [ratePlanId, ratePlan]) => {
+      rpAcc[ratePlanId] = { ...ratePlan, reserved: 0, visibleInventory: roomType?.inventory ?? ratePlan.visibleInventory };
+      return rpAcc;
+    }, {} as any);
+    return acc;
+  }, {} as any);
+  booking_store.ratePlanSelections = { ...updatedSelections };
+}
 export default booking_store;

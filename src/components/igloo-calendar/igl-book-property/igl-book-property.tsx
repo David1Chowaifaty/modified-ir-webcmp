@@ -9,7 +9,7 @@ import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { ICurrency } from '@/models/calendarData';
-import booking_store, { calculateTotalRooms, modifyBookingStore, reserveRooms, resetBookingStore } from '@/stores/booking.store';
+import booking_store, { calculateTotalRooms, modifyBookingStore, reserveRooms, resetBookingStore, resetReserved } from '@/stores/booking.store';
 import moment from 'moment';
 export type IHistoryEntry = {
   dates: { checkIn: Date; checkOut: Date };
@@ -199,6 +199,9 @@ export class IglBookProperty {
       case 'back':
         event.stopImmediatePropagation();
         event.stopPropagation();
+        if (this.isEventType('BAR_BOOKING')) {
+          resetReserved();
+        }
         this.gotoPage('page_one');
         break;
       case 'book':
