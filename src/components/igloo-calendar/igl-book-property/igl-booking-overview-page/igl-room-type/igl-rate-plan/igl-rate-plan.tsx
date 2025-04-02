@@ -2,7 +2,7 @@ import { Component, Host, Prop, h, Event, EventEmitter, Fragment } from '@stenci
 import { v4 as uuidv4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import { RatePlan, Variation } from '@/models/property';
-import booking_store, { IRatePlanSelection, reserveRooms, updateRoomParams } from '@/stores/booking.store';
+import booking_store, { IRatePlanSelection, reserveRooms, resetReserved, updateRoomParams } from '@/stores/booking.store';
 
 @Component({
   tag: 'igl-rate-plan',
@@ -67,7 +67,7 @@ export class IglRatePlan {
   // Navigate to the next page for booking
   private bookProperty(): void {
     if (this.bookingType === 'BAR_BOOKING') {
-      this.resetReserved();
+      resetReserved();
     }
     this.reserveRoom();
     this.buttonClicked.emit({ key: 'next' });
@@ -84,7 +84,7 @@ export class IglRatePlan {
           first_name: booking_store.guest?.first_name,
           unit: this.roomTypeId === booking_store.guest?.roomtype_id ? booking_store.guest?.unit : null,
           bed_preference: this.visibleInventory.roomtype.is_bed_configuration_enabled ? booking_store.guest?.bed_preference : null,
-          infant_nbr: this.visibleInventory.selected_variation.child_nbr > 0 ? booking_store.guest.infant_nbr : null,
+          infant_nbr: this.visibleInventory.selected_variation?.child_nbr > 0 ? booking_store.guest?.infant_nbr : null,
         },
       ],
     });
@@ -151,16 +151,6 @@ export class IglRatePlan {
   }
 
   // Reset reserved rooms in the booking store
-  private resetReserved(): void {
-    const updatedSelections = Object.entries(booking_store.ratePlanSelections).reduce((acc, [roomTypeId, ratePlans]) => {
-      acc[roomTypeId] = Object.entries(ratePlans).reduce((rpAcc, [ratePlanId, ratePlan]) => {
-        rpAcc[ratePlanId] = { ...ratePlan, reserved: 0 };
-        return rpAcc;
-      }, {} as any);
-      return acc;
-    }, {} as any);
-    booking_store.ratePlanSelections = updatedSelections;
-  }
 
   render() {
     const { ratePlan, bookingType, currency, ratePricingMode, visibleInventory } = this;
@@ -282,7 +272,7 @@ export class IglRatePlan {
                         name="ratePlanGroup"
                         value="1"
                         onChange={() => {
-                          this.resetReserved();
+                          resetReserved();
                           this.reserveRoom();
                         }}
                         checked={visibleInventory.reserved === 1}
@@ -295,7 +285,7 @@ export class IglRatePlan {
                     type="button"
                     class="btn btn-primary booking-btn mt-lg-0 btn-sm ml-md-1 mt-1 d-md-none"
                     onClick={() => {
-                      this.resetReserved();
+                      resetReserved();
                       this.reserveRoom();
                       this.bookProperty();
                     }}
