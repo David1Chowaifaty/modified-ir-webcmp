@@ -69,6 +69,11 @@ export class IglBookProperty {
   private wasBlockedUnit: boolean;
 
   async componentWillLoad() {
+    console.log('<==>roomtypes<==>', booking_store?.roomTypes);
+    if (booking_store.roomTypes) {
+      modifyBookingStore('roomTypes', []);
+      modifyBookingStore('ratePlanSelections', {});
+    }
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.initializeDefaultDateRange();
 

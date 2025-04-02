@@ -15,7 +15,7 @@ export class IrInterceptor {
   @State() endpointsCount = 0;
   @State() isPageLoadingStoped: string | null = null;
 
-  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings'];
+  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings', '/UnBlock_Exposed_Unit'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
 
   @Listen('preventPageLoad', { target: 'body' })
