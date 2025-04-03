@@ -213,14 +213,15 @@ export class IrHkTasks {
 
     const { tasks, url } = await this.houseKeepingService.getHkTasks({
       housekeepers,
-      cleaning_frequencies: cleaning_frequencies?.code,
-      dusty_units: dusty_units?.code,
+      cleaning_frequency: cleaning_frequencies?.code,
+      dusty_window: dusty_units?.code,
       highlight_window: highlight_check_ins?.code,
       property_id: this.property_id,
       from_date: moment().format('YYYY-MM-DD'),
       to_date: cleaning_periods?.code || moment().format('YYYY-MM-DD'),
       is_export_to_excel: export_to_excel,
     });
+    console.log(tasks);
     if (tasks) {
       this.updateTasks(tasks);
     }

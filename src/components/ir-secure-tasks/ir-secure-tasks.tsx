@@ -54,6 +54,7 @@ export class IrSecureTasks {
     return (
       <Host>
         <div class="px-1 nav  d-flex align-items-center justify-content-between">
+          {this.p && <h4>AName: {this.p}</h4>}
           <ul class="nav nav-tabs">
             <li class=" nav-item">
               <a
