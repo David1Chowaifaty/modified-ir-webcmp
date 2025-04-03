@@ -62,7 +62,7 @@ export class IrHousekeeping {
         propertyId = propertyData.My_Result.id;
       }
       updateHKStore('default_properties', { token: this.ticket, property_id: propertyId, language: this.language });
-      const requests = [this.houseKeepingService.getExposedHKSetup(propertyId), this.roomService.fetchLanguage(this.language, ['_HK_FRONT'])];
+      const requests = [this.houseKeepingService.getExposedHKSetup(propertyId), this.roomService.fetchLanguage(this.language, ['_HK_FRONT', '_PMS_FRONT'])];
 
       if (this.propertyid) {
         requests.unshift(

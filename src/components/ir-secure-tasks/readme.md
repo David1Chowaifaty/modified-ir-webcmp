@@ -20,6 +20,7 @@
 
 - [ir-login](../ir-login)
 - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
+- [igloo-calendar](../igloo-calendar)
 - [ir-housekeeping](../ir-housekeeping)
 
 ### Graph
@@ -27,6 +28,7 @@
 graph TD;
   ir-secure-tasks --> ir-login
   ir-secure-tasks --> ir-hk-tasks
+  ir-secure-tasks --> igloo-calendar
   ir-secure-tasks --> ir-housekeeping
   ir-login --> ir-interceptor
   ir-login --> ir-toast
@@ -161,6 +163,39 @@ graph TD;
   igl-property-booked-by --> ir-tooltip
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
+  igloo-calendar --> ir-toast
+  igloo-calendar --> ir-interceptor
+  igloo-calendar --> igl-to-be-assigned
+  igloo-calendar --> igl-legends
+  igloo-calendar --> igl-cal-header
+  igloo-calendar --> igl-cal-body
+  igloo-calendar --> igl-cal-footer
+  igloo-calendar --> ir-loading-screen
+  igloo-calendar --> igl-book-property
+  igloo-calendar --> ir-sidebar
+  igloo-calendar --> ir-room-nights
+  igloo-calendar --> ir-booking-details
+  igloo-calendar --> ir-room-guests
+  igloo-calendar --> ir-modal
+  igl-to-be-assigned --> igl-tba-category-view
+  igl-to-be-assigned --> ir-button
+  igl-tba-category-view --> igl-tba-booking-view
+  igl-tba-booking-view --> ir-button
+  igl-cal-header --> ir-button
+  igl-cal-header --> ir-date-picker
+  igl-cal-body --> ir-interactive-title
+  igl-cal-body --> igl-booking-event
+  igl-cal-body --> ir-modal
+  igl-booking-event --> igl-booking-event-hover
+  igl-booking-event-hover --> ir-date-view
+  igl-booking-event-hover --> ir-label
+  igl-booking-event-hover --> ota-label
+  igl-booking-event-hover --> ir-button
+  igl-booking-event-hover --> igl-block-dates-view
+  ir-room-nights --> ir-price-input
+  ir-room-nights --> ir-loading-screen
+  ir-room-nights --> ir-icon
+  ir-room-nights --> ir-button
   ir-housekeeping --> ir-loading-screen
   ir-housekeeping --> ir-interceptor
   ir-housekeeping --> ir-toast

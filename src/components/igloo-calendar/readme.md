@@ -33,6 +33,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [ir-secure-tasks](../ir-secure-tasks)
+
 ### Depends on
 
 - [ir-toast](../ui/ir-toast)
@@ -193,6 +197,7 @@ graph TD;
   ir-payment-details --> ir-payment-actions
   ir-payment-details --> ir-modal
   ir-payment-actions --> ir-button
+  ir-secure-tasks --> igloo-calendar
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

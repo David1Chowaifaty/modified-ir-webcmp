@@ -11,18 +11,33 @@ export class IrSecureTasks {
   @Prop() propertyid: number;
   @Prop() p: string;
   @Prop() bookingNumber: string;
+
   @State() isAuthenticated: boolean = false;
-  private token = new Token();
   @State() currentPage: string;
+
+  private token = new Token();
+  private dates: any = {};
 
   componentWillLoad() {
     const isAuthenticated = checkUserAuthState();
+    this.generateDates();
     if (isAuthenticated) {
       this.isAuthenticated = true;
       this.token.setToken(isAuthenticated.token);
     }
   }
+  private generateDates() {
+    var today = new Date();
+    today.setDate(today.getDate() - 1);
+    var _FROM_DATE = today.toISOString().substring(0, 10);
+    today.setDate(today.getDate() + 60);
+    var _TO_DATE = today.toISOString().substring(0, 10);
 
+    this.dates = {
+      from_date: _FROM_DATE,
+      to_date: _TO_DATE,
+    };
+  }
   private handleAuthFinish(e: CustomEvent) {
     const token = e.detail.token;
     this.token.setToken(token);
@@ -62,6 +77,17 @@ export class IrSecureTasks {
                 Tasks
               </a>
             </li>
+            <li class="nav-item">
+              <a
+                class={{ 'nav-link': true, 'active': this.currentPage === 'front' }}
+                href="#"
+                onClick={() => {
+                  this.currentPage = 'front';
+                }}
+              >
+                Front
+              </a>
+            </li>
           </ul>
           <button
             class="btn btn-sm btn-primary"
@@ -73,12 +99,33 @@ export class IrSecureTasks {
             Logout
           </button>
         </div>
-        {this.currentPage === 'tasks' ? (
-          <ir-hk-tasks p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-hk-tasks>
-        ) : (
-          <ir-housekeeping p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-housekeeping>
-        )}
+        {this.renderPage()}
       </Host>
     );
+  }
+  renderPage() {
+    switch (this.currentPage) {
+      case 'tasks':
+        return <ir-hk-tasks p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-hk-tasks>;
+
+      case 'front':
+        return (
+          <igloo-calendar
+            currencyName="USD"
+            propertyid={this.propertyid}
+            p={this.p}
+            ticket={this.token.getToken()}
+            from_date={this.dates.from_date}
+            to_date={this.dates.to_date}
+            language="en"
+          ></igloo-calendar>
+        );
+
+      case 'hk':
+        return <ir-housekeeping p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-housekeeping>;
+
+      default:
+        return null;
+    }
   }
 }

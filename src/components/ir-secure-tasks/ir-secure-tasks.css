@@ -1,5 +1,6 @@
 :host {
   display: block;
+  height: 100%;
 }
 .nav {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
