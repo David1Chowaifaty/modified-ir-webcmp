@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property     | Attribute     | Description | Type      | Default     |
-| ------------ | ------------- | ----------- | --------- | ----------- |
-| `customSlot` | `custom-slot` |             | `boolean` | `false`     |
-| `message`    | `message`     |             | `string`  | `undefined` |
-| `withHtml`   | `with-html`   |             | `boolean` | `true`      |
+| Property         | Attribute     | Description | Type                         | Default     |
+| ---------------- | ------------- | ----------- | ---------------------------- | ----------- |
+| `containerStyle` | --            |             | `{ [key: string]: string; }` | `undefined` |
+| `customSlot`     | `custom-slot` |             | `boolean`                    | `false`     |
+| `message`        | `message`     |             | `string`                     | `undefined` |
+| `withHtml`       | `with-html`   |             | `boolean`                    | `true`      |
 
 
 ## Dependencies

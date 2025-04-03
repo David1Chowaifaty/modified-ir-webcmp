@@ -7,4 +7,22 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: start;
+}
+.table th,
+.table td {
+  white-space: nowrap;
+  width: fit-content;
+  max-width: max-content !important;
+  /* background: white; */
+  border: 0;
+  text-align: start;
+  background-color: white;
+  padding: 0.25rem !important;
+}
+.table th:first-child,
+.table td:first-child {
+  padding-left: 0 !important;
 }

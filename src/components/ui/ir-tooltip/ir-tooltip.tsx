@@ -9,6 +9,7 @@ export class IrTooltip {
   @Prop({ reflect: true }) message: string;
   @Prop() withHtml: boolean = true;
   @Prop() customSlot: boolean = false;
+  @Prop() containerStyle: { [key: string]: string };
 
   @State() open: boolean;
   tooltipTimeout: any;
@@ -28,7 +29,12 @@ export class IrTooltip {
   render() {
     return (
       <Host class="m-0 p-0">
-        <span class={'m-0 p-0 d-flex align-items-center justify-content-center'} onMouseEnter={() => this.toggleOpen(true)} onMouseLeave={() => this.toggleOpen(false)}>
+        <span
+          style={this.containerStyle}
+          class={'m-0 p-0 d-flex align-items-center justify-content-center'}
+          onMouseEnter={() => this.toggleOpen(true)}
+          onMouseLeave={() => this.toggleOpen(false)}
+        >
           {/* <i
             class="ml-1 ft-info"
             data-toggle="tooltip"

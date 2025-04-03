@@ -1,11 +1,12 @@
-import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, Listen, Prop, State, h, Event, EventEmitter, Watch } from '@stencil/core';
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import { PhysicalRoom, RoomType } from '@/models/booking.dto';
-import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { ICountry } from '@/models/IBooking';
 import moment from 'moment';
+import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
+import calendar_data from '@/stores/calendar-data';
 
 export type RoomCategory = RoomType & { expanded: boolean };
 
@@ -27,6 +28,7 @@ export class IglCalBody {
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
   @State() selectedRoom: PhysicalRoom;
+  @State() isLoading: boolean;
 
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
   @Event() showBookingPopup: EventEmitter;
@@ -38,11 +40,17 @@ export class IglCalBody {
   private currentDate = new Date();
   private hkModal: HTMLIrModalElement;
   private housekeepingService = new HouseKeepingService();
+  private bookingMap = new Map<string | number, string | number>();
 
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
+    this.bookingMap = this.getBookingMap(this.getBookingData());
+    console.log(this.bookingMap);
   }
-
+  @Watch('calendarData')
+  handleCalendarDataChange() {
+    this.bookingMap = this.getBookingMap(this.getBookingData());
+  }
   @Listen('dragOverHighlightElement', { target: 'window' })
   dragOverHighlightElementHandler(event: CustomEvent) {
     this.dragOverElement = event.detail.dragOverElement;
@@ -264,7 +272,28 @@ export class IglCalBody {
   renderElement() {
     this.renderAgain = !this.renderAgain;
   }
+  private getBookingMap(bookings: any[]): Map<string | number, string | number> {
+    const bookingMap = new Map<string | number, string | number>();
+    const today = moment().startOf('day');
 
+    for (const booking of bookings) {
+      const fromDate = moment(booking.FROM_DATE, 'YYYY-MM-DD').startOf('day');
+      const toDate = moment(booking.TO_DATE, 'YYYY-MM-DD').startOf('day');
+
+      // Check if today is between fromDate and toDate, inclusive.
+      if (today.isSameOrAfter(fromDate) && today.isSameOrBefore(toDate)) {
+        if (!bookingMap.has(booking.PR_ID)) {
+          bookingMap.set(booking.PR_ID, booking.BOOKING_NUMBER);
+        } else {
+          if (compareTime(moment().toDate(), createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour))) {
+            bookingMap.set(booking.PR_ID, booking.BOOKING_NUMBER);
+          }
+        }
+      }
+    }
+
+    return bookingMap;
+  }
   getGeneralCategoryDayColumns(addClass: string, isCategory: boolean = false, index: number) {
     return calendar_dates.days.map(dayInfo => {
       return (
@@ -368,6 +397,7 @@ export class IglCalBody {
             }`}
             data-room={this.getRoomId(room)}
             onClick={() => {
+              console.log(room);
               this.selectedRoom = room;
               this.hkModal.openModal();
             }}
@@ -394,7 +424,40 @@ export class IglCalBody {
       }
     });
   }
-
+  private async confirmHousekeepingUpdate(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    try {
+      this.isLoading = true;
+      const newStatusCode = this.selectedRoom?.hk_status === '001' ? '002' : '001';
+      await this.housekeepingService.setExposedUnitHKStatus({
+        property_id: this.propertyId,
+        // housekeeper: this.selectedRoom?.housekeeper ? { id: this.selectedRoom?.housekeeper?.id } : null,
+        status: {
+          code: newStatusCode,
+        },
+        unit: {
+          id: this.selectedRoom?.id,
+        },
+      });
+      if (newStatusCode === '001') {
+        await this.housekeepingService.executeHKAction({
+          actions: [
+            {
+              description: 'Cleaned',
+              hkm_id: this.selectedRoom?.housekeeper.id || null,
+              unit_id: this.selectedRoom?.id,
+              booking_nbr: this.bookingMap.get(this.selectedRoom?.id) ?? null,
+            },
+          ],
+        });
+      }
+    } finally {
+      this.isLoading = false;
+      this.selectedRoom = null;
+      this.hkModal.closeModal();
+    }
+  }
   render() {
     // onDragStart={event => this.handleDragStart(event)} draggable={true}
     return (
@@ -424,24 +487,9 @@ export class IglCalBody {
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Update}
           modalBody={this.renderModalBody()}
-          onConfirmModal={async e => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
-            await this.housekeepingService.setExposedUnitHKStatus({
-              property_id: this.propertyId,
-              // housekeeper: this.selectedRoom?.housekeeper ? { id: this.selectedRoom?.housekeeper?.id } : null,
-              status: {
-                code: this.selectedRoom?.hk_status === '001' ? '002' : '001',
-              },
-              unit: {
-                id: this.selectedRoom?.id,
-              },
-            });
-            this.selectedRoom = null;
-            this.hkModal.closeModal();
-          }}
+          onConfirmModal={this.confirmHousekeepingUpdate.bind(this)}
           autoClose={false}
-          isLoading={isRequestPending('/Set_Exposed_Unit_HK_Status')}
+          isLoading={this.isLoading}
           onCancelModal={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();

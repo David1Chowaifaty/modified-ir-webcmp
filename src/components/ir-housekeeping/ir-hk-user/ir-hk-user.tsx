@@ -189,7 +189,7 @@ export class IrHkUser {
             error={this.errors?.username}
             asyncParse
             autoValidate={this.user ? (this.userInfo?.username !== this.user.username ? true : false) : this.autoValidate}
-            errorMessage={this.errors?.username && this.userInfo?.username?.length >= 3 ? 'Username already exists.' : undefined}
+            errorMessage={this.errors?.username && this.userInfo?.username?.length >= 3 ? locales.entries.Lcz_UsernameAlreadyExists : undefined}
             label={locales.entries.Lcz_Username}
             placeholder={locales.entries.Lcz_Username}
             value={this.userInfo.username}

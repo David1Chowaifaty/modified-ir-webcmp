@@ -1159,6 +1159,7 @@ export namespace Components {
         "position": TPositions;
     }
     interface IrTooltip {
+        "containerStyle": { [key: string]: string };
         "customSlot": boolean;
         "message": string;
         "withHtml": boolean;
@@ -4441,6 +4442,7 @@ declare namespace LocalJSX {
         "position"?: TPositions;
     }
     interface IrTooltip {
+        "containerStyle"?: { [key: string]: string };
         "customSlot"?: boolean;
         "message"?: string;
         "withHtml"?: boolean;

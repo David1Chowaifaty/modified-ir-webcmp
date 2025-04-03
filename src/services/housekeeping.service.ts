@@ -87,6 +87,7 @@ export class HouseKeepingService {
       unit_id: number;
       hkm_id: number;
       description: string;
+      booking_nbr?: string | number;
     }[];
   }) {
     await axios.post(`/Execute_HK_Action`, { ...params });

@@ -1,3 +1,4 @@
+import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, h, Listen, Prop } from '@stencil/core';
 
 @Component({
@@ -26,7 +27,7 @@ export class IrTasksHeader {
           <ir-button
             size="sm"
             btn_color="outline"
-            text="Export"
+            text={locales.entries.Lcz_Export}
             onClickHandler={e => {
               e.stopImmediatePropagation();
               e.stopPropagation();
@@ -40,7 +41,7 @@ export class IrTasksHeader {
           <ir-button
             size="sm"
             btn_color="outline"
-            text="Archives"
+            text={locales.entries.Lcz_Archives}
             btnStyle={{ height: '100%' }}
             onClickHandler={e => {
               e.stopImmediatePropagation();
@@ -57,7 +58,7 @@ export class IrTasksHeader {
             btnStyle={{ height: '100%' }}
             size="sm"
             btn_disabled={!this.isCleanedEnabled}
-            text="Cleaned"
+            text={'Cleaned'}
             ref={el => (this.btnRef = el)}
           ></ir-button>
         </div>

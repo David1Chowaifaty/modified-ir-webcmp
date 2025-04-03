@@ -3,6 +3,7 @@ import { HouseKeepingService } from '@/services/housekeeping.service';
 import calendar_data from '@/stores/calendar-data';
 import housekeeping_store from '@/stores/housekeeping.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 
 @Component({
@@ -130,9 +131,9 @@ export class IrHkUnassignedUnits {
         <section class="px-1">
           <table>
             <thead>
-              <th class="sr-only">room name</th>
-              <th class="sr-only">housekeeper name</th>
-              <th class="sr-only">actions</th>
+              <th class="sr-only">{locales.entries.Lcz_RoomName}</th>
+              <th class="sr-only">{locales.entries.Lcz_HousekeeperName}</th>
+              <th class="sr-only">{locales.entries.Lcz_Actions}</th>
             </thead>
             <tbody>{this.renderRooms()}</tbody>
           </table>
@@ -142,14 +143,14 @@ export class IrHkUnassignedUnits {
               class="flex-fill"
               btn_styles="w-100  justify-content-center align-items-center"
               btn_color="secondary"
-              text={'Cancel'}
+              text={locales.entries.Lcz_Cancel}
             ></ir-button>
             <ir-button
               isLoading={isRequestPending('/Manage_Exposed_Assigned_Unit_To_HKM')}
               onClickHandler={this.assignUnits.bind(this)}
               class="flex-fill ml-md-1"
               btn_styles="w-100  justify-content-center align-items-center mt-1 mt-md-0"
-              text={'Confirm'}
+              text={locales.entries.Lcz_Confirm}
             ></ir-button>
           </div>
         </section>

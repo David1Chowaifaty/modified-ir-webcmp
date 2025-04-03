@@ -2,6 +2,7 @@ import { Component, Event, EventEmitter, Listen, Prop, State, Watch, h } from '@
 import { Task } from '@/models/housekeeping';
 import moment from 'moment';
 import housekeeping_store from '@/stores/housekeeping.store';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-tasks-table',
@@ -206,11 +207,11 @@ export class IrTasksTable {
                   onCheckChange={() => this.toggleSelectAll()}
                 ></ir-checkbox>
               </th>
-              <th class="extra-padding">Period</th>
-              <th class="extra-padding">Unit</th>
+              <th class="extra-padding">{locales.entries.Lcz_Period}</th>
+              <th class="extra-padding">{locales.entries.Lcz_Unit}</th>
               <th class={'sortable extra-padding'} onClick={() => this.handleSort('status')}>
                 <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-                  <span>Status</span>
+                  <span>{locales.entries.Lcz_Status}</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -230,14 +231,14 @@ export class IrTasksTable {
                   </svg>
                 </div>
               </th>
-              <th class="extra-padding">Hint</th>
-              <th>A</th>
-              <th>C</th>
-              <th>I</th>
+              <th class="extra-padding">{locales.entries.Lcz_Hint}</th>
+              <th>{locales.entries.Lcz_A}</th>
+              <th>{locales.entries.Lcz_C}</th>
+              <th>{locales.entries.Lcz_I}</th>
               {haveManyHousekeepers && (
                 <th style={{ textAlign: 'start' }} class={'sortable extra-padding'} onClick={() => this.handleSort('housekeeper')}>
                   <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-                    <span>Housekeeper</span>
+                    <span>{locales.entries.Lcz_Housekeeper}</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -266,7 +267,7 @@ export class IrTasksTable {
               <tr>
                 <td colSpan={9} class="text-center">
                   <div style={{ height: '300px' }} class="d-flex align-items-center justify-content-center">
-                    <span> No Tasks Found</span>
+                    <span> {locales.entries.Lcz_NoTasksFound}</span>
                   </div>
                 </td>
               </tr>
@@ -301,7 +302,7 @@ export class IrTasksTable {
                   <td class="task-row">{task.infant}</td>
                   {haveManyHousekeepers && (
                     <td class="w-50 task-row extra-padding" style={{ textAlign: 'start' }}>
-                      {task.housekeeper ?? 'Unassigned'}
+                      {task.housekeeper ?? locales.entries.Lcz_Unassigned}
                     </td>
                   )}
                 </tr>

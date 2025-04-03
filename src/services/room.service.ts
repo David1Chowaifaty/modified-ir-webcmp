@@ -63,12 +63,25 @@ export class RoomService {
       let entries = this.transformArrayToObject(data.My_Result.entries);
       locales.entries = { ...locales.entries, ...entries };
       locales.direction = data.My_Result.direction;
+      //copy entries
+      // this.copyEntries(entries);
       return { entries, direction: data.My_Result.direction };
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
   }
+  // private copyEntries(data: Record<string, string>) {
+  //   const typedObject: Record<string, string> = {};
+  //   Object.keys(data).forEach(key => {
+  //     typedObject[key] = 'string' as unknown as string;
+  //   });
+  //   const output = Object.keys(typedObject).reduce((acc, key) => {
+  //     acc[key] = 'string';
+  //     return acc;
+  //   }, {} as Record<string, string>);
+  //   navigator.clipboard.writeText(JSON.stringify(output, null, 2).replace(/"string"/g, 'string'));
+  // }
 
   private transformArrayToObject(data: any) {
     let object: any = {};

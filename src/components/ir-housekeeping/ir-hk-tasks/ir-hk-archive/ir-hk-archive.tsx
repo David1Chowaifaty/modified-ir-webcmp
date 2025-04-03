@@ -196,28 +196,28 @@ export class IrHkArchive {
           {this.fetchedData && (
             <Fragment>
               {this.data?.length === 0 && !isRequestPending('/Get_Archived_HK_Tasks') ? (
-                <p class={'text-center mt-2'}>No Results Found</p>
+                <p class={'text-center mt-2'}>{locales.entries.Lcz_NoResultsFound}</p>
               ) : (
-                <table class="mt-2">
+                <table class="mt-2 table">
                   <thead>
-                    <th class="sr-only">period</th>
-                    <th class="sr-only">housekeeper name</th>
-                    <th class="sr-only">unit</th>
-                    <th class="sr-only">booking number</th>
+                    <th class="pl-0">{locales.entries.Lcz_Period}</th>
+                    <th>{locales.entries.Lcz_Housekeeper}</th>
+                    <th>{locales.entries.Lcz_Unit}</th>
+                    <th>{locales.entries.Lcz_BookingNumber}</th>
                   </thead>
                   <tbody>
                     {this.data?.map(d => (
                       <tr key={d.id}>
-                        <td class="pr-2">{d.date}</td>
-                        <td class="px-2">{d.house_keeper}</td>
-                        <td class="px-2">
-                          <ir-tooltip message={d.unit} customSlot>
+                        <td class="pl-0">{d.date}</td>
+                        <td>{d.house_keeper}</td>
+                        <td>
+                          <ir-tooltip message={d.unit} customSlot containerStyle={{ width: 'fit-content' }}>
                             <span slot="tooltip-trigger" class={`unit-name`}>
                               {d.unit}
                             </span>
                           </ir-tooltip>
                         </td>
-                        <td class="px-2">
+                        <td>
                           {d.booking_nbr ? (
                             <ir-button
                               btn_color="link"
@@ -236,7 +236,7 @@ export class IrHkArchive {
                               }}
                             ></ir-button>
                           ) : (
-                            'N/A'
+                            locales.entries.Lcz_WasVacant
                           )}
                         </td>
                       </tr>
