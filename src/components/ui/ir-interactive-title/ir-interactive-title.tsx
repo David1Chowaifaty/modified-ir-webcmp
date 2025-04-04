@@ -29,26 +29,51 @@ export class IrInteractiveTitle {
     this.initializePopover();
   }
 
-  initializePopover() {
+  // initializePopover() {
+  //   const titleElement = this.el.querySelector('.popover-title') as HTMLElement;
+
+  //   if (titleElement) {
+  //     const isOverflowing = titleElement.scrollWidth > titleElement.offsetWidth;
+
+  //     if (isOverflowing) {
+  //       this.croppedTitle = this.popoverTitle.slice(0, this.cropSize) + '...';
+  //       this.croppedTitleEl.innerHTML = this.croppedTitle;
+
+  //       $(titleElement).popover({
+  //         trigger: 'hover',
+  //         content: this.popoverTitle,
+  //         placement: 'top',
+  //       });
+  //     } else {
+  //       $(titleElement).popover('dispose');
+  //     }
+  //   }
+  // }
+  private initializePopover() {
     const titleElement = this.el.querySelector('.popover-title') as HTMLElement;
+    const iconElement = this.el.querySelector('.hk-dot') as HTMLElement;
 
-    if (titleElement) {
-      const isOverflowing = titleElement.scrollWidth + 10 > titleElement.offsetWidth;
+    if (!titleElement || !this.croppedTitleEl) {
+      return;
+    }
+    const containerWidth = titleElement.offsetWidth;
+    const textWidth = this.croppedTitleEl.scrollWidth;
+    const iconWidth = iconElement ? iconElement.offsetWidth : 0;
+    const isOverflowing = textWidth + iconWidth > containerWidth;
 
-      if (isOverflowing) {
-        this.croppedTitle = this.popoverTitle.slice(0, this.cropSize) + '...';
-        this.croppedTitleEl.innerHTML = this.croppedTitle;
-        ($(titleElement) as any).popover({
-          trigger: 'hover',
-          content: this.popoverTitle,
-          placement: 'top',
-        });
-      } else {
-        ($(titleElement) as any).popover('dispose');
-      }
+    if (isOverflowing) {
+      this.croppedTitle = this.popoverTitle.slice(0, this.cropSize) + '...';
+      this.croppedTitleEl.innerHTML = this.croppedTitle;
+
+      $(titleElement).popover({
+        trigger: 'hover',
+        content: this.popoverTitle,
+        placement: 'top',
+      });
+    } else {
+      $(titleElement).popover('dispose');
     }
   }
-
   render() {
     return (
       <Host style={{ '--ir-popover-left': this.irPopoverLeft }}>
