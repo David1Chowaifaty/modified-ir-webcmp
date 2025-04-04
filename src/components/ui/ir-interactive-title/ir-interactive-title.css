@@ -57,7 +57,7 @@
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   padding-inline: var(--ir-popover-left);
   background: var(--ir-interactive-hk-bg, white);
-  color: var(--dot-color, #ffffff);
+  color: var(--dot-color, black);
 }
 /* .hk-dot::after {
   content: '';

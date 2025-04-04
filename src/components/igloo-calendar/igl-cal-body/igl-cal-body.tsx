@@ -415,6 +415,7 @@ export class IglCalBody {
               ref={el => {
                 if (el) this.interactiveTitle[room.id] = el;
               }}
+              style={room.hk_status === '003' && { '--dot-color': '#999999' }}
               hkStatus={room.hk_status !== '001'}
               popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}
             ></ir-interactive-title>
