@@ -30,7 +30,7 @@ export class IrTasksFilters {
   componentWillLoad() {
     this.baseFilters = {
       cleaning_periods: housekeeping_store?.hk_criteria?.cleaning_periods[0],
-      housekeepers: { ids: housekeeping_store.hk_criteria.housekeepers?.map(h => h.id) },
+      housekeepers: housekeeping_store.hk_criteria.housekeepers?.map(h => ({ id: h.id })),
       cleaning_frequencies: housekeeping_store?.hk_criteria?.cleaning_frequencies[0],
       dusty_units: housekeeping_store?.hk_criteria?.dusty_periods[0],
       highlight_check_ins: housekeeping_store?.hk_criteria?.highlight_checkin_options[0],
@@ -46,9 +46,7 @@ export class IrTasksFilters {
     e.stopPropagation();
     this.applyFilters.emit({
       ...this.filters,
-      housekeepers: {
-        ids: this.filters.housekeepers === '000' ? this.baseFilters.housekeepers.ids : [Number(this.filters.housekeepers)],
-      },
+      housekeepers: this.filters.housekeepers === '000' ? this.baseFilters.housekeepers : [{ id: Number(this.filters.housekeepers) }],
     });
   }
   private resetFilters(e: CustomEvent) {
@@ -57,9 +55,7 @@ export class IrTasksFilters {
     this.filters = { ...this.baseFilters, housekeepers: '000' };
     this.applyFilters.emit({
       ...this.filters,
-      housekeepers: {
-        ids: this.filters.housekeepers === '000' ? this.baseFilters.housekeepers.ids : [Number(this.filters.housekeepers)],
-      },
+      housekeepers: this.filters.housekeepers === '000' ? this.baseFilters.housekeepers : [{ id: Number(this.filters.housekeepers) }],
     });
   }
   render() {

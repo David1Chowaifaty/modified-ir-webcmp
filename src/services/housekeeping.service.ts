@@ -70,7 +70,7 @@ export class HouseKeepingService {
     property_id: number;
     from_date: string;
     to_date: string;
-    housekeepers?: { ids: number[] };
+    housekeepers?: { id: number }[];
     cleaning_frequency?: string;
     dusty_window?: string;
     highlight_window?: string;
