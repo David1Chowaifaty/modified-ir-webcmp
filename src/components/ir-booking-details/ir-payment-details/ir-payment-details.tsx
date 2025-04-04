@@ -322,7 +322,7 @@ export class IrPaymentDetails {
               variant="icon"
               icon_name="credit_card"
               onClickHandler={async () => {
-                if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr && !this.bookingDetails.guest.cci) {
+                if (!this.bookingDetails.is_direct && this.bookingDetails.channel_booking_nbr && !this.bookingDetails.guest.cci && !this.collapsedGuarantee) {
                   this.paymentDetailsUrl = await this.bookingService.getPCICardInfoURL(this.bookingDetails.booking_nbr);
                 }
                 this.collapsedGuarantee = !this.collapsedGuarantee;
