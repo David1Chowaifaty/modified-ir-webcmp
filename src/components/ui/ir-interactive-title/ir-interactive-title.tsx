@@ -33,7 +33,7 @@ export class IrInteractiveTitle {
     const titleElement = this.el.querySelector('.popover-title') as HTMLElement;
 
     if (titleElement) {
-      const isOverflowing = titleElement.scrollWidth > titleElement.offsetWidth;
+      const isOverflowing = titleElement.scrollWidth + 10 > titleElement.offsetWidth;
 
       if (isOverflowing) {
         this.croppedTitle = this.popoverTitle.slice(0, this.cropSize) + '...';

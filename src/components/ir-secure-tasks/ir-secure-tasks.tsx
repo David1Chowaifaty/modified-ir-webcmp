@@ -1,6 +1,6 @@
 import Token from '@/models/Token';
 import { checkUserAuthState, manageAnchorSession } from '@/utils/utils';
-import { Component, Host, Prop, State, h } from '@stencil/core';
+import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-secure-tasks',
@@ -14,6 +14,7 @@ export class IrSecureTasks {
 
   @State() isAuthenticated: boolean = false;
   @State() currentPage: string;
+  @State() inputValue: string;
 
   private token = new Token();
   private dates: any = {};
@@ -25,6 +26,11 @@ export class IrSecureTasks {
       this.isAuthenticated = true;
       this.token.setToken(isAuthenticated.token);
     }
+    this.inputValue = this.p;
+  }
+  @Watch('p')
+  handlePChange() {
+    this.inputValue = this.p;
   }
   private generateDates() {
     var today = new Date();
@@ -53,48 +59,79 @@ export class IrSecureTasks {
       );
     return (
       <Host>
-        <div class="px-1 nav  d-flex align-items-center justify-content-between">
-          {this.p && <h4>AName: {this.p}</h4>}
-          <ul class="nav nav-tabs">
-            <li class=" nav-item">
-              <a
-                class={{ 'nav-link': true, 'active': this.currentPage === 'hk' }}
-                href="#"
-                onClick={() => {
-                  this.currentPage = 'hk';
+        <div class="px-1 nav flex-column flex-sm-row d-flex align-items-center justify-content-between">
+          <div class="d-flex  align-items-center">
+            <div class="d-flex align-items-center p-0 m-0" style={{ gap: '0.5rem' }}>
+              <h4 class="m-0 p-0">AName: </h4>
+              <form
+                class="input-group"
+                onSubmit={e => {
+                  e.preventDefault();
+                  if (this.inputValue) {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('aname', this.inputValue);
+                    window.history.pushState({}, '', url);
+                  }
+                  this.logout();
                 }}
               >
-                Housekeepers
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class={{ 'nav-link': true, 'active': this.currentPage === 'tasks' }}
-                href="#"
-                onClick={() => {
-                  this.currentPage = 'tasks';
-                }}
-              >
-                Tasks
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class={{ 'nav-link': true, 'active': this.currentPage === 'front' }}
-                href="#"
-                onClick={() => {
-                  this.currentPage = 'front';
-                }}
-              >
-                Front
-              </a>
-            </li>
-          </ul>
+                <input
+                  type="text"
+                  value={this.inputValue}
+                  onInput={e => (this.inputValue = (e.target as HTMLInputElement).value)}
+                  style={{ maxWidth: '60px' }}
+                  class="form-control"
+                  placeholder="AName"
+                  aria-label="AName"
+                  aria-describedby="button-save"
+                ></input>
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-outline-secondary" type="submit" id="button-save">
+                    save
+                  </button>
+                </div>
+              </form>
+            </div>
+            <ul class="nav  m-0 p-0">
+              <li class=" nav-item">
+                <a
+                  class={{ 'nav-link': true, 'active': this.currentPage === 'hk' }}
+                  href="#"
+                  onClick={() => {
+                    this.currentPage = 'hk';
+                  }}
+                >
+                  Housekeepers
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class={{ 'nav-link': true, 'active': this.currentPage === 'tasks' }}
+                  href="#"
+                  onClick={() => {
+                    this.currentPage = 'tasks';
+                  }}
+                >
+                  Tasks
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class={{ 'nav-link': true, 'active': this.currentPage === 'front' }}
+                  href="#"
+                  onClick={() => {
+                    this.currentPage = 'front';
+                  }}
+                >
+                  Front
+                </a>
+              </li>
+            </ul>
+          </div>
           <button
             class="btn btn-sm btn-primary"
             onClick={() => {
-              sessionStorage.removeItem('backend_anchor');
-              window.location.reload();
+              this.logout();
             }}
           >
             Logout
@@ -103,6 +140,10 @@ export class IrSecureTasks {
         {this.renderPage()}
       </Host>
     );
+  }
+  private logout() {
+    sessionStorage.removeItem('backend_anchor');
+    window.location.reload();
   }
   renderPage() {
     switch (this.currentPage) {

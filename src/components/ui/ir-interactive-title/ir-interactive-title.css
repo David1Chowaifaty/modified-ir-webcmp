@@ -54,8 +54,9 @@
   width: fit-content;
   padding: 4px;
   left: auto;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   padding-inline: var(--ir-popover-left);
-
+  background: var(--ir-interactive-hk-bg, white);
   color: var(--dot-color, #ffffff);
 }
 /* .hk-dot::after {

@@ -3,10 +3,16 @@
   height: 100%;
 }
 .nav {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.06); */
   background: white;
   padding: 0.25rem 0;
 }
 .nav-tabs {
   border-bottom: 0;
+}
+.nav-link {
+  color: inherit;
+}
+.active {
+  color: var(--blue);
 }

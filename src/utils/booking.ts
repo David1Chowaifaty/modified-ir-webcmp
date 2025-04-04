@@ -121,7 +121,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     TO_DATE: bookingToDate,
     NO_OF_DAYS: dateDifference(bookingFromDate, bookingToDate),
     STATUS: bookingStatus[cell.booking?.status.code],
-    NAME: formatName(mainGuest?.first_name, mainGuest.last_name),
+    NAME: formatName(mainGuest?.first_name, mainGuest?.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
     POOL: cell.POOL,

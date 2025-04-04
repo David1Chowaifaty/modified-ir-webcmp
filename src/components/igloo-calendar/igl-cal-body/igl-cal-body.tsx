@@ -41,6 +41,7 @@ export class IglCalBody {
   private hkModal: HTMLIrModalElement;
   private housekeepingService = new HouseKeepingService();
   private bookingMap = new Map<string | number, string | number>();
+  private interactiveTitle: HTMLIrInteractiveTitleElement[] = [];
 
   componentWillLoad() {
     this.currentDate.setHours(0, 0, 0, 0);
@@ -401,10 +402,19 @@ export class IglCalBody {
               this.selectedRoom = room;
               this.hkModal.openModal();
             }}
+            onMouseEnter={() => {
+              this.interactiveTitle[room.id]?.style?.setProperty('--ir-interactive-hk-bg', '#e0e0e0');
+            }}
+            onMouseLeave={() => {
+              this.interactiveTitle[room.id]?.style?.removeProperty('--ir-interactive-hk-bg');
+            }}
           >
             {/* <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div> */}
             {/* <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover> */}
             <ir-interactive-title
+              ref={el => {
+                if (el) this.interactiveTitle[room.id] = el;
+              }}
               hkStatus={room.hk_status !== '001'}
               popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}
             ></ir-interactive-title>
