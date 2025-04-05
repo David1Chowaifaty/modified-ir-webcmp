@@ -63,6 +63,9 @@ tr {
 .selected {
   background: #e3f3fa !important;
 }
+.sortable {
+  text-transform: capitalize;
+}
 .sortable:hover {
   color: #212529;
   background-color: #e2e6ea;
