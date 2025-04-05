@@ -1,6 +1,7 @@
 :host {
   display: block;
   position: absolute;
+  --ota-bar-width: 2px;
 }
 
 .bookingEventBase {
@@ -43,25 +44,25 @@
   border-bottom-right-radius: 0;
 }
 .bookingEventBase.border.skewedLeft::before {
-  border: 2px solid #424242;
+  border: var(--ota-bar-width) solid #424242;
   border-right: 0;
   border-left: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  top: -1px;
+  top: calc(var(--ota-bar-width) * -1);
   height: 20px;
   left: -4px;
 }
 .ota-booking-event {
-  border-width: 2px !important;
+  border-width: var(--ota-bar-width) !important;
 }
 .bookingEventBase.border.skewedRight::before {
-  border: 2px solid #424242;
+  border: var(--ota-bar-width) solid #424242;
   border-left: 0;
   border-right: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-  top: -1px;
+  top: calc(var(--ota-bar-width) * -1);
   height: 20px;
   right: -4px;
 }
