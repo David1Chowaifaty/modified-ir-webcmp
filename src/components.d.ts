@@ -563,6 +563,12 @@ export namespace Components {
         "language": string;
         "ticket": string;
     }
+    interface IrGuestsManagementTable {
+    }
+    interface IrGuestsManagementUser {
+    }
+    interface IrGuestsManagements {
+    }
     interface IrHkArchive {
         "language": string;
         "propertyId": string | number;
@@ -971,6 +977,8 @@ export namespace Components {
     interface IrReservationInformation {
         "booking": Booking;
         "countries": ICountry[];
+    }
+    interface IrResetPassword {
     }
     interface IrRoom {
         "bedPreferences": IEntries[];
@@ -1449,6 +1457,10 @@ export interface IrRangePickerCustomEvent<T> extends CustomEvent<T> {
 export interface IrReservationInformationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrReservationInformationElement;
+}
+export interface IrResetPasswordCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrResetPasswordElement;
 }
 export interface IrRoomCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2356,6 +2368,24 @@ declare global {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
     };
+    interface HTMLIrGuestsManagementTableElement extends Components.IrGuestsManagementTable, HTMLStencilElement {
+    }
+    var HTMLIrGuestsManagementTableElement: {
+        prototype: HTMLIrGuestsManagementTableElement;
+        new (): HTMLIrGuestsManagementTableElement;
+    };
+    interface HTMLIrGuestsManagementUserElement extends Components.IrGuestsManagementUser, HTMLStencilElement {
+    }
+    var HTMLIrGuestsManagementUserElement: {
+        prototype: HTMLIrGuestsManagementUserElement;
+        new (): HTMLIrGuestsManagementUserElement;
+    };
+    interface HTMLIrGuestsManagementsElement extends Components.IrGuestsManagements, HTMLStencilElement {
+    }
+    var HTMLIrGuestsManagementsElement: {
+        prototype: HTMLIrGuestsManagementsElement;
+        new (): HTMLIrGuestsManagementsElement;
+    };
     interface HTMLIrHkArchiveElement extends Components.IrHkArchive, HTMLStencilElement {
     }
     var HTMLIrHkArchiveElement: {
@@ -2794,6 +2824,26 @@ declare global {
         prototype: HTMLIrReservationInformationElement;
         new (): HTMLIrReservationInformationElement;
     };
+    interface HTMLIrResetPasswordElementEventMap {
+        "authFinish": {
+    token: string;
+    code: 'succsess' | 'error';
+  };
+    }
+    interface HTMLIrResetPasswordElement extends Components.IrResetPassword, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrResetPasswordElementEventMap>(type: K, listener: (this: HTMLIrResetPasswordElement, ev: IrResetPasswordCustomEvent<HTMLIrResetPasswordElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrResetPasswordElementEventMap>(type: K, listener: (this: HTMLIrResetPasswordElement, ev: IrResetPasswordCustomEvent<HTMLIrResetPasswordElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrResetPasswordElement: {
+        prototype: HTMLIrResetPasswordElement;
+        new (): HTMLIrResetPasswordElement;
+    };
     interface HTMLIrRoomElementEventMap {
         "deleteFinished": string;
         "pressCheckIn": any;
@@ -3154,6 +3204,9 @@ declare global {
         "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
         "ir-extra-services": HTMLIrExtraServicesElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-guests-management-table": HTMLIrGuestsManagementTableElement;
+        "ir-guests-management-user": HTMLIrGuestsManagementUserElement;
+        "ir-guests-managements": HTMLIrGuestsManagementsElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
         "ir-hk-tasks": HTMLIrHkTasksElement;
         "ir-hk-team": HTMLIrHkTeamElement;
@@ -3186,6 +3239,7 @@ declare global {
         "ir-price-input": HTMLIrPriceInputElement;
         "ir-range-picker": HTMLIrRangePickerElement;
         "ir-reservation-information": HTMLIrReservationInformationElement;
+        "ir-reset-password": HTMLIrResetPasswordElement;
         "ir-room": HTMLIrRoomElement;
         "ir-room-guests": HTMLIrRoomGuestsElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
@@ -3830,6 +3884,12 @@ declare namespace LocalJSX {
         "onResetBookingEvt"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "ticket"?: string;
     }
+    interface IrGuestsManagementTable {
+    }
+    interface IrGuestsManagementUser {
+    }
+    interface IrGuestsManagements {
+    }
     interface IrHkArchive {
         "language"?: string;
         "propertyId"?: string | number;
@@ -4280,6 +4340,12 @@ declare namespace LocalJSX {
         "countries"?: ICountry[];
         "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent<any>>) => void;
     }
+    interface IrResetPassword {
+        "onAuthFinish"?: (event: IrResetPasswordCustomEvent<{
+    token: string;
+    code: 'succsess' | 'error';
+  }>) => void;
+    }
     interface IrRoom {
         "bedPreferences"?: IEntries[];
         "booking"?: Booking;
@@ -4583,6 +4649,9 @@ declare namespace LocalJSX {
         "ir-extra-service-config": IrExtraServiceConfig;
         "ir-extra-services": IrExtraServices;
         "ir-guest-info": IrGuestInfo;
+        "ir-guests-management-table": IrGuestsManagementTable;
+        "ir-guests-management-user": IrGuestsManagementUser;
+        "ir-guests-managements": IrGuestsManagements;
         "ir-hk-archive": IrHkArchive;
         "ir-hk-tasks": IrHkTasks;
         "ir-hk-team": IrHkTeam;
@@ -4615,6 +4684,7 @@ declare namespace LocalJSX {
         "ir-price-input": IrPriceInput;
         "ir-range-picker": IrRangePicker;
         "ir-reservation-information": IrReservationInformation;
+        "ir-reset-password": IrResetPassword;
         "ir-room": IrRoom;
         "ir-room-guests": IrRoomGuests;
         "ir-room-nights": IrRoomNights;
@@ -4697,6 +4767,9 @@ declare module "@stencil/core" {
             "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;
             "ir-extra-services": LocalJSX.IrExtraServices & JSXBase.HTMLAttributes<HTMLIrExtraServicesElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-guests-management-table": LocalJSX.IrGuestsManagementTable & JSXBase.HTMLAttributes<HTMLIrGuestsManagementTableElement>;
+            "ir-guests-management-user": LocalJSX.IrGuestsManagementUser & JSXBase.HTMLAttributes<HTMLIrGuestsManagementUserElement>;
+            "ir-guests-managements": LocalJSX.IrGuestsManagements & JSXBase.HTMLAttributes<HTMLIrGuestsManagementsElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
             "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;
             "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;
@@ -4729,6 +4802,7 @@ declare module "@stencil/core" {
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
             "ir-range-picker": LocalJSX.IrRangePicker & JSXBase.HTMLAttributes<HTMLIrRangePickerElement>;
             "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;
+            "ir-reset-password": LocalJSX.IrResetPassword & JSXBase.HTMLAttributes<HTMLIrResetPasswordElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;

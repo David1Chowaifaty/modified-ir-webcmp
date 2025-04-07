@@ -24,17 +24,9 @@
 
 <body>
   <ir-common></ir-common>
-  <ir-sales-by-country propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-sales-by-country>
+  <ir-reset-password></ir-reset-password>
   <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
-  <script>
-    const salesByCountryEl = document.querySelector("ir-sales-by-country");
-    setTimeout(() => {
-      const ticket = getToken();
-      salesByCountryEl.propertyid = getId();
-      salesByCountryEl.ticket = ticket;
-    }, 300)
-  </script>
 
 </body>
 

@@ -4,6 +4,7 @@ import { UserService } from '@/services/user.service';
 import calendar_data from '@/stores/calendar-data';
 import { getDefaultProperties } from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
+import { CONSTANTS } from '@/utils/constants';
 import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 import { z, ZodError } from 'zod';
 
@@ -54,7 +55,7 @@ export class IrHkUser {
           if (this.user && !this.userInfo?.password) {
             return true;
           }
-          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/.test(password);
+          return CONSTANTS.PASSWORD.test(password);
         },
         { message: 'Password must be at least 8 characters long.' },
       ),
