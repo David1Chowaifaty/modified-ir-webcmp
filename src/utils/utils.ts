@@ -241,3 +241,15 @@ export function downloadFile(url: string, filename?: string) {
   a.click();
   document.body.removeChild(a);
 }
+
+/**
+ * Converts an integer value into a float by shifting the decimal point.
+ *
+ * @param value - The integer value to convert (e.g. 29016).
+ * @param decimalPlaces - The number of decimal places to shift (e.g. 2 results in 290.16).
+ * @returns The converted floating point number.
+ */
+export function toFloat(value: number, decimalPlaces: number): number {
+  const factor = Math.pow(10, decimalPlaces);
+  return value / factor;
+}
