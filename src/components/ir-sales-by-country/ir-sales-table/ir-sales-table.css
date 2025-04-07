@@ -1,3 +1,24 @@
 :host {
   display: block;
+  width: 100%;
+}
+.legend {
+  height: 12px;
+  aspect-ratio: 1;
+  background: #000;
+  border-radius: 4px;
+}
+.secondary {
+  background: #6692b3;
+}
+.channel-cell {
+  width: 100%;
+}
+.task-row,
+.table th,
+.table td {
+  white-space: nowrap;
+  max-width: max-content !important;
+  /* background: white; */
+  padding: 0.25rem 1rem !important;
 }

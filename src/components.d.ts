@@ -28,6 +28,8 @@ import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
+import { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/types";
+import { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
@@ -53,6 +55,8 @@ export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
+export { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/types";
+export { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export namespace Components {
@@ -1031,6 +1035,18 @@ export namespace Components {
         "ticket": string;
         "toDate": string;
     }
+    interface IrSalesByCountry {
+        "language": string;
+        "p": string;
+        "propertyid": number;
+        "ticket": string;
+    }
+    interface IrSalesFilters {
+        "isLoading": boolean;
+    }
+    interface IrSalesTable {
+        "records": SalesRecord[];
+    }
     interface IrSecureTasks {
         "bookingNumber": string;
         "p": string;
@@ -1445,6 +1461,10 @@ export interface IrRoomGuestsCustomEvent<T> extends CustomEvent<T> {
 export interface IrRoomNightsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrRoomNightsElement;
+}
+export interface IrSalesFiltersCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrSalesFiltersElement;
 }
 export interface IrSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2832,6 +2852,35 @@ declare global {
         prototype: HTMLIrRoomNightsElement;
         new (): HTMLIrRoomNightsElement;
     };
+    interface HTMLIrSalesByCountryElement extends Components.IrSalesByCountry, HTMLStencilElement {
+    }
+    var HTMLIrSalesByCountryElement: {
+        prototype: HTMLIrSalesByCountryElement;
+        new (): HTMLIrSalesByCountryElement;
+    };
+    interface HTMLIrSalesFiltersElementEventMap {
+        "applyFilters": SalesFilters;
+    }
+    interface HTMLIrSalesFiltersElement extends Components.IrSalesFilters, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrSalesFiltersElementEventMap>(type: K, listener: (this: HTMLIrSalesFiltersElement, ev: IrSalesFiltersCustomEvent<HTMLIrSalesFiltersElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrSalesFiltersElementEventMap>(type: K, listener: (this: HTMLIrSalesFiltersElement, ev: IrSalesFiltersCustomEvent<HTMLIrSalesFiltersElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrSalesFiltersElement: {
+        prototype: HTMLIrSalesFiltersElement;
+        new (): HTMLIrSalesFiltersElement;
+    };
+    interface HTMLIrSalesTableElement extends Components.IrSalesTable, HTMLStencilElement {
+    }
+    var HTMLIrSalesTableElement: {
+        prototype: HTMLIrSalesTableElement;
+        new (): HTMLIrSalesTableElement;
+    };
     interface HTMLIrSecureTasksElement extends Components.IrSecureTasks, HTMLStencilElement {
     }
     var HTMLIrSecureTasksElement: {
@@ -3140,6 +3189,9 @@ declare global {
         "ir-room": HTMLIrRoomElement;
         "ir-room-guests": HTMLIrRoomGuestsElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
+        "ir-sales-by-country": HTMLIrSalesByCountryElement;
+        "ir-sales-filters": HTMLIrSalesFiltersElement;
+        "ir-sales-table": HTMLIrSalesTableElement;
         "ir-secure-tasks": HTMLIrSecureTasksElement;
         "ir-select": HTMLIrSelectElement;
         "ir-sidebar": HTMLIrSidebarElement;
@@ -4301,6 +4353,19 @@ declare namespace LocalJSX {
         "ticket"?: string;
         "toDate"?: string;
     }
+    interface IrSalesByCountry {
+        "language"?: string;
+        "p"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+    }
+    interface IrSalesFilters {
+        "isLoading"?: boolean;
+        "onApplyFilters"?: (event: IrSalesFiltersCustomEvent<SalesFilters>) => void;
+    }
+    interface IrSalesTable {
+        "records"?: SalesRecord[];
+    }
     interface IrSecureTasks {
         "bookingNumber"?: string;
         "p"?: string;
@@ -4553,6 +4618,9 @@ declare namespace LocalJSX {
         "ir-room": IrRoom;
         "ir-room-guests": IrRoomGuests;
         "ir-room-nights": IrRoomNights;
+        "ir-sales-by-country": IrSalesByCountry;
+        "ir-sales-filters": IrSalesFilters;
+        "ir-sales-table": IrSalesTable;
         "ir-secure-tasks": IrSecureTasks;
         "ir-select": IrSelect;
         "ir-sidebar": IrSidebar;
@@ -4664,6 +4732,9 @@ declare module "@stencil/core" {
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
+            "ir-sales-by-country": LocalJSX.IrSalesByCountry & JSXBase.HTMLAttributes<HTMLIrSalesByCountryElement>;
+            "ir-sales-filters": LocalJSX.IrSalesFilters & JSXBase.HTMLAttributes<HTMLIrSalesFiltersElement>;
+            "ir-sales-table": LocalJSX.IrSalesTable & JSXBase.HTMLAttributes<HTMLIrSalesTableElement>;
             "ir-secure-tasks": LocalJSX.IrSecureTasks & JSXBase.HTMLAttributes<HTMLIrSecureTasksElement>;
             "ir-select": LocalJSX.IrSelect & JSXBase.HTMLAttributes<HTMLIrSelectElement>;
             "ir-sidebar": LocalJSX.IrSidebar & JSXBase.HTMLAttributes<HTMLIrSidebarElement>;
