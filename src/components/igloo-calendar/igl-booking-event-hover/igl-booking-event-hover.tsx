@@ -460,15 +460,18 @@ export class IglBookingEventHover {
         )}
 
         {/* {this.renderNote()} */}
-        {this.bookingEvent.is_direct ? (
+        {/* {this.bookingEvent.is_direct ? (
           <ir-label containerStyle={{ padding: '0', margin: '0' }} labelText={`${locales.entries.Lcz_GuestRemark}:`} display="inline" content={this.bookingEvent.NOTES}></ir-label>
         ) : (
           <ota-label
-            class={'m-0 p-0'}
+            class={'m-0 p-0 ota-notes'}
             label={`${locales.entries.Lcz_ChannelNotes || 'Channel notes'}:`}
             remarks={this.bookingEvent.ota_notes}
             maxVisibleItems={this.bookingEvent.ota_notes?.length}
           ></ota-label>
+        )} */}
+        {this.bookingEvent.is_direct && (
+          <ir-label containerStyle={{ padding: '0', margin: '0' }} labelText={`${locales.entries.Lcz_GuestRemark}:`} display="inline" content={this.bookingEvent.NOTES}></ir-label>
         )}
         {/* {this.getInternalNote() ? (
           <div class="row p-0 m-0">

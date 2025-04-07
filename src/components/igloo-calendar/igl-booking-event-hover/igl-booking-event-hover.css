@@ -45,6 +45,9 @@
   left: var(--el-left, 50%);
   transform: translateX(-50%);
 }
+.ota-notes {
+  width: 450px;
+}
 
 .iglPopOver {
   /* max-width: 350px; */

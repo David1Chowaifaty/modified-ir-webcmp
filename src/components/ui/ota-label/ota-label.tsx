@@ -28,12 +28,14 @@ export class OtaLabel {
     return (
       <Host>
         <p class={'label_title'}>{this.label}</p>
-        <ul>
+        <ul class="ota-message-list">
           {displayedRemarks.map((remark, index) => (
-            <li key={v4()}>
-              - {remark.statement}{' '}
+            <li key={v4()} class="ota-message-item">
+              {remark.statement}{' '}
               {this.remarks.length > this.maxVisibleItems && index === displayedRemarks.length - 1 && (
-                <button onClick={this.toggleShowAll}>{this.showAll ? locales.entries.Lcz_ShowLess : locales.entries.Lcz_ShowMore}</button>
+                <button class="ota-visibility-toggle" onClick={this.toggleShowAll}>
+                  {this.showAll ? locales.entries.Lcz_ShowLess : locales.entries.Lcz_ShowMore}
+                </button>
               )}
             </li>
           ))}
