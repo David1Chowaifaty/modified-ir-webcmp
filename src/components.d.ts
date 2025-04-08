@@ -32,6 +32,7 @@ import { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/
 import { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
+import { User } from "./components/ir-user-management/types";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
@@ -59,6 +60,7 @@ export { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/
 export { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
+export { User } from "./components/ir-user-management/types";
 export namespace Components {
     interface IglApplicationInfo {
         "baseData": { unit: { id: string; name: string }; roomtypeId: number };
@@ -1194,6 +1196,10 @@ export namespace Components {
         "users": any[];
     }
     interface IrUserManagementUser {
+        "isEdit": boolean;
+        "language": string;
+        "property_id": number;
+        "user": User;
     }
     interface OtaLabel {
         "label": string;
@@ -1522,6 +1528,10 @@ export interface IrTitleCustomEvent<T> extends CustomEvent<T> {
 export interface IrUnitStatusCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrUnitStatusElement;
+}
+export interface IrUserManagementUserCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrUserManagementUserElement;
 }
 declare global {
     interface HTMLIglApplicationInfoElement extends Components.IglApplicationInfo, HTMLStencilElement {
@@ -3138,7 +3148,19 @@ declare global {
         prototype: HTMLIrUserManagementTableElement;
         new (): HTMLIrUserManagementTableElement;
     };
+    interface HTMLIrUserManagementUserElementEventMap {
+        "resetData": null;
+        "closeSideBar": null;
+    }
     interface HTMLIrUserManagementUserElement extends Components.IrUserManagementUser, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrUserManagementUserElementEventMap>(type: K, listener: (this: HTMLIrUserManagementUserElement, ev: IrUserManagementUserCustomEvent<HTMLIrUserManagementUserElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrUserManagementUserElementEventMap>(type: K, listener: (this: HTMLIrUserManagementUserElement, ev: IrUserManagementUserCustomEvent<HTMLIrUserManagementUserElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrUserManagementUserElement: {
         prototype: HTMLIrUserManagementUserElement;
@@ -4590,6 +4612,12 @@ declare namespace LocalJSX {
         "users"?: any[];
     }
     interface IrUserManagementUser {
+        "isEdit"?: boolean;
+        "language"?: string;
+        "onCloseSideBar"?: (event: IrUserManagementUserCustomEvent<null>) => void;
+        "onResetData"?: (event: IrUserManagementUserCustomEvent<null>) => void;
+        "property_id"?: number;
+        "user"?: User;
     }
     interface OtaLabel {
         "label"?: string;

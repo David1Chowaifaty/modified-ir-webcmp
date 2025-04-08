@@ -25,7 +25,7 @@ export class IrUserManagementTable {
                 <th>Active</th>
 
                 <th class="text-center">
-                  {/* <ir-icon
+                  <ir-icon
                     data-testid="new_user"
                     title={locales.entries.Lcz_CreateHousekeeper}
                     onIconClickHandler={() => {
@@ -42,7 +42,7 @@ export class IrUserManagementTable {
                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
                       />
                     </svg>
-                  </ir-icon> */}
+                  </ir-icon>
                 </th>
               </tr>
             </thead>
@@ -108,5 +108,10 @@ export class IrUserManagementTable {
       </Host>
     );
   }
-  private renderCurrentTrigger() {}
+  private renderCurrentTrigger() {
+    if (!this.currentTrigger) {
+      return null;
+    }
+    return <ir-user-management-user slot="sidebar-body" user={this.currentTrigger?.user} isEdit={this.currentTrigger?.isEdit}></ir-user-management-user>;
+  }
 }
