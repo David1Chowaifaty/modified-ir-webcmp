@@ -1,11 +1,11 @@
 import { Component, Host, h } from '@stencil/core';
 
 @Component({
-  tag: 'ir-guests-management-table',
-  styleUrl: 'ir-guests-management-table.css',
+  tag: 'ir-user-management-user',
+  styleUrl: 'ir-user-management-user.css',
   scoped: true,
 })
-export class IrGuestsManagementTable {
+export class IrUserManagementUser {
   render() {
     return (
       <Host>

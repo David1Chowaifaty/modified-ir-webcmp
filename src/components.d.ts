@@ -563,12 +563,6 @@ export namespace Components {
         "language": string;
         "ticket": string;
     }
-    interface IrGuestsManagementTable {
-    }
-    interface IrGuestsManagementUser {
-    }
-    interface IrGuestsManagements {
-    }
     interface IrHkArchive {
         "language": string;
         "propertyId": string | number;
@@ -1189,6 +1183,17 @@ export namespace Components {
         "withHtml": boolean;
     }
     interface IrUnitStatus {
+    }
+    interface IrUserManagement {
+        "language": string;
+        "p": string;
+        "propertyid": number;
+        "ticket": string;
+    }
+    interface IrUserManagementTable {
+        "users": any[];
+    }
+    interface IrUserManagementUser {
     }
     interface OtaLabel {
         "label": string;
@@ -2368,24 +2373,6 @@ declare global {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
     };
-    interface HTMLIrGuestsManagementTableElement extends Components.IrGuestsManagementTable, HTMLStencilElement {
-    }
-    var HTMLIrGuestsManagementTableElement: {
-        prototype: HTMLIrGuestsManagementTableElement;
-        new (): HTMLIrGuestsManagementTableElement;
-    };
-    interface HTMLIrGuestsManagementUserElement extends Components.IrGuestsManagementUser, HTMLStencilElement {
-    }
-    var HTMLIrGuestsManagementUserElement: {
-        prototype: HTMLIrGuestsManagementUserElement;
-        new (): HTMLIrGuestsManagementUserElement;
-    };
-    interface HTMLIrGuestsManagementsElement extends Components.IrGuestsManagements, HTMLStencilElement {
-    }
-    var HTMLIrGuestsManagementsElement: {
-        prototype: HTMLIrGuestsManagementsElement;
-        new (): HTMLIrGuestsManagementsElement;
-    };
     interface HTMLIrHkArchiveElement extends Components.IrHkArchive, HTMLStencilElement {
     }
     var HTMLIrHkArchiveElement: {
@@ -3139,6 +3126,24 @@ declare global {
         prototype: HTMLIrUnitStatusElement;
         new (): HTMLIrUnitStatusElement;
     };
+    interface HTMLIrUserManagementElement extends Components.IrUserManagement, HTMLStencilElement {
+    }
+    var HTMLIrUserManagementElement: {
+        prototype: HTMLIrUserManagementElement;
+        new (): HTMLIrUserManagementElement;
+    };
+    interface HTMLIrUserManagementTableElement extends Components.IrUserManagementTable, HTMLStencilElement {
+    }
+    var HTMLIrUserManagementTableElement: {
+        prototype: HTMLIrUserManagementTableElement;
+        new (): HTMLIrUserManagementTableElement;
+    };
+    interface HTMLIrUserManagementUserElement extends Components.IrUserManagementUser, HTMLStencilElement {
+    }
+    var HTMLIrUserManagementUserElement: {
+        prototype: HTMLIrUserManagementUserElement;
+        new (): HTMLIrUserManagementUserElement;
+    };
     interface HTMLOtaLabelElement extends Components.OtaLabel, HTMLStencilElement {
     }
     var HTMLOtaLabelElement: {
@@ -3204,9 +3209,6 @@ declare global {
         "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
         "ir-extra-services": HTMLIrExtraServicesElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
-        "ir-guests-management-table": HTMLIrGuestsManagementTableElement;
-        "ir-guests-management-user": HTMLIrGuestsManagementUserElement;
-        "ir-guests-managements": HTMLIrGuestsManagementsElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
         "ir-hk-tasks": HTMLIrHkTasksElement;
         "ir-hk-team": HTMLIrHkTeamElement;
@@ -3262,6 +3264,9 @@ declare global {
         "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-unit-status": HTMLIrUnitStatusElement;
+        "ir-user-management": HTMLIrUserManagementElement;
+        "ir-user-management-table": HTMLIrUserManagementTableElement;
+        "ir-user-management-user": HTMLIrUserManagementUserElement;
         "ota-label": HTMLOtaLabelElement;
         "requirement-check": HTMLRequirementCheckElement;
     }
@@ -3883,12 +3888,6 @@ declare namespace LocalJSX {
         "onCloseSideBar"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "ticket"?: string;
-    }
-    interface IrGuestsManagementTable {
-    }
-    interface IrGuestsManagementUser {
-    }
-    interface IrGuestsManagements {
     }
     interface IrHkArchive {
         "language"?: string;
@@ -4581,6 +4580,17 @@ declare namespace LocalJSX {
     interface IrUnitStatus {
         "onResetData"?: (event: IrUnitStatusCustomEvent<null>) => void;
     }
+    interface IrUserManagement {
+        "language"?: string;
+        "p"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+    }
+    interface IrUserManagementTable {
+        "users"?: any[];
+    }
+    interface IrUserManagementUser {
+    }
     interface OtaLabel {
         "label"?: string;
         "maxVisibleItems"?: number;
@@ -4649,9 +4659,6 @@ declare namespace LocalJSX {
         "ir-extra-service-config": IrExtraServiceConfig;
         "ir-extra-services": IrExtraServices;
         "ir-guest-info": IrGuestInfo;
-        "ir-guests-management-table": IrGuestsManagementTable;
-        "ir-guests-management-user": IrGuestsManagementUser;
-        "ir-guests-managements": IrGuestsManagements;
         "ir-hk-archive": IrHkArchive;
         "ir-hk-tasks": IrHkTasks;
         "ir-hk-team": IrHkTeam;
@@ -4707,6 +4714,9 @@ declare namespace LocalJSX {
         "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
         "ir-unit-status": IrUnitStatus;
+        "ir-user-management": IrUserManagement;
+        "ir-user-management-table": IrUserManagementTable;
+        "ir-user-management-user": IrUserManagementUser;
         "ota-label": OtaLabel;
         "requirement-check": RequirementCheck;
     }
@@ -4767,9 +4777,6 @@ declare module "@stencil/core" {
             "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;
             "ir-extra-services": LocalJSX.IrExtraServices & JSXBase.HTMLAttributes<HTMLIrExtraServicesElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
-            "ir-guests-management-table": LocalJSX.IrGuestsManagementTable & JSXBase.HTMLAttributes<HTMLIrGuestsManagementTableElement>;
-            "ir-guests-management-user": LocalJSX.IrGuestsManagementUser & JSXBase.HTMLAttributes<HTMLIrGuestsManagementUserElement>;
-            "ir-guests-managements": LocalJSX.IrGuestsManagements & JSXBase.HTMLAttributes<HTMLIrGuestsManagementsElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
             "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;
             "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;
@@ -4825,6 +4832,9 @@ declare module "@stencil/core" {
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;
+            "ir-user-management": LocalJSX.IrUserManagement & JSXBase.HTMLAttributes<HTMLIrUserManagementElement>;
+            "ir-user-management-table": LocalJSX.IrUserManagementTable & JSXBase.HTMLAttributes<HTMLIrUserManagementTableElement>;
+            "ir-user-management-user": LocalJSX.IrUserManagementUser & JSXBase.HTMLAttributes<HTMLIrUserManagementUserElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
             "requirement-check": LocalJSX.RequirementCheck & JSXBase.HTMLAttributes<HTMLRequirementCheckElement>;
         }
