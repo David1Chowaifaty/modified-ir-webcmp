@@ -6,7 +6,7 @@ import moment from 'moment';
 import { PaymentService, IPaymentAction } from '@/services/payment.service';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
-import { formatAmount } from '@/utils/utils';
+import { formatAmount, toFloat } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
@@ -364,7 +364,7 @@ export class IrPaymentDetails {
             {/* <ir-label content={this.bookingDetails.ota_guarante?.expiration_date} labelText="Expiration date:"></ir-label> */}
             <ir-label
               content={this.formatCurrency(
-                Number(this.bookingDetails.ota_guarante?.meta?.virtual_card_current_balance),
+                toFloat(Number(this.bookingDetails.ota_guarante?.meta?.virtual_card_current_balance), Number(this.bookingDetails.ota_guarante?.meta?.virtual_card_decimal_places)),
                 this.bookingDetails.ota_guarante?.meta?.virtual_card_currency_code,
               )}
               labelText={`${locales.entries.Lcz_CardBalance}:`}
