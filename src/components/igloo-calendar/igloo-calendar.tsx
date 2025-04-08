@@ -314,7 +314,7 @@ export class IglooCalendar {
         this.scrollToElement(this.today);
       }, 200);
       if (!this.calendarData.is_vacation_rental) {
-        const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, dateToFormattedString(new Date()), this.to_date);
+        const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, this.from_date, this.to_date);
         this.unassignedDates = { fromDate: this.from_date, toDate: this.to_date, data: { ...this.unassignedDates, ...data } };
         this.calendarData = { ...this.calendarData, unassignedDates: data };
         addUnassignedDates(data);
@@ -696,6 +696,16 @@ export class IglooCalendar {
         monthsInfo: [...newMonths, ...this.calendarData.monthsInfo],
         bookingEvents: [...this.calendarData.bookingEvents, ...bookings],
       };
+      if (Math.abs(moment().diff(moment(fromDate, 'YYYY-MM-DD'), 'days')) <= 10) {
+        const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, fromDate, toDate);
+        this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
+        this.unassignedDates = {
+          fromDate,
+          toDate,
+          data,
+        };
+        addUnassignedDates(data);
+      }
     } else {
       this.calendarData.endingDate = new Date(toDate).getTime();
       this.calendarData.to_date = toDate;
@@ -728,15 +738,15 @@ export class IglooCalendar {
         monthsInfo: [...this.calendarData.monthsInfo, ...newMonths],
         bookingEvents: [...this.calendarData.bookingEvents, ...bookings],
       };
+      const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, fromDate, toDate);
+      this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
+      this.unassignedDates = {
+        fromDate,
+        toDate,
+        data,
+      };
+      addUnassignedDates(data);
     }
-    const data = await this.toBeAssignedService.getUnassignedDates(this.property_id, fromDate, toDate);
-    this.calendarData.unassignedDates = { ...this.calendarData.unassignedDates, ...data };
-    this.unassignedDates = {
-      fromDate,
-      toDate,
-      data,
-    };
-    addUnassignedDates(data);
   }
   async handleDateSearch(dates: { start: Moment; end: Moment }) {
     const startDate = moment(dates.start).toDate();
