@@ -8,11 +8,11 @@ import { UserService } from '@/services/user.service';
 import calendar_data from '@/stores/calendar-data';
 
 @Component({
-  tag: 'ir-user-management-user',
-  styleUrl: 'ir-user-management-user.css',
+  tag: 'ir-user-form-panel',
+  styleUrl: 'ir-user-form-panel.css',
   scoped: true,
 })
-export class IrUserManagementUser {
+export class IrUserFormPanel {
   @Prop() user: User;
   @Prop() isEdit: boolean = false;
   @Prop() language: string = 'en';
