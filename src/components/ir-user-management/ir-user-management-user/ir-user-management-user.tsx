@@ -5,6 +5,7 @@ import { z, ZodError } from 'zod';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { CONSTANTS } from '@/utils/constants';
 import { UserService } from '@/services/user.service';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-user-management-user',
@@ -43,6 +44,7 @@ export class IrUserManagementUser {
   @Event() closeSideBar: EventEmitter<null>;
 
   private housekeepingService = new HouseKeepingService();
+  private mobileMask = {};
   private userSchema = z.object({
     name: z.string().min(2),
     mobile: z.string().min(1).max(14),
@@ -86,6 +88,12 @@ export class IrUserManagementUser {
       this.autoValidate = true;
       this.userInfo = { ...this.user, password: '' };
     }
+    this.mobileMask = {
+      mask: `{${calendar_data.country.phone_prefix}} 000000000000`,
+      lazy: false,
+      autofix: true,
+      placeholderChar: '\u200B',
+    };
   }
 
   private updateUserField(key: keyof User, value: any) {
@@ -134,7 +142,7 @@ export class IrUserManagementUser {
     console.log(this.errors);
     return (
       <Host>
-        <ir-title class="px-1" displayContext="sidebar" label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : 'Create new user'}></ir-title>
+        <ir-title class="px-1" displayContext="sidebar" label={this.isEdit ? 'Edit User' : 'Create New User'}></ir-title>
         <section class="px-1">
           <ir-input-text
             testId="name"
@@ -170,7 +178,8 @@ export class IrUserManagementUser {
             asyncParse
             autoValidate={this.user ? (this.userInfo?.username !== this.user.username ? true : false) : this.autoValidate}
             errorMessage={this.errors?.username && this.userInfo?.username?.length >= 3 ? locales.entries.Lcz_UsernameAlreadyExists : undefined}
-            label={locales.entries.Lcz_Username}
+            label={'Mobile'}
+            mask={this.mobileMask}
             placeholder={locales.entries.Lcz_Username}
             value={this.userInfo.username}
             onTextChange={e => this.updateUserField('username', e.detail)}
@@ -191,7 +200,14 @@ export class IrUserManagementUser {
             }}
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
-          {this.showPasswordValidation && <ir-password-validator password={this.userInfo.password}></ir-password-validator>}
+          {this.showPasswordValidation && <ir-password-validator class="mb-1" password={this.userInfo.password}></ir-password-validator>}
+          <ir-select
+            label="Role"
+            data={[
+              { text: 'Super Admin', value: '1' },
+              { text: 'Frontdesk', value: '2' },
+            ]}
+          ></ir-select>
           <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
             <ir-button
               data-testid="cancel"
