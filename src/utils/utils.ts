@@ -253,3 +253,7 @@ export function toFloat(value: number, decimalPlaces: number): number {
   const factor = Math.pow(10, decimalPlaces);
   return value / factor;
 }
+
+export async function sleep(time: number = 200) {
+  return new Promise(r => setTimeout(() => r(null), time));
+}

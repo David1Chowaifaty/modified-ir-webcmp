@@ -1,6 +1,7 @@
 :host {
   display: block;
-  --ir-sidebar-padding: 0;
+  --ir-sidebar-padding-block: 0;
+  --ir-sidebar-padding-inline: 0;
 }
 .dropdown-toggle {
   color: var(--blue);

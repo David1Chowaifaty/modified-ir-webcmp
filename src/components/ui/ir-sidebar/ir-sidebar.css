@@ -30,7 +30,13 @@
   overflow-y: hidden;
   color: var(--sidebar-color, #000);
   background-color: var(--sidebar-backgound, #fff);
-  padding: var(--ir-sidebar-padding, 0.5rem 0);
+  /* padding: var(--ir-sidebar-padding, 0.5rem 0); */
+  padding-block: var(--ir-sidebar-padding-block, 0);
+  padding-inline: var(--ir-sidebar-padding-inline, 0.5rem);
+  padding-top: var(--ir-sidebar-padding-top, unset);
+  padding-bottom: var(--ir-sidebar-padding-bottom, unset);
+  padding-left: var(--ir-sidebar-padding-left, unset);
+  padding-right: var(--ir-sidebar-padding-right, unset);
 }
 .sidebar-right.active {
   right: 0;
@@ -50,7 +56,13 @@
   overflow-y: hidden;
   color: var(--sidebar-color, #000);
   background: var(--sidebar-backgound, #fff);
-  padding: var(--ir-sidebar-padding, 0.5rem 0);
+  /* padding: var(--ir-sidebar-padding, 0.5rem 0); */
+  padding-block: var(--ir-sidebar-padding-block, 0);
+  padding-inline: var(--ir-sidebar-padding-inline, 0.5rem);
+  padding-top: var(--ir-sidebar-padding-top, unset);
+  padding-bottom: var(--ir-sidebar-padding-bottom, unset);
+  padding-left: var(--ir-sidebar-padding-left, unset);
+  padding-right: var(--ir-sidebar-padding-right, unset);
 }
 .sidebar-title {
   display: flex;

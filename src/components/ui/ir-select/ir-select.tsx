@@ -30,6 +30,7 @@ export class IrSelect {
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
   @Prop() select_id: string = v4();
   @Prop() testId: string;
+  @Prop() disabled: boolean;
   /** Whether the select has an error */
   @Prop({ mutable: true }) error: boolean = false;
 
@@ -109,6 +110,7 @@ export class IrSelect {
         <div class="input-group row m-0">
           {label}
           <select
+            disabled={this.disabled}
             aria-invalid={this.error ? 'true' : 'false'}
             data-testid={this.testId}
             style={this.selectForcedStyles}

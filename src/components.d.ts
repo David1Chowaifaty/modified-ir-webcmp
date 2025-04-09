@@ -1059,6 +1059,7 @@ export namespace Components {
     interface IrSelect {
         "LabelAvailable": boolean;
         "data": selectOption[];
+        "disabled": boolean;
         /**
           * Whether the select has an error
          */
@@ -1188,17 +1189,20 @@ export namespace Components {
     }
     interface IrUserFormPanel {
         "isEdit": boolean;
+        "isSuperAdmin": boolean;
         "language": string;
         "property_id": number;
         "user": User;
     }
     interface IrUserManagement {
+        "isSuperAdmin": boolean;
         "language": string;
         "p": string;
         "propertyid": number;
         "ticket": string;
     }
     interface IrUserManagementTable {
+        "isSuperAdmin": boolean;
         "users": User[];
     }
     interface OtaLabel {
@@ -1532,6 +1536,10 @@ export interface IrUnitStatusCustomEvent<T> extends CustomEvent<T> {
 export interface IrUserFormPanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrUserFormPanelElement;
+}
+export interface IrUserManagementTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrUserManagementTableElement;
 }
 declare global {
     interface HTMLIglApplicationInfoElement extends Components.IglApplicationInfo, HTMLStencilElement {
@@ -3160,7 +3168,18 @@ declare global {
         prototype: HTMLIrUserManagementElement;
         new (): HTMLIrUserManagementElement;
     };
+    interface HTMLIrUserManagementTableElementEventMap {
+        "toast": IToast;
+    }
     interface HTMLIrUserManagementTableElement extends Components.IrUserManagementTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrUserManagementTableElementEventMap>(type: K, listener: (this: HTMLIrUserManagementTableElement, ev: IrUserManagementTableCustomEvent<HTMLIrUserManagementTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrUserManagementTableElementEventMap>(type: K, listener: (this: HTMLIrUserManagementTableElement, ev: IrUserManagementTableCustomEvent<HTMLIrUserManagementTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrUserManagementTableElement: {
         prototype: HTMLIrUserManagementTableElement;
@@ -4461,6 +4480,7 @@ declare namespace LocalJSX {
     interface IrSelect {
         "LabelAvailable"?: boolean;
         "data"?: selectOption[];
+        "disabled"?: boolean;
         /**
           * Whether the select has an error
          */
@@ -4604,6 +4624,7 @@ declare namespace LocalJSX {
     }
     interface IrUserFormPanel {
         "isEdit"?: boolean;
+        "isSuperAdmin"?: boolean;
         "language"?: string;
         "onCloseSideBar"?: (event: IrUserFormPanelCustomEvent<null>) => void;
         "onResetData"?: (event: IrUserFormPanelCustomEvent<null>) => void;
@@ -4611,12 +4632,15 @@ declare namespace LocalJSX {
         "user"?: User;
     }
     interface IrUserManagement {
+        "isSuperAdmin"?: boolean;
         "language"?: string;
         "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
     }
     interface IrUserManagementTable {
+        "isSuperAdmin"?: boolean;
+        "onToast"?: (event: IrUserManagementTableCustomEvent<IToast>) => void;
         "users"?: User[];
     }
     interface OtaLabel {

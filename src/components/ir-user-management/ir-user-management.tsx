@@ -13,6 +13,7 @@ export class IrUserManagement {
   @Prop() ticket: string = '';
   @Prop() propertyid: number;
   @Prop() p: string;
+  @Prop() isSuperAdmin: boolean = true;
 
   @State() isLoading = true;
   @State() users: User[] = [
@@ -157,8 +158,8 @@ export class IrUserManagement {
           <div class="d-flex align-items-center justify-content-between">
             <h3 class="mb-1 mb-md-0">Extranet Users</h3>
           </div>
-          <div class="mt-1" style={{ gap: '1rem' }}>
-            <ir-user-management-table users={this.users}></ir-user-management-table>
+          <div class="" style={{ gap: '1rem' }}>
+            <ir-user-management-table isSuperAdmin={this.isSuperAdmin} users={this.users}></ir-user-management-table>
           </div>
         </section>
       </Host>

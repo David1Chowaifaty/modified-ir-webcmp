@@ -17,6 +17,7 @@ export class IrUserFormPanel {
   @Prop() isEdit: boolean = false;
   @Prop() language: string = 'en';
   @Prop() property_id: number;
+  @Prop() isSuperAdmin: boolean;
 
   @State() isLoading: boolean = false;
   @State() autoValidate = false;
@@ -44,6 +45,7 @@ export class IrUserFormPanel {
   @Event() closeSideBar: EventEmitter<null>;
 
   private housekeepingService = new HouseKeepingService();
+  private disableFields = false;
   private mobileMask = {};
   private userSchema = z.object({
     name: z.string().min(2),
@@ -87,6 +89,7 @@ export class IrUserFormPanel {
     if (this.user) {
       this.autoValidate = true;
       this.userInfo = { ...this.user, password: '' };
+      this.disableFields = this.isSuperAdmin;
     }
     this.mobileMask = {
       mask: `{${calendar_data.country.phone_prefix}} 000000000000`,
@@ -139,51 +142,51 @@ export class IrUserFormPanel {
   }
 
   render() {
-    console.log(this.errors);
     return (
       <Host>
-        <ir-title class="px-1" displayContext="sidebar" label={this.isEdit ? 'Edit User' : 'Create New User'}></ir-title>
-        <section class="px-1">
+        <ir-title class="px-1 panel-header" displayContext="sidebar" label={this.isEdit ? 'Edit User' : 'Create New User'}></ir-title>
+        <section class="px-1 panel-body">
           <ir-input-text
             testId="name"
             zod={this.userSchema.pick({ name: true })}
-            wrapKey="Username"
+            wrapKey="name"
             autoValidate={this.autoValidate}
             error={this.errors?.name}
-            label={'Username'}
-            placeholder={''}
+            label="Username"
+            disabled={this.disableFields}
+            placeholder=""
             onTextChange={e => this.updateUserField('name', e.detail)}
             value={this.userInfo.name}
             onInputBlur={this.handleBlur.bind(this)}
             maxLength={40}
-          ></ir-input-text>
+          />
           <ir-input-text
             testId="email"
             zod={this.userSchema.pick({ email: true })}
             wrapKey="email"
             autoValidate={this.autoValidate}
-            error={this.errors?.name}
+            error={this.errors?.email}
             label={locales.entries.Lcz_Email}
-            placeholder={''}
-            onTextChange={e => this.updateUserField('name', e.detail)}
-            value={this.userInfo.name}
+            placeholder=""
+            onTextChange={e => this.updateUserField('email', e.detail)}
+            value={this.userInfo.email}
             onInputBlur={this.handleBlur.bind(this)}
             maxLength={40}
-          ></ir-input-text>
+          />
           <ir-input-text
             testId="mobile"
-            zod={this.userSchema.pick({ username: true })}
-            wrapKey="username"
-            error={this.errors?.username}
+            disabled={this.disableFields}
+            zod={this.userSchema.pick({ mobile: true })}
+            wrapKey="mobile"
+            error={this.errors?.mobile}
             asyncParse
-            autoValidate={this.user ? (this.userInfo?.username !== this.user.username ? true : false) : this.autoValidate}
-            errorMessage={this.errors?.username && this.userInfo?.username?.length >= 3 ? locales.entries.Lcz_UsernameAlreadyExists : undefined}
-            label={'Mobile'}
+            autoValidate={this.user ? (this.userInfo?.mobile !== this.user.mobile ? true : false) : this.autoValidate}
+            label="Mobile"
             mask={this.mobileMask}
-            placeholder={locales.entries.Lcz_Username}
-            value={this.userInfo.username}
-            onTextChange={e => this.updateUserField('username', e.detail)}
-          ></ir-input-text>
+            placeholder={''}
+            value={this.userInfo.mobile}
+            onTextChange={e => this.updateUserField('mobile', e.detail)}
+          />
           <ir-input-text
             testId="password"
             autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
@@ -202,31 +205,34 @@ export class IrUserFormPanel {
           ></ir-input-text>
           {this.showPasswordValidation && <ir-password-validator class="mb-1" password={this.userInfo.password}></ir-password-validator>}
           <ir-select
+            disabled={this.disableFields}
             label="Role"
             data={[
               { text: 'Super Admin', value: '1' },
               { text: 'Frontdesk', value: '2' },
             ]}
-          ></ir-select>
-          <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
-            <ir-button
-              data-testid="cancel"
-              onClickHandler={() => this.closeSideBar.emit(null)}
-              class="flex-fill"
-              btn_styles="w-100  justify-content-center align-items-center"
-              btn_color="secondary"
-              text={locales.entries.Lcz_Cancel}
-            ></ir-button>
-            <ir-button
-              data-testid="save"
-              isLoading={this.isLoading}
-              onClickHandler={this.addUser.bind(this)}
-              class="flex-fill ml-md-1"
-              btn_styles="w-100  justify-content-center align-items-center mt-1 mt-md-0"
-              text={locales.entries.Lcz_Save}
-            ></ir-button>
-          </div>
+            selectedValue={this.userInfo.role}
+            onSelectChange={e => this.updateUserField('role', e.detail)}
+          />
         </section>
+        <div class="panel-footer py-1 px-1 d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
+          <ir-button
+            data-testid="cancel"
+            onClickHandler={() => this.closeSideBar.emit(null)}
+            class="flex-fill"
+            btn_styles="w-100  justify-content-center align-items-center"
+            btn_color="secondary"
+            text={locales.entries.Lcz_Cancel}
+          ></ir-button>
+          <ir-button
+            data-testid="save"
+            isLoading={this.isLoading}
+            onClickHandler={this.addUser.bind(this)}
+            class="flex-fill ml-md-1"
+            btn_styles="w-100  justify-content-center align-items-center mt-1 mt-md-0"
+            text={locales.entries.Lcz_Save}
+          ></ir-button>
+        </div>
       </Host>
     );
   }
