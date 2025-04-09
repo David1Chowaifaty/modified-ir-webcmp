@@ -118,12 +118,12 @@ export class IrUserManagementTable {
       return null;
     }
     return (
-      <ir-user-management-user
+      <ir-user-form-panel
         onCloseSideBar={() => (this.currentTrigger = null)}
         slot="sidebar-body"
         user={this.currentTrigger?.user}
         isEdit={this.currentTrigger?.isEdit}
-      ></ir-user-management-user>
+      ></ir-user-form-panel>
     );
   }
 }

@@ -1186,6 +1186,12 @@ export namespace Components {
     }
     interface IrUnitStatus {
     }
+    interface IrUserFormPanel {
+        "isEdit": boolean;
+        "language": string;
+        "property_id": number;
+        "user": User;
+    }
     interface IrUserManagement {
         "language": string;
         "p": string;
@@ -1194,12 +1200,6 @@ export namespace Components {
     }
     interface IrUserManagementTable {
         "users": User[];
-    }
-    interface IrUserManagementUser {
-        "isEdit": boolean;
-        "language": string;
-        "property_id": number;
-        "user": User;
     }
     interface OtaLabel {
         "label": string;
@@ -1529,9 +1529,9 @@ export interface IrUnitStatusCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrUnitStatusElement;
 }
-export interface IrUserManagementUserCustomEvent<T> extends CustomEvent<T> {
+export interface IrUserFormPanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLIrUserManagementUserElement;
+    target: HTMLIrUserFormPanelElement;
 }
 declare global {
     interface HTMLIglApplicationInfoElement extends Components.IglApplicationInfo, HTMLStencilElement {
@@ -3136,6 +3136,24 @@ declare global {
         prototype: HTMLIrUnitStatusElement;
         new (): HTMLIrUnitStatusElement;
     };
+    interface HTMLIrUserFormPanelElementEventMap {
+        "resetData": null;
+        "closeSideBar": null;
+    }
+    interface HTMLIrUserFormPanelElement extends Components.IrUserFormPanel, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrUserFormPanelElementEventMap>(type: K, listener: (this: HTMLIrUserFormPanelElement, ev: IrUserFormPanelCustomEvent<HTMLIrUserFormPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrUserFormPanelElementEventMap>(type: K, listener: (this: HTMLIrUserFormPanelElement, ev: IrUserFormPanelCustomEvent<HTMLIrUserFormPanelElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrUserFormPanelElement: {
+        prototype: HTMLIrUserFormPanelElement;
+        new (): HTMLIrUserFormPanelElement;
+    };
     interface HTMLIrUserManagementElement extends Components.IrUserManagement, HTMLStencilElement {
     }
     var HTMLIrUserManagementElement: {
@@ -3147,24 +3165,6 @@ declare global {
     var HTMLIrUserManagementTableElement: {
         prototype: HTMLIrUserManagementTableElement;
         new (): HTMLIrUserManagementTableElement;
-    };
-    interface HTMLIrUserManagementUserElementEventMap {
-        "resetData": null;
-        "closeSideBar": null;
-    }
-    interface HTMLIrUserManagementUserElement extends Components.IrUserManagementUser, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIrUserManagementUserElementEventMap>(type: K, listener: (this: HTMLIrUserManagementUserElement, ev: IrUserManagementUserCustomEvent<HTMLIrUserManagementUserElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIrUserManagementUserElementEventMap>(type: K, listener: (this: HTMLIrUserManagementUserElement, ev: IrUserManagementUserCustomEvent<HTMLIrUserManagementUserElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLIrUserManagementUserElement: {
-        prototype: HTMLIrUserManagementUserElement;
-        new (): HTMLIrUserManagementUserElement;
     };
     interface HTMLOtaLabelElement extends Components.OtaLabel, HTMLStencilElement {
     }
@@ -3286,9 +3286,9 @@ declare global {
         "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-unit-status": HTMLIrUnitStatusElement;
+        "ir-user-form-panel": HTMLIrUserFormPanelElement;
         "ir-user-management": HTMLIrUserManagementElement;
         "ir-user-management-table": HTMLIrUserManagementTableElement;
-        "ir-user-management-user": HTMLIrUserManagementUserElement;
         "ota-label": HTMLOtaLabelElement;
         "requirement-check": HTMLRequirementCheckElement;
     }
@@ -4602,6 +4602,14 @@ declare namespace LocalJSX {
     interface IrUnitStatus {
         "onResetData"?: (event: IrUnitStatusCustomEvent<null>) => void;
     }
+    interface IrUserFormPanel {
+        "isEdit"?: boolean;
+        "language"?: string;
+        "onCloseSideBar"?: (event: IrUserFormPanelCustomEvent<null>) => void;
+        "onResetData"?: (event: IrUserFormPanelCustomEvent<null>) => void;
+        "property_id"?: number;
+        "user"?: User;
+    }
     interface IrUserManagement {
         "language"?: string;
         "p"?: string;
@@ -4610,14 +4618,6 @@ declare namespace LocalJSX {
     }
     interface IrUserManagementTable {
         "users"?: User[];
-    }
-    interface IrUserManagementUser {
-        "isEdit"?: boolean;
-        "language"?: string;
-        "onCloseSideBar"?: (event: IrUserManagementUserCustomEvent<null>) => void;
-        "onResetData"?: (event: IrUserManagementUserCustomEvent<null>) => void;
-        "property_id"?: number;
-        "user"?: User;
     }
     interface OtaLabel {
         "label"?: string;
@@ -4742,9 +4742,9 @@ declare namespace LocalJSX {
         "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
         "ir-unit-status": IrUnitStatus;
+        "ir-user-form-panel": IrUserFormPanel;
         "ir-user-management": IrUserManagement;
         "ir-user-management-table": IrUserManagementTable;
-        "ir-user-management-user": IrUserManagementUser;
         "ota-label": OtaLabel;
         "requirement-check": RequirementCheck;
     }
@@ -4860,9 +4860,9 @@ declare module "@stencil/core" {
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;
+            "ir-user-form-panel": LocalJSX.IrUserFormPanel & JSXBase.HTMLAttributes<HTMLIrUserFormPanelElement>;
             "ir-user-management": LocalJSX.IrUserManagement & JSXBase.HTMLAttributes<HTMLIrUserManagementElement>;
             "ir-user-management-table": LocalJSX.IrUserManagementTable & JSXBase.HTMLAttributes<HTMLIrUserManagementTableElement>;
-            "ir-user-management-user": LocalJSX.IrUserManagementUser & JSXBase.HTMLAttributes<HTMLIrUserManagementUserElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
             "requirement-check": LocalJSX.RequirementCheck & JSXBase.HTMLAttributes<HTMLRequirementCheckElement>;
         }

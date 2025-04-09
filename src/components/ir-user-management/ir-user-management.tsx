@@ -158,7 +158,7 @@ export class IrUserManagement {
             <h3 class="mb-1 mb-md-0">Extranet Users</h3>
           </div>
           <div class="mt-1" style={{ gap: '1rem' }}>
-            <ir-user-form-panel users={this.users}></ir-user-form-panel>
+            <ir-user-management-table users={this.users}></ir-user-management-table>
           </div>
         </section>
       </Host>
