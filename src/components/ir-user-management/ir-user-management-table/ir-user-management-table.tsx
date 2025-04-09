@@ -66,11 +66,11 @@ export class IrUserManagementTable {
                         data-testid="edit"
                         title={locales.entries.Lcz_EditHousekeeper}
                         onIconClickHandler={() => {
-                          // this.currentTrigger = {
-                          //   type: 'user',
-                          //   isEdit: true,
-                          //   user,
-                          // };
+                          this.currentTrigger = {
+                            type: 'user',
+                            isEdit: true,
+                            user,
+                          };
                         }}
                         icon="ft-save color-ir-light-blue-hover h5 pointer sm-margin-right"
                       >
@@ -116,6 +116,13 @@ export class IrUserManagementTable {
     if (!this.currentTrigger) {
       return null;
     }
-    return <ir-user-management-user slot="sidebar-body" user={this.currentTrigger?.user} isEdit={this.currentTrigger?.isEdit}></ir-user-management-user>;
+    return (
+      <ir-user-management-user
+        onCloseSideBar={() => (this.currentTrigger = null)}
+        slot="sidebar-body"
+        user={this.currentTrigger?.user}
+        isEdit={this.currentTrigger?.isEdit}
+      ></ir-user-management-user>
+    );
   }
 }
