@@ -1,3 +1,10 @@
 :host {
   display: block;
 }
+.table th,
+.table td {
+  white-space: nowrap;
+  width: max-content !important;
+  background: white;
+  padding: 0.25rem 1rem !important;
+}
