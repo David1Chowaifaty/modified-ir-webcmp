@@ -1,5 +1,7 @@
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, h } from '@stencil/core';
+import { User } from '../types';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-user-management-table',
@@ -7,21 +9,21 @@ import { Component, Host, Prop, State, h } from '@stencil/core';
   scoped: true,
 })
 export class IrUserManagementTable {
-  @Prop() users = [];
+  @Prop() users: User[] = [];
   @State() currentTrigger: any = null;
   render() {
     return (
       <Host>
-        <section class="mt-1 table-responsive">
+        <section class="card table-container h-100 p-1 w-100 m-0 table-responsive">
           <table class="table">
             <thead>
               <tr>
                 <th class="text-left">{locales.entries.Lcz_Username ?? 'Username'}</th>
-                <th>{locales.entries.Lcz_Email}</th>
-                <th>{locales.entries.Lcz_Mobile ?? 'Mobile'}</th>
-                <th>Role</th>
-                <th>Last signed in</th>
-                <th>Created at</th>
+                <th class="text-left">{locales.entries.Lcz_Email}</th>
+                <th class="text-left">{locales.entries.Lcz_Mobile ?? 'Mobile'}</th>
+                <th class="text-left">Role</th>
+                <th class="text-left">Last signed in</th>
+                <th class="text-left">Created at</th>
                 <th>Active</th>
 
                 <th class="text-center">
@@ -47,15 +49,17 @@ export class IrUserManagementTable {
               </tr>
             </thead>
             <tbody>
-              {this.users.map(hk => (
-                <tr key={hk.id}>
-                  <td class="text-left">Hello</td>
-                  <td class="text-left w-full"></td>
-                  <td>
-                    {hk.phone_prefix} {hk.mobile}
+              {this.users.map((user, i) => (
+                <tr key={user.id}>
+                  <td class="text-left">{user.username}</td>
+                  <td class="text-left w-full">{user.email}</td>
+                  <td class="text-left">
+                    {user.phone_prefix} {user.mobile}
                   </td>
-                  <td>{hk.username}</td>
-                  <td></td>
+                  <td class="text-left">{user.role}</td>
+                  <td class="text-left">{moment(user.last_signed_in, 'YYYY-MM-DD').format('MMM, DD YYYY')}</td>
+                  <td class="text-left">{moment(user.created_at, 'YYYY-MM-DD').format('MMM, DD YYYY')}</td>
+                  <td>{i > 0 && <ir-switch checked={user.is_active}></ir-switch>}</td>
                   <td class="text-center">
                     <div class="icons-container">
                       <ir-icon

@@ -1193,7 +1193,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrUserManagementTable {
-        "users": any[];
+        "users": User[];
     }
     interface IrUserManagementUser {
         "isEdit": boolean;
@@ -4609,7 +4609,7 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrUserManagementTable {
-        "users"?: any[];
+        "users"?: User[];
     }
     interface IrUserManagementUser {
         "isEdit"?: boolean;

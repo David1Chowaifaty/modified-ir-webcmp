@@ -29,6 +29,7 @@ export class IrUserManagementUser {
     name: '',
     note: '',
     password: '',
+    email: '',
     property_id: null,
     username: null,
     phone_prefix: null,
