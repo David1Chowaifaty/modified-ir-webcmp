@@ -7,7 +7,7 @@ import { sleep } from '@/utils/utils';
 
 @Component({
   tag: 'ir-user-management-table',
-  styleUrl: 'ir-user-management-table.css',
+  styleUrls: ['ir-user-management-table.css', '../../../common/table.css'],
   scoped: true,
 })
 export class IrUserManagementTable {
@@ -35,7 +35,7 @@ export class IrUserManagementTable {
   render() {
     return (
       <Host>
-        <section class="card table-container h-100 p-1 w-100 m-0 table-responsive">
+        <section class="table-container h-100 p-1 w-100 m-0 table-responsive">
           <table class="table">
             <thead>
               <tr>
@@ -47,7 +47,7 @@ export class IrUserManagementTable {
                 <th class="text-left">Created at</th>
                 <th>Active</th>
 
-                <th class="text-center">
+                <th class="">
                   <ir-icon
                     data-testid="new_user"
                     title={locales.entries.Lcz_CreateHousekeeper}
@@ -71,9 +71,9 @@ export class IrUserManagementTable {
             </thead>
             <tbody>
               {this.users.map((user, i) => (
-                <tr key={user.id}>
+                <tr key={user.id} class="ir-table-row">
                   <td class="text-left">{user.username}</td>
-                  <td class="text-left w-full">{user.email}</td>
+                  <td class="text-left w-100">{user.email}</td>
                   <td class="text-left">
                     {user.phone_prefix} {user.mobile}
                   </td>
@@ -81,8 +81,8 @@ export class IrUserManagementTable {
                   <td class="text-left">{moment(user.last_signed_in, 'YYYY-MM-DD').format('MMM, DD YYYY')}</td>
                   <td class="text-left">{moment(user.created_at, 'YYYY-MM-DD').format('MMM, DD YYYY')}</td>
                   <td>{i > 0 && <ir-switch onCheckChange={e => this.handleUserActiveChange(e, user)} checked={user.is_active}></ir-switch>}</td>
-                  <td class="text-center">
-                    <div class="icons-container d-flex align-items-center justify-content-center" style={{ gap: '0.5rem' }}>
+                  <td class="">
+                    <div class="icons-container d-flex align-items-center" style={{ gap: '0.5rem' }}>
                       <ir-icon
                         data-testid="edit"
                         title={locales.entries.Lcz_EditHousekeeper}

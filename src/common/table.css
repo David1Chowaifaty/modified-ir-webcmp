@@ -4,15 +4,25 @@
   z-index: 2;
 }
 .ir-table-row td:last-child {
-  width: 100%;
+  width: 100% !important;
+}
+.table-container {
+  border-radius: 0.5rem;
 }
 .table td {
+  border-top: 0;
   border-bottom: 1px solid #e3ebf3;
 }
+/* .table thead th:first-child {
+  border-top-left-radius: 0.5rem;
+}
+.table thead th:last-child {
+  border-top-right-radius: 0.5rem;
+} */
 .table thead th {
   border: none !important;
-  background: var(--light, #babfc7);
-  color: #464855;
+  background: #f3f4f6;
+  color: #374151;
   padding: 0.5rem 1rem !important;
   text-align: left;
 }
