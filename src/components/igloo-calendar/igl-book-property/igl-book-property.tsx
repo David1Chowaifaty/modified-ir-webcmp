@@ -479,7 +479,12 @@ export class IglBookProperty {
         room_type_ids: this.defaultData.roomsInfo.map(room => room.id),
         currency: this.currency,
       });
-      const isAvailable = booking_store.roomTypes.every(rt => rt.is_available_to_book);
+      const isAvailable = booking_store.roomTypes.every(rt => {
+        if (rt.is_available_to_book) {
+          return true;
+        }
+        return rt.inventory > 0 && rt['not_available_reason'] === 'ALL-RATES-PLAN-NOT-BOOKABLE';
+      });
       if (isAvailable) {
         await this.handleBlockDate(false);
       } else {
