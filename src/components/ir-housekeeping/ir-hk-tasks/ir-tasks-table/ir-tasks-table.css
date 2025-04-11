@@ -5,47 +5,20 @@
 .selected-row {
   background-color: rgba(0, 0, 255, 0.1);
 }
-.selected td {
-  color: var(--gray-dark) !important;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
 .selected-row:hover {
   background-color: rgba(0, 0, 255, 0.15);
 }
 .header-content {
   height: 100%;
 }
-.sortable {
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-.sortable svg {
-  color: var(--blue);
-}
-.task-row,
-.table th,
-.table td {
-  white-space: nowrap;
-  max-width: max-content !important;
-  /* background: white; */
-  border: 0;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-.task-row {
-  padding: 0.25rem 0.5rem !important;
-}
-.extra-padding {
-  padding: 0.25rem 1rem !important;
-}
+
 .highlighted-unit {
   background: #000;
   color: white;
   padding: 0.2rem 0.3rem;
   border-radius: 4px;
 }
-.table th,
-.table td {
-  text-align: start;
-}
+
 .table-container {
   max-height: 80vh;
 }
@@ -59,26 +32,9 @@ th {
 tr {
   border-bottom: 1px solid #e0e0e0;
 } */
-.task-table-row {
+.task-table-row td {
   background: white !important;
 }
-.task-table-row:hover {
+.task-table-row:hover td {
   background: #e2e6ea3f !important;
-}
-.selected {
-  background: #e3f3fa !important;
-}
-.sortable {
-  text-transform: capitalize;
-}
-.sortable:hover {
-  color: #212529;
-  background-color: #e2e6ea;
-  border-color: #dae0e5;
-  cursor: pointer;
-}
-.sortable:active {
-  color: #212529;
-  background-color: #dae0e5;
-  border-color: #d3d9df;
 }
