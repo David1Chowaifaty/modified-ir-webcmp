@@ -2,9 +2,13 @@
   padding: 0.5rem 1rem !important;
   text-align: left;
   z-index: 2;
+  background-color: white;
+  white-space: nowrap;
+  width: max-content;
+  max-width: max-content;
 }
 .ir-table-row td:last-child {
-  width: 100% !important;
+  width: 100%;
 }
 .table-container {
   border-radius: 0.5rem;

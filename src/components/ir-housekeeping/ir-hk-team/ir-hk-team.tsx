@@ -99,6 +99,7 @@ export class IrHkTeam {
                 <th>{locales.entries.Lcz_UnitsAssigned}</th>
                 <th>
                   <ir-icon
+                    class="pl-1"
                     data-testid="new_user"
                     title={locales.entries.Lcz_CreateHousekeeper}
                     onIconClickHandler={() => {
@@ -138,7 +139,7 @@ export class IrHkTeam {
                       )}
                     </div>
                   </td>
-                  <td class="w-100">
+                  <td class="">
                     {hk.phone_prefix} {hk.mobile}
                   </td>
                   <td>{hk.username}</td>
