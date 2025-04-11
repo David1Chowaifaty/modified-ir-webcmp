@@ -26,6 +26,7 @@
 .table thead th {
   border: none !important;
   background: #f3f4f6;
+  background: #f8fafc;
   color: #374151;
   padding: 0.5rem 1rem !important;
   text-align: left;
@@ -48,13 +49,13 @@
 }
 .sortable:hover {
   color: #212529;
-  background-color: #e2e6ea;
+  background-color: #e2e8f0 !important;
   border-color: #dae0e5;
   cursor: pointer;
 }
 .sortable:active {
   color: #212529;
-  background-color: #dae0e5;
+  background-color: #e2e8f0;
   border-color: #d3d9df;
 }
 .sortable svg {
