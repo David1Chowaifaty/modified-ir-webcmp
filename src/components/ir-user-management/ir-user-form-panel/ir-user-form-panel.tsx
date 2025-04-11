@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 import { User } from '../types';
 import locales from '@/stores/locales.store';
 import { z, ZodError } from 'zod';
@@ -9,7 +9,7 @@ import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-user-form-panel',
-  styleUrl: 'ir-user-form-panel.css',
+  styleUrls: ['ir-user-form-panel.css', '../../../common/sheet.css'],
   scoped: true,
 })
 export class IrUserFormPanel {
@@ -143,23 +143,15 @@ export class IrUserFormPanel {
 
   render() {
     return (
-      <Host>
-        <ir-title class="px-1 panel-header" displayContext="sidebar" label={this.isEdit ? 'Edit User' : 'Create New User'}></ir-title>
-        <section class="px-1 panel-body">
-          <ir-input-text
-            testId="name"
-            zod={this.userSchema.pick({ name: true })}
-            wrapKey="name"
-            autoValidate={this.autoValidate}
-            error={this.errors?.name}
-            label="Username"
-            disabled={this.disableFields}
-            placeholder=""
-            onTextChange={e => this.updateUserField('name', e.detail)}
-            value={this.userInfo.name}
-            onInputBlur={this.handleBlur.bind(this)}
-            maxLength={40}
-          />
+      <form
+        class="sheet-container"
+        onSubmit={async e => {
+          e.preventDefault();
+          await this.addUser();
+        }}
+      >
+        <ir-title class="px-1 sheet-header" displayContext="sidebar" label={this.isEdit ? 'Edit User' : 'Create New User'}></ir-title>
+        <section class="px-1 sheet-body">
           <ir-input-text
             testId="email"
             zod={this.userSchema.pick({ email: true })}
@@ -187,6 +179,32 @@ export class IrUserFormPanel {
             value={this.userInfo.mobile}
             onTextChange={e => this.updateUserField('mobile', e.detail)}
           />
+          <div class="mb-1">
+            <ir-select
+              disabled={this.disableFields}
+              label="Role"
+              data={[
+                { text: 'Admin', value: '1' },
+                { text: 'Frontdesk', value: '2' },
+              ]}
+              selectedValue={this.userInfo.role}
+              onSelectChange={e => this.updateUserField('role', e.detail)}
+            />
+          </div>
+          <ir-input-text
+            testId="name"
+            zod={this.userSchema.pick({ name: true })}
+            wrapKey="name"
+            autoValidate={this.autoValidate}
+            error={this.errors?.name}
+            label="Username"
+            disabled={this.disableFields}
+            placeholder=""
+            onTextChange={e => this.updateUserField('name', e.detail)}
+            value={this.userInfo.name}
+            onInputBlur={this.handleBlur.bind(this)}
+            maxLength={40}
+          />
           <ir-input-text
             testId="password"
             autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
@@ -204,36 +222,26 @@ export class IrUserFormPanel {
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
           {this.showPasswordValidation && <ir-password-validator class="mb-1" password={this.userInfo.password}></ir-password-validator>}
-          <ir-select
-            disabled={this.disableFields}
-            label="Role"
-            data={[
-              { text: 'Super Admin', value: '1' },
-              { text: 'Frontdesk', value: '2' },
-            ]}
-            selectedValue={this.userInfo.role}
-            onSelectChange={e => this.updateUserField('role', e.detail)}
-          />
         </section>
-        <div class="panel-footer py-1 px-1 d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
+        <div class="sheet-footer">
           <ir-button
             data-testid="cancel"
             onClickHandler={() => this.closeSideBar.emit(null)}
             class="flex-fill"
-            btn_styles="w-100  justify-content-center align-items-center"
+            btn_styles="w-100 justify-content-center align-items-center"
             btn_color="secondary"
             text={locales.entries.Lcz_Cancel}
           ></ir-button>
           <ir-button
             data-testid="save"
             isLoading={this.isLoading}
-            onClickHandler={this.addUser.bind(this)}
-            class="flex-fill ml-md-1"
-            btn_styles="w-100  justify-content-center align-items-center mt-1 mt-md-0"
+            class="flex-fill"
+            btn_type="submit"
+            btn_styles="w-100 justify-content-center align-items-center"
             text={locales.entries.Lcz_Save}
           ></ir-button>
         </div>
-      </Host>
+      </form>
     );
   }
 }
