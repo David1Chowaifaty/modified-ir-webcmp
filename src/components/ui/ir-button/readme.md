@@ -57,7 +57,6 @@ Type: `Promise<void>`
  - [igl-book-property-footer](../../igloo-calendar/igl-book-property/igl-book-property-footer)
  - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
  - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
- - [igl-booking-form](../../igloo-calendar/igl-book-property/igl-booking-form)
  - [igl-cal-header](../../igloo-calendar/igl-cal-header)
  - [igl-tba-booking-view](../../igloo-calendar/igl-to-be-assigned/igl-tba-booking-view)
  - [igl-to-be-assigned](../../igloo-calendar/igl-to-be-assigned)
@@ -109,7 +108,6 @@ graph TD;
   igl-book-property-footer --> ir-button
   igl-book-property-header --> ir-button
   igl-booking-event-hover --> ir-button
-  igl-booking-form --> ir-button
   igl-cal-header --> ir-button
   igl-tba-booking-view --> ir-button
   igl-to-be-assigned --> ir-button

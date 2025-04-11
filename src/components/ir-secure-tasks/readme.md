@@ -137,14 +137,15 @@ graph TD;
   ir-payment-details --> ir-modal
   ir-payment-actions --> ir-button
   igl-book-property --> igl-block-dates-view
-  igl-book-property --> ir-button
+  igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-booking-form
+  igl-book-property --> ir-button
+  igl-book-property --> igl-book-property-footer
   igl-block-dates-view --> ir-date-view
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-room-type
-  igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
@@ -153,16 +154,15 @@ graph TD;
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-tooltip
   igl-rate-plan --> ir-price-input
-  igl-book-property-footer --> ir-button
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
-  igl-booking-form --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
+  igl-book-property-footer --> ir-button
   igloo-calendar --> ir-toast
   igloo-calendar --> ir-interceptor
   igloo-calendar --> igl-to-be-assigned
@@ -193,7 +193,7 @@ graph TD;
   igl-booking-event-hover --> igl-block-dates-view
   ir-room-nights --> ir-price-input
   ir-room-nights --> ir-loading-screen
-  ir-room-nights --> ir-icon
+  ir-room-nights --> ir-title
   ir-room-nights --> ir-button
   ir-housekeeping --> ir-loading-screen
   ir-housekeeping --> ir-interceptor

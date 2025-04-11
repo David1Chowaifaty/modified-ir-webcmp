@@ -112,14 +112,15 @@ graph TD;
   ir-payment-actions --> ir-button
   ir-sidebar --> ir-icon
   igl-book-property --> igl-block-dates-view
-  igl-book-property --> ir-button
+  igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-booking-form
+  igl-book-property --> ir-button
+  igl-book-property --> igl-book-property-footer
   igl-block-dates-view --> ir-date-view
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-room-type
-  igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
@@ -128,16 +129,15 @@ graph TD;
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-tooltip
   igl-rate-plan --> ir-price-input
-  igl-book-property-footer --> ir-button
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
-  igl-booking-form --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
+  igl-book-property-footer --> ir-button
   style ir-booking fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

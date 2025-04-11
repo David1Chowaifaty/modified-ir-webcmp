@@ -89,13 +89,14 @@ graph TD;
   igl-block-dates-view --> ir-date-view
   ir-modal --> ir-button
   igl-book-property --> igl-block-dates-view
-  igl-book-property --> ir-button
+  igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-booking-form
+  igl-book-property --> ir-button
+  igl-book-property --> igl-book-property-footer
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-room-type
-  igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
@@ -104,11 +105,9 @@ graph TD;
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-tooltip
   igl-rate-plan --> ir-price-input
-  igl-book-property-footer --> ir-button
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
-  igl-booking-form --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
@@ -116,11 +115,13 @@ graph TD;
   igl-property-booked-by --> ir-phone-input
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
+  igl-book-property-footer --> ir-button
   ir-sidebar --> ir-icon
   ir-room-nights --> ir-price-input
   ir-room-nights --> ir-loading-screen
-  ir-room-nights --> ir-icon
+  ir-room-nights --> ir-title
   ir-room-nights --> ir-button
+  ir-title --> ir-icon
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> ir-booking-extra-note
@@ -147,7 +148,6 @@ graph TD;
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
-  ir-title --> ir-icon
   ir-pickup --> ir-title
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker

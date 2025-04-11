@@ -36,6 +36,7 @@
  - [ir-housekeeping](../ir-housekeeping)
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-room-guests](../ir-booking-details/ir-room-guests)
+ - [ir-room-nights](../igloo-calendar/ir-room-nights)
  - [ir-unit-status](../ir-housekeeping/ir-unit-status)
  - [ir-user-form-panel](../ir-user-management/ir-user-form-panel)
 
@@ -57,6 +58,7 @@ graph TD;
   ir-housekeeping --> ir-title
   ir-pickup --> ir-title
   ir-room-guests --> ir-title
+  ir-room-nights --> ir-title
   ir-unit-status --> ir-title
   ir-user-form-panel --> ir-title
   style ir-title fill:#f9f,stroke:#333,stroke-width:4px

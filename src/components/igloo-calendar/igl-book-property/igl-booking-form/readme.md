@@ -45,7 +45,6 @@
 - [ir-date-view](../../../ir-date-view)
 - [igl-application-info](igl-application-info)
 - [igl-property-booked-by](igl-property-booked-by)
-- [ir-button](../../../ui/ir-button)
 
 ### Graph
 ```mermaid
@@ -53,7 +52,6 @@ graph TD;
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
-  igl-booking-form --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
@@ -61,7 +59,6 @@ graph TD;
   igl-property-booked-by --> ir-phone-input
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
-  ir-button --> ir-icons
   igl-book-property --> igl-booking-form
   style igl-booking-form fill:#f9f,stroke:#333,stroke-width:4px
 ```

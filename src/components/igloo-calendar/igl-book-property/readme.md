@@ -42,37 +42,38 @@
 ### Depends on
 
 - [igl-block-dates-view](../igl-block-dates-view)
-- [ir-button](../../ui/ir-button)
+- [ir-spinner](../../ui/ir-spinner)
 - [ir-icon](../../ui/ir-icon)
 - [igl-booking-overview-page](igl-booking-overview-page)
 - [igl-booking-form](igl-booking-form)
+- [ir-button](../../ui/ir-button)
+- [igl-book-property-footer](igl-book-property-footer)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-book-property --> igl-block-dates-view
-  igl-book-property --> ir-button
+  igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
   igl-book-property --> igl-booking-overview-page
   igl-book-property --> igl-booking-form
+  igl-book-property --> ir-button
+  igl-book-property --> igl-book-property-footer
   igl-block-dates-view --> ir-date-view
-  ir-button --> ir-icons
   igl-booking-overview-page --> igl-book-property-header
   igl-booking-overview-page --> igl-room-type
-  igl-booking-overview-page --> igl-book-property-footer
   igl-book-property-header --> ir-autocomplete
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
+  ir-button --> ir-icons
   igl-date-range --> ir-date-range
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-tooltip
   igl-rate-plan --> ir-price-input
-  igl-book-property-footer --> ir-button
   igl-booking-form --> ir-date-view
   igl-booking-form --> igl-application-info
   igl-booking-form --> igl-property-booked-by
-  igl-booking-form --> ir-button
   igl-application-info --> ir-tooltip
   igl-property-booked-by --> ir-autocomplete
   igl-property-booked-by --> ir-tooltip
@@ -80,6 +81,7 @@ graph TD;
   igl-property-booked-by --> ir-phone-input
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
+  igl-book-property-footer --> ir-button
   igl-book-property-container --> igl-book-property
   igloo-calendar --> igl-book-property
   ir-booking-details --> igl-book-property

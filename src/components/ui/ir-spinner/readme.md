@@ -19,6 +19,7 @@
 
 ### Used by
 
+ - [igl-book-property](../../igloo-calendar/igl-book-property)
  - [ir-booking-details](../../ir-booking-details)
  - [ir-events-log](../../ir-booking-details/ir-booking-header/events-log)
  - [ir-guest-info](../../ir-guest-info)
@@ -28,6 +29,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  igl-book-property --> ir-spinner
   ir-booking-details --> ir-spinner
   ir-events-log --> ir-spinner
   ir-guest-info --> ir-spinner

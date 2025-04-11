@@ -37,7 +37,7 @@
 
 - [ir-price-input](../../ui/ir-price-input)
 - [ir-loading-screen](../../ir-loading-screen)
-- [ir-icon](../../ui/ir-icon)
+- [ir-title](../../ir-title)
 - [ir-button](../../ui/ir-button)
 
 ### Graph
@@ -45,8 +45,9 @@
 graph TD;
   ir-room-nights --> ir-price-input
   ir-room-nights --> ir-loading-screen
-  ir-room-nights --> ir-icon
+  ir-room-nights --> ir-title
   ir-room-nights --> ir-button
+  ir-title --> ir-icon
   ir-button --> ir-icons
   igloo-calendar --> ir-room-nights
   style ir-room-nights fill:#f9f,stroke:#333,stroke-width:4px
