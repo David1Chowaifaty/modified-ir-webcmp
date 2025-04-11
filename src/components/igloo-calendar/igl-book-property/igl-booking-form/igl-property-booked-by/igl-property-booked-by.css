@@ -1,12 +1,6 @@
 :host {
   display: block;
 }
-
-.row {
-  padding: 0 0 0 15px;
-  margin: 0;
-}
-
 .bookedByEmailContainer {
   flex: auto;
   max-width: 350px;

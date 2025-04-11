@@ -18,7 +18,7 @@ export type IHistoryEntry = {
 };
 @Component({
   tag: 'igl-book-property',
-  styleUrls: ['igl-book-property.css'],
+  styleUrls: ['igl-book-property.css', '../../../common/sheet.css'],
   scoped: true,
 })
 export class IglBookProperty {
@@ -84,8 +84,7 @@ export class IglBookProperty {
     this.initializeDefaultData();
     this.wasBlockedUnit = this.defaultData.hasOwnProperty('block_exposed_unit_props');
     modifyBookingStore('event_type', { type: this.defaultData.event_type });
-    await this.fetchSetupEntriesAndInitialize();
-    this.initializeEventData();
+    this.fetchSetupEntriesAndInitialize();
   }
 
   componentDidLoad() {
@@ -280,6 +279,7 @@ export class IglBookProperty {
       const setupEntries = await this.fetchSetupEntries();
       this.setSourceOptions(this.allowedBookingSources);
       this.setOtherProperties(setupEntries);
+      this.initializeEventData();
     } catch (error) {
       console.error('Error fetching setup entries:', error);
     }
@@ -501,12 +501,19 @@ export class IglBookProperty {
   private async closeWindow() {
     resetBookingStore();
     handleBodyOverflow(false);
-    this.closeBookingWindow.emit();
 
     if (this.wasBlockedUnit && !this.didReservation) {
       await this.checkAndBlockDate();
     }
-    document.removeEventListener('keydown', this.handleKeyDown);
+    const el = document.querySelector('.sideWindow');
+    if (!el) return;
+
+    el.classList.add('sideWindow--exit');
+
+    setTimeout(() => {
+      this.closeBookingWindow.emit();
+      document.removeEventListener('keydown', this.handleKeyDown);
+    }, 300);
   }
 
   private isEventType(key: TEventType) {
@@ -652,70 +659,85 @@ export class IglBookProperty {
 
   render() {
     return (
-      <Host data-testid="book_property_sheet">
+      <Host data-testid="book_property_sheet h-100">
         <div class="background-overlay" onClick={() => this.closeWindow()}></div>
-        <div class={'sideWindow pb-5 pb-md-0 ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '')}>
-          <div class="card position-sticky mb-0 shadow-none p-0 ">
-            <div class="card-header-container mb-2">
-              <h3 class=" text-left font-medium-2 px-2 px-md-3">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h3>
-              <ir-icon
-                class={'px-2'}
-                onIconClickHandler={() => {
-                  this.closeWindow();
-                }}
-              >
-                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={20} width={20}>
-                  <path
-                    fill="currentColor"
-                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
-                  />
-                </svg>
-              </ir-icon>
+        <div class={'sideWindow sheet-container ' + (this.getCurrentPage('page_block_date') ? 'block-date' : '')}>
+          {isRequestPending('/Get_Setup_Entries_By_TBL_NAME_MULTI') ? (
+            <div class={'loading-container'}>
+              <ir-spinner></ir-spinner>
             </div>
-          </div>
-          <div class="px-2 px-md-3">
-            {this.getCurrentPage('page_one') && (
-              <igl-booking-overview-page
-                initialRoomIds={this.initialRoomIds}
-                defaultDaterange={this.defaultDateRange}
-                class={'p-0 mb-1'}
-                eventType={this.defaultData.event_type}
-                selectedRooms={this.selectedUnits}
-                currency={this.currency}
-                showSplitBookingOption={this.showSplitBookingOption}
-                ratePricingMode={this.ratePricingMode}
-                dateRangeData={this.dateRangeData}
-                bookingData={this.defaultData}
-                adultChildCount={this.adultChildCount}
-                bookedByInfoData={this.bookedByInfoData}
-                adultChildConstraints={this.adultChildConstraints}
-                sourceOptions={this.sourceOptions}
-                propertyId={this.propertyid}
-              ></igl-booking-overview-page>
-            )}
+          ) : (
+            <Fragment>
+              <div class="sheet-header">
+                <div class="card-header-container mb-2">
+                  <h3 class="text-left font-medium-2 px-2">{this.getCurrentPage('page_block_date') ? this.defaultData.BLOCK_DATES_TITLE : this.defaultData.TITLE}</h3>
+                  <ir-icon
+                    class={'px-2'}
+                    onIconClickHandler={() => {
+                      this.closeWindow();
+                    }}
+                  >
+                    <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={20} width={20}>
+                      <path
+                        fill="currentColor"
+                        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                      />
+                    </svg>
+                  </ir-icon>
+                </div>
+              </div>
+              <div class="px-2 sheet-body">
+                {this.getCurrentPage('page_one') && (
+                  <igl-booking-overview-page
+                    initialRoomIds={this.initialRoomIds}
+                    defaultDaterange={this.defaultDateRange}
+                    eventType={this.defaultData.event_type}
+                    selectedRooms={this.selectedUnits}
+                    currency={this.currency}
+                    showSplitBookingOption={this.showSplitBookingOption}
+                    ratePricingMode={this.ratePricingMode}
+                    dateRangeData={this.dateRangeData}
+                    bookingData={this.defaultData}
+                    adultChildCount={this.adultChildCount}
+                    bookedByInfoData={this.bookedByInfoData}
+                    adultChildConstraints={this.adultChildConstraints}
+                    sourceOptions={this.sourceOptions}
+                    propertyId={this.propertyid}
+                  ></igl-booking-overview-page>
+                )}
 
-            {this.getCurrentPage('page_two') && (
-              <igl-booking-form
-                currency={this.currency}
-                propertyId={this.propertyid}
-                showPaymentDetails={this.showPaymentDetails}
-                selectedGuestData={this.guestData}
-                countries={this.countries}
-                isLoading={this.isLoading}
-                selectedRooms={this.selectedUnits}
-                bedPreferenceType={this.bedPreferenceType}
+                {this.getCurrentPage('page_two') && (
+                  <igl-booking-form
+                    currency={this.currency}
+                    propertyId={this.propertyid}
+                    showPaymentDetails={this.showPaymentDetails}
+                    selectedGuestData={this.guestData}
+                    countries={this.countries}
+                    isLoading={this.isLoading}
+                    selectedRooms={this.selectedUnits}
+                    bedPreferenceType={this.bedPreferenceType}
+                    dateRangeData={this.dateRangeData}
+                    bookingData={this.defaultData}
+                    showSplitBookingOption={this.showSplitBookingOption}
+                    language={this.language}
+                    bookedByInfoData={this.bookedByInfoData}
+                    defaultGuestData={this.defaultData}
+                    isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
+                    onDataUpdateEvent={event => this.handlePageTwoDataUpdateEvent(event)}
+                  ></igl-booking-form>
+                )}
+                {this.getCurrentPage('page_block_date') ? this.getPageBlockDatesView() : null}
+              </div>
+              <igl-book-property-footer
+                page={this.page}
                 dateRangeData={this.dateRangeData}
-                bookingData={this.defaultData}
-                showSplitBookingOption={this.showSplitBookingOption}
-                language={this.language}
-                bookedByInfoData={this.bookedByInfoData}
-                defaultGuestData={this.defaultData}
                 isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
-                onDataUpdateEvent={event => this.handlePageTwoDataUpdateEvent(event)}
-              ></igl-booking-form>
-            )}
-            {this.getCurrentPage('page_block_date') ? this.getPageBlockDatesView() : null}
-          </div>
+                isLoading={this.isLoading}
+                class={'sheet-footer'}
+                eventType={this.bookingData.event_type}
+              ></igl-book-property-footer>
+            </Fragment>
+          )}
         </div>
       </Host>
     );

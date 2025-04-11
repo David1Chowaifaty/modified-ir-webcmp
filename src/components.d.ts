@@ -101,8 +101,12 @@ export namespace Components {
         "withIrToastAndInterceptor": boolean;
     }
     interface IglBookPropertyFooter {
+        "dateRangeData": { [key: string]: any };
         "disabled": boolean;
         "eventType": string;
+        "isEditOrAddRoomEvent": boolean;
+        "isLoading": string;
+        "page": string;
     }
     interface IglBookPropertyHeader {
         "adultChildConstraints": TAdultChildConstraints1;
@@ -3360,9 +3364,13 @@ declare namespace LocalJSX {
         "withIrToastAndInterceptor"?: boolean;
     }
     interface IglBookPropertyFooter {
+        "dateRangeData"?: { [key: string]: any };
         "disabled"?: boolean;
         "eventType"?: string;
+        "isEditOrAddRoomEvent"?: boolean;
+        "isLoading"?: string;
         "onButtonClicked"?: (event: IglBookPropertyFooterCustomEvent<{ key: TPropertyButtonsTypes }>) => void;
+        "page"?: string;
     }
     interface IglBookPropertyHeader {
         "adultChildConstraints"?: TAdultChildConstraints1;

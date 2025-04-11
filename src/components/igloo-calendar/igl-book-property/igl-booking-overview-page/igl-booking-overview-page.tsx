@@ -93,7 +93,7 @@ export class IglBookingOverviewPage {
           )}
         </div>
 
-        <igl-book-property-footer class={'p-0 mb-1 mt-3'} eventType={this.bookingData.event_type}></igl-book-property-footer>
+        {/* <igl-book-property-footer class={'p-0 mb-1 mt-3'} eventType={this.bookingData.event_type}></igl-book-property-footer> */}
       </Host>
     );
   }

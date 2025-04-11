@@ -3,8 +3,9 @@
   top: 0;
   right: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   z-index: 99;
+  overflow: hidden;
   /* min-width: 450px; */
 }
 
@@ -21,15 +22,18 @@
   padding: 1rem 0;
   justify-content: space-between;
 }
+.loading-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
 .card-header-container h3 {
   padding: 0;
   margin: 0;
-}
-
-.scrollContent {
-  height: calc(100% - 79px);
-  overflow: auto;
-  position: relative;
 }
 
 .background-overlay {
@@ -52,15 +56,13 @@
   width: 100%;
 }
 .sideWindow {
-  /* display: grid; */
   position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
+  inset: 0;
+  left: unset;
   background-color: #ffffff;
-  width: 100vw;
-  overflow-y: auto;
-  padding-bottom: 85px !important;
+  width: 100%;
+  overflow: auto;
+  animation: slideInFromRight 0.5s;
 }
 .card {
   top: 0;
@@ -75,7 +77,6 @@
   color: #000;
   text-shadow: 0 1px 0 #fff;
   opacity: 0.5;
-
   padding: 0;
   background-color: transparent;
   border: 0;
@@ -92,6 +93,9 @@
 button:not(:disabled),
 [type='button']:not(:disabled) {
   cursor: pointer;
+}
+.sheet-footer {
+  width: 100%;
 }
 
 /* .row {
@@ -123,4 +127,24 @@ button:not(:disabled),
     max-width: 450px;
     padding-bottom: 0 !important;
   }
+}
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(120%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+.sideWindow--exit {
+  animation: slideOutToRight 0.5s forwards;
 }

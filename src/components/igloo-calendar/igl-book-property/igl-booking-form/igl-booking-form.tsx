@@ -1,12 +1,10 @@
-import { Component, Prop, h, Event, EventEmitter, Host, State } from '@stencil/core';
+import { Component, Prop, h, Event, EventEmitter, State } from '@stencil/core';
 import { IPageTwoDataUpdateProps } from '@/models/models';
 import { IglBookPropertyPayloadEditBooking, TPropertyButtonsTypes } from '../../../../models/igl-book-property';
 import { formatAmount } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { IRatePlanSelection } from '@/stores/booking.store';
-import calendar_data from '@/stores/calendar-data';
-import moment from 'moment';
 import { ICountry } from '@/models/IBooking';
 @Component({
   tag: 'igl-booking-form',
@@ -140,9 +138,8 @@ export class IglBookingForm {
   }
 
   render() {
-    const showBookAndCheckin = calendar_data.checkin_enabled && moment(new Date(this.dateRangeData?.fromDate)).isSame(new Date(), 'day');
     return (
-      <Host>
+      <div class="d-flex flex-column h-100">
         <div class="d-flex flex-wrap">
           <ir-date-view
             class="mr-1 flex-fill font-weight-bold font-medium-1"
@@ -198,62 +195,7 @@ export class IglBookingForm {
             }}
           ></igl-property-booked-by>
         )}
-
-        {this.isEditOrAddRoomEvent ? (
-          <div class="d-flex p-0 mb-1 mt-2">
-            <div class="flex-fill mr-2">
-              <ir-button
-                icon=""
-                text={locales.entries.Lcz_Back}
-                class="full-width"
-                btn_color="secondary"
-                btn_styles="justify-content-center"
-                onClickHandler={() => this.buttonClicked.emit({ key: 'back' })}
-              ></ir-button>
-            </div>
-            <div class="flex-fill">
-              <ir-button
-                isLoading={this.isLoading === 'save'}
-                onClickHandler={() => this.buttonClicked.emit({ key: 'save' })}
-                btn_styles="full-width align-items-center justify-content-center"
-                text={locales.entries.Lcz_Save}
-              ></ir-button>
-            </div>
-          </div>
-        ) : (
-          <div class="d-flex flex-column flex-md-row p-0 mb-1 mt-2 justify-content-md-between align-items-md-center">
-            <div class="flex-fill mr-md-1">
-              <ir-button
-                icon_name="angles_left"
-                btn_color="secondary"
-                btn_styles="full-width align-items-center justify-content-center"
-                onClickHandler={() => this.buttonClicked.emit({ key: 'back' })}
-                text={locales.entries.Lcz_Back}
-                style={{ '--icon-size': '1rem' }}
-                icon_style={{ paddingBottom: '1.9px' }}
-              ></ir-button>
-            </div>
-            <div class={`mt-1 mt-md-0 flex-fill ${showBookAndCheckin ? 'mr-md-1' : ''}`}>
-              <ir-button
-                isLoading={this.isLoading === 'book'}
-                btn_styles="full-width align-items-center justify-content-center"
-                onClickHandler={() => this.buttonClicked.emit({ key: 'book' })}
-                text={locales.entries.Lcz_Book}
-              ></ir-button>
-            </div>
-            {showBookAndCheckin && (
-              <div class="mt-1 mt-md-0 flex-fill">
-                <ir-button
-                  isLoading={this.isLoading === 'bookAndCheckIn'}
-                  btn_styles="full-width align-items-center justify-content-center"
-                  onClickHandler={() => this.buttonClicked.emit({ key: 'bookAndCheckIn' })}
-                  text={locales.entries.Lcz_BookAndChekcIn}
-                ></ir-button>
-              </div>
-            )}
-          </div>
-        )}
-      </Host>
+      </div>
     );
   }
 }
