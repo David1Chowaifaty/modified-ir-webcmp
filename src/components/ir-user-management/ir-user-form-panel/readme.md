@@ -34,8 +34,8 @@
 
 - [ir-title](../../ir-title)
 - [ir-input-text](../../ui/ir-input-text)
-- [ir-password-validator](../../ir-password-validator)
 - [ir-select](../../ui/ir-select)
+- [ir-password-validator](../../ir-password-validator)
 - [ir-button](../../ui/ir-button)
 
 ### Graph
@@ -43,8 +43,8 @@
 graph TD;
   ir-user-form-panel --> ir-title
   ir-user-form-panel --> ir-input-text
-  ir-user-form-panel --> ir-password-validator
   ir-user-form-panel --> ir-select
+  ir-user-form-panel --> ir-password-validator
   ir-user-form-panel --> ir-button
   ir-title --> ir-icon
   ir-password-validator --> requirement-check

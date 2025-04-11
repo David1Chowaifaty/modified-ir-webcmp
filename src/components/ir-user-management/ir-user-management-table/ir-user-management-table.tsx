@@ -137,7 +137,7 @@ export class IrUserManagementTable {
         </ir-sidebar>
         <ir-modal
           autoClose={false}
-          modalBody="Are you sure you want to delete this user?"
+          modalBody={`Are you sure you want to delete ${this.user?.username}?`}
           rightBtnColor="danger"
           rightBtnText={locales.entries.Lcz_Delete}
           onConfirmModal={this.removeUser.bind(this)}

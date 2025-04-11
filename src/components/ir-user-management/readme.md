@@ -42,8 +42,8 @@ graph TD;
   ir-button --> ir-icons
   ir-user-form-panel --> ir-title
   ir-user-form-panel --> ir-input-text
-  ir-user-form-panel --> ir-password-validator
   ir-user-form-panel --> ir-select
+  ir-user-form-panel --> ir-password-validator
   ir-user-form-panel --> ir-button
   ir-title --> ir-icon
   ir-password-validator --> requirement-check
