@@ -1,0 +1,21 @@
+.ir-table-row td {
+  /* background: black; */
+  padding: 0.5rem 1rem !important;
+  /* max-width: max-content !important; */
+  /* background: white; */
+  text-align: left;
+  z-index: 2;
+}
+.ir-table-row td:last-child {
+  width: 100%;
+}
+.table td {
+  border-bottom: 1px solid #e3ebf3;
+}
+.table thead th {
+  border: none !important;
+  background: var(--light, #babfc7);
+  color: #464855;
+  padding: 0.5rem 1rem !important;
+  text-align: left;
+}

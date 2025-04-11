@@ -6,7 +6,7 @@ import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-tasks-table',
-  styleUrl: 'ir-tasks-table.css',
+  styleUrls: ['ir-tasks-table.css', '../../../../common/table.css'],
   scoped: true,
 })
 export class IrTasksTable {
@@ -264,7 +264,7 @@ export class IrTasksTable {
 
           <tbody>
             {this.tasks.length === 0 && (
-              <tr>
+              <tr class="ir-table-row">
                 <td colSpan={9} class="text-center">
                   <div style={{ height: '300px' }} class="d-flex align-items-center justify-content-center">
                     <span> {locales.entries.Lcz_NoTasksFound}</span>
@@ -287,7 +287,7 @@ export class IrTasksTable {
                     }
                     this.toggleSelection(task.id);
                   }}
-                  class={{ 'selected': isSelected, 'task-table-row': true }}
+                  class={{ 'selected': isSelected, 'task-table-row ir-table-row': true }}
                   key={task.id}
                 >
                   <td class="task-row ">{isCheckable && <ir-checkbox checked={isSelected}></ir-checkbox>}</td>

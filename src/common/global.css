@@ -45,3 +45,7 @@
 .color-ir-dark-blue-hover:hover {
   color: var(--ir-dark-blue-2);
 }
+.ir-table-row {
+  background: black !important;
+  padding: 3rem;
+}

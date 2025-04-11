@@ -39,14 +39,14 @@ const sampleSalesData: SalesRecord[] = [
 ];
 @Component({
   tag: 'ir-sales-table',
-  styleUrl: 'ir-sales-table.css',
+  styleUrls: ['ir-sales-table.css', '../../../common/table.css'],
   scoped: true,
 })
 export class IrSalesTable {
   @Prop() records: SalesRecord[] = sampleSalesData;
   render() {
     return (
-      <div class="card table-container h-100 p-1 m-0 table-responsive">
+      <div class="table-container h-100 p-1 m-0 table-responsive">
         <table class="table" data-testid="hk_tasks_table">
           <thead class="table-header">
             <tr>
@@ -68,8 +68,8 @@ export class IrSalesTable {
               const mainPercentage = `${parseFloat(Math.ceil(record.percentage).toString()).toFixed(2)}%`;
               const secondaryPercentage = record.last_year_percentage ? `${parseFloat(Math.ceil(record.last_year_percentage).toString()).toFixed(2)}%` : null;
               return (
-                <tr data-testid={`record_row`} class={{ 'task-table-row': true }} key={record.id}>
-                  <td class="text-left country-cell">{record.country}</td>
+                <tr data-testid={`record_row`} class={{ 'task-table-row ir-table-row': true }} key={record.id}>
+                  <td class="text-left">{record.country}</td>
                   <td>{record.nights}</td>
                   <td>
                     <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>

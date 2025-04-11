@@ -95,7 +95,8 @@ export class IrSalesByCountry {
           </div>
           <div class="d-flex flex-column flex-lg-row mt-1 " style={{ gap: '1rem' }}>
             <ir-sales-filters></ir-sales-filters>
-            <ir-sales-table></ir-sales-table>
+
+            <ir-sales-table class="card"></ir-sales-table>
           </div>
         </section>
       </Host>

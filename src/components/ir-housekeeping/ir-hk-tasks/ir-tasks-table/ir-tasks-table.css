@@ -5,6 +5,10 @@
 .selected-row {
   background-color: rgba(0, 0, 255, 0.1);
 }
+.selected td {
+  color: var(--gray-dark) !important;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 .selected-row:hover {
   background-color: rgba(0, 0, 255, 0.15);
 }
@@ -24,6 +28,7 @@
   max-width: max-content !important;
   /* background: white; */
   border: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .task-row {
   padding: 0.25rem 0.5rem !important;
