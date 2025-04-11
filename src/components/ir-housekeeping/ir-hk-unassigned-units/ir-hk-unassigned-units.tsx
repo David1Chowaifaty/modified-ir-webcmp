@@ -66,9 +66,9 @@ export class IrHkUnassignedUnits {
     if (!this.user) {
       return housekeeping_store.hk_criteria.units_assignments.unassigned_units?.map(unit => (
         <tr key={unit.id}>
-          <td class="mr-2">{unit.name}</td>
+          <td class="">{unit.name}</td>
           <td class="sr-only"></td>
-          <td>
+          <td class="pl-1">
             <ir-select
               onSelectChange={e => {
                 let hk_id = e.detail;
