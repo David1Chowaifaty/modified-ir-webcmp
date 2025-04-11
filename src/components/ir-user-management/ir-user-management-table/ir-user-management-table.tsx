@@ -47,8 +47,9 @@ export class IrUserManagementTable {
                 <th class="text-left">Created at</th>
                 <th>Active</th>
 
-                <th class="">
+                <th>
                   <ir-icon
+                    style={{ paddingLeft: '0.875rem' }}
                     data-testid="new_user"
                     title={locales.entries.Lcz_CreateHousekeeper}
                     onIconClickHandler={() => {

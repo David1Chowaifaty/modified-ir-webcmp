@@ -155,11 +155,11 @@ export class IrUserManagement {
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
-          <div class="d-flex px-1 align-items-center justify-content-between">
+          <div class="d-flex  pb-2 align-items-center justify-content-between">
             <h3 class="mb-1 mb-md-0">Extranet Users</h3>
           </div>
           <div class="" style={{ gap: '1rem' }}>
-            <ir-user-management-table isSuperAdmin={this.isSuperAdmin} users={this.users}></ir-user-management-table>
+            <ir-user-management-table class="card" isSuperAdmin={this.isSuperAdmin} users={this.users}></ir-user-management-table>
           </div>
         </section>
       </Host>
