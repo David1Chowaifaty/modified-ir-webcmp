@@ -70,6 +70,8 @@ export class IrCombobox {
         //   this.selectItem(this.selectedIndex);
         //   break;
         case 'Escape':
+          event.stopImmediatePropagation();
+          event.stopPropagation();
           this.inputRef?.blur();
           this.isComboBoxVisible = false;
           break;

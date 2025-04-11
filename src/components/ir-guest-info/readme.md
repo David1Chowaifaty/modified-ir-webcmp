@@ -35,7 +35,7 @@
 ### Depends on
 
 - [ir-spinner](../ui/ir-spinner)
-- [ir-icon](../ui/ir-icon)
+- [ir-title](../ir-title)
 - [ir-input-text](../ui/ir-input-text)
 - [ir-country-picker](../ui/ir-country-picker)
 - [ir-phone-input](../ui/ir-phone-input)
@@ -46,12 +46,13 @@
 ```mermaid
 graph TD;
   ir-guest-info --> ir-spinner
-  ir-guest-info --> ir-icon
+  ir-guest-info --> ir-title
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-country-picker
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-title --> ir-icon
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-button --> ir-icons

@@ -30,6 +30,7 @@
 
  - [ir-hk-archive](..)
  - [ir-listing-header](../../../../ir-booking-listing/ir-listing-header)
+ - [ir-sales-filters](../../../../ir-sales-by-country/ir-sales-filters)
  - [ir-test-cmp](../../../../ir-test-cmp)
 
 ### Depends on
@@ -42,6 +43,7 @@ graph TD;
   ir-range-picker --> ir-date-picker
   ir-hk-archive --> ir-range-picker
   ir-listing-header --> ir-range-picker
+  ir-sales-filters --> ir-range-picker
   ir-test-cmp --> ir-range-picker
   style ir-range-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```

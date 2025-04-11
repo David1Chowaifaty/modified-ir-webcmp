@@ -11,6 +11,7 @@
 | ---------------------- | ------------------------ | ------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `LabelAvailable`       | `label-available`        |                                 | `boolean`                                                                                                            | `true`      |
 | `data`                 | --                       |                                 | `selectOption[]`                                                                                                     | `undefined` |
+| `disabled`             | `disabled`               |                                 | `boolean`                                                                                                            | `undefined` |
 | `error`                | `error`                  | Whether the select has an error | `boolean`                                                                                                            | `false`     |
 | `firstOption`          | `first-option`           |                                 | `string`                                                                                                             | `'Select'`  |
 | `label`                | `label`                  |                                 | `string`                                                                                                             | `'<label>'` |
@@ -57,8 +58,10 @@
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
+ - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
  - [ir-tasks-filters](../../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
  - [ir-unit-status](../../ir-housekeeping/ir-unit-status)
+ - [ir-user-form-panel](../../ir-user-management/ir-user-form-panel)
 
 ### Graph
 ```mermaid
@@ -75,8 +78,10 @@ graph TD;
   ir-option-details --> ir-select
   ir-pickup --> ir-select
   ir-room-guests --> ir-select
+  ir-sales-filters --> ir-select
   ir-tasks-filters --> ir-select
   ir-unit-status --> ir-select
+  ir-user-form-panel --> ir-select
   style ir-select fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

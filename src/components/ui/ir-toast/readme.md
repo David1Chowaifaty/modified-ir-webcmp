@@ -25,6 +25,9 @@
  - [ir-housekeeping](../../ir-housekeeping)
  - [ir-login](../../ir-login)
  - [ir-payment-option](../../ir-payment-option)
+ - [ir-reset-password](../../ir-reset-password)
+ - [ir-sales-by-country](../../ir-sales-by-country)
+ - [ir-user-management](../../ir-user-management)
 
 ### Graph
 ```mermaid
@@ -38,6 +41,9 @@ graph TD;
   ir-housekeeping --> ir-toast
   ir-login --> ir-toast
   ir-payment-option --> ir-toast
+  ir-reset-password --> ir-toast
+  ir-sales-by-country --> ir-toast
+  ir-user-management --> ir-toast
   style ir-toast fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

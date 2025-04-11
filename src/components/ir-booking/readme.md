@@ -52,12 +52,13 @@ graph TD;
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
   ir-guest-info --> ir-spinner
-  ir-guest-info --> ir-icon
+  ir-guest-info --> ir-title
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-country-picker
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-title --> ir-icon
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
@@ -65,7 +66,6 @@ graph TD;
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
   ir-pickup --> ir-button
-  ir-title --> ir-icon
   ir-booking-extra-note --> ir-title
   ir-booking-extra-note --> ir-textarea
   ir-booking-extra-note --> ir-button

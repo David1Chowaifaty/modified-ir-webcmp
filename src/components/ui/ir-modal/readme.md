@@ -69,6 +69,7 @@ Type: `Promise<void>`
  - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
  - [ir-payment-details](../../ir-booking-details/ir-payment-details)
  - [ir-room](../../ir-booking-details/ir-room)
+ - [ir-user-management-table](../../ir-user-management/ir-user-management-table)
 
 ### Depends on
 
@@ -87,6 +88,7 @@ graph TD;
   ir-hk-tasks --> ir-modal
   ir-payment-details --> ir-modal
   ir-room --> ir-modal
+  ir-user-management-table --> ir-modal
   style ir-modal fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

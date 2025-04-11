@@ -1,3 +1,4 @@
+import { handleBodyOverflow } from '@/utils/utils';
 import { Component, Prop, h, Method, Event, EventEmitter, Watch } from '@stencil/core';
 
 @Component({
@@ -36,9 +37,16 @@ export class IrSidebar {
     this.applyStyles();
     document.addEventListener('keydown', this.handleKeyDown);
   }
-
+  @Watch('open')
+  handleOpenChange(newValue: boolean, oldValue: boolean) {
+    if (newValue !== oldValue) {
+      handleBodyOverflow(newValue);
+    }
+  }
   private handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
+      e.stopImmediatePropagation();
+      e.stopPropagation();
       return this.toggleSidebar();
     } else {
       return;

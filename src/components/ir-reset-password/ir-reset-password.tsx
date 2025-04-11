@@ -85,12 +85,16 @@ export class IrResetPassword {
       <Host>
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
-        <form onSubmit={this.handleSignIn.bind(this)} class="card form-container px-2">
-          <img class="logo" src="https://x.igloorooms.com/app-assets/images/logo/logo-dark.png" alt="Login to igloorooms extranet" />
-          <div class="separator-container">
+        <form onSubmit={this.handleSignIn.bind(this)} class="form-container px-2">
+          {/* <img class="logo" src="https://x.igloorooms.com/app-assets/images/logo/logo-dark.png" alt="Login to igloorooms extranet" /> */}
+          {/* <div class="separator-container">
             <div class="separator"></div>
             <p>Change password</p>
             <div class="separator"></div>
+          </div> */}
+          <div class="text-center">
+            <h4>Set new Password</h4>
+            <p>Your new password must be different to previously used password</p>
           </div>
           {this.submitted ? (
             <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>

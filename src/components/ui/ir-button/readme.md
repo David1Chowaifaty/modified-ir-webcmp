@@ -87,11 +87,15 @@ Type: `Promise<void>`
  - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
+ - [ir-reset-password](../../ir-reset-password)
  - [ir-room](../../ir-booking-details/ir-room)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-room-nights](../../igloo-calendar/ir-room-nights)
+ - [ir-sales-by-country](../../ir-sales-by-country)
+ - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
  - [ir-tasks-filters](../../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
  - [ir-tasks-header](../../ir-housekeeping/ir-hk-tasks/ir-tasks-header)
+ - [ir-user-form-panel](../../ir-user-management/ir-user-form-panel)
 
 ### Depends on
 
@@ -135,11 +139,15 @@ graph TD;
   ir-pickup --> ir-button
   ir-pickup-view --> ir-button
   ir-reservation-information --> ir-button
+  ir-reset-password --> ir-button
   ir-room --> ir-button
   ir-room-guests --> ir-button
   ir-room-nights --> ir-button
+  ir-sales-by-country --> ir-button
+  ir-sales-filters --> ir-button
   ir-tasks-filters --> ir-button
   ir-tasks-header --> ir-button
+  ir-user-form-panel --> ir-button
   style ir-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

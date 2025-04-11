@@ -257,3 +257,45 @@ export function toFloat(value: number, decimalPlaces: number): number {
 export async function sleep(time: number = 200) {
   return new Promise(r => setTimeout(() => r(null), time));
 }
+export function handleBodyOverflow(open: boolean) {
+  const attr = 'data-ir-scroll-locked';
+  let counter = document.body.getAttribute(attr);
+  if (!document.getElementById('scroll-lock-style')) {
+    const style = document.createElement('style');
+    style.id = 'scroll-lock-style';
+    style.innerHTML = `
+      body:dir(ltr)[data-ir-scroll-locked] {
+        overflow: hidden !important;
+        overscroll-behavior: contain;
+        position: relative !important;
+        padding-left: 0px;
+        padding-top: 0px;
+        padding-right: 0px;
+        margin-left: 0;
+        margin-top: 0;
+        margin-right: 15px !important;
+      }
+      body:dir(rtl)[data-ir-scroll-locked] {
+        overflow: hidden !important;
+        overscroll-behavior: contain;
+        position: relative !important;
+        padding-left: 0px;
+        padding-top: 0px;
+        padding-right: 0px;
+        margin-right: 0;
+        margin-top: 0;
+        margin-left: 15px !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  if (!counter) {
+    document.body.setAttribute(attr, '1');
+  } else {
+    const newCount = open ? Number(counter) + 1 : Number(counter) - 1;
+    document.body.setAttribute(attr, newCount.toString());
+    if (newCount <= 0) {
+      document.body.removeAttribute(attr);
+    }
+  }
+}

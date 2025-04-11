@@ -1,6 +1,6 @@
 import { Component, Event, EventEmitter, Host, Prop, State, h, Listen, Fragment } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
-import { dateToFormattedString, getReleaseHoursString } from '@/utils/utils';
+import { dateToFormattedString, getReleaseHoursString, handleBodyOverflow } from '@/utils/utils';
 import { ICountry, IEntries, RoomBlockDetails } from '@/models/IBooking';
 import { IPageTwoDataUpdateProps } from '@/models/models';
 import { IglBookPropertyService } from './igl-book-property.service';
@@ -90,6 +90,7 @@ export class IglBookProperty {
 
   componentDidLoad() {
     document.addEventListener('keydown', this.handleKeyDown);
+    handleBodyOverflow(true);
   }
 
   disconnectedCallback() {
@@ -499,6 +500,7 @@ export class IglBookProperty {
   }
   private async closeWindow() {
     resetBookingStore();
+    handleBodyOverflow(false);
     this.closeBookingWindow.emit();
 
     if (this.wasBlockedUnit && !this.didReservation) {

@@ -2,13 +2,13 @@ import { Booking, ExtraService, ExtraServiceSchema } from '@/models/booking.dto'
 import { BookingService } from '@/services/booking.service';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 import { ZodError } from 'zod';
 import { _formatDate } from '../../functions';
 
 @Component({
   tag: 'ir-extra-service-config',
-  styleUrl: 'ir-extra-service-config.css',
+  styleUrls: ['ir-extra-service-config.css', '../../../../common/sheet.css'],
   scoped: true,
 })
 export class IrExtraServiceConfig {
@@ -76,11 +76,17 @@ export class IrExtraServiceConfig {
   }
   render() {
     return (
-      <Host class={'p-0'}>
-        <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={locales.entries.Lcz_ExtraServices} displayContext="sidebar"></ir-title>
-        <section class={'px-1'}>
+      <form
+        class={'sheet-container'}
+        onSubmit={async e => {
+          e.preventDefault();
+          await this.saveAmenity();
+        }}
+      >
+        <ir-title class="px-1 sheet-header" onCloseSideBar={() => this.closeModal.emit(null)} label={locales.entries.Lcz_ExtraServices} displayContext="sidebar"></ir-title>
+        <section class={'px-1 sheet-body'}>
           {/* Description */}
-          <fieldset class="input-group mb-1 mt-3 service-description">
+          <fieldset class="input-group mb-1 service-description">
             <div class="input-group-prepend">
               <span class="input-group-text">{locales.entries.Lcz_Description}</span>
             </div>
@@ -240,28 +246,28 @@ export class IrExtraServiceConfig {
               aria-describedby="service cost"
             ></ir-price-input>
           </div>
-          <div class={'d-flex flex-column flex-sm-row mt-3'}>
-            <ir-button
-              onClick={() => this.closeModal.emit(null)}
-              btn_styles="justify-content-center"
-              class={`mb-1 mb-sm-0 flex-fill mr-sm-1`}
-              icon=""
-              text={locales.entries.Lcz_Cancel}
-              btn_color="secondary"
-            ></ir-button>
-
-            <ir-button
-              btn_styles="justify-content-center align-items-center"
-              class={'m-0 flex-fill text-center'}
-              icon=""
-              isLoading={isRequestPending('/Do_Booking_Extra_Service')}
-              text={locales.entries.Lcz_Save}
-              btn_color="primary"
-              onClick={this.saveAmenity.bind(this)}
-            ></ir-button>
-          </div>
         </section>
-      </Host>
+        <div class={'sheet-footer'}>
+          <ir-button
+            onClick={() => this.closeModal.emit(null)}
+            btn_styles="justify-content-center"
+            class={`flex-fill`}
+            icon=""
+            text={locales.entries.Lcz_Cancel}
+            btn_color="secondary"
+          ></ir-button>
+
+          <ir-button
+            btn_styles="justify-content-center align-items-center"
+            class={'flex-fill'}
+            icon=""
+            btn_type="submit"
+            isLoading={isRequestPending('/Do_Booking_Extra_Service')}
+            text={locales.entries.Lcz_Save}
+            btn_color="primary"
+          ></ir-button>
+        </div>
+      </form>
     );
   }
 }

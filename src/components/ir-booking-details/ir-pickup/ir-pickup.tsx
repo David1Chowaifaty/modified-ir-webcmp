@@ -1,6 +1,6 @@
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
-import { Component, Element, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 import { TPickupData } from './types';
 import moment from 'moment';
 import { IAllowedOptions } from '@/models/calendarData';
@@ -10,7 +10,7 @@ import { MaskedRange } from 'imask';
 
 @Component({
   tag: 'ir-pickup',
-  styleUrl: 'ir-pickup.css',
+  styleUrls: ['ir-pickup.css', '../../../common/sheet.css'],
   scoped: true,
 })
 export class IrPickup {
@@ -183,9 +183,15 @@ export class IrPickup {
   }
   render() {
     return (
-      <Host class={'p-0'}>
-        <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={locales.entries.Lcz_Pickup} displayContext="sidebar"></ir-title>
-        <section class={'px-1'}>
+      <form
+        class={'sheet-container'}
+        onSubmit={async e => {
+          e.preventDefault();
+          await this.savePickup();
+        }}
+      >
+        <ir-title class="px-1 sheet-header" onCloseSideBar={() => this.closeModal.emit(null)} label={locales.entries.Lcz_Pickup} displayContext="sidebar"></ir-title>
+        <section class={'px-1 sheet-body'}>
           <ir-select
             testId="pickup_location"
             selectedValue={this.pickupData.location}
@@ -302,29 +308,29 @@ export class IrPickup {
               </div>
             </div>
           )}
-          <div class={'d-flex flex-column flex-sm-row mt-3'}>
-            <ir-button
-              onClick={() => this.closeModal.emit(null)}
-              btn_styles="justify-content-center"
-              class={`mb-1 mb-sm-0 flex-fill  ${this.defaultPickupData || this.pickupData.location !== -1 ? 'mr-sm-1' : ''}`}
-              icon=""
-              text={locales.entries.Lcz_Cancel}
-              btn_color="secondary"
-            ></ir-button>
-            {(this.defaultPickupData || this.pickupData.location !== -1) && (
-              <ir-button
-                btn_styles="justify-content-center align-items-center"
-                class={'m-0 flex-fill text-center'}
-                icon=""
-                isLoading={this.isLoading}
-                text={locales.entries.Lcz_Save}
-                btn_color="primary"
-                onClick={this.savePickup.bind(this)}
-              ></ir-button>
-            )}
-          </div>
         </section>
-      </Host>
+        <div class={'sheet-footer'}>
+          <ir-button
+            onClick={() => this.closeModal.emit(null)}
+            btn_styles="justify-content-center"
+            class={`flex-fill`}
+            icon=""
+            text={locales.entries.Lcz_Cancel}
+            btn_color="secondary"
+          ></ir-button>
+          {(this.defaultPickupData || this.pickupData.location !== -1) && (
+            <ir-button
+              btn_styles="justify-content-center align-items-center"
+              class={'flex-fill'}
+              icon=""
+              isLoading={this.isLoading}
+              text={locales.entries.Lcz_Save}
+              btn_color="primary"
+              btn_type="submit"
+            ></ir-button>
+          )}
+        </div>
+      </form>
     );
   }
 }

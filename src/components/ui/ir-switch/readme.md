@@ -28,6 +28,7 @@
  - [ir-channel](../../ir-channel)
  - [ir-hk-unassigned-units](../../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-payment-option](../../ir-payment-option)
+ - [ir-user-management-table](../../ir-user-management/ir-user-management-table)
 
 ### Graph
 ```mermaid
@@ -35,6 +36,7 @@ graph TD;
   ir-channel --> ir-switch
   ir-hk-unassigned-units --> ir-switch
   ir-payment-option --> ir-switch
+  ir-user-management-table --> ir-switch
   style ir-switch fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

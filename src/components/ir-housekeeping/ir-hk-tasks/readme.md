@@ -88,7 +88,7 @@ graph TD;
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
   ir-guest-info --> ir-spinner
-  ir-guest-info --> ir-icon
+  ir-guest-info --> ir-title
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-country-picker
   ir-guest-info --> ir-phone-input

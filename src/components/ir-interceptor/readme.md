@@ -31,6 +31,9 @@
  - [ir-housekeeping](../ir-housekeeping)
  - [ir-login](../ir-login)
  - [ir-payment-option](../ir-payment-option)
+ - [ir-reset-password](../ir-reset-password)
+ - [ir-sales-by-country](../ir-sales-by-country)
+ - [ir-user-management](../ir-user-management)
 
 ### Graph
 ```mermaid
@@ -43,6 +46,9 @@ graph TD;
   ir-housekeeping --> ir-interceptor
   ir-login --> ir-interceptor
   ir-payment-option --> ir-interceptor
+  ir-reset-password --> ir-interceptor
+  ir-sales-by-country --> ir-interceptor
+  ir-user-management --> ir-interceptor
   style ir-interceptor fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -1,8 +1,5 @@
 .ir-table-row td {
-  /* background: black; */
   padding: 0.5rem 1rem !important;
-  /* max-width: max-content !important; */
-  /* background: white; */
   text-align: left;
   z-index: 2;
 }
