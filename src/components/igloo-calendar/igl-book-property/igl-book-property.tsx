@@ -566,10 +566,6 @@ export class IglBookProperty {
           entryDate={this.defaultData.ENTRY_DATE}
           onDataUpdateEvent={event => this.handleBlockDateUpdate(event)}
         ></igl-block-dates-view>
-        <div class="p-0 mb-1 mt-2 gap-30 d-flex align-items-center justify-content-between">
-          <ir-button text={locales.entries.Lcz_Cancel} btn_color="secondary" class="flex-fill" onClick={() => this.closeWindow()}></ir-button>
-          <ir-button text={locales.entries.Lcz_Blockdates} isLoading={isRequestPending('/Block_Exposed_Unit')} class="flex-fill" onClick={() => this.handleBlockDate()}></ir-button>
-        </div>
       </Fragment>
     );
   }
@@ -728,14 +724,26 @@ export class IglBookProperty {
                 )}
                 {this.getCurrentPage('page_block_date') ? this.getPageBlockDatesView() : null}
               </div>
-              <igl-book-property-footer
-                page={this.page}
-                dateRangeData={this.dateRangeData}
-                isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
-                isLoading={this.isLoading}
-                class={'sheet-footer'}
-                eventType={this.bookingData.event_type}
-              ></igl-book-property-footer>
+              {this.getCurrentPage('page_block_date') ? (
+                <div class="sheet-footer">
+                  <ir-button text={locales.entries.Lcz_Cancel} btn_color="secondary" class="flex-fill" onClick={() => this.closeWindow()}></ir-button>
+                  <ir-button
+                    text={locales.entries.Lcz_Blockdates}
+                    isLoading={isRequestPending('/Block_Exposed_Unit')}
+                    class="flex-fill"
+                    onClick={() => this.handleBlockDate()}
+                  ></ir-button>
+                </div>
+              ) : (
+                <igl-book-property-footer
+                  page={this.page}
+                  dateRangeData={this.dateRangeData}
+                  isEditOrAddRoomEvent={this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')}
+                  isLoading={this.isLoading}
+                  class={'sheet-footer'}
+                  eventType={this.bookingData.event_type}
+                ></igl-book-property-footer>
+              )}
             </Fragment>
           )}
         </div>
