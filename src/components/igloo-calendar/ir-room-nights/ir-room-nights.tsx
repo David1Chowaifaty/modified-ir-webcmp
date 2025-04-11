@@ -1,4 +1,4 @@
-import { Component, Host, Prop, State, h, Event, EventEmitter, Fragment } from '@stencil/core';
+import { Component, Prop, State, h, Event, EventEmitter, Fragment } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
 import { convertDatePrice, formatDate, getDaysArray } from '@/utils/utils';
 import { Booking, Day, IUnit, Room } from '@/models/booking.dto';
@@ -9,7 +9,7 @@ import { Variation } from '@/models/property';
 
 @Component({
   tag: 'ir-room-nights',
-  styleUrl: 'ir-room-nights.css',
+  styleUrls: ['ir-room-nights.css', '../../../common/sheet.css'],
   scoped: true,
 })
 export class IrRoomNights {
@@ -238,20 +238,15 @@ export class IrRoomNights {
         </div>
       );
     }
-    console.log(this.inventory);
     return (
-      <Host>
-        <div class="card position-sticky mb-0 shadow-none p-0 ">
-          <div class="d-flex mt-2 align-items-center justify-content-between ">
-            <h3 class="card-title text-left pb-1 font-medium-2 px-2">
-              {locales.entries.Lcz_AddingRoomNightsTo} {this.selectedRoom?.roomtype?.name} {(this.selectedRoom?.unit as IUnit).name}
-            </h3>
-            <button type="button" class="close close-icon" onClick={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}>
-              <ir-icon icon="ft-x" class={'m-0'}></ir-icon>
-            </button>
-          </div>
-        </div>
-        <section class={'text-left px-2'}>
+      <div class="sheet-container">
+        <ir-title
+          class="p-1 sheet-header"
+          onCloseSideBar={() => this.closeRoomNightsDialog.emit({ type: 'cancel', pool: this.pool })}
+          label={`${locales.entries.Lcz_AddingRoomNightsTo} ${this.selectedRoom?.roomtype?.name} ${(this.selectedRoom?.unit as IUnit).name}`}
+          displayContext="sidebar"
+        ></ir-title>
+        <section class={'text-left px-1 pt-0 sheet-body'}>
           <p class={'font-medium-1'}>
             {`${locales.entries.Lcz_Booking}#`} {this.bookingNumber}
           </p>
@@ -273,7 +268,7 @@ export class IrRoomNights {
             </Fragment>
           )}
         </section>
-        <section class={'d-flex align-items-center mt-2 px-2'}>
+        <section class={'sheet-footer'}>
           <ir-button
             btn_color="secondary"
             btn_disabled={this.isLoading}
@@ -288,13 +283,13 @@ export class IrRoomNights {
               isLoading={this.isLoading}
               text={locales?.entries.Lcz_Confirm}
               btn_disabled={this.isButtonDisabled()}
-              class="ml-1 full-width"
+              class="full-width"
               btn_styles="justify-content-center"
               onClickHandler={this.handleRoomConfirmation.bind(this)}
             ></ir-button>
           )}
         </section>
-      </Host>
+      </div>
     );
   }
 }
