@@ -80,27 +80,26 @@ export class IrResetPassword {
     }
   }
   render() {
-    console.log(this.error);
     return (
       <Host>
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
         <form onSubmit={this.handleSignIn.bind(this)} class="form-container px-2">
-          {/* <img class="logo" src="https://x.igloorooms.com/app-assets/images/logo/logo-dark.png" alt="Login to igloorooms extranet" /> */}
-          {/* <div class="separator-container">
-            <div class="separator"></div>
-            <p>Change password</p>
-            <div class="separator"></div>
-          </div> */}
-          <div class="text-center">
-            <h4>Set new Password</h4>
+          <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={24} width={24}>
+            <path
+              fill="currentColor"
+              d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"
+            />
+          </svg>
+          <div class="text-center mb-2">
+            <h4 class="mb-1">Set new Password</h4>
             <p>Your new password must be different to previously used password</p>
           </div>
           {this.submitted ? (
             <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>
           ) : (
             <section>
-              <div>
+              <div class={'mb-2'}>
                 <div class="m-0 p-0">
                   <div class={'position-relative'}>
                     <ir-input-text
