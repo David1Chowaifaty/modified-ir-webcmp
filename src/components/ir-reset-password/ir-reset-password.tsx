@@ -93,11 +93,13 @@ export class IrResetPassword {
           </svg>
           <div class="text-center mb-2">
             <h4 class="mb-1">Set new Password</h4>
-            <p>Your new password must be different to previously used password</p>
+            {this.submitted ? (
+              <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>
+            ) : (
+              <p>Your new password must be different to previously used password</p>
+            )}
           </div>
-          {this.submitted ? (
-            <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>
-          ) : (
+          {!this.submitted && (
             <section>
               <div class={'mb-2'}>
                 <div class="m-0 p-0">
