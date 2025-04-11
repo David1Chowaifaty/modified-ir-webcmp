@@ -4,11 +4,11 @@ import calendar_data from '@/stores/calendar-data';
 import housekeeping_store from '@/stores/housekeeping.store';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-hk-unassigned-units',
-  styleUrl: 'ir-hk-unassigned-units.css',
+  styleUrls: ['ir-hk-unassigned-units.css', '../../../common/sheet.css'],
   scoped: true,
 })
 export class IrHkUnassignedUnits {
@@ -126,9 +126,9 @@ export class IrHkUnassignedUnits {
   }
   render() {
     return (
-      <Host>
-        <ir-title class="title px-1" displayContext="sidebar" label={!this.user ? 'Assingn Units' : `Assignment for ${this.user.name}`}></ir-title>
-        <section class="px-1">
+      <div class="sheet-container">
+        <ir-title class="title sheet-header px-1" displayContext="sidebar" label={!this.user ? 'Assingn Units' : `Assignment for ${this.user.name}`}></ir-title>
+        <section class="px-1 sheet-body">
           <table>
             <thead>
               <th class="sr-only">{locales.entries.Lcz_RoomName}</th>
@@ -137,24 +137,24 @@ export class IrHkUnassignedUnits {
             </thead>
             <tbody>{this.renderRooms()}</tbody>
           </table>
-          <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
-            <ir-button
-              onClickHandler={() => this.closeSideBar.emit(null)}
-              class="flex-fill"
-              btn_styles="w-100  justify-content-center align-items-center"
-              btn_color="secondary"
-              text={locales.entries.Lcz_Cancel}
-            ></ir-button>
-            <ir-button
-              isLoading={isRequestPending('/Manage_Exposed_Assigned_Unit_To_HKM')}
-              onClickHandler={this.assignUnits.bind(this)}
-              class="flex-fill ml-md-1"
-              btn_styles="w-100  justify-content-center align-items-center mt-1 mt-md-0"
-              text={locales.entries.Lcz_Confirm}
-            ></ir-button>
-          </div>
         </section>
-      </Host>
+        <div class="sheet-footer">
+          <ir-button
+            onClickHandler={() => this.closeSideBar.emit(null)}
+            class="flex-fill"
+            btn_styles="w-100 justify-content-center align-items-center"
+            btn_color="secondary"
+            text={locales.entries.Lcz_Cancel}
+          ></ir-button>
+          <ir-button
+            isLoading={isRequestPending('/Manage_Exposed_Assigned_Unit_To_HKM')}
+            onClickHandler={this.assignUnits.bind(this)}
+            class="flex-fill"
+            btn_styles="w-100  justify-content-center align-items-center"
+            text={locales.entries.Lcz_Confirm}
+          ></ir-button>
+        </div>
+      </div>
     );
   }
 }

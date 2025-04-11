@@ -5,7 +5,7 @@ import { Component, Host, Listen, State, h, Element } from '@stencil/core';
 
 @Component({
   tag: 'ir-hk-team',
-  styleUrl: 'ir-hk-team.css',
+  styleUrls: ['ir-hk-team.css', '../../../common/table.css'],
   scoped: true,
 })
 export class IrHkTeam {
@@ -97,7 +97,7 @@ export class IrHkTeam {
                 <th>{locales.entries.Lcz_Username}</th>
                 {/* <th>{locales.entries.Lcz_Note}</th> */}
                 <th>{locales.entries.Lcz_UnitsAssigned}</th>
-                <th class="text-center">
+                <th>
                   <ir-icon
                     data-testid="new_user"
                     title={locales.entries.Lcz_CreateHousekeeper}
@@ -121,7 +121,7 @@ export class IrHkTeam {
             </thead>
             <tbody>
               {housekeeping_store.hk_criteria.housekeepers.map(hk => (
-                <tr key={hk.id}>
+                <tr key={hk.id} class="ir-table-row">
                   <td class="text-left">
                     <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
                       {hk.name?.length > 25 ? (
@@ -138,12 +138,12 @@ export class IrHkTeam {
                       )}
                     </div>
                   </td>
-                  <td>
+                  <td class="w-100">
                     {hk.phone_prefix} {hk.mobile}
                   </td>
                   <td>{hk.username}</td>
                   <td>{this.renderAssignedUnits(hk)}</td>
-                  <td class="text-center">
+                  <td class="">
                     <div class="icons-container">
                       <ir-icon
                         data-testid="edit"

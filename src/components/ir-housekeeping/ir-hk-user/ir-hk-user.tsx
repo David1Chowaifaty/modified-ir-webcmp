@@ -5,12 +5,12 @@ import calendar_data from '@/stores/calendar-data';
 import { getDefaultProperties } from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
 import { CONSTANTS } from '@/utils/constants';
-import { Component, Host, Prop, State, h, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, State, h, Event, EventEmitter } from '@stencil/core';
 import { z, ZodError } from 'zod';
 
 @Component({
   tag: 'ir-hk-user',
-  styleUrl: 'ir-hk-user.css',
+  styleUrls: ['ir-hk-user.css', '../../../common/sheet.css'],
   scoped: true,
 })
 export class IrHkUser {
@@ -132,11 +132,14 @@ export class IrHkUser {
   }
 
   render() {
-    console.log(this.errors);
     return (
-      <Host>
-        <ir-title class="px-1" displayContext="sidebar" label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : locales.entries.Lcz_CreateHousekeeperProfile}></ir-title>
-        <section class="px-1">
+      <div class="sheet-container">
+        <ir-title
+          class="px-1 sheet-header"
+          displayContext="sidebar"
+          label={this.isEdit ? locales.entries.Lcz_EditHousekeeperProfile : locales.entries.Lcz_CreateHousekeeperProfile}
+        ></ir-title>
+        <section class="px-1 sheet-body">
           <ir-input-text
             testId="name"
             zod={this.housekeeperSchema.pick({ name: true })}
@@ -213,26 +216,26 @@ export class IrHkUser {
             onTextChange={e => this.updateUserField('password', e.detail)}
           ></ir-input-text>
           {this.showPasswordValidation && <ir-password-validator password={this.userInfo.password}></ir-password-validator>}
-          <div class="d-flex flex-column flex-md-row align-items-md-center mt-2 w-100">
-            <ir-button
-              data-testid="cancel"
-              onClickHandler={() => this.closeSideBar.emit(null)}
-              class="flex-fill"
-              btn_styles="w-100  justify-content-center align-items-center"
-              btn_color="secondary"
-              text={locales.entries.Lcz_Cancel}
-            ></ir-button>
-            <ir-button
-              data-testid="save"
-              isLoading={this.isLoading}
-              onClickHandler={this.addUser.bind(this)}
-              class="flex-fill ml-md-1"
-              btn_styles="w-100  justify-content-center align-items-center mt-1 mt-md-0"
-              text={locales.entries.Lcz_Save}
-            ></ir-button>
-          </div>
         </section>
-      </Host>
+        <div class="sheet-footer">
+          <ir-button
+            data-testid="cancel"
+            onClickHandler={() => this.closeSideBar.emit(null)}
+            class="flex-fill"
+            btn_styles="w-100  justify-content-center align-items-center"
+            btn_color="secondary"
+            text={locales.entries.Lcz_Cancel}
+          ></ir-button>
+          <ir-button
+            data-testid="save"
+            isLoading={this.isLoading}
+            onClickHandler={this.addUser.bind(this)}
+            class="flex-fill"
+            btn_styles="w-100 justify-content-center align-items-center"
+            text={locales.entries.Lcz_Save}
+          ></ir-button>
+        </div>
+      </div>
     );
   }
 }
