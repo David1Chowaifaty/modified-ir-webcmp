@@ -1,4 +1,4 @@
-import { Component, State, h, Prop, EventEmitter, Event, Watch } from '@stencil/core';
+import { Component, State, h, Prop, EventEmitter, Event, Watch, Fragment } from '@stencil/core';
 import { Guest } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import { ICountry } from '@/components';
@@ -23,7 +23,7 @@ export class GuestInfo {
   @State() countries: ICountry[];
   // @State() submit: boolean = false;
   @State() guest: Guest | null = null;
-  @State() isLoading: boolean = false;
+  @State() isLoading: boolean = true;
   @State() autoValidate = false;
 
   @Event() closeSideBar: EventEmitter<null>;
@@ -111,7 +111,7 @@ export class GuestInfo {
           <div class={this.headerShown ? 'card-body px-1 pt-0' : 'pt-0'}>
             <ir-input-text
               autoValidate={this.autoValidate}
-              label={locales.entries.Lcz_FirstName}
+              label={locales.entries?.Lcz_FirstName}
               name="firstName"
               // submitted={this.submit}
               value={this.guest?.first_name}
@@ -120,7 +120,7 @@ export class GuestInfo {
             ></ir-input-text>
             <ir-input-text
               autoValidate={this.autoValidate}
-              label={locales.entries.Lcz_LastName}
+              label={locales.entries?.Lcz_LastName}
               name="lastName"
               // submitted={this.submit}
               value={this.guest?.last_name}
@@ -128,7 +128,7 @@ export class GuestInfo {
               onTextChange={e => this.handleInputChange({ last_name: e.detail })}
             ></ir-input-text>
             <ir-input-text
-              label={locales.entries.Lcz_Email}
+              label={locales.entries?.Lcz_Email}
               name="email"
               // submitted={this.submit}
               value={this.guest?.email}
@@ -136,7 +136,7 @@ export class GuestInfo {
               onTextChange={e => this.handleInputChange({ email: e.detail })}
             ></ir-input-text>
             <ir-input-text
-              label={locales.entries.Lcz_AlternativeEmail}
+              label={locales.entries?.Lcz_AlternativeEmail}
               name="altEmail"
               value={this.guest?.alternative_email}
               onTextChange={e => this.handleInputChange({ alternative_email: e.detail })}
@@ -161,7 +161,7 @@ export class GuestInfo {
             <ir-country-picker
               // error={this.submit && !this.guest.country_id}
               country={this.countries.find(c => c.id === this.guest.country_id)}
-              label={locales.entries.Lcz_Country}
+              label={locales.entries?.Lcz_Country}
               onCountryChange={e => this.handleInputChange({ country_id: e.detail.id })}
               countries={this.countries}
             ></ir-country-picker>
@@ -178,7 +178,7 @@ export class GuestInfo {
               phone_prefix={this.guest.country_phone_prefix}
               value={this.guest.mobile}
               language={this.language}
-              label={locales.entries.Lcz_MobilePhone}
+              label={locales.entries?.Lcz_MobilePhone}
               countries={this.countries}
             />
             <div class="mb-2">
@@ -186,7 +186,7 @@ export class GuestInfo {
                 variant="prepend"
                 onTextChange={e => this.handleInputChange({ notes: e.detail })}
                 value={this.guest?.notes}
-                label={locales.entries.Lcz_PrivateNote}
+                label={locales.entries?.Lcz_PrivateNote}
               ></ir-textarea>
             </div>
             <div class={'p-0 m-0'}>
@@ -201,28 +201,43 @@ export class GuestInfo {
                 <span class="checkmark m-0 p-0"></span>
                 <span class={'m-0 p-0  check-label'}>{locales.entries.Lcz_Newsletter}</span>
               </label>
+              {!this.isInSideBar && (
+                <Fragment>
+                  <hr />
+                  <ir-button
+                    isLoading={this.isLoading}
+                    btn_disabled={this.isLoading}
+                    btn_styles="d-flex align-items-center justify-content-center"
+                    text={locales.entries.Lcz_Save}
+                    onClickHandler={this.editGuest.bind(this)}
+                    color="btn-primary"
+                  ></ir-button>
+                </Fragment>
+              )}
             </div>
           </div>
         </div>
-        <div class="sheet-footer">
-          <ir-button
-            data-testid="cancel"
-            onClickHandler={() => this.closeSideBar.emit(null)}
-            class="flex-fill m-0 p-0"
-            btn_styles="w-100 m-0  justify-content-center align-items-center"
-            btn_color="secondary"
-            text={locales.entries.Lcz_Cancel}
-          ></ir-button>
-          <ir-button
-            data-testid="save"
-            isLoading={isRequestPending('/Edit_Exposed_Guest')}
-            btn_disabled={this.isLoading}
-            class="flex-fill m-0"
-            btn_type="submit"
-            btn_styles="w-100 m-0  justify-content-center align-items-center"
-            text={locales.entries.Lcz_Save}
-          ></ir-button>
-        </div>
+        {this.isInSideBar && (
+          <div class={'sheet-footer'}>
+            <ir-button
+              data-testid="cancel"
+              onClickHandler={() => this.closeSideBar.emit(null)}
+              class="flex-fill m-0 p-0"
+              btn_styles="w-100 m-0  justify-content-center align-items-center"
+              btn_color="secondary"
+              text={locales.entries.Lcz_Cancel}
+            ></ir-button>
+            <ir-button
+              data-testid="save"
+              isLoading={isRequestPending('/Edit_Exposed_Guest')}
+              btn_disabled={this.isLoading}
+              class="flex-fill m-0"
+              btn_type="submit"
+              btn_styles="w-100 m-0  justify-content-center align-items-center"
+              text={locales.entries.Lcz_Save}
+            ></ir-button>
+          </div>
+        )}
       </form>
     );
   }
