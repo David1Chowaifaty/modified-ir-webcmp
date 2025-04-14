@@ -19,6 +19,10 @@
   user-select: none;
   -webkit-user-drag: none;
 }
+.cellData.disabled {
+  background: rgba(153, 153, 153, 10%);
+  cursor: not-allowed;
+}
 .roomRow .room {
   cursor: pointer;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;

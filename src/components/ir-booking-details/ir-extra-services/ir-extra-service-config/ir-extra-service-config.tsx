@@ -235,7 +235,7 @@ export class IrExtraServiceConfig {
             <ir-price-input
               autoValidate={false}
               label={locales.entries.Lcz_Cost}
-              labelStyle="cost-label"
+              labelStyle="rounded-0 border-left-0"
               currency={this.booking.currency.symbol}
               // class="ir-bl-lbl-none ir-bl-none"
               value={this.s_service?.cost?.toString()}

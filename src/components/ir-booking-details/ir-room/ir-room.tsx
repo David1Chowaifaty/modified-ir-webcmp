@@ -297,12 +297,14 @@ export class IrRoom {
         ></ir-button>
 
         <div class="flex-fill m-0 ">
-          <div class="d-flex align-items-start justify-content-between sm-mb-1">
-            <p class="m-0 p-0">
+          <div class="d-flex align-items-start justify-content-between sm-mb-1 flex-fill">
+            <p class="m-0 p-0  room-name">
               <span class="m-0 p-0" style={{ fontWeight: '600' }}>
                 {this.myRoomTypeFoodCat || ''}{' '}
               </span>{' '}
-              {this.mealCodeName} {this.room.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
+              <span>
+                {this.mealCodeName} {this.room.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
+              </span>
             </p>
             {/*this.room.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
             <div class="d-flex m-0 p-0 align-items-center room_actions_btns">

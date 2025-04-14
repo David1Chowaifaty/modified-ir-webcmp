@@ -17,6 +17,9 @@
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+.rate-input:read-only {
+  background: white !important;
+}
 .ir-br-lbl-none,
 .ir-br-input-none {
   border-top-right-radius: 0 !important;

@@ -13,3 +13,8 @@
 .border-theme {
   border: 1px solid #cacfe7;
 }
+@media (min-width: 768px) {
+  .price-input-container {
+    max-width: 290px;
+  }
+}

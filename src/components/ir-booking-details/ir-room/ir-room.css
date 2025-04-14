@@ -53,6 +53,14 @@
 .night-cost {
   color: #7cbebe;
 }
+.room-name {
+  max-width: 60%;
+}
+.room_actions_btns {
+  flex: 1 1 0%;
+  display: flex;
+  justify-content: flex-end;
+}
 /* .cancelation {
   max-width: 30%;
 } */

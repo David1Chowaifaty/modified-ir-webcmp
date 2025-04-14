@@ -12,6 +12,8 @@ export class IrPriceInput {
 
   /** The label for the input, optional */
   @Prop() label?: string;
+  /** The readonly for the input, optional */
+  @Prop() readOnly?: boolean;
 
   /** Extra classnames for the input, optional */
   @Prop() inputStyle?: string;
@@ -219,6 +221,7 @@ export class IrPriceInput {
             onFocus={this.handleFocus}
             type="text"
             placeholder={this.placeholder}
+            readOnly={this.readOnly}
             aria-label={this.el.ariaLabel ?? 'price-input'}
             aria-describedby={this.el.ariaDescription ?? 'price-input'}
           />

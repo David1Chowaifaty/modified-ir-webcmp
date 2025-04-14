@@ -296,7 +296,7 @@ export class IrPickup {
                     })) as any
                   }
                 ></ir-select>
-                <ir-input-text
+                {/* <ir-input-text
                   labelBorder="theme"
                   readonly
                   value={this.pickupData.due_upon_booking}
@@ -304,7 +304,10 @@ export class IrPickup {
                   label={`${locales.entries.Lcz_DueUponBooking}  ${this.pickupData.currency.symbol}`}
                   placeholder=""
                   class=""
-                ></ir-input-text>
+                ></ir-input-text> */}
+                <div class="price-input-container">
+                  <ir-price-input readOnly label={`${locales.entries.Lcz_DueUponBooking}`} value={this.pickupData.due_upon_booking} currency={this.pickupData.currency.symbol} />
+                </div>
               </div>
             </div>
           )}
