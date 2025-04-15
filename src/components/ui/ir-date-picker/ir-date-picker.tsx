@@ -108,6 +108,11 @@ export class IrDatePicker {
    */
   @Prop() emitEmptyDate: boolean = false;
 
+  /**
+   * Styles for the trigger container
+   */
+  @Prop() triggerContainerStyle: string = '';
+
   @State() currentDate: Date | null = null;
 
   @Event() dateChanged: EventEmitter<{
@@ -322,7 +327,7 @@ export class IrDatePicker {
 
   render() {
     return (
-      <div class="ir-date-picker-trigger">
+      <div class={`ir-date-picker-trigger ${this.triggerContainerStyle}`}>
         {this.customPicker && <slot name="trigger"></slot>}
         <input type="text" disabled={this.disabled} class={this.customPicker ? 'ir-date-picker-element' : 'form-control input-sm'} ref={el => (this.pickerRef = el)} />
       </div>

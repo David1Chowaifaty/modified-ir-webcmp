@@ -297,7 +297,7 @@ export class IrRoom {
         ></ir-button>
 
         <div class="flex-fill m-0 ">
-          <div class="d-flex align-items-start justify-content-between sm-mb-1 flex-fill">
+          <div class="d-flex align-items-start justify-content-between sm-mb-1 flex-fill" style={{ gap: '0.5rem' }}>
             <p class="m-0 p-0  room-name">
               <span class="m-0 p-0" style={{ fontWeight: '600' }}>
                 {this.myRoomTypeFoodCat || ''}{' '}

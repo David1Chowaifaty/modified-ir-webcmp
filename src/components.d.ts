@@ -479,6 +479,10 @@ export namespace Components {
           * Enables the timepicker functionality (select hours and minutes).
          */
         "timepicker": boolean;
+        /**
+          * Styles for the trigger container
+         */
+        "triggerContainerStyle": string;
     }
     interface IrDateRange {
         "applyLabel": string;
@@ -3836,6 +3840,10 @@ declare namespace LocalJSX {
           * Enables the timepicker functionality (select hours and minutes).
          */
         "timepicker"?: boolean;
+        /**
+          * Styles for the trigger container
+         */
+        "triggerContainerStyle"?: string;
     }
     interface IrDateRange {
         "applyLabel"?: string;
