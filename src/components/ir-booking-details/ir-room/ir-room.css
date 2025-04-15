@@ -53,8 +53,10 @@
 .night-cost {
   color: #7cbebe;
 }
-.room-name {
-  max-width: 60%;
+.room_actions_btns {
+  /* max-width: 50%; */
+  white-space: nowrap;
+  width: max-content;
 }
 .room_actions_btns {
   flex: 1 1 0%;
