@@ -263,7 +263,9 @@ export class IrPaymentOption {
           onIrSidebarToggle={() => {
             this.closeModal(null);
           }}
-          label={locales?.entries.Lcz_Information?.replace('%1', payment_option_store.selectedOption?.description)}
+          side={'right'}
+          showCloseButton={false}
+          // label={locales?.entries.Lcz_Information?.replace('%1', payment_option_store.selectedOption?.description)}
           open={payment_option_store?.selectedOption !== null}
         >
           {payment_option_store?.selectedOption && <ir-option-details propertyId={this.propertyid} slot="sidebar-body"></ir-option-details>}
