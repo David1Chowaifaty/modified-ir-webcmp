@@ -3,6 +3,7 @@ import { createStore } from '@stencil/store';
 
 type CalendarStore = CalendarDataDetails & {
   roomHistory: Record<string, boolean>;
+  housekeeping_enabled: boolean;
   checkin_enabled: boolean;
   checkin_checkout_hours: {
     hour: number;
@@ -20,6 +21,7 @@ const initialState: CalendarStore = {
   allowedBookingSources: [],
   currency: undefined,
   endingDate: 0,
+  housekeeping_enabled: true,
   formattedLegendData: undefined,
   is_vacation_rental: false,
   legendData: [],

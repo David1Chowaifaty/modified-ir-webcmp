@@ -208,6 +208,7 @@ export class IrHkTasks {
       this.isApplyFiltersLoading = false;
     }
   }
+
   private async fetchTasksWithFilters(export_to_excel: boolean = false) {
     const { cleaning_periods, housekeepers, cleaning_frequencies, dusty_units, highlight_check_ins } = this.filters ?? {};
 

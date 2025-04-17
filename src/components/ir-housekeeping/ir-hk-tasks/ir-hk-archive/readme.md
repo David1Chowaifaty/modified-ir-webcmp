@@ -76,6 +76,7 @@ graph TD;
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
+  ir-pickup --> ir-price-input
   ir-pickup --> ir-button
   ir-booking-extra-note --> ir-title
   ir-booking-extra-note --> ir-textarea

@@ -30,6 +30,10 @@
 .roomRow .room:hover {
   background: #e0e0e0;
 }
+.roomRow .room:hover[data-hk-enabled='false'] {
+  background: white;
+  cursor: default;
+}
 .cellData {
   width: 58px;
   height: 30px;

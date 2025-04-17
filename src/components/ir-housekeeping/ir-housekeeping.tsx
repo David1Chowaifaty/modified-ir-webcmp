@@ -62,10 +62,13 @@ export class IrHousekeeping {
         propertyId = propertyData.My_Result.id;
       }
       updateHKStore('default_properties', { token: this.ticket, property_id: propertyId, language: this.language });
-      const requests = [this.houseKeepingService.getExposedHKSetup(propertyId), this.roomService.fetchLanguage(this.language, ['_HK_FRONT', '_PMS_FRONT'])];
-
+      const requests: Array<Promise<any>> = [];
+      if (calendar_data.housekeeping_enabled) {
+        requests.push(this.houseKeepingService.getExposedHKSetup(propertyId));
+      }
+      requests.push(this.roomService.fetchLanguage(this.language, ['_HK_FRONT', '_PMS_FRONT']));
       if (this.propertyid) {
-        requests.unshift(
+        requests.push(
           this.roomService.getExposedProperty({
             id: propertyId,
             language: this.language,
@@ -113,7 +116,7 @@ export class IrHousekeeping {
           <div class="card p-1">
             <ir-title borderShown label="Check-In Mode"></ir-title>
             <div class={'d-flex align-items-center'}>
-              <p class="my-0 py-0 mr-1  ">{locales.entries.Lcz_CheckInOutGuestsAutomatically}:</p>
+              <p class="my-0 py-0 mr-1  ">{locales.entries.Lcz_CheckInOutGuestsAutomatically}</p>
               <ir-select
                 LabelAvailable={false}
                 showFirstOption={false}
@@ -127,7 +130,7 @@ export class IrHousekeeping {
             </div>
           </div>
           {/*<ir-unit-status class="mb-1"></ir-unit-status>*/}
-          <ir-hk-team class="mb-1"></ir-hk-team>
+          {calendar_data.housekeeping_enabled && <ir-hk-team class="mb-1"></ir-hk-team>}
         </section>
       </Host>
     );

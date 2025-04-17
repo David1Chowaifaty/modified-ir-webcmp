@@ -299,3 +299,21 @@ export function handleBodyOverflow(open: boolean) {
     }
   }
 }
+export function generatePassword(length = 16): string {
+  const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + 'abcdefghijklmnopqrstuvwxyz' + '0123456789' + '!@#$%^&*()-_=+[]{}|;:,.<>?';
+
+  const cryptoObj = (window.crypto || (window as any).msCrypto) as Crypto & { getRandomValues?: Function };
+  if (cryptoObj && typeof cryptoObj.getRandomValues === 'function') {
+    const randomValues = new Uint32Array(length);
+    cryptoObj.getRandomValues(randomValues);
+    return Array.from(randomValues, rv => CHARSET[rv % CHARSET.length]).join('');
+  } else {
+    console.warn('Secure crypto RNG not available—falling back to Math.random()');
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      const idx = Math.floor(Math.random() * CHARSET.length);
+      password += CHARSET.charAt(idx);
+    }
+    return password;
+  }
+}

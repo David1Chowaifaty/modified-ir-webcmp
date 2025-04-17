@@ -404,9 +404,12 @@ export class IglCalBody {
             class={`cellData room text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${
               'room_' + this.getRoomId(room)
             }`}
+            data-hk-enabled={String(calendar_data.housekeeping_enabled)}
             data-room={this.getRoomId(room)}
             onClick={() => {
-              console.log(room);
+              if (!calendar_data.housekeeping_enabled) {
+                return;
+              }
               this.selectedRoom = room;
               this.hkModal.openModal();
             }}
@@ -424,7 +427,7 @@ export class IglCalBody {
                 if (el) this.interactiveTitle[room.id] = el;
               }}
               style={room.hk_status === '003' && { '--dot-color': '#999999' }}
-              hkStatus={room.hk_status !== '001'}
+              hkStatus={calendar_data.housekeeping_enabled && room.hk_status !== '001'}
               popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}
             ></ir-interactive-title>
           </div>

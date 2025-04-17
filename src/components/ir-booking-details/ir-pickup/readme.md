@@ -35,6 +35,7 @@
 - [ir-select](../../ui/ir-select)
 - [ir-date-picker](../../ui/ir-date-picker)
 - [ir-input-text](../../ui/ir-input-text)
+- [ir-price-input](../../ui/ir-price-input)
 - [ir-button](../../ui/ir-button)
 
 ### Graph
@@ -44,6 +45,7 @@ graph TD;
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
+  ir-pickup --> ir-price-input
   ir-pickup --> ir-button
   ir-title --> ir-icon
   ir-button --> ir-icons

@@ -232,9 +232,9 @@ export class IrTasksTable {
                 </div>
               </th>
               <th class="extra-padding">{locales.entries.Lcz_Hint}</th>
-              <th class="text-center">{locales.entries.Lcz_A}</th>
-              <th class="text-center">{locales.entries.Lcz_C}</th>
-              <th class="text-center">{locales.entries.Lcz_I}</th>
+              <th class="text-left">{locales.entries.Lcz_A}</th>
+              <th class="text-left">{locales.entries.Lcz_C}</th>
+              <th class="text-left">{locales.entries.Lcz_I}</th>
               {haveManyHousekeepers && (
                 <th style={{ textAlign: 'start' }} class={'sortable extra-padding'} onClick={() => this.handleSort('housekeeper')}>
                   <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
@@ -297,9 +297,9 @@ export class IrTasksTable {
                   </td>
                   <td class="task-row extra-padding">{task.status.description}</td>
                   <td class="task-row extra-padding">{task.hint}</td>
-                  <td class="task-row text-center">{task.adult}</td>
-                  <td class="task-row text-center">{task.child}</td>
-                  <td class="task-row text-center">{task.infant}</td>
+                  <td class="task-row text-left">{task.adult}</td>
+                  <td class="task-row text-left">{task.child}</td>
+                  <td class="task-row text-left">{task.infant}</td>
                   {haveManyHousekeepers && (
                     <td class="w-50 task-row extra-padding" style={{ textAlign: 'start' }}>
                       {task.housekeeper ?? locales.entries.Lcz_Unassigned}
