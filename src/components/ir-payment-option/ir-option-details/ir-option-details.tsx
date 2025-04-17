@@ -176,7 +176,7 @@ export class IrOptionDetails {
                   // pluginsMode="add"
                   // toolbarItemsMode="add"
                   // toolbarItems={['|', 'link']}
-                  maxLength={250}
+                  maxLength={450}
                   placeholder=""
                   style={{ '--ir-editor-height': '250px' }}
                   error={this.invalid}
