@@ -7,7 +7,7 @@ import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
 @Component({
   tag: 'ir-option-details',
-  styleUrls: ['ir-option-details.css', '../../../common/sheet.css'],
+  styleUrl: 'ir-option-details.css',
   scoped: true,
 })
 export class IrOptionDetails {
@@ -146,31 +146,23 @@ export class IrOptionDetails {
     }
     return (
       <Host>
-        <form class={'sheet-container'} onSubmit={this.saveOption.bind(this)}>
-          <ir-title
-            class="px-1 sheet-header"
-            onCloseSideBar={() => this.closeModal.emit(null)}
-            label={locales?.entries.Lcz_Information?.replace('%1', payment_option_store.selectedOption?.description)}
-            displayContext="sidebar"
-          ></ir-title>
-
-          <div class="sheet-body px-1">
-            {payment_option_store.selectedOption.code === '005' ? (
+        <form class={'p-1 mt-2'} onSubmit={this.saveOption.bind(this)}>
+          {payment_option_store.selectedOption.code === '005' ? (
+            <div>
+              <div class="mb-1">
+                <ir-select
+                  selectedValue={this.selectedLanguage}
+                  LabelAvailable={false}
+                  showFirstOption={false}
+                  data={payment_option_store.languages.map(l => ({
+                    text: l.description,
+                    value: l.id.toString(),
+                  }))}
+                ></ir-select>
+              </div>
               <div>
-                <div class="mb-1">
-                  <ir-select
-                    selectedValue={this.selectedLanguage}
-                    LabelAvailable={false}
-                    showFirstOption={false}
-                    data={payment_option_store.languages.map(l => ({
-                      text: l.description,
-                      value: l.id.toString(),
-                    }))}
-                  ></ir-select>
-                </div>
-                <div>
-                  {this.invalid && <p class="text-danger p-0 m-0">{locales.entries.Lcz_YouMustFillEnglishField}</p>}
-                  {/* <ir-textarea
+                {this.invalid && <p class="text-danger p-0 m-0">{locales.entries.Lcz_YouMustFillEnglishField}</p>}
+                {/* <ir-textarea
                   placeholder=""
                   aria-invalid={this.invalid ? 'true' : 'false'}
                   textareaClassname="money-transfer-form"
@@ -179,45 +171,44 @@ export class IrOptionDetails {
                   onTextChange={this.handleTextAreaChange.bind(this)}
                   value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
                 ></ir-textarea> */}
-                  <ir-text-editor
-                    // plugins={[Link]}
-                    // pluginsMode="add"
-                    // toolbarItemsMode="add"
-                    // toolbarItems={['|', 'link']}
-                    maxLength={250}
-                    placeholder=""
-                    style={{ '--ir-editor-height': '250px' }}
-                    error={this.invalid}
-                    value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
-                    onTextChange={this.handleTextAreaChange.bind(this)}
-                  ></ir-text-editor>
-                </div>
+                <ir-text-editor
+                  // plugins={[Link]}
+                  // pluginsMode="add"
+                  // toolbarItemsMode="add"
+                  // toolbarItems={['|', 'link']}
+                  maxLength={450}
+                  placeholder=""
+                  style={{ '--ir-editor-height': '250px' }}
+                  error={this.invalid}
+                  value={this.localizationIdx !== null ? payment_option_store.selectedOption?.localizables[this.localizationIdx]?.description ?? '' : ''}
+                  onTextChange={this.handleTextAreaChange.bind(this)}
+                ></ir-text-editor>
               </div>
-            ) : (
-              <div>
-                {payment_option_store.selectedOption.data?.map((d, idx) => {
-                  return (
-                    <fieldset key={d.key}>
-                      <ir-input-text
-                        value={d.value}
-                        onTextChange={e => this.handlePaymentGatewayInfoChange(e, idx)}
-                        id={`input_${d.key}`}
-                        label={d.key.replace(/_/g, ' ')}
-                        placeholder=""
-                        labelWidth={4}
-                        aria-invalid={this.invalid && (d.value === null || (d.value ?? '')?.trim() === '') ? 'true' : 'false'}
-                      ></ir-input-text>
-                    </fieldset>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-          <div class={'sheet-footer'}>
+            </div>
+          ) : (
+            <div>
+              {payment_option_store.selectedOption.data?.map((d, idx) => {
+                return (
+                  <fieldset key={d.key}>
+                    <ir-input-text
+                      value={d.value}
+                      onTextChange={e => this.handlePaymentGatewayInfoChange(e, idx)}
+                      id={`input_${d.key}`}
+                      label={d.key.replace(/_/g, ' ')}
+                      placeholder=""
+                      labelWidth={4}
+                      aria-invalid={this.invalid && (d.value === null || (d.value ?? '')?.trim() === '') ? 'true' : 'false'}
+                    ></ir-input-text>
+                  </fieldset>
+                );
+              })}
+            </div>
+          )}
+          <div class={'d-flex flex-column flex-sm-row mt-3'}>
             <ir-button
               onClick={() => this.closeModal.emit(null)}
               btn_styles="justify-content-center"
-              class={`flex-fill`}
+              class={`mb-1 mb-sm-0 flex-fill mr-sm-1`}
               icon=""
               text={locales.entries.Lcz_Cancel}
               btn_color="secondary"
@@ -227,7 +218,7 @@ export class IrOptionDetails {
             <ir-button
               btn_type="submit"
               btn_styles="justify-content-center align-items-center"
-              class={'flex-fill'}
+              class={'m-0 flex-fill text-center'}
               icon=""
               isLoading={isRequestPending('/Handle_Payment_Method')}
               text={locales.entries.Lcz_Save}
