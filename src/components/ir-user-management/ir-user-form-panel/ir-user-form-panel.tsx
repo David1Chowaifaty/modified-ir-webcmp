@@ -239,12 +239,13 @@ export class IrUserFormPanel {
             </Fragment>
           ) : (
             this.haveAdminPrivileges &&
-            this.user.type.toString() !== '1' && (
+            this.user.type.toString() !== '1' &&
+            (this.user?.type.toString() === '17' && this.userTypeCode?.toString() === '17' ? null : (
               <div class="d-flex align-items-center justify-content-between">
                 <h4 class="m-0 p-0">Password</h4>
                 <ir-button btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
               </div>
-            )
+            ))
           )}
           <ir-sidebar
             open={this.isOpen}

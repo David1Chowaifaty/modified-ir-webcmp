@@ -7,11 +7,13 @@
 
 ## Properties
 
-| Property       | Attribute        | Description | Type                            | Default     |
-| -------------- | ---------------- | ----------- | ------------------------------- | ----------- |
-| `isSuperAdmin` | `is-super-admin` |             | `boolean`                       | `true`      |
-| `userTypes`    | --               |             | `Map<string \| number, string>` | `new Map()` |
-| `users`        | --               |             | `User[]`                        | `[]`        |
+| Property              | Attribute               | Description | Type                            | Default     |
+| --------------------- | ----------------------- | ----------- | ------------------------------- | ----------- |
+| `haveAdminPrivileges` | `have-admin-privileges` |             | `boolean`                       | `undefined` |
+| `isSuperAdmin`        | `is-super-admin`        |             | `boolean`                       | `undefined` |
+| `userTypeCode`        | `user-type-code`        |             | `number \| string`              | `undefined` |
+| `userTypes`           | --                      |             | `Map<string \| number, string>` | `new Map()` |
+| `users`               | --                      |             | `User[]`                        | `[]`        |
 
 
 ## Events

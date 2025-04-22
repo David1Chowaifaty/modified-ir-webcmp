@@ -11,6 +11,11 @@
 .ir-table-row td:last-child {
   width: 100%;
 }
+/* .ir-table-row td:first-child,
+.table thead th:first-child {
+  position: sticky;
+  left: var(--ir-table-sticky-padding,-1rem);
+} */
 
 .table td {
   border-top: 0;
@@ -60,3 +65,7 @@
 .sortable svg {
   color: var(--blue);
 }
+/* .action-row {
+  position: sticky;
+  right:var(--ir-table-sticky-padding,-1rem);
+} */

@@ -7,13 +7,15 @@
 
 ## Properties
 
-| Property       | Attribute        | Description | Type      | Default     |
-| -------------- | ---------------- | ----------- | --------- | ----------- |
-| `isSuperAdmin` | `is-super-admin` |             | `boolean` | `true`      |
-| `language`     | `language`       |             | `string`  | `''`        |
-| `p`            | `p`              |             | `string`  | `undefined` |
-| `propertyid`   | `propertyid`     |             | `number`  | `undefined` |
-| `ticket`       | `ticket`         |             | `string`  | `''`        |
+| Property       | Attribute        | Description | Type               | Default     |
+| -------------- | ---------------- | ----------- | ------------------ | ----------- |
+| `isSuperAdmin` | `is-super-admin` |             | `boolean`          | `true`      |
+| `language`     | `language`       |             | `string`           | `''`        |
+| `p`            | `p`              |             | `string`           | `undefined` |
+| `propertyid`   | `propertyid`     |             | `number`           | `undefined` |
+| `ticket`       | `ticket`         |             | `string`           | `''`        |
+| `userId`       | `user-id`        |             | `number \| string` | `undefined` |
+| `userTypeCode` | `user-type-code` |             | `number \| string` | `undefined` |
 
 
 ## Dependencies

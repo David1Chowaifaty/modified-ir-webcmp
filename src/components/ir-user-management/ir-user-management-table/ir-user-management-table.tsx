@@ -83,7 +83,7 @@ export class IrUserManagementTable {
                 <th class="text-left">Created at</th>
                 {this.haveAdminPrivileges && <th>Active</th>}
 
-                <th>
+                <th class={'action-row'}>
                   {this.canCreate && (
                     <ir-icon
                       style={{ paddingLeft: '0.875rem' }}
@@ -131,9 +131,9 @@ export class IrUserManagementTable {
                           : !isUserSuperAdmin && <ir-switch onCheckChange={e => this.handleUserActiveChange(e, user)} checked={user.is_active}></ir-switch>}
                       </td>
                     )}
-                    <td>
+                    <td class={'action-row'}>
                       {(this.canEdit || this.canDelete) && ((!this.isSuperAdmin && !isUserSuperAdmin) || this.isSuperAdmin) && (
-                        <div class="icons-container d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                        <div class="icons-container  d-flex align-items-center" style={{ gap: '0.5rem' }}>
                           {this.canEdit && (
                             <ir-icon
                               data-testid="edit"
