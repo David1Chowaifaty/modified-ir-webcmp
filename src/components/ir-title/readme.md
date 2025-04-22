@@ -34,6 +34,7 @@
  - [ir-hk-unassigned-units](../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../ir-housekeeping/ir-hk-user)
  - [ir-housekeeping](../ir-housekeeping)
+ - [ir-option-details](../ir-payment-option/ir-option-details)
  - [ir-pickup](../ir-booking-details/ir-pickup)
  - [ir-room-guests](../ir-booking-details/ir-room-guests)
  - [ir-room-nights](../igloo-calendar/ir-room-nights)
@@ -56,6 +57,7 @@ graph TD;
   ir-hk-unassigned-units --> ir-title
   ir-hk-user --> ir-title
   ir-housekeeping --> ir-title
+  ir-option-details --> ir-title
   ir-pickup --> ir-title
   ir-room-guests --> ir-title
   ir-room-nights --> ir-title

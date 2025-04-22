@@ -30,8 +30,10 @@
     <script>
         const booking_listing = document.querySelector("ir-booking-listing");
         if (booking_listing) {
-            booking_listing.propertyid = getId();
-            booking_listing.ticket = getToken();
+            (async () => {
+                booking_listing.propertyid = getId();
+                booking_listing.ticket = await getToken()
+            })();
         } 
     </script>
 

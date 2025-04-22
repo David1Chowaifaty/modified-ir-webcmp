@@ -30,8 +30,10 @@
     <script>
         const housekeepingEl = document.querySelector("ir-housekeeping");
         if (housekeepingEl) {
-            housekeepingEl.propertyid = getId();
-            housekeepingEl.ticket = getToken();
+            (async () => {
+                housekeepingEl.propertyid = getId();
+                housekeepingEl.ticket = await getToken();
+            })()
         } 
     </script>
 

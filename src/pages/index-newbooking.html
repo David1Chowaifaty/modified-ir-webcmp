@@ -43,8 +43,8 @@
         book_container.from_date = _FROM_DATE;
         book_container.to_date = _TO_DATE;
 
-        setTimeout(() => {
-            const ticket = getToken();
+        setTimeout(async () => {
+            const ticket = await getToken();
             book_container.propertyid = getId();
             book_container.ticket = ticket;
         }, 300)

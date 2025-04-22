@@ -48,10 +48,12 @@ graph TD;
   ir-payment-option --> ir-option-details
   ir-button --> ir-icons
   ir-sidebar --> ir-icon
+  ir-option-details --> ir-title
   ir-option-details --> ir-select
   ir-option-details --> ir-text-editor
   ir-option-details --> ir-input-text
   ir-option-details --> ir-button
+  ir-title --> ir-icon
   style ir-payment-option fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

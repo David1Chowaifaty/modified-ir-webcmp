@@ -30,11 +30,12 @@
     <script>
         const bookingPrinting = document.querySelector("ir-booking-printing");
 
-        sessionStorage.removeItem('token');
-        const ticket = getToken();
-        bookingPrinting.bookingNumber = "23080178267"
-        bookingPrinting.propertyid = getId();
-        bookingPrinting.token = ticket;
+        (async () => {
+            const ticket = await getToken();
+            bookingPrinting.bookingNumber = "23080178267"
+            bookingPrinting.propertyid = getId();
+            bookingPrinting.token = ticket;
+        })()
 
     </script>
 

@@ -31,8 +31,10 @@
         checkBrowserValidity()
         const housekeepingEl = document.querySelector("ir-hk-tasks");
         if (housekeepingEl) {
-            housekeepingEl.propertyid = getId();
-            housekeepingEl.ticket = getToken();
+            (async () => {
+                housekeepingEl.propertyid = getId();
+                housekeepingEl.ticket = await getToken()
+            })();
         } 
     </script>
 

@@ -29,8 +29,8 @@
 
     <script>
         const userManagementEl = document.querySelector("ir-user-management");
-        setTimeout(() => {
-            const ticket = getToken();
+        setTimeout(async () => {
+            const ticket = await getToken();
             userManagementEl.propertyid = getId();
             userManagementEl.ticket = ticket;
         }, 300)

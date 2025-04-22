@@ -30,8 +30,8 @@
 
     <script>
         const salesByCountryEl = document.querySelector("ir-sales-by-country");
-        setTimeout(() => {
-            const ticket = getToken();
+        setTimeout(async () => {
+            const ticket = await getToken();
             salesByCountryEl.propertyid = getId();
             salesByCountryEl.ticket = ticket;
         }, 300)

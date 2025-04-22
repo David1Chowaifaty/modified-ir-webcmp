@@ -1,23 +1,75 @@
-function getToken() {
-    return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NDQ5NTQzMTQsIkNMQUlNLTAxIjoicktLMi9DY1dQQnM9IiwiQ0xBSU0tMDIiOiI5UStMQm93VTl6az0iLCJDTEFJTS0wMyI6InJ5Y0ZmdnF6NjQ0PSIsIkNMQUlNLTA0IjoiQUVxVnRCMm1kWTg9IiwiQ0xBSU0tMDUiOiJFQTEzejA3ejBUcWRkM2gwNElyYThFOHYzRGt2MUlROCIsIkNMQUlNLTA2IjoiQUVxVnRCMm1kWTg9In0.4BkN5dlVfielxEsN1cvKycvDfOR6iP1XtXBrC4uHnXw"
+async function getToken() {
+    try {
+        if (!document.getElementById("jwt-decode-cdn")) {
+            console.log("Injecting jwt-decode script...");
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js";
+            script.id = "jwt-decode-cdn";
+
+            await new Promise((resolve, reject) => {
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+
+            console.log("jwt-decode script loaded.");
+        }
+
+        // Load token from localStorage or fallback
+        let token = localStorage.getItem("token");
+
+        let isExpired = true;
+
+        if (token) {
+            const decoded = jwt_decode(token);
+            isExpired = Date.now() > decoded.exp * 1000;
+            console.log("Token expiration:", new Date(decoded.exp * 1000), "Now:", new Date(), "Expired?", isExpired);
+        }
+
+        if (!token || isExpired) {
+            console.log("Token missing or expired. Fetching new one...");
+            const newToken = await authenticate("A35", "QAZqaz900_");
+
+            if (newToken) {
+                localStorage.setItem("token", newToken);
+                token = newToken;
+                console.log("New token saved to localStorage.");
+            } else {
+                console.error("Failed to get new token.");
+            }
+        }
+
+        return token;
+    } catch (error) {
+        console.error("getToken error:", error);
+    }
 }
+
+// token = await authenticate("A35", "QAZqaz900_")
 function getId() {
     return "42"
 }
+
 const authenticate = async (username = "A35", password = "12345") => {
     try {
-        const res = await fetch('https://gateway.igloorooms.com/IR/Authenticate', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            credentials: 'include', // This ensures that cookies are sent and received
-            body: JSON.stringify({
-                username,
-                password
-            })
+        const myHeaders = new Headers();
+        myHeaders.append("x-ir-bypass", "123");
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Cookie", "Cookie_1=value");
+
+        const raw = JSON.stringify({
+            "username": username,
+            "password": password
         });
 
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+        };
+
+        const res = await fetch('https://gateway.igloorooms.com/IR/Authenticate', requestOptions);
         const data = await res.json();
         return data.My_Result;
     } catch (error) {
