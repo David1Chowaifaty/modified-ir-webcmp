@@ -32,7 +32,7 @@ import { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/
 import { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
-import { User } from "./components/ir-user-management/types";
+import { User } from "./models/Users";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
@@ -60,7 +60,7 @@ export { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/
 export { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
-export { User } from "./components/ir-user-management/types";
+export { User } from "./models/Users";
 export namespace Components {
     interface IglApplicationInfo {
         "baseData": { unit: { id: string; name: string }; roomtypeId: number };
@@ -987,6 +987,10 @@ export namespace Components {
         "countries": ICountry[];
     }
     interface IrResetPassword {
+        "old_pwd": string;
+        "skip2Fa": boolean;
+        "ticket": string;
+        "username": string;
     }
     interface IrRoom {
         "bedPreferences": IEntries[];
@@ -1205,6 +1209,7 @@ export namespace Components {
         "language": string;
         "property_id": number;
         "user": User;
+        "userTypes": { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
     }
     interface IrUserManagement {
         "isSuperAdmin": boolean;
@@ -1215,6 +1220,7 @@ export namespace Components {
     }
     interface IrUserManagementTable {
         "isSuperAdmin": boolean;
+        "userTypes": Map<string | number, string>;
         "users": User[];
     }
     interface OtaLabel {
@@ -2846,6 +2852,7 @@ declare global {
     token: string;
     code: 'succsess' | 'error';
   };
+        "closeSideBar": null;
     }
     interface HTMLIrResetPasswordElement extends Components.IrResetPassword, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrResetPasswordElementEventMap>(type: K, listener: (this: HTMLIrResetPasswordElement, ev: IrResetPasswordCustomEvent<HTMLIrResetPasswordElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4405,10 +4412,15 @@ declare namespace LocalJSX {
         "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent<any>>) => void;
     }
     interface IrResetPassword {
+        "old_pwd"?: string;
         "onAuthFinish"?: (event: IrResetPasswordCustomEvent<{
     token: string;
     code: 'succsess' | 'error';
   }>) => void;
+        "onCloseSideBar"?: (event: IrResetPasswordCustomEvent<null>) => void;
+        "skip2Fa"?: boolean;
+        "ticket"?: string;
+        "username"?: string;
     }
     interface IrRoom {
         "bedPreferences"?: IEntries[];
@@ -4654,6 +4666,7 @@ declare namespace LocalJSX {
         "onResetData"?: (event: IrUserFormPanelCustomEvent<null>) => void;
         "property_id"?: number;
         "user"?: User;
+        "userTypes"?: { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
     }
     interface IrUserManagement {
         "isSuperAdmin"?: boolean;
@@ -4665,6 +4678,7 @@ declare namespace LocalJSX {
     interface IrUserManagementTable {
         "isSuperAdmin"?: boolean;
         "onToast"?: (event: IrUserManagementTableCustomEvent<IToast>) => void;
+        "userTypes"?: Map<string | number, string>;
         "users"?: User[];
     }
     interface OtaLabel {

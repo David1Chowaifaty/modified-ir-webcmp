@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State, Element, Fragment, Watch } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, State, Element, Fragment, Watch, Listen } from '@stencil/core';
 import { canCheckIn, findCountry, formatAmount } from '@/utils/utils';
 import { ICountry } from '@/models/IBooking';
 import { EventsService } from '@/services/events.service';
@@ -46,17 +46,8 @@ export class IglBookingEventHover {
     }
 
     this.canCheckInOrCheckout = moment().isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment().isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
-
-    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  componentDidLoad() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
   @Watch('bookingEvent')
   handleBookingEventChange(newValue, oldValue) {
     if (newValue !== oldValue)
@@ -71,11 +62,11 @@ export class IglBookingEventHover {
       key: 'hidebubble',
       currentInfoBubbleId: this.getBookingId(),
     });
-    document.removeEventListener('keydown', this.handleKeyDown);
   }
-
-  private handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
+  @Listen('keydown', { target: 'body' })
+  handleListenKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
       this.hideBubble();
     } else return;
   }

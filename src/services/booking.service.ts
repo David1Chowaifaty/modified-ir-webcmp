@@ -263,14 +263,14 @@ export class BookingService {
       throw new Error(error);
     }
   }
-  public async getSetupEntriesByTableName(TBL_NAME: string) {
+  public async getSetupEntriesByTableName(TBL_NAME: string): Promise<IEntries[]> {
     const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME`, {
       TBL_NAME,
     });
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
     }
-    const res: IEntries[] = data.My_Result;
+    const res: IEntries[] = data.My_Result ?? [];
     return res;
   }
 

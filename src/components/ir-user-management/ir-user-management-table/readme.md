@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property       | Attribute        | Description | Type      | Default     |
-| -------------- | ---------------- | ----------- | --------- | ----------- |
-| `isSuperAdmin` | `is-super-admin` |             | `boolean` | `undefined` |
-| `users`        | --               |             | `User[]`  | `[]`        |
+| Property       | Attribute        | Description | Type                            | Default     |
+| -------------- | ---------------- | ----------- | ------------------------------- | ----------- |
+| `isSuperAdmin` | `is-super-admin` |             | `boolean`                       | `true`      |
+| `userTypes`    | --               |             | `Map<string \| number, string>` | `new Map()` |
+| `users`        | --               |             | `User[]`                        | `[]`        |
 
 
 ## Events
@@ -50,9 +51,17 @@ graph TD;
   ir-user-form-panel --> ir-select
   ir-user-form-panel --> ir-password-validator
   ir-user-form-panel --> ir-button
+  ir-user-form-panel --> ir-sidebar
+  ir-user-form-panel --> ir-reset-password
   ir-title --> ir-icon
   ir-password-validator --> requirement-check
   requirement-check --> ir-icons
+  ir-reset-password --> ir-interceptor
+  ir-reset-password --> ir-toast
+  ir-reset-password --> ir-title
+  ir-reset-password --> ir-input-text
+  ir-reset-password --> ir-password-validator
+  ir-reset-password --> ir-button
   ir-user-management --> ir-user-management-table
   style ir-user-management-table fill:#f9f,stroke:#333,stroke-width:4px
 ```

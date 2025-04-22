@@ -1,5 +1,5 @@
 import { handleBodyOverflow } from '@/utils/utils';
-import { Component, Prop, h, Method, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Prop, h, Method, Event, EventEmitter, Watch, Listen, Element } from '@stencil/core';
 
 @Component({
   tag: 'ir-sidebar',
@@ -7,6 +7,7 @@ import { Component, Prop, h, Method, Event, EventEmitter, Watch } from '@stencil
   shadow: true,
 })
 export class IrSidebar {
+  @Element() el: HTMLIrSidebarElement;
   @Prop() name: string;
   @Prop() side: 'right' | 'left' = 'right';
   @Prop() showCloseButton: boolean = true;
@@ -29,13 +30,13 @@ export class IrSidebar {
     this.applyStyles();
   }
   componentWillLoad() {
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    // this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidLoad() {
     // If esc key is pressed, close the modal
     this.applyStyles();
-    document.addEventListener('keydown', this.handleKeyDown);
+    // document.addEventListener('keydown', this.handleKeyDown);
   }
   @Watch('open')
   handleOpenChange(newValue: boolean, oldValue: boolean) {
@@ -43,7 +44,8 @@ export class IrSidebar {
       handleBodyOverflow(newValue);
     }
   }
-  private handleKeyDown(e: KeyboardEvent) {
+  @Listen('keydown', { target: 'body' })
+  handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       e.stopImmediatePropagation();
       e.stopPropagation();
@@ -51,11 +53,6 @@ export class IrSidebar {
     } else {
       return;
     }
-  }
-
-  // Unsubscribe to the event when the component is removed from the DOM
-  disconnectedCallback() {
-    document.removeEventListener('keydown', this.handleKeyDown);
   }
 
   @Method()

@@ -1,7 +1,7 @@
 import { Booking, IUnit } from '@/models/booking.dto';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { RoomService } from '@/services/room.service';
-import booking_listing, { updateUserSelection, onBookingListingChange } from '@/stores/booking_listing.store';
+import booking_listing, { updateUserSelection, onBookingListingChange, IUserListingSelection, updateUserSelections } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
@@ -10,6 +10,7 @@ import { _formatTime } from '../ir-booking-details/functions';
 import { getPrivateNote } from '@/utils/booking';
 import Token from '@/models/Token';
 import { isSingleUnit } from '@/stores/calendar-data';
+import { getAllParams } from '@/utils/browserHistory';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -102,6 +103,7 @@ export class IrBookingListing {
 
       await Promise.all(requests);
       updateUserSelection('property_id', propertyId);
+      // this.geSearchFiltersFromParams();
       await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
     } catch (error) {
       console.error(error);
@@ -115,7 +117,34 @@ export class IrBookingListing {
       this.editBookingItem = null;
     }
   }
-
+  geSearchFiltersFromParams() {
+    //e=10&status=002&from=2025-04-15&to=2025-04-22&filter=2&c=Alitalia+Cabin+Crew
+    const params = getAllParams();
+    if (params) {
+      console.log('update params');
+      let obj: Partial<IUserListingSelection> = {};
+      if (params.e) {
+        obj['end_row'] = Number(params.e);
+      }
+      if (params.s) {
+        obj['start_row'] = Number(params.s);
+      }
+      if (params.status) {
+        obj['booking_status'] = params.status;
+      }
+      if (params.filter) {
+        obj['filter_type'] = params.filter;
+      }
+      if (params.from) {
+        obj['from'] = params.from;
+      }
+      if (params.to) {
+        obj['to'] = params.to;
+      }
+      updateUserSelections(obj);
+    }
+    console.log('params=>', params);
+  }
   getPaginationBounds() {
     const totalCount = booking_listing.userSelection.total_count;
     const startItem = (this.currentPage - 1) * this.rowCount;
@@ -168,6 +197,10 @@ export class IrBookingListing {
 
   async updateData() {
     const { endItem, startItem } = this.getPaginationBounds();
+    // setParams({
+    //   s: startItem,
+    //   e: endItem,
+    // });
     await this.bookingListingService.getExposedBookings({
       ...booking_listing.userSelection,
       is_to_export: false,

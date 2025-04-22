@@ -21,6 +21,7 @@ export class IrListingHeader {
   @Event() preventPageLoad: EventEmitter<string>;
 
   private bookingListingService = new BookingListingService();
+
   // private toDateRef: HTMLIrDatePickerElement;
 
   private async handleSearchClicked(is_to_export: boolean) {
@@ -40,6 +41,15 @@ export class IrListingHeader {
         book_nbr: '',
       };
     }
+    // setParams({
+    //   s: booking_listing.userSelection.start_row,
+    //   e: booking_listing.userSelection.end_row,
+    //   c: booking_listing.userSelection.channel,
+    //   status: booking_listing.userSelection.booking_status,
+    //   from: booking_listing.userSelection.from,
+    //   to: booking_listing.userSelection.to,
+    //   filter: booking_listing.userSelection.filter_type,
+    // });
     this.isLoading = is_to_export ? 'excel' : 'search';
     this.preventPageLoad.emit('/Get_Exposed_Bookings');
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export });

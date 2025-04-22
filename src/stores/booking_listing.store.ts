@@ -13,7 +13,7 @@ export interface IBookingListingStore extends IExposedBookingsCriteria {
 export interface IUserListingSelection {
   channel: string;
   property_id: number;
-  filter_type: number;
+  filter_type: number | string;
   from: string;
   to: string;
   name: string;
@@ -74,6 +74,12 @@ export function initializeUserSelection() {
     to: moment().format('YYYY-MM-DD'),
     start_row: 0,
     end_row: booking_listing.rowCount,
+  };
+}
+export function updateUserSelections(params: Partial<IUserListingSelection>) {
+  booking_listing.userSelection = {
+    ...booking_listing.userSelection,
+    ...params,
   };
 }
 export function updateUserSelection(key: keyof IUserListingSelection, value: any) {

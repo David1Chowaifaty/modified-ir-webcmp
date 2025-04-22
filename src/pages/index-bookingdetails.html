@@ -31,7 +31,6 @@
     <script>
         const bookingDetail = document.querySelector("ir-booking-details");
         setTimeout(async () => {
-            sessionStorage.removeItem('token');
             const ticket = await getToken();
             bookingDetail.bookingNumber = "23080178267"
             bookingDetail.propertyid = getId();

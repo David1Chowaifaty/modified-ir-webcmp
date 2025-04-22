@@ -1,11 +1,13 @@
-import { Component, Event, EventEmitter, Prop, State, h } from '@stencil/core';
-import { User } from '../types';
+import { Component, Event, EventEmitter, Fragment, Prop, State, h } from '@stencil/core';
+
 import locales from '@/stores/locales.store';
 import { z, ZodError } from 'zod';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { CONSTANTS } from '@/utils/constants';
 import { UserService } from '@/services/user.service';
 import calendar_data from '@/stores/calendar-data';
+import { User } from '@/models/Users';
+import { BookingService } from '@/services/booking.service';
 
 @Component({
   tag: 'ir-user-form-panel',
@@ -14,6 +16,7 @@ import calendar_data from '@/stores/calendar-data';
 })
 export class IrUserFormPanel {
   @Prop() user: User;
+  @Prop() userTypes = Map<number | string, string>;
   @Prop() isEdit: boolean = false;
   @Prop() language: string = 'en';
   @Prop() property_id: number;
@@ -23,10 +26,11 @@ export class IrUserFormPanel {
   @State() autoValidate = false;
 
   @State() userInfo: User = {
+    type: '',
     id: -1,
     is_active: false,
-    last_signed_in: '',
-    created_at: '',
+    last_sign_in: null,
+    created_on: null,
     mobile: '',
     name: '',
     note: '',
@@ -40,16 +44,19 @@ export class IrUserFormPanel {
   @State() errors: { [P in keyof User]?: any } | null = null;
   @State() showPasswordValidation: boolean = false;
   @State() isUsernameTaken: boolean;
+  @State() isOpen: boolean;
 
   @Event() resetData: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
 
   private housekeepingService = new HouseKeepingService();
+  private userService = new UserService();
+  private bookingService = new BookingService();
+
   private disableFields = false;
   private mobileMask = {};
   private userSchema = z.object({
-    name: z.string().min(2),
-    mobile: z.string().min(1).max(14),
+    mobile: z.string().min(1).max(12),
     email: z.string().email(),
     password: z
       .string()
@@ -69,7 +76,7 @@ export class IrUserFormPanel {
       .min(3)
       .refine(
         async name => {
-          if (this.user && this.user.username === name) {
+          if (this.user && this.user.username) {
             return true;
           }
           if (name.length >= 3) {
@@ -80,7 +87,6 @@ export class IrUserFormPanel {
         { message: 'Username already exists.' },
       ),
   });
-
   async componentWillLoad() {
     if (!this.user) {
       this.userInfo['property_id'] = this.property_id;
@@ -91,6 +97,7 @@ export class IrUserFormPanel {
       this.userInfo = { ...this.user, password: '' };
       this.disableFields = this.isSuperAdmin;
     }
+    await this.bookingService.getSetupEntriesByTableName('_USER_TYPE');
     this.mobileMask = {
       mask: `{${calendar_data.country.phone_prefix}} 000000000000`,
       lazy: false,
@@ -103,19 +110,19 @@ export class IrUserFormPanel {
     this.userInfo = { ...this.userInfo, [key]: value };
   }
 
-  private async addUser() {
+  private async createOrUpdateUser() {
     try {
       this.isLoading = true;
       if (!this.autoValidate) {
         this.autoValidate = true;
       }
       const toValidateUserInfo = { ...this.userInfo, password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password };
-      console.log('toValidateUserInfo', toValidateUserInfo);
-      await this.userSchema.parseAsync(toValidateUserInfo);
+      console.log('toValidateUserInfo', { ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.country.phone_prefix, '') });
+      await this.userSchema.parseAsync({ ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.country.phone_prefix, '') });
       if (this.errors) {
         this.errors = null;
       }
-      await this.housekeepingService.editExposedHKM(toValidateUserInfo);
+      await this.userService.handleExposedUser(toValidateUserInfo);
       this.resetData.emit(null);
       this.closeSideBar.emit(null);
     } catch (error) {
@@ -147,7 +154,7 @@ export class IrUserFormPanel {
         class="sheet-container"
         onSubmit={async e => {
           e.preventDefault();
-          await this.addUser();
+          await this.createOrUpdateUser();
         }}
       >
         <ir-title class="px-1 sheet-header" displayContext="sidebar" label={this.isEdit ? 'Edit User' : 'Create New User'}></ir-title>
@@ -179,49 +186,85 @@ export class IrUserFormPanel {
             value={this.userInfo.mobile}
             onTextChange={e => this.updateUserField('mobile', e.detail)}
           />
-          <div class="mb-1">
-            <ir-select
-              disabled={this.disableFields}
-              label="Role"
-              data={[
-                { text: 'Admin', value: '1' },
-                { text: 'Frontdesk', value: '2' },
-              ]}
-              selectedValue={this.userInfo.role}
-              onSelectChange={e => this.updateUserField('role', e.detail)}
-            />
-          </div>
+          {this.user && this.user?.type?.toString() === '1' ? null : (
+            <div class="mb-1">
+              <ir-select
+                disabled={this.disableFields}
+                label="Role"
+                data={[
+                  { text: 'Frontdesk', value: '16' },
+                  { text: 'Property Admin', value: '17' },
+                ]}
+                selectedValue={this.userInfo.type}
+                onSelectChange={e => this.updateUserField('type', e.detail)}
+              />
+            </div>
+          )}
           <ir-input-text
-            testId="name"
-            zod={this.userSchema.pick({ name: true })}
-            wrapKey="name"
+            testId="username"
+            zod={this.userSchema.pick({ username: true })}
+            wrapKey="username"
             autoValidate={this.autoValidate}
-            error={this.errors?.name}
+            error={this.errors?.username}
             label="Username"
             disabled={this.disableFields}
             placeholder=""
-            onTextChange={e => this.updateUserField('name', e.detail)}
-            value={this.userInfo.name}
+            onTextChange={e => this.updateUserField('username', e.detail)}
+            value={this.userInfo.username}
             onInputBlur={this.handleBlur.bind(this)}
             maxLength={40}
           />
-          <ir-input-text
-            testId="password"
-            autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
-            label={'Password'}
-            value={this.userInfo.password}
-            type="password"
-            maxLength={16}
-            zod={this.userSchema.pick({ password: true })}
-            wrapKey="password"
-            error={this.errors?.password}
-            onInputFocus={() => (this.showPasswordValidation = true)}
-            onInputBlur={() => {
-              // if (this.user) this.showPasswordValidation = false;
+          {!this.user ? (
+            <Fragment>
+              <ir-input-text
+                testId="password"
+                autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
+                label={'Password'}
+                value={this.userInfo.password}
+                type="password"
+                maxLength={16}
+                zod={this.userSchema.pick({ password: true })}
+                wrapKey="password"
+                error={this.errors?.password}
+                onInputFocus={() => (this.showPasswordValidation = true)}
+                onInputBlur={() => {
+                  // if (this.user) this.showPasswordValidation = false;
+                }}
+                onTextChange={e => this.updateUserField('password', e.detail)}
+              ></ir-input-text>
+              {this.showPasswordValidation && <ir-password-validator class="mb-1" password={this.userInfo.password}></ir-password-validator>}
+            </Fragment>
+          ) : (
+            <div class="d-flex align-items-center justify-content-between">
+              <h4 class="m-0 p-0">Password</h4>
+              <ir-button btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
+            </div>
+          )}
+          <ir-sidebar
+            open={this.isOpen}
+            showCloseButton={false}
+            style={{
+              '--sidebar-block-padding': '0',
             }}
-            onTextChange={e => this.updateUserField('password', e.detail)}
-          ></ir-input-text>
-          {this.showPasswordValidation && <ir-password-validator class="mb-1" password={this.userInfo.password}></ir-password-validator>}
+            onIrSidebarToggle={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.isOpen = false;
+            }}
+          >
+            {this.isOpen && (
+              <ir-reset-password
+                skip2Fa
+                username={this.user.username}
+                onCloseSideBar={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.isOpen = false;
+                }}
+                slot="sidebar-body"
+              ></ir-reset-password>
+            )}
+          </ir-sidebar>
         </section>
         <div class="sheet-footer">
           <ir-button
