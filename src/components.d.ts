@@ -1204,11 +1204,12 @@ export namespace Components {
     interface IrUnitStatus {
     }
     interface IrUserFormPanel {
+        "haveAdminPrivileges": boolean;
         "isEdit": boolean;
-        "isSuperAdmin": boolean;
         "language": string;
         "property_id": number;
         "user": User;
+        "userTypeCode": string | number;
         "userTypes": { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
     }
     interface IrUserManagement {
@@ -1217,9 +1218,13 @@ export namespace Components {
         "p": string;
         "propertyid": number;
         "ticket": string;
+        "userId": string | number;
+        "userTypeCode": string | number;
     }
     interface IrUserManagementTable {
+        "haveAdminPrivileges": boolean;
         "isSuperAdmin": boolean;
+        "userTypeCode": string | number;
         "userTypes": Map<string | number, string>;
         "users": User[];
     }
@@ -4659,13 +4664,14 @@ declare namespace LocalJSX {
         "onResetData"?: (event: IrUnitStatusCustomEvent<null>) => void;
     }
     interface IrUserFormPanel {
+        "haveAdminPrivileges"?: boolean;
         "isEdit"?: boolean;
-        "isSuperAdmin"?: boolean;
         "language"?: string;
         "onCloseSideBar"?: (event: IrUserFormPanelCustomEvent<null>) => void;
         "onResetData"?: (event: IrUserFormPanelCustomEvent<null>) => void;
         "property_id"?: number;
         "user"?: User;
+        "userTypeCode"?: string | number;
         "userTypes"?: { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
     }
     interface IrUserManagement {
@@ -4674,10 +4680,14 @@ declare namespace LocalJSX {
         "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
+        "userId"?: string | number;
+        "userTypeCode"?: string | number;
     }
     interface IrUserManagementTable {
+        "haveAdminPrivileges"?: boolean;
         "isSuperAdmin"?: boolean;
         "onToast"?: (event: IrUserManagementTableCustomEvent<IToast>) => void;
+        "userTypeCode"?: string | number;
         "userTypes"?: Map<string | number, string>;
         "users"?: User[];
     }

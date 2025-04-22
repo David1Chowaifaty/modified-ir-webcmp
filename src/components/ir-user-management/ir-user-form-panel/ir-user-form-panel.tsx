@@ -20,7 +20,8 @@ export class IrUserFormPanel {
   @Prop() isEdit: boolean = false;
   @Prop() language: string = 'en';
   @Prop() property_id: number;
-  @Prop() isSuperAdmin: boolean;
+  @Prop() haveAdminPrivileges: boolean;
+  @Prop() userTypeCode: string | number;
 
   @State() isLoading: boolean = false;
   @State() autoValidate = false;
@@ -29,7 +30,7 @@ export class IrUserFormPanel {
     type: '',
     id: -1,
     is_active: false,
-    last_sign_in: null,
+    sign_ins: null,
     created_on: null,
     mobile: '',
     name: '',
@@ -95,7 +96,7 @@ export class IrUserFormPanel {
     if (this.user) {
       this.autoValidate = true;
       this.userInfo = { ...this.user, password: '' };
-      this.disableFields = this.isSuperAdmin;
+      this.disableFields = true;
     }
     await this.bookingService.getSetupEntriesByTableName('_USER_TYPE');
     this.mobileMask = {
@@ -235,7 +236,8 @@ export class IrUserFormPanel {
               {this.showPasswordValidation && <ir-password-validator class="mb-1" password={this.userInfo.password}></ir-password-validator>}
             </Fragment>
           ) : (
-            this.isSuperAdmin && (
+            this.haveAdminPrivileges &&
+            this.user.type.toString() !== '1' && (
               <div class="d-flex align-items-center justify-content-between">
                 <h4 class="m-0 p-0">Password</h4>
                 <ir-button btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>

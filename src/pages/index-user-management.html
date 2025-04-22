@@ -33,6 +33,12 @@
             const ticket = await getToken();
             userManagementEl.propertyid = getId();
             userManagementEl.ticket = ticket;
+            //Super Admin
+            userManagementEl.userTypeCode = 1;
+            userManagementEl.userId = 189;
+            //Property Admin
+            // userManagementEl.userTypeCode = 17;
+            // userManagementEl.userId = 677634;
         }, 300)
     </script>
 

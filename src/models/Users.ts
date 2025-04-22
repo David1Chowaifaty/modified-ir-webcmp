@@ -8,5 +8,12 @@ export interface UserParams {
   mobile: string;
   type: string;
 }
-
-export type User = THKUser & { type: string; is_active: boolean; last_sign_in: string; created_on: string; password: string; email: string; role?: string };
+interface SignIn {
+  country: string;
+  date: string;
+  hour: number;
+  ip: string;
+  minute: number;
+  user_agent: string;
+}
+export type User = THKUser & { type: string; is_active: boolean; sign_ins: SignIn[]; created_on: string; password: string; email: string; role?: string };

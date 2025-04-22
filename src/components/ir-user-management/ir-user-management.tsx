@@ -16,6 +16,8 @@ export class IrUserManagement {
   @Prop() propertyid: number;
   @Prop() p: string;
   @Prop() isSuperAdmin: boolean = true;
+  @Prop() userTypeCode: string | number;
+  @Prop() userId: string | number;
 
   @State() isLoading = true;
   @State() users: User[] = [];
@@ -84,7 +86,31 @@ export class IrUserManagement {
   }
   private async fetchUsers() {
     const users = await this.userService.getExposedPropertyUsers();
-    this.users = [...users];
+    this.users = [...users].sort((u1: User, u2: User) => {
+      const priority = (u: User) => {
+        const t = u.type.toString();
+        if (t === '1') return 0;
+        if (t === '17') return 1;
+        return 2;
+      };
+      //sort by priority
+      const p1 = priority(u1),
+        p2 = priority(u2);
+      if (p1 !== p2) {
+        return p1 - p2;
+      }
+      //sort by user id
+      if (p1 === 1) {
+        const id1 = u1.id.toString(),
+          id2 = u2.id.toString(),
+          me = this.userId.toString();
+        if (id1 === me) return -1; // u1 is me → goes before u2
+        if (id2 === me) return 1; // u2 is me → u1 goes after
+      }
+
+      // 3) sort by username
+      return u1.username.localeCompare(u2.username);
+    });
   }
   private async fetchUserTypes() {
     const entries = await this.bookingService.getSetupEntriesByTableName('_USER_TYPE');
@@ -111,7 +137,14 @@ export class IrUserManagement {
             <h3 class="mb-1 mb-md-0">Extranet Users</h3>
           </div>
           <div class="" style={{ gap: '1rem' }}>
-            <ir-user-management-table userTypes={this.userTypes} class="card" isSuperAdmin={this.isSuperAdmin} users={this.users}></ir-user-management-table>
+            <ir-user-management-table
+              userTypeCode={this.userTypeCode}
+              haveAdminPrivileges={['1', '17'].includes(this.userTypeCode?.toString())}
+              userTypes={this.userTypes}
+              class="card"
+              isSuperAdmin={this.userTypeCode?.toString() === '1'}
+              users={this.users}
+            ></ir-user-management-table>
           </div>
         </section>
       </Host>
