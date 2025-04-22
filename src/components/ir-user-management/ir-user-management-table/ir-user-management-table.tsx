@@ -155,7 +155,7 @@ export class IrUserManagementTable {
                               </svg>
                             </ir-icon>
                           )}
-                          {this.canDelete && !isUserSuperAdmin && (
+                          {this.canDelete && !isUserSuperAdmin && (this.isSuperAdmin || user.type.toString() !== '17') && (
                             <ir-icon
                               data-testid="delete"
                               title={locales.entries.Lcz_DeleteHousekeeper}

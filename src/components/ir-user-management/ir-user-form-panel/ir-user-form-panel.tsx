@@ -7,7 +7,6 @@ import { CONSTANTS } from '@/utils/constants';
 import { UserService } from '@/services/user.service';
 import calendar_data from '@/stores/calendar-data';
 import { User } from '@/models/Users';
-import { BookingService } from '@/services/booking.service';
 
 @Component({
   tag: 'ir-user-form-panel',
@@ -52,9 +51,9 @@ export class IrUserFormPanel {
 
   private housekeepingService = new HouseKeepingService();
   private userService = new UserService();
-  private bookingService = new BookingService();
 
   private disableFields = false;
+  private isPropertyAdmin = false;
   private mobileMask = {};
   private userSchema = z.object({
     mobile: z.string().min(1).max(12),
@@ -98,7 +97,10 @@ export class IrUserFormPanel {
       this.userInfo = { ...this.user, password: '' };
       this.disableFields = true;
     }
-    await this.bookingService.getSetupEntriesByTableName('_USER_TYPE');
+    this.isPropertyAdmin = this.userTypeCode.toString() === '17';
+    if (this.isPropertyAdmin) {
+      this.updateUserField('type', '16');
+    }
     this.mobileMask = {
       mask: `{${calendar_data.country.phone_prefix}} 000000000000`,
       lazy: false,
@@ -187,7 +189,7 @@ export class IrUserFormPanel {
             value={this.userInfo.mobile}
             onTextChange={e => this.updateUserField('mobile', e.detail)}
           />
-          {this.user && this.user?.type?.toString() === '1' ? null : (
+          {(this.user && this.user?.type?.toString() === '1') || this.isPropertyAdmin ? null : (
             <div class="mb-1">
               <ir-select
                 disabled={this.disableFields}
