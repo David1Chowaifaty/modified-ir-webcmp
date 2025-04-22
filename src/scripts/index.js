@@ -3,7 +3,7 @@ async function getToken() {
         if (!document.getElementById("jwt-decode-cdn")) {
             console.log("Injecting jwt-decode script...");
             const script = document.createElement('script');
-            script.src = "https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js";
+            script.src = "scripts/jwt-decode.js";
             script.id = "jwt-decode-cdn";
 
             await new Promise((resolve, reject) => {
