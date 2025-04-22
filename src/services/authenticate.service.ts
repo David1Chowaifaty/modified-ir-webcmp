@@ -10,6 +10,9 @@ export class AuthService {
   }
   public async changeUserPwd(params: { username: string; new_pwd: string; old_pwd?: string }) {
     const { data } = await axios.post('/Change_User_Pwd', params);
+    if (data.ExceptionMsg?.trim()) {
+      throw new Error(data.ExceptionMsg?.trim());
+    }
     return data.My_Result;
   }
 }

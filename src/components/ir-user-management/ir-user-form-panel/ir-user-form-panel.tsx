@@ -235,10 +235,12 @@ export class IrUserFormPanel {
               {this.showPasswordValidation && <ir-password-validator class="mb-1" password={this.userInfo.password}></ir-password-validator>}
             </Fragment>
           ) : (
-            <div class="d-flex align-items-center justify-content-between">
-              <h4 class="m-0 p-0">Password</h4>
-              <ir-button btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
-            </div>
+            this.isSuperAdmin && (
+              <div class="d-flex align-items-center justify-content-between">
+                <h4 class="m-0 p-0">Password</h4>
+                <ir-button btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
+              </div>
+            )
           )}
           <ir-sidebar
             open={this.isOpen}
@@ -254,7 +256,7 @@ export class IrUserFormPanel {
           >
             {this.isOpen && (
               <ir-reset-password
-                skip2Fa
+                skip2Fa={true}
                 username={this.user.username}
                 onCloseSideBar={e => {
                   e.stopImmediatePropagation();

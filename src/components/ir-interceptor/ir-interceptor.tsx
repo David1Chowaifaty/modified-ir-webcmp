@@ -13,7 +13,7 @@ export class IrInterceptor {
   @State() isLoading = false;
   @State() isUnassignedUnit = false;
   @State() endpointsCount = 0;
-  @State() isPageLoadingStoped: string | null = null;
+  @State() isPageLoadingStopped: string | null = null;
 
   @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings', '/UnBlock_Exposed_Unit'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
@@ -21,7 +21,7 @@ export class IrInterceptor {
   @Listen('preventPageLoad', { target: 'body' })
   handleStopPageLoading(e: CustomEvent) {
     this.isLoading = false;
-    this.isPageLoadingStoped = e.detail;
+    this.isPageLoadingStopped = e.detail;
   }
   componentWillLoad() {
     this.setupAxiosInterceptors();
@@ -47,7 +47,7 @@ export class IrInterceptor {
     // if (this.ticket) {
     //   config.params.Ticket = this.ticket;
     // }
-    if (this.isHandledEndpoint(extractedUrl) && this.isPageLoadingStoped !== extractedUrl) {
+    if (this.isHandledEndpoint(extractedUrl) && this.isPageLoadingStopped !== extractedUrl) {
       if (extractedUrl !== '/Get_Exposed_Calendar') {
         this.isLoading = true;
       } else {
@@ -66,7 +66,7 @@ export class IrInterceptor {
     const extractedUrl = this.extractEndpoint(response.config.url);
     if (this.isHandledEndpoint(extractedUrl)) {
       this.isLoading = false;
-      this.isPageLoadingStoped = null;
+      this.isPageLoadingStopped = null;
     }
     interceptor_requests[extractedUrl] = 'done';
     if (response.data.ExceptionMsg?.trim()) {
@@ -88,7 +88,7 @@ export class IrInterceptor {
   render() {
     return (
       <Host>
-        {/* {this.isLoading && !this.isPageLoadingStoped && (
+        {/* {this.isLoading && !this.isPageLoadingStopped && (
           <div class="loadingScreenContainer">
             <div class="loaderContainer">
               <span class="loader"></span>
@@ -96,7 +96,7 @@ export class IrInterceptor {
             </div>
           </div>
         )} */}
-        {this.isLoading && !this.isPageLoadingStoped && (
+        {this.isLoading && !this.isPageLoadingStopped && (
           <div class="loadingScreenContainer">
             <div class="loaderContainer">
               <span class="page-loader"></span>

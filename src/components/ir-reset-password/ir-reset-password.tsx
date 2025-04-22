@@ -76,8 +76,11 @@ export class IrResetPassword {
         new_pwd: this.password,
         old_pwd: this.old_pwd,
       });
-      if (this.skip2Fa) {
+      if (!this.skip2Fa) {
         this.submitted = true;
+      }
+      if (this.el.slot === 'sidebar-body') {
+        this.closeSideBar.emit();
       }
     } catch (error) {
       if (error instanceof ZodError) {
