@@ -92,6 +92,7 @@ export class IrUserFormPanel {
         { message: 'Username already exists.' },
       ),
   });
+  //make user active by default
   async componentWillLoad() {
     if (!this.user) {
       this.userInfo['property_id'] = this.property_id;
@@ -100,7 +101,7 @@ export class IrUserFormPanel {
     if (this.user) {
       this.autoValidate = true;
       this.userInfo = { ...this.user, password: '' };
-      this.disableFields = true;
+      // this.disableFields = true;
     }
     this.isPropertyAdmin = this.userTypeCode.toString() === '17';
     if (this.isPropertyAdmin) {
@@ -211,20 +212,22 @@ export class IrUserFormPanel {
               />
             </div>
           )}
-          <ir-input-text
-            testId="username"
-            zod={this.userSchema.pick({ username: true })}
-            wrapKey="username"
-            autoValidate={this.autoValidate}
-            error={this.errors?.username}
-            label="Username"
-            disabled={this.disableFields}
-            placeholder=""
-            onTextChange={e => this.updateUserField('username', e.detail)}
-            value={this.userInfo.username}
-            onInputBlur={this.handleBlur.bind(this)}
-            maxLength={40}
-          />
+          {this.user?.type?.toString() !== '1' && (
+            <ir-input-text
+              testId="username"
+              zod={this.userSchema.pick({ username: true })}
+              wrapKey="username"
+              autoValidate={this.autoValidate}
+              error={this.errors?.username}
+              label="Username"
+              disabled={this.disableFields}
+              placeholder=""
+              onTextChange={e => this.updateUserField('username', e.detail)}
+              value={this.userInfo.username}
+              onInputBlur={this.handleBlur.bind(this)}
+              maxLength={40}
+            />
+          )}
           {!this.user ? (
             <Fragment>
               <ir-input-text
@@ -272,11 +275,12 @@ export class IrUserFormPanel {
               <ul class="logins-history-list">
                 {this.user.sign_ins.slice(0, this.showFullHistory ? this.user.sign_ins.length : 5).map((s, i) => {
                   const ua = UAParser(s.user_agent);
+                  console.log(new UAParser(s.user_agent).getResult());
                   return (
                     <li class="login-entry" key={s.date + '_' + i}>
                       <div class="login-meta">
                         <p class="login-datetime">
-                          {moment(s.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')} {_formatTime(s.hour?.toString(), s.minute?.toString())}
+                          {moment(s.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')} {_formatTime(s.hour?.toString(), s.minute?.toString())} |
                         </p>
                         <p class="login-location">
                           <span class="login-ip">IP: {s.ip}</span> &nbsp;|&nbsp;
@@ -286,13 +290,13 @@ export class IrUserFormPanel {
                           </span>
                         </p>
                       </div>
-                      {ua.device.type && (
+                      {/* {ua.device.type && (
                         <div class="login-user-agent">
                           <p class="ua-device">
                             {ua.device.vendor || ''} {ua.device.model} ({ua.device.type})
                           </p>
                         </div>
-                      )}
+                      )} */}
                     </li>
                   );
                 })}

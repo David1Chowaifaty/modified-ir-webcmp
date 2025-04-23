@@ -77,7 +77,8 @@ export class IrResetPassword {
         old_pwd: this.old_pwd,
       });
       if (!this.skip2Fa) {
-        this.submitted = true;
+        // this.submitted = true;
+        window.history.back();
       }
       if (this.el.slot === 'sidebar-body') {
         this.closeSideBar.emit();
@@ -137,7 +138,7 @@ export class IrResetPassword {
                         inputStyles={'m-0'}
                         zod={this.ResetPasswordSchema.pick({ password: true })}
                         wrapKey="password"
-                        placeholder="New Password"
+                        placeholder="New password"
                         onInputFocus={() => (this.showValidator = true)}
                         type={'password'}
                       ></ir-input-text>
@@ -156,7 +157,7 @@ export class IrResetPassword {
                       value={this.confirmPassword}
                       onTextChange={e => (this.confirmPassword = e.detail)}
                       label=""
-                      placeholder="Confirm Password"
+                      placeholder="Confirm password"
                       type={'password'}
                     ></ir-input-text>
                     {/* <button type="button" class="password_toggle" onClick={() => (this.showPassword = !this.showPassword)}>
@@ -165,7 +166,12 @@ export class IrResetPassword {
                   </div>
                 </div>
 
-                {!insideSidebar && <ir-button isLoading={this.isLoading} btn_type="submit" text={'Change password'} size="md" class="login-btn mt-1"></ir-button>}
+                {!insideSidebar && (
+                  <div class="d-flex flex-column mt-1 flex-sm-row align-items-sm-center" style={{ gap: '0.5rem' }}>
+                    <ir-button btn_styles={'flex-fill'} onClickHandler={() => window.history.back()} class="flex-fill" text={'Cancel'} size="md" btn_color="secondary"></ir-button>
+                    <ir-button btn_styles={'flex-fill'} class="flex-fill" isLoading={this.isLoading} btn_type="submit" text={'Change password'} size="md"></ir-button>
+                  </div>
+                )}
               </section>
             )}
           </div>
