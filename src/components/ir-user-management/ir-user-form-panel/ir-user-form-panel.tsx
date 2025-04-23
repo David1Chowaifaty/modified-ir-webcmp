@@ -7,6 +7,8 @@ import { CONSTANTS } from '@/utils/constants';
 import { UserService } from '@/services/user.service';
 import calendar_data from '@/stores/calendar-data';
 import { User } from '@/models/Users';
+import { _formatTime } from '@/components/ir-booking-details/functions';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-user-form-panel',
@@ -24,6 +26,7 @@ export class IrUserFormPanel {
 
   @State() isLoading: boolean = false;
   @State() autoValidate = false;
+  @State() showFullHistory = false;
 
   @State() userInfo: User = {
     type: '',
@@ -160,7 +163,7 @@ export class IrUserFormPanel {
           await this.createOrUpdateUser();
         }}
       >
-        <ir-title class="px-1 sheet-header" displayContext="sidebar" label={this.isEdit ? 'Edit User' : 'Create New User'}></ir-title>
+        <ir-title class="px-1 sheet-header" displayContext="sidebar" label={this.isEdit ? this.user.username : 'Create New User'}></ir-title>
         <section class="px-1 sheet-body">
           <ir-input-text
             testId="email"
@@ -242,10 +245,41 @@ export class IrUserFormPanel {
             this.user.type.toString() !== '1' &&
             (this.user?.type.toString() === '17' && this.userTypeCode?.toString() === '17' ? null : (
               <div class="d-flex align-items-center justify-content-between">
-                <h4 class="m-0 p-0">Password</h4>
-                <ir-button btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
+                <h4 class="m-0 p-0 logins-history-title">Password</h4>
+                <ir-button size="sm" btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
               </div>
             ))
+          )}
+          {this.user.sign_ins?.length > 0 && (
+            <section class="logins-history-section">
+              <div class="d-flex align-items-center logins-history-title-container justify-content-between">
+                <h4 class="logins-history-title m-0 p-0">Logins History</h4>
+                {this.user.sign_ins.length > 5 && (
+                  <ir-button
+                    btn_styles={'pr-0'}
+                    text={!this.showFullHistory ? 'View all' : 'View less'}
+                    btn_color="link"
+                    size="sm"
+                    onClickHandler={() => (this.showFullHistory = !this.showFullHistory)}
+                  ></ir-button>
+                )}
+              </div>
+              <ul class="logins-history-list">
+                {this.user.sign_ins.slice(0, this.showFullHistory ? this.user.sign_ins.length : 5).map((s, i) => (
+                  <li class="login-entry" key={s.date + '_' + i}>
+                    <div class="login-meta">
+                      <p class="login-datetime">
+                        {moment(s.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')} {_formatTime(s.hour?.toString(), s.minute?.toString())}
+                      </p>
+                      <p class="login-location">
+                        {s.ip} {s.country}
+                      </p>
+                    </div>
+                    <p class="login-user-agent">{s.user_agent}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
           <ir-sidebar
             open={this.isOpen}
