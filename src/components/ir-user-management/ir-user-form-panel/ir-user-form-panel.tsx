@@ -278,7 +278,7 @@ export class IrUserFormPanel {
                           <span class="login-ip">IP: {s.ip}</span> &nbsp;|&nbsp;
                           <span class="login-country">Location: {s.country}</span> &nbsp;|&nbsp;
                           <span class="login-os">
-                            OS: {ua.os.name} {ua.os.version}
+                            OS: {ua.os.name ?? 'N/A'} {ua.os.version}
                           </span>
                         </p>
                       </div>
