@@ -7,6 +7,7 @@ export interface UserParams {
   is_active: boolean;
   mobile: string;
   type: string;
+  is_to_remove?: boolean;
 }
 interface SignIn {
   country: string;

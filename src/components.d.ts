@@ -3194,6 +3194,7 @@ declare global {
     };
     interface HTMLIrUserManagementTableElementEventMap {
         "toast": IToast;
+        "resetData": null;
     }
     interface HTMLIrUserManagementTableElement extends Components.IrUserManagementTable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrUserManagementTableElementEventMap>(type: K, listener: (this: HTMLIrUserManagementTableElement, ev: IrUserManagementTableCustomEvent<HTMLIrUserManagementTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4686,6 +4687,7 @@ declare namespace LocalJSX {
     interface IrUserManagementTable {
         "haveAdminPrivileges"?: boolean;
         "isSuperAdmin"?: boolean;
+        "onResetData"?: (event: IrUserManagementTableCustomEvent<null>) => void;
         "onToast"?: (event: IrUserManagementTableCustomEvent<IToast>) => void;
         "userTypeCode"?: string | number;
         "userTypes"?: Map<string | number, string>;

@@ -6,11 +6,6 @@
   margin-top: 1.5rem;
 }
 
-.logins-history-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
 .logins-history-list {
   border-radius: 8px;
   list-style-type: none;
@@ -47,4 +42,47 @@
   color: #6b7280;
   margin: 0;
   word-break: break-word;
+}
+.login-user-agent {
+  font-size: 0.75rem;
+  color: #4b5563;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.login-user-agent p {
+  margin: 0.125rem 0;
+}
+
+.ua-browser {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.ua-os {
+  color: #374151;
+}
+
+.ua-device {
+  font-style: italic;
+  color: #6b7280;
+}
+.login-location {
+  font-size: 0.75rem;
+  color: #4b5563;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.login-location span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.login-location i {
+  font-size: 0.75rem;
+  color: #9ca3af;
 }

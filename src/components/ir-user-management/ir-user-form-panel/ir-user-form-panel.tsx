@@ -9,6 +9,7 @@ import calendar_data from '@/stores/calendar-data';
 import { User } from '@/models/Users';
 import { _formatTime } from '@/components/ir-booking-details/functions';
 import moment from 'moment';
+import { UAParser } from 'ua-parser-js';
 
 @Component({
   tag: 'ir-user-form-panel',
@@ -244,16 +245,16 @@ export class IrUserFormPanel {
             this.haveAdminPrivileges &&
             this.user.type.toString() !== '1' &&
             (this.user?.type.toString() === '17' && this.userTypeCode?.toString() === '17' ? null : (
-              <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex mt-2 align-items-center justify-content-between">
                 <h4 class="m-0 p-0 logins-history-title">Password</h4>
                 <ir-button size="sm" btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
               </div>
             ))
           )}
           {this.user.sign_ins?.length > 0 && (
-            <section class="logins-history-section">
+            <section class="logins-history-section mt-2">
               <div class="d-flex align-items-center logins-history-title-container justify-content-between">
-                <h4 class="logins-history-title m-0 p-0">Logins History</h4>
+                <h4 class="logins-history-title m-0 p-0">Recent sign-ins</h4>
                 {this.user.sign_ins.length > 5 && (
                   <ir-button
                     btn_styles={'pr-0'}
@@ -265,19 +266,32 @@ export class IrUserFormPanel {
                 )}
               </div>
               <ul class="logins-history-list">
-                {this.user.sign_ins.slice(0, this.showFullHistory ? this.user.sign_ins.length : 5).map((s, i) => (
-                  <li class="login-entry" key={s.date + '_' + i}>
-                    <div class="login-meta">
-                      <p class="login-datetime">
-                        {moment(s.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')} {_formatTime(s.hour?.toString(), s.minute?.toString())}
-                      </p>
-                      <p class="login-location">
-                        {s.ip} {s.country}
-                      </p>
-                    </div>
-                    <p class="login-user-agent">{s.user_agent}</p>
-                  </li>
-                ))}
+                {this.user.sign_ins.slice(0, this.showFullHistory ? this.user.sign_ins.length : 5).map((s, i) => {
+                  const ua = UAParser(s.user_agent);
+                  return (
+                    <li class="login-entry" key={s.date + '_' + i}>
+                      <div class="login-meta">
+                        <p class="login-datetime">
+                          {moment(s.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')} {_formatTime(s.hour?.toString(), s.minute?.toString())}
+                        </p>
+                        <p class="login-location">
+                          <span class="login-ip">IP: {s.ip}</span> &nbsp;|&nbsp;
+                          <span class="login-country">Location: {s.country}</span> &nbsp;|&nbsp;
+                          <span class="login-os">
+                            OS: {ua.os.name} {ua.os.version}
+                          </span>
+                        </p>
+                      </div>
+                      {ua.device.type && (
+                        <div class="login-user-agent">
+                          <p class="ua-device">
+                            {ua.device.vendor || ''} {ua.device.model} ({ua.device.type})
+                          </p>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           )}

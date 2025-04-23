@@ -6,6 +6,7 @@ import { IToast } from '@components/ui/ir-toast/toast';
 import { User } from '@/models/Users';
 import { UserService } from '@/services/user.service';
 import { _formatTime } from '@/components/ir-booking-details/functions';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-user-management-table',
@@ -28,6 +29,7 @@ export class IrUserManagementTable {
   @State() canCreate: boolean;
 
   @Event() toast: EventEmitter<IToast>;
+  @Event() resetData: EventEmitter<null>;
 
   private modalRef: HTMLIrModalElement;
   private userService = new UserService();
@@ -55,7 +57,7 @@ export class IrUserManagementTable {
     await this.userService.handleExposedUser({
       email: user.email,
       id: user.id,
-      is_active: e.detail,
+      is_active: user.is_active,
       mobile: user.mobile,
       password: user.password,
       type: user.type,
@@ -67,6 +69,41 @@ export class IrUserManagementTable {
       description: '',
       type: 'success',
     });
+  }
+  private async removeUser(e: CustomEvent) {
+    try {
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      await this.userService.handleExposedUser({
+        email: this.user.email,
+        id: this.user.id,
+        is_active: this.user.is_active,
+        mobile: this.user.mobile,
+        password: this.user.password,
+        type: this.user.type,
+        username: this.user.username,
+        is_to_remove: true,
+      });
+      this.resetData.emit(null);
+    } finally {
+      this.user = null;
+      this.modalRef.closeModal();
+    }
+  }
+  private renderCurrentTrigger() {
+    if (!this.currentTrigger) {
+      return null;
+    }
+    return (
+      <ir-user-form-panel
+        userTypeCode={this.userTypeCode}
+        haveAdminPrivileges={this.haveAdminPrivileges}
+        onCloseSideBar={() => (this.currentTrigger = null)}
+        slot="sidebar-body"
+        user={this.currentTrigger?.user}
+        isEdit={this.currentTrigger?.isEdit}
+      ></ir-user-form-panel>
+    );
   }
   render() {
     return (
@@ -194,35 +231,12 @@ export class IrUserManagementTable {
           autoClose={false}
           modalBody={`Are you sure you want to delete ${this.user?.username}?`}
           rightBtnColor="danger"
+          isLoading={isRequestPending('/Handle_Exposed_User')}
           rightBtnText={locales.entries.Lcz_Delete}
           onConfirmModal={this.removeUser.bind(this)}
           ref={el => (this.modalRef = el)}
         ></ir-modal>
       </Host>
-    );
-  }
-  private async removeUser(e: CustomEvent) {
-    try {
-      e.stopImmediatePropagation();
-      e.stopPropagation();
-    } finally {
-      this.user = null;
-      this.modalRef.closeModal();
-    }
-  }
-  private renderCurrentTrigger() {
-    if (!this.currentTrigger) {
-      return null;
-    }
-    return (
-      <ir-user-form-panel
-        userTypeCode={this.userTypeCode}
-        haveAdminPrivileges={this.haveAdminPrivileges}
-        onCloseSideBar={() => (this.currentTrigger = null)}
-        slot="sidebar-body"
-        user={this.currentTrigger?.user}
-        isEdit={this.currentTrigger?.isEdit}
-      ></ir-user-form-panel>
     );
   }
 }
