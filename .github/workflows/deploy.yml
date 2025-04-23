@@ -4,7 +4,7 @@ name: Build and deploy dist
 on:
   push:
     branches:
-      - guest-management # ← runs on every push to any branch
+      - guest-management
 
 jobs:
   build-and-deploy:
@@ -15,10 +15,12 @@ jobs:
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v3
-      - name: Cache node modules
+      - name: Cache node_modules
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: |
+            ~/.npm
+            node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
