@@ -202,7 +202,7 @@ export class IrUserFormPanel {
                 testId="user_type"
                 error={this.errors?.type && !this.userInfo.type}
                 disabled={this.disableFields}
-                label="User type"
+                label="Role"
                 data={[
                   { text: 'Frontdesk', value: '16' },
                   { text: 'Property Admin', value: '17' },
