@@ -60,7 +60,7 @@ export class IrUserFormPanel {
   private isPropertyAdmin = false;
   private mobileMask = {};
   private userSchema = z.object({
-    mobile: z.string().min(1).max(12),
+    mobile: z.string().min(1).max(20),
     email: z.string().email(),
     password: z
       .string()
@@ -75,6 +75,7 @@ export class IrUserFormPanel {
         },
         { message: 'Password must be at least 8 characters long.' },
       ),
+    type: z.string().nonempty().min(2),
     username: z
       .string()
       .min(3)
@@ -156,6 +157,7 @@ export class IrUserFormPanel {
   }
 
   render() {
+    console.log(this.user);
     return (
       <form
         class="sheet-container"
@@ -196,13 +198,15 @@ export class IrUserFormPanel {
           {(this.user && this.user?.type?.toString() === '1') || this.isPropertyAdmin ? null : (
             <div class="mb-1">
               <ir-select
+                testId="user_type"
+                error={this.errors?.type && !this.userInfo.type}
                 disabled={this.disableFields}
-                label="Role"
+                label="User type"
                 data={[
                   { text: 'Frontdesk', value: '16' },
                   { text: 'Property Admin', value: '17' },
                 ]}
-                selectedValue={this.userInfo.type}
+                selectedValue={this.userInfo.type?.toString()}
                 onSelectChange={e => this.updateUserField('type', e.detail)}
               />
             </div>
@@ -251,7 +255,7 @@ export class IrUserFormPanel {
               </div>
             ))
           )}
-          {this.user.sign_ins?.length > 0 && (
+          {this.user?.sign_ins?.length > 0 && (
             <section class="logins-history-section mt-2">
               <div class="d-flex align-items-center logins-history-title-container justify-content-between">
                 <h4 class="logins-history-title m-0 p-0">Recent sign-ins</h4>

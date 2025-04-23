@@ -601,6 +601,7 @@ export namespace Components {
     }
     interface IrIcon {
         "icon": string;
+        "type": 'button' | 'submit' | 'reset';
     }
     interface IrIcons {
         "color": string;
@@ -3998,6 +3999,7 @@ declare namespace LocalJSX {
     interface IrIcon {
         "icon"?: string;
         "onIconClickHandler"?: (event: IrIconCustomEvent<any>) => void;
+        "type"?: 'button' | 'submit' | 'reset';
     }
     interface IrIcons {
         "color"?: string;

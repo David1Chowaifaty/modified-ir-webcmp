@@ -186,15 +186,12 @@ export class IrInputText {
   }
 
   private async validateInput(value: string, forceValidation: boolean = false) {
-    console.log('autoValidate=>', this.autoValidate);
     if (!this.autoValidate && !forceValidation) {
-      console.log('here', 'error', this.error);
       if (this.error) {
         this.updateErrorState(false);
       }
       return;
     }
-    console.log('first');
     if (this.zod) {
       try {
         if (!this.asyncParse) {
@@ -206,6 +203,7 @@ export class IrInputText {
           this.updateErrorState(false);
         }
       } catch (error) {
+        console.log(error);
         this.updateErrorState(true);
       }
     }
