@@ -43,6 +43,13 @@ export class BookingService {
     }
     return data;
   }
+  public async getLov() {
+    const { data } = await axios.post(`/Get_LOV`, {});
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data;
+  }
   public async sendBookingConfirmationEmail(booking_nbr: string, language: string) {
     const { data } = await axios.post(`/Send_Booking_Confirmation_Email`, {
       booking_nbr,

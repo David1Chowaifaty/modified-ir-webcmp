@@ -33,6 +33,7 @@ import { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 import { User } from "./models/Users";
+import { AllowedUser } from "./components/ir-user-management/types";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
@@ -61,6 +62,7 @@ export { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { User } from "./models/Users";
+export { AllowedUser } from "./components/ir-user-management/types";
 export namespace Components {
     interface IglApplicationInfo {
         "baseData": { unit: { id: string; name: string }; roomtypeId: number };
@@ -1205,6 +1207,7 @@ export namespace Components {
     interface IrUnitStatus {
     }
     interface IrUserFormPanel {
+        "allowedUsersTypes": AllowedUser[];
         "haveAdminPrivileges": boolean;
         "isEdit": boolean;
         "language": string;
@@ -1223,6 +1226,7 @@ export namespace Components {
         "userTypeCode": string | number;
     }
     interface IrUserManagementTable {
+        "allowedUsersTypes": AllowedUser[];
         "haveAdminPrivileges": boolean;
         "isSuperAdmin": boolean;
         "userTypeCode": string | number;
@@ -4667,6 +4671,7 @@ declare namespace LocalJSX {
         "onResetData"?: (event: IrUnitStatusCustomEvent<null>) => void;
     }
     interface IrUserFormPanel {
+        "allowedUsersTypes"?: AllowedUser[];
         "haveAdminPrivileges"?: boolean;
         "isEdit"?: boolean;
         "language"?: string;
@@ -4687,6 +4692,7 @@ declare namespace LocalJSX {
         "userTypeCode"?: string | number;
     }
     interface IrUserManagementTable {
+        "allowedUsersTypes"?: AllowedUser[];
         "haveAdminPrivileges"?: boolean;
         "isSuperAdmin"?: boolean;
         "onResetData"?: (event: IrUserManagementTableCustomEvent<null>) => void;

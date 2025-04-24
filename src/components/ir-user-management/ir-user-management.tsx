@@ -4,6 +4,7 @@ import { BookingService } from '@/services/booking.service';
 import { RoomService } from '@/services/room.service';
 import { UserService } from '@/services/user.service';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { AllowedUser } from './types';
 
 @Component({
   tag: 'ir-user-management',
@@ -22,6 +23,7 @@ export class IrUserManagement {
   @State() isLoading = true;
   @State() users: User[] = [];
   @State() property_id: number;
+  @State() allowedUsersTypes: AllowedUser[] = [];
 
   private token = new Token();
   private roomService = new RoomService();
@@ -113,9 +115,14 @@ export class IrUserManagement {
     });
   }
   private async fetchUserTypes() {
-    const entries = await this.bookingService.getSetupEntriesByTableName('_USER_TYPE');
-    for (const e of entries) {
-      this.userTypes.set(e.CODE_NAME.toString(), e[`CODE_VALUE_${this.language?.toUpperCase() ?? 'EN'}`]);
+    const res = await Promise.all([this.bookingService.getSetupEntriesByTableName('_USER_TYPE'), this.bookingService.getLov()]);
+    const allowedUsers = res[1]?.My_Result?.allowed_user_types;
+    for (const e of res[0]) {
+      const value = e[`CODE_VALUE_${this.language?.toUpperCase() ?? 'EN'}`];
+      if (allowedUsers.find(f => f.code === e.CODE_NAME)) {
+        this.allowedUsersTypes.push({ code: e.CODE_NAME, value });
+      }
+      this.userTypes.set(e.CODE_NAME.toString(), value);
     }
   }
   render() {
@@ -138,6 +145,7 @@ export class IrUserManagement {
           </div>
           <div class="" style={{ gap: '1rem' }}>
             <ir-user-management-table
+              allowedUsersTypes={this.allowedUsersTypes}
               userTypeCode={this.userTypeCode}
               haveAdminPrivileges={['1', '17'].includes(this.userTypeCode?.toString())}
               userTypes={this.userTypes}

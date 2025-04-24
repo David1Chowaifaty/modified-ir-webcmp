@@ -7,6 +7,7 @@ import { User } from '@/models/Users';
 import { UserService } from '@/services/user.service';
 import { _formatTime } from '@/components/ir-booking-details/functions';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { AllowedUser } from '../types';
 
 @Component({
   tag: 'ir-user-management-table',
@@ -19,6 +20,7 @@ export class IrUserManagementTable {
   @Prop() userTypes: Map<string | number, string> = new Map();
   @Prop() userTypeCode: string | number;
   @Prop() haveAdminPrivileges: boolean;
+  @Prop() allowedUsersTypes: AllowedUser[] = [];
 
   @State() currentTrigger: any = null;
   @State() user: User = null;
@@ -96,6 +98,7 @@ export class IrUserManagementTable {
     }
     return (
       <ir-user-form-panel
+        allowedUsersTypes={this.allowedUsersTypes}
         userTypeCode={this.userTypeCode}
         haveAdminPrivileges={this.haveAdminPrivileges}
         onCloseSideBar={() => (this.currentTrigger = null)}
@@ -119,6 +122,7 @@ export class IrUserManagementTable {
                 <th class="text-left">Last signed in</th>
                 <th class="text-left">Created at</th>
                 {this.haveAdminPrivileges && <th>Active</th>}
+                {this.haveAdminPrivileges && <th>Email verified</th>}
 
                 <th class={'action-row'}>
                   {this.canCreate && (
@@ -168,6 +172,12 @@ export class IrUserManagementTable {
                           : !isUserSuperAdmin && <ir-switch onCheckChange={e => this.handleUserActiveChange(e, user)} checked={user.is_active}></ir-switch>}
                       </td>
                     )}
+                    {this.haveAdminPrivileges && (
+                      <td>
+                        <button class={`m-0 badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}>{user.is_email_verified ? 'verified' : 'not verified'}</button>
+                      </td>
+                    )}
+
                     <td class={'action-row'}>
                       {(this.canEdit || this.canDelete) && ((!this.isSuperAdmin && !isUserSuperAdmin) || this.isSuperAdmin) && (
                         <div class="icons-container  d-flex align-items-center" style={{ gap: '0.5rem' }}>

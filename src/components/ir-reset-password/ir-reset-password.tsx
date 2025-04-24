@@ -116,7 +116,7 @@ export class IrResetPassword {
               />
             </svg>
             <div class="text-center mb-2">
-              <h4 class="mb-1">Set new Password</h4>
+              <h4 class="mb-1">Set New Password</h4>
               {this.submitted ? (
                 <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>
               ) : (

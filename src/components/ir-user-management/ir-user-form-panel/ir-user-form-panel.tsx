@@ -10,6 +10,7 @@ import { User } from '@/models/Users';
 import { _formatTime } from '@/components/ir-booking-details/functions';
 import moment from 'moment';
 import { UAParser } from 'ua-parser-js';
+import { AllowedUser } from '../types';
 
 @Component({
   tag: 'ir-user-form-panel',
@@ -24,6 +25,7 @@ export class IrUserFormPanel {
   @Prop() property_id: number;
   @Prop() haveAdminPrivileges: boolean;
   @Prop() userTypeCode: string | number;
+  @Prop() allowedUsersTypes: AllowedUser[] = [];
 
   @State() isLoading: boolean = false;
   @State() autoValidate = false;
@@ -75,7 +77,7 @@ export class IrUserFormPanel {
         },
         { message: 'Password must be at least 8 characters long.' },
       ),
-    type: z.string().nonempty().min(2),
+    type: z.coerce.string().nonempty().min(2),
     username: z
       .string()
       .min(3)
@@ -125,7 +127,11 @@ export class IrUserFormPanel {
       if (!this.autoValidate) {
         this.autoValidate = true;
       }
-      const toValidateUserInfo = { ...this.userInfo, password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password };
+      const toValidateUserInfo = {
+        ...this.userInfo,
+        password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password,
+        type: Number(this.userInfo.type),
+      };
       console.log('toValidateUserInfo', { ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.country.phone_prefix, '') });
       await this.userSchema.parseAsync({ ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.country.phone_prefix, '') });
       if (this.errors) {
@@ -158,7 +164,6 @@ export class IrUserFormPanel {
   }
 
   render() {
-    console.log(this.user);
     return (
       <form
         class="sheet-container"
@@ -203,10 +208,10 @@ export class IrUserFormPanel {
                 error={this.errors?.type && !this.userInfo.type}
                 disabled={this.disableFields}
                 label="Role"
-                data={[
-                  { text: 'Frontdesk', value: '16' },
-                  { text: 'Property Admin', value: '17' },
-                ]}
+                data={this.allowedUsersTypes.map(t => ({
+                  text: t.value,
+                  value: t.code,
+                }))}
                 selectedValue={this.userInfo.type?.toString()}
                 onSelectChange={e => this.updateUserField('type', e.detail)}
               />
@@ -275,7 +280,6 @@ export class IrUserFormPanel {
               <ul class="logins-history-list">
                 {this.user.sign_ins.slice(0, this.showFullHistory ? this.user.sign_ins.length : 5).map((s, i) => {
                   const ua = UAParser(s.user_agent);
-                  console.log(new UAParser(s.user_agent).getResult());
                   return (
                     <li class="login-entry" key={s.date + '_' + i}>
                       <div class="login-meta">

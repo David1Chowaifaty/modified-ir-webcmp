@@ -6,7 +6,7 @@ export interface UserParams {
   email: string;
   is_active: boolean;
   mobile: string;
-  type: string;
+  type: number | string;
   is_to_remove?: boolean;
 }
 interface SignIn {
@@ -17,4 +17,13 @@ interface SignIn {
   minute: number;
   user_agent: string;
 }
-export type User = THKUser & { type: string; is_active: boolean; sign_ins: SignIn[]; created_on: string; password: string; email: string; role?: string };
+export type User = THKUser & {
+  type: string;
+  is_active: boolean;
+  sign_ins: SignIn[];
+  is_email_verified?: boolean;
+  created_on: string;
+  password: string;
+  email: string;
+  role?: string;
+};

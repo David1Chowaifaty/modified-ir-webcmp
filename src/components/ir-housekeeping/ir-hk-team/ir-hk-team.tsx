@@ -28,7 +28,7 @@ export class IrHkTeam {
       <span>
         {hk.assigned_units.length} -{' '}
         <button onClick={() => (this.currentTrigger = { type: 'unassigned_units', user: hk })} class="outline-btn">
-          {locales.entries.Lcz_Edit}
+          {'Edit'}
         </button>
       </span>
     );
