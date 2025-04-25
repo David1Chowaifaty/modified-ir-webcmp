@@ -192,14 +192,15 @@ export class IrUserManagementTable {
                           data-toggle="tooltip"
                           data-placement="bottom"
                           data-testid="user-verification"
-                          title={user.is_email_verified ? '' : 'Send verification email'}
+                          title={user.is_email_verified ? '' : 'Click to resend verification email.'}
                           class={`m-0  badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}
+                          //TODO add isRequestPending for when the request is sent the buttons should be disabled
                           disabled={user.is_email_verified}
                           onClick={() => {
                             this.sendVerificationEmail(user);
                           }}
                         >
-                          {user.is_email_verified ? 'verified' : 'not verified'}
+                          {user.is_email_verified ? 'Verified' : 'Not verified'}
                         </button>
                       </td>
                     )}
