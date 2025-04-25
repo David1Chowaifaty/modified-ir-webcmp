@@ -9,3 +9,9 @@
 .badge-danger:hover {
   background: #ff6377;
 }
+.badge:disabled {
+  cursor: default;
+}
+.badge-danger:disabled:hover {
+  background: var(--danger, #ff4961);
+}

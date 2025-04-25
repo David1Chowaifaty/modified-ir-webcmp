@@ -5,6 +5,8 @@ import { RoomService } from '@/services/room.service';
 import { UserService } from '@/services/user.service';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { AllowedUser } from './types';
+import { bookingReasons } from '@/models/IBooking';
+import { io, Socket } from 'socket.io-client';
 
 @Component({
   tag: 'ir-user-management',
@@ -31,6 +33,7 @@ export class IrUserManagement {
   private bookingService = new BookingService();
 
   private userTypes: Map<number | string, string> = new Map();
+  private socket: Socket;
 
   @Watch('ticket')
   ticketChanged(newValue: string, oldValue: string) {
@@ -40,6 +43,14 @@ export class IrUserManagement {
     this.token.setToken(this.ticket);
     this.initializeApp();
   }
+
+  @Listen('resetData')
+  async handleResetData(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    await this.fetchUsers();
+  }
+
   private async initializeApp() {
     try {
       this.isLoading = true;
@@ -74,18 +85,57 @@ export class IrUserManagement {
       }
 
       await Promise.all(requests);
+      this.socket = io('https://realtime.igloorooms.com/');
+      this.socket.on('MSG', async msg => {
+        await this.handleSocketMessage(msg);
+      });
     } catch (error) {
       console.log(error);
     } finally {
       this.isLoading = false;
     }
   }
-  @Listen('resetData')
-  async handleResetData(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    await this.fetchUsers();
+
+  private async handleSocketMessage(msg: string) {
+    const msgAsObject = JSON.parse(msg);
+    if (!msgAsObject) {
+      return;
+    }
+
+    const { REASON, KEY, PAYLOAD }: { REASON: bookingReasons; KEY: any; PAYLOAD: any } = msgAsObject;
+
+    if (KEY.toString() !== this.property_id.toString()) {
+      return;
+    }
+
+    let result = JSON.parse(PAYLOAD);
+    console.log(KEY, result);
+    // const reasonHandlers: Partial<Record<bookingReasons, Function>> = {
+    //   DORESERVATION: this.updateUserVerificationStatus,
+    // };
+    const reasonHandlers: Partial<Record<bookingReasons, Function>> = {};
+    const handler = reasonHandlers[REASON];
+    if (handler) {
+      await handler.call(this, result);
+    } else {
+      console.warn(`Unhandled REASON: ${REASON}`);
+    }
   }
+
+  public updateUserVerificationStatus(result: { id: string | number; is_email_verified: boolean }) {
+    const users = [...this.users];
+    const idx = users.findIndex(u => u.id === result.id);
+    if (idx === -1) {
+      console.warn(`User ${result.id} not found`);
+      return;
+    }
+    users[idx] = {
+      ...users[idx],
+      is_email_verified: result.is_email_verified,
+    };
+    this.users = users;
+  }
+
   private async fetchUsers() {
     const users = await this.userService.getExposedPropertyUsers();
     this.users = [...users].sort((u1: User, u2: User) => {
@@ -124,6 +174,9 @@ export class IrUserManagement {
       }
       this.userTypes.set(e.CODE_NAME.toString(), value);
     }
+  }
+  disconnectedCallback() {
+    this.socket.disconnect();
   }
   render() {
     if (this.isLoading) {

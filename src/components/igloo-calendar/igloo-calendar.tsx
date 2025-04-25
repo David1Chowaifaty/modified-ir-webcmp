@@ -391,7 +391,7 @@ export class IglooCalendar {
       result = JSON.parse(PAYLOAD);
     }
     console.log(KEY, result);
-    const reasonHandlers: { [key: string]: Function } = {
+    const reasonHandlers: Partial<Record<bookingReasons, Function>> = {
       DORESERVATION: this.handleDoReservation,
       BLOCK_EXPOSED_UNIT: this.handleBlockExposedUnit,
       ASSIGN_EXPOSED_ROOM: this.handleAssignExposedRoom,

@@ -92,6 +92,20 @@ export class IrUserManagementTable {
       this.modalRef.closeModal();
     }
   }
+  private async sendVerificationEmail(user: User) {
+    try {
+      console.log(user);
+      await this.userService.sendVerificationEmail();
+      this.toast.emit({
+        position: 'top-right',
+        title: "We've sent you a verification email. Please check your inbox to confirm your account.",
+        description: '',
+        type: 'success',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   private renderCurrentTrigger() {
     if (!this.currentTrigger) {
       return null;
@@ -174,7 +188,19 @@ export class IrUserManagementTable {
                     )}
                     {this.haveAdminPrivileges && (
                       <td>
-                        <button class={`m-0 badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}>{user.is_email_verified ? 'verified' : 'not verified'}</button>
+                        <button
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          data-testid="user-verification"
+                          title={user.is_email_verified ? '' : 'Send verification email'}
+                          class={`m-0  badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}
+                          disabled={user.is_email_verified}
+                          onClick={() => {
+                            this.sendVerificationEmail(user);
+                          }}
+                        >
+                          {user.is_email_verified ? 'verified' : 'not verified'}
+                        </button>
                       </td>
                     )}
 
