@@ -757,6 +757,7 @@ export namespace Components {
     }
     interface IrInterceptor {
         "handledEndpoints": string[];
+        "suppressToastEndpoints": string[];
     }
     interface IrLabel {
         /**
@@ -2858,10 +2859,6 @@ declare global {
         new (): HTMLIrReservationInformationElement;
     };
     interface HTMLIrResetPasswordElementEventMap {
-        "authFinish": {
-    token: string;
-    code: 'succsess' | 'error';
-  };
         "closeSideBar": null;
     }
     interface HTMLIrResetPasswordElement extends Components.IrResetPassword, HTMLStencilElement {
@@ -4161,6 +4158,7 @@ declare namespace LocalJSX {
     interface IrInterceptor {
         "handledEndpoints"?: string[];
         "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
+        "suppressToastEndpoints"?: string[];
     }
     interface IrLabel {
         /**
@@ -4425,10 +4423,6 @@ declare namespace LocalJSX {
     }
     interface IrResetPassword {
         "old_pwd"?: string;
-        "onAuthFinish"?: (event: IrResetPasswordCustomEvent<{
-    token: string;
-    code: 'succsess' | 'error';
-  }>) => void;
         "onCloseSideBar"?: (event: IrResetPasswordCustomEvent<null>) => void;
         "skip2Fa"?: boolean;
         "ticket"?: string;

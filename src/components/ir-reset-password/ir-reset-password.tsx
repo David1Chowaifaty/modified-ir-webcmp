@@ -1,7 +1,7 @@
 import Token from '@/models/Token';
 import { AuthService } from '@/services/authenticate.service';
 import { CONSTANTS } from '@/utils/constants';
-import { Component, Element, Event, EventEmitter, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import { z, ZodError } from 'zod';
 
 @Component({
@@ -25,19 +25,17 @@ export class IrResetPassword {
   @State() submitted: boolean = false;
   @State() isLoading = false;
 
-  @Event() authFinish: EventEmitter<{
-    token: string;
-    code: 'succsess' | 'error';
-  }>;
   @Event() closeSideBar: EventEmitter<null>;
 
   private token = new Token();
   private authService = new AuthService();
+
   componentWillLoad() {
     if (this.ticket) {
       this.token.setToken(this.ticket);
     }
   }
+
   @Watch('ticket')
   handleTicketChange(oldValue: string, newValue: string) {
     if (oldValue !== newValue) {
@@ -100,12 +98,17 @@ export class IrResetPassword {
       this.isLoading = false;
     }
   }
+
   render() {
     const insideSidebar = this.el.slot === 'sidebar-body';
     return (
       <div class={{ 'base-host': !insideSidebar, 'h-100': insideSidebar }}>
-        <ir-interceptor></ir-interceptor>
-        <ir-toast></ir-toast>
+        {!insideSidebar && (
+          <Fragment>
+            <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd']}></ir-interceptor>
+            <ir-toast></ir-toast>
+          </Fragment>
+        )}
         <form onSubmit={this.handleChangePassword.bind(this)} class={{ 'sheet-container': insideSidebar }}>
           {insideSidebar && <ir-title class="px-1 sheet-header" displayContext="sidebar" label={'Change Password'}></ir-title>}
           <div class={{ 'form-container': true, 'sheet-body px-1': insideSidebar, 'px-2': !insideSidebar }}>
@@ -142,9 +145,6 @@ export class IrResetPassword {
                         onInputFocus={() => (this.showValidator = true)}
                         type={'password'}
                       ></ir-input-text>
-                      {/* <button type="button" class="password_toggle" onClick={() => (this.showPassword = !this.showPassword)}>
-                <ir-icons name={!this.showPassword ? 'open_eye' : 'closed_eye'}></ir-icons>
-              </button> */}
                     </div>
                     {this.showValidator && <ir-password-validator class="mb-1" password={this.password}></ir-password-validator>}
                   </div>
@@ -160,9 +160,6 @@ export class IrResetPassword {
                       placeholder="Confirm password"
                       type={'password'}
                     ></ir-input-text>
-                    {/* <button type="button" class="password_toggle" onClick={() => (this.showPassword = !this.showPassword)}>
-              <ir-icons name={!this.showPassword ? 'open_eye' : 'closed_eye'}></ir-icons>
-            </button> */}
                   </div>
                 </div>
 

@@ -9,13 +9,15 @@ import interceptor_requests from '@/stores/ir-interceptor.store';
   scoped: true,
 })
 export class IrInterceptor {
+  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings', '/UnBlock_Exposed_Unit'];
+  @Prop() suppressToastEndpoints: string[] = [];
+
   @State() isShown = false;
   @State() isLoading = false;
   @State() isUnassignedUnit = false;
   @State() endpointsCount = 0;
   @State() isPageLoadingStopped: string | null = null;
 
-  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings', '/UnBlock_Exposed_Unit'];
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
 
   @Listen('preventPageLoad', { target: 'body' })
@@ -70,19 +72,22 @@ export class IrInterceptor {
     }
     interceptor_requests[extractedUrl] = 'done';
     if (response.data.ExceptionMsg?.trim()) {
-      this.handleError(response.data.ExceptionMsg);
+      this.handleError(response.data.ExceptionMsg, extractedUrl);
       throw new Error(response.data.ExceptionMsg);
     }
     return response;
   }
 
-  handleError(error: string) {
-    this.toast.emit({
-      type: 'error',
-      title: error,
-      description: '',
-      position: 'top-right',
-    });
+  handleError(error: string, url: string) {
+    const shouldSuppressToast = this.suppressToastEndpoints.includes(url);
+    if (!shouldSuppressToast) {
+      this.toast.emit({
+        type: 'error',
+        title: error,
+        description: '',
+        position: 'top-right',
+      });
+    }
     return Promise.reject(error);
   }
   render() {

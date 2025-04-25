@@ -138,7 +138,7 @@ export class IrUserManagement {
     return (
       <Host>
         <ir-toast></ir-toast>
-        <ir-interceptor></ir-interceptor>
+        <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd']}></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
           <div class="d-flex  pb-2 align-items-center justify-content-between">
             <h3 class="mb-1 mb-md-0">Extranet Users</h3>
