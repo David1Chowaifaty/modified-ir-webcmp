@@ -2,7 +2,7 @@ import { Component, Host, h, State, Event, EventEmitter, Prop, Watch } from '@st
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
 import { calculateDaysBetweenDates } from '@/utils/booking';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 @Component({
   tag: 'igl-date-range',
@@ -24,8 +24,8 @@ export class IglDateRange {
   @Event() toast: EventEmitter<IToast>;
 
   private totalNights: number = 0;
-  private fromDate: Date;
-  private toDate: Date;
+  private fromDate: Moment;
+  private toDate: Moment;
   private fromDateStr: string = 'from';
   private toDateStr: string = 'to';
 
@@ -41,18 +41,17 @@ export class IglDateRange {
   }
 
   private initializeDates() {
-    let dt = new Date();
-    dt.setHours(0, 0, 0, 0);
-    dt.setDate(dt.getDate() + 1);
+    // let dt = new Date();
+    // dt.setHours(0, 0, 0, 0);
+    // dt.setDate(dt.getDate() + 1);
     if (this.defaultData) {
       if (this.defaultData.fromDate) {
-        this.fromDate = new Date(this.defaultData.fromDate);
-        this.fromDate.setHours(0, 0, 0, 0);
+        this.fromDate = moment(this.defaultData.fromDate, 'YYYY-MM-DD');
         this.fromDateStr = this.getFormattedDateString(this.fromDate);
       }
       if (this.defaultData.toDate) {
-        this.toDate = new Date(this.defaultData.toDate);
-        this.toDate.setHours(0, 0, 0, 0);
+        this.toDate = this.defaultData.toDate;
+        // this.toDate.setHours(0, 0, 0, 0);
         this.toDateStr = this.getFormattedDateString(this.toDate);
       }
     }
@@ -72,8 +71,9 @@ export class IglDateRange {
   private calculateTotalNights() {
     this.totalNights = calculateDaysBetweenDates(moment(this.fromDate).format('YYYY-MM-DD'), moment(this.toDate).format('YYYY-MM-DD'));
   }
-  private getFormattedDateString(dt) {
-    return dt.getDate() + ' ' + dt.toLocaleString('default', { month: 'short' }).toLowerCase() + ' ' + dt.getFullYear();
+  private getFormattedDateString(dt: Moment) {
+    // return dt.getDate() + ' ' + dt.toLocaleString('default', { month: 'short' }).toLowerCase() + ' ' + dt.getFullYear();
+    return dt.format('DD MM YYYY');
   }
 
   private handleDateSelectEvent(key, data: any = '') {
@@ -86,8 +86,8 @@ export class IglDateRange {
     this.calculateTotalNights();
 
     this.handleDateSelectEvent('selectedDateRange', {
-      fromDate: this.fromDate.getTime(),
-      toDate: this.toDate.getTime(),
+      fromDate: this.fromDate,
+      toDate: this.toDate,
       fromDateStr: start.format('DD MMM YYYY'),
       toDateStr: end.format('DD MMM YYYY'),
       dateDifference: this.totalNights,
@@ -96,6 +96,7 @@ export class IglDateRange {
     this.renderAgain = !this.renderAgain;
   }
   render() {
+    console.warn(moment().format('YYYY-MM-DD'));
     if (this.variant === 'booking') {
       return (
         <div class={`p-0 m-0 date-range-container-cn`}>
@@ -139,7 +140,7 @@ export class IglDateRange {
             maxDate={this.maxDate}
             class={'date-range-input'}
             disabled={this.disabled}
-            minDate={this.fromDate}
+            minDate={this.fromDate.format('YYYY-MM-DD')}
             // minDate={this.toDate}
             // maxDate={this.minDate}
             // autoApply

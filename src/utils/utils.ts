@@ -8,7 +8,8 @@ export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear:
   if (!date.isValid()) {
     throw new Error('Invalid Date');
   }
-  return date.format('D_M_YYYY');
+  // return date.format('D_M_YYYY');
+  return date.format('YYYY-MM-DD');
 }
 
 export function convertDateToTime(dayWithWeekday: string, monthWithYear: string): number {

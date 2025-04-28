@@ -222,6 +222,7 @@ export class IglCalBody {
   }
 
   clickCell(roomId, selectedDay, roomCategory) {
+    console.log(selectedDay);
     if (!this.isScrollViewDragging && selectedDay.currentDate >= this.currentDate.getTime()) {
       let refKey = this.getSelectedCellRefName(roomId, selectedDay);
       if (this.selectedRooms.hasOwnProperty(refKey)) {

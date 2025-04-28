@@ -465,8 +465,9 @@ export class IglBookingEvent {
   }
 
   getPosition() {
-    let startingDate = this.getEventStartingDate();
-    let startingCellClass = '.room_' + this.getBookedRoomId() + '_' + startingDate.getDate() + '_' + (startingDate.getMonth() + 1) + '_' + startingDate.getFullYear();
+    let startingDate = this.bookingEvent.FROM_DATE;
+    // let startingCellClass = '.room_' + this.getBookedRoomId() + '_' + startingDate.getDate() + '_' + (startingDate.getMonth() + 1) + '_' + startingDate.getFullYear();
+    let startingCellClass = '.room_' + this.getBookedRoomId() + '_' + startingDate;
     let bodyContainer = document.querySelector('.bodyContainer');
     let startingCell = document.querySelector(startingCellClass);
     let pos = { top: '0', left: '0', width: '0', height: '20px' };
@@ -489,7 +490,7 @@ export class IglBookingEvent {
         this.eventSpace +
         'px';
     } else {
-      console.log(this.bookingEvent);
+      // console.log(this.bookingEvent);
       console.log('Locating event cell failed ', startingCellClass);
     }
     //console.log(pos);

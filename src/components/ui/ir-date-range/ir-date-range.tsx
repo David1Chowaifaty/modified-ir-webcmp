@@ -1,5 +1,5 @@
 import { Component, h, Element, Prop, Event, EventEmitter, Host, Watch, Method } from '@stencil/core';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 @Component({
   tag: 'ir-date-range',
@@ -8,9 +8,9 @@ import moment from 'moment';
 })
 export class IrDateRange {
   @Element() private element: HTMLElement;
-  @Prop() fromDate: Date;
-  @Prop() toDate: Date;
-  @Prop() date: Date;
+  @Prop() fromDate: Moment;
+  @Prop() toDate: Moment;
+  @Prop() date: Moment;
 
   @Prop() opens: 'left' | 'right' | 'center';
   @Prop() autoApply: boolean;
@@ -27,8 +27,8 @@ export class IrDateRange {
   @Prop() weekLabel: string = 'W';
   @Prop() disabled: boolean = false;
   @Prop() singleDatePicker = false;
-  @Prop() minDate: string | Date;
-  @Prop() maxDate: string | Date;
+  @Prop() minDate: string | Moment;
+  @Prop() maxDate: string | Moment;
   @Prop() maxSpan: moment.DurationInputArg1 = {
     days: 240,
   };
@@ -65,12 +65,12 @@ export class IrDateRange {
 
     // Adjust how dates are set based on whether it's a single date picker or range picker.
     if (this.singleDatePicker) {
-      const newDate = this.date ? moment(this.date) : moment();
+      const newDate = this.date ? this.date : moment();
       picker.setStartDate(newDate);
       picker.setEndDate(newDate); // For single date picker, start and end date might be the same.
     } else {
-      const newStartDate = this.fromDate ? moment(this.fromDate) : moment();
-      const newEndDate = this.toDate ? moment(this.toDate) : newStartDate.clone().add(1, 'days');
+      const newStartDate = this.fromDate ? this.fromDate : moment();
+      const newEndDate = this.toDate ? this.toDate : newStartDate.clone().add(1, 'days');
       picker.setStartDate(newStartDate);
       picker.setEndDate(newEndDate);
     }
@@ -98,9 +98,9 @@ export class IrDateRange {
       {
         singleDatePicker: this.singleDatePicker,
         opens: this.opens,
-        startDate: moment(this.fromDate),
-        endDate: moment(this.toDate),
-        minDate: moment(this.minDate || moment(new Date()).format('YYYY-MM-DD')),
+        startDate: this.fromDate,
+        endDate: this.toDate,
+        minDate: moment(this.minDate || moment().format('YYYY-MM-DD')),
         maxDate: this.maxDate ? moment(this.maxDate) : undefined,
         maxSpan: this.maxSpan,
         autoApply: this.autoApply,
