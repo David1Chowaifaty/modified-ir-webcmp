@@ -39,8 +39,8 @@
         const calendar = document.querySelector("igloo-calendar");
         calendar.from_date = _FROM_DATE;
         calendar.to_date = _TO_DATE;
-        setTimeout(() => {
-            const ticket = getToken();
+        setTimeout(async () => {
+            const ticket = await getToken();
             calendar.propertyid = getId();
             calendar.ticket = ticket;
         }, 300)
