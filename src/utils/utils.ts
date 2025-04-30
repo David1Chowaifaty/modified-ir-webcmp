@@ -8,7 +8,8 @@ export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear:
   if (!date.isValid()) {
     throw new Error('Invalid Date');
   }
-  return date.format('D_M_YYYY');
+  // return date.format('D_M_YYYY');
+  return date.format('YYYY-MM-DD');
 }
 
 export function convertDateToTime(dayWithWeekday: string, monthWithYear: string): number {
@@ -100,13 +101,13 @@ export function getReleaseHoursString(releaseDate: number) {
 }
 
 export function computeEndDate(startDate: string, numberOfDays: number): string {
-  const dateObj = moment(startDate, 'D_M_YYYY');
+  const dateObj = moment(startDate, 'YYYY-MM-DD');
   dateObj.add(numberOfDays, 'days');
   return dateObj.format('YYYY-MM-DD');
 }
 
 export function convertDMYToISO(date: string) {
-  const dateObj = moment(date, 'D_M_YYYY');
+  const dateObj = moment(date, 'YYYY-MM-DD');
   return dateObj.format('YYYY-MM-DD');
 }
 export function addTwoMonthToDate(date: Date) {
@@ -125,8 +126,8 @@ export function convertDatePrice(date: string) {
 }
 export function getDaysArray(date1: string, date2: string) {
   let dates = [];
-  let start = moment.min(moment(date1).add(1, 'days'), moment(date2));
-  let end = moment.max(moment(date1), moment(date2));
+  let start = moment.min(moment(date1, 'YYYY-MM-DD').add(1, 'days'), moment(date2, 'YYYY-MM-DD'));
+  let end = moment.max(moment(date1, 'YYYY-MM-DD'), moment(date2, 'YYYY-MM-DD'));
   while (start < end) {
     dates.push(start.format('YYYY-MM-DD'));
     start = start.clone().add(1, 'days');

@@ -263,6 +263,7 @@ export class IglBookingEvent {
                 //   });
                 //   throw new Error('Overlapping Dates');
                 // } else {
+
                 this.showRoomNightsDialog.emit({
                   bookingNumber: this.bookingEvent.BOOKING_NUMBER,
                   identifier: this.bookingEvent.IDENTIFIER,
@@ -465,8 +466,11 @@ export class IglBookingEvent {
   }
 
   getPosition() {
-    let startingDate = this.getEventStartingDate();
-    let startingCellClass = '.room_' + this.getBookedRoomId() + '_' + startingDate.getDate() + '_' + (startingDate.getMonth() + 1) + '_' + startingDate.getFullYear();
+    // let startingDate = this.getEventStartingDate();
+    let startingDate = this.bookingEvent.FROM_DATE;
+
+    // let startingCellClass = '.room_' + this.getBookedRoomId() + '_' + startingDate.getDate() + '_' + (startingDate.getMonth() + 1) + '_' + startingDate.getFullYear();
+    let startingCellClass = `[data-room="${this.getBookedRoomId()}"][data-date="${startingDate}"]`;
     let bodyContainer = document.querySelector('.bodyContainer');
     let startingCell = document.querySelector(startingCellClass);
     let pos = { top: '0', left: '0', width: '0', height: '20px' };

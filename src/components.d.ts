@@ -162,7 +162,7 @@ export namespace Components {
         "highlightedDate": string;
         "isScrollViewDragging": boolean;
         "language": string;
-        "today": String;
+        "today": string;
     }
     interface IglCalFooter {
         "calendarData": { [key: string]: any };
@@ -2839,7 +2839,7 @@ declare namespace LocalJSX {
         "onAddBookingDatasEvent"?: (event: IglCalBodyCustomEvent<any[]>) => void;
         "onScrollPageToRoom"?: (event: IglCalBodyCustomEvent<any>) => void;
         "onShowBookingPopup"?: (event: IglCalBodyCustomEvent<any>) => void;
-        "today"?: String;
+        "today"?: string;
     }
     interface IglCalFooter {
         "calendarData"?: { [key: string]: any };

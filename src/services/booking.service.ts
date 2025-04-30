@@ -1,7 +1,7 @@
 import { DayData } from '../models/DayType';
 import axios from 'axios';
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType } from '../models/IBooking';
-import { convertDateToCustomFormat, convertDateToTime, dateToFormattedString, extras } from '../utils/utils';
+import { convertDateToCustomFormat, dateToFormattedString, extras } from '../utils/utils';
 import { getMyBookings } from '../utils/booking';
 import { Booking, Day, ExtraService, Guest, IBookingPickupInfo, IPmsLog } from '../models/booking.dto';
 import booking_store from '@/stores/booking.store';
@@ -68,7 +68,7 @@ export class BookingService {
           });
           return month.days.map(day => ({
             day: convertDateToCustomFormat(day.description, month.description),
-            currentDate: convertDateToTime(day.description, month.description),
+            // currentDate: convertDateToTime(day.description, month.description),
             dayDisplayName: day.description,
             rate: day.room_types,
             unassigned_units_nbr: day.unassigned_units_nbr,

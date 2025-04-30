@@ -2,6 +2,8 @@ import { Component, Host, Listen, Prop, State, h, Event, EventEmitter } from '@s
 import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import { RoomType } from '@/models/booking.dto';
+import moment, { Moment } from 'moment';
+import { DayData } from '@/models/DayType';
 
 export type RoomCategory = RoomType & { expanded: boolean };
 
@@ -15,7 +17,7 @@ export class IglCalBody {
   @Event({ bubbles: true, composed: true }) scrollPageToRoom: EventEmitter;
   @Prop() isScrollViewDragging: boolean;
   @Prop() calendarData: { [key: string]: any };
-  @Prop() today: String;
+  @Prop() today: string;
   @Prop() currency;
   @Prop() language: string;
   @Prop() countryNodeList;
@@ -27,11 +29,12 @@ export class IglCalBody {
   private selectedRooms: { [key: string]: any } = {};
   private fromRoomId: number = -1;
   private newEvent: { [key: string]: any };
-  private currentDate = new Date();
+  // private currentDate = new Date();
+  private currentDate = moment();
 
-  componentWillLoad() {
-    this.currentDate.setHours(0, 0, 0, 0);
-  }
+  // componentWillLoad() {
+  //   this.currentDate.setHours(0, 0, 0, 0);
+  // }
 
   @Listen('dragOverHighlightElement', { target: 'window' })
   dragOverHighlightElementHandler(event: CustomEvent) {
@@ -109,8 +112,8 @@ export class IglCalBody {
     this.addBookingDatasEvent.emit(aData);
   }
 
-  getSelectedCellRefName(roomId, selectedDay) {
-    return 'room_' + roomId + '_' + selectedDay.currentDate;
+  private getSelectedCellRefName(roomId: number, selectedDay: DayData) {
+    return `room_${roomId}_${selectedDay.day}`;
   }
 
   // getSplitBookingEvents(newEvent) {
@@ -141,16 +144,26 @@ export class IglCalBody {
 
   addNewEvent(roomCategory) {
     let keys = Object.keys(this.selectedRooms);
-    let startDate, endDate;
-
-    if (this.selectedRooms[keys[0]].currentDate < this.selectedRooms[keys[1]].currentDate) {
-      startDate = new Date(this.selectedRooms[keys[0]].currentDate);
-      endDate = new Date(this.selectedRooms[keys[1]].currentDate);
+    let startDate: Moment, endDate: Moment;
+    console.log(this.selectedRooms);
+    // console.log(this.selectedRooms);
+    // if (this.selectedRooms[keys[0]].currentDate < this.selectedRooms[keys[1]].currentDate) {
+    //   startDate = new Date(this.selectedRooms[keys[0]].currentDate);
+    //   endDate = new Date(this.selectedRooms[keys[1]].currentDate);
+    // } else {
+    //   startDate = new Date(this.selectedRooms[keys[1]].currentDate);
+    //   endDate = new Date(this.selectedRooms[keys[0]].currentDate);
+    // }
+    const from = moment(this.selectedRooms[keys[0]].day, 'YYYY-MM-DD');
+    const to = moment(this.selectedRooms[keys[1]].day, 'YYYY-MM-DD');
+    if (from.isBefore(to, 'dates')) {
+      startDate = from;
+      endDate = to;
     } else {
-      startDate = new Date(this.selectedRooms[keys[1]].currentDate);
-      endDate = new Date(this.selectedRooms[keys[0]].currentDate);
+      startDate = to;
+      endDate = from;
     }
-
+    const dateDiff = ((endDate.toDate() as any) - (startDate.toDate() as any)) / 86400000;
     this.newEvent = {
       ID: 'NEW_TEMP_EVENT',
       NAME: <span>&nbsp;</span>,
@@ -158,14 +171,16 @@ export class IglCalBody {
       PHONE: '',
       convertBooking: false,
       REFERENCE_TYPE: 'PHONE',
-      FROM_DATE: startDate.getFullYear() + '-' + this.getTwoDigitNumStr(startDate.getMonth() + 1) + '-' + this.getTwoDigitNumStr(startDate.getDate()),
-      TO_DATE: endDate.getFullYear() + '-' + this.getTwoDigitNumStr(endDate.getMonth() + 1) + '-' + this.getTwoDigitNumStr(endDate.getDate()),
+      // FROM_DATE: startDate.getFullYear() + '-' + this.getTwoDigitNumStr(startDate.getMonth() + 1) + '-' + this.getTwoDigitNumStr(startDate.getDate()),
+      // TO_DATE: endDate.getFullYear() + '-' + this.getTwoDigitNumStr(endDate.getMonth() + 1) + '-' + this.getTwoDigitNumStr(endDate.getDate()),
+      FROM_DATE: startDate.format('YYYY-MM-DD'),
+      TO_DATE: endDate.format('YYYY-MM-DD'),
       BALANCE: '',
       NOTES: '',
       RELEASE_AFTER_HOURS: 0,
       PR_ID: this.selectedRooms[keys[0]].roomId,
       ENTRY_DATE: '',
-      NO_OF_DAYS: (endDate - startDate) / 86400000,
+      NO_OF_DAYS: dateDiff,
       ADULTS_COUNT: 1,
       COUNTRY: '',
       INTERNAL_NOTE: '',
@@ -183,7 +198,7 @@ export class IglCalBody {
         fromDateStr: '',
         toDate: null,
         toDateStr: '',
-        dateDifference: (endDate - startDate) / 86400000,
+        dateDifference: dateDiff,
         editable: false,
         message: 'Including 5.00% City Tax - Excluding 11.00% VAT',
       },
@@ -192,11 +207,11 @@ export class IglCalBody {
     let popupTitle = roomCategory.name + ' ' + this.getRoomName(this.getRoomById(this.getCategoryRooms(roomCategory), this.selectedRooms[keys[0]].roomId));
     this.newEvent.BLOCK_DATES_TITLE = `${locales.entries.Lcz_BlockDatesFor} ${popupTitle}`;
     this.newEvent.TITLE += popupTitle;
-    this.newEvent.defaultDateRange.toDate = new Date(this.newEvent.TO_DATE + 'T00:00:00');
-    this.newEvent.defaultDateRange.fromDate = new Date(this.newEvent.FROM_DATE + 'T00:00:00');
-    this.newEvent.defaultDateRange.fromDateStr = this.getDateStr(this.newEvent.defaultDateRange.fromDate);
-    this.newEvent.defaultDateRange.toDateStr = this.getDateStr(this.newEvent.defaultDateRange.toDate);
-    this.newEvent.ENTRY_DATE = new Date().toISOString();
+    this.newEvent.defaultDateRange.toDate = startDate;
+    this.newEvent.defaultDateRange.fromDate = endDate;
+    this.newEvent.defaultDateRange.fromDateStr = startDate.format('YYYY-MM-DD');
+    this.newEvent.defaultDateRange.toDateStr = endDate.format('YYYY-MM-DD');
+    this.newEvent.ENTRY_DATE = moment().format('YYYY-MM-DD');
     this.newEvent.legendData = this.calendarData.formattedLegendData;
 
     let splitBookingEvents = this.getSplitBookingEvents(this.newEvent);
@@ -221,8 +236,8 @@ export class IglCalBody {
     this.newEvent = null;
   }
 
-  clickCell(roomId, selectedDay, roomCategory) {
-    if (!this.isScrollViewDragging && selectedDay.currentDate >= this.currentDate.getTime()) {
+  clickCell(roomId: number, selectedDay: DayData, roomCategory: RoomCategory) {
+    if (!this.isScrollViewDragging && moment(selectedDay.day, 'YYYY-MM-DD').isAfter(this.currentDate, 'days')) {
       let refKey = this.getSelectedCellRefName(roomId, selectedDay);
       if (this.selectedRooms.hasOwnProperty(refKey)) {
         this.removeNewEvent();
@@ -281,10 +296,12 @@ export class IglCalBody {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
     return this.calendarData.days.map(dayInfo => (
       <div
+        data-room={roomId}
+        data-date={dayInfo.day}
         class={`cellData ${'room_' + roomId + '_' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''} ${
           this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''
-        } ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''}`}
-        onClick={() => this.clickCell(roomId, dayInfo, roomCategory)}
+        } ${this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(Number(roomId), dayInfo)) ? 'selectedDay' : ''}`}
+        onClick={() => this.clickCell(Number(roomId), dayInfo, roomCategory)}
       ></div>
     ));
   }
@@ -373,6 +390,11 @@ export class IglCalBody {
   }
 
   render() {
+    (() => {
+      setTimeout(() => {
+        console.log(document.querySelector('[data-date="2_5_2025"][data-room="3"]'));
+      }, 2000);
+    })();
     // onDragStart={event => this.handleDragStart(event)} draggable={true}
     return (
       <Host>

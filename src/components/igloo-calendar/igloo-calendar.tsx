@@ -69,7 +69,7 @@ export class IglooCalendar {
   private countryNodeList: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
   private scrollContainer: HTMLElement;
-  private today: String = '';
+  private today: string = '';
   private reachedEndOfCalendar = false;
 
   private socket: Socket;
@@ -302,7 +302,7 @@ export class IglooCalendar {
       this.showPaymentDetails = paymentMethods.some(item => item.code === '001' || item.code === '004');
       this.updateBookingEventsDateRange(this.calendarData.bookingEvents);
       this.updateBookingEventsDateRange(this.calendarData.toBeAssignedEvents);
-      this.today = this.transformDateForScroll(new Date());
+      this.today = this.transformDateForScroll(moment());
       let startingDay: Date = new Date(this.calendarData.startingDate);
       startingDay.setHours(0, 0, 0, 0);
       this.days = bookingResp.days;
@@ -525,13 +525,13 @@ export class IglooCalendar {
   private updateTotalAvailability() {
     let days = [...calendar_dates.days];
     this.totalAvailabilityQueue.forEach(queue => {
-      let selectedDate = new Date(queue.date);
-      selectedDate.setMilliseconds(0);
-      selectedDate.setSeconds(0);
-      selectedDate.setMinutes(0);
-      selectedDate.setHours(0);
+      // let selectedDate = new Date(queue.date);
+      // selectedDate.setMilliseconds(0);
+      // selectedDate.setSeconds(0);
+      // selectedDate.setMinutes(0);
+      // selectedDate.setHours(0);
       //find the selected day
-      const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
+      const index = days.findIndex(day => day.day === queue.date);
       if (index != -1) {
         //find room_type_id
         const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
@@ -598,8 +598,8 @@ export class IglooCalendar {
       bookingEvents: bookings,
     };
   }
-  private transformDateForScroll(date: Date) {
-    return moment(date).format('D_M_YYYY');
+  private transformDateForScroll(date: Moment) {
+    return date.format('YYYY-MM-DD');
   }
 
   shouldRenderCalendarView() {
@@ -627,16 +627,21 @@ export class IglooCalendar {
         this.showToBeAssigned = false;
         break;
       case 'calendar':
-        let dt = new Date();
+        let dt = moment();
         if (opt.data.start !== undefined && opt.data.end !== undefined) {
-          dt = opt.data.start.toDate();
+          dt = opt.data.start;
           this.handleDateSearch(opt.data);
         } else {
           //scroll to unassigned dates
-          dt = new Date(opt.data);
-          dt.setDate(dt.getDate() + 1);
+          // dt = new Date(opt.data);
+          // dt.setDate(dt.getDate() + 1);
+          // if (!opt?.noScroll) {
+          //   this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+          // }
+          dt = moment(opt.data, 'YYYY-MM-DD').add(1, 'days');
+
           if (!opt?.noScroll) {
-            this.scrollToElement(dt.getDate() + '_' + (dt.getMonth() + 1) + '_' + dt.getFullYear());
+            this.scrollToElement(dt.format('YYYY-MM-DD'));
           }
         }
         this.highlightedDate = this.transformDateForScroll(dt);
@@ -749,17 +754,17 @@ export class IglooCalendar {
     }
   }
   async handleDateSearch(dates: { start: Moment; end: Moment }) {
-    const startDate = moment(dates.start).toDate();
-    const defaultFromDate = moment(this.calDates.from).toDate();
-    const endDate = dates.end.toDate();
-    const defaultToDate = this.calendarData.endingDate;
-    if (startDate.getTime() < new Date(this.calDates.from).getTime()) {
+    const startDate = moment(dates.start);
+    const defaultFromDate = moment(this.calDates.from);
+    const endDate = dates.end;
+    const defaultToDate = moment(this.calendarData.endingDate);
+    if (startDate.isBefore(moment(this.calDates.from), 'dates')) {
       await this.addDatesToCalendar(moment(startDate).add(-1, 'days').format('YYYY-MM-DD'), moment(defaultFromDate).add(-1, 'days').format('YYYY-MM-DD'));
       this.calDates = { ...this.calDates, from: dates.start.add(-1, 'days').format('YYYY-MM-DD') };
       this.scrollToElement(this.transformDateForScroll(startDate));
-    } else if (startDate.getTime() > defaultFromDate.getTime() && startDate.getTime() < defaultToDate && endDate.getTime() < defaultToDate) {
+    } else if (startDate.isAfter(defaultFromDate, 'dates') && startDate.isBefore(defaultToDate, 'dates') && endDate.isBefore(defaultToDate, 'dates')) {
       this.scrollToElement(this.transformDateForScroll(startDate));
-    } else if (startDate.getTime() > defaultToDate) {
+    } else if (startDate.isAfter(defaultToDate, 'dates')) {
       const nextDay = getNextDay(new Date(this.calendarData.endingDate));
       await this.addDatesToCalendar(nextDay, moment(endDate).add(2, 'months').format('YYYY-MM-DD'));
       this.scrollToElement(this.transformDateForScroll(startDate));
