@@ -160,28 +160,30 @@ export class IglCalHeader {
   }
 
   getNewBookingModel() {
-    let today = new Date();
-    today.setHours(0, 0, 0, 0);
-    let from_date = this.getStringDateFormat(today);
-    today.setDate(today.getDate() + 1);
-    today.setHours(0, 0, 0, 0);
-    let to_date = this.getStringDateFormat(today);
+    // let today = new Date();
+    // today.setHours(0, 0, 0, 0);
+    // let from_date = this.getStringDateFormat(today);
+    // today.setDate(today.getDate() + 1);
+    // today.setHours(0, 0, 0, 0);
+    // let to_date = this.getStringDateFormat(today);\
+    const from_date = moment();
+    const to_date = moment().add(1, 'days');
     return {
       ID: '',
       NAME: '',
       EMAIL: '',
       PHONE: '',
       REFERENCE_TYPE: 'PHONE',
-      FROM_DATE: from_date, // "2023-07-09",
-      TO_DATE: to_date, // "2023-07-11",
+      FROM_DATE: from_date.format('YYYY-MM-DD'), // "2023-07-09",
+      TO_DATE: to_date.format('YYYY-MM-DD'), // "2023-07-11",
       roomsInfo: this.calendarData.roomsInfo,
       TITLE: locales.entries.Lcz_NewBooking,
       event_type: 'PLUS_BOOKING',
       legendData: this.calendarData.formattedLegendData,
       defaultDateRange: {
-        fromDate: new Date(from_date), //new Date("2023-09-10"),
+        fromDate: from_date.format('YYYY-MM-DD'), //new Date("2023-09-10"),
         fromDateStr: '', //"10 Sep 2023",
-        toDate: new Date(to_date), //new Date("2023-09-15"),
+        toDate: from_date.format('YYYY-MM-DD'), //new Date("2023-09-15"),
         toDateStr: '', // "15 Sep 2023",
         dateDifference: 0,
         editabled: true,

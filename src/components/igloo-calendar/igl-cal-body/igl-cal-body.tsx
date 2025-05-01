@@ -163,7 +163,9 @@ export class IglCalBody {
       startDate = to;
       endDate = from;
     }
-    const dateDiff = ((endDate.toDate() as any) - (startDate.toDate() as any)) / 86400000;
+    // const dateDiff = ((endDate.toDate() as any) - (startDate.toDate() as any)) / 86400000;
+    const dateDiff = (endDate.toDate().getTime() - startDate.toDate().getTime()) / 86400000;
+    console.log({ endDate: endDate.format('YYYY-MM-DD'), startDate: startDate.format('YYYY-MM-DD') });
     this.newEvent = {
       ID: 'NEW_TEMP_EVENT',
       NAME: <span>&nbsp;</span>,
@@ -207,8 +209,8 @@ export class IglCalBody {
     let popupTitle = roomCategory.name + ' ' + this.getRoomName(this.getRoomById(this.getCategoryRooms(roomCategory), this.selectedRooms[keys[0]].roomId));
     this.newEvent.BLOCK_DATES_TITLE = `${locales.entries.Lcz_BlockDatesFor} ${popupTitle}`;
     this.newEvent.TITLE += popupTitle;
-    this.newEvent.defaultDateRange.toDate = startDate;
-    this.newEvent.defaultDateRange.fromDate = endDate;
+    this.newEvent.defaultDateRange.toDate = endDate;
+    this.newEvent.defaultDateRange.fromDate = startDate;
     this.newEvent.defaultDateRange.fromDateStr = startDate.format('YYYY-MM-DD');
     this.newEvent.defaultDateRange.toDateStr = endDate.format('YYYY-MM-DD');
     this.newEvent.ENTRY_DATE = moment().format('YYYY-MM-DD');
@@ -218,7 +220,7 @@ export class IglCalBody {
     if (splitBookingEvents) {
       this.newEvent.splitBookingEvents = splitBookingEvents;
     }
-
+    console.warn({ newEvent: this.newEvent });
     this.getBookingData().push(this.newEvent);
     return this.newEvent;
   }
@@ -390,11 +392,6 @@ export class IglCalBody {
   }
 
   render() {
-    (() => {
-      setTimeout(() => {
-        console.log(document.querySelector('[data-date="2_5_2025"][data-room="3"]'));
-      }, 2000);
-    })();
     // onDragStart={event => this.handleDragStart(event)} draggable={true}
     return (
       <Host>
