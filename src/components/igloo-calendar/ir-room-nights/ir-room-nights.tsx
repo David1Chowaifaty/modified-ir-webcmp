@@ -3,7 +3,7 @@ import { BookingService } from '@/services/booking.service';
 import { convertDatePrice, formatDate, getDaysArray } from '@/utils/utils';
 import { Booking, Day, IUnit, Room } from '@/models/booking.dto';
 import { IRoomNightsDataEventPayload } from '@/models/property-types';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import locales from '@/stores/locales.store';
 import { Variation } from '@/models/property';
 
@@ -32,14 +32,14 @@ export class IrRoomNights {
   @State() isEndDateBeforeFromDate: boolean = false;
   @State() defaultTotalNights = 0;
   @State() isInputFocused = -1;
-  @State() dates: { from_date: Date; to_date: Date } = { from_date: new Date(), to_date: new Date() };
+  @State() dates: { from_date: Moment; to_date: Moment } = { from_date: moment(), to_date: moment() };
 
   @Event() closeRoomNightsDialog: EventEmitter<IRoomNightsDataEventPayload>;
 
   private bookingService = new BookingService();
 
   componentWillLoad() {
-    this.dates = { from_date: new Date(this.fromDate), to_date: new Date(this.toDate) };
+    this.dates = { from_date: moment(this.fromDate, 'YYYY-MM-DD'), to_date: moment(this.toDate, 'YYYY-MM-DD') };
     this.init();
   }
 
@@ -50,11 +50,11 @@ export class IrRoomNights {
     try {
       const { from_date } = this.defaultDates;
       if (moment(from_date, 'YYYY-MM-DD').isBefore(moment(this.fromDate, 'YYYY-MM-DD'))) {
-        this.dates.from_date = new Date(from_date);
+        this.dates.from_date = moment(from_date, 'YYYY-MM-DD');
       } else {
-        this.dates.from_date = new Date(this.fromDate);
+        this.dates.from_date = moment(this.fromDate, 'YYYY-MM-DD');
       }
-      this.dates.to_date = new Date(this.toDate);
+      this.dates.to_date = moment(this.toDate, 'YYYY-MM-DD');
       this.bookingEvent = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       if (this.bookingEvent) {
         const filteredRooms = this.bookingEvent.rooms.filter(room => room.identifier === this.identifier);
