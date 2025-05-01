@@ -16,7 +16,7 @@ export class IrListingModal {
   @Prop() editBooking: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' };
 
   @State() isOpen: boolean = false;
-  @State() deletionStage = 1;
+  @State() deletionStage = 2;
   @State() selectedDesignation: string;
   @State() loadingBtn: 'confirm' | 'just_delete' | 'recover_and_delete' | null = null;
 
@@ -29,10 +29,11 @@ export class IrListingModal {
 
   @Event() modalClosed: EventEmitter<null>;
   @Event() resetData: EventEmitter<string>;
+
   @Method()
   async closeModal() {
     this.isOpen = false;
-    this.deletionStage = 1;
+    // this.deletionStage = 1;
     this.selectedDesignation = booking_listing.settlement_methods[0].name;
     this.modalClosed.emit(null);
   }
@@ -50,6 +51,7 @@ export class IrListingModal {
     let name = target.name;
     try {
       if (name === 'confirm') {
+        this.loadingBtn = 'confirm';
         if (this.editBooking.cause === 'payment') {
           await this.paymentService.AddPayment(
             {
@@ -63,26 +65,27 @@ export class IrListingModal {
             this.editBooking.booking.booking_nbr,
           );
           this.resetData.emit(this.editBooking.booking.booking_nbr);
-          this.closeModal();
+          // this.closeModal();
         } else {
           if (this.deletionStage === 2) {
-            this.loadingBtn = 'recover_and_delete';
+            // this.loadingBtn = 'recover_and_delete';
             await this.bookingListingsService.removeExposedBooking(this.editBooking.booking.booking_nbr, true);
             this.filterBookings();
           }
-          if (this.deletionStage === 1) {
-            this.deletionStage = 2;
-          }
+          // if (this.deletionStage === 1) {
+          //   this.deletionStage = 2;
+          // }
         }
       }
       if (name === 'cancel') {
-        if (this.deletionStage === 2) {
-          this.loadingBtn = 'just_delete';
-          await this.bookingListingsService.removeExposedBooking(this.editBooking.booking.booking_nbr, false);
-          this.filterBookings();
-        } else {
-          this.closeModal();
-        }
+        // if (this.deletionStage === 2) {
+        //   this.loadingBtn = 'just_delete';
+        //   await this.bookingListingsService.removeExposedBooking(this.editBooking.booking.booking_nbr, false);
+        //   this.filterBookings();
+        // } else {
+        //   this.closeModal();
+        // }
+        this.closeModal();
       }
     } catch (error) {
       console.error(error);
@@ -98,22 +101,23 @@ export class IrListingModal {
     if (this.editBooking.cause === 'payment') {
       return locales.entries?.Lcz_MarkBookingAsPaid.replace('%1', this.editBooking.booking.booking_nbr);
     } else {
-      if (this.deletionStage === 1) {
-        return locales.entries.Lcz_SureYouWantToDeleteBookingNbr + this.editBooking?.booking.booking_nbr;
-      }
-      return locales.entries.Lcz_WantToRecoverAllotment;
+      // if (this.deletionStage === 1) {
+      //   return locales.entries.Lcz_SureYouWantToDeleteBookingNbr + this.editBooking?.booking.booking_nbr;
+      // }
+      // return locales.entries.Lcz_WantToRecoverAllotment;
+      return locales.entries.Lcz_SureYouWantToDeleteBookingNbr + this.editBooking?.booking.booking_nbr;
     }
   }
   renderConfirmationTitle() {
-    if (this.deletionStage === 2) {
-      return locales.entries.Lcz_RecoverAndDelete;
-    }
+    // if (this.deletionStage === 2) {
+    //   return locales.entries.Lcz_RecoverAndDelete;
+    // }
     return locales.entries.Lcz_Confirm;
   }
-  renderCancelationTitle() {
-    if (this.deletionStage === 2) {
-      return locales.entries.Lcz_JustDelete;
-    }
+  renderCancellationTitle() {
+    // if (this.deletionStage === 2) {
+    //   return locales.entries.Lcz_JustDelete;
+    // }
     return locales.entries.Lcz_Cancel;
   }
   render() {
@@ -166,9 +170,17 @@ export class IrListingModal {
             </div>
 
             <div class={`ir-alert-footer border-0 d-flex justify-content-end`}>
-              <ir-button isLoading={this.loadingBtn === 'just_delete'} icon={''} btn_color={'secondary'} btn_block text={this.renderCancelationTitle()} name={'cancel'}></ir-button>
               <ir-button
-                isLoading={this.loadingBtn === 'recover_and_delete'}
+                isLoading={this.loadingBtn === 'just_delete'}
+                icon={''}
+                btn_color={'secondary'}
+                btn_block
+                text={this.renderCancellationTitle()}
+                name={'cancel'}
+              ></ir-button>
+              <ir-button
+                isLoading={this.loadingBtn === 'confirm'}
+                // isLoading={this.loadingBtn === 'recover_and_delete'}
                 icon={''}
                 btn_color={'primary'}
                 btn_block
