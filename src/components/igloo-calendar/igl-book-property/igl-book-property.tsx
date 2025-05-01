@@ -69,7 +69,7 @@ export class IglBookProperty {
   private wasBlockedUnit: boolean;
 
   async componentWillLoad() {
-    console.log('<==>roomtypes<==>', booking_store?.roomTypes);
+    console.warn(this.bookingData);
     if (booking_store.roomTypes) {
       modifyBookingStore('roomTypes', []);
       modifyBookingStore('ratePlanSelections', {});

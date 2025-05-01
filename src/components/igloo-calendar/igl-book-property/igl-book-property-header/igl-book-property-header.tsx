@@ -239,6 +239,7 @@ export class IglBookPropertyHeader {
   }
 
   render() {
+    console.log(this.bookingDataDefaultDateRange);
     const showSourceNode = this.showSplitBookingOption ? this.getSplitBookingList() : this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM') ? false : true;
     return (
       <Host>

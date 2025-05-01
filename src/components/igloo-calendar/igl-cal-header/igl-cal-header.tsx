@@ -183,7 +183,7 @@ export class IglCalHeader {
       defaultDateRange: {
         fromDate: from_date.format('YYYY-MM-DD'), //new Date("2023-09-10"),
         fromDateStr: '', //"10 Sep 2023",
-        toDate: from_date.format('YYYY-MM-DD'), //new Date("2023-09-15"),
+        toDate: to_date.format('YYYY-MM-DD'), //new Date("2023-09-15"),
         toDateStr: '', // "15 Sep 2023",
         dateDifference: 0,
         editabled: true,
