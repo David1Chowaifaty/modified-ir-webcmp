@@ -1213,6 +1213,7 @@ export namespace Components {
         "isEdit": boolean;
         "language": string;
         "property_id": number;
+        "superAdminId": string;
         "user": User;
         "userTypeCode": string | number;
         "userTypes": { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
@@ -1230,6 +1231,7 @@ export namespace Components {
         "allowedUsersTypes": AllowedUser[];
         "haveAdminPrivileges": boolean;
         "isSuperAdmin": boolean;
+        "superAdminId": string;
         "userTypeCode": string | number;
         "userTypes": Map<string | number, string>;
         "users": User[];
@@ -4672,6 +4674,7 @@ declare namespace LocalJSX {
         "onCloseSideBar"?: (event: IrUserFormPanelCustomEvent<null>) => void;
         "onResetData"?: (event: IrUserFormPanelCustomEvent<null>) => void;
         "property_id"?: number;
+        "superAdminId"?: string;
         "user"?: User;
         "userTypeCode"?: string | number;
         "userTypes"?: { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
@@ -4691,6 +4694,7 @@ declare namespace LocalJSX {
         "isSuperAdmin"?: boolean;
         "onResetData"?: (event: IrUserManagementTableCustomEvent<null>) => void;
         "onToast"?: (event: IrUserManagementTableCustomEvent<IToast>) => void;
+        "superAdminId"?: string;
         "userTypeCode"?: string | number;
         "userTypes"?: Map<string | number, string>;
         "users"?: User[];

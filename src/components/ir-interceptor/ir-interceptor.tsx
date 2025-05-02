@@ -2,6 +2,7 @@ import { Component, Event, EventEmitter, Host, Listen, Prop, State, h } from '@s
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { IToast } from '@components/ui/ir-toast/toast';
 import interceptor_requests from '@/stores/ir-interceptor.store';
+import { InterceptorError } from './InterceptorError';
 
 @Component({
   tag: 'ir-interceptor',
@@ -72,15 +73,15 @@ export class IrInterceptor {
     }
     interceptor_requests[extractedUrl] = 'done';
     if (response.data.ExceptionMsg?.trim()) {
-      this.handleError(response.data.ExceptionMsg, extractedUrl);
-      throw new Error(response.data.ExceptionMsg);
+      this.handleError(response.data.ExceptionMsg, extractedUrl, response.data.ExceptionCode);
+      throw new InterceptorError(response.data.ExceptionMsg, response.data.ExceptionCode);
     }
     return response;
   }
 
-  handleError(error: string, url: string) {
+  handleError(error: string, url: string, code: string) {
     const shouldSuppressToast = this.suppressToastEndpoints.includes(url);
-    if (!shouldSuppressToast) {
+    if (!shouldSuppressToast || (shouldSuppressToast && !code)) {
       this.toast.emit({
         type: 'error',
         title: error,

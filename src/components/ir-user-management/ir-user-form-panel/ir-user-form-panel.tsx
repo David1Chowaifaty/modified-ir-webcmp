@@ -11,6 +11,7 @@ import { _formatTime } from '@/components/ir-booking-details/functions';
 import moment from 'moment';
 import { UAParser } from 'ua-parser-js';
 import { AllowedUser } from '../types';
+import { InterceptorError } from '@/components/ir-interceptor/InterceptorError';
 
 @Component({
   tag: 'ir-user-form-panel',
@@ -24,6 +25,7 @@ export class IrUserFormPanel {
   @Prop() language: string = 'en';
   @Prop() property_id: number;
   @Prop() haveAdminPrivileges: boolean;
+  @Prop() superAdminId: string = '5';
   @Prop() userTypeCode: string | number;
   @Prop() allowedUsersTypes: AllowedUser[] = [];
 
@@ -51,13 +53,13 @@ export class IrUserFormPanel {
   @State() showPasswordValidation: boolean = false;
   @State() isUsernameTaken: boolean;
   @State() isOpen: boolean;
+  @State() emailErrorMessage: string;
 
   @Event() resetData: EventEmitter<null>;
   @Event() closeSideBar: EventEmitter<null>;
 
   private housekeepingService = new HouseKeepingService();
   private userService = new UserService();
-
   private disableFields = false;
   private isPropertyAdmin = false;
   private mobileMask = {};
@@ -77,7 +79,7 @@ export class IrUserFormPanel {
         },
         { message: 'Password must be at least 8 characters long.' },
       ),
-    type: z.coerce.string().nonempty().min(2),
+    type: z.union([z.literal(1), z.literal(this.superAdminId ?? '5'), z.coerce.string().nonempty().min(2)]),
     username: z
       .string()
       .min(3)
@@ -124,6 +126,7 @@ export class IrUserFormPanel {
   private async createOrUpdateUser() {
     try {
       this.isLoading = true;
+      this.emailErrorMessage = undefined;
       if (!this.autoValidate) {
         this.autoValidate = true;
       }
@@ -143,12 +146,15 @@ export class IrUserFormPanel {
     } catch (error) {
       const e: any = {};
       if (error instanceof ZodError) {
+        console.error(error);
         error.issues.map(err => {
           e[err.path[0]] = true;
         });
-        this.errors = e;
+      } else if (error instanceof InterceptorError && error.code === 'EMAIL_EXISTS') {
+        e['email'] = true;
+        this.emailErrorMessage = 'This email is already in use. Please create another one.';
       }
-      console.error(error);
+      this.errors = e;
     } finally {
       this.isLoading = false;
     }
@@ -186,6 +192,7 @@ export class IrUserFormPanel {
             value={this.userInfo.email}
             onInputBlur={this.handleBlur.bind(this)}
             maxLength={40}
+            errorMessage={this.emailErrorMessage}
           />
           <ir-input-text
             testId="mobile"
@@ -201,7 +208,7 @@ export class IrUserFormPanel {
             value={this.userInfo.mobile}
             onTextChange={e => this.updateUserField('mobile', e.detail)}
           />
-          {(this.user && this.user?.type?.toString() === '1') || this.isPropertyAdmin ? null : (
+          {(this.user && this.user?.type?.toString() === this.superAdminId) || this.isPropertyAdmin ? null : (
             <div class="mb-1">
               <ir-select
                 testId="user_type"
@@ -217,7 +224,7 @@ export class IrUserFormPanel {
               />
             </div>
           )}
-          {this.user?.type?.toString() !== '1' && (
+          {this.user?.type?.toString() !== '5' && (
             <ir-input-text
               testId="username"
               zod={this.userSchema.pick({ username: true })}
@@ -255,7 +262,7 @@ export class IrUserFormPanel {
             </Fragment>
           ) : (
             this.haveAdminPrivileges &&
-            this.user.type.toString() !== '1' &&
+            this.user.type.toString() !== this.superAdminId &&
             (this.user?.type.toString() === '17' && this.userTypeCode?.toString() === '17' ? null : (
               <div class="d-flex mt-2 align-items-center justify-content-between">
                 <h4 class="m-0 p-0 logins-history-title">Password</h4>

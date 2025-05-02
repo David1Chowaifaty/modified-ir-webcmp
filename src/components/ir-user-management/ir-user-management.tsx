@@ -35,6 +35,8 @@ export class IrUserManagement {
   private userTypes: Map<number | string, string> = new Map();
   private socket: Socket;
 
+  private superAdminId = '5';
+
   @Watch('ticket')
   ticketChanged(newValue: string, oldValue: string) {
     if (newValue === oldValue) {
@@ -141,7 +143,7 @@ export class IrUserManagement {
     this.users = [...users].sort((u1: User, u2: User) => {
       const priority = (u: User) => {
         const t = u.type.toString();
-        if (t === '1') return 0;
+        if (t === this.superAdminId) return 0;
         if (t === '17') return 1;
         return 2;
       };
@@ -191,7 +193,7 @@ export class IrUserManagement {
     return (
       <Host>
         <ir-toast></ir-toast>
-        <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd']}></ir-interceptor>
+        <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd', '/Handle_Exposed_User']}></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
           <div class="d-flex  pb-2 align-items-center justify-content-between">
             <h3 class="mb-1 mb-md-0">Extranet Users</h3>
@@ -200,10 +202,10 @@ export class IrUserManagement {
             <ir-user-management-table
               allowedUsersTypes={this.allowedUsersTypes}
               userTypeCode={this.userTypeCode}
-              haveAdminPrivileges={['1', '17'].includes(this.userTypeCode?.toString())}
+              haveAdminPrivileges={[this.superAdminId, '17'].includes(this.userTypeCode?.toString())}
               userTypes={this.userTypes}
               class="card"
-              isSuperAdmin={this.userTypeCode?.toString() === '1'}
+              isSuperAdmin={this.userTypeCode?.toString() === this.superAdminId}
               users={this.users}
             ></ir-user-management-table>
           </div>

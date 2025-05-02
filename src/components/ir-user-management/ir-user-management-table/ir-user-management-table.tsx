@@ -20,6 +20,7 @@ export class IrUserManagementTable {
   @Prop() userTypes: Map<string | number, string> = new Map();
   @Prop() userTypeCode: string | number;
   @Prop() haveAdminPrivileges: boolean;
+  @Prop() superAdminId = '5';
   @Prop() allowedUsersTypes: AllowedUser[] = [];
 
   @State() currentTrigger: any = null;
@@ -112,6 +113,7 @@ export class IrUserManagementTable {
     }
     return (
       <ir-user-form-panel
+        superAdminId={this.superAdminId}
         allowedUsersTypes={this.allowedUsersTypes}
         userTypeCode={this.userTypeCode}
         haveAdminPrivileges={this.haveAdminPrivileges}
@@ -165,14 +167,14 @@ export class IrUserManagementTable {
             </thead>
             <tbody>
               {this.users.map(user => {
-                const isUserSuperAdmin = user.type.toString() === '1';
+                const isUserSuperAdmin = user.type.toString() === this.superAdminId;
                 const latestSignIn = user.sign_ins ? user.sign_ins[0] : null;
                 return (
                   <tr key={user.id} class="ir-table-row">
                     <td>{user.username}</td>
                     <td>{user.email}</td>
                     <td>{user.mobile ?? 'N/A'}</td>
-                    <td>{this.userTypes.get(user.type.toString())}</td>
+                    <td>{user.type.toString() === this.superAdminId ? 'Super admin' : this.userTypes.get(user.type.toString())}</td>
                     <td>
                       {latestSignIn && new Date(latestSignIn.date).getFullYear() > 1900
                         ? moment(latestSignIn.date, 'YYYY-MM-DD').format('DD-MMM-YYYY') + ' ' + _formatTime(latestSignIn.hour.toString(), latestSignIn.minute.toString())
@@ -188,20 +190,36 @@ export class IrUserManagementTable {
                     )}
                     {this.haveAdminPrivileges && (
                       <td>
-                        <button
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          data-testid="user-verification"
-                          title={user.is_email_verified ? '' : 'Click to resend verification email.'}
-                          class={`m-0  badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}
-                          //TODO add isRequestPending for when the request is sent the buttons should be disabled
-                          disabled={user.is_email_verified}
-                          onClick={() => {
-                            this.sendVerificationEmail(user);
-                          }}
-                        >
-                          {user.is_email_verified ? 'Verified' : 'Not verified'}
-                        </button>
+                        {user.is_email_verified ? (
+                          <button
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            data-testid="user-verification"
+                            title={user.is_email_verified ? '' : 'Click to resend verification email.'}
+                            class={`m-0  badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}
+                            //TODO add isRequestPending for when the request is sent the buttons should be disabled
+                            disabled={user.is_email_verified}
+                            onClick={() => {
+                              this.sendVerificationEmail(user);
+                            }}
+                          >
+                            {user.is_email_verified ? 'Verified' : 'Not verified'}
+                          </button>
+                        ) : (
+                          <ir-button
+                            class="m-0 p-0"
+                            btn_styles={'px-0 m-0 text-left'}
+                            labelStyle={{ padding: '0' }}
+                            btnStyle={{ paddingHorizontal: '0', width: 'fit-content' }}
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            data-testid="user-verification"
+                            title={user.is_email_verified ? '' : 'Click to resend verification email.'}
+                            btn_color="link"
+                            size="sm"
+                            text="Not verified"
+                          ></ir-button>
+                        )}
                       </td>
                     )}
 
