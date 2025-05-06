@@ -24,7 +24,7 @@
   transition: all 0.3s ease-in-out;
 }
 .ir-alert-content {
-  padding: 10px;
+  padding: 1rem;
   background: white;
   border-radius: 5px;
 }

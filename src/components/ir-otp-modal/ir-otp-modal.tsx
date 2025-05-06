@@ -75,10 +75,6 @@ export class IrOtpModal {
   private handleOtpComplete = (e: CustomEvent<string>) => {
     this.error = '';
     this.otp = e.detail;
-    if (this.otp.length === 6) {
-      // auto-submit
-      this.verifyOtp();
-    }
   };
 
   private async verifyOtp() {
@@ -105,10 +101,10 @@ export class IrOtpModal {
     this.startTimer();
   }
 
-  private onCancel = () => {
-    this.otpFinished.emit('');
-    this.closeModal();
-  };
+  // private onCancel = () => {
+  //   this.otpFinished.emit('');
+  //   this.closeModal();
+  // };
 
   render() {
     return (
@@ -117,21 +113,21 @@ export class IrOtpModal {
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Verify Code</h5>
-                <button type="button" class="close" onClick={this.onCancel}>
+                <h5 class="modal-title">Verify Your Identity</h5>
+                {/* <button type="button" class="close" onClick={this.onCancel}>
                   <span aria-hidden="true">&times;</span>
-                </button>
+                </button> */}
               </div>
 
               <div class="modal-body d-flex  flex-column">
-                <p>Please enter the 6-digit code we just sent you.</p>
+                <p class="medium">Please enter the 6-digit code we just sent you.</p>
                 <ir-otp
                   autoFocus
                   // value={this.otp}
                   onOtpComplete={this.handleOtpComplete}
                 ></ir-otp>
 
-                {this.error && <p class="text-danger small mt-2">{this.error}</p>}
+                {this.error && <p class="text-danger small mt-1 p-0 mb-0">{this.error}</p>}
 
                 {this.showResend && (
                   <p class="small mt-1">
@@ -152,9 +148,16 @@ export class IrOtpModal {
                 )}
               </div>
 
-              <div class="modal-footer">
-                <ir-button text="Cancel" btn_color="secondary" onClick={this.onCancel} btn_disabled={this.isLoading}></ir-button>
-                <ir-button text="Verify" isLoading={this.isLoading} btn_disabled={this.otp.length < 6 || this.isLoading} onClick={() => this.verifyOtp()}></ir-button>
+              <div class="modal-footer justify-content-auto">
+                {/* <ir-button text="Cancel" btn_color="secondary" onClick={this.onCancel} btn_disabled={this.isLoading}></ir-button> */}
+                <ir-button
+                  class="w-100"
+                  btn_styles={'flex-fill'}
+                  text="Verify now"
+                  isLoading={this.isLoading}
+                  btn_disabled={this.otp.length < 6 || this.isLoading}
+                  onClick={() => this.verifyOtp()}
+                ></ir-button>
               </div>
             </div>
           </div>
