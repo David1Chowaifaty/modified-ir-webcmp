@@ -8,6 +8,7 @@ export interface UserParams {
   mobile: string;
   type: number | string;
   is_to_remove?: boolean;
+  is_email_verified?: boolean;
 }
 interface SignIn {
   country: string;

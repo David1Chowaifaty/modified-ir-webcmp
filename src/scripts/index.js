@@ -28,7 +28,7 @@ async function getToken() {
 
         if (!token || isExpired) {
             console.log("Token missing or expired. Fetching new one...");
-            const newToken = await authenticate("A35", "QAZqaz900_");
+            const newToken = await authenticate("A35", "H@mburger9");
 
             if (newToken) {
                 localStorage.setItem("token", newToken);

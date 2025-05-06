@@ -844,6 +844,49 @@ export namespace Components {
     interface IrOtaServices {
         "services": OtaService[];
     }
+    interface IrOtp {
+        /**
+          * Auto focus on the first input when component loads
+         */
+        "autoFocus": boolean;
+        /**
+          * Whether the input is disabled
+         */
+        "disabled": boolean;
+        /**
+          * The length of the OTP code
+         */
+        "length": number;
+        /**
+          * Allow only numbers (0-9) as input
+         */
+        "numbersOnly": boolean;
+        /**
+          * Placeholder character to display
+         */
+        "placeholder": string;
+        /**
+          * Whether to mask the input (show dots instead of text)
+         */
+        "secure": boolean;
+        /**
+          * Input type - can be 'text', 'password', 'number', or 'tel'
+         */
+        "type": 'text' | 'password' | 'number' | 'tel';
+    }
+    interface IrOtpModal {
+        /**
+          * Hide & clear timer
+         */
+        "closeModal": () => Promise<void>;
+        /**
+          * Open & reset everything
+         */
+        "openModal": () => Promise<void>;
+        "requestUrl": string;
+        "resendTimer": number;
+        "showResend": boolean;
+    }
     interface IrPasswordValidator {
         /**
           * The password string to validate
@@ -1467,6 +1510,14 @@ export interface IrModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrOptionDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrOptionDetailsElement;
+}
+export interface IrOtpCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrOtpElement;
+}
+export interface IrOtpModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrOtpModalElement;
 }
 export interface IrPasswordValidatorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2684,6 +2735,41 @@ declare global {
         prototype: HTMLIrOtaServicesElement;
         new (): HTMLIrOtaServicesElement;
     };
+    interface HTMLIrOtpElementEventMap {
+        "otpChange": string;
+        "otpComplete": string;
+    }
+    interface HTMLIrOtpElement extends Components.IrOtp, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrOtpElementEventMap>(type: K, listener: (this: HTMLIrOtpElement, ev: IrOtpCustomEvent<HTMLIrOtpElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrOtpElementEventMap>(type: K, listener: (this: HTMLIrOtpElement, ev: IrOtpCustomEvent<HTMLIrOtpElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrOtpElement: {
+        prototype: HTMLIrOtpElement;
+        new (): HTMLIrOtpElement;
+    };
+    interface HTMLIrOtpModalElementEventMap {
+        "otpFinished": string;
+    }
+    interface HTMLIrOtpModalElement extends Components.IrOtpModal, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrOtpModalElementEventMap>(type: K, listener: (this: HTMLIrOtpModalElement, ev: IrOtpModalCustomEvent<HTMLIrOtpModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrOtpModalElementEventMap>(type: K, listener: (this: HTMLIrOtpModalElement, ev: IrOtpModalCustomEvent<HTMLIrOtpModalElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrOtpModalElement: {
+        prototype: HTMLIrOtpModalElement;
+        new (): HTMLIrOtpModalElement;
+    };
     interface HTMLIrPasswordValidatorElementEventMap {
         "passwordValidationChange": boolean;
     }
@@ -3299,6 +3385,8 @@ declare global {
         "ir-option-details": HTMLIrOptionDetailsElement;
         "ir-ota-service": HTMLIrOtaServiceElement;
         "ir-ota-services": HTMLIrOtaServicesElement;
+        "ir-otp": HTMLIrOtpElement;
+        "ir-otp-modal": HTMLIrOtpModalElement;
         "ir-password-validator": HTMLIrPasswordValidatorElement;
         "ir-payment-actions": HTMLIrPaymentActionsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
@@ -4254,6 +4342,53 @@ declare namespace LocalJSX {
     interface IrOtaServices {
         "services"?: OtaService[];
     }
+    interface IrOtp {
+        /**
+          * Auto focus on the first input when component loads
+         */
+        "autoFocus"?: boolean;
+        /**
+          * Whether the input is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * The length of the OTP code
+         */
+        "length"?: number;
+        /**
+          * Allow only numbers (0-9) as input
+         */
+        "numbersOnly"?: boolean;
+        /**
+          * Event emitted when the OTP value changes
+         */
+        "onOtpChange"?: (event: IrOtpCustomEvent<string>) => void;
+        /**
+          * Event emitted when the OTP is complete
+         */
+        "onOtpComplete"?: (event: IrOtpCustomEvent<string>) => void;
+        /**
+          * Placeholder character to display
+         */
+        "placeholder"?: string;
+        /**
+          * Whether to mask the input (show dots instead of text)
+         */
+        "secure"?: boolean;
+        /**
+          * Input type - can be 'text', 'password', 'number', or 'tel'
+         */
+        "type"?: 'text' | 'password' | 'number' | 'tel';
+    }
+    interface IrOtpModal {
+        /**
+          * Emits the final OTP (or empty on cancel)
+         */
+        "onOtpFinished"?: (event: IrOtpModalCustomEvent<string>) => void;
+        "requestUrl"?: string;
+        "resendTimer"?: number;
+        "showResend"?: boolean;
+    }
     interface IrPasswordValidator {
         "onPasswordValidationChange"?: (event: IrPasswordValidatorCustomEvent<boolean>) => void;
         /**
@@ -4787,6 +4922,8 @@ declare namespace LocalJSX {
         "ir-option-details": IrOptionDetails;
         "ir-ota-service": IrOtaService;
         "ir-ota-services": IrOtaServices;
+        "ir-otp": IrOtp;
+        "ir-otp-modal": IrOtpModal;
         "ir-password-validator": IrPasswordValidator;
         "ir-payment-actions": IrPaymentActions;
         "ir-payment-details": IrPaymentDetails;
@@ -4905,6 +5042,8 @@ declare module "@stencil/core" {
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
             "ir-ota-service": LocalJSX.IrOtaService & JSXBase.HTMLAttributes<HTMLIrOtaServiceElement>;
             "ir-ota-services": LocalJSX.IrOtaServices & JSXBase.HTMLAttributes<HTMLIrOtaServicesElement>;
+            "ir-otp": LocalJSX.IrOtp & JSXBase.HTMLAttributes<HTMLIrOtpElement>;
+            "ir-otp-modal": LocalJSX.IrOtpModal & JSXBase.HTMLAttributes<HTMLIrOtpModalElement>;
             "ir-password-validator": LocalJSX.IrPasswordValidator & JSXBase.HTMLAttributes<HTMLIrPasswordValidatorElement>;
             "ir-payment-actions": LocalJSX.IrPaymentActions & JSXBase.HTMLAttributes<HTMLIrPaymentActionsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;

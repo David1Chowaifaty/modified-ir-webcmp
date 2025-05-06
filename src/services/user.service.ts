@@ -1,9 +1,11 @@
 import { UserParams } from '@/models/Users';
+import { sleep } from '@/utils/utils';
 import axios from 'axios';
 
 export class UserService {
   public async sendVerificationEmail() {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
+    await sleep(400);
   }
   public async checkUserExistence(params: { UserName: string }): Promise<boolean> {
     const { data } = await axios.post('/CheckUserExistence', params);

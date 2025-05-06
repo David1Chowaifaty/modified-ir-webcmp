@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+.modal-header {
+  border-bottom: 0px !important;
+}
+.modal-footer {
+  border-top: 0 !important;
+}

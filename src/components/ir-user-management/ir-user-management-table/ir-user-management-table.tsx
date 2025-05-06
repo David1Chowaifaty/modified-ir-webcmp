@@ -25,6 +25,7 @@ export class IrUserManagementTable {
 
   @State() currentTrigger: any = null;
   @State() user: User = null;
+  @State() modalType: 'verify' | 'delete';
 
   //Permissions
   @State() canDelete: boolean;
@@ -60,7 +61,7 @@ export class IrUserManagementTable {
     await this.userService.handleExposedUser({
       email: user.email,
       id: user.id,
-      is_active: user.is_active,
+      is_active: e.detail,
       mobile: user.mobile,
       password: user.password,
       type: user.type,
@@ -73,7 +74,7 @@ export class IrUserManagementTable {
       type: 'success',
     });
   }
-  private async removeUser(e: CustomEvent) {
+  private async executeUserAction(e: CustomEvent) {
     try {
       e.stopImmediatePropagation();
       e.stopPropagation();
@@ -81,15 +82,16 @@ export class IrUserManagementTable {
         email: this.user.email,
         id: this.user.id,
         is_active: this.user.is_active,
+        is_email_verified: this.modalType === 'verify' ? false : this.user.is_email_verified,
         mobile: this.user.mobile,
         password: this.user.password,
         type: this.user.type,
         username: this.user.username,
-        is_to_remove: true,
+        is_to_remove: this.modalType === 'delete',
       });
       this.resetData.emit(null);
     } finally {
-      this.user = null;
+      this.resetModalState();
       this.modalRef.closeModal();
     }
   }
@@ -99,7 +101,7 @@ export class IrUserManagementTable {
       await this.userService.sendVerificationEmail();
       this.toast.emit({
         position: 'top-right',
-        title: "We've sent you a verification email. Please check your inbox to confirm your account.",
+        title: `We've sent a verification email to ${this.maskEmail(user.email)}.`,
         description: '',
         type: 'success',
       });
@@ -123,6 +125,28 @@ export class IrUserManagementTable {
         isEdit={this.currentTrigger?.isEdit}
       ></ir-user-form-panel>
     );
+  }
+  private openModal(user: User, type: 'verify' | 'delete') {
+    if (!this.modalRef || !user) {
+      return;
+    }
+    this.user = user;
+    this.modalType = type;
+    this.modalRef.openModal();
+  }
+
+  private maskEmail(email: string): string {
+    if (!email || !email.includes('@')) return '';
+
+    const [localPart, domain] = email.split('@');
+    const visible = localPart.slice(0, 1); // show only the first letter
+    const masked = '*'.repeat(Math.max(localPart.length - 1, 1)); // mask rest
+
+    return `${visible}${masked}@${domain}`;
+  }
+  private resetModalState() {
+    this.user = null;
+    this.modalType = null;
   }
   render() {
     return (
@@ -198,9 +222,9 @@ export class IrUserManagementTable {
                             title={user.is_email_verified ? '' : 'Click to resend verification email.'}
                             class={`m-0  badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}
                             //TODO add isRequestPending for when the request is sent the buttons should be disabled
-                            disabled={user.is_email_verified}
+                            // disabled={user.is_email_verified}
                             onClick={() => {
-                              this.sendVerificationEmail(user);
+                              this.openModal(user, 'verify');
                             }}
                           >
                             {user.is_email_verified ? 'Verified' : 'Not verified'}
@@ -208,6 +232,7 @@ export class IrUserManagementTable {
                         ) : (
                           <ir-button
                             class="m-0 p-0"
+                            onClickHandler={() => this.sendVerificationEmail(user)}
                             btn_styles={'px-0 m-0 text-left'}
                             labelStyle={{ padding: '0' }}
                             btnStyle={{ paddingHorizontal: '0', width: 'fit-content' }}
@@ -253,8 +278,7 @@ export class IrUserManagementTable {
                               title={locales.entries.Lcz_DeleteHousekeeper}
                               icon="ft-trash-2 danger h5 pointer"
                               onIconClickHandler={() => {
-                                this.user = user;
-                                this.modalRef.openModal();
+                                this.openModal(user, 'delete');
                               }}
                             >
                               <svg slot="icon" fill="#ff2441" xmlns="http://www.w3.org/2000/svg" height="16" width="14.25" viewBox="0 0 448 512">
@@ -284,11 +308,14 @@ export class IrUserManagementTable {
         </ir-sidebar>
         <ir-modal
           autoClose={false}
-          modalBody={`Are you sure you want to delete ${this.user?.username}?`}
+          modalBody={
+            this.modalType === 'delete' ? `Are you sure you want to delete ${this.user?.username}?` : `Are you sure you want to unverify ${this.maskEmail(this.user?.email)}`
+          }
           rightBtnColor="danger"
           isLoading={isRequestPending('/Handle_Exposed_User')}
-          rightBtnText={locales.entries.Lcz_Delete}
-          onConfirmModal={this.removeUser.bind(this)}
+          onCancelModal={this.resetModalState.bind(this)}
+          rightBtnText={this.modalType === 'verify' ? locales.entries.Lcz_Confirm : locales.entries.Lcz_Delete}
+          onConfirmModal={this.executeUserAction.bind(this)}
           ref={el => (this.modalRef = el)}
         ></ir-modal>
       </Host>

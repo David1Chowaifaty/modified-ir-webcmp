@@ -18,8 +18,16 @@ export class IrInterceptor {
   @State() isUnassignedUnit = false;
   @State() endpointsCount = 0;
   @State() isPageLoadingStopped: string | null = null;
+  @State() showModal: boolean;
+  @State() requestUrl: string;
 
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
+
+  private otpModal: HTMLIrOtpModalElement;
+
+  private pendingConfig?: AxiosRequestConfig;
+  private pendingResolve?: (resp: AxiosResponse) => void;
+  private pendingReject?: (err: any) => void;
 
   @Listen('preventPageLoad', { target: 'body' })
   handleStopPageLoading(e: CustomEvent) {
@@ -30,20 +38,19 @@ export class IrInterceptor {
     this.setupAxiosInterceptors();
   }
 
-  setupAxiosInterceptors() {
+  private setupAxiosInterceptors() {
     axios.interceptors.request.use(this.handleRequest.bind(this), this.handleError.bind(this));
     axios.interceptors.response.use(this.handleResponse.bind(this), this.handleError.bind(this));
   }
 
-  extractEndpoint(url: string): string {
+  private extractEndpoint(url: string): string {
     return url.split('?')[0];
   }
 
-  isHandledEndpoint(url: string): boolean {
+  private isHandledEndpoint(url: string): boolean {
     return this.handledEndpoints.includes(url);
   }
-
-  handleRequest(config: AxiosRequestConfig) {
+  private handleRequest(config: AxiosRequestConfig) {
     const extractedUrl = this.extractEndpoint(config.url);
     interceptor_requests[extractedUrl] = 'pending';
     config.params = config.params || {};
@@ -65,21 +72,38 @@ export class IrInterceptor {
     return config;
   }
 
-  handleResponse(response: AxiosResponse) {
+  private async handleResponse(response: AxiosResponse) {
     const extractedUrl = this.extractEndpoint(response.config.url);
     if (this.isHandledEndpoint(extractedUrl)) {
       this.isLoading = false;
       this.isPageLoadingStopped = null;
     }
     interceptor_requests[extractedUrl] = 'done';
+    if (extractedUrl === '/Validate_OTP') {
+      return response;
+    }
+    if (response.data.ExceptionCode === 'OTP') {
+      this.showModal = true;
+      this.requestUrl = extractedUrl.slice(1, extractedUrl.length);
+      this.pendingConfig = response.config;
+      return new Promise<AxiosResponse>((resolve, reject) => {
+        this.pendingResolve = resolve;
+        this.pendingReject = reject;
+        setTimeout(() => {
+          this.otpModal?.openModal();
+        }, 10);
+      });
+    }
     if (response.data.ExceptionMsg?.trim()) {
       this.handleError(response.data.ExceptionMsg, extractedUrl, response.data.ExceptionCode);
       throw new InterceptorError(response.data.ExceptionMsg, response.data.ExceptionCode);
     }
+
+    if (this.showModal) this.showModal = false;
     return response;
   }
 
-  handleError(error: string, url: string, code: string) {
+  private handleError(error: string, url: string, code: string) {
     const shouldSuppressToast = this.suppressToastEndpoints.includes(url);
     if (!shouldSuppressToast || (shouldSuppressToast && !code)) {
       this.toast.emit({
@@ -90,6 +114,32 @@ export class IrInterceptor {
       });
     }
     return Promise.reject(error);
+  }
+  private async handleOtpFinished(ev: CustomEvent) {
+    if (!this.pendingConfig || !this.pendingResolve || !this.pendingReject) {
+      return;
+    }
+
+    const otp = ev.detail;
+    if (!otp) {
+      this.pendingReject(new Error('OTP cancelled by user'));
+    } else {
+      try {
+        const retryConfig: AxiosRequestConfig = {
+          ...this.pendingConfig,
+          data: {
+            ...(typeof this.pendingConfig.data === 'string' ? JSON.parse(this.pendingConfig.data) : this.pendingConfig.data || {}),
+          },
+        };
+        const resp = await axios.request(retryConfig);
+        this.pendingResolve(resp);
+      } catch (err) {
+        this.pendingReject(err);
+      }
+    }
+    this.pendingConfig = undefined;
+    this.pendingResolve = undefined;
+    this.pendingReject = undefined;
   }
   render() {
     return (
@@ -109,6 +159,7 @@ export class IrInterceptor {
             </div>
           </div>
         )}
+        {this.showModal && <ir-otp-modal requestUrl={this.requestUrl} ref={el => (this.otpModal = el)} onOtpFinished={this.handleOtpFinished.bind(this)}></ir-otp-modal>}
       </Host>
     );
   }
