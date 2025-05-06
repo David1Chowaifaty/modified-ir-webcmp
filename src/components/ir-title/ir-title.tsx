@@ -39,7 +39,7 @@ export class IrTitle {
   render() {
     return (
       <Host>
-        <h4 class="text-left font-medium-2 py-0 my-0">{this.label}</h4>
+        <h4 class="text-left label font-medium-2 py-0 my-0">{this.label}</h4>
         {this.displayContext === 'sidebar' && (
           <ir-icon
             class={'close'}

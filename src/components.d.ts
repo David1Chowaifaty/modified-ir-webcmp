@@ -880,11 +880,28 @@ export namespace Components {
          */
         "closeModal": () => Promise<void>;
         /**
+          * User's email address to display in the modal and send the OTP to
+         */
+        "email": string;
+        /**
           * Open & reset everything
          */
         "openModal": () => Promise<void>;
+        /**
+          * Number of digits the OTP should have
+         */
+        "otpLength": number;
+        /**
+          * URL or endpoint used to validate the OTP
+         */
         "requestUrl": string;
+        /**
+          * Number of seconds to wait before allowing OTP resend
+         */
         "resendTimer": number;
+        /**
+          * Whether the resend option should be visible
+         */
         "showResend": boolean;
     }
     interface IrPasswordValidator {
@@ -4382,11 +4399,28 @@ declare namespace LocalJSX {
     }
     interface IrOtpModal {
         /**
+          * User's email address to display in the modal and send the OTP to
+         */
+        "email"?: string;
+        /**
           * Emits the final OTP (or empty on cancel)
          */
         "onOtpFinished"?: (event: IrOtpModalCustomEvent<string>) => void;
+        /**
+          * Number of digits the OTP should have
+         */
+        "otpLength"?: number;
+        /**
+          * URL or endpoint used to validate the OTP
+         */
         "requestUrl"?: string;
+        /**
+          * Number of seconds to wait before allowing OTP resend
+         */
         "resendTimer"?: number;
+        /**
+          * Whether the resend option should be visible
+         */
         "showResend"?: boolean;
     }
     interface IrPasswordValidator {

@@ -95,20 +95,20 @@ export class IrUserManagementTable {
       this.modalRef.closeModal();
     }
   }
-  private async sendVerificationEmail(user: User) {
-    try {
-      console.log(user);
-      await this.userService.sendVerificationEmail();
-      this.toast.emit({
-        position: 'top-right',
-        title: `We've sent a verification email to ${this.maskEmail(user.email)}.`,
-        description: '',
-        type: 'success',
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // private async sendVerificationEmail(user: User) {
+  //   try {
+  //     console.log(user);
+  //     await this.userService.sendVerificationEmail();
+  //     this.toast.emit({
+  //       position: 'top-right',
+  //       title: `We've sent a verification email to ${this.maskEmail(user.email)}.`,
+  //       description: '',
+  //       type: 'success',
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   private renderCurrentTrigger() {
     if (!this.currentTrigger) {
       return null;
@@ -212,23 +212,22 @@ export class IrUserManagementTable {
                           : !isUserSuperAdmin && <ir-switch onCheckChange={e => this.handleUserActiveChange(e, user)} checked={user.is_active}></ir-switch>}
                       </td>
                     )}
-                    {this.haveAdminPrivileges && (
+                    {/* {this.haveAdminPrivileges && (
                       <td>
                         {user.is_email_verified ? (
-                          <button
-                            data-toggle="tooltip"
-                            data-placement="bottom"
+                          <p
+                            // data-toggle="tooltip"
+                            // data-placement="bottom"
                             data-testid="user-verification"
-                            title={user.is_email_verified ? '' : 'Click to resend verification email.'}
-                            class={`m-0  badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}
+                            // title={user.is_email_verified ? '' : 'Click to resend verification email.'}
+                            class={`m-0 p-0`}
                             //TODO add isRequestPending for when the request is sent the buttons should be disabled
-                            // disabled={user.is_email_verified}
-                            onClick={() => {
-                              this.openModal(user, 'verify');
-                            }}
+                            // onClick={() => {
+                            //   this.openModal(user, 'verify');
+                            // }}
                           >
                             {user.is_email_verified ? 'Verified' : 'Not verified'}
-                          </button>
+                          </p>
                         ) : (
                           <ir-button
                             class="m-0 p-0"
@@ -245,6 +244,23 @@ export class IrUserManagementTable {
                             text="Not verified"
                           ></ir-button>
                         )}
+                      </td>
+                    )} */}
+                    {this.haveAdminPrivileges && (
+                      <td>
+                        <p
+                          // data-toggle="tooltip"
+                          // data-placement="bottom"
+                          data-testid="user-verification"
+                          // title={user.is_email_verified ? '' : 'Click to resend verification email.'}
+                          class={`m-0 badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}
+                          //TODO add isRequestPending for when the request is sent the buttons should be disabled
+                          // onClick={() => {
+                          //   this.openModal(user, 'verify');
+                          // }}
+                        >
+                          {user.is_email_verified ? 'Verified' : 'Not verified'}
+                        </p>
                       </td>
                     )}
 

@@ -4,14 +4,14 @@
 .badge {
   border: none;
   padding: 0.2rem 0.3rem;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
-.badge-danger:hover {
+/* .badge-danger:hover {
   background: #ff6377;
-}
+} */
 .badge:disabled {
   cursor: default;
 }
-.badge-danger:disabled:hover {
+/* .badge-danger:disabled:hover {
   background: var(--danger, #ff4961);
-}
+} */

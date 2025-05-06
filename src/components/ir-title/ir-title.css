@@ -21,6 +21,9 @@
   margin: 0;
   padding: 0;
 }
+.label {
+  font-family: inherit !important;
+}
 
 @media only screen and (max-width: 641px) {
   :host {

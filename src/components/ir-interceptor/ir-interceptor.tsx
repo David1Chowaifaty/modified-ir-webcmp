@@ -20,6 +20,7 @@ export class IrInterceptor {
   @State() isPageLoadingStopped: string | null = null;
   @State() showModal: boolean;
   @State() requestUrl: string;
+  @State() email: string;
 
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
 
@@ -84,6 +85,7 @@ export class IrInterceptor {
     }
     if (response.data.ExceptionCode === 'OTP') {
       this.showModal = true;
+      this.email = response.data.ExceptionMsg;
       this.requestUrl = extractedUrl.slice(1, extractedUrl.length);
       this.pendingConfig = response.config;
       return new Promise<AxiosResponse>((resolve, reject) => {
@@ -159,7 +161,9 @@ export class IrInterceptor {
             </div>
           </div>
         )}
-        {this.showModal && <ir-otp-modal requestUrl={this.requestUrl} ref={el => (this.otpModal = el)} onOtpFinished={this.handleOtpFinished.bind(this)}></ir-otp-modal>}
+        {this.showModal && (
+          <ir-otp-modal email={this.email} requestUrl={this.requestUrl} ref={el => (this.otpModal = el)} onOtpFinished={this.handleOtpFinished.bind(this)}></ir-otp-modal>
+        )}
       </Host>
     );
   }

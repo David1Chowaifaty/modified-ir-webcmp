@@ -1,5 +1,6 @@
 import { SystemService } from '@/services/system.service';
-import { Component, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Host, Method, Prop, State, h } from '@stencil/core';
+import { z } from 'zod';
 
 @Component({
   tag: 'ir-otp-modal',
@@ -7,9 +8,21 @@ import { Component, Event, EventEmitter, Host, Method, Prop, State, h } from '@s
   scoped: false,
 })
 export class IrOtpModal {
+  /** Number of seconds to wait before allowing OTP resend */
   @Prop() resendTimer = 60;
+
+  /** URL or endpoint used to validate the OTP */
   @Prop() requestUrl: string;
+
+  /** Whether the resend option should be visible */
   @Prop() showResend: boolean = true;
+
+  /** User's email address to display in the modal and send the OTP to */
+  @Prop() email: string;
+
+  /** Number of digits the OTP should have */
+  @Prop() otpLength: number = 6;
+
   @State() otp = '';
   @State() error = '';
   @State() isLoading = false;
@@ -18,6 +31,8 @@ export class IrOtpModal {
   private modalRef!: HTMLDivElement;
   private timerInterval: number;
   private systemService = new SystemService();
+
+  private otpVerificationSchema = z.object({ email: z.string().nonempty(), requestUrl: z.string().nonempty(), otp: z.string().length(this.otpLength) });
 
   /** Emits the final OTP (or empty on cancel) */
   @Event({ bubbles: true, composed: true }) otpFinished: EventEmitter<string>;
@@ -71,16 +86,19 @@ export class IrOtpModal {
     first && (first as HTMLInputElement).focus();
   }
 
-  /** Called by your <ir-otp> child whenever the 6-digit value changes/pastes */
   private handleOtpComplete = (e: CustomEvent<string>) => {
     this.error = '';
     this.otp = e.detail;
   };
 
   private async verifyOtp() {
-    if (this.otp.length < 6) return;
-
+    if (this.otp.length < this.otpLength) return;
     this.isLoading = true;
+    this.otpVerificationSchema.parse({
+      otp: this.otp,
+      requestUrl: this.requestUrl,
+      email: this.email,
+    });
     try {
       await this.systemService.validateOTP({ METHOD_NAME: this.requestUrl, OTP: this.otp });
       // emit the filled OTP back to the interceptor
@@ -93,19 +111,15 @@ export class IrOtpModal {
     }
   }
 
-  /** Allow the user to request a new OTP */
   private async resendOtp() {
     if (this.timer > 0) return;
-    // you’d trigger your API here; then:
+    // Resend otp
     this.timer = 60;
     this.startTimer();
   }
-
-  // private onCancel = () => {
-  //   this.otpFinished.emit('');
-  //   this.closeModal();
-  // };
-
+  disconnectedCallback() {
+    this.clearTimer();
+  }
   render() {
     return (
       <Host>
@@ -114,15 +128,15 @@ export class IrOtpModal {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">Verify Your Identity</h5>
-                {/* <button type="button" class="close" onClick={this.onCancel}>
-                  <span aria-hidden="true">&times;</span>
-                </button> */}
               </div>
 
-              <div class="modal-body d-flex  flex-column">
-                <p class="medium">Please enter the 6-digit code we just sent you.</p>
+              <div class="modal-body d-flex  align-items-center flex-column">
+                <p class="sm text-center">
+                  We sent a verification code to <span class="text-primary">{this.email}</span>
+                </p>
                 <ir-otp
                   autoFocus
+                  length={this.otpLength}
                   // value={this.otp}
                   onOtpComplete={this.handleOtpComplete}
                 ></ir-otp>
@@ -130,32 +144,33 @@ export class IrOtpModal {
                 {this.error && <p class="text-danger small mt-1 p-0 mb-0">{this.error}</p>}
 
                 {this.showResend && (
-                  <p class="small mt-1">
+                  <Fragment>
                     {this.timer > 0 ? (
-                      `Resend code in 00:${String(this.timer).padStart(2, '0')}`
+                      <p class="small mt-1">Resend code in 00:{String(this.timer).padStart(2, '0')}</p>
                     ) : (
-                      <a
-                        href="#"
-                        onClick={e => {
-                          e.preventDefault();
+                      <ir-button
+                        class="mt-1"
+                        btn_color="link"
+                        onClickHandler={e => {
+                          e.stopImmediatePropagation();
+                          e.stopPropagation();
                           this.resendOtp();
                         }}
-                      >
-                        Didn’t receive code? Resend
-                      </a>
+                        size="sm"
+                        text="Didn’t receive code? Resend"
+                      ></ir-button>
                     )}
-                  </p>
+                  </Fragment>
                 )}
               </div>
 
               <div class="modal-footer justify-content-auto">
-                {/* <ir-button text="Cancel" btn_color="secondary" onClick={this.onCancel} btn_disabled={this.isLoading}></ir-button> */}
                 <ir-button
                   class="w-100"
                   btn_styles={'flex-fill'}
                   text="Verify now"
                   isLoading={this.isLoading}
-                  btn_disabled={this.otp.length < 6 || this.isLoading}
+                  btn_disabled={this.otp.length < this.otpLength || this.isLoading}
                   onClick={() => this.verifyOtp()}
                 ></ir-button>
               </div>

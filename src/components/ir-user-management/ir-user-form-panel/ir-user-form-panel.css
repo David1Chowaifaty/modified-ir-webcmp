@@ -5,7 +5,9 @@
 .logins-history-section {
   margin-top: 1.5rem;
 }
-
+:host h4 {
+  font-family: inherit !important;
+}
 .logins-history-list {
   border-radius: 8px;
   list-style-type: none;
