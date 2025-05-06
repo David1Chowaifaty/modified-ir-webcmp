@@ -10,6 +10,10 @@ export class IrOtp {
    * The length of the OTP code
    */
   @Prop() length: number = 6;
+  /**
+   * The default OTP code
+   */
+  @Prop() defaultValue: string;
 
   /**
    * Whether the input is disabled
@@ -66,6 +70,9 @@ export class IrOtp {
    */
   componentWillLoad() {
     this.otpValues = Array(this.length).fill('');
+    if (this.defaultValue) {
+      this.setValue(this.defaultValue);
+    }
   }
 
   /**

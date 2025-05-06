@@ -6,13 +6,15 @@
 }
 .modal-header {
   border-bottom: 0px !important;
-  padding-block: 0.5rem !important;
 }
-.modal-content {
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
-}
+
 .modal-footer {
   padding-top: 0.5rem !important;
   border-top: 0 !important;
+}
+@media (min-width: 768px) {
+  .modal-dialog,
+  .modal-content {
+    width: fit-content !important;
+  }
 }

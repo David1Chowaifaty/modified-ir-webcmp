@@ -1,5 +1,6 @@
+import Token from '@/models/Token';
 import { SystemService } from '@/services/system.service';
-import { Component, Event, EventEmitter, Fragment, Host, Method, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 import { z } from 'zod';
 
 @Component({
@@ -23,6 +24,9 @@ export class IrOtpModal {
   /** Number of digits the OTP should have */
   @Prop() otpLength: number = 6;
 
+  /** ticket for verifying and resending the verification code */
+  @Prop() ticket: string;
+
   @State() otp = '';
   @State() error = '';
   @State() isLoading = false;
@@ -31,12 +35,24 @@ export class IrOtpModal {
   private modalRef!: HTMLDivElement;
   private timerInterval: number;
   private systemService = new SystemService();
+  private tokenService = new Token();
 
   private otpVerificationSchema = z.object({ email: z.string().nonempty(), requestUrl: z.string().nonempty(), otp: z.string().length(this.otpLength) });
 
   /** Emits the final OTP (or empty on cancel) */
   @Event({ bubbles: true, composed: true }) otpFinished: EventEmitter<string>;
 
+  componentWillLoad() {
+    if (this.ticket) {
+      this.tokenService.setToken(this.ticket);
+    }
+  }
+  @Watch('ticket')
+  handleTicketChange(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      this.tokenService.setToken(newValue);
+    }
+  }
   /** Open & reset everything */
   @Method()
   async openModal() {
@@ -51,6 +67,7 @@ export class IrOtpModal {
   @Method()
   async closeModal() {
     $(this.modalRef).modal('hide');
+    this.otp = null;
     this.clearTimer();
   }
 
@@ -137,6 +154,7 @@ export class IrOtpModal {
                 <ir-otp
                   autoFocus
                   length={this.otpLength}
+                  defaultValue={this.otp}
                   // value={this.otp}
                   onOtpComplete={this.handleOtpComplete}
                 ></ir-otp>

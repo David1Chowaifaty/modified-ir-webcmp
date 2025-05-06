@@ -850,6 +850,10 @@ export namespace Components {
          */
         "autoFocus": boolean;
         /**
+          * The default OTP code
+         */
+        "defaultValue": string;
+        /**
           * Whether the input is disabled
          */
         "disabled": boolean;
@@ -903,6 +907,10 @@ export namespace Components {
           * Whether the resend option should be visible
          */
         "showResend": boolean;
+        /**
+          * ticket for verifying and resending the verification code
+         */
+        "ticket": string;
     }
     interface IrPasswordValidator {
         /**
@@ -4365,6 +4373,10 @@ declare namespace LocalJSX {
          */
         "autoFocus"?: boolean;
         /**
+          * The default OTP code
+         */
+        "defaultValue"?: string;
+        /**
           * Whether the input is disabled
          */
         "disabled"?: boolean;
@@ -4422,6 +4434,10 @@ declare namespace LocalJSX {
           * Whether the resend option should be visible
          */
         "showResend"?: boolean;
+        /**
+          * ticket for verifying and resending the verification code
+         */
+        "ticket"?: string;
     }
     interface IrPasswordValidator {
         "onPasswordValidationChange"?: (event: IrPasswordValidatorCustomEvent<boolean>) => void;
