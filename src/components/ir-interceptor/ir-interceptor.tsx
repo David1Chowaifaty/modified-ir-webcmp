@@ -80,7 +80,7 @@ export class IrInterceptor {
       this.isPageLoadingStopped = null;
     }
     interceptor_requests[extractedUrl] = 'done';
-    if (extractedUrl === '/Validate_OTP') {
+    if (extractedUrl === '/Validated_Exposed_Method') {
       return response;
     }
     if (response.data.ExceptionCode === 'OTP') {
