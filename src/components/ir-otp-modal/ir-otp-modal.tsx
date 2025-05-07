@@ -131,8 +131,13 @@ export class IrOtpModal {
   private async resendOtp() {
     if (this.timer > 0) return;
     // Resend otp
-    this.timer = 60;
-    this.startTimer();
+    try {
+      await this.systemService.resendOTP({ METHOD_NAME: this.requestUrl });
+      this.timer = 60;
+      this.startTimer();
+    } catch (error) {
+      console.log(error);
+    }
   }
   disconnectedCallback() {
     this.clearTimer();
