@@ -80,7 +80,7 @@ export class IrInterceptor {
       this.isPageLoadingStopped = null;
     }
     interceptor_requests[extractedUrl] = 'done';
-    if (extractedUrl === '/Validated_Exposed_Method') {
+    if (extractedUrl === '/Validate_Exposed_Method') {
       return response;
     }
     if (response.data.ExceptionCode === 'OTP') {
@@ -100,8 +100,6 @@ export class IrInterceptor {
       this.handleError(response.data.ExceptionMsg, extractedUrl, response.data.ExceptionCode);
       throw new InterceptorError(response.data.ExceptionMsg, response.data.ExceptionCode);
     }
-
-    if (this.showModal) this.showModal = false;
     return response;
   }
 
@@ -142,6 +140,7 @@ export class IrInterceptor {
     this.pendingConfig = undefined;
     this.pendingResolve = undefined;
     this.pendingReject = undefined;
+    this.showModal = false;
   }
   render() {
     return (
