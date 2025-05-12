@@ -15,7 +15,7 @@ import { io, Socket } from 'socket.io-client';
 })
 export class IrUserManagement {
   @Prop() language: string = '';
-  @Prop() ticket: string = '';
+  @Prop() ticket: string;
   @Prop() propertyid: number;
   @Prop() p: string;
   @Prop() isSuperAdmin: boolean = true;
@@ -37,8 +37,27 @@ export class IrUserManagement {
 
   private superAdminId = '5';
 
+  componentWillLoad() {
+    console.log('init', {
+      ticket: this.ticket,
+      propertyid: this.propertyid,
+      userId: this.userId,
+      userTypeCode: this.userTypeCode,
+    });
+    if (this.ticket) {
+      this.token.setToken(this.ticket);
+      this.initializeApp();
+    }
+  }
+
   @Watch('ticket')
   ticketChanged(newValue: string, oldValue: string) {
+    console.log('ticket changed', {
+      ticket: this.ticket,
+      propertyid: this.propertyid,
+      userId: this.userId,
+      userTypeCode: this.userTypeCode,
+    });
     if (newValue === oldValue) {
       return;
     }
@@ -198,6 +217,7 @@ export class IrUserManagement {
           <div class="d-flex  pb-2 align-items-center justify-content-between">
             <h3 class="mb-1 mb-md-0">Extranet Users</h3>
           </div>
+
           <div class="" style={{ gap: '1rem' }}>
             <ir-user-management-table
               allowedUsersTypes={this.allowedUsersTypes}

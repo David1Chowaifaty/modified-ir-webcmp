@@ -164,7 +164,7 @@ export class IrResetPassword {
                 </div>
 
                 {!insideSidebar && (
-                  <div class="d-flex flex-column mt-1 flex-sm-row align-items-sm-center" style={{ gap: '0.5rem' }}>
+                  <div class="d-flex flex-column mt-2 flex-sm-row align-items-sm-center" style={{ gap: '0.5rem' }}>
                     <ir-button btn_styles={'flex-fill'} onClickHandler={() => window.history.back()} class="flex-fill" text={'Cancel'} size="md" btn_color="secondary"></ir-button>
                     <ir-button btn_styles={'flex-fill'} class="flex-fill" isLoading={this.isLoading} btn_type="submit" text={'Change password'} size="md"></ir-button>
                   </div>
