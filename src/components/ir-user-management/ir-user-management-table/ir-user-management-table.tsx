@@ -246,23 +246,7 @@ export class IrUserManagementTable {
                         )}
                       </td>
                     )} */}
-                    {this.haveAdminPrivileges && (
-                      <td>
-                        <p
-                          // data-toggle="tooltip"
-                          // data-placement="bottom"
-                          data-testid="user-verification"
-                          // title={user.is_email_verified ? '' : 'Click to resend verification email.'}
-                          class={`m-0 badge ${user.is_email_verified ? 'badge-success' : 'badge-danger'}`}
-                          //TODO add isRequestPending for when the request is sent the buttons should be disabled
-                          // onClick={() => {
-                          //   this.openModal(user, 'verify');
-                          // }}
-                        >
-                          {user.is_email_verified ? 'Verified' : 'Not verified'}
-                        </p>
-                      </td>
-                    )}
+                    {this.haveAdminPrivileges && <td>{user.is_email_verified ? 'Verified' : 'Not verified'}</td>}
 
                     <td class={'action-row'}>
                       {(this.canEdit || this.canDelete) && ((!this.isSuperAdmin && !isUserSuperAdmin) || this.isSuperAdmin) && (
