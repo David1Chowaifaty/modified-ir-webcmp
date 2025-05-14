@@ -1,5 +1,6 @@
 import Token from '@/models/Token';
 import { AuthService } from '@/services/authenticate.service';
+import { SystemService } from '@/services/system.service';
 import { CONSTANTS } from '@/utils/constants';
 import { Component, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import { z, ZodError } from 'zod';
@@ -29,6 +30,8 @@ export class IrResetPassword {
 
   private token = new Token();
   private authService = new AuthService();
+  private systemService = new SystemService();
+  private initialized = false;
 
   componentWillLoad() {
     if (this.ticket) {
@@ -36,11 +39,26 @@ export class IrResetPassword {
     }
   }
 
+  componentDidLoad() {
+    this.init();
+  }
+
   @Watch('ticket')
   handleTicketChange(oldValue: string, newValue: string) {
     if (oldValue !== newValue) {
       this.token.setToken(this.ticket);
+      this.init();
     }
+  }
+
+  private async init() {
+    if (this.initialized) {
+      return;
+    }
+    await this.systemService.checkOTPNecessity({
+      METHOD_NAME: 'Change_User_Pwd',
+    });
+    this.initialized = false;
   }
 
   private ResetPasswordSchema = z.object({

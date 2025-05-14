@@ -8,6 +8,7 @@ import { UserService } from '@/services/user.service';
 import { _formatTime } from '@/components/ir-booking-details/functions';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { AllowedUser } from '../types';
+import { SystemService } from '@/services/system.service';
 
 @Component({
   tag: 'ir-user-management-table',
@@ -37,6 +38,7 @@ export class IrUserManagementTable {
 
   private modalRef: HTMLIrModalElement;
   private userService = new UserService();
+  private systemService = new SystemService();
 
   componentWillLoad() {
     this.assignPermissions();
@@ -148,6 +150,14 @@ export class IrUserManagementTable {
     this.user = null;
     this.modalType = null;
   }
+  private async verifyAdminAction(params: { type: 'user'; isEdit: boolean; user: User | null }) {
+    await this.systemService.checkOTPNecessity({
+      METHOD_NAME: 'Handle_Exposed_User',
+    });
+    this.currentTrigger = {
+      ...params,
+    };
+  }
   render() {
     return (
       <Host>
@@ -171,11 +181,11 @@ export class IrUserManagementTable {
                       data-testid="new_user"
                       title={locales.entries.Lcz_CreateHousekeeper}
                       onIconClickHandler={() => {
-                        this.currentTrigger = {
+                        this.verifyAdminAction({
                           type: 'user',
                           isEdit: false,
                           user: null,
-                        };
+                        });
                       }}
                     >
                       <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
@@ -256,11 +266,11 @@ export class IrUserManagementTable {
                               data-testid="edit"
                               title={locales.entries.Lcz_EditHousekeeper}
                               onIconClickHandler={() => {
-                                this.currentTrigger = {
+                                this.verifyAdminAction({
                                   type: 'user',
                                   isEdit: true,
                                   user,
-                                };
+                                });
                               }}
                               icon="ft-save color-ir-light-blue-hover h5 pointer sm-margin-right"
                             >

@@ -188,6 +188,7 @@ export class IrOtpModal {
               </div>
 
               <div class="modal-footer justify-content-auto">
+                <ir-button class="w-100" btn_styles={'flex-fill'} text="Cancel" btn_color="secondary" onClick={() => window.location.reload()}></ir-button>
                 <ir-button
                   class="w-100"
                   btn_styles={'flex-fill'}
