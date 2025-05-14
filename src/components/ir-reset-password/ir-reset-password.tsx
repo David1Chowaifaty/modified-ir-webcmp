@@ -52,7 +52,7 @@ export class IrResetPassword {
   }
 
   private async init() {
-    if (this.initialized) {
+    if (!this.ticket || this.initialized) {
       return;
     }
     await this.systemService.checkOTPNecessity({
