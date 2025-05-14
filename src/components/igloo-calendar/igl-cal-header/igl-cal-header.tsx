@@ -297,6 +297,18 @@ export class IglCalHeader {
               style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
               onClickHandler={() => this.handleOptionEvent('add', this.getNewBookingModel())}
             ></ir-button>
+            <ir-button
+              variant="icon"
+              btn_styles="caledarBtns"
+              icon_name="plus"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              data-testid="new_bulk_btn"
+              title={locales.entries.Lcz_CreateNewBooking}
+              visibleBackgroundOnHover
+              style={{ ...colorVariants.danger, '--icon-size': '1.5rem' }}
+              onClickHandler={() => this.handleOptionEvent('bulk', this.getNewBookingModel())}
+            ></ir-button>
             {/* <div
               class="caledarBtns"
               onClick={() => this.handleOptionEvent('add', this.getNewBookingModel())}

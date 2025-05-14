@@ -330,13 +330,16 @@ export class IglCalBody {
   }
 
   private getGeneralRoomDayColumns(roomId: string, roomCategory: RoomCategory, roomName: string, index: number) {
+    let i = index;
+    i++;
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
     return this.calendarData.days.map(dayInfo => {
       const formattedDate = moment(dayInfo.currentDate).format('YYYY-MM-DD');
-      const isDisabled = calendar_dates.days.find(e => e.day === formattedDate)?.rate[index].exposed_inventory.rts;
+      // const isDisabled = calendar_dates.days.find(e => e.day === formattedDate)?.rate[index].exposed_inventory.rts;
+      const isDisabled = false;
       return (
         <div
-          class={`cellData ${isDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${
+          class={`cellData roomCell ${isDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${
             dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''
           } ${this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''} ${
             this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''

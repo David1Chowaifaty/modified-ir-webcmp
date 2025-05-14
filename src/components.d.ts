@@ -175,6 +175,8 @@ export namespace Components {
         "showSplitBookingOption": boolean;
         "sourceOptions": TSourceOptions[];
     }
+    interface IglBulkBlocks {
+    }
     interface IglCalBody {
         "calendarData": { [key: string]: any };
         "countries": ICountry[];
@@ -1836,6 +1838,12 @@ declare global {
         prototype: HTMLIglBookingOverviewPageElement;
         new (): HTMLIglBookingOverviewPageElement;
     };
+    interface HTMLIglBulkBlocksElement extends Components.IglBulkBlocks, HTMLStencilElement {
+    }
+    var HTMLIglBulkBlocksElement: {
+        prototype: HTMLIglBulkBlocksElement;
+        new (): HTMLIglBulkBlocksElement;
+    };
     interface HTMLIglCalBodyElementEventMap {
         "addBookingDatasEvent": any[];
         "showBookingPopup": any;
@@ -3348,6 +3356,7 @@ declare global {
         "igl-booking-event-hover": HTMLIglBookingEventHoverElement;
         "igl-booking-form": HTMLIglBookingFormElement;
         "igl-booking-overview-page": HTMLIglBookingOverviewPageElement;
+        "igl-bulk-blocks": HTMLIglBulkBlocksElement;
         "igl-cal-body": HTMLIglCalBodyElement;
         "igl-cal-footer": HTMLIglCalFooterElement;
         "igl-cal-header": HTMLIglCalHeaderElement;
@@ -3602,6 +3611,8 @@ declare namespace LocalJSX {
         "selectedRooms"?: Map<string, Map<string, any>>;
         "showSplitBookingOption"?: boolean;
         "sourceOptions"?: TSourceOptions[];
+    }
+    interface IglBulkBlocks {
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };
@@ -4910,6 +4921,7 @@ declare namespace LocalJSX {
         "igl-booking-event-hover": IglBookingEventHover;
         "igl-booking-form": IglBookingForm;
         "igl-booking-overview-page": IglBookingOverviewPage;
+        "igl-bulk-blocks": IglBulkBlocks;
         "igl-cal-body": IglCalBody;
         "igl-cal-footer": IglCalFooter;
         "igl-cal-header": IglCalHeader;
@@ -5030,6 +5042,7 @@ declare module "@stencil/core" {
             "igl-booking-event-hover": LocalJSX.IglBookingEventHover & JSXBase.HTMLAttributes<HTMLIglBookingEventHoverElement>;
             "igl-booking-form": LocalJSX.IglBookingForm & JSXBase.HTMLAttributes<HTMLIglBookingFormElement>;
             "igl-booking-overview-page": LocalJSX.IglBookingOverviewPage & JSXBase.HTMLAttributes<HTMLIglBookingOverviewPageElement>;
+            "igl-bulk-blocks": LocalJSX.IglBulkBlocks & JSXBase.HTMLAttributes<HTMLIglBulkBlocksElement>;
             "igl-cal-body": LocalJSX.IglCalBody & JSXBase.HTMLAttributes<HTMLIglCalBodyElement>;
             "igl-cal-footer": LocalJSX.IglCalFooter & JSXBase.HTMLAttributes<HTMLIglCalFooterElement>;
             "igl-cal-header": LocalJSX.IglCalHeader & JSXBase.HTMLAttributes<HTMLIglCalHeaderElement>;

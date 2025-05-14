@@ -33,7 +33,7 @@ export interface UnitHkStatusChangePayload {
   My_Hkm: null;
 }
 export type CalendarSidebarState = {
-  type: 'room-guests' | 'booking-details' | 'add-days';
+  type: 'room-guests' | 'booking-details' | 'add-days' | 'bulk-blocks';
   payload: any;
 };
 @Component({
@@ -742,6 +742,12 @@ export class IglooCalendar {
         break;
       case 'search':
         break;
+      case 'bulk':
+        this.calendarSidebarState = {
+          type: 'bulk-blocks',
+          payload: null,
+        };
+        break;
       case 'add':
         //console.log('data:', opt.data);
         if (opt.data.event_type !== 'EDIT_BOOKING') {
@@ -1205,6 +1211,7 @@ export class IglooCalendar {
               onCloseModal={() => (this.calendarSidebarState = null)}
             ></ir-room-guests>
           )}
+          {this.calendarSidebarState?.type === 'bulk-blocks' && <igl-bulk-blocks slot="sidebar-body"></igl-bulk-blocks>}
         </ir-sidebar>
         <ir-modal
           ref={el => (this.calendarModalEl = el)}
