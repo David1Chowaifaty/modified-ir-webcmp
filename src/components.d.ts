@@ -17,7 +17,7 @@ import { RatePlan, RoomType } from "./models/property";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
-import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+import { OpenSidebarEvent } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -46,7 +46,7 @@ export { RatePlan, RoomType } from "./models/property";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
-export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+export { OpenSidebarEvent } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -2993,8 +2993,6 @@ declare global {
         "pressCheckIn": any;
         "pressCheckOut": any;
         "editInitiated": TIglBookPropertyPayload;
-        "resetbooking": null;
-        "openSidebar": OpenSidebarEvent<RoomGuestsPayload>;
     }
     interface HTMLIrRoomElement extends Components.IrRoom, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomElementEventMap>(type: K, listener: (this: HTMLIrRoomElement, ev: IrRoomCustomEvent<HTMLIrRoomElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4632,10 +4630,8 @@ declare namespace LocalJSX {
         "myRoomTypeFoodCat"?: string;
         "onDeleteFinished"?: (event: IrRoomCustomEvent<string>) => void;
         "onEditInitiated"?: (event: IrRoomCustomEvent<TIglBookPropertyPayload>) => void;
-        "onOpenSidebar"?: (event: IrRoomCustomEvent<OpenSidebarEvent<RoomGuestsPayload>>) => void;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
-        "onResetbooking"?: (event: IrRoomCustomEvent<null>) => void;
         "room"?: Room;
         "roomsInfo"?: any;
     }
