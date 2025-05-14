@@ -84,37 +84,45 @@ export class IrInterceptor {
       return response;
     }
     if (response.data.ExceptionCode === 'OTP') {
-      this.showModal = true;
-      this.email = response.data.ExceptionMsg;
-      const name = extractedUrl.slice(1);
-      if (name === 'Check_OTP_Necessity') {
-        let methodName: string;
-        try {
-          const body = typeof response.config.data === 'string' ? JSON.parse(response.config.data) : response.config.data;
-          methodName = body.METHOD_NAME;
-        } catch (e) {
-          console.error('Failed to parse request body for METHOD_NAME', e);
-          methodName = name; // fallback
-        }
-        this.requestUrl = methodName;
-      } else {
-        this.requestUrl = name;
-      }
-
-      this.pendingConfig = response.config;
-      return new Promise<AxiosResponse>((resolve, reject) => {
-        this.pendingResolve = resolve;
-        this.pendingReject = reject;
-        setTimeout(() => {
-          this.otpModal?.openModal();
-        }, 10);
-      });
+      this.handleOtpResponse({ response, extractedUrl });
     }
     if (response.data.ExceptionMsg?.trim()) {
-      this.handleError(response.data.ExceptionMsg, extractedUrl, response.data.ExceptionCode);
-      throw new InterceptorError(response.data.ExceptionMsg, response.data.ExceptionCode);
+      this.handleResponseExceptions({ response, extractedUrl });
     }
     return response;
+  }
+
+  private handleResponseExceptions({ response, extractedUrl }: { response: AxiosResponse; extractedUrl: string }) {
+    this.handleError(response.data.ExceptionMsg, extractedUrl, response.data.ExceptionCode);
+    throw new InterceptorError(response.data.ExceptionMsg, response.data.ExceptionCode);
+  }
+
+  private handleOtpResponse({ extractedUrl, response }: { response: AxiosResponse; extractedUrl: string }) {
+    this.showModal = true;
+    this.email = response.data.ExceptionMsg;
+    const name = extractedUrl.slice(1);
+    if (name === 'Check_OTP_Necessity') {
+      let methodName: string;
+      try {
+        const body = typeof response.config.data === 'string' ? JSON.parse(response.config.data) : response.config.data;
+        methodName = body.METHOD_NAME;
+      } catch (e) {
+        console.error('Failed to parse request body for METHOD_NAME', e);
+        methodName = name; // fallback
+      }
+      this.requestUrl = methodName;
+    } else {
+      this.requestUrl = name;
+    }
+
+    this.pendingConfig = response.config;
+    return new Promise<AxiosResponse>((resolve, reject) => {
+      this.pendingResolve = resolve;
+      this.pendingReject = reject;
+      setTimeout(() => {
+        this.otpModal?.openModal();
+      }, 10);
+    });
   }
 
   private handleError(error: string, url: string, code: string) {
@@ -129,6 +137,7 @@ export class IrInterceptor {
     }
     return Promise.reject(error);
   }
+
   private async handleOtpFinished(ev: CustomEvent) {
     if (!this.pendingConfig || !this.pendingResolve || !this.pendingReject) {
       return;
@@ -158,6 +167,7 @@ export class IrInterceptor {
     this.pendingReject = undefined;
     this.showModal = false;
   }
+
   render() {
     return (
       <Host>
