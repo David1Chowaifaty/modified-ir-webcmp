@@ -12,6 +12,7 @@ import moment from 'moment';
 import { UAParser } from 'ua-parser-js';
 import { AllowedUser } from '../types';
 import { InterceptorError } from '@/components/ir-interceptor/InterceptorError';
+import Token from '@/models/Token';
 
 @Component({
   tag: 'ir-user-form-panel',
@@ -62,6 +63,7 @@ export class IrUserFormPanel {
   private userService = new UserService();
   private disableFields = false;
   private isPropertyAdmin = false;
+  private token = new Token();
   private mobileMask = {};
   private userSchema = z.object({
     mobile: z.string().min(1).max(20),
@@ -328,6 +330,7 @@ export class IrUserFormPanel {
           >
             {this.isOpen && (
               <ir-reset-password
+                ticket={this.token.getToken()}
                 skip2Fa={true}
                 username={this.user.username}
                 onCloseSideBar={e => {

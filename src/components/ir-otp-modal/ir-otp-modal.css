@@ -12,9 +12,15 @@
   padding-top: 0.5rem !important;
   border-top: 0 !important;
 }
+.verification-message {
+  max-width: 90%;
+}
 @media (min-width: 768px) {
   .modal-dialog,
   .modal-content {
     width: fit-content !important;
+  }
+  .verification-message {
+    max-width: 350px !important;
   }
 }

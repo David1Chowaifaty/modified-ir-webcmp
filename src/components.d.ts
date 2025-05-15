@@ -880,6 +880,10 @@ export namespace Components {
     }
     interface IrOtpModal {
         /**
+          * URL or endpoint used to validate the OTP
+         */
+        "baseOTPUrl": string;
+        /**
           * Hide & clear timer
          */
         "closeModal": () => Promise<void>;
@@ -2779,7 +2783,10 @@ declare global {
         new (): HTMLIrOtpElement;
     };
     interface HTMLIrOtpModalElementEventMap {
-        "otpFinished": string;
+        "otpFinished": {
+    otp: string;
+    type: 'success' | 'cancelled';
+  };
     }
     interface HTMLIrOtpModalElement extends Components.IrOtpModal, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrOtpModalElementEventMap>(type: K, listener: (this: HTMLIrOtpModalElement, ev: IrOtpModalCustomEvent<HTMLIrOtpModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4409,13 +4416,20 @@ declare namespace LocalJSX {
     }
     interface IrOtpModal {
         /**
+          * URL or endpoint used to validate the OTP
+         */
+        "baseOTPUrl"?: string;
+        /**
           * User's email address to display in the modal and send the OTP to
          */
         "email"?: string;
         /**
           * Emits the final OTP (or empty on cancel)
          */
-        "onOtpFinished"?: (event: IrOtpModalCustomEvent<string>) => void;
+        "onOtpFinished"?: (event: IrOtpModalCustomEvent<{
+    otp: string;
+    type: 'success' | 'cancelled';
+  }>) => void;
         /**
           * Number of digits the OTP should have
          */

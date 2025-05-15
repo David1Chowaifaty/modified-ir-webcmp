@@ -151,9 +151,12 @@ export class IrUserManagementTable {
     this.modalType = null;
   }
   private async verifyAdminAction(params: { type: 'user'; isEdit: boolean; user: User | null }) {
-    await this.systemService.checkOTPNecessity({
+    const res = await this.systemService.checkOTPNecessity({
       METHOD_NAME: 'Handle_Exposed_User',
     });
+    if (res?.cancelled) {
+      return;
+    }
     this.currentTrigger = {
       ...params,
     };
@@ -169,8 +172,11 @@ export class IrUserManagementTable {
                 <th class="text-left">{locales.entries.Lcz_Email}</th>
                 <th class="text-left">{locales.entries.Lcz_Mobile ?? 'Mobile'}</th>
                 <th class="text-left">Role</th>
-                <th class="text-left">Last signed in</th>
-                <th class="text-left">Created at</th>
+                <th class="text-left small" style={{ fontWeight: 'bold' }}>
+                  <p class="m-0 p-0 ">Created at</p>
+                  <p class="m-0 p-0">Last signed in</p>
+                </th>
+                {/* <th class="text-left">Created at</th> */}
                 {this.haveAdminPrivileges && <th>Active</th>}
                 {/* {this.haveAdminPrivileges && <th>Email verified</th>} */}
 
@@ -203,6 +209,8 @@ export class IrUserManagementTable {
               {this.users.map(user => {
                 const isUserSuperAdmin = user.type.toString() === this.superAdminId;
                 const latestSignIn = user.sign_ins ? user.sign_ins[0] : null;
+                const latestSignInDate = latestSignIn ? moment(latestSignIn.date, 'YYYY-MM-DD') : null;
+                const isLastSignInOld = latestSignInDate ? moment().diff(latestSignInDate, 'days') > 30 : false;
                 return (
                   <tr key={user.id} class="ir-table-row">
                     <td>{user.username}</td>
@@ -210,19 +218,24 @@ export class IrUserManagementTable {
                       {user.email}
 
                       {this.haveAdminPrivileges && (
-                        <span style={{ marginLeft: '0.5rem' }} class="small">
+                        <span style={{ marginLeft: '0.5rem' }} class={`small ${user.is_email_verified ? 'text-success' : 'text-danger'}`}>
                           {user.is_email_verified ? 'Verified' : 'Not verified'}
                         </span>
                       )}
                     </td>
                     <td>{user.mobile ?? 'N/A'}</td>
                     <td>{user.type.toString() === this.superAdminId ? 'Super admin' : this.userTypes.get(user.type.toString())}</td>
-                    <td>
-                      {latestSignIn && new Date(latestSignIn.date).getFullYear() > 1900
-                        ? moment(latestSignIn.date, 'YYYY-MM-DD').format('DD-MMM-YYYY') + ' ' + _formatTime(latestSignIn.hour.toString(), latestSignIn.minute.toString())
-                        : 'N/A'}
+                    <td class="small">
+                      <p class="m-0 p-0">
+                        {new Date(user.created_on).getFullYear() === 1900 || !user.created_on ? 'N/A' : moment(user.created_on, 'YYYY-MM-DD').format('DD-MMM-YYYY')}
+                      </p>
+                      <p class={`m-0 p-0 ${isLastSignInOld ? 'text-danger' : ''}`}>
+                        {latestSignIn && new Date(latestSignIn.date).getFullYear() > 1900
+                          ? moment(latestSignIn.date, 'YYYY-MM-DD').format('DD-MMM-YYYY') + ' ' + _formatTime(latestSignIn.hour.toString(), latestSignIn.minute.toString())
+                          : 'N/A'}
+                      </p>
                     </td>
-                    <td>{new Date(user.created_on).getFullYear() === 1900 || !user.created_on ? 'N/A' : moment(user.created_on, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</td>
+                    {/* <td>{new Date(user.created_on).getFullYear() === 1900 || !user.created_on ? 'N/A' : moment(user.created_on, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</td> */}
                     {this.haveAdminPrivileges && (
                       <td>
                         {this.haveAdminPrivileges && !this.isSuperAdmin && user.type.toString() === '17'
