@@ -2,7 +2,7 @@ import Token from '@/models/Token';
 import { AuthService } from '@/services/authenticate.service';
 import { SystemService } from '@/services/system.service';
 import { CONSTANTS } from '@/utils/constants';
-import { Component, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Fragment, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { z, ZodError } from 'zod';
 
 @Component({
@@ -40,6 +40,7 @@ export class IrResetPassword {
   }
 
   componentDidLoad() {
+    console.log('here');
     this.init();
   }
 
@@ -116,7 +117,17 @@ export class IrResetPassword {
       this.isLoading = false;
     }
   }
-
+  @Listen('otpFinished', { target: 'body' })
+  handleOtpFinished(e: CustomEvent) {
+    if (e.detail.type === 'success') {
+      return;
+    }
+    if (this.el.slot !== 'sidebar-body') {
+      window.history.back();
+    } else {
+      this.closeSideBar.emit();
+    }
+  }
   render() {
     const insideSidebar = this.el.slot === 'sidebar-body';
     return (

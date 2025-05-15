@@ -17,9 +17,6 @@ export class SystemService {
   }
   public async checkOTPNecessity(params: { METHOD_NAME: string }) {
     const { data } = await axios.post('/Check_OTP_Necessity', params);
-    if (data.ExceptionMsg !== '') {
-      throw new Error(data.ExceptionMsg);
-    }
     return data;
   }
 }

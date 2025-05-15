@@ -20,6 +20,7 @@ export class IrInterceptor {
   @State() isPageLoadingStopped: string | null = null;
   @State() showModal: boolean;
   @State() requestUrl: string;
+  @State() baseOTPUrl: string;
   @State() email: string;
 
   @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
@@ -29,6 +30,7 @@ export class IrInterceptor {
   private pendingConfig?: AxiosRequestConfig;
   private pendingResolve?: (resp: AxiosResponse) => void;
   private pendingReject?: (err: any) => void;
+  private response?: AxiosResponse;
 
   @Listen('preventPageLoad', { target: 'body' })
   handleStopPageLoading(e: CustomEvent) {
@@ -84,7 +86,7 @@ export class IrInterceptor {
       return response;
     }
     if (response.data.ExceptionCode === 'OTP') {
-      this.handleOtpResponse({ response, extractedUrl });
+      return this.handleOtpResponse({ response, extractedUrl });
     }
     if (response.data.ExceptionMsg?.trim()) {
       this.handleResponseExceptions({ response, extractedUrl });
@@ -101,6 +103,7 @@ export class IrInterceptor {
     this.showModal = true;
     this.email = response.data.ExceptionMsg;
     const name = extractedUrl.slice(1);
+    this.baseOTPUrl = name;
     if (name === 'Check_OTP_Necessity') {
       let methodName: string;
       try {
@@ -116,6 +119,7 @@ export class IrInterceptor {
     }
 
     this.pendingConfig = response.config;
+    this.response = response;
     return new Promise<AxiosResponse>((resolve, reject) => {
       this.pendingResolve = resolve;
       this.pendingReject = reject;
@@ -138,34 +142,83 @@ export class IrInterceptor {
     return Promise.reject(error);
   }
 
+  // private async handleOtpFinished(ev: CustomEvent) {
+  //   if (!this.pendingConfig || !this.pendingResolve || !this.pendingReject) {
+  //     return;
+  //   }
+
+  //   const { otp, type } = ev.detail;
+  //   if (type === 'success') {
+  //     if (!otp) {
+  //       this.pendingReject(new Error('OTP cancelled by user'));
+  //     } else {
+  //       try {
+  //         if (this.baseOTPUrl !== 'Check_OTP_Necessity') {
+  //           const retryConfig: AxiosRequestConfig = {
+  //             ...this.pendingConfig,
+  //             data: {
+  //               ...(typeof this.pendingConfig.data === 'string' ? JSON.parse(this.pendingConfig.data) : this.pendingConfig.data || {}),
+  //             },
+  //           };
+  //           const resp = await axios.request(retryConfig);
+  //           this.pendingResolve(resp);
+  //         }
+  //       } catch (err) {
+  //         this.pendingReject(err);
+  //       }
+  //     }
+  //   }
+  //   this.pendingConfig = undefined;
+  //   this.pendingResolve = undefined;
+  //   this.pendingReject = undefined;
+  //   this.showModal = false;
+  //   if (this.baseOTPUrl === 'Check_OTP_Necessity') {
+  //     this.baseOTPUrl = null;
+  //     return this.response;
+  //   }
+  // }
   private async handleOtpFinished(ev: CustomEvent) {
     if (!this.pendingConfig || !this.pendingResolve || !this.pendingReject) {
       return;
     }
 
-    const otp = ev.detail;
-    if (!otp) {
-      this.pendingReject(new Error('OTP cancelled by user'));
-    } else {
-      try {
-        if (this.requestUrl !== 'Check_OTP_Necessity') {
+    const { otp, type } = ev.detail;
+    if (type === 'cancel') {
+      const cancelResp = {
+        config: this.pendingConfig,
+        data: { cancelled: true, baseOTPUrl: this.baseOTPUrl },
+        status: 0,
+        statusText: 'OTP Cancelled',
+        headers: {},
+        request: {},
+      } as AxiosResponse;
+      this.pendingResolve(cancelResp);
+    } else if (type === 'success') {
+      if (!otp) {
+        this.pendingReject(new Error('OTP cancelled by user'));
+      } else if (this.baseOTPUrl === 'Check_OTP_Necessity') {
+        // don't resend, just resolve with the original response
+        this.pendingResolve(this.response!);
+      } else {
+        try {
           const retryConfig: AxiosRequestConfig = {
             ...this.pendingConfig,
-            data: {
-              ...(typeof this.pendingConfig.data === 'string' ? JSON.parse(this.pendingConfig.data) : this.pendingConfig.data || {}),
-            },
+            data: typeof this.pendingConfig.data === 'string' ? JSON.parse(this.pendingConfig.data) : this.pendingConfig.data || {},
           };
           const resp = await axios.request(retryConfig);
           this.pendingResolve(resp);
+        } catch (err) {
+          this.pendingReject(err);
         }
-      } catch (err) {
-        this.pendingReject(err);
       }
     }
+
+    // common clean-up
     this.pendingConfig = undefined;
     this.pendingResolve = undefined;
     this.pendingReject = undefined;
     this.showModal = false;
+    this.baseOTPUrl = null;
   }
 
   render() {
@@ -187,7 +240,13 @@ export class IrInterceptor {
           </div>
         )}
         {this.showModal && (
-          <ir-otp-modal email={this.email} requestUrl={this.requestUrl} ref={el => (this.otpModal = el)} onOtpFinished={this.handleOtpFinished.bind(this)}></ir-otp-modal>
+          <ir-otp-modal
+            email={this.email}
+            baseOTPUrl={this.baseOTPUrl}
+            requestUrl={this.requestUrl}
+            ref={el => (this.otpModal = el)}
+            onOtpFinished={this.handleOtpFinished.bind(this)}
+          ></ir-otp-modal>
         )}
       </Host>
     );
