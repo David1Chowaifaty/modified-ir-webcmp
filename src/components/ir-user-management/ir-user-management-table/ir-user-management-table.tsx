@@ -172,7 +172,7 @@ export class IrUserManagementTable {
                 <th class="text-left">Last signed in</th>
                 <th class="text-left">Created at</th>
                 {this.haveAdminPrivileges && <th>Active</th>}
-                {this.haveAdminPrivileges && <th>Email verified</th>}
+                {/* {this.haveAdminPrivileges && <th>Email verified</th>} */}
 
                 <th class={'action-row'}>
                   {this.canCreate && (
@@ -206,7 +206,15 @@ export class IrUserManagementTable {
                 return (
                   <tr key={user.id} class="ir-table-row">
                     <td>{user.username}</td>
-                    <td>{user.email}</td>
+                    <td>
+                      {user.email}
+
+                      {this.haveAdminPrivileges && (
+                        <span style={{ marginLeft: '0.5rem' }} class="small">
+                          {user.is_email_verified ? 'Verified' : 'Not verified'}
+                        </span>
+                      )}
+                    </td>
                     <td>{user.mobile ?? 'N/A'}</td>
                     <td>{user.type.toString() === this.superAdminId ? 'Super admin' : this.userTypes.get(user.type.toString())}</td>
                     <td>
@@ -256,8 +264,6 @@ export class IrUserManagementTable {
                         )}
                       </td>
                     )} */}
-                    {this.haveAdminPrivileges && <td>{user.is_email_verified ? 'Verified' : 'Not verified'}</td>}
-
                     <td class={'action-row'}>
                       {(this.canEdit || this.canDelete) && ((!this.isSuperAdmin && !isUserSuperAdmin) || this.isSuperAdmin) && (
                         <div class="icons-container  d-flex align-items-center" style={{ gap: '0.5rem' }}>
