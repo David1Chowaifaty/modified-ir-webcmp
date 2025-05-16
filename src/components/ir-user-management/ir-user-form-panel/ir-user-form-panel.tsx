@@ -37,7 +37,7 @@ export class IrUserFormPanel {
   @State() userInfo: User = {
     type: '',
     id: -1,
-    is_active: false,
+    is_active: true,
     sign_ins: null,
     created_on: null,
     mobile: '',
@@ -134,6 +134,7 @@ export class IrUserFormPanel {
       }
       const toValidateUserInfo = {
         ...this.userInfo,
+
         password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password,
         type: Number(this.userInfo.type),
       };
