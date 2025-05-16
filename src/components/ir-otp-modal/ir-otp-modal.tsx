@@ -161,7 +161,7 @@ export class IrOtpModal {
   render() {
     return (
       <Host>
-        <div ref={el => (this.modalRef = el as any)} class="modal fade" id="staticBackdrop" aria-hidden="true">
+        <div ref={el => (this.modalRef = el as any)} class="modal otp-modal fade" id="staticBackdrop" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">

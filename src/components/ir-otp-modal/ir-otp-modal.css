@@ -7,7 +7,12 @@
 .modal-header {
   border-bottom: 0px !important;
 }
-
+.otp-modal {
+  z-index: 9999999 !important;
+}
+.modal-dialog {
+  z-index: 9999999 !important;
+}
 .modal-footer {
   padding-top: 0.5rem !important;
   border-top: 0 !important;
