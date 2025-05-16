@@ -5,7 +5,7 @@ export type SecureScreens = 'hk' | 'tasks' | 'front' | 'users';
 @Component({
   tag: 'ir-secure-tasks',
   styleUrl: 'ir-secure-tasks.css',
-  scoped: true,
+  shadow: false,
 })
 export class IrSecureTasks {
   @Prop() propertyid: number;
