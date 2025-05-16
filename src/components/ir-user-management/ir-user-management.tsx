@@ -172,14 +172,14 @@ export class IrUserManagement {
       if (p1 !== p2) {
         return p1 - p2;
       }
-      //sort by user id
-      if (p1 === 1) {
-        const id1 = u1.id.toString(),
-          id2 = u2.id.toString(),
-          me = this.userId.toString();
-        if (id1 === me) return -1; // u1 is me → goes before u2
-        if (id2 === me) return 1; // u2 is me → u1 goes after
-      }
+      // //sort by user id
+      // if (p1 === 1) {
+      //   const id1 = u1.id.toString(),
+      //     id2 = u2.id.toString(),
+      //     me = this.userId.toString();
+      //   if (id1 === me) return -1; // u1 is me → goes before u2
+      //   if (id2 === me) return 1; // u2 is me → u1 goes after
+      // }
 
       // 3) sort by username
       return u1.username.localeCompare(u2.username);

@@ -66,7 +66,7 @@ export class IrUserFormPanel {
   private token = new Token();
   private mobileMask = {};
   private userSchema = z.object({
-    mobile: z.string().min(1).max(20),
+    mobile: z.string().min(4).max(20),
     email: z.string().email(),
     password: z
       .string()
@@ -81,7 +81,7 @@ export class IrUserFormPanel {
         },
         { message: 'Password must be at least 8 characters long.' },
       ),
-    type: z.union([z.literal(1), z.literal(this.superAdminId ?? '5'), z.coerce.string().nonempty().min(2)]),
+    type: z.union([z.literal(1), z.literal(Number(this.superAdminId?.toString() ?? '5')), z.coerce.string().nonempty().min(2)]),
     username: z
       .string()
       .min(3)
@@ -111,7 +111,7 @@ export class IrUserFormPanel {
     }
     this.isPropertyAdmin = this.userTypeCode.toString() === '17';
     if (this.isPropertyAdmin) {
-      this.updateUserField('type', '16');
+      this.updateUserField('type', '17');
     }
     this.mobileMask = {
       mask: `{${calendar_data.country.phone_prefix}} 000000000000`,
