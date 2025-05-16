@@ -57,7 +57,8 @@ export type bookingReasons =
   | 'NON_TECHNICAL_CHANGE_IN_BOOKING'
   | 'SHARING_PERSONS_UPDATED'
   | 'ROOM_STATUS_CHANGED'
-  | 'UNIT_HK_STATUS_CHANGED';
+  | 'UNIT_HK_STATUS_CHANGED'
+  | 'EMAIL_VERIFIED';
 export const validReasons = new Set<bookingReasons>([
   'DORESERVATION',
   'BLOCK_EXPOSED_UNIT',

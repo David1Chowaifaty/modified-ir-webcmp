@@ -134,7 +134,9 @@ export class IrUserManagement {
     // const reasonHandlers: Partial<Record<bookingReasons, Function>> = {
     //   DORESERVATION: this.updateUserVerificationStatus,
     // };
-    const reasonHandlers: Partial<Record<bookingReasons, Function>> = {};
+    const reasonHandlers: Partial<Record<bookingReasons, Function>> = {
+      EMAIL_VERIFIED: this.updateUserVerificationStatus,
+    };
     const handler = reasonHandlers[REASON];
     if (handler) {
       await handler.call(this, result);
@@ -143,7 +145,7 @@ export class IrUserManagement {
     }
   }
 
-  public updateUserVerificationStatus(result: { id: string | number; is_email_verified: boolean }) {
+  public updateUserVerificationStatus(result: { id: string | number }) {
     const users = [...this.users];
     const idx = users.findIndex(u => u.id === result.id);
     if (idx === -1) {
@@ -152,7 +154,7 @@ export class IrUserManagement {
     }
     users[idx] = {
       ...users[idx],
-      is_email_verified: result.is_email_verified,
+      is_email_verified: true,
     };
     this.users = users;
   }
