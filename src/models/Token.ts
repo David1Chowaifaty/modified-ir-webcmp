@@ -18,6 +18,9 @@ class Token extends Auth {
   public getToken() {
     return Token.token;
   }
+  public setBaseUrl(url: string) {
+    this.baseUrl = url;
+  }
   private initialize() {
     if (Token.isInterceptorAdded) {
       return;

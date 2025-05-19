@@ -15,6 +15,7 @@ import { io, Socket } from 'socket.io-client';
 })
 export class IrUserManagement {
   @Prop() language: string = '';
+  @Prop() baseUrl: string;
   @Prop() ticket: string;
   @Prop() propertyid: number;
   @Prop() p: string;
@@ -44,6 +45,9 @@ export class IrUserManagement {
       userId: this.userId,
       userTypeCode: this.userTypeCode,
     });
+    if (this.baseUrl) {
+      this.token.setBaseUrl(this.baseUrl);
+    }
     if (this.ticket) {
       this.token.setToken(this.ticket);
       this.initializeApp();

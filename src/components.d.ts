@@ -1291,6 +1291,7 @@ export namespace Components {
         "userTypes": { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
     }
     interface IrUserManagement {
+        "baseUrl": string;
         "isSuperAdmin": boolean;
         "language": string;
         "p": string;
@@ -4879,6 +4880,7 @@ declare namespace LocalJSX {
         "userTypes"?: { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
     }
     interface IrUserManagement {
+        "baseUrl"?: string;
         "isSuperAdmin"?: boolean;
         "language"?: string;
         "p"?: string;
