@@ -1,15 +1,49 @@
 import calendar_data from '@/stores/calendar-data';
-import { Component, h, State } from '@stencil/core';
+import { Component, h, Prop, State } from '@stencil/core';
+import moment, { Moment } from 'moment';
+import { z, ZodError } from 'zod';
 export type SelectedRooms = Record<string | number, (string | number)[]>;
+export interface Weekday {
+  value: number;
+  label: string;
+}
 @Component({
   tag: 'igl-bulk-blocks',
   styleUrls: ['igl-bulk-blocks.css', '../../../common/sheet.css'],
   scoped: true,
 })
 export class IglBulkBlocks {
+  @Prop() maxDatesLength = 10;
+
   @State() selectedRoomTypes: SelectedRooms[] = [];
+  @State() errors: 'dates' | 'rooms';
+  @State() dates: {
+    from: Moment | null;
+    to: Moment | null;
+  }[] = [{ from: null, to: null }];
+
+  private weekdays: Weekday[] = [
+    { value: 1, label: 'M' },
+    { value: 2, label: 'T' },
+    { value: 3, label: 'W' },
+    { value: 4, label: 'Th' },
+    { value: 5, label: 'Fr' },
+    { value: 6, label: 'Sa' },
+    { value: 0, label: 'Su' },
+  ];
+  @State() selectedWeekdays: number[] = Array(7)
+    .fill(null)
+    .map((_, i) => i);
+  private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
   private total: number;
   private allRoomTypes: SelectedRooms[] = [];
+  private minDate = moment().format('YYYY-MM-DD');
+  private datesSchema = z.array(
+    z.object({
+      from: z.string().nonempty(),
+      to: z.string().nonempty(),
+    }),
+  );
 
   componentWillLoad() {
     this.total = calendar_data.roomsInfo.length;
@@ -25,12 +59,14 @@ export class IglBulkBlocks {
     }
     this.selectedRoomTypes = this.allRoomTypes;
   }
+
   private selectAllRoomTypes() {
     this.allRoomTypes = calendar_data.roomsInfo.map(rt => ({
       [rt.id]: rt.physicalrooms.map(room => room.id),
     }));
     this.selectedRoomTypes = this.allRoomTypes;
   }
+
   private toggleRoom({ checked, roomId, roomTypeId }: { checked: boolean; roomTypeId: number; roomId: number }): void {
     // clone current selection
     const selected = [...this.selectedRoomTypes];
@@ -61,6 +97,7 @@ export class IglBulkBlocks {
 
     this.selectedRoomTypes = selected;
   }
+
   private toggleRoomType({ checked, roomTypeId }: { checked: boolean; roomTypeId: number }): void {
     const selected = [...this.selectedRoomTypes];
     const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
@@ -82,28 +119,56 @@ export class IglBulkBlocks {
 
     this.selectedRoomTypes = selected;
   }
+
+  private addBlockDates() {
+    try {
+      this.errors = null;
+      if (this.selectedRoomTypes.length === 0) {
+        return (this.errors = 'rooms');
+      }
+      this.datesSchema.parse(this.dates);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        this.errors = 'dates';
+      }
+    }
+  }
+  private toggleWeekDays({ checked, weekDay }: { checked: boolean; weekDay: number }): void {
+    if (checked) {
+      if (!this.selectedWeekdays.includes(weekDay)) {
+        this.selectedWeekdays = [...this.selectedWeekdays, weekDay];
+      }
+    } else {
+      this.selectedWeekdays = this.selectedWeekdays.filter(day => day !== weekDay);
+    }
+  }
   render() {
     const selectedRoomsByType = this.selectedRoomTypes.reduce((acc, entry) => {
       const typeId = Number(Object.keys(entry)[0]);
       acc[typeId] = entry[typeId];
       return acc;
     }, {} as Record<number, (string | number)[]>);
-
-    // are _all_ types “fully” selected? i.e. selectedRooms.length === physicalrooms.length
     const allFullySelected = calendar_data.roomsInfo.every(({ id, physicalrooms }) => {
       const sel = selectedRoomsByType[id] || [];
       return sel.length === physicalrooms.length;
     });
 
-    // only hide the per-room UI when everything is selected
     const shouldShowAllRooms = !allFullySelected;
     return (
-      <form class={'bulk-sheet-container'}>
+      <form
+        class={'bulk-sheet-container'}
+        onSubmit={e => {
+          e.preventDefault();
+          this.addBlockDates();
+        }}
+      >
         <div class="sheet-header d-flex align-items-center">
           <ir-title class="px-1" label="Bulk Block Dates" displayContext="sidebar"></ir-title>
         </div>
         <div class="sheet-body px-1">
-          <div class="text-muted">{1 === 1 ? <p>Select the listings that you want to block.</p> : <p>Select the roomtypes and units that you want to block.</p>}</div>
+          <div class="text-muted text-left mb-3">
+            {1 === 1 ? <p>Select the listings that you want to block.</p> : <p>Select the roomtypes and units that you want to block.</p>}
+          </div>
           <div class="d-flex flex-column" style={{ gap: '1rem' }}>
             <ir-checkbox
               indeterminate={this.selectedRoomTypes?.length > 0 && this.selectedRoomTypes?.length < this.allRoomTypes?.length}
@@ -140,6 +205,117 @@ export class IglBulkBlocks {
                 );
               })}
           </div>
+          <div class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
+            {this.weekdays.map(w => (
+              <ir-checkbox
+                checked={this.selectedWeekdays.findIndex(r => r.toString() === w.value.toString()) !== -1}
+                onCheckChange={e => this.toggleWeekDays({ checked: e.detail, weekDay: w.value })}
+                label={w.label}
+                labelClass="m-0 p-0 ml-1"
+              ></ir-checkbox>
+            ))}
+          </div>
+          {/* Dates */}
+          <table class="mt-1">
+            <thead>
+              <tr>
+                <th class="text-left">From</th>
+                <th class="text-left">to (inclusive)</th>
+                <td>
+                  <ir-button
+                    btn_disabled={this.dates.length === this.maxDatesLength - 1}
+                    variant="icon"
+                    icon_name="plus"
+                    onClickHandler={() => {
+                      this.dates = [...this.dates, { from: null, to: null }];
+                    }}
+                  ></ir-button>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.dates.map((d, i) => {
+                if (!this.dateRefs[i]) {
+                  this.dateRefs[i] = {};
+                }
+                return (
+                  <tr key={`date_${i}`}>
+                    <td>
+                      <ir-date-picker
+                        ref={el => {
+                          this.dateRefs[i].from = el;
+                        }}
+                        minDate={this.minDate}
+                        data-testid="pickup_arrival_date"
+                        date={d.from?.format('YYYY-MM-DD')}
+                        emitEmptyDate={true}
+                        aria-invalid={String(this.errors === 'dates' && !d.from)}
+                        onDateChanged={evt => {
+                          console.log(evt.detail);
+                          const dates = [...this.dates];
+                          dates[i] = { ...dates[i], from: evt.detail.start };
+                          if (dates[i].to && dates[i].to.isBefore(evt.detail.start, 'dates') && evt.detail.start) {
+                            dates[i] = { ...dates[i], to: null };
+                          }
+                          this.dates = [...dates];
+                          setTimeout(() => {
+                            this.dateRefs[i]?.to.openDatePicker();
+                          }, 100);
+                        }}
+                      >
+                        <input
+                          type="text"
+                          slot="trigger"
+                          value={d.from ? d.from.format('MMM DD, YYYY') : null}
+                          class={`form-control input-sm ${this.errors === 'dates' && !d.to ? 'border-danger' : ''} text-center`}
+                          style={{ width: '100%' }}
+                        ></input>
+                      </ir-date-picker>
+                    </td>
+                    <td>
+                      <ir-date-picker
+                        forceDestroyOnUpdate
+                        ref={el => {
+                          this.dateRefs[i].to = el;
+                        }}
+                        data-testid="pickup_arrival_date"
+                        date={d.to?.format('YYYY-MM-DD')}
+                        emitEmptyDate={true}
+                        minDate={this.dates[i]?.from ? this.dates[i].from.format('YYYY-MM-DD') : this.minDate}
+                        aria-invalid={String(this.errors === 'dates' && !d.to)}
+                        onDateChanged={evt => {
+                          const dates = [...this.dates];
+                          dates[i] = { ...dates[i], to: evt.detail.start };
+                          this.dates = [...dates];
+                        }}
+                      >
+                        <input
+                          type="text"
+                          slot="trigger"
+                          value={d.to ? d.to.format('MMM DD, YYYY') : null}
+                          class={`form-control input-sm 
+                          ${this.errors === 'dates' && !d.to ? 'border-danger' : ''}
+                          text-center`}
+                          style={{ width: '100%' }}
+                        ></input>
+                      </ir-date-picker>
+                    </td>
+                    {i > 0 && (
+                      <td>
+                        <ir-button
+                          variant="icon"
+                          icon_name="minus"
+                          onClickHandler={() => {
+                            this.dates = this.dates.filter((_, j) => j !== i);
+                          }}
+                        ></ir-button>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
         <div class={'sheet-footer'}>
           <ir-button text="Cancel" btn_color="secondary" class={'flex-fill'}></ir-button>

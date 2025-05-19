@@ -176,6 +176,7 @@ export namespace Components {
         "sourceOptions": TSourceOptions[];
     }
     interface IglBulkBlocks {
+        "maxDatesLength": number;
     }
     interface IglCalBody {
         "calendarData": { [key: string]: any };
@@ -3622,6 +3623,7 @@ declare namespace LocalJSX {
         "sourceOptions"?: TSourceOptions[];
     }
     interface IglBulkBlocks {
+        "maxDatesLength"?: number;
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };
