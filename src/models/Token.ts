@@ -20,6 +20,7 @@ class Token extends Auth {
   }
   public setBaseUrl(url: string) {
     this.baseUrl = url;
+    axios.defaults.baseURL = this.baseUrl;
   }
   private initialize() {
     if (Token.isInterceptorAdded) {
