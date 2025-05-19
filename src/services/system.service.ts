@@ -15,4 +15,8 @@ export class SystemService {
     }
     return data;
   }
+  public async checkOTPNecessity(params: { METHOD_NAME: string }) {
+    const { data } = await axios.post('/Check_OTP_Necessity', params);
+    return data;
+  }
 }

@@ -12,6 +12,7 @@ import moment from 'moment';
 import { UAParser } from 'ua-parser-js';
 import { AllowedUser } from '../types';
 import { InterceptorError } from '@/components/ir-interceptor/InterceptorError';
+import Token from '@/models/Token';
 
 @Component({
   tag: 'ir-user-form-panel',
@@ -36,7 +37,7 @@ export class IrUserFormPanel {
   @State() userInfo: User = {
     type: '',
     id: -1,
-    is_active: false,
+    is_active: true,
     sign_ins: null,
     created_on: null,
     mobile: '',
@@ -62,9 +63,10 @@ export class IrUserFormPanel {
   private userService = new UserService();
   private disableFields = false;
   private isPropertyAdmin = false;
+  private token = new Token();
   private mobileMask = {};
   private userSchema = z.object({
-    mobile: z.string().min(1).max(20),
+    mobile: z.string().min(4).max(20),
     email: z.string().email(),
     password: z
       .string()
@@ -79,7 +81,7 @@ export class IrUserFormPanel {
         },
         { message: 'Password must be at least 8 characters long.' },
       ),
-    type: z.union([z.literal(1), z.literal(this.superAdminId ?? '5'), z.coerce.string().nonempty().min(2)]),
+    type: z.union([z.literal(1), z.literal(Number(this.superAdminId?.toString() ?? '5')), z.coerce.string().nonempty().min(2)]),
     username: z
       .string()
       .min(3)
@@ -109,7 +111,7 @@ export class IrUserFormPanel {
     }
     this.isPropertyAdmin = this.userTypeCode.toString() === '17';
     if (this.isPropertyAdmin) {
-      this.updateUserField('type', '16');
+      this.updateUserField('type', '17');
     }
     this.mobileMask = {
       mask: `{${calendar_data.country.phone_prefix}} 000000000000`,
@@ -132,6 +134,7 @@ export class IrUserFormPanel {
       }
       const toValidateUserInfo = {
         ...this.userInfo,
+
         password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password,
         type: Number(this.userInfo.type),
       };
@@ -328,6 +331,7 @@ export class IrUserFormPanel {
           >
             {this.isOpen && (
               <ir-reset-password
+                ticket={this.token.getToken()}
                 skip2Fa={true}
                 username={this.user.username}
                 onCloseSideBar={e => {

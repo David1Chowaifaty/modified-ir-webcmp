@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>Sales by Country</title>
+    <title>Secure Screen</title>
     <script type="module" src="/build/ir-webcmp.esm.js"></script>
     <script nomodule src="/build/ir-webcmp.js"></script>
     <script src="assets/scripts/jquery.min.js"></script>
@@ -24,21 +24,8 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-reset-password></ir-reset-password>
+    <ir-secure-tasks propertyid="42"></ir-secure-tasks>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
-
-    <script>
-        const cmp = document.querySelector('ir-reset-password');
-        (
-            async () => {
-                const ticket = await getToken();
-                cmp.propertyid = getId();
-                cmp.ticket = ticket;
-            }
-        )()
-    </script>
-
-
 </body>
 
 </html>

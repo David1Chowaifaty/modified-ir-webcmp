@@ -8,6 +8,7 @@ import { UserService } from '@/services/user.service';
 import { _formatTime } from '@/components/ir-booking-details/functions';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { AllowedUser } from '../types';
+import { SystemService } from '@/services/system.service';
 
 @Component({
   tag: 'ir-user-management-table',
@@ -37,6 +38,7 @@ export class IrUserManagementTable {
 
   private modalRef: HTMLIrModalElement;
   private userService = new UserService();
+  private systemService = new SystemService();
 
   componentWillLoad() {
     this.assignPermissions();
@@ -148,6 +150,17 @@ export class IrUserManagementTable {
     this.user = null;
     this.modalType = null;
   }
+  private async verifyAdminAction(params: { type: 'user'; isEdit: boolean; user: User | null }) {
+    const res = await this.systemService.checkOTPNecessity({
+      METHOD_NAME: 'Handle_Exposed_User',
+    });
+    if (res?.cancelled) {
+      return;
+    }
+    this.currentTrigger = {
+      ...params,
+    };
+  }
   render() {
     return (
       <Host>
@@ -159,10 +172,13 @@ export class IrUserManagementTable {
                 <th class="text-left">{locales.entries.Lcz_Email}</th>
                 <th class="text-left">{locales.entries.Lcz_Mobile ?? 'Mobile'}</th>
                 <th class="text-left">Role</th>
-                <th class="text-left">Last signed in</th>
-                <th class="text-left">Created at</th>
+                <th class="text-left small" style={{ fontWeight: 'bold' }}>
+                  <p class="m-0 p-0 ">Created at</p>
+                  <p class="m-0 p-0">Last signed in</p>
+                </th>
+                {/* <th class="text-left">Created at</th> */}
                 {this.haveAdminPrivileges && <th>Active</th>}
-                {this.haveAdminPrivileges && <th>Email verified</th>}
+                {/* {this.haveAdminPrivileges && <th>Email verified</th>} */}
 
                 <th class={'action-row'}>
                   {this.canCreate && (
@@ -171,11 +187,11 @@ export class IrUserManagementTable {
                       data-testid="new_user"
                       title={locales.entries.Lcz_CreateHousekeeper}
                       onIconClickHandler={() => {
-                        this.currentTrigger = {
+                        this.verifyAdminAction({
                           type: 'user',
                           isEdit: false,
                           user: null,
-                        };
+                        });
                       }}
                     >
                       <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
@@ -193,18 +209,33 @@ export class IrUserManagementTable {
               {this.users.map(user => {
                 const isUserSuperAdmin = user.type.toString() === this.superAdminId;
                 const latestSignIn = user.sign_ins ? user.sign_ins[0] : null;
+                const latestSignInDate = latestSignIn ? moment(latestSignIn.date, 'YYYY-MM-DD') : null;
+                const isLastSignInOld = latestSignInDate ? moment().diff(latestSignInDate, 'days') > 30 : false;
                 return (
                   <tr key={user.id} class="ir-table-row">
                     <td>{user.username}</td>
-                    <td>{user.email}</td>
+                    <td>
+                      {user.email}
+
+                      {this.haveAdminPrivileges && (
+                        <span style={{ marginLeft: '0.5rem' }} class={`small ${user.is_email_verified ? 'text-success' : 'text-danger'}`}>
+                          {user.is_email_verified ? 'Verified' : 'Not verified'}
+                        </span>
+                      )}
+                    </td>
                     <td>{user.mobile ?? 'N/A'}</td>
                     <td>{user.type.toString() === this.superAdminId ? 'Super admin' : this.userTypes.get(user.type.toString())}</td>
-                    <td>
-                      {latestSignIn && new Date(latestSignIn.date).getFullYear() > 1900
-                        ? moment(latestSignIn.date, 'YYYY-MM-DD').format('DD-MMM-YYYY') + ' ' + _formatTime(latestSignIn.hour.toString(), latestSignIn.minute.toString())
-                        : 'N/A'}
+                    <td class="small">
+                      <p class="m-0 p-0">
+                        {new Date(user.created_on).getFullYear() === 1900 || !user.created_on ? 'N/A' : moment(user.created_on, 'YYYY-MM-DD').format('DD-MMM-YYYY')}
+                      </p>
+                      <p class={`m-0 p-0 ${isLastSignInOld ? 'text-danger' : ''}`}>
+                        {latestSignIn && new Date(latestSignIn.date).getFullYear() > 1900
+                          ? moment(latestSignIn.date, 'YYYY-MM-DD').format('DD-MMM-YYYY') + ' ' + _formatTime(latestSignIn.hour.toString(), latestSignIn.minute.toString())
+                          : 'N/A'}
+                      </p>
                     </td>
-                    <td>{new Date(user.created_on).getFullYear() === 1900 || !user.created_on ? 'N/A' : moment(user.created_on, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</td>
+                    {/* <td>{new Date(user.created_on).getFullYear() === 1900 || !user.created_on ? 'N/A' : moment(user.created_on, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</td> */}
                     {this.haveAdminPrivileges && (
                       <td>
                         {this.haveAdminPrivileges && !this.isSuperAdmin && user.type.toString() === '17'
@@ -246,8 +277,6 @@ export class IrUserManagementTable {
                         )}
                       </td>
                     )} */}
-                    {this.haveAdminPrivileges && <td>{user.is_email_verified ? 'Verified' : 'Not verified'}</td>}
-
                     <td class={'action-row'}>
                       {(this.canEdit || this.canDelete) && ((!this.isSuperAdmin && !isUserSuperAdmin) || this.isSuperAdmin) && (
                         <div class="icons-container  d-flex align-items-center" style={{ gap: '0.5rem' }}>
@@ -256,11 +285,11 @@ export class IrUserManagementTable {
                               data-testid="edit"
                               title={locales.entries.Lcz_EditHousekeeper}
                               onIconClickHandler={() => {
-                                this.currentTrigger = {
+                                this.verifyAdminAction({
                                   type: 'user',
                                   isEdit: true,
                                   user,
-                                };
+                                });
                               }}
                               icon="ft-save color-ir-light-blue-hover h5 pointer sm-margin-right"
                             >

@@ -14,6 +14,8 @@ export class IrOtpModal {
 
   /** URL or endpoint used to validate the OTP */
   @Prop() requestUrl: string;
+  /** URL or endpoint used to validate the OTP */
+  @Prop() baseOTPUrl: string;
 
   /** Whether the resend option should be visible */
   @Prop() showResend: boolean = true;
@@ -40,7 +42,10 @@ export class IrOtpModal {
   private otpVerificationSchema = z.object({ email: z.string().nonempty(), requestUrl: z.string().nonempty(), otp: z.string().length(this.otpLength) });
 
   /** Emits the final OTP (or empty on cancel) */
-  @Event({ bubbles: true, composed: true }) otpFinished: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true }) otpFinished: EventEmitter<{
+    otp: string;
+    type: 'success' | 'cancelled';
+  }>;
 
   componentWillLoad() {
     if (this.ticket) {
@@ -119,7 +124,7 @@ export class IrOtpModal {
     try {
       await this.systemService.validateOTP({ METHOD_NAME: this.requestUrl, OTP: this.otp });
       // emit the filled OTP back to the interceptor
-      this.otpFinished.emit(this.otp);
+      this.otpFinished.emit({ otp: this.otp, type: 'success' });
       this.closeModal();
     } catch (err) {
       this.error = 'Verification failed. Please try again.';
@@ -139,13 +144,24 @@ export class IrOtpModal {
       console.log(error);
     }
   }
+  private handleCancelClicked() {
+    if (this.baseOTPUrl === 'Check_OTP_Necessity') {
+      this.closeModal();
+      this.otpFinished.emit({
+        otp: null,
+        type: 'cancelled',
+      });
+      return;
+    }
+    window.location.reload();
+  }
   disconnectedCallback() {
     this.clearTimer();
   }
   render() {
     return (
       <Host>
-        <div ref={el => (this.modalRef = el as any)} class="modal fade" id="staticBackdrop" aria-hidden="true">
+        <div ref={el => (this.modalRef = el as any)} class="modal otp-modal fade" id="staticBackdrop" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
@@ -153,9 +169,7 @@ export class IrOtpModal {
               </div>
 
               <div class="modal-body d-flex  align-items-center flex-column">
-                <p class="sm text-center">
-                  We sent a verification code to <span class="text-primary">{this.email}</span>
-                </p>
+                <p class="verification-message text-truncate">We sent a verification code to {this.email}</p>
                 <ir-otp
                   autoFocus
                   length={this.otpLength}
@@ -188,12 +202,13 @@ export class IrOtpModal {
               </div>
 
               <div class="modal-footer justify-content-auto">
+                <ir-button class="w-100" btn_styles={'flex-fill'} text="Cancel" btn_color="secondary" onClick={this.handleCancelClicked.bind(this)}></ir-button>
                 <ir-button
                   class="w-100"
                   btn_styles={'flex-fill'}
                   text="Verify now"
                   isLoading={this.isLoading}
-                  btn_disabled={this.otp.length < this.otpLength || this.isLoading}
+                  btn_disabled={this.otp?.length < this.otpLength || this.isLoading}
                   onClick={() => this.verifyOtp()}
                 ></ir-button>
               </div>
