@@ -34,7 +34,8 @@ export class IrOtpModal {
   @State() isLoading = false;
   @State() timer = 60;
 
-  private modalRef!: HTMLDivElement;
+  private dialogRef: HTMLDialogElement;
+
   private timerInterval: number;
   private systemService = new SystemService();
   private tokenService = new Token();
@@ -62,8 +63,14 @@ export class IrOtpModal {
   @Method()
   async openModal() {
     this.resetState();
-    $(this.modalRef).modal({ backdrop: 'static', keyboard: false });
-    $(this.modalRef).modal('show');
+    // $(this.modalRef).modal({ backdrop: 'static', keyboard: false });
+    // $(this.modalRef).modal('show');
+    if (typeof this.dialogRef.showModal === 'function') {
+      this.dialogRef.showModal();
+    } else {
+      // fallback for browsers without dialog support
+      this.dialogRef.setAttribute('open', '');
+    }
     if (this.showResend) this.startTimer();
     await this.focusFirstInput();
   }
@@ -71,7 +78,12 @@ export class IrOtpModal {
   /** Hide & clear timer */
   @Method()
   async closeModal() {
-    $(this.modalRef).modal('hide');
+    // $(this.modalRef).modal('hide');
+    if (typeof this.dialogRef.close === 'function') {
+      this.dialogRef.close();
+    } else {
+      this.dialogRef.removeAttribute('open');
+    }
     this.otp = null;
     this.clearTimer();
   }
@@ -104,7 +116,7 @@ export class IrOtpModal {
 
   private async focusFirstInput() {
     await new Promise(r => setTimeout(r, 50));
-    const first = this.modalRef.querySelector('input');
+    const first = this.dialogRef.querySelector('input');
     first && (first as HTMLInputElement).focus();
   }
 
@@ -123,7 +135,6 @@ export class IrOtpModal {
     });
     try {
       await this.systemService.validateOTP({ METHOD_NAME: this.requestUrl, OTP: this.otp });
-      // emit the filled OTP back to the interceptor
       this.otpFinished.emit({ otp: this.otp, type: 'success' });
       this.closeModal();
     } catch (err) {
@@ -161,60 +172,52 @@ export class IrOtpModal {
   render() {
     return (
       <Host>
-        <div ref={el => (this.modalRef = el as any)} class="modal otp-modal fade" id="staticBackdrop" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Verify Your Identity</h5>
-              </div>
+        <dialog ref={el => (this.dialogRef = el)} class="otp-modal" aria-modal="true">
+          <form method="dialog" class="otp-modal-content">
+            <header class="otp-modal-header">
+              <h5 class="otp-modal-title">Verify Your Identity</h5>
+            </header>
 
-              <div class="modal-body d-flex  align-items-center flex-column">
-                <p class="verification-message text-truncate">We sent a verification code to {this.email}</p>
-                <ir-otp
-                  autoFocus
-                  length={this.otpLength}
-                  defaultValue={this.otp}
-                  // value={this.otp}
-                  onOtpComplete={this.handleOtpComplete}
-                ></ir-otp>
+            <section class="otp-modal-body d-flex align-items-center flex-column">
+              <p class="verification-message text-truncate">We sent a verification code to {this.email}</p>
+              <ir-otp autoFocus length={this.otpLength} defaultValue={this.otp} onOtpComplete={this.handleOtpComplete}></ir-otp>
 
-                {this.error && <p class="text-danger small mt-1 p-0 mb-0">{this.error}</p>}
+              {this.error && <p class="text-danger small mt-1 p-0 mb-0">{this.error}</p>}
 
-                {this.showResend && (
-                  <Fragment>
-                    {this.timer > 0 ? (
-                      <p class="small mt-1">Resend code in 00:{String(this.timer).padStart(2, '0')}</p>
-                    ) : (
-                      <ir-button
-                        class="mt-1"
-                        btn_color="link"
-                        onClickHandler={e => {
-                          e.stopImmediatePropagation();
-                          e.stopPropagation();
-                          this.resendOtp();
-                        }}
-                        size="sm"
-                        text="Didn’t receive code? Resend"
-                      ></ir-button>
-                    )}
-                  </Fragment>
-                )}
-              </div>
+              {this.showResend && (
+                <Fragment>
+                  {this.timer > 0 ? (
+                    <p class="small mt-1">Resend code in 00:{String(this.timer).padStart(2, '0')}</p>
+                  ) : (
+                    <ir-button
+                      class="mt-1"
+                      btn_color="link"
+                      onClickHandler={e => {
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        this.resendOtp();
+                      }}
+                      size="sm"
+                      text="Didn’t receive code? Resend"
+                    ></ir-button>
+                  )}
+                </Fragment>
+              )}
+            </section>
 
-              <div class="modal-footer justify-content-auto">
-                <ir-button class="w-100" btn_styles={'flex-fill'} text="Cancel" btn_color="secondary" onClick={this.handleCancelClicked.bind(this)}></ir-button>
-                <ir-button
-                  class="w-100"
-                  btn_styles={'flex-fill'}
-                  text="Verify now"
-                  isLoading={this.isLoading}
-                  btn_disabled={this.otp?.length < this.otpLength || this.isLoading}
-                  onClick={() => this.verifyOtp()}
-                ></ir-button>
-              </div>
-            </div>
-          </div>
-        </div>
+            <footer class="otp-modal-footer justify-content-auto">
+              <ir-button class="w-100" btn_styles="flex-fill" text="Cancel" btn_color="secondary" onClick={this.handleCancelClicked.bind(this)}></ir-button>
+              <ir-button
+                class="w-100"
+                btn_styles="flex-fill"
+                text="Verify now"
+                isLoading={this.isLoading}
+                btn_disabled={this.otp?.length < this.otpLength || this.isLoading}
+                onClick={() => this.verifyOtp()}
+              ></ir-button>
+            </footer>
+          </form>
+        </dialog>
       </Host>
     );
   }
