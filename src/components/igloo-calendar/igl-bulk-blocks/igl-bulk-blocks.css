@@ -1,3 +1,8 @@
-:host {
-  display: block;
+.bulk-sheet-container {
+  display: flex;
+  flex-direction: column;
+  height: auto !important;
+  min-height: 100vh;
+  background: white !important;
+  gap: 1rem;
 }

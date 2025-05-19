@@ -13,6 +13,7 @@ export class IrCheckbox {
   @Prop() name: string;
   @Prop() indeterminate: boolean;
   @Prop() disabled: boolean;
+  @Prop() labelClass: string;
 
   @State() currentChecked = false;
 
@@ -73,7 +74,11 @@ export class IrCheckbox {
           )}
         </button>
         <input type="checkbox" indeterminate={this.indeterminate} aria-hidden="true" tabindex="-1" value="on" checked={this.currentChecked} class="checkbox" />
-        {this.label && <label htmlFor={this.checkboxId}>{this.label}</label>}
+        {this.label && (
+          <label htmlFor={this.checkboxId} class={this.labelClass}>
+            {this.label}
+          </label>
+        )}
       </Host>
     );
   }

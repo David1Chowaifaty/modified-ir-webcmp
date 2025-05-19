@@ -390,6 +390,7 @@ export namespace Components {
         "disabled": boolean;
         "indeterminate": boolean;
         "label": string;
+        "labelClass": string;
         "name": string;
     }
     interface IrCheckboxes {
@@ -3885,6 +3886,7 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
         "indeterminate"?: boolean;
         "label"?: string;
+        "labelClass"?: string;
         "name"?: string;
         "onCheckChange"?: (event: IrCheckboxCustomEvent<boolean>) => void;
     }
