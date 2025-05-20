@@ -60,6 +60,10 @@ export class IrUserManagementTable {
   private async handleUserActiveChange(e: CustomEvent, user: User) {
     e.stopImmediatePropagation();
     e.stopPropagation();
+    const res = await this.verifyAdminAction({ type: 'user', mode: 'update', user });
+    if (res === 'cancelled') {
+      return;
+    }
     await this.userService.handleExposedUser({
       email: user.email,
       id: user.id,
@@ -150,16 +154,21 @@ export class IrUserManagementTable {
     this.user = null;
     this.modalType = null;
   }
-  private async verifyAdminAction(params: { type: 'user'; isEdit: boolean; user: User | null }) {
+  private async verifyAdminAction(params: { type: 'user'; mode: 'edit' | 'delete' | 'update' | 'create'; user: User | null }) {
     const res = await this.systemService.checkOTPNecessity({
       METHOD_NAME: 'Handle_Exposed_User',
     });
     if (res?.cancelled) {
-      return;
+      return 'cancelled';
     }
-    this.currentTrigger = {
-      ...params,
-    };
+    const { mode, ...rest } = params;
+    if (mode === 'edit' || mode === 'create') {
+      this.currentTrigger = {
+        ...rest,
+        isEdit: mode === 'edit',
+      };
+    }
+    return 'ok';
   }
   render() {
     return (
@@ -189,7 +198,7 @@ export class IrUserManagementTable {
                       onIconClickHandler={() => {
                         this.verifyAdminAction({
                           type: 'user',
-                          isEdit: false,
+                          mode: 'create',
                           user: null,
                         });
                       }}
@@ -287,7 +296,7 @@ export class IrUserManagementTable {
                               onIconClickHandler={() => {
                                 this.verifyAdminAction({
                                   type: 'user',
-                                  isEdit: true,
+                                  mode: 'edit',
                                   user,
                                 });
                               }}
@@ -306,7 +315,15 @@ export class IrUserManagementTable {
                               data-testid="delete"
                               title={locales.entries.Lcz_DeleteHousekeeper}
                               icon="ft-trash-2 danger h5 pointer"
-                              onIconClickHandler={() => {
+                              onIconClickHandler={async () => {
+                                const res = await this.verifyAdminAction({
+                                  type: 'user',
+                                  mode: 'delete',
+                                  user,
+                                });
+                                if (res === 'cancelled') {
+                                  return;
+                                }
                                 this.openModal(user, 'delete');
                               }}
                             >

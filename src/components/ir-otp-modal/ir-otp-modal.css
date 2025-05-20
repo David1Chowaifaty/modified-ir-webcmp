@@ -1,6 +1,8 @@
 :host {
   display: block;
-  --padding: 1.5rem;
+}
+:root {
+  --otp-modal-padding: 1.5rem;
 }
 .modal-backdrop {
   background-color: rgba(0, 0, 0, 0.5) !important;
@@ -29,12 +31,12 @@
 }
 .otp-modal-body {
   max-height: 100% !important;
-  padding: 0 var(--padding);
+  padding: 0 var(--otp-modal-padding);
 }
 .otp-modal-header {
   display: flex;
   justify-content: space-between;
-  padding: var(--padding);
+  padding: var(--otp-modal-padding);
   padding-bottom: 1rem;
   border-top-left-radius: 0.35rem;
   border-top-right-radius: 0.35rem;
@@ -47,7 +49,7 @@
   display: flex;
   gap: 0.5rem;
   flex-direction: column;
-  padding: var(--padding);
+  padding: var(--otp-modal-padding);
   padding-top: 0.5rem !important;
 }
 .verification-message {
