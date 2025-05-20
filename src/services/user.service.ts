@@ -16,8 +16,8 @@ export class UserService {
     console.warn('data<==>', data);
     return data.My_Result;
   }
-  public async getExposedPropertyUsers() {
-    const { data } = await axios.post('/Get_Exposed_Property_Users', {});
+  public async getExposedPropertyUsers({ property_id }: { property_id: number }) {
+    const { data } = await axios.post('/Get_Exposed_Property_Users', { property_id });
     return data.My_Result;
   }
 }

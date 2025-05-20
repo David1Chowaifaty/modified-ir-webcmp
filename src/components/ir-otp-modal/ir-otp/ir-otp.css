@@ -4,8 +4,9 @@
 }
 
 .otp-digit {
-  width: 2.5rem !important;
-  height: 2.5rem !important;
+  --otp-size: 3rem;
+  width: var(--otp-size) !important;
+  height: var(--otp-size) !important;
   padding: 0;
   font-size: 24px;
   font-weight: 500;
