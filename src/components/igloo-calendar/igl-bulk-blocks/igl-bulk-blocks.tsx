@@ -34,6 +34,7 @@ export class IglBulkBlocks {
   @State() selectedWeekdays: number[] = Array(7)
     .fill(null)
     .map((_, i) => i);
+
   private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
   private total: number;
   private allRoomTypes: SelectedRooms[] = [];
@@ -64,7 +65,7 @@ export class IglBulkBlocks {
     this.allRoomTypes = calendar_data.roomsInfo.map(rt => ({
       [rt.id]: rt.physicalrooms.map(room => room.id),
     }));
-    this.selectedRoomTypes = this.allRoomTypes;
+    // this.selectedRoomTypes = this.allRoomTypes;
   }
 
   private toggleRoom({ checked, roomId, roomTypeId }: { checked: boolean; roomTypeId: number; roomId: number }): void {
@@ -169,6 +170,7 @@ export class IglBulkBlocks {
           <div class="text-muted text-left mb-3">
             {1 === 1 ? <p>Select the listings that you want to block.</p> : <p>Select the roomtypes and units that you want to block.</p>}
           </div>
+          <p class="text-left text-muted">Select room types to block</p>
           <div class="d-flex flex-column" style={{ gap: '1rem' }}>
             <ir-checkbox
               indeterminate={this.selectedRoomTypes?.length > 0 && this.selectedRoomTypes?.length < this.allRoomTypes?.length}
@@ -205,6 +207,7 @@ export class IglBulkBlocks {
                 );
               })}
           </div>
+          <p class="text-left mt-2 text-muted">Select which days to block</p>
           <div class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
             {this.weekdays.map(w => (
               <ir-checkbox
@@ -215,6 +218,8 @@ export class IglBulkBlocks {
               ></ir-checkbox>
             ))}
           </div>
+          <p class="text-left mt-2 text-muted">Add date range(s) to block</p>
+
           {/* Dates */}
           <table class="mt-1">
             <thead>
@@ -222,14 +227,15 @@ export class IglBulkBlocks {
                 <th class="text-left">From</th>
                 <th class="text-left">to (inclusive)</th>
                 <td>
-                  <ir-button
-                    btn_disabled={this.dates.length === this.maxDatesLength - 1}
-                    variant="icon"
-                    icon_name="plus"
-                    onClickHandler={() => {
-                      this.dates = [...this.dates, { from: null, to: null }];
-                    }}
-                  ></ir-button>
+                  {this.dates.length !== this.maxDatesLength && (
+                    <ir-button
+                      variant="icon"
+                      icon_name="plus"
+                      onClickHandler={() => {
+                        this.dates = [...this.dates, { from: null, to: null }];
+                      }}
+                    ></ir-button>
+                  )}
                 </td>
               </tr>
             </thead>
@@ -240,7 +246,7 @@ export class IglBulkBlocks {
                 }
                 return (
                   <tr key={`date_${i}`}>
-                    <td>
+                    <td class="pr-1">
                       <ir-date-picker
                         ref={el => {
                           this.dateRefs[i].from = el;
@@ -272,7 +278,7 @@ export class IglBulkBlocks {
                         ></input>
                       </ir-date-picker>
                     </td>
-                    <td>
+                    <td class="pr-1">
                       <ir-date-picker
                         forceDestroyOnUpdate
                         ref={el => {

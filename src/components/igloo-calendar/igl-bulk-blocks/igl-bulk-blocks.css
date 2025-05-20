@@ -6,3 +6,6 @@
   background: white !important;
   gap: 1rem;
 }
+.animated-container {
+  transition: all 0.5s ease;
+}
