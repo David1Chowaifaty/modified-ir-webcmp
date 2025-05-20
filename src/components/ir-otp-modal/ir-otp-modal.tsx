@@ -1,6 +1,6 @@
 import Token from '@/models/Token';
 import { SystemService } from '@/services/system.service';
-import { Component, Event, EventEmitter, Fragment, Host, Method, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Host, Listen, Method, Prop, State, Watch, h } from '@stencil/core';
 import { z } from 'zod';
 
 @Component({
@@ -57,6 +57,12 @@ export class IrOtpModal {
   handleTicketChange(newValue: string, oldValue: string) {
     if (newValue !== oldValue) {
       this.tokenService.setToken(newValue);
+    }
+  }
+  @Listen('keydown', { target: 'document' })
+  handleKeyDownChange(e: KeyboardEvent) {
+    if (e.key === 'Escape' && this.dialogRef?.open) {
+      e.preventDefault();
     }
   }
   /** Open & reset everything */
