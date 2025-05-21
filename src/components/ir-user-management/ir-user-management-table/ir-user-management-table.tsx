@@ -23,7 +23,8 @@ export class IrUserManagementTable {
   @Prop() haveAdminPrivileges: boolean;
   @Prop() superAdminId = '5';
   @Prop() allowedUsersTypes: AllowedUser[] = [];
-
+  @Prop() baseUserTypeCode: string | number;
+  @Prop() property_id: number;
   @State() currentTrigger: any = null;
   @State() user: User = null;
   @State() modalType: 'verify' | 'delete';
@@ -72,6 +73,8 @@ export class IrUserManagementTable {
       password: user.password,
       type: user.type,
       username: user.username,
+      base_user_type_code: this.baseUserTypeCode,
+      property_id: this.property_id,
     });
     this.toast.emit({
       position: 'top-right',
@@ -121,6 +124,8 @@ export class IrUserManagementTable {
     }
     return (
       <ir-user-form-panel
+        property_id={this.property_id}
+        baseUserTypeCode={this.baseUserTypeCode}
         superAdminId={this.superAdminId}
         allowedUsersTypes={this.allowedUsersTypes}
         userTypeCode={this.userTypeCode}

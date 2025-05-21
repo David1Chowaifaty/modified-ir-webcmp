@@ -21,6 +21,7 @@ export class IrUserManagement {
   @Prop() p: string;
   @Prop() isSuperAdmin: boolean = true;
   @Prop() userTypeCode: string | number;
+  @Prop() baseUserTypeCode: string | number;
   @Prop() userId: string | number;
 
   @State() isLoading = true;
@@ -39,13 +40,6 @@ export class IrUserManagement {
   private superAdminId = '5';
 
   componentWillLoad() {
-    console.log('init', {
-      ticket: this.ticket,
-      propertyid: this.propertyid,
-      userId: this.userId,
-      userTypeCode: this.userTypeCode,
-      baseUrl: this.baseUrl,
-    });
     if (this.baseUrl) {
       this.token.setBaseUrl(this.baseUrl);
     }
@@ -57,12 +51,6 @@ export class IrUserManagement {
 
   @Watch('ticket')
   ticketChanged(newValue: string, oldValue: string) {
-    console.log('ticket changed', {
-      ticket: this.ticket,
-      propertyid: this.propertyid,
-      userId: this.userId,
-      userTypeCode: this.userTypeCode,
-    });
     if (newValue === oldValue) {
       return;
     }
@@ -230,6 +218,8 @@ export class IrUserManagement {
 
           <div class="" style={{ gap: '1rem' }}>
             <ir-user-management-table
+              property_id={this.property_id}
+              baseUserTypeCode={this.baseUserTypeCode}
               allowedUsersTypes={this.allowedUsersTypes}
               userTypeCode={this.userTypeCode}
               haveAdminPrivileges={[this.superAdminId, '17'].includes(this.userTypeCode?.toString())}

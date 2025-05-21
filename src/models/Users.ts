@@ -9,6 +9,8 @@ export interface UserParams {
   type: number | string;
   is_to_remove?: boolean;
   is_email_verified?: boolean;
+  base_user_type_code?: number | string;
+  property_id?: number | string;
 }
 interface SignIn {
   country: string;

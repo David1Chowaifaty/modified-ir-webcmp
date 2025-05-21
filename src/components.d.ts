@@ -1281,6 +1281,7 @@ export namespace Components {
     }
     interface IrUserFormPanel {
         "allowedUsersTypes": AllowedUser[];
+        "baseUserTypeCode": string | number;
         "haveAdminPrivileges": boolean;
         "isEdit": boolean;
         "language": string;
@@ -1292,6 +1293,7 @@ export namespace Components {
     }
     interface IrUserManagement {
         "baseUrl": string;
+        "baseUserTypeCode": string | number;
         "isSuperAdmin": boolean;
         "language": string;
         "p": string;
@@ -1302,8 +1304,10 @@ export namespace Components {
     }
     interface IrUserManagementTable {
         "allowedUsersTypes": AllowedUser[];
+        "baseUserTypeCode": string | number;
         "haveAdminPrivileges": boolean;
         "isSuperAdmin": boolean;
+        "property_id": number;
         "superAdminId": string;
         "userTypeCode": string | number;
         "userTypes": Map<string | number, string>;
@@ -4868,6 +4872,7 @@ declare namespace LocalJSX {
     }
     interface IrUserFormPanel {
         "allowedUsersTypes"?: AllowedUser[];
+        "baseUserTypeCode"?: string | number;
         "haveAdminPrivileges"?: boolean;
         "isEdit"?: boolean;
         "language"?: string;
@@ -4881,6 +4886,7 @@ declare namespace LocalJSX {
     }
     interface IrUserManagement {
         "baseUrl"?: string;
+        "baseUserTypeCode"?: string | number;
         "isSuperAdmin"?: boolean;
         "language"?: string;
         "p"?: string;
@@ -4891,10 +4897,12 @@ declare namespace LocalJSX {
     }
     interface IrUserManagementTable {
         "allowedUsersTypes"?: AllowedUser[];
+        "baseUserTypeCode"?: string | number;
         "haveAdminPrivileges"?: boolean;
         "isSuperAdmin"?: boolean;
         "onResetData"?: (event: IrUserManagementTableCustomEvent<null>) => void;
         "onToast"?: (event: IrUserManagementTableCustomEvent<IToast>) => void;
+        "property_id"?: number;
         "superAdminId"?: string;
         "userTypeCode"?: string | number;
         "userTypes"?: Map<string | number, string>;

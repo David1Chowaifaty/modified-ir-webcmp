@@ -29,6 +29,7 @@ export class IrUserFormPanel {
   @Prop() superAdminId: string = '5';
   @Prop() userTypeCode: string | number;
   @Prop() allowedUsersTypes: AllowedUser[] = [];
+  @Prop() baseUserTypeCode: string | number;
 
   @State() isLoading: boolean = false;
   @State() autoValidate = false;
@@ -134,7 +135,8 @@ export class IrUserFormPanel {
       }
       const toValidateUserInfo = {
         ...this.userInfo,
-
+        base_user_type_code: this.baseUserTypeCode,
+        property_id: this.property_id,
         password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password,
         type: Number(this.userInfo.type),
       };
