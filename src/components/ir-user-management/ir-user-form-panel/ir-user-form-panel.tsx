@@ -224,34 +224,41 @@ export class IrUserFormPanel {
                   text: t.value,
                   value: t.code,
                 }))}
+                firstOption={'Select...'}
                 selectedValue={this.userInfo.type?.toString()}
                 onSelectChange={e => this.updateUserField('type', e.detail)}
               />
             </div>
           )}
           {this.user?.type?.toString() !== '5' && (
-            <ir-input-text
-              testId="username"
-              zod={this.userSchema.pick({ username: true })}
-              wrapKey="username"
-              autoValidate={this.autoValidate}
-              error={this.errors?.username}
-              label="Username"
-              disabled={this.disableFields}
-              placeholder=""
-              onTextChange={e => this.updateUserField('username', e.detail)}
-              value={this.userInfo.username}
-              onInputBlur={this.handleBlur.bind(this)}
-              maxLength={40}
-            />
+            <Fragment>
+              <input type="text" name="dummy" style={{ display: 'none' }} />
+              <ir-input-text
+                testId="username"
+                zod={this.userSchema.pick({ username: true })}
+                wrapKey="username"
+                autoValidate={this.autoValidate}
+                error={this.errors?.username}
+                label="Username"
+                disabled={this.disableFields}
+                placeholder=""
+                onTextChange={e => this.updateUserField('username', e.detail)}
+                value={this.userInfo.username}
+                onInputBlur={this.handleBlur.bind(this)}
+                maxLength={40}
+                autoComplete="off"
+              />
+            </Fragment>
           )}
           {!this.user ? (
             <Fragment>
+              <input type="text" name="dummy" style={{ display: 'none' }} />
               <ir-input-text
                 testId="password"
                 autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
                 label={'Password'}
                 value={this.userInfo.password}
+                autoComplete="off"
                 type="password"
                 maxLength={16}
                 zod={this.userSchema.pick({ password: true })}

@@ -119,6 +119,9 @@ export class IrInputText {
   /** To clear all the Input base styling*/
   @Prop() errorMessage: string;
 
+  /** Autocomplete behavior for the input (e.g., 'on', 'off', 'email', etc.) */
+  @Prop() autoComplete: string;
+
   @State() inputFocused: boolean = false;
 
   @Event({ bubbles: true, composed: true }) textChange: EventEmitter<any>;
@@ -264,6 +267,7 @@ export class IrInputText {
             onInput={this.handleInputChange.bind(this)}
             required={this.required}
             disabled={this.disabled}
+            autoComplete={this.autoComplete}
           />
         </fieldset>
       );
@@ -306,6 +310,7 @@ export class IrInputText {
               this.inputFocus.emit(e);
             }}
             placeholder={this.placeholder}
+            autoComplete={this.autoComplete}
             value={this.value}
             onInput={this.handleInputChange.bind(this)}
             required={this.required}

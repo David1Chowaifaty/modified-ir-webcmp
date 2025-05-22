@@ -616,6 +616,10 @@ export namespace Components {
          */
         "asyncParse"?: boolean;
         /**
+          * Autocomplete behavior for the input (e.g., 'on', 'off', 'email', etc.)
+         */
+        "autoComplete": string;
+        /**
           * Whether the input should auto-validate
          */
         "autoValidate"?: boolean;
@@ -4139,6 +4143,10 @@ declare namespace LocalJSX {
           * A Zod parse type for validating the input
          */
         "asyncParse"?: boolean;
+        /**
+          * Autocomplete behavior for the input (e.g., 'on', 'off', 'email', etc.)
+         */
+        "autoComplete"?: string;
         /**
           * Whether the input should auto-validate
          */
