@@ -207,7 +207,7 @@ export class IrUserFormPanel {
             error={this.errors?.mobile}
             asyncParse
             autoValidate={this.user ? (this.userInfo?.mobile !== this.user.mobile ? true : false) : this.autoValidate}
-            label="Mobile"
+            label={locales.entries.Lcz_Mobile}
             mask={this.mobileMask}
             placeholder={''}
             value={this.userInfo.mobile}
@@ -224,7 +224,7 @@ export class IrUserFormPanel {
                   text: t.value,
                   value: t.code,
                 }))}
-                firstOption={'Select...'}
+                firstOption={locales.entries.Lcz_Select}
                 selectedValue={this.userInfo.type?.toString()}
                 onSelectChange={e => this.updateUserField('type', e.detail)}
               />
@@ -239,12 +239,12 @@ export class IrUserFormPanel {
                 wrapKey="username"
                 autoValidate={this.autoValidate}
                 error={this.errors?.username}
-                label="Username"
+                label={locales.entries.Lcz_Username}
                 disabled={this.disableFields}
                 placeholder=""
                 onTextChange={e => this.updateUserField('username', e.detail)}
                 value={this.userInfo.username}
-                onInputBlur={this.handleBlur.bind(this)}
+                // onInputBlur={this.handleBlur.bind(this)}
                 maxLength={40}
                 autoComplete="off"
               />
@@ -256,7 +256,7 @@ export class IrUserFormPanel {
               <ir-input-text
                 testId="password"
                 autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
-                label={'Password'}
+                label={locales.entries.Lcz_Password}
                 value={this.userInfo.password}
                 autoComplete="off"
                 type="password"
@@ -277,8 +277,8 @@ export class IrUserFormPanel {
             this.user.type.toString() !== this.superAdminId &&
             (this.user?.type.toString() === '17' && this.userTypeCode?.toString() === '17' ? null : (
               <div class="d-flex mt-2 align-items-center justify-content-between">
-                <h4 class="m-0 p-0 logins-history-title">Password</h4>
-                <ir-button size="sm" btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
+                <h4 class="m-0 p-0 logins-history-title">{locales.entries.Lcz_Password}</h4>
+                <ir-button size="sm" btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text={locales.entries.Lcz_ChangePassword} btn_color="link"></ir-button>
               </div>
             ))
           )}
@@ -289,7 +289,7 @@ export class IrUserFormPanel {
                 {this.user.sign_ins.length > 5 && (
                   <ir-button
                     btn_styles={'pr-0'}
-                    text={!this.showFullHistory ? 'View all' : 'View less'}
+                    text={!this.showFullHistory ? locales.entries.Lcz_ViewAll : locales.entries.Lcz_ViewLess}
                     btn_color="link"
                     size="sm"
                     onClickHandler={() => (this.showFullHistory = !this.showFullHistory)}
@@ -306,8 +306,14 @@ export class IrUserFormPanel {
                           {moment(s.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')} {_formatTime(s.hour?.toString(), s.minute?.toString())} |
                         </p>
                         <p class="login-location">
-                          <span class="login-ip">IP: {s.ip}</span> &nbsp;|&nbsp;
-                          <span class="login-country">Location: {s.country}</span> &nbsp;|&nbsp;
+                          <span class="login-ip">
+                            {locales.entries.Lcz_IP}: {s.ip}
+                          </span>{' '}
+                          &nbsp;|&nbsp;
+                          <span class="login-country">
+                            {locales.entries.Lcz_Location}: {s.country}
+                          </span>{' '}
+                          &nbsp;|&nbsp;
                           <span class="login-os">
                             OS: {ua.os.name ?? 'N/A'} {ua.os.version}
                           </span>

@@ -1,6 +1,7 @@
 .otp-input-wrapper {
   display: flex;
   gap: 0.5rem;
+  justify-content: space-evenly;
 }
 
 .otp-digit {

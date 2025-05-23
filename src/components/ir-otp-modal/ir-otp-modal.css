@@ -55,6 +55,10 @@
 .verification-message {
   max-width: 90%;
 }
+.modal-loading-container {
+  height: 250px;
+  width: 80vw;
+}
 @media (min-width: 768px) {
   .otp-modal-dialog,
   .otp-modal-content {
@@ -63,6 +67,9 @@
   .otp-modal-footer {
     flex-direction: row;
     align-items: center;
+  }
+  .modal-loading-container {
+    width: 380px !important;
   }
   .verification-message {
     max-width: 350px !important;

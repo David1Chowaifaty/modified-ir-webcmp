@@ -895,6 +895,7 @@ export namespace Components {
           * User's email address to display in the modal and send the OTP to
          */
         "email": string;
+        "language": string;
         /**
           * Open & reset everything
          */
@@ -1067,6 +1068,7 @@ export namespace Components {
         "countries": ICountry[];
     }
     interface IrResetPassword {
+        "language": string;
         "old_pwd": string;
         "skip2Fa": boolean;
         "ticket": string;
@@ -4438,6 +4440,7 @@ declare namespace LocalJSX {
           * User's email address to display in the modal and send the OTP to
          */
         "email"?: string;
+        "language"?: string;
         /**
           * Emits the final OTP (or empty on cancel)
          */
@@ -4636,6 +4639,7 @@ declare namespace LocalJSX {
         "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent<any>>) => void;
     }
     interface IrResetPassword {
+        "language"?: string;
         "old_pwd"?: string;
         "onCloseSideBar"?: (event: IrResetPasswordCustomEvent<null>) => void;
         "skip2Fa"?: boolean;

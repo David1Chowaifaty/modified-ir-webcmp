@@ -1,6 +1,8 @@
 import Token from '@/models/Token';
 import { AuthService } from '@/services/authenticate.service';
+import { RoomService } from '@/services/room.service';
 import { SystemService } from '@/services/system.service';
+import locales from '@/stores/locales.store';
 import { CONSTANTS } from '@/utils/constants';
 import { Component, Element, Event, EventEmitter, Fragment, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { z, ZodError } from 'zod';
@@ -17,6 +19,7 @@ export class IrResetPassword {
   @Prop() old_pwd: string;
   @Prop() ticket: string;
   @Prop() skip2Fa: boolean;
+  @Prop() language: string = 'en';
 
   @State() confirmPassword: string;
   @State() password: string;
@@ -31,6 +34,7 @@ export class IrResetPassword {
   private token = new Token();
   private authService = new AuthService();
   private systemService = new SystemService();
+  private roomService = new RoomService();
   private initialized = false;
 
   componentWillLoad() {
@@ -40,7 +44,6 @@ export class IrResetPassword {
   }
 
   componentDidLoad() {
-    console.log('here');
     this.init();
   }
 
@@ -56,9 +59,12 @@ export class IrResetPassword {
     if (!this.ticket || this.initialized) {
       return;
     }
-    await this.systemService.checkOTPNecessity({
-      METHOD_NAME: 'Change_User_Pwd',
-    });
+    await Promise.all([
+      this.systemService.checkOTPNecessity({
+        METHOD_NAME: 'Change_User_Pwd',
+      }),
+      this.roomService.fetchLanguage(this.language, ['_USER_MGT']),
+    ]);
     this.initialized = false;
   }
 
@@ -148,7 +154,7 @@ export class IrResetPassword {
               />
             </svg>
             <div class="text-center mb-2">
-              <h4 class="mb-1">Set New Password</h4>
+              <h4 class="mb-1">{locales.entries.Lcz_SetNewPassword}</h4>
               {this.submitted ? (
                 <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>
               ) : (
@@ -170,7 +176,7 @@ export class IrResetPassword {
                         inputStyles={'m-0'}
                         zod={this.ResetPasswordSchema.pick({ password: true })}
                         wrapKey="password"
-                        placeholder="New password"
+                        placeholder={locales.entries.Lcz_NewPassword}
                         onInputFocus={() => (this.showValidator = true)}
                         type={'password'}
                       ></ir-input-text>
@@ -186,7 +192,7 @@ export class IrResetPassword {
                       value={this.confirmPassword}
                       onTextChange={e => (this.confirmPassword = e.detail)}
                       label=""
-                      placeholder="Confirm password"
+                      placeholder={locales.entries.Lcz_ConfirmPassword}
                       type={'password'}
                     ></ir-input-text>
                   </div>
@@ -194,8 +200,22 @@ export class IrResetPassword {
 
                 {!insideSidebar && (
                   <div class="d-flex flex-column mt-2 flex-sm-row align-items-sm-center" style={{ gap: '0.5rem' }}>
-                    <ir-button btn_styles={'flex-fill'} onClickHandler={() => window.history.back()} class="flex-fill" text={'Cancel'} size="md" btn_color="secondary"></ir-button>
-                    <ir-button btn_styles={'flex-fill'} class="flex-fill" isLoading={this.isLoading} btn_type="submit" text={'Change password'} size="md"></ir-button>
+                    <ir-button
+                      btn_styles={'flex-fill'}
+                      onClickHandler={() => window.history.back()}
+                      class="flex-fill"
+                      text={locales.entries.Lcz_Cancel}
+                      size="md"
+                      btn_color="secondary"
+                    ></ir-button>
+                    <ir-button
+                      btn_styles={'flex-fill'}
+                      class="flex-fill"
+                      isLoading={this.isLoading}
+                      btn_type="submit"
+                      text={locales.entries.Lcz_ChangePassword}
+                      size="md"
+                    ></ir-button>
                   </div>
                 )}
               </section>
@@ -204,7 +224,7 @@ export class IrResetPassword {
           {insideSidebar && (
             <div class={'sheet-footer w-full'}>
               <ir-button
-                text={'Cancel'}
+                text={locales.entries.Lcz_Cancel}
                 onClickHandler={() => this.closeSideBar.emit(null)}
                 class="flex-fill"
                 btn_color="secondary"
@@ -216,7 +236,7 @@ export class IrResetPassword {
                 class="flex-fill"
                 btn_type="submit"
                 btn_styles="w-100 justify-content-center align-items-center"
-                text={'Change password'}
+                text={locales.entries.Lcz_ChangePassword}
                 size="md"
               ></ir-button>
             </div>

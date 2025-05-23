@@ -185,13 +185,13 @@ export class IrUserManagementTable {
                 <th class="text-left">{locales.entries.Lcz_Username ?? 'Username'}</th>
                 <th class="text-left">{locales.entries.Lcz_Email}</th>
                 <th class="text-left">{locales.entries.Lcz_Mobile ?? 'Mobile'}</th>
-                <th class="text-left">Role</th>
+                <th class="text-left">{locales.entries.Lcz_Role}</th>
                 <th class="text-left small" style={{ fontWeight: 'bold' }}>
-                  <p class="m-0 p-0 ">Created at</p>
-                  <p class="m-0 p-0">Last signed in</p>
+                  <p class="m-0 p-0 ">{locales.entries.Lcz_CreatedAt}</p>
+                  <p class="m-0 p-0">{locales.entries.Lcz_LastSignedIn}</p>
                 </th>
                 {/* <th class="text-left">Created at</th> */}
-                {this.haveAdminPrivileges && <th>Active</th>}
+                {this.haveAdminPrivileges && <th>{locales.entries.Lcz_Active}</th>}
                 {/* {this.haveAdminPrivileges && <th>Email verified</th>} */}
 
                 <th class={'action-row'}>
@@ -199,7 +199,7 @@ export class IrUserManagementTable {
                     <ir-icon
                       style={{ paddingLeft: '0.875rem' }}
                       data-testid="new_user"
-                      title={locales.entries.Lcz_CreateHousekeeper}
+                      title={locales.entries.Lcz_CreateUser}
                       onIconClickHandler={() => {
                         this.verifyAdminAction({
                           type: 'user',
@@ -233,12 +233,12 @@ export class IrUserManagementTable {
 
                       {this.haveAdminPrivileges && (
                         <span style={{ marginLeft: '0.5rem' }} class={`small ${user.is_email_verified ? 'text-success' : 'text-danger'}`}>
-                          {user.is_email_verified ? 'Verified' : 'Not verified'}
+                          {user.is_email_verified ? locales.entries.Lcz_Verified : locales.entries.Lcz_NotVerified}
                         </span>
                       )}
                     </td>
                     <td>{user.mobile ?? 'N/A'}</td>
-                    <td>{user.type.toString() === this.superAdminId ? 'Super admin' : this.userTypes.get(user.type.toString())}</td>
+                    <td>{user.type.toString() === this.superAdminId ? locales.entries.Lcz_SuperAdmin : this.userTypes.get(user.type.toString())}</td>
                     <td class="small">
                       <p class="m-0 p-0">
                         {new Date(user.created_on).getFullYear() === 1900 || !user.created_on ? 'N/A' : moment(user.created_on, 'YYYY-MM-DD').format('DD-MMM-YYYY')}
@@ -297,7 +297,7 @@ export class IrUserManagementTable {
                           {this.canEdit && (
                             <ir-icon
                               data-testid="edit"
-                              title={locales.entries.Lcz_EditHousekeeper}
+                              title={locales.entries.Lcz_EditUser}
                               onIconClickHandler={() => {
                                 this.verifyAdminAction({
                                   type: 'user',
@@ -318,7 +318,7 @@ export class IrUserManagementTable {
                           {this.canDelete && !isUserSuperAdmin && (this.isSuperAdmin || user.type.toString() !== '17') && (
                             <ir-icon
                               data-testid="delete"
-                              title={locales.entries.Lcz_DeleteHousekeeper}
+                              title={locales.entries.Lcz_DeleteUser}
                               icon="ft-trash-2 danger h5 pointer"
                               onIconClickHandler={async () => {
                                 const res = await this.verifyAdminAction({
@@ -360,7 +360,9 @@ export class IrUserManagementTable {
         <ir-modal
           autoClose={false}
           modalBody={
-            this.modalType === 'delete' ? `Are you sure you want to delete ${this.user?.username}?` : `Are you sure you want to unverify ${this.maskEmail(this.user?.email)}`
+            this.modalType === 'delete'
+              ? `${locales.entries.Lcz_AreYouSureToDelete} ${this.user?.username}?`
+              : `${locales.entries.Lcz_AreYouSureToUnverify} ${this.maskEmail(this.user?.email)}`
           }
           rightBtnColor="danger"
           isLoading={isRequestPending('/Handle_Exposed_User')}
