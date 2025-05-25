@@ -1,11 +1,11 @@
 import Token from '@/models/Token';
 import { checkUserAuthState, manageAnchorSession } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-
+export type SecureScreens = 'hk' | 'tasks' | 'front' | 'users';
 @Component({
   tag: 'ir-secure-tasks',
   styleUrl: 'ir-secure-tasks.css',
-  scoped: true,
+  shadow: false,
 })
 export class IrSecureTasks {
   @Prop() propertyid: number;
@@ -13,7 +13,7 @@ export class IrSecureTasks {
   @Prop() bookingNumber: string;
 
   @State() isAuthenticated: boolean = false;
-  @State() currentPage: string;
+  @State() currentPage: SecureScreens;
   @State() inputValue: string;
 
   private token = new Token();
@@ -44,6 +44,12 @@ export class IrSecureTasks {
       to_date: _TO_DATE,
     };
   }
+  private routes: { name: string; value: SecureScreens }[] = [
+    { name: 'Housekeepers', value: 'hk' },
+    { name: 'Tasks', value: 'tasks' },
+    { name: 'Front', value: 'front' },
+    { name: 'Users', value: 'users' },
+  ];
   private handleAuthFinish(e: CustomEvent) {
     const token = e.detail.token;
     this.token.setToken(token);
@@ -93,39 +99,19 @@ export class IrSecureTasks {
               </form>
             </div>
             <ul class="nav  m-0 p-0">
-              <li class=" nav-item">
-                <a
-                  class={{ 'nav-link': true, 'active': this.currentPage === 'hk' }}
-                  href="#"
-                  onClick={() => {
-                    this.currentPage = 'hk';
-                  }}
-                >
-                  Housekeepers
-                </a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class={{ 'nav-link': true, 'active': this.currentPage === 'tasks' }}
-                  href="#"
-                  onClick={() => {
-                    this.currentPage = 'tasks';
-                  }}
-                >
-                  Tasks
-                </a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class={{ 'nav-link': true, 'active': this.currentPage === 'front' }}
-                  href="#"
-                  onClick={() => {
-                    this.currentPage = 'front';
-                  }}
-                >
-                  Front
-                </a>
-              </li>
+              {this.routes.map(route => (
+                <li key={route.name} class=" nav-item">
+                  <a
+                    class={{ 'nav-link': true, 'active': this.currentPage === route.value }}
+                    href="#"
+                    onClick={() => {
+                      this.currentPage = route.value;
+                    }}
+                  >
+                    {route.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           <button
@@ -162,9 +148,10 @@ export class IrSecureTasks {
             language="en"
           ></igloo-calendar>
         );
-
       case 'hk':
         return <ir-housekeeping p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-housekeeping>;
+      case 'users':
+        return <ir-user-management userTypeCode={5} p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-user-management>;
 
       default:
         return null;

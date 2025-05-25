@@ -29,6 +29,7 @@ export class IrUserFormPanel {
   @Prop() superAdminId: string = '5';
   @Prop() userTypeCode: string | number;
   @Prop() allowedUsersTypes: AllowedUser[] = [];
+  @Prop() baseUserTypeCode: string | number;
 
   @State() isLoading: boolean = false;
   @State() autoValidate = false;
@@ -37,7 +38,7 @@ export class IrUserFormPanel {
   @State() userInfo: User = {
     type: '',
     id: -1,
-    is_active: false,
+    is_active: true,
     sign_ins: null,
     created_on: null,
     mobile: '',
@@ -66,7 +67,7 @@ export class IrUserFormPanel {
   private token = new Token();
   private mobileMask = {};
   private userSchema = z.object({
-    mobile: z.string().min(1).max(20),
+    mobile: z.string().min(4).max(20),
     email: z.string().email(),
     password: z
       .string()
@@ -81,7 +82,7 @@ export class IrUserFormPanel {
         },
         { message: 'Password must be at least 8 characters long.' },
       ),
-    type: z.union([z.literal(1), z.literal(this.superAdminId ?? '5'), z.coerce.string().nonempty().min(2)]),
+    type: z.union([z.literal(1), z.literal(Number(this.superAdminId?.toString() ?? '5')), z.coerce.string().nonempty().min(2)]),
     username: z
       .string()
       .min(3)
@@ -111,7 +112,7 @@ export class IrUserFormPanel {
     }
     this.isPropertyAdmin = this.userTypeCode.toString() === '17';
     if (this.isPropertyAdmin) {
-      this.updateUserField('type', '16');
+      this.updateUserField('type', '17');
     }
     this.mobileMask = {
       mask: `{${calendar_data.country.phone_prefix}} 000000000000`,
@@ -134,6 +135,8 @@ export class IrUserFormPanel {
       }
       const toValidateUserInfo = {
         ...this.userInfo,
+        base_user_type_code: this.baseUserTypeCode,
+        property_id: this.property_id,
         password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password,
         type: Number(this.userInfo.type),
       };
@@ -204,7 +207,7 @@ export class IrUserFormPanel {
             error={this.errors?.mobile}
             asyncParse
             autoValidate={this.user ? (this.userInfo?.mobile !== this.user.mobile ? true : false) : this.autoValidate}
-            label="Mobile"
+            label={locales.entries.Lcz_Mobile}
             mask={this.mobileMask}
             placeholder={''}
             value={this.userInfo.mobile}
@@ -221,34 +224,41 @@ export class IrUserFormPanel {
                   text: t.value,
                   value: t.code,
                 }))}
+                firstOption={locales.entries.Lcz_Select}
                 selectedValue={this.userInfo.type?.toString()}
                 onSelectChange={e => this.updateUserField('type', e.detail)}
               />
             </div>
           )}
           {this.user?.type?.toString() !== '5' && (
-            <ir-input-text
-              testId="username"
-              zod={this.userSchema.pick({ username: true })}
-              wrapKey="username"
-              autoValidate={this.autoValidate}
-              error={this.errors?.username}
-              label="Username"
-              disabled={this.disableFields}
-              placeholder=""
-              onTextChange={e => this.updateUserField('username', e.detail)}
-              value={this.userInfo.username}
-              onInputBlur={this.handleBlur.bind(this)}
-              maxLength={40}
-            />
+            <Fragment>
+              <input type="text" name="dummy" style={{ display: 'none' }} />
+              <ir-input-text
+                testId="username"
+                zod={this.userSchema.pick({ username: true })}
+                wrapKey="username"
+                autoValidate={this.autoValidate}
+                error={this.errors?.username}
+                label={locales.entries.Lcz_Username}
+                disabled={this.disableFields}
+                placeholder=""
+                onTextChange={e => this.updateUserField('username', e.detail)}
+                value={this.userInfo.username}
+                // onInputBlur={this.handleBlur.bind(this)}
+                maxLength={40}
+                autoComplete="off"
+              />
+            </Fragment>
           )}
           {!this.user ? (
             <Fragment>
+              <input type="text" name="dummy" style={{ display: 'none' }} />
               <ir-input-text
                 testId="password"
                 autoValidate={this.user ? (!this.userInfo?.password ? false : true) : this.autoValidate}
-                label={'Password'}
+                label={locales.entries.Lcz_Password}
                 value={this.userInfo.password}
+                autoComplete="off"
                 type="password"
                 maxLength={16}
                 zod={this.userSchema.pick({ password: true })}
@@ -267,8 +277,8 @@ export class IrUserFormPanel {
             this.user.type.toString() !== this.superAdminId &&
             (this.user?.type.toString() === '17' && this.userTypeCode?.toString() === '17' ? null : (
               <div class="d-flex mt-2 align-items-center justify-content-between">
-                <h4 class="m-0 p-0 logins-history-title">Password</h4>
-                <ir-button size="sm" btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text="Change password" btn_color="link"></ir-button>
+                <h4 class="m-0 p-0 logins-history-title">{locales.entries.Lcz_Password}</h4>
+                <ir-button size="sm" btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text={locales.entries.Lcz_ChangePassword} btn_color="link"></ir-button>
               </div>
             ))
           )}
@@ -279,7 +289,7 @@ export class IrUserFormPanel {
                 {this.user.sign_ins.length > 5 && (
                   <ir-button
                     btn_styles={'pr-0'}
-                    text={!this.showFullHistory ? 'View all' : 'View less'}
+                    text={!this.showFullHistory ? locales.entries.Lcz_ViewAll : locales.entries.Lcz_ViewLess}
                     btn_color="link"
                     size="sm"
                     onClickHandler={() => (this.showFullHistory = !this.showFullHistory)}
@@ -296,8 +306,14 @@ export class IrUserFormPanel {
                           {moment(s.date, 'YYYY-MM-DD').format('DD-MMM-YYYY')} {_formatTime(s.hour?.toString(), s.minute?.toString())} |
                         </p>
                         <p class="login-location">
-                          <span class="login-ip">IP: {s.ip}</span> &nbsp;|&nbsp;
-                          <span class="login-country">Location: {s.country}</span> &nbsp;|&nbsp;
+                          <span class="login-ip">
+                            {locales.entries.Lcz_IP}: {s.ip}
+                          </span>{' '}
+                          &nbsp;|&nbsp;
+                          <span class="login-country">
+                            {locales.entries.Lcz_Location}: {s.country}
+                          </span>{' '}
+                          &nbsp;|&nbsp;
                           <span class="login-os">
                             OS: {ua.os.name ?? 'N/A'} {ua.os.version}
                           </span>

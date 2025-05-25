@@ -1,6 +1,8 @@
 import Token from '@/models/Token';
+import { RoomService } from '@/services/room.service';
 import { SystemService } from '@/services/system.service';
-import { Component, Event, EventEmitter, Fragment, Host, Method, Prop, State, Watch, h } from '@stencil/core';
+import locales from '@/stores/locales.store';
+import { Component, Event, EventEmitter, Fragment, Host, Listen, Method, Prop, State, Watch, h } from '@stencil/core';
 import { z } from 'zod';
 
 @Component({
@@ -9,6 +11,7 @@ import { z } from 'zod';
   scoped: false,
 })
 export class IrOtpModal {
+  @Prop() language: string = 'en';
   /** Number of seconds to wait before allowing OTP resend */
   @Prop() resendTimer = 60;
 
@@ -34,9 +37,11 @@ export class IrOtpModal {
   @State() isLoading = false;
   @State() timer = 60;
 
-  private modalRef!: HTMLDivElement;
+  private dialogRef: HTMLDialogElement;
+
   private timerInterval: number;
   private systemService = new SystemService();
+  private roomService = new RoomService();
   private tokenService = new Token();
 
   private otpVerificationSchema = z.object({ email: z.string().nonempty(), requestUrl: z.string().nonempty(), otp: z.string().length(this.otpLength) });
@@ -46,24 +51,41 @@ export class IrOtpModal {
     otp: string;
     type: 'success' | 'cancelled';
   }>;
+  @State() isInitializing: boolean;
 
   componentWillLoad() {
     if (this.ticket) {
       this.tokenService.setToken(this.ticket);
     }
+    this.fetchLocale();
   }
+
   @Watch('ticket')
   handleTicketChange(newValue: string, oldValue: string) {
     if (newValue !== oldValue) {
       this.tokenService.setToken(newValue);
+      this.fetchLocale();
+    }
+  }
+
+  @Listen('keydown', { target: 'document' })
+  handleKeyDownChange(e: KeyboardEvent) {
+    if (e.key === 'Escape' && this.dialogRef?.open) {
+      e.preventDefault();
     }
   }
   /** Open & reset everything */
   @Method()
   async openModal() {
     this.resetState();
-    $(this.modalRef).modal({ backdrop: 'static', keyboard: false });
-    $(this.modalRef).modal('show');
+    // $(this.modalRef).modal({ backdrop: 'static', keyboard: false });
+    // $(this.modalRef).modal('show');
+    if (typeof this.dialogRef.showModal === 'function') {
+      this.dialogRef.showModal();
+    } else {
+      // fallback for browsers without dialog support
+      this.dialogRef.setAttribute('open', '');
+    }
     if (this.showResend) this.startTimer();
     await this.focusFirstInput();
   }
@@ -71,9 +93,22 @@ export class IrOtpModal {
   /** Hide & clear timer */
   @Method()
   async closeModal() {
-    $(this.modalRef).modal('hide');
+    // $(this.modalRef).modal('hide');
+    if (typeof this.dialogRef.close === 'function') {
+      this.dialogRef.close();
+    } else {
+      this.dialogRef.removeAttribute('open');
+    }
     this.otp = null;
     this.clearTimer();
+  }
+  private async fetchLocale() {
+    if (!this.tokenService.getToken()) {
+      return;
+    }
+    this.isInitializing = true;
+    await this.roomService.fetchLanguage(this.language, ['_USER_MGT']);
+    this.isInitializing = false;
   }
 
   private resetState() {
@@ -104,7 +139,7 @@ export class IrOtpModal {
 
   private async focusFirstInput() {
     await new Promise(r => setTimeout(r, 50));
-    const first = this.modalRef.querySelector('input');
+    const first = this.dialogRef.querySelector('input');
     first && (first as HTMLInputElement).focus();
   }
 
@@ -123,7 +158,6 @@ export class IrOtpModal {
     });
     try {
       await this.systemService.validateOTP({ METHOD_NAME: this.requestUrl, OTP: this.otp });
-      // emit the filled OTP back to the interceptor
       this.otpFinished.emit({ otp: this.otp, type: 'success' });
       this.closeModal();
     } catch (err) {
@@ -161,60 +195,64 @@ export class IrOtpModal {
   render() {
     return (
       <Host>
-        <div ref={el => (this.modalRef = el as any)} class="modal fade" id="staticBackdrop" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Verify Your Identity</h5>
+        <dialog ref={el => (this.dialogRef = el)} class="otp-modal" aria-modal="true">
+          <form method="dialog" class="otp-modal-content">
+            {this.isInitializing ? (
+              <div class={'d-flex align-items-center justify-content-center modal-loading-container'}>
+                <ir-spinner></ir-spinner>
               </div>
+            ) : (
+              <Fragment>
+                <header class="otp-modal-header">
+                  <h5 class="otp-modal-title">{locales.entries.Lcz_VerifyYourIdentity}</h5>
+                </header>
 
-              <div class="modal-body d-flex  align-items-center flex-column">
-                <p class="verification-message text-truncate">We sent a verification code to {this.email}</p>
-                <ir-otp
-                  autoFocus
-                  length={this.otpLength}
-                  defaultValue={this.otp}
-                  // value={this.otp}
-                  onOtpComplete={this.handleOtpComplete}
-                ></ir-otp>
+                <section class="otp-modal-body d-flex align-items-center flex-column">
+                  <p class="verification-message text-truncate">
+                    {locales.entries.Lcz_WeSentYuoVerificationCode} {this.email}
+                  </p>
+                  <ir-otp autoFocus length={this.otpLength} defaultValue={this.otp} onOtpComplete={this.handleOtpComplete}></ir-otp>
 
-                {this.error && <p class="text-danger small mt-1 p-0 mb-0">{this.error}</p>}
+                  {this.error && <p class="text-danger small mt-1 p-0 mb-0">{this.error}</p>}
 
-                {this.showResend && (
-                  <Fragment>
-                    {this.timer > 0 ? (
-                      <p class="small mt-1">Resend code in 00:{String(this.timer).padStart(2, '0')}</p>
-                    ) : (
-                      <ir-button
-                        class="mt-1"
-                        btn_color="link"
-                        onClickHandler={e => {
-                          e.stopImmediatePropagation();
-                          e.stopPropagation();
-                          this.resendOtp();
-                        }}
-                        size="sm"
-                        text="Didn’t receive code? Resend"
-                      ></ir-button>
-                    )}
-                  </Fragment>
-                )}
-              </div>
+                  {this.showResend && (
+                    <Fragment>
+                      {this.timer > 0 ? (
+                        <p class="small mt-1">
+                          {locales.entries.Lcz_ResendCode} 00:{String(this.timer).padStart(2, '0')}
+                        </p>
+                      ) : (
+                        <ir-button
+                          class="mt-1"
+                          btn_color="link"
+                          onClickHandler={e => {
+                            e.stopImmediatePropagation();
+                            e.stopPropagation();
+                            this.resendOtp();
+                          }}
+                          size="sm"
+                          text={'Didn’t receive code? Resend'}
+                        ></ir-button>
+                      )}
+                    </Fragment>
+                  )}
+                </section>
 
-              <div class="modal-footer justify-content-auto">
-                <ir-button class="w-100" btn_styles={'flex-fill'} text="Cancel" btn_color="secondary" onClick={this.handleCancelClicked.bind(this)}></ir-button>
-                <ir-button
-                  class="w-100"
-                  btn_styles={'flex-fill'}
-                  text="Verify now"
-                  isLoading={this.isLoading}
-                  btn_disabled={this.otp?.length < this.otpLength || this.isLoading}
-                  onClick={() => this.verifyOtp()}
-                ></ir-button>
-              </div>
-            </div>
-          </div>
-        </div>
+                <footer class="otp-modal-footer justify-content-auto">
+                  <ir-button class="w-100" btn_styles="flex-fill" text={locales.entries.Lcz_Cancel} btn_color="secondary" onClick={this.handleCancelClicked.bind(this)}></ir-button>
+                  <ir-button
+                    class="w-100"
+                    btn_styles="flex-fill"
+                    text={locales.entries.Lcz_VerifyNow}
+                    isLoading={this.isLoading}
+                    btn_disabled={this.otp?.length < this.otpLength || this.isLoading}
+                    onClick={() => this.verifyOtp()}
+                  ></ir-button>
+                </footer>
+              </Fragment>
+            )}
+          </form>
+        </dialog>
       </Host>
     );
   }

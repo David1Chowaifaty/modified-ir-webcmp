@@ -7,6 +7,7 @@ import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { AllowedUser } from './types';
 import { bookingReasons } from '@/models/IBooking';
 import { io, Socket } from 'socket.io-client';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-user-management',
@@ -15,11 +16,13 @@ import { io, Socket } from 'socket.io-client';
 })
 export class IrUserManagement {
   @Prop() language: string = '';
+  @Prop() baseUrl: string;
   @Prop() ticket: string;
   @Prop() propertyid: number;
   @Prop() p: string;
   @Prop() isSuperAdmin: boolean = true;
   @Prop() userTypeCode: string | number;
+  @Prop() baseUserTypeCode: string | number;
   @Prop() userId: string | number;
 
   @State() isLoading = true;
@@ -38,12 +41,9 @@ export class IrUserManagement {
   private superAdminId = '5';
 
   componentWillLoad() {
-    console.log('init', {
-      ticket: this.ticket,
-      propertyid: this.propertyid,
-      userId: this.userId,
-      userTypeCode: this.userTypeCode,
-    });
+    if (this.baseUrl) {
+      this.token.setBaseUrl(this.baseUrl);
+    }
     if (this.ticket) {
       this.token.setToken(this.ticket);
       this.initializeApp();
@@ -52,12 +52,6 @@ export class IrUserManagement {
 
   @Watch('ticket')
   ticketChanged(newValue: string, oldValue: string) {
-    console.log('ticket changed', {
-      ticket: this.ticket,
-      propertyid: this.propertyid,
-      userId: this.userId,
-      userTypeCode: this.userTypeCode,
-    });
     if (newValue === oldValue) {
       return;
     }
@@ -74,6 +68,9 @@ export class IrUserManagement {
 
   private async initializeApp() {
     try {
+      if (this.baseUrl) {
+        this.token.setBaseUrl(this.baseUrl);
+      }
       this.isLoading = true;
       let propertyId = this.propertyid;
       if (!this.propertyid && !this.p) {
@@ -93,7 +90,7 @@ export class IrUserManagement {
         propertyId = propertyData.My_Result.id;
       }
       this.property_id = propertyId;
-      const requests = [this.fetchUserTypes(), this.fetchUsers(), this.roomService.fetchLanguage(this.language)];
+      const requests = [this.fetchUserTypes(), this.fetchUsers(), this.roomService.fetchLanguage(this.language, ['_USER_MGT'])];
       if (this.propertyid) {
         requests.push(
           this.roomService.getExposedProperty({
@@ -134,7 +131,9 @@ export class IrUserManagement {
     // const reasonHandlers: Partial<Record<bookingReasons, Function>> = {
     //   DORESERVATION: this.updateUserVerificationStatus,
     // };
-    const reasonHandlers: Partial<Record<bookingReasons, Function>> = {};
+    const reasonHandlers: Partial<Record<bookingReasons, Function>> = {
+      EMAIL_VERIFIED: this.updateUserVerificationStatus,
+    };
     const handler = reasonHandlers[REASON];
     if (handler) {
       await handler.call(this, result);
@@ -143,7 +142,7 @@ export class IrUserManagement {
     }
   }
 
-  public updateUserVerificationStatus(result: { id: string | number; is_email_verified: boolean }) {
+  public updateUserVerificationStatus(result: { id: string | number }) {
     const users = [...this.users];
     const idx = users.findIndex(u => u.id === result.id);
     if (idx === -1) {
@@ -152,13 +151,13 @@ export class IrUserManagement {
     }
     users[idx] = {
       ...users[idx],
-      is_email_verified: result.is_email_verified,
+      is_email_verified: true,
     };
     this.users = users;
   }
 
   private async fetchUsers() {
-    const users = await this.userService.getExposedPropertyUsers();
+    const users = await this.userService.getExposedPropertyUsers({ property_id: this.propertyid });
     this.users = [...users].sort((u1: User, u2: User) => {
       const priority = (u: User) => {
         const t = u.type.toString();
@@ -172,14 +171,14 @@ export class IrUserManagement {
       if (p1 !== p2) {
         return p1 - p2;
       }
-      //sort by user id
-      if (p1 === 1) {
-        const id1 = u1.id.toString(),
-          id2 = u2.id.toString(),
-          me = this.userId.toString();
-        if (id1 === me) return -1; // u1 is me → goes before u2
-        if (id2 === me) return 1; // u2 is me → u1 goes after
-      }
+      // //sort by user id
+      // if (p1 === 1) {
+      //   const id1 = u1.id.toString(),
+      //     id2 = u2.id.toString(),
+      //     me = this.userId.toString();
+      //   if (id1 === me) return -1; // u1 is me → goes before u2
+      //   if (id2 === me) return 1; // u2 is me → u1 goes after
+      // }
 
       // 3) sort by username
       return u1.username.localeCompare(u2.username);
@@ -215,11 +214,13 @@ export class IrUserManagement {
         <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd', '/Handle_Exposed_User']}></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
           <div class="d-flex  pb-2 align-items-center justify-content-between">
-            <h3 class="mb-1 mb-md-0">Extranet Users</h3>
+            <h3 class="mb-1 mb-md-0">{locales.entries.Lcz_ExtranetUsers}</h3>
           </div>
 
           <div class="" style={{ gap: '1rem' }}>
             <ir-user-management-table
+              property_id={this.property_id}
+              baseUserTypeCode={this.baseUserTypeCode}
               allowedUsersTypes={this.allowedUsersTypes}
               userTypeCode={this.userTypeCode}
               haveAdminPrivileges={[this.superAdminId, '17'].includes(this.userTypeCode?.toString())}

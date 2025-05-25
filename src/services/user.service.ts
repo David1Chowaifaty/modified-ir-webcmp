@@ -12,12 +12,17 @@ export class UserService {
     return data.My_Result;
   }
   public async handleExposedUser(params: UserParams) {
-    const { data } = await axios.post('/Handle_Exposed_User', params);
+    const { base_user_type_code, property_id, ...rest } = params;
+    let body: any = { ...rest };
+    if ([1, 4].includes(Number(base_user_type_code))) {
+      body = { ...body, property_id };
+    }
+    const { data } = await axios.post('/Handle_Exposed_User', body);
     console.warn('data<==>', data);
     return data.My_Result;
   }
-  public async getExposedPropertyUsers() {
-    const { data } = await axios.post('/Get_Exposed_Property_Users', {});
+  public async getExposedPropertyUsers({ property_id }: { property_id: number }) {
+    const { data } = await axios.post('/Get_Exposed_Property_Users', { property_id });
     return data.My_Result;
   }
 }

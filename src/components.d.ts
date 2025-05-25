@@ -616,6 +616,10 @@ export namespace Components {
          */
         "asyncParse"?: boolean;
         /**
+          * Autocomplete behavior for the input (e.g., 'on', 'off', 'email', etc.)
+         */
+        "autoComplete": string;
+        /**
           * Whether the input should auto-validate
          */
         "autoValidate"?: boolean;
@@ -891,6 +895,7 @@ export namespace Components {
           * User's email address to display in the modal and send the OTP to
          */
         "email": string;
+        "language": string;
         /**
           * Open & reset everything
          */
@@ -1063,6 +1068,7 @@ export namespace Components {
         "countries": ICountry[];
     }
     interface IrResetPassword {
+        "language": string;
         "old_pwd": string;
         "skip2Fa": boolean;
         "ticket": string;
@@ -1281,6 +1287,7 @@ export namespace Components {
     }
     interface IrUserFormPanel {
         "allowedUsersTypes": AllowedUser[];
+        "baseUserTypeCode": string | number;
         "haveAdminPrivileges": boolean;
         "isEdit": boolean;
         "language": string;
@@ -1291,6 +1298,8 @@ export namespace Components {
         "userTypes": { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
     }
     interface IrUserManagement {
+        "baseUrl": string;
+        "baseUserTypeCode": string | number;
         "isSuperAdmin": boolean;
         "language": string;
         "p": string;
@@ -1301,8 +1310,10 @@ export namespace Components {
     }
     interface IrUserManagementTable {
         "allowedUsersTypes": AllowedUser[];
+        "baseUserTypeCode": string | number;
         "haveAdminPrivileges": boolean;
         "isSuperAdmin": boolean;
+        "property_id": number;
         "superAdminId": string;
         "userTypeCode": string | number;
         "userTypes": Map<string | number, string>;
@@ -4133,6 +4144,10 @@ declare namespace LocalJSX {
          */
         "asyncParse"?: boolean;
         /**
+          * Autocomplete behavior for the input (e.g., 'on', 'off', 'email', etc.)
+         */
+        "autoComplete"?: string;
+        /**
           * Whether the input should auto-validate
          */
         "autoValidate"?: boolean;
@@ -4423,6 +4438,7 @@ declare namespace LocalJSX {
           * User's email address to display in the modal and send the OTP to
          */
         "email"?: string;
+        "language"?: string;
         /**
           * Emits the final OTP (or empty on cancel)
          */
@@ -4621,6 +4637,7 @@ declare namespace LocalJSX {
         "onOpenSidebar"?: (event: IrReservationInformationCustomEvent<OpenSidebarEvent<any>>) => void;
     }
     interface IrResetPassword {
+        "language"?: string;
         "old_pwd"?: string;
         "onCloseSideBar"?: (event: IrResetPasswordCustomEvent<null>) => void;
         "skip2Fa"?: boolean;
@@ -4863,6 +4880,7 @@ declare namespace LocalJSX {
     }
     interface IrUserFormPanel {
         "allowedUsersTypes"?: AllowedUser[];
+        "baseUserTypeCode"?: string | number;
         "haveAdminPrivileges"?: boolean;
         "isEdit"?: boolean;
         "language"?: string;
@@ -4875,6 +4893,8 @@ declare namespace LocalJSX {
         "userTypes"?: { new (entries?: readonly (readonly [string | number, string])[]): Map<string | number, string>; new (iterable?: Iterable<readonly [string | number, string]>): Map<string | number, string>; readonly prototype: Map<any, any>; readonly [Symbol.species]: MapConstructor; };
     }
     interface IrUserManagement {
+        "baseUrl"?: string;
+        "baseUserTypeCode"?: string | number;
         "isSuperAdmin"?: boolean;
         "language"?: string;
         "p"?: string;
@@ -4885,10 +4905,12 @@ declare namespace LocalJSX {
     }
     interface IrUserManagementTable {
         "allowedUsersTypes"?: AllowedUser[];
+        "baseUserTypeCode"?: string | number;
         "haveAdminPrivileges"?: boolean;
         "isSuperAdmin"?: boolean;
         "onResetData"?: (event: IrUserManagementTableCustomEvent<null>) => void;
         "onToast"?: (event: IrUserManagementTableCustomEvent<IToast>) => void;
+        "property_id"?: number;
         "superAdminId"?: string;
         "userTypeCode"?: string | number;
         "userTypes"?: Map<string | number, string>;
