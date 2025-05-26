@@ -1375,6 +1375,10 @@ export interface IglBookingOverviewPageCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookingOverviewPageElement;
 }
+export interface IglBulkBlocksCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBulkBlocksElement;
+}
 export interface IglCalBodyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglCalBodyElement;
@@ -1855,7 +1859,18 @@ declare global {
         prototype: HTMLIglBookingOverviewPageElement;
         new (): HTMLIglBookingOverviewPageElement;
     };
+    interface HTMLIglBulkBlocksElementEventMap {
+        "closeModal": null;
+    }
     interface HTMLIglBulkBlocksElement extends Components.IglBulkBlocks, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBulkBlocksElementEventMap>(type: K, listener: (this: HTMLIglBulkBlocksElement, ev: IglBulkBlocksCustomEvent<HTMLIglBulkBlocksElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBulkBlocksElementEventMap>(type: K, listener: (this: HTMLIglBulkBlocksElement, ev: IglBulkBlocksCustomEvent<HTMLIglBulkBlocksElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIglBulkBlocksElement: {
         prototype: HTMLIglBulkBlocksElement;
@@ -3634,6 +3649,7 @@ declare namespace LocalJSX {
     }
     interface IglBulkBlocks {
         "maxDatesLength"?: number;
+        "onCloseModal"?: (event: IglBulkBlocksCustomEvent<null>) => void;
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };

@@ -1211,7 +1211,7 @@ export class IglooCalendar {
               onCloseModal={() => (this.calendarSidebarState = null)}
             ></ir-room-guests>
           )}
-          {this.calendarSidebarState?.type === 'bulk-blocks' && <igl-bulk-blocks slot="sidebar-body"></igl-bulk-blocks>}
+          {this.calendarSidebarState?.type === 'bulk-blocks' && <igl-bulk-blocks slot="sidebar-body" onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-blocks>}
         </ir-sidebar>
         <ir-modal
           ref={el => (this.calendarModalEl = el)}

@@ -1,5 +1,5 @@
 import calendar_data from '@/stores/calendar-data';
-import { Component, h, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import moment, { Moment } from 'moment';
 import { z, ZodError } from 'zod';
 export type SelectedRooms = Record<string | number, (string | number)[]>;
@@ -13,7 +13,7 @@ export interface Weekday {
   scoped: true,
 })
 export class IglBulkBlocks {
-  @Prop() maxDatesLength = 10;
+  @Prop() maxDatesLength = 8;
 
   @State() selectedRoomTypes: SelectedRooms[] = [];
   @State() errors: 'dates' | 'rooms';
@@ -22,18 +22,20 @@ export class IglBulkBlocks {
     to: Moment | null;
   }[] = [{ from: null, to: null }];
 
-  private weekdays: Weekday[] = [
-    { value: 1, label: 'M' },
-    { value: 2, label: 'T' },
-    { value: 3, label: 'W' },
-    { value: 4, label: 'Th' },
-    { value: 5, label: 'Fr' },
-    { value: 6, label: 'Sa' },
-    { value: 0, label: 'Su' },
-  ];
+  // private weekdays: Weekday[] = [
+  //   { value: 1, label: 'M' },
+  //   { value: 2, label: 'T' },
+  //   { value: 3, label: 'W' },
+  //   { value: 4, label: 'Th' },
+  //   { value: 5, label: 'Fr' },
+  //   { value: 6, label: 'Sa' },
+  //   { value: 0, label: 'Su' },
+  // ];
   @State() selectedWeekdays: number[] = Array(7)
     .fill(null)
     .map((_, i) => i);
+
+  @Event() closeModal: EventEmitter<null>;
 
   private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
   private total: number;
@@ -134,15 +136,15 @@ export class IglBulkBlocks {
       }
     }
   }
-  private toggleWeekDays({ checked, weekDay }: { checked: boolean; weekDay: number }): void {
-    if (checked) {
-      if (!this.selectedWeekdays.includes(weekDay)) {
-        this.selectedWeekdays = [...this.selectedWeekdays, weekDay];
-      }
-    } else {
-      this.selectedWeekdays = this.selectedWeekdays.filter(day => day !== weekDay);
-    }
-  }
+  // private toggleWeekDays({ checked, weekDay }: { checked: boolean; weekDay: number }): void {
+  //   if (checked) {
+  //     if (!this.selectedWeekdays.includes(weekDay)) {
+  //       this.selectedWeekdays = [...this.selectedWeekdays, weekDay];
+  //     }
+  //   } else {
+  //     this.selectedWeekdays = this.selectedWeekdays.filter(day => day !== weekDay);
+  //   }
+  // }
   render() {
     const selectedRoomsByType = this.selectedRoomTypes.reduce((acc, entry) => {
       const typeId = Number(Object.keys(entry)[0]);
@@ -164,7 +166,16 @@ export class IglBulkBlocks {
         }}
       >
         <div class="sheet-header d-flex align-items-center">
-          <ir-title class="px-1" label="Bulk Block Dates" displayContext="sidebar"></ir-title>
+          <ir-title
+            onCloseSideBar={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.closeModal.emit(null);
+            }}
+            class="px-1"
+            label="Bulk Block Dates"
+            displayContext="sidebar"
+          ></ir-title>
         </div>
         <div class="sheet-body px-1">
           <div class="text-muted text-left mb-3">
@@ -207,7 +218,7 @@ export class IglBulkBlocks {
                 );
               })}
           </div>
-          <p class="text-left mt-2 text-muted">Select which days to block</p>
+          {/* <p class="text-left mt-2 text-muted">Select which days to block</p>
           <div class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
             {this.weekdays.map(w => (
               <ir-checkbox
@@ -217,7 +228,7 @@ export class IglBulkBlocks {
                 labelClass="m-0 p-0 ml-1"
               ></ir-checkbox>
             ))}
-          </div>
+          </div> */}
           <p class="text-left mt-2 text-muted">Add date range(s) to block</p>
 
           {/* Dates */}
@@ -246,7 +257,7 @@ export class IglBulkBlocks {
                 }
                 return (
                   <tr key={`date_${i}`}>
-                    <td class="pr-1">
+                    <td class="pr-1 pb-1">
                       <ir-date-picker
                         ref={el => {
                           this.dateRefs[i].from = el;
@@ -278,7 +289,7 @@ export class IglBulkBlocks {
                         ></input>
                       </ir-date-picker>
                     </td>
-                    <td class="pr-1">
+                    <td class="pr-1 pb-1">
                       <ir-date-picker
                         forceDestroyOnUpdate
                         ref={el => {
@@ -307,7 +318,7 @@ export class IglBulkBlocks {
                       </ir-date-picker>
                     </td>
                     {i > 0 && (
-                      <td>
+                      <td class="pb-1">
                         <ir-button
                           variant="icon"
                           icon_name="minus"
@@ -324,7 +335,7 @@ export class IglBulkBlocks {
           </table>
         </div>
         <div class={'sheet-footer'}>
-          <ir-button text="Cancel" btn_color="secondary" class={'flex-fill'}></ir-button>
+          <ir-button text="Cancel" btn_color="secondary" class={'flex-fill'} onClickHandler={() => this.closeModal.emit(null)}></ir-button>
           <ir-button text="Save" btn_type="submit" class="flex-fill"></ir-button>
         </div>
       </form>
