@@ -172,13 +172,15 @@ export class IglBulkBlocks {
               e.stopPropagation();
               this.closeModal.emit(null);
             }}
-            class="px-1"
+            class="px-1 mb-0"
             label="Bulk Block Dates"
             displayContext="sidebar"
           ></ir-title>
         </div>
         <div class="sheet-body px-1">
-          <div class="text-muted text-left py-0 my-0">{false ? <p>Select the listings that you want to block.</p> : <p>Select the unit(s) that you want to block.</p>}</div>
+          <div class="text-muted text-left py-0 my-0">
+            {calendar_data.is_vacation_rental ? <p>Select the listings that you want to block.</p> : <p>Select the unit(s) that you want to block.</p>}
+          </div>
           {/* <p class="text-left text-muted">Select room types to block</p> */}
           <div class="d-flex flex-column" style={{ gap: '1rem' }}>
             <ir-checkbox
