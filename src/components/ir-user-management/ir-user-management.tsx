@@ -7,6 +7,7 @@ import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { AllowedUser } from './types';
 import { bookingReasons } from '@/models/IBooking';
 import { io, Socket } from 'socket.io-client';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-user-management',
@@ -21,6 +22,7 @@ export class IrUserManagement {
   @Prop() p: string;
   @Prop() isSuperAdmin: boolean = true;
   @Prop() userTypeCode: string | number;
+  @Prop() baseUserTypeCode: string | number;
   @Prop() userId: string | number;
 
   @State() isLoading = true;
@@ -39,13 +41,6 @@ export class IrUserManagement {
   private superAdminId = '5';
 
   componentWillLoad() {
-    console.log('init', {
-      ticket: this.ticket,
-      propertyid: this.propertyid,
-      userId: this.userId,
-      userTypeCode: this.userTypeCode,
-      baseUrl: this.baseUrl,
-    });
     if (this.baseUrl) {
       this.token.setBaseUrl(this.baseUrl);
     }
@@ -57,12 +52,6 @@ export class IrUserManagement {
 
   @Watch('ticket')
   ticketChanged(newValue: string, oldValue: string) {
-    console.log('ticket changed', {
-      ticket: this.ticket,
-      propertyid: this.propertyid,
-      userId: this.userId,
-      userTypeCode: this.userTypeCode,
-    });
     if (newValue === oldValue) {
       return;
     }
@@ -101,7 +90,7 @@ export class IrUserManagement {
         propertyId = propertyData.My_Result.id;
       }
       this.property_id = propertyId;
-      const requests = [this.fetchUserTypes(), this.fetchUsers(), this.roomService.fetchLanguage(this.language)];
+      const requests = [this.fetchUserTypes(), this.fetchUsers(), this.roomService.fetchLanguage(this.language, ['_USER_MGT'])];
       if (this.propertyid) {
         requests.push(
           this.roomService.getExposedProperty({
@@ -168,7 +157,7 @@ export class IrUserManagement {
   }
 
   private async fetchUsers() {
-    const users = await this.userService.getExposedPropertyUsers();
+    const users = await this.userService.getExposedPropertyUsers({ property_id: this.propertyid });
     this.users = [...users].sort((u1: User, u2: User) => {
       const priority = (u: User) => {
         const t = u.type.toString();
@@ -225,11 +214,13 @@ export class IrUserManagement {
         <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd', '/Handle_Exposed_User']}></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
           <div class="d-flex  pb-2 align-items-center justify-content-between">
-            <h3 class="mb-1 mb-md-0">Extranet Users</h3>
+            <h3 class="mb-1 mb-md-0">{locales.entries.Lcz_ExtranetUsers}</h3>
           </div>
 
           <div class="" style={{ gap: '1rem' }}>
             <ir-user-management-table
+              property_id={this.property_id}
+              baseUserTypeCode={this.baseUserTypeCode}
               allowedUsersTypes={this.allowedUsersTypes}
               userTypeCode={this.userTypeCode}
               haveAdminPrivileges={[this.superAdminId, '17'].includes(this.userTypeCode?.toString())}

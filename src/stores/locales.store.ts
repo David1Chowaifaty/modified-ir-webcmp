@@ -3,8 +3,54 @@ export interface ILocale {
   entries: TLocaleEntries;
   direction: 'ltr' | 'rtl';
 }
-export type TLocaleEntries = (LocalizationStrings & LocalizationChannelFrontEntries & BookingListingCodes & HousekeepingLocalizedWords & LocalizationPAYMENTBACK) | null;
-
+export type TLocaleEntries =
+  | (LocalizationStrings & LocalizationChannelFrontEntries & BookingListingCodes & HousekeepingLocalizedWords & LocalizationPAYMENTBACK & UserManagementWords)
+  | null;
+export type UserManagementWords = {
+  Lcz_Active: string;
+  Lcz_AreYouSureToDelete: string;
+  Lcz_AreYouSureToUnverify: string;
+  Lcz_Cancel: string;
+  Lcz_ChangePassword: string;
+  Lcz_Confirm: string;
+  Lcz_ConfirmPassword: string;
+  Lcz_CreatedAt: string;
+  Lcz_CreateNewUser: string;
+  Lcz_CreateUser: string;
+  Lcz_Delete: string;
+  Lcz_DeleteUser: string;
+  Lcz_EditUser: string;
+  Lcz_Email: string;
+  Lcz_EmailAlreadyExists: string;
+  Lcz_ExtranetUsers: string;
+  Lcz_IP: string;
+  Lcz_LastSignedIn: string;
+  Lcz_Location: string;
+  Lcz_Mobile: string;
+  Lcz_NewPassword: string;
+  Lcz_NotVerified: string;
+  Lcz_OS: string;
+  Lcz_Password: string;
+  Lcz_PasswordMustBe: string;
+  Lcz_PasswordMustBeDifferent: string;
+  Lcz_RecentSignIns: string;
+  Lcz_ResendCode: string;
+  Lcz_Role: string;
+  Lcz_SAnEmailHasBeenSent: string;
+  Lcz_SavedSuccessfully: string;
+  Lcz_Select: string;
+  Lcz_SetNewPassword: string;
+  Lcz_SuperAdmin: string;
+  Lcz_Username: string;
+  Lcz_UserNameAlreadyExists: string;
+  Lcz_VerificationFailed: string;
+  Lcz_Verified: string;
+  Lcz_VerifyNow: string;
+  Lcz_VerifyYourIdentity: string;
+  Lcz_ViewAll: string;
+  Lcz_ViewLess: string;
+  Lcz_WeSentYuoVerificationCode: string;
+};
 export type LocalizationStrings = {
   'Lcz_A': string;
   'Lcz_AcceptAndConfirm': string;
