@@ -178,10 +178,8 @@ export class IglBulkBlocks {
           ></ir-title>
         </div>
         <div class="sheet-body px-1">
-          <div class="text-muted text-left mb-3">
-            {1 === 1 ? <p>Select the listings that you want to block.</p> : <p>Select the roomtypes and units that you want to block.</p>}
-          </div>
-          <p class="text-left text-muted">Select room types to block</p>
+          <div class="text-muted text-left py-0 my-0">{false ? <p>Select the listings that you want to block.</p> : <p>Select the unit(s) that you want to block.</p>}</div>
+          {/* <p class="text-left text-muted">Select room types to block</p> */}
           <div class="d-flex flex-column" style={{ gap: '1rem' }}>
             <ir-checkbox
               indeterminate={this.selectedRoomTypes?.length > 0 && this.selectedRoomTypes?.length < this.allRoomTypes?.length}

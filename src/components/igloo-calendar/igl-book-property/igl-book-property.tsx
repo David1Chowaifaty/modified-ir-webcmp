@@ -595,8 +595,8 @@ export class IglBookProperty {
             ...releaseData,
           };
         })();
-    await this.bookingService.blockUnit(props);
     // const blockedUnit = await transformNewBLockedRooms(result);
+    await this.bookingService.blockUnit(props);
     // this.blockedCreated.emit(blockedUnit);
     if (auto_close) this.closeWindow();
   }
@@ -625,6 +625,7 @@ export class IglBookProperty {
         check_in,
       });
       await this.bookingService.doReservation(serviceParams);
+      await this.checkAndBlockDateBasedOnDoReservation(serviceParams);
       this.resetBookingEvt.emit(null);
     } catch (error) {
       console.error('Error booking user:', error);
@@ -632,6 +633,18 @@ export class IglBookProperty {
       // this.isLoading = null;
       this.resetLoadingState();
     }
+  }
+  private async checkAndBlockDateBasedOnDoReservation(serviceParams: any) {
+    if (!this.defaultData.block_exposed_unit_props) {
+      return;
+    }
+    const original_to_date = moment(this.defaultData.block_exposed_unit_props.to_date, 'YYYY-MM-DD');
+    const current_to_date = moment(serviceParams.booking.to_date, 'YYYY-MM-DD');
+    if (current_to_date.isBefore(original_to_date, 'days')) {
+      const props = { ...this.defaultData.block_exposed_unit_props, from_date: current_to_date.format('YYYY-MM-DD') };
+      await this.bookingService.blockUnit(props);
+    }
+    return;
   }
 
   private setLoadingState(assign_units: boolean) {
