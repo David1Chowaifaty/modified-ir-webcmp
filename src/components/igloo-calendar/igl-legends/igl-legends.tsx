@@ -32,16 +32,26 @@ export class IglLegends {
               <hr />
             </div>
             <div class="mt-2 pl-1">
-              {this.legendData.map(legendInfo => (
-                <div class="legendRow ">
-                  <div class={`legend_${legendInfo.design} mr-2`} style={{ backgroundColor: legendInfo.color }}></div>
-                  <span class="font-small-3">{legendInfo.name}</span>
-                </div>
-              ))}
-              <div class="legendRow d-flex align-items-center">
-                <span style={{ height: '15px', width: '20px', background: 'rgba(153, 153, 153,50%)', display: 'block' }}></span>
-                <p class="p-0 font-small-3 m-0 ml-1">No availability or stop sale</p>
-              </div>
+              <table>
+                {this.legendData.map((legendInfo, i) => (
+                  <tr key={`legend_${i}`} class="legendRow ">
+                    <td>
+                      <div class={`legend_${legendInfo.design}`} style={{ backgroundColor: legendInfo.color }}></div>
+                    </td>
+                    <td>
+                      <span class="font-small-3">{legendInfo.name}</span>
+                    </td>
+                  </tr>
+                ))}
+                <tr class="legendRow">
+                  <td>
+                    <div class="legend_cell mr-2"></div>
+                  </td>
+                  <td>
+                    <span class="font-small-3">No availability or stop sale</span>
+                  </td>
+                </tr>
+              </table>
             </div>
             <hr />
             <div class="mt-2">
