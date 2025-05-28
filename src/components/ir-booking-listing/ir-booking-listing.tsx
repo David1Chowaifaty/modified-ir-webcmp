@@ -25,6 +25,7 @@ export class IrBookingListing {
   @Prop() propertyid: number;
   @Prop() rowCount: number = 10;
   @Prop() p: string;
+  @Prop() baseUrl: string;
 
   @State() isLoading = false;
   @State() currentPage = 1;
@@ -47,6 +48,9 @@ export class IrBookingListing {
   };
 
   componentWillLoad() {
+    if (this.baseUrl) {
+      this.token.setBaseUrl(this.baseUrl);
+    }
     updateUserSelection('end_row', this.rowCount);
     booking_listing.rowCount = this.rowCount;
     if (this.ticket !== '') {

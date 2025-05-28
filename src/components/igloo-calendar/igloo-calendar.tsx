@@ -50,6 +50,7 @@ export class IglooCalendar {
   @Prop() currencyName: string;
   @Prop() ticket: string = '';
   @Prop() p: string;
+  @Prop() baseUrl: string;
 
   @Element() private element: HTMLElement;
 
@@ -99,6 +100,9 @@ export class IglooCalendar {
   calendarModalEl: HTMLIrModalElement;
 
   componentWillLoad() {
+    if (this.baseUrl) {
+      this.token.setBaseUrl(this.baseUrl);
+    }
     this.init();
   }
   componentDidLoad() {

@@ -17,6 +17,7 @@ export class IrHousekeeping {
 
   @Prop() propertyid: number;
   @Prop() p: string;
+  @Prop() baseUrl: string;
 
   @State() isLoading = false;
 
@@ -27,6 +28,9 @@ export class IrHousekeeping {
   private token = new Token();
 
   componentWillLoad() {
+    if (this.baseUrl) {
+      this.token.setBaseUrl(this.baseUrl);
+    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
       this.initializeApp();
