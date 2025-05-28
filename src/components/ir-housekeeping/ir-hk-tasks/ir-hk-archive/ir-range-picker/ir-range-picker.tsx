@@ -15,7 +15,7 @@ export class IrRangePicker {
   /**
    * The latest date that can be selected.
    */
-  @Prop() maxDate?: string | Date = moment().toDate();
+  @Prop() maxDate?: string | Date;
   /**
    * The start date of the range.
    */
