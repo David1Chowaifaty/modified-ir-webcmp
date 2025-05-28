@@ -280,7 +280,7 @@ export class IglBookingEventHover {
   }
 
   private handleConvertBlockedDateToBooking() {
-    this.handleBookingOption('PLUS_BOOKING');
+    this.handleBookingOption('BAR_BOOKING');
   }
 
   private getRoomInfo() {
@@ -321,7 +321,7 @@ export class IglBookingEventHover {
     if (['003', '002', '004'].includes(this.bookingEvent.STATUS_CODE)) {
       data.roomsInfo = [roomInfo.ROOMS_INFO];
     }
-    if (eventType === 'PLUS_BOOKING' && this.bookingEvent.STATUS !== 'TEMP-EVENT') {
+    if (eventType === 'BAR_BOOKING' && this.bookingEvent.STATUS !== 'TEMP-EVENT') {
       const { FROM_DATE, TO_DATE, PR_ID, RELEASE_AFTER_HOURS, ENTRY_DATE, OPTIONAL_REASON, ENTRY_MINUTE, ENTRY_HOUR, STATUS_CODE } = this.bookingEvent;
       data.block_exposed_unit_props = {
         from_date: FROM_DATE,

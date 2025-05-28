@@ -532,7 +532,7 @@ export class IglBookProperty {
     event.stopPropagation();
     const opt = event.detail;
     if (opt.guestRefKey) {
-      if (this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')) {
+      if (this.isEventType('BAR_BOOKING') || this.wasBlockedUnit || this.isEventType('SPLIT_BOOKING')) {
         this.guestData[opt.guestRefKey] = {
           ...opt.data,
           roomId: this.defaultData.PR_ID,
@@ -625,7 +625,7 @@ export class IglBookProperty {
         check_in,
       });
       await this.bookingService.doReservation(serviceParams);
-      await this.checkAndBlockDateBasedOnDoReservation(serviceParams);
+      await this.adjustBlockedDatesAfterReservation(serviceParams);
       this.resetBookingEvt.emit(null);
     } catch (error) {
       console.error('Error booking user:', error);
@@ -634,14 +634,20 @@ export class IglBookProperty {
       this.resetLoadingState();
     }
   }
-  private async checkAndBlockDateBasedOnDoReservation(serviceParams: any) {
-    if (!this.defaultData.block_exposed_unit_props) {
+  private async adjustBlockedDatesAfterReservation(serviceParams: any) {
+    if (!this.wasBlockedUnit) {
       return;
     }
+    const original_from_date = moment(this.defaultData.block_exposed_unit_props.from_date, 'YYYY-MM-DD');
+    const current_from_date = moment(serviceParams.booking.from_date, 'YYYY-MM-DD');
     const original_to_date = moment(this.defaultData.block_exposed_unit_props.to_date, 'YYYY-MM-DD');
     const current_to_date = moment(serviceParams.booking.to_date, 'YYYY-MM-DD');
     if (current_to_date.isBefore(original_to_date, 'days')) {
       const props = { ...this.defaultData.block_exposed_unit_props, from_date: current_to_date.format('YYYY-MM-DD') };
+      await this.bookingService.blockUnit(props);
+    }
+    if (current_from_date.isAfter(original_from_date, 'days')) {
+      const props = { ...this.defaultData.block_exposed_unit_props, to_date: current_from_date.format('YYYY-MM-DD') };
       await this.bookingService.blockUnit(props);
     }
     return;
@@ -698,6 +704,7 @@ export class IglBookProperty {
               <div class="px-2 sheet-body">
                 {this.getCurrentPage('page_one') && (
                   <igl-booking-overview-page
+                    wasBlockedUnit={this.wasBlockedUnit}
                     initialRoomIds={this.initialRoomIds}
                     defaultDaterange={this.defaultDateRange}
                     eventType={this.defaultData.event_type}

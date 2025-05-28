@@ -125,6 +125,7 @@ export namespace Components {
         "sourceOptions": TSourceOptions[];
         "splitBookingId": any;
         "splitBookings": any[];
+        "wasBlockedUnit": boolean;
     }
     interface IglBookingEvent {
         "allBookingEvents": { [key: string]: any };
@@ -174,6 +175,7 @@ export namespace Components {
         "selectedRooms": Map<string, Map<string, any>>;
         "showSplitBookingOption": boolean;
         "sourceOptions": TSourceOptions[];
+        "wasBlockedUnit": boolean;
     }
     interface IglBulkBlocks {
         "maxDatesLength": number;
@@ -3578,6 +3580,7 @@ declare namespace LocalJSX {
         "sourceOptions"?: TSourceOptions[];
         "splitBookingId"?: any;
         "splitBookings"?: any[];
+        "wasBlockedUnit"?: boolean;
     }
     interface IglBookingEvent {
         "allBookingEvents"?: { [key: string]: any };
@@ -3646,6 +3649,7 @@ declare namespace LocalJSX {
         "selectedRooms"?: Map<string, Map<string, any>>;
         "showSplitBookingOption"?: boolean;
         "sourceOptions"?: TSourceOptions[];
+        "wasBlockedUnit"?: boolean;
     }
     interface IglBulkBlocks {
         "maxDatesLength"?: number;

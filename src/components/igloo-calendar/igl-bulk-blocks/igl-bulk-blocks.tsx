@@ -67,7 +67,7 @@ export class IglBulkBlocks {
     this.allRoomTypes = calendar_data.roomsInfo.map(rt => ({
       [rt.id]: rt.physicalrooms.map(room => room.id),
     }));
-    // this.selectedRoomTypes = this.allRoomTypes;
+    this.selectedRoomTypes = this.allRoomTypes;
   }
 
   private toggleRoom({ checked, roomId, roomTypeId }: { checked: boolean; roomTypeId: number; roomId: number }): void {
@@ -145,6 +145,104 @@ export class IglBulkBlocks {
   //     this.selectedWeekdays = this.selectedWeekdays.filter(day => day !== weekDay);
   //   }
   // }
+
+  // private handleToDateChange({ index, date }: { index: number; date: Moment }) {
+  //   const dates = [...this.dates];
+  //   dates[index] = { ...dates[index], to: date };
+  //   for (let i = index + 1; i < dates.length; i++) {
+  //     const prevToDate = dates[i - 1].to;
+  //     if (!prevToDate) continue;
+  //     if (!dates[i].from || dates[i].from.isSameOrBefore(prevToDate, 'day')) {
+  //       dates[i] = {
+  //         ...dates[i],
+  //         from: moment(prevToDate).add(1, 'day'),
+  //         to: dates[i].to && dates[i].to.isBefore(moment(prevToDate).add(1, 'day'), 'day') ? null : dates[i].to,
+  //       };
+  //     }
+  //   }
+  //   this.dates = [...dates];
+  //   if (index < this.dates.length - 1) {
+  //     setTimeout(() => {
+  //       this.dateRefs[index + 1]?.from.openDatePicker();
+  //     }, 100);
+  //   }
+  // }
+
+  // private handleFromDateChange({ index, date }: { index: number; date: Moment }) {
+  //   const dates = [...this.dates];
+  //   dates[index] = { ...dates[index], from: date };
+  //   if (dates[index].to && dates[index].to.isBefore(date, 'day')) {
+  //     dates[index] = { ...dates[index], to: null };
+  //   }
+  //   for (let i = index + 1; i < dates.length; i++) {
+  //     const prevToDate = dates[i - 1].to;
+  //     if (!prevToDate) continue;
+  //     if (!dates[i].from || dates[i].from.isSameOrBefore(prevToDate, 'day')) {
+  //       dates[i] = {
+  //         ...dates[i],
+  //         from: moment(prevToDate).add(1, 'day'),
+  //         to: dates[i].to && dates[i].to.isBefore(moment(prevToDate).add(1, 'day'), 'day') ? null : dates[i].to,
+  //       };
+  //     }
+  //   }
+  //   this.dates = [...dates];
+  //   setTimeout(() => {
+  //     this.dateRefs[index]?.to.openDatePicker();
+  //   }, 100);
+  // }
+  private handleToDateChange({ index, date }: { index: number; date: Moment }) {
+    // 1) clone and set the new “to”
+    const dates = [...this.dates];
+    dates[index] = { ...dates[index], to: date };
+
+    // 2) clear every row beneath it
+    for (let i = index + 1; i < dates.length; i++) {
+      dates[i] = { from: null, to: null };
+    }
+
+    // 3) commit
+    this.dates = dates;
+
+    // 4) focus the first empty “from” in the list
+    const nextFrom = dates.findIndex(d => d.from === null);
+    if (nextFrom > -1) {
+      setTimeout(() => this.dateRefs[nextFrom]?.from.openDatePicker(), 100);
+    }
+  }
+
+  private handleFromDateChange({ index, date }: { index: number; date: Moment }) {
+    // 1) clone and set the new “from”
+    const dates = [...this.dates];
+    dates[index] = { ...dates[index], from: date };
+
+    // 2) if the existing “to” is now before it, wipe it out
+    if (dates[index].to && dates[index].to.isBefore(date, 'day')) {
+      dates[index] = { ...dates[index], to: null };
+    }
+
+    // 3) clear every row beneath it
+    for (let i = index + 1; i < dates.length; i++) {
+      dates[i] = { from: null, to: null };
+    }
+
+    // 4) commit
+    this.dates = dates;
+
+    // 5) focus the “to” for this same row so they can finish that range
+    setTimeout(() => this.dateRefs[index]?.to.openDatePicker(), 100);
+  }
+  private addDateRow() {
+    const last_dates = this.dates[this.dates.length - 1];
+    if (!last_dates.from || !last_dates.to) {
+      this.errors = 'dates';
+      return;
+    }
+    this.errors = null;
+    this.dates = [...this.dates, { from: null, to: null }];
+    setTimeout(() => {
+      this.dateRefs[this.dates.length - 1].to?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  }
   render() {
     const selectedRoomsByType = this.selectedRoomTypes.reduce((acc, entry) => {
       const typeId = Number(Object.keys(entry)[0]);
@@ -184,8 +282,8 @@ export class IglBulkBlocks {
           {/* <p class="text-left text-muted">Select room types to block</p> */}
           <div class="d-flex flex-column" style={{ gap: '1rem' }}>
             <ir-checkbox
-              indeterminate={this.selectedRoomTypes?.length > 0 && this.selectedRoomTypes?.length < this.allRoomTypes?.length}
-              checked={this.selectedRoomTypes.length === this.total}
+              indeterminate={this.selectedRoomTypes?.length > 0 && shouldShowAllRooms}
+              checked={!shouldShowAllRooms}
               onCheckChange={e => this.toggleAllRoomTypes(e)}
               label="All property"
               labelClass="m-0 p-0 ml-1"
@@ -243,7 +341,7 @@ export class IglBulkBlocks {
                       variant="icon"
                       icon_name="plus"
                       onClickHandler={() => {
-                        this.dates = [...this.dates, { from: null, to: null }];
+                        this.addDateRow();
                       }}
                     ></ir-button>
                   )}
@@ -255,6 +353,7 @@ export class IglBulkBlocks {
                 if (!this.dateRefs[i]) {
                   this.dateRefs[i] = {};
                 }
+
                 return (
                   <tr key={`date_${i}`}>
                     <td class="pr-1 pb-1">
@@ -262,22 +361,16 @@ export class IglBulkBlocks {
                         ref={el => {
                           this.dateRefs[i].from = el;
                         }}
-                        minDate={this.minDate}
+                        forceDestroyOnUpdate
+                        minDate={i > 0 ? this.dates[i - 1]?.to?.format('YYYY-MM-DD') : this.minDate}
                         data-testid="pickup_arrival_date"
                         date={d.from?.format('YYYY-MM-DD')}
                         emitEmptyDate={true}
                         aria-invalid={String(this.errors === 'dates' && !d.from)}
                         onDateChanged={evt => {
-                          console.log(evt.detail);
-                          const dates = [...this.dates];
-                          dates[i] = { ...dates[i], from: evt.detail.start };
-                          if (dates[i].to && dates[i].to.isBefore(evt.detail.start, 'dates') && evt.detail.start) {
-                            dates[i] = { ...dates[i], to: null };
-                          }
-                          this.dates = [...dates];
-                          setTimeout(() => {
-                            this.dateRefs[i]?.to.openDatePicker();
-                          }, 100);
+                          evt.stopImmediatePropagation();
+                          evt.stopPropagation();
+                          this.handleFromDateChange({ index: i, date: evt.detail.start });
                         }}
                       >
                         <input
@@ -298,12 +391,19 @@ export class IglBulkBlocks {
                         data-testid="pickup_arrival_date"
                         date={d.to?.format('YYYY-MM-DD')}
                         emitEmptyDate={true}
-                        minDate={this.dates[i]?.from ? this.dates[i].from.format('YYYY-MM-DD') : this.minDate}
+                        minDate={this.dates[i].from ? this.dates[i]?.from?.clone().add(1, 'days').format('YYYY-MM-DD') : this.minDate}
                         aria-invalid={String(this.errors === 'dates' && !d.to)}
                         onDateChanged={evt => {
-                          const dates = [...this.dates];
-                          dates[i] = { ...dates[i], to: evt.detail.start };
-                          this.dates = [...dates];
+                          evt.stopImmediatePropagation();
+                          evt.stopPropagation();
+                          this.handleToDateChange({ index: i, date: evt.detail.start });
+                        }}
+                        onDatePickerFocus={e => {
+                          e.stopImmediatePropagation();
+                          e.stopPropagation();
+                          if (!this.dates[i].from) {
+                            this.dateRefs[i].from.openDatePicker();
+                          }
                         }}
                       >
                         <input

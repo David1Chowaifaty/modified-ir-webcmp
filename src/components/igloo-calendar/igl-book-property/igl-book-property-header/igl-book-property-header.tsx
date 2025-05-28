@@ -28,6 +28,7 @@ export class IglBookPropertyHeader {
   @Prop() bookedByInfoData: any;
   @Prop() defaultDaterange: { from_date: string; to_date: string };
   @Prop() propertyId: number;
+  @Prop() wasBlockedUnit: boolean;
 
   @Event() splitBookingDropDownChange: EventEmitter<any>;
   @Event() sourceDropDownChange: EventEmitter<string>;
@@ -266,7 +267,7 @@ export class IglBookPropertyHeader {
               dateLabel={locales.entries.Lcz_Dates}
               maxDate={this.getMaxDate()}
               minDate={this.getMinDate()}
-              disabled={this.isEventType('BAR_BOOKING') || this.isEventType('SPLIT_BOOKING')}
+              disabled={(this.isEventType('BAR_BOOKING') && !this.wasBlockedUnit) || this.isEventType('SPLIT_BOOKING')}
               defaultData={this.bookingDataDefaultDateRange}
             ></igl-date-range>
           </fieldset>

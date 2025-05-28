@@ -24,6 +24,7 @@ export class IglBookingOverviewPage {
   @Prop() sourceOptions: TSourceOptions[];
   @Prop() bookedByInfoData: any;
   @Prop() initialRoomIds: any;
+  @Prop() wasBlockedUnit: boolean;
 
   @Event() roomsDataUpdate: EventEmitter;
 
@@ -48,6 +49,7 @@ export class IglBookingOverviewPage {
     return (
       <Host>
         <igl-book-property-header
+          wasBlockedUnit={this.wasBlockedUnit}
           bookedByInfoData={this.bookedByInfoData}
           defaultDaterange={this.defaultDaterange}
           dateRangeData={this.dateRangeData}
