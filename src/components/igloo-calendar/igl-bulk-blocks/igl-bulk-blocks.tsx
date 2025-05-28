@@ -1,5 +1,7 @@
 import calendar_data from '@/stores/calendar-data';
-import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
+import { ReloadInterceptor } from '@/utils/ReloadInterceptor';
+import { sleep } from '@/utils/utils';
+import { Component, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
 import moment, { Moment } from 'moment';
 import { z, ZodError } from 'zod';
 export type SelectedRooms = Record<string | number, (string | number)[]>;
@@ -17,6 +19,7 @@ export class IglBulkBlocks {
 
   @State() selectedRoomTypes: SelectedRooms[] = [];
   @State() errors: 'dates' | 'rooms';
+  @State() isLoading: boolean;
   @State() dates: {
     from: Moment | null;
     to: Moment | null;
@@ -37,20 +40,48 @@ export class IglBulkBlocks {
 
   @Event() closeModal: EventEmitter<null>;
 
+  private sidebar: HTMLIrSidebarElement;
   private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
-  private total: number;
   private allRoomTypes: SelectedRooms[] = [];
+  private reloadInterceptor: ReloadInterceptor;
   private minDate = moment().format('YYYY-MM-DD');
   private datesSchema = z.array(
     z.object({
-      from: z.string().nonempty(),
-      to: z.string().nonempty(),
+      from: z
+        .any()
+        .refine((val): val is Moment => moment.isMoment(val), {
+          message: "Invalid 'from' date; expected a Moment object.",
+        })
+        .transform((val: Moment) => val.format('YYYY-MM-DD')),
+      to: z
+        .any()
+        .refine((val): val is Moment => moment.isMoment(val), {
+          message: "Invalid 'to' date; expected a Moment object.",
+        })
+        .transform((val: Moment) => val.format('YYYY-MM-DD')),
     }),
   );
 
   componentWillLoad() {
-    this.total = calendar_data.roomsInfo.length;
     this.selectAllRoomTypes();
+  }
+  componentDidLoad() {
+    this.reloadInterceptor = new ReloadInterceptor({ autoActivate: false });
+    this.sidebar = document.querySelector('ir-sidebar') as HTMLIrSidebarElement;
+  }
+
+  disconnectedCallback() {
+    this.reloadInterceptor.deactivate();
+  }
+
+  @Listen('beforeSidebarClose', { target: 'body' })
+  handleBeforeSidebarClose(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    if (window.confirm('Do you really want to proceed?')) {
+      this.deactivate();
+      this.sidebar.toggleSidebar();
+    }
   }
 
   private toggleAllRoomTypes(e: CustomEvent) {
@@ -123,18 +154,35 @@ export class IglBulkBlocks {
     this.selectedRoomTypes = selected;
   }
 
-  private addBlockDates() {
+  private async addBlockDates() {
     try {
       this.errors = null;
+      this.isLoading = true;
       if (this.selectedRoomTypes.length === 0) {
         return (this.errors = 'rooms');
       }
       this.datesSchema.parse(this.dates);
+      this.activate();
+      await sleep(10000);
+      // console.warn('done');
+
+      this.deactivate();
     } catch (error) {
+      console.log(error);
       if (error instanceof ZodError) {
         this.errors = 'dates';
       }
+    } finally {
+      this.isLoading = false;
     }
+  }
+  private activate() {
+    this.reloadInterceptor.activate();
+    if (this.sidebar) this.sidebar.preventClose = true;
+  }
+  private deactivate() {
+    this.reloadInterceptor.deactivate();
+    if (this.sidebar) this.sidebar.preventClose = false;
   }
   // private toggleWeekDays({ checked, weekDay }: { checked: boolean; weekDay: number }): void {
   //   if (checked) {
@@ -268,6 +316,9 @@ export class IglBulkBlocks {
             onCloseSideBar={e => {
               e.stopImmediatePropagation();
               e.stopPropagation();
+              if (this.isLoading) {
+                return;
+              }
               this.closeModal.emit(null);
             }}
             class="px-1 mb-0"
@@ -436,7 +487,7 @@ export class IglBulkBlocks {
         </div>
         <div class={'sheet-footer'}>
           <ir-button text="Cancel" btn_color="secondary" class={'flex-fill'} onClickHandler={() => this.closeModal.emit(null)}></ir-button>
-          <ir-button text="Save" btn_type="submit" class="flex-fill"></ir-button>
+          <ir-button isLoading={this.isLoading} text="Save" btn_type="submit" class="flex-fill"></ir-button>
         </div>
       </form>
     );

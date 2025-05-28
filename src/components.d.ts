@@ -1193,6 +1193,7 @@ export namespace Components {
         "label": string;
         "name": string;
         "open": boolean;
+        "preventClose": boolean;
         "showCloseButton": boolean;
         "side": 'right' | 'left';
         "sidebarStyles": Partial<CSSStyleDeclaration>;
@@ -3145,6 +3146,7 @@ declare global {
     };
     interface HTMLIrSidebarElementEventMap {
         "irSidebarToggle": any;
+        "beforeSidebarClose": any;
     }
     interface HTMLIrSidebarElement extends Components.IrSidebar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrSidebarElementEventMap>(type: K, listener: (this: HTMLIrSidebarElement, ev: IrSidebarCustomEvent<HTMLIrSidebarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4805,8 +4807,10 @@ declare namespace LocalJSX {
     interface IrSidebar {
         "label"?: string;
         "name"?: string;
+        "onBeforeSidebarClose"?: (event: IrSidebarCustomEvent<any>) => void;
         "onIrSidebarToggle"?: (event: IrSidebarCustomEvent<any>) => void;
         "open"?: boolean;
+        "preventClose"?: boolean;
         "showCloseButton"?: boolean;
         "side"?: 'right' | 'left';
         "sidebarStyles"?: Partial<CSSStyleDeclaration>;

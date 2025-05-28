@@ -14,7 +14,10 @@ export class IrSidebar {
   @Prop({ mutable: true, reflect: true }) open: boolean = false;
   @Prop() sidebarStyles: Partial<CSSStyleDeclaration>;
   @Prop() label: string;
+  @Prop() preventClose: boolean;
+
   @Event({ bubbles: true, composed: true }) irSidebarToggle: EventEmitter;
+  @Event({ bubbles: true, composed: true }) beforeSidebarClose: EventEmitter;
 
   private sidebarRef: HTMLDivElement;
 
@@ -57,6 +60,10 @@ export class IrSidebar {
 
   @Method()
   async toggleSidebar() {
+    if (this.preventClose) {
+      this.beforeSidebarClose.emit();
+      return;
+    }
     this.irSidebarToggle.emit(this.open);
   }
 
