@@ -172,6 +172,7 @@ export class IrHkArchive {
               }}
             ></igl-date-range> */}
             <ir-range-picker
+              maxDate={moment().format('YYYY-MM-DD')}
               minDate={this.minSelectableDate}
               class="mr-1"
               fromDate={this.filters.from_date ? moment(this.filters.from_date, 'YYYY-MM-DD') : null}
