@@ -208,22 +208,37 @@ export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_da
     return bookingStatus[status_code || '001'];
   } else {
     const now = moment();
+    // const toDate = moment(to_date, 'YYYY-MM-DD');
+    // const fromDate = moment(from_date, 'YYYY-MM-DD');
+    // const isNowAfterOrSameAsHotelHour = compareTime(
+    //   now.toDate(),
+    //   createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour),
+    // );
+    // if (fromDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
+    //   return bookingStatus['000'];
+    // } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+    //   return bookingStatus['000'];
+    // } else if (toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
+    //   return bookingStatus['000'];
+    // } else if ((toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) || toDate.isBefore(now, 'day')) {
+    //   return bookingStatus['003'];
+    // } else {
+    //   return bookingStatus[status_code || '001'];
+    // }
     const toDate = moment(to_date, 'YYYY-MM-DD');
     const fromDate = moment(from_date, 'YYYY-MM-DD');
-    const isNowAfterOrSameAsHotelHour = compareTime(
-      now.toDate(),
-      createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour),
-    );
-    if (fromDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
-      return bookingStatus['000'];
-    } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-      return bookingStatus['000'];
-    } else if (toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
-      return bookingStatus['000'];
-    } else if ((toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) || toDate.isBefore(now, 'day')) {
-      return bookingStatus['003'];
-    } else {
-      return bookingStatus[status_code || '001'];
+    if (status_code !== 'PENDING') {
+      if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+        return bookingStatus['000'];
+      } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+        return bookingStatus['000'];
+      } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+        return bookingStatus['000'];
+      } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+        return bookingStatus['003'];
+      } else {
+        return bookingStatus[status_code || '001'];
+      }
     }
   }
 }
