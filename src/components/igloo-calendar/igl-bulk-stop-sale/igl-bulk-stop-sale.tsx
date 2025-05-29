@@ -160,17 +160,9 @@ export class IglBulkStopSale {
 
   //   this.selectedRoomTypes = selected;
   // }
-
   private async addBlockDates() {
-    try {
-      this.errors = null;
-      this.isLoading = true;
-      if (this.selectedRoomTypes.length === 0) {
-        return (this.errors = 'rooms');
-      }
-      const periods = this.datesSchema.parse(this.dates);
-      this.activate();
-      const periods_to_modify = [];
+    const generatePeriodsToModify = periods => {
+      const p = [];
       for (const period of periods) {
         let current = period.from;
         const lastDay = moment(period.to, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
@@ -181,7 +173,7 @@ export class IglBulkStopSale {
             continue;
           }
           for (const selectedRoom of this.selectedRoomTypes) {
-            periods_to_modify.push({
+            p.push({
               room_type_id: selectedRoom.id,
               night: current,
             });
@@ -189,6 +181,17 @@ export class IglBulkStopSale {
           current = nextDay;
         }
       }
+      return p;
+    };
+    try {
+      this.errors = null;
+      this.isLoading = true;
+      if (this.selectedRoomTypes.length === 0) {
+        return (this.errors = 'rooms');
+      }
+      const periods = this.datesSchema.parse(this.dates);
+      this.activate();
+      const periods_to_modify = generatePeriodsToModify(periods);
       const isAllOpen = this.selectedRoomTypes.every(e => e.result === 'open');
       const isAllClosed = this.selectedRoomTypes.every(e => e.result === 'closed');
       if (isAllClosed || isAllOpen) {
@@ -197,15 +200,16 @@ export class IglBulkStopSale {
           restrictions: periods_to_modify,
         });
       } else {
+        const payloads = [];
         for (const room of this.selectedRoomTypes) {
           const periods = periods_to_modify.filter(f => f.room_type_id === room.id);
-          await this.bookingService.setExposedRestrictionPerRoomType({
+          payloads.push({
             is_closed: room.result === 'closed',
             restrictions: periods,
           });
         }
+        await Promise.all(payloads.map(p => this.bookingService.setExposedRestrictionPerRoomType(p)));
       }
-
       this.deactivate();
     } catch (error) {
       console.log(error);
@@ -216,14 +220,17 @@ export class IglBulkStopSale {
       this.isLoading = false;
     }
   }
+
   private activate() {
     this.reloadInterceptor.activate();
     if (this.sidebar) this.sidebar.preventClose = true;
   }
+
   private deactivate() {
     this.reloadInterceptor.deactivate();
     if (this.sidebar) this.sidebar.preventClose = false;
   }
+
   private toggleWeekDays({ checked, weekDay }: { checked: boolean; weekDay: number }): void {
     const prev = new Set(this.selectedWeekdays);
     if (checked) {
@@ -237,50 +244,6 @@ export class IglBulkStopSale {
     }
   }
 
-  // private handleToDateChange({ index, date }: { index: number; date: Moment }) {
-  //   const dates = [...this.dates];
-  //   dates[index] = { ...dates[index], to: date };
-  //   for (let i = index + 1; i < dates.length; i++) {
-  //     const prevToDate = dates[i - 1].to;
-  //     if (!prevToDate) continue;
-  //     if (!dates[i].from || dates[i].from.isSameOrBefore(prevToDate, 'day')) {
-  //       dates[i] = {
-  //         ...dates[i],
-  //         from: moment(prevToDate).add(1, 'day'),
-  //         to: dates[i].to && dates[i].to.isBefore(moment(prevToDate).add(1, 'day'), 'day') ? null : dates[i].to,
-  //       };
-  //     }
-  //   }
-  //   this.dates = [...dates];
-  //   if (index < this.dates.length - 1) {
-  //     setTimeout(() => {
-  //       this.dateRefs[index + 1]?.from.openDatePicker();
-  //     }, 100);
-  //   }
-  // }
-
-  // private handleFromDateChange({ index, date }: { index: number; date: Moment }) {
-  //   const dates = [...this.dates];
-  //   dates[index] = { ...dates[index], from: date };
-  //   if (dates[index].to && dates[index].to.isBefore(date, 'day')) {
-  //     dates[index] = { ...dates[index], to: null };
-  //   }
-  //   for (let i = index + 1; i < dates.length; i++) {
-  //     const prevToDate = dates[i - 1].to;
-  //     if (!prevToDate) continue;
-  //     if (!dates[i].from || dates[i].from.isSameOrBefore(prevToDate, 'day')) {
-  //       dates[i] = {
-  //         ...dates[i],
-  //         from: moment(prevToDate).add(1, 'day'),
-  //         to: dates[i].to && dates[i].to.isBefore(moment(prevToDate).add(1, 'day'), 'day') ? null : dates[i].to,
-  //       };
-  //     }
-  //   }
-  //   this.dates = [...dates];
-  //   setTimeout(() => {
-  //     this.dateRefs[index]?.to.openDatePicker();
-  //   }, 100);
-  // }
   private handleToDateChange({ index, date }: { index: number; date: Moment }) {
     // 1) clone and set the new “to”
     const dates = [...this.dates];

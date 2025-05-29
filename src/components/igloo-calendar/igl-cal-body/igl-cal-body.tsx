@@ -309,7 +309,7 @@ export class IglCalBody {
   }
   private getGeneralCategoryDayColumns(addClass: string, isCategory: boolean = false, index: number) {
     return calendar_dates.days.map(dayInfo => {
-      const isActive = true;
+      // const isActive = true;
       return (
         <div
           class={`cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${
@@ -320,7 +320,7 @@ export class IglCalBody {
             <Fragment>
               <span class={'categoryName'}>
                 {dayInfo.rate[index].exposed_inventory.rts}
-                <button class={'triangle-button'} style={{ '--in-toggle-color': isActive ? 'green' : '#ff4961' }}></button>
+                {/* <button class={'triangle-button'} style={{ '--in-toggle-color': isActive ? 'green' : '#ff4961' }}></button> */}
                 {/* <br />
               {dayInfo.rate[index].exposed_inventory.offline} */}
               </span>
