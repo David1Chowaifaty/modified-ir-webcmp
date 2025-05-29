@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type     | Default      |
-| -------- | --------- | ----------- | -------- | ------------ |
-| `icon`   | `icon`    |             | `string` | `'ft-check'` |
+| Property | Attribute | Description | Type                              | Default      |
+| -------- | --------- | ----------- | --------------------------------- | ------------ |
+| `icon`   | `icon`    |             | `string`                          | `'ft-check'` |
+| `type`   | `type`    |             | `"button" \| "reset" \| "submit"` | `'button'`   |
 
 
 ## Events

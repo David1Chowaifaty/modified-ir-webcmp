@@ -9,6 +9,7 @@
 
 | Property   | Attribute   | Description | Type      | Default     |
 | ---------- | ----------- | ----------- | --------- | ----------- |
+| `language` | `language`  |             | `string`  | `'en'`      |
 | `old_pwd`  | `old_pwd`   |             | `string`  | `undefined` |
 | `skip2Fa`  | `skip-2-fa` |             | `boolean` | `undefined` |
 | `ticket`   | `ticket`    |             | `string`  | `undefined` |
@@ -17,10 +18,9 @@
 
 ## Events
 
-| Event          | Description | Type                                                           |
-| -------------- | ----------- | -------------------------------------------------------------- |
-| `authFinish`   |             | `CustomEvent<{ token: string; code: "error" \| "succsess"; }>` |
-| `closeSideBar` |             | `CustomEvent<null>`                                            |
+| Event          | Description | Type                |
+| -------------- | ----------- | ------------------- |
+| `closeSideBar` |             | `CustomEvent<null>` |
 
 
 ## Dependencies
@@ -47,10 +47,14 @@ graph TD;
   ir-reset-password --> ir-input-text
   ir-reset-password --> ir-password-validator
   ir-reset-password --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
   ir-title --> ir-icon
   ir-password-validator --> requirement-check
   requirement-check --> ir-icons
-  ir-button --> ir-icons
   ir-user-form-panel --> ir-reset-password
   style ir-reset-password fill:#f9f,stroke:#333,stroke-width:4px
 ```

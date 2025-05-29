@@ -9,6 +9,7 @@
 
 | Property     | Attribute    | Description | Type     | Default     |
 | ------------ | ------------ | ----------- | -------- | ----------- |
+| `baseUrl`    | `base-url`   |             | `string` | `undefined` |
 | `language`   | `language`   |             | `string` | `''`        |
 | `p`          | `p`          |             | `string` | `undefined` |
 | `propertyid` | `propertyid` |             | `number` | `undefined` |
@@ -52,8 +53,12 @@ graph TD;
   ir-hk-tasks --> ir-modal
   ir-hk-tasks --> ir-sidebar
   ir-hk-tasks --> ir-hk-archive
-  ir-tasks-header --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
   ir-button --> ir-icons
+  ir-tasks-header --> ir-button
   ir-tasks-filters --> ir-button
   ir-tasks-filters --> ir-select
   ir-tasks-table --> ir-checkbox
@@ -130,7 +135,6 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
-  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-pickup-view --> ir-button

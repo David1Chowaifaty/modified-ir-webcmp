@@ -9,6 +9,7 @@
 
 | Property         | Attribute         | Description | Type     | Default     |
 | ---------------- | ----------------- | ----------- | -------- | ----------- |
+| `baseUrl`        | `base-url`        |             | `string` | `undefined` |
 | `currencyName`   | `currency-name`   |             | `string` | `undefined` |
 | `from_date`      | `from_date`       |             | `string` | `undefined` |
 | `language`       | `language`        |             | `string` | `undefined` |
@@ -71,11 +72,15 @@ graph TD;
   igloo-calendar --> ir-booking-details
   igloo-calendar --> ir-room-guests
   igloo-calendar --> ir-modal
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-button
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
-  ir-button --> ir-icons
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
   igl-cal-body --> ir-interactive-title
@@ -182,7 +187,6 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
-  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-pickup-view --> ir-button
