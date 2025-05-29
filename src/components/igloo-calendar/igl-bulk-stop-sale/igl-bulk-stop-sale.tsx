@@ -186,64 +186,39 @@ export class IglBulkStopSale {
     }
   }
 
-  private handleToDateChange({ index, date }: { index: number; date: Moment }) {
-    // 1) clone and set the new “to”
+  private handleDateChange({ index, date, key }: { index: number; date: Moment; key: 'from' | 'to' }) {
+    // 1) clone and set the new date
     const dates = [...this.dates];
-    dates[index] = { ...dates[index], to: date };
+    dates[index] = { ...dates[index], [key]: date };
 
-    // 2) clear every row beneath it
+    // 1a) if they just changed the “from”, always clear that row’s “to”
+    if (key === 'from' && dates[index].to?.isBefore(date, 'dates')) {
+      dates[index].to = null;
+    }
+
+    // 2) clear any subsequent rows whose “from” is on or before the changed date
     for (let i = index + 1; i < dates.length; i++) {
-      dates[i] = { from: null, to: null };
+      const rowFrom = dates[i]?.from;
+      if (rowFrom && rowFrom.isSameOrBefore(date, 'day')) {
+        dates[i] = { from: null, to: null };
+      }
     }
 
     // 3) commit
     this.dates = dates;
 
-    // 4) focus the first empty “from” in the list
-    const nextFrom = dates.findIndex(d => d.from === null);
-    if (nextFrom > -1) {
-      setTimeout(() => this.dateRefs[nextFrom]?.from.openDatePicker(), 100);
-    }
-  }
-
-  private handleFromDateChange({ index, date }: { index: number; date: Moment }) {
-    // 1) clone and set the new “from”
-    const dates = [...this.dates];
-    dates[index] = { ...dates[index], from: date };
-
-    for (let i = index; i < dates.length; i++) {
-      console.log(dates[index].from.isBefore(date, 'dates'), date, dates[index].from);
-      if (dates[index].from.isBefore(date, 'dates')) {
-        dates[i] = { from: null, to: null };
+    // 4) open the appropriate picker
+    setTimeout(() => {
+      if (key === 'from') {
+        this.dateRefs[index]?.to.openDatePicker();
+      } else {
+        const nextFrom = dates.findIndex(d => d.from === null);
+        if (nextFrom > -1) {
+          this.dateRefs[nextFrom]?.from.openDatePicker();
+        }
       }
-    }
-    // 4) commit
-    this.dates = dates;
-
-    // 5) focus the “to” for this same row so they can finish that range
-    setTimeout(() => this.dateRefs[index]?.to.openDatePicker(), 100);
+    }, 100);
   }
-  // private handleFromDateChange({ index, date }: { index: number; date: Moment }) {
-  //   // 1) clone and set the new “from”
-  //   const dates = [...this.dates];
-  //   dates[index] = { ...dates[index], from: date };
-
-  //   // 2) if the existing “to” is now before it, wipe it out
-  //   if (dates[index].to && dates[index].to.isBefore(date, 'day')) {
-  //     dates[index] = { ...dates[index], to: null };
-  //   }
-
-  //   // 3) clear every row beneath it
-  //   for (let i = index + 1; i < dates.length; i++) {
-  //     dates[i] = { from: null, to: null };
-  //   }
-
-  //   // 4) commit
-  //   this.dates = dates;
-
-  //   // 5) focus the “to” for this same row so they can finish that range
-  //   setTimeout(() => this.dateRefs[index]?.to.openDatePicker(), 100);
-  // }
 
   private addDateRow() {
     const last_dates = this.dates[this.dates.length - 1];
@@ -372,6 +347,8 @@ export class IglBulkStopSale {
                   this.dateRefs[i] = {};
                 }
 
+                const fromDateMinDate = i > 0 ? this.dates[i - 1]?.to?.format('YYYY-MM-DD') ?? this.minDate : this.minDate;
+                const toDateMinDate = this.dates[i].from ? this.dates[i]?.from?.clone().add(1, 'days').format('YYYY-MM-DD') : this.minDate;
                 return (
                   <tr key={`date_${i}`}>
                     <td class="pr-1 pb-1">
@@ -380,7 +357,7 @@ export class IglBulkStopSale {
                           this.dateRefs[i].from = el;
                         }}
                         forceDestroyOnUpdate
-                        minDate={i > 0 ? this.dates[i - 1]?.to?.format('YYYY-MM-DD') : this.minDate}
+                        minDate={fromDateMinDate}
                         data-testid="pickup_arrival_date"
                         date={d.from?.format('YYYY-MM-DD')}
                         emitEmptyDate={true}
@@ -388,7 +365,23 @@ export class IglBulkStopSale {
                         onDateChanged={evt => {
                           evt.stopImmediatePropagation();
                           evt.stopPropagation();
-                          this.handleFromDateChange({ index: i, date: evt.detail.start });
+                          this.handleDateChange({ index: i, date: evt.detail.start, key: 'from' });
+                        }}
+                        onDatePickerFocus={e => {
+                          e.stopImmediatePropagation();
+                          e.stopPropagation();
+                          if (i === 0) {
+                            return;
+                          }
+                          const index = this.dates.findIndex(d => !d.from || !d.to);
+
+                          if (!this.dates[index]?.from) {
+                            this.dateRefs[index]?.from.openDatePicker();
+                            return;
+                          }
+                          if (!this.dates[index]?.to) {
+                            this.dateRefs[index].to.openDatePicker();
+                          }
                         }}
                       >
                         <input
@@ -409,18 +402,24 @@ export class IglBulkStopSale {
                         data-testid="pickup_arrival_date"
                         date={d.to?.format('YYYY-MM-DD')}
                         emitEmptyDate={true}
-                        minDate={this.dates[i].from ? this.dates[i]?.from?.clone().add(1, 'days').format('YYYY-MM-DD') : this.minDate}
+                        minDate={toDateMinDate}
                         aria-invalid={String(this.errors === 'dates' && !d.to)}
                         onDateChanged={evt => {
                           evt.stopImmediatePropagation();
                           evt.stopPropagation();
-                          this.handleToDateChange({ index: i, date: evt.detail.start });
+                          this.handleDateChange({ index: i, date: evt.detail.start, key: 'to' });
                         }}
                         onDatePickerFocus={e => {
                           e.stopImmediatePropagation();
                           e.stopPropagation();
-                          if (!this.dates[i].from) {
-                            this.dateRefs[i].from.openDatePicker();
+                          const index = this.dates.findIndex(d => !d.from || !d.to);
+
+                          if (!this.dates[index]?.from) {
+                            this.dateRefs[index]?.from?.openDatePicker();
+                            return;
+                          }
+                          if (!this.dates[index]?.to) {
+                            this.dateRefs[index].to.openDatePicker();
                           }
                         }}
                       >

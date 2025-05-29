@@ -27,7 +27,7 @@
   border-top: 1px solid #e4e5ec;
   display: flex;
   flex-direction: column;
-  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  padding: 1rem;
   gap: 0.5rem;
 }
 .sheet-header {
@@ -39,11 +39,11 @@
 .sheet-body {
   flex: 1 1 0%;
 }
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   .sheet-footer {
     bottom: env(safe-area-inset-bottom);
   }
-}
+} */
 @media (min-width: 768px) {
   .sheet-footer {
     flex-direction: row;
