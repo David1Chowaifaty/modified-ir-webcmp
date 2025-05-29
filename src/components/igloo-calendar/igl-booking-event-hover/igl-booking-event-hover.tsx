@@ -7,6 +7,7 @@ import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { CalendarModalEvent } from '@/models/property-types';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
+import { IOtaNotes } from '@/models/booking.dto';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -375,7 +376,20 @@ export class IglBookingEventHover {
   //   }
   //   return null;
   // }
-
+  private getOTANotes(maxVisible: number = 3) {
+    if (!this.bookingEvent.ota_notes || this.bookingEvent.ota_notes?.length === 0) {
+      return null;
+    }
+    const channel_notes: IOtaNotes[] = [...this.bookingEvent.ota_notes];
+    const separator = '<br>- ';
+    if (channel_notes.length > maxVisible) {
+      channel_notes[maxVisible - 1] = { statement: `${channel_notes[maxVisible - 1].statement} <span style="color: #1e9ff2;">more...</span>` };
+    }
+    return channel_notes
+      .slice(0, maxVisible)
+      .map(o => `${separator}${o.statement}`)
+      .join('');
+  }
   private getInfoElement() {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
@@ -464,6 +478,14 @@ export class IglBookingEventHover {
         {this.bookingEvent.is_direct && (
           <ir-label containerStyle={{ padding: '0', margin: '0' }} labelText={`${locales.entries.Lcz_GuestRemark}:`} display="inline" content={this.bookingEvent.NOTES}></ir-label>
         )}
+        <ir-label
+          containerStyle={{ padding: '0', margin: '0' }}
+          labelText={`${locales.entries.Lcz_ChannelNotes}:`}
+          display="inline"
+          content={this.getOTANotes()}
+          renderContentAsHtml
+        ></ir-label>
+
         {/* {this.getInternalNote() ? (
           <div class="row p-0 m-0">
             <div class="col-12 px-0 text-wrap">

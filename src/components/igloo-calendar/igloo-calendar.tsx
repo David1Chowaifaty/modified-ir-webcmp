@@ -611,15 +611,66 @@ export class IglooCalendar {
       bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
       bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
       if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
+        // if (calendar_data.checkin_enabled) {
         bookingEvent.STATUS = getRoomStatus({
           in_out: bookingEvent.ROOM_INFO?.in_out,
           from_date: bookingEvent.FROM_DATE,
           to_date: bookingEvent.TO_DATE,
           status_code: bookingEvent.BASE_STATUS_CODE,
         });
+        // } else {
+        //   const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+        //   const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+        //   if (bookingEvent.STATUS !== 'PENDING') {
+        //     if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+        //       bookingEvent.STATUS = bookingStatus['000'];
+        //     } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+        //       bookingEvent.STATUS = bookingStatus['000'];
+        //     } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+        //       bookingEvent.STATUS = bookingStatus['000'];
+        //     } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+        //       bookingEvent.STATUS = bookingStatus['003'];
+        //     }
+        //   }
+        // }
       }
     });
   }
+  /**
+   * 
+   *private updateBookingEventsDateRange(eventData) {
+    const now = moment();
+    eventData.forEach(bookingEvent => {
+      bookingEvent.legendData = this.calendarData.formattedLegendData;
+      bookingEvent.defaultDateRange = {};
+      bookingEvent.defaultDateRange.fromDate = new Date(bookingEvent.FROM_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.fromDateStr = this.getDateStr(bookingEvent.defaultDateRange.fromDate);
+      bookingEvent.defaultDateRange.fromDateTimeStamp = bookingEvent.defaultDateRange.fromDate.getTime();
+
+      bookingEvent.defaultDateRange.toDate = new Date(bookingEvent.TO_DATE + 'T00:00:00');
+      bookingEvent.defaultDateRange.toDateStr = this.getDateStr(bookingEvent.defaultDateRange.toDate);
+      bookingEvent.defaultDateRange.toDateTimeStamp = bookingEvent.defaultDateRange.toDate.getTime();
+
+      bookingEvent.defaultDateRange.dateDifference = bookingEvent.NO_OF_DAYS;
+      bookingEvent.roomsInfo = [...this.calendarData.roomsInfo];
+      if (!isBlockUnit(bookingEvent.STATUS_CODE)) {
+        const toDate = moment(bookingEvent.TO_DATE, 'YYYY-MM-DD');
+        const fromDate = moment(bookingEvent.FROM_DATE, 'YYYY-MM-DD');
+        if (bookingEvent.STATUS !== 'PENDING') {
+          if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+            bookingEvent.STATUS = bookingStatus['000'];
+          } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+            bookingEvent.STATUS = bookingStatus['003'];
+          }
+        }
+      }
+    });
+  }
+   */
 
   private updateTotalAvailability() {
     let days = [...calendar_dates.days];
