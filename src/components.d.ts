@@ -262,6 +262,7 @@ export namespace Components {
         "unassignedDatesProp": any;
     }
     interface IglooCalendar {
+        "baseUrl": string;
         "currencyName": string;
         "from_date": string;
         "language": string;
@@ -323,6 +324,7 @@ export namespace Components {
         "hasReceipt": boolean;
     }
     interface IrBookingListing {
+        "baseUrl": string;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -581,6 +583,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrHkTasks {
+        "baseUrl": string;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -596,6 +599,7 @@ export namespace Components {
         "user": THKUser | null;
     }
     interface IrHousekeeping {
+        "baseUrl": string;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -3734,6 +3738,7 @@ declare namespace LocalJSX {
         "unassignedDatesProp"?: any;
     }
     interface IglooCalendar {
+        "baseUrl"?: string;
         "currencyName"?: string;
         "from_date"?: string;
         "language"?: string;
@@ -3813,6 +3818,7 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrBookingHeaderCustomEvent<IToast>) => void;
     }
     interface IrBookingListing {
+        "baseUrl"?: string;
         "language"?: string;
         "p"?: string;
         "propertyid"?: number;
@@ -4102,6 +4108,7 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrHkTasks {
+        "baseUrl"?: string;
         "language"?: string;
         "onClearSelectedHkTasks"?: (event: IrHkTasksCustomEvent<void>) => void;
         "p"?: string;
@@ -4122,6 +4129,7 @@ declare namespace LocalJSX {
         "user"?: THKUser | null;
     }
     interface IrHousekeeping {
+        "baseUrl"?: string;
         "language"?: string;
         "onToast"?: (event: IrHousekeepingCustomEvent<IToast>) => void;
         "p"?: string;
