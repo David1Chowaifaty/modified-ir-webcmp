@@ -5,7 +5,6 @@ import { Component, Event, EventEmitter, h, Listen, Prop, State } from '@stencil
 import moment, { Moment } from 'moment';
 import { z, ZodError } from 'zod';
 export type SelectedRooms = { id: string | number; result: 'open' | 'closed' };
-// export type SelectedRooms = Record<string | number, (number|string)[]>;
 export interface Weekday {
   value: number;
   label: string;
@@ -74,9 +73,6 @@ export class IglBulkStopSale {
   private weekdaysSections: HTMLDivElement;
   private datesSections: HTMLTableElement;
 
-  componentWillLoad() {
-    // this.selectAllRoomTypes();
-  }
   componentDidLoad() {
     this.reloadInterceptor = new ReloadInterceptor({ autoActivate: false });
     this.sidebar = document.querySelector('ir-sidebar') as HTMLIrSidebarElement;
@@ -96,75 +92,6 @@ export class IglBulkStopSale {
     }
   }
 
-  // private toggleAllRoomTypes(e: CustomEvent) {
-  //   e.stopImmediatePropagation();
-  //   e.stopPropagation();
-  //   if (!e.detail) {
-  //     this.selectedRoomTypes = [];
-  //     return;
-  //   }
-  //   this.selectedRoomTypes = this.allRoomTypes;
-  // }
-
-  // private selectAllRoomTypes() {
-  //   this.allRoomTypes = calendar_data.roomsInfo.map(rt => ({
-  //     [rt.id]: rt.physicalrooms.map(room => room.id),
-  //   }));
-  //   this.selectedRoomTypes = this.allRoomTypes;
-  // }
-
-  // private toggleRoom({ checked, roomId, roomTypeId }: { checked: boolean; roomTypeId: number; roomId: number }): void {
-  //   // clone current selection
-  //   const selected = [...this.selectedRoomTypes];
-  //   // find existing entry for this roomType
-  //   const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
-
-  //   if (checked) {
-  //     // add the room
-  //     if (idx > -1) {
-  //       const rooms = selected[idx][roomTypeId];
-  //       if (!rooms.includes(roomId)) {
-  //         selected[idx] = { [roomTypeId]: [...rooms, roomId] };
-  //       }
-  //     } else {
-  //       selected.push({ [roomTypeId]: [roomId] });
-  //     }
-  //   } else {
-  //     // remove the room
-  //     if (idx > -1) {
-  //       const filtered = selected[idx][roomTypeId].filter(id => id !== roomId);
-  //       if (filtered.length) {
-  //         selected[idx] = { [roomTypeId]: filtered };
-  //       } else {
-  //         selected.splice(idx, 1);
-  //       }
-  //     }
-  //   }
-
-  //   this.selectedRoomTypes = selected;
-  // }
-
-  // private toggleRoomType({ checked, roomTypeId }: { checked: boolean; roomTypeId: number }): void {
-  //   const selected = [...this.selectedRoomTypes];
-  //   const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
-
-  //   if (checked) {
-  //     const roomType = calendar_data.roomsInfo.find(rt => rt.id === roomTypeId);
-  //     const allRooms = roomType ? roomType.physicalrooms.map(r => r.id) : [];
-
-  //     if (idx > -1) {
-  //       selected[idx] = { [roomTypeId]: allRooms };
-  //     } else {
-  //       selected.push({ [roomTypeId]: allRooms });
-  //     }
-  //   } else {
-  //     if (idx > -1) {
-  //       selected.splice(idx, 1);
-  //     }
-  //   }
-
-  //   this.selectedRoomTypes = selected;
-  // }
   private async addBlockDates() {
     const generatePeriodsToModify = periods => {
       const p = [];
@@ -191,18 +118,17 @@ export class IglBulkStopSale {
     try {
       this.errors = null;
       this.isLoading = true;
+      const periods = this.datesSchema.parse(this.dates);
       if (this.selectedRoomTypes.length === 0) {
         this.unitSections.scrollIntoView({ behavior: 'smooth', block: 'center' });
         this.errors = 'rooms';
         return;
       }
-      console.log('here');
       if (this.selectedWeekdays.size === 0) {
         this.weekdaysSections.scrollIntoView({ behavior: 'smooth', block: 'center' });
         this.errors = 'weekdays';
         return;
       }
-      const periods = this.datesSchema.parse(this.dates);
       this.activate();
       const periods_to_modify = generatePeriodsToModify(periods);
       const isAllOpen = this.selectedRoomTypes.every(e => e.result === 'open');
@@ -285,22 +211,40 @@ export class IglBulkStopSale {
     const dates = [...this.dates];
     dates[index] = { ...dates[index], from: date };
 
-    // 2) if the existing “to” is now before it, wipe it out
-    if (dates[index].to && dates[index].to.isBefore(date, 'day')) {
-      dates[index] = { ...dates[index], to: null };
+    for (let i = index; i < dates.length; i++) {
+      console.log(dates[index].from.isBefore(date, 'dates'), date, dates[index].from);
+      if (dates[index].from.isBefore(date, 'dates')) {
+        dates[i] = { from: null, to: null };
+      }
     }
-
-    // 3) clear every row beneath it
-    for (let i = index + 1; i < dates.length; i++) {
-      dates[i] = { from: null, to: null };
-    }
-
     // 4) commit
     this.dates = dates;
 
     // 5) focus the “to” for this same row so they can finish that range
     setTimeout(() => this.dateRefs[index]?.to.openDatePicker(), 100);
   }
+  // private handleFromDateChange({ index, date }: { index: number; date: Moment }) {
+  //   // 1) clone and set the new “from”
+  //   const dates = [...this.dates];
+  //   dates[index] = { ...dates[index], from: date };
+
+  //   // 2) if the existing “to” is now before it, wipe it out
+  //   if (dates[index].to && dates[index].to.isBefore(date, 'day')) {
+  //     dates[index] = { ...dates[index], to: null };
+  //   }
+
+  //   // 3) clear every row beneath it
+  //   for (let i = index + 1; i < dates.length; i++) {
+  //     dates[i] = { from: null, to: null };
+  //   }
+
+  //   // 4) commit
+  //   this.dates = dates;
+
+  //   // 5) focus the “to” for this same row so they can finish that range
+  //   setTimeout(() => this.dateRefs[index]?.to.openDatePicker(), 100);
+  // }
+
   private addDateRow() {
     const last_dates = this.dates[this.dates.length - 1];
     if (!last_dates.from || !last_dates.to) {
@@ -313,19 +257,8 @@ export class IglBulkStopSale {
       this.dateRefs[this.dates.length - 1].to?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
   }
-  render() {
-    // const selectedRoomsByType = this.selectedRoomTypes.reduce((acc, entry) => {
-    //   const typeId = Number(Object.keys(entry)[0]);
-    //   acc[typeId] = entry[typeId];
-    //   return acc;
-    // }, {} as Record<number, (string | number)[]>);
-    // const allFullySelected = calendar_data.roomsInfo.every(({ id, physicalrooms }) => {
-    //   const sel = selectedRoomsByType[id] || [];
-    //   return sel.length === physicalrooms.length;
-    // });
 
-    // const shouldShowAllRooms = !allFullySelected;
-    console.log(this.selectedRoomTypes);
+  render() {
     return (
       <form
         class={'bulk-sheet-container'}
@@ -359,44 +292,6 @@ export class IglBulkStopSale {
                 Please select at least one {calendar_data.is_vacation_rental ? 'listing' : 'unit'}
               </p>
             )}
-
-            {/* <p class="text-left text-muted">Select room types to block</p> */}
-            {/* <div class="d-flex flex-column" style={{ gap: '1rem' }}>
-            <ir-checkbox
-              indeterminate={this.selectedRoomTypes?.length > 0 && shouldShowAllRooms}
-              checked={!shouldShowAllRooms}
-              onCheckChange={e => this.toggleAllRoomTypes(e)}
-              label="All property"
-              labelClass="m-0 p-0 ml-1"
-            ></ir-checkbox>
-            {shouldShowAllRooms &&
-              calendar_data.roomsInfo.map(roomType => {
-                const selectedRoomType = this.selectedRoomTypes.find(rt => !!rt[roomType.id]);
-                const selectedRooms = selectedRoomType ? selectedRoomType[roomType.id] : [];
-                const physicalRoomsLength = roomType.physicalrooms.length;
-                return (
-                  <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
-                    <ir-checkbox
-                      onCheckChange={e => this.toggleRoomType({ checked: e.detail, roomTypeId: roomType.id })}
-                      checked={selectedRooms?.length === physicalRoomsLength}
-                      indeterminate={selectedRooms?.length > 0 && selectedRooms?.length < physicalRoomsLength}
-                      label={roomType.name}
-                      labelClass="m-0 p-0 ml-1"
-                    ></ir-checkbox>
-                    <div class="d-flex ml-1 flex-column" style={{ gap: '0.5rem' }}>
-                      {roomType.physicalrooms.map(room => (
-                        <ir-checkbox
-                          checked={!!selectedRooms.find(r => r === room.id)}
-                          onCheckChange={e => this.toggleRoom({ checked: e.detail, roomTypeId: roomType.id, roomId: room.id })}
-                          label={room.name}
-                          labelClass="m-0 p-0 ml-1"
-                        ></ir-checkbox>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-          </div> */}
             <table ref={el => (this.unitSections = el)}>
               <thead>
                 <tr>

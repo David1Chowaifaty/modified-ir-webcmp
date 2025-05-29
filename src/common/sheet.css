@@ -5,8 +5,19 @@
   display: flex !important;
   flex-direction: column !important;
   background: white;
-  height: 100% !important;
+  height: 100vh;
   gap: 1rem;
+  z-index: 1000;
+}
+.sheet-container {
+  height: -webkit-fill-available;
+  height: 100vh;
+}
+
+@supports (height: 100svh) {
+  .sheet-container {
+    height: 100svh;
+  }
 }
 .sheet-footer {
   position: sticky;
@@ -16,7 +27,7 @@
   border-top: 1px solid #e4e5ec;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
   gap: 0.5rem;
 }
 .sheet-header {
@@ -27,6 +38,11 @@
 }
 .sheet-body {
   flex: 1 1 0%;
+}
+@media (max-width: 767px) {
+  .sheet-footer {
+    bottom: env(safe-area-inset-bottom);
+  }
 }
 @media (min-width: 768px) {
   .sheet-footer {
