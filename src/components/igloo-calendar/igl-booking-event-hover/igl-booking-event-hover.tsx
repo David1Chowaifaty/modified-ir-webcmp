@@ -376,17 +376,17 @@ export class IglBookingEventHover {
   //   }
   //   return null;
   // }
-  private getOTANotes() {
+  private getOTANotes(maxVisible: number = 3) {
     if (!this.bookingEvent.ota_notes || this.bookingEvent.ota_notes?.length === 0) {
       return null;
     }
     const channel_notes: IOtaNotes[] = [...this.bookingEvent.ota_notes];
     const separator = '<br>- ';
-    if (channel_notes.length > 8) {
-      channel_notes[7] = { statement: `${channel_notes[7].statement} <span style="color: #1e9ff2;">more...</span>` };
+    if (channel_notes.length > maxVisible) {
+      channel_notes[maxVisible - 1] = { statement: `${channel_notes[maxVisible - 1].statement} <span style="color: #1e9ff2;">more...</span>` };
     }
     return channel_notes
-      .slice(0, 8)
+      .slice(0, maxVisible)
       .map(o => `${separator}${o.statement}`)
       .join('');
   }
