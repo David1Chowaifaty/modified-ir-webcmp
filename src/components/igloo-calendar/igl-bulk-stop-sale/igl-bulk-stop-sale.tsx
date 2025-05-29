@@ -19,7 +19,7 @@ export class IglBulkStopSale {
   @Prop() maxDatesLength = 8;
 
   @State() selectedRoomTypes: SelectedRooms[] = [];
-  @State() errors: 'dates' | 'rooms';
+  @State() errors: 'dates' | 'rooms' | 'weekdays';
   @State() isLoading: boolean;
   @State() dates: {
     from: Moment | null;
@@ -68,6 +68,11 @@ export class IglBulkStopSale {
         .transform((val: Moment) => val.format('YYYY-MM-DD')),
     }),
   );
+
+  //sections
+  private unitSections: HTMLTableElement;
+  private weekdaysSections: HTMLDivElement;
+  private datesSections: HTMLTableElement;
 
   componentWillLoad() {
     // this.selectAllRoomTypes();
@@ -187,7 +192,15 @@ export class IglBulkStopSale {
       this.errors = null;
       this.isLoading = true;
       if (this.selectedRoomTypes.length === 0) {
-        return (this.errors = 'rooms');
+        this.unitSections.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        this.errors = 'rooms';
+        return;
+      }
+      console.log('here');
+      if (this.selectedWeekdays.size === 0) {
+        this.weekdaysSections.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        this.errors = 'weekdays';
+        return;
       }
       const periods = this.datesSchema.parse(this.dates);
       this.activate();
@@ -211,9 +224,12 @@ export class IglBulkStopSale {
         await Promise.all(payloads.map(p => this.bookingService.setExposedRestrictionPerRoomType(p)));
       }
       this.deactivate();
+      this.isLoading = false;
+      this.closeModal.emit();
     } catch (error) {
       console.log(error);
       if (error instanceof ZodError) {
+        this.datesSections.scrollIntoView({ behavior: 'smooth', block: 'end' });
         this.errors = 'dates';
       }
     } finally {
@@ -294,7 +310,7 @@ export class IglBulkStopSale {
     this.errors = null;
     this.dates = [...this.dates, { from: null, to: null }];
     setTimeout(() => {
-      this.dateRefs[this.dates.length - 1].to?.scrollIntoView({ behavior: 'smooth' });
+      this.dateRefs[this.dates.length - 1].to?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
   }
   render() {
@@ -337,8 +353,15 @@ export class IglBulkStopSale {
           <div class="text-muted text-left py-0 my-0">
             {calendar_data.is_vacation_rental ? <p>Select the listings that you want to open or stop sale.</p> : <p>Select the unit(s) that you want to open or stop sale.</p>}
           </div>
-          {/* <p class="text-left text-muted">Select room types to block</p> */}
-          {/* <div class="d-flex flex-column" style={{ gap: '1rem' }}>
+          <div>
+            {this.errors === 'rooms' && (
+              <p class={'text-danger text-left smaller p-0 '} style={{ 'margin-bottom': '0.5rem' }}>
+                Please select at least one {calendar_data.is_vacation_rental ? 'listing' : 'unit'}
+              </p>
+            )}
+
+            {/* <p class="text-left text-muted">Select room types to block</p> */}
+            {/* <div class="d-flex flex-column" style={{ gap: '1rem' }}>
             <ir-checkbox
               indeterminate={this.selectedRoomTypes?.length > 0 && shouldShowAllRooms}
               checked={!shouldShowAllRooms}
@@ -374,47 +397,49 @@ export class IglBulkStopSale {
                 );
               })}
           </div> */}
-          <table>
-            <thead>
-              <tr>
-                <th class="sr-only">choice</th>
-                <th class="sr-only">room type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {calendar_data.roomsInfo.map((roomType, i) => {
-                const row_style = i === calendar_data.roomsInfo.length - 1 ? '' : 'pb-1';
-                return (
-                  <tr key={roomType.id}>
-                    <td class={`choice-row ${row_style}`}>
-                      <div class={'d-flex justify-content-end'}>
-                        <ir-select
-                          LabelAvailable={false}
-                          data={[
-                            { value: 'open', text: 'Open' },
-                            { value: 'closed', text: 'Stop Sale' },
-                          ]}
-                          onSelectChange={e => {
-                            const choice = e.detail as 'open' | 'closed' | undefined;
-                            // drop any existing entry for this roomType
-                            const rest = this.selectedRoomTypes.filter(entry => entry.id !== roomType.id);
-                            // if they actually picked something, append it
-                            if (choice) {
-                              rest.push({ id: roomType.id, result: choice });
-                            }
-                            this.selectedRoomTypes = rest;
-                          }}
-                        ></ir-select>
-                      </div>
-                    </td>
-                    <td class={`pl-1 text-left ${row_style}`}>{roomType.name}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+            <table ref={el => (this.unitSections = el)}>
+              <thead>
+                <tr>
+                  <th class="sr-only">choice</th>
+                  <th class="sr-only">room type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {calendar_data.roomsInfo.map((roomType, i) => {
+                  const row_style = i === calendar_data.roomsInfo.length - 1 ? '' : 'pb-1';
+                  return (
+                    <tr key={roomType.id}>
+                      <td class={`choice-row ${row_style}`}>
+                        <div class={'d-flex justify-content-end'}>
+                          <ir-select
+                            LabelAvailable={false}
+                            data={[
+                              { value: 'open', text: 'Open' },
+                              { value: 'closed', text: 'Stop Sale' },
+                            ]}
+                            onSelectChange={e => {
+                              const choice = e.detail as 'open' | 'closed' | undefined;
+                              // drop any existing entry for this roomType
+                              const rest = this.selectedRoomTypes.filter(entry => entry.id !== roomType.id);
+                              // if they actually picked something, append it
+                              if (choice) {
+                                rest.push({ id: roomType.id, result: choice });
+                              }
+                              this.selectedRoomTypes = rest;
+                            }}
+                          ></ir-select>
+                        </div>
+                      </td>
+                      <td class={`pl-1 text-left ${row_style}`}>{roomType.name}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
           <p class="text-left mt-2 text-muted">Select days to open or stop sale</p>
-          <div class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
+          {this.errors === 'weekdays' && <p class={'text-danger text-left smaller m-0 p-0'}>Please select at least one day</p>}
+          <div ref={el => (this.weekdaysSections = el)} class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
             {this.weekdays.map(w => (
               <ir-checkbox
                 checked={this.selectedWeekdays.has(w.value)}
@@ -428,7 +453,7 @@ export class IglBulkStopSale {
           <p class="text-left mt-2 text-muted">Add date range(s) to open or stop sale</p>
 
           {/* Dates */}
-          <table class="mt-1">
+          <table class="mt-1" ref={el => (this.datesSections = el)}>
             <thead>
               <tr>
                 <th class="text-left">From</th>
