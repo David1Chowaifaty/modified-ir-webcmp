@@ -106,7 +106,7 @@ export class IrSalesFilters {
                   ]}
                 ></ir-select>
                 <p class="m-0 p-0 text-center">Or</p>
-                <ir-range-picker withOverlay={false}></ir-range-picker>
+                <ir-range-picker maxDate={moment().format('YYYY-MM-DD')} withOverlay={false}></ir-range-picker>
               </div>
             </fieldset>
             <div class="d-flex align-items-center mt-1 mb-2 compare-year-toggle" style={{ gap: '0.5rem' }}>

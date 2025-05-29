@@ -17,7 +17,7 @@ import { RatePlan, RoomType } from "./models/property";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
-import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+import { OpenSidebarEvent } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -46,7 +46,7 @@ export { RatePlan, RoomType } from "./models/property";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
-export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+export { OpenSidebarEvent } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -267,6 +267,7 @@ export namespace Components {
         "unassignedDatesProp": any;
     }
     interface IglooCalendar {
+        "baseUrl": string;
         "currencyName": string;
         "from_date": string;
         "language": string;
@@ -328,6 +329,7 @@ export namespace Components {
         "hasReceipt": boolean;
     }
     interface IrBookingListing {
+        "baseUrl": string;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -587,6 +589,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrHkTasks {
+        "baseUrl": string;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -602,6 +605,7 @@ export namespace Components {
         "user": THKUser | null;
     }
     interface IrHousekeeping {
+        "baseUrl": string;
         "language": string;
         "p": string;
         "propertyid": number;
@@ -3039,8 +3043,6 @@ declare global {
         "pressCheckIn": any;
         "pressCheckOut": any;
         "editInitiated": TIglBookPropertyPayload;
-        "resetbooking": null;
-        "openSidebar": OpenSidebarEvent<RoomGuestsPayload>;
     }
     interface HTMLIrRoomElement extends Components.IrRoom, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomElementEventMap>(type: K, listener: (this: HTMLIrRoomElement, ev: IrRoomCustomEvent<HTMLIrRoomElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3772,6 +3774,7 @@ declare namespace LocalJSX {
         "unassignedDatesProp"?: any;
     }
     interface IglooCalendar {
+        "baseUrl"?: string;
         "currencyName"?: string;
         "from_date"?: string;
         "language"?: string;
@@ -3851,6 +3854,7 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrBookingHeaderCustomEvent<IToast>) => void;
     }
     interface IrBookingListing {
+        "baseUrl"?: string;
         "language"?: string;
         "p"?: string;
         "propertyid"?: number;
@@ -4141,6 +4145,7 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrHkTasks {
+        "baseUrl"?: string;
         "language"?: string;
         "onClearSelectedHkTasks"?: (event: IrHkTasksCustomEvent<void>) => void;
         "p"?: string;
@@ -4161,6 +4166,7 @@ declare namespace LocalJSX {
         "user"?: THKUser | null;
     }
     interface IrHousekeeping {
+        "baseUrl"?: string;
         "language"?: string;
         "onToast"?: (event: IrHousekeepingCustomEvent<IToast>) => void;
         "p"?: string;
@@ -4700,10 +4706,8 @@ declare namespace LocalJSX {
         "myRoomTypeFoodCat"?: string;
         "onDeleteFinished"?: (event: IrRoomCustomEvent<string>) => void;
         "onEditInitiated"?: (event: IrRoomCustomEvent<TIglBookPropertyPayload>) => void;
-        "onOpenSidebar"?: (event: IrRoomCustomEvent<OpenSidebarEvent<RoomGuestsPayload>>) => void;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
-        "onResetbooking"?: (event: IrRoomCustomEvent<null>) => void;
         "room"?: Room;
         "roomsInfo"?: any;
     }

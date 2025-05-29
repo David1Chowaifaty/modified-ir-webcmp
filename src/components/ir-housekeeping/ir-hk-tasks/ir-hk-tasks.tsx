@@ -23,6 +23,7 @@ export class IrHkTasks {
   @Prop() ticket: string = '';
   @Prop() propertyid: number;
   @Prop() p: string;
+  @Prop() baseUrl: string;
 
   @State() isLoading = false;
   @State() selectedDuration = '';
@@ -46,6 +47,9 @@ export class IrHkTasks {
   private modal: HTMLIrModalElement;
 
   componentWillLoad() {
+    if (this.baseUrl) {
+      this.token.setBaseUrl(this.baseUrl);
+    }
     if (this.ticket !== '') {
       this.token.setToken(this.ticket);
       this.init();

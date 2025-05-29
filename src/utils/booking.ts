@@ -43,8 +43,8 @@ export const bookingStatus: Record<string, STATUS> = {
 };
 
 export function formatName(firstName: string | null, lastName: string | null) {
-  if (firstName === null && lastName === null) return '';
-  if (lastName !== null && lastName !== '') {
+  if ((firstName === null && lastName === null) || !firstName) return '';
+  if (!!lastName) {
     return `${firstName ?? ''} , ${lastName ?? ''}`;
   }
   return firstName;
@@ -103,10 +103,6 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       },
     };
   }
-  if (cell.booking.booking_nbr.toString() === '77054273380') {
-    console.log('booking', cell);
-  }
-
   // if (cell.booking.booking_nbr === '61249849') {
   //   console.log('cell');
   //   console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
@@ -122,6 +118,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
     NO_OF_DAYS: dateDifference(bookingFromDate, bookingToDate),
     STATUS: bookingStatus[cell.booking?.status.code],
     NAME: formatName(mainGuest?.first_name, mainGuest?.last_name),
+    // NAME: formatName(mainGuest?.first_name, mainGuest?.last_name) || formatName(cell?.booking.guest?.first_name, cell?.booking?.guest?.last_name),
     IDENTIFIER: cell.room.identifier,
     PR_ID: cell.pr_id,
     POOL: cell.POOL,
@@ -211,22 +208,37 @@ export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_da
     return bookingStatus[status_code || '001'];
   } else {
     const now = moment();
+    // const toDate = moment(to_date, 'YYYY-MM-DD');
+    // const fromDate = moment(from_date, 'YYYY-MM-DD');
+    // const isNowAfterOrSameAsHotelHour = compareTime(
+    //   now.toDate(),
+    //   createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour),
+    // );
+    // if (fromDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
+    //   return bookingStatus['000'];
+    // } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+    //   return bookingStatus['000'];
+    // } else if (toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
+    //   return bookingStatus['000'];
+    // } else if ((toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) || toDate.isBefore(now, 'day')) {
+    //   return bookingStatus['003'];
+    // } else {
+    //   return bookingStatus[status_code || '001'];
+    // }
     const toDate = moment(to_date, 'YYYY-MM-DD');
     const fromDate = moment(from_date, 'YYYY-MM-DD');
-    const isNowAfterOrSameAsHotelHour = compareTime(
-      now.toDate(),
-      createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour),
-    );
-    if (fromDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
-      return bookingStatus['000'];
-    } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
-      return bookingStatus['000'];
-    } else if (toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) {
-      return bookingStatus['000'];
-    } else if ((toDate.isSame(now, 'day') && isNowAfterOrSameAsHotelHour) || toDate.isBefore(now, 'day')) {
-      return bookingStatus['003'];
-    } else {
-      return bookingStatus[status_code || '001'];
+    if (status_code !== 'PENDING') {
+      if (fromDate.isSame(now, 'day') && now.hour() >= 12) {
+        return bookingStatus['000'];
+      } else if (now.isAfter(fromDate, 'day') && now.isBefore(toDate, 'day')) {
+        return bookingStatus['000'];
+      } else if (toDate.isSame(now, 'day') && now.hour() < 12) {
+        return bookingStatus['000'];
+      } else if ((toDate.isSame(now, 'day') && now.hour() >= 12) || toDate.isBefore(now, 'day')) {
+        return bookingStatus['003'];
+      } else {
+        return bookingStatus[status_code || '001'];
+      }
     }
   }
 }
@@ -276,6 +288,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
         status_code: data.status?.code,
       }),
       NAME: formatName(mainGuest?.first_name, mainGuest.last_name),
+      // NAME: formatName(mainGuest?.first_name, mainGuest.last_name) || formatName(room.guest.first_name, room.guest.last_name),
       PHONE: data.guest.mobile_without_prefix ?? '',
       ENTRY_DATE: '12-12-2023',
       PHONE_PREFIX: data.guest.country_phone_prefix,

@@ -98,10 +98,12 @@ export class IglBookingEvent {
       data.rooms = filteredRooms;
 
       const transformedBooking = transformNewBooking(data)[0];
-      const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, ...otherBookingData } = transformedBooking;
+      const { ID, TO_DATE, FROM_DATE, NO_OF_DAYS, STATUS, NAME, IDENTIFIER, PR_ID, POOL, BOOKING_NUMBER, NOTES, is_direct, BALANCE, channel_booking_nbr, ...otherBookingData } =
+        transformedBooking;
       this.bookingEvent = {
         ...otherBookingData,
         ...this.bookingEvent,
+        channel_booking_nbr,
         booking: data,
         PHONE: otherBookingData.PHONE,
         PHONE_PREFIX: otherBookingData.PHONE_PREFIX,
