@@ -1,5 +1,5 @@
 import { Extras, Room } from './../models/booking.dto';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { PhysicalRoomType, MonthType, CellType, STATUS, RoomBookingDetails, RoomBlockDetails } from '../models/IBooking';
 import { dateDifference, isBlockUnit } from './utils';
 import axios from 'axios';
