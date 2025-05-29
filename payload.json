@@ -1,728 +1,294 @@
 {
-  "assign_units": true,
-  "is_pms": true,
-  "is_direct": true,
-  "is_in_loyalty_mode": false,
-  "promo_key": null,
-  "extras": [
+  "operation_type": "close_open",
+  "is_closed": true,
+  "restrictions": [
     {
-      "key": "private_note",
-      "value": ""
+      "roomtype_id": "110",
+      "night": "2025-05-30"
     },
     {
-      "key": "is_backend",
-      "value": true
+      "roomtype_id": "111",
+      "night": "2025-05-30"
     },
     {
-      "key": "ERROR_EMAIL",
-      "value": ""
+      "roomtype_id": "2352",
+      "night": "2025-05-30"
     },
     {
-      "key": "agent_payment_mode",
-      "value": ""
+      "roomtype_id": "110",
+      "night": "2025-05-31"
     },
     {
-      "key": "payment_code",
-      "value": ""
+      "roomtype_id": "111",
+      "night": "2025-05-31"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-05-31"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-01"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-01"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-01"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-02"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-02"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-02"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-03"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-03"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-03"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-06"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-06"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-06"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-07"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-07"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-07"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-08"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-08"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-08"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-09"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-09"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-09"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-10"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-10"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-10"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-13"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-13"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-13"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-14"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-14"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-14"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-15"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-15"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-15"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-16"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-16"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-16"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-17"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-17"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-17"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-20"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-20"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-20"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-21"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-21"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-21"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-22"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-22"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-22"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-23"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-23"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-23"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-24"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-24"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-24"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-27"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-27"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-27"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-28"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-28"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-28"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-29"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-29"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-29"
+    },
+    {
+      "roomtype_id": "110",
+      "night": "2025-06-30"
+    },
+    {
+      "roomtype_id": "111",
+      "night": "2025-06-30"
+    },
+    {
+      "roomtype_id": "2352",
+      "night": "2025-06-30"
     }
-  ],
-  "agent": null,
-  "booking": {
-    "from_date": "2025-05-26",
-    "to_date": "2025-05-27",
-    "remark": null,
-    "booking_nbr": "",
-    "property": {
-      "id": 42
-    },
-    "booked_on": {
-      "date": "2025-05-26",
-      "hour": 11,
-      "minute": 14
-    },
-    "source": {
-      "code": "003",
-      "description": "Phone/Email",
-      "tag": "",
-      "type": "SETUP",
-      "id": "06b4be34-f1f7-42ba-b790-06bc4ae7b1b8"
-    },
-    "rooms": [
-      {
-        "identifier": null,
-        "roomtype": {
-          "amenities": [
-            {
-              "amenity_type": "room",
-              "code": "jacuzzi",
-              "description": "Jacuzzi"
-            },
-            {
-              "amenity_type": "room",
-              "code": "view",
-              "description": "Scenic view"
-            },
-            {
-              "amenity_type": "room",
-              "code": "terracegrass",
-              "description": "Terrace with grass"
-            },
-            {
-              "amenity_type": "room",
-              "code": "bathroomshared",
-              "description": "Shared bathroom"
-            }
-          ],
-          "availabilities": null,
-          "bedding_setup": [
-            {
-              "code": "kingsizebed",
-              "count": 1,
-              "name": "King size bed"
-            },
-            {
-              "code": "singlebed",
-              "count": 1,
-              "name": "Single bed"
-            }
-          ],
-          "description": "Large room with sitting area and Jacuzzi",
-          "exposed_inventory": null,
-          "id": 111,
-          "images": [
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_221.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_224.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_251.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_225.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_222.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_236.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_234.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_223.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_231.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_226.jpg"
-            },
-            {
-              "thumbnail": "",
-              "tooltip": "Premium Suites",
-              "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_229.jpg"
-            }
-          ],
-          "inventory": 5,
-          "is_active": true,
-          "is_available_to_book": true,
-          "is_bed_configuration_enabled": false,
-          "main_image": {
-            "thumbnail": null,
-            "tooltip": "Premium Suites",
-            "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_221.jpg"
-          },
-          "name": "Premium Suites",
-          "not_available_reason": null,
-          "occupancy_default": {
-            "adult_nbr": 2,
-            "children_nbr": 0,
-            "infant_nbr": null
-          },
-          "occupancy_max": {
-            "adult_nbr": 5,
-            "children_nbr": 0,
-            "infant_nbr": 0
-          },
-          "physicalrooms": null,
-          "rate": null,
-          "rateplans": null,
-          "size": 50,
-          "smoking_option": {
-            "allowed_smoking_options": [
-              {
-                "code": "",
-                "description": "No preferences"
-              },
-              {
-                "code": "001",
-                "description": "Smoking"
-              },
-              {
-                "code": "002",
-                "description": "Non-smoking"
-              }
-            ],
-            "code": "001",
-            "description": "Ask"
-          }
-        },
-        "rateplan": {
-          "agents": [],
-          "assignable_units": [
-            {
-              "Is_Fully_Available": true,
-              "Is_Not_Available": false,
-              "Is_Partially_Available": false,
-              "from_date": "2025-05-26",
-              "name": "102",
-              "pr_id": 3,
-              "prs_entries": [
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-26",
-                  "PRS_ID": null,
-                  "PR_ID": 3,
-                  "STAY_SHIFT_CODE": "002",
-                  "STAY_STATUS_CODE": null
-                },
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-27",
-                  "PRS_ID": null,
-                  "PR_ID": 3,
-                  "STAY_SHIFT_CODE": "001",
-                  "STAY_STATUS_CODE": null
-                }
-              ],
-              "to_date": "2025-05-27"
-            },
-            {
-              "Is_Fully_Available": true,
-              "Is_Not_Available": false,
-              "Is_Partially_Available": false,
-              "from_date": "2025-05-26",
-              "name": "103",
-              "pr_id": 4,
-              "prs_entries": [
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-26",
-                  "PRS_ID": null,
-                  "PR_ID": 4,
-                  "STAY_SHIFT_CODE": "002",
-                  "STAY_STATUS_CODE": null
-                },
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-27",
-                  "PRS_ID": null,
-                  "PR_ID": 4,
-                  "STAY_SHIFT_CODE": "001",
-                  "STAY_STATUS_CODE": null
-                }
-              ],
-              "to_date": "2025-05-27"
-            },
-            {
-              "Is_Fully_Available": true,
-              "Is_Not_Available": false,
-              "Is_Partially_Available": false,
-              "from_date": "2025-05-26",
-              "name": "104",
-              "pr_id": 5,
-              "prs_entries": [
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-26",
-                  "PRS_ID": null,
-                  "PR_ID": 5,
-                  "STAY_SHIFT_CODE": "002",
-                  "STAY_STATUS_CODE": null
-                },
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-27",
-                  "PRS_ID": null,
-                  "PR_ID": 5,
-                  "STAY_SHIFT_CODE": "001",
-                  "STAY_STATUS_CODE": null
-                }
-              ],
-              "to_date": "2025-05-27"
-            },
-            {
-              "Is_Fully_Available": true,
-              "Is_Not_Available": false,
-              "Is_Partially_Available": false,
-              "from_date": "2025-05-26",
-              "name": "105",
-              "pr_id": 6,
-              "prs_entries": [
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-26",
-                  "PRS_ID": null,
-                  "PR_ID": 6,
-                  "STAY_SHIFT_CODE": "002",
-                  "STAY_STATUS_CODE": null
-                },
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-27",
-                  "PRS_ID": null,
-                  "PR_ID": 6,
-                  "STAY_SHIFT_CODE": "001",
-                  "STAY_STATUS_CODE": null
-                }
-              ],
-              "to_date": "2025-05-27"
-            },
-            {
-              "Is_Fully_Available": true,
-              "Is_Not_Available": false,
-              "Is_Partially_Available": false,
-              "from_date": "2025-05-26",
-              "name": "106",
-              "pr_id": 1,
-              "prs_entries": [
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-26",
-                  "PRS_ID": null,
-                  "PR_ID": 1,
-                  "STAY_SHIFT_CODE": "002",
-                  "STAY_STATUS_CODE": null
-                },
-                {
-                  "BLOCKED_TILL_DATE": null,
-                  "BLOCKED_TILL_HOUR": null,
-                  "BLOCKED_TILL_MINUTE": null,
-                  "BOOK_NBR": null,
-                  "BSA_REF": null,
-                  "DESCRIPTION": null,
-                  "ENTRY_DATE": null,
-                  "ENTRY_USER_ID": null,
-                  "EXTRA_DATA": null,
-                  "EXTRA_DATA_TYPE": null,
-                  "IS_CONTINUITY": null,
-                  "My_Pr": null,
-                  "NOTES": null,
-                  "OWNER_ID": null,
-                  "POOL": null,
-                  "PRS_DATE": "2025-05-27",
-                  "PRS_ID": null,
-                  "PR_ID": 1,
-                  "STAY_SHIFT_CODE": "001",
-                  "STAY_STATUS_CODE": null
-                }
-              ],
-              "to_date": "2025-05-27"
-            }
-          ],
-          "cancelation": null,
-          "custom_text": "Breakfast & dinner",
-          "extra_bed_for_code": "002",
-          "extra_bed_max": 3,
-          "extra_bed_rate_per_night": 5,
-          "extra_bed_rate_per_night_additional_child": 5,
-          "extra_bed_rate_per_night_first_child": 10,
-          "guarantee": null,
-          "id": 3755,
-          "is_active": true,
-          "is_available_to_book": true,
-          "is_booking_engine_enabled": true,
-          "is_channel_enabled": false,
-          "is_closed": null,
-          "is_extra_bed_free_for_children": false,
-          "is_non_refundable": false,
-          "is_targeting_travel_agency": false,
-          "meal_plan": {
-            "code": "003",
-            "name": "Half board"
-          },
-          "name": "Premium Suites/Breakfast & dinner/Half-board",
-          "not_available_reason": null,
-          "pre_payment_amount": null,
-          "pre_payment_amount_gross": null,
-          "rate_restrictions": null,
-          "selected_variation": null,
-          "sell_mode": {
-            "code": "001",
-            "description": "Per Room"
-          },
-          "short_name": "Half board",
-          "sleeps": 2,
-          "variations": [
-            {
-              "IS_MLS_VIOLATED": false,
-              "MLS_ALERT": null,
-              "MLS_ALERT_VALUE": null,
-              "adult_child_offering": null,
-              "adult_nbr": 2,
-              "amount": 140,
-              "amount_gross": 155.4,
-              "amount_per_night": 140,
-              "amount_per_night_gross": 155.4,
-              "applicable_policies": [
-                {
-                  "brackets": [
-                    {
-                      "amount": 140,
-                      "amount_formatted": "US$140.00",
-                      "code": "004",
-                      "currency_id": 4,
-                      "due_on": "2025-05-26",
-                      "due_on_formatted": "Monday, 26 May 2025, 14:00",
-                      "gross_amount": 155.4,
-                      "gross_amount_formatted": "US$155.40",
-                      "statement": "100% of the total price"
-                    }
-                  ],
-                  "combined_statement": "US$155.40 if cancelled later or in case of no show.",
-                  "type": "cancelation"
-                },
-                {
-                  "brackets": [
-                    {
-                      "amount": 140,
-                      "amount_formatted": "US$140.00",
-                      "code": "001",
-                      "currency_id": 4,
-                      "due_on": "2025-05-26",
-                      "due_on_formatted": null,
-                      "gross_amount": 155.4,
-                      "gross_amount_formatted": "US$155.40",
-                      "statement": "First night from your booking will be charged."
-                    }
-                  ],
-                  "combined_statement": "First night from your booking will be charged.",
-                  "type": "guarantee"
-                }
-              ],
-              "bed_preference_code": "001",
-              "child_nbr": 0,
-              "discount_pct": 0,
-              "discounted_amount": 140,
-              "discounted_gross_amount": 155.4,
-              "extra_bed_free_nbr": 0,
-              "extra_bed_nbr": 0,
-              "extra_bed_rate_per_night": 5,
-              "food_nbr_upsell": 0,
-              "infant_nbr": null,
-              "is_lmd": null,
-              "nights": [
-                {
-                  "amount": 140,
-                  "applied_promotion": null,
-                  "discounted_amount": 140,
-                  "discounted_gross_amount": 155.4,
-                  "extra_bed_nbr": 0,
-                  "extra_bed_nbr_child": 0,
-                  "extra_bed_nbr_child_addi": 0,
-                  "extra_bed_rate_per_night": 5,
-                  "extra_bed_rate_per_night_child": 10,
-                  "extra_bed_rate_per_night_child_addi": 5,
-                  "gross_amount": 155.4,
-                  "night": "2025-05-26",
-                  "night_index": 1
-                }
-              ],
-              "nights_nbr": 1,
-              "prepayment_amount": 140,
-              "prepayment_amount_gross": 155.4,
-              "rate_plan_id": 3755,
-              "smoking_code": "001",
-              "total_before_discount": null
-            },
-            {
-              "IS_MLS_VIOLATED": false,
-              "MLS_ALERT": null,
-              "MLS_ALERT_VALUE": null,
-              "adult_child_offering": null,
-              "adult_nbr": 1,
-              "amount": 140,
-              "amount_gross": 155.4,
-              "amount_per_night": 140,
-              "amount_per_night_gross": 155.4,
-              "applicable_policies": [
-                {
-                  "brackets": [
-                    {
-                      "amount": 140,
-                      "amount_formatted": "US$140.00",
-                      "code": "004",
-                      "currency_id": 4,
-                      "due_on": "2025-05-26",
-                      "due_on_formatted": "Monday, 26 May 2025, 14:00",
-                      "gross_amount": 155.4,
-                      "gross_amount_formatted": "US$155.40",
-                      "statement": "100% of the total price"
-                    }
-                  ],
-                  "combined_statement": "US$155.40 if cancelled later or in case of no show.",
-                  "type": "cancelation"
-                },
-                {
-                  "brackets": [
-                    {
-                      "amount": 140,
-                      "amount_formatted": "US$140.00",
-                      "code": "001",
-                      "currency_id": 4,
-                      "due_on": "2025-05-26",
-                      "due_on_formatted": null,
-                      "gross_amount": 155.4,
-                      "gross_amount_formatted": "US$155.40",
-                      "statement": "First night from your booking will be charged."
-                    }
-                  ],
-                  "combined_statement": "First night from your booking will be charged.",
-                  "type": "guarantee"
-                }
-              ],
-              "bed_preference_code": "001",
-              "child_nbr": 0,
-              "discount_pct": 0,
-              "discounted_amount": 140,
-              "discounted_gross_amount": 155.4,
-              "extra_bed_free_nbr": 0,
-              "extra_bed_nbr": 0,
-              "extra_bed_rate_per_night": 5,
-              "food_nbr_upsell": 0,
-              "infant_nbr": null,
-              "is_lmd": null,
-              "nights": [
-                {
-                  "amount": 140,
-                  "applied_promotion": null,
-                  "discounted_amount": 140,
-                  "discounted_gross_amount": 155.4,
-                  "extra_bed_nbr": 0,
-                  "extra_bed_nbr_child": 0,
-                  "extra_bed_nbr_child_addi": 0,
-                  "extra_bed_rate_per_night": 5,
-                  "extra_bed_rate_per_night_child": 10,
-                  "extra_bed_rate_per_night_child_addi": 5,
-                  "gross_amount": 155.4,
-                  "night": "2025-05-26",
-                  "night_index": 1
-                }
-              ],
-              "nights_nbr": 1,
-              "prepayment_amount": 140,
-              "prepayment_amount_gross": 155.4,
-              "rate_plan_id": 3755,
-              "smoking_code": "001",
-              "total_before_discount": null
-            }
-          ]
-        },
-        "prepayment_amount_gross": 0,
-        "unit": {
-          "id": "3"
-        },
-        "occupancy": {
-          "adult_nbr": 2,
-          "children_nbr": 0,
-          "infant_nbr": null
-        },
-        "bed_preference": null,
-        "from_date": "2025-05-26",
-        "to_date": "2025-05-27",
-        "notes": "",
-        "check_in": true,
-        "days": [
-          {
-            "date": "2025-05-26",
-            "amount": 140,
-            "cost": null
-          }
-        ],
-        "guest": {
-          "email": null,
-          "first_name": "test",
-          "last_name": "test",
-          "country_id": null,
-          "city": null,
-          "mobile": null,
-          "address": null,
-          "dob": null,
-          "subscribe_to_news_letter": null,
-          "cci": null
-        }
-      }
-    ],
-    "currency": {
-      "code": "USD",
-      "id": 4,
-      "symbol": "US$"
-    },
-    "arrival": {
-      "code": "001"
-    },
-    "guest": {
-      "email": "estest.test@gmail.com",
-      "first_name": "test",
-      "last_name": "test5",
-      "country_id": 486,
-      "city": null,
-      "mobile": "12345678",
-      "country_phone_prefix": "+501",
-      "address": "",
-      "dob": null,
-      "subscribe_to_news_letter": false,
-      "cci": null
-    }
-  },
-  "pickup_info": null
+  ]
 }

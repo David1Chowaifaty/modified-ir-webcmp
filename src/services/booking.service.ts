@@ -43,6 +43,16 @@ export class BookingService {
     }
     return data;
   }
+  public async setExposedRestrictionPerRoomType(params: { is_closed: boolean; restrictions: { room_type_id: number | string; night: string }[]; operation_type?: string }) {
+    const { data } = await axios.post(`/Set_Exposed_Restriction_Per_Room_Type`, {
+      operation_type: params.operation_type ?? 'close_open',
+      ...params,
+    });
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data;
+  }
   public async getLov() {
     const { data } = await axios.post(`/Get_LOV`, {});
     if (data.ExceptionMsg !== '') {

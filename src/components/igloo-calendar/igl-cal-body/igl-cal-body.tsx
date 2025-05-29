@@ -1,4 +1,4 @@
-import { Component, Host, Listen, Prop, State, h, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Host, Listen, Prop, State, h, Event, EventEmitter, Watch, Fragment } from '@stencil/core';
 
 import moment from 'moment';
 
@@ -309,6 +309,7 @@ export class IglCalBody {
   }
   private getGeneralCategoryDayColumns(addClass: string, isCategory: boolean = false, index: number) {
     return calendar_dates.days.map(dayInfo => {
+      const isActive = true;
       return (
         <div
           class={`cellData  font-weight-bold categoryPriceColumn ${addClass + '_' + dayInfo.day} ${
@@ -316,11 +317,14 @@ export class IglCalBody {
           }`}
         >
           {isCategory ? (
-            <span class={'categoryName'}>
-              {dayInfo.rate[index].exposed_inventory.rts}
-              {/* <br />
+            <Fragment>
+              <span class={'categoryName'}>
+                {dayInfo.rate[index].exposed_inventory.rts}
+                <button class={'triangle-button'} style={{ '--in-toggle-color': isActive ? 'green' : '#ff4961' }}></button>
+                {/* <br />
               {dayInfo.rate[index].exposed_inventory.offline} */}
-            </span>
+              </span>
+            </Fragment>
           ) : (
             ''
           )}
@@ -339,7 +343,7 @@ export class IglCalBody {
       const isDisabled = false;
       return (
         <div
-          class={`cellData roomCell ${isDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${
+          class={`cellData position-relative roomCell ${isDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${
             dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''
           } ${this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''} ${
             this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''
@@ -352,7 +356,9 @@ export class IglCalBody {
           }}
           data-date={formattedDate}
           data-room-name={roomName}
-        ></div>
+        >
+          {/* <button class={'triangle-button'} style={{ '--in-toggle-color': isDisabled ? 'green' : '#ff4961' }}></button> */}
+        </div>
       );
     });
   }

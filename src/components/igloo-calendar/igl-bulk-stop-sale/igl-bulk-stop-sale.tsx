@@ -1,20 +1,21 @@
+import { BookingService } from '@/services/booking.service';
 import calendar_data from '@/stores/calendar-data';
 import { ReloadInterceptor } from '@/utils/ReloadInterceptor';
-import { sleep } from '@/utils/utils';
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
 import moment, { Moment } from 'moment';
 import { z, ZodError } from 'zod';
-export type SelectedRooms = Record<string | number, (string | number)[]>;
+export type SelectedRooms = { id: string | number; result: 'open' | 'closed' };
+// export type SelectedRooms = Record<string | number, (number|string)[]>;
 export interface Weekday {
   value: number;
   label: string;
 }
 @Component({
-  tag: 'igl-bulk-blocks',
-  styleUrls: ['igl-bulk-blocks.css', '../../../common/sheet.css'],
+  tag: 'igl-bulk-stop-sale',
+  styleUrls: ['igl-bulk-stop-sale.css', '../../../common/sheet.css'],
   scoped: true,
 })
-export class IglBulkBlocks {
+export class IglBulkStopSale {
   @Prop() maxDatesLength = 8;
 
   @State() selectedRoomTypes: SelectedRooms[] = [];
@@ -25,26 +26,32 @@ export class IglBulkBlocks {
     to: Moment | null;
   }[] = [{ from: null, to: null }];
 
-  // private weekdays: Weekday[] = [
-  //   { value: 1, label: 'M' },
-  //   { value: 2, label: 'T' },
-  //   { value: 3, label: 'W' },
-  //   { value: 4, label: 'Th' },
-  //   { value: 5, label: 'Fr' },
-  //   { value: 6, label: 'Sa' },
-  //   { value: 0, label: 'Su' },
-  // ];
-  @State() selectedWeekdays: number[] = Array(7)
-    .fill(null)
-    .map((_, i) => i);
+  private weekdays: Weekday[] = [
+    { value: 1, label: 'M' },
+    { value: 2, label: 'T' },
+    { value: 3, label: 'W' },
+    { value: 4, label: 'Th' },
+    { value: 5, label: 'Fr' },
+    { value: 6, label: 'Sa' },
+    { value: 0, label: 'Su' },
+  ];
+  @State() selectedWeekdays: Set<number> = new Set(
+    Array(7)
+      .fill(null)
+      .map((_, i) => i),
+  );
 
   @Event() closeModal: EventEmitter<null>;
 
   private sidebar: HTMLIrSidebarElement;
   private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
-  private allRoomTypes: SelectedRooms[] = [];
+  // private allRoomTypes: SelectedRooms[] = [];
   private reloadInterceptor: ReloadInterceptor;
   private minDate = moment().format('YYYY-MM-DD');
+  private bookingService = new BookingService();
+  private getDayIndex(dateStr: string): number {
+    return moment(dateStr, 'YYYY-MM-DD').day();
+  }
   private datesSchema = z.array(
     z.object({
       from: z
@@ -63,7 +70,7 @@ export class IglBulkBlocks {
   );
 
   componentWillLoad() {
-    this.selectAllRoomTypes();
+    // this.selectAllRoomTypes();
   }
   componentDidLoad() {
     this.reloadInterceptor = new ReloadInterceptor({ autoActivate: false });
@@ -84,75 +91,75 @@ export class IglBulkBlocks {
     }
   }
 
-  private toggleAllRoomTypes(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    if (!e.detail) {
-      this.selectedRoomTypes = [];
-      return;
-    }
-    this.selectedRoomTypes = this.allRoomTypes;
-  }
+  // private toggleAllRoomTypes(e: CustomEvent) {
+  //   e.stopImmediatePropagation();
+  //   e.stopPropagation();
+  //   if (!e.detail) {
+  //     this.selectedRoomTypes = [];
+  //     return;
+  //   }
+  //   this.selectedRoomTypes = this.allRoomTypes;
+  // }
 
-  private selectAllRoomTypes() {
-    this.allRoomTypes = calendar_data.roomsInfo.map(rt => ({
-      [rt.id]: rt.physicalrooms.map(room => room.id),
-    }));
-    this.selectedRoomTypes = this.allRoomTypes;
-  }
+  // private selectAllRoomTypes() {
+  //   this.allRoomTypes = calendar_data.roomsInfo.map(rt => ({
+  //     [rt.id]: rt.physicalrooms.map(room => room.id),
+  //   }));
+  //   this.selectedRoomTypes = this.allRoomTypes;
+  // }
 
-  private toggleRoom({ checked, roomId, roomTypeId }: { checked: boolean; roomTypeId: number; roomId: number }): void {
-    // clone current selection
-    const selected = [...this.selectedRoomTypes];
-    // find existing entry for this roomType
-    const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
+  // private toggleRoom({ checked, roomId, roomTypeId }: { checked: boolean; roomTypeId: number; roomId: number }): void {
+  //   // clone current selection
+  //   const selected = [...this.selectedRoomTypes];
+  //   // find existing entry for this roomType
+  //   const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
 
-    if (checked) {
-      // add the room
-      if (idx > -1) {
-        const rooms = selected[idx][roomTypeId];
-        if (!rooms.includes(roomId)) {
-          selected[idx] = { [roomTypeId]: [...rooms, roomId] };
-        }
-      } else {
-        selected.push({ [roomTypeId]: [roomId] });
-      }
-    } else {
-      // remove the room
-      if (idx > -1) {
-        const filtered = selected[idx][roomTypeId].filter(id => id !== roomId);
-        if (filtered.length) {
-          selected[idx] = { [roomTypeId]: filtered };
-        } else {
-          selected.splice(idx, 1);
-        }
-      }
-    }
+  //   if (checked) {
+  //     // add the room
+  //     if (idx > -1) {
+  //       const rooms = selected[idx][roomTypeId];
+  //       if (!rooms.includes(roomId)) {
+  //         selected[idx] = { [roomTypeId]: [...rooms, roomId] };
+  //       }
+  //     } else {
+  //       selected.push({ [roomTypeId]: [roomId] });
+  //     }
+  //   } else {
+  //     // remove the room
+  //     if (idx > -1) {
+  //       const filtered = selected[idx][roomTypeId].filter(id => id !== roomId);
+  //       if (filtered.length) {
+  //         selected[idx] = { [roomTypeId]: filtered };
+  //       } else {
+  //         selected.splice(idx, 1);
+  //       }
+  //     }
+  //   }
 
-    this.selectedRoomTypes = selected;
-  }
+  //   this.selectedRoomTypes = selected;
+  // }
 
-  private toggleRoomType({ checked, roomTypeId }: { checked: boolean; roomTypeId: number }): void {
-    const selected = [...this.selectedRoomTypes];
-    const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
+  // private toggleRoomType({ checked, roomTypeId }: { checked: boolean; roomTypeId: number }): void {
+  //   const selected = [...this.selectedRoomTypes];
+  //   const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
 
-    if (checked) {
-      const roomType = calendar_data.roomsInfo.find(rt => rt.id === roomTypeId);
-      const allRooms = roomType ? roomType.physicalrooms.map(r => r.id) : [];
+  //   if (checked) {
+  //     const roomType = calendar_data.roomsInfo.find(rt => rt.id === roomTypeId);
+  //     const allRooms = roomType ? roomType.physicalrooms.map(r => r.id) : [];
 
-      if (idx > -1) {
-        selected[idx] = { [roomTypeId]: allRooms };
-      } else {
-        selected.push({ [roomTypeId]: allRooms });
-      }
-    } else {
-      if (idx > -1) {
-        selected.splice(idx, 1);
-      }
-    }
+  //     if (idx > -1) {
+  //       selected[idx] = { [roomTypeId]: allRooms };
+  //     } else {
+  //       selected.push({ [roomTypeId]: allRooms });
+  //     }
+  //   } else {
+  //     if (idx > -1) {
+  //       selected.splice(idx, 1);
+  //     }
+  //   }
 
-    this.selectedRoomTypes = selected;
-  }
+  //   this.selectedRoomTypes = selected;
+  // }
 
   private async addBlockDates() {
     try {
@@ -161,10 +168,43 @@ export class IglBulkBlocks {
       if (this.selectedRoomTypes.length === 0) {
         return (this.errors = 'rooms');
       }
-      this.datesSchema.parse(this.dates);
+      const periods = this.datesSchema.parse(this.dates);
       this.activate();
-      await sleep(10000);
-      // console.warn('done');
+      const periods_to_modify = [];
+      for (const period of periods) {
+        let current = period.from;
+        const lastDay = moment(period.to, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+        while (current !== lastDay) {
+          const nextDay = moment(current, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+          if (!this.selectedWeekdays.has(this.getDayIndex(current))) {
+            current = nextDay;
+            continue;
+          }
+          for (const selectedRoom of this.selectedRoomTypes) {
+            periods_to_modify.push({
+              room_type_id: selectedRoom.id,
+              night: current,
+            });
+          }
+          current = nextDay;
+        }
+      }
+      const isAllOpen = this.selectedRoomTypes.every(e => e.result === 'open');
+      const isAllClosed = this.selectedRoomTypes.every(e => e.result === 'closed');
+      if (isAllClosed || isAllOpen) {
+        await this.bookingService.setExposedRestrictionPerRoomType({
+          is_closed: isAllClosed,
+          restrictions: periods_to_modify,
+        });
+      } else {
+        for (const room of this.selectedRoomTypes) {
+          const periods = periods_to_modify.filter(f => f.room_type_id === room.id);
+          await this.bookingService.setExposedRestrictionPerRoomType({
+            is_closed: room.result === 'closed',
+            restrictions: periods,
+          });
+        }
+      }
 
       this.deactivate();
     } catch (error) {
@@ -184,15 +224,18 @@ export class IglBulkBlocks {
     this.reloadInterceptor.deactivate();
     if (this.sidebar) this.sidebar.preventClose = false;
   }
-  // private toggleWeekDays({ checked, weekDay }: { checked: boolean; weekDay: number }): void {
-  //   if (checked) {
-  //     if (!this.selectedWeekdays.includes(weekDay)) {
-  //       this.selectedWeekdays = [...this.selectedWeekdays, weekDay];
-  //     }
-  //   } else {
-  //     this.selectedWeekdays = this.selectedWeekdays.filter(day => day !== weekDay);
-  //   }
-  // }
+  private toggleWeekDays({ checked, weekDay }: { checked: boolean; weekDay: number }): void {
+    const prev = new Set(this.selectedWeekdays);
+    if (checked) {
+      if (!this.selectedWeekdays.has(weekDay)) {
+        prev.add(weekDay);
+        this.selectedWeekdays = new Set(prev);
+      }
+    } else {
+      prev.delete(weekDay);
+      this.selectedWeekdays = new Set(prev);
+    }
+  }
 
   // private handleToDateChange({ index, date }: { index: number; date: Moment }) {
   //   const dates = [...this.dates];
@@ -292,17 +335,18 @@ export class IglBulkBlocks {
     }, 100);
   }
   render() {
-    const selectedRoomsByType = this.selectedRoomTypes.reduce((acc, entry) => {
-      const typeId = Number(Object.keys(entry)[0]);
-      acc[typeId] = entry[typeId];
-      return acc;
-    }, {} as Record<number, (string | number)[]>);
-    const allFullySelected = calendar_data.roomsInfo.every(({ id, physicalrooms }) => {
-      const sel = selectedRoomsByType[id] || [];
-      return sel.length === physicalrooms.length;
-    });
+    // const selectedRoomsByType = this.selectedRoomTypes.reduce((acc, entry) => {
+    //   const typeId = Number(Object.keys(entry)[0]);
+    //   acc[typeId] = entry[typeId];
+    //   return acc;
+    // }, {} as Record<number, (string | number)[]>);
+    // const allFullySelected = calendar_data.roomsInfo.every(({ id, physicalrooms }) => {
+    //   const sel = selectedRoomsByType[id] || [];
+    //   return sel.length === physicalrooms.length;
+    // });
 
-    const shouldShowAllRooms = !allFullySelected;
+    // const shouldShowAllRooms = !allFullySelected;
+    console.log(this.selectedRoomTypes);
     return (
       <form
         class={'bulk-sheet-container'}
@@ -322,16 +366,16 @@ export class IglBulkBlocks {
               this.closeModal.emit(null);
             }}
             class="px-1 mb-0"
-            label="Bulk Block Dates"
+            label="Bulk Open / Stop Sale"
             displayContext="sidebar"
           ></ir-title>
         </div>
         <div class="sheet-body px-1">
           <div class="text-muted text-left py-0 my-0">
-            {calendar_data.is_vacation_rental ? <p>Select the listings that you want to block.</p> : <p>Select the unit(s) that you want to block.</p>}
+            {calendar_data.is_vacation_rental ? <p>Select the listings that you want to open or stop sale.</p> : <p>Select the unit(s) that you want to open or stop sale.</p>}
           </div>
           {/* <p class="text-left text-muted">Select room types to block</p> */}
-          <div class="d-flex flex-column" style={{ gap: '1rem' }}>
+          {/* <div class="d-flex flex-column" style={{ gap: '1rem' }}>
             <ir-checkbox
               indeterminate={this.selectedRoomTypes?.length > 0 && shouldShowAllRooms}
               checked={!shouldShowAllRooms}
@@ -366,19 +410,59 @@ export class IglBulkBlocks {
                   </div>
                 );
               })}
-          </div>
-          {/* <p class="text-left mt-2 text-muted">Select which days to block</p>
+          </div> */}
+          <table>
+            <thead>
+              <tr>
+                <th class="sr-only">choice</th>
+                <th class="sr-only">room type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {calendar_data.roomsInfo.map((roomType, i) => {
+                const row_style = i === calendar_data.roomsInfo.length - 1 ? '' : 'pb-1';
+                return (
+                  <tr key={roomType.id}>
+                    <td class={`choice-row ${row_style}`}>
+                      <div class={'d-flex justify-content-end'}>
+                        <ir-select
+                          LabelAvailable={false}
+                          data={[
+                            { value: 'open', text: 'Open' },
+                            { value: 'closed', text: 'Stop Sale' },
+                          ]}
+                          onSelectChange={e => {
+                            const choice = e.detail as 'open' | 'closed' | undefined;
+                            // drop any existing entry for this roomType
+                            const rest = this.selectedRoomTypes.filter(entry => entry.id !== roomType.id);
+                            // if they actually picked something, append it
+                            if (choice) {
+                              rest.push({ id: roomType.id, result: choice });
+                            }
+                            this.selectedRoomTypes = rest;
+                          }}
+                        ></ir-select>
+                      </div>
+                    </td>
+                    <td class={`pl-1 text-left ${row_style}`}>{roomType.name}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <p class="text-left mt-2 text-muted">Select days to open or stop sale</p>
           <div class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
             {this.weekdays.map(w => (
               <ir-checkbox
-                checked={this.selectedWeekdays.findIndex(r => r.toString() === w.value.toString()) !== -1}
+                checked={this.selectedWeekdays.has(w.value)}
                 onCheckChange={e => this.toggleWeekDays({ checked: e.detail, weekDay: w.value })}
                 label={w.label}
-                labelClass="m-0 p-0 ml-1"
+                labelClass="m-0 p-0"
+                class="days-checkbox"
               ></ir-checkbox>
             ))}
-          </div> */}
-          <p class="text-left mt-2 text-muted">Add date range(s) to block</p>
+          </div>
+          <p class="text-left mt-2 text-muted">Add date range(s) to open or stop sale</p>
 
           {/* Dates */}
           <table class="mt-1">

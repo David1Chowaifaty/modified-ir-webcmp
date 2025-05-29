@@ -42,7 +42,26 @@
   border-left: 1px solid #e0e0e0;
   vertical-align: top;
 }
+.triangle-button {
+  --size: 10px;
+  position: absolute;
+  right: -6px;
+  top: -1px;
 
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-bottom: var(--size) solid var(--in-toggle-color);
+
+  transform: rotate(45deg);
+}
 .cellData:nth-child(2) {
   border-left: 0px;
 }
@@ -109,6 +128,7 @@
   height: 40px;
   -webkit-user-select: none;
   user-select: none;
+  position: relative;
 }
 
 /* BOOKING EVENT */

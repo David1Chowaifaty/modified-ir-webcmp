@@ -177,7 +177,7 @@ export namespace Components {
         "sourceOptions": TSourceOptions[];
         "wasBlockedUnit": boolean;
     }
-    interface IglBulkBlocks {
+    interface IglBulkStopSale {
         "maxDatesLength": number;
     }
     interface IglCalBody {
@@ -1382,9 +1382,9 @@ export interface IglBookingOverviewPageCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookingOverviewPageElement;
 }
-export interface IglBulkBlocksCustomEvent<T> extends CustomEvent<T> {
+export interface IglBulkStopSaleCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLIglBulkBlocksElement;
+    target: HTMLIglBulkStopSaleElement;
 }
 export interface IglCalBodyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1866,22 +1866,22 @@ declare global {
         prototype: HTMLIglBookingOverviewPageElement;
         new (): HTMLIglBookingOverviewPageElement;
     };
-    interface HTMLIglBulkBlocksElementEventMap {
+    interface HTMLIglBulkStopSaleElementEventMap {
         "closeModal": null;
     }
-    interface HTMLIglBulkBlocksElement extends Components.IglBulkBlocks, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIglBulkBlocksElementEventMap>(type: K, listener: (this: HTMLIglBulkBlocksElement, ev: IglBulkBlocksCustomEvent<HTMLIglBulkBlocksElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+    interface HTMLIglBulkStopSaleElement extends Components.IglBulkStopSale, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBulkStopSaleElementEventMap>(type: K, listener: (this: HTMLIglBulkStopSaleElement, ev: IglBulkStopSaleCustomEvent<HTMLIglBulkStopSaleElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIglBulkBlocksElementEventMap>(type: K, listener: (this: HTMLIglBulkBlocksElement, ev: IglBulkBlocksCustomEvent<HTMLIglBulkBlocksElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBulkStopSaleElementEventMap>(type: K, listener: (this: HTMLIglBulkStopSaleElement, ev: IglBulkStopSaleCustomEvent<HTMLIglBulkStopSaleElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
-    var HTMLIglBulkBlocksElement: {
-        prototype: HTMLIglBulkBlocksElement;
-        new (): HTMLIglBulkBlocksElement;
+    var HTMLIglBulkStopSaleElement: {
+        prototype: HTMLIglBulkStopSaleElement;
+        new (): HTMLIglBulkStopSaleElement;
     };
     interface HTMLIglCalBodyElementEventMap {
         "addBookingDatasEvent": any[];
@@ -3397,7 +3397,7 @@ declare global {
         "igl-booking-event-hover": HTMLIglBookingEventHoverElement;
         "igl-booking-form": HTMLIglBookingFormElement;
         "igl-booking-overview-page": HTMLIglBookingOverviewPageElement;
-        "igl-bulk-blocks": HTMLIglBulkBlocksElement;
+        "igl-bulk-stop-sale": HTMLIglBulkStopSaleElement;
         "igl-cal-body": HTMLIglCalBodyElement;
         "igl-cal-footer": HTMLIglCalFooterElement;
         "igl-cal-header": HTMLIglCalHeaderElement;
@@ -3655,9 +3655,9 @@ declare namespace LocalJSX {
         "sourceOptions"?: TSourceOptions[];
         "wasBlockedUnit"?: boolean;
     }
-    interface IglBulkBlocks {
+    interface IglBulkStopSale {
         "maxDatesLength"?: number;
-        "onCloseModal"?: (event: IglBulkBlocksCustomEvent<null>) => void;
+        "onCloseModal"?: (event: IglBulkStopSaleCustomEvent<null>) => void;
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };
@@ -4989,7 +4989,7 @@ declare namespace LocalJSX {
         "igl-booking-event-hover": IglBookingEventHover;
         "igl-booking-form": IglBookingForm;
         "igl-booking-overview-page": IglBookingOverviewPage;
-        "igl-bulk-blocks": IglBulkBlocks;
+        "igl-bulk-stop-sale": IglBulkStopSale;
         "igl-cal-body": IglCalBody;
         "igl-cal-footer": IglCalFooter;
         "igl-cal-header": IglCalHeader;
@@ -5110,7 +5110,7 @@ declare module "@stencil/core" {
             "igl-booking-event-hover": LocalJSX.IglBookingEventHover & JSXBase.HTMLAttributes<HTMLIglBookingEventHoverElement>;
             "igl-booking-form": LocalJSX.IglBookingForm & JSXBase.HTMLAttributes<HTMLIglBookingFormElement>;
             "igl-booking-overview-page": LocalJSX.IglBookingOverviewPage & JSXBase.HTMLAttributes<HTMLIglBookingOverviewPageElement>;
-            "igl-bulk-blocks": LocalJSX.IglBulkBlocks & JSXBase.HTMLAttributes<HTMLIglBulkBlocksElement>;
+            "igl-bulk-stop-sale": LocalJSX.IglBulkStopSale & JSXBase.HTMLAttributes<HTMLIglBulkStopSaleElement>;
             "igl-cal-body": LocalJSX.IglCalBody & JSXBase.HTMLAttributes<HTMLIglCalBodyElement>;
             "igl-cal-footer": LocalJSX.IglCalFooter & JSXBase.HTMLAttributes<HTMLIglCalFooterElement>;
             "igl-cal-header": LocalJSX.IglCalHeader & JSXBase.HTMLAttributes<HTMLIglCalHeaderElement>;
