@@ -21,6 +21,7 @@
 }
 .cellData.disabled {
   background: rgba(153, 153, 153, 10%);
+  background: rgba(153, 153, 153, 1);
   cursor: not-allowed;
 }
 .roomRow .room {

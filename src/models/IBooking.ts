@@ -1,6 +1,6 @@
 import { Booking, IFormat, Room, Origin, Arrival, IOtaNotes } from './booking.dto';
 import { TAdultChildConstraints } from './igl-book-property';
-import { Currency } from './property';
+import { Currency, RoomType } from './property';
 import { IRoomService } from './property-types';
 
 export default interface IBooking {
@@ -58,7 +58,9 @@ export type bookingReasons =
   | 'SHARING_PERSONS_UPDATED'
   | 'ROOM_STATUS_CHANGED'
   | 'UNIT_HK_STATUS_CHANGED'
-  | 'EMAIL_VERIFIED';
+  | 'EMAIL_VERIFIED'
+  | 'ROOM_TYPE_CLOSE'
+  | 'ROOM_TYPE_OPEN';
 export const validReasons = new Set<bookingReasons>([
   'DORESERVATION',
   'BLOCK_EXPOSED_UNIT',
@@ -133,21 +135,12 @@ export interface MonthType {
 
 export interface DayType {
   description: string;
+  value: string;
   occupancy: number;
   room_types: RoomType[];
   unassigned_units_nbr: number;
 }
 
-export interface RoomType {
-  availabilities: number | null;
-  id: number;
-  inventory: number;
-  name: string;
-  physicalrooms: PhysicalRoomType[];
-  rate: number;
-  rateplans: RatePlanType[];
-  exposed_inventory: IExposedInventory;
-}
 export interface IExposedInventory {
   blocked: number;
   booked: number;

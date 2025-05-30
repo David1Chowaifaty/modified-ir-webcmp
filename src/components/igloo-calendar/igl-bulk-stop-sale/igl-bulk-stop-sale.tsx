@@ -348,7 +348,7 @@ export class IglBulkStopSale {
                 }
 
                 const fromDateMinDate = i > 0 ? this.dates[i - 1]?.to?.format('YYYY-MM-DD') ?? this.minDate : this.minDate;
-                const toDateMinDate = this.dates[i].from ? this.dates[i]?.from?.clone().add(1, 'days').format('YYYY-MM-DD') : this.minDate;
+                const toDateMinDate = this.dates[i].from ? this.dates[i]?.from?.format('YYYY-MM-DD') : this.minDate;
                 return (
                   <tr key={`date_${i}`}>
                     <td class="pr-1 pb-1">

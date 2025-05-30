@@ -91,14 +91,20 @@ export class BookingService {
             daysCount: month.days.length,
             monthName: month.description,
           });
-          return month.days.map(day => ({
-            day: convertDateToCustomFormat(day.description, month.description),
-            currentDate: convertDateToTime(day.description, month.description),
-            dayDisplayName: day.description,
-            rate: day.room_types,
-            unassigned_units_nbr: day.unassigned_units_nbr,
-            occupancy: day.occupancy,
-          }));
+          return month.days.map(day => {
+            if (day['value'] === '2025-05-30') {
+              console.log(day);
+            }
+            return {
+              day: convertDateToCustomFormat(day.description, month.description),
+              value: day.value,
+              currentDate: convertDateToTime(day.description, month.description),
+              dayDisplayName: day.description,
+              rate: day.room_types,
+              unassigned_units_nbr: day.unassigned_units_nbr,
+              occupancy: day.occupancy,
+            };
+          });
         })
         .flat();
 

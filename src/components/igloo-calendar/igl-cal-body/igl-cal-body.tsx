@@ -334,13 +334,11 @@ export class IglCalBody {
   }
 
   private getGeneralRoomDayColumns(roomId: string, roomCategory: RoomCategory, roomName: string, index: number) {
-    let i = index;
-    i++;
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
     return this.calendarData.days.map(dayInfo => {
       const formattedDate = moment(dayInfo.currentDate).format('YYYY-MM-DD');
       // const isDisabled = calendar_dates.days.find(e => e.day === formattedDate)?.rate[index].exposed_inventory.rts;
-      const isDisabled = false;
+      const isDisabled = !dayInfo.rate[index].is_available_to_book;
       return (
         <div
           class={`cellData position-relative roomCell ${isDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${
