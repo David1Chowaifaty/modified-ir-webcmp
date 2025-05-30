@@ -266,7 +266,13 @@ export class IglBulkStopSale {
         </div>
         <div class="sheet-body px-1">
           <div class="text-muted text-left py-0 my-0">
-            {calendar_data.is_vacation_rental ? <p>Select the listings that you want to open or stop sale.</p> : <p>Select the unit(s) that you want to open or stop sale.</p>}
+            {calendar_data.is_vacation_rental ? (
+              <p>Select the listings that you want to open or stop sale.</p>
+            ) : (
+              <p>
+                Select the unit(s) that you want to open or stop sale. <span class="text-warning">This operation might require several minutes.</span>
+              </p>
+            )}
           </div>
           <div>
             {this.errors === 'rooms' && (
@@ -292,7 +298,7 @@ export class IglBulkStopSale {
                             LabelAvailable={false}
                             data={[
                               { value: 'open', text: 'Open' },
-                              { value: 'closed', text: 'Stop Sale' },
+                              { value: 'closed', text: 'Stop sale' },
                             ]}
                             onSelectChange={e => {
                               const choice = e.detail as 'open' | 'closed' | undefined;

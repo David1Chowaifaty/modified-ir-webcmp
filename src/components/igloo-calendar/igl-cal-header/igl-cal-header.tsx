@@ -304,7 +304,7 @@ export class IglCalHeader {
               data-toggle="tooltip"
               data-placement="bottom"
               data-testid="new_bulk_btn"
-              title={locales.entries.Lcz_CreateNewBooking}
+              title={'Stop/Open sale'}
               visibleBackgroundOnHover
               style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}
               onClickHandler={() => this.handleOptionEvent('bulk', this.getNewBookingModel())}

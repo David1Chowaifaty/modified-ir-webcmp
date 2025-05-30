@@ -336,7 +336,7 @@ export class IglCalBody {
   private getGeneralRoomDayColumns(roomId: string, roomCategory: RoomCategory, roomName: string, index: number) {
     // onDragOver={event => this.handleDragOver(event)} onDrop={event => this.handleDrop(event, addClass+"_"+dayInfo.day)}
     return this.calendarData.days.map(dayInfo => {
-      const formattedDate = moment(dayInfo.currentDate).format('YYYY-MM-DD');
+      // const formattedDate = moment(dayInfo.currentDate).format('YYYY-MM-DD');
       // const isDisabled = calendar_dates.days.find(e => e.day === formattedDate)?.rate[index].exposed_inventory.rts;
       const isDisabled = !dayInfo.rate[index].is_available_to_book;
       return (
@@ -352,7 +352,7 @@ export class IglCalBody {
             }
             this.clickCell(roomId, dayInfo, roomCategory);
           }}
-          data-date={formattedDate}
+          data-date={dayInfo.value}
           data-room-name={roomName}
         >
           {/* <button class={'triangle-button'} style={{ '--in-toggle-color': isDisabled ? 'green' : '#ff4961' }}></button> */}
