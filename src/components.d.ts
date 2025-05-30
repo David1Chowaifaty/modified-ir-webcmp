@@ -1868,6 +1868,7 @@ declare global {
     };
     interface HTMLIglBulkStopSaleElementEventMap {
         "closeModal": null;
+        "toast": IToast;
     }
     interface HTMLIglBulkStopSaleElement extends Components.IglBulkStopSale, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBulkStopSaleElementEventMap>(type: K, listener: (this: HTMLIglBulkStopSaleElement, ev: IglBulkStopSaleCustomEvent<HTMLIglBulkStopSaleElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3658,6 +3659,7 @@ declare namespace LocalJSX {
     interface IglBulkStopSale {
         "maxDatesLength"?: number;
         "onCloseModal"?: (event: IglBulkStopSaleCustomEvent<null>) => void;
+        "onToast"?: (event: IglBulkStopSaleCustomEvent<IToast>) => void;
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };

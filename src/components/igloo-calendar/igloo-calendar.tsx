@@ -689,13 +689,14 @@ export class IglooCalendar {
   private processSalesBatch(batch: SalesBatchPayload[]) {
     // this.salesQueue
     let days = [...calendar_dates.days];
+    console.log({ batch });
     for (const newSales of batch) {
       const index = days.findIndex(day => day.value === newSales.night);
       if (index === -1) {
         console.warn(`Couldn't find day ${newSales.night}`);
         continue;
       }
-      const room_type_index = days[index].rate.findIndex(room => room.id.toString() === newSales.room_type_id.toString());
+      const room_type_index = days[index].rate.findIndex(room => room.id === newSales.room_type_id);
       if (room_type_index === -1) {
         console.warn(`Couldn't find room type id ${newSales.room_type_id}`);
         continue;

@@ -4,6 +4,7 @@ import { ReloadInterceptor } from '@/utils/ReloadInterceptor';
 import { Component, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
 import moment, { Moment } from 'moment';
 import { z, ZodError } from 'zod';
+import { IToast } from '@components/ui/ir-toast/toast';
 export type SelectedRooms = { id: string | number; result: 'open' | 'closed' };
 export interface Weekday {
   value: number;
@@ -41,6 +42,7 @@ export class IglBulkStopSale {
   );
 
   @Event() closeModal: EventEmitter<null>;
+  @Event() toast: EventEmitter<IToast>;
 
   private sidebar: HTMLIrSidebarElement;
   private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
@@ -150,6 +152,11 @@ export class IglBulkStopSale {
         await Promise.all(payloads.map(p => this.bookingService.setExposedRestrictionPerRoomType(p)));
       }
       this.deactivate();
+      this.toast.emit({
+        type: 'success',
+        title: 'Request was submitted successfully .Your changes have been queued and will be applied shortly.',
+        description: '',
+      });
       this.isLoading = false;
       this.closeModal.emit();
     } catch (error) {
