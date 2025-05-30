@@ -33,7 +33,7 @@ export interface UnitHkStatusChangePayload {
   My_Room_category: null;
   My_Hkm: null;
 }
-export type SalesBatchPayload = { room_type_id: number; night: string; is_available_to_book: boolean };
+export type SalesBatchPayload = { rate_plan_id: number; night: string; is_available_to_book: boolean };
 export type CalendarSidebarState = {
   type: 'room-guests' | 'booking-details' | 'add-days' | 'bulk-blocks';
   payload: any;
@@ -107,6 +107,7 @@ export class IglooCalendar {
     maxQueueSize: 5000,
     onError: e => console.error('Batch Sales Update Error:', e),
   });
+  private roomTypeIdsCache: Map<number, { id: number; index: number } | 'skip'> = new Map();
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -403,7 +404,7 @@ export class IglooCalendar {
     } else {
       result = JSON.parse(PAYLOAD);
     }
-    console.log({ [KEY]: result });
+    console.log({ [REASON]: result });
     const reasonHandlers: Partial<Record<bookingReasons, Function>> = {
       DORESERVATION: this.handleDoReservation,
       BLOCK_EXPOSED_UNIT: this.handleBlockExposedUnit,
@@ -687,23 +688,54 @@ export class IglooCalendar {
   }
    */
   private processSalesBatch(batch: SalesBatchPayload[]) {
-    // this.salesQueue
-    let days = [...calendar_dates.days];
-    console.log({ batch });
-    for (const newSales of batch) {
-      const index = days.findIndex(day => day.value === newSales.night);
-      if (index === -1) {
-        console.warn(`Couldn't find day ${newSales.night}`);
+    const days = [...calendar_dates.days];
+
+    for (const sale of batch) {
+      // 1) find the day index
+      const dayIdx = days.findIndex(d => d.value === sale.night);
+      if (dayIdx === -1) {
+        console.warn(`Couldn't find day ${sale.night}`);
         continue;
       }
-      const room_type_index = days[index].rate.findIndex(room => room.id === newSales.room_type_id);
-      if (room_type_index === -1) {
-        console.warn(`Couldn't find room type id ${newSales.room_type_id}`);
+
+      // 2) check cache entry
+      let entry = this.roomTypeIdsCache.get(sale.rate_plan_id);
+      if (entry === 'skip') {
+        // previously determined no matching room type for this rate_plan_id
         continue;
       }
-      days[index].rate[room_type_index].is_available_to_book = newSales.is_available_to_book;
+
+      // 3) if not cached, look it up and cache it
+      if (!entry) {
+        const rtIdx = days[dayIdx].rate.findIndex(rt => rt.rateplans.some(rp => rp.id === sale.rate_plan_id));
+        if (rtIdx === -1) {
+          this.roomTypeIdsCache.set(sale.rate_plan_id, 'skip');
+          console.warn(`Couldn't find room type for rate plan ${sale.rate_plan_id}`);
+          continue;
+        }
+        const roomType = days[dayIdx].rate[rtIdx];
+        const rpIdx = roomType.rateplans.findIndex(rp => rp.id === sale.rate_plan_id);
+        entry = { id: rtIdx, index: rpIdx };
+        this.roomTypeIdsCache.set(sale.rate_plan_id, entry);
+      }
+
+      // 4) apply cached indices
+      const { id: roomTypeIdx, index: ratePlanIdx } = entry as { id: number; index: number };
+      const roomType = days[dayIdx].rate[roomTypeIdx];
+
+      // 5) update that specific rateplan
+      const updatedRateplans = roomType.rateplans.map((rp, i) => (i === ratePlanIdx ? { ...rp, is_available_to_book: sale.is_available_to_book } : rp));
+
+      days[dayIdx].rate[roomTypeIdx] = {
+        ...roomType,
+        rateplans: updatedRateplans,
+        // overall room availability = true if any rateplan is bookable
+        is_available_to_book: updatedRateplans.some(rp => rp.is_available_to_book),
+      };
     }
-    calendar_dates.days = [...days];
+
+    // 6) write back to the store
+    calendar_dates.days = days;
   }
   private updateTotalAvailability() {
     let days = [...calendar_dates.days];

@@ -154,7 +154,7 @@ export class IglBulkStopSale {
       this.deactivate();
       this.toast.emit({
         type: 'success',
-        title: 'Request was submitted successfully .Your changes have been queued and will be applied shortly.',
+        title: 'Request was submitted successfully. Your changes have been queued and will be applied shortly.',
         description: '',
       });
       this.isLoading = false;
