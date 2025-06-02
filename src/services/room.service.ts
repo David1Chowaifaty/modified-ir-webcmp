@@ -43,7 +43,7 @@ export class RoomService {
       calendar_data.is_pms_enabled = results.is_pms_enabled;
       const spitTime = results?.time_constraints?.check_out_till?.split(':');
       calendar_data.checkin_checkout_hours = {
-        offset: results.country.gmt_offset,
+        offset: results.city.gmt_offset,
         hour: Number(spitTime[0] || 0),
         minute: Number(spitTime[1] || 0),
       };
