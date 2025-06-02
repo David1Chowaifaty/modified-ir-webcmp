@@ -8,6 +8,7 @@ import { IToast } from '@components/ui/ir-toast/toast';
 import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
 import { ICountry } from '@/models/IBooking';
+import calendar_dates from '@/stores/calendar-dates.store';
 
 @Component({
   tag: 'igl-booking-event',
@@ -191,6 +192,16 @@ export class IglBookingEvent {
           }
         } else {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
+          const previousToDate = moment(to_date, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD');
+          if (
+            calendar_dates.disabled_cells.get(`${toRoomId}_${from_date}`) ||
+            (calendar_dates.disabled_cells.get(`${toRoomId}_${to_date}`) && calendar_dates.disabled_cells.get(`${toRoomId}_${previousToDate}`))
+          ) {
+            this.animationFrameId = requestAnimationFrame(() => {
+              this.resetBookingToInitialPosition();
+            });
+            throw new Error('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
+          }
           if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
             this.animationFrameId = requestAnimationFrame(() => {
               this.resetBookingToInitialPosition();

@@ -689,7 +689,7 @@ export class IglooCalendar {
    */
   private processSalesBatch(batch: SalesBatchPayload[]) {
     const days = [...calendar_dates.days];
-
+    const disabled_cells = new Map(calendar_dates.disabled_cells);
     for (const sale of batch) {
       // 1) find the day index
       const dayIdx = days.findIndex(d => d.value === sale.night);
@@ -725,16 +725,18 @@ export class IglooCalendar {
 
       // 5) update that specific rateplan
       const updatedRateplans = roomType.rateplans.map((rp, i) => (i === ratePlanIdx ? { ...rp, is_available_to_book: sale.is_available_to_book } : rp));
-
+      const is_available_to_book = updatedRateplans.some(rp => rp.is_available_to_book);
       days[dayIdx].rate[roomTypeIdx] = {
         ...roomType,
         rateplans: updatedRateplans,
         // overall room availability = true if any rateplan is bookable
-        is_available_to_book: updatedRateplans.some(rp => rp.is_available_to_book),
+        is_available_to_book,
       };
+      disabled_cells.set(days[dayIdx].value, is_available_to_book);
     }
 
     // 6) write back to the store
+    calendar_dates['disabled_cells'] = new Map(disabled_cells);
     calendar_dates.days = days;
   }
   private updateTotalAvailability() {
