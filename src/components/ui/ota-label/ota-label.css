@@ -20,7 +20,7 @@
   width: 100%;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
-  list-style: circle !important;
+  /* list-style: circle !important; */
 }
 .ota-message-item {
   width: 100%;

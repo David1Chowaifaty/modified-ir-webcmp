@@ -260,19 +260,15 @@ export class IglBulkStopSale {
               this.closeModal.emit(null);
             }}
             class="px-1 mb-0"
-            label="Bulk Open / Stop Sale"
+            label="Bulk Stop/Open Sale"
             displayContext="sidebar"
           ></ir-title>
         </div>
         <div class="sheet-body px-1">
           <div class="text-muted text-left py-0 my-0">
-            {calendar_data.is_vacation_rental ? (
-              <p>Select the listings that you want to open or stop sale.</p>
-            ) : (
-              <p>
-                Select the unit(s) that you want to open or stop sale. <span class="text-warning">This operation might require several minutes.</span>
-              </p>
-            )}
+            <p>
+              Select the affected unit(s). <span class="text-warning">This operation might require several minutes.</span>
+            </p>
           </div>
           <div>
             {this.errors === 'rooms' && (
@@ -320,7 +316,7 @@ export class IglBulkStopSale {
               </tbody>
             </table>
           </div>
-          <p class="text-left mt-2 text-muted">Select days to open or stop sale</p>
+          <p class="text-left mt-2 text-muted">Included days</p>
           {this.errors === 'weekdays' && <p class={'text-danger text-left smaller m-0 p-0'}>Please select at least one day</p>}
           <div ref={el => (this.weekdaysSections = el)} class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
             {this.weekdays.map(w => (
@@ -333,7 +329,6 @@ export class IglBulkStopSale {
               ></ir-checkbox>
             ))}
           </div>
-          <p class="text-left mt-2 text-muted">Add date range(s) to open or stop sale</p>
 
           {/* Dates */}
           <table class="mt-1" ref={el => (this.datesSections = el)}>
@@ -360,8 +355,8 @@ export class IglBulkStopSale {
                   this.dateRefs[i] = {};
                 }
 
-                const fromDateMinDate = i > 0 ? this.dates[i - 1]?.to?.format('YYYY-MM-DD') ?? this.minDate : this.minDate;
-                const toDateMinDate = this.dates[i].from ? this.dates[i]?.from?.format('YYYY-MM-DD') : this.minDate;
+                const fromDateMinDate = i > 0 ? this.dates[i - 1]?.to.clone().add(1, 'days')?.format('YYYY-MM-DD') ?? this.minDate : this.minDate;
+                const toDateMinDate = this.dates[i].from ? this.dates[i]?.from.clone().add(1, 'days')?.format('YYYY-MM-DD') : this.minDate;
                 return (
                   <tr key={`date_${i}`}>
                     <td class="pr-1 pb-1">
