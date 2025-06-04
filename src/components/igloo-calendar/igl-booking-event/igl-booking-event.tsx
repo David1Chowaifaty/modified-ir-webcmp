@@ -194,14 +194,11 @@ export class IglBookingEvent {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
           const previousToDate = moment(to_date, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD');
           if (
-            calendar_dates.disabled_cells.get(`${toRoomId}_${from_date}`) ||
-            (calendar_dates.disabled_cells.get(`${toRoomId}_${to_date}`) && calendar_dates.disabled_cells.get(`${toRoomId}_${previousToDate}`))
+            (calendar_dates.disabled_cells.get(`${toRoomId}_${from_date}`) ||
+              (calendar_dates.disabled_cells.get(`${toRoomId}_${to_date}`) && calendar_dates.disabled_cells.get(`${toRoomId}_${previousToDate}`))) &&
+            !this.isStretch
           ) {
-            if (this.isStretch) {
-              //count disable dates
-            } else {
-              this.reset('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
-            }
+            this.reset('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
           }
           if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
             this.reset('Overlapping Dates');
@@ -301,7 +298,7 @@ export class IglBookingEvent {
                     }
                     cursor = moment(cursor, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
                   }
-                  if (counter > 1) {
+                  if (counter >= 1) {
                     this.reset('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
                   }
                 };
