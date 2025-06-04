@@ -46,7 +46,7 @@ export class IglBookingEvent {
   /* show bubble */
   private showInfoPopup: boolean = false;
   private bubbleInfoTopSide: boolean = false;
-  private isStreatch = false;
+  private isStretch = false;
   /*Services */
   private eventsService = new EventsService();
   private bookingService = new BookingService();
@@ -64,8 +64,8 @@ export class IglBookingEvent {
   dragEndPos: { [key: string]: any };
   elementRect: { [key: string]: any };
   isTouchStart: boolean;
-  moveDiffereneX: number;
-  moveDiffereneY: number;
+  moveDifferenceX: number;
+  moveDifferenceY: number;
   private animationFrameId: number | null = null;
 
   handleMouseMoveBind = this.handleMouseMove.bind(this);
@@ -171,7 +171,7 @@ export class IglBookingEvent {
       if (event.detail.moveToDay === 'revert' || event.detail.toRoomId === 'revert') {
         event.detail.moveToDay = this.bookingEvent.FROM_DATE;
         event.detail.toRoomId = event.detail.fromRoomId;
-        if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
+        if (this.isTouchStart && this.moveDifferenceX <= 5 && this.moveDifferenceY <= 5 && !this.isStretch) {
           if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
           } else if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
@@ -184,7 +184,7 @@ export class IglBookingEvent {
           return;
         }
       } else {
-        if (this.isTouchStart && this.moveDiffereneX <= 5 && this.moveDiffereneY <= 5 && !this.isStreatch) {
+        if (this.isTouchStart && this.moveDifferenceX <= 5 && this.moveDifferenceY <= 5 && !this.isStretch) {
           if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
             this.showEventInfo(true);
           } else if (['IN-HOUSE', 'CONFIRMED', 'PENDING-CONFIRMATION', 'CHECKED-OUT'].includes(this.bookingEvent.STATUS)) {
@@ -197,16 +197,14 @@ export class IglBookingEvent {
             calendar_dates.disabled_cells.get(`${toRoomId}_${from_date}`) ||
             (calendar_dates.disabled_cells.get(`${toRoomId}_${to_date}`) && calendar_dates.disabled_cells.get(`${toRoomId}_${previousToDate}`))
           ) {
-            this.animationFrameId = requestAnimationFrame(() => {
-              this.resetBookingToInitialPosition();
-            });
-            throw new Error('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
+            if (this.isStretch) {
+              //count disable dates
+            } else {
+              this.reset('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
+            }
           }
           if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
-            this.animationFrameId = requestAnimationFrame(() => {
-              this.resetBookingToInitialPosition();
-            });
-            throw new Error('Overlapping Dates');
+            this.reset('Overlapping Dates');
           }
           if (pool) {
             if (isBlockUnit(this.bookingEvent.STATUS_CODE)) {
@@ -218,7 +216,7 @@ export class IglBookingEvent {
                 this.resetBookingToInitialPosition();
               });
             } else {
-              if (this.isShrinking || !this.isStreatch) {
+              if (this.isShrinking || !this.isStretch) {
                 // try {
                 //   if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {
                 //     await this.eventsService.reallocateEvent(pool, toRoomId, from_date, to_date);
@@ -259,6 +257,7 @@ export class IglBookingEvent {
                     }
                   }
                 } else {
+                  console.log('stretching');
                   if (moment(from_date, 'YYYY-MM-DD').isBefore(moment(oldFromDate, 'YYYY-MM-DD'))) {
                     fromDate = from_date;
                     const newToDate = moment(from_date, 'YYYY-MM-DD').add(diffDays, 'days');
@@ -277,6 +276,42 @@ export class IglBookingEvent {
                 //   });
                 //   throw new Error('Overlapping Dates');
                 // } else {
+
+                // let stretchDirection: "left" | "right"
+                const oldFromDate = this.bookingEvent.defaultDates.from_date;
+                const oldToDate = this.bookingEvent.defaultDates.to_date;
+                // const diffDays = calculateDaysBetweenDates(oldFromDate, oldToDate);
+
+                // let fromDate = oldFromDate;
+
+                // if (moment(from_date, 'YYYY-MM-DD').isBefore(moment(oldFromDate, 'YYYY-MM-DD'))) {
+                //   fromDate = from_date;
+                //   const newToDate = moment(from_date, 'YYYY-MM-DD').add(diffDays, 'days');
+                //   toDate = newToDate.isBefore(moment(to_date, 'YYYY-MM-DD'), 'days') ? to_date : newToDate.format('YYYY-MM-DD');
+                // } else if (moment(to_date, 'YYYY-MM-DD').isAfter(moment(oldToDate, 'YYYY-MM-DD'))) {
+                //   toDate = to_date;
+                //   fromDate = moment(to_date, 'YYYY-MM-DD').subtract(diffDays, 'days').format('YYYY-MM-DD');
+                // }
+                const validateDates = (base_date: string, to_date: string) => {
+                  let cursor = base_date;
+                  let counter = 0;
+                  while (cursor !== to_date) {
+                    if (calendar_dates.disabled_cells.get(`${toRoomId}_${cursor}`)) {
+                      counter++;
+                    }
+                    cursor = moment(cursor, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+                  }
+                  if (counter > 1) {
+                    this.reset('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
+                  }
+                };
+
+                if (moment(oldToDate, 'YYYY-MM-DD').isBefore(moment(to_date), 'dates')) {
+                  validateDates(oldToDate, to_date);
+                } else if (moment(oldFromDate, 'YYYY-MM-DD').isAfter(moment(from_date, 'YYYY-MM-DD'), 'dates')) {
+                  validateDates(from_date, oldFromDate);
+                }
+
                 this.showRoomNightsDialog.emit({
                   bookingNumber: this.bookingEvent.BOOKING_NUMBER,
                   identifier: this.bookingEvent.IDENTIFIER,
@@ -301,6 +336,12 @@ export class IglBookingEvent {
       });
       console.log('something went wrong');
     }
+  }
+  private reset(message: string) {
+    this.animationFrameId = requestAnimationFrame(() => {
+      this.resetBookingToInitialPosition();
+    });
+    throw new Error(message);
   }
   private getModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string } {
     const findRoomType = (roomId: number) => {
@@ -358,10 +399,10 @@ export class IglBookingEvent {
     }
   }
   private resetBookingToInitialPosition() {
-    if (this.isStreatch) {
+    if (this.isStretch) {
       this.element.style.left = `${this.initialLeft}px`;
       this.element.style.width = `${this.initialWidth}px`;
-      this.isStreatch = false;
+      this.isStretch = false;
       this.finalWidth = this.initialWidth;
       this.isShrinking = null;
     } else {
@@ -527,7 +568,7 @@ export class IglBookingEvent {
     this.isDragging = true;
 
     this.showEventInfo(false);
-    this.isStreatch = side !== 'move';
+    this.isStretch = side !== 'move';
     if (side === 'move') {
       this.initialX = event.clientX || event.touches[0].clientX;
       this.initialY = event.clientY || event.touches[0].clientY;
@@ -627,8 +668,8 @@ export class IglBookingEvent {
         // console.log("End X::"+this.dragEndPos.x);
         // console.log("End Y::"+this.dragEndPos.y);
         if (this.isTouchStart) {
-          this.moveDiffereneX = Math.abs(this.dragEndPos.x - this.dragInitPos.x);
-          this.moveDiffereneY = Math.abs(this.dragEndPos.y - this.dragInitPos.y);
+          this.moveDifferenceX = Math.abs(this.dragEndPos.x - this.dragInitPos.x);
+          this.moveDifferenceY = Math.abs(this.dragEndPos.y - this.dragInitPos.y);
         }
         this.dragOverEventData.emit({
           id: 'DRAG_OVER_END',

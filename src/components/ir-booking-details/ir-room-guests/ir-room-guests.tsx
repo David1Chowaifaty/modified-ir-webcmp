@@ -308,7 +308,6 @@ export class IrRoomGuests {
               onClick={() => this.closeModal.emit(null)}
               btn_styles="justify-content-center"
               class={`mb-1 mb-sm-0 flex-fill mr-sm-1`}
-              icon=""
               text={locales.entries.Lcz_Cancel}
               btn_color="secondary"
             ></ir-button>
@@ -316,7 +315,6 @@ export class IrRoomGuests {
             <ir-button
               btn_styles="justify-content-center align-items-center"
               class={'m-0 flex-fill text-center'}
-              icon=""
               isLoading={isRequestPending('/Handle_Exposed_Room_Guests')}
               text={this.checkIn ? locales.entries.Lcz_CheckIn : locales.entries.Lcz_Save}
               btn_color="primary"

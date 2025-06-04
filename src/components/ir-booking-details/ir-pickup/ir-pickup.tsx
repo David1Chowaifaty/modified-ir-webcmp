@@ -317,7 +317,6 @@ export class IrPickup {
             onClick={() => this.closeModal.emit(null)}
             btn_styles="justify-content-center"
             class={`flex-fill`}
-            icon=""
             text={locales.entries.Lcz_Cancel}
             btn_color="secondary"
           ></ir-button>
@@ -325,7 +324,6 @@ export class IrPickup {
             <ir-button
               btn_styles="justify-content-center align-items-center"
               class={'flex-fill'}
-              icon=""
               isLoading={this.isLoading}
               text={locales.entries.Lcz_Save}
               btn_color="primary"

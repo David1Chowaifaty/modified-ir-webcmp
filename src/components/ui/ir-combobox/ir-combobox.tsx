@@ -10,33 +10,106 @@ export type ComboboxItem = { id: string; name: string; image?: string; occupancy
   scoped: true,
 })
 export class IrCombobox {
+  @Element() el: HTMLElement;
+
+  /**
+   * The list of items displayed in the combobox.
+   */
   @Prop({ mutable: true }) data: ComboboxItem[] = [];
+
+  /**
+   * Debounce duration in milliseconds for search input.
+   */
   @Prop() duration: number = 300;
+
+  /**
+   * Placeholder text for the input field.
+   */
   @Prop() placeholder: string;
+
+  /**
+   * The current value of the input field.
+   */
   @Prop() value: string;
+
+  /**
+   * Disables the combobox input when set to true.
+   */
   @Prop() disabled: boolean = false;
+
+  /**
+   * Autofocuses the input field when true.
+   */
   @Prop() autoFocus: boolean = false;
+
+  /**
+   * Unique identifier for the input element.
+   */
   @Prop() input_id: string = v4();
 
+  /**
+   * The index of the currently selected item.
+   */
   @State() selectedIndex: number = -1;
+
+  /**
+   * Tracks the actual focused index during keyboard navigation.
+   */
   @State() actualIndex: number = -1;
+
+  /**
+   * Whether the dropdown is visible.
+   */
   @State() isComboBoxVisible: boolean = false;
+
+  /**
+   * Indicates if the component is in loading state.
+   */
   @State() isLoading: boolean = true;
+
+  /**
+   * Whether a selection was made before blur.
+   */
   @State() isItemSelected: boolean;
+
+  /**
+   * The current input value typed by the user.
+   */
   @State() inputValue: string = '';
+
+  /**
+   * Filtered list based on user input.
+   */
   @State() filteredData: ComboboxItem[] = [];
 
-  @Element() el: HTMLElement;
-  @Event({ bubbles: true, composed: true }) comboboxValueChange: EventEmitter<{ key: string; data: unknown }>;
-  @Event() inputCleared: EventEmitter<null>;
-  @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
+  /**
+   * Determines if the input should automatically receive focus.
+   */
   @State() componentShouldAutoFocus: boolean = false;
+
+  /**
+   * Emitted when a selection is made from the combobox.
+   */
+  @Event({ bubbles: true, composed: true }) comboboxValueChange: EventEmitter<{ key: string; data: unknown }>;
+
+  /**
+   * Emitted when the input is cleared by the user.
+   */
+  @Event() inputCleared: EventEmitter<null>;
+
+  /**
+   * Emits a toast notification.
+   */
+  @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
+
   private inputRef: HTMLInputElement;
   private debounceTimer: any;
-  private blurTimout: NodeJS.Timeout;
+  private blurTimeout: NodeJS.Timeout;
+
   componentWillLoad() {
     this.filteredData = this.data;
   }
+
   componentDidLoad() {
     if (this.autoFocus) {
       this.focusInput();
@@ -49,7 +122,26 @@ export class IrCombobox {
       this.focusInput();
     }
   }
-  handleKeyDown(event: KeyboardEvent) {
+  @Listen('click', { target: 'document' })
+  handleDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!this.el.contains(target)) {
+      this.isComboBoxVisible = false;
+    }
+  }
+  disconnectedCallback() {
+    clearTimeout(this.debounceTimer);
+    clearTimeout(this.blurTimeout);
+    this.inputRef?.removeEventListener('blur', this.handleBlur);
+    this.inputRef?.removeEventListener('click', this.selectItem);
+    this.inputRef?.removeEventListener('keydown', this.handleKeyDown);
+    this.inputRef?.removeEventListener('focus', this.handleFocus);
+  }
+
+  /**
+   * Handles keyboard navigation and selection inside the combobox.
+   */
+  private handleKeyDown(event: KeyboardEvent) {
     const dataSize = this.filteredData.length;
     if (dataSize > 0) {
       switch (event.key) {
@@ -78,22 +170,28 @@ export class IrCombobox {
       }
     }
   }
-
-  focusInput() {
+  /**
+   * Focuses the combobox input element.
+   */
+  private focusInput() {
     requestAnimationFrame(() => {
       this.inputRef?.focus();
     });
   }
-
-  adjustScrollPosition() {
+  /**
+   * Scrolls the selected item into view when navigating.
+   */
+  private adjustScrollPosition() {
     const selectedItem = this.el?.querySelector(`[data-selected]`);
     if (!selectedItem) return;
     selectedItem.scrollIntoView({
       block: 'center',
     });
   }
-
-  selectItem(index) {
+  /**
+   * Selects an item at the given index.
+   */
+  private selectItem(index) {
     if (this.filteredData[index]) {
       this.isItemSelected = true;
       this.comboboxValueChange.emit({ key: 'select', data: this.filteredData[index].id });
@@ -104,29 +202,35 @@ export class IrCombobox {
       }
     }
   }
-
-  debounceFetchData() {
+  /**
+   * Debounces calls to the fetch data function.
+   */
+  private debounceFetchData() {
     clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(() => {
       this.fetchData();
     }, this.duration);
   }
-  handleFocus() {
+  /**
+   * Makes the dropdown visible on input focus.
+   */
+  private handleFocus() {
     this.isComboBoxVisible = true;
   }
-  clearInput() {
-    this.inputValue = '';
-    this.resetCombobox();
-    this.inputCleared.emit(null);
-  }
-  resetCombobox(withblur: boolean = true) {
-    if (withblur) {
+  /**
+   * Resets the combobox state and optionally blurs the input.
+   */
+  private resetCombobox(withBlur: boolean = true) {
+    if (withBlur) {
       this.inputRef?.blur();
     }
     this.selectedIndex = -1;
     this.isComboBoxVisible = false;
   }
-  async fetchData() {
+  /**
+   * Filters data based on input value.
+   */
+  private async fetchData() {
     try {
       this.isLoading = true;
       this.filteredData = this.data.filter(d => d.name.toLowerCase().startsWith(this.inputValue));
@@ -137,8 +241,10 @@ export class IrCombobox {
       this.isLoading = false;
     }
   }
-
-  handleInputChange(event: Event) {
+  /**
+   * Updates input value and triggers search.
+   */
+  private handleInputChange(event: Event) {
     this.inputValue = (event.target as HTMLInputElement).value;
     if (this.inputValue) {
       this.debounceFetchData();
@@ -147,16 +253,11 @@ export class IrCombobox {
     }
   }
 
-  @Listen('click', { target: 'document' })
-  handleDocumentClick(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (!this.el.contains(target)) {
-      this.isComboBoxVisible = false;
-    }
-  }
-
-  handleBlur() {
-    this.blurTimout = setTimeout(() => {
+  /**
+   * Clears input or resets dropdown if nothing selected on blur.
+   */
+  private handleBlur() {
+    this.blurTimeout = setTimeout(() => {
       if (!this.isItemSelected) {
         this.inputValue = '';
         this.resetCombobox();
@@ -165,19 +266,11 @@ export class IrCombobox {
       }
     }, 300);
   }
-  isDropdownItem(element) {
-    return element && element.closest('.combobox');
-  }
 
-  disconnectedCallback() {
-    clearTimeout(this.debounceTimer);
-    clearTimeout(this.blurTimout);
-    this.inputRef?.removeEventListener('blur', this.handleBlur);
-    this.inputRef?.removeEventListener('click', this.selectItem);
-    this.inputRef?.removeEventListener('keydown', this.handleKeyDown);
-    this.inputRef?.removeEventListener('focus', this.handleFocus);
-  }
-  handleItemKeyDown(event: KeyboardEvent, index: number) {
+  /**
+   * Handles key navigation on individual items.
+   */
+  private handleItemKeyDown(event: KeyboardEvent, index: number) {
     if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowRight') {
       this.selectItem(index);
       event.preventDefault();
@@ -187,7 +280,10 @@ export class IrCombobox {
       event.preventDefault();
     }
   }
-  renderDropdown() {
+  /**
+   * Renders the dropdown list.
+   */
+  private renderDropdown() {
     if (!this.isComboBoxVisible) {
       return null;
     }
@@ -223,7 +319,10 @@ export class IrCombobox {
       </ul>
     );
   }
-  handleSubmit(e: Event) {
+  /**
+   * Handles form submission by selecting the highlighted item.
+   */
+  private handleSubmit(e: Event) {
     e.preventDefault();
     e.stopPropagation();
     console.log('object');
@@ -232,6 +331,7 @@ export class IrCombobox {
     }
     this.selectItem(this.selectedIndex === -1 ? 0 : this.selectedIndex);
   }
+
   render() {
     return (
       <form onSubmit={this.handleSubmit.bind(this)} class="m-0 p-0">

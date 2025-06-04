@@ -104,8 +104,8 @@ export class IrDeleteModal {
               )}
 
               <div class={`ir-alert-footer border-0 d-flex justify-content-end`}>
-                <ir-button icon={''} btn_color={'secondary'} btn_block text={locales.entries.Lcz_Cancel} name={'cancel'}></ir-button>
-                <ir-button isLoading={this.loadingBtn === 'confirm'} icon={''} btn_color={'primary'} btn_block text={locales.entries.Lcz_Confirm} name={'confirm'}></ir-button>
+                <ir-button btn_color={'secondary'} btn_block text={locales.entries.Lcz_Cancel} name={'cancel'}></ir-button>
+                <ir-button isLoading={this.loadingBtn === 'confirm'} btn_color={'primary'} btn_block text={locales.entries.Lcz_Confirm} name={'confirm'}></ir-button>
               </div>
             </div>
           </div>

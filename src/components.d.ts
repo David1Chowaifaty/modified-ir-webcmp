@@ -345,29 +345,85 @@ export namespace Components {
         "token": string;
     }
     interface IrButton {
+        /**
+          * Triggers a bounce animation on the button.
+         */
         "bounce": () => Promise<void>;
+        /**
+          * Custom inline styles for the button element.
+         */
         "btnStyle": { [key: string]: string };
+        /**
+          * Whether the button should expand to the full width of its container.
+         */
         "btn_block": boolean;
+        /**
+          * The color theme of the button.
+         */
         "btn_color": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
+        /**
+          * Disables the button when set to true.
+         */
         "btn_disabled": boolean;
+        /**
+          * A unique identifier for the button instance.
+         */
         "btn_id": string;
+        /**
+          * Additional custom class names for the button.
+         */
         "btn_styles": string;
+        /**
+          * The button type attribute (`button`, `submit`, or `reset`).
+         */
         "btn_type": string;
-        "icon": string;
+        /**
+          * Position of the icon relative to the button text.
+         */
         "iconPosition": 'left' | 'right';
+        /**
+          * The name of the icon to display.
+         */
         "icon_name": TIcons;
+        /**
+          * Custom style object for the icon.
+         */
         "icon_style": any;
+        /**
+          * Displays a loading indicator when true and disables the button.
+         */
         "isLoading": boolean;
+        /**
+          * Custom inline styles for the label/text inside the button.
+         */
         "labelStyle": { [key: string]: string };
+        /**
+          * The name of the button, used for identification purposes.
+         */
         "name": string;
         /**
-          * If true, will render `content` as HTML
+          * If true, renders the text property as raw HTML inside the button.
          */
         "renderContentAsHtml": boolean;
+        /**
+          * The size of the button.
+         */
         "size": 'sm' | 'md' | 'lg';
+        /**
+          * The text content displayed inside the button.
+         */
         "text": string;
+        /**
+          * The size of the text inside the button.
+         */
         "textSize": 'sm' | 'md' | 'lg';
+        /**
+          * Visual variant of the button: either standard (`default`) or icon-only (`icon`).
+         */
         "variant": 'default' | 'icon';
+        /**
+          * If true, applies a visible background when hovered.
+         */
         "visibleBackgroundOnHover": boolean;
     }
     interface IrChannel {
@@ -390,24 +446,66 @@ export namespace Components {
     interface IrChannelMapping {
     }
     interface IrCheckbox {
+        /**
+          * The unique ID of the checkbox element.
+         */
         "checkboxId": string;
+        /**
+          * Whether the checkbox is checked.
+         */
         "checked": boolean;
+        /**
+          * Disables the checkbox when true.
+         */
         "disabled": boolean;
+        /**
+          * Whether the checkbox is in an indeterminate state.
+         */
         "indeterminate": boolean;
+        /**
+          * The label text associated with the checkbox.
+         */
         "label": string;
+        /**
+          * CSS class applied to the label element.
+         */
         "labelClass": string;
+        /**
+          * The name attribute of the checkbox, used for form submission.
+         */
         "name": string;
     }
     interface IrCheckboxes {
         "checkboxes": checkboxes[];
     }
     interface IrCombobox {
+        /**
+          * Autofocuses the input field when true.
+         */
         "autoFocus": boolean;
+        /**
+          * The list of items displayed in the combobox.
+         */
         "data": ComboboxItem[];
+        /**
+          * Disables the combobox input when set to true.
+         */
         "disabled": boolean;
+        /**
+          * Debounce duration in milliseconds for search input.
+         */
         "duration": number;
+        /**
+          * Unique identifier for the input element.
+         */
         "input_id": string;
+        /**
+          * Placeholder text for the input field.
+         */
         "placeholder": string;
+        /**
+          * The current value of the input field.
+         */
         "value": string;
     }
     interface IrCommon {
@@ -3872,29 +3970,85 @@ declare namespace LocalJSX {
         "token"?: string;
     }
     interface IrButton {
+        /**
+          * Custom inline styles for the button element.
+         */
         "btnStyle"?: { [key: string]: string };
+        /**
+          * Whether the button should expand to the full width of its container.
+         */
         "btn_block"?: boolean;
+        /**
+          * The color theme of the button.
+         */
         "btn_color"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'outline' | 'link';
+        /**
+          * Disables the button when set to true.
+         */
         "btn_disabled"?: boolean;
+        /**
+          * A unique identifier for the button instance.
+         */
         "btn_id"?: string;
+        /**
+          * Additional custom class names for the button.
+         */
         "btn_styles"?: string;
+        /**
+          * The button type attribute (`button`, `submit`, or `reset`).
+         */
         "btn_type"?: string;
-        "icon"?: string;
+        /**
+          * Position of the icon relative to the button text.
+         */
         "iconPosition"?: 'left' | 'right';
+        /**
+          * The name of the icon to display.
+         */
         "icon_name"?: TIcons;
+        /**
+          * Custom style object for the icon.
+         */
         "icon_style"?: any;
+        /**
+          * Displays a loading indicator when true and disables the button.
+         */
         "isLoading"?: boolean;
+        /**
+          * Custom inline styles for the label/text inside the button.
+         */
         "labelStyle"?: { [key: string]: string };
+        /**
+          * The name of the button, used for identification purposes.
+         */
         "name"?: string;
+        /**
+          * Emits a custom click event when the button is clicked.
+         */
         "onClickHandler"?: (event: IrButtonCustomEvent<any>) => void;
         /**
-          * If true, will render `content` as HTML
+          * If true, renders the text property as raw HTML inside the button.
          */
         "renderContentAsHtml"?: boolean;
+        /**
+          * The size of the button.
+         */
         "size"?: 'sm' | 'md' | 'lg';
+        /**
+          * The text content displayed inside the button.
+         */
         "text"?: string;
+        /**
+          * The size of the text inside the button.
+         */
         "textSize"?: 'sm' | 'md' | 'lg';
+        /**
+          * Visual variant of the button: either standard (`default`) or icon-only (`icon`).
+         */
         "variant"?: 'default' | 'icon';
+        /**
+          * If true, applies a visible background when hovered.
+         */
         "visibleBackgroundOnHover"?: boolean;
     }
     interface IrChannel {
@@ -3922,13 +4076,37 @@ declare namespace LocalJSX {
     interface IrChannelMapping {
     }
     interface IrCheckbox {
+        /**
+          * The unique ID of the checkbox element.
+         */
         "checkboxId"?: string;
+        /**
+          * Whether the checkbox is checked.
+         */
         "checked"?: boolean;
+        /**
+          * Disables the checkbox when true.
+         */
         "disabled"?: boolean;
+        /**
+          * Whether the checkbox is in an indeterminate state.
+         */
         "indeterminate"?: boolean;
+        /**
+          * The label text associated with the checkbox.
+         */
         "label"?: string;
+        /**
+          * CSS class applied to the label element.
+         */
         "labelClass"?: string;
+        /**
+          * The name attribute of the checkbox, used for form submission.
+         */
         "name"?: string;
+        /**
+          * Emitted when the checkbox's checked state changes.
+         */
         "onCheckChange"?: (event: IrCheckboxCustomEvent<boolean>) => void;
     }
     interface IrCheckboxes {
@@ -3936,15 +4114,45 @@ declare namespace LocalJSX {
         "onCheckboxesChange"?: (event: IrCheckboxesCustomEvent<checkboxes[]>) => void;
     }
     interface IrCombobox {
+        /**
+          * Autofocuses the input field when true.
+         */
         "autoFocus"?: boolean;
+        /**
+          * The list of items displayed in the combobox.
+         */
         "data"?: ComboboxItem[];
+        /**
+          * Disables the combobox input when set to true.
+         */
         "disabled"?: boolean;
+        /**
+          * Debounce duration in milliseconds for search input.
+         */
         "duration"?: number;
+        /**
+          * Unique identifier for the input element.
+         */
         "input_id"?: string;
+        /**
+          * Emitted when a selection is made from the combobox.
+         */
         "onComboboxValueChange"?: (event: IrComboboxCustomEvent<{ key: string; data: unknown }>) => void;
+        /**
+          * Emitted when the input is cleared by the user.
+         */
         "onInputCleared"?: (event: IrComboboxCustomEvent<null>) => void;
+        /**
+          * Emits a toast notification.
+         */
         "onToast"?: (event: IrComboboxCustomEvent<IToast>) => void;
+        /**
+          * Placeholder text for the input field.
+         */
         "placeholder"?: string;
+        /**
+          * The current value of the input field.
+         */
         "value"?: string;
     }
     interface IrCommon {

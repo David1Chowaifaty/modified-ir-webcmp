@@ -252,7 +252,6 @@ export class IrExtraServiceConfig {
             onClick={() => this.closeModal.emit(null)}
             btn_styles="justify-content-center"
             class={`flex-fill`}
-            icon=""
             text={locales.entries.Lcz_Cancel}
             btn_color="secondary"
           ></ir-button>
@@ -260,7 +259,6 @@ export class IrExtraServiceConfig {
           <ir-button
             btn_styles="justify-content-center align-items-center"
             class={'flex-fill'}
-            icon=""
             btn_type="submit"
             isLoading={isRequestPending('/Do_Booking_Extra_Service')}
             text={locales.entries.Lcz_Save}

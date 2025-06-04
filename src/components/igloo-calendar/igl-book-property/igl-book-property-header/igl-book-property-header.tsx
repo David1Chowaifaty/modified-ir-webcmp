@@ -166,7 +166,6 @@ export class IglBookPropertyHeader {
           <ir-button
             btn_id="check_availability"
             isLoading={isRequestPending('/Check_Availability')}
-            icon=""
             size="sm"
             class="ml-2"
             text={locales.entries.Lcz_Check}

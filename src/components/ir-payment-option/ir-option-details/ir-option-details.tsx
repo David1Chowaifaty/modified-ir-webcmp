@@ -218,7 +218,6 @@ export class IrOptionDetails {
               onClick={() => this.closeModal.emit(null)}
               btn_styles="justify-content-center"
               class={`flex-fill`}
-              icon=""
               text={locales.entries.Lcz_Cancel}
               btn_color="secondary"
               btn_type="button"
@@ -228,7 +227,6 @@ export class IrOptionDetails {
               btn_type="submit"
               btn_styles="justify-content-center align-items-center"
               class={'flex-fill'}
-              icon=""
               isLoading={isRequestPending('/Handle_Payment_Method')}
               text={locales.entries.Lcz_Save}
               btn_color="primary"

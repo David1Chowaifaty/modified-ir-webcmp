@@ -170,18 +170,10 @@ export class IrListingModal {
             </div>
 
             <div class={`ir-alert-footer border-0 d-flex justify-content-end`}>
-              <ir-button
-                isLoading={this.loadingBtn === 'just_delete'}
-                icon={''}
-                btn_color={'secondary'}
-                btn_block
-                text={this.renderCancellationTitle()}
-                name={'cancel'}
-              ></ir-button>
+              <ir-button isLoading={this.loadingBtn === 'just_delete'} btn_color={'secondary'} btn_block text={this.renderCancellationTitle()} name={'cancel'}></ir-button>
               <ir-button
                 isLoading={this.loadingBtn === 'confirm'}
                 // isLoading={this.loadingBtn === 'recover_and_delete'}
-                icon={''}
                 btn_color={'primary'}
                 btn_block
                 text={this.renderConfirmationTitle()}

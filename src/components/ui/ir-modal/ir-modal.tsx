@@ -99,12 +99,9 @@ export class IrModal {
           </div>
 
           <div class={`ir-alert-footer border-0  d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
-            {this.leftBtnActive && (
-              <ir-button btn_disabled={this.isLoading} icon={''} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>
-            )}
+            {this.leftBtnActive && <ir-button btn_disabled={this.isLoading} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>}
             {this.rightBtnActive && (
               <ir-button
-                icon={''}
                 btn_color={this.rightBtnColor}
                 btn_disabled={this.isLoading}
                 isLoading={this.isLoading}
