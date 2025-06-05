@@ -28,6 +28,7 @@ export class IrResetPassword {
   @State() error: { password?: boolean; confirm_password?: boolean } = {};
   @State() submitted: boolean = false;
   @State() isLoading = false;
+  @State() isFetching = false;
 
   @Event() closeSideBar: EventEmitter<null>;
 
@@ -59,12 +60,14 @@ export class IrResetPassword {
     if (!this.ticket || this.initialized) {
       return;
     }
-    await Promise.all([
+    const [localized_words] = await Promise.all([
+      this.roomService.fetchLanguage(this.language, ['_USER_MGT']),
       this.systemService.checkOTPNecessity({
         METHOD_NAME: 'Change_User_Pwd',
       }),
-      this.roomService.fetchLanguage(this.language, ['_USER_MGT']),
     ]);
+    locales.entries = localized_words.entries;
+    locales.direction = localized_words.direction;
     this.initialized = false;
   }
 
@@ -136,6 +139,9 @@ export class IrResetPassword {
   }
   render() {
     const insideSidebar = this.el.slot === 'sidebar-body';
+    if (!locales.entries && !insideSidebar) {
+      return <ir-loading-screen></ir-loading-screen>;
+    }
     return (
       <div class={{ 'base-host': !insideSidebar, 'h-100': insideSidebar }}>
         {!insideSidebar && (
@@ -154,7 +160,7 @@ export class IrResetPassword {
               />
             </svg>
             <div class="text-center mb-2">
-              <h4 class="mb-1">{locales.entries.Lcz_SetNewPassword}</h4>
+              <h4 class="mb-1">{locales?.entries?.Lcz_SetNewPassword}</h4>
               {this.submitted ? (
                 <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>
               ) : (
