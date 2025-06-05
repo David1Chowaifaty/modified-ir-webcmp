@@ -9,7 +9,7 @@ import { ICountry, IEntries } from '@/models/IBooking';
 import { ZodError } from 'zod';
 @Component({
   tag: 'ir-room-guests',
-  styleUrl: 'ir-room-guests.css',
+  styleUrls: ['ir-room-guests.css', '../../../common/sheet.css'],
   scoped: true,
 })
 export class IrRoomGuests {
@@ -168,9 +168,16 @@ export class IrRoomGuests {
       );
     }
     return (
-      <div class="h-100 d-flex flex-column" style={{ minWidth: '300px' }}>
-        <ir-title class="px-1" onCloseSideBar={() => this.closeModal.emit(null)} label={`Room ${this.roomName}`} displayContext="sidebar"></ir-title>
-        <section class={'d-flex flex-column px-1 h-100 '}>
+      <form
+        class="sheet-container"
+        style={{ minWidth: '300px' }}
+        onSubmit={e => {
+          e.preventDefault();
+          this.saveGuests();
+        }}
+      >
+        <ir-title class="px-1 sheet-header" onCloseSideBar={() => this.closeModal.emit(null)} label={`Room ${this.roomName}`} displayContext="sidebar"></ir-title>
+        <section class={'sheet-body px-1'}>
           <div class="">
             <div class="guest-grid guests-labels">
               <p class="">{locales.entries.Lcz_MainGuest}</p>
@@ -303,26 +310,18 @@ export class IrRoomGuests {
               </Fragment>
             ))}
           </div>
-          <div class={'d-flex flex-column flex-sm-row mt-3 action-buttons '}>
-            <ir-button
-              onClick={() => this.closeModal.emit(null)}
-              btn_styles="justify-content-center"
-              class={`mb-1 mb-sm-0 flex-fill mr-sm-1`}
-              text={locales.entries.Lcz_Cancel}
-              btn_color="secondary"
-            ></ir-button>
-
-            <ir-button
-              btn_styles="justify-content-center align-items-center"
-              class={'m-0 flex-fill text-center'}
-              isLoading={isRequestPending('/Handle_Exposed_Room_Guests')}
-              text={this.checkIn ? locales.entries.Lcz_CheckIn : locales.entries.Lcz_Save}
-              btn_color="primary"
-              onClickHandler={this.saveGuests.bind(this)}
-            ></ir-button>
-          </div>
         </section>
-      </div>
+        <div class={'sheet-footer'}>
+          <ir-button onClick={() => this.closeModal.emit(null)} class={`flex-fill`} text={locales.entries.Lcz_Cancel} btn_color="secondary"></ir-button>
+          <ir-button
+            btn_type="submit"
+            class={'flex-fill'}
+            isLoading={isRequestPending('/Handle_Exposed_Room_Guests')}
+            text={this.checkIn ? locales.entries.Lcz_CheckIn : locales.entries.Lcz_Save}
+            btn_color="primary"
+          ></ir-button>
+        </div>
+      </form>
     );
   }
 }
