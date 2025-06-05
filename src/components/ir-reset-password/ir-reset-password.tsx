@@ -139,121 +139,117 @@ export class IrResetPassword {
   }
   render() {
     const insideSidebar = this.el.slot === 'sidebar-body';
-    if (!locales.entries && !insideSidebar) {
-      return (
-        <Host>
-          <ir-loading-screen></ir-loading-screen>
-          <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd']}></ir-interceptor>
-          <ir-toast></ir-toast>
-        </Host>
-      );
-    }
+    // if (!locales.entries && !insideSidebar) {
+    //   return <ir-loading-screen></ir-loading-screen>;
+    // }
     return (
       <div class={{ 'base-host': !insideSidebar, 'h-100': insideSidebar }}>
-        {!insideSidebar && (
-          <Fragment>
-            <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd']}></ir-interceptor>
-            <ir-toast></ir-toast>
-          </Fragment>
-        )}
-        <form onSubmit={this.handleChangePassword.bind(this)} class={{ 'sheet-container': insideSidebar }}>
-          {insideSidebar && <ir-title class="px-1 sheet-header" displayContext="sidebar" label={'Change Password'}></ir-title>}
-          <div class={{ 'form-container': true, 'sheet-body px-1': insideSidebar, 'px-2': !insideSidebar }}>
-            <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={24} width={24}>
-              <path
-                fill="currentColor"
-                d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"
-              />
-            </svg>
-            <div class="text-center mb-2">
-              <h4 class="mb-1">{locales?.entries?.Lcz_SetNewPassword}</h4>
-              {this.submitted ? (
-                <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>
-              ) : (
-                <p>Your new password must be different to previously used password</p>
-              )}
-            </div>
-            {!this.submitted && (
-              <section>
-                <div class={'mb-2'}>
-                  <div class="m-0 p-0">
+        <Fragment>
+          {!insideSidebar && (
+            <Fragment>
+              <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd']}></ir-interceptor>
+              <ir-toast></ir-toast>
+            </Fragment>
+          )}
+          <form onSubmit={this.handleChangePassword.bind(this)} class={{ 'sheet-container': insideSidebar }}>
+            {insideSidebar && <ir-title class="px-1 sheet-header" displayContext="sidebar" label={'Change Password'}></ir-title>}
+            <div class={{ 'form-container': true, 'sheet-body px-1': insideSidebar, 'px-2': !insideSidebar }}>
+              <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height={24} width={24}>
+                <path
+                  fill="currentColor"
+                  d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"
+                />
+              </svg>
+              <div class="text-center mb-2">
+                <h4 class="mb-1">{locales?.entries?.Lcz_SetNewPassword}</h4>
+                {this.submitted ? (
+                  <p>An email has been sent to your address. Please check your inbox to confirm the password change.</p>
+                ) : (
+                  <p>Your new password must be different to previously used password</p>
+                )}
+              </div>
+              {!this.submitted && (
+                <section>
+                  <div class={'mb-2'}>
+                    <div class="m-0 p-0">
+                      <div class={'position-relative'}>
+                        <ir-input-text
+                          error={this.error?.password}
+                          autoValidate={this.autoValidate}
+                          value={this.password}
+                          onTextChange={e => (this.password = e.detail)}
+                          label=""
+                          class="m-0 p-0"
+                          inputStyles={'m-0'}
+                          zod={this.ResetPasswordSchema.pick({ password: true })}
+                          wrapKey="password"
+                          placeholder={locales.entries?.Lcz_NewPassword}
+                          onInputFocus={() => (this.showValidator = true)}
+                          type={'password'}
+                        ></ir-input-text>
+                      </div>
+                      {this.showValidator && <ir-password-validator class="mb-1" password={this.password}></ir-password-validator>}
+                    </div>
                     <div class={'position-relative'}>
                       <ir-input-text
-                        error={this.error?.password}
+                        error={this.error?.confirm_password}
                         autoValidate={this.autoValidate}
-                        value={this.password}
-                        onTextChange={e => (this.password = e.detail)}
+                        zod={this.ResetPasswordSchema.pick({ confirm_password: true })}
+                        wrapKey="confirm_password"
+                        value={this.confirmPassword}
+                        onTextChange={e => (this.confirmPassword = e.detail)}
                         label=""
-                        class="m-0 p-0"
-                        inputStyles={'m-0'}
-                        zod={this.ResetPasswordSchema.pick({ password: true })}
-                        wrapKey="password"
-                        placeholder={locales.entries.Lcz_NewPassword}
-                        onInputFocus={() => (this.showValidator = true)}
+                        placeholder={locales.entries?.Lcz_ConfirmPassword}
                         type={'password'}
                       ></ir-input-text>
                     </div>
-                    {this.showValidator && <ir-password-validator class="mb-1" password={this.password}></ir-password-validator>}
                   </div>
-                  <div class={'position-relative'}>
-                    <ir-input-text
-                      error={this.error?.confirm_password}
-                      autoValidate={this.autoValidate}
-                      zod={this.ResetPasswordSchema.pick({ confirm_password: true })}
-                      wrapKey="confirm_password"
-                      value={this.confirmPassword}
-                      onTextChange={e => (this.confirmPassword = e.detail)}
-                      label=""
-                      placeholder={locales.entries.Lcz_ConfirmPassword}
-                      type={'password'}
-                    ></ir-input-text>
-                  </div>
-                </div>
 
-                {!insideSidebar && (
-                  <div class="d-flex flex-column mt-2 flex-sm-row align-items-sm-center" style={{ gap: '0.5rem' }}>
-                    <ir-button
-                      btn_styles={'flex-fill'}
-                      onClickHandler={() => window.history.back()}
-                      class="flex-fill"
-                      text={locales.entries.Lcz_Cancel}
-                      size="md"
-                      btn_color="secondary"
-                    ></ir-button>
-                    <ir-button
-                      btn_styles={'flex-fill'}
-                      class="flex-fill"
-                      isLoading={this.isLoading}
-                      btn_type="submit"
-                      text={locales.entries.Lcz_ChangePassword}
-                      size="md"
-                    ></ir-button>
-                  </div>
-                )}
-              </section>
-            )}
-          </div>
-          {insideSidebar && (
-            <div class={'sheet-footer w-full'}>
-              <ir-button
-                text={locales.entries.Lcz_Cancel}
-                onClickHandler={() => this.closeSideBar.emit(null)}
-                class="flex-fill"
-                btn_color="secondary"
-                btn_styles="w-100 justify-content-center align-items-center"
-                size="md"
-              ></ir-button>
-              <ir-button
-                isLoading={this.isLoading}
-                class="flex-fill"
-                btn_type="submit"
-                btn_styles="w-100 justify-content-center align-items-center"
-                text={locales.entries.Lcz_ChangePassword}
-                size="md"
-              ></ir-button>
+                  {!insideSidebar && (
+                    <div class="d-flex flex-column mt-2 flex-sm-row align-items-sm-center" style={{ gap: '0.5rem' }}>
+                      <ir-button
+                        btn_styles={'flex-fill'}
+                        onClickHandler={() => window.history.back()}
+                        class="flex-fill"
+                        text={locales.entries?.Lcz_Cancel}
+                        size="md"
+                        btn_color="secondary"
+                      ></ir-button>
+                      <ir-button
+                        btn_styles={'flex-fill'}
+                        class="flex-fill"
+                        isLoading={this.isLoading}
+                        btn_type="submit"
+                        text={locales.entries?.Lcz_ChangePassword}
+                        size="md"
+                      ></ir-button>
+                    </div>
+                  )}
+                </section>
+              )}
             </div>
-          )}
-        </form>
+            {insideSidebar && (
+              <div class={'sheet-footer w-full'}>
+                <ir-button
+                  text={locales.entries.Lcz_Cancel}
+                  onClickHandler={() => this.closeSideBar.emit(null)}
+                  class="flex-fill"
+                  btn_color="secondary"
+                  btn_styles="w-100 justify-content-center align-items-center"
+                  size="md"
+                ></ir-button>
+                <ir-button
+                  isLoading={this.isLoading}
+                  class="flex-fill"
+                  btn_type="submit"
+                  btn_styles="w-100 justify-content-center align-items-center"
+                  text={locales.entries.Lcz_ChangePassword}
+                  size="md"
+                ></ir-button>
+              </div>
+            )}
+          </form>
+        </Fragment>
       </div>
     );
   }
