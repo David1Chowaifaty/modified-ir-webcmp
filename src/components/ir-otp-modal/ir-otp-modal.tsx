@@ -197,7 +197,7 @@ export class IrOtpModal {
       <Host>
         <dialog ref={el => (this.dialogRef = el)} class="otp-modal" aria-modal="true">
           <form method="dialog" class="otp-modal-content">
-            {this.isInitializing ? (
+            {this.isInitializing || !locales.entries ? (
               <div class={'d-flex align-items-center justify-content-center modal-loading-container'}>
                 <ir-spinner></ir-spinner>
               </div>
