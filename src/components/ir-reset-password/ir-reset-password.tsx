@@ -4,7 +4,7 @@ import { RoomService } from '@/services/room.service';
 import { SystemService } from '@/services/system.service';
 import locales from '@/stores/locales.store';
 import { CONSTANTS } from '@/utils/constants';
-import { Component, Element, Event, EventEmitter, Fragment, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { z, ZodError } from 'zod';
 
 @Component({
@@ -140,7 +140,13 @@ export class IrResetPassword {
   render() {
     const insideSidebar = this.el.slot === 'sidebar-body';
     if (!locales.entries && !insideSidebar) {
-      return <ir-loading-screen></ir-loading-screen>;
+      return (
+        <Host>
+          <ir-loading-screen></ir-loading-screen>
+          <ir-interceptor suppressToastEndpoints={['/Change_User_Pwd']}></ir-interceptor>
+          <ir-toast></ir-toast>
+        </Host>
+      );
     }
     return (
       <div class={{ 'base-host': !insideSidebar, 'h-100': insideSidebar }}>
