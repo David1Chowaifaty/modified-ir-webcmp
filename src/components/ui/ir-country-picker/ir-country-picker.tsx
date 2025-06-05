@@ -7,19 +7,64 @@ import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from 
   scoped: true,
 })
 export class IrCountryPicker {
+  /**
+   * List of countries to display in the dropdown.
+   */
   @Prop() countries: ICountry[] = [];
+
+  /**
+   * Currently selected country.
+   */
   @Prop() country: ICountry;
+
+  /**
+   * Whether to show an error state on the input.
+   */
   @Prop({ mutable: true }) error: boolean;
+
+  /**
+   * The property-associated country, shown separately if relevant.
+   */
   @Prop() propertyCountry: ICountry;
+
+  /**
+   * The label to display for the input.
+   */
   @Prop() label: string;
+
+  /**
+   * Test ID for automated testing.
+   */
   @Prop() testId: string;
+
+  /**
+   * Whether to automatically validate the input.
+   */
   @Prop() autoValidate: boolean = false;
 
+  /**
+   * The current input value typed by the user.
+   */
   @State() inputValue: string;
+
+  /**
+   * The currently selected country object.
+   */
   @State() selectedCountry: ICountry;
+
+  /**
+   * Filtered list of countries based on the user's input.
+   */
   @State() filteredCountries: ICountry[] = [];
+
+  /**
+   * Whether the input is currently being used for searching.
+   */
   @State() searching: boolean = false;
 
+  /**
+   * Event emitted when a country is selected.
+   */
   @Event() countryChange: EventEmitter<ICountry>;
 
   private debounceTimeout: NodeJS.Timeout;
@@ -39,7 +84,9 @@ export class IrCountryPicker {
       this.selectedCountry = newCountry;
     }
   }
-
+  /**
+   * Filters the list of countries based on the current input.
+   */
   private filterCountries() {
     if (this.inputValue === '' && this.country) {
       this.selectCountry(null);
@@ -53,13 +100,18 @@ export class IrCountryPicker {
       }
     }, 300);
   }
-
+  /**
+   * Selects a country and emits the change event.
+   */
   private selectCountry(c: ICountry | null) {
     this.selectedCountry = c;
     this.inputValue = c?.name;
     this.filteredCountries = [...this.countries];
     this.countryChange.emit(c);
   }
+  /**
+   * Scrolls to the selected country in the dropdown for accessibility.
+   */
   private scrollToSelected() {
     setTimeout(() => {
       const dropdownItem = document.querySelector(`.dropdown-item.active`);

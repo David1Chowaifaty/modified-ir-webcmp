@@ -2,7 +2,13 @@ import { DayData } from '@/models/DayType';
 import { createStore } from '@stencil/store';
 export interface ICalendarDates {
   days: DayData[];
-  disabled_cells: Map<string, boolean>;
+  disabled_cells: Map<
+    string,
+    {
+      disabled: boolean;
+      reason: 'inventory' | 'stop_sale';
+    }
+  >;
   months: { daysCount: number; monthName: string }[];
   fromDate: string;
   toDate: string;

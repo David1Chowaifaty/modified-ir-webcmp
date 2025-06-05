@@ -732,7 +732,7 @@ export class IglooCalendar {
         // overall room availability = true if any rateplan is bookable
         is_available_to_book,
       };
-      disabled_cells.set(days[dayIdx].value, is_available_to_book);
+      disabled_cells.set(days[dayIdx].value, { disabled: is_available_to_book, reason: 'stop_sale' });
     }
 
     // 6) write back to the store

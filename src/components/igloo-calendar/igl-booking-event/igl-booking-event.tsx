@@ -194,8 +194,8 @@ export class IglBookingEvent {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
           const previousToDate = moment(to_date, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD');
           if (
-            (calendar_dates.disabled_cells.get(`${toRoomId}_${from_date}`) ||
-              (calendar_dates.disabled_cells.get(`${toRoomId}_${to_date}`) && calendar_dates.disabled_cells.get(`${toRoomId}_${previousToDate}`))) &&
+            (calendar_dates.disabled_cells.get(`${toRoomId}_${from_date}`)?.disabled ||
+              (calendar_dates.disabled_cells.get(`${toRoomId}_${to_date}`)?.disabled && calendar_dates.disabled_cells.get(`${toRoomId}_${previousToDate}`)?.disabled)) &&
             !this.isStretch
           ) {
             this.reset('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
@@ -293,7 +293,7 @@ export class IglBookingEvent {
                   let cursor = base_date;
                   let counter = 0;
                   while (cursor !== to_date) {
-                    if (calendar_dates.disabled_cells.get(`${toRoomId}_${cursor}`)) {
+                    if (calendar_dates.disabled_cells.get(`${toRoomId}_${cursor}`)?.disabled) {
                       counter++;
                     }
                     cursor = moment(cursor, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');

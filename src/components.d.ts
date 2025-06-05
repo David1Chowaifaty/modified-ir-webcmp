@@ -512,12 +512,33 @@ export namespace Components {
         "extraResources": string;
     }
     interface IrCountryPicker {
+        /**
+          * Whether to automatically validate the input.
+         */
         "autoValidate": boolean;
+        /**
+          * List of countries to display in the dropdown.
+         */
         "countries": ICountry[];
+        /**
+          * Currently selected country.
+         */
         "country": ICountry;
+        /**
+          * Whether to show an error state on the input.
+         */
         "error": boolean;
+        /**
+          * The label to display for the input.
+         */
         "label": string;
+        /**
+          * The property-associated country, shown separately if relevant.
+         */
         "propertyCountry": ICountry;
+        /**
+          * Test ID for automated testing.
+         */
         "testId": string;
     }
     interface IrDatePicker {
@@ -1145,6 +1166,36 @@ export namespace Components {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrRadio {
+        /**
+          * Whether the checkbox is checked.
+         */
+        "checked": boolean;
+        /**
+          * Disables the checkbox when true.
+         */
+        "disabled": boolean;
+        /**
+          * Whether the checkbox is in an indeterminate state.
+         */
+        "indeterminate": boolean;
+        /**
+          * The label text associated with the checkbox.
+         */
+        "label": string;
+        /**
+          * CSS class applied to the label element.
+         */
+        "labelClass": string;
+        /**
+          * The name attribute of the checkbox, used for form submission.
+         */
+        "name": string;
+        /**
+          * The unique ID of the checkbox element.
+         */
+        "radioBoxId": string;
+    }
     interface IrRangePicker {
         /**
           * Whether to all the emitted dates to be null.
@@ -1699,6 +1750,10 @@ export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
 export interface IrPriceInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPriceInputElement;
+}
+export interface IrRadioCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrRadioElement;
 }
 export interface IrRangePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3086,6 +3141,23 @@ declare global {
         prototype: HTMLIrPriceInputElement;
         new (): HTMLIrPriceInputElement;
     };
+    interface HTMLIrRadioElementEventMap {
+        "checkChange": boolean;
+    }
+    interface HTMLIrRadioElement extends Components.IrRadio, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrRadioElementEventMap>(type: K, listener: (this: HTMLIrRadioElement, ev: IrRadioCustomEvent<HTMLIrRadioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrRadioElementEventMap>(type: K, listener: (this: HTMLIrRadioElement, ev: IrRadioCustomEvent<HTMLIrRadioElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrRadioElement: {
+        prototype: HTMLIrRadioElement;
+        new (): HTMLIrRadioElement;
+    };
     interface HTMLIrRangePickerElementEventMap {
         "dateRangeChanged": { fromDate: Moment; toDate: Moment };
     }
@@ -3571,6 +3643,7 @@ declare global {
         "ir-pms-logs": HTMLIrPmsLogsElement;
         "ir-popover": HTMLIrPopoverElement;
         "ir-price-input": HTMLIrPriceInputElement;
+        "ir-radio": HTMLIrRadioElement;
         "ir-range-picker": HTMLIrRangePickerElement;
         "ir-reservation-information": HTMLIrReservationInformationElement;
         "ir-reset-password": HTMLIrResetPasswordElement;
@@ -4159,13 +4232,37 @@ declare namespace LocalJSX {
         "extraResources"?: string;
     }
     interface IrCountryPicker {
+        /**
+          * Whether to automatically validate the input.
+         */
         "autoValidate"?: boolean;
+        /**
+          * List of countries to display in the dropdown.
+         */
         "countries"?: ICountry[];
+        /**
+          * Currently selected country.
+         */
         "country"?: ICountry;
+        /**
+          * Whether to show an error state on the input.
+         */
         "error"?: boolean;
+        /**
+          * The label to display for the input.
+         */
         "label"?: string;
+        /**
+          * Event emitted when a country is selected.
+         */
         "onCountryChange"?: (event: IrCountryPickerCustomEvent<ICountry>) => void;
+        /**
+          * The property-associated country, shown separately if relevant.
+         */
         "propertyCountry"?: ICountry;
+        /**
+          * Test ID for automated testing.
+         */
         "testId"?: string;
     }
     interface IrDatePicker {
@@ -4859,6 +4956,40 @@ declare namespace LocalJSX {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrRadio {
+        /**
+          * Whether the checkbox is checked.
+         */
+        "checked"?: boolean;
+        /**
+          * Disables the checkbox when true.
+         */
+        "disabled"?: boolean;
+        /**
+          * Whether the checkbox is in an indeterminate state.
+         */
+        "indeterminate"?: boolean;
+        /**
+          * The label text associated with the checkbox.
+         */
+        "label"?: string;
+        /**
+          * CSS class applied to the label element.
+         */
+        "labelClass"?: string;
+        /**
+          * The name attribute of the checkbox, used for form submission.
+         */
+        "name"?: string;
+        /**
+          * Emitted when the checkbox's checked state changes.
+         */
+        "onCheckChange"?: (event: IrRadioCustomEvent<boolean>) => void;
+        /**
+          * The unique ID of the checkbox element.
+         */
+        "radioBoxId"?: string;
+    }
     interface IrRangePicker {
         /**
           * Whether to all the emitted dates to be null.
@@ -5274,6 +5405,7 @@ declare namespace LocalJSX {
         "ir-pms-logs": IrPmsLogs;
         "ir-popover": IrPopover;
         "ir-price-input": IrPriceInput;
+        "ir-radio": IrRadio;
         "ir-range-picker": IrRangePicker;
         "ir-reservation-information": IrReservationInformation;
         "ir-reset-password": IrResetPassword;
@@ -5395,6 +5527,7 @@ declare module "@stencil/core" {
             "ir-pms-logs": LocalJSX.IrPmsLogs & JSXBase.HTMLAttributes<HTMLIrPmsLogsElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
+            "ir-radio": LocalJSX.IrRadio & JSXBase.HTMLAttributes<HTMLIrRadioElement>;
             "ir-range-picker": LocalJSX.IrRangePicker & JSXBase.HTMLAttributes<HTMLIrRangePickerElement>;
             "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;
             "ir-reset-password": LocalJSX.IrResetPassword & JSXBase.HTMLAttributes<HTMLIrResetPasswordElement>;
