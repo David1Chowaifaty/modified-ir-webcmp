@@ -614,27 +614,93 @@ export namespace Components {
         "triggerContainerStyle": string;
     }
     interface IrDateRange {
+        /**
+          * Text shown on the Apply button.
+         */
         "applyLabel": string;
+        /**
+          * Whether to apply the selected range automatically without clicking 'Apply'.
+         */
         "autoApply": boolean;
+        /**
+          * Text shown on the Cancel button.
+         */
         "cancelLabel": string;
+        /**
+          * Label used for the custom date range option.
+         */
         "customRangeLabel": string;
+        /**
+          * Single date selection value (used in single date picker mode).
+         */
         "date": Date;
+        /**
+          * Abbreviated names of the days of the week.
+         */
         "daysOfWeek": string[];
+        /**
+          * Disables the date range input when true.
+         */
         "disabled": boolean;
+        /**
+          * First day of the week (0 = Sunday, 1 = Monday, ...).
+         */
         "firstDay": number;
+        /**
+          * Date format used in the input and picker.
+         */
         "format": string;
+        /**
+          * Start date for the date range.
+         */
         "fromDate": Date;
+        /**
+          * Label for the "From" date input.
+         */
         "fromLabel": string;
+        /**
+          * Maximum selectable date.
+         */
         "maxDate": string | Date;
+        /**
+          * Maximum range span (e.g., `{ days: 240 }`).
+         */
         "maxSpan": moment.DurationInputArg1;
+        /**
+          * Minimum selectable date.
+         */
         "minDate": string | Date;
+        /**
+          * Month names shown in the calendar header.
+         */
         "monthNames": string[];
+        /**
+          * Opens the date picker programmatically.  Example: ```ts const el = document.querySelector('ir-date-range'); await el.openDatePicker(); ```
+         */
         "openDatePicker": () => Promise<void>;
+        /**
+          * Defines which side the calendar opens to. Options: `'left'`, `'right'`, `'center'`.
+         */
         "opens": 'left' | 'right' | 'center';
+        /**
+          * Separator string used between start and end dates.
+         */
         "separator": string;
+        /**
+          * Enables single date selection mode.
+         */
         "singleDatePicker": boolean;
+        /**
+          * End date for the date range.
+         */
         "toDate": Date;
+        /**
+          * Label for the "To" date input.
+         */
         "toLabel": string;
+        /**
+          * Label for the week column in the calendar.
+         */
         "weekLabel": string;
     }
     interface IrDateView {
@@ -1073,16 +1139,49 @@ export namespace Components {
         "ticket": string;
     }
     interface IrPhoneInput {
+        /**
+          * Country list, used to populate prefix and dropdown. If not provided, fetched from the booking service.
+         */
         "countries": ICountry[];
+        /**
+          * Default country ID used if no phone prefix is set.
+         */
         "default_country": number;
+        /**
+          * Disables the phone input when true.
+         */
         "disabled": boolean;
+        /**
+          * If true, styles the input to indicate an error state.
+         */
         "error": boolean;
+        /**
+          * Label displayed next to the phone input.
+         */
         "label": string;
+        /**
+          * Two-letter language code used for country fetching.
+         */
         "language": string;
+        /**
+          * If provided, sets the phone prefix and updates selected country.
+         */
         "phone_prefix": string | null;
+        /**
+          * Placeholder text for the input.
+         */
         "placeholder": string;
+        /**
+          * Identifier for test automation.
+         */
         "testId": string;
+        /**
+          * Auth token used by the booking service (if needed).
+         */
         "token": string;
+        /**
+          * Initial phone number value.
+         */
         "value": string;
     }
     interface IrPickup {
@@ -1098,10 +1197,25 @@ export namespace Components {
         "bookingNumber": string;
     }
     interface IrPopover {
+        /**
+          * Content to display inside the popover. Can be plain text or HTML depending on `renderContentAsHtml`.
+         */
         "content": string;
+        /**
+          * Horizontal offset (left) of the popover from its trigger. Used in inline style as `--ir-popover-left`.
+         */
         "irPopoverLeft": string;
+        /**
+          * Position of the popover relative to the trigger. Options: `'top'`, `'bottom'`, `'left'`, `'right'`, `'auto'`.
+         */
         "placement": 'top' | 'bottom' | 'left' | 'right' | 'auto';
+        /**
+          * Whether to treat `content` as raw HTML. When true, `content` will be injected with `html: true` in jQuery popover.
+         */
         "renderContentAsHtml": boolean;
+        /**
+          * Event that triggers the popover. Options: `'focus'`, `'click'`, `'hover'`.
+         */
         "trigger": 'focus' | 'click' | 'hover';
     }
     interface IrPriceInput {
@@ -1317,9 +1431,6 @@ export namespace Components {
         "LabelAvailable": boolean;
         "data": selectOption[];
         "disabled": boolean;
-        /**
-          * Whether the select has an error
-         */
         "error": boolean;
         "firstOption": string;
         "label": string;
@@ -1343,27 +1454,72 @@ export namespace Components {
         "textSize": 'sm' | 'md' | 'lg';
     }
     interface IrSidebar {
+        /**
+          * Label text displayed in the sidebar header.
+         */
         "label": string;
+        /**
+          * Identifier for the sidebar instance.
+         */
         "name": string;
+        /**
+          * Whether the sidebar is open. Can be used with two-way binding.
+         */
         "open": boolean;
+        /**
+          * Prevents the sidebar from closing when `toggleSidebar()` is called. When true, emits `beforeSidebarClose` instead of toggling.
+         */
         "preventClose": boolean;
+        /**
+          * Whether to show the close (X) button in the sidebar header.
+         */
         "showCloseButton": boolean;
+        /**
+          * Which side of the screen the sidebar appears on. Options: `'left'` or `'right'`.
+         */
         "side": 'right' | 'left';
+        /**
+          * Inline styles applied to the sidebar container.
+         */
         "sidebarStyles": Partial<CSSStyleDeclaration>;
+        /**
+          * Toggles the sidebar's visibility.  - If `preventClose` is true, emits `beforeSidebarClose` and does nothing else. - Otherwise, emits `irSidebarToggle` with the current `open` state.  Example: ```ts const el = document.querySelector('ir-sidebar'); await el.toggleSidebar(); ```
+         */
         "toggleSidebar": () => Promise<void>;
     }
     interface IrSpan {
         "text": any;
     }
     interface IrSpinner {
+        /**
+          * Thickness of the spinner's border. Example: `borderWidth={4}` renders a `4px` or `4rem` thick border.
+         */
         "borderWidth": number;
+        /**
+          * Color of the spinner. Accepts any valid CSS color string.
+         */
         "color": string;
+        /**
+          * Size of the spinner (diameter). Example: `size={2}` with `unit="rem"` sets spinner to `2rem`.
+         */
         "size": number;
+        /**
+          * CSS unit used for `size` and `borderWidth`. Can be `'px'` or `'rem'`.
+         */
         "unit": 'px' | 'rem';
     }
     interface IrSwitch {
+        /**
+          * Whether the switch is currently checked (on). This is mutable and can be toggled internally.
+         */
         "checked": boolean;
+        /**
+          * Disables the switch if true.
+         */
         "disabled": boolean;
+        /**
+          * Optional ID for the switch. If not provided, a random ID will be generated.
+         */
         "switchId": string;
     }
     interface IrTasksFilters {
@@ -1402,17 +1558,53 @@ export namespace Components {
         "value": string;
     }
     interface IrTextarea {
+        /**
+          * Number of visible character columns.
+         */
         "cols": number;
+        /**
+          * Text label displayed above or beside the textarea.
+         */
         "label": string;
+        /**
+          * Width of the label in grid columns (for `variant="prepend"`).
+         */
         "labelWidth": 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+        /**
+          * Maximum number of characters allowed.
+         */
         "maxLength": number;
+        /**
+          * Placeholder text shown when input is empty.
+         */
         "placeholder": string;
+        /**
+          * Number of visible text lines.
+         */
         "rows": number;
+        /**
+          * Inline styles applied directly to the textarea.
+         */
         "styles": { [key: string]: string };
+        /**
+          * `data-testid` for targeting in tests.
+         */
         "testId": string;
+        /**
+          * Unused property, intended to store textarea text.
+         */
         "text": string;
+        /**
+          * Additional classes for the textarea element.
+         */
         "textareaClassname": string;
+        /**
+          * Current value of the textarea (supports two-way binding).
+         */
         "value": string;
+        /**
+          * Layout style of the textarea: `'default'` shows label above, `'prepend'` shows label on the left.
+         */
         "variant": 'default' | 'prepend';
     }
     interface IrTitle {
@@ -1435,12 +1627,27 @@ export namespace Components {
         "label": string;
     }
     interface IrToast {
+        /**
+          * Position where toasts will appear. Options include: `'top-left'`, `'top-right'`, `'bottom-left'`, `'bottom-right'`.
+         */
         "position": TPositions;
     }
     interface IrTooltip {
+        /**
+          * Inline styles applied to the outer tooltip container.
+         */
         "containerStyle": { [key: string]: string };
+        /**
+          * When true, allows a custom element to trigger the tooltip using a named slot. If false, a default info icon is used.
+         */
         "customSlot": boolean;
+        /**
+          * Text or HTML content to be displayed in the tooltip.
+         */
         "message": string;
+        /**
+          * Whether the tooltip content should be rendered using `innerHTML`. If false, treats message as plain text.
+         */
         "withHtml": boolean;
     }
     interface IrUnitStatus {
@@ -1480,8 +1687,17 @@ export namespace Components {
         "users": User[];
     }
     interface OtaLabel {
+        /**
+          * Label displayed as the section title.
+         */
         "label": string;
+        /**
+          * Maximum number of remarks to display before showing the "Show More" button.
+         */
         "maxVisibleItems": number;
+        /**
+          * Array of OTA notes to display in the list.
+         */
         "remarks": IOtaNotes[];
     }
     interface RequirementCheck {
@@ -4342,30 +4558,96 @@ declare namespace LocalJSX {
         "triggerContainerStyle"?: string;
     }
     interface IrDateRange {
+        /**
+          * Text shown on the Apply button.
+         */
         "applyLabel"?: string;
+        /**
+          * Whether to apply the selected range automatically without clicking 'Apply'.
+         */
         "autoApply"?: boolean;
+        /**
+          * Text shown on the Cancel button.
+         */
         "cancelLabel"?: string;
+        /**
+          * Label used for the custom date range option.
+         */
         "customRangeLabel"?: string;
+        /**
+          * Single date selection value (used in single date picker mode).
+         */
         "date"?: Date;
+        /**
+          * Abbreviated names of the days of the week.
+         */
         "daysOfWeek"?: string[];
+        /**
+          * Disables the date range input when true.
+         */
         "disabled"?: boolean;
+        /**
+          * First day of the week (0 = Sunday, 1 = Monday, ...).
+         */
         "firstDay"?: number;
+        /**
+          * Date format used in the input and picker.
+         */
         "format"?: string;
+        /**
+          * Start date for the date range.
+         */
         "fromDate"?: Date;
+        /**
+          * Label for the "From" date input.
+         */
         "fromLabel"?: string;
+        /**
+          * Maximum selectable date.
+         */
         "maxDate"?: string | Date;
+        /**
+          * Maximum range span (e.g., `{ days: 240 }`).
+         */
         "maxSpan"?: moment.DurationInputArg1;
+        /**
+          * Minimum selectable date.
+         */
         "minDate"?: string | Date;
+        /**
+          * Month names shown in the calendar header.
+         */
         "monthNames"?: string[];
+        /**
+          * Emits when a new date range is selected.  Example: ```tsx <ir-date-range onDateChanged={(e) => console.log(e.detail)} /> ```
+         */
         "onDateChanged"?: (event: IrDateRangeCustomEvent<{
     start: moment.Moment;
     end: moment.Moment;
   }>) => void;
+        /**
+          * Defines which side the calendar opens to. Options: `'left'`, `'right'`, `'center'`.
+         */
         "opens"?: 'left' | 'right' | 'center';
+        /**
+          * Separator string used between start and end dates.
+         */
         "separator"?: string;
+        /**
+          * Enables single date selection mode.
+         */
         "singleDatePicker"?: boolean;
+        /**
+          * End date for the date range.
+         */
         "toDate"?: Date;
+        /**
+          * Label for the "To" date input.
+         */
         "toLabel"?: string;
+        /**
+          * Label for the week column in the calendar.
+         */
         "weekLabel"?: string;
     }
     interface IrDateView {
@@ -4848,17 +5130,53 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrPhoneInput {
+        /**
+          * Country list, used to populate prefix and dropdown. If not provided, fetched from the booking service.
+         */
         "countries"?: ICountry[];
+        /**
+          * Default country ID used if no phone prefix is set.
+         */
         "default_country"?: number;
+        /**
+          * Disables the phone input when true.
+         */
         "disabled"?: boolean;
+        /**
+          * If true, styles the input to indicate an error state.
+         */
         "error"?: boolean;
+        /**
+          * Label displayed next to the phone input.
+         */
         "label"?: string;
+        /**
+          * Two-letter language code used for country fetching.
+         */
         "language"?: string;
+        /**
+          * Emits when the user changes the phone number. Emits `{ phone_prefix, mobile }` object.  Example: ```tsx <ir-phone-input onTextChange={(e) => console.log(e.detail)} /> ```
+         */
         "onTextChange"?: (event: IrPhoneInputCustomEvent<{ phone_prefix: string; mobile: string }>) => void;
+        /**
+          * If provided, sets the phone prefix and updates selected country.
+         */
         "phone_prefix"?: string | null;
+        /**
+          * Placeholder text for the input.
+         */
         "placeholder"?: string;
+        /**
+          * Identifier for test automation.
+         */
         "testId"?: string;
+        /**
+          * Auth token used by the booking service (if needed).
+         */
         "token"?: string;
+        /**
+          * Initial phone number value.
+         */
         "value"?: string;
     }
     interface IrPickup {
@@ -4876,10 +5194,25 @@ declare namespace LocalJSX {
         "bookingNumber"?: string;
     }
     interface IrPopover {
+        /**
+          * Content to display inside the popover. Can be plain text or HTML depending on `renderContentAsHtml`.
+         */
         "content"?: string;
+        /**
+          * Horizontal offset (left) of the popover from its trigger. Used in inline style as `--ir-popover-left`.
+         */
         "irPopoverLeft"?: string;
+        /**
+          * Position of the popover relative to the trigger. Options: `'top'`, `'bottom'`, `'left'`, `'right'`, `'auto'`.
+         */
         "placement"?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
+        /**
+          * Whether to treat `content` as raw HTML. When true, `content` will be injected with `html: true` in jQuery popover.
+         */
         "renderContentAsHtml"?: boolean;
+        /**
+          * Event that triggers the popover. Options: `'focus'`, `'click'`, `'hover'`.
+         */
         "trigger"?: 'focus' | 'click' | 'hover';
     }
     interface IrPriceInput {
@@ -5123,9 +5456,6 @@ declare namespace LocalJSX {
         "LabelAvailable"?: boolean;
         "data"?: selectOption[];
         "disabled"?: boolean;
-        /**
-          * Whether the select has an error
-         */
         "error"?: boolean;
         "firstOption"?: string;
         "label"?: string;
@@ -5150,29 +5480,80 @@ declare namespace LocalJSX {
         "textSize"?: 'sm' | 'md' | 'lg';
     }
     interface IrSidebar {
+        /**
+          * Label text displayed in the sidebar header.
+         */
         "label"?: string;
+        /**
+          * Identifier for the sidebar instance.
+         */
         "name"?: string;
+        /**
+          * Event emitted *before* the sidebar attempts to close, but only if `preventClose` is set to true.
+         */
         "onBeforeSidebarClose"?: (event: IrSidebarCustomEvent<any>) => void;
+        /**
+          * Event emitted when the sidebar is toggled open/closed. Emits the current `open` state.
+         */
         "onIrSidebarToggle"?: (event: IrSidebarCustomEvent<any>) => void;
+        /**
+          * Whether the sidebar is open. Can be used with two-way binding.
+         */
         "open"?: boolean;
+        /**
+          * Prevents the sidebar from closing when `toggleSidebar()` is called. When true, emits `beforeSidebarClose` instead of toggling.
+         */
         "preventClose"?: boolean;
+        /**
+          * Whether to show the close (X) button in the sidebar header.
+         */
         "showCloseButton"?: boolean;
+        /**
+          * Which side of the screen the sidebar appears on. Options: `'left'` or `'right'`.
+         */
         "side"?: 'right' | 'left';
+        /**
+          * Inline styles applied to the sidebar container.
+         */
         "sidebarStyles"?: Partial<CSSStyleDeclaration>;
     }
     interface IrSpan {
         "text"?: any;
     }
     interface IrSpinner {
+        /**
+          * Thickness of the spinner's border. Example: `borderWidth={4}` renders a `4px` or `4rem` thick border.
+         */
         "borderWidth"?: number;
+        /**
+          * Color of the spinner. Accepts any valid CSS color string.
+         */
         "color"?: string;
+        /**
+          * Size of the spinner (diameter). Example: `size={2}` with `unit="rem"` sets spinner to `2rem`.
+         */
         "size"?: number;
+        /**
+          * CSS unit used for `size` and `borderWidth`. Can be `'px'` or `'rem'`.
+         */
         "unit"?: 'px' | 'rem';
     }
     interface IrSwitch {
+        /**
+          * Whether the switch is currently checked (on). This is mutable and can be toggled internally.
+         */
         "checked"?: boolean;
+        /**
+          * Disables the switch if true.
+         */
         "disabled"?: boolean;
+        /**
+          * Emitted when the checked state changes. Emits `true` when turned on, `false` when turned off.  Example: ```tsx <ir-switch onCheckChange={(e) => console.log(e.detail)} /> ```
+         */
         "onCheckChange"?: (event: IrSwitchCustomEvent<boolean>) => void;
+        /**
+          * Optional ID for the switch. If not provided, a random ID will be generated.
+         */
         "switchId"?: string;
     }
     interface IrTasksFilters {
@@ -5220,18 +5601,57 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface IrTextarea {
+        /**
+          * Number of visible character columns.
+         */
         "cols"?: number;
+        /**
+          * Text label displayed above or beside the textarea.
+         */
         "label"?: string;
+        /**
+          * Width of the label in grid columns (for `variant="prepend"`).
+         */
         "labelWidth"?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+        /**
+          * Maximum number of characters allowed.
+         */
         "maxLength"?: number;
+        /**
+          * Emits when the textarea content changes.  Example: ```tsx <ir-textarea onTextChange={(e) => console.log(e.detail)} /> ```
+         */
         "onTextChange"?: (event: IrTextareaCustomEvent<string>) => void;
+        /**
+          * Placeholder text shown when input is empty.
+         */
         "placeholder"?: string;
+        /**
+          * Number of visible text lines.
+         */
         "rows"?: number;
+        /**
+          * Inline styles applied directly to the textarea.
+         */
         "styles"?: { [key: string]: string };
+        /**
+          * `data-testid` for targeting in tests.
+         */
         "testId"?: string;
+        /**
+          * Unused property, intended to store textarea text.
+         */
         "text"?: string;
+        /**
+          * Additional classes for the textarea element.
+         */
         "textareaClassname"?: string;
+        /**
+          * Current value of the textarea (supports two-way binding).
+         */
         "value"?: string;
+        /**
+          * Layout style of the textarea: `'default'` shows label above, `'prepend'` shows label on the left.
+         */
         "variant"?: 'default' | 'prepend';
     }
     interface IrTitle {
@@ -5255,12 +5675,27 @@ declare namespace LocalJSX {
         "onCloseSideBar"?: (event: IrTitleCustomEvent<null>) => void;
     }
     interface IrToast {
+        /**
+          * Position where toasts will appear. Options include: `'top-left'`, `'top-right'`, `'bottom-left'`, `'bottom-right'`.
+         */
         "position"?: TPositions;
     }
     interface IrTooltip {
+        /**
+          * Inline styles applied to the outer tooltip container.
+         */
         "containerStyle"?: { [key: string]: string };
+        /**
+          * When true, allows a custom element to trigger the tooltip using a named slot. If false, a default info icon is used.
+         */
         "customSlot"?: boolean;
+        /**
+          * Text or HTML content to be displayed in the tooltip.
+         */
         "message"?: string;
+        /**
+          * Whether the tooltip content should be rendered using `innerHTML`. If false, treats message as plain text.
+         */
         "withHtml"?: boolean;
     }
     interface IrUnitStatus {
@@ -5305,8 +5740,17 @@ declare namespace LocalJSX {
         "users"?: User[];
     }
     interface OtaLabel {
+        /**
+          * Label displayed as the section title.
+         */
         "label"?: string;
+        /**
+          * Maximum number of remarks to display before showing the "Show More" button.
+         */
         "maxVisibleItems"?: number;
+        /**
+          * Array of OTA notes to display in the list.
+         */
         "remarks"?: IOtaNotes[];
     }
     interface RequirementCheck {

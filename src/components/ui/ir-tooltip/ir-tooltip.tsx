@@ -6,14 +6,49 @@ import { Component, Host, Prop, State, h } from '@stencil/core';
   scoped: true,
 })
 export class IrTooltip {
+  /**
+   * Text or HTML content to be displayed in the tooltip.
+   */
   @Prop({ reflect: true }) message: string;
+
+  /**
+   * Whether the tooltip content should be rendered using `innerHTML`.
+   * If false, treats message as plain text.
+   */
   @Prop() withHtml: boolean = true;
+
+  /**
+   * When true, allows a custom element to trigger the tooltip using a named slot.
+   * If false, a default info icon is used.
+   */
   @Prop() customSlot: boolean = false;
+
+  /**
+   * Inline styles applied to the outer tooltip container.
+   */
   @Prop() containerStyle: { [key: string]: string };
 
+  /**
+   * Internal state tracking whether the tooltip is currently visible.
+   */
   @State() open: boolean;
-  tooltipTimeout: any;
-  toggleOpen(shouldOpen: boolean) {
+
+  private tooltipTimeout: any;
+  /**
+   * Handles showing or hiding the tooltip.
+   *
+   * - If `shouldOpen` is `true`, the tooltip is shown after a 300ms delay.
+   * - If `false`, the tooltip is hidden immediately.
+   *
+   * @param shouldOpen - whether the tooltip should be shown or hidden.
+   *
+   * Example:
+   * ```ts
+   * this.toggleOpen(true);  // show tooltip
+   * this.toggleOpen(false); // hide tooltip
+   * ```
+   */
+  private toggleOpen(shouldOpen: boolean) {
     if (this.tooltipTimeout) {
       clearTimeout(this.tooltipTimeout);
     }
@@ -26,6 +61,7 @@ export class IrTooltip {
       this.open = false;
     }
   }
+
   render() {
     return (
       <Host class="m-0 p-0">

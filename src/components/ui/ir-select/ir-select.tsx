@@ -8,34 +8,85 @@ import { v4 } from 'uuid';
   scoped: true,
 })
 export class IrSelect {
+  // Name of the select input
   @Prop() name: string;
+
+  // Options to populate the select
   @Prop() data: selectOption[];
+
+  // Text shown in the label
   @Prop() label = '<label>';
+
+  // Custom class for select
   @Prop() selectStyles: string;
+
+  // Inline styles for the select
   @Prop() selectForcedStyles: { [key: string]: string };
+
+  // Custom class for the outer container
   @Prop() selectContainerStyle: string;
+
+  // Selected value of the select
   @Prop({ reflect: true, mutable: true }) selectedValue = null;
+
+  // Marks the select as required
   @Prop() required: boolean;
+
+  // Whether to render the label
   @Prop() LabelAvailable: boolean = true;
+
+  // Placeholder text for the first option
   @Prop() firstOption: string = 'Select';
+
+  // Enable/disable default form styling
   @Prop() selectStyle: boolean = true;
+
+  // Whether to show the first placeholder option
   @Prop() showFirstOption: boolean = true;
+
+  // Set to true when the form is submitted
   @Prop() submited: boolean = false;
+
+  // Size of the select: 'sm' | 'md' | 'lg'
   @Prop() size: 'sm' | 'md' | 'lg' = 'md';
+
+  // Size of the text: 'sm' | 'md' | 'lg'
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
+
+  // Position of the label
   @Prop() labelPosition: 'left' | 'right' | 'center' = 'left';
+
+  // Background color of the label
   @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null = null;
+
+  // Text color of the label
   @Prop() labelColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'dark';
+
+  // Border color of the label
   @Prop() labelBorder: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none' = 'theme';
+
+  // Width of the label (Bootstrap cols)
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
+
+  // Unique ID for the select element
   @Prop() select_id: string = v4();
+
+  // Data-testid for testing
   @Prop() testId: string;
+
+  // Whether the select is disabled
   @Prop() disabled: boolean;
-  /** Whether the select has an error */
+
+  // Whether the select has an error state
   @Prop({ mutable: true }) error: boolean = false;
 
+  // Tracks if the field has been touched
   @State() initial: boolean = true;
+
+  // Tracks if the field is valid
   @State() valid: boolean = false;
+
+  // Emits selected value changes
   @Event({ bubbles: true, composed: true }) selectChange: EventEmitter;
 
   private selectEl: HTMLSelectElement;
@@ -54,18 +105,17 @@ export class IrSelect {
   }
   @Listen('animateIrSelect', { target: 'body' })
   handleButtonAnimation(e: CustomEvent) {
-    console.log(e.detail, this.select_id, e.detail === this.select_id);
     if (!this.selectEl || e.detail !== this.select_id) {
       return;
     }
-    console.log('first1');
     e.stopImmediatePropagation();
     e.stopPropagation();
     this.selectEl.classList.add('border-danger');
   }
-  componentwillload() {}
-  disconnectedCallback() {}
-  handleSelectChange(event) {
+
+  // Handle select change event
+  // Example: onInput={this.handleSelectChange.bind(this)}
+  private handleSelectChange(event) {
     this.selectEl.classList.remove('border-danger');
     if (this.required) {
       this.initial = false;

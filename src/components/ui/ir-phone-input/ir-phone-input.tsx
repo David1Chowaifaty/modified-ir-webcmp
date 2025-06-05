@@ -10,21 +10,86 @@ import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, Wat
 })
 export class IrPhoneInput {
   @Element() el: HTMLElement;
+  /**
+   * Label displayed next to the phone input.
+   */
   @Prop() label: string;
+
+  /**
+   * Initial phone number value.
+   */
   @Prop() value: string = '';
+
+  /**
+   * Disables the phone input when true.
+   */
   @Prop() disabled: boolean = false;
+
+  /**
+   * If true, styles the input to indicate an error state.
+   */
   @Prop() error: boolean = false;
+
+  /**
+   * Auth token used by the booking service (if needed).
+   */
   @Prop() token: string;
+
+  /**
+   * Two-letter language code used for country fetching.
+   */
   @Prop() language: string;
+
+  /**
+   * Default country ID used if no phone prefix is set.
+   */
   @Prop() default_country: number = null;
+
+  /**
+   * If provided, sets the phone prefix and updates selected country.
+   */
   @Prop() phone_prefix: string | null = null;
+
+  /**
+   * Placeholder text for the input.
+   */
   @Prop() placeholder: string;
+
+  /**
+   * Country list, used to populate prefix and dropdown.
+   * If not provided, fetched from the booking service.
+   */
   @Prop({ mutable: true }) countries: ICountry[] = [];
+
+  /**
+   * Identifier for test automation.
+   */
   @Prop() testId: string;
 
+  /**
+   * Emits when the user changes the phone number.
+   * Emits `{ phone_prefix, mobile }` object.
+   *
+   * Example:
+   * ```tsx
+   * <ir-phone-input onTextChange={(e) => console.log(e.detail)} />
+   * ```
+   */
   @Event() textChange: EventEmitter<{ phone_prefix: string; mobile: string }>;
+
+  /**
+   * Tracks current user input value.
+   */
   @State() inputValue: string = '';
+
+  /**
+   * Tracks visibility of the country dropdown.
+   */
   @State() isDropdownVisible: boolean = false;
+
+  /**
+   * Currently selected country (based on prefix or ID).
+   */
   @State() currentCountry: ICountry;
 
   // private cmp_countries: ICountry[] = [];
@@ -64,7 +129,12 @@ export class IrPhoneInput {
       this.isDropdownVisible = false;
     }
   }
-  handleInputChange(e: InputEvent) {
+  /**
+   * Handles user input:
+   * - Removes all characters except numbers and "+"
+   * - Updates state and emits new phone number
+   */
+  private handleInputChange(e: InputEvent) {
     let inputElement = e.target as HTMLInputElement;
     let inputValue = inputElement.value;
     inputValue = inputValue.replace(/[^+\d]+/g, '');
@@ -72,6 +142,10 @@ export class IrPhoneInput {
     this.inputValue = inputValue;
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.inputValue });
   }
+  /**
+   * Sets the current country based on `phone_prefix` prop or country ID.
+   * Emits current phone prefix and phone number.
+   */
   private setCountryFromPhonePrefix() {
     let country = this.countries.find(country => country.phone_prefix === this.phone_prefix);
     if (!country) {
@@ -83,7 +157,11 @@ export class IrPhoneInput {
     this.currentCountry = { ...country };
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.value });
   }
-  setCurrentCountry(id: number) {
+  /**
+   * Sets the current country by its ID.
+   * Emits current phone prefix and phone number.
+   */
+  private setCurrentCountry(id: number) {
     const country = this.countries.find(country => country.id === id);
     if (!country) {
       throw new Error('Invalid country id');

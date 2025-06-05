@@ -8,45 +8,74 @@ import { Component, Prop, h, Method, Event, EventEmitter, Watch, Listen, Element
 })
 export class IrSidebar {
   @Element() el: HTMLIrSidebarElement;
+  /**
+   * Identifier for the sidebar instance.
+   */
   @Prop() name: string;
+
+  /**
+   * Which side of the screen the sidebar appears on.
+   * Options: `'left'` or `'right'`.
+   */
   @Prop() side: 'right' | 'left' = 'right';
+
+  /**
+   * Whether to show the close (X) button in the sidebar header.
+   */
   @Prop() showCloseButton: boolean = true;
+
+  /**
+   * Whether the sidebar is open.
+   * Can be used with two-way binding.
+   */
   @Prop({ mutable: true, reflect: true }) open: boolean = false;
+
+  /**
+   * Inline styles applied to the sidebar container.
+   */
   @Prop() sidebarStyles: Partial<CSSStyleDeclaration>;
+
+  /**
+   * Label text displayed in the sidebar header.
+   */
   @Prop() label: string;
+
+  /**
+   * Prevents the sidebar from closing when `toggleSidebar()` is called.
+   * When true, emits `beforeSidebarClose` instead of toggling.
+   */
   @Prop() preventClose: boolean;
 
+  /**
+   * Event emitted when the sidebar is toggled open/closed.
+   * Emits the current `open` state.
+   */
   @Event({ bubbles: true, composed: true }) irSidebarToggle: EventEmitter;
+
+  /**
+   * Event emitted *before* the sidebar attempts to close,
+   * but only if `preventClose` is set to true.
+   */
   @Event({ bubbles: true, composed: true }) beforeSidebarClose: EventEmitter;
 
   private sidebarRef: HTMLDivElement;
 
-  applyStyles() {
-    for (const property in this.sidebarStyles) {
-      if (this.sidebarStyles.hasOwnProperty(property)) {
-        this.sidebarRef.style[property] = this.sidebarStyles[property];
-      }
-    }
+  componentDidLoad() {
+    this.applyStyles();
   }
+
   @Watch('sidebarStyles')
   handleSidebarStylesChange() {
     this.applyStyles();
   }
-  componentWillLoad() {
-    // this.handleKeyDown = this.handleKeyDown.bind(this);
-  }
 
-  componentDidLoad() {
-    // If esc key is pressed, close the modal
-    this.applyStyles();
-    // document.addEventListener('keydown', this.handleKeyDown);
-  }
   @Watch('open')
   handleOpenChange(newValue: boolean, oldValue: boolean) {
     if (newValue !== oldValue) {
       handleBodyOverflow(newValue);
     }
   }
+
   @Listen('keydown', { target: 'body' })
   handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
@@ -58,6 +87,18 @@ export class IrSidebar {
     }
   }
 
+  /**
+   * Toggles the sidebar's visibility.
+   *
+   * - If `preventClose` is true, emits `beforeSidebarClose` and does nothing else.
+   * - Otherwise, emits `irSidebarToggle` with the current `open` state.
+   *
+   * Example:
+   * ```ts
+   * const el = document.querySelector('ir-sidebar');
+   * await el.toggleSidebar();
+   * ```
+   */
   @Method()
   async toggleSidebar() {
     if (this.preventClose) {
@@ -65,6 +106,17 @@ export class IrSidebar {
       return;
     }
     this.irSidebarToggle.emit(this.open);
+  }
+
+  /**
+   * Applies inline styles defined in `sidebarStyles` to the sidebar container.
+   */
+  private applyStyles() {
+    for (const property in this.sidebarStyles) {
+      if (this.sidebarStyles.hasOwnProperty(property)) {
+        this.sidebarRef.style[property] = this.sidebarStyles[property];
+      }
+    }
   }
 
   render() {

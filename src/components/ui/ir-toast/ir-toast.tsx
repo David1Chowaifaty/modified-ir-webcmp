@@ -7,15 +7,26 @@ import { TPositions, IToast } from './toast';
   scoped: true,
 })
 export class IrToast {
-  @Prop({ reflect: true, mutable: true }) position: TPositions = 'bottom-left';
   @Element() element: HTMLElement;
+
+  /**
+   * Position where toasts will appear.
+   * Options include: `'top-left'`, `'top-right'`, `'bottom-left'`, `'bottom-right'`.
+   */
+  @Prop({ reflect: true, mutable: true }) position: TPositions = 'bottom-left';
+
+  /**
+   * Array of active toast messages.
+   */
   @State() toasts: IToast[] = [];
+
   @Listen('toast', { target: 'body' })
   onToast(event: CustomEvent<IToast>) {
     const toast: IToast = event.detail;
     this.showToast(toast);
   }
-  showToast(toast: IToast) {
+
+  private showToast(toast: IToast) {
     const toastrOptions = {
       positionClass: 'toast-top-right',
       closeButton: true,
@@ -31,6 +42,7 @@ export class IrToast {
         break;
     }
   }
+
   render() {
     return <Host></Host>;
   }
