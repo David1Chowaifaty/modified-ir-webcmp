@@ -628,6 +628,11 @@ export class IglCalBody {
   }
 
   private isCellDisabled(roomId: number, day: string): boolean {
-    return calendar_dates.disabled_cells.get(this.getCellKey(roomId, day))?.disabled || false;
+    const key = this.getCellKey(roomId, day);
+    if (!calendar_dates.disabled_cells.has(key)) {
+      return false;
+    }
+    const { disabled } = calendar_dates.disabled_cells.get(key);
+    return disabled;
   }
 }

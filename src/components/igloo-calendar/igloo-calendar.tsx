@@ -34,6 +34,7 @@ export interface UnitHkStatusChangePayload {
   My_Hkm: null;
 }
 export type SalesBatchPayload = { rate_plan_id: number; night: string; is_available_to_book: boolean };
+export type AvailabilityBatchPayload = { room_type_id: number; date: string; availability: number };
 export type CalendarSidebarState = {
   type: 'room-guests' | 'booking-details' | 'add-days' | 'bulk-blocks';
   payload: any;
@@ -70,7 +71,6 @@ export class IglooCalendar {
   @State() roomNightsData: IRoomNightsData | null = null;
   @State() renderAgain = false;
   @State() showBookProperty: boolean = false;
-  @State() totalAvailabilityQueue: { room_type_id: number; date: string; availability: number }[] = [];
   @State() highlightedDate: string;
   @State() calDates: { from: string; to: string };
   @State() isAuthenticated = false;
@@ -97,7 +97,6 @@ export class IglooCalendar {
   private reachedEndOfCalendar = false;
 
   private socket: Socket;
-  private availabilityTimeout: NodeJS.Timeout;
   private token = new Token();
   private calendarModalEl: HTMLIrModalElement;
 
@@ -107,6 +106,14 @@ export class IglooCalendar {
     maxQueueSize: 5000,
     onError: e => console.error('Batch Sales Update Error:', e),
   });
+
+  private availabilityQueue = new BatchingQueue<AvailabilityBatchPayload[]>(this.processAvailabilityBatch.bind(this), {
+    batchSize: 50,
+    flushInterval: 1000,
+    maxQueueSize: 5000,
+    onError: e => console.error('Batch Availability Update Error:', e),
+  });
+
   private roomTypeIdsCache: Map<number, { id: number; index: number } | 'skip'> = new Map();
 
   componentWillLoad() {
@@ -412,7 +419,7 @@ export class IglooCalendar {
       REALLOCATE_EXPOSED_ROOM_BLOCK: this.handleReallocateExposedRoomBlock,
       DELETE_CALENDAR_POOL: this.handleDeleteCalendarPool,
       GET_UNASSIGNED_DATES: this.handleGetUnassignedDates,
-      UPDATE_CALENDAR_AVAILABILITY: this.handleUpdateCalendarAvailability,
+      UPDATE_CALENDAR_AVAILABILITY: r => this.availabilityQueue.offer(r),
       CHANGE_IN_DUE_AMOUNT: this.handleChangeInDueAmount,
       CHANGE_IN_BOOK_STATUS: this.handleChangeInBookStatus,
       NON_TECHNICAL_CHANGE_IN_BOOKING: this.handleNonTechnicalChangeInBooking,
@@ -555,16 +562,6 @@ export class IglooCalendar {
       result[res[0]] = res[1];
     });
     return result;
-  }
-
-  private handleUpdateCalendarAvailability(result: any) {
-    this.totalAvailabilityQueue.push(result);
-    if (this.totalAvailabilityQueue.length > 0) {
-      clearTimeout(this.availabilityTimeout);
-    }
-    this.availabilityTimeout = setTimeout(() => {
-      this.updateTotalAvailability();
-    }, 1000);
   }
 
   private handleChangeInDueAmount(result: any) {
@@ -732,31 +729,43 @@ export class IglooCalendar {
         // overall room availability = true if any rateplan is bookable
         is_available_to_book,
       };
-      disabled_cells.set(days[dayIdx].value, { disabled: is_available_to_book, reason: 'stop_sale' });
+      //update the disabled cells
+      for (const room of roomType.physicalrooms) {
+        const key = `${room.id}_${days[dayIdx].value}`;
+        disabled_cells.set(key, { disabled: !is_available_to_book, reason: 'stop_sale' });
+      }
     }
 
     // 6) write back to the store
     calendar_dates['disabled_cells'] = new Map(disabled_cells);
     calendar_dates.days = days;
   }
-  private updateTotalAvailability() {
+  private processAvailabilityBatch(batch: AvailabilityBatchPayload[]) {
     let days = [...calendar_dates.days];
-    this.totalAvailabilityQueue.forEach(queue => {
-      let selectedDate = new Date(queue.date);
-      selectedDate.setMilliseconds(0);
-      selectedDate.setSeconds(0);
-      selectedDate.setMinutes(0);
-      selectedDate.setHours(0);
+    const disabled_cells = new Map(calendar_dates.disabled_cells);
+    for (const queue of batch) {
       //find the selected day
-      const index = days.findIndex(day => day.currentDate === selectedDate.getTime());
-      if (index != -1) {
-        //find room_type_id
-        const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
-        if (room_type_index != -1) {
-          days[index].rate[room_type_index].exposed_inventory.rts = queue.availability;
-        }
+      const index = days.findIndex(day => day.value === queue.date);
+      if (index === -1) {
+        console.warn(`Couldn't find day ${queue.date}`);
+        return;
       }
-    });
+      //find room_type_id
+      const room_type_index = days[index].rate.findIndex(room => room.id === queue.room_type_id);
+      if (room_type_index === -1) {
+        console.warn(`Couldn't find room type ${queue.room_type_id}`);
+        return;
+      }
+      const room_type = days[index].rate[room_type_index];
+      //update the availability
+      room_type.exposed_inventory.rts = queue.availability;
+      const isClosed = room_type.rateplans.every(rp => !rp.is_available_to_book);
+      for (const room of room_type.physicalrooms) {
+        const key = `${room.id}_${queue.date}`;
+        disabled_cells.set(key, { disabled: isClosed || queue.availability === 0, reason: isClosed ? 'stop_sale' : 'inventory' });
+      }
+    }
+    calendar_dates['disabled_cells'] = new Map(disabled_cells);
     calendar_dates.days = [...days];
   }
 
