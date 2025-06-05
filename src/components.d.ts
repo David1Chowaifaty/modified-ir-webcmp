@@ -715,8 +715,17 @@ export namespace Components {
         "user": IHouseKeepers;
     }
     interface IrDialog {
+        /**
+          * Closes the modal dialog programmatically. Reverts body scroll and emits `openChange`.
+         */
         "closeModal": () => Promise<void>;
+        /**
+          * Controls whether the dialog should be opened. Can be updated externally and watched internally.
+         */
         "open": boolean;
+        /**
+          * Opens the modal dialog programmatically. Applies `overflow: hidden` to the `body`.  Example: ```ts const dialog = document.querySelector('ir-dialog'); await dialog.openModal(); ```
+         */
         "openModal": () => Promise<void>;
     }
     interface IrDrawer {
@@ -801,8 +810,17 @@ export namespace Components {
         "type": 'button' | 'submit' | 'reset';
     }
     interface IrIcons {
+        /**
+          * Sets the `color` attribute on the `<svg>` element. Accepts any valid CSS color string.
+         */
         "color": string;
+        /**
+          * The name of the icon to render. Must match a key from the imported `icons` map.  Example: ```tsx <ir-icons name="check" /> ```
+         */
         "name": TIcons;
+        /**
+          * Additional CSS class applied to the `<svg>` element. Can be used for sizing, positioning, etc.
+         */
         "svgClassName": string;
     }
     interface IrInputText {
@@ -949,9 +967,21 @@ export namespace Components {
         "zod"?: ZodType<any, any>;
     }
     interface IrInteractiveTitle {
+        /**
+          * The number of characters to display before cropping the title with ellipsis.
+         */
         "cropSize": number;
+        /**
+          * Whether to show the housekeeping (HK) status dot.
+         */
         "hkStatus": boolean;
+        /**
+          * CSS offset for the left position of the popover. Used as a CSS variable `--ir-popover-left`.
+         */
         "irPopoverLeft": string;
+        /**
+          * The full title string that may be cropped in the UI.
+         */
         "popoverTitle": string;
     }
     interface IrInterceptor {
@@ -1016,22 +1046,73 @@ export namespace Components {
     interface IrLogin {
     }
     interface IrModal {
+        /**
+          * If true, the modal automatically closes after confirm/cancel actions.
+         */
         "autoClose": boolean;
+        /**
+          * Horizontal alignment of the footer buttons.
+         */
         "btnPosition": 'left' | 'right' | 'center';
+        /**
+          * Closes the modal.
+         */
         "closeModal": () => Promise<void>;
+        /**
+          * Icon name to render next to the title (if `iconAvailable` is true).
+         */
         "icon": string;
+        /**
+          * Whether an icon should be displayed next to the title.
+         */
         "iconAvailable": boolean;
+        /**
+          * Whether the modal is in a loading state, disabling interaction.
+         */
         "isLoading": boolean;
+        /**
+          * Payload object to pass along with confirm/cancel events.
+         */
         "item": any;
+        /**
+          * Whether the left (cancel/close) button is visible.
+         */
         "leftBtnActive": boolean;
+        /**
+          * Color theme of the left button.
+         */
         "leftBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Text displayed on the left (cancel/close) button.
+         */
         "leftBtnText": string;
+        /**
+          * The main content text shown in the modal body.
+         */
         "modalBody": string;
+        /**
+          * The title text displayed in the modal header.
+         */
         "modalTitle": string;
+        /**
+          * Opens the modal.  Example: ```ts const modal = document.querySelector('ir-modal'); modal.openModal(); ```
+         */
         "openModal": () => Promise<void>;
+        /**
+          * Whether the right (confirm) button is visible.
+         */
         "rightBtnActive": boolean;
+        /**
+          * Color theme of the right button.
+         */
         "rightBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Text displayed on the right (confirm) button.
+         */
         "rightBtnText": string;
+        /**
+          * Controls whether the modal title is rendered.
+         */
         "showTitle": boolean;
     }
     interface IrOptionDetails {
@@ -4662,7 +4743,13 @@ declare namespace LocalJSX {
         "user"?: IHouseKeepers;
     }
     interface IrDialog {
+        /**
+          * Emits the open/close state of the modal.  Example: ```tsx <ir-dialog onOpenChange={(e) => console.log(e.detail)} /> ```
+         */
         "onOpenChange"?: (event: IrDialogCustomEvent<boolean>) => void;
+        /**
+          * Controls whether the dialog should be opened. Can be updated externally and watched internally.
+         */
         "open"?: boolean;
     }
     interface IrDrawer {
@@ -4768,8 +4855,17 @@ declare namespace LocalJSX {
         "type"?: 'button' | 'submit' | 'reset';
     }
     interface IrIcons {
+        /**
+          * Sets the `color` attribute on the `<svg>` element. Accepts any valid CSS color string.
+         */
         "color"?: string;
+        /**
+          * The name of the icon to render. Must match a key from the imported `icons` map.  Example: ```tsx <ir-icons name="check" /> ```
+         */
         "name"?: TIcons;
+        /**
+          * Additional CSS class applied to the `<svg>` element. Can be used for sizing, positioning, etc.
+         */
         "svgClassName"?: string;
     }
     interface IrInputText {
@@ -4919,9 +5015,21 @@ declare namespace LocalJSX {
         "zod"?: ZodType<any, any>;
     }
     interface IrInteractiveTitle {
+        /**
+          * The number of characters to display before cropping the title with ellipsis.
+         */
         "cropSize"?: number;
+        /**
+          * Whether to show the housekeeping (HK) status dot.
+         */
         "hkStatus"?: boolean;
+        /**
+          * CSS offset for the left position of the popover. Used as a CSS variable `--ir-popover-left`.
+         */
         "irPopoverLeft"?: string;
+        /**
+          * The full title string that may be cropped in the UI.
+         */
         "popoverTitle"?: string;
     }
     interface IrInterceptor {
@@ -4992,22 +5100,73 @@ declare namespace LocalJSX {
   }>) => void;
     }
     interface IrModal {
+        /**
+          * If true, the modal automatically closes after confirm/cancel actions.
+         */
         "autoClose"?: boolean;
+        /**
+          * Horizontal alignment of the footer buttons.
+         */
         "btnPosition"?: 'left' | 'right' | 'center';
+        /**
+          * Icon name to render next to the title (if `iconAvailable` is true).
+         */
         "icon"?: string;
+        /**
+          * Whether an icon should be displayed next to the title.
+         */
         "iconAvailable"?: boolean;
+        /**
+          * Whether the modal is in a loading state, disabling interaction.
+         */
         "isLoading"?: boolean;
+        /**
+          * Payload object to pass along with confirm/cancel events.
+         */
         "item"?: any;
+        /**
+          * Whether the left (cancel/close) button is visible.
+         */
         "leftBtnActive"?: boolean;
+        /**
+          * Color theme of the left button.
+         */
         "leftBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Text displayed on the left (cancel/close) button.
+         */
         "leftBtnText"?: string;
+        /**
+          * The main content text shown in the modal body.
+         */
         "modalBody"?: string;
+        /**
+          * The title text displayed in the modal header.
+         */
         "modalTitle"?: string;
+        /**
+          * Fired when the cancel (left) button or backdrop is clicked.
+         */
         "onCancelModal"?: (event: IrModalCustomEvent<any>) => void;
+        /**
+          * Fired when the confirm (right) button is clicked. Emits the current `item` value.
+         */
         "onConfirmModal"?: (event: IrModalCustomEvent<any>) => void;
+        /**
+          * Whether the right (confirm) button is visible.
+         */
         "rightBtnActive"?: boolean;
+        /**
+          * Color theme of the right button.
+         */
         "rightBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Text displayed on the right (confirm) button.
+         */
         "rightBtnText"?: string;
+        /**
+          * Controls whether the modal title is rendered.
+         */
         "showTitle"?: boolean;
     }
     interface IrOptionDetails {

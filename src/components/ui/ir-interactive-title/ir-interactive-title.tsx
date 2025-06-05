@@ -8,47 +8,49 @@ import { Component, Host, Prop, h, Element } from '@stencil/core';
 export class IrInteractiveTitle {
   @Element() el: HTMLElement;
 
+  /**
+   * The full title string that may be cropped in the UI.
+   */
   @Prop() popoverTitle: string;
+
+  /**
+   * CSS offset for the left position of the popover.
+   * Used as a CSS variable `--ir-popover-left`.
+   */
   @Prop() irPopoverLeft: string = '10px';
+
+  /**
+   * Whether to show the housekeeping (HK) status dot.
+   */
   @Prop() hkStatus: boolean;
+
+  /**
+   * The number of characters to display before cropping the title with ellipsis.
+   */
   @Prop() cropSize: number = 15;
 
+  /**
+   * The visible title (possibly cropped).
+   * Computed during lifecycle based on content overflow.
+   */
   private croppedTitle: string;
+
+  /**
+   * Reference to the span DOM element that holds the cropped title text.
+   */
   private croppedTitleEl: HTMLSpanElement;
 
-  // private hkStatusColors = {
-  //   green: '#57f707',
-  //   red: 'rgb(199, 139, 36)',
-  //   orange: '#ff9149',
-  //   black: '#ff4961',
-  // };
   componentWillLoad() {
     this.croppedTitle = this.popoverTitle;
   }
   componentDidLoad() {
     this.initializePopover();
   }
-
-  // initializePopover() {
-  //   const titleElement = this.el.querySelector('.popover-title') as HTMLElement;
-
-  //   if (titleElement) {
-  //     const isOverflowing = titleElement.scrollWidth > titleElement.offsetWidth;
-
-  //     if (isOverflowing) {
-  //       this.croppedTitle = this.popoverTitle.slice(0, this.cropSize) + '...';
-  //       this.croppedTitleEl.innerHTML = this.croppedTitle;
-
-  //       $(titleElement).popover({
-  //         trigger: 'hover',
-  //         content: this.popoverTitle,
-  //         placement: 'top',
-  //       });
-  //     } else {
-  //       $(titleElement).popover('dispose');
-  //     }
-  //   }
-  // }
+  /**
+   * Measures the width of the title and icon to determine if the text overflows.
+   * If it does, crops the title and attaches a popover to the title element.
+   * Otherwise, removes any existing popover.
+   */
   private initializePopover() {
     const titleElement = this.el.querySelector('.popover-title') as HTMLElement;
     const iconElement = this.el.querySelector('.hk-dot') as HTMLElement;
@@ -74,6 +76,7 @@ export class IrInteractiveTitle {
       $(titleElement).popover('dispose');
     }
   }
+
   render() {
     return (
       <Host style={{ '--ir-popover-left': this.irPopoverLeft }}>

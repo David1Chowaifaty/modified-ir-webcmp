@@ -6,13 +6,32 @@ import { Component, Host, h, Element, Method, Listen, State, Event, EventEmitter
   shadow: true,
 })
 export class IrDialog {
-  @Prop() open: boolean = false;
   @Element() el: HTMLElement;
+
+  /**
+   * Controls whether the dialog should be opened.
+   * Can be updated externally and watched internally.
+   */
+  @Prop() open: boolean = false;
+
+  /**
+   * Internal open state, driven by `open` prop or internal logic.
+   */
+  @State() isOpen = false;
+
+  /**
+   * Emits the open/close state of the modal.
+   *
+   * Example:
+   * ```tsx
+   * <ir-dialog onOpenChange={(e) => console.log(e.detail)} />
+   * ```
+   */
+  @Event() openChange: EventEmitter<boolean>;
+
   private firstFocusableElement: HTMLElement;
   private lastFocusableElement: HTMLElement;
 
-  @State() isOpen = false;
-  @Event() openChange: EventEmitter<boolean>;
   componentWillLoad() {
     if (this.open) {
       this.openModal();
@@ -21,7 +40,16 @@ export class IrDialog {
   componentDidLoad() {
     this.prepareFocusTrap();
   }
-
+  /**
+   * Opens the modal dialog programmatically.
+   * Applies `overflow: hidden` to the `body`.
+   *
+   * Example:
+   * ```ts
+   * const dialog = document.querySelector('ir-dialog');
+   * await dialog.openModal();
+   * ```
+   */
   @Method()
   async openModal() {
     this.isOpen = true;
@@ -31,7 +59,10 @@ export class IrDialog {
     }, 10);
     this.openChange.emit(this.isOpen);
   }
-
+  /**
+   * Closes the modal dialog programmatically.
+   * Reverts body scroll and emits `openChange`.
+   */
   @Method()
   async closeModal() {
     console.log('close');
@@ -50,16 +81,6 @@ export class IrDialog {
     } else {
       this.closeModal();
     }
-  }
-
-  prepareFocusTrap() {
-    const focusableElements = 'button,ir-dropdown ,[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const focusableContent: NodeListOf<HTMLElement> = this.el.shadowRoot.querySelectorAll(focusableElements);
-    // console.log(focusableContent);
-    if (focusableContent.length === 0) return;
-    this.firstFocusableElement = focusableContent[0];
-    this.lastFocusableElement = focusableContent[focusableContent.length - 1];
-    this.firstFocusableElement.focus();
   }
 
   @Listen('keydown', { target: 'window' })
@@ -92,7 +113,18 @@ export class IrDialog {
   disconnectedCallback() {
     document.body.style.overflow = 'visible';
   }
-
+  /**
+   * Finds and traps focus within modal content for accessibility.
+   */
+  private prepareFocusTrap() {
+    const focusableElements = 'button,ir-dropdown ,[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusableContent: NodeListOf<HTMLElement> = this.el.shadowRoot.querySelectorAll(focusableElements);
+    // console.log(focusableContent);
+    if (focusableContent.length === 0) return;
+    this.firstFocusableElement = focusableContent[0];
+    this.lastFocusableElement = focusableContent[focusableContent.length - 1];
+    this.firstFocusableElement.focus();
+  }
   render() {
     return (
       <Host>
