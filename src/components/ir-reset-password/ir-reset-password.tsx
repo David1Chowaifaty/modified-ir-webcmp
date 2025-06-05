@@ -4,7 +4,7 @@ import { RoomService } from '@/services/room.service';
 import { SystemService } from '@/services/system.service';
 import locales from '@/stores/locales.store';
 import { CONSTANTS } from '@/utils/constants';
-import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Fragment, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { z, ZodError } from 'zod';
 
 @Component({
