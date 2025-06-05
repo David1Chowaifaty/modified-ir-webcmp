@@ -9,6 +9,7 @@
 
 | Property     | Attribute    | Description | Type     | Default     |
 | ------------ | ------------ | ----------- | -------- | ----------- |
+| `baseUrl`    | `base-url`   |             | `string` | `undefined` |
 | `language`   | `language`   |             | `string` | `''`        |
 | `p`          | `p`          |             | `string` | `undefined` |
 | `propertyid` | `propertyid` |             | `number` | `undefined` |
@@ -48,6 +49,11 @@ graph TD;
   ir-booking-listing --> ir-sidebar
   ir-booking-listing --> ir-booking-details
   ir-booking-listing --> ir-guest-info
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
   ir-listing-header --> igl-book-property-container
   ir-listing-header --> ir-button
   ir-listing-header --> ir-input-text
@@ -70,7 +76,6 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-book-property-header --> ir-button
   igl-book-property-header --> igl-date-range
-  ir-button --> ir-icons
   igl-date-range --> ir-date-range
   igl-room-type --> igl-rate-plan
   igl-rate-plan --> ir-tooltip
@@ -152,7 +157,6 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
-  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button

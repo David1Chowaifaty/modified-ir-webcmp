@@ -7,14 +7,14 @@
 
 ## Properties
 
-| Property         | Attribute          | Description                                              | Type             | Default             |
-| ---------------- | ------------------ | -------------------------------------------------------- | ---------------- | ------------------- |
-| `allowNullDates` | `allow-null-dates` | Whether to all the emitted dates to be null.             | `boolean`        | `true`              |
-| `fromDate`       | --                 | The start date of the range.                             | `Moment`         | `undefined`         |
-| `maxDate`        | `max-date`         | The latest date that can be selected.                    | `Date \| string` | `moment().toDate()` |
-| `minDate`        | `min-date`         | The earliest date that can be selected.                  | `Date \| string` | `undefined`         |
-| `toDate`         | --                 | The end date of the range.                               | `Moment`         | `undefined`         |
-| `withOverlay`    | `with-overlay`     | Whether to show the overlay before the date is selected. | `boolean`        | `true`              |
+| Property         | Attribute          | Description                                              | Type             | Default     |
+| ---------------- | ------------------ | -------------------------------------------------------- | ---------------- | ----------- |
+| `allowNullDates` | `allow-null-dates` | Whether to all the emitted dates to be null.             | `boolean`        | `true`      |
+| `fromDate`       | --                 | The start date of the range.                             | `Moment`         | `undefined` |
+| `maxDate`        | `max-date`         | The latest date that can be selected.                    | `Date \| string` | `undefined` |
+| `minDate`        | `min-date`         | The earliest date that can be selected.                  | `Date \| string` | `undefined` |
+| `toDate`         | --                 | The end date of the range.                               | `Moment`         | `undefined` |
+| `withOverlay`    | `with-overlay`     | Whether to show the overlay before the date is selected. | `boolean`        | `true`      |
 
 
 ## Events

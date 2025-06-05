@@ -26,6 +26,7 @@
 
 ### Used by
 
+ - [igl-bulk-stop-sale](../igloo-calendar/igl-bulk-stop-sale)
  - [ir-booking-extra-note](../ir-booking-details/ir-booking-extra-note)
  - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info](../ir-guest-info)
@@ -50,6 +51,7 @@
 ```mermaid
 graph TD;
   ir-title --> ir-icon
+  igl-bulk-stop-sale --> ir-title
   ir-booking-extra-note --> ir-title
   ir-extra-service-config --> ir-title
   ir-guest-info --> ir-title

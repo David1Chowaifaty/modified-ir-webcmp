@@ -7,24 +7,24 @@
 
 ## Properties
 
-| Property      | Attribute     | Description | Type             | Default     |
-| ------------- | ------------- | ----------- | ---------------- | ----------- |
-| `autoFocus`   | `auto-focus`  |             | `boolean`        | `false`     |
-| `data`        | --            |             | `ComboboxItem[]` | `[]`        |
-| `disabled`    | `disabled`    |             | `boolean`        | `false`     |
-| `duration`    | `duration`    |             | `number`         | `300`       |
-| `input_id`    | `input_id`    |             | `string`         | `v4()`      |
-| `placeholder` | `placeholder` |             | `string`         | `undefined` |
-| `value`       | `value`       |             | `string`         | `undefined` |
+| Property      | Attribute     | Description                                         | Type             | Default     |
+| ------------- | ------------- | --------------------------------------------------- | ---------------- | ----------- |
+| `autoFocus`   | `auto-focus`  | Autofocuses the input field when true.              | `boolean`        | `false`     |
+| `data`        | --            | The list of items displayed in the combobox.        | `ComboboxItem[]` | `[]`        |
+| `disabled`    | `disabled`    | Disables the combobox input when set to true.       | `boolean`        | `false`     |
+| `duration`    | `duration`    | Debounce duration in milliseconds for search input. | `number`         | `300`       |
+| `input_id`    | `input_id`    | Unique identifier for the input element.            | `string`         | `v4()`      |
+| `placeholder` | `placeholder` | Placeholder text for the input field.               | `string`         | `undefined` |
+| `value`       | `value`       | The current value of the input field.               | `string`         | `undefined` |
 
 
 ## Events
 
-| Event                 | Description | Type                                                                                                 |
-| --------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `comboboxValueChange` |             | `CustomEvent<{ key: string; data: unknown; }>`                                                       |
-| `inputCleared`        |             | `CustomEvent<null>`                                                                                  |
-| `toast`               |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+| Event                 | Description                                         | Type                                                                                                 |
+| --------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `comboboxValueChange` | Emitted when a selection is made from the combobox. | `CustomEvent<{ key: string; data: unknown; }>`                                                       |
+| `inputCleared`        | Emitted when the input is cleared by the user.      | `CustomEvent<null>`                                                                                  |
+| `toast`               | Emits a toast notification.                         | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies

@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property   | Attribute  | Description | Type                                                           | Default         |
-| ---------- | ---------- | ----------- | -------------------------------------------------------------- | --------------- |
-| `position` | `position` |             | `"bottom-left" \| "bottom-right" \| "top-left" \| "top-right"` | `'bottom-left'` |
+| Property   | Attribute  | Description                                                                                                         | Type                                                           | Default         |
+| ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------------- |
+| `position` | `position` | Position where toasts will appear. Options include: `'top-left'`, `'top-right'`, `'bottom-left'`, `'bottom-right'`. | `"bottom-left" \| "bottom-right" \| "top-left" \| "top-right"` | `'bottom-left'` |
 
 
 ## Dependencies

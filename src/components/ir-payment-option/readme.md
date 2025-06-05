@@ -46,6 +46,10 @@ graph TD;
   ir-payment-option --> ir-button
   ir-payment-option --> ir-sidebar
   ir-payment-option --> ir-option-details
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
   ir-button --> ir-icons
   ir-sidebar --> ir-icon
   ir-option-details --> ir-title

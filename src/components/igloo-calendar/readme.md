@@ -9,6 +9,7 @@
 
 | Property         | Attribute         | Description | Type     | Default     |
 | ---------------- | ----------------- | ----------- | -------- | ----------- |
+| `baseUrl`        | `base-url`        |             | `string` | `undefined` |
 | `currencyName`   | `currency-name`   |             | `string` | `undefined` |
 | `from_date`      | `from_date`       |             | `string` | `undefined` |
 | `language`       | `language`        |             | `string` | `undefined` |
@@ -21,14 +22,14 @@
 
 ## Events
 
-| Event                      | Description | Type                                                                                     |
-| -------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
-| `calculateUnassignedDates` |             | `CustomEvent<any>`                                                                       |
-| `dragOverHighlightElement` |             | `CustomEvent<any>`                                                                       |
-| `moveBookingTo`            |             | `CustomEvent<any>`                                                                       |
-| `openCalendarSidebar`      |             | `CustomEvent<{ type: "room-guests" \| "booking-details" \| "add-days"; payload: any; }>` |
-| `reduceAvailableUnitEvent` |             | `CustomEvent<{ fromDate: string; toDate: string; }>`                                     |
-| `revertBooking`            |             | `CustomEvent<any>`                                                                       |
+| Event                      | Description | Type                                                                                                      |
+| -------------------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
+| `calculateUnassignedDates` |             | `CustomEvent<any>`                                                                                        |
+| `dragOverHighlightElement` |             | `CustomEvent<any>`                                                                                        |
+| `moveBookingTo`            |             | `CustomEvent<any>`                                                                                        |
+| `openCalendarSidebar`      |             | `CustomEvent<{ type: "room-guests" \| "booking-details" \| "add-days" \| "bulk-blocks"; payload: any; }>` |
+| `reduceAvailableUnitEvent` |             | `CustomEvent<{ fromDate: string; toDate: string; }>`                                                      |
+| `revertBooking`            |             | `CustomEvent<any>`                                                                                        |
 
 
 ## Dependencies
@@ -52,6 +53,7 @@
 - [ir-room-nights](ir-room-nights)
 - [ir-booking-details](../ir-booking-details)
 - [ir-room-guests](../ir-booking-details/ir-room-guests)
+- [igl-bulk-stop-sale](igl-bulk-stop-sale)
 - [ir-modal](../ui/ir-modal)
 
 ### Graph
@@ -70,12 +72,17 @@ graph TD;
   igloo-calendar --> ir-room-nights
   igloo-calendar --> ir-booking-details
   igloo-calendar --> ir-room-guests
+  igloo-calendar --> igl-bulk-stop-sale
   igloo-calendar --> ir-modal
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-button
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
-  ir-button --> ir-icons
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
   igl-cal-body --> ir-interactive-title
@@ -182,7 +189,6 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
-  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-pickup-view --> ir-button
@@ -197,6 +203,11 @@ graph TD;
   ir-payment-details --> ir-payment-actions
   ir-payment-details --> ir-modal
   ir-payment-actions --> ir-button
+  igl-bulk-stop-sale --> ir-title
+  igl-bulk-stop-sale --> ir-select
+  igl-bulk-stop-sale --> ir-checkbox
+  igl-bulk-stop-sale --> ir-button
+  igl-bulk-stop-sale --> ir-date-picker
   ir-secure-tasks --> igloo-calendar
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```

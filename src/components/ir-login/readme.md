@@ -35,6 +35,10 @@ graph TD;
   ir-login --> ir-input-text
   ir-login --> ir-icons
   ir-login --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
   ir-button --> ir-icons
   ir-booking --> ir-login
   ir-secure-tasks --> ir-login

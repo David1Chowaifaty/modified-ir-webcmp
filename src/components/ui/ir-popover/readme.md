@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property              | Attribute                | Description | Type                                               | Default     |
-| --------------------- | ------------------------ | ----------- | -------------------------------------------------- | ----------- |
-| `content`             | `content`                |             | `string`                                           | `undefined` |
-| `irPopoverLeft`       | `ir-popover-left`        |             | `string`                                           | `'10px'`    |
-| `placement`           | `placement`              |             | `"auto" \| "bottom" \| "left" \| "right" \| "top"` | `'auto'`    |
-| `renderContentAsHtml` | `render-content-as-html` |             | `boolean`                                          | `false`     |
-| `trigger`             | `trigger`                |             | `"click" \| "focus" \| "hover"`                    | `'focus'`   |
+| Property              | Attribute                | Description                                                                                                        | Type                                               | Default     |
+| --------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- | ----------- |
+| `content`             | `content`                | Content to display inside the popover. Can be plain text or HTML depending on `renderContentAsHtml`.               | `string`                                           | `undefined` |
+| `irPopoverLeft`       | `ir-popover-left`        | Horizontal offset (left) of the popover from its trigger. Used in inline style as `--ir-popover-left`.             | `string`                                           | `'10px'`    |
+| `placement`           | `placement`              | Position of the popover relative to the trigger. Options: `'top'`, `'bottom'`, `'left'`, `'right'`, `'auto'`.      | `"auto" \| "bottom" \| "left" \| "right" \| "top"` | `'auto'`    |
+| `renderContentAsHtml` | `render-content-as-html` | Whether to treat `content` as raw HTML. When true, `content` will be injected with `html: true` in jQuery popover. | `boolean`                                          | `false`     |
+| `trigger`             | `trigger`                | Event that triggers the popover. Options: `'focus'`, `'click'`, `'hover'`.                                         | `"click" \| "focus" \| "hover"`                    | `'focus'`   |
 
 
 ## Dependencies

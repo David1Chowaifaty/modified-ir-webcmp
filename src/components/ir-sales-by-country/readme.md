@@ -35,6 +35,10 @@ graph TD;
   ir-sales-by-country --> ir-button
   ir-sales-by-country --> ir-sales-filters
   ir-sales-by-country --> ir-sales-table
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
   ir-button --> ir-icons
   ir-sales-filters --> ir-button
   ir-sales-filters --> ir-select

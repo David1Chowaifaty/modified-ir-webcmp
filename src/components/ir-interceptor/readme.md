@@ -7,16 +7,17 @@
 
 ## Properties
 
-| Property           | Attribute | Description | Type       | Default                                                                                                   |
-| ------------------ | --------- | ----------- | ---------- | --------------------------------------------------------------------------------------------------------- |
-| `handledEndpoints` | --        |             | `string[]` | `['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings', '/UnBlock_Exposed_Unit']` |
+| Property                 | Attribute | Description                                                               | Type       | Default                                                                                                   |
+| ------------------------ | --------- | ------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
+| `handledEndpoints`       | --        | List of endpoint paths that should trigger loader logic and OTP handling. | `string[]` | `['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings', '/UnBlock_Exposed_Unit']` |
+| `suppressToastEndpoints` | --        | List of endpoints for which to suppress toast messages.                   | `string[]` | `[]`                                                                                                      |
 
 
 ## Events
 
-| Event   | Description | Type                                                                                                 |
-| ------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `toast` |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+| Event   | Description                                                              | Type                                                                                                 |
+| ------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `toast` | Emits a toast notification (`type`, `title`, `description`, `position`). | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies
@@ -35,9 +36,18 @@
  - [ir-sales-by-country](../ir-sales-by-country)
  - [ir-user-management](../ir-user-management)
 
+### Depends on
+
+- [ir-otp-modal](../ir-otp-modal)
+
 ### Graph
 ```mermaid
 graph TD;
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
   igl-book-property-container --> ir-interceptor
   igloo-calendar --> ir-interceptor
   ir-booking-details --> ir-interceptor

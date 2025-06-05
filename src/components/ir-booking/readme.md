@@ -31,6 +31,10 @@ graph TD;
   ir-login --> ir-input-text
   ir-login --> ir-icons
   ir-login --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
   ir-button --> ir-icons
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
@@ -95,7 +99,6 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
-  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button

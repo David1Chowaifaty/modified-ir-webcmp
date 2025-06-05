@@ -7,22 +7,22 @@
 
 ## Properties
 
-| Property          | Attribute       | Description | Type         | Default     |
-| ----------------- | --------------- | ----------- | ------------ | ----------- |
-| `autoValidate`    | `auto-validate` |             | `boolean`    | `false`     |
-| `countries`       | --              |             | `ICountry[]` | `[]`        |
-| `country`         | --              |             | `ICountry`   | `undefined` |
-| `error`           | `error`         |             | `boolean`    | `undefined` |
-| `label`           | `label`         |             | `string`     | `undefined` |
-| `propertyCountry` | --              |             | `ICountry`   | `undefined` |
-| `testId`          | `test-id`       |             | `string`     | `undefined` |
+| Property          | Attribute       | Description                                                    | Type         | Default     |
+| ----------------- | --------------- | -------------------------------------------------------------- | ------------ | ----------- |
+| `autoValidate`    | `auto-validate` | Whether to automatically validate the input.                   | `boolean`    | `false`     |
+| `countries`       | --              | List of countries to display in the dropdown.                  | `ICountry[]` | `[]`        |
+| `country`         | --              | Currently selected country.                                    | `ICountry`   | `undefined` |
+| `error`           | `error`         | Whether to show an error state on the input.                   | `boolean`    | `undefined` |
+| `label`           | `label`         | The label to display for the input.                            | `string`     | `undefined` |
+| `propertyCountry` | --              | The property-associated country, shown separately if relevant. | `ICountry`   | `undefined` |
+| `testId`          | `test-id`       | Test ID for automated testing.                                 | `string`     | `undefined` |
 
 
 ## Events
 
-| Event           | Description | Type                    |
-| --------------- | ----------- | ----------------------- |
-| `countryChange` |             | `CustomEvent<ICountry>` |
+| Event           | Description                               | Type                    |
+| --------------- | ----------------------------------------- | ----------------------- |
+| `countryChange` | Event emitted when a country is selected. | `CustomEvent<ICountry>` |
 
 
 ## Dependencies

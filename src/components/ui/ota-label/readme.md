@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property          | Attribute           | Description | Type          | Default     |
-| ----------------- | ------------------- | ----------- | ------------- | ----------- |
-| `label`           | `label`             |             | `string`      | `undefined` |
-| `maxVisibleItems` | `max-visible-items` |             | `number`      | `3`         |
-| `remarks`         | --                  |             | `IOtaNotes[]` | `undefined` |
+| Property          | Attribute           | Description                                                                 | Type          | Default     |
+| ----------------- | ------------------- | --------------------------------------------------------------------------- | ------------- | ----------- |
+| `label`           | `label`             | Label displayed as the section title.                                       | `string`      | `undefined` |
+| `maxVisibleItems` | `max-visible-items` | Maximum number of remarks to display before showing the "Show More" button. | `number`      | `3`         |
+| `remarks`         | --                  | Array of OTA notes to display in the list.                                  | `IOtaNotes[]` | `undefined` |
 
 
 ## Dependencies

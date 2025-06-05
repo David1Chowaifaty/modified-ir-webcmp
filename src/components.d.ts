@@ -985,7 +985,13 @@ export namespace Components {
         "popoverTitle": string;
     }
     interface IrInterceptor {
+        /**
+          * List of endpoint paths that should trigger loader logic and OTP handling.
+         */
         "handledEndpoints": string[];
+        /**
+          * List of endpoints for which to suppress toast messages.
+         */
         "suppressToastEndpoints": string[];
     }
     interface IrLabel {
@@ -5033,8 +5039,17 @@ declare namespace LocalJSX {
         "popoverTitle"?: string;
     }
     interface IrInterceptor {
+        /**
+          * List of endpoint paths that should trigger loader logic and OTP handling.
+         */
         "handledEndpoints"?: string[];
+        /**
+          * Emits a toast notification (`type`, `title`, `description`, `position`).
+         */
         "onToast"?: (event: IrInterceptorCustomEvent<IToast>) => void;
+        /**
+          * List of endpoints for which to suppress toast messages.
+         */
         "suppressToastEndpoints"?: string[];
     }
     interface IrLabel {

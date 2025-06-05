@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property        | Attribute         | Description | Type      | Default     |
-| --------------- | ----------------- | ----------- | --------- | ----------- |
-| `cropSize`      | `crop-size`       |             | `number`  | `15`        |
-| `hkStatus`      | `hk-status`       |             | `boolean` | `undefined` |
-| `irPopoverLeft` | `ir-popover-left` |             | `string`  | `'10px'`    |
-| `popoverTitle`  | `popover-title`   |             | `string`  | `undefined` |
+| Property        | Attribute         | Description                                                                                  | Type      | Default     |
+| --------------- | ----------------- | -------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `cropSize`      | `crop-size`       | The number of characters to display before cropping the title with ellipsis.                 | `number`  | `15`        |
+| `hkStatus`      | `hk-status`       | Whether to show the housekeeping (HK) status dot.                                            | `boolean` | `undefined` |
+| `irPopoverLeft` | `ir-popover-left` | CSS offset for the left position of the popover. Used as a CSS variable `--ir-popover-left`. | `string`  | `'10px'`    |
+| `popoverTitle`  | `popover-title`   | The full title string that may be cropped in the UI.                                         | `string`  | `undefined` |
 
 
 ## Dependencies

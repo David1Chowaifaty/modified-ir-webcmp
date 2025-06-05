@@ -7,32 +7,32 @@
 
 ## Properties
 
-| Property               | Attribute                | Description                     | Type                                                                                                                 | Default     |
-| ---------------------- | ------------------------ | ------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `LabelAvailable`       | `label-available`        |                                 | `boolean`                                                                                                            | `true`      |
-| `data`                 | --                       |                                 | `selectOption[]`                                                                                                     | `undefined` |
-| `disabled`             | `disabled`               |                                 | `boolean`                                                                                                            | `undefined` |
-| `error`                | `error`                  | Whether the select has an error | `boolean`                                                                                                            | `false`     |
-| `firstOption`          | `first-option`           |                                 | `string`                                                                                                             | `'Select'`  |
-| `label`                | `label`                  |                                 | `string`                                                                                                             | `'<label>'` |
-| `labelBackground`      | `label-background`       |                                 | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`                      | `null`      |
-| `labelBorder`          | `label-border`           |                                 | `"danger" \| "dark" \| "info" \| "light" \| "none" \| "primary" \| "secondary" \| "success" \| "theme" \| "warning"` | `'theme'`   |
-| `labelColor`           | `label-color`            |                                 | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`                      | `'dark'`    |
-| `labelPosition`        | `label-position`         |                                 | `"center" \| "left" \| "right"`                                                                                      | `'left'`    |
-| `labelWidth`           | `label-width`            |                                 | `1 \| 10 \| 11 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9`                                                              | `3`         |
-| `name`                 | `name`                   |                                 | `string`                                                                                                             | `undefined` |
-| `required`             | `required`               |                                 | `boolean`                                                                                                            | `undefined` |
-| `selectContainerStyle` | `select-container-style` |                                 | `string`                                                                                                             | `undefined` |
-| `selectForcedStyles`   | --                       |                                 | `{ [key: string]: string; }`                                                                                         | `undefined` |
-| `selectStyle`          | `select-style`           |                                 | `boolean`                                                                                                            | `true`      |
-| `selectStyles`         | `select-styles`          |                                 | `string`                                                                                                             | `undefined` |
-| `select_id`            | `select_id`              |                                 | `string`                                                                                                             | `v4()`      |
-| `selectedValue`        | `selected-value`         |                                 | `any`                                                                                                                | `null`      |
-| `showFirstOption`      | `show-first-option`      |                                 | `boolean`                                                                                                            | `true`      |
-| `size`                 | `size`                   |                                 | `"lg" \| "md" \| "sm"`                                                                                               | `'md'`      |
-| `submited`             | `submited`               |                                 | `boolean`                                                                                                            | `false`     |
-| `testId`               | `test-id`                |                                 | `string`                                                                                                             | `undefined` |
-| `textSize`             | `text-size`              |                                 | `"lg" \| "md" \| "sm"`                                                                                               | `'md'`      |
+| Property               | Attribute                | Description | Type                                                                                                                 | Default     |
+| ---------------------- | ------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `LabelAvailable`       | `label-available`        |             | `boolean`                                                                                                            | `true`      |
+| `data`                 | --                       |             | `selectOption[]`                                                                                                     | `undefined` |
+| `disabled`             | `disabled`               |             | `boolean`                                                                                                            | `undefined` |
+| `error`                | `error`                  |             | `boolean`                                                                                                            | `false`     |
+| `firstOption`          | `first-option`           |             | `string`                                                                                                             | `'Select'`  |
+| `label`                | `label`                  |             | `string`                                                                                                             | `'<label>'` |
+| `labelBackground`      | `label-background`       |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`                      | `null`      |
+| `labelBorder`          | `label-border`           |             | `"danger" \| "dark" \| "info" \| "light" \| "none" \| "primary" \| "secondary" \| "success" \| "theme" \| "warning"` | `'theme'`   |
+| `labelColor`           | `label-color`            |             | `"danger" \| "dark" \| "info" \| "light" \| "primary" \| "secondary" \| "success" \| "warning"`                      | `'dark'`    |
+| `labelPosition`        | `label-position`         |             | `"center" \| "left" \| "right"`                                                                                      | `'left'`    |
+| `labelWidth`           | `label-width`            |             | `1 \| 10 \| 11 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9`                                                              | `3`         |
+| `name`                 | `name`                   |             | `string`                                                                                                             | `undefined` |
+| `required`             | `required`               |             | `boolean`                                                                                                            | `undefined` |
+| `selectContainerStyle` | `select-container-style` |             | `string`                                                                                                             | `undefined` |
+| `selectForcedStyles`   | --                       |             | `{ [key: string]: string; }`                                                                                         | `undefined` |
+| `selectStyle`          | `select-style`           |             | `boolean`                                                                                                            | `true`      |
+| `selectStyles`         | `select-styles`          |             | `string`                                                                                                             | `undefined` |
+| `select_id`            | `select_id`              |             | `string`                                                                                                             | `v4()`      |
+| `selectedValue`        | `selected-value`         |             | `any`                                                                                                                | `null`      |
+| `showFirstOption`      | `show-first-option`      |             | `boolean`                                                                                                            | `true`      |
+| `size`                 | `size`                   |             | `"lg" \| "md" \| "sm"`                                                                                               | `'md'`      |
+| `submited`             | `submited`               |             | `boolean`                                                                                                            | `false`     |
+| `testId`               | `test-id`                |             | `string`                                                                                                             | `undefined` |
+| `textSize`             | `text-size`              |             | `"lg" \| "md" \| "sm"`                                                                                               | `'md'`      |
 
 
 ## Events
@@ -47,6 +47,7 @@
 ### Used by
 
  - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
+ - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-stop-sale)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-delete-modal](../../ir-housekeeping/ir-delete-modal)
@@ -67,6 +68,7 @@
 ```mermaid
 graph TD;
   igl-book-property-header --> ir-select
+  igl-bulk-stop-sale --> ir-select
   ir-booking-header --> ir-select
   ir-booking-listing --> ir-select
   ir-delete-modal --> ir-select

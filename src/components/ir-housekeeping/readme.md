@@ -9,6 +9,7 @@
 
 | Property     | Attribute    | Description | Type     | Default     |
 | ------------ | ------------ | ----------- | -------- | ----------- |
+| `baseUrl`    | `base-url`   |             | `string` | `undefined` |
 | `language`   | `language`   |             | `string` | `''`        |
 | `p`          | `p`          |             | `string` | `undefined` |
 | `propertyid` | `propertyid` |             | `number` | `undefined` |
@@ -46,6 +47,11 @@ graph TD;
   ir-housekeeping --> ir-title
   ir-housekeeping --> ir-select
   ir-housekeeping --> ir-hk-team
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
   ir-title --> ir-icon
   ir-hk-team --> ir-hk-unassigned-units
   ir-hk-team --> ir-hk-user
@@ -59,7 +65,6 @@ graph TD;
   ir-hk-unassigned-units --> ir-switch
   ir-hk-unassigned-units --> ir-title
   ir-hk-unassigned-units --> ir-button
-  ir-button --> ir-icons
   ir-hk-user --> ir-title
   ir-hk-user --> ir-input-text
   ir-hk-user --> ir-phone-input

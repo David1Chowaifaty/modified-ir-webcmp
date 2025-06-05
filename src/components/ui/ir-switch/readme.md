@@ -7,18 +7,18 @@
 
 ## Properties
 
-| Property   | Attribute   | Description | Type      | Default     |
-| ---------- | ----------- | ----------- | --------- | ----------- |
-| `checked`  | `checked`   |             | `boolean` | `false`     |
-| `disabled` | `disabled`  |             | `boolean` | `false`     |
-| `switchId` | `switch-id` |             | `string`  | `undefined` |
+| Property   | Attribute   | Description                                                                                  | Type      | Default     |
+| ---------- | ----------- | -------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `checked`  | `checked`   | Whether the switch is currently checked (on). This is mutable and can be toggled internally. | `boolean` | `false`     |
+| `disabled` | `disabled`  | Disables the switch if true.                                                                 | `boolean` | `false`     |
+| `switchId` | `switch-id` | Optional ID for the switch. If not provided, a random ID will be generated.                  | `string`  | `undefined` |
 
 
 ## Events
 
-| Event         | Description | Type                   |
-| ------------- | ----------- | ---------------------- |
-| `checkChange` |             | `CustomEvent<boolean>` |
+| Event         | Description                                                                                                                                                                   | Type                   |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `checkChange` | Emitted when the checked state changes. Emits `true` when turned on, `false` when turned off.  Example: ```tsx <ir-switch onCheckChange={(e) => console.log(e.detail)} /> ``` | `CustomEvent<boolean>` |
 
 
 ## Dependencies

@@ -24,6 +24,7 @@
 | `selectedRooms`          | --                          |             | `Map<string, Map<string, any>>`                                            | `undefined` |
 | `showSplitBookingOption` | `show-split-booking-option` |             | `boolean`                                                                  | `undefined` |
 | `sourceOptions`          | --                          |             | `TSourceOptions[]`                                                         | `undefined` |
+| `wasBlockedUnit`         | `was-blocked-unit`          |             | `boolean`                                                                  | `undefined` |
 
 
 ## Events

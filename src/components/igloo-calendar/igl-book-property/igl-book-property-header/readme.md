@@ -23,6 +23,7 @@
 | `sourceOptions`               | --                          |             | `TSourceOptions[]`                                                         | `[]`        |
 | `splitBookingId`              | `split-booking-id`          |             | `any`                                                                      | `''`        |
 | `splitBookings`               | --                          |             | `any[]`                                                                    | `undefined` |
+| `wasBlockedUnit`              | `was-blocked-unit`          |             | `boolean`                                                                  | `undefined` |
 
 
 ## Events

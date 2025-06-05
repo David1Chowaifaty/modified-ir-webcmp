@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property         | Attribute     | Description | Type                         | Default     |
-| ---------------- | ------------- | ----------- | ---------------------------- | ----------- |
-| `containerStyle` | --            |             | `{ [key: string]: string; }` | `undefined` |
-| `customSlot`     | `custom-slot` |             | `boolean`                    | `false`     |
-| `message`        | `message`     |             | `string`                     | `undefined` |
-| `withHtml`       | `with-html`   |             | `boolean`                    | `true`      |
+| Property         | Attribute     | Description                                                                                                          | Type                         | Default     |
+| ---------------- | ------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ----------- |
+| `containerStyle` | --            | Inline styles applied to the outer tooltip container.                                                                | `{ [key: string]: string; }` | `undefined` |
+| `customSlot`     | `custom-slot` | When true, allows a custom element to trigger the tooltip using a named slot. If false, a default info icon is used. | `boolean`                    | `false`     |
+| `message`        | `message`     | Text or HTML content to be displayed in the tooltip.                                                                 | `string`                     | `undefined` |
+| `withHtml`       | `with-html`   | Whether the tooltip content should be rendered using `innerHTML`. If false, treats message as plain text.            | `boolean`                    | `true`      |
 
 
 ## Dependencies
@@ -25,7 +25,6 @@
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
- - [ir-room](../../ir-booking-details/ir-room)
 
 ### Graph
 ```mermaid
@@ -36,7 +35,6 @@ graph TD;
   ir-booking-listing --> ir-tooltip
   ir-hk-archive --> ir-tooltip
   ir-reservation-information --> ir-tooltip
-  ir-room --> ir-tooltip
   style ir-tooltip fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

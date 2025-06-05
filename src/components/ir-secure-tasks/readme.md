@@ -22,6 +22,7 @@
 - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
 - [igloo-calendar](../igloo-calendar)
 - [ir-housekeeping](../ir-housekeeping)
+- [ir-user-management](../ir-user-management)
 
 ### Graph
 ```mermaid
@@ -30,11 +31,16 @@ graph TD;
   ir-secure-tasks --> ir-hk-tasks
   ir-secure-tasks --> igloo-calendar
   ir-secure-tasks --> ir-housekeeping
+  ir-secure-tasks --> ir-user-management
   ir-login --> ir-interceptor
   ir-login --> ir-toast
   ir-login --> ir-input-text
   ir-login --> ir-icons
   ir-login --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
   ir-button --> ir-icons
   ir-hk-tasks --> ir-loading-screen
   ir-hk-tasks --> ir-toast
@@ -122,7 +128,6 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
-  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-pickup-view --> ir-button
@@ -177,6 +182,7 @@ graph TD;
   igloo-calendar --> ir-room-nights
   igloo-calendar --> ir-booking-details
   igloo-calendar --> ir-room-guests
+  igloo-calendar --> igl-bulk-stop-sale
   igloo-calendar --> ir-modal
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-button
@@ -196,6 +202,11 @@ graph TD;
   ir-room-nights --> ir-loading-screen
   ir-room-nights --> ir-title
   ir-room-nights --> ir-button
+  igl-bulk-stop-sale --> ir-title
+  igl-bulk-stop-sale --> ir-select
+  igl-bulk-stop-sale --> ir-checkbox
+  igl-bulk-stop-sale --> ir-button
+  igl-bulk-stop-sale --> ir-date-picker
   ir-housekeeping --> ir-loading-screen
   ir-housekeeping --> ir-interceptor
   ir-housekeeping --> ir-toast
@@ -224,6 +235,28 @@ graph TD;
   requirement-check --> ir-icons
   ir-delete-modal --> ir-button
   ir-delete-modal --> ir-select
+  ir-user-management --> ir-toast
+  ir-user-management --> ir-interceptor
+  ir-user-management --> ir-loading-screen
+  ir-user-management --> ir-user-management-table
+  ir-user-management-table --> ir-user-form-panel
+  ir-user-management-table --> ir-icon
+  ir-user-management-table --> ir-switch
+  ir-user-management-table --> ir-sidebar
+  ir-user-management-table --> ir-modal
+  ir-user-form-panel --> ir-title
+  ir-user-form-panel --> ir-input-text
+  ir-user-form-panel --> ir-select
+  ir-user-form-panel --> ir-password-validator
+  ir-user-form-panel --> ir-button
+  ir-user-form-panel --> ir-sidebar
+  ir-user-form-panel --> ir-reset-password
+  ir-reset-password --> ir-interceptor
+  ir-reset-password --> ir-toast
+  ir-reset-password --> ir-title
+  ir-reset-password --> ir-input-text
+  ir-reset-password --> ir-password-validator
+  ir-reset-password --> ir-button
   style ir-secure-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

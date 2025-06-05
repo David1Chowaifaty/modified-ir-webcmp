@@ -20,13 +20,13 @@
 
 ## Events
 
-| Event                               | Description | Type                                                                                     |
-| ----------------------------------- | ----------- | ---------------------------------------------------------------------------------------- |
-| `addToBeAssignedEvent`              |             | `CustomEvent<any>`                                                                       |
-| `assignRoomEvent`                   |             | `CustomEvent<{ [key: string]: any; }>`                                                   |
-| `highlightToBeAssignedBookingEvent` |             | `CustomEvent<any>`                                                                       |
-| `openCalendarSidebar`               |             | `CustomEvent<{ type: "room-guests" \| "booking-details" \| "add-days"; payload: any; }>` |
-| `scrollPageToRoom`                  |             | `CustomEvent<any>`                                                                       |
+| Event                               | Description | Type                                                                                                      |
+| ----------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
+| `addToBeAssignedEvent`              |             | `CustomEvent<any>`                                                                                        |
+| `assignRoomEvent`                   |             | `CustomEvent<{ [key: string]: any; }>`                                                                    |
+| `highlightToBeAssignedBookingEvent` |             | `CustomEvent<any>`                                                                                        |
+| `openCalendarSidebar`               |             | `CustomEvent<{ type: "room-guests" \| "booking-details" \| "add-days" \| "bulk-blocks"; payload: any; }>` |
+| `scrollPageToRoom`                  |             | `CustomEvent<any>`                                                                                        |
 
 
 ## Dependencies

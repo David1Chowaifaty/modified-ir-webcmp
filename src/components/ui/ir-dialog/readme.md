@@ -7,23 +7,24 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type      | Default |
-| -------- | --------- | ----------- | --------- | ------- |
-| `open`   | `open`    |             | `boolean` | `false` |
+| Property | Attribute | Description                                                                                     | Type      | Default |
+| -------- | --------- | ----------------------------------------------------------------------------------------------- | --------- | ------- |
+| `open`   | `open`    | Controls whether the dialog should be opened. Can be updated externally and watched internally. | `boolean` | `false` |
 
 
 ## Events
 
-| Event        | Description | Type                   |
-| ------------ | ----------- | ---------------------- |
-| `openChange` |             | `CustomEvent<boolean>` |
+| Event        | Description                                                                                                             | Type                   |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `openChange` | Emits the open/close state of the modal.  Example: ```tsx <ir-dialog onOpenChange={(e) => console.log(e.detail)} /> ``` | `CustomEvent<boolean>` |
 
 
 ## Methods
 
 ### `closeModal() => Promise<void>`
 
-
+Closes the modal dialog programmatically.
+Reverts body scroll and emits `openChange`.
 
 #### Returns
 
@@ -33,7 +34,14 @@ Type: `Promise<void>`
 
 ### `openModal() => Promise<void>`
 
+Opens the modal dialog programmatically.
+Applies `overflow: hidden` to the `body`.
 
+Example:
+```ts
+const dialog = document.querySelector('ir-dialog');
+await dialog.openModal();
+```
 
 #### Returns
 
