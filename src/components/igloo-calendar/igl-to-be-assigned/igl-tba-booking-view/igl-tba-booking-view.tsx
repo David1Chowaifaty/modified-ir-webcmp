@@ -4,7 +4,7 @@ import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import { CalendarSidebarState } from '@/components/igloo-calendar/igloo-calendar';
 import { canCheckIn } from '@/utils/utils';
-import { IUnit } from '@/models/booking.dto';
+// import { IUnit } from '@/models/booking.dto';
 
 @Component({
   tag: 'igl-tba-booking-view',
