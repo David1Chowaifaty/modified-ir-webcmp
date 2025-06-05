@@ -1773,6 +1773,12 @@ export namespace Components {
         "userTypes": Map<string | number, string>;
         "users": User[];
     }
+    interface IrWeekdaySelector {
+        /**
+          * Initial list of selected weekdays (numeric values).
+         */
+        "weekdays": number[];
+    }
     interface OtaLabel {
         /**
           * Label displayed as the section title.
@@ -2133,6 +2139,10 @@ export interface IrUserFormPanelCustomEvent<T> extends CustomEvent<T> {
 export interface IrUserManagementTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrUserManagementTableElement;
+}
+export interface IrWeekdaySelectorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrWeekdaySelectorElement;
 }
 declare global {
     interface HTMLIglApplicationInfoElement extends Components.IglApplicationInfo, HTMLStencilElement {
@@ -3848,6 +3858,23 @@ declare global {
         prototype: HTMLIrUserManagementTableElement;
         new (): HTMLIrUserManagementTableElement;
     };
+    interface HTMLIrWeekdaySelectorElementEventMap {
+        "weekdayChange": number[];
+    }
+    interface HTMLIrWeekdaySelectorElement extends Components.IrWeekdaySelector, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrWeekdaySelectorElementEventMap>(type: K, listener: (this: HTMLIrWeekdaySelectorElement, ev: IrWeekdaySelectorCustomEvent<HTMLIrWeekdaySelectorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrWeekdaySelectorElementEventMap>(type: K, listener: (this: HTMLIrWeekdaySelectorElement, ev: IrWeekdaySelectorCustomEvent<HTMLIrWeekdaySelectorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrWeekdaySelectorElement: {
+        prototype: HTMLIrWeekdaySelectorElement;
+        new (): HTMLIrWeekdaySelectorElement;
+    };
     interface HTMLOtaLabelElement extends Components.OtaLabel, HTMLStencilElement {
     }
     var HTMLOtaLabelElement: {
@@ -3975,6 +4002,7 @@ declare global {
         "ir-user-form-panel": HTMLIrUserFormPanelElement;
         "ir-user-management": HTMLIrUserManagementElement;
         "ir-user-management-table": HTMLIrUserManagementTableElement;
+        "ir-weekday-selector": HTMLIrWeekdaySelectorElement;
         "ota-label": HTMLOtaLabelElement;
         "requirement-check": HTMLRequirementCheckElement;
     }
@@ -5913,6 +5941,16 @@ declare namespace LocalJSX {
         "userTypes"?: Map<string | number, string>;
         "users"?: User[];
     }
+    interface IrWeekdaySelector {
+        /**
+          * Emits an updated list of selected weekday values when the selection changes.  Example: ```tsx <ir-weekday-selector onWeekdayChange={(e) => console.log(e.detail)} /> ```
+         */
+        "onWeekdayChange"?: (event: IrWeekdaySelectorCustomEvent<number[]>) => void;
+        /**
+          * Initial list of selected weekdays (numeric values).
+         */
+        "weekdays"?: number[];
+    }
     interface OtaLabel {
         /**
           * Label displayed as the section title.
@@ -6052,6 +6090,7 @@ declare namespace LocalJSX {
         "ir-user-form-panel": IrUserFormPanel;
         "ir-user-management": IrUserManagement;
         "ir-user-management-table": IrUserManagementTable;
+        "ir-weekday-selector": IrWeekdaySelector;
         "ota-label": OtaLabel;
         "requirement-check": RequirementCheck;
     }
@@ -6174,6 +6213,7 @@ declare module "@stencil/core" {
             "ir-user-form-panel": LocalJSX.IrUserFormPanel & JSXBase.HTMLAttributes<HTMLIrUserFormPanelElement>;
             "ir-user-management": LocalJSX.IrUserManagement & JSXBase.HTMLAttributes<HTMLIrUserManagementElement>;
             "ir-user-management-table": LocalJSX.IrUserManagementTable & JSXBase.HTMLAttributes<HTMLIrUserManagementTableElement>;
+            "ir-weekday-selector": LocalJSX.IrWeekdaySelector & JSXBase.HTMLAttributes<HTMLIrWeekdaySelectorElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
             "requirement-check": LocalJSX.RequirementCheck & JSXBase.HTMLAttributes<HTMLRequirementCheckElement>;
         }

@@ -1,0 +1,6 @@
+:host {
+  display: block;
+}
+.days-checkbox {
+  gap: 0.5rem;
+}

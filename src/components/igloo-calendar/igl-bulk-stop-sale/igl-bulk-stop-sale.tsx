@@ -6,10 +6,7 @@ import moment, { Moment } from 'moment';
 import { z, ZodError } from 'zod';
 import { IToast } from '@components/ui/ir-toast/toast';
 export type SelectedRooms = { id: string | number; result: 'open' | 'closed' };
-export interface Weekday {
-  value: number;
-  label: string;
-}
+
 @Component({
   tag: 'igl-bulk-stop-sale',
   styleUrls: ['igl-bulk-stop-sale.css', '../../../common/sheet.css'],
@@ -26,15 +23,6 @@ export class IglBulkStopSale {
     to: Moment | null;
   }[] = [{ from: null, to: null }];
 
-  private weekdays: Weekday[] = [
-    { value: 1, label: 'M' },
-    { value: 2, label: 'T' },
-    { value: 3, label: 'W' },
-    { value: 4, label: 'Th' },
-    { value: 5, label: 'Fr' },
-    { value: 6, label: 'Sa' },
-    { value: 0, label: 'Su' },
-  ];
   @State() selectedWeekdays: Set<number> = new Set(
     Array(7)
       .fill(null)
@@ -72,7 +60,7 @@ export class IglBulkStopSale {
 
   //sections
   private unitSections: HTMLTableElement;
-  private weekdaysSections: HTMLDivElement;
+  private weekdaysSections: HTMLIrWeekdaySelectorElement;
   private datesSections: HTMLTableElement;
 
   componentDidLoad() {
@@ -178,19 +166,6 @@ export class IglBulkStopSale {
   private deactivate() {
     this.reloadInterceptor.deactivate();
     if (this.sidebar) this.sidebar.preventClose = false;
-  }
-
-  private toggleWeekDays({ checked, weekDay }: { checked: boolean; weekDay: number }): void {
-    const prev = new Set(this.selectedWeekdays);
-    if (checked) {
-      if (!this.selectedWeekdays.has(weekDay)) {
-        prev.add(weekDay);
-        this.selectedWeekdays = new Set(prev);
-      }
-    } else {
-      prev.delete(weekDay);
-      this.selectedWeekdays = new Set(prev);
-    }
   }
 
   private handleDateChange({ index, date, key }: { index: number; date: Moment; key: 'from' | 'to' }) {
@@ -318,18 +293,15 @@ export class IglBulkStopSale {
           </div>
           <p class="text-left mt-2 text-muted">Included days</p>
           {this.errors === 'weekdays' && <p class={'text-danger text-left smaller m-0 p-0'}>Please select at least one day</p>}
-          <div ref={el => (this.weekdaysSections = el)} class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
-            {this.weekdays.map(w => (
-              <ir-checkbox
-                checked={this.selectedWeekdays.has(w.value)}
-                onCheckChange={e => this.toggleWeekDays({ checked: e.detail, weekDay: w.value })}
-                label={w.label}
-                labelClass="m-0 p-0"
-                class="days-checkbox"
-              ></ir-checkbox>
-            ))}
-          </div>
-
+          <ir-weekday-selector
+            ref={el => (this.weekdaysSections = el)}
+            weekdays={Array.from(this.selectedWeekdays)}
+            onWeekdayChange={e => {
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+              this.selectedWeekdays = new Set(e.detail);
+            }}
+          ></ir-weekday-selector>
           {/* Dates */}
           <table class="mt-1" ref={el => (this.datesSections = el)}>
             <thead>
