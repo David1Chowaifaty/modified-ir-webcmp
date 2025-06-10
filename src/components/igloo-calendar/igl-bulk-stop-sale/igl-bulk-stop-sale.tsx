@@ -105,6 +105,108 @@ export class IglBulkStopSale {
       }
       return p;
     };
+    // const updateCalendarCells = (
+    //   payloads: {
+    //     is_closed: boolean;
+    //     restrictions: {
+    //       night: string;
+    //       room_type_id: number;
+    //     }[];
+    //   }[],
+    // ) => {
+    //   const prevDisabledCells = new Map(calendar_dates.disabled_cells);
+    //   for (const payload of payloads) {
+    //     for (const restrictions of payload.restrictions) {
+    //       const roomType = calendar_data.roomsInfo.find(rt => rt.id === restrictions.room_type_id);
+    //       if (roomType) {
+    //         const dayIndex = calendar_dates.days.findIndex(r => r.value === restrictions.night);
+    //         if (dayIndex === -1) {
+    //           console.warn(`Couldn't find date ${restrictions.night}`);
+    //           continue;
+    //         }
+    //         const day = calendar_dates.days[dayIndex];
+    //         const rp = day.rate.find(r => r.id === restrictions.room_type_id);
+    //         if (!rp) {
+    //           console.warn(`Couldn't find room type ${restrictions.room_type_id}`);
+    //           continue;
+    //         }
+    //         const haveAvailability = (rp.exposed_inventory as any).rts === 0;
+    //         for (const room of roomType.physicalrooms) {
+    //           const key = `${room.id}_${restrictions.night}`;
+    //           prevDisabledCells.set(key, {
+    //             disabled: payload.is_closed ? true : haveAvailability,
+    //             reason: payload.is_closed ? 'stop_sale' : haveAvailability ? 'inventory' : 'stop_sale',
+    //           });
+    //         }
+    //       }
+    //     }
+    //   }
+    //   calendar_dates['disabled_cells'] = new Map(prevDisabledCells);
+    // };
+    const updateCalendarCells = (
+      payloads: {
+        is_closed: boolean;
+        restrictions: {
+          night: string;
+          room_type_id: number;
+        }[];
+      }[],
+    ) => {
+      console.log(payloads);
+      // const prevDisabledCells = new Map(calendar_dates.disabled_cells);
+
+      // // Caches
+      // const roomsInfoById = new Map(calendar_data.roomsInfo.map((rt,i) => [rt.id, {roomType:rt,index:i}]));
+      // const dayIndexByValue = new Map(calendar_dates.days.map((day, i) => [day.value, i]));
+      // const rateByRoomTypeAndDate = new Map<string, any>();
+      // const days = [...calendar_dates.days];
+
+      // for (const payload of payloads) {
+      //   for (const restriction of payload.restrictions) {
+      //     const { night, room_type_id } = restriction;
+      //     const {roomType,index} = roomsInfoById.get(room_type_id);
+
+      //     if (!roomType) continue;
+
+      //     const dayIndex = dayIndexByValue.get(night);
+      //     if (dayIndex === undefined) {
+      //       console.warn(`Couldn't find date ${night}`);
+      //       continue;
+      //     }
+
+      //     const day = calendar_dates.days[dayIndex];
+      //     const updatedRateplans = roomType.rateplans.map((rp) => (i === ratePlanIdx ? { ...rp, is_available_to_book: sale.is_available_to_book } : rp));
+      //     const is_available_to_book = updatedRateplans.some(rp => rp.is_available_to_book);
+      //     days[dayIndex].rate[index] = {
+      //       ...roomType,
+      //       rateplans: updatedRateplans,
+      //       // overall room availability = true if any rateplan is bookable
+      //       is_available_to_book,
+      //     };
+      //     const rateKey = `${room_type_id}_${night}`;
+      //     let rp = rateByRoomTypeAndDate.get(rateKey);
+      //     if (!rp) {
+      //       rp = day.rate.find(r => r.id === room_type_id);
+      //       if (!rp) {
+      //         console.warn(`Couldn't find room type ${room_type_id}`);
+      //         continue;
+      //       }
+      //       rateByRoomTypeAndDate.set(rateKey, rp);
+      //     }
+
+      //     const haveAvailability = (rp.exposed_inventory as any).rts === 0;
+      //     for (const room of roomType.physicalrooms) {
+      //       const key = `${room.id}_${night}`;
+      //       prevDisabledCells.set(key, {
+      //         disabled: payload.is_closed ? true : haveAvailability,
+      //         reason: payload.is_closed ? 'stop_sale' : haveAvailability ? 'inventory' : 'stop_sale',
+      //       });
+      //     }
+      //   }
+      // }
+
+      // calendar_dates['disabled_cells'] = new Map(prevDisabledCells);
+    };
     try {
       this.errors = null;
       this.isLoading = true;
@@ -124,10 +226,12 @@ export class IglBulkStopSale {
       const isAllOpen = this.selectedRoomTypes.every(e => e.result === 'open');
       const isAllClosed = this.selectedRoomTypes.every(e => e.result === 'closed');
       if (isAllClosed || isAllOpen) {
-        await this.bookingService.setExposedRestrictionPerRoomType({
+        const payload = {
           is_closed: isAllClosed,
           restrictions: periods_to_modify,
-        });
+        };
+        await this.bookingService.setExposedRestrictionPerRoomType(payload);
+        updateCalendarCells([payload]);
       } else {
         const payloads = [];
         for (const room of this.selectedRoomTypes) {
@@ -138,6 +242,7 @@ export class IglBulkStopSale {
           });
         }
         await Promise.all(payloads.map(p => this.bookingService.setExposedRestrictionPerRoomType(p)));
+        updateCalendarCells(payloads);
       }
       this.deactivate();
       this.toast.emit({
