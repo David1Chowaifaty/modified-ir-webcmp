@@ -21,7 +21,7 @@
 }
 .cellData.disabled {
   background: rgba(153, 153, 153, 15%);
-  cursor: not-allowed;
+  cursor: var(--cell-cursor, not-allowed);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .roomRow .room {

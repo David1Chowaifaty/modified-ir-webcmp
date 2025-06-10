@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h, Element } from '@stencil/core';
+import { Component, Host, Prop, h, Element, Watch } from '@stencil/core';
 
 @Component({
   tag: 'ir-interactive-title',
@@ -11,7 +11,7 @@ export class IrInteractiveTitle {
   /**
    * The full title string that may be cropped in the UI.
    */
-  @Prop() popoverTitle: string;
+  @Prop({ reflect: true }) popoverTitle: string;
 
   /**
    * CSS offset for the left position of the popover.
@@ -43,18 +43,33 @@ export class IrInteractiveTitle {
   componentWillLoad() {
     this.croppedTitle = this.popoverTitle;
   }
+
   componentDidLoad() {
     this.initializePopover();
   }
+
+  disconnectedCallback() {
+    this.disposePopover();
+  }
+
+  @Watch('popoverTitle')
+  handleTitleChange(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      this.disposePopover();
+      this.croppedTitle = newValue;
+      this.initializePopover(newValue);
+    }
+  }
+
   /**
    * Measures the width of the title and icon to determine if the text overflows.
    * If it does, crops the title and attaches a popover to the title element.
    * Otherwise, removes any existing popover.
    */
-  private initializePopover() {
+  private initializePopover(title?: string) {
     const titleElement = this.el.querySelector('.popover-title') as HTMLElement;
     const iconElement = this.el.querySelector('.hk-dot') as HTMLElement;
-
+    const cropped_title = title ?? this.croppedTitle;
     if (!titleElement || !this.croppedTitleEl) {
       return;
     }
@@ -65,14 +80,24 @@ export class IrInteractiveTitle {
 
     if (isOverflowing) {
       this.croppedTitle = this.popoverTitle.slice(0, this.cropSize) + '...';
-      this.croppedTitleEl.innerHTML = this.croppedTitle;
-
+      this.croppedTitleEl.innerHTML = cropped_title;
+      // this.render();
       $(titleElement).popover({
         trigger: 'hover',
         content: this.popoverTitle,
         placement: 'top',
       });
     } else {
+      $(titleElement).popover('dispose');
+    }
+  }
+
+  /**
+   * Disposes of the Bootstrap popover associated with the `.popover-title` element.
+   */
+  private disposePopover() {
+    const titleElement = this.el.querySelector('.popover-title') as HTMLElement;
+    if (titleElement) {
       $(titleElement).popover('dispose');
     }
   }

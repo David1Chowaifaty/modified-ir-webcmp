@@ -293,11 +293,9 @@ export class IglooCalendar {
     }
   }
   private setUpCalendarData(roomResp, bookingResp) {
-    console.log(roomResp);
     this.calendarData.currency = roomResp['My_Result'].currency;
     this.calendarData.allowedBookingSources = roomResp['My_Result'].allowed_booking_sources;
     this.calendarData.adultChildConstraints = roomResp['My_Result'].adult_child_constraints;
-    console.log(this.calendarData.allowedBookingSources);
     this.calendarData.legendData = this.getLegendData(roomResp);
     this.calendarData.is_vacation_rental = roomResp['My_Result'].is_vacation_rental;
     this.calendarData.from_date = bookingResp.My_Params_Get_Rooming_Data.FROM;

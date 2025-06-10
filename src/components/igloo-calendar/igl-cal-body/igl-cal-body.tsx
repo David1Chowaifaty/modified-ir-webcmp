@@ -38,7 +38,7 @@ export class IglCalBody {
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) scrollPageToRoom: EventEmitter;
 
-  private selectedRooms: { [key: string]: any } = {};
+  @State() selectedRooms: { [key: string]: any } = {};
   private fromRoomId: number = -1;
   private newEvent: { [key: string]: any };
   private currentDate = new Date();
@@ -305,7 +305,7 @@ export class IglCalBody {
           }
           cursor.add(1, 'days');
         }
-        if (disabledCount >= 2) {
+        if (disabledCount >= 1) {
           this.selectedRooms = {};
           this.fromRoomId = roomId;
           this.renderElement();
@@ -378,23 +378,32 @@ export class IglCalBody {
 
   private getGeneralRoomDayColumns(roomId: string, roomCategory: RoomCategory, roomName: string) {
     return this.calendarData.days.map(dayInfo => {
-      const isDisabled = this.isCellDisabled(Number(roomId), dayInfo.value);
+      const isCellDisabled = this.isCellDisabled(Number(roomId), dayInfo.value);
+      const prevDate = moment(dayInfo.value, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD');
+      const isDisabled = (isCellDisabled && Object.keys(this.selectedRooms).length === 0) || (isCellDisabled && this.isCellDisabled(Number(roomId), prevDate));
+      const isSelected = this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo));
+      const isCurrentDate = dayInfo.day === this.today || dayInfo.day === this.highlightedDate;
       return (
         <div
-          class={`cellData position-relative roomCell ${isDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${
-            dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''
-          } ${this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''} ${
-            this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo)) ? 'selectedDay' : ''
-          }`}
+          class={`cellData position-relative roomCell ${isCellDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${isCurrentDate ? 'currentDay' : ''} ${
+            this.dragOverElement === roomId + '_' + dayInfo.day ? 'dragOverHighlight' : ''
+          } ${isSelected ? 'selectedDay' : ''}`}
+          style={!isDisabled && { '--cell-cursor': 'default' }}
           onClick={() => {
-            const prevDate = moment(dayInfo.value, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD');
-            if (isDisabled && this.isCellDisabled(Number(roomId), prevDate)) {
+            if (isDisabled) {
               return;
             }
             this.clickCell(Number(roomId), dayInfo, roomCategory);
           }}
+          aria-label={roomName}
+          role="gridcell"
+          data-room-id={roomId}
           data-date={dayInfo.value}
+          aria-current={isCurrentDate ? 'date' : undefined}
           data-room-name={roomName}
+          aria-disabled={String(isDisabled)}
+          aria-selected={Boolean(isSelected)}
+          // tabIndex={-1}
         >
           {/* <button class={'triangle-button'} style={{ '--in-toggle-color': isDisabled ? 'green' : '#ff4961' }}></button> */}
         </div>
@@ -447,24 +456,25 @@ export class IglCalBody {
    * Renders a list of active rooms for an expanded room category. Returns an array of JSX elements, including headers and day columns, or an empty array if the category is collapsed or contains no active rooms.
    *
    * @param {RoomCategory} roomCategory - The category containing room details.
-   * @returns {JSX.Element[]} - JSX elements for the active rooms or an empty array.
    */
   private getRoomsByCategory(roomCategory: RoomCategory) {
     // Check accordion is expanded.
     if (!roomCategory.expanded) {
-      return [];
+      return null;
     }
-
     return this.getCategoryRooms(roomCategory)?.map(room => {
       if (!room.is_active) {
         return null;
       }
+      const haveSingleRooms = this.getTotalPhysicalRooms(roomCategory) <= 1;
+      const name = haveSingleRooms ? this.getCategoryName(roomCategory) : this.getRoomName(room);
       return (
         <div class="roomRow">
           <div
             class={`cellData room text-left align-items-center roomHeaderCell  roomTitle ${this.getTotalPhysicalRooms(roomCategory) <= 1 ? 'pl10' : ''} ${
               'room_' + this.getRoomId(room)
             }`}
+            data-room-name={name}
             data-hk-enabled={String(calendar_data.housekeeping_enabled)}
             data-room={this.getRoomId(room)}
             onClick={() => {
@@ -481,18 +491,16 @@ export class IglCalBody {
               this.interactiveTitle[room.id]?.style?.removeProperty('--ir-interactive-hk-bg');
             }}
           >
-            {/* <div>{this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}</div> */}
-            {/* <ir-popover popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}></ir-popover> */}
             <ir-interactive-title
               ref={el => {
                 if (el) this.interactiveTitle[room.id] = el;
               }}
               style={room.hk_status === '003' && { '--dot-color': '#999999' }}
               hkStatus={calendar_data.housekeeping_enabled && room.hk_status !== '001'}
-              popoverTitle={this.getTotalPhysicalRooms(roomCategory) <= 1 ? this.getCategoryName(roomCategory) : this.getRoomName(room)}
+              popoverTitle={name}
             ></ir-interactive-title>
           </div>
-          {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory, room.name)}
+          {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory, name)}
         </div>
       );
     });
@@ -501,7 +509,12 @@ export class IglCalBody {
   private getRoomRows() {
     return this.calendarData.roomsInfo?.map((roomCategory, index) => {
       if (roomCategory.is_active) {
-        return [this.getRoomCategoryRow(roomCategory, index), this.getRoomsByCategory(roomCategory)];
+        return (
+          <Fragment>
+            {this.getRoomCategoryRow(roomCategory, index)}
+            {roomCategory.expanded && this.getRoomsByCategory(roomCategory)}
+          </Fragment>
+        );
       } else {
         return null;
       }
