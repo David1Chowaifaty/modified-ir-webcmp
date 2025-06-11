@@ -33,24 +33,19 @@ export class IglLegends {
             </div>
             <div class="mt-2 pl-1">
               <table>
-                {this.legendData.map((legendInfo, i) => (
-                  <tr key={`legend_${i}`} class="legendRow ">
-                    <td>
-                      <div class={`legend_${legendInfo.design}`} style={{ backgroundColor: legendInfo.color }}></div>
-                    </td>
-                    <td>
-                      <span class="font-small-3">{legendInfo.name}</span>
-                    </td>
-                  </tr>
-                ))}
-                <tr class="legendRow">
-                  <td>
-                    <div class="legend_cell mr-2"></div>
-                  </td>
-                  <td>
-                    <span class="font-small-3">No availability or stop sale</span>
-                  </td>
-                </tr>
+                {this.legendData.map(legendInfo => {
+                  console.log(legendInfo);
+                  return (
+                    <tr key={`legend_${legendInfo.id}`} class="legendRow ">
+                      <td>
+                        <div class={`legend_${legendInfo.design}`} style={{ backgroundColor: legendInfo.color }}></div>
+                      </td>
+                      <td>
+                        <span class="font-small-3">{legendInfo.name}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </table>
             </div>
             <hr />

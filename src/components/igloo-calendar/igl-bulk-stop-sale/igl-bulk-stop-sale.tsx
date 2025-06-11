@@ -1,11 +1,12 @@
 import { BookingService } from '@/services/booking.service';
 import calendar_data from '@/stores/calendar-data';
 import { ReloadInterceptor } from '@/utils/ReloadInterceptor';
-import { Component, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import moment, { Moment } from 'moment';
 import { z, ZodError } from 'zod';
 import { IToast } from '@components/ui/ir-toast/toast';
 import calendar_dates from '@/stores/calendar-dates.store';
+import locales from '@/stores/locales.store';
 export type SelectedRooms = { id: string | number; result: 'open' | 'closed' };
 
 @Component({
@@ -73,15 +74,15 @@ export class IglBulkStopSale {
     this.reloadInterceptor.deactivate();
   }
 
-  @Listen('beforeSidebarClose', { target: 'body' })
-  handleBeforeSidebarClose(e: CustomEvent) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    if (window.confirm('Do you really want to proceed?')) {
-      this.deactivate();
-      this.sidebar.toggleSidebar();
-    }
-  }
+  // @Listen('beforeSidebarClose', { target: 'body' })
+  // handleBeforeSidebarClose(e: CustomEvent) {
+  //   e.stopImmediatePropagation();
+  //   e.stopPropagation();
+  //   if (window.confirm('Do you really want to proceed?')) {
+  //     this.deactivate();
+  //     this.sidebar.toggleSidebar();
+  //   }
+  // }
 
   private async addBlockDates() {
     const generatePeriodsToModify = periods => {
@@ -199,7 +200,7 @@ export class IglBulkStopSale {
       this.deactivate();
       this.toast.emit({
         type: 'success',
-        title: 'Request was submitted successfully. Your changes have been queued and will be applied shortly.',
+        title: locales.entries.Lcz_RequestSubmittedSuccessfully,
         description: '',
       });
       this.isLoading = false;
@@ -292,20 +293,20 @@ export class IglBulkStopSale {
               this.closeModal.emit(null);
             }}
             class="px-1 mb-0"
-            label="Bulk Stop/Open Sale"
+            label={locales.entries.Lcz_BulkStopOpenSale}
             displayContext="sidebar"
           ></ir-title>
         </div>
         <div class="sheet-body px-1">
           <div class="text-muted text-left py-0 my-0">
             <p>
-              Select the affected unit(s). <span class="text-warning">This operation might require several minutes.</span>
+              {locales.entries.Lcz_SelectAffectedUnits} <span class="text-warning">{locales.entries.Lcz_OperationRequiresSeveralMinutes}</span>
             </p>
           </div>
           <div>
             {this.errors === 'rooms' && (
               <p class={'text-danger text-left smaller p-0 '} style={{ 'margin-bottom': '0.5rem' }}>
-                Please select at least one {calendar_data.is_vacation_rental ? 'listing' : 'unit'}
+                {calendar_data.is_vacation_rental ? locales.entries.Lcz_PlzSelectOneListing : locales.entries.Lcz_PlzSelectOneUnit}
               </p>
             )}
             <table ref={el => (this.unitSections = el)}>
@@ -325,8 +326,8 @@ export class IglBulkStopSale {
                           <ir-select
                             LabelAvailable={false}
                             data={[
-                              { value: 'open', text: 'Open' },
-                              { value: 'closed', text: 'Stop sale' },
+                              { value: 'open', text: locales.entries.Lcz_Open },
+                              { value: 'closed', text: locales.entries.Lcz_StopSale },
                             ]}
                             onSelectChange={e => {
                               const choice = e.detail as 'open' | 'closed' | undefined;
@@ -363,8 +364,8 @@ export class IglBulkStopSale {
           <table class="mt-1" ref={el => (this.datesSections = el)}>
             <thead>
               <tr>
-                <th class="text-left">From</th>
-                <th class="text-left">to (inclusive)</th>
+                <th class="text-left">{locales.entries.Lcz_From}</th>
+                <th class="text-left">{locales.entries.Lcz_ToExclusive}</th>
                 <td>
                   {this.dates.length !== this.maxDatesLength && (
                     <ir-button
@@ -489,8 +490,8 @@ export class IglBulkStopSale {
           </table>
         </div>
         <div class={'sheet-footer'}>
-          <ir-button text="Cancel" btn_color="secondary" class={'flex-fill'} onClickHandler={() => this.closeModal.emit(null)}></ir-button>
-          <ir-button isLoading={this.isLoading} text="Save" btn_type="submit" class="flex-fill"></ir-button>
+          <ir-button text={locales.entries.Lcz_Cancel} btn_color="secondary" class={'flex-fill'} onClickHandler={() => this.closeModal.emit(null)}></ir-button>
+          <ir-button isLoading={this.isLoading} text={locales.entries.Lcz_Save} btn_type="submit" class="flex-fill"></ir-button>
         </div>
       </form>
     );

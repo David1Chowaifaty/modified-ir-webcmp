@@ -78,7 +78,7 @@ export class IrSidebar {
 
   @Listen('keydown', { target: 'body' })
   handleKeyDown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && this.open) {
       e.stopImmediatePropagation();
       e.stopPropagation();
       return this.toggleSidebar();
