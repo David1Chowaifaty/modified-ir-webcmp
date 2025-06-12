@@ -4,7 +4,7 @@ import { v4 } from 'uuid';
 import locales from '@/stores/locales.store';
 import { CalendarSidebarState } from '@/components/igloo-calendar/igloo-calendar';
 import { canCheckIn } from '@/utils/utils';
-// import { IUnit } from '@/models/booking.dto';
+import { IUnit } from '@/models/booking.dto';
 
 @Component({
   tag: 'igl-tba-booking-view',
@@ -92,24 +92,24 @@ export class IglTbaBookingView {
         console.log('room=>', room);
         if (room) {
           // TODO:enable this when applying the check in module
-          // const { adult_nbr, children_nbr, infant_nbr } = room.occupancy;
-          // window.dispatchEvent(
-          //   new CustomEvent('openCalendarSidebar', {
-          //     detail: {
-          //       type: 'room-guests',
-          //       payload: {
-          //         identifier: this.eventData.ID,
-          //         bookingNumber: this.eventData.BOOKING_NUMBER,
-          //         checkin: false,
-          //         roomName: (room.unit as IUnit)?.name ?? '',
-          //         sharing_persons: room.sharing_persons,
-          //         totalGuests: adult_nbr + children_nbr + infant_nbr,
-          //       },
-          //     },
-          //     bubbles: true,
-          //     composed: true,
-          //   }),
-          // );
+          const { adult_nbr, children_nbr, infant_nbr } = room.occupancy;
+          window.dispatchEvent(
+            new CustomEvent('openCalendarSidebar', {
+              detail: {
+                type: 'room-guests',
+                payload: {
+                  identifier: this.eventData.ID,
+                  bookingNumber: this.eventData.BOOKING_NUMBER,
+                  checkin: false,
+                  roomName: (room.unit as IUnit)?.name ?? '',
+                  sharing_persons: room.sharing_persons,
+                  totalGuests: adult_nbr + children_nbr + infant_nbr,
+                },
+              },
+              bubbles: true,
+              composed: true,
+            }),
+          );
           console.log('event emitted directly to window 🔥');
         }
         let assignEvent = { ...this.eventData, PR_ID: this.selectedRoom };
