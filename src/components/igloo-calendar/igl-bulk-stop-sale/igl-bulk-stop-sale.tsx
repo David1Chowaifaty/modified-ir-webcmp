@@ -326,6 +326,7 @@ export class IglBulkStopSale {
                         <div class={'d-flex justify-content-end'}>
                           <ir-select
                             LabelAvailable={false}
+                            firstOption={`${locales.entries.Lcz_Select}...`}
                             data={[
                               { value: 'open', text: locales.entries.Lcz_Open },
                               { value: 'closed', text: locales.entries.Lcz_StopSale },

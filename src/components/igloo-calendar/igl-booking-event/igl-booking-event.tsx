@@ -299,7 +299,7 @@ export class IglBookingEvent {
                     cursor = moment(cursor, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
                   }
                   if (counter >= 1) {
-                    this.reset('This unit isn’t available for the entire selected period. Please choose different dates or a different unit.');
+                    this.reset(locales.entries.Lcz_ThisUnitIsNotAvailable);
                   }
                 };
 
