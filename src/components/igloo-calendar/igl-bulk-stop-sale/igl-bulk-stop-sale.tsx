@@ -300,7 +300,8 @@ export class IglBulkStopSale {
         <div class="sheet-body px-1">
           <div class="text-muted text-left py-0 my-0">
             <p>
-              {locales.entries.Lcz_SelectAffectedUnits} <span class="text-warning">{locales.entries.Lcz_OperationRequiresSeveralMinutes}</span>
+              {locales.entries.Lcz_SelectAffectedUnits}
+              {/* <span class="text-warning">{locales.entries.Lcz_OperationRequiresSeveralMinutes}</span> */}
             </p>
           </div>
           <div>

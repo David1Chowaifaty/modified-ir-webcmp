@@ -653,7 +653,8 @@ export class IglBookingEventHover {
               btn_block
               btn_styles="h-100"
               size="sm"
-              text={locales.entries.Lcz_ConvertToBooking}
+              text={'Convert/Split booking'}
+              // text={locales.entries.Lcz_ConvertToBooking}
               onClickHandler={() => {
                 this.handleConvertBlockedDateToBooking();
               }}
