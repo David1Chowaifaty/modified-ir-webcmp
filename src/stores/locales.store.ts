@@ -13,6 +13,8 @@ export type UserManagementWords = {
   Lcz_AreYouSureToUnverify: string;
   Lcz_PlzSelectOneListing: string;
   Lcz_PlzSelectOneUnit: string;
+  Lcz_ThisUnitIsNotAvailable: string;
+  Lcz_ConvertSplitBooking: string;
   Lcz_Open: string;
   Lcz_StopSale: string;
   Lcz_ToExclusive: string;

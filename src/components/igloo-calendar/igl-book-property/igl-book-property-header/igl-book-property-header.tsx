@@ -239,9 +239,9 @@ export class IglBookPropertyHeader {
   }
   private getMinDate() {
     if (this.isEventType('PLUS_BOOKING')) {
-      if (!this.bookingData?.block_exposed_unit_props) {
-        return moment().add(-1, 'months').startOf('month').format('YYYY-MM-DD');
-      }
+      return moment().add(-1, 'months').startOf('month').format('YYYY-MM-DD');
+    }
+    if (this.wasBlockedUnit) {
       return this.bookingData?.block_exposed_unit_props.from_date;
     }
     return this.minDate;

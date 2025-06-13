@@ -760,7 +760,8 @@ export class IglooCalendar {
       const isClosed = room_type.rateplans.every(rp => !rp.is_available_to_book);
       for (const room of room_type.physicalrooms) {
         const key = `${room.id}_${queue.date}`;
-        disabled_cells.set(key, { disabled: isClosed || queue.availability === 0, reason: isClosed ? 'stop_sale' : 'inventory' });
+        // disabled_cells.set(key, { disabled: isClosed || queue.availability === 0, reason: isClosed ? 'stop_sale' : 'inventory' });
+        disabled_cells.set(key, { disabled: queue.availability === 0, reason: isClosed ? 'stop_sale' : 'inventory' });
       }
     }
     calendar_dates['disabled_cells'] = new Map(disabled_cells);

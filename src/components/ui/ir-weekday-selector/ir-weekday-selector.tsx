@@ -67,7 +67,7 @@ export class IrWeekdaySelector {
   }
   render() {
     return (
-      <Host class="my-1 d-flex align-items-center" style={{ gap: '1.5rem' }}>
+      <Host class="my-1 d-flex align-items-center" style={{ gap: '1.1rem' }}>
         {this._weekdays.map(w => (
           <ir-checkbox
             checked={this.selectedWeekdays.has(w.value)}

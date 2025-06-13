@@ -299,7 +299,7 @@ export class IglBookingEvent {
                     cursor = moment(cursor, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
                   }
                   if (counter >= 1) {
-                    this.reset('This room isn’t available for the entire selected period. Please choose different dates or a different room.');
+                    this.reset(locales.entries.Lcz_ThisUnitIsNotAvailable);
                   }
                 };
 
