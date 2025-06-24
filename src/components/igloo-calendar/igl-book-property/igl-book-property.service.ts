@@ -256,13 +256,14 @@ export class IglBookPropertyService {
         }
         case 'ADD_ROOM':
         case 'SPLIT_BOOKING': {
-          const { booking } = context.defaultData;
+          const { booking, ROOMS } = context.defaultData;
+          console.log(booking);
           if (!booking) {
             throw new Error('Missing booking');
           }
-          console.log(booking);
           const newRooms = generateNewRooms();
-          newBooking = modifyBookingDetails(booking, [...booking?.rooms, ...newRooms]);
+          const previousRooms = context.defaultData.event_type === 'ADD_ROOM' ? ROOMS ?? [] : booking?.rooms;
+          newBooking = modifyBookingDetails(booking, [...previousRooms, ...newRooms]);
           break;
         }
         default: {

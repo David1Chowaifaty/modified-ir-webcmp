@@ -45,7 +45,7 @@ export const bookingStatus: Record<string, STATUS> = {
 export function formatName(firstName: string | null, lastName: string | null) {
   if ((firstName === null && lastName === null) || !firstName) return '';
   if (!!lastName) {
-    return `${firstName ?? ''} , ${lastName ?? ''}`;
+    return `${firstName ?? ''} ${lastName ?? ''}`;
   }
   return firstName;
 }
