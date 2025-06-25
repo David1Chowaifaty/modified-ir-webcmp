@@ -36,7 +36,7 @@ export interface UnitHkStatusChangePayload {
 export type SalesBatchPayload = { rate_plan_id: number; night: string; is_available_to_book: boolean };
 export type AvailabilityBatchPayload = { room_type_id: number; date: string; availability: number };
 export type CalendarSidebarState = {
-  type: 'room-guests' | 'booking-details' | 'add-days' | 'bulk-blocks';
+  type: 'room-guests' | 'booking-details' | 'add-days' | 'bulk-blocks' | 'change-assignment';
   payload: any;
 };
 @Component({
@@ -141,6 +141,15 @@ export class IglooCalendar {
     ev.stopImmediatePropagation();
     ev.stopPropagation();
     this.calendarSidebarState = ev.detail;
+    if (ev.detail.type === 'change-assignment') {
+      const { booking, identifier } = ev.detail.payload;
+      const selectedRoom = booking.rooms.find(r => r.identifier === identifier);
+      if (!selectedRoom) {
+        console.error(`No room found with identifier ${identifier}`);
+        return;
+      }
+      this.scrollToElement(moment(selectedRoom.from_date, 'YYYY-MM-DD').format('D_M_YYYY'));
+    }
   }
   @Listen('scrollPageToRoom', { target: 'window' })
   scrollPageToRoom(event: CustomEvent) {
@@ -1287,6 +1296,8 @@ export class IglooCalendar {
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={!!this.calendarSidebarState || this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING')}
           showCloseButton={false}
+          withBackdrop={this.calendarSidebarState?.type !== 'change-assignment'}
+          preventOverflow={this.calendarSidebarState?.type !== 'change-assignment'}
           sidebarStyles={{
             width: this.calendarSidebarState?.type === 'room-guests' ? '60rem' : this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)',
             background: this.editBookingItem ? '#F2F3F8' : 'white',
@@ -1340,6 +1351,16 @@ export class IglooCalendar {
           )}
           {this.calendarSidebarState?.type === 'bulk-blocks' && (
             <igl-bulk-stop-sale slot="sidebar-body" onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-stop-sale>
+          )}
+          {this.calendarSidebarState?.type === 'change-assignment' && (
+            <igl-cal-change-assignments
+              slot="sidebar-body"
+              booking={this.calendarSidebarState?.payload?.booking}
+              language={this.language}
+              identifier={this.calendarSidebarState?.payload?.identifier}
+              propertyId={this.property_id}
+              onCloseModal={() => (this.calendarSidebarState = null)}
+            ></igl-cal-change-assignments>
           )}
         </ir-sidebar>
         <ir-modal

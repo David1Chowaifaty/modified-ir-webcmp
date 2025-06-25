@@ -47,6 +47,15 @@ export class IrSidebar {
   @Prop() preventClose: boolean;
 
   /**
+   * Indicates whether the sidebar have a backdrop present or not.
+   */
+  @Prop() withBackdrop: boolean = true;
+  /**
+   * Prevents body from the vertical overflow.
+   */
+  @Prop() preventOverflow: boolean = true;
+
+  /**
    * Event emitted when the sidebar is toggled open/closed.
    * Emits the current `open` state.
    */
@@ -71,7 +80,7 @@ export class IrSidebar {
 
   @Watch('open')
   handleOpenChange(newValue: boolean, oldValue: boolean) {
-    if (newValue !== oldValue) {
+    if (newValue !== oldValue && this.preventOverflow) {
       handleBodyOverflow(newValue);
     }
   }
@@ -128,12 +137,14 @@ export class IrSidebar {
     }
 
     return [
-      <div
-        class={`backdrop ${className}`}
-        onClick={() => {
-          this.toggleSidebar();
-        }}
-      ></div>,
+      this.withBackdrop && (
+        <div
+          class={`backdrop ${className}`}
+          onClick={() => {
+            this.toggleSidebar();
+          }}
+        ></div>
+      ),
       <div ref={el => (this.sidebarRef = el)} class={`sidebar-${this.side} ${className}`}>
         {this.showCloseButton && (
           <div class={'sidebar-title'}>

@@ -8,6 +8,7 @@ import calendar_data from '@/stores/calendar-data';
 import { CalendarModalEvent } from '@/models/property-types';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
 import { IOtaNotes } from '@/models/booking.dto';
+import { CalendarSidebarState } from '../igloo-calendar';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -33,6 +34,7 @@ export class IglBookingEventHover {
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: any[] }>;
   @Event() showDialog: EventEmitter<CalendarModalEvent>;
+  @Event() openCalendarSidebar: EventEmitter<CalendarSidebarState>;
 
   private eventService = new EventsService();
   private hideButtons = false;
@@ -510,7 +512,7 @@ export class IglBookingEventHover {
               class={'w-100'}
               btn_block
               text={locales.entries.Lcz_Edit}
-              icon_name="edit"
+              // icon_name="edit"
               btn_styles="h-100"
               size="sm"
             ></ir-button>
@@ -518,7 +520,7 @@ export class IglBookingEventHover {
               <ir-button
                 style={{ '--icon-size': '0.875rem' }}
                 text={locales.entries.Lcz_AddRoom}
-                icon_name="square_plus"
+                // icon_name="square_plus"
                 size="sm"
                 class={'w-100'}
                 btn_styles="h-100"
@@ -531,7 +533,7 @@ export class IglBookingEventHover {
                 style={{ '--icon-size': '0.875rem' }}
                 text={locales.entries.Lcz_CheckIn}
                 onClickHandler={() => this.handleCustomerCheckIn()}
-                icon_name="edit"
+                // icon_name="edit"
                 btn_styles="h-100"
                 size="sm"
               ></ir-button>
@@ -542,7 +544,7 @@ export class IglBookingEventHover {
                 btn_styles="h-100"
                 style={{ '--icon-size': '0.875rem' }}
                 text={locales.entries.Lcz_CheckOut}
-                icon_name="edit"
+                // icon_name="edit"
                 onClickHandler={() => this.handleCustomerCheckOut()}
                 size="sm"
               ></ir-button>
@@ -556,12 +558,23 @@ export class IglBookingEventHover {
                     style={{ '--icon-size': '0.875rem' }}
                     size="sm"
                     text={locales.entries.Lcz_Unassign}
-                    icon_name="xmark"
+                    // icon_name="xmark"
                     onClickHandler={_ => {
                       this.handleDeleteEvent();
                     }}
                   ></ir-button>
                 )}
+            <ir-button
+              class={'w-100'}
+              btn_styles="h-100"
+              style={{ '--icon-size': '0.875rem' }}
+              size="sm"
+              text={'Change assignment'}
+              onClickHandler={_ => {
+                this.openCalendarSidebar.emit({ type: 'change-assignment', payload: { booking: this.bookingEvent.booking, identifier: this.bookingEvent.IDENTIFIER } });
+                this.hideBubble();
+              }}
+            ></ir-button>
           </div>
         </div>
       </div>

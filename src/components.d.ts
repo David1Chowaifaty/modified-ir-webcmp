@@ -12,11 +12,12 @@ import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-bo
 import { IToast } from "./components/ui/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
-import { IPageTwoDataUpdateProps } from "./models/models";
-import { RatePlan, RoomType } from "./models/property";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
-import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
+import { IPageTwoDataUpdateProps } from "./models/models";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
+import { RatePlan, RoomType } from "./models/property";
+import { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
+import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
@@ -41,11 +42,12 @@ export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-bo
 export { IToast } from "./components/ui/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
-export { IPageTwoDataUpdateProps } from "./models/models";
-export { RatePlan, RoomType } from "./models/property";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
-export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
+export { IPageTwoDataUpdateProps } from "./models/models";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
+export { RatePlan, RoomType } from "./models/property";
+export { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
+export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
@@ -189,6 +191,12 @@ export namespace Components {
         "language": string;
         "propertyId": number;
         "today": String;
+    }
+    interface IglCalChangeAssignments {
+        "booking": Booking;
+        "identifier": string;
+        "language": string;
+        "propertyId": number;
     }
     interface IglCalFooter {
         "calendarData": { [key: string]: any };
@@ -1558,6 +1566,10 @@ export namespace Components {
          */
         "preventClose": boolean;
         /**
+          * Prevents body from the vertical overflow.
+         */
+        "preventOverflow": boolean;
+        /**
           * Whether to show the close (X) button in the sidebar header.
          */
         "showCloseButton": boolean;
@@ -1573,6 +1585,10 @@ export namespace Components {
           * Toggles the sidebar's visibility.  - If `preventClose` is true, emits `beforeSidebarClose` and does nothing else. - Otherwise, emits `irSidebarToggle` with the current `open` state.  Example: ```ts const el = document.querySelector('ir-sidebar'); await el.toggleSidebar(); ```
          */
         "toggleSidebar": () => Promise<void>;
+        /**
+          * Indicates whether the sidebar have a backdrop present or not.
+         */
+        "withBackdrop": boolean;
     }
     interface IrSpan {
         "text": any;
@@ -1847,6 +1863,10 @@ export interface IglBulkStopSaleCustomEvent<T> extends CustomEvent<T> {
 export interface IglCalBodyCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglCalBodyElement;
+}
+export interface IglCalChangeAssignmentsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglCalChangeAssignmentsElement;
 }
 export interface IglCalFooterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2279,6 +2299,7 @@ declare global {
         "deleteButton": string;
         "bookingCreated": { pool?: string; data: any[] };
         "showDialog": CalendarModalEvent;
+        "openCalendarSidebar": CalendarSidebarState;
     }
     interface HTMLIglBookingEventHoverElement extends Components.IglBookingEventHover, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookingEventHoverElementEventMap>(type: K, listener: (this: HTMLIglBookingEventHoverElement, ev: IglBookingEventHoverCustomEvent<HTMLIglBookingEventHoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2368,6 +2389,23 @@ declare global {
     var HTMLIglCalBodyElement: {
         prototype: HTMLIglCalBodyElement;
         new (): HTMLIglCalBodyElement;
+    };
+    interface HTMLIglCalChangeAssignmentsElementEventMap {
+        "closeModal": null;
+    }
+    interface HTMLIglCalChangeAssignmentsElement extends Components.IglCalChangeAssignments, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglCalChangeAssignmentsElementEventMap>(type: K, listener: (this: HTMLIglCalChangeAssignmentsElement, ev: IglCalChangeAssignmentsCustomEvent<HTMLIglCalChangeAssignmentsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglCalChangeAssignmentsElementEventMap>(type: K, listener: (this: HTMLIglCalChangeAssignmentsElement, ev: IglCalChangeAssignmentsCustomEvent<HTMLIglCalChangeAssignmentsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIglCalChangeAssignmentsElement: {
+        prototype: HTMLIglCalChangeAssignmentsElement;
+        new (): HTMLIglCalChangeAssignmentsElement;
     };
     interface HTMLIglCalFooterElementEventMap {
         "optionEvent": { [key: string]: any };
@@ -2560,7 +2598,7 @@ declare global {
         "calculateUnassignedDates": any;
         "reduceAvailableUnitEvent": { fromDate: string; toDate: string };
         "revertBooking": any;
-        "openCalendarSidebar": CalendarSidebarState;
+        "openCalendarSidebar": CalendarSidebarState1;
     }
     interface HTMLIglooCalendarElement extends Components.IglooCalendar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglooCalendarElementEventMap>(type: K, listener: (this: HTMLIglooCalendarElement, ev: IglooCalendarCustomEvent<HTMLIglooCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3902,6 +3940,7 @@ declare global {
         "igl-booking-overview-page": HTMLIglBookingOverviewPageElement;
         "igl-bulk-stop-sale": HTMLIglBulkStopSaleElement;
         "igl-cal-body": HTMLIglCalBodyElement;
+        "igl-cal-change-assignments": HTMLIglCalChangeAssignmentsElement;
         "igl-cal-footer": HTMLIglCalFooterElement;
         "igl-cal-header": HTMLIglCalHeaderElement;
         "igl-date-range": HTMLIglDateRangeElement;
@@ -4116,6 +4155,7 @@ declare namespace LocalJSX {
         "onBookingCreated"?: (event: IglBookingEventHoverCustomEvent<{ pool?: string; data: any[] }>) => void;
         "onDeleteButton"?: (event: IglBookingEventHoverCustomEvent<string>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
+        "onOpenCalendarSidebar"?: (event: IglBookingEventHoverCustomEvent<CalendarSidebarState>) => void;
         "onShowBookingPopup"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
         "onShowDialog"?: (event: IglBookingEventHoverCustomEvent<CalendarModalEvent>) => void;
     }
@@ -4177,6 +4217,13 @@ declare namespace LocalJSX {
         "onShowBookingPopup"?: (event: IglCalBodyCustomEvent<any>) => void;
         "propertyId"?: number;
         "today"?: String;
+    }
+    interface IglCalChangeAssignments {
+        "booking"?: Booking;
+        "identifier"?: string;
+        "language"?: string;
+        "onCloseModal"?: (event: IglCalChangeAssignmentsCustomEvent<null>) => void;
+        "propertyId"?: number;
     }
     interface IglCalFooter {
         "calendarData"?: { [key: string]: any };
@@ -4288,7 +4335,7 @@ declare namespace LocalJSX {
         "onCalculateUnassignedDates"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onDragOverHighlightElement"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onMoveBookingTo"?: (event: IglooCalendarCustomEvent<any>) => void;
-        "onOpenCalendarSidebar"?: (event: IglooCalendarCustomEvent<CalendarSidebarState>) => void;
+        "onOpenCalendarSidebar"?: (event: IglooCalendarCustomEvent<CalendarSidebarState1>) => void;
         "onReduceAvailableUnitEvent"?: (event: IglooCalendarCustomEvent<{ fromDate: string; toDate: string }>) => void;
         "onRevertBooking"?: (event: IglooCalendarCustomEvent<any>) => void;
         "p"?: string;
@@ -5711,6 +5758,10 @@ declare namespace LocalJSX {
          */
         "preventClose"?: boolean;
         /**
+          * Prevents body from the vertical overflow.
+         */
+        "preventOverflow"?: boolean;
+        /**
           * Whether to show the close (X) button in the sidebar header.
          */
         "showCloseButton"?: boolean;
@@ -5722,6 +5773,10 @@ declare namespace LocalJSX {
           * Inline styles applied to the sidebar container.
          */
         "sidebarStyles"?: Partial<CSSStyleDeclaration>;
+        /**
+          * Indicates whether the sidebar have a backdrop present or not.
+         */
+        "withBackdrop"?: boolean;
     }
     interface IrSpan {
         "text"?: any;
@@ -5992,6 +6047,7 @@ declare namespace LocalJSX {
         "igl-booking-overview-page": IglBookingOverviewPage;
         "igl-bulk-stop-sale": IglBulkStopSale;
         "igl-cal-body": IglCalBody;
+        "igl-cal-change-assignments": IglCalChangeAssignments;
         "igl-cal-footer": IglCalFooter;
         "igl-cal-header": IglCalHeader;
         "igl-date-range": IglDateRange;
@@ -6115,6 +6171,7 @@ declare module "@stencil/core" {
             "igl-booking-overview-page": LocalJSX.IglBookingOverviewPage & JSXBase.HTMLAttributes<HTMLIglBookingOverviewPageElement>;
             "igl-bulk-stop-sale": LocalJSX.IglBulkStopSale & JSXBase.HTMLAttributes<HTMLIglBulkStopSaleElement>;
             "igl-cal-body": LocalJSX.IglCalBody & JSXBase.HTMLAttributes<HTMLIglCalBodyElement>;
+            "igl-cal-change-assignments": LocalJSX.IglCalChangeAssignments & JSXBase.HTMLAttributes<HTMLIglCalChangeAssignmentsElement>;
             "igl-cal-footer": LocalJSX.IglCalFooter & JSXBase.HTMLAttributes<HTMLIglCalFooterElement>;
             "igl-cal-header": LocalJSX.IglCalHeader & JSXBase.HTMLAttributes<HTMLIglCalHeaderElement>;
             "igl-date-range": LocalJSX.IglDateRange & JSXBase.HTMLAttributes<HTMLIglDateRangeElement>;

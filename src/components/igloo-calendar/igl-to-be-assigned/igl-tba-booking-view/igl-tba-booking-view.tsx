@@ -90,8 +90,7 @@ export class IglTbaBookingView {
         });
         const room = booking.rooms.find(r => r.identifier === this.eventData.identifier);
         console.log('room=>', room);
-        if (room) {
-          // TODO:enable this when applying the check in module
+        if (room && check_in) {
           const { adult_nbr, children_nbr, infant_nbr } = room.occupancy;
           window.dispatchEvent(
             new CustomEvent('openCalendarSidebar', {
