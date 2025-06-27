@@ -181,6 +181,7 @@ export namespace Components {
     }
     interface IglBulkStopSale {
         "maxDatesLength": number;
+        "property_id": number;
     }
     interface IglCalBody {
         "calendarData": { [key: string]: any };
@@ -4204,6 +4205,7 @@ declare namespace LocalJSX {
         "maxDatesLength"?: number;
         "onCloseModal"?: (event: IglBulkStopSaleCustomEvent<null>) => void;
         "onToast"?: (event: IglBulkStopSaleCustomEvent<IToast>) => void;
+        "property_id"?: number;
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };
