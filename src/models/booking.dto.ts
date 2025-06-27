@@ -174,6 +174,7 @@ export interface Booking {
     verification_mode: null;
   } | null;
   ota_services: OtaService[];
+  is_requested_to_cancel: boolean;
   arrival: Arrival;
   allowed_actions: IAllowedActions[];
   system_id: number;

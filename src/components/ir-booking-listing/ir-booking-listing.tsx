@@ -269,7 +269,7 @@ export class IrBookingListing {
                     </tr>
                   )}
                   {booking_listing.bookings?.map(booking => {
-                    let confirmationBG: string = this.statusColors[booking.status.code];
+                    let confirmationBG: string = this.statusColors[booking.is_requested_to_cancel ? '003' : booking.status.code];
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
@@ -403,7 +403,9 @@ export class IrBookingListing {
                         )}
 
                         <td>
-                          <p class={`m-0 badge ${confirmationBG} ct_ir_badge`}>{booking.status.description}</p>
+                          <p class={`m-0 badge ${confirmationBG} ct_ir_badge`}>
+                            {booking.is_requested_to_cancel ? locales?.entries?.Lcz_CancellationRequested : booking.status.description}
+                          </p>
                         </td>
                         <td>
                           <div class="d-flex justify-content-center align-items-center" style={{ gap: '8px' }}>

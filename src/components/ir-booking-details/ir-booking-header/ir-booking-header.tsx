@@ -98,7 +98,9 @@ export class IrBookingHeader {
           </div>
 
           <div class="d-flex justify-content-end align-items-center" style={{ gap: '1rem', flexWrap: 'wrap' }}>
-            <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.status.code]}`}>{this.booking.status.description}</span>
+            <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
+              {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
+            </span>
             {this.booking.allowed_actions.length > 0 && this.booking.is_editable && (
               <div class="m-0 p-0 d-flex align-items-center" style={{ gap: '0.25rem' }}>
                 <ir-select
