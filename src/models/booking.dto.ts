@@ -393,7 +393,7 @@ export interface Room {
   total: number;
   smoking_option: string;
   identifier: string;
-  unit: string | number | IUnit | null;
+  unit: IUnit | null;
   ota_taxes: IOtaTax[];
   ota_meta: OtaMeta;
   cost: number | null;

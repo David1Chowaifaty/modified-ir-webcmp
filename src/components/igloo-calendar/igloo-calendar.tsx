@@ -1298,10 +1298,21 @@ export class IglooCalendar {
           showCloseButton={false}
           withBackdrop={this.calendarSidebarState?.type !== 'change-assignment'}
           preventOverflow={this.calendarSidebarState?.type !== 'change-assignment'}
-          sidebarStyles={{
-            width: this.calendarSidebarState?.type === 'room-guests' ? '60rem' : this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)',
-            background: this.editBookingItem ? '#F2F3F8' : 'white',
-          }}
+          style={
+            this.calendarSidebarState?.type === 'change-assignment' && {
+              '--sidebar-width': '30rem',
+            }
+          }
+          sidebarStyles={
+            this.calendarSidebarState?.type === 'change-assignment'
+              ? {
+                  // width: 'var(--sidebar-width,100%)',
+                }
+              : {
+                  width: this.calendarSidebarState?.type === 'room-guests' ? '60rem' : this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)',
+                  background: this.editBookingItem ? '#F2F3F8' : 'white',
+                }
+          }
         >
           {this.roomNightsData && (
             <ir-room-nights

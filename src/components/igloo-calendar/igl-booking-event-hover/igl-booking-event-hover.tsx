@@ -511,7 +511,8 @@ export class IglBookingEventHover {
               onClickHandler={() => this.handleEditBooking()}
               class={'w-100'}
               btn_block
-              text={locales.entries.Lcz_Edit}
+              // text={locales.entries.Lcz_Edit}
+              text="Edit"
               // icon_name="edit"
               btn_styles="h-100"
               size="sm"
@@ -569,7 +570,7 @@ export class IglBookingEventHover {
               btn_styles="h-100"
               style={{ '--icon-size': '0.875rem' }}
               size="sm"
-              text={'Change assignment'}
+              text={'Change unit'}
               onClickHandler={_ => {
                 this.openCalendarSidebar.emit({ type: 'change-assignment', payload: { booking: this.bookingEvent.booking, identifier: this.bookingEvent.IDENTIFIER } });
                 this.hideBubble();

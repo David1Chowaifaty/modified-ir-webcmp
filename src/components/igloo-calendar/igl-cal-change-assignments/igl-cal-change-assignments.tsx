@@ -18,7 +18,7 @@ export class IglCalChangeAssignments {
   @Prop() language: string = 'en';
 
   @State() isLoading = null;
-  @State() selectedRoom: Room;
+  @State() selectedRoom: Room | null = null;
   @State() newRoom: number;
   @State() guestName: string;
 
@@ -81,6 +81,7 @@ export class IglCalChangeAssignments {
     }
   }
   render() {
+    console.log(this.selectedRoom);
     if (this.isLoading === 'init') {
       return (
         <div class={'loading-container'}>
@@ -107,13 +108,16 @@ export class IglCalChangeAssignments {
               this.closeModal.emit(null);
             }}
             class="px-1 mb-0"
-            label={'Change Assignment'}
+            label={'Change Unit Assignment'}
             displayContext="sidebar"
           ></ir-title>
         </div>
         <div class={'sheet-body px-1 text-left'}>
           <p>
-            {this.guestName} - {this.booking.booking_nbr}
+            <b>
+              {this.guestName} - {this.booking?.booking_nbr}
+            </b>{' '}
+            from <b>{this.selectedRoom?.unit?.name ?? ''}</b> to ...
           </p>
           <ul class="mx-0 px-0">
             {booking_store.roomTypes.map(r => {
@@ -122,10 +126,10 @@ export class IglCalChangeAssignments {
               }
               return (
                 <li key={r.id} class="pb-1">
-                  <p>{r.name}</p>
-                  <ul>
+                  <p class={'p-0 m-0'}>{r.name}</p>
+                  <ul class="m-0 p-0">
                     {r.physicalrooms.map(room => (
-                      <li key={room.id}>
+                      <li key={room.id} class="p-0 m-0 available-rooms">
                         <ir-radio
                           onCheckChange={e => {
                             if (e.detail) this.newRoom = room.id;

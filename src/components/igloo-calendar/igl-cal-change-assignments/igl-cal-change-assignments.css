@@ -1,3 +1,15 @@
 :host {
   display: block;
 }
+ul {
+  list-style-type: none !important;
+}
+ul li {
+  list-style: none !important;
+}
+ul li:first-child {
+  margin-top: 0.5rem !important;
+}
+.available-rooms {
+  padding-inline-start: 1rem !important;
+}
