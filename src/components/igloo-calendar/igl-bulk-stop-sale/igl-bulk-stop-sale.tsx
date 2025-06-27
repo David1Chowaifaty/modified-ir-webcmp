@@ -16,6 +16,7 @@ export type SelectedRooms = { id: string | number; result: 'open' | 'closed' };
 })
 export class IglBulkStopSale {
   @Prop() maxDatesLength = 8;
+  @Prop() property_id: number;
 
   @State() selectedRoomTypes: SelectedRooms[] = [];
   @State() errors: 'dates' | 'rooms' | 'weekdays';
@@ -182,6 +183,7 @@ export class IglBulkStopSale {
         const payload = {
           is_closed: isAllClosed,
           restrictions: periods_to_modify,
+          property_id: this.property_id,
         };
         await this.bookingService.setExposedRestrictionPerRoomType(payload);
         updateCalendarCells([payload]);
@@ -192,6 +194,7 @@ export class IglBulkStopSale {
           payloads.push({
             is_closed: room.result === 'closed',
             restrictions: periods,
+            property_id: this.property_id,
           });
         }
         await Promise.all(payloads.map(p => this.bookingService.setExposedRestrictionPerRoomType(p)));
