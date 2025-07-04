@@ -381,13 +381,16 @@ export class IrBookingListing {
                           <p class="p-0 m-0 date-p">{moment(booking.to_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
                         </td>
                         <td>
-                          <p class="p-0 m-0">{formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}</p>
+                          <p class="p-0 m-0" style={{ whiteSpace: 'nowrap' }}>
+                            {formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}
+                          </p>
                           {booking.financial.due_amount > 0 && (
                             <buuton
                               onClick={() => {
                                 this.editBookingItem = { booking, cause: 'payment' };
                                 this.openModal();
                               }}
+                              style={{ whiteSpace: 'nowrap' }}
                               class="btn p-0 m-0 due-btn"
                             >
                               {formatAmount(booking.currency.symbol, booking.financial.due_amount)}
