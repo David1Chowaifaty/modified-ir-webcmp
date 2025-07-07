@@ -33,8 +33,10 @@
 | ---------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `deleteFinished` |             | `CustomEvent<string>`                                                                                                                                                                                                                |
 | `editInitiated`  |             | `CustomEvent<IglBookPropertyPayloadAddRoom \| IglBookPropertyPayloadBarBooking \| IglBookPropertyPayloadBlockDates \| IglBookPropertyPayloadEditBooking \| IglBookPropertyPayloadPlusBooking \| IglBookPropertyPayloadSplitBooking>` |
+| `openSidebar`    |             | `CustomEvent<{ type: BookingDetailsSidebarEvents; payload?: RoomGuestsPayload; }>`                                                                                                                                                   |
 | `pressCheckIn`   |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
 | `pressCheckOut`  |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
+| `resetbooking`   |             | `CustomEvent<null>`                                                                                                                                                                                                                  |
 
 
 ## Dependencies
@@ -47,6 +49,7 @@
 
 - [ir-button](../../ui/ir-button)
 - [ir-date-view](../../ir-date-view)
+- [ir-tooltip](../../ui/ir-tooltip)
 - [ir-label](../../ui/ir-label)
 - [ir-modal](../../ui/ir-modal)
 
@@ -55,6 +58,7 @@
 graph TD;
   ir-room --> ir-button
   ir-room --> ir-date-view
+  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-button --> ir-icons
