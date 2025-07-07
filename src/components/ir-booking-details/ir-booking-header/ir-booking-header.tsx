@@ -84,7 +84,7 @@ export class IrBookingHeader {
       case 'pms':
         return <ir-pms-logs slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-pms-logs>;
       case 'events-log':
-        return <ir-events-log slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-events-log>;
+        return <ir-events-log booking={this.booking} slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-events-log>;
     }
   }
 

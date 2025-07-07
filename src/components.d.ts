@@ -756,6 +756,7 @@ export namespace Components {
         "object": any;
     }
     interface IrEventsLog {
+        "booking": Booking;
         "bookingNumber": string;
     }
     interface IrExtraService {
@@ -4823,6 +4824,7 @@ declare namespace LocalJSX {
         "onDropdownItemCLicked"?: (event: IrDropdownCustomEvent<{ name: string; object: any }>) => void;
     }
     interface IrEventsLog {
+        "booking"?: Booking;
         "bookingNumber"?: string;
     }
     interface IrExtraService {

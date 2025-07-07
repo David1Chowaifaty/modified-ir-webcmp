@@ -1,4 +1,4 @@
-import { HandleExposedRoomGuestsRequest } from './../models/booking.dto';
+import { ExposedBookingEvent, HandleExposedRoomGuestsRequest } from './../models/booking.dto';
 import { DayData } from '../models/DayType';
 import axios from 'axios';
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType } from '../models/IBooking';
@@ -25,15 +25,6 @@ export interface IBookingParams {
   pr_id?: number;
   identifier?: string;
   extras: { key: string; value: string }[] | null;
-}
-export interface ExposedBookingEvent {
-  date: string;
-  hour: number;
-  id: number;
-  minute: number;
-  second: number;
-  user: string;
-  type: string;
 }
 export class BookingService {
   public async handleExposedRoomInOut(props: { booking_nbr: string; room_identifier: string; status: RoomInOut['code'] }) {
