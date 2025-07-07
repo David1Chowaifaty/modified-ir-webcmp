@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type            | Default           |
-| --------- | --------- | ----------- | --------------- | ----------------- |
-| `records` | --        |             | `SalesRecord[]` | `sampleSalesData` |
+| Property  | Attribute | Description | Type            | Default |
+| --------- | --------- | ----------- | --------------- | ------- |
+| `records` | --        |             | `SalesRecord[]` | `[]`    |
 
 
 ## Dependencies

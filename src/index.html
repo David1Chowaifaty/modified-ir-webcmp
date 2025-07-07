@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>Secure Screen</title>
+    <title>Sales by Country</title>
     <script type="module" src="/build/ir-webcmp.esm.js"></script>
     <script nomodule src="/build/ir-webcmp.js"></script>
     <script src="assets/scripts/jquery.min.js"></script>
@@ -24,8 +24,19 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-secure-tasks propertyid="42"></ir-secure-tasks>
+    <ir-sales-by-country propertyid="42" language="en"
+        baseurl="https://gateway.igloorooms.com/IR"></ir-sales-by-country>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+
+    <script>
+        const salesByCountryEl = document.querySelector("ir-sales-by-country");
+        setTimeout(async () => {
+            const ticket = await getToken();
+            salesByCountryEl.propertyid = getId();
+            salesByCountryEl.ticket = ticket;
+        }, 300)
+    </script>
+
 </body>
 
 </html>
