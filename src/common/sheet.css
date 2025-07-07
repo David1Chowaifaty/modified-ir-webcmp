@@ -6,6 +6,7 @@
   flex-direction: column !important;
   background: white;
   height: 100vh;
+  height: 100dvh;
   gap: 1rem;
   z-index: 1000;
 }
@@ -14,11 +15,11 @@
   height: 100vh;
 }
 
-@supports (height: 100svh) {
+/* @supports (height: 100svh) {
   .sheet-container {
     height: 100svh;
   }
-}
+} */
 .sheet-footer {
   position: sticky;
   bottom: 0;
