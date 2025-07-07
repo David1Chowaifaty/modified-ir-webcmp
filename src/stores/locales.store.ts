@@ -9,6 +9,7 @@ export type TLocaleEntries =
 export type UserManagementWords = {
   Lcz_Active: string;
   Lcz_AreYouSureToDelete: string;
+  Lcz_CancellationRequested: string;
   Lcz_RequestSubmittedSuccessfully: string;
   Lcz_AreYouSureToUnverify: string;
   Lcz_PlzSelectOneListing: string;

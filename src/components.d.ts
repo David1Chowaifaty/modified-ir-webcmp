@@ -179,6 +179,7 @@ export namespace Components {
     }
     interface IglBulkStopSale {
         "maxDatesLength": number;
+        "property_id": number;
     }
     interface IglCalBody {
         "calendarData": { [key: string]: any };
@@ -755,6 +756,7 @@ export namespace Components {
         "object": any;
     }
     interface IrEventsLog {
+        "booking": Booking;
         "bookingNumber": string;
     }
     interface IrExtraService {
@@ -4164,6 +4166,7 @@ declare namespace LocalJSX {
         "maxDatesLength"?: number;
         "onCloseModal"?: (event: IglBulkStopSaleCustomEvent<null>) => void;
         "onToast"?: (event: IglBulkStopSaleCustomEvent<IToast>) => void;
+        "property_id"?: number;
     }
     interface IglCalBody {
         "calendarData"?: { [key: string]: any };
@@ -4823,6 +4826,7 @@ declare namespace LocalJSX {
         "onDropdownItemCLicked"?: (event: IrDropdownCustomEvent<{ name: string; object: any }>) => void;
     }
     interface IrEventsLog {
+        "booking"?: Booking;
         "bookingNumber"?: string;
     }
     interface IrExtraService {

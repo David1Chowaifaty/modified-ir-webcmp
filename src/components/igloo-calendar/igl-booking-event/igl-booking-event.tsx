@@ -193,7 +193,10 @@ export class IglBookingEvent {
         } else {
           const { pool, to_date, from_date, toRoomId } = event.detail as any;
           const previousToDate = moment(to_date, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD');
+          console.log(this.findRoomType(Number(this.bookingEvent.PR_ID)), this.findRoomType(Number(toRoomId)));
           if (
+            (!moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isSame(moment(to_date, 'YYYY-MM-DD'), 'dates') ||
+              this.findRoomType(Number(this.bookingEvent.PR_ID)) !== this.findRoomType(Number(toRoomId))) &&
             (calendar_dates.disabled_cells.get(`${toRoomId}_${from_date}`)?.disabled ||
               (calendar_dates.disabled_cells.get(`${toRoomId}_${to_date}`)?.disabled && calendar_dates.disabled_cells.get(`${toRoomId}_${previousToDate}`)?.disabled)) &&
             !this.isStretch
@@ -340,14 +343,14 @@ export class IglBookingEvent {
     });
     throw new Error(message);
   }
+  private findRoomType = (roomId: number) => {
+    let roomType = this.bookingEvent.roomsInfo.filter(room => room.physicalrooms.some(r => r.id === +roomId));
+    if (roomType.length) {
+      return roomType[0].id;
+    }
+    return null;
+  };
   private getModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string } {
-    const findRoomType = (roomId: number) => {
-      let roomType = this.bookingEvent.roomsInfo.filter(room => room.physicalrooms.some(r => r.id === +roomId));
-      if (roomType.length) {
-        return roomType[0].id;
-      }
-      return null;
-    };
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
@@ -359,8 +362,8 @@ export class IglBookingEvent {
           moment(from_date, 'YYYY-MM-DD').isSame(moment(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')) &&
           moment(to_date, 'YYYY-MM-DD').isSame(moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD'))
         ) {
-          const initialRT = findRoomType(this.bookingEvent.PR_ID);
-          const targetRT = findRoomType(toRoomId);
+          const initialRT = this.findRoomType(this.bookingEvent.PR_ID);
+          const targetRT = this.findRoomType(toRoomId);
           if (initialRT === targetRT) {
             return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           } else {
@@ -376,8 +379,8 @@ export class IglBookingEvent {
       }
     } else {
       if (!this.isShrinking) {
-        const initialRT = findRoomType(Number(this.bookingEvent.PR_ID));
-        const targetRT = findRoomType(Number(toRoomId));
+        const initialRT = this.findRoomType(Number(this.bookingEvent.PR_ID));
+        const targetRT = this.findRoomType(Number(toRoomId));
         if (initialRT === targetRT) {
           console.log('same rt');
           if (this.bookingEvent.PR_ID.toString() === toRoomId.toString()) {

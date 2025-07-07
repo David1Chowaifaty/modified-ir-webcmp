@@ -9,10 +9,12 @@ export interface IBookingListingStore extends IExposedBookingsCriteria {
   bookings: Booking[];
   download_url: string | null;
   rowCount: number;
+  balance_filter: { name: string; value: string }[];
 }
 export interface IUserListingSelection {
   channel: string;
   property_id: number;
+  balance_filter: string;
   filter_type: number | string;
   from: string;
   to: string;
@@ -38,10 +40,12 @@ const initialState: IBookingListingStore = {
   token: '',
   rowCount: 10,
   bookings: [],
+  balance_filter: [],
   userSelection: {
     from: moment().add(-7, 'days').format('YYYY-MM-DD'),
     to: moment().format('YYYY-MM-DD'),
     channel: '',
+    balance_filter: null,
     property_id: null,
     start_row: 0,
     end_row: 20,
@@ -74,6 +78,7 @@ export function initializeUserSelection() {
     to: moment().format('YYYY-MM-DD'),
     start_row: 0,
     end_row: booking_listing.rowCount,
+    balance_filter: booking_listing.balance_filter[0].value,
   };
 }
 export function updateUserSelections(params: Partial<IUserListingSelection>) {

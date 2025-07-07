@@ -269,7 +269,7 @@ export class IrBookingListing {
                     </tr>
                   )}
                   {booking_listing.bookings?.map(booking => {
-                    let confirmationBG: string = this.statusColors[booking.status.code];
+                    let confirmationBG: string = this.statusColors[booking.is_requested_to_cancel ? '003' : booking.status.code];
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
@@ -381,13 +381,16 @@ export class IrBookingListing {
                           <p class="p-0 m-0 date-p">{moment(booking.to_date, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</p>
                         </td>
                         <td>
-                          <p class="p-0 m-0">{formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}</p>
+                          <p class="p-0 m-0" style={{ whiteSpace: 'nowrap' }}>
+                            {formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}
+                          </p>
                           {booking.financial.due_amount > 0 && (
                             <buuton
                               onClick={() => {
                                 this.editBookingItem = { booking, cause: 'payment' };
                                 this.openModal();
                               }}
+                              style={{ whiteSpace: 'nowrap' }}
                               class="btn p-0 m-0 due-btn"
                             >
                               {formatAmount(booking.currency.symbol, booking.financial.due_amount)}
@@ -403,7 +406,14 @@ export class IrBookingListing {
                         )}
 
                         <td>
-                          <p class={`m-0 badge ${confirmationBG} ct_ir_badge`}>{booking.status.description}</p>
+                          <p class={`m-0 badge ${confirmationBG} ct_ir_badge`}>
+                            {booking.is_requested_to_cancel ? locales?.entries?.Lcz_CancellationRequested : booking.status.description}
+                          </p>
+                          {booking.events && booking.events[0].type.toLowerCase() === 'modified' && (
+                            <p class="mx-0 p-0 small" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
+                              Modified
+                            </p>
+                          )}
                         </td>
                         <td>
                           <div class="d-flex justify-content-center align-items-center" style={{ gap: '8px' }}>
