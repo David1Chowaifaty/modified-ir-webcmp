@@ -1,0 +1,488 @@
+// import { Component, Event, EventEmitter, Fragment, h, Prop, State } from '@stencil/core';
+// import { BookingService } from '@/services/booking.service';
+// import calendar_data from '@/stores/calendar-data';
+// import { ReloadInterceptor } from '@/utils/ReloadInterceptor';
+// import moment, { Moment } from 'moment';
+// import { z, ZodError } from 'zod';
+// import { IToast } from '@components/ui/ir-toast/toast';
+// import locales from '@/stores/locales.store';
+// import { sleep } from '@/utils/utils';
+// export type SelectedRooms = { [key: string | number]: number[] };
+
+// @Component({
+//   tag: 'igl-bulk-block',
+//   styleUrls: ['igl-bulk-block.css', '../../../../common/sheet.css'],
+//   scoped: true,
+// })
+// export class IglBulkBlock {
+//   @Prop() maxDatesLength = 8;
+//   @Prop() property_id: number;
+
+//   @State() selectedRoomTypes: SelectedRooms[] = [];
+//   @State() errors: 'dates' | 'rooms' | 'weekdays';
+//   @State() isLoading: boolean;
+//   @State() dates: {
+//     from: Moment | null;
+//     to: Moment | null;
+//   }[] = [{ from: null, to: null }];
+
+//   @Event() closeModal: EventEmitter<null>;
+//   @Event() toast: EventEmitter<IToast>;
+
+//   private sidebar: HTMLIrSidebarElement;
+//   private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
+//   private allRoomTypes: SelectedRooms[] = [];
+//   private reloadInterceptor: ReloadInterceptor;
+//   private minDate = moment().format('YYYY-MM-DD');
+//   // private bookingService = new BookingService();
+
+//   // private datesSchema = z.array(
+//   //   z.object({
+//   //     from: z
+//   //       .any()
+//   //       .refine((val): val is Moment => moment.isMoment(val), {
+//   //         message: "Invalid 'from' date; expected a Moment object.",
+//   //       })
+//   //       .transform((val: Moment) => val.format('YYYY-MM-DD')),
+//   //     to: z
+//   //       .any()
+//   //       .refine((val): val is Moment => moment.isMoment(val), {
+//   //         message: "Invalid 'to' date; expected a Moment object.",
+//   //       })
+//   //       .transform((val: Moment) => val.format('YYYY-MM-DD')),
+//   //   }),
+//   // );
+
+//   // //sections
+//   // private unitSections: HTMLTableElement;
+//   private datesSections: HTMLTableElement;
+
+//   componentWillLoad() {
+//     this.selectAllRoomTypes();
+//   }
+//   componentDidLoad() {
+//     this.reloadInterceptor = new ReloadInterceptor({ autoActivate: false });
+//     this.sidebar = document.querySelector('ir-sidebar') as HTMLIrSidebarElement;
+//   }
+
+//   disconnectedCallback() {
+//     this.reloadInterceptor.deactivate();
+//   }
+
+//   // @Listen('beforeSidebarClose', { target: 'body' })
+//   // handleBeforeSidebarClose(e: CustomEvent) {
+//   //   e.stopImmediatePropagation();
+//   //   e.stopPropagation();
+//   //   if (window.confirm('Do you really want to proceed?')) {
+//   //     this.deactivate();
+//   //     this.sidebar.toggleSidebar();
+//   //   }
+//   // }
+
+//   private async addBlockDates() {
+//     // const generatePeriodsToModify = periods => {
+//     //   const p = [];
+//     //   for (const period of periods) {
+//     //     let current = period.from;
+//     //     const lastDay = moment(period.to, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+//     //     while (current !== lastDay) {
+//     //       const nextDay = moment(current, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+//     //       for (const selectedRoom of this.selectedRoomTypes) {
+//     //         p.push({
+//     //           room_type_id: selectedRoom.id,
+//     //           night: current,
+//     //         });
+//     //       }
+//     //       current = nextDay;
+//     //     }
+//     //   }
+//     //   return p;
+//     // };
+//     try {
+//       this.errors = null;
+//       this.isLoading = true;
+
+//       this.activate();
+//       await sleep(1000);
+//       this.deactivate();
+//       this.toast.emit({
+//         type: 'success',
+//         title: locales.entries.Lcz_RequestSubmittedSuccessfully,
+//         description: '',
+//       });
+//       this.isLoading = false;
+//       this.closeModal.emit();
+//     } catch (error) {
+//       console.log(error);
+//       if (error instanceof ZodError) {
+//         this.datesSections.scrollIntoView({ behavior: 'smooth', block: 'end' });
+//         this.errors = 'dates';
+//       }
+//     } finally {
+//       this.isLoading = false;
+//     }
+//   }
+
+//   private activate() {
+//     this.reloadInterceptor.activate();
+//     if (this.sidebar) this.sidebar.preventClose = true;
+//   }
+
+//   private deactivate() {
+//     this.reloadInterceptor.deactivate();
+//     if (this.sidebar) this.sidebar.preventClose = false;
+//   }
+
+//   private handleDateChange({ index, date, key }: { index: number; date: Moment; key: 'from' | 'to' }) {
+//     // 1) clone and set the new date
+//     const dates = [...this.dates];
+//     dates[index] = { ...dates[index], [key]: date };
+
+//     // 1a) if they just changed the “from”, always clear that row’s “to”
+//     if (key === 'from' && dates[index].to?.isBefore(date, 'dates')) {
+//       dates[index].to = null;
+//     }
+
+//     // 2) clear any subsequent rows whose “from” is on or before the changed date
+//     for (let i = index + 1; i < dates.length; i++) {
+//       const rowFrom = dates[i]?.from;
+//       if (rowFrom && rowFrom.isSameOrBefore(date, 'day')) {
+//         dates[i] = { from: null, to: null };
+//       }
+//     }
+
+//     // 3) commit
+//     this.dates = dates;
+
+//     // 4) open the appropriate picker
+//     setTimeout(() => {
+//       if (key === 'from') {
+//         this.dateRefs[index]?.to.openDatePicker();
+//       } else {
+//         const nextFrom = dates.findIndex(d => d.from === null);
+//         if (nextFrom > -1) {
+//           this.dateRefs[nextFrom]?.from.openDatePicker();
+//         }
+//       }
+//     }, 100);
+//   }
+
+//   private addDateRow() {
+//     const last_dates = this.dates[this.dates.length - 1];
+//     if (!last_dates.from || !last_dates.to) {
+//       this.errors = 'dates';
+//       return;
+//     }
+//     this.errors = null;
+//     this.dates = [...this.dates, { from: null, to: null }];
+//     setTimeout(() => {
+//       this.dateRefs[this.dates.length - 1].to?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+//     }, 100);
+//   }
+//   private toggleRoomType({ checked, roomTypeId }: { checked: boolean; roomTypeId: number }): void {
+//     console.log(checked, roomTypeId);
+//     const selected = [...this.selectedRoomTypes];
+//     const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
+
+//     if (checked) {
+//       const roomType = calendar_data.roomsInfo.find(rt => rt.id === roomTypeId);
+//       const allRooms = roomType ? roomType.physicalrooms.map(r => r.id) : [];
+
+//       if (idx > -1) {
+//         selected[idx] = { [roomTypeId]: allRooms };
+//       } else {
+//         selected.push({ [roomTypeId]: allRooms });
+//       }
+//     } else {
+//       if (idx > -1) {
+//         selected.splice(idx, 1);
+//       }
+//     }
+
+//     this.selectedRoomTypes = selected;
+//   }
+
+//   private toggleAllRoomTypes(e: CustomEvent) {
+//     e.stopImmediatePropagation();
+//     e.stopPropagation();
+
+//     if (!e.detail) {
+//       // Deselect all
+//       this.selectedRoomTypes = [];
+//       return;
+//     }
+//     this.selectedRoomTypes = [...this.allRoomTypes];
+//   }
+
+//   private selectAllRoomTypes() {
+//     this.allRoomTypes = calendar_data.roomsInfo.map(rt => ({
+//       [rt.id]: rt.physicalrooms.map(room => room.id),
+//     }));
+//     this.selectedRoomTypes = [...this.allRoomTypes];
+//   }
+
+//   private toggleRoom({ checked, roomId, roomTypeId }: { checked: boolean; roomTypeId: number; roomId: number }): void {
+//     const selected = [...this.selectedRoomTypes];
+//     const idx = selected.findIndex(entry => Object.keys(entry)[0] === roomTypeId.toString());
+
+//     if (checked) {
+//       if (idx > -1) {
+//         const rooms = selected[idx][roomTypeId];
+//         if (!rooms.includes(roomId)) {
+//           selected[idx] = { [roomTypeId]: [...rooms, roomId] };
+//         }
+//       } else {
+//         selected.push({ [roomTypeId]: [roomId] });
+//       }
+//     } else {
+//       if (idx > -1) {
+//         const filtered = selected[idx][roomTypeId].filter(id => id !== roomId);
+//         if (filtered.length > 0) {
+//           selected[idx] = { [roomTypeId]: filtered };
+//         } else {
+//           selected.splice(idx, 1);
+//         }
+//       }
+//     }
+
+//     this.selectedRoomTypes = selected;
+//   }
+//   private getTotalSelectedRooms(): number {
+//     return this.selectedRoomTypes.reduce((total, entry) => {
+//       const roomIds = Object.values(entry)[0] as number[];
+//       return total + roomIds.length;
+//     }, 0);
+//   }
+//   private getTotalAvailableRooms(): number {
+//     return calendar_data.roomsInfo.reduce((total, roomType) => {
+//       return total + roomType.physicalrooms.length;
+//     }, 0);
+//   }
+//   render() {
+//     const selectedRoomsByType = this.selectedRoomTypes.reduce((acc, entry) => {
+//       const typeId = Number(Object.keys(entry)[0]);
+//       acc[typeId] = entry[typeId];
+//       return acc;
+//     }, {} as Record<number, (string | number)[]>);
+
+//     const totalSelectedRooms = this.getTotalSelectedRooms();
+//     const totalAvailableRooms = this.getTotalAvailableRooms();
+
+//     const allRoomsSelected = totalSelectedRooms === totalAvailableRooms;
+
+//     const someRoomsSelected = totalSelectedRooms > 0 && totalSelectedRooms < totalAvailableRooms;
+//     return (
+//       <form
+//         class={'bulk-sheet-container'}
+//         onSubmit={e => {
+//           e.preventDefault();
+//           this.addBlockDates();
+//         }}
+//       >
+//         {/* <div class="sheet-header d-flex align-items-center">
+//           <ir-title
+//             onCloseSideBar={e => {
+//               e.stopImmediatePropagation();
+//               e.stopPropagation();
+//               if (this.isLoading) {
+//                 return;
+//               }
+//               this.closeModal.emit(null);
+//             }}
+//             class="px-1 mb-0"
+//             label={'Bulk Block Unit(s)'}
+//             displayContext="sidebar"
+//           ></ir-title>
+//         </div> */}
+//         <div class="sheet-body px-1">
+//           <div class="text-muted text-left py-0 my-0">
+//             <p>
+//               {/* {locales.entries.Lcz_SelectAffectedUnits} */}
+//               Select the units to block or unblock.
+//               {/* <span class="text-warning">{locales.entries.Lcz_OperationRequiresSeveralMinutes}</span> */}
+//             </p>
+//           </div>
+//           <div>
+//             {this.errors === 'rooms' && (
+//               <p class={'text-danger text-left smaller p-0 '} style={{ 'margin-bottom': '0.5rem' }}>
+//                 {calendar_data.is_vacation_rental ? locales.entries.Lcz_PlzSelectOneListing : locales.entries.Lcz_PlzSelectOneUnit}
+//               </p>
+//             )}
+//             <div class="d-flex flex-column" style={{ gap: '1rem' }}>
+//               <ir-checkbox
+//                 indeterminate={someRoomsSelected}
+//                 checked={allRoomsSelected}
+//                 onCheckChange={e => this.toggleAllRoomTypes(e)}
+//                 label="All property"
+//                 labelClass="m-0 p-0 ml-1"
+//               ></ir-checkbox>
+//               {calendar_data.roomsInfo.map(roomType => {
+//                 const selectedRooms = selectedRoomsByType[roomType.id] || [];
+//                 const physicalRoomsLength = roomType.physicalrooms.length;
+//                 const allRoomTypeSelected = selectedRooms.length === physicalRoomsLength;
+//                 const someRoomTypeSelected = selectedRooms.length > 0 && selectedRooms.length < physicalRoomsLength;
+
+//                 return (
+//                   <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
+//                     <ir-checkbox
+//                       onCheckChange={e => this.toggleRoomType({ checked: e.detail, roomTypeId: roomType.id })}
+//                       checked={allRoomTypeSelected}
+//                       indeterminate={someRoomTypeSelected}
+//                       label={roomType.name}
+//                       labelClass="m-0 p-0 ml-1"
+//                     ></ir-checkbox>
+
+//                     {!allRoomTypeSelected && (
+//                       <div class="d-flex ml-1 flex-column" style={{ gap: '0.5rem' }}>
+//                         {roomType.physicalrooms.map(room => (
+//                           <ir-checkbox
+//                             checked={selectedRooms.includes(room.id)}
+//                             onCheckChange={e => this.toggleRoom({ checked: e.detail, roomTypeId: roomType.id, roomId: room.id })}
+//                             label={room.name}
+//                             labelClass="m-0 p-0 ml-1"
+//                           ></ir-checkbox>
+//                         ))}
+//                       </div>
+//                     )}
+//                   </div>
+//                 );
+//               })}
+//             </div>
+//           </div>
+//           {/* Dates */}
+//           <table class="mt-1" ref={el => (this.datesSections = el)}>
+//             <thead>
+//               <tr>
+//                 <th class="text-left">{locales.entries.Lcz_From}</th>
+//                 <th class="text-left">{locales.entries.Lcz_ToExclusive}</th>
+//                 <td>
+//                   {this.dates.length !== this.maxDatesLength && (
+//                     <ir-button
+//                       variant="icon"
+//                       icon_name="plus"
+//                       onClickHandler={() => {
+//                         this.addDateRow();
+//                       }}
+//                     ></ir-button>
+//                   )}
+//                 </td>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {this.dates.map((d, i) => {
+//                 if (!this.dateRefs[i]) {
+//                   this.dateRefs[i] = {};
+//                 }
+
+//                 const fromDateMinDate = i > 0 ? this.dates[i - 1]?.to.clone().add(1, 'days')?.format('YYYY-MM-DD') ?? this.minDate : this.minDate;
+//                 const toDateMinDate = this.dates[i].from ? this.dates[i]?.from.clone().add(1, 'days')?.format('YYYY-MM-DD') : this.minDate;
+//                 return (
+//                   <tr key={`date_${i}`}>
+//                     <td class="pr-1 pb-1">
+//                       <ir-date-picker
+//                         ref={el => {
+//                           this.dateRefs[i].from = el;
+//                         }}
+//                         forceDestroyOnUpdate
+//                         minDate={fromDateMinDate}
+//                         data-testid="pickup_arrival_date"
+//                         date={d.from?.format('YYYY-MM-DD')}
+//                         emitEmptyDate={true}
+//                         aria-invalid={String(this.errors === 'dates' && !d.from)}
+//                         onDateChanged={evt => {
+//                           evt.stopImmediatePropagation();
+//                           evt.stopPropagation();
+//                           this.handleDateChange({ index: i, date: evt.detail.start, key: 'from' });
+//                         }}
+//                         onDatePickerFocus={e => {
+//                           e.stopImmediatePropagation();
+//                           e.stopPropagation();
+//                           if (i === 0) {
+//                             return;
+//                           }
+//                           const index = this.dates.findIndex(d => !d.from || !d.to);
+
+//                           if (!this.dates[index]?.from) {
+//                             this.dateRefs[index]?.from.openDatePicker();
+//                             return;
+//                           }
+//                           if (!this.dates[index]?.to) {
+//                             this.dateRefs[index].to.openDatePicker();
+//                           }
+//                         }}
+//                       >
+//                         <input
+//                           type="text"
+//                           slot="trigger"
+//                           value={d.from ? d.from.format('MMM DD, YYYY') : null}
+//                           class={`form-control input-sm ${this.errors === 'dates' && !d.to ? 'border-danger' : ''} text-center`}
+//                           style={{ width: '100%' }}
+//                         ></input>
+//                       </ir-date-picker>
+//                     </td>
+//                     <td class="pr-1 pb-1">
+//                       <ir-date-picker
+//                         forceDestroyOnUpdate
+//                         ref={el => {
+//                           this.dateRefs[i].to = el;
+//                         }}
+//                         data-testid="pickup_arrival_date"
+//                         date={d.to?.format('YYYY-MM-DD')}
+//                         emitEmptyDate={true}
+//                         minDate={toDateMinDate}
+//                         aria-invalid={String(this.errors === 'dates' && !d.to)}
+//                         onDateChanged={evt => {
+//                           evt.stopImmediatePropagation();
+//                           evt.stopPropagation();
+//                           this.handleDateChange({ index: i, date: evt.detail.start, key: 'to' });
+//                         }}
+//                         onDatePickerFocus={e => {
+//                           e.stopImmediatePropagation();
+//                           e.stopPropagation();
+//                           const index = this.dates.findIndex(d => !d.from || !d.to);
+
+//                           if (!this.dates[index]?.from) {
+//                             this.dateRefs[index]?.from?.openDatePicker();
+//                             return;
+//                           }
+//                           if (!this.dates[index]?.to) {
+//                             this.dateRefs[index].to.openDatePicker();
+//                           }
+//                         }}
+//                       >
+//                         <input
+//                           type="text"
+//                           slot="trigger"
+//                           value={d.to ? d.to.format('MMM DD, YYYY') : null}
+//                           class={`form-control input-sm
+//                             ${this.errors === 'dates' && !d.to ? 'border-danger' : ''}
+//                             text-center`}
+//                           style={{ width: '100%' }}
+//                         ></input>
+//                       </ir-date-picker>
+//                     </td>
+//                     {i > 0 && (
+//                       <td class="pb-1">
+//                         <ir-button
+//                           variant="icon"
+//                           icon_name="minus"
+//                           onClickHandler={() => {
+//                             this.dates = this.dates.filter((_, j) => j !== i);
+//                           }}
+//                         ></ir-button>
+//                       </td>
+//                     )}
+//                   </tr>
+//                 );
+//               })}
+//             </tbody>
+//           </table>
+//         </div>
+//         <div class={'sheet-footer'}>
+//           <ir-button text={locales.entries.Lcz_Cancel} btn_color="secondary" class={'flex-fill'} onClickHandler={() => this.closeModal.emit(null)}></ir-button>
+//           <ir-button isLoading={this.isLoading} text={locales.entries.Lcz_Save} btn_type="submit" class="flex-fill"></ir-button>
+//         </div>
+//       </form>
+//     );
+//   }
+// }

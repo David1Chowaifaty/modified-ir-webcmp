@@ -11,7 +11,7 @@ export type SelectedRooms = { id: string | number; result: 'open' | 'closed' };
 
 @Component({
   tag: 'igl-bulk-stop-sale',
-  styleUrls: ['igl-bulk-stop-sale.css', '../../../common/sheet.css'],
+  styleUrls: ['igl-bulk-stop-sale.css', '../../../../common/sheet.css'],
   scoped: true,
 })
 export class IglBulkStopSale {
@@ -285,7 +285,7 @@ export class IglBulkStopSale {
           this.addBlockDates();
         }}
       >
-        <div class="sheet-header d-flex align-items-center">
+        {/* <div class="sheet-header d-flex align-items-center">
           <ir-title
             onCloseSideBar={e => {
               e.stopImmediatePropagation();
@@ -299,11 +299,12 @@ export class IglBulkStopSale {
             label={locales.entries.Lcz_BulkStopOpenSale}
             displayContext="sidebar"
           ></ir-title>
-        </div>
+        </div> */}
         <div class="sheet-body px-1">
           <div class="text-muted text-left py-0 my-0">
             <p>
-              {locales.entries.Lcz_SelectAffectedUnits}
+              {/* {locales.entries.Lcz_SelectAffectedUnits} */}
+              Select the types to stop or open sales for all related rate plans
               {/* <span class="text-warning">{locales.entries.Lcz_OperationRequiresSeveralMinutes}</span> */}
             </p>
           </div>

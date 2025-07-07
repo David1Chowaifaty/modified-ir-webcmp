@@ -13,6 +13,7 @@ import { IToast } from "./components/ui/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
+import { IrToast } from "./components/ui/ir-toast/ir-toast";
 import { RatePlan, RoomType } from "./models/property";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
@@ -30,6 +31,7 @@ import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
 import { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/types";
 import { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
+import { Tab } from "./components/ui/ir-tabs/ir-tabs";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 import { User } from "./models/Users";
@@ -42,6 +44,7 @@ export { IToast } from "./components/ui/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
+export { IrToast } from "./components/ui/ir-toast/ir-toast";
 export { RatePlan, RoomType } from "./models/property";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
@@ -59,6 +62,7 @@ export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
 export { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/types";
 export { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
+export { Tab } from "./components/ui/ir-tabs/ir-tabs";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { User } from "./models/Users";
@@ -176,6 +180,14 @@ export namespace Components {
         "showSplitBookingOption": boolean;
         "sourceOptions": TSourceOptions[];
         "wasBlockedUnit": boolean;
+    }
+    interface IglBulkBlock {
+        "maxDatesLength": number;
+        "property_id": number;
+    }
+    interface IglBulkOperations {
+        "maxDatesLength": number;
+        "property_id": number;
     }
     interface IglBulkStopSale {
         "maxDatesLength": number;
@@ -1610,6 +1622,32 @@ export namespace Components {
          */
         "switchId": string;
     }
+    interface IrTabs {
+        /**
+          * Aria label for the tab list
+          * @type {string}
+          * @default 'Tabs'
+         */
+        "ariaLabel": string;
+        /**
+          * Whether the tabs are disabled
+          * @type {boolean}
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * ID of the tab that should be selected initially
+          * @type {string}
+          * @default undefined
+         */
+        "initialTab": string;
+        /**
+          * Array of tab objects containing id and label
+          * @type {Tab[]}
+          * @default []
+         */
+        "tabs": Tab[];
+    }
     interface IrTasksFilters {
         "isLoading": boolean;
     }
@@ -1840,6 +1878,14 @@ export interface IglBookingFormCustomEvent<T> extends CustomEvent<T> {
 export interface IglBookingOverviewPageCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBookingOverviewPageElement;
+}
+export interface IglBulkBlockCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBulkBlockElement;
+}
+export interface IglBulkOperationsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIglBulkOperationsElement;
 }
 export interface IglBulkStopSaleCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2105,6 +2151,10 @@ export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSwitchElement;
 }
+export interface IrTabsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTabsElement;
+}
 export interface IrTasksFiltersCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrTasksFiltersElement;
@@ -2332,6 +2382,42 @@ declare global {
     var HTMLIglBookingOverviewPageElement: {
         prototype: HTMLIglBookingOverviewPageElement;
         new (): HTMLIglBookingOverviewPageElement;
+    };
+    interface HTMLIglBulkBlockElementEventMap {
+        "closeModal": null;
+        "toast": IToast;
+    }
+    interface HTMLIglBulkBlockElement extends Components.IglBulkBlock, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBulkBlockElementEventMap>(type: K, listener: (this: HTMLIglBulkBlockElement, ev: IglBulkBlockCustomEvent<HTMLIglBulkBlockElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBulkBlockElementEventMap>(type: K, listener: (this: HTMLIglBulkBlockElement, ev: IglBulkBlockCustomEvent<HTMLIglBulkBlockElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIglBulkBlockElement: {
+        prototype: HTMLIglBulkBlockElement;
+        new (): HTMLIglBulkBlockElement;
+    };
+    interface HTMLIglBulkOperationsElementEventMap {
+        "closeModal": null;
+        "toast": IrToast;
+    }
+    interface HTMLIglBulkOperationsElement extends Components.IglBulkOperations, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIglBulkOperationsElementEventMap>(type: K, listener: (this: HTMLIglBulkOperationsElement, ev: IglBulkOperationsCustomEvent<HTMLIglBulkOperationsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIglBulkOperationsElementEventMap>(type: K, listener: (this: HTMLIglBulkOperationsElement, ev: IglBulkOperationsCustomEvent<HTMLIglBulkOperationsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIglBulkOperationsElement: {
+        prototype: HTMLIglBulkOperationsElement;
+        new (): HTMLIglBulkOperationsElement;
     };
     interface HTMLIglBulkStopSaleElementEventMap {
         "closeModal": null;
@@ -3678,6 +3764,23 @@ declare global {
         prototype: HTMLIrSwitchElement;
         new (): HTMLIrSwitchElement;
     };
+    interface HTMLIrTabsElementEventMap {
+        "tabChanged": Tab;
+    }
+    interface HTMLIrTabsElement extends Components.IrTabs, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTabsElementEventMap>(type: K, listener: (this: HTMLIrTabsElement, ev: IrTabsCustomEvent<HTMLIrTabsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTabsElementEventMap>(type: K, listener: (this: HTMLIrTabsElement, ev: IrTabsCustomEvent<HTMLIrTabsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrTabsElement: {
+        prototype: HTMLIrTabsElement;
+        new (): HTMLIrTabsElement;
+    };
     interface HTMLIrTasksFiltersElementEventMap {
         "applyFilters": TaskFilters;
     }
@@ -3899,6 +4002,8 @@ declare global {
         "igl-booking-event-hover": HTMLIglBookingEventHoverElement;
         "igl-booking-form": HTMLIglBookingFormElement;
         "igl-booking-overview-page": HTMLIglBookingOverviewPageElement;
+        "igl-bulk-block": HTMLIglBulkBlockElement;
+        "igl-bulk-operations": HTMLIglBulkOperationsElement;
         "igl-bulk-stop-sale": HTMLIglBulkStopSaleElement;
         "igl-cal-body": HTMLIglCalBodyElement;
         "igl-cal-footer": HTMLIglCalFooterElement;
@@ -3990,6 +4095,7 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-switch": HTMLIrSwitchElement;
+        "ir-tabs": HTMLIrTabsElement;
         "ir-tasks-filters": HTMLIrTasksFiltersElement;
         "ir-tasks-header": HTMLIrTasksHeaderElement;
         "ir-tasks-table": HTMLIrTasksTableElement;
@@ -4158,6 +4264,18 @@ declare namespace LocalJSX {
         "showSplitBookingOption"?: boolean;
         "sourceOptions"?: TSourceOptions[];
         "wasBlockedUnit"?: boolean;
+    }
+    interface IglBulkBlock {
+        "maxDatesLength"?: number;
+        "onCloseModal"?: (event: IglBulkBlockCustomEvent<null>) => void;
+        "onToast"?: (event: IglBulkBlockCustomEvent<IToast>) => void;
+        "property_id"?: number;
+    }
+    interface IglBulkOperations {
+        "maxDatesLength"?: number;
+        "onCloseModal"?: (event: IglBulkOperationsCustomEvent<null>) => void;
+        "onToast"?: (event: IglBulkOperationsCustomEvent<IrToast>) => void;
+        "property_id"?: number;
     }
     interface IglBulkStopSale {
         "maxDatesLength"?: number;
@@ -5760,6 +5878,38 @@ declare namespace LocalJSX {
          */
         "switchId"?: string;
     }
+    interface IrTabs {
+        /**
+          * Aria label for the tab list
+          * @type {string}
+          * @default 'Tabs'
+         */
+        "ariaLabel"?: string;
+        /**
+          * Whether the tabs are disabled
+          * @type {boolean}
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * ID of the tab that should be selected initially
+          * @type {string}
+          * @default undefined
+         */
+        "initialTab"?: string;
+        /**
+          * Emitted when a tab is selected
+          * @event tabChanged
+          * @type {CustomEvent<Tab>}
+         */
+        "onTabChanged"?: (event: IrTabsCustomEvent<Tab>) => void;
+        /**
+          * Array of tab objects containing id and label
+          * @type {Tab[]}
+          * @default []
+         */
+        "tabs"?: Tab[];
+    }
     interface IrTasksFilters {
         "isLoading"?: boolean;
         "onApplyFilters"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
@@ -5988,6 +6138,8 @@ declare namespace LocalJSX {
         "igl-booking-event-hover": IglBookingEventHover;
         "igl-booking-form": IglBookingForm;
         "igl-booking-overview-page": IglBookingOverviewPage;
+        "igl-bulk-block": IglBulkBlock;
+        "igl-bulk-operations": IglBulkOperations;
         "igl-bulk-stop-sale": IglBulkStopSale;
         "igl-cal-body": IglCalBody;
         "igl-cal-footer": IglCalFooter;
@@ -6079,6 +6231,7 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-spinner": IrSpinner;
         "ir-switch": IrSwitch;
+        "ir-tabs": IrTabs;
         "ir-tasks-filters": IrTasksFilters;
         "ir-tasks-header": IrTasksHeader;
         "ir-tasks-table": IrTasksTable;
@@ -6111,6 +6264,8 @@ declare module "@stencil/core" {
             "igl-booking-event-hover": LocalJSX.IglBookingEventHover & JSXBase.HTMLAttributes<HTMLIglBookingEventHoverElement>;
             "igl-booking-form": LocalJSX.IglBookingForm & JSXBase.HTMLAttributes<HTMLIglBookingFormElement>;
             "igl-booking-overview-page": LocalJSX.IglBookingOverviewPage & JSXBase.HTMLAttributes<HTMLIglBookingOverviewPageElement>;
+            "igl-bulk-block": LocalJSX.IglBulkBlock & JSXBase.HTMLAttributes<HTMLIglBulkBlockElement>;
+            "igl-bulk-operations": LocalJSX.IglBulkOperations & JSXBase.HTMLAttributes<HTMLIglBulkOperationsElement>;
             "igl-bulk-stop-sale": LocalJSX.IglBulkStopSale & JSXBase.HTMLAttributes<HTMLIglBulkStopSaleElement>;
             "igl-cal-body": LocalJSX.IglCalBody & JSXBase.HTMLAttributes<HTMLIglCalBodyElement>;
             "igl-cal-footer": LocalJSX.IglCalFooter & JSXBase.HTMLAttributes<HTMLIglCalFooterElement>;
@@ -6202,6 +6357,7 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
+            "ir-tabs": LocalJSX.IrTabs & JSXBase.HTMLAttributes<HTMLIrTabsElement>;
             "ir-tasks-filters": LocalJSX.IrTasksFilters & JSXBase.HTMLAttributes<HTMLIrTasksFiltersElement>;
             "ir-tasks-header": LocalJSX.IrTasksHeader & JSXBase.HTMLAttributes<HTMLIrTasksHeaderElement>;
             "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;
