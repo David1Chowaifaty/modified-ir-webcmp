@@ -28,8 +28,7 @@ import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
-import { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/types";
-import { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
+import { CountrySalesFilter, SalesRecord } from "./components/ir-sales-by-country/types";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 import { User } from "./models/Users";
@@ -57,8 +56,7 @@ export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
-export { SalesFilters } from "./components/ir-sales-by-country/ir-sales-filters/types";
-export { SalesRecord } from "./components/ir-sales-by-country/ir-sales-table/ir-sales-table";
+export { CountrySalesFilter, SalesRecord } from "./components/ir-sales-by-country/types";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { User } from "./models/Users";
@@ -1506,6 +1504,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrSalesFilters {
+        "baseFilters": CountrySalesFilter;
         "isLoading": boolean;
     }
     interface IrSalesTable {
@@ -3589,7 +3588,7 @@ declare global {
         new (): HTMLIrSalesByCountryElement;
     };
     interface HTMLIrSalesFiltersElementEventMap {
-        "applyFilters": SalesFilters;
+        "applyFilters": CountrySalesFilter;
     }
     interface HTMLIrSalesFiltersElement extends Components.IrSalesFilters, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrSalesFiltersElementEventMap>(type: K, listener: (this: HTMLIrSalesFiltersElement, ev: IrSalesFiltersCustomEvent<HTMLIrSalesFiltersElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5651,8 +5650,9 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrSalesFilters {
+        "baseFilters"?: CountrySalesFilter;
         "isLoading"?: boolean;
-        "onApplyFilters"?: (event: IrSalesFiltersCustomEvent<SalesFilters>) => void;
+        "onApplyFilters"?: (event: IrSalesFiltersCustomEvent<CountrySalesFilter>) => void;
     }
     interface IrSalesTable {
         "records"?: SalesRecord[];

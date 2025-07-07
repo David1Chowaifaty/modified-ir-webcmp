@@ -1,5 +1,5 @@
 import { Component, Prop, h } from '@stencil/core';
-export type SalesRecord = { id: string; country: string; nights: number; percentage: number; last_year_percentage: number };
+import { SalesRecord } from '../types';
 const sampleSalesData: SalesRecord[] = [
   {
     id: '1',

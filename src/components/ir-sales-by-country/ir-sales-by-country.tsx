@@ -1,7 +1,10 @@
 import Token from '@/models/Token';
+import { PropertyService } from '@/services/property.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { CountrySalesFilter, SalesRecord } from './types';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-sales-by-country',
@@ -16,10 +19,27 @@ export class IrSalesByCountry {
 
   @State() isLoading = true;
   @State() property_id: number;
+  @State() salesData: SalesRecord[];
+  @State() salesFilters: CountrySalesFilter;
 
   private token = new Token();
   private roomService = new RoomService();
+  private propertyService = new PropertyService();
 
+  private baseFilters = {
+    FROM_DATE: moment().add(-7, 'days').format('YYYY-MM-DD'),
+    TO_DATE: moment().format('YYYY-MM-DD'),
+    BOOK_CASE: '001',
+    WINDOW: 7,
+    include_previous_year: false,
+  };
+
+  componentWillLoad() {
+    this.salesFilters = this.baseFilters;
+    if (this.ticket) {
+      this.initializeApp();
+    }
+  }
   @Watch('ticket')
   ticketChanged(newValue: string, oldValue: string) {
     if (newValue === oldValue) {
@@ -49,7 +69,7 @@ export class IrSalesByCountry {
         propertyId = propertyData.My_Result.id;
       }
       this.property_id = propertyId;
-      const requests = [this.roomService.fetchLanguage(this.language)];
+      const requests = [this.roomService.fetchLanguage(this.language), this.getCountrySales()];
       if (this.propertyid) {
         requests.push(
           this.roomService.getExposedProperty({
@@ -68,6 +88,19 @@ export class IrSalesByCountry {
       this.isLoading = false;
     }
   }
+  private async getCountrySales(withExcel = false) {
+    const { include_previous_year, ...rest } = this.salesFilters;
+
+    const res = await this.propertyService.getCountrySales({
+      AC_ID: this.property_id,
+      is_export_to_excel: withExcel,
+      ...rest,
+    });
+    if (include_previous_year && rest.WINDOW === 365) {
+    }
+    this.salesFilters = res;
+    // this.
+  }
   render() {
     if (this.isLoading) {
       return <ir-loading-screen></ir-loading-screen>;
@@ -83,9 +116,10 @@ export class IrSalesByCountry {
               size="sm"
               btn_color="outline"
               text={locales.entries.Lcz_Export}
-              onClickHandler={e => {
+              onClickHandler={async e => {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
+                await this.getCountrySales(true);
               }}
               btnStyle={{ height: '100%' }}
               iconPosition="right"
@@ -94,8 +128,15 @@ export class IrSalesByCountry {
             ></ir-button>
           </div>
           <div class="d-flex flex-column flex-lg-row mt-1 " style={{ gap: '1rem' }}>
-            <ir-sales-filters></ir-sales-filters>
-
+            <ir-sales-filters
+              onApplyFilters={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.salesFilters = e.detail;
+                this.getCountrySales();
+              }}
+              baseFilters={this.baseFilters}
+            ></ir-sales-filters>
             <ir-sales-table class="card"></ir-sales-table>
           </div>
         </section>
