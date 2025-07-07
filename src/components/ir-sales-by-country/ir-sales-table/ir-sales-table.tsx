@@ -1,49 +1,13 @@
 import { Component, Prop, h } from '@stencil/core';
-export type SalesRecord = { id: string; country: string; nights: number; percentage: number; last_year_percentage: number };
-const sampleSalesData: SalesRecord[] = [
-  {
-    id: '1',
-    country: 'United States',
-    nights: 120,
-    percentage: 65.5,
-    last_year_percentage: 60.2,
-  },
-  {
-    id: '2',
-    country: 'United Kingdom',
-    nights: 90,
-    percentage: 55.3,
-    last_year_percentage: 50.1,
-  },
-  {
-    id: '3',
-    country: 'Germany',
-    nights: 75,
-    percentage: 48.7,
-    last_year_percentage: 45.0,
-  },
-  {
-    id: '4',
-    country: 'France',
-    nights: 60,
-    percentage: 42.9,
-    last_year_percentage: 39.5,
-  },
-  {
-    id: '5',
-    country: 'Australia',
-    nights: 30,
-    percentage: 21.0,
-    last_year_percentage: 19.0,
-  },
-];
+import { SalesRecord } from '../types';
+
 @Component({
   tag: 'ir-sales-table',
   styleUrls: ['ir-sales-table.css', '../../../common/table.css'],
   scoped: true,
 })
 export class IrSalesTable {
-  @Prop() records: SalesRecord[] = sampleSalesData;
+  @Prop() records: SalesRecord[] = [];
   render() {
     return (
       <div class="table-container h-100 p-1 m-0 table-responsive">

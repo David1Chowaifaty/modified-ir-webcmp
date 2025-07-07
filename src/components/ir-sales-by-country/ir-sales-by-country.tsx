@@ -1,7 +1,11 @@
 import Token from '@/models/Token';
+import { PropertyService } from '@/services/property.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { CountrySalesFilter, SalesRecord } from './types';
+import moment from 'moment';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-sales-by-country',
@@ -14,12 +18,30 @@ export class IrSalesByCountry {
   @Prop() propertyid: number;
   @Prop() p: string;
 
-  @State() isLoading = true;
+  @State() isLoading: 'filter' | 'export' | null = null;
+  @State() isPageLoading = true;
   @State() property_id: number;
+  @State() salesData: SalesRecord[];
+  @State() salesFilters: CountrySalesFilter;
 
   private token = new Token();
   private roomService = new RoomService();
+  private propertyService = new PropertyService();
 
+  private baseFilters = {
+    FROM_DATE: moment().add(-7, 'days').format('YYYY-MM-DD'),
+    TO_DATE: moment().format('YYYY-MM-DD'),
+    BOOK_CASE: '001',
+    WINDOW: 7,
+    include_previous_year: false,
+  };
+
+  componentWillLoad() {
+    this.salesFilters = this.baseFilters;
+    if (this.ticket) {
+      this.initializeApp();
+    }
+  }
   @Watch('ticket')
   ticketChanged(newValue: string, oldValue: string) {
     if (newValue === oldValue) {
@@ -30,7 +52,6 @@ export class IrSalesByCountry {
   }
   private async initializeApp() {
     try {
-      this.isLoading = true;
       let propertyId = this.propertyid;
       if (!this.propertyid && !this.p) {
         throw new Error('Property ID or username is required');
@@ -49,7 +70,7 @@ export class IrSalesByCountry {
         propertyId = propertyData.My_Result.id;
       }
       this.property_id = propertyId;
-      const requests = [this.roomService.fetchLanguage(this.language)];
+      const requests = [this.roomService.fetchLanguage(this.language), this.getCountrySales()];
       if (this.propertyid) {
         requests.push(
           this.roomService.getExposedProperty({
@@ -65,11 +86,65 @@ export class IrSalesByCountry {
     } catch (error) {
       console.log(error);
     } finally {
-      this.isLoading = false;
+      this.isPageLoading = false;
+    }
+  }
+
+  private async getCountrySales(isExportToExcel = false) {
+    try {
+      const { include_previous_year, ...filterParams } = this.salesFilters;
+      this.isLoading = isExportToExcel ? 'export' : 'filter';
+
+      const currentSales = await this.propertyService.getCountrySales({
+        AC_ID: this.property_id,
+        is_export_to_excel: isExportToExcel,
+        ...filterParams,
+      });
+
+      const shouldFetchPreviousYear = !isExportToExcel && include_previous_year && filterParams.WINDOW === 365;
+
+      let enrichedSales: SalesRecord[] = [];
+
+      if (shouldFetchPreviousYear) {
+        const previousYearSales = await this.propertyService.getCountrySales({
+          AC_ID: this.property_id,
+          is_export_to_excel: false,
+          ...filterParams,
+          FROM_DATE: moment(filterParams.FROM_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
+          TO_DATE: moment(filterParams.TO_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
+        });
+
+        enrichedSales = currentSales.map(current => {
+          const previous = previousYearSales.find(prev => prev.COUNTRY.toLowerCase() === current.COUNTRY.toLowerCase());
+          return {
+            id: v4(),
+            country: current.COUNTRY,
+            nights: current.NIGHTS,
+            percentage: current.PCT,
+            last_year_percentage: previous?.PCT ?? null,
+            revenue: currentSales.REVENUE,
+          };
+        });
+      } else {
+        enrichedSales = currentSales.map(record => ({
+          id: v4(),
+          country: record.COUNTRY,
+          nights: record.NIGHTS,
+          percentage: record.PCT,
+          last_year_percentage: null,
+          revenue: currentSales.REVENUE,
+        }));
+      }
+
+      this.salesData = enrichedSales;
+    } catch (error) {
+      console.error('Failed to fetch sales data:', error);
+    } finally {
+      this.isLoading = null;
     }
   }
   render() {
-    if (this.isLoading) {
+    if (this.isPageLoading) {
       return <ir-loading-screen></ir-loading-screen>;
     }
     return (
@@ -82,10 +157,12 @@ export class IrSalesByCountry {
             <ir-button
               size="sm"
               btn_color="outline"
+              isLoading={this.isLoading === 'export'}
               text={locales.entries.Lcz_Export}
-              onClickHandler={e => {
+              onClickHandler={async e => {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
+                await this.getCountrySales(true);
               }}
               btnStyle={{ height: '100%' }}
               iconPosition="right"
@@ -94,9 +171,17 @@ export class IrSalesByCountry {
             ></ir-button>
           </div>
           <div class="d-flex flex-column flex-lg-row mt-1 " style={{ gap: '1rem' }}>
-            <ir-sales-filters></ir-sales-filters>
-
-            <ir-sales-table class="card"></ir-sales-table>
+            <ir-sales-filters
+              isLoading={this.isLoading === 'filter'}
+              onApplyFilters={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.salesFilters = e.detail;
+                this.getCountrySales();
+              }}
+              baseFilters={this.baseFilters}
+            ></ir-sales-filters>
+            <ir-sales-table class="card mb-0" records={this.salesData}></ir-sales-table>
           </div>
         </section>
       </Host>

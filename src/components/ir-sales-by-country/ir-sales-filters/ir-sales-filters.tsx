@@ -1,9 +1,8 @@
 import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 
 import locales from '@/stores/locales.store';
-import { SalesFilters } from './types';
-import moment from 'moment';
-export type ModifiedSalesFilters = Omit<SalesFilters, 'housekeepers'>;
+import moment, { Moment } from 'moment';
+import { CountrySalesFilter } from '../types';
 
 @Component({
   tag: 'ir-sales-filters',
@@ -12,26 +11,25 @@ export type ModifiedSalesFilters = Omit<SalesFilters, 'housekeepers'>;
 })
 export class IrSalesFilters {
   @Prop() isLoading: boolean;
+  @Prop() baseFilters: CountrySalesFilter;
 
-  @State() filters: ModifiedSalesFilters = {
-    from_date: moment().add(-7, 'days').format('YYYY-MM-DD'),
-    to_date: moment().format('YYYY-MM-DD'),
-    rooms_status: { code: '' },
-    show_previous_year: false,
-  };
+  @State() filters: CountrySalesFilter;
 
   @State() collapsed: boolean = false;
+  @State() dates: { from: Moment; to: Moment } = {
+    from: moment(),
+    to: moment().add(1, 'days'),
+  };
 
-  @Event() applyFilters: EventEmitter<SalesFilters>;
+  @Event() applyFilters: EventEmitter<CountrySalesFilter>;
 
-  private baseFilters: SalesFilters;
   componentWillLoad() {
-    console.log(this.baseFilters);
+    this.filters = this.baseFilters;
   }
 
-  // private updateFilter(params: Partial<ModifiedSalesFilters>) {
-  //   this.filters = { ...this.filters, ...params };
-  // }
+  private updateFilter(params: Partial<CountrySalesFilter>) {
+    this.filters = { ...this.filters, ...params };
+  }
 
   private applyFiltersEvt(e: CustomEvent) {
     e.stopImmediatePropagation();
@@ -41,6 +39,7 @@ export class IrSalesFilters {
   private resetFilters(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
+    this.filters = this.baseFilters;
     this.applyFilters.emit(this.filters);
   }
   render() {
@@ -81,6 +80,11 @@ export class IrSalesFilters {
                 select_id="rooms"
                 LabelAvailable={false}
                 showFirstOption={false}
+                onSelectChange={e =>
+                  this.updateFilter({
+                    BOOK_CASE: e.detail,
+                  })
+                }
                 data={[
                   { text: 'Booked', value: '001' },
                   { text: 'Stayed', value: '002' },
@@ -93,6 +97,15 @@ export class IrSalesFilters {
               </label>
               <div class="d-flex flex-column date-filter-group" style={{ gap: '0.5rem' }}>
                 <ir-select
+                  onSelectChange={e => {
+                    const dateDiff = Number(e.detail);
+                    const today = moment();
+                    this.updateFilter({
+                      WINDOW: dateDiff,
+                      TO_DATE: today.format('YYYY-MM-DD'),
+                      FROM_DATE: today.add(-dateDiff, 'days').format('YYYY-MM-DD'),
+                    });
+                  }}
                   select_id="period"
                   LabelAvailable={false}
                   showFirstOption={false}
@@ -106,12 +119,34 @@ export class IrSalesFilters {
                   ]}
                 ></ir-select>
                 <p class="m-0 p-0 text-center">Or</p>
-                <ir-range-picker maxDate={moment().format('YYYY-MM-DD')} withOverlay={false}></ir-range-picker>
+                <ir-range-picker
+                  onDateRangeChanged={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    const { fromDate, toDate } = e.detail;
+                    this.updateFilter({
+                      FROM_DATE: fromDate.format('YYYY-MM-DD'),
+                      TO_DATE: toDate.format('YYYY-MM-DD'),
+                    });
+                    this.dates = { from: fromDate, to: toDate };
+                  }}
+                  fromDate={this.dates.from}
+                  toDate={this.dates.to}
+                  maxDate={moment().format('YYYY-MM-DD')}
+                  withOverlay={false}
+                ></ir-range-picker>
               </div>
             </fieldset>
             <div class="d-flex align-items-center mt-1 mb-2 compare-year-toggle" style={{ gap: '0.5rem' }}>
               <label htmlFor="compare-prev-year">Compare with previous year</label>
-              <ir-checkbox checkboxId="compare-prev-year"></ir-checkbox>
+              <ir-checkbox
+                checkboxId="compare-prev-year"
+                onCheckChange={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.updateFilter({ include_previous_year: e.detail });
+                }}
+              ></ir-checkbox>
             </div>
 
             <div class="d-flex align-items-center justify-content-end filter-actions" style={{ gap: '1rem' }}>

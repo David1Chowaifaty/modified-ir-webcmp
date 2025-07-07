@@ -208,7 +208,10 @@ export class IrTasksTable {
                 ></ir-checkbox>
               </th>
               <th class="extra-padding">{locales.entries.Lcz_Period}</th>
-              <th class="extra-padding">{locales.entries.Lcz_Unit}</th>
+              <th class="extra-padding">
+                {this.tasks.length > 1 && this.tasks.length + ' '}
+                {locales.entries.Lcz_Unit}
+              </th>
               <th class={'sortable extra-padding'} onClick={() => this.handleSort('status')}>
                 <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
                   <span>{locales.entries.Lcz_Status}</span>
