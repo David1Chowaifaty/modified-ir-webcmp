@@ -31,47 +31,6 @@ const applyHKFilters = async ({
     highlight_check_ins: string;
   };
 }) => {
-  // // Get initial row count before applying filters
-  // const initialRows = page.getByTestId('hk_task_row');
-  // const initialRowCount = await initialRows.count();
-
-  // // Set up request interception before applying filters
-  // const requestPromise = page.waitForRequest(request => request.url().includes('/Get_HK_Tasks') && request.method() === 'POST');
-
-  // const responsePromise = page.waitForResponse(response => response.url().includes('/Get_HK_Tasks') && response.status() === 200);
-
-  // // Apply the filters
-  // await (testInfo['period'] as Locator).selectOption({ value: params.period });
-  // if (testInfo['housekeepers']) {
-  //   await (testInfo['housekeepers'] as Locator).selectOption({ value: params.housekeepers });
-  // }
-  // await (testInfo['cleaning_frequency'] as Locator).selectOption({ value: params.frequency });
-  // await (testInfo['dusty_units'] as Locator).selectOption({ value: params.include_dusty_units });
-  // await (testInfo['highlight_check_ins'] as Locator).selectOption({ value: params.highlight_check_ins });
-
-  // // Click apply and wait for both request and response
-  // await (testInfo['applyButton'] as Locator).click();
-
-  // const [request, response] = await Promise.all([requestPromise, responsePromise]);
-
-  // // Wait for the DOM to update after the response
-  // await page.waitForLoadState('networkidle');
-
-  // // Wait for the table to be updated (either different row count or content)
-  // await page.waitForFunction(
-  //   initialCount => {
-  //     const rows = document.querySelectorAll('[data-testid="hk_task_row"]');
-  //     // Either row count changed or we wait for at least some rows to exist
-  //     return rows.length !== initialCount || rows.length > 0;
-  //   },
-  //   initialRowCount,
-  //   { timeout: 10000 },
-  // );
-
-  // // Additional wait to ensure DOM is fully updated
-  // await page.waitForTimeout(500);
-
-  // return { request, response };
   const requestPromise = page.waitForRequest(request => request.url().includes('/Get_HK_Tasks') && request.method() === 'POST');
 
   const responsePromise = page.waitForResponse(response => response.url().includes('/Get_HK_Tasks') && response.status() === 200);

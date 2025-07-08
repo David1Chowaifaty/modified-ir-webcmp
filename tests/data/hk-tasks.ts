@@ -1,11 +1,9 @@
 import { expect, Page } from '@playwright/test';
 import moment from 'moment';
+
 type StatusType = 'INHOUSE' | 'VACANT' | 'TURNOVER' | 'CHECKIN' | 'CHECKOUT' | 'BLOCKED';
 
-type StatusSummary = {
-  count: number;
-  period: string;
-};
+type StatusSummary = string;
 
 type StatusesResult = {
   total: number;
@@ -13,63 +11,14 @@ type StatusesResult = {
   statuses: Record<StatusType, StatusSummary[]>;
 };
 
-// export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]> {
-//   const rows = page.getByTestId('hk_task_row');
-//   const rowCount = await rows.count();
-
-//   const roomMap = new Map<string, StatusesResult>();
-
-//   for (let i = 0; i < rowCount; i++) {
-//     const row = rows.nth(i);
-//     const cells = row.locator('td');
-
-//     const period = (await cells.nth(1).textContent())?.trim() || '';
-//     const room = (await cells.nth(2).textContent())?.trim() || '';
-//     const statusText = (await cells.nth(3).textContent())?.trim().toUpperCase() as StatusType;
-
-//     if (!period || !room || !statusText) continue;
-
-//     // Ignore unknown status
-//     const validStatuses: StatusType[] = ['INHOUSE', 'VACANT', 'TURNOVER', 'CHECKIN', 'CHECKOUT', 'BLOCKED'];
-//     if (!validStatuses.includes(statusText)) continue;
-
-//     if (!roomMap.has(room)) {
-//       roomMap.set(room, {
-//         total: 0,
-//         room,
-//         statuses: {
-//           INHOUSE: [],
-//           VACANT: [],
-//           TURNOVER: [],
-//           CHECKIN: [],
-//           CHECKOUT: [],
-//           BLOCKED: [],
-//         },
-//       });
-//     }
-
-//     const roomData = roomMap.get(room)!;
-//     roomData.total++;
-
-//     roomData.statuses[statusText].push({
-//       count: 1,
-//       period,
-//     });
-//   }
-//   return Array.from(roomMap.values());
-// }
 export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]> {
-  // Wait for the loading state to complete and new data to be rendered
   await page.waitForLoadState('networkidle');
 
-  // Wait for the table to be visible and stable
   const tableLocator = page.getByTestId('hk_task_row');
   await expect(tableLocator.first()).toBeVisible({ timeout: 10000 });
 
-  // Wait a bit more for any potential re-renders
   await page.waitForTimeout(500);
 
-  // Get fresh locator after waiting
   const rows = page.getByTestId('hk_task_row');
   const rowCount = await rows.count();
 
@@ -79,7 +28,6 @@ export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]
     const row = rows.nth(i);
     const cells = row.locator('td');
 
-    // Wait for cells to be visible before extracting text
     await expect(cells.first()).toBeVisible();
 
     const period = (await cells.nth(1).textContent())?.trim() || '';
@@ -88,7 +36,6 @@ export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]
 
     if (!period || !room || !statusText) continue;
 
-    // Ignore unknown status
     const validStatuses: StatusType[] = ['INHOUSE', 'VACANT', 'TURNOVER', 'CHECKIN', 'CHECKOUT', 'BLOCKED'];
     if (!validStatuses.includes(statusText)) continue;
 
@@ -110,198 +57,53 @@ export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]
     const roomData = roomMap.get(room)!;
     roomData.total++;
 
-    roomData.statuses[statusText].push({
-      count: 1,
-      period,
-    });
+    // Push the period as a string (matching StatusSummary type)
+    roomData.statuses[statusText].push(period);
   }
   return Array.from(roomMap.values());
 }
 
-// Alternative approach: Wait for specific content changes
-export async function getAllRoomsTestCasesWithContentWait(page: Page, expectedMinRows = 1): Promise<StatusesResult[]> {
-  // Wait for the API response to complete
-  await page.waitForLoadState('networkidle');
-
-  // Wait for the table to have the expected number of rows
-  await page.waitForFunction(
-    minRows => {
-      const rows = document.querySelectorAll('[data-testid="hk_task_row"]');
-      return rows.length >= minRows;
-    },
-    expectedMinRows,
-    { timeout: 10000 },
-  );
-
-  // Additional wait for any animations or delayed updates
-  await page.waitForTimeout(300);
-
-  const rows = page.getByTestId('hk_task_row');
-  const rowCount = await rows.count();
-
-  const roomMap = new Map<string, StatusesResult>();
-
-  for (let i = 0; i < rowCount; i++) {
-    const row = rows.nth(i);
-    const cells = row.locator('td');
-
-    // Ensure each cell is loaded
-    await expect(cells.nth(1)).toBeVisible();
-    await expect(cells.nth(2)).toBeVisible();
-    await expect(cells.nth(3)).toBeVisible();
-
-    const period = (await cells.nth(1).textContent())?.trim() || '';
-    const room = (await cells.nth(2).textContent())?.trim() || '';
-    const statusText = (await cells.nth(3).textContent())?.trim().toUpperCase() as StatusType;
-
-    if (!period || !room || !statusText) continue;
-
-    const validStatuses: StatusType[] = ['INHOUSE', 'VACANT', 'TURNOVER', 'CHECKIN', 'CHECKOUT', 'BLOCKED'];
-    if (!validStatuses.includes(statusText)) continue;
-
-    if (!roomMap.has(room)) {
-      roomMap.set(room, {
-        total: 0,
-        room,
-        statuses: {
-          INHOUSE: [],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
-        },
-      });
-    }
-
-    const roomData = roomMap.get(room)!;
-    roomData.total++;
-
-    roomData.statuses[statusText].push({
-      count: 1,
-      period,
-    });
-  }
-  return Array.from(roomMap.values());
-}
-
-// Most robust approach: Wait for data attribute changes
-export async function getAllRoomsTestCasesWithDataWait(page: Page, previousCount = 0): Promise<StatusesResult[]> {
-  // Wait for network to be idle
-  await page.waitForLoadState('networkidle');
-
-  // Wait for the row count to change (if we expect it to change)
-  if (previousCount > 0) {
-    await page.waitForFunction(
-      prevCount => {
-        const rows = document.querySelectorAll('[data-testid="hk_task_row"]');
-        return rows.length !== prevCount;
-      },
-      previousCount,
-      { timeout: 10000 },
-    );
-  }
-
-  // Wait for the table container to be stable
-  const tableContainer = page.locator('ir-hk-tasks');
-  await expect(tableContainer).toBeVisible();
-
-  // Wait for at least one row to be visible
-  const firstRow = page.getByTestId('hk_task_row').first();
-  await expect(firstRow).toBeVisible({ timeout: 10000 });
-
-  // Additional stability wait
-  await page.waitForTimeout(500);
-
-  const rows = page.getByTestId('hk_task_row');
-  const rowCount = await rows.count();
-
-  const roomMap = new Map<string, StatusesResult>();
-
-  for (let i = 0; i < rowCount; i++) {
-    const row = rows.nth(i);
-
-    // Wait for the row to be stable
-    await expect(row).toBeVisible();
-
-    const cells = row.locator('td');
-
-    // Wait for all required cells to be present
-    await expect(cells.nth(1)).toBeVisible();
-    await expect(cells.nth(2)).toBeVisible();
-    await expect(cells.nth(3)).toBeVisible();
-
-    const period = (await cells.nth(1).textContent())?.trim() || '';
-    const room = (await cells.nth(2).textContent())?.trim() || '';
-    const statusText = (await cells.nth(3).textContent())?.trim().toUpperCase() as StatusType;
-
-    if (!period || !room || !statusText) continue;
-
-    const validStatuses: StatusType[] = ['INHOUSE', 'VACANT', 'TURNOVER', 'CHECKIN', 'CHECKOUT', 'BLOCKED'];
-    if (!validStatuses.includes(statusText)) continue;
-
-    if (!roomMap.has(room)) {
-      roomMap.set(room, {
-        total: 0,
-        room,
-        statuses: {
-          INHOUSE: [],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
-        },
-      });
-    }
-
-    const roomData = roomMap.get(room)!;
-    roomData.total++;
-
-    roomData.statuses[statusText].push({
-      count: 1,
-      period,
-    });
-  }
-  return Array.from(roomMap.values());
-}
 export function areResultsEqual(expected: StatusesResult[], actual: StatusesResult[]): boolean {
-  const filteredExpected = expected.filter(entry => entry.total >= 1);
-
-  const normalize = (data: StatusesResult[]) => {
-    const map = new Map<string, StatusesResult>();
+  function normalize(data: StatusesResult[]): Map<string, { total: number; statuses: Record<StatusType, Map<string, number>> }> {
+    const map = new Map<string, { total: number; statuses: Record<StatusType, Map<string, number>> }>();
 
     for (const entry of data) {
-      const statuses: Record<StatusType, Record<string, number>> = {
-        INHOUSE: {},
-        VACANT: {},
-        TURNOVER: {},
-        CHECKIN: {},
-        CHECKOUT: {},
-        BLOCKED: {},
+      const statuses: Record<StatusType, Map<string, number>> = {
+        INHOUSE: new Map(),
+        VACANT: new Map(),
+        TURNOVER: new Map(),
+        CHECKIN: new Map(),
+        CHECKOUT: new Map(),
+        BLOCKED: new Map(),
       };
 
-      for (const status in entry.statuses) {
-        for (const s of entry.statuses[status as StatusType]) {
-          statuses[status as StatusType][s.period] = (statuses[status as StatusType][s.period] || 0) + s.count;
+      for (const status of Object.keys(entry.statuses) as StatusType[]) {
+        const arr = entry.statuses[status];
+
+        for (const period of arr) {
+          if (typeof period === 'string' && period.trim()) {
+            const trimmedPeriod = period.trim();
+            statuses[status].set(trimmedPeriod, (statuses[status].get(trimmedPeriod) || 0) + 1);
+          }
         }
       }
 
-      map.set(entry.room.trim(), {
-        total: entry.total,
-        room: entry.room.trim(),
-        statuses: Object.fromEntries(Object.entries(statuses).map(([key, value]) => [key, Object.entries(value).map(([period, count]) => ({ period, count }))])) as Record<
-          StatusType,
-          StatusSummary[]
-        >,
-      });
+      map.set(entry.room.trim(), { total: entry.total, statuses });
     }
-
     return map;
-  };
+  }
 
+  // Detailed logging
+  console.log('=== COMPARISON DETAILS ===');
+  console.log('Expected rooms:', expected.map(e => e.room).join(', '));
+  console.log('Actual rooms:', actual.map(a => a.room).join(', '));
+
+  const filteredExpected = expected.filter(entry => entry.total >= 1);
   const eMap = normalize(filteredExpected);
   const aMap = normalize(actual);
+
+  console.log('Filtered expected rooms:', Array.from(eMap.keys()).join(', '));
+  console.log('Actual rooms after normalization:', Array.from(aMap.keys()).join(', '));
 
   for (const [room, eEntry] of eMap.entries()) {
     const aEntry = aMap.get(room);
@@ -309,6 +111,9 @@ export function areResultsEqual(expected: StatusesResult[], actual: StatusesResu
       console.log(`[Mismatch] Missing room: "${room}" in actual results`);
       return false;
     }
+
+    console.log(`Comparing room: "${room}"`);
+    console.log(`  Expected total: ${eEntry.total}, Actual total: ${aEntry.total}`);
 
     if (eEntry.total !== aEntry.total) {
       console.log(`[Mismatch] Room: "${room}" has different totals. Expected: ${eEntry.total}, Actual: ${aEntry.total}`);
@@ -318,30 +123,31 @@ export function areResultsEqual(expected: StatusesResult[], actual: StatusesResu
     for (const status of Object.keys(eEntry.statuses) as StatusType[]) {
       const eStatus = eEntry.statuses[status];
       const aStatus = aEntry.statuses[status];
+      const allPeriods = new Set([...eStatus.keys(), ...aStatus.keys()]);
 
-      const eByPeriod = new Map(eStatus.map(({ period, count }) => [period, count]));
-      const aByPeriod = new Map(aStatus.map(({ period, count }) => [period, count]));
+      if (allPeriods.size > 0) {
+        console.log(`  Status: ${status}`);
+        for (const period of allPeriods) {
+          const expectedCount = eStatus.get(period) || 0;
+          const actualCount = aStatus.get(period) || 0;
 
-      const allPeriods = new Set([...eByPeriod.keys(), ...aByPeriod.keys()]);
+          console.log(`    Period: "${period}" - Expected: ${expectedCount}, Actual: ${actualCount}`);
 
-      for (const period of allPeriods) {
-        const expectedCount = eByPeriod.get(period) || 0;
-        const actualCount = aByPeriod.get(period) || 0;
-
-        if (expectedCount !== actualCount) {
-          console.log(`[Mismatch] Room: "${room}", Status: "${status}", Period: "${period}" — Expected: ${expectedCount}, Actual: ${actualCount}`);
-          return false;
+          if (expectedCount !== actualCount) {
+            console.log(`[Mismatch] Room: "${room}", Status: "${status}", Period: "${period}" — Expected: ${expectedCount}, Actual: ${actualCount}`);
+            return false;
+          }
         }
       }
     }
   }
 
+  console.log('=== COMPARISON COMPLETE - ALL MATCHES ===');
   return true;
 }
-
 export const testData = [
   {
-    case: 'Every day',
+    case: 'Every day today',
     params: {
       period: moment().format('YYYY-MM-DD'),
       housekeepers: '000',
@@ -358,12 +164,7 @@ export const testData = [
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
-          CHECKOUT: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          CHECKOUT: ['8 Jul'],
           BLOCKED: [],
         },
       },
@@ -373,12 +174,7 @@ export const testData = [
         statuses: {
           INHOUSE: [],
           VACANT: [],
-          TURNOVER: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          TURNOVER: ['8 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
           BLOCKED: [],
@@ -417,24 +213,14 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          BLOCKED: ['8 Jul'],
         },
       },
       {
         room: '06. Pomegranate Room (2 adults - 1 child)',
         total: 1,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -450,12 +236,7 @@ export const testData = [
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
-          CHECKOUT: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          CHECKOUT: ['8 Jul'],
           BLOCKED: [],
         },
       },
@@ -468,12 +249,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          BLOCKED: ['8 Jul'],
         },
       },
       {
@@ -504,12 +280,7 @@ export const testData = [
         room: '11. Bitter Orange Double Room',
         total: 1,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -545,12 +316,7 @@ export const testData = [
         room: '14. Prickly Pear Double Room',
         total: 1,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -576,24 +342,9 @@ export const testData = [
         statuses: {
           INHOUSE: [],
           VACANT: [],
-          TURNOVER: [
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
-          CHECKIN: [
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-          ],
-          CHECKOUT: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          TURNOVER: ['10 Jul'],
+          CHECKIN: ['9 Jul'],
+          CHECKOUT: ['8 Jul'],
           BLOCKED: [],
         },
       },
@@ -601,23 +352,9 @@ export const testData = [
         room: '02. Peach Deluxe Studio',
         total: 3,
         statuses: {
-          INHOUSE: [
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['9 Jul', '10 Jul'],
           VACANT: [],
-          TURNOVER: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          TURNOVER: ['8 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
           BLOCKED: [],
@@ -642,18 +379,8 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-          ],
-          CHECKOUT: [
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['9 Jul'],
+          CHECKOUT: ['10 Jul'],
           BLOCKED: [],
         },
       },
@@ -666,33 +393,18 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          BLOCKED: ['8 Jul'],
         },
       },
       {
         room: '06. Pomegranate Room (2 adults - 1 child)',
         total: 2,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
-          CHECKOUT: [
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-          ],
+          CHECKOUT: ['9 Jul'],
           BLOCKED: [],
         },
       },
@@ -703,18 +415,8 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
-          CHECKOUT: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['10 Jul'],
+          CHECKOUT: ['8 Jul'],
           BLOCKED: [],
         },
       },
@@ -727,20 +429,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
+          BLOCKED: ['8 Jul', '9 Jul', '10 Jul'],
         },
       },
       {
@@ -771,20 +460,7 @@ export const testData = [
         room: '11. Bitter Orange Double Room',
         total: 3,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul', '9 Jul', '10 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -820,20 +496,7 @@ export const testData = [
         room: '14. Prickly Pear Double Room',
         total: 3,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul', '9 Jul', '10 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -857,35 +520,11 @@ export const testData = [
         room: '01. Quince Deluxe Studio',
         total: 5,
         statuses: {
-          INHOUSE: [
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['11 Jul', '12 Jul'],
           VACANT: [],
-          TURNOVER: [
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
-          CHECKIN: [
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-          ],
-          CHECKOUT: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          TURNOVER: ['10 Jul'],
+          CHECKIN: ['9 Jul'],
+          CHECKOUT: ['8 Jul'],
           BLOCKED: [],
         },
       },
@@ -893,31 +532,9 @@ export const testData = [
         room: '02. Peach Deluxe Studio',
         total: 5,
         statuses: {
-          INHOUSE: [
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['9 Jul', '10 Jul'],
           VACANT: [],
-          TURNOVER: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          TURNOVER: ['8 Jul', '11 Jul', '12 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
           BLOCKED: [],
@@ -930,12 +547,7 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['12 Jul'],
           CHECKOUT: [],
           BLOCKED: [],
         },
@@ -947,24 +559,9 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-          ],
-          CHECKOUT: [
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
-          BLOCKED: [
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['9 Jul'],
+          CHECKOUT: ['10 Jul'],
+          BLOCKED: ['12 Jul'],
         },
       },
       {
@@ -976,43 +573,18 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          BLOCKED: ['8 Jul'],
         },
       },
       {
         room: '06. Pomegranate Room (2 adults - 1 child)',
         total: 4,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul'],
           VACANT: [],
-          TURNOVER: [
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
-          CHECKIN: [
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-          ],
-          CHECKOUT: [
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-          ],
+          TURNOVER: ['12 Jul'],
+          CHECKIN: ['11 Jul'],
+          CHECKOUT: ['9 Jul'],
           BLOCKED: [],
         },
       },
@@ -1020,30 +592,11 @@ export const testData = [
         room: '07. Orange Quadruple Split Level Family Room',
         total: 4,
         statuses: {
-          INHOUSE: [
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['11 Jul', '12 Jul'],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-          ],
-          CHECKOUT: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['10 Jul'],
+          CHECKOUT: ['8 Jul'],
           BLOCKED: [],
         },
       },
@@ -1054,31 +607,9 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-          ],
+          BLOCKED: ['8 Jul', '9 Jul', '10 Jul', '11 Jul'],
         },
       },
       {
@@ -1088,12 +619,7 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['12 Jul'],
           CHECKOUT: [],
           BLOCKED: [],
         },
@@ -1102,20 +628,10 @@ export const testData = [
         room: '10. Hawthorn Double Room',
         total: 2,
         statuses: {
-          INHOUSE: [
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['12 Jul'],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['11 Jul'],
           CHECKOUT: [],
           BLOCKED: [],
         },
@@ -1124,31 +640,9 @@ export const testData = [
         room: '11. Bitter Orange Double Room',
         total: 5,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul', '9 Jul', '10 Jul', '12 Jul'],
           VACANT: [],
-          TURNOVER: [
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-          ],
+          TURNOVER: ['11 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
           BLOCKED: [],
@@ -1161,12 +655,7 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['12 Jul'],
           CHECKOUT: [],
           BLOCKED: [],
         },
@@ -1175,20 +664,10 @@ export const testData = [
         room: '13. Lime Double Room',
         total: 2,
         statuses: {
-          INHOUSE: [
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['12 Jul'],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-          ],
+          CHECKIN: ['11 Jul'],
           CHECKOUT: [],
           BLOCKED: [],
         },
@@ -1197,28 +676,7 @@ export const testData = [
         room: '14. Prickly Pear Double Room',
         total: 5,
         statuses: {
-          INHOUSE: [
-            {
-              period: '8 Jul',
-              count: 1,
-            },
-            {
-              period: '9 Jul',
-              count: 1,
-            },
-            {
-              period: '10 Jul',
-              count: 1,
-            },
-            {
-              period: '11 Jul',
-              count: 1,
-            },
-            {
-              period: '12 Jul',
-              count: 1,
-            },
-          ],
+          INHOUSE: ['8 Jul', '9 Jul', '10 Jul', '11 Jul', '12 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
