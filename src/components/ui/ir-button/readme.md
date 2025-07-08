@@ -93,6 +93,7 @@ Type: `Promise<void>`
  - [ir-room-nights](../../igloo-calendar/ir-room-nights)
  - [ir-sales-by-country](../../ir-sales-by-country)
  - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
+ - [ir-sales-table](../../ir-sales-by-country/ir-sales-table)
  - [ir-tasks-filters](../../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
  - [ir-tasks-header](../../ir-housekeeping/ir-hk-tasks/ir-tasks-header)
  - [ir-user-form-panel](../../ir-user-management/ir-user-form-panel)
@@ -146,6 +147,7 @@ graph TD;
   ir-room-nights --> ir-button
   ir-sales-by-country --> ir-button
   ir-sales-filters --> ir-button
+  ir-sales-table --> ir-button
   ir-tasks-filters --> ir-button
   ir-tasks-header --> ir-button
   ir-user-form-panel --> ir-button

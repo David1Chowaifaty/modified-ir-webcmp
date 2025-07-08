@@ -28,7 +28,7 @@ import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
 import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
-import { CountrySalesFilter, SalesRecord } from "./components/ir-sales-by-country/types";
+import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 import { User } from "./models/Users";
@@ -56,7 +56,7 @@ export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
 export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
-export { CountrySalesFilter, SalesRecord } from "./components/ir-sales-by-country/types";
+export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { User } from "./models/Users";
@@ -1508,12 +1508,14 @@ export namespace Components {
         "isLoading": boolean;
     }
     interface IrSalesTable {
+        "mappedCountries": MappedCountries;
         "records": SalesRecord[];
     }
     interface IrSecureTasks {
         "bookingNumber": string;
         "p": string;
         "propertyid": number;
+        "ticket": string;
     }
     interface IrSelect {
         "LabelAvailable": boolean;
@@ -5655,12 +5657,14 @@ declare namespace LocalJSX {
         "onApplyFilters"?: (event: IrSalesFiltersCustomEvent<CountrySalesFilter>) => void;
     }
     interface IrSalesTable {
+        "mappedCountries"?: MappedCountries;
         "records"?: SalesRecord[];
     }
     interface IrSecureTasks {
         "bookingNumber"?: string;
         "p"?: string;
         "propertyid"?: number;
+        "ticket"?: string;
     }
     interface IrSelect {
         "LabelAvailable"?: boolean;

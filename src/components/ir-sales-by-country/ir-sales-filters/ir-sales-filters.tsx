@@ -73,10 +73,11 @@ export class IrSalesFilters {
         <div class="m-0 p-0 collapse filters-section" id="salesFiltersCollapse">
           <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
             <fieldset class="pt-1 filter-group">
-              <label htmlFor="rooms" class="m-0 p-0">
+              <label htmlFor="rooms" class="m-0 px-0" style={{ paddingBottom: '0.25rem' }}>
                 Rooms
               </label>
               <ir-select
+                selectedValue={this.filters?.BOOK_CASE}
                 select_id="rooms"
                 LabelAvailable={false}
                 showFirstOption={false}
@@ -92,11 +93,12 @@ export class IrSalesFilters {
               ></ir-select>
             </fieldset>
             <fieldset class="pt-1 filter-group">
-              <label htmlFor="period" class="p-0 m-0">
-                Selected Period
+              <label htmlFor="period" class="px-0 m-0" style={{ paddingBottom: '0.25rem' }}>
+                Selected period
               </label>
               <div class="d-flex flex-column date-filter-group" style={{ gap: '0.5rem' }}>
                 <ir-select
+                  selectedValue={this.filters?.WINDOW?.toString()}
                   onSelectChange={e => {
                     const dateDiff = Number(e.detail);
                     const today = moment();
@@ -138,8 +140,11 @@ export class IrSalesFilters {
               </div>
             </fieldset>
             <div class="d-flex align-items-center mt-1 mb-2 compare-year-toggle" style={{ gap: '0.5rem' }}>
-              <label htmlFor="compare-prev-year">Compare with previous year</label>
+              <label htmlFor="compare-prev-year" style={{ paddingBottom: '0.25rem' }}>
+                Compare with previous year
+              </label>
               <ir-checkbox
+                checked={this.filters?.include_previous_year}
                 checkboxId="compare-prev-year"
                 onCheckChange={e => {
                   e.stopImmediatePropagation();

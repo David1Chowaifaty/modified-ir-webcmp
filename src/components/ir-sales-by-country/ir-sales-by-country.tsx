@@ -3,9 +3,11 @@ import { PropertyService } from '@/services/property.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { CountrySalesFilter, SalesRecord } from './types';
+import { CountrySalesFilter, MappedCountries, SalesRecord } from './types';
 import moment from 'moment';
 import { v4 } from 'uuid';
+import { BookingService } from '@/services/booking.service';
+import { ICountry } from '@/models/IBooking';
 
 @Component({
   tag: 'ir-sales-by-country',
@@ -23,10 +25,12 @@ export class IrSalesByCountry {
   @State() property_id: number;
   @State() salesData: SalesRecord[];
   @State() salesFilters: CountrySalesFilter;
+  @State() countries: MappedCountries = new Map();
 
   private token = new Token();
   private roomService = new RoomService();
   private propertyService = new PropertyService();
+  private bookingService = new BookingService();
 
   private baseFilters = {
     FROM_DATE: moment().add(-7, 'days').format('YYYY-MM-DD'),
@@ -70,7 +74,7 @@ export class IrSalesByCountry {
         propertyId = propertyData.My_Result.id;
       }
       this.property_id = propertyId;
-      const requests = [this.roomService.fetchLanguage(this.language), this.getCountrySales()];
+      const requests = [this.bookingService.getCountries(this.language), this.roomService.fetchLanguage(this.language), this.getCountrySales()];
       if (this.propertyid) {
         requests.push(
           this.roomService.getExposedProperty({
@@ -82,7 +86,16 @@ export class IrSalesByCountry {
         );
       }
 
-      await Promise.all(requests);
+      const [countries] = await Promise.all(requests);
+      const mappedCountries = new Map();
+      (countries as ICountry[]).map(country => {
+        mappedCountries.set(country.name, {
+          flag: country.flag,
+          name: country.name,
+        });
+      });
+      this.countries = mappedCountries;
+      console.log(this.countries);
     } catch (error) {
       console.log(error);
     } finally {
@@ -101,7 +114,7 @@ export class IrSalesByCountry {
         ...filterParams,
       });
 
-      const shouldFetchPreviousYear = !isExportToExcel && include_previous_year && filterParams.WINDOW === 365;
+      const shouldFetchPreviousYear = !isExportToExcel && include_previous_year;
 
       let enrichedSales: SalesRecord[] = [];
 
@@ -121,8 +134,15 @@ export class IrSalesByCountry {
             country: current.COUNTRY,
             nights: current.NIGHTS,
             percentage: current.PCT,
-            last_year_percentage: previous?.PCT ?? null,
-            revenue: currentSales.REVENUE,
+            revenue: current.REVENUE,
+            last_year: previous
+              ? {
+                  country: previous.COUNTRY,
+                  nights: previous.NIGHTS,
+                  percentage: previous.PCT,
+                  revenue: previous.REVENUE,
+                }
+              : null,
           };
         });
       } else {
@@ -131,8 +151,8 @@ export class IrSalesByCountry {
           country: record.COUNTRY,
           nights: record.NIGHTS,
           percentage: record.PCT,
-          last_year_percentage: null,
-          revenue: currentSales.REVENUE,
+          last_year: null,
+          revenue: record.REVENUE,
         }));
       }
 
@@ -179,9 +199,10 @@ export class IrSalesByCountry {
                 this.salesFilters = e.detail;
                 this.getCountrySales();
               }}
+              class="filters-card"
               baseFilters={this.baseFilters}
             ></ir-sales-filters>
-            <ir-sales-table class="card mb-0" records={this.salesData}></ir-sales-table>
+            <ir-sales-table mappedCountries={this.countries} class="card mb-0" records={this.salesData}></ir-sales-table>
           </div>
         </section>
       </Host>

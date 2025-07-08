@@ -1,5 +1,7 @@
-import { Component, Prop, h } from '@stencil/core';
-import { SalesRecord } from '../types';
+import { Component, Prop, h, State } from '@stencil/core';
+import { MappedCountries, SalesRecord } from '../types';
+import { formatAmount } from '@/utils/utils';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-sales-table',
@@ -8,14 +10,23 @@ import { SalesRecord } from '../types';
 })
 export class IrSalesTable {
   @Prop() records: SalesRecord[] = [];
+  @Prop() mappedCountries: MappedCountries;
+  @State() visibleCount: number = 10;
+
+  private handleLoadMore = () => {
+    this.visibleCount = Math.min(this.visibleCount + 10, this.records.length);
+  };
+
   render() {
+    const visibleRecords = this.records.slice(0, this.visibleCount);
     return (
       <div class="table-container h-100 p-1 m-0 table-responsive">
         <table class="table" data-testid="hk_tasks_table">
           <thead class="table-header">
             <tr>
               <th class="text-left">Country</th>
-              <th class="">Room nights</th>
+              <th class="text-center">Room nights</th>
+              <th class="text-right">Revenue</th>
               <th class=""></th>
             </tr>
           </thead>
@@ -28,13 +39,38 @@ export class IrSalesTable {
                 </td>
               </tr>
             )}
-            {this.records.map(record => {
-              const mainPercentage = `${parseFloat(Math.ceil(record.percentage).toString()).toFixed(2)}%`;
-              const secondaryPercentage = record.last_year_percentage ? `${parseFloat(Math.ceil(record.last_year_percentage).toString()).toFixed(2)}%` : null;
+            {visibleRecords.map(record => {
+              const mainPercentage = `${parseFloat(record.percentage.toString()).toFixed(2)}%`;
+              const secondaryPercentage = record.last_year ? `${parseFloat(record.last_year.percentage.toString()).toFixed(2)}%` : null;
+              const mappedCountry = this.mappedCountries.get(record.country);
               return (
                 <tr data-testid={`record_row`} class={{ 'task-table-row ir-table-row': true }} key={record.id}>
-                  <td class="text-left">{record.country}</td>
-                  <td>{record.nights}</td>
+                  <td class="text-left">
+                    <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+                      {mappedCountry?.flag && <img class="flag" alt={mappedCountry.name} src={mappedCountry.flag} />}
+                      <span>{mappedCountry?.name ?? record.country}</span>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
+                      <p class={`p-0 m-0 ${record.last_year?.nights ? 'font-weight-bold' : ''}`}>{record.nights}</p>
+                      {record.last_year?.nights && (
+                        <p class="p-0 mx-0" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
+                          {record.last_year.nights}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
+                      <p class={`p-0 m-0 ${record.last_year?.revenue ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, record.revenue)}</p>
+                      {record.last_year?.revenue && (
+                        <p class="p-0 mx-0" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
+                          {formatAmount(calendar_data.currency.symbol, record.last_year.revenue)}
+                        </p>
+                      )}
+                    </div>
+                  </td>
                   <td>
                     <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
                       <div class="progress-main">
@@ -43,7 +79,7 @@ export class IrSalesTable {
                           <div class="progress bg-primary mb-0" style={{ width: mainPercentage }}></div>
                         </div>
                       </div>
-                      {record.last_year_percentage && (
+                      {record.last_year?.percentage && (
                         <div class="progress-main">
                           <span class="progress-totle">{secondaryPercentage}</span>
                           <div class="progress-line">
@@ -59,7 +95,7 @@ export class IrSalesTable {
           </tbody>
           <tfoot>
             <tr style={{ fontSize: '12px' }}>
-              <td colSpan={2}></td>
+              <td colSpan={3}></td>
               <td style={{ width: '250px' }}>
                 <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem' }}>
                   <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
@@ -75,6 +111,11 @@ export class IrSalesTable {
             </tr>
           </tfoot>
         </table>
+        {this.visibleCount < this.records.length && (
+          <div class="d-flex justify-content-center my-2">
+            <ir-button size="sm" text="Load More" onClickHandler={this.handleLoadMore}></ir-button>
+          </div>
+        )}
       </div>
     );
   }
