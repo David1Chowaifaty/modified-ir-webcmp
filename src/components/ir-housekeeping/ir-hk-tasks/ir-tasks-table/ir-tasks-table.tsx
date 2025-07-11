@@ -3,7 +3,16 @@ import { Task } from '@/models/housekeeping';
 import moment from 'moment';
 import housekeeping_store from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
-import { hkTasksStore, toggleTaskSelection, selectAllTasks, clearSelectedTasks, getCheckableTasks, isAllTasksSelected, updateSorting, getPaginatedTasks } from '@/stores/hk-tasks.store';
+import {
+  hkTasksStore,
+  toggleTaskSelection,
+  selectAllTasks,
+  clearSelectedTasks,
+  getCheckableTasks,
+  isAllTasksSelected,
+  updateSorting,
+  getPaginatedTasks,
+} from '@/stores/hk-tasks.store';
 
 @Component({
   tag: 'ir-tasks-table',
@@ -101,6 +110,7 @@ export class IrTasksTable {
 
   render() {
     const haveManyHousekeepers = housekeeping_store?.hk_criteria?.housekeepers?.length > 1;
+    const tasks = getPaginatedTasks();
     return (
       <div class="card table-container flex-fill p-1 m-0">
         <ir-tasks-header></ir-tasks-header>
@@ -174,16 +184,16 @@ export class IrTasksTable {
             </thead>
 
             <tbody>
-              {/* {this.filteredTasks.length === 0 && (
-              <tr class="ir-table-row">
-              <td colSpan={9} class="text-center">
-              <div style={{ height: '300px' }} class="d-flex align-items-center justify-content-center">
-              <span> {locales.entries.Lcz_NoTasksFound}</span>
-              </div>
-              </td>
-              </tr>
-              )} */}
-              {getPaginatedTasks()?.map(task => {
+              {tasks.length === 0 && (
+                <tr class="ir-table-row">
+                  <td colSpan={9} class="text-center">
+                    <div style={{ height: '300px' }} class="d-flex align-items-center justify-content-center">
+                      <span> {locales.entries.Lcz_NoTasksFound}</span>
+                    </div>
+                  </td>
+                </tr>
+              )}
+              {tasks?.map(task => {
                 const isSelected = hkTasksStore.selectedTasks.some(t => t.id === task.id);
                 const isCheckable = this.isCheckable(task);
                 return (
