@@ -42,7 +42,8 @@ export class IrSalesTable {
             {visibleRecords.map(record => {
               const mainPercentage = `${parseFloat(record.percentage.toString()).toFixed(2)}%`;
               const secondaryPercentage = record.last_year ? `${parseFloat(record.last_year.percentage.toString()).toFixed(2)}%` : null;
-              const mappedCountry = this.mappedCountries.get(record.country);
+              const mappedCountry = this.mappedCountries.get(record.country_id);
+
               return (
                 <tr data-testid={`record_row`} class={{ 'task-table-row ir-table-row': true }} key={record.id}>
                   <td class="text-left">

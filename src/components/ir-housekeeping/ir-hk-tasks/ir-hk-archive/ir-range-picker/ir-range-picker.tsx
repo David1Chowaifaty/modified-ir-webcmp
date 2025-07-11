@@ -1,4 +1,4 @@
-import { Component, Host, Listen, Prop, Event, EventEmitter, h } from '@stencil/core';
+import { Component, Host, Listen, Prop, Event, EventEmitter, h, State } from '@stencil/core';
 import moment, { Moment } from 'moment';
 
 @Component({
@@ -34,7 +34,9 @@ export class IrRangePicker {
    */
   @Prop() allowNullDates: boolean = true;
 
-  @Event() dateRangeChanged: EventEmitter<{ fromDate: Moment; toDate: Moment }>;
+  @State() lastFocusedPicker: string;
+
+  @Event() dateRangeChanged: EventEmitter<{ fromDate: Moment; toDate: Moment; wasFocused?: boolean }>;
 
   private minSelectableDate = moment().subtract(90, 'days').toDate();
   private fromDatePicker: HTMLIrDatePickerElement;
@@ -46,27 +48,30 @@ export class IrRangePicker {
   async handleDateChanged(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    console.log(e.detail);
     const selectedDate = e.detail.start ? moment(e.detail.start) : null;
+    if (!this.lastFocusedPicker) {
+      return;
+    }
     if ((e.target as HTMLElement).id === 'fromDate') {
       let updatedToDate = this.toDate;
       if (!selectedDate) {
-        this.dateRangeChanged.emit({ fromDate: null, toDate: null });
+        this.dateRangeChanged.emit({ fromDate: null, toDate: null, wasFocused: !!this.lastFocusedPicker });
         return;
       }
       if (!updatedToDate || updatedToDate.isBefore(selectedDate, 'day')) {
         updatedToDate = selectedDate;
       }
 
-      this.dateRangeChanged.emit({ fromDate: selectedDate, toDate: updatedToDate });
+      this.dateRangeChanged.emit({ fromDate: selectedDate, toDate: updatedToDate, wasFocused: !!this.lastFocusedPicker });
       await this.toDatePicker.openDatePicker();
     } else {
       if (!selectedDate) {
-        this.dateRangeChanged.emit({ fromDate: this.fromDate, toDate: this.fromDate });
+        this.dateRangeChanged.emit({ fromDate: this.fromDate, toDate: this.fromDate, wasFocused: !!this.lastFocusedPicker });
         return;
       }
-      this.dateRangeChanged.emit({ fromDate: this.fromDate, toDate: selectedDate });
+      this.dateRangeChanged.emit({ fromDate: this.fromDate, toDate: selectedDate, wasFocused: !!this.lastFocusedPicker });
     }
+    this.lastFocusedPicker = null;
   }
   @Listen('datePickerFocus')
   handleDatePickerFocus(e: CustomEvent) {
@@ -99,6 +104,9 @@ export class IrRangePicker {
         maxDate={this.maxDate}
         date={date?.toDate()}
         id={id}
+        onDatePickerFocus={() => {
+          this.lastFocusedPicker = id;
+        }}
         emitEmptyDate={this.allowNullDates}
         {...additionalProps}
       >

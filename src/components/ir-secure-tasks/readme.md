@@ -12,6 +12,7 @@
 | `bookingNumber` | `booking-number` |             | `string` | `undefined` |
 | `p`             | `p`              |             | `string` | `undefined` |
 | `propertyid`    | `propertyid`     |             | `number` | `undefined` |
+| `ticket`        | `ticket`         |             | `string` | `undefined` |
 
 
 ## Dependencies

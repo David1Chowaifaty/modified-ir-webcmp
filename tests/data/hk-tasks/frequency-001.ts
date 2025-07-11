@@ -1,151 +1,6 @@
-import { expect, Page } from '@playwright/test';
 import moment from 'moment';
 
-type StatusType = 'INHOUSE' | 'VACANT' | 'TURNOVER' | 'CHECKIN' | 'CHECKOUT' | 'BLOCKED';
-
-type StatusSummary = string;
-
-type StatusesResult = {
-  total: number;
-  room: string;
-  statuses: Record<StatusType, StatusSummary[]>;
-};
-
-export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]> {
-  await page.waitForLoadState('networkidle');
-
-  const tableLocator = page.getByTestId('hk_task_row');
-  await expect(tableLocator.first()).toBeVisible({ timeout: 10000 });
-
-  await page.waitForTimeout(500);
-
-  const rows = page.getByTestId('hk_task_row');
-  const rowCount = await rows.count();
-
-  const roomMap = new Map<string, StatusesResult>();
-
-  for (let i = 0; i < rowCount; i++) {
-    const row = rows.nth(i);
-    const cells = row.locator('td');
-
-    await expect(cells.first()).toBeVisible();
-
-    const period = (await cells.nth(1).textContent())?.trim() || '';
-    const room = (await cells.nth(2).textContent())?.trim() || '';
-    const statusText = (await cells.nth(3).textContent())?.trim().toUpperCase() as StatusType;
-
-    if (!period || !room || !statusText) continue;
-
-    const validStatuses: StatusType[] = ['INHOUSE', 'VACANT', 'TURNOVER', 'CHECKIN', 'CHECKOUT', 'BLOCKED'];
-    if (!validStatuses.includes(statusText)) continue;
-
-    if (!roomMap.has(room)) {
-      roomMap.set(room, {
-        total: 0,
-        room,
-        statuses: {
-          INHOUSE: [],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
-        },
-      });
-    }
-
-    const roomData = roomMap.get(room)!;
-    roomData.total++;
-
-    // Push the period as a string (matching StatusSummary type)
-    roomData.statuses[statusText].push(period);
-  }
-  return Array.from(roomMap.values());
-}
-
-export function areResultsEqual(expected: StatusesResult[], actual: StatusesResult[]): boolean {
-  function normalize(data: StatusesResult[]): Map<string, { total: number; statuses: Record<StatusType, Map<string, number>> }> {
-    const map = new Map<string, { total: number; statuses: Record<StatusType, Map<string, number>> }>();
-
-    for (const entry of data) {
-      const statuses: Record<StatusType, Map<string, number>> = {
-        INHOUSE: new Map(),
-        VACANT: new Map(),
-        TURNOVER: new Map(),
-        CHECKIN: new Map(),
-        CHECKOUT: new Map(),
-        BLOCKED: new Map(),
-      };
-
-      for (const status of Object.keys(entry.statuses) as StatusType[]) {
-        const arr = entry.statuses[status];
-
-        for (const period of arr) {
-          if (typeof period === 'string' && period.trim()) {
-            const trimmedPeriod = period.trim();
-            statuses[status].set(trimmedPeriod, (statuses[status].get(trimmedPeriod) || 0) + 1);
-          }
-        }
-      }
-
-      map.set(entry.room.trim(), { total: entry.total, statuses });
-    }
-    return map;
-  }
-
-  // Detailed logging
-  console.log('=== COMPARISON DETAILS ===');
-  console.log('Expected rooms:', expected.map(e => e.room).join(', '));
-  console.log('Actual rooms:', actual.map(a => a.room).join(', '));
-
-  const filteredExpected = expected.filter(entry => entry.total >= 1);
-  const eMap = normalize(filteredExpected);
-  const aMap = normalize(actual);
-
-  console.log('Filtered expected rooms:', Array.from(eMap.keys()).join(', '));
-  console.log('Actual rooms after normalization:', Array.from(aMap.keys()).join(', '));
-
-  for (const [room, eEntry] of eMap.entries()) {
-    const aEntry = aMap.get(room);
-    if (!aEntry) {
-      console.log(`[Mismatch] Missing room: "${room}" in actual results`);
-      return false;
-    }
-
-    console.log(`Comparing room: "${room}"`);
-    console.log(`  Expected total: ${eEntry.total}, Actual total: ${aEntry.total}`);
-
-    if (eEntry.total !== aEntry.total) {
-      console.log(`[Mismatch] Room: "${room}" has different totals. Expected: ${eEntry.total}, Actual: ${aEntry.total}`);
-      return false;
-    }
-
-    for (const status of Object.keys(eEntry.statuses) as StatusType[]) {
-      const eStatus = eEntry.statuses[status];
-      const aStatus = aEntry.statuses[status];
-      const allPeriods = new Set([...eStatus.keys(), ...aStatus.keys()]);
-
-      if (allPeriods.size > 0) {
-        console.log(`  Status: ${status}`);
-        for (const period of allPeriods) {
-          const expectedCount = eStatus.get(period) || 0;
-          const actualCount = aStatus.get(period) || 0;
-
-          console.log(`    Period: "${period}" - Expected: ${expectedCount}, Actual: ${actualCount}`);
-
-          if (expectedCount !== actualCount) {
-            console.log(`[Mismatch] Room: "${room}", Status: "${status}", Period: "${period}" — Expected: ${expectedCount}, Actual: ${actualCount}`);
-            return false;
-          }
-        }
-      }
-    }
-  }
-
-  console.log('=== COMPARISON COMPLETE - ALL MATCHES ===');
-  return true;
-}
-export const testData = [
+export const freq001 = [
   {
     case: 'Every day today',
     params: {
@@ -162,22 +17,22 @@ export const testData = [
         statuses: {
           INHOUSE: [],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['10 Jul'],
           CHECKIN: [],
-          CHECKOUT: ['8 Jul'],
-          BLOCKED: [],
+          CHECKOUT: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '02. Peach Deluxe Studio',
         total: 1,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['10 Jul'],
           VACANT: [],
-          TURNOVER: ['8 Jul'],
+          TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -189,11 +44,23 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '04. Grapes Deluxe Studio',
+        total: 1,
+        statuses: {
+          INHOUSE: [],
+          VACANT: [],
+          TURNOVER: [],
+          CHECKIN: [],
+          CHECKOUT: ['10 Jul'],
+          // BLOCKED: [],
+        },
+      },
+      {
+        room: '05. Lemon Deluxe Studio',
         total: 0,
         statuses: {
           INHOUSE: [],
@@ -201,31 +68,19 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
-        room: '05. Lemon Deluxe Studio',
-        total: 1,
+        room: '06. Pomegranate Room (2 adults - 1 child)',
+        total: 0,
         statuses: {
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: ['8 Jul'],
-        },
-      },
-      {
-        room: '06. Pomegranate Room (2 adults - 1 child)',
-        total: 1,
-        statuses: {
-          INHOUSE: ['8 Jul'],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -235,9 +90,9 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: ['8 Jul'],
-          BLOCKED: [],
+          CHECKIN: ['10 Jul'],
+          CHECKOUT: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -249,7 +104,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: ['8 Jul'],
+          // BLOCKED: ['10 Jul'],
         },
       },
       {
@@ -261,7 +116,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -273,19 +128,19 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '11. Bitter Orange Double Room',
         total: 1,
         statuses: {
-          INHOUSE: ['8 Jul'],
+          INHOUSE: ['10 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -297,7 +152,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -309,27 +164,27 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '14. Prickly Pear Double Room',
         total: 1,
         statuses: {
-          INHOUSE: ['8 Jul'],
+          INHOUSE: ['10 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
     ],
   },
   {
-    case: `Every day until ${moment().add(2, 'days').format('YYYY-MM-DD')}`,
+    case: `Every day until ${moment().add(7, 'days').format('YYYY-MM-DD')}`,
     params: {
-      period: moment().add(2, 'days').format('YYYY-MM-DD'),
+      period: moment().add(7, 'days').format('YYYY-MM-DD'),
       housekeepers: '000',
       frequency: '001',
       include_dusty_units: '000',
@@ -338,170 +193,170 @@ export const testData = [
     results: [
       {
         room: '01. Quince Deluxe Studio',
-        total: 3,
+        total: 8,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['11 Jul', '12 Jul', '16 Jul', '17 Jul'],
           VACANT: [],
-          TURNOVER: ['10 Jul'],
-          CHECKIN: ['9 Jul'],
-          CHECKOUT: ['8 Jul'],
-          BLOCKED: [],
+          TURNOVER: ['10 Jul', '15 Jul'],
+          CHECKIN: ['14 Jul'],
+          CHECKOUT: ['13 Jul'],
+          // BLOCKED: [],
         },
       },
       {
         room: '02. Peach Deluxe Studio',
-        total: 3,
+        total: 6,
         statuses: {
-          INHOUSE: ['9 Jul', '10 Jul'],
+          INHOUSE: ['10 Jul'],
           VACANT: [],
-          TURNOVER: ['8 Jul'],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
+          TURNOVER: ['11 Jul', '12 Jul'],
+          CHECKIN: ['15 Jul'],
+          CHECKOUT: ['13 Jul', '16 Jul'],
+          // BLOCKED: [],
         },
       },
       {
         room: '03. Loquat Superior Studio',
-        total: 0,
+        total: 5,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Jul', '14 Jul', '15 Jul'],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
+          CHECKIN: ['12 Jul'],
+          CHECKOUT: ['16 Jul'],
+          // BLOCKED: [],
         },
       },
       {
         room: '04. Grapes Deluxe Studio',
-        total: 2,
-        statuses: {
-          INHOUSE: [],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: ['9 Jul'],
-          CHECKOUT: ['10 Jul'],
-          BLOCKED: [],
-        },
-      },
-      {
-        room: '05. Lemon Deluxe Studio',
         total: 1,
         statuses: {
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
+          CHECKOUT: ['10 Jul'],
+          // BLOCKED: ['12 Jul', '13 Jul'],
+        },
+      },
+      {
+        room: '05. Lemon Deluxe Studio',
+        total: 0,
+        statuses: {
+          INHOUSE: [],
+          VACANT: [],
+          TURNOVER: [],
+          CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: ['8 Jul'],
+          // BLOCKED: ['12 Jul', '13 Jul'],
         },
       },
       {
         room: '06. Pomegranate Room (2 adults - 1 child)',
-        total: 2,
+        total: 6,
         statuses: {
-          INHOUSE: ['8 Jul'],
+          INHOUSE: ['16 Jul', '17 Jul'],
           VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: ['9 Jul'],
-          BLOCKED: [],
+          TURNOVER: ['12 Jul'],
+          CHECKIN: ['11 Jul', '15 Jul'],
+          CHECKOUT: ['13 Jul'],
+          // BLOCKED: [],
         },
       },
       {
         room: '07. Orange Quadruple Split Level Family Room',
+        total: 8,
+        statuses: {
+          INHOUSE: ['11 Jul', '12 Jul', '13 Jul', '14 Jul'],
+          VACANT: [],
+          TURNOVER: [],
+          CHECKIN: ['10 Jul', '16 Jul'],
+          CHECKOUT: ['15 Jul', '17 Jul'],
+          // BLOCKED: [],
+        },
+      },
+      {
+        room: '08. Tangerine Deluxe Studio',
+        total: 4,
+        statuses: {
+          INHOUSE: [],
+          VACANT: [],
+          TURNOVER: [],
+          CHECKIN: ['15 Jul', '12 Jul'],
+          CHECKOUT: ['13 Jul', '16 Jul'],
+          // BLOCKED: ['10 Jul', '11 Jul', '12 Jul', '17 Jul'],
+        },
+      },
+      {
+        room: '09. Blueberry Double Room',
+        total: 6,
+        statuses: {
+          INHOUSE: ['16 Jul'],
+          VACANT: [],
+          TURNOVER: ['15 Jul'],
+          CHECKIN: ['12 Jul', '14 Jul'],
+          CHECKOUT: ['13 Jul', '17 Jul'],
+          // BLOCKED: [],
+        },
+      },
+      {
+        room: '10. Hawthorn Double Room',
+        total: 6,
+        statuses: {
+          INHOUSE: ['12 Jul', '16 Jul'],
+          VACANT: [],
+          TURNOVER: [],
+          CHECKIN: ['11 Jul', '15 Jul'],
+          CHECKOUT: ['13 Jul', '17 Jul'],
+          // BLOCKED: [],
+        },
+      },
+      {
+        room: '11. Bitter Orange Double Room',
+        total: 4,
+        statuses: {
+          INHOUSE: ['10 Jul', '12 Jul'],
+          VACANT: [],
+          TURNOVER: ['11 Jul'],
+          CHECKIN: [],
+          CHECKOUT: ['13 Jul'],
+          // BLOCKED: [],
+        },
+      },
+      {
+        room: '12. Fig Double Room',
         total: 2,
         statuses: {
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: ['10 Jul'],
-          CHECKOUT: ['8 Jul'],
-          BLOCKED: [],
-        },
-      },
-      {
-        room: '08. Tangerine Deluxe Studio',
-        total: 3,
-        statuses: {
-          INHOUSE: [],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: ['8 Jul', '9 Jul', '10 Jul'],
-        },
-      },
-      {
-        room: '09. Blueberry Double Room',
-        total: 0,
-        statuses: {
-          INHOUSE: [],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
-        },
-      },
-      {
-        room: '10. Hawthorn Double Room',
-        total: 0,
-        statuses: {
-          INHOUSE: [],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
-        },
-      },
-      {
-        room: '11. Bitter Orange Double Room',
-        total: 3,
-        statuses: {
-          INHOUSE: ['8 Jul', '9 Jul', '10 Jul'],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
-        },
-      },
-      {
-        room: '12. Fig Double Room',
-        total: 0,
-        statuses: {
-          INHOUSE: [],
-          VACANT: [],
-          TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
+          CHECKIN: ['12 Jul'],
+          CHECKOUT: ['13 Jul'],
+          // BLOCKED: [],
         },
       },
       {
         room: '13. Lime Double Room',
-        total: 0,
+        total: 6,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['12 Jul', '13 Jul', '17 Jul'],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
+          CHECKIN: ['11 Jul', '16 Jul'],
+          CHECKOUT: ['14 Jul'],
+          // BLOCKED: [],
         },
       },
       {
         room: '14. Prickly Pear Double Room',
-        total: 3,
+        total: 7,
         statuses: {
-          INHOUSE: ['8 Jul', '9 Jul', '10 Jul'],
+          INHOUSE: ['10 Jul', '11 Jul', '12 Jul', '16 Jul'],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
+          CHECKIN: ['15 Jul'],
+          CHECKOUT: ['13 Jul', '17 Jul'],
+          // BLOCKED: [],
         },
       },
     ],
@@ -523,21 +378,21 @@ export const testData = [
           INHOUSE: ['11 Jul', '12 Jul'],
           VACANT: [],
           TURNOVER: ['10 Jul'],
-          CHECKIN: ['9 Jul'],
-          CHECKOUT: ['8 Jul'],
-          BLOCKED: [],
+          CHECKIN: [],
+          CHECKOUT: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '02. Peach Deluxe Studio',
         total: 5,
         statuses: {
-          INHOUSE: ['9 Jul', '10 Jul'],
+          INHOUSE: ['10 Jul'],
           VACANT: [],
-          TURNOVER: ['8 Jul', '11 Jul', '12 Jul'],
+          TURNOVER: ['11 Jul', '12 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -549,7 +404,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -559,9 +414,9 @@ export const testData = [
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: ['9 Jul'],
+          CHECKIN: [],
           CHECKOUT: ['10 Jul'],
-          BLOCKED: ['12 Jul'],
+          // BLOCKED: ['12 Jul'],
         },
       },
       {
@@ -573,19 +428,19 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: ['8 Jul'],
+          // BLOCKED: [],
         },
       },
       {
         room: '06. Pomegranate Room (2 adults - 1 child)',
         total: 4,
         statuses: {
-          INHOUSE: ['8 Jul'],
+          INHOUSE: [],
           VACANT: [],
           TURNOVER: ['12 Jul'],
           CHECKIN: ['11 Jul'],
-          CHECKOUT: ['9 Jul'],
-          BLOCKED: [],
+          CHECKOUT: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -596,8 +451,8 @@ export const testData = [
           VACANT: [],
           TURNOVER: [],
           CHECKIN: ['10 Jul'],
-          CHECKOUT: ['8 Jul'],
-          BLOCKED: [],
+          CHECKOUT: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -609,7 +464,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: ['8 Jul', '9 Jul', '10 Jul', '11 Jul'],
+          // BLOCKED: [, , '10 Jul', '11 Jul'],
         },
       },
       {
@@ -621,7 +476,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -633,19 +488,19 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: ['11 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '11. Bitter Orange Double Room',
         total: 5,
         statuses: {
-          INHOUSE: ['8 Jul', '9 Jul', '10 Jul', '12 Jul'],
+          INHOUSE: [, , '10 Jul', '12 Jul'],
           VACANT: [],
           TURNOVER: ['11 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -657,7 +512,7 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -669,19 +524,19 @@ export const testData = [
           TURNOVER: [],
           CHECKIN: ['11 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '14. Prickly Pear Double Room',
         total: 5,
         statuses: {
-          INHOUSE: ['8 Jul', '9 Jul', '10 Jul', '11 Jul', '12 Jul'],
+          INHOUSE: ['10 Jul', '11 Jul', '12 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
     ],

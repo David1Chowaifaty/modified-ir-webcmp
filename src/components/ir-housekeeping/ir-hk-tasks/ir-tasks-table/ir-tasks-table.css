@@ -20,7 +20,7 @@
 }
 
 .table-container {
-  max-height: 80vh;
+  height: 75vh;
 }
 /* td,
 th {
@@ -37,4 +37,10 @@ tr {
 }
 .task-table-row:hover td {
   background: #e2e6ea3f !important;
+}
+.pagination-container {
+  position: sticky;
+  bottom: -1rem;
+  background-color: white;
+  padding: 1rem 0;
 }

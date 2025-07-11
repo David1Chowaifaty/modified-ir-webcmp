@@ -1,7 +1,7 @@
 import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 
 import locales from '@/stores/locales.store';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { CountrySalesFilter } from '../types';
 
 @Component({
@@ -16,15 +16,13 @@ export class IrSalesFilters {
   @State() filters: CountrySalesFilter;
 
   @State() collapsed: boolean = false;
-  @State() dates: { from: Moment; to: Moment } = {
-    from: moment(),
-    to: moment().add(1, 'days'),
-  };
+  @State() window: string;
 
   @Event() applyFilters: EventEmitter<CountrySalesFilter>;
 
   componentWillLoad() {
     this.filters = this.baseFilters;
+    this.window = this.baseFilters.WINDOW.toString();
   }
 
   private updateFilter(params: Partial<CountrySalesFilter>) {
@@ -98,7 +96,7 @@ export class IrSalesFilters {
               </label>
               <div class="d-flex flex-column date-filter-group" style={{ gap: '0.5rem' }}>
                 <ir-select
-                  selectedValue={this.filters?.WINDOW?.toString()}
+                  selectedValue={this.window}
                   onSelectChange={e => {
                     const dateDiff = Number(e.detail);
                     const today = moment();
@@ -107,10 +105,12 @@ export class IrSalesFilters {
                       TO_DATE: today.format('YYYY-MM-DD'),
                       FROM_DATE: today.add(-dateDiff, 'days').format('YYYY-MM-DD'),
                     });
+                    this.window = e.detail;
                   }}
                   select_id="period"
                   LabelAvailable={false}
-                  showFirstOption={false}
+                  // showFirstOption={false}
+                  firstOption="..."
                   data={[
                     { text: 'For the past 7 days', value: '7' },
                     { text: 'For the past 14 days', value: '14' },
@@ -125,15 +125,16 @@ export class IrSalesFilters {
                   onDateRangeChanged={e => {
                     e.stopImmediatePropagation();
                     e.stopPropagation();
-                    const { fromDate, toDate } = e.detail;
+                    const { fromDate, toDate, wasFocused } = e.detail;
                     this.updateFilter({
                       FROM_DATE: fromDate.format('YYYY-MM-DD'),
                       TO_DATE: toDate.format('YYYY-MM-DD'),
                     });
-                    this.dates = { from: fromDate, to: toDate };
+                    if (wasFocused) this.window = '';
+                    // this.dates = { from: fromDate, to: toDate };
                   }}
-                  fromDate={this.dates.from}
-                  toDate={this.dates.to}
+                  fromDate={moment(this.filters.FROM_DATE, 'YYYY-MM-DD')}
+                  toDate={moment(this.filters.TO_DATE, 'YYYY-MM-DD')}
                   maxDate={moment().format('YYYY-MM-DD')}
                   withOverlay={false}
                 ></ir-range-picker>

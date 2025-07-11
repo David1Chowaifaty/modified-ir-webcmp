@@ -1,4 +1,4 @@
-import { IPendingActions, Task } from '@/models/housekeeping';
+import { IPendingActions } from '@/models/housekeeping';
 import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
@@ -10,6 +10,7 @@ import moment from 'moment';
 import { v4 } from 'uuid';
 import { TaskFilters } from './types';
 import { downloadFile } from '@/utils/utils';
+import { updateTasks as updateTasksStore, updateSelectedTasks, clearSelectedTasks, hkTasksStore, setLoading } from '@/stores/hk-tasks.store';
 
 @Component({
   tag: 'ir-hk-tasks',
@@ -31,8 +32,6 @@ export class IrHkTasks {
   @State() selectedRoom: IPendingActions | null = null;
   @State() archiveOpened = false;
   @State() property_id: number;
-  @State() tasks: Task[] = [];
-  @State() selectedTasks: Task[] = [];
   @State() isSidebarOpen: boolean;
   @State() isApplyFiltersLoading: boolean;
   @State() filters: TaskFilters;
@@ -86,6 +85,7 @@ export class IrHkTasks {
   private async init() {
     try {
       this.isLoading = true;
+      setLoading(true);
       let propertyId = this.propertyid;
       if (!this.propertyid && !this.p) {
         throw new Error('Property ID or username is required');
@@ -129,6 +129,7 @@ export class IrHkTasks {
       console.log(error);
     } finally {
       this.isLoading = false;
+      setLoading(false);
     }
   }
 
@@ -141,24 +142,26 @@ export class IrHkTasks {
     });
   }
 
-  private updateTasks(tasks) {
+  private updateTasks(tasks: any[]) {
     this.buildHousekeeperNameCache();
-    this.tasks = tasks.map(t => ({
-      ...t,
-      id: v4(),
-      housekeeper: (() => {
-        const name = this.hkNameCache[t.hkm_id];
-        if (name) {
-          return name;
-        }
-        const hkName = housekeeping_store.hk_criteria?.housekeepers?.find(hk => hk.id === t.hkm_id)?.name;
-        this.hkNameCache[t.hkm_id] = hkName;
-        return hkName;
-      })(),
-    }));
+    updateTasksStore(
+      tasks.map(t => ({
+        ...t,
+        id: v4(),
+        housekeeper: (() => {
+          const name = this.hkNameCache[t.hkm_id];
+          if (name) {
+            return name;
+          }
+          const hkName = housekeeping_store.hk_criteria?.housekeepers?.find(hk => hk.id === t.hkm_id)?.name;
+          this.hkNameCache[t.hkm_id] = hkName;
+          return hkName;
+        })(),
+      })),
+    );
   }
-
-  private async handleHeaderButtonPress(e: CustomEvent) {
+  @Listen('headerButtonPress')
+  async handleHeaderButtonPress(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const { name } = e.detail;
@@ -185,16 +188,16 @@ export class IrHkTasks {
     try {
       e.stopImmediatePropagation();
       e.stopPropagation();
-      if (this.selectedTasks.length === 0) {
+      if (hkTasksStore.selectedTasks.length === 0) {
         return;
       }
       await this.houseKeepingService.executeHKAction({
-        actions: this.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id === 0 ? null : t.hkm_id, unit_id: t.unit.id, booking_nbr: t.booking_nbr })),
+        actions: hkTasksStore.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id === 0 ? null : t.hkm_id, unit_id: t.unit.id, booking_nbr: t.booking_nbr })),
       });
       await this.fetchTasksWithFilters();
     } finally {
-      this.selectedTasks = [];
-      this.clearSelectedHkTasks.emit();
+      clearSelectedTasks();
+      // this.clearSelectedTasks.emit();
       this.modal.closeModal();
     }
   }
@@ -241,24 +244,26 @@ export class IrHkTasks {
       <Host data-testid="hk_tasks_base">
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
-        <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
-          <ir-tasks-header onHeaderButtonPress={this.handleHeaderButtonPress.bind(this)} isCleanedEnabled={this.selectedTasks.length > 0}></ir-tasks-header>
-          <div class="d-flex flex-column flex-md-row mt-1 " style={{ gap: '1rem' }}>
+        <section class="p-1 d-flex flex-column" style={{ gap: '1rem' }}>
+          <h3>Housekeeping Tasks</h3>
+          <div class="tasks-view " style={{ gap: '1rem' }}>
             <ir-tasks-filters
               isLoading={this.isApplyFiltersLoading}
               onApplyFilters={e => {
                 this.applyFilters(e);
               }}
             ></ir-tasks-filters>
-            <ir-tasks-table
-              onRowSelectChange={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                this.selectedTasks = e.detail;
-              }}
-              class="flex-grow-1 w-100"
-              tasks={this.tasks}
-            ></ir-tasks-table>
+            <div class="d-flex w-100 flex-column" style={{ gap: '1rem' }}>
+              <ir-tasks-table
+                onRowSelectChange={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  updateSelectedTasks(e.detail);
+                }}
+                class="flex-grow-1 w-100"
+              ></ir-tasks-table>
+              {/* <ir-tasks-table-pagination></ir-tasks-table-pagination> */}
+            </div>
           </div>
         </section>
         <ir-modal

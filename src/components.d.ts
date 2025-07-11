@@ -1616,10 +1616,11 @@ export namespace Components {
         "isLoading": boolean;
     }
     interface IrTasksHeader {
-        "isCleanedEnabled": boolean;
     }
     interface IrTasksTable {
         "tasks": Task[];
+    }
+    interface IrTasksTablePagination {
     }
     interface IrTestCmp {
     }
@@ -3475,7 +3476,7 @@ declare global {
         new (): HTMLIrRadioElement;
     };
     interface HTMLIrRangePickerElementEventMap {
-        "dateRangeChanged": { fromDate: Moment; toDate: Moment };
+        "dateRangeChanged": { fromDate: Moment; toDate: Moment; wasFocused?: boolean };
     }
     interface HTMLIrRangePickerElement extends Components.IrRangePicker, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRangePickerElementEventMap>(type: K, listener: (this: HTMLIrRangePickerElement, ev: IrRangePickerCustomEvent<HTMLIrRangePickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3734,6 +3735,12 @@ declare global {
     var HTMLIrTasksTableElement: {
         prototype: HTMLIrTasksTableElement;
         new (): HTMLIrTasksTableElement;
+    };
+    interface HTMLIrTasksTablePaginationElement extends Components.IrTasksTablePagination, HTMLStencilElement {
+    }
+    var HTMLIrTasksTablePaginationElement: {
+        prototype: HTMLIrTasksTablePaginationElement;
+        new (): HTMLIrTasksTablePaginationElement;
     };
     interface HTMLIrTestCmpElement extends Components.IrTestCmp, HTMLStencilElement {
     }
@@ -3997,6 +4004,7 @@ declare global {
         "ir-tasks-filters": HTMLIrTasksFiltersElement;
         "ir-tasks-header": HTMLIrTasksHeaderElement;
         "ir-tasks-table": HTMLIrTasksTableElement;
+        "ir-tasks-table-pagination": HTMLIrTasksTablePaginationElement;
         "ir-test-cmp": HTMLIrTestCmpElement;
         "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
@@ -5549,7 +5557,7 @@ declare namespace LocalJSX {
           * The earliest date that can be selected.
          */
         "minDate"?: string | Date;
-        "onDateRangeChanged"?: (event: IrRangePickerCustomEvent<{ fromDate: Moment; toDate: Moment }>) => void;
+        "onDateRangeChanged"?: (event: IrRangePickerCustomEvent<{ fromDate: Moment; toDate: Moment; wasFocused?: boolean }>) => void;
         /**
           * The end date of the range.
          */
@@ -5775,7 +5783,6 @@ declare namespace LocalJSX {
         "onApplyFilters"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
     }
     interface IrTasksHeader {
-        "isCleanedEnabled"?: boolean;
         "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' | 'archive' }>) => void;
     }
     interface IrTasksTable {
@@ -5783,6 +5790,8 @@ declare namespace LocalJSX {
         "onRowSelectChange"?: (event: IrTasksTableCustomEvent<Task[]>) => void;
         "onSortingChanged"?: (event: IrTasksTableCustomEvent<{ field: string; direction: 'ASC' | 'DESC' }>) => void;
         "tasks"?: Task[];
+    }
+    interface IrTasksTablePagination {
     }
     interface IrTestCmp {
     }
@@ -6092,6 +6101,7 @@ declare namespace LocalJSX {
         "ir-tasks-filters": IrTasksFilters;
         "ir-tasks-header": IrTasksHeader;
         "ir-tasks-table": IrTasksTable;
+        "ir-tasks-table-pagination": IrTasksTablePagination;
         "ir-test-cmp": IrTestCmp;
         "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
@@ -6215,6 +6225,7 @@ declare module "@stencil/core" {
             "ir-tasks-filters": LocalJSX.IrTasksFilters & JSXBase.HTMLAttributes<HTMLIrTasksFiltersElement>;
             "ir-tasks-header": LocalJSX.IrTasksHeader & JSXBase.HTMLAttributes<HTMLIrTasksHeaderElement>;
             "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;
+            "ir-tasks-table-pagination": LocalJSX.IrTasksTablePagination & JSXBase.HTMLAttributes<HTMLIrTasksTablePaginationElement>;
             "ir-test-cmp": LocalJSX.IrTestCmp & JSXBase.HTMLAttributes<HTMLIrTestCmpElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
