@@ -1,5 +1,8 @@
 import { Task, ArchivedTask } from '@/models/housekeeping';
 import { createStore } from '@stencil/store';
+import calendar_data from './calendar-data';
+
+const defaultTasksList = [10, 20, 50, 100];
 
 export type TaskFilters = {
   cleaning_periods: { code: string };
@@ -20,18 +23,19 @@ export type SortingState = {
   field: string;
   direction: 'ASC' | 'DESC';
 };
-
+export type TasksPagination = {
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+  totalItems: number;
+  tasksList: number[];
+};
 export interface IHkTasksStore {
   searchField: string;
   tasks: Task[];
   filteredTasks: Task[];
   selectedTasks: Task[];
-  pagination: {
-    currentPage: number;
-    pageSize: number;
-    totalPages: number;
-    totalItems: number;
-  };
+  pagination: TasksPagination;
   filters: TaskFilters | null;
   isLoading: boolean;
   isFiltersLoading: boolean;
@@ -44,18 +48,22 @@ export interface IHkTasksStore {
   modalOpen: boolean;
   sidebarOpen: boolean;
 }
-
+function getPaginationInitialParams() {
+  const tasks = getTaskList();
+  return {
+    tasksList: tasks,
+    currentPage: 1,
+    pageSize: tasks[0],
+    totalPages: 0,
+    totalItems: 0,
+  };
+}
 const initialState: IHkTasksStore = {
   searchField: '',
   tasks: [],
   filteredTasks: [],
   selectedTasks: [],
-  pagination: {
-    currentPage: 1,
-    pageSize: 10,
-    totalPages: 0,
-    totalItems: 0,
-  },
+  pagination: getPaginationInitialParams(),
   filters: null,
   isLoading: false,
   isFiltersLoading: false,
@@ -86,20 +94,62 @@ export function updateSearchField(searchField: string) {
 }
 
 export function updateTasks(tasks: Task[]) {
+  const wasEmpty = hkTasksStore.tasks.length === 0;
   hkTasksStore.tasks = tasks;
+
+  // Update task list if significantly changed or was empty
+  if (wasEmpty || shouldUpdateTaskList(tasks.length)) {
+    updateTaskList();
+  }
+
   filterTasks();
 }
-
+function updatePaginationFields(params: Partial<TasksPagination>) {
+  hkTasksStore.pagination = {
+    ...hkTasksStore.pagination,
+    ...params,
+  };
+}
 export function updatePageSize(pageSize: number) {
-  hkTasksStore.pagination.pageSize = pageSize;
-  hkTasksStore.pagination.currentPage = 1;
+  updatePaginationFields({
+    pageSize,
+    currentPage: 1,
+  });
   updatePagination();
 }
 
 export function updateCurrentPage(page: number) {
   if (page >= 1 && page <= hkTasksStore.pagination.totalPages) {
-    hkTasksStore.pagination.currentPage = page;
+    updatePaginationFields({ currentPage: page });
   }
+}
+export function updateTaskList() {
+  const list = getTaskList();
+  updatePaginationFields({
+    tasksList: list,
+    pageSize: list[0],
+  });
+  updatePagination();
+}
+
+function getTaskList(): number[] {
+  if (!calendar_data.roomsInfo) {
+    return defaultTasksList;
+  }
+  const totalRooms = calendar_data.roomsInfo.length;
+  if (totalRooms <= 10) {
+    return defaultTasksList;
+  }
+  const calculatedList = [...Array(4)].map((_, i) => {
+    const t = totalRooms * (i + 1);
+    return i === 3 ? (t < 100 ? 100 : t) : t;
+  });
+  return calculatedList;
+}
+
+function shouldUpdateTaskList(newTaskCount: number): boolean {
+  const currentMax = Math.max(...hkTasksStore.pagination.tasksList);
+  return newTaskCount > currentMax * 1.5 || newTaskCount < currentMax * 0.5;
 }
 
 function filterTasks() {
@@ -120,13 +170,11 @@ function filterTasks() {
 function updatePagination() {
   const totalItems = hkTasksStore.filteredTasks.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / hkTasksStore.pagination.pageSize));
-
-  hkTasksStore.pagination = {
-    ...hkTasksStore.pagination,
+  updatePaginationFields({
     totalItems,
     totalPages,
     currentPage: Math.min(hkTasksStore.pagination.currentPage, totalPages),
-  };
+  });
 }
 
 export function getPaginatedTasks(): Task[] {
@@ -140,13 +188,7 @@ export function resetHkTasksStore() {
   hkTasksStore.tasks = [];
   hkTasksStore.filteredTasks = [];
   hkTasksStore.selectedTasks = [];
-  hkTasksStore.pagination = {
-    currentPage: 1,
-    pageSize: 10,
-    totalPages: 0,
-    totalItems: 0,
-  };
-  hkTasksStore.filters = null;
+  (hkTasksStore.pagination = getPaginationInitialParams()), (hkTasksStore.filters = null);
   hkTasksStore.isLoading = false;
   hkTasksStore.isFiltersLoading = false;
   hkTasksStore.isExportLoading = false;
@@ -214,12 +256,14 @@ export function setExportLoading(loading: boolean) {
 // Sorting helpers
 export function updateSorting(field: string, direction: 'ASC' | 'DESC') {
   hkTasksStore.sorting = { field, direction };
-  updateTasks(getSortedTasks());
+  // Apply sorting to original tasks, then re-filter
+  hkTasksStore.tasks = getSortedTasks(hkTasksStore.tasks);
+  filterTasks();
 }
 
-export function getSortedTasks(): Task[] {
+export function getSortedTasks(tasksToSort: Task[] = hkTasksStore.filteredTasks): Task[] {
   const { field, direction } = hkTasksStore.sorting;
-  return [...hkTasksStore.filteredTasks].sort((a, b) => {
+  return [...tasksToSort].sort((a, b) => {
     let aValue = a[field];
     let bValue = b[field];
 

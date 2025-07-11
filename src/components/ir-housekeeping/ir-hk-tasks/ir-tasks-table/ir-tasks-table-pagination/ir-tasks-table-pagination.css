@@ -1,3 +1,6 @@
 :host {
   display: block;
 }
+.page-item.active .page-link {
+  background-color: var(--blue);
+}

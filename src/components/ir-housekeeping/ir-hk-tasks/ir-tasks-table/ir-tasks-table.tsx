@@ -3,7 +3,7 @@ import { Task } from '@/models/housekeeping';
 import moment from 'moment';
 import housekeeping_store from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
-import { hkTasksStore, toggleTaskSelection, selectAllTasks, clearSelectedTasks, getCheckableTasks, isAllTasksSelected, updateSorting } from '@/stores/hk-tasks.store';
+import { hkTasksStore, toggleTaskSelection, selectAllTasks, clearSelectedTasks, getCheckableTasks, isAllTasksSelected, updateSorting, getPaginatedTasks } from '@/stores/hk-tasks.store';
 
 @Component({
   tag: 'ir-tasks-table',
@@ -183,7 +183,7 @@ export class IrTasksTable {
               </td>
               </tr>
               )} */}
-              {hkTasksStore.filteredTasks?.map(task => {
+              {getPaginatedTasks()?.map(task => {
                 const isSelected = hkTasksStore.selectedTasks.some(t => t.id === task.id);
                 const isCheckable = this.isCheckable(task);
                 return (
