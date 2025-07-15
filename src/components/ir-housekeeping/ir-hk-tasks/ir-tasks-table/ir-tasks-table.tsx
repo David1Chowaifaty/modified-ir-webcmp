@@ -123,6 +123,7 @@ export class IrTasksTable {
             const isCheckable = this.isCheckable(task);
             return <ir-tasks-card task={task} key={task.id} isCheckable={isCheckable}></ir-tasks-card>;
           })}
+          <ir-tasks-table-pagination></ir-tasks-table-pagination>
         </section>
         <div class="card table-container flex-fill p-1 m-0">
           <ir-tasks-header></ir-tasks-header>
@@ -229,7 +230,7 @@ export class IrTasksTable {
                         <span class={{ 'highlighted-unit': task.is_highlight }}>{task.unit.name}</span>
                       </td>
                       <td class="task-row extra-padding text-left">{task.status.description}</td>
-                      <td class="task-row extra-padding text-left">{task.hint} aaa</td>
+                      <td class="task-row extra-padding text-left">{task.hint}</td>
                       <td class="task-row text-left">{task.adult}</td>
                       <td class="task-row text-left">{task.child}</td>
                       <td class="task-row text-left">{task.infant}</td>

@@ -10,16 +10,16 @@
 }
 /*sm*/
 @media (min-width: 640px) {
-}
-
-/*md*/
-@media (min-width: 768px) {
   .tasks-load-more {
     display: none;
   }
   .tasks-pagination {
     display: flex !important;
   }
+}
+
+/*md*/
+@media (min-width: 768px) {
 }
 
 /*lg*/
