@@ -3758,7 +3758,7 @@ declare global {
         new (): HTMLIrSwitchElement;
     };
     interface HTMLIrTasksCardElementEventMap {
-        "headerButtonPress": { name: 'cleaned' | 'export' | 'archive' };
+        "cleanSelectedTask": Task;
     }
     interface HTMLIrTasksCardElement extends Components.IrTasksCard, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksCardElementEventMap>(type: K, listener: (this: HTMLIrTasksCardElement, ev: IrTasksCardCustomEvent<HTMLIrTasksCardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5935,7 +5935,7 @@ declare namespace LocalJSX {
     }
     interface IrTasksCard {
         "isCheckable"?: boolean;
-        "onHeaderButtonPress"?: (event: IrTasksCardCustomEvent<{ name: 'cleaned' | 'export' | 'archive' }>) => void;
+        "onCleanSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
         "task"?: Task;
     }
     interface IrTasksFilters {

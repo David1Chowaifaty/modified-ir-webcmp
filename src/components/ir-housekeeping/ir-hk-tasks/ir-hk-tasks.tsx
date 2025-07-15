@@ -1,4 +1,4 @@
-import { IPendingActions } from '@/models/housekeeping';
+import { IPendingActions, Task } from '@/models/housekeeping';
 import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
@@ -35,6 +35,7 @@ export class IrHkTasks {
   @State() isSidebarOpen: boolean;
   @State() isApplyFiltersLoading: boolean;
   @State() filters: TaskFilters;
+  @State() selectedTask: Task;
 
   @Event({ bubbles: true, composed: true }) clearSelectedHkTasks: EventEmitter<void>;
 
@@ -184,6 +185,13 @@ export class IrHkTasks {
         break;
     }
   }
+  @Listen('cleanSelectedTask')
+  handleSelectedTaskCleaningEvent(e: CustomEvent<Task>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.selectedTask = e.detail;
+    this.modal?.openModal();
+  }
 
   private async handleModalConfirmation(e: CustomEvent) {
     try {
@@ -198,6 +206,9 @@ export class IrHkTasks {
       await this.fetchTasksWithFilters();
     } finally {
       clearSelectedTasks();
+      if (this.selectedTask) {
+        this.selectedTask = null;
+      }
       // this.clearSelectedTasks.emit();
       this.modal.closeModal();
     }
@@ -272,6 +283,12 @@ export class IrHkTasks {
           ref={el => (this.modal = el)}
           isLoading={isRequestPending('/Execute_HK_Action')}
           onConfirmModal={this.handleModalConfirmation.bind(this)}
+          onCancelModal={() => {
+            if (this.selectedTask) {
+              clearSelectedTasks();
+              this.selectedTask = null;
+            }
+          }}
           iconAvailable={true}
           icon="ft-alert-triangle danger h1"
           leftBtnText={locales.entries.Lcz_Cancel}
@@ -279,7 +296,7 @@ export class IrHkTasks {
           leftBtnColor="secondary"
           rightBtnColor={'primary'}
           modalTitle={locales.entries.Lcz_Confirmation}
-          modalBody={'Update selected unit(s) to Clean'}
+          modalBody={this.selectedTask ? `Update ${this.selectedTask?.unit?.name} to Clean` : 'Update selected unit(s) to Clean'}
         ></ir-modal>
         <ir-sidebar
           open={this.isSidebarOpen}

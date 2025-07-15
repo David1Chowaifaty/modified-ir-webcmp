@@ -11,7 +11,7 @@ export class IrTasksCard {
   @Prop() task: Task;
   @Prop() isCheckable: boolean;
 
-  @Event() headerButtonPress: EventEmitter<{ name: 'cleaned' | 'export' | 'archive' }>;
+  @Event() cleanSelectedTask: EventEmitter<Task>;
 
   render() {
     const baseText = 'Mark as clean';
@@ -114,7 +114,7 @@ export class IrTasksCard {
             <ir-button
               onClickHandler={() => {
                 toggleTaskSelection(this.task);
-                this.headerButtonPress.emit({ name: 'cleaned' });
+                this.cleanSelectedTask.emit(this.task);
               }}
               size="sm"
               text={btnText}
