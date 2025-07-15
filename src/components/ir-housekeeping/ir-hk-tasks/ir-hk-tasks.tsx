@@ -274,8 +274,8 @@ export class IrHkTasks {
           onConfirmModal={this.handleModalConfirmation.bind(this)}
           iconAvailable={true}
           icon="ft-alert-triangle danger h1"
-          leftBtnText={locales.entries.Lcz_NO}
-          rightBtnText={locales.entries.Lcz_Yes}
+          leftBtnText={locales.entries.Lcz_Cancel}
+          rightBtnText={locales.entries.Lcz_Confirm}
           leftBtnColor="secondary"
           rightBtnColor={'primary'}
           modalTitle={locales.entries.Lcz_Confirmation}

@@ -116,6 +116,9 @@ export class IrTasksTable {
     return (
       <Host class="flex-fill">
         <section class="mobile-tasks-container flex-fill">
+          <div class="card p-1 m-0">
+            <ir-tasks-header></ir-tasks-header>
+          </div>
           {mobileTasks.map(task => {
             const isCheckable = this.isCheckable(task);
             return <ir-tasks-card task={task} key={task.id} isCheckable={isCheckable}></ir-tasks-card>;
@@ -161,10 +164,10 @@ export class IrTasksTable {
                       </svg>
                     </div>
                   </th>
-                  <th class="extra-padding">{locales.entries.Lcz_Hint}</th>
+                  <th class="extra-padding text-left">{locales.entries.Lcz_Hint}</th>
                   <th class="text-left">{locales.entries.Lcz_A}d</th>
                   <th class="text-left">{locales.entries.Lcz_C}h</th>
-                  <th class="text-left">{locales.entries.Lcz_I}n</th>
+                  <th class="text-left text-left">{locales.entries.Lcz_I}n</th>
                   {haveManyHousekeepers && (
                     <th style={{ textAlign: 'start' }} class={'sortable extra-padding'} onClick={() => this.handleSort('housekeeper')}>
                       <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
@@ -195,7 +198,7 @@ export class IrTasksTable {
               <tbody>
                 {tasks.length === 0 && (
                   <tr class="ir-table-row">
-                    <td colSpan={9} class="text-center">
+                    <td colSpan={9} class="text-left">
                       <div style={{ height: '300px' }} class="d-flex align-items-center justify-content-center">
                         <span> {locales.entries.Lcz_NoTasksFound}</span>
                       </div>
@@ -225,8 +228,8 @@ export class IrTasksTable {
                       <td class="task-row extra-padding">
                         <span class={{ 'highlighted-unit': task.is_highlight }}>{task.unit.name}</span>
                       </td>
-                      <td class="task-row extra-padding">{task.status.description}</td>
-                      <td class="task-row extra-padding">{task.hint}</td>
+                      <td class="task-row extra-padding text-left">{task.status.description}</td>
+                      <td class="task-row extra-padding text-left">{task.hint} aaa</td>
                       <td class="task-row text-left">{task.adult}</td>
                       <td class="task-row text-left">{task.child}</td>
                       <td class="task-row text-left">{task.infant}</td>

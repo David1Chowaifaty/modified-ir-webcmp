@@ -55,6 +55,7 @@ export class IrTasksHeader {
             }}
           ></ir-button>
           <ir-button
+            class="d-none d-md-flex"
             onClickHandler={e => {
               e.stopImmediatePropagation();
               e.stopPropagation();
