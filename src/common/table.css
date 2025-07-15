@@ -5,12 +5,12 @@
   z-index: 2;
   background-color: white;
   white-space: nowrap;
-  width: max-content;
-  max-width: max-content;
+  /* width: max-content;
+  max-width: max-content; */
 }
-.ir-table-row td:last-child {
-  width: 100%;
-}
+/* .ir-table-row td:last-child {
+  width: 100%; 
+}*/
 /* .ir-table-row td:first-child,
 .table thead th:first-child {
   position: sticky;

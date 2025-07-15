@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Listen, Prop, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Listen, Prop, Watch, h } from '@stencil/core';
 import { Task } from '@/models/housekeeping';
 import moment from 'moment';
 import housekeeping_store from '@/stores/housekeeping.store';
@@ -12,6 +12,7 @@ import {
   isAllTasksSelected,
   updateSorting,
   getPaginatedTasks,
+  getMobileTasks,
 } from '@/stores/hk-tasks.store';
 
 @Component({
@@ -111,55 +112,36 @@ export class IrTasksTable {
   render() {
     const haveManyHousekeepers = housekeeping_store?.hk_criteria?.housekeepers?.length > 1;
     const tasks = getPaginatedTasks();
+    const mobileTasks = getMobileTasks();
     return (
-      <div class="card table-container flex-fill p-1 m-0">
-        <ir-tasks-header></ir-tasks-header>
-        <div class={'table-responsive '}>
-          <table class="table" data-testid="hk_tasks_table">
-            <thead class="table-header">
-              <tr>
-                <th class={'task-row'}>
-                  <ir-checkbox
-                    indeterminate={hkTasksStore.selectedTasks.length > 0 && hkTasksStore.selectedTasks.length < getCheckableTasks().length}
-                    checked={this.allSelected}
-                    onCheckChange={() => this.toggleSelectAll()}
-                  ></ir-checkbox>
-                </th>
-                <th class="extra-padding">{locales.entries.Lcz_Period}</th>
-                <th class="extra-padding">
-                  {this.tasks.length > 1 && this.tasks.length + ' '}
-                  {locales.entries.Lcz_Unit}
-                </th>
-                <th class={'sortable extra-padding'} onClick={() => this.handleSort('status')}>
-                  <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-                    <span>{locales.entries.Lcz_Status}</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="lucide lucide-arrow-up-down"
-                    >
-                      <path d="m21 16-4 4-4-4" />
-                      <path d="M17 20V4" />
-                      <path d="m3 8 4-4 4 4" />
-                      <path d="M7 4v16" />
-                    </svg>
-                  </div>
-                </th>
-                <th class="extra-padding">{locales.entries.Lcz_Hint}</th>
-                <th class="text-left">{locales.entries.Lcz_A}</th>
-                <th class="text-left">{locales.entries.Lcz_C}</th>
-                <th class="text-left">{locales.entries.Lcz_I}</th>
-                {haveManyHousekeepers && (
-                  <th style={{ textAlign: 'start' }} class={'sortable extra-padding'} onClick={() => this.handleSort('housekeeper')}>
+      <Host class="flex-fill">
+        <section class="mobile-tasks-container flex-fill">
+          {mobileTasks.map(task => {
+            const isCheckable = this.isCheckable(task);
+            return <ir-tasks-card task={task} key={task.id} isCheckable={isCheckable}></ir-tasks-card>;
+          })}
+        </section>
+        <div class="card table-container flex-fill p-1 m-0">
+          <ir-tasks-header></ir-tasks-header>
+          <div class={'table-responsive mb-auto'}>
+            <table class="table" data-testid="hk_tasks_table">
+              <thead class="table-header">
+                <tr>
+                  <th class={'task-row'}>
+                    <ir-checkbox
+                      indeterminate={hkTasksStore.selectedTasks.length > 0 && hkTasksStore.selectedTasks.length < getCheckableTasks().length}
+                      checked={this.allSelected}
+                      onCheckChange={() => this.toggleSelectAll()}
+                    ></ir-checkbox>
+                  </th>
+                  <th class="extra-padding">{locales.entries.Lcz_Period}</th>
+                  <th class="extra-padding">
+                    {this.tasks.length > 1 && this.tasks.length + ' '}
+                    {locales.entries.Lcz_Unit}
+                  </th>
+                  <th class={'sortable extra-padding'} onClick={() => this.handleSort('status')}>
                     <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-                      <span>{locales.entries.Lcz_Housekeeper}</span>
+                      <span>{locales.entries.Lcz_Status}</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -179,61 +161,91 @@ export class IrTasksTable {
                       </svg>
                     </div>
                   </th>
-                )}
-              </tr>
-            </thead>
-
-            <tbody>
-              {tasks.length === 0 && (
-                <tr class="ir-table-row">
-                  <td colSpan={9} class="text-center">
-                    <div style={{ height: '300px' }} class="d-flex align-items-center justify-content-center">
-                      <span> {locales.entries.Lcz_NoTasksFound}</span>
-                    </div>
-                  </td>
+                  <th class="extra-padding">{locales.entries.Lcz_Hint}</th>
+                  <th class="text-left">{locales.entries.Lcz_A}d</th>
+                  <th class="text-left">{locales.entries.Lcz_C}h</th>
+                  <th class="text-left">{locales.entries.Lcz_I}n</th>
+                  {haveManyHousekeepers && (
+                    <th style={{ textAlign: 'start' }} class={'sortable extra-padding'} onClick={() => this.handleSort('housekeeper')}>
+                      <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+                        <span>{locales.entries.Lcz_Housekeeper}</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-arrow-up-down"
+                        >
+                          <path d="m21 16-4 4-4-4" />
+                          <path d="M17 20V4" />
+                          <path d="m3 8 4-4 4 4" />
+                          <path d="M7 4v16" />
+                        </svg>
+                      </div>
+                    </th>
+                  )}
                 </tr>
-              )}
-              {tasks?.map(task => {
-                const isSelected = hkTasksStore.selectedTasks.some(t => t.id === task.id);
-                const isCheckable = this.isCheckable(task);
-                return (
-                  <tr
-                    data-date={task.date}
-                    data-testid={`hk_task_row`}
-                    data-assigned={task.housekeeper ? 'true' : 'false'}
-                    style={isCheckable && { cursor: 'pointer' }}
-                    onClick={() => {
-                      if (!isCheckable) {
-                        return;
-                      }
-                      this.toggleSelection(task);
-                    }}
-                    class={{ 'selected': isSelected, 'task-table-row ir-table-row': true }}
-                    key={task.id}
-                  >
-                    <td class="task-row ">{isCheckable && <ir-checkbox checked={isSelected}></ir-checkbox>}</td>
-                    <td class="task-row extra-padding">{task.formatted_date}</td>
-                    <td class="task-row extra-padding">
-                      <span class={{ 'highlighted-unit': task.is_highlight }}>{task.unit.name}</span>
+              </thead>
+
+              <tbody>
+                {tasks.length === 0 && (
+                  <tr class="ir-table-row">
+                    <td colSpan={9} class="text-center">
+                      <div style={{ height: '300px' }} class="d-flex align-items-center justify-content-center">
+                        <span> {locales.entries.Lcz_NoTasksFound}</span>
+                      </div>
                     </td>
-                    <td class="task-row extra-padding">{task.status.description}</td>
-                    <td class="task-row extra-padding">{task.hint}</td>
-                    <td class="task-row text-left">{task.adult}</td>
-                    <td class="task-row text-left">{task.child}</td>
-                    <td class="task-row text-left">{task.infant}</td>
-                    {haveManyHousekeepers && (
-                      <td class="w-50 task-row extra-padding" style={{ textAlign: 'start' }}>
-                        {task.housekeeper ?? locales.entries.Lcz_Unassigned}
-                      </td>
-                    )}
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                )}
+                {tasks?.map(task => {
+                  const isSelected = hkTasksStore.selectedTasks.some(t => t.id === task.id);
+                  const isCheckable = this.isCheckable(task);
+                  return (
+                    <tr
+                      data-date={task.date}
+                      data-testid={`hk_task_row`}
+                      data-assigned={task.housekeeper ? 'true' : 'false'}
+                      style={isCheckable && { cursor: 'pointer' }}
+                      onClick={() => {
+                        if (!isCheckable) {
+                          return;
+                        }
+                        this.toggleSelection(task);
+                      }}
+                      class={{ 'selected': isSelected, 'task-table-row ir-table-row': true }}
+                      key={task.id}
+                    >
+                      <td class="task-row ">{isCheckable && <ir-checkbox checked={isSelected}></ir-checkbox>}</td>
+                      <td class="task-row extra-padding">{task.formatted_date}</td>
+                      <td class="task-row extra-padding">
+                        <span class={{ 'highlighted-unit': task.is_highlight }}>{task.unit.name}</span>
+                      </td>
+                      <td class="task-row extra-padding">{task.status.description}</td>
+                      <td class="task-row extra-padding">{task.hint}</td>
+                      <td class="task-row text-left">{task.adult}</td>
+                      <td class="task-row text-left">{task.child}</td>
+                      <td class="task-row text-left">{task.infant}</td>
+                      {haveManyHousekeepers && (
+                        <td class=" task-row extra-padding" style={{ textAlign: 'start' }}>
+                          {task.housekeeper ?? locales.entries.Lcz_Unassigned}
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-auto">
+            <ir-tasks-table-pagination></ir-tasks-table-pagination>
+          </div>
         </div>
-        <ir-tasks-table-pagination></ir-tasks-table-pagination>
-      </div>
+      </Host>
     );
   }
 }

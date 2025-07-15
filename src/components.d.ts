@@ -26,6 +26,7 @@ import { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { PaymentOption } from "./models/payment-options";
+import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
@@ -54,6 +55,7 @@ export { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { PaymentOption } from "./models/payment-options";
+export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
@@ -1203,6 +1205,44 @@ export namespace Components {
          */
         "ticket": string;
     }
+    interface IrPagination {
+        /**
+          * Current active page number (1-based)
+         */
+        "currentPage": number;
+        /**
+          * Whether the pagination is disabled
+         */
+        "disabled": boolean;
+        /**
+          * Page size for calculations
+         */
+        "pageSize": number;
+        /**
+          * List of all page size
+         */
+        "pageSizes": number[];
+        /**
+          * Total number of pages available
+         */
+        "pages": number;
+        /**
+          * Label for the record type (e.g., 'items', 'tasks', 'records')
+         */
+        "recordLabel": string;
+        /**
+          * Whether to show total records count
+         */
+        "showTotalRecords": boolean;
+        /**
+          * Range of items currently being displayed
+         */
+        "showing": PaginationRange;
+        /**
+          * Total number of records/items
+         */
+        "total": number;
+    }
     interface IrPasswordValidator {
         /**
           * The password string to validate
@@ -1611,6 +1651,10 @@ export namespace Components {
           * Optional ID for the switch. If not provided, a random ID will be generated.
          */
         "switchId": string;
+    }
+    interface IrTasksCard {
+        "isCheckable": boolean;
+        "task": Task;
     }
     interface IrTasksFilters {
         "isLoading": boolean;
@@ -2036,6 +2080,10 @@ export interface IrOtpModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrOtpModalElement;
 }
+export interface IrPaginationCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPaginationElement;
+}
 export interface IrPasswordValidatorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPasswordValidatorElement;
@@ -2107,6 +2155,10 @@ export interface IrSidebarCustomEvent<T> extends CustomEvent<T> {
 export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSwitchElement;
+}
+export interface IrTasksCardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTasksCardElement;
 }
 export interface IrTasksFiltersCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3316,6 +3368,28 @@ declare global {
         prototype: HTMLIrOtpModalElement;
         new (): HTMLIrOtpModalElement;
     };
+    interface HTMLIrPaginationElementEventMap {
+        "pageChange": PaginationChangeEvent;
+        "pageSizeChange": PaginationChangeEvent;
+        "firstPage": PaginationChangeEvent;
+        "lastPage": PaginationChangeEvent;
+        "previousPage": PaginationChangeEvent;
+        "nextPage": PaginationChangeEvent;
+    }
+    interface HTMLIrPaginationElement extends Components.IrPagination, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPaginationElementEventMap>(type: K, listener: (this: HTMLIrPaginationElement, ev: IrPaginationCustomEvent<HTMLIrPaginationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPaginationElementEventMap>(type: K, listener: (this: HTMLIrPaginationElement, ev: IrPaginationCustomEvent<HTMLIrPaginationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPaginationElement: {
+        prototype: HTMLIrPaginationElement;
+        new (): HTMLIrPaginationElement;
+    };
     interface HTMLIrPasswordValidatorElementEventMap {
         "passwordValidationChange": boolean;
     }
@@ -3683,6 +3757,23 @@ declare global {
         prototype: HTMLIrSwitchElement;
         new (): HTMLIrSwitchElement;
     };
+    interface HTMLIrTasksCardElementEventMap {
+        "headerButtonPress": { name: 'cleaned' | 'export' | 'archive' };
+    }
+    interface HTMLIrTasksCardElement extends Components.IrTasksCard, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTasksCardElementEventMap>(type: K, listener: (this: HTMLIrTasksCardElement, ev: IrTasksCardCustomEvent<HTMLIrTasksCardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTasksCardElementEventMap>(type: K, listener: (this: HTMLIrTasksCardElement, ev: IrTasksCardCustomEvent<HTMLIrTasksCardElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrTasksCardElement: {
+        prototype: HTMLIrTasksCardElement;
+        new (): HTMLIrTasksCardElement;
+    };
     interface HTMLIrTasksFiltersElementEventMap {
         "applyFilters": TaskFilters;
     }
@@ -3975,6 +4066,7 @@ declare global {
         "ir-ota-services": HTMLIrOtaServicesElement;
         "ir-otp": HTMLIrOtpElement;
         "ir-otp-modal": HTMLIrOtpModalElement;
+        "ir-pagination": HTMLIrPaginationElement;
         "ir-password-validator": HTMLIrPasswordValidatorElement;
         "ir-payment-actions": HTMLIrPaymentActionsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
@@ -4001,6 +4093,7 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-switch": HTMLIrSwitchElement;
+        "ir-tasks-card": HTMLIrTasksCardElement;
         "ir-tasks-filters": HTMLIrTasksFiltersElement;
         "ir-tasks-header": HTMLIrTasksHeaderElement;
         "ir-tasks-table": HTMLIrTasksTableElement;
@@ -5318,6 +5411,68 @@ declare namespace LocalJSX {
          */
         "ticket"?: string;
     }
+    interface IrPagination {
+        /**
+          * Current active page number (1-based)
+         */
+        "currentPage"?: number;
+        /**
+          * Whether the pagination is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Emitted when the first page is requested
+         */
+        "onFirstPage"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the last page is requested
+         */
+        "onLastPage"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the next page is requested
+         */
+        "onNextPage"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the current page changes
+         */
+        "onPageChange"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the page size changes
+         */
+        "onPageSizeChange"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the previous page is requested
+         */
+        "onPreviousPage"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Page size for calculations
+         */
+        "pageSize"?: number;
+        /**
+          * List of all page size
+         */
+        "pageSizes"?: number[];
+        /**
+          * Total number of pages available
+         */
+        "pages"?: number;
+        /**
+          * Label for the record type (e.g., 'items', 'tasks', 'records')
+         */
+        "recordLabel"?: string;
+        /**
+          * Whether to show total records count
+         */
+        "showTotalRecords"?: boolean;
+        /**
+          * Range of items currently being displayed
+         */
+        "showing"?: PaginationRange;
+        /**
+          * Total number of records/items
+         */
+        "total"?: number;
+    }
     interface IrPasswordValidator {
         "onPasswordValidationChange"?: (event: IrPasswordValidatorCustomEvent<boolean>) => void;
         /**
@@ -5778,6 +5933,11 @@ declare namespace LocalJSX {
          */
         "switchId"?: string;
     }
+    interface IrTasksCard {
+        "isCheckable"?: boolean;
+        "onHeaderButtonPress"?: (event: IrTasksCardCustomEvent<{ name: 'cleaned' | 'export' | 'archive' }>) => void;
+        "task"?: Task;
+    }
     interface IrTasksFilters {
         "isLoading"?: boolean;
         "onApplyFilters"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
@@ -6072,6 +6232,7 @@ declare namespace LocalJSX {
         "ir-ota-services": IrOtaServices;
         "ir-otp": IrOtp;
         "ir-otp-modal": IrOtpModal;
+        "ir-pagination": IrPagination;
         "ir-password-validator": IrPasswordValidator;
         "ir-payment-actions": IrPaymentActions;
         "ir-payment-details": IrPaymentDetails;
@@ -6098,6 +6259,7 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-spinner": IrSpinner;
         "ir-switch": IrSwitch;
+        "ir-tasks-card": IrTasksCard;
         "ir-tasks-filters": IrTasksFilters;
         "ir-tasks-header": IrTasksHeader;
         "ir-tasks-table": IrTasksTable;
@@ -6196,6 +6358,7 @@ declare module "@stencil/core" {
             "ir-ota-services": LocalJSX.IrOtaServices & JSXBase.HTMLAttributes<HTMLIrOtaServicesElement>;
             "ir-otp": LocalJSX.IrOtp & JSXBase.HTMLAttributes<HTMLIrOtpElement>;
             "ir-otp-modal": LocalJSX.IrOtpModal & JSXBase.HTMLAttributes<HTMLIrOtpModalElement>;
+            "ir-pagination": LocalJSX.IrPagination & JSXBase.HTMLAttributes<HTMLIrPaginationElement>;
             "ir-password-validator": LocalJSX.IrPasswordValidator & JSXBase.HTMLAttributes<HTMLIrPasswordValidatorElement>;
             "ir-payment-actions": LocalJSX.IrPaymentActions & JSXBase.HTMLAttributes<HTMLIrPaymentActionsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
@@ -6222,6 +6385,7 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
+            "ir-tasks-card": LocalJSX.IrTasksCard & JSXBase.HTMLAttributes<HTMLIrTasksCardElement>;
             "ir-tasks-filters": LocalJSX.IrTasksFilters & JSXBase.HTMLAttributes<HTMLIrTasksFiltersElement>;
             "ir-tasks-header": LocalJSX.IrTasksHeader & JSXBase.HTMLAttributes<HTMLIrTasksHeaderElement>;
             "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;

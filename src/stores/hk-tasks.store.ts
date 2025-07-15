@@ -29,6 +29,8 @@ export type TasksPagination = {
   totalPages: number;
   totalItems: number;
   tasksList: number[];
+  mobileCurrentPage: number;
+  mobilePageSize: number;
 };
 export interface IHkTasksStore {
   searchField: string;
@@ -53,7 +55,9 @@ function getPaginationInitialParams() {
   return {
     tasksList: tasks,
     currentPage: 1,
+    mobileCurrentPage: 1,
     pageSize: tasks[0],
+    mobilePageSize: tasks[0],
     totalPages: 0,
     totalItems: 0,
   };
@@ -128,6 +132,7 @@ export function updateTaskList() {
   updatePaginationFields({
     tasksList: list,
     pageSize: list[0],
+    mobilePageSize: list[0],
   });
   updatePagination();
 }
@@ -181,6 +186,27 @@ export function getPaginatedTasks(): Task[] {
   const start = (hkTasksStore.pagination.currentPage - 1) * hkTasksStore.pagination.pageSize;
   const end = start + hkTasksStore.pagination.pageSize;
   return hkTasksStore.filteredTasks.slice(start, end);
+}
+
+export function getMobileTasks(): Task[] {
+  const { mobileCurrentPage, mobilePageSize } = hkTasksStore.pagination;
+  const start = (mobileCurrentPage - 1) * mobilePageSize;
+  const end = start + mobilePageSize;
+  return hkTasksStore.filteredTasks.slice(0, end);
+}
+
+export function shouldLoadMore(): boolean {
+  const { mobileCurrentPage, mobilePageSize } = hkTasksStore.pagination;
+  return !(mobilePageSize * (mobileCurrentPage - 1) + mobilePageSize >= hkTasksStore.filteredTasks.length);
+}
+
+export function loadMoreTasks(page: number) {
+  if (!shouldLoadMore()) {
+    return;
+  }
+  updatePaginationFields({
+    mobileCurrentPage: page,
+  });
 }
 
 export function resetHkTasksStore() {
