@@ -119,6 +119,7 @@ export class IrTasksTable {
           <div class="card p-1 m-0">
             <ir-tasks-header></ir-tasks-header>
           </div>
+          {mobileTasks?.length === 0 && <p class="mx-auto">{locales.entries.Lcz_NoTasksFound}</p>}
           {mobileTasks.map(task => {
             const isCheckable = this.isCheckable(task);
             return <ir-tasks-card task={task} key={task.id} isCheckable={isCheckable}></ir-tasks-card>;
