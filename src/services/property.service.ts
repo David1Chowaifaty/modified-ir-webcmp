@@ -62,4 +62,11 @@ export class PropertyService {
     }
     return data.My_Result;
   }
+  public async setExposedCleaningFrequency(params: { property_id: number; code: string }) {
+    const { data } = await axios.post('/Set_Exposed_Cleaning_Frequency', params);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
+  }
 }

@@ -6,6 +6,7 @@ import housekeeping_store, { updateHKStore } from '@/stores/housekeeping.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
+import { PropertyService } from '@/services/property.service';
 @Component({
   tag: 'ir-housekeeping',
   styleUrl: 'ir-housekeeping.css',
@@ -25,6 +26,7 @@ export class IrHousekeeping {
 
   private roomService = new RoomService();
   private houseKeepingService = new HouseKeepingService();
+  private propertyService = new PropertyService();
   private token = new Token();
 
   componentWillLoad() {
@@ -89,14 +91,33 @@ export class IrHousekeeping {
       this.isLoading = false;
     }
   }
-  private saveAutomaticCheckInCheckout(e: CustomEvent): void {
+  private async saveAutomaticCheckInCheckout(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     try {
-      this.roomService.SetAutomaticCheckInOut({
-        property_id: this.propertyid,
+      await this.roomService.SetAutomaticCheckInOut({
+        property_id: housekeeping_store.default_properties.property_id,
         flag: e.detail === 'auto',
       });
+      this.toast.emit({
+        position: 'top-right',
+        title: 'Saved Successfully',
+        description: '',
+        type: 'success',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  private async saveCleaningFrequency(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    try {
+      await this.propertyService.setExposedCleaningFrequency({
+        property_id: housekeeping_store.default_properties.property_id,
+        code: e.detail,
+      });
+      calendar_data.cleaning_frequency = { code: e.detail, description: '' };
       this.toast.emit({
         position: 'top-right',
         title: 'Saved Successfully',
@@ -111,6 +132,7 @@ export class IrHousekeeping {
     if (this.isLoading) {
       return <ir-loading-screen></ir-loading-screen>;
     }
+    console.log(calendar_data.cleaning_frequency);
     return (
       <Host>
         <ir-interceptor></ir-interceptor>
@@ -137,8 +159,8 @@ export class IrHousekeeping {
               <ir-select
                 LabelAvailable={false}
                 showFirstOption={false}
-                selectedValue={calendar_data.is_automatic_check_in_out ? 'auto' : 'manual'}
-                onSelectChange={e => this.saveAutomaticCheckInCheckout(e)}
+                selectedValue={calendar_data.cleaning_frequency?.code}
+                onSelectChange={e => this.saveCleaningFrequency(e)}
                 data={housekeeping_store?.hk_criteria?.cleaning_frequencies.map(v => ({
                   text: v.description,
                   value: v.code,
