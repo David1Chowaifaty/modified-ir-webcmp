@@ -22,3 +22,22 @@
   /* background: white; */
   padding: 0.25rem 1rem !important;
 }
+
+.table-container {
+  overflow-y: auto;
+  max-height: 70vh;
+  max-height: 70dvh;
+}
+
+.outer-container {
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.table tfoot td {
+  border-bottom: 0;
+}
+.flag {
+  height: 16px;
+  width: 23px;
+  border-radius: 3px;
+}
