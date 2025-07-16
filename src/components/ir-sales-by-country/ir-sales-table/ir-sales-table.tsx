@@ -99,6 +99,7 @@ export class IrSalesTable {
               <td colSpan={3}></td>
               <td style={{ width: '250px' }}>
                 <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
+                  {this.visibleCount < this.records.length && <ir-button size="sm" text="Load More" onClickHandler={this.handleLoadMore}></ir-button>}
                   <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
                     <div class="legend bg-primary"></div>
                     <p class="p-0 m-0">Selected period </p>
@@ -112,11 +113,6 @@ export class IrSalesTable {
             </tr>
           </tfoot>
         </table>
-        {this.visibleCount < this.records.length && (
-          <div class="d-flex justify-content-center my-2">
-            <ir-button size="sm" text="Load More" onClickHandler={this.handleLoadMore}></ir-button>
-          </div>
-        )}
       </div>
     );
   }
