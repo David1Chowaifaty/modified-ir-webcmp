@@ -2257,7 +2257,7 @@ declare global {
         "dragOverEventData": any;
         "showRoomNightsDialog": IRoomNightsData;
         "showDialog": CalendarModalEvent;
-        "resetStreachedBooking": string;
+        "resetStretchedBooking": string;
         "toast": IToast;
         "updateBookingEvent": { [key: string]: any };
     }
@@ -2563,6 +2563,7 @@ declare global {
         "reduceAvailableUnitEvent": { fromDate: string; toDate: string };
         "revertBooking": any;
         "openCalendarSidebar": CalendarSidebarState;
+        "showRoomNightsDialog": IRoomNightsData;
     }
     interface HTMLIglooCalendarElement extends Components.IglooCalendar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglooCalendarElementEventMap>(type: K, listener: (this: HTMLIglooCalendarElement, ev: IglooCalendarCustomEvent<HTMLIglooCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4100,7 +4101,7 @@ declare namespace LocalJSX {
         "language"?: string;
         "onDragOverEventData"?: (event: IglBookingEventCustomEvent<any>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventCustomEvent<any>) => void;
-        "onResetStreachedBooking"?: (event: IglBookingEventCustomEvent<string>) => void;
+        "onResetStretchedBooking"?: (event: IglBookingEventCustomEvent<string>) => void;
         "onShowDialog"?: (event: IglBookingEventCustomEvent<CalendarModalEvent>) => void;
         "onShowRoomNightsDialog"?: (event: IglBookingEventCustomEvent<IRoomNightsData>) => void;
         "onToast"?: (event: IglBookingEventCustomEvent<IToast>) => void;
@@ -4292,6 +4293,7 @@ declare namespace LocalJSX {
         "onOpenCalendarSidebar"?: (event: IglooCalendarCustomEvent<CalendarSidebarState>) => void;
         "onReduceAvailableUnitEvent"?: (event: IglooCalendarCustomEvent<{ fromDate: string; toDate: string }>) => void;
         "onRevertBooking"?: (event: IglooCalendarCustomEvent<any>) => void;
+        "onShowRoomNightsDialog"?: (event: IglooCalendarCustomEvent<IRoomNightsData>) => void;
         "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
