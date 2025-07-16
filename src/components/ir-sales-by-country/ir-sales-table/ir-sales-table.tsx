@@ -98,7 +98,7 @@ export class IrSalesTable {
             <tr style={{ fontSize: '12px' }}>
               <td colSpan={3}></td>
               <td style={{ width: '250px' }}>
-                <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem' }}>
+                <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
                   <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
                     <div class="legend bg-primary"></div>
                     <p class="p-0 m-0">Selected period </p>
