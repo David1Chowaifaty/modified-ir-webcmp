@@ -7,16 +7,17 @@
 
 ## Properties
 
-| Property    | Attribute    | Description | Type      | Default     |
-| ----------- | ------------ | ----------- | --------- | ----------- |
-| `isLoading` | `is-loading` |             | `boolean` | `undefined` |
+| Property      | Attribute    | Description | Type                                                                                              | Default     |
+| ------------- | ------------ | ----------- | ------------------------------------------------------------------------------------------------- | ----------- |
+| `baseFilters` | --           |             | `Omit<CountrySalesParams, "is_export_to_excel" \| "AC_ID"> & { include_previous_year: boolean; }` | `undefined` |
+| `isLoading`   | `is-loading` |             | `boolean`                                                                                         | `undefined` |
 
 
 ## Events
 
-| Event          | Description | Type                                                                                                                 |
-| -------------- | ----------- | -------------------------------------------------------------------------------------------------------------------- |
-| `applyFilters` |             | `CustomEvent<{ from_date: string; to_date: string; show_previous_year: boolean; rooms_status: { code: string; }; }>` |
+| Event          | Description | Type                                                                                                           |
+| -------------- | ----------- | -------------------------------------------------------------------------------------------------------------- |
+| `applyFilters` |             | `CustomEvent<Omit<CountrySalesParams, "is_export_to_excel" \| "AC_ID"> & { include_previous_year: boolean; }>` |
 
 
 ## Dependencies
