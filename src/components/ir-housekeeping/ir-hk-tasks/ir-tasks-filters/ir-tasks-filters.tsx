@@ -2,6 +2,7 @@ import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import { TaskFilters } from '../types';
 import housekeeping_store from '@/stores/housekeeping.store';
 import locales from '@/stores/locales.store';
+import calendar_data from '@/stores/calendar-data';
 export type ModifiedTaskFilters = Omit<TaskFilters, 'housekeepers'> & { housekeepers: string };
 @Component({
   tag: 'ir-tasks-filters',
@@ -31,7 +32,7 @@ export class IrTasksFilters {
     this.baseFilters = {
       cleaning_periods: housekeeping_store?.hk_criteria?.cleaning_periods[0],
       housekeepers: housekeeping_store.hk_criteria.housekeepers?.map(h => ({ id: h.id })),
-      cleaning_frequencies: housekeeping_store?.hk_criteria?.cleaning_frequencies[0],
+      cleaning_frequencies: calendar_data.cleaning_frequency ?? housekeeping_store?.hk_criteria?.cleaning_frequencies[0],
       dusty_units: housekeeping_store?.hk_criteria?.dusty_periods[0],
       highlight_check_ins: housekeeping_store?.hk_criteria?.highlight_checkin_options[0],
     };
@@ -89,7 +90,9 @@ export class IrTasksFilters {
         <div class="m-0 p-0 collapse" id="hkTasksFiltersCollapse">
           <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
             <fieldset class="pt-1">
-              <p class="m-0 p-0">{locales.entries.Lcz_Period}</p>
+              <p class="m-0 pt-0 px-0" style={{ paddingBottom: '0.25rem' }}>
+                {locales.entries.Lcz_Period}
+              </p>
               <ir-select
                 testId="period"
                 selectedValue={this.filters?.cleaning_periods?.code}
@@ -106,7 +109,9 @@ export class IrTasksFilters {
             </fieldset>
             {housekeeping_store?.hk_criteria?.housekeepers.length > 1 && (
               <fieldset>
-                <p class="m-0 p-0">{locales.entries.Lcz_Housekeepers}</p>
+                <p class="m-0 pt-0 px-0" style={{ paddingBottom: '0.25rem' }}>
+                  {locales.entries.Lcz_Housekeepers}
+                </p>
                 <ir-select
                   testId="housekeepers"
                   selectedValue={this.filters?.housekeepers}
@@ -133,7 +138,9 @@ export class IrTasksFilters {
               </fieldset>
             )}
             <fieldset>
-              <p class="m-0 p-0">{locales.entries.Lcz_CleaningFrequency}</p>
+              <p class="m-0 pt-0 px-0" style={{ paddingBottom: '0.25rem' }}>
+                {locales.entries.Lcz_CleaningFrequency}
+              </p>
               <ir-select
                 testId="cleaning_frequency"
                 selectedValue={this.filters?.cleaning_frequencies?.code}
@@ -149,7 +156,9 @@ export class IrTasksFilters {
               ></ir-select>
             </fieldset>
             <fieldset>
-              <p class="m-0 p-0">Include dusty units</p>
+              <p class="m-0 pt-0 px-0" style={{ paddingBottom: '0.25rem' }}>
+                Include dusty units
+              </p>
               <ir-select
                 testId="dusty_units"
                 showFirstOption={false}
@@ -167,7 +176,9 @@ export class IrTasksFilters {
               ></ir-select>
             </fieldset>
             <fieldset class="mb-1">
-              <p class="m-0 p-0">{locales.entries['Lcz_HighlightCheck-insFrom']}</p>
+              <p class="m-0 pt-0 px-0" style={{ paddingBottom: '0.25rem' }}>
+                {locales.entries['Lcz_HighlightCheck-insFrom']}
+              </p>
               <ir-select
                 testId="highlight_check_ins"
                 selectedValue={this.filters?.highlight_check_ins?.code}

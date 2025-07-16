@@ -2,7 +2,7 @@ import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
 import calendar_data from '@/stores/calendar-data';
-import { updateHKStore } from '@/stores/housekeeping.store';
+import housekeeping_store, { updateHKStore } from '@/stores/housekeeping.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
@@ -118,9 +118,9 @@ export class IrHousekeeping {
         <section class="p-1">
           <h3 class="mb-2">{locales.entries.Lcz_HouseKeepingAndCheckInSetup}</h3>
           <div class="card p-1">
-            <ir-title borderShown label="Check-In Mode"></ir-title>
-            <div class={'d-flex align-items-center'}>
-              <p class="my-0 py-0 mr-1  ">{locales.entries.Lcz_CheckInOutGuestsAutomatically}</p>
+            <ir-title borderShown label="Operations Settings"></ir-title>
+            <div class={'d-flex align-items-center mb-1'}>
+              <p class="my-0 py-0 mr-1">{locales.entries.Lcz_CheckInOutGuestsAutomatically}</p>
               <ir-select
                 LabelAvailable={false}
                 showFirstOption={false}
@@ -130,6 +130,19 @@ export class IrHousekeeping {
                   { text: locales.entries.Lcz_YesAsPerPropertyPolicy, value: 'auto' },
                   { text: locales.entries.Lcz_NoIWillDoItManually, value: 'manual' },
                 ]}
+              ></ir-select>
+            </div>
+            <div class={'d-flex align-items-center'}>
+              <p class="my-0 py-0 mr-1">{locales.entries.Lcz_CleaningFrequency}:</p>
+              <ir-select
+                LabelAvailable={false}
+                showFirstOption={false}
+                selectedValue={calendar_data.is_automatic_check_in_out ? 'auto' : 'manual'}
+                onSelectChange={e => this.saveAutomaticCheckInCheckout(e)}
+                data={housekeeping_store?.hk_criteria?.cleaning_frequencies.map(v => ({
+                  text: v.description,
+                  value: v.code,
+                }))}
               ></ir-select>
             </div>
           </div>

@@ -17,6 +17,7 @@ const initialState: CalendarStore = {
     child_max_nbr: 0,
     child_max_age: 0,
   },
+  cleaning_frequency: null,
   checkin_checkout_hours: null,
   allowedBookingSources: [],
   currency: undefined,
