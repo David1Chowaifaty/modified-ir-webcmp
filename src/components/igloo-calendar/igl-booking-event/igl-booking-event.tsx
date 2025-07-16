@@ -641,18 +641,25 @@ export class IglBookingEvent {
         this.dragEndPos.y = this.dragEndPos.top; // + (this.elementRect.height/2);
         this.dragOverEventData.emit({ id: 'DRAG_OVER', data: this.dragEndPos });
       } else {
-        // if (!this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE)) {
+        // if (this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE)) {
         //   return;
         // }
+        const baseCondition = !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE);
         let newWidth = this.initialWidth;
         if (this.resizeSide == 'rightSide') {
           newWidth = this.initialWidth + distanceX;
           newWidth = Math.min(newWidth, this.initialX + this.element.offsetWidth);
           newWidth = Math.max(this.dayWidth - this.eventSpace, newWidth);
-          this.element.style.width = `${newWidth}px`;
           this.isShrinking = distanceX < 0;
+          if (!this.isShrinking && baseCondition) {
+            return;
+          }
+          this.element.style.width = `${newWidth}px`;
         } else if (this.resizeSide == 'leftSide') {
           this.isShrinking = distanceX > 0;
+          if (!this.isShrinking && baseCondition) {
+            return;
+          }
           newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);
           let newLeft = this.initialLeft + (this.initialWidth - newWidth);
           this.element.style.left = `${newLeft}px`;
