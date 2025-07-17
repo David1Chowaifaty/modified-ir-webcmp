@@ -12,6 +12,8 @@ export class IrTasksTablePagination {
     const totalTasks = hkTasksStore.tasks?.length ?? 0;
     const start = totalTasks === 0 ? 0 : (currentPage - 1) * pageSize + 1;
     const end = Math.min(currentPage * pageSize, totalTasks);
+    const pageSizes =
+      hkTasksStore.pagination.tasksList[0] > totalTasks ? hkTasksStore.pagination.tasksList.slice(0, 1) : hkTasksStore.pagination.tasksList?.filter(t => t <= totalTasks);
     return (
       <Host>
         {shouldLoadMore() && <ir-button size="sm" class="tasks-load-more" text="Load more" onClickHandler={() => loadMoreTasks(mobileCurrentPage + 1)}></ir-button>}
@@ -25,7 +27,7 @@ export class IrTasksTablePagination {
           pages={totalPages}
           pageSize={pageSize}
           currentPage={currentPage}
-          pageSizes={hkTasksStore.pagination.tasksList}
+          pageSizes={pageSizes}
           onPageChange={e => updateCurrentPage(e.detail.currentPage)}
           onPageSizeChange={e => updatePageSize(e.detail.pageSize)}
           showTotalRecords={true}
