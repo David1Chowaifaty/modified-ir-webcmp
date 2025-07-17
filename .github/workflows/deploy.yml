@@ -5,6 +5,7 @@ on:
     branches:
       - guest-management
       - bulk-front
+      - hk-with-ota
 
 jobs:
   build-and-deploy:
