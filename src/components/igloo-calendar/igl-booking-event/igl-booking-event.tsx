@@ -359,9 +359,14 @@ export class IglBookingEvent {
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
-          description: `${locales.entries.Lcz_YouWillLoseFutureUpdates}.`,
+          description:
+            'ALERT! Modifying a channel booking will create a discrepancy between igloorooms and the source. Future guest modifications on the channel may require manual adjustments of the booking.',
           status: '200',
         };
+        // return {
+        //   description: `${locales.entries.Lcz_YouWillLoseFutureUpdates}.`,
+        //   status: '200',
+        // };
       } else {
         if (
           moment(from_date, 'YYYY-MM-DD').isSame(moment(this.bookingEvent.FROM_DATE, 'YYYY-MM-DD')) &&
@@ -373,11 +378,16 @@ export class IglBookingEvent {
             return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           } else {
             return {
-              description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${
-                locales.entries.Lcz_SameRatesWillBeKept + '.'
-              }`,
+              description:
+                'ALERT! Modifying an OTA booking will create a discrepancy between igloorooms and the source. Future guest modifications on the OTA may require manual adjustments of the booking.',
               status: '200',
             };
+            // return {
+            //   description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${
+            //     locales.entries.Lcz_SameRatesWillBeKept + '.'
+            //   }`,
+            //   status: '200',
+            // };
           }
         }
         return { description: locales.entries.Lcz_CannotChangeCHBookings + '.', status: '400' };
