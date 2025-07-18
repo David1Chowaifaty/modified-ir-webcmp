@@ -10,7 +10,7 @@ import moment from 'moment';
 import { v4 } from 'uuid';
 import { TaskFilters } from './types';
 import { downloadFile } from '@/utils/utils';
-import { updateTasks as updateTasksStore, updateSelectedTasks, clearSelectedTasks, hkTasksStore, setLoading, updateTaskList } from '@/stores/hk-tasks.store';
+import { updateTasks as updateTasksStore, updateSelectedTasks, clearSelectedTasks, hkTasksStore, setLoading } from '@/stores/hk-tasks.store';
 
 @Component({
   tag: 'ir-hk-tasks',
@@ -123,7 +123,7 @@ export class IrHkTasks {
 
       const results = await Promise.all(requests);
       const tasksResult = results[0] as any;
-      updateTaskList();
+      // updateTaskList();
       if (tasksResult?.tasks) {
         this.updateTasks(tasksResult.tasks);
       }

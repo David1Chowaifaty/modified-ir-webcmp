@@ -39,6 +39,14 @@ export class IrSecureTasks {
   handlePChange() {
     this.inputValue = this.p;
   }
+  @Watch('ticket')
+  handleTicketChange(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      this.isAuthenticated = true;
+      this.token.setToken(this.ticket);
+      this.propertyid = this.propertyid;
+    }
+  }
   private generateDates() {
     var today = new Date();
     today.setDate(today.getDate() - 1);

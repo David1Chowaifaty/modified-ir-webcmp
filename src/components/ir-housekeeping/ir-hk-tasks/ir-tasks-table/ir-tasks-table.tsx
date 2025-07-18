@@ -112,6 +112,7 @@ export class IrTasksTable {
   render() {
     const haveManyHousekeepers = housekeeping_store?.hk_criteria?.housekeepers?.length > 1;
     const tasks = getPaginatedTasks();
+    // const tasks = hkTasksStore.tasks;
     const mobileTasks = getMobileTasks();
     return (
       <Host class="flex-fill">

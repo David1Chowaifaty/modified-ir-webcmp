@@ -37,6 +37,17 @@ export class IrPagination {
    * List of all page size
    */
   @Prop() pageSizes: number[];
+  /**
+   * Enables a dropdown for changing the number of items displayed per page.
+   *
+   * When set to `true`, users can select a page size from the `pageSizes` array.
+   *
+   * **Note:** This prop requires the `pageSizes` prop to be defined with one or more numeric values.
+   * If `pageSizes` is empty or undefined, the page size selector will not be displayed.
+   *
+   * @default false
+   */
+  @Prop() allowPageSizeChange: boolean;
 
   /**
    * Total number of records/items
@@ -221,7 +232,7 @@ export class IrPagination {
           </p>
         )}
         <div class={'d-flex align-items-center buttons-container'}>
-          {this.pageSizes && (
+          {this.allowPageSizeChange && this.pageSizes && (
             <ir-select
               selectedValue={String(this.pageSize)}
               LabelAvailable={false}

@@ -20,7 +20,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -32,7 +32,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -44,7 +44,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -56,7 +56,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -68,7 +68,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -80,7 +80,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -92,7 +92,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -104,7 +104,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -116,7 +116,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -128,7 +128,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -140,7 +140,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -152,7 +152,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -164,7 +164,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -176,7 +176,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
     ],
@@ -200,7 +200,7 @@ export const freq002 = [
           TURNOVER: ['10 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -212,7 +212,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -224,7 +224,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -236,7 +236,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: ['10 Jul'],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -248,7 +248,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -260,7 +260,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -272,7 +272,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: ['10 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -296,7 +296,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -308,7 +308,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -320,7 +320,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -332,7 +332,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -344,7 +344,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -356,7 +356,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
     ],
@@ -373,62 +373,62 @@ export const freq002 = [
     results: [
       {
         room: '01. Quince Deluxe Studio',
-        total: 5,
+        total: 4,
         statuses: {
-          INHOUSE: ['11 Jul', '12 Jul'],
+          INHOUSE: ['18 Jul', '22 Jul'],
           VACANT: [],
-          TURNOVER: ['10 Jul'],
+          TURNOVER: ['19 Jul', '20 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '02. Peach Deluxe Studio',
-        total: 5,
+        total: 4,
         statuses: {
-          INHOUSE: ['10 Jul'],
+          INHOUSE: [],
           VACANT: [],
-          TURNOVER: ['11 Jul', '12 Jul'],
+          TURNOVER: ['18 Jul', '19 Jul', '20 Jul', '22 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '03. Loquat Superior Studio',
-        total: 1,
+        total: 0,
         statuses: {
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: ['12 Jul'],
+          CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
         room: '04. Grapes Deluxe Studio',
-        total: 3,
+        total: 2,
         statuses: {
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: ['10 Jul'],
-          BLOCKED: ['12 Jul'],
+          CHECKIN: ['19 Jul'],
+          CHECKOUT: ['20 Jul'],
+          // BLOCKED: [],
         },
       },
       {
         room: '05. Lemon Deluxe Studio',
-        total: 1,
+        total: 2,
         statuses: {
           INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
-          CHECKIN: [],
-          CHECKOUT: [],
-          BLOCKED: [],
+          CHECKIN: ['19 Jul'],
+          CHECKOUT: ['20 Jul'],
+          // BLOCKED: [],
         },
       },
       {
@@ -440,7 +440,7 @@ export const freq002 = [
           TURNOVER: ['12 Jul'],
           CHECKIN: ['11 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -452,7 +452,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: ['10 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -476,7 +476,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -488,7 +488,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: ['11 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -500,7 +500,7 @@ export const freq002 = [
           TURNOVER: ['11 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -512,7 +512,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -524,7 +524,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: ['11 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
       {
@@ -536,7 +536,7 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
+          // BLOCKED: [],
         },
       },
     ],
