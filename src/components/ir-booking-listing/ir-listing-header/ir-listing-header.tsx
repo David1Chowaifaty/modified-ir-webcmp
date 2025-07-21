@@ -81,6 +81,7 @@ export class IrListingHeader {
   //   await this.toDateRef.openDatePicker();
   // }
   render() {
+    console.log(booking_listing.balance_filter);
     return (
       <Host>
         <section class="d-flex align-items-center ">
@@ -254,6 +255,18 @@ export class IrListingHeader {
             }))}
             select_id="channels"
             firstOption={locales.entries?.Lcz_All + ' ' + locales.entries?.Lcz_Channels}
+          ></ir-select>
+          <ir-select
+            class="flex-sm-wrap"
+            selectedValue={booking_listing.userSelection.balance_filter}
+            onSelectChange={e => updateUserSelection('balance_filter', e.detail)}
+            LabelAvailable={false}
+            data={booking_listing?.balance_filter.map(b => ({
+              value: b.value,
+              text: b.name,
+            }))}
+            showFirstOption={false}
+            select_id="balance_filter"
           ></ir-select>
           <div class="d-flex flex-fill align-items-end m-0  buttons-container">
             <ir-button

@@ -12,6 +12,7 @@ export class BookingListingService {
     booking_listing.settlement_methods = result.settlement_methods;
     booking_listing.statuses = result.statuses;
     booking_listing.types = result.types;
+    booking_listing.balance_filter = result.balance_filter;
     initializeUserSelection();
   }
 

@@ -409,6 +409,11 @@ export class IrBookingListing {
                           <p class={`m-0 badge ${confirmationBG} ct_ir_badge`}>
                             {booking.is_requested_to_cancel ? locales?.entries?.Lcz_CancellationRequested : booking.status.description}
                           </p>
+                          {booking.events && booking.events[0].type.toLowerCase() === 'modified' && (
+                            <p class="mx-0 p-0 small" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
+                              Modified
+                            </p>
+                          )}
                         </td>
                         <td>
                           <div class="d-flex justify-content-center align-items-center" style={{ gap: '8px' }}>

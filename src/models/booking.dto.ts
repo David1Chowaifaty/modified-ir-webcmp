@@ -166,6 +166,15 @@ export interface OtaService {
   price_per_unit: number;
   total_price: number;
 }
+export interface ExposedBookingEvent {
+  date: string;
+  hour: number;
+  id: number;
+  minute: number;
+  second: number;
+  user: string;
+  type: string;
+}
 export interface Booking {
   agent: {
     code: string;
@@ -173,6 +182,7 @@ export interface Booking {
     name: string;
     verification_mode: null;
   } | null;
+  events: ExposedBookingEvent[];
   ota_services: OtaService[];
   is_requested_to_cancel: boolean;
   arrival: Arrival;

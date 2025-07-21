@@ -39,6 +39,7 @@ export class IrBookingHeader {
   private dialogRef: HTMLIrDialogElement;
 
   private bookingService = new BookingService();
+  modalEl: HTMLIrModalElement;
 
   @Listen('selectChange')
   handleSelectChange(e: CustomEvent<any>) {
@@ -84,7 +85,7 @@ export class IrBookingHeader {
       case 'pms':
         return <ir-pms-logs slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-pms-logs>;
       case 'events-log':
-        return <ir-events-log slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-events-log>;
+        return <ir-events-log booking={this.booking} slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-events-log>;
     }
   }
 
@@ -116,7 +117,13 @@ export class IrBookingHeader {
                   selectedValue={this.bookingStatus}
                 ></ir-select>
                 <ir-button
-                  onClickHandler={this.updateStatus.bind(this)}
+                  onClickHandler={() => {
+                    if (!this.booking.is_direct) {
+                      this.modalEl.openModal();
+                      return;
+                    }
+                    this.updateStatus();
+                  }}
                   btn_styles="h-28"
                   isLoading={isRequestPending('/Change_Exposed_Booking_Status')}
                   btn_disabled={isRequestPending('/Change_Exposed_Booking_Status')}
@@ -181,6 +188,15 @@ export class IrBookingHeader {
         >
           {this.renderDialogBody()}
         </ir-dialog>
+        <ir-modal
+          ref={el => (this.modalEl = el)}
+          modalTitle={''}
+          leftBtnText={locales?.entries?.Lcz_Cancel}
+          rightBtnText={locales?.entries?.Lcz_Confirm}
+          modalBody={locales.entries.Lcz_OTA_Modification_Alter}
+          isLoading={isRequestPending('/Change_Exposed_Booking_Status')}
+          onConfirmModal={this.updateStatus.bind(this)}
+        ></ir-modal>
       </div>
     );
   }

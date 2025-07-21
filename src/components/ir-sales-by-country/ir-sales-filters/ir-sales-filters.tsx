@@ -1,9 +1,8 @@
 import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 
 import locales from '@/stores/locales.store';
-import { SalesFilters } from './types';
 import moment from 'moment';
-export type ModifiedSalesFilters = Omit<SalesFilters, 'housekeepers'>;
+import { CountrySalesFilter } from '../types';
 
 @Component({
   tag: 'ir-sales-filters',
@@ -12,26 +11,23 @@ export type ModifiedSalesFilters = Omit<SalesFilters, 'housekeepers'>;
 })
 export class IrSalesFilters {
   @Prop() isLoading: boolean;
+  @Prop() baseFilters: CountrySalesFilter;
 
-  @State() filters: ModifiedSalesFilters = {
-    from_date: moment().add(-7, 'days').format('YYYY-MM-DD'),
-    to_date: moment().format('YYYY-MM-DD'),
-    rooms_status: { code: '' },
-    show_previous_year: false,
-  };
+  @State() filters: CountrySalesFilter;
 
   @State() collapsed: boolean = false;
+  @State() window: string;
 
-  @Event() applyFilters: EventEmitter<SalesFilters>;
+  @Event() applyFilters: EventEmitter<CountrySalesFilter>;
 
-  private baseFilters: SalesFilters;
   componentWillLoad() {
-    console.log(this.baseFilters);
+    this.filters = this.baseFilters;
+    this.window = this.baseFilters.WINDOW.toString();
   }
 
-  // private updateFilter(params: Partial<ModifiedSalesFilters>) {
-  //   this.filters = { ...this.filters, ...params };
-  // }
+  private updateFilter(params: Partial<CountrySalesFilter>) {
+    this.filters = { ...this.filters, ...params };
+  }
 
   private applyFiltersEvt(e: CustomEvent) {
     e.stopImmediatePropagation();
@@ -41,6 +37,7 @@ export class IrSalesFilters {
   private resetFilters(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
+    this.filters = this.baseFilters;
     this.applyFilters.emit(this.filters);
   }
   render() {
@@ -74,13 +71,19 @@ export class IrSalesFilters {
         <div class="m-0 p-0 collapse filters-section" id="salesFiltersCollapse">
           <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
             <fieldset class="pt-1 filter-group">
-              <label htmlFor="rooms" class="m-0 p-0">
+              <label htmlFor="rooms" class="m-0 px-0" style={{ paddingBottom: '0.25rem' }}>
                 Rooms
               </label>
               <ir-select
+                selectedValue={this.filters?.BOOK_CASE}
                 select_id="rooms"
                 LabelAvailable={false}
                 showFirstOption={false}
+                onSelectChange={e =>
+                  this.updateFilter({
+                    BOOK_CASE: e.detail,
+                  })
+                }
                 data={[
                   { text: 'Booked', value: '001' },
                   { text: 'Stayed', value: '002' },
@@ -88,14 +91,26 @@ export class IrSalesFilters {
               ></ir-select>
             </fieldset>
             <fieldset class="pt-1 filter-group">
-              <label htmlFor="period" class="p-0 m-0">
-                Selected Period
+              <label htmlFor="period" class="px-0 m-0" style={{ paddingBottom: '0.25rem' }}>
+                Selected period
               </label>
               <div class="d-flex flex-column date-filter-group" style={{ gap: '0.5rem' }}>
                 <ir-select
+                  selectedValue={this.window}
+                  onSelectChange={e => {
+                    const dateDiff = Number(e.detail);
+                    const today = moment();
+                    this.updateFilter({
+                      WINDOW: dateDiff,
+                      TO_DATE: today.format('YYYY-MM-DD'),
+                      FROM_DATE: today.add(-dateDiff, 'days').format('YYYY-MM-DD'),
+                    });
+                    this.window = e.detail;
+                  }}
                   select_id="period"
                   LabelAvailable={false}
-                  showFirstOption={false}
+                  // showFirstOption={false}
+                  firstOption="..."
                   data={[
                     { text: 'For the past 7 days', value: '7' },
                     { text: 'For the past 14 days', value: '14' },
@@ -106,12 +121,38 @@ export class IrSalesFilters {
                   ]}
                 ></ir-select>
                 <p class="m-0 p-0 text-center">Or</p>
-                <ir-range-picker maxDate={moment().format('YYYY-MM-DD')} withOverlay={false}></ir-range-picker>
+                <ir-range-picker
+                  onDateRangeChanged={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    const { fromDate, toDate, wasFocused } = e.detail;
+                    this.updateFilter({
+                      FROM_DATE: fromDate.format('YYYY-MM-DD'),
+                      TO_DATE: toDate.format('YYYY-MM-DD'),
+                    });
+                    if (wasFocused) this.window = '';
+                    // this.dates = { from: fromDate, to: toDate };
+                  }}
+                  fromDate={moment(this.filters.FROM_DATE, 'YYYY-MM-DD')}
+                  toDate={moment(this.filters.TO_DATE, 'YYYY-MM-DD')}
+                  maxDate={moment().format('YYYY-MM-DD')}
+                  withOverlay={false}
+                ></ir-range-picker>
               </div>
             </fieldset>
             <div class="d-flex align-items-center mt-1 mb-2 compare-year-toggle" style={{ gap: '0.5rem' }}>
-              <label htmlFor="compare-prev-year">Compare with previous year</label>
-              <ir-checkbox checkboxId="compare-prev-year"></ir-checkbox>
+              <label htmlFor="compare-prev-year" style={{ paddingBottom: '0.25rem' }}>
+                Compare with previous year
+              </label>
+              <ir-checkbox
+                checked={this.filters?.include_previous_year}
+                checkboxId="compare-prev-year"
+                onCheckChange={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.updateFilter({ include_previous_year: e.detail });
+                }}
+              ></ir-checkbox>
             </div>
 
             <div class="d-flex align-items-center justify-content-end filter-actions" style={{ gap: '1rem' }}>

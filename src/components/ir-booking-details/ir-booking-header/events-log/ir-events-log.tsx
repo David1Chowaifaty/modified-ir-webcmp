@@ -1,7 +1,7 @@
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { Component, Fragment, Prop, State, h } from '@stencil/core';
-import { BookingService, ExposedBookingEvent } from '@/services/booking.service';
 import locales from '@/stores/locales.store';
+import { Booking, ExposedBookingEvent } from '@/models/booking.dto';
 
 @Component({
   tag: 'ir-events-log',
@@ -10,10 +10,9 @@ import locales from '@/stores/locales.store';
 })
 export class IrEventsLog {
   @Prop() bookingNumber: string;
+  @Prop() booking: Booking;
 
   @State() bookingEvents: ExposedBookingEvent[];
-
-  private bookingService = new BookingService();
 
   componentWillLoad() {
     this.init();
@@ -21,7 +20,7 @@ export class IrEventsLog {
 
   private async init() {
     try {
-      this.bookingEvents = await this.bookingService.getExposedBookingEvents(this.bookingNumber);
+      this.bookingEvents = this.booking.events;
     } catch (error) {
       console.error(error);
     }

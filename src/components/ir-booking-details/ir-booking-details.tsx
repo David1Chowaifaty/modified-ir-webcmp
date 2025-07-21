@@ -410,9 +410,10 @@ export class IrBookingDetails {
             <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
             <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
               <ir-date-view from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
-              {this.hasRoomAdd && this.booking.is_direct && this.booking.is_editable && (
-                <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
-              )}
+              {
+                // this.hasRoomAdd && this.booking.is_direct && this.booking.is_editable && (
+                this.hasRoomAdd && this.booking.is_editable && <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
+              }
             </div>
             <div class="card p-0 mx-0">
               {this.booking.rooms.map((room: Room, index: number) => {

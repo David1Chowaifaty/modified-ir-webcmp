@@ -264,6 +264,7 @@ export type LocalizationStrings = {
   'Lcz_pms': string;
   'Lcz_PMS_Logs': string;
   'Lcz_Policies': string;
+  'Lcz_OTA_Modification_Alter': string;
   'Lcz_Price': string;
   'Lcz_PrivateNote': string;
   'Lcz_PrivateNote_MaxChar': string;

@@ -84,6 +84,7 @@ export class IglooCalendar {
   reduceAvailableUnitEvent: EventEmitter<{ fromDate: string; toDate: string }>;
   @Event({ bubbles: true }) revertBooking: EventEmitter;
   @Event() openCalendarSidebar: EventEmitter<CalendarSidebarState>;
+  @Event() showRoomNightsDialog: EventEmitter<IRoomNightsData>;
 
   private bookingService: BookingService = new BookingService();
   private roomService: RoomService = new RoomService();
@@ -288,6 +289,8 @@ export class IglooCalendar {
       }
       case 'reallocate':
         return this.dialogData?.description || '';
+      case 'stretch':
+        return 'Warning ';
       default:
         return 'Unknown modal content';
     }
@@ -1153,6 +1156,10 @@ export class IglooCalendar {
           }
           break;
         }
+        case 'stretch':
+          const { reason, ...rest } = this.dialogData;
+          this.showRoomNightsDialog.emit(rest);
+          break;
         case 'reallocate': {
           if (!this.dialogData) {
             console.warn('No dialog data available for reallocation.');
@@ -1182,7 +1189,7 @@ export class IglooCalendar {
     }
   }
   private handleModalCancel() {
-    if (this.dialogData?.reason === 'reallocate') {
+    if (this.dialogData?.reason === 'reallocate' || this.dialogData.reason === 'stretch') {
       this.revertBooking.emit(this.dialogData.pool);
     }
     this.dialogData = null;
