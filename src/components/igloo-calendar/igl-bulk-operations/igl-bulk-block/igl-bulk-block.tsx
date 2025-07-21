@@ -1,9 +1,9 @@
-import { BookingService } from '@/services/booking.service';
+// import { BookingService } from '@/services/booking.service';
 import calendar_data from '@/stores/calendar-data';
 import { ReloadInterceptor } from '@/utils/ReloadInterceptor';
 import { Component, Event, EventEmitter, Fragment, h, Prop, State } from '@stencil/core';
 import moment, { Moment } from 'moment';
-import { z, ZodError } from 'zod';
+import { ZodError } from 'zod';
 import { IToast } from '@components/ui/ir-toast/toast';
 // import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
@@ -37,24 +37,24 @@ export class IglBulkBlock {
   private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
   private reloadInterceptor: ReloadInterceptor;
   private minDate = moment().format('YYYY-MM-DD');
-  private bookingService = new BookingService();
+  // private bookingService = new BookingService();
 
-  private datesSchema = z.array(
-    z.object({
-      from: z
-        .any()
-        .refine((val): val is Moment => moment.isMoment(val), {
-          message: "Invalid 'from' date; expected a Moment object.",
-        })
-        .transform((val: Moment) => val.format('YYYY-MM-DD')),
-      to: z
-        .any()
-        .refine((val): val is Moment => moment.isMoment(val), {
-          message: "Invalid 'to' date; expected a Moment object.",
-        })
-        .transform((val: Moment) => val.format('YYYY-MM-DD')),
-    }),
-  );
+  // private datesSchema = z.array(
+  //   z.object({
+  //     from: z
+  //       .any()
+  //       .refine((val): val is Moment => moment.isMoment(val), {
+  //         message: "Invalid 'from' date; expected a Moment object.",
+  //       })
+  //       .transform((val: Moment) => val.format('YYYY-MM-DD')),
+  //     to: z
+  //       .any()
+  //       .refine((val): val is Moment => moment.isMoment(val), {
+  //         message: "Invalid 'to' date; expected a Moment object.",
+  //       })
+  //       .transform((val: Moment) => val.format('YYYY-MM-DD')),
+  //   }),
+  // );
 
   private unitSections: HTMLUListElement;
   private datesSections: HTMLTableElement;
