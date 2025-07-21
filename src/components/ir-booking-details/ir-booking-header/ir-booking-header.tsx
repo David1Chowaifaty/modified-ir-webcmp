@@ -193,9 +193,7 @@ export class IrBookingHeader {
           modalTitle={''}
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Confirm}
-          modalBody={
-            'ALERT! Modifying a channel booking will create a discrepancy between igloorooms and the source. Future guest modifications on the channel may require manual adjustments of the booking.'
-          }
+          modalBody={locales.entries.Lcz_OTA_Modification_Alter}
           isLoading={isRequestPending('/Change_Exposed_Booking_Status')}
           onConfirmModal={this.updateStatus.bind(this)}
         ></ir-modal>

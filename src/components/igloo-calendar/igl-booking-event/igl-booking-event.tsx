@@ -359,8 +359,7 @@ export class IglBookingEvent {
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
-          description:
-            'ALERT! Modifying a channel booking will create a discrepancy between igloorooms and the source. Future guest modifications on the channel may require manual adjustments of the booking.',
+          description: locales.entries.Lcz_OTA_Modification_Alter,
           status: '200',
         };
         // return {
@@ -378,8 +377,7 @@ export class IglBookingEvent {
             return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           } else {
             return {
-              description:
-                'ALERT! Modifying an OTA booking will create a discrepancy between igloorooms and the source. Future guest modifications on the OTA may require manual adjustments of the booking.',
+              description: locales.entries.Lcz_OTA_Modification_Alter,
               status: '200',
             };
             // return {
