@@ -23,6 +23,10 @@ export class IglBulkBlock {
   @Prop() property_id: number;
 
   @State() selectedRoomTypes: Map<string | number, SelectedRooms[]> = new Map();
+  @State() selectedUnit: {
+    roomtype_id: number;
+    unit_id: number;
+  } | null = null;
   @State() errors: 'dates' | 'rooms';
   @State() isLoading: boolean;
   @State() dates: {
@@ -251,10 +255,10 @@ export class IglBulkBlock {
   }
 
   render() {
-    const data = [
-      { value: 'open', text: 'Unblock' },
-      { value: 'closed', text: 'Block' },
-    ];
+    // const data = [
+    //   { value: 'open', text: 'Unblock' },
+    //   { value: 'closed', text: 'Block' },
+    // ];
     return (
       <form
         class={'bulk-sheet-container'}
@@ -267,7 +271,7 @@ export class IglBulkBlock {
           <div class="text-muted text-left py-0 my-0">
             <p>
               {/* {locales.entries.Lcz_SelectAffectedUnits} */}
-              Select the units to block or unblock.
+              Select the unit to block or unblock.
             </p>
           </div>
           <div>
@@ -279,15 +283,15 @@ export class IglBulkBlock {
             <ul class="room-type-list" ref={el => (this.unitSections = el)}>
               {calendar_data.roomsInfo.map((roomType, i) => {
                 const row_style = i === calendar_data.roomsInfo.length - 1 ? '' : 'pb-1';
-                const currRoom = this.selectedRoomTypes.get(roomType.id) ?? [];
-                const isFullySelected = Array.isArray(currRoom) && currRoom.length === roomType.physicalrooms.length;
-                const allSameResult = isFullySelected && currRoom.every(({ result }) => result === currRoom[0].result);
-                const roomTypeValue: RoomStatus | undefined = allSameResult ? currRoom[0].result : undefined;
+                // const currRoom = this.selectedRoomTypes.get(roomType.id) ?? [];
+                // const isFullySelected = Array.isArray(currRoom) && currRoom.length === roomType.physicalrooms.length;
+                // const allSameResult = isFullySelected && currRoom.every(({ result }) => result === currRoom[0].result);
+                // const roomTypeValue: RoomStatus | undefined = allSameResult ? currRoom[0].result : undefined;
                 return (
                   <Fragment>
                     <li key={`roomTypeRow-${roomType.id}`} class={`room-type-row pb-1`}>
                       <div class={'d-flex choice-row'}>
-                        <ir-select
+                        {/* <ir-select
                           LabelAvailable={false}
                           firstOption={`${locales.entries.Lcz_Select}...`}
                           data={data}
@@ -302,14 +306,14 @@ export class IglBulkBlock {
                             prevRooms.set(roomType.id, rooms);
                             this.selectedRoomTypes = new Map(prevRooms);
                           }}
-                        ></ir-select>
+                        ></ir-select> */}
                         <span class="pl-1 text-left room-type-name">{roomType.name}</span>
                       </div>
                     </li>
                     {roomType.physicalrooms.map((room, j) => (
                       <li key={`physicalRoom-${room.id}-${j}`} class={`physical-room ${row_style}`}>
                         <div class={'d-flex choice-row'}>
-                          <ir-select
+                          {/* <ir-select
                             LabelAvailable={false}
                             firstOption={`${locales.entries.Lcz_Select}...`}
                             data={data}
@@ -328,7 +332,19 @@ export class IglBulkBlock {
                               this.selectedRoomTypes = new Map(prevRooms);
                             }}
                           ></ir-select>
-                          <span class="pl-1 text-left room-name">{room.name}</span>
+                          <span class="pl-1 text-left room-name">{room.name}</span> */}
+                          <ir-radio
+                            class="pl-1 "
+                            name="unit"
+                            checked={this.selectedUnit?.unit_id === room.id}
+                            onCheckChange={() =>
+                              (this.selectedUnit = {
+                                roomtype_id: roomType.id,
+                                unit_id: room.id,
+                              })
+                            }
+                            label={room.name}
+                          ></ir-radio>
                         </div>
                       </li>
                     ))}
@@ -423,6 +439,7 @@ export class IglBulkBlock {
                           evt.stopPropagation();
                           this.handleDateChange({ index: i, date: evt.detail.start, key: 'to' });
                         }}
+                        maxDate={d.from ? moment(d.from).add(3, 'months').format('YYYY-MM-DD') : undefined}
                         onDatePickerFocus={e => {
                           e.stopImmediatePropagation();
                           e.stopPropagation();

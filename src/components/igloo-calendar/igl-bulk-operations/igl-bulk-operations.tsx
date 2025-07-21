@@ -23,7 +23,7 @@ export class IglBulkOperations {
     },
     {
       id: 'block',
-      label: 'Block Units',
+      label: 'Block Unit',
     },
   ];
 

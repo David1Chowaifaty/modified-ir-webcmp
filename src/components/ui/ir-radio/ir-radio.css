@@ -1,3 +1,7 @@
 :host {
   display: block;
 }
+.checkmark {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
