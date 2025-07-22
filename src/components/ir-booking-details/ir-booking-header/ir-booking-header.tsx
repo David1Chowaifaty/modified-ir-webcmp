@@ -209,7 +209,7 @@ export class IrBookingHeader {
           modalTitle={''}
           leftBtnText={locales?.entries?.Lcz_Cancel}
           rightBtnText={locales?.entries?.Lcz_Confirm}
-          modalBody={this.alertMessage}
+          modalBody={locales.entries.Lcz_OTA_Modification_Alter}
           isLoading={isRequestPending('/Change_Exposed_Booking_Status')}
           onConfirmModal={this.updateStatus.bind(this)}
         ></ir-modal>
