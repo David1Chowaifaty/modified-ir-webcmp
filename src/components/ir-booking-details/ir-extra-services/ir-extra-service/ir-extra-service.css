@@ -3,7 +3,7 @@
 }
 .extra-service-container {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
   gap: 0.5rem;
 }
@@ -19,4 +19,7 @@
 }
 .extra-service-conditional-date {
   margin-top: 0.5rem;
+}
+.extra-service-price {
+  white-space: nowrap;
 }
