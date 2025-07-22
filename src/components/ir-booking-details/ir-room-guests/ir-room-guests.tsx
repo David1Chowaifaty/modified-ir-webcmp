@@ -131,22 +131,24 @@ export class IrRoomGuests {
     try {
       this.error = {};
       this.autoValidate = true;
+      console.log(this.guests);
       ZSharedPersons.parse(this.guests);
-      await this.bookingService.handleExposedRoomGuests({
-        booking_nbr: this.bookingNumber,
-        identifier: this.identifier,
-        guests: this.guests.map(g => ({ ...g, dob: g.dob ? moment(g.dob, 'DD/MM/YYYY').format('YYYY-MM-DD') : null })),
-      });
-      if (this.checkIn) {
-        await this.bookingService.handleExposedRoomInOut({
-          booking_nbr: this.bookingNumber,
-          room_identifier: this.identifier,
-          status: '001',
-        });
-      }
-      this.closeModal.emit(null);
-      this.updateRoomGuests.emit({ identifier: this.identifier, guests: this.guests });
-      this.resetBookingEvt.emit();
+
+      // await this.bookingService.handleExposedRoomGuests({
+      //   booking_nbr: this.bookingNumber,
+      //   identifier: this.identifier,
+      //   guests: this.guests.map(g => ({ ...g, dob: g.dob ? moment(g.dob, 'DD/MM/YYYY').format('YYYY-MM-DD') : null })),
+      // });
+      // if (this.checkIn) {
+      //   await this.bookingService.handleExposedRoomInOut({
+      //     booking_nbr: this.bookingNumber,
+      //     room_identifier: this.identifier,
+      //     status: '001',
+      //   });
+      // }
+      // this.closeModal.emit(null);
+      // this.updateRoomGuests.emit({ identifier: this.identifier, guests: this.guests });
+      // this.resetBookingEvt.emit();
     } catch (error) {
       console.log(error);
       if (error instanceof ZodError) {

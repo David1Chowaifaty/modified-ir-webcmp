@@ -85,7 +85,8 @@ export const ZIdInfo = z.object({
       // or it can be empty string
       z.literal(''),
     ])
-    .optional(),
+    .optional()
+    .nullable(),
 });
 
 /**
@@ -109,13 +110,15 @@ export const ZSharedPerson = z.object({
       z.string().min(2), // if provided and non-empty, must have min length 2
       z.literal(''), // or it can be empty string
     ])
-    .optional(),
+    .optional()
+    .nullable(),
   last_name: z
     .union([
       z.string().min(2), // if provided and non-empty, must have min length 2
       z.literal(''), // or it can be empty string
     ])
-    .optional(),
+    .optional()
+    .nullable(),
   country_id: z.coerce
     .number()
     .min(0) // if provided, must be >= 0
@@ -131,6 +134,7 @@ export const ZSharedPerson = z.object({
       return isDDMMYYYY ? null : moment(value, 'DD/MM/YYYY').format('YYYY-MM-DD');
     }),
   id_info: ZIdInfo.optional(),
+  is_main: z.boolean().default(false),
 });
 
 export const ZSharedPersons = z.array(ZSharedPerson);
