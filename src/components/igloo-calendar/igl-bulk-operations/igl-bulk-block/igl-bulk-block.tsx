@@ -1,9 +1,9 @@
-// import { BookingService } from '@/services/booking.service';
+import { BookingService } from '@/services/booking.service';
 import calendar_data from '@/stores/calendar-data';
 import { ReloadInterceptor } from '@/utils/ReloadInterceptor';
 import { Component, Event, EventEmitter, Fragment, h, Prop, State } from '@stencil/core';
 import moment, { Moment } from 'moment';
-import { ZodError } from 'zod';
+import { z, ZodError } from 'zod';
 import { IToast } from '@components/ui/ir-toast/toast';
 // import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
@@ -41,24 +41,24 @@ export class IglBulkBlock {
   private dateRefs: { from?: HTMLIrDatePickerElement; to?: HTMLIrDatePickerElement }[] = [];
   private reloadInterceptor: ReloadInterceptor;
   private minDate = moment().format('YYYY-MM-DD');
-  // private bookingService = new BookingService();
+  private bookingService = new BookingService();
 
-  // private datesSchema = z.array(
-  //   z.object({
-  //     from: z
-  //       .any()
-  //       .refine((val): val is Moment => moment.isMoment(val), {
-  //         message: "Invalid 'from' date; expected a Moment object.",
-  //       })
-  //       .transform((val: Moment) => val.format('YYYY-MM-DD')),
-  //     to: z
-  //       .any()
-  //       .refine((val): val is Moment => moment.isMoment(val), {
-  //         message: "Invalid 'to' date; expected a Moment object.",
-  //       })
-  //       .transform((val: Moment) => val.format('YYYY-MM-DD')),
-  //   }),
-  // );
+  private datesSchema = z.array(
+    z.object({
+      from: z
+        .any()
+        .refine((val): val is Moment => moment.isMoment(val), {
+          message: "Invalid 'from' date; expected a Moment object.",
+        })
+        .transform((val: Moment) => val.format('YYYY-MM-DD')),
+      to: z
+        .any()
+        .refine((val): val is Moment => moment.isMoment(val), {
+          message: "Invalid 'to' date; expected a Moment object.",
+        })
+        .transform((val: Moment) => val.format('YYYY-MM-DD')),
+    }),
+  );
 
   private unitSections: HTMLUListElement;
   private datesSections: HTMLTableElement;
@@ -73,111 +73,26 @@ export class IglBulkBlock {
   }
 
   private async addBlockDates() {
-    // const generatePeriodsToModify = periods => {
-    //   const p = [];
-    //   for (const period of periods) {
-    //     let current = period.from;
-    //     const lastDay = moment(period.to, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
-    //     while (current !== lastDay) {
-    //       const nextDay = moment(current, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
-    //       for (const selectedRoom of this.selectedRoomTypes) {
-    //         p.push({
-    //           room_type_id: selectedRoom.id,
-    //           night: current,
-    //         });
-    //       }
-    //       current = nextDay;
-    //     }
-    //   }
-    //   return p;
-    // };
-    // const updateCalendarCells = (
-    //   payloads: {
-    //     is_closed: boolean;
-    //     restrictions: {
-    //       night: string;
-    //       room_type_id: number;
-    //     }[];
-    //   }[],
-    // ) => {
-    //   const prevDisabledCells = new Map(calendar_dates.disabled_cells);
-
-    //   // Caches
-    //   const roomsInfoById = new Map(calendar_data.roomsInfo.map((rt, i) => [rt.id, { roomType: rt, index: i }]));
-    //   const dayIndexByValue = new Map(calendar_dates.days.map((day, i) => [day.value, i]));
-    //   const rateByRoomTypeAndDate = new Map<string, any>();
-
-    //   for (const payload of payloads) {
-    //     for (const restriction of payload.restrictions) {
-    //       const { night, room_type_id } = restriction;
-    //       const { roomType } = roomsInfoById.get(room_type_id);
-
-    //       if (!roomType) continue;
-
-    //       const dayIndex = dayIndexByValue.get(night);
-    //       if (dayIndex === undefined) {
-    //         console.warn(`Couldn't find date ${night}`);
-    //         continue;
-    //       }
-
-    //       const day = calendar_dates.days[dayIndex];
-    //       const rateKey = `${room_type_id}_${night}`;
-    //       let rp = rateByRoomTypeAndDate.get(rateKey);
-    //       if (!rp) {
-    //         rp = day.rate.find(r => r.id === room_type_id);
-    //         if (!rp) {
-    //           console.warn(`Couldn't find room type ${room_type_id}`);
-    //           continue;
-    //         }
-    //         rateByRoomTypeAndDate.set(rateKey, rp);
-    //       }
-
-    //       const haveAvailability = (rp.exposed_inventory as any).rts === 0;
-    //       for (const room of roomType.physicalrooms) {
-    //         const key = `${room.id}_${night}`;
-    //         prevDisabledCells.set(key, {
-    //           disabled: payload.is_closed ? true : haveAvailability,
-    //           reason: payload.is_closed ? 'stop_sale' : haveAvailability ? 'inventory' : 'stop_sale',
-    //         });
-    //       }
-    //     }
-    //   }
-    //   calendar_dates['disabled_cells'] = new Map(prevDisabledCells);
-    // };
     try {
       this.errors = null;
       this.isLoading = true;
-      // const periods = this.datesSchema.parse(this.dates);
-      if (this.selectedRoomTypes.size === 0) {
+      const periods = this.datesSchema.parse(this.dates);
+      if (!this.selectedUnit) {
         this.unitSections.scrollIntoView({ behavior: 'smooth', block: 'center' });
         this.errors = 'rooms';
         return;
       }
+      for (const period of periods) {
+        await this.bookingService.blockUnit({
+          from_date: period.from,
+          to_date: period.to,
+          DESCRIPTION: '',
+          NOTES: '',
+          pr_id: this.selectedUnit?.unit_id?.toString(),
+          STAY_STATUS_CODE: '004',
+        });
+      }
       this.activate();
-      // const periods_to_modify = generatePeriodsToModify(periods);
-      // const isAllOpen = this.selectedRoomTypes.every(e => e.result === 'open');
-      // const isAllClosed = this.selectedRoomTypes.every(e => e.result === 'closed');
-      // if (isAllClosed || isAllOpen) {
-      //   const payload = {
-      //     is_closed: isAllClosed,
-      //     restrictions: periods_to_modify,
-      //     property_id: this.property_id,
-      //   };
-      //   await this.bookingService.setExposedRestrictionPerRoomType(payload);
-      //   updateCalendarCells([payload]);
-      // } else {
-      //   const payloads = [];
-      //   for (const room of this.selectedRoomTypes) {
-      //     const periods = periods_to_modify.filter(f => f.room_type_id === room.id);
-      //     payloads.push({
-      //       is_closed: room.result === 'closed',
-      //       restrictions: periods,
-      //       property_id: this.property_id,
-      //     });
-      //   }
-      //   await Promise.all(payloads.map(p => this.bookingService.setExposedRestrictionPerRoomType(p)));
-      //   updateCalendarCells(payloads);
-      // }
       this.deactivate();
       this.toast.emit({
         type: 'success',
