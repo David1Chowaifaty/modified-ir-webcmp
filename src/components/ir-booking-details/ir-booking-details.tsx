@@ -520,7 +520,7 @@ export class IrBookingDetails {
     if (room.in_out && room.in_out.code !== '000') {
       return false;
     }
-    if (moment(new Date()).isSameOrAfter(new Date(room.from_date), 'days') && moment(new Date()).isBefore(new Date(room.to_date), 'days')) {
+    if (moment().isSameOrAfter(moment(room.from_date, 'YYYY-MM-DD'), 'days') && moment().isBefore(moment(room.to_date, 'YYYY-MM-DD'), 'days')) {
       return true;
     }
     return false;
