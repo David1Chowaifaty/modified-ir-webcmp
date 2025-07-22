@@ -1,7 +1,7 @@
 import Token from '@/models/Token';
 import { checkUserAuthState, manageAnchorSession } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-export type SecureScreens = 'hk' | 'tasks' | 'front' | 'users';
+export type SecureScreens = 'hk' | 'tasks' | 'front' | 'users' | 'country-sales';
 @Component({
   tag: 'ir-secure-tasks',
   styleUrl: 'ir-secure-tasks.css',
@@ -11,6 +11,7 @@ export class IrSecureTasks {
   @Prop() propertyid: number;
   @Prop() p: string;
   @Prop() bookingNumber: string;
+  @Prop() ticket: string;
 
   @State() isAuthenticated: boolean = false;
   @State() currentPage: SecureScreens;
@@ -21,7 +22,13 @@ export class IrSecureTasks {
 
   componentWillLoad() {
     const isAuthenticated = checkUserAuthState();
+
     this.generateDates();
+    if (this.ticket) {
+      this.isAuthenticated = true;
+      this.token.setToken(this.ticket);
+      this.propertyid = this.propertyid;
+    }
     if (isAuthenticated) {
       this.isAuthenticated = true;
       this.token.setToken(isAuthenticated.token);
@@ -31,6 +38,14 @@ export class IrSecureTasks {
   @Watch('p')
   handlePChange() {
     this.inputValue = this.p;
+  }
+  @Watch('ticket')
+  handleTicketChange(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      this.isAuthenticated = true;
+      this.token.setToken(this.ticket);
+      this.propertyid = this.propertyid;
+    }
   }
   private generateDates() {
     var today = new Date();
@@ -49,6 +64,7 @@ export class IrSecureTasks {
     { name: 'Tasks', value: 'tasks' },
     { name: 'Front', value: 'front' },
     { name: 'Users', value: 'users' },
+    { name: 'Sales By Country', value: 'country-sales' },
   ];
   private handleAuthFinish(e: CustomEvent) {
     const token = e.detail.token;
@@ -152,7 +168,8 @@ export class IrSecureTasks {
         return <ir-housekeeping p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-housekeeping>;
       case 'users':
         return <ir-user-management userTypeCode={5} p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-user-management>;
-
+      case 'country-sales':
+        return <ir-sales-by-country p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-sales-by-country>;
       default:
         return null;
     }

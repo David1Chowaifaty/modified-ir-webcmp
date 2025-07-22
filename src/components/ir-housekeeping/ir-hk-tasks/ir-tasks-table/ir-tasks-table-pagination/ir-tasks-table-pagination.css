@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  margin-top: auto;
+}
+.page-item.active .page-link {
+  background-color: var(--blue);
+}
+.tasks-pagination {
+  display: none !important;
+}
+/*sm*/
+@media (min-width: 640px) {
+  .tasks-load-more {
+    display: none;
+  }
+  .tasks-pagination {
+    display: flex !important;
+  }
+}
+
+/*md*/
+@media (min-width: 768px) {
+}
+
+/*lg*/
+@media (min-width: 1024px) {
+}
+
+/*xl*/
+@media (min-width: 1280px) {
+}
+
+/*2xl*/
+@media (min-width: 1536px) {
+}

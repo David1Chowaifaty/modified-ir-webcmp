@@ -12,6 +12,7 @@
 | `bookingNumber` | `booking-number` |             | `string` | `undefined` |
 | `p`             | `p`              |             | `string` | `undefined` |
 | `propertyid`    | `propertyid`     |             | `number` | `undefined` |
+| `ticket`        | `ticket`         |             | `string` | `undefined` |
 
 
 ## Dependencies
@@ -23,6 +24,7 @@
 - [igloo-calendar](../igloo-calendar)
 - [ir-housekeeping](../ir-housekeeping)
 - [ir-user-management](../ir-user-management)
+- [ir-sales-by-country](../ir-sales-by-country)
 
 ### Graph
 ```mermaid
@@ -32,6 +34,7 @@ graph TD;
   ir-secure-tasks --> igloo-calendar
   ir-secure-tasks --> ir-housekeeping
   ir-secure-tasks --> ir-user-management
+  ir-secure-tasks --> ir-sales-by-country
   ir-login --> ir-interceptor
   ir-login --> ir-toast
   ir-login --> ir-input-text
@@ -128,6 +131,7 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
+  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-pickup-view --> ir-button
@@ -204,9 +208,10 @@ graph TD;
   ir-room-nights --> ir-button
   igl-bulk-stop-sale --> ir-title
   igl-bulk-stop-sale --> ir-select
-  igl-bulk-stop-sale --> ir-checkbox
+  igl-bulk-stop-sale --> ir-weekday-selector
   igl-bulk-stop-sale --> ir-button
   igl-bulk-stop-sale --> ir-date-picker
+  ir-weekday-selector --> ir-checkbox
   ir-housekeeping --> ir-loading-screen
   ir-housekeeping --> ir-interceptor
   ir-housekeeping --> ir-toast
@@ -257,6 +262,17 @@ graph TD;
   ir-reset-password --> ir-input-text
   ir-reset-password --> ir-password-validator
   ir-reset-password --> ir-button
+  ir-sales-by-country --> ir-loading-screen
+  ir-sales-by-country --> ir-toast
+  ir-sales-by-country --> ir-interceptor
+  ir-sales-by-country --> ir-button
+  ir-sales-by-country --> ir-sales-filters
+  ir-sales-by-country --> ir-sales-table
+  ir-sales-filters --> ir-button
+  ir-sales-filters --> ir-select
+  ir-sales-filters --> ir-range-picker
+  ir-sales-filters --> ir-checkbox
+  ir-sales-table --> ir-button
   style ir-secure-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

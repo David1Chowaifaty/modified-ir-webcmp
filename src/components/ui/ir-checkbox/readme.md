@@ -29,18 +29,18 @@
 
 ### Used by
 
- - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-stop-sale)
  - [ir-checkboxes](../ir-checkboxes)
  - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
  - [ir-tasks-table](../../ir-housekeeping/ir-hk-tasks/ir-tasks-table)
+ - [ir-weekday-selector](../ir-weekday-selector)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-bulk-stop-sale --> ir-checkbox
   ir-checkboxes --> ir-checkbox
   ir-sales-filters --> ir-checkbox
   ir-tasks-table --> ir-checkbox
+  ir-weekday-selector --> ir-checkbox
   style ir-checkbox fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

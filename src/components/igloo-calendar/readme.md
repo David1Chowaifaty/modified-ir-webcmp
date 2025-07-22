@@ -189,6 +189,7 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
+  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-pickup-view --> ir-button
@@ -205,9 +206,10 @@ graph TD;
   ir-payment-actions --> ir-button
   igl-bulk-stop-sale --> ir-title
   igl-bulk-stop-sale --> ir-select
-  igl-bulk-stop-sale --> ir-checkbox
+  igl-bulk-stop-sale --> ir-weekday-selector
   igl-bulk-stop-sale --> ir-button
   igl-bulk-stop-sale --> ir-date-picker
+  ir-weekday-selector --> ir-checkbox
   ir-secure-tasks --> igloo-calendar
   style igloo-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```

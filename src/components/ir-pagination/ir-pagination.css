@@ -1,0 +1,85 @@
+:host {
+  display: block;
+  font-family: var(--font-family, inherit);
+  font-size: var(--font-size, 0.875rem);
+  color: var(--text-color, #333);
+}
+
+.pagination-container {
+  gap: 1rem;
+  padding: 0.5rem 0;
+  min-height: 2.5rem;
+}
+
+.pagination-container.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.pagination-info {
+  color: var(--text-muted, #6c757d);
+  font-size: var(--font-size-sm, 0.875rem);
+  white-space: nowrap;
+}
+
+.buttons-container {
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.buttons-container ir-button {
+  flex-shrink: 0;
+}
+
+/* .buttons-container ir-select {
+  min-width: 4rem;
+  max-width: 6rem;
+  flex-shrink: 0;
+} */
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .pagination-container {
+    gap: 0.75rem;
+  }
+
+  .pagination-info {
+    text-align: center;
+    order: 2;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .buttons-container {
+    order: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-container {
+    gap: 0.5rem;
+  }
+
+  .buttons-container {
+    gap: 0.125rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .pagination-info {
+    color: var(--text-color, #000);
+  }
+
+  .pagination-container.disabled {
+    opacity: 0.8;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

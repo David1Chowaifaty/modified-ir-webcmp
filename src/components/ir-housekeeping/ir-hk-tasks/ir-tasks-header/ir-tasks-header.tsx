@@ -1,5 +1,6 @@
+import { updateSearchField, hkTasksStore } from '@/stores/hk-tasks.store';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, h, Listen, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Host, Listen } from '@stencil/core';
 
 @Component({
   tag: 'ir-tasks-header',
@@ -7,8 +8,6 @@ import { Component, Event, EventEmitter, h, Listen, Prop } from '@stencil/core';
   scoped: true,
 })
 export class IrTasksHeader {
-  @Prop() isCleanedEnabled: boolean = false;
-
   private btnRef: HTMLIrButtonElement;
 
   @Event() headerButtonPress: EventEmitter<{ name: 'cleaned' | 'export' | 'archive' }>;
@@ -19,11 +18,17 @@ export class IrTasksHeader {
     e.stopPropagation();
     this.btnRef.bounce();
   }
+
   render() {
     return (
-      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
-        <h3 class="mb-1 mb-md-0">Housekeeping Tasks</h3>
-        <div class="d-flex" style={{ gap: '1rem' }}>
+      <Host>
+        {/* <h3 class="mb-1 mb-md-0">Housekeeping Tasks</h3> */}
+        <div class="search-filter-container" style={{ gap: '1rem' }}>
+          <ir-input-text class="search-filter-input" placeholder="Search unit" variant="icon" value={hkTasksStore.searchField} onTextChange={e => updateSearchField(e.detail)}>
+            <ir-icons name="search" slot="icon"></ir-icons>
+          </ir-input-text>
+        </div>
+        <div class="action-buttons" style={{ gap: '1rem' }}>
           <ir-button
             size="sm"
             btn_color="outline"
@@ -50,6 +55,7 @@ export class IrTasksHeader {
             }}
           ></ir-button>
           <ir-button
+            class="d-none d-md-flex"
             onClickHandler={e => {
               e.stopImmediatePropagation();
               e.stopPropagation();
@@ -57,12 +63,12 @@ export class IrTasksHeader {
             }}
             btnStyle={{ height: '100%' }}
             size="sm"
-            btn_disabled={!this.isCleanedEnabled}
+            btn_disabled={!(hkTasksStore.selectedTasks.length > 0)}
             text={'Cleaned'}
             ref={el => (this.btnRef = el)}
           ></ir-button>
         </div>
-      </div>
+      </Host>
     );
   }
 }

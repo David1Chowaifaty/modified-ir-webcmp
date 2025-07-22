@@ -12,13 +12,14 @@
 .sheet-container {
   height: -webkit-fill-available;
   height: 100vh;
+  height: 100dvh;
 }
 
-@supports (height: 100svh) {
+/* @supports (height: 100svh) {
   .sheet-container {
     height: 100svh;
   }
-}
+} */
 .sheet-footer {
   position: sticky;
   bottom: 0;

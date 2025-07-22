@@ -85,7 +85,8 @@ export const ZIdInfo = z.object({
       // or it can be empty string
       z.literal(''),
     ])
-    .optional(),
+    .optional()
+    .nullable(),
 });
 
 /**
@@ -110,12 +111,14 @@ export const ZSharedPerson = z.object({
       z.literal(''), // or it can be empty string
     ])
     .optional(),
+  // .nullable(),
   last_name: z
     .union([
       z.string().min(2), // if provided and non-empty, must have min length 2
       z.literal(''), // or it can be empty string
     ])
     .optional(),
+  // .nullable(),
   country_id: z.coerce
     .number()
     .min(0) // if provided, must be >= 0
@@ -131,6 +134,7 @@ export const ZSharedPerson = z.object({
       return isDDMMYYYY ? null : moment(value, 'DD/MM/YYYY').format('YYYY-MM-DD');
     }),
   id_info: ZIdInfo.optional(),
+  is_main: z.boolean().default(false),
 });
 
 export const ZSharedPersons = z.array(ZSharedPerson);
@@ -175,6 +179,19 @@ export interface ExposedBookingEvent {
   user: string;
   type: string;
 }
+
+export type OTAManipulations = {
+  user: string;
+  date: string;
+  hour: string;
+  minute: string;
+};
+
+export type BypassedOtaRevisions = {
+  revision_nbr: number;
+  date: string;
+  revision_type: string;
+};
 export interface Booking {
   agent: {
     code: string;
@@ -183,6 +200,8 @@ export interface Booking {
     verification_mode: null;
   } | null;
   events: ExposedBookingEvent[];
+  ota_manipulations: OTAManipulations[];
+  bypassed_ota_revisions: BypassedOtaRevisions[];
   ota_services: OtaService[];
   is_requested_to_cancel: boolean;
   arrival: Arrival;

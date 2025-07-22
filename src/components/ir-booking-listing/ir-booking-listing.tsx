@@ -270,6 +270,7 @@ export class IrBookingListing {
                   )}
                   {booking_listing.bookings?.map(booking => {
                     let confirmationBG: string = this.statusColors[booking.is_requested_to_cancel ? '003' : booking.status.code];
+                    const lastManipulation = booking.ota_manipulations ? booking.ota_manipulations[booking.ota_manipulations.length - 1] : null;
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
@@ -413,6 +414,16 @@ export class IrBookingListing {
                             <p class="mx-0 p-0 small" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
                               Modified
                             </p>
+                          )}
+                          {lastManipulation && (
+                            <ir-popover
+                              trigger="hover"
+                              content={`Modified by ${lastManipulation.user} at ${lastManipulation.date} ${lastManipulation.hour}:${lastManipulation.minute}`}
+                            >
+                              <p class="mx-0 p-0 small text-danger" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
+                                <b>Modified</b>
+                              </p>
+                            </ir-popover>
                           )}
                         </td>
                         <td>
