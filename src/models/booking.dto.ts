@@ -110,15 +110,15 @@ export const ZSharedPerson = z.object({
       z.string().min(2), // if provided and non-empty, must have min length 2
       z.literal(''), // or it can be empty string
     ])
-    .optional()
-    .nullable(),
+    .optional(),
+  // .nullable(),
   last_name: z
     .union([
       z.string().min(2), // if provided and non-empty, must have min length 2
       z.literal(''), // or it can be empty string
     ])
-    .optional()
-    .nullable(),
+    .optional(),
+  // .nullable(),
   country_id: z.coerce
     .number()
     .min(0) // if provided, must be >= 0
