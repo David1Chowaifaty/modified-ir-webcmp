@@ -1127,7 +1127,8 @@ export namespace Components {
     }
     interface IrMonthlyBookingsReport {
         "language": string;
-        "propertyid": number | string;
+        "p": string;
+        "propertyid": number;
         "ticket": string;
     }
     interface IrMonthlyBookingsReportFilter {
@@ -5379,7 +5380,8 @@ declare namespace LocalJSX {
     }
     interface IrMonthlyBookingsReport {
         "language"?: string;
-        "propertyid"?: number | string;
+        "p"?: string;
+        "propertyid"?: number;
         "ticket"?: string;
     }
     interface IrMonthlyBookingsReportFilter {

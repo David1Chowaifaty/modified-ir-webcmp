@@ -1,8 +1,10 @@
 import Token from '@/models/Token';
 import { sleep } from '@/utils/utils';
-import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { DailyReport, DailyReportFilter, ReportDate } from './types';
+import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { DailyReport, DailyReportFilter } from './types';
 import moment from 'moment';
+import locales from '@/stores/locales.store';
+import { RoomService } from '@/services/room.service';
 const fakeDailyReports: DailyReport[] = [
   { date: '2025-07-01', rooms: 12 },
   { date: '2025-07-02', rooms: 9 },
@@ -43,22 +45,28 @@ const fakeDailyReports: DailyReport[] = [
   scoped: true,
 })
 export class IrMonthlyBookingsReport {
-  @Prop() ticket: string;
-  @Prop() language: string = 'en';
-  @Prop() propertyid: number | string;
+  @Prop() language: string = '';
+  @Prop() ticket: string = '';
+  @Prop() propertyid: number;
+  @Prop() p: string;
 
-  @State() isLoading: boolean = true;
+  @State() isPageLoading = true;
+  @State() isLoading: 'export' | 'filter' | null = null;
+
   @State() reports: DailyReport[] = fakeDailyReports;
-  @State() selectedMonth: ReportDate;
+  @State() filters: DailyReportFilter;
+  @State() property_id: number;
 
   private baseFilters: DailyReportFilter;
 
   private tokenService = new Token();
+  private roomService = new RoomService();
+  // private propertyService = new PropertyService();
 
   componentWillLoad() {
     this.baseFilters = {
       date: {
-        description: moment().format('MMM YYY'),
+        description: moment().format('MMM YYYY'),
         firstOfMonth: moment().startOf('month').format('YYYY-MM-DD'),
         lastOfMonth: moment().endOf('month').format('YYYY-MM-DD'),
       },
@@ -76,24 +84,90 @@ export class IrMonthlyBookingsReport {
       this.init();
     }
   }
-  private async init() {
-    console.log('init');
-    await this.getReports();
-    this.isLoading = false;
+  @Listen('applyFilters')
+  handleApplyFiltersChange(e: CustomEvent<DailyReportFilter>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.filters = e.detail;
+    this.getReports();
   }
 
-  private async getReports() {
+  private async init() {
+    try {
+      let propertyId = this.propertyid;
+      if (!this.propertyid && !this.p) {
+        throw new Error('Property ID or username is required');
+      }
+      // let roomResp = null;
+      if (!propertyId) {
+        console.log(propertyId);
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+          include_units_hk_status: true,
+        });
+        // roomResp = propertyData;
+        propertyId = propertyData.My_Result.id;
+      }
+      this.property_id = propertyId;
+      const requests = [this.roomService.fetchLanguage(this.language), this.getReports()];
+      if (this.propertyid) {
+        requests.push(
+          this.roomService.getExposedProperty({
+            id: this.propertyid,
+            language: this.language,
+            is_backend: true,
+            include_units_hk_status: true,
+          }),
+        );
+      }
+
+      await Promise.all(requests);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isPageLoading = false;
+    }
+  }
+
+  private async getReports(isExportToExcel = false) {
     await sleep(1000);
-    console.log(this.selectedMonth);
+    console.log(this.filters, isExportToExcel);
   }
   render() {
-    if (this.isLoading) {
+    if (this.isPageLoading) {
       return <ir-loading-screen></ir-loading-screen>;
     }
     return (
-      <Host class={'p-2'}>
-        <ir-monthly-bookings-report-filter baseFilters={this.baseFilters}></ir-monthly-bookings-report-filter>
-        <ir-monthly-bookings-report-table reports={this.reports}></ir-monthly-bookings-report-table>
+      <Host>
+        <ir-toast></ir-toast>
+        <ir-interceptor></ir-interceptor>
+        <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
+          <div class="d-flex align-items-center justify-content-between">
+            <h3 class="mb-1 mb-md-0">Daily Reports</h3>
+            <ir-button
+              size="sm"
+              btn_color="outline"
+              isLoading={this.isLoading === 'export'}
+              text={locales.entries?.Lcz_Export}
+              onClickHandler={async e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                await this.getReports(true);
+              }}
+              btnStyle={{ height: '100%' }}
+              iconPosition="right"
+              icon_name="file"
+              icon_style={{ '--icon-size': '14px' }}
+            ></ir-button>
+          </div>
+          <div class="d-flex flex-column flex-lg-row mt-1 " style={{ gap: '1rem' }}>
+            <ir-monthly-bookings-report-filter isLoading={this.isLoading === 'filter'} class="filters-card" baseFilters={this.baseFilters}></ir-monthly-bookings-report-filter>
+            <ir-monthly-bookings-report-table reports={this.reports}></ir-monthly-bookings-report-table>
+          </div>
+        </section>
       </Host>
     );
   }

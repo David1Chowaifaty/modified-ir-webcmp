@@ -3,6 +3,9 @@
   height: 100%;
   flex: 1 1 0%;
 }
+.sales-filters-card {
+  min-width: max-content;
+}
 #salesFiltersCollapse.collapse:not(.show) {
   display: block;
 }
