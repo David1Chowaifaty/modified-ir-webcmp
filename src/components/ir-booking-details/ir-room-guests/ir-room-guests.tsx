@@ -1,4 +1,4 @@
-import { SharedPerson, ZIdInfo, ZSharedPerson, ZSharedPersons } from '@/models/booking.dto';
+import { SharedPerson, ZIdInfo, ZSharedPerson } from '@/models/booking.dto';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, Prop, State, h } from '@stencil/core';
@@ -131,30 +131,36 @@ export class IrRoomGuests {
     try {
       this.error = {};
       this.autoValidate = true;
-      console.log(this.guests);
-      ZSharedPersons.parse(this.guests);
-
-      // await this.bookingService.handleExposedRoomGuests({
-      //   booking_nbr: this.bookingNumber,
-      //   identifier: this.identifier,
-      //   guests: this.guests.map(g => ({ ...g, dob: g.dob ? moment(g.dob, 'DD/MM/YYYY').format('YYYY-MM-DD') : null })),
-      // });
-      // if (this.checkIn) {
-      //   await this.bookingService.handleExposedRoomInOut({
-      //     booking_nbr: this.bookingNumber,
-      //     room_identifier: this.identifier,
-      //     status: '001',
-      //   });
-      // }
-      // this.closeModal.emit(null);
-      // this.updateRoomGuests.emit({ identifier: this.identifier, guests: this.guests });
-      // this.resetBookingEvt.emit();
+      // ZSharedPersons.parse(this.guests);
+      for (const guest of this.guests) {
+        if (guest.is_main) {
+          ZSharedPerson.parse(guest);
+        } else {
+          let toValidateGuest: SharedPerson = { ...guest, first_name: guest.first_name ?? undefined, last_name: guest.last_name ?? undefined };
+          ZSharedPerson.parse(toValidateGuest);
+        }
+      }
+      await this.bookingService.handleExposedRoomGuests({
+        booking_nbr: this.bookingNumber,
+        identifier: this.identifier,
+        guests: this.guests.map(g => ({ ...g, dob: g.dob ? moment(g.dob, 'DD/MM/YYYY').format('YYYY-MM-DD') : null })),
+      });
+      if (this.checkIn) {
+        await this.bookingService.handleExposedRoomInOut({
+          booking_nbr: this.bookingNumber,
+          room_identifier: this.identifier,
+          status: '001',
+        });
+      }
+      this.closeModal.emit(null);
+      this.updateRoomGuests.emit({ identifier: this.identifier, guests: this.guests });
+      this.resetBookingEvt.emit();
     } catch (error) {
       console.log(error);
       if (error instanceof ZodError) {
         let errors = {};
         error.issues.forEach(e => {
-          errors[e.path[1]] = true;
+          errors[e.path[e.path.length - 1]] = true;
         });
         this.error = { ...errors };
       }
@@ -204,7 +210,7 @@ export class IrRoomGuests {
                       class="flex-grow-1 h-100"
                       id={`first_name_${idx}`}
                       zod={ZSharedPerson.pick({ first_name: true })}
-                      error={!!this.error['first_name']}
+                      error={!!this.error['first_name'] && !ZSharedPerson.pick({ first_name: true }).safeParse(guest.first_name).success}
                       autoValidate={this.autoValidate}
                       wrapKey="first_name"
                       placeholder="First name"
@@ -220,7 +226,7 @@ export class IrRoomGuests {
                       class="flex-grow-1 h-100"
                       id={`last_name_${idx}`}
                       zod={ZSharedPerson.pick({ last_name: true })}
-                      error={!!this.error['last_name']}
+                      error={!!this.error['last_name'] && guest.is_main && !ZSharedPerson.pick({ last_name: true }).safeParse(guest.last_name).success}
                       autoValidate={this.autoValidate}
                       wrapKey="last_name"
                       placeholder="Last name"
