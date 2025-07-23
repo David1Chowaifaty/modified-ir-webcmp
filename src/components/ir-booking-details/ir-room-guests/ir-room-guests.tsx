@@ -143,7 +143,14 @@ export class IrRoomGuests {
       await this.bookingService.handleExposedRoomGuests({
         booking_nbr: this.bookingNumber,
         identifier: this.identifier,
-        guests: this.guests.map(g => ({ ...g, dob: g.dob ? moment(g.dob, 'DD/MM/YYYY').format('YYYY-MM-DD') : null })),
+        guests: this.guests
+          .map(g => {
+            if (!g.first_name && g.id === -1) {
+              return null;
+            }
+            return { ...g, dob: g.dob ? moment(g.dob, 'DD/MM/YYYY').format('YYYY-MM-DD') : null };
+          })
+          .filter(Boolean),
       });
       if (this.checkIn) {
         await this.bookingService.handleExposedRoomInOut({
