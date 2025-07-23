@@ -25,6 +25,7 @@ import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
+import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
@@ -54,6 +55,7 @@ export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
+export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
@@ -1123,6 +1125,18 @@ export namespace Components {
          */
         "showTitle": boolean;
     }
+    interface IrMonthlyBookingsReport {
+        "language": string;
+        "propertyid": number | string;
+        "ticket": string;
+    }
+    interface IrMonthlyBookingsReportFilter {
+        "baseFilters": DailyReportFilter;
+        "isLoading": boolean;
+    }
+    interface IrMonthlyBookingsReportTable {
+        "reports": DailyReport[];
+    }
     interface IrOptionDetails {
         "propertyId": string;
     }
@@ -2072,6 +2086,10 @@ export interface IrLoginCustomEvent<T> extends CustomEvent<T> {
 export interface IrModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrModalElement;
+}
+export interface IrMonthlyBookingsReportFilterCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrMonthlyBookingsReportFilterElement;
 }
 export interface IrOptionDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3306,6 +3324,35 @@ declare global {
         prototype: HTMLIrModalElement;
         new (): HTMLIrModalElement;
     };
+    interface HTMLIrMonthlyBookingsReportElement extends Components.IrMonthlyBookingsReport, HTMLStencilElement {
+    }
+    var HTMLIrMonthlyBookingsReportElement: {
+        prototype: HTMLIrMonthlyBookingsReportElement;
+        new (): HTMLIrMonthlyBookingsReportElement;
+    };
+    interface HTMLIrMonthlyBookingsReportFilterElementEventMap {
+        "applyFilters": DailyReportFilter;
+    }
+    interface HTMLIrMonthlyBookingsReportFilterElement extends Components.IrMonthlyBookingsReportFilter, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrMonthlyBookingsReportFilterElementEventMap>(type: K, listener: (this: HTMLIrMonthlyBookingsReportFilterElement, ev: IrMonthlyBookingsReportFilterCustomEvent<HTMLIrMonthlyBookingsReportFilterElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrMonthlyBookingsReportFilterElementEventMap>(type: K, listener: (this: HTMLIrMonthlyBookingsReportFilterElement, ev: IrMonthlyBookingsReportFilterCustomEvent<HTMLIrMonthlyBookingsReportFilterElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrMonthlyBookingsReportFilterElement: {
+        prototype: HTMLIrMonthlyBookingsReportFilterElement;
+        new (): HTMLIrMonthlyBookingsReportFilterElement;
+    };
+    interface HTMLIrMonthlyBookingsReportTableElement extends Components.IrMonthlyBookingsReportTable, HTMLStencilElement {
+    }
+    var HTMLIrMonthlyBookingsReportTableElement: {
+        prototype: HTMLIrMonthlyBookingsReportTableElement;
+        new (): HTMLIrMonthlyBookingsReportTableElement;
+    };
     interface HTMLIrOptionDetailsElementEventMap {
         "closeModal": PaymentOption | null;
         "toast": IToast;
@@ -4067,6 +4114,9 @@ declare global {
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-login": HTMLIrLoginElement;
         "ir-modal": HTMLIrModalElement;
+        "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
+        "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
+        "ir-monthly-bookings-report-table": HTMLIrMonthlyBookingsReportTableElement;
         "ir-option-details": HTMLIrOptionDetailsElement;
         "ir-ota-service": HTMLIrOtaServiceElement;
         "ir-ota-services": HTMLIrOtaServicesElement;
@@ -5327,6 +5377,19 @@ declare namespace LocalJSX {
          */
         "showTitle"?: boolean;
     }
+    interface IrMonthlyBookingsReport {
+        "language"?: string;
+        "propertyid"?: number | string;
+        "ticket"?: string;
+    }
+    interface IrMonthlyBookingsReportFilter {
+        "baseFilters"?: DailyReportFilter;
+        "isLoading"?: boolean;
+        "onApplyFilters"?: (event: IrMonthlyBookingsReportFilterCustomEvent<DailyReportFilter>) => void;
+    }
+    interface IrMonthlyBookingsReportTable {
+        "reports"?: DailyReport[];
+    }
     interface IrOptionDetails {
         "onCloseModal"?: (event: IrOptionDetailsCustomEvent<PaymentOption | null>) => void;
         "onToast"?: (event: IrOptionDetailsCustomEvent<IToast>) => void;
@@ -6239,6 +6302,9 @@ declare namespace LocalJSX {
         "ir-loading-screen": IrLoadingScreen;
         "ir-login": IrLogin;
         "ir-modal": IrModal;
+        "ir-monthly-bookings-report": IrMonthlyBookingsReport;
+        "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
+        "ir-monthly-bookings-report-table": IrMonthlyBookingsReportTable;
         "ir-option-details": IrOptionDetails;
         "ir-ota-service": IrOtaService;
         "ir-ota-services": IrOtaServices;
@@ -6365,6 +6431,9 @@ declare module "@stencil/core" {
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-login": LocalJSX.IrLogin & JSXBase.HTMLAttributes<HTMLIrLoginElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
+            "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
+            "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;
+            "ir-monthly-bookings-report-table": LocalJSX.IrMonthlyBookingsReportTable & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportTableElement>;
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
             "ir-ota-service": LocalJSX.IrOtaService & JSXBase.HTMLAttributes<HTMLIrOtaServiceElement>;
             "ir-ota-services": LocalJSX.IrOtaServices & JSXBase.HTMLAttributes<HTMLIrOtaServicesElement>;
