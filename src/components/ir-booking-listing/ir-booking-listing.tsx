@@ -1,4 +1,4 @@
-import { Booking, IUnit } from '@/models/booking.dto';
+import { Booking, IUnit, Occupancy } from '@/models/booking.dto';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { RoomService } from '@/services/room.service';
 import booking_listing, { updateUserSelection, onBookingListingChange, IUserListingSelection, updateUserSelections } from '@/stores/booking_listing.store';
@@ -212,7 +212,14 @@ export class IrBookingListing {
       end_row: endItem,
     });
   }
-
+  private calculateTotalPersons(booking: Booking) {
+    const sumOfOccupancy = ({ adult_nbr, children_nbr, infant_nbr }: Occupancy) => {
+      return (adult_nbr ?? 0) + (children_nbr ?? 0) + (infant_nbr ?? 0);
+    };
+    return booking.rooms.reduce((prev, cur) => {
+      return sumOfOccupancy(cur.occupancy) + prev;
+    }, 0);
+  }
   render() {
     if (this.isLoading || this.ticket === '') {
       return <ir-loading-screen></ir-loading-screen>;
@@ -271,6 +278,7 @@ export class IrBookingListing {
                   {booking_listing.bookings?.map(booking => {
                     let confirmationBG: string = this.statusColors[booking.is_requested_to_cancel ? '003' : booking.status.code];
                     const lastManipulation = booking.ota_manipulations ? booking.ota_manipulations[booking.ota_manipulations.length - 1] : null;
+                    const totalPersons = this.calculateTotalPersons(booking);
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
@@ -321,7 +329,8 @@ export class IrBookingListing {
                                     }}
                                   ></button> */}
                                   <span class={'p-0 m-0'}>
-                                    {booking.occupancy.adult_nbr}
+                                    {/* {booking.occupancy.adult_nbr} */}
+                                    {totalPersons}
                                     {locales.entries.Lcz_P}
                                   </span>
                                   {getPrivateNote(booking.extras) && <span class="yellow_dot"></span>}
