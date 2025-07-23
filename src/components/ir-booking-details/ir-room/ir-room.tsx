@@ -1,6 +1,6 @@
 import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Host, Fragment, Watch } from '@stencil/core';
 import { _getDay } from '../functions';
-import { Booking, IUnit, IVariations, Occupancy, Room, SharedPerson } from '@/models/booking.dto';
+import { Booking, IUnit, Occupancy, Room, SharedPerson } from '@/models/booking.dto';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { formatName } from '@/utils/booking';
 import locales from '@/stores/locales.store';
