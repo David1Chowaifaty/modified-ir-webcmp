@@ -102,6 +102,13 @@ export class IrMonthlyBookingsReport {
 
   private async getReports(isExportToExcel = false) {
     try {
+      const getReportObj = (report): DailyReport => {
+        return {
+          day: report.Date,
+          units_booked: report.Units_booked,
+          occupancy_percent: report.Occupancy,
+        };
+      };
       this.isLoading = isExportToExcel ? 'export' : 'filter';
       const { date, include_previous_year } = this.filters;
       const currentReports = await this.propertyService.getMonthlyStats({
@@ -120,12 +127,12 @@ export class IrMonthlyBookingsReport {
         enrichedReports = currentReports.map(current => {
           const previous = previousYearReports.find(prev => prev.day === moment(current.day, 'YYYY-MM-DD').add(-1, 'years').format('YYYY-MM-DD'));
           return {
-            ...current,
-            last_year: previous ?? null,
+            ...getReportObj(current),
+            last_year: previous ? getReportObj(previous) : null,
           };
         });
       } else {
-        enrichedReports = [...currentReports];
+        enrichedReports = currentReports.map(getReportObj);
       }
       this.reports = [...enrichedReports];
     } catch (e) {
