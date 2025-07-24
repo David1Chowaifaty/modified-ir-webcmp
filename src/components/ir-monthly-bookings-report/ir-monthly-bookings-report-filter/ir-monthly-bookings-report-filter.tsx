@@ -65,7 +65,7 @@ export class IrMonthlyBookingsReportFilter {
       lastOfMonth: firstOfThisMonth.clone().endOf('month').format('YYYY-MM-DD'),
     });
 
-    return dates;
+    return dates.reverse();
   }
 
   render() {
@@ -85,7 +85,7 @@ export class IrMonthlyBookingsReportFilter {
         <div class="m-0 p-0 collapse filters-section" id="salesFiltersCollapse">
           <fieldset class="pt-1 filter-group">
             <label htmlFor="rooms" class="m-0 px-0" style={{ paddingBottom: '0.25rem' }}>
-              From
+              For
             </label>
             <ir-select
               showFirstOption={false}

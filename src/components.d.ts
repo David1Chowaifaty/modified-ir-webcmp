@@ -1427,6 +1427,16 @@ export namespace Components {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrProgressIndicator {
+        /**
+          * The color variant of the progress bar. Options: - 'primary' (default) - 'secondary'
+         */
+        "color": 'primary' | 'secondary';
+        /**
+          * The percentage value to display and fill the progress bar. Example: "75%"
+         */
+        "percentage": string;
+    }
     interface IrRadio {
         /**
           * Whether the checkbox is checked.
@@ -3586,6 +3596,12 @@ declare global {
         prototype: HTMLIrPriceInputElement;
         new (): HTMLIrPriceInputElement;
     };
+    interface HTMLIrProgressIndicatorElement extends Components.IrProgressIndicator, HTMLStencilElement {
+    }
+    var HTMLIrProgressIndicatorElement: {
+        prototype: HTMLIrProgressIndicatorElement;
+        new (): HTMLIrProgressIndicatorElement;
+    };
     interface HTMLIrRadioElementEventMap {
         "checkChange": boolean;
     }
@@ -4134,6 +4150,7 @@ declare global {
         "ir-pms-logs": HTMLIrPmsLogsElement;
         "ir-popover": HTMLIrPopoverElement;
         "ir-price-input": HTMLIrPriceInputElement;
+        "ir-progress-indicator": HTMLIrProgressIndicatorElement;
         "ir-radio": HTMLIrRadioElement;
         "ir-range-picker": HTMLIrRangePickerElement;
         "ir-reservation-information": HTMLIrReservationInformationElement;
@@ -5738,6 +5755,16 @@ declare namespace LocalJSX {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrProgressIndicator {
+        /**
+          * The color variant of the progress bar. Options: - 'primary' (default) - 'secondary'
+         */
+        "color"?: 'primary' | 'secondary';
+        /**
+          * The percentage value to display and fill the progress bar. Example: "75%"
+         */
+        "percentage"?: string;
+    }
     interface IrRadio {
         /**
           * Whether the checkbox is checked.
@@ -6323,6 +6350,7 @@ declare namespace LocalJSX {
         "ir-pms-logs": IrPmsLogs;
         "ir-popover": IrPopover;
         "ir-price-input": IrPriceInput;
+        "ir-progress-indicator": IrProgressIndicator;
         "ir-radio": IrRadio;
         "ir-range-picker": IrRangePicker;
         "ir-reservation-information": IrReservationInformation;
@@ -6452,6 +6480,7 @@ declare module "@stencil/core" {
             "ir-pms-logs": LocalJSX.IrPmsLogs & JSXBase.HTMLAttributes<HTMLIrPmsLogsElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
+            "ir-progress-indicator": LocalJSX.IrProgressIndicator & JSXBase.HTMLAttributes<HTMLIrProgressIndicatorElement>;
             "ir-radio": LocalJSX.IrRadio & JSXBase.HTMLAttributes<HTMLIrRadioElement>;
             "ir-range-picker": LocalJSX.IrRangePicker & JSXBase.HTMLAttributes<HTMLIrRangePickerElement>;
             "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;

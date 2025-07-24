@@ -3,9 +3,13 @@ export type ReportDate = {
   firstOfMonth: string;
   lastOfMonth: string;
 };
-export type DailyReport = {
-  date: string;
-  rooms: number;
+export type BaseDailyReport = {
+  day: string;
+  occupancy_percent: number;
+  units_booked: number;
+};
+export type DailyReport = BaseDailyReport & {
+  last_year?: BaseDailyReport;
 };
 export type DailyReportFilter = {
   date: ReportDate;

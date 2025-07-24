@@ -9,6 +9,12 @@ export type CountrySalesParams = {
   BOOK_CASE: string;
   is_export_to_excel: boolean;
 };
+export type MonthlyStatsParams = {
+  property_id: number;
+  from_date: string;
+  to_date: string;
+  is_export_to_excel?: boolean;
+};
 export class PropertyService {
   public async getExposedProperty(params: {
     id: number | null;
@@ -66,6 +72,16 @@ export class PropertyService {
     const { data } = await axios.post('/Set_Exposed_Cleaning_Frequency', params);
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
+  }
+  public async getMonthlyStats(params: MonthlyStatsParams) {
+    const { data } = await axios.post('/Get_Monthly_Stats', params);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    if (params.is_export_to_excel) {
+      downloadFile(data.My_Params_Get_Monthly_Stats.Link_excel);
     }
     return data.My_Result;
   }

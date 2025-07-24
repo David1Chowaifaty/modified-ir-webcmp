@@ -1,43 +1,10 @@
 import Token from '@/models/Token';
-import { sleep } from '@/utils/utils';
 import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { DailyReport, DailyReportFilter } from './types';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { RoomService } from '@/services/room.service';
-const fakeDailyReports: DailyReport[] = [
-  { date: '2025-07-01', rooms: 12 },
-  { date: '2025-07-02', rooms: 9 },
-  { date: '2025-07-03', rooms: 14 },
-  { date: '2025-07-04', rooms: 11 },
-  { date: '2025-07-05', rooms: 10 },
-  { date: '2025-07-06', rooms: 13 },
-  { date: '2025-07-07', rooms: 7 },
-  { date: '2025-07-08', rooms: 16 },
-  { date: '2025-07-09', rooms: 8 },
-  { date: '2025-07-10', rooms: 15 },
-  { date: '2025-07-11', rooms: 10 },
-  { date: '2025-07-12', rooms: 9 },
-  { date: '2025-07-13', rooms: 12 },
-  { date: '2025-07-14', rooms: 14 },
-  { date: '2025-07-15', rooms: 11 },
-  { date: '2025-07-16', rooms: 13 },
-  { date: '2025-07-17', rooms: 8 },
-  { date: '2025-07-18', rooms: 7 },
-  { date: '2025-07-19', rooms: 15 },
-  { date: '2025-07-20', rooms: 10 },
-  { date: '2025-07-21', rooms: 9 },
-  { date: '2025-07-22', rooms: 16 },
-  { date: '2025-07-23', rooms: 14 },
-  { date: '2025-07-24', rooms: 12 },
-  { date: '2025-07-25', rooms: 11 },
-  { date: '2025-07-26', rooms: 13 },
-  { date: '2025-07-27', rooms: 9 },
-  { date: '2025-07-28', rooms: 10 },
-  { date: '2025-07-29', rooms: 14 },
-  { date: '2025-07-30', rooms: 8 },
-  { date: '2025-07-31', rooms: 12 },
-];
+import { PropertyService } from '@/services/property.service';
 
 @Component({
   tag: 'ir-monthly-bookings-report',
@@ -53,7 +20,7 @@ export class IrMonthlyBookingsReport {
   @State() isPageLoading = true;
   @State() isLoading: 'export' | 'filter' | null = null;
 
-  @State() reports: DailyReport[] = fakeDailyReports;
+  @State() reports: DailyReport[] = [];
   @State() filters: DailyReportFilter;
   @State() property_id: number;
 
@@ -61,7 +28,7 @@ export class IrMonthlyBookingsReport {
 
   private tokenService = new Token();
   private roomService = new RoomService();
-  // private propertyService = new PropertyService();
+  private propertyService = new PropertyService();
 
   componentWillLoad() {
     this.baseFilters = {
@@ -72,6 +39,7 @@ export class IrMonthlyBookingsReport {
       },
       include_previous_year: false,
     };
+    this.filters = this.baseFilters;
     if (this.ticket) {
       this.tokenService.setToken(this.ticket);
       this.init();
@@ -133,8 +101,38 @@ export class IrMonthlyBookingsReport {
   }
 
   private async getReports(isExportToExcel = false) {
-    await sleep(1000);
-    console.log(this.filters, isExportToExcel);
+    try {
+      this.isLoading = isExportToExcel ? 'export' : 'filter';
+      const { date, include_previous_year } = this.filters;
+      const currentReports = await this.propertyService.getMonthlyStats({
+        from_date: date.firstOfMonth,
+        to_date: date.lastOfMonth,
+        property_id: this.property_id,
+        is_export_to_excel: isExportToExcel,
+      });
+      let enrichedReports: DailyReport[] = [];
+      if (include_previous_year) {
+        const previousYearReports = await this.propertyService.getMonthlyStats({
+          from_date: moment(date.firstOfMonth, 'YYYY-MM-DD').add(-1, 'year').format('YYYY-MM-DD'),
+          to_date: moment(date.lastOfMonth, 'YYYY-MM-DD').add(-1, 'years').format('YYYY-MM-DD'),
+          property_id: this.property_id,
+        });
+        enrichedReports = currentReports.map(current => {
+          const previous = previousYearReports.find(prev => prev.day === current.day);
+          return {
+            ...current,
+            last_year: previous ?? null,
+          };
+        });
+      } else {
+        enrichedReports = [...currentReports];
+      }
+      this.reports = [...enrichedReports];
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.isLoading = null;
+    }
   }
   render() {
     if (this.isPageLoading) {
@@ -146,7 +144,7 @@ export class IrMonthlyBookingsReport {
         <ir-interceptor></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
           <div class="d-flex align-items-center justify-content-between">
-            <h3 class="mb-1 mb-md-0">Daily Reports</h3>
+            <h3 class="mb-1 mb-md-0">Daily Occupancy</h3>
             <ir-button
               size="sm"
               btn_color="outline"

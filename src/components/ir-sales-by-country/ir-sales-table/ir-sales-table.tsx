@@ -74,20 +74,8 @@ export class IrSalesTable {
                   </td>
                   <td>
                     <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
-                      <div class="progress-main">
-                        <span class="progress-totle">{mainPercentage}</span>
-                        <div class="progress-line">
-                          <div class="progress bg-primary mb-0" style={{ width: mainPercentage }}></div>
-                        </div>
-                      </div>
-                      {record.last_year?.percentage && (
-                        <div class="progress-main">
-                          <span class="progress-totle">{secondaryPercentage}</span>
-                          <div class="progress-line">
-                            <div class="progress secondary mb-0" style={{ width: secondaryPercentage }}></div>
-                          </div>
-                        </div>
-                      )}
+                      <ir-progress-indicator percentage={mainPercentage}></ir-progress-indicator>
+                      {record.last_year?.percentage && <ir-progress-indicator percentage={secondaryPercentage} color="secondary"></ir-progress-indicator>}
                     </div>
                   </td>
                 </tr>

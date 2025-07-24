@@ -5,6 +5,7 @@
 }
 .sales-filters-card {
   min-width: max-content;
+  flex: 1 1 0%;
 }
 #salesFiltersCollapse.collapse:not(.show) {
   display: block;
