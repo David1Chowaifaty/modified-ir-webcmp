@@ -48,9 +48,20 @@ export class IrMonthlyBookingsReportTable {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={2}></td>
-              <td class="text-right">
+              <td style={{ whiteSpace: 'nowrap' }}>
                 <b>Total: {totalUnits}</b>
+              </td>
+              <td colSpan={2} class="text-right">
+                <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
+                  <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                    <div class="legend bg-primary"></div>
+                    <p class="p-0 m-0">Selected period </p>
+                  </div>
+                  <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                    <div class="legend secondary"></div>
+                    <p class="p-0 m-0">Previous year</p>
+                  </div>
+                </div>
               </td>
             </tr>
           </tfoot>

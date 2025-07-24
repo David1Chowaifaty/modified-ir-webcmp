@@ -4,3 +4,12 @@
 .future-report td {
   background-color: hsla(210, 16%, 85.2%, 0.25) !important;
 }
+.legend {
+  height: 12px;
+  aspect-ratio: 1;
+  background: #000;
+  border-radius: 4px;
+}
+.secondary {
+  background: #6692b3;
+}
