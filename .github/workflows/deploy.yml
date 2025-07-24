@@ -6,6 +6,7 @@ on:
       - guest-management
       - bulk-front
       - hk-with-ota
+      - monthly-report
 
 jobs:
   build-and-deploy:
