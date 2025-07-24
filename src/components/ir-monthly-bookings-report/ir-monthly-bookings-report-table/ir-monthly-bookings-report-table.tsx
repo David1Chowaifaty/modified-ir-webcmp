@@ -49,7 +49,9 @@ export class IrMonthlyBookingsReportTable {
           <tfoot>
             <tr>
               <td colSpan={2}></td>
-              <td class="text-right">Total: {totalUnits}</td>
+              <td class="text-right">
+                <b>Total: {totalUnits}</b>
+              </td>
             </tr>
           </tfoot>
         </table>
