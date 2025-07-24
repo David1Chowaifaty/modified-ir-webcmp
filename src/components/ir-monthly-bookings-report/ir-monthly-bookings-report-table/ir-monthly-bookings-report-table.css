@@ -13,3 +13,6 @@
 .secondary {
   background: #6692b3;
 }
+.progress-main {
+  width: 450px !important;
+}
