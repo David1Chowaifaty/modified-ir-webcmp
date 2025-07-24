@@ -124,11 +124,12 @@ export class IrMonthlyBookingsReport {
           to_date: moment(date.lastOfMonth, 'YYYY-MM-DD').add(-1, 'years').format('YYYY-MM-DD'),
           property_id: this.property_id,
         });
-        enrichedReports = currentReports.map(current => {
-          const previous = previousYearReports.find(prev => prev.day === moment(current.day, 'YYYY-MM-DD').add(-1, 'years').format('YYYY-MM-DD'));
+        let formattedReports = previousYearReports.map(getReportObj);
+        enrichedReports = currentReports.map(getReportObj).map(current => {
+          const previous = formattedReports.find(prev => prev.day === moment(current.day, 'YYYY-MM-DD').add(-1, 'years').format('YYYY-MM-DD'));
           return {
-            ...getReportObj(current),
-            last_year: previous ? getReportObj(previous) : null,
+            ...current,
+            last_year: previous ?? null,
           };
         });
       } else {
