@@ -36,7 +36,7 @@ export class IrMonthlyBookingsReportTable {
                       {report.last_year?.units_booked && <p class="p-0 m-0">{report.units_booked}</p>}
                     </div>
                   </td>
-                  <td style={{ width: '100%' }}>
+                  <td>
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
                       <ir-progress-indicator percentage={mainPercentage}></ir-progress-indicator>
                       {report.last_year?.occupancy_percent && <ir-progress-indicator percentage={secondaryPercentage} color="secondary"></ir-progress-indicator>}
