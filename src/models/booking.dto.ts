@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z, ZodError, ZodIssueCode } from 'zod';
 import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
 import { TSourceOption } from './igl-book-property';
 import { ICountry } from './IBooking';
@@ -137,8 +137,66 @@ export const ZSharedPerson = z.object({
   is_main: z.boolean().default(false),
 });
 
-export const ZSharedPersons = z.array(ZSharedPerson);
+// export const ZSharedPersons = z.array(ZSharedPerson).superRefine((data, ctx) => {
+//   for (const d of data) {
+//     validateSharedPerson(d, ctx);
+//   }
+// });
 
+export function validateSharedPerson(data: any) {
+  ZSharedPerson.parse(data);
+  const hasValue = (field: string | null | undefined): boolean => {
+    return field !== null && field !== undefined && field.trim() !== '';
+  };
+  const ctx = [];
+  if (data.is_main) {
+    if (!hasValue(data.first_name)) {
+      ctx.push({
+        path: ['first_name'],
+        code: ZodIssueCode.custom,
+        message: 'First name is required for main guest',
+      });
+    }
+
+    if (!hasValue(data.last_name)) {
+      ctx.push({
+        path: ['last_name'],
+        code: ZodIssueCode.custom,
+        message: 'Last name is required for main guest',
+      });
+    }
+  }
+
+  // For non-main guests: check if ANY field has data
+  const hasAnyFieldData =
+    hasValue(data.first_name) ||
+    hasValue(data.last_name) ||
+    hasValue(data.dob) ||
+    (data.country_id !== null && data.country_id !== undefined && data.country_id > 0) ||
+    hasValue(data.id_info?.number);
+
+  // If any field has data, then first_name and last_name become required
+  if (hasAnyFieldData) {
+    if (!hasValue(data.first_name)) {
+      ctx.push({
+        path: ['first_name'],
+        code: ZodIssueCode.custom,
+        message: 'First name is required when other guest information is provided',
+      });
+    }
+
+    if (!hasValue(data.last_name)) {
+      ctx.push({
+        path: ['last_name'],
+        code: ZodIssueCode.custom,
+        message: 'Last name is required when other guest information is provided',
+      });
+    }
+  }
+  if (ctx.length >= 1) {
+    throw new ZodError(ctx);
+  }
+}
 export interface HandleExposedRoomGuestsRequest {
   booking_nbr: string;
   identifier: string;

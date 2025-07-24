@@ -1,4 +1,4 @@
-import { SharedPerson, ZIdInfo, ZSharedPerson } from '@/models/booking.dto';
+import { SharedPerson, validateSharedPerson, ZIdInfo, ZSharedPerson } from '@/models/booking.dto';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, Prop, State, h } from '@stencil/core';
@@ -133,12 +133,7 @@ export class IrRoomGuests {
       this.autoValidate = true;
       // ZSharedPersons.parse(this.guests);
       for (const guest of this.guests) {
-        if (guest.is_main) {
-          ZSharedPerson.parse(guest);
-        } else {
-          let toValidateGuest: SharedPerson = { ...guest, first_name: guest.first_name ?? undefined, last_name: guest.last_name ?? undefined };
-          ZSharedPerson.parse(toValidateGuest);
-        }
+        validateSharedPerson(guest);
       }
       await this.bookingService.handleExposedRoomGuests({
         booking_nbr: this.bookingNumber,
@@ -202,128 +197,137 @@ export class IrRoomGuests {
               <p class=" ">{locales.entries.Lcz_Documents}</p>
             </div>
             <h5 class="main_guest_heading">{locales.entries.Lcz_MainGuest}</h5>
-            {this.guests.map((guest, idx) => (
-              <Fragment>
-                {idx === 1 && (
-                  <div class="d-flex mx-0 px-0">
-                    <h5 class="mx-0 px-0 sharing_persons_heading">{locales.entries.Lcz_PersonsSharingRoom}</h5>
-                    <p class="mx-0 px-0 sharing_persons_label">{locales.entries.Lcz_PersonsSharingRoom}</p>
-                  </div>
-                )}
-                <div key={idx} class="guest-grid">
-                  <div class={'m-0 p-0 d-flex align-items-center h-100'}>
-                    <p class="guest_label">First name</p>
-                    <ir-input-text
-                      class="flex-grow-1 h-100"
-                      id={`first_name_${idx}`}
-                      zod={ZSharedPerson.pick({ first_name: true })}
-                      error={!!this.error['first_name'] && !ZSharedPerson.pick({ first_name: true }).safeParse(guest.first_name).success}
-                      autoValidate={this.autoValidate}
-                      wrapKey="first_name"
-                      placeholder="First name"
-                      onTextChange={e => this.updateGuestInfo(idx, { first_name: e.detail })}
-                      value={guest.first_name}
-                      maxLength={40}
-                    ></ir-input-text>
-                  </div>
-                  <div class={'m-0 p-0 d-flex align-items-center h-100'}>
-                    <p class="guest_label">Last name</p>
-                    <ir-input-text
-                      maxLength={40}
-                      class="flex-grow-1 h-100"
-                      id={`last_name_${idx}`}
-                      zod={ZSharedPerson.pick({ last_name: true })}
-                      error={!!this.error['last_name'] && guest.is_main && !ZSharedPerson.pick({ last_name: true }).safeParse(guest.last_name).success}
-                      autoValidate={this.autoValidate}
-                      wrapKey="last_name"
-                      placeholder="Last name"
-                      onTextChange={e => this.updateGuestInfo(idx, { last_name: e.detail })}
-                      value={guest.last_name}
-                    ></ir-input-text>
-                  </div>
-                  <div class="flex-grow-0 m-0 p-0 h-100 d-flex align-items-center">
-                    <p class="guest_label">{locales.entries.Lcz_DOB}</p>
-                    <ir-input-text
-                      class="flex-grow-1 h-100"
-                      id={`dob_${idx}`}
-                      zod={ZSharedPerson.pick({ dob: true })}
-                      error={!!this.error['dob']}
-                      autoValidate={this.autoValidate}
-                      wrapKey="dob"
-                      mask={dateMask}
-                      placeholder=""
-                      onTextChange={e => {
-                        this.updateGuestInfo(idx, { dob: e.detail });
-                      }}
-                      value={guest.dob}
-                    ></ir-input-text>
-                  </div>
-                  <div class=" m-0 p-0 d-flex align-items-center">
-                    <p class="guest_label">{locales.entries.Lcz_Nationality}</p>
-                    <div class="mx-0 flex-grow-1  h-100">
-                      <ir-country-picker
-                        class="h-100"
-                        propertyCountry={this.propertyCountry}
-                        id={`{locales.entries.Lcz_Nationality}_${idx}`}
-                        error={!!this.error['country_id'] && !guest.country_id}
-                        country={this.countries?.find(c => c.id?.toString() === guest.country?.id?.toString())}
-                        onCountryChange={e => this.updateGuestInfo(idx, { country_id: e.detail?.id?.toString() ?? null, country: e.detail })}
-                        countries={this.countries}
-                      ></ir-country-picker>
+            {this.guests.map((guest, idx) => {
+              let isRowValid = true;
+              try {
+                validateSharedPerson(guest);
+              } catch (error) {
+                isRowValid = false;
+              }
+              console.log(`row ${idx}=>${isRowValid}`);
+              return (
+                <Fragment>
+                  {idx === 1 && (
+                    <div class="d-flex mx-0 px-0">
+                      <h5 class="mx-0 px-0 sharing_persons_heading">{locales.entries.Lcz_PersonsSharingRoom}</h5>
+                      <p class="mx-0 px-0 sharing_persons_label">{locales.entries.Lcz_PersonsSharingRoom}</p>
                     </div>
-                  </div>
-                  <div class="flex-grow-1 m-0 p-0 d-flex align-items-center">
-                    <p class="guest_label">{locales.entries.Lcz_Documents}</p>
-                    <div class={' d-flex m-0 flex-grow-1 h-100'}>
-                      <ir-select
-                        selectForcedStyles={{
-                          borderTopRightRadius: '0px',
-                          borderBottomRightRadius: '0px',
-                          borderRight: '0',
-                        }}
-                        selectStyles={'rounded-top-0 rounded-bottom-0'}
-                        onSelectChange={e => {
-                          this.updateGuestInfo(idx, {
-                            id_info: {
-                              ...this.guests[idx].id_info,
-                              type: {
-                                code: e.detail,
-                                description: '',
-                              },
-                            },
-                          });
-                        }}
-                        selectedValue={guest.id_info.type.code}
-                        LabelAvailable={false}
-                        showFirstOption={false}
-                        data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
-                      ></ir-select>
+                  )}
+                  <div key={idx} class="guest-grid">
+                    <div class={'m-0 p-0 d-flex align-items-center h-100'}>
+                      <p class="guest_label">First name</p>
                       <ir-input-text
+                        class="flex-grow-1 h-100"
+                        id={`first_name_${idx}`}
+                        zod={ZSharedPerson.pick({ first_name: true })}
+                        error={!!this.error['first_name'] && !isRowValid}
                         autoValidate={this.autoValidate}
-                        maxLength={18}
-                        placeholder="12345"
-                        class="flex-grow-1 guest_document"
-                        type="text"
-                        inputForcedStyle={{ borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px' }}
-                        value={guest.id_info.number}
-                        zod={ZIdInfo.pick({ number: true })}
-                        error={!!this.error['number']}
-                        wrapKey="number"
-                        inputStyles="form-control"
-                        onTextChange={e =>
-                          this.updateGuestInfo(idx, {
-                            id_info: {
-                              ...this.guests[idx].id_info,
-                              number: e.detail,
-                            },
-                          })
-                        }
+                        wrapKey="first_name"
+                        placeholder="First name"
+                        onTextChange={e => this.updateGuestInfo(idx, { first_name: e.detail })}
+                        value={guest.first_name}
+                        maxLength={40}
                       ></ir-input-text>
                     </div>
+                    <div class={'m-0 p-0 d-flex align-items-center h-100'}>
+                      <p class="guest_label">Last name</p>
+                      <ir-input-text
+                        maxLength={40}
+                        class="flex-grow-1 h-100"
+                        id={`last_name_${idx}`}
+                        zod={ZSharedPerson.pick({ last_name: true })}
+                        error={!!this.error['last_name'] && !isRowValid}
+                        autoValidate={this.autoValidate}
+                        wrapKey="last_name"
+                        placeholder="Last name"
+                        onTextChange={e => this.updateGuestInfo(idx, { last_name: e.detail })}
+                        value={guest.last_name}
+                      ></ir-input-text>
+                    </div>
+                    <div class="flex-grow-0 m-0 p-0 h-100 d-flex align-items-center">
+                      <p class="guest_label">{locales.entries.Lcz_DOB}</p>
+                      <ir-input-text
+                        class="flex-grow-1 h-100"
+                        id={`dob_${idx}`}
+                        zod={ZSharedPerson.pick({ dob: true })}
+                        error={!!this.error['dob'] && !isRowValid}
+                        autoValidate={this.autoValidate}
+                        wrapKey="dob"
+                        mask={dateMask}
+                        placeholder=""
+                        onTextChange={e => {
+                          this.updateGuestInfo(idx, { dob: e.detail });
+                        }}
+                        value={guest.dob}
+                      ></ir-input-text>
+                    </div>
+                    <div class=" m-0 p-0 d-flex align-items-center">
+                      <p class="guest_label">{locales.entries.Lcz_Nationality}</p>
+                      <div class="mx-0 flex-grow-1  h-100">
+                        <ir-country-picker
+                          class="h-100"
+                          propertyCountry={this.propertyCountry}
+                          id={`{locales.entries.Lcz_Nationality}_${idx}`}
+                          error={!!this.error['country_id'] && !guest.country_id}
+                          country={this.countries?.find(c => c.id?.toString() === guest.country?.id?.toString())}
+                          onCountryChange={e => this.updateGuestInfo(idx, { country_id: e.detail?.id?.toString() ?? null, country: e.detail })}
+                          countries={this.countries}
+                        ></ir-country-picker>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 m-0 p-0 d-flex align-items-center">
+                      <p class="guest_label">{locales.entries.Lcz_Documents}</p>
+                      <div class={' d-flex m-0 flex-grow-1 h-100'}>
+                        <ir-select
+                          selectForcedStyles={{
+                            borderTopRightRadius: '0px',
+                            borderBottomRightRadius: '0px',
+                            borderRight: '0',
+                          }}
+                          selectStyles={'rounded-top-0 rounded-bottom-0'}
+                          onSelectChange={e => {
+                            this.updateGuestInfo(idx, {
+                              id_info: {
+                                ...this.guests[idx].id_info,
+                                type: {
+                                  code: e.detail,
+                                  description: '',
+                                },
+                              },
+                            });
+                          }}
+                          selectedValue={guest.id_info.type.code}
+                          LabelAvailable={false}
+                          showFirstOption={false}
+                          data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
+                        ></ir-select>
+                        <ir-input-text
+                          autoValidate={this.autoValidate}
+                          maxLength={18}
+                          placeholder="12345"
+                          class="flex-grow-1 guest_document"
+                          type="text"
+                          inputForcedStyle={{ borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px' }}
+                          value={guest.id_info.number}
+                          zod={ZIdInfo.pick({ number: true })}
+                          error={!!this.error['number'] && !isRowValid}
+                          wrapKey="number"
+                          inputStyles="form-control"
+                          onTextChange={e =>
+                            this.updateGuestInfo(idx, {
+                              id_info: {
+                                ...this.guests[idx].id_info,
+                                number: e.detail,
+                              },
+                            })
+                          }
+                        ></ir-input-text>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </Fragment>
-            ))}
+                </Fragment>
+              );
+            })}
           </div>
         </section>
         <div class={'sheet-footer'}>

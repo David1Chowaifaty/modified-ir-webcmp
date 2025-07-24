@@ -149,10 +149,10 @@ export class IrInputText {
   handleMaskChange() {
     this.initMask();
   }
-  @Watch('autoValidate')
-  handleMaskChange1() {
-    console.log(this.autoValidate);
-  }
+  // @Watch('autoValidate')
+  // handleMaskChange1() {
+  //   console.log(this.autoValidate);
+  // }
 
   // @Watch('error')
   // handleErrorChange(newValue: boolean, oldValue: boolean) {

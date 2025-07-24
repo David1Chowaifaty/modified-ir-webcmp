@@ -1,6 +1,6 @@
 import { Component, h, Prop, EventEmitter, Event, Listen, State, Element, Host, Fragment, Watch } from '@stencil/core';
 import { _getDay } from '../functions';
-import { Booking, IUnit, IVariations, Occupancy, Room, SharedPerson } from '@/models/booking.dto';
+import { Booking, IUnit, Occupancy, Room, SharedPerson } from '@/models/booking.dto';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { formatName } from '@/utils/booking';
 import locales from '@/stores/locales.store';
@@ -202,9 +202,9 @@ export class IrRoom {
     this.deleteFinished.emit(this.room.identifier);
   }
 
-  private formatVariation({ adult_nbr, child_nbr }: IVariations, { infant_nbr }: Occupancy) {
+  private formatVariation({ infant_nbr, adult_nbr, children_nbr }: Occupancy) {
     const adultCount = adult_nbr > 0 ? adult_nbr : 0;
-    const childCount = child_nbr > 0 ? child_nbr : 0;
+    const childCount = children_nbr > 0 ? children_nbr : 0;
     const infantCount = infant_nbr > 0 ? infant_nbr : 0;
 
     const adultLabel = adultCount > 1 ? locales.entries.Lcz_Adults.toLowerCase() : locales.entries.Lcz_Adult.toLowerCase();
@@ -365,11 +365,11 @@ export class IrRoom {
                     onClickHandler={() => this.showGuestModal()}
                     size="sm"
                     btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit', textAlign: 'center', lineHeight: '1.2' }}
-                    text={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}
+                    text={this.formatVariation(this.room.occupancy)}
                   ></ir-button>
                 </ir-tooltip>
               ) : (
-                <span innerHTML={this.formatVariation(this.room.rateplan.selected_variation, this.room.occupancy)}></span>
+                <span innerHTML={this.formatVariation(this.room.occupancy)}></span>
               ))}
             {bed && <p class="m-0 p-0">({bed})</p>}
           </div>
