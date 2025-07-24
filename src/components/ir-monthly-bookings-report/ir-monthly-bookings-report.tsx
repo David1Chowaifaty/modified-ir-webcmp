@@ -33,7 +33,7 @@ export class IrMonthlyBookingsReport {
   componentWillLoad() {
     this.baseFilters = {
       date: {
-        description: moment().format('MMM YYYY'),
+        description: moment().format('MMMM YYYY'),
         firstOfMonth: moment().startOf('month').format('YYYY-MM-DD'),
         lastOfMonth: moment().endOf('month').format('YYYY-MM-DD'),
       },

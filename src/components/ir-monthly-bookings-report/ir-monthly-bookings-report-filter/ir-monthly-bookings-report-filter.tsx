@@ -52,7 +52,7 @@ export class IrMonthlyBookingsReportFilter {
 
     while (cursor.format(format) !== firstOfThisMonth.format(format)) {
       dates.push({
-        description: cursor.format('MMM YYYY'),
+        description: cursor.format('MMMM YYYY'),
         firstOfMonth: cursor.format('YYYY-MM-DD'),
         lastOfMonth: cursor.clone().endOf('month').format('YYYY-MM-DD'),
       });
@@ -60,7 +60,7 @@ export class IrMonthlyBookingsReportFilter {
     }
 
     dates.push({
-      description: firstOfThisMonth.format('MMM YYYY'),
+      description: firstOfThisMonth.format('MMMM YYYY'),
       firstOfMonth: firstOfThisMonth.format('YYYY-MM-DD'),
       lastOfMonth: firstOfThisMonth.clone().endOf('month').format('YYYY-MM-DD'),
     });

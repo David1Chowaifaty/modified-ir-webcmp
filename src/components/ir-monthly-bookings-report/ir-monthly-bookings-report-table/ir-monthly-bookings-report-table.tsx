@@ -10,7 +10,7 @@ import moment from 'moment';
 export class IrMonthlyBookingsReportTable {
   @Prop() reports: DailyReport[] = [];
   render() {
-    console.log(this.reports);
+    const totalUnits = this.reports?.reduce((prev, curr) => prev + curr.units_booked, 0) ?? 0;
     return (
       <Host class={'card p-1  table-container table-responsive'}>
         <table class="table">
@@ -46,6 +46,12 @@ export class IrMonthlyBookingsReportTable {
               );
             })}
           </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan={2}></td>
+              <td>Total: {totalUnits}</td>
+            </tr>
+          </tfoot>
         </table>
       </Host>
     );
