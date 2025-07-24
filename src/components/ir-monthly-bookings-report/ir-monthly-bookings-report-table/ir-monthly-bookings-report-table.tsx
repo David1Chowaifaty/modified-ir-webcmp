@@ -29,7 +29,7 @@ export class IrMonthlyBookingsReportTable {
               const isFutureDate = moment().isBefore(reportDate, 'dates');
               return (
                 <tr key={report.day} class={`ir-table-row ${isFutureDate ? 'future-report' : ''}`}>
-                  <td class={'text-center'}>{reportDate.format('DD')}</td>
+                  <td class={'text-center'}>{reportDate.format('D')}</td>
                   <td class="text-center">
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
                       <p class={`p-0 m-0 ${report.last_year?.units_booked ? 'font-weight-bold' : ''}`}>{report.units_booked}</p>
