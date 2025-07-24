@@ -32,8 +32,8 @@ export class IrMonthlyBookingsReportTable {
                   <td class={'text-center'}>{reportDate.format('DD')}</td>
                   <td class="text-center">
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
-                      <p class={`p-0 m-0 ${report.last_year?.units_booked ? 'font-weight-bold' : ''}}`}>{report.units_booked}</p>
-                      {report.last_year?.units_booked && <p class="p-0 m-0">{report.units_booked}</p>}
+                      <p class={`p-0 m-0 ${report.last_year?.units_booked ? 'font-weight-bold' : ''}`}>{report.units_booked}</p>
+                      {report.last_year?.units_booked && <p class="p-0 m-0">{report.last_year?.units_booked}</p>}
                     </div>
                   </td>
                   <td>
@@ -49,7 +49,7 @@ export class IrMonthlyBookingsReportTable {
           <tfoot>
             <tr>
               <td colSpan={2}></td>
-              <td>Total: {totalUnits}</td>
+              <td class="text-right">Total: {totalUnits}</td>
             </tr>
           </tfoot>
         </table>
