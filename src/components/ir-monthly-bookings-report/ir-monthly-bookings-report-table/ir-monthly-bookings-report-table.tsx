@@ -22,6 +22,13 @@ export class IrMonthlyBookingsReportTable {
             </tr>
           </thead>
           <tbody>
+            {this.reports.length === 0 && (
+              <tr>
+                <td colSpan={3} class={'text-center'} style={{ height: '30vh' }}>
+                  No data found
+                </td>
+              </tr>
+            )}
             {this.reports.map(report => {
               const mainPercentage = `${parseFloat(report.occupancy_percent.toString()).toFixed(2)}%`;
               const secondaryPercentage = report.last_year ? `${parseFloat(report.last_year.occupancy_percent.toString()).toFixed(2)}%` : null;
@@ -33,13 +40,13 @@ export class IrMonthlyBookingsReportTable {
                   <td class="text-center">
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
                       <p class={`p-0 m-0 ${report.last_year?.units_booked ? 'font-weight-bold' : ''}`}>{report.units_booked}</p>
-                      {report.last_year?.units_booked && <p class="p-0 m-0">{report.last_year?.units_booked}</p>}
+                      {report.last_year?.units_booked > 0 && <p class="p-0 m-0">{report.last_year?.units_booked}</p>}
                     </div>
                   </td>
                   <td>
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
                       <ir-progress-indicator percentage={mainPercentage}></ir-progress-indicator>
-                      {report.last_year?.occupancy_percent && <ir-progress-indicator percentage={secondaryPercentage} color="secondary"></ir-progress-indicator>}
+                      {report.last_year?.occupancy_percent > 0 && <ir-progress-indicator percentage={secondaryPercentage} color="secondary"></ir-progress-indicator>}
                     </div>
                   </td>
                 </tr>
