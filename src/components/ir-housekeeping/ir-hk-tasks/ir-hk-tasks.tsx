@@ -3,7 +3,7 @@ import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
 import housekeeping_store from '@/stores/housekeeping.store';
-import { isRequestPending } from '@/stores/ir-interceptor.store';
+// import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, h, Element, Watch, Event, EventEmitter, Listen } from '@stencil/core';
 import moment from 'moment';
