@@ -178,6 +178,9 @@ export class IrMonthlyBookingsReport {
     }
   }
   private StatsCard({ icon, subtitle, title, value }: { icon: TIcons; title: string; subtitle: string; value: string }) {
+    if (!value) {
+      return null;
+    }
     return (
       <div class="card p-1 d-flex flex-column flex-fill m-0" style={{ gap: '0.5rem' }}>
         <div class="d-flex align-items-center justify-content-between">
@@ -223,19 +226,19 @@ export class IrMonthlyBookingsReport {
               {this.StatsCard({
                 icon: this.stats.OccupancyDelta < 0 ? 'arrow-trend-down' : 'arrow-trend-up',
                 title: 'Average Occupancy',
-                value: this.stats?.AverageOccupancy.toFixed(2) + '%',
+                value: this.stats.AverageOccupancy ? this.stats?.AverageOccupancy.toFixed(2) + '%' : null,
                 subtitle: `${this.stats?.OccupancyDelta.toFixed(2)}% from last month`,
               })}
               {this.StatsCard({
                 icon: 'hotel',
                 title: 'Total Units',
-                value: this.stats?.TotalUnitsBooked.toString(),
+                value: this.stats?.TotalUnitsBooked ? this.stats?.TotalUnitsBooked.toString() : null,
                 subtitle: 'Booked',
               })}
               {this.StatsCard({
                 icon: 'calendar',
                 title: 'Peak Days',
-                value: this.stats?.PeakDays?.map(pd => moment(pd.Date, 'YYYY-MM-DD').format('D').concat('th')).join(' - '),
+                value: this.stats?.PeakDays.length === 0 ? null : this.stats?.PeakDays?.map(pd => moment(pd.Date, 'YYYY-MM-DD').format('D').concat('th')).join(' - '),
                 subtitle: `${Math.max(...(this.stats.PeakDays?.map(pd => pd.OccupancyPercent) || []))}% occupancy`,
               })}
             </div>
