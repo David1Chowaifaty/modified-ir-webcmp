@@ -495,7 +495,7 @@ export class IglCalBody {
               ref={el => {
                 if (el) this.interactiveTitle[room.id] = el;
               }}
-              style={room.hk_status === '003' && { '--dot-color': '#999999' }}
+              style={room.hk_status === '003' && { '--dot-color': '#ededed' }}
               hkStatus={calendar_data.housekeeping_enabled && room.hk_status !== '001'}
               popoverTitle={name}
             ></ir-interactive-title>
@@ -525,7 +525,7 @@ export class IglCalBody {
     e.stopPropagation();
     try {
       this.isLoading = true;
-      const newStatusCode = this.selectedRoom?.hk_status === '001' ? '002' : '001';
+      const newStatusCode = this.selectedRoom?.hk_status === '002' ? '001' : '002';
       await this.housekeepingService.setExposedUnitHKStatus({
         property_id: this.propertyId,
         // housekeeper: this.selectedRoom?.housekeeper ? { id: this.selectedRoom?.housekeeper?.id } : null,
@@ -602,7 +602,7 @@ export class IglCalBody {
     }
     return (
       <p>
-        Update unit {this.selectedRoom?.name} to <b>{this.selectedRoom?.hk_status === '001' ? 'Dirty' : 'Clean'}?</b>
+        Update unit {this.selectedRoom?.name} to <b>{this.selectedRoom?.hk_status === '002' ? 'Clean' : 'Dirty'}?</b>
       </p>
       // <ir-select
       //   LabelAvailable={false}
