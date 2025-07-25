@@ -224,10 +224,10 @@ export class IrMonthlyBookingsReport {
           <section>
             <div class="d-flex flex-column flex-md-row w-100" style={{ gap: '1rem', alignItems: 'stretch' }}>
               {this.StatsCard({
-                icon: this.stats.OccupancyDelta < 0 ? 'arrow-trend-down' : 'arrow-trend-up',
+                icon: this.stats?.OccupancyDelta < 0 ? 'arrow-trend-down' : 'arrow-trend-up',
                 title: 'Average Occupancy',
                 value: this.stats.AverageOccupancy ? this.stats?.AverageOccupancy.toFixed(2) + '%' : null,
-                subtitle: `${this.stats?.OccupancyDelta.toFixed(2)}% from last month`,
+                subtitle: `${this.stats?.OccupancyDelta < 0 ? '-' : '+'}${this.stats?.OccupancyDelta.toFixed(2)}% from last month`,
               })}
               {this.StatsCard({
                 icon: 'hotel',
