@@ -15,6 +15,24 @@ export type MonthlyStatsParams = {
   to_date: string;
   is_export_to_excel?: boolean;
 };
+export interface MonthlyStatsResults {
+  AverageOccupancy: number;
+  DailyStats: DailyStat[];
+  ExcelLink: null;
+  PeakDays: PeakDay[];
+  TotalUnitsBooked: number;
+}
+
+export interface PeakDay {
+  Date: string;
+  OccupancyPercent: number;
+}
+
+export interface DailyStat {
+  Date: string;
+  Occupancy: number;
+  Units_booked: number;
+}
 export class PropertyService {
   public async getExposedProperty(params: {
     id: number | null;
@@ -75,8 +93,8 @@ export class PropertyService {
     }
     return data.My_Result;
   }
-  public async getMonthlyStats(params: MonthlyStatsParams) {
-    const { data } = await axios.post('/Get_Monthly_Stats', params);
+  public async getMonthlyStats(params: MonthlyStatsParams): Promise<MonthlyStatsResults> {
+    const { data } = await axios.post('https://gateway.igloorooms.com/IRBE/Get_Monthly_Stats', params);
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
     }
