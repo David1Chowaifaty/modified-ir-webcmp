@@ -20,6 +20,7 @@ export interface MonthlyStatsResults {
   DailyStats: DailyStat[];
   ExcelLink: null;
   PeakDays: PeakDay[];
+  Occupancy_Difference_From_Previous_Month: number;
   TotalUnitsBooked: number;
 }
 
