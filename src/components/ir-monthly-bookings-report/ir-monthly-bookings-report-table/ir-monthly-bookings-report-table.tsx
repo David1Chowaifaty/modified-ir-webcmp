@@ -21,7 +21,7 @@ export class IrMonthlyBookingsReportTable {
               <th class="text-center">Date</th>
               <th class="text-center">Units booked</th>
               <th class="text-right">ADR</th>
-              <th class="text-right">RevPAR</th>
+              <th class="text-right">Room revenue</th>
               <th class="">Occupancy</th>
             </tr>
           </thead>
