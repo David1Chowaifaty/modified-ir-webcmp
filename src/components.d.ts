@@ -857,6 +857,10 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
+          * Forcing css style to the input container
+         */
+        "inputContainerStyle": { [key: string]: string };
+        /**
           * Forcing css style to the input
          */
         "inputForcedStyle"?: { [key: string]: string };
@@ -5114,6 +5118,10 @@ declare namespace LocalJSX {
           * To clear all the Input base styling
          */
         "errorMessage"?: string;
+        /**
+          * Forcing css style to the input container
+         */
+        "inputContainerStyle"?: { [key: string]: string };
         /**
           * Forcing css style to the input
          */

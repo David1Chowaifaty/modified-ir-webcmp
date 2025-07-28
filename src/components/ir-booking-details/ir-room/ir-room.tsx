@@ -6,7 +6,7 @@ import { formatName } from '@/utils/booking';
 import locales from '@/stores/locales.store';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
-import { formatAmount } from '@/utils/utils';
+import { formatAmount, generateTimeSlotsMilitary } from '@/utils/utils';
 import { IEntries } from '@/models/IBooking';
 import { BookingService } from '@/services/booking.service';
 import { OpenSidebarEvent, RoomGuestsPayload } from '../types';
@@ -277,6 +277,7 @@ export class IrRoom {
   private getMainGuest() {
     return this.room.sharing_persons?.find(p => p.is_main);
   }
+
   render() {
     const bed = this.getBedName();
     return (
@@ -295,6 +296,12 @@ export class IrRoom {
           }}
           style={{ '--icon-size': '1.6rem' }}
         ></ir-button>
+        <sl-alert variant="primary" open>
+          <sl-icon slot="icon" name="info-circle"></sl-icon>
+          <strong>This is super informative</strong>
+          <br />
+          You can tell by how pretty the alert is.
+        </sl-alert>
 
         <div class="flex-fill m-0 ">
           <div class="d-flex align-items-start justify-content-between sm-mb-1">
@@ -372,6 +379,17 @@ export class IrRoom {
                 <span innerHTML={this.formatVariation(this.room.occupancy)}></span>
               ))}
             {bed && <p class="m-0 p-0">({bed})</p>}
+          </div>
+          <div class="d-flex align-items-center" style={{ marginTop: '0.5rem', marginBottom: '0.875rem', gap: '0.5rem' }}>
+            <p class="m-0 p-0">Expected departure time:</p>
+            <ir-select
+              LabelAvailable={false}
+              firstOption="Not provided"
+              data={generateTimeSlotsMilitary('04:00', '18:00', 30).map(t => ({
+                text: t,
+                value: t,
+              }))}
+            ></ir-select>
           </div>
           <div class="collapse" id={`roomCollapse-${this.room.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">

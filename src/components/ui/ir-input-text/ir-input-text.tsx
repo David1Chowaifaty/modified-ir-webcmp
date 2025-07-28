@@ -122,6 +122,9 @@ export class IrInputText {
   /** Autocomplete behavior for the input (e.g., 'on', 'off', 'email', etc.) */
   @Prop() autoComplete: string;
 
+  /** Forcing css style to the input container */
+  @Prop() inputContainerStyle: { [key: string]: string };
+
   @State() inputFocused: boolean = false;
 
   @Event({ bubbles: true, composed: true }) textChange: EventEmitter<any>;
@@ -273,7 +276,7 @@ export class IrInputText {
       );
     }
     return (
-      <div class={'form-group'}>
+      <div class={'form-group'} style={this.inputContainerStyle}>
         <div class="input-group row m-0">
           {this.label && (
             <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
