@@ -7,6 +7,8 @@ export type BaseDailyReport = {
   day: string;
   occupancy_percent: number;
   units_booked: number;
+  adr: number;
+  rooms_revenue: number;
 };
 export type DailyReport = BaseDailyReport & {
   last_year?: BaseDailyReport;

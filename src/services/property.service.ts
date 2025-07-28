@@ -33,6 +33,8 @@ export interface DailyStat {
   Date: string;
   Occupancy: number;
   Units_booked: number;
+  Rooms_Revenue: number;
+  ADR: number;
 }
 export class PropertyService {
   public async getExposedProperty(params: {

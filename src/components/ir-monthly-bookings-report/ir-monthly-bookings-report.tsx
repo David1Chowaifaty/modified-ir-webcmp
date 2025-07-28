@@ -4,7 +4,7 @@ import { DailyReport, DailyReportFilter } from './types';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { RoomService } from '@/services/room.service';
-import { MonthlyStatsResults, PropertyService } from '@/services/property.service';
+import { DailyStat, MonthlyStatsResults, PropertyService } from '@/services/property.service';
 import { TIcons } from '@/components/ui/ir-icons/icons';
 
 @Component({
@@ -104,11 +104,13 @@ export class IrMonthlyBookingsReport {
 
   private async getReports(isExportToExcel = false) {
     try {
-      const getReportObj = (report): DailyReport => {
+      const getReportObj = (report: DailyStat): DailyReport => {
         return {
           day: report.Date,
           units_booked: report.Units_booked,
           occupancy_percent: report.Occupancy,
+          adr: report.ADR,
+          rooms_revenue: report.Rooms_Revenue,
         };
       };
       this.isLoading = isExportToExcel ? 'export' : 'filter';
