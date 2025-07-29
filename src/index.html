@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>Monthly Booking Reports</title>
+    <title>Stencil Component Starter</title>
     <script type="module" src="/build/ir-webcmp.esm.js"></script>
     <script nomodule src="/build/ir-webcmp.js"></script>
     <script src="assets/scripts/jquery.min.js"></script>
@@ -24,16 +24,15 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-monthly-bookings-report baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-monthly-bookings-report>
+    <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
     <script>
-        checkBrowserValidity()
-        const monthlyReportEl = document.querySelector("ir-monthly-bookings-report");
-        if (monthlyReportEl) {
+        const booking_listing = document.querySelector("ir-booking-listing");
+        if (booking_listing) {
             (async () => {
-                monthlyReportEl.propertyid = getId();
-                monthlyReportEl.ticket = await getToken()
+                booking_listing.propertyid = getId();
+                booking_listing.ticket = await getToken()
             })();
         } 
     </script>
