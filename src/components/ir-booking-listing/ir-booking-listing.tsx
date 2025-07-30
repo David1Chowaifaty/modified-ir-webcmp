@@ -279,7 +279,6 @@ export class IrBookingListing {
                     let confirmationBG: string = this.statusColors[booking.is_requested_to_cancel ? '003' : booking.status.code];
                     const lastManipulation = booking.ota_manipulations ? booking.ota_manipulations[booking.ota_manipulations.length - 1] : null;
                     const totalPersons = this.calculateTotalPersons(booking);
-                    console.log(booking.events);
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
