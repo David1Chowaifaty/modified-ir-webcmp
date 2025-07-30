@@ -20,12 +20,13 @@ export class IrSalesTable {
   render() {
     const visibleRecords = this.records.slice(0, this.visibleCount);
     return (
-      <div class="table-container h-100 p-1 m-0 table-responsive">
+      <div class="table-container h-100 p-1 m-0 mb-2 table-responsive">
         <table class="table" data-testid="hk_tasks_table">
           <thead class="table-header">
             <tr>
               <th class="text-left">Country</th>
               <th class="text-center">Room nights</th>
+              {/* <th class="text-center">No of guests</th> */}
               <th class="text-right">Revenue</th>
               <th class=""></th>
             </tr>
@@ -62,6 +63,16 @@ export class IrSalesTable {
                       )}
                     </div>
                   </td>
+                  {/* <td class="text-center">
+                    <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
+                      <p class={`p-0 m-0 ${record.last_year?.number_of_guests ? 'font-weight-bold' : ''}`}>{record.number_of_guests}</p>
+                      {record.last_year?.number_of_guests && (
+                        <p class="p-0 mx-0" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
+                          {record.last_year.number_of_guests}
+                        </p>
+                      )}
+                    </div>
+                  </td> */}
                   <td class="text-right">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
                       <p class={`p-0 m-0 ${record.last_year?.revenue ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, record.revenue)}</p>
@@ -87,7 +98,6 @@ export class IrSalesTable {
               <td colSpan={3}></td>
               <td style={{ width: '250px' }}>
                 <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
-                  {this.visibleCount < this.records.length && <ir-button size="sm" text="Load More" onClickHandler={this.handleLoadMore}></ir-button>}
                   <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
                     <div class="legend bg-primary"></div>
                     <p class="p-0 m-0">Selected period </p>
@@ -101,6 +111,11 @@ export class IrSalesTable {
             </tr>
           </tfoot>
         </table>
+        {this.visibleCount < this.records.length && (
+          <div class={'d-flex mx-auto'}>
+            <ir-button class="mx-auto" size="sm" text="Load More" onClickHandler={this.handleLoadMore}></ir-button>
+          </div>
+        )}
       </div>
     );
   }

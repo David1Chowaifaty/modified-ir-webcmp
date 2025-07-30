@@ -1803,6 +1803,14 @@ export namespace Components {
     }
     interface IrTooltip {
         /**
+          * Defines the horizontal alignment of the tooltip trigger content.  - `'start'`: Aligns the trigger to the left within its container. - `'center'`: Centers the trigger horizontally (default). - `'end'`: Aligns the trigger to the right within its container.  This alignment affects how the trigger (e.g., icon or slotted element) is positioned inside the outer tooltip container.
+         */
+        "alignment": 'start' | 'end' | 'center';
+        /**
+          * CSS classes applied to the outer tooltip container.
+         */
+        "containerClass": string;
+        /**
           * Inline styles applied to the outer tooltip container.
          */
         "containerStyle": { [key: string]: string };
@@ -6176,6 +6184,14 @@ declare namespace LocalJSX {
         "position"?: TPositions;
     }
     interface IrTooltip {
+        /**
+          * Defines the horizontal alignment of the tooltip trigger content.  - `'start'`: Aligns the trigger to the left within its container. - `'center'`: Centers the trigger horizontally (default). - `'end'`: Aligns the trigger to the right within its container.  This alignment affects how the trigger (e.g., icon or slotted element) is positioned inside the outer tooltip container.
+         */
+        "alignment"?: 'start' | 'end' | 'center';
+        /**
+          * CSS classes applied to the outer tooltip container.
+         */
+        "containerClass"?: string;
         /**
           * Inline styles applied to the outer tooltip container.
          */

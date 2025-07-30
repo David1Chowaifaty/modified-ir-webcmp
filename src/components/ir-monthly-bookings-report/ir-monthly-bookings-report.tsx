@@ -111,6 +111,7 @@ export class IrMonthlyBookingsReport {
           occupancy_percent: report.Occupancy,
           adr: report.ADR,
           rooms_revenue: report.Rooms_Revenue,
+          total_guests: report?.Total_Guests,
         };
       };
       this.isLoading = isExportToExcel ? 'export' : 'filter';

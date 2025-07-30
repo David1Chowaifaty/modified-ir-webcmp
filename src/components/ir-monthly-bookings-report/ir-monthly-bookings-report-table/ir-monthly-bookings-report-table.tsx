@@ -20,8 +20,13 @@ export class IrMonthlyBookingsReportTable {
             <tr>
               <th class="text-center">Date</th>
               <th class="text-center">Units booked</th>
-              <th class="text-right">ADR</th>
-              <th class="text-right">Room revenue</th>
+              <th class="text-center">Total guests</th>
+              <th class="text-right">
+                <ir-tooltip customSlot message="Average Daily Revenue" alignment="end">
+                  <span slot="tooltip-trigger">ADR</span>
+                </ir-tooltip>
+              </th>
+              <th class="text-right">Rooms revenue</th>
               <th class="">Occupancy</th>
             </tr>
           </thead>
@@ -47,15 +52,21 @@ export class IrMonthlyBookingsReportTable {
                       {report.last_year?.units_booked > 0 && <p class="p-0 m-0">{report.last_year?.units_booked}</p>}
                     </div>
                   </td>
+                  <td class="text-center">
+                    <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
+                      <p class={`p-0 m-0 ${report.last_year?.total_guests ? 'font-weight-bold' : ''}`}>{report.total_guests}</p>
+                      {report.last_year?.total_guests > 0 && <p class="p-0 m-0">{report.last_year?.total_guests}</p>}
+                    </div>
+                  </td>
                   <td class="text-right">
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
-                      <p class={`p-0 m-0 ${report.last_year?.units_booked ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, report.adr)}</p>
+                      <p class={`p-0 m-0 ${report.last_year?.adr ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, report.adr)}</p>
                       {report.last_year?.adr > 0 && <p class="p-0 m-0">{formatAmount(calendar_data.currency.symbol, report.last_year.adr)}</p>}
                     </div>
                   </td>
                   <td class="text-right">
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
-                      <p class={`p-0 m-0 ${report.last_year?.units_booked ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, report.rooms_revenue)}</p>
+                      <p class={`p-0 m-0 ${report.last_year?.rooms_revenue ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, report.rooms_revenue)}</p>
                       {report.last_year?.rooms_revenue > 0 && <p class="p-0 m-0">{formatAmount(calendar_data.currency.symbol, report.last_year.rooms_revenue)}</p>}
                     </div>
                   </td>
@@ -71,7 +82,7 @@ export class IrMonthlyBookingsReportTable {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={4}></td>
+              <td colSpan={5}></td>
               {/* <td>
                 {' '}
                 <b style={{ whiteSpace: 'nowrap' }}>Total: {totalUnits}</b>
