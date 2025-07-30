@@ -26,7 +26,7 @@ export class IrSalesTable {
             <tr>
               <th class="text-left">Country</th>
               <th class="text-center">Room nights</th>
-              {/* <th class="text-center">No of guests</th> */}
+              <th class="text-center">No of guests</th>
               <th class="text-right">Revenue</th>
               <th class=""></th>
             </tr>
@@ -35,7 +35,7 @@ export class IrSalesTable {
           <tbody>
             {this.records.length === 0 && (
               <tr>
-                <td colSpan={4} style={{ height: '300px' }}>
+                <td colSpan={5} style={{ height: '300px' }}>
                   No data found.
                 </td>
               </tr>
@@ -63,7 +63,7 @@ export class IrSalesTable {
                       )}
                     </div>
                   </td>
-                  {/* <td class="text-center">
+                  <td class="text-center">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
                       <p class={`p-0 m-0 ${record.last_year?.number_of_guests ? 'font-weight-bold' : ''}`}>{record.number_of_guests}</p>
                       {record.last_year?.number_of_guests && (
@@ -72,7 +72,7 @@ export class IrSalesTable {
                         </p>
                       )}
                     </div>
-                  </td> */}
+                  </td>
                   <td class="text-right">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
                       <p class={`p-0 m-0 ${record.last_year?.revenue ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, record.revenue)}</p>
@@ -95,7 +95,7 @@ export class IrSalesTable {
           </tbody>
           <tfoot>
             <tr style={{ fontSize: '12px' }}>
-              <td colSpan={3}></td>
+              <td colSpan={4}></td>
               <td style={{ width: '250px' }}>
                 <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
                   <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>

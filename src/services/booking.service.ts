@@ -26,6 +26,11 @@ export interface IBookingParams {
   identifier?: string;
   extras: { key: string; value: string }[] | null;
 }
+
+export type TableEntries = '_CALENDAR_BLOCKED_TILL' | '_DEPARTURE_TIME' | '_ARRIVAL_TIME' | '_RATE_PRICING_MODE' | '_BED_PREFERENCE_TYPE' | (string & {});
+export type GroupedTableEntries = {
+  [K in TableEntries as K extends `_${infer Rest}` ? Lowercase<Rest> : never]: IEntries[];
+};
 export class BookingService {
   public async handleExposedRoomInOut(props: { booking_nbr: string; room_identifier: string; status: RoomInOut['code'] }) {
     const { data } = await axios.post(`/Handle_Exposed_Room_InOut`, props);
@@ -290,18 +295,12 @@ export class BookingService {
 
   public async fetchSetupEntries(): Promise<ISetupEntries> {
     try {
-      const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI`, {
-        TBL_NAMES: ['_ARRIVAL_TIME', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE'],
-      });
-      if (data.ExceptionMsg !== '') {
-        throw new Error(data.ExceptionMsg);
-      }
-      const res: any[] = data.My_Result;
+      const data = await this.getSetupEntriesByTableNameMulti(['_ARRIVAL_TIME', '_RATE_PRICING_MODE', '_BED_PREFERENCE_TYPE']);
+      const { arrival_time, rate_pricing_mode, bed_preference_type } = this.groupEntryTablesResult(data);
       return {
-        arrivalTime: res.filter(e => e.TBL_NAME === '_ARRIVAL_TIME'),
-
-        ratePricingMode: res.filter(e => e.TBL_NAME === '_RATE_PRICING_MODE'),
-        bedPreferenceType: res.filter(e => e.TBL_NAME === '_BED_PREFERENCE_TYPE'),
+        arrivalTime: arrival_time,
+        ratePricingMode: rate_pricing_mode,
+        bedPreferenceType: bed_preference_type,
       };
     } catch (error) {
       console.error(error);
@@ -315,17 +314,27 @@ export class BookingService {
     }
     return data.My_Result;
   }
-  public async getBlockedInfo(): Promise<IEntries[]> {
-    try {
-      const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI`, { TBL_NAMES: ['_CALENDAR_BLOCKED_TILL'] });
-      if (data.ExceptionMsg !== '') {
-        throw new Error(data.ExceptionMsg);
+
+  public groupEntryTablesResult(entries: IEntries[]): GroupedTableEntries {
+    let result = {};
+    for (const entry of entries) {
+      const key = entry.TBL_NAME.substring(1, entry.TBL_NAME.length).toLowerCase();
+      if (!result[key]) {
+        result[key] = [];
       }
-      return data.My_Result;
-    } catch (error) {
-      console.error(error);
-      throw new Error(error);
+      result[key] = [...result[key], entry];
     }
+    return result as GroupedTableEntries;
+  }
+  public async getSetupEntriesByTableNameMulti(entries: TableEntries[]): Promise<IEntries[]> {
+    const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_MULTI`, { TBL_NAMES: entries });
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
+  }
+  public async getBlockedInfo(): Promise<IEntries[]> {
+    return await this.getSetupEntriesByTableNameMulti(['_CALENDAR_BLOCKED_TILL']);
   }
   public async getUserDefaultCountry() {
     try {
@@ -341,6 +350,7 @@ export class BookingService {
       throw new Error(error);
     }
   }
+
   public async blockUnit(params: IBlockUnit) {
     try {
       const { data } = await axios.post(`/Block_Exposed_Unit`, params);
@@ -353,6 +363,13 @@ export class BookingService {
       console.error(error);
       throw new Error(error);
     }
+  }
+  public async setDepartureTime(params: { property_id: number; room_identifier: string; code: string }) {
+    const { data } = await axios.post('/Set_Departure_Time', params);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data;
   }
 
   public async getUserInfo(email: string) {

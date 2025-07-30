@@ -111,7 +111,7 @@ export class IrSalesByCountry {
         nights: data.NIGHTS,
         percentage: data.PCT,
         revenue: data.REVENUE,
-        number_of_guests: undefined,
+        number_of_guests: data.Total_Guests,
       };
     };
     try {

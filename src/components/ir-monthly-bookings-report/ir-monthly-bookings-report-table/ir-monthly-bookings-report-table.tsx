@@ -22,7 +22,7 @@ export class IrMonthlyBookingsReportTable {
               <th class="text-center">Units booked</th>
               <th class="text-center">Total guests</th>
               <th class="text-right">
-                <ir-tooltip customSlot message="Average Daily Revenue" alignment="end">
+                <ir-tooltip customSlot message="Average Daily Rate" alignment="end">
                   <span slot="tooltip-trigger">ADR</span>
                 </ir-tooltip>
               </th>

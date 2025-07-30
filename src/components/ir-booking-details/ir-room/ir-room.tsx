@@ -10,6 +10,7 @@ import { formatAmount, generateTimeSlotsMilitary } from '@/utils/utils';
 import { IEntries } from '@/models/IBooking';
 import { BookingService } from '@/services/booking.service';
 import { OpenSidebarEvent, RoomGuestsPayload } from '../types';
+import { IToast } from '@/components/ui/ir-toast/toast';
 export type RoomModalReason = 'delete' | 'checkin' | 'checkout' | null;
 @Component({
   tag: 'ir-room',
@@ -23,6 +24,7 @@ export class IrRoom {
   @Prop() bookingIndex: number;
   @Prop() isEditable: boolean;
   @Prop() room: Room;
+  @Prop() property_id: number;
   // Meal Code names
   @Prop() mealCodeName: string;
   @Prop() myRoomTypeFoodCat: string;
@@ -32,6 +34,7 @@ export class IrRoom {
   @Prop() legendData;
   @Prop() roomsInfo;
   @Prop() bedPreferences: IEntries[];
+  @Prop() departureTime: IEntries[];
   // Booleans Conditions
   @Prop() hasRoomEdit: boolean = false;
   @Prop() hasRoomDelete: boolean = false;
@@ -47,6 +50,7 @@ export class IrRoom {
 
   // Event Emitters
   @Event({ bubbles: true, composed: true }) deleteFinished: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true }) toast: EventEmitter<IToast>;
   @Event({ bubbles: true, composed: true }) pressCheckIn: EventEmitter;
   @Event({ bubbles: true, composed: true }) pressCheckOut: EventEmitter;
   @Event({ bubbles: true, composed: true }) editInitiated: EventEmitter<TIglBookPropertyPayload>;
@@ -201,7 +205,23 @@ export class IrRoom {
     await this.bookingService.doReservation(body);
     this.deleteFinished.emit(this.room.identifier);
   }
-
+  private async updateDepartureTime(code: string) {
+    try {
+      await this.bookingService.setDepartureTime({
+        property_id: this.property_id,
+        code,
+        room_identifier: this.room.identifier,
+      });
+      this.toast.emit({
+        type: 'success',
+        description: '',
+        title: 'Saved Successfully',
+        position: 'top-right',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   private formatVariation({ infant_nbr, adult_nbr, children_nbr }: Occupancy) {
     const adultCount = adult_nbr > 0 ? adult_nbr : 0;
     const childCount = children_nbr > 0 ? children_nbr : 0;
@@ -296,13 +316,6 @@ export class IrRoom {
           }}
           style={{ '--icon-size': '1.6rem' }}
         ></ir-button>
-        <sl-alert variant="primary" open>
-          <sl-icon slot="icon" name="info-circle"></sl-icon>
-          <strong>This is super informative</strong>
-          <br />
-          You can tell by how pretty the alert is.
-        </sl-alert>
-
         <div class="flex-fill m-0 ">
           <div class="d-flex align-items-start justify-content-between sm-mb-1">
             <p class="m-0 p-0">
@@ -383,11 +396,15 @@ export class IrRoom {
           <div class="d-flex align-items-center" style={{ marginTop: '0.5rem', marginBottom: '0.875rem', gap: '0.5rem' }}>
             <p class="m-0 p-0">Expected departure time:</p>
             <ir-select
+              selectedValue={this.room.departure_time?.code}
               LabelAvailable={false}
-              firstOption="Not provided"
-              data={generateTimeSlotsMilitary('04:00', '18:00', 30).map(t => ({
-                text: t,
-                value: t,
+              showFirstOption={false}
+              onSelectChange={e => {
+                this.updateDepartureTime(e.detail);
+              }}
+              data={this.departureTime?.map(d => ({
+                text: d[`CODE_VALUE_${this.language?.toUpperCase()}`] ?? d[`CODE_VALUE_EN`],
+                value: d.CODE_NAME,
               }))}
             ></ir-select>
           </div>

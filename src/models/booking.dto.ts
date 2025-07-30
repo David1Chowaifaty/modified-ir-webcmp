@@ -463,6 +463,10 @@ export interface Property {
   name: string;
   roomtypes: null;
 }
+export type DepartureTime = {
+  code: string;
+  description: string;
+};
 export type RoomInOut = { code: '001' | '002' | '000'; description: string };
 export interface Room {
   days: Day[];
@@ -477,6 +481,7 @@ export interface Room {
   bed_preference: number | null;
   rateplan: RatePlan;
   roomtype: RoomType;
+  departure_time: DepartureTime;
   to_date: string;
   total: number;
   smoking_option: string;
@@ -484,6 +489,7 @@ export interface Room {
   unit: string | number | IUnit | null;
   ota_taxes: IOtaTax[];
   ota_meta: OtaMeta;
+
   cost: number | null;
   gross_cost: number;
   gross_total: number;

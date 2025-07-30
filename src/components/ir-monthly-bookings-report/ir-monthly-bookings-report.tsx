@@ -229,6 +229,12 @@ export class IrMonthlyBookingsReport {
                 value: this.stats?.PeakDays.length === 0 ? null : this.stats?.PeakDays?.map(pd => moment(pd.Date, 'YYYY-MM-DD').format('D').concat('th')).join(' - '),
                 subtitle: `${Math.max(...(this.stats.PeakDays?.map(pd => pd.OccupancyPercent) || []))}% occupancy`,
               })}
+              {this.StatsCard({
+                icon: 'user_group',
+                title: 'Total Guests',
+                value: this.reports?.reduce((prev, curr) => prev + curr.total_guests, 0)?.toString(),
+                subtitle: `Stayed`,
+              })}
             </div>
             <div class="d-flex flex-column flex-lg-row mt-1 " style={{ gap: '1rem' }}>
               <ir-monthly-bookings-report-filter isLoading={this.isLoading === 'filter'} class="filters-card" baseFilters={this.baseFilters}></ir-monthly-bookings-report-filter>
