@@ -6,7 +6,7 @@ import { formatName } from '@/utils/booking';
 import locales from '@/stores/locales.store';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
 import { colorVariants } from '@/components/ui/ir-icons/icons';
-import { formatAmount, generateTimeSlotsMilitary } from '@/utils/utils';
+import { formatAmount } from '@/utils/utils';
 import { IEntries } from '@/models/IBooking';
 import { BookingService } from '@/services/booking.service';
 import { OpenSidebarEvent, RoomGuestsPayload } from '../types';
