@@ -279,6 +279,7 @@ export class IrBookingListing {
                     let confirmationBG: string = this.statusColors[booking.is_requested_to_cancel ? '003' : booking.status.code];
                     const lastManipulation = booking.ota_manipulations ? booking.ota_manipulations[booking.ota_manipulations.length - 1] : null;
                     const totalPersons = this.calculateTotalPersons(booking);
+                    console.log(booking.events);
                     return (
                       <tr key={booking.booking_nbr}>
                         <td class="text-left">
@@ -419,7 +420,7 @@ export class IrBookingListing {
                           <p class={`m-0 badge ${confirmationBG} ct_ir_badge`}>
                             {booking.is_requested_to_cancel ? locales?.entries?.Lcz_CancellationRequested : booking.status.description}
                           </p>
-                          {booking.events && booking.events[0].type.toLowerCase() === 'modified' && (
+                          {booking.events?.length > 0 && booking.events[0].type.toLowerCase() === 'modified' && (
                             <p class="mx-0 p-0 small" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
                               Modified
                             </p>
