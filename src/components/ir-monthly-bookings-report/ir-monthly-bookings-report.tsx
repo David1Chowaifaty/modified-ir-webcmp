@@ -5,7 +5,6 @@ import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { RoomService } from '@/services/room.service';
 import { DailyStat, MonthlyStatsResults, PropertyService } from '@/services/property.service';
-import { TIcons } from '@/components/ui/ir-icons/icons';
 
 @Component({
   tag: 'ir-monthly-bookings-report',
@@ -163,23 +162,6 @@ export class IrMonthlyBookingsReport {
       this.isLoading = null;
     }
   }
-  private StatsCard({ icon, subtitle, title, value }: { icon: TIcons; title: string; subtitle: string; value: string }) {
-    if (!value) {
-      return null;
-    }
-    return (
-      <div class="card p-1 d-flex flex-column flex-fill m-0" style={{ gap: '0.5rem' }}>
-        <div class="d-flex align-items-center justify-content-between">
-          <p class="m-0 p-0">{title}</p>
-          <ir-icons name={icon}></ir-icons>
-        </div>
-        <h4 class="m-0 p-0">
-          <b class="m-0 p-0">{value}</b>
-        </h4>
-        {subtitle && <p class="m-0 p-0 small text-muted">{subtitle}</p>}
-      </div>
-    );
-  }
   render() {
     if (this.isPageLoading) {
       return <ir-loading-screen></ir-loading-screen>;
@@ -209,32 +191,35 @@ export class IrMonthlyBookingsReport {
           </div>
           <section>
             <div class="d-flex flex-column flex-md-row w-100" style={{ gap: '1rem', alignItems: 'stretch' }}>
-              {this.StatsCard({
-                icon: this.stats?.Occupancy_Difference_From_Previous_Month < 0 ? 'arrow-trend-down' : 'arrow-trend-up',
-                title: 'Average Occupancy',
-                value: this.stats.AverageOccupancy ? this.stats?.AverageOccupancy.toFixed(2) + '%' : null,
-                subtitle: `${this.stats?.Occupancy_Difference_From_Previous_Month < 0 ? '' : '+'}${this.stats?.Occupancy_Difference_From_Previous_Month.toFixed(
+              <ir-report-stats-card
+                icon={this.stats?.Occupancy_Difference_From_Previous_Month < 0 ? 'arrow-trend-down' : 'arrow-trend-up'}
+                cardTitle="Average Occupancy"
+                value={this.stats.AverageOccupancy ? this.stats?.AverageOccupancy.toFixed(2) + '%' : null}
+                subtitle={`${this.stats?.Occupancy_Difference_From_Previous_Month < 0 ? '' : '+'}${this.stats?.Occupancy_Difference_From_Previous_Month.toFixed(
                   2,
-                )}% from last month`,
-              })}
-              {this.StatsCard({
-                icon: 'hotel',
-                title: 'Total Units',
-                value: this.stats?.TotalUnitsBooked ? this.stats?.TotalUnitsBooked.toString() : null,
-                subtitle: 'Booked',
-              })}
-              {this.StatsCard({
-                icon: 'calendar',
-                title: 'Peak Days',
-                value: this.stats?.PeakDays.length === 0 ? null : this.stats?.PeakDays?.map(pd => moment(pd.Date, 'YYYY-MM-DD').format('D').concat('th')).join(' - '),
-                subtitle: `${Math.max(...(this.stats.PeakDays?.map(pd => pd.OccupancyPercent) || []))}% occupancy`,
-              })}
-              {this.StatsCard({
-                icon: 'user_group',
-                title: 'Total Guests',
-                value: this.reports?.reduce((prev, curr) => prev + curr.total_guests, 0)?.toString(),
-                subtitle: `Stayed`,
-              })}
+                )}% from last month`}
+              ></ir-report-stats-card>
+
+              <ir-report-stats-card
+                icon="hotel"
+                cardTitle="Total Units"
+                value={this.stats?.TotalUnitsBooked ? this.stats?.TotalUnitsBooked.toString() : null}
+                subtitle="Booked"
+              ></ir-report-stats-card>
+
+              <ir-report-stats-card
+                icon="user_group"
+                cardTitle="Total Guests"
+                value={this.reports?.reduce((prev, curr) => prev + curr.total_guests, 0)?.toString()}
+                subtitle="Stayed"
+              ></ir-report-stats-card>
+
+              <ir-report-stats-card
+                icon="calendar"
+                cardTitle="Peak Days"
+                value={this.stats?.PeakDays.length === 0 ? null : this.stats?.PeakDays?.map(pd => moment(pd.Date, 'YYYY-MM-DD').format('D').concat('th')).join(' - ')}
+                subtitle={`${Math.max(...(this.stats.PeakDays?.map(pd => pd.OccupancyPercent) || []))}% occupancy`}
+              ></ir-report-stats-card>
             </div>
             <div class="d-flex flex-column flex-lg-row mt-1 " style={{ gap: '1rem' }}>
               <ir-monthly-bookings-report-filter isLoading={this.isLoading === 'filter'} class="filters-card" baseFilters={this.baseFilters}></ir-monthly-bookings-report-filter>
