@@ -1,4 +1,5 @@
-import { Component, Host, h, Prop, State, Event, EventEmitter, Element, Listen } from '@stencil/core';
+import { Component, Host, h, Element, State, Listen, Prop, Event, EventEmitter, Watch, Method } from '@stencil/core';
+import { v4 } from 'uuid';
 
 export interface ComboboxOption {
   value: string;
@@ -7,6 +8,7 @@ export interface ComboboxOption {
 }
 
 export type ComboboxType = 'select' | 'editable' | 'multiselect';
+export type DataMode = 'static' | 'external';
 
 @Component({
   tag: 'ir-m-combobox',
@@ -16,242 +18,331 @@ export type ComboboxType = 'select' | 'editable' | 'multiselect';
 export class IrMCombobox {
   @Element() el: HTMLElement;
 
-  @Prop() type: ComboboxType = 'select';
-  @Prop() label: string = '';
-  @Prop() placeholder: string = '';
+  /**
+   * Placeholder text displayed in the input when no option is selected.
+   */
+  @Prop() placeholder: string;
+
+  /**
+   * Determines how the options are loaded into the component.
+   * - 'static': Uses the options passed through the `options` prop or the default internal list.
+   * - 'external': Emits search events for external handling, options updated via `options` prop.
+   *
+   * @default 'static'
+   */
+  @Prop() dataMode: DataMode = 'static';
+
+  /**
+   * List of available options for the combobox when using static data mode.
+   * If empty, falls back to a default internal option list.
+   */
   @Prop() options: ComboboxOption[] = [];
-  @Prop() value: string | string[] = '';
-  @Prop() disabled: boolean = false;
-  @Prop() readonly: boolean = false;
+
+  /**
+   * Debounce delay in milliseconds for search events when using external data mode.
+   * @default 300
+   */
+  @Prop() debounceDelay: number = 300;
+
+  /**
+   * Whether to show loading state
+   */
+  @Prop() loading: boolean = false;
+
+  /**
+   * Whether to use slot content for custom dropdown rendering
+   */
+  @Prop() useSlot: boolean = false;
 
   @State() isOpen: boolean = false;
-  @State() activeOptionIndex: number = -1;
-  @State() inputValue: string = '';
-  @State() selectedOptions: ComboboxOption[] = [];
+  @State() selectedOption: ComboboxOption;
+  @State() focusedIndex: number = -1;
+  @State() filteredOptions: ComboboxOption[] = [];
+  @State() slotElements: HTMLElement[] = [];
 
-  @Event() irChange: EventEmitter<string | string[]>;
-  @Event() irInput: EventEmitter<string>;
-  @Event() irFocus: EventEmitter<void>;
-  @Event() irBlur: EventEmitter<void>;
+  /**
+   * Emitted when a user selects an option from the combobox.
+   * The event payload contains the selected `ComboboxOption` object.
+   */
+  @Event() optionChange: EventEmitter<ComboboxOption>;
 
-  private comboboxId = `combo-${Math.random().toString(36).substr(2, 9)}`;
-  private listboxId = `listbox-${this.comboboxId}`;
-  private labelId = `label-${this.comboboxId}`;
+  /**
+   * Emitted when the user types in the input field (debounced).
+   * Used for external data fetching in 'external' data mode.
+   */
+  @Event() searchQuery: EventEmitter<string>;
 
-  componentWillLoad() {
-    this.initializeValue();
+  /**
+   * Public method to select an option from external slot content
+   */
+  @Method()
+  async selectOptionFromSlot(option: ComboboxOption) {
+    this.selectOption(option);
   }
 
-  @Listen('click', { target: 'document' })
-  handleDocumentClick(event: Event) {
-    if (!this.el.contains(event.target as Node)) {
-      this.isOpen = false;
+  private inputRef: HTMLInputElement;
+  private dropdownRef: HTMLElement;
+  private id = v4();
+  private dropdownId = `dropdown-${this.id}`;
+  private debounceTimeout: NodeJS.Timeout;
+
+  @Watch('options')
+  watchOptionsChanged(newOptions: ComboboxOption[]) {
+    this.filteredOptions = newOptions || [];
+    if (this.useSlot) {
+      this.updateSlotElements();
     }
   }
 
-  @Listen('keydown')
-  handleKeyDown(event: KeyboardEvent) {
+  @Watch('useSlot')
+  watchUseSlotChanged() {
+    if (this.useSlot) {
+      setTimeout(() => this.updateSlotElements(), 0);
+    }
+  }
+
+  componentWillLoad() {
+    this.initializeOptions();
+  }
+
+  componentDidLoad() {
+    document.addEventListener('click', this.handleDocumentClick.bind(this));
+    if (this.useSlot) {
+      setTimeout(() => this.updateSlotElements(), 0);
+    }
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('click', this.handleDocumentClick.bind(this));
+    if (this.debounceTimeout) {
+      clearTimeout(this.debounceTimeout);
+    }
+  }
+
+  @Listen('keydown', { target: 'document' })
+  handleDocumentKeyDown(event: KeyboardEvent) {
+    if (!this.isOpen) return;
+
+    if (event.key === 'Escape') {
+      this.closeDropdown();
+      this.inputRef?.focus();
+    }
+  }
+
+  private initializeOptions() {
+    this.filteredOptions = this.options.length > 0 ? this.options : [];
+  }
+
+  private handleDocumentClick = (event: Event) => {
+    if (!this.el.contains(event.target as Node)) {
+      this.closeDropdown();
+    }
+  };
+
+  private openDropdown() {
+    this.isOpen = true;
+    if (this.useSlot) {
+      this.focusedIndex = -1;
+      setTimeout(() => this.updateSlotElements(), 0);
+    } else {
+      this.focusedIndex = this.selectedOption ? this.filteredOptions.findIndex(v => v.value === this.selectedOption.value) : -1;
+    }
+  }
+
+  private emitSearchQuery(query: string) {
+    if (this.debounceTimeout) {
+      clearTimeout(this.debounceTimeout);
+    }
+
+    this.debounceTimeout = setTimeout(() => {
+      this.searchQuery.emit(query);
+    }, this.debounceDelay);
+  }
+
+  private closeDropdown() {
+    this.isOpen = false;
+    this.focusedIndex = -1;
+    this.removeSlotFocus();
+  }
+
+  private updateSlotElements() {
+    if (!this.useSlot || !this.dropdownRef) return;
+    
+    const slotElement = this.dropdownRef.querySelector('slot[name="dropdown-content"]');
+    if (slotElement) {
+      const assignedElements = (slotElement as any).assignedElements ? 
+        (slotElement as any).assignedElements() : 
+        Array.from(this.el.querySelectorAll('[slot="dropdown-content"] [data-option]'));
+      
+      this.slotElements = assignedElements.length > 0 ? 
+        assignedElements : 
+        Array.from(this.dropdownRef.querySelectorAll('[data-option], .dropdown-item[style*="cursor"]'));
+      
+      this.slotElements.forEach((element, index) => {
+        element.setAttribute('data-slot-index', index.toString());
+        element.setAttribute('role', 'option');
+        element.setAttribute('tabindex', '-1');
+      });
+    }
+  }
+
+  private removeSlotFocus() {
+    this.slotElements.forEach(element => {
+      element.classList.remove('focused', 'active');
+      element.removeAttribute('aria-selected');
+    });
+  }
+
+  private focusSlotElement(index: number) {
+    this.removeSlotFocus();
+    if (index >= 0 && index < this.slotElements.length) {
+      const element = this.slotElements[index];
+      element.classList.add('focused', 'active');
+      element.setAttribute('aria-selected', 'true');
+      element.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  private selectSlotElement(index: number) {
+    if (index >= 0 && index < this.slotElements.length) {
+      const element = this.slotElements[index];
+      element.click();
+    }
+  }
+
+  private handleKeyDown = (event: KeyboardEvent) => {
+    const maxIndex = this.useSlot ? this.slotElements.length - 1 : this.filteredOptions.length - 1;
+    
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        this.navigateOptions(1);
+        if (!this.isOpen) {
+          this.openDropdown();
+        } else {
+          this.focusedIndex = Math.min(this.focusedIndex + 1, maxIndex);
+          if (this.useSlot) {
+            this.focusSlotElement(this.focusedIndex);
+          } else {
+            this.scrollToFocusedOption();
+          }
+        }
         break;
+
       case 'ArrowUp':
         event.preventDefault();
-        this.navigateOptions(-1);
+        if (this.isOpen) {
+          this.focusedIndex = Math.max(this.focusedIndex - 1, 0);
+          if (this.useSlot) {
+            this.focusSlotElement(this.focusedIndex);
+          } else {
+            this.scrollToFocusedOption();
+          }
+        }
         break;
+
       case 'Enter':
         event.preventDefault();
-        this.selectCurrentOption();
+        if (this.isOpen && this.focusedIndex >= 0) {
+          if (this.useSlot) {
+            this.selectSlotElement(this.focusedIndex);
+          } else {
+            this.selectOption(this.filteredOptions[this.focusedIndex]);
+          }
+        } else if (!this.isOpen) {
+          this.openDropdown();
+        }
         break;
+
       case 'Escape':
-        this.isOpen = false;
+        event.preventDefault();
+        this.closeDropdown();
+        break;
+
+      case 'Tab':
+        if (this.isOpen) {
+          this.closeDropdown();
+        }
         break;
     }
-  }
-
-  private initializeValue() {
-    if (this.type === 'multiselect' && Array.isArray(this.value)) {
-      this.selectedOptions = this.options.filter(option => 
-        (this.value as string[]).includes(option.value)
-      );
-    } else if (typeof this.value === 'string') {
-      this.inputValue = this.value;
-      const selectedOption = this.options.find(option => option.value === this.value);
-      if (selectedOption && this.type === 'multiselect') {
-        this.selectedOptions = [selectedOption];
-      }
-    }
-  }
-
-  private navigateOptions(direction: number) {
-    if (!this.isOpen) {
-      this.isOpen = true;
-      return;
-    }
-
-    const newIndex = this.activeOptionIndex + direction;
-    if (newIndex >= 0 && newIndex < this.options.length) {
-      this.activeOptionIndex = newIndex;
-    }
-  }
-
-  private selectCurrentOption() {
-    if (this.activeOptionIndex >= 0 && this.activeOptionIndex < this.options.length) {
-      this.selectOption(this.options[this.activeOptionIndex]);
-    }
-  }
+  };
 
   private selectOption(option: ComboboxOption) {
-    if (option.disabled) return;
+    this.selectedOption = option;
+    this.optionChange.emit(option);
+    this.closeDropdown();
+    this.inputRef.focus();
+  }
 
-    if (this.type === 'multiselect') {
-      const isSelected = this.selectedOptions.some(selected => selected.value === option.value);
-      if (isSelected) {
-        this.selectedOptions = this.selectedOptions.filter(selected => selected.value !== option.value);
-      } else {
-        this.selectedOptions = [...this.selectedOptions, option];
-      }
-      this.irChange.emit(this.selectedOptions.map(opt => opt.value));
-    } else {
-      this.inputValue = option.label;
-      this.isOpen = false;
-      this.irChange.emit(option.value);
+  private scrollToFocusedOption() {
+    if (this.focusedIndex < 0 || !this.dropdownRef || this.useSlot) return;
+
+    const focusedElement = this.dropdownRef.querySelector(`#${this.dropdownId}-option-${this.focusedIndex}`) as HTMLElement;
+    if (focusedElement) {
+      focusedElement.scrollIntoView({ block: 'nearest' });
     }
   }
 
-  private handleInputChange(event: Event) {
+  private handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement;
-    this.inputValue = target.value;
-    this.irInput.emit(this.inputValue);
-    
+    const value = target.value;
+
+    if (this.dataMode === 'external') {
+      this.emitSearchQuery(value);
+    } else {
+      const allOptions = this.options.length > 0 ? this.options : [];
+      this.filteredOptions = value ? allOptions.filter(option => option.label.toLowerCase().includes(value.toLowerCase())) : allOptions;
+    }
+
+    this.focusedIndex = -1;
     if (!this.isOpen) {
-      this.isOpen = true;
+      this.openDropdown();
     }
-  }
-
-  private handleInputFocus() {
-    this.irFocus.emit();
-    if (this.type !== 'editable' || this.options.length > 0) {
-      this.isOpen = true;
-    }
-  }
-
-  private handleInputBlur() {
-    this.irBlur.emit();
-  }
-
-  private toggleCombobox() {
-    if (!this.disabled) {
-      this.isOpen = !this.isOpen;
-    }
-  }
-
-  private removeSelectedOption(option: ComboboxOption) {
-    this.selectedOptions = this.selectedOptions.filter(selected => selected.value !== option.value);
-    this.irChange.emit(this.selectedOptions.map(opt => opt.value));
-  }
-
-  private getFilteredOptions() {
-    if (this.type !== 'editable' || !this.inputValue) {
-      return this.options;
-    }
-    return this.options.filter(option => 
-      option.label.toLowerCase().includes(this.inputValue.toLowerCase())
-    );
-  }
+  };
 
   render() {
-    const filteredOptions = this.getFilteredOptions();
-
     return (
       <Host>
-        {this.label && (
-          <label id={this.labelId} class="combo-label">
-            {this.label}
-          </label>
-        )}
-
-        {this.type === 'multiselect' && this.selectedOptions.length > 0 && (
-          <ul class="selected-options">
-            {this.selectedOptions.map(option => (
-              <li key={option.value}>
-                <button
-                  type="button"
-                  class="remove-option"
-                  onClick={() => this.removeSelectedOption(option)}
-                  aria-label={`Remove ${option.label}`}
-                >
-                  {option.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div class={`combo ${this.isOpen ? 'open' : ''}`}>
-          {this.type === 'select' ? (
-            <div
-              id={this.comboboxId}
-              class="combo-input"
-              role="combobox"
-              aria-expanded={this.isOpen.toString()}
-              aria-haspopup="listbox"
-              aria-controls={this.listboxId}
-              aria-labelledby={this.label ? this.labelId : undefined}
-              tabindex={this.disabled ? -1 : 0}
-              onClick={() => this.toggleCombobox()}
-              onFocus={() => this.handleInputFocus()}
-              onBlur={() => this.handleInputBlur()}
-            >
-              {this.inputValue || this.placeholder}
-            </div>
-          ) : (
-            <input
-              id={this.comboboxId}
-              class="combo-input"
-              type="text"
-              role="combobox"
-              aria-expanded={this.isOpen.toString()}
-              aria-haspopup="listbox"
-              aria-controls={this.listboxId}
-              aria-labelledby={this.label ? this.labelId : undefined}
-              value={this.inputValue}
-              placeholder={this.placeholder}
-              disabled={this.disabled}
-              readonly={this.readonly}
-              onInput={(e) => this.handleInputChange(e)}
-              onFocus={() => this.handleInputFocus()}
-              onBlur={() => this.handleInputBlur()}
-            />
-          )}
-
-          {this.isOpen && (
-            <div class="combo-menu" role="listbox" id={this.listboxId}>
-              {filteredOptions.map((option, index) => (
-                <div
-                  key={option.value}
-                  class={`combo-option ${index === this.activeOptionIndex ? 'option-current' : ''} ${
-                    this.type === 'multiselect' && this.selectedOptions.some(selected => selected.value === option.value) 
-                      ? 'option-selected' 
-                      : ''
-                  }`}
-                  role="option"
-                  aria-selected={
-                    this.type === 'multiselect' 
-                      ? this.selectedOptions.some(selected => selected.value === option.value).toString()
-                      : (this.inputValue === option.label).toString()
-                  }
-                  onClick={() => this.selectOption(option)}
-                >
-                  {option.label}
-                </div>
-              ))}
-              {filteredOptions.length === 0 && (
-                <div class="combo-option">No options available</div>
-              )}
-            </div>
-          )}
+        <input
+          ref={el => (this.inputRef = el)}
+          type="text"
+          class="form-control"
+          role="combobox"
+          id={this.id}
+          value={this.selectedOption?.label || ''}
+          aria-expanded={String(this.isOpen)}
+          aria-autocomplete="list"
+          aria-controls={this.dropdownId}
+          aria-haspopup="listbox"
+          aria-activedescendant={this.focusedIndex >= 0 ? `${this.dropdownId}-option-${this.focusedIndex}` : null}
+          aria-label="Combobox"
+          aria-required={true}
+          onKeyDown={this.handleKeyDown}
+          onInput={this.handleInput}
+        />
+        <div class={`dropdown ${this.isOpen ? 'show' : ''}`}>
+          <div ref={el => (this.dropdownRef = el)} class={`dropdown-menu ${this.isOpen ? 'show' : ''}`} id={this.dropdownId} role="listbox" aria-expanded={String(this.isOpen)}>
+            {this.useSlot ? (
+              <slot name="dropdown-content"></slot>
+            ) : (
+              [
+                this.loading && <div class="dropdown-item loading">Loading...</div>,
+                !this.loading && this.filteredOptions.length === 0 && <div class="dropdown-item no-results">No results found</div>,
+                !this.loading &&
+                  this.filteredOptions.map((option, index) => (
+                    <button
+                      id={`${this.dropdownId}-option-${index}`}
+                      class={`dropdown-item ${this.focusedIndex === index ? 'active' : ''}`}
+                      role="option"
+                      aria-selected={this.selectedOption?.value === option.value ? 'true' : 'false'}
+                      onClick={() => this.selectOption(option)}
+                      onMouseEnter={() => (this.focusedIndex = index)}
+                    >
+                      {option.label}
+                    </button>
+                  )),
+              ]
+            )}
+          </div>
         </div>
       </Host>
     );

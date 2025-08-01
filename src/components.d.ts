@@ -25,7 +25,7 @@ import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
-import { ComboboxOption, ComboboxType } from "./components/ir-m-combobox/ir-m-combobox";
+import { ComboboxOption, DataMode } from "./components/ir-m-combobox/ir-m-combobox";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
@@ -57,7 +57,7 @@ export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
-export { ComboboxOption, ComboboxType } from "./components/ir-m-combobox/ir-m-combobox";
+export { ComboboxOption, DataMode } from "./components/ir-m-combobox/ir-m-combobox";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
@@ -1064,13 +1064,36 @@ export namespace Components {
     interface IrLogin {
     }
     interface IrMCombobox {
-        "disabled": boolean;
-        "label": string;
+        /**
+          * Determines how the options are loaded into the component. - 'static': Uses the options passed through the `options` prop or the default internal list. - 'external': Emits search events for external handling, options updated via `options` prop.
+          * @default 'static'
+         */
+        "dataMode": DataMode;
+        /**
+          * Debounce delay in milliseconds for search events when using external data mode.
+          * @default 300
+         */
+        "debounceDelay": number;
+        /**
+          * Whether to show loading state
+         */
+        "loading": boolean;
+        /**
+          * List of available options for the combobox when using static data mode. If empty, falls back to a default internal option list.
+         */
         "options": ComboboxOption[];
+        /**
+          * Placeholder text displayed in the input when no option is selected.
+         */
         "placeholder": string;
-        "readonly": boolean;
-        "type": ComboboxType;
-        "value": string | string[];
+        /**
+          * Public method to select an option from external slot content
+         */
+        "selectOptionFromSlot": (option: ComboboxOption) => Promise<void>;
+        /**
+          * Whether to use slot content for custom dropdown rendering
+         */
+        "useSlot": boolean;
     }
     interface IrModal {
         /**
@@ -3355,10 +3378,8 @@ declare global {
         new (): HTMLIrLoginElement;
     };
     interface HTMLIrMComboboxElementEventMap {
-        "irChange": string | string[];
-        "irInput": string;
-        "irFocus": void;
-        "irBlur": void;
+        "optionChange": ComboboxOption;
+        "searchQuery": string;
     }
     interface HTMLIrMComboboxElement extends Components.IrMCombobox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrMComboboxElementEventMap>(type: K, listener: (this: HTMLIrMComboboxElement, ev: IrMComboboxCustomEvent<HTMLIrMComboboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5396,17 +5417,40 @@ declare namespace LocalJSX {
   }>) => void;
     }
     interface IrMCombobox {
-        "disabled"?: boolean;
-        "label"?: string;
-        "onIrBlur"?: (event: IrMComboboxCustomEvent<void>) => void;
-        "onIrChange"?: (event: IrMComboboxCustomEvent<string | string[]>) => void;
-        "onIrFocus"?: (event: IrMComboboxCustomEvent<void>) => void;
-        "onIrInput"?: (event: IrMComboboxCustomEvent<string>) => void;
+        /**
+          * Determines how the options are loaded into the component. - 'static': Uses the options passed through the `options` prop or the default internal list. - 'external': Emits search events for external handling, options updated via `options` prop.
+          * @default 'static'
+         */
+        "dataMode"?: DataMode;
+        /**
+          * Debounce delay in milliseconds for search events when using external data mode.
+          * @default 300
+         */
+        "debounceDelay"?: number;
+        /**
+          * Whether to show loading state
+         */
+        "loading"?: boolean;
+        /**
+          * Emitted when a user selects an option from the combobox. The event payload contains the selected `ComboboxOption` object.
+         */
+        "onOptionChange"?: (event: IrMComboboxCustomEvent<ComboboxOption>) => void;
+        /**
+          * Emitted when the user types in the input field (debounced). Used for external data fetching in 'external' data mode.
+         */
+        "onSearchQuery"?: (event: IrMComboboxCustomEvent<string>) => void;
+        /**
+          * List of available options for the combobox when using static data mode. If empty, falls back to a default internal option list.
+         */
         "options"?: ComboboxOption[];
+        /**
+          * Placeholder text displayed in the input when no option is selected.
+         */
         "placeholder"?: string;
-        "readonly"?: boolean;
-        "type"?: ComboboxType;
-        "value"?: string | string[];
+        /**
+          * Whether to use slot content for custom dropdown rendering
+         */
+        "useSlot"?: boolean;
     }
     interface IrModal {
         /**
