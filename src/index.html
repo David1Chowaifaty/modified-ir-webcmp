@@ -24,20 +24,7 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-monthly-bookings-report baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-monthly-bookings-report>
-    <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
-
-    <script>
-        checkBrowserValidity()
-        const monthlyReportEl = document.querySelector("ir-monthly-bookings-report");
-        if (monthlyReportEl) {
-            (async () => {
-                monthlyReportEl.propertyid = getId();
-                monthlyReportEl.ticket = await getToken()
-            })();
-        } 
-    </script>
-
+    <ir-test-cmp></ir-test-cmp>
 </body>
 
 </html>

@@ -11,7 +11,7 @@ export class IrTestCmp {
   render() {
     return (
       <Host class="card p-4">
-        <ir-range-picker onDateRangeChanged={e => (this.dates = e.detail)} fromDate={this.dates?.fromDate} toDate={this.dates?.toDate}></ir-range-picker>
+        <ir-m-combobox></ir-m-combobox>
       </Host>
     );
   }

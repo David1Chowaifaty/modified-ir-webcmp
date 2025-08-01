@@ -25,6 +25,7 @@ import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
+import { ComboboxOption, ComboboxType } from "./components/ir-m-combobox/ir-m-combobox";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
@@ -56,6 +57,7 @@ export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
+export { ComboboxOption, ComboboxType } from "./components/ir-m-combobox/ir-m-combobox";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
@@ -1060,6 +1062,15 @@ export namespace Components {
         "message": string;
     }
     interface IrLogin {
+    }
+    interface IrMCombobox {
+        "disabled": boolean;
+        "label": string;
+        "options": ComboboxOption[];
+        "placeholder": string;
+        "readonly": boolean;
+        "type": ComboboxType;
+        "value": string | string[];
     }
     interface IrModal {
         /**
@@ -2115,6 +2126,10 @@ export interface IrListingModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrLoginCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrLoginElement;
+}
+export interface IrMComboboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrMComboboxElement;
 }
 export interface IrModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3339,6 +3354,26 @@ declare global {
         prototype: HTMLIrLoginElement;
         new (): HTMLIrLoginElement;
     };
+    interface HTMLIrMComboboxElementEventMap {
+        "irChange": string | string[];
+        "irInput": string;
+        "irFocus": void;
+        "irBlur": void;
+    }
+    interface HTMLIrMComboboxElement extends Components.IrMCombobox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrMComboboxElementEventMap>(type: K, listener: (this: HTMLIrMComboboxElement, ev: IrMComboboxCustomEvent<HTMLIrMComboboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrMComboboxElementEventMap>(type: K, listener: (this: HTMLIrMComboboxElement, ev: IrMComboboxCustomEvent<HTMLIrMComboboxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrMComboboxElement: {
+        prototype: HTMLIrMComboboxElement;
+        new (): HTMLIrMComboboxElement;
+    };
     interface HTMLIrModalElementEventMap {
         "confirmModal": any;
         "cancelModal": any;
@@ -4159,6 +4194,7 @@ declare global {
         "ir-listing-modal": HTMLIrListingModalElement;
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-login": HTMLIrLoginElement;
+        "ir-m-combobox": HTMLIrMComboboxElement;
         "ir-modal": HTMLIrModalElement;
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
         "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
@@ -5359,6 +5395,19 @@ declare namespace LocalJSX {
     code: 'succsess' | 'error';
   }>) => void;
     }
+    interface IrMCombobox {
+        "disabled"?: boolean;
+        "label"?: string;
+        "onIrBlur"?: (event: IrMComboboxCustomEvent<void>) => void;
+        "onIrChange"?: (event: IrMComboboxCustomEvent<string | string[]>) => void;
+        "onIrFocus"?: (event: IrMComboboxCustomEvent<void>) => void;
+        "onIrInput"?: (event: IrMComboboxCustomEvent<string>) => void;
+        "options"?: ComboboxOption[];
+        "placeholder"?: string;
+        "readonly"?: boolean;
+        "type"?: ComboboxType;
+        "value"?: string | string[];
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -6381,6 +6430,7 @@ declare namespace LocalJSX {
         "ir-listing-modal": IrListingModal;
         "ir-loading-screen": IrLoadingScreen;
         "ir-login": IrLogin;
+        "ir-m-combobox": IrMCombobox;
         "ir-modal": IrModal;
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
         "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
@@ -6512,6 +6562,7 @@ declare module "@stencil/core" {
             "ir-listing-modal": LocalJSX.IrListingModal & JSXBase.HTMLAttributes<HTMLIrListingModalElement>;
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-login": LocalJSX.IrLogin & JSXBase.HTMLAttributes<HTMLIrLoginElement>;
+            "ir-m-combobox": LocalJSX.IrMCombobox & JSXBase.HTMLAttributes<HTMLIrMComboboxElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
             "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;
