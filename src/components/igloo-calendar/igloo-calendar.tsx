@@ -332,6 +332,7 @@ export class IglooCalendar {
           language: this.language,
           is_backend: true,
           include_units_hk_status: true,
+          include_sales_rate_plans: true,
         });
         roomResp = propertyData;
         propertyId = propertyData.My_Result.id;
@@ -350,6 +351,7 @@ export class IglooCalendar {
             language: this.language,
             is_backend: true,
             include_units_hk_status: true,
+            include_sales_rate_plans: true,
           }),
         );
       }
