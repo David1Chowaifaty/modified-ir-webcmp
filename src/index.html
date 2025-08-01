@@ -24,16 +24,16 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
+    <ir-housekeeping baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-housekeeping>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
     <script>
-        const booking_listing = document.querySelector("ir-booking-listing");
-        if (booking_listing) {
+        const housekeepingEl = document.querySelector("ir-housekeeping");
+        if (housekeepingEl) {
             (async () => {
-                booking_listing.propertyid = getId();
-                booking_listing.ticket = await getToken()
-            })();
+                housekeepingEl.propertyid = getId();
+                housekeepingEl.ticket = await getToken();
+            })()
         } 
     </script>
 
