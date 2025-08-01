@@ -1178,6 +1178,9 @@ export namespace Components {
     interface IrMonthlyBookingsReportTable {
         "reports": DailyReport[];
     }
+    interface IrNotifications {
+        "notificationCount": number;
+    }
     interface IrOptionDetails {
         "propertyId": string;
     }
@@ -3442,6 +3445,12 @@ declare global {
         prototype: HTMLIrMonthlyBookingsReportTableElement;
         new (): HTMLIrMonthlyBookingsReportTableElement;
     };
+    interface HTMLIrNotificationsElement extends Components.IrNotifications, HTMLStencilElement {
+    }
+    var HTMLIrNotificationsElement: {
+        prototype: HTMLIrNotificationsElement;
+        new (): HTMLIrNotificationsElement;
+    };
     interface HTMLIrOptionDetailsElementEventMap {
         "closeModal": PaymentOption | null;
         "toast": IToast;
@@ -4220,6 +4229,7 @@ declare global {
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
         "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
         "ir-monthly-bookings-report-table": HTMLIrMonthlyBookingsReportTableElement;
+        "ir-notifications": HTMLIrNotificationsElement;
         "ir-option-details": HTMLIrOptionDetailsElement;
         "ir-ota-service": HTMLIrOtaServiceElement;
         "ir-ota-services": HTMLIrOtaServicesElement;
@@ -5536,6 +5546,9 @@ declare namespace LocalJSX {
     interface IrMonthlyBookingsReportTable {
         "reports"?: DailyReport[];
     }
+    interface IrNotifications {
+        "notificationCount"?: number;
+    }
     interface IrOptionDetails {
         "onCloseModal"?: (event: IrOptionDetailsCustomEvent<PaymentOption | null>) => void;
         "onToast"?: (event: IrOptionDetailsCustomEvent<IToast>) => void;
@@ -6479,6 +6492,7 @@ declare namespace LocalJSX {
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
         "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
         "ir-monthly-bookings-report-table": IrMonthlyBookingsReportTable;
+        "ir-notifications": IrNotifications;
         "ir-option-details": IrOptionDetails;
         "ir-ota-service": IrOtaService;
         "ir-ota-services": IrOtaServices;
@@ -6611,6 +6625,7 @@ declare module "@stencil/core" {
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
             "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;
             "ir-monthly-bookings-report-table": LocalJSX.IrMonthlyBookingsReportTable & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportTableElement>;
+            "ir-notifications": LocalJSX.IrNotifications & JSXBase.HTMLAttributes<HTMLIrNotificationsElement>;
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
             "ir-ota-service": LocalJSX.IrOtaService & JSXBase.HTMLAttributes<HTMLIrOtaServiceElement>;
             "ir-ota-services": LocalJSX.IrOtaServices & JSXBase.HTMLAttributes<HTMLIrOtaServicesElement>;

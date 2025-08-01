@@ -167,17 +167,15 @@ export class IrMCombobox {
 
   private updateSlotElements() {
     if (!this.useSlot || !this.dropdownRef) return;
-    
+
     const slotElement = this.dropdownRef.querySelector('slot[name="dropdown-content"]');
     if (slotElement) {
-      const assignedElements = (slotElement as any).assignedElements ? 
-        (slotElement as any).assignedElements() : 
-        Array.from(this.el.querySelectorAll('[slot="dropdown-content"] [data-option]'));
-      
-      this.slotElements = assignedElements.length > 0 ? 
-        assignedElements : 
-        Array.from(this.dropdownRef.querySelectorAll('[data-option], .dropdown-item[style*="cursor"]'));
-      
+      const assignedElements = (slotElement as any).assignedElements
+        ? (slotElement as any).assignedElements()
+        : Array.from(this.el.querySelectorAll('[slot="dropdown-content"] [data-option]'));
+
+      this.slotElements = assignedElements.length > 0 ? assignedElements : Array.from(this.dropdownRef.querySelectorAll('[data-option], .dropdown-item[style*="cursor"]'));
+
       this.slotElements.forEach((element, index) => {
         element.setAttribute('data-slot-index', index.toString());
         element.setAttribute('role', 'option');
@@ -212,7 +210,7 @@ export class IrMCombobox {
 
   private handleKeyDown = (event: KeyboardEvent) => {
     const maxIndex = this.useSlot ? this.slotElements.length - 1 : this.filteredOptions.length - 1;
-    
+
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
@@ -309,9 +307,11 @@ export class IrMCombobox {
           role="combobox"
           id={this.id}
           value={this.selectedOption?.label || ''}
+          placeholder={this.placeholder}
           aria-expanded={String(this.isOpen)}
           aria-autocomplete="list"
           aria-controls={this.dropdownId}
+          data-reference="parent"
           aria-haspopup="listbox"
           aria-activedescendant={this.focusedIndex >= 0 ? `${this.dropdownId}-option-${this.focusedIndex}` : null}
           aria-label="Combobox"
