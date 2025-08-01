@@ -1,4 +1,4 @@
-/* .backdropModal {
+.backdropModal {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   position: fixed;
@@ -18,9 +18,9 @@
 
 .ir-modal[data-state='opened'] {
   opacity: 1;
-  
-  visibility: visible; 
-  pointer-events: all; 
+
+  visibility: visible;
+  pointer-events: all;
   transition: all 0.3s ease-in-out;
 }
 .ir-alert-content {
@@ -54,30 +54,12 @@
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
   visibility: hidden;
   pointer-events: none;
-  }
-  
-  .ir-modal.active {
-    opacity: 1;
-    transform: translate(-50%, 0);
-    visibility: visible; 
-    pointer-events: all; 
-    transition: all 0.3s ease-in-out;
-    } */
-:host {
-  font-size: 1rem;
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-.modal-backdrop {
-  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
-.ir-alert-footer {
-  gap: 10px;
-}
-
-.exit-icon {
-  position: absolute;
-  right: 10px;
-  top: 5px;
-  margin: 0;
+.ir-modal.active {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  visibility: visible;
+  pointer-events: all;
+  transition: all 0.3s ease-in-out;
 }
