@@ -199,7 +199,7 @@ export class IrBookingHeader {
               this.currentDialogStatus = null;
             }
           }}
-          style={this.currentDialogStatus === 'events-log' && { '--ir-dialog-max-width': '400px' }}
+          style={this.currentDialogStatus === 'events-log' && { '--ir-dialog-max-width': 'max-content' }}
           ref={el => (this.dialogRef = el)}
         >
           {this.renderDialogBody()}
