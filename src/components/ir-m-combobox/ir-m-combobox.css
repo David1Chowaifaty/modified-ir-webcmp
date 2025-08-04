@@ -29,6 +29,7 @@
 .dropdown-item.active,
 .dropdown-item.focused {
   background-color: var(--blue, #1e9ff2) !important;
+  color: white !important;
 }
 
 /* Slot content focus styles */
