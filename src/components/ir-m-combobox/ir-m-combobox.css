@@ -28,18 +28,18 @@
 
 .dropdown-item.active,
 .dropdown-item.focused {
-  background-color: var(--blue);
+  background-color: var(--blue, #1e9ff2) !important;
 }
 
 /* Slot content focus styles */
 [slot='dropdown-content'] .dropdown-item.focused,
 [slot='dropdown-content'] .dropdown-item.active {
-  background-color: #0d6efd !important;
+  background-color: #1e9ff2 !important;
   color: white !important;
 }
 
 [slot='dropdown-content'] [data-option].focused,
 [slot='dropdown-content'] [data-option].active {
-  background-color: #0d6efd !important;
+  background-color: #1e9ff2 !important;
   color: white !important;
 }
