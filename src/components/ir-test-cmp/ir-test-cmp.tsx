@@ -1,6 +1,7 @@
 import { Component, Host, State, h } from '@stencil/core';
 import { Moment } from 'moment';
 import { ComboboxOption } from '../ir-m-combobox/ir-m-combobox';
+import { ACPages } from '@/components';
 
 @Component({
   tag: 'ir-test-cmp',
@@ -93,11 +94,160 @@ export class IrTestCmp {
     }
   };
   @State() notificationCount: number = 0;
-  @State() isMobileMenuOpen: boolean = false;
+  @State() isMobileMenuOpen: boolean = true;
 
   private toggleMobileMenu = () => {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   };
+  private pages: ACPages[] = [
+    {
+      label: 'Dashboard',
+      href: 'acdashboard.aspx',
+      id: 'Li_AcDashboard',
+      icon: 'la la-dashboard',
+    },
+    {
+      label: 'Frontdesk',
+      href: 'frontdesk.aspx',
+      id: 'Li_FrontDesk',
+      icon: 'la la-calendar',
+    },
+    {
+      label: 'Inventory',
+      href: 'acratesallotment.aspx',
+      id: 'Li_AcRatesAllotment',
+      icon: 'la la-list',
+    },
+    {
+      label: 'Marketing',
+      id: 'Li_AcPromotions',
+      icon: 'la la-rocket',
+      href: '#',
+      subMenus: [
+        {
+          label: 'Discounts',
+          href: 'acpromodiscounts.aspx',
+        },
+        {
+          label: 'Automated Emails',
+          href: 'acautomatedemails.aspx',
+          id: 'Li_AutomatedEmails',
+        },
+      ],
+    },
+    {
+      label: 'Bookings',
+      href: 'acbookinglist.aspx',
+      icon: 'la la-suitcase',
+    },
+    {
+      href: '#',
+      label: 'Settings',
+      id: 'Li_AcSetup',
+      icon: 'la la-building',
+      subMenus: [
+        {
+          label: 'General Info',
+          href: 'acgeneral.aspx',
+        },
+        {
+          label: 'Facilities & Services',
+          href: 'acamenities.aspx',
+        },
+        {
+          label: 'Descriptions',
+          href: 'acdescriptions.aspx',
+          id: 'Li_AcDesc',
+        },
+        {
+          label: 'Policies',
+          href: 'acconcan.aspx',
+        },
+        {
+          label: 'Money Matters',
+          href: 'accommtax.aspx',
+        },
+        {
+          label: 'Rooms & Rate Plans',
+          href: 'acroomcategories.aspx',
+          className: 'Li_AcRooming anchor_AcRooming',
+        },
+        {
+          label: 'Housekeeping & Check-in Setup',
+          href: 'ACHousekeeping.aspx',
+          id: 'Li_Housekeeping',
+        },
+        {
+          label: 'Agents and Groups',
+          href: 'actravelagents.aspx',
+        },
+        {
+          label: 'Image Gallery',
+          href: 'acimagegallery.aspx',
+          className: 'Li_AcRooming',
+        },
+        {
+          label: 'Pickup Services',
+          href: 'acpickups.aspx',
+        },
+        {
+          label: 'Integrations',
+          href: 'acintegrations.aspx',
+        },
+        {
+          label: 'iSPACE',
+          href: 'acthemingwebsite.aspx',
+        },
+        {
+          label: 'iCHANNEL',
+          href: 'acigloochannel.aspx',
+        },
+        {
+          label: 'iSWITCH',
+          href: 'iSwitch.aspx',
+          id: 'Li_iSwitch',
+        },
+      ],
+    },
+    {
+      href: '#',
+      label: 'Reports',
+      id: 'Li_AcAnalytics',
+      icon: 'la la-bar-chart',
+      subMenus: [
+        {
+          label: 'Housekeeping Tasks',
+          href: 'ACHousekeepingTasks.aspx',
+          id: 'Li_HousekeepingTasks',
+        },
+        {
+          label: 'Guests',
+          href: 'acmemberlist.aspx',
+        },
+        {
+          label: 'Sales Statistics',
+          href: 'acsalesstatistics.aspx',
+        },
+        {
+          label: 'Sales by Channel',
+          href: 'acsalesbychannel.aspx',
+        },
+        {
+          label: 'Sales by Country',
+          href: 'acsalesbycountry.aspx',
+        },
+        {
+          label: 'Daily Occupancy',
+          href: 'ACDailyOccupancy.aspx',
+          id: 'Li_DailyOccupancy',
+        },
+        {
+          label: 'Accounting Report',
+          href: 'acaccountingreport.aspx',
+        },
+      ],
+    },
+  ];
 
   render() {
     return (
@@ -200,9 +350,12 @@ export class IrTestCmp {
                   </a>
                 </li>
               </ul>
+              <ac-pages-menu location="sheet" pages={this.pages}></ac-pages-menu>
             </div>
           </div>
-          <div class="submenus d-none d-md-block"></div>
+          <div class="submenus d-none d-md-block">
+            <ac-pages-menu pages={this.pages}></ac-pages-menu>
+          </div>
         </nav>
         <section class="p-2">
           <div class="row g-3">
@@ -229,6 +382,7 @@ export class IrTestCmp {
             <div class="col-md-3">
               <h5>Custom Dropdown Content</h5>
               <ir-m-combobox
+                class="custom-width"
                 ref={el => (this.customComboboxRef = el)}
                 placeholder="Search with custom dropdown..."
                 dataMode="external"

@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { ACPages } from "./components/ac-pages-menu/ac-pages-menu";
 import { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 import { ICurrency } from "./models/calendarData";
 import { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
@@ -37,6 +38,7 @@ import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 import { User } from "./models/Users";
 import { AllowedUser } from "./components/ir-user-management/types";
+export { ACPages } from "./components/ac-pages-menu/ac-pages-menu";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
@@ -70,6 +72,10 @@ export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { User } from "./models/Users";
 export { AllowedUser } from "./components/ir-user-management/types";
 export namespace Components {
+    interface AcPagesMenu {
+        "location": 'sheet' | 'nav';
+        "pages": ACPages[];
+    }
     interface IglApplicationInfo {
         "baseData": { unit: { id: string; name: string }; roomtypeId: number };
         "bedPreferenceType": any[];
@@ -1941,6 +1947,10 @@ export namespace Components {
         "text": string;
     }
 }
+export interface AcPagesMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLAcPagesMenuElement;
+}
 export interface IglBlockDatesViewCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIglBlockDatesViewElement;
@@ -2298,6 +2308,23 @@ export interface IrWeekdaySelectorCustomEvent<T> extends CustomEvent<T> {
     target: HTMLIrWeekdaySelectorElement;
 }
 declare global {
+    interface HTMLAcPagesMenuElementEventMap {
+        "linkClicked": MouseEvent;
+    }
+    interface HTMLAcPagesMenuElement extends Components.AcPagesMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLAcPagesMenuElementEventMap>(type: K, listener: (this: HTMLAcPagesMenuElement, ev: AcPagesMenuCustomEvent<HTMLAcPagesMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLAcPagesMenuElementEventMap>(type: K, listener: (this: HTMLAcPagesMenuElement, ev: AcPagesMenuCustomEvent<HTMLAcPagesMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLAcPagesMenuElement: {
+        prototype: HTMLAcPagesMenuElement;
+        new (): HTMLAcPagesMenuElement;
+    };
     interface HTMLIglApplicationInfoElement extends Components.IglApplicationInfo, HTMLStencilElement {
     }
     var HTMLIglApplicationInfoElement: {
@@ -4155,6 +4182,7 @@ declare global {
         new (): HTMLRequirementCheckElement;
     };
     interface HTMLElementTagNameMap {
+        "ac-pages-menu": HTMLAcPagesMenuElement;
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
         "igl-book-property": HTMLIglBookPropertyElement;
@@ -4285,6 +4313,11 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface AcPagesMenu {
+        "location"?: 'sheet' | 'nav';
+        "onLinkClicked"?: (event: AcPagesMenuCustomEvent<MouseEvent>) => void;
+        "pages"?: ACPages[];
+    }
     interface IglApplicationInfo {
         "baseData"?: { unit: { id: string; name: string }; roomtypeId: number };
         "bedPreferenceType"?: any[];
@@ -6418,6 +6451,7 @@ declare namespace LocalJSX {
         "text"?: string;
     }
     interface IntrinsicElements {
+        "ac-pages-menu": AcPagesMenu;
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
         "igl-book-property": IglBookProperty;
@@ -6551,6 +6585,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "ac-pages-menu": LocalJSX.AcPagesMenu & JSXBase.HTMLAttributes<HTMLAcPagesMenuElement>;
             "igl-application-info": LocalJSX.IglApplicationInfo & JSXBase.HTMLAttributes<HTMLIglApplicationInfoElement>;
             "igl-block-dates-view": LocalJSX.IglBlockDatesView & JSXBase.HTMLAttributes<HTMLIglBlockDatesViewElement>;
             "igl-book-property": LocalJSX.IglBookProperty & JSXBase.HTMLAttributes<HTMLIglBookPropertyElement>;
