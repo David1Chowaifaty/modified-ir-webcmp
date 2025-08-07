@@ -195,7 +195,7 @@ export class IrHousekeeping {
             leftBtnColor="secondary"
             rightBtnColor={'primary'}
             modalTitle={locales.entries.Lcz_Confirmation}
-            modalBody={'This action will reset all skipped tasks. Do you want to continue?'}
+            modalBody={'This action will reschedule all cleaning tasks. Do you want to continue?'}
           ></ir-modal>
         </section>
       </Host>
