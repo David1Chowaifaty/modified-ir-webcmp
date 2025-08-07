@@ -326,37 +326,16 @@ export class IglCalHeader {
             </div> */}
           </div>
           <div class="row justify-content-around no-gutters searchContiner">
-            <fieldset class={`form-group position-relative ${this.searchValue != '' ? 'show' : ''}`}>
-              <input
-                type="text"
-                class="form-control form-control-sm input-sm"
-                id="iconLeft7"
-                value={this.searchValue}
-                placeholder={locales.entries.Lcz_FindUnit}
-                onInput={event => this.handleFilterRooms(event)}
-              />
-              {this.searchValue !== '' ? (
-                <div
-                  class="form-control-position pointer"
-                  onClick={() => this.handleClearSearch()}
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  data-original-title="Clear Selection"
-                >
-                  <i class="la la-close font-small-4"></i>
-                </div>
-              ) : null}
-
-              {this.searchList.length ? (
-                <div class="position-absolute searchListContainer dropdown-menu dropdown-menu-left min-width-full">
-                  {this.searchList.map(room => (
-                    <div class="searchListItem1 dropdown-item px-1 text-left pointer" onClick={() => this.handleScrollToRoom(room.id)}>
-                      {room.name}
-                    </div>
-                  ))}
-                </div>
-              ) : null}
-            </fieldset>
+            <ir-m-combobox
+              placeholder={locales.entries.Lcz_FindUnit}
+              options={this.roomsList.map(r => ({
+                label: r.name,
+                value: r.id,
+              }))}
+              onOptionChange={e => {
+                this.handleScrollToRoom(e.detail.value);
+              }}
+            ></ir-m-combobox>
           </div>
         </div>
         <div class="stickyCell headersContainer">
