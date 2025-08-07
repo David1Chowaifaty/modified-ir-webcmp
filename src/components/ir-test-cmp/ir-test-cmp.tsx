@@ -328,28 +328,6 @@ export class IrTestCmp {
               <div class="mobile-search">
                 <ir-m-combobox placeholder="Search..." dataMode="static" options={this.staticOptions} onOptionChange={this.handleStaticOptionChange}></ir-m-combobox>
               </div>
-              <ul class="mobile-nav-items">
-                <li class="mobile-nav-item">
-                  <a href="#" class="mobile-nav-link">
-                    a
-                  </a>
-                </li>
-                <li class="mobile-nav-item">
-                  <a href="#" class="mobile-nav-link">
-                    b
-                  </a>
-                </li>
-                <li class="mobile-nav-item">
-                  <a href="#" class="mobile-nav-link">
-                    c
-                  </a>
-                </li>
-                <li class="mobile-nav-item">
-                  <a href="#" class="mobile-nav-link">
-                    d
-                  </a>
-                </li>
-              </ul>
               <ac-pages-menu location="sheet" pages={this.pages}></ac-pages-menu>
             </div>
           </div>

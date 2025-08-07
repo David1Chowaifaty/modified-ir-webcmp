@@ -224,10 +224,6 @@
   .navbar-brand {
     font-size: 1.25rem;
   }
-
-  .hotel-name {
-    display: none !important;
-  }
 }
 
 @media (min-width: 768px) {
@@ -240,36 +236,5 @@
   }
   .navbar-left {
     width: auto;
-  }
-}
-
-/* Utility classes for responsive design */
-.d-none {
-  display: none !important;
-}
-
-.d-md-none {
-  display: block !important;
-}
-
-.d-md-block {
-  display: none !important;
-}
-
-.d-md-flex {
-  display: none !important;
-}
-
-@media (min-width: 768px) {
-  .d-md-none {
-    display: none !important;
-  }
-
-  .d-md-block {
-    display: block !important;
-  }
-
-  .d-md-flex {
-    display: flex !important;
   }
 }

@@ -24,18 +24,11 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-housekeeping baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-housekeeping>
+    <!-- <ir-housekeeping baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-housekeeping> -->
+    <ir-test-cmp></ir-test-cmp>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
-    <script>
-        const housekeepingEl = document.querySelector("ir-housekeeping");
-        if (housekeepingEl) {
-            (async () => {
-                housekeepingEl.propertyid = getId();
-                housekeepingEl.ticket = await getToken();
-            })()
-        } 
-    </script>
+
 
 </body>
 
