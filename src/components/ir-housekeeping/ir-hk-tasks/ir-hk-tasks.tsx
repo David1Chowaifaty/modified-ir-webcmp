@@ -210,14 +210,14 @@ export class IrHkTasks {
       }
       this.isCleaningLoading = true;
       if (this.modalCauses?.cause === 'skip') {
-        const { booking_nbr, date } = this.modalCauses.task;
+        const { booking_nbr, date, unit } = this.modalCauses.task;
         await this.houseKeepingService.editHkSkip({
           BOOK_NBR: booking_nbr,
           DATE: date,
           COMMENT: '',
           HK_SKIP_ID: -1,
           HK_SKIP_REASON_CODE: '001',
-          PR_ID: this.property_id,
+          PR_ID: unit.id,
         });
       } else {
         await this.houseKeepingService.executeHKAction({
