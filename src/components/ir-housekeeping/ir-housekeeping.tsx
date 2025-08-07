@@ -7,6 +7,7 @@ import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } f
 import { IToast } from '@components/ui/ir-toast/toast';
 import locales from '@/stores/locales.store';
 import { PropertyService } from '@/services/property.service';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 @Component({
   tag: 'ir-housekeeping',
   styleUrl: 'ir-housekeeping.css',
@@ -28,6 +29,8 @@ export class IrHousekeeping {
   private houseKeepingService = new HouseKeepingService();
   private propertyService = new PropertyService();
   private token = new Token();
+  modal: HTMLIrModalElement;
+  selectedCleaningFrequency: any;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -85,6 +88,7 @@ export class IrHousekeeping {
       }
 
       await Promise.all(requests);
+      this.selectedCleaningFrequency = calendar_data.cleaning_frequency?.code;
     } catch (error) {
       console.error(error);
     } finally {
@@ -115,15 +119,16 @@ export class IrHousekeeping {
     try {
       await this.propertyService.setExposedCleaningFrequency({
         property_id: housekeeping_store.default_properties.property_id,
-        code: e.detail,
+        code: this.selectedCleaningFrequency,
       });
-      calendar_data.cleaning_frequency = { code: e.detail, description: '' };
+      calendar_data.cleaning_frequency = { code: this.selectedCleaningFrequency, description: '' };
       this.toast.emit({
         position: 'top-right',
         title: 'Saved Successfully',
         description: '',
         type: 'success',
       });
+      this.modal.closeModal();
     } catch (error) {
       console.log(error);
     }
@@ -159,8 +164,13 @@ export class IrHousekeeping {
               <ir-select
                 LabelAvailable={false}
                 showFirstOption={false}
-                selectedValue={calendar_data.cleaning_frequency?.code}
-                onSelectChange={e => this.saveCleaningFrequency(e)}
+                selectedValue={this.selectedCleaningFrequency}
+                onSelectChange={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.selectedCleaningFrequency = e.detail;
+                  this.modal.openModal();
+                }}
                 data={housekeeping_store?.hk_criteria?.cleaning_frequencies.map(v => ({
                   text: v.description,
                   value: v.code,
@@ -170,6 +180,23 @@ export class IrHousekeeping {
           </div>
           {/*<ir-unit-status class="mb-1"></ir-unit-status>*/}
           {calendar_data.housekeeping_enabled && <ir-hk-team class="mb-1"></ir-hk-team>}
+          <ir-modal
+            autoClose={false}
+            ref={el => (this.modal = el)}
+            isLoading={isRequestPending('/Set_Exposed_Cleaning_Frequency')}
+            onConfirmModal={this.saveCleaningFrequency.bind(this)}
+            iconAvailable={true}
+            onCancelModal={() => {
+              this.selectedCleaningFrequency = calendar_data.cleaning_frequency?.code;
+            }}
+            icon="ft-alert-triangle danger h1"
+            leftBtnText={locales.entries.Lcz_Cancel}
+            rightBtnText={locales.entries.Lcz_Confirm}
+            leftBtnColor="secondary"
+            rightBtnColor={'primary'}
+            modalTitle={locales.entries.Lcz_Confirmation}
+            modalBody={'This action will reset all skipped tasks. Do you want to continue?'}
+          ></ir-modal>
         </section>
       </Host>
     );

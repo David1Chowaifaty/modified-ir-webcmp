@@ -137,7 +137,7 @@ export class IrTasksFilters {
                 ></ir-select>
               </fieldset>
             )}
-            <fieldset>
+            {/* <fieldset>
               <p class="m-0 pt-0 px-0" style={{ paddingBottom: '0.25rem' }}>
                 {locales.entries.Lcz_CleaningFrequency}
               </p>
@@ -154,7 +154,7 @@ export class IrTasksFilters {
                   this.updateFilter({ cleaning_frequencies: { code: e.detail } });
                 }}
               ></ir-select>
-            </fieldset>
+            </fieldset> */}
             <fieldset>
               <p class="m-0 pt-0 px-0" style={{ paddingBottom: '0.25rem' }}>
                 Include dusty units
