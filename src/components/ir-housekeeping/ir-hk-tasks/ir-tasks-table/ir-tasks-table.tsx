@@ -119,7 +119,6 @@ export class IrTasksTable {
    * @returns {boolean} - Returns `true` if the task's date is today and in house, otherwise `false`.
    */
   private isSkippable(task: Task): boolean {
-    console.log(task);
     const isTodayTask = moment().isSame(moment(task.date, 'YYYY-MM-DD'), 'date');
     return isTodayTask && task.status.code === 'IH';
   }
