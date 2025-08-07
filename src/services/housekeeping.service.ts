@@ -16,6 +16,10 @@ export class HouseKeepingService {
     updateHKStore('hk_tasks', data['My_Result']);
     return data['My_Result'];
   }
+  public async editHkSkip(params: { HK_SKIP_ID: number; BOOK_NBR: string; PR_ID: number; DATE: string; HK_SKIP_REASON_CODE: '001'; COMMENT: string }) {
+    const { data } = await axios.post(`/Edit_Hk_skip`, params);
+    return data;
+  }
   public async getArchivedHKTasks(params: {
     property_id: number;
     from_date: string;

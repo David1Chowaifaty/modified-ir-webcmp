@@ -26,6 +26,7 @@ export class IrTasksTable {
   @Event({ bubbles: true, composed: true }) animateCleanedButton: EventEmitter<null>;
   @Event({ bubbles: true, composed: true }) rowSelectChange: EventEmitter<Task[]>;
   @Event({ bubbles: true, composed: true }) sortingChanged: EventEmitter<{ field: string; direction: 'ASC' | 'DESC' }>;
+  @Event({ bubbles: true, composed: true }) skipSelectedTask: EventEmitter<Task>;
 
   componentWillLoad() {
     if (this.tasks && this.tasks.length > 0) {
@@ -109,6 +110,20 @@ export class IrTasksTable {
     return moment(task.date, 'YYYY-MM-DD').isSameOrBefore(moment(), 'days');
   }
 
+  /**
+   * Determines if a task is skippable.
+   *
+   * A task is considered skippable if its date is today and should be In house.
+   *
+   * @param {Task} task - The task to skip.
+   * @returns {boolean} - Returns `true` if the task's date is today and in house, otherwise `false`.
+   */
+  private isSkippable(task: Task): boolean {
+    console.log(task);
+    const isTodayTask = moment().isSame(moment(task.date, 'YYYY-MM-DD'), 'date');
+    return isTodayTask && task.status.code === 'IH';
+  }
+
   render() {
     const haveManyHousekeepers = housekeeping_store?.hk_criteria?.housekeepers?.length > 1;
     const tasks = getPaginatedTasks();
@@ -123,7 +138,8 @@ export class IrTasksTable {
           {mobileTasks?.length === 0 && <p class="mx-auto">{locales.entries.Lcz_NoTasksFound}</p>}
           {mobileTasks.map(task => {
             const isCheckable = this.isCheckable(task);
-            return <ir-tasks-card task={task} key={task.id} isCheckable={isCheckable}></ir-tasks-card>;
+            const isSkippable = this.isSkippable(task);
+            return <ir-tasks-card task={task} isSkippable={isSkippable} key={task.id} isCheckable={isCheckable}></ir-tasks-card>;
           })}
           <ir-tasks-table-pagination></ir-tasks-table-pagination>
         </section>
@@ -195,6 +211,7 @@ export class IrTasksTable {
                       </div>
                     </th>
                   )}
+                  <th></th>
                 </tr>
               </thead>
 
@@ -241,6 +258,17 @@ export class IrTasksTable {
                           {task.housekeeper ?? locales.entries.Lcz_Unassigned}
                         </td>
                       )}
+                      <td>
+                        {this.isSkippable(task) && (
+                          <ir-button
+                            text="Skip"
+                            size="sm"
+                            onClickHandler={() => {
+                              this.skipSelectedTask.emit(task);
+                            }}
+                          ></ir-button>
+                        )}
+                      </td>
                     </tr>
                   );
                 })}

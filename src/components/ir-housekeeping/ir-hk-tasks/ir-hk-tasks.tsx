@@ -36,7 +36,7 @@ export class IrHkTasks {
   @State() isSidebarOpen: boolean;
   @State() isApplyFiltersLoading: boolean;
   @State() filters: TaskFilters;
-  @State() selectedTask: Task;
+  @State() modalCauses: { task?: Task; cause: 'skip' | 'clean' };
 
   @Event({ bubbles: true, composed: true }) clearSelectedHkTasks: EventEmitter<void>;
 
@@ -82,6 +82,13 @@ export class IrHkTasks {
       return;
     }
     this.table_sorting.set(field, direction);
+  }
+  @Listen('skipSelectedTask')
+  handleSkipSelectedTask(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.modalCauses = { task: e.detail, cause: 'skip' };
+    this.modal?.openModal();
   }
 
   private async init() {
@@ -190,7 +197,7 @@ export class IrHkTasks {
   handleSelectedTaskCleaningEvent(e: CustomEvent<Task>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.selectedTask = e.detail;
+    this.modalCauses = { task: e.detail, cause: 'clean' };
     this.modal?.openModal();
   }
 
@@ -202,14 +209,26 @@ export class IrHkTasks {
         return;
       }
       this.isCleaningLoading = true;
-      await this.houseKeepingService.executeHKAction({
-        actions: hkTasksStore.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id === 0 ? null : t.hkm_id, unit_id: t.unit.id, booking_nbr: t.booking_nbr })),
-      });
+      if (this.modalCauses?.cause === 'skip') {
+        const { booking_nbr, date } = this.modalCauses.task;
+        await this.houseKeepingService.editHkSkip({
+          BOOK_NBR: booking_nbr,
+          DATE: date,
+          COMMENT: '',
+          HK_SKIP_ID: -1,
+          HK_SKIP_REASON_CODE: '001',
+          PR_ID: this.property_id,
+        });
+      } else {
+        await this.houseKeepingService.executeHKAction({
+          actions: hkTasksStore.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id === 0 ? null : t.hkm_id, unit_id: t.unit.id, booking_nbr: t.booking_nbr })),
+        });
+      }
       await this.fetchTasksWithFilters();
     } finally {
       clearSelectedTasks();
-      if (this.selectedTask) {
-        this.selectedTask = null;
+      if (this.modalCauses) {
+        this.modalCauses = null;
       }
       this.isCleaningLoading = false;
       // this.clearSelectedTasks.emit();
@@ -287,9 +306,9 @@ export class IrHkTasks {
           isLoading={this.isCleaningLoading}
           onConfirmModal={this.handleModalConfirmation.bind(this)}
           onCancelModal={() => {
-            if (this.selectedTask) {
+            if (this.modalCauses) {
               clearSelectedTasks();
-              this.selectedTask = null;
+              this.modalCauses = null;
             }
           }}
           iconAvailable={true}
@@ -299,7 +318,13 @@ export class IrHkTasks {
           leftBtnColor="secondary"
           rightBtnColor={'primary'}
           modalTitle={locales.entries.Lcz_Confirmation}
-          modalBody={this.selectedTask ? `Update ${this.selectedTask?.unit?.name} to Clean` : 'Update selected unit(s) to Clean'}
+          modalBody={
+            this.modalCauses
+              ? this.modalCauses?.cause === 'clean'
+                ? `Update ${this.modalCauses?.task?.unit?.name} to Clean`
+                : 'Skip cleaning and reschedule for tomorrow.'
+              : 'Update selected unit(s) to Clean'
+          }
         ></ir-modal>
         <ir-sidebar
           open={this.isSidebarOpen}

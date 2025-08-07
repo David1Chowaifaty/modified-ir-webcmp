@@ -1741,6 +1741,7 @@ export namespace Components {
     }
     interface IrTasksCard {
         "isCheckable": boolean;
+        "isSkippable": boolean;
         "task": Task;
     }
     interface IrTasksFilters {
@@ -3950,6 +3951,7 @@ declare global {
     };
     interface HTMLIrTasksCardElementEventMap {
         "cleanSelectedTask": Task;
+        "skipSelectedTask": Task;
     }
     interface HTMLIrTasksCardElement extends Components.IrTasksCard, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksCardElementEventMap>(type: K, listener: (this: HTMLIrTasksCardElement, ev: IrTasksCardCustomEvent<HTMLIrTasksCardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4003,6 +4005,7 @@ declare global {
         "animateCleanedButton": null;
         "rowSelectChange": Task[];
         "sortingChanged": { field: string; direction: 'ASC' | 'DESC' };
+        "skipSelectedTask": Task;
     }
     interface HTMLIrTasksTableElement extends Components.IrTasksTable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksTableElementEventMap>(type: K, listener: (this: HTMLIrTasksTableElement, ev: IrTasksTableCustomEvent<HTMLIrTasksTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6221,7 +6224,9 @@ declare namespace LocalJSX {
     }
     interface IrTasksCard {
         "isCheckable"?: boolean;
+        "isSkippable"?: boolean;
         "onCleanSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
+        "onSkipSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
         "task"?: Task;
     }
     interface IrTasksFilters {
@@ -6234,6 +6239,7 @@ declare namespace LocalJSX {
     interface IrTasksTable {
         "onAnimateCleanedButton"?: (event: IrTasksTableCustomEvent<null>) => void;
         "onRowSelectChange"?: (event: IrTasksTableCustomEvent<Task[]>) => void;
+        "onSkipSelectedTask"?: (event: IrTasksTableCustomEvent<Task>) => void;
         "onSortingChanged"?: (event: IrTasksTableCustomEvent<{ field: string; direction: 'ASC' | 'DESC' }>) => void;
         "tasks"?: Task[];
     }

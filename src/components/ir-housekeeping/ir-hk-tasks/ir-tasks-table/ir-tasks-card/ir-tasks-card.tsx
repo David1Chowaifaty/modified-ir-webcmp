@@ -10,8 +10,10 @@ import { toggleTaskSelection } from '@/stores/hk-tasks.store';
 export class IrTasksCard {
   @Prop() task: Task;
   @Prop() isCheckable: boolean;
+  @Prop() isSkippable: boolean;
 
   @Event() cleanSelectedTask: EventEmitter<Task>;
+  @Event() skipSelectedTask: EventEmitter<Task>;
 
   render() {
     const baseText = 'Mark as clean';
@@ -118,6 +120,20 @@ export class IrTasksCard {
               }}
               size="sm"
               text={btnText}
+              labelStyle={{ textAlign: 'left !important' }}
+              btn_styles="text-left"
+            ></ir-button>
+          </div>
+        )}
+        {this.isSkippable && (
+          <div>
+            <ir-button
+              onClickHandler={() => {
+                // toggleTaskSelection(this.task);
+                this.skipSelectedTask.emit(this.task);
+              }}
+              size="sm"
+              text={'Skip'}
               labelStyle={{ textAlign: 'left !important' }}
               btn_styles="text-left"
             ></ir-button>

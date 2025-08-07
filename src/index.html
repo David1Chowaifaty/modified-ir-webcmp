@@ -24,26 +24,18 @@
 
 <body>
     <ir-common></ir-common>
-    <igloo-calendar currency-name="USD" propertyid="42" language="en"
-        baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <ir-hk-tasks baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-hk-tasks>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
     <script>
-        //backend-cmp-injector
-        //aname - username -password
-        var today = new Date();
-        today.setDate(today.getDate() - 1);
-        var _FROM_DATE = today.toISOString().substring(0, 10)
-        today.setDate(today.getDate() + 60);
-        var _TO_DATE = today.toISOString().substring(0, 10)
-        const calendar = document.querySelector("igloo-calendar");
-        calendar.from_date = _FROM_DATE;
-        calendar.to_date = _TO_DATE;
-        setTimeout(async () => {
-            const ticket = await getToken();
-            calendar.propertyid = getId();
-            calendar.ticket = ticket;
-        }, 300)
+        checkBrowserValidity()
+        const housekeepingEl = document.querySelector("ir-hk-tasks");
+        if (housekeepingEl) {
+            (async () => {
+                housekeepingEl.propertyid = getId();
+                housekeepingEl.ticket = await getToken()
+            })();
+        } 
     </script>
 
 </body>
