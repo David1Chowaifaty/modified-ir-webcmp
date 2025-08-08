@@ -82,16 +82,25 @@ export class IglBulkBlock {
         this.errors = 'rooms';
         return;
       }
-      for (const period of periods) {
-        await this.bookingService.blockUnit({
-          from_date: period.from,
-          to_date: period.to,
-          DESCRIPTION: '',
-          NOTES: '',
-          pr_id: this.selectedUnit?.unit_id?.toString(),
-          STAY_STATUS_CODE: '004',
-        });
-      }
+      // for (const period of periods) {
+      //   await this.bookingService.blockUnit({
+      //     from_date: period.from,
+      //     to_date: period.to,
+      //     DESCRIPTION: '',
+      //     NOTES: '',
+      //     pr_id: this.selectedUnit?.unit_id?.toString(),
+      //     STAY_STATUS_CODE: '004',
+      //   });
+      // }
+      await this.bookingService.blockAvailabilityForBrackets({
+        unit_id: this.selectedUnit?.unit_id,
+        description: '',
+        block_status_code: '004',
+        brackets: periods.map(p => ({
+          from_date: p.from,
+          to_date: p.to,
+        })),
+      });
       this.activate();
       this.deactivate();
       this.toast.emit({

@@ -365,6 +365,24 @@ export class BookingService {
       throw new Error(error);
     }
   }
+  public async blockAvailabilityForBrackets(params: {
+    unit_id: number;
+    block_status_code?: '003' | '004' | '002';
+    description?: string;
+    brackets: { from_date: string; to_date: string }[];
+  }) {
+    try {
+      const { data } = await axios.post(`/Block_Availability_For_Brackets`, params);
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
+      }
+      console.log(data);
+      return data['My_Params_Block_Exposed_Unit'];
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
   public async setDepartureTime(params: { property_id: number; room_identifier: string; code: string }) {
     const { data } = await axios.post('/Set_Departure_Time', params);
     if (data.ExceptionMsg !== '') {
