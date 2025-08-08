@@ -145,6 +145,7 @@ export class IrTestCmp {
       label: 'Settings',
       id: 'Li_AcSetup',
       icon: 'la la-building',
+      isNew: true,
       subMenus: [
         {
           label: 'General Info',
@@ -176,6 +177,7 @@ export class IrTestCmp {
           label: 'Housekeeping & Check-in Setup',
           href: 'ACHousekeeping.aspx',
           id: 'Li_Housekeeping',
+          isNew: true,
         },
         {
           label: 'Agents and Groups',
@@ -214,6 +216,7 @@ export class IrTestCmp {
       label: 'Reports',
       id: 'Li_AcAnalytics',
       icon: 'la la-bar-chart',
+      isNew: true,
       subMenus: [
         {
           label: 'Housekeeping Tasks',
@@ -231,10 +234,12 @@ export class IrTestCmp {
         {
           label: 'Sales by Channel',
           href: 'acsalesbychannel.aspx',
+          isNew: true,
         },
         {
           label: 'Sales by Country',
           href: 'acsalesbycountry.aspx',
+          isNew: true,
         },
         {
           label: 'Daily Occupancy',
@@ -248,6 +253,7 @@ export class IrTestCmp {
       ],
     },
   ];
+  @State() showMegaMenu: boolean;
 
   render() {
     return (
@@ -289,10 +295,120 @@ export class IrTestCmp {
             <div class="navbar-right">
               {/* Desktop navigation */}
               <ul class="nav-items d-none d-md-flex">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
+                <li class="nav-item dropdown">
+                  <a data-reference="parent" href="#" role="button" class="nav-link" data-toggle="dropdown" aria-expanded="false">
                     a
                   </a>
+                  {/* Mega menu */}
+                  <ul class={`ir-mega-menu mx-auto dropdown-menu-right dropdown-menu    w-100 shadow-sm`}>
+                    <li>
+                      <ul class="ir-mega-menu-column">
+                        <li class="ir-mega-menu-row title">Parameters</li>
+                        <li class="ir-mega-menu-row">
+                          <a href="userinline.aspx">Users List</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="languageinline.aspx">System Languages</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="countryinline.aspx">Countries</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="level2inline.aspx">Country Level 2</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="cardinline.aspx">Credit Cards</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="hotel_chaininline.aspx">Hotel Chains</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="currencyinline.aspx">Currencies</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="amenityinline.aspx">Amenities</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="foodinline.aspx">Food</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="beddinginline.aspx">Bedding</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="setupinline.aspx">Setup Table</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="gwedit.aspx">Payment Gateways</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="channelmanager.aspx">Channel Manager</a>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <ul class="ir-mega-menu-column">
+                        <li class="ir-mega-menu-row title">Main</li>
+                        <li class="ir-mega-menu-row">
+                          <a href="mpolist.aspx">MPOs</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="aclist.aspx">Properties</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="acbookinglist.aspx?MODE=MPO">Bookings</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="mpoaffiliateproperties.aspx">MPO Affiliate Properties</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="acratesallotment.aspx?VIEW_MODE=CV">MPO Combined Inventory</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="acbookinglist.aspx?VIEW_MODE=CV">MPO Combined Bookings</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="Acmemberlist.aspx?VIEW_MODE=CV">MPO Combined Guests</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="mpobillingreport.aspx">MPO Billing Report</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="Acmemberlist.aspx">Guests</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="acbookinglist.aspx">Bookings</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="billing.aspx">Billing</a>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <ul class="ir-mega-menu-column">
+                        <li class="ir-mega-menu-row title">Locations</li>
+                        <li class="ir-mega-menu-row">
+                          <a href="poicategoriesinline.aspx">Types</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="poilist.aspx">List</a>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <ul class="ir-mega-menu-column">
+                        <li class="ir-mega-menu-row title">Referrers</li>
+                        <li class="ir-mega-menu-row">
+                          <a href="affiliatelist.aspx">Affiliates</a>
+                        </li>
+                        <li class="ir-mega-menu-row">
+                          <a href="travelagentslist.aspx">Travel Agents ...NOT USED</a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
                 </li>
                 <li class="nav-item">
                   <a href="#" class="nav-link">
@@ -331,6 +447,7 @@ export class IrTestCmp {
               <ac-pages-menu location="sheet" pages={this.pages}></ac-pages-menu>
             </div>
           </div>
+
           <div class="submenus d-none d-md-block">
             <ac-pages-menu pages={this.pages}></ac-pages-menu>
           </div>

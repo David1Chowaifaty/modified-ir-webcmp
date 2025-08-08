@@ -42,11 +42,14 @@ export class AcPagesMenu {
                     data-target={`#${_collapseId}`}
                     aria-controls={_collapseId}
                   >
-                    <span>
+                    <div class={'d-flex align-items-center'} style={{ gap: '0.25rem' }}>
                       {page.icon && <i class={page.icon}></i>}
                       <span>{page.label}</span>
-                    </span>
-                    <ir-icons name="angle-down"></ir-icons>
+                    </div>
+                    <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+                      {page.isNew && <span class="new-badge">new</span>}
+                      <ir-icons name="angle-down"></ir-icons>
+                    </div>
                   </button>
                   <ul class="collapse " id={_collapseId}>
                     {page.subMenus.map(submenu => {
@@ -57,6 +60,7 @@ export class AcPagesMenu {
                             {submenu.icon && <i class={submenu.icon}></i>}
                             <span>{submenu.label}</span>
                           </a>
+                          {submenu.isNew && <span class="new-badge">new</span>}
                         </li>
                       );
                     })}
@@ -67,8 +71,11 @@ export class AcPagesMenu {
             return (
               <li key={id} id={id} class={`${page.className ?? ''}  mobile-nav-item`}>
                 <a href={page.href} onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link">
-                  {page.icon && <i class={page.icon}></i>}
-                  <span>{page.label}</span>
+                  <span>
+                    {page.icon && <i class={page.icon}></i>}
+                    <span>{page.label}</span>
+                  </span>
+                  {page.isNew && <span class="new-badge">new</span>}
                 </a>
               </li>
             );
@@ -100,18 +107,24 @@ export class AcPagesMenu {
                 data-menu="dropdown"
                 class={`dropdown  navigation-item ac-menu-dropdown ${isSheet ? 'mobile-nav-item' : ''} ${page.className}`}
               >
-                <a class="dropdown-toggle navigation-link" href="#" data-toggle="dropdown">
-                  {page.icon && <i class={page.icon}></i>}
-                  <span>{page.label}</span>
-                </a>
+                <button class="btn dropdown-toggle navigation-link" data-toggle="dropdown">
+                  <span>
+                    {page.icon && <i class={page.icon}></i>}
+                    <span>{page.label}</span>
+                  </span>
+                  {page.isNew && <span class="new-badge">new</span>}
+                </button>
                 <ul class="dropdown-menu ">
                   {page.subMenus.map(submenu => {
                     const menuId = submenu.id ?? v4();
                     return (
                       <li key={menuId} id={menuId} class={`navigation-item ${submenu.className ?? ''}`}>
                         <a onClick={e => this.linkClicked.emit(e)} class="dropdown-item" href={submenu.href}>
-                          {submenu.icon && <i class={submenu.icon}></i>}
-                          <span>{submenu.label}</span>
+                          <span>
+                            {submenu.icon && <i class={submenu.icon}></i>}
+                            <span>{submenu.label}</span>
+                          </span>
+                          {submenu.isNew && <span class="new-badge">new</span>}
                         </a>
                       </li>
                     );
@@ -123,8 +136,11 @@ export class AcPagesMenu {
           return (
             <li key={id} id={id} class={`${page.className ?? ''}  navigation-item`}>
               <a href={page.href} onClick={e => this.linkClicked.emit(e)} class={`navigation-link`}>
-                {page.icon && <i class={page.icon}></i>}
-                <span>{page.label}</span>
+                <span>
+                  {page.icon && <i class={page.icon}></i>}
+                  <span>{page.label}</span>
+                </span>
+                {page.isNew && <span class="new-badge">new</span>}
               </a>
             </li>
           );
