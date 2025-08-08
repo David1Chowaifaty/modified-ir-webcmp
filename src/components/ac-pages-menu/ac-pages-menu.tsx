@@ -26,7 +26,7 @@ export class AcPagesMenu {
     const isSheet = this.location === 'sheet';
     if (isSheet) {
       return (
-        <ul class="mobile-nav-items accordion" data-menu="menu-navigation">
+        <ul class="mobile-nav-items accordion">
           {this.pages.map(page => {
             const id = page.id ?? v4();
             if (page.subMenus) {
@@ -77,7 +77,7 @@ export class AcPagesMenu {
       );
     }
     return (
-      <ul class="navigation-items" data-menu="menu-navigation">
+      <ul class="navigation-items">
         {this.pages.map(page => {
           const id = page.id ?? v4();
           if (page.subMenus) {
