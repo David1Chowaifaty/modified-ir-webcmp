@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property        | Attribute        | Description | Type     | Default     |
-| --------------- | ---------------- | ----------- | -------- | ----------- |
-| `bookingNumber` | `booking-number` |             | `string` | `undefined` |
+| Property        | Attribute        | Description | Type      | Default     |
+| --------------- | ---------------- | ----------- | --------- | ----------- |
+| `booking`       | --               |             | `Booking` | `undefined` |
+| `bookingNumber` | `booking-number` |             | `string`  | `undefined` |
 
 
 ## Dependencies

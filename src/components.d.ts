@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { ACPages } from "./components/ac-pages-menu/ac-pages-menu";
 import { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 import { ICurrency } from "./models/calendarData";
 import { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
@@ -18,7 +19,7 @@ import { RatePlan, RoomType } from "./models/property";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
-import { OpenSidebarEvent } from "./components/ir-booking-details/types";
+import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -26,15 +27,20 @@ import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
+import { ComboboxOption, DataMode } from "./components/ir-m-combobox/ir-m-combobox";
+import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { PaymentOption } from "./models/payment-options";
+import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
+import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 import { Tab } from "./components/ui/ir-tabs/ir-tabs";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 import { User } from "./models/Users";
 import { AllowedUser } from "./components/ir-user-management/types";
+export { ACPages } from "./components/ac-pages-menu/ac-pages-menu";
 export { IRatePlanSelection, RatePlanGuest } from "./stores/booking.store";
 export { ICurrency } from "./models/calendarData";
 export { ICountry, IEntries, RoomBlockDetails } from "./models/IBooking";
@@ -48,7 +54,7 @@ export { RatePlan, RoomType } from "./models/property";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
-export { OpenSidebarEvent } from "./components/ir-booking-details/types";
+export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -56,9 +62,13 @@ export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
+export { ComboboxOption, DataMode } from "./components/ir-m-combobox/ir-m-combobox";
+export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { PaymentOption } from "./models/payment-options";
+export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
+export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 export { Tab } from "./components/ui/ir-tabs/ir-tabs";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
@@ -66,6 +76,10 @@ export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
 export { User } from "./models/Users";
 export { AllowedUser } from "./components/ir-user-management/types";
 export namespace Components {
+    interface AcPagesMenu {
+        "location": 'sheet' | 'nav';
+        "pages": ACPages[];
+    }
     interface IglApplicationInfo {
         "baseData": { unit: { id: string; name: string }; roomtypeId: number };
         "bedPreferenceType": any[];
@@ -865,6 +879,10 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
+          * Forcing css style to the input container
+         */
+        "inputContainerStyle": { [key: string]: string };
+        /**
           * Forcing css style to the input
          */
         "inputForcedStyle"?: { [key: string]: string };
@@ -1063,6 +1081,38 @@ export namespace Components {
     }
     interface IrLogin {
     }
+    interface IrMCombobox {
+        /**
+          * Determines how the options are loaded into the component. - 'static': Uses the options passed through the `options` prop or the default internal list. - 'external': Emits search events for external handling, options updated via `options` prop.
+          * @default 'static'
+         */
+        "dataMode": DataMode;
+        /**
+          * Debounce delay in milliseconds for search events when using external data mode.
+          * @default 300
+         */
+        "debounceDelay": number;
+        /**
+          * Whether to show loading state
+         */
+        "loading": boolean;
+        /**
+          * List of available options for the combobox when using static data mode. If empty, falls back to a default internal option list.
+         */
+        "options": ComboboxOption[];
+        /**
+          * Placeholder text displayed in the input when no option is selected.
+         */
+        "placeholder": string;
+        /**
+          * Public method to select an option from external slot content
+         */
+        "selectOptionFromSlot": (option: ComboboxOption) => Promise<void>;
+        /**
+          * Whether to use slot content for custom dropdown rendering
+         */
+        "useSlot": boolean;
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -1132,6 +1182,22 @@ export namespace Components {
           * Controls whether the modal title is rendered.
          */
         "showTitle": boolean;
+    }
+    interface IrMonthlyBookingsReport {
+        "language": string;
+        "p": string;
+        "propertyid": number;
+        "ticket": string;
+    }
+    interface IrMonthlyBookingsReportFilter {
+        "baseFilters": DailyReportFilter;
+        "isLoading": boolean;
+    }
+    interface IrMonthlyBookingsReportTable {
+        "reports": DailyReport[];
+    }
+    interface IrNotifications {
+        "notificationCount": number;
     }
     interface IrOptionDetails {
         "propertyId": string;
@@ -1214,6 +1280,49 @@ export namespace Components {
           * ticket for verifying and resending the verification code
          */
         "ticket": string;
+    }
+    interface IrPagination {
+        /**
+          * Enables a dropdown for changing the number of items displayed per page.  When set to `true`, users can select a page size from the `pageSizes` array.  **Note:** This prop requires the `pageSizes` prop to be defined with one or more numeric values. If `pageSizes` is empty or undefined, the page size selector will not be displayed.
+          * @default false
+         */
+        "allowPageSizeChange": boolean;
+        /**
+          * Current active page number (1-based)
+         */
+        "currentPage": number;
+        /**
+          * Whether the pagination is disabled
+         */
+        "disabled": boolean;
+        /**
+          * Page size for calculations
+         */
+        "pageSize": number;
+        /**
+          * List of all page size
+         */
+        "pageSizes": number[];
+        /**
+          * Total number of pages available
+         */
+        "pages": number;
+        /**
+          * Label for the record type (e.g., 'items', 'tasks', 'records')
+         */
+        "recordLabel": string;
+        /**
+          * Whether to show total records count
+         */
+        "showTotalRecords": boolean;
+        /**
+          * Range of items currently being displayed
+         */
+        "showing": PaginationRange;
+        /**
+          * Total number of records/items
+         */
+        "total": number;
     }
     interface IrPasswordValidator {
         /**
@@ -1379,6 +1488,16 @@ export namespace Components {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrProgressIndicator {
+        /**
+          * The color variant of the progress bar. Options: - 'primary' (default) - 'secondary'
+         */
+        "color": 'primary' | 'secondary';
+        /**
+          * The percentage value to display and fill the progress bar. Example: "75%"
+         */
+        "percentage": string;
+    }
     interface IrRadio {
         /**
           * Whether the checkbox is checked.
@@ -1435,6 +1554,12 @@ export namespace Components {
          */
         "withOverlay": boolean;
     }
+    interface IrReportStatsCard {
+        "cardTitle": string;
+        "icon": TIcons;
+        "subtitle": string;
+        "value": string;
+    }
     interface IrReservationInformation {
         "booking": Booking;
         "countries": ICountry[];
@@ -1451,6 +1576,7 @@ export namespace Components {
         "booking": Booking;
         "bookingIndex": number;
         "currency": string;
+        "departureTime": IEntries[];
         "hasCheckIn": boolean;
         "hasCheckOut": boolean;
         "hasRoomAdd": boolean;
@@ -1461,6 +1587,7 @@ export namespace Components {
         "legendData": any;
         "mealCodeName": string;
         "myRoomTypeFoodCat": string;
+        "property_id": number;
         "room": Room;
         "roomsInfo": any;
     }
@@ -1527,6 +1654,7 @@ export namespace Components {
         "bookingNumber": string;
         "p": string;
         "propertyid": number;
+        "ticket": string;
     }
     interface IrSelect {
         "LabelAvailable": boolean;
@@ -1649,14 +1777,20 @@ export namespace Components {
          */
         "tabs": Tab[];
     }
+    interface IrTasksCard {
+        "isCheckable": boolean;
+        "isSkippable": boolean;
+        "task": Task;
+    }
     interface IrTasksFilters {
         "isLoading": boolean;
     }
     interface IrTasksHeader {
-        "isCleanedEnabled": boolean;
     }
     interface IrTasksTable {
         "tasks": Task[];
+    }
+    interface IrTasksTablePagination {
     }
     interface IrTestCmp {
     }
@@ -1761,6 +1895,14 @@ export namespace Components {
     }
     interface IrTooltip {
         /**
+          * Defines the horizontal alignment of the tooltip trigger content.  - `'start'`: Aligns the trigger to the left within its container. - `'center'`: Centers the trigger horizontally (default). - `'end'`: Aligns the trigger to the right within its container.  This alignment affects how the trigger (e.g., icon or slotted element) is positioned inside the outer tooltip container.
+         */
+        "alignment": 'start' | 'end' | 'center';
+        /**
+          * CSS classes applied to the outer tooltip container.
+         */
+        "containerClass": string;
+        /**
           * Inline styles applied to the outer tooltip container.
          */
         "containerStyle": { [key: string]: string };
@@ -1843,6 +1985,10 @@ export namespace Components {
          */
         "text": string;
     }
+}
+export interface AcPagesMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLAcPagesMenuElement;
 }
 export interface IglBlockDatesViewCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2064,9 +2210,17 @@ export interface IrLoginCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrLoginElement;
 }
+export interface IrMComboboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrMComboboxElement;
+}
 export interface IrModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrModalElement;
+}
+export interface IrMonthlyBookingsReportFilterCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrMonthlyBookingsReportFilterElement;
 }
 export interface IrOptionDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2079,6 +2233,10 @@ export interface IrOtpCustomEvent<T> extends CustomEvent<T> {
 export interface IrOtpModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrOtpModalElement;
+}
+export interface IrPaginationCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPaginationElement;
 }
 export interface IrPasswordValidatorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2156,6 +2314,10 @@ export interface IrTabsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrTabsElement;
 }
+export interface IrTasksCardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTasksCardElement;
+}
 export interface IrTasksFiltersCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrTasksFiltersElement;
@@ -2197,6 +2359,23 @@ export interface IrWeekdaySelectorCustomEvent<T> extends CustomEvent<T> {
     target: HTMLIrWeekdaySelectorElement;
 }
 declare global {
+    interface HTMLAcPagesMenuElementEventMap {
+        "linkClicked": MouseEvent;
+    }
+    interface HTMLAcPagesMenuElement extends Components.AcPagesMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLAcPagesMenuElementEventMap>(type: K, listener: (this: HTMLAcPagesMenuElement, ev: AcPagesMenuCustomEvent<HTMLAcPagesMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLAcPagesMenuElementEventMap>(type: K, listener: (this: HTMLAcPagesMenuElement, ev: AcPagesMenuCustomEvent<HTMLAcPagesMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLAcPagesMenuElement: {
+        prototype: HTMLAcPagesMenuElement;
+        new (): HTMLAcPagesMenuElement;
+    };
     interface HTMLIglApplicationInfoElement extends Components.IglApplicationInfo, HTMLStencilElement {
     }
     var HTMLIglApplicationInfoElement: {
@@ -3315,6 +3494,24 @@ declare global {
         prototype: HTMLIrLoginElement;
         new (): HTMLIrLoginElement;
     };
+    interface HTMLIrMComboboxElementEventMap {
+        "optionChange": ComboboxOption;
+        "searchQuery": string;
+    }
+    interface HTMLIrMComboboxElement extends Components.IrMCombobox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrMComboboxElementEventMap>(type: K, listener: (this: HTMLIrMComboboxElement, ev: IrMComboboxCustomEvent<HTMLIrMComboboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrMComboboxElementEventMap>(type: K, listener: (this: HTMLIrMComboboxElement, ev: IrMComboboxCustomEvent<HTMLIrMComboboxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrMComboboxElement: {
+        prototype: HTMLIrMComboboxElement;
+        new (): HTMLIrMComboboxElement;
+    };
     interface HTMLIrModalElementEventMap {
         "confirmModal": any;
         "cancelModal": any;
@@ -3332,6 +3529,41 @@ declare global {
     var HTMLIrModalElement: {
         prototype: HTMLIrModalElement;
         new (): HTMLIrModalElement;
+    };
+    interface HTMLIrMonthlyBookingsReportElement extends Components.IrMonthlyBookingsReport, HTMLStencilElement {
+    }
+    var HTMLIrMonthlyBookingsReportElement: {
+        prototype: HTMLIrMonthlyBookingsReportElement;
+        new (): HTMLIrMonthlyBookingsReportElement;
+    };
+    interface HTMLIrMonthlyBookingsReportFilterElementEventMap {
+        "applyFilters": DailyReportFilter;
+    }
+    interface HTMLIrMonthlyBookingsReportFilterElement extends Components.IrMonthlyBookingsReportFilter, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrMonthlyBookingsReportFilterElementEventMap>(type: K, listener: (this: HTMLIrMonthlyBookingsReportFilterElement, ev: IrMonthlyBookingsReportFilterCustomEvent<HTMLIrMonthlyBookingsReportFilterElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrMonthlyBookingsReportFilterElementEventMap>(type: K, listener: (this: HTMLIrMonthlyBookingsReportFilterElement, ev: IrMonthlyBookingsReportFilterCustomEvent<HTMLIrMonthlyBookingsReportFilterElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrMonthlyBookingsReportFilterElement: {
+        prototype: HTMLIrMonthlyBookingsReportFilterElement;
+        new (): HTMLIrMonthlyBookingsReportFilterElement;
+    };
+    interface HTMLIrMonthlyBookingsReportTableElement extends Components.IrMonthlyBookingsReportTable, HTMLStencilElement {
+    }
+    var HTMLIrMonthlyBookingsReportTableElement: {
+        prototype: HTMLIrMonthlyBookingsReportTableElement;
+        new (): HTMLIrMonthlyBookingsReportTableElement;
+    };
+    interface HTMLIrNotificationsElement extends Components.IrNotifications, HTMLStencilElement {
+    }
+    var HTMLIrNotificationsElement: {
+        prototype: HTMLIrNotificationsElement;
+        new (): HTMLIrNotificationsElement;
     };
     interface HTMLIrOptionDetailsElementEventMap {
         "closeModal": PaymentOption | null;
@@ -3400,6 +3632,28 @@ declare global {
     var HTMLIrOtpModalElement: {
         prototype: HTMLIrOtpModalElement;
         new (): HTMLIrOtpModalElement;
+    };
+    interface HTMLIrPaginationElementEventMap {
+        "pageChange": PaginationChangeEvent;
+        "pageSizeChange": PaginationChangeEvent;
+        "firstPage": PaginationChangeEvent;
+        "lastPage": PaginationChangeEvent;
+        "previousPage": PaginationChangeEvent;
+        "nextPage": PaginationChangeEvent;
+    }
+    interface HTMLIrPaginationElement extends Components.IrPagination, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPaginationElementEventMap>(type: K, listener: (this: HTMLIrPaginationElement, ev: IrPaginationCustomEvent<HTMLIrPaginationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPaginationElementEventMap>(type: K, listener: (this: HTMLIrPaginationElement, ev: IrPaginationCustomEvent<HTMLIrPaginationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPaginationElement: {
+        prototype: HTMLIrPaginationElement;
+        new (): HTMLIrPaginationElement;
     };
     interface HTMLIrPasswordValidatorElementEventMap {
         "passwordValidationChange": boolean;
@@ -3543,6 +3797,12 @@ declare global {
         prototype: HTMLIrPriceInputElement;
         new (): HTMLIrPriceInputElement;
     };
+    interface HTMLIrProgressIndicatorElement extends Components.IrProgressIndicator, HTMLStencilElement {
+    }
+    var HTMLIrProgressIndicatorElement: {
+        prototype: HTMLIrProgressIndicatorElement;
+        new (): HTMLIrProgressIndicatorElement;
+    };
     interface HTMLIrRadioElementEventMap {
         "checkChange": boolean;
     }
@@ -3576,6 +3836,12 @@ declare global {
     var HTMLIrRangePickerElement: {
         prototype: HTMLIrRangePickerElement;
         new (): HTMLIrRangePickerElement;
+    };
+    interface HTMLIrReportStatsCardElement extends Components.IrReportStatsCard, HTMLStencilElement {
+    }
+    var HTMLIrReportStatsCardElement: {
+        prototype: HTMLIrReportStatsCardElement;
+        new (): HTMLIrReportStatsCardElement;
     };
     interface HTMLIrReservationInformationElementEventMap {
         "openSidebar": OpenSidebarEvent<any>;
@@ -3613,9 +3879,12 @@ declare global {
     };
     interface HTMLIrRoomElementEventMap {
         "deleteFinished": string;
+        "toast": IToast;
         "pressCheckIn": any;
         "pressCheckOut": any;
         "editInitiated": TIglBookPropertyPayload;
+        "resetbooking": null;
+        "openSidebar": OpenSidebarEvent<RoomGuestsPayload>;
     }
     interface HTMLIrRoomElement extends Components.IrRoom, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomElementEventMap>(type: K, listener: (this: HTMLIrRoomElement, ev: IrRoomCustomEvent<HTMLIrRoomElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3783,6 +4052,24 @@ declare global {
         prototype: HTMLIrTabsElement;
         new (): HTMLIrTabsElement;
     };
+    interface HTMLIrTasksCardElementEventMap {
+        "cleanSelectedTask": Task;
+        "skipSelectedTask": Task;
+    }
+    interface HTMLIrTasksCardElement extends Components.IrTasksCard, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTasksCardElementEventMap>(type: K, listener: (this: HTMLIrTasksCardElement, ev: IrTasksCardCustomEvent<HTMLIrTasksCardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTasksCardElementEventMap>(type: K, listener: (this: HTMLIrTasksCardElement, ev: IrTasksCardCustomEvent<HTMLIrTasksCardElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrTasksCardElement: {
+        prototype: HTMLIrTasksCardElement;
+        new (): HTMLIrTasksCardElement;
+    };
     interface HTMLIrTasksFiltersElementEventMap {
         "applyFilters": TaskFilters;
     }
@@ -3821,6 +4108,7 @@ declare global {
         "animateCleanedButton": null;
         "rowSelectChange": Task[];
         "sortingChanged": { field: string; direction: 'ASC' | 'DESC' };
+        "skipSelectedTask": Task;
     }
     interface HTMLIrTasksTableElement extends Components.IrTasksTable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksTableElementEventMap>(type: K, listener: (this: HTMLIrTasksTableElement, ev: IrTasksTableCustomEvent<HTMLIrTasksTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3835,6 +4123,12 @@ declare global {
     var HTMLIrTasksTableElement: {
         prototype: HTMLIrTasksTableElement;
         new (): HTMLIrTasksTableElement;
+    };
+    interface HTMLIrTasksTablePaginationElement extends Components.IrTasksTablePagination, HTMLStencilElement {
+    }
+    var HTMLIrTasksTablePaginationElement: {
+        prototype: HTMLIrTasksTablePaginationElement;
+        new (): HTMLIrTasksTablePaginationElement;
     };
     interface HTMLIrTestCmpElement extends Components.IrTestCmp, HTMLStencilElement {
     }
@@ -3994,6 +4288,7 @@ declare global {
         new (): HTMLRequirementCheckElement;
     };
     interface HTMLElementTagNameMap {
+        "ac-pages-menu": HTMLAcPagesMenuElement;
         "igl-application-info": HTMLIglApplicationInfoElement;
         "igl-block-dates-view": HTMLIglBlockDatesViewElement;
         "igl-book-property": HTMLIglBookPropertyElement;
@@ -4065,12 +4360,18 @@ declare global {
         "ir-listing-modal": HTMLIrListingModalElement;
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-login": HTMLIrLoginElement;
+        "ir-m-combobox": HTMLIrMComboboxElement;
         "ir-modal": HTMLIrModalElement;
+        "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
+        "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
+        "ir-monthly-bookings-report-table": HTMLIrMonthlyBookingsReportTableElement;
+        "ir-notifications": HTMLIrNotificationsElement;
         "ir-option-details": HTMLIrOptionDetailsElement;
         "ir-ota-service": HTMLIrOtaServiceElement;
         "ir-ota-services": HTMLIrOtaServicesElement;
         "ir-otp": HTMLIrOtpElement;
         "ir-otp-modal": HTMLIrOtpModalElement;
+        "ir-pagination": HTMLIrPaginationElement;
         "ir-password-validator": HTMLIrPasswordValidatorElement;
         "ir-payment-actions": HTMLIrPaymentActionsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
@@ -4081,8 +4382,10 @@ declare global {
         "ir-pms-logs": HTMLIrPmsLogsElement;
         "ir-popover": HTMLIrPopoverElement;
         "ir-price-input": HTMLIrPriceInputElement;
+        "ir-progress-indicator": HTMLIrProgressIndicatorElement;
         "ir-radio": HTMLIrRadioElement;
         "ir-range-picker": HTMLIrRangePickerElement;
+        "ir-report-stats-card": HTMLIrReportStatsCardElement;
         "ir-reservation-information": HTMLIrReservationInformationElement;
         "ir-reset-password": HTMLIrResetPasswordElement;
         "ir-room": HTMLIrRoomElement;
@@ -4098,9 +4401,11 @@ declare global {
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-tabs": HTMLIrTabsElement;
+        "ir-tasks-card": HTMLIrTasksCardElement;
         "ir-tasks-filters": HTMLIrTasksFiltersElement;
         "ir-tasks-header": HTMLIrTasksHeaderElement;
         "ir-tasks-table": HTMLIrTasksTableElement;
+        "ir-tasks-table-pagination": HTMLIrTasksTablePaginationElement;
         "ir-test-cmp": HTMLIrTestCmpElement;
         "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
@@ -4117,6 +4422,11 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface AcPagesMenu {
+        "location"?: 'sheet' | 'nav';
+        "onLinkClicked"?: (event: AcPagesMenuCustomEvent<MouseEvent>) => void;
+        "pages"?: ACPages[];
+    }
     interface IglApplicationInfo {
         "baseData"?: { unit: { id: string; name: string }; roomtypeId: number };
         "bedPreferenceType"?: any[];
@@ -5056,6 +5366,10 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
+          * Forcing css style to the input container
+         */
+        "inputContainerStyle"?: { [key: string]: string };
+        /**
           * Forcing css style to the input
          */
         "inputForcedStyle"?: { [key: string]: string };
@@ -5266,6 +5580,42 @@ declare namespace LocalJSX {
     code: 'succsess' | 'error';
   }>) => void;
     }
+    interface IrMCombobox {
+        /**
+          * Determines how the options are loaded into the component. - 'static': Uses the options passed through the `options` prop or the default internal list. - 'external': Emits search events for external handling, options updated via `options` prop.
+          * @default 'static'
+         */
+        "dataMode"?: DataMode;
+        /**
+          * Debounce delay in milliseconds for search events when using external data mode.
+          * @default 300
+         */
+        "debounceDelay"?: number;
+        /**
+          * Whether to show loading state
+         */
+        "loading"?: boolean;
+        /**
+          * Emitted when a user selects an option from the combobox. The event payload contains the selected `ComboboxOption` object.
+         */
+        "onOptionChange"?: (event: IrMComboboxCustomEvent<ComboboxOption>) => void;
+        /**
+          * Emitted when the user types in the input field (debounced). Used for external data fetching in 'external' data mode.
+         */
+        "onSearchQuery"?: (event: IrMComboboxCustomEvent<string>) => void;
+        /**
+          * List of available options for the combobox when using static data mode. If empty, falls back to a default internal option list.
+         */
+        "options"?: ComboboxOption[];
+        /**
+          * Placeholder text displayed in the input when no option is selected.
+         */
+        "placeholder"?: string;
+        /**
+          * Whether to use slot content for custom dropdown rendering
+         */
+        "useSlot"?: boolean;
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -5335,6 +5685,23 @@ declare namespace LocalJSX {
           * Controls whether the modal title is rendered.
          */
         "showTitle"?: boolean;
+    }
+    interface IrMonthlyBookingsReport {
+        "language"?: string;
+        "p"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+    }
+    interface IrMonthlyBookingsReportFilter {
+        "baseFilters"?: DailyReportFilter;
+        "isLoading"?: boolean;
+        "onApplyFilters"?: (event: IrMonthlyBookingsReportFilterCustomEvent<DailyReportFilter>) => void;
+    }
+    interface IrMonthlyBookingsReportTable {
+        "reports"?: DailyReport[];
+    }
+    interface IrNotifications {
+        "notificationCount"?: number;
     }
     interface IrOptionDetails {
         "onCloseModal"?: (event: IrOptionDetailsCustomEvent<PaymentOption | null>) => void;
@@ -5426,6 +5793,73 @@ declare namespace LocalJSX {
           * ticket for verifying and resending the verification code
          */
         "ticket"?: string;
+    }
+    interface IrPagination {
+        /**
+          * Enables a dropdown for changing the number of items displayed per page.  When set to `true`, users can select a page size from the `pageSizes` array.  **Note:** This prop requires the `pageSizes` prop to be defined with one or more numeric values. If `pageSizes` is empty or undefined, the page size selector will not be displayed.
+          * @default false
+         */
+        "allowPageSizeChange"?: boolean;
+        /**
+          * Current active page number (1-based)
+         */
+        "currentPage"?: number;
+        /**
+          * Whether the pagination is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Emitted when the first page is requested
+         */
+        "onFirstPage"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the last page is requested
+         */
+        "onLastPage"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the next page is requested
+         */
+        "onNextPage"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the current page changes
+         */
+        "onPageChange"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the page size changes
+         */
+        "onPageSizeChange"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Emitted when the previous page is requested
+         */
+        "onPreviousPage"?: (event: IrPaginationCustomEvent<PaginationChangeEvent>) => void;
+        /**
+          * Page size for calculations
+         */
+        "pageSize"?: number;
+        /**
+          * List of all page size
+         */
+        "pageSizes"?: number[];
+        /**
+          * Total number of pages available
+         */
+        "pages"?: number;
+        /**
+          * Label for the record type (e.g., 'items', 'tasks', 'records')
+         */
+        "recordLabel"?: string;
+        /**
+          * Whether to show total records count
+         */
+        "showTotalRecords"?: boolean;
+        /**
+          * Range of items currently being displayed
+         */
+        "showing"?: PaginationRange;
+        /**
+          * Total number of records/items
+         */
+        "total"?: number;
     }
     interface IrPasswordValidator {
         "onPasswordValidationChange"?: (event: IrPasswordValidatorCustomEvent<boolean>) => void;
@@ -5615,6 +6049,16 @@ declare namespace LocalJSX {
          */
         "zod"?: ZodType<any, any>;
     }
+    interface IrProgressIndicator {
+        /**
+          * The color variant of the progress bar. Options: - 'primary' (default) - 'secondary'
+         */
+        "color"?: 'primary' | 'secondary';
+        /**
+          * The percentage value to display and fill the progress bar. Example: "75%"
+         */
+        "percentage"?: string;
+    }
     interface IrRadio {
         /**
           * Whether the checkbox is checked.
@@ -5676,6 +6120,12 @@ declare namespace LocalJSX {
          */
         "withOverlay"?: boolean;
     }
+    interface IrReportStatsCard {
+        "cardTitle"?: string;
+        "icon"?: TIcons;
+        "subtitle"?: string;
+        "value"?: string;
+    }
     interface IrReservationInformation {
         "booking"?: Booking;
         "countries"?: ICountry[];
@@ -5694,6 +6144,7 @@ declare namespace LocalJSX {
         "booking"?: Booking;
         "bookingIndex"?: number;
         "currency"?: string;
+        "departureTime"?: IEntries[];
         "hasCheckIn"?: boolean;
         "hasCheckOut"?: boolean;
         "hasRoomAdd"?: boolean;
@@ -5706,8 +6157,12 @@ declare namespace LocalJSX {
         "myRoomTypeFoodCat"?: string;
         "onDeleteFinished"?: (event: IrRoomCustomEvent<string>) => void;
         "onEditInitiated"?: (event: IrRoomCustomEvent<TIglBookPropertyPayload>) => void;
+        "onOpenSidebar"?: (event: IrRoomCustomEvent<OpenSidebarEvent<RoomGuestsPayload>>) => void;
         "onPressCheckIn"?: (event: IrRoomCustomEvent<any>) => void;
         "onPressCheckOut"?: (event: IrRoomCustomEvent<any>) => void;
+        "onResetbooking"?: (event: IrRoomCustomEvent<null>) => void;
+        "onToast"?: (event: IrRoomCustomEvent<IToast>) => void;
+        "property_id"?: number;
         "room"?: Room;
         "roomsInfo"?: any;
     }
@@ -5779,6 +6234,7 @@ declare namespace LocalJSX {
         "bookingNumber"?: string;
         "p"?: string;
         "propertyid"?: number;
+        "ticket"?: string;
     }
     interface IrSelect {
         "LabelAvailable"?: boolean;
@@ -5916,19 +6372,28 @@ declare namespace LocalJSX {
          */
         "tabs"?: Tab[];
     }
+    interface IrTasksCard {
+        "isCheckable"?: boolean;
+        "isSkippable"?: boolean;
+        "onCleanSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
+        "onSkipSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
+        "task"?: Task;
+    }
     interface IrTasksFilters {
         "isLoading"?: boolean;
         "onApplyFilters"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
     }
     interface IrTasksHeader {
-        "isCleanedEnabled"?: boolean;
         "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' | 'archive' }>) => void;
     }
     interface IrTasksTable {
         "onAnimateCleanedButton"?: (event: IrTasksTableCustomEvent<null>) => void;
         "onRowSelectChange"?: (event: IrTasksTableCustomEvent<Task[]>) => void;
+        "onSkipSelectedTask"?: (event: IrTasksTableCustomEvent<Task>) => void;
         "onSortingChanged"?: (event: IrTasksTableCustomEvent<{ field: string; direction: 'ASC' | 'DESC' }>) => void;
         "tasks"?: Task[];
+    }
+    interface IrTasksTablePagination {
     }
     interface IrTestCmp {
     }
@@ -6042,6 +6507,14 @@ declare namespace LocalJSX {
     }
     interface IrTooltip {
         /**
+          * Defines the horizontal alignment of the tooltip trigger content.  - `'start'`: Aligns the trigger to the left within its container. - `'center'`: Centers the trigger horizontally (default). - `'end'`: Aligns the trigger to the right within its container.  This alignment affects how the trigger (e.g., icon or slotted element) is positioned inside the outer tooltip container.
+         */
+        "alignment"?: 'start' | 'end' | 'center';
+        /**
+          * CSS classes applied to the outer tooltip container.
+         */
+        "containerClass"?: string;
+        /**
           * Inline styles applied to the outer tooltip container.
          */
         "containerStyle"?: { [key: string]: string };
@@ -6134,6 +6607,7 @@ declare namespace LocalJSX {
         "text"?: string;
     }
     interface IntrinsicElements {
+        "ac-pages-menu": AcPagesMenu;
         "igl-application-info": IglApplicationInfo;
         "igl-block-dates-view": IglBlockDatesView;
         "igl-book-property": IglBookProperty;
@@ -6205,12 +6679,18 @@ declare namespace LocalJSX {
         "ir-listing-modal": IrListingModal;
         "ir-loading-screen": IrLoadingScreen;
         "ir-login": IrLogin;
+        "ir-m-combobox": IrMCombobox;
         "ir-modal": IrModal;
+        "ir-monthly-bookings-report": IrMonthlyBookingsReport;
+        "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
+        "ir-monthly-bookings-report-table": IrMonthlyBookingsReportTable;
+        "ir-notifications": IrNotifications;
         "ir-option-details": IrOptionDetails;
         "ir-ota-service": IrOtaService;
         "ir-ota-services": IrOtaServices;
         "ir-otp": IrOtp;
         "ir-otp-modal": IrOtpModal;
+        "ir-pagination": IrPagination;
         "ir-password-validator": IrPasswordValidator;
         "ir-payment-actions": IrPaymentActions;
         "ir-payment-details": IrPaymentDetails;
@@ -6221,8 +6701,10 @@ declare namespace LocalJSX {
         "ir-pms-logs": IrPmsLogs;
         "ir-popover": IrPopover;
         "ir-price-input": IrPriceInput;
+        "ir-progress-indicator": IrProgressIndicator;
         "ir-radio": IrRadio;
         "ir-range-picker": IrRangePicker;
+        "ir-report-stats-card": IrReportStatsCard;
         "ir-reservation-information": IrReservationInformation;
         "ir-reset-password": IrResetPassword;
         "ir-room": IrRoom;
@@ -6238,9 +6720,11 @@ declare namespace LocalJSX {
         "ir-spinner": IrSpinner;
         "ir-switch": IrSwitch;
         "ir-tabs": IrTabs;
+        "ir-tasks-card": IrTasksCard;
         "ir-tasks-filters": IrTasksFilters;
         "ir-tasks-header": IrTasksHeader;
         "ir-tasks-table": IrTasksTable;
+        "ir-tasks-table-pagination": IrTasksTablePagination;
         "ir-test-cmp": IrTestCmp;
         "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
@@ -6260,6 +6744,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "ac-pages-menu": LocalJSX.AcPagesMenu & JSXBase.HTMLAttributes<HTMLAcPagesMenuElement>;
             "igl-application-info": LocalJSX.IglApplicationInfo & JSXBase.HTMLAttributes<HTMLIglApplicationInfoElement>;
             "igl-block-dates-view": LocalJSX.IglBlockDatesView & JSXBase.HTMLAttributes<HTMLIglBlockDatesViewElement>;
             "igl-book-property": LocalJSX.IglBookProperty & JSXBase.HTMLAttributes<HTMLIglBookPropertyElement>;
@@ -6331,12 +6816,18 @@ declare module "@stencil/core" {
             "ir-listing-modal": LocalJSX.IrListingModal & JSXBase.HTMLAttributes<HTMLIrListingModalElement>;
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-login": LocalJSX.IrLogin & JSXBase.HTMLAttributes<HTMLIrLoginElement>;
+            "ir-m-combobox": LocalJSX.IrMCombobox & JSXBase.HTMLAttributes<HTMLIrMComboboxElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
+            "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
+            "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;
+            "ir-monthly-bookings-report-table": LocalJSX.IrMonthlyBookingsReportTable & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportTableElement>;
+            "ir-notifications": LocalJSX.IrNotifications & JSXBase.HTMLAttributes<HTMLIrNotificationsElement>;
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
             "ir-ota-service": LocalJSX.IrOtaService & JSXBase.HTMLAttributes<HTMLIrOtaServiceElement>;
             "ir-ota-services": LocalJSX.IrOtaServices & JSXBase.HTMLAttributes<HTMLIrOtaServicesElement>;
             "ir-otp": LocalJSX.IrOtp & JSXBase.HTMLAttributes<HTMLIrOtpElement>;
             "ir-otp-modal": LocalJSX.IrOtpModal & JSXBase.HTMLAttributes<HTMLIrOtpModalElement>;
+            "ir-pagination": LocalJSX.IrPagination & JSXBase.HTMLAttributes<HTMLIrPaginationElement>;
             "ir-password-validator": LocalJSX.IrPasswordValidator & JSXBase.HTMLAttributes<HTMLIrPasswordValidatorElement>;
             "ir-payment-actions": LocalJSX.IrPaymentActions & JSXBase.HTMLAttributes<HTMLIrPaymentActionsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
@@ -6347,8 +6838,10 @@ declare module "@stencil/core" {
             "ir-pms-logs": LocalJSX.IrPmsLogs & JSXBase.HTMLAttributes<HTMLIrPmsLogsElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
+            "ir-progress-indicator": LocalJSX.IrProgressIndicator & JSXBase.HTMLAttributes<HTMLIrProgressIndicatorElement>;
             "ir-radio": LocalJSX.IrRadio & JSXBase.HTMLAttributes<HTMLIrRadioElement>;
             "ir-range-picker": LocalJSX.IrRangePicker & JSXBase.HTMLAttributes<HTMLIrRangePickerElement>;
+            "ir-report-stats-card": LocalJSX.IrReportStatsCard & JSXBase.HTMLAttributes<HTMLIrReportStatsCardElement>;
             "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;
             "ir-reset-password": LocalJSX.IrResetPassword & JSXBase.HTMLAttributes<HTMLIrResetPasswordElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
@@ -6364,9 +6857,11 @@ declare module "@stencil/core" {
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-tabs": LocalJSX.IrTabs & JSXBase.HTMLAttributes<HTMLIrTabsElement>;
+            "ir-tasks-card": LocalJSX.IrTasksCard & JSXBase.HTMLAttributes<HTMLIrTasksCardElement>;
             "ir-tasks-filters": LocalJSX.IrTasksFilters & JSXBase.HTMLAttributes<HTMLIrTasksFiltersElement>;
             "ir-tasks-header": LocalJSX.IrTasksHeader & JSXBase.HTMLAttributes<HTMLIrTasksHeaderElement>;
             "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;
+            "ir-tasks-table-pagination": LocalJSX.IrTasksTablePagination & JSXBase.HTMLAttributes<HTMLIrTasksTablePaginationElement>;
             "ir-test-cmp": LocalJSX.IrTestCmp & JSXBase.HTMLAttributes<HTMLIrTestCmpElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;

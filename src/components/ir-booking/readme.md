@@ -99,6 +99,7 @@ graph TD;
   ir-reservation-information --> ota-label
   ir-room --> ir-button
   ir-room --> ir-date-view
+  ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button

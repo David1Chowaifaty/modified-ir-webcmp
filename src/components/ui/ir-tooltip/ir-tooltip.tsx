@@ -27,6 +27,21 @@ export class IrTooltip {
    * Inline styles applied to the outer tooltip container.
    */
   @Prop() containerStyle: { [key: string]: string };
+  /**
+   * CSS classes applied to the outer tooltip container.
+   */
+  @Prop() containerClass: string;
+  /**
+   * Defines the horizontal alignment of the tooltip trigger content.
+   *
+   * - `'start'`: Aligns the trigger to the left within its container.
+   * - `'center'`: Centers the trigger horizontally (default).
+   * - `'end'`: Aligns the trigger to the right within its container.
+   *
+   * This alignment affects how the trigger (e.g., icon or slotted element)
+   * is positioned inside the outer tooltip container.
+   */
+  @Prop() alignment: 'start' | 'end' | 'center' = 'center';
 
   /**
    * Internal state tracking whether the tooltip is currently visible.
@@ -63,11 +78,23 @@ export class IrTooltip {
   }
 
   render() {
+    const alignment = (() => {
+      switch (this.alignment) {
+        case 'start':
+          return 'justify-content-start';
+        case 'end':
+          return 'justify-content-end';
+        case 'center':
+          return 'justify-content-center';
+        default:
+          return 'justify-content-center';
+      }
+    })();
     return (
       <Host class="m-0 p-0">
         <span
           style={this.containerStyle}
-          class={'m-0 p-0 d-flex align-items-center justify-content-center'}
+          class={`m-0 p-0 d-flex align-items-center ${alignment} ${this.containerClass}`}
           onMouseEnter={() => this.toggleOpen(true)}
           onMouseLeave={() => this.toggleOpen(false)}
         >

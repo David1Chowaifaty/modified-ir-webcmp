@@ -39,6 +39,7 @@ export class IrBookingHeader {
   private dialogRef: HTMLIrDialogElement;
 
   private bookingService = new BookingService();
+  private alertMessage = `ALERT! Modifying an OTA booking will create a discrepancy between igloorooms and the source. Future guest modifications on the OTA may require manual adjustments of the booking.`;
   modalEl: HTMLIrModalElement;
 
   @Listen('selectChange')
@@ -90,6 +91,7 @@ export class IrBookingHeader {
   }
 
   render() {
+    const lastManipulation = this.booking.ota_manipulations ? this.booking.ota_manipulations[this.booking.ota_manipulations.length - 1] : null;
     return (
       <div class="fluid-container px-1">
         <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between mt-1">
@@ -99,9 +101,23 @@ export class IrBookingHeader {
           </div>
 
           <div class="d-flex justify-content-end align-items-center" style={{ gap: '1rem', flexWrap: 'wrap' }}>
-            <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
-              {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
-            </span>
+            <div class="d-flex flex-column align-items-center">
+              <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
+                {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
+              </span>
+              {lastManipulation && (
+                <ir-popover
+                  trigger="hover"
+                  renderContentAsHtml
+                  content={`<div><p>Modified by ${lastManipulation.user} at ${lastManipulation.date} ${lastManipulation.hour}:${lastManipulation.minute}.</p>
+                <p>${this.alertMessage}</p></div>`}
+                >
+                  <p class="mx-0 p-0 small text-danger" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
+                    <b>Modified</b>
+                  </p>
+                </ir-popover>
+              )}
+            </div>
             {this.booking.allowed_actions.length > 0 && this.booking.is_editable && (
               <div class="m-0 p-0 d-flex align-items-center" style={{ gap: '0.25rem' }}>
                 <ir-select
@@ -183,7 +199,7 @@ export class IrBookingHeader {
               this.currentDialogStatus = null;
             }
           }}
-          style={this.currentDialogStatus === 'events-log' && { '--ir-dialog-max-width': '400px' }}
+          style={this.currentDialogStatus === 'events-log' && { '--ir-dialog-max-width': 'max-content' }}
           ref={el => (this.dialogRef = el)}
         >
           {this.renderDialogBody()}

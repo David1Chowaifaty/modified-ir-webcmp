@@ -174,15 +174,11 @@ export class IrSelect {
           >
             {this.showFirstOption && <option value={''}>{this.firstOption}</option>}
             {this.data.map(item => {
-              if (this.selectedValue === item.value) {
-                return (
-                  <option selected value={item.value}>
-                    {item.text}
-                  </option>
-                );
-              } else {
-                return <option value={item.value}>{item.text}</option>;
-              }
+              return (
+                <option selected={this.selectedValue === item.value} value={item.value}>
+                  {item.text}
+                </option>
+              );
             })}
           </select>
         </div>

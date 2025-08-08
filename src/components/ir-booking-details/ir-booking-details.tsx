@@ -66,6 +66,7 @@ export class IrBookingDetails {
   @State() bedPreference: IEntries[];
   @State() roomGuest: any;
   @State() modalState: { type: 'email' | (string & {}); message: string; loading: boolean } = null;
+  @State() departureTime: IEntries[];
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
   @Event() bookingChanged: EventEmitter<Booking>;
@@ -77,7 +78,7 @@ export class IrBookingDetails {
   private token = new Token();
 
   private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
-  modalRef: HTMLIrModalElement;
+  private modalRef: HTMLIrModalElement;
 
   componentWillLoad() {
     if (this.ticket !== '') {
@@ -220,15 +221,18 @@ export class IrBookingDetails {
   }
   private async initializeApp() {
     try {
-      const [roomResponse, languageTexts, countriesList, bookingDetails, bedPreference] = await Promise.all([
+      const [roomResponse, languageTexts, countriesList, bookingDetails, setupEntries] = await Promise.all([
         this.roomService.getExposedProperty({ id: this.propertyid || 0, language: this.language, aname: this.p }),
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
-        this.bookingService.getSetupEntriesByTableName('_BED_PREFERENCE_TYPE'),
+        this.bookingService.getSetupEntriesByTableNameMulti(['_BED_PREFERENCE_TYPE', '_DEPARTURE_TIME']),
       ]);
       this.property_id = roomResponse?.My_Result?.id;
-      this.bedPreference = bedPreference;
+      const { bed_preference_type, departure_time } = this.bookingService.groupEntryTablesResult(setupEntries);
+      this.bedPreference = bed_preference_type;
+      this.departureTime = departure_time;
+      console.log(departure_time);
       if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id && bookingDetails.is_direct) {
         this.paymentService
           .GetExposedCancellationDueAmount({
@@ -422,7 +426,9 @@ export class IrBookingDetails {
                 return [
                   <ir-room
                     room={room}
+                    property_id={this.property_id}
                     language={this.language}
+                    departureTime={this.departureTime}
                     bedPreferences={this.bedPreference}
                     isEditable={this.booking.is_editable}
                     legendData={this.calendarData.legendData}
@@ -520,7 +526,7 @@ export class IrBookingDetails {
     if (room.in_out && room.in_out.code !== '000') {
       return false;
     }
-    if (moment(new Date()).isSameOrAfter(new Date(room.from_date), 'days') && moment(new Date()).isBefore(new Date(room.to_date), 'days')) {
+    if (moment().isSameOrAfter(moment(room.from_date, 'YYYY-MM-DD'), 'days') && moment().isBefore(moment(room.to_date, 'YYYY-MM-DD'), 'days')) {
       return true;
     }
     return false;

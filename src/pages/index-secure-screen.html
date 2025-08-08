@@ -24,8 +24,16 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-secure-tasks propertyid="42"></ir-secure-tasks>
+    <ir-secure-tasks></ir-secure-tasks>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
+    <script>
+        const secureScreensEl = document.querySelector("ir-secure-tasks");
+        (async () => {
+            const ticket = await getToken();
+            secureScreensEl.propertyid = getId();
+            secureScreensEl.ticket = ticket;
+        })()
+    </script>
 </body>
 
 </html>

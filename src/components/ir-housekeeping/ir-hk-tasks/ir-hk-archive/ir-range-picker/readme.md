@@ -19,9 +19,9 @@
 
 ## Events
 
-| Event              | Description | Type                                                 |
-| ------------------ | ----------- | ---------------------------------------------------- |
-| `dateRangeChanged` |             | `CustomEvent<{ fromDate: Moment; toDate: Moment; }>` |
+| Event              | Description | Type                                                                       |
+| ------------------ | ----------- | -------------------------------------------------------------------------- |
+| `dateRangeChanged` |             | `CustomEvent<{ fromDate: Moment; toDate: Moment; wasFocused?: boolean; }>` |
 
 
 ## Dependencies

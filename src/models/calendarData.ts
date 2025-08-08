@@ -8,6 +8,10 @@ export interface CalendarDataDetails {
   currency: IPickupCurrency;
   endingDate: number;
   taxes: ITaxes[];
+  cleaning_frequency: {
+    code: string;
+    description: string;
+  };
   formattedLegendData: IFormattedLegendData;
   is_vacation_rental: boolean;
   legendData: ILegendData[];

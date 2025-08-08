@@ -317,3 +317,27 @@ export function generatePassword(length = 16): string {
     return password;
   }
 }
+/**
+ * Generates a list of time strings in military time (24-hour format) between two specified times,
+ * incremented by a given number of minutes.
+ *
+ * @param from - Start time in "HH:mm" (24-hour/military) format (e.g., "04:00").
+ * @param to - End time in "HH:mm" (24-hour/military) format (e.g., "18:00").
+ * @param stepMinutes - The interval step in minutes between time slots (default is 60).
+ * @returns An array of time strings in "HH:mm" format representing each step between the start and end times.
+ */
+export function generateTimeSlotsMilitary(from: string, to: string, stepMinutes: number = 60): string[] {
+  const startTime = moment(from, 'HH:mm');
+  const endTime = moment(to, 'HH:mm');
+
+  const timeSlots: string[] = [];
+
+  let currentTime = startTime.clone();
+
+  while (currentTime <= endTime) {
+    timeSlots.push(currentTime.format('HH:mm'));
+    currentTime.add(stepMinutes, 'minutes');
+  }
+
+  return timeSlots;
+}

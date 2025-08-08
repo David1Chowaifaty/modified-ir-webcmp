@@ -27,8 +27,8 @@ export class IglCalHeader {
   @Prop() highlightedDate: string;
   @State() renderAgain: boolean = false;
   @State() unassignedRoomsNumber: any = {};
-  private searchValue: string = '';
-  private searchList: { [key: string]: any }[] = [];
+  // private searchValue: string = '';
+  // private searchList: { [key: string]: any }[] = [];
   private roomsList: { [key: string]: any }[] = [];
   private toBeAssignedService = new ToBeAssignedService();
   dateRef: HTMLIrButtonElement;
@@ -132,20 +132,20 @@ export class IglCalHeader {
   }
 
   handleClearSearch() {
-    this.searchValue = '';
-    this.searchList = [];
+    // this.searchValue = '';
+    // this.searchList = [];
     this.renderView();
   }
 
   handleFilterRooms(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     let value = inputElement.value.trim();
-    this.searchValue = value;
+    // this.searchValue = value;
     value = value.toLowerCase();
     if (value === '') {
       this.handleClearSearch();
     } else {
-      this.searchList = this.roomsList.filter(room => room.name.toLocaleLowerCase().indexOf(value) != -1);
+      // this.searchList = this.roomsList.filter(room => room.name.toLocaleLowerCase().indexOf(value) != -1);
     }
     this.renderView();
   }
@@ -326,37 +326,16 @@ export class IglCalHeader {
             </div> */}
           </div>
           <div class="row justify-content-around no-gutters searchContiner">
-            <fieldset class={`form-group position-relative ${this.searchValue != '' ? 'show' : ''}`}>
-              <input
-                type="text"
-                class="form-control form-control-sm input-sm"
-                id="iconLeft7"
-                value={this.searchValue}
-                placeholder={locales.entries.Lcz_FindUnit}
-                onInput={event => this.handleFilterRooms(event)}
-              />
-              {this.searchValue !== '' ? (
-                <div
-                  class="form-control-position pointer"
-                  onClick={() => this.handleClearSearch()}
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  data-original-title="Clear Selection"
-                >
-                  <i class="la la-close font-small-4"></i>
-                </div>
-              ) : null}
-
-              {this.searchList.length ? (
-                <div class="position-absolute searchListContainer dropdown-menu dropdown-menu-left min-width-full">
-                  {this.searchList.map(room => (
-                    <div class="searchListItem1 dropdown-item px-1 text-left pointer" onClick={() => this.handleScrollToRoom(room.id)}>
-                      {room.name}
-                    </div>
-                  ))}
-                </div>
-              ) : null}
-            </fieldset>
+            <ir-m-combobox
+              placeholder={locales.entries.Lcz_FindUnit}
+              options={this.roomsList.map(r => ({
+                label: r.name,
+                value: r.id,
+              }))}
+              onOptionChange={e => {
+                this.handleScrollToRoom(e.detail.value);
+              }}
+            ></ir-m-combobox>
           </div>
         </div>
         <div class="stickyCell headersContainer">

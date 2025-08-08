@@ -9,6 +9,34 @@ export type CountrySalesParams = {
   BOOK_CASE: string;
   is_export_to_excel: boolean;
 };
+export type MonthlyStatsParams = {
+  property_id: number;
+  from_date: string;
+  to_date: string;
+  is_export_to_excel?: boolean;
+};
+export interface MonthlyStatsResults {
+  AverageOccupancy: number;
+  DailyStats: DailyStat[];
+  ExcelLink: null;
+  PeakDays: PeakDay[];
+  Occupancy_Difference_From_Previous_Month: number;
+  TotalUnitsBooked: number;
+}
+
+export interface PeakDay {
+  Date: string;
+  OccupancyPercent: number;
+}
+
+export interface DailyStat {
+  Date: string;
+  Occupancy: number;
+  Units_booked: number;
+  Rooms_Revenue: number;
+  ADR: number;
+  Total_Guests: number | undefined;
+}
 export class PropertyService {
   public async getExposedProperty(params: {
     id: number | null;
@@ -66,6 +94,16 @@ export class PropertyService {
     const { data } = await axios.post('/Set_Exposed_Cleaning_Frequency', params);
     if (data.ExceptionMsg !== '') {
       throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
+  }
+  public async getMonthlyStats(params: MonthlyStatsParams): Promise<MonthlyStatsResults> {
+    const { data } = await axios.post('/Get_Monthly_Stats', params);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    if (params.is_export_to_excel) {
+      downloadFile(data.My_Params_Get_Monthly_Stats.Link_excel);
     }
     return data.My_Result;
   }

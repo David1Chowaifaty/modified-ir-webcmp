@@ -26,6 +26,7 @@ export class RoomService {
       }
       const results = data.My_Result;
       calendar_data.adultChildConstraints = results.adult_child_constraints;
+      calendar_data.cleaning_frequency = results.cleaning_frequency;
       calendar_data.allowedBookingSources = results.allowed_booking_sources;
       calendar_data.allowed_payment_methods = results.allowed_payment_methods;
       calendar_data.currency = results.currency;

@@ -3,7 +3,7 @@ import { PropertyService } from '@/services/property.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { CountrySalesFilter, MappedCountries, SalesRecord } from './types';
+import { BaseSalesRecord, CountrySalesFilter, MappedCountries, SalesRecord } from './types';
 import moment from 'moment';
 import { v4 } from 'uuid';
 import { BookingService } from '@/services/booking.service';
@@ -104,6 +104,16 @@ export class IrSalesByCountry {
   }
 
   private async getCountrySales(isExportToExcel = false) {
+    const formatSalesData = (data): Omit<BaseSalesRecord, 'id'> => {
+      return {
+        country: data.COUNTRY,
+        country_id: data.COUNTRY_ID,
+        nights: data.NIGHTS,
+        percentage: data.PCT,
+        revenue: data.REVENUE,
+        number_of_guests: data.Total_Guests,
+      };
+    };
     try {
       const { include_previous_year, ...filterParams } = this.salesFilters;
       this.isLoading = isExportToExcel ? 'export' : 'filter';
@@ -131,35 +141,23 @@ export class IrSalesByCountry {
           const previous = previousYearSales.find(prev => prev.COUNTRY.toLowerCase() === current.COUNTRY.toLowerCase());
           return {
             id: v4(),
-            country: current.COUNTRY,
-            country_id: current.COUNTRY_ID,
-            nights: current.NIGHTS,
-            percentage: current.PCT,
-            revenue: current.REVENUE,
-            last_year: previous
-              ? {
-                  country: previous.COUNTRY,
-                  nights: previous.NIGHTS,
-                  country_id: previous.COUNTRY_ID,
-                  percentage: previous.PCT,
-                  revenue: previous.REVENUE,
-                }
-              : null,
+            ...formatSalesData(current),
+            last_year: previous ? formatSalesData(previous) : null,
           };
         });
       } else {
         enrichedSales = currentSales.map(record => ({
           id: v4(),
-          country: record.COUNTRY,
-          country_id: record.COUNTRY_ID,
-          nights: record.NIGHTS,
-          percentage: record.PCT,
+          ...formatSalesData(record),
           last_year: null,
-          revenue: record.REVENUE,
         }));
       }
 
-      this.salesData = enrichedSales;
+      this.salesData = enrichedSales.sort((a, b) => {
+        if (a.country_id === 0) return -1;
+        if (b.country_id === 0) return 1;
+        return 0;
+      });
     } catch (error) {
       console.error('Failed to fetch sales data:', error);
     } finally {

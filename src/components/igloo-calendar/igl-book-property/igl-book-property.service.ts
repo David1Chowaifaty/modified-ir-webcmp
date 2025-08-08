@@ -173,7 +173,7 @@ export class IglBookPropertyService {
               unit: override_unit ? { id: unit } : rateplan.guest[i].unit ? { id: rateplan.guest[i].unit } : null,
               occupancy: {
                 adult_nbr: rateplan.selected_variation.adult_nbr,
-                children_nbr: rateplan.selected_variation.child_nbr - Math.max(rateplan.guest[i].infant_nbr, 0),
+                children_nbr: Number(rateplan.selected_variation.child_nbr ?? 0) - Math.max(Number(rateplan.guest[i].infant_nbr ?? 0), 0),
                 infant_nbr: rateplan.guest[i].infant_nbr,
               },
               bed_preference: rateplan.guest[i].bed_preference,
@@ -257,7 +257,7 @@ export class IglBookPropertyService {
         case 'ADD_ROOM':
         case 'SPLIT_BOOKING': {
           const { booking, ROOMS } = context.defaultData;
-          console.log(booking);
+          // console.log(booking);
           if (!booking) {
             throw new Error('Missing booking');
           }
