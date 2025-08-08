@@ -29,6 +29,7 @@ export class IglBulkBlock {
   } | null = null;
   @State() errors: 'dates' | 'rooms';
   @State() isLoading: boolean;
+  @State() blockState: 'block' | 'unblock' = 'block';
   @State() dates: {
     from: Moment | null;
     to: Moment | null;
@@ -82,25 +83,23 @@ export class IglBulkBlock {
         this.errors = 'rooms';
         return;
       }
-      // for (const period of periods) {
-      //   await this.bookingService.blockUnit({
-      //     from_date: period.from,
-      //     to_date: period.to,
-      //     DESCRIPTION: '',
-      //     NOTES: '',
-      //     pr_id: this.selectedUnit?.unit_id?.toString(),
-      //     STAY_STATUS_CODE: '004',
-      //   });
-      // }
-      await this.bookingService.blockAvailabilityForBrackets({
-        unit_id: this.selectedUnit?.unit_id,
-        description: '',
-        block_status_code: '004',
-        brackets: periods.map(p => ({
-          from_date: p.from,
-          to_date: p.to,
-        })),
-      });
+      if (this.blockState === 'block') {
+        await this.bookingService.blockAvailabilityForBrackets({
+          unit_id: this.selectedUnit?.unit_id,
+          description: '',
+          block_status_code: '004',
+          brackets: periods.map(p => ({
+            from_date: p.from,
+            to_date: p.to,
+          })),
+        });
+      } else {
+        await this.bookingService.unBlockUnitByPeriod({
+          unit_id: this.selectedUnit?.unit_id,
+          from_date: periods[0].from,
+          to_date: periods[0].to,
+        });
+      }
       this.activate();
       this.deactivate();
       this.toast.emit({
@@ -179,10 +178,6 @@ export class IglBulkBlock {
   }
 
   render() {
-    // const data = [
-    //   { value: 'open', text: 'Unblock' },
-    //   { value: 'closed', text: 'Block' },
-    // ];
     return (
       <form
         class={'bulk-sheet-container'}
@@ -192,11 +187,20 @@ export class IglBulkBlock {
         }}
       >
         <div class="sheet-body px-1">
-          <div class="text-muted text-left py-0 my-0">
-            <p>
-              {/* {locales.entries.Lcz_SelectAffectedUnits} */}
-              Select the unit to block or unblock.
-            </p>
+          <div class="text-muted text-left pt-0 my-0 d-flex align-items-center pb-1" style={{ gap: '0.5rem' }}>
+            <p class="m-0 p-0">Select the unit to</p>
+            <ir-select
+              LabelAvailable={false}
+              showFirstOption={false}
+              selectedValue={this.blockState}
+              data={[
+                { text: 'Block', value: 'block' },
+                { text: 'Unblock', value: 'unblock' },
+              ]}
+              onSelectChange={e => {
+                this.blockState = e.detail;
+              }}
+            ></ir-select>
           </div>
           <div>
             {this.errors === 'rooms' && (
@@ -207,56 +211,16 @@ export class IglBulkBlock {
             <ul class="room-type-list" ref={el => (this.unitSections = el)}>
               {calendar_data.roomsInfo.map((roomType, i) => {
                 const row_style = i === calendar_data.roomsInfo.length - 1 ? '' : 'pb-1';
-                // const currRoom = this.selectedRoomTypes.get(roomType.id) ?? [];
-                // const isFullySelected = Array.isArray(currRoom) && currRoom.length === roomType.physicalrooms.length;
-                // const allSameResult = isFullySelected && currRoom.every(({ result }) => result === currRoom[0].result);
-                // const roomTypeValue: RoomStatus | undefined = allSameResult ? currRoom[0].result : undefined;
                 return (
                   <Fragment>
                     <li key={`roomTypeRow-${roomType.id}`} class={`room-type-row pb-1`}>
                       <div class={'d-flex choice-row'}>
-                        {/* <ir-select
-                          LabelAvailable={false}
-                          firstOption={`${locales.entries.Lcz_Select}...`}
-                          data={data}
-                          selectedValue={roomTypeValue}
-                          onSelectChange={e => {
-                            const choice = e.detail as 'open' | 'closed' | undefined;
-                            const prevRooms = new Map(this.selectedRoomTypes);
-                            let rooms = [];
-                            if (choice) {
-                              rooms = [...roomType.physicalrooms.map(r => ({ id: r.id, result: choice }))];
-                            }
-                            prevRooms.set(roomType.id, rooms);
-                            this.selectedRoomTypes = new Map(prevRooms);
-                          }}
-                        ></ir-select> */}
                         <span class="pl-1 text-left room-type-name">{roomType.name}</span>
                       </div>
                     </li>
                     {roomType.physicalrooms.map((room, j) => (
                       <li key={`physicalRoom-${room.id}-${j}`} class={`physical-room ${row_style}`}>
                         <div class={'d-flex choice-row'}>
-                          {/* <ir-select
-                            LabelAvailable={false}
-                            firstOption={`${locales.entries.Lcz_Select}...`}
-                            data={data}
-                            selectedValue={this.selectedRoomTypes?.get(roomType.id)?.find(r => r.id === room.id)?.result}
-                            onSelectChange={e => {
-                              const choice = e.detail as 'open' | 'closed' | undefined;
-                              const prevRooms = new Map(this.selectedRoomTypes);
-                              // drop any existing entry for this room
-                              const rest = currRoom?.filter(entry => entry.id !== room.id);
-                              // if they actually picked something, append it
-                              if (choice) {
-                                rest.push({ id: room.id, result: choice });
-                              }
-
-                              prevRooms.set(roomType.id, rest);
-                              this.selectedRoomTypes = new Map(prevRooms);
-                            }}
-                          ></ir-select>
-                          <span class="pl-1 text-left room-name">{room.name}</span> */}
                           <ir-radio
                             class="pl-1 "
                             name="unit"
@@ -284,7 +248,7 @@ export class IglBulkBlock {
                 <th class="text-left">{locales.entries.Lcz_From}</th>
                 <th class="text-left">{locales.entries.Lcz_ToExclusive}</th>
                 <td>
-                  {this.dates.length !== this.maxDatesLength && (
+                  {this.dates.length !== this.maxDatesLength && this.blockState === 'block' && (
                     <ir-button
                       variant="icon"
                       icon_name="plus"
