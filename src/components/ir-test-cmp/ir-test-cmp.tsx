@@ -94,7 +94,7 @@ export class IrTestCmp {
     }
   };
   @State() notificationCount: number = 0;
-  @State() isMobileMenuOpen: boolean = true;
+  @State() isMobileMenuOpen: boolean = false;
 
   private toggleMobileMenu = () => {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
