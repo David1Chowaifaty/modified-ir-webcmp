@@ -62,6 +62,7 @@
 }
 .mobile-nav-item {
   margin: 0;
+  list-style: none !important;
 }
 .navigation-item .dropdown-toggle::after {
   content: none !important;

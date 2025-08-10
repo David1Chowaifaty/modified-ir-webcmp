@@ -26,7 +26,7 @@ export class AcPagesMenu {
     const isSheet = this.location === 'sheet';
     if (isSheet) {
       return (
-        <ul class="mobile-nav-items accordion">
+        <ul class="mobile-nav-items accordion" id="mainMenuNavigation">
           {this.pages.map(page => {
             const id = page.id ?? v4();
             if (page.subMenus) {
