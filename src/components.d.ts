@@ -1095,7 +1095,7 @@ export namespace Components {
         /**
           * Color theme of the left button.
          */
-        "leftBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "leftBtnColor": 'default' | 'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text';
         /**
           * Text displayed on the left (cancel/close) button.
          */
@@ -1119,7 +1119,7 @@ export namespace Components {
         /**
           * Color theme of the right button.
          */
-        "rightBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "rightBtnColor": 'default' | 'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text';
         /**
           * Text displayed on the right (confirm) button.
          */
@@ -5365,7 +5365,7 @@ declare namespace LocalJSX {
         /**
           * Color theme of the left button.
          */
-        "leftBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "leftBtnColor"?: 'default' | 'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text';
         /**
           * Text displayed on the left (cancel/close) button.
          */
@@ -5393,7 +5393,7 @@ declare namespace LocalJSX {
         /**
           * Color theme of the right button.
          */
-        "rightBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        "rightBtnColor"?: 'default' | 'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text';
         /**
           * Text displayed on the right (confirm) button.
          */

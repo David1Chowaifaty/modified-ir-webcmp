@@ -38,27 +38,43 @@ export class IrExtraService {
   render() {
     return (
       <Host>
-        <div class="p-1">
+        <div class="">
           <div class={'extra-service-container'}>
             <p class="extra-service-description">{this.service.description}</p>
             <div class="extra-service-actions">
               {this.service.price && <p class="extra-service-price p-0 m-0 font-weight-bold">{formatAmount(this.currencySymbol, this.service.price)}</p>}
-              <ir-button
+              {/* <ir-button
                 id={`serviceEdit-${this.service.booking_system_id}`}
                 class="extra-service-edit-btn m-0 p-0"
                 variant="icon"
                 icon_name="edit"
                 style={colorVariants.secondary}
                 onClickHandler={() => this.editExtraService.emit(this.service)}
-              ></ir-button>
-              <ir-button
+              ></ir-button> */}
+              {/* <sl-icon-button
+                id={`serviceEdit-${this.service.booking_system_id}`}
+                class="extra-service-actions-buttons"
+                library="my-icons"
+                name="pen-to-square"
+                label="Edit Service"
+                onclick={() => this.editExtraService.emit(this.service)}
+              ></sl-icon-button>
+              <sl-icon-button
+                id={`serviceEdit-${this.service.booking_system_id}`}
+                class="extra-service-actions-buttons danger"
+                library="my-icons"
+                name="trash-can"
+                label="Delete Service"
+                onclick={() => this.irModalRef.openModal()}
+              ></sl-icon-button> */}
+              {/* <ir-button
                 class="extra-service-delete-btn m-0 p-0"
                 variant="icon"
                 onClickHandler={() => this.irModalRef.openModal()}
                 id={`roomDelete-${this.service.booking_system_id}`}
                 icon_name="trash"
                 style={colorVariants.danger}
-              ></ir-button>
+              ></ir-button> */}
             </div>
           </div>
           <div class="extra-service-conditional-date">
@@ -78,7 +94,6 @@ export class IrExtraService {
           icon="ft-alert-triangle danger h1"
           leftBtnText={locales.entries.Lcz_Cancel}
           rightBtnText={locales.entries.Lcz_Delete}
-          leftBtnColor="secondary"
           rightBtnColor="danger"
           modalTitle={locales.entries.Lcz_Confirmation}
           modalBody={`${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${locales.entries.Lcz_ThisService} ${locales.entries.Lcz_FromThisBooking}`}

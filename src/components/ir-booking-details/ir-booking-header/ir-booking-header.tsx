@@ -31,10 +31,10 @@ export class IrBookingHeader {
   @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
 
   private confirmationBG = {
-    '001': 'bg-ir-orange',
-    '002': 'bg-ir-green',
-    '003': 'bg-ir-red',
-    '004': 'bg-ir-red',
+    '001': 'warning',
+    '002': 'success',
+    '003': 'danger',
+    '004': 'danger',
   };
   private dialogRef: HTMLIrDialogElement;
 
@@ -102,9 +102,9 @@ export class IrBookingHeader {
 
           <div class="d-flex justify-content-end align-items-center" style={{ gap: '1rem', flexWrap: 'wrap' }}>
             <div class="d-flex flex-column align-items-center">
-              <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
+              <sl-tag variant={this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}>
                 {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
-              </span>
+              </sl-tag>
               {lastManipulation && (
                 <ir-popover
                   trigger="hover"

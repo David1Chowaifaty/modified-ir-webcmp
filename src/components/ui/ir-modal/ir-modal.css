@@ -23,6 +23,12 @@
   pointer-events: all; /* Restore pointer events */
   transition: all 0.3s ease-in-out;
 }
+.dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sl-spacing-medium, 1rem);
+}
 .ir-alert-content {
   padding: 1rem;
   background: white;

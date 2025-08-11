@@ -2,6 +2,7 @@
   overflow-x: hidden;
   --ir-dialog-max-width: 20rem;
   font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  background-color: white !important;
 }
 :host * {
   font-family: inherit !important;
@@ -17,6 +18,10 @@
 }
 .h-28 {
   height: 2rem;
+}
+.bd-card {
+  width: 100%;
+  box-shadow: var(--sl-shadow-x-medium);
 }
 .mx-01 {
   --m: 5px;

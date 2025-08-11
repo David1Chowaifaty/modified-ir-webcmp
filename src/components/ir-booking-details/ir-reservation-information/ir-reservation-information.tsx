@@ -65,8 +65,8 @@ export class IrReservationInformation {
   render() {
     const privateNote = getPrivateNote(this.booking.extras);
     return (
-      <div class="card">
-        <div class="p-1">
+      <sl-card class="w-100">
+        <div class="">
           <p>{this.booking.property.name || ''}</p>
           <ir-label
             labelText={`${locales.entries.Lcz_Source}:`}
@@ -150,7 +150,7 @@ export class IrReservationInformation {
             <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary} onClickHandler={e => this.handleEditClick(e, 'extra_note')}></ir-button>
           </div>
         </div>
-      </div>
+      </sl-card>
     );
   }
 }

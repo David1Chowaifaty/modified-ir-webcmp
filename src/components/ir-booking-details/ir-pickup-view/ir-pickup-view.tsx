@@ -18,8 +18,8 @@ export class IrPickupView {
     }
     return (
       <Host>
-        <div class="mb-1">
-          <div class={'d-flex w-100 mb-1 align-items-center justify-content-between'}>
+        <div class="">
+          <div class={'d-flex w-100  align-items-center justify-content-between'}>
             <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>
             <ir-button id="pickup" data-testid="new_pickup_btn" variant="icon" icon_name="edit" style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}></ir-button>
           </div>

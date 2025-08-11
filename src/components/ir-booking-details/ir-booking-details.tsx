@@ -17,7 +17,7 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'ir-booking-details',
-  styleUrl: 'ir-booking-details.css',
+  styleUrls: ['ir-booking-details.css', '../../common/global/app.css'],
   scoped: true,
 })
 export class IrBookingDetails {
@@ -407,52 +407,51 @@ export class IrBookingDetails {
       <div class="fluid-container p-1 text-left mx-0">
         <div class="row m-0">
           <div class="col-12 p-0 mx-0 pr-lg-1 col-lg-6">
-            <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
-            <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
-              <ir-date-view from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
-              {
-                // this.hasRoomAdd && this.booking.is_direct && this.booking.is_editable && (
-                this.hasRoomAdd && this.booking.is_editable && <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
-              }
-            </div>
-            <div class="card p-0 mx-0">
-              {this.booking.rooms.map((room: Room, index: number) => {
-                const showCheckin = this.handleRoomCheckin(room);
-                const showCheckout = this.handleRoomCheckout(room);
-                return [
-                  <ir-room
-                    room={room}
-                    language={this.language}
-                    bedPreferences={this.bedPreference}
-                    isEditable={this.booking.is_editable}
-                    legendData={this.calendarData.legendData}
-                    roomsInfo={this.calendarData.roomsInfo}
-                    myRoomTypeFoodCat={room.roomtype.name}
-                    mealCodeName={room.rateplan.short_name}
-                    currency={this.booking.currency.symbol}
-                    hasRoomEdit={this.hasRoomEdit && this.booking.status.code !== '003' && this.booking.is_direct}
-                    hasRoomDelete={this.hasRoomDelete && this.booking.status.code !== '003' && this.booking.is_direct}
-                    hasCheckIn={showCheckin}
-                    hasCheckOut={showCheckout}
-                    booking={this.booking}
-                    bookingIndex={index}
-                    onDeleteFinished={this.handleDeleteFinish.bind(this)}
-                  />,
-                  index !== this.booking.rooms.length - 1 && <hr class="mr-2 ml-2 my-0 p-0" />,
-                ];
-              })}
-            </div>
-            {/* <ir-ota-services services={this.booking.ota_services}></ir-ota-services> */}
-            <ir-pickup-view booking={this.booking}></ir-pickup-view>
-            <section>
-              <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
-                <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_ExtraServices}</p>
-                <ir-button id="extra_service_btn" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
+            <div class="d-flex flex-column" style={{ gap: 'var(--sl-spacing-large)' }}>
+              <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
+              <div class="font-size-large d-flex justify-content-between align-items-center">
+                <ir-date-view from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
+                {this.hasRoomAdd && this.booking.is_editable && <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>}
               </div>
-              <ir-extra-services
-                booking={{ booking_nbr: this.booking.booking_nbr, currency: this.booking.currency, extra_services: this.booking.extra_services }}
-              ></ir-extra-services>
-            </section>
+              <sl-card class="bd-card">
+                {this.booking.rooms.map((room: Room, index: number) => {
+                  const showCheckin = this.handleRoomCheckin(room);
+                  const showCheckout = this.handleRoomCheckout(room);
+                  return [
+                    <ir-room
+                      room={room}
+                      language={this.language}
+                      bedPreferences={this.bedPreference}
+                      isEditable={this.booking.is_editable}
+                      legendData={this.calendarData.legendData}
+                      roomsInfo={this.calendarData.roomsInfo}
+                      myRoomTypeFoodCat={room.roomtype.name}
+                      mealCodeName={room.rateplan.short_name}
+                      currency={this.booking.currency.symbol}
+                      hasRoomEdit={this.hasRoomEdit && this.booking.status.code !== '003' && this.booking.is_direct}
+                      hasRoomDelete={this.hasRoomDelete && this.booking.status.code !== '003' && this.booking.is_direct}
+                      hasCheckIn={showCheckin}
+                      hasCheckOut={showCheckout}
+                      booking={this.booking}
+                      bookingIndex={index}
+                      onDeleteFinished={this.handleDeleteFinish.bind(this)}
+                    />,
+                    index !== this.booking.rooms.length - 1 && <hr class="mr-2 ml-2 my-0 p-0" />,
+                  ];
+                })}
+              </sl-card>
+              {/* <ir-ota-services services={this.booking.ota_services}></ir-ota-services> */}
+              <ir-pickup-view booking={this.booking}></ir-pickup-view>
+              <section class="d-flex flex-column" style={{ gap: 'var(--sl-spacing-medium)' }}>
+                <div class="font-size-large d-flex justify-content-between align-items-center">
+                  <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_ExtraServices}</p>
+                  <ir-button id="extra_service_btn" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
+                </div>
+                <ir-extra-services
+                  booking={{ booking_nbr: this.booking.booking_nbr, currency: this.booking.currency, extra_services: this.booking.extra_services }}
+                ></ir-extra-services>
+              </section>
+            </div>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
             <ir-payment-details paymentActions={this.paymentActions} bookingDetails={this.booking}></ir-payment-details>

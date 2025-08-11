@@ -281,7 +281,7 @@ export class IrRoom {
   render() {
     const bed = this.getBedName();
     return (
-      <Host class="p-1 d-flex m-0">
+      <Host class=" d-flex m-0">
         <ir-button
           variant="icon"
           id="drawer-icon"
@@ -296,13 +296,6 @@ export class IrRoom {
           }}
           style={{ '--icon-size': '1.6rem' }}
         ></ir-button>
-        <sl-alert variant="primary" open>
-          <sl-icon slot="icon" name="info-circle"></sl-icon>
-          <strong>This is super informative</strong>
-          <br />
-          You can tell by how pretty the alert is.
-        </sl-alert>
-
         <div class="flex-fill m-0 ">
           <div class="d-flex align-items-start justify-content-between sm-mb-1">
             <p class="m-0 p-0">
@@ -484,7 +477,6 @@ export class IrRoom {
           icon="ft-alert-triangle danger h1"
           leftBtnText={locales.entries.Lcz_Cancel}
           rightBtnText={this.modalReason === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
-          leftBtnColor="secondary"
           rightBtnColor={this.modalReason === 'delete' ? 'danger' : 'primary'}
           modalTitle={locales.entries.Lcz_Confirmation}
           modalBody={this.renderModalMessage()}

@@ -135,6 +135,7 @@ export class IrButton {
     const disabled = this.btn_disabled || this.isLoading;
     if (this.variant === 'icon') {
       return (
+        // <sl-icon-button class="icon-button" library="my-icons" name={this.icon_name} onclick={() => this.clickHandler.emit()}></sl-icon-button>
         <button
           id={this.btn_id}
           class={`icon-button ${this.btn_styles} ${this.visibleBackgroundOnHover ? 'hovered_bg' : ''}`}
@@ -149,26 +150,29 @@ export class IrButton {
     }
     let blockClass = this.btn_block ? 'btn-block' : '';
     return (
-      <button
-        id={this.btn_id}
-        ref={el => (this.buttonEl = el)}
-        onClick={() => this.clickHandler.emit()}
-        class={`btn btn-${this.btn_color} ${this.btn_styles} ir-button-class  btn-${this.size} text-${this.textSize} ${blockClass}`}
-        type={this.btn_type}
-        style={this.btnStyle}
-        disabled={disabled}
-      >
-        {this.icon_name && this.iconPosition === 'left' && <ir-icons name={this.icon_name} style={this.icon_style}></ir-icons>}
-        {this.text &&
-          (this.renderContentAsHtml ? (
-            <span class="button-text m-0" innerHTML={this.text} style={this.labelStyle}></span>
-          ) : (
-            <span style={this.labelStyle} class="button-text m-0">
-              {this.text}
-            </span>
-          ))}
-        {this.isLoading ? <div class="btn_loader m-0 p-0"></div> : this.iconPosition === 'right' && <ir-icons style={this.icon_style} name={this.icon_name}></ir-icons>}
-      </button>
+      // <button
+      //   id={this.btn_id}
+      //   ref={el => (this.buttonEl = el)}
+      //   onClick={() => this.clickHandler.emit()}
+      //   class={`btn btn-${this.btn_color} ${this.btn_styles} ir-button-class  btn-${this.size} text-${this.textSize} ${blockClass}`}
+      //   type={this.btn_type}
+      //   style={this.btnStyle}
+      //   disabled={disabled}
+      // >
+      //   {this.icon_name && this.iconPosition === 'left' && <ir-icons name={this.icon_name} style={this.icon_style}></ir-icons>}
+      //   {this.text &&
+      //     (this.renderContentAsHtml ? (
+      //       <span class="button-text m-0" innerHTML={this.text} style={this.labelStyle}></span>
+      //     ) : (
+      //       <span style={this.labelStyle} class="button-text m-0">
+      //         {this.text}
+      //       </span>
+      //     ))}
+      //   {this.isLoading ? <div class="btn_loader m-0 p-0"></div> : this.iconPosition === 'right' && <ir-icons style={this.icon_style} name={this.icon_name}></ir-icons>}
+      // </button>
+      <sl-button size="small" variant="primary">
+        {this.text}
+      </sl-button>
     );
   }
 }

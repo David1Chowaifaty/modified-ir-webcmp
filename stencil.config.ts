@@ -2,7 +2,8 @@ import { Config } from '@stencil/core';
 
 export const config: Config = {
   namespace: 'ir-webcmp',
-  globalStyle: 'src/common/global.css',
+  globalStyle: 'src/common/global/app.css',
+  globalScript: 'src/common/global/app.ts',
   outputTargets: [
     {
       type: 'dist',
@@ -18,10 +19,21 @@ export const config: Config = {
     {
       type: 'www',
       serviceWorker: null,
-      copy: [{ src: 'assets' }, { src: 'scripts' }],
+      copy: [
+        { src: 'assets' },
+        { src: 'scripts' },
+        {
+          src: '../node_modules/@shoelace-style/shoelace/dist/assets',
+          dest: 'assets/shoelace',
+        },
+        {
+          src: '../node_modules/@shoelace-style/shoelace/dist/themes',
+          dest: 'assets/shoelace/themes',
+        },
+      ],
     },
   ],
   testing: {
-    browserHeadless: 'new',
+    // browserHeadless: 'new',
   },
 };

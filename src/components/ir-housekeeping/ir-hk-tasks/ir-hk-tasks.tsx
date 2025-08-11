@@ -296,7 +296,6 @@ export class IrHkTasks {
           icon="ft-alert-triangle danger h1"
           leftBtnText={locales.entries.Lcz_Cancel}
           rightBtnText={locales.entries.Lcz_Confirm}
-          leftBtnColor="secondary"
           rightBtnColor={'primary'}
           modalTitle={locales.entries.Lcz_Confirmation}
           modalBody={this.selectedTask ? `Update ${this.selectedTask?.unit?.name} to Clean` : 'Update selected unit(s) to Clean'}

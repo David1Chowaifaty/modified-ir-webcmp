@@ -1,4 +1,5 @@
-import { Component, h, State, Method, Event, EventEmitter, Prop, Listen } from '@stencil/core';
+import { SlDialog, SlRequestCloseEvent } from '@shoelace-style/shoelace';
+import { Component, h, Method, Event, EventEmitter, Prop } from '@stencil/core';
 
 @Component({
   tag: 'ir-modal',
@@ -54,12 +55,12 @@ export class IrModal {
   /**
    * Color theme of the right button.
    */
-  @Prop() rightBtnColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'primary';
+  @Prop() rightBtnColor: 'default' | 'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text' = 'primary';
 
   /**
    * Color theme of the left button.
    */
-  @Prop() leftBtnColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'secondary';
+  @Prop() leftBtnColor: 'default' | 'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text' = 'default';
 
   /**
    * Horizontal alignment of the footer buttons.
@@ -77,14 +78,24 @@ export class IrModal {
   @Prop() icon: string = '';
 
   /**
-   * Controls visibility of the modal.
-   */
-  @State() isOpen: boolean = false;
-
-  /**
    * Payload object to pass along with confirm/cancel events.
    */
   @Prop({ mutable: true }) item: any = {};
+
+  private dialogEl: SlDialog;
+
+  componentDidLoad() {
+    this.dialogEl.addEventListener('sl-request-close', this.handleDialogRequestCloseEvent.bind(this));
+  }
+  disconnectedCallback() {
+    this.dialogEl.removeEventListener('sl-request-close', this.handleDialogRequestCloseEvent.bind(this));
+  }
+
+  private handleDialogRequestCloseEvent = (e: SlRequestCloseEvent) => {
+    if (e.detail.source === 'close-button') {
+      this.cancelModal.emit();
+    }
+  };
 
   /**
    * Opens the modal.
@@ -97,7 +108,8 @@ export class IrModal {
    */
   @Method()
   async openModal() {
-    this.isOpen = true;
+    // this.isOpen = true;
+    this.dialogEl.show();
   }
 
   /**
@@ -105,7 +117,8 @@ export class IrModal {
    */
   @Method()
   async closeModal() {
-    this.isOpen = false;
+    this.dialogEl.hide();
+    // this.isOpen = false;
   }
 
   /**
@@ -119,78 +132,37 @@ export class IrModal {
    */
   @Event({ bubbles: true, composed: true }) cancelModal: EventEmitter<any>;
 
-  @Listen('clickHandler')
-  btnClickHandler(event: CustomEvent) {
-    let target = event.target as HTMLInputElement;
-    let name = target.name;
-
-    if (name === this.leftBtnText) {
-      this.cancelModal.emit();
-      this.item = {};
-      this.closeModal();
-    } else if (name === this.rightBtnText) {
-      this.confirmModal.emit(this.item);
-      this.item = {};
-      if (this.autoClose) {
-        this.closeModal();
-      }
-    }
-  }
-
   render() {
     return [
-      <div
-        class={`backdropModal ${this.isOpen ? 'active' : ''}`}
-        onClick={() => {
-          this.cancelModal.emit();
-          if (this.autoClose && !this.isLoading) {
-            this.closeModal();
-          }
-        }}
-      ></div>,
-      <div data-state={this.isOpen ? 'opened' : 'closed'} class={`ir-modal`} tabindex="-1">
-        <div class={`ir-alert-content p-2`}>
-          {this.showTitle && (
-            <div class={`ir-alert-header`}>
-              {/*
-            <p class="font-weight-bold p-0 my-0 mb-1">
-              {this.iconAvailable && <ir-icon class="mr-1" icon={this.icon}></ir-icon>} 
-               {this.modalBody} 
-              {this.modalTitle}
-            </p>
-            */}
-              {/* <div class="font-weight-bold d-flex align-items-center font-size-large my-0 py-0">
-              <ir-icon
-                icon="ft-x"
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  this.closeModal();
-                  this.cancelModal.emit();
-                }}
-              ></ir-icon>
-            </div> */}
-              <p>{this.modalTitle}</p>
-            </div>
-          )}
-          <div class="modal-body text-left p-0 mb-2">
-            <div>{this.modalBody}</div>
-          </div>
-
-          <div class={`ir-alert-footer border-0  d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
-            {this.leftBtnActive && <ir-button btn_disabled={this.isLoading} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>}
-            {this.rightBtnActive && (
-              <ir-button
-                btn_color={this.rightBtnColor}
-                btn_disabled={this.isLoading}
-                isLoading={this.isLoading}
-                btn_block
-                text={this.rightBtnText}
-                name={this.rightBtnText}
-              ></ir-button>
-            )}
-          </div>
+      <sl-dialog label={this.showTitle ? this.modalTitle : undefined} ref={el => (this.dialogEl = el)} class="dialog-overview">
+        {this.modalBody}
+        <div slot="footer" class="dialog-footer">
+          <sl-button
+            variant={this.leftBtnColor}
+            onclick={() => {
+              this.closeModal();
+              this.cancelModal.emit();
+            }}
+            disabled={!this.leftBtnActive}
+          >
+            {this.leftBtnText}
+          </sl-button>
+          <sl-button
+            loading={this.isLoading}
+            disabled={!this.rightBtnActive}
+            variant={this.rightBtnColor}
+            onclick={() => {
+              this.confirmModal.emit(this.item);
+              this.item = {};
+              if (this.autoClose) {
+                this.closeModal();
+              }
+            }}
+          >
+            {this.rightBtnText}
+          </sl-button>
         </div>
-      </div>,
+      </sl-dialog>,
     ];
   }
 }

@@ -417,8 +417,8 @@ export class IrPaymentDetails {
       return null;
     }
     return [
-      <div class="card m-0">
-        <div class="p-1">
+      <sl-card class="w-100">
+        <div>
           {this.bookingDetails.financial.gross_cost > 0 && this.bookingDetails.financial.gross_cost !== null && (
             <div class="mb-2 h4 total-cost-container">
               {locales.entries.Lcz_TotalCost}: <span>{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.gross_cost)}</span>
@@ -517,7 +517,7 @@ export class IrPaymentDetails {
             </table>
           </div>
         </div>
-      </div>,
+      </sl-card>,
 
       <ir-modal
         item={this.toBeDeletedItem}
@@ -528,7 +528,6 @@ export class IrPaymentDetails {
         icon="ft-alert-triangle danger h1"
         leftBtnText={locales.entries.Lcz_Cancel}
         rightBtnText={this.modal_mode === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
-        leftBtnColor="secondary"
         rightBtnColor={this.modal_mode === 'delete' ? 'danger' : 'primary'}
         onConfirmModal={this.handleConfirmModal.bind(this)}
         onCancelModal={this.handleCancelModal.bind(this)}

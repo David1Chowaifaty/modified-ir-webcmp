@@ -1,0 +1,8 @@
+/* app.css */
+@import url('../themes/light.css');
+/* Loads dark.css only when system is dark */
+/* @import url('../themes/dark.css'); */
+sl-card {
+  width: 100%;
+  box-shadow: var(--sl-shadow-x-large);
+}

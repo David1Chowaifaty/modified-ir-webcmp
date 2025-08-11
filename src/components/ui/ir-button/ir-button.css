@@ -38,7 +38,7 @@
   background: #104064;
   color: white;
 }
-.icon-button {
+/* .icon-button {
   all: unset;
   box-sizing: border-box;
   border-radius: 0.25rem;
@@ -57,7 +57,7 @@
 }
 .icon-button:disabled {
   pointer-events: none;
-}
+} */
 
 .icon-loader {
   margin: 0;
@@ -127,4 +127,23 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.icon-button {
+  font-size: 1.5rem;
+}
+.icon-button::part(base) {
+  padding: 0;
+}
+.icon-button.danger::part(base) {
+  color: var(--sl-color-danger-600);
+}
+
+.icon-button.danger::part(base):hover,
+.icon-button.danger::part(base):focus {
+  color: var(--sl-color-danger-500);
+}
+
+.icon-button.danger::part(base):active {
+  color: var(--sl-color-danger-600);
 }

@@ -23,3 +23,24 @@
 .extra-service-price {
   white-space: nowrap;
 }
+.extra-service-description {
+  word-break: break-all;
+}
+.extra-service-actions-buttons {
+  font-size: 1.5rem;
+}
+.extra-service-actions-buttons::part(base) {
+  padding: 0;
+}
+.extra-service-actions-buttons.danger::part(base) {
+  color: var(--sl-color-danger-600);
+}
+
+.extra-service-actions-buttons.danger::part(base):hover,
+.extra-service-actions-buttons.danger::part(base):focus {
+  color: var(--sl-color-danger-500);
+}
+
+.extra-service-actions-buttons.danger::part(base):active {
+  color: var(--sl-color-danger-600);
+}
