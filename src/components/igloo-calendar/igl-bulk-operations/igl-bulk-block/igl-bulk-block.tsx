@@ -87,7 +87,7 @@ export class IglBulkBlock {
         await this.bookingService.blockAvailabilityForBrackets({
           unit_id: this.selectedUnit?.unit_id,
           description: '',
-          block_status_code: '004',
+          block_status_code: '002',
           brackets: periods.map(p => ({
             from_date: p.from,
             to_date: p.to,
@@ -112,7 +112,7 @@ export class IglBulkBlock {
     } catch (error) {
       console.log(error);
       if (error instanceof ZodError) {
-        this.datesSections.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        this.datesSections.scrollIntoView({ behavior: 'smooth', block: 'center' });
         this.errors = 'dates';
       }
     } finally {
@@ -210,32 +210,34 @@ export class IglBulkBlock {
             )}
             <ul class="room-type-list" ref={el => (this.unitSections = el)}>
               {calendar_data.roomsInfo.map((roomType, i) => {
-                const row_style = i === calendar_data.roomsInfo.length - 1 ? '' : 'pb-1';
                 return (
                   <Fragment>
-                    <li key={`roomTypeRow-${roomType.id}`} class={`room-type-row pb-1`}>
+                    <li key={`roomTypeRow-${roomType.id}`} class={`room-type-row`}>
                       <div class={'d-flex choice-row'}>
                         <span class="pl-1 text-left room-type-name">{roomType.name}</span>
                       </div>
                     </li>
-                    {roomType.physicalrooms.map((room, j) => (
-                      <li key={`physicalRoom-${room.id}-${j}`} class={`physical-room ${row_style}`}>
-                        <div class={'d-flex choice-row'}>
-                          <ir-radio
-                            class="pl-1 "
-                            name="unit"
-                            checked={this.selectedUnit?.unit_id === room.id}
-                            onCheckChange={() =>
-                              (this.selectedUnit = {
-                                roomtype_id: roomType.id,
-                                unit_id: room.id,
-                              })
-                            }
-                            label={room.name}
-                          ></ir-radio>
-                        </div>
-                      </li>
-                    ))}
+                    {roomType.physicalrooms.map((room, j) => {
+                      const row_style = j === roomType.physicalrooms.length - 1 ? 'pb-1' : '';
+                      return (
+                        <li key={`physicalRoom-${room.id}-${j}`} class={`physical-room ${row_style}`}>
+                          <div class={'d-flex choice-row'}>
+                            <ir-radio
+                              class="pl-1 "
+                              name="unit"
+                              checked={this.selectedUnit?.unit_id === room.id}
+                              onCheckChange={() =>
+                                (this.selectedUnit = {
+                                  roomtype_id: roomType.id,
+                                  unit_id: room.id,
+                                })
+                              }
+                              label={room.name}
+                            ></ir-radio>
+                          </div>
+                        </li>
+                      );
+                    })}
                   </Fragment>
                 );
               })}
@@ -372,7 +374,7 @@ export class IglBulkBlock {
         </div>
         <div class={'sheet-footer'}>
           <ir-button text={locales.entries.Lcz_Cancel} btn_color="secondary" class={'flex-fill'} onClickHandler={() => this.closeModal.emit(null)}></ir-button>
-          <ir-button isLoading={this.isLoading} text={locales.entries.Lcz_Save} btn_type="submit" class="flex-fill"></ir-button>
+          <ir-button isLoading={this.isLoading} text={locales.entries.Lcz_Confirm} btn_type="submit" class="flex-fill"></ir-button>
         </div>
       </form>
     );

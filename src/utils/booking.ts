@@ -341,7 +341,7 @@ export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDeta
     NOTES: '',
     BALANCE: '',
     NAME:
-      data.NOTES !== ''
+      data.NOTES !== '' && data.NOTES !== null
         ? data.NOTES
         : data.STAY_STATUS_CODE === '003'
         ? renderBlock003Date(data.BLOCKED_TILL_DATE, data.BLOCKED_TILL_HOUR, data.BLOCKED_TILL_MINUTE)
