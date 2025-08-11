@@ -22,6 +22,9 @@ export class AcPagesMenu {
 
   @Event({ eventName: 'link-clicked' }) linkClicked: EventEmitter<MouseEvent>;
 
+  private Icon({ name }: { name: string }) {
+    return [<i class={name}></i>];
+  }
   render() {
     const isSheet = this.location === 'sheet';
     if (isSheet) {
@@ -34,7 +37,7 @@ export class AcPagesMenu {
               return (
                 <li key={id} id={id} class={`mobile-nav-item ${page.className}`}>
                   <button
-                    class="btn mobile-nav-link d-flex align-items-center justify-content-between"
+                    class="btn mobile-nav-link menu-icon-container justify-content-between"
                     style={{ width: '100%' }}
                     data-toggle="collapse"
                     data-parent="#mainMenuNavigation"
@@ -42,8 +45,8 @@ export class AcPagesMenu {
                     data-target={`#${_collapseId}`}
                     aria-controls={_collapseId}
                   >
-                    <div class={'d-flex align-items-center'} style={{ gap: '0.25rem' }}>
-                      {page.icon && <i class={page.icon}></i>}
+                    <div class={'menu-icon-container'}>
+                      {page.icon && this.Icon({ name: page.icon })}
                       <span>{page.label}</span>
                     </div>
                     <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
@@ -55,10 +58,12 @@ export class AcPagesMenu {
                     {page.subMenus.map(submenu => {
                       const menuId = submenu.id ?? v4();
                       return (
-                        <li key={menuId} id={menuId} class={`mobile-nav-item ${submenu.className ?? ''}`}>
-                          <a onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link" href={submenu.href}>
-                            {submenu.icon && <i class={submenu.icon}></i>}
-                            <span>{submenu.label}</span>
+                        <li key={menuId} id={menuId} class={`mobile-nav-item menu-icon-container ${submenu.className ?? ''}`} style={{ width: '100%' }}>
+                          <a onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link w-100" href={submenu.href}>
+                            <div class="menu-icon-container">
+                              {submenu.icon && this.Icon({ name: submenu.icon })}
+                              <span>{submenu.label}</span>
+                            </div>
                             {submenu.isNew && <span class="new-badge">new</span>}
                           </a>
                         </li>
@@ -71,10 +76,10 @@ export class AcPagesMenu {
             return (
               <li key={id} id={id} class={`${page.className ?? ''}  mobile-nav-item`}>
                 <a href={page.href} onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link">
-                  <span>
-                    {page.icon && <i class={page.icon}></i>}
+                  <div class="menu-icon-container">
+                    {page.icon && this.Icon({ name: page.icon })}
                     <span>{page.label}</span>
-                  </span>
+                  </div>
                   {page.isNew && <span class="new-badge">new</span>}
                 </a>
               </li>
@@ -107,11 +112,11 @@ export class AcPagesMenu {
                 data-menu="dropdown"
                 class={`dropdown  navigation-item ac-menu-dropdown ${isSheet ? 'mobile-nav-item' : ''} ${page.className}`}
               >
-                <button class="btn dropdown-toggle navigation-link" data-toggle="dropdown">
-                  <span>
-                    {page.icon && <i class={page.icon}></i>}
+                <button class="btn dropdown-toggle menu-icon-container navigation-link " data-toggle="dropdown">
+                  <div class="menu-icon-container">
+                    {page.icon && this.Icon({ name: page.icon })}
                     <span>{page.label}</span>
-                  </span>
+                  </div>
                   {page.isNew && <span class="new-badge">new</span>}
                 </button>
                 <ul class="dropdown-menu ">
@@ -119,11 +124,11 @@ export class AcPagesMenu {
                     const menuId = submenu.id ?? v4();
                     return (
                       <li key={menuId} id={menuId} class={`navigation-item ${submenu.className ?? ''}`}>
-                        <a onClick={e => this.linkClicked.emit(e)} class="dropdown-item" href={submenu.href}>
-                          <span>
-                            {submenu.icon && <i class={submenu.icon}></i>}
+                        <a onClick={e => this.linkClicked.emit(e)} class="dropdown-item menu-icon-container" href={submenu.href}>
+                          <div class="menu-icon-container">
+                            {submenu.icon && this.Icon({ name: submenu.icon })}
                             <span>{submenu.label}</span>
-                          </span>
+                          </div>
                           {submenu.isNew && <span class="new-badge">new</span>}
                         </a>
                       </li>
@@ -136,10 +141,10 @@ export class AcPagesMenu {
           return (
             <li key={id} id={id} class={`${page.className ?? ''}  navigation-item`}>
               <a href={page.href} onClick={e => this.linkClicked.emit(e)} class={`navigation-link`}>
-                <span>
-                  {page.icon && <i class={page.icon}></i>}
+                <div class="menu-icon-container">
+                  {page.icon && this.Icon({ name: page.icon })}
                   <span>{page.label}</span>
-                </span>
+                </div>
                 {page.isNew && <span class="new-badge">new</span>}
               </a>
             </li>

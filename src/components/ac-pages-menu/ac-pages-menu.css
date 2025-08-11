@@ -67,12 +67,17 @@
 .navigation-item .dropdown-toggle::after {
   content: none !important;
 }
+.menu-icon-container {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.25rem;
+}
 .mobile-nav-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
-  color: #374151;
+  color: #374151 !important;
   text-decoration: none;
   font-weight: 500;
   transition: all 0.2s ease;
