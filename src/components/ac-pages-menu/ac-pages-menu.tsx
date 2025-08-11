@@ -20,7 +20,7 @@ export class AcPagesMenu {
   @Prop() pages: ACPages[] = [];
   @Prop() location: 'sheet' | 'nav' = 'nav';
 
-  @Event() linkClicked: EventEmitter<MouseEvent>;
+  @Event({ eventName: 'link-clicked' }) linkClicked: EventEmitter<MouseEvent>;
 
   render() {
     const isSheet = this.location === 'sheet';
@@ -59,8 +59,8 @@ export class AcPagesMenu {
                           <a onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link" href={submenu.href}>
                             {submenu.icon && <i class={submenu.icon}></i>}
                             <span>{submenu.label}</span>
+                            {submenu.isNew && <span class="new-badge">new</span>}
                           </a>
-                          {submenu.isNew && <span class="new-badge">new</span>}
                         </li>
                       );
                     })}

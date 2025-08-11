@@ -2360,7 +2360,7 @@ export interface IrWeekdaySelectorCustomEvent<T> extends CustomEvent<T> {
 }
 declare global {
     interface HTMLAcPagesMenuElementEventMap {
-        "linkClicked": MouseEvent;
+        "link-clicked": MouseEvent;
     }
     interface HTMLAcPagesMenuElement extends Components.AcPagesMenu, HTMLStencilElement {
         addEventListener<K extends keyof HTMLAcPagesMenuElementEventMap>(type: K, listener: (this: HTMLAcPagesMenuElement, ev: AcPagesMenuCustomEvent<HTMLAcPagesMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4424,7 +4424,7 @@ declare global {
 declare namespace LocalJSX {
     interface AcPagesMenu {
         "location"?: 'sheet' | 'nav';
-        "onLinkClicked"?: (event: AcPagesMenuCustomEvent<MouseEvent>) => void;
+        "onLink-clicked"?: (event: AcPagesMenuCustomEvent<MouseEvent>) => void;
         "pages"?: ACPages[];
     }
     interface IglApplicationInfo {
