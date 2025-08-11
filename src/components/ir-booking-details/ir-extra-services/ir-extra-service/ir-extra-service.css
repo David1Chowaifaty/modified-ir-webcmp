@@ -23,3 +23,6 @@
 .extra-service-price {
   white-space: nowrap;
 }
+.extra-service-description {
+  word-break: break-all;
+}

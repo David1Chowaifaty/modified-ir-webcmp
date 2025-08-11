@@ -24,11 +24,18 @@
 
 <body>
     <ir-common></ir-common>
-    <!-- <ir-housekeeping baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-housekeeping> -->
-    <ir-test-cmp></ir-test-cmp>
+    <ir-booking-listing baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-booking-listing>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
-
+    <script>
+        const booking_listing = document.querySelector("ir-booking-listing");
+        if (booking_listing) {
+            (async () => {
+                booking_listing.propertyid = getId();
+                booking_listing.ticket = await getToken()
+            })();
+        } 
+    </script>
 
 </body>
 

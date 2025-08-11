@@ -42,7 +42,9 @@ export class IrExtraService {
           <div class={'extra-service-container'}>
             <p class="extra-service-description">{this.service.description}</p>
             <div class="extra-service-actions">
-              {this.service.price && <p class="extra-service-price p-0 m-0 font-weight-bold">{formatAmount(this.currencySymbol, this.service.price)}</p>}
+              {!!this.service.price && this.service.price > 0 && (
+                <p class="extra-service-price p-0 m-0 font-weight-bold">{formatAmount(this.currencySymbol, this.service.price)}</p>
+              )}
               <ir-button
                 id={`serviceEdit-${this.service.booking_system_id}`}
                 class="extra-service-edit-btn m-0 p-0"
