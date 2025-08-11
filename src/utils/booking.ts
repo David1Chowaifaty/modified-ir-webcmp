@@ -77,7 +77,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       NOTES: '',
       BALANCE: '',
       NAME:
-        cell.My_Block_Info.NOTES !== ''
+        cell.My_Block_Info.NOTES !== '' && cell.My_Block_Info.NOTES !== null
           ? cell.My_Block_Info.NOTES
           : cell.STAY_STATUS_CODE === '003'
           ? renderBlock003Date(cell.My_Block_Info.BLOCKED_TILL_DATE, cell.My_Block_Info.BLOCKED_TILL_HOUR, cell.My_Block_Info.BLOCKED_TILL_MINUTE)
