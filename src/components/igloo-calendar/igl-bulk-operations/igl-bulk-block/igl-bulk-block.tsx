@@ -209,7 +209,7 @@ export class IglBulkBlock {
               </p>
             )}
             <ul class="room-type-list" ref={el => (this.unitSections = el)}>
-              {calendar_data.roomsInfo.map((roomType, i) => {
+              {calendar_data.roomsInfo.map(roomType => {
                 return (
                   <Fragment>
                     <li key={`roomTypeRow-${roomType.id}`} class={`room-type-row`}>
