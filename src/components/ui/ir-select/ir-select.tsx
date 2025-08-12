@@ -27,7 +27,7 @@ export class IrSelect {
   @Prop() selectContainerStyle: string;
 
   // Selected value of the select
-  @Prop({ reflect: true, mutable: true }) selectedValue = null;
+  @Prop({ mutable: true }) selectedValue = null;
 
   // Marks the select as required
   @Prop() required: boolean;

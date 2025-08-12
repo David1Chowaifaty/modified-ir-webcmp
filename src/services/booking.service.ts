@@ -32,6 +32,14 @@ export type GroupedTableEntries = {
   [K in TableEntries as K extends `_${infer Rest}` ? Lowercase<Rest> : never]: IEntries[];
 };
 export class BookingService {
+  public async unBlockUnitByPeriod(props: { unit_id: number; from_date: string; to_date: string }) {
+    const { data } = await axios.post(`/Unblock_Unit_By_Period`, props);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data;
+  }
+
   public async handleExposedRoomInOut(props: { booking_nbr: string; room_identifier: string; status: RoomInOut['code'] }) {
     const { data } = await axios.post(`/Handle_Exposed_Room_InOut`, props);
     if (data.ExceptionMsg !== '') {
@@ -360,6 +368,23 @@ export class BookingService {
       }
       console.log(data);
       return data['My_Params_Block_Exposed_Unit'];
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  }
+  public async blockAvailabilityForBrackets(params: {
+    unit_id: number;
+    block_status_code?: '003' | '004' | '002';
+    description?: string;
+    brackets: { from_date: string; to_date: string }[];
+  }) {
+    try {
+      const { data } = await axios.post(`/Block_Availability_For_Brackets`, params);
+      if (data.ExceptionMsg !== '') {
+        throw new Error(data.ExceptionMsg);
+      }
+      return data;
     } catch (error) {
       console.error(error);
       throw new Error(error);

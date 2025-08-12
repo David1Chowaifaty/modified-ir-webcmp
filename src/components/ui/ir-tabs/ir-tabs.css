@@ -1,0 +1,46 @@
+:host {
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+.tab {
+  font-size: 0.95rem;
+  font-weight: 400;
+  cursor: pointer;
+  position: relative;
+  margin: 0;
+  padding: 0rem;
+  padding-bottom: 1rem;
+  transition: color 0.3s ease;
+  user-select: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  flex: 1 1 0%;
+  text-align: center;
+  white-space: nowrap;
+}
+.tab[data-disabled] {
+  cursor: auto;
+}
+.tab:hover {
+  opacity: 80%;
+}
+
+.tab[data-state='selected'],
+.tab[data-state='selected']:hover {
+  color: var(--blue, #1e9ff2);
+  opacity: 100%;
+}
+.active-indicator {
+  padding: 0;
+  bottom: 0px;
+  position: absolute;
+  height: 3px;
+  border-radius: 4px;
+  transition: transform 0.3s ease, width 0.3s ease;
+  background: var(--blue, #1e9ff2);
+}

@@ -497,6 +497,7 @@ export class IglCalBody {
               }}
               style={room.hk_status === '003' && { '--dot-color': '#ededed' }}
               hkStatus={calendar_data.housekeeping_enabled && room.hk_status !== '001'}
+              broomTooltip={room.hk_status === '002' ? 'This unit is dirty' : undefined}
               popoverTitle={name}
             ></ir-interactive-title>
           </div>

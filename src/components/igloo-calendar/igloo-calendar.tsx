@@ -1348,7 +1348,8 @@ export class IglooCalendar {
             ></ir-room-guests>
           )}
           {this.calendarSidebarState?.type === 'bulk-blocks' && (
-            <igl-bulk-stop-sale slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-stop-sale>
+            <igl-bulk-operations slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-operations>
+            // <igl-bulk-stop-sale slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-stop-sale>
           )}
         </ir-sidebar>
         <ir-modal

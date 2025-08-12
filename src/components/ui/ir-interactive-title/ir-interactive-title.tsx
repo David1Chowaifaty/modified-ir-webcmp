@@ -28,6 +28,11 @@ export class IrInteractiveTitle {
    * The number of characters to display before cropping the title with ellipsis.
    */
   @Prop() cropSize: number = 20;
+  /**
+   * The message shown when hovering over the broom svg if provided.
+   * @requires hkStatus to be true
+   */
+  @Prop() broomTooltip: string;
 
   /**
    * Reference to track if we've initialized popover for current render
@@ -131,7 +136,7 @@ export class IrInteractiveTitle {
             {displayTitle}
           </span>
           {this.hkStatus && (
-            <div title="This unit is dirty" class="hk-dot" style={{ flexShrink: '0' }}>
+            <div title={this.broomTooltip} class="hk-dot" style={{ flexShrink: '0' }}>
               <svg xmlns="http://www.w3.org/2000/svg" height="12" width="13.5" viewBox="0 0 576 512" style={{ display: 'block' }}>
                 <path
                   fill="currentColor"

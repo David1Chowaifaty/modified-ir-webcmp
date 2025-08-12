@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Prop, State, h, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, State, h, Watch, Element } from '@stencil/core';
 import { v4 } from 'uuid';
 
 @Component({
@@ -7,6 +7,7 @@ import { v4 } from 'uuid';
   scoped: true,
 })
 export class IrRadio {
+  @Element() el: HTMLIrRadioElement;
   /**
    * Whether the checkbox is checked.
    */
@@ -86,11 +87,13 @@ export class IrRadio {
   render() {
     return (
       <div class="input-group">
-        <label class="check-container radio-container">
+        <label class="check-container radio-container align-items-center m-0 py-0">
           <span>{this.label}</span>
           <input
+            class="p-0 m-0"
             type="radio"
             value="000"
+            name={this.el.name}
             title=""
             onChange={() => {
               this.handleCheckChange();
