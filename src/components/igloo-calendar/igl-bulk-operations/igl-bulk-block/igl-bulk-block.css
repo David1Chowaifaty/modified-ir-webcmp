@@ -26,3 +26,9 @@
   padding: 0;
   margin: 0;
 }
+
+.room-type-list > li,
+.physical-room,
+.room-type-row {
+  list-style: none;
+}
