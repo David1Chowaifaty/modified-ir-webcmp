@@ -119,7 +119,7 @@ export class AcPagesMenu {
                   </div>
                   {page.isNew && <span class="new-badge">new</span>}
                 </button>
-                <ul class="dropdown-menu ">
+                <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
                   {page.subMenus.map(submenu => {
                     const menuId = submenu.id ?? v4();
                     return (
