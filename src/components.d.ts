@@ -998,6 +998,11 @@ export namespace Components {
     }
     interface IrInteractiveTitle {
         /**
+          * The message shown when hovering over the broom svg if provided.
+          * @requires hkStatus to be true
+         */
+        "broomTooltip": string;
+        /**
           * The number of characters to display before cropping the title with ellipsis.
          */
         "cropSize": number;
@@ -5487,6 +5492,11 @@ declare namespace LocalJSX {
         "zod"?: ZodType<any, any>;
     }
     interface IrInteractiveTitle {
+        /**
+          * The message shown when hovering over the broom svg if provided.
+          * @requires hkStatus to be true
+         */
+        "broomTooltip"?: string;
         /**
           * The number of characters to display before cropping the title with ellipsis.
          */
