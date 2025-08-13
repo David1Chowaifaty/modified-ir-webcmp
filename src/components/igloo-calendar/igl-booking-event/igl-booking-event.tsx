@@ -106,6 +106,7 @@ export class IglBookingEvent {
         ...this.bookingEvent,
         channel_booking_nbr,
         booking: data,
+        DEPARTURE_TIME: otherBookingData.DEPARTURE_TIME,
         PHONE: otherBookingData.PHONE,
         PHONE_PREFIX: otherBookingData.PHONE_PREFIX,
         PRIVATE_NOTE: otherBookingData.PRIVATE_NOTE,

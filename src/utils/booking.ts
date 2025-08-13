@@ -108,6 +108,9 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
   //   console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
   //   console.log(cell);
   // }
+  if (cell.booking.booking_nbr.toString() === '00553011358') {
+    console.log(cell);
+  }
   const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
   const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
   const mainGuest = cell.room.sharing_persons?.find(p => p.is_main);
@@ -133,6 +136,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       from_date: cell.room.from_date,
       to_date: cell.room.to_date,
     },
+    DEPARTURE_TIME: cell.room.departure_time,
     ///from here
     ENTRY_DATE: cell.booking.booked_on.date,
     PHONE_PREFIX: cell.booking.guest.country_phone_prefix,
@@ -317,6 +321,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
       channel_booking_nbr: data.channel_booking_nbr,
       is_direct: data.is_direct,
       NOTES: data.is_direct ? data.remark : null,
+      DEPARTURE_TIME: room.departure_time,
       SOURCE: { code: data.source.code, description: data.source.description, tag: data.source.tag },
       ota_notes: data.ota_notes,
       defaultDates: {

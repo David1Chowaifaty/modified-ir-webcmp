@@ -449,6 +449,9 @@ export class IglBookingEventHover {
           // </div>
           <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`${locales.entries.Lcz_RatePlan}:`} content={this.getRatePlan()}></ir-label>
         )}
+        {this.bookingEvent.DEPARTURE_TIME?.code !== '000' && (
+          <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`Departure time:`} content={this.bookingEvent.DEPARTURE_TIME?.description}></ir-label>
+        )}
         {this.bookingEvent.PRIVATE_NOTE && (
           // <div class="row p-0 m-0">
           //   <div class="px-0  col-12 text-wrap">

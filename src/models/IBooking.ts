@@ -287,6 +287,10 @@ export interface RoomBookingDetails {
   TO_DATE: string;
   ARRIVAL: Arrival;
   FROM_DATE: string;
+  DEPARTURE_TIME: {
+    code: string;
+    description: string;
+  };
   NO_OF_DAYS: number;
   IS_EDITABLE: boolean;
   PRIVATE_NOTE: string;
