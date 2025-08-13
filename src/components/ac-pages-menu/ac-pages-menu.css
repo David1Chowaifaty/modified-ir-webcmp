@@ -108,3 +108,24 @@
     cursor: pointer;
   }
 }
+
+/* Ensure consistent dropdown width and responsive alignment */
+.ac-menu-dropdown .dropdown-menu {
+  min-width: 14rem;
+}
+
+/* Desktop (PC): align from left */
+@media (min-width: 992px) {
+  .ac-menu-dropdown .dropdown-menu {
+    left: 0 !important;
+    right: auto !important;
+  }
+}
+
+/* Tablet and below: align from right */
+@media (max-width: 991.98px) {
+  .ac-menu-dropdown .dropdown-menu {
+    right: 0 !important;
+    left: auto !important;
+  }
+}
