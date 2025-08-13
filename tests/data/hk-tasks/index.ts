@@ -1,5 +1,4 @@
 import { expect, Page } from '@playwright/test';
-import moment from 'moment';
 import { freq002 } from './frequency-002';
 import { freq001 } from './frequency-001';
 import { freq003 } from './frequency-003';
@@ -8,7 +7,7 @@ type StatusType = 'INHOUSE' | 'VACANT' | 'TURNOVER' | 'CHECKIN' | 'CHECKOUT' | '
 
 type StatusSummary = string;
 
-type StatusesResult = {
+export type StatusesResult = {
   total: number;
   room: string;
   statuses: Record<StatusType, StatusSummary[]>;
