@@ -1,6 +1,7 @@
 import moment from 'moment';
+import { HouseKeepingTasksSchema } from './index';
 
-export const freq003 = [
+export const freq003: HouseKeepingTasksSchema = [
   {
     case: 'On Checkout today',
     params: {
@@ -20,7 +21,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -32,7 +32,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -44,7 +43,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -56,7 +54,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -68,7 +65,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -80,7 +76,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -92,7 +87,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -104,7 +98,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -116,7 +109,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -128,7 +120,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -140,7 +131,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -152,7 +142,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -164,7 +153,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -176,7 +164,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
     ],
@@ -200,7 +187,6 @@ export const freq003 = [
           TURNOVER: ['10 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -212,7 +198,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -224,7 +209,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -236,7 +220,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: ['10 Jul'],
-          BLOCKED: [],
         },
       },
       {
@@ -248,7 +231,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -260,7 +242,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -272,7 +253,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: ['10 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -284,7 +264,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [, , '10 Jul'],
         },
       },
       {
@@ -296,7 +275,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -308,19 +286,17 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
         room: '11. Bitter Orange Double Room',
         total: 3,
         statuses: {
-          INHOUSE: [, , '10 Jul'],
+          INHOUSE: ['10 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -332,7 +308,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -344,19 +319,17 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
         room: '14. Prickly Pear Double Room',
         total: 3,
         statuses: {
-          INHOUSE: [, , '10 Jul'],
+          INHOUSE: ['10 Jul'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
     ],
@@ -380,7 +353,6 @@ export const freq003 = [
           TURNOVER: ['10 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -392,7 +364,6 @@ export const freq003 = [
           TURNOVER: ['11 Jul', '12 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -404,7 +375,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -416,7 +386,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: ['10 Jul'],
-          BLOCKED: ['12 Jul'],
         },
       },
       {
@@ -428,7 +397,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -440,7 +408,6 @@ export const freq003 = [
           TURNOVER: ['12 Jul'],
           CHECKIN: ['11 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -452,7 +419,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: ['10 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -464,7 +430,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [, , '10 Jul', '11 Jul'],
         },
       },
       {
@@ -476,7 +441,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -488,19 +452,17 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: ['11 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
         room: '11. Bitter Orange Double Room',
         total: 5,
         statuses: {
-          INHOUSE: [, , '10 Jul', '12 Jul'],
+          INHOUSE: [],
           VACANT: [],
           TURNOVER: ['11 Jul'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -512,7 +474,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: ['12 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -524,7 +485,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: ['11 Jul'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -536,7 +496,6 @@ export const freq003 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
     ],

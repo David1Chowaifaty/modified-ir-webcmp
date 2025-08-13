@@ -122,24 +122,7 @@ test.describe('Check task results', () => {
 
       // Now get the results
       const tasksResults = await getAllRoomsTestCases(page);
-
-      // Ensure BLOCKED status is present in all results for comparison
-      const normalizeStatuses = (statuses: Record<string, string[]>) => ({
-        INHOUSE: statuses.INHOUSE ?? [],
-        VACANT: statuses.VACANT ?? [],
-        TURNOVER: statuses.TURNOVER ?? [],
-        CHECKIN: statuses.CHECKIN ?? [],
-        CHECKOUT: statuses.CHECKOUT ?? [],
-        BLOCKED: statuses.BLOCKED ?? [],
-      });
-
-      const normalizeResults = (results: any[]) =>
-        results.map(r => ({
-          ...r,
-          statuses: normalizeStatuses(r.statuses),
-        }));
-
-      expect(areResultsEqual(normalizeResults(testCase.results), normalizeResults(tasksResults))).toBe(true);
+      expect(areResultsEqual(testCase.results, tasksResults)).toBe(true);
     });
   });
 });

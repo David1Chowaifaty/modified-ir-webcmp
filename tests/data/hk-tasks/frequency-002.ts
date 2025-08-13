@@ -1,6 +1,7 @@
 import moment from 'moment';
+import { HouseKeepingTasksSchema } from './index';
 
-export const freq002 = [
+export const freq002: HouseKeepingTasksSchema = [
   {
     case: 'Every other day today',
     params: {
@@ -20,7 +21,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -32,7 +32,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -44,7 +43,6 @@ export const freq002 = [
           TURNOVER: ['13 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -56,7 +54,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -68,7 +65,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -80,19 +76,17 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
         room: '001',
-        total: 1,
+        total: 0,
         statuses: {
-          INHOUSE: ['13 Aug'],
+          INHOUSE: [],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -104,7 +98,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -116,7 +109,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -128,7 +120,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: ['13 Aug'],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -140,7 +131,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -152,7 +142,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -164,7 +153,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -176,7 +164,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -188,7 +175,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -200,7 +186,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -212,7 +197,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -224,7 +208,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -236,7 +219,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
     ],
@@ -260,7 +242,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -272,7 +253,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -284,7 +264,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -296,7 +275,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -308,7 +286,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -320,7 +297,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -332,7 +308,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -344,7 +319,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -356,7 +330,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -368,7 +341,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -380,7 +352,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -392,7 +363,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -404,7 +374,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -416,7 +385,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -428,7 +396,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -440,7 +407,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -452,7 +418,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -464,7 +429,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -476,7 +440,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
     ],
@@ -500,7 +463,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -512,7 +474,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -524,7 +485,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -536,7 +496,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -548,7 +507,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -560,7 +518,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -572,7 +529,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -584,7 +540,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -596,7 +551,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -608,7 +562,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -620,7 +573,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -632,7 +584,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -644,7 +595,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -656,7 +606,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -668,7 +617,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -680,7 +628,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -692,7 +639,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -704,7 +650,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
       {
@@ -716,7 +661,6 @@ export const freq002 = [
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       },
     ],

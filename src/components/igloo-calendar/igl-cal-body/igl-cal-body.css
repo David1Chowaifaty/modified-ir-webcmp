@@ -19,6 +19,12 @@
   user-select: none;
   -webkit-user-drag: none;
 }
+.cellData[data-dirty-room='true'] {
+  background-color: rgba(153, 153, 153, 60%) !important;
+}
+.cellData.disabled[data-dirty-room='true'] {
+  border-bottom: 2px solid rgb(80, 80, 80) !important;
+}
 .cellData.disabled {
   background: rgba(153, 153, 153, 15%);
   cursor: var(--cell-cursor, not-allowed);

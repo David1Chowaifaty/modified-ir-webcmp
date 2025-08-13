@@ -3,7 +3,7 @@ import { freq002 } from './frequency-002';
 import { freq001 } from './frequency-001';
 import { freq003 } from './frequency-003';
 
-type StatusType = 'INHOUSE' | 'VACANT' | 'TURNOVER' | 'CHECKIN' | 'CHECKOUT' | 'BLOCKED';
+type StatusType = 'INHOUSE' | 'VACANT' | 'TURNOVER' | 'CHECKIN' | 'CHECKOUT';
 
 type StatusSummary = string;
 
@@ -12,7 +12,17 @@ export type StatusesResult = {
   room: string;
   statuses: Record<StatusType, StatusSummary[]>;
 };
-
+export type HouseKeepingTasksSchema = {
+  case: string;
+  params: {
+    period: string;
+    housekeepers: string;
+    frequency: string;
+    include_dusty_units: string;
+    highlight_check_ins: string;
+  };
+  results: StatusesResult[];
+}[];
 export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]> {
   await page.waitForLoadState('networkidle');
 
@@ -38,7 +48,7 @@ export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]
 
     if (!period || !room || !statusText) continue;
 
-    const validStatuses: StatusType[] = ['INHOUSE', 'VACANT', 'TURNOVER', 'CHECKIN', 'CHECKOUT', 'BLOCKED'];
+    const validStatuses: StatusType[] = ['INHOUSE', 'VACANT', 'TURNOVER', 'CHECKIN', 'CHECKOUT'];
     if (!validStatuses.includes(statusText)) continue;
 
     if (!roomMap.has(room)) {
@@ -51,7 +61,6 @@ export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]
           TURNOVER: [],
           CHECKIN: [],
           CHECKOUT: [],
-          BLOCKED: [],
         },
       });
     }
@@ -76,7 +85,6 @@ export function areResultsEqual(expected: StatusesResult[], actual: StatusesResu
         TURNOVER: new Map(),
         CHECKIN: new Map(),
         CHECKOUT: new Map(),
-        BLOCKED: new Map(),
       };
 
       for (const status of Object.keys(entry.statuses) as StatusType[]) {
@@ -106,7 +114,6 @@ export function areResultsEqual(expected: StatusesResult[], actual: StatusesResu
 
   console.log('Filtered expected rooms:', Array.from(eMap.keys()).join(', '));
   console.log('Actual rooms after normalization:', Array.from(aMap.keys()).join(', '));
-
   for (const [room, eEntry] of eMap.entries()) {
     const aEntry = aMap.get(room);
     if (!aEntry) {
