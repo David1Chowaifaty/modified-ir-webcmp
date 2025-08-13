@@ -59,6 +59,8 @@ export class IrMCombobox {
   @State() focusedIndex: number = -1;
   @State() filteredOptions: ComboboxOption[] = [];
   @State() slotElements: HTMLElement[] = [];
+  @State() hasPrefix: boolean = false;
+  @State() hasSuffix: boolean = false;
 
   /**
    * Emitted when a user selects an option from the combobox.
@@ -85,6 +87,8 @@ export class IrMCombobox {
   private id = v4();
   private dropdownId = `dropdown-${this.id}`;
   private debounceTimeout: NodeJS.Timeout;
+  private prefixSlotRef: HTMLSlotElement;
+  private suffixSlotRef: HTMLSlotElement;
 
   @Watch('options')
   watchOptionsChanged(newOptions: ComboboxOption[]) {
@@ -110,6 +114,9 @@ export class IrMCombobox {
     if (this.useSlot) {
       setTimeout(() => this.updateSlotElements(), 0);
     }
+    setTimeout(() => this.updateAffixPresence(), 0);
+    this.prefixSlotRef?.addEventListener('slotchange', this.updateAffixPresence);
+    this.suffixSlotRef?.addEventListener('slotchange', this.updateAffixPresence);
   }
 
   disconnectedCallback() {
@@ -117,6 +124,8 @@ export class IrMCombobox {
     if (this.debounceTimeout) {
       clearTimeout(this.debounceTimeout);
     }
+    this.prefixSlotRef?.removeEventListener('slotchange', this.updateAffixPresence);
+    this.suffixSlotRef?.removeEventListener('slotchange', this.updateAffixPresence);
   }
 
   @Listen('keydown', { target: 'document' })
@@ -183,6 +192,27 @@ export class IrMCombobox {
       });
     }
   }
+
+  private updateAffixPresence = () => {
+    try {
+      const prefixAssigned =
+        this.prefixSlotRef && (this.prefixSlotRef as any).assignedElements
+          ? (this.prefixSlotRef as any).assignedElements()
+          : Array.from(this.el.querySelectorAll('[slot="prefix"]'));
+      const suffixAssigned =
+        this.suffixSlotRef && (this.suffixSlotRef as any).assignedElements
+          ? (this.suffixSlotRef as any).assignedElements()
+          : Array.from(this.el.querySelectorAll('[slot="suffix"]'));
+
+      this.hasPrefix = Array.isArray(prefixAssigned) ? prefixAssigned.length > 0 : false;
+      this.hasSuffix = Array.isArray(suffixAssigned) ? suffixAssigned.length > 0 : false;
+    } catch (e) {
+      const prefixFallback = this.el.querySelector('[slot="prefix"]');
+      const suffixFallback = this.el.querySelector('[slot="suffix"]');
+      this.hasPrefix = !!prefixFallback;
+      this.hasSuffix = !!suffixFallback;
+    }
+  };
 
   private removeSlotFocus() {
     this.slotElements.forEach(element => {
@@ -299,26 +329,34 @@ export class IrMCombobox {
 
   render() {
     return (
-      <Host>
-        <input
-          ref={el => (this.inputRef = el)}
-          type="text"
-          class="form-control"
-          role="combobox"
-          id={this.id}
-          value={this.selectedOption?.label || ''}
-          placeholder={this.placeholder}
-          aria-expanded={String(this.isOpen)}
-          aria-autocomplete="list"
-          aria-controls={this.dropdownId}
-          data-reference="parent"
-          aria-haspopup="listbox"
-          aria-activedescendant={this.focusedIndex >= 0 ? `${this.dropdownId}-option-${this.focusedIndex}` : null}
-          aria-label="Combobox"
-          aria-required={true}
-          onKeyDown={this.handleKeyDown}
-          onInput={this.handleInput}
-        />
+      <Host class={{ 'has-prefix': this.hasPrefix, 'has-suffix': this.hasSuffix }}>
+        <div class="input-wrapper">
+          <span class="prefix-container" aria-hidden={!this.hasPrefix}>
+            <slot name="prefix" ref={el => (this.prefixSlotRef = el as HTMLSlotElement)}></slot>
+          </span>
+          <input
+            ref={el => (this.inputRef = el)}
+            type="text"
+            class="form-control"
+            role="combobox"
+            id={this.id}
+            value={this.selectedOption?.label || ''}
+            placeholder={this.placeholder}
+            aria-expanded={String(this.isOpen)}
+            aria-autocomplete="list"
+            aria-controls={this.dropdownId}
+            data-reference="parent"
+            aria-haspopup="listbox"
+            aria-activedescendant={this.focusedIndex >= 0 ? `${this.dropdownId}-option-${this.focusedIndex}` : null}
+            aria-label="Combobox"
+            aria-required={true}
+            onKeyDown={this.handleKeyDown}
+            onInput={this.handleInput}
+          />
+          <span class="suffix-container" aria-hidden={!this.hasSuffix}>
+            <slot name="suffix" ref={el => (this.suffixSlotRef = el as HTMLSlotElement)}></slot>
+          </span>
+        </div>
         <div class={`dropdown ${this.isOpen ? 'show' : ''}`}>
           <div ref={el => (this.dropdownRef = el)} class={`dropdown-menu ${this.isOpen ? 'show' : ''}`} id={this.dropdownId} role="listbox" aria-expanded={String(this.isOpen)}>
             {this.useSlot ? (
