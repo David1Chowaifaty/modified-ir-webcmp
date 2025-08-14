@@ -21,6 +21,7 @@
  - [ir-channel](../ir-channel)
  - [ir-hk-tasks](../ir-housekeeping/ir-hk-tasks)
  - [ir-housekeeping](../ir-housekeeping)
+ - [ir-monthly-bookings-report](../ir-monthly-bookings-report)
  - [ir-room-nights](../igloo-calendar/ir-room-nights)
  - [ir-sales-by-country](../ir-sales-by-country)
  - [ir-user-management](../ir-user-management)
@@ -33,6 +34,7 @@ graph TD;
   ir-channel --> ir-loading-screen
   ir-hk-tasks --> ir-loading-screen
   ir-housekeeping --> ir-loading-screen
+  ir-monthly-bookings-report --> ir-loading-screen
   ir-room-nights --> ir-loading-screen
   ir-sales-by-country --> ir-loading-screen
   ir-user-management --> ir-loading-screen

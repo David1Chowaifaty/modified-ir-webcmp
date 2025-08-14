@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property           | Attribute            | Description | Type      | Default |
-| ------------------ | -------------------- | ----------- | --------- | ------- |
-| `isCleanedEnabled` | `is-cleaned-enabled` |             | `boolean` | `false` |
-
-
 ## Events
 
 | Event               | Description | Type                                                         |
@@ -23,18 +16,22 @@
 
 ### Used by
 
- - [ir-hk-tasks](..)
+ - [ir-tasks-table](../ir-tasks-table)
 
 ### Depends on
 
+- [ir-input-text](../../../ui/ir-input-text)
+- [ir-icons](../../../ui/ir-icons)
 - [ir-button](../../../ui/ir-button)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-tasks-header --> ir-input-text
+  ir-tasks-header --> ir-icons
   ir-tasks-header --> ir-button
   ir-button --> ir-icons
-  ir-hk-tasks --> ir-tasks-header
+  ir-tasks-table --> ir-tasks-header
   style ir-tasks-header fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

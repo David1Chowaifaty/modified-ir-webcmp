@@ -1,35 +1,135 @@
 :host {
+  /* ========= Theme / palette ========= */
+  /** @prop --ir-bg: Base background of the control. */
+  --ir-bg: #fff;
+
+  /** @prop --ir-primary: Accent color used for focus outline and active label. */
+  --ir-primary: #1e9ff2;
+
+  /** @prop --ir-danger: Error color for borders and text. */
+  --ir-danger: #ff4961;
+
+  /** @prop --ir-border: Generic border color used across the component. */
+  --ir-border: #cacfe7;
+
+  /** @prop --ir-disabled-fg: Text/icon color when disabled. */
+  --ir-disabled-fg: #9aa1ac;
+
+  /** @prop --ir-readonly-bg: Background for readonly fields. */
+  --ir-readonly-bg: #f8f9fa;
+
+  /** @prop --ir-input-color: Text color inside the input. */
+  --ir-input-color: #3b4781;
+
+  /** @prop --ir-placeholder-color: Placeholder color for empty state (when not using floating). */
+  --ir-placeholder-color: #bbbfc6;
+
+  /* ========= Floating outline + input box ========= */
+  /** @prop --ir-floating-input-border: Outline/border color of the floating group. */
+  --ir-floating-input-border: var(--ir-border);
+
+  /** @prop --ir-floating-input-border-radius: Corner radius for the outlined group and input. */
+  --ir-floating-input-border-radius: 0.21rem;
+
+  /** @prop --ir-floating-input-height: Fixed height for the input element. */
+  --ir-floating-input-height: 2rem;
+
+  /** @prop --ir-focus-ring: Box-shadow used on focus (set to `none` to disable). */
+  --ir-focus-ring: none;
+
+  /** @prop --ir-focus-border-color: Border color applied on focus. */
+  --ir-focus-border-color: var(--ir-primary);
+
+  /** @prop --ir-floating-input-font-size: Font size of the input text. */
+  --ir-floating-input-font-size: 0.975rem;
+
+  /** @prop --ir-floating-input-line-height: Line-height of the input text. */
+  --ir-floating-input-line-height: 1.45;
+
+  /** @prop --ir-floating-input-padding-y: Vertical padding inside the input. */
+  --ir-floating-input-padding-y: 0.75rem;
+
+  /** @prop --ir-floating-input-padding-x: Horizontal padding inside the input. */
+  --ir-floating-input-padding-x: 1rem;
+
+  /** @prop --ir-floating-input-padding-x-with-affix: Horizontal padding when a prefix/suffix is present. */
+  --ir-floating-input-padding-x-with-affix: 2rem;
+
+  /* ========= Floating label ========= */
+  /** @prop --ir-floating-label-fg: Resting label color. */
+  --ir-floating-label-fg: #6c757d;
+
+  /** @prop --ir-floating-label-fg-focus: Floated/active label color. */
+  --ir-floating-label-fg-focus: #495057;
+
+  /** @prop --ir-floating-label-bg: Background behind the floated label “chip”. */
+  --ir-floating-label-bg: #fff;
+
+  /** @prop --ir-floating-label-scale: Scale applied to the label when floated. */
+  --ir-floating-label-scale: 0.88;
+
+  /** @prop --ir-floating-label-float-translateY: translateY used when label floats (relative to its top=0). */
+  --ir-floating-label-float-translateY: -70%;
+
+  /** @prop --ir-floating-label-resting-offset-inline: Inline offset for the resting label (LTR=left, RTL=right). */
+  --ir-floating-label-resting-offset-inline: 0.9rem;
+
+  /** @prop --ir-floating-label-resting-offset-inline-with-prefix: Inline offset for the label when a prefix exists. */
+  --ir-floating-label-resting-offset-inline-with-prefix: 1.8rem;
+
+  /* ========= Prefix/Suffix (affixes) ========= */
+  /** @prop --ir-floating-input-affix-size: Size for prefix/suffix slotted icons/elements. */
+  --ir-floating-input-affix-size: 1rem;
+
+  /** @prop --ir-floating-input-affix-color: Color for prefix/suffix icons/text. */
+  --ir-floating-input-affix-color: #6c757d;
+
   margin: 0;
   padding: 0;
   display: inline;
 }
-.border-theme {
-  border: 1px solid #cacfe7;
+
+/* Legacy aliases (kept for backward compat if consumer themes use them) */
+:host {
+  /** @prop --blue: Legacy alias for --ir-primary. */
+  --blue: var(--ir-primary);
+  /** @prop --red: Legacy alias for --ir-danger. */
+  --red: var(--ir-danger);
 }
+
+/* ==== existing styles, now variable-driven ==== */
+.border-theme {
+  border: 1px solid var(--ir-border);
+}
+
 .icon-container {
   color: #3b4781;
-  border: 1px solid #cacfe7;
-  font-size: 0.975rem;
-  height: 2rem;
-  background: rgb(255, 255, 255);
+  border: 1px solid var(--ir-border);
+  font-size: var(--ir-floating-input-font-size);
+  height: var(--ir-floating-input-height);
+  background: var(--ir-bg);
   padding-right: 0 !important;
   border-right: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
+
 input:focus {
-  border-color: #1e9ff2 !important;
+  border-color: var(--ir-primary) !important;
 }
+
 .error-message {
   font-size: 0.875rem;
   padding: 0;
   margin: 0.5rem 0 0;
-  color: var(--red, #ff4961);
+  color: var(--ir-danger);
 }
+
 .ir-input[data-state='empty'] {
-  color: #bbbfc6;
+  color: var(--ir-placeholder-color);
 }
+
 .input-container {
   display: flex;
   align-items: center;
@@ -37,6 +137,7 @@ input:focus {
   box-sizing: border-box;
   flex: 1;
 }
+
 .input-container input {
   padding-left: 5px !important;
   padding-right: 5px !important;
@@ -44,13 +145,167 @@ input:focus {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+
 .icon-container[data-state='focus'] {
-  border-color: var(--blue);
+  border-color: var(--ir-primary);
 }
+
 .icon-container[data-disabled] {
   background-color: #eceff1;
   border-color: rgba(118, 118, 118, 0.3);
 }
+
 .danger-border {
-  border-color: var(--red, #ff4961);
+  border-color: var(--ir-danger);
+}
+
+/* ===== Floating outlined group ===== */
+.ir-floating-group {
+  position: relative;
+  display: block;
+  border: 1px solid var(--ir-floating-input-border);
+  border-radius: var(--ir-floating-input-border-radius);
+  background: var(--ir-bg);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+  padding: 0;
+}
+
+.ir-floating-group:focus-within {
+  border-color: var(--ir-focus-border-color);
+  box-shadow: var(--ir-focus-ring);
+}
+
+.ir-floating-group.has-error,
+.has-error .ir-floating-group {
+  border-color: var(--ir-danger);
+}
+
+.ir-floating-group.is-disabled {
+  background-color: #f1f3f5;
+}
+
+.ir-floating-group.is-readonly {
+  background-color: var(--ir-readonly-bg);
+}
+
+/* ===== Input (borderless inside the outlined group) ===== */
+.ir-floating-input {
+  width: 100%;
+  display: block;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ir-input-color);
+  font-size: var(--ir-floating-input-font-size);
+  line-height: var(--ir-floating-input-line-height);
+  border-radius: var(--ir-floating-input-border-radius);
+  box-shadow: none;
+
+  padding: var(--ir-floating-input-padding-y) var(--ir-floating-input-padding-x);
+  height: var(--ir-floating-input-height);
+}
+
+.ir-floating-input.danger-border {
+  box-shadow: none;
+}
+
+/* ===== Floating label ===== */
+.ir-floating-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  padding: 0 0.4rem;
+  color: var(--ir-floating-label-fg);
+  background: transparent;
+  transition: transform 120ms ease, color 120ms ease, top 120ms ease, background-color 120ms ease, opacity 120ms ease;
+  opacity: 0.95;
+  line-height: 1;
+}
+
+/* logical inline offsets */
+.ir-floating-label:dir(rtl) {
+  right: var(--ir-floating-label-resting-offset-inline);
+}
+.ir-floating-label:dir(ltr) {
+  left: var(--ir-floating-label-resting-offset-inline);
+}
+
+/* Float up when focused OR has value */
+.ir-floating-group:focus-within .ir-floating-label,
+.ir-floating-input:not(:placeholder-shown) + .ir-floating-label,
+.ir-floating-group[data-has-value='true'] .ir-floating-label {
+  top: 0;
+  transform: translateY(var(--ir-floating-label-float-translateY)) scale(var(--ir-floating-label-scale));
+  background: var(--ir-floating-label-bg);
+  color: var(--ir-floating-label-fg-focus);
+  font-size: 12px;
+  padding: 0;
+}
+
+/* Error coloring for the floated label */
+.ir-floating-group.has-error .ir-floating-label,
+.has-error .ir-floating-group .ir-floating-label {
+  color: var(--ir-danger);
+}
+
+/* Disabled/read-only label color tweaks */
+.ir-floating-group.is-disabled .ir-floating-label {
+  color: var(--ir-disabled-fg);
+}
+
+/* iOS clip quirk */
+@supports (-webkit-touch-callout: none) {
+  .ir-floating-input {
+    border-radius: var(--ir-floating-input-border-radius);
+  }
+}
+
+/* ===== Prefix/Suffix containers ===== */
+.prefix-container,
+.suffix-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ir-floating-input-affix-color);
+  pointer-events: none;
+}
+.prefix-container:dir(ltr) {
+  left: 0.5rem;
+}
+.suffix-container:dir(ltr) {
+  right: 0.5rem;
+}
+.prefix-container:dir(rtl) {
+  right: 0.5rem;
+}
+.suffix-container:dir(rtl) {
+  left: 0.5rem;
+}
+
+/* Default sizing for slotted icons/elements */
+::slotted([slot='prefix']),
+::slotted([slot='suffix']) {
+  display: inline-flex;
+  width: var(--ir-floating-input-affix-size);
+  height: var(--ir-floating-input-affix-size);
+}
+
+/* When prefix exists, increase input padding and shift label start */
+.ir-floating-group[data-have-prefix='true'] .ir-floating-input {
+  padding: var(--ir-floating-input-padding-y) var(--ir-floating-input-padding-x-with-affix);
+}
+
+.ir-floating-group[data-have-prefix='true'] .ir-floating-label:dir(ltr) {
+  left: var(--ir-floating-label-resting-offset-inline-with-prefix);
+}
+
+.ir-floating-group[data-have-prefix='true'] .ir-floating-label:dir(rtl) {
+  right: var(--ir-floating-label-resting-offset-inline-with-prefix);
+}
+
+.no-slot {
+  display: none;
 }

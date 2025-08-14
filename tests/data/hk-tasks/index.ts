@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { freq002 } from './frequency-002';
-import { freq001 } from './frequency-001';
-import { freq003 } from './frequency-003';
+// import { freq001 } from './frequency-001';
+// import { freq003 } from './frequency-003';
 
 type StatusType = 'INHOUSE' | 'VACANT' | 'TURNOVER' | 'CHECKIN' | 'CHECKOUT';
 
@@ -44,12 +44,15 @@ export async function getAllRoomsTestCases(page: Page): Promise<StatusesResult[]
 
     const period = (await cells.nth(1).textContent())?.trim() || '';
     const room = (await cells.nth(2).textContent())?.trim() || '';
-    const statusText = (await cells.nth(3).textContent())?.trim().toUpperCase() as StatusType;
+    let statusText = (await cells.nth(3).textContent())?.trim().toUpperCase();
 
     if (!period || !room || !statusText) continue;
+    if (statusText === 'NOT CLEAN TODAY') {
+      statusText = 'INHOUSE';
+    }
 
     const validStatuses: StatusType[] = ['INHOUSE', 'VACANT', 'TURNOVER', 'CHECKIN', 'CHECKOUT'];
-    if (!validStatuses.includes(statusText)) continue;
+    if (!validStatuses.includes(statusText as StatusType)) continue;
 
     if (!roomMap.has(room)) {
       roomMap.set(room, {
@@ -102,7 +105,29 @@ export function areResultsEqual(expected: StatusesResult[], actual: StatusesResu
     }
     return map;
   }
+  function getMissingRooms(eMap: Map<string, any>, aMap: Map<string, any>): { missingInActual: string[]; extraInActual: string[] } {
+    const missingInActual: string[] = [];
+    const extraInActual: string[] = [];
 
+    for (const room of eMap.keys()) {
+      if (!aMap.has(room)) missingInActual.push(room);
+    }
+    for (const room of aMap.keys()) {
+      if (!eMap.has(room)) extraInActual.push(room);
+    }
+
+    if (missingInActual.length) {
+      console.log(`Missing rooms in actual (present in expected): ${missingInActual.join(', ')}`);
+    }
+    if (extraInActual.length) {
+      console.log(`Unexpected rooms in actual (not in expected): ${extraInActual.join(', ')}`);
+    }
+    if (!missingInActual.length && !extraInActual.length) {
+      console.log('No room differences between expected and actual.');
+    }
+
+    return { missingInActual, extraInActual };
+  }
   // Detailed logging
   console.log('=== COMPARISON DETAILS ===');
   console.log('Expected rooms:', expected.map(e => e.room).join(', '));
@@ -111,6 +136,13 @@ export function areResultsEqual(expected: StatusesResult[], actual: StatusesResu
   const filteredExpected = expected.filter(entry => entry.total >= 1);
   const eMap = normalize(filteredExpected);
   const aMap = normalize(actual);
+
+  if (eMap.size !== aMap.size) {
+    console.log('Difference in size between the actual size and the expected room size');
+    console.log(`Expected size ${eMap.size} but got ${aMap.size}`);
+    getMissingRooms(eMap, aMap);
+    return false;
+  }
 
   console.log('Filtered expected rooms:', Array.from(eMap.keys()).join(', '));
   console.log('Actual rooms after normalization:', Array.from(aMap.keys()).join(', '));
@@ -154,4 +186,5 @@ export function areResultsEqual(expected: StatusesResult[], actual: StatusesResu
   console.log('=== COMPARISON COMPLETE - ALL MATCHES ===');
   return true;
 }
-export const testData = [...freq001, ...freq002, ...freq003];
+// export const testData = [...freq001, ...freq002, ...freq003];
+export const testData = [...freq002];

@@ -66,7 +66,7 @@ export class IrInputText {
   @Prop() textSize: 'sm' | 'md' | 'lg' = 'md';
 
   /** Position of the label: left, right, or center */
-  @Prop() labelPosition: 'left' | 'right' | 'center' = 'left';
+  @Prop() labelPosition: 'left' | 'right' | 'center' | 'top' = 'left';
 
   /** Background color of the label */
   @Prop() labelBackground: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null = null;
@@ -80,8 +80,8 @@ export class IrInputText {
   /** Label width as a fraction of 12 columns (1-11) */
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
 
-  /** Variant of the input: default or icon */
-  @Prop() variant: 'default' | 'icon' = 'default';
+  /** Variant of the input: default or icon or floating-label */
+  @Prop() variant: 'default' | 'icon' | 'floating-label' = 'default';
 
   /** Whether the input is disabled */
   @Prop() disabled: boolean = false;
@@ -135,6 +135,8 @@ export class IrInputText {
   private maskInstance: InputMask<FactoryArg>;
 
   private id: string;
+  private hasPrefixSlot: boolean;
+  private hasSuffixSlot: boolean;
 
   componentWillLoad() {
     if (this.el.id) {
@@ -142,6 +144,8 @@ export class IrInputText {
     } else {
       this.id = v4();
     }
+    this.hasPrefixSlot = this.haveSlotPresent('prefix');
+    this.hasSuffixSlot = this.haveSlotPresent('suffix');
   }
 
   componentDidLoad() {
@@ -191,6 +195,12 @@ export class IrInputText {
     });
   }
 
+  private haveSlotPresent(name: string) {
+    const slot = this.el.querySelector(`[slot="${name}"]`);
+    console.log(slot);
+    return slot !== null;
+  }
+
   private async validateInput(value: string, forceValidation: boolean = false) {
     if (!this.autoValidate && !forceValidation) {
       if (this.error) {
@@ -235,8 +245,72 @@ export class IrInputText {
     this.inputFocused = false;
     this.inputBlur.emit(e);
   }
+  private renderFloatingLabel() {
+    const labelText = this.label || this.placeholder || '';
+    const hasValue = !!(this.value && String(this.value).length > 0);
 
+    return (
+      <div class="form-group" style={this.inputContainerStyle}>
+        <div
+          class={`ir-floating-group ${this.error ? 'has-error' : ''} ${this.disabled ? 'is-disabled' : ''} ${this.readonly ? 'is-readonly' : ''}`}
+          data-has-value={String(hasValue)}
+          data-focused={String(this.inputFocused)}
+          data-have-prefix={String(this.hasPrefixSlot)}
+          data-have-suffix={String(this.hasSuffixSlot)}
+          part="form-group"
+        >
+          <span part="prefix-container" class={{ 'prefix-container': true, 'no-slot': !this.hasPrefixSlot }}>
+            <slot name="prefix"></slot>
+          </span>
+          <input
+            part="input"
+            data-state={!!this.value ? undefined : this.mask ? 'empty' : undefined}
+            maxLength={this.maxLength}
+            data-testid={this.testId}
+            style={this.inputForcedStyle}
+            id={this.id}
+            name={this.name}
+            ref={el => (this.inputRef = el)}
+            readOnly={this.readonly}
+            type={this.type}
+            class={`ir-input ir-floating-input ${this.inputStyles || ''} ${this.error ? 'danger-border' : ''} text-${this.textSize}`}
+            onBlur={this.handleBlur.bind(this)}
+            onFocus={e => {
+              this.inputFocused = true;
+              this.inputFocus.emit(e);
+            }}
+            placeholder=" "
+            autoComplete={this.autoComplete}
+            autocomplete={this.autoComplete}
+            value={this.value}
+            onInput={this.handleInputChange.bind(this)}
+            required={this.required}
+            disabled={this.disabled}
+            aria-invalid={String(this.error)}
+            aria-required={String(this.required)}
+          />
+          <label part="label" htmlFor={this.id} class="ir-floating-label">
+            {labelText}
+            {this.required ? ' *' : ''}
+          </label>
+
+          <span part="suffix-container" class={{ 'suffix-container': true, 'no-slot': !this.hasSuffixSlot }}>
+            <slot name="suffix"></slot>
+          </span>
+        </div>
+
+        {this.errorMessage && this.error && (
+          <p part="error-message" class="error-message">
+            {this.errorMessage}
+          </p>
+        )}
+      </div>
+    );
+  }
   render() {
+    if (this.variant === 'floating-label') {
+      return this.renderFloatingLabel();
+    }
     if (this.variant === 'icon') {
       return (
         <fieldset class="position-relative has-icon-left input-container">
@@ -314,6 +388,7 @@ export class IrInputText {
             }}
             placeholder={this.placeholder}
             autoComplete={this.autoComplete}
+            autocomplete={this.autoComplete}
             value={this.value}
             onInput={this.handleInputChange.bind(this)}
             required={this.required}

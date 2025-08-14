@@ -25,6 +25,7 @@
 - [ir-housekeeping](../ir-housekeeping)
 - [ir-user-management](../ir-user-management)
 - [ir-sales-by-country](../ir-sales-by-country)
+- [ir-monthly-bookings-report](../ir-monthly-bookings-report)
 
 ### Graph
 ```mermaid
@@ -35,6 +36,7 @@ graph TD;
   ir-secure-tasks --> ir-housekeeping
   ir-secure-tasks --> ir-user-management
   ir-secure-tasks --> ir-sales-by-country
+  ir-secure-tasks --> ir-monthly-bookings-report
   ir-login --> ir-interceptor
   ir-login --> ir-toast
   ir-login --> ir-input-text
@@ -48,16 +50,26 @@ graph TD;
   ir-hk-tasks --> ir-loading-screen
   ir-hk-tasks --> ir-toast
   ir-hk-tasks --> ir-interceptor
-  ir-hk-tasks --> ir-tasks-header
   ir-hk-tasks --> ir-tasks-filters
   ir-hk-tasks --> ir-tasks-table
   ir-hk-tasks --> ir-modal
   ir-hk-tasks --> ir-sidebar
   ir-hk-tasks --> ir-hk-archive
-  ir-tasks-header --> ir-button
   ir-tasks-filters --> ir-button
   ir-tasks-filters --> ir-select
+  ir-tasks-table --> ir-tasks-header
+  ir-tasks-table --> ir-tasks-card
+  ir-tasks-table --> ir-tasks-table-pagination
   ir-tasks-table --> ir-checkbox
+  ir-tasks-table --> ir-button
+  ir-tasks-header --> ir-input-text
+  ir-tasks-header --> ir-icons
+  ir-tasks-header --> ir-button
+  ir-tasks-card --> ir-button
+  ir-tasks-table-pagination --> ir-button
+  ir-tasks-table-pagination --> ir-pagination
+  ir-pagination --> ir-select
+  ir-pagination --> ir-button
   ir-modal --> ir-button
   ir-sidebar --> ir-icon
   ir-hk-archive --> ir-title
@@ -118,9 +130,11 @@ graph TD;
   ir-room-guests --> ir-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
+  ir-booking-header --> ir-popover
   ir-booking-header --> ir-select
   ir-booking-header --> ir-button
   ir-booking-header --> ir-dialog
+  ir-booking-header --> ir-modal
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
   ir-dialog --> ir-icon
@@ -132,6 +146,7 @@ graph TD;
   ir-room --> ir-button
   ir-room --> ir-date-view
   ir-room --> ir-tooltip
+  ir-room --> ir-select
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-pickup-view --> ir-button
@@ -186,7 +201,7 @@ graph TD;
   igloo-calendar --> ir-room-nights
   igloo-calendar --> ir-booking-details
   igloo-calendar --> ir-room-guests
-  igloo-calendar --> igl-bulk-stop-sale
+  igloo-calendar --> igl-bulk-operations
   igloo-calendar --> ir-modal
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-button
@@ -194,6 +209,7 @@ graph TD;
   igl-tba-booking-view --> ir-button
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
+  igl-cal-header --> ir-m-combobox
   igl-cal-body --> ir-interactive-title
   igl-cal-body --> igl-booking-event
   igl-cal-body --> ir-modal
@@ -206,18 +222,26 @@ graph TD;
   ir-room-nights --> ir-loading-screen
   ir-room-nights --> ir-title
   ir-room-nights --> ir-button
-  igl-bulk-stop-sale --> ir-title
+  igl-bulk-operations --> ir-title
+  igl-bulk-operations --> ir-tabs
+  igl-bulk-operations --> igl-bulk-stop-sale
+  igl-bulk-operations --> igl-bulk-block
   igl-bulk-stop-sale --> ir-select
   igl-bulk-stop-sale --> ir-weekday-selector
   igl-bulk-stop-sale --> ir-button
   igl-bulk-stop-sale --> ir-date-picker
   ir-weekday-selector --> ir-checkbox
+  igl-bulk-block --> ir-select
+  igl-bulk-block --> ir-radio
+  igl-bulk-block --> ir-button
+  igl-bulk-block --> ir-date-picker
   ir-housekeeping --> ir-loading-screen
   ir-housekeeping --> ir-interceptor
   ir-housekeeping --> ir-toast
   ir-housekeeping --> ir-title
   ir-housekeeping --> ir-select
   ir-housekeeping --> ir-hk-team
+  ir-housekeeping --> ir-modal
   ir-hk-team --> ir-hk-unassigned-units
   ir-hk-team --> ir-hk-user
   ir-hk-team --> ir-title
@@ -272,7 +296,21 @@ graph TD;
   ir-sales-filters --> ir-select
   ir-sales-filters --> ir-range-picker
   ir-sales-filters --> ir-checkbox
+  ir-sales-table --> ir-progress-indicator
   ir-sales-table --> ir-button
+  ir-monthly-bookings-report --> ir-loading-screen
+  ir-monthly-bookings-report --> ir-toast
+  ir-monthly-bookings-report --> ir-interceptor
+  ir-monthly-bookings-report --> ir-button
+  ir-monthly-bookings-report --> ir-report-stats-card
+  ir-monthly-bookings-report --> ir-monthly-bookings-report-filter
+  ir-monthly-bookings-report --> ir-monthly-bookings-report-table
+  ir-report-stats-card --> ir-icons
+  ir-monthly-bookings-report-filter --> ir-select
+  ir-monthly-bookings-report-filter --> ir-checkbox
+  ir-monthly-bookings-report-filter --> ir-button
+  ir-monthly-bookings-report-table --> ir-tooltip
+  ir-monthly-bookings-report-table --> ir-progress-indicator
   style ir-secure-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

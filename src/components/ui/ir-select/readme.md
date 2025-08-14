@@ -47,7 +47,8 @@
 ### Used by
 
  - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
- - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-stop-sale)
+ - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
+ - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-delete-modal](../../ir-housekeeping/ir-delete-modal)
@@ -56,8 +57,11 @@
  - [ir-housekeeping](../../ir-housekeeping)
  - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../../ir-booking-listing/ir-listing-modal)
+ - [ir-monthly-bookings-report-filter](../../ir-monthly-bookings-report/ir-monthly-bookings-report-filter)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
+ - [ir-pagination](../../ir-pagination)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
+ - [ir-room](../../ir-booking-details/ir-room)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
  - [ir-tasks-filters](../../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
@@ -68,6 +72,7 @@
 ```mermaid
 graph TD;
   igl-book-property-header --> ir-select
+  igl-bulk-block --> ir-select
   igl-bulk-stop-sale --> ir-select
   ir-booking-header --> ir-select
   ir-booking-listing --> ir-select
@@ -77,8 +82,11 @@ graph TD;
   ir-housekeeping --> ir-select
   ir-listing-header --> ir-select
   ir-listing-modal --> ir-select
+  ir-monthly-bookings-report-filter --> ir-select
   ir-option-details --> ir-select
+  ir-pagination --> ir-select
   ir-pickup --> ir-select
+  ir-room --> ir-select
   ir-room-guests --> ir-select
   ir-sales-filters --> ir-select
   ir-tasks-filters --> ir-select

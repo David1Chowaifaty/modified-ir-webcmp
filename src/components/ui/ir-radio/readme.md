@@ -25,6 +25,19 @@
 | `checkChange` | Emitted when the checkbox's checked state changes. | `CustomEvent<boolean>` |
 
 
+## Dependencies
+
+### Used by
+
+ - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
+
+### Graph
+```mermaid
+graph TD;
+  igl-bulk-block --> ir-radio
+  style ir-radio fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

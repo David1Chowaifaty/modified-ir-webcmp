@@ -1,4 +1,4 @@
-# igl-bulk-stop-sale
+# igl-bulk-block
 
 
 
@@ -30,21 +30,20 @@
 ### Depends on
 
 - [ir-select](../../../ui/ir-select)
-- [ir-weekday-selector](../../../ui/ir-weekday-selector)
+- [ir-radio](../../../ui/ir-radio)
 - [ir-button](../../../ui/ir-button)
 - [ir-date-picker](../../../ui/ir-date-picker)
 
 ### Graph
 ```mermaid
 graph TD;
-  igl-bulk-stop-sale --> ir-select
-  igl-bulk-stop-sale --> ir-weekday-selector
-  igl-bulk-stop-sale --> ir-button
-  igl-bulk-stop-sale --> ir-date-picker
-  ir-weekday-selector --> ir-checkbox
+  igl-bulk-block --> ir-select
+  igl-bulk-block --> ir-radio
+  igl-bulk-block --> ir-button
+  igl-bulk-block --> ir-date-picker
   ir-button --> ir-icons
-  igl-bulk-operations --> igl-bulk-stop-sale
-  style igl-bulk-stop-sale fill:#f9f,stroke:#333,stroke-width:4px
+  igl-bulk-operations --> igl-bulk-block
+  style igl-bulk-block fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

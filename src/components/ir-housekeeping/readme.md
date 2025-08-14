@@ -37,6 +37,7 @@
 - [ir-title](../ir-title)
 - [ir-select](../ui/ir-select)
 - [ir-hk-team](ir-hk-team)
+- [ir-modal](../ui/ir-modal)
 
 ### Graph
 ```mermaid
@@ -47,6 +48,7 @@ graph TD;
   ir-housekeeping --> ir-title
   ir-housekeeping --> ir-select
   ir-housekeeping --> ir-hk-team
+  ir-housekeeping --> ir-modal
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp
@@ -77,6 +79,7 @@ graph TD;
   ir-sidebar --> ir-icon
   ir-delete-modal --> ir-button
   ir-delete-modal --> ir-select
+  ir-modal --> ir-button
   ir-secure-tasks --> ir-housekeeping
   style ir-housekeeping fill:#f9f,stroke:#333,stroke-width:4px
 ```

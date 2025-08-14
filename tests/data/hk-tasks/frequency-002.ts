@@ -235,9 +235,9 @@ export const freq002: HouseKeepingTasksSchema = [
     results: [
       {
         room: '003',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -246,9 +246,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '004',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -257,9 +257,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '101',
-        total: 0,
+        total: 1,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -268,9 +268,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '102',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -279,20 +279,20 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '103',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['14 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '201',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -301,9 +301,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '001',
-        total: 0,
+        total: 1,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -312,20 +312,20 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '002',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['14 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '205',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -334,9 +334,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '105',
-        total: 0,
+        total: 1,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -345,20 +345,20 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '106',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['14 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '207',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -367,31 +367,31 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '208',
-        total: 0,
+        total: 3,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['15 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '104',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['14 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '202',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -400,9 +400,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '203',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -411,9 +411,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '204',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -422,9 +422,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '206',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -433,11 +433,11 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '005',
-        total: 0,
+        total: 3,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['15 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
@@ -456,9 +456,9 @@ export const freq002: HouseKeepingTasksSchema = [
     results: [
       {
         room: '003',
-        total: 0,
+        total: 3,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug', '16 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -467,31 +467,31 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '004',
-        total: 0,
+        total: 3,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '15 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['17 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '101',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['15 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['17 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '102',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -500,20 +500,20 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '103',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['14 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '201',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -522,9 +522,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '001',
-        total: 0,
+        total: 1,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -533,20 +533,20 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '002',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['14 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '205',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -555,9 +555,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '105',
-        total: 0,
+        total: 1,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -566,20 +566,20 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '106',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['14 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '207',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '15 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -588,31 +588,31 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '208',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['15 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '104',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['14 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },
       },
       {
         room: '202',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -621,9 +621,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '203',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -632,9 +632,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '204',
-        total: 0,
+        total: 2,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -643,9 +643,9 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '206',
-        total: 0,
+        total: 1,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug'],
           VACANT: [],
           TURNOVER: [],
           CHECKIN: [],
@@ -654,11 +654,11 @@ export const freq002: HouseKeepingTasksSchema = [
       },
       {
         room: '005',
-        total: 0,
+        total: 3,
         statuses: {
-          INHOUSE: [],
+          INHOUSE: ['13 Aug', '14 Aug'],
           VACANT: [],
-          TURNOVER: [],
+          TURNOVER: ['15 Aug'],
           CHECKIN: [],
           CHECKOUT: [],
         },

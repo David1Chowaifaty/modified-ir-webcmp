@@ -64,7 +64,8 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-stop-sale)
+ - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
+ - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
  - [igl-cal-header](../../igloo-calendar/igl-cal-header)
  - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-payment-details](../../ir-booking-details/ir-payment-details)
@@ -74,6 +75,7 @@ Type: `Promise<void>`
 ### Graph
 ```mermaid
 graph TD;
+  igl-bulk-block --> ir-date-picker
   igl-bulk-stop-sale --> ir-date-picker
   igl-cal-header --> ir-date-picker
   ir-extra-service-config --> ir-date-picker

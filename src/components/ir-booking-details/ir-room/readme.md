@@ -13,6 +13,7 @@
 | `booking`           | --                      |             | `Booking`    | `undefined` |
 | `bookingIndex`      | `booking-index`         |             | `number`     | `undefined` |
 | `currency`          | `currency`              |             | `string`     | `'USD'`     |
+| `departureTime`     | --                      |             | `IEntries[]` | `undefined` |
 | `hasCheckIn`        | `has-check-in`          |             | `boolean`    | `false`     |
 | `hasCheckOut`       | `has-check-out`         |             | `boolean`    | `false`     |
 | `hasRoomAdd`        | `has-room-add`          |             | `boolean`    | `false`     |
@@ -23,6 +24,7 @@
 | `legendData`        | `legend-data`           |             | `any`        | `undefined` |
 | `mealCodeName`      | `meal-code-name`        |             | `string`     | `undefined` |
 | `myRoomTypeFoodCat` | `my-room-type-food-cat` |             | `string`     | `undefined` |
+| `property_id`       | `property_id`           |             | `number`     | `undefined` |
 | `room`              | --                      |             | `Room`       | `undefined` |
 | `roomsInfo`         | `rooms-info`            |             | `any`        | `undefined` |
 
@@ -37,6 +39,7 @@
 | `pressCheckIn`   |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
 | `pressCheckOut`  |             | `CustomEvent<any>`                                                                                                                                                                                                                   |
 | `resetbooking`   |             | `CustomEvent<null>`                                                                                                                                                                                                                  |
+| `toast`          |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>`                                                                                                                                 |
 
 
 ## Dependencies
@@ -50,6 +53,7 @@
 - [ir-button](../../ui/ir-button)
 - [ir-date-view](../../ir-date-view)
 - [ir-tooltip](../../ui/ir-tooltip)
+- [ir-select](../../ui/ir-select)
 - [ir-label](../../ui/ir-label)
 - [ir-modal](../../ui/ir-modal)
 
@@ -59,6 +63,7 @@ graph TD;
   ir-room --> ir-button
   ir-room --> ir-date-view
   ir-room --> ir-tooltip
+  ir-room --> ir-select
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-button --> ir-icons

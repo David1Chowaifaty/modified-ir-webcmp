@@ -913,7 +913,7 @@ export namespace Components {
         /**
           * Position of the label: left, right, or center
          */
-        "labelPosition": 'left' | 'right' | 'center';
+        "labelPosition": 'left' | 'right' | 'center' | 'top';
         /**
           * Label width as a fraction of 12 columns (1-11)
          */
@@ -984,9 +984,9 @@ export namespace Components {
          */
         "value": string;
         /**
-          * Variant of the input: default or icon
+          * Variant of the input: default or icon or floating-label
          */
-        "variant": 'default' | 'icon';
+        "variant": 'default' | 'icon' | 'floating-label';
         /**
           * Key to wrap the value (e.g., 'price' or 'cost')
          */
@@ -5405,7 +5405,7 @@ declare namespace LocalJSX {
         /**
           * Position of the label: left, right, or center
          */
-        "labelPosition"?: 'left' | 'right' | 'center';
+        "labelPosition"?: 'left' | 'right' | 'center' | 'top';
         /**
           * Label width as a fraction of 12 columns (1-11)
          */
@@ -5479,9 +5479,9 @@ declare namespace LocalJSX {
          */
         "value"?: string;
         /**
-          * Variant of the input: default or icon
+          * Variant of the input: default or icon or floating-label
          */
-        "variant"?: 'default' | 'icon';
+        "variant"?: 'default' | 'icon' | 'floating-label';
         /**
           * Key to wrap the value (e.g., 'price' or 'cost')
          */

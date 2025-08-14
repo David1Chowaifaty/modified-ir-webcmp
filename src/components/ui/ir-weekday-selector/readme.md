@@ -23,7 +23,7 @@
 
 ### Used by
 
- - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-stop-sale)
+ - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
 
 ### Depends on
 

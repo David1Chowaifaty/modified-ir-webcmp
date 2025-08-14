@@ -36,12 +36,14 @@
 
 - [ir-button](../../ui/ir-button)
 - [ir-date-picker](../../ui/ir-date-picker)
+- [ir-m-combobox](../../ir-m-combobox)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
+  igl-cal-header --> ir-m-combobox
   ir-button --> ir-icons
   igloo-calendar --> igl-cal-header
   style igl-cal-header fill:#f9f,stroke:#333,stroke-width:4px
