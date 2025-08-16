@@ -2,6 +2,7 @@ import { Component, Host, State, h } from '@stencil/core';
 import { Moment } from 'moment';
 import { ComboboxOption } from '../ir-m-combobox/ir-m-combobox';
 import { ACPages } from '@/components';
+import { sleep } from '@/utils/utils';
 
 @Component({
   tag: 'ir-test-cmp',
@@ -444,7 +445,14 @@ export class IrTestCmp {
               <div class="mobile-search">
                 <ir-m-combobox placeholder="Search..." dataMode="static" options={this.staticOptions} onOptionChange={this.handleStaticOptionChange}></ir-m-combobox>
               </div>
-              <ac-pages-menu location="sheet" pages={this.pages}></ac-pages-menu>
+              <ac-pages-menu
+                location="sheet"
+                onLink-clicked={async e => {
+                  await sleep(1000);
+                  window.location.href = (e.detail.target as any).href;
+                }}
+                pages={this.pages}
+              ></ac-pages-menu>
             </div>
           </div>
 

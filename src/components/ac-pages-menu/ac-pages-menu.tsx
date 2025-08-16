@@ -59,7 +59,14 @@ export class AcPagesMenu {
                       const menuId = submenu.id ?? v4();
                       return (
                         <li key={menuId} id={menuId} class={`mobile-nav-item menu-icon-container ${submenu.className ?? ''}`} style={{ width: '100%' }}>
-                          <a onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link w-100" href={submenu.href}>
+                          <a
+                            onClick={e => {
+                              e.preventDefault();
+                              this.linkClicked.emit(e);
+                            }}
+                            class="mobile-nav-link w-100"
+                            href={submenu.href}
+                          >
                             <div class="menu-icon-container">
                               {submenu.icon && this.Icon({ name: submenu.icon })}
                               <span>{submenu.label}</span>
@@ -75,7 +82,14 @@ export class AcPagesMenu {
             }
             return (
               <li key={id} id={id} class={`${page.className ?? ''}  mobile-nav-item`}>
-                <a href={page.href} onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link">
+                <a
+                  href={page.href}
+                  onClick={e => {
+                    e.preventDefault();
+                    this.linkClicked.emit(e);
+                  }}
+                  class="mobile-nav-link"
+                >
                   <div class="menu-icon-container">
                     {page.icon && this.Icon({ name: page.icon })}
                     <span>{page.label}</span>
@@ -124,7 +138,13 @@ export class AcPagesMenu {
                     const menuId = submenu.id ?? v4();
                     return (
                       <li key={menuId} id={menuId} class={`navigation-item ${submenu.className ?? ''}`}>
-                        <a onClick={e => this.linkClicked.emit(e)} class="dropdown-item menu-icon-container" href={submenu.href}>
+                        <a
+                          onClick={e => {
+                            this.linkClicked.emit(e);
+                          }}
+                          class="dropdown-item menu-icon-container"
+                          href={submenu.href}
+                        >
                           <div class="menu-icon-container">
                             {submenu.icon && this.Icon({ name: submenu.icon })}
                             <span>{submenu.label}</span>
