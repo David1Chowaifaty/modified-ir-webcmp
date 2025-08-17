@@ -62,8 +62,8 @@ export class IrNotifications {
 
           <div class="dropdown-menu dropdown-menu-right">
             <div class={'dropdown-item'}>
-              <ir-icons name="danger"> </ir-icons>
-              <p class={'p-0 m-0'}>Something went wrong</p>
+              {/* <ir-icons name="danger"> </ir-icons> */}
+              <p class={'p-0 m-0'}>All caught up.</p>
             </div>
           </div>
         </div>
