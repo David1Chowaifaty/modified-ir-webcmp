@@ -7,7 +7,7 @@ import { Component, Host, h, Prop, Element, Watch } from '@stencil/core';
 })
 export class IrNotifications {
   @Element() el: HTMLElement;
-  @Prop({ mutable: true }) notificationCount: number = 2;
+  @Prop({ mutable: true }) notificationCount: number;
 
   private buttonRef: HTMLIrButtonElement;
 
@@ -61,7 +61,7 @@ export class IrNotifications {
           ></ir-button>
 
           <div class="dropdown-menu dropdown-menu-right">
-            <div class={'dropdown-item'}>
+            <div class={'dropdown-header m-0'}>
               {/* <ir-icons name="danger"> </ir-icons> */}
               <p class={'p-0 m-0'}>All caught up.</p>
             </div>

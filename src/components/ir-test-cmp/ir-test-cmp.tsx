@@ -106,6 +106,7 @@ export class IrTestCmp {
       href: 'acdashboard.aspx',
       id: 'Li_AcDashboard',
       icon: 'la la-dashboard',
+      isNew: true,
     },
     {
       label: 'Frontdesk',

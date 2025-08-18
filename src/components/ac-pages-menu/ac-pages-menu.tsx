@@ -5,6 +5,7 @@ interface ACPage {
   href: string;
   id?: string;
   isNew?: boolean;
+  badgeId?: string;
   className?: string;
   icon?: string;
 }
@@ -48,9 +49,13 @@ export class AcPagesMenu {
                     <div class={'menu-icon-container'}>
                       {page.icon && this.Icon({ name: page.icon })}
                       <span>{page.label}</span>
+                      {page.isNew && (
+                        <span class="new-badge" id={page.badgeId}>
+                          new
+                        </span>
+                      )}
                     </div>
                     <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-                      {page.isNew && <span class="new-badge">new</span>}
                       <ir-icons name="angle-down"></ir-icons>
                     </div>
                   </button>
@@ -70,8 +75,12 @@ export class AcPagesMenu {
                             <div class="menu-icon-container">
                               {submenu.icon && this.Icon({ name: submenu.icon })}
                               <span>{submenu.label}</span>
+                              {submenu.isNew && (
+                                <span id={submenu.badgeId} class="new-badge">
+                                  new
+                                </span>
+                              )}
                             </div>
-                            {submenu.isNew && <span class="new-badge">new</span>}
                           </a>
                         </li>
                       );
@@ -93,8 +102,12 @@ export class AcPagesMenu {
                   <div class="menu-icon-container">
                     {page.icon && this.Icon({ name: page.icon })}
                     <span>{page.label}</span>
+                    {page.isNew && (
+                      <span id={page.badgeId} class="new-badge">
+                        new
+                      </span>
+                    )}
                   </div>
-                  {page.isNew && <span class="new-badge">new</span>}
                 </a>
               </li>
             );
@@ -131,7 +144,11 @@ export class AcPagesMenu {
                     {page.icon && this.Icon({ name: page.icon })}
                     <span>{page.label}</span>
                   </div>
-                  {page.isNew && <span class="new-badge">new</span>}
+                  {page.isNew && (
+                    <span id={page.badgeId} class="new-badge">
+                      new
+                    </span>
+                  )}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
                   {page.subMenus.map(submenu => {
@@ -145,11 +162,15 @@ export class AcPagesMenu {
                           class="dropdown-item menu-icon-container"
                           href={submenu.href}
                         >
-                          <div class="menu-icon-container">
+                          <div class="menu-icon-container mr-auto">
                             {submenu.icon && this.Icon({ name: submenu.icon })}
                             <span>{submenu.label}</span>
                           </div>
-                          {submenu.isNew && <span class="new-badge">new</span>}
+                          {submenu.isNew && (
+                            <span id={submenu.badgeId} class="new-badge">
+                              new
+                            </span>
+                          )}
                         </a>
                       </li>
                     );
@@ -164,8 +185,12 @@ export class AcPagesMenu {
                 <div class="menu-icon-container">
                   {page.icon && this.Icon({ name: page.icon })}
                   <span>{page.label}</span>
+                  {page.isNew && (
+                    <span id={page.badgeId} class="new-badge">
+                      new
+                    </span>
+                  )}
                 </div>
-                {page.isNew && <span class="new-badge">new</span>}
               </a>
             </li>
           );
