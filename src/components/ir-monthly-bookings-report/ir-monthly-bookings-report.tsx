@@ -142,8 +142,8 @@ export class IrMonthlyBookingsReport {
 
       this.stats = { ...rest };
 
-      if (include_previous_year && results[isExportToExcel ? 1 : 2]) {
-        const previousYearReports = results[isExportToExcel ? 1 : 2];
+      if (include_previous_year && results[isExportToExcel ? 0 : 1]) {
+        const previousYearReports = results[isExportToExcel ? 0 : 1];
         let formattedReports = previousYearReports.DailyStats.map(getReportObj);
         enrichedReports = DailyStats.map(getReportObj).map(current => {
           const previous = formattedReports.find(prev => prev.day === moment(current.day, 'YYYY-MM-DD').add(-1, 'years').format('YYYY-MM-DD'));
