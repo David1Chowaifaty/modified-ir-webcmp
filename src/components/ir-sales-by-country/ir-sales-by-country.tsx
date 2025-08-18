@@ -153,11 +153,12 @@ export class IrSalesByCountry {
         }));
       }
 
-      this.salesData = enrichedSales.sort((a, b) => {
-        if (a.country_id === 0) return -1;
-        if (b.country_id === 0) return 1;
-        return 0;
-      });
+      // this.salesData = enrichedSales.sort((a, b) => {
+      //   if (a.country_id === 0) return -1;
+      //   if (b.country_id === 0) return 1;
+      //   return 0;
+      // });
+      this.salesData = [...enrichedSales];
     } catch (error) {
       console.error('Failed to fetch sales data:', error);
     } finally {
