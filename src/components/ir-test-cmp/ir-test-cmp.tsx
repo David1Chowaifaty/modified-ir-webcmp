@@ -1,6 +1,6 @@
 import { Component, Host, State, h } from '@stencil/core';
 import { Moment } from 'moment';
-import { ComboboxOption } from '../ir-m-combobox/ir-m-combobox';
+import { ComboboxOption } from '../ir-m-combobox/types';
 import { ACPages } from '@/components';
 import { sleep } from '@/utils/utils';
 

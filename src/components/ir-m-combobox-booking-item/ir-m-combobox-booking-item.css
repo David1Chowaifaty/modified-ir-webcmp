@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: inherit;
+}
+.origin-icon {
+  margin-right: 0.5rem;
+  height: 24px;
+  aspect-ratio: 1;
+}
