@@ -522,6 +522,7 @@ export class IglooCalendar {
         };
       }
     }
+    this.getHousekeepingTasks({ from_date: this.from_date, to_date: this.to_date });
   }
   private async handleDoReservation(result: any) {
     const transformedBooking = transformNewBooking(result);
