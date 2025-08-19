@@ -361,7 +361,10 @@ export class IglooCalendar {
       }
 
       const results = await Promise.all(requests);
-      await this.getHousekeepingTasks({ from_date: this.from_date, to_date: this.to_date });
+      await this.getHousekeepingTasks({
+        from_date: moment().format('YYYY-MM-DD'),
+        to_date: housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code,
+      });
       if (!roomResp) {
         roomResp = results[results.length - 1];
       }
@@ -522,7 +525,6 @@ export class IglooCalendar {
         };
       }
     }
-    this.getHousekeepingTasks({ from_date: this.from_date, to_date: this.to_date });
   }
   private async handleDoReservation(result: any) {
     const transformedBooking = transformNewBooking(result);
@@ -924,10 +926,7 @@ export class IglooCalendar {
   }
 
   private async addDatesToCalendar(fromDate: string, toDate: string) {
-    const [results] = await Promise.all([
-      this.bookingService.getCalendarData(this.property_id, fromDate, toDate),
-      this.getHousekeepingTasks({ from_date: fromDate, to_date: toDate }),
-    ]);
+    const [results] = await Promise.all([this.bookingService.getCalendarData(this.property_id, fromDate, toDate)]);
 
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);

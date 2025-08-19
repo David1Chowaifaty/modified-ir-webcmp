@@ -27,9 +27,9 @@
   position: absolute;
   bottom: 0;
   height: 100%;
-  left: 20%;
-  right: 20%;
-  background-color: rgb(188, 185, 171) !important;
+  left: 30%;
+  right: 30%;
+  background-color: rgb(227 224 221) !important;
 }
 
 /* .cellData.disabled[data-dirty-room='true'] {
