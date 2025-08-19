@@ -7,7 +7,7 @@ import { Component, Host, h, Prop, Element, Watch } from '@stencil/core';
 })
 export class IrNotifications {
   @Element() el: HTMLElement;
-  @Prop({ mutable: true }) notificationCount: number;
+  @Prop({ mutable: true }) notificationCount: number = 0;
 
   private buttonRef: HTMLIrButtonElement;
 
