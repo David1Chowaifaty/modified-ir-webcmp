@@ -31,7 +31,7 @@ export class IrTasksFilters {
   componentWillLoad() {
     this.baseFilters = {
       cleaning_periods: housekeeping_store?.hk_criteria?.cleaning_periods[0],
-      housekeepers: housekeeping_store.hk_criteria.housekeepers?.map(h => ({ id: h.id })),
+      housekeepers: [],
       cleaning_frequencies: calendar_data.cleaning_frequency ?? housekeeping_store?.hk_criteria?.cleaning_frequencies[0],
       dusty_units: housekeeping_store?.hk_criteria?.dusty_periods[0],
       highlight_check_ins: housekeeping_store?.hk_criteria?.highlight_checkin_options[0],

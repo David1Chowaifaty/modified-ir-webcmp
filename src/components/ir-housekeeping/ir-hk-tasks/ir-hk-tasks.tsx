@@ -11,6 +11,7 @@ import { v4 } from 'uuid';
 import { TaskFilters } from './types';
 import { downloadFile } from '@/utils/utils';
 import { updateTasks as updateTasksStore, updateSelectedTasks, clearSelectedTasks, hkTasksStore, setLoading } from '@/stores/hk-tasks.store';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'ir-hk-tasks',
@@ -113,11 +114,7 @@ export class IrHkTasks {
         propertyId = propertyData.My_Result.id;
       }
       this.property_id = propertyId;
-      const requests = [
-        this.houseKeepingService.getHkTasks({ property_id: this.property_id, from_date: moment().format('YYYY-MM-DD'), to_date: moment().format('YYYY-MM-DD') }),
-        this.houseKeepingService.getExposedHKSetup(this.property_id),
-        this.roomService.fetchLanguage(this.language),
-      ];
+      const requests = [this.houseKeepingService.getExposedHKSetup(this.property_id), this.roomService.fetchLanguage(this.language)];
       if (this.propertyid) {
         requests.push(
           this.roomService.getExposedProperty({
@@ -129,8 +126,17 @@ export class IrHkTasks {
         );
       }
 
-      const results = await Promise.all(requests);
-      const tasksResult = results[0] as any;
+      await Promise.all(requests);
+      const tasksResult = await this.houseKeepingService.getHkTasks({
+        property_id: this.property_id,
+        from_date: moment().format('YYYY-MM-DD'),
+        to_date: moment().format('YYYY-MM-DD'),
+        housekeepers: [],
+        cleaning_frequency: (calendar_data.cleaning_frequency ?? housekeeping_store?.hk_criteria?.cleaning_frequencies[0])?.code,
+        dusty_window: housekeeping_store?.hk_criteria?.dusty_periods[0]?.code,
+        highlight_window: housekeeping_store?.hk_criteria?.highlight_checkin_options[0]?.code,
+      });
+
       // updateTaskList();
       if (tasksResult?.tasks) {
         this.updateTasks(tasksResult.tasks);
