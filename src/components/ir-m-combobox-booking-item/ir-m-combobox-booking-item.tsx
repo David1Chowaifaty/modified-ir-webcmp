@@ -15,7 +15,6 @@ export class IrMComboboxBookingItem {
         <div>
           <p class="p-0 m-0">{this.booking.booking_nbr}</p>
           {!this.booking.is_direct && <p class="small p-0 m-0">{this.booking.channel_booking_nbr}</p>}
-          {<p class="small p-0 m-0 text-muted">BDC-{this.booking.booking_nbr}</p>}
         </div>
         <p class="p-0 m-0">
           {this.booking.guest.first_name} {this.booking.guest.last_name}

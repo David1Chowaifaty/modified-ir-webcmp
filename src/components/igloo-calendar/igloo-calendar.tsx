@@ -10,7 +10,7 @@ import { ToBeAssignedService } from '@/services/toBeAssigned.service';
 import { bookingStatus, calculateDaysBetweenDates, formatName, getPrivateNote, getRoomStatus, transformNewBLockedRooms, transformNewBooking } from '@/utils/booking';
 import { IRoomNightsData, IRoomNightsDataEventPayload, CalendarModalEvent } from '@/models/property-types';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
-import calendar_dates from '@/stores/calendar-dates.store';
+import calendar_dates, { addCleaningTasks } from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { addUnassignedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
@@ -413,13 +413,7 @@ export class IglooCalendar {
       dusty_window: housekeeping_store?.hk_criteria?.dusty_periods[0]?.code,
       highlight_window: housekeeping_store?.hk_criteria?.highlight_checkin_options[0]?.code,
     });
-    const tasksMap = new Map(calendar_dates.cleaningTasks);
-    for (const task of tasks) {
-      const taskMap = new Map(tasksMap.get(task.unit.id) ?? new Map());
-      taskMap.set(task.date, task);
-      tasksMap.set(task.unit.id, taskMap);
-    }
-    calendar_dates.cleaningTasks = new Map(tasksMap);
+    addCleaningTasks(tasks);
   }
 
   private async handleSocketMessage(msg: string) {
