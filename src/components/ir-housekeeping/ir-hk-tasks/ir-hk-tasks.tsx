@@ -131,7 +131,7 @@ export class IrHkTasks {
         property_id: this.property_id,
         from_date: moment().format('YYYY-MM-DD'),
         to_date: moment().format('YYYY-MM-DD'),
-        housekeepers: housekeeping_store.hk_criteria.housekeepers?.map(h => ({ id: h.id })),
+        housekeepers: [],
         cleaning_frequency: (calendar_data.cleaning_frequency ?? housekeeping_store?.hk_criteria?.cleaning_frequencies[0])?.code,
         dusty_window: housekeeping_store?.hk_criteria?.dusty_periods[0]?.code,
         highlight_window: housekeeping_store?.hk_criteria?.highlight_checkin_options[0]?.code,
