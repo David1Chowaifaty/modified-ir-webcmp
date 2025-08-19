@@ -18,6 +18,7 @@ import Token from '@/models/Token';
 import { RoomHkStatus, RoomType } from '@/models/booking.dto';
 import { BatchingQueue } from '@/utils/Queue';
 import { HouseKeepingService } from '@/services/housekeeping.service';
+import housekeeping_store from '@/stores/housekeeping.store';
 // import Auth from '@/models/Auth';
 export interface UnitHkStatusChangePayload {
   PR_ID: number;
@@ -344,7 +345,7 @@ export class IglooCalendar {
         this.bookingService.getCalendarData(propertyId, this.from_date, this.to_date),
         this.bookingService.getCountries(this.language),
         this.roomService.fetchLanguage(this.language),
-        this.getHousekeepingTasks({ from_date: this.from_date, to_date: this.to_date }),
+        this.housekeepingService.getExposedHKSetup(this.property_id),
       ];
 
       if (this.propertyid) {
@@ -360,6 +361,7 @@ export class IglooCalendar {
       }
 
       const results = await Promise.all(requests);
+      await this.getHousekeepingTasks({ from_date: this.from_date, to_date: this.to_date });
       if (!roomResp) {
         roomResp = results[results.length - 1];
       }
@@ -399,7 +401,15 @@ export class IglooCalendar {
     }
   }
   private async getHousekeepingTasks({ from_date, to_date }: { from_date: string; to_date: string }) {
-    const { tasks } = await this.housekeepingService.getHkTasks({ property_id: this.property_id, from_date, to_date });
+    const { tasks } = await this.housekeepingService.getHkTasks({
+      property_id: this.property_id,
+      from_date,
+      to_date,
+      housekeepers: housekeeping_store.hk_criteria.housekeepers?.map(h => ({ id: h.id })),
+      cleaning_frequency: (calendar_data.cleaning_frequency ?? housekeeping_store?.hk_criteria?.cleaning_frequencies[0])?.code,
+      dusty_window: housekeeping_store?.hk_criteria?.dusty_periods[0]?.code,
+      highlight_window: housekeeping_store?.hk_criteria?.highlight_checkin_options[0]?.code,
+    });
     const tasksMap = new Map(calendar_dates.cleaningTasks);
     for (const task of tasks) {
       const taskMap = new Map(tasksMap.get(task.unit.id) ?? new Map());
