@@ -383,7 +383,8 @@ export class IglCalBody {
       const isDisabled = (isCellDisabled && Object.keys(this.selectedRooms).length === 0) || (isCellDisabled && this.isCellDisabled(Number(roomId), prevDate));
       const isSelected = this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo));
       const isCurrentDate = dayInfo.day === this.today || dayInfo.day === this.highlightedDate;
-      // const shouldBeCleaned = Math.random() * 12 < 3;
+      const cleaningDates = calendar_dates.cleaningTasks.has(+roomId) ? calendar_dates.cleaningTasks.get(+roomId) : null;
+      const shouldBeCleaned = cleaningDates?.has(dayInfo.value);
       return (
         <div
           class={`cellData position-relative roomCell ${isCellDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${isCurrentDate ? 'currentDay' : ''} ${
@@ -402,7 +403,7 @@ export class IglCalBody {
           data-date={dayInfo.value}
           aria-current={isCurrentDate ? 'date' : undefined}
           data-room-name={roomName}
-          // data-dirty-room={String(shouldBeCleaned)}
+          data-dirty-room={String(shouldBeCleaned)}
           aria-disabled={String(isDisabled)}
           aria-selected={Boolean(isSelected)}
           // tabIndex={-1}

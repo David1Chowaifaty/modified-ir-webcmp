@@ -17,6 +17,7 @@ import { addUnassignedDates, handleUnAssignedDatesChange, removeUnassignedDates 
 import Token from '@/models/Token';
 import { RoomHkStatus, RoomType } from '@/models/booking.dto';
 import { BatchingQueue } from '@/utils/Queue';
+import { HouseKeepingService } from '@/services/housekeeping.service';
 // import Auth from '@/models/Auth';
 export interface UnitHkStatusChangePayload {
   PR_ID: number;
@@ -90,6 +91,7 @@ export class IglooCalendar {
   private roomService: RoomService = new RoomService();
   private eventsService = new EventsService();
   private toBeAssignedService = new ToBeAssignedService();
+  private housekeepingService = new HouseKeepingService();
   // private auth = new Auth();
   private countries: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
@@ -342,6 +344,7 @@ export class IglooCalendar {
         this.bookingService.getCalendarData(propertyId, this.from_date, this.to_date),
         this.bookingService.getCountries(this.language),
         this.roomService.fetchLanguage(this.language),
+        this.getHousekeepingTasks({ from_date: this.from_date, to_date: this.to_date }),
       ];
 
       if (this.propertyid) {
@@ -394,6 +397,16 @@ export class IglooCalendar {
     } catch (error) {
       console.error('Initializing Calendar Error', error);
     }
+  }
+  private async getHousekeepingTasks({ from_date, to_date }: { from_date: string; to_date: string }) {
+    const { tasks } = await this.housekeepingService.getHkTasks({ property_id: this.property_id, from_date, to_date });
+    const tasksMap = new Map(calendar_dates.cleaningTasks);
+    for (const task of tasks) {
+      const taskMap = new Map(tasksMap.get(task.unit.id) ?? new Map());
+      taskMap.set(task.date, task);
+      tasksMap.set(task.unit.id, taskMap);
+    }
+    calendar_dates.cleaningTasks = new Map(tasksMap);
   }
 
   private async handleSocketMessage(msg: string) {
@@ -900,7 +913,11 @@ export class IglooCalendar {
   }
 
   private async addDatesToCalendar(fromDate: string, toDate: string) {
-    const results = await this.bookingService.getCalendarData(this.property_id, fromDate, toDate);
+    const [results] = await Promise.all([
+      this.bookingService.getCalendarData(this.property_id, fromDate, toDate),
+      this.getHousekeepingTasks({ from_date: fromDate, to_date: toDate }),
+    ]);
+
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {
