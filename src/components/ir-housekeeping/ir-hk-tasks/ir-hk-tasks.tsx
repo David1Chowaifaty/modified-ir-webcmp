@@ -185,6 +185,11 @@ export class IrHkTasks {
       case 'cleaned':
       case 'clean-inspect':
         this.modal?.openModal();
+        this.modalCauses = {
+          task: null,
+          cause: 'clean',
+          status: name === 'clean-inspect' ? '004' : '001',
+        };
         break;
       case 'export':
         const sortingArray: { key: string; value: string }[] = Array.from(this.table_sorting.entries()).map(([key, value]) => ({
@@ -334,7 +339,9 @@ export class IrHkTasks {
           modalBody={
             this.modalCauses
               ? this.modalCauses?.cause === 'clean'
-                ? `Update ${this.modalCauses?.task?.unit?.name} to Clean`
+                ? this.modalCauses.task
+                  ? `Update ${this.modalCauses?.task?.unit?.name} to Clean`
+                  : 'Update selected unit(s) to Clean'
                 : 'Skip cleaning and reschedule for tomorrow.'
               : 'Update selected unit(s) to Clean'
           }
