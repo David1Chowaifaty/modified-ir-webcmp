@@ -28,7 +28,7 @@ export const { state: calendar_dates, onChange: onCalendarDatesChange } = create
 export default calendar_dates;
 
 export function addCleaningTasks(tasks: Task[]) {
-  const tasksMap = new Map(calendar_dates.cleaningTasks);
+  const tasksMap = new Map();
   for (const task of tasks) {
     const taskMap = new Map(tasksMap.get(task.unit.id) ?? new Map());
     taskMap.set(task.date, task);
@@ -37,21 +37,21 @@ export function addCleaningTasks(tasks: Task[]) {
   calendar_dates.cleaningTasks = new Map(tasksMap);
 }
 
-export function cleanRoom(task: Task) {
+export function cleanRoom({ unitId, date }: { unitId: Task['unit']['id']; date: Task['date'] }) {
   const tasksMap = new Map(calendar_dates.cleaningTasks);
-  if (!tasksMap.has(task.unit.id)) {
+  if (!tasksMap.has(unitId)) {
     return;
   }
-  const taskMap = new Map(tasksMap.get(task.unit.id));
-  taskMap.delete(task.date);
-  tasksMap.set(task.unit.id, taskMap);
+  const taskMap = new Map(tasksMap.get(unitId));
+  taskMap.delete(date);
+  tasksMap.set(unitId, taskMap);
   calendar_dates.cleaningTasks = new Map(tasksMap);
 }
 
-export function addRoomForCleaning(task: Task) {
+export function addRoomForCleaning({ unitId, date, task }: { unitId: Task['unit']['id']; date: Task['date']; task?: Task }) {
   const tasksMap = new Map(calendar_dates.cleaningTasks);
-  const taskMap = new Map(tasksMap.get(task.unit.id) ?? new Map());
-  taskMap.set(task.date, task);
-  tasksMap.set(task.unit.id, taskMap);
+  const taskMap = new Map(tasksMap.get(unitId) ?? new Map());
+  taskMap.set(date, task ?? date);
+  tasksMap.set(unitId, taskMap);
   calendar_dates.cleaningTasks = new Map(tasksMap);
 }

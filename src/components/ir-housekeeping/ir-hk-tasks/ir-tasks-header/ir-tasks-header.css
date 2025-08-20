@@ -16,6 +16,9 @@
 .search-filter-container {
   flex: 1 1 0%;
 }
+.clean-button {
+  display: none;
+}
 /*sm*/
 @media (min-width: 640px) {
   :host {
@@ -29,6 +32,9 @@
   }
   .action-buttons {
     justify-content: stretch;
+  }
+  .clean-button {
+    display: flex;
   }
 }
 

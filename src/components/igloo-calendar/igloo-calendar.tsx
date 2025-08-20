@@ -10,7 +10,7 @@ import { ToBeAssignedService } from '@/services/toBeAssigned.service';
 import { bookingStatus, calculateDaysBetweenDates, formatName, getPrivateNote, getRoomStatus, transformNewBLockedRooms, transformNewBooking } from '@/utils/booking';
 import { IRoomNightsData, IRoomNightsDataEventPayload, CalendarModalEvent } from '@/models/property-types';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
-import calendar_dates, { addCleaningTasks } from '@/stores/calendar-dates.store';
+import calendar_dates, { addCleaningTasks, addRoomForCleaning, cleanRoom } from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { addUnassignedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
@@ -451,6 +451,7 @@ export class IglooCalendar {
       SHARING_PERSONS_UPDATED: this.handleSharingPersonsUpdated,
       ROOM_TYPE_CLOSE: r => this.salesQueue.offer({ ...r, is_available_to_book: false }),
       ROOM_TYPE_OPEN: r => this.salesQueue.offer({ ...r, is_available_to_book: true }),
+      HK_SKIP: this.handleHkSkip,
     };
 
     const handler = reasonHandlers[REASON];
@@ -499,6 +500,9 @@ export class IglooCalendar {
       ],
     };
   }
+  private handleHkSkip(result) {
+    console.log('skip', result);
+  }
   private handleUnitHKStatusChanged(result: UnitHkStatusChangePayload) {
     console.log('hk unit change', result);
     const updatedRooms: RoomType[] = [...this.calendarData.roomsInfo];
@@ -518,6 +522,12 @@ export class IglooCalendar {
           roomsInfo: updatedRooms,
         };
       }
+    }
+    const roomPayload = { date: moment().format('YYYY-MM-DD'), unitId: result.PR_ID };
+    if (result.HKS_CODE === '002') {
+      addRoomForCleaning(roomPayload);
+    } else {
+      cleanRoom(roomPayload);
     }
   }
   private async handleDoReservation(result: any) {
@@ -848,7 +858,20 @@ export class IglooCalendar {
       ...this.calendarData,
       bookingEvents: bookings,
     };
+
+    const isDateInBetweenTheLastPeriodDate = (d: any): boolean => {
+      const endDate = moment(housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code, 'YYYY-MM-DD');
+      return moment(d.FROM_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate) || moment(d.TO_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate);
+    };
+
+    if (data.some(isDateInBetweenTheLastPeriodDate)) {
+      this.getHousekeepingTasks({
+        from_date: moment().format('YYYY-MM-DD'),
+        to_date: housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code,
+      });
+    }
   }
+
   private transformDateForScroll(date: Date) {
     return moment(date).format('D_M_YYYY');
   }

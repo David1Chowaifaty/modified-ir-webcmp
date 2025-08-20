@@ -24,7 +24,7 @@ import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
-import { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
@@ -59,7 +59,7 @@ export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
-export { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
@@ -1167,6 +1167,11 @@ export namespace Components {
          */
         "isLoading": boolean;
         /**
+          * Whether the modal middle button is in a loading state, disabling interaction.
+          * @requires middleBtnActive to be true
+         */
+        "isMiddleButtonLoading": boolean;
+        /**
           * Payload object to pass along with confirm/cancel events.
          */
         "item": any;
@@ -1182,6 +1187,18 @@ export namespace Components {
           * Text displayed on the left (cancel/close) button.
          */
         "leftBtnText": string;
+        /**
+          * Whether the middle (tertiary) button is visible.
+         */
+        "middleBtnActive": boolean;
+        /**
+          * Color theme of the middle (tertiary) button.
+         */
+        "middleBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Text displayed on the middle (tertiary) button.
+         */
+        "middleBtnText": string;
         /**
           * The main content text shown in the modal body.
          */
@@ -3572,6 +3589,7 @@ declare global {
     interface HTMLIrModalElementEventMap {
         "confirmModal": any;
         "cancelModal": any;
+        "middleModal": any;
     }
     interface HTMLIrModalElement extends Components.IrModal, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrModalElementEventMap>(type: K, listener: (this: HTMLIrModalElement, ev: IrModalCustomEvent<HTMLIrModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4110,7 +4128,7 @@ declare global {
         new (): HTMLIrTabsElement;
     };
     interface HTMLIrTasksCardElementEventMap {
-        "cleanSelectedTask": Task;
+        "cleanSelectedTask": CleanTaskEvent;
         "skipSelectedTask": Task;
     }
     interface HTMLIrTasksCardElement extends Components.IrTasksCard, HTMLStencilElement {
@@ -4145,7 +4163,7 @@ declare global {
         new (): HTMLIrTasksFiltersElement;
     };
     interface HTMLIrTasksHeaderElementEventMap {
-        "headerButtonPress": { name: 'cleaned' | 'export' | 'archive' };
+        "headerButtonPress": { name: 'cleaned' | 'export' | 'archive' | 'clean-inspect' };
     }
     interface HTMLIrTasksHeaderElement extends Components.IrTasksHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksHeaderElementEventMap>(type: K, listener: (this: HTMLIrTasksHeaderElement, ev: IrTasksHeaderCustomEvent<HTMLIrTasksHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5735,6 +5753,11 @@ declare namespace LocalJSX {
          */
         "isLoading"?: boolean;
         /**
+          * Whether the modal middle button is in a loading state, disabling interaction.
+          * @requires middleBtnActive to be true
+         */
+        "isMiddleButtonLoading"?: boolean;
+        /**
           * Payload object to pass along with confirm/cancel events.
          */
         "item"?: any;
@@ -5751,6 +5774,18 @@ declare namespace LocalJSX {
          */
         "leftBtnText"?: string;
         /**
+          * Whether the middle (tertiary) button is visible.
+         */
+        "middleBtnActive"?: boolean;
+        /**
+          * Color theme of the middle (tertiary) button.
+         */
+        "middleBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Text displayed on the middle (tertiary) button.
+         */
+        "middleBtnText"?: string;
+        /**
           * The main content text shown in the modal body.
          */
         "modalBody"?: string;
@@ -5766,6 +5801,10 @@ declare namespace LocalJSX {
           * Fired when the confirm (right) button is clicked. Emits the current `item` value.
          */
         "onConfirmModal"?: (event: IrModalCustomEvent<any>) => void;
+        /**
+          * Fired when the middle (tertiary) button is clicked. Emits the current `item` value.
+         */
+        "onMiddleModal"?: (event: IrModalCustomEvent<any>) => void;
         /**
           * Whether the right (confirm) button is visible.
          */
@@ -6472,7 +6511,7 @@ declare namespace LocalJSX {
     interface IrTasksCard {
         "isCheckable"?: boolean;
         "isSkippable"?: boolean;
-        "onCleanSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
+        "onCleanSelectedTask"?: (event: IrTasksCardCustomEvent<CleanTaskEvent>) => void;
         "onSkipSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
         "task"?: Task;
     }
@@ -6481,7 +6520,7 @@ declare namespace LocalJSX {
         "onApplyFilters"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
     }
     interface IrTasksHeader {
-        "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' | 'archive' }>) => void;
+        "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' | 'archive' | 'clean-inspect' }>) => void;
     }
     interface IrTasksTable {
         "onAnimateCleanedButton"?: (event: IrTasksTableCustomEvent<null>) => void;

@@ -1,4 +1,4 @@
-import { IPendingActions, Task } from '@/models/housekeeping';
+import { CleanTaskEvent, IPendingActions, Task } from '@/models/housekeeping';
 import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
@@ -37,7 +37,7 @@ export class IrHkTasks {
   @State() isSidebarOpen: boolean;
   @State() isApplyFiltersLoading: boolean;
   @State() filters: TaskFilters;
-  @State() modalCauses: { task?: Task; cause: 'skip' | 'clean' };
+  @State() modalCauses: CleanTaskEvent & { cause: 'skip' | 'clean' };
 
   @Event({ bubbles: true, composed: true }) clearSelectedHkTasks: EventEmitter<void>;
 
@@ -183,6 +183,7 @@ export class IrHkTasks {
     const { name } = e.detail;
     switch (name) {
       case 'cleaned':
+      case 'clean-inspect':
         this.modal?.openModal();
         break;
       case 'export':
@@ -200,10 +201,10 @@ export class IrHkTasks {
     }
   }
   @Listen('cleanSelectedTask')
-  handleSelectedTaskCleaningEvent(e: CustomEvent<Task>) {
+  handleSelectedTaskCleaningEvent(e: CustomEvent<CleanTaskEvent>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.modalCauses = { task: e.detail, cause: 'clean' };
+    this.modalCauses = { ...e.detail, cause: 'clean' };
     this.modal?.openModal();
   }
 
@@ -227,7 +228,13 @@ export class IrHkTasks {
         });
       } else {
         await this.houseKeepingService.executeHKAction({
-          actions: hkTasksStore.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id === 0 ? null : t.hkm_id, unit_id: t.unit.id, booking_nbr: t.booking_nbr })),
+          actions: hkTasksStore.selectedTasks.map(t => ({
+            description: 'Cleaned',
+            hkm_id: t.hkm_id === 0 ? null : t.hkm_id,
+            unit_id: t.unit.id,
+            booking_nbr: t.booking_nbr,
+            action: this.modalCauses?.status ?? '001',
+          })),
         });
       }
       await this.fetchTasksWithFilters();

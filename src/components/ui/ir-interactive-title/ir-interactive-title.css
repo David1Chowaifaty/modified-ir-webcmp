@@ -59,6 +59,10 @@
   background: var(--ir-interactive-hk-bg, white);
   color: var(--dot-color, black);
 }
+.hk-dot::slotted(*)[name='end'] {
+  height: 12px;
+}
+
 /* .hk-dot::after {
   content: '';
   height: 8px;
