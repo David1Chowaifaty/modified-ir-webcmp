@@ -1,4 +1,4 @@
-import { CleanTaskEvent, IPendingActions, Task } from '@/models/housekeeping';
+import { CleanTaskEvent, IPendingActions } from '@/models/housekeeping';
 import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
