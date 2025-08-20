@@ -17,7 +17,7 @@ import { addUnassignedDates, handleUnAssignedDatesChange, removeUnassignedDates 
 import Token from '@/models/Token';
 import { RoomHkStatus, RoomType } from '@/models/booking.dto';
 import { BatchingQueue } from '@/utils/Queue';
-import { HouseKeepingService } from '@/services/housekeeping.service';
+import { HKSkipParams, HouseKeepingService } from '@/services/housekeeping.service';
 import housekeeping_store from '@/stores/housekeeping.store';
 // import Auth from '@/models/Auth';
 export interface UnitHkStatusChangePayload {
@@ -500,8 +500,8 @@ export class IglooCalendar {
       ],
     };
   }
-  private handleHkSkip(result) {
-    console.log('skip', result);
+  private handleHkSkip(result: HKSkipParams) {
+    cleanRoom({ date: result.DATE, unitId: result.PR_ID });
   }
   private handleUnitHKStatusChanged(result: UnitHkStatusChangePayload) {
     console.log('hk unit change', result);

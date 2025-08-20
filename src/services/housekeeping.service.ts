@@ -2,7 +2,7 @@ import { RoomHkStatus } from '@/models/booking.dto';
 import { ArchivedTask, IExposedHouseKeepingSetup, IInspectionMode, IPropertyHousekeepingAssignment, THKUser, TPendingHkSetupParams } from '@/models/housekeeping';
 import { updateHKStore } from '@/stores/housekeeping.store';
 import axios from 'axios';
-
+export type HKSkipParams = { HK_SKIP_ID: number; BOOK_NBR: string; PR_ID: number; DATE: string; HK_SKIP_REASON_CODE: '001'; COMMENT: string };
 export class HouseKeepingService {
   public async getExposedHKSetup(property_id: number): Promise<IExposedHouseKeepingSetup> {
     const { data } = await axios.post(`/Get_Exposed_HK_Setup`, {
@@ -16,7 +16,7 @@ export class HouseKeepingService {
     updateHKStore('hk_tasks', data['My_Result']);
     return data['My_Result'];
   }
-  public async editHkSkip(params: { HK_SKIP_ID: number; BOOK_NBR: string; PR_ID: number; DATE: string; HK_SKIP_REASON_CODE: '001'; COMMENT: string }) {
+  public async editHkSkip(params: HKSkipParams) {
     const { data } = await axios.post(`/Edit_Hk_skip`, params);
     return data;
   }
