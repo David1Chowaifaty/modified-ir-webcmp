@@ -560,7 +560,7 @@ export class IglCalBody {
           id: this.selectedRoom?.id,
         },
       });
-      if (status === '001') {
+      if (['001', '004'].includes(status)) {
         await this.housekeepingService.executeHKAction({
           actions: [
             {
@@ -568,6 +568,7 @@ export class IglCalBody {
               hkm_id: this.selectedRoom?.housekeeper?.id || null,
               unit_id: this.selectedRoom?.id,
               booking_nbr: this.bookingMap.get(this.selectedRoom?.id) ?? null,
+              action: status as any,
             },
           ],
         });
