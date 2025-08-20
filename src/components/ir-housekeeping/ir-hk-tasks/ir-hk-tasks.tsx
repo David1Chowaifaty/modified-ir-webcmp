@@ -233,7 +233,7 @@ export class IrHkTasks {
             hkm_id: t.hkm_id === 0 ? null : t.hkm_id,
             unit_id: t.unit.id,
             booking_nbr: t.booking_nbr,
-            action: this.modalCauses?.status ?? '001',
+            status: this.modalCauses?.status ?? '001',
           })),
         });
       }

@@ -92,7 +92,7 @@ export class HouseKeepingService {
       hkm_id: number;
       description: string;
       booking_nbr?: string | number;
-      action: '001' | '004';
+      status: '001' | '004';
     }[];
   }) {
     await axios.post(`/Execute_HK_Action`, { ...params });

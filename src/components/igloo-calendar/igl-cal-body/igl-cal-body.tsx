@@ -568,7 +568,7 @@ export class IglCalBody {
               hkm_id: this.selectedRoom?.housekeeper?.id || null,
               unit_id: this.selectedRoom?.id,
               booking_nbr: this.bookingMap.get(this.selectedRoom?.id) ?? null,
-              action: status as any,
+              status: status as any,
             },
           ],
         });
