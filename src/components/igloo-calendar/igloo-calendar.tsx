@@ -364,7 +364,7 @@ export class IglooCalendar {
       const results = await Promise.all(requests);
       // this.tasksEndDate=housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code
       this.tasksEndDate = moment().add(30, 'days').format('YYYY-MM-DD');
-      await this.getHousekeepingTasks({
+      this.getHousekeepingTasks({
         from_date: moment().format('YYYY-MM-DD'),
         to_date: this.tasksEndDate,
       });
