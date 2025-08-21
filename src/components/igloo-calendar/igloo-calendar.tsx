@@ -119,6 +119,7 @@ export class IglooCalendar {
   });
 
   private roomTypeIdsCache: Map<number, { id: number; index: number } | 'skip'> = new Map();
+  private tasksEndDate: string;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -361,9 +362,11 @@ export class IglooCalendar {
       }
 
       const results = await Promise.all(requests);
+      // this.tasksEndDate=housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code
+      this.tasksEndDate = moment().add(30, 'days').format('YYYY-MM-DD');
       await this.getHousekeepingTasks({
         from_date: moment().format('YYYY-MM-DD'),
-        to_date: housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code,
+        to_date: this.tasksEndDate,
       });
       if (!roomResp) {
         roomResp = results[results.length - 1];
@@ -386,6 +389,7 @@ export class IglooCalendar {
       this.calendarData.monthsInfo = bookingResp.months;
       calendar_dates.fromDate = this.calendarData.from_date;
       calendar_dates.toDate = this.calendarData.to_date;
+
       setTimeout(() => {
         this.scrollToElement(this.today);
       }, 200);
@@ -867,7 +871,7 @@ export class IglooCalendar {
     if (data.some(isDateInBetweenTheLastPeriodDate)) {
       this.getHousekeepingTasks({
         from_date: moment().format('YYYY-MM-DD'),
-        to_date: housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code,
+        to_date: this.tasksEndDate,
       });
     }
   }
