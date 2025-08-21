@@ -60,7 +60,8 @@ export type bookingReasons =
   | 'UNIT_HK_STATUS_CHANGED'
   | 'EMAIL_VERIFIED'
   | 'ROOM_TYPE_CLOSE'
-  | 'ROOM_TYPE_OPEN';
+  | 'ROOM_TYPE_OPEN'
+  | 'HK_SKIP';
 export const validReasons = new Set<bookingReasons>([
   'DORESERVATION',
   'BLOCK_EXPOSED_UNIT',

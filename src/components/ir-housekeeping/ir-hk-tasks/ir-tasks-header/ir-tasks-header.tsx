@@ -10,7 +10,7 @@ import { Component, Event, EventEmitter, h, Host, Listen } from '@stencil/core';
 export class IrTasksHeader {
   private btnRef: HTMLIrButtonElement;
 
-  @Event() headerButtonPress: EventEmitter<{ name: 'cleaned' | 'export' | 'archive' }>;
+  @Event() headerButtonPress: EventEmitter<{ name: 'cleaned' | 'export' | 'archive' | 'clean-inspect' }>;
 
   @Listen('animateCleanedButton', { target: 'body' })
   handleCleanedButtonAnimation(e: CustomEvent) {
@@ -55,7 +55,7 @@ export class IrTasksHeader {
             }}
           ></ir-button>
           <ir-button
-            class="d-none d-md-flex"
+            class="clean-button"
             onClickHandler={e => {
               e.stopImmediatePropagation();
               e.stopPropagation();
@@ -65,6 +65,19 @@ export class IrTasksHeader {
             size="sm"
             btn_disabled={!(hkTasksStore.selectedTasks.length > 0)}
             text={'Cleaned'}
+            ref={el => (this.btnRef = el)}
+          ></ir-button>
+          <ir-button
+            class="clean-button"
+            onClickHandler={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.headerButtonPress.emit({ name: 'clean-inspect' });
+            }}
+            btnStyle={{ height: '100%' }}
+            size="sm"
+            btn_disabled={!(hkTasksStore.selectedTasks.length > 0)}
+            text={'Clean & Inspect'}
             ref={el => (this.btnRef = el)}
           ></ir-button>
         </div>

@@ -1,4 +1,4 @@
-import { IPendingActions, Task } from '@/models/housekeeping';
+import { CleanTaskEvent, IPendingActions } from '@/models/housekeeping';
 import Token from '@/models/Token';
 import { HouseKeepingService } from '@/services/housekeeping.service';
 import { RoomService } from '@/services/room.service';
@@ -37,7 +37,7 @@ export class IrHkTasks {
   @State() isSidebarOpen: boolean;
   @State() isApplyFiltersLoading: boolean;
   @State() filters: TaskFilters;
-  @State() modalCauses: { task?: Task; cause: 'skip' | 'clean' };
+  @State() modalCauses: CleanTaskEvent & { cause: 'skip' | 'clean' };
 
   @Event({ bubbles: true, composed: true }) clearSelectedHkTasks: EventEmitter<void>;
 
@@ -183,7 +183,13 @@ export class IrHkTasks {
     const { name } = e.detail;
     switch (name) {
       case 'cleaned':
+      case 'clean-inspect':
         this.modal?.openModal();
+        this.modalCauses = {
+          task: null,
+          cause: 'clean',
+          status: name === 'clean-inspect' ? '004' : '001',
+        };
         break;
       case 'export':
         const sortingArray: { key: string; value: string }[] = Array.from(this.table_sorting.entries()).map(([key, value]) => ({
@@ -200,10 +206,10 @@ export class IrHkTasks {
     }
   }
   @Listen('cleanSelectedTask')
-  handleSelectedTaskCleaningEvent(e: CustomEvent<Task>) {
+  handleSelectedTaskCleaningEvent(e: CustomEvent<CleanTaskEvent>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.modalCauses = { task: e.detail, cause: 'clean' };
+    this.modalCauses = { ...e.detail, cause: 'clean' };
     this.modal?.openModal();
   }
 
@@ -227,7 +233,13 @@ export class IrHkTasks {
         });
       } else {
         await this.houseKeepingService.executeHKAction({
-          actions: hkTasksStore.selectedTasks.map(t => ({ description: 'Cleaned', hkm_id: t.hkm_id === 0 ? null : t.hkm_id, unit_id: t.unit.id, booking_nbr: t.booking_nbr })),
+          actions: hkTasksStore.selectedTasks.map(t => ({
+            description: 'Cleaned',
+            hkm_id: t.hkm_id === 0 ? null : t.hkm_id,
+            unit_id: t.unit.id,
+            booking_nbr: t.booking_nbr,
+            status: this.modalCauses?.status ?? '001',
+          })),
         });
       }
       await this.fetchTasksWithFilters();
@@ -327,7 +339,9 @@ export class IrHkTasks {
           modalBody={
             this.modalCauses
               ? this.modalCauses?.cause === 'clean'
-                ? `Update ${this.modalCauses?.task?.unit?.name} to Clean`
+                ? this.modalCauses.task
+                  ? `Update ${this.modalCauses?.task?.unit?.name} to Clean`
+                  : 'Update selected unit(s) to Clean'
                 : 'Skip cleaning and reschedule for tomorrow.'
               : 'Update selected unit(s) to Clean'
           }

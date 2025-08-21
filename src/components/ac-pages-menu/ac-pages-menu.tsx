@@ -5,6 +5,7 @@ interface ACPage {
   href: string;
   id?: string;
   isNew?: boolean;
+  badgeId?: string;
   className?: string;
   icon?: string;
 }
@@ -48,9 +49,13 @@ export class AcPagesMenu {
                     <div class={'menu-icon-container'}>
                       {page.icon && this.Icon({ name: page.icon })}
                       <span>{page.label}</span>
+                      {page.isNew && (
+                        <span class="new-badge" id={page.badgeId}>
+                          new
+                        </span>
+                      )}
                     </div>
                     <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-                      {page.isNew && <span class="new-badge">new</span>}
                       <ir-icons name="angle-down"></ir-icons>
                     </div>
                   </button>
@@ -59,12 +64,23 @@ export class AcPagesMenu {
                       const menuId = submenu.id ?? v4();
                       return (
                         <li key={menuId} id={menuId} class={`mobile-nav-item menu-icon-container ${submenu.className ?? ''}`} style={{ width: '100%' }}>
-                          <a onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link w-100" href={submenu.href}>
+                          <a
+                            onClick={e => {
+                              e.preventDefault();
+                              this.linkClicked.emit(e);
+                            }}
+                            class="mobile-nav-link w-100"
+                            href={submenu.href}
+                          >
                             <div class="menu-icon-container">
                               {submenu.icon && this.Icon({ name: submenu.icon })}
                               <span>{submenu.label}</span>
+                              {submenu.isNew && (
+                                <span id={submenu.badgeId} class="new-badge">
+                                  new
+                                </span>
+                              )}
                             </div>
-                            {submenu.isNew && <span class="new-badge">new</span>}
                           </a>
                         </li>
                       );
@@ -75,12 +91,23 @@ export class AcPagesMenu {
             }
             return (
               <li key={id} id={id} class={`${page.className ?? ''}  mobile-nav-item`}>
-                <a href={page.href} onClick={e => this.linkClicked.emit(e)} class="mobile-nav-link">
+                <a
+                  href={page.href}
+                  onClick={e => {
+                    e.preventDefault();
+                    this.linkClicked.emit(e);
+                  }}
+                  class="mobile-nav-link"
+                >
                   <div class="menu-icon-container">
                     {page.icon && this.Icon({ name: page.icon })}
                     <span>{page.label}</span>
+                    {page.isNew && (
+                      <span id={page.badgeId} class="new-badge">
+                        new
+                      </span>
+                    )}
                   </div>
-                  {page.isNew && <span class="new-badge">new</span>}
                 </a>
               </li>
             );
@@ -117,19 +144,33 @@ export class AcPagesMenu {
                     {page.icon && this.Icon({ name: page.icon })}
                     <span>{page.label}</span>
                   </div>
-                  {page.isNew && <span class="new-badge">new</span>}
+                  {page.isNew && (
+                    <span id={page.badgeId} class="new-badge">
+                      new
+                    </span>
+                  )}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
                   {page.subMenus.map(submenu => {
                     const menuId = submenu.id ?? v4();
                     return (
                       <li key={menuId} id={menuId} class={`navigation-item ${submenu.className ?? ''}`}>
-                        <a onClick={e => this.linkClicked.emit(e)} class="dropdown-item menu-icon-container" href={submenu.href}>
-                          <div class="menu-icon-container">
+                        <a
+                          onClick={e => {
+                            this.linkClicked.emit(e);
+                          }}
+                          class="dropdown-item menu-icon-container"
+                          href={submenu.href}
+                        >
+                          <div class="menu-icon-container mr-auto">
                             {submenu.icon && this.Icon({ name: submenu.icon })}
                             <span>{submenu.label}</span>
                           </div>
-                          {submenu.isNew && <span class="new-badge">new</span>}
+                          {submenu.isNew && (
+                            <span id={submenu.badgeId} class="new-badge">
+                              new
+                            </span>
+                          )}
                         </a>
                       </li>
                     );
@@ -144,8 +185,12 @@ export class AcPagesMenu {
                 <div class="menu-icon-container">
                   {page.icon && this.Icon({ name: page.icon })}
                   <span>{page.label}</span>
+                  {page.isNew && (
+                    <span id={page.badgeId} class="new-badge">
+                      new
+                    </span>
+                  )}
                 </div>
-                {page.isNew && <span class="new-badge">new</span>}
               </a>
             </li>
           );

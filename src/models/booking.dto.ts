@@ -554,7 +554,7 @@ export interface RoomType {
   rateplans: null;
   is_active: boolean;
 }
-export type RoomHkStatus = '001' | '002' | '003';
+export type RoomHkStatus = '001' | '002' | '003' | '004';
 export interface PhysicalRoom {
   calendar_cell: null;
   housekeeper: IHouseKeepers;

@@ -1,14 +1,6 @@
 import { Component, Host, h, Element, State, Listen, Prop, Event, EventEmitter, Watch, Method } from '@stencil/core';
 import { v4 } from 'uuid';
-
-export interface ComboboxOption {
-  value: string;
-  label: string;
-  disabled?: boolean;
-}
-
-export type ComboboxType = 'select' | 'editable' | 'multiselect';
-export type DataMode = 'static' | 'external';
+import { ComboboxOption, DataMode } from './types';
 
 @Component({
   tag: 'ir-m-combobox',
@@ -52,7 +44,7 @@ export class IrMCombobox {
   /**
    * Whether to use slot content for custom dropdown rendering
    */
-  @Prop() useSlot: boolean = false;
+  @Prop({ mutable: true }) useSlot: boolean = false;
 
   @State() isOpen: boolean = false;
   @State() selectedOption: ComboboxOption;
@@ -61,6 +53,7 @@ export class IrMCombobox {
   @State() slotElements: HTMLElement[] = [];
   @State() hasPrefix: boolean = false;
   @State() hasSuffix: boolean = false;
+  @State() itemChildren: HTMLIrMComboboxItemElement[] = [];
 
   /**
    * Emitted when a user selects an option from the combobox.
@@ -89,6 +82,11 @@ export class IrMCombobox {
   private debounceTimeout: NodeJS.Timeout;
   private prefixSlotRef: HTMLSlotElement;
   private suffixSlotRef: HTMLSlotElement;
+  private mo: MutationObserver | null = null;
+
+  private get isCompositionMode() {
+    return this.itemChildren.length > 0;
+  }
 
   @Watch('options')
   watchOptionsChanged(newOptions: ComboboxOption[]) {
@@ -107,10 +105,18 @@ export class IrMCombobox {
 
   componentWillLoad() {
     this.initializeOptions();
+    // discover items on first paint
+    this.collectItemChildren();
+
+    // watch DOM changes to children
+    this.mo = new MutationObserver(() => this.collectItemChildren());
+    this.mo.observe(this.el, { childList: true, subtree: true });
   }
 
   componentDidLoad() {
     document.addEventListener('click', this.handleDocumentClick.bind(this));
+
+    // existing stuff
     if (this.useSlot) {
       setTimeout(() => this.updateSlotElements(), 0);
     }
@@ -121,11 +127,10 @@ export class IrMCombobox {
 
   disconnectedCallback() {
     document.removeEventListener('click', this.handleDocumentClick.bind(this));
-    if (this.debounceTimeout) {
-      clearTimeout(this.debounceTimeout);
-    }
+    if (this.debounceTimeout) clearTimeout(this.debounceTimeout);
     this.prefixSlotRef?.removeEventListener('slotchange', this.updateAffixPresence);
     this.suffixSlotRef?.removeEventListener('slotchange', this.updateAffixPresence);
+    this.mo?.disconnect();
   }
 
   @Listen('keydown', { target: 'document' })
@@ -136,6 +141,22 @@ export class IrMCombobox {
       this.closeDropdown();
       this.inputRef?.focus();
     }
+  }
+  @Listen('comboboxItemSelect')
+  handleComboboxItemSelect(ev: CustomEvent<ComboboxOption>) {
+    ev.stopPropagation();
+    console.log(ev.detail);
+    this.selectOption(ev.detail);
+  }
+
+  @Listen('comboboxItemRegister')
+  handleComboboxItemRegister() {
+    this.collectItemChildren();
+  }
+
+  @Listen('comboboxItemUnregister')
+  handleComboboxItemUnregister() {
+    this.collectItemChildren();
   }
 
   private initializeOptions() {
@@ -148,16 +169,24 @@ export class IrMCombobox {
     }
   };
 
+  // private openDropdown() {
+  //   this.isOpen = true;
+  //   if (this.useSlot) {
+  //     this.focusedIndex = -1;
+  //     setTimeout(() => this.updateSlotElements(), 0);
+  //   } else {
+  //     this.focusedIndex = this.selectedOption ? this.filteredOptions.findIndex(v => v.value === this.selectedOption.value) : -1;
+  //   }
+  // }
   private openDropdown() {
     this.isOpen = true;
-    if (this.useSlot) {
+    if (this.isCompositionMode || this.useSlot) {
       this.focusedIndex = -1;
-      setTimeout(() => this.updateSlotElements(), 0);
+      setTimeout(() => (this.isCompositionMode ? this.updateSlotElementsForItems() : this.updateSlotElements()), 0);
     } else {
       this.focusedIndex = this.selectedOption ? this.filteredOptions.findIndex(v => v.value === this.selectedOption.value) : -1;
     }
   }
-
   private emitSearchQuery(query: string) {
     if (this.debounceTimeout) {
       clearTimeout(this.debounceTimeout);
@@ -310,13 +339,33 @@ export class IrMCombobox {
     }
   }
 
+  // private handleInput = (event: Event) => {
+  //   const target = event.target as HTMLInputElement;
+  //   const value = target.value;
+
+  //   if (this.dataMode === 'external') {
+  //     this.emitSearchQuery(value);
+  //   } else {
+  //     const allOptions = this.options.length > 0 ? this.options : [];
+  //     this.filteredOptions = value ? allOptions.filter(option => option.label.toLowerCase().includes(value.toLowerCase())) : allOptions;
+  //   }
+
+  //   this.focusedIndex = -1;
+  //   if (!this.isOpen) {
+  //     this.openDropdown();
+  //   }
+  // };
   private handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement;
     const value = target.value;
 
-    if (this.dataMode === 'external') {
+    if (this.dataMode === 'external' && !this.isCompositionMode) {
       this.emitSearchQuery(value);
+    } else if (this.isCompositionMode) {
+      // composition mode: filter child items
+      this.filterComposition(value);
     } else {
+      // static options mode (existing behavior)
       const allOptions = this.options.length > 0 ? this.options : [];
       this.filteredOptions = value ? allOptions.filter(option => option.label.toLowerCase().includes(value.toLowerCase())) : allOptions;
     }
@@ -326,6 +375,38 @@ export class IrMCombobox {
       this.openDropdown();
     }
   };
+  private collectItemChildren() {
+    // find *direct or nested* items inside the dropdown container
+    const items = Array.from(this.el.querySelectorAll('ir-m-combobox-item')) as HTMLIrMComboboxItemElement[];
+    this.itemChildren = items;
+    console.log(items);
+    // when in composition mode, use slot-like navigation on the items
+    if (this.isCompositionMode) {
+      this.useSlot = true; // leverage your existing slot-based keyboard handling
+      setTimeout(() => this.updateSlotElementsForItems(), 0);
+    }
+  }
+
+  private updateSlotElementsForItems() {
+    // Treat the child items as "slot elements" for nav
+    this.slotElements = this.itemChildren as unknown as HTMLElement[];
+
+    // index and decorate for ARIA & focus handling
+    this.slotElements.forEach((el, index) => {
+      el.setAttribute('data-slot-index', String(index));
+      el.setAttribute('role', 'option');
+      el.setAttribute('tabindex', '-1');
+    });
+  }
+  private async filterComposition(query: string) {
+    // Hide/show each child according to its own matching logic
+    const results: boolean[] = await Promise.all(this.itemChildren.map(item => item.matchesQuery(query)));
+
+    await Promise.all(this.itemChildren.map((item, i) => item.setHidden(query ? !results[i] : false)));
+
+    // refresh slotElements (only visible items should be navigable)
+    this.updateSlotElementsForItems();
+  }
 
   render() {
     return (
@@ -359,7 +440,9 @@ export class IrMCombobox {
         </div>
         <div class={`dropdown ${this.isOpen ? 'show' : ''}`}>
           <div ref={el => (this.dropdownRef = el)} class={`dropdown-menu ${this.isOpen ? 'show' : ''}`} id={this.dropdownId} role="listbox" aria-expanded={String(this.isOpen)}>
-            {this.useSlot ? (
+            {this.isCompositionMode ? (
+              <slot></slot>
+            ) : this.useSlot ? (
               <slot name="dropdown-content"></slot>
             ) : (
               [
@@ -374,8 +457,9 @@ export class IrMCombobox {
                       aria-selected={this.selectedOption?.value === option.value ? 'true' : 'false'}
                       onClick={() => this.selectOption(option)}
                       onMouseEnter={() => (this.focusedIndex = index)}
+                      innerHTML={option.html_content}
                     >
-                      {option.label}
+                      {option.html_content ? null : option.label}
                     </button>
                   )),
               ]

@@ -1,5 +1,5 @@
-import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
-import { Task } from '@/models/housekeeping';
+import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
+import { CleanTaskEvent, Task } from '@/models/housekeeping';
 import { toggleTaskSelection } from '@/stores/hk-tasks.store';
 
 @Component({
@@ -12,12 +12,13 @@ export class IrTasksCard {
   @Prop() isCheckable: boolean;
   @Prop() isSkippable: boolean;
 
-  @Event() cleanSelectedTask: EventEmitter<Task>;
+  @Event() cleanSelectedTask: EventEmitter<CleanTaskEvent>;
   @Event() skipSelectedTask: EventEmitter<Task>;
 
   render() {
     const baseText = 'Mark as clean';
     const btnText = this.task.housekeeper ? `${baseText} for ${this.task.housekeeper.slice(0, 20)}` : baseText;
+    const btnCleanAndInspectText = this.task.housekeeper ? `Clean & Inspect for ${this.task.housekeeper.slice(0, 20)}` : baseText;
     return (
       <Host class="card p-1 flex-fill m-0" style={{ gap: '0.5rem' }}>
         <div class="d-flex align items-center p-0 m-0 justify-content-between" style={{ gap: '0.5rem' }}>
@@ -112,18 +113,32 @@ export class IrTasksCard {
           </span>
         </p>
         {this.isCheckable && (
-          <div>
-            <ir-button
-              onClickHandler={() => {
-                toggleTaskSelection(this.task);
-                this.cleanSelectedTask.emit(this.task);
-              }}
-              size="sm"
-              text={btnText}
-              labelStyle={{ textAlign: 'left !important' }}
-              btn_styles="text-left"
-            ></ir-button>
-          </div>
+          <Fragment>
+            <div>
+              <ir-button
+                onClickHandler={() => {
+                  toggleTaskSelection(this.task);
+                  this.cleanSelectedTask.emit({ task: this.task, status: '001' });
+                }}
+                size="sm"
+                text={btnText}
+                labelStyle={{ textAlign: 'left !important' }}
+                btn_styles="text-left"
+              ></ir-button>
+            </div>
+            <div>
+              <ir-button
+                onClickHandler={() => {
+                  toggleTaskSelection(this.task);
+                  this.cleanSelectedTask.emit({ task: this.task, status: '004' });
+                }}
+                size="sm"
+                text={btnCleanAndInspectText}
+                labelStyle={{ textAlign: 'left !important' }}
+                btn_styles="text-left"
+              ></ir-button>
+            </div>
+          </Fragment>
         )}
         {this.isSkippable && (
           <div>

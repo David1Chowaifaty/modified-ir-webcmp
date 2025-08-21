@@ -60,6 +60,23 @@
 .legend_skew-bordered {
   border: 1px solid black;
 }
+.legend_dirty-unit {
+  background-color: white !important;
+  border: 1px solid #e0e0e0;
+  height: 12px;
+  width: 20px;
+  margin-right: 1rem;
+  position: relative;
+}
+.legend_dirty-unit::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  left: 30%;
+  right: 30%;
+  background-color: #d4d0be !important;
+}
 
 .legend_circle {
   border-radius: 100%;

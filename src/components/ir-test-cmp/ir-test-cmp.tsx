@@ -1,7 +1,8 @@
 import { Component, Host, State, h } from '@stencil/core';
 import { Moment } from 'moment';
-import { ComboboxOption } from '../ir-m-combobox/ir-m-combobox';
+import { ComboboxOption } from '../ir-m-combobox/types';
 import { ACPages } from '@/components';
+import { sleep } from '@/utils/utils';
 
 @Component({
   tag: 'ir-test-cmp',
@@ -105,6 +106,7 @@ export class IrTestCmp {
       href: 'acdashboard.aspx',
       id: 'Li_AcDashboard',
       icon: 'la la-dashboard',
+      isNew: true,
     },
     {
       label: 'Frontdesk',
@@ -253,6 +255,36 @@ export class IrTestCmp {
       ],
     },
   ];
+  private notifications = [
+    {
+      id: '1',
+      type: 'info',
+      title: 'Welcome!',
+      message: 'Your account has been created successfully.',
+      createdAt: Date.now(),
+      read: false,
+      dismissible: true,
+    },
+    {
+      id: '2',
+      type: 'warning',
+      title: 'Storage Almost Full',
+      message: 'You have used 90% of your storage. Please upgrade.',
+      createdAt: Date.now(),
+      read: false,
+      dismissible: true,
+      link: { href: '#', text: 'Upgrade now' },
+    },
+    {
+      id: '3',
+      type: 'success',
+      title: 'Payment Received',
+      message: 'Your invoice has been paid. Thank you!',
+      createdAt: Date.now(),
+      read: true,
+      dismissible: true,
+    },
+  ];
   @State() showMegaMenu: boolean;
 
   render() {
@@ -282,7 +314,7 @@ export class IrTestCmp {
               </div>
               <div class="hotel-name d-none d-md-block">Hotel Name</div>
               <div class="ml-auto d-md-none">
-                <ir-notifications notificationCount={this.notificationCount}></ir-notifications>
+                <ir-notifications notifications={this.notifications as any}></ir-notifications>
               </div>
             </div>
 
@@ -427,7 +459,7 @@ export class IrTestCmp {
                 </li>
                 <li class="nav-item">
                   <div class="d-flex align-items-center justify-content-center" style={{ marginTop: '2px' }}>
-                    <ir-notifications notificationCount={this.notificationCount}></ir-notifications>
+                    <ir-notifications notifications={this.notifications as any}></ir-notifications>
                   </div>
                 </li>
               </ul>
@@ -444,7 +476,14 @@ export class IrTestCmp {
               <div class="mobile-search">
                 <ir-m-combobox placeholder="Search..." dataMode="static" options={this.staticOptions} onOptionChange={this.handleStaticOptionChange}></ir-m-combobox>
               </div>
-              <ac-pages-menu location="sheet" pages={this.pages}></ac-pages-menu>
+              <ac-pages-menu
+                location="sheet"
+                onLink-clicked={async e => {
+                  await sleep(1000);
+                  window.location.href = (e.detail.target as any).href;
+                }}
+                pages={this.pages}
+              ></ac-pages-menu>
             </div>
           </div>
 

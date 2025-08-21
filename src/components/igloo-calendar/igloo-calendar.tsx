@@ -10,13 +10,15 @@ import { ToBeAssignedService } from '@/services/toBeAssigned.service';
 import { bookingStatus, calculateDaysBetweenDates, formatName, getPrivateNote, getRoomStatus, transformNewBLockedRooms, transformNewBooking } from '@/utils/booking';
 import { IRoomNightsData, IRoomNightsDataEventPayload, CalendarModalEvent } from '@/models/property-types';
 import { TIglBookPropertyPayload } from '@/models/igl-book-property';
-import calendar_dates from '@/stores/calendar-dates.store';
+import calendar_dates, { addCleaningTasks, addRoomForCleaning, cleanRoom } from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { addUnassignedDates, handleUnAssignedDatesChange, removeUnassignedDates } from '@/stores/unassigned_dates.store';
 import Token from '@/models/Token';
 import { RoomHkStatus, RoomType } from '@/models/booking.dto';
 import { BatchingQueue } from '@/utils/Queue';
+import { HKSkipParams, HouseKeepingService } from '@/services/housekeeping.service';
+import housekeeping_store from '@/stores/housekeeping.store';
 // import Auth from '@/models/Auth';
 export interface UnitHkStatusChangePayload {
   PR_ID: number;
@@ -90,6 +92,7 @@ export class IglooCalendar {
   private roomService: RoomService = new RoomService();
   private eventsService = new EventsService();
   private toBeAssignedService = new ToBeAssignedService();
+  private housekeepingService = new HouseKeepingService();
   // private auth = new Auth();
   private countries: ICountry[] = [];
   private visibleCalendarCells: { x: any[]; y: any[] } = { x: [], y: [] };
@@ -116,6 +119,7 @@ export class IglooCalendar {
   });
 
   private roomTypeIdsCache: Map<number, { id: number; index: number } | 'skip'> = new Map();
+  private tasksEndDate: string;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -342,6 +346,7 @@ export class IglooCalendar {
         this.bookingService.getCalendarData(propertyId, this.from_date, this.to_date),
         this.bookingService.getCountries(this.language),
         this.roomService.fetchLanguage(this.language),
+        this.housekeepingService.getExposedHKSetup(this.property_id),
       ];
 
       if (this.propertyid) {
@@ -357,6 +362,12 @@ export class IglooCalendar {
       }
 
       const results = await Promise.all(requests);
+      // this.tasksEndDate=housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code
+      this.tasksEndDate = moment().add(30, 'days').format('YYYY-MM-DD');
+      this.getHousekeepingTasks({
+        from_date: moment().format('YYYY-MM-DD'),
+        to_date: this.tasksEndDate,
+      });
       if (!roomResp) {
         roomResp = results[results.length - 1];
       }
@@ -378,6 +389,7 @@ export class IglooCalendar {
       this.calendarData.monthsInfo = bookingResp.months;
       calendar_dates.fromDate = this.calendarData.from_date;
       calendar_dates.toDate = this.calendarData.to_date;
+
       setTimeout(() => {
         this.scrollToElement(this.today);
       }, 200);
@@ -394,6 +406,18 @@ export class IglooCalendar {
     } catch (error) {
       console.error('Initializing Calendar Error', error);
     }
+  }
+  private async getHousekeepingTasks({ from_date, to_date }: { from_date: string; to_date: string }) {
+    const { tasks } = await this.housekeepingService.getHkTasks({
+      property_id: this.property_id,
+      from_date,
+      to_date,
+      housekeepers: [],
+      cleaning_frequency: (calendar_data.cleaning_frequency ?? housekeeping_store?.hk_criteria?.cleaning_frequencies[0])?.code,
+      dusty_window: housekeeping_store?.hk_criteria?.dusty_periods[0]?.code,
+      highlight_window: housekeeping_store?.hk_criteria?.highlight_checkin_options[0]?.code,
+    });
+    addCleaningTasks(tasks);
   }
 
   private async handleSocketMessage(msg: string) {
@@ -431,6 +455,7 @@ export class IglooCalendar {
       SHARING_PERSONS_UPDATED: this.handleSharingPersonsUpdated,
       ROOM_TYPE_CLOSE: r => this.salesQueue.offer({ ...r, is_available_to_book: false }),
       ROOM_TYPE_OPEN: r => this.salesQueue.offer({ ...r, is_available_to_book: true }),
+      HK_SKIP: this.handleHkSkip,
     };
 
     const handler = reasonHandlers[REASON];
@@ -479,6 +504,9 @@ export class IglooCalendar {
       ],
     };
   }
+  private handleHkSkip(result: HKSkipParams) {
+    cleanRoom({ date: result.DATE, unitId: result.PR_ID });
+  }
   private handleUnitHKStatusChanged(result: UnitHkStatusChangePayload) {
     console.log('hk unit change', result);
     const updatedRooms: RoomType[] = [...this.calendarData.roomsInfo];
@@ -498,6 +526,12 @@ export class IglooCalendar {
           roomsInfo: updatedRooms,
         };
       }
+    }
+    const roomPayload = { date: moment().format('YYYY-MM-DD'), unitId: result.PR_ID };
+    if (result.HKS_CODE === '002') {
+      addRoomForCleaning(roomPayload);
+    } else {
+      cleanRoom(roomPayload);
     }
   }
   private async handleDoReservation(result: any) {
@@ -828,7 +862,21 @@ export class IglooCalendar {
       ...this.calendarData,
       bookingEvents: bookings,
     };
+
+    const isDateInBetweenTheLastPeriodDate = (d: any): boolean => {
+      const endDate = moment(this.tasksEndDate, 'YYYY-MM-DD');
+      // return moment(d.FROM_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate) || moment(d.TO_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate);
+      return moment(d.FROM_DATE, 'YYYY-MM-DD').isSameOrBefore(endDate, 'date') || moment(d.TO_DATE, 'YYYY-MM-DD').isSameOrBefore(endDate, 'date');
+    };
+
+    if (data.some(isDateInBetweenTheLastPeriodDate)) {
+      this.getHousekeepingTasks({
+        from_date: moment().format('YYYY-MM-DD'),
+        to_date: this.tasksEndDate,
+      });
+    }
   }
+
   private transformDateForScroll(date: Date) {
     return moment(date).format('D_M_YYYY');
   }
@@ -900,7 +948,8 @@ export class IglooCalendar {
   }
 
   private async addDatesToCalendar(fromDate: string, toDate: string) {
-    const results = await this.bookingService.getCalendarData(this.property_id, fromDate, toDate);
+    const [results] = await Promise.all([this.bookingService.getCalendarData(this.property_id, fromDate, toDate)]);
+
     const newBookings = results.myBookings || [];
     this.updateBookingEventsDateRange(newBookings);
     if (new Date(fromDate).getTime() < new Date(this.calendarData.startingDate).getTime()) {

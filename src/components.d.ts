@@ -24,11 +24,12 @@ import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
-import { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
-import { ComboboxOption, DataMode } from "./components/ir-m-combobox/ir-m-combobox";
+import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
+import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
@@ -59,11 +60,12 @@ export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
-export { IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
-export { ComboboxOption, DataMode } from "./components/ir-m-combobox/ir-m-combobox";
+export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
+export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
@@ -1118,6 +1120,29 @@ export namespace Components {
          */
         "useSlot": boolean;
     }
+    interface IrMComboboxBookingItem {
+        "booking": Booking;
+    }
+    interface IrMComboboxItem {
+        /**
+          * When true, visually hide the item (used for filtering).
+         */
+        "hidden": boolean;
+        /**
+          * Optional html_content (when you want rich content); If omitted, the component will render its own slot content.
+         */
+        "html_content"?: string;
+        /**
+          * Optional label (falls back to textContent)
+         */
+        "label"?: string;
+        "matchesQuery": (query: string) => Promise<boolean>;
+        "setHidden": (next: boolean) => Promise<void>;
+        /**
+          * Required value for the option
+         */
+        "value": string;
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -1144,6 +1169,11 @@ export namespace Components {
          */
         "isLoading": boolean;
         /**
+          * Whether the modal middle button is in a loading state, disabling interaction.
+          * @requires middleBtnActive to be true
+         */
+        "isMiddleButtonLoading": boolean;
+        /**
           * Payload object to pass along with confirm/cancel events.
          */
         "item": any;
@@ -1159,6 +1189,18 @@ export namespace Components {
           * Text displayed on the left (cancel/close) button.
          */
         "leftBtnText": string;
+        /**
+          * Whether the middle (tertiary) button is visible.
+         */
+        "middleBtnActive": boolean;
+        /**
+          * Color theme of the middle (tertiary) button.
+         */
+        "middleBtnColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Text displayed on the middle (tertiary) button.
+         */
+        "middleBtnText": string;
         /**
           * The main content text shown in the modal body.
          */
@@ -1202,7 +1244,7 @@ export namespace Components {
         "reports": DailyReport[];
     }
     interface IrNotifications {
-        "notificationCount": number;
+        "notifications": Notification[];
     }
     interface IrOptionDetails {
         "propertyId": string;
@@ -2219,6 +2261,10 @@ export interface IrMComboboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrMComboboxElement;
 }
+export interface IrMComboboxItemCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrMComboboxItemElement;
+}
 export interface IrModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrModalElement;
@@ -2226,6 +2272,10 @@ export interface IrModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrMonthlyBookingsReportFilterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrMonthlyBookingsReportFilterElement;
+}
+export interface IrNotificationsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrNotificationsElement;
 }
 export interface IrOptionDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3517,9 +3567,35 @@ declare global {
         prototype: HTMLIrMComboboxElement;
         new (): HTMLIrMComboboxElement;
     };
+    interface HTMLIrMComboboxBookingItemElement extends Components.IrMComboboxBookingItem, HTMLStencilElement {
+    }
+    var HTMLIrMComboboxBookingItemElement: {
+        prototype: HTMLIrMComboboxBookingItemElement;
+        new (): HTMLIrMComboboxBookingItemElement;
+    };
+    interface HTMLIrMComboboxItemElementEventMap {
+        "comboboxItemSelect": ComboboxOption;
+        "comboboxItemRegister": void;
+        "comboboxItemUnregister": void;
+    }
+    interface HTMLIrMComboboxItemElement extends Components.IrMComboboxItem, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrMComboboxItemElementEventMap>(type: K, listener: (this: HTMLIrMComboboxItemElement, ev: IrMComboboxItemCustomEvent<HTMLIrMComboboxItemElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrMComboboxItemElementEventMap>(type: K, listener: (this: HTMLIrMComboboxItemElement, ev: IrMComboboxItemCustomEvent<HTMLIrMComboboxItemElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrMComboboxItemElement: {
+        prototype: HTMLIrMComboboxItemElement;
+        new (): HTMLIrMComboboxItemElement;
+    };
     interface HTMLIrModalElementEventMap {
         "confirmModal": any;
         "cancelModal": any;
+        "middleModal": any;
     }
     interface HTMLIrModalElement extends Components.IrModal, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrModalElementEventMap>(type: K, listener: (this: HTMLIrModalElement, ev: IrModalCustomEvent<HTMLIrModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3564,7 +3640,18 @@ declare global {
         prototype: HTMLIrMonthlyBookingsReportTableElement;
         new (): HTMLIrMonthlyBookingsReportTableElement;
     };
+    interface HTMLIrNotificationsElementEventMap {
+        "notificationCleared": Notification;
+    }
     interface HTMLIrNotificationsElement extends Components.IrNotifications, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrNotificationsElementEventMap>(type: K, listener: (this: HTMLIrNotificationsElement, ev: IrNotificationsCustomEvent<HTMLIrNotificationsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrNotificationsElementEventMap>(type: K, listener: (this: HTMLIrNotificationsElement, ev: IrNotificationsCustomEvent<HTMLIrNotificationsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrNotificationsElement: {
         prototype: HTMLIrNotificationsElement;
@@ -4058,7 +4145,7 @@ declare global {
         new (): HTMLIrTabsElement;
     };
     interface HTMLIrTasksCardElementEventMap {
-        "cleanSelectedTask": Task;
+        "cleanSelectedTask": CleanTaskEvent;
         "skipSelectedTask": Task;
     }
     interface HTMLIrTasksCardElement extends Components.IrTasksCard, HTMLStencilElement {
@@ -4093,7 +4180,7 @@ declare global {
         new (): HTMLIrTasksFiltersElement;
     };
     interface HTMLIrTasksHeaderElementEventMap {
-        "headerButtonPress": { name: 'cleaned' | 'export' | 'archive' };
+        "headerButtonPress": { name: 'cleaned' | 'export' | 'archive' | 'clean-inspect' };
     }
     interface HTMLIrTasksHeaderElement extends Components.IrTasksHeader, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrTasksHeaderElementEventMap>(type: K, listener: (this: HTMLIrTasksHeaderElement, ev: IrTasksHeaderCustomEvent<HTMLIrTasksHeaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4366,6 +4453,8 @@ declare global {
         "ir-loading-screen": HTMLIrLoadingScreenElement;
         "ir-login": HTMLIrLoginElement;
         "ir-m-combobox": HTMLIrMComboboxElement;
+        "ir-m-combobox-booking-item": HTMLIrMComboboxBookingItemElement;
+        "ir-m-combobox-item": HTMLIrMComboboxItemElement;
         "ir-modal": HTMLIrModalElement;
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
         "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
@@ -5626,6 +5715,39 @@ declare namespace LocalJSX {
          */
         "useSlot"?: boolean;
     }
+    interface IrMComboboxBookingItem {
+        "booking"?: Booking;
+    }
+    interface IrMComboboxItem {
+        /**
+          * When true, visually hide the item (used for filtering).
+         */
+        "hidden"?: boolean;
+        /**
+          * Optional html_content (when you want rich content); If omitted, the component will render its own slot content.
+         */
+        "html_content"?: string;
+        /**
+          * Optional label (falls back to textContent)
+         */
+        "label"?: string;
+        /**
+          * Inform the parent this item exists (parent will index and manage focus)
+         */
+        "onComboboxItemRegister"?: (event: IrMComboboxItemCustomEvent<void>) => void;
+        /**
+          * Emit when this item is chosen. Parent listens and closes dropdown.
+         */
+        "onComboboxItemSelect"?: (event: IrMComboboxItemCustomEvent<ComboboxOption>) => void;
+        /**
+          * Inform the parent this item is gone
+         */
+        "onComboboxItemUnregister"?: (event: IrMComboboxItemCustomEvent<void>) => void;
+        /**
+          * Required value for the option
+         */
+        "value": string;
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -5648,6 +5770,11 @@ declare namespace LocalJSX {
          */
         "isLoading"?: boolean;
         /**
+          * Whether the modal middle button is in a loading state, disabling interaction.
+          * @requires middleBtnActive to be true
+         */
+        "isMiddleButtonLoading"?: boolean;
+        /**
           * Payload object to pass along with confirm/cancel events.
          */
         "item"?: any;
@@ -5664,6 +5791,18 @@ declare namespace LocalJSX {
          */
         "leftBtnText"?: string;
         /**
+          * Whether the middle (tertiary) button is visible.
+         */
+        "middleBtnActive"?: boolean;
+        /**
+          * Color theme of the middle (tertiary) button.
+         */
+        "middleBtnColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Text displayed on the middle (tertiary) button.
+         */
+        "middleBtnText"?: string;
+        /**
           * The main content text shown in the modal body.
          */
         "modalBody"?: string;
@@ -5679,6 +5818,10 @@ declare namespace LocalJSX {
           * Fired when the confirm (right) button is clicked. Emits the current `item` value.
          */
         "onConfirmModal"?: (event: IrModalCustomEvent<any>) => void;
+        /**
+          * Fired when the middle (tertiary) button is clicked. Emits the current `item` value.
+         */
+        "onMiddleModal"?: (event: IrModalCustomEvent<any>) => void;
         /**
           * Whether the right (confirm) button is visible.
          */
@@ -5711,7 +5854,8 @@ declare namespace LocalJSX {
         "reports"?: DailyReport[];
     }
     interface IrNotifications {
-        "notificationCount"?: number;
+        "notifications"?: Notification[];
+        "onNotificationCleared"?: (event: IrNotificationsCustomEvent<Notification>) => void;
     }
     interface IrOptionDetails {
         "onCloseModal"?: (event: IrOptionDetailsCustomEvent<PaymentOption | null>) => void;
@@ -6385,7 +6529,7 @@ declare namespace LocalJSX {
     interface IrTasksCard {
         "isCheckable"?: boolean;
         "isSkippable"?: boolean;
-        "onCleanSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
+        "onCleanSelectedTask"?: (event: IrTasksCardCustomEvent<CleanTaskEvent>) => void;
         "onSkipSelectedTask"?: (event: IrTasksCardCustomEvent<Task>) => void;
         "task"?: Task;
     }
@@ -6394,7 +6538,7 @@ declare namespace LocalJSX {
         "onApplyFilters"?: (event: IrTasksFiltersCustomEvent<TaskFilters>) => void;
     }
     interface IrTasksHeader {
-        "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' | 'archive' }>) => void;
+        "onHeaderButtonPress"?: (event: IrTasksHeaderCustomEvent<{ name: 'cleaned' | 'export' | 'archive' | 'clean-inspect' }>) => void;
     }
     interface IrTasksTable {
         "onAnimateCleanedButton"?: (event: IrTasksTableCustomEvent<null>) => void;
@@ -6690,6 +6834,8 @@ declare namespace LocalJSX {
         "ir-loading-screen": IrLoadingScreen;
         "ir-login": IrLogin;
         "ir-m-combobox": IrMCombobox;
+        "ir-m-combobox-booking-item": IrMComboboxBookingItem;
+        "ir-m-combobox-item": IrMComboboxItem;
         "ir-modal": IrModal;
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
         "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
@@ -6827,6 +6973,8 @@ declare module "@stencil/core" {
             "ir-loading-screen": LocalJSX.IrLoadingScreen & JSXBase.HTMLAttributes<HTMLIrLoadingScreenElement>;
             "ir-login": LocalJSX.IrLogin & JSXBase.HTMLAttributes<HTMLIrLoginElement>;
             "ir-m-combobox": LocalJSX.IrMCombobox & JSXBase.HTMLAttributes<HTMLIrMComboboxElement>;
+            "ir-m-combobox-booking-item": LocalJSX.IrMComboboxBookingItem & JSXBase.HTMLAttributes<HTMLIrMComboboxBookingItemElement>;
+            "ir-m-combobox-item": LocalJSX.IrMComboboxItem & JSXBase.HTMLAttributes<HTMLIrMComboboxItemElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
             "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;

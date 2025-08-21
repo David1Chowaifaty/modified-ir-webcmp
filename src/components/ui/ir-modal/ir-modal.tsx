@@ -31,6 +31,9 @@ export class IrModal {
    */
   @Prop() leftBtnActive: boolean = true;
 
+  /** Whether the middle (tertiary) button is visible. */
+  @Prop() middleBtnActive: boolean = false;
+
   /**
    * Text displayed on the right (confirm) button.
    */
@@ -41,10 +44,19 @@ export class IrModal {
    */
   @Prop() leftBtnText: string = 'Close';
 
+  /**Text displayed on the middle (tertiary) button. */
+  @Prop() middleBtnText: string = 'More';
+
   /**
    * Whether the modal is in a loading state, disabling interaction.
    */
   @Prop() isLoading: boolean = false;
+
+  /**
+   * Whether the modal middle button is in a loading state, disabling interaction.
+   * @requires middleBtnActive to be true
+   */
+  @Prop() isMiddleButtonLoading: boolean = false;
 
   /**
    * If true, the modal automatically closes after confirm/cancel actions.
@@ -60,6 +72,9 @@ export class IrModal {
    * Color theme of the left button.
    */
   @Prop() leftBtnColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'secondary';
+
+  /** Color theme of the middle (tertiary) button. */
+  @Prop() middleBtnColor: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'info';
 
   /**
    * Horizontal alignment of the footer buttons.
@@ -119,6 +134,9 @@ export class IrModal {
    */
   @Event({ bubbles: true, composed: true }) cancelModal: EventEmitter<any>;
 
+  /** Fired when the middle (tertiary) button is clicked. Emits the current `item` value. */
+  @Event({ bubbles: true, composed: true }) middleModal: EventEmitter<any>;
+
   @Listen('clickHandler')
   btnClickHandler(event: CustomEvent) {
     let target = event.target as HTMLInputElement;
@@ -128,6 +146,10 @@ export class IrModal {
       this.cancelModal.emit();
       this.item = {};
       this.closeModal();
+    } else if (name === this.middleBtnText) {
+      this.middleModal.emit(this.item);
+      this.item = {};
+      if (this.autoClose) this.closeModal();
     } else if (name === this.rightBtnText) {
       this.confirmModal.emit(this.item);
       this.item = {};
@@ -178,6 +200,16 @@ export class IrModal {
 
           <div class={`ir-alert-footer border-0  d-flex justify-content-${this.btnPosition === 'center' ? 'center' : this.btnPosition === 'left' ? 'start' : 'end'}`}>
             {this.leftBtnActive && <ir-button btn_disabled={this.isLoading} btn_color={this.leftBtnColor} btn_block text={this.leftBtnText} name={this.leftBtnText}></ir-button>}
+            {this.middleBtnActive && (
+              <ir-button
+                btn_disabled={this.isMiddleButtonLoading}
+                btn_color={this.middleBtnColor}
+                btn_block
+                text={this.middleBtnText}
+                isLoading={this.isMiddleButtonLoading}
+                name={this.middleBtnText}
+              ></ir-button>
+            )}
             {this.rightBtnActive && (
               <ir-button
                 btn_color={this.rightBtnColor}

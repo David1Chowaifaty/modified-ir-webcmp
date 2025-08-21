@@ -110,3 +110,17 @@
 .notifications-dropdown .dropdown-item:focus {
   background-color: var(--blue);
 }
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.notification-item p {
+  padding: 0;
+  margin: 0;
+}
+.notification-item:active {
+  background-color: #f4f5fa !important;
+}

@@ -1,0 +1,22 @@
+/* ir-m-combobox-item.css */
+:host {
+  display: block;
+  cursor: pointer;
+}
+:host([hidden]) {
+  display: none !important;
+}
+:host(.active),
+:host(.focused),
+:host:active {
+  /* keep in sync with your combobox .dropdown-item.active styles */
+  outline: none;
+  background-color: var(--blue, #1e9ff2) !important;
+  color: white !important;
+}
+:host(.dropdown-item) {
+  padding: 0.5rem 1rem !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

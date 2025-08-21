@@ -9,7 +9,7 @@ import calendar_dates from '@/stores/calendar-dates.store';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 
-import { PhysicalRoom, RoomType } from '@/models/booking.dto';
+import { PhysicalRoom, RoomHkStatus, RoomType } from '@/models/booking.dto';
 import { ICountry } from '@/models/IBooking';
 
 export type RoomCategory = RoomType & { expanded: boolean };
@@ -32,7 +32,7 @@ export class IglCalBody {
   @State() dragOverElement: string = '';
   @State() renderAgain: boolean = false;
   @State() selectedRoom: PhysicalRoom;
-  @State() isLoading: boolean;
+  @State() isLoading: 'middle' | 'right' | null = null;
 
   @Event() addBookingDatasEvent: EventEmitter<any[]>;
   @Event() showBookingPopup: EventEmitter;
@@ -383,7 +383,8 @@ export class IglCalBody {
       const isDisabled = (isCellDisabled && Object.keys(this.selectedRooms).length === 0) || (isCellDisabled && this.isCellDisabled(Number(roomId), prevDate));
       const isSelected = this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo));
       const isCurrentDate = dayInfo.day === this.today || dayInfo.day === this.highlightedDate;
-      // const shouldBeCleaned = Math.random() * 12 < 3;
+      const cleaningDates = calendar_dates.cleaningTasks.has(+roomId) ? calendar_dates.cleaningTasks.get(+roomId) : null;
+      const shouldBeCleaned = calendar_data.cleaning_frequency?.code === '001' ? false : cleaningDates?.has(dayInfo.value);
       return (
         <div
           class={`cellData position-relative roomCell ${isCellDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${isCurrentDate ? 'currentDay' : ''} ${
@@ -402,7 +403,7 @@ export class IglCalBody {
           data-date={dayInfo.value}
           aria-current={isCurrentDate ? 'date' : undefined}
           data-room-name={roomName}
-          // data-dirty-room={String(shouldBeCleaned)}
+          data-dirty-room={String(shouldBeCleaned)}
           aria-disabled={String(isDisabled)}
           aria-selected={Boolean(isSelected)}
           // tabIndex={-1}
@@ -499,9 +500,30 @@ export class IglCalBody {
               }}
               style={room.hk_status === '003' && { '--dot-color': '#ededed' }}
               hkStatus={calendar_data.housekeeping_enabled && room.hk_status !== '001'}
-              broomTooltip={room.hk_status === '002' ? 'This unit is dirty' : undefined}
               popoverTitle={name}
-            ></ir-interactive-title>
+            >
+              {room.hk_status !== '001' && (
+                <div slot="end" class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                  {room.hk_status === '004' ? (
+                    <svg height={14} width={14} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                      <title>Inspected</title>
+                      <path
+                        fill="green"
+                        d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"
+                      />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="12" width="13.5" viewBox="0 0 576 512" style={{ display: 'block' }}>
+                      {room.hk_status === '002' && <title>This unit is dirty</title>}
+                      <path
+                        fill="currentColor"
+                        d="M566.6 54.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192-34.7-34.7c-4.2-4.2-10-6.6-16-6.6c-12.5 0-22.6 10.1-22.6 22.6l0 29.1L364.3 320l29.1 0c12.5 0 22.6-10.1 22.6-22.6c0-6-2.4-11.8-6.6-16l-34.7-34.7 192-192zM341.1 353.4L222.6 234.9c-42.7-3.7-85.2 11.7-115.8 42.3l-8 8C76.5 307.5 64 337.7 64 369.2c0 6.8 7.1 11.2 13.2 8.2l51.1-25.5c5-2.5 9.5 4.1 5.4 7.9L7.3 473.4C2.7 477.6 0 483.6 0 489.9C0 502.1 9.9 512 22.1 512l173.3 0c38.8 0 75.9-15.4 103.4-42.8c30.6-30.6 45.9-73.1 42.3-115.8z"
+                      />
+                    </svg>
+                  )}
+                </div>
+              )}
+            </ir-interactive-title>
           </div>
           {this.getGeneralRoomDayColumns(this.getRoomId(room), roomCategory, name)}
         </div>
@@ -523,36 +545,36 @@ export class IglCalBody {
       }
     });
   }
-  private async confirmHousekeepingUpdate(e: CustomEvent) {
+  private async confirmHousekeepingUpdate(e: CustomEvent, status: RoomHkStatus) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     try {
-      this.isLoading = true;
-      const newStatusCode = this.selectedRoom?.hk_status === '002' ? '001' : '002';
+      this.isLoading = status === '004' ? 'right' : 'middle';
       await this.housekeepingService.setExposedUnitHKStatus({
         property_id: this.propertyId,
         // housekeeper: this.selectedRoom?.housekeeper ? { id: this.selectedRoom?.housekeeper?.id } : null,
         status: {
-          code: newStatusCode,
+          code: status,
         },
         unit: {
           id: this.selectedRoom?.id,
         },
       });
-      if (newStatusCode === '001') {
+      if (['001', '004'].includes(status)) {
         await this.housekeepingService.executeHKAction({
           actions: [
             {
               description: 'Cleaned',
-              hkm_id: this.selectedRoom?.housekeeper.id || null,
+              hkm_id: this.selectedRoom?.housekeeper?.id || null,
               unit_id: this.selectedRoom?.id,
               booking_nbr: this.bookingMap.get(this.selectedRoom?.id) ?? null,
+              status: status as any,
             },
           ],
         });
       }
     } finally {
-      this.isLoading = false;
+      this.isLoading = null;
       this.selectedRoom = null;
       this.hkModal.closeModal();
     }
@@ -583,11 +605,15 @@ export class IglCalBody {
         <ir-modal
           ref={el => (this.hkModal = el)}
           leftBtnText={locales?.entries?.Lcz_Cancel}
-          rightBtnText={locales?.entries?.Lcz_Update}
+          middleBtnText={this.renderModalMiddleButtonText()}
+          middleBtnActive
+          rightBtnText={this.renderModalRightButtonText()}
           modalBody={this.renderModalBody()}
-          onConfirmModal={this.confirmHousekeepingUpdate.bind(this)}
+          onConfirmModal={e => this.confirmHousekeepingUpdate(e, '004')}
+          onMiddleModal={e => this.confirmHousekeepingUpdate(e, this.selectedRoom?.hk_status === '002' ? '001' : '002')}
           autoClose={false}
-          isLoading={this.isLoading}
+          isMiddleButtonLoading={this.isLoading === 'middle'}
+          isLoading={this.isLoading === 'right'}
           onCancelModal={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
@@ -604,9 +630,7 @@ export class IglCalBody {
       return null;
     }
     return (
-      <p>
-        Update unit {this.selectedRoom?.name} to <b>{this.selectedRoom?.hk_status === '002' ? 'Clean' : 'Dirty'}?</b>
-      </p>
+      <p>Update unit {this.selectedRoom?.name} to ...</p>
       // <ir-select
       //   LabelAvailable={false}
       //   showFirstOption={false}
@@ -618,6 +642,18 @@ export class IglCalBody {
       //   onSelectChange={e => (this.selectedHKStatus = e.detail)}
       // ></ir-select>
     );
+  }
+  private renderModalMiddleButtonText() {
+    if (!this.selectedRoom) {
+      return null;
+    }
+    return this.selectedRoom.hk_status === '002' ? 'Clean' : 'Dirty';
+  }
+  private renderModalRightButtonText() {
+    if (!this.selectedRoom) {
+      return null;
+    }
+    return this.selectedRoom.hk_status !== '004' ? 'Clean & Inspected' : 'Clean';
   }
 
   private updateDisabledCellsCache() {
