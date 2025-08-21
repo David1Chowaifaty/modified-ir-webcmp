@@ -29,6 +29,7 @@ import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
+import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
@@ -64,6 +65,7 @@ export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
+export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
@@ -1242,7 +1244,7 @@ export namespace Components {
         "reports": DailyReport[];
     }
     interface IrNotifications {
-        "notificationCount": number;
+        "notifications": Notification[];
     }
     interface IrOptionDetails {
         "propertyId": string;
@@ -2270,6 +2272,10 @@ export interface IrModalCustomEvent<T> extends CustomEvent<T> {
 export interface IrMonthlyBookingsReportFilterCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrMonthlyBookingsReportFilterElement;
+}
+export interface IrNotificationsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrNotificationsElement;
 }
 export interface IrOptionDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3634,7 +3640,18 @@ declare global {
         prototype: HTMLIrMonthlyBookingsReportTableElement;
         new (): HTMLIrMonthlyBookingsReportTableElement;
     };
+    interface HTMLIrNotificationsElementEventMap {
+        "notificationCleared": Notification;
+    }
     interface HTMLIrNotificationsElement extends Components.IrNotifications, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrNotificationsElementEventMap>(type: K, listener: (this: HTMLIrNotificationsElement, ev: IrNotificationsCustomEvent<HTMLIrNotificationsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrNotificationsElementEventMap>(type: K, listener: (this: HTMLIrNotificationsElement, ev: IrNotificationsCustomEvent<HTMLIrNotificationsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrNotificationsElement: {
         prototype: HTMLIrNotificationsElement;
@@ -5837,7 +5854,8 @@ declare namespace LocalJSX {
         "reports"?: DailyReport[];
     }
     interface IrNotifications {
-        "notificationCount"?: number;
+        "notifications"?: Notification[];
+        "onNotificationCleared"?: (event: IrNotificationsCustomEvent<Notification>) => void;
     }
     interface IrOptionDetails {
         "onCloseModal"?: (event: IrOptionDetailsCustomEvent<PaymentOption | null>) => void;
