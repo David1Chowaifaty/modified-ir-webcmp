@@ -865,7 +865,8 @@ export class IglooCalendar {
 
     const isDateInBetweenTheLastPeriodDate = (d: any): boolean => {
       const endDate = moment(this.tasksEndDate, 'YYYY-MM-DD');
-      return moment(d.FROM_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate) || moment(d.TO_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate);
+      // return moment(d.FROM_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate) || moment(d.TO_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate);
+      return moment(d.FROM_DATE, 'YYYY-MM-DD').isSameOrBefore(endDate, 'date') || moment(d.TO_DATE, 'YYYY-MM-DD').isSameOrBefore(endDate, 'date');
     };
 
     if (data.some(isDateInBetweenTheLastPeriodDate)) {
