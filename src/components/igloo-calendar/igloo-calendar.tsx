@@ -864,7 +864,7 @@ export class IglooCalendar {
     };
 
     const isDateInBetweenTheLastPeriodDate = (d: any): boolean => {
-      const endDate = moment(housekeeping_store?.hk_criteria?.cleaning_periods[housekeeping_store?.hk_criteria?.cleaning_periods.length - 1].code, 'YYYY-MM-DD');
+      const endDate = moment(this.tasksEndDate, 'YYYY-MM-DD');
       return moment(d.FROM_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate) || moment(d.TO_DATE, 'YYYY-MM-DD').isBetween(moment(), endDate);
     };
 
