@@ -378,6 +378,8 @@ export class IrBookingDetails {
             onCloseModal={handleClose}
           ></ir-room-guests>
         );
+      case 'payment-folio':
+        return <ir-payment-folio slot="sidebar-body" onCloseModal={handleClose}></ir-payment-folio>;
       default:
         return null;
     }

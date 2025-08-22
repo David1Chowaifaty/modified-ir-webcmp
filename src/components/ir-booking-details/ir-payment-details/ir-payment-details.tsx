@@ -10,6 +10,7 @@ import { formatAmount, toFloat } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
+import { OpenSidebarEvent } from '../types';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -38,6 +39,7 @@ export class IrPaymentDetails {
   @Event({ bubbles: true }) resetBookingEvt: EventEmitter<null>;
   @Event({ bubbles: true }) resetExposedCancelationDueAmount: EventEmitter<null>;
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
+  @Event({ bubbles: true }) openSidebar: EventEmitter<OpenSidebarEvent<unknown>>;
 
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
@@ -487,7 +489,11 @@ export class IrPaymentDetails {
                 icon_name="square_plus"
                 style={{ '--icon-size': '1.5rem' }}
                 onClickHandler={() => {
-                  this.newTableRow = true;
+                  // this.newTableRow = true;
+                  this.openSidebar.emit({
+                    type: 'payment-folio',
+                    payload: null,
+                  });
                 }}
               ></ir-button>
             </div>
