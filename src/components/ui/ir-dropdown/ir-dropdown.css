@@ -12,3 +12,9 @@
 .dropdown.nav-item.show .dropdown-menu {
   display: block; /* display the dropdown when the parent has the "show" class */
 }
+.caret-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-55%);
+  right: 0.25rem;
+}

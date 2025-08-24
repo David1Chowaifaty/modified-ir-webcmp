@@ -229,9 +229,13 @@ export class IrDropdown {
           onClick={() => {
             this.isOpen = !this.isOpen;
           }}
+          class="position-relative"
           onKeyDown={this.handleKeyDown}
         >
           <slot name="trigger"></slot>
+          <div class="caret-icon">
+            <ir-icons name={!this.isOpen ? 'angle-down' : 'angle-up'}></ir-icons>
+          </div>
         </div>
         <div ref={el => (this.dropdownRef = el)} class="dropdown-menu">
           <slot></slot>

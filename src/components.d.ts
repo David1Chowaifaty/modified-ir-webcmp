@@ -35,6 +35,7 @@ import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
+import { TFolioData } from "./components/ir-booking-details/ir-payment-details/ir-payment-folio/ir-payment-folio";
 import { Moment } from "moment";
 import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
@@ -73,6 +74,7 @@ export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
+export { TFolioData } from "./components/ir-booking-details/ir-payment-details/ir-payment-folio/ir-payment-folio";
 export { Moment } from "moment";
 export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
@@ -1402,6 +1404,7 @@ export namespace Components {
         "paymentActions": IPaymentAction[];
     }
     interface IrPaymentFolio {
+        "payment": TFolioData;
     }
     interface IrPaymentOption {
         "defaultStyles": boolean;
@@ -1504,6 +1507,10 @@ export namespace Components {
           * The disabled for the input, optional
          */
         "disabled"?: boolean;
+        /**
+          * Error
+         */
+        "error": boolean;
         /**
           * Extra classnames for the input, optional
          */
@@ -6127,6 +6134,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentFolio {
         "onCloseModal"?: (event: IrPaymentFolioCustomEvent<null>) => void;
+        "payment"?: TFolioData;
     }
     interface IrPaymentOption {
         "defaultStyles"?: boolean;
@@ -6236,6 +6244,10 @@ declare namespace LocalJSX {
           * The disabled for the input, optional
          */
         "disabled"?: boolean;
+        /**
+          * Error
+         */
+        "error"?: boolean;
         /**
           * Extra classnames for the input, optional
          */
