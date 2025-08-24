@@ -25,6 +25,8 @@ import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
+import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
@@ -61,6 +63,8 @@ export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
+export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
@@ -771,15 +775,27 @@ export namespace Components {
         "placement": 'left' | 'right';
     }
     interface IrDropdown {
-        "data": {
-    name: string;
-    icon: string;
-    children: {
-      name: string;
-      icon: string;
-    }[];
-  };
-        "object": any;
+        "value": DropdownItem['value'];
+    }
+    interface IrDropdownItem {
+        /**
+          * When true, visually hide the item (used for filtering).
+         */
+        "hidden": boolean;
+        /**
+          * Optional html_content (when you want rich content); If omitted, the component will render its own slot content.
+         */
+        "html_content"?: string;
+        /**
+          * Optional label (falls back to textContent)
+         */
+        "label"?: string;
+        "matchesQuery": (query: string) => Promise<boolean>;
+        "setHidden": (next: boolean) => Promise<void>;
+        /**
+          * Required value for the option
+         */
+        "value": string;
     }
     interface IrEventsLog {
         "booking": Booking;
@@ -2207,6 +2223,10 @@ export interface IrDropdownCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDropdownElement;
 }
+export interface IrDropdownItemCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDropdownItemElement;
+}
 export interface IrExtraServiceCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrExtraServiceElement;
@@ -3259,7 +3279,7 @@ declare global {
         new (): HTMLIrDrawerElement;
     };
     interface HTMLIrDropdownElementEventMap {
-        "dropdownItemCLicked": { name: string; object: any };
+        "optionChange": DropdownItem['value'];
     }
     interface HTMLIrDropdownElement extends Components.IrDropdown, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrDropdownElementEventMap>(type: K, listener: (this: HTMLIrDropdownElement, ev: IrDropdownCustomEvent<HTMLIrDropdownElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3274,6 +3294,25 @@ declare global {
     var HTMLIrDropdownElement: {
         prototype: HTMLIrDropdownElement;
         new (): HTMLIrDropdownElement;
+    };
+    interface HTMLIrDropdownItemElementEventMap {
+        "dropdownItemSelect": DropdownItem1['value'];
+        "dropdownItemRegister": void;
+        "dropdownItemUnregister": void;
+    }
+    interface HTMLIrDropdownItemElement extends Components.IrDropdownItem, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrDropdownItemElementEventMap>(type: K, listener: (this: HTMLIrDropdownItemElement, ev: IrDropdownItemCustomEvent<HTMLIrDropdownItemElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrDropdownItemElementEventMap>(type: K, listener: (this: HTMLIrDropdownItemElement, ev: IrDropdownItemCustomEvent<HTMLIrDropdownItemElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrDropdownItemElement: {
+        prototype: HTMLIrDropdownItemElement;
+        new (): HTMLIrDropdownItemElement;
     };
     interface HTMLIrEventsLogElement extends Components.IrEventsLog, HTMLStencilElement {
     }
@@ -4455,6 +4494,7 @@ declare global {
         "ir-dialog": HTMLIrDialogElement;
         "ir-drawer": HTMLIrDrawerElement;
         "ir-dropdown": HTMLIrDropdownElement;
+        "ir-dropdown-item": HTMLIrDropdownItemElement;
         "ir-events-log": HTMLIrEventsLogElement;
         "ir-extra-service": HTMLIrExtraServiceElement;
         "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
@@ -5361,16 +5401,41 @@ declare namespace LocalJSX {
         "placement"?: 'left' | 'right';
     }
     interface IrDropdown {
-        "data"?: {
-    name: string;
-    icon: string;
-    children: {
-      name: string;
-      icon: string;
-    }[];
-  };
-        "object"?: any;
-        "onDropdownItemCLicked"?: (event: IrDropdownCustomEvent<{ name: string; object: any }>) => void;
+        /**
+          * Emitted when a user selects an option from the combobox. The event payload contains the selected `ComboboxOption` object.
+         */
+        "onOptionChange"?: (event: IrDropdownCustomEvent<DropdownItem['value']>) => void;
+        "value"?: DropdownItem['value'];
+    }
+    interface IrDropdownItem {
+        /**
+          * When true, visually hide the item (used for filtering).
+         */
+        "hidden"?: boolean;
+        /**
+          * Optional html_content (when you want rich content); If omitted, the component will render its own slot content.
+         */
+        "html_content"?: string;
+        /**
+          * Optional label (falls back to textContent)
+         */
+        "label"?: string;
+        /**
+          * Inform the parent this item exists (parent will index and manage focus)
+         */
+        "onDropdownItemRegister"?: (event: IrDropdownItemCustomEvent<void>) => void;
+        /**
+          * Emit when this item is chosen. Parent listens and closes dropdown.
+         */
+        "onDropdownItemSelect"?: (event: IrDropdownItemCustomEvent<DropdownItem1['value']>) => void;
+        /**
+          * Inform the parent this item is gone
+         */
+        "onDropdownItemUnregister"?: (event: IrDropdownItemCustomEvent<void>) => void;
+        /**
+          * Required value for the option
+         */
+        "value": string;
     }
     interface IrEventsLog {
         "booking"?: Booking;
@@ -6841,6 +6906,7 @@ declare namespace LocalJSX {
         "ir-dialog": IrDialog;
         "ir-drawer": IrDrawer;
         "ir-dropdown": IrDropdown;
+        "ir-dropdown-item": IrDropdownItem;
         "ir-events-log": IrEventsLog;
         "ir-extra-service": IrExtraService;
         "ir-extra-service-config": IrExtraServiceConfig;
@@ -6981,6 +7047,7 @@ declare module "@stencil/core" {
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
             "ir-drawer": LocalJSX.IrDrawer & JSXBase.HTMLAttributes<HTMLIrDrawerElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;
+            "ir-dropdown-item": LocalJSX.IrDropdownItem & JSXBase.HTMLAttributes<HTMLIrDropdownItemElement>;
             "ir-events-log": LocalJSX.IrEventsLog & JSXBase.HTMLAttributes<HTMLIrEventsLogElement>;
             "ir-extra-service": LocalJSX.IrExtraService & JSXBase.HTMLAttributes<HTMLIrExtraServiceElement>;
             "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;
