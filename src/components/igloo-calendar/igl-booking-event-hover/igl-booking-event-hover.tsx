@@ -116,7 +116,20 @@ export class IglBookingEventHover {
   }
 
   private getRatePlan() {
-    return this.bookingEvent.RATE_PLAN;
+    if (!this.bookingEvent) {
+      return;
+    }
+    const currentRoom = this.bookingEvent?.booking?.rooms?.find(room => room.assigned_units_pool === this.bookingEvent.ID);
+    if (!currentRoom) {
+      console.warn(`Couldn't find room with pool ${this.bookingEvent.ID}`);
+      return null;
+    }
+    let str = '';
+    str += currentRoom.rateplan['short_name'];
+    if (currentRoom.rateplan['is_non_refundable']) {
+      str += ` - ${locales.entries.Lcz_NonRefundable}`;
+    }
+    return str;
   }
 
   private getEntryDate() {
