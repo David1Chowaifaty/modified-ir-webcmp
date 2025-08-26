@@ -85,14 +85,14 @@ export class GuestInfo {
       this.autoValidate = true;
 
       await this.bookingService.editExposedGuest(this.guest, this.booking_nbr ?? null);
-      this.closeSideBar.emit(null);
-      this.resetBookingEvt.emit(null);
       this.toast.emit({
         type: 'success',
         description: '',
-        title: locales.entries.Lcz_StatusUpdatedSuccessfully,
+        title: 'Saved Successfully',
         position: 'top-right',
       });
+      this.closeSideBar.emit(null);
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
     }
@@ -114,6 +114,7 @@ export class GuestInfo {
           await this.editGuest();
         }}
       >
+        {!this.isInSideBar && [<ir-toast></ir-toast>, <ir-interceptor></ir-interceptor>]}
         {this.headerShown && <ir-title class="px-1 sheet-header" displayContext="sidebar" label={locales.entries.Lcz_GuestDetails}></ir-title>}
         <div class={this.isInSideBar ? 'sheet-body' : 'card-content collapse show '}>
           <div class={this.headerShown ? 'card-body px-1 pt-0' : 'pt-0'}>
