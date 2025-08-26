@@ -3325,6 +3325,7 @@ declare global {
     interface HTMLIrGuestInfoElementEventMap {
         "closeSideBar": null;
         "resetBookingEvt": null;
+        "toast": IToast;
     }
     interface HTMLIrGuestInfoElement extends Components.IrGuestInfo, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrGuestInfoElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoElement, ev: IrGuestInfoCustomEvent<HTMLIrGuestInfoElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5380,6 +5381,7 @@ declare namespace LocalJSX {
         "language"?: string;
         "onCloseSideBar"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrGuestInfoCustomEvent<null>) => void;
+        "onToast"?: (event: IrGuestInfoCustomEvent<IToast>) => void;
         "ticket"?: string;
     }
     interface IrHkArchive {
