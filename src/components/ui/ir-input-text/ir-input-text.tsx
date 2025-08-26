@@ -197,7 +197,6 @@ export class IrInputText {
 
   private haveSlotPresent(name: string) {
     const slot = this.el.querySelector(`[slot="${name}"]`);
-    console.log(slot);
     return slot !== null;
   }
 

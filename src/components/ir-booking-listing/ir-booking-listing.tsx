@@ -481,7 +481,6 @@ export class IrBookingListing {
                     ></ir-button>
                     <ir-select
                       selectedValue={this.currentPage.toString()}
-                      LabelAvailable={false}
                       showFirstOption={false}
                       onSelectChange={async e => {
                         this.currentPage = +e.detail;

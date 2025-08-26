@@ -199,7 +199,6 @@ export class IrPickup {
             onSelectChange={this.handleLocationChange.bind(this)}
             firstOption={locales.entries.Lcz_Pickup_NoThankYou}
             class={'m-0 mb-1'}
-            LabelAvailable={false}
             data={this.pickupService.getAvailableLocations(locales.entries.Lcz_Pickup_YesFrom) as any}
           ></ir-select>
           {this.pickupData.location > 0 && (
@@ -269,7 +268,6 @@ export class IrPickup {
                 firstOption={locales.entries.Lcz_Select}
                 selectedValue={this.pickupData.vehicle_type_code}
                 class={'m-0'}
-                LabelAvailable={false}
                 data={
                   this.allowedOptionsByLocation.map(option => ({
                     text: option.vehicle.description,

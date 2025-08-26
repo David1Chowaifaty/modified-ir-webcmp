@@ -115,7 +115,6 @@ export class IrHkArchive {
             <ir-select
               class="w-100"
               showFirstOption={false}
-              LabelAvailable={false}
               data={[
                 { text: 'All units', value: '000' },
                 ,
@@ -140,7 +139,6 @@ export class IrHkArchive {
               <ir-select
                 class="ml-1 w-100"
                 selectedValue={this.filters?.filtered_by_hkm?.length === housekeeping_store.hk_criteria.housekeepers.length ? '000' : this.filters?.filtered_by_hkm[0]?.toString()}
-                LabelAvailable={false}
                 showFirstOption={false}
                 data={[
                   { text: 'All housekeepers', value: '000' },

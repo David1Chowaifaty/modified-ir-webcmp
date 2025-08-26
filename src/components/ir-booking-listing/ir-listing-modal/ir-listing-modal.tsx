@@ -160,7 +160,6 @@ export class IrListingModal {
                   selectedValue={this.selectedDesignation}
                   onSelectChange={e => (this.selectedDesignation = e.detail)}
                   showFirstOption={false}
-                  LabelAvailable={false}
                   data={booking_listing.settlement_methods.map(m => ({
                     value: m.name,
                     text: m.name,

@@ -384,7 +384,7 @@ export class IglCalBody {
       const isSelected = this.selectedRooms.hasOwnProperty(this.getSelectedCellRefName(roomId, dayInfo));
       const isCurrentDate = dayInfo.day === this.today || dayInfo.day === this.highlightedDate;
       const cleaningDates = calendar_dates.cleaningTasks.has(+roomId) ? calendar_dates.cleaningTasks.get(+roomId) : null;
-      const shouldBeCleaned = calendar_data.cleaning_frequency?.code === '001' ? false : cleaningDates?.has(dayInfo.value);
+      const shouldBeCleaned = ['001', '003'].includes(calendar_data.cleaning_frequency?.code) ? false : cleaningDates?.has(dayInfo.value);
       return (
         <div
           class={`cellData position-relative roomCell ${isCellDisabled ? 'disabled' : ''} ${'room_' + roomId + '_' + dayInfo.day} ${isCurrentDate ? 'currentDay' : ''} ${
@@ -632,7 +632,6 @@ export class IglCalBody {
     return (
       <p>Update unit {this.selectedRoom?.name} to ...</p>
       // <ir-select
-      //   LabelAvailable={false}
       //   showFirstOption={false}
       //   selectedValue={this.selectedRoom?.hk_status === '001' ? '001' : '002'}
       //   data={[

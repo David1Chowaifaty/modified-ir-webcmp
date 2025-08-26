@@ -96,7 +96,6 @@ export class IrTasksFilters {
               <ir-select
                 testId="period"
                 selectedValue={this.filters?.cleaning_periods?.code}
-                LabelAvailable={false}
                 showFirstOption={false}
                 data={housekeeping_store?.hk_criteria?.cleaning_periods.map(v => ({
                   text: v.description,
@@ -115,7 +114,6 @@ export class IrTasksFilters {
                 <ir-select
                   testId="housekeepers"
                   selectedValue={this.filters?.housekeepers}
-                  LabelAvailable={false}
                   showFirstOption={false}
                   data={[
                     { text: locales.entries.Lcz_Allhousekeepers, value: '000' },
@@ -144,7 +142,7 @@ export class IrTasksFilters {
               <ir-select
                 testId="cleaning_frequency"
                 selectedValue={this.filters?.cleaning_frequencies?.code}
-                LabelAvailable={false}
+                
                 showFirstOption={false}
                 data={housekeeping_store?.hk_criteria?.cleaning_frequencies.map(v => ({
                   text: v.description,
@@ -162,7 +160,6 @@ export class IrTasksFilters {
               <ir-select
                 testId="dusty_units"
                 showFirstOption={false}
-                LabelAvailable={false}
                 selectedValue={this.filters?.dusty_units?.code}
                 data={housekeeping_store.hk_criteria?.dusty_periods?.map(v => ({
                   text: v.description,
@@ -182,7 +179,6 @@ export class IrTasksFilters {
               <ir-select
                 testId="highlight_check_ins"
                 selectedValue={this.filters?.highlight_check_ins?.code}
-                LabelAvailable={false}
                 showFirstOption={false}
                 onSelectChange={e => {
                   this.updateFilter({ highlight_check_ins: { code: e.detail } });

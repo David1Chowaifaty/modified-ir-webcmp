@@ -190,7 +190,6 @@ export class IglBulkBlock {
           <div class="text-muted text-left pt-0 my-0 d-flex align-items-center pb-1" style={{ gap: '0.5rem' }}>
             <p class="m-0 p-0">Select the unit to</p>
             <ir-select
-              LabelAvailable={false}
               showFirstOption={false}
               selectedValue={this.blockState}
               data={[

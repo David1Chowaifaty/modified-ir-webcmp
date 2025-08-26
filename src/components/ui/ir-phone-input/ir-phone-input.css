@@ -55,3 +55,78 @@
   padding: 0 0.5rem;
   margin: 0;
 }
+:host {
+  /* ========= Floating label ========= */
+  /** @prop --ir-floating-label-fg: Resting label color. */
+  --ir-floating-label-fg: #6c757d;
+
+  /** @prop --ir-floating-label-fg-focus: Floated/active label color. */
+  --ir-floating-label-fg-focus: #495057;
+
+  /** @prop --ir-floating-label-bg: Background behind the floated label “chip”. */
+  --ir-floating-label-bg: #fff;
+
+  /** @prop --ir-floating-label-scale: Scale applied to the label when floated. */
+  --ir-floating-label-scale: 0.88;
+
+  /** @prop --ir-floating-label-float-translateY: translateY used when label floats (relative to its top=0). */
+  --ir-floating-label-float-translateY: -70%;
+
+  /** @prop --ir-floating-label-resting-offset-inline: Inline offset for the resting label (LTR=left, RTL=right). */
+  --ir-floating-label-resting-offset-inline: 0.9rem;
+
+  /** @prop --ir-floating-phone-input-radius: Radius of the select. */
+  --ir-floating-phone-input-radius: 0.21rem;
+
+  /** @prop --ir-floating-phone-input-height: Fixed height for the input element. */
+  --ir-floating-phone-input-height: 2rem;
+  /* existing design tokens you referenced */
+  --ir-danger: #dc3545;
+  --ir-disabled-fg: #9aa0a6;
+}
+
+:host .input-container.has-floating {
+  position: relative;
+  padding-top: 0.9rem;
+}
+
+:host .floating-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  position: absolute;
+  padding: 0 0.4rem;
+  z-index: 10;
+  color: var(--ir-floating-label-fg);
+  background: white;
+  transition: transform 120ms ease, color 120ms ease, top 120ms ease, background-color 120ms ease, opacity 120ms ease;
+  opacity: 0.95;
+  line-height: 1;
+  white-space: nowrap;
+}
+:host .floating-label:dir(rtl) {
+  right: 95px;
+}
+:host .floating-label:dir(ltr) {
+  left: 95px;
+}
+
+:host .floating-label.active {
+  top: 0;
+  transform: translateY(var(--ir-floating-label-float-translateY)) scale(var(--ir-floating-label-scale));
+  background: var(--ir-floating-label-bg);
+  color: var(--ir-floating-label-fg-focus);
+  font-size: 12px;
+  padding: 0;
+  opacity: 0.95;
+}
+
+/* :host .input-container.has-floating input {
+  padding-top: 0.9rem;
+}
+
+:host .input-container.has-floating .dropdown-trigger:focus ~ .floating-label,
+:host .input-container.has-floating .dropdown-trigger:hover ~ .floating-label {
+  opacity: 0.9;
+} */
