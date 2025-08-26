@@ -135,17 +135,17 @@ export class IrPaymentFolio {
                 </div>
               </div>
             </div>
-            <div>
-              <ir-price-input
-                autoValidate={this.autoValidate}
-                zod={this.folioSchema.pick({ amount: true })}
-                label="Amount"
-                error={this.errors?.amount && !this.folioData?.amount}
-                value={this.folioData?.amount?.toString()}
-                currency={calendar_data.currency.symbol}
-                onTextChange={e => this.updateFolioData({ amount: Number(e.detail) })}
-              ></ir-price-input>
-            </div>
+          </div>
+          <div>
+            <ir-price-input
+              autoValidate={this.autoValidate}
+              zod={this.folioSchema.pick({ amount: true })}
+              label="Amount"
+              error={this.errors?.amount && !this.folioData?.amount}
+              value={this.folioData?.amount?.toString()}
+              currency={calendar_data.currency.symbol}
+              onTextChange={e => this.updateFolioData({ amount: Number(e.detail) })}
+            ></ir-price-input>
           </div>
           <div>
             <ir-dropdown
@@ -175,7 +175,7 @@ export class IrPaymentFolio {
               error={this.errors?.reference_number}
               autoValidate={this.autoValidate}
               zod={this.folioSchema.pick({ reference: true })}
-              label="Reference number"
+              label="Reference"
               inputContainerStyle={{
                 margin: '0',
               }}

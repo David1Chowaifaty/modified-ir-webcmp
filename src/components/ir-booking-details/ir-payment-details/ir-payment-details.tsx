@@ -530,17 +530,15 @@ export class IrPaymentDetails {
                 <div key={row.id} class={'payment-item'}>
                   <div class="payment-body">
                     <div class="payment-fields">
+                      <p class="text-muted">{row.date}</p>
                       <p>
                         <b>{row.cause}</b>
                       </p>
-                      <p class="text-muted">{row.date}</p>
                     </div>
                     {row.reference && (
                       <p class="payment-reference text-muted">
-                        <b>Ref: </b>
+                        {/* <b>Ref: </b> */}
                         {row?.reference}
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas aliquid repellat illo labore laborum libero vel distinctio architecto nulla natus quam
-                        dolores provident incidunt itaque eum alias, similique dignissimos recusandae.
                       </p>
                     )}
                   </div>
@@ -550,7 +548,7 @@ export class IrPaymentDetails {
                       {row.type === 'Credit' ? '+' : '-'}US$ {row.amount}
                     </p>
                     <div class="payment-actions">
-                      <ir-button variant="icon" icon_name="save" style={colorVariants.secondary}></ir-button>
+                      <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary}></ir-button>
                       <ir-button variant="icon" style={colorVariants.danger} icon_name="trash"></ir-button>
                     </div>
                   </div>

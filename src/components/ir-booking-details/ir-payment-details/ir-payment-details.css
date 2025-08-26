@@ -70,6 +70,7 @@
   align-items: center;
   min-height: 3rem;
   padding-right: 1rem;
+  gap: 1rem;
 }
 .payment-item:last-child {
   border-bottom: 0;
@@ -98,7 +99,7 @@
 .payment-fields {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 .payment-item:hover .payment-actions {
   display: flex;
@@ -116,30 +117,21 @@
 
 .payment-reference {
   font-size: 12px;
-  overflow: hidden;
+  /* overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 250px;
+  white-space: nowrap; */
+  /* width: 250px; */
 }
 /*sm*/
-@media (min-width: 640px) {
+/* @media (min-width: 640px) {
   .payment-reference {
     width: 300px;
   }
 }
 
-@media (min-width: 768px) {
-  .payment-reference {
-    width: 600px;
-  }
-  .payments-container {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-}
 
 @media (min-width: 1024px) {
   .payment-reference {
     width: 300px;
-  }
-}
+    }
+    } */
