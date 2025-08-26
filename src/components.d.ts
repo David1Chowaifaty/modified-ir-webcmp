@@ -15,10 +15,11 @@ import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChil
 import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { IrToast } from "./components/ui/ir-toast/ir-toast";
-import { RatePlan, RoomType } from "./models/property";
+import { Currency, RatePlan, RoomType } from "./models/property";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+import { BookingService } from "./services/booking.service";
 import { OpenSidebarEvent, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
@@ -53,10 +54,11 @@ export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChil
 export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { IrToast } from "./components/ui/ir-toast/ir-toast";
-export { RatePlan, RoomType } from "./models/property";
+export { Currency, RatePlan, RoomType } from "./models/property";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+export { BookingService } from "./services/booking.service";
 export { OpenSidebarEvent, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
@@ -349,6 +351,10 @@ export namespace Components {
     }
     interface IrBookingExtraNote {
         "booking": Booking;
+    }
+    interface IrBookingGuarantee {
+        "booking": Booking;
+        "bookingService": BookingService;
     }
     interface IrBookingHeader {
         "booking": Booking;
@@ -1418,6 +1424,15 @@ export namespace Components {
         "propertyid": string;
         "ticket": string;
     }
+    interface IrPaymentSummary {
+        "balance": number;
+        "collected": number;
+        "currency": Currency;
+        "totalCost": number;
+    }
+    interface IrPaymentsFolio {
+        "payments": IPayment[];
+    }
     interface IrPhoneInput {
         /**
           * Country list, used to populate prefix and dropdown. If not provided, fetched from the booking service.
@@ -2355,6 +2370,10 @@ export interface IrPaymentOptionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPaymentOptionElement;
 }
+export interface IrPaymentsFolioCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPaymentsFolioElement;
+}
 export interface IrPhoneInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPhoneInputElement;
@@ -3006,6 +3025,12 @@ declare global {
     var HTMLIrBookingExtraNoteElement: {
         prototype: HTMLIrBookingExtraNoteElement;
         new (): HTMLIrBookingExtraNoteElement;
+    };
+    interface HTMLIrBookingGuaranteeElement extends Components.IrBookingGuarantee, HTMLStencilElement {
+    }
+    var HTMLIrBookingGuaranteeElement: {
+        prototype: HTMLIrBookingGuaranteeElement;
+        new (): HTMLIrBookingGuaranteeElement;
     };
     interface HTMLIrBookingHeaderElementEventMap {
         "toast": IToast;
@@ -3924,6 +3949,31 @@ declare global {
         prototype: HTMLIrPaymentOptionElement;
         new (): HTMLIrPaymentOptionElement;
     };
+    interface HTMLIrPaymentSummaryElement extends Components.IrPaymentSummary, HTMLStencilElement {
+    }
+    var HTMLIrPaymentSummaryElement: {
+        prototype: HTMLIrPaymentSummaryElement;
+        new (): HTMLIrPaymentSummaryElement;
+    };
+    interface HTMLIrPaymentsFolioElementEventMap {
+        "addPayment": void;
+        "editPayment": IPayment;
+        "deletePayment": IPayment;
+    }
+    interface HTMLIrPaymentsFolioElement extends Components.IrPaymentsFolio, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPaymentsFolioElementEventMap>(type: K, listener: (this: HTMLIrPaymentsFolioElement, ev: IrPaymentsFolioCustomEvent<HTMLIrPaymentsFolioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPaymentsFolioElementEventMap>(type: K, listener: (this: HTMLIrPaymentsFolioElement, ev: IrPaymentsFolioCustomEvent<HTMLIrPaymentsFolioElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPaymentsFolioElement: {
+        prototype: HTMLIrPaymentsFolioElement;
+        new (): HTMLIrPaymentsFolioElement;
+    };
     interface HTMLIrPhoneInputElementEventMap {
         "textChange": { phone_prefix: string; mobile: string };
     }
@@ -4517,6 +4567,7 @@ declare global {
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
+        "ir-booking-guarantee": HTMLIrBookingGuaranteeElement;
         "ir-booking-header": HTMLIrBookingHeaderElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
@@ -4581,6 +4632,8 @@ declare global {
         "ir-payment-folio": HTMLIrPaymentFolioElement;
         "ir-payment-item": HTMLIrPaymentItemElement;
         "ir-payment-option": HTMLIrPaymentOptionElement;
+        "ir-payment-summary": HTMLIrPaymentSummaryElement;
+        "ir-payments-folio": HTMLIrPaymentsFolioElement;
         "ir-phone-input": HTMLIrPhoneInputElement;
         "ir-pickup": HTMLIrPickupElement;
         "ir-pickup-view": HTMLIrPickupViewElement;
@@ -4981,6 +5034,10 @@ declare namespace LocalJSX {
         "booking"?: Booking;
         "onCloseModal"?: (event: IrBookingExtraNoteCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrBookingExtraNoteCustomEvent<Booking | null>) => void;
+    }
+    interface IrBookingGuarantee {
+        "booking"?: Booking;
+        "bookingService"?: BookingService;
     }
     interface IrBookingHeader {
         "booking"?: Booking;
@@ -6192,6 +6249,18 @@ declare namespace LocalJSX {
         "propertyid"?: string;
         "ticket"?: string;
     }
+    interface IrPaymentSummary {
+        "balance"?: number;
+        "collected"?: number;
+        "currency"?: Currency;
+        "totalCost"?: number;
+    }
+    interface IrPaymentsFolio {
+        "onAddPayment"?: (event: IrPaymentsFolioCustomEvent<void>) => void;
+        "onDeletePayment"?: (event: IrPaymentsFolioCustomEvent<IPayment>) => void;
+        "onEditPayment"?: (event: IrPaymentsFolioCustomEvent<IPayment>) => void;
+        "payments"?: IPayment[];
+    }
     interface IrPhoneInput {
         /**
           * Country list, used to populate prefix and dropdown. If not provided, fetched from the booking service.
@@ -6949,6 +7018,7 @@ declare namespace LocalJSX {
         "ir-booking": IrBooking;
         "ir-booking-details": IrBookingDetails;
         "ir-booking-extra-note": IrBookingExtraNote;
+        "ir-booking-guarantee": IrBookingGuarantee;
         "ir-booking-header": IrBookingHeader;
         "ir-booking-listing": IrBookingListing;
         "ir-booking-printing": IrBookingPrinting;
@@ -7013,6 +7083,8 @@ declare namespace LocalJSX {
         "ir-payment-folio": IrPaymentFolio;
         "ir-payment-item": IrPaymentItem;
         "ir-payment-option": IrPaymentOption;
+        "ir-payment-summary": IrPaymentSummary;
+        "ir-payments-folio": IrPaymentsFolio;
         "ir-phone-input": IrPhoneInput;
         "ir-pickup": IrPickup;
         "ir-pickup-view": IrPickupView;
@@ -7092,6 +7164,7 @@ declare module "@stencil/core" {
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
+            "ir-booking-guarantee": LocalJSX.IrBookingGuarantee & JSXBase.HTMLAttributes<HTMLIrBookingGuaranteeElement>;
             "ir-booking-header": LocalJSX.IrBookingHeader & JSXBase.HTMLAttributes<HTMLIrBookingHeaderElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;
@@ -7156,6 +7229,8 @@ declare module "@stencil/core" {
             "ir-payment-folio": LocalJSX.IrPaymentFolio & JSXBase.HTMLAttributes<HTMLIrPaymentFolioElement>;
             "ir-payment-item": LocalJSX.IrPaymentItem & JSXBase.HTMLAttributes<HTMLIrPaymentItemElement>;
             "ir-payment-option": LocalJSX.IrPaymentOption & JSXBase.HTMLAttributes<HTMLIrPaymentOptionElement>;
+            "ir-payment-summary": LocalJSX.IrPaymentSummary & JSXBase.HTMLAttributes<HTMLIrPaymentSummaryElement>;
+            "ir-payments-folio": LocalJSX.IrPaymentsFolio & JSXBase.HTMLAttributes<HTMLIrPaymentsFolioElement>;
             "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
             "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;
