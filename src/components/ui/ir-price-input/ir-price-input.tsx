@@ -192,7 +192,7 @@ export class IrPriceInput {
               ${this.hasSpecialClass('ir-bl-none') ? 'ir-bl-none' : ''} 
               `}
             >
-              <label class={'p-0 m-0 '} htmlFor={this.id}>
+              <label class={'p-0 m-0'} htmlFor={this.id}>
                 {this.label}
               </label>
             </span>

@@ -3,7 +3,6 @@ import { Component, Event, EventEmitter, Prop, State, Watch, h } from '@stencil/
 import moment from 'moment';
 import { z, ZodError } from 'zod';
 export type TFolioData = {
-  arrival_time: string;
   arrival_date: string;
   amount: number;
   reference?: string;
@@ -15,7 +14,11 @@ export type TFolioData = {
   scoped: true,
 })
 export class IrPaymentFolio {
-  @Prop() payment: TFolioData;
+  @Prop() payment: TFolioData = {
+    arrival_date: moment().format('YYYY-MM-DD'),
+    amount: 0,
+    selected_option: undefined,
+  };
 
   @State() isLoading: boolean;
   @State() errors: any;
@@ -108,10 +111,14 @@ export class IrPaymentFolio {
             {/*Date Picker */}
             <div class="form-group  mb-0 flex-grow-1">
               <div class="input-group row m-0 flex-grow-1">
-                <div class={`input-group-prepend col-4 p-0 text-dark border-0`}>
+                <div class={`input-group-prepend col-3 p-0 text-dark border-0`}>
                   <label class={`input-group-text flex-grow-1 text-dark border-theme `}>Date</label>
                 </div>
                 <div class="form-control  form-control-md col-10 flex-grow-1 d-flex align-items-center px-0 mx-0" style={{ border: '0' }}>
+                  <style>
+                    {`.ir-date-picker-trigger{
+                    width:100%;}`}
+                  </style>
                   <ir-date-picker
                     data-testid="pickup_arrival_date"
                     date={this.folioData?.arrival_date}
@@ -137,10 +144,16 @@ export class IrPaymentFolio {
             </div>
           </div>
           <div>
+            <style>
+              {`.price-label{
+              width:133px !important;
+              }`}
+            </style>
             <ir-price-input
               autoValidate={this.autoValidate}
               zod={this.folioSchema.pick({ amount: true })}
               label="Amount"
+              labelStyle={'price-label'}
               error={this.errors?.amount && !this.folioData?.amount}
               value={this.folioData?.amount?.toString()}
               currency={calendar_data.currency.symbol}
@@ -179,7 +192,7 @@ export class IrPaymentFolio {
               inputContainerStyle={{
                 margin: '0',
               }}
-              labelWidth={4}
+              labelWidth={3}
             ></ir-input-text>
           </div>
         </section>

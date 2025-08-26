@@ -43,14 +43,14 @@ export class IrPaymentDetails {
 
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
-  private paymentBackground = 'white';
+  // private paymentBackground = 'white';
 
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
     this.newTableRow = true;
     this.itemToBeAdded = { ...this.itemToBeAdded, amount: value.amount, date: value.due_on };
-    this.paymentBackground = 'rgba(250, 253, 174)';
+    // this.paymentBackground = 'rgba(250, 253, 174)';
   }
   async componentWillLoad() {
     try {
@@ -73,7 +73,7 @@ export class IrPaymentDetails {
       designation: '',
       reference: '',
     };
-    this.paymentBackground = 'white';
+    // this.paymentBackground = 'white';
   }
 
   async _processPaymentSave() {
@@ -95,7 +95,7 @@ export class IrPaymentDetails {
   }
 
   async _handleSave() {
-    this.paymentBackground = 'white';
+    // this.paymentBackground = 'white';
     try {
       await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
       this.initializeItemToBeAdded();
@@ -106,7 +106,7 @@ export class IrPaymentDetails {
     }
   }
   handlePaymentInputChange(key: keyof IPayment, value: any, event?: CustomEvent) {
-    this.paymentBackground = 'white';
+    // this.paymentBackground = 'white';
     if (key === 'amount') {
       if (!isNaN(value) || value === '') {
         if (value === '') {
@@ -139,7 +139,7 @@ export class IrPaymentDetails {
     }
   }
   async handleConfirmModal(e: CustomEvent) {
-    this.paymentBackground = 'white';
+    // this.paymentBackground = 'white';
     e.stopImmediatePropagation();
     e.stopPropagation();
     if (this.modal_mode === 'delete') {
@@ -156,7 +156,7 @@ export class IrPaymentDetails {
     e.stopImmediatePropagation();
     e.stopPropagation();
     try {
-      this.paymentBackground = 'white';
+      // this.paymentBackground = 'white';
       if (this.modal_mode === 'save') {
         this.initializeItemToBeAdded();
       }
@@ -426,16 +426,10 @@ export class IrPaymentDetails {
               {locales.entries.Lcz_TotalCost}: <span>{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.gross_cost)}</span>
             </div>
           )}
-          {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
           <div class=" h4">
             {locales.entries.Lcz_Balance}:{' '}
             <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
           </div>
-          {/* <div class=" h4">
-            {locales.entries.Lcz_DueBalance}:{' '}
-            <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
-          </div> */}
-          {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
           <div class="mb-2 h4">
             {locales.entries.Lcz_Collected}:{' '}
             <span class="">
@@ -447,118 +441,76 @@ export class IrPaymentDetails {
           </div>
 
           {this.bookingGuarantee()}
-          {/* <div class="mt-2">
-            <div>
-              {this.bookingDetails.financial?.due_dates?.length > 0 && (
-                <Fragment>
-                  <div class="d-flex align-items-center">
-                    <strong class="mr-1">{locales.entries.Lcz_PaymentDueDates}</strong>
-                    <ir-button
-                      id="drawer-icon"
-                      data-toggle="collapse"
-                      data-target={`.roomName`}
-                      aria-expanded={this.collapsedPayment ? 'true' : 'false'}
-                      aria-controls="myCollapse"
-                      variant="icon"
-                      icon_name={this.collapsedPayment ? 'closed_eye' : 'open_eye'}
-                      onClickHandler={() => {
-                        this.collapsedPayment = !this.collapsedPayment;
-                      }}
-                      style={{ '--icon-size': '1.5rem' }}
-                    ></ir-button>
-                  </div>
-
-                  <table>{this.bookingDetails.financial.due_dates?.map(item => this._renderDueDate(item))}</table>
-                </Fragment>
-              )}
-            </div>
-          </div> */}
-          {/* TODO:IMPLEMENT THIS ON BOOKING ACTIONS */}
           {this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.bookingDetails.is_direct && (
             <div class="payment_action_beta_container">
               <p class="beta">Beta</p>
               <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails}></ir-payment-actions>
             </div>
           )}
-          <div class="mt-2 d-flex  flex-column rounded payment-container">
-            <div class="d-flex align-items-center justify-content-between">
-              <span class={'font-medium'}>{locales.entries.Lcz_Payments} history</span>
-              <ir-button
-                id="add-payment"
-                variant="icon"
-                icon_name="square_plus"
-                style={{ '--icon-size': '1.5rem' }}
-                onClickHandler={() => {
-                  // this.newTableRow = true;
-                  this.openSidebar.emit({
-                    type: 'payment-folio',
-                    payload: null,
-                  });
-                }}
-              ></ir-button>
-            </div>
-            {/* <table class="mt-1" style={{ backgroundColor: this.paymentBackground }}>
-              <thead>
-                <tr>
-                  <th class={'border border-light border-bottom-0 text-center payment_date'}>{locales.entries.Lcz_Dates}</th>
-                  <th class={'border border-light border-bottom-0 text-center w-60'}>{locales.entries.Lcz_Amount}</th>
-                  <th class={'border border-light border-bottom-0 text-center designation'}>{locales.entries.Lcz_Designation}</th>
-                  <th class={'border border-light border-bottom-0 text-center action_icons'}>
-                    <span class={'sr-only'}>payment actions</span>
-                   
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.bookingDetails.financial.payments?.map((item: any) => this._renderTableRow(item))}
-                {this.newTableRow ? this._renderTableRow(null, 'add') : null}
-              </tbody>
-            </table> */}
-            <div class="mt-1 payments-container">
-              {[
-                { id: 'REQ1000', cause: 'Reservation deposit', amount: 363.02, type: 'Credit', date: '2025-08-12', reference: 'INV-2025-0812-001' },
-                { id: 'REQ1001', cause: 'Housekeeping fee', amount: 355.45, type: 'Debit', date: '2025-08-16' },
-                { id: 'REQ1002', cause: 'Mini-bar', amount: 360.49, type: 'Debit', date: '2025-08-08', reference: 'RM120-MB-8842' },
-                { id: 'REQ1003', cause: 'Refund – canceled tour', amount: 294.34, type: 'Credit', date: '2025-08-16' },
-                { id: 'REQ1004', cause: 'Late checkout', amount: 80.97, type: 'Credit', date: '2025-08-04', reference: 'CHKO-2025-0804' },
-                { id: 'REQ1005', cause: 'Airport pickup', amount: 346.6, type: 'Credit', date: '2025-08-17' },
-                { id: 'REQ1006', cause: 'Room service', amount: 430.52, type: 'Credit', date: '2025-08-05', reference: 'RSV-7421' },
-                { id: 'REQ1007', cause: 'City tax', amount: 89.39, type: 'Credit', date: '2025-08-09' },
-                { id: 'REQ1008', cause: 'Laundry', amount: 49.93, type: 'Credit', date: '2025-07-30', reference: 'LND-20541' },
-                { id: 'REQ1009', cause: 'Spa treatment', amount: 469.32, type: 'Credit', date: '2025-08-13' },
-              ].map(row => (
-                <div key={row.id} class={'payment-item'}>
-                  <div class="payment-body">
-                    <div class="payment-fields">
-                      <p class="text-muted">{row.date}</p>
-                      <p>
-                        <b>{row.cause}</b>
-                      </p>
-                    </div>
-                    {row.reference && (
-                      <p class="payment-reference text-muted">
-                        {/* <b>Ref: </b> */}
-                        {row?.reference}
-                      </p>
-                    )}
-                  </div>
+        </div>
+      </div>,
+      <div class=" mt-1">
+        <div class="d-flex  flex-column rounded payment-container">
+          <div class="d-flex align-items-center justify-content-between">
+            <p class={'font-size-large p-0 m-0 '}>Payment folio</p>
+            <ir-button
+              id="add-payment"
+              variant="icon"
+              icon_name="square_plus"
+              style={{ '--icon-size': '1.5rem' }}
+              onClickHandler={() => {
+                // this.newTableRow = true;
+                this.openSidebar.emit({
+                  type: 'payment-folio',
+                  payload: null,
+                });
+              }}
+            ></ir-button>
+          </div>
 
-                  <div class="d-flex align-items-center justify-content-between" style={{ gap: '0.5rem' }}>
-                    <p class={`payment-amount ${row.type === 'Credit' ? 'is-credit' : 'is-debit'}`}>
-                      {row.type === 'Credit' ? '+' : '-'}US$ {row.amount}
+          <div class="mt-1 card p-1 payments-container">
+            {[
+              { id: 'REQ1000', cause: 'Reservation deposit', amount: 363.02, type: 'Credit', date: '2025-08-12', reference: 'INV-2025-0812-001' },
+              { id: 'REQ1001', cause: 'Housekeeping fee', amount: 355.45, type: 'Debit', date: '2025-08-16' },
+              { id: 'REQ1002', cause: 'Mini-bar', amount: 360.49, type: 'Debit', date: '2025-08-08', reference: 'RM120-MB-8842' },
+              { id: 'REQ1003', cause: 'Refund – canceled tour', amount: 294.34, type: 'Credit', date: '2025-08-16' },
+              { id: 'REQ1004', cause: 'Late checkout', amount: 80.97, type: 'Credit', date: '2025-08-04', reference: 'CHKO-2025-0804' },
+              { id: 'REQ1005', cause: 'Airport pickup', amount: 346.6, type: 'Credit', date: '2025-08-17' },
+              { id: 'REQ1006', cause: 'Room service', amount: 430.52, type: 'Credit', date: '2025-08-05', reference: 'RSV-7421' },
+              { id: 'REQ1007', cause: 'City tax', amount: 89.39, type: 'Credit', date: '2025-08-09' },
+              { id: 'REQ1008', cause: 'Laundry', amount: 49.93, type: 'Credit', date: '2025-07-30', reference: 'LND-20541' },
+              { id: 'REQ1009', cause: 'Spa treatment', amount: 469.32, type: 'Credit', date: '2025-08-13' },
+            ].map(row => (
+              <div key={row.id} class={'payment-item'}>
+                <div class="payment-body">
+                  <div class="payment-fields">
+                    <p class="text-muted">{row.date}</p>
+                    <p>
+                      <b>{row.cause}</b>
                     </p>
-                    <div class="payment-actions">
-                      <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary}></ir-button>
-                      <ir-button variant="icon" style={colorVariants.danger} icon_name="trash"></ir-button>
-                    </div>
+                  </div>
+                  {row.reference && (
+                    <p class="payment-reference text-muted">
+                      {/* <b>Ref: </b> */}
+                      {row?.reference}
+                    </p>
+                  )}
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between" style={{ gap: '0.5rem' }}>
+                  <p class={`payment-amount ${row.type === 'Credit' ? 'is-credit' : 'is-debit'}`}>
+                    {row.type === 'Credit' ? '+' : '-'}US$ {row.amount}
+                  </p>
+                  <div class="payment-actions">
+                    <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary}></ir-button>
+                    <ir-button variant="icon" style={colorVariants.danger} icon_name="trash"></ir-button>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>,
-
       <ir-modal
         item={this.toBeDeletedItem}
         class={'delete-record-modal'}
