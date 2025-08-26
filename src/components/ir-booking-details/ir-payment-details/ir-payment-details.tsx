@@ -1,17 +1,145 @@
-import { Component, h, Prop, State, Event, EventEmitter, Fragment, Watch, Listen } from '@stencil/core';
-import { _formatDate } from '../functions';
-import { Booking, IDueDate, IPayment } from '@/models/booking.dto';
+import { Component, h, Prop, State, Event, EventEmitter, Watch, Listen } from '@stencil/core';
+import { Booking, IPayment } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import moment from 'moment';
 import { PaymentService, IPaymentAction } from '@/services/payment.service';
-import { colorVariants } from '@/components/ui/ir-icons/icons';
-import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { formatAmount, toFloat } from '@/utils/utils';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';
 import calendar_data from '@/stores/calendar-data';
-import { OpenSidebarEvent } from '../types';
-
+import { PaymentSidebarEvent } from '../types';
+const payments = [
+  {
+    id: 1,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Reservation deposit',
+    amount: 363.02,
+    type: 'credit',
+    date: '2025-08-12',
+    reference: 'INV-2025-0812-001',
+  },
+  {
+    id: 2,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Housekeeping fee',
+    amount: 355.45,
+    type: 'debit',
+    date: '2025-08-16',
+    reference: null,
+  },
+  {
+    id: 3,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Mini-bar',
+    amount: 360.49,
+    type: 'debit',
+    date: '2025-08-08',
+    reference: 'RM120-MB-8842',
+  },
+  {
+    id: 4,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Refund – canceled tour',
+    amount: 294.34,
+    type: 'credit',
+    date: '2025-08-16',
+    reference: null,
+  },
+  {
+    id: 5,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Late checkout',
+    amount: 80.97,
+    type: 'credit',
+    date: '2025-08-04',
+    reference: 'CHKO-2025-0804',
+  },
+  {
+    id: 6,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Airport pickup',
+    amount: 346.6,
+    type: 'credit',
+    date: '2025-08-17',
+    reference: null,
+  },
+  {
+    id: 7,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Room service',
+    amount: 430.52,
+    type: 'credit',
+    date: '2025-08-05',
+    reference: 'RSV-7421',
+  },
+  {
+    id: 8,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'City tax',
+    amount: 89.39,
+    type: 'credit',
+    date: '2025-08-09',
+    reference: null,
+  },
+  {
+    id: 9,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Laundry',
+    amount: 49.93,
+    type: 'credit',
+    date: '2025-07-30',
+    reference: 'LND-20541',
+  },
+  {
+    id: 10,
+    currency: {
+      id: 1,
+      symbol: '$US',
+      code: '',
+    },
+    designation: 'Spa treatment',
+    amount: 469.32,
+    type: 'credit',
+    date: '2025-08-13',
+    reference: null,
+  },
+] as IPayment[];
 @Component({
   styleUrl: 'ir-payment-details.css',
   tag: 'ir-payment-details',
@@ -37,20 +165,29 @@ export class IrPaymentDetails {
   @State() itemToBeAdded: IPayment;
 
   @Event({ bubbles: true }) resetBookingEvt: EventEmitter<null>;
-  @Event({ bubbles: true }) resetExposedCancelationDueAmount: EventEmitter<null>;
+  @Event({ bubbles: true }) resetExposedCancellationDueAmount: EventEmitter<null>;
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
-  @Event({ bubbles: true }) openSidebar: EventEmitter<OpenSidebarEvent<unknown>>;
+  @Event({ bubbles: true }) openSidebar: EventEmitter<PaymentSidebarEvent>;
 
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
-  // private paymentBackground = 'white';
+
+  @Watch('bookingDetails')
+  handleBookingDetails() {
+    if (this.newTableRow) {
+      this.newTableRow = false;
+    }
+  }
 
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
-    this.newTableRow = true;
-    this.itemToBeAdded = { ...this.itemToBeAdded, amount: value.amount, date: value.due_on };
-    // this.paymentBackground = 'rgba(250, 253, 174)';
+    this.openSidebar.emit({
+      type: 'payment-folio',
+      payload: { ...value, date: value.due_on, id: -1, amount: value.amount },
+    });
+    // this.newTableRow = true;
+    // this.itemToBeAdded = { ...this.itemToBeAdded, amount: value.amount, date: value.due_on };
   }
   async componentWillLoad() {
     try {
@@ -64,7 +201,8 @@ export class IrPaymentDetails {
       }
     }
   }
-  initializeItemToBeAdded() {
+
+  private initializeItemToBeAdded() {
     this.itemToBeAdded = {
       id: -1,
       date: moment().format('YYYY-MM-DD'),
@@ -73,72 +211,34 @@ export class IrPaymentDetails {
       designation: '',
       reference: '',
     };
-    // this.paymentBackground = 'white';
-  }
-
-  async _processPaymentSave() {
-    if (this.itemToBeAdded.amount === null) {
-      this.toast.emit({
-        type: 'error',
-        title: locales.entries.Lcz_EnterAmount,
-        description: '',
-        position: 'top-right',
-      });
-      return;
-    }
-    if (Number(this.itemToBeAdded.amount) > Number(this.bookingDetails.financial.due_amount)) {
-      this.modal_mode = 'save';
-      this.openModal();
-      return;
-    }
-    this._handleSave();
   }
 
   async _handleSave() {
-    // this.paymentBackground = 'white';
     try {
       await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
       this.initializeItemToBeAdded();
       this.resetBookingEvt.emit(null);
-      this.resetExposedCancelationDueAmount.emit(null);
+      this.resetExposedCancellationDueAmount.emit(null);
     } catch (error) {
       console.log(error);
     }
   }
-  handlePaymentInputChange(key: keyof IPayment, value: any, event?: CustomEvent) {
-    // this.paymentBackground = 'white';
-    if (key === 'amount') {
-      if (!isNaN(value) || value === '') {
-        if (value === '') {
-          this.itemToBeAdded = { ...this.itemToBeAdded, [key]: null };
-        } else {
-          this.itemToBeAdded = { ...this.itemToBeAdded, [key]: parseFloat(value) };
-        }
-      } else if (event && event.target) {
-        let inputElement = event.target as HTMLInputElement;
-        let inputValue = inputElement.value;
-        inputValue = inputValue.replace(/[^\d-]|(?<!^)-/g, '');
-        inputElement.value = inputValue;
-      }
-    } else {
-      this.itemToBeAdded = { ...this.itemToBeAdded, [key]: value };
-    }
-  }
-  async cancelPayment() {
+
+  private async cancelPayment() {
     try {
       await this.paymentService.CancelPayment(this.toBeDeletedItem.id);
       const newPaymentArray = this.bookingDetails.financial.payments.filter((item: IPayment) => item.id !== this.toBeDeletedItem.id);
       this.bookingDetails = { ...this.bookingDetails, financial: { ...this.bookingDetails.financial, payments: newPaymentArray } };
       this.confirmModal = !this.confirmModal;
       this.resetBookingEvt.emit(null);
-      this.resetExposedCancelationDueAmount.emit(null);
+      this.resetExposedCancellationDueAmount.emit(null);
       this.toBeDeletedItem = null;
       this.modal_mode = null;
     } catch (error) {
       console.log(error);
     }
   }
-  async handleConfirmModal(e: CustomEvent) {
+  private async handleConfirmModal(e: CustomEvent) {
     // this.paymentBackground = 'white';
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -148,11 +248,12 @@ export class IrPaymentDetails {
       await this._handleSave();
     }
   }
-  openModal() {
+  private openModal() {
     const modal: any = document.querySelector('.delete-record-modal');
     modal.openModal();
   }
-  async handleCancelModal(e: CustomEvent) {
+
+  private async handleCancelModal(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     try {
@@ -164,134 +265,7 @@ export class IrPaymentDetails {
       console.log(error);
     }
   }
-  @Watch('bookingDetails')
-  handleBookingDetails() {
-    if (this.newTableRow) {
-      this.newTableRow = false;
-    }
-  }
-  handleDateChange(
-    e: CustomEvent<{
-      start: moment.Moment;
-      end: moment.Moment;
-    }>,
-  ) {
-    this.handlePaymentInputChange('date', e.detail.end.format('YYYY-MM-DD'));
-  }
-  _renderTableRow(item: IPayment, rowMode: 'add' | 'normal' = 'normal') {
-    return (
-      <Fragment>
-        <tr>
-          <td class={'border payments-height border-light border-bottom-0 text-center'}>
-            {rowMode === 'normal' ? (
-              <span class="sm-padding-left">{_formatDate(item.date)}</span>
-            ) : (
-              <ir-date-picker
-                date={this.itemToBeAdded?.date ? new Date(this.itemToBeAdded.date) : new Date()}
-                minDate={moment().add(-2, 'months').startOf('month').format('YYYY-MM-DD')}
-                // singleDatePicker
-                // autoApply
-                class="d-flex justify-content-center"
-                onDateChanged={this.handleDateChange.bind(this)}
-              >
-                <input
-                  type="text"
-                  slot="trigger"
-                  value={_formatDate(this.itemToBeAdded?.date)}
-                  class="text-center  form-control flex-grow-1 w-100"
-                  style={{ border: '0', marginLeft: 'auto', marginRight: 'auto', width: '100%' }}
-                ></input>
-              </ir-date-picker>
-            )}
-          </td>
-          <td class={'border payments-height border-light border-bottom-0 text-center '}>
-            {rowMode === 'normal' ? (
-              <span class="sm-padding-right">{formatAmount(this.bookingDetails.currency.symbol, item.amount)}</span>
-            ) : (
-              // <input
-              //   type="text"
-              //   class="border-0 text-center form-control py-0 m-0 w-100"
-              //   value={this.itemToBeAdded.amount}
-              //   onBlur={e => {
-              //     (e.target as HTMLInputElement).value = Number(this.itemToBeAdded.amount).toFixed(2);
-              //   }}
-              //   onInput={event => this.handlePaymentInputChange('amount', +(event.target as HTMLInputElement).value, event)}
-              // ></input>
-              <ir-price-input
-                value={this.itemToBeAdded.amount?.toString()}
-                onTextChange={e => this.handlePaymentInputChange('amount', Number(e.detail), e)}
-                inputStyle="border-0 rounded-0 text-center py-0 m-0 w-100"
-              ></ir-price-input>
-            )}
-          </td>
-          <td class={'border payments-height border-light border-bottom-0 text-center'}>
-            {rowMode === 'normal' ? (
-              <span class="sm-padding-left">{item.designation}</span>
-            ) : (
-              <input
-                class="border-0 w-100 form-control py-0 m-0"
-                onInput={event => this.handlePaymentInputChange('designation', (event.target as HTMLInputElement).value)}
-                type="text"
-              ></input>
-            )}
-          </td>
-          <td rowSpan={2} class={'border payments-height border-light border-bottom-0 text-center'}>
-            <div class={'payment-actions'}>
-              {rowMode === 'add' && (
-                <ir-button
-                  variant="icon"
-                  icon_name="save"
-                  style={colorVariants.secondary}
-                  isLoading={rowMode === 'add' && isRequestPending('/Do_Payment')}
-                  class={'m-0'}
-                  onClickHandler={() => {
-                    this._processPaymentSave();
-                  }}
-                ></ir-button>
-              )}
-              <ir-button
-                variant="icon"
-                icon_name="trash"
-                style={colorVariants.danger}
-                isLoading={this.toBeDeletedItem?.id === item?.id && isRequestPending('/Cancel_Payment')}
-                onClickHandler={
-                  rowMode === 'add'
-                    ? () => {
-                        this.newTableRow = false;
-                        this.initializeItemToBeAdded();
-                      }
-                    : () => {
-                        this.modal_mode = 'delete';
-                        this.toBeDeletedItem = item;
-                        this.openModal();
-                      }
-                }
-              ></ir-button>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td colSpan={3} class={'border border-light payments-height border-bottom-0 text-center'}>
-            {rowMode === 'normal' ? (
-              <span class="sm-padding-left ">{item.reference}</span>
-            ) : (
-              <input
-                class="border-0 w-100  form-control py-0 m-0"
-                onKeyPress={event => {
-                  if (event.key === 'Enter') {
-                    this.newTableRow = false;
-                    this._handleSave();
-                  }
-                }}
-                onInput={event => this.handlePaymentInputChange('reference', (event.target as HTMLInputElement).value)}
-                type="text"
-              ></input>
-            )}
-          </td>
-        </tr>
-      </Fragment>
-    );
-  }
+
   private formatCurrency(amount: number, currency: string, locale: string = 'en-US'): string {
     if (!currency) {
       return;
@@ -306,6 +280,7 @@ export class IrPaymentDetails {
     }
     return;
   }
+
   private bookingGuarantee() {
     const paymentMethod = this.bookingDetails.is_direct ? this.getPaymentMethod() : null;
     if (this.bookingDetails.is_direct && !paymentMethod && !this.bookingDetails.guest.cci) {
@@ -366,9 +341,6 @@ export class IrPaymentDetails {
             ></ir-label>
             <ir-label content={this.bookingDetails.ota_guarante?.cardholder_name} labelText={`${locales.entries.Lcz_CardHolderName}:`}></ir-label>
             <ir-label content={this.bookingDetails.ota_guarante?.card_number} labelText={`${locales.entries.Lcz_CardNumber}:`}></ir-label>
-            {/* <ir-label content={this.bookingDetails.ota_guarante?.cvv} labelText="Cvv:"></ir-label> */}
-            {/* <ir-label content={JSON.stringify(this.bookingDetails?.ota_guarante.is_virtual)} labelText="Is card virtual:"></ir-label> */}
-            {/* <ir-label content={this.bookingDetails.ota_guarante?.expiration_date} labelText="Expiration date:"></ir-label> */}
             <ir-label
               content={this.formatCurrency(
                 toFloat(Number(this.bookingDetails.ota_guarante?.meta?.virtual_card_current_balance), Number(this.bookingDetails.ota_guarante?.meta?.virtual_card_decimal_places)),
@@ -383,7 +355,6 @@ export class IrPaymentDetails {
   }
 
   private checkPaymentCode(value: string) {
-    console.log(calendar_data.allowed_payment_methods);
     return calendar_data.allowed_payment_methods?.find(pm => pm.code === value)?.description ?? null;
   }
 
@@ -403,17 +374,6 @@ export class IrPaymentDetails {
     return paymentMethod;
   }
 
-  _renderDueDate(item: IDueDate) {
-    return (
-      <tr>
-        <td class={'pr-1'}>{_formatDate(item.date)}</td>
-        <td class={'pr-1'}>{formatAmount(this.bookingDetails.currency.symbol, item.amount)}</td>
-        <td class={'pr-1'}>{item.description}</td>
-        <td class="collapse font-size-small roomName">{item.room}</td>
-      </tr>
-    );
-  }
-
   render() {
     if (!this.bookingDetails.financial) {
       return null;
@@ -426,12 +386,12 @@ export class IrPaymentDetails {
               {locales.entries.Lcz_TotalCost}: <span>{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.gross_cost)}</span>
             </div>
           )}
-          <div class=" h4">
-            {locales.entries.Lcz_Balance}:{' '}
+          <div class="h4 d-flex align-items-center justify-content-between">
+            <span>{locales.entries.Lcz_Balance}: </span>
             <span class="danger font-weight-bold">{formatAmount(this.bookingDetails.currency.symbol, this.bookingDetails.financial.due_amount)}</span>
           </div>
-          <div class="mb-2 h4">
-            {locales.entries.Lcz_Collected}:{' '}
+          <div class="mb-2 h4 d-flex align-items-center justify-content-between">
+            <span>{locales.entries.Lcz_Collected}: </span>
             <span class="">
               {formatAmount(
                 this.bookingDetails.currency.symbol,
@@ -442,8 +402,7 @@ export class IrPaymentDetails {
 
           {this.bookingGuarantee()}
           {this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.bookingDetails.is_direct && (
-            <div class="payment_action_beta_container">
-              <p class="beta">Beta</p>
+            <div>
               <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails}></ir-payment-actions>
             </div>
           )}
@@ -469,45 +428,24 @@ export class IrPaymentDetails {
           </div>
 
           <div class="mt-1 card p-1 payments-container">
-            {[
-              { id: 'REQ1000', cause: 'Reservation deposit', amount: 363.02, type: 'Credit', date: '2025-08-12', reference: 'INV-2025-0812-001' },
-              { id: 'REQ1001', cause: 'Housekeeping fee', amount: 355.45, type: 'Debit', date: '2025-08-16' },
-              { id: 'REQ1002', cause: 'Mini-bar', amount: 360.49, type: 'Debit', date: '2025-08-08', reference: 'RM120-MB-8842' },
-              { id: 'REQ1003', cause: 'Refund – canceled tour', amount: 294.34, type: 'Credit', date: '2025-08-16' },
-              { id: 'REQ1004', cause: 'Late checkout', amount: 80.97, type: 'Credit', date: '2025-08-04', reference: 'CHKO-2025-0804' },
-              { id: 'REQ1005', cause: 'Airport pickup', amount: 346.6, type: 'Credit', date: '2025-08-17' },
-              { id: 'REQ1006', cause: 'Room service', amount: 430.52, type: 'Credit', date: '2025-08-05', reference: 'RSV-7421' },
-              { id: 'REQ1007', cause: 'City tax', amount: 89.39, type: 'Credit', date: '2025-08-09' },
-              { id: 'REQ1008', cause: 'Laundry', amount: 49.93, type: 'Credit', date: '2025-07-30', reference: 'LND-20541' },
-              { id: 'REQ1009', cause: 'Spa treatment', amount: 469.32, type: 'Credit', date: '2025-08-13' },
-            ].map(row => (
-              <div key={row.id} class={'payment-item'}>
-                <div class="payment-body">
-                  <div class="payment-fields">
-                    <p class="text-muted">{row.date}</p>
-                    <p>
-                      <b>{row.cause}</b>
-                    </p>
-                  </div>
-                  {row.reference && (
-                    <p class="payment-reference text-muted">
-                      {/* <b>Ref: </b> */}
-                      {row?.reference}
-                    </p>
-                  )}
-                </div>
-
-                <div class="d-flex align-items-center justify-content-between" style={{ gap: '0.5rem' }}>
-                  <p class={`payment-amount ${row.type === 'Credit' ? 'is-credit' : 'is-debit'}`}>
-                    {row.type === 'Credit' ? '+' : '-'}US$ {row.amount}
-                  </p>
-                  <div class="payment-actions">
-                    <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary}></ir-button>
-                    <ir-button variant="icon" style={colorVariants.danger} icon_name="trash"></ir-button>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {payments.map((row, index) => [
+              <ir-payment-item
+                onDeletePayment={e => {
+                  this.modal_mode = 'delete';
+                  this.toBeDeletedItem = e.detail;
+                  this.openModal();
+                }}
+                onEditPayment={e => {
+                  this.openSidebar.emit({
+                    type: 'payment-folio',
+                    payload: { ...e.detail },
+                  });
+                }}
+                key={row.id}
+                payment={row}
+              ></ir-payment-item>,
+              index < payments.length - 1 && <hr class={'p-0 m-0'} />,
+            ])}
           </div>
         </div>
       </div>,

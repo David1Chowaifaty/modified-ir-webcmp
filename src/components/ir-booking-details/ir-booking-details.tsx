@@ -168,7 +168,7 @@ export class IrBookingDetails {
     }
   }
 
-  @Listen('resetExposedCancelationDueAmount')
+  @Listen('resetExposedCancellationDueAmount')
   async handleResetExposedCancellationDueAmount(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -379,7 +379,7 @@ export class IrBookingDetails {
           ></ir-room-guests>
         );
       case 'payment-folio':
-        return <ir-payment-folio slot="sidebar-body" onCloseModal={handleClose}></ir-payment-folio>;
+        return <ir-payment-folio slot="sidebar-body" payment={this.sidebarPayload} onCloseModal={handleClose}></ir-payment-folio>;
       default:
         return null;
     }

@@ -18,8 +18,8 @@ import { IrToast } from "./components/ui/ir-toast/ir-toast";
 import { RatePlan, RoomType } from "./models/property";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
-import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
-import { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+import { OpenSidebarEvent, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -35,7 +35,6 @@ import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
-import { TFolioData } from "./components/ir-booking-details/ir-payment-details/ir-payment-folio/ir-payment-folio";
 import { Moment } from "moment";
 import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
@@ -57,8 +56,8 @@ export { IrToast } from "./components/ui/ir-toast/ir-toast";
 export { RatePlan, RoomType } from "./models/property";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
-export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, OtaService, Room, SharedPerson } from "./models/booking.dto";
-export { OpenSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+export { OpenSidebarEvent, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -74,7 +73,6 @@ export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
-export { TFolioData } from "./components/ir-booking-details/ir-payment-details/ir-payment-folio/ir-payment-folio";
 export { Moment } from "moment";
 export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
@@ -1395,6 +1393,9 @@ export namespace Components {
          */
         "password": string;
     }
+    interface IrPaymentAction {
+        "paymentAction": IPaymentAction;
+    }
     interface IrPaymentActions {
         "booking": Booking;
         "paymentAction": IPaymentAction[];
@@ -1404,7 +1405,10 @@ export namespace Components {
         "paymentActions": IPaymentAction[];
     }
     interface IrPaymentFolio {
-        "payment": TFolioData;
+        "payment": IPayment;
+    }
+    interface IrPaymentItem {
+        "payment": IPayment;
     }
     interface IrPaymentOption {
         "defaultStyles": boolean;
@@ -2331,9 +2335,9 @@ export interface IrPasswordValidatorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPasswordValidatorElement;
 }
-export interface IrPaymentActionsCustomEvent<T> extends CustomEvent<T> {
+export interface IrPaymentActionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLIrPaymentActionsElement;
+    target: HTMLIrPaymentActionElement;
 }
 export interface IrPaymentDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2342,6 +2346,10 @@ export interface IrPaymentDetailsCustomEvent<T> extends CustomEvent<T> {
 export interface IrPaymentFolioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPaymentFolioElement;
+}
+export interface IrPaymentItemCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPaymentItemElement;
 }
 export interface IrPaymentOptionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3821,18 +3829,24 @@ declare global {
         prototype: HTMLIrPasswordValidatorElement;
         new (): HTMLIrPasswordValidatorElement;
     };
-    interface HTMLIrPaymentActionsElementEventMap {
+    interface HTMLIrPaymentActionElementEventMap {
         "generatePayment": IPaymentAction;
     }
-    interface HTMLIrPaymentActionsElement extends Components.IrPaymentActions, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIrPaymentActionsElementEventMap>(type: K, listener: (this: HTMLIrPaymentActionsElement, ev: IrPaymentActionsCustomEvent<HTMLIrPaymentActionsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+    interface HTMLIrPaymentActionElement extends Components.IrPaymentAction, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPaymentActionElementEventMap>(type: K, listener: (this: HTMLIrPaymentActionElement, ev: IrPaymentActionCustomEvent<HTMLIrPaymentActionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIrPaymentActionsElementEventMap>(type: K, listener: (this: HTMLIrPaymentActionsElement, ev: IrPaymentActionsCustomEvent<HTMLIrPaymentActionsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPaymentActionElementEventMap>(type: K, listener: (this: HTMLIrPaymentActionElement, ev: IrPaymentActionCustomEvent<HTMLIrPaymentActionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPaymentActionElement: {
+        prototype: HTMLIrPaymentActionElement;
+        new (): HTMLIrPaymentActionElement;
+    };
+    interface HTMLIrPaymentActionsElement extends Components.IrPaymentActions, HTMLStencilElement {
     }
     var HTMLIrPaymentActionsElement: {
         prototype: HTMLIrPaymentActionsElement;
@@ -3840,9 +3854,9 @@ declare global {
     };
     interface HTMLIrPaymentDetailsElementEventMap {
         "resetBookingEvt": null;
-        "resetExposedCancelationDueAmount": null;
+        "resetExposedCancellationDueAmount": null;
         "toast": IToast;
-        "openSidebar": OpenSidebarEvent<unknown>;
+        "openSidebar": PaymentSidebarEvent;
     }
     interface HTMLIrPaymentDetailsElement extends Components.IrPaymentDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentDetailsElementEventMap>(type: K, listener: (this: HTMLIrPaymentDetailsElement, ev: IrPaymentDetailsCustomEvent<HTMLIrPaymentDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3874,6 +3888,24 @@ declare global {
     var HTMLIrPaymentFolioElement: {
         prototype: HTMLIrPaymentFolioElement;
         new (): HTMLIrPaymentFolioElement;
+    };
+    interface HTMLIrPaymentItemElementEventMap {
+        "editPayment": IPayment;
+        "deletePayment": IPayment;
+    }
+    interface HTMLIrPaymentItemElement extends Components.IrPaymentItem, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPaymentItemElementEventMap>(type: K, listener: (this: HTMLIrPaymentItemElement, ev: IrPaymentItemCustomEvent<HTMLIrPaymentItemElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPaymentItemElementEventMap>(type: K, listener: (this: HTMLIrPaymentItemElement, ev: IrPaymentItemCustomEvent<HTMLIrPaymentItemElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPaymentItemElement: {
+        prototype: HTMLIrPaymentItemElement;
+        new (): HTMLIrPaymentItemElement;
     };
     interface HTMLIrPaymentOptionElementEventMap {
         "toast": IToast;
@@ -4543,9 +4575,11 @@ declare global {
         "ir-otp-modal": HTMLIrOtpModalElement;
         "ir-pagination": HTMLIrPaginationElement;
         "ir-password-validator": HTMLIrPasswordValidatorElement;
+        "ir-payment-action": HTMLIrPaymentActionElement;
         "ir-payment-actions": HTMLIrPaymentActionsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
         "ir-payment-folio": HTMLIrPaymentFolioElement;
+        "ir-payment-item": HTMLIrPaymentItemElement;
         "ir-payment-option": HTMLIrPaymentOptionElement;
         "ir-phone-input": HTMLIrPhoneInputElement;
         "ir-pickup": HTMLIrPickupElement;
@@ -6124,22 +6158,30 @@ declare namespace LocalJSX {
          */
         "password"?: string;
     }
+    interface IrPaymentAction {
+        "onGeneratePayment"?: (event: IrPaymentActionCustomEvent<IPaymentAction>) => void;
+        "paymentAction"?: IPaymentAction;
+    }
     interface IrPaymentActions {
         "booking"?: Booking;
-        "onGeneratePayment"?: (event: IrPaymentActionsCustomEvent<IPaymentAction>) => void;
         "paymentAction"?: IPaymentAction[];
     }
     interface IrPaymentDetails {
         "bookingDetails"?: Booking;
-        "onOpenSidebar"?: (event: IrPaymentDetailsCustomEvent<OpenSidebarEvent<unknown>>) => void;
+        "onOpenSidebar"?: (event: IrPaymentDetailsCustomEvent<PaymentSidebarEvent>) => void;
         "onResetBookingEvt"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
-        "onResetExposedCancelationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
+        "onResetExposedCancellationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
         "paymentActions"?: IPaymentAction[];
     }
     interface IrPaymentFolio {
         "onCloseModal"?: (event: IrPaymentFolioCustomEvent<null>) => void;
-        "payment"?: TFolioData;
+        "payment"?: IPayment;
+    }
+    interface IrPaymentItem {
+        "onDeletePayment"?: (event: IrPaymentItemCustomEvent<IPayment>) => void;
+        "onEditPayment"?: (event: IrPaymentItemCustomEvent<IPayment>) => void;
+        "payment"?: IPayment;
     }
     interface IrPaymentOption {
         "defaultStyles"?: boolean;
@@ -6965,9 +7007,11 @@ declare namespace LocalJSX {
         "ir-otp-modal": IrOtpModal;
         "ir-pagination": IrPagination;
         "ir-password-validator": IrPasswordValidator;
+        "ir-payment-action": IrPaymentAction;
         "ir-payment-actions": IrPaymentActions;
         "ir-payment-details": IrPaymentDetails;
         "ir-payment-folio": IrPaymentFolio;
+        "ir-payment-item": IrPaymentItem;
         "ir-payment-option": IrPaymentOption;
         "ir-phone-input": IrPhoneInput;
         "ir-pickup": IrPickup;
@@ -7106,9 +7150,11 @@ declare module "@stencil/core" {
             "ir-otp-modal": LocalJSX.IrOtpModal & JSXBase.HTMLAttributes<HTMLIrOtpModalElement>;
             "ir-pagination": LocalJSX.IrPagination & JSXBase.HTMLAttributes<HTMLIrPaginationElement>;
             "ir-password-validator": LocalJSX.IrPasswordValidator & JSXBase.HTMLAttributes<HTMLIrPasswordValidatorElement>;
+            "ir-payment-action": LocalJSX.IrPaymentAction & JSXBase.HTMLAttributes<HTMLIrPaymentActionElement>;
             "ir-payment-actions": LocalJSX.IrPaymentActions & JSXBase.HTMLAttributes<HTMLIrPaymentActionsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
             "ir-payment-folio": LocalJSX.IrPaymentFolio & JSXBase.HTMLAttributes<HTMLIrPaymentFolioElement>;
+            "ir-payment-item": LocalJSX.IrPaymentItem & JSXBase.HTMLAttributes<HTMLIrPaymentItemElement>;
             "ir-payment-option": LocalJSX.IrPaymentOption & JSXBase.HTMLAttributes<HTMLIrPaymentOptionElement>;
             "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;

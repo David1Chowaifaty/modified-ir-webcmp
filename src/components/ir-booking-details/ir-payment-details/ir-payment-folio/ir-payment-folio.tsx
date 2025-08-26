@@ -2,42 +2,52 @@ import calendar_data from '@/stores/calendar-data';
 import { Component, Event, EventEmitter, Prop, State, Watch, h } from '@stencil/core';
 import moment from 'moment';
 import { z, ZodError } from 'zod';
-export type TFolioData = {
-  arrival_date: string;
-  amount: number;
-  reference?: string;
-  selected_option: any;
-};
+import { IPayment } from '@/models/booking.dto';
+
 @Component({
   tag: 'ir-payment-folio',
   styleUrls: ['ir-payment-folio.css', '../../../../common/sheet.css'],
   scoped: true,
 })
 export class IrPaymentFolio {
-  @Prop() payment: TFolioData = {
-    arrival_date: moment().format('YYYY-MM-DD'),
+  @Prop() payment: IPayment = {
+    date: moment().format('YYYY-MM-DD'),
     amount: 0,
-    selected_option: undefined,
+    designation: undefined,
+    currency: null,
+    reference: null,
+    id: -1,
   };
 
   @State() isLoading: boolean;
   @State() errors: any;
   @State() autoValidate: boolean = false;
-  @State() folioData: TFolioData;
+  @State() folioData: IPayment;
 
   @Event() closeModal: EventEmitter<null>;
 
-  private folioSchema: z.ZodObject<
-    { arrival_date: z.ZodEffects<z.ZodString, string, string>; amount: z.ZodNumber; reference: z.ZodNullable<z.ZodOptional<z.ZodString>>; selected_option: z.ZodString },
-    'strip',
-    z.ZodTypeAny,
-    { arrival_date?: string; amount?: number; reference?: string; selected_option?: string },
-    { arrival_date?: string; amount?: number; reference?: string; selected_option?: string }
-  >;
+  private folioSchema: any;
+  // private async _processPaymentSave() {
+  //   if (this.itemToBeAdded.amount === null) {
+  //     this.toast.emit({
+  //       type: 'error',
+  //       title: locales.entries.Lcz_EnterAmount,
+  //       description: '',
+  //       position: 'top-right',
+  //     });
+  //     return;
+  //   }
+  //   if (Number(this.itemToBeAdded.amount) > Number(this.bookingDetails.financial.due_amount)) {
+  //     this.modal_mode = 'save';
+  //     this.openModal();
+  //     return;
+  //   }
+  //   this._handleSave();
+  // }
 
   private createPickupSchema(minDate: string, maxDate: string) {
     return z.object({
-      arrival_date: z
+      date: z
         .string()
         .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid date format, expected YYYY-MM-DD' })
         .refine(
@@ -47,11 +57,11 @@ export class IrPaymentFolio {
             const max = moment(maxDate, 'YYYY-MM-DD', true);
             return date.isValid() && min.isValid() && max.isValid() && date.isBetween(min, max, undefined, '[]');
           },
-          { message: `arrival_date must be between ${minDate} and ${maxDate}` },
+          { message: `date must be between ${minDate} and ${maxDate}` },
         ),
       amount: z.coerce.number(),
       reference: z.string().optional().nullable(),
-      selected_option: z.string(),
+      designation: z.string(),
     });
   }
 
@@ -63,13 +73,13 @@ export class IrPaymentFolio {
   }
 
   @Watch('payment')
-  handlePaymentChange(newValue: TFolioData, oldValue: TFolioData) {
+  handlePaymentChange(newValue: IPayment, oldValue: IPayment) {
     if (newValue !== oldValue && newValue) {
       this.folioData = { ...newValue };
     }
   }
 
-  private updateFolioData(params: Partial<TFolioData>): void {
+  private updateFolioData(params: Partial<IPayment>): void {
     this.folioData = { ...this.folioData, ...params };
   }
 
@@ -97,6 +107,7 @@ export class IrPaymentFolio {
   }
 
   render() {
+    console.log(this.payment);
     return (
       <form
         class={'sheet-container'}
@@ -120,22 +131,22 @@ export class IrPaymentFolio {
                     width:100%;}`}
                   </style>
                   <ir-date-picker
-                    data-testid="pickup_arrival_date"
-                    date={this.folioData?.arrival_date}
+                    data-testid="pickup_date"
+                    date={this.folioData?.date}
                     // minDate={this.bookingDates.from}
                     // maxDate={this.bookingDates?.to}
                     class="w-100"
                     emitEmptyDate={true}
-                    aria-invalid={this.errors?.arrival_date && !this.folioData?.arrival_date ? 'true' : 'false'}
+                    aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
                     onDateChanged={evt => {
-                      this.updateFolioData({ arrival_date: evt.detail.start?.format('YYYY-MM-DD') });
+                      this.updateFolioData({ date: evt.detail.start?.format('YYYY-MM-DD') });
                     }}
                   >
                     <input
                       type="text"
                       slot="trigger"
-                      value={this.folioData?.arrival_date ? moment(this.folioData?.arrival_date).format('MMM DD, YYYY') : null}
-                      class={`form-control w-100 input-sm ${this.errors?.arrival_date && !this.folioData?.arrival_date ? 'border-danger' : ''} text-center`}
+                      value={this.folioData?.date ? moment(this.folioData?.date).format('MMM DD, YYYY') : null}
+                      class={`form-control w-100 input-sm ${this.errors?.date && !this.folioData?.date ? 'border-danger' : ''} text-center`}
                       style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0', width: '100%' }}
                     ></input>
                   </ir-date-picker>
@@ -162,9 +173,9 @@ export class IrPaymentFolio {
           </div>
           <div>
             <ir-dropdown
-              value={this.folioData?.selected_option}
+              value={this.folioData?.designation}
               onOptionChange={e => {
-                this.updateFolioData({ selected_option: e.detail });
+                this.updateFolioData({ designation: e.detail.toString() });
               }}
             >
               <div slot="trigger" class={'input-group row m-0 '}>
@@ -173,9 +184,9 @@ export class IrPaymentFolio {
                 </div>
                 <button
                   type="button"
-                  class={`form-control d-flex align-items-center cursor-pointer ${this.errors?.selected_option && !this.folioData?.selected_option ? 'border-danger' : ''}`}
+                  class={`form-control d-flex align-items-center cursor-pointer ${this.errors?.designation && !this.folioData?.designation ? 'border-danger' : ''}`}
                 >
-                  {this.folioData?.selected_option ? <span>{this.folioData.selected_option}</span> : <span></span>}
+                  {this.folioData?.designation ? <span>{this.folioData.designation}</span> : <span></span>}
                 </button>
               </div>
               <ir-dropdown-item value="option1">Option 1</ir-dropdown-item>

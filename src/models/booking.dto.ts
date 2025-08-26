@@ -344,6 +344,7 @@ export interface IPayment {
   currency: ICurrency;
   designation: string;
   reference: string;
+  type?: 'debit' | 'credit';
 }
 export interface IDueDate {
   amount: number;
