@@ -60,3 +60,86 @@
   right: 4px;
   margin: 0;
 }
+
+.payment-item {
+  position: relative;
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid gainsboro;
+  padding: 0.5rem 0rem;
+  align-items: center;
+  min-height: 3rem;
+  padding-right: 1rem;
+}
+.payment-item:last-child {
+  border-bottom: 0;
+}
+.payment-item:hover {
+  background: #f4f5fa;
+}
+.payment-item p {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.payment-item .payment-actions {
+  display: none;
+  background: #f4f5fa;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+.payment-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1 1 0%;
+}
+.payment-fields {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.payment-item:hover .payment-actions {
+  display: flex;
+}
+.payment-amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.payment-amount.is-credit {
+  color: #629a4c;
+}
+.payment-amount.is-debit {
+  color: #ff4961;
+}
+
+.payment-reference {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 250px;
+}
+/*sm*/
+@media (min-width: 640px) {
+  .payment-reference {
+    width: 300px;
+  }
+}
+
+@media (min-width: 768px) {
+  .payment-reference {
+    width: 600px;
+  }
+  .payments-container {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .payment-reference {
+    width: 300px;
+  }
+}

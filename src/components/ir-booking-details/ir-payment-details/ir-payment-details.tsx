@@ -497,7 +497,7 @@ export class IrPaymentDetails {
                 }}
               ></ir-button>
             </div>
-            <table class="mt-1" style={{ backgroundColor: this.paymentBackground }}>
+            {/* <table class="mt-1" style={{ backgroundColor: this.paymentBackground }}>
               <thead>
                 <tr>
                   <th class={'border border-light border-bottom-0 text-center payment_date'}>{locales.entries.Lcz_Dates}</th>
@@ -505,14 +505,7 @@ export class IrPaymentDetails {
                   <th class={'border border-light border-bottom-0 text-center designation'}>{locales.entries.Lcz_Designation}</th>
                   <th class={'border border-light border-bottom-0 text-center action_icons'}>
                     <span class={'sr-only'}>payment actions</span>
-                    {/* <ir-button
-                      id="add-payment"
-                      variant="icon"
-                      icon_name="square_plus"
-                      onClickHandler={() => {
-                        this.newTableRow = true;
-                      }}
-                    ></ir-button> */}
+                   
                   </th>
                 </tr>
               </thead>
@@ -520,7 +513,50 @@ export class IrPaymentDetails {
                 {this.bookingDetails.financial.payments?.map((item: any) => this._renderTableRow(item))}
                 {this.newTableRow ? this._renderTableRow(null, 'add') : null}
               </tbody>
-            </table>
+            </table> */}
+            <div class="mt-1 payments-container">
+              {[
+                { id: 'REQ1000', cause: 'Reservation deposit', amount: 363.02, type: 'Credit', date: '2025-08-12', reference: 'INV-2025-0812-001' },
+                { id: 'REQ1001', cause: 'Housekeeping fee', amount: 355.45, type: 'Debit', date: '2025-08-16' },
+                { id: 'REQ1002', cause: 'Mini-bar', amount: 360.49, type: 'Debit', date: '2025-08-08', reference: 'RM120-MB-8842' },
+                { id: 'REQ1003', cause: 'Refund – canceled tour', amount: 294.34, type: 'Credit', date: '2025-08-16' },
+                { id: 'REQ1004', cause: 'Late checkout', amount: 80.97, type: 'Credit', date: '2025-08-04', reference: 'CHKO-2025-0804' },
+                { id: 'REQ1005', cause: 'Airport pickup', amount: 346.6, type: 'Credit', date: '2025-08-17' },
+                { id: 'REQ1006', cause: 'Room service', amount: 430.52, type: 'Credit', date: '2025-08-05', reference: 'RSV-7421' },
+                { id: 'REQ1007', cause: 'City tax', amount: 89.39, type: 'Credit', date: '2025-08-09' },
+                { id: 'REQ1008', cause: 'Laundry', amount: 49.93, type: 'Credit', date: '2025-07-30', reference: 'LND-20541' },
+                { id: 'REQ1009', cause: 'Spa treatment', amount: 469.32, type: 'Credit', date: '2025-08-13' },
+              ].map(row => (
+                <div key={row.id} class={'payment-item'}>
+                  <div class="payment-body">
+                    <div class="payment-fields">
+                      <p>
+                        <b>{row.cause}</b>
+                      </p>
+                      <p class="text-muted">{row.date}</p>
+                    </div>
+                    {row.reference && (
+                      <p class="payment-reference text-muted">
+                        <b>Ref: </b>
+                        {row?.reference}
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas aliquid repellat illo labore laborum libero vel distinctio architecto nulla natus quam
+                        dolores provident incidunt itaque eum alias, similique dignissimos recusandae.
+                      </p>
+                    )}
+                  </div>
+
+                  <div class="d-flex align-items-center justify-content-between" style={{ gap: '0.5rem' }}>
+                    <p class={`payment-amount ${row.type === 'Credit' ? 'is-credit' : 'is-debit'}`}>
+                      {row.type === 'Credit' ? '+' : '-'}US$ {row.amount}
+                    </p>
+                    <div class="payment-actions">
+                      <ir-button variant="icon" icon_name="save" style={colorVariants.secondary}></ir-button>
+                      <ir-button variant="icon" style={colorVariants.danger} icon_name="trash"></ir-button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>,
