@@ -632,7 +632,6 @@ export class IglCalBody {
     return (
       <p>Update unit {this.selectedRoom?.name} to ...</p>
       // <ir-select
-      //   LabelAvailable={false}
       //   showFirstOption={false}
       //   selectedValue={this.selectedRoom?.hk_status === '001' ? '001' : '002'}
       //   data={[

@@ -67,6 +67,25 @@ export class IrPhoneInput {
   @Prop() testId: string;
 
   /**
+   * Floating label text that appears inside the input and “floats” above
+   * when the field is focused or has a value.
+   *
+   * - If provided, a floating label will be rendered inside the input container.
+   * - If you omit this prop but set `label`, the old left-side static label is used.
+   * - If you provide both `label` and `floatingLabel`, only the floating label is shown.
+   *
+   * Accessibility:
+   * - The floating label is tied to the input via `aria-labelledby`.
+   * - You can still set `placeholder`; the label will not be replaced by it.
+   *
+   * Examples:
+   * ```tsx
+   * <ir-phone-input floating-label label="Phone" />
+   * ```
+   */
+  @Prop({ attribute: 'floating-label', reflect: true }) floatingLabel: boolean;
+
+  /**
    * Emits when the user changes the phone number.
    * Emits `{ phone_prefix, mobile }` object.
    *
@@ -92,9 +111,14 @@ export class IrPhoneInput {
    */
   @State() currentCountry: ICountry;
 
+  /** Internal: input focus state for floating label. */
+  @State() hasFocus: boolean = false;
   // private cmp_countries: ICountry[] = [];
 
   private bookingService: BookingService = new BookingService();
+  /** Internal: ids for label/input pairing (a11y). */
+  private inputId = `ir-phone-input-${Math.random().toString(36).slice(2)}`;
+  private labelId = `ir-phone-input-label-${Math.random().toString(36).slice(2)}`;
 
   async componentWillLoad() {
     if (this.countries.length === 0) {
@@ -170,14 +194,17 @@ export class IrPhoneInput {
     this.textChange.emit({ phone_prefix: this.currentCountry?.phone_prefix, mobile: this.value });
   }
   render() {
+    const useFloating = this.floatingLabel && this.label;
+    const showSideLabel = !!this.label && !useFloating;
+    const isActive = this.hasFocus || !!this.inputValue; // float when focused or has value
     return (
       <Host>
         <div class="form-group mr-0">
           {/* <p class="mb-0">Phone</p> */}
           <div class="input-group row m-0 p-0 position-relative">
-            {this.label && (
+            {showSideLabel && (
               <div class={`input-group-prepend col-3 p-0 text-dark border-none`}>
-                <label class={`input-group-text  border-theme flex-grow-1 text-dark  `}>{this.label}</label>
+                <label class={`input-group-text border-theme flex-grow-1 text-dark`}>{this.label}</label>
               </div>
             )}
             <div class={'form-control  input-container  flex-fill' + (this.error ? ' is-invalid' : '')}>
@@ -189,6 +216,11 @@ export class IrPhoneInput {
               </button>
 
               <p class={'phone_prefix_label'}>{this.currentCountry?.phone_prefix}</p>
+              {useFloating && (
+                <label id={this.labelId} class={`floating-label ${isActive ? 'active' : ''}`} htmlFor={this.inputId}>
+                  {this.label}
+                </label>
+              )}
               <input
                 data-testid={this.testId}
                 maxLength={14}
@@ -198,6 +230,12 @@ export class IrPhoneInput {
                 value={this.inputValue}
                 disabled={this.disabled}
                 onInput={e => this.handleInputChange(e)}
+                onFocus={() => {
+                  this.hasFocus = true;
+                }}
+                onBlur={() => {
+                  this.hasFocus = false;
+                }}
               />
             </div>
             {this.isDropdownVisible && (

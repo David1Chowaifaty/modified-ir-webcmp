@@ -1411,6 +1411,10 @@ export namespace Components {
          */
         "error": boolean;
         /**
+          * Floating label text that appears inside the input and “floats” above when the field is focused or has a value.  - If provided, a floating label will be rendered inside the input container. - If you omit this prop but set `label`, the old left-side static label is used. - If you provide both `label` and `floatingLabel`, only the floating label is shown.  Accessibility: - The floating label is tied to the input via `aria-labelledby`. - You can still set `placeholder`; the label will not be replaced by it.  Examples: ```tsx <ir-phone-input floating-label label="Phone" /> ```
+         */
+        "floatingLabel": boolean;
+        /**
           * Label displayed next to the phone input.
          */
         "label": string;
@@ -1704,11 +1708,14 @@ export namespace Components {
         "ticket": string;
     }
     interface IrSelect {
-        "LabelAvailable": boolean;
         "data": selectOption[];
         "disabled": boolean;
         "error": boolean;
         "firstOption": string;
+        /**
+          * Floating label text that appears inside the input and “floats” above when the field is focused or has a value.  - If provided, a floating label will be rendered inside the input container. - If you omit this prop but set `label`, the old left-side static label is used. - If you provide both `label` and `floatingLabel`, only the floating label is shown.   Examples: ```tsx <ir-select floating-label label="Phone" /> ```
+         */
+        "floatingLabel": boolean;
         "label": string;
         "labelBackground": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
         "labelBorder": 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
@@ -1719,13 +1726,11 @@ export namespace Components {
         "required": boolean;
         "selectContainerStyle": string;
         "selectForcedStyles": { [key: string]: string };
-        "selectStyle": boolean;
+        "selectId": string;
         "selectStyles": string;
-        "select_id": string;
         "selectedValue": any;
         "showFirstOption": boolean;
         "size": 'sm' | 'md' | 'lg';
-        "submited": boolean;
         "testId": string;
         "textSize": 'sm' | 'md' | 'lg';
     }
@@ -6061,6 +6066,10 @@ declare namespace LocalJSX {
          */
         "error"?: boolean;
         /**
+          * Floating label text that appears inside the input and “floats” above when the field is focused or has a value.  - If provided, a floating label will be rendered inside the input container. - If you omit this prop but set `label`, the old left-side static label is used. - If you provide both `label` and `floatingLabel`, only the floating label is shown.  Accessibility: - The floating label is tied to the input via `aria-labelledby`. - You can still set `placeholder`; the label will not be replaced by it.  Examples: ```tsx <ir-phone-input floating-label label="Phone" /> ```
+         */
+        "floatingLabel"?: boolean;
+        /**
           * Label displayed next to the phone input.
          */
         "label"?: string;
@@ -6391,11 +6400,14 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrSelect {
-        "LabelAvailable"?: boolean;
         "data"?: selectOption[];
         "disabled"?: boolean;
         "error"?: boolean;
         "firstOption"?: string;
+        /**
+          * Floating label text that appears inside the input and “floats” above when the field is focused or has a value.  - If provided, a floating label will be rendered inside the input container. - If you omit this prop but set `label`, the old left-side static label is used. - If you provide both `label` and `floatingLabel`, only the floating label is shown.   Examples: ```tsx <ir-select floating-label label="Phone" /> ```
+         */
+        "floatingLabel"?: boolean;
         "label"?: string;
         "labelBackground"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | null;
         "labelBorder"?: 'theme' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'none';
@@ -6407,13 +6419,11 @@ declare namespace LocalJSX {
         "required"?: boolean;
         "selectContainerStyle"?: string;
         "selectForcedStyles"?: { [key: string]: string };
-        "selectStyle"?: boolean;
+        "selectId"?: string;
         "selectStyles"?: string;
-        "select_id"?: string;
         "selectedValue"?: any;
         "showFirstOption"?: boolean;
         "size"?: 'sm' | 'md' | 'lg';
-        "submited"?: boolean;
         "testId"?: string;
         "textSize"?: 'sm' | 'md' | 'lg';
     }

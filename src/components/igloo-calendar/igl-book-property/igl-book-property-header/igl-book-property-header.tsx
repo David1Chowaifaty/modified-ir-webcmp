@@ -129,9 +129,8 @@ export class IglBookPropertyHeader {
                 class={'m-0'}
                 selectedValue={this.adultChildCount?.adult?.toString()}
                 onSelectChange={e => this.handleAdultChildChange('adult', e.detail)}
-                select_id="adult_select"
+                selectId="adult_select"
                 firstOption={locales.entries.Lcz_AdultsCaption}
-                LabelAvailable={false}
                 data={Array.from(Array(this.adultChildConstraints.adult_max_nbr), (_, i) => i + 1).map(option => ({
                   text: option.toString(),
                   value: option.toString(),
@@ -152,9 +151,8 @@ export class IglBookPropertyHeader {
                   selectedValue={this.adultChildCount?.child?.toString()}
                   testId="child_number"
                   onSelectChange={e => this.handleAdultChildChange('child', e.detail)}
-                  select_id="child_select"
+                  selectId="child_select"
                   firstOption={this.renderChildCaption()}
-                  LabelAvailable={false}
                   data={Array.from(Array(this.adultChildConstraints.child_max_nbr), (_, i) => i + 1).map(option => ({
                     text: option.toString(),
                     value: option.toString(),

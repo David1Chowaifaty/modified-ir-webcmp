@@ -84,7 +84,6 @@ export class IrDeleteModal {
                   firstOption={locales.entries.Lcz_nobody}
                   selectedValue={this.selectedId}
                   onSelectChange={e => (this.selectedId = e.detail)}
-                  LabelAvailable={false}
                   data={housekeeping_store.hk_criteria.housekeepers
                     .filter(hk => hk.id !== this.user.id)
                     .map(m => ({
@@ -118,7 +117,7 @@ export class IrDeleteModal {
     //               firstOption={locales.entries.Lcz_nobody}
     //               selectedValue={this.selectedId}
     //               onSelectChange={e => (this.selectedId = e.detail)}
-    //               LabelAvailable={false}
+    //
     //               data={housekeeping_store.hk_criteria.housekeepers
     //                 .filter(hk => hk.id !== this.user.id)
     //                 .map(m => ({

@@ -15,7 +15,7 @@ export class IrSelect {
   @Prop() data: selectOption[];
 
   // Text shown in the label
-  @Prop() label = '<label>';
+  @Prop() label: string;
 
   // Custom class for select
   @Prop() selectStyles: string;
@@ -32,20 +32,11 @@ export class IrSelect {
   // Marks the select as required
   @Prop() required: boolean;
 
-  // Whether to render the label
-  @Prop() LabelAvailable: boolean = true;
-
   // Placeholder text for the first option
   @Prop() firstOption: string = 'Select';
 
-  // Enable/disable default form styling
-  @Prop() selectStyle: boolean = true;
-
   // Whether to show the first placeholder option
   @Prop() showFirstOption: boolean = true;
-
-  // Set to true when the form is submitted
-  @Prop() submited: boolean = false;
 
   // Size of the select: 'sm' | 'md' | 'lg'
   @Prop() size: 'sm' | 'md' | 'lg' = 'md';
@@ -69,7 +60,7 @@ export class IrSelect {
   @Prop() labelWidth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 3;
 
   // Unique ID for the select element
-  @Prop() select_id: string = v4();
+  @Prop({ attribute: 'select-id' }) selectId: string = v4();
 
   // Data-testid for testing
   @Prop() testId: string;
@@ -79,6 +70,22 @@ export class IrSelect {
 
   // Whether the select has an error state
   @Prop({ mutable: true }) error: boolean = false;
+
+  /**
+   * Floating label text that appears inside the input and “floats” above
+   * when the field is focused or has a value.
+   *
+   * - If provided, a floating label will be rendered inside the input container.
+   * - If you omit this prop but set `label`, the old left-side static label is used.
+   * - If you provide both `label` and `floatingLabel`, only the floating label is shown.
+   *
+   *
+   * Examples:
+   * ```tsx
+   * <ir-select floating-label label="Phone" />
+   * ```
+   */
+  @Prop({ attribute: 'floating-label', reflect: true }) floatingLabel: boolean;
 
   // Tracks if the field has been touched
   @State() initial: boolean = true;
@@ -91,21 +98,19 @@ export class IrSelect {
 
   private selectEl: HTMLSelectElement;
 
+  /** Internal: id used by aria-labelledby for the floating label. */
+  private labelId = `ir-select-label-${v4()}`;
+
   @Watch('selectedValue')
   watchHandler(newValue: string) {
     if (newValue !== null && this.required) {
       this.valid = true;
     }
   }
-  @Watch('submited')
-  watchHandler2(newValue: boolean) {
-    if (newValue && this.required) {
-      this.initial = false;
-    }
-  }
+
   @Listen('animateIrSelect', { target: 'body' })
   handleButtonAnimation(e: CustomEvent) {
-    if (!this.selectEl || e.detail !== this.select_id) {
+    if (!this.selectEl || e.detail !== this.selectId) {
       return;
     }
     e.stopImmediatePropagation();
@@ -130,31 +135,36 @@ export class IrSelect {
   count = 0;
 
   render() {
-    let className = 'form-control';
-    let label = (
-      <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
-        <label
-          htmlFor={this.select_id}
-          class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
-            this.labelBackground ? 'bg-' + this.labelBackground : ''
-          } flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} `}
-        >
+    let className = ['form-control'];
+    if (this.floatingLabel) {
+      className.push('floating-select');
+    } else {
+      className.push(`col-${this.label ? 12 - this.labelWidth : 12}`);
+    }
+    if (this.required && !this.valid && !this.initial) {
+      className.push('border-danger');
+    }
+
+    let label = this.label ? (
+      this.floatingLabel ? (
+        <label id={this.labelId} class={`floating-label active`} htmlFor={this.selectId}>
           {this.label}
           {this.required ? '*' : ''}
         </label>
-      </div>
-    );
-    if (this.selectStyle === false) {
-      className = '';
-    }
-    if (this.required && !this.valid && !this.initial) {
-      className = `${className} border-danger`;
-    }
-
-    if (!this.LabelAvailable) {
-      label = '';
-    }
-
+      ) : (
+        <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
+          <label
+            htmlFor={this.selectId}
+            class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
+              this.labelBackground ? 'bg-' + this.labelBackground : ''
+            } flex-grow-1 text-${this.labelColor} border-${this.labelBorder === 'none' ? 0 : this.labelBorder} `}
+          >
+            {this.label}
+            {this.required ? '*' : ''}
+          </label>
+        </div>
+      )
+    ) : null;
     return (
       <div class={`form-group m-0 ${this.selectContainerStyle}`}>
         <div class="input-group row m-0">
@@ -165,10 +175,8 @@ export class IrSelect {
             data-testid={this.testId}
             style={this.selectForcedStyles}
             ref={el => (this.selectEl = el)}
-            id={this.select_id}
-            class={`${this.selectStyles} ${this.error ? 'border-danger' : ''} ${className} form-control-${this.size} text-${this.textSize} col-${
-              this.LabelAvailable ? 12 - this.labelWidth : 12
-            }`}
+            id={this.selectId}
+            class={`${this.selectStyles} ${this.error ? 'border-danger' : ''} ${className.join(' ')} form-control-${this.size} text-${this.textSize} `}
             onInput={this.handleSelectChange.bind(this)}
             required={this.required}
           >

@@ -66,7 +66,6 @@ export class IrUnitStatus {
                         <div>
                           <ir-select
                             selectedValue={status.inspection_mode.is_active ? status.inspection_mode?.window.toString() : ''}
-                            LabelAvailable={false}
                             firstOption={locales.entries.Lcz_No}
                             onSelectChange={this.handleSelectChange.bind(this)}
                             data={Array.from(Array(7 + 1), (_, i) => i).map(i => {

@@ -157,8 +157,7 @@ export class IrListingHeader {
             }))}
             class="flex-sm-wrap"
             selectedValue={booking_listing.userSelection.filter_type}
-            select_id="dateTo"
-            LabelAvailable={false}
+            selectId="dateTo"
           ></ir-select>
           {/* <div class={'booking-dates-container'}>
             <span>
@@ -240,33 +239,30 @@ export class IrListingHeader {
               value: status.code,
               text: status.name,
             }))}
-            select_id="booking_status"
-            LabelAvailable={false}
+            selectId="booking_status"
           ></ir-select>
 
           <ir-select
             class="flex-sm-wrap"
             selectedValue={booking_listing.userSelection.channel}
             onSelectChange={e => updateUserSelection('channel', e.detail)}
-            LabelAvailable={false}
             data={booking_listing?.channels.map(channel => ({
               value: channel.value,
               text: channel.name,
             }))}
-            select_id="channels"
+            selectId="channels"
             firstOption={locales.entries?.Lcz_All + ' ' + locales.entries?.Lcz_Channels}
           ></ir-select>
           <ir-select
             class="flex-sm-wrap"
             selectedValue={booking_listing.userSelection.balance_filter}
             onSelectChange={e => updateUserSelection('balance_filter', e.detail)}
-            LabelAvailable={false}
             data={booking_listing?.balance_filter.map(b => ({
               value: b.value,
               text: b.name,
             }))}
             showFirstOption={false}
-            select_id="balance_filter"
+            selectId="balance_filter"
           ></ir-select>
           <div class="d-flex flex-fill align-items-end m-0  buttons-container">
             <ir-button

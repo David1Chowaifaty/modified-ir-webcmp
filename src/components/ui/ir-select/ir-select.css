@@ -1,6 +1,7 @@
 .border-theme {
   border: 1px solid #cacfe7;
 }
+
 @keyframes bounce {
   0%,
   100% {
@@ -12,6 +13,136 @@
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
+
 .bounce-3 {
   animation: bounce 1s 1;
+}
+
+/* ============================================
+   Floating label (spec-aligned)
+   ============================================ */
+
+/* sensible defaults */
+:host {
+  /* ========= Floating label ========= */
+  /** @prop --ir-floating-label-fg: Resting label color. */
+  --ir-floating-label-fg: #6c757d;
+
+  /** @prop --ir-floating-label-fg-focus: Floated/active label color. */
+  --ir-floating-label-fg-focus: #495057;
+
+  /** @prop --ir-floating-label-bg: Background behind the floated label “chip”. */
+  --ir-floating-label-bg: #fff;
+
+  /** @prop --ir-floating-label-scale: Scale applied to the label when floated. */
+  --ir-floating-label-scale: 0.88;
+
+  /** @prop --ir-floating-label-float-translateY: translateY used when label floats (relative to its top=0). */
+  --ir-floating-label-float-translateY: -70%;
+
+  /** @prop --ir-floating-label-resting-offset-inline: Inline offset for the resting label (LTR=left, RTL=right). */
+  --ir-floating-label-resting-offset-inline: 0.9rem;
+
+  /** @prop --ir-floating-select-radius: Radius of the select. */
+  --ir-floating-select-radius: 0.21rem;
+
+  /** @prop --ir-floating-select-height: Fixed height for the input element. */
+  --ir-floating-select-height: 2rem;
+  /* existing design tokens you referenced */
+  --ir-danger: #dc3545;
+  --ir-disabled-fg: #9aa0a6;
+}
+.floating-select {
+  height: var(--ir-floating-select-height);
+  border-radius: var(--ir-floating-select-radius) !important ;
+}
+/* wrapper for positioning (new class) */
+:host .ir-floating-group,
+:host .ir-select-wrapper {
+  /* alias for backward compatibility */
+  position: relative;
+}
+
+/* add headroom when floating is enabled */
+:host .ir-floating-group.has-floating,
+:host .ir-select-wrapper.has-floating {
+  /* alias */
+  padding-top: 0.9rem;
+}
+
+/* base floating label */
+:host .ir-floating-label,
+:host .floating-label {
+  position: absolute;
+  top: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+  padding: 0 0.4rem;
+  z-index: 10;
+  color: var(--ir-floating-label-fg);
+  background: white;
+  transition: transform 120ms ease, color 120ms ease, top 120ms ease, background-color 120ms ease, opacity 120ms ease;
+  opacity: 0.95;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* logical inline offsets */
+:host .ir-floating-label:dir(rtl),
+:host .floating-label:dir(rtl) {
+  /* alias */
+  right: var(--ir-floating-label-resting-offset-inline);
+}
+:host .ir-floating-label:dir(ltr),
+:host .floating-label:dir(ltr) {
+  /* alias */
+  left: var(--ir-floating-label-resting-offset-inline);
+}
+
+/* Float up when focused OR has value */
+:host .ir-floating-group:focus-within .ir-floating-label,
+:host .ir-floating-input:not(:placeholder-shown) + .ir-floating-label,
+:host .ir-floating-group[data-has-value='true'] .ir-floating-label,
+/* aliases for current markup that toggles an 'active' class */
+:host .ir-floating-group:focus-within .floating-label,
+:host .ir-floating-input:not(:placeholder-shown) + .floating-label,
+:host .ir-floating-group[data-has-value='true'] .floating-label,
+:host .floating-label.active {
+  top: 0;
+  transform: translateY(var(--ir-floating-label-float-translateY)) scale(var(--ir-floating-label-scale));
+  background: var(--ir-floating-label-bg);
+  color: var(--ir-floating-label-fg-focus);
+  font-size: 12px;
+  padding: 0;
+  opacity: 0.95;
+}
+
+/* ensure the field (select/input) accounts for label headroom */
+:host .ir-floating-group.has-floating select,
+:host .ir-select-wrapper.has-floating select, /* alias */
+:host .ir-floating-group.has-floating .ir-floating-input {
+  padding-top: 0.9rem;
+}
+
+/* Error coloring for the floated label */
+:host .ir-floating-group.has-error .ir-floating-label,
+:host .has-error .ir-floating-group .ir-floating-label,
+:host .ir-floating-group.has-error .floating-label,          /* alias */
+:host .has-error .ir-floating-group .floating-label {
+  /* alias */
+  color: var(--ir-danger);
+}
+
+/* Disabled/read-only label color tweaks */
+:host .ir-floating-group.is-disabled .ir-floating-label,
+:host .ir-floating-group.is-disabled .floating-label {
+  /* alias */
+  color: var(--ir-disabled-fg);
+}
+
+/* iOS clip quirk */
+@supports (-webkit-touch-callout: none) {
+  :host .ir-floating-input {
+    border-radius: var(--ir-floating-input-border-radius);
+  }
 }

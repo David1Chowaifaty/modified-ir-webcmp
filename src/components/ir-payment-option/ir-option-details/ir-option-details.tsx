@@ -160,7 +160,6 @@ export class IrOptionDetails {
                 <div class="mb-1">
                   <ir-select
                     selectedValue={this.selectedLanguage}
-                    LabelAvailable={false}
                     showFirstOption={false}
                     data={payment_option_store.languages.map(l => ({
                       text: l.description,

@@ -235,7 +235,6 @@ export class IrPagination {
           {this.allowPageSizeChange && this.pageSizes && (
             <ir-select
               selectedValue={String(this.pageSize)}
-              LabelAvailable={false}
               data={this.pageSizes.map(size => ({
                 text: `${size} ${this.recordLabel}`,
                 value: String(size),
@@ -265,7 +264,6 @@ export class IrPagination {
               ></ir-button>
               <ir-select
                 selectedValue={this.currentPage.toString()}
-                LabelAvailable={false}
                 showFirstOption={false}
                 onSelectChange={e => this.handlePageChange(+e.detail, 'direct')}
                 data={Array.from(Array(this.pages), (_, i) => i + 1).map(i => ({
