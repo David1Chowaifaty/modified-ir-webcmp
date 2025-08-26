@@ -167,7 +167,6 @@ export class GuestInfo {
             ></ir-country-picker>
 
             <ir-phone-input
-              floating-label
               onTextChange={e => {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
