@@ -95,7 +95,17 @@ export class IrPaymentDetails {
   async _handleSave() {
     this.paymentBackground = 'white';
     try {
-      await this.paymentService.AddPayment(this.itemToBeAdded, this.bookingDetails.booking_nbr);
+      await this.paymentService.AddPayment(
+        {
+          ...this.itemToBeAdded,
+          payment_type: {
+            code: '001',
+            description: 'Cash',
+            operation: 'CR',
+          },
+        },
+        this.bookingDetails.booking_nbr,
+      );
       this.initializeItemToBeAdded();
       this.resetBookingEvt.emit(null);
       this.resetExposedCancelationDueAmount.emit(null);

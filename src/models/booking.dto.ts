@@ -344,6 +344,11 @@ export interface IPayment {
   currency: ICurrency;
   designation: string;
   reference: string;
+  payment_type?: {
+    code: string;
+    description: string;
+    operation: 'CR' | 'DB';
+  };
 }
 export interface IDueDate {
   amount: number;
