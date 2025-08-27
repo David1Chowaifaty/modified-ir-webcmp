@@ -21,7 +21,7 @@ export class IrPaymentItem {
           <div class="payment-fields" part="payment-fields">
             <p class="text-muted">{this.payment.date}</p>
             <p>
-              <b>{this.payment.designation}</b>
+              <b>{this.payment.payment_type.description ?? this.payment.designation}</b>
             </p>
           </div>
           {this.payment.reference && <p class="payment-reference text-muted">{this.payment?.reference}</p>}

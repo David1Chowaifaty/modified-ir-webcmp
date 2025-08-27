@@ -110,13 +110,15 @@ export class IrPaymentFolio {
   private handleDropdownChange(e: CustomEvent<string | number>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.updateFolioData({ designation: e.detail.toString() });
+    const value = e.detail.toString();
+    console.log(value);
+    this.updateFolioData({ designation: value });
     if (!e.detail) {
       this.updateFolioData({
         payment_type: null,
       });
     } else {
-      const payment_type = this.paymentTypes.find(pt => pt.CODE_NAME === e.detail.toString());
+      const payment_type = this.paymentTypes.find(pt => pt.CODE_NAME === value);
       if (!payment_type) {
         console.warn(`Invalid payment type ${e.detail}`);
         this.updateFolioData({
@@ -124,6 +126,7 @@ export class IrPaymentFolio {
         });
         return;
       }
+      console.log(payment_type);
       this.updateFolioData({
         payment_type: {
           code: payment_type.CODE_NAME,
