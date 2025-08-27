@@ -78,6 +78,7 @@ export class IrPaymentFolio {
       await this.paymentService.AddPayment(
         {
           ...this.folioData,
+          currency: calendar_data.currency,
           reference: this.folioData.reference ?? '',
           designation: payment_type.CODE_VALUE_EN,
           payment_type: {
@@ -89,6 +90,7 @@ export class IrPaymentFolio {
         this.bookingNumber,
       );
       this.resetBookingEvt.emit(null);
+      this.closeModal.emit(null);
     } catch (error) {
       const err = {};
       if (error instanceof ZodError) {
