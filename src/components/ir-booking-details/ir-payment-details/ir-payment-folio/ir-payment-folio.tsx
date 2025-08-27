@@ -107,8 +107,34 @@ export class IrPaymentFolio {
     }
   }
 
+  private handleDropdownChange(e: CustomEvent<string | number>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.updateFolioData({ designation: e.detail.toString() });
+    if (!e.detail) {
+      this.updateFolioData({
+        payment_type: null,
+      });
+    } else {
+      const payment_type = this.paymentTypes.find(pt => pt.CODE_NAME === e.detail.toString());
+      if (!payment_type) {
+        console.warn(`Invalid payment type ${e.detail}`);
+        this.updateFolioData({
+          payment_type: null,
+        });
+        return;
+      }
+      this.updateFolioData({
+        payment_type: {
+          code: payment_type.CODE_NAME,
+          description: payment_type.CODE_VALUE_EN,
+          operation: payment_type.NOTES,
+        },
+      });
+    }
+  }
+
   render() {
-    console.log(this.payment);
     return (
       <form
         class={'sheet-container'}
@@ -172,20 +198,7 @@ export class IrPaymentFolio {
             ></ir-price-input>
           </div>
           <div>
-            <ir-dropdown
-              value={this.folioData?.designation}
-              onOptionChange={e => {
-                this.updateFolioData({ designation: e.detail.toString() });
-                const payment_type = this.paymentTypes.find(pt => pt.CODE_NAME === e.detail);
-                this.updateFolioData({
-                  payment_type: {
-                    code: payment_type.CODE_NAME,
-                    description: payment_type.CODE_VALUE_EN,
-                    operation: payment_type.NOTES,
-                  },
-                });
-              }}
-            >
+            <ir-dropdown value={this.folioData?.designation} onOptionChange={this.handleDropdownChange.bind(this)}>
               <div slot="trigger" class={'input-group row m-0 '}>
                 <div class={`input-group-prepend col-3 p-0 text-dark border-0`}>
                   <label class={`input-group-text flex-grow-1 text-dark  border-theme`}>Transaction type</label>
@@ -194,7 +207,7 @@ export class IrPaymentFolio {
                   type="button"
                   class={`form-control  d-flex align-items-center cursor-pointer ${this.errors?.designation && !this.folioData?.designation ? 'border-danger' : ''}`}
                 >
-                  {this.folioData?.payment_type ? <span>{this.payment.payment_type.description}</span> : <span>Select...</span>}
+                  {this.folioData?.payment_type ? <span>{this.folioData.payment_type?.description}</span> : <span>Select...</span>}
                 </button>
               </div>
               <ir-dropdown-item value="">Select...</ir-dropdown-item>
