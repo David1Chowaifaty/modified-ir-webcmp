@@ -13,7 +13,9 @@ import { PaymentService } from '@/services/payment.service';
 })
 export class IrPaymentFolio {
   @Prop() paymentTypes: IEntries[];
+
   @Prop() bookingNumber: string;
+
   @Prop() payment: IPayment = {
     date: moment().format('YYYY-MM-DD'),
     amount: 0,
@@ -106,6 +108,7 @@ export class IrPaymentFolio {
   }
 
   render() {
+    console.log(this.payment);
     return (
       <form
         class={'sheet-container'}
@@ -173,6 +176,14 @@ export class IrPaymentFolio {
               value={this.folioData?.designation}
               onOptionChange={e => {
                 this.updateFolioData({ designation: e.detail.toString() });
+                const payment_type = this.paymentTypes.find(pt => pt.CODE_NAME === e.detail);
+                this.updateFolioData({
+                  payment_type: {
+                    code: payment_type.CODE_NAME,
+                    description: payment_type.CODE_VALUE_EN,
+                    operation: payment_type.NOTES,
+                  },
+                });
               }}
             >
               <div slot="trigger" class={'input-group row m-0 '}>
@@ -181,9 +192,9 @@ export class IrPaymentFolio {
                 </div>
                 <button
                   type="button"
-                  class={`form-control d-flex align-items-center cursor-pointer ${this.errors?.designation && !this.folioData?.designation ? 'border-danger' : ''}`}
+                  class={`form-control  d-flex align-items-center cursor-pointer ${this.errors?.designation && !this.folioData?.designation ? 'border-danger' : ''}`}
                 >
-                  {this.folioData?.designation ? <span>{this.paymentTypes.find(pt => pt.CODE_NAME === this.folioData.designation)?.CODE_VALUE_EN}</span> : <span>Select...</span>}
+                  {this.folioData?.payment_type ? <span>{this.payment.payment_type.description}</span> : <span>Select...</span>}
                 </button>
               </div>
               <ir-dropdown-item value="">Select...</ir-dropdown-item>
