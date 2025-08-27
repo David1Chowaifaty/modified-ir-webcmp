@@ -6,8 +6,10 @@
 :host([hidden]) {
   display: none !important;
 }
+:host(.focused) {
+  background: #f4f5fa !important;
+}
 :host(.active),
-:host(.focused),
 :host([aria-selected='true']),
 :host:active {
   /* keep in sync with your combobox .dropdown-item.active styles */

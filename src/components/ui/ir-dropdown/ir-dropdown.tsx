@@ -187,7 +187,7 @@ export class IrDropdown {
     this.removeItemFocus();
     if (index >= 0 && index < this.itemChildren.length) {
       const element = this.itemChildren[index];
-      element.classList.add('focused', 'active');
+      element.classList.add('focused');
       element.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
   }
