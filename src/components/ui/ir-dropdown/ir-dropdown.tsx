@@ -250,7 +250,12 @@ export class IrDropdown {
         break;
 
       case 'Escape':
+        if (!this.isOpen) {
+          return;
+        }
         event.preventDefault();
+        event.stopImmediatePropagation();
+        event.stopPropagation();
         this.closeDropdown();
         break;
 
