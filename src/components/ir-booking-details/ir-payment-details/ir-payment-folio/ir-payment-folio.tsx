@@ -78,6 +78,7 @@ export class IrPaymentFolio {
       await this.paymentService.AddPayment(
         {
           ...this.folioData,
+          reference: this.folioData.reference ?? '',
           designation: payment_type.CODE_VALUE_EN,
           payment_type: {
             code: payment_type.CODE_NAME,
