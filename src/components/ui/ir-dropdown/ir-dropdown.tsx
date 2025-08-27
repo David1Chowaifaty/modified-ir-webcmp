@@ -20,6 +20,7 @@ export class IrDropdown {
   @State() itemChildren: HTMLIrDropdownItemElement[] = [];
 
   private mo: MutationObserver | null = null;
+  private dropdownRef: HTMLDivElement;
   private documentClickHandler: (event: Event) => void;
   private isComponentConnected: boolean = true;
   private updateQueued: boolean = false;
@@ -125,11 +126,22 @@ export class IrDropdown {
   }
 
   private openDropdown() {
-    this.isOpen = true;
-    // Initialize focus to the currently selected item
-    this.focusedIndex = this.getSelectedItemIndex();
-    // Immediate update instead of setTimeout
-    this.updateItemElements();
+    try {
+      this.isOpen = true;
+      // Initialize focus to the currently selected item
+      this.focusedIndex = this.getSelectedItemIndex();
+      // Immediate update instead of setTimeout
+      this.updateItemElements();
+
+      // Auto-scroll to selected item if it exists
+      if (this.focusedIndex >= 0) {
+        requestAnimationFrame(() => {
+          this.scrollToSelectedItem();
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private closeDropdown() {
@@ -185,6 +197,19 @@ export class IrDropdown {
     if (index >= 0 && index < this.itemChildren.length) {
       const element = this.itemChildren[index];
       element.click();
+    }
+  }
+
+  private scrollToSelectedItem() {
+    if (this.focusedIndex >= 0 && this.focusedIndex < this.itemChildren.length) {
+      const selectedElement = this.itemChildren[this.focusedIndex];
+      if (selectedElement) {
+        selectedElement.scrollIntoView({
+          block: 'nearest',
+          behavior: 'smooth',
+          inline: 'nearest',
+        });
+      }
     }
   }
 
@@ -250,12 +275,7 @@ export class IrDropdown {
         break;
 
       case 'Escape':
-        if (!this.isOpen) {
-          return;
-        }
         event.preventDefault();
-        event.stopImmediatePropagation();
-        event.stopPropagation();
         this.closeDropdown();
         break;
 
@@ -279,9 +299,14 @@ export class IrDropdown {
       <Host class={`dropdown ${this.isOpen ? 'show' : ''}`}>
         <div
           onClick={() => {
-            this.isOpen = !this.isOpen;
+            // this.isOpen = !this.isOpen;
+            // if (this.isOpen) {
+            //   this.updateItemElements();
+            // }
             if (this.isOpen) {
-              this.updateItemElements();
+              this.closeDropdown();
+            } else {
+              this.openDropdown();
             }
           }}
           class="position-relative"
@@ -293,7 +318,7 @@ export class IrDropdown {
             <ir-icons name={!this.isOpen ? 'angle-down' : 'angle-up'}></ir-icons>
           </div>
         </div>
-        <div class="dropdown-menu" role="listbox" aria-expanded={this.isOpen.toString()}>
+        <div ref={el => (this.dropdownRef = el)} class="dropdown-menu" role="listbox" aria-expanded={this.isOpen.toString()}>
           <slot></slot>
         </div>
       </Host>
