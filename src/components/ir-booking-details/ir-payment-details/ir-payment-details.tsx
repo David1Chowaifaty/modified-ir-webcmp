@@ -32,6 +32,7 @@ export class IrPaymentDetails {
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
+    console.log({ value });
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: { ...value, date: value.due_on, id: -1, amount: value.amount },
@@ -53,6 +54,7 @@ export class IrPaymentDetails {
   };
 
   private handleEditPayment = (payment: IPayment) => {
+    console.log(payment);
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: { ...payment },

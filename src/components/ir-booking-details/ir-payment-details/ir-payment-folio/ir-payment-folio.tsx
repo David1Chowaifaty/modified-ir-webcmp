@@ -142,7 +142,7 @@ export class IrPaymentFolio {
                       type="text"
                       slot="trigger"
                       value={this.folioData?.date ? moment(this.folioData?.date).format('MMM DD, YYYY') : null}
-                      class={`form-control w-100 input-sm ${this.errors?.date && !this.folioData?.date ? 'border-danger' : ''} text-center`}
+                      class={`form-control w-100 input-sm ${this.errors?.date && !this.folioData?.date ? 'border-danger' : ''} text-left`}
                       style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0', width: '100%' }}
                     ></input>
                   </ir-date-picker>
@@ -197,6 +197,7 @@ export class IrPaymentFolio {
           </div>
           <div>
             <ir-input-text
+              value={this.folioData?.reference}
               error={this.errors?.reference_number}
               autoValidate={this.autoValidate}
               zod={this.folioSchema.pick({ reference: true })}

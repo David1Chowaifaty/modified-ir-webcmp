@@ -32,7 +32,20 @@ export class IrPaymentsFolio {
 
   private renderPaymentItem(payment: IPayment, index: number) {
     return [
-      <ir-payment-item key={payment.id} payment={payment} onDeletePayment={e => this.handleDeletePayment(e.detail)} onEditPayment={e => this.handleEditPayment(e.detail)} />,
+      <ir-payment-item
+        key={payment.id}
+        payment={payment}
+        onDeletePayment={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.handleDeletePayment(e.detail);
+        }}
+        onEditPayment={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.handleEditPayment(e.detail);
+        }}
+      />,
       index < this.payments.length - 1 && <hr class="p-0 m-0" />,
     ];
   }
