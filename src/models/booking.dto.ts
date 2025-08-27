@@ -287,7 +287,7 @@ export interface Booking {
   format: IFormat;
   channel_booking_nbr: string | null;
   is_direct: boolean;
-  financial: IFinancials;
+  financial: IFinancial;
   pickup_info: IBookingPickupInfo | null;
   cost: number | null;
   is_pms_enabled: boolean;
@@ -328,11 +328,12 @@ export interface IAllowedActions {
   code: string;
   description: string;
 }
-export interface IFinancials {
+export interface IFinancial {
   due_amount: number;
   due_dates: IDueDate[];
   payments: IPayment[] | null;
   total_amount: number;
+  collected: number;
   gross_total: number;
   gross_cost: number;
   invoice_nbr: string;
@@ -344,8 +345,17 @@ export interface IPayment {
   currency: ICurrency;
   designation: string;
   reference: string;
-  type?: 'debit' | 'credit';
+  book_nbr?: string;
+  payment_gateway_code?: number;
+  payment_type?: PaymentType;
 }
+
+interface PaymentType {
+  code: string;
+  description: string;
+  operation: string;
+}
+
 export interface IDueDate {
   amount: number;
   currencysymbol: string;

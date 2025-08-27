@@ -3,6 +3,8 @@ import { Component, Event, EventEmitter, Prop, State, Watch, h } from '@stencil/
 import moment from 'moment';
 import { z, ZodError } from 'zod';
 import { IPayment } from '@/models/booking.dto';
+import { IEntries } from '@/models/IBooking';
+import { PaymentService } from '@/services/payment.service';
 
 @Component({
   tag: 'ir-payment-folio',
@@ -10,6 +12,8 @@ import { IPayment } from '@/models/booking.dto';
   scoped: true,
 })
 export class IrPaymentFolio {
+  @Prop() paymentTypes: IEntries[];
+  @Prop() bookingNumber: string;
   @Prop() payment: IPayment = {
     date: moment().format('YYYY-MM-DD'),
     amount: 0,
@@ -25,48 +29,27 @@ export class IrPaymentFolio {
   @State() folioData: IPayment;
 
   @Event() closeModal: EventEmitter<null>;
+  @Event() resetBookingEvt: EventEmitter<null>;
 
   private folioSchema: any;
-  // private async _processPaymentSave() {
-  //   if (this.itemToBeAdded.amount === null) {
-  //     this.toast.emit({
-  //       type: 'error',
-  //       title: locales.entries.Lcz_EnterAmount,
-  //       description: '',
-  //       position: 'top-right',
-  //     });
-  //     return;
-  //   }
-  //   if (Number(this.itemToBeAdded.amount) > Number(this.bookingDetails.financial.due_amount)) {
-  //     this.modal_mode = 'save';
-  //     this.openModal();
-  //     return;
-  //   }
-  //   this._handleSave();
-  // }
+  private paymentService = new PaymentService();
 
-  private createPickupSchema(minDate: string, maxDate: string) {
-    return z.object({
+  componentWillLoad() {
+    this.folioSchema = z.object({
       date: z
         .string()
-        .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid date format, expected YYYY-MM-DD' })
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
         .refine(
           dateStr => {
             const date = moment(dateStr, 'YYYY-MM-DD', true);
-            const min = moment(minDate, 'YYYY-MM-DD', true);
-            const max = moment(maxDate, 'YYYY-MM-DD', true);
-            return date.isValid() && min.isValid() && max.isValid() && date.isBetween(min, max, undefined, '[]');
+            return date.isValid();
           },
-          { message: `date must be between ${minDate} and ${maxDate}` },
+          { message: `Invalid date` },
         ),
-      amount: z.coerce.number(),
+      amount: z.coerce.number().refine(a => a !== 0),
       reference: z.string().optional().nullable(),
-      designation: z.string(),
+      designation: z.string().min(1),
     });
-  }
-
-  componentWillLoad() {
-    this.folioSchema = this.createPickupSchema(moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
     if (this.payment) {
       this.folioData = { ...this.payment };
     }
@@ -83,7 +66,7 @@ export class IrPaymentFolio {
     this.folioData = { ...this.folioData, ...params };
   }
 
-  private saveFolio() {
+  private async savePayment() {
     try {
       this.isLoading = true;
       this.autoValidate = true;
@@ -91,6 +74,20 @@ export class IrPaymentFolio {
         this.errors = null;
       }
       this.folioSchema.parse(this.folioData ?? {});
+      const payment_type = this.paymentTypes.find(p => p.CODE_NAME === this.folioData.designation);
+      await this.paymentService.AddPayment(
+        {
+          ...this.folioData,
+          designation: payment_type.CODE_VALUE_EN,
+          payment_type: {
+            code: payment_type.CODE_NAME,
+            description: payment_type.CODE_VALUE_EN,
+            operation: payment_type.NOTES,
+          },
+        },
+        this.bookingNumber,
+      );
+      this.resetBookingEvt.emit(null);
     } catch (error) {
       const err = {};
       if (error instanceof ZodError) {
@@ -100,20 +97,18 @@ export class IrPaymentFolio {
         });
       }
       this.errors = err;
-      console.log(this.errors);
     } finally {
       this.isLoading = false;
     }
   }
 
   render() {
-    console.log(this.payment);
     return (
       <form
         class={'sheet-container'}
         onSubmit={async e => {
           e.preventDefault();
-          this.saveFolio();
+          this.savePayment();
         }}
       >
         <ir-title class="px-1 sheet-header" onCloseSideBar={() => this.closeModal.emit(null)} label={'Payment Folio'} displayContext="sidebar"></ir-title>
@@ -133,8 +128,6 @@ export class IrPaymentFolio {
                   <ir-date-picker
                     data-testid="pickup_date"
                     date={this.folioData?.date}
-                    // minDate={this.bookingDates.from}
-                    // maxDate={this.bookingDates?.to}
                     class="w-100"
                     emitEmptyDate={true}
                     aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
@@ -163,6 +156,7 @@ export class IrPaymentFolio {
             <ir-price-input
               autoValidate={this.autoValidate}
               zod={this.folioSchema.pick({ amount: true })}
+              wrapKey="amount"
               label="Amount"
               labelStyle={'price-label'}
               error={this.errors?.amount && !this.folioData?.amount}
@@ -186,12 +180,16 @@ export class IrPaymentFolio {
                   type="button"
                   class={`form-control d-flex align-items-center cursor-pointer ${this.errors?.designation && !this.folioData?.designation ? 'border-danger' : ''}`}
                 >
-                  {this.folioData?.designation ? <span>{this.folioData.designation}</span> : <span></span>}
+                  {this.folioData?.designation ? <span>{this.paymentTypes.find(pt => pt.CODE_NAME === this.folioData.designation)?.CODE_VALUE_EN}</span> : <span>Select...</span>}
                 </button>
               </div>
-              <ir-dropdown-item value="option1">Option 1</ir-dropdown-item>
-              <ir-dropdown-item value="option2">Option 2</ir-dropdown-item>
-              <ir-dropdown-item value="option3">Option 3</ir-dropdown-item>
+              <ir-dropdown-item value="">Select...</ir-dropdown-item>
+              {this.paymentTypes.map(pt => (
+                <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
+                  <span>{pt.CODE_VALUE_EN}</span>
+                  <span class={`payment-type-badge ${pt.NOTES === 'CR' ? 'credit-badge' : 'debit-badge'}`}>{pt.NOTES === 'CR' ? 'credit' : 'debit'}</span>
+                </ir-dropdown-item>
+              ))}
             </ir-dropdown>
           </div>
           <div>

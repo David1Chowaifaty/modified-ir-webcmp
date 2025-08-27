@@ -14,7 +14,7 @@ export class IrPaymentItem {
   @Event() deletePayment: EventEmitter<IPayment>;
 
   render() {
-    const isCredit = this.payment.type === 'credit';
+    const isCredit = this.payment.payment_type.operation === 'CR';
     return (
       <div class="payment-item" part="base">
         <div class="payment-body" part="payment-body">

@@ -1409,9 +1409,12 @@ export namespace Components {
     interface IrPaymentDetails {
         "bookingDetails": Booking;
         "paymentActions": IPaymentAction[];
+        "paymentTypes": IEntries[];
     }
     interface IrPaymentFolio {
+        "bookingNumber": string;
         "payment": IPayment;
+        "paymentTypes": IEntries[];
     }
     interface IrPaymentItem {
         "payment": IPayment;
@@ -1431,6 +1434,7 @@ export namespace Components {
         "totalCost": number;
     }
     interface IrPaymentsFolio {
+        "paymentTypes": IEntries[];
         "payments": IPayment[];
     }
     interface IrPhoneInput {
@@ -3899,6 +3903,7 @@ declare global {
     };
     interface HTMLIrPaymentFolioElementEventMap {
         "closeModal": null;
+        "resetBookingEvt": null;
     }
     interface HTMLIrPaymentFolioElement extends Components.IrPaymentFolio, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentFolioElementEventMap>(type: K, listener: (this: HTMLIrPaymentFolioElement, ev: IrPaymentFolioCustomEvent<HTMLIrPaymentFolioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6230,10 +6235,14 @@ declare namespace LocalJSX {
         "onResetExposedCancellationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
         "paymentActions"?: IPaymentAction[];
+        "paymentTypes"?: IEntries[];
     }
     interface IrPaymentFolio {
+        "bookingNumber"?: string;
         "onCloseModal"?: (event: IrPaymentFolioCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrPaymentFolioCustomEvent<null>) => void;
         "payment"?: IPayment;
+        "paymentTypes"?: IEntries[];
     }
     interface IrPaymentItem {
         "onDeletePayment"?: (event: IrPaymentItemCustomEvent<IPayment>) => void;
@@ -6259,6 +6268,7 @@ declare namespace LocalJSX {
         "onAddPayment"?: (event: IrPaymentsFolioCustomEvent<void>) => void;
         "onDeletePayment"?: (event: IrPaymentsFolioCustomEvent<IPayment>) => void;
         "onEditPayment"?: (event: IrPaymentsFolioCustomEvent<IPayment>) => void;
+        "paymentTypes"?: IEntries[];
         "payments"?: IPayment[];
     }
     interface IrPhoneInput {

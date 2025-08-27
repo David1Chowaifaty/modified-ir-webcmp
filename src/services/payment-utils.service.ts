@@ -27,8 +27,8 @@ export class PaymentUtilsService {
   /**
    * Filters payments by type (credit/debit)
    */
-  static filterPaymentsByType(payments: IPayment[], type: 'credit' | 'debit'): IPayment[] {
-    return payments.filter(payment => payment.type === type);
+  static filterPaymentsByType(payments: IPayment[], type: 'CR' | 'DB'): IPayment[] {
+    return payments.filter(payment => payment.payment_type.operation === type);
   }
 
   /**
