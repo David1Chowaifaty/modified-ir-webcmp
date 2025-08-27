@@ -6,6 +6,7 @@ import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import Token from '@/models/Token';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { IToast } from '@components/ui/ir-toast/toast';
 
 @Component({
   tag: 'ir-guest-info',
@@ -28,6 +29,7 @@ export class GuestInfo {
 
   @Event() closeSideBar: EventEmitter<null>;
   @Event({ bubbles: true }) resetBookingEvt: EventEmitter<null>;
+  @Event() toast: EventEmitter<IToast>;
 
   private bookingService = new BookingService();
   private roomService = new RoomService();
@@ -83,6 +85,12 @@ export class GuestInfo {
       this.autoValidate = true;
 
       await this.bookingService.editExposedGuest(this.guest, this.booking_nbr ?? null);
+      this.toast.emit({
+        type: 'success',
+        description: '',
+        title: 'Saved Successfully',
+        position: 'top-right',
+      });
       this.closeSideBar.emit(null);
       this.resetBookingEvt.emit(null);
     } catch (error) {
@@ -106,6 +114,7 @@ export class GuestInfo {
           await this.editGuest();
         }}
       >
+        {!this.isInSideBar && [<ir-toast></ir-toast>, <ir-interceptor></ir-interceptor>]}
         {this.headerShown && <ir-title class="px-1 sheet-header" displayContext="sidebar" label={locales.entries.Lcz_GuestDetails}></ir-title>}
         <div class={this.isInSideBar ? 'sheet-body' : 'card-content collapse show '}>
           <div class={this.headerShown ? 'card-body px-1 pt-0' : 'pt-0'}>
@@ -206,11 +215,10 @@ export class GuestInfo {
                 <Fragment>
                   <hr />
                   <ir-button
-                    isLoading={this.isLoading}
-                    btn_disabled={this.isLoading}
                     btn_styles="d-flex align-items-center justify-content-center"
                     text={locales.entries.Lcz_Save}
                     onClickHandler={this.editGuest.bind(this)}
+                    isLoading={isRequestPending('/Edit_Exposed_Guest')}
                     color="btn-primary"
                   ></ir-button>
                 </Fragment>
