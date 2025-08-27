@@ -20,7 +20,6 @@ export class IrDropdown {
   @State() itemChildren: HTMLIrDropdownItemElement[] = [];
 
   private mo: MutationObserver | null = null;
-  private dropdownRef: HTMLDivElement;
   private documentClickHandler: (event: Event) => void;
   private isComponentConnected: boolean = true;
   private updateQueued: boolean = false;
@@ -299,10 +298,6 @@ export class IrDropdown {
       <Host class={`dropdown ${this.isOpen ? 'show' : ''}`}>
         <div
           onClick={() => {
-            // this.isOpen = !this.isOpen;
-            // if (this.isOpen) {
-            //   this.updateItemElements();
-            // }
             if (this.isOpen) {
               this.closeDropdown();
             } else {
@@ -318,7 +313,7 @@ export class IrDropdown {
             <ir-icons name={!this.isOpen ? 'angle-down' : 'angle-up'}></ir-icons>
           </div>
         </div>
-        <div ref={el => (this.dropdownRef = el)} class="dropdown-menu" role="listbox" aria-expanded={this.isOpen.toString()}>
+        <div class="dropdown-menu" role="listbox" aria-expanded={this.isOpen.toString()}>
           <slot></slot>
         </div>
       </Host>
