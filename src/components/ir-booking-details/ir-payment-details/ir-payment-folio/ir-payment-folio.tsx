@@ -204,6 +204,7 @@ export class IrPaymentFolio {
               inputContainerStyle={{
                 margin: '0',
               }}
+              onTextChange={e => this.updateFolioData({ reference: e.detail })}
               labelWidth={3}
             ></ir-input-text>
           </div>
