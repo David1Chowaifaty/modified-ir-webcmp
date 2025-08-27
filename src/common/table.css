@@ -49,8 +49,10 @@
 /* Sorting styles */
 .sortable,
 .ir-table-row {
-  text-transform: capitalize;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.sortable {
+  text-transform: capitalize;
 }
 .sortable:hover {
   color: #212529;
