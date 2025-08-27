@@ -5511,7 +5511,7 @@ declare namespace LocalJSX {
     }
     interface IrDropdown {
         /**
-          * Emitted when a user selects an option from the combobox. The event payload contains the selected `ComboboxOption` object.
+          * Emitted when a user selects an option from the combobox. The event payload contains the selected `DropdownItem` object.
          */
         "onOptionChange"?: (event: IrDropdownCustomEvent<DropdownItem['value']>) => void;
         "value"?: DropdownItem['value'];

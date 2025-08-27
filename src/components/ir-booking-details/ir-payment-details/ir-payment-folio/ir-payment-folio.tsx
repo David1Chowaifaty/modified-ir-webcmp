@@ -201,7 +201,7 @@ export class IrPaymentFolio {
             ></ir-price-input>
           </div>
           <div>
-            <ir-dropdown value={this.folioData?.designation} onOptionChange={this.handleDropdownChange.bind(this)}>
+            <ir-dropdown value={this.folioData?.payment_type?.code} onOptionChange={this.handleDropdownChange.bind(this)}>
               <div slot="trigger" class={'input-group row m-0 '}>
                 <div class={`input-group-prepend col-3 p-0 text-dark border-0`}>
                   <label class={`input-group-text flex-grow-1 text-dark  border-theme`}>Transaction type</label>

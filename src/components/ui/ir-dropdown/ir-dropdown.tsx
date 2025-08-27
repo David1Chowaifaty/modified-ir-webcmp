@@ -3,6 +3,7 @@ import { Component, Prop, State, h, Event, EventEmitter, Host, Element, Listen, 
 export type DropdownItem = {
   value: string | number;
 };
+
 @Component({
   tag: 'ir-dropdown',
   styleUrl: 'ir-dropdown.css',
@@ -16,49 +17,73 @@ export class IrDropdown {
   @State() isOpen: boolean = false;
   @State() selectedOption: DropdownItem['value'];
   @State() focusedIndex: number = -1;
-  @State() slotElements: HTMLIrDropdownItemElement[] = [];
   @State() itemChildren: HTMLIrDropdownItemElement[] = [];
 
   private mo: MutationObserver | null = null;
-  private dropdownRef: HTMLDivElement;
+  private documentClickHandler: (event: Event) => void;
+  private isComponentConnected: boolean = true;
+  private updateQueued: boolean = false;
 
   /**
    * Emitted when a user selects an option from the combobox.
-   * The event payload contains the selected `ComboboxOption` object.
+   * The event payload contains the selected `DropdownItem` object.
    */
   @Event() optionChange: EventEmitter<DropdownItem['value']>;
 
   componentWillLoad() {
-    this.collectItemChildren();
     this.selectedOption = this.value;
-    // watch DOM changes to children
-    this.mo = new MutationObserver(() => this.collectItemChildren());
+    this.documentClickHandler = this.handleDocumentClick.bind(this);
+    this.collectItemChildren();
+
+    // Optimized mutation observer with debouncing
+    this.mo = new MutationObserver(() => {
+      if (!this.updateQueued) {
+        this.updateQueued = true;
+        requestAnimationFrame(() => {
+          if (this.isComponentConnected) {
+            this.collectItemChildren();
+            this.updateQueued = false;
+          }
+        });
+      }
+    });
     this.mo.observe(this.el, { childList: true, subtree: true });
   }
 
   componentDidLoad() {
-    document.addEventListener('click', this.handleDocumentClick.bind(this));
-    setTimeout(() => this.updateSlotElements(), 0);
-    if (this.value) {
-      setTimeout(() => this.updateDropdownItemValue(this.value), 100);
-    }
+    document.addEventListener('click', this.documentClickHandler, { passive: true });
+
+    // Single RAF call instead of multiple setTimeouts
+    requestAnimationFrame(() => {
+      if (this.isComponentConnected) {
+        this.updateItemElements();
+        if (this.value) {
+          this.updateDropdownItemValue(this.value);
+        }
+      }
+    });
   }
 
   disconnectedCallback() {
-    document.removeEventListener('click', this.handleDocumentClick.bind(this));
+    this.isComponentConnected = false;
+    document.removeEventListener('click', this.documentClickHandler);
     this.mo?.disconnect();
+    this.mo = null;
   }
 
   @Listen('keydown', { target: 'document' })
   handleDocumentKeyDown(event: KeyboardEvent) {
-    if (!this.isOpen) return;
+    if (!this.isOpen || !this.isComponentConnected) return;
 
     if (event.key === 'Escape') {
       this.closeDropdown();
     }
   }
+
   @Listen('dropdownItemSelect')
   handleDropdownItemSelect(ev: CustomEvent<DropdownItem['value']>) {
+    if (!this.isComponentConnected) return;
+
     ev.stopPropagation();
     this.selectOption(ev.detail);
     (ev.target as HTMLIrDropdownItemElement).setAttribute('aria-selected', 'true');
@@ -66,125 +91,159 @@ export class IrDropdown {
 
   @Listen('dropdownItemRegister')
   handleDropdownItemRegister() {
+    if (!this.isComponentConnected) return;
     this.collectItemChildren();
   }
 
   @Listen('dropdownItemUnregister')
   handleDropdownItemUnregister() {
+    if (!this.isComponentConnected) return;
     this.collectItemChildren();
   }
 
   @Watch('value')
   handleValueChange(newValue: DropdownItem['value'], oldValue: DropdownItem['value']) {
-    if (newValue !== oldValue) {
+    if (newValue !== oldValue && this.isComponentConnected) {
       this.updateDropdownItemValue(newValue);
     }
   }
 
   private updateDropdownItemValue(value: DropdownItem['value']) {
-    const el = this.slotElements?.find(el => el.value === value);
+    // Clear previous selections immediately
+    this.itemChildren.forEach(el => el.removeAttribute('aria-selected'));
+
+    // Set new selection
+    const el = this.itemChildren.find(el => el.value === value);
     if (el) {
       el.setAttribute('aria-selected', 'true');
     }
   }
 
+  private getSelectedItemIndex(): number {
+    if (!this.value) return -1;
+    return this.itemChildren.findIndex(item => item.value === this.value);
+  }
+
   private openDropdown() {
     this.isOpen = true;
-    this.focusedIndex = -1;
-    setTimeout(() => this.updateSlotElements());
+    // Initialize focus to the currently selected item
+    this.focusedIndex = this.getSelectedItemIndex();
+    // Immediate update instead of setTimeout
+    this.updateItemElements();
   }
 
   private closeDropdown() {
     this.isOpen = false;
     this.focusedIndex = -1;
-    this.removeSlotFocus();
+    this.removeItemFocus();
   }
 
   private handleDocumentClick = (event: Event) => {
-    if (!this.el.contains(event.target as Node)) {
+    if (!this.isComponentConnected || !this.el.contains(event.target as Node)) {
       this.closeDropdown();
     }
   };
 
   private collectItemChildren() {
-    // find *direct or nested* items inside the dropdown container
+    if (!this.isComponentConnected) return;
+
     const items = Array.from(this.el.querySelectorAll('ir-dropdown-item')) as HTMLIrDropdownItemElement[];
     this.itemChildren = items;
 
-    setTimeout(() => this.updateSlotElementsForItems(), 0);
+    // Immediate update instead of setTimeout
+    this.updateItemElements();
   }
 
-  private updateSlotElements() {
-    if (!this.dropdownRef) return;
+  private updateItemElements() {
+    if (!this.isComponentConnected) return;
 
-    const slotElement = this.dropdownRef.querySelector('slot[name="dropdown-content"]');
-    if (slotElement) {
-      const assignedElements = (slotElement as any).assignedElements
-        ? (slotElement as any).assignedElements()
-        : Array.from(this.el.querySelectorAll('[slot="dropdown-content"] [data-option]'));
-
-      this.slotElements = assignedElements.length > 0 ? assignedElements : Array.from(this.dropdownRef.querySelectorAll('[data-option], .dropdown-item[style*="cursor"]'));
-
-      this.slotElements.forEach((element, index) => {
-        element.setAttribute('data-slot-index', index.toString());
-        element.setAttribute('role', 'option');
-        element.setAttribute('tabindex', '-1');
-      });
-    }
-  }
-
-  private removeSlotFocus() {
-    this.slotElements.forEach(element => {
-      element.classList.remove('focused', 'active');
-      element.removeAttribute('aria-selected');
+    // Use the collected item children directly
+    this.itemChildren.forEach((el, index) => {
+      el.setAttribute('data-slot-index', String(index));
+      el.setAttribute('role', 'option');
+      el.setAttribute('tabindex', '-1');
     });
   }
 
-  private focusSlotElement(index: number) {
-    this.removeSlotFocus();
-    if (index >= 0 && index < this.slotElements.length) {
-      const element = this.slotElements[index];
+  private removeItemFocus() {
+    this.itemChildren.forEach(element => {
+      element.classList.remove('focused', 'active');
+      // Don't remove aria-selected as it indicates selection, not focus
+    });
+  }
+
+  private focusItemElement(index: number) {
+    this.removeItemFocus();
+    if (index >= 0 && index < this.itemChildren.length) {
+      const element = this.itemChildren[index];
       element.classList.add('focused', 'active');
-      element.setAttribute('aria-selected', 'true');
-      element.scrollIntoView({ block: 'nearest' });
+      element.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
   }
 
-  private selectSlotElement(index: number) {
-    if (index >= 0 && index < this.slotElements.length) {
-      const element = this.slotElements[index];
+  private selectItemElement(index: number) {
+    if (index >= 0 && index < this.itemChildren.length) {
+      const element = this.itemChildren[index];
       element.click();
     }
   }
 
   private handleKeyDown = (event: KeyboardEvent) => {
-    const maxIndex = this.slotElements.length - 1;
+    if (!this.isComponentConnected) return;
+
+    const maxIndex = this.itemChildren.length - 1;
 
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
         if (!this.isOpen) {
           this.openDropdown();
-        } else {
-          this.focusedIndex = Math.min(this.focusedIndex + 1, maxIndex);
-          this.focusSlotElement(this.focusedIndex);
+          // After opening, if we have a selection, start from next item
+          if (this.focusedIndex >= 0 && this.focusedIndex < maxIndex) {
+            this.focusedIndex++;
+            this.focusItemElement(this.focusedIndex);
+          } else if (this.focusedIndex === -1) {
+            // No selection, start from first item
+            this.focusedIndex = 0;
+            this.focusItemElement(this.focusedIndex);
+          } else if (this.focusedIndex === maxIndex) {
+            // At last item, wrap to first
+            this.focusedIndex = 0;
+            this.focusItemElement(this.focusedIndex);
+          }
+        } else if (maxIndex >= 0) {
+          this.focusedIndex = this.focusedIndex < maxIndex ? this.focusedIndex + 1 : 0;
+          this.focusItemElement(this.focusedIndex);
         }
         break;
 
       case 'ArrowUp':
         event.preventDefault();
-        if (this.isOpen) {
-          this.focusedIndex = Math.max(this.focusedIndex - 1, 0);
-          this.focusSlotElement(this.focusedIndex);
-        } else {
+        if (!this.isOpen) {
           this.openDropdown();
+          // After opening, if we have a selection, start from previous item
+          if (this.focusedIndex > 0) {
+            this.focusedIndex--;
+            this.focusItemElement(this.focusedIndex);
+          } else if (this.focusedIndex === -1) {
+            // No selection, start from last item
+            this.focusedIndex = maxIndex;
+            this.focusItemElement(this.focusedIndex);
+          } else if (this.focusedIndex === 0) {
+            // At first item, wrap to last
+            this.focusedIndex = maxIndex;
+            this.focusItemElement(this.focusedIndex);
+          }
+        } else if (maxIndex >= 0) {
+          this.focusedIndex = this.focusedIndex > 0 ? this.focusedIndex - 1 : maxIndex;
+          this.focusItemElement(this.focusedIndex);
         }
         break;
 
       case 'Enter':
         event.preventDefault();
         if (this.isOpen && this.focusedIndex >= 0) {
-          this.selectSlotElement(this.focusedIndex);
+          this.selectItemElement(this.focusedIndex);
         } else if (!this.isOpen) {
           this.openDropdown();
         }
@@ -203,23 +262,11 @@ export class IrDropdown {
     }
   };
 
-  private selectOption(option: any) {
+  private selectOption(option: DropdownItem['value']) {
     this.selectedOption = option;
     this.value = option;
     this.optionChange.emit(option);
     this.closeDropdown();
-  }
-
-  private updateSlotElementsForItems() {
-    // Treat the child items as "slot elements" for nav
-    this.slotElements = this.itemChildren as unknown as HTMLIrDropdownItemElement[];
-
-    // index and decorate for ARIA & focus handling
-    this.slotElements.forEach((el, index) => {
-      el.setAttribute('data-slot-index', String(index));
-      el.setAttribute('role', 'option');
-      el.setAttribute('tabindex', '-1');
-    });
   }
 
   render() {
@@ -228,16 +275,20 @@ export class IrDropdown {
         <div
           onClick={() => {
             this.isOpen = !this.isOpen;
+            if (this.isOpen) {
+              this.updateItemElements();
+            }
           }}
           class="position-relative"
           onKeyDown={this.handleKeyDown}
+          tabindex="0"
         >
           <slot name="trigger"></slot>
           <div class="caret-icon">
             <ir-icons name={!this.isOpen ? 'angle-down' : 'angle-up'}></ir-icons>
           </div>
         </div>
-        <div ref={el => (this.dropdownRef = el)} class="dropdown-menu">
+        <div class="dropdown-menu" role="listbox" aria-expanded={this.isOpen.toString()}>
           <slot></slot>
         </div>
       </Host>
