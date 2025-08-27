@@ -9,32 +9,16 @@
   padding: 0;
   margin: 0;
 }
-.action-container td {
-  padding: 0px 0.5rem;
-  padding-bottom: 0.5rem;
+.beta {
+  background: var(--red);
+  color: white;
+  padding: 0.2rem 0.3rem !important;
+  font-size: 12px;
+  border-radius: 4px;
+  margin: 0;
 }
-.action-container .amount_action {
-  padding-inline-start: 0;
-}
-.overdue_action {
-  color: #ff4961;
-  border-radius: 0.25rem;
+.payment-actions-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
-}
-.future_action {
-  border-radius: 0.25rem;
-  color: #1e9ff2;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  gap: 0.5rem;
-}
-.date_action {
-  font-weight: 500;
-}
-.amount_action {
-  /* color: green; */
-  font-weight: 600;
 }

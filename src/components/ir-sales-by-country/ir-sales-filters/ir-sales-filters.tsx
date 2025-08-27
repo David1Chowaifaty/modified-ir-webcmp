@@ -76,8 +76,7 @@ export class IrSalesFilters {
               </label>
               <ir-select
                 selectedValue={this.filters?.BOOK_CASE}
-                select_id="rooms"
-                LabelAvailable={false}
+                selectId="rooms"
                 showFirstOption={false}
                 onSelectChange={e =>
                   this.updateFilter({
@@ -107,8 +106,7 @@ export class IrSalesFilters {
                     });
                     this.window = e.detail;
                   }}
-                  select_id="period"
-                  LabelAvailable={false}
+                  selectId="period"
                   // showFirstOption={false}
                   firstOption="..."
                   data={[

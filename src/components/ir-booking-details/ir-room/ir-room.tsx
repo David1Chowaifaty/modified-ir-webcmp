@@ -397,7 +397,6 @@ export class IrRoom {
             <p class="m-0 p-0">Expected departure time:</p>
             <ir-select
               selectedValue={this.room.departure_time?.code}
-              LabelAvailable={false}
               showFirstOption={false}
               onSelectChange={e => {
                 this.updateDepartureTime(e.detail);

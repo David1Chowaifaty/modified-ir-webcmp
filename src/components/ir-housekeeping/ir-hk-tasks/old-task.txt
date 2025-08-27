@@ -179,7 +179,7 @@ export class IrHkTasks {
               }))}
               class="mb-1 w-100 mb-sm-0"
               showFirstOption={false}
-              LabelAvailable={false}
+              
             ></ir-select>
             <ir-select
               onSelectChange={e => {
@@ -195,7 +195,7 @@ export class IrHkTasks {
                 })),
               ]}
               showFirstOption={false}
-              LabelAvailable={false}
+              
               class="ml-sm-2 w-100"
             ></ir-select>
           </div>

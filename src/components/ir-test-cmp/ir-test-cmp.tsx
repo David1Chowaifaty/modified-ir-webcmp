@@ -3,6 +3,7 @@ import { Moment } from 'moment';
 import { ComboboxOption } from '../ir-m-combobox/types';
 import { ACPages } from '@/components';
 import { sleep } from '@/utils/utils';
+import { colorVariants } from '../ui/ir-icons/icons';
 
 @Component({
   tag: 'ir-test-cmp',
@@ -572,7 +573,7 @@ export class IrTestCmp {
             </button>
           </div>
 
-          <ir-input-text variant="floating-label" class="my-text-input" label="First name" style={{ '--ir-floating-input-height': '4rem' }}>
+          <ir-input-text variant="floating-label" class="my-text-input" label="First name">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" slot="prefix">
               <path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z" />
             </svg>
@@ -580,6 +581,53 @@ export class IrTestCmp {
               <path d="M264 112L376 112C380.4 112 384 115.6 384 120L384 160L256 160L256 120C256 115.6 259.6 112 264 112zM208 120L208 544L432 544L432 120C432 89.1 406.9 64 376 64L264 64C233.1 64 208 89.1 208 120zM480 160L480 544L512 544C547.3 544 576 515.3 576 480L576 224C576 188.7 547.3 160 512 160L480 160zM160 544L160 160L128 160C92.7 160 64 188.7 64 224L64 480C64 515.3 92.7 544 128 544L160 544z" />
             </svg>
           </ir-input-text>
+          <ir-select floating-label label="Hello" data={[{ value: '1', text: '1' }]}></ir-select>
+          <div class="my-2"></div>
+          <ir-select label="Hello" data={[{ value: '1', text: '1' }]}></ir-select>
+          <div class="my-2"></div>
+          <ir-select data={[{ value: '1', text: '1' }]}></ir-select>
+
+          <div class="card p-1">
+            {[
+              { id: 'REQ1000', cause: 'Reservation deposit', amount: 363.02, type: 'Credit', date: '2025-08-12', reference: 'INV-2025-0812-001' },
+              { id: 'REQ1001', cause: 'Housekeeping fee', amount: 355.45, type: 'Debit', date: '2025-08-16' },
+              { id: 'REQ1002', cause: 'Mini-bar', amount: 360.49, type: 'Debit', date: '2025-08-08', reference: 'RM120-MB-8842' },
+              { id: 'REQ1003', cause: 'Refund – canceled tour', amount: 294.34, type: 'Credit', date: '2025-08-16' },
+              { id: 'REQ1004', cause: 'Late checkout', amount: 80.97, type: 'Credit', date: '2025-08-04', reference: 'CHKO-2025-0804' },
+              { id: 'REQ1005', cause: 'Airport pickup', amount: 346.6, type: 'Credit', date: '2025-08-17' },
+              { id: 'REQ1006', cause: 'Room service', amount: 430.52, type: 'Credit', date: '2025-08-05', reference: 'RSV-7421' },
+              { id: 'REQ1007', cause: 'City tax', amount: 89.39, type: 'Credit', date: '2025-08-09' },
+              { id: 'REQ1008', cause: 'Laundry', amount: 49.93, type: 'Credit', date: '2025-07-30', reference: 'LND-20541' },
+              { id: 'REQ1009', cause: 'Spa treatment', amount: 469.32, type: 'Credit', date: '2025-08-13' },
+            ].map(row => (
+              <div key={row.id} class={'payment-item'}>
+                <div class="payment-body">
+                  <div class="payment-fields">
+                    <p>
+                      <b>{row.cause}</b>
+                    </p>
+                    <p class="text-muted">{row.date}</p>
+                  </div>
+                  {row.reference && (
+                    <p class="payment-reference text-muted">
+                      <b>Ref: </b>
+                      {row?.reference}
+                    </p>
+                  )}
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between" style={{ gap: '0.5rem' }}>
+                  <p class={`payment-amount ${row.type === 'Credit' ? 'is-credit' : 'is-debit'}`}>
+                    {row.type === 'Credit' ? '+' : '-'}$US {row.amount}
+                  </p>
+                  <div class="payment-actions">
+                    <ir-button variant="icon" icon_name="save" style={colorVariants.secondary}></ir-button>
+                    <ir-button variant="icon" style={colorVariants.danger} icon_name="trash"></ir-button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       </Host>
     );

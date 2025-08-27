@@ -1,0 +1,67 @@
+.payment-item {
+  position: relative;
+  width: 100%;
+  display: flex;
+  padding: 0.5rem;
+  align-items: center;
+  min-height: 3rem;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+/* .payment-item:last-child {
+  border-bottom: 0;
+} */
+.payment-item:hover {
+  background: #f4f5fa;
+}
+.payment-item:hover .payment-actions {
+  display: flex;
+}
+
+.payment-item p {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.payment-item .payment-actions {
+  display: none;
+  background: #f4f5fa;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+.payment-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1 1 0%;
+}
+.payment-fields {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.payment-amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.payment-amount.is-credit {
+  color: #629a4c;
+}
+.payment-amount.is-debit {
+  color: #ff4961;
+}
+
+.payment-reference {
+  font-size: 12px;
+}
+.payment-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.action-button {
+  cursor: pointer;
+}

@@ -79,7 +79,6 @@ export class IrHkUnassignedUnits {
                 }
                 this.assignUnit(unit.id, hk_id, false);
               }}
-              LabelAvailable={false}
               data={housekeeping_store.hk_criteria.housekeepers.map(hk => ({ text: hk.name, value: hk.id.toString() }))}
             ></ir-select>
           </td>

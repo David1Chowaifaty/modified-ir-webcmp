@@ -165,6 +165,7 @@ export class GuestInfo {
               onCountryChange={e => this.handleInputChange({ country_id: e.detail.id })}
               countries={this.countries}
             ></ir-country-picker>
+
             <ir-phone-input
               onTextChange={e => {
                 e.stopImmediatePropagation();

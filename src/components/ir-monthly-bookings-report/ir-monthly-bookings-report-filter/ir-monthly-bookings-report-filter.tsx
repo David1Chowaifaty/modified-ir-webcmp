@@ -93,7 +93,6 @@ export class IrMonthlyBookingsReportFilter {
               onSelectChange={e => {
                 this.updateFilter({ date: this.dates.find(d => d.description === e.detail) });
               }}
-              LabelAvailable={false}
               data={this.dates.map(d => ({
                 text: d.description,
                 value: d.description,

@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { ZodType } from 'zod';
 import IMask, { InputMask } from 'imask';
@@ -58,7 +58,7 @@ export class IrPriceInput {
   @Prop() testId?: string;
 
   /** Error*/
-  @State() error: boolean;
+  @Prop({ mutable: true }) error: boolean;
 
   /** Emits the current value on change */
   @Event() textChange: EventEmitter<string>;
@@ -192,7 +192,7 @@ export class IrPriceInput {
               ${this.hasSpecialClass('ir-bl-none') ? 'ir-bl-none' : ''} 
               `}
             >
-              <label class={'p-0 m-0 '} htmlFor={this.id}>
+              <label class={'p-0 m-0'} htmlFor={this.id}>
                 {this.label}
               </label>
             </span>
