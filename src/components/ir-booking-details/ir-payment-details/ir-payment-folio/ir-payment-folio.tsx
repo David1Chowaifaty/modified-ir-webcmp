@@ -1,10 +1,11 @@
 import calendar_data from '@/stores/calendar-data';
-import { Component, Event, EventEmitter, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import moment from 'moment';
 import { z, ZodError } from 'zod';
 import { IPayment } from '@/models/booking.dto';
 import { IEntries } from '@/models/IBooking';
 import { PaymentService } from '@/services/payment.service';
+import { FolioEntryMode } from '../../types';
 
 @Component({
   tag: 'ir-payment-folio',
@@ -25,6 +26,8 @@ export class IrPaymentFolio {
     id: -1,
   };
 
+  @Prop() mode: FolioEntryMode;
+
   @State() isLoading: boolean;
   @State() errors: any;
   @State() autoValidate: boolean = false;
@@ -44,13 +47,18 @@ export class IrPaymentFolio {
         .refine(
           dateStr => {
             const date = moment(dateStr, 'YYYY-MM-DD', true);
-            return date.isValid();
+            return date.isValid() && !date.isAfter(moment(), 'dates');
           },
           { message: `Invalid date` },
         ),
       amount: z.coerce.number().refine(a => a !== 0),
       reference: z.string().optional().nullable(),
       designation: z.string().min(1),
+      payment_type: z.object({
+        code: z.string().min(3).max(4),
+        description: z.string().min(1),
+        operation: z.union([z.literal('CR'), z.literal('DB')]),
+      }),
     });
     if (this.payment) {
       this.folioData = { ...this.payment };
@@ -76,18 +84,12 @@ export class IrPaymentFolio {
         this.errors = null;
       }
       this.folioSchema.parse(this.folioData ?? {});
-      const payment_type = this.paymentTypes.find(p => p.CODE_NAME === this.folioData.designation);
       await this.paymentService.AddPayment(
         {
           ...this.folioData,
           currency: calendar_data.currency,
           reference: this.folioData.reference ?? '',
-          designation: payment_type.CODE_VALUE_EN,
-          payment_type: {
-            code: payment_type.CODE_NAME,
-            description: payment_type.CODE_VALUE_EN,
-            operation: payment_type.NOTES,
-          },
+          designation: this.folioData.payment_type?.description,
         },
         this.bookingNumber,
       );
@@ -96,11 +98,11 @@ export class IrPaymentFolio {
     } catch (error) {
       const err = {};
       if (error instanceof ZodError) {
-        console.log(error.issues);
         error.issues.forEach(e => {
           err[e.path[0]] = true;
         });
       }
+      console.error(error);
       this.errors = err;
     } finally {
       this.isLoading = false;
@@ -126,7 +128,6 @@ export class IrPaymentFolio {
         });
         return;
       }
-      console.log(payment_type);
       this.updateFolioData({
         payment_type: {
           code: payment_type.CODE_NAME,
@@ -136,7 +137,25 @@ export class IrPaymentFolio {
       });
     }
   }
-
+  private renderDropdownItems() {
+    const dividerArray = ['011'];
+    if (this.mode !== 'payment-action') {
+      dividerArray.push('008');
+    }
+    let items = [...this.paymentTypes];
+    if (this.mode === 'payment-action') {
+      items = items.slice(0, 8);
+    }
+    return items.map(pt => (
+      <Fragment>
+        <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
+          <span>{pt.CODE_VALUE_EN}</span>
+          <span class={`payment-type-badge ${pt.NOTES === 'CR' ? 'credit-badge' : 'debit-badge'}`}>{pt.NOTES === 'CR' ? 'credit' : 'debit'}</span>
+        </ir-dropdown-item>
+        {dividerArray.includes(pt.CODE_NAME) && <div class="dropdown-divider"></div>}
+      </Fragment>
+    ));
+  }
   render() {
     return (
       <form
@@ -146,7 +165,12 @@ export class IrPaymentFolio {
           this.savePayment();
         }}
       >
-        <ir-title class="px-1 sheet-header" onCloseSideBar={() => this.closeModal.emit(null)} label={'Payment Folio'} displayContext="sidebar"></ir-title>
+        <ir-title
+          class="px-1 sheet-header"
+          onCloseSideBar={() => this.closeModal.emit(null)}
+          label={this.mode === 'edit' ? 'Edit Folio Entry' : 'New Folio Entry'}
+          displayContext="sidebar"
+        ></ir-title>
         <section class={'px-1 sheet-body d-flex flex-column'} style={{ gap: '1rem' }}>
           <div class={'d-flex w-fill'} style={{ gap: '0.5rem' }}>
             {/*Date Picker */}
@@ -165,6 +189,7 @@ export class IrPaymentFolio {
                     date={this.folioData?.date}
                     class="w-100"
                     emitEmptyDate={true}
+                    maxDate={moment().format('YYYY-MM-DD')}
                     aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
                     onDateChanged={evt => {
                       this.updateFolioData({ date: evt.detail.start?.format('YYYY-MM-DD') });
@@ -189,6 +214,7 @@ export class IrPaymentFolio {
               }`}
             </style>
             <ir-price-input
+              minValue={0}
               autoValidate={this.autoValidate}
               zod={this.folioSchema.pick({ amount: true })}
               wrapKey="amount"
@@ -214,12 +240,7 @@ export class IrPaymentFolio {
                 </button>
               </div>
               <ir-dropdown-item value="">Select...</ir-dropdown-item>
-              {this.paymentTypes.map(pt => (
-                <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
-                  <span>{pt.CODE_VALUE_EN}</span>
-                  <span class={`payment-type-badge ${pt.NOTES === 'CR' ? 'credit-badge' : 'debit-badge'}`}>{pt.NOTES === 'CR' ? 'credit' : 'debit'}</span>
-                </ir-dropdown-item>
-              ))}
+              {this.renderDropdownItems()}
             </ir-dropdown>
           </div>
           <div>

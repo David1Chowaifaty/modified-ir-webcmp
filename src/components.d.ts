@@ -20,7 +20,7 @@ import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
 import { BookingService } from "./services/booking.service";
-import { OpenSidebarEvent, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+import { FolioEntryMode, OpenSidebarEvent, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -59,7 +59,7 @@ export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
 export { BookingService } from "./services/booking.service";
-export { OpenSidebarEvent, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+export { FolioEntryMode, OpenSidebarEvent, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -1413,6 +1413,7 @@ export namespace Components {
     }
     interface IrPaymentFolio {
         "bookingNumber": string;
+        "mode": FolioEntryMode;
         "payment": IPayment;
         "paymentTypes": IEntries[];
     }
@@ -6241,6 +6242,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentFolio {
         "bookingNumber"?: string;
+        "mode"?: FolioEntryMode;
         "onCloseModal"?: (event: IrPaymentFolioCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrPaymentFolioCustomEvent<null>) => void;
         "payment"?: IPayment;

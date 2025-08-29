@@ -18,7 +18,7 @@ export class IrPaymentActions {
     return (
       <Host>
         <div class={'my-1 d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-          <p class={'font-size-large p-0 m-0 '}>Payment actions</p>
+          <p class={'font-size-large p-0 m-0 '}>Payment Actions</p>
           <span class="beta">Beta</span>
         </div>
         <div class="payment-actions-container">

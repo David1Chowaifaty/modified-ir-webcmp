@@ -1,6 +1,7 @@
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { Component, Event, EventEmitter, Prop, h } from '@stencil/core';
 import { IPayment } from '@/models/booking.dto';
+import { formatAmount } from '@/utils/utils';
 
 @Component({
   tag: 'ir-payment-item',
@@ -29,8 +30,7 @@ export class IrPaymentItem {
 
         <div class="payment-toolbar" part="payment-toolbar">
           <p class={`payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>
-            {isCredit ? '+' : '-'}
-            {this.payment.currency.symbol} {this.payment.amount}
+            {formatAmount(this.payment.currency.symbol, this.payment.payment_type.code === '012' ? this.payment.amount * -1 : this.payment.amount)}
           </p>
           <div class="payment-actions">
             <ir-button

@@ -32,10 +32,9 @@ export class IrPaymentDetails {
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
-    console.log({ value });
     this.openSidebar.emit({
       type: 'payment-folio',
-      payload: { ...value, date: value.due_on, id: -1, amount: value.amount },
+      payload: { payment: { ...value, date: value.due_on, id: -1, amount: value.amount }, mode: 'payment-action' },
     });
   }
 
@@ -43,12 +42,15 @@ export class IrPaymentDetails {
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: {
-        id: -1,
-        date: moment().format('YYYY-MM-DD'),
-        amount: null,
-        currency: undefined,
-        designation: null,
-        reference: null,
+        payment: {
+          id: -1,
+          date: moment().format('YYYY-MM-DD'),
+          amount: null,
+          currency: undefined,
+          designation: null,
+          reference: null,
+        },
+        mode: 'new',
       },
     });
   };
@@ -57,7 +59,7 @@ export class IrPaymentDetails {
     console.log(payment);
     this.openSidebar.emit({
       type: 'payment-folio',
-      payload: { ...payment },
+      payload: { payment, mode: 'edit' },
     });
   };
 

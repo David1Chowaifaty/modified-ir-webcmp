@@ -63,7 +63,7 @@ export class IrPaymentsFolio {
       <div class="mt-1">
         <div class="d-flex flex-column rounded payment-container">
           <div class="d-flex align-items-center justify-content-between">
-            <p class="font-size-large p-0 m-0">Payment folio</p>
+            <p class="font-size-large p-0 m-0">Payment Folio</p>
             <ir-button id="add-payment" variant="icon" icon_name="square_plus" style={{ '--icon-size': '1.5rem' }} onClickHandler={this.handleAddPayment} />
           </div>
 

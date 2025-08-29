@@ -13,8 +13,9 @@ export type OpenDialogEvent = {
 };
 export type PaymentSidebarEvent = {
   type: 'payment-folio';
-  payload: IPayment;
+  payload: { payment: IPayment; mode: FolioEntryMode };
 };
+export type FolioEntryMode = 'edit' | 'new' | 'payment-action';
 export type RoomGuestsPayload = {
   roomName: string;
   sharing_persons: SharedPerson[];

@@ -387,7 +387,8 @@ export class IrBookingDetails {
             bookingNumber={this.booking.booking_nbr}
             paymentTypes={this.paymentTypes}
             slot="sidebar-body"
-            payment={this.sidebarPayload}
+            payment={this.sidebarPayload.payment}
+            mode={this.sidebarPayload.mode}
             onCloseModal={handleClose}
           ></ir-payment-folio>
         );
