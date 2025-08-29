@@ -208,25 +208,15 @@ export class IrPaymentFolio {
             </div>
           </div>
           <div>
-            <style>
-              {`
-                .price-label {
-                  width: 94px !important;
-                }
-                @media (min-width: 768px) {
-                  .price-label {
-                    width: 133px !important;
-                  }
-                }
-              `}
-            </style>
             <ir-price-input
+              containerClassname="row"
+              labelContainerClassname="col-3 p-0 text-dark border-0"
               minValue={0}
               autoValidate={this.autoValidate}
               zod={this.folioSchema.pick({ amount: true })}
               wrapKey="amount"
               label="Amount"
-              labelStyle={'price-label'}
+              labelStyle={'flex-grow-1 text-dark  border-theme'}
               error={this.errors?.amount && !this.folioData?.amount}
               value={this.folioData?.amount?.toString()}
               currency={calendar_data.currency.symbol}

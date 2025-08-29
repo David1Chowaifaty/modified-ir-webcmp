@@ -22,7 +22,7 @@ export class IrPaymentActions {
           <span class="beta">Beta</span>
         </div>
         <div class="payment-actions-container">
-          {([...this.paymentAction, { ...this.paymentAction[0], type: 'future' }] as any)?.map((pa, index) => (
+          {this.paymentAction?.map((pa, index) => (
             <ir-payment-action key={pa.due_on + index} paymentAction={pa}></ir-payment-action>
           ))}
         </div>

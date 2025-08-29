@@ -1528,6 +1528,10 @@ export namespace Components {
          */
         "autoValidate"?: boolean;
         /**
+          * Extra class names applied to the outer <fieldset> wrapper. Useful for spacing (e.g., margins/padding), width/layout utilities, or theming the whole input group from the outside. Example: "w-100 mb-2 d-flex align-items-center"
+         */
+        "containerClassname": string;
+        /**
           * The Currency for the input, optional
          */
         "currency"?: string;
@@ -1547,6 +1551,10 @@ export namespace Components {
           * The label for the input, optional
          */
         "label"?: string;
+        /**
+          * Extra class names applied to the label container (<div class="input-group-prepend">) that wraps the <label>. Use this to control label width, alignment, spacing, or visibility at different breakpoints. Example: "min-w-120 text-nowrap pe-2"
+         */
+        "labelContainerClassname": string;
         /**
           * Extra classnames for the label, optional
          */
@@ -6371,6 +6379,10 @@ declare namespace LocalJSX {
          */
         "autoValidate"?: boolean;
         /**
+          * Extra class names applied to the outer <fieldset> wrapper. Useful for spacing (e.g., margins/padding), width/layout utilities, or theming the whole input group from the outside. Example: "w-100 mb-2 d-flex align-items-center"
+         */
+        "containerClassname"?: string;
+        /**
           * The Currency for the input, optional
          */
         "currency"?: string;
@@ -6390,6 +6402,10 @@ declare namespace LocalJSX {
           * The label for the input, optional
          */
         "label"?: string;
+        /**
+          * Extra class names applied to the label container (<div class="input-group-prepend">) that wraps the <label>. Use this to control label width, alignment, spacing, or visibility at different breakpoints. Example: "min-w-120 text-nowrap pe-2"
+         */
+        "labelContainerClassname"?: string;
         /**
           * Extra classnames for the label, optional
          */
