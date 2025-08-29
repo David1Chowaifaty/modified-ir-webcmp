@@ -37,10 +37,10 @@
   gap: 0.25rem;
   flex: 1 1 0%;
 }
+
 .payment-fields {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
 }
 
 .payment-amount {
@@ -64,4 +64,11 @@
 }
 .action-button {
   cursor: pointer;
+}
+@media (min-width: 768px) {
+  .payment-fields {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
 }

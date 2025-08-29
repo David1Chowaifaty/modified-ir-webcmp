@@ -209,9 +209,16 @@ export class IrPaymentFolio {
           </div>
           <div>
             <style>
-              {`.price-label{
-              width:133px !important;
-              }`}
+              {`
+                .price-label {
+                  width: 94px !important;
+                }
+                @media (min-width: 768px) {
+                  .price-label {
+                    width: 133px !important;
+                  }
+                }
+              `}
             </style>
             <ir-price-input
               minValue={0}
@@ -250,6 +257,7 @@ export class IrPaymentFolio {
               autoValidate={this.autoValidate}
               zod={this.folioSchema.pick({ reference: true })}
               label="Reference"
+              maxLength={50}
               inputContainerStyle={{
                 margin: '0',
               }}

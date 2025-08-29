@@ -1,9 +1,10 @@
 :host {
   display: block;
   --label-col: 6rem; /* width for icon + status text */
-  --amount-col: 12ch; /* width for currency (tabular) */
+  --amount-col: 1ch; /* width for currency (tabular) */
   --payment-action-bg: rgba(255, 73, 97, 10%);
   --payment-action-border: rgba(255, 73, 97, 40%);
+  max-width: 500px;
 }
 
 .action-container.overdue {
@@ -52,13 +53,16 @@
   column-gap: 1rem;
   min-width: 0;
 }
-
+.alert-message {
+  display: none;
+}
 /* Numbers line up, date starts at same x every row */
 .amount_action {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   text-align: right;
   justify-self: end; /* hugs the right edge of the amount column */
+  white-space: nowrap;
 }
 .date_action {
   font-weight: 500;
@@ -76,4 +80,13 @@
 /* Remove any leftover layout from earlier */
 .action-row {
   display: contents;
+}
+
+@media (min-width: 640px) {
+  :host {
+    --amount-col: 8ch;
+  }
+  .alert-message {
+    display: inline-flex;
+  }
 }
