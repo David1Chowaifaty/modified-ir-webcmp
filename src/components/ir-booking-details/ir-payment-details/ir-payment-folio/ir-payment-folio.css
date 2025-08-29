@@ -24,3 +24,7 @@
   box-sizing: border-box;
   justify-content: space-between;
 }
+
+.input-group-text {
+  border-color: #cacfe7 !important;
+}

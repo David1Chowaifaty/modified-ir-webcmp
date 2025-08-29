@@ -935,6 +935,10 @@ export namespace Components {
          */
         "labelColor": 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
         /**
+          * Extra class names applied to the label container (<div class="input-group-prepend">) that wraps the <label>. Use this to control label width, alignment, spacing, or visibility at different breakpoints. Example: "min-w-120 text-nowrap pe-2"
+         */
+        "labelContainerClassname": string;
+        /**
           * Position of the label: left, right, or center
          */
         "labelPosition": 'left' | 'right' | 'center' | 'top';
@@ -5700,6 +5704,10 @@ declare namespace LocalJSX {
           * Text color of the label
          */
         "labelColor"?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+        /**
+          * Extra class names applied to the label container (<div class="input-group-prepend">) that wraps the <label>. Use this to control label width, alignment, spacing, or visibility at different breakpoints. Example: "min-w-120 text-nowrap pe-2"
+         */
+        "labelContainerClassname"?: string;
         /**
           * Position of the label: left, right, or center
          */

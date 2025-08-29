@@ -176,7 +176,7 @@ export class IrPaymentFolio {
             {/*Date Picker */}
             <div class="form-group  mb-0 flex-grow-1">
               <div class="input-group row m-0 flex-grow-1">
-                <div class={`input-group-prepend col-3 p-0 text-dark border-0`}>
+                <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
                   <label class={`input-group-text flex-grow-1 text-dark border-theme `}>Date</label>
                 </div>
                 <div class="form-control  form-control-md col-10 flex-grow-1 d-flex align-items-center px-0 mx-0" style={{ border: '0' }}>
@@ -210,7 +210,7 @@ export class IrPaymentFolio {
           <div>
             <ir-price-input
               containerClassname="row"
-              labelContainerClassname="col-3 p-0 text-dark border-0"
+              labelContainerClassname="col-4 col-md-3 p-0 text-dark border-0"
               minValue={0}
               autoValidate={this.autoValidate}
               zod={this.folioSchema.pick({ amount: true })}
@@ -226,7 +226,7 @@ export class IrPaymentFolio {
           <div>
             <ir-dropdown value={this.folioData?.payment_type?.code} onOptionChange={this.handleDropdownChange.bind(this)}>
               <div slot="trigger" class={'input-group row m-0 '}>
-                <div class={`input-group-prepend col-3 p-0 text-dark border-0`}>
+                <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
                   <label class={`input-group-text flex-grow-1 text-dark  border-theme`}>Transaction type</label>
                 </div>
                 <button
@@ -253,6 +253,7 @@ export class IrPaymentFolio {
               }}
               onTextChange={e => this.updateFolioData({ reference: e.detail })}
               labelWidth={3}
+              labelContainerClassname={'col-4 col-md-3'}
             ></ir-input-text>
           </div>
         </section>

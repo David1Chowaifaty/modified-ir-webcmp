@@ -124,6 +124,13 @@ export class IrInputText {
 
   /** Forcing css style to the input container */
   @Prop() inputContainerStyle: { [key: string]: string };
+  /**
+   * Extra class names applied to the label container (<div class="input-group-prepend">)
+   * that wraps the <label>. Use this to control label width, alignment,
+   * spacing, or visibility at different breakpoints.
+   * Example: "min-w-120 text-nowrap pe-2"
+   */
+  @Prop() labelContainerClassname: string;
 
   @State() inputFocused: boolean = false;
 
@@ -352,7 +359,7 @@ export class IrInputText {
       <div class={'form-group'} style={this.inputContainerStyle}>
         <div class="input-group row m-0">
           {this.label && (
-            <div class={`input-group-prepend col-${this.labelWidth} p-0 text-${this.labelColor}`}>
+            <div class={`input-group-prepend col-${this.labelWidth} ${this.labelContainerClassname} p-0 text-${this.labelColor}`}>
               <label
                 htmlFor={this.id}
                 class={`input-group-text ${this.labelPosition === 'right' ? 'justify-content-end' : this.labelPosition === 'center' ? 'justify-content-center' : ''} ${
