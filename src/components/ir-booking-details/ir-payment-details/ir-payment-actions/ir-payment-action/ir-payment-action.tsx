@@ -15,9 +15,9 @@ export class IrPaymentAction {
 
   render() {
     return (
-      <div class={`action-container ${this.paymentAction.type}`}>
+      <div class={`action-container ${this.paymentAction.type.toLowerCase()}`}>
         <div class={'action-row'}>
-          {this.paymentAction.type === 'overdue' && this.paymentAction.amount > 0 && (
+          {this.paymentAction.type.toLowerCase() === 'overdue' && this.paymentAction.amount > 0 && (
             <div class={'overdue_action'}>
               <svg height={16} width={16} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path
@@ -28,7 +28,7 @@ export class IrPaymentAction {
               <span class="alert-message">Overdue</span>
             </div>
           )}
-          {this.paymentAction.type === 'future' && this.paymentAction.amount > 0 && (
+          {this.paymentAction.type.toLowerCase() === 'future' && this.paymentAction.amount > 0 && (
             <div class={'future_action '}>
               <svg xmlns="http://www.w3.org/2000/svg" height={16} width={16} viewBox="0 0 512 512">
                 <path
@@ -39,9 +39,12 @@ export class IrPaymentAction {
               <span class="alert-message">{moment(new Date(this.paymentAction.due_on)).isSame(new Date()) ? 'Today' : 'Future'}</span>
             </div>
           )}
-          <div class="payment-meta">
-            <p class={'amount_action'}>{formatAmount(this.paymentAction.currency.symbol, this.paymentAction.amount)}</p>
-            <p class={'date_action'}>{moment(new Date(this.paymentAction.due_on)).format('ddd, MMM DD YYYY')}</p>
+          <div class="meta-grid">
+            <div class="payment-meta">
+              <p class="amount_action">{formatAmount(this.paymentAction.currency.symbol, this.paymentAction.amount)}</p>
+              <p class="date_action">{moment(new Date(this.paymentAction.due_on)).format('ddd, MMM DD YYYY')}</p>
+            </div>
+            <p class="payment-reason">{this.paymentAction.reason.trim()}</p>
           </div>
         </div>
 

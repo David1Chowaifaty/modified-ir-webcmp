@@ -7,6 +7,7 @@ import { IToast } from '@/components/ui/ir-toast/toast';
 import { PaymentSidebarEvent } from '../types';
 import { IEntries } from '@/models/IBooking';
 import moment from 'moment';
+
 @Component({
   styleUrl: 'ir-payment-details.css',
   tag: 'ir-payment-details',
@@ -32,9 +33,25 @@ export class IrPaymentDetails {
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
+    const paymentType = this.paymentTypes?.find(p => p.CODE_NAME === value.pay_type_code);
     this.openSidebar.emit({
       type: 'payment-folio',
-      payload: { payment: { ...value, date: value.due_on, id: -1, amount: value.amount }, mode: 'payment-action' },
+      payload: {
+        payment: {
+          ...value,
+          date: value.due_on,
+          id: -1,
+          amount: value.amount,
+          payment_type: paymentType
+            ? {
+                code: paymentType.CODE_NAME,
+                description: paymentType.CODE_VALUE_EN,
+                operation: paymentType.NOTES,
+              }
+            : null,
+        },
+        mode: 'payment-action',
+      },
     });
   }
 
