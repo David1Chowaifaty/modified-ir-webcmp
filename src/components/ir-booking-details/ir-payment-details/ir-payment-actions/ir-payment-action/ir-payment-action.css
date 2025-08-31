@@ -14,6 +14,14 @@
   --payment-action-bg: rgb(30, 159, 242, 5%);
   --payment-action-border: rgba(30, 159, 242, 40%);
 }
+.action-container.overdue:hover {
+  --payment-action-bg: rgba(255, 73, 97, 10%);
+  --payment-action-border: rgba(255, 73, 97, 50%);
+}
+.action-container.future:hover {
+  --payment-action-bg: rgb(30, 159, 242, 10%);
+  --payment-action-border: rgba(30, 159, 242, 50%);
+}
 
 /* One grid per row, but with fixed track sizes so all rows align */
 .action-container {
@@ -25,6 +33,7 @@
   box-sizing: border-box; /* (fixed the typo) */
   border: 1px solid var(--payment-action-border);
   border-radius: 0.25rem;
+  transition: all 0.3s ease-in-out;
 }
 
 .overdue_action,
