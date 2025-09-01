@@ -14,6 +14,8 @@ export class IrDropdown {
 
   @Prop({ reflect: true, mutable: true }) value: DropdownItem['value'];
 
+  @Prop({ reflect: true, mutable: true }) disabled: boolean = false;
+
   @State() isOpen: boolean = false;
   @State() selectedOption: DropdownItem['value'];
   @State() focusedIndex: number = -1;
@@ -213,7 +215,7 @@ export class IrDropdown {
   }
 
   private handleKeyDown = (event: KeyboardEvent) => {
-    if (!this.isComponentConnected) return;
+    if (!this.isComponentConnected || this.disabled) return;
 
     const maxIndex = this.itemChildren.length - 1;
 
@@ -298,18 +300,20 @@ export class IrDropdown {
       <Host class={`dropdown ${this.isOpen ? 'show' : ''}`}>
         <div
           onClick={() => {
+            if (this.disabled) return;
             if (this.isOpen) {
               this.closeDropdown();
             } else {
               this.openDropdown();
             }
           }}
-          class="position-relative"
+          aria-disabled={String(this.disabled)}
+          class={`dropdown-trigger ${this.disabled ? 'disabled' : ''}`}
           onKeyDown={this.handleKeyDown}
           tabindex="0"
         >
           <slot name="trigger"></slot>
-          <div class="caret-icon">
+          <div class={`caret-icon ${this.disabled ? 'disabled' : ''}`}>
             <ir-icons name={!this.isOpen ? 'angle-down' : 'angle-up'}></ir-icons>
           </div>
         </div>

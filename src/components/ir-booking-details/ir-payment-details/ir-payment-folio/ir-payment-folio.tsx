@@ -32,9 +32,11 @@ export class IrPaymentFolio {
   @State() errors: any;
   @State() autoValidate: boolean = false;
   @State() folioData: IPayment;
+  @State() _paymentTypes: IEntries[] = [];
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetBookingEvt: EventEmitter<null>;
+  @Event() resetExposedCancellationDueAmount: EventEmitter<null>;
 
   private folioSchema: any;
   private paymentService = new PaymentService();
@@ -63,12 +65,20 @@ export class IrPaymentFolio {
     if (this.payment) {
       this.folioData = { ...this.payment };
     }
+    this.getPaymentTypes();
   }
 
   @Watch('payment')
   handlePaymentChange(newValue: IPayment, oldValue: IPayment) {
     if (newValue !== oldValue && newValue) {
       this.folioData = { ...newValue };
+      this.getPaymentTypes();
+    }
+  }
+  @Watch('paymentTypes')
+  handlePaymentTypesChange(newValue: IEntries[], oldValue: IEntries[]) {
+    if (newValue !== oldValue && newValue) {
+      this.getPaymentTypes();
     }
   }
 
@@ -94,6 +104,7 @@ export class IrPaymentFolio {
         this.bookingNumber,
       );
       this.resetBookingEvt.emit(null);
+      this.resetExposedCancellationDueAmount.emit(null);
       this.closeModal.emit(null);
     } catch (error) {
       const err = {};
@@ -137,16 +148,21 @@ export class IrPaymentFolio {
       });
     }
   }
+  private async getPaymentTypes() {
+    let items = [...this.paymentTypes];
+    if (this.mode === 'payment-action') {
+      items = items.slice(0, 8);
+    }
+    this._paymentTypes = items;
+  }
+
   private renderDropdownItems() {
     const dividerArray = ['011'];
     if (this.mode !== 'payment-action') {
       dividerArray.push('008');
     }
-    let items = [...this.paymentTypes];
-    if (this.mode === 'payment-action') {
-      items = items.slice(0, 8);
-    }
-    return items.map(pt => (
+
+    return this._paymentTypes.map(pt => (
       <Fragment>
         <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
           <span>{pt.CODE_VALUE_EN}</span>
@@ -224,13 +240,18 @@ export class IrPaymentFolio {
             ></ir-price-input>
           </div>
           <div>
-            <ir-dropdown value={this.folioData?.payment_type?.code} onOptionChange={this.handleDropdownChange.bind(this)}>
+            <ir-dropdown
+              value={this.folioData?.payment_type?.code}
+              disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
+              onOptionChange={this.handleDropdownChange.bind(this)}
+            >
               <div slot="trigger" class={'input-group row m-0 '}>
                 <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
                   <label class={`input-group-text flex-grow-1 text-dark  border-theme`}>Transaction type</label>
                 </div>
                 <button
                   type="button"
+                  disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
                   class={`form-control  d-flex align-items-center cursor-pointer ${this.errors?.designation && !this.folioData?.designation ? 'border-danger' : ''}`}
                 >
                   {this.folioData?.payment_type ? <span>{this.folioData.payment_type?.description}</span> : <span>Select...</span>}

@@ -32,7 +32,8 @@
         const bookingDetail = document.querySelector("ir-booking-details");
         setTimeout(async () => {
             const ticket = await getToken();
-            bookingDetail.bookingNumber = "51463877884"
+            // bookingDetail.bookingNumber = "51463877884"
+            bookingDetail.bookingNumber = "51731041471"
             bookingDetail.propertyid = getId();
             bookingDetail.ticket = ticket;
         }, 300)

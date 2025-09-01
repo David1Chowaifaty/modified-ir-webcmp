@@ -18,3 +18,11 @@
   right: 0.25rem;
   z-index: 99999;
 }
+.dropdown-trigger {
+  position: relative;
+}
+.caret-icon.disabled {
+  opacity: 0.5 !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+}

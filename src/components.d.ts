@@ -781,6 +781,7 @@ export namespace Components {
         "placement": 'left' | 'right';
     }
     interface IrDropdown {
+        "disabled": boolean;
         "value": DropdownItem['value'];
     }
     interface IrDropdownItem {
@@ -3918,6 +3919,7 @@ declare global {
     interface HTMLIrPaymentFolioElementEventMap {
         "closeModal": null;
         "resetBookingEvt": null;
+        "resetExposedCancellationDueAmount": null;
     }
     interface HTMLIrPaymentFolioElement extends Components.IrPaymentFolio, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentFolioElementEventMap>(type: K, listener: (this: HTMLIrPaymentFolioElement, ev: IrPaymentFolioCustomEvent<HTMLIrPaymentFolioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5523,6 +5525,7 @@ declare namespace LocalJSX {
         "placement"?: 'left' | 'right';
     }
     interface IrDropdown {
+        "disabled"?: boolean;
         /**
           * Emitted when a user selects an option from the combobox. The event payload contains the selected `DropdownItem` object.
          */
@@ -6261,6 +6264,7 @@ declare namespace LocalJSX {
         "mode"?: FolioEntryMode;
         "onCloseModal"?: (event: IrPaymentFolioCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrPaymentFolioCustomEvent<null>) => void;
+        "onResetExposedCancellationDueAmount"?: (event: IrPaymentFolioCustomEvent<null>) => void;
         "payment"?: IPayment;
         "paymentTypes"?: IEntries[];
     }

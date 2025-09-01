@@ -44,7 +44,7 @@ export class IrPaymentAction {
               <p class="amount_action">{formatAmount(this.paymentAction.currency.symbol, this.paymentAction.amount)}</p>
               <p class="date_action">{moment(new Date(this.paymentAction.due_on)).format('ddd, MMM DD YYYY')}</p>
             </div>
-            <p class="payment-reason">{this.paymentAction.reason.trim()}</p>
+            {/* <p class="payment-reason">{this.paymentAction.reason.trim()}</p> */}
           </div>
         </div>
 
