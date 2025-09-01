@@ -32,7 +32,7 @@ export class IrPaymentFolio {
   @State() errors: any;
   @State() autoValidate: boolean = false;
   @State() folioData: IPayment;
-  @State() _paymentTypes: IEntries[] = [];
+  @State() _paymentTypes: Record<string, IEntries[]> = {};
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetBookingEvt: EventEmitter<null>;
@@ -149,26 +149,54 @@ export class IrPaymentFolio {
     }
   }
   private async getPaymentTypes() {
-    let items = [...this.paymentTypes];
-    if (this.mode === 'payment-action') {
-      items = items.slice(0, 8);
+    // Safety checks
+    if (!Array.isArray(this.paymentTypes) || this.paymentTypes.length === 0) {
+      this._paymentTypes = {};
+      return;
     }
-    this._paymentTypes = items;
+
+    // Local copy so we never mutate the prop
+    const items = [...this.paymentTypes];
+
+    // Helper: keep the order defined by the code arrays
+    const byCodes = (codes: string[]) => codes.map(code => items.find(i => i.CODE_NAME === code)).filter((x): x is IEntries => Boolean(x));
+
+    // Code groups
+    const paymentsTypesCodes = ['001', '002', '003', '004', '005', '006', '007', '008'];
+    const adjustmentsTypeCodes = ['009', '010', '011'];
+    const cancellationTypesCodes = ['012', '013'];
+
+    // Build the record in display order (Payments → Adjustments → Cancellations)
+    let rec: Record<string, IEntries[]> = {};
+
+    if (this.mode === 'payment-action') {
+      // Only payments for "payment-action"
+      const payments = byCodes(paymentsTypesCodes);
+      if (payments.length) rec['Payments'] = payments;
+    } else {
+      const payments = byCodes(paymentsTypesCodes);
+      const adjustments = byCodes(adjustmentsTypeCodes);
+      const cancellations = byCodes(cancellationTypesCodes);
+
+      if (payments.length) rec['Payments'] = payments;
+      if (adjustments.length) rec['Adjustments'] = adjustments;
+      if (cancellations.length) rec['Cancellations'] = cancellations;
+    }
+
+    this._paymentTypes = rec;
   }
 
   private renderDropdownItems() {
-    const dividerArray = ['011'];
-    if (this.mode !== 'payment-action') {
-      dividerArray.push('008');
-    }
-
-    return this._paymentTypes.map(pt => (
+    console.log(this._paymentTypes);
+    return Object.values(this._paymentTypes).map((p, idx) => (
       <Fragment>
-        <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
-          <span>{pt.CODE_VALUE_EN}</span>
-          <span class={`payment-type-badge ${pt.NOTES === 'CR' ? 'credit-badge' : 'debit-badge'}`}>{pt.NOTES === 'CR' ? 'credit' : 'debit'}</span>
-        </ir-dropdown-item>
-        {dividerArray.includes(pt.CODE_NAME) && <div class="dropdown-divider"></div>}
+        {p.map(pt => (
+          <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
+            <span>{pt.CODE_VALUE_EN}</span>
+            <span class={`payment-type-badge ${pt.NOTES === 'CR' ? 'credit-badge' : 'debit-badge'}`}>{pt.NOTES === 'CR' ? 'credit' : 'debit'}</span>
+          </ir-dropdown-item>
+        ))}
+        {idx !== Object.values(this._paymentTypes).length - 1 && <div class="dropdown-divider"></div>}
       </Fragment>
     ));
   }
