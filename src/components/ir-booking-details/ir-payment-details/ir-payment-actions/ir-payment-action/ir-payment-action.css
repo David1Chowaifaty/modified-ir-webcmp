@@ -44,7 +44,7 @@
   border-radius: 0.25rem;
   min-width: 0;
 }
-.overdue_action {
+.action-container.overdue .overdue_action {
   color: #ff4961;
 }
 .future_action {
@@ -56,8 +56,12 @@
   align-items: center;
   gap: 1rem;
 }
+
 .alert-message {
   display: none;
+}
+.action-container.overdue .alert-message {
+  text-transform: capitalize;
 }
 .amount_action {
   font-weight: 600;
