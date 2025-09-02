@@ -5,6 +5,7 @@ import locales from '@/stores/locales.store';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { PaymentService } from '@/services/payment.service';
 import moment from 'moment';
+import { IEntries } from '@/models/property';
 
 @Component({
   tag: 'ir-listing-modal',
@@ -14,17 +15,18 @@ import moment from 'moment';
 export class IrListingModal {
   @Prop() modalTitle: string = 'Modal Title';
   @Prop() editBooking: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' };
+  @Prop() paymentEntries: IEntries[];
 
   @State() isOpen: boolean = false;
   @State() deletionStage = 2;
-  @State() selectedDesignation: string;
+  @State() selectedDesignation: IEntries;
   @State() loadingBtn: 'confirm' | 'just_delete' | 'recover_and_delete' | null = null;
 
   private bookingListingsService = new BookingListingService();
   private paymentService = new PaymentService();
 
   componentWillLoad() {
-    this.selectedDesignation = booking_listing.settlement_methods[0].name;
+    this.selectedDesignation = this.paymentEntries[0];
   }
 
   @Event() modalClosed: EventEmitter<null>;
@@ -34,7 +36,7 @@ export class IrListingModal {
   async closeModal() {
     this.isOpen = false;
     // this.deletionStage = 1;
-    this.selectedDesignation = booking_listing.settlement_methods[0].name;
+    this.selectedDesignation = this.paymentEntries[0];
     this.modalClosed.emit(null);
   }
   @Method()
@@ -58,7 +60,12 @@ export class IrListingModal {
               amount: this.editBooking.booking.financial.due_amount,
               currency: this.editBooking.booking.currency,
               date: moment().format('YYYY-MM-DD'),
-              designation: this.selectedDesignation,
+              designation: this.selectedDesignation.CODE_VALUE_EN,
+              payment_type: {
+                code: this.selectedDesignation.CODE_NAME,
+                description: this.selectedDesignation.CODE_VALUE_EN,
+                operation: this.selectedDesignation.NOTES,
+              },
               id: -1,
               reference: '',
             },
@@ -120,6 +127,20 @@ export class IrListingModal {
     // }
     return locales.entries.Lcz_Cancel;
   }
+  private handleDropdownChange(e: CustomEvent<string | number>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const value = e.detail.toString();
+    console.log(value);
+
+    const payment_type = this.paymentEntries.find(pt => pt.CODE_NAME === value);
+    if (!payment_type) {
+      console.warn(`Invalid payment type ${e.detail}`);
+
+      return;
+    }
+    this.selectedDesignation = payment_type;
+  }
   render() {
     if (!this.editBooking) {
       return null;
@@ -157,12 +178,12 @@ export class IrListingModal {
             <div class="modal-body text-left p-0 mb-2">
               {this.editBooking.cause === 'payment' ? (
                 <ir-select
-                  selectedValue={this.selectedDesignation}
-                  onSelectChange={e => (this.selectedDesignation = e.detail)}
+                  selectedValue={this.selectedDesignation?.CODE_NAME}
+                  onSelectChange={this.handleDropdownChange.bind(this)}
                   showFirstOption={false}
-                  data={booking_listing.settlement_methods.map(m => ({
-                    value: m.name,
-                    text: m.name,
+                  data={this.paymentEntries.map(m => ({
+                    value: m.CODE_NAME,
+                    text: m.CODE_VALUE_EN,
                   }))}
                 ></ir-select>
               ) : null}

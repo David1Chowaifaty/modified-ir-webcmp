@@ -11,6 +11,8 @@ import { getPrivateNote } from '@/utils/booking';
 import Token from '@/models/Token';
 import { isSingleUnit } from '@/stores/calendar-data';
 import { getAllParams } from '@/utils/browserHistory';
+import { BookingService, buildPaymentTypes } from '@/services/booking.service';
+import { IEntries } from '@/models/property';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -33,8 +35,10 @@ export class IrBookingListing {
   @State() oldStartValue = 0;
   @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' } | null = null;
   @State() showCost = false;
+  @State() paymentEntries: IEntries[];
 
   private bookingListingService = new BookingListingService();
+  private bookingService = new BookingService();
   private roomService = new RoomService();
   private token = new Token();
 
@@ -93,10 +97,14 @@ export class IrBookingListing {
         propertyId = propertyData.My_Result.id;
       }
 
-      const requests = [this.bookingListingService.getExposedBookingsCriteria(propertyId), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])];
+      const requests = [
+        this.bookingService.getSetupEntriesByTableNameMulti(['_PAY_TYPE', '_PAY_TYPE_GROUP']),
+        this.bookingListingService.getExposedBookingsCriteria(propertyId),
+        this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT']),
+      ];
 
       if (this.propertyid) {
-        requests.unshift(
+        requests.push(
           this.roomService.getExposedProperty({
             id: this.propertyid,
             language: this.language,
@@ -105,7 +113,10 @@ export class IrBookingListing {
         );
       }
 
-      await Promise.all(requests);
+      const [setupEntries] = await Promise.all(requests);
+      const { pay_type, pay_type_group } = this.bookingService.groupEntryTablesResult(setupEntries as any);
+      const groupedEntries = buildPaymentTypes(pay_type, pay_type_group);
+      this.paymentEntries = groupedEntries['PAYMENTS'];
       updateUserSelection('property_id', propertyId);
       // this.geSearchFiltersFromParams();
       await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
@@ -518,7 +529,7 @@ export class IrBookingListing {
             </div>
           </section>
         </div>
-        {this.editBookingItem && <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
+        {this.editBookingItem && <ir-listing-modal paymentEntries={this.paymentEntries} onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.editBookingItem !== null && ['edit', 'guest'].includes(this.editBookingItem.cause)}
