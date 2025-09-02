@@ -1421,6 +1421,7 @@ export namespace Components {
         "mode": FolioEntryMode;
         "payment": IPayment;
         "paymentTypes": IEntries[];
+        "paymentTypesGroups": IEntries[];
     }
     interface IrPaymentItem {
         "payment": IPayment;
@@ -6267,6 +6268,7 @@ declare namespace LocalJSX {
         "onResetExposedCancellationDueAmount"?: (event: IrPaymentFolioCustomEvent<null>) => void;
         "payment"?: IPayment;
         "paymentTypes"?: IEntries[];
+        "paymentTypesGroups"?: IEntries[];
     }
     interface IrPaymentItem {
         "onDeletePayment"?: (event: IrPaymentItemCustomEvent<IPayment>) => void;

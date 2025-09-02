@@ -27,10 +27,57 @@ export interface IBookingParams {
   extras: { key: string; value: string }[] | null;
 }
 
-export type TableEntries = '_CALENDAR_BLOCKED_TILL' | '_DEPARTURE_TIME' | '_ARRIVAL_TIME' | '_RATE_PRICING_MODE' | '_BED_PREFERENCE_TYPE' | '_PAY_TYPE' | (string & {});
+export type TableEntries =
+  | '_CALENDAR_BLOCKED_TILL'
+  | '_DEPARTURE_TIME'
+  | '_ARRIVAL_TIME'
+  | '_RATE_PRICING_MODE'
+  | '_BED_PREFERENCE_TYPE'
+  | '_PAY_TYPE'
+  | '_PAY_TYPE_GROUP'
+  | (string & {});
+
 export type GroupedTableEntries = {
   [K in TableEntries as K extends `_${infer Rest}` ? Lowercase<Rest> : never]: IEntries[];
 };
+
+/**
+ * Builds a grouped payment types record from raw entries and groups.
+ *
+ * @param paymentTypes - The flat list of all available payment type entries.
+ * @param paymentTypesGroups - The list of groups that define how payment types should be organized.
+ * @returns A record where each key is a group CODE_NAME and the value is the
+ *          ordered array of payment type entries belonging to that group.
+ *
+ * @example
+ * const result = buildPaymentTypes(paymentTypes, paymentTypesGroups);
+ * // {
+ * //   PAYMENTS: [ { CODE_NAME: "001", CODE_VALUE_EN: "Cash", ... }, ... ],
+ * //   ADJUSTMENTS: [ ... ],
+ * //   ...
+ * // }
+ */
+export function buildPaymentTypes(paymentTypes: IEntries[], paymentTypesGroups: IEntries[]): Record<string, IEntries[]> {
+  if (!Array.isArray(paymentTypes) || paymentTypes.length === 0 || !Array.isArray(paymentTypesGroups) || paymentTypesGroups.length === 0) {
+    return {};
+  }
+
+  const items = [...paymentTypes];
+
+  const byCodes = (codes: string[]) => codes.map(code => items.find(i => i.CODE_NAME === code)).filter((x): x is IEntries => Boolean(x));
+
+  const extractGroupCodes = (code: string) => {
+    const paymentGroup = paymentTypesGroups.find(pt => pt.CODE_NAME === code);
+    return paymentGroup ? paymentGroup.CODE_VALUE_EN.split(',') : [];
+  };
+
+  let rec: Record<string, IEntries[]> = {};
+
+  paymentTypesGroups.forEach(group => {
+    rec[group.CODE_NAME] = byCodes(extractGroupCodes(group.CODE_NAME));
+  });
+  return rec;
+}
 export class BookingService {
   public async unBlockUnitByPeriod(props: { unit_id: number; from_date: string; to_date: string }) {
     const { data } = await axios.post(`/Unblock_Unit_By_Period`, props);

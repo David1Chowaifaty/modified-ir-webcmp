@@ -68,6 +68,7 @@ export class IrBookingDetails {
   @State() modalState: { type: 'email' | (string & {}); message: string; loading: boolean } = null;
   @State() departureTime: IEntries[];
   @State() paymentTypes: IEntries[];
+  @State() paymentTypesGroups: IEntries[];
 
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
@@ -228,13 +229,14 @@ export class IrBookingDetails {
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
-        this.bookingService.getSetupEntriesByTableNameMulti(['_BED_PREFERENCE_TYPE', '_DEPARTURE_TIME', '_PAY_TYPE']),
+        this.bookingService.getSetupEntriesByTableNameMulti(['_BED_PREFERENCE_TYPE', '_DEPARTURE_TIME', '_PAY_TYPE', '_PAY_TYPE_GROUP']),
       ]);
       this.property_id = roomResponse?.My_Result?.id;
-      const { bed_preference_type, departure_time, pay_type } = this.bookingService.groupEntryTablesResult(setupEntries);
+      const { bed_preference_type, departure_time, pay_type, pay_type_group } = this.bookingService.groupEntryTablesResult(setupEntries);
       this.bedPreference = bed_preference_type;
       this.departureTime = departure_time;
       this.paymentTypes = pay_type;
+      this.paymentTypesGroups = pay_type_group;
       console.log(departure_time);
       if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id && bookingDetails.is_direct) {
         this.paymentService
@@ -384,6 +386,7 @@ export class IrBookingDetails {
       case 'payment-folio':
         return (
           <ir-payment-folio
+            paymentTypesGroups={this.paymentTypesGroups}
             bookingNumber={this.booking.booking_nbr}
             paymentTypes={this.paymentTypes}
             slot="sidebar-body"

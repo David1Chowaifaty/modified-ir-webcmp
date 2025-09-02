@@ -6,6 +6,7 @@ import { IPayment } from '@/models/booking.dto';
 import { IEntries } from '@/models/IBooking';
 import { PaymentService } from '@/services/payment.service';
 import { FolioEntryMode } from '../../types';
+import { buildPaymentTypes } from '@/services/booking.service';
 
 @Component({
   tag: 'ir-payment-folio',
@@ -14,6 +15,7 @@ import { FolioEntryMode } from '../../types';
 })
 export class IrPaymentFolio {
   @Prop() paymentTypes: IEntries[];
+  @Prop() paymentTypesGroups: IEntries[];
 
   @Prop() bookingNumber: string;
 
@@ -149,45 +151,17 @@ export class IrPaymentFolio {
     }
   }
   private async getPaymentTypes() {
-    // Safety checks
-    if (!Array.isArray(this.paymentTypes) || this.paymentTypes.length === 0) {
-      this._paymentTypes = {};
-      return;
+    const rec = buildPaymentTypes(this.paymentTypes, this.paymentTypesGroups);
+    if (this.mode === 'payment-action' && this.payment.payment_type?.code === '001') {
+      const { PAYMENTS } = rec;
+      return (this._paymentTypes = {
+        PAYMENTS,
+      });
     }
-
-    // Local copy so we never mutate the prop
-    const items = [...this.paymentTypes];
-
-    // Helper: keep the order defined by the code arrays
-    const byCodes = (codes: string[]) => codes.map(code => items.find(i => i.CODE_NAME === code)).filter((x): x is IEntries => Boolean(x));
-
-    // Code groups
-    const paymentsTypesCodes = ['001', '002', '003', '004', '005', '006', '007', '008'];
-    const adjustmentsTypeCodes = ['009', '010', '011'];
-    const cancellationTypesCodes = ['012', '013'];
-
-    // Build the record in display order (Payments → Adjustments → Cancellations)
-    let rec: Record<string, IEntries[]> = {};
-
-    if (this.mode === 'payment-action') {
-      // Only payments for "payment-action"
-      const payments = byCodes(paymentsTypesCodes);
-      if (payments.length) rec['Payments'] = payments;
-    } else {
-      const payments = byCodes(paymentsTypesCodes);
-      const adjustments = byCodes(adjustmentsTypeCodes);
-      const cancellations = byCodes(cancellationTypesCodes);
-
-      if (payments.length) rec['Payments'] = payments;
-      if (adjustments.length) rec['Adjustments'] = adjustments;
-      if (cancellations.length) rec['Cancellations'] = cancellations;
-    }
-
     this._paymentTypes = rec;
   }
 
   private renderDropdownItems() {
-    console.log(this._paymentTypes);
     return Object.values(this._paymentTypes).map((p, idx) => (
       <Fragment>
         {p.map(pt => (
