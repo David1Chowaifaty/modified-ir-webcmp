@@ -49,6 +49,7 @@ export class IrPaymentDetails {
                 operation: paymentType.NOTES,
               }
             : null,
+          designation: paymentType?.CODE_VALUE_EN ?? null,
         },
         mode: 'payment-action',
       },
