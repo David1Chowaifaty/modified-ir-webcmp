@@ -51,7 +51,7 @@ export class IrPaymentFolio {
         .refine(
           dateStr => {
             const date = moment(dateStr, 'YYYY-MM-DD', true);
-            return date.isValid() && !date.isAfter(moment(), 'dates');
+            return date.isValid();
           },
           { message: `Invalid date` },
         ),
