@@ -150,11 +150,21 @@ export class IrDailyRevenue {
   }
   private groupPaymentsByName(payments: FolioPayment[]): GroupedFolioPayment {
     const groupedPayment: GroupedFolioPayment = new Map();
+
     for (const payment of payments) {
       const p = groupedPayment.get(payment.payTypeCode) ?? [];
       groupedPayment.set(payment.payTypeCode, [...p, payment]);
     }
-    return groupedPayment;
+    return new Map(
+      [...groupedPayment.entries()].sort(([a], [b]) => {
+        const aNum = Number(a);
+        const bNum = Number(b);
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+          return aNum - bNum;
+        }
+        return a.localeCompare(b);
+      }),
+    );
   }
 
   private async getPaymentReports(isExportToExcel = false) {

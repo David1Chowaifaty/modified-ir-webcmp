@@ -39,7 +39,7 @@ export class IrPaymentDetails {
       payload: {
         payment: {
           ...value,
-          date: value.due_on,
+          date: moment(value.due_on, 'M/D/YYYY h:mm:ss A').format('YYYY-MM-DD'),
           id: -1,
           amount: value.amount,
           payment_type: paymentType
@@ -74,7 +74,6 @@ export class IrPaymentDetails {
   };
 
   private handleEditPayment = (payment: IPayment) => {
-    console.log(payment);
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: { payment, mode: 'edit' },

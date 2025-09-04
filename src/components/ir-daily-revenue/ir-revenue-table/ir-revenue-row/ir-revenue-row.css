@@ -1,12 +1,13 @@
 :host {
-  --ir-acc-duration: 220ms;
-  --ir-acc-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ir-border: #e5e7eb;
 }
 
+.ir-revenue-row__accordion::part(base),
 .ir-revenue-row {
+  border: 0;
+  border-radius: 0;
   border-bottom: 1px solid var(--ir-border, #e5e7eb);
-  /* border-radius: var(--ir-radius, 6px); */
-  background: var(--ir-bg, #fff);
+  background: #fff;
   padding: 0;
 }
 
@@ -18,11 +19,11 @@
   padding: var(--ir-space-4, 1rem);
   border-bottom: 1px solid var(--ir-border, #e5e7eb);
 }
-
+.ir-revenue-row__accordion::part(trigger),
 .ir-revenue-row__title {
   display: inline-flex;
   align-items: center;
-  gap: var(--ir-space-2, 0.5rem);
+  gap: 0.5rem;
   background: transparent;
   border: 0;
   padding: 0;
@@ -33,18 +34,16 @@
   padding: 0.5rem;
   color: black;
 }
+.ir-revenue-row__title {
+  padding: 0;
+}
 .ir-revenue-row__header-left {
   display: flex;
   align-items: center;
-  gap: var(--ir-space-2, 0.5rem); /* consistent spacing between icon and text */
+  gap: 0.5rem;
 }
 
-.ir-revenue-row__title:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.ir-revenue-row__title:hover {
+.ir-revenue-row__accordion::part(trigger):hover {
   background: #f4f5fa;
 }
 
@@ -66,56 +65,15 @@
   font-weight: 700;
   margin: 0;
 }
-
-/* Toggle icon rotation */
-.ir-revenue-row__toggle {
-  transition: transform var(--ir-acc-duration) var(--ir-acc-ease);
-  transform: rotate(-90deg);
-}
-
-.ir-revenue-row[data-open='true'] .ir-revenue-row__toggle,
-.ir-revenue-row__toggle.is-open {
-  transform: rotate(0deg);
-}
-
-.ir-revenue-row__details {
-  transition: height var(--ir-acc-duration) var(--ir-acc-ease);
-  will-change: height;
-}
-
-/* When collapsed (default state) */
-.ir-revenue-row__details:not([data-expanded='true']) {
-  height: 0 !important;
-  overflow: hidden !important;
-  visibility: hidden;
-}
-
-/* When expanded or during animation, let JavaScript control height/overflow */
-.ir-revenue-row__details[data-expanded='true'] {
-  visibility: visible;
-}
-
-.ir-revenue-row__details-inner {
+.ir-revenue-row__accordion::part(content) {
   padding: 0.25rem 1rem;
 }
 
-/* Detail rows */
 .ir-revenue-row__detail {
   display: block;
-  /* padding: var(--ir-space-2, 0.5rem) 0; */
   border-bottom: 1px solid var(--ir-border, #e5e7eb);
 }
 
 .ir-revenue-row__detail:last-child {
   border-bottom: none;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .ir-revenue-row__toggle {
-    transition: none;
-  }
-  .ir-revenue-row__details {
-    transition: none;
-  }
 }

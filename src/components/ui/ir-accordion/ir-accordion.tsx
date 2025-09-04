@@ -1,4 +1,4 @@
-import { Component, Host, Prop, State, Event, EventEmitter, h, Element, Watch } from '@stencil/core';
+import { Component, Host, Prop, State, Event, EventEmitter, h, Element, Watch, Method } from '@stencil/core';
 
 let accId = 0;
 
@@ -14,16 +14,16 @@ export class IrAccordion {
   @Prop() defaultExpanded: boolean = false;
 
   /** Optional controlled prop: when provided, component follows this value */
-  @Prop() expanded?: boolean;
+  @Prop({ mutable: true, reflect: true }) expanded?: boolean;
 
   /** Show caret icon */
-  @Prop() showCaret: boolean = true;
+  @Prop() caret: boolean = true;
 
   /** Caret icon name */
   @Prop() caretIcon: string = 'angle-down';
 
   /** Fired after expansion state changes */
-  @Event() irToggle!: EventEmitter<{ expanded: boolean }>;
+  @Event({ eventName: 'ir-toggle', bubbles: true, composed: true }) irToggle: EventEmitter<{ expanded: boolean }>;
 
   @State() _expanded: boolean = false;
 
@@ -64,9 +64,9 @@ export class IrAccordion {
     // Only animate if the state actually changed
     if (wasExpanded !== expanded) {
       if (expanded) {
-        this.openWithAnimation();
+        this.show();
       } else {
-        this.closeWithAnimation();
+        this.hide();
       }
 
       if (shouldEmit) {
@@ -74,42 +74,29 @@ export class IrAccordion {
       }
     }
   }
-
-  private openWithAnimation() {
-    console.log('openWithAnimation called', { detailsEl: !!this.detailsEl, contentEl: !!this.contentEl, isAnimating: this.isAnimating });
-
-    if (!this.detailsEl || !this.contentEl || this.isAnimating) {
-      console.log('openWithAnimation aborted - missing elements or already animating');
-      return;
-    }
+  @Method()
+  async show() {
+    if (!this.detailsEl || !this.contentEl || this.isAnimating) return;
 
     this.isAnimating = true;
     this.cleanupPreviousAnimation();
 
     // Set initial state
     const startHeight = this.detailsEl.offsetHeight;
-    console.log('Start height:', startHeight);
-
     this.detailsEl.style.height = `${startHeight}px`;
     this.detailsEl.style.overflow = 'hidden';
 
     // Make content visible and measure target height
     this.detailsEl.setAttribute('data-expanded', 'true');
     const targetHeight = this.contentEl.scrollHeight;
-    console.log('Target height:', targetHeight);
 
     // Use requestAnimationFrame to ensure the browser has processed the initial state
     requestAnimationFrame(() => {
-      if (!this.detailsEl || !this.isAnimating) {
-        console.log('requestAnimationFrame aborted');
-        return;
-      }
+      if (!this.detailsEl) return;
 
-      console.log('Setting height to:', targetHeight);
       this.detailsEl.style.height = `${targetHeight}px`;
 
       const handleTransitionEnd = (event: TransitionEvent) => {
-        console.log('Transition end event:', event.propertyName, event.target === this.detailsEl);
         // Make sure this is the height transition and not a child element
         if (event.target === this.detailsEl && event.propertyName === 'height') {
           this.finishOpenAnimation();
@@ -120,6 +107,7 @@ export class IrAccordion {
         if (this.detailsEl) {
           this.detailsEl.removeEventListener('transitionend', handleTransitionEnd);
         }
+        this.isAnimating = false;
       };
 
       this.detailsEl.addEventListener('transitionend', handleTransitionEnd);
@@ -127,14 +115,13 @@ export class IrAccordion {
       // Fallback timeout in case transitionend doesn't fire
       setTimeout(() => {
         if (this.isAnimating) {
-          console.log('Fallback timeout triggered for open animation');
           this.finishOpenAnimation();
         }
-      }, 250);
+      }, 300); // Should match your CSS transition duration
     });
   }
-
-  private closeWithAnimation() {
+  @Method()
+  async hide() {
     if (!this.detailsEl || !this.contentEl || this.isAnimating) return;
 
     this.isAnimating = true;
@@ -147,7 +134,7 @@ export class IrAccordion {
 
     // Force reflow then animate to 0
     requestAnimationFrame(() => {
-      if (!this.detailsEl || !this.isAnimating) return;
+      if (!this.detailsEl) return;
 
       this.detailsEl.style.height = '0px';
 
@@ -162,6 +149,7 @@ export class IrAccordion {
         if (this.detailsEl) {
           this.detailsEl.removeEventListener('transitionend', handleTransitionEnd);
         }
+        this.isAnimating = false;
       };
 
       this.detailsEl.addEventListener('transitionend', handleTransitionEnd);
@@ -171,7 +159,7 @@ export class IrAccordion {
         if (this.isAnimating) {
           this.finishCloseAnimation();
         }
-      }, 250);
+      }, 300);
     });
   }
 
@@ -186,6 +174,7 @@ export class IrAccordion {
       this.detailsEl.style.overflow = '';
     }
 
+    this.expanded = true;
     this.isAnimating = false;
   }
 
@@ -200,7 +189,7 @@ export class IrAccordion {
       this.detailsEl.style.overflow = '';
       this.detailsEl.removeAttribute('data-expanded');
     }
-
+    this.expanded = false;
     this.isAnimating = false;
   }
 
@@ -220,14 +209,8 @@ export class IrAccordion {
     }
 
     const nextExpanded = !this._expanded;
-
-    // For controlled components, just emit the event
-    if (this.expanded !== undefined) {
-      this.irToggle.emit({ expanded: nextExpanded });
-    } else {
-      // For uncontrolled components, update state and emit
-      this.updateExpansion(nextExpanded, true);
-    }
+    this.irToggle.emit({ expanded: nextExpanded });
+    this.updateExpansion(nextExpanded, true);
   };
 
   private onTriggerKeyDown = (ev: KeyboardEvent) => {
@@ -240,11 +223,9 @@ export class IrAccordion {
 
   render() {
     const isOpen = this._expanded;
-    console.log(isOpen);
     return (
       <Host>
-        <div class="ir-accordion" data-open={isOpen ? 'true' : 'false'}>
-          {/* Trigger */}
+        <div part="base" class="ir-accordion" data-open={isOpen ? 'true' : 'false'}>
           <button
             type="button"
             class="ir-accordion__trigger"
@@ -253,10 +234,10 @@ export class IrAccordion {
             aria-busy={this.isAnimating ? 'true' : 'false'}
             onClick={this.onTriggerClick}
             onKeyDown={this.onTriggerKeyDown}
-            // ref={el => (this.triggerBtn = el as HTMLButtonElement)}
             disabled={this.isAnimating}
+            part="trigger"
           >
-            {this.showCaret && <ir-icons name={'angle-down'} class={`ir-accordion__caret ${isOpen ? 'is-open' : ''}`} aria-hidden="true"></ir-icons>}
+            {this.caret && <ir-icons name={'angle-down'} class={`ir-accordion__caret ${isOpen ? 'is-open' : ''}`} aria-hidden="true"></ir-icons>}
 
             <div class="ir-accordion__trigger-content">
               <slot name="trigger"></slot>
@@ -272,8 +253,8 @@ export class IrAccordion {
             role="region"
             aria-hidden={isOpen ? 'false' : 'true'}
           >
-            <div class="ir-accordion__content-inner" ref={el => (this.contentEl = el as HTMLDivElement)}>
-              <slot name="body"></slot>
+            <div class="ir-accordion__content-inner" part="content" ref={el => (this.contentEl = el as HTMLDivElement)}>
+              <slot></slot>
             </div>
           </div>
         </div>

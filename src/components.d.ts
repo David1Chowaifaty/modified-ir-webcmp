@@ -316,6 +316,10 @@ export namespace Components {
     }
     interface IrAccordion {
         /**
+          * Show caret icon
+         */
+        "caret": boolean;
+        /**
           * Caret icon name
          */
         "caretIcon": string;
@@ -327,10 +331,8 @@ export namespace Components {
           * Optional controlled prop: when provided, component follows this value
          */
         "expanded"?: boolean;
-        /**
-          * Show caret icon
-         */
-        "showCaret": boolean;
+        "hide": () => Promise<void>;
+        "show": () => Promise<void>;
     }
     interface IrAutocomplete {
         "danger_border": boolean;
@@ -1720,14 +1722,6 @@ export namespace Components {
     }
     interface IrRevenueRow {
         /**
-          * Start expanded
-         */
-        "defaultExpanded": boolean;
-        /**
-          * Optional controlled prop: when provided, component follows this value
-         */
-        "expanded"?: boolean;
-        /**
           * Group display name (e.g., "Credit Card")
          */
         "groupName": string;
@@ -2503,10 +2497,6 @@ export interface IrResetPasswordCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrResetPasswordElement;
 }
-export interface IrRevenueRowCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLIrRevenueRowElement;
-}
 export interface IrRevenueRowDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrRevenueRowDetailsElement;
@@ -3074,7 +3064,7 @@ declare global {
         new (): HTMLIglooCalendarElement;
     };
     interface HTMLIrAccordionElementEventMap {
-        "irToggle": { expanded: boolean };
+        "ir-toggle": { expanded: boolean };
     }
     interface HTMLIrAccordionElement extends Components.IrAccordion, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrAccordionElementEventMap>(type: K, listener: (this: HTMLIrAccordionElement, ev: IrAccordionCustomEvent<HTMLIrAccordionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4289,18 +4279,7 @@ declare global {
         prototype: HTMLIrResetPasswordElement;
         new (): HTMLIrResetPasswordElement;
     };
-    interface HTMLIrRevenueRowElementEventMap {
-        "irToggle": { expanded: boolean };
-    }
     interface HTMLIrRevenueRowElement extends Components.IrRevenueRow, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIrRevenueRowElementEventMap>(type: K, listener: (this: HTMLIrRevenueRowElement, ev: IrRevenueRowCustomEvent<HTMLIrRevenueRowElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIrRevenueRowElementEventMap>(type: K, listener: (this: HTMLIrRevenueRowElement, ev: IrRevenueRowCustomEvent<HTMLIrRevenueRowElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrRevenueRowElement: {
         prototype: HTMLIrRevenueRowElement;
@@ -5210,6 +5189,10 @@ declare namespace LocalJSX {
     }
     interface IrAccordion {
         /**
+          * Show caret icon
+         */
+        "caret"?: boolean;
+        /**
           * Caret icon name
          */
         "caretIcon"?: string;
@@ -5224,11 +5207,7 @@ declare namespace LocalJSX {
         /**
           * Fired after expansion state changes
          */
-        "onIrToggle"?: (event: IrAccordionCustomEvent<{ expanded: boolean }>) => void;
-        /**
-          * Show caret icon
-         */
-        "showCaret"?: boolean;
+        "onIr-toggle"?: (event: IrAccordionCustomEvent<{ expanded: boolean }>) => void;
     }
     interface IrAutocomplete {
         "danger_border"?: boolean;
@@ -6801,21 +6780,9 @@ declare namespace LocalJSX {
     }
     interface IrRevenueRow {
         /**
-          * Start expanded
-         */
-        "defaultExpanded"?: boolean;
-        /**
-          * Optional controlled prop: when provided, component follows this value
-         */
-        "expanded"?: boolean;
-        /**
           * Group display name (e.g., "Credit Card")
          */
         "groupName": string;
-        /**
-          * Fired after expansion state changes
-         */
-        "onIrToggle"?: (event: IrRevenueRowCustomEvent<{ expanded: boolean }>) => void;
         /**
           * Array of payments for this method group
          */
