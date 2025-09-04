@@ -32,7 +32,6 @@ export class IrRevenueRow {
 
   private detailsEl?: HTMLDivElement;
   private contentEl?: HTMLDivElement;
-  private headerBtn?: HTMLButtonElement;
   private contentId = `ir-rr-content-${++accId}`;
   private isAnimating = false;
   private cleanupAnimation?: () => void;
@@ -245,7 +244,6 @@ export class IrRevenueRow {
             aria-busy={this.isAnimating ? 'true' : 'false'}
             onClick={this.onHeaderClick}
             onKeyDown={this.onHeaderKeyDown}
-            ref={el => (this.headerBtn = el as HTMLButtonElement)}
             disabled={this.isAnimating}
           >
             <div class="ir-revenue-row__header-left">

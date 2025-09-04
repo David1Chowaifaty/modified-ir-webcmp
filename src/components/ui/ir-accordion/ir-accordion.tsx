@@ -29,7 +29,7 @@ export class IrAccordion {
 
   private detailsEl?: HTMLDivElement;
   private contentEl?: HTMLDivElement;
-  private triggerBtn?: HTMLButtonElement;
+  // private triggerBtn?: HTMLButtonElement;
   private contentId = `ir-accordion-content-${++accId}`;
   private isAnimating = false;
   private cleanupAnimation?: () => void;
@@ -253,7 +253,7 @@ export class IrAccordion {
             aria-busy={this.isAnimating ? 'true' : 'false'}
             onClick={this.onTriggerClick}
             onKeyDown={this.onTriggerKeyDown}
-            ref={el => (this.triggerBtn = el as HTMLButtonElement)}
+            // ref={el => (this.triggerBtn = el as HTMLButtonElement)}
             disabled={this.isAnimating}
           >
             {this.showCaret && <ir-icons name={'angle-down'} class={`ir-accordion__caret ${isOpen ? 'is-open' : ''}`} aria-hidden="true"></ir-icons>}
