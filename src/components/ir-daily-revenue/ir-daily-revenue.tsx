@@ -1,0 +1,259 @@
+import Token from '@/models/Token';
+import { BookingService, buildPaymentTypes } from '@/services/booking.service';
+import { PropertyService } from '@/services/property.service';
+import { RoomService } from '@/services/room.service';
+import locales from '@/stores/locales.store';
+import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { FolioPayment, GroupedFolioPayment, SidebarOpenEvent } from './types';
+import { v4 } from 'uuid';
+import moment from 'moment';
+import { IEntries } from '@/models/IBooking';
+
+@Component({
+  tag: 'ir-daily-revenue',
+  styleUrl: 'ir-daily-revenue.css',
+  scoped: true,
+})
+export class IrDailyRevenue {
+  @Prop() language: string = '';
+  @Prop() ticket: string = '';
+  @Prop() propertyid: number;
+  @Prop() p: string;
+
+  @State() isPageLoading: boolean;
+  @State() property_id: number;
+  @State() groupedPayment: GroupedFolioPayment;
+  @State() previousDateGroupedPayments: GroupedFolioPayment;
+  @State() isLoading: string;
+  @State() date: string = moment().format('YYYY-MM-DD');
+  @State() sideBarEvent: SidebarOpenEvent | null;
+
+  private tokenService = new Token();
+  private roomService = new RoomService();
+  private propertyService = new PropertyService();
+  private bookingService = new BookingService();
+  private payTypes: IEntries[];
+  private payTypeGroup: IEntries[];
+
+  @Event() preventPageLoad: EventEmitter<null>;
+
+  componentWillLoad() {
+    if (this.ticket) {
+      this.tokenService.setToken(this.ticket);
+      this.initializeApp();
+    }
+  }
+
+  @Watch('ticket')
+  ticketChanged(newValue: string, oldValue: string) {
+    if (newValue === oldValue) {
+      return;
+    }
+    this.tokenService.setToken(this.ticket);
+    this.initializeApp();
+  }
+
+  @Listen('revenueOpenSidebar')
+  handleOpenSidebar(e: CustomEvent<SidebarOpenEvent>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.sideBarEvent = e.detail;
+  }
+  @Listen('fetchNewReports')
+  handleFetchNewReports(e: CustomEvent<string>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.date = e.detail;
+    this.getPaymentReports();
+  }
+
+  private handleSidebarClose = (e: CustomEvent) => {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.sideBarEvent = null;
+  };
+
+  private renderSidebarBody() {
+    if (!this.sideBarEvent) {
+      return;
+    }
+    switch (this.sideBarEvent.type) {
+      case 'booking':
+        return (
+          <ir-booking-details
+            slot="sidebar-body"
+            hasPrint
+            hasReceipt
+            hasCloseButton
+            onCloseSidebar={this.handleSidebarClose}
+            is_from_front_desk
+            propertyid={this.property_id}
+            hasRoomEdit
+            hasRoomDelete
+            bookingNumber={this.sideBarEvent.payload.bookingNumber.toString()}
+            ticket={this.ticket}
+            language={this.language}
+            hasRoomAdd
+          ></ir-booking-details>
+        );
+      default:
+        return null;
+    }
+  }
+
+  private async initializeApp() {
+    this.isPageLoading = true;
+
+    try {
+      let propertyId = this.propertyid;
+      if (!propertyId && !this.p) {
+        throw new Error('Property ID or username is required');
+      }
+      if (!propertyId) {
+        const propertyData = await this.roomService.getExposedProperty({
+          id: 0,
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+          include_units_hk_status: true,
+        });
+        propertyId = propertyData.My_Result.id;
+      }
+
+      this.property_id = propertyId;
+
+      const requests: Promise<any>[] = [
+        this.bookingService.getSetupEntriesByTableNameMulti(['_PAY_TYPE', '_PAY_TYPE_GROUP']),
+        this.getPaymentReports(),
+        this.roomService.fetchLanguage(this.language),
+      ];
+      if (propertyId) {
+        requests.push(
+          this.roomService.getExposedProperty({
+            id: propertyId,
+            language: this.language,
+            is_backend: true,
+            include_units_hk_status: true,
+          }),
+        );
+      }
+
+      const [setupEntries] = await Promise.all(requests);
+      const { pay_type, pay_type_group } = this.bookingService.groupEntryTablesResult(setupEntries);
+      this.payTypes = pay_type;
+      this.payTypeGroup = buildPaymentTypes(pay_type, pay_type_group)['PAYMENTS'];
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isPageLoading = false;
+    }
+  }
+  private groupPaymentsByName(payments: FolioPayment[]): GroupedFolioPayment {
+    const groupedPayment: GroupedFolioPayment = new Map();
+    for (const payment of payments) {
+      const p = groupedPayment.get(payment.payTypeCode) ?? [];
+      groupedPayment.set(payment.payTypeCode, [...p, payment]);
+    }
+    return groupedPayment;
+  }
+
+  private async getPaymentReports(isExportToExcel = false) {
+    try {
+      const getReportObj = (report): FolioPayment => {
+        return {
+          method: report.METHOD,
+          payTypeCode: report.PAY_TYPE_CODE,
+          amount: report.AMOUNT,
+          date: report.DATE,
+          hour: report.HOUR,
+          minute: report.MINUTE,
+          user: report.USER,
+          currency: report.CURRENCY,
+          bookingNbr: report.BOOKING_NBR,
+          id: v4(),
+        };
+      };
+      this.isLoading = isExportToExcel ? 'export' : 'filter';
+
+      const requests = [
+        this.propertyService.getDailyRevenueReport({
+          date: this.date,
+          property_id: this.property_id?.toString(),
+          is_export_to_excel: isExportToExcel,
+        }),
+      ];
+      if (!isExportToExcel) {
+        requests.push(
+          this.propertyService.getDailyRevenueReport({
+            date: moment(this.date, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'),
+            property_id: this.property_id?.toString(),
+            is_export_to_excel: isExportToExcel,
+          }),
+        );
+      }
+
+      const results = await Promise.all(requests);
+      if (!isExportToExcel) {
+        if (results[0]) {
+          this.groupedPayment = this.groupPaymentsByName(results[0]?.map(getReportObj));
+        } else {
+          this.groupedPayment = new Map();
+        }
+        if (results[1]) this.previousDateGroupedPayments = this.groupPaymentsByName(results[1]?.map(getReportObj));
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.isLoading = null;
+    }
+  }
+
+  render() {
+    if (this.isPageLoading) {
+      return <ir-loading-screen></ir-loading-screen>;
+    }
+    return (
+      <Host>
+        <ir-toast></ir-toast>
+        <ir-interceptor handledEndpoints={['/Get_Daily_Revenue_Report']}></ir-interceptor>
+        <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
+          <div class="d-flex align-items-center justify-content-between">
+            <h3 class="mb-1 mb-md-0">Daily Revenue</h3>
+            <ir-button
+              size="sm"
+              btn_color="outline"
+              isLoading={this.isLoading === 'export'}
+              text={locales.entries?.Lcz_Export}
+              onClickHandler={async e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                await this.getPaymentReports(true);
+              }}
+              btnStyle={{ height: '100%' }}
+              iconPosition="right"
+              icon_name="file"
+              icon_style={{ '--icon-size': '14px' }}
+            ></ir-button>
+          </div>
+          <ir-revenue-summary
+            previousDateGroupedPayments={this.previousDateGroupedPayments}
+            groupedPayments={this.groupedPayment}
+            payTypesGroup={this.payTypeGroup}
+          ></ir-revenue-summary>
+          <ir-revenue-table date={this.date} payTypes={this.payTypes} payments={this.groupedPayment}></ir-revenue-table>
+        </section>
+        <ir-sidebar
+          sidebarStyles={{
+            width: this.sideBarEvent?.type === 'booking' ? '80rem' : 'var(--sidebar-width,40rem)',
+            background: this.sideBarEvent?.type === 'booking' ? '#F2F3F8' : 'white',
+          }}
+          open={Boolean(this.sideBarEvent)}
+          showCloseButton={false}
+          onIrSidebarToggle={this.handleSidebarClose}
+        >
+          {this.renderSidebarBody()}
+        </ir-sidebar>
+      </Host>
+    );
+  }
+}

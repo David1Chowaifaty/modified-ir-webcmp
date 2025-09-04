@@ -1,0 +1,644 @@
+"use client"
+
+import { useState, useMemo } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  CalendarIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  SearchIcon,
+  RefreshCwIcon,
+  DownloadIcon,
+  BuildingIcon,
+  CreditCardIcon,
+  UndoIcon,
+  DollarSignIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
+  AlertCircleIcon,
+  EyeIcon,
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+
+const mockPayments = [
+  {
+    id: "1",
+    method: "Credit Card",
+    amount: 3922.07,
+    timestamp: "2024-01-15T14:30:00Z",
+    extranetUser: "John Smith",
+    bookingNumber: "BK-2024-001",
+    type: "payment",
+  },
+  {
+    id: "1b",
+    method: "Credit Card",
+    amount: 1250.0,
+    timestamp: "2024-01-15T16:15:00Z",
+    extranetUser: "Alice Johnson",
+    bookingNumber: "BK-2024-007",
+    type: "payment",
+  },
+  {
+    id: "1c",
+    method: "Credit Card",
+    amount: 675.5,
+    timestamp: "2024-01-15T18:45:00Z",
+    extranetUser: "Mark Wilson",
+    bookingNumber: "BK-2024-012",
+    type: "payment",
+  },
+  {
+    id: "2",
+    method: "Cash",
+    amount: 850.0,
+    timestamp: "2024-01-15T16:45:00Z",
+    extranetUser: "Sarah Johnson",
+    bookingNumber: "BK-2024-002",
+    type: "payment",
+  },
+  {
+    id: "2b",
+    method: "Cash",
+    amount: 320.0,
+    timestamp: "2024-01-15T12:30:00Z",
+    extranetUser: "David Brown",
+    bookingNumber: "BK-2024-008",
+    type: "payment",
+  },
+  {
+    id: "3",
+    method: "Refund",
+    amount: -245.5,
+    timestamp: "2024-01-15T11:20:00Z",
+    extranetUser: "Mike Wilson",
+    bookingNumber: "BK-2024-003",
+    type: "refund",
+  },
+  {
+    id: "3b",
+    method: "Refund",
+    amount: -89.25,
+    timestamp: "2024-01-15T15:10:00Z",
+    extranetUser: "Lisa Garcia",
+    bookingNumber: "BK-2024-009",
+    type: "refund",
+  },
+  {
+    id: "4",
+    method: "Credit Note",
+    amount: -120.0,
+    timestamp: "2024-01-15T09:15:00Z",
+    extranetUser: "Emma Davis",
+    bookingNumber: "BK-2024-004",
+    type: "credit",
+  },
+  {
+    id: "5",
+    method: "Bank Transfer",
+    amount: 1500.0,
+    timestamp: "2024-01-15T13:00:00Z",
+    extranetUser: "Robert Brown",
+    bookingNumber: "BK-2024-005",
+    type: "payment",
+  },
+  {
+    id: "5b",
+    method: "Bank Transfer",
+    amount: 2100.0,
+    timestamp: "2024-01-15T10:30:00Z",
+    extranetUser: "Jennifer Lee",
+    bookingNumber: "BK-2024-010",
+    type: "payment",
+  },
+]
+
+interface PaymentRowProps {
+  method: string
+  transactions: typeof mockPayments
+  isExpanded: boolean
+  onToggle: () => void
+  isMobile: boolean
+}
+
+function PaymentRow({ method, transactions, isExpanded, onToggle, isMobile }: PaymentRowProps) {
+  const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0)
+
+  const formatCurrency = (amount: number) => {
+    const formatted = new Intl.NumberFormat("en-EU", {
+      style: "currency",
+      currency: "EUR",
+      minimumFractionDigits: 2,
+    }).format(Math.abs(amount))
+
+    return amount < 0 ? `–${formatted}` : formatted
+  }
+
+  const formatTime = (timestamp: string) => {
+    return new Date(timestamp).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
+  }
+
+  if (isMobile) {
+    return (
+      <div className="border-b">
+        <div className="flex items-center justify-between p-4" onClick={onToggle}>
+          <div className="flex items-center gap-2">
+            {isExpanded ? (
+              <ChevronDownIcon className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <ChevronRightIcon className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="font-medium">{method}</span>
+            <Badge variant="secondary" className="text-xs">
+              {transactions.length}
+            </Badge>
+          </div>
+          <span
+            className={cn(
+              "font-mono font-semibold text-right tabular-nums",
+              totalAmount < 0 ? "text-destructive" : "text-foreground",
+            )}
+          >
+            {formatCurrency(totalAmount)}
+          </span>
+        </div>
+
+        {isExpanded && (
+          <div className="bg-muted/30 px-4 pb-4">
+            <div className="space-y-3">
+              {transactions.map((transaction) => (
+                <div key={transaction.id} className="bg-background rounded-lg p-3 text-sm">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="font-mono tabular-nums">{formatTime(transaction.timestamp)}</span>
+                    <span
+                      className={cn(
+                        "font-mono font-semibold tabular-nums",
+                        transaction.amount < 0 ? "text-destructive" : "text-foreground",
+                      )}
+                    >
+                      {formatCurrency(transaction.amount)}
+                    </span>
+                  </div>
+                  <div className="space-y-1 text-muted-foreground">
+                    <div>{transaction.extranetUser}</div>
+                    <Button variant="link" className="h-auto p-0 text-accent text-sm">
+                      {transaction.bookingNumber}
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <tr className="border-b hover:bg-muted/50 cursor-pointer" onClick={onToggle}>
+        <td className="p-4">
+          <div className="flex items-center gap-2">
+            {isExpanded ? (
+              <ChevronDownIcon className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <ChevronRightIcon className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="font-medium">{method}</span>
+            <Badge variant="secondary" className="text-xs">
+              {transactions.length}
+            </Badge>
+          </div>
+        </td>
+        <td className="p-4 text-right">
+          <span
+            className={cn(
+              "font-mono font-semibold tabular-nums",
+              totalAmount < 0 ? "text-destructive" : "text-foreground",
+            )}
+          >
+            {formatCurrency(totalAmount)}
+          </span>
+        </td>
+      </tr>
+
+      {isExpanded && (
+        <tr className="bg-muted/30">
+          <td colSpan={2} className="p-0">
+            <div className="px-6 py-4">
+              <div className="space-y-3">
+                {transactions.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    className="grid grid-cols-3 gap-4 text-sm py-2 border-b border-muted last:border-0"
+                  >
+                    <div>
+                      <span className="text-muted-foreground block mb-1">Timestamp:</span>
+                      <div className="font-mono tabular-nums">{formatTime(transaction.timestamp)}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground block mb-1">Extranet User:</span>
+                      <div>{transaction.extranetUser}</div>
+                      <Button variant="link" className="h-auto p-0 text-accent text-sm mt-1">
+                        {transaction.bookingNumber}
+                      </Button>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-muted-foreground block mb-1">Amount:</span>
+                      <div
+                        className={cn(
+                          "font-mono font-semibold tabular-nums",
+                          transaction.amount < 0 ? "text-destructive" : "text-foreground",
+                        )}
+                      >
+                        {formatCurrency(transaction.amount)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </td>
+        </tr>
+      )}
+    </>
+  )
+}
+
+function LoadingSkeleton({ isMobile }: { isMobile: boolean }) {
+  if (isMobile) {
+    return (
+      <div className="space-y-0">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="border-b p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-4 w-4" />
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-5 w-6 rounded-full" />
+              </div>
+              <Skeleton className="h-4 w-20" />
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-0">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4 p-4 border-b">
+          <Skeleton className="h-4 w-4" />
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-5 w-6 rounded-full" />
+          <div className="ml-auto">
+            <Skeleton className="h-4 w-24" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function EmptyState({ onChangeDate }: { onChangeDate: () => void }) {
+  return (
+    <div className="text-center py-12">
+      <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-4">
+        <AlertCircleIcon className="h-12 w-12 text-muted-foreground" />
+      </div>
+      <h3 className="text-lg font-semibold mb-2">No folio payments for this date</h3>
+      <p className="text-muted-foreground mb-6">There are no payment transactions recorded for the selected date.</p>
+      <div className="flex items-center justify-center gap-3">
+        <Button onClick={onChangeDate} variant="outline">
+          Change Date
+        </Button>
+        <Button variant="default">
+          <RefreshCwIcon className="h-4 w-4 mr-2" />
+          Retry
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export function DailyRevenueScreen() {
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0])
+  const [selectedProperty, setSelectedProperty] = useState("all")
+  const [selectedMethod, setSelectedMethod] = useState("all")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
+  const [isLoading, setIsLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [showEmptyState, setShowEmptyState] = useState(false)
+
+  // Simulate mobile detection
+  useState(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  })
+
+  const filteredPayments = useMemo(() => {
+    if (showEmptyState) return []
+
+    return mockPayments.filter((payment) => {
+      const matchesMethod =
+        selectedMethod === "all" || payment.method.toLowerCase().includes(selectedMethod.toLowerCase())
+      const matchesSearch =
+        searchQuery === "" ||
+        payment.method.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        payment.extranetUser.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        payment.bookingNumber.toLowerCase().includes(searchQuery.toLowerCase())
+
+      return matchesMethod && matchesSearch
+    })
+  }, [selectedMethod, searchQuery, showEmptyState])
+
+  const groupedPayments = useMemo(() => {
+    const groups: Record<string, typeof mockPayments> = {}
+    filteredPayments.forEach((payment) => {
+      if (!groups[payment.method]) {
+        groups[payment.method] = []
+      }
+      groups[payment.method].push(payment)
+    })
+    return groups
+  }, [filteredPayments])
+
+  const totals = useMemo(() => {
+    const payments = filteredPayments.filter((p) => p.amount > 0).reduce((sum, p) => sum + p.amount, 0)
+    const refunds = filteredPayments.filter((p) => p.amount < 0).reduce((sum, p) => sum + Math.abs(p.amount), 0)
+    const netTotal = payments - refunds
+    const total = payments + refunds
+
+    return { payments, refunds, netTotal, total }
+  }, [filteredPayments])
+
+  const toggleRow = (method: string) => {
+    const newExpanded = new Set(expandedRows)
+    if (newExpanded.has(method)) {
+      newExpanded.delete(method)
+    } else {
+      newExpanded.add(method)
+    }
+    setExpandedRows(newExpanded)
+  }
+
+  const handleRefresh = () => {
+    setIsLoading(true)
+    setTimeout(() => setIsLoading(false), 1000)
+  }
+
+  const formatCurrency = (amount: number) => {
+    const formatted = new Intl.NumberFormat("en-EU", {
+      style: "currency",
+      currency: "EUR",
+      minimumFractionDigits: 2,
+    }).format(amount)
+
+    return formatted
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-card border-b shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3">
+              <BuildingIcon className="h-6 w-6 text-accent" />
+              <h1 className="text-2xl font-bold text-balance">Daily Revenue - Guests' Folio Payments</h1>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+              <Input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="w-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="p-6 py-[0]">
+        {/* Controls */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
+                <Select value={selectedProperty} onValueChange={setSelectedProperty}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Select Property" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Properties</SelectItem>
+                    <SelectItem value="hotel-a">Hotel A</SelectItem>
+                    <SelectItem value="hotel-b">Hotel B</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={selectedMethod} onValueChange={setSelectedMethod}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Filter by Method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Methods</SelectItem>
+                    <SelectItem value="credit">Credit Card</SelectItem>
+                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="bank">Bank Transfer</SelectItem>
+                    <SelectItem value="refund">Refunds</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="relative">
+                  <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search transactions..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 w-full md:w-64"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowEmptyState(!showEmptyState)}
+                  className="text-xs"
+                >
+                  <EyeIcon className="h-4 w-4" />
+                  <span className="sr-only md:not-sr-only md:ml-2">{showEmptyState ? "Show Data" : "Show Empty"}</span>
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleRefresh}>
+                  <RefreshCwIcon className="h-4 w-4" />
+                  <span className="sr-only md:not-sr-only md:ml-2">Refresh</span>
+                </Button>
+                <Button variant="outline" size="sm">
+                  <DownloadIcon className="h-4 w-4" />
+                  <span className="sr-only md:not-sr-only md:ml-2">Export</span>
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Main Content */}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Payments Card */}
+            <Card>
+              <CardContent className="">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <CreditCardIcon className="h-5 w-5 text-green-600" />
+                    </div>
+                    <p className="text-sm font-medium text-muted-foreground">Payments</p>
+                  </div>
+                  <p className="text-2xl font-bold text-green-600 font-mono tabular-nums">
+                    {formatCurrency(totals.payments)}
+                  </p>
+                  <div className="flex items-center gap-1 text-xs text-green-600">
+                    <ArrowUpIcon className="h-3 w-3" />
+                    <span className="font-medium">12.5% vs yesterday</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Refunds Card */}
+            <Card>
+              <CardContent className="">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-red-100 rounded-lg">
+                      <UndoIcon className="h-5 w-5 text-red-600" />
+                    </div>
+                    <p className="text-sm font-medium text-muted-foreground">Refunds</p>
+                  </div>
+                  <p className="text-2xl font-bold text-red-600 font-mono tabular-nums">
+                    –{formatCurrency(totals.refunds)}
+                  </p>
+                  <div className="flex items-center gap-1 text-xs text-red-600">
+                    <ArrowDownIcon className="h-3 w-3" />
+                    <span className="font-medium">8.2% vs yesterday</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Total Card */}
+            <Card>
+              <CardContent className="">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-purple-100 rounded-lg">
+                      <DollarSignIcon className="h-5 w-5 text-purple-600" />
+                    </div>
+                    <p className="text-sm font-medium text-muted-foreground">Total</p>
+                  </div>
+                  <p className="text-2xl font-bold text-purple-600 font-mono tabular-nums">
+                    {formatCurrency(totals.total)}
+                  </p>
+                  <div className="flex items-center gap-1 text-xs text-green-600">
+                    <ArrowUpIcon className="h-3 w-3" />
+                    <span className="font-medium">11.7% vs yesterday</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Payments Table */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>Payment Transactions</span>
+                <Badge variant="secondary">{filteredPayments.length} transactions</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              {isLoading ? (
+                <div className="p-4">
+                  <LoadingSkeleton isMobile={isMobile} />
+                </div>
+              ) : (
+                <>
+                  {Object.keys(groupedPayments).length === 0 ? (
+                    <EmptyState onChangeDate={() => setSelectedDate(new Date().toISOString().split("T")[0])} />
+                  ) : (
+                    <>
+                      {isMobile ? (
+                        <div>
+                          {Object.entries(groupedPayments).map(([method, transactions]) => (
+                            <PaymentRow
+                              key={method}
+                              method={method}
+                              transactions={transactions}
+                              isExpanded={expandedRows.has(method)}
+                              onToggle={() => toggleRow(method)}
+                              isMobile={true}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full">
+                            <thead className="bg-muted/50 sticky top-0">
+                              <tr>
+                                <th className="text-left p-4 font-semibold">Method</th>
+                                <th className="text-right p-4 font-semibold">Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {Object.entries(groupedPayments).map(([method, transactions]) => (
+                                <PaymentRow
+                                  key={method}
+                                  method={method}
+                                  transactions={transactions}
+                                  isExpanded={expandedRows.has(method)}
+                                  onToggle={() => toggleRow(method)}
+                                  isMobile={false}
+                                />
+                              ))}
+                            </tbody>
+                            <tfoot className="bg-muted/80 sticky bottom-0 border-t-2">
+                              <tr>
+                                <td className="p-4 font-bold">Total</td>
+                                <td className="p-4 text-right font-bold font-mono tabular-nums">
+                                  {formatCurrency(totals.total)}
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  )
+}

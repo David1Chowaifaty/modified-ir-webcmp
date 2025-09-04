@@ -1,0 +1,38 @@
+:host {
+  border-bottom: 1px solid var(--ir-border, #e5e7eb);
+  font-size: 0.875rem;
+}
+.ir-revenue-row-detail {
+  display: flex;
+  gap: var(--ir-space-4, 1rem);
+  padding: 0.5rem 0;
+  align-items: center;
+}
+.ir-revenue-row-detail:hover {
+  background: #f4f5fa;
+}
+.ir-revenue-row-detail__booking {
+  display: inline-flex;
+}
+.ir-revenue-row-detail__booking-btn {
+  display: inline-flex;
+}
+.ir-revenue-row-detail:last-child {
+  border-bottom: none;
+}
+
+.ir-revenue-row-detail__label {
+  font-weight: 500;
+  color: var(--ir-muted, #6b7280);
+  margin-right: 0.25rem;
+}
+
+.ir-revenue-row-detail__amount {
+  font-weight: 600;
+  text-align: right;
+  flex: 1 1 0%;
+}
+
+.ir-revenue-row-detail__amount.negative {
+  color: var(--ir-danger, #dc2626);
+}

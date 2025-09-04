@@ -19,7 +19,7 @@ export class IrPaymentAction {
     return (
       <div class={`action-container ${isFutureAction ? 'future' : 'overdue'}`}>
         <div class={'action-row'}>
-          {!isFutureAction && this.paymentAction.amount > 0 && (
+          {!isFutureAction && (
             <div class={'overdue_action'}>
               <svg height={16} width={16} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path
@@ -49,12 +49,9 @@ export class IrPaymentAction {
             {/* <p class="payment-reason">{this.paymentAction.reason.trim()}</p> */}
           </div>
         </div>
-
-        {this.paymentAction.amount > 0 && (
-          <div style={{ width: 'fit-content' }}>
-            <ir-button btn_color="dark" text={'Pay'} size="sm" onClickHandler={() => this.generatePayment.emit(this.paymentAction)}></ir-button>
-          </div>
-        )}
+        <div style={{ width: 'fit-content' }}>
+          <ir-button btn_color="dark" text={'Pay'} size="sm" onClickHandler={() => this.generatePayment.emit(this.paymentAction)}></ir-button>
+        </div>
       </div>
     );
   }

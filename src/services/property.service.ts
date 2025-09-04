@@ -9,6 +9,11 @@ export type CountrySalesParams = {
   BOOK_CASE: string;
   is_export_to_excel: boolean;
 };
+export type DailyRevenueReportParams = {
+  date: string;
+  property_id: string;
+  is_export_to_excel: boolean;
+};
 export type MonthlyStatsParams = {
   property_id: number;
   from_date: string;
@@ -87,6 +92,16 @@ export class PropertyService {
     }
     if (params.is_export_to_excel) {
       downloadFile(data.My_Params_Get_Country_Sales.Link_excel);
+    }
+    return data.My_Result;
+  }
+  public async getDailyRevenueReport(params: DailyRevenueReportParams) {
+    const { data } = await axios.post('/Get_Daily_Revenue_Report', params);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    if (params.is_export_to_excel) {
+      downloadFile(data.My_Params_Get_Daily_Revenue_Report.Link_excel);
     }
     return data.My_Result;
   }

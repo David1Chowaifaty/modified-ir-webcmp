@@ -1,0 +1,15 @@
+:host {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+}
+/*md*/
+@media (min-width: 768px) {
+  :host {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/*lg*/
+@media (min-width: 1024px) {
+}

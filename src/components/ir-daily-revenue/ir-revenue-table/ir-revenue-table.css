@@ -1,0 +1,45 @@
+:host {
+  overflow-x: hidden;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+:host * {
+  font-family: inherit !important;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+.revenue-table__header {
+  box-sizing: border-box;
+  background: #ececec;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+.revenue-table__header p {
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.revenue-table__title-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+}
+.revenue-table__title-section p {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.revenue-table__date-picker-icon {
+  position: absolute;
+  inset: 0;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  transform: translateY(-0.15rem);
+}
+.revenue-table__table {
+  min-height: 50vh;
+}
