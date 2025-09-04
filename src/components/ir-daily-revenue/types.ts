@@ -18,3 +18,7 @@ export type SidebarOpenEvent = {
     bookingNumber: number;
   };
 };
+export type DailyPaymentFilter = {
+  date: string;
+  users: string | null;
+};

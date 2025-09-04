@@ -1,12 +1,26 @@
-:host {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
+.ir-revenue-summary__mobile {
+  display: flex;
+  align-items: center;
   gap: 1rem;
+}
+.ir-revenue-summary__tablet {
+  display: none;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.stats-card__payments-value {
+  color: #629a4c;
+}
+.stats-card__refund-value {
+  color: #ff4961;
 }
 /*md*/
 @media (min-width: 768px) {
-  :host {
-    grid-template-columns: repeat(3, 1fr);
+  .ir-revenue-summary__tablet {
+    display: grid;
+  }
+  .ir-revenue-summary__mobile {
+    display: none;
   }
 }
 

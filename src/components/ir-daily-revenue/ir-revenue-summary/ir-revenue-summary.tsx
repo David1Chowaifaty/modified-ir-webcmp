@@ -24,9 +24,9 @@ export class IrRevenueSummary {
     return total;
   }
 
-  private calculateTotalAmount(groupedPayments: GroupedFolioPayment) {
-    return Array.from(groupedPayments.entries()).reduce((prev, curr) => prev + this.calculateTotalValue(curr[1]), 0);
-  }
+  // private calculateTotalAmount(groupedPayments: GroupedFolioPayment) {
+  //   return Array.from(groupedPayments.entries()).reduce((prev, curr) => prev + this.calculateTotalValue(curr[1]), 0);
+  // }
 
   private calculateTotalRefunds(groupedPayments: GroupedFolioPayment) {
     const refundKeyCode = '010';
@@ -48,38 +48,56 @@ export class IrRevenueSummary {
   }
   render() {
     const paymentsTotal = this.calculateTotalPayments(this.groupedPayments);
-    const totalAmount = this.calculateTotalAmount(this.groupedPayments);
     const refundAmount = this.calculateTotalRefunds(this.groupedPayments);
+    const totalAmount = paymentsTotal - refundAmount;
 
     const previousDatePaymentsTotal = this.calculateTotalPayments(this.previousDateGroupedPayments);
-    const previousDateTotalAmount = this.calculateTotalAmount(this.previousDateGroupedPayments);
     const previousDateRefundAmount = this.calculateTotalRefunds(this.previousDateGroupedPayments);
+    const previousDateTotalAmount = previousDatePaymentsTotal - previousDateRefundAmount;
 
     return (
       <Host>
-        <ir-stats-card
-          icon={this.getTrendIcon(paymentsTotal, previousDatePaymentsTotal)}
-          value={formatAmount(calendar_data.currency.symbol, paymentsTotal)}
-          cardTitle="Payments"
-          subtitle={`Previous day payments ${formatAmount(calendar_data.currency.symbol, previousDatePaymentsTotal)}`}
-        ></ir-stats-card>
-        <ir-stats-card
-          value="123$"
-          class="refunds-card"
-          icon={this.getTrendIcon(refundAmount, previousDateRefundAmount)}
-          cardTitle="Refunds"
-          subtitle={`Previous day refunds ${formatAmount(calendar_data.currency.symbol, previousDateRefundAmount)}`}
-        >
-          <p class="p-0 m-0 text-danger" slot="value">
-            {formatAmount(calendar_data.currency.symbol, refundAmount)}
-          </p>
-        </ir-stats-card>
-        <ir-stats-card
-          icon={this.getTrendIcon(totalAmount, previousDateTotalAmount)}
-          value={formatAmount(calendar_data.currency.symbol, totalAmount)}
-          cardTitle="Total"
-          subtitle={`Previous day total ${formatAmount(calendar_data.currency.symbol, previousDateTotalAmount)}`}
-        ></ir-stats-card>
+        <div class="ir-revenue-summary__mobile">
+          <ir-stats-card icon={'arrow-trend-up'} value={formatAmount(calendar_data.currency.symbol, paymentsTotal)} cardTitle="Payments">
+            <p class="stats-card__payments-value" slot="value">
+              {formatAmount(calendar_data.currency.symbol, paymentsTotal)}
+            </p>
+          </ir-stats-card>
+          <ir-stats-card value="123$" class="refunds-card" icon={'arrow-trend-down'} cardTitle="Refunds">
+            <p class="stats-card__refund-value" slot="value">
+              {formatAmount(calendar_data.currency.symbol, refundAmount)}
+            </p>
+          </ir-stats-card>
+        </div>
+        <div class="ir-revenue-summary__tablet">
+          <ir-stats-card
+            icon={'arrow-trend-up'}
+            value={formatAmount(calendar_data.currency.symbol, paymentsTotal)}
+            cardTitle="Payments"
+            subtitle={`Previous day  ${formatAmount(calendar_data.currency.symbol, previousDatePaymentsTotal)}`}
+          >
+            <p class="stats-card__payments-value" slot="value">
+              {formatAmount(calendar_data.currency.symbol, paymentsTotal)}
+            </p>
+          </ir-stats-card>
+          <ir-stats-card
+            value="123$"
+            class="refunds-card"
+            icon={'arrow-trend-down'}
+            cardTitle="Refunds"
+            subtitle={`Previous day  ${formatAmount(calendar_data.currency.symbol, previousDateRefundAmount)}`}
+          >
+            <p class="stats-card__refund-value" slot="value">
+              {formatAmount(calendar_data.currency.symbol, refundAmount)}
+            </p>
+          </ir-stats-card>
+          <ir-stats-card
+            icon={this.getTrendIcon(totalAmount, previousDateTotalAmount)}
+            value={formatAmount(calendar_data.currency.symbol, totalAmount)}
+            cardTitle="Difference"
+            subtitle={`Previous day  ${formatAmount(calendar_data.currency.symbol, previousDateTotalAmount)}`}
+          ></ir-stats-card>
+        </div>
       </Host>
     );
   }

@@ -19,34 +19,36 @@ export class IrRevenueRowDetails {
       <Host>
         <div class="ir-revenue-row-detail">
           <div class="ir-revenue-row-detail__time">
-            <span class="ir-revenue-row-detail__label">Timestamp:</span>
+            <span class="ir-revenue-row-detail__label">{this.payment.date}</span>
             <span class="ir-revenue-row-detail__value">{_formatTime(this.payment.hour.toString(), this.payment.minute.toString())}</span>
+            <div class="ir-revenue-row-detail__amount">{formatAmount(calendar_data.currency.symbol, this.payment.amount)}</div>
           </div>
 
-          <div class="ir-revenue-row-detail__user">
-            <span class="ir-revenue-row-detail__label">User:</span>
-            <span class="ir-revenue-row-detail__value">{this.payment.user}</span>
-          </div>
-
-          <div class="ir-revenue-row-detail__booking">
-            <ir-button
-              variant="default"
-              btn_color="link"
-              text={this.payment.bookingNbr}
-              class="ir-revenue-row-detail__booking-btn"
-              size="sm"
-              onClickHandler={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                this.revenueOpenSidebar.emit({
-                  payload: {
-                    bookingNumber: Number(this.payment.bookingNbr),
-                  },
-                  type: 'booking',
-                });
-              }}
-              btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit', textAlign: 'center', lineHeight: '1.2' }}
-            ></ir-button>
+          <div class="ir-revenue-row-detail__meta">
+            <div class="ir-revenue-row-detail__user">
+              <span class="ir-revenue-row-detail__label">User:</span>
+              <span class="ir-revenue-row-detail__value">{this.payment.user}</span>
+            </div>
+            <div class="ir-revenue-row-detail__booking">
+              <ir-button
+                variant="default"
+                btn_color="link"
+                text={this.payment.bookingNbr}
+                class="ir-revenue-row-detail__booking-btn"
+                size="sm"
+                onClickHandler={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.revenueOpenSidebar.emit({
+                    payload: {
+                      bookingNumber: Number(this.payment.bookingNbr),
+                    },
+                    type: 'booking',
+                  });
+                }}
+                btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit', textAlign: 'center', lineHeight: '1.2' }}
+              ></ir-button>
+            </div>
           </div>
 
           <div class="ir-revenue-row-detail__amount">{formatAmount(calendar_data.currency.symbol, this.payment.amount)}</div>

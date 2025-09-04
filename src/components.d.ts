@@ -25,6 +25,7 @@ import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
+import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
@@ -38,7 +39,6 @@ import { PaginationChangeEvent, PaginationRange } from "./components/ir-paginati
 import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
 import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
-import { FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 import { SidebarOpenEvent } from "./components/ir-daily-revenue/types";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 import { Tab } from "./components/ui/ir-tabs/ir-tabs";
@@ -66,6 +66,7 @@ export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
+export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
@@ -79,7 +80,6 @@ export { PaginationChangeEvent, PaginationRange } from "./components/ir-paginati
 export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
 export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
-export { FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 export { SidebarOpenEvent } from "./components/ir-daily-revenue/types";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 export { Tab } from "./components/ui/ir-tabs/ir-tabs";
@@ -605,6 +605,10 @@ export namespace Components {
         "p": string;
         "propertyid": number;
         "ticket": string;
+    }
+    interface IrDailyRevenueFilters {
+        "isLoading": boolean;
+        "payments": GroupedFolioPayment;
     }
     interface IrDatePicker {
         /**
@@ -1741,7 +1745,7 @@ export namespace Components {
         "previousDateGroupedPayments": GroupedFolioPayment;
     }
     interface IrRevenueTable {
-        "date": string;
+        "filters": DailyPaymentFilter;
         "payTypes": IEntries[];
         "payments": GroupedFolioPayment;
     }
@@ -2323,6 +2327,10 @@ export interface IrDailyRevenueCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDailyRevenueElement;
 }
+export interface IrDailyRevenueFiltersCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrDailyRevenueFiltersElement;
+}
 export interface IrDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDatePickerElement;
@@ -2502,10 +2510,6 @@ export interface IrRevenueRowCustomEvent<T> extends CustomEvent<T> {
 export interface IrRevenueRowDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrRevenueRowDetailsElement;
-}
-export interface IrRevenueTableCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLIrRevenueTableElement;
 }
 export interface IrRoomCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3360,6 +3364,23 @@ declare global {
     var HTMLIrDailyRevenueElement: {
         prototype: HTMLIrDailyRevenueElement;
         new (): HTMLIrDailyRevenueElement;
+    };
+    interface HTMLIrDailyRevenueFiltersElementEventMap {
+        "fetchNewReports": DailyPaymentFilter;
+    }
+    interface HTMLIrDailyRevenueFiltersElement extends Components.IrDailyRevenueFilters, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrDailyRevenueFiltersElementEventMap>(type: K, listener: (this: HTMLIrDailyRevenueFiltersElement, ev: IrDailyRevenueFiltersCustomEvent<HTMLIrDailyRevenueFiltersElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrDailyRevenueFiltersElementEventMap>(type: K, listener: (this: HTMLIrDailyRevenueFiltersElement, ev: IrDailyRevenueFiltersCustomEvent<HTMLIrDailyRevenueFiltersElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrDailyRevenueFiltersElement: {
+        prototype: HTMLIrDailyRevenueFiltersElement;
+        new (): HTMLIrDailyRevenueFiltersElement;
     };
     interface HTMLIrDatePickerElementEventMap {
         "dateChanged": {
@@ -4308,18 +4329,7 @@ declare global {
         prototype: HTMLIrRevenueSummaryElement;
         new (): HTMLIrRevenueSummaryElement;
     };
-    interface HTMLIrRevenueTableElementEventMap {
-        "fetchNewReports": string;
-    }
     interface HTMLIrRevenueTableElement extends Components.IrRevenueTable, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIrRevenueTableElementEventMap>(type: K, listener: (this: HTMLIrRevenueTableElement, ev: IrRevenueTableCustomEvent<HTMLIrRevenueTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIrRevenueTableElementEventMap>(type: K, listener: (this: HTMLIrRevenueTableElement, ev: IrRevenueTableCustomEvent<HTMLIrRevenueTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrRevenueTableElement: {
         prototype: HTMLIrRevenueTableElement;
@@ -4789,6 +4799,7 @@ declare global {
         "ir-common": HTMLIrCommonElement;
         "ir-country-picker": HTMLIrCountryPickerElement;
         "ir-daily-revenue": HTMLIrDailyRevenueElement;
+        "ir-daily-revenue-filters": HTMLIrDailyRevenueFiltersElement;
         "ir-date-picker": HTMLIrDatePickerElement;
         "ir-date-range": HTMLIrDateRangeElement;
         "ir-date-view": HTMLIrDateViewElement;
@@ -5531,6 +5542,11 @@ declare namespace LocalJSX {
         "p"?: string;
         "propertyid"?: number;
         "ticket"?: string;
+    }
+    interface IrDailyRevenueFilters {
+        "isLoading"?: boolean;
+        "onFetchNewReports"?: (event: IrDailyRevenueFiltersCustomEvent<DailyPaymentFilter>) => void;
+        "payments"?: GroupedFolioPayment;
     }
     interface IrDatePicker {
         /**
@@ -6815,8 +6831,7 @@ declare namespace LocalJSX {
         "previousDateGroupedPayments"?: GroupedFolioPayment;
     }
     interface IrRevenueTable {
-        "date"?: string;
-        "onFetchNewReports"?: (event: IrRevenueTableCustomEvent<string>) => void;
+        "filters"?: DailyPaymentFilter;
         "payTypes"?: IEntries[];
         "payments"?: GroupedFolioPayment;
     }
@@ -7342,6 +7357,7 @@ declare namespace LocalJSX {
         "ir-common": IrCommon;
         "ir-country-picker": IrCountryPicker;
         "ir-daily-revenue": IrDailyRevenue;
+        "ir-daily-revenue-filters": IrDailyRevenueFilters;
         "ir-date-picker": IrDatePicker;
         "ir-date-range": IrDateRange;
         "ir-date-view": IrDateView;
@@ -7495,6 +7511,7 @@ declare module "@stencil/core" {
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-country-picker": LocalJSX.IrCountryPicker & JSXBase.HTMLAttributes<HTMLIrCountryPickerElement>;
             "ir-daily-revenue": LocalJSX.IrDailyRevenue & JSXBase.HTMLAttributes<HTMLIrDailyRevenueElement>;
+            "ir-daily-revenue-filters": LocalJSX.IrDailyRevenueFilters & JSXBase.HTMLAttributes<HTMLIrDailyRevenueFiltersElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
             "ir-date-range": LocalJSX.IrDateRange & JSXBase.HTMLAttributes<HTMLIrDateRangeElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;

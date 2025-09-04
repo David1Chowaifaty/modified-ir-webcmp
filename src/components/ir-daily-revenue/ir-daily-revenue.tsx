@@ -4,7 +4,7 @@ import { PropertyService } from '@/services/property.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
-import { FolioPayment, GroupedFolioPayment, SidebarOpenEvent } from './types';
+import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment, SidebarOpenEvent } from './types';
 import { v4 } from 'uuid';
 import moment from 'moment';
 import { IEntries } from '@/models/IBooking';
@@ -25,7 +25,7 @@ export class IrDailyRevenue {
   @State() groupedPayment: GroupedFolioPayment;
   @State() previousDateGroupedPayments: GroupedFolioPayment;
   @State() isLoading: string;
-  @State() date: string = moment().format('YYYY-MM-DD');
+  @State() filters: DailyPaymentFilter = { date: moment().format('YYYY-MM-DD'), users: null };
   @State() sideBarEvent: SidebarOpenEvent | null;
 
   private tokenService = new Token();
@@ -60,10 +60,10 @@ export class IrDailyRevenue {
     this.sideBarEvent = e.detail;
   }
   @Listen('fetchNewReports')
-  handleFetchNewReports(e: CustomEvent<string>) {
+  handleFetchNewReports(e: CustomEvent<DailyPaymentFilter>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.date = e.detail;
+    this.filters = { ...e.detail };
     this.getPaymentReports();
   }
 
@@ -177,7 +177,7 @@ export class IrDailyRevenue {
 
       const requests = [
         this.propertyService.getDailyRevenueReport({
-          date: this.date,
+          date: this.filters.date,
           property_id: this.property_id?.toString(),
           is_export_to_excel: isExportToExcel,
         }),
@@ -185,7 +185,7 @@ export class IrDailyRevenue {
       if (!isExportToExcel) {
         requests.push(
           this.propertyService.getDailyRevenueReport({
-            date: moment(this.date, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'),
+            date: moment(this.filters.date, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'),
             property_id: this.property_id?.toString(),
             is_export_to_excel: isExportToExcel,
           }),
@@ -215,7 +215,7 @@ export class IrDailyRevenue {
     return (
       <Host>
         <ir-toast></ir-toast>
-        <ir-interceptor handledEndpoints={['/Get_Daily_Revenue_Report']}></ir-interceptor>
+        <ir-interceptor></ir-interceptor>
         <section class="p-2 d-flex flex-column" style={{ gap: '1rem' }}>
           <div class="d-flex align-items-center justify-content-between">
             <h3 class="mb-1 mb-md-0">Daily Revenue</h3>
@@ -240,7 +240,10 @@ export class IrDailyRevenue {
             groupedPayments={this.groupedPayment}
             payTypesGroup={this.payTypeGroup}
           ></ir-revenue-summary>
-          <ir-revenue-table date={this.date} payTypes={this.payTypes} payments={this.groupedPayment}></ir-revenue-table>
+          <div class="daily-revenue__meta">
+            <ir-daily-revenue-filters isLoading={this.isLoading === 'filter'} payments={this.groupedPayment}></ir-daily-revenue-filters>
+            <ir-revenue-table filters={this.filters} class={'daily-revenue__table'} payTypes={this.payTypes} payments={this.groupedPayment}></ir-revenue-table>
+          </div>
         </section>
         <ir-sidebar
           sidebarStyles={{

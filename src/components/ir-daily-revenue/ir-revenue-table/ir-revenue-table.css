@@ -24,21 +24,8 @@
 .revenue-table__title-section {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-bottom: 1rem;
-}
-.revenue-table__title-section p {
-  font-size: 1rem;
-  font-weight: 600;
-}
-.revenue-table__date-picker-icon {
-  position: absolute;
-  inset: 0;
-  left: 0.75rem;
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  transform: translateY(-0.15rem);
+  justify-content: center;
+  padding-bottom: 0.875rem;
 }
 .revenue-table__table {
   min-height: 50vh;
