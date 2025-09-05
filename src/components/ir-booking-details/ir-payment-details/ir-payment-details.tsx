@@ -33,7 +33,7 @@ export class IrPaymentDetails {
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
-    const paymentType = this.paymentTypes?.find(p => p.CODE_NAME === (value.pay_type_code === '013' && this.booking.status.code === '003' ? value.pay_type_code : '001'));
+    const paymentType = this.paymentTypes?.find(p => p.CODE_NAME === (this.booking.status.code === '003' ? value.pay_type_code : '001'));
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: {
