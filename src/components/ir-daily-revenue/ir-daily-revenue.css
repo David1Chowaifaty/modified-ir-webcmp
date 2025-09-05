@@ -11,7 +11,7 @@
 }
 
 /*sm*/
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .daily-revenue__meta {
     flex-direction: row;
   }
