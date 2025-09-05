@@ -1814,6 +1814,9 @@ export namespace Components {
         "propertyid": number;
         "ticket": string;
     }
+    interface IrSalesByCountrySummary {
+        "salesReports": SalesRecord[];
+    }
     interface IrSalesFilters {
         "baseFilters": CountrySalesFilter;
         "isLoading": boolean;
@@ -4379,6 +4382,12 @@ declare global {
         prototype: HTMLIrSalesByCountryElement;
         new (): HTMLIrSalesByCountryElement;
     };
+    interface HTMLIrSalesByCountrySummaryElement extends Components.IrSalesByCountrySummary, HTMLStencilElement {
+    }
+    var HTMLIrSalesByCountrySummaryElement: {
+        prototype: HTMLIrSalesByCountrySummaryElement;
+        new (): HTMLIrSalesByCountrySummaryElement;
+    };
     interface HTMLIrSalesFiltersElementEventMap {
         "applyFilters": CountrySalesFilter;
     }
@@ -4851,6 +4860,7 @@ declare global {
         "ir-room-guests": HTMLIrRoomGuestsElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-sales-by-country": HTMLIrSalesByCountryElement;
+        "ir-sales-by-country-summary": HTMLIrSalesByCountrySummaryElement;
         "ir-sales-filters": HTMLIrSalesFiltersElement;
         "ir-sales-table": HTMLIrSalesTableElement;
         "ir-secure-tasks": HTMLIrSecureTasksElement;
@@ -6884,6 +6894,9 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "ticket"?: string;
     }
+    interface IrSalesByCountrySummary {
+        "salesReports"?: SalesRecord[];
+    }
     interface IrSalesFilters {
         "baseFilters"?: CountrySalesFilter;
         "isLoading"?: boolean;
@@ -7397,6 +7410,7 @@ declare namespace LocalJSX {
         "ir-room-guests": IrRoomGuests;
         "ir-room-nights": IrRoomNights;
         "ir-sales-by-country": IrSalesByCountry;
+        "ir-sales-by-country-summary": IrSalesByCountrySummary;
         "ir-sales-filters": IrSalesFilters;
         "ir-sales-table": IrSalesTable;
         "ir-secure-tasks": IrSecureTasks;
@@ -7551,6 +7565,7 @@ declare module "@stencil/core" {
             "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-sales-by-country": LocalJSX.IrSalesByCountry & JSXBase.HTMLAttributes<HTMLIrSalesByCountryElement>;
+            "ir-sales-by-country-summary": LocalJSX.IrSalesByCountrySummary & JSXBase.HTMLAttributes<HTMLIrSalesByCountrySummaryElement>;
             "ir-sales-filters": LocalJSX.IrSalesFilters & JSXBase.HTMLAttributes<HTMLIrSalesFiltersElement>;
             "ir-sales-table": LocalJSX.IrSalesTable & JSXBase.HTMLAttributes<HTMLIrSalesTableElement>;
             "ir-secure-tasks": LocalJSX.IrSecureTasks & JSXBase.HTMLAttributes<HTMLIrSecureTasksElement>;

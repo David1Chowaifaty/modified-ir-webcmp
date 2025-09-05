@@ -192,6 +192,7 @@ export class IrSalesByCountry {
               icon_style={{ '--icon-size': '14px' }}
             ></ir-button>
           </div>
+          <ir-sales-by-country-summary salesReports={this.salesData}></ir-sales-by-country-summary>
           <div class="d-flex flex-column flex-lg-row mt-1 " style={{ gap: '1rem' }}>
             <ir-sales-filters
               isLoading={this.isLoading === 'filter'}
