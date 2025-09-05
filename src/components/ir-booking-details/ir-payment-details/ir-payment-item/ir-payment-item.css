@@ -1,4 +1,4 @@
-.payment-item {
+/* .payment-item {
   position: relative;
   width: 100%;
   display: flex;
@@ -8,9 +8,6 @@
   gap: 1rem;
   box-sizing: border-box;
 }
-/* .payment-item:last-child {
-  border-bottom: 0;
-} */
 .payment-item:hover {
   background: #f4f5fa;
 }
@@ -47,12 +44,7 @@
   font-weight: 700;
   white-space: nowrap;
 }
-.payment-amount.is-credit {
-  color: #629a4c;
-}
-.payment-amount.is-debit {
-  color: #ff4961;
-}
+
 
 .payment-reference {
   font-size: 12px;
@@ -62,13 +54,103 @@
   align-items: center;
   gap: 0.5rem;
 }
-.action-button {
-  cursor: pointer;
-}
+
 @media (min-width: 768px) {
   .payment-fields {
     flex-direction: row;
     align-items: center;
     gap: 1rem;
+  }
+} */
+.payment-item__payment-item {
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.25rem; */
+  padding: 0.5rem;
+  min-height: 3rem;
+}
+.payment-item__payment-item p {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.payment-item__payment-body {
+  display: flex;
+  flex-direction: column;
+}
+.payment-item__payment-fields {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.payment-item__payment-body .payment-item__payment-reference,
+.payment-item__payment-body .payment-item__payment-description {
+  display: none;
+}
+.payment-item__payment-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.payment-item__payment-toolbar .payment-item__payment-amount {
+  display: none;
+}
+.payment-item__action-button {
+  cursor: pointer;
+}
+.payment-item__payment-amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.payment-item__payment-amount.is-credit {
+  color: #629a4c;
+}
+.payment-item__payment-amount.is-debit {
+  color: #ff4961;
+}
+.payment-item__payment-reference {
+  font-size: 12px;
+}
+/*md*/
+@media (min-width: 640px) {
+  .payment-item__payment-item {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .payment-item__payment-item:hover {
+    background: #f4f5fa;
+  }
+  .payment-item__payment-item:hover .payment-item__payment-actions {
+    display: inline-flex;
+  }
+  .payment-item__payment-body .payment-item__payment-reference,
+  .payment-item__payment-body .payment-item__payment-description,
+  .payment-item__payment-item .payment-item__payment-amount {
+    display: inline-flex;
+  }
+  .payment-item__payment-fields .payment-item__payment-amount,
+  .payment-item__payment-toolbar .payment-item__payment-description,
+  .payment-item__payment-item .payment-item__payment-reference,
+  .payment-item__payment-actions {
+    display: none;
+  }
+  .payment-item__payment-body .payment-item__payment-reference {
+    display: inline-flex;
+    align-items: center;
+  }
+  .payment-item__payment-body {
+    flex: 1 1 0%;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+  .payment-item__payment-fields {
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+  .payment-item__payment-toolbar {
+    gap: 0.5rem;
+    align-items: center;
   }
 }
