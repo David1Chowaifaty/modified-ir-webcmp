@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>Stencil Component Starter</title>
+    <title>Monthly Booking Reports</title>
     <script type="module" src="/build/ir-webcmp.esm.js"></script>
     <script nomodule src="/build/ir-webcmp.js"></script>
     <script src="assets/scripts/jquery.min.js"></script>
@@ -24,26 +24,18 @@
 
 <body>
     <ir-common></ir-common>
-    <igloo-calendar currency-name="USD" propertyid="42" language="en"
-        baseurl="https://gateway.igloorooms.com/IR"></igloo-calendar>
+    <ir-monthly-bookings-report baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-monthly-bookings-report>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
     <script>
-        //backend-cmp-injector
-        //aname - username -password
-        var today = new Date();
-        today.setDate(today.getDate() - 1);
-        var _FROM_DATE = today.toISOString().substring(0, 10)
-        today.setDate(today.getDate() + 60);
-        var _TO_DATE = today.toISOString().substring(0, 10)
-        const calendar = document.querySelector("igloo-calendar");
-        calendar.from_date = _FROM_DATE;
-        calendar.to_date = _TO_DATE;
-        setTimeout(async () => {
-            const ticket = await getToken();
-            calendar.propertyid = getId();
-            calendar.ticket = ticket;
-        }, 300)
+        checkBrowserValidity()
+        const monthlyReportEl = document.querySelector("ir-monthly-bookings-report");
+        if (monthlyReportEl) {
+            (async () => {
+                monthlyReportEl.propertyid = getId();
+                monthlyReportEl.ticket = await getToken()
+            })();
+        } 
     </script>
 
 </body>

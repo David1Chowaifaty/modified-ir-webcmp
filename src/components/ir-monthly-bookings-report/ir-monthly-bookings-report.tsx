@@ -207,12 +207,7 @@ export class IrMonthlyBookingsReport {
                 subtitle="Booked"
               ></ir-report-stats-card>
 
-              <ir-report-stats-card
-                icon="user_group"
-                cardTitle="Total Guests"
-                value={this.reports?.reduce((prev, curr) => prev + curr.total_guests, 0)?.toString()}
-                subtitle="Stayed"
-              ></ir-report-stats-card>
+              <ir-report-stats-card icon="user_group" cardTitle="Total Guests" value={this.stats?.Total_Guests?.toString()} subtitle="Stayed"></ir-report-stats-card>
 
               <ir-report-stats-card
                 icon="calendar"
