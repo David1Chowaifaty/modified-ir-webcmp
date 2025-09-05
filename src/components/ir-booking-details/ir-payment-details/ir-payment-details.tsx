@@ -14,7 +14,7 @@ import moment from 'moment';
   scoped: true,
 })
 export class IrPaymentDetails {
-  @Prop({ mutable: true }) bookingDetails: Booking;
+  @Prop({ mutable: true }) booking: Booking;
   @Prop() paymentActions: IPaymentAction[];
   @Prop() paymentTypes: IEntries[];
 
@@ -33,13 +33,13 @@ export class IrPaymentDetails {
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
-    const paymentType = this.paymentTypes?.find(p => p.CODE_NAME === value.pay_type_code);
+    const paymentType = this.paymentTypes?.find(p => p.CODE_NAME === (value.pay_type_code === '013' && this.booking.status.code === '003' ? value.pay_type_code : '001'));
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: {
         payment: {
           ...value,
-          date: moment(value.due_on, 'M/D/YYYY h:mm:ss A').format('YYYY-MM-DD'),
+          date: moment().format('YYYY-MM-DD'),
           id: -1,
           amount: value.amount,
           payment_type: paymentType
@@ -89,11 +89,11 @@ export class IrPaymentDetails {
   private async cancelPayment() {
     try {
       await this.paymentService.CancelPayment(this.toBeDeletedItem.id);
-      const newPaymentArray = this.bookingDetails.financial.payments.filter((item: IPayment) => item.id !== this.toBeDeletedItem.id);
+      const newPaymentArray = this.booking.financial.payments.filter((item: IPayment) => item.id !== this.toBeDeletedItem.id);
 
-      this.bookingDetails = {
-        ...this.bookingDetails,
-        financial: { ...this.bookingDetails.financial, payments: newPaymentArray },
+      this.booking = {
+        ...this.booking,
+        financial: { ...this.booking.financial, payments: newPaymentArray },
       };
 
       this.confirmModal = false;
@@ -134,11 +134,11 @@ export class IrPaymentDetails {
   }
 
   private hasValidFinancialData(): boolean {
-    return Boolean(this.bookingDetails?.financial);
+    return Boolean(this.booking?.financial);
   }
 
   private shouldShowPaymentActions(): boolean {
-    return Boolean(this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.bookingDetails.is_direct);
+    return Boolean(this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.booking.is_direct);
   }
 
   render() {
@@ -146,13 +146,13 @@ export class IrPaymentDetails {
       return null;
     }
 
-    const { financial, currency } = this.bookingDetails;
+    const { financial, currency } = this.booking;
 
     return [
       <div class="card p-1">
-        <ir-payment-summary totalCost={financial.gross_cost} balance={financial.due_amount} collected={this.bookingDetails.financial.collected} currency={currency} />
-        <ir-booking-guarantee booking={this.bookingDetails} bookingService={this.bookingService} />
-        {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.bookingDetails} />}
+        <ir-payment-summary totalCost={financial.gross_cost} balance={financial.due_amount} collected={this.booking.financial.collected} currency={currency} />
+        <ir-booking-guarantee booking={this.booking} bookingService={this.bookingService} />
+        {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />}
       </div>,
       <ir-payments-folio
         paymentTypes={this.paymentTypes}

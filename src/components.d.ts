@@ -1447,7 +1447,7 @@ export namespace Components {
         "paymentAction": IPaymentAction[];
     }
     interface IrPaymentDetails {
-        "bookingDetails": Booking;
+        "booking": Booking;
         "paymentActions": IPaymentAction[];
         "paymentTypes": IEntries[];
     }
@@ -6467,7 +6467,7 @@ declare namespace LocalJSX {
         "paymentAction"?: IPaymentAction[];
     }
     interface IrPaymentDetails {
-        "bookingDetails"?: Booking;
+        "booking"?: Booking;
         "onOpenSidebar"?: (event: IrPaymentDetailsCustomEvent<PaymentSidebarEvent>) => void;
         "onResetBookingEvt"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onResetExposedCancellationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;

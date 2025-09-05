@@ -153,9 +153,10 @@ export class IrPaymentFolio {
   private async getPaymentTypes() {
     const rec = buildPaymentTypes(this.paymentTypes, this.paymentTypesGroups);
     if (this.mode === 'payment-action' && this.payment.payment_type?.code === '001') {
-      const { PAYMENTS } = rec;
+      const { PAYMENTS, CANCELLATION } = rec;
       return (this._paymentTypes = {
         PAYMENTS,
+        CANCELLATION,
       });
     }
     this._paymentTypes = rec;
