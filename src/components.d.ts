@@ -1693,6 +1693,9 @@ export namespace Components {
         "propertyid": number;
         "ticket": string;
     }
+    interface IrSalesByCountrySummary {
+        "salesReports": SalesRecord[];
+    }
     interface IrSalesFilters {
         "baseFilters": CountrySalesFilter;
         "isLoading": boolean;
@@ -1788,6 +1791,12 @@ export namespace Components {
           * CSS unit used for `size` and `borderWidth`. Can be `'px'` or `'rem'`.
          */
         "unit": 'px' | 'rem';
+    }
+    interface IrStatsCard {
+        "cardTitle": string;
+        "icon": TIcons;
+        "subtitle": string;
+        "value": string;
     }
     interface IrSwitch {
         /**
@@ -4040,6 +4049,12 @@ declare global {
         prototype: HTMLIrSalesByCountryElement;
         new (): HTMLIrSalesByCountryElement;
     };
+    interface HTMLIrSalesByCountrySummaryElement extends Components.IrSalesByCountrySummary, HTMLStencilElement {
+    }
+    var HTMLIrSalesByCountrySummaryElement: {
+        prototype: HTMLIrSalesByCountrySummaryElement;
+        new (): HTMLIrSalesByCountrySummaryElement;
+    };
     interface HTMLIrSalesFiltersElementEventMap {
         "applyFilters": CountrySalesFilter;
     }
@@ -4115,6 +4130,12 @@ declare global {
     var HTMLIrSpinnerElement: {
         prototype: HTMLIrSpinnerElement;
         new (): HTMLIrSpinnerElement;
+    };
+    interface HTMLIrStatsCardElement extends Components.IrStatsCard, HTMLStencilElement {
+    }
+    var HTMLIrStatsCardElement: {
+        prototype: HTMLIrStatsCardElement;
+        new (): HTMLIrStatsCardElement;
     };
     interface HTMLIrSwitchElementEventMap {
         "checkChange": boolean;
@@ -4492,6 +4513,7 @@ declare global {
         "ir-room-guests": HTMLIrRoomGuestsElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-sales-by-country": HTMLIrSalesByCountryElement;
+        "ir-sales-by-country-summary": HTMLIrSalesByCountrySummaryElement;
         "ir-sales-filters": HTMLIrSalesFiltersElement;
         "ir-sales-table": HTMLIrSalesTableElement;
         "ir-secure-tasks": HTMLIrSecureTasksElement;
@@ -4499,6 +4521,7 @@ declare global {
         "ir-sidebar": HTMLIrSidebarElement;
         "ir-span": HTMLIrSpanElement;
         "ir-spinner": HTMLIrSpinnerElement;
+        "ir-stats-card": HTMLIrStatsCardElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-tabs": HTMLIrTabsElement;
         "ir-tasks-card": HTMLIrTasksCardElement;
@@ -6386,6 +6409,9 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "ticket"?: string;
     }
+    interface IrSalesByCountrySummary {
+        "salesReports"?: SalesRecord[];
+    }
     interface IrSalesFilters {
         "baseFilters"?: CountrySalesFilter;
         "isLoading"?: boolean;
@@ -6487,6 +6513,12 @@ declare namespace LocalJSX {
           * CSS unit used for `size` and `borderWidth`. Can be `'px'` or `'rem'`.
          */
         "unit"?: 'px' | 'rem';
+    }
+    interface IrStatsCard {
+        "cardTitle"?: string;
+        "icon"?: TIcons;
+        "subtitle"?: string;
+        "value"?: string;
     }
     interface IrSwitch {
         /**
@@ -6879,6 +6911,7 @@ declare namespace LocalJSX {
         "ir-room-guests": IrRoomGuests;
         "ir-room-nights": IrRoomNights;
         "ir-sales-by-country": IrSalesByCountry;
+        "ir-sales-by-country-summary": IrSalesByCountrySummary;
         "ir-sales-filters": IrSalesFilters;
         "ir-sales-table": IrSalesTable;
         "ir-secure-tasks": IrSecureTasks;
@@ -6886,6 +6919,7 @@ declare namespace LocalJSX {
         "ir-sidebar": IrSidebar;
         "ir-span": IrSpan;
         "ir-spinner": IrSpinner;
+        "ir-stats-card": IrStatsCard;
         "ir-switch": IrSwitch;
         "ir-tabs": IrTabs;
         "ir-tasks-card": IrTasksCard;
@@ -7018,6 +7052,7 @@ declare module "@stencil/core" {
             "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-sales-by-country": LocalJSX.IrSalesByCountry & JSXBase.HTMLAttributes<HTMLIrSalesByCountryElement>;
+            "ir-sales-by-country-summary": LocalJSX.IrSalesByCountrySummary & JSXBase.HTMLAttributes<HTMLIrSalesByCountrySummaryElement>;
             "ir-sales-filters": LocalJSX.IrSalesFilters & JSXBase.HTMLAttributes<HTMLIrSalesFiltersElement>;
             "ir-sales-table": LocalJSX.IrSalesTable & JSXBase.HTMLAttributes<HTMLIrSalesTableElement>;
             "ir-secure-tasks": LocalJSX.IrSecureTasks & JSXBase.HTMLAttributes<HTMLIrSecureTasksElement>;
@@ -7025,6 +7060,7 @@ declare module "@stencil/core" {
             "ir-sidebar": LocalJSX.IrSidebar & JSXBase.HTMLAttributes<HTMLIrSidebarElement>;
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
+            "ir-stats-card": LocalJSX.IrStatsCard & JSXBase.HTMLAttributes<HTMLIrStatsCardElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-tabs": LocalJSX.IrTabs & JSXBase.HTMLAttributes<HTMLIrTabsElement>;
             "ir-tasks-card": LocalJSX.IrTasksCard & JSXBase.HTMLAttributes<HTMLIrTasksCardElement>;
