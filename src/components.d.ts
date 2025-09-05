@@ -38,9 +38,9 @@ import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
-import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 import { SidebarOpenEvent } from "./components/ir-daily-revenue/types";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
+import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 import { Tab } from "./components/ui/ir-tabs/ir-tabs";
 import { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 import { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
@@ -79,9 +79,9 @@ export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
-export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 export { SidebarOpenEvent } from "./components/ir-daily-revenue/types";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
+export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 export { Tab } from "./components/ui/ir-tabs/ir-tabs";
 export { TaskFilters } from "./components/ir-housekeeping/ir-hk-tasks/types";
 export { ToolbarConfig } from "./components/ui/ir-text-editor/ir-text-editor";
@@ -1702,12 +1702,6 @@ export namespace Components {
           * Whether to show the overlay before the date is selected.
          */
         "withOverlay": boolean;
-    }
-    interface IrReportStatsCard {
-        "cardTitle": string;
-        "icon": TIcons;
-        "subtitle": string;
-        "value": string;
     }
     interface IrReservationInformation {
         "booking": Booking;
@@ -4242,12 +4236,6 @@ declare global {
         prototype: HTMLIrRangePickerElement;
         new (): HTMLIrRangePickerElement;
     };
-    interface HTMLIrReportStatsCardElement extends Components.IrReportStatsCard, HTMLStencilElement {
-    }
-    var HTMLIrReportStatsCardElement: {
-        prototype: HTMLIrReportStatsCardElement;
-        new (): HTMLIrReportStatsCardElement;
-    };
     interface HTMLIrReservationInformationElementEventMap {
         "openSidebar": OpenSidebarEvent<any>;
     }
@@ -4849,7 +4837,6 @@ declare global {
         "ir-progress-indicator": HTMLIrProgressIndicatorElement;
         "ir-radio": HTMLIrRadioElement;
         "ir-range-picker": HTMLIrRangePickerElement;
-        "ir-report-stats-card": HTMLIrReportStatsCardElement;
         "ir-reservation-information": HTMLIrReservationInformationElement;
         "ir-reset-password": HTMLIrResetPasswordElement;
         "ir-revenue-row": HTMLIrRevenueRowElement;
@@ -6769,12 +6756,6 @@ declare namespace LocalJSX {
          */
         "withOverlay"?: boolean;
     }
-    interface IrReportStatsCard {
-        "cardTitle"?: string;
-        "icon"?: TIcons;
-        "subtitle"?: string;
-        "value"?: string;
-    }
     interface IrReservationInformation {
         "booking"?: Booking;
         "countries"?: ICountry[];
@@ -7399,7 +7380,6 @@ declare namespace LocalJSX {
         "ir-progress-indicator": IrProgressIndicator;
         "ir-radio": IrRadio;
         "ir-range-picker": IrRangePicker;
-        "ir-report-stats-card": IrReportStatsCard;
         "ir-reservation-information": IrReservationInformation;
         "ir-reset-password": IrResetPassword;
         "ir-revenue-row": IrRevenueRow;
@@ -7554,7 +7534,6 @@ declare module "@stencil/core" {
             "ir-progress-indicator": LocalJSX.IrProgressIndicator & JSXBase.HTMLAttributes<HTMLIrProgressIndicatorElement>;
             "ir-radio": LocalJSX.IrRadio & JSXBase.HTMLAttributes<HTMLIrRadioElement>;
             "ir-range-picker": LocalJSX.IrRangePicker & JSXBase.HTMLAttributes<HTMLIrRangePickerElement>;
-            "ir-report-stats-card": LocalJSX.IrReportStatsCard & JSXBase.HTMLAttributes<HTMLIrReportStatsCardElement>;
             "ir-reservation-information": LocalJSX.IrReservationInformation & JSXBase.HTMLAttributes<HTMLIrReservationInformationElement>;
             "ir-reset-password": LocalJSX.IrResetPassword & JSXBase.HTMLAttributes<HTMLIrResetPasswordElement>;
             "ir-revenue-row": LocalJSX.IrRevenueRow & JSXBase.HTMLAttributes<HTMLIrRevenueRowElement>;

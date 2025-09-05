@@ -191,35 +191,30 @@ export class IrMonthlyBookingsReport {
           </div>
           <section>
             <div class="d-flex flex-column flex-md-row w-100" style={{ gap: '1rem', alignItems: 'stretch' }}>
-              <ir-report-stats-card
+              <ir-stats-card
                 icon={this.stats?.Occupancy_Difference_From_Previous_Month < 0 ? 'arrow-trend-down' : 'arrow-trend-up'}
                 cardTitle="Average Occupancy"
                 value={this.stats.AverageOccupancy ? this.stats?.AverageOccupancy.toFixed(2) + '%' : null}
                 subtitle={`${this.stats?.Occupancy_Difference_From_Previous_Month < 0 ? '' : '+'}${this.stats?.Occupancy_Difference_From_Previous_Month.toFixed(
                   2,
                 )}% from last month`}
-              ></ir-report-stats-card>
+              ></ir-stats-card>
 
-              <ir-report-stats-card
+              <ir-stats-card
                 icon="hotel"
                 cardTitle="Total Units"
                 value={this.stats?.TotalUnitsBooked ? this.stats?.TotalUnitsBooked.toString() : null}
                 subtitle="Booked"
-              ></ir-report-stats-card>
+              ></ir-stats-card>
 
-              <ir-report-stats-card
-                icon="user_group"
-                cardTitle="Total Guests"
-                value={this.reports?.reduce((prev, curr) => prev + curr.total_guests, 0)?.toString()}
-                subtitle="Stayed"
-              ></ir-report-stats-card>
+              <ir-stats-card icon="user_group" cardTitle="Total Guests" value={this.stats?.Total_Guests?.toString()} subtitle="Stayed"></ir-stats-card>
 
-              <ir-report-stats-card
+              <ir-stats-card
                 icon="calendar"
                 cardTitle="Peak Days"
                 value={this.stats?.PeakDays.length === 0 ? null : this.stats?.PeakDays?.map(pd => moment(pd.Date, 'YYYY-MM-DD').format('D').concat('th')).join(' - ')}
                 subtitle={`${Math.max(...(this.stats.PeakDays?.map(pd => pd.OccupancyPercent) || []))}% occupancy`}
-              ></ir-report-stats-card>
+              ></ir-stats-card>
             </div>
             <div class="d-flex flex-column flex-lg-row mt-1 " style={{ gap: '1rem' }}>
               <ir-monthly-bookings-report-filter isLoading={this.isLoading === 'filter'} class="filters-card" baseFilters={this.baseFilters}></ir-monthly-bookings-report-filter>
