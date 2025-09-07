@@ -175,7 +175,7 @@ export class IrSecureTasks {
       case 'daily-occupancy':
         return <ir-monthly-bookings-report p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-monthly-bookings-report>;
       case 'daily-revenue':
-        return <ir-ir-daily-revenue p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-ir-daily-revenue>;
+        return <ir-daily-revenue p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-daily-revenue>;
 
       default:
         return null;
