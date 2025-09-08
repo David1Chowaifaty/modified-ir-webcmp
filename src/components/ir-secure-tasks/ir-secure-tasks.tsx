@@ -1,7 +1,7 @@
 import Token from '@/models/Token';
 import { checkUserAuthState, manageAnchorSession } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-export type SecureScreens = 'hk' | 'tasks' | 'daily-revenue' | 'front' | 'users' | 'country-sales' | 'daily-occupancy';
+export type SecureScreens = 'hk' | 'tasks' | 'daily-revenue' | 'front' | 'users' | 'email-logs' | 'country-sales' | 'daily-occupancy';
 @Component({
   tag: 'ir-secure-tasks',
   styleUrl: 'ir-secure-tasks.css',
@@ -67,6 +67,7 @@ export class IrSecureTasks {
     { name: 'Sales By Country', value: 'country-sales' },
     { name: 'Daily Occupancy', value: 'daily-occupancy' },
     { name: 'Daily Revenue', value: 'daily-revenue' },
+    { name: 'Email logs', value: 'email-logs' },
   ];
   private handleAuthFinish(e: CustomEvent) {
     const token = e.detail.token;
@@ -176,7 +177,8 @@ export class IrSecureTasks {
         return <ir-monthly-bookings-report p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-monthly-bookings-report>;
       case 'daily-revenue':
         return <ir-daily-revenue p={this.p} propertyid={this.propertyid} language="en" ticket={this.token.getToken()}></ir-daily-revenue>;
-
+      case 'email-logs':
+        return <ir-booking-email-logs ticket={this.token.getToken()}></ir-booking-email-logs>;
       default:
         return null;
     }

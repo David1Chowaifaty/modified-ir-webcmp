@@ -373,6 +373,9 @@ export namespace Components {
         "propertyid": number;
         "ticket": string;
     }
+    interface IrBookingEmailLogs {
+        "ticket": string;
+    }
     interface IrBookingExtraNote {
         "booking": Booking;
     }
@@ -3121,6 +3124,12 @@ declare global {
         prototype: HTMLIrBookingDetailsElement;
         new (): HTMLIrBookingDetailsElement;
     };
+    interface HTMLIrBookingEmailLogsElement extends Components.IrBookingEmailLogs, HTMLStencilElement {
+    }
+    var HTMLIrBookingEmailLogsElement: {
+        prototype: HTMLIrBookingEmailLogsElement;
+        new (): HTMLIrBookingEmailLogsElement;
+    };
     interface HTMLIrBookingExtraNoteElementEventMap {
         "closeModal": null;
         "resetBookingEvt": Booking | null;
@@ -4758,6 +4767,7 @@ declare global {
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
+        "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
         "ir-booking-guarantee": HTMLIrBookingGuaranteeElement;
         "ir-booking-header": HTMLIrBookingHeaderElement;
@@ -5249,6 +5259,9 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrBookingDetailsCustomEvent<IToast>) => void;
         "p"?: string;
         "propertyid"?: number;
+        "ticket"?: string;
+    }
+    interface IrBookingEmailLogs {
         "ticket"?: string;
     }
     interface IrBookingExtraNote {
@@ -7301,6 +7314,7 @@ declare namespace LocalJSX {
         "ir-autocomplete": IrAutocomplete;
         "ir-booking": IrBooking;
         "ir-booking-details": IrBookingDetails;
+        "ir-booking-email-logs": IrBookingEmailLogs;
         "ir-booking-extra-note": IrBookingExtraNote;
         "ir-booking-guarantee": IrBookingGuarantee;
         "ir-booking-header": IrBookingHeader;
@@ -7455,6 +7469,7 @@ declare module "@stencil/core" {
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
+            "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;
             "ir-booking-guarantee": LocalJSX.IrBookingGuarantee & JSXBase.HTMLAttributes<HTMLIrBookingGuaranteeElement>;
             "ir-booking-header": LocalJSX.IrBookingHeader & JSXBase.HTMLAttributes<HTMLIrBookingHeaderElement>;
