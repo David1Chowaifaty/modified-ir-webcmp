@@ -30,3 +30,13 @@
 .revenue-table__table {
   min-height: 50vh;
 }
+/*lg*/
+@media (min-width: 1024px) {
+  .revenue-table__header {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .revenue-table__header p:first-child {
+    width: calc(40vw + 1.375rem + 0.5rem);
+  }
+}

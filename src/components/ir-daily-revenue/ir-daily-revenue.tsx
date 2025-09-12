@@ -65,6 +65,12 @@ export class IrDailyRevenue {
     this.filters = { ...e.detail };
     this.getPaymentReports();
   }
+  @Listen('resetBookingEvt')
+  async handleResetBooking(e: CustomEvent) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    this.getPaymentReports(false, true);
+  }
 
   private handleSidebarClose = (e: CustomEvent) => {
     e.stopImmediatePropagation();
@@ -170,7 +176,7 @@ export class IrDailyRevenue {
     );
   }
 
-  private async getPaymentReports(isExportToExcel = false) {
+  private async getPaymentReports(isExportToExcel = false, excludeYesterday = false) {
     try {
       const getReportObj = (report): FolioPayment => {
         return {
@@ -196,7 +202,7 @@ export class IrDailyRevenue {
           is_export_to_excel: isExportToExcel,
         }),
       ];
-      if (!isExportToExcel) {
+      if (!isExportToExcel && !excludeYesterday) {
         requests.push(
           this.propertyService.getDailyRevenueReport({
             date: moment(this.filters.date, 'YYYY-MM-DD').add(-1, 'days').format('YYYY-MM-DD'),

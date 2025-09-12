@@ -77,3 +77,13 @@
 .ir-revenue-row__detail:last-child {
   border-bottom: none;
 }
+/*lg*/
+@media (min-width: 1024px) {
+  .ir-revenue-row__header-left {
+    width: 40vw;
+  }
+  .ir-revenue-row__accordion::part(trigger),
+  .ir-revenue-row__title {
+    justify-content: flex-start;
+  }
+}
