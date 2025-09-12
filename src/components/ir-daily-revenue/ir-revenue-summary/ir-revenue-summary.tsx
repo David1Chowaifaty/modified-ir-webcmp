@@ -1,8 +1,8 @@
-import { IEntries } from '@/models/IBooking';
 import { Component, Host, Prop, h } from '@stencil/core';
 import { FolioPayment, GroupedFolioPayment } from '../types';
 import { formatAmount } from '@/utils/utils';
 import calendar_data from '@/stores/calendar-data';
+import { PaymentEntries } from '@/components/ir-booking-details/types';
 
 @Component({
   tag: 'ir-revenue-summary',
@@ -12,12 +12,12 @@ import calendar_data from '@/stores/calendar-data';
 export class IrRevenueSummary {
   @Prop() groupedPayments: GroupedFolioPayment = new Map();
   @Prop() previousDateGroupedPayments: GroupedFolioPayment = new Map();
-  @Prop() payTypesGroup: IEntries[];
+  @Prop() paymentEntries: PaymentEntries;
 
   private calculateTotalPayments(groupedPayments: GroupedFolioPayment) {
     let total = 0;
     groupedPayments.forEach((value, key) => {
-      if (this.payTypesGroup.find(p => p.CODE_NAME === key)) {
+      if (key.split('_')[0] === '001') {
         total += this.calculateTotalValue(value);
       }
     });
@@ -30,10 +30,14 @@ export class IrRevenueSummary {
 
   private calculateTotalRefunds(groupedPayments: GroupedFolioPayment) {
     const refundKeyCode = '010';
-    if (!groupedPayments.has(refundKeyCode)) {
-      return 0;
-    }
-    return this.calculateTotalValue(groupedPayments.get(refundKeyCode));
+    const payments: any = [];
+    groupedPayments.forEach((value, key) => {
+      if (key.split('_')[0] === refundKeyCode) {
+        payments.push(...value);
+      }
+    });
+
+    return this.calculateTotalValue(payments);
   }
 
   private calculateTotalValue(payments: FolioPayment[]) {

@@ -1732,12 +1732,12 @@ export namespace Components {
     }
     interface IrRevenueSummary {
         "groupedPayments": GroupedFolioPayment;
-        "payTypesGroup": IEntries[];
+        "paymentEntries": PaymentEntries;
         "previousDateGroupedPayments": GroupedFolioPayment;
     }
     interface IrRevenueTable {
         "filters": DailyPaymentFilter;
-        "payTypes": IEntries[];
+        "paymentEntries": PaymentEntries;
         "payments": GroupedFolioPayment;
     }
     interface IrRoom {
@@ -6796,12 +6796,12 @@ declare namespace LocalJSX {
     }
     interface IrRevenueSummary {
         "groupedPayments"?: GroupedFolioPayment;
-        "payTypesGroup"?: IEntries[];
+        "paymentEntries"?: PaymentEntries;
         "previousDateGroupedPayments"?: GroupedFolioPayment;
     }
     interface IrRevenueTable {
         "filters"?: DailyPaymentFilter;
-        "payTypes"?: IEntries[];
+        "paymentEntries"?: PaymentEntries;
         "payments"?: GroupedFolioPayment;
     }
     interface IrRoom {

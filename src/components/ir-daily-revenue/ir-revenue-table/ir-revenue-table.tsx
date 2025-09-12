@@ -1,6 +1,7 @@
 import { Component, Fragment, h, Prop } from '@stencil/core';
 import { DailyPaymentFilter, GroupedFolioPayment } from '../types';
-import { IEntries } from '@/models/IBooking';
+import { PaymentEntries } from '@/components/ir-booking-details/types';
+import { PAYMENT_TYPES_WITH_METHOD } from '@/components/ir-booking-details/ir-payment-details/global.variables';
 
 @Component({
   tag: 'ir-revenue-table',
@@ -9,17 +10,23 @@ import { IEntries } from '@/models/IBooking';
 })
 export class IrRevenueTable {
   @Prop() payments: GroupedFolioPayment = new Map();
-  @Prop() payTypes: IEntries[];
+  @Prop() paymentEntries: PaymentEntries;
   @Prop() filters: DailyPaymentFilter;
 
   private payTypesObj: {};
+  private payMethodObj: {};
 
   componentWillLoad() {
-    let pt = {};
-    this.payTypes.forEach(p => {
-      pt = { ...pt, [p.CODE_NAME]: p.CODE_VALUE_EN };
-    });
-    this.payTypesObj = pt;
+    const buildPaymentLookup = (key: keyof PaymentEntries) => {
+      let pt = {};
+      this.paymentEntries[key].forEach(p => {
+        pt = { ...pt, [p.CODE_NAME]: p.CODE_VALUE_EN };
+      });
+      return pt;
+    };
+
+    this.payTypesObj = buildPaymentLookup('types');
+    this.payMethodObj = buildPaymentLookup('methods');
   }
 
   render() {
@@ -32,7 +39,11 @@ export class IrRevenueTable {
               <p>Amount</p>
             </div>
             {Array.from(this.payments.entries()).map(([key, p]) => {
-              return <ir-revenue-row key={key} payments={p} groupName={this.payTypesObj[key]}></ir-revenue-row>;
+              const [paymentType, paymentMethod] = key.split('_');
+              const groupName = PAYMENT_TYPES_WITH_METHOD.includes(paymentType)
+                ? `${this.payTypesObj[paymentType]}: ${this.payMethodObj[paymentMethod]}`
+                : this.payTypesObj[paymentType];
+              return <ir-revenue-row key={key} payments={p} groupName={groupName}></ir-revenue-row>;
             })}
           </Fragment>
         ) : (

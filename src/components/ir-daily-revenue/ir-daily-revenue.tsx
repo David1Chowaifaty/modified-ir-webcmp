@@ -1,5 +1,5 @@
 import Token from '@/models/Token';
-import { BookingService, buildPaymentTypes } from '@/services/booking.service';
+import { BookingService } from '@/services/booking.service';
 import { PropertyService } from '@/services/property.service';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
@@ -7,7 +7,7 @@ import { Component, Event, EventEmitter, Host, Listen, Prop, State, Watch, h } f
 import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment, SidebarOpenEvent } from './types';
 import { v4 } from 'uuid';
 import moment from 'moment';
-import { IEntries } from '@/models/IBooking';
+import { PaymentEntries } from '../ir-booking-details/types';
 
 @Component({
   tag: 'ir-daily-revenue',
@@ -32,8 +32,7 @@ export class IrDailyRevenue {
   private roomService = new RoomService();
   private propertyService = new PropertyService();
   private bookingService = new BookingService();
-  private payTypes: IEntries[];
-  private payTypeGroup: IEntries[];
+  private paymentEntries: PaymentEntries;
 
   @Event() preventPageLoad: EventEmitter<null>;
 
@@ -140,12 +139,11 @@ export class IrDailyRevenue {
 
       const [setupEntries] = await Promise.all(requests);
       const { pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries);
-      this.payTypes = pay_type;
-      this.payTypeGroup = buildPaymentTypes({
-        types: pay_type,
+      this.paymentEntries = {
         groups: pay_type_group,
         methods: pay_method,
-      })['PAYMENTS'];
+        types: pay_type,
+      };
     } catch (error) {
       console.log(error);
     } finally {
@@ -156,8 +154,9 @@ export class IrDailyRevenue {
     const groupedPayment: GroupedFolioPayment = new Map();
 
     for (const payment of payments) {
-      const p = groupedPayment.get(payment.payTypeCode) ?? [];
-      groupedPayment.set(payment.payTypeCode, [...p, payment]);
+      const key = `${payment.payTypeCode}_${payment.payMethodCode}`;
+      const p = groupedPayment.get(key) ?? [];
+      groupedPayment.set(key, [...p, payment]);
     }
     return new Map(
       [...groupedPayment.entries()].sort(([a], [b]) => {
@@ -177,6 +176,7 @@ export class IrDailyRevenue {
         return {
           method: report.METHOD,
           payTypeCode: report.PAY_TYPE_CODE,
+          payMethodCode: report.PAY_METHOD_CODE,
           amount: report.AMOUNT,
           date: report.DATE,
           hour: report.HOUR,
@@ -252,16 +252,11 @@ export class IrDailyRevenue {
           <ir-revenue-summary
             previousDateGroupedPayments={this.previousDateGroupedPayments}
             groupedPayments={this.groupedPayment}
-            // payTypesGroup={this.payTypeGroup}
+            paymentEntries={this.paymentEntries}
           ></ir-revenue-summary>
           <div class="daily-revenue__meta">
             <ir-daily-revenue-filters isLoading={this.isLoading === 'filter'} payments={this.groupedPayment}></ir-daily-revenue-filters>
-            <ir-revenue-table
-              filters={this.filters}
-              class={'daily-revenue__table'}
-              // payTypes={this.payTypes}
-              payments={this.groupedPayment}
-            ></ir-revenue-table>
+            <ir-revenue-table filters={this.filters} class={'daily-revenue__table'} paymentEntries={this.paymentEntries} payments={this.groupedPayment}></ir-revenue-table>
           </div>
         </section>
         <ir-sidebar

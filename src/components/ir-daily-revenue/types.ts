@@ -9,6 +9,7 @@ export interface FolioPayment {
   currency: string;
   bookingNbr: string;
   id: string;
+  payMethodCode: string;
 }
 
 export type GroupedFolioPayment = Map<FolioPayment['method'], FolioPayment[]>;
