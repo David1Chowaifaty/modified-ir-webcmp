@@ -11,8 +11,8 @@ import { getPrivateNote } from '@/utils/booking';
 import Token from '@/models/Token';
 import { isSingleUnit } from '@/stores/calendar-data';
 import { getAllParams } from '@/utils/browserHistory';
-import { BookingService, buildPaymentTypes } from '@/services/booking.service';
-import { IEntries } from '@/models/property';
+import { BookingService } from '@/services/booking.service';
+import { PaymentEntries } from '../ir-booking-details/types';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -35,7 +35,7 @@ export class IrBookingListing {
   @State() oldStartValue = 0;
   @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' } | null = null;
   @State() showCost = false;
-  @State() paymentEntries: IEntries[];
+  @State() paymentEntries: PaymentEntries;
 
   private bookingListingService = new BookingListingService();
   private bookingService = new BookingService();
@@ -115,12 +115,11 @@ export class IrBookingListing {
 
       const [setupEntries] = await Promise.all(requests);
       const { pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries as any);
-      const groupedEntries = buildPaymentTypes({
-        types: pay_type,
+      this.paymentEntries = {
         groups: pay_type_group,
         methods: pay_method,
-      });
-      this.paymentEntries = groupedEntries['PAYMENTS'];
+        types: pay_type,
+      };
       updateUserSelection('property_id', propertyId);
       // this.geSearchFiltersFromParams();
       await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });

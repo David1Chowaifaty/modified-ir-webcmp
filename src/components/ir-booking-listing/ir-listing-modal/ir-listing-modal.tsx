@@ -6,6 +6,7 @@ import { BookingListingService } from '@/services/booking_listing.service';
 import { PaymentService } from '@/services/payment.service';
 import moment from 'moment';
 import { IEntries } from '@/models/property';
+import { PaymentEntries } from '@/components/ir-booking-details/types';
 
 @Component({
   tag: 'ir-listing-modal',
@@ -15,7 +16,7 @@ import { IEntries } from '@/models/property';
 export class IrListingModal {
   @Prop() modalTitle: string = 'Modal Title';
   @Prop() editBooking: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' };
-  @Prop() paymentEntries: IEntries[];
+  @Prop() paymentEntries: PaymentEntries;
 
   @State() isOpen: boolean = false;
   @State() deletionStage = 2;
@@ -26,7 +27,7 @@ export class IrListingModal {
   private paymentService = new PaymentService();
 
   componentWillLoad() {
-    this.selectedDesignation = this.paymentEntries[0];
+    this.selectedDesignation = this.paymentEntries.methods[0];
   }
 
   @Event() modalClosed: EventEmitter<null>;
@@ -36,7 +37,7 @@ export class IrListingModal {
   async closeModal() {
     this.isOpen = false;
     // this.deletionStage = 1;
-    this.selectedDesignation = this.paymentEntries[0];
+    this.selectedDesignation = this.paymentEntries.methods[0];
     this.modalClosed.emit(null);
   }
   @Method()
@@ -55,16 +56,22 @@ export class IrListingModal {
       if (name === 'confirm') {
         this.loadingBtn = 'confirm';
         if (this.editBooking.cause === 'payment') {
+          const paymentType = this.paymentEntries.types.find(pt => pt.CODE_NAME === '001');
           await this.paymentService.AddPayment(
             {
               amount: this.editBooking.booking.financial.due_amount,
               currency: this.editBooking.booking.currency,
               date: moment().format('YYYY-MM-DD'),
               designation: this.selectedDesignation.CODE_VALUE_EN,
-              payment_type: {
+              payment_method: {
                 code: this.selectedDesignation.CODE_NAME,
                 description: this.selectedDesignation.CODE_VALUE_EN,
                 operation: this.selectedDesignation.NOTES,
+              },
+              payment_type: {
+                code: paymentType.CODE_NAME,
+                description: paymentType.CODE_VALUE_EN,
+                operation: paymentType.NOTES,
               },
               id: -1,
               reference: '',
@@ -133,13 +140,13 @@ export class IrListingModal {
     const value = e.detail.toString();
     console.log(value);
 
-    const payment_type = this.paymentEntries.find(pt => pt.CODE_NAME === value);
-    if (!payment_type) {
-      console.warn(`Invalid payment type ${e.detail}`);
+    const payment_method = this.paymentEntries.methods.find(pt => pt.CODE_NAME === value);
+    if (!payment_method) {
+      console.warn(`Invalid payment method ${e.detail}`);
 
       return;
     }
-    this.selectedDesignation = payment_type;
+    this.selectedDesignation = payment_method;
   }
   render() {
     if (!this.editBooking) {
@@ -181,7 +188,7 @@ export class IrListingModal {
                   selectedValue={this.selectedDesignation?.CODE_NAME}
                   onSelectChange={this.handleDropdownChange.bind(this)}
                   showFirstOption={false}
-                  data={this.paymentEntries.map(m => ({
+                  data={this.paymentEntries.methods?.map(m => ({
                     value: m.CODE_NAME,
                     text: m.CODE_VALUE_EN,
                   }))}
