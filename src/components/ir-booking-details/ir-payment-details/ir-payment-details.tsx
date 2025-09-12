@@ -4,8 +4,7 @@ import { BookingService } from '@/services/booking.service';
 import { PaymentService, IPaymentAction } from '@/services/payment.service';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';
-import { PaymentSidebarEvent } from '../types';
-import { IEntries } from '@/models/IBooking';
+import { PaymentEntries, PaymentSidebarEvent } from '../types';
 import moment from 'moment';
 
 @Component({
@@ -16,7 +15,7 @@ import moment from 'moment';
 export class IrPaymentDetails {
   @Prop({ mutable: true }) booking: Booking;
   @Prop() paymentActions: IPaymentAction[];
-  @Prop() paymentTypes: IEntries[];
+  @Prop() paymentEntries: PaymentEntries;
 
   @State() confirmModal: boolean = false;
   @State() toBeDeletedItem: IPayment | null = null;
@@ -33,7 +32,7 @@ export class IrPaymentDetails {
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
-    const paymentType = this.paymentTypes?.find(p => p.CODE_NAME === (this.booking.status.code === '003' ? value.pay_type_code : '001'));
+    const paymentType = this.paymentEntries?.types?.find(p => p.CODE_NAME === (this.booking.status.code === '003' ? value.pay_type_code : '001'));
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: {
@@ -155,7 +154,6 @@ export class IrPaymentDetails {
         {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />}
       </div>,
       <ir-payments-folio
-        paymentTypes={this.paymentTypes}
         payments={financial.payments || []}
         onAddPayment={this.handleAddPayment}
         onEditPayment={e => this.handleEditPayment(e.detail)}

@@ -1,6 +1,6 @@
 import { Component, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { IPayment } from '@/models/booking.dto';
-import { IEntries } from '@/models/IBooking';
+
 @Component({
   styleUrl: 'ir-payments-folio.css',
   tag: 'ir-payments-folio',
@@ -8,7 +8,6 @@ import { IEntries } from '@/models/IBooking';
 })
 export class IrPaymentsFolio {
   @Prop() payments: IPayment[] = [];
-  @Prop() paymentTypes: IEntries[];
 
   @Event({ bubbles: true }) addPayment: EventEmitter<void>;
   @Event({ bubbles: true }) editPayment: EventEmitter<IPayment>;

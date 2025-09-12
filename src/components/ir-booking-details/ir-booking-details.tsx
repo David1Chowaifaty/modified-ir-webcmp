@@ -9,7 +9,7 @@ import { IToast } from '@components/ui/ir-toast/toast';
 import { ICountry, IEntries } from '@/models/IBooking';
 import { IPaymentAction, PaymentService } from '@/services/payment.service';
 import Token from '@/models/Token';
-import { BookingDetailsSidebarEvents, OpenSidebarEvent } from './types';
+import { BookingDetailsSidebarEvents, OpenSidebarEvent, PaymentEntries } from './types';
 import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
 import { IrModalCustomEvent } from '@/components';
@@ -67,8 +67,8 @@ export class IrBookingDetails {
   @State() roomGuest: any;
   @State() modalState: { type: 'email' | (string & {}); message: string; loading: boolean } = null;
   @State() departureTime: IEntries[];
-  @State() paymentTypes: IEntries[];
-  @State() paymentTypesGroups: IEntries[];
+
+  @State() paymentEntries: PaymentEntries;
 
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
@@ -229,15 +229,13 @@ export class IrBookingDetails {
         this.roomService.fetchLanguage(this.language),
         this.bookingService.getCountries(this.language),
         this.bookingService.getExposedBooking(this.bookingNumber, this.language),
-        this.bookingService.getSetupEntriesByTableNameMulti(['_BED_PREFERENCE_TYPE', '_DEPARTURE_TIME', '_PAY_TYPE', '_PAY_TYPE_GROUP']),
+        this.bookingService.getSetupEntriesByTableNameMulti(['_BED_PREFERENCE_TYPE', '_DEPARTURE_TIME', '_PAY_TYPE', '_PAY_TYPE_GROUP', '_PAY_METHOD']),
       ]);
       this.property_id = roomResponse?.My_Result?.id;
-      const { bed_preference_type, departure_time, pay_type, pay_type_group } = this.bookingService.groupEntryTablesResult(setupEntries);
+      const { bed_preference_type, departure_time, pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries);
       this.bedPreference = bed_preference_type;
       this.departureTime = departure_time;
-      this.paymentTypes = pay_type;
-      this.paymentTypesGroups = pay_type_group;
-      console.log(departure_time);
+      this.paymentEntries = { types: pay_type, groups: pay_type_group, methods: pay_method };
       if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id && bookingDetails.is_direct) {
         this.paymentService
           .GetExposedCancellationDueAmount({
@@ -386,9 +384,8 @@ export class IrBookingDetails {
       case 'payment-folio':
         return (
           <ir-payment-folio
-            paymentTypesGroups={this.paymentTypesGroups}
             bookingNumber={this.booking.booking_nbr}
-            paymentTypes={this.paymentTypes}
+            paymentEntries={this.paymentEntries}
             slot="sidebar-body"
             payment={this.sidebarPayload.payment}
             mode={this.sidebarPayload.mode}
@@ -478,7 +475,7 @@ export class IrBookingDetails {
             </section>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
-            <ir-payment-details paymentTypes={this.paymentTypes} paymentActions={this.paymentActions} booking={this.booking}></ir-payment-details>
+            <ir-payment-details paymentEntries={this.paymentEntries} paymentActions={this.paymentActions} booking={this.booking}></ir-payment-details>
           </div>
         </div>
       </div>,

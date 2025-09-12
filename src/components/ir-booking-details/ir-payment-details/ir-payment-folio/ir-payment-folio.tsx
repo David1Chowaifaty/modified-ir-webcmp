@@ -5,20 +5,17 @@ import { z, ZodError } from 'zod';
 import { IPayment } from '@/models/booking.dto';
 import { IEntries } from '@/models/IBooking';
 import { PaymentService } from '@/services/payment.service';
-import { FolioEntryMode } from '../../types';
+import { FolioEntryMode, PaymentEntries } from '../../types';
 import { buildPaymentTypes } from '@/services/booking.service';
-
+import { PAYMENT_TYPES_WITH_METHOD } from '../global.variables';
 @Component({
   tag: 'ir-payment-folio',
   styleUrls: ['ir-payment-folio.css', '../../../../common/sheet.css'],
   scoped: true,
 })
 export class IrPaymentFolio {
-  @Prop() paymentTypes: IEntries[];
-  @Prop() paymentTypesGroups: IEntries[];
-
+  @Prop() paymentEntries: PaymentEntries;
   @Prop() bookingNumber: string;
-
   @Prop() payment: IPayment = {
     date: moment().format('YYYY-MM-DD'),
     amount: 0,
@@ -62,6 +59,10 @@ export class IrPaymentFolio {
         code: z.string().min(3).max(4),
         description: z.string().min(1),
         operation: z.union([z.literal('CR'), z.literal('DB')]),
+      }),
+      payment_method: z.object({
+        code: z.string().min(3).max(4),
+        description: z.string().min(1),
       }),
     });
     if (this.payment) {
@@ -133,7 +134,7 @@ export class IrPaymentFolio {
         payment_type: null,
       });
     } else {
-      const payment_type = this.paymentTypes.find(pt => pt.CODE_NAME === value);
+      const payment_type = this.paymentEntries?.types.find(pt => pt.CODE_NAME === value);
       if (!payment_type) {
         console.warn(`Invalid payment type ${e.detail}`);
         this.updateFolioData({
@@ -141,17 +142,45 @@ export class IrPaymentFolio {
         });
         return;
       }
+
       this.updateFolioData({
         payment_type: {
           code: payment_type.CODE_NAME,
           description: payment_type.CODE_VALUE_EN,
           operation: payment_type.NOTES,
         },
+        payment_method: PAYMENT_TYPES_WITH_METHOD.includes(payment_type.CODE_NAME)
+          ? undefined
+          : {
+              code: this.paymentEntries.methods[0].CODE_NAME,
+              description: this.paymentEntries.methods[0].CODE_VALUE_EN,
+              operation: this.paymentEntries.methods[0].NOTES,
+            },
       });
     }
   }
+  private handlePaymentMethodDropdownChange(e: CustomEvent<string | number>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const value = e.detail.toString();
+    const payment_method = this.paymentEntries?.methods.find(pt => pt.CODE_NAME === value);
+    if (!payment_method) {
+      console.warn(`Invalid payment method ${e.detail}`);
+      this.updateFolioData({
+        payment_type: null,
+      });
+      return;
+    }
+    this.updateFolioData({
+      payment_method: {
+        code: payment_method.CODE_NAME,
+        description: payment_method.CODE_VALUE_EN,
+        operation: payment_method.NOTES,
+      },
+    });
+  }
   private async getPaymentTypes() {
-    const rec = buildPaymentTypes(this.paymentTypes, this.paymentTypesGroups);
+    const rec = buildPaymentTypes(this.paymentEntries);
     if (this.mode === 'payment-action' && this.payment.payment_type?.code === '001') {
       const { PAYMENTS, CANCELLATION } = rec;
       return (this._paymentTypes = {
@@ -264,6 +293,37 @@ export class IrPaymentFolio {
               {this.renderDropdownItems()}
             </ir-dropdown>
           </div>
+          {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
+            <div>
+              <ir-dropdown
+                value={this.folioData?.payment_type?.code}
+                disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
+                onOptionChange={this.handlePaymentMethodDropdownChange.bind(this)}
+              >
+                <button
+                  slot="trigger"
+                  type="button"
+                  disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
+                  class={`form-control d-flex align-items-center cursor-pointer ${this.errors?.payment_method && !this.folioData?.payment_method?.code ? 'border-danger' : ''}`}
+                >
+                  {this.folioData?.payment_method ? (
+                    <span>{this.folioData.payment_method?.description}</span>
+                  ) : (
+                    <span>Select {this.folioData?.payment_type?.code === '001' ? 'payment' : 'refund'} method...</span>
+                  )}
+                </button>
+
+                <ir-dropdown-item value="">Select {this.folioData.payment_type?.code === '001' ? 'payment' : 'refund'} method...</ir-dropdown-item>
+                {this.paymentEntries?.methods?.map(pt => {
+                  return (
+                    <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
+                      <span>{pt.CODE_VALUE_EN}</span>
+                    </ir-dropdown-item>
+                  );
+                })}
+              </ir-dropdown>
+            </div>
+          )}
           <div>
             <ir-input-text
               value={this.folioData?.reference}

@@ -2,6 +2,7 @@ import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { Component, Event, EventEmitter, Prop, h } from '@stencil/core';
 import { IPayment } from '@/models/booking.dto';
 import { formatAmount } from '@/utils/utils';
+import { PAYMENT_TYPES_WITH_METHOD } from '../global.variables';
 
 @Component({
   tag: 'ir-payment-item',
@@ -16,6 +17,11 @@ export class IrPaymentItem {
 
   render() {
     const isCredit = this.payment.payment_type.operation === 'CR';
+
+    const paymentDescription =
+      (PAYMENT_TYPES_WITH_METHOD.includes(this.payment.payment_type?.code)
+        ? `${this.payment.payment_type?.description}: ${this.payment.payment_method.description}`
+        : this.payment.payment_type.description) ?? this.payment.designation;
     return (
       <div class="payment-item__payment-item">
         <div class="payment-item__payment-body" part="payment-body">
@@ -23,7 +29,7 @@ export class IrPaymentItem {
             <p class="payment-item__payment-date">{this.payment.date}</p>
             <p class={`payment-item__payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>{formatAmount(this.payment.currency.symbol, this.payment.amount)}</p>
             <p class="payment-item__payment-description">
-              <b>{this.payment.payment_type.description ?? this.payment.designation}</b>
+              <b>{paymentDescription}</b>
             </p>
           </div>
           {this.payment.reference && <p class="payment-item__payment-reference">{this.payment?.reference}</p>}
@@ -31,7 +37,7 @@ export class IrPaymentItem {
         <div class="payment-item__payment-toolbar">
           <p class={`payment-item__payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>{formatAmount(this.payment.currency.symbol, this.payment.amount)}</p>
           <p class="payment-item__payment-description">
-            <b>{this.payment.payment_type.description ?? this.payment.designation}</b>
+            <b>{paymentDescription}</b>
           </p>
           <div class="payment-item__payment-actions">
             <ir-button

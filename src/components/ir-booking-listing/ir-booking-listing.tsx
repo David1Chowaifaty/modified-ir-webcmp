@@ -98,7 +98,7 @@ export class IrBookingListing {
       }
 
       const requests = [
-        this.bookingService.getSetupEntriesByTableNameMulti(['_PAY_TYPE', '_PAY_TYPE_GROUP']),
+        this.bookingService.getSetupEntriesByTableNameMulti(['_PAY_TYPE', '_PAY_TYPE_GROUP', '_PAY_METHOD']),
         this.bookingListingService.getExposedBookingsCriteria(propertyId),
         this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT']),
       ];
@@ -114,8 +114,12 @@ export class IrBookingListing {
       }
 
       const [setupEntries] = await Promise.all(requests);
-      const { pay_type, pay_type_group } = this.bookingService.groupEntryTablesResult(setupEntries as any);
-      const groupedEntries = buildPaymentTypes(pay_type, pay_type_group);
+      const { pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries as any);
+      const groupedEntries = buildPaymentTypes({
+        types: pay_type,
+        groups: pay_type_group,
+        methods: pay_method,
+      });
       this.paymentEntries = groupedEntries['PAYMENTS'];
       updateUserSelection('property_id', propertyId);
       // this.geSearchFiltersFromParams();

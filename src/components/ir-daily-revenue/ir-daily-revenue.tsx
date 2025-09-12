@@ -123,7 +123,7 @@ export class IrDailyRevenue {
       this.property_id = propertyId;
 
       const requests: Promise<any>[] = [
-        this.bookingService.getSetupEntriesByTableNameMulti(['_PAY_TYPE', '_PAY_TYPE_GROUP']),
+        this.bookingService.getSetupEntriesByTableNameMulti(['_PAY_TYPE', '_PAY_TYPE_GROUP', '_PAY_METHOD']),
         this.getPaymentReports(),
         this.roomService.fetchLanguage(this.language),
       ];
@@ -139,9 +139,13 @@ export class IrDailyRevenue {
       }
 
       const [setupEntries] = await Promise.all(requests);
-      const { pay_type, pay_type_group } = this.bookingService.groupEntryTablesResult(setupEntries);
+      const { pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries);
       this.payTypes = pay_type;
-      this.payTypeGroup = buildPaymentTypes(pay_type, pay_type_group)['PAYMENTS'];
+      this.payTypeGroup = buildPaymentTypes({
+        types: pay_type,
+        groups: pay_type_group,
+        methods: pay_method,
+      })['PAYMENTS'];
     } catch (error) {
       console.log(error);
     } finally {
@@ -248,11 +252,16 @@ export class IrDailyRevenue {
           <ir-revenue-summary
             previousDateGroupedPayments={this.previousDateGroupedPayments}
             groupedPayments={this.groupedPayment}
-            payTypesGroup={this.payTypeGroup}
+            // payTypesGroup={this.payTypeGroup}
           ></ir-revenue-summary>
           <div class="daily-revenue__meta">
             <ir-daily-revenue-filters isLoading={this.isLoading === 'filter'} payments={this.groupedPayment}></ir-daily-revenue-filters>
-            <ir-revenue-table filters={this.filters} class={'daily-revenue__table'} payTypes={this.payTypes} payments={this.groupedPayment}></ir-revenue-table>
+            <ir-revenue-table
+              filters={this.filters}
+              class={'daily-revenue__table'}
+              // payTypes={this.payTypes}
+              payments={this.groupedPayment}
+            ></ir-revenue-table>
           </div>
         </section>
         <ir-sidebar
