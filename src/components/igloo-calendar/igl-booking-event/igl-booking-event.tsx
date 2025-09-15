@@ -128,6 +128,7 @@ export class IglBookingEvent {
         PHONE_PREFIX: otherBookingData.PHONE_PREFIX,
         PRIVATE_NOTE: otherBookingData.PRIVATE_NOTE,
         origin,
+        BALANCE,
         TOTAL_PRICE,
       };
       this.updateBookingEvent.emit(this.bookingEvent);
