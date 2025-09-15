@@ -222,6 +222,9 @@ export class IrBookingDetails {
     }
     this.calendarData.roomsInfo = roomsData;
   }
+  // private shouldFetchCancellationPenalty(): boolean {
+  //   return this.booking.is_requested_to_cancel || this.booking.status.code === '003';
+  // }
   private async initializeApp() {
     try {
       const [roomResponse, languageTexts, countriesList, bookingDetails, setupEntries] = await Promise.all([

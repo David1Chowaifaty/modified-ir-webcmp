@@ -1453,6 +1453,7 @@ export namespace Components {
     }
     interface IrPaymentDetails {
         "booking": Booking;
+        "cancellationAmount": number;
         "paymentActions": IPaymentAction[];
         "paymentEntries": PaymentEntries1;
     }
@@ -6478,6 +6479,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentDetails {
         "booking"?: Booking;
+        "cancellationAmount"?: number;
         "onOpenSidebar"?: (event: IrPaymentDetailsCustomEvent<PaymentSidebarEvent>) => void;
         "onResetBookingEvt"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onResetExposedCancellationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;

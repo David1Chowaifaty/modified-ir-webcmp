@@ -6,6 +6,8 @@ import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';
 import { PaymentEntries, PaymentSidebarEvent } from '../types';
 import moment from 'moment';
+import { formatAmount } from '@/utils/utils';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   styleUrl: 'ir-payment-details.css',
@@ -16,6 +18,7 @@ export class IrPaymentDetails {
   @Prop({ mutable: true }) booking: Booking;
   @Prop() paymentActions: IPaymentAction[];
   @Prop() paymentEntries: PaymentEntries;
+  @Prop() cancellationAmount: number = 0;
 
   @State() confirmModal: boolean = false;
   @State() toBeDeletedItem: IPayment | null = null;
@@ -55,18 +58,40 @@ export class IrPaymentDetails {
     });
   }
 
-  private handleAddPayment = () => {
+  private handleAddPayment = (props?: { type: 'cancellation-penalty' | 'refund'; amount: number }) => {
+    let payment: IPayment = {
+      id: -1,
+      date: moment().format('YYYY-MM-DD'),
+      amount: null,
+      currency: calendar_data.currency,
+      designation: null,
+      reference: null,
+    };
+    if (props) {
+      const { amount, type } = props;
+      const cashMethod = this.paymentEntries.methods.find(pt => pt.CODE_NAME === '001');
+      const payment_method = {
+        code: cashMethod.CODE_NAME,
+        description: cashMethod.CODE_VALUE_EN,
+        operation: cashMethod.NOTES,
+      };
+      const paymentType = this.paymentEntries.types.find(pt => pt.CODE_NAME === (type === 'cancellation-penalty' ? '013' : '010'));
+      payment = {
+        ...payment,
+        amount: amount,
+        designation: paymentType.CODE_VALUE_EN,
+        payment_type: {
+          code: paymentType.CODE_NAME,
+          description: paymentType.CODE_VALUE_EN,
+          operation: paymentType.NOTES,
+        },
+        payment_method: type === 'refund' ? undefined : payment_method,
+      };
+    }
     this.openSidebar.emit({
       type: 'payment-folio',
       payload: {
-        payment: {
-          id: -1,
-          date: moment().format('YYYY-MM-DD'),
-          amount: null,
-          currency: undefined,
-          designation: null,
-          reference: null,
-        },
+        payment,
         mode: 'new',
       },
     });
@@ -139,6 +164,12 @@ export class IrPaymentDetails {
   private shouldShowPaymentActions(): boolean {
     return Boolean(this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.booking.is_direct);
   }
+  private shouldShowRefundButton(): boolean {
+    if (this.booking.is_requested_to_cancel || this.booking.status.code === '003') {
+      return this.booking.financial.due_amount < 0;
+    }
+    return false;
+  }
 
   render() {
     if (!this.hasValidFinancialData()) {
@@ -152,10 +183,34 @@ export class IrPaymentDetails {
         <ir-payment-summary totalCost={financial.gross_cost} balance={financial.due_amount} collected={this.booking.financial.collected} currency={currency} />
         <ir-booking-guarantee booking={this.booking} bookingService={this.bookingService} />
         {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />}
+        {this.shouldShowRefundButton() && (
+          <div class="d-flex">
+            <ir-button
+              btn_color="outline"
+              text={`Refund ${formatAmount(currency.symbol, financial.due_amount * -1)}`}
+              size="sm"
+              onClickHandler={() => {
+                this.handleAddPayment({ type: 'refund', amount: financial.due_amount * -1 });
+              }}
+            ></ir-button>
+          </div>
+        )}
+        {this.cancellationAmount > 0 && (
+          <div class="d-flex">
+            <ir-button
+              btn_color="outline"
+              text={`Cancellation penalty ${formatAmount(currency.symbol, this.cancellationAmount)}`}
+              size="sm"
+              onClickHandler={() => {
+                this.handleAddPayment({ type: 'cancellation-penalty', amount: this.cancellationAmount });
+              }}
+            ></ir-button>
+          </div>
+        )}
       </div>,
       <ir-payments-folio
         payments={financial.payments || []}
-        onAddPayment={this.handleAddPayment}
+        onAddPayment={() => this.handleAddPayment()}
         onEditPayment={e => this.handleEditPayment(e.detail)}
         onDeletePayment={e => this.handleDeletePayment(e.detail)}
       />,

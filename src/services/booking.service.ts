@@ -113,6 +113,13 @@ export class BookingService {
     }
     return data;
   }
+  public async GetPenaltyStatement(params: { booking_nbr: string; currency_id: number; language: string }) {
+    const { data } = await axios.post('/Get_Penalty_Statement', params);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
+  }
   public async setExposedRestrictionPerRoomType(params: { is_closed: boolean; restrictions: { room_type_id: number | string; night: string }[]; operation_type?: string }) {
     const { data } = await axios.post(`https://gateway.igloorooms.com/IRBE/Set_Exposed_Restriction_Per_Room_Type`, {
       operation_type: params.operation_type ?? 'close_open',
