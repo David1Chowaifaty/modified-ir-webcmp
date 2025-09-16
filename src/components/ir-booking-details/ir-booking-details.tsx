@@ -478,7 +478,7 @@ export class IrBookingDetails {
             </section>
           </div>
           <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
-            <ir-payment-details paymentEntries={this.paymentEntries} paymentActions={this.paymentActions} booking={this.booking}></ir-payment-details>
+            <ir-payment-details propertyId={this.property_id} paymentEntries={this.paymentEntries} paymentActions={this.paymentActions} booking={this.booking}></ir-payment-details>
           </div>
         </div>
       </div>,

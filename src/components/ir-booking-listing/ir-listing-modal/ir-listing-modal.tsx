@@ -56,7 +56,7 @@ export class IrListingModal {
       if (name === 'confirm') {
         this.loadingBtn = 'confirm';
         if (this.editBooking.cause === 'payment') {
-          const paymentType = this.paymentEntries.types.find(pt => pt.CODE_NAME === '001');
+          const paymentType = this.paymentEntries.types.find(pt => pt.CODE_NAME === (this.editBooking.booking.financial.due_amount < 0 ? '010' : '001'));
           await this.paymentService.AddPayment(
             {
               amount: this.editBooking.booking.financial.due_amount,

@@ -1,5 +1,7 @@
 import { IEntries } from '@/models/IBooking';
+import { RoomType, RatePlan } from '@/models/reservation.dto';
 import { IPayment, SharedPerson } from './../../models/booking.dto';
+import { ExposedApplicablePolicy } from '@/services/booking.service';
 //Sidebar
 export type BookingDetailsSidebarEvents = 'guest' | 'pickup' | 'extra_note' | 'extra_service' | 'room-guest' | 'payment-folio';
 export type OpenSidebarEvent<T> = {
@@ -29,3 +31,7 @@ export type PaymentEntries = {
   groups: IEntries[];
   methods: IEntries[];
 };
+export type CancellationStatement = {
+  roomType: RoomType;
+  ratePlan: RatePlan;
+} & ExposedApplicablePolicy;

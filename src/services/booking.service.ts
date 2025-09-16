@@ -29,6 +29,23 @@ export interface IBookingParams {
   identifier?: string;
   extras: { key: string; value: string }[] | null;
 }
+export interface ExposedApplicablePolicy {
+  brackets: Bracket[];
+  combined_statement: string;
+  type: 'cancelation' | 'guarantee';
+}
+
+export interface Bracket {
+  amount: number;
+  amount_formatted: string;
+  code: string;
+  currency_id: number;
+  due_on: string;
+  due_on_formatted: null | string;
+  gross_amount: number;
+  gross_amount_formatted: string;
+  statement: string;
+}
 
 export type TableEntries =
   | '_CALENDAR_BLOCKED_TILL'
@@ -104,6 +121,20 @@ export class BookingService {
       throw new Error(data.ExceptionMsg);
     }
     return data;
+  }
+  public async getExposedApplicablePolicies(props: {
+    booking_nbr: string;
+    currency_id: number;
+    language?: string;
+    rate_plan_id: number;
+    room_type_id: number;
+    property_id: number;
+  }): Promise<ExposedApplicablePolicy[] | null> {
+    const { data } = await axios.post(`/Get_Exposed_Applicable_Policies`, props);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result ?? [];
   }
 
   public async handleExposedRoomInOut(props: { booking_nbr: string; room_identifier: string; status: RoomInOut['code'] }) {

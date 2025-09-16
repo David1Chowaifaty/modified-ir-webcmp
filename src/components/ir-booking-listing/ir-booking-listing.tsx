@@ -249,7 +249,7 @@ export class IrBookingListing {
               <table class="table table-striped table-bordered no-footer dataTable">
                 <thead>
                   <tr>
-                    <th scope="col" class="text-left">
+                    <th scope="col" class="text-center">
                       {locales.entries?.Lcz_Booking}#
                     </th>
                     <th scope="col">{locales.entries?.Lcz_BookedOn}</th>
@@ -408,8 +408,8 @@ export class IrBookingListing {
                           <p class="p-0 m-0" style={{ whiteSpace: 'nowrap' }}>
                             {formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}
                           </p>
-                          {booking.financial.due_amount > 0 && (
-                            <buuton
+                          {booking.financial.due_amount !== 0 && (
+                            <button
                               onClick={() => {
                                 this.editBookingItem = { booking, cause: 'payment' };
                                 this.openModal();
@@ -417,8 +417,9 @@ export class IrBookingListing {
                               style={{ whiteSpace: 'nowrap' }}
                               class="btn p-0 m-0 due-btn"
                             >
+                              {booking.status.code === '003' && <span>{booking.financial.due_amount < 0 ? 'Refund' : 'Charge'} </span>}
                               {formatAmount(booking.currency.symbol, booking.financial.due_amount)}
-                            </buuton>
+                            </button>
                           )}
                         </td>
                         {this.showCost && (

@@ -1,0 +1,128 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.cancellation-schedule__container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cancellation-schedule__title {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0;
+  margin: 0;
+}
+
+.cancellation-schedule__no-penalty {
+  padding: 0;
+  margin: 0;
+}
+
+.cancellation-schedule__statements {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgb(30, 159, 242, 5%);
+  padding: 1rem;
+  border: 1px solid rgba(30, 159, 242, 40%);
+  border-radius: 0.25rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.cancellation-schedule__statement {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+.cancellation-schedule__statement:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.cancellation-schedule__room {
+  padding: 0;
+  margin: 0;
+  padding-bottom: 0.5rem;
+}
+
+.cancellation-schedule__bracket {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  padding-bottom: 0.5rem;
+}
+
+.cancellation-schedule__bracket-dates {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+/* .cancellation-schedule__icon {
+} */
+
+.cancellation-schedule__amount {
+  text-align: right;
+  padding: 0;
+  margin: 0;
+  font-weight: 600;
+}
+
+.cancellation-schedule__statement-text {
+  padding: 0;
+  margin: 0;
+}
+.cancellation-schedule__brackets-table {
+  display: none;
+}
+
+/*sm*/
+@media (min-width: 640px) {
+}
+
+/*md*/
+@media (min-width: 768px) {
+  .cancellation-schedule__brackets {
+    display: none;
+  }
+  .cancellation-schedule__brackets-table {
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+  }
+  .cancellation-schedule__brackets-table table {
+    width: 100%;
+  }
+  .cancellation-schedule__amount,
+  .cancellation-schedule__bracket-dates {
+    white-space: nowrap;
+  }
+  .cancellation-schedule__statement-text {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/*lg*/
+@media (min-width: 1024px) {
+}
+
+/*xl*/
+@media (min-width: 1280px) {
+}
+
+/*2xl*/
+@media (min-width: 1536px) {
+}

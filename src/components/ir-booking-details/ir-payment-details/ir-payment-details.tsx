@@ -17,6 +17,7 @@ import calendar_data from '@/stores/calendar-data';
 export class IrPaymentDetails {
   @Prop({ mutable: true }) booking: Booking;
   @Prop() paymentActions: IPaymentAction[];
+  @Prop() propertyId: number;
   @Prop() paymentEntries: PaymentEntries;
   @Prop() cancellationAmount: number = 0;
 
@@ -161,9 +162,9 @@ export class IrPaymentDetails {
     return Boolean(this.booking?.financial);
   }
 
-  private shouldShowPaymentActions(): boolean {
-    return Boolean(this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.booking.is_direct);
-  }
+  // private shouldShowPaymentActions(): boolean {
+  //   return Boolean(this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.booking.is_direct);
+  // }
   private shouldShowRefundButton(): boolean {
     if (this.booking.is_requested_to_cancel || this.booking.status.code === '003') {
       return this.booking.financial.due_amount < 0;
@@ -182,7 +183,8 @@ export class IrPaymentDetails {
       <div class="card p-1">
         <ir-payment-summary totalCost={financial.gross_cost} balance={financial.due_amount} collected={this.booking.financial.collected} currency={currency} />
         <ir-booking-guarantee booking={this.booking} bookingService={this.bookingService} />
-        {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />}
+        {/* {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />} */}
+        <ir-cancellation-schedule propertyId={this.propertyId} booking={this.booking}></ir-cancellation-schedule>
         {this.shouldShowRefundButton() && (
           <div class="d-flex">
             <ir-button

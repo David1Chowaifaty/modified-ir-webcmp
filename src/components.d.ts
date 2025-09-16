@@ -22,6 +22,7 @@ import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaServ
 import { BookingService } from "./services/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
+import { Booking as Booking1 } from "./models/reservation.dto";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
@@ -64,6 +65,7 @@ export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaServ
 export { BookingService } from "./services/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
+export { Booking as Booking1 } from "./models/reservation.dto";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
@@ -492,6 +494,11 @@ export namespace Components {
          */
         "visibleBackgroundOnHover": boolean;
     }
+    interface IrCancellationSchedule {
+        "booking": Booking;
+        "language": string;
+        "propertyId": number;
+    }
     interface IrChannel {
         "baseurl": string;
         "language": string;
@@ -858,6 +865,14 @@ export namespace Components {
     }
     interface IrExtraServices {
         "booking": Pick<Booking, 'currency' | 'extra_services' | 'booking_nbr'>;
+    }
+    interface IrFinancialActions {
+    }
+    interface IrFinancialFilters {
+    }
+    interface IrFinancialSummary {
+    }
+    interface IrFinancialTable {
     }
     interface IrGuestInfo {
         "booking_nbr": string;
@@ -1456,6 +1471,7 @@ export namespace Components {
         "cancellationAmount": number;
         "paymentActions": IPaymentAction[];
         "paymentEntries": PaymentEntries1;
+        "propertyId": number;
     }
     interface IrPaymentFolio {
         "bookingNumber": string;
@@ -3204,6 +3220,12 @@ declare global {
         prototype: HTMLIrButtonElement;
         new (): HTMLIrButtonElement;
     };
+    interface HTMLIrCancellationScheduleElement extends Components.IrCancellationSchedule, HTMLStencilElement {
+    }
+    var HTMLIrCancellationScheduleElement: {
+        prototype: HTMLIrCancellationScheduleElement;
+        new (): HTMLIrCancellationScheduleElement;
+    };
     interface HTMLIrChannelElement extends Components.IrChannel, HTMLStencilElement {
     }
     var HTMLIrChannelElement: {
@@ -3563,6 +3585,30 @@ declare global {
     var HTMLIrExtraServicesElement: {
         prototype: HTMLIrExtraServicesElement;
         new (): HTMLIrExtraServicesElement;
+    };
+    interface HTMLIrFinancialActionsElement extends Components.IrFinancialActions, HTMLStencilElement {
+    }
+    var HTMLIrFinancialActionsElement: {
+        prototype: HTMLIrFinancialActionsElement;
+        new (): HTMLIrFinancialActionsElement;
+    };
+    interface HTMLIrFinancialFiltersElement extends Components.IrFinancialFilters, HTMLStencilElement {
+    }
+    var HTMLIrFinancialFiltersElement: {
+        prototype: HTMLIrFinancialFiltersElement;
+        new (): HTMLIrFinancialFiltersElement;
+    };
+    interface HTMLIrFinancialSummaryElement extends Components.IrFinancialSummary, HTMLStencilElement {
+    }
+    var HTMLIrFinancialSummaryElement: {
+        prototype: HTMLIrFinancialSummaryElement;
+        new (): HTMLIrFinancialSummaryElement;
+    };
+    interface HTMLIrFinancialTableElement extends Components.IrFinancialTable, HTMLStencilElement {
+    }
+    var HTMLIrFinancialTableElement: {
+        prototype: HTMLIrFinancialTableElement;
+        new (): HTMLIrFinancialTableElement;
     };
     interface HTMLIrGuestInfoElementEventMap {
         "closeSideBar": null;
@@ -4775,6 +4821,7 @@ declare global {
         "ir-booking-listing": HTMLIrBookingListingElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
         "ir-button": HTMLIrButtonElement;
+        "ir-cancellation-schedule": HTMLIrCancellationScheduleElement;
         "ir-channel": HTMLIrChannelElement;
         "ir-channel-editor": HTMLIrChannelEditorElement;
         "ir-channel-general": HTMLIrChannelGeneralElement;
@@ -4799,6 +4846,10 @@ declare global {
         "ir-extra-service": HTMLIrExtraServiceElement;
         "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
         "ir-extra-services": HTMLIrExtraServicesElement;
+        "ir-financial-actions": HTMLIrFinancialActionsElement;
+        "ir-financial-filters": HTMLIrFinancialFiltersElement;
+        "ir-financial-summary": HTMLIrFinancialSummaryElement;
+        "ir-financial-table": HTMLIrFinancialTableElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
         "ir-hk-tasks": HTMLIrHkTasksElement;
@@ -5385,6 +5436,11 @@ declare namespace LocalJSX {
          */
         "visibleBackgroundOnHover"?: boolean;
     }
+    interface IrCancellationSchedule {
+        "booking"?: Booking;
+        "language"?: string;
+        "propertyId"?: number;
+    }
     interface IrChannel {
         "baseurl"?: string;
         "language"?: string;
@@ -5807,6 +5863,14 @@ declare namespace LocalJSX {
     }
     interface IrExtraServices {
         "booking"?: Pick<Booking, 'currency' | 'extra_services' | 'booking_nbr'>;
+    }
+    interface IrFinancialActions {
+    }
+    interface IrFinancialFilters {
+    }
+    interface IrFinancialSummary {
+    }
+    interface IrFinancialTable {
     }
     interface IrGuestInfo {
         "booking_nbr"?: string;
@@ -6486,6 +6550,7 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrPaymentDetailsCustomEvent<IToast>) => void;
         "paymentActions"?: IPaymentAction[];
         "paymentEntries"?: PaymentEntries1;
+        "propertyId"?: number;
     }
     interface IrPaymentFolio {
         "bookingNumber"?: string;
@@ -7321,6 +7386,7 @@ declare namespace LocalJSX {
         "ir-booking-listing": IrBookingListing;
         "ir-booking-printing": IrBookingPrinting;
         "ir-button": IrButton;
+        "ir-cancellation-schedule": IrCancellationSchedule;
         "ir-channel": IrChannel;
         "ir-channel-editor": IrChannelEditor;
         "ir-channel-general": IrChannelGeneral;
@@ -7345,6 +7411,10 @@ declare namespace LocalJSX {
         "ir-extra-service": IrExtraService;
         "ir-extra-service-config": IrExtraServiceConfig;
         "ir-extra-services": IrExtraServices;
+        "ir-financial-actions": IrFinancialActions;
+        "ir-financial-filters": IrFinancialFilters;
+        "ir-financial-summary": IrFinancialSummary;
+        "ir-financial-table": IrFinancialTable;
         "ir-guest-info": IrGuestInfo;
         "ir-hk-archive": IrHkArchive;
         "ir-hk-tasks": IrHkTasks;
@@ -7476,6 +7546,7 @@ declare module "@stencil/core" {
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
+            "ir-cancellation-schedule": LocalJSX.IrCancellationSchedule & JSXBase.HTMLAttributes<HTMLIrCancellationScheduleElement>;
             "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
             "ir-channel-editor": LocalJSX.IrChannelEditor & JSXBase.HTMLAttributes<HTMLIrChannelEditorElement>;
             "ir-channel-general": LocalJSX.IrChannelGeneral & JSXBase.HTMLAttributes<HTMLIrChannelGeneralElement>;
@@ -7500,6 +7571,10 @@ declare module "@stencil/core" {
             "ir-extra-service": LocalJSX.IrExtraService & JSXBase.HTMLAttributes<HTMLIrExtraServiceElement>;
             "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;
             "ir-extra-services": LocalJSX.IrExtraServices & JSXBase.HTMLAttributes<HTMLIrExtraServicesElement>;
+            "ir-financial-actions": LocalJSX.IrFinancialActions & JSXBase.HTMLAttributes<HTMLIrFinancialActionsElement>;
+            "ir-financial-filters": LocalJSX.IrFinancialFilters & JSXBase.HTMLAttributes<HTMLIrFinancialFiltersElement>;
+            "ir-financial-summary": LocalJSX.IrFinancialSummary & JSXBase.HTMLAttributes<HTMLIrFinancialSummaryElement>;
+            "ir-financial-table": LocalJSX.IrFinancialTable & JSXBase.HTMLAttributes<HTMLIrFinancialTableElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
             "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;
