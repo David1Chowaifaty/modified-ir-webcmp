@@ -296,7 +296,7 @@ export class IrPaymentFolio {
           {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
             <div>
               <ir-dropdown
-                value={this.folioData?.payment_type?.code}
+                value={this.folioData?.payment_method?.code}
                 disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
                 onOptionChange={this.handlePaymentMethodDropdownChange.bind(this)}
               >

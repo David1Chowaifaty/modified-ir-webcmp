@@ -30,6 +30,7 @@ import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./compone
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
+import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { PaymentEntries } from "./components/ir-booking-details/types";
@@ -40,7 +41,7 @@ import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
-import { SidebarOpenEvent } from "./components/ir-daily-revenue/types";
+import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 import { Tab } from "./components/ui/ir-tabs/ir-tabs";
@@ -73,6 +74,7 @@ export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./compone
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
+export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { PaymentEntries } from "./components/ir-booking-details/types";
@@ -83,7 +85,7 @@ export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
-export { SidebarOpenEvent } from "./components/ir-daily-revenue/types";
+export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 export { Tab } from "./components/ui/ir-tabs/ir-tabs";
@@ -867,8 +869,13 @@ export namespace Components {
         "booking": Pick<Booking, 'currency' | 'extra_services' | 'booking_nbr'>;
     }
     interface IrFinancialActions {
+        "language": string;
+        "p": string;
+        "propertyid": number;
+        "ticket": string;
     }
     interface IrFinancialFilters {
+        "isLoading": boolean;
     }
     interface IrFinancialSummary {
     }
@@ -2378,6 +2385,14 @@ export interface IrExtraServiceConfigCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrExtraServiceConfigElement;
 }
+export interface IrFinancialFiltersCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrFinancialFiltersElement;
+}
+export interface IrFinancialTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrFinancialTableElement;
+}
 export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrGuestInfoElement;
@@ -3592,7 +3607,18 @@ declare global {
         prototype: HTMLIrFinancialActionsElement;
         new (): HTMLIrFinancialActionsElement;
     };
+    interface HTMLIrFinancialFiltersElementEventMap {
+        "fetchNewReports": DailyFinancialActionsFilter;
+    }
     interface HTMLIrFinancialFiltersElement extends Components.IrFinancialFilters, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrFinancialFiltersElementEventMap>(type: K, listener: (this: HTMLIrFinancialFiltersElement, ev: IrFinancialFiltersCustomEvent<HTMLIrFinancialFiltersElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrFinancialFiltersElementEventMap>(type: K, listener: (this: HTMLIrFinancialFiltersElement, ev: IrFinancialFiltersCustomEvent<HTMLIrFinancialFiltersElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrFinancialFiltersElement: {
         prototype: HTMLIrFinancialFiltersElement;
@@ -3604,7 +3630,18 @@ declare global {
         prototype: HTMLIrFinancialSummaryElement;
         new (): HTMLIrFinancialSummaryElement;
     };
+    interface HTMLIrFinancialTableElementEventMap {
+        "financialActionsOpenSidebar": SidebarOpenEvent;
+    }
     interface HTMLIrFinancialTableElement extends Components.IrFinancialTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrFinancialTableElementEventMap>(type: K, listener: (this: HTMLIrFinancialTableElement, ev: IrFinancialTableCustomEvent<HTMLIrFinancialTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrFinancialTableElementEventMap>(type: K, listener: (this: HTMLIrFinancialTableElement, ev: IrFinancialTableCustomEvent<HTMLIrFinancialTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrFinancialTableElement: {
         prototype: HTMLIrFinancialTableElement;
@@ -5865,12 +5902,19 @@ declare namespace LocalJSX {
         "booking"?: Pick<Booking, 'currency' | 'extra_services' | 'booking_nbr'>;
     }
     interface IrFinancialActions {
+        "language"?: string;
+        "p"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
     }
     interface IrFinancialFilters {
+        "isLoading"?: boolean;
+        "onFetchNewReports"?: (event: IrFinancialFiltersCustomEvent<DailyFinancialActionsFilter>) => void;
     }
     interface IrFinancialSummary {
     }
     interface IrFinancialTable {
+        "onFinancialActionsOpenSidebar"?: (event: IrFinancialTableCustomEvent<SidebarOpenEvent>) => void;
     }
     interface IrGuestInfo {
         "booking_nbr"?: string;
