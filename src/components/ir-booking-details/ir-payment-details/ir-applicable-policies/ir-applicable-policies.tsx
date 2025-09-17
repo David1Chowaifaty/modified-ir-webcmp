@@ -91,10 +91,9 @@ export class IrApplicablePolicies {
         showArrow = false;
         rightLabel = moment(brackets[index + 1]?.due_on, 'YYYY-MM-DD').format('MMM DD, YYYY');
       } else if (index === brackets.length - 1) {
-        const leftDate = moment(bracket.due_on, 'YYYY-MM-DD');
-
-        leftLabel = this.formatPreviousBracketDueOn(leftDate, MCheckInDate);
-        rightLabel = MCheckInDate.format('MMM DD, YYYY');
+        leftLabel = moment(bracket.due_on, 'YYYY-MM-DD').format('MMM DD, YYYY');
+        showArrow = false;
+        rightLabel = null;
       } else {
         const d1 = moment(bracket.due_on, 'YYYY-MM-DD');
         const d2 = moment(brackets[index + 1].due_on, 'YYYY-MM-DD').add(-1, 'days');
