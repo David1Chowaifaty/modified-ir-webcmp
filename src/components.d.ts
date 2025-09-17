@@ -17,12 +17,12 @@ import { IPageTwoDataUpdateProps } from "./models/models";
 import { IrToast } from "./components/ui/ir-toast/ir-toast";
 import { Currency, RatePlan, RoomType } from "./models/property";
 import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
-import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+import { IPaymentAction } from "./services/payment.service";
+import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { BookingService } from "./services/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
-import { Booking as Booking1 } from "./models/reservation.dto";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
@@ -39,7 +39,6 @@ import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
-import { IPaymentAction } from "./services/payment.service";
 import { Moment } from "moment";
 import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
@@ -61,12 +60,12 @@ export { IPageTwoDataUpdateProps } from "./models/models";
 export { IrToast } from "./components/ui/ir-toast/ir-toast";
 export { Currency, RatePlan, RoomType } from "./models/property";
 export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
-export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+export { IPaymentAction } from "./services/payment.service";
+export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { BookingService } from "./services/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
-export { Booking as Booking1 } from "./models/reservation.dto";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
@@ -83,7 +82,6 @@ export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
-export { IPaymentAction } from "./services/payment.service";
 export { Moment } from "moment";
 export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
@@ -340,6 +338,11 @@ export namespace Components {
         "hide": () => Promise<void>;
         "show": () => Promise<void>;
     }
+    interface IrApplicablePolicies {
+        "booking": Booking;
+        "language": string;
+        "propertyId": number;
+    }
     interface IrAutocomplete {
         "danger_border": boolean;
         "disabled": boolean;
@@ -495,11 +498,6 @@ export namespace Components {
           * If true, applies a visible background when hovered.
          */
         "visibleBackgroundOnHover": boolean;
-    }
-    interface IrCancellationSchedule {
-        "booking": Booking;
-        "language": string;
-        "propertyId": number;
     }
     interface IrChannel {
         "baseurl": string;
@@ -1475,7 +1473,6 @@ export namespace Components {
     }
     interface IrPaymentDetails {
         "booking": Booking;
-        "cancellationAmount": number;
         "paymentActions": IPaymentAction[];
         "paymentEntries": PaymentEntries1;
         "propertyId": number;
@@ -2292,6 +2289,10 @@ export interface IglooCalendarCustomEvent<T> extends CustomEvent<T> {
 export interface IrAccordionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrAccordionElement;
+}
+export interface IrApplicablePoliciesCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrApplicablePoliciesElement;
 }
 export interface IrAutocompleteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3112,6 +3113,23 @@ declare global {
         prototype: HTMLIrAccordionElement;
         new (): HTMLIrAccordionElement;
     };
+    interface HTMLIrApplicablePoliciesElementEventMap {
+        "generatePayment": IPaymentAction;
+    }
+    interface HTMLIrApplicablePoliciesElement extends Components.IrApplicablePolicies, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrApplicablePoliciesElementEventMap>(type: K, listener: (this: HTMLIrApplicablePoliciesElement, ev: IrApplicablePoliciesCustomEvent<HTMLIrApplicablePoliciesElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrApplicablePoliciesElementEventMap>(type: K, listener: (this: HTMLIrApplicablePoliciesElement, ev: IrApplicablePoliciesCustomEvent<HTMLIrApplicablePoliciesElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrApplicablePoliciesElement: {
+        prototype: HTMLIrApplicablePoliciesElement;
+        new (): HTMLIrApplicablePoliciesElement;
+    };
     interface HTMLIrAutocompleteElementEventMap {
         "comboboxValue": { key: string; data: unknown };
         "inputCleared": null;
@@ -3234,12 +3252,6 @@ declare global {
     var HTMLIrButtonElement: {
         prototype: HTMLIrButtonElement;
         new (): HTMLIrButtonElement;
-    };
-    interface HTMLIrCancellationScheduleElement extends Components.IrCancellationSchedule, HTMLStencilElement {
-    }
-    var HTMLIrCancellationScheduleElement: {
-        prototype: HTMLIrCancellationScheduleElement;
-        new (): HTMLIrCancellationScheduleElement;
     };
     interface HTMLIrChannelElement extends Components.IrChannel, HTMLStencilElement {
     }
@@ -4848,6 +4860,7 @@ declare global {
         "igl-to-be-assigned": HTMLIglToBeAssignedElement;
         "igloo-calendar": HTMLIglooCalendarElement;
         "ir-accordion": HTMLIrAccordionElement;
+        "ir-applicable-policies": HTMLIrApplicablePoliciesElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
@@ -4858,7 +4871,6 @@ declare global {
         "ir-booking-listing": HTMLIrBookingListingElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
         "ir-button": HTMLIrButtonElement;
-        "ir-cancellation-schedule": HTMLIrCancellationScheduleElement;
         "ir-channel": HTMLIrChannelElement;
         "ir-channel-editor": HTMLIrChannelEditorElement;
         "ir-channel-general": HTMLIrChannelGeneralElement;
@@ -5305,6 +5317,12 @@ declare namespace LocalJSX {
          */
         "onIr-toggle"?: (event: IrAccordionCustomEvent<{ expanded: boolean }>) => void;
     }
+    interface IrApplicablePolicies {
+        "booking"?: Booking;
+        "language"?: string;
+        "onGeneratePayment"?: (event: IrApplicablePoliciesCustomEvent<IPaymentAction>) => void;
+        "propertyId"?: number;
+    }
     interface IrAutocomplete {
         "danger_border"?: boolean;
         "disabled"?: boolean;
@@ -5472,11 +5490,6 @@ declare namespace LocalJSX {
           * If true, applies a visible background when hovered.
          */
         "visibleBackgroundOnHover"?: boolean;
-    }
-    interface IrCancellationSchedule {
-        "booking"?: Booking;
-        "language"?: string;
-        "propertyId"?: number;
     }
     interface IrChannel {
         "baseurl"?: string;
@@ -6587,7 +6600,6 @@ declare namespace LocalJSX {
     }
     interface IrPaymentDetails {
         "booking"?: Booking;
-        "cancellationAmount"?: number;
         "onOpenSidebar"?: (event: IrPaymentDetailsCustomEvent<PaymentSidebarEvent>) => void;
         "onResetBookingEvt"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onResetExposedCancellationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
@@ -7420,6 +7432,7 @@ declare namespace LocalJSX {
         "igl-to-be-assigned": IglToBeAssigned;
         "igloo-calendar": IglooCalendar;
         "ir-accordion": IrAccordion;
+        "ir-applicable-policies": IrApplicablePolicies;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking": IrBooking;
         "ir-booking-details": IrBookingDetails;
@@ -7430,7 +7443,6 @@ declare namespace LocalJSX {
         "ir-booking-listing": IrBookingListing;
         "ir-booking-printing": IrBookingPrinting;
         "ir-button": IrButton;
-        "ir-cancellation-schedule": IrCancellationSchedule;
         "ir-channel": IrChannel;
         "ir-channel-editor": IrChannelEditor;
         "ir-channel-general": IrChannelGeneral;
@@ -7580,6 +7592,7 @@ declare module "@stencil/core" {
             "igl-to-be-assigned": LocalJSX.IglToBeAssigned & JSXBase.HTMLAttributes<HTMLIglToBeAssignedElement>;
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
             "ir-accordion": LocalJSX.IrAccordion & JSXBase.HTMLAttributes<HTMLIrAccordionElement>;
+            "ir-applicable-policies": LocalJSX.IrApplicablePolicies & JSXBase.HTMLAttributes<HTMLIrApplicablePoliciesElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
@@ -7590,7 +7603,6 @@ declare module "@stencil/core" {
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
-            "ir-cancellation-schedule": LocalJSX.IrCancellationSchedule & JSXBase.HTMLAttributes<HTMLIrCancellationScheduleElement>;
             "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
             "ir-channel-editor": LocalJSX.IrChannelEditor & JSXBase.HTMLAttributes<HTMLIrChannelEditorElement>;
             "ir-channel-general": LocalJSX.IrChannelGeneral & JSXBase.HTMLAttributes<HTMLIrChannelGeneralElement>;

@@ -4,7 +4,7 @@ import { RoomService } from '@/services/room.service';
 import booking_listing, { updateUserSelection, onBookingListingChange, IUserListingSelection, updateUserSelections } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
-import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
+import { Component, Host, Prop, State, Watch, h, Element, Listen, Fragment } from '@stencil/core';
 import moment from 'moment';
 import { _formatTime } from '../ir-booking-details/functions';
 import { getPrivateNote } from '@/utils/booking';
@@ -417,8 +417,14 @@ export class IrBookingListing {
                               style={{ whiteSpace: 'nowrap' }}
                               class="btn p-0 m-0 due-btn"
                             >
-                              {booking.status.code === '003' && <span>{booking.financial.due_amount < 0 ? 'Refund' : 'Charge'} </span>}
-                              {formatAmount(booking.currency.symbol, booking.financial.due_amount)}
+                              {booking.status.code === '003'
+                                ? booking.financial.cancelation_penality_as_if_today !== 0 && (
+                                    <Fragment>
+                                      <span>{booking.financial.cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} </span>
+                                      {formatAmount(booking.currency.symbol, Math.abs(booking.financial.cancelation_penality_as_if_today))}
+                                    </Fragment>
+                                  )
+                                : formatAmount(booking.currency.symbol, booking.financial.due_amount)}
                             </button>
                           )}
                         </td>

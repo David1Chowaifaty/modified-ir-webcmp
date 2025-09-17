@@ -1,4 +1,4 @@
-import { ExposedBookingEvent, HandleExposedRoomGuestsRequest } from './../models/booking.dto';
+import { ExposedApplicablePolicy, ExposedBookingEvent, HandleExposedRoomGuestsRequest } from './../models/booking.dto';
 import { DayData } from '../models/DayType';
 import axios from 'axios';
 import { BookingDetails, IBlockUnit, ICountry, IEntries, ISetupEntries, MonthType, ZIEntrySchema } from '../models/IBooking';
@@ -28,23 +28,6 @@ export interface IBookingParams {
   pr_id?: number;
   identifier?: string;
   extras: { key: string; value: string }[] | null;
-}
-export interface ExposedApplicablePolicy {
-  brackets: Bracket[];
-  combined_statement: string;
-  type: 'cancelation' | 'guarantee';
-}
-
-export interface Bracket {
-  amount: number;
-  amount_formatted: string;
-  code: string;
-  currency_id: number;
-  due_on: string;
-  due_on_formatted: null | string;
-  gross_amount: number;
-  gross_amount_formatted: string;
-  statement: string;
 }
 
 export type TableEntries =

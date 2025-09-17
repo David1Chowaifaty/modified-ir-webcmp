@@ -19,7 +19,6 @@ export class IrPaymentDetails {
   @Prop() paymentActions: IPaymentAction[];
   @Prop() propertyId: number;
   @Prop() paymentEntries: PaymentEntries;
-  @Prop() cancellationAmount: number = 0;
 
   @State() confirmModal: boolean = false;
   @State() toBeDeletedItem: IPayment | null = null;
@@ -54,7 +53,7 @@ export class IrPaymentDetails {
             : null,
           designation: paymentType?.CODE_VALUE_EN ?? null,
         },
-        mode: 'payment-action',
+        mode: 'new',
       },
     });
   }
@@ -167,7 +166,7 @@ export class IrPaymentDetails {
   // }
   private shouldShowRefundButton(): boolean {
     if (this.booking.is_requested_to_cancel || this.booking.status.code === '003') {
-      return this.booking.financial.due_amount < 0;
+      return this.booking.financial.cancelation_penality_as_if_today < 0;
     }
     return false;
   }
@@ -184,27 +183,28 @@ export class IrPaymentDetails {
         <ir-payment-summary totalCost={financial.gross_cost} balance={financial.due_amount} collected={this.booking.financial.collected} currency={currency} />
         <ir-booking-guarantee booking={this.booking} bookingService={this.bookingService} />
         {/* {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />} */}
-        <ir-cancellation-schedule propertyId={this.propertyId} booking={this.booking}></ir-cancellation-schedule>
+        <ir-applicable-policies propertyId={this.propertyId} booking={this.booking}></ir-applicable-policies>
+
         {this.shouldShowRefundButton() && (
-          <div class="d-flex">
+          <div class="d-flex mt-1">
             <ir-button
               btn_color="outline"
-              text={`Refund ${formatAmount(currency.symbol, financial.due_amount * -1)}`}
+              text={`Refund ${formatAmount(currency.symbol, Math.abs(this.booking.financial.cancelation_penality_as_if_today))}`}
               size="sm"
               onClickHandler={() => {
-                this.handleAddPayment({ type: 'refund', amount: financial.due_amount * -1 });
+                this.handleAddPayment({ type: 'refund', amount: Math.abs(this.booking.financial.cancelation_penality_as_if_today) });
               }}
             ></ir-button>
           </div>
         )}
-        {this.cancellationAmount > 0 && (
-          <div class="d-flex">
+        {this.booking.status.code === '003' && this.booking.financial.cancelation_penality_as_if_today > 0 && (
+          <div class="d-flex mt-1">
             <ir-button
               btn_color="outline"
-              text={`Cancellation penalty ${formatAmount(currency.symbol, this.cancellationAmount)}`}
+              text={`Cancellation penalty ${formatAmount(currency.symbol, this.booking.financial.cancelation_penality_as_if_today)}`}
               size="sm"
               onClickHandler={() => {
-                this.handleAddPayment({ type: 'cancellation-penalty', amount: this.cancellationAmount });
+                this.handleAddPayment({ type: 'cancellation-penalty', amount: Math.abs(this.booking.financial.cancelation_penality_as_if_today) });
               }}
             ></ir-button>
           </div>

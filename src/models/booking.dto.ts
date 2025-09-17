@@ -329,6 +329,7 @@ export interface IAllowedActions {
   description: string;
 }
 export interface IFinancial {
+  cancelation_penality_as_if_today: number;
   due_amount: number;
   due_dates: IDueDate[];
   payments: IPayment[] | null;
@@ -480,9 +481,27 @@ export type DepartureTime = {
   code: string;
   description: string;
 };
+export interface ExposedApplicablePolicy {
+  brackets: Bracket[];
+  combined_statement: string;
+  type: 'cancelation' | 'guarantee';
+}
+
+export interface Bracket {
+  amount: number;
+  amount_formatted: string;
+  code: string;
+  currency_id: number;
+  due_on: string;
+  due_on_formatted: null | string;
+  gross_amount: number;
+  gross_amount_formatted: string;
+  statement: string;
+}
 export type RoomInOut = { code: '001' | '002' | '000'; description: string };
 export interface Room {
   days: Day[];
+  applicable_policies: ExposedApplicablePolicy[];
   from_date: string;
   guest: Guest;
   occupancy_default: number;

@@ -94,7 +94,9 @@ export class IrFinancialActions {
     e.stopPropagation();
     this.sideBarEvent = e.detail;
   }
-  private async getFinancialAction(isExportToExcel: boolean = false) {}
+  private async getFinancialAction(isExportToExcel: boolean = false) {
+    console.log(isExportToExcel);
+  }
   private async initializeApp() {
     this.isPageLoading = true;
 
