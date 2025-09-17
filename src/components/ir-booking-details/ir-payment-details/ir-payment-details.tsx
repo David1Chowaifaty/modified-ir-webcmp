@@ -165,7 +165,7 @@ export class IrPaymentDetails {
   //   return Boolean(this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.booking.is_direct);
   // }
   private shouldShowRefundButton(): boolean {
-    if (this.booking.is_requested_to_cancel || this.booking.status.code === '003') {
+    if (this.booking.is_requested_to_cancel || ['003', '004'].includes(this.booking.status.code)) {
       return this.booking.financial.cancelation_penality_as_if_today < 0;
     }
     return false;
@@ -183,7 +183,7 @@ export class IrPaymentDetails {
         <ir-payment-summary totalCost={financial.gross_cost} balance={financial.due_amount} collected={this.booking.financial.collected} currency={currency} />
         <ir-booking-guarantee booking={this.booking} bookingService={this.bookingService} />
         {/* {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />} */}
-        <ir-applicable-policies propertyId={this.propertyId} booking={this.booking}></ir-applicable-policies>
+        {!['003', '004'].includes(this.booking.status.code) && <ir-applicable-policies propertyId={this.propertyId} booking={this.booking}></ir-applicable-policies>}
 
         {this.shouldShowRefundButton() && (
           <div class="d-flex mt-1">
@@ -197,7 +197,7 @@ export class IrPaymentDetails {
             ></ir-button>
           </div>
         )}
-        {this.booking.status.code === '003' && this.booking.financial.cancelation_penality_as_if_today > 0 && (
+        {['003', '004'].includes(this.booking.status.code) && this.booking.financial.cancelation_penality_as_if_today > 0 && (
           <div class="d-flex mt-1">
             <ir-button
               btn_color="outline"

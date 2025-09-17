@@ -28,17 +28,13 @@ export class IrPaymentItem {
           <div class="payment-item__payment-fields" part="payment-fields">
             <p class="payment-item__payment-date">{this.payment.date}</p>
             <p class={`payment-item__payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>{formatAmount(this.payment.currency.symbol, this.payment.amount)}</p>
-            <p class="payment-item__payment-description">
-              <b>{paymentDescription}</b>
-            </p>
+            <p class="payment-item__payment-description">{paymentDescription}</p>
           </div>
           {this.payment.reference && <p class="payment-item__payment-reference">{this.payment?.reference}</p>}
         </div>
         <div class="payment-item__payment-toolbar">
           <p class={`payment-item__payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>{formatAmount(this.payment.currency.symbol, this.payment.amount)}</p>
-          <p class="payment-item__payment-description">
-            <b>{paymentDescription}</b>
-          </p>
+          <p class="payment-item__payment-description">{paymentDescription}</p>
           <div class="payment-item__payment-actions">
             <ir-button
               class="payment-item__action-button"

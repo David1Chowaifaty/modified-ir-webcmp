@@ -59,10 +59,9 @@ export class IrListingModal {
           const paymentType = this.paymentEntries.types.find(pt => pt.CODE_NAME === (this.editBooking.booking.financial.due_amount < 0 ? '010' : '001'));
           await this.paymentService.AddPayment(
             {
-              amount:
-                this.editBooking.booking.status.code === '003'
-                  ? Math.abs(this.editBooking.booking.financial.cancelation_penality_as_if_today)
-                  : this.editBooking.booking.financial.due_amount,
+              amount: ['003', '004'].includes(this.editBooking.booking.status.code)
+                ? Math.abs(this.editBooking.booking.financial.cancelation_penality_as_if_today)
+                : this.editBooking.booking.financial.due_amount,
               currency: this.editBooking.booking.currency,
               date: moment().format('YYYY-MM-DD'),
               designation: this.selectedDesignation.CODE_VALUE_EN,

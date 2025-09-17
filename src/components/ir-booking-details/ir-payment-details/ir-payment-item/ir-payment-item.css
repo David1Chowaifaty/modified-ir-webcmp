@@ -136,6 +136,9 @@
   .payment-item__payment-actions {
     display: none;
   }
+  .payment-item__payment-description {
+    padding: 0 0.5rem !important;
+  }
   .payment-item__payment-body .payment-item__payment-reference {
     display: inline-flex;
     align-items: center;

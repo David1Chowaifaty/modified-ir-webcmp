@@ -5,6 +5,7 @@ import moment, { Moment } from 'moment';
 import { formatAmount } from '@/utils/utils';
 import calendar_data from '@/stores/calendar-data';
 import { IPaymentAction } from '@/services/payment.service';
+import locales from '@/stores/locales.store';
 
 @Component({
   tag: 'ir-applicable-policies',
@@ -46,7 +47,7 @@ export class IrApplicablePolicies {
             ...cancellationPolicy,
             roomType: room.roomtype,
             ratePlan: room.rateplan,
-            brackets: cancellationPolicy.brackets.filter(b => b.amount > 0),
+            // brackets: cancellationPolicy.brackets.filter(b => b.amount > 0),
             checkInDate: room.from_date,
           });
         }
@@ -70,40 +71,7 @@ export class IrApplicablePolicies {
 
     return d1.format('MMM DD, YYYY');
   }
-  // private getBracketLabelsAndArrowState({ bracket, index, brackets }: { index: number; bracket: Bracket; brackets: Bracket[]; }): {
-  //   leftLabel: string;
-  //   showArrow: boolean;
-  //   rightLabel: string;
-  // } {
-  //   let leftLabel = '';
-  //   let showArrow = true;
-  //   let rightLabel = '';
-  //   const MCheckInDate = moment(this.booking.booked_on.date, 'YYYY-MM-DD');
-  //   if (brackets.length === 1) {
-  //     const d1 = moment(bracket.due_on, 'YYYY-MM-DD');
-  //     const isSameDay = d1.isSame(MCheckInDate, 'dates');
-  //     const isDueAfterBookedOn = d1.isAfter(MCheckInDate, 'dates');
-  //     leftLabel = isSameDay ? null : this.formatPreviousBracketDueOn(d1, MCheckInDate);
-  //     showArrow = !isSameDay && !isDueAfterBookedOn;
-  //     rightLabel = isDueAfterBookedOn ? null : MCheckInDate.format('MMM DD, YYYY');
-  //   } else if (brackets.length > 1) {
-  //     if (index === 0) {
-  //       leftLabel = 'Until';
-  //       showArrow = false;
-  //       rightLabel = moment(brackets[index + 1]?.due_on, 'YYYY-MM-DD').format('MMM DD, YYYY');
-  //     } else if (index === brackets.length - 1) {
-  //       leftLabel = moment(bracket.due_on, 'YYYY-MM-DD').format('MMM DD, YYYY');
-  //       showArrow = false;
-  //       rightLabel = null;
-  //     } else {
-  //       const d1 = moment(bracket.due_on, 'YYYY-MM-DD');
-  //       const d2 = moment(brackets[index + 1].due_on, 'YYYY-MM-DD').add(-1, 'days');
-  //       leftLabel = this.formatPreviousBracketDueOn(d1, d2);
-  //       rightLabel = d2.format('MMM DD, YYYY');
-  //     }
-  //   }
-  //   return { leftLabel, rightLabel, showArrow };
-  // }
+
   private getBracketLabelsAndArrowState({ bracket, index, brackets }: { index: number; bracket: Bracket; brackets: Bracket[] }): {
     leftLabel: string | null;
     showArrow: boolean;
@@ -125,47 +93,23 @@ export class IrApplicablePolicies {
 
     // Single bracket case
     if (brackets.length === 1) {
-      return this.handleSingleBracket(bracketDueDate, checkInDate);
+      return this.handleSingleBracket(bracketDueDate);
     }
 
     // Multiple brackets case
     return this.handleMultipleBrackets(bracket, index, brackets);
   }
 
-  private handleSingleBracket(
-    bracketDueDate: moment.Moment,
-    checkInDate: moment.Moment,
-  ): {
+  private handleSingleBracket(bracketDueDate: moment.Moment): {
     leftLabel: string | null;
     showArrow: boolean;
     rightLabel: string | null;
   } {
-    const isSameDay = bracketDueDate.isSame(checkInDate, 'day');
-    const isDueBeforeCheckIn = bracketDueDate.isBefore(checkInDate, 'day');
-    // const isDueAfterCheckIn = bracketDueDate.isAfter(checkInDate, 'day');
-
-    if (isSameDay) {
-      // Due date is same as check-in date
-      return {
-        leftLabel: null,
-        showArrow: false,
-        rightLabel: checkInDate.format('MMM DD, YYYY'),
-      };
-    } else if (isDueBeforeCheckIn) {
-      // Due date is before check-in (overdue scenario)
-      return {
-        leftLabel: this.formatPreviousBracketDueOn(bracketDueDate, checkInDate),
-        showArrow: true,
-        rightLabel: checkInDate.format('MMM DD, YYYY'),
-      };
-    } else {
-      // Due date is after check-in (future due date)
-      return {
-        leftLabel: checkInDate.format('MMM DD, YYYY'),
-        showArrow: true,
-        rightLabel: bracketDueDate.format('MMM DD, YYYY'),
-      };
-    }
+    return {
+      leftLabel: null,
+      showArrow: false,
+      rightLabel: bracketDueDate.format('MMM DD, YYYY'),
+    };
   }
 
   private handleMultipleBrackets(
@@ -203,7 +147,7 @@ export class IrApplicablePolicies {
       return {
         leftLabel: bracketDueDate.format('MMM DD, YYYY'),
         showArrow: false,
-        rightLabel: 'onwards',
+        rightLabel: '',
       };
     }
 
@@ -258,8 +202,10 @@ export class IrApplicablePolicies {
             <div class="applicable-policies__guarantee">
               <div class="applicable-policies__guarantee-info">
                 <p class="applicable-policies__guarantee-date">{moment(this.booking.booked_on.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
-                <p class="applicable-policies__guarantee-amount">{formatAmount(calendar_data.currency.symbol, this.guaranteeAmount)}</p>
-                <p class="applicable-policies__guarantee-label">Guarantee</p>
+                <p class="applicable-policies__guarantee-amount">
+                  {formatAmount(calendar_data.currency.symbol, remainingGuaranteeAmount < 0 ? Math.abs(remainingGuaranteeAmount) : this.guaranteeAmount)}
+                </p>
+                <p class="applicable-policies__guarantee-label">Guarantee {remainingGuaranteeAmount < 0 ? 'balance' : ''}</p>
               </div>
               {remainingGuaranteeAmount < 0 && (
                 <div class="applicable-policies__guarantee-action">
@@ -295,7 +241,7 @@ export class IrApplicablePolicies {
               <div class="applicable-policies__statement">
                 {this.cancellationStatements.length > 1 && (
                   <p class="applicable-policies__room">
-                    <b>{statement.roomType.name}</b> {statement.ratePlan['short_name']}
+                    <b>{statement.roomType.name}</b> {statement.ratePlan['short_name']} {statement.ratePlan.is_non_refundable ? ` - ${locales.entries.Lcz_NonRefundable}` : ''}
                   </p>
                 )}
                 <div class="applicable-policies__brackets">
@@ -313,7 +259,7 @@ export class IrApplicablePolicies {
                         </p>
                         <p class="applicable-policies__amount">{formatAmount(calendar_data.currency.symbol, bracket.amount)}</p>
 
-                        <p class="applicable-policies__statement-text">{bracket.statement}</p>
+                        <p class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</p>
                       </div>
                     );
                   })}
@@ -337,7 +283,7 @@ export class IrApplicablePolicies {
 
                             <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, bracket.amount)}</td>
 
-                            <td class="applicable-policies__statement-text">{bracket.statement}</td>
+                            <td class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</td>
                           </tr>
                         );
                       })}
