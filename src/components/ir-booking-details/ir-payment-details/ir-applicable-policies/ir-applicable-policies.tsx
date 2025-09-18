@@ -161,7 +161,7 @@ export class IrApplicablePolicies {
     // Last bracket
     if (index === brackets.length - 1) {
       return {
-        leftLabel: bracketDueDate.format('MMM DD'),
+        leftLabel: bracketDueDate.clone().add(1, 'days').format('MMM DD'),
         showArrow: true,
         rightLabel: moment(checkInDate).format('MMM DD, YYYY'),
       };
@@ -179,7 +179,7 @@ export class IrApplicablePolicies {
     }
 
     // Calculate the end of current bracket period (day before next bracket starts)
-    const periodEndDate = nextBracketDueDate.clone().subtract(1, 'day');
+    const periodEndDate = nextBracketDueDate.clone();
 
     return {
       leftLabel: this.formatPreviousBracketDueOn(bracketDueDate, periodEndDate),
