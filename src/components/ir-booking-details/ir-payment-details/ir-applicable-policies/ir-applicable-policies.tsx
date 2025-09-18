@@ -61,7 +61,7 @@ export class IrApplicablePolicies {
           });
         }
         if (guaranteePolicy) {
-          total += this.getCurrentBracket(guaranteePolicy.brackets)?.amount ?? 0;
+          total += this.getCurrentBracket(guaranteePolicy.brackets)?.gross_amount ?? 0;
         }
       });
 
