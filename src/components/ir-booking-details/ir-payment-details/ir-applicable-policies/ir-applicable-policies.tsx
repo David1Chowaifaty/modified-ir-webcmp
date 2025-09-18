@@ -47,7 +47,16 @@ export class IrApplicablePolicies {
             ...cancellationPolicy,
             roomType: room.roomtype,
             ratePlan: room.rateplan,
-            // brackets: cancellationPolicy.brackets.filter(b => b.amount > 0),
+            brackets: cancellationPolicy.brackets
+              .map((bracket, index) => {
+                if (bracket.amount > 0) {
+                  return bracket;
+                }
+                if (index < cancellationPolicy?.brackets.length - 1 && cancellationPolicy.brackets[index + 1]?.amount > 0) {
+                  return bracket;
+                }
+              })
+              .filter(Boolean),
             checkInDate: room.from_date,
           });
         }
@@ -130,9 +139,12 @@ export class IrApplicablePolicies {
         return { leftLabel: null, rightLabel: null, showArrow: false };
       }
 
-      const nextBracketDueDate = moment(nextBracket.due_on, 'YYYY-MM-DD');
+      let nextBracketDueDate = moment(nextBracket.due_on, 'YYYY-MM-DD');
       if (!nextBracketDueDate.isValid()) {
         return { leftLabel: null, rightLabel: null, showArrow: false };
+      }
+      if (bracket.amount === 0) {
+        nextBracketDueDate = nextBracketDueDate.clone().add(-1, 'days');
       }
 
       return {
@@ -195,6 +207,7 @@ export class IrApplicablePolicies {
       return null;
     }
     const remainingGuaranteeAmount = this.booking.financial.collected - this.guaranteeAmount;
+    console.log(this.cancellationStatements);
     return (
       <Host>
         {this.guaranteeAmount !== 0 && (
