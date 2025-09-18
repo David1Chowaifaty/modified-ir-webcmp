@@ -274,7 +274,7 @@ export class IrApplicablePolicies {
                         <p class="applicable-policies__bracket-dates">
                           {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>} {rightLabel}
                         </p>
-                        <p class="applicable-policies__amount">{formatAmount(calendar_data.currency.symbol, bracket.amount)}</p>
+                        <p class="applicable-policies__amount">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</p>
 
                         <p class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</p>
                       </div>
@@ -298,7 +298,7 @@ export class IrApplicablePolicies {
                               {rightLabel}
                             </td>
 
-                            <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, bracket.amount)}</td>
+                            <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</td>
 
                             <td class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</td>
                           </tr>
