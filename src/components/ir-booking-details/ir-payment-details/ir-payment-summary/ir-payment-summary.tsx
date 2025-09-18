@@ -33,7 +33,7 @@ export class IrPaymentSummary {
           <span class="danger font-weight-bold">{formatAmount(this.currency.symbol, this.balance)}</span>
         </div>
 
-        {this.isBookingCancelled && (
+        {!this.isBookingCancelled && (
           <div class="mb-2 h4 d-flex align-items-center justify-content-between">
             <span>{locales.entries.Lcz_Collected}: </span>
             <span>{formatAmount(this.currency.symbol, this.collected)}</span>
