@@ -47,7 +47,7 @@ export class IrPaymentDetails {
   handlePaymentGeneration(e: CustomEvent) {
     const value = e.detail;
     this.newTableRow = true;
-    this.itemToBeAdded = { ...this.itemToBeAdded, amount: value.amount, date: value.due_on };
+    this.itemToBeAdded = { ...this.itemToBeAdded, amount: value.amount, date: moment(value.due_on, 'M/D/YYYY h:mm:ss A').format('YYYY-MM-DD') };
     this.paymentBackground = 'rgba(250, 253, 174)';
   }
   async componentWillLoad() {
