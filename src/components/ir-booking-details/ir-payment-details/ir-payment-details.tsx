@@ -53,7 +53,7 @@ export class IrPaymentDetails {
             : null,
           designation: paymentType?.CODE_VALUE_EN ?? null,
         },
-        mode: 'new',
+        mode: 'payment-action',
       },
     });
   }
@@ -75,7 +75,7 @@ export class IrPaymentDetails {
         description: cashMethod.CODE_VALUE_EN,
         operation: cashMethod.NOTES,
       };
-      const paymentType = this.paymentEntries.types.find(pt => pt.CODE_NAME === (type === 'cancellation-penalty' ? '013' : '010'));
+      const paymentType = this.paymentEntries.types.find(pt => pt.CODE_NAME === (type === 'cancellation-penalty' ? '001' : '010'));
       payment = {
         ...payment,
         amount: amount,
@@ -87,6 +87,14 @@ export class IrPaymentDetails {
         },
         payment_method: type === 'refund' ? undefined : payment_method,
       };
+      this.openSidebar.emit({
+        type: 'payment-folio',
+        payload: {
+          payment,
+          mode: 'payment-action',
+        },
+      });
+      return;
     }
     this.openSidebar.emit({
       type: 'payment-folio',

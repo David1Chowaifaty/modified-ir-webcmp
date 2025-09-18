@@ -272,18 +272,14 @@ export class IrPaymentFolio {
             ></ir-price-input>
           </div>
           <div>
-            <ir-dropdown
-              value={this.folioData?.payment_type?.code}
-              disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
-              onOptionChange={this.handleDropdownChange.bind(this)}
-            >
+            <ir-dropdown value={this.folioData?.payment_type?.code} disabled={this.mode === 'payment-action'} onOptionChange={this.handleDropdownChange.bind(this)}>
               <div slot="trigger" class={'input-group row m-0 '}>
                 <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
                   <label class={`input-group-text flex-grow-1 text-dark  border-theme`}>Transaction type</label>
                 </div>
                 <button
                   type="button"
-                  disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
+                  disabled={this.mode === 'payment-action'}
                   class={`form-control  d-flex align-items-center cursor-pointer ${this.errors?.designation && !this.folioData?.designation ? 'border-danger' : ''}`}
                 >
                   {this.folioData?.payment_type ? <span>{this.folioData.payment_type?.description}</span> : <span>Select...</span>}
@@ -295,15 +291,10 @@ export class IrPaymentFolio {
           </div>
           {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
             <div>
-              <ir-dropdown
-                value={this.folioData?.payment_method?.code}
-                disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
-                onOptionChange={this.handlePaymentMethodDropdownChange.bind(this)}
-              >
+              <ir-dropdown value={this.folioData?.payment_method?.code} onOptionChange={this.handlePaymentMethodDropdownChange.bind(this)}>
                 <button
                   slot="trigger"
                   type="button"
-                  disabled={this.payment.payment_type?.code !== '001' && this.mode === 'payment-action'}
                   class={`form-control d-flex align-items-center cursor-pointer ${this.errors?.payment_method && !this.folioData?.payment_method?.code ? 'border-danger' : ''}`}
                 >
                   {this.folioData?.payment_method ? (
