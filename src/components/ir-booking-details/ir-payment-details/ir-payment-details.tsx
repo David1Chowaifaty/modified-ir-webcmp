@@ -165,8 +165,20 @@ export class IrPaymentDetails {
   //   return Boolean(this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.booking.is_direct);
   // }
   private shouldShowRefundButton(): boolean {
+    if (this.booking.financial.due_amount === 0) {
+      return false;
+    }
     if (this.booking.is_requested_to_cancel || ['003', '004'].includes(this.booking.status.code)) {
       return this.booking.financial.cancelation_penality_as_if_today < 0;
+    }
+    return false;
+  }
+  private shouldCancellationButton(): boolean {
+    if (this.booking.financial.due_amount === 0) {
+      return false;
+    }
+    if (['003', '004'].includes(this.booking.status.code) && this.booking.financial.cancelation_penality_as_if_today > 0) {
+      return true;
     }
     return false;
   }
@@ -180,7 +192,13 @@ export class IrPaymentDetails {
 
     return [
       <div class="card p-1">
-        <ir-payment-summary totalCost={financial.gross_cost} balance={financial.due_amount} collected={this.booking.financial.collected} currency={currency} />
+        <ir-payment-summary
+          isBookingCancelled={['003', '004'].includes(this.booking.status.code)}
+          totalCost={financial.gross_cost}
+          balance={financial.due_amount}
+          collected={this.booking.financial.collected}
+          currency={currency}
+        />
         <ir-booking-guarantee booking={this.booking} bookingService={this.bookingService} />
         {/* {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />} */}
         {!['003', '004'].includes(this.booking.status.code) && <ir-applicable-policies propertyId={this.propertyId} booking={this.booking}></ir-applicable-policies>}
@@ -197,7 +215,7 @@ export class IrPaymentDetails {
             ></ir-button>
           </div>
         )}
-        {['003', '004'].includes(this.booking.status.code) && this.booking.financial.cancelation_penality_as_if_today > 0 && (
+        {this.shouldCancellationButton() && (
           <div class="d-flex mt-1">
             <ir-button
               btn_color="outline"

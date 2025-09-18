@@ -1498,6 +1498,7 @@ export namespace Components {
         "balance": number;
         "collected": number;
         "currency": Currency;
+        "isBookingCancelled": boolean;
         "totalCost": number;
     }
     interface IrPaymentsFolio {
@@ -6635,6 +6636,7 @@ declare namespace LocalJSX {
         "balance"?: number;
         "collected"?: number;
         "currency"?: Currency;
+        "isBookingCancelled"?: boolean;
         "totalCost"?: number;
     }
     interface IrPaymentsFolio {

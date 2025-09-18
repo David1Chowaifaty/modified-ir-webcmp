@@ -13,6 +13,7 @@ export class IrPaymentSummary {
   @Prop() balance: number;
   @Prop() collected: number;
   @Prop() currency: Currency;
+  @Prop() isBookingCancelled: boolean;
 
   private shouldShowTotalCost(): boolean {
     return this.totalCost > 0 && this.totalCost !== null;
@@ -32,10 +33,12 @@ export class IrPaymentSummary {
           <span class="danger font-weight-bold">{formatAmount(this.currency.symbol, this.balance)}</span>
         </div>
 
-        <div class="mb-2 h4 d-flex align-items-center justify-content-between">
-          <span>{locales.entries.Lcz_Collected}: </span>
-          <span>{formatAmount(this.currency.symbol, this.collected)}</span>
-        </div>
+        {this.isBookingCancelled && (
+          <div class="mb-2 h4 d-flex align-items-center justify-content-between">
+            <span>{locales.entries.Lcz_Collected}: </span>
+            <span>{formatAmount(this.currency.symbol, this.collected)}</span>
+          </div>
+        )}
       </div>
     );
   }
