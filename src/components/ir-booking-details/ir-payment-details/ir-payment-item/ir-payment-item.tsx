@@ -3,6 +3,7 @@ import { Component, Event, EventEmitter, Prop, h } from '@stencil/core';
 import { IPayment } from '@/models/booking.dto';
 import { formatAmount } from '@/utils/utils';
 import { PAYMENT_TYPES_WITH_METHOD } from '../global.variables';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-payment-item',
@@ -26,7 +27,7 @@ export class IrPaymentItem {
       <div class="payment-item__payment-item">
         <div class="payment-item__payment-body" part="payment-body">
           <div class="payment-item__payment-fields" part="payment-fields">
-            <p class="payment-item__payment-date">{this.payment.date}</p>
+            <p class="payment-item__payment-date">{moment(this.payment.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
             <p class={`payment-item__payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>{formatAmount(this.payment.currency.symbol, this.payment.amount)}</p>
             <p class="payment-item__payment-description">{paymentDescription}</p>
           </div>

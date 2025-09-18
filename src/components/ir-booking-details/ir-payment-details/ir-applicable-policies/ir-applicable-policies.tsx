@@ -81,7 +81,7 @@ export class IrApplicablePolicies {
     return d1.format('MMM DD, YYYY');
   }
 
-  private getBracketLabelsAndArrowState({ bracket, index, brackets }: { index: number; bracket: Bracket; brackets: Bracket[] }): {
+  private getBracketLabelsAndArrowState({ bracket, index, brackets, checkInDate }: { index: number; bracket: Bracket; brackets: Bracket[]; checkInDate: string }): {
     leftLabel: string | null;
     showArrow: boolean;
     rightLabel: string | null;
@@ -92,10 +92,10 @@ export class IrApplicablePolicies {
     }
 
     // Parse dates with validation
-    const checkInDate = moment(this.booking.booked_on.date, 'YYYY-MM-DD');
+    const bookedOnDate = moment(this.booking.booked_on.date, 'YYYY-MM-DD');
     const bracketDueDate = moment(bracket.due_on, 'YYYY-MM-DD');
 
-    if (!checkInDate.isValid() || !bracketDueDate.isValid()) {
+    if (!bookedOnDate.isValid() || !bracketDueDate.isValid()) {
       console.warn('Invalid date encountered in getBracketLabelsAndArrowState');
       return { leftLabel: null, rightLabel: null, showArrow: false };
     }
@@ -106,7 +106,7 @@ export class IrApplicablePolicies {
     }
 
     // Multiple brackets case
-    return this.handleMultipleBrackets(bracket, index, brackets);
+    return this.handleMultipleBrackets(bracket, index, brackets, checkInDate);
   }
 
   private handleSingleBracket(bracketDueDate: moment.Moment): {
@@ -125,6 +125,7 @@ export class IrApplicablePolicies {
     bracket: Bracket,
     index: number,
     brackets: Bracket[],
+    checkInDate: string,
   ): {
     leftLabel: string | null;
     showArrow: boolean;
@@ -150,16 +151,16 @@ export class IrApplicablePolicies {
       return {
         leftLabel: 'Until',
         showArrow: false,
-        rightLabel: nextBracketDueDate.format('MMM DD, YYYY'),
+        rightLabel: nextBracketDueDate.format('MMM DD'),
       };
     }
 
     // Last bracket
     if (index === brackets.length - 1) {
       return {
-        leftLabel: bracketDueDate.format('MMM DD, YYYY'),
-        showArrow: false,
-        rightLabel: '',
+        leftLabel: bracketDueDate.format('MMM DD'),
+        showArrow: true,
+        rightLabel: moment(checkInDate).format('MMM DD, YYYY'),
       };
     }
 
@@ -216,7 +217,7 @@ export class IrApplicablePolicies {
               <div class="applicable-policies__guarantee-info">
                 <p class="applicable-policies__guarantee-date">{moment(this.booking.booked_on.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
                 <p class="applicable-policies__guarantee-amount">
-                  {formatAmount(calendar_data.currency.symbol, remainingGuaranteeAmount < 0 ? Math.abs(remainingGuaranteeAmount) : this.guaranteeAmount)}
+                  <span class="px-1">{formatAmount(calendar_data.currency.symbol, remainingGuaranteeAmount < 0 ? Math.abs(remainingGuaranteeAmount) : this.guaranteeAmount)}</span>
                 </p>
                 <p class="applicable-policies__guarantee-label">Guarantee {remainingGuaranteeAmount < 0 ? 'balance' : ''}</p>
               </div>
@@ -263,7 +264,7 @@ export class IrApplicablePolicies {
                       index: idx,
                       bracket,
                       brackets: statement.brackets,
-                      // checkIn: statement.checkInDate,
+                      checkInDate: statement.checkInDate,
                     });
                     return (
                       <div class="applicable-policies__bracket">
@@ -285,7 +286,7 @@ export class IrApplicablePolicies {
                           index: idx,
                           bracket,
                           brackets: statement.brackets,
-                          // checkIn: statement.checkInDate,
+                          checkInDate: statement.checkInDate,
                         });
                         return (
                           <tr>

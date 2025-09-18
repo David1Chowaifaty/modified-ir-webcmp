@@ -58,7 +58,7 @@ export class IrBookingGuarantee {
         paymentMethod = code.value === '001' ? locales.entries.Lcz_OnCredit : payment_code ? this.checkPaymentCode(payment_code.value) : null;
       }
     } else if (payment_code) {
-      paymentMethod = this.checkPaymentCode(payment_code.value);
+      paymentMethod = payment_code.value === '000' ? 'No card info required upon booking' : this.checkPaymentCode(payment_code.value);
     }
 
     return paymentMethod;
@@ -140,7 +140,7 @@ export class IrBookingGuarantee {
     const paymentMethod = this.booking.is_direct ? this.getPaymentMethod() : null;
 
     return (
-      <div class="mb-1">
+      <div class="py-1 mb-1">
         <div class="d-flex align-items-center">
           <span class="mr-1 font-medium">
             {locales.entries.Lcz_BookingGuarantee}

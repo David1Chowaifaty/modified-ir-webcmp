@@ -201,7 +201,7 @@ export class IrPaymentDetails {
           <div class="d-flex mt-1">
             <ir-button
               btn_color="outline"
-              text={`Cancellation penalty ${formatAmount(currency.symbol, this.booking.financial.cancelation_penality_as_if_today)}`}
+              text={`Charge cancellation penalty ${formatAmount(currency.symbol, this.booking.financial.cancelation_penality_as_if_today)}`}
               size="sm"
               onClickHandler={() => {
                 this.handleAddPayment({ type: 'cancellation-penalty', amount: Math.abs(this.booking.financial.cancelation_penality_as_if_today) });
