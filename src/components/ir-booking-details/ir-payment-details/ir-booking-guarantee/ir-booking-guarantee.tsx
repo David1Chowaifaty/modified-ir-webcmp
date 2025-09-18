@@ -140,7 +140,7 @@ export class IrBookingGuarantee {
     const paymentMethod = this.booking.is_direct ? this.getPaymentMethod() : null;
 
     return (
-      <div class="py-1 mb-1">
+      <div class="mb-1">
         <div class="d-flex align-items-center">
           <span class="mr-1 font-medium">
             {locales.entries.Lcz_BookingGuarantee}
