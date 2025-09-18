@@ -400,6 +400,7 @@ export class IrBookingDetails {
     }
   }
   render() {
+    console.log(this.booking?.financial?.gross_total_with_extras);
     if (!this.booking) {
       return (
         <div class={'loading-container'}>
