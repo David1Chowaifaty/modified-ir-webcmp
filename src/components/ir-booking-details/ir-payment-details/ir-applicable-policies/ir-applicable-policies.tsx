@@ -102,22 +102,25 @@ export class IrApplicablePolicies {
 
     // Single bracket case
     if (brackets.length === 1) {
-      return this.handleSingleBracket(bracketDueDate);
+      return this.handleSingleBracket(bracketDueDate, checkInDate);
     }
 
     // Multiple brackets case
     return this.handleMultipleBrackets(bracket, index, brackets, checkInDate);
   }
 
-  private handleSingleBracket(bracketDueDate: moment.Moment): {
+  private handleSingleBracket(
+    bracketDueDate: moment.Moment,
+    checkInDate: string,
+  ): {
     leftLabel: string | null;
     showArrow: boolean;
     rightLabel: string | null;
   } {
     return {
-      leftLabel: null,
-      showArrow: false,
-      rightLabel: bracketDueDate.format('MMM DD, YYYY'),
+      leftLabel: bracketDueDate.format('MMM DD'),
+      showArrow: true,
+      rightLabel: moment(checkInDate, 'YYYY-MM-DD').format('MMM DD, YYYY'),
     };
   }
 
