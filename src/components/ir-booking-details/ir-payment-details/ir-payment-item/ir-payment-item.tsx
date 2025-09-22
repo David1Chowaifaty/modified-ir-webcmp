@@ -27,12 +27,7 @@ export class IrPaymentItem {
       <div class="payment-item__payment-item">
         <div class="payment-item__payment-body" part="payment-body">
           <div class="payment-item__payment-fields" part="payment-fields">
-            <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
-              <ir-popover trigger="hover" content={`User: ${this.payment.time_stamp.user}`}>
-                <ir-icons name="user" style={{ '--icon-size': '0.875rem' }}></ir-icons>
-              </ir-popover>
-              <p class="payment-item__payment-date">{moment(this.payment.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
-            </div>
+            <p class="payment-item__payment-date">{moment(this.payment.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
             <p class={`payment-item__payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>{formatAmount(this.payment.currency.symbol, this.payment.amount)}</p>
             <p class="payment-item__payment-description">{paymentDescription}</p>
           </div>
@@ -42,6 +37,12 @@ export class IrPaymentItem {
           <p class={`payment-item__payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>{formatAmount(this.payment.currency.symbol, this.payment.amount)}</p>
           <p class="payment-item__payment-description">{paymentDescription}</p>
           <div class="payment-item__payment-actions">
+            <div class="d-flex align-items-center">
+              <ir-popover trigger="hover" content={`User: ${this.payment.time_stamp.user}`}>
+                <ir-button variant="icon" style={{ 'color': colorVariants.secondary['--icon-button-color'], '--icon-size': '1.1rem' }} icon_name="user"></ir-button>
+                {/* <ir-icons name="user" style={{ '--icon-size': '1rem', 'color': colorVariants.secondary['--icon-button-color'] }}></ir-icons> */}
+              </ir-popover>
+            </div>
             <ir-button
               class="payment-item__action-button"
               variant="icon"
