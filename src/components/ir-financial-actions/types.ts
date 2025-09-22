@@ -1,4 +1,4 @@
-import { IPayment } from '@/models/booking.dto';
+import { Payment } from '../ir-booking-details/types';
 
 export type SidebarOpenEvent =
   | {
@@ -10,7 +10,7 @@ export type SidebarOpenEvent =
   | {
       type: 'payment';
       payload: {
-        payment: IPayment;
+        payment: Payment;
         bookingNumber: number;
       };
     };

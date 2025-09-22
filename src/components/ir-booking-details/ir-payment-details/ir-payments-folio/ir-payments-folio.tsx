@@ -1,5 +1,6 @@
 import { Component, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { IPayment } from '@/models/booking.dto';
+import { HelpDocButton } from '@/components/HelpButton';
 
 @Component({
   styleUrl: 'ir-payments-folio.css',
@@ -62,7 +63,10 @@ export class IrPaymentsFolio {
       <div class="mt-1">
         <div class="d-flex flex-column rounded payment-container">
           <div class="d-flex align-items-center justify-content-between">
-            <p class="font-size-large p-0 m-0">Guest Folio</p>
+            <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+              <p class="font-size-large p-0 m-0">Guest Folio</p>
+              <HelpDocButton message="Help" href="https://help.igloorooms.com/extranet/booking-details/guest-folio" />
+            </div>
             <ir-button id="add-payment" variant="icon" icon_name="square_plus" style={{ '--icon-size': '1.5rem' }} onClickHandler={this.handleAddPayment} />
           </div>
 

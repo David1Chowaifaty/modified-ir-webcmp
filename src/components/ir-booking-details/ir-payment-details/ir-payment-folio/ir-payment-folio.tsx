@@ -2,10 +2,9 @@ import calendar_data from '@/stores/calendar-data';
 import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import moment from 'moment';
 import { z, ZodError } from 'zod';
-import { IPayment } from '@/models/booking.dto';
 import { IEntries } from '@/models/IBooking';
 import { PaymentService } from '@/services/payment.service';
-import { FolioEntryMode, PaymentEntries } from '../../types';
+import { FolioEntryMode, Payment, PaymentEntries } from '../../types';
 import { buildPaymentTypes } from '@/services/booking.service';
 import { PAYMENT_TYPES_WITH_METHOD } from '../global.variables';
 @Component({
@@ -16,7 +15,7 @@ import { PAYMENT_TYPES_WITH_METHOD } from '../global.variables';
 export class IrPaymentFolio {
   @Prop() paymentEntries: PaymentEntries;
   @Prop() bookingNumber: string;
-  @Prop() payment: IPayment = {
+  @Prop() payment: Payment = {
     date: moment().format('YYYY-MM-DD'),
     amount: 0,
     designation: undefined,
@@ -30,7 +29,7 @@ export class IrPaymentFolio {
   @State() isLoading: boolean;
   @State() errors: any;
   @State() autoValidate: boolean = false;
-  @State() folioData: IPayment;
+  @State() folioData: Payment;
   @State() _paymentTypes: Record<string, IEntries[]> = {};
 
   @Event() closeModal: EventEmitter<null>;
@@ -72,7 +71,7 @@ export class IrPaymentFolio {
   }
 
   @Watch('payment')
-  handlePaymentChange(newValue: IPayment, oldValue: IPayment) {
+  handlePaymentChange(newValue: Payment, oldValue: Payment) {
     if (newValue !== oldValue && newValue) {
       this.folioData = { ...newValue };
       this.getPaymentTypes();
@@ -85,7 +84,7 @@ export class IrPaymentFolio {
     }
   }
 
-  private updateFolioData(params: Partial<IPayment>): void {
+  private updateFolioData(params: Partial<Payment>): void {
     this.folioData = { ...this.folioData, ...params };
   }
 
@@ -102,7 +101,7 @@ export class IrPaymentFolio {
           ...this.folioData,
           currency: calendar_data.currency,
           reference: this.folioData.reference ?? '',
-          designation: this.folioData.payment_type?.description,
+          designation: this.folioData.payment_type?.description || '',
         },
         this.bookingNumber,
       );
@@ -179,6 +178,7 @@ export class IrPaymentFolio {
       },
     });
   }
+
   private async getPaymentTypes() {
     const rec = buildPaymentTypes(this.paymentEntries);
     if (this.mode === 'payment-action' && this.payment.payment_type?.code === '001') {

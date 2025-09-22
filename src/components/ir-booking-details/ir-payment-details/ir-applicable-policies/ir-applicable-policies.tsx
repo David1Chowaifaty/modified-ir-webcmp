@@ -6,6 +6,7 @@ import { formatAmount } from '@/utils/utils';
 import calendar_data from '@/stores/calendar-data';
 import { IPaymentAction } from '@/services/payment.service';
 import locales from '@/stores/locales.store';
+import { HelpDocButton } from '@/components/HelpButton';
 
 @Component({
   tag: 'ir-applicable-policies',
@@ -249,7 +250,10 @@ export class IrApplicablePolicies {
         )}
         <section>
           <div class="applicable-policies__container">
-            <p class="applicable-policies__title font-size-large p-0 m-0">Cancellation Schedule</p>
+            <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+              <p class="applicable-policies__title font-size-large p-0 m-0">Cancellation Schedule</p>
+              <HelpDocButton message="Help" href="https://help.igloorooms.com/extranet/booking-details/guarantee-and-cancellation" />
+            </div>
             <p class="applicable-policies__no-penalty">{this.generateCancellationStatement()}</p>
           </div>
 

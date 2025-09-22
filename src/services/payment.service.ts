@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IPayment } from '@/models/booking.dto';
+import { Payment } from '@/components/ir-booking-details/types';
 export interface IPaymentAction {
   amount: number;
   currency: {
@@ -13,7 +13,7 @@ export interface IPaymentAction {
   type: 'OVERDUE' | 'FUTURE';
 }
 export class PaymentService {
-  public async AddPayment(payment: IPayment, book_nbr: string): Promise<any> {
+  public async AddPayment(payment: Payment, book_nbr: string): Promise<any> {
     try {
       const { data } = await axios.post(`/Do_Payment`, { payment: { ...payment, book_nbr } });
       if (data.ExceptionMsg !== '') {

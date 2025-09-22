@@ -4,7 +4,7 @@ import { BookingService } from '@/services/booking.service';
 import { PaymentService, IPaymentAction } from '@/services/payment.service';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';
-import { PaymentEntries, PaymentSidebarEvent } from '../types';
+import { Payment, PaymentEntries, PaymentSidebarEvent } from '../types';
 import moment from 'moment';
 import { formatAmount } from '@/utils/utils';
 import calendar_data from '@/stores/calendar-data';
@@ -59,7 +59,7 @@ export class IrPaymentDetails {
   }
 
   private handleAddPayment = (props?: { type: 'cancellation-penalty' | 'refund'; amount: number }) => {
-    let payment: IPayment = {
+    let payment: Payment = {
       id: -1,
       date: moment().format('YYYY-MM-DD'),
       amount: null,
