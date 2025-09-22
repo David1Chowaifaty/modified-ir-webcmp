@@ -71,14 +71,16 @@ export class IrPaymentsFolio {
                     justify-content-center;
                     height:1rem;
                     width:1rem;
-                    background:#6b6f82;
-                    color:white;
-                    padding:0.2rem;
+                    border:1px solid #6b6f82;
+                    color:#6b6f82;
+                    padding:0.1rem;
                     border-radius:0.5rem;
+                    background:transparent;
                   }
                   .documentation-btn:hover{
-                    background:#104064;
-                    color:white !important;
+                    border-color:#104064;
+                    background:transparent;
+                    color:#104064 !important;
                   }
                 `}
               </style>

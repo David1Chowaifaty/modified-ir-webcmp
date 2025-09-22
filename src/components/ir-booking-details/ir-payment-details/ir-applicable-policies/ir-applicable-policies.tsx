@@ -258,14 +258,16 @@ export class IrApplicablePolicies {
                     justify-content-center;
                     height:1rem;
                     width:1rem;
-                    background:#6b6f82;
-                    color:white;
-                    padding:0.2rem;
+                    border:1px solid #6b6f82;
+                    color:#6b6f82;
+                    padding:0.1rem;
                     border-radius:0.5rem;
+                    background:white
                   }
                   .documentation-btn:hover{
-                    background:#104064;
-                    color:white !important;
+                    border-color:#104064;
+                    background:white;
+                    color:#104064 !important;
                   }
                 `}
               </style>
