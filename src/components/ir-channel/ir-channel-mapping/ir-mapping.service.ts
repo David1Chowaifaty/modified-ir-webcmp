@@ -12,6 +12,7 @@ export class IrMappingService {
   }
   public checkMappingExists(id: string, isRoomType: boolean, roomTypeId?: string) {
     const mapped_id = channels_data.mappedChannels.find(m => m.channel_id === id);
+
     if (!mapped_id) {
       if (!isRoomType) {
         const matchingRoomType = channels_data.mappedChannels.find(m => m.channel_id.toString() === roomTypeId);
@@ -28,13 +29,51 @@ export class IrMappingService {
     if (!roomTypeId) {
       throw new Error('Missing room type id');
     }
-    const matchingRoomType = channels_data.mappedChannels.find(m => m.channel_id.toString() === roomTypeId);
-    const room_type = calendar_data.roomsInfo.find(room => room.id.toString() === matchingRoomType.ir_id);
+    const matchingRoomType = channels_data.mappedChannels.find(m => m.channel_id.toString() === id);
+    const room_type = calendar_data.roomsInfo.find(rt =>
+      matchingRoomType?.type === 'room_type'
+        ? rt.id.toString() === matchingRoomType.ir_id
+        : rt.rateplans.findIndex(rp => rp.id.toString() === matchingRoomType?.ir_id.toString()) !== -1,
+    );
     if (!room_type) {
       throw new Error('Invalid Room type');
     }
+    if (!channels_data.mappedChannels.find(c => c.ir_id === room_type.id.toString())) {
+      if (!isRoomType) {
+        const matchingRoomType = channels_data.mappedChannels.find(m => m.channel_id.toString() === roomTypeId);
+        if (!matchingRoomType) {
+          return { hide: true, result: undefined, occupancy: undefined };
+        }
+      }
+      return { hide: false, result: undefined, occupancy: undefined };
+    }
     return { hide: false, occupancy: room_type.occupancy_default.adult_nbr, result: room_type.rateplans.find(r => r.id.toString() === mapped_id.ir_id) };
   }
+  // public checkMappingExists(id: string, isRoomType: boolean, roomTypeId?: string) {
+  //   const mapped_id = channels_data.mappedChannels.find(m => m.channel_id === id);
+  //   if (!mapped_id) {
+  //     if (!isRoomType) {
+  //       const matchingRoomType = channels_data.mappedChannels.find(m => m.channel_id.toString() === roomTypeId);
+  //       if (!matchingRoomType) {
+  //         return { hide: true, result: undefined, occupancy: undefined };
+  //       }
+  //     }
+  //     return { hide: false, result: undefined, occupancy: undefined };
+  //   }
+  //   if (isRoomType) {
+  //     const room_type = calendar_data.roomsInfo.find(room => room.id.toString() === mapped_id.ir_id);
+  //     return { hide: false, occupancy: room_type.occupancy_default.adult_nbr, result: room_type };
+  //   }
+  //   if (!roomTypeId) {
+  //     throw new Error('Missing room type id');
+  //   }
+  //   const matchingRoomType = channels_data.mappedChannels.find(m => m.channel_id.toString() === roomTypeId);
+  //   const room_type = calendar_data.roomsInfo.find(room => room.id.toString() === matchingRoomType.ir_id);
+  //   if (!room_type) {
+  //     throw new Error('Invalid Room type');
+  //   }
+  //   return { hide: false, occupancy: room_type.occupancy_default.adult_nbr, result: room_type.rateplans.find(r => r.id.toString() === mapped_id.ir_id) };
+  // }
   public getAppropriateRooms(isRoomType: boolean, roomTypeId?: string) {
     if (isRoomType) {
       const filteredRoomTypes = calendar_data.roomsInfo.filter(

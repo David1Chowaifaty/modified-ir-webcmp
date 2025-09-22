@@ -14,8 +14,8 @@
     <script src="assets/scripts/bootstrap.bundle.min.js"></script>
     <script src="assets/scripts/toastr/toastr.min.js"></script>
     <link rel="stylesheet" href="assets/scripts/daterangepicker/daterangepicker.css">
-    <!-- <link rel="stylesheet" href="assets/scripts/switchery/switchery.css"> -->
     <script src="scripts/index.js"></script>
+
     <style>
         body {
             overflow-x: hidden;
@@ -25,16 +25,14 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-booking-details has-room-edit has-room-delete baseurl="https://gateway.igloorooms.com/IR" language="en"
-        has-print="true" has-receipt></ir-booking-details>
+    <ir-channel propertyid="42" language="en" baseurl="https://gateway.igloorooms.com/IR"></ir-channel>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
     <script>
-        const bookingDetail = document.querySelector("ir-booking-details");
+        const irchannel = document.querySelector('ir-channel')
         setTimeout(async () => {
             const ticket = await getToken();
-            bookingDetail.bookingNumber = "71507405573"
-            bookingDetail.propertyid = getId();
-            bookingDetail.ticket = ticket;
+            irchannel.propertyid = 42;
+            irchannel.ticket = ticket
         }, 300)
     </script>
 
