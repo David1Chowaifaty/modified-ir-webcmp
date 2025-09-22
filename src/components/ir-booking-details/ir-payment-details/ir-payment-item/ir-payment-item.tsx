@@ -8,7 +8,7 @@ import moment from 'moment';
 @Component({
   tag: 'ir-payment-item',
   styleUrl: 'ir-payment-item.css',
-  shadow: true,
+  scoped: true,
 })
 export class IrPaymentItem {
   @Prop() payment: IPayment;
@@ -27,7 +27,12 @@ export class IrPaymentItem {
       <div class="payment-item__payment-item">
         <div class="payment-item__payment-body" part="payment-body">
           <div class="payment-item__payment-fields" part="payment-fields">
-            <p class="payment-item__payment-date">{moment(this.payment.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
+            <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+              <ir-popover trigger="hover" content={`User: ${this.payment.time_stamp.user}`}>
+                <ir-icons name="user" style={{ '--icon-size': '0.875rem' }}></ir-icons>
+              </ir-popover>
+              <p class="payment-item__payment-date">{moment(this.payment.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
+            </div>
             <p class={`payment-item__payment-amount ${isCredit ? 'is-credit' : 'is-debit'}`}>{formatAmount(this.payment.currency.symbol, this.payment.amount)}</p>
             <p class="payment-item__payment-description">{paymentDescription}</p>
           </div>

@@ -249,7 +249,37 @@ export class IrApplicablePolicies {
         )}
         <section>
           <div class="applicable-policies__container">
-            <p class="applicable-policies__title font-size-large p-0 m-0">Cancellation Schedule</p>
+            <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+              <p class="applicable-policies__title font-size-large p-0 m-0">Cancellation Schedule</p>
+              <style>
+                {`.documentation-btn{
+                    display:flex;
+                    align-items:center;
+                    justify-content-center;
+                    height:1rem;
+                    width:1rem;
+                    background:#6b6f82;
+                    color:white;
+                    padding:0.2rem;
+                    border-radius:0.5rem;
+                  }
+                  .documentation-btn:hover{
+                    background:#104064;
+                    color:white !important;
+                  }
+                `}
+              </style>
+              <ir-tooltip customSlot message="Help">
+                <a slot="tooltip-trigger" class="documentation-btn" target="_blank" href="https://help.igloorooms.com/extranet/booking-details/guarantee-and-cancellation">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                    <path
+                      fill="currentColor"
+                      d="M224 224C224 171 267 128 320 128C373 128 416 171 416 224C416 266.7 388.1 302.9 349.5 315.4C321.1 324.6 288 350.7 288 392L288 416C288 433.7 302.3 448 320 448C337.7 448 352 433.7 352 416L352 392C352 390.3 352.6 387.9 355.5 384.7C358.5 381.4 363.4 378.2 369.2 376.3C433.5 355.6 480 295.3 480 224C480 135.6 408.4 64 320 64C231.6 64 160 135.6 160 224C160 241.7 174.3 256 192 256C209.7 256 224 241.7 224 224zM320 576C342.1 576 360 558.1 360 536C360 513.9 342.1 496 320 496C297.9 496 280 513.9 280 536C280 558.1 297.9 576 320 576z"
+                    />
+                  </svg>
+                </a>
+              </ir-tooltip>
+            </div>
             <p class="applicable-policies__no-penalty">{this.generateCancellationStatement()}</p>
           </div>
 

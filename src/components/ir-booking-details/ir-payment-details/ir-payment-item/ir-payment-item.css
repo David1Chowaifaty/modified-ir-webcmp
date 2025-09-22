@@ -67,7 +67,7 @@
   flex-direction: column;
   /* gap: 0.25rem; */
   padding: 0.25rem 0.5rem;
-  min-height: 2rem;
+  min-height: 2.5rem;
 }
 .payment-item__payment-item p {
   padding: 0;
@@ -146,7 +146,7 @@
   .payment-item__payment-body {
     flex: 1 1 0%;
     justify-content: flex-start;
-    gap: 0.5rem;
+    /* gap: 0.5rem; */
   }
   .payment-item__payment-fields {
     justify-content: flex-start;
