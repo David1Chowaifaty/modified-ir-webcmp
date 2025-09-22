@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.financial-filter__date-picker-icon {
+  position: absolute;
+  inset: 0;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  transform: translateY(-0.15rem);
+}
+:host {
+  display: block;
+  height: 100%;
+}
+@media (min-width: 768px) {
+  :host {
+    width: 300px;
+  }
+  .collapse-btn {
+    display: none;
+  }
+  #financialFilterCollapse.collapse:not(.show) {
+    display: block;
+  }
+}

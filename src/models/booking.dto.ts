@@ -287,7 +287,7 @@ export interface Booking {
   format: IFormat;
   channel_booking_nbr: string | null;
   is_direct: boolean;
-  financial: IFinancials;
+  financial: IFinancial;
   pickup_info: IBookingPickupInfo | null;
   cost: number | null;
   is_pms_enabled: boolean;
@@ -328,11 +328,13 @@ export interface IAllowedActions {
   code: string;
   description: string;
 }
-export interface IFinancials {
+export interface IFinancial {
+  cancelation_penality_as_if_today: number;
   due_amount: number;
   due_dates: IDueDate[];
   payments: IPayment[] | null;
   total_amount: number;
+  collected: number;
   gross_total: number;
   gross_cost: number;
   invoice_nbr: string;
@@ -345,12 +347,18 @@ export interface IPayment {
   currency: ICurrency;
   designation: string;
   reference: string;
-  payment_type?: {
-    code: string;
-    description: string;
-    operation: 'CR' | 'DB';
-  };
+  book_nbr?: string;
+  payment_gateway_code?: number;
+  payment_type?: PaymentType;
+  payment_method?: PaymentType;
 }
+
+interface PaymentType {
+  code: string;
+  description: string;
+  operation: string;
+}
+
 export interface IDueDate {
   amount: number;
   currencysymbol: string;
@@ -473,9 +481,27 @@ export type DepartureTime = {
   code: string;
   description: string;
 };
+export interface ExposedApplicablePolicy {
+  brackets: Bracket[];
+  combined_statement: string;
+  type: 'cancelation' | 'guarantee';
+}
+
+export interface Bracket {
+  amount: number;
+  amount_formatted: string;
+  code: string;
+  currency_id: number;
+  due_on: string;
+  due_on_formatted: null | string;
+  gross_amount: number;
+  gross_amount_formatted: string;
+  statement: string;
+}
 export type RoomInOut = { code: '001' | '002' | '000'; description: string };
 export interface Room {
   days: Day[];
+  applicable_policies: ExposedApplicablePolicy[];
   from_date: string;
   guest: Guest;
   occupancy_default: number;

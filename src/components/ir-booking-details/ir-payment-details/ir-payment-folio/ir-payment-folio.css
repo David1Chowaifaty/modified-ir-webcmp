@@ -1,0 +1,30 @@
+:host {
+  display: block;
+  --payment-type-badge-bg: #ff4961;
+}
+.payment-type-badge {
+  background: var(--payment-type-badge-bg);
+  color: white;
+  padding: 0.2rem 0.3rem !important;
+  font-size: 12px;
+  border-radius: 4px;
+  margin: 0;
+  text-transform: capitalize;
+}
+.credit-badge {
+  --payment-type-badge-bg: #629a4c;
+}
+.debit-badge {
+  --payment-type-badge-bg: #ff4961;
+}
+.dropdown-item-payment {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+
+.input-group-text {
+  border-color: #cacfe7 !important;
+}

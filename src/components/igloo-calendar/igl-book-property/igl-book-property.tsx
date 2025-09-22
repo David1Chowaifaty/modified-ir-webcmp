@@ -67,6 +67,7 @@ export class IglBookProperty {
   private MAX_HISTORY_LENGTH: number = 2;
   private didReservation: boolean;
   private wasBlockedUnit: boolean;
+  private _sourceOptions: TSourceOptions[];
 
   async componentWillLoad() {
     console.log('<==>roomtypes<==>', booking_store?.roomTypes);
@@ -391,19 +392,47 @@ export class IglBookProperty {
       tag: source.tag,
       type: source.type,
     }));
+    this._sourceOptions = this.isEventType('BAR_BOOKING') ? this.getFilteredSourceOptions() : this.sourceOptions;
     if (this.isEventType('EDIT_BOOKING')) {
       this.sourceOption = { ...this.defaultData.SOURCE };
     } else {
+      //get first source option not tag
+      let option: TSourceOptions & { code: string; description: string } = this._sourceOptions.find(o => o.type !== 'LABEL') as any;
+      console.log({ option });
       this.sourceOption = {
-        code: bookingSource[0].code,
-        description: bookingSource[0].description,
-        tag: bookingSource[0].tag,
-        type: bookingSource[0].type,
-        id: bookingSource[0].id,
+        code: option.code,
+        description: option.description,
+        tag: option.tag,
+        type: option.type,
+        id: option.id,
       };
     }
   }
+  private getFilteredSourceOptions(): TSourceOptions[] {
+    const agentIds = new Set<string>();
+    const hasAgentOnlyRoomType =
+      this.bookingData?.roomsInfo?.some((rt: any) => {
+        const rps = rt?.rateplans ?? [];
+        if (rps.length === 0) return false;
 
+        const isForAgentOnly = rps.every((rp: any) => (rp?.agents?.length ?? 0) > 0);
+        if (isForAgentOnly) {
+          rps.forEach((rp: any) => {
+            (rp?.agents ?? []).forEach((ag: any) => agentIds.add(ag?.id?.toString()));
+          });
+        }
+        return isForAgentOnly;
+      }) ?? false;
+    if (!hasAgentOnlyRoomType) {
+      return this.sourceOptions;
+    }
+    return (this.sourceOptions ?? []).filter((opt: any) => {
+      if (opt?.type === 'LABEL') return true;
+      const candidate = opt?.tag;
+      const matchesId = candidate != null && agentIds.has(candidate);
+      return matchesId;
+    });
+  }
   private setOtherProperties(res: any) {
     this.ratePricingMode = res?.ratePricingMode;
     this.bookedByInfoData.arrivalTime = res.arrivalTime;
@@ -414,6 +443,7 @@ export class IglBookProperty {
     resetBookingStore();
     const from_date = moment(this.dateRangeData.fromDate).format('YYYY-MM-DD');
     const to_date = moment(this.dateRangeData.toDate).format('YYYY-MM-DD');
+    console.log({ sourceOption: this.sourceOption });
     const is_in_agent_mode = this.sourceOption['type'] === 'TRAVEL_AGENCY';
     try {
       const room_type_ids_to_update = this.isEventType('EDIT_BOOKING') ? [this.defaultData.RATE_TYPE] : [];
@@ -448,7 +478,6 @@ export class IglBookProperty {
       const { currentRoomType, GUEST } = this.defaultData as IglBookPropertyPayloadEditBooking;
       const roomtypeId = currentRoomType.roomtype.id;
       const rateplanId = currentRoomType.rateplan.id;
-      console.log({ GUEST });
       const guest = {
         bed_preference: currentRoomType.bed_preference?.toString(),
         infant_nbr: currentRoomType.occupancy.infant_nbr,
@@ -717,7 +746,7 @@ export class IglBookProperty {
                     adultChildCount={this.adultChildCount}
                     bookedByInfoData={this.bookedByInfoData}
                     adultChildConstraints={this.adultChildConstraints}
-                    sourceOptions={this.sourceOptions}
+                    sourceOptions={this._sourceOptions}
                     propertyId={this.propertyid}
                   ></igl-booking-overview-page>
                 )}

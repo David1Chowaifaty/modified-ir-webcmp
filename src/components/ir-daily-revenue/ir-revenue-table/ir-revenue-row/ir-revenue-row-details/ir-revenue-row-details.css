@@ -1,0 +1,85 @@
+:host {
+  border-bottom: 1px solid var(--ir-border, #e5e7eb);
+  font-size: 0.875rem;
+}
+.ir-revenue-row-detail,
+.ir-revenue-row-detail__info {
+  display: flex;
+  /* gap: var(--ir-space-4, 1rem); */
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  /* align-items: center; */
+  flex-direction: column;
+}
+.ir-revenue-row-detail:hover {
+  background: #f4f5fa;
+}
+.ir-revenue-row-detail__booking {
+  display: inline-flex;
+}
+.ir-revenue-row-detail__booking-btn {
+  display: inline-flex;
+}
+.ir-revenue-row-detail:last-child {
+  border-bottom: none;
+}
+
+.ir-revenue-row-detail__label {
+  font-weight: 500;
+  color: var(--ir-muted, #6b7280);
+  margin-right: 0.25rem;
+}
+
+.ir-revenue-row-detail__amount {
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+  flex: 1 1 0%;
+}
+
+.ir-revenue-row-detail__amount.negative {
+  color: var(--ir-danger, #dc2626);
+}
+
+.ir-revenue-row-detail__meta {
+  display: flex;
+  align-items: center;
+}
+.ir-revenue-row-detail__amount {
+  display: none;
+}
+.ir-revenue-row-detail__time {
+  display: flex;
+  gap: 0.5rem;
+}
+.ir-revenue-row-detail__time .ir-revenue-row-detail__amount {
+  display: flex;
+  flex: 1 1 0%;
+  justify-content: end;
+}
+/*sm*/
+@media (min-width: 640px) {
+  .ir-revenue-row-detail,
+  .ir-revenue-row-detail__info {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+  .ir-revenue-row-detail__amount {
+    display: inline-flex;
+    justify-content: flex-end;
+  }
+  .ir-revenue-row-detail__time .ir-revenue-row-detail__amount {
+    display: none;
+  }
+}
+
+/*lg*/
+@media (min-width: 1024px) {
+  .ir-revenue-row-detail__info {
+    width: calc(40vw + 1.375rem);
+  }
+  .ir-revenue-row-detail__amount {
+    justify-content: flex-start;
+  }
+}

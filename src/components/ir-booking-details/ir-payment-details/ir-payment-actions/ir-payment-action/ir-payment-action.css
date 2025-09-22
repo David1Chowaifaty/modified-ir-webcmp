@@ -1,0 +1,120 @@
+:host {
+  display: block;
+  --label-col: 6rem; /* width for icon + status text */
+  --amount-col: 1ch; /* width for currency (tabular) */
+  --payment-action-bg: rgba(255, 73, 97, 10%);
+  --payment-action-border: rgba(255, 73, 97, 40%);
+}
+
+.action-container.overdue {
+  --payment-action-bg: rgba(255, 73, 97, 5%);
+  --payment-action-border: rgba(255, 73, 97, 40%);
+}
+.action-container.future {
+  --payment-action-bg: rgb(30, 159, 242, 5%);
+  --payment-action-border: rgba(30, 159, 242, 40%);
+}
+.action-container.overdue:hover {
+  --payment-action-bg: rgba(255, 73, 97, 10%);
+  --payment-action-border: rgba(255, 73, 97, 50%);
+}
+.action-container.future:hover {
+  --payment-action-bg: rgb(30, 159, 242, 10%);
+  --payment-action-border: rgba(30, 159, 242, 50%);
+}
+
+/* One grid per row, but with fixed track sizes so all rows align */
+.action-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--payment-action-bg);
+  padding: 0.5rem 1rem;
+  box-sizing: border-box; /* (fixed the typo) */
+  border: 1px solid var(--payment-action-border);
+  border-radius: 0.25rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.overdue_action,
+.future_action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.25rem;
+  min-width: 0;
+}
+.action-container.overdue .overdue_action {
+  color: #ff4961;
+}
+.future_action {
+  color: #1e9ff2;
+}
+
+.payment-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.alert-message {
+  display: none;
+}
+.action-container.overdue .alert-message {
+  text-transform: capitalize;
+}
+.amount_action {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  justify-self: end;
+  white-space: nowrap;
+}
+.meta-grid {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+}
+.payment-reason {
+  font-size: 12px;
+  color: hsl(230, 10%, 46%, 80%);
+}
+.date_action {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.action-container p {
+  margin: 0;
+  padding: 0;
+}
+
+.action-row {
+  display: contents;
+}
+
+@media (min-width: 640px) {
+  :host {
+    --amount-col: 8ch;
+  }
+  .alert-message {
+    display: inline-flex;
+  }
+  .amount_action {
+    justify-self: auto;
+  }
+  .action-container {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr auto;
+    align-items: center;
+  }
+  .payment-meta {
+    display: grid;
+    grid-template-columns: var(--amount-col) 1fr;
+    align-items: center;
+    column-gap: 1rem;
+    min-width: 0;
+  }
+}

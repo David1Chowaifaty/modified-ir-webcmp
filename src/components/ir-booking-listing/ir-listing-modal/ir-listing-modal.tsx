@@ -5,6 +5,8 @@ import locales from '@/stores/locales.store';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { PaymentService } from '@/services/payment.service';
 import moment from 'moment';
+import { IEntries } from '@/models/property';
+import { PaymentEntries } from '@/components/ir-booking-details/types';
 
 @Component({
   tag: 'ir-listing-modal',
@@ -14,17 +16,18 @@ import moment from 'moment';
 export class IrListingModal {
   @Prop() modalTitle: string = 'Modal Title';
   @Prop() editBooking: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' };
+  @Prop() paymentEntries: PaymentEntries;
 
   @State() isOpen: boolean = false;
   @State() deletionStage = 2;
-  @State() selectedDesignation: string;
+  @State() selectedDesignation: IEntries;
   @State() loadingBtn: 'confirm' | 'just_delete' | 'recover_and_delete' | null = null;
 
   private bookingListingsService = new BookingListingService();
   private paymentService = new PaymentService();
 
   componentWillLoad() {
-    this.selectedDesignation = booking_listing.settlement_methods[0].name;
+    this.selectedDesignation = this.paymentEntries.methods[0];
   }
 
   @Event() modalClosed: EventEmitter<null>;
@@ -34,7 +37,7 @@ export class IrListingModal {
   async closeModal() {
     this.isOpen = false;
     // this.deletionStage = 1;
-    this.selectedDesignation = booking_listing.settlement_methods[0].name;
+    this.selectedDesignation = this.paymentEntries.methods[0];
     this.modalClosed.emit(null);
   }
   @Method()
@@ -53,12 +56,25 @@ export class IrListingModal {
       if (name === 'confirm') {
         this.loadingBtn = 'confirm';
         if (this.editBooking.cause === 'payment') {
+          const paymentType = this.paymentEntries.types.find(pt => pt.CODE_NAME === (this.editBooking.booking.financial.due_amount < 0 ? '010' : '001'));
           await this.paymentService.AddPayment(
             {
-              amount: this.editBooking.booking.financial.due_amount,
+              amount: ['003', '004'].includes(this.editBooking.booking.status.code)
+                ? Math.abs(this.editBooking.booking.financial.cancelation_penality_as_if_today)
+                : this.editBooking.booking.financial.due_amount,
               currency: this.editBooking.booking.currency,
               date: moment().format('YYYY-MM-DD'),
-              designation: this.selectedDesignation,
+              designation: this.selectedDesignation.CODE_VALUE_EN,
+              payment_method: {
+                code: this.selectedDesignation.CODE_NAME,
+                description: this.selectedDesignation.CODE_VALUE_EN,
+                operation: this.selectedDesignation.NOTES,
+              },
+              payment_type: {
+                code: paymentType.CODE_NAME,
+                description: paymentType.CODE_VALUE_EN,
+                operation: paymentType.NOTES,
+              },
               id: -1,
               reference: '',
             },
@@ -120,6 +136,20 @@ export class IrListingModal {
     // }
     return locales.entries.Lcz_Cancel;
   }
+  private handleDropdownChange(e: CustomEvent<string | number>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const value = e.detail.toString();
+    console.log(value);
+
+    const payment_method = this.paymentEntries.methods.find(pt => pt.CODE_NAME === value);
+    if (!payment_method) {
+      console.warn(`Invalid payment method ${e.detail}`);
+
+      return;
+    }
+    this.selectedDesignation = payment_method;
+  }
   render() {
     if (!this.editBooking) {
       return null;
@@ -157,12 +187,12 @@ export class IrListingModal {
             <div class="modal-body text-left p-0 mb-2">
               {this.editBooking.cause === 'payment' ? (
                 <ir-select
-                  selectedValue={this.selectedDesignation}
-                  onSelectChange={e => (this.selectedDesignation = e.detail)}
+                  selectedValue={this.selectedDesignation?.CODE_NAME}
+                  onSelectChange={this.handleDropdownChange.bind(this)}
                   showFirstOption={false}
-                  data={booking_listing.settlement_methods.map(m => ({
-                    value: m.name,
-                    text: m.name,
+                  data={this.paymentEntries.methods?.map(m => ({
+                    value: m.CODE_NAME,
+                    text: m.CODE_VALUE_EN,
                   }))}
                 ></ir-select>
               ) : null}

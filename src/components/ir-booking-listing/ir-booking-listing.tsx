@@ -4,13 +4,15 @@ import { RoomService } from '@/services/room.service';
 import booking_listing, { updateUserSelection, onBookingListingChange, IUserListingSelection, updateUserSelections } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
-import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
+import { Component, Host, Prop, State, Watch, h, Element, Listen, Fragment } from '@stencil/core';
 import moment from 'moment';
 import { _formatTime } from '../ir-booking-details/functions';
 import { getPrivateNote } from '@/utils/booking';
 import Token from '@/models/Token';
 import { isSingleUnit } from '@/stores/calendar-data';
 import { getAllParams } from '@/utils/browserHistory';
+import { BookingService } from '@/services/booking.service';
+import { PaymentEntries } from '../ir-booking-details/types';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -33,8 +35,10 @@ export class IrBookingListing {
   @State() oldStartValue = 0;
   @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' } | null = null;
   @State() showCost = false;
+  @State() paymentEntries: PaymentEntries;
 
   private bookingListingService = new BookingListingService();
+  private bookingService = new BookingService();
   private roomService = new RoomService();
   private token = new Token();
 
@@ -93,10 +97,14 @@ export class IrBookingListing {
         propertyId = propertyData.My_Result.id;
       }
 
-      const requests = [this.bookingListingService.getExposedBookingsCriteria(propertyId), this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT'])];
+      const requests = [
+        this.bookingService.getSetupEntriesByTableNameMulti(['_PAY_TYPE', '_PAY_TYPE_GROUP', '_PAY_METHOD']),
+        this.bookingListingService.getExposedBookingsCriteria(propertyId),
+        this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT']),
+      ];
 
       if (this.propertyid) {
-        requests.unshift(
+        requests.push(
           this.roomService.getExposedProperty({
             id: this.propertyid,
             language: this.language,
@@ -105,7 +113,13 @@ export class IrBookingListing {
         );
       }
 
-      await Promise.all(requests);
+      const [setupEntries] = await Promise.all(requests);
+      const { pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries as any);
+      this.paymentEntries = {
+        groups: pay_type_group,
+        methods: pay_method,
+        types: pay_type,
+      };
       updateUserSelection('property_id', propertyId);
       // this.geSearchFiltersFromParams();
       await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
@@ -235,7 +249,7 @@ export class IrBookingListing {
               <table class="table table-striped table-bordered no-footer dataTable">
                 <thead>
                   <tr>
-                    <th scope="col" class="text-left">
+                    <th scope="col" class="text-center">
                       {locales.entries?.Lcz_Booking}#
                     </th>
                     <th scope="col">{locales.entries?.Lcz_BookedOn}</th>
@@ -394,8 +408,8 @@ export class IrBookingListing {
                           <p class="p-0 m-0" style={{ whiteSpace: 'nowrap' }}>
                             {formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}
                           </p>
-                          {booking.financial.due_amount > 0 && (
-                            <buuton
+                          {booking.financial.due_amount !== 0 && (
+                            <button
                               onClick={() => {
                                 this.editBookingItem = { booking, cause: 'payment' };
                                 this.openModal();
@@ -403,8 +417,15 @@ export class IrBookingListing {
                               style={{ whiteSpace: 'nowrap' }}
                               class="btn p-0 m-0 due-btn"
                             >
-                              {formatAmount(booking.currency.symbol, booking.financial.due_amount)}
-                            </buuton>
+                              {booking.status.code === '003'
+                                ? booking.financial.cancelation_penality_as_if_today !== 0 && (
+                                    <Fragment>
+                                      <span>{booking.financial.cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} </span>
+                                      {formatAmount(booking.currency.symbol, Math.abs(booking.financial.cancelation_penality_as_if_today))}
+                                    </Fragment>
+                                  )
+                                : formatAmount(booking.currency.symbol, booking.financial.due_amount)}
+                            </button>
                           )}
                         </td>
                         {this.showCost && (
@@ -518,7 +539,7 @@ export class IrBookingListing {
             </div>
           </section>
         </div>
-        {this.editBookingItem && <ir-listing-modal onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
+        {this.editBookingItem && <ir-listing-modal paymentEntries={this.paymentEntries} onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.editBookingItem !== null && ['edit', 'guest'].includes(this.editBookingItem.cause)}

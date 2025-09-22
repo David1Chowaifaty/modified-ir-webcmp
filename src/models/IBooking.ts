@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { Booking, IFormat, Room, Origin, Arrival, IOtaNotes } from './booking.dto';
 import { TAdultChildConstraints } from './igl-book-property';
 import { Currency, RoomType } from './property';
@@ -93,7 +94,32 @@ export interface ICountry {
   phone_prefix: string;
   flag: string;
 }
-export interface IEntries {
+export const ZIEntrySchema = z.object({
+  CODE_NAME: z.string(),
+  CODE_VALUE_AR: z.string().nullable(),
+  CODE_VALUE_DE: z.string().nullable(),
+  CODE_VALUE_EL: z.string().nullable(),
+  CODE_VALUE_EN: z.string().nullable(),
+  CODE_VALUE_FR: z.string().nullable(),
+  CODE_VALUE_HE: z.string().nullable(),
+  CODE_VALUE_PL: z.string().nullable(),
+  CODE_VALUE_RU: z.string().nullable(),
+  CODE_VALUE_UA: z.string().nullable(),
+  DISPLAY_ORDER: z.number().nullable(),
+  ENTRY_DATE: z.string().nullable(),
+  ENTRY_USER_ID: z.number().nullable(),
+  INVARIANT_VALUE: z.string().nullable(),
+  ISDELETEABLE: z.boolean(),
+  ISDELETED: z.boolean(),
+  ISSYSTEM: z.boolean(),
+  ISUPDATEABLE: z.boolean(),
+  ISVISIBLE: z.boolean(),
+  NOTES: z.string().nullable(),
+  OWNER_ID: z.number().nullable(),
+  TBL_NAME: z.string(),
+});
+
+export type IEntries = {
   CODE_NAME: string;
   CODE_VALUE_AR: string;
   CODE_VALUE_DE: string;
@@ -116,7 +142,7 @@ export interface IEntries {
   NOTES: string;
   OWNER_ID: number;
   TBL_NAME: string;
-}
+};
 export interface ISetupEntries {
   arrivalTime: IEntries[];
   ratePricingMode: IEntries[];

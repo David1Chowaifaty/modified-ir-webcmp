@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, h } from '@stencil/core';
 import { v4 } from 'uuid';
 import { ZodType } from 'zod';
 import IMask, { InputMask } from 'imask';
@@ -58,7 +58,22 @@ export class IrPriceInput {
   @Prop() testId?: string;
 
   /** Error*/
-  @State() error: boolean;
+  @Prop({ mutable: true }) error: boolean;
+  /**
+   * Extra class names applied to the outer <fieldset> wrapper.
+   * Useful for spacing (e.g., margins/padding), width/layout utilities,
+   * or theming the whole input group from the outside.
+   * Example: "w-100 mb-2 d-flex align-items-center"
+   */
+  @Prop() containerClassname: string;
+
+  /**
+   * Extra class names applied to the label container (<div class="input-group-prepend">)
+   * that wraps the <label>. Use this to control label width, alignment,
+   * spacing, or visibility at different breakpoints.
+   * Example: "min-w-120 text-nowrap pe-2"
+   */
+  @Prop() labelContainerClassname: string;
 
   /** Emits the current value on change */
   @Event() textChange: EventEmitter<string>;
@@ -180,9 +195,9 @@ export class IrPriceInput {
 
   render() {
     return (
-      <fieldset class="input-group price-input-group m-0 p-0">
+      <fieldset class={`${this.containerClassname} input-group price-input-group m-0 p-0 `}>
         {this.label && (
-          <div class="input-group-prepend">
+          <div class={`input-group-prepend ${this.labelContainerClassname}`}>
             <span
               class={`input-group-text 
                 ${this.labelStyle}
@@ -200,7 +215,7 @@ export class IrPriceInput {
         )}
         <div class="position-relative has-icon-left rate-input-container">
           {this.currency && (
-            <div class={`input-group-prepend`}>
+            <div>
               <span class={`input-group-text ${this.disabled ? 'disabled' : ''} currency-label ${this.error ? 'error' : ''} ${this.label ? 'with-label' : ''}`}>
                 {this.currency}
               </span>
