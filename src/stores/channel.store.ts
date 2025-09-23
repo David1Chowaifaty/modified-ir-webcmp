@@ -71,11 +71,12 @@ export function resetStore() {
   channels_data.isConnectedToChannel = false;
   channels_data.channel_settings = null;
 }
-export function addMapping(ir_id: string, fr_id: string, isRoomType: boolean) {
+export function addMapping(ir_id: string, fr_id: string, isRoomType: boolean, parentChannelId?: string) {
   channels_data.mappedChannels.push({
     channel_id: fr_id,
     ir_id,
     type: isRoomType ? 'room_type' : 'rate_plan',
+    channel_parent_id: parentChannelId,
   });
 }
 export function testConnection() {
