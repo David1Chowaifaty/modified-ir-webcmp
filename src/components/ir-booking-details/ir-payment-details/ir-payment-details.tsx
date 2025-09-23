@@ -209,7 +209,9 @@ export class IrPaymentDetails {
         />
         <ir-booking-guarantee booking={this.booking} bookingService={this.bookingService} />
         {/* {this.shouldShowPaymentActions() && <ir-payment-actions paymentAction={this.paymentActions} booking={this.booking} />} */}
-        {!['003', '004'].includes(this.booking.status.code) && <ir-applicable-policies propertyId={this.propertyId} booking={this.booking}></ir-applicable-policies>}
+        {!['003', '004'].includes(this.booking.status.code) && this.booking.is_direct && (
+          <ir-applicable-policies propertyId={this.propertyId} booking={this.booking}></ir-applicable-policies>
+        )}
 
         {this.shouldShowRefundButton() && (
           <div class="d-flex mt-1">
