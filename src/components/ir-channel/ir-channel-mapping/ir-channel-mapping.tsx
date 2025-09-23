@@ -16,11 +16,12 @@ export class IrChannelMapping {
   private mappingService = new IrMappingService();
 
   setActiveField(id: string, isRoomType: boolean, roomTypeId?: string) {
-    const availableRooms = this.mappingService.getAppropriateRooms(isRoomType, roomTypeId);
+    const parentChannelId = roomTypeId?.toString();
+    const availableRooms = this.mappingService.getAppropriateRooms(isRoomType, parentChannelId);
     if (availableRooms) {
       this.availableRooms = availableRooms;
     }
-    this.activeMapField = id;
+    this.activeMapField = id.toString();
   }
 
   renderMappingStatus(
@@ -130,7 +131,7 @@ export class IrChannelMapping {
           </div>
           <div>
             {channels_data.selectedChannel?.property?.room_types?.map(room_type => {
-              const mappedRoomType = this.mappingService.checkMappingExists(room_type.id, true);
+              const mappedRoomType = this.mappingService.checkMappingExists(room_type.id.toString(), true);
               return (
                 <Fragment>
                   <div key={room_type.id} class="mapped_row room_type pt-1">
@@ -144,7 +145,7 @@ export class IrChannelMapping {
                   </div>
 
                   {room_type.rate_plans.map(rate_plan => {
-                    const mappedRatePlan = this.mappingService.checkMappingExists(rate_plan.id, false, room_type.id);
+                    const mappedRatePlan = this.mappingService.checkMappingExists(rate_plan.id.toString(), false, room_type.id.toString());
                     // console.log(mappedRatePlan);
                     return (
                       <div key={rate_plan.id} class=" mapped_row rate_plan">

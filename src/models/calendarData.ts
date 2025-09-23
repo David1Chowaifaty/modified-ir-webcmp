@@ -67,6 +67,7 @@ export interface IMap {
   channel_id: string;
   ir_id: string;
   type: 'room_type' | 'rate_plan' | 'property';
+  channel_parent_id?: string;
 }
 export interface IPickupCurrency extends ICurrency {
   symbol: string;
