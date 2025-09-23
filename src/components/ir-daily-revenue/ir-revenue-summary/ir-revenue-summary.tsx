@@ -53,11 +53,11 @@ export class IrRevenueSummary {
   render() {
     const paymentsTotal = this.calculateTotalPayments(this.groupedPayments);
     const refundAmount = this.calculateTotalRefunds(this.groupedPayments);
-    const totalAmount = paymentsTotal - refundAmount;
+    const totalAmount = paymentsTotal + refundAmount;
 
     const previousDatePaymentsTotal = this.calculateTotalPayments(this.previousDateGroupedPayments);
     const previousDateRefundAmount = this.calculateTotalRefunds(this.previousDateGroupedPayments);
-    const previousDateTotalAmount = previousDatePaymentsTotal - previousDateRefundAmount;
+    const previousDateTotalAmount = previousDatePaymentsTotal + previousDateRefundAmount;
 
     return (
       <Host>
