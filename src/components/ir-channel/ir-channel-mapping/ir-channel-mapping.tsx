@@ -12,7 +12,6 @@ import locales from '@/stores/locales.store';
 export class IrChannelMapping {
   @State() activeMapField = '';
   @State() availableRooms: { id: string; name: string }[] = [];
-  @State() activeParentRoomTypeId?: string;
 
   private mappingService = new IrMappingService();
 
@@ -23,7 +22,6 @@ export class IrChannelMapping {
       this.availableRooms = availableRooms;
     }
     this.activeMapField = id.toString();
-    this.activeParentRoomTypeId = isRoomType ? undefined : parentChannelId;
   }
 
   renderMappingStatus(
@@ -97,9 +95,8 @@ export class IrChannelMapping {
             placeholder={locales.entries?.Lcz_NotMapped}
             data={this.availableRooms}
             onComboboxValueChange={e => {
-              addMapping(e.detail.data as string, this.activeMapField, isRoomType, isRoomType ? undefined : this.activeParentRoomTypeId);
+              addMapping(e.detail.data as string, this.activeMapField, isRoomType);
               this.activeMapField = '';
-              this.activeParentRoomTypeId = undefined;
             }}
           ></ir-combobox>
         ) : (
@@ -112,7 +109,6 @@ export class IrChannelMapping {
   }
 
   render() {
-    console.log(channels_data.mappedChannels);
     return (
       <Host class="py-md-2 px-md-2">
         <div class="d-flex p-0 m-0 w-100 justify-content-end">

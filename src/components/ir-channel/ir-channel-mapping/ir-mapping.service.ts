@@ -1,3 +1,5 @@
+import type { RatePlanDetail, RoomDetail } from '@/models/IBooking';
+import type { IMap } from '@/models/calendarData';
 import calendar_data from '@/stores/calendar-data';
 import channels_data from '@/stores/channel.store';
 
@@ -10,53 +12,18 @@ export class IrMappingService {
     }
     channels_data.mappedChannels = selectedChannels.filter(c => c.ir_id !== ir_id);
   }
-  /**
-   * Determines the current mapping status for a channel-provided entity (room type or rate plan).
-   *
-   * The method inspects `channels_data.mappedChannels` to discover whether the given channel identifier
-   * has already been associated with an Igloonet resource. It returns UI-oriented metadata describing
-   * whether the mapping UI should be hidden, which entity (room or rate plan) is already linked, and
-   * the default occupancy that should be displayed.
-   *
-   * @param id Channel-side identifier for the entity currently being rendered.
-   * @param isRoomType Flag indicating whether `id` points to a room type (true) or a rate plan (false).
-   * @param roomTypeId Channel room-type identifier owning the rate plan; only required when `isRoomType` is false.
-   * @returns An object consumed by the Stencil component to drive rendering (`hide`, `result`, `occupancy`).
-   * @throws When a rate plan lookup is requested without a `roomTypeId`, or when a mapping references an
-   * invalid/unknown room type in the calendar store.
-   */
   public checkMappingExists(id: string, isRoomType: boolean, roomTypeId?: string) {
     const channelId = id.toString();
     const parentChannelId = roomTypeId?.toString();
 
-    const mappedEntry = channels_data.mappedChannels.find(mapping => {
-      if (isRoomType) {
-        return mapping.channel_id === channelId && mapping.type === 'room_type';
-      }
-      return (
-        mapping.channel_id === channelId &&
-        mapping.type === 'rate_plan' &&
-        (parentChannelId ? mapping.channel_parent_id === parentChannelId : true)
-      );
-    });
-
-    if (!mappedEntry) {
-      if (!isRoomType) {
-        if (!parentChannelId) {
-          throw new Error('Missing room type id');
-        }
-        const parentMapping = channels_data.mappedChannels.find(
-          mapping => mapping.type === 'room_type' && mapping.channel_id === parentChannelId,
-        );
-        if (!parentMapping) {
-          return { hide: true, result: undefined, occupancy: undefined };
-        }
-      }
-      return { hide: false, result: undefined, occupancy: undefined };
-    }
-
     if (isRoomType) {
-      const room = calendar_data.roomsInfo.find(roomInfo => roomInfo.id.toString() === mappedEntry.ir_id);
+      const mappedRoomType = channels_data.mappedChannels.find(mapping => mapping.type === 'room_type' && mapping.channel_id.toString() === channelId);
+
+      if (!mappedRoomType) {
+        return { hide: false, result: undefined, occupancy: undefined };
+      }
+
+      const room = calendar_data.roomsInfo.find(roomInfo => roomInfo.id.toString() === mappedRoomType.ir_id);
       if (!room) {
         throw new Error('Invalid Room type');
       }
@@ -67,30 +34,60 @@ export class IrMappingService {
       throw new Error('Missing room type id');
     }
 
-    const parentMapping = channels_data.mappedChannels.find(
-      mapping => mapping.type === 'room_type' && mapping.channel_id === parentChannelId,
-    );
-
-    const room = parentMapping
-      ? calendar_data.roomsInfo.find(roomInfo => roomInfo.id.toString() === parentMapping.ir_id)
-      : calendar_data.roomsInfo.find(roomInfo =>
-          roomInfo.rateplans.some(ratePlan => ratePlan.id.toString() === mappedEntry.ir_id),
-        );
-
-    if (!room) {
-      throw new Error('Invalid Room type');
-    }
-
+    const parentMapping = channels_data.mappedChannels.find(mapping => mapping.type === 'room_type' && mapping.channel_id.toString() === parentChannelId);
     if (!parentMapping) {
       return { hide: true, result: undefined, occupancy: undefined };
     }
 
-    const ratePlan = room.rateplans.find(rp => rp.id.toString() === mappedEntry.ir_id);
-    if (!ratePlan) {
-      throw new Error('Invalid rate plan');
+    const parentRoom = calendar_data.roomsInfo.find(roomInfo => roomInfo.id.toString() === parentMapping.ir_id);
+    if (!parentRoom) {
+      throw new Error('Invalid Room type');
     }
 
-    return { hide: false, occupancy: room.occupancy_default.adult_nbr, result: ratePlan };
+    let matchedContext: RatePlanContext | undefined;
+    for (const mapping of channels_data.mappedChannels) {
+      if (mapping.type !== 'rate_plan' || mapping.channel_id.toString() !== channelId) {
+        continue;
+      }
+      const context = this.resolveRatePlanContext(mapping);
+      if (context && context.parentChannelId === parentChannelId) {
+        matchedContext = context;
+        break;
+      }
+    }
+
+    if (!matchedContext) {
+      return { hide: false, result: undefined, occupancy: undefined };
+    }
+
+    if (matchedContext.room.id.toString() !== parentRoom.id.toString()) {
+      return { hide: false, result: undefined, occupancy: undefined };
+    }
+
+    return {
+      hide: false,
+      occupancy: parentRoom.occupancy_default.adult_nbr,
+      result: matchedContext.ratePlan,
+    };
+  }
+  private resolveRatePlanContext(ratePlanMapping: IMap): RatePlanContext | undefined {
+    if (ratePlanMapping.type !== 'rate_plan') {
+      return undefined;
+    }
+    const room = calendar_data.roomsInfo.find(roomInfo => roomInfo.rateplans.some(ratePlan => ratePlan.id.toString() === ratePlanMapping.ir_id));
+    if (!room) {
+      return undefined;
+    }
+    const ratePlan = room.rateplans.find(rp => rp.id.toString() === ratePlanMapping.ir_id);
+    if (!ratePlan) {
+      return undefined;
+    }
+    const parentMapping = channels_data.mappedChannels.find(mapping => mapping.type === 'room_type' && mapping.ir_id === room.id.toString());
+    return {
+      room,
+      ratePlan,
+      parentChannelId: parentMapping?.channel_id?.toString(),
+    };
   }
   // public checkMappingExists(id: string, isRoomType: boolean, roomTypeId?: string) {
   //   const mapped_id = channels_data.mappedChannels.find(m => m.channel_id === id);
@@ -141,3 +138,9 @@ export class IrMappingService {
       }));
   }
 }
+
+type RatePlanContext = {
+  room: RoomDetail;
+  ratePlan: RatePlanDetail;
+  parentChannelId?: string;
+};
