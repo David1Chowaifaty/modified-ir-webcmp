@@ -408,25 +408,34 @@ export class IrBookingListing {
                           <p class="p-0 m-0" style={{ whiteSpace: 'nowrap' }}>
                             {formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}
                           </p>
-                          {booking.financial.due_amount !== 0 && (
-                            <button
-                              onClick={() => {
-                                this.editBookingItem = { booking, cause: 'payment' };
-                                this.openModal();
-                              }}
-                              style={{ whiteSpace: 'nowrap' }}
-                              class="btn p-0 m-0 due-btn"
-                            >
-                              {booking.status.code === '003'
-                                ? booking.financial.cancelation_penality_as_if_today !== 0 && (
-                                    <Fragment>
-                                      <span>{booking.financial.cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} </span>
-                                      {formatAmount(booking.currency.symbol, Math.abs(booking.financial.cancelation_penality_as_if_today))}
-                                    </Fragment>
-                                  )
-                                : formatAmount(booking.currency.symbol, booking.financial.due_amount)}
-                            </button>
-                          )}
+                          <Fragment>
+                            {['003', '004'].includes(booking.status.code)
+                              ? booking.financial.cancelation_penality_as_if_today !== 0 && (
+                                  <button
+                                    onClick={() => {
+                                      this.editBookingItem = { booking, cause: 'payment' };
+                                      this.openModal();
+                                    }}
+                                    style={{ whiteSpace: 'nowrap' }}
+                                    class="btn p-0 m-0 due-btn"
+                                  >
+                                    <span>{booking.financial.cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} </span>
+                                    {formatAmount(booking.currency.symbol, Math.abs(booking.financial.cancelation_penality_as_if_today))}
+                                  </button>
+                                )
+                              : booking.financial.due_amount !== 0 && (
+                                  <button
+                                    onClick={() => {
+                                      this.editBookingItem = { booking, cause: 'payment' };
+                                      this.openModal();
+                                    }}
+                                    style={{ whiteSpace: 'nowrap' }}
+                                    class="btn p-0 m-0 due-btn"
+                                  >
+                                    {formatAmount(booking.currency.symbol, booking.financial.due_amount)}
+                                  </button>
+                                )}
+                          </Fragment>
                         </td>
                         {this.showCost && (
                           <td>
