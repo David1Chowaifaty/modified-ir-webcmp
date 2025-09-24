@@ -51,9 +51,9 @@ export class IrPaymentFolio {
           },
           { message: `Invalid date` },
         ),
-      amount: z.coerce.number().refine(a => a !== 0),
+      amount: z.coerce.number().refine(a => a >= 0),
       reference: z.string().optional().nullable(),
-      designation: z.string().min(1),
+      // designation: z.string().min(1),
       payment_type: z.object({
         code: z.string().min(3).max(4),
         description: z.string().min(1),
@@ -280,7 +280,7 @@ export class IrPaymentFolio {
                 <button
                   type="button"
                   disabled={this.mode === 'payment-action'}
-                  class={`form-control  d-flex align-items-center cursor-pointer ${this.errors?.designation && !this.folioData?.designation ? 'border-danger' : ''}`}
+                  class={`form-control  d-flex align-items-center cursor-pointer ${this.errors?.payment_type && !this.folioData?.payment_type?.code ? 'border-danger' : ''}`}
                 >
                   {this.folioData?.payment_type ? <span>{this.folioData.payment_type?.description}</span> : <span>Select...</span>}
                 </button>
