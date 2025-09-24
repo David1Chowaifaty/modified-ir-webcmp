@@ -257,63 +257,65 @@ export class IrApplicablePolicies {
             <p class="applicable-policies__no-penalty">{this.generateCancellationStatement()}</p>
           </div>
 
-          <div class="applicable-policies__statements">
-            {this.cancellationStatements?.map(statement => (
-              <div class="applicable-policies__statement">
-                {this.cancellationStatements.length > 1 && (
-                  <p class="applicable-policies__room">
-                    <b>{statement.roomType.name}</b> {statement.ratePlan['short_name']} {statement.ratePlan.is_non_refundable ? ` - ${locales.entries.Lcz_NonRefundable}` : ''}
-                  </p>
-                )}
-                <div class="applicable-policies__brackets">
-                  {statement.brackets.map((bracket, idx) => {
-                    const { leftLabel, rightLabel, showArrow } = this.getBracketLabelsAndArrowState({
-                      index: idx,
-                      bracket,
-                      brackets: statement.brackets,
-                      checkInDate: statement.checkInDate,
-                    });
-                    return (
-                      <div class="applicable-policies__bracket">
-                        <p class="applicable-policies__bracket-dates">
-                          {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>} {rightLabel}
-                        </p>
-                        <p class="applicable-policies__amount">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</p>
+          {this.cancellationStatements?.length > 0 && (
+            <div class="applicable-policies__statements">
+              {this.cancellationStatements?.map(statement => (
+                <div class="applicable-policies__statement">
+                  {this.cancellationStatements.length > 1 && (
+                    <p class="applicable-policies__room">
+                      <b>{statement.roomType.name}</b> {statement.ratePlan['short_name']} {statement.ratePlan.is_non_refundable ? ` - ${locales.entries.Lcz_NonRefundable}` : ''}
+                    </p>
+                  )}
+                  <div class="applicable-policies__brackets">
+                    {statement.brackets.map((bracket, idx) => {
+                      const { leftLabel, rightLabel, showArrow } = this.getBracketLabelsAndArrowState({
+                        index: idx,
+                        bracket,
+                        brackets: statement.brackets,
+                        checkInDate: statement.checkInDate,
+                      });
+                      return (
+                        <div class="applicable-policies__bracket">
+                          <p class="applicable-policies__bracket-dates">
+                            {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>} {rightLabel}
+                          </p>
+                          <p class="applicable-policies__amount">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</p>
 
-                        <p class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</p>
-                      </div>
-                    );
-                  })}
+                          <p class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div class="applicable-policies__brackets-table">
+                    <table>
+                      <tbody>
+                        {statement.brackets.map((bracket, idx) => {
+                          const { leftLabel, rightLabel, showArrow } = this.getBracketLabelsAndArrowState({
+                            index: idx,
+                            bracket,
+                            brackets: statement.brackets,
+                            checkInDate: statement.checkInDate,
+                          });
+                          return (
+                            <tr>
+                              <td class="applicable-policies__bracket-dates">
+                                {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>}{' '}
+                                {rightLabel}
+                              </td>
+
+                              <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</td>
+
+                              <td class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <div class="applicable-policies__brackets-table">
-                  <table>
-                    <tbody>
-                      {statement.brackets.map((bracket, idx) => {
-                        const { leftLabel, rightLabel, showArrow } = this.getBracketLabelsAndArrowState({
-                          index: idx,
-                          bracket,
-                          brackets: statement.brackets,
-                          checkInDate: statement.checkInDate,
-                        });
-                        return (
-                          <tr>
-                            <td class="applicable-policies__bracket-dates">
-                              {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>}{' '}
-                              {rightLabel}
-                            </td>
-
-                            <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</td>
-
-                            <td class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
       </Host>
     );
