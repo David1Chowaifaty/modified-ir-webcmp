@@ -210,6 +210,27 @@ export class IrApplicablePolicies {
     return `${cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} ${formatAmount(calendar_data.currency.symbol, Math.abs(cancelation_penality_as_if_today))} ${label}`;
   }
 
+  private checkCurrentBracket(bracket: Bracket, nextBracket: Bracket | null): boolean {
+    if (!bracket?.due_on) return false;
+
+    const today = moment().startOf('day');
+    const start = moment(bracket.due_on, 'YYYY-MM-DD', true).startOf('day');
+    if (!start.isValid()) return false;
+
+    // If there's no next bracket, this one applies from its start onward.
+    if (!nextBracket?.due_on) {
+      return today.isSameOrAfter(start, 'day');
+    }
+
+    const end = moment(nextBracket.due_on, 'YYYY-MM-DD', true).startOf('day');
+    if (!end.isValid()) {
+      return today.isSameOrAfter(start, 'day');
+    }
+
+    // Active if today ∈ [start, end)
+    return today.isSameOrAfter(start, 'day') && today.isBefore(end, 'day');
+  }
+
   render() {
     if (this.isLoading) {
       return null;
@@ -277,8 +298,10 @@ export class IrApplicablePolicies {
                         brackets: statement.brackets,
                         checkInDate: statement.checkInDate,
                       });
+                      const isInCurrentBracket = this.checkCurrentBracket(bracket, idx < statement.brackets.length - 1 ? statement.brackets[idx + 1] : null);
+
                       return (
-                        <div class="applicable-policies__bracket">
+                        <div class={{ 'applicable-policies__bracket': true, 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
                           <p class="applicable-policies__bracket-dates">
                             {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>} {rightLabel}
                           </p>
@@ -299,8 +322,9 @@ export class IrApplicablePolicies {
                             brackets: statement.brackets,
                             checkInDate: statement.checkInDate,
                           });
+                          const isInCurrentBracket = this.checkCurrentBracket(bracket, idx < statement.brackets.length - 1 ? statement.brackets[idx + 1] : null);
                           return (
-                            <tr>
+                            <tr class={{ 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
                               <td class="applicable-policies__bracket-dates">
                                 {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>}{' '}
                                 {rightLabel}

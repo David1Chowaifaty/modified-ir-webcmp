@@ -35,7 +35,9 @@
   max-height: 200px;
   overflow-y: auto;
 }
-
+.applicable-policies__highlighted-bracket {
+  color: rgba(30, 159, 242, 100%);
+}
 .applicable-policies__statement {
   display: flex;
   flex-direction: column;
