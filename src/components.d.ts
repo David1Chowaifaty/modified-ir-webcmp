@@ -584,6 +584,9 @@ export namespace Components {
     interface IrCommon {
         "extraResources": string;
     }
+    interface IrCopyButton {
+        "text": string;
+    }
     interface IrCountryPicker {
         /**
           * Whether to automatically validate the input.
@@ -3378,6 +3381,12 @@ declare global {
         prototype: HTMLIrCommonElement;
         new (): HTMLIrCommonElement;
     };
+    interface HTMLIrCopyButtonElement extends Components.IrCopyButton, HTMLStencilElement {
+    }
+    var HTMLIrCopyButtonElement: {
+        prototype: HTMLIrCopyButtonElement;
+        new (): HTMLIrCopyButtonElement;
+    };
     interface HTMLIrCountryPickerElementEventMap {
         "countryChange": ICountry;
     }
@@ -4881,6 +4890,7 @@ declare global {
         "ir-checkboxes": HTMLIrCheckboxesElement;
         "ir-combobox": HTMLIrComboboxElement;
         "ir-common": HTMLIrCommonElement;
+        "ir-copy-button": HTMLIrCopyButtonElement;
         "ir-country-picker": HTMLIrCountryPickerElement;
         "ir-daily-revenue": HTMLIrDailyRevenueElement;
         "ir-daily-revenue-filters": HTMLIrDailyRevenueFiltersElement;
@@ -5598,6 +5608,9 @@ declare namespace LocalJSX {
     }
     interface IrCommon {
         "extraResources"?: string;
+    }
+    interface IrCopyButton {
+        "text"?: string;
     }
     interface IrCountryPicker {
         /**
@@ -7454,6 +7467,7 @@ declare namespace LocalJSX {
         "ir-checkboxes": IrCheckboxes;
         "ir-combobox": IrCombobox;
         "ir-common": IrCommon;
+        "ir-copy-button": IrCopyButton;
         "ir-country-picker": IrCountryPicker;
         "ir-daily-revenue": IrDailyRevenue;
         "ir-daily-revenue-filters": IrDailyRevenueFilters;
@@ -7614,6 +7628,7 @@ declare module "@stencil/core" {
             "ir-checkboxes": LocalJSX.IrCheckboxes & JSXBase.HTMLAttributes<HTMLIrCheckboxesElement>;
             "ir-combobox": LocalJSX.IrCombobox & JSXBase.HTMLAttributes<HTMLIrComboboxElement>;
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
+            "ir-copy-button": LocalJSX.IrCopyButton & JSXBase.HTMLAttributes<HTMLIrCopyButtonElement>;
             "ir-country-picker": LocalJSX.IrCountryPicker & JSXBase.HTMLAttributes<HTMLIrCountryPickerElement>;
             "ir-daily-revenue": LocalJSX.IrDailyRevenue & JSXBase.HTMLAttributes<HTMLIrDailyRevenueElement>;
             "ir-daily-revenue-filters": LocalJSX.IrDailyRevenueFilters & JSXBase.HTMLAttributes<HTMLIrDailyRevenueFiltersElement>;
