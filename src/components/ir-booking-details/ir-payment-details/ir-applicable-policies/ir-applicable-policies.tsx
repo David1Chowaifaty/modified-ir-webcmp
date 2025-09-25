@@ -202,7 +202,10 @@ export class IrApplicablePolicies {
     const label = 'if cancelled today';
     const { cancelation_penality_as_if_today } = this.booking.financial;
     if (cancelation_penality_as_if_today === 0) {
-      return `No penalty ${label}`;
+      if (this.booking.financial.collected > 0) {
+        return `No refund ${label}`;
+      }
+      return `No payment required ${label}`;
     }
     return `${cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} ${formatAmount(calendar_data.currency.symbol, Math.abs(cancelation_penality_as_if_today))} ${label}`;
   }

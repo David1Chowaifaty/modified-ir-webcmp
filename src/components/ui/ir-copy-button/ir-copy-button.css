@@ -1,18 +1,5 @@
 :host {
-  --ir-copy-button-bg: #1e293b;
-  --ir-copy-button-bg-hover: #273449;
-  --ir-copy-button-bg-active: #172136;
-  --ir-copy-button-border: transparent;
-  --ir-copy-button-color: #f8fafc;
-  --ir-copy-button-radius: 0.5rem;
-  --ir-copy-button-padding: 0.45rem 0.75rem;
-  --ir-copy-button-font-size: 0.85rem;
-  --ir-copy-tooltip-bg: rgba(15, 23, 42, 0.95);
-  --ir-copy-tooltip-color: #f8fafc;
-  --ir-copy-tooltip-radius: 0.375rem;
-  --ir-copy-tooltip-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
   display: inline-block;
-  font-size: var(--ir-copy-button-font-size);
 }
 
 .copy-tooltip {
@@ -26,27 +13,11 @@
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  color: #212529;
-  border: 1px solid var(--ir-copy-button-border);
-  border-radius: var(--ir-copy-button-radius);
   cursor: pointer;
   transition: background-color 160ms ease, color 160ms ease, transform 120ms ease;
-  min-width: 2.25rem;
-  min-height: 2.25rem;
-}
-
-.copy-button:hover:not([disabled]) {
-  color: #212529;
-  background-color: #e2e6ea;
-}
-
-.copy-button:active:not([disabled]) {
-  transform: translateY(1px);
-}
-
-.copy-button:focus-visible {
-  outline: 2px solid #60a5fa;
-  outline-offset: 3px;
+  min-width: 2rem;
+  min-height: 2rem;
+  border: none;
 }
 
 .copy-button[disabled] {
@@ -93,48 +64,6 @@
   100% {
     transform: rotate(360deg);
   }
-}
-
-.tooltip-dropdown {
-  pointer-events: none;
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 0.5rem);
-  transform: translateX(-50%);
-  background: var(--ir-copy-tooltip-bg);
-  color: var(--ir-copy-tooltip-color);
-  padding: 0.3rem 0.6rem;
-  border-radius: var(--ir-copy-tooltip-radius);
-  box-shadow: var(--ir-copy-tooltip-shadow);
-  font-size: 0.75rem;
-  line-height: 1.2;
-  white-space: normal;
-  text-align: center;
-  word-break: break-word;
-  max-width: min(18rem, calc(100vw - 1.5rem));
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 150ms ease;
-  z-index: 10;
-}
-
-.tooltip-dropdown::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translateX(-50%);
-  border-width: 6px;
-  border-style: solid;
-  border-color: var(--ir-copy-tooltip-bg) transparent transparent transparent;
-}
-
-.tooltip--open .tooltip-dropdown,
-.copy-tooltip:hover .tooltip-dropdown,
-.copy-tooltip:focus-within .tooltip-dropdown {
-  pointer-events: auto;
-  opacity: 1;
-  visibility: visible;
 }
 
 .copy-button[data-state='success'] {

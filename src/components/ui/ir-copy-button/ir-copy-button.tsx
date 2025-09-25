@@ -111,7 +111,7 @@ export class IrCopyButton {
     return (
       <button
         type="button"
-        class="copy-button btn btn-light p-0 m-0"
+        class="copy-button btn btn-outline-secondary p-0 m-0"
         data-state={state}
         data-tooltip-placeholder
         aria-label={this.tooltipMessage}
