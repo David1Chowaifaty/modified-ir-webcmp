@@ -53,7 +53,7 @@ export class IglPropertyBookedBy {
 
   private initializeExpiryYears() {
     const currentYear = new Date().getFullYear();
-    this.expiryYears = Array.from({ length: 4 }, (_, index) => (currentYear + index).toString());
+    this.expiryYears = Array.from({ length: 12 }, (_, index) => (currentYear + index).toString());
   }
   private async assignCountryCode() {
     const country = await this.bookingService.getUserDefaultCountry();
