@@ -46,16 +46,16 @@
 .sidebar-left {
   position: fixed;
   top: 0;
-  left: -100%;
+  left: -120%;
   bottom: 0;
-  width: var(--sidebar-width, 30rem);
+  width: var(--sidebar-width, 40rem);
   max-width: 100%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: all 0.5s;
-  z-index: 200;
+  z-index: 100;
   overflow-y: hidden;
   color: var(--sidebar-color, #000);
-  background: var(--sidebar-backgound, #fff);
+  background-color: var(--sidebar-backgound, #fff);
   /* padding: var(--ir-sidebar-padding, 0.5rem 0); */
   padding-block: var(--ir-sidebar-padding-block, 0);
   padding-inline: var(--ir-sidebar-padding-inline, 0.5rem);
@@ -77,7 +77,7 @@
 }
 .sidebar-left.active {
   left: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .close {
   position: absolute;
