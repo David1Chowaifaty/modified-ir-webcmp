@@ -23,6 +23,7 @@ export class IrApplicablePolicies {
   @State() guaranteeAmount: number;
 
   @Event() generatePayment: EventEmitter<IPaymentAction>;
+  private shouldShowCancellationBrackets: boolean = false;
 
   componentWillLoad() {
     this.loadApplicablePolicies();
@@ -260,7 +261,7 @@ export class IrApplicablePolicies {
             <p class="applicable-policies__no-penalty">{this.generateCancellationStatement()}</p>
           </div>
 
-          {this.cancellationStatements?.length > 0 && (
+          {this.cancellationStatements?.length > 0 && this.shouldShowCancellationBrackets && (
             <div class="applicable-policies__statements">
               {this.cancellationStatements?.map(statement => (
                 <div class="applicable-policies__statement">
