@@ -268,6 +268,10 @@ export interface RatePlanDetail {
   name: string;
   rate_restrictions: null;
   variations: RateVariation[];
+  meal_plan: {
+    code: string;
+    description: string;
+  };
 }
 export interface RateVariation {
   adult_child_offering: string;

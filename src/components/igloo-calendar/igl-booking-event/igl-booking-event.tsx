@@ -9,6 +9,8 @@ import { EventsService } from '@/services/events.service';
 import locales from '@/stores/locales.store';
 import { ICountry } from '@/models/IBooking';
 import calendar_dates from '@/stores/calendar-dates.store';
+import { Rateplan } from '@/models/property';
+import calendar_data from '@/stores/calendar-data';
 
 @Component({
   tag: 'igl-booking-event',
@@ -247,7 +249,7 @@ export class IglBookingEvent {
                 //   this.resetBookingToInitialPosition();
                 //   return;
                 // }
-                const { description, status } = this.getModalDescription(toRoomId, from_date, to_date);
+                const { description, status, ratePlans } = this.getModalDescription(toRoomId, from_date, to_date);
                 let hideConfirmButton = false;
                 if (status === '400') {
                   hideConfirmButton = true;
@@ -289,7 +291,7 @@ export class IglBookingEvent {
                   }
                 }
                 console.warn({ fromDate, toDate });
-                this.showDialog.emit({ reason: 'reallocate', ...event.detail, description, title: '', hideConfirmButton, from_date: fromDate, to_date: toDate });
+                this.showDialog.emit({ reason: 'reallocate', ...event.detail, description, title: '', hideConfirmButton, ratePlans, from_date: fromDate, to_date: toDate });
               } else {
                 // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
                 //   this.animationFrameId = requestAnimationFrame(() => {
@@ -376,7 +378,7 @@ export class IglBookingEvent {
     }
     return null;
   };
-  private getModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string } {
+  private getModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string; ratePlans?: Rateplan[] } {
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
@@ -423,9 +425,17 @@ export class IglBookingEvent {
           }
           return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         } else {
+          const rateplan = (() => {
+            const roomType = calendar_data.roomsInfo.find(rt => rt.id === this.bookingEvent.RATE_TYPE);
+            return roomType?.rateplans?.find(rp => rp.id === this.bookingEvent.RATE_PLAN_ID);
+          })();
+
+          const newRoomType = calendar_data.roomsInfo.find(rt => rt.id === targetRT);
+          const mealPlan = newRoomType.rateplans.find(rp => rp.meal_plan.code === rateplan.meal_plan.code);
           return {
             description: locales.entries.Lcz_SameRatesWillBeKept + '.',
             status: '200',
+            ratePlans: mealPlan ? undefined : (newRoomType.rateplans as any),
           };
         }
       }

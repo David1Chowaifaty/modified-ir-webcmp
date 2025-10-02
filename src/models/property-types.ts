@@ -89,6 +89,7 @@ type CheckinCheckoutEventPayload =
 
 type ReallocateEventPayload = {
   reason: 'reallocate';
+  ratePlans?: RatePlan[];
 } & IReallocationPayload;
 type StretchEventPayload = {
   reason: 'stretch';
