@@ -22,6 +22,13 @@
   max-width: 100%;
   height: auto;
 }
+.booking-event-hover__color-picker-trigger {
+  all: unset;
+  border: 1px solid #e0e0e0;
+  padding: 0.25rem 0.25rem;
+  border-radius: 0.21rem;
+  cursor: pointer;
+}
 .events_btns {
   display: inline-flex;
   align-items: center;

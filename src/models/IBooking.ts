@@ -363,7 +363,7 @@ export interface RoomBookingDetails {
     to_date: string;
   };
   BASE_STATUS_CODE: string;
-  ROOM_INFO: Pick<Room, 'occupancy' | 'sharing_persons' | 'unit' | 'in_out'>;
+  ROOM_INFO: Pick<Room, 'occupancy' | 'sharing_persons' | 'unit' | 'in_out' | 'calendar_extra'>;
 }
 export interface ISource {
   code: string;

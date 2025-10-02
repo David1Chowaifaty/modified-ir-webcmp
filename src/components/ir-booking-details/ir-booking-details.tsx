@@ -529,13 +529,13 @@ export class IrBookingDetails {
     ];
   }
   private handleRoomCheckout(room: Room): boolean {
-    if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
+    if (!calendar_data.checkin_enabled || calendar_data.property.is_automatic_check_in_out) {
       return false;
     }
     return room.in_out.code === '001';
   }
   private handleRoomCheckin(room: Room): boolean {
-    if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
+    if (!calendar_data.checkin_enabled || calendar_data.property.is_automatic_check_in_out) {
       return false;
     }
     if (!room.unit) {

@@ -1,5 +1,5 @@
-import type { RatePlanDetail, RoomDetail } from '@/models/IBooking';
 import type { IMap } from '@/models/calendarData';
+import { PropertyRatePlan, PropertyRoomType } from '@/models/property-types';
 import calendar_data from '@/stores/calendar-data';
 import channels_data from '@/stores/channel.store';
 
@@ -7,7 +7,7 @@ export class IrMappingService {
   public removedMapping(ir_id: string, isRoomType: boolean) {
     let selectedChannels = [...channels_data.mappedChannels];
     if (isRoomType) {
-      const toBeRemovedRoomType = calendar_data.roomsInfo.find(room => room.id.toString() === ir_id);
+      const toBeRemovedRoomType = calendar_data.property.roomtypes.find(room => room.id.toString() === ir_id);
       selectedChannels = selectedChannels.filter(c => toBeRemovedRoomType.rateplans.find(rate_plan => rate_plan.id.toString() === c.ir_id) === undefined);
     }
     channels_data.mappedChannels = selectedChannels.filter(c => c.ir_id !== ir_id);
@@ -23,7 +23,7 @@ export class IrMappingService {
         return { hide: false, result: undefined, occupancy: undefined };
       }
 
-      const room = calendar_data.roomsInfo.find(roomInfo => roomInfo.id.toString() === mappedRoomType.ir_id);
+      const room = calendar_data.property.roomtypes.find(roomInfo => roomInfo.id.toString() === mappedRoomType.ir_id);
       if (!room) {
         throw new Error('Invalid Room type');
       }
@@ -39,7 +39,7 @@ export class IrMappingService {
       return { hide: true, result: undefined, occupancy: undefined };
     }
 
-    const parentRoom = calendar_data.roomsInfo.find(roomInfo => roomInfo.id.toString() === parentMapping.ir_id);
+    const parentRoom = calendar_data.property.roomtypes.find(roomInfo => roomInfo.id.toString() === parentMapping.ir_id);
     if (!parentRoom) {
       throw new Error('Invalid Room type');
     }
@@ -74,7 +74,7 @@ export class IrMappingService {
     if (ratePlanMapping.type !== 'rate_plan') {
       return undefined;
     }
-    const room = calendar_data.roomsInfo.find(roomInfo => roomInfo.rateplans.some(ratePlan => ratePlan.id.toString() === ratePlanMapping.ir_id));
+    const room = calendar_data.property.roomtypes.find(roomInfo => roomInfo.rateplans.some(ratePlan => ratePlan.id.toString() === ratePlanMapping.ir_id));
     if (!room) {
       return undefined;
     }
@@ -116,7 +116,7 @@ export class IrMappingService {
   // }
   public getAppropriateRooms(isRoomType: boolean, roomTypeId?: string) {
     if (isRoomType) {
-      const filteredRoomTypes = calendar_data.roomsInfo.filter(
+      const filteredRoomTypes = calendar_data.property.roomtypes.filter(
         room => channels_data.mappedChannels.find(m => m.ir_id.toString() === room.id.toString()) === undefined && room.is_active,
       );
       return filteredRoomTypes.map(room => ({ id: room.id.toString(), name: room.name, occupancy: room.occupancy_default.adult_nbr }));
@@ -128,7 +128,7 @@ export class IrMappingService {
     if (!matchingRoomType) {
       throw new Error('Invalid room type id');
     }
-    const selectedRoomType = calendar_data.roomsInfo.find(room => room.id.toString() === matchingRoomType.ir_id);
+    const selectedRoomType = calendar_data.property.roomtypes.find(room => room.id.toString() === matchingRoomType.ir_id);
     return selectedRoomType.rateplans
       .filter(rate_plan => channels_data.mappedChannels.find(r => rate_plan.id.toString() === r.ir_id) === undefined && rate_plan['is_active'])
       .map(rate_plan => ({
@@ -140,7 +140,7 @@ export class IrMappingService {
 }
 
 type RatePlanContext = {
-  room: RoomDetail;
-  ratePlan: RatePlanDetail;
+  room: PropertyRoomType;
+  ratePlan: PropertyRatePlan;
   parentChannelId?: string;
 };

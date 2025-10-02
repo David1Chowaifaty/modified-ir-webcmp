@@ -159,7 +159,7 @@ export class IrHkUser {
             error={this.errors?.mobile && !this.userInfo?.mobile}
             language={this.default_properties.language}
             token={this.default_properties.token}
-            default_country={calendar_data.country.id}
+            default_country={calendar_data.property.country.id}
             phone_prefix={this.user?.phone_prefix}
             label={locales.entries.Lcz_Mobile}
             value={this.userInfo.mobile}

@@ -43,7 +43,7 @@ export class PickupService {
   }
   public getAvailableLocations(message: string) {
     let locations: { value: number; text: string }[] = [];
-    calendar_data.pickup_service.allowed_options.forEach(option => {
+    calendar_data.property.pickup_service.allowed_options.forEach(option => {
       if (locations.filter(location => location.value === option.location.id).length === 0) {
         locations.push({
           text: message + ' ' + option.location.description,
@@ -133,7 +133,7 @@ export class PickupService {
     return Array.from({ length: total_number_of_vehicles + bonus_number }, (_, i) => startNumber + i);
   }
   private getPickUpPersonStatus(code: string) {
-    const getCodeDescription = calendar_data.pickup_service.allowed_pricing_models.find(model => model.code === code);
+    const getCodeDescription = calendar_data.property.pickup_service.allowed_pricing_models.find(model => model.code === code);
     if (!getCodeDescription) {
       return null;
     }

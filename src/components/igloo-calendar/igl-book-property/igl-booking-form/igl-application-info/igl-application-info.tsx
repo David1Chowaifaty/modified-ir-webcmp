@@ -114,7 +114,7 @@ export class IglApplicationInfo {
 
   private filterRooms(): { name: string; id: number }[] {
     const result = [];
-    if (!calendar_data.is_frontdesk_enabled) {
+    if (!calendar_data.property.is_frontdesk_enabled) {
       return result;
     }
     this.rateplanSelection.ratePlan?.assignable_units?.forEach(unit => {
@@ -209,7 +209,7 @@ export class IglApplicationInfo {
               value={this.guestInfo?.last_name}
             />
           </div>
-          {calendar_data.is_frontdesk_enabled &&
+          {calendar_data.property.is_frontdesk_enabled &&
             !isSingleUnit(this.rateplanSelection.roomtype.id) &&
             (this.bookingType === 'PLUS_BOOKING' || this.bookingType === 'ADD_ROOM' || this.bookingType === 'EDIT_BOOKING') && (
               <div class="mt-1 mt-md-0 d-flex align-items-center flex-fill">

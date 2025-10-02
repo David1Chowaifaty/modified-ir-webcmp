@@ -159,7 +159,7 @@ export class IrBookingHeader {
                 this.openDialog({ type: 'events-log' });
               }}
             ></ir-button>
-            {calendar_data.is_pms_enabled && (
+            {calendar_data.property.is_pms_enabled && (
               <ir-button
                 size="sm"
                 btn_color="outline"

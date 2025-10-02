@@ -99,7 +99,7 @@ export class IrPaymentFolio {
       await this.paymentService.AddPayment(
         {
           ...this.folioData,
-          currency: calendar_data.currency,
+          currency: calendar_data.property.currency as any,
           reference: this.folioData.reference ?? '',
           designation: this.folioData.payment_type?.description || '',
         },
@@ -267,7 +267,7 @@ export class IrPaymentFolio {
               labelStyle={'flex-grow-1 text-dark  border-theme'}
               error={this.errors?.amount && !this.folioData?.amount}
               value={this.folioData?.amount?.toString()}
-              currency={calendar_data.currency.symbol}
+              currency={calendar_data.property.currency.symbol}
               onTextChange={e => this.updateFolioData({ amount: Number(e.detail) })}
             ></ir-price-input>
           </div>

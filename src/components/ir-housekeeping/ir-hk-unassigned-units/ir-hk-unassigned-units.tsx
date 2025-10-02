@@ -85,7 +85,7 @@ export class IrHkUnassignedUnits {
         </tr>
       ));
     }
-    return calendar_data.roomsInfo.map(roomType => {
+    return calendar_data.property.roomtypes.map(roomType => {
       console.log(roomType);
       if (!roomType.is_active) {
         return null;

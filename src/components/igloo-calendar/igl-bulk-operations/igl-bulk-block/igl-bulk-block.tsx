@@ -204,11 +204,11 @@ export class IglBulkBlock {
           <div>
             {this.errors === 'rooms' && (
               <p class={'text-danger text-left smaller p-0 '} style={{ 'margin-bottom': '0.5rem' }}>
-                {calendar_data.is_vacation_rental ? locales.entries.Lcz_PlzSelectOneListing : locales.entries.Lcz_PlzSelectOneUnit}
+                {calendar_data.property.is_vacation_rental ? locales.entries.Lcz_PlzSelectOneListing : locales.entries.Lcz_PlzSelectOneUnit}
               </p>
             )}
             <ul class="room-type-list" ref={el => (this.unitSections = el)}>
-              {calendar_data.roomsInfo.map(roomType => {
+              {calendar_data.property.roomtypes.map(roomType => {
                 return (
                   <Fragment>
                     <li key={`roomTypeRow-${roomType.id}`} class={`room-type-row`}>

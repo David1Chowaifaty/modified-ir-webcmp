@@ -1,6 +1,17 @@
+import { BookingColor, PropertySchema } from '@/models/property-types';
 import calendar_data from '@/stores/calendar-data';
 import { locales } from '@/stores/locales.store';
+import { bestForeground } from '@/utils/utils';
 import axios from 'axios';
+
+const DEFAULT_BOOKING_COLORS: BookingColor[] = [
+  { color: '#F9A9FE', design: 'skew', name: '' },
+  { color: '#FFF281', design: 'skew', name: '' },
+  { color: '#6FF1EF', design: 'skew', name: '' },
+  { color: '#9BF091', design: 'skew', name: '' },
+  { color: '#C28D6B', design: 'skew', name: '' },
+  { color: '#9B84D6', design: 'skew', name: '' },
+];
 
 export class RoomService {
   public async SetAutomaticCheckInOut(props: { property_id: number; flag: boolean }) {
@@ -25,36 +36,74 @@ export class RoomService {
         throw new Error(data.ExceptionMsg);
       }
       const results = data.My_Result;
-      calendar_data.adultChildConstraints = results.adult_child_constraints;
-      calendar_data.cleaning_frequency = results.cleaning_frequency;
-      calendar_data.allowedBookingSources = results.allowed_booking_sources;
-      calendar_data.allowed_payment_methods = results.allowed_payment_methods;
-      calendar_data.currency = results.currency;
-      calendar_data.is_vacation_rental = results.is_vacation_rental;
-      calendar_data.pickup_service = results.pickup_service;
-      calendar_data.max_nights = results.max_nights;
-      calendar_data.roomsInfo = results.roomtypes;
-      calendar_data.taxes = results.taxes;
-      calendar_data.id = results.id;
-      calendar_data.country = results.country;
-      calendar_data.name = results.name;
-      calendar_data.is_automatic_check_in_out = results.is_automatic_check_in_out;
-      calendar_data.tax_statement = results.tax_statement;
-      calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
-      calendar_data.is_pms_enabled = results.is_pms_enabled;
+      // calendar_data.adultChildConstraints = results.adult_child_constraints;
+      // calendar_data.cleaning_frequency = results.cleaning_frequency;
+      // calendar_data.allowedBookingSources = results.allowed_booking_sources;
+      // calendar_data.allowed_payment_methods = results.allowed_payment_methods;
+      // calendar_data.currency = results.currency;
+      // calendar_data.is_vacation_rental = results.is_vacation_rental;
+      calendar_data.property = PropertySchema.parse(results);
+      // calendar_data.pickup_service = results.pickup_service;
+      // calendar_data.max_nights = results.max_nights;
+      // calendar_data.roomsInfo = results.roomtypes;
+      // calendar_data.taxes = results.taxes;
+      // calendar_data.id = results.id;
+      // calendar_data.country = results.country;
+      // calendar_data.name = results.name;
+      // calendar_data.is_automatic_check_in_out = results.is_automatic_check_in_out;
+      // calendar_data.tax_statement = results.tax_statement;
+      // calendar_data.is_frontdesk_enabled = results.is_frontdesk_enabled;
+      // calendar_data.is_pms_enabled = results.is_pms_enabled;
       const spitTime = results?.time_constraints?.check_out_till?.split(':');
       calendar_data.checkin_checkout_hours = {
         offset: results.city.gmt_offset,
         hour: Number(spitTime[0] || 0),
         minute: Number(spitTime[1] || 0),
       };
+      this.initializeBookingColors();
+      this.generateColorForegrounds();
       return data;
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
   }
+  private generateColorForegrounds() {
+    const data = {};
 
+    calendar_data.property.calendar_legends.forEach(legend => {
+      if (legend.design === 'skew') {
+        data[legend.color] = 'white';
+      }
+    });
+    DEFAULT_BOOKING_COLORS.forEach(d => {
+      data[d.color] = bestForeground(d.color);
+    });
+    calendar_data.colorsForegrounds = { ...data };
+  }
+  private initializeBookingColors() {
+    const calendarExtra = calendar_data.property.calendar_extra ?? {};
+    const rawColors = Array.isArray(calendarExtra?.booking_colors) && calendarExtra.booking_colors.length ? calendarExtra.booking_colors : DEFAULT_BOOKING_COLORS;
+
+    const normalized = rawColors.map(color => this.normalizeBookingColor(color));
+    this.syncCalendarExtra(normalized);
+  }
+
+  private normalizeBookingColor(color: Partial<BookingColor>): BookingColor {
+    return {
+      design: color.design || 'skew',
+      color: color.color || '#ffffff',
+      name: color.name || '',
+    };
+  }
+
+  private syncCalendarExtra(colors: BookingColor[]) {
+    const calendarExtra = calendar_data.property.calendar_extra ?? {};
+    calendar_data.property.calendar_extra = {
+      ...calendarExtra,
+      booking_colors: colors.map(color => ({ ...color })),
+    };
+  }
   public async fetchLanguage(code: string, sections: string[] = ['_PMS_FRONT']) {
     try {
       const { data } = await axios.post(`https://gateway.igloorooms.com/IRBE/Get_Exposed_Language`, { code, sections });

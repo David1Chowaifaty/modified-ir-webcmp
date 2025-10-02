@@ -115,7 +115,7 @@ export class IrUserFormPanel {
       this.updateUserField('type', '17');
     }
     this.mobileMask = {
-      mask: `{${calendar_data.country.phone_prefix}} 000000000000`,
+      mask: `{${calendar_data.property.country.phone_prefix}} 000000000000`,
       lazy: false,
       autofix: true,
       placeholderChar: '\u200B',
@@ -140,8 +140,8 @@ export class IrUserFormPanel {
         password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password,
         type: Number(this.userInfo.type),
       };
-      console.log('toValidateUserInfo', { ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.country.phone_prefix, '') });
-      await this.userSchema.parseAsync({ ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.country.phone_prefix, '') });
+      console.log('toValidateUserInfo', { ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.property.country.phone_prefix, '') });
+      await this.userSchema.parseAsync({ ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.property.country.phone_prefix, '') });
       if (this.errors) {
         this.errors = null;
       }

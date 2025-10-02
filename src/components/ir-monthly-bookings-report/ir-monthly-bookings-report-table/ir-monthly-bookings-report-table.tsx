@@ -60,14 +60,16 @@ export class IrMonthlyBookingsReportTable {
                   </td>
                   <td class="text-right">
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
-                      <p class={`p-0 m-0 ${report.last_year?.adr ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, report.adr)}</p>
-                      {report.last_year?.adr > 0 && <p class="p-0 m-0">{formatAmount(calendar_data.currency.symbol, report.last_year.adr)}</p>}
+                      <p class={`p-0 m-0 ${report.last_year?.adr ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.property.currency.symbol, report.adr)}</p>
+                      {report.last_year?.adr > 0 && <p class="p-0 m-0">{formatAmount(calendar_data.property.currency.symbol, report.last_year.adr)}</p>}
                     </div>
                   </td>
                   <td class="text-right">
                     <div class={'d-flex flex-column'} style={{ gap: '0.5rem' }}>
-                      <p class={`p-0 m-0 ${report.last_year?.rooms_revenue ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, report.rooms_revenue)}</p>
-                      {report.last_year?.rooms_revenue > 0 && <p class="p-0 m-0">{formatAmount(calendar_data.currency.symbol, report.last_year.rooms_revenue)}</p>}
+                      <p class={`p-0 m-0 ${report.last_year?.rooms_revenue ? 'font-weight-bold' : ''}`}>
+                        {formatAmount(calendar_data.property.currency.symbol, report.rooms_revenue)}
+                      </p>
+                      {report.last_year?.rooms_revenue > 0 && <p class="p-0 m-0">{formatAmount(calendar_data.property.currency.symbol, report.last_year.rooms_revenue)}</p>}
                     </div>
                   </td>
                   <td>

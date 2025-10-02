@@ -55,8 +55,8 @@ export class IrSalesByCountrySummary {
         <ir-stats-card
           icon={this.getIcon(totalRevenue, lastYearTotalRevenue)}
           cardTitle="Total Revenue"
-          value={formatAmount(calendar_data.currency.symbol, totalRevenue)}
-          subtitle={lastYearTotalRevenue ? `Last year ${formatAmount(calendar_data.currency.symbol, lastYearTotalRevenue)}` : undefined}
+          value={formatAmount(calendar_data.property.currency.symbol, totalRevenue)}
+          subtitle={lastYearTotalRevenue ? `Last year ${formatAmount(calendar_data.property.currency.symbol, lastYearTotalRevenue)}` : undefined}
         ></ir-stats-card>
       </div>
     );

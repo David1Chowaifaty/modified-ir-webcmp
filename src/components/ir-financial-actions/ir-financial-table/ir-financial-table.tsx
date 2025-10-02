@@ -56,7 +56,7 @@ export class IrFinancialTable {
                           id: -1,
                           date: moment().format('YYYY-MM-DD'),
                           amount: 120,
-                          currency: calendar_data.currency,
+                          currency: calendar_data.property.currency,
                           designation: '',
                           reference: '',
                         },

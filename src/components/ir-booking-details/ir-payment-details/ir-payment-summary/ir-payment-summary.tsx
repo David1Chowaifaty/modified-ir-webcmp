@@ -1,4 +1,4 @@
-import { Currency } from '@/models/property';
+import { Currency } from '@/models/property-types';
 import locales from '@/stores/locales.store';
 import { formatAmount } from '@/utils/utils';
 import { Component, Prop, h } from '@stencil/core';

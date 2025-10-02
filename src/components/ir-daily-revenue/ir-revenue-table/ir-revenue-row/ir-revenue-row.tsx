@@ -35,7 +35,7 @@ export class IrRevenueRow {
                 </span>
               </p>
             </div>
-            <p class="ir-revenue-row__total">{formatAmount(calendar_data.currency.symbol, total)}</p>
+            <p class="ir-revenue-row__total">{formatAmount(calendar_data.property.currency.symbol, total)}</p>
           </div>
           <div class="ir-revenue-row__details" id={this.contentId}>
             <div class="ir-revenue-row__details-inner">

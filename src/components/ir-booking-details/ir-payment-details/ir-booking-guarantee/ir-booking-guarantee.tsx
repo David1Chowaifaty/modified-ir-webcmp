@@ -45,7 +45,7 @@ export class IrBookingGuarantee {
   }
 
   private checkPaymentCode(value: string): string | null {
-    return calendar_data.allowed_payment_methods?.find(pm => pm.code === value)?.description ?? null;
+    return calendar_data.property.allowed_payment_methods?.find(pm => pm.code === value)?.description ?? null;
   }
 
   private getPaymentMethod(): string | null {

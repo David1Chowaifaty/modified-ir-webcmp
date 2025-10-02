@@ -75,10 +75,10 @@ export class IrSalesTable {
                   </td>
                   <td class="text-right">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
-                      <p class={`p-0 m-0 ${record.last_year?.revenue ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, record.revenue)}</p>
+                      <p class={`p-0 m-0 ${record.last_year?.revenue ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.property.currency.symbol, record.revenue)}</p>
                       {record.last_year?.revenue && (
                         <p class="p-0 mx-0" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
-                          {formatAmount(calendar_data.currency.symbol, record.last_year.revenue)}
+                          {formatAmount(calendar_data.property.currency.symbol, record.last_year.revenue)}
                         </p>
                       )}
                     </div>

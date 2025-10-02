@@ -50,7 +50,7 @@ export class IrHkArchive {
   }
   private setUpUnits() {
     const units = [];
-    calendar_data.roomsInfo.forEach(r => {
+    calendar_data.property.roomtypes.forEach(r => {
       r.physicalrooms.forEach(room => {
         units.push({ id: room.id, name: room.name });
       });

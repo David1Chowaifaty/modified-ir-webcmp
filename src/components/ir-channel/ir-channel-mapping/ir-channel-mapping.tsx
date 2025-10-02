@@ -1,8 +1,8 @@
 import { Component, Fragment, Host, State, h } from '@stencil/core';
 import { IrMappingService } from './ir-mapping.service';
 import channels_data, { addMapping, setMappedChannel } from '@/stores/channel.store';
-import { RoomDetail, RatePlanDetail } from '@/models/IBooking';
 import locales from '@/stores/locales.store';
+import { PropertyRatePlan, PropertyRoomType } from '@/models/property-types';
 
 @Component({
   tag: 'ir-channel-mapping',
@@ -28,12 +28,12 @@ export class IrChannelMapping {
     mappedField:
       | {
           hide: boolean;
-          result: RoomDetail;
+          result: PropertyRoomType;
           occupancy?: number;
         }
       | {
           hide: boolean;
-          result: RatePlanDetail;
+          result: PropertyRatePlan;
           occupancy?: number;
         },
     id: string,

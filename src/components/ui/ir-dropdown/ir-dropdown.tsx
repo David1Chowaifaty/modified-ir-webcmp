@@ -16,6 +16,8 @@ export class IrDropdown {
 
   @Prop({ reflect: true, mutable: true }) disabled: boolean = false;
 
+  @Prop({ reflect: true, mutable: true }) caret: boolean = true;
+
   @State() isOpen: boolean = false;
   @State() selectedOption: DropdownItem['value'];
   @State() focusedIndex: number = -1;
@@ -313,9 +315,11 @@ export class IrDropdown {
           tabindex="0"
         >
           <slot name="trigger"></slot>
-          <div class={`caret-icon ${this.disabled ? 'disabled' : ''}`}>
-            <ir-icons name={!this.isOpen ? 'angle-down' : 'angle-up'}></ir-icons>
-          </div>
+          {this.caret && (
+            <div class={`caret-icon ${this.disabled ? 'disabled' : ''}`}>
+              <ir-icons name={!this.isOpen ? 'angle-down' : 'angle-up'}></ir-icons>
+            </div>
+          )}
         </div>
         <div class="dropdown-menu" role="listbox" aria-expanded={this.isOpen.toString()}>
           <slot></slot>

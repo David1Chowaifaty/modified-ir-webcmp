@@ -13,7 +13,7 @@ import { Booking } from '@/models/booking.dto';
 export class IrPickupView {
   @Prop() booking: Booking;
   render() {
-    if (!calendar_data.pickup_service.is_enabled || !this.booking.is_editable) {
+    if (!calendar_data.property.pickup_service.is_enabled || !this.booking.is_editable) {
       return null;
     }
     return (
@@ -52,8 +52,8 @@ export class IrPickupView {
                   {locales.entries.Lcz_NbrOfVehicles}:<span class={'font-weight-normal'}> {`${this.booking.pickup_info.nbr_of_units}`}</span>
                 </p>
                 <p class={'small py-0 my-0 pickup-margin'}>
-                  {calendar_data.pickup_service.pickup_instruction.description}
-                  {calendar_data.pickup_service.pickup_cancelation_prepayment.description}
+                  {calendar_data.property.pickup_service.pickup_instruction.description}
+                  {calendar_data.property.pickup_service.pickup_cancelation_prepayment.description}
                 </p>
               </div>
             </div>

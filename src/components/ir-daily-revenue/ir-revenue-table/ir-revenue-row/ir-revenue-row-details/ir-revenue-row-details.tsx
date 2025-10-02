@@ -22,7 +22,7 @@ export class IrRevenueRowDetails {
             <div class="ir-revenue-row-detail__time">
               <span class="ir-revenue-row-detail__label">{this.payment.date}</span>
               <span class="ir-revenue-row-detail__value">{_formatTime(this.payment.hour.toString(), this.payment.minute.toString())}</span>
-              <div class="ir-revenue-row-detail__amount">{formatAmount(calendar_data.currency.symbol, this.payment.amount)}</div>
+              <div class="ir-revenue-row-detail__amount">{formatAmount(calendar_data.property.currency.symbol, this.payment.amount)}</div>
             </div>
 
             <div class="ir-revenue-row-detail__meta">
@@ -53,7 +53,7 @@ export class IrRevenueRowDetails {
             </div>
           </div>
 
-          <div class="ir-revenue-row-detail__amount">{formatAmount(calendar_data.currency.symbol, this.payment.amount)}</div>
+          <div class="ir-revenue-row-detail__amount">{formatAmount(calendar_data.property.currency.symbol, this.payment.amount)}</div>
         </div>
       </Host>
     );

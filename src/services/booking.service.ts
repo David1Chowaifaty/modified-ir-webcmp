@@ -9,6 +9,8 @@ import booking_store from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import { PaymentEntries } from '@/components/ir-booking-details/types';
 import { z } from 'zod';
+import { Currency } from '@/models/property-types';
+import { BookingSchema } from '@/models/Booking';
 
 export interface IBookingParams {
   bookedByInfoData: any;
@@ -292,7 +294,7 @@ export class BookingService {
     room_type_ids: number[];
     room_type_ids_to_update?: number[];
     rate_plan_ids?: number[];
-    currency: { id: number; code: string };
+    currency: Currency;
     is_in_agent_mode?: boolean;
     agent_id?: string | number;
   }): Promise<BookingDetails> {
@@ -303,7 +305,7 @@ export class BookingService {
         adult_nbr: adultChildCount.adult,
         child_nbr: adultChildCount.child,
         currency_ref: currency.code,
-        skip_getting_assignable_units: !calendar_data.is_frontdesk_enabled,
+        skip_getting_assignable_units: !calendar_data.property.is_frontdesk_enabled,
         is_backend: true,
       });
       if (data.ExceptionMsg !== '') {
@@ -509,6 +511,7 @@ export class BookingService {
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }
+      console.log(BookingSchema.safeParse(data.My_Result).error.issues);
       return data.My_Result;
     } catch (error) {
       console.error(error);

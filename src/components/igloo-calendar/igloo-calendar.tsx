@@ -413,7 +413,7 @@ export class IglooCalendar {
       from_date,
       to_date,
       housekeepers: [],
-      cleaning_frequency: (calendar_data.cleaning_frequency ?? housekeeping_store?.hk_criteria?.cleaning_frequencies[0])?.code,
+      cleaning_frequency: (calendar_data.property.cleaning_frequency ?? housekeeping_store?.hk_criteria?.cleaning_frequencies[0])?.code,
       dusty_window: housekeeping_store?.hk_criteria?.dusty_periods[0]?.code,
       highlight_window: housekeeping_store?.hk_criteria?.highlight_checkin_options[0]?.code,
     });
@@ -816,7 +816,9 @@ export class IglooCalendar {
         roomCategory.expanded = true;
       });
     }
-    calendar_data.roomsInfo = roomsData;
+    console.log({ roomsData });
+    //TODO check the room data
+    // calendar_data.roomsInfo = roomsData;
     this.calendarData.roomsInfo = roomsData;
   }
 

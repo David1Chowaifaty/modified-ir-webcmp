@@ -108,9 +108,9 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
   //   console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
   //   console.log(cell);
   // }
-  if (cell.booking.booking_nbr.toString() === '00553011358') {
-    console.log(cell);
-  }
+  // if (cell.booking.booking_nbr.toString() === '51614156064') {
+  //   console.log(cell);
+  // }
   const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
   const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
   const mainGuest = cell.room.sharing_persons?.find(p => p.is_main);
@@ -169,6 +169,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       sharing_persons: cell.room.sharing_persons,
       unit: cell.room.unit,
       in_out: cell.room.in_out,
+      calendar_extra: cell.room.calendar_extra,
     },
     BASE_STATUS_CODE: cell.booking.status?.code,
   };
@@ -194,7 +195,7 @@ export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_da
     if (in_out?.code === '001') {
       return bookingStatus['000'];
     } else if (in_out?.code === '002') {
-      if (!calendar_data.is_automatic_check_in_out) {
+      if (!calendar_data.property.is_automatic_check_in_out) {
         const now = moment();
         const toDate = moment(to_date, 'YYYY-MM-DD');
         const fromDate = moment(from_date, 'YYYY-MM-DD');
@@ -332,6 +333,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
         occupancy: room.occupancy,
         sharing_persons: room.sharing_persons,
         unit: room.unit,
+        calendar_extra: room.calendar_extra,
         in_out: room.in_out,
       },
       BASE_STATUS_CODE: data.status?.code,

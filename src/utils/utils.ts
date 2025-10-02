@@ -3,6 +3,7 @@ import IBooking, { ICountry, PhysicalRoomType } from '../models/IBooking';
 import { z } from 'zod';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
 import calendarData from '@/stores/calendar-data';
+import chroma from 'chroma-js';
 
 export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear: string, format: string = 'D_M_YYYY'): string {
   const dateStr = `${dayWithWeekday.split(' ')[1]} ${monthWithYear}`;
@@ -11,6 +12,15 @@ export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear:
     throw new Error('Invalid Date');
   }
   return date.format(format);
+}
+
+export function bestForeground(bgColor: string): 'black' | 'white' {
+  const bg = chroma(bgColor);
+
+  // Measure contrast against black and white
+  const contrastWithBlack = chroma.contrast(bg, '#000000');
+  const contrastWithWhite = chroma.contrast(bg, '#FFFFFF');
+  return contrastWithBlack > contrastWithWhite ? 'black' : 'white';
 }
 
 export function convertDateToTime(dayWithWeekday: string, monthWithYear: string): number {
@@ -211,7 +221,7 @@ export interface CheckInParams {
  * @returns True if check-in is allowed; otherwise, false.
  */
 export function canCheckIn({ from_date, to_date, isCheckedIn }: CheckInParams): boolean {
-  if (!calendarData.checkin_enabled || calendarData.is_automatic_check_in_out) {
+  if (!calendarData.checkin_enabled || calendarData.property.is_automatic_check_in_out) {
     return false;
   }
   if (isCheckedIn) {

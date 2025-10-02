@@ -63,7 +63,7 @@ export class IrPaymentDetails {
       id: -1,
       date: moment().format('YYYY-MM-DD'),
       amount: null,
-      currency: calendar_data.currency,
+      currency: calendar_data.property.currency as any,
       designation: null,
       reference: null,
     };

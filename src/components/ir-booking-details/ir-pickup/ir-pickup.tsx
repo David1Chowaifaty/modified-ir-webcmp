@@ -3,10 +3,10 @@ import locales from '@/stores/locales.store';
 import { Component, Element, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 import { TPickupData } from './types';
 import moment from 'moment';
-import { IAllowedOptions } from '@/models/calendarData';
 import { PickupService } from './pickup.service';
 import { IBookingPickupInfo } from '@/models/booking.dto';
 import { MaskedRange } from 'imask';
+import { AllowedOption } from '@/models/property-types';
 
 @Component({
   tag: 'ir-pickup',
@@ -22,7 +22,7 @@ export class IrPickup {
   @Prop() bookingDates: { from: string; to: string };
 
   @State() isLoading = false;
-  @State() allowedOptionsByLocation: IAllowedOptions[] = [];
+  @State() allowedOptionsByLocation: AllowedOption[] = [];
   @State() pickupData: TPickupData = {
     location: -1,
     flight_details: '',
@@ -69,7 +69,7 @@ export class IrPickup {
     if (this.defaultPickupData) {
       const transformedData = this.pickupService.transformDefaultPickupData(this.defaultPickupData);
       this.vehicleCapacity = this.pickupService.getNumberOfVehicles(transformedData.selected_option.vehicle.capacity, this.numberOfPersons);
-      this.allowedOptionsByLocation = calendar_data.pickup_service.allowed_options.filter(option => option.location.id === transformedData.location);
+      this.allowedOptionsByLocation = calendar_data.property.pickup_service.allowed_options.filter(option => option.location.id === transformedData.location);
       this.pickupData = { ...transformedData };
     }
     this.pickupSchema = this.pickupService.createPickupSchema(this.bookingDates.from, this.bookingDates.to);
@@ -82,7 +82,7 @@ export class IrPickup {
       this.updatePickupData('location', -1);
     }
     if (value !== '') {
-      this.allowedOptionsByLocation = calendar_data.pickup_service.allowed_options.filter(option => option.location.id.toString() === value);
+      this.allowedOptionsByLocation = calendar_data.property.pickup_service.allowed_options.filter(option => option.location.id.toString() === value);
       let locationChoice = this.allowedOptionsByLocation[0];
       if (!locationChoice) {
         return;
@@ -137,7 +137,7 @@ export class IrPickup {
       };
       return;
     }
-    let locationChoice = calendar_data.pickup_service.allowed_options.find(option => option.location.id === +this.pickupData.location && option.vehicle.code === e.detail);
+    let locationChoice = calendar_data.property.pickup_service.allowed_options.find(option => option.location.id === +this.pickupData.location && option.vehicle.code === e.detail);
     if (!locationChoice) {
       return;
     }

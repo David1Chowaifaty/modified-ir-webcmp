@@ -1,12 +1,9 @@
 import axios from 'axios';
 import { Payment } from '@/components/ir-booking-details/types';
+import { Currency } from '@/models/property-types';
 export interface IPaymentAction {
   amount: number;
-  currency: {
-    code: string;
-    id: number;
-    symbol: string;
-  };
+  currency: Currency;
   due_on: string;
   reason: string;
   pay_type_code: string;

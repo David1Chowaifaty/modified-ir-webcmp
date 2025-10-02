@@ -43,7 +43,7 @@ export class ChannelService {
           title: channels_data.channel_settings.hotel_title,
           is_active: channels_data.is_active,
           channel: { id: channels_data.selectedChannel.id, name: channels_data.selectedChannel.name },
-          property: { id: calendar_data.id, name: calendar_data.name },
+          property: { id: calendar_data.property.id, name: calendar_data.property.name },
           map: channels_data.mappedChannels,
           is_remove,
         };

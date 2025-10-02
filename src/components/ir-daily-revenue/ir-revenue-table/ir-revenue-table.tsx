@@ -107,7 +107,7 @@ export class IrRevenueTable {
                   <div key={`method_${methodKey}`}>
                     <div class="revenue-table__method_header">
                       <p>{this.payMethodObj[methodKey] ?? methodKey}</p>
-                      <p>{formatAmount(calendar_data.currency.symbol, total)}</p>
+                      <p>{formatAmount(calendar_data.property.currency.symbol, total)}</p>
                     </div>
                     {Array.from(byType.entries()).map(([typeKey, list]) => {
                       const groupName = PAYMENT_TYPES_WITH_METHOD.includes(typeKey) ? `${this.payTypesObj[typeKey] ?? typeKey}` : this.payTypesObj[typeKey] ?? typeKey;

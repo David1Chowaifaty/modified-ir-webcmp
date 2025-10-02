@@ -1,9 +1,10 @@
 import { z, ZodError, ZodIssueCode } from 'zod';
-import { IAllowedOptions, ICurrency, IPickupCurrency } from './calendarData';
+import { IAllowedOptions, IPickupCurrency } from './calendarData';
 import { TSourceOption } from './igl-book-property';
 import { ICountry } from './IBooking';
 import moment from 'moment';
 import { IHouseKeepers } from './housekeeping';
+import { Currency } from './property-types';
 
 interface IDType {
   code: string;
@@ -344,7 +345,7 @@ export interface IPayment {
   id: number | null;
   date: string;
   amount: number;
-  currency: ICurrency;
+  currency: Currency;
   designation: string;
   reference: string;
   book_nbr?: string;
@@ -386,12 +387,6 @@ export interface DateTime {
   date: string;
   hour: number;
   minute: number;
-}
-
-export interface Currency {
-  code: string;
-  id: number;
-  symbol: string;
 }
 
 export interface Guest {
@@ -510,6 +505,7 @@ export interface Room {
   days: Day[];
   applicable_policies: ExposedApplicablePolicy[];
   from_date: string;
+  calendar_extra: string;
   guest: Guest;
   occupancy_default: number;
   notes: string | null;

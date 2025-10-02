@@ -13,7 +13,14 @@ export class IrInterceptor {
   /**
    * List of endpoint paths that should trigger loader logic and OTP handling.
    */
-  @Prop({ reflect: true }) handledEndpoints = ['/Get_Exposed_Calendar', '/ReAllocate_Exposed_Room', '/Get_Exposed_Bookings', '/UnBlock_Exposed_Unit'];
+  @Prop({ reflect: true }) handledEndpoints = [
+    '/Get_Exposed_Calendar',
+    '/ReAllocate_Exposed_Room',
+    '/Get_Exposed_Bookings',
+    '/UnBlock_Exposed_Unit',
+    '/Set_Property_Calendar_Extra',
+    '/Set_Room_Calendar_Extra',
+  ];
 
   /**
    * List of endpoints for which to suppress toast messages.

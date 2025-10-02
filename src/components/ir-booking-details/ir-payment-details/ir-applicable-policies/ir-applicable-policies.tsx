@@ -208,7 +208,10 @@ export class IrApplicablePolicies {
       }
       return `No payment required ${label}`;
     }
-    return `${cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} ${formatAmount(calendar_data.currency.symbol, Math.abs(cancelation_penality_as_if_today))} ${label}`;
+    return `${cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} ${formatAmount(
+      calendar_data.property.currency.symbol,
+      Math.abs(cancelation_penality_as_if_today),
+    )} ${label}`;
   }
 
   render() {
@@ -225,7 +228,9 @@ export class IrApplicablePolicies {
               <div class="applicable-policies__guarantee-info">
                 <p class="applicable-policies__guarantee-date">{moment(this.booking.booked_on.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
                 <p class="applicable-policies__guarantee-amount">
-                  <span class="px-1">{formatAmount(calendar_data.currency.symbol, remainingGuaranteeAmount < 0 ? Math.abs(remainingGuaranteeAmount) : this.guaranteeAmount)}</span>
+                  <span class="px-1">
+                    {formatAmount(calendar_data.property.currency.symbol, remainingGuaranteeAmount < 0 ? Math.abs(remainingGuaranteeAmount) : this.guaranteeAmount)}
+                  </span>
                 </p>
                 <p class="applicable-policies__guarantee-label">Guarantee {remainingGuaranteeAmount < 0 ? 'balance' : ''}</p>
               </div>
@@ -238,8 +243,7 @@ export class IrApplicablePolicies {
                     onClickHandler={() => {
                       this.generatePayment.emit({
                         amount: Math.abs(remainingGuaranteeAmount),
-
-                        currency: calendar_data.currency,
+                        currency: calendar_data.property.currency,
                         due_on: moment().format('YYYY-MM-DD'),
                         pay_type_code: null,
                         reason: '',
@@ -283,7 +287,7 @@ export class IrApplicablePolicies {
                           <p class="applicable-policies__bracket-dates">
                             {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>} {rightLabel}
                           </p>
-                          <p class="applicable-policies__amount">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</p>
+                          <p class="applicable-policies__amount">{formatAmount(calendar_data.property.currency.symbol, bracket.gross_amount)}</p>
 
                           <p class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</p>
                         </div>
@@ -307,7 +311,7 @@ export class IrApplicablePolicies {
                                 {rightLabel}
                               </td>
 
-                              <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</td>
+                              <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.property.currency.symbol, bracket.gross_amount)}</td>
 
                               <td class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</td>
                             </tr>

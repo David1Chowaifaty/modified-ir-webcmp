@@ -5,6 +5,7 @@
   z-index: 1000;
   width: 100%;
   max-height: 300px;
+  min-width: var(--ir-dropdown-menu-min-width, 11rem) !important;
   overflow-y: auto;
 }
 

@@ -88,7 +88,7 @@ export class IrHousekeeping {
       }
 
       await Promise.all(requests);
-      this.selectedCleaningFrequency = calendar_data.cleaning_frequency?.code;
+      this.selectedCleaningFrequency = calendar_data.property.cleaning_frequency?.code;
     } catch (error) {
       console.error(error);
     } finally {
@@ -121,7 +121,7 @@ export class IrHousekeeping {
         property_id: housekeeping_store.default_properties.property_id,
         code: this.selectedCleaningFrequency,
       });
-      calendar_data.cleaning_frequency = { code: this.selectedCleaningFrequency, description: '' };
+      calendar_data.property.cleaning_frequency = { code: this.selectedCleaningFrequency, description: '' };
       this.toast.emit({
         position: 'top-right',
         title: 'Saved Successfully',
@@ -137,7 +137,7 @@ export class IrHousekeeping {
     if (this.isLoading) {
       return <ir-loading-screen></ir-loading-screen>;
     }
-    console.log(calendar_data.cleaning_frequency);
+    console.log(calendar_data.property.cleaning_frequency);
     return (
       <Host>
         <ir-interceptor></ir-interceptor>
@@ -150,7 +150,7 @@ export class IrHousekeeping {
               <p class="my-0 py-0 mr-1">{locales.entries.Lcz_CheckInOutGuestsAutomatically}</p>
               <ir-select
                 showFirstOption={false}
-                selectedValue={calendar_data.is_automatic_check_in_out ? 'auto' : 'manual'}
+                selectedValue={calendar_data.property.is_automatic_check_in_out ? 'auto' : 'manual'}
                 onSelectChange={e => this.saveAutomaticCheckInCheckout(e)}
                 data={[
                   { text: locales.entries.Lcz_YesAsPerPropertyPolicy, value: 'auto' },
@@ -185,7 +185,7 @@ export class IrHousekeeping {
             onConfirmModal={this.saveCleaningFrequency.bind(this)}
             iconAvailable={true}
             onCancelModal={() => {
-              this.selectedCleaningFrequency = calendar_data.cleaning_frequency?.code;
+              this.selectedCleaningFrequency = calendar_data.property.cleaning_frequency?.code;
             }}
             icon="ft-alert-triangle danger h1"
             leftBtnText={locales.entries.Lcz_Cancel}

@@ -125,6 +125,7 @@ export class IglBookingEvent {
         ...this.bookingEvent,
         channel_booking_nbr,
         booking: data,
+        ROOM_INFO: otherBookingData.ROOM_INFO,
         DEPARTURE_TIME: otherBookingData.DEPARTURE_TIME,
         PHONE: otherBookingData.PHONE,
         PHONE_PREFIX: otherBookingData.PHONE_PREFIX,
@@ -426,11 +427,11 @@ export class IglBookingEvent {
           return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         } else {
           const rateplan = (() => {
-            const roomType = calendar_data.roomsInfo.find(rt => rt.id === this.bookingEvent.RATE_TYPE);
+            const roomType = calendar_data.property.roomtypes.find(rt => rt.id === this.bookingEvent.RATE_TYPE);
             return roomType?.rateplans?.find(rp => rp.id === this.bookingEvent.RATE_PLAN_ID);
           })();
 
-          const newRoomType = calendar_data.roomsInfo.find(rt => rt.id === targetRT);
+          const newRoomType = calendar_data.property.roomtypes.find(rt => rt.id === targetRT);
           const mealPlan = newRoomType.rateplans.find(rp => rp.meal_plan.code === rateplan.meal_plan.code);
           return {
             description: locales.entries.Lcz_SameRatesWillBeKept + '.',
@@ -879,6 +880,11 @@ export class IglBookingEvent {
     let legend = this.getEventLegend();
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
+
+    const backgroundColor = this.bookingEvent.ROOM_INFO?.calendar_extra
+      ? JSON.parse(this.bookingEvent.ROOM_INFO.calendar_extra)?.booking_color?.color ?? legend.color
+      : legend.color;
+    const color = calendar_data.colorsForegrounds?.[backgroundColor] ?? 'white';
     // console.log(this.bookingEvent.BOOKING_NUMBER === '46231881' ? this.bookingEvent : '');
     return (
       <Host
@@ -899,14 +905,14 @@ export class IglBookingEvent {
             this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
             'border border-dark ota-booking-event'
           }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
-          style={{ 'backgroundColor': legend.color, '--ir-event-bg': legend.color }}
+          style={{ 'backgroundColor': backgroundColor, '--ir-event-bg': backgroundColor }}
           onTouchStart={event => this.startDragging(event, 'move')}
           onMouseDown={event => this.startDragging(event, 'move')}
         ></div>
         {noteNode ? <div class="legend_circle noteIcon" style={{ backgroundColor: noteNode.color }}></div> : null}
         {balanceNode ? <div class="legend_circle balanceIcon" style={{ backgroundColor: balanceNode.color }}></div> : null}
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
-        <div class="bookingEventTitle" onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
+        <div class="bookingEventTitle" style={{ color }} onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
           {this.getBookedBy()}
           {this.renderEventBookingNumber()}
         </div>

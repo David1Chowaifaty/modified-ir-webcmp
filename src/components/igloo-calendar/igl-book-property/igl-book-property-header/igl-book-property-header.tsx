@@ -270,7 +270,7 @@ export class IglBookPropertyHeader {
           </fieldset>
           {!this.isEventType('EDIT_BOOKING') && this.getAdultChildConstraints()}
         </div>
-        <p class="text-right mt-1 message-label">{calendar_data.tax_statement}</p>
+        <p class="text-right mt-1 message-label">{calendar_data.property.tax_statement}</p>
       </Host>
     );
   }

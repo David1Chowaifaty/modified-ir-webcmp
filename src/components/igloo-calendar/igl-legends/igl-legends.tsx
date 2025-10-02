@@ -1,5 +1,8 @@
+import { BookingColor } from '@/models/property-types';
+import { PropertyService } from '@/services/property.service';
+import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'igl-legends',
@@ -9,8 +12,83 @@ import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 export class IglLegends {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() legendData: { [key: string]: any };
+  private propertyService = new PropertyService();
+
+  @State() bookingColors: BookingColor[] = [];
+  @State() saveState: 'idle' | 'saving' | 'saved' | 'error' = 'idle';
+  @State() saveError?: string;
+
+  private saveTimeout?: number;
+
+  disconnectedCallback() {
+    if (this.saveTimeout) {
+      clearTimeout(this.saveTimeout);
+    }
+  }
+
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
+  }
+
+  private syncCalendarExtra(colors: BookingColor[]) {
+    const calendarExtra = calendar_data.property.calendar_extra ?? {};
+    calendar_data.property.calendar_extra = {
+      ...calendarExtra,
+      booking_colors: colors.map(color => ({ ...color })),
+    };
+  }
+
+  private get propertyId(): number | null {
+    return calendar_data.property?.id ?? calendar_data.property.id ?? null;
+  }
+
+  private updateBookingColor(index: number, patch: Partial<BookingColor>) {
+    this.bookingColors = this.bookingColors.map((color, idx) => (idx === index ? { ...color, ...patch } : color));
+    this.syncCalendarExtra(this.bookingColors);
+    if (this.saveState === 'saved') {
+      this.saveState = 'idle';
+    }
+  }
+
+  private async persistBookingColors() {
+    const propertyId = this.propertyId;
+    if (!propertyId) {
+      return;
+    }
+
+    if (this.saveState === 'saving') {
+      return;
+    }
+
+    this.saveState = 'saving';
+    this.saveError = undefined;
+
+    try {
+      await this.propertyService.setPropertyCalendarExtra({
+        property_id: propertyId,
+        value: JSON.stringify(calendar_data.property.calendar_extra),
+      });
+      this.saveState = 'saved';
+      if (this.saveTimeout) {
+        clearTimeout(this.saveTimeout);
+      }
+      this.saveTimeout = window.setTimeout(() => {
+        this.saveState = 'idle';
+        this.saveTimeout = undefined;
+      }, 2000);
+    } catch (error) {
+      this.saveState = 'error';
+      this.saveError = error instanceof Error ? error.message : String(error);
+    }
+  }
+
+  private handleNameInput(index: number, event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.updateBookingColor(index, { name: value });
+  }
+
+  private handleBlur() {
+    this.persistBookingColors();
   }
 
   render() {
@@ -34,7 +112,6 @@ export class IglLegends {
             <div class="mt-2 pl-1">
               <table>
                 {this.legendData.map(legendInfo => {
-                  console.log(legendInfo);
                   return (
                     <tr key={`legend_${legendInfo.id}`} class="legendRow ">
                       <td>
@@ -58,6 +135,25 @@ export class IglLegends {
                       </td>
                       <td>
                         <span class="font-small-3">{legendInfo.name}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {this.bookingColors.map((legendInfo, index) => {
+                  const previewClass = `legend_${legendInfo.design}`;
+                  return (
+                    <tr key={`legend_custom_${index}`} class="legendRow legendRow-editor">
+                      <td class="BookingColorCell">
+                        <div class={previewClass} style={{ backgroundColor: legendInfo.color }}></div>
+                      </td>
+                      <td class="legendDetailsCell">
+                        <input
+                          class="legendTextarea border-0"
+                          value={legendInfo.name}
+                          placeholder="Reason for using this color"
+                          onInput={event => this.handleNameInput(index, event)}
+                          onBlur={() => this.handleBlur()}
+                        ></input>
                       </td>
                     </tr>
                   );
@@ -93,6 +189,7 @@ export class IglLegends {
                   <div class="legendCal br-s br-bt  font-weight-bold total-availability">20</div>
                   <div class="highphenLegend">{locales.entries.Lcz_TotalAvailability}</div>
                 </div>
+
                 {/* <div class="legendRow align-items-center">
                   <div class="legendCal br-s br-bt font-small-2">15</div>
                   <div class="highphenLegend">

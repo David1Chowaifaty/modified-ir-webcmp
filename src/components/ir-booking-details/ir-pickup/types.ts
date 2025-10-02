@@ -1,4 +1,4 @@
-import { IAllowedOptions, IPickupCurrency } from '@/models/calendarData';
+import { AllowedOption } from '@/models/property-types';
 
 export type TPickupData = {
   location: number;
@@ -6,10 +6,10 @@ export type TPickupData = {
   due_upon_booking: string;
   number_of_vehicles: number;
   vehicle_type_code: string;
-  currency: IPickupCurrency;
+  currency: AllowedOption['currency'];
   arrival_time: string;
   arrival_date: string;
-  selected_option: IAllowedOptions;
+  selected_option: AllowedOption;
 };
 
 export type TDueParams = {

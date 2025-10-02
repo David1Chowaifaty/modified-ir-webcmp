@@ -140,10 +140,10 @@ export function updateTaskList() {
 }
 
 function getTaskList(): number[] {
-  if (!calendar_data.roomsInfo) {
+  if (!calendar_data.property.roomtypes) {
     return defaultTasksList;
   }
-  const totalRooms = calendar_data.roomsInfo.length;
+  const totalRooms = calendar_data.property.roomtypes.length;
   if (totalRooms <= 10) {
     return defaultTasksList;
   }

@@ -249,7 +249,7 @@ export class IrRoom {
       if (!this.room.smoking_option) {
         return null;
       }
-      const currRT = calendar_data.roomsInfo.find(rt => rt.id === this.room.roomtype.id);
+      const currRT = calendar_data.property.roomtypes.find(rt => rt.id === this.room.roomtype.id);
       if (currRT) {
         const smoking_option = currRT['smoking_option']?.allowed_smoking_options;
         if (smoking_option) {
@@ -356,7 +356,7 @@ export class IrRoom {
               to_date={this.room.to_date}
               showDateDifference={false}
             ></ir-date-view>
-            {!isSingleUnit(this.room.roomtype.id) && calendar_data.is_frontdesk_enabled && this.room.unit && (
+            {!isSingleUnit(this.room.roomtype.id) && calendar_data.property.is_frontdesk_enabled && this.room.unit && (
               <div class={'d-flex justify-content-center align-items-center'}>
                 <ir-tooltip message={(this.room.unit as IUnit).name} customSlot>
                   <span slot="tooltip-trigger" class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>
@@ -432,7 +432,7 @@ export class IrRoom {
                   {this.booking.is_direct ? (
                     <Fragment>
                       {(() => {
-                        const filtered_data = calendar_data.taxes.filter(tx => tx.pct > 0);
+                        const filtered_data = calendar_data.property.taxes.filter(tx => tx.pct > 0);
                         return filtered_data.map(d => {
                           return (
                             <tr>

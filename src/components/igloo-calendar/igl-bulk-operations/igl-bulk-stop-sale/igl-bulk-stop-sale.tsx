@@ -120,7 +120,7 @@ export class IglBulkStopSale {
       const prevDisabledCells = new Map(calendar_dates.disabled_cells);
 
       // Caches
-      const roomsInfoById = new Map(calendar_data.roomsInfo.map((rt, i) => [rt.id, { roomType: rt, index: i }]));
+      const roomsInfoById = new Map(calendar_data.property.roomtypes.map((rt, i) => [rt.id, { roomType: rt, index: i }]));
       const dayIndexByValue = new Map(calendar_dates.days.map((day, i) => [day.value, i]));
       const rateByRoomTypeAndDate = new Map<string, any>();
 
@@ -311,7 +311,7 @@ export class IglBulkStopSale {
           <div>
             {this.errors === 'rooms' && (
               <p class={'text-danger text-left smaller p-0 '} style={{ 'margin-bottom': '0.5rem' }}>
-                {calendar_data.is_vacation_rental ? locales.entries.Lcz_PlzSelectOneListing : locales.entries.Lcz_PlzSelectOneUnit}
+                {calendar_data.property.is_vacation_rental ? locales.entries.Lcz_PlzSelectOneListing : locales.entries.Lcz_PlzSelectOneUnit}
               </p>
             )}
             <table ref={el => (this.unitSections = el)}>
@@ -322,8 +322,8 @@ export class IglBulkStopSale {
                 </tr>
               </thead>
               <tbody>
-                {calendar_data.roomsInfo.map((roomType, i) => {
-                  const row_style = i === calendar_data.roomsInfo.length - 1 ? '' : 'pb-1';
+                {calendar_data.property.roomtypes.map((roomType, i) => {
+                  const row_style = i === calendar_data.property.roomtypes.length - 1 ? '' : 'pb-1';
                   return (
                     <tr key={roomType.id}>
                       <td class={`choice-row ${row_style}`}>
