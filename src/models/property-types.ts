@@ -117,8 +117,8 @@ export const LocalizableSchema = z.object({
 export type Localizable = z.infer<typeof LocalizableSchema>;
 
 export const OptionSchema = z.object({
-  code: z.string(),
-  description: z.string(),
+  code: z.string().nullable(),
+  description: z.string().nullable(),
 });
 export type Option = z.infer<typeof OptionSchema>;
 
@@ -176,16 +176,16 @@ export type Amenity = z.infer<typeof AmenitySchema>;
 
 export const ExtraInfoSchema = z.object({
   key: z.string(),
-  value: z.string(),
+  value: z.string().nullable(),
 });
 export type ExtraInfo = z.infer<typeof ExtraInfoSchema>;
 
 export const DescriptionSchema = z.object({
-  food_and_beverage: z.string(),
-  important_info: z.string(),
-  location_and_intro: z.string(),
-  non_standard_conditions: z.string(),
-  rooming: z.string(),
+  food_and_beverage: z.string().nullable(),
+  important_info: z.string().nullable(),
+  location_and_intro: z.string().nullable(),
+  non_standard_conditions: z.string().nullable(),
+  rooming: z.string().nullable(),
 });
 export type Description = z.infer<typeof DescriptionSchema>;
 
@@ -258,22 +258,22 @@ export const TaxSchema = z.object({
 export type Tax = z.infer<typeof TaxSchema>;
 
 export const TimeConstraintsSchema = z.object({
-  booking_cutoff: z.string(),
-  check_in_from: z.string(),
-  check_in_till: z.string(),
-  check_out_till: z.string(),
+  booking_cutoff: z.string().nullable(),
+  check_in_from: z.string().nullable(),
+  check_in_till: z.string().nullable(),
+  check_out_till: z.string().nullable(),
 });
 export type TimeConstraints = z.infer<typeof TimeConstraintsSchema>;
 
 export const PropertyImageSchema = z.object({
-  thumbnail: z.string(),
+  thumbnail: z.string().nullable(),
   tooltip: z.string().nullable(),
-  url: z.string(),
+  url: z.string().nullable(),
 });
 export type PropertyImage = z.infer<typeof PropertyImageSchema>;
 
 export const RoomImageSchema = z.object({
-  thumbnail: z.string(),
+  thumbnail: z.string().nullable(),
   tooltip: z.string(),
   url: z.string(),
 });
@@ -404,7 +404,7 @@ export const PropertyRoomTypeSchema = z.object({
   description: z.string(),
   exposed_inventory: z.null(),
   id: z.number(),
-  images: z.array(RoomImageSchema),
+  images: z.array(RoomImageSchema).nullable(),
   inventory: z.null(),
   is_active: z.boolean(),
   is_available_to_book: z.null(),
@@ -438,14 +438,14 @@ export const AllowedPaymentMethodSchema = z.object({
 export type AllowedPaymentMethod = z.infer<typeof AllowedPaymentMethodSchema>;
 
 export const PickupServiceSchema = z.object({
-  allowed_locations: z.array(AllowedLocationSchema),
-  allowed_options: z.array(AllowedOptionSchema),
-  allowed_pricing_models: z.array(OptionSchema),
-  allowed_vehicle_types: z.array(VehicleSchema),
+  allowed_locations: z.array(AllowedLocationSchema).nullable(),
+  allowed_options: z.array(AllowedOptionSchema).nullable(),
+  allowed_pricing_models: z.array(OptionSchema).nullable(),
+  allowed_vehicle_types: z.array(VehicleSchema).nullable(),
   is_enabled: z.boolean(),
-  is_not_allowed_on_same_day: z.boolean(),
-  pickup_cancelation_prepayment: OptionSchema,
-  pickup_instruction: OptionSchema,
+  is_not_allowed_on_same_day: z.boolean().nullable(),
+  pickup_cancelation_prepayment: OptionSchema.nullable(),
+  pickup_instruction: OptionSchema.nullable(),
 });
 export type PickupService = z.infer<typeof PickupServiceSchema>;
 
@@ -502,27 +502,41 @@ export const BookingColorSchema = z.object({
 
 export type BookingColor = z.infer<typeof BookingColorSchema>;
 
+const CalendarExtraSchema = z.object({
+  booking_colors: z.array(BookingColorSchema),
+});
+export type CalendarExtra = z.infer<typeof CalendarExtraSchema>;
+
 export const PropertySchema = z.object({
   address: z.string(),
   adult_child_constraints: AdultChildConstraintsSchema,
   affiliates: z.array(z.any()),
-  agents: z.array(AgentSchema),
+  agents: z.array(AgentSchema).nullable(),
   allowed_booking_sources: z.array(AllowedBookingSourceSchema),
   allowed_cards: z.array(AllowedCardSchema),
   allowed_payment_methods: z.array(AllowedPaymentMethodSchema),
   amenities: z.array(AmenitySchema),
   aname: z.string(),
-  area: z.string(),
+  area: z.string().nullable(),
   baby_cot_offering: BabyCotOfferingSchema,
   be_listing_mode: z.string(),
-  calendar_extra: z.preprocess(
-    val => (typeof val === 'string' ? JSON.parse(val) : val),
-    z
-      .object({
-        booking_colors: z.array(BookingColorSchema),
-      })
-      .nullable(),
-  ),
+  calendar_extra: z.preprocess(val => {
+    // treat undefined, null, empty string, or literal "null" as null
+    if (val == null || val === '' || val === 'null') return null;
+
+    if (typeof val === 'string') {
+      try {
+        return JSON.parse(val);
+      } catch {
+        // if it can't be parsed, let validation fail by returning the original string
+        // (or return null if you prefer to coerce invalid strings to null)
+        return val;
+      }
+    }
+
+    // already an object → validate it as-is
+    return val;
+  }, CalendarExtraSchema.nullable()),
   calendar_legends: z.array(PropertyCalendarLegendSchema),
   city: CitySchema,
   cleaning_frequency: OptionSchema,
@@ -532,7 +546,7 @@ export const PropertySchema = z.object({
   description: DescriptionSchema,
   extra_info: z.array(ExtraInfoSchema),
   id: z.number(),
-  images: z.array(PropertyImageSchema),
+  images: z.array(PropertyImageSchema).nullable(),
   internet_offering: InternetOfferingSchema,
   is_automatic_check_in_out: z.boolean(),
   is_be_enabled: z.boolean(),
@@ -549,7 +563,7 @@ export const PropertySchema = z.object({
   pets_acceptance: PetsAcceptanceSchema,
   phone: z.string(),
   pickup_service: PickupServiceSchema.nullable(),
-  postal: z.null(),
+  postal: z.string().nullable(),
   privacy_policy: z.string(),
   promotions: z.array(z.any()),
   registered_name: z.string(),
@@ -557,11 +571,11 @@ export const PropertySchema = z.object({
   social_media: z.array(SocialMediaSchema),
   sources: z.array(OptionSchema),
   space_theme: SpaceThemeSchema,
-  tags: z.array(ExtraInfoSchema),
+  tags: z.array(ExtraInfoSchema).nullable(),
   tax_nbr: z.string(),
   tax_statement: z.string(),
   taxation_strategy: OptionSchema,
   taxes: z.array(TaxSchema),
-  time_constraints: TimeConstraintsSchema,
+  time_constraints: TimeConstraintsSchema.nullable(),
 });
 export type Property = z.infer<typeof PropertySchema>;
