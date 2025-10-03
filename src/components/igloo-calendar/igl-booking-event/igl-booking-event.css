@@ -12,8 +12,8 @@
   border-radius: 4px;
   transform: skewX(-22deg);
 }
-
-.bookingEventBase.skewedLeft::before {
+.bookingEventBase.skewedLeft::before,
+.bookingEventBase.skewedRight::before {
   content: '';
   position: absolute;
   top: 0px;
@@ -22,24 +22,17 @@
   width: 50%;
   height: 100%;
   background-color: var(--ir-event-bg);
+  border-radius: 4px;
+}
+.bookingEventBase.skewedLeft::before {
   transform-origin: right;
   transform: skewX(22deg);
-  border-radius: 4px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 .bookingEventBase.skewedRight::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: -4px;
-  width: 50%;
-  height: 100%;
-  background-color: var(--ir-event-bg);
   transform-origin: left;
   transform: skewX(22deg);
-  border-radius: 4px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -53,9 +46,6 @@
   height: 20px;
   left: -4px;
 }
-.ota-booking-event {
-  border-width: var(--ota-bar-width) !important;
-}
 .bookingEventBase.border.skewedRight::before {
   border: var(--ota-bar-width) solid #424242;
   border-left: 0;
@@ -66,11 +56,30 @@
   height: 20px;
   right: -4px;
 }
+.bookingEventBase.stripped-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  /* clean, seamless repeating tile */
+  --stripe-period: 20px; /* tune density here */
+  background: repeating-linear-gradient(
+    45deg,
+    var(--ir-event-bg) 0,
+    var(--ir-event-bg) calc(var(--stripe-period) / 2),
+    var(--ir-event-bg-stripe-color) calc(var(--stripe-period) / 2),
+    var(--ir-event-bg-stripe-color) var(--stripe-period)
+  );
+  backface-visibility: hidden;
+}
 .bookingEvent {
   cursor: pointer;
 }
 .bookingEventBase {
   cursor: pointer;
+}
+.ota-booking-event {
+  border-width: var(--ota-bar-width) !important;
 }
 .bookingEventHiddenBase {
   position: absolute;

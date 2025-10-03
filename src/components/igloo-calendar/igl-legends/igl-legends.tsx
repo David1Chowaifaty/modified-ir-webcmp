@@ -43,8 +43,8 @@ export class IglLegends {
   }
 
   private updateBookingColor(index: number, patch: Partial<BookingColor>) {
-    this.bookingColors = this.bookingColors.map((color, idx) => (idx === index ? { ...color, ...patch } : color));
-    this.syncCalendarExtra(this.bookingColors);
+    const bookingColors = calendar_data.property.calendar_extra?.booking_colors.map((color, idx) => (idx === index ? { ...color, ...patch } : color));
+    this.syncCalendarExtra(bookingColors);
     if (this.saveState === 'saved') {
       this.saveState = 'idle';
     }
@@ -82,8 +82,7 @@ export class IglLegends {
     }
   }
 
-  private handleNameInput(index: number, event: Event) {
-    const value = (event.target as HTMLInputElement).value;
+  private handleNameInput(index: number, value: string) {
     this.updateBookingColor(index, { name: value });
   }
 
@@ -93,7 +92,7 @@ export class IglLegends {
 
   render() {
     return (
-      <Host class="legendContainer pr-1 text-left">
+      <Host class="legendContainer pr-1 text-left pb-4">
         <div class={'w-full'}>
           <div class={'w-full'}>
             <div class="stickyHeader pt-1 ">
@@ -139,21 +138,32 @@ export class IglLegends {
                     </tr>
                   );
                 })}
-                {this.bookingColors.map((legendInfo, index) => {
+                <tr>
+                  <td colSpan={2}>
+                    <hr />
+                  </td>
+                </tr>
+                <tr>
+                  <th colSpan={2} class="pb-1">
+                    Use your own colors
+                  </th>
+                </tr>
+                {calendar_data.property.calendar_extra?.booking_colors.map((legendInfo, index) => {
                   const previewClass = `legend_${legendInfo.design}`;
                   return (
-                    <tr key={`legend_custom_${index}`} class="legendRow legendRow-editor">
-                      <td class="BookingColorCell">
+                    <tr key={`legend_${index}`} class="legendRow ">
+                      <td>
                         <div class={previewClass} style={{ backgroundColor: legendInfo.color }}></div>
                       </td>
                       <td class="legendDetailsCell">
-                        <input
-                          class="legendTextarea border-0"
+                        <ir-input-text
+                          class="legendTextarea border-0 m-0 p-0"
                           value={legendInfo.name}
-                          placeholder="Reason for using this color"
-                          onInput={event => this.handleNameInput(index, event)}
-                          onBlur={() => this.handleBlur()}
-                        ></input>
+                          inputContainerStyle={{ margin: '0' }}
+                          placeholder="Reason for this color"
+                          onTextChange={event => this.handleNameInput(index, event.detail)}
+                          onInputBlur={() => this.handleBlur()}
+                        ></ir-input-text>
                       </td>
                     </tr>
                   );

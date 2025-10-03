@@ -13,7 +13,7 @@ type CalendarStore =
       offset: number;
     };
     property: Property;
-    colorsForegrounds: Record<string, string>;
+    colorsForegrounds: Record<string, { foreground: string; stripe: string }>;
   };
 const initialState: CalendarStore = {
   property: null,

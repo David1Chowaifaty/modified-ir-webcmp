@@ -1,12 +1,12 @@
 import { BookingColor, PropertySchema } from '@/models/property-types';
 import calendar_data from '@/stores/calendar-data';
 import { locales } from '@/stores/locales.store';
-import { bestForeground } from '@/utils/utils';
+import { bestForeground, getAdjustedShades } from '@/utils/utils';
 import axios from 'axios';
 
 const DEFAULT_BOOKING_COLORS: BookingColor[] = [
   { color: '#F9A9FE', design: 'skew', name: '' },
-  { color: '#FFF281', design: 'skew', name: '' },
+  { color: '#ffe502', design: 'skew', name: '' },
   { color: '#6FF1EF', design: 'skew', name: '' },
   { color: '#9BF091', design: 'skew', name: '' },
   { color: '#C28D6B', design: 'skew', name: '' },
@@ -73,11 +73,17 @@ export class RoomService {
 
     calendar_data.property.calendar_legends.forEach(legend => {
       if (legend.design === 'skew') {
-        data[legend.color] = 'white';
+        data[legend.color] = {
+          foreground: 'white',
+          stripe: getAdjustedShades(legend.color),
+        };
       }
     });
     DEFAULT_BOOKING_COLORS.forEach(d => {
-      data[d.color] = bestForeground(d.color);
+      data[d.color] = {
+        foreground: ['#C28D6B', '#9B84D6'].includes(d.color) ? 'white' : 'black',
+        stripe: getAdjustedShades(d.color).lighter,
+      };
     });
     calendar_data.colorsForegrounds = { ...data };
   }

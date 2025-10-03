@@ -548,7 +548,7 @@ export const PropertySchema = z.object({
   perma_link: z.string(),
   pets_acceptance: PetsAcceptanceSchema,
   phone: z.string(),
-  pickup_service: PickupServiceSchema,
+  pickup_service: PickupServiceSchema.nullable(),
   postal: z.null(),
   privacy_policy: z.string(),
   promotions: z.array(z.any()),

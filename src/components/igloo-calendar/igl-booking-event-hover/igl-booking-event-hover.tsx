@@ -5,7 +5,7 @@ import { EventsService } from '@/services/events.service';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
-import { CalendarModalEvent } from '@/models/property-types';
+import { BookingColor, CalendarModalEvent } from '@/models/property-types';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
 import { IOtaNotes } from '@/models/booking.dto';
 import { PropertyService } from '@/services/property.service';
@@ -28,6 +28,7 @@ export class IglBookingEventHover {
   @State() isLoading: string;
   @State() shouldHideUnassignUnit = false;
   @State() canCheckInOrCheckout: boolean;
+  @State() bookingColor: BookingColor | null = null;
 
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
@@ -46,7 +47,7 @@ export class IglBookingEventHover {
     if (moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(moment())) {
       this.hideButtons = true;
     }
-
+    this.bookingColor = this.bookingEvent.ROOM_INFO.calendar_extra ? this.bookingEvent.ROOM_INFO.calendar_extra?.booking_color : null;
     this.canCheckInOrCheckout = moment().isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment().isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
   }
 
@@ -406,7 +407,6 @@ export class IglBookingEventHover {
   }
 
   private getInfoElement() {
-    console.log(this.bookingEvent);
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
         <div class={`d-flex p-0 m-0  ${this.bookingEvent.BALANCE > 1 ? 'pb-0' : 'pb-1'}`}>
@@ -417,22 +417,28 @@ export class IglBookingEventHover {
           <div class="pr-0  text-right d-flex align-items-center" style={{ gap: '0.5rem' }}>
             <ir-dropdown
               caret={false}
-              onOptionChange={e => {
-                this.propertyService.setRoomCalendarExtra({
+              onOptionChange={async e => {
+                const newBookingColor = e.detail === 'none' ? null : calendar_data.property.calendar_extra?.booking_colors.find(c => c.color === e.detail);
+                await this.propertyService.setRoomCalendarExtra({
                   property_id: calendar_data.property.id,
                   room_identifier: this.bookingEvent.IDENTIFIER,
                   value: JSON.stringify({
-                    booking_color: e.detail === 'none' ? null : calendar_data.property.calendar_extra?.booking_colors.find(c => c.color === e.detail),
+                    booking_color: newBookingColor,
                   }),
                 });
+                this.bookingColor = newBookingColor;
               }}
               style={{ '--ir-dropdown-menu-min-width': 'fit-content', 'width': '1.5rem' }}
             >
               <button class="booking-event-hover__color-picker-trigger" slot="trigger">
-                <div style={{ height: '1rem', width: '1rem', background: 'red', borderRadius: '0.21rem' }}></div>
+                {this.bookingColor ? (
+                  <div style={{ height: '1rem', width: '1rem', background: this.bookingColor?.color, borderRadius: '0.21rem' }}></div>
+                ) : (
+                  <ir-icons class="p-0 m-0 d-flex align-items-center" style={{ '--icon-size': '1rem', 'height': '1rem', 'width': '1rem' }} name="ban"></ir-icons>
+                )}
               </button>
               <ir-dropdown-item value="none">
-                <ir-icons style={{ '--icon-size': '1rem' }} name="ban"></ir-icons>
+                <ir-icons class="p-0 m-0 d-flex align-items-center" style={{ '--icon-size': '1rem', 'height': '1rem', 'width': '1rem' }} name="ban"></ir-icons>
               </ir-dropdown-item>
               {calendar_data.property.calendar_extra?.booking_colors.map(s => (
                 <ir-dropdown-item value={s.color}>

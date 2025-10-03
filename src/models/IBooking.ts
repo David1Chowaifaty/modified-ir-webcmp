@@ -62,7 +62,8 @@ export type bookingReasons =
   | 'EMAIL_VERIFIED'
   | 'ROOM_TYPE_CLOSE'
   | 'ROOM_TYPE_OPEN'
-  | 'HK_SKIP';
+  | 'HK_SKIP'
+  | 'SET_ROOM_CALENDAR_EXTRA';
 export const validReasons = new Set<bookingReasons>([
   'DORESERVATION',
   'BLOCK_EXPOSED_UNIT',

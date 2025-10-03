@@ -23,6 +23,58 @@ export function bestForeground(bgColor: string): 'black' | 'white' {
   return contrastWithBlack > contrastWithWhite ? 'black' : 'white';
 }
 
+/**
+ * Returns lighter/darker shades that stay harmonious with the background
+ * and a text color that meets the target contrast against *all* of them.
+ *
+ * @param bgColor - any CSS color
+ * @param opts.amount - mix amount for stripe shades (0..1). Default 0.28
+ * @param opts.minContrast - WCAG contrast target. 4.5 is a good default for normal text.
+ */
+export function getAdjustedShades(bgColor: string, opts: { amount?: number; minContrast?: number } = {}): { lighter: string; darker: string; text: string } {
+  const base = chroma(bgColor);
+  if (bgColor === '#c28d6b') {
+    console.log(base.luminance());
+  }
+
+  // Pick default amount based on perceived lightness unless caller overrides it
+  const defaultAmount = base.luminance() <= 0.5 ? 0.2 : 0.6;
+  const amount = opts.amount ?? defaultAmount; // how strong the stripe deltas are
+  const minContrast = opts.minContrast ?? 7;
+
+  // Stripe colors: mix toward white/black in LCH so hue is preserved
+  // (looks like the same “family” of color).
+  const lighter = chroma.mix(base, '#fff', amount, 'lch').hex();
+  const darker = chroma.mix(base, '#000', amount, 'lch').hex();
+
+  // Pick a starting text color (black or white) by higher contrast to the *base*,
+  // then nudge it toward the better end until it passes the contrast goal
+  // for base, lighter and darker simultaneously.
+  const start = chroma.contrast(base, '#000') >= chroma.contrast(base, '#fff') ? '#000' : '#fff';
+  const target = start === '#000' ? '#000' : '#fff';
+
+  const candidates = [base.hex(), lighter, darker];
+
+  const ensureContrast = (seed: string, toward: string) => {
+    // Try the seed first
+    if (candidates.every(c => chroma.contrast(seed, c) >= minContrast)) return seed;
+
+    // Otherwise walk 0→1 toward the target until we meet the goal.
+    for (let t = 0.05; t <= 1.0; t += 0.05) {
+      const test = chroma.mix(seed, toward, t, 'lch').hex();
+      if (candidates.every(c => chroma.contrast(test, c) >= minContrast)) {
+        return test;
+      }
+    }
+    // Fallback to pure black/white if nothing meets the threshold
+    return target;
+  };
+
+  const text = ensureContrast(start, target);
+
+  return { lighter, darker, text };
+}
+
 export function convertDateToTime(dayWithWeekday: string, monthWithYear: string): number {
   const date = moment(dayWithWeekday + ' ' + monthWithYear, 'ddd DD MMM YYYY').toDate();
   date.setHours(0, 0, 0, 0);

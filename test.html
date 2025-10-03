@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <ir-common></ir-common>
+    <!-- <ir-common></ir-common>
     <ir-booking baseurl="https://gateway.igloorooms.com/IR"></ir-booking>
     <link rel="stylesheet" href="https://wb-cmp.igloorooms.com/backend/dist/collection/assets/scripts/toastr/toastr.css"
         type="text/css">
@@ -34,7 +34,26 @@
         const booking = document.querySelector("ir-booking");
         booking.propertyid = getQueryParam("pid");
         booking.bookingNumber = getQueryParam("BN");
-    </script>
+    </script> -->
+    <style>
+        .stripes {
+            width: 100px;
+            height: 16px;
+            /* adjust as needed */
+            background: repeating-linear-gradient(45deg,
+                    /* angle of stripes */
+                    #f7c71d,
+                    /* yellow color */
+                    #f7c71d 10px,
+                    /* stripe thickness */
+                    #000 10px,
+                    /* black starts */
+                    #000 20px
+                    /* black thickness (same size as yellow) */
+                );
+        }
+    </style>
+    <div class="stripes"></div>
 </body>
 
 </html>

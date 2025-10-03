@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
 import { calculateDaysBetweenDates, transformNewBooking } from '@/utils/booking';
-import { isBlockUnit } from '@/utils/utils';
+import { getAdjustedShades, isBlockUnit } from '@/utils/utils';
 import { IRoomNightsData, CalendarModalEvent } from '@/models/property-types';
 import moment from 'moment';
 import { IToast } from '@components/ui/ir-toast/toast';
@@ -881,10 +881,10 @@ export class IglBookingEvent {
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
 
-    const backgroundColor = this.bookingEvent.ROOM_INFO?.calendar_extra
-      ? JSON.parse(this.bookingEvent.ROOM_INFO.calendar_extra)?.booking_color?.color ?? legend.color
-      : legend.color;
-    const color = calendar_data.colorsForegrounds?.[backgroundColor] ?? 'white';
+    const backgroundColor = this.bookingEvent.ROOM_INFO?.calendar_extra ? this.bookingEvent.ROOM_INFO.calendar_extra?.booking_color?.color ?? legend.color : legend.color;
+
+    const { foreground = 'white', stripe } = calendar_data.colorsForegrounds?.[backgroundColor];
+
     // console.log(this.bookingEvent.BOOKING_NUMBER === '46231881' ? this.bookingEvent : '');
     return (
       <Host
@@ -898,6 +898,7 @@ export class IglBookingEvent {
             !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
           }
           ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}
+       ${this.bookingEvent.STATUS === 'IN-HOUSE' ? 'stripped-bar' : ''}
           ${
             !this.bookingEvent.is_direct &&
             !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
@@ -905,14 +906,23 @@ export class IglBookingEvent {
             this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
             'border border-dark ota-booking-event'
           }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
-          style={{ 'backgroundColor': backgroundColor, '--ir-event-bg': backgroundColor }}
+          style={{
+            'backgroundColor': backgroundColor,
+            '--ir-event-bg': backgroundColor,
+            '--ir-event-bg-stripe-color': stripe,
+          }}
           onTouchStart={event => this.startDragging(event, 'move')}
           onMouseDown={event => this.startDragging(event, 'move')}
         ></div>
         {noteNode ? <div class="legend_circle noteIcon" style={{ backgroundColor: noteNode.color }}></div> : null}
         {balanceNode ? <div class="legend_circle balanceIcon" style={{ backgroundColor: balanceNode.color }}></div> : null}
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
-        <div class="bookingEventTitle" style={{ color }} onTouchStart={event => this.startDragging(event, 'move')} onMouseDown={event => this.startDragging(event, 'move')}>
+        <div
+          class="bookingEventTitle"
+          style={{ color: foreground }}
+          onTouchStart={event => this.startDragging(event, 'move')}
+          onMouseDown={event => this.startDragging(event, 'move')}
+        >
           {this.getBookedBy()}
           {this.renderEventBookingNumber()}
         </div>
