@@ -75,7 +75,7 @@ export class RoomService {
       if (legend.design === 'skew') {
         data[legend.color] = {
           foreground: 'white',
-          stripe: getAdjustedShades(legend.color),
+          stripe: getAdjustedShades(legend.color).lighter,
         };
       }
     });

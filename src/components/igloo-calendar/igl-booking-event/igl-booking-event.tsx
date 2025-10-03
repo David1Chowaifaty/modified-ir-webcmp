@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
 import { calculateDaysBetweenDates, transformNewBooking } from '@/utils/booking';
-import { getAdjustedShades, isBlockUnit } from '@/utils/utils';
+import { isBlockUnit } from '@/utils/utils';
 import { IRoomNightsData, CalendarModalEvent } from '@/models/property-types';
 import moment from 'moment';
 import { IToast } from '@components/ui/ir-toast/toast';
@@ -898,14 +898,12 @@ export class IglBookingEvent {
             !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
           }
           ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}
-       ${this.bookingEvent.STATUS === 'IN-HOUSE' ? 'stripped-bar' : ''}
-          ${
-            !this.bookingEvent.is_direct &&
-            !isBlockUnit(this.bookingEvent.STATUS_CODE) &&
-            this.bookingEvent.STATUS !== 'TEMP-EVENT' &&
-            this.bookingEvent.ID !== 'NEW_TEMP_EVENT' &&
-            'border border-dark ota-booking-event'
-          }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
+       ${this.bookingEvent.STATUS === 'IN-HOUSE' ? 'stripped-bar' : ''}  
+       ${
+         !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS !== 'TEMP-EVENT' && this.bookingEvent.ID !== 'NEW_TEMP_EVENT'
+           ? 'border border-dark ota-booking-event'
+           : ''
+       }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
           style={{
             'backgroundColor': backgroundColor,
             '--ir-event-bg': backgroundColor,

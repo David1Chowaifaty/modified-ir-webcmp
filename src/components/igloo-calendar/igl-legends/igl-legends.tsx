@@ -111,6 +111,7 @@ export class IglLegends {
             <div class="mt-2 pl-1">
               <table>
                 {this.legendData.map(legendInfo => {
+                  const stripeColor = calendar_data.colorsForegrounds[legendInfo?.color];
                   return (
                     <tr key={`legend_${legendInfo.id}`} class="legendRow ">
                       <td>
@@ -129,7 +130,10 @@ export class IglLegends {
                             />
                           </svg>
                         ) : (
-                          <div class={`legend_${legendInfo.design}`} style={{ backgroundColor: legendInfo.color }}></div>
+                          <div
+                            class={`legend_${legendInfo.design} ${legendInfo.id.toString() === '1' ? 'striped' : ''}`}
+                            style={{ '--ir-skew-background': legendInfo.color, '--ir-event-bg-stripe-color': stripeColor?.stripe, 'backgroundColor': legendInfo.color }}
+                          ></div>
                         )}
                       </td>
                       <td>

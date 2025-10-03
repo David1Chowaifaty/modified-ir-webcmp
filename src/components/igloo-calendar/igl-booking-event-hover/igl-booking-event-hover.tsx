@@ -39,6 +39,7 @@ export class IglBookingEventHover {
   private eventService = new EventsService();
   private hideButtons = false;
   private propertyService = new PropertyService();
+  private baseColor: string;
   componentWillLoad() {
     let selectedRt = this.bookingEvent.roomsInfo.find(r => r.id === this.bookingEvent.RATE_TYPE);
     if (selectedRt) {
@@ -47,6 +48,7 @@ export class IglBookingEventHover {
     if (moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(moment())) {
       this.hideButtons = true;
     }
+    this.baseColor = this.getEventLegend().color;
     this.bookingColor = this.bookingEvent.ROOM_INFO.calendar_extra ? this.bookingEvent.ROOM_INFO.calendar_extra?.booking_color : null;
     this.canCheckInOrCheckout = moment().isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment().isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
   }
@@ -193,6 +195,13 @@ export class IglBookingEventHover {
       return true;
     }
     return false;
+  }
+  private getEventLegend() {
+    let status = this.bookingEvent?.legendData.statusId[this.bookingEvent.STATUS];
+    return {
+      ...this.bookingEvent?.legendData[status.id],
+      ...status,
+    };
   }
 
   private handleBlockDateUpdate(event: CustomEvent<{ [key: string]: any }>) {
@@ -434,7 +443,19 @@ export class IglBookingEventHover {
                 {this.bookingColor ? (
                   <div style={{ height: '1rem', width: '1rem', background: this.bookingColor?.color, borderRadius: '0.21rem' }}></div>
                 ) : (
-                  <ir-icons class="p-0 m-0 d-flex align-items-center" style={{ '--icon-size': '1rem', 'height': '1rem', 'width': '1rem' }} name="ban"></ir-icons>
+                  <ir-icons
+                    class="p-0 m-0 d-flex align-items-center"
+                    style={{
+                      '--icon-size': '1rem',
+                      'height': '1rem',
+                      'width': '1rem',
+                      'background': this.baseColor,
+                      'color': 'white',
+                      'borderRadius': '0.21rem',
+                      'padding': '0.25rem',
+                    }}
+                    name="ban"
+                  ></ir-icons>
                 )}
               </button>
               <ir-dropdown-item value="none">

@@ -53,10 +53,21 @@
 .legend_skew,
 .legend_skew-bordered,
 .legend_skewsplit {
-  transform: skew(-30deg);
+  transform: skew(-22deg);
   width: 15px;
   height: 16px;
   border-radius: 4px;
+  background-color: var(--ir-skew-background);
+}
+.legend_skew.striped {
+  --stripe-period: 6px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--ir-skew-background) 0,
+    var(--ir-skew-background) calc(var(--stripe-period) / 2),
+    var(--ir-event-bg-stripe-color) calc(var(--stripe-period) / 2),
+    var(--ir-event-bg-stripe-color) var(--stripe-period)
+  );
 }
 .legend_skew-bordered {
   border: 1px solid black;
