@@ -67,7 +67,7 @@ export class IrUserFormPanel {
   private token = new Token();
   private mobileMask = {};
   private userSchema = z.object({
-    mobile: z.string().min(4).max(20),
+    mobile: z.string().optional(),
     email: z.string().email(),
     password: z
       .string()
