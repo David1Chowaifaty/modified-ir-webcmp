@@ -23,7 +23,7 @@ export class IrApplicablePolicies {
   @State() guaranteeAmount: number;
 
   @Event() generatePayment: EventEmitter<IPaymentAction>;
-  private shouldShowCancellationBrackets: boolean = false;
+  private shouldShowCancellationBrackets: boolean = true;
 
   componentWillLoad() {
     this.loadApplicablePolicies();
@@ -44,6 +44,7 @@ export class IrApplicablePolicies {
       this.booking.rooms.forEach(room => {
         const cancellationPolicy = getPoliciesByType(room.applicable_policies, 'cancelation');
         const guaranteePolicy = getPoliciesByType(room.applicable_policies, 'guarantee');
+
         if (cancellationPolicy) {
           let brackets = [
             ...cancellationPolicy.brackets
@@ -57,19 +58,6 @@ export class IrApplicablePolicies {
               })
               .filter(Boolean),
           ];
-          // if (moment(room.from_date, 'YYYY-MM-DD').add(1, 'days').isSameOrBefore(moment())) {
-          //   brackets.push({
-          //     amount: room['gross_total'],
-          //     amount_formatted: '',
-          //     code: '',
-          //     currency_id: 0,
-          //     due_on: moment().add(1, 'days').format('YYYY-MM-DD'),
-          //     due_on_formatted: '',
-          //     gross_amount: room['gross_total'],
-          //     gross_amount_formatted: '',
-          //     statement: '100% of the total price',
-          //   });
-          // }
           statements.push({
             ...cancellationPolicy,
             roomType: room.roomtype,
