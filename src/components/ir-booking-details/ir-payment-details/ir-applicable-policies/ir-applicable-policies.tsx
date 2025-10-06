@@ -44,11 +44,8 @@ export class IrApplicablePolicies {
         const cancellationPolicy = getPoliciesByType(room.applicable_policies, 'cancelation');
         const guaranteePolicy = getPoliciesByType(room.applicable_policies, 'guarantee');
         if (cancellationPolicy) {
-          statements.push({
-            ...cancellationPolicy,
-            roomType: room.roomtype,
-            ratePlan: room.rateplan,
-            brackets: cancellationPolicy.brackets
+          let brackets = [
+            ...cancellationPolicy.brackets
               .map((bracket, index) => {
                 if (bracket.amount > 0) {
                   return bracket;
@@ -58,7 +55,27 @@ export class IrApplicablePolicies {
                 }
               })
               .filter(Boolean),
+          ];
+          // if (moment(room.from_date, 'YYYY-MM-DD').add(1, 'days').isSameOrBefore(moment())) {
+          //   brackets.push({
+          //     amount: room['gross_total'],
+          //     amount_formatted: '',
+          //     code: '',
+          //     currency_id: 0,
+          //     due_on: moment().add(1, 'days').format('YYYY-MM-DD'),
+          //     due_on_formatted: '',
+          //     gross_amount: room['gross_total'],
+          //     gross_amount_formatted: '',
+          //     statement: '100% of the total price',
+          //   });
+          // }
+          statements.push({
+            ...cancellationPolicy,
+            roomType: room.roomtype,
+            ratePlan: room.rateplan,
+            brackets,
             checkInDate: room.from_date,
+            grossTotal: room.gross_total,
           });
         }
         if (guaranteePolicy) {
@@ -162,7 +179,7 @@ export class IrApplicablePolicies {
     // Last bracket
     if (index === brackets.length - 1) {
       return {
-        leftLabel: bracketDueDate.clone().add(1, 'days').format('MMM DD'),
+        leftLabel: bracketDueDate.clone().format('MMM DD'),
         showArrow: true,
         rightLabel: moment(checkInDate).format('MMM DD, YYYY'),
       };
@@ -210,25 +227,35 @@ export class IrApplicablePolicies {
     return `${cancelation_penality_as_if_today < 0 ? 'Refund' : 'Charge'} ${formatAmount(calendar_data.currency.symbol, Math.abs(cancelation_penality_as_if_today))} ${label}`;
   }
 
-  private checkCurrentBracket(bracket: Bracket, nextBracket: Bracket | null): boolean {
-    if (!bracket?.due_on) return false;
+  private _getCurrentBracket(brackets: Bracket[]): moment.Moment | null {
+    if (!Array.isArray(brackets) || brackets.length === 0) return null;
 
     const today = moment().startOf('day');
-    const start = moment(bracket.due_on, 'YYYY-MM-DD', true).startOf('day');
-    if (!start.isValid()) return false;
 
-    // If there's no next bracket, this one applies from its start onward.
-    if (!nextBracket?.due_on) {
-      return today.isSameOrAfter(start, 'day');
+    // Parse + validate + sort ascending by due_on
+    const parsed = brackets
+      .map(b => ({ b, date: moment(b.due_on, 'YYYY-MM-DD', true).startOf('day') }))
+      .filter(x => x.date.isValid())
+      .sort((a, b) => a.date.valueOf() - b.date.valueOf());
+
+    if (parsed.length === 0) return null;
+
+    // If today is before the first due date → return first bracket (closest upcoming)
+    if (today.isBefore(parsed[0].date, 'day')) {
+      return parsed[0].date;
     }
 
-    const end = moment(nextBracket.due_on, 'YYYY-MM-DD', true).startOf('day');
-    if (!end.isValid()) {
-      return today.isSameOrAfter(start, 'day');
+    // Find i such that date[i] <= today < date[i+1] → return date[i]
+    for (let i = 0; i < parsed.length - 1; i++) {
+      const cur = parsed[i].date;
+      const next = parsed[i + 1].date;
+      if (today.isSameOrAfter(cur, 'day') && today.isBefore(next, 'day')) {
+        return cur;
+      }
     }
 
-    // Active if today ∈ [start, end)
-    return today.isSameOrAfter(start, 'day') && today.isBefore(end, 'day');
+    // If today is on/after the last due date → return last bracket
+    return parsed[parsed.length - 1].date;
   }
 
   render() {
@@ -236,7 +263,6 @@ export class IrApplicablePolicies {
       return null;
     }
     const remainingGuaranteeAmount = this.booking.financial.collected - this.guaranteeAmount;
-    console.log(this.cancellationStatements);
     return (
       <Host>
         {this.guaranteeAmount !== 0 && (
@@ -283,64 +309,80 @@ export class IrApplicablePolicies {
 
           {this.cancellationStatements?.length > 0 && (
             <div class="applicable-policies__statements">
-              {this.cancellationStatements?.map(statement => (
-                <div class="applicable-policies__statement">
-                  {this.cancellationStatements.length > 1 && (
-                    <p class="applicable-policies__room">
-                      <b>{statement.roomType.name}</b> {statement.ratePlan['short_name']} {statement.ratePlan.is_non_refundable ? ` - ${locales.entries.Lcz_NonRefundable}` : ''}
-                    </p>
-                  )}
-                  <div class="applicable-policies__brackets">
-                    {statement.brackets.map((bracket, idx) => {
-                      const { leftLabel, rightLabel, showArrow } = this.getBracketLabelsAndArrowState({
-                        index: idx,
-                        bracket,
-                        brackets: statement.brackets,
-                        checkInDate: statement.checkInDate,
-                      });
-                      const isInCurrentBracket = this.checkCurrentBracket(bracket, idx < statement.brackets.length - 1 ? statement.brackets[idx + 1] : null);
+              {this.cancellationStatements?.map(statement => {
+                const currentBracket = this._getCurrentBracket(statement.brackets);
+                const isTodaySameOrAfterCheckInDate = moment().isSameOrAfter(moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days'));
+                return (
+                  <div class="applicable-policies__statement">
+                    {this.cancellationStatements.length > 1 && (
+                      <p class="applicable-policies__room">
+                        <b>{statement.roomType.name}</b> {statement.ratePlan['short_name']} {statement.ratePlan.is_non_refundable ? ` - ${locales.entries.Lcz_NonRefundable}` : ''}
+                      </p>
+                    )}
+                    <div class="applicable-policies__brackets">
+                      {statement.brackets.map((bracket, idx) => {
+                        const { leftLabel, rightLabel, showArrow } = this.getBracketLabelsAndArrowState({
+                          index: idx,
+                          bracket,
+                          brackets: statement.brackets,
+                          checkInDate: statement.checkInDate,
+                        });
+                        const isInCurrentBracket = moment(bracket.due_on, 'YYYY-MM-DD').isSame(currentBracket, 'date');
 
-                      return (
-                        <div class={{ 'applicable-policies__bracket': true, 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
-                          <p class="applicable-policies__bracket-dates">
-                            {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>} {rightLabel}
-                          </p>
-                          <p class="applicable-policies__amount">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</p>
+                        return (
+                          <div class={{ 'applicable-policies__bracket': true, 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
+                            <p class="applicable-policies__bracket-dates">
+                              {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>}{' '}
+                              {rightLabel}
+                            </p>
+                            <p class="applicable-policies__amount">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</p>
 
-                          <p class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div class="applicable-policies__brackets-table">
-                    <table>
-                      <tbody>
-                        {statement.brackets.map((bracket, idx) => {
-                          const { leftLabel, rightLabel, showArrow } = this.getBracketLabelsAndArrowState({
-                            index: idx,
-                            bracket,
-                            brackets: statement.brackets,
-                            checkInDate: statement.checkInDate,
-                          });
-                          const isInCurrentBracket = this.checkCurrentBracket(bracket, idx < statement.brackets.length - 1 ? statement.brackets[idx + 1] : null);
-                          return (
-                            <tr class={{ 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
-                              <td class="applicable-policies__bracket-dates">
-                                {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>}{' '}
-                                {rightLabel}
-                              </td>
+                            <p class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div class="applicable-policies__brackets-table">
+                      <table>
+                        <tbody>
+                          {statement.brackets.map((bracket, idx) => {
+                            const { leftLabel, rightLabel, showArrow } = this.getBracketLabelsAndArrowState({
+                              index: idx,
+                              bracket,
+                              brackets: statement.brackets,
+                              checkInDate: statement.checkInDate,
+                            });
 
-                              <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</td>
+                            const isInCurrentBracket = isTodaySameOrAfterCheckInDate ? false : moment(bracket.due_on, 'YYYY-MM-DD').isSame(currentBracket, 'date');
 
-                              <td class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</td>
+                            return (
+                              <tr class={{ 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
+                                <td class="applicable-policies__bracket-dates">
+                                  {leftLabel} {showArrow && <ir-icons name="arrow_right" class="applicable-policies__icon" style={{ '--icon-size': '0.875rem' }}></ir-icons>}{' '}
+                                  {rightLabel}
+                                </td>
+
+                                <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, bracket.gross_amount)}</td>
+
+                                <td class="applicable-policies__statement-text">{bracket.amount === 0 ? 'No penalty' : bracket.statement}</td>
+                              </tr>
+                            );
+                          })}
+                          {isTodaySameOrAfterCheckInDate && (
+                            <tr class={{ 'applicable-policies__highlighted-bracket': true }}>
+                              <td class="applicable-policies__bracket-dates">{moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days').format('MMM DD')} onwards</td>
+
+                              <td class="applicable-policies__amount px-1">{formatAmount(calendar_data.currency.symbol, statement.grossTotal)}</td>
+
+                              <td class="applicable-policies__statement-text">100% of the total price</td>
                             </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </section>

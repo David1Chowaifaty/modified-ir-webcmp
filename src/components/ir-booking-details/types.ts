@@ -34,6 +34,7 @@ export type CancellationStatement = {
   roomType: RoomType;
   ratePlan: RatePlan;
   checkInDate: string;
+  grossTotal: number;
 } & ExposedApplicablePolicy;
 
 export type Payment = Omit<IPayment, 'time_stamp'>;
