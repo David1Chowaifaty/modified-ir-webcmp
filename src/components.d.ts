@@ -41,6 +41,8 @@ import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { Moment } from "moment";
 import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
+import { ChannelReportResult, ChannelSaleFilter } from "./components/ir-sales-by-channel/types";
+import { AllowedProperties } from "./services/property.service";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 import { Tab } from "./components/ui/ir-tabs/ir-tabs";
@@ -84,6 +86,8 @@ export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { Moment } from "moment";
 export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
+export { ChannelReportResult, ChannelSaleFilter } from "./components/ir-sales-by-channel/types";
+export { AllowedProperties } from "./services/property.service";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
 export { Tab } from "./components/ui/ir-tabs/ir-tabs";
@@ -868,6 +872,92 @@ export namespace Components {
     }
     interface IrExtraServices {
         "booking": Pick<Booking, 'currency' | 'extra_services' | 'booking_nbr'>;
+    }
+    interface IrFiltersPanel {
+        /**
+          * Optional data test id suffix for default buttons
+         */
+        "actionTestId": string;
+        /**
+          * Align footer actions
+         */
+        "actionsAlign": 'start' | 'center' | 'end' | 'space-between' | 'space-around';
+        /**
+          * Apply button copy
+         */
+        "applyLabel": string;
+        /**
+          * Optional extra class for the card wrapper
+         */
+        "cardClass": string;
+        /**
+          * Collapse icon when collapsed
+         */
+        "collapseIconClosed": TIcons;
+        /**
+          * Collapse icon when expanded
+         */
+        "collapseIconOpen": TIcons;
+        /**
+          * Optional custom collapse target id (useful for legacy CSS hooks)
+         */
+        "collapseId"?: string;
+        /**
+          * Controlled collapse state
+         */
+        "collapsed"?: boolean;
+        /**
+          * Optional extra class for the filters content wrapper
+         */
+        "contentClass"?: string;
+        /**
+          * Space between content items
+         */
+        "contentGap": string;
+        /**
+          * Collapse by default
+         */
+        "defaultCollapsed": boolean;
+        /**
+          * Disable apply action
+         */
+        "disableApply": boolean;
+        /**
+          * Disable reset action
+         */
+        "disableReset": boolean;
+        /**
+          * Panel headline text
+         */
+        "filterTitle": string;
+        /**
+          * Optional extra class for the header row
+         */
+        "headerClass"?: string;
+        /**
+          * Hide the default footer actions
+         */
+        "hideDefaultActions": boolean;
+        /**
+          * Show loader inside apply button
+         */
+        "isApplyLoading": boolean;
+        /**
+          * Optional extra class for the outer wrapper
+         */
+        "panelClass"?: string;
+        /**
+          * Keep content expanded on desktop and hide the collapse toggle
+         */
+        "persistentOnDesktop": boolean;
+        /**
+          * Reset button copy
+         */
+        "resetLabel": string;
+        /**
+          * Show collapse toggle button
+         */
+        "showCollapseButton": boolean;
     }
     interface IrFinancialActions {
         "language": string;
@@ -1830,6 +1920,22 @@ export namespace Components {
         "ticket": string;
         "toDate": string;
     }
+    interface IrSalesByChannel {
+        "language": string;
+        "p": string;
+        "propertyid": number;
+        "ticket": string;
+    }
+    interface IrSalesByChannelFilters {
+        "allowedProperties": AllowedProperties;
+        "baseFilters": ChannelSaleFilter;
+        "isLoading": boolean;
+    }
+    interface IrSalesByChannelSummary {
+    }
+    interface IrSalesByChannelTable {
+        "records": ChannelReportResult;
+    }
     interface IrSalesByCountry {
         "language": string;
         "p": string;
@@ -2390,6 +2496,10 @@ export interface IrExtraServiceConfigCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrExtraServiceConfigElement;
 }
+export interface IrFiltersPanelCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrFiltersPanelElement;
+}
 export interface IrFinancialFiltersCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrFinancialFiltersElement;
@@ -2549,6 +2659,10 @@ export interface IrRoomGuestsCustomEvent<T> extends CustomEvent<T> {
 export interface IrRoomNightsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrRoomNightsElement;
+}
+export interface IrSalesByChannelFiltersCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrSalesByChannelFiltersElement;
 }
 export interface IrSalesFiltersCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3623,6 +3737,25 @@ declare global {
         prototype: HTMLIrExtraServicesElement;
         new (): HTMLIrExtraServicesElement;
     };
+    interface HTMLIrFiltersPanelElementEventMap {
+        "irFilterToggle": { collapsed: boolean };
+        "irFilterApply": void;
+        "irFilterReset": void;
+    }
+    interface HTMLIrFiltersPanelElement extends Components.IrFiltersPanel, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrFiltersPanelElementEventMap>(type: K, listener: (this: HTMLIrFiltersPanelElement, ev: IrFiltersPanelCustomEvent<HTMLIrFiltersPanelElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrFiltersPanelElementEventMap>(type: K, listener: (this: HTMLIrFiltersPanelElement, ev: IrFiltersPanelCustomEvent<HTMLIrFiltersPanelElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrFiltersPanelElement: {
+        prototype: HTMLIrFiltersPanelElement;
+        new (): HTMLIrFiltersPanelElement;
+    };
     interface HTMLIrFinancialActionsElement extends Components.IrFinancialActions, HTMLStencilElement {
     }
     var HTMLIrFinancialActionsElement: {
@@ -4479,6 +4612,41 @@ declare global {
         prototype: HTMLIrRoomNightsElement;
         new (): HTMLIrRoomNightsElement;
     };
+    interface HTMLIrSalesByChannelElement extends Components.IrSalesByChannel, HTMLStencilElement {
+    }
+    var HTMLIrSalesByChannelElement: {
+        prototype: HTMLIrSalesByChannelElement;
+        new (): HTMLIrSalesByChannelElement;
+    };
+    interface HTMLIrSalesByChannelFiltersElementEventMap {
+        "applyFilters": ChannelSaleFilter;
+    }
+    interface HTMLIrSalesByChannelFiltersElement extends Components.IrSalesByChannelFilters, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrSalesByChannelFiltersElementEventMap>(type: K, listener: (this: HTMLIrSalesByChannelFiltersElement, ev: IrSalesByChannelFiltersCustomEvent<HTMLIrSalesByChannelFiltersElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrSalesByChannelFiltersElementEventMap>(type: K, listener: (this: HTMLIrSalesByChannelFiltersElement, ev: IrSalesByChannelFiltersCustomEvent<HTMLIrSalesByChannelFiltersElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrSalesByChannelFiltersElement: {
+        prototype: HTMLIrSalesByChannelFiltersElement;
+        new (): HTMLIrSalesByChannelFiltersElement;
+    };
+    interface HTMLIrSalesByChannelSummaryElement extends Components.IrSalesByChannelSummary, HTMLStencilElement {
+    }
+    var HTMLIrSalesByChannelSummaryElement: {
+        prototype: HTMLIrSalesByChannelSummaryElement;
+        new (): HTMLIrSalesByChannelSummaryElement;
+    };
+    interface HTMLIrSalesByChannelTableElement extends Components.IrSalesByChannelTable, HTMLStencilElement {
+    }
+    var HTMLIrSalesByChannelTableElement: {
+        prototype: HTMLIrSalesByChannelTableElement;
+        new (): HTMLIrSalesByChannelTableElement;
+    };
     interface HTMLIrSalesByCountryElement extends Components.IrSalesByCountry, HTMLStencilElement {
     }
     var HTMLIrSalesByCountryElement: {
@@ -4906,6 +5074,7 @@ declare global {
         "ir-extra-service": HTMLIrExtraServiceElement;
         "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
         "ir-extra-services": HTMLIrExtraServicesElement;
+        "ir-filters-panel": HTMLIrFiltersPanelElement;
         "ir-financial-actions": HTMLIrFinancialActionsElement;
         "ir-financial-filters": HTMLIrFinancialFiltersElement;
         "ir-financial-summary": HTMLIrFinancialSummaryElement;
@@ -4968,6 +5137,10 @@ declare global {
         "ir-room": HTMLIrRoomElement;
         "ir-room-guests": HTMLIrRoomGuestsElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
+        "ir-sales-by-channel": HTMLIrSalesByChannelElement;
+        "ir-sales-by-channel-filters": HTMLIrSalesByChannelFiltersElement;
+        "ir-sales-by-channel-summary": HTMLIrSalesByChannelSummaryElement;
+        "ir-sales-by-channel-table": HTMLIrSalesByChannelTableElement;
         "ir-sales-by-country": HTMLIrSalesByCountryElement;
         "ir-sales-by-country-summary": HTMLIrSalesByCountrySummaryElement;
         "ir-sales-filters": HTMLIrSalesFiltersElement;
@@ -5927,6 +6100,95 @@ declare namespace LocalJSX {
     }
     interface IrExtraServices {
         "booking"?: Pick<Booking, 'currency' | 'extra_services' | 'booking_nbr'>;
+    }
+    interface IrFiltersPanel {
+        /**
+          * Optional data test id suffix for default buttons
+         */
+        "actionTestId"?: string;
+        /**
+          * Align footer actions
+         */
+        "actionsAlign"?: 'start' | 'center' | 'end' | 'space-between' | 'space-around';
+        /**
+          * Apply button copy
+         */
+        "applyLabel"?: string;
+        /**
+          * Optional extra class for the card wrapper
+         */
+        "cardClass"?: string;
+        /**
+          * Collapse icon when collapsed
+         */
+        "collapseIconClosed"?: TIcons;
+        /**
+          * Collapse icon when expanded
+         */
+        "collapseIconOpen"?: TIcons;
+        /**
+          * Optional custom collapse target id (useful for legacy CSS hooks)
+         */
+        "collapseId"?: string;
+        /**
+          * Controlled collapse state
+         */
+        "collapsed"?: boolean;
+        /**
+          * Optional extra class for the filters content wrapper
+         */
+        "contentClass"?: string;
+        /**
+          * Space between content items
+         */
+        "contentGap"?: string;
+        /**
+          * Collapse by default
+         */
+        "defaultCollapsed"?: boolean;
+        /**
+          * Disable apply action
+         */
+        "disableApply"?: boolean;
+        /**
+          * Disable reset action
+         */
+        "disableReset"?: boolean;
+        /**
+          * Panel headline text
+         */
+        "filterTitle"?: string;
+        /**
+          * Optional extra class for the header row
+         */
+        "headerClass"?: string;
+        /**
+          * Hide the default footer actions
+         */
+        "hideDefaultActions"?: boolean;
+        /**
+          * Show loader inside apply button
+         */
+        "isApplyLoading"?: boolean;
+        "onIrFilterApply"?: (event: IrFiltersPanelCustomEvent<void>) => void;
+        "onIrFilterReset"?: (event: IrFiltersPanelCustomEvent<void>) => void;
+        "onIrFilterToggle"?: (event: IrFiltersPanelCustomEvent<{ collapsed: boolean }>) => void;
+        /**
+          * Optional extra class for the outer wrapper
+         */
+        "panelClass"?: string;
+        /**
+          * Keep content expanded on desktop and hide the collapse toggle
+         */
+        "persistentOnDesktop"?: boolean;
+        /**
+          * Reset button copy
+         */
+        "resetLabel"?: string;
+        /**
+          * Show collapse toggle button
+         */
+        "showCollapseButton"?: boolean;
     }
     interface IrFinancialActions {
         "language"?: string;
@@ -7018,6 +7280,23 @@ declare namespace LocalJSX {
         "ticket"?: string;
         "toDate"?: string;
     }
+    interface IrSalesByChannel {
+        "language"?: string;
+        "p"?: string;
+        "propertyid"?: number;
+        "ticket"?: string;
+    }
+    interface IrSalesByChannelFilters {
+        "allowedProperties"?: AllowedProperties;
+        "baseFilters"?: ChannelSaleFilter;
+        "isLoading"?: boolean;
+        "onApplyFilters"?: (event: IrSalesByChannelFiltersCustomEvent<ChannelSaleFilter>) => void;
+    }
+    interface IrSalesByChannelSummary {
+    }
+    interface IrSalesByChannelTable {
+        "records"?: ChannelReportResult;
+    }
     interface IrSalesByCountry {
         "language"?: string;
         "p"?: string;
@@ -7483,6 +7762,7 @@ declare namespace LocalJSX {
         "ir-extra-service": IrExtraService;
         "ir-extra-service-config": IrExtraServiceConfig;
         "ir-extra-services": IrExtraServices;
+        "ir-filters-panel": IrFiltersPanel;
         "ir-financial-actions": IrFinancialActions;
         "ir-financial-filters": IrFinancialFilters;
         "ir-financial-summary": IrFinancialSummary;
@@ -7545,6 +7825,10 @@ declare namespace LocalJSX {
         "ir-room": IrRoom;
         "ir-room-guests": IrRoomGuests;
         "ir-room-nights": IrRoomNights;
+        "ir-sales-by-channel": IrSalesByChannel;
+        "ir-sales-by-channel-filters": IrSalesByChannelFilters;
+        "ir-sales-by-channel-summary": IrSalesByChannelSummary;
+        "ir-sales-by-channel-table": IrSalesByChannelTable;
         "ir-sales-by-country": IrSalesByCountry;
         "ir-sales-by-country-summary": IrSalesByCountrySummary;
         "ir-sales-filters": IrSalesFilters;
@@ -7644,6 +7928,7 @@ declare module "@stencil/core" {
             "ir-extra-service": LocalJSX.IrExtraService & JSXBase.HTMLAttributes<HTMLIrExtraServiceElement>;
             "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;
             "ir-extra-services": LocalJSX.IrExtraServices & JSXBase.HTMLAttributes<HTMLIrExtraServicesElement>;
+            "ir-filters-panel": LocalJSX.IrFiltersPanel & JSXBase.HTMLAttributes<HTMLIrFiltersPanelElement>;
             "ir-financial-actions": LocalJSX.IrFinancialActions & JSXBase.HTMLAttributes<HTMLIrFinancialActionsElement>;
             "ir-financial-filters": LocalJSX.IrFinancialFilters & JSXBase.HTMLAttributes<HTMLIrFinancialFiltersElement>;
             "ir-financial-summary": LocalJSX.IrFinancialSummary & JSXBase.HTMLAttributes<HTMLIrFinancialSummaryElement>;
@@ -7706,6 +7991,10 @@ declare module "@stencil/core" {
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
+            "ir-sales-by-channel": LocalJSX.IrSalesByChannel & JSXBase.HTMLAttributes<HTMLIrSalesByChannelElement>;
+            "ir-sales-by-channel-filters": LocalJSX.IrSalesByChannelFilters & JSXBase.HTMLAttributes<HTMLIrSalesByChannelFiltersElement>;
+            "ir-sales-by-channel-summary": LocalJSX.IrSalesByChannelSummary & JSXBase.HTMLAttributes<HTMLIrSalesByChannelSummaryElement>;
+            "ir-sales-by-channel-table": LocalJSX.IrSalesByChannelTable & JSXBase.HTMLAttributes<HTMLIrSalesByChannelTableElement>;
             "ir-sales-by-country": LocalJSX.IrSalesByCountry & JSXBase.HTMLAttributes<HTMLIrSalesByCountryElement>;
             "ir-sales-by-country-summary": LocalJSX.IrSalesByCountrySummary & JSXBase.HTMLAttributes<HTMLIrSalesByCountrySummaryElement>;
             "ir-sales-filters": LocalJSX.IrSalesFilters & JSXBase.HTMLAttributes<HTMLIrSalesFiltersElement>;

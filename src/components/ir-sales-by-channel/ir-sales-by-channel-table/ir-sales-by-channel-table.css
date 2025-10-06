@@ -1,3 +1,43 @@
 :host {
   display: block;
+  width: 100%;
+}
+.legend {
+  height: 12px;
+  aspect-ratio: 1;
+  background: #000;
+  border-radius: 4px;
+}
+.secondary {
+  background: #6692b3;
+}
+.channel-cell {
+  width: 100%;
+}
+.task-row,
+.table th,
+.table td {
+  white-space: nowrap;
+  max-width: max-content !important;
+  /* background: white; */
+  padding: 0.25rem 1rem !important;
+}
+
+/* .table-container {
+  overflow-y: auto;
+  max-height: 70vh;
+  max-height: 70dvh;
+} */
+
+.outer-container {
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.table tfoot td {
+  border-bottom: 0;
+}
+.flag {
+  height: 16px;
+  width: 23px;
+  border-radius: 3px;
 }

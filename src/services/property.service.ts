@@ -2,6 +2,7 @@ import { type ChannelReportResult, type ChannelSalesParams, parseChannelReportRe
 import calendar_data from '@/stores/calendar-data';
 import { downloadFile } from '@/utils/utils';
 import axios from 'axios';
+import { z } from 'zod';
 
 export type CountrySalesParams = {
   AC_ID: number;
@@ -45,7 +46,9 @@ export interface DailyStat {
   ADR: number;
   Total_Guests: number | undefined;
 }
+export const AllowedPropertiesSchema = z.array(z.object({ id: z.number(), name: z.string() })).nullable();
 
+export type AllowedProperties = z.infer<typeof AllowedPropertiesSchema>;
 export class PropertyService {
   public async getExposedProperty(params: {
     id: number | null;
@@ -100,6 +103,14 @@ export class PropertyService {
       downloadFile(data.My_Params_Get_Channel_Sales.Link_excel);
     }
     return parseChannelReportResult(data.My_Result);
+  }
+
+  public async getExposedAllowedProperties() {
+    const { data } = await axios.post('/Get_Exposed_Allowed_Properties', {});
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return AllowedPropertiesSchema.parse(data.My_Result);
   }
 
   public async getCountrySales(params: CountrySalesParams) {
