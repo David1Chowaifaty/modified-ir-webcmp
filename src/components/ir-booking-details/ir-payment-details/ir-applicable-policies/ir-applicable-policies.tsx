@@ -1,6 +1,6 @@
 import { Booking, Bracket, ExposedApplicablePolicy } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
-import { CancellationStatement } from '../../types';
+import { BracketWithCheckIn, CancellationStatement } from '../../types';
 import moment, { Moment } from 'moment';
 import { formatAmount } from '@/utils/utils';
 import calendar_data from '@/stores/calendar-data';
@@ -46,18 +46,35 @@ export class IrApplicablePolicies {
         const guaranteePolicy = getPoliciesByType(room.applicable_policies, 'guarantee');
 
         if (cancellationPolicy) {
-          let brackets = [
-            ...cancellationPolicy.brackets
-              .map((bracket, index) => {
-                if (bracket.amount > 0) {
-                  return bracket;
-                }
-                if (index < cancellationPolicy?.brackets.length - 1 && cancellationPolicy.brackets[index + 1]?.amount > 0) {
-                  return bracket;
-                }
-              })
-              .filter(Boolean),
-          ];
+          //check if every bracket have 0 in amount;
+          const isEveryBracketEmpty = cancellationPolicy.brackets.every(b => b.amount === 0);
+
+          let brackets: BracketWithCheckIn[] = isEveryBracketEmpty
+            ? [cancellationPolicy.brackets[cancellationPolicy.brackets.length - 1]]
+            : [
+                ...cancellationPolicy.brackets
+                  .map((bracket, index) => {
+                    if (bracket.amount > 0) {
+                      return bracket;
+                    }
+                    if (index < cancellationPolicy?.brackets.length - 1 && cancellationPolicy.brackets[index + 1]?.amount > 0) {
+                      return bracket;
+                    }
+                  })
+                  .filter(Boolean),
+              ];
+          brackets.push({
+            amount: room.total,
+            amount_formatted: '',
+            code: '',
+            currency_id: 0,
+            due_on: moment(room.from_date, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD'),
+            due_on_formatted: '',
+            gross_amount: room.gross_total,
+            gross_amount_formatted: '',
+            statement: '100% of total price',
+            is_check_in_date: true,
+          });
           statements.push({
             ...cancellationPolicy,
             roomType: room.roomtype,
@@ -166,11 +183,19 @@ export class IrApplicablePolicies {
     }
 
     // Last bracket
+    // if (index === brackets.length - 1) {
+    //   return {
+    //     leftLabel: bracketDueDate.clone().format('MMM DD'),
+    //     showArrow: true,
+    //     rightLabel: moment(checkInDate).format('MMM DD, YYYY'),
+    //   };
+    // }
+    console.log(checkInDate);
     if (index === brackets.length - 1) {
       return {
-        leftLabel: bracketDueDate.clone().format('MMM DD'),
-        showArrow: true,
-        rightLabel: moment(checkInDate).format('MMM DD, YYYY'),
+        leftLabel: `${bracketDueDate.clone().format('MMM DD')} onwards`,
+        showArrow: false,
+        rightLabel: '',
       };
     }
 
@@ -300,7 +325,6 @@ export class IrApplicablePolicies {
             <div class="applicable-policies__statements">
               {this.cancellationStatements?.map(statement => {
                 const currentBracket = this._getCurrentBracket(statement.brackets);
-                const isTodaySameOrAfterCheckInDate = moment().isSameOrAfter(moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days'));
                 return (
                   <div class="applicable-policies__statement">
                     {this.cancellationStatements.length > 1 && (
@@ -342,7 +366,8 @@ export class IrApplicablePolicies {
                               checkInDate: statement.checkInDate,
                             });
 
-                            const isInCurrentBracket = isTodaySameOrAfterCheckInDate ? false : moment(bracket.due_on, 'YYYY-MM-DD').isSame(currentBracket, 'date');
+                            const isInCurrentBracket = moment(bracket.due_on, 'YYYY-MM-DD').isSame(currentBracket, 'date');
+                            console.log({ isInCurrentBracket });
 
                             return (
                               <tr class={{ 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
@@ -357,7 +382,7 @@ export class IrApplicablePolicies {
                               </tr>
                             );
                           })}
-                          {isTodaySameOrAfterCheckInDate && (
+                          {/* {isTodaySameOrAfterCheckInDate && (
                             <tr class={{ 'applicable-policies__highlighted-bracket': true }}>
                               <td class="applicable-policies__bracket-dates">{moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days').format('MMM DD')} onwards</td>
 
@@ -365,7 +390,7 @@ export class IrApplicablePolicies {
 
                               <td class="applicable-policies__statement-text">100% of the total price</td>
                             </tr>
-                          )}
+                          )} */}
                         </tbody>
                       </table>
                     </div>

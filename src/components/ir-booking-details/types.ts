@@ -1,5 +1,5 @@
 import { IEntries } from '@/models/IBooking';
-import { RoomType, RatePlan, ExposedApplicablePolicy } from '@/models/booking.dto';
+import { RoomType, RatePlan, ExposedApplicablePolicy, Bracket } from '@/models/booking.dto';
 import { IPayment, SharedPerson } from './../../models/booking.dto';
 //Sidebar
 export type BookingDetailsSidebarEvents = 'guest' | 'pickup' | 'extra_note' | 'extra_service' | 'room-guest' | 'payment-folio';
@@ -30,11 +30,18 @@ export type PaymentEntries = {
   groups: IEntries[];
   methods: IEntries[];
 };
+
+export type BracketWithCheckIn = Bracket & { is_check_in_date?: boolean };
+
+interface StatementApplicablePolicy extends ExposedApplicablePolicy {
+  brackets: BracketWithCheckIn[];
+}
+
 export type CancellationStatement = {
   roomType: RoomType;
   ratePlan: RatePlan;
   checkInDate: string;
   grossTotal: number;
-} & ExposedApplicablePolicy;
+} & StatementApplicablePolicy;
 
 export type Payment = Omit<IPayment, 'time_stamp'>;
