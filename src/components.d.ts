@@ -1934,6 +1934,7 @@ export namespace Components {
     interface IrSalesByChannelSummary {
     }
     interface IrSalesByChannelTable {
+        "allowedProperties": AllowedProperties;
         "records": ChannelReportResult;
     }
     interface IrSalesByCountry {
@@ -7295,6 +7296,7 @@ declare namespace LocalJSX {
     interface IrSalesByChannelSummary {
     }
     interface IrSalesByChannelTable {
+        "allowedProperties"?: AllowedProperties;
         "records"?: ChannelReportResult;
     }
     interface IrSalesByCountry {

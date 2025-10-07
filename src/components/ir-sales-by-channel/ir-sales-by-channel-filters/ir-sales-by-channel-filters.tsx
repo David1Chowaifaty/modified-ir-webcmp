@@ -28,6 +28,7 @@ export class IrSalesByChannelFilters {
   }
 
   render() {
+    console.log(this.filters);
     return (
       <ir-filters-panel
         isApplyLoading={this.isLoading}
@@ -71,11 +72,11 @@ export class IrSalesByChannelFilters {
                 const value = e.detail;
                 if (value === 'all') {
                   this.updateFilter({
-                    LIST_AC_ID: this.allowedProperties,
+                    LIST_AC_ID: this.allowedProperties.map(p => p.id),
                   });
                 } else
                   this.updateFilter({
-                    LIST_AC_ID: this.allowedProperties.filter(e => e.id === Number(value)),
+                    LIST_AC_ID: this.allowedProperties.filter(e => e.id === Number(value)).map(p => p.id),
                   });
               }}
               data={[

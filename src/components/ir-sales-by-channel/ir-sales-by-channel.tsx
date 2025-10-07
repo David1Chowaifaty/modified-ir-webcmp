@@ -87,7 +87,7 @@ export class IrSalesByChannel {
       const [properties] = await Promise.all(requests);
       this.allowedProperties = [...(properties as any)];
 
-      this.baseFilters = { ...this.baseFilters, LIST_AC_ID: this.allowedProperties };
+      this.baseFilters = { ...this.baseFilters, LIST_AC_ID: this.allowedProperties.map(p => p.id) };
       this.channelSalesFilters = { ...this.baseFilters };
 
       await this.getChannelSales();
@@ -110,31 +110,27 @@ export class IrSalesByChannel {
       const shouldFetchPreviousYear = !isExportToExcel && include_previous_year;
       let enrichedSales: ChannelReportResult = [];
       if (shouldFetchPreviousYear) {
-        // const previousYearSales = await this.propertyService.getChannelSales({
-        //   AC_ID: this.property_id,
-        //   is_export_to_excel: false,
-        //   ...filterParams,
-        //   FROM_DATE: moment(filterParams.FROM_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
-        //   TO_DATE: moment(filterParams.TO_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
-        // });
-        // enrichedSales = currentSales.map(current => {
-        //   // const previous = previousYearSales.find(prev => prev..toLowerCase() === current.COUNTRY.toLowerCase());
-        //   // return {
-        //   //   ...current,
-        //   //   last_year: previous ? previous: null,
-        //   // };
-        // });
+        const previousYearSales = await this.propertyService.getChannelSales({
+          AC_ID: this.property_id,
+          is_export_to_excel: isExportToExcel,
+          ...filterParams,
+          FROM_DATE: moment(filterParams.FROM_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
+          TO_DATE: moment(filterParams.TO_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
+        });
+
+        enrichedSales = currentSales.map(current => {
+          const previous = previousYearSales.find(prev => prev.SOURCE.toLowerCase() === current.SOURCE.toLowerCase());
+          return {
+            ...current,
+            last_year: previous ? previous : null,
+          };
+        });
       } else {
         enrichedSales = currentSales.map(record => ({
           ...record,
           last_year: null,
         }));
       }
-      // this.salesData = enrichedSales.sort((a, b) => {
-      //   if (a.country_id === 0) return -1;
-      //   if (b.country_id === 0) return 1;
-      //   return 0;
-      // });
       this.salesData = [...enrichedSales];
     } catch (error) {
       console.error('Failed to fetch sales data:', error);
@@ -176,12 +172,13 @@ export class IrSalesByChannel {
               onApplyFilters={e => {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
+                this.channelSalesFilters = { ...e.detail };
                 this.getChannelSales();
               }}
               allowedProperties={this.allowedProperties}
               baseFilters={this.baseFilters}
             ></ir-sales-by-channel-filters>
-            <ir-sales-by-channel-table class="card mb-0" records={this.salesData}></ir-sales-by-channel-table>
+            <ir-sales-by-channel-table allowedProperties={this.allowedProperties} class="card mb-0" records={this.salesData}></ir-sales-by-channel-table>
           </div>
         </section>
       </Host>

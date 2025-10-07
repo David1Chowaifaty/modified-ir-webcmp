@@ -1,30 +1,52 @@
-import { Component, Prop, State, h } from '@stencil/core';
+import { Component, Prop, State, Watch, h } from '@stencil/core';
 import { ChannelReportResult } from '../types';
 import { formatAmount } from '@/utils/utils';
 import calendar_data from '@/stores/calendar-data';
+import { AllowedProperties } from '@/services/property.service';
 
 @Component({
   tag: 'ir-sales-by-channel-table',
-  styleUrl: 'ir-sales-by-channel-table.css',
+  styleUrls: ['ir-sales-by-channel-table.css', '../../../common/table.css'],
   scoped: true,
 })
 export class IrSalesByChannelTable {
   @Prop() records: ChannelReportResult;
+  @Prop() allowedProperties: AllowedProperties;
+
   @State() visibleCount: number = 10;
+  @State() properties: Map<number, string> = new Map();
+
+  componentWillLoad() {
+    this.setupProperties();
+  }
+
+  @Watch('allowedProperties')
+  handlePropertiesChange() {
+    this.setupProperties();
+  }
+  private setupProperties() {
+    const map: Map<number, string> = new Map();
+    for (const property of this.allowedProperties) {
+      map.set(property.id, property.name);
+    }
+    this.properties = new Map(map);
+  }
 
   private handleLoadMore = () => {
     this.visibleCount = Math.min(this.visibleCount + 10, this.records.length);
   };
   render() {
     const visibleRecords = this.records.slice(0, this.visibleCount);
+    const haveMultipleProperties = this.allowedProperties.length > 1;
     return (
       <div class="table-container h-100 p-1 m-0 mb-2 table-responsive">
         <table class="table" data-testid="hk_tasks_table">
           <thead class="table-header">
             <tr>
-              <th class="text-center">Room NIGHTS</th>
-              <th class="text-center">No of guests</th>
-              <th class="text-right">Revenue</th>
+              {haveMultipleProperties && <th class="text-center">Property</th>}
+              <th class="text-center">Channel</th>
+              <th class="text-center">Room nights</th>
+              <th class="text-right">Room Revenue</th>
               <th class=""></th>
             </tr>
           </thead>
@@ -38,11 +60,22 @@ export class IrSalesByChannelTable {
               </tr>
             )}
             {visibleRecords.map(record => {
-              const mainPercentage = `${parseFloat(record.REVENUE.toString()).toFixed(2)}%`;
+              const mainPercentage = `${parseFloat(record.PCT.toString()).toFixed(2)}%`;
               const secondaryPercentage = record.last_year ? `${parseFloat(record.last_year.REVENUE.toString()).toFixed(2)}%` : null;
 
               return (
                 <tr data-testid={`record_row`} class={{ 'task-table-row ir-table-row': true }}>
+                  {haveMultipleProperties && <td class="text-center"></td>}
+                  <td class="text-center">
+                    <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
+                      <p class={`p-0 m-0 ${record.last_year?.SOURCE ? 'font-weight-bold' : ''}`}>{record.SOURCE}</p>
+                      {record.last_year?.SOURCE && (
+                        <p class="p-0 mx-0" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
+                          {record.last_year.SOURCE}
+                        </p>
+                      )}
+                    </div>
+                  </td>
                   <td class="text-center">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
                       <p class={`p-0 m-0 ${record.last_year?.NIGHTS ? 'font-weight-bold' : ''}`}>{record.NIGHTS}</p>
@@ -52,16 +85,6 @@ export class IrSalesByChannelTable {
                         </p>
                       )}
                     </div>
-                  </td>
-                  <td class="text-center">
-                    {/* <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
-                      <p class={`p-0 m-0 ${record.last_year?.number_of_guests ? 'font-weight-bold' : ''}`}>{record.number_of_guests}</p>
-                      {record.last_year?.number_of_guests && (
-                        <p class="p-0 mx-0" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
-                          {record.last_year.number_of_guests}
-                        </p>
-                      )}
-                    </div> */}
                   </td>
                   <td class="text-right">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
@@ -85,8 +108,7 @@ export class IrSalesByChannelTable {
           </tbody>
           <tfoot>
             <tr style={{ fontSize: '12px' }}>
-              <td colSpan={4}></td>
-              <td style={{ width: '250px' }}>
+              <td colSpan={haveMultipleProperties ? 5 : 4}>
                 <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
                   <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
                     <div class="legend bg-primary"></div>
