@@ -13,12 +13,10 @@ import { ChannelReportResult, ChannelSaleFilter } from './types';
 export class IrSalesByChannel {
   @Prop() language: string = '';
   @Prop() ticket: string = '';
-  @Prop() propertyid: number;
-  @Prop() p: string;
+  @Prop() propertyid: string;
 
   @State() isLoading: 'filter' | 'export' | null = null;
   @State() isPageLoading = true;
-  @State() property_id: number;
 
   @State() salesData: ChannelReportResult;
   @State() channelSalesFilters: ChannelSaleFilter;
@@ -55,35 +53,7 @@ export class IrSalesByChannel {
 
   private async initializeApp() {
     try {
-      let propertyId = this.propertyid;
-      if (!this.propertyid && !this.p) {
-        throw new Error('Property ID or username is required');
-      }
-      // let roomResp = null;
-      if (!propertyId) {
-        const propertyData = await this.roomService.getExposedProperty({
-          id: 0,
-          aname: this.p,
-          language: this.language,
-          is_backend: true,
-          include_units_hk_status: true,
-        });
-        // roomResp = propertyData;
-        propertyId = propertyData.My_Result.id;
-      }
-      this.property_id = propertyId;
       const requests = [this.propertyService.getExposedAllowedProperties(), this.roomService.fetchLanguage(this.language)];
-      if (this.propertyid) {
-        requests.push(
-          this.roomService.getExposedProperty({
-            id: this.propertyid,
-            language: this.language,
-            is_backend: true,
-            include_units_hk_status: true,
-          }),
-        );
-      }
-
       const [properties] = await Promise.all(requests);
       this.allowedProperties = [...(properties as any)];
 
@@ -103,7 +73,7 @@ export class IrSalesByChannel {
       const { include_previous_year, ...filterParams } = this.channelSalesFilters;
       this.isLoading = isExportToExcel ? 'export' : 'filter';
       const currentSales = await this.propertyService.getChannelSales({
-        AC_ID: this.property_id,
+        // AC_ID: this.propertyid,
         is_export_to_excel: isExportToExcel,
         ...filterParams,
       });
@@ -111,7 +81,7 @@ export class IrSalesByChannel {
       let enrichedSales: ChannelReportResult = [];
       if (shouldFetchPreviousYear) {
         const previousYearSales = await this.propertyService.getChannelSales({
-          AC_ID: this.property_id,
+          // AC_ID: this.propertyid.toString(),
           is_export_to_excel: isExportToExcel,
           ...filterParams,
           FROM_DATE: moment(filterParams.FROM_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
@@ -131,6 +101,31 @@ export class IrSalesByChannel {
           last_year: null,
         }));
       }
+      // --- Group by PROPERTY_ID and sort so that hotels with most revenue are on top ---
+      const totalsByProperty: Record<number, number> = enrichedSales.reduce((acc, r) => {
+        acc[r.PROPERTY_ID] = (acc[r.PROPERTY_ID] ?? 0) + r.REVENUE;
+        return acc;
+      }, {} as Record<number, number>);
+
+      enrichedSales.sort((a, b) => {
+        const tA = totalsByProperty[a.PROPERTY_ID] ?? 0;
+        const tB = totalsByProperty[b.PROPERTY_ID] ?? 0;
+
+        // 1) Sort groups by total revenue (desc)
+        if (tB !== tA) return tB - tA;
+
+        // 2) Within the same property, sort each channel row by REVENUE (desc),
+        //    then by SOURCE for a stable, readable order
+        if (a.PROPERTY_ID === b.PROPERTY_ID) {
+          if (b.REVENUE !== a.REVENUE) return b.REVENUE - a.REVENUE;
+          return a.SOURCE.localeCompare(b.SOURCE);
+        }
+
+        // 3) Tie-breaker when two different properties have identical totals
+        return String(a.PROPERTY_NAME).localeCompare(String(b.PROPERTY_NAME));
+      });
+      // -------------------------------------------------------------------------------
+
       this.salesData = [...enrichedSales];
     } catch (error) {
       console.error('Failed to fetch sales data:', error);

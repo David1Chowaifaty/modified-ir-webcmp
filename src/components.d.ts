@@ -1922,8 +1922,7 @@ export namespace Components {
     }
     interface IrSalesByChannel {
         "language": string;
-        "p": string;
-        "propertyid": number;
+        "propertyid": string;
         "ticket": string;
     }
     interface IrSalesByChannelFilters {
@@ -7283,8 +7282,7 @@ declare namespace LocalJSX {
     }
     interface IrSalesByChannel {
         "language"?: string;
-        "p"?: string;
-        "propertyid"?: number;
+        "propertyid"?: string;
         "ticket"?: string;
     }
     interface IrSalesByChannelFilters {

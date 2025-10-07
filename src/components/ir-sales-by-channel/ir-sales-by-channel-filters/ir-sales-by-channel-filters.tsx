@@ -60,7 +60,7 @@ export class IrSalesByChannelFilters {
           ></ir-select>
         </fieldset>
         {this.allowedProperties.length > 1 && (
-          <fieldset class="pt-1 filter-group">
+          <fieldset class="filter-group">
             <label htmlFor="rooms" class="m-0 px-0" style={{ paddingBottom: '0.25rem' }}>
               Properties
             </label>
@@ -89,7 +89,7 @@ export class IrSalesByChannelFilters {
             ></ir-select>
           </fieldset>
         )}
-        <fieldset class="pt-1 filter-group">
+        <fieldset class="filter-group">
           <label htmlFor="period" class="px-0 m-0" style={{ paddingBottom: '0.25rem' }}>
             Selected period
           </label>

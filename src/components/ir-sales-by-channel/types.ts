@@ -2,12 +2,20 @@
 import { z } from 'zod';
 
 /* ---------- Report (input) ---------- */
+export const CurrencySchema = z.object({
+  code: z.string(),
+  id: z.number(),
+  symbol: z.string(),
+});
 
 const ChannelReportBaseSchema = z.object({
   NIGHTS: z.number(),
   PCT: z.number(),
   REVENUE: z.number(),
   SOURCE: z.string(),
+  PROPERTY_ID: z.number(),
+  PROPERTY_NAME: z.string(),
+  currency: CurrencySchema,
 });
 
 /**
@@ -27,7 +35,7 @@ export type ChannelReportResult = z.infer<typeof ChannelReportResultSchema>;
 /* ---------- Params ---------- */
 
 export const ChannelSalesParamsSchema = z.object({
-  AC_ID: z.coerce.number().int().positive(),
+  AC_ID: z.string().optional(),
   BOOK_CASE: z.string().min(1),
   FROM_DATE: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD format'),
   TO_DATE: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD format'),

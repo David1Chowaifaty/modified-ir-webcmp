@@ -1,7 +1,6 @@
 import { Component, Prop, State, Watch, h } from '@stencil/core';
 import { ChannelReportResult } from '../types';
 import { formatAmount } from '@/utils/utils';
-import calendar_data from '@/stores/calendar-data';
 import { AllowedProperties } from '@/services/property.service';
 
 @Component({
@@ -65,7 +64,7 @@ export class IrSalesByChannelTable {
 
               return (
                 <tr data-testid={`record_row`} class={{ 'task-table-row ir-table-row': true }}>
-                  {haveMultipleProperties && <td class="text-center"></td>}
+                  {haveMultipleProperties && <td class="text-center">{record.PROPERTY_NAME}</td>}
                   <td class="text-center">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
                       <p class={`p-0 m-0 ${record.last_year?.SOURCE ? 'font-weight-bold' : ''}`}>{record.SOURCE}</p>
@@ -88,10 +87,10 @@ export class IrSalesByChannelTable {
                   </td>
                   <td class="text-right">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
-                      <p class={`p-0 m-0 ${record.last_year?.REVENUE ? 'font-weight-bold' : ''}`}>{formatAmount(calendar_data.currency.symbol, record.REVENUE)}</p>
+                      <p class={`p-0 m-0 ${record.last_year?.REVENUE ? 'font-weight-bold' : ''}`}>{formatAmount(record.currency.symbol, record.REVENUE)}</p>
                       {record.last_year?.REVENUE && (
                         <p class="p-0 mx-0" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
-                          {formatAmount(calendar_data.currency.symbol, record.last_year.REVENUE)}
+                          {formatAmount(record.currency.symbol, record.last_year.REVENUE)}
                         </p>
                       )}
                     </div>
