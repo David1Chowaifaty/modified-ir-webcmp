@@ -4,7 +4,7 @@ import { AllowedProperties, PropertyService } from '@/services/property.service'
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import moment from 'moment';
-import { ChannelReportResult, ChannelSaleFilter } from './types';
+import { ChannelReport, ChannelReportResult, ChannelSaleFilter } from './types';
 @Component({
   tag: 'ir-sales-by-channel',
   styleUrl: 'ir-sales-by-channel.css',
@@ -101,32 +101,93 @@ export class IrSalesByChannel {
           last_year: null,
         }));
       }
-      // --- Group by PROPERTY_ID and sort so that hotels with most revenue are on top ---
-      const totalsByProperty: Record<number, number> = enrichedSales.reduce((acc, r) => {
-        acc[r.PROPERTY_ID] = (acc[r.PROPERTY_ID] ?? 0) + r.REVENUE;
-        return acc;
-      }, {} as Record<number, number>);
+      /**
+       * Groups sales records by SOURCE and currency.id, summing numeric fields
+       * and recalculating PCT based on the total REVENUE.
+       */
+      const groupSalesRecordsBySource = (records: ChannelReportResult): ChannelReportResult => {
+        if (!records || records.length === 0) return records;
 
-      enrichedSales.sort((a, b) => {
-        const tA = totalsByProperty[a.PROPERTY_ID] ?? 0;
-        const tB = totalsByProperty[b.PROPERTY_ID] ?? 0;
+        // Helper to extract currency ID from various possible formats
+        const getCurrencyId = (r: ChannelReport): number | null => {
+          return r?.currency?.id ?? null;
+        };
 
-        // 1) Sort groups by total revenue (desc)
-        if (tB !== tA) return tB - tA;
+        // Create unique key for grouping
+        const createKey = (r: ChannelReport): string => {
+          const source = r.SOURCE.toString().toLowerCase().trim();
+          const currencyId = getCurrencyId(r);
+          return `${source}__${currencyId ?? 'null'}`;
+        };
 
-        // 2) Within the same property, sort each channel row by REVENUE (desc),
-        //    then by SOURCE for a stable, readable order
-        if (a.PROPERTY_ID === b.PROPERTY_ID) {
-          if (b.REVENUE !== a.REVENUE) return b.REVENUE - a.REVENUE;
-          return a.SOURCE.localeCompare(b.SOURCE);
+        // Sum two values safely
+        const sumValues = (a: number | undefined, b: number | undefined): number => {
+          return (a ?? 0) + (b ?? 0);
+        };
+
+        // Merge numeric fields from last_year objects
+        const mergeLastYear = (base: ChannelReport['last_year'], incoming: ChannelReport['last_year']): ChannelReport['last_year'] => {
+          if (!incoming) return base;
+          if (!base) return { ...incoming };
+
+          return {
+            NIGHTS: sumValues(base.NIGHTS, incoming.NIGHTS),
+            PCT: sumValues(base.PCT, incoming.PCT), // Will recalculate later
+            REVENUE: sumValues(base.REVENUE, incoming.REVENUE),
+            SOURCE: base.SOURCE,
+            PROPERTY_ID: base.PROPERTY_ID,
+            PROPERTY_NAME: base.PROPERTY_NAME,
+            currency: base.currency,
+          };
+        };
+
+        // Group records by key
+        const grouped = new Map<string, ChannelReport>();
+
+        for (const record of records) {
+          const key = createKey(record);
+          const existing = grouped.get(key);
+
+          if (!existing) {
+            // First record for this key - clone it
+            grouped.set(key, { ...record });
+          } else {
+            // Merge with existing record
+            const merged: ChannelReport = {
+              ...existing,
+              NIGHTS: sumValues(existing.NIGHTS, record.NIGHTS),
+              PCT: 0, // Will recalculate after summing all REVENUE
+              REVENUE: sumValues(existing.REVENUE, record.REVENUE),
+              last_year: mergeLastYear(existing.last_year, record.last_year),
+            };
+            grouped.set(key, merged);
+          }
         }
 
-        // 3) Tie-breaker when two different properties have identical totals
-        return String(a.PROPERTY_NAME).localeCompare(String(b.PROPERTY_NAME));
-      });
-      // -------------------------------------------------------------------------------
+        // Convert to array
+        const result = Array.from(grouped.values());
 
-      this.salesData = [...enrichedSales];
+        // Recalculate PCT based on total REVENUE
+        const totalRevenue = result.reduce((sum, r) => sum + (r.REVENUE ?? 0), 0);
+
+        if (totalRevenue > 0) {
+          for (const record of result) {
+            record.PCT = (record.REVENUE / totalRevenue) * 100;
+
+            // Also recalculate last_year PCT if it exists
+            if (record.last_year) {
+              const lastYearTotal = result.reduce((sum, r) => sum + (r.last_year?.REVENUE ?? 0), 0);
+              if (lastYearTotal > 0) {
+                record.last_year.PCT = (record.last_year.REVENUE / lastYearTotal) * 100;
+              }
+            }
+          }
+        }
+
+        return result;
+      };
+
+      this.salesData = [...groupSalesRecordsBySource(enrichedSales)];
     } catch (error) {
       console.error('Failed to fetch sales data:', error);
     } finally {

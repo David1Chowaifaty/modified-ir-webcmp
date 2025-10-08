@@ -64,12 +64,10 @@ export class IrSalesByChannelFilters {
             <label htmlFor="rooms" class="m-0 px-0" style={{ paddingBottom: '0.25rem' }}>
               Properties
             </label>
-            <ir-select
-              selectedValue={this.filters?.BOOK_CASE}
-              selectId="rooms"
-              showFirstOption={false}
-              onSelectChange={e => {
-                const value = e.detail;
+            <ir-m-combobox
+              defaultOption={this.filters?.LIST_AC_ID?.length === this.allowedProperties?.length ? 'all' : this.filters?.LIST_AC_ID[0]?.toString()}
+              onOptionChange={e => {
+                const value = e.detail.value;
                 if (value === 'all') {
                   this.updateFilter({
                     LIST_AC_ID: this.allowedProperties.map(p => p.id),
@@ -79,14 +77,14 @@ export class IrSalesByChannelFilters {
                     LIST_AC_ID: this.allowedProperties.filter(e => e.id === Number(value)).map(p => p.id),
                   });
               }}
-              data={[
-                { text: 'All', value: 'all' },
+              options={[
+                { label: 'All', value: 'all' },
                 ...this.allowedProperties.map(p => ({
-                  text: p.name,
+                  label: p.name,
                   value: p.id.toString(),
                 })),
               ]}
-            ></ir-select>
+            ></ir-m-combobox>
           </fieldset>
         )}
         <fieldset class="filter-group">

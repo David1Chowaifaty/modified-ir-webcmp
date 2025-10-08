@@ -1280,6 +1280,10 @@ export namespace Components {
          */
         "debounceDelay": number;
         /**
+          * default selected option for the combobox.
+         */
+        "defaultOption": ComboboxOption['value'];
+        /**
           * Whether to show loading state
          */
         "loading": boolean;
@@ -6534,6 +6538,10 @@ declare namespace LocalJSX {
           * @default 300
          */
         "debounceDelay"?: number;
+        /**
+          * default selected option for the combobox.
+         */
+        "defaultOption"?: ComboboxOption['value'];
         /**
           * Whether to show loading state
          */

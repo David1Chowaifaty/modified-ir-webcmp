@@ -36,13 +36,12 @@ export class IrSalesByChannelTable {
   };
   render() {
     const visibleRecords = this.records.slice(0, this.visibleCount);
-    const haveMultipleProperties = this.allowedProperties.length > 1;
+
     return (
       <div class="table-container h-100 p-1 m-0 mb-2 table-responsive">
         <table class="table" data-testid="hk_tasks_table">
           <thead class="table-header">
             <tr>
-              {haveMultipleProperties && <th class="text-center">Property</th>}
               <th class="text-center">Channel</th>
               <th class="text-center">Room nights</th>
               <th class="text-right">Room Revenue</th>
@@ -60,11 +59,10 @@ export class IrSalesByChannelTable {
             )}
             {visibleRecords.map(record => {
               const mainPercentage = `${parseFloat(record.PCT.toString()).toFixed(2)}%`;
-              const secondaryPercentage = record.last_year ? `${parseFloat(record.last_year.REVENUE.toString()).toFixed(2)}%` : null;
+              const secondaryPercentage = record.last_year ? `${parseFloat(record.last_year.PCT.toString()).toFixed(2)}%` : null;
 
               return (
                 <tr data-testid={`record_row`} class={{ 'task-table-row ir-table-row': true }}>
-                  {haveMultipleProperties && <td class="text-center">{record.PROPERTY_NAME}</td>}
                   <td class="text-center">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
                       <p class={`p-0 m-0 ${record.last_year?.SOURCE ? 'font-weight-bold' : ''}`}>{record.SOURCE}</p>
@@ -107,7 +105,7 @@ export class IrSalesByChannelTable {
           </tbody>
           <tfoot>
             <tr style={{ fontSize: '12px' }}>
-              <td colSpan={haveMultipleProperties ? 5 : 4}>
+              <td colSpan={4}>
                 <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
                   <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
                     <div class="legend bg-primary"></div>

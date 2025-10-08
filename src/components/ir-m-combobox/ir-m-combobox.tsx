@@ -16,6 +16,11 @@ export class IrMCombobox {
   @Prop() placeholder: string;
 
   /**
+   * default selected option for the combobox.
+   */
+  @Prop() defaultOption: ComboboxOption['value'];
+
+  /**
    * Determines how the options are loaded into the component.
    * - 'static': Uses the options passed through the `options` prop or the default internal list.
    * - 'external': Emits search events for external handling, options updated via `options` prop.
@@ -107,6 +112,15 @@ export class IrMCombobox {
     this.initializeOptions();
     // discover items on first paint
     this.collectItemChildren();
+
+    //set selected option
+
+    if (this.defaultOption) {
+      const opt = this.options.find(o => o.value === this.defaultOption);
+      if (opt) {
+        this.selectOption(opt);
+      }
+    }
 
     // watch DOM changes to children
     this.mo = new MutationObserver(() => this.collectItemChildren());
