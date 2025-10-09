@@ -36,13 +36,14 @@ export class IrSalesByChannelTable {
   };
   render() {
     const visibleRecords = this.records.slice(0, this.visibleCount);
+    const isSingleProperty = this.allowedProperties.length === 1;
 
     return (
       <div class="table-container h-100 p-1 m-0 mb-2 table-responsive">
         <table class="table" data-testid="hk_tasks_table">
           <thead class="table-header">
             <tr>
-              <th class="text-center">Channel</th>
+              <th class="text-left">Channel</th>
               <th class="text-center">Room nights</th>
               <th class="text-right">Room Revenue</th>
               <th class=""></th>
@@ -63,7 +64,7 @@ export class IrSalesByChannelTable {
 
               return (
                 <tr data-testid={`record_row`} class={{ 'task-table-row ir-table-row': true }}>
-                  <td class="text-center">
+                  <td class="text-left">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
                       <p class={`p-0 m-0 ${record.last_year?.SOURCE ? 'font-weight-bold' : ''}`}>{record.SOURCE}</p>
                       {record.last_year?.SOURCE && (
@@ -83,42 +84,46 @@ export class IrSalesByChannelTable {
                       )}
                     </div>
                   </td>
-                  <td class="text-right">
+                  <td class="text-right ">
                     <div class="d-flex flex-column" style={{ gap: '0.25rem' }}>
-                      <p class={`p-0 m-0 ${record.last_year?.REVENUE ? 'font-weight-bold' : ''}`}>{formatAmount(record.currency.symbol, record.REVENUE)}</p>
+                      <p class={`p-0 m-0 ${record.last_year?.REVENUE ? 'font-weight-bold' : ''}`}>{formatAmount(record.currency, record.REVENUE)}</p>
                       {record.last_year?.REVENUE && (
                         <p class="p-0 mx-0" style={{ marginTop: '0.25rem', marginBottom: '0' }}>
-                          {formatAmount(record.currency.symbol, record.last_year.REVENUE)}
+                          {formatAmount(record.currency, record.last_year.REVENUE)}
                         </p>
                       )}
                     </div>
                   </td>
                   <td>
-                    <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
-                      <ir-progress-indicator percentage={mainPercentage}></ir-progress-indicator>
-                      {record.last_year?.PCT && <ir-progress-indicator percentage={secondaryPercentage} color="secondary"></ir-progress-indicator>}
-                    </div>
+                    {isSingleProperty && (
+                      <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
+                        <ir-progress-indicator percentage={mainPercentage}></ir-progress-indicator>
+                        {record.last_year?.PCT && <ir-progress-indicator percentage={secondaryPercentage} color="secondary"></ir-progress-indicator>}
+                      </div>
+                    )}
                   </td>
                 </tr>
               );
             })}
           </tbody>
-          <tfoot>
-            <tr style={{ fontSize: '12px' }}>
-              <td colSpan={4}>
-                <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
-                  <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
-                    <div class="legend bg-primary"></div>
-                    <p class="p-0 m-0">Selected period </p>
+          {isSingleProperty && (
+            <tfoot>
+              <tr style={{ fontSize: '12px' }}>
+                <td colSpan={4}>
+                  <div class={'d-flex align-items-center justify-content-end'} style={{ gap: '1rem', paddingTop: '0.5rem' }}>
+                    <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                      <div class="legend bg-primary"></div>
+                      <p class="p-0 m-0">Selected period </p>
+                    </div>
+                    <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                      <div class="legend secondary"></div>
+                      <p class="p-0 m-0">Previous year</p>
+                    </div>
                   </div>
-                  <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
-                    <div class="legend secondary"></div>
-                    <p class="p-0 m-0">Previous year</p>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tfoot>
+                </td>
+              </tr>
+            </tfoot>
+          )}
         </table>
         {this.visibleCount < this.records.length && (
           <div class={'d-flex mx-auto'}>

@@ -412,6 +412,7 @@ export namespace Components {
         "propertyid": number;
         "rowCount": number;
         "ticket": string;
+        "userType": number;
     }
     interface IrBookingPrinting {
         "bookingNumber": string;
@@ -5588,6 +5589,7 @@ declare namespace LocalJSX {
         "propertyid"?: number;
         "rowCount"?: number;
         "ticket"?: string;
+        "userType"?: number;
     }
     interface IrBookingPrinting {
         "bookingNumber"?: string;

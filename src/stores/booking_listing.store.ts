@@ -2,35 +2,50 @@ import { IExposedBookingsCriteria } from '@/models/IrBookingListing';
 import { Booking } from '@/models/booking.dto';
 import { createStore } from '@stencil/store';
 import moment from 'moment';
+import { z } from 'zod';
 
 export interface IBookingListingStore extends IExposedBookingsCriteria {
   token: string;
-  userSelection: IUserListingSelection;
+  userSelection: ExposedBookingsParams;
   bookings: Booking[];
   download_url: string | null;
   rowCount: number;
   balance_filter: { name: string; value: string }[];
 }
-export interface IUserListingSelection {
-  channel: string;
-  property_id: number;
-  balance_filter: string;
-  filter_type: number | string;
-  from: string;
-  to: string;
-  name: string;
-  book_nbr: string;
-  booking_status: string;
-  affiliate_id: 0;
-  is_mpo_managed: false;
-  is_mpo_used: false;
-  is_for_mobile: false;
-  is_combined_view: false;
-  start_row: number;
-  end_row: number;
-  total_count: number;
-  is_to_export: boolean;
-}
+const ymdDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected date in YYYY-MM-DD format');
+export const ExposedBookingsParamsSchema = z.object({
+  channel: z.string(),
+
+  // These are null in your initialState, so allow nulls
+  property_id: z.number().int().nullable(),
+  balance_filter: z.string().nullable(),
+  filter_type: z.union([z.number(), z.string()]).nullable(),
+
+  from: ymdDate,
+  to: ymdDate,
+
+  name: z.string(),
+  book_nbr: z.string(),
+  booking_status: z.string(),
+  userTypeCode: z.number().optional(),
+
+  // In the interface these were literal 0/false, but you treat them like values.
+  affiliate_id: z.number().int().default(0),
+  is_mpo_managed: z.boolean().default(false),
+  is_mpo_used: z.boolean().default(false),
+  is_for_mobile: z.boolean().default(false),
+  is_combined_view: z.boolean().default(false),
+
+  start_row: z.number().int(),
+  end_row: z.number().int(),
+  total_count: z.number().int(),
+
+  is_to_export: z.boolean(),
+
+  property_ids: z.array(z.number().int()).optional(),
+});
+
+export type ExposedBookingsParams = z.infer<typeof ExposedBookingsParamsSchema>;
 
 const initialState: IBookingListingStore = {
   channels: [],
@@ -81,13 +96,13 @@ export function initializeUserSelection() {
     balance_filter: booking_listing.balance_filter[0].value,
   };
 }
-export function updateUserSelections(params: Partial<IUserListingSelection>) {
+export function updateUserSelections(params: Partial<ExposedBookingsParams>) {
   booking_listing.userSelection = {
     ...booking_listing.userSelection,
     ...params,
   };
 }
-export function updateUserSelection(key: keyof IUserListingSelection, value: any) {
+export function updateUserSelection(key: keyof ExposedBookingsParams, value: any) {
   booking_listing.userSelection = {
     ...booking_listing.userSelection,
     [key]: value,

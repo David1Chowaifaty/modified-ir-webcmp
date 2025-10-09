@@ -109,8 +109,8 @@ export class IrSalesByChannel {
         if (!records || records.length === 0) return records;
 
         // Helper to extract currency ID from various possible formats
-        const getCurrencyId = (r: ChannelReport): number | null => {
-          return r?.currency?.id ?? null;
+        const getCurrencyId = (r: ChannelReport): string | null => {
+          return r?.currency ?? null;
         };
 
         // Create unique key for grouping

@@ -1,9 +1,9 @@
 import { Booking, IUnit, Occupancy } from '@/models/booking.dto';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { RoomService } from '@/services/room.service';
-import booking_listing, { updateUserSelection, onBookingListingChange, IUserListingSelection, updateUserSelections } from '@/stores/booking_listing.store';
+import booking_listing, { updateUserSelection, onBookingListingChange, updateUserSelections, ExposedBookingsParams } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
-import { formatAmount } from '@/utils/utils';
+import { formatAmount, isPrivilegedUser } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h, Element, Listen, Fragment } from '@stencil/core';
 import moment from 'moment';
 import { _formatTime } from '../ir-booking-details/functions';
@@ -13,6 +13,7 @@ import { isSingleUnit } from '@/stores/calendar-data';
 import { getAllParams } from '@/utils/browserHistory';
 import { BookingService } from '@/services/booking.service';
 import { PaymentEntries } from '../ir-booking-details/types';
+import { AllowedProperties, PropertyService } from '@/services/property.service';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -28,6 +29,7 @@ export class IrBookingListing {
   @Prop() rowCount: number = 10;
   @Prop() p: string;
   @Prop() baseUrl: string;
+  @Prop() userType: number;
 
   @State() isLoading = false;
   @State() currentPage = 1;
@@ -40,6 +42,7 @@ export class IrBookingListing {
   private bookingListingService = new BookingListingService();
   private bookingService = new BookingService();
   private roomService = new RoomService();
+  private propertyService = new PropertyService();
   private token = new Token();
 
   private listingModal: HTMLIrListingModalElement;
@@ -50,6 +53,8 @@ export class IrBookingListing {
     '003': 'badge-danger',
     '004': 'badge-danger',
   };
+  private allowedProperties: number[];
+  private havePrivilege: boolean;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -80,31 +85,40 @@ export class IrBookingListing {
     this.initializeApp();
   }
 
-  async initializeApp() {
+  private async initializeApp() {
     try {
       this.isLoading = true;
-      if (!this.propertyid && !this.p) {
-        throw new Error('Property ID or username is required');
-      }
+      this.havePrivilege = isPrivilegedUser(this.userType);
+
       let propertyId = this.propertyid;
-      if (!propertyId) {
-        const propertyData = await this.roomService.getExposedProperty({
-          id: 0,
-          aname: this.p,
-          language: this.language,
-          is_backend: true,
-        });
-        propertyId = propertyData.My_Result.id;
+      if (!this.havePrivilege) {
+        if (!this.propertyid && !this.p) {
+          throw new Error('Property ID or username is required');
+        }
+
+        if (!propertyId) {
+          const propertyData = await this.roomService.getExposedProperty({
+            id: 0,
+            aname: this.p,
+            language: this.language,
+            is_backend: true,
+          });
+          propertyId = propertyData.My_Result.id;
+        }
       }
 
-      const requests = [
+      const parallelRequests: Promise<unknown>[] = [
         this.bookingService.getSetupEntriesByTableNameMulti(['_PAY_TYPE', '_PAY_TYPE_GROUP', '_PAY_METHOD']),
-        this.bookingListingService.getExposedBookingsCriteria(propertyId),
+        this.bookingListingService.getExposedBookingsCriteria(this.havePrivilege ? null : propertyId),
         this.roomService.fetchLanguage(this.language, ['_BOOKING_LIST_FRONT']),
       ];
 
-      if (this.propertyid) {
-        requests.push(
+      // let propertyDataIndex: number | null = null;
+      let allowedPropertiesIndex: number | null = null;
+
+      if (this.propertyid && !this.havePrivilege) {
+        // propertyDataIndex = parallelRequests.length;
+        parallelRequests.push(
           this.roomService.getExposedProperty({
             id: this.propertyid,
             language: this.language,
@@ -113,18 +127,37 @@ export class IrBookingListing {
         );
       }
 
-      const [setupEntries] = await Promise.all(requests);
+      if (this.havePrivilege) {
+        allowedPropertiesIndex = parallelRequests.length;
+        parallelRequests.push(this.propertyService.getExposedAllowedProperties());
+      }
+
+      const results = await Promise.all(parallelRequests);
+
+      const [setupEntries] = results;
       const { pay_type, pay_type_group, pay_method } = this.bookingService.groupEntryTablesResult(setupEntries as any);
+
       this.paymentEntries = {
         groups: pay_type_group,
         methods: pay_method,
         types: pay_type,
       };
+
+      this.allowedProperties = allowedPropertiesIndex !== null ? (results[allowedPropertiesIndex] as AllowedProperties)?.map(p => p.id) : null;
+
       updateUserSelection('property_id', propertyId);
-      // this.geSearchFiltersFromParams();
-      await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
+
+      updateUserSelections({
+        property_ids: this.allowedProperties,
+        userTypeCode: this.userType,
+      });
+
+      await this.bookingListingService.getExposedBookings({
+        ...booking_listing.userSelection,
+        is_to_export: false,
+      });
     } catch (error) {
-      console.error(error);
+      console.error('Error initializing app:', error);
     } finally {
       this.isLoading = false;
     }
@@ -140,7 +173,7 @@ export class IrBookingListing {
     const params = getAllParams();
     if (params) {
       console.log('update params');
-      let obj: Partial<IUserListingSelection> = {};
+      let obj: Partial<ExposedBookingsParams> = {};
       if (params.e) {
         obj['end_row'] = Number(params.e);
       }
@@ -181,6 +214,7 @@ export class IrBookingListing {
   disconnectedCallback() {
     clearTimeout(this.listingModalTimeout);
   }
+
   @Listen('resetData')
   async handleResetData(e: CustomEvent) {
     e.stopImmediatePropagation();
@@ -249,6 +283,7 @@ export class IrBookingListing {
               <table class="table table-striped table-bordered no-footer dataTable">
                 <thead>
                   <tr>
+                    {this.havePrivilege && <th>Property</th>}
                     <th scope="col" class="text-center">
                       {locales.entries?.Lcz_Booking}#
                     </th>
@@ -286,7 +321,7 @@ export class IrBookingListing {
                 <tbody class="">
                   {booking_listing.bookings.length === 0 && (
                     <tr>
-                      <td colSpan={8}>{locales.entries?.Lcz_NoDataAvailable}</td>
+                      <td colSpan={this.havePrivilege ? 9 : 8}>{locales.entries?.Lcz_NoDataAvailable}</td>
                     </tr>
                   )}
                   {booking_listing.bookings?.map(booking => {
@@ -295,6 +330,7 @@ export class IrBookingListing {
                     const totalPersons = this.calculateTotalPersons(booking);
                     return (
                       <tr key={booking.booking_nbr}>
+                        {this.havePrivilege && <td>{booking.property.name}</td>}
                         <td class="text-left">
                           <ir-button
                             btn_color="link"
@@ -564,7 +600,7 @@ export class IrBookingListing {
               hasPrint
               hasReceipt
               is_from_front_desk
-              propertyid={this.propertyid}
+              propertyid={this.editBookingItem?.booking?.property?.id}
               hasRoomEdit
               hasRoomDelete
               hasCloseButton
