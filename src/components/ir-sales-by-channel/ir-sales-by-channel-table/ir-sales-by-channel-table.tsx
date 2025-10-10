@@ -46,7 +46,7 @@ export class IrSalesByChannelTable {
               <th class="text-left">Channel</th>
               <th class="text-center">Room nights</th>
               <th class="text-right">Room Revenue</th>
-              <th class=""></th>
+              <th class={`sales-by-channel-table__progress-col ${!isSingleProperty ? 'single' : ''}`}></th>
             </tr>
           </thead>
 
@@ -94,7 +94,7 @@ export class IrSalesByChannelTable {
                       )}
                     </div>
                   </td>
-                  <td>
+                  <td class={`sales-by-channel-table__progress-col ${!isSingleProperty ? 'single' : ''}`}>
                     {isSingleProperty && (
                       <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
                         <ir-progress-indicator percentage={mainPercentage}></ir-progress-indicator>

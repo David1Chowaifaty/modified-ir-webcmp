@@ -22,6 +22,18 @@
   /* background: white; */
   padding: 0.25rem 1rem !important;
 }
+.sales-by-channel-table__progress-col {
+  width: 50%;
+}
+.sales-by-channel-table__progress-col.single {
+  display: none !important;
+}
+/*md*/
+@media (min-width: 768px) {
+  .sales-by-channel-table__progress-col.single {
+    display: table-cell !important;
+  }
+}
 
 /* .table-container {
   overflow-y: auto;

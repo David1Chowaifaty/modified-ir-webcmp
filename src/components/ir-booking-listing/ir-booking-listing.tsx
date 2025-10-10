@@ -283,7 +283,7 @@ export class IrBookingListing {
               <table class="table table-striped table-bordered no-footer dataTable">
                 <thead>
                   <tr>
-                    {this.havePrivilege && <th>Property</th>}
+                    {this.havePrivilege && <th class="text-left">Property</th>}
                     <th scope="col" class="text-center">
                       {locales.entries?.Lcz_Booking}#
                     </th>
@@ -330,7 +330,7 @@ export class IrBookingListing {
                     const totalPersons = this.calculateTotalPersons(booking);
                     return (
                       <tr key={booking.booking_nbr}>
-                        {this.havePrivilege && <td>{booking.property.name}</td>}
+                        {this.havePrivilege && <td class="text-left">{booking.property.name}</td>}
                         <td class="text-left">
                           <ir-button
                             btn_color="link"
