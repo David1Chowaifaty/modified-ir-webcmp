@@ -1,5 +1,5 @@
 import { Component, Prop, State, Watch, h } from '@stencil/core';
-import { ChannelReportResult } from '../types';
+import { ChannelReportResult, SalesByChannelMode } from '../types';
 import { formatAmount } from '@/utils/utils';
 import { AllowedProperties } from '@/services/property.service';
 
@@ -11,7 +11,7 @@ import { AllowedProperties } from '@/services/property.service';
 export class IrSalesByChannelTable {
   @Prop() records: ChannelReportResult;
   @Prop() allowedProperties: AllowedProperties;
-
+  @Prop() mode: SalesByChannelMode;
   @State() visibleCount: number = 10;
   @State() properties: Map<number, string> = new Map();
 
@@ -36,7 +36,7 @@ export class IrSalesByChannelTable {
   };
   render() {
     const visibleRecords = this.records.slice(0, this.visibleCount);
-    const isSingleProperty = this.allowedProperties.length === 1;
+    const isSingleProperty = this.mode === 'property';
 
     return (
       <div class="table-container h-100 p-1 m-0 mb-2 table-responsive">

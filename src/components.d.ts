@@ -41,7 +41,7 @@ import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { Moment } from "moment";
 import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
-import { ChannelReportResult, ChannelSaleFilter } from "./components/ir-sales-by-channel/types";
+import { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
 import { AllowedProperties } from "./services/property.service";
 import { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 import { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
@@ -86,7 +86,7 @@ export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { Moment } from "moment";
 export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
-export { ChannelReportResult, ChannelSaleFilter } from "./components/ir-sales-by-channel/types";
+export { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
 export { AllowedProperties } from "./services/property.service";
 export { CountrySalesFilter, MappedCountries, SalesRecord } from "./components/ir-sales-by-country/types";
 export { TIcons as TIcons1 } from "./components/ui/ir-icons/icons";
@@ -1927,6 +1927,8 @@ export namespace Components {
     }
     interface IrSalesByChannel {
         "language": string;
+        "mode": SalesByChannelMode;
+        "p": string;
         "propertyid": string;
         "ticket": string;
     }
@@ -1939,6 +1941,7 @@ export namespace Components {
     }
     interface IrSalesByChannelTable {
         "allowedProperties": AllowedProperties;
+        "mode": SalesByChannelMode;
         "records": ChannelReportResult;
     }
     interface IrSalesByCountry {
@@ -7292,6 +7295,8 @@ declare namespace LocalJSX {
     }
     interface IrSalesByChannel {
         "language"?: string;
+        "mode"?: SalesByChannelMode;
+        "p"?: string;
         "propertyid"?: string;
         "ticket"?: string;
     }
@@ -7305,6 +7310,7 @@ declare namespace LocalJSX {
     }
     interface IrSalesByChannelTable {
         "allowedProperties"?: AllowedProperties;
+        "mode"?: SalesByChannelMode;
         "records"?: ChannelReportResult;
     }
     interface IrSalesByCountry {

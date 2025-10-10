@@ -17,7 +17,7 @@ const ChannelReportBaseSchema = z.object({
   PROPERTY_NAME: z.string(),
   currency: z.string(),
 });
-
+export type SalesByChannelMode = 'property' | 'mpo';
 /**
  * Transforms UPPER_SNAKE_CASE keys to lowercase at parse time.
  * Output type is exactly the lowercased version of the base schema.
@@ -42,7 +42,7 @@ export const ChannelSalesParamsSchema = z.object({
   WINDOW: z.coerce.number().int().nonnegative(),
   // Accepts true/false, "true"/"false", 1/0; defaults to false
   is_export_to_excel: z.coerce.boolean().optional().default(false),
-  LIST_AC_ID: z.array(z.number()).optional(),
+  LIST_AC_ID: z.array(z.number()).nullable(),
 });
 // .strict()
 // .refine(v => new Date(v.FROM_DATE) <= new Date(v.TO_DATE), { message: 'FROM_DATE must be on or before TO_DATE', path: ['TO_DATE'] });

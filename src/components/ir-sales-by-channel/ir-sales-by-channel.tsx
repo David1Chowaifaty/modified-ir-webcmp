@@ -4,7 +4,7 @@ import { AllowedProperties, PropertyService } from '@/services/property.service'
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import moment from 'moment';
-import { ChannelReport, ChannelReportResult, ChannelSaleFilter } from './types';
+import { ChannelReport, ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from './types';
 @Component({
   tag: 'ir-sales-by-channel',
   styleUrl: 'ir-sales-by-channel.css',
@@ -14,13 +14,16 @@ export class IrSalesByChannel {
   @Prop() language: string = '';
   @Prop() ticket: string = '';
   @Prop() propertyid: string;
+  @Prop() p: string;
+  @Prop() mode!: SalesByChannelMode;
 
   @State() isLoading: 'filter' | 'export' | null = null;
   @State() isPageLoading = true;
 
   @State() salesData: ChannelReportResult;
   @State() channelSalesFilters: ChannelSaleFilter;
-  @State() allowedProperties: AllowedProperties;
+  @State() allowedProperties: AllowedProperties = [];
+  @State() propertyID: number;
 
   private token = new Token();
   private roomService = new RoomService();
@@ -53,11 +56,29 @@ export class IrSalesByChannel {
 
   private async initializeApp() {
     try {
-      const requests = [this.propertyService.getExposedAllowedProperties(), this.roomService.fetchLanguage(this.language)];
-      const [properties] = await Promise.all(requests);
-      this.allowedProperties = [...(properties as any)];
+      if (!this.mode) {
+        throw new Error("Missing required 'mode'. Please set it to either 'property' or 'mpo'.");
+      }
+      if (!this.propertyid && this.mode === 'property' && !this.p) {
+        throw new Error('Missing Property ID or aname');
+      }
+      if (this.mode === 'property') {
+        const property = await this.propertyService.getExposedProperty({
+          id: Number(this.propertyid ?? 0),
+          aname: this.p,
+          language: this.language,
+          is_backend: true,
+        });
+        this.propertyID = property.My_Result.id;
+      }
+      const requests: Promise<unknown>[] = [, this.roomService.fetchLanguage(this.language)];
+      if (this.mode === 'mpo') {
+        requests.unshift(this.propertyService.getExposedAllowedProperties());
+        const [properties] = await Promise.all(requests);
+        this.allowedProperties = [...(properties as any)];
+      }
 
-      this.baseFilters = { ...this.baseFilters, LIST_AC_ID: this.allowedProperties.map(p => p.id) };
+      this.baseFilters = { ...this.baseFilters, LIST_AC_ID: this.allowedProperties?.map(p => p.id) };
       this.channelSalesFilters = { ...this.baseFilters };
 
       await this.getChannelSales();
@@ -70,20 +91,22 @@ export class IrSalesByChannel {
 
   private async getChannelSales(isExportToExcel = false) {
     try {
-      const { include_previous_year, ...filterParams } = this.channelSalesFilters;
+      const { include_previous_year, LIST_AC_ID, ...filterParams } = this.channelSalesFilters;
       this.isLoading = isExportToExcel ? 'export' : 'filter';
       const currentSales = await this.propertyService.getChannelSales({
-        // AC_ID: this.propertyid,
         is_export_to_excel: isExportToExcel,
         ...filterParams,
+        AC_ID: this.propertyID ? this.propertyID.toString() : undefined,
+        ...filterParams,
+        LIST_AC_ID: this.propertyID ? null : LIST_AC_ID,
       });
       const shouldFetchPreviousYear = !isExportToExcel && include_previous_year;
       let enrichedSales: ChannelReportResult = [];
       if (shouldFetchPreviousYear) {
         const previousYearSales = await this.propertyService.getChannelSales({
-          // AC_ID: this.propertyid.toString(),
-          is_export_to_excel: isExportToExcel,
+          AC_ID: this.propertyID ? this.propertyID.toString() : undefined,
           ...filterParams,
+          LIST_AC_ID: this.propertyID ? null : LIST_AC_ID,
           FROM_DATE: moment(filterParams.FROM_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
           TO_DATE: moment(filterParams.TO_DATE).subtract(1, 'year').format('YYYY-MM-DD'),
         });
@@ -234,7 +257,7 @@ export class IrSalesByChannel {
               allowedProperties={this.allowedProperties}
               baseFilters={this.baseFilters}
             ></ir-sales-by-channel-filters>
-            <ir-sales-by-channel-table allowedProperties={this.allowedProperties} class="card mb-0" records={this.salesData}></ir-sales-by-channel-table>
+            <ir-sales-by-channel-table mode={this.mode} allowedProperties={this.allowedProperties} class="card mb-0" records={this.salesData}></ir-sales-by-channel-table>
           </div>
         </section>
       </Host>
