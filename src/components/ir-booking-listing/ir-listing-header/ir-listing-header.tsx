@@ -1,7 +1,7 @@
 import { BookingListingService } from '@/services/booking_listing.service';
 import booking_listing, { initializeUserSelection, updateUserSelection } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
-import { downloadFile } from '@/utils/utils';
+import { downloadFile, isPrivilegedUser } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 import moment from 'moment';
 
@@ -82,6 +82,7 @@ export class IrListingHeader {
   // }
   render() {
     console.log(booking_listing.balance_filter);
+    const havePrivilege = isPrivilegedUser(booking_listing.userSelection.userTypeCode);
     return (
       <Host>
         <section class="d-flex align-items-center ">
@@ -89,16 +90,18 @@ export class IrListingHeader {
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
               <h3 class="flex-fill">{locales.entries?.Lcz_Bookings}</h3>
               <div>
-                <igl-book-property-container
-                  p={this.p}
-                  withIrToastAndInterceptor={false}
-                  propertyid={this.propertyId}
-                  language={this.language}
-                  title={locales.entries.Lcz_CreateNewBooking}
-                  ticket={booking_listing.token}
-                >
-                  <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
-                </igl-book-property-container>
+                {!havePrivilege && (
+                  <igl-book-property-container
+                    p={this.p}
+                    withIrToastAndInterceptor={false}
+                    propertyid={this.propertyId}
+                    language={this.language}
+                    title={locales.entries.Lcz_CreateNewBooking}
+                    ticket={booking_listing.token}
+                  >
+                    <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
+                  </igl-book-property-container>
+                )}
               </div>
             </div>
             <h3 class="d-none d-md-block">{locales.entries?.Lcz_Bookings}</h3>
@@ -128,16 +131,18 @@ export class IrListingHeader {
             </form>
           </div>
           <div class="d-none d-md-block">
-            <igl-book-property-container
-              p={this.p}
-              withIrToastAndInterceptor={false}
-              propertyid={this.propertyId}
-              language={this.language}
-              title={locales.entries.Lcz_CreateNewBooking}
-              ticket={booking_listing.token}
-            >
-              <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
-            </igl-book-property-container>
+            {!havePrivilege && (
+              <igl-book-property-container
+                p={this.p}
+                withIrToastAndInterceptor={false}
+                propertyid={this.propertyId}
+                language={this.language}
+                title={locales.entries.Lcz_CreateNewBooking}
+                ticket={booking_listing.token}
+              >
+                <ir-button slot="trigger" class={'new-booking-btn'} variant="icon" icon_name="square_plus"></ir-button>
+              </igl-book-property-container>
+            )}
           </div>
         </section>
         <section class="d-flex align-items-center justify-evenly seperator-container d-sm-none">
@@ -242,17 +247,19 @@ export class IrListingHeader {
             selectId="booking_status"
           ></ir-select>
 
-          <ir-select
-            class="flex-sm-wrap"
-            selectedValue={booking_listing.userSelection.channel}
-            onSelectChange={e => updateUserSelection('channel', e.detail)}
-            data={booking_listing?.channels.map(channel => ({
-              value: channel.value,
-              text: channel.name,
-            }))}
-            selectId="channels"
-            firstOption={locales.entries?.Lcz_All + ' ' + locales.entries?.Lcz_Channels}
-          ></ir-select>
+          {!isPrivilegedUser(booking_listing.userSelection.userTypeCode) && (
+            <ir-select
+              class="flex-sm-wrap"
+              selectedValue={booking_listing.userSelection.channel}
+              onSelectChange={e => updateUserSelection('channel', e.detail)}
+              data={booking_listing?.channels.map(channel => ({
+                value: channel.value,
+                text: channel.name,
+              }))}
+              selectId="channels"
+              firstOption={locales.entries?.Lcz_All + ' ' + locales.entries?.Lcz_Channels}
+            ></ir-select>
+          )}
           <ir-select
             class="flex-sm-wrap"
             selectedValue={booking_listing.userSelection.balance_filter}

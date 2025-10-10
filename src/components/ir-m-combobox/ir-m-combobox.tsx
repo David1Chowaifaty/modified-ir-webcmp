@@ -16,6 +16,11 @@ export class IrMCombobox {
   @Prop() placeholder: string;
 
   /**
+   * default selected option for the combobox.
+   */
+  @Prop() defaultOption: ComboboxOption['value'];
+
+  /**
    * Determines how the options are loaded into the component.
    * - 'static': Uses the options passed through the `options` prop or the default internal list.
    * - 'external': Emits search events for external handling, options updated via `options` prop.
@@ -95,6 +100,12 @@ export class IrMCombobox {
       this.updateSlotElements();
     }
   }
+  @Watch('defaultOption')
+  watchDefaultValueChanged(newOption: string) {
+    if (newOption !== this.selectedOption.value) {
+      this.applyDefaultOption();
+    }
+  }
 
   @Watch('useSlot')
   watchUseSlotChanged() {
@@ -121,6 +132,9 @@ export class IrMCombobox {
       setTimeout(() => this.updateSlotElements(), 0);
     }
     setTimeout(() => this.updateAffixPresence(), 0);
+    setTimeout(() => {
+      this.applyDefaultOption();
+    }, 0);
     this.prefixSlotRef?.addEventListener('slotchange', this.updateAffixPresence);
     this.suffixSlotRef?.addEventListener('slotchange', this.updateAffixPresence);
   }
@@ -157,6 +171,12 @@ export class IrMCombobox {
   @Listen('comboboxItemUnregister')
   handleComboboxItemUnregister() {
     this.collectItemChildren();
+  }
+
+  private applyDefaultOption() {
+    if (!this.defaultOption || !Array.isArray(this.options)) return;
+    const opt = this.options.find(o => o.value === this.defaultOption);
+    if (opt) this.selectedOption = { ...opt };
   }
 
   private initializeOptions() {
@@ -327,7 +347,7 @@ export class IrMCombobox {
     this.selectedOption = option;
     this.optionChange.emit(option);
     this.closeDropdown();
-    this.inputRef.focus();
+    this.inputRef?.focus();
   }
 
   private scrollToFocusedOption() {
