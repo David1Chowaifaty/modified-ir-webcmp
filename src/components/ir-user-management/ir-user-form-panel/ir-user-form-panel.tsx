@@ -273,14 +273,14 @@ export class IrUserFormPanel {
               {this.showPasswordValidation && <ir-password-validator class="mb-1" password={this.userInfo.password}></ir-password-validator>}
             </Fragment>
           ) : (
-            this.haveAdminPrivileges &&
-            this.user.type.toString() !== this.superAdminId &&
-            (this.user?.type.toString() === '17' && this.userTypeCode?.toString() === '17' ? null : (
-              <div class="d-flex mt-2 align-items-center justify-content-between">
-                <h4 class="m-0 p-0 logins-history-title">{locales.entries.Lcz_Password}</h4>
-                <ir-button size="sm" btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text={locales.entries.Lcz_ChangePassword} btn_color="link"></ir-button>
-              </div>
-            ))
+            // this.haveAdminPrivileges &&
+            // this.user.type.toString() !== this.superAdminId &&
+            // (this.user?.type.toString() === '17' && this.userTypeCode?.toString() === '17' ? null : (
+            <div class="d-flex mt-2 align-items-center justify-content-between">
+              <h4 class="m-0 p-0 logins-history-title">{locales.entries.Lcz_Password}</h4>
+              <ir-button size="sm" btn_styles={'pr-0'} onClickHandler={() => (this.isOpen = true)} text={locales.entries.Lcz_ChangePassword} btn_color="link"></ir-button>
+            </div>
+            // ))
           )}
           {this.user?.sign_ins?.length > 0 && (
             <section class="logins-history-section mt-2">

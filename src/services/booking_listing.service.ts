@@ -1,5 +1,5 @@
-import booking_listing, { IUserListingSelection, initializeUserSelection } from '@/stores/booking_listing.store';
-import { extras } from '@/utils/utils';
+import booking_listing, { ExposedBookingsParams, initializeUserSelection } from '@/stores/booking_listing.store';
+import { extras, isPrivilegedUser } from '@/utils/utils';
 import axios from 'axios';
 
 export class BookingListingService {
@@ -16,8 +16,16 @@ export class BookingListingService {
     initializeUserSelection();
   }
 
-  public async getExposedBookings(params: IUserListingSelection) {
-    const { data } = await axios.post(`/Get_Exposed_Bookings`, { ...params, extras });
+  public async getExposedBookings(params: ExposedBookingsParams) {
+    const { property_id, userTypeCode, channel, property_ids, ...rest } = params;
+    const havePrivilege = isPrivilegedUser(userTypeCode);
+    const { data } = await axios.post(`/Get_Exposed_Bookings`, {
+      ...rest,
+      extras,
+      property_id: havePrivilege ? undefined : property_id,
+      property_ids: havePrivilege ? property_ids : null,
+      channel: havePrivilege ? '' : channel,
+    });
     const result = data.My_Result;
     const header = data.My_Params_Get_Exposed_Bookings;
     booking_listing.bookings = [...result];

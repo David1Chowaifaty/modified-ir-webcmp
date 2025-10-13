@@ -1,6 +1,9 @@
+import { type ChannelReportResult, type ChannelSalesParams, parseChannelReportResult, parseChannelSalesParams } from '@/components/ir-sales-by-channel/types';
 import calendar_data from '@/stores/calendar-data';
 import { downloadFile } from '@/utils/utils';
 import axios from 'axios';
+import { z } from 'zod';
+
 export type CountrySalesParams = {
   AC_ID: number;
   WINDOW: number;
@@ -43,6 +46,9 @@ export interface DailyStat {
   ADR: number;
   Total_Guests: number | undefined;
 }
+export const AllowedPropertiesSchema = z.array(z.object({ id: z.number(), name: z.string() })).nullable();
+
+export type AllowedProperties = z.infer<typeof AllowedPropertiesSchema>;
 export class PropertyService {
   public async getExposedProperty(params: {
     id: number | null;
@@ -86,6 +92,27 @@ export class PropertyService {
       throw new Error(error);
     }
   }
+
+  public async getChannelSales(params: ChannelSalesParams): Promise<ChannelReportResult> {
+    const _params = parseChannelSalesParams(params);
+    const { data } = await axios.post('/Get_Channel_Sales', _params);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    if (params.is_export_to_excel) {
+      downloadFile(data.My_Params_Get_Channel_Sales.Link_excel);
+    }
+    return parseChannelReportResult(data.My_Result);
+  }
+
+  public async getExposedAllowedProperties() {
+    const { data } = await axios.post('/Get_Exposed_Allowed_Properties', {});
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return AllowedPropertiesSchema.parse(data.My_Result);
+  }
+
   public async getCountrySales(params: CountrySalesParams) {
     const { data } = await axios.post('/Get_Country_Sales', params);
     if (data.ExceptionMsg !== '') {
