@@ -7,6 +7,7 @@ import calendar_data from '@/stores/calendar-data';
 import { IPaymentAction } from '@/services/payment.service';
 import locales from '@/stores/locales.store';
 import { HelpDocButton } from '@/components/HelpButton';
+import { calculateDaysBetweenDates } from '@/utils/booking';
 
 @Component({
   tag: 'ir-applicable-policies',
@@ -75,6 +76,9 @@ export class IrApplicablePolicies {
             statement: '100% of total price',
             is_check_in_date: true,
           });
+          if (calculateDaysBetweenDates(room.from_date, room.to_date) === 1) {
+            brackets = [];
+          }
           statements.push({
             ...cancellationPolicy,
             roomType: room.roomtype,
@@ -321,7 +325,7 @@ export class IrApplicablePolicies {
             <p class="applicable-policies__no-penalty">{this.generateCancellationStatement()}</p>
           </div>
 
-          {this.cancellationStatements?.length > 0 && this.shouldShowCancellationBrackets && (
+          {this.cancellationStatements?.length > 0 && this.cancellationStatements.some(s => s.brackets?.length > 0) && this.shouldShowCancellationBrackets && (
             <div class="applicable-policies__statements">
               {this.cancellationStatements?.map(statement => {
                 const currentBracket = this._getCurrentBracket(statement.brackets);
