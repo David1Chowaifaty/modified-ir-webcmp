@@ -33,18 +33,16 @@ export function bestForeground(bgColor: string): 'black' | 'white' {
  */
 export function getAdjustedShades(bgColor: string, opts: { amount?: number; minContrast?: number } = {}): { lighter: string; darker: string; text: string } {
   const base = chroma(bgColor);
-  if (bgColor === '#c28d6b') {
-    console.log(base.luminance());
-  }
-
+  const isDark = base.luminance() <= 0.5;
   // Pick default amount based on perceived lightness unless caller overrides it
-  const defaultAmount = base.luminance() <= 0.5 ? 0.2 : 0.6;
+  const defaultAmount = isDark ? 0.2 : 0.6;
+
   const amount = opts.amount ?? defaultAmount; // how strong the stripe deltas are
   const minContrast = opts.minContrast ?? 7;
 
   // Stripe colors: mix toward white/black in LCH so hue is preserved
   // (looks like the same “family” of color).
-  const lighter = chroma.mix(base, '#fff', amount, 'lch').hex();
+  const lighter = chroma.mix(base, isDark ? '#000' : '#fff', amount, 'lch').hex();
   const darker = chroma.mix(base, '#000', amount, 'lch').hex();
 
   // Pick a starting text color (black or white) by higher contrast to the *base*,
@@ -72,7 +70,7 @@ export function getAdjustedShades(bgColor: string, opts: { amount?: number; minC
 
   const text = ensureContrast(start, target);
 
-  return { lighter, darker, text };
+  return { lighter: chroma.average([base.hex(), 'rgba(255, 255, 255, 0.8)']).hex(), darker, text };
 }
 
 export function convertDateToTime(dayWithWeekday: string, monthWithYear: string): number {

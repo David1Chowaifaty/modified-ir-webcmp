@@ -495,15 +495,15 @@ export const AdultChildConstraintsSchema = z.object({
 export type AdultChildConstraints = z.infer<typeof AdultChildConstraintsSchema>;
 
 export const BookingColorSchema = z.object({
-  color: z.string(),
+  color: z.string().nullable(),
   design: z.literal('skew'),
-  name: z.string(),
+  name: z.string().nullable(),
 });
 
 export type BookingColor = z.infer<typeof BookingColorSchema>;
 
 const CalendarExtraSchema = z.object({
-  booking_colors: z.array(BookingColorSchema),
+  booking_colors: z.array(BookingColorSchema).nullable(),
 });
 export type CalendarExtra = z.infer<typeof CalendarExtraSchema>;
 

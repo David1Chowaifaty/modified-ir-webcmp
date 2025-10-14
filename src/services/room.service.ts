@@ -1,7 +1,7 @@
 import { BookingColor, PropertySchema } from '@/models/property-types';
 import calendar_data from '@/stores/calendar-data';
 import { locales } from '@/stores/locales.store';
-import { bestForeground, getAdjustedShades } from '@/utils/utils';
+import { getAdjustedShades } from '@/utils/utils';
 import axios from 'axios';
 
 const DEFAULT_BOOKING_COLORS: BookingColor[] = [

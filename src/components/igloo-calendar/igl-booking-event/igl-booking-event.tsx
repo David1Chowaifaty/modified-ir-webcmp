@@ -878,12 +878,15 @@ export class IglBookingEvent {
   render() {
     // onMouseLeave={()=>this.showEventInfo(false)}
     let legend = this.getEventLegend();
+
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
 
     const backgroundColor = this.bookingEvent.ROOM_INFO?.calendar_extra ? this.bookingEvent.ROOM_INFO.calendar_extra?.booking_color?.color ?? legend.color : legend.color;
 
-    const { foreground = 'white', stripe } = calendar_data.colorsForegrounds?.[backgroundColor];
+    const { foreground, stripe } = calendar_data.colorsForegrounds?.[backgroundColor] ?? {
+      foreground: '',
+    };
 
     // console.log(this.bookingEvent.BOOKING_NUMBER === '46231881' ? this.bookingEvent : '');
     return (
@@ -898,15 +901,16 @@ export class IglBookingEvent {
             !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
           }
           ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}
-       ${this.bookingEvent.STATUS === 'IN-HOUSE' ? 'stripped-bar' : ''}  
+       ${this.bookingEvent.STATUS === 'IN-HOUSE' ? 'striped-bar vertical' : ''}  
+       ${isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003' ? 'striped-bar animated' : ''}
        ${
          !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS !== 'TEMP-EVENT' && this.bookingEvent.ID !== 'NEW_TEMP_EVENT'
            ? 'border border-dark ota-booking-event'
            : ''
        }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
           style={{
-            'backgroundColor': backgroundColor,
-            '--ir-event-bg': backgroundColor,
+            'backgroundColor': isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003' ? 'rgb(243, 71, 82)' : backgroundColor,
+            '--ir-event-bg': isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003' ? 'rgb(243, 71, 82)' : backgroundColor,
             '--ir-event-bg-stripe-color': stripe,
           }}
           onTouchStart={event => this.startDragging(event, 'move')}
