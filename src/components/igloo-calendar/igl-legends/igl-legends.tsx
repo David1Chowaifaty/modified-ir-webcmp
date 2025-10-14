@@ -1,5 +1,8 @@
+import { BookingColor } from '@/models/booking.dto';
+import { PropertyService } from '@/services/property.service';
+import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'igl-legends',
@@ -9,13 +12,87 @@ import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 export class IglLegends {
   @Event() optionEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() legendData: { [key: string]: any };
+  private propertyService = new PropertyService();
+
+  @State() bookingColors: BookingColor[] = [];
+  @State() saveState: 'idle' | 'saving' | 'saved' | 'error' = 'idle';
+  @State() saveError?: string;
+
+  private saveTimeout?: number;
+
+  disconnectedCallback() {
+    if (this.saveTimeout) {
+      clearTimeout(this.saveTimeout);
+    }
+  }
+
   handleOptionEvent(key, data = '') {
     this.optionEvent.emit({ key, data });
   }
 
+  private syncCalendarExtra(colors: BookingColor[]) {
+    const calendarExtra = calendar_data.property.calendar_extra ?? {};
+    calendar_data.property.calendar_extra = {
+      ...calendarExtra,
+      booking_colors: colors.map(color => ({ ...color })),
+    };
+  }
+
+  private get propertyId(): number | null {
+    return calendar_data.property?.id ?? calendar_data.property.id ?? null;
+  }
+
+  private updateBookingColor(index: number, patch: Partial<BookingColor>) {
+    const bookingColors = calendar_data.property.calendar_extra?.booking_colors.map((color, idx) => (idx === index ? { ...color, ...patch } : color));
+    this.syncCalendarExtra(bookingColors);
+    if (this.saveState === 'saved') {
+      this.saveState = 'idle';
+    }
+  }
+
+  private async persistBookingColors() {
+    const propertyId = this.propertyId;
+    if (!propertyId) {
+      return;
+    }
+
+    if (this.saveState === 'saving') {
+      return;
+    }
+
+    this.saveState = 'saving';
+    this.saveError = undefined;
+
+    try {
+      await this.propertyService.setPropertyCalendarExtra({
+        property_id: propertyId,
+        value: JSON.stringify(calendar_data.property.calendar_extra),
+      });
+      this.saveState = 'saved';
+      if (this.saveTimeout) {
+        clearTimeout(this.saveTimeout);
+      }
+      this.saveTimeout = window.setTimeout(() => {
+        this.saveState = 'idle';
+        this.saveTimeout = undefined;
+      }, 2000);
+    } catch (error) {
+      this.saveState = 'error';
+      this.saveError = error instanceof Error ? error.message : String(error);
+    }
+  }
+
+  private handleNameInput(index: number, value: string) {
+    this.updateBookingColor(index, { name: value });
+  }
+
+  private handleBlur() {
+    this.persistBookingColors();
+  }
+
   render() {
     return (
-      <Host class="legendContainer pr-1 text-left">
+      <Host class="legendContainer pr-1 text-left pb-4">
         <div class={'w-full'}>
           <div class={'w-full'}>
             <div class="stickyHeader pt-1 ">
@@ -34,7 +111,7 @@ export class IglLegends {
             <div class="mt-2 pl-1">
               <table>
                 {this.legendData.map(legendInfo => {
-                  console.log(legendInfo);
+                  const stripeColor = calendar_data.colorsForegrounds[legendInfo?.color];
                   return (
                     <tr key={`legend_${legendInfo.id}`} class="legendRow ">
                       <td>
@@ -53,11 +130,46 @@ export class IglLegends {
                             />
                           </svg>
                         ) : (
-                          <div class={`legend_${legendInfo.design}`} style={{ backgroundColor: legendInfo.color }}></div>
+                          <div
+                            class={`legend_${legendInfo.design} ${
+                              ['1', '7'].includes(legendInfo.id.toString()) ? `striped ${legendInfo.id.toString() === '1' ? 'vertical' : ''}` : ''
+                            }`}
+                            style={{ '--ir-skew-background': legendInfo.color, '--ir-event-bg-stripe-color': stripeColor?.stripe, 'backgroundColor': legendInfo.color }}
+                          ></div>
                         )}
                       </td>
                       <td>
                         <span class="font-small-3">{legendInfo.name}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+                <tr>
+                  <td colSpan={2}>
+                    <hr />
+                  </td>
+                </tr>
+                <tr>
+                  <th colSpan={2} class="pb-1">
+                    Use your own colors
+                  </th>
+                </tr>
+                {calendar_data.property.calendar_extra?.booking_colors.map((legendInfo, index) => {
+                  const previewClass = `legend_${legendInfo.design}`;
+                  return (
+                    <tr key={`legend_${index}`} class="legendRow ">
+                      <td>
+                        <div class={previewClass} style={{ backgroundColor: legendInfo.color }}></div>
+                      </td>
+                      <td class="legendDetailsCell">
+                        <ir-input-text
+                          class="legendTextarea border-0 m-0 p-0"
+                          value={legendInfo.name}
+                          inputContainerStyle={{ margin: '0' }}
+                          placeholder="Reason for this color"
+                          onTextChange={event => this.handleNameInput(index, event.detail)}
+                          onInputBlur={() => this.handleBlur()}
+                        ></ir-input-text>
                       </td>
                     </tr>
                   );
@@ -93,6 +205,7 @@ export class IglLegends {
                   <div class="legendCal br-s br-bt  font-weight-bold total-availability">20</div>
                   <div class="highphenLegend">{locales.entries.Lcz_TotalAvailability}</div>
                 </div>
+
                 {/* <div class="legendRow align-items-center">
                   <div class="legendCal br-s br-bt font-small-2">15</div>
                   <div class="highphenLegend">

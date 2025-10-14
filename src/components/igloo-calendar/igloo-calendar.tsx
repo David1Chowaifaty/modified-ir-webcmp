@@ -19,6 +19,7 @@ import { RoomHkStatus, RoomType } from '@/models/booking.dto';
 import { BatchingQueue } from '@/utils/Queue';
 import { HKSkipParams, HouseKeepingService } from '@/services/housekeeping.service';
 import housekeeping_store from '@/stores/housekeeping.store';
+import { SetRoomCalendarExtraParams } from '@/services/property.service';
 // import Auth from '@/models/Auth';
 export interface UnitHkStatusChangePayload {
   PR_ID: number;
@@ -456,6 +457,7 @@ export class IglooCalendar {
       ROOM_TYPE_CLOSE: r => this.salesQueue.offer({ ...r, is_available_to_book: false }),
       ROOM_TYPE_OPEN: r => this.salesQueue.offer({ ...r, is_available_to_book: true }),
       HK_SKIP: this.handleHkSkip,
+      SET_ROOM_CALENDAR_EXTRA: this.handleRoomCalendarExtra,
     };
 
     const handler = reasonHandlers[REASON];
@@ -464,6 +466,27 @@ export class IglooCalendar {
     } else {
       console.warn(`Unhandled REASON: ${REASON}`);
     }
+  }
+  private handleRoomCalendarExtra(result: SetRoomCalendarExtraParams) {
+    this.calendarData = {
+      ...this.calendarData,
+      bookingEvents: [
+        ...this.calendarData.bookingEvents.map(e => {
+          if (e.IDENTIFIER === result.room_identifier) {
+            const newValue = result.value ? JSON.parse(result.value) : null;
+            const calendar_extra = newValue ? (e.ROOM_INFO.calendar ? { ...e.ROOM_INFO.calendar, ...newValue } : newValue) : null;
+            return {
+              ...e,
+              ROOM_INFO: {
+                ...e.ROOM_INFO,
+                calendar_extra,
+              },
+            };
+          }
+          return e;
+        }),
+      ],
+    };
   }
   private handleSharingPersonsUpdated(result: any) {
     console.log('sharing persons updated', result);

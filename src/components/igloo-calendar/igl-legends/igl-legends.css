@@ -53,9 +53,25 @@
 .legend_skew,
 .legend_skew-bordered,
 .legend_skewsplit {
-  transform: skew(-30deg);
+  transform: skew(-22deg);
   width: 15px;
   height: 16px;
+  border-radius: 4px;
+  background-color: var(--ir-skew-background);
+}
+.legend_skew.striped.vertical {
+  --stripe-period: 17px;
+  --stripe-angle: 360deg;
+}
+.legend_skew.striped {
+  --stripe-period: 6px;
+  background: repeating-linear-gradient(
+    var(--stripe-angle, 45deg),
+    var(--ir-skew-background) 0,
+    var(--ir-skew-background) calc(var(--stripe-period) / 2),
+    var(--ir-event-bg-stripe-color) calc(var(--stripe-period) / 2),
+    var(--ir-event-bg-stripe-color) var(--stripe-period)
+  );
 }
 .legend_skew-bordered {
   border: 1px solid black;
@@ -196,6 +212,116 @@
   -webkit-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
+}
+
+.legendRow-editor {
+  vertical-align: top;
+}
+
+.legendColorCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.legendColorPicker {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+
+.legendColorPicker::-webkit-color-swatch {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.legendColorPicker::-moz-color-swatch {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.legendDetailsCell {
+  min-width: 220px;
+}
+
+.legendInput,
+.legendTextarea {
+  width: 100%;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  display: block;
+}
+
+.legendInput {
+  margin-bottom: 0.4rem;
+}
+
+.legendTextarea {
+  resize: vertical;
+}
+
+.legendActionsCell {
+  width: 32px;
+  text-align: right;
+}
+
+.legendRemoveBtn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: #a0a0a0;
+  padding: 0;
+}
+
+.legendRemoveBtn:hover,
+.legendRemoveBtn:focus {
+  color: #5c5c5c;
+}
+
+.legendEditorFooter {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.legendAddBtn {
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  background-color: #ffffff;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.legendAddBtn:hover,
+.legendAddBtn:focus {
+  border-color: #b3b3b3;
+}
+
+.legendStatus {
+  font-size: 0.75rem;
+}
+
+.legendStatus.saving {
+  color: #6b6f82;
+}
+
+.legendStatus.success {
+  color: #2e7d32;
+}
+
+.legendStatus.error {
+  color: #d32f2f;
 }
 
 .headerCell {

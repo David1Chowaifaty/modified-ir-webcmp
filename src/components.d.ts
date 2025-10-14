@@ -835,6 +835,7 @@ export namespace Components {
         "placement": 'left' | 'right';
     }
     interface IrDropdown {
+        "caret": boolean;
         "disabled": boolean;
         "value": DropdownItem['value'];
     }
@@ -6053,6 +6054,7 @@ declare namespace LocalJSX {
         "placement"?: 'left' | 'right';
     }
     interface IrDropdown {
+        "caret"?: boolean;
         "disabled"?: boolean;
         /**
           * Emitted when a user selects an option from the combobox. The event payload contains the selected `DropdownItem` object.

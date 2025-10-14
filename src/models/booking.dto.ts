@@ -477,12 +477,21 @@ export interface Origin {
   Label: string;
 }
 
+export interface BookingColor {
+  color: string | null;
+  design: 'skew';
+  name: string | null;
+}
+export interface CalendarExtra {
+  booking_colors: BookingColor[] | null;
+}
 export interface Property {
-  calendar_legends: null;
+  calendar_legends: any;
   currency: null;
   id: number;
   name: string;
   roomtypes: null;
+  calendar_extra: CalendarExtra | null;
 }
 export type DepartureTime = {
   code: string;
@@ -510,6 +519,7 @@ export interface Room {
   days: Day[];
   applicable_policies: ExposedApplicablePolicy[];
   from_date: string;
+  calendar_extra: string;
   guest: Guest;
   occupancy_default: number;
   notes: string | null;

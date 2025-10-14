@@ -32,6 +32,11 @@ export interface MonthlyStatsResults {
   TotalUnitsBooked: number;
   Total_Guests: number;
 }
+export const SetPropertyCalendarExtraParamsSchema = z.object({
+  property_id: z.number(),
+  value: z.string(),
+});
+export type SetPropertyCalendarExtraParams = z.infer<typeof SetPropertyCalendarExtraParamsSchema>;
 
 export interface PeakDay {
   Date: string;
@@ -49,6 +54,13 @@ export interface DailyStat {
 export const AllowedPropertiesSchema = z.array(z.object({ id: z.number(), name: z.string() })).nullable();
 
 export type AllowedProperties = z.infer<typeof AllowedPropertiesSchema>;
+
+export const SetRoomCalendarExtraParamsSchema = z.object({
+  property_id: z.number(),
+  room_identifier: z.string(),
+  value: z.string(),
+});
+export type SetRoomCalendarExtraParams = z.infer<typeof SetRoomCalendarExtraParamsSchema>;
 export class PropertyService {
   public async getExposedProperty(params: {
     id: number | null;
@@ -64,6 +76,7 @@ export class PropertyService {
         throw new Error(data.ExceptionMsg);
       }
       const results = data.My_Result;
+      calendar_data.property = { ...results };
       calendar_data.adultChildConstraints = results.adult_child_constraints;
       calendar_data.allowedBookingSources = results.allowed_booking_sources;
       calendar_data.allowed_payment_methods = results.allowed_payment_methods;
@@ -92,7 +105,23 @@ export class PropertyService {
       throw new Error(error);
     }
   }
+  public async setPropertyCalendarExtra(params: SetPropertyCalendarExtraParams) {
+    const payload = SetPropertyCalendarExtraParamsSchema.parse(params);
+    const { data } = await axios.post('/Set_Property_Calendar_Extra', payload);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
+  }
 
+  public async setRoomCalendarExtra(params: SetRoomCalendarExtraParams) {
+    const payload = SetRoomCalendarExtraParamsSchema.parse(params);
+    const { data } = await axios.post('/Set_Room_Calendar_Extra', payload);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data.My_Result;
+  }
   public async getChannelSales(params: ChannelSalesParams): Promise<ChannelReportResult> {
     const _params = parseChannelSalesParams(params);
     const { data } = await axios.post('/Get_Channel_Sales', _params);

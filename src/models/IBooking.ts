@@ -62,7 +62,8 @@ export type bookingReasons =
   | 'EMAIL_VERIFIED'
   | 'ROOM_TYPE_CLOSE'
   | 'ROOM_TYPE_OPEN'
-  | 'HK_SKIP';
+  | 'HK_SKIP'
+  | 'SET_ROOM_CALENDAR_EXTRA';
 export const validReasons = new Set<bookingReasons>([
   'DORESERVATION',
   'BLOCK_EXPOSED_UNIT',
@@ -359,7 +360,7 @@ export interface RoomBookingDetails {
     to_date: string;
   };
   BASE_STATUS_CODE: string;
-  ROOM_INFO: Pick<Room, 'occupancy' | 'sharing_persons' | 'unit' | 'in_out'>;
+  ROOM_INFO: Pick<Room, 'occupancy' | 'sharing_persons' | 'unit' | 'in_out' | 'calendar_extra'>;
 }
 export interface ISource {
   code: string;

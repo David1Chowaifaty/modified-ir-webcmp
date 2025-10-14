@@ -1,8 +1,10 @@
+import { Property } from '@/models/booking.dto';
 import { CalendarDataDetails } from '@/models/calendarData';
 import { createStore } from '@stencil/store';
 
 type CalendarStore = CalendarDataDetails & {
   roomHistory: Record<string, boolean>;
+  property: Property;
   housekeeping_enabled: boolean;
   checkin_enabled: boolean;
   checkin_checkout_hours: {
@@ -10,6 +12,7 @@ type CalendarStore = CalendarDataDetails & {
     minute: number;
     offset: number;
   };
+  colorsForegrounds: Record<string, { foreground: string; stripe: string }>;
 };
 const initialState: CalendarStore = {
   adultChildConstraints: {
@@ -21,6 +24,8 @@ const initialState: CalendarStore = {
   checkin_checkout_hours: null,
   allowedBookingSources: [],
   currency: undefined,
+  property: null,
+  colorsForegrounds: null,
   endingDate: 0,
   housekeeping_enabled: true, //TODO: revert to true
   formattedLegendData: undefined,

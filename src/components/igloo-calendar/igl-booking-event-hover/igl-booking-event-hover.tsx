@@ -7,7 +7,8 @@ import locales from '@/stores/locales.store';
 import calendar_data from '@/stores/calendar-data';
 import { CalendarModalEvent } from '@/models/property-types';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
-import { IOtaNotes } from '@/models/booking.dto';
+import { BookingColor, IOtaNotes } from '@/models/booking.dto';
+import { PropertyService } from '@/services/property.service';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -27,6 +28,7 @@ export class IglBookingEventHover {
   @State() isLoading: string;
   @State() shouldHideUnassignUnit = false;
   @State() canCheckInOrCheckout: boolean;
+  @State() bookingColor: BookingColor | null = null;
 
   @Event() showBookingPopup: EventEmitter;
   @Event({ bubbles: true, composed: true }) hideBubbleInfo: EventEmitter;
@@ -36,6 +38,8 @@ export class IglBookingEventHover {
 
   private eventService = new EventsService();
   private hideButtons = false;
+  private propertyService = new PropertyService();
+  private baseColor: string;
 
   componentWillLoad() {
     let selectedRt = this.bookingEvent.roomsInfo.find(r => r.id === this.bookingEvent.RATE_TYPE);
@@ -45,10 +49,17 @@ export class IglBookingEventHover {
     if (moment(this.bookingEvent.TO_DATE, 'YYYY-MM-DD').isBefore(moment())) {
       this.hideButtons = true;
     }
-
+    this.baseColor = this.getEventLegend().color;
+    this.bookingColor = this.bookingEvent.ROOM_INFO?.calendar_extra ? this.bookingEvent.ROOM_INFO?.calendar_extra?.booking_color : null;
     this.canCheckInOrCheckout = moment().isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment().isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
   }
-
+  private getEventLegend() {
+    let status = this.bookingEvent?.legendData.statusId[this.bookingEvent.STATUS];
+    return {
+      ...this.bookingEvent?.legendData[status.id],
+      ...status,
+    };
+  }
   @Watch('bookingEvent')
   handleBookingEventChange(newValue, oldValue) {
     if (newValue !== oldValue)
@@ -407,13 +418,59 @@ export class IglBookingEventHover {
   private getInfoElement() {
     return (
       <div class={`iglPopOver infoBubble ${this.bubbleInfoTop ? 'bubbleInfoAbove' : ''} text-left`}>
-        <div class={`row p-0 m-0  ${this.bookingEvent.BALANCE > 1 ? 'pb-0' : 'pb-1'}`}>
-          <div class="px-0  col-8 font-weight-bold font-medium-1 d-flex align-items-center">
+        <div class={`d-flex p-0 m-0  ${this.bookingEvent.BALANCE > 1 ? 'pb-0' : 'pb-1'}`}>
+          <div class="px-0  font-weight-bold font-medium-1 d-flex align-items-center" style={{ flex: '1 1 0%' }}>
             <img src={this.bookingEvent?.origin?.Icon} alt={this.bookingEvent?.origin?.Label} class={'icon-image'} />
             <p class={'p-0 m-0'}>{!this.bookingEvent.is_direct ? this.bookingEvent.channel_booking_nbr : this.bookingEvent.BOOKING_NUMBER}</p>
           </div>
-          <div class="pr-0 col-4 text-right">{formatAmount(this.currency.symbol, this.getTotalPrice())}</div>
+          <div class="pr-0  text-right d-flex align-items-center" style={{ gap: '0.5rem' }}>
+            <ir-dropdown
+              caret={false}
+              onOptionChange={async e => {
+                const newBookingColor = e.detail === 'none' ? null : calendar_data.property.calendar_extra?.booking_colors.find(c => c.color === e.detail);
+                await this.propertyService.setRoomCalendarExtra({
+                  property_id: calendar_data.property.id,
+                  room_identifier: this.bookingEvent.IDENTIFIER,
+                  value: JSON.stringify({
+                    booking_color: newBookingColor,
+                  }),
+                });
+                this.bookingColor = newBookingColor;
+              }}
+              style={{ '--ir-dropdown-menu-min-width': 'fit-content', 'width': '1.5rem' }}
+            >
+              <button class="booking-event-hover__color-picker-trigger" slot="trigger">
+                {this.bookingColor ? (
+                  <div style={{ height: '1rem', width: '1rem', background: this.bookingColor?.color, borderRadius: '0.21rem' }}></div>
+                ) : (
+                  <ir-icons
+                    class="p-0 m-0 d-flex align-items-center"
+                    style={{
+                      '--icon-size': '1rem',
+                      'height': '1rem',
+                      'width': '1rem',
+                      'background': this.baseColor,
+                      'color': 'white',
+                      'borderRadius': '0.21rem',
+                      'padding': '0.25rem',
+                    }}
+                    name="ban"
+                  ></ir-icons>
+                )}
+              </button>
+              <ir-dropdown-item value="none">
+                <ir-icons class="p-0 m-0 d-flex align-items-center" style={{ '--icon-size': '1rem', 'height': '1rem', 'width': '1rem' }} name="ban"></ir-icons>
+              </ir-dropdown-item>
+              {calendar_data.property.calendar_extra?.booking_colors.map(s => (
+                <ir-dropdown-item value={s.color}>
+                  <div style={{ height: '1rem', width: '1rem', borderRadius: '0.21rem', background: s.color }}></div>
+                </ir-dropdown-item>
+              ))}
+            </ir-dropdown>
+            {formatAmount(this.currency.symbol, this.getTotalPrice())}
+          </div>
         </div>
+
         {this.bookingEvent.BALANCE > 1 && (
           <p class="pr-0 m-0 p-0 text-right balance_amount">
             {locales.entries.Lcz_Balance}: {formatAmount(this.currency.symbol, this.bookingEvent.BALANCE)}
@@ -583,7 +640,6 @@ export class IglBookingEventHover {
       </div>
     );
   }
-
   private getNewBookingOptions() {
     const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);
     return (

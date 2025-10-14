@@ -169,6 +169,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
       sharing_persons: cell.room.sharing_persons,
       unit: cell.room.unit,
       in_out: cell.room.in_out,
+      calendar_extra: cell.room.calendar_extra ? JSON.parse(cell.room.calendar_extra) : null,
     },
     BASE_STATUS_CODE: cell.booking.status?.code,
   };
@@ -333,6 +334,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
         sharing_persons: room.sharing_persons,
         unit: room.unit,
         in_out: room.in_out,
+        calendar_extra: room.calendar_extra ? JSON.parse(room.calendar_extra) : null,
       },
       BASE_STATUS_CODE: data.status?.code,
     });
