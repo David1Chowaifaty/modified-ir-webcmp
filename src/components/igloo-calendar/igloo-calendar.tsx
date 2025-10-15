@@ -39,7 +39,7 @@ export interface UnitHkStatusChangePayload {
 export type SalesBatchPayload = { rate_plan_id: number; night: string; is_available_to_book: boolean };
 export type AvailabilityBatchPayload = { room_type_id: number; date: string; availability: number };
 export type CalendarSidebarState = {
-  type: 'room-guests' | 'booking-details' | 'add-days' | 'bulk-blocks';
+  type: 'room-guests' | 'booking-details' | 'add-days' | 'bulk-blocks' | 'split';
   payload: any;
 };
 @Component({
@@ -1387,6 +1387,13 @@ export class IglooCalendar {
               ticket={this.ticket}
               propertyId={this.property_id}
             ></ir-room-nights>
+          )}
+          {this.calendarSidebarState?.type === 'split' && (
+            <igl-split-booking
+              slot="sidebar-body"
+              booking={this.calendarSidebarState?.payload?.booking}
+              identifier={this.calendarSidebarState?.payload?.identifier}
+            ></igl-split-booking>
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
             <ir-booking-details

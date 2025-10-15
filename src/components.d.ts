@@ -13,11 +13,12 @@ import { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-bo
 import { IToast } from "./components/ui/ir-toast/toast";
 import { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 import { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
+import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { IrToast } from "./components/ui/ir-toast/ir-toast";
 import { Currency, RatePlan, RoomType } from "./models/property";
-import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+import { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
 import { IPaymentAction } from "./services/payment.service";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { BookingService } from "./services/booking.service";
@@ -58,11 +59,12 @@ export { TAdultChildConstraints, TIglBookPropertyPayload } from "./models/igl-bo
 export { IToast } from "./components/ui/ir-toast/toast";
 export { IglBookPropertyPayloadEditBooking, TAdultChildConstraints as TAdultChildConstraints1, TPropertyButtonsTypes, TSourceOptions } from "./models/igl-book-property";
 export { CalendarModalEvent, IRoomNightsData, IRoomNightsDataEventPayload } from "./models/property-types";
+export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { IrToast } from "./components/ui/ir-toast/ir-toast";
 export { Currency, RatePlan, RoomType } from "./models/property";
-export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar";
 export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+export { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
 export { IPaymentAction } from "./services/payment.service";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { BookingService } from "./services/booking.service";
@@ -286,6 +288,10 @@ export namespace Components {
         "ratePricingMode": any[];
         "roomInfoId": number | null;
         "roomType": RoomType;
+    }
+    interface IglSplitBooking {
+        "booking": Booking;
+        "identifier": Room['identifier'];
     }
     interface IglTbaBookingView {
         "calendarData": { [key: string]: any };
@@ -2911,6 +2917,7 @@ declare global {
         "deleteButton": string;
         "bookingCreated": { pool?: string; data: any[] };
         "showDialog": CalendarModalEvent;
+        "openCalendarSidebar": CalendarSidebarState;
     }
     interface HTMLIglBookingEventHoverElement extends Components.IglBookingEventHover, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIglBookingEventHoverElementEventMap>(type: K, listener: (this: HTMLIglBookingEventHoverElement, ev: IglBookingEventHoverCustomEvent<HTMLIglBookingEventHoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3163,6 +3170,12 @@ declare global {
         prototype: HTMLIglRoomTypeElement;
         new (): HTMLIglRoomTypeElement;
     };
+    interface HTMLIglSplitBookingElement extends Components.IglSplitBooking, HTMLStencilElement {
+    }
+    var HTMLIglSplitBookingElement: {
+        prototype: HTMLIglSplitBookingElement;
+        new (): HTMLIglSplitBookingElement;
+    };
     interface HTMLIglTbaBookingViewElementEventMap {
         "highlightToBeAssignedBookingEvent": any;
         "openCalendarSidebar": CalendarSidebarState;
@@ -3228,7 +3241,7 @@ declare global {
         "calculateUnassignedDates": any;
         "reduceAvailableUnitEvent": { fromDate: string; toDate: string };
         "revertBooking": any;
-        "openCalendarSidebar": CalendarSidebarState;
+        "openCalendarSidebar": CalendarSidebarState1;
         "showRoomNightsDialog": IRoomNightsData;
     }
     interface HTMLIglooCalendarElement extends Components.IglooCalendar, HTMLStencilElement {
@@ -5081,6 +5094,7 @@ declare global {
         "igl-property-booked-by": HTMLIglPropertyBookedByElement;
         "igl-rate-plan": HTMLIglRatePlanElement;
         "igl-room-type": HTMLIglRoomTypeElement;
+        "igl-split-booking": HTMLIglSplitBookingElement;
         "igl-tba-booking-view": HTMLIglTbaBookingViewElement;
         "igl-tba-category-view": HTMLIglTbaCategoryViewElement;
         "igl-to-be-assigned": HTMLIglToBeAssignedElement;
@@ -5334,6 +5348,7 @@ declare namespace LocalJSX {
         "onBookingCreated"?: (event: IglBookingEventHoverCustomEvent<{ pool?: string; data: any[] }>) => void;
         "onDeleteButton"?: (event: IglBookingEventHoverCustomEvent<string>) => void;
         "onHideBubbleInfo"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
+        "onOpenCalendarSidebar"?: (event: IglBookingEventHoverCustomEvent<CalendarSidebarState>) => void;
         "onShowBookingPopup"?: (event: IglBookingEventHoverCustomEvent<any>) => void;
         "onShowDialog"?: (event: IglBookingEventHoverCustomEvent<CalendarModalEvent>) => void;
     }
@@ -5475,6 +5490,10 @@ declare namespace LocalJSX {
         "roomInfoId"?: number | null;
         "roomType"?: RoomType;
     }
+    interface IglSplitBooking {
+        "booking"?: Booking;
+        "identifier"?: Room['identifier'];
+    }
     interface IglTbaBookingView {
         "calendarData"?: { [key: string]: any };
         "categoriesData"?: { [key: string]: any };
@@ -5519,7 +5538,7 @@ declare namespace LocalJSX {
         "onCalculateUnassignedDates"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onDragOverHighlightElement"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onMoveBookingTo"?: (event: IglooCalendarCustomEvent<any>) => void;
-        "onOpenCalendarSidebar"?: (event: IglooCalendarCustomEvent<CalendarSidebarState>) => void;
+        "onOpenCalendarSidebar"?: (event: IglooCalendarCustomEvent<CalendarSidebarState1>) => void;
         "onReduceAvailableUnitEvent"?: (event: IglooCalendarCustomEvent<{ fromDate: string; toDate: string }>) => void;
         "onRevertBooking"?: (event: IglooCalendarCustomEvent<any>) => void;
         "onShowRoomNightsDialog"?: (event: IglooCalendarCustomEvent<IRoomNightsData>) => void;
@@ -7801,6 +7820,7 @@ declare namespace LocalJSX {
         "igl-property-booked-by": IglPropertyBookedBy;
         "igl-rate-plan": IglRatePlan;
         "igl-room-type": IglRoomType;
+        "igl-split-booking": IglSplitBooking;
         "igl-tba-booking-view": IglTbaBookingView;
         "igl-tba-category-view": IglTbaCategoryView;
         "igl-to-be-assigned": IglToBeAssigned;
@@ -7968,6 +7988,7 @@ declare module "@stencil/core" {
             "igl-property-booked-by": LocalJSX.IglPropertyBookedBy & JSXBase.HTMLAttributes<HTMLIglPropertyBookedByElement>;
             "igl-rate-plan": LocalJSX.IglRatePlan & JSXBase.HTMLAttributes<HTMLIglRatePlanElement>;
             "igl-room-type": LocalJSX.IglRoomType & JSXBase.HTMLAttributes<HTMLIglRoomTypeElement>;
+            "igl-split-booking": LocalJSX.IglSplitBooking & JSXBase.HTMLAttributes<HTMLIglSplitBookingElement>;
             "igl-tba-booking-view": LocalJSX.IglTbaBookingView & JSXBase.HTMLAttributes<HTMLIglTbaBookingViewElement>;
             "igl-tba-category-view": LocalJSX.IglTbaCategoryView & JSXBase.HTMLAttributes<HTMLIglTbaCategoryViewElement>;
             "igl-to-be-assigned": LocalJSX.IglToBeAssigned & JSXBase.HTMLAttributes<HTMLIglToBeAssignedElement>;

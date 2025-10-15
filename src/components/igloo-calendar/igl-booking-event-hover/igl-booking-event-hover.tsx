@@ -9,6 +9,7 @@ import { CalendarModalEvent } from '@/models/property-types';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
 import { BookingColor, IOtaNotes } from '@/models/booking.dto';
 import { PropertyService } from '@/services/property.service';
+import { CalendarSidebarState } from '../igloo-calendar';
 //import { transformNewBLockedRooms } from '../../../utils/booking';
 
 @Component({
@@ -35,6 +36,7 @@ export class IglBookingEventHover {
   @Event({ bubbles: true, composed: true }) deleteButton: EventEmitter<string>;
   @Event() bookingCreated: EventEmitter<{ pool?: string; data: any[] }>;
   @Event() showDialog: EventEmitter<CalendarModalEvent>;
+  @Event() openCalendarSidebar: EventEmitter<CalendarSidebarState>;
 
   private eventService = new EventsService();
   private hideButtons = false;
@@ -414,6 +416,43 @@ export class IglBookingEventHover {
       .map(o => `${separator}${o.statement}`)
       .join('');
   }
+  /**
+   * Determines whether the current booking is eligible to be split.
+   *
+   * Rules enforced:
+   *  1) Minimum stay — there must be at least 2 nights between `from_date` (check-in) and `to_date` (check-out).
+   *     (Checkout is treated as exclusive; nights = `to_date - from_date` in whole days.)
+   *  2) Proximity to checkout — disallow splitting when checkout is tomorrow or earlier
+   *     (i.e., `to_date - today < 1 day` when all are normalized to start of day).
+   *
+   * @returns {boolean} `true` if the booking can be split under the rules above; otherwise `false`.
+   *
+   * @example
+   * // Given defaultDates: { from_date: '2025-10-10', to_date: '2025-10-13' }
+   * // nights = 3, and if checkout is more than a day away, returns true.
+   * const canSplit = this.canSplitBooking(); // -> true
+   */
+  private canSplitBooking(): boolean {
+    const fromStr = this.bookingEvent?.defaultDates?.from_date;
+    const toStr = this.bookingEvent?.defaultDates?.to_date;
+
+    const MFromDate = moment(fromStr, 'YYYY-MM-DD', true).startOf('day');
+    const MToDate = moment(toStr, 'YYYY-MM-DD', true).startOf('day');
+
+    if (!MFromDate.isValid() || !MToDate.isValid()) return false;
+
+    // Nights between (checkout is exclusive)
+    const nights = MToDate.diff(MFromDate, 'days');
+
+    // Must be at least 2 nights to make a meaningful split
+    if (nights < 2) return false;
+
+    // Don’t allow split if checkout is  tomorrow (< 1 day away)
+    const today = moment().startOf('day');
+    if (MToDate.diff(today, 'days') < 1) return false;
+
+    return true;
+  }
 
   private getInfoElement() {
     return (
@@ -583,7 +622,7 @@ export class IglBookingEventHover {
               class={'w-100'}
               btn_block
               text={locales.entries.Lcz_Edit}
-              icon_name="edit"
+              // icon_name="edit"
               btn_styles="h-100"
               size="sm"
             ></ir-button>
@@ -591,11 +630,21 @@ export class IglBookingEventHover {
               <ir-button
                 style={{ '--icon-size': '0.875rem' }}
                 text={locales.entries.Lcz_AddRoom}
-                icon_name="square_plus"
+                // icon_name="square_plus"
                 size="sm"
                 class={'w-100'}
                 btn_styles="h-100"
                 onClickHandler={() => this.handleAddRoom()}
+              ></ir-button>
+            )}
+            {this.canSplitBooking() && (
+              <ir-button
+                class={'w-100'}
+                style={{ '--icon-size': '0.875rem' }}
+                text={'Split'}
+                onClickHandler={() => this.handleSplitBooking()}
+                btn_styles="h-100"
+                size="sm"
               ></ir-button>
             )}
             {this.canCheckIn() && (
@@ -604,7 +653,7 @@ export class IglBookingEventHover {
                 style={{ '--icon-size': '0.875rem' }}
                 text={locales.entries.Lcz_CheckIn}
                 onClickHandler={() => this.handleCustomerCheckIn()}
-                icon_name="edit"
+                // icon_name="edit"
                 btn_styles="h-100"
                 size="sm"
               ></ir-button>
@@ -615,7 +664,7 @@ export class IglBookingEventHover {
                 btn_styles="h-100"
                 style={{ '--icon-size': '0.875rem' }}
                 text={locales.entries.Lcz_CheckOut}
-                icon_name="edit"
+                // icon_name="edit"
                 onClickHandler={() => this.handleCustomerCheckOut()}
                 size="sm"
               ></ir-button>
@@ -629,7 +678,7 @@ export class IglBookingEventHover {
                     style={{ '--icon-size': '0.875rem' }}
                     size="sm"
                     text={locales.entries.Lcz_Unassign}
-                    icon_name="xmark"
+                    // icon_name="xmark"
                     onClickHandler={_ => {
                       this.handleDeleteEvent();
                     }}
@@ -639,6 +688,10 @@ export class IglBookingEventHover {
         </div>
       </div>
     );
+  }
+  private handleSplitBooking(): void {
+    this.hideBubble();
+    this.openCalendarSidebar.emit({ type: 'split', payload: { booking: this.bookingEvent.booking, identifier: this.bookingEvent.IDENTIFIER } });
   }
   private getNewBookingOptions() {
     const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);

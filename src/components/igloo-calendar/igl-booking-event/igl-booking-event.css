@@ -54,6 +54,19 @@
   border-bottom-left-radius: 0;
 }
 
+/* .bookingEventBase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  background-color: var(--ir-event-bg);
+  transform-origin: left;
+  left: 10px;
+  right: -4px;
+  transform: skewX(22deg);
+  border-radius: inherit;
+} */
+
 .bookingEventBase.skewedRight::before {
   transform-origin: left;
   transform: skewX(22deg 0deg);
