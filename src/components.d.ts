@@ -2056,6 +2056,24 @@ export namespace Components {
         "subtitle": string;
         "value": string;
     }
+    interface IrSuccessLoader {
+        /**
+          * Controls the visibility of the loader. Setting this to `true` starts the spinner/success cycle.
+         */
+        "active": boolean;
+        /**
+          * Whether the loader should automatically start its cycle when it becomes active.
+         */
+        "autoStart": boolean;
+        /**
+          * How long the spinner should be shown before transitioning to the success icon. Value is expressed in milliseconds.
+         */
+        "spinnerDuration": number;
+        /**
+          * How long the success icon should be shown before the loader dispatches the completion event. Value is expressed in milliseconds.
+         */
+        "successDuration": number;
+    }
     interface IrSwitch {
         /**
           * Whether the switch is currently checked (on). This is mutable and can be toggled internally.
@@ -2684,6 +2702,10 @@ export interface IrSelectCustomEvent<T> extends CustomEvent<T> {
 export interface IrSidebarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSidebarElement;
+}
+export interface IrSuccessLoaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrSuccessLoaderElement;
 }
 export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4750,6 +4772,23 @@ declare global {
         prototype: HTMLIrStatsCardElement;
         new (): HTMLIrStatsCardElement;
     };
+    interface HTMLIrSuccessLoaderElementEventMap {
+        "loaderComplete": void;
+    }
+    interface HTMLIrSuccessLoaderElement extends Components.IrSuccessLoader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrSuccessLoaderElementEventMap>(type: K, listener: (this: HTMLIrSuccessLoaderElement, ev: IrSuccessLoaderCustomEvent<HTMLIrSuccessLoaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrSuccessLoaderElementEventMap>(type: K, listener: (this: HTMLIrSuccessLoaderElement, ev: IrSuccessLoaderCustomEvent<HTMLIrSuccessLoaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrSuccessLoaderElement: {
+        prototype: HTMLIrSuccessLoaderElement;
+        new (): HTMLIrSuccessLoaderElement;
+    };
     interface HTMLIrSwitchElementEventMap {
         "checkChange": boolean;
     }
@@ -5160,6 +5199,7 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-stats-card": HTMLIrStatsCardElement;
+        "ir-success-loader": HTMLIrSuccessLoaderElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-tabs": HTMLIrTabsElement;
         "ir-tasks-card": HTMLIrTasksCardElement;
@@ -7432,6 +7472,28 @@ declare namespace LocalJSX {
         "subtitle"?: string;
         "value"?: string;
     }
+    interface IrSuccessLoader {
+        /**
+          * Controls the visibility of the loader. Setting this to `true` starts the spinner/success cycle.
+         */
+        "active"?: boolean;
+        /**
+          * Whether the loader should automatically start its cycle when it becomes active.
+         */
+        "autoStart"?: boolean;
+        /**
+          * Emit when the loader finishes the success state and should be hidden by the parent.
+         */
+        "onLoaderComplete"?: (event: IrSuccessLoaderCustomEvent<void>) => void;
+        /**
+          * How long the spinner should be shown before transitioning to the success icon. Value is expressed in milliseconds.
+         */
+        "spinnerDuration"?: number;
+        /**
+          * How long the success icon should be shown before the loader dispatches the completion event. Value is expressed in milliseconds.
+         */
+        "successDuration"?: number;
+    }
     interface IrSwitch {
         /**
           * Whether the switch is currently checked (on). This is mutable and can be toggled internally.
@@ -7857,6 +7919,7 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-spinner": IrSpinner;
         "ir-stats-card": IrStatsCard;
+        "ir-success-loader": IrSuccessLoader;
         "ir-switch": IrSwitch;
         "ir-tabs": IrTabs;
         "ir-tasks-card": IrTasksCard;
@@ -8023,6 +8086,7 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-stats-card": LocalJSX.IrStatsCard & JSXBase.HTMLAttributes<HTMLIrStatsCardElement>;
+            "ir-success-loader": LocalJSX.IrSuccessLoader & JSXBase.HTMLAttributes<HTMLIrSuccessLoaderElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-tabs": LocalJSX.IrTabs & JSXBase.HTMLAttributes<HTMLIrTabsElement>;
             "ir-tasks-card": LocalJSX.IrTasksCard & JSXBase.HTMLAttributes<HTMLIrTasksCardElement>;

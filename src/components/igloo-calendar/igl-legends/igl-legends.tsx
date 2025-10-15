@@ -2,7 +2,9 @@ import { BookingColor } from '@/models/booking.dto';
 import { PropertyService } from '@/services/property.service';
 import calendar_data from '@/stores/calendar-data';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+
+type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 
 @Component({
   tag: 'igl-legends',
@@ -15,14 +17,22 @@ export class IglLegends {
   private propertyService = new PropertyService();
 
   @State() bookingColors: BookingColor[] = [];
-  @State() saveState: 'idle' | 'saving' | 'saved' | 'error' = 'idle';
+  @State() saveState: SaveState = 'idle';
   @State() saveError?: string;
+  @State() loadingIndex: number[] = [];
 
   private saveTimeout?: number;
 
   disconnectedCallback() {
     if (this.saveTimeout) {
       clearTimeout(this.saveTimeout);
+    }
+  }
+
+  @Watch('saveState')
+  handleSaveStateChange(newValue: SaveState) {
+    if (newValue === 'error' || newValue === 'idle') {
+      this.loadingIndex = [];
     }
   }
 
@@ -59,7 +69,6 @@ export class IglLegends {
     if (this.saveState === 'saving') {
       return;
     }
-
     this.saveState = 'saving';
     this.saveError = undefined;
 
@@ -86,8 +95,15 @@ export class IglLegends {
     this.updateBookingColor(index, { name: value });
   }
 
-  private handleBlur() {
+  private handleBlur(index: number) {
     this.persistBookingColors();
+    if (!this.loadingIndex.includes(index)) {
+      this.loadingIndex = [...this.loadingIndex, index];
+    }
+  }
+
+  private handleLoaderComplete(index: number) {
+    this.loadingIndex = this.loadingIndex.filter(currentIndex => currentIndex !== index);
   }
 
   render() {
@@ -162,14 +178,19 @@ export class IglLegends {
                         <div class={previewClass} style={{ backgroundColor: legendInfo.color }}></div>
                       </td>
                       <td class="legendDetailsCell">
-                        <ir-input-text
-                          class="legendTextarea border-0 m-0 p-0"
-                          value={legendInfo.name}
-                          inputContainerStyle={{ margin: '0' }}
-                          placeholder="Reason for this color"
-                          onTextChange={event => this.handleNameInput(index, event.detail)}
-                          onInputBlur={() => this.handleBlur()}
-                        ></ir-input-text>
+                        <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                          <ir-input-text
+                            class="legendTextarea border-0 m-0 p-0"
+                            value={legendInfo.name}
+                            inputContainerStyle={{ margin: '0' }}
+                            placeholder="Reason for this color"
+                            onTextChange={event => this.handleNameInput(index, event.detail)}
+                            onInputBlur={() => this.handleBlur(index)}
+                          ></ir-input-text>
+                          {this.loadingIndex.includes(index) && (this.saveState === 'saving' || this.saveState === 'saved') ? (
+                            <ir-success-loader onLoaderComplete={() => this.handleLoaderComplete(index)}></ir-success-loader>
+                          ) : null}
+                        </div>
                       </td>
                     </tr>
                   );

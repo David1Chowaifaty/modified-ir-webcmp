@@ -56,7 +56,7 @@
 
 .bookingEventBase.skewedRight::before {
   transform-origin: left;
-  transform: skewX(22deg);
+  transform: skewX(22deg 0deg);
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }

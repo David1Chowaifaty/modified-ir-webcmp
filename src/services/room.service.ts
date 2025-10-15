@@ -13,18 +13,18 @@ const DEFAULT_BOOKING_COLORS: BookingColor[] = [
 ];
 
 const FRONT_DESK_STRIPE_COLORS = {
-  '#31bef1': '#b8e1f8',
+  '#31bef1': '#85d0ff',
   '#45b16d': '#bbdbc4',
   '#FF9149': '#ffcfbc',
   '#a0a0a0': '#d5d5d5',
-  '#f34752': '#f9bbbd',
-  '#f88c91': '#fccecf',
+  '#f34752': '#f8727b',
+  '#f88c91': '#f8727b',
   '#F9A9FE': '#fcd8ff',
   '#ffe502': '#fff2b4',
   '#6FF1EF': '#c5f8f7',
   '#9BF091': '#d3f8cf',
-  '#C28D6B': '#e3cec4',
-  '#9B84D6': '#d3cbeb',
+  '#C28D6B': '#e5b08f',
+  '#9B84D6': '#beadf0',
 };
 
 export class RoomService {
