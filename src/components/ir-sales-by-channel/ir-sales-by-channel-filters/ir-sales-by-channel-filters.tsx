@@ -93,7 +93,7 @@ export class IrSalesByChannelFilters {
           </label>
           <div class="d-flex flex-column date-filter-group" style={{ gap: '0.5rem' }}>
             <ir-select
-              selectedValue={this.window}
+              selectedValue={this.window?.toString()}
               onSelectChange={e => {
                 const dateDiff = Number(e.detail);
                 const today = moment();
