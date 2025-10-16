@@ -1,3 +1,37 @@
 :host {
   display: block;
 }
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  height: 100%;
+}
+.bulk-sheet-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 1rem;
+}
+.animated-container {
+  transition: all 0.5s ease;
+}
+.physical-room {
+  margin-left: 1rem !important;
+  padding-top: 0.5rem;
+}
+/* target only the last <td> in each .physical-room row */
+.physical-room > td:last-child {
+  padding-left: 1rem; /* or whatever indent you like */
+}
+.room-type-list {
+  padding: 0;
+  margin: 0;
+}
+
+.room-type-list > li,
+.physical-room,
+.room-type-row {
+  list-style: none;
+}

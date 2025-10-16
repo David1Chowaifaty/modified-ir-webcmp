@@ -244,6 +244,249 @@ export interface BookingDetails {
   roomtypes: RoomDetail[];
   tax_statement: string;
 }
+//-------------------------------
+//              NEW
+//-------------------------------
+
+export interface PropertyRoomType {
+  amenities: Amenity[];
+  availabilities: null;
+  bedding_setup: BeddingSetup[];
+  description: string;
+  exposed_inventory: null;
+  id: number;
+  images: Image[];
+  inventory: number | null;
+  is_active: boolean;
+  is_available_to_book: boolean;
+  is_bed_configuration_enabled: boolean;
+  main_image: Image;
+  name: Name;
+  not_available_reason: null | string;
+  occupancy_default: Occupancy;
+  occupancy_max: Occupancy;
+  physicalrooms: Physicalroom[];
+  rate: null;
+  rateplans: Rateplan[];
+  size: number;
+  smoking_option: SmokingOption;
+}
+
+export interface Amenity {
+  amenity_type: AmenityType;
+  code: string;
+  description: string;
+}
+
+export enum AmenityType {
+  Room = 'room',
+}
+
+export interface BeddingSetup {
+  code: string;
+  count: number;
+  name: string;
+}
+
+export interface Image {
+  thumbnail: null | string;
+  tooltip: Name;
+  url: string;
+}
+
+export enum Name {
+  Penthouse = 'Penthouse',
+  PremiumSuites = 'Premium Suites',
+  StandardRooms = 'Standard Rooms',
+}
+
+export interface Occupancy {
+  adult_nbr: number;
+  children_nbr: number;
+  infant_nbr: number | null;
+}
+
+export interface Physicalroom {
+  calendar_cell: null;
+  hk_status: null;
+  housekeeper: Housekeeper | null;
+  id: number;
+  is_active: boolean;
+  name: string;
+}
+
+export interface Housekeeper {
+  assigned_units: null;
+  id: number;
+  is_active: boolean;
+  is_soft_deleted: boolean;
+  mobile: null;
+  name: string;
+  note: null;
+  password: null;
+  phone_prefix: null;
+  property_id: number;
+  username: null;
+}
+
+export interface Rateplan {
+  agents: any[];
+  assignable_units: AssignableUnit[] | null;
+  cancelation: null;
+  custom_text: null | string;
+  extra_bed_for_code: Code;
+  extra_bed_max: number;
+  extra_bed_rate_per_night: number;
+  extra_bed_rate_per_night_additional_child: number;
+  extra_bed_rate_per_night_first_child: number;
+  guarantee: null;
+  id: number;
+  is_active: boolean;
+  is_available_to_book: boolean;
+  is_booking_engine_enabled: boolean;
+  is_channel_enabled: boolean;
+  is_closed: null;
+  is_derived: boolean;
+  is_extra_bed_free_for_children: boolean;
+  is_non_refundable: boolean;
+  is_targeting_travel_agency: boolean;
+  meal_plan: MealPlan;
+  name: string;
+  not_available_reason: null;
+  pre_payment_amount: null;
+  pre_payment_amount_gross: null;
+  rate_restrictions: null;
+  selected_variation: null;
+  sell_mode: SellMode;
+  short_name: string;
+  sleeps: number;
+  variations: Variation[];
+}
+
+export interface AssignableUnit {
+  Is_Fully_Available: boolean;
+  Is_Not_Available: boolean;
+  Is_Partially_Available: boolean;
+  from_date: Date;
+  name: string;
+  pr_id: number;
+  prs_entries: PrsEntry[];
+  to_date: Date;
+}
+
+export interface PrsEntry {
+  BLOCKED_TILL_DATE: null;
+  BLOCKED_TILL_HOUR: null;
+  BLOCKED_TILL_MINUTE: null;
+  BOOK_NBR: null;
+  BSA_REF: null;
+  DESCRIPTION: null;
+  ENTRY_DATE: null;
+  ENTRY_USER_ID: null;
+  EXTRA_DATA: null;
+  EXTRA_DATA_TYPE: null;
+  IS_CONTINUITY: null;
+  My_Pr: null;
+  NOTES: null;
+  OWNER_ID: null;
+  POOL: null;
+  PRS_DATE: Date;
+  PRS_ID: null;
+  PR_ID: number;
+  STAY_SHIFT_CODE: Code;
+  STAY_STATUS_CODE: null;
+}
+
+export enum Code {
+  Empty = '',
+  The001 = '001',
+  The002 = '002',
+}
+
+export interface MealPlan {
+  code: string;
+  name: string;
+}
+
+export interface SellMode {
+  code: Code;
+  description: string;
+}
+
+export interface Variation {
+  IS_MLS_VIOLATED: boolean;
+  MLS_ALERT: null;
+  MLS_ALERT_VALUE: null;
+  adult_child_offering: null;
+  adult_nbr: number;
+  amount: number;
+  amount_gross: number;
+  amount_per_night: number;
+  amount_per_night_gross: number;
+  applicable_policies: ApplicablePolicy[];
+  bed_preference_code: Code;
+  child_nbr: number;
+  discount_pct: number;
+  discounted_amount: number;
+  discounted_gross_amount: number;
+  extra_bed_free_nbr: number;
+  extra_bed_nbr: number;
+  extra_bed_rate_per_night: number;
+  food_nbr_upsell: number;
+  infant_nbr: null;
+  is_lmd: null;
+  nights: Night[];
+  nights_nbr: number;
+  prepayment_amount: number;
+  prepayment_amount_gross: number;
+  rate_plan_id: number;
+  smoking_code: Code;
+  total_before_discount: null;
+}
+
+export interface ApplicablePolicy {
+  brackets: Bracket[];
+  combined_statement: string;
+  type: string;
+}
+
+export interface Bracket {
+  amount: number;
+  amount_formatted: string;
+  code: string;
+  currency_id: number;
+  due_on: Date;
+  due_on_formatted: string;
+  gross_amount: number;
+  gross_amount_formatted: string;
+  statement: string;
+}
+
+export interface Night {
+  amount: number;
+  applied_promotion: null;
+  discounted_amount: number;
+  discounted_gross_amount: number;
+  extra_bed_nbr: number;
+  extra_bed_nbr_child: number;
+  extra_bed_nbr_child_addi: number;
+  extra_bed_rate_per_night: number;
+  extra_bed_rate_per_night_child: number;
+  extra_bed_rate_per_night_child_addi: number;
+  gross_amount: number;
+  night: Date;
+  night_index: number;
+}
+
+export interface SmokingOption {
+  allowed_smoking_options: SellMode[];
+  code: string;
+  description: string;
+}
+
+//-------------------------------
+//           END NEW
+//-------------------------------
 
 export interface RoomDetail {
   availabilities: number | null;
