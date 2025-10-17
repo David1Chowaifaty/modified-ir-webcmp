@@ -249,7 +249,7 @@ export class IglBookingEventHover {
       GUEST: this.bookingEvent.GUEST,
       message: this.bookingEvent.NOTES,
       SOURCE: this.bookingEvent.SOURCE,
-      booking: this.bookingEvent?.booking,
+      booking: this.bookingEvent?.base_booking,
       defaultDateRange: {
         fromDate: fromDate,
         fromDateStr: '',
@@ -691,7 +691,7 @@ export class IglBookingEventHover {
   }
   private handleSplitBooking(): void {
     this.hideBubble();
-    this.openCalendarSidebar.emit({ type: 'split', payload: { booking: this.bookingEvent.booking, identifier: this.bookingEvent.IDENTIFIER } });
+    this.openCalendarSidebar.emit({ type: 'split', payload: { booking: this.bookingEvent.base_booking, identifier: this.bookingEvent.IDENTIFIER } });
   }
   private getNewBookingOptions() {
     const shouldDisplayButtons = this.bookingEvent.roomsInfo[0].rateplans.some(rate => rate.is_active);

@@ -87,6 +87,7 @@ export class IglBookingEvent {
       }
 
       const data = await this.bookingService.getExposedBooking(this.bookingEvent.BOOKING_NUMBER, 'en');
+      const base_booking = { ...data };
       const filteredRooms = data.rooms.filter(room => room['assigned_units_pool'] === this.bookingEvent.ID);
 
       if (filteredRooms.length === 0) {
@@ -124,6 +125,7 @@ export class IglBookingEvent {
         ...this.bookingEvent,
         channel_booking_nbr,
         booking: data,
+        base_booking,
         DEPARTURE_TIME: otherBookingData.DEPARTURE_TIME,
         PHONE: otherBookingData.PHONE,
         PHONE_PREFIX: otherBookingData.PHONE_PREFIX,

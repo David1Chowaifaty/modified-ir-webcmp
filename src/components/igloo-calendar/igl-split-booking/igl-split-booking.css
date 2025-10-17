@@ -19,7 +19,7 @@
 }
 .physical-room {
   margin-left: 1rem !important;
-  padding-top: 0.5rem;
+  /* padding-top: 0.5rem; */
 }
 /* target only the last <td> in each .physical-room row */
 .physical-room > td:last-child {

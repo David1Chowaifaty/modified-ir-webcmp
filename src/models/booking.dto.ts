@@ -586,6 +586,10 @@ export interface RatePlan {
   custom_text: string | null;
   is_active: boolean;
   short_name: string;
+  meal_plan: {
+    code: string;
+    description: string | null;
+  } | null;
 }
 export interface IVariations {
   adult_child_offering: string;

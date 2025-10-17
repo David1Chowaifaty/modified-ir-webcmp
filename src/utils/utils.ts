@@ -1,8 +1,10 @@
 import moment from 'moment';
-import IBooking, { ICountry, PhysicalRoomType } from '../models/IBooking';
+import IBooking, { ICountry, PhysicalRoomType, PropertyRoomType } from '../models/IBooking';
 import { z } from 'zod';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
 import calendarData from '@/stores/calendar-data';
+import { Room } from '@/models/booking.dto';
+import locales from '@/stores/locales.store';
 
 export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear: string, format: string = 'D_M_YYYY'): string {
   const dateStr = `${dayWithWeekday.split(' ')[1]} ${monthWithYear}`;
@@ -18,6 +20,105 @@ export function convertDateToTime(dayWithWeekday: string, monthWithYear: string)
   date.setHours(0, 0, 0, 0);
   return date.getTime();
 }
+
+export interface SelectOption {
+  text: string;
+  value: string;
+}
+
+interface CheckMealPlanParams {
+  room: Room;
+  roomTypes?: PropertyRoomType[] | null;
+  roomTypeId?: number | null;
+}
+
+/**
+ * Determines whether the currently selected room's rateplan is valid for the
+ * chosen room type. If it is **not** valid, this returns the list of
+ * alternative (active) rateplans that the user can switch to.
+ *
+ * #### Return contract
+ * - **`null`** → No UI action required. Either:
+ *   - no `roomTypeId`/`roomTypes`/room type found, or
+ *   - the room already has a compatible active rateplan for this room type.
+ * - **`SelectOption[]`** → The current rateplan doesn't exist (or isn't active)
+ *   for the chosen room type. Render these options so the user can pick one.
+ *
+ * #### Matching rules
+ * A rateplan is considered compatible if **all** of the following match:
+ * - `meal_plan.code`
+ * - `custom_text`
+ * - `is_active === true`
+ * - `is_non_refundable` (boolean equality)
+ *
+ * #### Edge cases handled
+ * - Missing/invalid `roomTypeId` or `roomTypes`
+ * - Room type not found or has no `rateplans`
+ * - Partial/undefined fields on `rateplan` (safe optional access)
+ * - Localized "Non-Refundable" label missing (falls back to literal)
+ * - Filters out inactive rateplans and guarantees unique options by `id`
+ *
+ * @param params.room       The room currently being edited/validated.
+ * @param params.roomTypes  All property room types (may be null/undefined).
+ * @param params.roomTypeId The selected room type id (may be null/undefined).
+ *
+ * @returns `null` if no choices are needed; otherwise a list of choices.
+ */
+export function checkMealPlan({ room, roomTypes, roomTypeId }: CheckMealPlanParams): SelectOption | SelectOption[] | null {
+  if (!roomTypeId || !Array.isArray(roomTypes) || roomTypes.length === 0) {
+    return null;
+  }
+  const roomtype = roomTypes.find(rt => rt?.id === roomTypeId);
+  if (!roomtype || !Array.isArray(roomtype.rateplans) || roomtype.rateplans.length === 0) {
+    return null;
+  }
+  const current = {
+    mealPlanCode: room?.rateplan?.meal_plan?.code ?? null,
+    customText: room?.rateplan?.custom_text ?? null,
+    isNonRefundable: Boolean(room?.rateplan?.is_non_refundable),
+  };
+  const hasCompatibleActiveRateplan = roomtype.rateplans.some(
+    rp =>
+      Boolean(rp?.is_active) &&
+      (rp?.meal_plan?.code ?? null) === current.mealPlanCode &&
+      (rp?.custom_text ?? null) === current.customText &&
+      Boolean(rp?.is_non_refundable) === current.isNonRefundable,
+  );
+
+  if (hasCompatibleActiveRateplan) {
+    const rp = roomtype.rateplans.find(
+      rp =>
+        Boolean(rp?.is_active) &&
+        (rp?.meal_plan?.code ?? null) === current.mealPlanCode &&
+        (rp?.custom_text ?? null) === current.customText &&
+        Boolean(rp?.is_non_refundable) === current.isNonRefundable,
+    );
+    return {
+      text: rp.short_name,
+      value: rp.id.toString(),
+    };
+  }
+  const nonRefundableLabel = locales?.entries?.Lcz_NonRefundable ?? 'Non-Refundable';
+  const seen = new Set<number>();
+  const options: SelectOption[] = [];
+  for (const rp of roomtype.rateplans) {
+    if (!rp || !rp.is_active || seen.has(rp.id)) continue;
+
+    seen.add(rp.id);
+
+    const suffix = rp.is_non_refundable ? ` ${nonRefundableLabel}` : '';
+    const text = `${rp.short_name ?? ''}${suffix}`.trim();
+
+    if (!text) continue;
+
+    options.push({
+      text,
+      value: String(rp.id),
+    });
+  }
+  return options;
+}
+
 export function dateDifference(FROM_DATE: string, TO_DATE: string): number {
   const startDate = new Date(FROM_DATE);
   const endDate = new Date(TO_DATE);
