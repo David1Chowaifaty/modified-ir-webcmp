@@ -23,10 +23,10 @@ export class IglSplitBooking {
   @State() selectedDates: RoomDates;
   @State() room: Room;
   @State() roomTypes: PropertyRoomType[] = [];
-  @State() selectedUnit: SelectedUnit = {};
+  @State() selectedUnit: Partial<SelectedUnit> = {};
   @State() isLoading: boolean;
-  @State() errors: Record<string, boolean>;
-  @State() mealPlans: SelectOption[];
+  @State() errors: Record<string, boolean> | null;
+  @State() mealPlanOptions: SelectOption[] | null = null;
 
   @Event() closeModal: EventEmitter<null>;
 
@@ -55,16 +55,19 @@ export class IglSplitBooking {
   }
 
   private generateDates(room: Room): RoomDates {
-    const MFromDate = moment(room.from_date, 'YYYY-MM-DD');
-    const MToDate = moment(room.to_date, 'YYYY-MM-DD');
+    let MFromDate = moment(room.from_date, 'YYYY-MM-DD');
+    const MToDate = moment(room.to_date, 'YYYY-MM-DD').add(-1, 'days');
     const today = moment();
-    // if (MFromDate.isAfter(today)) {
-    //   return { from_date: MFromDate, to_date: MToDate };
-    // }
-    if (MFromDate.isSameOrAfter(today)) {
-      return { from_date: MFromDate.clone().add(1, 'days'), to_date: MToDate.clone().add(-1, 'days') };
+    if (MFromDate.isBefore(today)) {
+      MFromDate = today.clone();
     }
-    return { from_date: today.clone().add(1, 'days'), to_date: MToDate.clone().add(-1, 'days') };
+    if (MFromDate.isSame(today)) {
+      return { from_date: MFromDate, to_date: MToDate };
+    }
+    if (MFromDate.isSameOrAfter(today)) {
+      return { from_date: MFromDate.clone().add(1, 'days'), to_date: MToDate };
+    }
+    return { from_date: today.clone().add(1, 'days'), to_date: MToDate };
   }
 
   private async checkBookingAvailability() {
@@ -150,8 +153,9 @@ export class IglSplitBooking {
         pickup_info: this.booking.pickup_info,
       };
       await this.bookingService.doReservation(booking);
+      this.closeModal.emit(null);
     } catch (error) {
-      const err = {};
+      const err: Record<string, boolean> = {};
       if (error instanceof ZodError) {
         console.error(error);
         error.issues.forEach(i => {
@@ -165,32 +169,36 @@ export class IglSplitBooking {
   }
 
   private updateSelectedUnit(params: Partial<SelectedUnit>) {
-    let prev = { ...this.selectedUnit, ...params };
-    if (!params.rateplan_id) {
-      const mealPlan = checkMealPlan({
-        room: this.room,
-        roomTypeId: prev?.roomtype_id,
-        roomTypes: calendar_data.property.roomtypes,
-      });
-      let m = [];
-      if (!mealPlan || Array.isArray(mealPlan)) {
-        prev = { ...prev, rateplan_id: undefined };
-        if (mealPlan) {
-          m = [...(mealPlan as SelectOption[])];
+    const merged: Partial<SelectedUnit> = { ...this.selectedUnit, ...params };
+    const roomTypesSource = calendar_data?.property?.roomtypes;
+    const mealPlanResult = checkMealPlan({
+      room: this.room,
+      roomTypeId: merged?.roomtype_id,
+      roomTypes: roomTypesSource,
+    });
+
+    const hasExplicitRateplanUpdate = Object.prototype.hasOwnProperty.call(params, 'rateplan_id');
+
+    if (Array.isArray(mealPlanResult)) {
+      this.mealPlanOptions = mealPlanResult;
+      if (!hasExplicitRateplanUpdate) {
+        delete merged.rateplan_id;
+      }
+    } else {
+      this.mealPlanOptions = null;
+      if (!hasExplicitRateplanUpdate) {
+        if (mealPlanResult) {
+          merged.rateplan_id = Number(mealPlanResult.value);
+        } else {
+          delete merged.rateplan_id;
         }
-      } else {
-        prev = { ...prev, rateplan_id: Number(mealPlan.value) };
       }
     }
-    this.selectedUnit = { ...prev };
+
+    this.selectedUnit = merged;
   }
 
   render() {
-    const mealPlans = checkMealPlan({
-      room: this.room,
-      roomTypeId: this.selectedUnit?.roomtype_id,
-      roomTypes: calendar_data.property.roomtypes,
-    });
     return (
       <form
         onSubmit={e => {
@@ -241,6 +249,18 @@ export class IglSplitBooking {
               if (!roomType.is_available_to_book) {
                 return null;
               }
+              const units = (() => {
+                const unitMap = new Map<number, string>();
+                for (const rateplan of roomType.rateplans) {
+                  for (const unit of rateplan.assignable_units) {
+                    if (unit.Is_Fully_Available) {
+                      unitMap.set(unit.pr_id, unit.name);
+                    }
+                  }
+                }
+
+                return Array.from(unitMap, ([id, name]) => ({ id, name }));
+              })();
               return (
                 <Fragment>
                   <li key={`roomTypeRow-${roomType.id}`} class={`room-type-row`}>
@@ -248,11 +268,9 @@ export class IglSplitBooking {
                       <span class="text-left room-type-name">{roomType.name}</span>
                     </div>
                   </li>
-                  {roomType.physicalrooms.map((room, j) => {
-                    if (!room.is_active) {
-                      return null;
-                    }
+                  {units.map((room, j) => {
                     const row_style = j === roomType.physicalrooms.length - 1 ? 'pb-1' : '';
+                    const showMealPlanSelect = this.selectedUnit?.unit_id === room.id && Array.isArray(this.mealPlanOptions) && this.mealPlanOptions.length > 0;
                     return (
                       <li key={`physicalRoom-${room.id}-${j}`} class={`physical-room ${row_style}`}>
                         <div class={'d-flex choice-row align-items-center'} style={{ gap: '0.5rem' }}>
@@ -268,17 +286,38 @@ export class IglSplitBooking {
                             }
                             label={room.name}
                           ></ir-radio>
-                          {this.selectedUnit?.unit_id === room.id && Array.isArray(mealPlans) && mealPlans?.length > 0 && (
-                            <ir-select
-                              firstOption="Select a new rateplan..."
-                              error={this.errors?.rateplan_id && !this.selectedUnit?.rateplan_id}
-                              onSelectChange={e =>
+                          {showMealPlanSelect && (
+                            // <ir-select
+                            //   firstOption="Select a new rateplan..."
+                            //   error={this.errors?.rateplan_id && !this.selectedUnit?.rateplan_id}
+                            //   onSelectChange={e => {
+                            //     const value = e.detail === null || e.detail === undefined || e.detail === '' ? undefined : Number(e.detail);
+                            //     this.updateSelectedUnit({
+                            //       rateplan_id: value,
+                            //     });
+                            //   }}
+                            //   data={this.mealPlanOptions}
+                            // ></ir-select>
+                            <ir-dropdown
+                              onOptionChange={e => {
                                 this.updateSelectedUnit({
-                                  rateplan_id: e.detail ?? undefined,
-                                })
-                              }
-                              data={mealPlans}
-                            ></ir-select>
+                                  rateplan_id: Number(e.detail.toString()),
+                                });
+                              }}
+                              style={{ '--ir-dropdown-menu-min-width': 'max-content' }}
+                            >
+                              <button type="button" class="btn btn-sm form-control pr-2 d-flex align-items-center" style={{ minWidth: '200px' }} slot="trigger">
+                                {this.selectedUnit?.rateplan_id ? this.mealPlanOptions.find(r => r.value === this.selectedUnit.rateplan_id.toString()).text : 'Choose a meal plan'}
+                              </button>
+                              {this.mealPlanOptions.map(o => (
+                                <ir-dropdown-item value={o.value}>
+                                  <p class="m-0 p-0">{o.text}</p>
+                                  <p class="m-0 p-0" style={{ fontSize: '12px' }}>
+                                    hello world
+                                  </p>
+                                </ir-dropdown-item>
+                              ))}
+                            </ir-dropdown>
                           )}
                         </div>
                       </li>

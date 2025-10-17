@@ -108,71 +108,78 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
   //   console.log(moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE);
   //   console.log(cell);
   // }
-  if (cell.booking.booking_nbr.toString() === '00553011358') {
+  // if (cell.booking.booking_nbr.toString() === '00553011358') {
+  //   console.log(cell);
+  // }
+
+  try {
+    const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
+    const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
+    const mainGuest = cell.room.sharing_persons?.find(p => p.is_main);
+    return {
+      ID: cell.POOL,
+      FROM_DATE: bookingFromDate,
+      TO_DATE: bookingToDate,
+      NO_OF_DAYS: dateDifference(bookingFromDate, bookingToDate),
+      STATUS: bookingStatus[cell.booking?.status.code],
+      // NAME: formatName(mainGuest?.first_name, mainGuest?.last_name),
+      NAME: formatName(mainGuest?.first_name, mainGuest?.last_name) || formatName(cell?.booking.guest?.first_name, cell?.booking?.guest?.last_name),
+      IDENTIFIER: cell.room.identifier,
+      PR_ID: cell.pr_id,
+      POOL: cell.POOL,
+      BOOKING_NUMBER: cell.booking.booking_nbr,
+      NOTES: cell.booking.is_direct ? cell.booking.remark : null,
+      PRIVATE_NOTE: getPrivateNote(cell.booking.extras),
+      is_direct: cell.booking.is_direct,
+      BALANCE: cell.booking.financial?.due_amount,
+      channel_booking_nbr: cell.booking.channel_booking_nbr,
+      ARRIVAL_TIME: cell.booking.arrival.description,
+      defaultDates: {
+        from_date: cell.room.from_date,
+        to_date: cell.room.to_date,
+      },
+      DEPARTURE_TIME: cell.room.departure_time,
+      ///from here
+      ENTRY_DATE: cell.booking.booked_on.date,
+      PHONE_PREFIX: cell.booking.guest.country_phone_prefix,
+      IS_EDITABLE: cell.booking.is_editable,
+      ARRIVAL: cell.booking.arrival,
+      PHONE: cell.booking.guest.mobile_without_prefix ?? '',
+      RATE: cell.room.total,
+      RATE_PLAN: cell.room.rateplan.name,
+      SPLIT_BOOKING: false,
+      RATE_PLAN_ID: cell.room.rateplan.id,
+      RATE_TYPE: cell.room?.roomtype?.id,
+      ADULTS_COUNT: cell.room.occupancy.adult_nbr,
+      CHILDREN_COUNT: cell.room.occupancy.children_nbr,
+      origin: cell.booking.origin,
+      GUEST: cell.booking.guest,
+      ROOMS: cell.booking.rooms,
+      cancelation: cell.room.rateplan.cancelation,
+      guarantee: cell.room.rateplan.guarantee,
+      TOTAL_PRICE: cell.booking.financial?.gross_total,
+      COUNTRY: cell.booking.guest.country_id,
+      FROM_DATE_STR: cell.booking.format.from_date,
+      TO_DATE_STR: cell.booking.format.to_date,
+      adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
+      SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
+      //TODO:Implement checkin-checkout
+      CHECKIN: cell.room.in_out?.code === '001',
+      CHECKOUT: cell.room.in_out?.code === '002',
+      ROOM_INFO: {
+        occupancy: cell.room.occupancy,
+        sharing_persons: cell.room.sharing_persons,
+        unit: cell.room.unit,
+        in_out: cell.room.in_out,
+        calendar_extra: cell.room.calendar_extra ? JSON.parse(cell.room.calendar_extra) : null,
+      },
+      BASE_STATUS_CODE: cell.booking.status?.code,
+    };
+  } catch (error) {
+    console.error(`Something went wrong in cell`);
     console.log(cell);
+    console.error(error);
   }
-  const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
-  const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
-  const mainGuest = cell.room.sharing_persons?.find(p => p.is_main);
-  return {
-    ID: cell.POOL,
-    FROM_DATE: bookingFromDate,
-    TO_DATE: bookingToDate,
-    NO_OF_DAYS: dateDifference(bookingFromDate, bookingToDate),
-    STATUS: bookingStatus[cell.booking?.status.code],
-    // NAME: formatName(mainGuest?.first_name, mainGuest?.last_name),
-    NAME: formatName(mainGuest?.first_name, mainGuest?.last_name) || formatName(cell?.booking.guest?.first_name, cell?.booking?.guest?.last_name),
-    IDENTIFIER: cell.room.identifier,
-    PR_ID: cell.pr_id,
-    POOL: cell.POOL,
-    BOOKING_NUMBER: cell.booking.booking_nbr,
-    NOTES: cell.booking.is_direct ? cell.booking.remark : null,
-    PRIVATE_NOTE: getPrivateNote(cell.booking.extras),
-    is_direct: cell.booking.is_direct,
-    BALANCE: cell.booking.financial?.due_amount,
-    channel_booking_nbr: cell.booking.channel_booking_nbr,
-    ARRIVAL_TIME: cell.booking.arrival.description,
-    defaultDates: {
-      from_date: cell.room.from_date,
-      to_date: cell.room.to_date,
-    },
-    DEPARTURE_TIME: cell.room.departure_time,
-    ///from here
-    ENTRY_DATE: cell.booking.booked_on.date,
-    PHONE_PREFIX: cell.booking.guest.country_phone_prefix,
-    IS_EDITABLE: cell.booking.is_editable,
-    ARRIVAL: cell.booking.arrival,
-    PHONE: cell.booking.guest.mobile_without_prefix ?? '',
-    RATE: cell.room.total,
-    RATE_PLAN: cell.room.rateplan.name,
-    SPLIT_BOOKING: false,
-    RATE_PLAN_ID: cell.room.rateplan.id,
-    RATE_TYPE: cell.room?.roomtype?.id,
-    ADULTS_COUNT: cell.room.occupancy.adult_nbr,
-    CHILDREN_COUNT: cell.room.occupancy.children_nbr,
-    origin: cell.booking.origin,
-    GUEST: cell.booking.guest,
-    ROOMS: cell.booking.rooms,
-    cancelation: cell.room.rateplan.cancelation,
-    guarantee: cell.room.rateplan.guarantee,
-    TOTAL_PRICE: cell.booking.financial?.gross_total,
-    COUNTRY: cell.booking.guest.country_id,
-    FROM_DATE_STR: cell.booking.format.from_date,
-    TO_DATE_STR: cell.booking.format.to_date,
-    adult_child_offering: cell.room.rateplan.selected_variation.adult_child_offering,
-    SOURCE: { code: cell.booking.source.code, description: cell.booking.source.description, tag: cell.booking.source.tag },
-    //TODO:Implement checkin-checkout
-    CHECKIN: cell.room.in_out?.code === '001',
-    CHECKOUT: cell.room.in_out?.code === '002',
-    ROOM_INFO: {
-      occupancy: cell.room.occupancy,
-      sharing_persons: cell.room.sharing_persons,
-      unit: cell.room.unit,
-      in_out: cell.room.in_out,
-      calendar_extra: cell.room.calendar_extra ? JSON.parse(cell.room.calendar_extra) : null,
-    },
-    BASE_STATUS_CODE: cell.booking.status?.code,
-  };
 }
 
 // function updateBookingWithStayData(data: any, cell: CellType): any {

@@ -72,10 +72,11 @@ export function checkMealPlan({ room, roomTypes, roomTypeId }: CheckMealPlanPara
   if (!roomtype || !Array.isArray(roomtype.rateplans) || roomtype.rateplans.length === 0) {
     return null;
   }
+  const rateplan = roomtype.rateplans.find(rp => rp.id === room.rateplan.id);
   const current = {
-    mealPlanCode: room?.rateplan?.meal_plan?.code ?? null,
-    customText: room?.rateplan?.custom_text ?? null,
-    isNonRefundable: Boolean(room?.rateplan?.is_non_refundable),
+    mealPlanCode: rateplan?.meal_plan?.code ?? null,
+    customText: rateplan?.custom_text ?? null,
+    isNonRefundable: Boolean(rateplan?.is_non_refundable),
   };
   const hasCompatibleActiveRateplan = roomtype.rateplans.some(
     rp =>

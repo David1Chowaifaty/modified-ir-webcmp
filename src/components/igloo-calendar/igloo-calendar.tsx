@@ -1393,6 +1393,7 @@ export class IglooCalendar {
               slot="sidebar-body"
               booking={this.calendarSidebarState?.payload?.booking}
               identifier={this.calendarSidebarState?.payload?.identifier}
+              onCloseModal={() => (this.calendarSidebarState = null)}
             ></igl-split-booking>
           )}
           {this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING' && (
