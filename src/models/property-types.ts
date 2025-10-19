@@ -1,4 +1,5 @@
 import { RoomGuestsPayload } from '@/components/ir-booking-details/types';
+import { SelectOption } from '@/utils/utils';
 
 export interface IRoomService {
   calendar_legends: CalendarLegend[];
@@ -51,6 +52,7 @@ export interface IReallocationPayload {
   title: string;
   description: string;
   hideConfirmButton?: boolean;
+  rateplans?: SelectOption[];
 }
 export interface IRoomNightsDataEventPayload {
   type: 'cancel' | 'confirm';

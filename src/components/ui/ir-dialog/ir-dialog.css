@@ -1,68 +1,113 @@
 :host {
   display: block;
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
-}
-.backdrop {
-  opacity: 0;
-  background: rgba(0, 0, 0, 0.2);
-  position: fixed;
-  inset: 0;
-  z-index: 99999998;
-}
-.backdrop[data-state='opened'] {
-  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-.backdrop[data-state='closed'] {
-  opacity: 0;
-  pointer-events: none;
+  font: inherit;
+  color: inherit;
 }
 
-.modal-container {
-  box-sizing: border-box;
-  margin: 0;
-  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
-  position: fixed;
-  z-index: 99999999;
-  overflow-y: auto;
-  top: 50%;
-  left: 50%;
-  background: white;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  min-height: fit-content;
-  height: fit-content;
-  max-width: var(--ir-dialog-max-width, 40rem);
-  min-width: var(--ir-dialog-min-width);
-  max-height: 85vh;
-  border-radius: 8px;
+.dialog {
+  border: none;
+  margin: auto;
   padding: 0;
+  background: transparent;
+  color: inherit;
+  width: min(90vw, var(--ir-dialog-max-width, 40rem));
+  max-width: var(--ir-dialog-max-width, 40rem);
+  min-width: var(--ir-dialog-min-width, auto);
+}
+
+.dialog::backdrop {
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+  animation: overlayShow 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialog__content {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  max-height: min(85vh, 100%);
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.dialog[open] .dialog__content {
   animation: contentShow 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.modal-footer ::slotted(*) {
-  flex-direction: row;
-  align-items: center;
-  justify-content: end;
-  gap: 8px;
-  --ir-btn-width: inherit;
+.dialog__header,
+.dialog__body,
+.dialog__footer {
+  padding: 0;
 }
-.modal-footer {
-  --ir-btn-width: 100%;
+
+.dialog__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
 }
-.modal-title ::slotted(*) {
-  font-size: 18px;
-  font-weight: 600;
-  color: #101828;
-  margin-bottom: 8px;
+
+.dialog__header slot[name='modal-title']::slotted(*) {
+  margin: 0;
 }
-.modal-body ::slotted(*) {
+
+.dialog__body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding-bottom: 2rem;
+}
+
+.dialog__body ::slotted(*) {
   font-size: 14px;
   font-weight: 400;
   color: #475467;
-  padding: 0;
   margin: 0;
+}
+
+.dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.dialog__footer ::slotted(*) {
+  --ir-btn-width: auto;
+}
+
+.dialog__close-button {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  padding: 4px;
+  border-radius: 999px;
+  color: #104064;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog__close-button:hover {
+  background: rgba(16, 64, 100, 0.08);
+}
+
+.dialog__close-button:focus-visible {
+  outline: 2px solid #104064;
+  outline-offset: 2px;
+}
+
+.dialog__close-button svg {
+  display: block;
+}
+
+.dialog__header slot[name='modal-title']::slotted(*) {
+  font-size: 18px;
+  font-weight: 600;
+  color: #101828;
 }
 
 @keyframes overlayShow {
@@ -77,16 +122,10 @@
 @keyframes contentShow {
   from {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
+    transform: translateY(-8px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateY(0) scale(1);
   }
 }
-.dialog-close-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-/* md */

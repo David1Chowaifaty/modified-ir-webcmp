@@ -1,4 +1,4 @@
-import { Component, Host, h, Element, Method, Listen, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
+import { Component, Host, h, Element, Method, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
 
 @Component({
   tag: 'ir-dialog',
@@ -6,151 +6,206 @@ import { Component, Host, h, Element, Method, Listen, State, Event, EventEmitter
   shadow: true,
 })
 export class IrDialog {
-  @Element() el: HTMLElement;
+  private static dialogIds = 0;
+
+  @Element() hostEl!: HTMLElement;
 
   /**
-   * Controls whether the dialog should be opened.
-   * Can be updated externally and watched internally.
+   * Controls whether the dialog is open. Reflects to the host attribute for CSS hooks.
    */
-  @Prop() open: boolean = false;
+  @Prop({ mutable: true, reflect: true }) open = false;
 
   /**
-   * Internal open state, driven by `open` prop or internal logic.
-   */
-  @State() isOpen = false;
-
-  /**
-   * Emits the open/close state of the modal.
-   *
-   * Example:
-   * ```tsx
-   * <ir-dialog onOpenChange={(e) => console.log(e.detail)} />
-   * ```
+   * Emits when the open state changes due to user interaction or programmatic control.
    */
   @Event() openChange: EventEmitter<boolean>;
 
-  private firstFocusableElement: HTMLElement;
-  private lastFocusableElement: HTMLElement;
+  @State() private hasTitleSlot = false;
+  @State() private hasBodySlot = false;
 
-  componentWillLoad() {
-    if (this.open) {
-      this.openModal();
-    }
+  private dialogEl?: HTMLDialogElement;
+  private previouslyFocused: HTMLElement | null = null;
+  private readonly instanceId = ++IrDialog.dialogIds;
+
+  private get titleId() {
+    return `ir-dialog-title-${this.instanceId}`;
   }
+
+  private get descriptionId() {
+    return `ir-dialog-description-${this.instanceId}`;
+  }
+
   componentDidLoad() {
-    this.prepareFocusTrap();
-  }
-  /**
-   * Opens the modal dialog programmatically.
-   * Applies `overflow: hidden` to the `body`.
-   *
-   * Example:
-   * ```ts
-   * const dialog = document.querySelector('ir-dialog');
-   * await dialog.openModal();
-   * ```
-   */
-  @Method()
-  async openModal() {
-    this.isOpen = true;
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => {
-      this.prepareFocusTrap();
-    }, 10);
-    this.openChange.emit(this.isOpen);
-  }
-  /**
-   * Closes the modal dialog programmatically.
-   * Reverts body scroll and emits `openChange`.
-   */
-  @Method()
-  async closeModal() {
-    console.log('close');
-    if (!this.isOpen) {
+    if (!this.dialogEl) {
       return;
     }
-    document.body.style.overflow = 'visible';
-    this.isOpen = false;
-    this.openChange.emit(this.isOpen);
-  }
 
-  @Watch('open')
-  handleOpenChange() {
+    this.dialogEl.addEventListener('cancel', this.handleCancel);
+    this.dialogEl.addEventListener('close', this.handleNativeClose);
+
+    this.syncSlotState();
+
     if (this.open) {
-      this.openModal();
-    } else {
-      this.closeModal();
-    }
-  }
-
-  @Listen('keydown', { target: 'window' })
-  handleKeyDown(ev: KeyboardEvent) {
-    if (!this.isOpen) {
-      return;
-    }
-
-    let isTabPressed = ev.key === 'Tab';
-    if (ev.key === 'Escape' && this.isOpen) {
-      this.closeModal();
-    }
-    if (!isTabPressed) {
-      return;
-    }
-
-    // If focus is about to leave the last focusable element, redirect it to the first.
-    if (!ev.shiftKey && document.activeElement === this.lastFocusableElement) {
-      this.firstFocusableElement.focus();
-      ev.preventDefault();
-    }
-
-    // If focus is about to leave the first focusable element, redirect it to the last.
-    if (ev.shiftKey && document.activeElement === this.firstFocusableElement) {
-      this.lastFocusableElement.focus();
-      ev.preventDefault();
+      this.showDialog(false);
     }
   }
 
   disconnectedCallback() {
-    document.body.style.overflow = 'visible';
+    if (this.dialogEl) {
+      this.dialogEl.removeEventListener('cancel', this.handleCancel);
+      this.dialogEl.removeEventListener('close', this.handleNativeClose);
+    }
+    this.restoreFocus();
   }
+
+  @Watch('open')
+  protected handleOpenChange(open: boolean) {
+    if (open) {
+      this.showDialog();
+    } else {
+      this.hideDialog();
+    }
+  }
+
   /**
-   * Finds and traps focus within modal content for accessibility.
+   * Opens the dialog programmatically using the native `showModal` API.
    */
-  private prepareFocusTrap() {
-    const focusableElements = 'button,ir-dropdown ,[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const focusableContent: NodeListOf<HTMLElement> = this.el.shadowRoot.querySelectorAll(focusableElements);
-    // console.log(focusableContent);
-    if (focusableContent.length === 0) return;
-    this.firstFocusableElement = focusableContent[0];
-    this.lastFocusableElement = focusableContent[focusableContent.length - 1];
-    this.firstFocusableElement.focus();
+  @Method()
+  async openModal() {
+    this.open = true;
   }
+
+  /**
+   * Closes the dialog programmatically and restores focus to the previously active element.
+   */
+  @Method()
+  async closeModal() {
+    this.open = false;
+  }
+
+  private showDialog(emit = true) {
+    if (!this.dialogEl || this.dialogEl.open) {
+      return;
+    }
+
+    this.previouslyFocused = document.activeElement as HTMLElement;
+
+    if (typeof this.dialogEl.showModal === 'function') {
+      this.dialogEl.showModal();
+    } else {
+      this.dialogEl.setAttribute('open', '');
+    }
+
+    if (emit) {
+      this.openChange.emit(true);
+    }
+  }
+
+  private hideDialog(emit = true) {
+    if (!this.dialogEl) {
+      return;
+    }
+
+    if (this.dialogEl.open) {
+      this.dialogEl.close();
+    }
+
+    this.restoreFocus();
+
+    if (emit) {
+      this.openChange.emit(false);
+    }
+  }
+
+  private handleCancel = (event: Event) => {
+    event.preventDefault();
+    this.closeModal();
+  };
+
+  private handleNativeClose = () => {
+    if (this.open) {
+      // Ensure the public prop stays in sync when the native dialog closes (e.g. via form submission).
+      this.open = false;
+      return;
+    }
+
+    this.hideDialog(false);
+  };
+
+  private restoreFocus() {
+    if (this.previouslyFocused && typeof this.previouslyFocused.focus === 'function') {
+      this.previouslyFocused.focus({ preventScroll: true });
+    }
+    this.previouslyFocused = null;
+  }
+
+  private onTitleSlotChange = (event: Event) => {
+    const slot = event.target as HTMLSlotElement;
+    this.hasTitleSlot = slot.assignedNodes({ flatten: true }).length > 0;
+  };
+
+  private onBodySlotChange = (event: Event) => {
+    const slot = event.target as HTMLSlotElement;
+    this.hasBodySlot = slot.assignedNodes({ flatten: true }).length > 0;
+  };
+
+  private onCloseButtonClick = () => {
+    this.closeModal();
+  };
+
+  private syncSlotState() {
+    if (!this.dialogEl) {
+      return;
+    }
+
+    const titleSlot = this.dialogEl.querySelector('slot[name="modal-title"]') as HTMLSlotElement | null;
+    const bodySlot = this.dialogEl.querySelector('slot[name="modal-body"]') as HTMLSlotElement | null;
+
+    if (titleSlot) {
+      this.hasTitleSlot = titleSlot.assignedNodes({ flatten: true }).length > 0;
+    }
+
+    if (bodySlot) {
+      this.hasBodySlot = bodySlot.assignedNodes({ flatten: true }).length > 0;
+    }
+  }
+
   render() {
+    const labelledBy = this.hasTitleSlot ? this.titleId : undefined;
+    const describedBy = this.hasBodySlot ? this.descriptionId : undefined;
+
     return (
       <Host>
-        <div class="backdrop" data-state={this.isOpen ? 'opened' : 'closed'} onClick={() => this.closeModal()}></div>
-        {this.isOpen && (
-          <div class="modal-container" tabIndex={-1} role="dialog" aria-labelledby="dialog1Title" aria-describedby="dialog1Desc">
-            <ir-icon id="close" class="dialog-close-button" onIconClickHandler={() => this.closeModal()}>
-              <svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={18} width={18}>
-                <path
-                  fill="#104064"
-                  class="currentColor"
-                  d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
-                />
-              </svg>
-            </ir-icon>
-            <div class={'modal-title'} id="dialog1Title">
-              <slot name="modal-title"></slot>
-            </div>
-            <div class="modal-body" id="dialog1Desc">
-              <slot name="modal-body"></slot>
-            </div>
-            <div class="modal-footer">
+        <dialog
+          ref={el => (this.dialogEl = el as HTMLDialogElement)}
+          class="dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={labelledBy}
+          aria-describedby={describedBy}
+        >
+          <div class="dialog__content" role="document">
+            <header class="dialog__header" id={labelledBy}>
+              <slot name="modal-title" onSlotchange={this.onTitleSlotChange}></slot>
+              <button type="button" class="dialog__close-button" onClick={this.onCloseButtonClick} aria-label="Close dialog">
+                <slot name="close-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" height={18} width={18} aria-hidden="true" focusable="false">
+                    <path
+                      fill="currentColor"
+                      d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                    />
+                  </svg>
+                </slot>
+              </button>
+            </header>
+            <section class="dialog__body" id={describedBy}>
+              <slot name="modal-body" onSlotchange={this.onBodySlotChange}></slot>
+            </section>
+            <footer class="dialog__footer">
               <slot name="modal-footer"></slot>
-            </div>
+            </footer>
           </div>
-        )}
+        </dialog>
       </Host>
     );
   }

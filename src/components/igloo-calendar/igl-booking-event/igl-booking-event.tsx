@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
 import { calculateDaysBetweenDates, transformNewBooking } from '@/utils/booking';
-import { isBlockUnit } from '@/utils/utils';
+import { checkMealPlan, isBlockUnit } from '@/utils/utils';
 import { IRoomNightsData, CalendarModalEvent } from '@/models/property-types';
 import moment from 'moment';
 import { IToast } from '@components/ui/ir-toast/toast';
@@ -250,7 +250,7 @@ export class IglBookingEvent {
                 //   this.resetBookingToInitialPosition();
                 //   return;
                 // }
-                const { description, status } = this.getModalDescription(toRoomId, from_date, to_date);
+                const { description, status, newRatePlans } = this.getModalDescription(toRoomId, from_date, to_date);
                 let hideConfirmButton = false;
                 if (status === '400') {
                   hideConfirmButton = true;
@@ -292,7 +292,16 @@ export class IglBookingEvent {
                   }
                 }
                 console.warn({ fromDate, toDate });
-                this.showDialog.emit({ reason: 'reallocate', ...event.detail, description, title: '', hideConfirmButton, from_date: fromDate, to_date: toDate });
+                this.showDialog.emit({
+                  reason: 'reallocate',
+                  ...event.detail,
+                  description,
+                  title: '',
+                  rateplans: newRatePlans,
+                  hideConfirmButton,
+                  from_date: fromDate,
+                  to_date: toDate,
+                });
               } else {
                 // if (this.checkIfSlotOccupied(toRoomId, from_date, to_date)) {
                 //   this.animationFrameId = requestAnimationFrame(() => {
@@ -379,7 +388,7 @@ export class IglBookingEvent {
     }
     return null;
   };
-  private getModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string } {
+  private getModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string; newRatePlans?: any[] } {
     if (!this.bookingEvent.is_direct) {
       if (this.isShrinking) {
         return {
@@ -400,9 +409,15 @@ export class IglBookingEvent {
           if (initialRT === targetRT) {
             return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
           } else {
+            const mealPlans = checkMealPlan({
+              rateplan_id: this.bookingEvent.RATE_PLAN_ID,
+              roomTypeId: targetRT,
+              roomTypes: calendar_data?.property?.roomtypes,
+            });
             return {
               description: locales.entries.Lcz_OTA_Modification_Alter,
               status: '200',
+              newRatePlans: Array.isArray(mealPlans) ? mealPlans : undefined,
             };
             // return {
             //   description: `${locales.entries.Lcz_YouWillLoseFutureUpdates} ${this.bookingEvent.origin ? this.bookingEvent.origin.Label : ''}. ${
@@ -426,9 +441,16 @@ export class IglBookingEvent {
           }
           return { description: `${locales.entries.Lcz_AreYouSureWantToMoveAnotherUnit}?`, status: '200' };
         } else {
+          const mealPlans = checkMealPlan({
+            rateplan_id: this.bookingEvent.RATE_PLAN_ID,
+            roomTypeId: targetRT,
+            roomTypes: calendar_data?.property?.roomtypes,
+          });
+
           return {
             description: locales.entries.Lcz_SameRatesWillBeKept + '.',
             status: '200',
+            newRatePlans: Array.isArray(mealPlans) ? mealPlans : undefined,
           };
         }
       }

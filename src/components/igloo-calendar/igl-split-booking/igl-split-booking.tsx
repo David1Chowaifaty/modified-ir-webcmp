@@ -172,7 +172,7 @@ export class IglSplitBooking {
     const merged: Partial<SelectedUnit> = { ...this.selectedUnit, ...params };
     const roomTypesSource = calendar_data?.property?.roomtypes;
     const mealPlanResult = checkMealPlan({
-      room: this.room,
+      rateplan_id: this.room.rateplan.id.toString(),
       roomTypeId: merged?.roomtype_id,
       roomTypes: roomTypesSource,
     });
@@ -312,9 +312,11 @@ export class IglSplitBooking {
                               {this.mealPlanOptions.map(o => (
                                 <ir-dropdown-item value={o.value}>
                                   <p class="m-0 p-0">{o.text}</p>
-                                  <p class="m-0 p-0" style={{ fontSize: '12px' }}>
-                                    hello world
-                                  </p>
+                                  {o.custom_text && (
+                                    <p class="m-0 p-0" style={{ fontSize: '12px' }}>
+                                      {o.custom_text}
+                                    </p>
+                                  )}
                                 </ir-dropdown-item>
                               ))}
                             </ir-dropdown>

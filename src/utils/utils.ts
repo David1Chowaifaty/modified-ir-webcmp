@@ -24,10 +24,11 @@ export function convertDateToTime(dayWithWeekday: string, monthWithYear: string)
 export interface SelectOption {
   text: string;
   value: string;
+  custom_text: string | null;
 }
 
 interface CheckMealPlanParams {
-  room: Room;
+  rateplan_id: string;
   roomTypes?: PropertyRoomType[] | null;
   roomTypeId?: number | null;
 }
@@ -53,18 +54,18 @@ interface CheckMealPlanParams {
  *
  * #### Edge cases handled
  * - Missing/invalid `roomTypeId` or `roomTypes`
- * - Room type not found or has no `rateplans`
+ * - rateplan_id type not found or has no `rateplans`
  * - Partial/undefined fields on `rateplan` (safe optional access)
  * - Localized "Non-Refundable" label missing (falls back to literal)
  * - Filters out inactive rateplans and guarantees unique options by `id`
  *
- * @param params.room       The room currently being edited/validated.
+ * @param params.rateplan_id       The room currently being edited/validated.
  * @param params.roomTypes  All property room types (may be null/undefined).
  * @param params.roomTypeId The selected room type id (may be null/undefined).
  *
  * @returns `null` if no choices are needed; otherwise a list of choices.
  */
-export function checkMealPlan({ room, roomTypes, roomTypeId }: CheckMealPlanParams): SelectOption | SelectOption[] | null {
+export function checkMealPlan({ rateplan_id, roomTypes, roomTypeId }: CheckMealPlanParams): SelectOption | SelectOption[] | null {
   if (!roomTypeId || !Array.isArray(roomTypes) || roomTypes.length === 0) {
     return null;
   }
@@ -72,7 +73,7 @@ export function checkMealPlan({ room, roomTypes, roomTypeId }: CheckMealPlanPara
   if (!roomtype || !Array.isArray(roomtype.rateplans) || roomtype.rateplans.length === 0) {
     return null;
   }
-  const rateplan = roomtype.rateplans.find(rp => rp.id === room.rateplan.id);
+  const rateplan = roomtype.rateplans.find(rp => rp.id.toString() === rateplan_id.toString());
   const current = {
     mealPlanCode: rateplan?.meal_plan?.code ?? null,
     customText: rateplan?.custom_text ?? null,
@@ -95,6 +96,7 @@ export function checkMealPlan({ room, roomTypes, roomTypeId }: CheckMealPlanPara
         Boolean(rp?.is_non_refundable) === current.isNonRefundable,
     );
     return {
+      custom_text: rp.custom_text,
       text: rp.short_name,
       value: rp.id.toString(),
     };
@@ -114,6 +116,7 @@ export function checkMealPlan({ room, roomTypes, roomTypeId }: CheckMealPlanPara
 
     options.push({
       text,
+      custom_text: rp.custom_text,
       value: String(rp.id),
     });
   }

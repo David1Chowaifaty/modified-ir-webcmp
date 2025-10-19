@@ -121,6 +121,7 @@ export class IglooCalendar {
 
   private roomTypeIdsCache: Map<number, { id: number; index: number } | 'skip'> = new Map();
   private tasksEndDate: string;
+  dialogEl: HTMLIrDialogElement;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -169,7 +170,9 @@ export class IglooCalendar {
     event.stopImmediatePropagation();
     event.stopPropagation();
     this.dialogData = event.detail;
-    this.calendarModalEl?.openModal();
+    if (this.dialogData.reason !== 'reallocate') {
+      this.calendarModalEl?.openModal();
+    }
   }
   @Listen('showRoomNightsDialog')
   handleShowRoomNightsDialog(event: CustomEvent<IRoomNightsData>) {
@@ -1432,6 +1435,10 @@ export class IglooCalendar {
             // <igl-bulk-stop-sale slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-stop-sale>
           )}
         </ir-sidebar>
+        <igl-reallocation-dialog
+          onDialogClose={() => this.handleModalCancel()}
+          data={this.dialogData?.reason === 'reallocate' ? this.dialogData : undefined}
+        ></igl-reallocation-dialog>
         <ir-modal
           ref={el => (this.calendarModalEl = el)}
           modalTitle={''}
