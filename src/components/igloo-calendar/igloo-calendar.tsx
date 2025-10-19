@@ -1267,7 +1267,7 @@ export class IglooCalendar {
     }
   }
   private handleModalCancel() {
-    if (this.dialogData?.reason === 'reallocate' || this.dialogData.reason === 'stretch') {
+    if (this.dialogData?.reason === 'reallocate' || this.dialogData?.reason === 'stretch') {
       this.revertBooking.emit(this.dialogData.pool);
     }
     this.dialogData = null;
@@ -1436,6 +1436,7 @@ export class IglooCalendar {
           )}
         </ir-sidebar>
         <igl-reallocation-dialog
+          onResetModalState={() => (this.dialogData = null)}
           onDialogClose={() => this.handleModalCancel()}
           data={this.dialogData?.reason === 'reallocate' ? this.dialogData : undefined}
         ></igl-reallocation-dialog>

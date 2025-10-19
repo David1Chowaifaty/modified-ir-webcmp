@@ -3,7 +3,6 @@ import IBooking, { ICountry, PhysicalRoomType, PropertyRoomType } from '../model
 import { z } from 'zod';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
 import calendarData from '@/stores/calendar-data';
-import { Room } from '@/models/booking.dto';
 import locales from '@/stores/locales.store';
 
 export function convertDateToCustomFormat(dayWithWeekday: string, monthWithYear: string, format: string = 'D_M_YYYY'): string {
