@@ -2,6 +2,7 @@ import { EventsService } from '@/services/events.service';
 import { Component, Element, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import type { IReallocationPayload } from '@/models/property-types';
 import type { SelectOption } from '@/utils/utils';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 
 @Component({
   tag: 'igl-reallocation-dialog',
@@ -150,7 +151,7 @@ export class IglReallocationDialog {
             </div>
             <div class="dialog-footer" slot="modal-footer">
               <ir-button onClick={this.handleCancelClick} text="Cancel" size="md" btn_color="secondary"></ir-button>
-              <ir-button text="Confirm" onClick={() => this.reallocateUnit()} size="md"></ir-button>
+              <ir-button text="Confirm" onClick={() => this.reallocateUnit()} size="md" isLoading={isRequestPending('/ReAllocate_Exposed_Room')}></ir-button>
             </div>
           </Fragment>
         )}
