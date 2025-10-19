@@ -4,10 +4,10 @@ import { extras, getReleaseHoursString } from '../utils/utils';
 
 export class EventsService {
   private readonly bookingService: BookingService = new BookingService();
-  async reallocateEvent(pool: string, destination_pr_id: number, from_date: string, to_date: string) {
+  async reallocateEvent(pool: string, destination_pr_id: number, from_date: string, to_date: string, rateplan_id?: number) {
     try {
       console.log(pool, destination_pr_id, from_date, to_date);
-      const { data } = await axios.post(`/ReAllocate_Exposed_Room`, { pool, destination_pr_id, from_date, to_date, extras });
+      const { data } = await axios.post(`/ReAllocate_Exposed_Room`, { pool, destination_pr_id, from_date, to_date, extras, rateplan_id });
       if (data.ExceptionMsg !== '') {
         throw new Error(data.ExceptionMsg);
       }
