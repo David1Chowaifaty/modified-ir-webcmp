@@ -99,6 +99,14 @@ export class IrApplicablePolicies {
     showArrow: boolean;
     rightLabel: string | null;
   } {
+    const momentCheckInDate = moment(checkInDate, 'YYYY-MM-DD');
+    if (bracketDueDate.isSame(momentCheckInDate, 'days')) {
+      return {
+        leftLabel: `${momentCheckInDate.format('MMM DD')} onwards`,
+        showArrow: false,
+        rightLabel: '',
+      };
+    }
     return {
       leftLabel: bracketDueDate.format('MMM DD'),
       showArrow: true,
@@ -137,7 +145,9 @@ export class IrApplicablePolicies {
       return {
         leftLabel: 'Until',
         showArrow: false,
-        rightLabel: nextBracketDueDate.format('MMM DD, YYYY'),
+        rightLabel: nextBracketDueDate.isSame(momentCheckInDate, 'dates')
+          ? nextBracketDueDate.clone().add(-1, 'days').format('MMM DD, YYYY')
+          : nextBracketDueDate.format('MMM DD, YYYY'),
       };
     }
 
