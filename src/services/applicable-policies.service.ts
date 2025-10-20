@@ -94,7 +94,11 @@ export class ApplicablePoliciesService {
 
         if (grouping.identifiers.length > 1) {
           grouping.identifiers.forEach(roomIdentifier => {
-            requests.push(this.bookingService.getExposedApplicablePolicies({ ...basePayload, room_identifier: roomIdentifier }).then(policies => ({ grouping, policies })));
+            requests.push(
+              this.bookingService
+                .getExposedApplicablePolicies({ ...basePayload, room_identifier: roomIdentifier })
+                .then(policies => ({ grouping: { ...grouping, rooms: rooms.filter(r => r.identifier === roomIdentifier) }, policies })),
+            );
           });
         } else {
           requests.push(this.bookingService.getExposedApplicablePolicies(basePayload).then(policies => ({ grouping, policies })));
