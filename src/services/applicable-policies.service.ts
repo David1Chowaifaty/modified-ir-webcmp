@@ -197,8 +197,6 @@ export class ApplicablePoliciesService {
         if (!checkInDate.isValid()) {
           return;
         }
-
-        console.log({ b: cancellationPolicy.brackets });
         // const checkInDateStr = checkInDate.format('YYYY-MM-DD');
         //Remove check-in dates and above from brackets
         const oldBrackets = cancellationPolicy.brackets.filter(bracket => {

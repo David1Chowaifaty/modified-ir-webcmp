@@ -235,7 +235,6 @@ export class IrApplicablePolicies {
     if (this.isLoading) {
       return null;
     }
-    console.log(this.cancellationStatements);
     const remainingGuaranteeAmount = this.booking.financial.collected - this.guaranteeAmount;
     return (
       <Host>
