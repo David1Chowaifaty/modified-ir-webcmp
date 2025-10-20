@@ -72,7 +72,7 @@ export class ApplicablePoliciesService {
     if (!this._booking) {
       throw new Error('Booking must be defined before fetching applicable policies.');
     }
-    if (['003', '004'].includes(this._booking.status.code)) {
+    if (['003', '004'].includes(this._booking.status.code) || !this._booking.is_direct) {
       return;
     }
     const { rooms, booking_nbr, currency, property } = this._booking;
