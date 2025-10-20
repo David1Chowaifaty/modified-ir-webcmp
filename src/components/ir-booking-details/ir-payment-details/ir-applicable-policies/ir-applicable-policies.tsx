@@ -284,7 +284,7 @@ export class IrApplicablePolicies {
             <div class="applicable-policies__statements">
               {this.cancellationStatements?.map(statement => {
                 const currentBracket = this._getCurrentBracket(statement.brackets);
-                const isTodaySameOrAfterCheckInDate = moment().isSameOrAfter(moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days'));
+                // const isTodaySameOrAfterCheckInDate = moment().isSameOrAfter(moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days'));
                 return (
                   <div class="applicable-policies__statement">
                     {this.cancellationStatements.length > 1 && (
@@ -326,7 +326,7 @@ export class IrApplicablePolicies {
                               checkInDate: statement.checkInDate,
                             });
 
-                            const isInCurrentBracket = isTodaySameOrAfterCheckInDate ? false : moment(bracket.due_on, 'YYYY-MM-DD').isSame(currentBracket, 'date');
+                            const isInCurrentBracket = moment(bracket.due_on, 'YYYY-MM-DD').isSame(currentBracket, 'date');
 
                             return (
                               <tr class={{ 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
