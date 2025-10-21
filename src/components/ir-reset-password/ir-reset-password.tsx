@@ -20,6 +20,7 @@ export class IrResetPassword {
   @Prop() ticket: string;
   @Prop() skip2Fa: boolean;
   @Prop() language: string = 'en';
+  @Prop() baseUrl: string;
 
   @State() confirmPassword: string;
   @State() password: string;
@@ -39,6 +40,9 @@ export class IrResetPassword {
   private initialized = false;
 
   componentWillLoad() {
+    if (this.baseUrl) {
+      this.token.setBaseUrl(this.baseUrl);
+    }
     if (this.ticket) {
       this.token.setToken(this.ticket);
     }
