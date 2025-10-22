@@ -67,8 +67,11 @@ Type: `Promise<void>`
  - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
  - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
  - [igl-cal-header](../../igloo-calendar/igl-cal-header)
+ - [igl-split-booking](../../igloo-calendar/igl-split-booking)
+ - [ir-daily-revenue-filters](../../ir-daily-revenue/ir-daily-revenue-filters)
  - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
- - [ir-payment-details](../../ir-booking-details/ir-payment-details)
+ - [ir-financial-filters](../../ir-financial-actions/ir-financial-filters)
+ - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-range-picker](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive/ir-range-picker)
 
@@ -78,8 +81,11 @@ graph TD;
   igl-bulk-block --> ir-date-picker
   igl-bulk-stop-sale --> ir-date-picker
   igl-cal-header --> ir-date-picker
+  igl-split-booking --> ir-date-picker
+  ir-daily-revenue-filters --> ir-date-picker
   ir-extra-service-config --> ir-date-picker
-  ir-payment-details --> ir-date-picker
+  ir-financial-filters --> ir-date-picker
+  ir-payment-folio --> ir-date-picker
   ir-pickup --> ir-date-picker
   ir-range-picker --> ir-date-picker
   style ir-date-picker fill:#f9f,stroke:#333,stroke-width:4px

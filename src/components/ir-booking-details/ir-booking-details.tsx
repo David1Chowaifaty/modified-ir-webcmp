@@ -14,6 +14,7 @@ import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
 import { IrModalCustomEvent } from '@/components';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { buildSplitIndex, SplitIndex } from '@/utils/booking';
 
 @Component({
   tag: 'ir-booking-details',
@@ -69,6 +70,7 @@ export class IrBookingDetails {
   @State() departureTime: IEntries[];
 
   @State() paymentEntries: PaymentEntries;
+  @State() splitIndex: SplitIndex;
 
   // Payment Event
   @Event() toast: EventEmitter<IToast>;
@@ -195,6 +197,7 @@ export class IrBookingDetails {
     const updatedRoom = { ...currentRoom, sharing_persons: guests };
     rooms[currentRoomIndex] = updatedRoom;
     this.booking = { ...this.booking, rooms: [...rooms] };
+    this.splitIndex = buildSplitIndex(this.booking.rooms);
   }
 
   @Listen('resetBookingEvt')
@@ -202,7 +205,9 @@ export class IrBookingDetails {
     // e.stopPropagation();
     // e.stopImmediatePropagation();
     if (e.detail) {
-      return (this.booking = e.detail);
+      this.booking = e.detail;
+      this.splitIndex = buildSplitIndex(this.booking.rooms);
+      return;
     }
     await this.resetBooking();
   }
@@ -274,6 +279,7 @@ export class IrBookingDetails {
       // Set guest and booking data
       this.guestData = bookingDetails.guest;
       this.booking = bookingDetails;
+      this.splitIndex = buildSplitIndex(this.booking.rooms);
     } catch (error) {
       console.error('Error initializing app:', error);
     }
@@ -301,14 +307,16 @@ export class IrBookingDetails {
     this.bookingItem = null;
   }
 
-  private handleDeleteFinish(e: CustomEvent) {
+  private handleDeleteFinish = (e: CustomEvent) => {
     this.booking = { ...this.booking, rooms: this.booking.rooms.filter(room => room.identifier !== e.detail) };
-  }
+    this.splitIndex = buildSplitIndex(this.booking.rooms);
+  };
 
   private async resetBooking() {
     try {
       const booking = await this.bookingService.getExposedBooking(this.bookingNumber, this.language);
       this.booking = { ...booking };
+      this.splitIndex = buildSplitIndex(this.booking.rooms);
       this.bookingChanged.emit(this.booking);
     } catch (error) {
       console.log(error);
@@ -399,8 +407,161 @@ export class IrBookingDetails {
         return null;
     }
   }
+
+  private computeRoomGroups(rooms: Room[]) {
+    const indexById = new Map<string, number>();
+    rooms.forEach((room, idx) => indexById.set(room.identifier, idx));
+
+    if (!rooms.length) {
+      return { groups: [], indexById, hasSplitGroups: false };
+    }
+
+    const groupSortKey = (groupRooms: Room[]) => {
+      let min = Number.MAX_SAFE_INTEGER;
+      for (const r of groupRooms) {
+        const ts = Date.parse(r?.from_date ?? '');
+        if (!Number.isNaN(ts)) {
+          min = Math.min(min, ts);
+        }
+      }
+      return min;
+    };
+
+    const splitIndex = this.splitIndex ?? buildSplitIndex(rooms);
+    if (!splitIndex) {
+      const sortedRooms = [...rooms].sort((a, b) => {
+        const diff = Date.parse(a?.from_date ?? '') - Date.parse(b?.from_date ?? '');
+        if (!Number.isNaN(diff) && diff !== 0) {
+          return diff;
+        }
+        return (indexById.get(a.identifier) ?? 0) - (indexById.get(b.identifier) ?? 0);
+      });
+      return { groups: [{ rooms: sortedRooms, order: 0, isSplit: false, sortKey: groupSortKey(sortedRooms) }], indexById, hasSplitGroups: false };
+    }
+
+    const roomsById = new Map<string, Room>(rooms.map(room => [room.identifier, room]));
+    const grouped: { rooms: Room[]; order: number; sortKey: number; isSplit: boolean }[] = [];
+    const visited = new Set<string>();
+
+    for (const head of splitIndex.heads) {
+      const chain = splitIndex.chainOf.get(head) ?? [head];
+      const chainRooms = chain.map(id => roomsById.get(id)).filter((room): room is Room => Boolean(room));
+      if (!chainRooms.length) continue;
+
+      const chainHasSplitLink =
+        chain.some(id => {
+          const parent = splitIndex.parentOf.get(id);
+          const children = splitIndex.childrenOf.get(id) ?? [];
+          return Boolean(parent) || children.length > 0;
+        }) || chainRooms.some(room => Boolean(room?.is_split));
+
+      if (chainHasSplitLink) {
+        chainRooms.forEach(room => visited.add(room.identifier));
+        const order = Math.min(...chainRooms.map(room => indexById.get(room.identifier) ?? Number.MAX_SAFE_INTEGER));
+        grouped.push({ rooms: chainRooms, order, sortKey: groupSortKey(chainRooms), isSplit: true });
+      }
+    }
+
+    for (const room of rooms) {
+      if (!visited.has(room.identifier)) {
+        const order = indexById.get(room.identifier) ?? Number.MAX_SAFE_INTEGER;
+        const singleGroup = [room];
+        grouped.push({ rooms: singleGroup, order, sortKey: groupSortKey(singleGroup), isSplit: false });
+      }
+    }
+
+    grouped.sort((a, b) => {
+      if (a.sortKey !== b.sortKey) {
+        return a.sortKey - b.sortKey;
+      }
+      return a.order - b.order;
+    });
+    const hasSplitGroups = grouped.some(group => group.isSplit);
+
+    if (!hasSplitGroups) {
+      const merged = grouped
+        .map(group => group.rooms)
+        .reduce<Room[]>((acc, curr) => acc.concat(curr), [])
+        .sort((a, b) => {
+          const diff = Date.parse(a?.from_date ?? '') - Date.parse(b?.from_date ?? '');
+          if (!Number.isNaN(diff) && diff !== 0) {
+            return diff;
+          }
+          return (indexById.get(a.identifier) ?? 0) - (indexById.get(b.identifier) ?? 0);
+        });
+      return { groups: [{ rooms: merged, order: 0, sortKey: groupSortKey(merged), isSplit: false }], indexById, hasSplitGroups: false };
+    }
+
+    return { groups: grouped, indexById, hasSplitGroups: true };
+  }
+
+  private renderRoomItem(room: Room, bookingIndex: number) {
+    const showCheckin = this.handleRoomCheckin(room);
+    const showCheckout = this.handleRoomCheckout(room);
+
+    return (
+      <ir-room
+        key={room.identifier}
+        room={room}
+        property_id={this.property_id}
+        language={this.language}
+        departureTime={this.departureTime}
+        bedPreferences={this.bedPreference}
+        isEditable={this.booking.is_editable}
+        legendData={this.calendarData.legendData}
+        roomsInfo={this.calendarData.roomsInfo}
+        myRoomTypeFoodCat={room.roomtype.name}
+        mealCodeName={room.rateplan.short_name}
+        currency={this.booking.currency.symbol}
+        hasRoomEdit={this.hasRoomEdit && this.booking.status.code !== '003' && this.booking.is_direct}
+        hasRoomDelete={this.hasRoomDelete && this.booking.status.code !== '003' && this.booking.is_direct}
+        hasCheckIn={showCheckin}
+        hasCheckOut={showCheckout}
+        booking={this.booking}
+        bookingIndex={bookingIndex}
+        onDeleteFinished={this.handleDeleteFinish}
+      />
+    );
+  }
+
+  private renderRooms() {
+    const rooms = this.booking?.rooms ?? [];
+    if (!rooms.length) {
+      return null;
+    }
+
+    const { groups, indexById, hasSplitGroups } = this.computeRoomGroups(rooms);
+
+    if (!hasSplitGroups) {
+      const groupRooms = groups[0].rooms;
+      return (
+        <div class="card p-0 mx-0">
+          {groupRooms.map((room, idx) => (
+            <Fragment>
+              {this.renderRoomItem(room, indexById.get(room.identifier) ?? idx)}
+              {idx < groupRooms.length - 1 ? <hr class="mr-2 ml-2 my-0 p-0" /> : null}
+            </Fragment>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <Fragment>
+        {groups.map((group, groupIdx) => (
+          <div class="card p-0 mx-0" key={`room-group-${group.order}-${groupIdx}`}>
+            {group.rooms.map((room, roomIdx) => (
+              <Fragment>
+                {this.renderRoomItem(room, indexById.get(room.identifier) ?? roomIdx)}
+                {roomIdx < group.rooms.length - 1 ? <hr class="mr-2 ml-2 my-0 p-0" /> : null}
+              </Fragment>
+            ))}
+          </div>
+        ))}
+      </Fragment>
+    );
+  }
   render() {
-    console.log(this.booking?.financial?.gross_total_with_extras);
     if (!this.booking) {
       return (
         <div class={'loading-container'}>
@@ -408,6 +569,7 @@ export class IrBookingDetails {
         </div>
       );
     }
+    const roomsSection = this.renderRooms();
     return [
       <Fragment>
         {!this.is_from_front_desk && (
@@ -437,35 +599,7 @@ export class IrBookingDetails {
                 this.hasRoomAdd && this.booking.is_editable && <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
               }
             </div>
-            <div class="card p-0 mx-0">
-              {this.booking.rooms.map((room: Room, index: number) => {
-                const showCheckin = this.handleRoomCheckin(room);
-                const showCheckout = this.handleRoomCheckout(room);
-                return [
-                  <ir-room
-                    room={room}
-                    property_id={this.property_id}
-                    language={this.language}
-                    departureTime={this.departureTime}
-                    bedPreferences={this.bedPreference}
-                    isEditable={this.booking.is_editable}
-                    legendData={this.calendarData.legendData}
-                    roomsInfo={this.calendarData.roomsInfo}
-                    myRoomTypeFoodCat={room.roomtype.name}
-                    mealCodeName={room.rateplan.short_name}
-                    currency={this.booking.currency.symbol}
-                    hasRoomEdit={this.hasRoomEdit && this.booking.status.code !== '003' && this.booking.is_direct}
-                    hasRoomDelete={this.hasRoomDelete && this.booking.status.code !== '003' && this.booking.is_direct}
-                    hasCheckIn={showCheckin}
-                    hasCheckOut={showCheckout}
-                    booking={this.booking}
-                    bookingIndex={index}
-                    onDeleteFinished={this.handleDeleteFinish.bind(this)}
-                  />,
-                  index !== this.booking.rooms.length - 1 && <hr class="mr-2 ml-2 my-0 p-0" />,
-                ];
-              })}
-            </div>
+            {roomsSection}
             {/* <ir-ota-services services={this.booking.ota_services}></ir-ota-services> */}
             <ir-pickup-view booking={this.booking}></ir-pickup-view>
             <section>

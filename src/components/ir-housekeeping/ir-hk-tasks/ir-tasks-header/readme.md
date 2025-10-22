@@ -7,9 +7,9 @@
 
 ## Events
 
-| Event               | Description | Type                                                         |
-| ------------------- | ----------- | ------------------------------------------------------------ |
-| `headerButtonPress` |             | `CustomEvent<{ name: "cleaned" \| "export" \| "archive"; }>` |
+| Event               | Description | Type                                                                            |
+| ------------------- | ----------- | ------------------------------------------------------------------------------- |
+| `headerButtonPress` |             | `CustomEvent<{ name: "cleaned" \| "export" \| "archive" \| "clean-inspect"; }>` |
 
 
 ## Dependencies

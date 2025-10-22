@@ -27,7 +27,7 @@
 - [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [ir-button](../ui/ir-button)
-- [ir-report-stats-card](ir-report-stats-card)
+- [ir-stats-card](../ui/ir-stats-card)
 - [ir-monthly-bookings-report-filter](ir-monthly-bookings-report-filter)
 - [ir-monthly-bookings-report-table](ir-monthly-bookings-report-table)
 
@@ -38,7 +38,7 @@ graph TD;
   ir-monthly-bookings-report --> ir-toast
   ir-monthly-bookings-report --> ir-interceptor
   ir-monthly-bookings-report --> ir-button
-  ir-monthly-bookings-report --> ir-report-stats-card
+  ir-monthly-bookings-report --> ir-stats-card
   ir-monthly-bookings-report --> ir-monthly-bookings-report-filter
   ir-monthly-bookings-report --> ir-monthly-bookings-report-table
   ir-interceptor --> ir-otp-modal
@@ -46,7 +46,7 @@ graph TD;
   ir-otp-modal --> ir-otp
   ir-otp-modal --> ir-button
   ir-button --> ir-icons
-  ir-report-stats-card --> ir-icons
+  ir-stats-card --> ir-icons
   ir-monthly-bookings-report-filter --> ir-select
   ir-monthly-bookings-report-filter --> ir-checkbox
   ir-monthly-bookings-report-filter --> ir-button

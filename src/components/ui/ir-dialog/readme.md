@@ -7,24 +7,23 @@
 
 ## Properties
 
-| Property | Attribute | Description                                                                                     | Type      | Default |
-| -------- | --------- | ----------------------------------------------------------------------------------------------- | --------- | ------- |
-| `open`   | `open`    | Controls whether the dialog should be opened. Can be updated externally and watched internally. | `boolean` | `false` |
+| Property | Attribute | Description                                                                        | Type      | Default |
+| -------- | --------- | ---------------------------------------------------------------------------------- | --------- | ------- |
+| `open`   | `open`    | Controls whether the dialog is open. Reflects to the host attribute for CSS hooks. | `boolean` | `false` |
 
 
 ## Events
 
-| Event        | Description                                                                                                             | Type                   |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `openChange` | Emits the open/close state of the modal.  Example: ```tsx <ir-dialog onOpenChange={(e) => console.log(e.detail)} /> ``` | `CustomEvent<boolean>` |
+| Event        | Description                                                                        | Type                   |
+| ------------ | ---------------------------------------------------------------------------------- | ---------------------- |
+| `openChange` | Emits when the open state changes due to user interaction or programmatic control. | `CustomEvent<boolean>` |
 
 
 ## Methods
 
 ### `closeModal() => Promise<void>`
 
-Closes the modal dialog programmatically.
-Reverts body scroll and emits `openChange`.
+Closes the dialog programmatically and restores focus to the previously active element.
 
 #### Returns
 
@@ -34,14 +33,7 @@ Type: `Promise<void>`
 
 ### `openModal() => Promise<void>`
 
-Opens the modal dialog programmatically.
-Applies `overflow: hidden` to the `body`.
-
-Example:
-```ts
-const dialog = document.querySelector('ir-dialog');
-await dialog.openModal();
-```
+Opens the dialog programmatically using the native `showModal` API.
 
 #### Returns
 
@@ -54,16 +46,13 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
-
-### Depends on
-
-- [ir-icon](../ir-icon)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-dialog --> ir-icon
+  igl-reallocation-dialog --> ir-dialog
   ir-booking-header --> ir-dialog
   style ir-dialog fill:#f9f,stroke:#333,stroke-width:4px
 ```

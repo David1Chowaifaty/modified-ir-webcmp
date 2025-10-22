@@ -26,6 +26,10 @@
 - [ir-user-management](../ir-user-management)
 - [ir-sales-by-country](../ir-sales-by-country)
 - [ir-monthly-bookings-report](../ir-monthly-bookings-report)
+- [ir-daily-revenue](../ir-daily-revenue)
+- [ir-booking-email-logs](../ir-booking-email-logs)
+- [ir-booking-listing](../ir-booking-listing)
+- [ir-sales-by-channel](../ir-sales-by-channel)
 
 ### Graph
 ```mermaid
@@ -37,6 +41,10 @@ graph TD;
   ir-secure-tasks --> ir-user-management
   ir-secure-tasks --> ir-sales-by-country
   ir-secure-tasks --> ir-monthly-bookings-report
+  ir-secure-tasks --> ir-daily-revenue
+  ir-secure-tasks --> ir-booking-email-logs
+  ir-secure-tasks --> ir-booking-listing
+  ir-secure-tasks --> ir-sales-by-channel
   ir-login --> ir-interceptor
   ir-login --> ir-toast
   ir-login --> ir-input-text
@@ -86,6 +94,8 @@ graph TD;
   ir-booking-details --> ir-booking-extra-note
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-room-guests
+  ir-booking-details --> ir-payment-folio
+  ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
   ir-booking-details --> ir-interceptor
@@ -93,7 +103,6 @@ graph TD;
   ir-booking-details --> ir-reservation-information
   ir-booking-details --> ir-date-view
   ir-booking-details --> ir-button
-  ir-booking-details --> ir-room
   ir-booking-details --> ir-pickup-view
   ir-booking-details --> ir-extra-services
   ir-booking-details --> ir-payment-details
@@ -101,6 +110,8 @@ graph TD;
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
   ir-guest-info --> ir-spinner
+  ir-guest-info --> ir-toast
+  ir-guest-info --> ir-interceptor
   ir-guest-info --> ir-title
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-country-picker
@@ -128,6 +139,20 @@ graph TD;
   ir-room-guests --> ir-country-picker
   ir-room-guests --> ir-select
   ir-room-guests --> ir-button
+  ir-payment-folio --> ir-dropdown-item
+  ir-payment-folio --> ir-title
+  ir-payment-folio --> ir-date-picker
+  ir-payment-folio --> ir-price-input
+  ir-payment-folio --> ir-dropdown
+  ir-payment-folio --> ir-input-text
+  ir-payment-folio --> ir-button
+  ir-dropdown --> ir-icons
+  ir-room --> ir-button
+  ir-room --> ir-date-view
+  ir-room --> ir-tooltip
+  ir-room --> ir-select
+  ir-room --> ir-label
+  ir-room --> ir-modal
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-popover
@@ -137,30 +162,30 @@ graph TD;
   ir-booking-header --> ir-modal
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
-  ir-dialog --> ir-icon
   ir-reservation-information --> ir-label
   ir-reservation-information --> ir-tooltip
   ir-reservation-information --> ir-icons
   ir-reservation-information --> ir-button
   ir-reservation-information --> ota-label
-  ir-room --> ir-button
-  ir-room --> ir-date-view
-  ir-room --> ir-tooltip
-  ir-room --> ir-select
-  ir-room --> ir-label
-  ir-room --> ir-modal
   ir-pickup-view --> ir-button
   ir-extra-services --> ir-extra-service
   ir-extra-service --> ir-button
   ir-extra-service --> ir-date-view
   ir-extra-service --> ir-modal
-  ir-payment-details --> ir-date-picker
-  ir-payment-details --> ir-price-input
+  ir-payment-details --> ir-payment-summary
+  ir-payment-details --> ir-booking-guarantee
+  ir-payment-details --> ir-applicable-policies
   ir-payment-details --> ir-button
-  ir-payment-details --> ir-label
-  ir-payment-details --> ir-payment-actions
+  ir-payment-details --> ir-payments-folio
   ir-payment-details --> ir-modal
-  ir-payment-actions --> ir-button
+  ir-booking-guarantee --> ir-label
+  ir-booking-guarantee --> ir-button
+  ir-applicable-policies --> ir-button
+  ir-applicable-policies --> ir-icons
+  ir-payments-folio --> ir-payment-item
+  ir-payments-folio --> ir-button
+  ir-payment-item --> ir-popover
+  ir-payment-item --> ir-button
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
@@ -199,14 +224,19 @@ graph TD;
   igloo-calendar --> igl-book-property
   igloo-calendar --> ir-sidebar
   igloo-calendar --> ir-room-nights
+  igloo-calendar --> igl-split-booking
   igloo-calendar --> ir-booking-details
   igloo-calendar --> ir-room-guests
   igloo-calendar --> igl-bulk-operations
+  igloo-calendar --> igl-reallocation-dialog
   igloo-calendar --> ir-modal
   igl-to-be-assigned --> igl-tba-category-view
   igl-to-be-assigned --> ir-button
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
+  igl-legends --> ir-input-text
+  igl-legends --> ir-success-loader
+  ir-success-loader --> ir-icons
   igl-cal-header --> ir-button
   igl-cal-header --> ir-date-picker
   igl-cal-header --> ir-m-combobox
@@ -214,6 +244,9 @@ graph TD;
   igl-cal-body --> igl-booking-event
   igl-cal-body --> ir-modal
   igl-booking-event --> igl-booking-event-hover
+  igl-booking-event-hover --> ir-dropdown
+  igl-booking-event-hover --> ir-icons
+  igl-booking-event-hover --> ir-dropdown-item
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
   igl-booking-event-hover --> ir-button
@@ -222,6 +255,12 @@ graph TD;
   ir-room-nights --> ir-loading-screen
   ir-room-nights --> ir-title
   ir-room-nights --> ir-button
+  igl-split-booking --> ir-title
+  igl-split-booking --> ir-date-view
+  igl-split-booking --> ir-date-picker
+  igl-split-booking --> ir-button
+  igl-split-booking --> ir-radio
+  igl-split-booking --> ir-select
   igl-bulk-operations --> ir-title
   igl-bulk-operations --> ir-tabs
   igl-bulk-operations --> igl-bulk-stop-sale
@@ -235,6 +274,9 @@ graph TD;
   igl-bulk-block --> ir-radio
   igl-bulk-block --> ir-button
   igl-bulk-block --> ir-date-picker
+  igl-reallocation-dialog --> ir-dialog
+  igl-reallocation-dialog --> ir-select
+  igl-reallocation-dialog --> ir-button
   ir-housekeeping --> ir-loading-screen
   ir-housekeeping --> ir-interceptor
   ir-housekeeping --> ir-toast
@@ -290,8 +332,11 @@ graph TD;
   ir-sales-by-country --> ir-toast
   ir-sales-by-country --> ir-interceptor
   ir-sales-by-country --> ir-button
+  ir-sales-by-country --> ir-sales-by-country-summary
   ir-sales-by-country --> ir-sales-filters
   ir-sales-by-country --> ir-sales-table
+  ir-sales-by-country-summary --> ir-stats-card
+  ir-stats-card --> ir-icons
   ir-sales-filters --> ir-button
   ir-sales-filters --> ir-select
   ir-sales-filters --> ir-range-picker
@@ -302,15 +347,73 @@ graph TD;
   ir-monthly-bookings-report --> ir-toast
   ir-monthly-bookings-report --> ir-interceptor
   ir-monthly-bookings-report --> ir-button
-  ir-monthly-bookings-report --> ir-report-stats-card
+  ir-monthly-bookings-report --> ir-stats-card
   ir-monthly-bookings-report --> ir-monthly-bookings-report-filter
   ir-monthly-bookings-report --> ir-monthly-bookings-report-table
-  ir-report-stats-card --> ir-icons
   ir-monthly-bookings-report-filter --> ir-select
   ir-monthly-bookings-report-filter --> ir-checkbox
   ir-monthly-bookings-report-filter --> ir-button
   ir-monthly-bookings-report-table --> ir-tooltip
   ir-monthly-bookings-report-table --> ir-progress-indicator
+  ir-daily-revenue --> ir-booking-details
+  ir-daily-revenue --> ir-loading-screen
+  ir-daily-revenue --> ir-toast
+  ir-daily-revenue --> ir-interceptor
+  ir-daily-revenue --> ir-button
+  ir-daily-revenue --> ir-revenue-summary
+  ir-daily-revenue --> ir-daily-revenue-filters
+  ir-daily-revenue --> ir-revenue-table
+  ir-daily-revenue --> ir-sidebar
+  ir-revenue-summary --> ir-stats-card
+  ir-daily-revenue-filters --> ir-button
+  ir-daily-revenue-filters --> ir-date-picker
+  ir-revenue-table --> ir-revenue-row
+  ir-revenue-row --> ir-accordion
+  ir-revenue-row --> ir-revenue-row-details
+  ir-accordion --> ir-icons
+  ir-revenue-row-details --> ir-button
+  ir-booking-email-logs --> ir-interceptor
+  ir-booking-email-logs --> ir-toast
+  ir-booking-email-logs --> ir-input-text
+  ir-booking-email-logs --> ir-button
+  ir-booking-listing --> ir-loading-screen
+  ir-booking-listing --> ir-interceptor
+  ir-booking-listing --> ir-toast
+  ir-booking-listing --> ir-listing-header
+  ir-booking-listing --> ir-tooltip
+  ir-booking-listing --> ir-button
+  ir-booking-listing --> ir-icons
+  ir-booking-listing --> ir-popover
+  ir-booking-listing --> ir-select
+  ir-booking-listing --> ir-listing-modal
+  ir-booking-listing --> ir-sidebar
+  ir-booking-listing --> ir-booking-details
+  ir-booking-listing --> ir-guest-info
+  ir-listing-header --> igl-book-property-container
+  ir-listing-header --> ir-button
+  ir-listing-header --> ir-input-text
+  ir-listing-header --> ir-select
+  ir-listing-header --> ir-range-picker
+  igl-book-property-container --> ir-toast
+  igl-book-property-container --> ir-interceptor
+  igl-book-property-container --> igl-book-property
+  ir-listing-modal --> ir-icon
+  ir-listing-modal --> ir-select
+  ir-listing-modal --> ir-button
+  ir-sales-by-channel --> ir-loading-screen
+  ir-sales-by-channel --> ir-toast
+  ir-sales-by-channel --> ir-interceptor
+  ir-sales-by-channel --> ir-button
+  ir-sales-by-channel --> ir-sales-by-channel-filters
+  ir-sales-by-channel --> ir-sales-by-channel-table
+  ir-sales-by-channel-filters --> ir-filters-panel
+  ir-sales-by-channel-filters --> ir-select
+  ir-sales-by-channel-filters --> ir-m-combobox
+  ir-sales-by-channel-filters --> ir-range-picker
+  ir-sales-by-channel-filters --> ir-checkbox
+  ir-filters-panel --> ir-button
+  ir-sales-by-channel-table --> ir-progress-indicator
+  ir-sales-by-channel-table --> ir-button
   style ir-secure-tasks fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

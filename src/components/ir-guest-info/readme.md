@@ -19,10 +19,11 @@
 
 ## Events
 
-| Event             | Description | Type                |
-| ----------------- | ----------- | ------------------- |
-| `closeSideBar`    |             | `CustomEvent<null>` |
-| `resetBookingEvt` |             | `CustomEvent<null>` |
+| Event             | Description | Type                                                                                                 |
+| ----------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `closeSideBar`    |             | `CustomEvent<null>`                                                                                  |
+| `resetBookingEvt` |             | `CustomEvent<null>`                                                                                  |
+| `toast`           |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies
@@ -35,6 +36,8 @@
 ### Depends on
 
 - [ir-spinner](../ui/ir-spinner)
+- [ir-toast](../ui/ir-toast)
+- [ir-interceptor](../ir-interceptor)
 - [ir-title](../ir-title)
 - [ir-input-text](../ui/ir-input-text)
 - [ir-country-picker](../ui/ir-country-picker)
@@ -46,16 +49,22 @@
 ```mermaid
 graph TD;
   ir-guest-info --> ir-spinner
+  ir-guest-info --> ir-toast
+  ir-guest-info --> ir-interceptor
   ir-guest-info --> ir-title
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-country-picker
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
   ir-title --> ir-icon
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
-  ir-button --> ir-icons
   ir-booking-details --> ir-guest-info
   ir-booking-listing --> ir-guest-info
   style ir-guest-info fill:#f9f,stroke:#333,stroke-width:4px

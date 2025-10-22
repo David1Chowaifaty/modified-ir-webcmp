@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property      | Attribute     | Description | Type                                                                       | Default         |
-| ------------- | ------------- | ----------- | -------------------------------------------------------------------------- | --------------- |
-| `editBooking` | --            |             | `{ booking: Booking; cause: "edit" \| "guest" \| "delete" \| "payment"; }` | `undefined`     |
-| `modalTitle`  | `modal-title` |             | `string`                                                                   | `'Modal Title'` |
+| Property         | Attribute     | Description | Type                                                                       | Default         |
+| ---------------- | ------------- | ----------- | -------------------------------------------------------------------------- | --------------- |
+| `editBooking`    | --            |             | `{ booking: Booking; cause: "edit" \| "guest" \| "delete" \| "payment"; }` | `undefined`     |
+| `modalTitle`     | `modal-title` |             | `string`                                                                   | `'Modal Title'` |
+| `paymentEntries` | --            |             | `{ types: IEntries[]; groups: IEntries[]; methods: IEntries[]; }`          | `undefined`     |
 
 
 ## Events

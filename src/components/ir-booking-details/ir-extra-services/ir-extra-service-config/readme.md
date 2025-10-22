@@ -9,7 +9,7 @@
 
 | Property  | Attribute | Description | Type                                                                                                                                                                     | Default     |
 | --------- | --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `booking` | --        |             | `{ from_date: string; to_date: string; currency: Currency; booking_nbr: string; }`                                                                                       | `undefined` |
+| `booking` | --        |             | `{ currency: Currency; from_date: string; to_date: string; booking_nbr: string; }`                                                                                       | `undefined` |
 | `service` | --        |             | `{ description?: string; cost?: number; booking_system_id?: number; currency_id?: number; end_date?: string; price?: number; start_date?: string; system_id?: number; }` | `undefined` |
 
 

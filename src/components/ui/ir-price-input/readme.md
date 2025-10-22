@@ -7,23 +7,26 @@
 
 ## Properties
 
-| Property       | Attribute       | Description                                                      | Type                     | Default     |
-| -------------- | --------------- | ---------------------------------------------------------------- | ------------------------ | ----------- |
-| `autoValidate` | `auto-validate` | The AutoValidate for the input, optional                         | `boolean`                | `true`      |
-| `currency`     | `currency`      | The Currency for the input, optional                             | `string`                 | `undefined` |
-| `disabled`     | `disabled`      | The disabled for the input, optional                             | `boolean`                | `undefined` |
-| `inputStyle`   | `input-style`   | Extra classnames for the input, optional                         | `string`                 | `undefined` |
-| `label`        | `label`         | The label for the input, optional                                | `string`                 | `undefined` |
-| `labelStyle`   | `label-style`   | Extra classnames for the label, optional                         | `string`                 | `undefined` |
-| `maxValue`     | `max-value`     | Maximum value for the price                                      | `number`                 | `undefined` |
-| `minValue`     | `min-value`     | Minimum value for the price                                      | `number`                 | `undefined` |
-| `placeholder`  | `placeholder`   | Placeholder text for the input                                   | `string`                 | `''`        |
-| `readOnly`     | `read-only`     | The readonly for the input, optional                             | `boolean`                | `undefined` |
-| `required`     | `required`      | Whether the input is required                                    | `boolean`                | `false`     |
-| `testId`       | `test-id`       | Unique id for testing                                            | `string`                 | `undefined` |
-| `value`        | `value`         | Initial value for the input                                      | `string`                 | `''`        |
-| `wrapKey`      | `wrap-key`      | Indicates the key to wrap the value (e.g., 'price' or 'cost')    | `string`                 | `undefined` |
-| `zod`          | --              | A Zod schema for validating the input Example: z.coerce.number() | `ZodType<any, any, any>` | `undefined` |
+| Property                  | Attribute                   | Description                                                                                                                                                                                                                                     | Type                     | Default     |
+| ------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | ----------- |
+| `autoValidate`            | `auto-validate`             | The AutoValidate for the input, optional                                                                                                                                                                                                        | `boolean`                | `true`      |
+| `containerClassname`      | `container-classname`       | Extra class names applied to the outer <fieldset> wrapper. Useful for spacing (e.g., margins/padding), width/layout utilities, or theming the whole input group from the outside. Example: "w-100 mb-2 d-flex align-items-center"               | `string`                 | `undefined` |
+| `currency`                | `currency`                  | The Currency for the input, optional                                                                                                                                                                                                            | `string`                 | `undefined` |
+| `disabled`                | `disabled`                  | The disabled for the input, optional                                                                                                                                                                                                            | `boolean`                | `undefined` |
+| `error`                   | `error`                     | Error                                                                                                                                                                                                                                           | `boolean`                | `undefined` |
+| `inputStyle`              | `input-style`               | Extra classnames for the input, optional                                                                                                                                                                                                        | `string`                 | `undefined` |
+| `label`                   | `label`                     | The label for the input, optional                                                                                                                                                                                                               | `string`                 | `undefined` |
+| `labelContainerClassname` | `label-container-classname` | Extra class names applied to the label container (<div class="input-group-prepend">) that wraps the <label>. Use this to control label width, alignment, spacing, or visibility at different breakpoints. Example: "min-w-120 text-nowrap pe-2" | `string`                 | `undefined` |
+| `labelStyle`              | `label-style`               | Extra classnames for the label, optional                                                                                                                                                                                                        | `string`                 | `undefined` |
+| `maxValue`                | `max-value`                 | Maximum value for the price                                                                                                                                                                                                                     | `number`                 | `undefined` |
+| `minValue`                | `min-value`                 | Minimum value for the price                                                                                                                                                                                                                     | `number`                 | `undefined` |
+| `placeholder`             | `placeholder`               | Placeholder text for the input                                                                                                                                                                                                                  | `string`                 | `''`        |
+| `readOnly`                | `read-only`                 | The readonly for the input, optional                                                                                                                                                                                                            | `boolean`                | `undefined` |
+| `required`                | `required`                  | Whether the input is required                                                                                                                                                                                                                   | `boolean`                | `false`     |
+| `testId`                  | `test-id`                   | Unique id for testing                                                                                                                                                                                                                           | `string`                 | `undefined` |
+| `value`                   | `value`                     | Initial value for the input                                                                                                                                                                                                                     | `string`                 | `''`        |
+| `wrapKey`                 | `wrap-key`                  | Indicates the key to wrap the value (e.g., 'price' or 'cost')                                                                                                                                                                                   | `string`                 | `undefined` |
+| `zod`                     | --                          | A Zod schema for validating the input Example: z.coerce.number()                                                                                                                                                                                | `ZodType<any, any, any>` | `undefined` |
 
 
 ## Events
@@ -41,7 +44,7 @@
 
  - [igl-rate-plan](../../igloo-calendar/igl-book-property/igl-booking-overview-page/igl-room-type/igl-rate-plan)
  - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
- - [ir-payment-details](../../ir-booking-details/ir-payment-details)
+ - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-room-nights](../../igloo-calendar/ir-room-nights)
 
@@ -50,7 +53,7 @@
 graph TD;
   igl-rate-plan --> ir-price-input
   ir-extra-service-config --> ir-price-input
-  ir-payment-details --> ir-price-input
+  ir-payment-folio --> ir-price-input
   ir-pickup --> ir-price-input
   ir-room-nights --> ir-price-input
   style ir-price-input fill:#f9f,stroke:#333,stroke-width:4px

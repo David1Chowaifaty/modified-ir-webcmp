@@ -27,6 +27,7 @@
 - [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
 - [ir-button](../ui/ir-button)
+- [ir-sales-by-country-summary](ir-sales-by-country-summary)
 - [ir-sales-filters](ir-sales-filters)
 - [ir-sales-table](ir-sales-table)
 
@@ -37,6 +38,7 @@ graph TD;
   ir-sales-by-country --> ir-toast
   ir-sales-by-country --> ir-interceptor
   ir-sales-by-country --> ir-button
+  ir-sales-by-country --> ir-sales-by-country-summary
   ir-sales-by-country --> ir-sales-filters
   ir-sales-by-country --> ir-sales-table
   ir-interceptor --> ir-otp-modal
@@ -44,6 +46,8 @@ graph TD;
   ir-otp-modal --> ir-otp
   ir-otp-modal --> ir-button
   ir-button --> ir-icons
+  ir-sales-by-country-summary --> ir-stats-card
+  ir-stats-card --> ir-icons
   ir-sales-filters --> ir-button
   ir-sales-filters --> ir-select
   ir-sales-filters --> ir-range-picker

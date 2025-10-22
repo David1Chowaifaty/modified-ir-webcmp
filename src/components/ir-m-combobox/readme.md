@@ -11,6 +11,7 @@
 | --------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | ----------- |
 | `dataMode`      | `data-mode`      | Determines how the options are loaded into the component. - 'static': Uses the options passed through the `options` prop or the default internal list. - 'external': Emits search events for external handling, options updated via `options` prop. | `"external" \| "static"` | `'static'`  |
 | `debounceDelay` | `debounce-delay` | Debounce delay in milliseconds for search events when using external data mode.                                                                                                                                                                     | `number`                 | `300`       |
+| `defaultOption` | `default-option` | default selected option for the combobox.                                                                                                                                                                                                           | `string`                 | `undefined` |
 | `loading`       | `loading`        | Whether to show loading state                                                                                                                                                                                                                       | `boolean`                | `false`     |
 | `options`       | --               | List of available options for the combobox when using static data mode. If empty, falls back to a default internal option list.                                                                                                                     | `ComboboxOption[]`       | `[]`        |
 | `placeholder`   | `placeholder`    | Placeholder text displayed in the input when no option is selected.                                                                                                                                                                                 | `string`                 | `undefined` |
@@ -49,12 +50,14 @@ Type: `Promise<void>`
 ### Used by
 
  - [igl-cal-header](../igloo-calendar/igl-cal-header)
+ - [ir-sales-by-channel-filters](../ir-sales-by-channel/ir-sales-by-channel-filters)
  - [ir-test-cmp](../ir-test-cmp)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-cal-header --> ir-m-combobox
+  ir-sales-by-channel-filters --> ir-m-combobox
   ir-test-cmp --> ir-m-combobox
   style ir-m-combobox fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -47,10 +47,14 @@ graph TD;
   igl-cal-body --> igl-booking-event
   igl-cal-body --> ir-modal
   igl-booking-event --> igl-booking-event-hover
+  igl-booking-event-hover --> ir-dropdown
+  igl-booking-event-hover --> ir-icons
+  igl-booking-event-hover --> ir-dropdown-item
   igl-booking-event-hover --> ir-date-view
   igl-booking-event-hover --> ir-label
   igl-booking-event-hover --> ir-button
   igl-booking-event-hover --> igl-block-dates-view
+  ir-dropdown --> ir-icons
   ir-button --> ir-icons
   igl-block-dates-view --> ir-date-view
   ir-modal --> ir-button

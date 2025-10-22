@@ -13,29 +13,18 @@
 | `paymentAction` | --        |             | `IPaymentAction[]` | `undefined` |
 
 
-## Events
-
-| Event             | Description | Type                          |
-| ----------------- | ----------- | ----------------------------- |
-| `generatePayment` |             | `CustomEvent<IPaymentAction>` |
-
-
 ## Dependencies
-
-### Used by
-
- - [ir-payment-details](..)
 
 ### Depends on
 
-- [ir-button](../../../ui/ir-button)
+- [ir-payment-action](ir-payment-action)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-payment-actions --> ir-button
+  ir-payment-actions --> ir-payment-action
+  ir-payment-action --> ir-button
   ir-button --> ir-icons
-  ir-payment-details --> ir-payment-actions
   style ir-payment-actions fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

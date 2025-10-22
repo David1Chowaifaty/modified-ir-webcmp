@@ -25,9 +25,17 @@
 
  - [igloo-calendar](..)
 
+### Depends on
+
+- [ir-input-text](../../ui/ir-input-text)
+- [ir-success-loader](../../ui/ir-success-loader)
+
 ### Graph
 ```mermaid
 graph TD;
+  igl-legends --> ir-input-text
+  igl-legends --> ir-success-loader
+  ir-success-loader --> ir-icons
   igloo-calendar --> igl-legends
   style igl-legends fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -49,6 +49,8 @@ graph TD;
   ir-booking-details --> ir-booking-extra-note
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-room-guests
+  ir-booking-details --> ir-payment-folio
+  ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
   ir-booking-details --> ir-interceptor
@@ -56,7 +58,6 @@ graph TD;
   ir-booking-details --> ir-reservation-information
   ir-booking-details --> ir-date-view
   ir-booking-details --> ir-button
-  ir-booking-details --> ir-room
   ir-booking-details --> ir-pickup-view
   ir-booking-details --> ir-extra-services
   ir-booking-details --> ir-payment-details
@@ -64,12 +65,18 @@ graph TD;
   ir-booking-details --> ir-sidebar
   ir-booking-details --> igl-book-property
   ir-guest-info --> ir-spinner
+  ir-guest-info --> ir-toast
+  ir-guest-info --> ir-interceptor
   ir-guest-info --> ir-title
   ir-guest-info --> ir-input-text
   ir-guest-info --> ir-country-picker
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
@@ -91,10 +98,21 @@ graph TD;
   ir-room-guests --> ir-country-picker
   ir-room-guests --> ir-select
   ir-room-guests --> ir-button
-  ir-interceptor --> ir-otp-modal
-  ir-otp-modal --> ir-spinner
-  ir-otp-modal --> ir-otp
-  ir-otp-modal --> ir-button
+  ir-payment-folio --> ir-dropdown-item
+  ir-payment-folio --> ir-title
+  ir-payment-folio --> ir-date-picker
+  ir-payment-folio --> ir-price-input
+  ir-payment-folio --> ir-dropdown
+  ir-payment-folio --> ir-input-text
+  ir-payment-folio --> ir-button
+  ir-dropdown --> ir-icons
+  ir-room --> ir-button
+  ir-room --> ir-date-view
+  ir-room --> ir-tooltip
+  ir-room --> ir-select
+  ir-room --> ir-label
+  ir-room --> ir-modal
+  ir-modal --> ir-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-popover
@@ -104,31 +122,30 @@ graph TD;
   ir-booking-header --> ir-modal
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
-  ir-dialog --> ir-icon
-  ir-modal --> ir-button
   ir-reservation-information --> ir-label
   ir-reservation-information --> ir-tooltip
   ir-reservation-information --> ir-icons
   ir-reservation-information --> ir-button
   ir-reservation-information --> ota-label
-  ir-room --> ir-button
-  ir-room --> ir-date-view
-  ir-room --> ir-tooltip
-  ir-room --> ir-select
-  ir-room --> ir-label
-  ir-room --> ir-modal
   ir-pickup-view --> ir-button
   ir-extra-services --> ir-extra-service
   ir-extra-service --> ir-button
   ir-extra-service --> ir-date-view
   ir-extra-service --> ir-modal
-  ir-payment-details --> ir-date-picker
-  ir-payment-details --> ir-price-input
+  ir-payment-details --> ir-payment-summary
+  ir-payment-details --> ir-booking-guarantee
+  ir-payment-details --> ir-applicable-policies
   ir-payment-details --> ir-button
-  ir-payment-details --> ir-label
-  ir-payment-details --> ir-payment-actions
+  ir-payment-details --> ir-payments-folio
   ir-payment-details --> ir-modal
-  ir-payment-actions --> ir-button
+  ir-booking-guarantee --> ir-label
+  ir-booking-guarantee --> ir-button
+  ir-applicable-policies --> ir-button
+  ir-applicable-policies --> ir-icons
+  ir-payments-folio --> ir-payment-item
+  ir-payments-folio --> ir-button
+  ir-payment-item --> ir-popover
+  ir-payment-item --> ir-button
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon

@@ -7,19 +7,22 @@
 
 ## Properties
 
-| Property         | Attribute | Description | Type               | Default     |
-| ---------------- | --------- | ----------- | ------------------ | ----------- |
-| `bookingDetails` | --        |             | `Booking`          | `undefined` |
-| `paymentActions` | --        |             | `IPaymentAction[]` | `undefined` |
+| Property         | Attribute     | Description | Type                                                              | Default     |
+| ---------------- | ------------- | ----------- | ----------------------------------------------------------------- | ----------- |
+| `booking`        | --            |             | `Booking`                                                         | `undefined` |
+| `paymentActions` | --            |             | `IPaymentAction[]`                                                | `undefined` |
+| `paymentEntries` | --            |             | `{ types: IEntries[]; groups: IEntries[]; methods: IEntries[]; }` | `undefined` |
+| `propertyId`     | `property-id` |             | `number`                                                          | `undefined` |
 
 
 ## Events
 
-| Event                              | Description | Type                                                                                                 |
-| ---------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `resetBookingEvt`                  |             | `CustomEvent<null>`                                                                                  |
-| `resetExposedCancelationDueAmount` |             | `CustomEvent<null>`                                                                                  |
-| `toast`                            |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
+| Event                               | Description | Type                                                                                                 |
+| ----------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `openSidebar`                       |             | `CustomEvent<{ type: "payment-folio"; payload: { payment: Payment; mode: FolioEntryMode; }; }>`      |
+| `resetBookingEvt`                   |             | `CustomEvent<null>`                                                                                  |
+| `resetExposedCancellationDueAmount` |             | `CustomEvent<null>`                                                                                  |
+| `toast`                             |             | `CustomEvent<ICustomToast & Partial<IToastWithButton> \| IDefaultToast & Partial<IToastWithButton>>` |
 
 
 ## Dependencies
@@ -30,24 +33,31 @@
 
 ### Depends on
 
-- [ir-date-picker](../../ui/ir-date-picker)
-- [ir-price-input](../../ui/ir-price-input)
+- [ir-payment-summary](ir-payment-summary)
+- [ir-booking-guarantee](ir-booking-guarantee)
+- [ir-applicable-policies](ir-applicable-policies)
 - [ir-button](../../ui/ir-button)
-- [ir-label](../../ui/ir-label)
-- [ir-payment-actions](ir-payment-actions)
+- [ir-payments-folio](ir-payments-folio)
 - [ir-modal](../../ui/ir-modal)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-payment-details --> ir-date-picker
-  ir-payment-details --> ir-price-input
+  ir-payment-details --> ir-payment-summary
+  ir-payment-details --> ir-booking-guarantee
+  ir-payment-details --> ir-applicable-policies
   ir-payment-details --> ir-button
-  ir-payment-details --> ir-label
-  ir-payment-details --> ir-payment-actions
+  ir-payment-details --> ir-payments-folio
   ir-payment-details --> ir-modal
+  ir-booking-guarantee --> ir-label
+  ir-booking-guarantee --> ir-button
   ir-button --> ir-icons
-  ir-payment-actions --> ir-button
+  ir-applicable-policies --> ir-button
+  ir-applicable-policies --> ir-icons
+  ir-payments-folio --> ir-payment-item
+  ir-payments-folio --> ir-button
+  ir-payment-item --> ir-popover
+  ir-payment-item --> ir-button
   ir-modal --> ir-button
   ir-booking-details --> ir-payment-details
   style ir-payment-details fill:#f9f,stroke:#333,stroke-width:4px

@@ -56,6 +56,8 @@ Type: `Promise<void>`
  - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-channel](../../ir-channel)
+ - [ir-daily-revenue](../../ir-daily-revenue)
+ - [ir-financial-actions](../../ir-financial-actions)
  - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
  - [ir-hk-team](../../ir-housekeeping/ir-hk-team)
@@ -75,6 +77,8 @@ graph TD;
   ir-booking-details --> ir-sidebar
   ir-booking-listing --> ir-sidebar
   ir-channel --> ir-sidebar
+  ir-daily-revenue --> ir-sidebar
+  ir-financial-actions --> ir-sidebar
   ir-hk-archive --> ir-sidebar
   ir-hk-tasks --> ir-sidebar
   ir-hk-team --> ir-sidebar

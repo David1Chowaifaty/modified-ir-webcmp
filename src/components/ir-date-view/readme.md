@@ -22,6 +22,7 @@
  - [igl-block-dates-view](../igloo-calendar/igl-block-dates-view)
  - [igl-booking-event-hover](../igloo-calendar/igl-booking-event-hover)
  - [igl-booking-form](../igloo-calendar/igl-book-property/igl-booking-form)
+ - [igl-split-booking](../igloo-calendar/igl-split-booking)
  - [ir-booking-details](../ir-booking-details)
  - [ir-extra-service](../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-room](../ir-booking-details/ir-room)
@@ -32,6 +33,7 @@ graph TD;
   igl-block-dates-view --> ir-date-view
   igl-booking-event-hover --> ir-date-view
   igl-booking-form --> ir-date-view
+  igl-split-booking --> ir-date-view
   ir-booking-details --> ir-date-view
   ir-extra-service --> ir-date-view
   ir-room --> ir-date-view

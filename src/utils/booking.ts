@@ -132,24 +132,39 @@ export function getSplitChain(index: SplitIndex, identifier: string): string[] {
 }
 
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
-  const myBookings: any[] = [];
+  if (!months?.length) {
+    return [];
+  }
+
   const stayStatus = await getStayStatus();
+  const stayStatusLookup = new Map<string, string>(stayStatus.map(item => [item.code, item.value]));
+  const bookingsByPool = new Map<string, any>();
+
   for (const month of months) {
     for (const day of month.days) {
       for (const room of day.room_types) {
-        assignBooking(room.physicalrooms, myBookings, stayStatus);
+        assignBooking(room.physicalrooms, bookingsByPool, stayStatusLookup);
       }
     }
   }
 
-  return myBookings;
+  return Array.from(bookingsByPool.values());
 }
 
-function assignBooking(physicalRoom: PhysicalRoomType[], myBookings: any[], stayStatus: { code: string; value: string }[]): void {
+function assignBooking(
+  physicalRoom: PhysicalRoomType[],
+  bookingsByPool: Map<string, any>,
+  stayStatusLookup: Map<string, string>,
+): void {
+  if (!physicalRoom?.length) {
+    return;
+  }
+
   for (const room of physicalRoom) {
-    for (const key in room.calendar_cell) {
-      if (room.calendar_cell[key].Is_Available === false) {
-        addOrUpdateBooking(room.calendar_cell[key], myBookings, stayStatus);
+    const calendarCells = room?.calendar_cell ? Object.values(room.calendar_cell) : [];
+    for (const cell of calendarCells) {
+      if (cell?.Is_Available === false) {
+        addOrUpdateBooking(cell, bookingsByPool, stayStatusLookup);
       }
     }
   }
@@ -166,6 +181,8 @@ export const bookingStatus: Record<string, STATUS> = {
   '003': 'CHECKED-OUT',
 };
 
+type StayStatusEntry = { code: string; value: string };
+
 export function formatName(firstName: string | null, lastName: string | null) {
   if ((firstName === null && lastName === null) || !firstName) return '';
   if (!!lastName) {
@@ -173,7 +190,7 @@ export function formatName(firstName: string | null, lastName: string | null) {
   }
   return firstName;
 }
-async function getStayStatus() {
+async function getStayStatus(): Promise<StayStatusEntry[]> {
   try {
     const { data } = await axios.post(`/Get_Setup_Entries_By_TBL_NAME_Multi`, {
       TBL_NAMES: ['_STAY_STATUS'],
@@ -184,6 +201,7 @@ async function getStayStatus() {
     }));
   } catch (error) {
     console.log(error);
+    return [];
   }
 }
 function renderBlock003Date(date, hour, minute) {
@@ -192,7 +210,7 @@ function renderBlock003Date(date, hour, minute) {
   dt.setMinutes(minute);
   return `${locales.entries.Lcz_BlockedTill} ${moment(dt).format('MMM DD, HH:mm')}`;
 }
-function getDefaultData(cell: CellType, stayStatus: { code: string; value: string }[]): any {
+function getDefaultData(cell: CellType, stayStatusLookup: Map<string, string>): any {
   if (isBlockUnit(cell.STAY_STATUS_CODE)) {
     const blockedFromDate = moment(cell.My_Block_Info.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.My_Block_Info.from_date : cell.DATE;
     const blockedToDate = moment(cell.My_Block_Info.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.My_Block_Info.to_date : cell.DATE;
@@ -205,7 +223,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
           ? cell.My_Block_Info.NOTES
           : cell.STAY_STATUS_CODE === '003'
           ? renderBlock003Date(cell.My_Block_Info.BLOCKED_TILL_DATE, cell.My_Block_Info.BLOCKED_TILL_HOUR, cell.My_Block_Info.BLOCKED_TILL_MINUTE)
-          : stayStatus.find(st => st.code === cell.STAY_STATUS_CODE).value || '',
+          : stayStatusLookup.get(cell.STAY_STATUS_CODE) || '',
       RELEASE_AFTER_HOURS: cell.My_Block_Info.DESCRIPTION,
       PR_ID: cell.My_Block_Info.pr_id,
       ENTRY_DATE: cell.My_Block_Info.BLOCKED_TILL_DATE,
@@ -379,16 +397,15 @@ export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_da
   }
 }
 
-function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { code: string; value: string }[]): void {
-  const index = myBookings.findIndex(booking => booking.POOL === cell.POOL);
-  if (index === -1) {
-    const newData = getDefaultData(cell, stayStatus);
-    myBookings.push(newData);
+function addOrUpdateBooking(cell: CellType, bookingsByPool: Map<string, any>, stayStatusLookup: Map<string, string>): void {
+  if (!cell?.POOL || bookingsByPool.has(cell.POOL)) {
+    return;
   }
-  //else {
-  //   const updatedData = updateBookingWithStayData(myBookings[index], cell);
-  //   myBookings[index] = updatedData;
-  // }
+
+  const newData = getDefaultData(cell, stayStatusLookup);
+  if (newData) {
+    bookingsByPool.set(cell.POOL, newData);
+  }
 }
 export function getPrivateNote(extras: Extras[] | null) {
   if (!extras) {

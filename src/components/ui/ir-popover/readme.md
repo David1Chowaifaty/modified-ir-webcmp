@@ -23,6 +23,7 @@
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-hk-team](../../ir-housekeeping/ir-hk-team)
+ - [ir-payment-item](../../ir-booking-details/ir-payment-details/ir-payment-item)
 
 ### Graph
 ```mermaid
@@ -30,6 +31,7 @@ graph TD;
   ir-booking-header --> ir-popover
   ir-booking-listing --> ir-popover
   ir-hk-team --> ir-popover
+  ir-payment-item --> ir-popover
   style ir-popover fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

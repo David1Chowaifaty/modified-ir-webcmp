@@ -9,7 +9,7 @@
 
 | Property      | Attribute    | Description | Type                                                                                              | Default     |
 | ------------- | ------------ | ----------- | ------------------------------------------------------------------------------------------------- | ----------- |
-| `baseFilters` | --           |             | `Omit<CountrySalesParams, "is_export_to_excel" \| "AC_ID"> & { include_previous_year: boolean; }` | `undefined` |
+| `baseFilters` | --           |             | `Omit<CountrySalesParams, "AC_ID" \| "is_export_to_excel"> & { include_previous_year: boolean; }` | `undefined` |
 | `isLoading`   | `is-loading` |             | `boolean`                                                                                         | `undefined` |
 
 
@@ -17,7 +17,7 @@
 
 | Event          | Description | Type                                                                                                           |
 | -------------- | ----------- | -------------------------------------------------------------------------------------------------------------- |
-| `applyFilters` |             | `CustomEvent<Omit<CountrySalesParams, "is_export_to_excel" \| "AC_ID"> & { include_previous_year: boolean; }>` |
+| `applyFilters` |             | `CustomEvent<Omit<CountrySalesParams, "AC_ID" \| "is_export_to_excel"> & { include_previous_year: boolean; }>` |
 
 
 ## Dependencies

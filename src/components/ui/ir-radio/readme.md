@@ -30,11 +30,13 @@
 ### Used by
 
  - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
+ - [igl-split-booking](../../igloo-calendar/igl-split-booking)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-bulk-block --> ir-radio
+  igl-split-booking --> ir-radio
   style ir-radio fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
