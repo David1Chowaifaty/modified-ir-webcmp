@@ -520,6 +520,8 @@ export interface Room {
   applicable_policies: ExposedApplicablePolicy[];
   from_date: string;
   calendar_extra: string;
+  parent_room_identifier: string | null;
+  is_split: boolean;
   guest: Guest;
   occupancy_default: number;
   notes: string | null;

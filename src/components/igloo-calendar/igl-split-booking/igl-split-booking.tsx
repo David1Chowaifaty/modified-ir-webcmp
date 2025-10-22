@@ -116,6 +116,8 @@ export class IglSplitBooking {
           ...this.room,
           identifier: null,
           assigned_units_pool: null,
+          parent_room_identifier: this.room.identifier,
+          is_split: true,
           roomtype: {
             id: selectedUnit.roomtype_id,
           },

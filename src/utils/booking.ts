@@ -7,6 +7,130 @@ import locales from '@/stores/locales.store';
 import calendar_dates from '@/stores/calendar-dates.store';
 import calendar_data from '@/stores/calendar-data';
 
+export type SplitRole = 'fullSplit' | 'leftSplit' | 'rightSplit' | null;
+
+export type SplitIndex = {
+  // fast lookups
+  parentOf: Map<string, string | null>; // child -> parent
+  childrenOf: Map<string, string[]>; // parent -> ordered children
+  roleOf: Map<string, SplitRole>; // node -> role
+  chainOf: Map<string, string[]>; // any node -> full chain (head..tail)
+  heads: string[]; // all chain heads
+};
+
+/**
+ * Builds an index of split chains for a booking's rooms.
+ * @param rooms - The booking's rooms array.
+ * @returns A {@link SplitIndex} with constant-time lookups, or `null` if no rooms are provided.
+ */
+export function buildSplitIndex(rooms: Room[]): SplitIndex | null {
+  if (!rooms) {
+    return;
+  }
+  const parentOf = new Map<string, string | null>();
+  const childrenOf = new Map<string, string[]>();
+
+  // 1) index parents/children
+  for (const r of rooms) {
+    if (!r?.identifier) continue;
+    const id = r.identifier;
+    const parent = r.parent_room_identifier ?? null;
+    parentOf.set(id, parent);
+    if (parent) {
+      if (!childrenOf.has(parent)) childrenOf.set(parent, []);
+      childrenOf.get(parent)!.push(id);
+    } else {
+      if (!childrenOf.has(id)) childrenOf.set(id, []); // ensure every head exists in map
+    }
+  }
+
+  // 2) deterministic child order
+  const byId = new Map(rooms.map(r => [r.identifier, r]));
+  for (const [_, kids] of childrenOf) {
+    kids.sort((a, b) => {
+      const ad = byId.get(a)?.from_date ?? '';
+      const bd = byId.get(b)?.from_date ?? '';
+      if (ad < bd) return -1;
+      if (ad > bd) return 1;
+      return a.localeCompare(b);
+    });
+  }
+
+  // 3) find heads (nodes with no parent in map or parent missing)
+  const heads: string[] = [];
+  for (const id of parentOf.keys()) {
+    const parent = parentOf.get(id);
+    if (!parent || !parentOf.has(parent)) heads.push(id);
+  }
+
+  // 4) build chains, roles, and guard against cycles
+  const roleOf = new Map<string, SplitRole>();
+  const chainOf = new Map<string, string[]>();
+
+  const visitChain = (head: string) => {
+    const chain: string[] = [];
+    const seen = new Set<string>();
+    let cur: string | undefined = head;
+
+    while (cur && !seen.has(cur)) {
+      seen.add(cur);
+      chain.push(cur);
+      const kids = childrenOf.get(cur) ?? [];
+      // if data branches, we follow the earliest child and treat the rest as separate heads
+      cur = kids[0];
+    }
+
+    // assign roles
+    for (let i = 0; i < chain.length; i++) {
+      const id = chain[i];
+      const hasParent = i > 0;
+      const hasChild = i < chain.length - 1;
+      const role: SplitRole = hasParent && hasChild ? 'fullSplit' : hasParent ? 'leftSplit' : hasChild ? 'rightSplit' : null;
+      roleOf.set(id, role);
+      chainOf.set(id, chain);
+    }
+  };
+
+  // visit each head
+  for (const h of heads) visitChain(h);
+
+  // handle orphans/cycles that weren’t reachable from heads
+  for (const id of parentOf.keys()) {
+    if (!chainOf.has(id)) visitChain(id);
+  }
+
+  return { parentOf, childrenOf, roleOf, chainOf, heads };
+}
+
+/**
+ * Returns the split role of a given room identifier.
+ *
+ * Roles:
+ * - `"fullSplit"`: node has a parent and a child (middle of a chain)
+ * - `"leftSplit"`: node has a parent only (tail)
+ * - `"rightSplit"`: node has a child only (head that splits)
+ * - `null`: singleton (no parent & no child) or not part of any chain in the index
+ *
+ * @param index - A previously built {@link SplitIndex}.
+ * @param identifier - The room identifier to query.
+ * @returns The role of the identifier, or `null` if not present.
+ */
+export function getSplitRole(index: SplitIndex, identifier: string): SplitRole {
+  return index.roleOf.get(identifier) ?? null;
+}
+
+/**
+ * Returns the full ordered chain (head → … → tail) containing the identifier.
+ * If the identifier is unknown to the index, returns a single-element array with the identifier.
+ *
+ * @param index - A previously built {@link SplitIndex}.
+ * @param identifier - The room identifier to query.
+ * @returns An array of identifiers representing the chain.
+ */
+export function getSplitChain(index: SplitIndex, identifier: string): string[] {
+  return index.chainOf.get(identifier) ?? [identifier];
+}
+
 export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   const myBookings: any[] = [];
   const stayStatus = await getStayStatus();
@@ -111,7 +235,6 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
   // if (cell.booking.booking_nbr.toString() === '00553011358') {
   //   console.log(cell);
   // }
-
   try {
     const bookingFromDate = moment(cell.room.from_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.from_date : cell.DATE;
     const bookingToDate = moment(cell.room.to_date, 'YYYY-MM-DD').isAfter(cell.DATE) ? cell.room.to_date : cell.DATE;
@@ -172,6 +295,7 @@ function getDefaultData(cell: CellType, stayStatus: { code: string; value: strin
         unit: cell.room.unit,
         in_out: cell.room.in_out,
         calendar_extra: cell.room.calendar_extra ? JSON.parse(cell.room.calendar_extra) : null,
+        parent_room_identifier: cell.room.parent_room_identifier,
       },
       BASE_STATUS_CODE: cell.booking.status?.code,
     };
@@ -254,6 +378,7 @@ export function getRoomStatus(params: Pick<Room, 'in_out' | 'from_date' | 'to_da
     }
   }
 }
+
 function addOrUpdateBooking(cell: CellType, myBookings: any[], stayStatus: { code: string; value: string }[]): void {
   const index = myBookings.findIndex(booking => booking.POOL === cell.POOL);
   if (index === -1) {
@@ -271,6 +396,7 @@ export function getPrivateNote(extras: Extras[] | null) {
   }
   return extras.find(e => e.key === 'private_note')?.value || null;
 }
+
 export function transformNewBooking(data: any): RoomBookingDetails[] {
   let bookings: RoomBookingDetails[] = [];
   const rooms = data.rooms.filter(room => !!room['assigned_units_pool']);
@@ -341,6 +467,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
         sharing_persons: room.sharing_persons,
         unit: room.unit,
         in_out: room.in_out,
+        parent_room_identifier: room.parent_room_identifier,
         calendar_extra: room.calendar_extra ? JSON.parse(room.calendar_extra) : null,
       },
       BASE_STATUS_CODE: data.status?.code,
@@ -348,6 +475,7 @@ export function transformNewBooking(data: any): RoomBookingDetails[] {
   });
   return bookings;
 }
+
 export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDetails> {
   const stayStatus = await getStayStatus();
   return {
@@ -381,15 +509,18 @@ export async function transformNewBLockedRooms(data: any): Promise<RoomBlockDeta
     },
   };
 }
+
 export function calculateDaysBetweenDates(from_date: string, to_date: string) {
   const startDate = moment(from_date, 'YYYY-MM-DD').startOf('day');
   const endDate = moment(to_date, 'YYYY-MM-DD').endOf('day');
   const daysDiff = endDate.diff(startDate, 'days');
   return daysDiff || 1;
 }
+
 export function compareTime(date1: Date, date2: Date) {
   return date1.getHours() >= date2.getHours() && date1.getMinutes() >= date2.getMinutes();
 }
+
 /**
  * Creates a Date object for today at the specified hour in a given time zone.
  * The offset is the number of hours that the target time zone is ahead of UTC.

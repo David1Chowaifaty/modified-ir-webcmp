@@ -603,7 +603,7 @@ export interface RoomBookingDetails {
     to_date: string;
   };
   BASE_STATUS_CODE: string;
-  ROOM_INFO: Pick<Room, 'occupancy' | 'sharing_persons' | 'unit' | 'in_out' | 'calendar_extra'>;
+  ROOM_INFO: Pick<Room, 'occupancy' | 'sharing_persons' | 'unit' | 'in_out' | 'calendar_extra' | 'parent_room_identifier'>;
 }
 export interface ISource {
   code: string;
