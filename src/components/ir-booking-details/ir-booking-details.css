@@ -15,6 +15,12 @@
 :host th {
   font-weight: 600;
 }
+.card.room-group {
+  margin-bottom: 1rem !important;
+}
+.card.room-group:last-child {
+  margin-bottom: 1.81rem !important;
+}
 .h-28 {
   height: 2rem;
 }

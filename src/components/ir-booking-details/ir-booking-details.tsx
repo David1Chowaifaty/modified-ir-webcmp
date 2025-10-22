@@ -548,16 +548,19 @@ export class IrBookingDetails {
 
     return (
       <Fragment>
-        {groups.map((group, groupIdx) => (
-          <div class="card p-0 mx-0" key={`room-group-${group.order}-${groupIdx}`}>
-            {group.rooms.map((room, roomIdx) => (
-              <Fragment>
-                {this.renderRoomItem(room, indexById.get(room.identifier) ?? roomIdx)}
-                {roomIdx < group.rooms.length - 1 ? <hr class="mr-2 ml-2 my-0 p-0" /> : null}
-              </Fragment>
-            ))}
-          </div>
-        ))}
+        {groups.map((group, groupIdx) => {
+          const isLastGroup = groupIdx === groups.length - 1;
+          return (
+            <div class={`card p-0 mx-0 ${isLastGroup ? '' : 'room-group'}`} key={`room-group-${group.order}-${groupIdx}`}>
+              {group.rooms.map((room, roomIdx) => (
+                <Fragment>
+                  {this.renderRoomItem(room, indexById.get(room.identifier) ?? roomIdx)}
+                  {roomIdx < group.rooms.length - 1 ? <hr class="mr-2 ml-2 my-0 p-0" /> : null}
+                </Fragment>
+              ))}
+            </div>
+          );
+        })}
       </Fragment>
     );
   }
