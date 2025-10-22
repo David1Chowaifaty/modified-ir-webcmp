@@ -10,6 +10,7 @@ on:
       - folio
       - folio2
       - sales-by-channel
+      - fd/split-booking
 
 jobs:
   build-and-deploy:
