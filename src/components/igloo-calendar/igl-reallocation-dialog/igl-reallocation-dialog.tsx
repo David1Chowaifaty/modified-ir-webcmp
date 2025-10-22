@@ -72,7 +72,7 @@ export class IglReallocationDialog {
       return '';
     }
 
-    const suffix = option.custom_text ? ` ${option.custom_text}` : '';
+    const suffix = option.custom_text ? ` | ${option.custom_text}` : '';
     return `${option.text}${suffix}`.trim();
   }
 
@@ -137,12 +137,12 @@ export class IglReallocationDialog {
           <Fragment>
             {this.data.title && <div slot="modal-title">{this.data.title}</div>}
             <div slot="modal-body" class="dialog-body">
-              <p class="text-left dialog-body__description">{this.data.description}</p>
+              <p class="text-left dialog-body__description m-0 p-0">{this.data.description}</p>
               {hasRateplans && (
                 <ir-select
                   ref={el => (this.rateplanSelectEl = el)}
                   required
-                  firstOption="Select rate plan"
+                  firstOption="Select rate plan..."
                   data={this.rateplanOptions.map(option => ({ text: option.text, value: option.value }))}
                   error={this.showRateplanError}
                   onSelectChange={this.handleRateplanChange}

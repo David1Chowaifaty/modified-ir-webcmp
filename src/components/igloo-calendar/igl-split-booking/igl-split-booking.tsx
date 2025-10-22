@@ -207,7 +207,7 @@ export class IglSplitBooking {
         }}
         class="sheet-container"
       >
-        <ir-title class="px-1 sheet-header mb-0" displayContext="sidebar" label={`Split unit ${this.room?.unit['name']}`}></ir-title>
+        <ir-title class="px-1 sheet-header mb-0" displayContext="sidebar" onCloseSideBar={() => this.closeModal.emit()} label={`Split unit ${this.room?.unit['name']}`}></ir-title>
         <section class="px-1 sheet-body">
           <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
             <div>
@@ -287,39 +287,36 @@ export class IglSplitBooking {
                             label={room.name}
                           ></ir-radio>
                           {showMealPlanSelect && (
-                            // <ir-select
-                            //   firstOption="Select a new rateplan..."
-                            //   error={this.errors?.rateplan_id && !this.selectedUnit?.rateplan_id}
-                            //   onSelectChange={e => {
-                            //     const value = e.detail === null || e.detail === undefined || e.detail === '' ? undefined : Number(e.detail);
-                            //     this.updateSelectedUnit({
-                            //       rateplan_id: value,
-                            //     });
-                            //   }}
-                            //   data={this.mealPlanOptions}
-                            // ></ir-select>
-                            <ir-dropdown
-                              onOptionChange={e => {
+                            <ir-select
+                              firstOption="Select a new rateplan..."
+                              error={this.errors?.rateplan_id && !this.selectedUnit?.rateplan_id}
+                              onSelectChange={e => {
+                                const value = e.detail === null || e.detail === undefined || e.detail === '' ? undefined : Number(e.detail);
                                 this.updateSelectedUnit({
-                                  rateplan_id: Number(e.detail.toString()),
+                                  rateplan_id: value,
                                 });
                               }}
-                              style={{ '--ir-dropdown-menu-min-width': 'max-content' }}
-                            >
-                              <button type="button" class="btn btn-sm form-control pr-2 d-flex align-items-center" style={{ minWidth: '200px' }} slot="trigger">
-                                {this.selectedUnit?.rateplan_id ? this.mealPlanOptions.find(r => r.value === this.selectedUnit.rateplan_id.toString()).text : 'Choose a meal plan'}
-                              </button>
-                              {this.mealPlanOptions.map(o => (
-                                <ir-dropdown-item value={o.value}>
-                                  <p class="m-0 p-0">{o.text}</p>
-                                  {o.custom_text && (
-                                    <p class="m-0 p-0" style={{ fontSize: '12px' }}>
-                                      {o.custom_text}
-                                    </p>
-                                  )}
-                                </ir-dropdown-item>
-                              ))}
-                            </ir-dropdown>
+                              data={this.mealPlanOptions.map(e => ({ ...e, text: e.text + ' | ' + e.value }))}
+                            ></ir-select>
+                            // <ir-dropdown
+                            //   onOptionChange={e => {
+                            //     this.updateSelectedUnit({
+                            //       rateplan_id: Number(e.detail.toString()),
+                            //     });
+                            //   }}
+                            //   style={{ '--ir-dropdown-menu-min-width': 'max-content' }}
+                            // >
+                            //   <button type="button" class="btn btn-sm form-control pr-2 d-flex align-items-center" style={{ minWidth: '200px' }} slot="trigger">
+                            //     {this.selectedUnit?.rateplan_id ? this.mealPlanOptions.find(r => r.value === this.selectedUnit.rateplan_id.toString()).text : 'Choose a meal plan'}
+                            //   </button>
+                            //   {this.mealPlanOptions.map(o => (
+                            //     <ir-dropdown-item value={o.value}>
+                            //       <p class="m-0 p-0">
+                            //         {o.text} {o.custom_text && <span class="m-0 p-0">| {o.custom_text}</span>}
+                            //       </p>
+                            //     </ir-dropdown-item>
+                            //   ))}
+                            // </ir-dropdown>
                           )}
                         </div>
                       </li>

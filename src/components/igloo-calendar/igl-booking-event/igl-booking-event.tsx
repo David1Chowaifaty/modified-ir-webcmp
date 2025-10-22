@@ -448,7 +448,7 @@ export class IglBookingEvent {
           });
 
           return {
-            description: locales.entries.Lcz_SameRatesWillBeKept + '.',
+            description: locales.entries.Lcz_SameRatesWillBeKept,
             status: '200',
             newRatePlans: Array.isArray(mealPlans) ? mealPlans : undefined,
           };
@@ -921,7 +921,10 @@ export class IglBookingEvent {
          !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS !== 'TEMP-EVENT' && this.bookingEvent.ID !== 'NEW_TEMP_EVENT'
            ? 'border border-dark ota-booking-event'
            : ''
-       }  ${this.isSplitBooking() ? 'splitBooking' : ''}`}
+       }  ${this.isSplitBooking() ? 'splitBooking' : ''}
+            fullSplit  
+            
+            `}
           style={{
             'backgroundColor': isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003' ? 'rgb(243, 71, 82)' : backgroundColor,
             '--ir-event-bg': isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003' ? 'rgb(243, 71, 82)' : backgroundColor,

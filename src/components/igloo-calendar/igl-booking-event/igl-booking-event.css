@@ -3,6 +3,8 @@
   position: absolute;
   --ota-bar-width: 2px;
   --stripe-period: 20px;
+  --split-border-width: 5px;
+  --split-border-color: black;
 }
 
 .bookingEventBase {
@@ -13,6 +15,25 @@
   background-color: rgb(49, 190, 241);
   transform: skewX(-22deg);
   cursor: pointer;
+}
+.bookingEventBase.leftSplit {
+  border-left: var(--split-border-width) solid var(--split-border-color);
+}
+.bookingEventBase.rightSplit {
+  border-right: var(--split-border-width) solid var(--split-border-color);
+}
+.bookingEventBase.fullSplit {
+  border-right: var(--split-border-width) solid var(--split-border-color);
+  border-left: var(--split-border-width) solid var(--split-border-color);
+}
+
+.bookingEventBase.fullSplit.skewedLeft,
+.bookingEventBase.leftSplit.skewedLeft {
+  border-left: 0;
+}
+.bookingEventBase.fullSplit.skewedRight,
+.bookingEventBase.leftSplit.skewedRight {
+  border-right: 0;
 }
 
 .bookingEvent {
@@ -52,6 +73,18 @@
   transform: skewX(22deg);
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+.bookingEventBase.fullSplit.skewedLeft::before,
+.bookingEventBase.leftSplit.skewedLeft::before {
+  border-left: var(--split-border-width) solid var(--split-border-color) !important;
+  z-index: 2;
+  background-color: transparent;
+}
+.bookingEventBase.fullSplit.skewedRight::before,
+.bookingEventBase.leftRight.skewedRight::before {
+  border-right: var(--split-border-width) solid var(--split-border-color) !important;
+  z-index: 2;
+  background-color: transparent;
 }
 
 /* .bookingEventBase::before {
@@ -96,6 +129,18 @@
   height: 20px;
   right: -4px;
 }
+
+.bookingEventBase.striped-bar.fullSplit.skewedLeft.vertical::after,
+.bookingEventBase.striped-bar.leftSplit.skewedLeft.vertical::after {
+  z-index: 1;
+  border-left: var(--split-border-width) solid var(--split-border-color);
+}
+.bookingEventBase.striped-bar.fullSplit.skewedRight.vertical::after,
+.bookingEventBase.striped-bar.rightSplit.skewedRight.vertical::after {
+  z-index: 1;
+  border-right: var(--split-border-width) solid var(--split-border-color);
+}
+
 .bookingEventBase.striped-bar.vertical::after {
   --stripe-angle: 360deg;
 }
