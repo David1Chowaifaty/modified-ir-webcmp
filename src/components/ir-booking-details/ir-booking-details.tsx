@@ -239,16 +239,16 @@ export class IrBookingDetails {
       this.bedPreference = bed_preference_type;
       this.departureTime = departure_time;
       this.paymentEntries = { types: pay_type, groups: pay_type_group, methods: pay_method };
-      if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id && bookingDetails.is_direct) {
-        this.paymentService
-          .GetExposedCancellationDueAmount({
-            booking_nbr: bookingDetails.booking_nbr,
-            currency_id: bookingDetails.currency.id,
-          })
-          .then(res => {
-            this.paymentActions = res;
-          });
-      }
+      // if (bookingDetails?.booking_nbr && bookingDetails?.currency?.id && bookingDetails.is_direct) {
+      //   this.paymentService
+      //     .GetExposedCancellationDueAmount({
+      //       booking_nbr: bookingDetails.booking_nbr,
+      //       currency_id: bookingDetails.currency.id,
+      //     })
+      //     .then(res => {
+      //       this.paymentActions = res;
+      //     });
+      // }
       if (!locales?.entries) {
         locales.entries = languageTexts.entries;
         locales.direction = languageTexts.direction;

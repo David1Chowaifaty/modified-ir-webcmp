@@ -1,4 +1,4 @@
-import { Booking, Bracket, ExposedApplicablePolicy } from '@/models/booking.dto';
+import { Booking, Bracket } from '@/models/booking.dto';
 import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { CancellationStatement } from '../../types';
 import moment, { Moment } from 'moment';
@@ -7,6 +7,8 @@ import calendar_data from '@/stores/calendar-data';
 import { IPaymentAction } from '@/services/payment.service';
 import locales from '@/stores/locales.store';
 import { HelpDocButton } from '@/components/HelpButton';
+import { ApplicablePoliciesService } from '@/services/applicable-policies.service';
+import { BookingService } from '@/services/booking.service';
 
 @Component({
   tag: 'ir-applicable-policies',
@@ -23,7 +25,9 @@ export class IrApplicablePolicies {
   @State() guaranteeAmount: number;
 
   @Event() generatePayment: EventEmitter<IPaymentAction>;
+
   private shouldShowCancellationBrackets: boolean = true;
+  private applicablePoliciesService = new ApplicablePoliciesService(new BookingService());
 
   componentWillLoad() {
     this.loadApplicablePolicies();
@@ -36,44 +40,13 @@ export class IrApplicablePolicies {
   private async loadApplicablePolicies() {
     this.isLoading = true;
     try {
-      const getPoliciesByType = (policies: ExposedApplicablePolicy[], type: ExposedApplicablePolicy['type']) => {
-        return policies.find(p => p.type === type);
-      };
-      const statements: CancellationStatement[] = [];
-      let total = 0;
-      this.booking.rooms.forEach(room => {
-        const cancellationPolicy = getPoliciesByType(room.applicable_policies, 'cancelation');
-        const guaranteePolicy = getPoliciesByType(room.applicable_policies, 'guarantee');
-
-        if (cancellationPolicy) {
-          let brackets = [
-            ...cancellationPolicy.brackets
-              .map((bracket, index) => {
-                if (bracket.amount > 0) {
-                  return bracket;
-                }
-                if (index < cancellationPolicy?.brackets.length - 1 && cancellationPolicy.brackets[index + 1]?.amount > 0) {
-                  return bracket;
-                }
-              })
-              .filter(Boolean),
-          ];
-          statements.push({
-            ...cancellationPolicy,
-            roomType: room.roomtype,
-            ratePlan: room.rateplan,
-            brackets,
-            checkInDate: room.from_date,
-            grossTotal: room.gross_total,
-          });
-        }
-        if (guaranteePolicy) {
-          total += this.getCurrentBracket(guaranteePolicy.brackets)?.gross_amount ?? 0;
-        }
+      this.applicablePoliciesService.booking = this.booking;
+      const { cancellationStatements, guaranteeAmount } = await this.applicablePoliciesService.fetchGroupedApplicablePolicies({
+        language: this.language,
       });
 
-      this.guaranteeAmount = total;
-      this.cancellationStatements = [...statements];
+      this.guaranteeAmount = guaranteeAmount;
+      this.cancellationStatements = [...cancellationStatements];
     } catch (error) {
       console.error(error);
     } finally {
@@ -113,7 +86,9 @@ export class IrApplicablePolicies {
     }
 
     // Multiple brackets case
-    return this.handleMultipleBrackets(bracket, index, brackets, checkInDate);
+    const _brackets = this.handleMultipleBrackets(bracket, index, brackets, checkInDate);
+
+    return _brackets;
   }
 
   private handleSingleBracket(
@@ -124,6 +99,14 @@ export class IrApplicablePolicies {
     showArrow: boolean;
     rightLabel: string | null;
   } {
+    const momentCheckInDate = moment(checkInDate, 'YYYY-MM-DD');
+    if (bracketDueDate.isSame(momentCheckInDate, 'days')) {
+      return {
+        leftLabel: `${momentCheckInDate.format('MMM DD')} onwards`,
+        showArrow: false,
+        rightLabel: '',
+      };
+    }
     return {
       leftLabel: bracketDueDate.format('MMM DD'),
       showArrow: true,
@@ -142,6 +125,7 @@ export class IrApplicablePolicies {
     rightLabel: string | null;
   } {
     const bracketDueDate = moment(bracket.due_on, 'YYYY-MM-DD');
+    const momentCheckInDate = moment(checkInDate, 'YYYY-MM-DD');
 
     // First bracket
     if (index === 0) {
@@ -161,7 +145,17 @@ export class IrApplicablePolicies {
       return {
         leftLabel: 'Until',
         showArrow: false,
-        rightLabel: nextBracketDueDate.format('MMM DD, YYYY'),
+        rightLabel: nextBracketDueDate.isSame(momentCheckInDate, 'dates')
+          ? nextBracketDueDate.clone().add(-1, 'days').format('MMM DD, YYYY')
+          : nextBracketDueDate.format('MMM DD, YYYY'),
+      };
+    }
+
+    if (moment(bracket.due_on, 'YYYY-MM-DD').isSameOrAfter(momentCheckInDate, 'days')) {
+      return {
+        leftLabel: `${momentCheckInDate.format('MMM DD')} onwards`,
+        showArrow: false,
+        rightLabel: '',
       };
     }
 
@@ -186,24 +180,14 @@ export class IrApplicablePolicies {
     }
 
     // Calculate the end of current bracket period (day before next bracket starts)
-    const periodEndDate = nextBracketDueDate.clone();
-
+    const periodEndDate = nextBracketDueDate.isAfter(momentCheckInDate, 'days') ? momentCheckInDate : nextBracketDueDate.clone();
+    const haveSameDays = bracketDueDate.isSame(periodEndDate.clone().add(-1, 'days'), 'days');
     return {
       leftLabel: this.formatPreviousBracketDueOn(bracketDueDate, periodEndDate),
-      showArrow: true,
-      rightLabel: periodEndDate.format('MMM DD, YYYY'),
+      showArrow: !haveSameDays,
+      rightLabel: haveSameDays ? '' : periodEndDate.add(-1, 'days').format('MMM DD, YYYY'),
     };
   }
-  private getCurrentBracket(brackets: Bracket[]) {
-    const today = moment();
-    for (const bracket of brackets) {
-      if (today.isSameOrAfter(moment(bracket.due_on, 'YYYY-MM-DD'), 'days')) {
-        return bracket;
-      }
-    }
-    return null;
-  }
-
   private generateCancellationStatement() {
     const label = 'if cancelled today';
     const { cancelation_penality_as_if_today } = this.booking.financial;
@@ -300,7 +284,7 @@ export class IrApplicablePolicies {
             <div class="applicable-policies__statements">
               {this.cancellationStatements?.map(statement => {
                 const currentBracket = this._getCurrentBracket(statement.brackets);
-                const isTodaySameOrAfterCheckInDate = moment().isSameOrAfter(moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days'));
+                // const isTodaySameOrAfterCheckInDate = moment().isSameOrAfter(moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days'));
                 return (
                   <div class="applicable-policies__statement">
                     {this.cancellationStatements.length > 1 && (
@@ -342,7 +326,7 @@ export class IrApplicablePolicies {
                               checkInDate: statement.checkInDate,
                             });
 
-                            const isInCurrentBracket = isTodaySameOrAfterCheckInDate ? false : moment(bracket.due_on, 'YYYY-MM-DD').isSame(currentBracket, 'date');
+                            const isInCurrentBracket = moment(bracket.due_on, 'YYYY-MM-DD').isSame(currentBracket, 'date');
 
                             return (
                               <tr class={{ 'applicable-policies__highlighted-bracket': isInCurrentBracket }}>
@@ -357,7 +341,7 @@ export class IrApplicablePolicies {
                               </tr>
                             );
                           })}
-                          {isTodaySameOrAfterCheckInDate && (
+                          {/*isTodaySameOrAfterCheckInDate && (
                             <tr class={{ 'applicable-policies__highlighted-bracket': true }}>
                               <td class="applicable-policies__bracket-dates">{moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days').format('MMM DD')} onwards</td>
 
@@ -365,7 +349,7 @@ export class IrApplicablePolicies {
 
                               <td class="applicable-policies__statement-text">100% of the total price</td>
                             </tr>
-                          )}
+                          )*/}
                         </tbody>
                       </table>
                     </div>

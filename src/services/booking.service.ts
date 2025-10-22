@@ -112,6 +112,8 @@ export class BookingService {
     rate_plan_id: number;
     room_type_id: number;
     property_id: number;
+    is_preserve_history?: boolean;
+    room_identifier?: string;
   }): Promise<ExposedApplicablePolicy[] | null> {
     const { data } = await axios.post(`/Get_Exposed_Applicable_Policies`, props);
     if (data.ExceptionMsg !== '') {
