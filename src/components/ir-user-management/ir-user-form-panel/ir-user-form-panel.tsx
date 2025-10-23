@@ -128,6 +128,7 @@ export class IrUserFormPanel {
 
   private async createOrUpdateUser() {
     try {
+      console.log('hello world');
       this.isLoading = true;
       this.emailErrorMessage = undefined;
       if (!this.autoValidate) {
@@ -140,8 +141,8 @@ export class IrUserFormPanel {
         password: this.user && this.userInfo.password === '' ? this.user.password : this.userInfo.password,
         type: Number(this.userInfo.type),
       };
-      console.log('toValidateUserInfo', { ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.country.phone_prefix, '') });
-      await this.userSchema.parseAsync({ ...toValidateUserInfo, mobile: toValidateUserInfo.mobile.split(' ').join('').replace(calendar_data.country.phone_prefix, '') });
+      console.log('toValidateUserInfo', { ...toValidateUserInfo, mobile: toValidateUserInfo.mobile?.split(' ')?.join('')?.replace(calendar_data.country.phone_prefix, '') ?? '' });
+      await this.userSchema.parseAsync({ ...toValidateUserInfo, mobile: toValidateUserInfo.mobile?.split(' ')?.join('')?.replace(calendar_data.country.phone_prefix, '') ?? '' });
       if (this.errors) {
         this.errors = null;
       }
@@ -149,6 +150,7 @@ export class IrUserFormPanel {
       this.resetData.emit(null);
       this.closeSideBar.emit(null);
     } catch (error) {
+      console.log(error);
       const e: any = {};
       if (error instanceof ZodError) {
         console.error(error);
