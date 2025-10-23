@@ -298,7 +298,7 @@ export class IglSplitBooking {
                                   rateplan_id: value,
                                 });
                               }}
-                              data={this.mealPlanOptions.map(e => ({ ...e, text: e.text + ' | ' + e.value }))}
+                              data={this.mealPlanOptions.map(e => ({ ...e, text: e.text + `${e.custom_text ? ' | ' : ''}${e.custom_text}` }))}
                             ></ir-select>
                             // <ir-dropdown
                             //   onOptionChange={e => {
