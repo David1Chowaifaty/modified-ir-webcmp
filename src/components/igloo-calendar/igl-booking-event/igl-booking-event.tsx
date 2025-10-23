@@ -711,6 +711,9 @@ export class IglBookingEvent {
         // if (this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE)) {
         //   return;
         // }
+        if (this.role === 'fullSplit') {
+          return;
+        }
         const baseCondition = !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE);
         let newWidth = this.initialWidth;
         if (this.resizeSide == 'rightSide') {
@@ -721,10 +724,16 @@ export class IglBookingEvent {
           if (!this.isShrinking && baseCondition) {
             return;
           }
+          if (this.role === 'rightSplit') {
+            return;
+          }
           this.element.style.width = `${newWidth}px`;
         } else if (this.resizeSide == 'leftSide') {
           this.isShrinking = distanceX > 0;
           if (!this.isShrinking && baseCondition) {
+            return;
+          }
+          if (this.role === 'leftSplit') {
             return;
           }
           newWidth = Math.max(this.dayWidth - this.eventSpace, this.initialWidth - distanceX);

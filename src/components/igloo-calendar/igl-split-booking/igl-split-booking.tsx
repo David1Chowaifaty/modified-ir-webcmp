@@ -111,6 +111,7 @@ export class IglSplitBooking {
           from_date: this.room.from_date,
           to_date: this.selectedDates.from_date.format('YYYY-MM-DD'),
           days: this.room.days.filter(r => moment(r.date, 'YYYY-MM-DD').isBefore(this.selectedDates.from_date, 'dates')),
+          departure_time: null,
         },
         {
           ...this.room,
@@ -124,6 +125,7 @@ export class IglSplitBooking {
           rateplan: {
             id: selectedUnit.rateplan_id || this.room.rateplan.id,
           },
+          departure_time: this.room.departure_time,
           unit: { id: selectedUnit.unit_id },
           from_date: this.selectedDates.from_date.format('YYYY-MM-DD'),
           // to_date: this.selectedDates.to_date.format('YYYY-MM-DD'),

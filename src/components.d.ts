@@ -1438,6 +1438,8 @@ export namespace Components {
     interface IrMonthlyBookingsReportTable {
         "reports": DailyReport[];
     }
+    interface IrNewBadge {
+    }
     interface IrNotifications {
         "notifications": Notification[];
     }
@@ -1881,6 +1883,7 @@ export namespace Components {
         "hasRoomAdd": boolean;
         "hasRoomDelete": boolean;
         "hasRoomEdit": boolean;
+        "includeDepartureTime": boolean;
         "isEditable": boolean;
         "language": string;
         "legendData": any;
@@ -4211,6 +4214,12 @@ declare global {
         prototype: HTMLIrMonthlyBookingsReportTableElement;
         new (): HTMLIrMonthlyBookingsReportTableElement;
     };
+    interface HTMLIrNewBadgeElement extends Components.IrNewBadge, HTMLStencilElement {
+    }
+    var HTMLIrNewBadgeElement: {
+        prototype: HTMLIrNewBadgeElement;
+        new (): HTMLIrNewBadgeElement;
+    };
     interface HTMLIrNotificationsElementEventMap {
         "notificationCleared": Notification;
     }
@@ -5207,6 +5216,7 @@ declare global {
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
         "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
         "ir-monthly-bookings-report-table": HTMLIrMonthlyBookingsReportTableElement;
+        "ir-new-badge": HTMLIrNewBadgeElement;
         "ir-notifications": HTMLIrNotificationsElement;
         "ir-option-details": HTMLIrOptionDetailsElement;
         "ir-ota-service": HTMLIrOtaServiceElement;
@@ -6820,6 +6830,8 @@ declare namespace LocalJSX {
     interface IrMonthlyBookingsReportTable {
         "reports"?: DailyReport[];
     }
+    interface IrNewBadge {
+    }
     interface IrNotifications {
         "notifications"?: Notification[];
         "onNotificationCleared"?: (event: IrNotificationsCustomEvent<Notification>) => void;
@@ -7338,6 +7350,7 @@ declare namespace LocalJSX {
         "hasRoomAdd"?: boolean;
         "hasRoomDelete"?: boolean;
         "hasRoomEdit"?: boolean;
+        "includeDepartureTime"?: boolean;
         "isEditable"?: boolean;
         "language"?: string;
         "legendData"?: any;
@@ -7941,6 +7954,7 @@ declare namespace LocalJSX {
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
         "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
         "ir-monthly-bookings-report-table": IrMonthlyBookingsReportTable;
+        "ir-new-badge": IrNewBadge;
         "ir-notifications": IrNotifications;
         "ir-option-details": IrOptionDetails;
         "ir-ota-service": IrOtaService;
@@ -8110,6 +8124,7 @@ declare module "@stencil/core" {
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
             "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;
             "ir-monthly-bookings-report-table": LocalJSX.IrMonthlyBookingsReportTable & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportTableElement>;
+            "ir-new-badge": LocalJSX.IrNewBadge & JSXBase.HTMLAttributes<HTMLIrNewBadgeElement>;
             "ir-notifications": LocalJSX.IrNotifications & JSXBase.HTMLAttributes<HTMLIrNotificationsElement>;
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
             "ir-ota-service": LocalJSX.IrOtaService & JSXBase.HTMLAttributes<HTMLIrOtaServiceElement>;

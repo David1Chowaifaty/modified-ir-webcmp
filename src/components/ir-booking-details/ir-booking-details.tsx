@@ -495,7 +495,7 @@ export class IrBookingDetails {
     return { groups: grouped, indexById, hasSplitGroups: true };
   }
 
-  private renderRoomItem(room: Room, bookingIndex: number) {
+  private renderRoomItem(room: Room, bookingIndex: number, includeDepartureTime: boolean = true) {
     const showCheckin = this.handleRoomCheckin(room);
     const showCheckout = this.handleRoomCheckout(room);
 
@@ -512,6 +512,7 @@ export class IrBookingDetails {
         roomsInfo={this.calendarData.roomsInfo}
         myRoomTypeFoodCat={room.roomtype.name}
         mealCodeName={room.rateplan.short_name}
+        includeDepartureTime={includeDepartureTime}
         currency={this.booking.currency.symbol}
         hasRoomEdit={this.hasRoomEdit && this.booking.status.code !== '003' && this.booking.is_direct}
         hasRoomDelete={this.hasRoomDelete && this.booking.status.code !== '003' && this.booking.is_direct}
@@ -554,7 +555,7 @@ export class IrBookingDetails {
             <div class={`card p-0 mx-0 ${isLastGroup ? '' : 'room-group'}`} key={`room-group-${group.order}-${groupIdx}`}>
               {group.rooms.map((room, roomIdx) => (
                 <Fragment>
-                  {this.renderRoomItem(room, indexById.get(room.identifier) ?? roomIdx)}
+                  {this.renderRoomItem(room, indexById.get(room.identifier) ?? roomIdx, roomIdx === group.rooms.length - 1)}
                   {roomIdx < group.rooms.length - 1 ? <hr class="mr-2 ml-2 my-0 p-0" /> : null}
                 </Fragment>
               ))}

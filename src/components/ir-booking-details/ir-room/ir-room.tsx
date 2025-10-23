@@ -25,6 +25,7 @@ export class IrRoom {
   @Prop() isEditable: boolean;
   @Prop() room: Room;
   @Prop() property_id: number;
+  @Prop() includeDepartureTime: boolean;
   // Meal Code names
   @Prop() mealCodeName: string;
   @Prop() myRoomTypeFoodCat: string;
@@ -393,20 +394,22 @@ export class IrRoom {
               ))}
             {bed && <p class="m-0 p-0">({bed})</p>}
           </div>
-          <div class="d-flex align-items-center" style={{ marginTop: '0.5rem', marginBottom: '0.875rem', gap: '0.5rem' }}>
-            <p class="m-0 p-0">Expected departure time:</p>
-            <ir-select
-              selectedValue={this.room.departure_time?.code}
-              showFirstOption={false}
-              onSelectChange={e => {
-                this.updateDepartureTime(e.detail);
-              }}
-              data={this.departureTime?.map(d => ({
-                text: d[`CODE_VALUE_${this.language?.toUpperCase()}`] ?? d[`CODE_VALUE_EN`],
-                value: d.CODE_NAME,
-              }))}
-            ></ir-select>
-          </div>
+          {this.includeDepartureTime && (
+            <div class="d-flex align-items-center" style={{ marginTop: '0.5rem', marginBottom: '0.875rem', gap: '0.5rem' }}>
+              <p class="m-0 p-0">Expected departure time:</p>
+              <ir-select
+                selectedValue={this.room.departure_time?.code}
+                showFirstOption={false}
+                onSelectChange={e => {
+                  this.updateDepartureTime(e.detail);
+                }}
+                data={this.departureTime?.map(d => ({
+                  text: d[`CODE_VALUE_${this.language?.toUpperCase()}`] ?? d[`CODE_VALUE_EN`],
+                  value: d.CODE_NAME,
+                }))}
+              ></ir-select>
+            </div>
+          )}
           <div class="collapse" id={`roomCollapse-${this.room.identifier?.split(' ').join('')}`}>
             <div class="d-flex sm-mb-1 sm-mt-1">
               <div class=" sm-padding-top">
