@@ -296,7 +296,7 @@ export class IrRoomGuests {
                               },
                             });
                           }}
-                          selectedValue={guest.id_info.type.code}
+                          selectedValue={guest.id_info?.type?.code}
                           showFirstOption={false}
                           data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
                         ></ir-select>
@@ -307,7 +307,7 @@ export class IrRoomGuests {
                           class="flex-grow-1 guest_document"
                           type="text"
                           inputForcedStyle={{ borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px' }}
-                          value={guest.id_info.number}
+                          value={guest?.id_info?.number}
                           zod={ZIdInfo.pick({ number: true })}
                           error={!!this.error['number'] && !isRowValid}
                           wrapKey="number"
