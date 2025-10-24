@@ -256,22 +256,6 @@ export class IrPaymentFolio {
             </div>
           </div>
           <div>
-            <ir-price-input
-              containerClassname="row"
-              labelContainerClassname="col-4 col-md-3 p-0 text-dark border-0"
-              minValue={0}
-              autoValidate={this.autoValidate}
-              zod={this.folioSchema.pick({ amount: true })}
-              wrapKey="amount"
-              label="Amount"
-              labelStyle={'flex-grow-1 text-dark  border-theme'}
-              error={this.errors?.amount && !this.folioData?.amount}
-              value={this.folioData?.amount?.toString()}
-              currency={calendar_data.currency.symbol}
-              onTextChange={e => this.updateFolioData({ amount: Number(e.detail) })}
-            ></ir-price-input>
-          </div>
-          <div>
             <ir-dropdown value={this.folioData?.payment_type?.code} disabled={this.mode === 'payment-action'} onOptionChange={this.handleDropdownChange.bind(this)}>
               <div slot="trigger" class={'input-group row m-0 '}>
                 <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
@@ -315,6 +299,22 @@ export class IrPaymentFolio {
               </ir-dropdown>
             </div>
           )}
+          <div>
+            <ir-price-input
+              containerClassname="row"
+              labelContainerClassname="col-4 col-md-3 p-0 text-dark border-0"
+              minValue={0}
+              autoValidate={this.autoValidate}
+              zod={this.folioSchema.pick({ amount: true })}
+              wrapKey="amount"
+              label="Amount"
+              labelStyle={'flex-grow-1 text-dark  border-theme'}
+              error={this.errors?.amount && !this.folioData?.amount}
+              value={this.folioData?.amount?.toString()}
+              currency={calendar_data.currency.symbol}
+              onTextChange={e => this.updateFolioData({ amount: Number(e.detail) })}
+            ></ir-price-input>
+          </div>
           <div>
             <ir-input-text
               value={this.folioData?.reference}
