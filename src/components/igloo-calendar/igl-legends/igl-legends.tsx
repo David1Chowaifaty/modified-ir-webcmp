@@ -167,7 +167,10 @@ export class IglLegends {
                 </tr>
                 <tr>
                   <th colSpan={2} class="pb-1">
-                    Use your own colors
+                    <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                      <span>Use your own colors</span>
+                      <ir-new-badge></ir-new-badge>
+                    </div>
                   </th>
                 </tr>
                 {calendar_data.property.calendar_extra?.booking_colors.map((legendInfo, index) => {

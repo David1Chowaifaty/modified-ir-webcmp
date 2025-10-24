@@ -22,10 +22,11 @@ export class IglCalFooter {
     return (
       <Host class="footerContainer">
         <div class="footerCell bottomLeftCell align-items-center preventPageScroll">
-          <div class="legendBtn" onClick={() => this.handleOptionEvent('showLegend')}>
+          <div class="legendBtn d-flex align-items-center" style={{ gap: '0.5rem' }} onClick={() => this.handleOptionEvent('showLegend')}>
             <i class="la la-square"></i>
             <u>{locales.entries.Lcz_Legend}</u>
-            <span> - v1.0133</span>
+            <span> - v1.01</span>
+            <ir-new-badge></ir-new-badge>
           </div>
           {/* <div class={`${this.isOnline ? 'isOnline' : 'isOffline'}`}>
             <i class="la la-share-alt isOffline"></i><span>{this.isOnline ? "Connected": "Offline"}</span>
