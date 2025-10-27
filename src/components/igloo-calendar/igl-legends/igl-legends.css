@@ -73,6 +73,9 @@
     var(--ir-event-bg-stripe-color) var(--stripe-period)
   );
 }
+.legend_skew.split {
+  border-right: 4px solid black;
+}
 .legend_skew-bordered {
   border: 1px solid black;
 }
