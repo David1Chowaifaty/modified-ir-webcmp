@@ -126,8 +126,25 @@ export class IglLegends {
             </div>
             <div class="mt-2 pl-1">
               <table>
+                {(() => {
+                  const legendInfo = this.legendData.find(l => l.id === '14');
+                  return (
+                    <tr>
+                      <td>
+                        <div class={`legend_${legendInfo.design}`} style={{ '--ir-skew-background': legendInfo.color }}></div>
+                      </td>
+                      <td>
+                        <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+                          <span class="font-small-3">{legendInfo.name}</span>
+                          <ir-new-badge></ir-new-badge>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })()}
+
                 {this.legendData.map(legendInfo => {
-                  if (Number(legendInfo.id) < 4 || legendInfo.id === '6') {
+                  if (['1', '2', '3', '5', '14'].includes(legendInfo.id)) {
                     return null;
                   }
                   const stripeColor = calendar_data.colorsForegrounds[legendInfo?.color];
@@ -160,7 +177,6 @@ export class IglLegends {
                       <td>
                         <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
                           <span class="font-small-3">{legendInfo.name}</span>
-                          {legendInfo.id === '4' && <ir-new-badge></ir-new-badge>}
                         </div>
                       </td>
                     </tr>
@@ -179,7 +195,7 @@ export class IglLegends {
                   </th>
                 </tr>
                 {this.legendData.map(legendInfo => {
-                  if (Number(legendInfo.id) > 3 && legendInfo.id !== '6') {
+                  if (!['1', '2', '3', '5'].includes(legendInfo.id)) {
                     return null;
                   }
                   const stripeColor = calendar_data.colorsForegrounds[legendInfo?.color];
