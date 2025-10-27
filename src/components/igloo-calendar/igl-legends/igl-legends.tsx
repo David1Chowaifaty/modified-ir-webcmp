@@ -172,7 +172,7 @@ export class IglLegends {
                   </td>
                 </tr>
                 <tr>
-                  <th colSpan={2} class="pb-1">
+                  <th colSpan={2} class="" style={{ paddingBottom: '0.5rem' }}>
                     <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
                       <span>Default colors</span>
                     </div>
@@ -224,7 +224,7 @@ export class IglLegends {
                   </td>
                 </tr>
                 <tr>
-                  <th colSpan={2} class="pb-1">
+                  <th colSpan={2} style={{ paddingBottom: '0.5rem' }}>
                     <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
                       <span>Use your own colors</span>
                       <ir-new-badge></ir-new-badge>
@@ -258,7 +258,7 @@ export class IglLegends {
                 })}
               </table>
             </div>
-            <hr style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
+            <hr style={{ marginTop: '1rem', marginBottom: '0.5rem' }} />
             <div class="mt-1">
               <div class="legendCalendar">
                 <div class="legendRow align-items-center">

@@ -27,9 +27,14 @@
 
  - [igloo-calendar](..)
 
+### Depends on
+
+- [ir-new-badge](../../ir-new-badge)
+
 ### Graph
 ```mermaid
 graph TD;
+  igl-cal-footer --> ir-new-badge
   igloo-calendar --> igl-cal-footer
   style igl-cal-footer fill:#f9f,stroke:#333,stroke-width:4px
 ```

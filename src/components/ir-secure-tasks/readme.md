@@ -142,8 +142,8 @@ graph TD;
   ir-payment-folio --> ir-dropdown-item
   ir-payment-folio --> ir-title
   ir-payment-folio --> ir-date-picker
-  ir-payment-folio --> ir-price-input
   ir-payment-folio --> ir-dropdown
+  ir-payment-folio --> ir-price-input
   ir-payment-folio --> ir-input-text
   ir-payment-folio --> ir-button
   ir-dropdown --> ir-icons
@@ -234,6 +234,7 @@ graph TD;
   igl-to-be-assigned --> ir-button
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
+  igl-legends --> ir-new-badge
   igl-legends --> ir-input-text
   igl-legends --> ir-success-loader
   ir-success-loader --> ir-icons
@@ -251,6 +252,7 @@ graph TD;
   igl-booking-event-hover --> ir-label
   igl-booking-event-hover --> ir-button
   igl-booking-event-hover --> igl-block-dates-view
+  igl-cal-footer --> ir-new-badge
   ir-room-nights --> ir-price-input
   ir-room-nights --> ir-loading-screen
   ir-room-nights --> ir-title

@@ -1,4 +1,4 @@
-# ir-hk-tasks
+# ir-financial-actions
 
 
 
@@ -9,79 +9,38 @@
 
 | Property     | Attribute    | Description | Type     | Default     |
 | ------------ | ------------ | ----------- | -------- | ----------- |
-| `baseUrl`    | `base-url`   |             | `string` | `undefined` |
 | `language`   | `language`   |             | `string` | `''`        |
 | `p`          | `p`          |             | `string` | `undefined` |
 | `propertyid` | `propertyid` |             | `number` | `undefined` |
 | `ticket`     | `ticket`     |             | `string` | `''`        |
 
 
-## Events
-
-| Event                  | Description | Type                |
-| ---------------------- | ----------- | ------------------- |
-| `clearSelectedHkTasks` |             | `CustomEvent<void>` |
-
-
 ## Dependencies
-
-### Used by
-
- - [ir-secure-tasks](../../ir-secure-tasks)
 
 ### Depends on
 
-- [ir-loading-screen](../../ir-loading-screen)
-- [ir-toast](../../ui/ir-toast)
-- [ir-interceptor](../../ir-interceptor)
-- [ir-tasks-filters](ir-tasks-filters)
-- [ir-tasks-table](ir-tasks-table)
-- [ir-modal](../../ui/ir-modal)
-- [ir-sidebar](../../ui/ir-sidebar)
-- [ir-hk-archive](ir-hk-archive)
+- [ir-booking-details](../ir-booking-details)
+- [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
+- [ir-loading-screen](../ir-loading-screen)
+- [ir-toast](../ui/ir-toast)
+- [ir-interceptor](../ir-interceptor)
+- [ir-button](../ui/ir-button)
+- [ir-financial-filters](ir-financial-filters)
+- [ir-financial-table](ir-financial-table)
+- [ir-sidebar](../ui/ir-sidebar)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-hk-tasks --> ir-loading-screen
-  ir-hk-tasks --> ir-toast
-  ir-hk-tasks --> ir-interceptor
-  ir-hk-tasks --> ir-tasks-filters
-  ir-hk-tasks --> ir-tasks-table
-  ir-hk-tasks --> ir-modal
-  ir-hk-tasks --> ir-sidebar
-  ir-hk-tasks --> ir-hk-archive
-  ir-interceptor --> ir-otp-modal
-  ir-otp-modal --> ir-spinner
-  ir-otp-modal --> ir-otp
-  ir-otp-modal --> ir-button
-  ir-button --> ir-icons
-  ir-tasks-filters --> ir-button
-  ir-tasks-filters --> ir-select
-  ir-tasks-table --> ir-tasks-header
-  ir-tasks-table --> ir-tasks-card
-  ir-tasks-table --> ir-tasks-table-pagination
-  ir-tasks-table --> ir-checkbox
-  ir-tasks-table --> ir-button
-  ir-tasks-header --> ir-input-text
-  ir-tasks-header --> ir-icons
-  ir-tasks-header --> ir-button
-  ir-tasks-card --> ir-button
-  ir-tasks-table-pagination --> ir-button
-  ir-tasks-table-pagination --> ir-pagination
-  ir-pagination --> ir-select
-  ir-pagination --> ir-button
-  ir-modal --> ir-button
-  ir-sidebar --> ir-icon
-  ir-hk-archive --> ir-title
-  ir-hk-archive --> ir-select
-  ir-hk-archive --> ir-range-picker
-  ir-hk-archive --> ir-button
-  ir-hk-archive --> ir-tooltip
-  ir-hk-archive --> ir-sidebar
-  ir-hk-archive --> ir-booking-details
-  ir-title --> ir-icon
-  ir-range-picker --> ir-date-picker
+  ir-financial-actions --> ir-booking-details
+  ir-financial-actions --> ir-payment-folio
+  ir-financial-actions --> ir-loading-screen
+  ir-financial-actions --> ir-toast
+  ir-financial-actions --> ir-interceptor
+  ir-financial-actions --> ir-button
+  ir-financial-actions --> ir-financial-filters
+  ir-financial-actions --> ir-financial-table
+  ir-financial-actions --> ir-sidebar
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> ir-booking-extra-note
@@ -111,6 +70,12 @@ graph TD;
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
+  ir-title --> ir-icon
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
@@ -146,6 +111,7 @@ graph TD;
   ir-room --> ir-select
   ir-room --> ir-label
   ir-room --> ir-modal
+  ir-modal --> ir-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-popover
@@ -179,6 +145,7 @@ graph TD;
   ir-payments-folio --> ir-button
   ir-payment-item --> ir-popover
   ir-payment-item --> ir-button
+  ir-sidebar --> ir-icon
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
@@ -206,8 +173,11 @@ graph TD;
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
   igl-book-property-footer --> ir-button
-  ir-secure-tasks --> ir-hk-tasks
-  style ir-hk-tasks fill:#f9f,stroke:#333,stroke-width:4px
+  ir-financial-filters --> ir-button
+  ir-financial-filters --> ir-date-picker
+  ir-financial-filters --> ir-select
+  ir-financial-table --> ir-button
+  style ir-financial-actions fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

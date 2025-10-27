@@ -918,12 +918,13 @@ export class IglBookingEvent {
     let noteNode = this.getNoteNode();
     let balanceNode = this.getBalanceNode();
 
-    const backgroundColor = this.bookingEvent.ROOM_INFO?.calendar_extra ? this.bookingEvent.ROOM_INFO.calendar_extra?.booking_color?.color ?? legend.color : legend.color;
+    let backgroundColor = this.bookingEvent.ROOM_INFO?.calendar_extra ? this.bookingEvent.ROOM_INFO.calendar_extra?.booking_color?.color ?? legend.color : legend.color;
 
     const { foreground, stripe } = calendar_data.colorsForegrounds?.[backgroundColor] ?? {
       foreground: '',
+      checkout: '',
     };
-
+    backgroundColor = this.bookingEvent.STATUS === 'CHECKED-OUT' ? legend.color : backgroundColor;
     // console.log(this.bookingEvent.BOOKING_NUMBER === '46231881' ? this.bookingEvent : '');
     return (
       <Host
@@ -958,8 +959,8 @@ export class IglBookingEvent {
             [this.role]: true,
           }}
           style={{
-            'backgroundColor': isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003' ? 'rgb(243, 71, 82)' : backgroundColor,
-            '--ir-event-bg': isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003' ? 'rgb(243, 71, 82)' : backgroundColor,
+            'backgroundColor': backgroundColor,
+            '--ir-event-bg': backgroundColor,
             '--ir-event-bg-stripe-color': stripe,
           }}
           onTouchStart={event => this.startDragging(event, 'move')}

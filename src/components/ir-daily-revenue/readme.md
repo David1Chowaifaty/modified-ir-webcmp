@@ -1,4 +1,4 @@
-# ir-hk-tasks
+# ir-daily-revenue
 
 
 
@@ -9,7 +9,6 @@
 
 | Property     | Attribute    | Description | Type     | Default     |
 | ------------ | ------------ | ----------- | -------- | ----------- |
-| `baseUrl`    | `base-url`   |             | `string` | `undefined` |
 | `language`   | `language`   |             | `string` | `''`        |
 | `p`          | `p`          |             | `string` | `undefined` |
 | `propertyid` | `propertyid` |             | `number` | `undefined` |
@@ -18,70 +17,41 @@
 
 ## Events
 
-| Event                  | Description | Type                |
-| ---------------------- | ----------- | ------------------- |
-| `clearSelectedHkTasks` |             | `CustomEvent<void>` |
+| Event             | Description | Type                |
+| ----------------- | ----------- | ------------------- |
+| `preventPageLoad` |             | `CustomEvent<null>` |
 
 
 ## Dependencies
 
 ### Used by
 
- - [ir-secure-tasks](../../ir-secure-tasks)
+ - [ir-secure-tasks](../ir-secure-tasks)
 
 ### Depends on
 
-- [ir-loading-screen](../../ir-loading-screen)
-- [ir-toast](../../ui/ir-toast)
-- [ir-interceptor](../../ir-interceptor)
-- [ir-tasks-filters](ir-tasks-filters)
-- [ir-tasks-table](ir-tasks-table)
-- [ir-modal](../../ui/ir-modal)
-- [ir-sidebar](../../ui/ir-sidebar)
-- [ir-hk-archive](ir-hk-archive)
+- [ir-booking-details](../ir-booking-details)
+- [ir-loading-screen](../ir-loading-screen)
+- [ir-toast](../ui/ir-toast)
+- [ir-interceptor](../ir-interceptor)
+- [ir-button](../ui/ir-button)
+- [ir-revenue-summary](ir-revenue-summary)
+- [ir-daily-revenue-filters](ir-daily-revenue-filters)
+- [ir-revenue-table](ir-revenue-table)
+- [ir-sidebar](../ui/ir-sidebar)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-hk-tasks --> ir-loading-screen
-  ir-hk-tasks --> ir-toast
-  ir-hk-tasks --> ir-interceptor
-  ir-hk-tasks --> ir-tasks-filters
-  ir-hk-tasks --> ir-tasks-table
-  ir-hk-tasks --> ir-modal
-  ir-hk-tasks --> ir-sidebar
-  ir-hk-tasks --> ir-hk-archive
-  ir-interceptor --> ir-otp-modal
-  ir-otp-modal --> ir-spinner
-  ir-otp-modal --> ir-otp
-  ir-otp-modal --> ir-button
-  ir-button --> ir-icons
-  ir-tasks-filters --> ir-button
-  ir-tasks-filters --> ir-select
-  ir-tasks-table --> ir-tasks-header
-  ir-tasks-table --> ir-tasks-card
-  ir-tasks-table --> ir-tasks-table-pagination
-  ir-tasks-table --> ir-checkbox
-  ir-tasks-table --> ir-button
-  ir-tasks-header --> ir-input-text
-  ir-tasks-header --> ir-icons
-  ir-tasks-header --> ir-button
-  ir-tasks-card --> ir-button
-  ir-tasks-table-pagination --> ir-button
-  ir-tasks-table-pagination --> ir-pagination
-  ir-pagination --> ir-select
-  ir-pagination --> ir-button
-  ir-modal --> ir-button
-  ir-sidebar --> ir-icon
-  ir-hk-archive --> ir-title
-  ir-hk-archive --> ir-select
-  ir-hk-archive --> ir-range-picker
-  ir-hk-archive --> ir-button
-  ir-hk-archive --> ir-tooltip
-  ir-hk-archive --> ir-sidebar
-  ir-hk-archive --> ir-booking-details
-  ir-title --> ir-icon
-  ir-range-picker --> ir-date-picker
+  ir-daily-revenue --> ir-booking-details
+  ir-daily-revenue --> ir-loading-screen
+  ir-daily-revenue --> ir-toast
+  ir-daily-revenue --> ir-interceptor
+  ir-daily-revenue --> ir-button
+  ir-daily-revenue --> ir-revenue-summary
+  ir-daily-revenue --> ir-daily-revenue-filters
+  ir-daily-revenue --> ir-revenue-table
+  ir-daily-revenue --> ir-sidebar
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> ir-booking-extra-note
@@ -111,6 +81,12 @@ graph TD;
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
+  ir-button --> ir-icons
+  ir-title --> ir-icon
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
@@ -146,6 +122,7 @@ graph TD;
   ir-room --> ir-select
   ir-room --> ir-label
   ir-room --> ir-modal
+  ir-modal --> ir-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-popover
@@ -179,6 +156,7 @@ graph TD;
   ir-payments-folio --> ir-button
   ir-payment-item --> ir-popover
   ir-payment-item --> ir-button
+  ir-sidebar --> ir-icon
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
@@ -206,8 +184,17 @@ graph TD;
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
   igl-book-property-footer --> ir-button
-  ir-secure-tasks --> ir-hk-tasks
-  style ir-hk-tasks fill:#f9f,stroke:#333,stroke-width:4px
+  ir-revenue-summary --> ir-stats-card
+  ir-stats-card --> ir-icons
+  ir-daily-revenue-filters --> ir-button
+  ir-daily-revenue-filters --> ir-date-picker
+  ir-revenue-table --> ir-revenue-row
+  ir-revenue-row --> ir-accordion
+  ir-revenue-row --> ir-revenue-row-details
+  ir-accordion --> ir-icons
+  ir-revenue-row-details --> ir-button
+  ir-secure-tasks --> ir-daily-revenue
+  style ir-daily-revenue fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

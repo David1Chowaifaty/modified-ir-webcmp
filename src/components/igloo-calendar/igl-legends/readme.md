@@ -27,12 +27,14 @@
 
 ### Depends on
 
+- [ir-new-badge](../../ir-new-badge)
 - [ir-input-text](../../ui/ir-input-text)
 - [ir-success-loader](../../ui/ir-success-loader)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-legends --> ir-new-badge
   igl-legends --> ir-input-text
   igl-legends --> ir-success-loader
   ir-success-loader --> ir-icons

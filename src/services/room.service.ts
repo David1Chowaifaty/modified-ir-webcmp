@@ -27,6 +27,21 @@ const FRONT_DESK_STRIPE_COLORS = {
   '#9B84D6': '#beadf0',
 };
 
+const FRONT_DESK_CHECKOUT_COLORS = {
+  '#31bef1': '#76b0cd',
+  '#45b16d': '#7ba989',
+  '#FF9149': '#d5997c',
+  '#a0a0a0': '#a0a0a0',
+  '#f34752': '#ce7c7f',
+  '#f88c91': '#d19699',
+  '#F9A9FE': '#d1a5d4',
+  '#ffe502': '#d5c671',
+  '#6FF1EF': '#8acdcb',
+  '#9BF091': '#9ecc99',
+  '#C28D6B': '#b29788',
+  '#9B84D6': '#9e93bd',
+};
+
 export class RoomService {
   public async SetAutomaticCheckInOut(props: { property_id: number; flag: boolean }) {
     const { data } = await axios.post(`/Set_Automatic_Check_In_Out`, props);
@@ -93,6 +108,7 @@ export class RoomService {
         data[legend.color] = {
           foreground: 'white',
           stripe: FRONT_DESK_STRIPE_COLORS[legend.color] ?? '',
+          checkout: FRONT_DESK_CHECKOUT_COLORS[legend.color] ?? '',
         };
       }
     });
@@ -100,6 +116,7 @@ export class RoomService {
       data[d.color] = {
         foreground: ['#C28D6B', '#9B84D6'].includes(d.color) ? 'white' : 'black',
         stripe: FRONT_DESK_STRIPE_COLORS[d.color] ?? '',
+        checkout: FRONT_DESK_CHECKOUT_COLORS[d.color] ?? '',
       };
     });
     calendar_data.colorsForegrounds = { ...data };

@@ -12,7 +12,7 @@ type CalendarStore = CalendarDataDetails & {
     minute: number;
     offset: number;
   };
-  colorsForegrounds: Record<string, { foreground: string; stripe: string }>;
+  colorsForegrounds: Record<string, { foreground: string; stripe: string; checkout: string }>;
 };
 const initialState: CalendarStore = {
   adultChildConstraints: {

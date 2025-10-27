@@ -88,6 +88,7 @@ graph TD;
   igl-to-be-assigned --> ir-button
   igl-tba-category-view --> igl-tba-booking-view
   igl-tba-booking-view --> ir-button
+  igl-legends --> ir-new-badge
   igl-legends --> ir-input-text
   igl-legends --> ir-success-loader
   ir-success-loader --> ir-icons
@@ -108,6 +109,7 @@ graph TD;
   ir-dropdown --> ir-icons
   igl-block-dates-view --> ir-date-view
   ir-modal --> ir-button
+  igl-cal-footer --> ir-new-badge
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
@@ -199,8 +201,8 @@ graph TD;
   ir-payment-folio --> ir-dropdown-item
   ir-payment-folio --> ir-title
   ir-payment-folio --> ir-date-picker
-  ir-payment-folio --> ir-price-input
   ir-payment-folio --> ir-dropdown
+  ir-payment-folio --> ir-price-input
   ir-payment-folio --> ir-input-text
   ir-payment-folio --> ir-button
   ir-room --> ir-button

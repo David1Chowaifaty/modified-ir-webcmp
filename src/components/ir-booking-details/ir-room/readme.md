@@ -7,26 +7,27 @@
 
 ## Properties
 
-| Property            | Attribute               | Description | Type         | Default     |
-| ------------------- | ----------------------- | ----------- | ------------ | ----------- |
-| `bedPreferences`    | --                      |             | `IEntries[]` | `undefined` |
-| `booking`           | --                      |             | `Booking`    | `undefined` |
-| `bookingIndex`      | `booking-index`         |             | `number`     | `undefined` |
-| `currency`          | `currency`              |             | `string`     | `'USD'`     |
-| `departureTime`     | --                      |             | `IEntries[]` | `undefined` |
-| `hasCheckIn`        | `has-check-in`          |             | `boolean`    | `false`     |
-| `hasCheckOut`       | `has-check-out`         |             | `boolean`    | `false`     |
-| `hasRoomAdd`        | `has-room-add`          |             | `boolean`    | `false`     |
-| `hasRoomDelete`     | `has-room-delete`       |             | `boolean`    | `false`     |
-| `hasRoomEdit`       | `has-room-edit`         |             | `boolean`    | `false`     |
-| `isEditable`        | `is-editable`           |             | `boolean`    | `undefined` |
-| `language`          | `language`              |             | `string`     | `'en'`      |
-| `legendData`        | `legend-data`           |             | `any`        | `undefined` |
-| `mealCodeName`      | `meal-code-name`        |             | `string`     | `undefined` |
-| `myRoomTypeFoodCat` | `my-room-type-food-cat` |             | `string`     | `undefined` |
-| `property_id`       | `property_id`           |             | `number`     | `undefined` |
-| `room`              | --                      |             | `Room`       | `undefined` |
-| `roomsInfo`         | `rooms-info`            |             | `any`        | `undefined` |
+| Property               | Attribute                | Description | Type         | Default     |
+| ---------------------- | ------------------------ | ----------- | ------------ | ----------- |
+| `bedPreferences`       | --                       |             | `IEntries[]` | `undefined` |
+| `booking`              | --                       |             | `Booking`    | `undefined` |
+| `bookingIndex`         | `booking-index`          |             | `number`     | `undefined` |
+| `currency`             | `currency`               |             | `string`     | `'USD'`     |
+| `departureTime`        | --                       |             | `IEntries[]` | `undefined` |
+| `hasCheckIn`           | `has-check-in`           |             | `boolean`    | `false`     |
+| `hasCheckOut`          | `has-check-out`          |             | `boolean`    | `false`     |
+| `hasRoomAdd`           | `has-room-add`           |             | `boolean`    | `false`     |
+| `hasRoomDelete`        | `has-room-delete`        |             | `boolean`    | `false`     |
+| `hasRoomEdit`          | `has-room-edit`          |             | `boolean`    | `false`     |
+| `includeDepartureTime` | `include-departure-time` |             | `boolean`    | `undefined` |
+| `isEditable`           | `is-editable`            |             | `boolean`    | `undefined` |
+| `language`             | `language`               |             | `string`     | `'en'`      |
+| `legendData`           | `legend-data`            |             | `any`        | `undefined` |
+| `mealCodeName`         | `meal-code-name`         |             | `string`     | `undefined` |
+| `myRoomTypeFoodCat`    | `my-room-type-food-cat`  |             | `string`     | `undefined` |
+| `property_id`          | `property_id`            |             | `number`     | `undefined` |
+| `room`                 | --                       |             | `Room`       | `undefined` |
+| `roomsInfo`            | `rooms-info`             |             | `any`        | `undefined` |
 
 
 ## Events

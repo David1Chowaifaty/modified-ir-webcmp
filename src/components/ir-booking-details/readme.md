@@ -132,8 +132,8 @@ graph TD;
   ir-payment-folio --> ir-dropdown-item
   ir-payment-folio --> ir-title
   ir-payment-folio --> ir-date-picker
-  ir-payment-folio --> ir-price-input
   ir-payment-folio --> ir-dropdown
+  ir-payment-folio --> ir-price-input
   ir-payment-folio --> ir-input-text
   ir-payment-folio --> ir-button
   ir-dropdown --> ir-icons
