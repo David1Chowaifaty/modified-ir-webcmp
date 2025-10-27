@@ -144,7 +144,7 @@ export class IglLegends {
                 })()}
 
                 {this.legendData.map(legendInfo => {
-                  if (['1', '2', '3', '5', '14'].includes(legendInfo.id)) {
+                  if (['1', '2', '3', '14'].includes(legendInfo.id)) {
                     return null;
                   }
                   const stripeColor = calendar_data.colorsForegrounds[legendInfo?.color];
@@ -195,7 +195,7 @@ export class IglLegends {
                   </th>
                 </tr>
                 {this.legendData.map(legendInfo => {
-                  if (!['1', '2', '3', '5'].includes(legendInfo.id)) {
+                  if (!['1', '2', '3'].includes(legendInfo.id)) {
                     return null;
                   }
                   const stripeColor = calendar_data.colorsForegrounds[legendInfo?.color];
