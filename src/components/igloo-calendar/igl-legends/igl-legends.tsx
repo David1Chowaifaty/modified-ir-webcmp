@@ -127,7 +127,7 @@ export class IglLegends {
             <div class="mt-2 pl-1">
               <table>
                 {this.legendData.map(legendInfo => {
-                  if (Number(legendInfo.id) < 4 || legendInfo.id === '5') {
+                  if (Number(legendInfo.id) < 4 || legendInfo.id === '6') {
                     return null;
                   }
                   const stripeColor = calendar_data.colorsForegrounds[legendInfo?.color];
@@ -160,7 +160,7 @@ export class IglLegends {
                       <td>
                         <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
                           <span class="font-small-3">{legendInfo.name}</span>
-                          {legendInfo.id === '14' && <ir-new-badge></ir-new-badge>}
+                          {legendInfo.id === '4' && <ir-new-badge></ir-new-badge>}
                         </div>
                       </td>
                     </tr>
@@ -179,7 +179,7 @@ export class IglLegends {
                   </th>
                 </tr>
                 {this.legendData.map(legendInfo => {
-                  if (Number(legendInfo.id) > 3 && legendInfo.id !== '5') {
+                  if (Number(legendInfo.id) > 3 && legendInfo.id !== '6') {
                     return null;
                   }
                   const stripeColor = calendar_data.colorsForegrounds[legendInfo?.color];
