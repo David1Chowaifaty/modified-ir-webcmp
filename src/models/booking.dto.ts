@@ -337,6 +337,7 @@ export interface IFinancial {
   collected: number;
   gross_total: number;
   gross_cost: number;
+  refunds: number;
   invoice_nbr: string;
   gross_total_with_extras: number;
 }

@@ -204,7 +204,7 @@ export class IrPaymentDetails {
           isBookingCancelled={['003', '004'].includes(this.booking.status.code)}
           totalCost={financial.gross_cost}
           balance={financial.due_amount}
-          collected={this.booking.financial.collected}
+          collected={this.booking.financial.collected + this.booking.financial.refunds}
           currency={currency}
         />
         <ir-booking-guarantee booking={this.booking} bookingService={this.bookingService} />
