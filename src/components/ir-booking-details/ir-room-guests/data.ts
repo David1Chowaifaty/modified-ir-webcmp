@@ -34,7 +34,7 @@ export const dateMask: FactoryArg = {
   mask: Date,
   pattern: 'DD/MM/YYYY',
   lazy: false,
-  min: new Date(1900, 0, 1),
+  min: moment('1900-01-01', 'YYYY-MM-DD').toDate(),
   max: new Date(),
   format: date => moment(date).format('DD/MM/YYYY'),
   parse: str => moment(str, 'DD/MM/YYYY').toDate(),
@@ -43,7 +43,7 @@ export const dateMask: FactoryArg = {
   blocks: {
     YYYY: {
       mask: MaskedRange,
-      from: 1970,
+      from: 1900,
       to: new Date().getFullYear(),
       placeholderChar: 'Y',
     },

@@ -25,7 +25,7 @@ export class IglCalFooter {
           <div class="legendBtn d-flex align-items-center" style={{ gap: '0.5rem' }} onClick={() => this.handleOptionEvent('showLegend')}>
             <i class="la la-square"></i>
             <u>{locales.entries.Lcz_Legend}</u>
-            <span> - v1.01</span>
+            <span> - v1.02</span>
             <ir-new-badge></ir-new-badge>
           </div>
           {/* <div class={`${this.isOnline ? 'isOnline' : 'isOffline'}`}>
