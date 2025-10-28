@@ -7,6 +7,8 @@ import { TPropertyButtonsTypes } from '@/components';
 import { z } from 'zod';
 import { validateEmail } from '@/utils/utils';
 import booking_store, { BookingStore, modifyBookingStore } from '@/stores/booking.store';
+import calendar_data from '@/stores/calendar-data';
+import { AllowedPaymentMethod } from '@/models/booking.dto';
 
 @Component({
   tag: 'igl-property-booked-by',
@@ -17,16 +19,10 @@ export class IglPropertyBookedBy {
   @Prop() language: string;
   @Prop() showPaymentDetails: boolean = false;
   @Prop() defaultData: { [key: string]: any };
-  @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
   @Prop() countries: ICountry[] = [];
   @Prop() propertyId: number;
+
   @State() isButtonPressed: boolean = false;
-  private bookingService: BookingService = new BookingService();
-  private arrivalTimeList: IEntries[] = [];
-  private expiryMonths: string[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-  private expiryYears: string[] = [];
-  private currentMonth: string = '01';
-  private country;
   @State() bookedByData: { [key: string]: any } = {
     id: undefined,
     email: '',
@@ -44,11 +40,37 @@ export class IglPropertyBookedBy {
     expiryYear: '',
   };
 
-  async componentWillLoad() {
+  @Event() dataUpdateEvent: EventEmitter<{ [key: string]: any }>;
+
+  private bookingService: BookingService = new BookingService();
+  private arrivalTimeList: IEntries[] = [];
+  private expiryMonths: string[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+  private expiryYears: string[] = [];
+  private currentMonth: string = '01';
+  private country;
+  private paymentMethods: AllowedPaymentMethod[] = [];
+
+  componentWillLoad() {
     this.assignCountryCode();
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
+    this.paymentMethods = calendar_data.property.allowed_payment_methods.filter(p => !p.is_payment_gateway);
+  }
+
+  @Listen('buttonClicked', { target: 'body' })
+  handleButtonClicked(
+    event: CustomEvent<{
+      key: TPropertyButtonsTypes;
+      data?: CustomEvent;
+    }>,
+  ) {
+    switch (event.detail.key) {
+      case 'book':
+      case 'bookAndCheckIn':
+        this.isButtonPressed = true;
+        break;
+    }
   }
 
   private initializeExpiryYears() {
@@ -78,7 +100,6 @@ export class IglPropertyBookedBy {
     if (!this.bookedByData.expiryYear) {
       this.bookedByData.expiryYear = new Date().getFullYear();
     }
-    console.log('initial bookedby data', this.bookedByData);
   }
 
   private handleDataChange(key, event) {
@@ -131,7 +152,7 @@ export class IglPropertyBookedBy {
   //     this.handleDataChange(key, event);
   //   }
   // }
-  async checkUser() {
+  private async checkUser() {
     try {
       const email = this.bookedByData.email;
       if (z.string().email().safeParse(email).success) {
@@ -165,10 +186,12 @@ export class IglPropertyBookedBy {
       //   toastr.error(error);
     }
   }
+
   private updateGuest(props: Partial<BookingStore['checkout_guest']>) {
     modifyBookingStore('checkout_guest', { ...(booking_store.checkout_guest ?? {}), ...props });
   }
-  handleComboboxChange(e: CustomEvent) {
+
+  private handleComboboxChange(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     const { key, data } = e.detail;
@@ -201,45 +224,9 @@ export class IglPropertyBookedBy {
         data: this.bookedByData,
       });
     }
-
-    // console.log('data', data, 'key', key);
-    // switch (key) {
-    //   case 'blur':
-    //     if (data !== '') {
-    //       this.bookedByData.email = data;
-    //       this.checkUser();
-    //     } else {
-    //       let prevBookedByData = { ...this.bookedByData };
-    //       prevBookedByData = { ...prevBookedByData, email: '' };
-    //       this.bookedByData = { ...prevBookedByData };
-    //       this.dataUpdateEvent.emit({
-    //         key: 'bookedByInfoUpdated',
-    //         data: { ...this.bookedByData },
-    //       });
-    //     }
-
-    //     break;
-    //   case 'select':
-    //     this.bookedByData.email = data.email;
-    //     this.bookedByData = {
-    //       ...this.bookedByData,
-    //       id: data.id,
-    //       firstName: data.first_name,
-    //       lastName: data.last_name,
-    //       contactNumber: data.mobile,
-    //       countryId: data.country_id,
-    //       isdCode: data.country_id.toString(),
-    //     };
-    //     this.dataUpdateEvent.emit({
-    //       key: 'bookedByInfoUpdated',
-    //       data: this.bookedByData,
-    //     });
-    //     break;
-    //   default:
-    //     break;
-    // }
   }
-  clearEvent() {
+
+  private clearEvent() {
     this.bookedByData = {
       ...this.bookedByData,
       id: '',
@@ -254,20 +241,7 @@ export class IglPropertyBookedBy {
       data: { ...this.bookedByData },
     });
   }
-  @Listen('buttonClicked', { target: 'body' })
-  handleButtonClicked(
-    event: CustomEvent<{
-      key: TPropertyButtonsTypes;
-      data?: CustomEvent;
-    }>,
-  ) {
-    switch (event.detail.key) {
-      case 'book':
-      case 'bookAndCheckIn':
-        this.isButtonPressed = true;
-        break;
-    }
-  }
+
   render() {
     return (
       <Host>
@@ -444,7 +418,26 @@ export class IglPropertyBookedBy {
                   ></textarea>
                 </div>
               </div>
-              {this.showPaymentDetails && (
+              {this.paymentMethods.length > 1 && (
+                <div class="form-group mt-md-1 mt-1 p-0 d-flex flex-column flex-md-row align-items-md-center">
+                  <label class="p-0 m-0 margin3">Payment Method</label>
+                  <div class="p-0 m-0  controlContainer flex-fill">
+                    <ir-select
+                      showFirstOption={false}
+                      data={this.paymentMethods.map(p => ({
+                        text: p.description,
+                        value: p.code,
+                      }))}
+                      onSelectChange={e =>
+                        modifyBookingStore('selectedPaymentMethod', {
+                          code: e.detail,
+                        })
+                      }
+                    ></ir-select>
+                  </div>
+                </div>
+              )}
+              {booking_store.selectedPaymentMethod?.code === '001' && (
                 <Fragment>
                   <div class="form-group mt-md-1  p-0 d-flex flex-column flex-md-row align-items-md-center">
                     <label class="p-0 m-0 margin3">{locales.entries.Lcz_CardNumber}</label>

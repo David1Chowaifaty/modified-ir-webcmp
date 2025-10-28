@@ -60,6 +60,7 @@ export interface IBookinAvailabilityParams {
 export interface BookingStore {
   tax_statement: { message: string } | null;
   checkout_guest: Guest | null;
+  selectedPaymentMethod: { code: string };
   roomTypes: RoomType[];
   enableBooking: boolean;
   ratePlanSelections: { [roomTypeId: number]: IRoomTypeSelection };
@@ -80,6 +81,7 @@ const initialState: BookingStore = {
   enableBooking: false,
   resetBooking: false,
   ratePlanSelections: {},
+  selectedPaymentMethod: null,
   isInFreeCancelationZone: false,
   bookingAvailabilityParams: {
     from_date: null,

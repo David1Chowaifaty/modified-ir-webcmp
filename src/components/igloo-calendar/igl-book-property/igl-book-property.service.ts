@@ -278,7 +278,7 @@ export class IglBookPropertyService {
             is_backend: true,
             is_in_loyalty_mode: false,
             promo_key: null,
-            extras,
+            extras: [...extras.filter(e => e.key !== 'payment_code'), { key: 'payment_code', value: booking_store.selectedPaymentMethod?.code }],
             agent: isAgent ? { id: sourceOption.tag } : null,
             booking: {
               from_date: moment(fromDate).format('YYYY-MM-DD'),
