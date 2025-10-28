@@ -375,6 +375,7 @@ export class IglBookingEvent {
         origin,
         BALANCE,
         TOTAL_PRICE,
+        ROOM_INFO: { ...this.bookingEvent.ROOM_INFO, sharing_persons: otherBookingData.ROOM_INFO.sharing_persons },
       };
       this.updateBookingEvent.emit(this.bookingEvent);
       this.showEventInfo(true);

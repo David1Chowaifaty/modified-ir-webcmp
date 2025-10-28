@@ -131,6 +131,10 @@ export class IrRoomGuests {
     try {
       this.error = {};
       this.autoValidate = true;
+      console.log({
+        sharedPersons: this.sharedPersons,
+        guests: this.guests,
+      });
       // ZSharedPersons.parse(this.guests);
       for (const guest of this.guests) {
         validateSharedPerson(guest);
@@ -204,7 +208,7 @@ export class IrRoomGuests {
               } catch (error) {
                 isRowValid = false;
               }
-              console.log(`row ${idx}=>${isRowValid}`);
+              // console.log(`row ${idx}=>${isRowValid}`);
               return (
                 <Fragment>
                   {idx === 1 && (
