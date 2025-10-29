@@ -21,6 +21,17 @@
   height: 1.2rem !important;
   width: 30px;
 }
+
+.property-booked-by__money-transfer-description * {
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+/* reset wrapper itself + all descendants */
+.property-booked-by__money-transfer-description,
+.property-booked-by__money-transfer-description :where(*, *::before, *::after) {
+  margin: 0.5rem !important;
+}
 /* .controlContainer1 .textarea-container {
   border: 1px solid #ced4da; 
   border-radius: 0.25rem; 

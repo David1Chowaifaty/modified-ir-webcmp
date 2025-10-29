@@ -500,7 +500,10 @@ export class IglPropertyBookedBy {
                 <div class="form-group mt-md-1 mt-1 p-0 d-flex flex-column flex-md-row align-items-md-center">
                   <label class="p-0 m-0 margin3"></label>
                   <div class="p-0 m-0  controlContainer flex-fill">
-                    <p innerHTML={this.paymentMethods.find(p => p.code === '005')?.localizables.find(l => l.language.code.toLowerCase() === 'en')?.description}></p>
+                    <div
+                      class="property-booked-by__money-transfer-description"
+                      innerHTML={this.paymentMethods.find(p => p.code === '005')?.localizables.find(l => l.language.code.toLowerCase() === 'en')?.description}
+                    ></div>
                   </div>
                 </div>
               )}
