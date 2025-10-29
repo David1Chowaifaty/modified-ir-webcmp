@@ -445,7 +445,7 @@ export class IrBookingListing {
                             {formatAmount(booking.currency.symbol, booking.financial?.gross_total ?? 0)}
                           </p>
                           <Fragment>
-                            {['003', '004'].includes(booking.status.code)
+                            {['003', '004'].includes(booking.status.code) && booking.is_direct
                               ? booking.financial.cancelation_penality_as_if_today !== 0 && (
                                   <button
                                     onClick={() => {

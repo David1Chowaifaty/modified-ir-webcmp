@@ -173,6 +173,9 @@ export class IrPaymentDetails {
   //   return Boolean(this.paymentActions?.filter(pa => pa.amount !== 0).length > 0 && this.booking.is_direct);
   // }
   private shouldShowRefundButton(): boolean {
+    if (!this.booking.is_direct) {
+      return false;
+    }
     if (this.booking.financial.due_amount === 0) {
       return false;
     }
@@ -182,6 +185,9 @@ export class IrPaymentDetails {
     return false;
   }
   private shouldCancellationButton(): boolean {
+    if (!this.booking.is_direct) {
+      return false;
+    }
     if (this.booking.financial.due_amount === 0) {
       return false;
     }

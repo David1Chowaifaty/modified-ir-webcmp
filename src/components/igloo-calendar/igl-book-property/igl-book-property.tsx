@@ -11,6 +11,7 @@ import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { ICurrency } from '@/models/calendarData';
 import booking_store, { calculateTotalRooms, modifyBookingStore, reserveRooms, resetBookingStore, resetReserved } from '@/stores/booking.store';
 import moment from 'moment';
+import calendar_data from '@/stores/calendar-data';
 export type IHistoryEntry = {
   dates: { checkIn: Date; checkOut: Date };
   adults: number;
@@ -644,13 +645,17 @@ export class IglBookProperty {
     }
 
     try {
-      if (this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM')) {
+      const isEditOrAdd = this.isEventType('EDIT_BOOKING') || this.isEventType('ADD_ROOM');
+      if (isEditOrAdd) {
         this.bookedByInfoData.message = this.defaultData.NOTES;
       }
       this.didReservation = true;
+
+      let sourceOption = (calendar_data.property.allowed_booking_sources.find(o => o.id === this.sourceOption.id) as any) || this.sourceOption;
+
       const serviceParams = await this.bookPropertyService.prepareBookUserServiceParams({
         context: this,
-        sourceOption: this.sourceOption,
+        sourceOption,
         check_in,
       });
       await this.bookingService.doReservation(serviceParams);
