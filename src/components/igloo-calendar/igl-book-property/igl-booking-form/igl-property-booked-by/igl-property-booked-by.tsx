@@ -55,7 +55,10 @@ export class IglPropertyBookedBy {
     this.initializeExpiryYears();
     this.initializeDateData();
     this.populateBookedByData();
-    this.paymentMethods = calendar_data.property.allowed_payment_methods.filter(p => !p.is_payment_gateway);
+    this.paymentMethods = calendar_data.property.allowed_payment_methods.filter(p => p.is_active && !p.is_payment_gateway);
+    if (this.paymentMethods.length > 0) {
+      modifyBookingStore('selectedPaymentMethod', { code: this.paymentMethods[0].code });
+    }
   }
 
   @Listen('buttonClicked', { target: 'body' })
@@ -424,6 +427,7 @@ export class IglPropertyBookedBy {
                   <div class="p-0 m-0  controlContainer flex-fill">
                     <ir-select
                       showFirstOption={false}
+                      selectedValue={booking_store?.selectedPaymentMethod?.code}
                       data={this.paymentMethods.map(p => ({
                         text: p.description,
                         value: p.code,
@@ -491,6 +495,14 @@ export class IglPropertyBookedBy {
                     </div>
                   </div>
                 </Fragment>
+              )}
+              {booking_store.selectedPaymentMethod?.code === '005' && (
+                <div class="form-group mt-md-1 mt-1 p-0 d-flex flex-column flex-md-row align-items-md-center">
+                  <label class="p-0 m-0 margin3"></label>
+                  <div class="p-0 m-0  controlContainer flex-fill">
+                    <p innerHTML={this.paymentMethods.find(p => p.code === '005')?.localizables.find(l => l.language.code.toLowerCase() === 'en')?.description}></p>
+                  </div>
+                </div>
               )}
               <div class="form-group mt-1 p-0 d-flex flex-row align-items-center">
                 <label class="p-0 m-0" htmlFor={'emailTheGuestId'}>
