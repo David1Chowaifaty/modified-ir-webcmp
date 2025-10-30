@@ -55,6 +55,22 @@ export class IglBookingEventHover {
     this.bookingColor = this.bookingEvent.ROOM_INFO?.calendar_extra ? this.bookingEvent.ROOM_INFO?.calendar_extra?.booking_color : null;
     this.canCheckInOrCheckout = moment().isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment().isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
   }
+
+  @Watch('bookingEvent')
+  handleBookingEventChange(newValue, oldValue) {
+    if (newValue !== oldValue)
+      this.canCheckInOrCheckout =
+        moment(new Date()).isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment(new Date()).isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
+  }
+
+  @Listen('keydown', { target: 'body' })
+  handleListenKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      this.hideBubble();
+    } else return;
+  }
+
   private getEventLegend() {
     let status = this.bookingEvent?.legendData.statusId[this.bookingEvent.STATUS];
     return {
@@ -62,27 +78,16 @@ export class IglBookingEventHover {
       ...status,
     };
   }
-  @Watch('bookingEvent')
-  handleBookingEventChange(newValue, oldValue) {
-    if (newValue !== oldValue)
-      this.canCheckInOrCheckout =
-        moment(new Date()).isSameOrAfter(new Date(this.bookingEvent.FROM_DATE), 'days') && moment(new Date()).isBefore(new Date(this.bookingEvent.TO_DATE), 'days');
-  }
+
   private getBookingId() {
     return this.bookingEvent.ID;
   }
+
   private hideBubble() {
     this.hideBubbleInfo.emit({
       key: 'hidebubble',
       currentInfoBubbleId: this.getBookingId(),
     });
-  }
-  @Listen('keydown', { target: 'body' })
-  handleListenKeyDown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      e.stopPropagation();
-      this.hideBubble();
-    } else return;
   }
 
   private getTotalOccupants() {
@@ -102,19 +107,17 @@ export class IglBookingEventHover {
   private getCountry() {
     return findCountry(this.bookingEvent.COUNTRY, this.countries).name;
   }
+
   private getPhoneCode() {
     if (this.bookingEvent.PHONE_PREFIX) {
       return this.bookingEvent.PHONE_PREFIX;
     }
     return findCountry(this.bookingEvent.COUNTRY, this.countries).phone_prefix;
   }
+
   private renderPhone() {
     return this.bookingEvent.COUNTRY ? `${this.bookingEvent.is_direct ? this.getPhoneCode() + '-' : ''}${this.getPhoneNumber()} - ${this.getCountry()}` : this.getPhoneNumber();
   }
-
-  // private getGuestNote() {
-  //   return this.bookingEvent.NOTES && <p class={'user-notes p-0 my-0'}>{this.bookingEvent.NOTES}</p>;
-  // }
 
   private getInternalNote() {
     return this.bookingEvent.INTERNAL_NOTE;
@@ -166,21 +169,6 @@ export class IglBookingEventHover {
   }
 
   private canCheckIn() {
-    // if (!calendar_data.checkin_enabled || calendar_data.is_automatic_check_in_out) {
-    //   return false;
-    // }
-    // if (this.isCheckedIn()) {
-    //   return false;
-    // }
-    // const now = moment();
-    // if (
-    //   this.canCheckInOrCheckout ||
-    //   (moment().isSame(new Date(this.bookingEvent.TO_DATE), 'days') &&
-    //     !compareTime(now.toDate(), createDateWithOffsetAndHour(calendar_data.checkin_checkout_hours?.offset, calendar_data.checkin_checkout_hours?.hour)))
-    // ) {
-    //   return true;
-    // }
-    // return false;
     return canCheckIn({
       from_date: this.bookingEvent.FROM_DATE,
       to_date: this.bookingEvent.TO_DATE,
@@ -211,11 +199,9 @@ export class IglBookingEventHover {
     event.stopPropagation();
     const opt: { [key: string]: any } = event.detail;
     this.bookingEvent = { ...this.bookingEvent, ...opt.data };
-    //console.log("blocked date booking event", this.bookingEvent);
   }
 
   private handleEditBooking() {
-    // console.log("Edit booking");
     this.bookingEvent.TITLE = locales.entries.Lcz_EditBookingFor;
     this.handleBookingOption('EDIT_BOOKING');
   }
@@ -233,7 +219,6 @@ export class IglBookingEventHover {
     //toDate.setDate(toDate.getDate() + 1);
     toDate.setHours(0, 0, 0, 0);
     let to_date_str = this.getStringDateFormat(toDate);
-    // console.log(this.bookingEvent);
     let eventData = {
       ID: '',
       NAME: '',
@@ -327,6 +312,7 @@ export class IglBookingEventHover {
 
     return selectedRoom;
   }
+
   private renderTitle(eventType, roomInfo) {
     switch (eventType) {
       case 'EDIT_BOOKING':
@@ -339,6 +325,7 @@ export class IglBookingEventHover {
         return `${locales.entries.Lcz_NewBookingFor} ${roomInfo.CATEGORY} ${roomInfo.ROOM_NAME}`;
     }
   }
+
   private handleBookingOption(eventType, roomData = null) {
     const roomInfo = this.getRoomInfo();
     let data = roomData ? roomData : this.bookingEvent;
@@ -375,33 +362,7 @@ export class IglBookingEventHover {
       currentInfoBubbleId: this.getBookingId(),
     });
   }
-  // private renderNote() {
-  //   const { is_direct, ota_notes } = this.bookingEvent;
-  //   const guestNote = this.getGuestNote();
-  //   const noteLabel = locales.entries.Lcz_Note + ':';
 
-  //   if (!is_direct && ota_notes) {
-  //     return (
-  //       <div class="row p-0 m-0">
-  //         <div class="col-12 px-0 text-wrap d-flex">
-  //           <ota-label label={noteLabel} remarks={ota_notes}></ota-label>
-  //         </div>
-  //       </div>
-  //     );
-  //   } else if (is_direct && guestNote) {
-  //     return (
-  //       <div class="row p-0 m-0">
-  //         <div class="col-12 px-0 text-wrap d-flex">
-  //           <Fragment>
-  //             <span class="font-weight-bold">{noteLabel} </span>
-  //             {guestNote}
-  //           </Fragment>
-  //         </div>
-  //       </div>
-  //     );
-  //   }
-  //   return null;
-  // }
   private getOTANotes(maxVisible: number = 3) {
     if (!this.bookingEvent.ota_notes || this.bookingEvent.ota_notes?.length === 0) {
       return null;
@@ -518,56 +479,25 @@ export class IglBookingEventHover {
         <div class="row p-0 m-0">
           <div class="px-0 pr-0 col-12">
             <ir-date-view from_date={this.bookingEvent.defaultDates.from_date} to_date={this.bookingEvent.defaultDates.to_date} showDateDifference={false}></ir-date-view>
-            {/* <span class="font-weight-bold">{locales.entries.Lcz_In}: </span> */}
           </div>
         </div>
+        {this.bookingEvent.NAME && <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`Guest name:`} content={this.bookingEvent.NAME}></ir-label>}
         {this.getArrivalTime() && (
-          // <div class="row p-0 m-0">
-          //   <div class="px-0 col-12">
-          //     <span class="font-weight-bold">{locales.entries.Lcz_ArrivalTime}: </span>
-          //     {this.getArrivalTime()}
-          //   </div>
-          // </div>
           <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`${locales.entries.Lcz_ArrivalTime}:`} content={this.getArrivalTime()}></ir-label>
         )}
         {this.getTotalOccupants() && (
-          // <div class="row p-0 m-0">
-          //   <div class="px-0  col-12">
-          //     <span class="font-weight-bold">{locales.entries.Lcz_Occupancy}: </span>
-          //     {this.getTotalOccupants()}
-          //   </div>
-          // </div>
-
           <ir-label class="m-0 p-0" containerStyle={{ padding: '0', margin: '0' }} labelText={`${locales.entries.Lcz_Occupancy}:`} content={this.getTotalOccupants()}></ir-label>
         )}
         {this.getPhoneNumber() && (
-          // <div class="row p-0 m-0">
-          //   <div class="px-0  col-12 text-wrap">
-          //     <span class="font-weight-bold">{locales.entries.Lcz_Phone}: </span>
-          //     {this.renderPhone()}
-          //   </div>
-          // </div>
           <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`${locales.entries.Lcz_Phone}:`} content={this.renderPhone()}></ir-label>
         )}
         {this.getRatePlan() && (
-          // <div class="row p-0 m-0">
-          //   <div class="px-0  col-12">
-          //     <span class="font-weight-bold">{locales.entries.Lcz_RatePlan}: </span>
-          //     {this.getRatePlan()}
-          //   </div>
-          // </div>
           <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`${locales.entries.Lcz_RatePlan}:`} content={this.getRatePlan()}></ir-label>
         )}
         {this.bookingEvent.DEPARTURE_TIME?.code !== '000' && (
           <ir-label containerStyle={{ padding: '0', margin: '0' }} class="m-0 p-0" labelText={`Departure time:`} content={this.bookingEvent.DEPARTURE_TIME?.description}></ir-label>
         )}
         {this.bookingEvent.PRIVATE_NOTE && (
-          // <div class="row p-0 m-0">
-          //   <div class="px-0  col-12 text-wrap">
-          //     <span class="font-weight-bold">{locales.entries.Lcz_PrivateNote}: </span>
-          //     {this.bookingEvent.PRIVATE_NOTE}
-          //   </div>
-          // </div>
           <ir-label
             containerStyle={{ padding: '0', margin: '0' }}
             class="m-0 p-0"
@@ -576,18 +506,6 @@ export class IglBookingEventHover {
             content={this.bookingEvent.PRIVATE_NOTE}
           ></ir-label>
         )}
-
-        {/* {this.renderNote()} */}
-        {/* {this.bookingEvent.is_direct ? (
-          <ir-label containerStyle={{ padding: '0', margin: '0' }} labelText={`${locales.entries.Lcz_GuestRemark}:`} display="inline" content={this.bookingEvent.NOTES}></ir-label>
-        ) : (
-          <ota-label
-            class={'m-0 p-0 ota-notes'}
-            label={`${locales.entries.Lcz_ChannelNotes || 'Channel notes'}:`}
-            remarks={this.bookingEvent.ota_notes}
-            maxVisibleItems={this.bookingEvent.ota_notes?.length}
-          ></ota-label>
-        )} */}
         {this.bookingEvent.is_direct && (
           <ir-label containerStyle={{ padding: '0', margin: '0' }} labelText={`${locales.entries.Lcz_GuestRemark}:`} display="inline" content={this.bookingEvent.NOTES}></ir-label>
         )}
@@ -598,21 +516,6 @@ export class IglBookingEventHover {
           content={this.getOTANotes()}
           renderContentAsHtml
         ></ir-label>
-
-        {/* {this.getInternalNote() ? (
-          <div class="row p-0 m-0">
-            <div class="col-12 px-0 text-wrap">
-              {this.bookingEvent.is_direct ? (
-                <Fragment>
-                  <span class="font-weight-bold">{locales.entries.Lcz_InternalRemark}: </span>
-                  {this.getInternalNote()}
-                </Fragment>
-              ) : (
-                <ota-label label={`${locales.entries.Lcz_InternalRemark}:`} remarks={this.bookingEvent.ota_notes}></ota-label>
-              )}
-            </div>
-          </div>
-        ) : null} */}
         {this.getInternalNote() && <ir-label labelText={`${locales.entries.Lcz_InternalRemark}:`} content={this.getInternalNote()}></ir-label>}
         <div class="row p-0 m-0 mt-2">
           <div class="full-width d-flex align-items-center" style={{ gap: '0.25rem' }} role="group">
@@ -678,7 +581,6 @@ export class IglBookingEventHover {
                     style={{ '--icon-size': '0.875rem' }}
                     size="sm"
                     text={locales.entries.Lcz_Unassign}
-                    // icon_name="xmark"
                     onClickHandler={_ => {
                       this.handleDeleteEvent();
                     }}
