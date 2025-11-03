@@ -446,7 +446,8 @@ export class IrBookingListing {
                           </p>
                           <Fragment>
                             {['003', '004'].includes(booking.status.code) && booking.is_direct
-                              ? booking.financial.cancelation_penality_as_if_today !== 0 && (
+                              ? booking.financial.cancelation_penality_as_if_today !== 0 &&
+                                booking.financial.due_amount !== 0 && (
                                   <button
                                     onClick={() => {
                                       this.editBookingItem = { booking, cause: 'payment' };
