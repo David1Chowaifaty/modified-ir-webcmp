@@ -179,16 +179,23 @@ export class IrPaymentDetails {
     if (this.booking.financial.due_amount === 0) {
       return false;
     }
+    if (this.booking.financial.cancelation_penality_as_if_today === 0) {
+      return false;
+    }
     if (this.booking.is_requested_to_cancel || ['003', '004'].includes(this.booking.status.code)) {
       return this.booking.financial.cancelation_penality_as_if_today < 0;
     }
     return false;
   }
+
   private shouldCancellationButton(): boolean {
     if (!this.booking.is_direct) {
       return false;
     }
     if (this.booking.financial.due_amount === 0) {
+      return false;
+    }
+    if (this.booking.financial.cancelation_penality_as_if_today === 0) {
       return false;
     }
     if (['003', '004'].includes(this.booking.status.code) && this.booking.financial.cancelation_penality_as_if_today > 0) {
