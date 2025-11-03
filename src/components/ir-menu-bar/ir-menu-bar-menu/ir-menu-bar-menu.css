@@ -14,7 +14,7 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.5rem 0.75rem;
-  color: white;
+  color: inherit;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -23,6 +23,7 @@
   user-select: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
   border-radius: 0.25rem;
+  box-sizing: border-box;
 }
 
 :host(.has-dropdown) .menu-trigger-wrapper {
@@ -37,8 +38,6 @@
 
 :host(:hover) .menu-trigger-wrapper,
 :host(.is-open) .menu-trigger-wrapper {
-  color: #212529;
-  color: white;
   background-color: rgba(255, 255, 255, 0.05);
 }
 ::slotted(*) {
@@ -83,7 +82,7 @@
   display: none;
 }
 .dropdown-menu {
-  min-width: 12rem;
+  /* min-width: 12rem; */
   padding: 0.5rem 0;
   margin: 0.25rem 0 0;
   font-size: 0.875rem;
@@ -260,6 +259,9 @@
 @media (min-width: 768px) {
   #arrow {
     display: block;
+  }
+  .menu-bar-menu__accordion_indicator {
+    display: none;
   }
   .dropdown-menu {
     position: absolute;

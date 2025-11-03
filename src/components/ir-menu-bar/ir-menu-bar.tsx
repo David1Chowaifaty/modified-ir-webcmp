@@ -169,24 +169,6 @@ export class IrMenuBar {
     }
   }
 
-  @Listen('focusin', { target: 'document' })
-  handleDocumentFocus(event: FocusEvent) {
-    if (!this.isMobileLayout || !this.isSheetOpen || !this.sheetPanelRef) {
-      return;
-    }
-
-    const target = event.composedPath()[0] as HTMLElement | undefined;
-    if (!target) {
-      return;
-    }
-
-    if (this.sheetPanelRef.contains(target)) {
-      return;
-    }
-
-    requestAnimationFrame(() => this.closeButtonRef?.focus());
-  }
-
   private openSheet = () => {
     this.isSheetOpen = true;
   };
@@ -236,11 +218,7 @@ export class IrMenuBar {
           )}
 
           {this.isMobileLayout ? (
-            <div
-              id={this.sheetId}
-              class={{ 'menu-sheet': true, 'menu-sheet--open': this.isSheetOpen }}
-              aria-hidden={this.isSheetOpen ? 'false' : 'true'}
-            >
+            <div id={this.sheetId} class={{ 'menu-sheet': true, 'menu-sheet--open': this.isSheetOpen }} aria-hidden={this.isSheetOpen ? 'false' : 'true'}>
               <div
                 class="menu-sheet__panel"
                 role="dialog"

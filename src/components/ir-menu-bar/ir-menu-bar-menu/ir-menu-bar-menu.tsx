@@ -230,10 +230,14 @@ export class IrMenuBarMenu {
       <Host
         class={hostClass}
         role="none"
-        onPointerEnter={supportsDropdownHover ? () => {
-          this.cancelDropdownClose();
-          this.isOpen = true;
-        } : undefined}
+        onPointerEnter={
+          supportsDropdownHover
+            ? () => {
+                this.cancelDropdownClose();
+                this.isOpen = true;
+              }
+            : undefined
+        }
         onPointerLeave={supportsDropdownHover ? () => this.scheduleDropdownClose() : undefined}
       >
         <div
@@ -247,6 +251,38 @@ export class IrMenuBarMenu {
           aria-expanded={this.hasDropdown ? String(this.isOpen) : undefined}
         >
           <slot name="trigger"></slot>
+          {this.hasDropdown &&
+            (!this.isOpen ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="menu-bar-menu__accordion_indicator"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="menu-bar-menu__accordion_indicator"
+              >
+                <path d="m18 15-6-6-6 6" />
+              </svg>
+            ))}
           {this.newBadge && <ir-new-badge class="menu-new-badge" part="new-indicator"></ir-new-badge>}
         </div>
         <div

@@ -1,3 +1,8 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 :host {
   display: block;
   width: 100%;
@@ -12,8 +17,10 @@
   cursor: pointer;
   transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
   border-radius: 0;
+  box-sizing: border-box !important;
+  padding-left: 1rem !important;
+  color: #393c40;
 }
-
 :host(:hover),
 :host(:focus) {
   color: #16181b;
@@ -26,7 +33,11 @@
   color: #212529;
   background-color: #e9ecef;
 }
-
+:host ::slotted(*) {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 :host ::slotted(a),
 :host ::slotted(button) {
   display: block;
