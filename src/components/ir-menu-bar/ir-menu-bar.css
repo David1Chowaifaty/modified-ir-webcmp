@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.menu-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+::slotted(ir-menu-bar-menu:focus-visible) {
+  outline: none;
+}

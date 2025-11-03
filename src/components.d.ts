@@ -1338,6 +1338,20 @@ export namespace Components {
          */
         "value": string;
     }
+    interface IrMenuBar {
+        "focusFirstMenu": () => Promise<void>;
+    }
+    interface IrMenuBarItem {
+    }
+    interface IrMenuBarMenu {
+        "closeMenuExternally": (options?: { focusTrigger?: boolean; }) => Promise<void>;
+        "focusTrigger": (options?: FocusOptions) => Promise<void>;
+        "hasSubmenu": () => Promise<boolean>;
+        /**
+          * Displays an `ir-new-badge` next to the trigger when set.
+         */
+        "newBadge": boolean;
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -4166,6 +4180,24 @@ declare global {
         prototype: HTMLIrMComboboxItemElement;
         new (): HTMLIrMComboboxItemElement;
     };
+    interface HTMLIrMenuBarElement extends Components.IrMenuBar, HTMLStencilElement {
+    }
+    var HTMLIrMenuBarElement: {
+        prototype: HTMLIrMenuBarElement;
+        new (): HTMLIrMenuBarElement;
+    };
+    interface HTMLIrMenuBarItemElement extends Components.IrMenuBarItem, HTMLStencilElement {
+    }
+    var HTMLIrMenuBarItemElement: {
+        prototype: HTMLIrMenuBarItemElement;
+        new (): HTMLIrMenuBarItemElement;
+    };
+    interface HTMLIrMenuBarMenuElement extends Components.IrMenuBarMenu, HTMLStencilElement {
+    }
+    var HTMLIrMenuBarMenuElement: {
+        prototype: HTMLIrMenuBarMenuElement;
+        new (): HTMLIrMenuBarMenuElement;
+    };
     interface HTMLIrModalElementEventMap {
         "confirmModal": any;
         "cancelModal": any;
@@ -5212,6 +5244,9 @@ declare global {
         "ir-m-combobox": HTMLIrMComboboxElement;
         "ir-m-combobox-booking-item": HTMLIrMComboboxBookingItemElement;
         "ir-m-combobox-item": HTMLIrMComboboxItemElement;
+        "ir-menu-bar": HTMLIrMenuBarElement;
+        "ir-menu-bar-item": HTMLIrMenuBarItemElement;
+        "ir-menu-bar-menu": HTMLIrMenuBarMenuElement;
         "ir-modal": HTMLIrModalElement;
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
         "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
@@ -6725,6 +6760,16 @@ declare namespace LocalJSX {
          */
         "value": string;
     }
+    interface IrMenuBar {
+    }
+    interface IrMenuBarItem {
+    }
+    interface IrMenuBarMenu {
+        /**
+          * Displays an `ir-new-badge` next to the trigger when set.
+         */
+        "newBadge"?: boolean;
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -7950,6 +7995,9 @@ declare namespace LocalJSX {
         "ir-m-combobox": IrMCombobox;
         "ir-m-combobox-booking-item": IrMComboboxBookingItem;
         "ir-m-combobox-item": IrMComboboxItem;
+        "ir-menu-bar": IrMenuBar;
+        "ir-menu-bar-item": IrMenuBarItem;
+        "ir-menu-bar-menu": IrMenuBarMenu;
         "ir-modal": IrModal;
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
         "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
@@ -8120,6 +8168,9 @@ declare module "@stencil/core" {
             "ir-m-combobox": LocalJSX.IrMCombobox & JSXBase.HTMLAttributes<HTMLIrMComboboxElement>;
             "ir-m-combobox-booking-item": LocalJSX.IrMComboboxBookingItem & JSXBase.HTMLAttributes<HTMLIrMComboboxBookingItemElement>;
             "ir-m-combobox-item": LocalJSX.IrMComboboxItem & JSXBase.HTMLAttributes<HTMLIrMComboboxItemElement>;
+            "ir-menu-bar": LocalJSX.IrMenuBar & JSXBase.HTMLAttributes<HTMLIrMenuBarElement>;
+            "ir-menu-bar-item": LocalJSX.IrMenuBarItem & JSXBase.HTMLAttributes<HTMLIrMenuBarItemElement>;
+            "ir-menu-bar-menu": LocalJSX.IrMenuBarMenu & JSXBase.HTMLAttributes<HTMLIrMenuBarMenuElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
             "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;

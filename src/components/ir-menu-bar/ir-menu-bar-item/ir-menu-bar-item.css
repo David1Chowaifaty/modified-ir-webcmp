@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  border-radius: 0;
+}
+
+:host(:hover),
+:host(:focus) {
+  color: #16181b;
+  text-decoration: none;
+  background-color: #f8f9fa;
+  outline: none;
+}
+
+:host(:active) {
+  color: #212529;
+  background-color: #e9ecef;
+}
+
+:host ::slotted(a),
+:host ::slotted(button) {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+:host ::slotted(a:hover),
+:host ::slotted(button:hover),
+:host ::slotted(a:focus),
+:host ::slotted(button:focus) {
+  text-decoration: none;
+  outline: none;
+}
