@@ -9,7 +9,7 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.5rem 0.75rem;
-  color: #495057;
+  color: white;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -33,7 +33,8 @@
 :host(:hover) .menu-trigger-wrapper,
 :host(.is-open) .menu-trigger-wrapper {
   color: #212529;
-  background-color: #e9ecef;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.05);
 }
 ::slotted(*) {
   p {
@@ -79,6 +80,7 @@
   margin: 0.25rem 0 0;
   font-size: 0.875rem;
   color: #212529;
+  color: white;
   text-align: left;
   list-style: none;
   background-color: #fff;
@@ -98,4 +100,13 @@
 
 .dropdown-menu ::slotted(*) {
   display: block;
+}
+
+@media (min-width: 780px) {
+  .menu-trigger-wrapper {
+    font-size: 1.05rem;
+  }
+}
+/*xl*/
+@media (min-width: 1280px) {
 }

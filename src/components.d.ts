@@ -1344,9 +1344,6 @@ export namespace Components {
     interface IrMenuBarItem {
     }
     interface IrMenuBarMenu {
-        "closeMenuExternally": (options?: { focusTrigger?: boolean; }) => Promise<void>;
-        "focusTrigger": (options?: FocusOptions) => Promise<void>;
-        "hasSubmenu": () => Promise<boolean>;
         /**
           * Displays an `ir-new-badge` next to the trigger when set.
          */

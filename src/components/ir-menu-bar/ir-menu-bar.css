@@ -6,6 +6,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  background: #104064;
+  width: 100%;
+  color: white;
 }
 
 ::slotted(ir-menu-bar-menu:focus-visible) {
