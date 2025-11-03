@@ -1,5 +1,5 @@
-import { Component, Element, Host, Listen, Method, Prop, State, h } from '@stencil/core';
-
+import { Component, Element, Host, Prop, State, Watch, h } from '@stencil/core';
+import { arrow, autoUpdate, computePosition, shift } from '@floating-ui/dom';
 @Component({
   tag: 'ir-menu-bar-menu',
   styleUrl: 'ir-menu-bar-menu.css',
@@ -15,20 +15,22 @@ export class IrMenuBarMenu {
 
   @State() private hasDropdown = false;
   @State() private isOpen = false;
-  @State() private activeItemIndex = -1;
+  @State() private isAccordionLayout = false;
 
-  // private get triggerElement(): HTMLElement | null {
-  //   return this.hostEl.shadowRoot?.querySelector('.menu-trigger-wrapper') as HTMLElement | null;
-  // }
+  private dropdownContainerRef: HTMLDivElement;
+  private menuTriggerRef: HTMLDivElement;
+
+  private cleanupAutoUpdate?: () => void;
+  private mediaQuery?: MediaQueryList;
+  private mediaQueryCleanup?: () => void;
+  private closeTimeout?: number;
 
   private get items(): HTMLElement[] {
     return Array.from(this.hostEl.querySelectorAll('ir-menu-bar-item')).filter(item => item.parentElement === this.hostEl && !item.slot) as HTMLElement[];
   }
 
-  // private closeTimeout?: number;
-
   private updateDropdownState() {
-    const hasDropdown = this.items.length > 0;
+    const hasDropdown = this.items.length > 1;
 
     if (hasDropdown !== this.hasDropdown) {
       this.hasDropdown = hasDropdown;
@@ -43,286 +45,203 @@ export class IrMenuBarMenu {
 
   componentWillLoad() {
     this.updateDropdownState();
+    this.setupLayoutMode();
+  }
+
+  @Watch('isOpen')
+  handleOpenChange(open: boolean) {
+    if (!this.hasDropdown) return;
+
+    if (this.isAccordionLayout) {
+      this.cleanupAutoUpdate?.();
+      this.cleanupAutoUpdate = undefined;
+      this.updateAccordionHeight(open);
+      return;
+    }
+
+    if (open) {
+      const arrowElement = this.hostEl.shadowRoot.querySelector('#arrow');
+
+      requestAnimationFrame(() => {
+        this.cleanupAutoUpdate = autoUpdate(this.menuTriggerRef, this.dropdownContainerRef, () => {
+          computePosition(this.menuTriggerRef, this.dropdownContainerRef, {
+            strategy: 'fixed',
+            placement: 'bottom-start',
+            middleware: [shift(), arrow({ element: arrowElement })],
+          }).then(({ x, y, placement, middlewareData }) => {
+            Object.assign(this.dropdownContainerRef.style, {
+              left: `${x}px`,
+              top: `${y}px`,
+            });
+            const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+            const staticSide = {
+              top: 'bottom',
+              right: 'left',
+              bottom: 'top',
+              left: 'right',
+            }[placement.split('-')[0]];
+
+            Object.assign((arrowElement as HTMLElement).style, {
+              left: arrowX != null ? `${arrowX}px` : '',
+              top: arrowY != null ? `${arrowY}px` : '',
+              right: '',
+              bottom: '',
+              [staticSide]: '-4px',
+            });
+          });
+        });
+      });
+    } else {
+      this.cleanupAutoUpdate?.();
+      this.cleanupAutoUpdate = undefined;
+      this.cancelDropdownClose();
+    }
   }
 
   componentDidLoad() {
     this.updateDropdownState();
+    if (this.isAccordionLayout) {
+      this.updateAccordionHeight(this.isOpen);
+    }
+  }
+
+  disconnectedCallback() {
+    this.cleanupAutoUpdate?.();
+    this.cleanupAutoUpdate = undefined;
+    this.mediaQueryCleanup?.();
+    this.mediaQueryCleanup = undefined;
+    this.cancelDropdownClose();
   }
 
   private handleItemsSlotChange = () => {
     this.updateDropdownState();
+    if (this.isAccordionLayout && this.isOpen) {
+      // refresh measured height when slot content changes
+      requestAnimationFrame(() => this.updateAccordionHeight(true));
+    }
   };
 
-  // private isNodeWithinMenu(target: EventTarget | null): boolean {
-  //   if (!(target instanceof Node)) {
-  //     return false;
-  //   }
+  private setupLayoutMode() {
+    if (typeof window === 'undefined' || typeof matchMedia === 'undefined') {
+      this.isAccordionLayout = false;
+      return;
+    }
 
-  //   if (target === this.hostEl) {
-  //     return true;
-  //   }
+    const query = '(min-width: 768px)';
+    this.mediaQuery = window.matchMedia(query);
 
-  //   if (this.hostEl.contains(target)) {
-  //     return true;
-  //   }
+    const evaluateLayout = (mq: MediaQueryList | MediaQueryListEvent) => {
+      const isDropdownLayout = mq.matches;
+      this.isAccordionLayout = !isDropdownLayout;
 
-  //   const shadow = this.hostEl.shadowRoot;
-  //   return shadow ? shadow.contains(target) : false;
-  // }
+      if (isDropdownLayout) {
+        this.cancelDropdownClose();
+        this.dropdownContainerRef?.style.removeProperty('height');
+        this.dropdownContainerRef?.style.removeProperty('display');
+        if (this.isOpen) {
+          this.isOpen = false;
+        }
+      } else if (this.dropdownContainerRef) {
+        this.cancelDropdownClose();
+        if (this.isOpen) {
+          requestAnimationFrame(() => this.updateAccordionHeight(true));
+        } else {
+          this.dropdownContainerRef.style.height = '0px';
+        }
+      }
 
-  // private focusTriggerElement(options?: FocusOptions) {
-  //   const trigger = this.triggerElement;
-  //   if (!trigger) {
-  //     return;
-  //   }
+      if (isDropdownLayout) {
+        // ensure open state recalculates floating UI positioning
+        if (this.isOpen) {
+          this.handleOpenChange(true);
+        }
+      } else {
+        this.cleanupAutoUpdate?.();
+        this.cleanupAutoUpdate = undefined;
+      }
+    };
 
-  //   if (!trigger.hasAttribute('tabindex')) {
-  //     trigger.setAttribute('tabindex', '0');
-  //   }
+    evaluateLayout(this.mediaQuery);
 
-  //   trigger.focus(options);
-  // }
+    const listener = (event: MediaQueryListEvent) => evaluateLayout(event);
 
-  // private setOpenState(isOpen: boolean, focusTrigger = false) {
-  //   if (!this.hasDropdown) {
-  //     return;
-  //   }
+    if (typeof this.mediaQuery.addEventListener === 'function') {
+      this.mediaQuery.addEventListener('change', listener);
+      this.mediaQueryCleanup = () => this.mediaQuery.removeEventListener('change', listener);
+    } else {
+      this.mediaQuery.addListener(listener);
+      this.mediaQueryCleanup = () => this.mediaQuery.removeListener(listener);
+    }
+  }
 
-  //   this.isOpen = isOpen;
-  //   if (!isOpen) {
-  //     this.activeItemIndex = -1;
-  //     if (focusTrigger) {
-  //       this.focusTriggerElement();
-  //     }
-  //   }
-  // }
+  private updateAccordionHeight(open: boolean) {
+    if (!this.dropdownContainerRef) return;
 
-  // private openMenuInternal({ focusFirstItem = false } = {}) {
-  //   if (!this.hasDropdown) {
-  //     return;
-  //   }
+    const dropdownEl = this.dropdownContainerRef;
 
-  //   this.cancelScheduledClose();
-  //   this.isOpen = true;
-  //   this.activeItemIndex = -1;
+    if (open) {
+      const contentHeight = dropdownEl.scrollHeight;
+      dropdownEl.style.height = `${contentHeight}px`;
+    } else {
+      if (dropdownEl.style.height === 'auto') {
+        dropdownEl.style.height = `${dropdownEl.scrollHeight}px`;
+      }
+      requestAnimationFrame(() => {
+        dropdownEl.style.height = '0px';
+      });
+    }
+  }
 
-  //   if (focusFirstItem) {
-  //     this.focusItem(0);
-  //   }
-  // }
+  private handleAccordionTransitionEnd = (event: TransitionEvent) => {
+    if (!this.isAccordionLayout) return;
+    if (event.target !== this.dropdownContainerRef || event.propertyName !== 'height') return;
 
-  // private closeMenuInternal({ focusTrigger = false } = {}) {
-  //   this.cancelScheduledClose();
-  //   this.setOpenState(false, focusTrigger);
-  // }
+    if (this.isOpen) {
+      this.dropdownContainerRef.style.height = 'auto';
+    }
+  };
 
-  // private scheduleClose() {
-  //   this.cancelScheduledClose();
-  //   this.closeTimeout = window.setTimeout(() => {
-  //     this.closeTimeout = undefined;
-  //     this.closeMenuInternal();
-  //   }, 100);
-  // }
+  private scheduleDropdownClose() {
+    if (!this.hasDropdown || this.isAccordionLayout) return;
+    this.cancelDropdownClose();
+    this.closeTimeout = window.setTimeout(() => {
+      this.closeTimeout = undefined;
+      this.isOpen = false;
+    }, 150);
+  }
 
-  // private cancelScheduledClose() {
-  //   if (this.closeTimeout !== undefined) {
-  //     clearTimeout(this.closeTimeout);
-  //     this.closeTimeout = undefined;
-  //   }
-  // }
-
-  // private focusItem(index: number) {
-  //   const items = this.items;
-  //   if (items.length === 0) {
-  //     return;
-  //   }
-
-  //   const normalizedIndex = (index + items.length) % items.length;
-  //   const item = items[normalizedIndex];
-
-  //   item?.focus();
-  //   this.activeItemIndex = normalizedIndex;
-  // }
-
-  // private focusNextItem() {
-  //   if (this.activeItemIndex === -1) {
-  //     this.focusItem(0);
-  //   } else {
-  //     this.focusItem(this.activeItemIndex + 1);
-  //   }
-  // }
-
-  // private focusPreviousItem() {
-  //   if (this.activeItemIndex === -1) {
-  //     this.focusItem(this.items.length - 1);
-  //   } else {
-  //     this.focusItem(this.activeItemIndex - 1);
-  //   }
-  // }
-
-  // private isEventFromTrigger(event: Event) {
-  //   const trigger = this.triggerElement;
-  //   if (!trigger) {
-  //     return false;
-  //   }
-
-  //   return event.composedPath().includes(trigger);
-  // }
-
-  // private isEventFromMenuItem(event: Event) {
-  //   const path = event.composedPath();
-  //   return this.items.some(item => path.includes(item));
-  // }
-
-  // private activateTriggerContent() {
-  //   const triggerSlot = this.hostEl.shadowRoot?.querySelector('slot[name="trigger"]') as HTMLSlotElement | null;
-  //   const assignedElements = triggerSlot?.assignedElements({ flatten: true }) ?? [];
-  //   const interactive = assignedElements.find((el): el is HTMLElement => typeof (el as HTMLElement).click === 'function');
-
-  //   if (interactive) {
-  //     interactive.click();
-  //   }
-  // }
-
-  // @Listen('mouseenter')
-  // handleMouseEnter() {
-  //   if (this.hasDropdown) {
-  //     this.cancelScheduledClose();
-  //     this.isOpen = true;
-  //   }
-  // }
-
-  // @Listen('mouseleave')
-  // handleMouseLeave(event: MouseEvent) {
-  //   if (!this.hasDropdown) {
-  //     return;
-  //   }
-
-  //   if (this.isNodeWithinMenu(event.relatedTarget)) {
-  //     this.cancelScheduledClose();
-  //     return;
-  //   }
-
-  //   this.scheduleClose();
-  // }
-
-  // @Listen('focusin')
-  // handleFocusIn(event: FocusEvent) {
-  //   if (!this.hasDropdown) {
-  //     return;
-  //   }
-
-  //   if (this.isEventFromMenuItem(event)) {
-  //     this.cancelScheduledClose();
-  //     this.isOpen = true;
-  //   }
-  // }
-
-  // @Listen('focusout')
-  // handleFocusOut(event: FocusEvent) {
-  //   if (!this.hasDropdown) {
-  //     return;
-  //   }
-
-  //   if (!this.isNodeWithinMenu(event.relatedTarget)) {
-  //     this.scheduleClose();
-  //   }
-  // }
-
-  // @Listen('keydown')
-  // handleKeydown(event: KeyboardEvent) {
-  //   const { key } = event;
-
-  //   if (this.hasDropdown) {
-  //     if (key === 'Escape') {
-  //       event.preventDefault();
-  //       this.closeMenuInternal({ focusTrigger: true });
-  //       return;
-  //     }
-
-  //     if (this.isEventFromTrigger(event)) {
-  //       if (key === 'Enter' || key === ' ') {
-  //         event.preventDefault();
-  //         if (this.isOpen) {
-  //           this.closeMenuInternal({ focusTrigger: true });
-  //         } else {
-  //           this.openMenuInternal({ focusFirstItem: true });
-  //         }
-  //         return;
-  //       }
-
-  //       if (key === 'ArrowDown') {
-  //         event.preventDefault();
-  //         this.openMenuInternal({ focusFirstItem: true });
-  //         return;
-  //       }
-
-  //       if (key === 'ArrowUp') {
-  //         event.preventDefault();
-  //         this.openMenuInternal({ focusFirstItem: false });
-  //         this.focusItem(this.items.length - 1);
-  //         return;
-  //       }
-  //     }
-
-  //     if (this.isEventFromMenuItem(event)) {
-  //       switch (key) {
-  //         case 'ArrowDown':
-  //           event.preventDefault();
-  //           this.focusNextItem();
-  //           return;
-  //         case 'ArrowUp':
-  //           event.preventDefault();
-  //           this.focusPreviousItem();
-  //           return;
-  //         case 'Home':
-  //           event.preventDefault();
-  //           this.focusItem(0);
-  //           return;
-  //         case 'End':
-  //           event.preventDefault();
-  //           this.focusItem(this.items.length - 1);
-  //           return;
-  //         case 'Tab':
-  //           this.closeMenuInternal();
-  //           return;
-  //       }
-  //     }
-  //   } else if (this.isEventFromTrigger(event)) {
-  //     if (key === 'Enter' || key === ' ') {
-  //       event.preventDefault();
-  //       this.activateTriggerContent();
-  //     }
-  //   }
-  // }
-
-  // @Method()
-  // async focusTrigger(options?: FocusOptions) {
-  //   this.focusTriggerElement(options);
-  // }
-
-  // @Method()
-  // async closeMenuExternally(options?: { focusTrigger?: boolean }) {
-  //   this.closeMenuInternal({ focusTrigger: options?.focusTrigger });
-  // }
-
-  // @Method()
-  // async hasSubmenu(): Promise<boolean> {
-  //   return this.hasDropdown;
-  // }
+  private cancelDropdownClose() {
+    if (this.closeTimeout !== undefined) {
+      clearTimeout(this.closeTimeout);
+      this.closeTimeout = undefined;
+    }
+  }
 
   render() {
     const hostClass = {
       'has-dropdown': this.hasDropdown,
       'is-open': this.hasDropdown && this.isOpen,
+      'is-accordion': this.isAccordionLayout,
+      'is-dropdown': this.hasDropdown && !this.isAccordionLayout,
     };
-    console.log(this.hasDropdown);
+    const supportsDropdownHover = this.hasDropdown && !this.isAccordionLayout;
     return (
-      <Host class={hostClass} role="none">
+      <Host
+        class={hostClass}
+        role="none"
+        onPointerEnter={supportsDropdownHover ? () => {
+          this.cancelDropdownClose();
+          this.isOpen = true;
+        } : undefined}
+        onPointerLeave={supportsDropdownHover ? () => this.scheduleDropdownClose() : undefined}
+      >
         <div
           class="menu-trigger-wrapper"
           part="trigger"
           role="menuitem"
+          onClick={() => (this.isOpen = !this.isOpen)}
+          ref={el => (this.menuTriggerRef = el)}
           tabindex={this.hasDropdown ? '0' : undefined}
           aria-haspopup={this.hasDropdown ? 'menu' : undefined}
           aria-expanded={this.hasDropdown ? String(this.isOpen) : undefined}
@@ -330,7 +249,15 @@ export class IrMenuBarMenu {
           <slot name="trigger"></slot>
           {this.newBadge && <ir-new-badge class="menu-new-badge" part="new-indicator"></ir-new-badge>}
         </div>
-        <div class="dropdown-menu" part="dropdown" role={this.hasDropdown ? 'menu' : undefined} aria-hidden={!this.hasDropdown || !this.isOpen ? 'true' : 'false'}>
+        <div
+          class="dropdown-menu"
+          ref={el => (this.dropdownContainerRef = el)}
+          part="dropdown"
+          role={this.hasDropdown ? 'menu' : undefined}
+          aria-hidden={!this.hasDropdown || !this.isOpen ? 'true' : 'false'}
+          onTransitionEnd={this.handleAccordionTransitionEnd}
+        >
+          <div id="arrow"></div>
           <slot onSlotchange={this.handleItemsSlotChange}></slot>
         </div>
       </Host>

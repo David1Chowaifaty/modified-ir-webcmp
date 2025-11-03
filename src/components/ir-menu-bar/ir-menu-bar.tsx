@@ -1,4 +1,6 @@
-import { Component, Element, Host, Listen, Method, h } from '@stencil/core';
+import { Component, Element, Host, Listen, Method, State, Watch, h } from '@stencil/core';
+
+let menuBarInstanceCounter = 0;
 
 type MenuComponent = HTMLIrMenuBarMenuElement & {
   focusTrigger?: (options?: FocusOptions) => Promise<void>;
@@ -12,6 +14,17 @@ type MenuComponent = HTMLIrMenuBarMenuElement & {
 })
 export class IrMenuBar {
   @Element() private hostEl!: HTMLElement;
+
+  @State() private isSheetOpen = false;
+  @State() private isMobileLayout = false;
+
+  private mediaQuery?: MediaQueryList;
+  private mediaQueryCleanup?: () => void;
+  private toggleButtonRef?: HTMLButtonElement;
+  private closeButtonRef?: HTMLButtonElement;
+  private sheetPanelRef?: HTMLDivElement;
+  private readonly sheetId = `ir-menu-bar-sheet-${++menuBarInstanceCounter}`;
+  private readonly sheetTitleId = `${this.sheetId}-title`;
 
   private getMenus(): MenuComponent[] {
     return Array.from(this.hostEl.querySelectorAll('ir-menu-bar-menu')) as MenuComponent[];
@@ -33,6 +46,15 @@ export class IrMenuBar {
   @Listen('keydown')
   async handleKeydown(event: KeyboardEvent) {
     const { key } = event;
+
+    if (this.isMobileLayout) {
+      if (this.isSheetOpen && key === 'Escape') {
+        event.preventDefault();
+        this.closeSheet();
+      }
+      return;
+    }
+
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key)) {
       return;
     }
@@ -89,11 +111,189 @@ export class IrMenuBar {
     await this.focusMenu(firstMenu);
   }
 
+  componentWillLoad() {
+    this.setupLayoutMode();
+  }
+
+  disconnectedCallback() {
+    this.mediaQueryCleanup?.();
+    this.mediaQueryCleanup = undefined;
+  }
+
+  private setupLayoutMode() {
+    if (typeof window === 'undefined' || typeof matchMedia === 'undefined') {
+      this.isMobileLayout = false;
+      return;
+    }
+
+    const query = '(min-width: 768px)';
+    this.mediaQuery = window.matchMedia(query);
+
+    const evaluateLayout = (mq: MediaQueryList | MediaQueryListEvent) => {
+      const isTabletOrAbove = mq.matches;
+      this.isMobileLayout = !isTabletOrAbove;
+      if (isTabletOrAbove && this.isSheetOpen) {
+        this.isSheetOpen = false;
+      }
+    };
+
+    evaluateLayout(this.mediaQuery);
+
+    const listener = (event: MediaQueryListEvent) => evaluateLayout(event);
+
+    if (typeof this.mediaQuery.addEventListener === 'function') {
+      this.mediaQuery.addEventListener('change', listener);
+      this.mediaQueryCleanup = () => this.mediaQuery.removeEventListener('change', listener);
+    } else {
+      this.mediaQuery.addListener(listener);
+      this.mediaQueryCleanup = () => this.mediaQuery.removeListener(listener);
+    }
+  }
+
+  @Watch('isSheetOpen')
+  handleSheetOpenChange(open: boolean) {
+    this.sheetPanelRef?.toggleAttribute('inert', !open);
+
+    const scheduleFocus = (callback: () => void) => {
+      if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(callback);
+      } else {
+        callback();
+      }
+    };
+
+    if (open) {
+      scheduleFocus(() => this.closeButtonRef?.focus());
+    } else {
+      scheduleFocus(() => this.toggleButtonRef?.focus());
+    }
+  }
+
+  @Listen('focusin', { target: 'document' })
+  handleDocumentFocus(event: FocusEvent) {
+    if (!this.isMobileLayout || !this.isSheetOpen || !this.sheetPanelRef) {
+      return;
+    }
+
+    const target = event.composedPath()[0] as HTMLElement | undefined;
+    if (!target) {
+      return;
+    }
+
+    if (this.sheetPanelRef.contains(target)) {
+      return;
+    }
+
+    requestAnimationFrame(() => this.closeButtonRef?.focus());
+  }
+
+  private openSheet = () => {
+    this.isSheetOpen = true;
+  };
+
+  private closeSheet = () => {
+    this.isSheetOpen = false;
+  };
+
   render() {
+    const hostClass = {
+      'is-mobile': this.isMobileLayout,
+      'sheet-open': this.isSheetOpen,
+    };
+
     return (
-      <Host role="menubar">
+      <Host role="menubar" class={hostClass}>
         <nav class="menu-bar" part="container">
-          <slot></slot>
+          {this.isMobileLayout && (
+            <button
+              class="menu-toggle"
+              part="toggle"
+              type="button"
+              aria-label={this.isSheetOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={String(this.isSheetOpen)}
+              aria-controls={this.sheetId}
+              tabIndex={this.isSheetOpen ? -1 : 0}
+              onClick={() => (this.isSheetOpen ? this.closeSheet() : this.openSheet())}
+              ref={el => (this.toggleButtonRef = el)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-menu-icon lucide-menu"
+              >
+                <path d="M4 5h16" />
+                <path d="M4 12h16" />
+                <path d="M4 19h16" />
+              </svg>
+            </button>
+          )}
+
+          {this.isMobileLayout ? (
+            <div
+              id={this.sheetId}
+              class={{ 'menu-sheet': true, 'menu-sheet--open': this.isSheetOpen }}
+              aria-hidden={this.isSheetOpen ? 'false' : 'true'}
+            >
+              <div
+                class="menu-sheet__panel"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={this.sheetTitleId}
+                tabIndex={-1}
+                ref={el => {
+                  this.sheetPanelRef = el;
+                  if (el) {
+                    el.toggleAttribute('inert', !this.isSheetOpen);
+                  }
+                }}
+              >
+                <div class="menu-sheet__header">
+                  <span id={this.sheetTitleId} class="menu-sheet__title">
+                    Menu
+                  </span>
+                  <button
+                    type="button"
+                    class="menu-sheet__close"
+                    aria-label="Close menu"
+                    onClick={this.closeSheet}
+                    tabIndex={this.isSheetOpen ? 0 : -1}
+                    ref={el => (this.closeButtonRef = el)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-x"
+                    >
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="menu-sheet__body">
+                  <slot></slot>
+                </div>
+              </div>
+              <div class="menu-sheet__overlay" role="presentation" onClick={this.closeSheet}></div>
+            </div>
+          ) : (
+            <div class="menu-items" part="items">
+              <slot></slot>
+            </div>
+          )}
         </nav>
       </Host>
     );

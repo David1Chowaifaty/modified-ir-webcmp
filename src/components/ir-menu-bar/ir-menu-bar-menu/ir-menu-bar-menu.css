@@ -4,6 +4,11 @@
   align-items: stretch;
 }
 
+:host(.is-accordion) {
+  display: block;
+  width: 100%;
+}
+
 .menu-trigger-wrapper {
   display: inline-flex;
   align-items: center;
@@ -68,13 +73,16 @@
   margin-left: 0.35rem;
   pointer-events: none;
 }
-
-.dropdown-menu {
+#arrow {
   position: absolute;
-  top: calc(100% - 0.125rem);
-  left: 0;
-  z-index: 1000;
+  background: white;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  border-top-left-radius: 2px;
   display: none;
+}
+.dropdown-menu {
   min-width: 12rem;
   padding: 0.5rem 0;
   margin: 0.25rem 0 0;
@@ -83,23 +91,73 @@
   color: white;
   text-align: left;
   list-style: none;
-  background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0.25rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.175);
+  transition: width, transform 250ms ease;
 }
 
 :host(.has-dropdown.is-open) .dropdown-menu {
   display: block;
+  animation: fadeIn 200ms ease;
 }
 
 :host(:not(.has-dropdown)) .dropdown-menu {
+  animation: fadeOut 200ms ease;
   display: none;
 }
 
 .dropdown-menu ::slotted(*) {
   display: block;
+}
+
+:host(.is-dropdown) .dropdown-menu {
+  position: fixed;
+  display: none;
+  z-index: 10;
+}
+
+:host(.is-dropdown.has-dropdown.is-open) .dropdown-menu {
+  display: block;
+}
+
+:host(.is-dropdown) #arrow {
+  display: block;
+}
+
+:host(.is-accordion) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+:host(.is-accordion) .menu-trigger-wrapper {
+  width: 100%;
+  justify-content: space-between;
+}
+
+:host(.is-accordion) .dropdown-menu {
+  position: static;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  transition: height 250ms ease, opacity 200ms ease;
+  animation: none;
+}
+
+:host(.is-accordion.is-open) .dropdown-menu {
+  opacity: 1;
+}
+
+:host(.is-accordion) #arrow {
+  display: none;
+}
+
+:host(.is-accordion) .dropdown-menu ::slotted(*) {
+  padding: 0.5rem 0.75rem;
 }
 
 @media (min-width: 780px) {
@@ -109,4 +167,119 @@
 }
 /*xl*/
 @media (min-width: 1280px) {
+}
+
+@keyframes enterFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes enterFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes exitToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+}
+
+@keyframes exitToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: rotateX(-30deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: rotateX(-10deg) scale(0.95);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+/*sm*/
+@media (min-width: 640px) {
+}
+
+/*md*/
+@media (min-width: 768px) {
+  #arrow {
+    display: block;
+  }
+  .dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+  }
+  :host(.has-dropdown.is-open) .dropdown-menu {
+    display: block;
+    animation: fadeIn 200ms ease;
+  }
+}
+
+/*lg*/
+@media (min-width: 1024px) {
+}
+
+/*xl*/
+@media (min-width: 1280px) {
+}
+
+/*2xl*/
+@media (min-width: 1536px) {
 }
