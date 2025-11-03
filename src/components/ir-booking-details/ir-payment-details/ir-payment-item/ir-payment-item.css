@@ -122,7 +122,7 @@
   .payment-item__payment-item:hover {
     background: #f4f5fa;
   }
-  .payment-item__payment-item:hover .payment-item__payment-actions {
+  .payment-item__payment-item .payment-item__payment-actions {
     display: inline-flex;
   }
   .payment-item__payment-body .payment-item__payment-reference,

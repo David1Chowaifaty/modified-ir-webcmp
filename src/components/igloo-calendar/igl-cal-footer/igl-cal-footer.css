@@ -38,6 +38,9 @@
   color: #41bff3;
   cursor: pointer;
 }
+.legendBtn:hover {
+  color: #1e29ca;
+}
 
 .isOnline i {
   color: #2f9c3f;
