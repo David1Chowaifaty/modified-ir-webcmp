@@ -6,7 +6,6 @@
 :host {
   display: block;
   width: 100%;
-  padding: 0.25rem 1.5rem;
   clear: both;
   font-weight: 400;
   color: #212529;
@@ -18,14 +17,14 @@
   transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
   border-radius: 0;
   box-sizing: border-box !important;
-  padding-left: 1rem !important;
   color: #393c40;
+  padding: 0.5rem 1.125rem 0.5rem 3.375rem !important;
 }
 :host(:hover),
 :host(:focus) {
   color: #16181b;
   text-decoration: none;
-  background-color: #f8f9fa;
+  background-color: #f4f5fa;
   outline: none;
 }
 
@@ -58,4 +57,13 @@
 :host ::slotted(button:focus) {
   text-decoration: none;
   outline: none;
+}
+@media (min-width: 768px) {
+  :host {
+    padding: 0.625rem 1.25rem !important;
+    font-size: 0.875rem;
+    color: #2a2e30;
+    line-height: 1;
+    font-weight: 400;
+  }
 }
