@@ -87,6 +87,7 @@ export class IglBulkBlock {
         await this.bookingService.blockAvailabilityForBrackets({
           unit_id: this.selectedUnit?.unit_id,
           description: '',
+          property_id: calendar_data.property.id,
           block_status_code: '002',
           brackets: periods.map(p => ({
             from_date: p.from,
