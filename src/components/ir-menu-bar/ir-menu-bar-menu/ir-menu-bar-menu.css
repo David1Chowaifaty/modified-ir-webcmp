@@ -45,6 +45,11 @@
 
 :host(:hover) .menu-trigger-wrapper,
 :host(.is-open) .menu-trigger-wrapper {
+  background-color: #f4f5fa !important;
+  cursor: pointer;
+}
+:host(:hover) .menu-trigger-wrapper,
+:host(.is-open) .menu-trigger-wrapper {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
