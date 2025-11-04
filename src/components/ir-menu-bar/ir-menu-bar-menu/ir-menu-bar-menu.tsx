@@ -1,5 +1,6 @@
-import { Component, Element, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { arrow, autoUpdate, computePosition, shift } from '@floating-ui/dom';
+import { v4 } from 'uuid';
 @Component({
   tag: 'ir-menu-bar-menu',
   styleUrl: 'ir-menu-bar-menu.css',
@@ -13,9 +14,19 @@ export class IrMenuBarMenu {
    */
   @Prop({ attribute: 'new', reflect: true }) newBadge = false;
 
+  /**
+   * Controls the open state of the dropdown menu.
+   * Can be toggled programmatically or via user interaction.
+   */
+  @Prop({ attribute: 'open', reflect: true, mutable: true }) open = false;
+
   @State() private hasDropdown = false;
-  @State() private isOpen = false;
   @State() private isAccordionLayout = false;
+
+  /**
+   * Fires whenever the menu's `open` state changes.
+   */
+  @Event() menuBarOpenChange: EventEmitter<boolean>;
 
   private dropdownContainerRef: HTMLDivElement;
   private menuTriggerRef: HTMLDivElement;
@@ -36,26 +47,30 @@ export class IrMenuBarMenu {
       this.hasDropdown = hasDropdown;
     }
 
-    if (!hasDropdown && this.isOpen) {
-      this.isOpen = false;
+    if (!hasDropdown && this.open) {
+      this.open = false;
     }
 
     this.hostEl.toggleAttribute('has-submenu', hasDropdown);
   }
 
   componentWillLoad() {
+    if (!this.hostEl.id) {
+      this.hostEl.id = `menu-bar-${v4()}`;
+    }
     this.updateDropdownState();
     this.setupLayoutMode();
   }
 
-  @Watch('isOpen')
-  handleOpenChange(open: boolean) {
+  @Watch('open')
+  handleMenuBarOpenChange(open: boolean) {
     if (!this.hasDropdown) return;
 
     if (this.isAccordionLayout) {
       this.cleanupAutoUpdate?.();
       this.cleanupAutoUpdate = undefined;
       this.updateAccordionHeight(open);
+      this.menuBarOpenChange.emit(open);
       return;
     }
 
@@ -102,7 +117,7 @@ export class IrMenuBarMenu {
   componentDidLoad() {
     this.updateDropdownState();
     if (this.isAccordionLayout) {
-      this.updateAccordionHeight(this.isOpen);
+      this.updateAccordionHeight(this.open);
     }
   }
 
@@ -116,7 +131,7 @@ export class IrMenuBarMenu {
 
   private handleItemsSlotChange = () => {
     this.updateDropdownState();
-    if (this.isAccordionLayout && this.isOpen) {
+    if (this.isAccordionLayout && this.open) {
       // refresh measured height when slot content changes
       requestAnimationFrame(() => this.updateAccordionHeight(true));
     }
@@ -139,12 +154,12 @@ export class IrMenuBarMenu {
         this.cancelDropdownClose();
         this.dropdownContainerRef?.style.removeProperty('height');
         this.dropdownContainerRef?.style.removeProperty('display');
-        if (this.isOpen) {
-          this.isOpen = false;
+        if (this.open) {
+          this.open = false;
         }
       } else if (this.dropdownContainerRef) {
         this.cancelDropdownClose();
-        if (this.isOpen) {
+        if (this.open) {
           requestAnimationFrame(() => this.updateAccordionHeight(true));
         } else {
           this.dropdownContainerRef.style.height = '0px';
@@ -153,8 +168,8 @@ export class IrMenuBarMenu {
 
       if (isDropdownLayout) {
         // ensure open state recalculates floating UI positioning
-        if (this.isOpen) {
-          this.handleOpenChange(true);
+        if (this.open) {
+          this.handleMenuBarOpenChange(true);
         }
       } else {
         this.cleanupAutoUpdate?.();
@@ -197,7 +212,7 @@ export class IrMenuBarMenu {
     if (!this.isAccordionLayout) return;
     if (event.target !== this.dropdownContainerRef || event.propertyName !== 'height') return;
 
-    if (this.isOpen) {
+    if (this.open) {
       this.dropdownContainerRef.style.height = 'auto';
     }
   };
@@ -207,7 +222,7 @@ export class IrMenuBarMenu {
     this.cancelDropdownClose();
     this.closeTimeout = window.setTimeout(() => {
       this.closeTimeout = undefined;
-      this.isOpen = false;
+      this.open = false;
     }, 150);
   }
 
@@ -221,7 +236,7 @@ export class IrMenuBarMenu {
   render() {
     const hostClass = {
       'has-dropdown': this.hasDropdown,
-      'is-open': this.hasDropdown && this.isOpen,
+      'is-open': this.hasDropdown && this.open,
       'is-accordion': this.isAccordionLayout,
       'is-dropdown': this.hasDropdown && !this.isAccordionLayout,
     };
@@ -234,7 +249,7 @@ export class IrMenuBarMenu {
           supportsDropdownHover
             ? () => {
                 this.cancelDropdownClose();
-                this.isOpen = true;
+                this.open = true;
               }
             : undefined
         }
@@ -244,15 +259,15 @@ export class IrMenuBarMenu {
           class="menu-trigger-wrapper"
           part="trigger"
           role="menuitem"
-          onClick={() => (this.isOpen = !this.isOpen)}
+          onClick={() => (this.open = !this.open)}
           ref={el => (this.menuTriggerRef = el)}
           tabindex={this.hasDropdown ? '0' : undefined}
           aria-haspopup={this.hasDropdown ? 'menu' : undefined}
-          aria-expanded={this.hasDropdown ? String(this.isOpen) : undefined}
+          aria-expanded={this.hasDropdown ? String(this.open) : undefined}
         >
           <slot name="trigger"></slot>
           {this.hasDropdown &&
-            (!this.isOpen ? (
+            (!this.open ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -290,7 +305,7 @@ export class IrMenuBarMenu {
           ref={el => (this.dropdownContainerRef = el)}
           part="dropdown"
           role={this.hasDropdown ? 'menu' : undefined}
-          aria-hidden={!this.hasDropdown || !this.isOpen ? 'true' : 'false'}
+          data-state={!this.hasDropdown || !this.open ? 'open' : 'closed'}
           onTransitionEnd={this.handleAccordionTransitionEnd}
         >
           <div id="arrow"></div>

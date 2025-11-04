@@ -160,6 +160,18 @@
                 <ir-menu-bar-item href="acaccountingreport.aspx">Accounting Report</ir-menu-bar-item>
             </ir-menu-bar-menu>
         </ir-menu-bar>
+
+        <script>
+            const item = document.getElementById('Li_DynamicPricing');
+
+            item.addEventListener('menu-bar-item-click', (event) => {
+                // 👇 Stop the default anchor navigation
+                event.preventDefault();
+
+                // You can still do your own custom logic here
+                console.log('Navigation prevented!', event);
+            });
+        </script>
     </div>
 
 </body>

@@ -177,6 +177,25 @@ export class IrMenuBar {
     this.isSheetOpen = false;
   };
 
+  @Listen('menu-bar-item-click')
+  handleMenuItemClick() {
+    if (this.isSheetOpen) {
+      this.closeSheet();
+    }
+  }
+
+  @Listen('menuBarOpenChange')
+  handleMenuBarOpenChange(e: CustomEvent<boolean>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    if (e.detail)
+      this.getMenus().forEach(m => {
+        if (m.id !== (e.target as HTMLIrMenuBarElement).id) {
+          m.open = false;
+        }
+      });
+  }
+
   render() {
     const hostClass = {
       'is-mobile': this.isMobileLayout,

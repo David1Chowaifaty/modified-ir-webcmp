@@ -3,67 +3,107 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+:host {
+  --mbi-color: #393c40;
+  --mbi-color-hover: #16181b;
+  --mbi-color-active: #212529;
+  --mbi-bg-hover: #f4f5fa;
+  --mbi-bg-active: #e9ecef;
+  --mbi-pad: 0.5rem 1.125rem 0.5rem 3.375rem;
+}
+
 :host {
   display: block;
   width: 100%;
   clear: both;
+
   font-weight: 400;
-  color: #212529;
+  color: var(--mbi-color);
   text-align: inherit;
   white-space: nowrap;
+
   background-color: transparent;
   border: 0;
-  cursor: pointer;
-  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
   border-radius: 0;
+  cursor: pointer;
+
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
   box-sizing: border-box !important;
-  color: #393c40;
-  padding: 0.5rem 1.125rem 0.5rem 3.375rem !important;
+  padding: var(--mbi-pad) !important;
 }
+
+:host([href]) {
+  padding: 0 !important;
+}
+
 :host(:hover),
 :host(:focus) {
-  color: #16181b;
+  color: var(--mbi-color-hover);
+  background-color: var(--mbi-bg-hover);
   text-decoration: none;
-  background-color: #f4f5fa;
   outline: none;
 }
 
 :host(:active) {
-  color: #212529;
-  background-color: #e9ecef;
+  color: var(--mbi-color-active);
+  background-color: var(--mbi-bg-active);
 }
+
 :host ::slotted(*) {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
+
 :host ::slotted(a),
-:host ::slotted(button) {
+:host ::slotted(button),
+.menu-bar-item__link {
   display: block;
   width: 100%;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
+  clear: both;
+
   font: inherit;
-  text-align: inherit;
-  text-decoration: none;
+  font-weight: 400;
+  text-align: inherit !important;
+  white-space: nowrap;
+  color: inherit;
+
+  background: transparent;
+  border: 0;
+  border-radius: 0;
   cursor: pointer;
+
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  box-sizing: border-box !important;
+  padding: var(--mbi-pad) !important;
+  text-decoration: none;
 }
 
 :host ::slotted(a:hover),
 :host ::slotted(button:hover),
 :host ::slotted(a:focus),
-:host ::slotted(button:focus) {
+:host ::slotted(button:focus),
+.menu-bar-item__link:hover,
+.menu-bar-item__link:focus {
   text-decoration: none;
   outline: none;
 }
+
+/* Responsive tweaks */
 @media (min-width: 768px) {
-  :host {
+  :host,
+  :host ::slotted(a),
+  :host ::slotted(button),
+  .menu-bar-item__link {
     padding: 0.625rem 1.25rem !important;
     font-size: 0.875rem;
-    color: #2a2e30;
     line-height: 1;
     font-weight: 400;
+    color: #2a2e30;
+  }
+
+  :host([href]) {
+    padding: 0 !important;
   }
 }
