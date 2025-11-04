@@ -1,3 +1,4 @@
+import { OverflowAdd, OverflowRelease } from '@/utils/OverflowLock';
 import { Component, Element, Host, Listen, Method, State, Watch, h } from '@stencil/core';
 
 let menuBarInstanceCounter = 0;
@@ -169,13 +170,15 @@ export class IrMenuBar {
     }
   }
 
-  private openSheet = () => {
+  @OverflowAdd('menuSheet')
+  private openSheet() {
     this.isSheetOpen = true;
-  };
+  }
 
-  private closeSheet = () => {
+  @OverflowRelease('menuSheet')
+  private closeSheet() {
     this.isSheetOpen = false;
-  };
+  }
 
   @Listen('menu-bar-item-click')
   handleMenuItemClick() {
@@ -284,7 +287,7 @@ export class IrMenuBar {
                   <slot></slot>
                 </div>
               </div>
-              <div class="menu-sheet__overlay" role="presentation" onClick={this.closeSheet}></div>
+              <div class="menu-sheet__overlay" role="presentation" onClick={this.closeSheet.bind(this)}></div>
             </div>
           ) : (
             <div class="menu-items" part="items">

@@ -1,3 +1,4 @@
+/* --- Base layout (unchanged where not noted) --- */
 :host {
   display: block;
 }
@@ -25,7 +26,6 @@
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
-
 .menu-toggle:hover,
 .menu-toggle:focus-visible {
   outline: none;
@@ -40,6 +40,7 @@
   flex-wrap: wrap;
 }
 
+/* --- SHEET --- */
 .menu-sheet {
   position: fixed;
   inset: 0;
@@ -48,31 +49,51 @@
   display: flex;
   align-items: stretch;
 
+  /* We’ll control visibility via open/closing modifiers */
   pointer-events: none;
   visibility: hidden;
 }
 
-.menu-sheet--open {
-  pointer-events: auto;
+/* Keep the sheet visible during open or closing so animations can run */
+.menu-sheet--open,
+.menu-sheet--closing {
   visibility: visible;
 }
 
+/* Only interactive when open */
+.menu-sheet--open {
+  pointer-events: auto;
+}
+
+/* --- OVERLAY with fade in/out --- */
 .menu-sheet__overlay {
   flex: 1;
   opacity: 0;
   background-color: rgba(0, 0, 0, 0.45);
-  transition: opacity 200ms ease;
+  transition: opacity 240ms ease;
   cursor: pointer;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
 }
 
+/* Fade in when open */
 .menu-sheet--open .menu-sheet__overlay {
   opacity: 1;
+}
+
+/* Fade out when closing */
+.menu-sheet--closing .menu-sheet__overlay {
+  opacity: 0;
 }
 
 .menu-sheet__panel {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  position: fixed;
+  left: 0;
+  z-index: 999999;
 
   width: min(100%, 60vw);
   max-width: 60vw;
@@ -81,14 +102,28 @@
   background: white;
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
 
+  /* Start off-screen */
   transform: translateX(-100%);
-  transition: transform 240ms ease;
+  /* Keep it opaque so content doesn't "pop in" */
+  opacity: 1;
+
+  /* Only animate the slide */
+  transition: transform 300ms ease;
+
+  /* Smoother paint on some GPUs */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .menu-sheet--open .menu-sheet__panel {
   transform: translateX(0);
 }
 
+.menu-sheet--closing .menu-sheet__panel {
+  transform: translateX(-100%);
+}
+
+/* --- Header/Body (unchanged) --- */
 .menu-sheet__header {
   display: flex;
   align-items: center;
@@ -142,6 +177,7 @@
   overflow-y: auto;
 }
 
+/* --- Reduced motion --- */
 @media (prefers-reduced-motion: reduce) {
   .menu-sheet__overlay,
   .menu-sheet__panel {
@@ -149,10 +185,12 @@
   }
 }
 
+/* --- Slotted focus (unchanged) --- */
 ::slotted(ir-menu-bar-menu:focus-visible) {
   outline: none;
 }
 
+/* --- Desktop tweaks (unchanged aside from keeping your styles) --- */
 @media (min-width: 768px) {
   .menu-toggle {
     display: none;
