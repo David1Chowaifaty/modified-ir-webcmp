@@ -255,9 +255,11 @@ export class IrMenuBar {
                 }}
               >
                 <div class="menu-sheet__header">
-                  <span id={this.sheetTitleId} class="menu-sheet__title">
-                    Menu
-                  </span>
+                  <slot name="sheet-header">
+                    <span id={this.sheetTitleId} class="menu-sheet__title">
+                      Menu
+                    </span>
+                  </slot>
                   <button
                     type="button"
                     class="menu-sheet__close"
