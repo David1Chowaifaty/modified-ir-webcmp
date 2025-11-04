@@ -36,8 +36,8 @@ export class IrMenuBarMenu {
   private mediaQueryCleanup?: () => void;
   private closeTimeout?: number;
 
-  private get items(): HTMLElement[] {
-    return Array.from(this.hostEl.querySelectorAll('ir-menu-bar-item')).filter(item => item.parentElement === this.hostEl && !item.slot) as HTMLElement[];
+  private get items(): HTMLIrMenuBarItemElement[] {
+    return Array.from(this.hostEl.querySelectorAll('ir-menu-bar-item')).filter(item => item.parentElement === this.hostEl && !item.slot) as HTMLIrMenuBarItemElement[];
   }
 
   private updateDropdownState() {
@@ -259,7 +259,16 @@ export class IrMenuBarMenu {
           class="menu-trigger-wrapper"
           part="trigger"
           role="menuitem"
-          onClick={() => (this.open = !this.open)}
+          onClick={() => {
+            if (this.hasDropdown) {
+              this.open = !this.open;
+            } else {
+              const item = this.items[0];
+              if (item.href) {
+                window.open(item.href, item.target);
+              }
+            }
+          }}
           ref={el => (this.menuTriggerRef = el)}
           tabindex={this.hasDropdown ? '0' : undefined}
           aria-haspopup={this.hasDropdown ? 'menu' : undefined}
