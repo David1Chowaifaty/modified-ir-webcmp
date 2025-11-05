@@ -104,6 +104,7 @@ export class IglSplitBooking {
       this.errors = null;
       const selectedUnit = SelectedUnitSchema.parse(this.selectedUnit);
       const oldRooms = this.booking.rooms.filter(r => r.identifier !== this.identifier);
+      const canCheckIn = this.room.in_out?.code === '001' ? (moment().isBefore(this.selectedDates.from_date) ? false : true) : false;
       let rooms = [
         ...oldRooms,
         {
@@ -116,6 +117,12 @@ export class IglSplitBooking {
         {
           ...this.room,
           identifier: null,
+          in_out: canCheckIn
+            ? this.room.in_out
+            : {
+                code: '000',
+              },
+          check_in: canCheckIn,
           assigned_units_pool: null,
           parent_room_identifier: this.room.identifier,
           is_split: true,
@@ -156,6 +163,7 @@ export class IglSplitBooking {
         },
         pickup_info: this.booking.pickup_info,
       };
+      console.log(booking);
       await this.bookingService.doReservation(booking);
       this.closeModal.emit(null);
     } catch (error) {
@@ -255,8 +263,8 @@ export class IglSplitBooking {
               }
               const units = (() => {
                 const unitMap = new Map<number, string>();
-                for (const rateplan of roomType.rateplans) {
-                  for (const unit of rateplan.assignable_units) {
+                for (const rateplan of roomType.rateplans ?? []) {
+                  for (const unit of rateplan.assignable_units ?? []) {
                     if (unit.Is_Fully_Available) {
                       unitMap.set(unit.pr_id, unit.name);
                     }
