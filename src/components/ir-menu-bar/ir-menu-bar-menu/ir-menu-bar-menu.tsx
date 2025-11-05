@@ -12,7 +12,7 @@ export class IrMenuBarMenu {
   /**
    * Displays an `ir-new-badge` next to the trigger when set.
    */
-  @Prop({ attribute: 'new', reflect: true }) newBadge = false;
+  @Prop({ attribute: 'new', reflect: true, mutable: true }) newBadge = false;
 
   /**
    * Controls the open state of the dropdown menu.
@@ -131,6 +131,9 @@ export class IrMenuBarMenu {
 
   private handleItemsSlotChange = () => {
     this.updateDropdownState();
+    if (!this.newBadge && this.items.some(i => i.newBadge)) {
+      this.newBadge = true;
+    }
     if (this.isAccordionLayout && this.open) {
       // refresh measured height when slot content changes
       requestAnimationFrame(() => this.updateAccordionHeight(true));
@@ -274,7 +277,10 @@ export class IrMenuBarMenu {
           aria-haspopup={this.hasDropdown ? 'menu' : undefined}
           aria-expanded={this.hasDropdown ? String(this.open) : undefined}
         >
-          <slot name="trigger"></slot>
+          <div class="menu-bar-menu__trigger-container">
+            <slot name="trigger"></slot>
+            {this.newBadge && <ir-new-badge class="menu-new-badge" part="new-indicator"></ir-new-badge>}
+          </div>
           {this.hasDropdown &&
             (!this.open ? (
               <svg
@@ -307,7 +313,6 @@ export class IrMenuBarMenu {
                 <path d="m18 15-6-6-6 6" />
               </svg>
             ))}
-          {this.newBadge && <ir-new-badge class="menu-new-badge" part="new-indicator"></ir-new-badge>}
         </div>
         <div
           class="dropdown-menu"

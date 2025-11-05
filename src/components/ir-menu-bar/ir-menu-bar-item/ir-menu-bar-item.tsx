@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-menu-bar-item',
@@ -68,12 +68,14 @@ export class IrMenuBarItem {
             href={this.href}
           >
             <slot></slot>
+            {this.newBadge && <ir-new-badge></ir-new-badge>}
           </a>
         ) : (
-          <slot></slot>
+          <Fragment>
+            <slot></slot>
+            {this.newBadge && <ir-new-badge></ir-new-badge>}
+          </Fragment>
         )}
-
-        {this.newBadge && <ir-new-badge></ir-new-badge>}
       </Host>
     );
   }

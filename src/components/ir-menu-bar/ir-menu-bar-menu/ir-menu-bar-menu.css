@@ -164,7 +164,11 @@
 /* sm */
 @media (min-width: 640px) {
 }
-
+.menu-bar-menu__trigger-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 /* md */
 @media (min-width: 768px) {
   #arrow {
@@ -184,7 +188,14 @@
   .menu-bar-menu__accordion_indicator {
     display: none;
   }
-
+  .menu-new-badge {
+    position: absolute;
+    top: -4px;
+    right: -1rem;
+  }
+  .menu-new-badge::part(base) {
+    font-size: 8px !important;
+  }
   .dropdown-menu {
     position: absolute;
     z-index: 1000;

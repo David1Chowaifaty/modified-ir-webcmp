@@ -9,7 +9,9 @@ export class IrNewBadge {
   render() {
     return (
       <Host>
-        <span class="new-badge">new</span>
+        <span class="new-badge" part="base">
+          new
+        </span>
       </Host>
     );
   }

@@ -89,6 +89,12 @@
   text-decoration: none;
   outline: none;
 }
+:host([new='true']),
+.menu-bar-item__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
 /* Responsive tweaks */
 @media (min-width: 768px) {
