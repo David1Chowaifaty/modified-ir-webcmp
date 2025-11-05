@@ -466,6 +466,7 @@ export class BookingService {
     unit_id: number;
     block_status_code?: '003' | '004' | '002';
     description?: string;
+    property_id: number;
     brackets: { from_date: string; to_date: string }[];
   }) {
     try {
