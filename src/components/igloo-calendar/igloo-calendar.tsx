@@ -928,7 +928,7 @@ export class IglooCalendar {
         calendarElement.classList.remove('showLegend');
         calendarElement.classList.toggle('showLegend');
 
-        this.showLegend = true;
+        this.showLegend = !this.showLegend;
         this.showToBeAssigned = false;
         break;
       case 'calendar':
@@ -1342,6 +1342,7 @@ export class IglooCalendar {
                     calendarData={this.calendarData}
                   ></igl-cal-body>
                   <igl-cal-footer
+                    isLegendOpen={this.showLegend}
                     highlightedDate={this.highlightedDate}
                     today={this.today}
                     calendarData={this.calendarData}
