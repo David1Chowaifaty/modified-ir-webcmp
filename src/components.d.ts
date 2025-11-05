@@ -240,6 +240,7 @@ export namespace Components {
     interface IglCalFooter {
         "calendarData": { [key: string]: any };
         "highlightedDate": string;
+        "isLegendOpen": boolean;
         "today": String;
     }
     interface IglCalHeader {
@@ -5479,6 +5480,7 @@ declare namespace LocalJSX {
     interface IglCalFooter {
         "calendarData"?: { [key: string]: any };
         "highlightedDate"?: string;
+        "isLegendOpen"?: boolean;
         "onOptionEvent"?: (event: IglCalFooterCustomEvent<{ [key: string]: any }>) => void;
         "today"?: String;
     }
