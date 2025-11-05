@@ -65,7 +65,6 @@ interface CheckMealPlanParams {
  * @returns `null` if no choices are needed; otherwise a list of choices.
  */
 export function checkMealPlan({ rateplan_id, roomTypes, roomTypeId }: CheckMealPlanParams): SelectOption | SelectOption[] | null {
-  console.log({ rateplan_id, roomTypes, roomTypeId });
   if (!roomTypeId || !Array.isArray(roomTypes) || roomTypes.length === 0) {
     return null;
   }
@@ -73,7 +72,15 @@ export function checkMealPlan({ rateplan_id, roomTypes, roomTypeId }: CheckMealP
   if (!roomtype || !Array.isArray(roomtype.rateplans) || roomtype.rateplans.length === 0) {
     return null;
   }
-  const rateplan = roomtype.rateplans.find(rp => rp.id.toString() === rateplan_id.toString());
+  const rateplan = (() => {
+    for (const rt of roomTypes) {
+      const ratePlan = rt.rateplans.find(rp => rp.id.toString() === rateplan_id.toString());
+      if (ratePlan) {
+        return ratePlan;
+      }
+    }
+    return null;
+  })();
   const current = {
     mealPlanCode: rateplan?.meal_plan?.code ?? null,
     customText: rateplan?.custom_text ?? null,

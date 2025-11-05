@@ -801,6 +801,26 @@ export interface Bracket {
   gross_amount_formatted: string;
   statement: string;
 }
+/**
+ * Indicates the guest's **arrival/departure status** for a room.
+ *
+ * Codes:
+ * - `'000'` — **No show** (guest didn't arrive).
+ * - `'001'` — **Check-in** (guest has arrived / is occupying the room).
+ * - `'002'` — **Check-out** (guest has departed).
+ *
+ * @property code - Three-digit status code. See codes list above.
+ * @property description - Human-readable label for the status (e.g., "Check-in").
+ *
+ * @remarks
+ * - In {@link Room.in_out}, this type may be `null` if the status is unknown or not applicable.
+ * - The `description` is intended for display; rely on `code` for logic.
+ *
+ * @example
+ * const arriving: RoomInOut = { code: '001', description: 'Check-in' };
+ * const leaving: RoomInOut  = { code: '002', description: 'Check-out' };
+ * const noShow: RoomInOut   = { code: '000', description: "Didn't arrive" };
+ */
 export type RoomInOut = { code: '001' | '002' | '000'; description: string };
 export interface Room {
   days: Day[];
