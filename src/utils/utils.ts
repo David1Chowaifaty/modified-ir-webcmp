@@ -65,6 +65,7 @@ interface CheckMealPlanParams {
  * @returns `null` if no choices are needed; otherwise a list of choices.
  */
 export function checkMealPlan({ rateplan_id, roomTypes, roomTypeId }: CheckMealPlanParams): SelectOption | SelectOption[] | null {
+  console.log({ rateplan_id, roomTypes, roomTypeId });
   if (!roomTypeId || !Array.isArray(roomTypes) || roomTypes.length === 0) {
     return null;
   }

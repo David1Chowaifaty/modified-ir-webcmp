@@ -156,6 +156,7 @@ export class IglSplitBooking {
         },
         pickup_info: this.booking.pickup_info,
       };
+      console.log(booking);
       await this.bookingService.doReservation(booking);
       this.closeModal.emit(null);
     } catch (error) {
@@ -255,8 +256,8 @@ export class IglSplitBooking {
               }
               const units = (() => {
                 const unitMap = new Map<number, string>();
-                for (const rateplan of roomType.rateplans) {
-                  for (const unit of rateplan.assignable_units) {
+                for (const rateplan of roomType.rateplans ?? []) {
+                  for (const unit of rateplan.assignable_units ?? []) {
                     if (unit.Is_Fully_Available) {
                       unitMap.set(unit.pr_id, unit.name);
                     }
