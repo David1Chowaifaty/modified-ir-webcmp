@@ -45,7 +45,7 @@
   border-color: #4f6bed;
   box-shadow: 0 0 0 4px rgba(79, 107, 237, 0.15);
 }
-
+.dropzone:hover,
 .dropzone.is-dragging {
   border-color: #4f6bed;
   background: #eef1ff;

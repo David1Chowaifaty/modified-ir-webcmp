@@ -215,9 +215,9 @@ export class IrImageUpload {
           )}
           <div
             class={{
-              dropzone: true,
+              'dropzone': true,
               'is-dragging': this.isDragOver,
-              disabled: this.disabled,
+              'disabled': this.disabled,
             }}
             role="button"
             tabindex={this.disabled ? -1 : 0}
@@ -249,12 +249,23 @@ export class IrImageUpload {
             onDrop={this.handleDrop}
           >
             <div class="dropzone-content">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="dropzone-icon">
-                <path
-                  d="M12 5a1 1 0 0 1 1 1v4h3l-4 5-4-5h3V6a1 1 0 0 1 1-1zm-7 9a3 3 0 0 1 3-3h1.09l1.2 1.5H8a1 1 0 0 0-1 1v4h10v-4a1 1 0 0 0-1-1h-2.3L14.91 11H16a3 3 0 0 1 3 3v5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-5z"
-                  fill="currentColor"
-                ></path>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="dropzone-icon"
+              >
+                <path d="M12 13v8" />
+                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+                <path d="m8 17 4-4 4 4" />
               </svg>
+
               <p class="dropzone-title">Click to upload or drag and drop</p>
               <p class="dropzone-subtitle">{this.helperText || `PNG, JPG, GIF, WEBP up to ${maxSizeText}`}</p>
               {this.footerText && <p class="dropzone-footer">{this.footerText}</p>}
