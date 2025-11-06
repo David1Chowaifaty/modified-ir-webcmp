@@ -177,20 +177,20 @@ export class IrMpoManagement {
             `}
           </style>
           <header class="page-header">
-            <div>
-              <h1>Company Profile</h1>
-              <p>Manage your company information and settings</p>
+            <div class={'d-flex align-items-center justify-content-between'}>
+              <h1>MPO Details</h1>
+              <ir-button btn_color="outline" text="Add affiliate" size="sm"></ir-button>
             </div>
           </header>
 
-          <section class="panel">
-            <div class="panel-header">
+          <section class="mpo-management__panel">
+            <div class="mpo-management__panel-header">
               <div>
-                <h2 class="panel-title">Company Information</h2>
-                <p class="panel-subtitle">Basic information about your company</p>
+                <h2 class="mpo-management__panel-title">Company Information</h2>
+                <p class="mpo-management__panel-subtitle">Basic information about your company</p>
               </div>
             </div>
-            <div class="panel-body">
+            <div class="mpo-management__panel-body">
               <div class="form-grid two">
                 <div class="input-with-hint">
                   <ir-input-text
@@ -241,14 +241,14 @@ export class IrMpoManagement {
             </div>
           </section>
 
-          <section class="panel">
-            <div class="panel-header">
+          <section class="mpo-management__panel">
+            <div class="mpo-management__panel-header">
               <div>
-                <h2 class="panel-title">Location Details</h2>
-                <p class="panel-subtitle">Where your company is located</p>
+                <h2 class="mpo-management__panel-title">Location Details</h2>
+                <p class="mpo-management__panel-subtitle">Where your company is located</p>
               </div>
             </div>
-            <div class="panel-body">
+            <div class="mpo-management__panel-body">
               <div class="form-grid three">
                 <div class="input-with-hint">
                   <ir-select
@@ -281,29 +281,29 @@ export class IrMpoManagement {
                     onSelectChange={event => this.updateTextField('billingCurrency', event.detail)}
                   ></ir-select>
                 </div>
-              </div>
-              <div class="input-with-hint">
-                <ir-input-text
-                  label="Address"
-                  required
-                  variant="floating-label"
-                  value={this.form.address}
-                  submitted={this.submitted}
-                  zod={mpoManagementSchema.shape.address}
-                  onTextChange={event => this.updateTextField('address', event.detail)}
-                ></ir-input-text>
+                <div class="input-with-hint">
+                  <ir-input-text
+                    label="Address"
+                    required
+                    variant="floating-label"
+                    value={this.form.address}
+                    submitted={this.submitted}
+                    zod={mpoManagementSchema.shape.address}
+                    onTextChange={event => this.updateTextField('address', event.detail)}
+                  ></ir-input-text>
+                </div>
               </div>
             </div>
           </section>
 
-          <section class="panel">
-            <div class="panel-header">
+          <section class="mpo-management__panel">
+            <div class="mpo-management__panel-header">
               <div>
-                <h2 class="panel-title">Contact Information</h2>
-                <p class="panel-subtitle">Primary contact details for your company</p>
+                <h2 class="mpo-management__panel-title">Contact Information</h2>
+                <p class="mpo-management__panel-subtitle">Primary contact details for your company</p>
               </div>
             </div>
-            <div class="panel-body">
+            <div class="mpo-management__panel-body">
               <div class="form-grid two">
                 <div class="input-with-hint">
                   <ir-input-text
@@ -360,12 +360,12 @@ export class IrMpoManagement {
             </div>
           </section>
 
-          <section class="panel">
-            <div class="panel-header">
+          <section class="mpo-management__panel">
+            <div class="mpo-management__panel-header">
               <div class="header-with-switch">
                 <div>
-                  <h2 class="panel-title">White Labeling</h2>
-                  <p class="panel-subtitle">Customize your brand appearance and identity</p>
+                  <h2 class="mpo-management__panel-title">White Labeling</h2>
+                  <p class="mpo-management__panel-subtitle">Customize your brand appearance and identity</p>
                 </div>
                 <div class="toggle-wrapper">
                   <ir-checkbox
@@ -377,7 +377,7 @@ export class IrMpoManagement {
                 </div>
               </div>
             </div>
-            <div class={{ 'panel-body': true, 'disabled': disableWhiteLabelFields }}>
+            <div class={{ 'mpo-management__panel-body': true, 'disabled': disableWhiteLabelFields }}>
               <div class="form-grid two">
                 {whiteLabelFieldMeta.map(field => (
                   <div class="input-with-hint" key={field.key}>
