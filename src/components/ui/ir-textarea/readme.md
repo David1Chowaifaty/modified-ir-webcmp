@@ -37,6 +37,7 @@
  - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
  - [ir-guest-info](../../ir-guest-info)
  - [ir-hk-user](../../ir-housekeeping/ir-hk-user)
+ - [ir-mpo-management](../../ir-mpo-management)
 
 ### Graph
 ```mermaid
@@ -44,6 +45,7 @@ graph TD;
   ir-booking-extra-note --> ir-textarea
   ir-guest-info --> ir-textarea
   ir-hk-user --> ir-textarea
+  ir-mpo-management --> ir-textarea
   style ir-textarea fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

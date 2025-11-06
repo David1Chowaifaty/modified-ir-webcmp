@@ -24,159 +24,12 @@
 
 <body>
     <ir-common></ir-common>
-    <style>
-        .banner {
-            background-color: red;
-        }
 
-        /* Main navigation wrapper */
-        .main-nav {
-            width: 100%;
-            background-color: #fff;
-            border-bottom: 1px solid #e5e7eb;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            flex-direction: row-reverse;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        /* Inner flex container */
-        .nav-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-
-        }
-
-        /* Search input */
-        .nav-search {
-            flex: 1;
-            max-width: 250px;
-            padding: 0.4rem 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-            transition: border-color 0.2s ease;
-        }
-
-        .nav-search:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-
-        /* Logo */
-        .admin-logo {
-            height: 40px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        /* Greeting or right-aligned element */
-        .nav-greeting {
-            font-size: 0.9rem;
-            color: #333;
-        }
-
-        /* Account menu wrapper */
-        .account-menu {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        /* The visible trigger (e.g. user initials) */
-        .account-menu__trigger {
-            background-color: #007bff;
-            color: #fff;
-            font-weight: 600;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-transform: uppercase;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            user-select: none;
-        }
-
-        /* The dropdown panel */
-        .account-menu__dropdown {
-            position: absolute;
-            top: 110%;
-            right: 0;
-            background-color: #fff;
-            border-radius: 0.25rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.175);
-            padding: 0.5rem 0;
-            min-width: 160px;
-            display: none;
-            flex-direction: column;
-            z-index: 10;
-        }
-
-        /* Menu items */
-        .account-menu__item {
-            display: block;
-            padding: 0.5rem 1rem;
-            text-align: left;
-            background: none;
-            border: none;
-            width: 100%;
-            font-size: 0.875rem;
-            color: #333;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .account-menu__item:hover {
-            background-color: #f2f4f7;
-        }
-
-        /* Logout item modifier */
-        .account-menu__logout {
-            color: #e63946;
-        }
-
-        /* Show dropdown on hover */
-        .account-menu:hover .account-menu__dropdown {
-            display: flex;
-        }
-
-        /* Responsive alignment */
-        @media (max-width: 768px) {
-            .account-menu {
-                justify-content: flex-end;
-            }
-        }
-
-        /* Responsive behavior */
-        @media (max-width: 768px) {
-
-
-            .admin-logo {
-                height: 32px;
-                margin: 0.5rem 0;
-            }
-
-            .nav-search {
-                max-width: 100%;
-            }
-        }
-    </style>
-    <div class="banner">
+    <!-- <div class="banner">
         Please use something else
-    </div>
+    </div> -->
     <nav class="main-nav">
-        <div class="nav-container">
+        <!-- <div class="nav-container">
             <input class="nav-search" placeholder="hello world" />
             <img alt="modern admin logo" class="admin-logo"
                 src="https://x.igloorooms.com/app-assets/images/logo/logo-dark.png" />
@@ -188,7 +41,7 @@
                     <button class="account-menu__item account-menu__logout">Logout</button>
                 </div>
             </div>
-        </div>
+        </div> -->
         <ir-menu-bar id="main-ac-menu-navigation">
             <input class="d-md-none" placeholder="hello" />
             <ir-menu-bar-menu id="Li_AcDashboard">
@@ -249,8 +102,8 @@
                         <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
                         <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
                     </svg>Marketing</button>
-                <ir-menu-bar-item new href="acpromodiscounts.aspx">Discounts</ir-menu-bar-item>
-                <ir-menu-bar-item new id="Li_AutomatedEmails" href="acautomatedemails.aspx">Automated
+                <ir-menu-bar-item href="acpromodiscounts.aspx">Discounts</ir-menu-bar-item>
+                <ir-menu-bar-item id="Li_AutomatedEmails" href="acautomatedemails.aspx">Automated
                     Emails</ir-menu-bar-item>
                 <ir-menu-bar-item id="Li_DynamicPricing" href="#">Dynamic Pricing</ir-menu-bar-item>
             </ir-menu-bar-menu>
@@ -284,7 +137,7 @@
                         <path d="M8 7h.01" />
                         <rect x="4" y="2" width="16" height="20" rx="2" />
                     </svg>Settings</button>
-                <ir-menu-bar-item new href="acgeneral.aspx">General Info</ir-menu-bar-item>
+                <ir-menu-bar-item href="acgeneral.aspx">General Info</ir-menu-bar-item>
                 <ir-menu-bar-item href="acamenities.aspx">Facilities & Services</ir-menu-bar-item>
                 <ir-menu-bar-item id="Li_AcDesc" href="acdescriptions.aspx">Descriptions</ir-menu-bar-item>
                 <ir-menu-bar-item href="acconcan.aspx">Policies</ir-menu-bar-item>
@@ -334,8 +187,8 @@
             });
         </script>
     </nav>
+    <ir-mpo-management></ir-mpo-management>
 
-    <div style="height: 200vh;"></div>
 
 </body>
 

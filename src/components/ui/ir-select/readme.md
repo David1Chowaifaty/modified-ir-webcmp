@@ -61,6 +61,7 @@
  - [igl-book-property-header](../../igloo-calendar/igl-book-property/igl-book-property-header)
  - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
  - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
+ - [igl-property-booked-by](../../igloo-calendar/igl-book-property/igl-booking-form/igl-property-booked-by)
  - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
  - [igl-split-booking](../../igloo-calendar/igl-split-booking)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
@@ -73,6 +74,7 @@
  - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../../ir-booking-listing/ir-listing-modal)
  - [ir-monthly-bookings-report-filter](../../ir-monthly-bookings-report/ir-monthly-bookings-report-filter)
+ - [ir-mpo-management](../../ir-mpo-management)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-pagination](../../ir-pagination)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
@@ -91,6 +93,7 @@ graph TD;
   igl-book-property-header --> ir-select
   igl-bulk-block --> ir-select
   igl-bulk-stop-sale --> ir-select
+  igl-property-booked-by --> ir-select
   igl-reallocation-dialog --> ir-select
   igl-split-booking --> ir-select
   ir-booking-header --> ir-select
@@ -103,6 +106,7 @@ graph TD;
   ir-listing-header --> ir-select
   ir-listing-modal --> ir-select
   ir-monthly-bookings-report-filter --> ir-select
+  ir-mpo-management --> ir-select
   ir-option-details --> ir-select
   ir-pagination --> ir-select
   ir-pickup --> ir-select

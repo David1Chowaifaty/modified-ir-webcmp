@@ -32,6 +32,7 @@ import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeep
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
+import { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { PaymentEntries } from "./components/ir-booking-details/types";
@@ -78,6 +79,7 @@ export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeep
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
+export { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { PaymentEntries } from "./components/ir-booking-details/types";
@@ -1038,6 +1040,52 @@ export namespace Components {
          */
         "svgClassName": string;
     }
+    interface IrImageUpload {
+        /**
+          * Comma separated list of accepted mime types or file extensions. Defaults to the most common image formats.
+         */
+        "accept": string;
+        /**
+          * Clears all selected files.
+         */
+        "clear": () => Promise<void>;
+        /**
+          * Disables user interaction when true.
+         */
+        "disabled": boolean;
+        /**
+          * Optional label describing an existing uploaded resource.
+         */
+        "existingValueLabel": string;
+        /**
+          * Extra message shown below the helper text (useful for accepted formats, size limits, etc.).
+         */
+        "footerText": string;
+        /**
+          * Helper text rendered beneath the dropzone.
+         */
+        "helperText": string;
+        /**
+          * Accessible label displayed above the dropzone.
+         */
+        "label": string;
+        /**
+          * Max file size in bytes. Default is 10MB.
+         */
+        "maxFileSize": number;
+        /**
+          * Maximum number of files allowed.
+         */
+        "maxFiles": number;
+        /**
+          * When true, clears previously selected files whenever new files are chosen.
+         */
+        "replaceOnSelect": boolean;
+        /**
+          * Optional pre-selected files.
+         */
+        "value": File[];
+    }
     interface IrInputText {
         /**
           * A Zod parse type for validating the input
@@ -1465,6 +1513,8 @@ export namespace Components {
     }
     interface IrMonthlyBookingsReportTable {
         "reports": DailyReport[];
+    }
+    interface IrMpoManagement {
     }
     interface IrNewBadge {
     }
@@ -2606,6 +2656,10 @@ export interface IrHousekeepingCustomEvent<T> extends CustomEvent<T> {
 export interface IrIconCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrIconElement;
+}
+export interface IrImageUploadCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrImageUploadElement;
 }
 export interface IrInputTextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4050,6 +4104,24 @@ declare global {
         prototype: HTMLIrIconsElement;
         new (): HTMLIrIconsElement;
     };
+    interface HTMLIrImageUploadElementEventMap {
+        "filesSelected": File[];
+        "fileRejected": { fileName: string; reason: FileRejectReason };
+    }
+    interface HTMLIrImageUploadElement extends Components.IrImageUpload, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrImageUploadElementEventMap>(type: K, listener: (this: HTMLIrImageUploadElement, ev: IrImageUploadCustomEvent<HTMLIrImageUploadElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrImageUploadElementEventMap>(type: K, listener: (this: HTMLIrImageUploadElement, ev: IrImageUploadCustomEvent<HTMLIrImageUploadElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrImageUploadElement: {
+        prototype: HTMLIrImageUploadElement;
+        new (): HTMLIrImageUploadElement;
+    };
     interface HTMLIrInputTextElementEventMap {
         "textChange": any;
         "inputBlur": FocusEvent;
@@ -4289,6 +4361,12 @@ declare global {
     var HTMLIrMonthlyBookingsReportTableElement: {
         prototype: HTMLIrMonthlyBookingsReportTableElement;
         new (): HTMLIrMonthlyBookingsReportTableElement;
+    };
+    interface HTMLIrMpoManagementElement extends Components.IrMpoManagement, HTMLStencilElement {
+    }
+    var HTMLIrMpoManagementElement: {
+        prototype: HTMLIrMpoManagementElement;
+        new (): HTMLIrMpoManagementElement;
     };
     interface HTMLIrNewBadgeElement extends Components.IrNewBadge, HTMLStencilElement {
     }
@@ -5277,6 +5355,7 @@ declare global {
         "ir-housekeeping": HTMLIrHousekeepingElement;
         "ir-icon": HTMLIrIconElement;
         "ir-icons": HTMLIrIconsElement;
+        "ir-image-upload": HTMLIrImageUploadElement;
         "ir-input-text": HTMLIrInputTextElement;
         "ir-interactive-title": HTMLIrInteractiveTitleElement;
         "ir-interceptor": HTMLIrInterceptorElement;
@@ -5295,6 +5374,7 @@ declare global {
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
         "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
         "ir-monthly-bookings-report-table": HTMLIrMonthlyBookingsReportTableElement;
+        "ir-mpo-management": HTMLIrMpoManagementElement;
         "ir-new-badge": HTMLIrNewBadgeElement;
         "ir-notifications": HTMLIrNotificationsElement;
         "ir-option-details": HTMLIrOptionDetailsElement;
@@ -6478,6 +6558,56 @@ declare namespace LocalJSX {
          */
         "svgClassName"?: string;
     }
+    interface IrImageUpload {
+        /**
+          * Comma separated list of accepted mime types or file extensions. Defaults to the most common image formats.
+         */
+        "accept"?: string;
+        /**
+          * Disables user interaction when true.
+         */
+        "disabled"?: boolean;
+        /**
+          * Optional label describing an existing uploaded resource.
+         */
+        "existingValueLabel"?: string;
+        /**
+          * Extra message shown below the helper text (useful for accepted formats, size limits, etc.).
+         */
+        "footerText"?: string;
+        /**
+          * Helper text rendered beneath the dropzone.
+         */
+        "helperText"?: string;
+        /**
+          * Accessible label displayed above the dropzone.
+         */
+        "label"?: string;
+        /**
+          * Max file size in bytes. Default is 10MB.
+         */
+        "maxFileSize"?: number;
+        /**
+          * Maximum number of files allowed.
+         */
+        "maxFiles"?: number;
+        /**
+          * Fired when a file is rejected due to type, size, or exceeding the limit.
+         */
+        "onFileRejected"?: (event: IrImageUploadCustomEvent<{ fileName: string; reason: FileRejectReason }>) => void;
+        /**
+          * Fired whenever the list of selected files changes.
+         */
+        "onFilesSelected"?: (event: IrImageUploadCustomEvent<File[]>) => void;
+        /**
+          * When true, clears previously selected files whenever new files are chosen.
+         */
+        "replaceOnSelect"?: boolean;
+        /**
+          * Optional pre-selected files.
+         */
+        "value"?: File[];
+    }
     interface IrInputText {
         /**
           * A Zod parse type for validating the input
@@ -6943,6 +7073,8 @@ declare namespace LocalJSX {
     }
     interface IrMonthlyBookingsReportTable {
         "reports"?: DailyReport[];
+    }
+    interface IrMpoManagement {
     }
     interface IrNewBadge {
     }
@@ -8053,6 +8185,7 @@ declare namespace LocalJSX {
         "ir-housekeeping": IrHousekeeping;
         "ir-icon": IrIcon;
         "ir-icons": IrIcons;
+        "ir-image-upload": IrImageUpload;
         "ir-input-text": IrInputText;
         "ir-interactive-title": IrInteractiveTitle;
         "ir-interceptor": IrInterceptor;
@@ -8071,6 +8204,7 @@ declare namespace LocalJSX {
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
         "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
         "ir-monthly-bookings-report-table": IrMonthlyBookingsReportTable;
+        "ir-mpo-management": IrMpoManagement;
         "ir-new-badge": IrNewBadge;
         "ir-notifications": IrNotifications;
         "ir-option-details": IrOptionDetails;
@@ -8226,6 +8360,7 @@ declare module "@stencil/core" {
             "ir-housekeeping": LocalJSX.IrHousekeeping & JSXBase.HTMLAttributes<HTMLIrHousekeepingElement>;
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-icons": LocalJSX.IrIcons & JSXBase.HTMLAttributes<HTMLIrIconsElement>;
+            "ir-image-upload": LocalJSX.IrImageUpload & JSXBase.HTMLAttributes<HTMLIrImageUploadElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
             "ir-interactive-title": LocalJSX.IrInteractiveTitle & JSXBase.HTMLAttributes<HTMLIrInteractiveTitleElement>;
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;
@@ -8244,6 +8379,7 @@ declare module "@stencil/core" {
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
             "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;
             "ir-monthly-bookings-report-table": LocalJSX.IrMonthlyBookingsReportTable & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportTableElement>;
+            "ir-mpo-management": LocalJSX.IrMpoManagement & JSXBase.HTMLAttributes<HTMLIrMpoManagementElement>;
             "ir-new-badge": LocalJSX.IrNewBadge & JSXBase.HTMLAttributes<HTMLIrNewBadgeElement>;
             "ir-notifications": LocalJSX.IrNotifications & JSXBase.HTMLAttributes<HTMLIrNotificationsElement>;
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;

@@ -110,6 +110,7 @@
  - [ir-hk-user](../../ir-housekeeping/ir-hk-user)
  - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-login](../../ir-login)
+ - [ir-mpo-management](../../ir-mpo-management)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
@@ -129,6 +130,7 @@ graph TD;
   ir-hk-user --> ir-input-text
   ir-listing-header --> ir-input-text
   ir-login --> ir-input-text
+  ir-mpo-management --> ir-input-text
   ir-option-details --> ir-input-text
   ir-payment-folio --> ir-input-text
   ir-pickup --> ir-input-text

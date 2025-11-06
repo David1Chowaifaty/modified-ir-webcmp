@@ -172,6 +172,7 @@ graph TD;
   igl-property-booked-by --> ir-tooltip
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
+  igl-property-booked-by --> ir-select
   igl-book-property-footer --> ir-button
   ir-hk-tasks --> ir-hk-archive
   style ir-hk-archive fill:#f9f,stroke:#333,stroke-width:4px
