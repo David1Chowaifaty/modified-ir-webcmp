@@ -207,7 +207,7 @@ export class IrMenuBar {
 
     return (
       <Host role="menubar" class={hostClass}>
-        <nav class="menu-bar" part="container">
+        <div class="menu-bar" part="container">
           {this.isMobileLayout && (
             <button
               class="menu-toggle"
@@ -296,7 +296,7 @@ export class IrMenuBar {
               <slot></slot>
             </div>
           )}
-        </nav>
+        </div>
       </Host>
     );
   }
