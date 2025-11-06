@@ -1086,6 +1086,36 @@ export namespace Components {
          */
         "value": File[];
     }
+    interface IrInput {
+        /**
+          * If true, displays a clear (X) button when the input has a value.
+         */
+        "clearable": boolean;
+        /**
+          * The label text displayed alongside or above the input.
+         */
+        "label": string;
+        /**
+          * Controls where the label is positioned: 'default', 'side', or 'floating'.
+         */
+        "labelPosition": 'default' | 'side' | 'floating';
+        /**
+          * Placeholder text displayed inside the input when empty.
+         */
+        "placeholder": string;
+        /**
+          * Hides the prefix slot content from assistive technologies when true.
+         */
+        "prefixHidden": boolean;
+        /**
+          * Hides the suffix slot content from assistive technologies when true.
+         */
+        "suffixHidden": boolean;
+        /**
+          * Type of input element — can be 'text', 'password', 'email', or 'number'.
+         */
+        "type": 'text' | 'password' | 'email' | 'number';
+    }
     interface IrInputText {
         /**
           * A Zod parse type for validating the input
@@ -2661,6 +2691,10 @@ export interface IrImageUploadCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrImageUploadElement;
 }
+export interface IrInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrInputElement;
+}
 export interface IrInputTextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrInputTextElement;
@@ -4122,6 +4156,26 @@ declare global {
         prototype: HTMLIrImageUploadElement;
         new (): HTMLIrImageUploadElement;
     };
+    interface HTMLIrInputElementEventMap {
+        "input-change": { value: string };
+        "cleared": void;
+        "input-focus": FocusEvent;
+        "input-blur": FocusEvent;
+    }
+    interface HTMLIrInputElement extends Components.IrInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrInputElementEventMap>(type: K, listener: (this: HTMLIrInputElement, ev: IrInputCustomEvent<HTMLIrInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrInputElementEventMap>(type: K, listener: (this: HTMLIrInputElement, ev: IrInputCustomEvent<HTMLIrInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrInputElement: {
+        prototype: HTMLIrInputElement;
+        new (): HTMLIrInputElement;
+    };
     interface HTMLIrInputTextElementEventMap {
         "textChange": any;
         "inputBlur": FocusEvent;
@@ -5356,6 +5410,7 @@ declare global {
         "ir-icon": HTMLIrIconElement;
         "ir-icons": HTMLIrIconsElement;
         "ir-image-upload": HTMLIrImageUploadElement;
+        "ir-input": HTMLIrInputElement;
         "ir-input-text": HTMLIrInputTextElement;
         "ir-interactive-title": HTMLIrInteractiveTitleElement;
         "ir-interceptor": HTMLIrInterceptorElement;
@@ -6607,6 +6662,52 @@ declare namespace LocalJSX {
           * Optional pre-selected files.
          */
         "value"?: File[];
+    }
+    interface IrInput {
+        /**
+          * If true, displays a clear (X) button when the input has a value.
+         */
+        "clearable"?: boolean;
+        /**
+          * The label text displayed alongside or above the input.
+         */
+        "label"?: string;
+        /**
+          * Controls where the label is positioned: 'default', 'side', or 'floating'.
+         */
+        "labelPosition"?: 'default' | 'side' | 'floating';
+        /**
+          * Fired only when the clear button is pressed.
+         */
+        "onCleared"?: (event: IrInputCustomEvent<void>) => void;
+        /**
+          * Fired only when the input is blurred.
+         */
+        "onInput-blur"?: (event: IrInputCustomEvent<FocusEvent>) => void;
+        /**
+          * Fired on any value change (typing, programmatic set, or clear).
+         */
+        "onInput-change"?: (event: IrInputCustomEvent<{ value: string }>) => void;
+        /**
+          * Fired only when the input is focused.
+         */
+        "onInput-focus"?: (event: IrInputCustomEvent<FocusEvent>) => void;
+        /**
+          * Placeholder text displayed inside the input when empty.
+         */
+        "placeholder"?: string;
+        /**
+          * Hides the prefix slot content from assistive technologies when true.
+         */
+        "prefixHidden"?: boolean;
+        /**
+          * Hides the suffix slot content from assistive technologies when true.
+         */
+        "suffixHidden"?: boolean;
+        /**
+          * Type of input element — can be 'text', 'password', 'email', or 'number'.
+         */
+        "type"?: 'text' | 'password' | 'email' | 'number';
     }
     interface IrInputText {
         /**
@@ -8186,6 +8287,7 @@ declare namespace LocalJSX {
         "ir-icon": IrIcon;
         "ir-icons": IrIcons;
         "ir-image-upload": IrImageUpload;
+        "ir-input": IrInput;
         "ir-input-text": IrInputText;
         "ir-interactive-title": IrInteractiveTitle;
         "ir-interceptor": IrInterceptor;
@@ -8361,6 +8463,7 @@ declare module "@stencil/core" {
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-icons": LocalJSX.IrIcons & JSXBase.HTMLAttributes<HTMLIrIconsElement>;
             "ir-image-upload": LocalJSX.IrImageUpload & JSXBase.HTMLAttributes<HTMLIrImageUploadElement>;
+            "ir-input": LocalJSX.IrInput & JSXBase.HTMLAttributes<HTMLIrInputElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
             "ir-interactive-title": LocalJSX.IrInteractiveTitle & JSXBase.HTMLAttributes<HTMLIrInteractiveTitleElement>;
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;
