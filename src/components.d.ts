@@ -33,6 +33,7 @@ import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
 import { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
+import { MaskProp } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
 import { ZodType } from "zod";
 import { PaymentEntries } from "./components/ir-booking-details/types";
@@ -80,6 +81,7 @@ export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
 export { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
+export { MaskProp } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
 export { ZodType } from "zod";
 export { PaymentEntries } from "./components/ir-booking-details/types";
@@ -1091,6 +1093,7 @@ export namespace Components {
           * If true, displays a clear (X) button when the input has a value.
          */
         "clearable": boolean;
+        "disabled": boolean;
         /**
           * The label text displayed alongside or above the input.
          */
@@ -1100,6 +1103,18 @@ export namespace Components {
          */
         "labelPosition": 'default' | 'side' | 'floating';
         /**
+          * Mask for the input field (optional)
+         */
+        "mask": MaskProp;
+        /**
+          * Maximum allowed value (for number or masked inputs).
+         */
+        "max": number;
+        /**
+          * Minimum allowed value (for number or masked inputs).
+         */
+        "min": number;
+        /**
           * Placeholder text displayed inside the input when empty.
          */
         "placeholder": string;
@@ -1107,6 +1122,7 @@ export namespace Components {
           * Hides the prefix slot content from assistive technologies when true.
          */
         "prefixHidden": boolean;
+        "readonly": boolean;
         /**
           * Hides the suffix slot content from assistive technologies when true.
          */
@@ -1115,6 +1131,10 @@ export namespace Components {
           * Type of input element — can be 'text', 'password', 'email', or 'number'.
          */
         "type": 'text' | 'password' | 'email' | 'number';
+        /**
+          * The value of the input.
+         */
+        "value": string;
     }
     interface IrInputText {
         /**
@@ -6668,6 +6688,7 @@ declare namespace LocalJSX {
           * If true, displays a clear (X) button when the input has a value.
          */
         "clearable"?: boolean;
+        "disabled"?: boolean;
         /**
           * The label text displayed alongside or above the input.
          */
@@ -6676,6 +6697,18 @@ declare namespace LocalJSX {
           * Controls where the label is positioned: 'default', 'side', or 'floating'.
          */
         "labelPosition"?: 'default' | 'side' | 'floating';
+        /**
+          * Mask for the input field (optional)
+         */
+        "mask"?: MaskProp;
+        /**
+          * Maximum allowed value (for number or masked inputs).
+         */
+        "max"?: number;
+        /**
+          * Minimum allowed value (for number or masked inputs).
+         */
+        "min"?: number;
         /**
           * Fired only when the clear button is pressed.
          */
@@ -6700,6 +6733,7 @@ declare namespace LocalJSX {
           * Hides the prefix slot content from assistive technologies when true.
          */
         "prefixHidden"?: boolean;
+        "readonly"?: boolean;
         /**
           * Hides the suffix slot content from assistive technologies when true.
          */
@@ -6708,6 +6742,10 @@ declare namespace LocalJSX {
           * Type of input element — can be 'text', 'password', 'email', or 'number'.
          */
         "type"?: 'text' | 'password' | 'email' | 'number';
+        /**
+          * The value of the input.
+         */
+        "value"?: string;
     }
     interface IrInputText {
         /**

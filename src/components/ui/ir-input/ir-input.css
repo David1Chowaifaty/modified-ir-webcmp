@@ -15,7 +15,7 @@
   --ir-input-border: 1px solid gainsboro;
 
   /** @prop --ir-input-border-focus: Border color when the input is focused. */
-  --ir-input-border-focus: blue;
+  --ir-input-border-focus: #1e9ff2;
 
   /** @prop --ir-input-bg: Background color of the input field. */
   --ir-input-bg: #fff;
@@ -85,6 +85,17 @@
 
   transition: border-color var(--ir-floating-transition), box-shadow var(--ir-floating-transition);
 }
+
+.input-field:read-only {
+  cursor: default;
+}
+
+.input-field:disabled {
+  --ir-input-bg: #9aa1ac;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .input-wrapper {
   position: relative;
   flex: 1 1 0%;

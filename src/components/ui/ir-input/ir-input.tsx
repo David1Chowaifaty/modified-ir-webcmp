@@ -1,6 +1,11 @@
-import { Component, Element, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { v4 } from 'uuid';
+import { masks } from './masks';
+import IMask, { FactoryArg, InputMask } from 'imask';
 
+export type MaskName = keyof typeof masks;
+export type MaskConfig<N extends MaskName = MaskName> = (typeof masks)[N];
+export type MaskProp = MaskName | MaskConfig | FactoryArg;
 @Component({
   tag: 'ir-input',
   styleUrl: 'ir-input.css',
@@ -15,6 +20,12 @@ export class IrInput {
   /** The label text displayed alongside or above the input. */
   @Prop() label: string;
 
+  /** The value of the input. */
+  @Prop({ reflect: true, mutable: true }) value: string = '';
+
+  @Prop({ reflect: true }) disabled: boolean;
+  @Prop({ reflect: true }) readonly: boolean;
+
   /** Type of input element — can be 'text', 'password', 'email', or 'number'. */
   @Prop({ reflect: true }) type: 'text' | 'password' | 'email' | 'number' = 'text';
 
@@ -25,13 +36,21 @@ export class IrInput {
   @Prop({ reflect: true }) clearable: boolean;
 
   /** Hides the prefix slot content from assistive technologies when true. */
-  @Prop({ reflect: true, attribute: 'prefix-hidden' }) prefixHidden = true;
+  @Prop({ attribute: 'prefix-hidden' }) prefixHidden = true;
 
   /** Hides the suffix slot content from assistive technologies when true. */
-  @Prop({ reflect: true, attribute: 'suffix-hidden' }) suffixHidden = true;
+  @Prop({ attribute: 'suffix-hidden' }) suffixHidden = true;
+
+  /** Maximum allowed value (for number or masked inputs). */
+  @Prop({ reflect: true, attribute: 'max' }) max: number;
+
+  /** Minimum allowed value (for number or masked inputs). */
+  @Prop({ reflect: true, attribute: 'min' }) min: number;
+
+  /** Mask for the input field (optional) */
+  @Prop() mask: MaskProp;
 
   @State() _type: string;
-  @State() value: string;
   @State() inputFocused: boolean;
 
   /** Fired on any value change (typing, programmatic set, or clear). */
@@ -46,6 +65,8 @@ export class IrInput {
   private id: string;
   private prefixSlotEl!: HTMLSlotElement;
   private resizeObs?: ResizeObserver;
+  private _mask?: InputMask<any>;
+  private inputRef: HTMLInputElement;
 
   // ─────────────────────────────────────────────────────────────
   // Lifecycle
@@ -53,10 +74,17 @@ export class IrInput {
   componentWillLoad() {
     this.id = this.el.id || `input-${v4()}`;
     this._type = this.type;
+    const form = this.el.closest('form');
+    console.log(form);
+    if (form) {
+      form.addEventListener('reset', this.handleFormReset);
+    }
   }
 
   componentDidLoad() {
+    // Find the closest form element (if any)
     // track slotted prefix to compute width
+    this.initializeMask();
     this.prefixSlotEl = this.el.shadowRoot!.querySelector('slot[name="prefix"]') as HTMLSlotElement;
     if (this.prefixSlotEl) {
       this.prefixSlotEl.addEventListener('slotchange', this.handlePrefixSlotChange);
@@ -75,24 +103,101 @@ export class IrInput {
   disconnectedCallback() {
     this.prefixSlotEl?.removeEventListener('slotchange', this.handlePrefixSlotChange);
     this.resizeObs?.disconnect();
+    this.destroyMask();
+    const form = this.el.closest('form');
+    if (form) {
+      form.removeEventListener('reset', this.handleFormReset);
+    }
+  }
+
+  @Watch('mask')
+  @Watch('min')
+  @Watch('max')
+  protected handleMaskPropsChange() {
+    if (!this.inputRef) return;
+    const hasMask = Boolean(this.resolveMask());
+    if (!hasMask) {
+      this.destroyMask();
+      return;
+    }
+    this.rebuildMask();
   }
 
   // ─────────────────────────────────────────────────────────────
   // Methods (extracted handlers)
   // ─────────────────────────────────────────────────────────────
   private handleInput = (nextValue: string) => {
-    this.value = nextValue;
+    this.value = nextValue ?? '';
     this.inputChange.emit({ value: this.value });
+  };
+
+  private handleFormReset = () => {
+    this.clearValue();
   };
 
   private onInput = (e: Event) => {
     const next = (e.target as HTMLInputElement).value;
-    this.handleInput(next);
+    if (!this._mask) this.handleInput(next);
   };
+
+  private initializeMask() {
+    if (!this.inputRef) return;
+    const maskOpts = this.buildMaskOptions();
+    if (!maskOpts) return;
+
+    this._mask = IMask(this.inputRef, maskOpts);
+
+    if (this.value) {
+      this._mask.unmaskedValue = this.value;
+    }
+
+    this._mask.on('accept', () => {
+      if (!this._mask) return;
+      const isEmpty = this.inputRef.value.trim() === '' || this._mask.unmaskedValue === '';
+      this.handleInput(isEmpty ? '' : this._mask.unmaskedValue);
+    });
+  }
+
+  private rebuildMask() {
+    this.destroyMask();
+    this.initializeMask();
+  }
+
+  private destroyMask() {
+    this._mask?.destroy();
+    this._mask = undefined;
+  }
+
+  private buildMaskOptions() {
+    const resolvedMask = this.resolveMask();
+    if (!resolvedMask) return;
+
+    const maskOpts: Record<string, any> = typeof resolvedMask === 'object' && resolvedMask !== null && !Array.isArray(resolvedMask) ? { ...resolvedMask } : { mask: resolvedMask };
+
+    if (this.min !== undefined) {
+      maskOpts.min = this.min;
+    }
+    if (this.max !== undefined) {
+      maskOpts.max = this.max;
+    }
+
+    return maskOpts;
+  }
+
+  private resolveMask() {
+    if (!this.mask) return;
+    if (typeof this.mask === 'string') return masks[this.mask];
+    return this.mask;
+  }
 
   private clearValue = () => {
     // Per requirement: clear calls the same input-change method…
-    this.handleInput('');
+    if (this._mask) {
+      this._mask.value = '';
+    } else {
+      this.handleInput('');
+    }
+
     // …and also emits its own event only when the clear button is pressed
     this.cleared.emit();
   };
@@ -165,11 +270,14 @@ export class IrInput {
           </div>
 
           <input
+            disabled={this.disabled}
+            readonly={this.readonly}
             class="input-field"
             type={this._type}
+            ref={el => (this.inputRef = el)}
             id={this.id}
             placeholder={this.placeholder}
-            value={this.value}
+            value={this._mask ? this._mask.value : this.value}
             onFocus={this.handleInputFocus.bind(this)}
             onBlur={this.handleInputBlur.bind(this)}
             onInput={this.onInput}
