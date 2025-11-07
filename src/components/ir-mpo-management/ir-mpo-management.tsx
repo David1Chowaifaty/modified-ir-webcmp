@@ -168,195 +168,38 @@ export class IrMpoManagement {
     return (
       <Host>
         <form class="mpo-management-form" onSubmit={event => this.handleSubmit(event)}>
-          <style>
-            {`
-            ir-input-text .form-group{
-            margin-bottom:0 !important;}
-            ir-checkbox label{
-            margin-bottom:0 !important;}
-            `}
-          </style>
           <header class="page-header">
             <div class={'d-flex align-items-center justify-content-between'}>
               <h1>MPO Details</h1>
-              <ir-button btn_color="outline" text="Add affiliate" size="sm"></ir-button>
             </div>
           </header>
-
+          <ir-mpo-core-details></ir-mpo-core-details>
           <section class="mpo-management__panel">
-            <div class="mpo-management__panel-header">
-              <div>
-                <h2 class="mpo-management__panel-title">Company Information</h2>
-                <p class="mpo-management__panel-subtitle">Basic information about your company</p>
-              </div>
-            </div>
             <div class="mpo-management__panel-body">
-              <div class="form-grid two">
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="Company Name"
-                    required
-                    variant="floating-label"
-                    value={this.form.companyName}
-                    submitted={this.submitted}
-                    zod={mpoManagementSchema.shape.companyName}
-                    onTextChange={event => this.updateTextField('companyName', event.detail)}
-                  ></ir-input-text>
+              <div class="form-grid">
+                <div class="logo-upload">
+                  <ir-image-upload
+                    label="Company Logo"
+                    helperText={`PNG, JPG, GIF, SVG, WEBP up to ${Math.round(MAX_LOGO_FILE_SIZE / (1024 * 1024))}MB`}
+                    accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                    maxFileSize={MAX_LOGO_FILE_SIZE}
+                    value={logoValue}
+                    existingValueLabel={existingLogoLabel}
+                    onFilesSelected={event => this.updateCompanyLogo(event.detail)}
+                    onFileRejected={event => console.warn('Logo upload rejected', event.detail)}
+                  ></ir-image-upload>
                 </div>
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="Username"
-                    required
-                    readonly
-                    variant="floating-label"
-                    value={this.form.username}
-                    onTextChange={event => this.updateTextField('username', event.detail)}
-                  ></ir-input-text>
+                <div class="checkbox-card">
+                  <ir-checkbox
+                    style={{ gap: '0.5rem' }}
+                    label="Receive notifications via email"
+                    checked={this.form.receiveNotificationOnEmail}
+                    onCheckChange={event => this.toggleReceiveNotification(event.detail)}
+                  ></ir-checkbox>
+                  <p class="field-hint">Get updates about your account and important changes</p>
                 </div>
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="Password"
-                    required
-                    type="password"
-                    variant="floating-label"
-                    value={this.form.password}
-                    submitted={this.submitted}
-                    zod={mpoManagementSchema.shape.password}
-                    onTextChange={event => this.updateTextField('password', event.detail)}
-                  ></ir-input-text>
-                </div>
+                <ir-textarea label="Notes" rows={4} value={this.form.notes} onTextChange={event => this.updateTextField('notes', event.detail)}></ir-textarea>
               </div>
-              <div class="logo-upload">
-                <ir-image-upload
-                  label="Company Logo (170x30 png/jpg/svg recommended)"
-                  helperText={`PNG, JPG, GIF, SVG, WEBP up to ${Math.round(MAX_LOGO_FILE_SIZE / (1024 * 1024))}MB`}
-                  accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
-                  maxFileSize={MAX_LOGO_FILE_SIZE}
-                  value={logoValue}
-                  existingValueLabel={existingLogoLabel}
-                  onFilesSelected={event => this.updateCompanyLogo(event.detail)}
-                  onFileRejected={event => console.warn('Logo upload rejected', event.detail)}
-                ></ir-image-upload>
-              </div>
-            </div>
-          </section>
-
-          <section class="mpo-management__panel">
-            <div class="mpo-management__panel-header">
-              <div>
-                <h2 class="mpo-management__panel-title">Location Details</h2>
-                <p class="mpo-management__panel-subtitle">Where your company is located</p>
-              </div>
-            </div>
-            <div class="mpo-management__panel-body">
-              <div class="form-grid three">
-                <div class="input-with-hint">
-                  <ir-select
-                    label="Country"
-                    required
-                    floating-label
-                    data={countryOptions}
-                    selectedValue={this.form.country}
-                    onSelectChange={event => this.updateTextField('country', event.detail)}
-                  ></ir-select>
-                </div>
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="City"
-                    required
-                    variant="floating-label"
-                    value={this.form.city}
-                    submitted={this.submitted}
-                    zod={mpoManagementSchema.shape.city}
-                    onTextChange={event => this.updateTextField('city', event.detail)}
-                  ></ir-input-text>
-                </div>
-                <div class="input-with-hint">
-                  <ir-select
-                    label="Billing Currency"
-                    required
-                    floating-label
-                    data={currencyOptions}
-                    selectedValue={this.form.billingCurrency}
-                    onSelectChange={event => this.updateTextField('billingCurrency', event.detail)}
-                  ></ir-select>
-                </div>
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="Address"
-                    required
-                    variant="floating-label"
-                    value={this.form.address}
-                    submitted={this.submitted}
-                    zod={mpoManagementSchema.shape.address}
-                    onTextChange={event => this.updateTextField('address', event.detail)}
-                  ></ir-input-text>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="mpo-management__panel">
-            <div class="mpo-management__panel-header">
-              <div>
-                <h2 class="mpo-management__panel-title">Contact Information</h2>
-                <p class="mpo-management__panel-subtitle">Primary contact details for your company</p>
-              </div>
-            </div>
-            <div class="mpo-management__panel-body">
-              <div class="form-grid two">
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="Main Contact"
-                    required
-                    variant="floating-label"
-                    value={this.form.mainContact}
-                    onTextChange={event => this.updateTextField('mainContact', event.detail)}
-                  ></ir-input-text>
-                </div>
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="Phone"
-                    required
-                    variant="floating-label"
-                    value={this.form.phone}
-                    submitted={this.submitted}
-                    zod={mpoManagementSchema.shape.phone}
-                    onTextChange={event => this.updateTextField('phone', event.detail)}
-                  ></ir-input-text>
-                </div>
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="Email"
-                    required
-                    type="email"
-                    variant="floating-label"
-                    value={this.form.email}
-                    submitted={this.submitted}
-                    zod={mpoManagementSchema.shape.email}
-                    onTextChange={event => this.updateTextField('email', event.detail)}
-                  ></ir-input-text>
-                </div>
-                <div class="input-with-hint">
-                  <ir-input-text
-                    label="Notification Email"
-                    type="email"
-                    variant="floating-label"
-                    value={this.form.notificationEmail}
-                    onTextChange={event => this.updateTextField('notificationEmail', event.detail)}
-                  ></ir-input-text>
-                </div>
-              </div>
-              <div class="checkbox-card">
-                <ir-checkbox
-                  style={{ gap: '0.5rem' }}
-                  label="Receive notifications via email"
-                  checked={this.form.receiveNotificationOnEmail}
-                  onCheckChange={event => this.toggleReceiveNotification(event.detail)}
-                ></ir-checkbox>
-                <p class="field-hint">Get updates about your account and important changes</p>
-              </div>
-              <ir-textarea label="Notes" rows={4} value={this.form.notes} onTextChange={event => this.updateTextField('notes', event.detail)}></ir-textarea>
             </div>
           </section>
 

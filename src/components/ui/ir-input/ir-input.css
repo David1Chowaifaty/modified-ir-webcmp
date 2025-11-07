@@ -5,6 +5,9 @@
   /** @prop --ir-input-padding-block: Vertical padding inside the input field. */
   --ir-input-padding-block: 0.75rem;
 
+  /** @prop --ir-danger: Error color for borders and text. */
+  --ir-danger: #ff4961;
+
   /** @prop --ir-input-padding-inline: Horizontal padding inside the input field. */
   --ir-input-padding-inline: 1rem;
 
@@ -30,10 +33,10 @@
   --ir-label-color: #444;
 
   /** @prop --ir-label-floating-font-size: Font size of the label when floating above the input. */
-  --ir-label-floating-font-size: 0.75rem;
+  --ir-label-floating-font-size: 0.875rem;
 
   /** @prop --ir-label-floating-color: Label text color when active or floated. */
-  --ir-label-floating-color: blue;
+  --ir-label-floating-color: #1e9ff2;
 
   /** @prop --ir-floating-offset-block: Vertical distance from the top when the label floats. (No longer used for positioning, but can be kept for other purposes if needed) */
   --ir-floating-offset-block: 0.5rem;
@@ -57,7 +60,8 @@
   --ir-input-ring-width-focus: 3px;
 
   /** @prop --ir-input-ring-color-focus: Color of the focus ring. */
-  --ir-input-ring-color-focus: rgba(0, 0, 255, 0.25);
+  /* --ir-input-ring-color-focus: rgba(30, 159, 242, 0.25); */
+  --ir-input-ring-color-focus: transparent;
 
   display: flex;
   gap: var(--ir-gap);
@@ -68,7 +72,6 @@
   flex-direction: row;
   align-items: center;
 }
-
 .input-field {
   padding-block: var(--ir-input-padding-block);
   padding-inline: var(--ir-input-padding-inline);
@@ -82,16 +85,19 @@
   position: relative;
   flex: 1 1 0%;
   padding-inline-start: calc(var(--ir-input-padding-inline) + var(--ir-prefix-width, 0px));
-
+  height: 2.8rem;
   transition: border-color var(--ir-floating-transition), box-shadow var(--ir-floating-transition);
 }
 
+:host([aria-invalid='true']) .input-field {
+  border-color: var(--ir-danger);
+}
 .input-field:read-only {
   cursor: default;
 }
 
 .input-field:disabled {
-  --ir-input-bg: #9aa1ac;
+  /* --ir-input-bg: #9aa1ac; */
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -144,11 +150,14 @@
   inset-inline-start: var(--ir-floating-offset-inline);
   transform: translateY(-50%);
   font-size: var(--ir-label-floating-font-size);
-  color: var(--ir-label-floating-color);
 
   /* These two properties create the "border gap" */
   background: var(--ir-input-bg);
   padding-inline: 0.25rem;
+}
+/* When the input inside gains focus, color the floating label */
+:host([label-position='floating']):focus-within .input-label[data-active='true'] {
+  color: var(--ir-label-floating-color) !important;
 }
 
 :host([label-position='floating']) .input-label:dir(rtl) {

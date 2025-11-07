@@ -70,22 +70,6 @@
   margin-bottom: 0.875rem;
 }
 
-.mpo-management__panel-icon {
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 999px;
-  background: #eef2ff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent);
-}
-
-.mpo-management__panel-icon-svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
 .mpo-management__panel-title {
   margin: 0;
   font-size: 1.125rem;

@@ -35,10 +35,11 @@ import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-f
 import { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
 import { MaskProp } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
-import { ZodType } from "zod";
+import { ZodType, ZodTypeAny } from "zod";
 import { PaymentEntries } from "./components/ir-booking-details/types";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
+import { SelectOption } from "./components/ir-native-select/ir-native-select";
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
@@ -83,10 +84,11 @@ export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-f
 export { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
 export { MaskProp } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
-export { ZodType } from "zod";
+export { ZodType, ZodTypeAny } from "zod";
 export { PaymentEntries } from "./components/ir-booking-details/types";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
+export { SelectOption } from "./components/ir-native-select/ir-native-select";
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
@@ -1564,7 +1566,47 @@ export namespace Components {
     interface IrMonthlyBookingsReportTable {
         "reports": DailyReport[];
     }
+    interface IrMpoCoreDetails {
+    }
     interface IrMpoManagement {
+    }
+    interface IrNativeSelect {
+        /**
+          * Disables the select when true.
+         */
+        "disabled": boolean;
+        /**
+          * The label text displayed alongside or above the select.
+         */
+        "label"?: string;
+        /**
+          * Controls where the label is positioned.
+         */
+        "labelPosition": 'default' | 'side' | 'floating';
+        /**
+          * Options rendered in the select dropdown.
+         */
+        "options": SelectOption[];
+        /**
+          * Optional placeholder rendered as a disabled option.
+         */
+        "placeholder"?: string;
+        /**
+          * Hides the prefix slot content from assistive technologies when true.
+         */
+        "prefixHidden": boolean;
+        /**
+          * Sets the "required" attribute on the select.
+         */
+        "required": boolean;
+        /**
+          * Hides the suffix slot content from assistive technologies when true.
+         */
+        "suffixHidden": boolean;
+        /**
+          * Currently selected value.
+         */
+        "value"?: string | number | null;
     }
     interface IrNewBadge {
     }
@@ -2432,6 +2474,32 @@ export namespace Components {
         "userTypes": Map<string | number, string>;
         "users": User[];
     }
+    interface IrValidator {
+        /**
+          * Enables automatic validation on every value change.
+         */
+        "autovalidate"?: boolean;
+        /**
+          * Event names (space/comma separated) dispatched when the child loses focus.
+         */
+        "blurEvent": string;
+        /**
+          * Optional form id. Falls back to the closest ancestor form when omitted.
+         */
+        "form"?: string;
+        /**
+          * Zod schema used to validate the child control's value.
+         */
+        "schema": ZodTypeAny;
+        /**
+          * Debounce delay (ms) before running validation for autovalidated changes.
+         */
+        "validationDebounce": number;
+        /**
+          * Event names (space/comma separated) dispatched when the child value changes.
+         */
+        "valueEvent": string;
+    }
     interface IrWeekdaySelector {
         /**
           * Initial list of selected weekdays (numeric values).
@@ -2759,6 +2827,10 @@ export interface IrMonthlyBookingsReportFilterCustomEvent<T> extends CustomEvent
     detail: T;
     target: HTMLIrMonthlyBookingsReportFilterElement;
 }
+export interface IrNativeSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrNativeSelectElement;
+}
 export interface IrNotificationsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrNotificationsElement;
@@ -2918,6 +2990,10 @@ export interface IrUserFormPanelCustomEvent<T> extends CustomEvent<T> {
 export interface IrUserManagementTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrUserManagementTableElement;
+}
+export interface IrValidatorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrValidatorElement;
 }
 export interface IrWeekdaySelectorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4177,7 +4253,7 @@ declare global {
         new (): HTMLIrImageUploadElement;
     };
     interface HTMLIrInputElementEventMap {
-        "input-change": { value: string };
+        "input-change": string;
         "cleared": void;
         "input-focus": FocusEvent;
         "input-blur": FocusEvent;
@@ -4436,11 +4512,36 @@ declare global {
         prototype: HTMLIrMonthlyBookingsReportTableElement;
         new (): HTMLIrMonthlyBookingsReportTableElement;
     };
+    interface HTMLIrMpoCoreDetailsElement extends Components.IrMpoCoreDetails, HTMLStencilElement {
+    }
+    var HTMLIrMpoCoreDetailsElement: {
+        prototype: HTMLIrMpoCoreDetailsElement;
+        new (): HTMLIrMpoCoreDetailsElement;
+    };
     interface HTMLIrMpoManagementElement extends Components.IrMpoManagement, HTMLStencilElement {
     }
     var HTMLIrMpoManagementElement: {
         prototype: HTMLIrMpoManagementElement;
         new (): HTMLIrMpoManagementElement;
+    };
+    interface HTMLIrNativeSelectElementEventMap {
+        "select-change": { value?: string | number | null };
+        "select-focus": FocusEvent;
+        "select-blur": FocusEvent;
+    }
+    interface HTMLIrNativeSelectElement extends Components.IrNativeSelect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrNativeSelectElementEventMap>(type: K, listener: (this: HTMLIrNativeSelectElement, ev: IrNativeSelectCustomEvent<HTMLIrNativeSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrNativeSelectElementEventMap>(type: K, listener: (this: HTMLIrNativeSelectElement, ev: IrNativeSelectCustomEvent<HTMLIrNativeSelectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrNativeSelectElement: {
+        prototype: HTMLIrNativeSelectElement;
+        new (): HTMLIrNativeSelectElement;
     };
     interface HTMLIrNewBadgeElement extends Components.IrNewBadge, HTMLStencilElement {
     }
@@ -5320,6 +5421,24 @@ declare global {
         prototype: HTMLIrUserManagementTableElement;
         new (): HTMLIrUserManagementTableElement;
     };
+    interface HTMLIrValidatorElementEventMap {
+        "irValidationChange": { valid: boolean; value: unknown };
+        "irValueChange": { value: unknown };
+    }
+    interface HTMLIrValidatorElement extends Components.IrValidator, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrValidatorElementEventMap>(type: K, listener: (this: HTMLIrValidatorElement, ev: IrValidatorCustomEvent<HTMLIrValidatorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrValidatorElementEventMap>(type: K, listener: (this: HTMLIrValidatorElement, ev: IrValidatorCustomEvent<HTMLIrValidatorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrValidatorElement: {
+        prototype: HTMLIrValidatorElement;
+        new (): HTMLIrValidatorElement;
+    };
     interface HTMLIrWeekdaySelectorElementEventMap {
         "weekdayChange": number[];
     }
@@ -5449,7 +5568,9 @@ declare global {
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
         "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
         "ir-monthly-bookings-report-table": HTMLIrMonthlyBookingsReportTableElement;
+        "ir-mpo-core-details": HTMLIrMpoCoreDetailsElement;
         "ir-mpo-management": HTMLIrMpoManagementElement;
+        "ir-native-select": HTMLIrNativeSelectElement;
         "ir-new-badge": HTMLIrNewBadgeElement;
         "ir-notifications": HTMLIrNotificationsElement;
         "ir-option-details": HTMLIrOptionDetailsElement;
@@ -5517,6 +5638,7 @@ declare global {
         "ir-user-form-panel": HTMLIrUserFormPanelElement;
         "ir-user-management": HTMLIrUserManagementElement;
         "ir-user-management-table": HTMLIrUserManagementTableElement;
+        "ir-validator": HTMLIrValidatorElement;
         "ir-weekday-selector": HTMLIrWeekdaySelectorElement;
         "ota-label": HTMLOtaLabelElement;
         "requirement-check": HTMLRequirementCheckElement;
@@ -6720,7 +6842,7 @@ declare namespace LocalJSX {
         /**
           * Fired on any value change (typing, programmatic set, or clear).
          */
-        "onInput-change"?: (event: IrInputCustomEvent<{ value: string }>) => void;
+        "onInput-change"?: (event: IrInputCustomEvent<string>) => void;
         /**
           * Fired only when the input is focused.
          */
@@ -7213,7 +7335,59 @@ declare namespace LocalJSX {
     interface IrMonthlyBookingsReportTable {
         "reports"?: DailyReport[];
     }
+    interface IrMpoCoreDetails {
+    }
     interface IrMpoManagement {
+    }
+    interface IrNativeSelect {
+        /**
+          * Disables the select when true.
+         */
+        "disabled"?: boolean;
+        /**
+          * The label text displayed alongside or above the select.
+         */
+        "label"?: string;
+        /**
+          * Controls where the label is positioned.
+         */
+        "labelPosition"?: 'default' | 'side' | 'floating';
+        /**
+          * Fired when the select loses focus.
+         */
+        "onSelect-blur"?: (event: IrNativeSelectCustomEvent<FocusEvent>) => void;
+        /**
+          * Fired when the select value changes.
+         */
+        "onSelect-change"?: (event: IrNativeSelectCustomEvent<{ value?: string | number | null }>) => void;
+        /**
+          * Fired when the select receives focus.
+         */
+        "onSelect-focus"?: (event: IrNativeSelectCustomEvent<FocusEvent>) => void;
+        /**
+          * Options rendered in the select dropdown.
+         */
+        "options"?: SelectOption[];
+        /**
+          * Optional placeholder rendered as a disabled option.
+         */
+        "placeholder"?: string;
+        /**
+          * Hides the prefix slot content from assistive technologies when true.
+         */
+        "prefixHidden"?: boolean;
+        /**
+          * Sets the "required" attribute on the select.
+         */
+        "required"?: boolean;
+        /**
+          * Hides the suffix slot content from assistive technologies when true.
+         */
+        "suffixHidden"?: boolean;
+        /**
+          * Currently selected value.
+         */
+        "value"?: string | number | null;
     }
     interface IrNewBadge {
     }
@@ -8210,6 +8384,40 @@ declare namespace LocalJSX {
         "userTypes"?: Map<string | number, string>;
         "users"?: User[];
     }
+    interface IrValidator {
+        /**
+          * Enables automatic validation on every value change.
+         */
+        "autovalidate"?: boolean;
+        /**
+          * Event names (space/comma separated) dispatched when the child loses focus.
+         */
+        "blurEvent"?: string;
+        /**
+          * Optional form id. Falls back to the closest ancestor form when omitted.
+         */
+        "form"?: string;
+        /**
+          * Emits whenever the validation state toggles.
+         */
+        "onIrValidationChange"?: (event: IrValidatorCustomEvent<{ valid: boolean; value: unknown }>) => void;
+        /**
+          * Emits whenever the tracked value changes.
+         */
+        "onIrValueChange"?: (event: IrValidatorCustomEvent<{ value: unknown }>) => void;
+        /**
+          * Zod schema used to validate the child control's value.
+         */
+        "schema": ZodTypeAny;
+        /**
+          * Debounce delay (ms) before running validation for autovalidated changes.
+         */
+        "validationDebounce"?: number;
+        /**
+          * Event names (space/comma separated) dispatched when the child value changes.
+         */
+        "valueEvent"?: string;
+    }
     interface IrWeekdaySelector {
         /**
           * Emits an updated list of selected weekday values when the selection changes.  Example: ```tsx <ir-weekday-selector onWeekdayChange={(e) => console.log(e.detail)} /> ```
@@ -8344,7 +8552,9 @@ declare namespace LocalJSX {
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
         "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
         "ir-monthly-bookings-report-table": IrMonthlyBookingsReportTable;
+        "ir-mpo-core-details": IrMpoCoreDetails;
         "ir-mpo-management": IrMpoManagement;
+        "ir-native-select": IrNativeSelect;
         "ir-new-badge": IrNewBadge;
         "ir-notifications": IrNotifications;
         "ir-option-details": IrOptionDetails;
@@ -8412,6 +8622,7 @@ declare namespace LocalJSX {
         "ir-user-form-panel": IrUserFormPanel;
         "ir-user-management": IrUserManagement;
         "ir-user-management-table": IrUserManagementTable;
+        "ir-validator": IrValidator;
         "ir-weekday-selector": IrWeekdaySelector;
         "ota-label": OtaLabel;
         "requirement-check": RequirementCheck;
@@ -8520,7 +8731,9 @@ declare module "@stencil/core" {
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
             "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;
             "ir-monthly-bookings-report-table": LocalJSX.IrMonthlyBookingsReportTable & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportTableElement>;
+            "ir-mpo-core-details": LocalJSX.IrMpoCoreDetails & JSXBase.HTMLAttributes<HTMLIrMpoCoreDetailsElement>;
             "ir-mpo-management": LocalJSX.IrMpoManagement & JSXBase.HTMLAttributes<HTMLIrMpoManagementElement>;
+            "ir-native-select": LocalJSX.IrNativeSelect & JSXBase.HTMLAttributes<HTMLIrNativeSelectElement>;
             "ir-new-badge": LocalJSX.IrNewBadge & JSXBase.HTMLAttributes<HTMLIrNewBadgeElement>;
             "ir-notifications": LocalJSX.IrNotifications & JSXBase.HTMLAttributes<HTMLIrNotificationsElement>;
             "ir-option-details": LocalJSX.IrOptionDetails & JSXBase.HTMLAttributes<HTMLIrOptionDetailsElement>;
@@ -8588,6 +8801,7 @@ declare module "@stencil/core" {
             "ir-user-form-panel": LocalJSX.IrUserFormPanel & JSXBase.HTMLAttributes<HTMLIrUserFormPanelElement>;
             "ir-user-management": LocalJSX.IrUserManagement & JSXBase.HTMLAttributes<HTMLIrUserManagementElement>;
             "ir-user-management-table": LocalJSX.IrUserManagementTable & JSXBase.HTMLAttributes<HTMLIrUserManagementTableElement>;
+            "ir-validator": LocalJSX.IrValidator & JSXBase.HTMLAttributes<HTMLIrValidatorElement>;
             "ir-weekday-selector": LocalJSX.IrWeekdaySelector & JSXBase.HTMLAttributes<HTMLIrWeekdaySelectorElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
             "requirement-check": LocalJSX.RequirementCheck & JSXBase.HTMLAttributes<HTMLRequirementCheckElement>;

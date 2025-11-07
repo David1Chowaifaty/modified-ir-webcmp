@@ -1,0 +1,171 @@
+:host {
+  /** @prop --ir-gap: Spacing between the label, select, and any adjacent elements. */
+  --ir-gap: 0.25rem;
+
+  /** @prop --ir-select-padding-block: Vertical padding inside the select field. */
+  --ir-select-padding-block: 0.5rem;
+
+  /** @prop --ir-select-padding-inline: Horizontal padding inside the select field. */
+  --ir-select-padding-inline: 1rem;
+
+  /** @prop --ir-select-radius: Corner radius of the select field. */
+  --ir-select-radius: 0.5rem;
+
+  /** @prop --ir-select-border: Default select border (complete shorthand). */
+  --ir-select-border: 1px solid gainsboro;
+
+  /** @prop --ir-select-border-focus: Border color when the select is focused. */
+  --ir-select-border-focus: #1e9ff2;
+
+  /** @prop --ir-select-bg: Background color of the select field. */
+  --ir-select-bg: #fff;
+
+  /** @prop --ir-select-color: Text color used inside the select field. */
+  --ir-select-color: inherit;
+
+  /** @prop --ir-label-font-size: Default font size of the label. */
+  --ir-label-font-size: 1rem;
+
+  /** @prop --ir-label-color: Default color of the label text. */
+  --ir-label-color: #444;
+
+  /** @prop --ir-label-floating-font-size: Font size of the label when floating above the select. */
+  --ir-label-floating-font-size: 0.875rem;
+
+  /** @prop --ir-label-floating-color: Label text color when active or floated. */
+  --ir-label-floating-color: #1e9ff2;
+
+  /** @prop --ir-danger: Error color for borders and text. */
+  --ir-danger: #ff4961;
+
+  /** @prop --ir-floating-offset-block: Vertical distance from the top when the label floats. */
+  --ir-floating-offset-block: 0.5rem;
+
+  /** @prop --ir-floating-offset-inline: Horizontal inset alignment for the floating label. */
+  --ir-floating-offset-inline: 1rem;
+
+  /** @prop --ir-floating-transition: Transition speed and easing for label animations. */
+  --ir-floating-transition: 150ms ease;
+
+  /** @prop --ir-clear-size: Size (width/height) of the clear button. */
+  --ir-clear-size: 1.5rem;
+
+  /** @prop --ir-clear-padding: Inner padding of the clear button. */
+  --ir-clear-padding: 0.25rem;
+
+  /** @prop --ir-prefix-width: (Internal) Width of the prefix slot content. Should be set by JS. */
+  --ir-prefix-width: 0px;
+
+  /** @prop --ir-select-ring-width-focus: Width of the focus ring. */
+  --ir-select-ring-width-focus: 3px;
+
+  /** @prop --ir-select-ring-color-focus: Color of the focus ring. */
+  /* --ir-select-ring-color-focus: rgba(30, 159, 242, 0.25); */
+  --ir-select-ring-color-focus: transparent;
+
+  display: flex;
+  gap: var(--ir-gap);
+  flex-direction: column;
+}
+
+:host([label-position='side']) {
+  flex-direction: row;
+  align-items: center;
+}
+
+.select-wrapper {
+  position: relative;
+  flex: 1 1 0%;
+}
+
+.select-field {
+  padding-block: var(--ir-select-padding-block);
+  padding-inline: var(--ir-select-padding-inline);
+  padding-inline-start: calc(var(--ir-select-padding-inline) + var(--ir-prefix-width, 0px));
+  border-radius: var(--ir-select-radius);
+  border: var(--ir-select-border);
+  background: var(--ir-select-bg);
+  color: var(--ir-select-color);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline-end: var(--ir-select-padding-inline);
+  transition: border-color var(--ir-floating-transition), box-shadow var(--ir-floating-transition);
+  font: inherit;
+  line-height: normal;
+  height: 2.8rem;
+}
+:host([aria-invalid='true']) .select-field {
+  border-color: var(--ir-danger);
+}
+.select-field:focus {
+  border-color: var(--ir-select-border-focus);
+  box-shadow: 0 0 0 var(--ir-select-ring-width-focus) var(--ir-select-ring-color-focus);
+}
+
+.select-field:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.select-label {
+  box-sizing: border-box;
+  font-size: var(--ir-label-font-size);
+  color: var(--ir-label-color);
+  transition: transform var(--ir-floating-transition), color var(--ir-floating-transition), font-size var(--ir-floating-transition), top var(--ir-floating-transition),
+    inset-inline-start var(--ir-floating-transition), padding var(--ir-floating-transition), background-color var(--ir-floating-transition);
+}
+
+:host([label-position='floating']) {
+  position: relative;
+}
+
+:host([label-position='floating']) .select-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inset-inline-start: calc(var(--ir-select-padding-inline) + var(--ir-prefix-width, 0px));
+  pointer-events: none;
+  z-index: 1;
+  padding-inline: 0;
+  background: transparent;
+}
+
+:host([label-position='floating']) .select-label[data-active='true'] {
+  top: 0;
+  inset-inline-start: var(--ir-floating-offset-inline);
+  transform: translateY(-50%);
+  font-size: var(--ir-label-floating-font-size);
+  background: var(--ir-select-bg);
+  padding-inline: 0.25rem;
+}
+
+:host([label-position='floating']):focus-within .select-label[data-active='true'] {
+  color: var(--ir-label-floating-color) !important;
+}
+
+.select-suffix,
+.select-prefix {
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  gap: var(--ir-gap);
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+}
+
+.select-suffix:dir(ltr),
+.select-prefix:dir(rtl) {
+  right: var(--ir-floating-offset-inline);
+}
+
+.select-suffix:dir(rtl),
+.select-prefix:dir(ltr) {
+  left: var(--ir-floating-offset-inline);
+}
+
+:host([label-position='side']) .select-label {
+  min-width: max-content;
+}
