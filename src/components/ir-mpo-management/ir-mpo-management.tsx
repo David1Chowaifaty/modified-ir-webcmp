@@ -95,6 +95,7 @@ export class IrMpoManagement {
                   </tr>
                 </tbody>
               </table>
+              <ir-affiliate-table></ir-affiliate-table>
             </div>
           </section>
         </section>
