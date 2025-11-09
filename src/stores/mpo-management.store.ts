@@ -39,7 +39,7 @@ export const mpoManagementSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
   companyLogo: z.union([optionalString(), fileArraySchema.optional()]),
   username: z.string().min(1, 'Username is required'),
-  password: z.string().min(1, 'Password is required'),
+  password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/, 'Password is required'),
   country: z.string().min(1, 'Country is required'),
   city: z.string().min(1, 'City is required'),
   address: z.string().min(1, 'Address is required'),

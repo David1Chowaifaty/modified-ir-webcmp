@@ -18,7 +18,7 @@ export class IrMpoCoreDetails {
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
             <div class="form-grid">
-              <ir-validator schema={mpoCoreDetailSchemas.companyName} autovalidate valueEvent="input-change" blurEvent="input-blur">
+              <ir-validator schema={mpoCoreDetailSchemas.companyName} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
                   placeholder="Company name"
@@ -30,7 +30,7 @@ export class IrMpoCoreDetails {
               </ir-validator>
               <div>
                 <div class="mpo-management__credentials-container">
-                  <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.username} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                  <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.username} valueEvent="input-change" blurEvent="input-blur">
                     <ir-input
                       class="mpo-management__input "
                       label="Credentials *"
@@ -41,7 +41,7 @@ export class IrMpoCoreDetails {
                     ></ir-input>
                   </ir-validator>
 
-                  <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.password} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                  <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.password} valueEvent="input-change" blurEvent="input-blur">
                     <ir-input
                       class="mpo-management__input mpo-management__input-password "
                       label="Password *"
@@ -64,7 +64,7 @@ export class IrMpoCoreDetails {
           <div class="mpo-management__panel-body">
             <div class="form-grid">
               <div class="mpo-management__country-container">
-                <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.country} autovalidate valueEvent="select-change" blurEvent="select-blur">
+                <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.country} valueEvent="select-change" blurEvent="select-blur">
                   <ir-native-select
                     label="Country *"
                     class="mpo-management__input flex-fill"
@@ -75,7 +75,7 @@ export class IrMpoCoreDetails {
                   ></ir-native-select>
                 </ir-validator>
 
-                <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.city} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.city} valueEvent="input-change" blurEvent="input-blur">
                   <ir-input
                     class="mpo-management__input mpo-management__input-city flex-fill"
                     label="City"
@@ -86,7 +86,7 @@ export class IrMpoCoreDetails {
                   ></ir-input>
                 </ir-validator>
               </div>
-              <ir-validator schema={mpoCoreDetailSchemas.billingCurrency} autovalidate valueEvent="select-change" blurEvent="select-blur">
+              <ir-validator schema={mpoCoreDetailSchemas.billingCurrency} valueEvent="select-change" blurEvent="select-blur">
                 <ir-native-select
                   onSelect-change={event => this.handleInputChange('billingCurrency', event.detail as any)}
                   class="mpo-management__input"
@@ -95,7 +95,7 @@ export class IrMpoCoreDetails {
                   options={[{ label: 'Select...', value: '' }]}
                 ></ir-native-select>
               </ir-validator>
-              <ir-validator schema={mpoCoreDetailSchemas.address} autovalidate valueEvent="input-change" blurEvent="input-blur">
+              <ir-validator schema={mpoCoreDetailSchemas.address} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
                   label="Address *"
@@ -111,7 +111,7 @@ export class IrMpoCoreDetails {
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
             <div class="form-grid">
-              <ir-validator schema={mpoCoreDetailSchemas.mainContact} autovalidate valueEvent="input-change" blurEvent="input-blur">
+              <ir-validator schema={mpoCoreDetailSchemas.mainContact} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
                   placeholder="Main contact"
@@ -121,7 +121,7 @@ export class IrMpoCoreDetails {
                   onInput-change={event => this.handleInputChange('mainContact', event.detail)}
                 ></ir-input>
               </ir-validator>
-              <ir-validator schema={mpoCoreDetailSchemas.email} autovalidate valueEvent="input-change" blurEvent="input-blur">
+              <ir-validator schema={mpoCoreDetailSchemas.email} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
                   type="email"
@@ -133,7 +133,7 @@ export class IrMpoCoreDetails {
                 ></ir-input>
               </ir-validator>
 
-              <ir-validator schema={mpoCoreDetailSchemas.phone} autovalidate valueEvent="input-change" blurEvent="input-blur">
+              <ir-validator schema={mpoCoreDetailSchemas.phone} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
                   label="Phone *"

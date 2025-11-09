@@ -1,12 +1,6 @@
 import { Component, Host, h } from '@stencil/core';
 import { z } from 'zod';
-import {
-  mpoManagementStore,
-  mpoWhiteLabelFieldSchemas,
-  MpoWhiteLabelSettings,
-  smtpDependentFields,
-  updateWhiteLabelField,
-} from '@/stores/mpo-management.store';
+import { mpoManagementStore, mpoWhiteLabelFieldSchemas, MpoWhiteLabelSettings, smtpDependentFields, updateWhiteLabelField } from '@/stores/mpo-management.store';
 
 @Component({
   tag: 'ir-white-labeling',
@@ -92,12 +86,10 @@ export class IrWhiteLabeling {
               {this.whiteLabelFieldMeta.map((field, index) => {
                 const disableField = disableFieldsAfterSmtp && smtpFieldIndex !== -1 && index > smtpFieldIndex;
                 const shouldRequireField = isSmtpServerProvided && smtpDependentFields.includes(field.key as (typeof smtpDependentFields)[number]);
-                const schema = shouldRequireField
-                  ? z.string().min(1, `${field.label} is required when SMTP server is provided`)
-                  : mpoWhiteLabelFieldSchemas[field.key];
+                const schema = shouldRequireField ? z.string().min(1, `${field.label} is required when SMTP server is provided`) : mpoWhiteLabelFieldSchemas[field.key];
                 return (
                   <div class="input-with-hint" key={field.key}>
-                    <ir-validator schema={schema} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                    <ir-validator schema={schema} valueEvent="input-change" blurEvent="input-blur">
                       <ir-input
                         class="white-labeling__input-forms"
                         label={field.label}
