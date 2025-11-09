@@ -30,76 +30,9 @@ const initialForm: MpoManagementForm = {
   },
 };
 
-const countryOptions = [
-  { text: 'Lebanon', value: 'Lebanon' },
-  { text: 'United Arab Emirates', value: 'United Arab Emirates' },
-  { text: 'Qatar', value: 'Qatar' },
-  { text: 'Saudi Arabia', value: 'Saudi Arabia' },
-];
-
-const currencyOptions = [
-  { text: 'USD - US Dollar', value: 'USD' },
-  { text: 'EUR - Euro', value: 'EUR' },
-  { text: 'LBP - Lebanese Pound', value: 'LBP' },
-  { text: 'AED - UAE Dirham', value: 'AED' },
-];
-
-const whiteLabelFieldMeta: Array<{
-  key: keyof MpoWhiteLabelSettings;
-  label: string;
-  type?: 'text' | 'email' | 'password';
-  placeholder?: string;
-  hint?: string;
-}> = [
-  {
-    key: 'extranetUrl',
-    label: 'Custom Domain',
-    placeholder: 'app.yourcompany.com',
-    hint: 'Your custom domain or subdomain',
-  },
-  {
-    key: 'companyWebsite',
-    label: 'Brand Name',
-    placeholder: 'Lancaster Group',
-    hint: 'Name shown to your customers',
-  },
-  {
-    key: 'smtpServer',
-    label: 'SMTP Server',
-    placeholder: 'smtp.provider.com',
-    hint: 'Server address for transactional email',
-  },
-  {
-    key: 'smtpPort',
-    label: 'Port',
-    placeholder: '2525',
-    hint: 'Common ports: 2525 / 465 (SSL) / 587 (TLS)',
-  },
-  {
-    key: 'smtpLogin',
-    label: 'Login',
-    placeholder: 'admin@company.com',
-    hint: 'Credentials used to authenticate with your provider',
-  },
-  {
-    key: 'smtpPassword',
-    label: 'Password',
-    type: 'password',
-    placeholder: 'Enter password',
-    hint: 'Stored securely; required for sending branded emails',
-  },
-  {
-    key: 'noReplyEmail',
-    label: 'No reply email',
-    type: 'email',
-    placeholder: 'no-reply@company.com',
-    hint: 'Sender address displayed to your customers',
-  },
-];
-
 @Component({
   tag: 'ir-mpo-management',
-  styleUrls: ['ir-mpo-management.css', '../../common/table.css'],
+  styleUrls: ['ir-mpo-management.css', './ir-mpo-management-common.css', '../../common/table.css'],
   scoped: true,
 })
 export class IrMpoManagement {
@@ -202,45 +135,7 @@ export class IrMpoManagement {
               </div>
             </div>
           </section>
-
-          <section class="mpo-management__panel">
-            <div class="mpo-management__panel-header">
-              <div class="header-with-switch">
-                <div>
-                  <h2 class="mpo-management__panel-title">White Labeling</h2>
-                  <p class="mpo-management__panel-subtitle">Customize your brand appearance and identity</p>
-                </div>
-                <div class="toggle-wrapper">
-                  <ir-checkbox
-                    style={{ gap: '0.5rem' }}
-                    label="Enable white labeling"
-                    checked={this.form.whiteLabel.enabled}
-                    onCheckChange={event => this.toggleWhiteLabel(event.detail)}
-                  ></ir-checkbox>
-                </div>
-              </div>
-            </div>
-            <div class={{ 'mpo-management__panel-body': true, 'disabled': disableWhiteLabelFields }}>
-              <div class="form-grid two">
-                {whiteLabelFieldMeta.map(field => (
-                  <div class="input-with-hint" key={field.key}>
-                    <ir-input-text
-                      label={field.label}
-                      type={field.type || 'text'}
-                      variant="floating-label"
-                      value={this.form.whiteLabel[field.key] as string}
-                      placeholder={field.placeholder}
-                      disabled={disableWhiteLabelFields}
-                      onTextChange={event => this.updateWhiteLabelField(field.key, event.detail)}
-                    ></ir-input-text>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div class="mpo-management__form-actions">
-              <ir-button text="Save" size="md"></ir-button>
-            </div>
-          </section>
+          <ir-white-labeling></ir-white-labeling>
         </form>
         <div class="mpo-management-table">
           <table class="table">

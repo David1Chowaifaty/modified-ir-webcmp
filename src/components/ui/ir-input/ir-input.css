@@ -15,7 +15,7 @@
   --ir-input-radius: 0.5rem;
 
   /** @prop --ir-input-border: Default input border (complete shorthand). */
-  --ir-input-border: 1px solid gainsboro;
+  --ir-input-border: 1px solid #cacfe7;
 
   /** @prop --ir-input-border-focus: Border color when the input is focused. */
   --ir-input-border-focus: #1e9ff2;
@@ -24,10 +24,10 @@
   --ir-input-bg: #fff;
 
   /** @prop --ir-input-color: Text color used inside the input field. */
-  --ir-input-color: inherit;
+  --ir-input-color: #3b4781;
 
   /** @prop --ir-label-font-size: Default font size of the label. */
-  --ir-label-font-size: 1rem;
+  --ir-label-font-size: 0.875rem;
 
   /** @prop --ir-label-color: Default color of the label text. */
   --ir-label-color: #444;
@@ -59,9 +59,12 @@
   /** @prop --ir-input-ring-width-focus: Width of the focus ring. */
   --ir-input-ring-width-focus: 3px;
 
+  /** @prop --ir-input-placeholder-color: Input placeholder color. */
+  --ir-input-placeholder-color: #cacfe7;
+
   /** @prop --ir-input-ring-color-focus: Color of the focus ring. */
-  /* --ir-input-ring-color-focus: rgba(30, 159, 242, 0.25); */
   --ir-input-ring-color-focus: transparent;
+  /* --ir-input-ring-color-focus: rgba(30, 159, 242, 0.25); */
 
   display: flex;
   gap: var(--ir-gap);
@@ -114,6 +117,9 @@
 
 :host([label-position='floating']) {
   position: relative;
+}
+.input-field::placeholder {
+  color: var(--ir-input-placeholder-color);
 }
 /* The ::placeholder selector is no longer needed since JS will control the active state. 
    However, we keep it if your input *does not* have a value on render. */

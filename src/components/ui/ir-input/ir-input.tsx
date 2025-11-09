@@ -297,7 +297,7 @@ export class IrInput {
               </button>
             )}
 
-            {this.type === 'password' && (
+            {this.type === 'password' && !this.disabled && (
               <button
                 type="button"
                 class="visibility-button"

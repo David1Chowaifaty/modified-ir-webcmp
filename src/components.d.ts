@@ -358,6 +358,8 @@ export namespace Components {
         "hide": () => Promise<void>;
         "show": () => Promise<void>;
     }
+    interface IrAffiliateForm {
+    }
     interface IrApplicablePolicies {
         "booking": Booking;
         "language": string;
@@ -2506,6 +2508,8 @@ export namespace Components {
          */
         "weekdays": number[];
     }
+    interface IrWhiteLabeling {
+    }
     interface OtaLabel {
         /**
           * Label displayed as the section title.
@@ -3538,6 +3542,12 @@ declare global {
     var HTMLIrAccordionElement: {
         prototype: HTMLIrAccordionElement;
         new (): HTMLIrAccordionElement;
+    };
+    interface HTMLIrAffiliateFormElement extends Components.IrAffiliateForm, HTMLStencilElement {
+    }
+    var HTMLIrAffiliateFormElement: {
+        prototype: HTMLIrAffiliateFormElement;
+        new (): HTMLIrAffiliateFormElement;
     };
     interface HTMLIrApplicablePoliciesElementEventMap {
         "generatePayment": IPaymentAction;
@@ -5456,6 +5466,12 @@ declare global {
         prototype: HTMLIrWeekdaySelectorElement;
         new (): HTMLIrWeekdaySelectorElement;
     };
+    interface HTMLIrWhiteLabelingElement extends Components.IrWhiteLabeling, HTMLStencilElement {
+    }
+    var HTMLIrWhiteLabelingElement: {
+        prototype: HTMLIrWhiteLabelingElement;
+        new (): HTMLIrWhiteLabelingElement;
+    };
     interface HTMLOtaLabelElement extends Components.OtaLabel, HTMLStencilElement {
     }
     var HTMLOtaLabelElement: {
@@ -5498,6 +5514,7 @@ declare global {
         "igl-to-be-assigned": HTMLIglToBeAssignedElement;
         "igloo-calendar": HTMLIglooCalendarElement;
         "ir-accordion": HTMLIrAccordionElement;
+        "ir-affiliate-form": HTMLIrAffiliateFormElement;
         "ir-applicable-policies": HTMLIrApplicablePoliciesElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking": HTMLIrBookingElement;
@@ -5640,6 +5657,7 @@ declare global {
         "ir-user-management-table": HTMLIrUserManagementTableElement;
         "ir-validator": HTMLIrValidatorElement;
         "ir-weekday-selector": HTMLIrWeekdaySelectorElement;
+        "ir-white-labeling": HTMLIrWhiteLabelingElement;
         "ota-label": HTMLOtaLabelElement;
         "requirement-check": HTMLRequirementCheckElement;
     }
@@ -5984,6 +6002,8 @@ declare namespace LocalJSX {
           * Fired after expansion state changes
          */
         "onIr-toggle"?: (event: IrAccordionCustomEvent<{ expanded: boolean }>) => void;
+    }
+    interface IrAffiliateForm {
     }
     interface IrApplicablePolicies {
         "booking"?: Booking;
@@ -8428,6 +8448,8 @@ declare namespace LocalJSX {
          */
         "weekdays"?: number[];
     }
+    interface IrWhiteLabeling {
+    }
     interface OtaLabel {
         /**
           * Label displayed as the section title.
@@ -8482,6 +8504,7 @@ declare namespace LocalJSX {
         "igl-to-be-assigned": IglToBeAssigned;
         "igloo-calendar": IglooCalendar;
         "ir-accordion": IrAccordion;
+        "ir-affiliate-form": IrAffiliateForm;
         "ir-applicable-policies": IrApplicablePolicies;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking": IrBooking;
@@ -8624,6 +8647,7 @@ declare namespace LocalJSX {
         "ir-user-management-table": IrUserManagementTable;
         "ir-validator": IrValidator;
         "ir-weekday-selector": IrWeekdaySelector;
+        "ir-white-labeling": IrWhiteLabeling;
         "ota-label": OtaLabel;
         "requirement-check": RequirementCheck;
     }
@@ -8661,6 +8685,7 @@ declare module "@stencil/core" {
             "igl-to-be-assigned": LocalJSX.IglToBeAssigned & JSXBase.HTMLAttributes<HTMLIglToBeAssignedElement>;
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
             "ir-accordion": LocalJSX.IrAccordion & JSXBase.HTMLAttributes<HTMLIrAccordionElement>;
+            "ir-affiliate-form": LocalJSX.IrAffiliateForm & JSXBase.HTMLAttributes<HTMLIrAffiliateFormElement>;
             "ir-applicable-policies": LocalJSX.IrApplicablePolicies & JSXBase.HTMLAttributes<HTMLIrApplicablePoliciesElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
@@ -8803,6 +8828,7 @@ declare module "@stencil/core" {
             "ir-user-management-table": LocalJSX.IrUserManagementTable & JSXBase.HTMLAttributes<HTMLIrUserManagementTableElement>;
             "ir-validator": LocalJSX.IrValidator & JSXBase.HTMLAttributes<HTMLIrValidatorElement>;
             "ir-weekday-selector": LocalJSX.IrWeekdaySelector & JSXBase.HTMLAttributes<HTMLIrWeekdaySelectorElement>;
+            "ir-white-labeling": LocalJSX.IrWhiteLabeling & JSXBase.HTMLAttributes<HTMLIrWhiteLabelingElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
             "requirement-check": LocalJSX.RequirementCheck & JSXBase.HTMLAttributes<HTMLRequirementCheckElement>;
         }

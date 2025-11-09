@@ -157,10 +157,6 @@
   :host {
     flex-direction: column;
   }
-  .mpo-management__panel,
-  .page-header {
-    padding: 1.25rem;
-  }
 
   .mpo-management__panel-icon {
     width: 2.25rem;
