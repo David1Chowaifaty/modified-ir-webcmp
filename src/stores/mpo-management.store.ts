@@ -1,19 +1,86 @@
 import { createStore } from '@stencil/store';
-import { MpoWhiteLabelSettings } from '@/components/ir-mpo-management/types';
+import { z } from 'zod';
 
-export interface MpoManagementFormValues {
-  companyName: string;
-  username: string;
-  password: string;
-  country: string;
-  city: string;
-  billingCurrency: string;
-  address: string;
-  mainContact: string;
-  email: string;
-  phone: string;
-  whiteLabel: MpoWhiteLabelSettings;
-}
+const optionalString = () => z.string().optional().or(z.literal(''));
+const fileSchema = typeof File !== 'undefined' ? z.instanceof(File) : z.any();
+const fileArraySchema = z.array(fileSchema).max(10);
+const smtpDependentKeys = ['smtpPort', 'smtpLogin', 'smtpPassword', 'noReplyEmail'] as const;
+export const smtpDependentFields = smtpDependentKeys;
+
+const mpoWhiteLabelBaseSchema = z.object({
+  enabled: z.boolean(),
+  extranetUrl: optionalString(),
+  companyWebsite: optionalString(),
+  smtpServer: optionalString(),
+  smtpPort: optionalString(),
+  smtpLogin: optionalString(),
+  smtpPassword: optionalString(),
+  noReplyEmail: optionalString(),
+});
+
+export const mpoWhiteLabelSchema = mpoWhiteLabelBaseSchema.superRefine((values, ctx) => {
+  const smtpServerFilled = Boolean(values.smtpServer?.trim());
+  if (!smtpServerFilled) return;
+
+  smtpDependentKeys.forEach(field => {
+    if (!values[field]?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Required when SMTP server is provided',
+        path: [field],
+      });
+    }
+  });
+});
+
+export type MpoWhiteLabelSettings = z.infer<typeof mpoWhiteLabelSchema>;
+
+export const mpoManagementSchema = z.object({
+  companyName: z.string().min(1, 'Company name is required'),
+  companyLogo: z.union([optionalString(), fileArraySchema.optional()]),
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(1, 'Password is required'),
+  country: z.string().min(1, 'Country is required'),
+  city: z.string().min(1, 'City is required'),
+  address: z.string().min(1, 'Address is required'),
+  billingCurrency: z.string().min(1, 'Billing currency is required'),
+  mainContact: z.string().min(1, 'Main contact is required'),
+  email: z.string().email('Enter a valid email'),
+  phone: z.string().min(1, 'Phone is required'),
+  notificationEmail: optionalString(),
+  receiveNotificationOnEmail: z.boolean(),
+  notes: optionalString(),
+  whiteLabel: mpoWhiteLabelSchema,
+});
+
+export type MpoManagementForm = z.infer<typeof mpoManagementSchema>;
+
+const schemaShape = mpoManagementSchema.shape;
+
+export const mpoCoreDetailSchemas = {
+  companyName: schemaShape.companyName,
+  username: schemaShape.username,
+  password: schemaShape.password,
+  country: schemaShape.country,
+  city: schemaShape.city,
+  billingCurrency: schemaShape.billingCurrency,
+  address: schemaShape.address,
+  mainContact: schemaShape.mainContact,
+  email: schemaShape.email,
+  phone: schemaShape.phone,
+} as const;
+
+const whiteLabelShape = mpoWhiteLabelBaseSchema.shape;
+
+export const mpoWhiteLabelFieldSchemas = {
+  extranetUrl: whiteLabelShape.extranetUrl,
+  companyWebsite: whiteLabelShape.companyWebsite,
+  smtpServer: whiteLabelShape.smtpServer,
+  smtpPort: whiteLabelShape.smtpPort,
+  smtpLogin: whiteLabelShape.smtpLogin,
+  smtpPassword: whiteLabelShape.smtpPassword,
+  noReplyEmail: whiteLabelShape.noReplyEmail,
+} as const;
 
 export type SelectOption = { label: string; value: string };
 
@@ -22,22 +89,26 @@ export interface MpoManagementSelects {
 }
 
 export interface MpoManagementStoreState {
-  form: MpoManagementFormValues;
+  form: MpoManagementForm;
   selects: MpoManagementSelects;
 }
 
 const initialState: MpoManagementStoreState = {
   form: {
     companyName: '',
+    companyLogo: '',
     username: '',
     password: '',
     country: '',
     city: '',
-    billingCurrency: '',
     address: '',
+    billingCurrency: '',
     mainContact: '',
     email: '',
     phone: '',
+    notificationEmail: '',
+    receiveNotificationOnEmail: true,
+    notes: '',
     whiteLabel: {
       enabled: false,
       extranetUrl: '',
@@ -51,6 +122,7 @@ const initialState: MpoManagementStoreState = {
   },
   selects: {
     countries: [
+      { label: 'Select...', value: '' },
       { label: 'United States', value: 'US' },
       { label: 'United Kingdom', value: 'UK' },
       { label: 'Canada', value: 'CA' },
@@ -62,9 +134,9 @@ const initialState: MpoManagementStoreState = {
 
 export const { state: mpoManagementStore } = createStore<MpoManagementStoreState>(initialState);
 
-type RootMpoFields = Exclude<keyof MpoManagementFormValues, 'whiteLabel'>;
+export type RootMpoFields = Exclude<keyof MpoManagementForm, 'whiteLabel'>;
 
-export function updateMpoManagementField(field: RootMpoFields, value: string) {
+export function updateMpoManagementField<Field extends RootMpoFields>(field: Field, value: MpoManagementForm[Field]) {
   mpoManagementStore.form = {
     ...mpoManagementStore.form,
     [field]: value,
@@ -81,9 +153,13 @@ export function updateWhiteLabelField(field: keyof MpoWhiteLabelSettings, value:
   };
 }
 
-export function setMpoManagementSelectOptions(selectKey: keyof MpoManagementSelects, options: SelectOption[]) {
-  mpoManagementStore.selects = {
-    ...mpoManagementStore.selects,
-    [selectKey]: options,
+export function resetMpoManagementForm(next?: Partial<MpoManagementForm>) {
+  mpoManagementStore.form = {
+    ...initialState.form,
+    ...next,
+    whiteLabel: {
+      ...initialState.form.whiteLabel,
+      ...(next?.whiteLabel || {}),
+    },
   };
 }

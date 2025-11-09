@@ -1,34 +1,7 @@
 import { Component, Host, State, h } from '@stencil/core';
-import { MpoManagementForm, MpoWhiteLabelSettings, mpoManagementSchema } from './types';
+import { mpoManagementSchema, MpoManagementForm, mpoManagementStore, RootMpoFields, updateMpoManagementField } from '@/stores/mpo-management.store';
 
 const MAX_LOGO_FILE_SIZE = 10 * 1024 * 1024;
-
-const initialForm: MpoManagementForm = {
-  companyName: '',
-  companyLogo: '',
-  username: '',
-  password: '',
-  country: '',
-  city: '',
-  address: '',
-  billingCurrency: '',
-  mainContact: '',
-  email: '',
-  phone: '',
-  notificationEmail: '',
-  receiveNotificationOnEmail: true,
-  notes: '',
-  whiteLabel: {
-    enabled: false,
-    extranetUrl: '',
-    companyWebsite: '',
-    smtpServer: '',
-    smtpPort: '',
-    smtpLogin: '',
-    smtpPassword: '',
-    noReplyEmail: '',
-  },
-};
 
 @Component({
   tag: 'ir-mpo-management',
@@ -36,57 +9,26 @@ const initialForm: MpoManagementForm = {
   scoped: true,
 })
 export class IrMpoManagement {
-  @State() form: MpoManagementForm = initialForm;
   @State() submitted = false;
-  @State() logoFiles: File[] = [];
+  private store = mpoManagementStore;
 
-  private updateTextField(field: keyof Omit<MpoManagementForm, 'whiteLabel' | 'receiveNotificationOnEmail' | 'companyLogo'>, value: string | null) {
-    this.form = {
-      ...this.form,
-      [field]: value ?? '',
-    } as MpoManagementForm;
+  private updateTextField<Field extends Exclude<RootMpoFields, 'companyLogo' | 'receiveNotificationOnEmail'>>(field: Field, value: string | null) {
+    updateMpoManagementField(field, (value ?? '') as MpoManagementForm[Field]);
   }
 
   private updateCompanyLogo(files: File[]) {
-    this.logoFiles = [...files];
-    this.form = {
-      ...this.form,
-      companyLogo: files.length ? [...files] : '',
-    };
-  }
-
-  private updateWhiteLabelField(field: keyof MpoWhiteLabelSettings, value: string | null) {
-    this.form = {
-      ...this.form,
-      whiteLabel: {
-        ...this.form.whiteLabel,
-        [field]: value ?? '',
-      },
-    };
+    updateMpoManagementField('companyLogo', files.length ? [...files] : '');
   }
 
   private toggleReceiveNotification(checked: boolean) {
-    this.form = {
-      ...this.form,
-      receiveNotificationOnEmail: checked,
-    };
-  }
-
-  private toggleWhiteLabel(checked: boolean) {
-    this.form = {
-      ...this.form,
-      whiteLabel: {
-        ...this.form.whiteLabel,
-        enabled: checked,
-      },
-    };
+    updateMpoManagementField('receiveNotificationOnEmail', checked);
   }
 
   private handleSubmit(event: Event) {
     event.preventDefault();
     this.submitted = true;
     try {
-      const cleaned = mpoManagementSchema.parse(this.form);
+      const cleaned = mpoManagementSchema.parse(this.store.form);
       console.log('MPO management payload', cleaned);
     } catch (error) {
       console.warn('Validation errors', error);
@@ -94,9 +36,9 @@ export class IrMpoManagement {
   }
 
   render() {
-    const disableWhiteLabelFields = !this.form.whiteLabel.enabled;
-    const logoValue = Array.isArray(this.form.companyLogo) ? this.form.companyLogo : this.logoFiles;
-    const existingLogoLabel = typeof this.form.companyLogo === 'string' ? this.form.companyLogo : undefined;
+    const { form } = this.store;
+    const logoValue = Array.isArray(form.companyLogo) ? form.companyLogo : [];
+    const existingLogoLabel = typeof form.companyLogo === 'string' ? form.companyLogo : undefined;
 
     return (
       <Host>
@@ -126,16 +68,17 @@ export class IrMpoManagement {
                   <ir-checkbox
                     style={{ gap: '0.5rem' }}
                     label="Receive notifications via email"
-                    checked={this.form.receiveNotificationOnEmail}
+                    checked={form.receiveNotificationOnEmail}
                     onCheckChange={event => this.toggleReceiveNotification(event.detail)}
                   ></ir-checkbox>
                   <p class="field-hint">Get updates about your account and important changes</p>
                 </div>
-                <ir-textarea label="Notes" rows={4} value={this.form.notes} onTextChange={event => this.updateTextField('notes', event.detail)}></ir-textarea>
+                <ir-textarea label="Notes" rows={4} value={form.notes} onTextChange={event => this.updateTextField('notes', event.detail)}></ir-textarea>
               </div>
             </div>
           </section>
           <ir-white-labeling></ir-white-labeling>
+          <ir-button btn_type="submit" text="Save" class="mt-2" size="md"></ir-button>
         </form>
         <div class="mpo-management-table">
           <table class="table">

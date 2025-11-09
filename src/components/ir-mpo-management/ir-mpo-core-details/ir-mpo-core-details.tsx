@@ -1,6 +1,5 @@
 import { Component, Host, h } from '@stencil/core';
-import { z } from 'zod';
-import { mpoManagementStore, updateMpoManagementField } from '@/stores/mpo-management.store';
+import { mpoCoreDetailSchemas, mpoManagementStore, updateMpoManagementField } from '@/stores/mpo-management.store';
 
 @Component({
   tag: 'ir-mpo-core-details',
@@ -19,7 +18,7 @@ export class IrMpoCoreDetails {
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
             <div class="form-grid">
-              <ir-validator schema={z.string().min(10)} autovalidate valueEvent="input-change" blurEvent="input-blur">
+              <ir-validator schema={mpoCoreDetailSchemas.companyName} autovalidate valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
                   placeholder="Company name"
@@ -29,28 +28,34 @@ export class IrMpoCoreDetails {
                   onInput-change={event => this.handleInputChange('companyName', event.detail)}
                 ></ir-input>
               </ir-validator>
-              <div class="mpo-management__credentials-container">
-                <ir-input
-                  class="mpo-management__input flex-fill"
-                  label="Credentials *"
-                  placeholder="Username"
-                  labelPosition="side"
-                  value={this.store.form.username}
-                  onInput-change={event => this.handleInputChange('username', event.detail)}
-                ></ir-input>
+              <div>
+                <div class="mpo-management__credentials-container">
+                  <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.username} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                    <ir-input
+                      class="mpo-management__input "
+                      label="Credentials *"
+                      placeholder="Username"
+                      labelPosition="side"
+                      value={this.store.form.username}
+                      onInput-change={event => this.handleInputChange('username', event.detail)}
+                    ></ir-input>
+                  </ir-validator>
 
-                <ir-input
-                  class="mpo-management__input mpo-management__input-password flex-fill"
-                  label="Password *"
-                  type="password"
-                  placeholder="Password"
-                  value={this.store.form.password}
-                  onInput-change={event => this.handleInputChange('password', event.detail)}
-                  labelPosition="side"
-                ></ir-input>
-              </div>
-              <div class={'d-flex justify-content-end'}>
-                {this.store.form.password && <ir-password-validator password={this.store.form.password} style={{ marginLeft: 'calc(130px + 0.5rem)' }}></ir-password-validator>}
+                  <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.password} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                    <ir-input
+                      class="mpo-management__input mpo-management__input-password "
+                      label="Password *"
+                      type="password"
+                      placeholder="Password"
+                      value={this.store.form.password}
+                      onInput-change={event => this.handleInputChange('password', event.detail)}
+                      labelPosition="side"
+                    ></ir-input>
+                  </ir-validator>
+                </div>
+                <div class={'d-flex justify-content-end'}>
+                  {this.store.form.password && <ir-password-validator password={this.store.form.password} style={{ marginLeft: 'calc(130px + 0.5rem)' }}></ir-password-validator>}
+                </div>
               </div>
             </div>
           </div>
@@ -59,72 +64,86 @@ export class IrMpoCoreDetails {
           <div class="mpo-management__panel-body">
             <div class="form-grid">
               <div class="mpo-management__country-container">
-                <ir-native-select
-                  label="Country *"
-                  class="mpo-management__input flex-fill"
-                  options={this.store.selects.countries}
-                  value={this.store.form.country}
-                  onSelect-change={event => this.handleInputChange('country', event.detail?.value?.toString() ?? '')}
-                  labelPosition="side"
-                ></ir-native-select>
+                <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.country} autovalidate valueEvent="select-change" blurEvent="select-blur">
+                  <ir-native-select
+                    label="Country *"
+                    class="mpo-management__input flex-fill"
+                    options={this.store.selects.countries}
+                    value={this.store.form.country}
+                    onSelect-change={event => this.handleInputChange('country', event.detail?.value?.toString() ?? '')}
+                    labelPosition="side"
+                  ></ir-native-select>
+                </ir-validator>
 
-                <ir-input
-                  class="mpo-management__input mpo-management__input-city flex-fill"
-                  label="City"
-                  placeholder="City"
-                  labelPosition="side"
-                  value={this.store.form.city}
-                  onInput-change={event => this.handleInputChange('city', event.detail)}
-                ></ir-input>
+                <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.city} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                  <ir-input
+                    class="mpo-management__input mpo-management__input-city flex-fill"
+                    label="City"
+                    placeholder="City"
+                    labelPosition="side"
+                    value={this.store.form.city}
+                    onInput-change={event => this.handleInputChange('city', event.detail)}
+                  ></ir-input>
+                </ir-validator>
               </div>
-              <ir-input
-                class="mpo-management__input "
-                label="Billing *"
-                labelPosition="side"
-                placeholder="Billing"
-                value={this.store.form.billingCurrency}
-                onInput-change={event => this.handleInputChange('billingCurrency', event.detail)}
-              ></ir-input>
-              <ir-input
-                class="mpo-management__input "
-                label="Address *"
-                labelPosition="side"
-                placeholder="Address"
-                value={this.store.form.address}
-                onInput-change={event => this.handleInputChange('address', event.detail)}
-              ></ir-input>
+              <ir-validator schema={mpoCoreDetailSchemas.billingCurrency} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                <ir-input
+                  class="mpo-management__input "
+                  label="Billing *"
+                  labelPosition="side"
+                  placeholder="Billing"
+                  value={this.store.form.billingCurrency}
+                  onInput-change={event => this.handleInputChange('billingCurrency', event.detail)}
+                ></ir-input>
+              </ir-validator>
+              <ir-validator schema={mpoCoreDetailSchemas.address} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                <ir-input
+                  class="mpo-management__input "
+                  label="Address *"
+                  labelPosition="side"
+                  placeholder="Address"
+                  value={this.store.form.address}
+                  onInput-change={event => this.handleInputChange('address', event.detail)}
+                ></ir-input>
+              </ir-validator>
             </div>
           </div>
         </section>
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
             <div class="form-grid">
-              <ir-input
-                class="mpo-management__input "
-                placeholder="Main contact"
-                label="Main contact *"
-                labelPosition="side"
-                value={this.store.form.mainContact}
-                onInput-change={event => this.handleInputChange('mainContact', event.detail)}
-              ></ir-input>
-              <ir-input
-                class="mpo-management__input "
-                type="email"
-                label="Email *"
-                placeholder="Email"
-                labelPosition="side"
-                value={this.store.form.email}
-                onInput-change={event => this.handleInputChange('email', event.detail)}
-              ></ir-input>
+              <ir-validator schema={mpoCoreDetailSchemas.mainContact} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                <ir-input
+                  class="mpo-management__input "
+                  placeholder="Main contact"
+                  label="Main contact *"
+                  labelPosition="side"
+                  value={this.store.form.mainContact}
+                  onInput-change={event => this.handleInputChange('mainContact', event.detail)}
+                ></ir-input>
+              </ir-validator>
+              <ir-validator schema={mpoCoreDetailSchemas.email} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                <ir-input
+                  class="mpo-management__input "
+                  type="email"
+                  label="Email *"
+                  placeholder="Email"
+                  labelPosition="side"
+                  value={this.store.form.email}
+                  onInput-change={event => this.handleInputChange('email', event.detail)}
+                ></ir-input>
+              </ir-validator>
 
-              <ir-input
-                class="mpo-management__input "
-                label="Phone *"
-                placeholder="Phone"
-                labelPosition="side"
-                value={this.store.form.phone}
-                onInput-change={event => this.handleInputChange('phone', event.detail)}
-              ></ir-input>
+              <ir-validator schema={mpoCoreDetailSchemas.phone} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                <ir-input
+                  class="mpo-management__input "
+                  label="Phone *"
+                  placeholder="Phone"
+                  labelPosition="side"
+                  value={this.store.form.phone}
+                  onInput-change={event => this.handleInputChange('phone', event.detail)}
+                ></ir-input>
+              </ir-validator>
             </div>
           </div>
         </section>

@@ -1,6 +1,12 @@
 import { Component, Host, h } from '@stencil/core';
-import { MpoWhiteLabelSettings } from '../types';
-import { mpoManagementStore, updateWhiteLabelField } from '@/stores/mpo-management.store';
+import { z } from 'zod';
+import {
+  mpoManagementStore,
+  mpoWhiteLabelFieldSchemas,
+  MpoWhiteLabelSettings,
+  smtpDependentFields,
+  updateWhiteLabelField,
+} from '@/stores/mpo-management.store';
 
 @Component({
   tag: 'ir-white-labeling',
@@ -69,6 +75,7 @@ export class IrWhiteLabeling {
     const whiteLabel = this.store.form.whiteLabel;
     const smtpFieldIndex = this.whiteLabelFieldMeta.findIndex(meta => meta.key === 'smtpServer');
     const disableFieldsAfterSmtp = !whiteLabel.smtpServer?.trim();
+    const isSmtpServerProvided = !disableFieldsAfterSmtp;
     return (
       <Host>
         <section class="mpo-management__panel">
@@ -84,18 +91,24 @@ export class IrWhiteLabeling {
             <div class="form-grid">
               {this.whiteLabelFieldMeta.map((field, index) => {
                 const disableField = disableFieldsAfterSmtp && smtpFieldIndex !== -1 && index > smtpFieldIndex;
+                const shouldRequireField = isSmtpServerProvided && smtpDependentFields.includes(field.key as (typeof smtpDependentFields)[number]);
+                const schema = shouldRequireField
+                  ? z.string().min(1, `${field.label} is required when SMTP server is provided`)
+                  : mpoWhiteLabelFieldSchemas[field.key];
                 return (
                   <div class="input-with-hint" key={field.key}>
-                    <ir-input
-                      class="white-labeling__input-forms"
-                      label={field.label}
-                      labelPosition="side"
-                      type={field.type || 'text'}
-                      placeholder={field.placeholder}
-                      value={whiteLabel[field.key] as string}
-                      disabled={disableField}
-                      onInput-change={event => this.handleFieldChange(field.key, event.detail)}
-                    ></ir-input>
+                    <ir-validator schema={schema} autovalidate valueEvent="input-change" blurEvent="input-blur">
+                      <ir-input
+                        class="white-labeling__input-forms"
+                        label={field.label}
+                        labelPosition="side"
+                        type={field.type || 'text'}
+                        placeholder={field.placeholder}
+                        value={whiteLabel[field.key] as string}
+                        disabled={disableField}
+                        onInput-change={event => this.handleFieldChange(field.key, event.detail)}
+                      ></ir-input>
+                    </ir-validator>
                   </div>
                 );
               })}
