@@ -9,10 +9,6 @@
   --surface-muted: #f4f6fc;
   width: 100%;
   background-color: white;
-  display: flex;
-  flex-direction: row;
-  padding: 1rem;
-  gap: 1rem;
 }
 :host * {
   font-family: inherit !important;
@@ -26,10 +22,15 @@
   display: flex;
   flex-direction: column;
   /* max-width: 50vw; */
-  flex: 1;
+  flex: 1 1 0%;
 }
-
-.page-header {
+.mpo-management__page-content {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+  gap: 1rem;
+}
+.mpo-management__page-header {
   background: var(--mpo-management__panel-background);
   padding: 0.5rem 0rem;
   display: flex;
@@ -38,14 +39,14 @@
   padding-bottom: 1rem;
 }
 
-.page-header h1 {
+.mpo-management__page-header h1 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--text-heading);
 }
 
-.page-header p {
+.mpo-management__page-header p {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.95rem;
@@ -154,7 +155,7 @@
 }
 
 @media (max-width: 768px) {
-  :host {
+  .mpo-management__page-content {
     flex-direction: column;
   }
 

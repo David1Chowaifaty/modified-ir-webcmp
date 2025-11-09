@@ -86,15 +86,14 @@ export class IrMpoCoreDetails {
                   ></ir-input>
                 </ir-validator>
               </div>
-              <ir-validator schema={mpoCoreDetailSchemas.billingCurrency} autovalidate valueEvent="input-change" blurEvent="input-blur">
-                <ir-input
-                  class="mpo-management__input "
+              <ir-validator schema={mpoCoreDetailSchemas.billingCurrency} autovalidate valueEvent="select-change" blurEvent="select-blur">
+                <ir-native-select
+                  onSelect-change={event => this.handleInputChange('billingCurrency', event.detail as any)}
+                  class="mpo-management__input"
                   label="Billing *"
                   labelPosition="side"
-                  placeholder="Billing"
-                  value={this.store.form.billingCurrency}
-                  onInput-change={event => this.handleInputChange('billingCurrency', event.detail)}
-                ></ir-input>
+                  options={[{ label: 'Select...', value: '' }]}
+                ></ir-native-select>
               </ir-validator>
               <ir-validator schema={mpoCoreDetailSchemas.address} autovalidate valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
