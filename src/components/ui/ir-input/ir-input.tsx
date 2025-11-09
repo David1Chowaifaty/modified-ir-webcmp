@@ -85,6 +85,10 @@ export class IrInput {
     // Find the closest form element (if any)
     // track slotted prefix to compute width
     this.initializeMask();
+    if (this.el.hasAttribute('data-testid')) {
+      this.inputRef.setAttribute('data-testid', this.el.getAttribute('data-testid'));
+      this.el.removeAttribute('data-testid');
+    }
     this.prefixSlotEl = this.el.shadowRoot!.querySelector('slot[name="prefix"]') as HTMLSlotElement;
     if (this.prefixSlotEl) {
       this.prefixSlotEl.addEventListener('slotchange', this.handlePrefixSlotChange);

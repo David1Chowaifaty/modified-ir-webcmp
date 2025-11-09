@@ -52,12 +52,17 @@ export class IrNativeSelect {
   private id: string;
   private prefixSlotEl?: HTMLSlotElement;
   private resizeObs?: ResizeObserver;
+  private selectRef: HTMLSelectElement;
 
   componentWillLoad() {
     this.id = this.el.id || `native-select-${v4()}`;
   }
 
   componentDidLoad() {
+    if (this.el.hasAttribute('data-testid')) {
+      this.selectRef.setAttribute('data-testid', this.el.getAttribute('data-testid'));
+      this.el.removeAttribute('data-testid');
+    }
     this.prefixSlotEl = this.el.shadowRoot?.querySelector('slot[name="prefix"]') as HTMLSlotElement;
     if (this.prefixSlotEl) {
       this.prefixSlotEl.addEventListener('slotchange', this.handlePrefixSlotChange);
@@ -172,6 +177,7 @@ export class IrNativeSelect {
 
           <select
             id={this.id}
+            ref={el => (this.selectRef = el)}
             class="select-field"
             disabled={this.disabled}
             required={this.required}
