@@ -1,4 +1,5 @@
 import { Component, Event, EventEmitter, Prop, State, Watch, h } from '@stencil/core';
+import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-textarea',
@@ -81,10 +82,14 @@ export class IrTextArea {
    * ```
    */
   @Event() textChange: EventEmitter<string>;
+  private id: string;
 
   @Watch('aria-invalid')
   handleAriaInvalidChange(newValue) {
     this.error = newValue === 'true';
+  }
+  componentWillLoad() {
+    this.id = `textarea-${v4()}`;
   }
   render() {
     if (this.variant === 'prepend') {
@@ -107,8 +112,9 @@ export class IrTextArea {
     }
     return (
       <div class={'form-group'}>
-        <label>{this.label}</label>
+        <label htmlFor={this.id}>{this.label}</label>
         <textarea
+          id={this.id}
           data-testid={this.testId}
           style={this.styles}
           maxLength={this.maxLength}

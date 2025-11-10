@@ -119,7 +119,22 @@ export class IrMpoManagement {
                     ></ir-checkbox>
                     <p class="field-hint">Get updates about your account and important changes</p>
                   </div>
-                  <ir-textarea label="Notes" rows={4} value={form.notes} onTextChange={event => this.updateTextField('notes', event.detail)}></ir-textarea>
+                  <style>
+                    {`
+                      .mpo-management__note-textfield .form-control{
+                        border-radius:0.5rem
+                      }
+                      
+                      `}
+                  </style>
+                  <ir-textarea
+                    class="mpo-management__note-textfield"
+                    label="Notes"
+                    placeholder=""
+                    rows={2}
+                    value={form.notes}
+                    onTextChange={event => this.updateTextField('notes', event.detail)}
+                  ></ir-textarea>
                 </div>
               </div>
             </section>
