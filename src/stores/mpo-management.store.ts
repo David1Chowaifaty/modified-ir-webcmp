@@ -1,5 +1,7 @@
+import { ICountry } from '@/models/IBooking';
 import { createStore } from '@stencil/store';
 import { z } from 'zod';
+import { Currency } from '@/models/property';
 
 const optionalString = () => z.string().optional().or(z.literal(''));
 const fileSchema = typeof File !== 'undefined' ? z.instanceof(File) : z.any();
@@ -82,10 +84,10 @@ export const mpoWhiteLabelFieldSchemas = {
   noReplyEmail: whiteLabelShape.noReplyEmail,
 } as const;
 
-export type SelectOption = { label: string; value: string };
-
 export interface MpoManagementSelects {
-  countries: SelectOption[];
+  countries: ICountry[];
+  marketPlaces: ICountry[];
+  currencies: Currency[];
 }
 
 export interface MpoManagementStoreState {
@@ -121,14 +123,9 @@ const initialState: MpoManagementStoreState = {
     },
   },
   selects: {
-    countries: [
-      { label: 'Select...', value: '' },
-      { label: 'United States', value: 'US' },
-      { label: 'United Kingdom', value: 'UK' },
-      { label: 'Canada', value: 'CA' },
-      { label: 'Australia', value: 'AU' },
-      { label: 'Germany', value: 'DE' },
-    ],
+    marketPlaces: [],
+    countries: [],
+    currencies: [],
   },
 };
 
@@ -140,6 +137,12 @@ export function updateMpoManagementField<Field extends RootMpoFields>(field: Fie
   mpoManagementStore.form = {
     ...mpoManagementStore.form,
     [field]: value,
+  };
+}
+export function updateMpoSelectField(params: Partial<MpoManagementSelects>) {
+  mpoManagementStore.selects = {
+    ...mpoManagementStore.selects,
+    ...params,
   };
 }
 

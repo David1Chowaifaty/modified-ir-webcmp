@@ -1,4 +1,5 @@
 import { type ChannelReportResult, type ChannelSalesParams, parseChannelReportResult, parseChannelSalesParams } from '@/components/ir-sales-by-channel/types';
+import { Currency } from '@/models/property';
 import calendar_data from '@/stores/calendar-data';
 import { downloadFile } from '@/utils/utils';
 import axios from 'axios';
@@ -176,6 +177,13 @@ export class PropertyService {
     }
     if (params.is_export_to_excel) {
       downloadFile(data.My_Params_Get_Monthly_Stats.Link_excel);
+    }
+    return data.My_Result;
+  }
+  public async getExposedCurrencies(): Promise<Currency[]> {
+    const { data } = await axios.post('https://gateway.igloorooms.com/IRBE/Get_Exposed_Currencies', {});
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
     }
     return data.My_Result;
   }

@@ -68,7 +68,7 @@ export class IrMpoCoreDetails {
                   <ir-native-select
                     label="Country *"
                     class="mpo-management__input flex-fill"
-                    options={this.store.selects.countries}
+                    options={[{ label: 'Select', value: '' }, ...this.store.selects.countries.map(c => ({ label: c.name, value: c.id.toString() }))]}
                     value={this.store.form.country}
                     onSelect-change={event => this.handleInputChange('country', event.detail?.value?.toString() ?? '')}
                     labelPosition="side"
@@ -92,7 +92,7 @@ export class IrMpoCoreDetails {
                   class="mpo-management__input"
                   label="Billing *"
                   labelPosition="side"
-                  options={[{ label: 'Select...', value: '' }]}
+                  options={[{ label: 'Select...', value: '' }, ...this.store.selects.currencies.map(c => ({ label: c.symbol, value: c.id }))]}
                 ></ir-native-select>
               </ir-validator>
               <ir-validator schema={mpoCoreDetailSchemas.address} valueEvent="input-change" blurEvent="input-blur">

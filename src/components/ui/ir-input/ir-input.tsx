@@ -75,7 +75,6 @@ export class IrInput {
     this.id = this.el.id || `input-${v4()}`;
     this._type = this.type;
     const form = this.el.closest('form');
-    console.log(form);
     if (form) {
       form.addEventListener('reset', this.handleFormReset);
     }

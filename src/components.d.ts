@@ -1577,6 +1577,9 @@ export namespace Components {
     interface IrMpoCoreDetails {
     }
     interface IrMpoManagement {
+        "language": string;
+        "propertyid": string;
+        "ticket": string;
     }
     interface IrNativeSelect {
         /**
@@ -7391,6 +7394,9 @@ declare namespace LocalJSX {
     interface IrMpoCoreDetails {
     }
     interface IrMpoManagement {
+        "language"?: string;
+        "propertyid"?: string;
+        "ticket"?: string;
     }
     interface IrNativeSelect {
         /**

@@ -1,5 +1,8 @@
-import { Component, Host, State, h } from '@stencil/core';
-import { mpoManagementSchema, MpoManagementForm, mpoManagementStore, RootMpoFields, updateMpoManagementField } from '@/stores/mpo-management.store';
+import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { mpoManagementSchema, MpoManagementForm, mpoManagementStore, RootMpoFields, updateMpoManagementField, updateMpoSelectField } from '@/stores/mpo-management.store';
+import Token from '@/models/Token';
+import { BookingService } from '@/services/booking.service';
+import { PropertyService } from '@/services/property.service';
 
 const MAX_LOGO_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -9,8 +12,42 @@ const MAX_LOGO_FILE_SIZE = 10 * 1024 * 1024;
   scoped: true,
 })
 export class IrMpoManagement {
+  @Prop() ticket: string;
+  @Prop() propertyid: string;
+  @Prop() language: string = 'en';
+
+  @State() isLoading: boolean;
   @State() submitted = false;
+
+  private tokenService = new Token();
+  private bookingService = new BookingService();
+  private propertyService = new PropertyService();
   private store = mpoManagementStore;
+
+  componentWillLoad() {
+    if (this.ticket) {
+      this.tokenService.setToken(this.ticket);
+      this.init();
+    }
+  }
+
+  @Watch('ticket')
+  handleTicketChange() {
+    if (this.ticket) {
+      this.tokenService.setToken(this.ticket);
+      this.init();
+    }
+  }
+
+  private async init() {
+    const [countries, currencies] = await Promise.all([this.bookingService.getCountries(this.language), this.propertyService.getExposedCurrencies()]);
+
+    updateMpoSelectField({
+      marketPlaces: countries.filter(c => c.market_places !== null),
+      countries,
+      currencies,
+    });
+  }
 
   private updateTextField<Field extends Exclude<RootMpoFields, 'companyLogo' | 'receiveNotificationOnEmail'>>(field: Field, value: string | null) {
     updateMpoManagementField(field, (value ?? '') as MpoManagementForm[Field]);
