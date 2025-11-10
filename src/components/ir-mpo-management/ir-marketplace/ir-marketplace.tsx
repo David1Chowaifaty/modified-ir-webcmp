@@ -36,6 +36,7 @@ export class IrMarketplace {
       : [];
     return (
       <Host>
+        {/* <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1b2a4b' }}>Marketplaces</p> */}
         <div class={'d-flex align-items-center mb-1'} style={{ gap: '0.5rem' }}>
           <ir-native-select
             class="flex-fill"

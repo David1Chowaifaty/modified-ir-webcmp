@@ -57,6 +57,8 @@
 }
 .icon-button:disabled {
   pointer-events: none;
+  cursor: not-allowed !important;
+  opacity: 0.5;
 }
 
 .icon-loader {
