@@ -1,10 +1,10 @@
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { mpoManagementSchema, MpoManagementForm, mpoManagementStore, RootMpoFields, updateMpoManagementField, updateMpoSelectField } from '@/stores/mpo-management.store';
+import { updateMpoSelectField } from '@/stores/mpo-management.store';
 import Token from '@/models/Token';
 import { BookingService } from '@/services/booking.service';
 import { PropertyService } from '@/services/property.service';
 
-const MAX_LOGO_FILE_SIZE = 10 * 1024 * 1024;
+// const MAX_LOGO_FILE_SIZE = 10 * 1024 * 1024;
 
 @Component({
   tag: 'ir-mpo-management',
@@ -22,7 +22,7 @@ export class IrMpoManagement {
   private tokenService = new Token();
   private bookingService = new BookingService();
   private propertyService = new PropertyService();
-  private store = mpoManagementStore;
+  // private store = mpoManagementStore;
 
   private panels = [
     {
@@ -68,39 +68,39 @@ export class IrMpoManagement {
     });
   }
 
-  private updateTextField<Field extends Exclude<RootMpoFields, 'companyLogo' | 'receiveNotificationOnEmail'>>(field: Field, value: string | null) {
-    updateMpoManagementField(field, (value ?? '') as MpoManagementForm[Field]);
-  }
+  // private updateTextField<Field extends Exclude<RootMpoFields, 'companyLogo' | 'receiveNotificationOnEmail'>>(field: Field, value: string | null) {
+  //   updateMpoManagementField(field, (value ?? '') as MpoManagementForm[Field]);
+  // }
 
-  private updateCompanyLogo(files: File[]) {
-    updateMpoManagementField('companyLogo', files.length ? [...files] : '');
-  }
+  // private updateCompanyLogo(files: File[]) {
+  //   updateMpoManagementField('companyLogo', files.length ? [...files] : '');
+  // }
 
-  private toggleReceiveNotification(checked: boolean) {
-    updateMpoManagementField('receiveNotificationOnEmail', checked);
-  }
+  // private toggleReceiveNotification(checked: boolean) {
+  //   updateMpoManagementField('receiveNotificationOnEmail', checked);
+  // }
 
-  private handleSubmit(event: Event) {
-    event.preventDefault();
-    this.submitted = true;
-    try {
-      const cleaned = mpoManagementSchema.parse(this.store.form);
-      console.log('MPO management payload', cleaned);
-    } catch (error) {
-      console.warn('Validation errors', error);
-    }
-  }
+  // private handleSubmit(event: Event) {
+  //   event.preventDefault();
+  //   this.submitted = true;
+  //   try {
+  //     const cleaned = mpoManagementSchema.parse(this.store.form);
+  //     console.log('MPO management payload', cleaned);
+  //   } catch (error) {
+  //     console.warn('Validation errors', error);
+  //   }
+  // }
 
   render() {
-    const { form } = this.store;
-    const logoValue = Array.isArray(form.companyLogo) ? form.companyLogo : [];
-    const existingLogoLabel = typeof form.companyLogo === 'string' ? form.companyLogo : undefined;
-    const previewSrc =
-      typeof form.companyLogo === 'string'
-        ? form.companyLogo
-        : Array.isArray(form.companyLogo) && form.companyLogo.length > 0
-        ? URL.createObjectURL(form.companyLogo[0])
-        : undefined;
+    // const { form } = this.store;
+    // const logoValue = Array.isArray(form.companyLogo) ? form.companyLogo : [];
+    // const existingLogoLabel = typeof form.companyLogo === 'string' ? form.companyLogo : undefined;
+    // const previewSrc =
+    //   typeof form.companyLogo === 'string'
+    //     ? form.companyLogo
+    //     : Array.isArray(form.companyLogo) && form.companyLogo.length > 0
+    //     ? URL.createObjectURL(form.companyLogo[0])
+    //     : undefined;
     return (
       <Host class={'py-1'}>
         <ir-toast></ir-toast>

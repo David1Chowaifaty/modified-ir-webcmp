@@ -8,11 +8,31 @@
   text-align: right;
   font-weight: bold;
 }
+.mpo-management__input-password::part(suffix) {
+  gap: 0.25rem;
+  align-items: center;
+}
 .mpo-management__country-container,
 .mpo-management__credentials-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+.mpo-management__popup {
+  display: flex;
+  height: 100%;
+}
+.mpo-management__popup-trigger {
+  all: unset;
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  width: var(--ir-clear-size);
+  height: var(--ir-clear-size);
+  padding: var(--ir-clear-padding);
+  cursor: pointer;
+  margin: auto;
 }
 @media (min-width: 768px) {
   .mpo-management__input-city::part(label),

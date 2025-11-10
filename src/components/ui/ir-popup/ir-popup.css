@@ -1,3 +1,42 @@
 :host {
-  display: block;
+  display: inline-block;
+  position: relative;
+}
+
+::slotted(*) {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  position: absolute;
+  z-index: var(--ir-popup-z-index, 1000);
+  min-width: max-content;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: white;
+  transition: opacity 120ms ease, visibility 120ms ease;
+  border-radius: 4px;
+  padding: 20px;
+  width: 260px;
+  background-color: white;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+  box-sizing: border-box;
+}
+
+.popup--open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }

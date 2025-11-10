@@ -43,6 +43,7 @@ import { SelectOption } from "./components/ui/ir-native-select/ir-native-select"
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
+import { PopupChangeReason } from "./components/ui/ir-popup/ir-popup";
 import { Moment } from "moment";
 import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 import { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
@@ -92,6 +93,7 @@ export { SelectOption } from "./components/ui/ir-native-select/ir-native-select"
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
+export { PopupChangeReason } from "./components/ui/ir-popup/ir-popup";
 export { Moment } from "moment";
 export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 export { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
@@ -1888,6 +1890,65 @@ export namespace Components {
         "trigger": 'focus' | 'click' | 'hover';
     }
     interface IrPopup {
+        /**
+          * Close the popup when the Escape key is pressed.
+         */
+        "closeOnEsc": boolean;
+        /**
+          * Close the popup when clicking outside of the host.
+         */
+        "closeOnOutsideClick": boolean;
+        /**
+          * Initial open state when the popup is uncontrolled.
+         */
+        "defaultOpen": boolean;
+        /**
+          * Main-axis distance in pixels between the trigger and popup.
+         */
+        "distance": number;
+        /**
+          * Enable flip middleware to keep the popup visible.
+         */
+        "flip": boolean;
+        /**
+          * Strategy used by Floating UI when multiple flip candidates exist.
+         */
+        "flipFallbackStrategy": 'best-fit' | 'initial';
+        /**
+          * Choose how the popup toggles open (click or hover).
+         */
+        "interaction": 'click' | 'hover';
+        /**
+          * Reflects whether the popup panel is visible.
+         */
+        "open": boolean;
+        /**
+          * Placement string recognized by Floating UI.
+         */
+        "placement": | 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+        /**
+          * Viewport padding passed to the shift middleware.
+         */
+        "shiftPadding": number;
+        /**
+          * Cross-axis skidding in pixels between the trigger and popup.
+         */
+        "skidding": number;
+        /**
+          * Positioning strategy applied to the floating element.
+         */
+        "strategy": 'fixed' | 'absolute';
     }
     interface IrPriceInput {
         /**
@@ -2928,6 +2989,10 @@ export interface IrPhoneInputCustomEvent<T> extends CustomEvent<T> {
 export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPickupElement;
+}
+export interface IrPopupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPopupElement;
 }
 export interface IrPriceInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4952,7 +5017,18 @@ declare global {
         prototype: HTMLIrPopoverElement;
         new (): HTMLIrPopoverElement;
     };
+    interface HTMLIrPopupElementEventMap {
+        "ir-popup-open-change": { open: boolean; reason: PopupChangeReason };
+    }
     interface HTMLIrPopupElement extends Components.IrPopup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPopupElementEventMap>(type: K, listener: (this: HTMLIrPopupElement, ev: IrPopupCustomEvent<HTMLIrPopupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPopupElementEventMap>(type: K, listener: (this: HTMLIrPopupElement, ev: IrPopupCustomEvent<HTMLIrPopupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrPopupElement: {
         prototype: HTMLIrPopupElement;
@@ -7882,6 +7958,69 @@ declare namespace LocalJSX {
         "trigger"?: 'focus' | 'click' | 'hover';
     }
     interface IrPopup {
+        /**
+          * Close the popup when the Escape key is pressed.
+         */
+        "closeOnEsc"?: boolean;
+        /**
+          * Close the popup when clicking outside of the host.
+         */
+        "closeOnOutsideClick"?: boolean;
+        /**
+          * Initial open state when the popup is uncontrolled.
+         */
+        "defaultOpen"?: boolean;
+        /**
+          * Main-axis distance in pixels between the trigger and popup.
+         */
+        "distance"?: number;
+        /**
+          * Enable flip middleware to keep the popup visible.
+         */
+        "flip"?: boolean;
+        /**
+          * Strategy used by Floating UI when multiple flip candidates exist.
+         */
+        "flipFallbackStrategy"?: 'best-fit' | 'initial';
+        /**
+          * Choose how the popup toggles open (click or hover).
+         */
+        "interaction"?: 'click' | 'hover';
+        /**
+          * Fired whenever the popup open state changes.
+         */
+        "onIr-popup-open-change"?: (event: IrPopupCustomEvent<{ open: boolean; reason: PopupChangeReason }>) => void;
+        /**
+          * Reflects whether the popup panel is visible.
+         */
+        "open"?: boolean;
+        /**
+          * Placement string recognized by Floating UI.
+         */
+        "placement"?: | 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+        /**
+          * Viewport padding passed to the shift middleware.
+         */
+        "shiftPadding"?: number;
+        /**
+          * Cross-axis skidding in pixels between the trigger and popup.
+         */
+        "skidding"?: number;
+        /**
+          * Positioning strategy applied to the floating element.
+         */
+        "strategy"?: 'fixed' | 'absolute';
     }
     interface IrPriceInput {
         /**
