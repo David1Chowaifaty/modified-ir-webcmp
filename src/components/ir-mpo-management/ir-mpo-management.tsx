@@ -79,22 +79,7 @@ export class IrMpoManagement {
           </form>
           <section class="mpo-management-table">
             <div>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Country</th>
-                    <th>Marketplace</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class={'ir-table-row'}>
-                    <td colSpan={3} class="text-center">
-                      No data
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <ir-marketplace></ir-marketplace>
               <ir-affiliate-table></ir-affiliate-table>
             </div>
           </section>

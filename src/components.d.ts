@@ -1445,6 +1445,8 @@ export namespace Components {
          */
         "value": string;
     }
+    interface IrMarketplace {
+    }
     interface IrMenuBar {
         "focusFirstMenu": () => Promise<void>;
     }
@@ -4450,6 +4452,12 @@ declare global {
         prototype: HTMLIrMComboboxItemElement;
         new (): HTMLIrMComboboxItemElement;
     };
+    interface HTMLIrMarketplaceElement extends Components.IrMarketplace, HTMLStencilElement {
+    }
+    var HTMLIrMarketplaceElement: {
+        prototype: HTMLIrMarketplaceElement;
+        new (): HTMLIrMarketplaceElement;
+    };
     interface HTMLIrMenuBarElement extends Components.IrMenuBar, HTMLStencilElement {
     }
     var HTMLIrMenuBarElement: {
@@ -5596,6 +5604,7 @@ declare global {
         "ir-m-combobox": HTMLIrMComboboxElement;
         "ir-m-combobox-booking-item": HTMLIrMComboboxBookingItemElement;
         "ir-m-combobox-item": HTMLIrMComboboxItemElement;
+        "ir-marketplace": HTMLIrMarketplaceElement;
         "ir-menu-bar": HTMLIrMenuBarElement;
         "ir-menu-bar-item": HTMLIrMenuBarItemElement;
         "ir-menu-bar-menu": HTMLIrMenuBarMenuElement;
@@ -7238,6 +7247,8 @@ declare namespace LocalJSX {
          */
         "value": string;
     }
+    interface IrMarketplace {
+    }
     interface IrMenuBar {
     }
     interface IrMenuBarItem {
@@ -8592,6 +8603,7 @@ declare namespace LocalJSX {
         "ir-m-combobox": IrMCombobox;
         "ir-m-combobox-booking-item": IrMComboboxBookingItem;
         "ir-m-combobox-item": IrMComboboxItem;
+        "ir-marketplace": IrMarketplace;
         "ir-menu-bar": IrMenuBar;
         "ir-menu-bar-item": IrMenuBarItem;
         "ir-menu-bar-menu": IrMenuBarMenu;
@@ -8775,6 +8787,7 @@ declare module "@stencil/core" {
             "ir-m-combobox": LocalJSX.IrMCombobox & JSXBase.HTMLAttributes<HTMLIrMComboboxElement>;
             "ir-m-combobox-booking-item": LocalJSX.IrMComboboxBookingItem & JSXBase.HTMLAttributes<HTMLIrMComboboxBookingItemElement>;
             "ir-m-combobox-item": LocalJSX.IrMComboboxItem & JSXBase.HTMLAttributes<HTMLIrMComboboxItemElement>;
+            "ir-marketplace": LocalJSX.IrMarketplace & JSXBase.HTMLAttributes<HTMLIrMarketplaceElement>;
             "ir-menu-bar": LocalJSX.IrMenuBar & JSXBase.HTMLAttributes<HTMLIrMenuBarElement>;
             "ir-menu-bar-item": LocalJSX.IrMenuBarItem & JSXBase.HTMLAttributes<HTMLIrMenuBarItemElement>;
             "ir-menu-bar-menu": LocalJSX.IrMenuBarMenu & JSXBase.HTMLAttributes<HTMLIrMenuBarMenuElement>;

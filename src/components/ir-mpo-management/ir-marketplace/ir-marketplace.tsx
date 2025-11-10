@@ -9,7 +9,22 @@ export class IrMarketplace {
   render() {
     return (
       <Host>
-        <slot></slot>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Marketplace</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class={'ir-table-row'}>
+              <td colSpan={3} class="text-center">
+                No data
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </Host>
     );
   }
