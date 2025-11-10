@@ -1,6 +1,6 @@
 :host {
   /** @prop --ir-gap: Spacing between the label, select, and any adjacent elements. */
-  --ir-gap: 0.25rem;
+  --ir-gap: 1rem;
 
   /** @prop --ir-select-padding-block: Vertical padding inside the select field. */
   --ir-select-padding-block: 0.5rem;
@@ -9,13 +9,13 @@
   --ir-select-padding-inline: 1rem;
 
   /** @prop --ir-select-radius: Corner radius of the select field. */
-  --ir-select-radius: 0.5rem;
+  --ir-select-radius: var(--ir-radius);
 
   /** @prop --ir-select-border: Default select border (complete shorthand). */
-  --ir-select-border: 1px solid #cacfe7;
+  --ir-select-border: 1px solid var(--ir-border);
 
   /** @prop --ir-select-border-focus: Border color when the select is focused. */
-  --ir-select-border-focus: #1e9ff2;
+  --ir-select-border-focus: var(--ir-primary);
 
   /** @prop --ir-select-bg: Background color of the select field. */
   --ir-select-bg: #fff;
@@ -33,7 +33,7 @@
   --ir-label-floating-font-size: 0.875rem;
 
   /** @prop --ir-label-floating-color: Label text color when active or floated. */
-  --ir-label-floating-color: #1e9ff2;
+  --ir-label-floating-color: var(--ir-primary);
 
   /** @prop --ir-danger: Error color for borders and text. */
   --ir-danger: #ff4961;

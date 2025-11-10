@@ -1,0 +1,65 @@
+:host {
+  display: block;
+  position: relative;
+  color: var(--ir-foreground);
+  font: inherit;
+}
+
+:host(:focus-visible) {
+  outline: none;
+}
+:host(:focus-visible) .tab-item {
+  border: 2px solid var(--ir-primary);
+  border-radius: var(--tab-radius);
+}
+
+.tab-item {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: var(--tab-height);
+  padding: 0 var(--pad-x);
+  border-radius: var(--tab-radius);
+  color: var(--ir-foreground);
+  background: white;
+  cursor: pointer;
+  white-space: nowrap;
+  background: transparent;
+  border: transparent;
+  box-sizing: border-box;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+}
+.tab-item:hover {
+  color: var(--ir-foreground);
+  opacity: 0.8;
+}
+
+.tab-item:disabled {
+  color: (--ir-fro);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tab-item:active {
+  transform: translateY(1px);
+}
+.tab-item:disabled.tab-item:active {
+  transform: translateY(0px);
+}
+.tab-item.selected {
+  color: var(--ir-primary);
+}
+
+.tab-item .subtitle {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+::slotted(*) {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}

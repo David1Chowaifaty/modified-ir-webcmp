@@ -18,20 +18,20 @@ export class IrWhiteLabeling {
   }> = [
     {
       key: 'extranetUrl',
-      label: 'Custom Domain',
-      placeholder: 'app.yourcompany.com',
+      label: 'Extranet Url',
+      placeholder: 'youradmindomain.com',
       hint: 'Your custom domain or subdomain',
     },
     {
       key: 'companyWebsite',
-      label: 'Brand Name',
-      placeholder: 'Lancaster Group',
+      label: 'Company website',
+      placeholder: 'yourgroupwebsite.com',
       hint: 'Name shown to your customers',
     },
     {
       key: 'smtpServer',
       label: 'SMTP Server',
-      placeholder: 'smtp.provider.com',
+      placeholder: 'smtp.com',
       hint: 'Server address for transactional email',
     },
     {
@@ -43,7 +43,7 @@ export class IrWhiteLabeling {
     {
       key: 'smtpLogin',
       label: 'Login',
-      placeholder: 'admin@company.com',
+      placeholder: 'admin@youradmindomain.com',
       hint: 'Credentials used to authenticate with your provider',
     },
     {
@@ -55,9 +55,9 @@ export class IrWhiteLabeling {
     },
     {
       key: 'noReplyEmail',
-      label: 'No reply email',
+      label: 'Sender email',
       type: 'email',
-      placeholder: 'no-reply@company.com',
+      placeholder: 'no-reply@youradmindomain.com',
       hint: 'Sender address displayed to your customers',
     },
   ];
@@ -99,7 +99,13 @@ export class IrWhiteLabeling {
                         value={whiteLabel[field.key] as string}
                         disabled={disableField}
                         onInput-change={event => this.handleFieldChange(field.key, event.detail)}
-                      ></ir-input>
+                      >
+                        {['extranetUrl', 'companyWebsite', 'smtpServer'].includes(field.key) && (
+                          <p class="m-0 p-0" slot="prefix">
+                            https://
+                          </p>
+                        )}
+                      </ir-input>
                     </ir-validator>
                   </div>
                 );

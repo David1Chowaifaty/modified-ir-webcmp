@@ -5,7 +5,7 @@ export type SelectOption = { label: string; value: string | number };
 
 @Component({
   tag: 'ir-native-select',
-  styleUrl: 'ir-native-select.css',
+  styleUrls: ['ir-native-select.css', '../../../common/global.css'],
   shadow: true,
 })
 export class IrNativeSelect {
@@ -166,7 +166,9 @@ export class IrNativeSelect {
       <Host>
         {this.label && (
           <label class="select-label" htmlFor={this.id} part="label" data-active={String(activeLabel)}>
-            <slot name="label">{this.label}</slot>
+            <slot name="label">
+              {this.label} {this.required && <span style={{ color: 'red' }}>*</span>}
+            </slot>
           </label>
         )}
 

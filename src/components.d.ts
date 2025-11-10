@@ -1137,6 +1137,7 @@ export namespace Components {
          */
         "prefixHidden": boolean;
         "readonly": boolean;
+        "required": boolean;
         /**
           * Hides the suffix slot content from assistive technologies when true.
          */
@@ -1886,6 +1887,8 @@ export namespace Components {
          */
         "trigger": 'focus' | 'click' | 'hover';
     }
+    interface IrPopup {
+    }
     interface IrPriceInput {
         /**
           * The AutoValidate for the input, optional
@@ -2287,6 +2290,17 @@ export namespace Components {
           * Optional ID for the switch. If not provided, a random ID will be generated.
          */
         "switchId": string;
+    }
+    interface IrTab {
+        "disabled": boolean;
+        "panel": string;
+        "selected": boolean;
+    }
+    interface IrTabGroup {
+        "initialPanel": string;
+        "orientation": 'horizontal' | 'vertical';
+    }
+    interface IrTabPanel {
     }
     interface IrTabs {
         /**
@@ -2974,6 +2988,10 @@ export interface IrSuccessLoaderCustomEvent<T> extends CustomEvent<T> {
 export interface IrSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrSwitchElement;
+}
+export interface IrTabCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrTabElement;
 }
 export interface IrTabsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4934,6 +4952,12 @@ declare global {
         prototype: HTMLIrPopoverElement;
         new (): HTMLIrPopoverElement;
     };
+    interface HTMLIrPopupElement extends Components.IrPopup, HTMLStencilElement {
+    }
+    var HTMLIrPopupElement: {
+        prototype: HTMLIrPopupElement;
+        new (): HTMLIrPopupElement;
+    };
     interface HTMLIrPriceInputElementEventMap {
         "textChange": string;
         "inputBlur": string;
@@ -5283,6 +5307,35 @@ declare global {
     var HTMLIrSwitchElement: {
         prototype: HTMLIrSwitchElement;
         new (): HTMLIrSwitchElement;
+    };
+    interface HTMLIrTabElementEventMap {
+        "ir-tab-click": string;
+    }
+    interface HTMLIrTabElement extends Components.IrTab, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrTabElementEventMap>(type: K, listener: (this: HTMLIrTabElement, ev: IrTabCustomEvent<HTMLIrTabElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrTabElementEventMap>(type: K, listener: (this: HTMLIrTabElement, ev: IrTabCustomEvent<HTMLIrTabElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrTabElement: {
+        prototype: HTMLIrTabElement;
+        new (): HTMLIrTabElement;
+    };
+    interface HTMLIrTabGroupElement extends Components.IrTabGroup, HTMLStencilElement {
+    }
+    var HTMLIrTabGroupElement: {
+        prototype: HTMLIrTabGroupElement;
+        new (): HTMLIrTabGroupElement;
+    };
+    interface HTMLIrTabPanelElement extends Components.IrTabPanel, HTMLStencilElement {
+    }
+    var HTMLIrTabPanelElement: {
+        prototype: HTMLIrTabPanelElement;
+        new (): HTMLIrTabPanelElement;
     };
     interface HTMLIrTabsElementEventMap {
         "tabChanged": Tab;
@@ -5691,6 +5744,7 @@ declare global {
         "ir-pickup-view": HTMLIrPickupViewElement;
         "ir-pms-logs": HTMLIrPmsLogsElement;
         "ir-popover": HTMLIrPopoverElement;
+        "ir-popup": HTMLIrPopupElement;
         "ir-price-input": HTMLIrPriceInputElement;
         "ir-progress-indicator": HTMLIrProgressIndicatorElement;
         "ir-radio": HTMLIrRadioElement;
@@ -5720,6 +5774,9 @@ declare global {
         "ir-stats-card": HTMLIrStatsCardElement;
         "ir-success-loader": HTMLIrSuccessLoaderElement;
         "ir-switch": HTMLIrSwitchElement;
+        "ir-tab": HTMLIrTabElement;
+        "ir-tab-group": HTMLIrTabGroupElement;
+        "ir-tab-panel": HTMLIrTabPanelElement;
         "ir-tabs": HTMLIrTabsElement;
         "ir-tasks-card": HTMLIrTasksCardElement;
         "ir-tasks-filters": HTMLIrTasksFiltersElement;
@@ -6968,6 +7025,7 @@ declare namespace LocalJSX {
          */
         "prefixHidden"?: boolean;
         "readonly"?: boolean;
+        "required"?: boolean;
         /**
           * Hides the suffix slot content from assistive technologies when true.
          */
@@ -7823,6 +7881,8 @@ declare namespace LocalJSX {
          */
         "trigger"?: 'focus' | 'click' | 'hover';
     }
+    interface IrPopup {
+    }
     interface IrPriceInput {
         /**
           * The AutoValidate for the input, optional
@@ -8271,6 +8331,18 @@ declare namespace LocalJSX {
          */
         "switchId"?: string;
     }
+    interface IrTab {
+        "disabled"?: boolean;
+        "onIr-tab-click"?: (event: IrTabCustomEvent<string>) => void;
+        "panel": string;
+        "selected"?: boolean;
+    }
+    interface IrTabGroup {
+        "initialPanel"?: string;
+        "orientation"?: 'horizontal' | 'vertical';
+    }
+    interface IrTabPanel {
+    }
     interface IrTabs {
         /**
           * Aria label for the tab list
@@ -8704,6 +8776,7 @@ declare namespace LocalJSX {
         "ir-pickup-view": IrPickupView;
         "ir-pms-logs": IrPmsLogs;
         "ir-popover": IrPopover;
+        "ir-popup": IrPopup;
         "ir-price-input": IrPriceInput;
         "ir-progress-indicator": IrProgressIndicator;
         "ir-radio": IrRadio;
@@ -8733,6 +8806,9 @@ declare namespace LocalJSX {
         "ir-stats-card": IrStatsCard;
         "ir-success-loader": IrSuccessLoader;
         "ir-switch": IrSwitch;
+        "ir-tab": IrTab;
+        "ir-tab-group": IrTabGroup;
+        "ir-tab-panel": IrTabPanel;
         "ir-tabs": IrTabs;
         "ir-tasks-card": IrTasksCard;
         "ir-tasks-filters": IrTasksFilters;
@@ -8890,6 +8966,7 @@ declare module "@stencil/core" {
             "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;
             "ir-pms-logs": LocalJSX.IrPmsLogs & JSXBase.HTMLAttributes<HTMLIrPmsLogsElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;
+            "ir-popup": LocalJSX.IrPopup & JSXBase.HTMLAttributes<HTMLIrPopupElement>;
             "ir-price-input": LocalJSX.IrPriceInput & JSXBase.HTMLAttributes<HTMLIrPriceInputElement>;
             "ir-progress-indicator": LocalJSX.IrProgressIndicator & JSXBase.HTMLAttributes<HTMLIrProgressIndicatorElement>;
             "ir-radio": LocalJSX.IrRadio & JSXBase.HTMLAttributes<HTMLIrRadioElement>;
@@ -8919,6 +8996,9 @@ declare module "@stencil/core" {
             "ir-stats-card": LocalJSX.IrStatsCard & JSXBase.HTMLAttributes<HTMLIrStatsCardElement>;
             "ir-success-loader": LocalJSX.IrSuccessLoader & JSXBase.HTMLAttributes<HTMLIrSuccessLoaderElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
+            "ir-tab": LocalJSX.IrTab & JSXBase.HTMLAttributes<HTMLIrTabElement>;
+            "ir-tab-group": LocalJSX.IrTabGroup & JSXBase.HTMLAttributes<HTMLIrTabGroupElement>;
+            "ir-tab-panel": LocalJSX.IrTabPanel & JSXBase.HTMLAttributes<HTMLIrTabPanelElement>;
             "ir-tabs": LocalJSX.IrTabs & JSXBase.HTMLAttributes<HTMLIrTabsElement>;
             "ir-tasks-card": LocalJSX.IrTasksCard & JSXBase.HTMLAttributes<HTMLIrTasksCardElement>;
             "ir-tasks-filters": LocalJSX.IrTasksFilters & JSXBase.HTMLAttributes<HTMLIrTasksFiltersElement>;

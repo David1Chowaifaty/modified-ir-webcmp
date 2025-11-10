@@ -1,6 +1,6 @@
 :host {
   /** @prop --ir-gap: Spacing between the label, input, and any adjacent elements. */
-  --ir-gap: 0.25rem;
+  --ir-gap: 1rem;
 
   /** @prop --ir-input-padding-block: Vertical padding inside the input field. */
   --ir-input-padding-block: 0.75rem;
@@ -12,19 +12,19 @@
   --ir-input-padding-inline: 1rem;
 
   /** @prop --ir-input-radius: Corner radius of the input field. */
-  --ir-input-radius: 0.5rem;
+  --ir-input-radius: var(--ir-radius);
 
   /** @prop --ir-input-border: Default input border (complete shorthand). */
-  --ir-input-border: 1px solid #cacfe7;
+  --ir-input-border: 1px solid var(--ir-border);
 
   /** @prop --ir-input-border-focus: Border color when the input is focused. */
   --ir-input-border-focus: #1e9ff2;
 
   /** @prop --ir-input-bg: Background color of the input field. */
-  --ir-input-bg: #fff;
+  --ir-input-bg: var(--ir-input);
 
   /** @prop --ir-input-color: Text color used inside the input field. */
-  --ir-input-color: #3b4781;
+  --ir-input-color: var(--ir-input-foreground);
 
   /** @prop --ir-label-font-size: Default font size of the label. */
   --ir-label-font-size: 0.875rem;

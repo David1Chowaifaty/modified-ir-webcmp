@@ -6,9 +6,10 @@ import IMask, { FactoryArg, InputMask } from 'imask';
 export type MaskName = keyof typeof masks;
 export type MaskConfig<N extends MaskName = MaskName> = (typeof masks)[N];
 export type MaskProp = MaskName | MaskConfig | FactoryArg;
+
 @Component({
   tag: 'ir-input',
-  styleUrl: 'ir-input.css',
+  styleUrls: ['ir-input.css', '../../../common/global.css'],
   shadow: true,
 })
 export class IrInput {
@@ -25,6 +26,7 @@ export class IrInput {
 
   @Prop({ reflect: true }) disabled: boolean;
   @Prop({ reflect: true }) readonly: boolean;
+  @Prop({ reflect: true }) required: boolean;
 
   /** Type of input element — can be 'text', 'password', 'email', or 'number'. */
   @Prop({ reflect: true }) type: 'text' | 'password' | 'email' | 'number' = 'text';
@@ -265,7 +267,9 @@ export class IrInput {
       <Host>
         {this.label && (
           <label class="input-label" htmlFor={this.id} part="label" data-active={String(Boolean(this.value) || this.inputFocused)}>
-            <slot name="label">{this.label}</slot>
+            <slot name="label">
+              {this.label} {this.required && <span style={{ color: 'red' }}>*</span>}
+            </slot>
           </label>
         )}
 
@@ -282,6 +286,7 @@ export class IrInput {
             ref={el => (this.inputRef = el)}
             id={this.id}
             placeholder={this.placeholder}
+            required={this.required}
             value={this._mask ? this._mask.value : this.value}
             onFocus={this.handleInputFocus.bind(this)}
             onBlur={this.handleInputBlur.bind(this)}

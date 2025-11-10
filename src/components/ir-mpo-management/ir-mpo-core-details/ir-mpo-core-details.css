@@ -1,16 +1,18 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 .mpo-management__input::part(label) {
   width: 130px;
+  text-align: right;
+  font-weight: bold;
 }
 .mpo-management__country-container,
 .mpo-management__credentials-container {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 @media (min-width: 768px) {
   .mpo-management__input-city::part(label),

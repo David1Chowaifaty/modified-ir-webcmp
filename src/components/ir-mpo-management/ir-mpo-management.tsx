@@ -24,6 +24,25 @@ export class IrMpoManagement {
   private propertyService = new PropertyService();
   private store = mpoManagementStore;
 
+  private panels = [
+    {
+      label: 'Company Information',
+      value: 'companyInformation',
+    },
+    {
+      label: 'White labeling',
+      value: 'whiteLabeling',
+    },
+    {
+      label: 'Marketplaces',
+      value: 'marketplaces',
+    },
+    {
+      label: 'Websites',
+      value: 'websites',
+    },
+  ];
+
   componentWillLoad() {
     if (this.ticket) {
       this.tokenService.setToken(this.ticket);
@@ -87,9 +106,29 @@ export class IrMpoManagement {
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <ir-title class="px-1" label="MPO Details"></ir-title>
-        <section class="mpo-management__page-content">
+        <div>
+          <ir-tab-group orientation="horizontal">
+            {this.panels.map(p => (
+              <ir-tab slot="nav" key={p.value} panel={p.value}>
+                {p.label}
+              </ir-tab>
+            ))}
+            <ir-tab-panel id="companyInformation">
+              <ir-mpo-core-details></ir-mpo-core-details>
+            </ir-tab-panel>
+            <ir-tab-panel id="whiteLabeling">
+              <ir-white-labeling></ir-white-labeling>
+            </ir-tab-panel>
+            <ir-tab-panel id="marketplaces">
+              <ir-marketplace></ir-marketplace>
+            </ir-tab-panel>
+            <ir-tab-panel id="websites">
+              <ir-affiliate-table></ir-affiliate-table>
+            </ir-tab-panel>
+          </ir-tab-group>
+        </div>
+        {/* <section class="mpo-management__page-content">
           <form class="mpo-management-form" onSubmit={event => this.handleSubmit(event)}>
-            <ir-mpo-core-details></ir-mpo-core-details>
             <section class="mpo-management__panel">
               <div class="mpo-management__panel-body">
                 <div class="form-grid">
@@ -143,11 +182,10 @@ export class IrMpoManagement {
           </form>
           <section class="mpo-management-table">
             <div>
-              <ir-marketplace></ir-marketplace>
               <ir-affiliate-table></ir-affiliate-table>
             </div>
           </section>
-        </section>
+        </section> */}
       </Host>
     );
   }

@@ -6,4 +6,6 @@
 }
 .white-labeling__input-forms::part(label) {
   width: 130px;
+  text-align: right;
+  font-weight: bold;
 }
