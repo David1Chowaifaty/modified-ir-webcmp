@@ -1,11 +1,11 @@
 import { Component, Host, h } from '@stencil/core';
 
 @Component({
-  tag: 'ir-affiliate-table',
-  styleUrls: ['ir-affiliate-table.css', '../../../common/table.css'],
+  tag: 'ir-marketplace',
+  styleUrls: ['ir-marketplace.css', '../../../common/table.css'],
   scoped: true,
 })
-export class IrAffiliateTable {
+export class IrMarketplace {
   render() {
     return (
       <Host>

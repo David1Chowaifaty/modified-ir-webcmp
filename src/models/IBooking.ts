@@ -94,6 +94,12 @@ export interface ICountry {
   name: string;
   phone_prefix: string;
   flag: string;
+  market_places: MarketPlace[];
+}
+export interface MarketPlace {
+  id: number;
+  country_id: number;
+  name: string;
 }
 export const ZIEntrySchema = z.object({
   CODE_NAME: z.string(),

@@ -39,7 +39,7 @@ import { ZodType, ZodTypeAny } from "zod";
 import { PaymentEntries } from "./components/ir-booking-details/types";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
-import { SelectOption } from "./components/ir-native-select/ir-native-select";
+import { SelectOption } from "./components/ui/ir-native-select/ir-native-select";
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
 import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
@@ -88,7 +88,7 @@ export { ZodType, ZodTypeAny } from "zod";
 export { PaymentEntries } from "./components/ir-booking-details/types";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
-export { SelectOption } from "./components/ir-native-select/ir-native-select";
+export { SelectOption } from "./components/ui/ir-native-select/ir-native-select";
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
 export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
@@ -358,7 +358,11 @@ export namespace Components {
         "hide": () => Promise<void>;
         "show": () => Promise<void>;
     }
+    interface IrAffiliate {
+    }
     interface IrAffiliateForm {
+    }
+    interface IrAffiliateTable {
     }
     interface IrApplicablePolicies {
         "booking": Booking;
@@ -3543,11 +3547,23 @@ declare global {
         prototype: HTMLIrAccordionElement;
         new (): HTMLIrAccordionElement;
     };
+    interface HTMLIrAffiliateElement extends Components.IrAffiliate, HTMLStencilElement {
+    }
+    var HTMLIrAffiliateElement: {
+        prototype: HTMLIrAffiliateElement;
+        new (): HTMLIrAffiliateElement;
+    };
     interface HTMLIrAffiliateFormElement extends Components.IrAffiliateForm, HTMLStencilElement {
     }
     var HTMLIrAffiliateFormElement: {
         prototype: HTMLIrAffiliateFormElement;
         new (): HTMLIrAffiliateFormElement;
+    };
+    interface HTMLIrAffiliateTableElement extends Components.IrAffiliateTable, HTMLStencilElement {
+    }
+    var HTMLIrAffiliateTableElement: {
+        prototype: HTMLIrAffiliateTableElement;
+        new (): HTMLIrAffiliateTableElement;
     };
     interface HTMLIrApplicablePoliciesElementEventMap {
         "generatePayment": IPaymentAction;
@@ -5514,7 +5530,9 @@ declare global {
         "igl-to-be-assigned": HTMLIglToBeAssignedElement;
         "igloo-calendar": HTMLIglooCalendarElement;
         "ir-accordion": HTMLIrAccordionElement;
+        "ir-affiliate": HTMLIrAffiliateElement;
         "ir-affiliate-form": HTMLIrAffiliateFormElement;
+        "ir-affiliate-table": HTMLIrAffiliateTableElement;
         "ir-applicable-policies": HTMLIrApplicablePoliciesElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking": HTMLIrBookingElement;
@@ -6003,7 +6021,11 @@ declare namespace LocalJSX {
          */
         "onIr-toggle"?: (event: IrAccordionCustomEvent<{ expanded: boolean }>) => void;
     }
+    interface IrAffiliate {
+    }
     interface IrAffiliateForm {
+    }
+    interface IrAffiliateTable {
     }
     interface IrApplicablePolicies {
         "booking"?: Booking;
@@ -8504,7 +8526,9 @@ declare namespace LocalJSX {
         "igl-to-be-assigned": IglToBeAssigned;
         "igloo-calendar": IglooCalendar;
         "ir-accordion": IrAccordion;
+        "ir-affiliate": IrAffiliate;
         "ir-affiliate-form": IrAffiliateForm;
+        "ir-affiliate-table": IrAffiliateTable;
         "ir-applicable-policies": IrApplicablePolicies;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking": IrBooking;
@@ -8685,7 +8709,9 @@ declare module "@stencil/core" {
             "igl-to-be-assigned": LocalJSX.IglToBeAssigned & JSXBase.HTMLAttributes<HTMLIglToBeAssignedElement>;
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
             "ir-accordion": LocalJSX.IrAccordion & JSXBase.HTMLAttributes<HTMLIrAccordionElement>;
+            "ir-affiliate": LocalJSX.IrAffiliate & JSXBase.HTMLAttributes<HTMLIrAffiliateElement>;
             "ir-affiliate-form": LocalJSX.IrAffiliateForm & JSXBase.HTMLAttributes<HTMLIrAffiliateFormElement>;
+            "ir-affiliate-table": LocalJSX.IrAffiliateTable & JSXBase.HTMLAttributes<HTMLIrAffiliateTableElement>;
             "ir-applicable-policies": LocalJSX.IrApplicablePolicies & JSXBase.HTMLAttributes<HTMLIrApplicablePoliciesElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
