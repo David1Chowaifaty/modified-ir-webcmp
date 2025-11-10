@@ -79,6 +79,8 @@ export class IrMpoManagement {
 
     return (
       <Host class={'py-1'}>
+        <ir-toast></ir-toast>
+        <ir-interceptor></ir-interceptor>
         <ir-title class="px-1" label="MPO Details"></ir-title>
         <section class="mpo-management__page-content">
           <form class="mpo-management-form" onSubmit={event => this.handleSubmit(event)}>

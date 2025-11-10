@@ -1446,6 +1446,7 @@ export namespace Components {
         "value": string;
     }
     interface IrMarketplace {
+        "marketPlaces": any[];
     }
     interface IrMenuBar {
         "focusFirstMenu": () => Promise<void>;
@@ -2823,6 +2824,10 @@ export interface IrMComboboxCustomEvent<T> extends CustomEvent<T> {
 export interface IrMComboboxItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrMComboboxItemElement;
+}
+export interface IrMarketplaceCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrMarketplaceElement;
 }
 export interface IrMenuBarItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4455,7 +4460,18 @@ declare global {
         prototype: HTMLIrMComboboxItemElement;
         new (): HTMLIrMComboboxItemElement;
     };
+    interface HTMLIrMarketplaceElementEventMap {
+        "toast": IToast;
+    }
     interface HTMLIrMarketplaceElement extends Components.IrMarketplace, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrMarketplaceElementEventMap>(type: K, listener: (this: HTMLIrMarketplaceElement, ev: IrMarketplaceCustomEvent<HTMLIrMarketplaceElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrMarketplaceElementEventMap>(type: K, listener: (this: HTMLIrMarketplaceElement, ev: IrMarketplaceCustomEvent<HTMLIrMarketplaceElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrMarketplaceElement: {
         prototype: HTMLIrMarketplaceElement;
@@ -7251,6 +7267,8 @@ declare namespace LocalJSX {
         "value": string;
     }
     interface IrMarketplace {
+        "marketPlaces"?: any[];
+        "onToast"?: (event: IrMarketplaceCustomEvent<IToast>) => void;
     }
     interface IrMenuBar {
     }
