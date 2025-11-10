@@ -31,14 +31,7 @@ export class IrMpoCoreDetails {
               <div>
                 <div class="mpo-management__credentials-container">
                   <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.username} valueEvent="input-change" blurEvent="input-blur">
-                    <ir-input
-                      class="mpo-management__input "
-                      label="Credentials *"
-                      placeholder="Username"
-                      labelPosition="side"
-                      value={this.store.form.username}
-                      onInput-change={event => this.handleInputChange('username', event.detail)}
-                    ></ir-input>
+                    <ir-input class="mpo-management__input " label="Credentials *" readonly placeholder="Username" labelPosition="side" value={this.store.form.username}></ir-input>
                   </ir-validator>
 
                   <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.password} valueEvent="input-change" blurEvent="input-blur">

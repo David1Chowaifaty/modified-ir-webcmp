@@ -1050,6 +1050,12 @@ export namespace Components {
          */
         "svgClassName": string;
     }
+    interface IrImageGallery {
+    }
+    interface IrImagePreview {
+        "alt": string;
+        "src": string;
+    }
     interface IrImageUpload {
         /**
           * Comma separated list of accepted mime types or file extensions. Defaults to the most common image formats.
@@ -2789,6 +2795,10 @@ export interface IrIconCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrIconElement;
 }
+export interface IrImagePreviewCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrImagePreviewElement;
+}
 export interface IrImageUploadCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrImageUploadElement;
@@ -4270,6 +4280,29 @@ declare global {
         prototype: HTMLIrIconsElement;
         new (): HTMLIrIconsElement;
     };
+    interface HTMLIrImageGalleryElement extends Components.IrImageGallery, HTMLStencilElement {
+    }
+    var HTMLIrImageGalleryElement: {
+        prototype: HTMLIrImageGalleryElement;
+        new (): HTMLIrImageGalleryElement;
+    };
+    interface HTMLIrImagePreviewElementEventMap {
+        "remove-image": void;
+    }
+    interface HTMLIrImagePreviewElement extends Components.IrImagePreview, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrImagePreviewElementEventMap>(type: K, listener: (this: HTMLIrImagePreviewElement, ev: IrImagePreviewCustomEvent<HTMLIrImagePreviewElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrImagePreviewElementEventMap>(type: K, listener: (this: HTMLIrImagePreviewElement, ev: IrImagePreviewCustomEvent<HTMLIrImagePreviewElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrImagePreviewElement: {
+        prototype: HTMLIrImagePreviewElement;
+        new (): HTMLIrImagePreviewElement;
+    };
     interface HTMLIrImageUploadElementEventMap {
         "filesSelected": File[];
         "fileRejected": { fileName: string; reason: FileRejectReason };
@@ -5610,6 +5643,8 @@ declare global {
         "ir-housekeeping": HTMLIrHousekeepingElement;
         "ir-icon": HTMLIrIconElement;
         "ir-icons": HTMLIrIconsElement;
+        "ir-image-gallery": HTMLIrImageGalleryElement;
+        "ir-image-preview": HTMLIrImagePreviewElement;
         "ir-image-upload": HTMLIrImageUploadElement;
         "ir-input": HTMLIrInputElement;
         "ir-input-text": HTMLIrInputTextElement;
@@ -6824,6 +6859,13 @@ declare namespace LocalJSX {
           * Additional CSS class applied to the `<svg>` element. Can be used for sizing, positioning, etc.
          */
         "svgClassName"?: string;
+    }
+    interface IrImageGallery {
+    }
+    interface IrImagePreview {
+        "alt"?: string;
+        "onRemove-image"?: (event: IrImagePreviewCustomEvent<void>) => void;
+        "src"?: string;
     }
     interface IrImageUpload {
         /**
@@ -8614,6 +8656,8 @@ declare namespace LocalJSX {
         "ir-housekeeping": IrHousekeeping;
         "ir-icon": IrIcon;
         "ir-icons": IrIcons;
+        "ir-image-gallery": IrImageGallery;
+        "ir-image-preview": IrImagePreview;
         "ir-image-upload": IrImageUpload;
         "ir-input": IrInput;
         "ir-input-text": IrInputText;
@@ -8798,6 +8842,8 @@ declare module "@stencil/core" {
             "ir-housekeeping": LocalJSX.IrHousekeeping & JSXBase.HTMLAttributes<HTMLIrHousekeepingElement>;
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-icons": LocalJSX.IrIcons & JSXBase.HTMLAttributes<HTMLIrIconsElement>;
+            "ir-image-gallery": LocalJSX.IrImageGallery & JSXBase.HTMLAttributes<HTMLIrImageGalleryElement>;
+            "ir-image-preview": LocalJSX.IrImagePreview & JSXBase.HTMLAttributes<HTMLIrImagePreviewElement>;
             "ir-image-upload": LocalJSX.IrImageUpload & JSXBase.HTMLAttributes<HTMLIrImageUploadElement>;
             "ir-input": LocalJSX.IrInput & JSXBase.HTMLAttributes<HTMLIrInputElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;

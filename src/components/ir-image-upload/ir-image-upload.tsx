@@ -171,37 +171,6 @@ export class IrImageUpload {
     }
   };
 
-  private renderSelectedFiles() {
-    if (!this.files.length) {
-      return null;
-    }
-
-    return (
-      <ul class="file-list">
-        {this.files.map(file => (
-          <li>
-            <span class="file-name">{file.name}</span>
-            <span class="file-size">{this.formatSize(file.size)}</span>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
-  private formatSize(bytes: number) {
-    if (!bytes && bytes !== 0) {
-      return '';
-    }
-    const units = ['B', 'KB', 'MB', 'GB'];
-    let size = bytes;
-    let unitIndex = 0;
-    while (size >= 1024 && unitIndex < units.length - 1) {
-      size /= 1024;
-      unitIndex++;
-    }
-    return `${size.toFixed(unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
-  }
-
   render() {
     const maxSizeText = `${Math.round(this.maxFileSize / (1024 * 1024))}MB`;
 
@@ -281,7 +250,6 @@ export class IrImageUpload {
               disabled={this.disabled}
             />
           </div>
-          {this.renderSelectedFiles()}
         </div>
       </Host>
     );

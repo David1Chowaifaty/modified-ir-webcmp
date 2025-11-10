@@ -1,0 +1,58 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  --card-radius: 12px;
+  --btn-size: 24px;
+  --btn-bg: rgba(0, 0, 0, 0.55);
+  --btn-bg-hover: rgba(0, 0, 0, 0.75);
+  --btn-color: #fff;
+  --btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+.image-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  background: #f4f4f5;
+  box-sizing: border-box;
+}
+
+/* Image fills the entire card */
+.image-card > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  box-sizing: border-box;
+}
+
+/* Absolutely positioned delete button */
+.delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: var(--btn-size);
+  height: var(--btn-size);
+  border: none;
+  border-radius: 999px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15); /* translucent white */
+  backdrop-filter: blur(8px) saturate(180%);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  color: var(--btn-color, #fff);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}

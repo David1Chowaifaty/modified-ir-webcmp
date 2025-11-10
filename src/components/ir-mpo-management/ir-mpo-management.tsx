@@ -76,7 +76,12 @@ export class IrMpoManagement {
     const { form } = this.store;
     const logoValue = Array.isArray(form.companyLogo) ? form.companyLogo : [];
     const existingLogoLabel = typeof form.companyLogo === 'string' ? form.companyLogo : undefined;
-
+    const previewSrc =
+      typeof form.companyLogo === 'string'
+        ? form.companyLogo
+        : Array.isArray(form.companyLogo) && form.companyLogo.length > 0
+        ? URL.createObjectURL(form.companyLogo[0])
+        : undefined;
     return (
       <Host class={'py-1'}>
         <ir-toast></ir-toast>
@@ -99,6 +104,11 @@ export class IrMpoManagement {
                       onFilesSelected={event => this.updateCompanyLogo(event.detail)}
                       onFileRejected={event => console.warn('Logo upload rejected', event.detail)}
                     ></ir-image-upload>
+                    {previewSrc && (
+                      <div class="mt-1" style={{ width: '150px', height: '150px' }}>
+                        <ir-image-preview src={previewSrc} alt="logo"></ir-image-preview>
+                      </div>
+                    )}
                   </div>
                   <div class="checkbox-card">
                     <ir-checkbox
