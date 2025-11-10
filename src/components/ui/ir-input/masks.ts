@@ -11,6 +11,17 @@ export const masks = {
     padFractionalZeros: true,
     thousandsSeparator: ',',
   },
+  url: {
+    mask: /^\S*$/,
+    overwrite: false,
+    prepare(appended /* string */) {
+      return appended.replace(/^https?:\/\//i, '');
+    },
+
+    commit(value, masked) {
+      masked._value = 'https://' + value.replace(/^https?:\/\//i, '');
+    },
+  },
   time: {
     mask: 'HH:mm',
     blocks: {

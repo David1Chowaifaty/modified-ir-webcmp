@@ -15,24 +15,28 @@ export class IrWhiteLabeling {
     type?: 'text' | 'email' | 'password';
     placeholder?: string;
     hint?: string;
+    mask?: string;
   }> = [
     {
       key: 'extranetUrl',
       label: 'Extranet Url',
       placeholder: 'youradmindomain.com',
       hint: 'Your custom domain or subdomain',
+      mask: 'url',
     },
     {
       key: 'companyWebsite',
       label: 'Company website',
       placeholder: 'yourgroupwebsite.com',
       hint: 'Name shown to your customers',
+      mask: 'url',
     },
     {
       key: 'smtpServer',
       label: 'SMTP Server',
       placeholder: 'smtp.com',
       hint: 'Server address for transactional email',
+      mask: 'url',
     },
     {
       key: 'smtpPort',
@@ -91,6 +95,7 @@ export class IrWhiteLabeling {
                   <div class="input-with-hint" key={field.key}>
                     <ir-validator schema={schema} valueEvent="input-change" blurEvent="input-blur">
                       <ir-input
+                        mask={field.mask}
                         class="white-labeling__input-forms"
                         label={field.label}
                         labelPosition="side"
@@ -99,13 +104,7 @@ export class IrWhiteLabeling {
                         value={whiteLabel[field.key] as string}
                         disabled={disableField}
                         onInput-change={event => this.handleFieldChange(field.key, event.detail)}
-                      >
-                        {['extranetUrl', 'companyWebsite', 'smtpServer'].includes(field.key) && (
-                          <p class="m-0 p-0" slot="prefix">
-                            https://
-                          </p>
-                        )}
-                      </ir-input>
+                      ></ir-input>
                     </ir-validator>
                   </div>
                 );

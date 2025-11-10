@@ -79,6 +79,8 @@
 }
 
 .select-field {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   padding-block: var(--ir-select-padding-block);
   padding-inline: var(--ir-select-padding-inline);
   padding-inline-start: calc(var(--ir-select-padding-inline) + var(--ir-prefix-width, 0px));

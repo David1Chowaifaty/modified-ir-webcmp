@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Currency } from '@/models/property';
 
 const optionalString = () => z.string().optional().or(z.literal(''));
+const optionalUrl = () => z.string().url().optional().or(z.literal(''));
 const fileSchema = typeof File !== 'undefined' ? z.instanceof(File) : z.any();
 const fileArraySchema = z.array(fileSchema).max(10);
 const smtpDependentKeys = ['smtpPort', 'smtpLogin', 'smtpPassword', 'noReplyEmail'] as const;
@@ -11,9 +12,9 @@ export const smtpDependentFields = smtpDependentKeys;
 
 const mpoWhiteLabelBaseSchema = z.object({
   enabled: z.boolean(),
-  extranetUrl: optionalString(),
-  companyWebsite: optionalString(),
-  smtpServer: optionalString(),
+  extranetUrl: optionalUrl(),
+  companyWebsite: optionalUrl(),
+  smtpServer: optionalUrl(),
   smtpPort: optionalString(),
   smtpLogin: optionalString(),
   smtpPassword: optionalString(),
