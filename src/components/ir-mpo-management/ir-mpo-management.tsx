@@ -1,4 +1,4 @@
-import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
 import { mpoManagementStore, updateMpoManagementField, updateMpoSelectField } from '@/stores/mpo-management.store';
 import Token from '@/models/Token';
 import { BookingService } from '@/services/booking.service';
