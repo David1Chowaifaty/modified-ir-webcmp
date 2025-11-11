@@ -117,7 +117,26 @@ export class IrMpoManagement {
               <ir-brand-uploader
                 src={previewSrc}
                 onFilesSelected={event => this.updateCompanyLogo(event.detail)}
-                onFileRejected={event => console.warn('Logo upload rejected', event.detail)}
+                onFileRejected={event => {
+                  const { fileName, reason } = event.detail;
+                  let message = '';
+
+                  switch (reason) {
+                    case 'file-type':
+                      message = `The file "${fileName}" is not a supported image type. Please upload PNG, JPG, WEBP, GIF, or SVG formats.`;
+                      break;
+                    case 'file-size':
+                      message = `The file "${fileName}" is too large. Please upload an image under 10 MB.`;
+                      break;
+                    case 'max-files':
+                      message = `You can only upload one image at a time.`;
+                      break;
+                    default:
+                      message = `The file "${fileName}" could not be uploaded. Please try again.`;
+                  }
+
+                  alert(message);
+                }}
               ></ir-brand-uploader>
               <ir-mpo-core-details></ir-mpo-core-details>
             </ir-tab-panel>

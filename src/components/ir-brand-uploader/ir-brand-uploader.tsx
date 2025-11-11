@@ -51,7 +51,6 @@ export class IrBrandUploader {
           onFileRejected={event => {
             event.stopImmediatePropagation();
             event.stopPropagation();
-            console.warn('Logo upload rejected', event.detail);
             this.fileRejected.emit(event.detail);
           }}
         ></ir-image-upload>
