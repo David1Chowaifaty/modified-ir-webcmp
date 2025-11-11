@@ -1,5 +1,5 @@
-import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { updateMpoSelectField } from '@/stores/mpo-management.store';
+import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { mpoManagementStore, updateMpoManagementField, updateMpoSelectField } from '@/stores/mpo-management.store';
 import Token from '@/models/Token';
 import { BookingService } from '@/services/booking.service';
 import { PropertyService } from '@/services/property.service';
@@ -22,7 +22,7 @@ export class IrMpoManagement {
   private tokenService = new Token();
   private bookingService = new BookingService();
   private propertyService = new PropertyService();
-  // private store = mpoManagementStore;
+  private store = mpoManagementStore;
 
   private panels = [
     {
@@ -72,9 +72,9 @@ export class IrMpoManagement {
   //   updateMpoManagementField(field, (value ?? '') as MpoManagementForm[Field]);
   // }
 
-  // private updateCompanyLogo(files: File[]) {
-  //   updateMpoManagementField('companyLogo', files.length ? [...files] : '');
-  // }
+  private updateCompanyLogo(files: File[]) {
+    updateMpoManagementField('companyLogo', files.length ? [...files] : '');
+  }
 
   // private toggleReceiveNotification(checked: boolean) {
   //   updateMpoManagementField('receiveNotificationOnEmail', checked);
@@ -92,15 +92,15 @@ export class IrMpoManagement {
   // }
 
   render() {
-    // const { form } = this.store;
+    const { form } = this.store;
     // const logoValue = Array.isArray(form.companyLogo) ? form.companyLogo : [];
     // const existingLogoLabel = typeof form.companyLogo === 'string' ? form.companyLogo : undefined;
-    // const previewSrc =
-    //   typeof form.companyLogo === 'string'
-    //     ? form.companyLogo
-    //     : Array.isArray(form.companyLogo) && form.companyLogo.length > 0
-    //     ? URL.createObjectURL(form.companyLogo[0])
-    //     : undefined;
+    const previewSrc =
+      typeof form.companyLogo === 'string'
+        ? form.companyLogo
+        : Array.isArray(form.companyLogo) && form.companyLogo.length > 0
+        ? URL.createObjectURL(form.companyLogo[0])
+        : undefined;
     return (
       <Host class={'py-1'}>
         <ir-toast></ir-toast>
@@ -114,6 +114,11 @@ export class IrMpoManagement {
               </ir-tab>
             ))}
             <ir-tab-panel id="companyInformation">
+              <ir-brand-uploader
+                src={previewSrc}
+                onFilesSelected={event => this.updateCompanyLogo(event.detail)}
+                onFileRejected={event => console.warn('Logo upload rejected', event.detail)}
+              ></ir-brand-uploader>
               <ir-mpo-core-details></ir-mpo-core-details>
             </ir-tab-panel>
             <ir-tab-panel id="whiteLabeling">

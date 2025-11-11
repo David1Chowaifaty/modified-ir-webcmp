@@ -1,5 +1,5 @@
 import { Component, Host, State, h, writeTask } from '@stencil/core';
-import { mpoCoreDetailSchemas, mpoManagementStore, updateMpoManagementField } from '@/stores/mpo-management.store';
+import { mpoCoreDetailSchemas, MpoManagementForm, mpoManagementStore, RootMpoFields, updateMpoManagementField } from '@/stores/mpo-management.store';
 
 @Component({
   tag: 'ir-mpo-core-details',
@@ -23,6 +23,13 @@ export class IrMpoCoreDetails {
       this.isPasswordValid = nextValue;
     });
   };
+  private updateTextField<Field extends Exclude<RootMpoFields, 'companyLogo' | 'receiveNotificationOnEmail'>>(field: Field, value: string | null) {
+    updateMpoManagementField(field, (value ?? '') as MpoManagementForm[Field]);
+  }
+
+  private toggleReceiveNotification(checked: boolean) {
+    updateMpoManagementField('receiveNotificationOnEmail', checked);
+  }
   render() {
     return (
       <Host>
@@ -183,6 +190,31 @@ export class IrMpoCoreDetails {
                   onInput-change={event => this.handleInputChange('phone', event.detail)}
                 ></ir-input>
               </ir-validator>
+              <div class="checkbox-card">
+                <ir-checkbox
+                  style={{ gap: '0.5rem' }}
+                  label="Receive notifications via email"
+                  checked={this.store.form.receiveNotificationOnEmail}
+                  onCheckChange={event => this.toggleReceiveNotification(event.detail)}
+                ></ir-checkbox>
+                <p class="field-hint">Get updates about your account and important changes</p>
+              </div>
+              <style>
+                {`
+                      .mpo-management__note-textfield .form-control{
+                        border-radius:0.5rem
+                      }
+                      
+                      `}
+              </style>
+              <ir-textarea
+                class="mpo-management__note-textfield"
+                label="Notes"
+                placeholder=""
+                rows={2}
+                value={this.store.form.notes}
+                onTextChange={event => this.updateTextField('notes', event.detail)}
+              ></ir-textarea>
             </div>
           </div>
         </section>

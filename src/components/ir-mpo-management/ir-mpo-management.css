@@ -1,12 +1,5 @@
 :host {
   display: block;
-  --mpo-management__panel-border: #e4e9f7;
-  --mpo-management__panel-background: #ffffff;
-  --mpo-management__panel-shadow: 0 16px 40px rgba(15, 30, 57, 0.08);
-  --text-muted: #6f7d9b;
-  --text-heading: #1a2a52;
-  --accent: #4f6bed;
-  --surface-muted: #f4f6fc;
   width: 100%;
   background-color: white;
 }
@@ -130,23 +123,8 @@
   gap: 0.35rem;
 }
 
-.field-hint {
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
 .logo-upload {
   padding: 0.25rem 0;
-}
-
-.checkbox-card {
-  background: var(--surface-muted);
-  border-radius: 0.85rem;
-  padding: 1rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
 }
 
 .mpo-management__form-actions {

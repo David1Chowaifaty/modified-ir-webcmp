@@ -176,7 +176,7 @@ export class IrImageUpload {
 
     return (
       <Host>
-        <div class={{ container: true, disabled: this.disabled }}>
+        <div part="base" class={{ container: true, disabled: this.disabled }}>
           {this.label && (
             <label class="upload-label" htmlFor={this.inputId}>
               {this.label}
@@ -188,6 +188,7 @@ export class IrImageUpload {
               'is-dragging': this.isDragOver,
               'disabled': this.disabled,
             }}
+            part="dropzone"
             role="button"
             tabindex={this.disabled ? -1 : 0}
             aria-disabled={this.disabled ? 'true' : 'false'}
@@ -217,7 +218,7 @@ export class IrImageUpload {
             }}
             onDrop={this.handleDrop}
           >
-            <div class="dropzone-content">
+            <div class="dropzone-content" part="dropzone-content">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

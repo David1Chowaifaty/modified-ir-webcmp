@@ -1,3 +1,12 @@
+:host {
+  --mpo-management__panel-border: #e4e9f7;
+  --mpo-management__panel-background: #ffffff;
+  --mpo-management__panel-shadow: 0 16px 40px rgba(15, 30, 57, 0.08);
+  --text-muted: #6f7d9b;
+  --text-heading: #1a2a52;
+  --accent: #4f6bed;
+  --surface-muted: #f4f6fc;
+}
 .mpo-management__panel {
   background: var(--mpo-management__panel-background);
   display: flex;
@@ -36,7 +45,19 @@
   flex-direction: column;
   gap: 1.25rem;
 }
-
+.checkbox-card {
+  background: var(--surface-muted);
+  border-radius: 0.85rem;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.field-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
 .mpo-management__panel-body.disabled {
   opacity: 0.55;
   pointer-events: none;

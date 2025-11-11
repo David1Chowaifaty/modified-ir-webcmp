@@ -23,6 +23,7 @@ import { IPaymentAction } from "./services/payment.service";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { BookingService } from "./services/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+import { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -32,7 +33,7 @@ import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeep
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
-import { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
+import { FileRejectReason as FileRejectReason1 } from "./components/ir-image-upload/ir-image-upload";
 import { MaskProp } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
 import { ZodType, ZodTypeAny } from "zod";
@@ -73,6 +74,7 @@ export { IPaymentAction } from "./services/payment.service";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { BookingService } from "./services/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+export { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -82,7 +84,7 @@ export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeep
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
-export { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
+export { FileRejectReason as FileRejectReason1 } from "./components/ir-image-upload/ir-image-upload";
 export { MaskProp } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
 export { ZodType, ZodTypeAny } from "zod";
@@ -445,6 +447,9 @@ export namespace Components {
         "mode": 'invoice' | 'default';
         "propertyid": number;
         "token": string;
+    }
+    interface IrBrandUploader {
+        "src": string;
     }
     interface IrButton {
         /**
@@ -2758,6 +2763,10 @@ export interface IrBookingHeaderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingHeaderElement;
 }
+export interface IrBrandUploaderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBrandUploaderElement;
+}
 export interface IrButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrButtonElement;
@@ -3791,6 +3800,24 @@ declare global {
         prototype: HTMLIrBookingPrintingElement;
         new (): HTMLIrBookingPrintingElement;
     };
+    interface HTMLIrBrandUploaderElementEventMap {
+        "filesSelected": File[];
+        "fileRejected": { fileName: string; reason: FileRejectReason };
+    }
+    interface HTMLIrBrandUploaderElement extends Components.IrBrandUploader, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBrandUploaderElementEventMap>(type: K, listener: (this: HTMLIrBrandUploaderElement, ev: IrBrandUploaderCustomEvent<HTMLIrBrandUploaderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBrandUploaderElementEventMap>(type: K, listener: (this: HTMLIrBrandUploaderElement, ev: IrBrandUploaderCustomEvent<HTMLIrBrandUploaderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBrandUploaderElement: {
+        prototype: HTMLIrBrandUploaderElement;
+        new (): HTMLIrBrandUploaderElement;
+    };
     interface HTMLIrButtonElementEventMap {
         "clickHandler": any;
     }
@@ -4388,7 +4415,7 @@ declare global {
     };
     interface HTMLIrImageUploadElementEventMap {
         "filesSelected": File[];
-        "fileRejected": { fileName: string; reason: FileRejectReason };
+        "fileRejected": { fileName: string; reason: FileRejectReason1 };
     }
     interface HTMLIrImageUploadElement extends Components.IrImageUpload, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrImageUploadElementEventMap>(type: K, listener: (this: HTMLIrImageUploadElement, ev: IrImageUploadCustomEvent<HTMLIrImageUploadElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5732,6 +5759,7 @@ declare global {
         "ir-booking-header": HTMLIrBookingHeaderElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
+        "ir-brand-uploader": HTMLIrBrandUploaderElement;
         "ir-button": HTMLIrButtonElement;
         "ir-channel": HTMLIrChannelElement;
         "ir-channel-editor": HTMLIrChannelEditorElement;
@@ -6315,6 +6343,17 @@ declare namespace LocalJSX {
         "mode"?: 'invoice' | 'default';
         "propertyid"?: number;
         "token"?: string;
+    }
+    interface IrBrandUploader {
+        /**
+          * Fired when a file is rejected due to type, size, or exceeding the limit.
+         */
+        "onFileRejected"?: (event: IrBrandUploaderCustomEvent<{ fileName: string; reason: FileRejectReason }>) => void;
+        /**
+          * Fired whenever the list of selected files changes.
+         */
+        "onFilesSelected"?: (event: IrBrandUploaderCustomEvent<File[]>) => void;
+        "src"?: string;
     }
     interface IrButton {
         /**
@@ -7036,7 +7075,7 @@ declare namespace LocalJSX {
         /**
           * Fired when a file is rejected due to type, size, or exceeding the limit.
          */
-        "onFileRejected"?: (event: IrImageUploadCustomEvent<{ fileName: string; reason: FileRejectReason }>) => void;
+        "onFileRejected"?: (event: IrImageUploadCustomEvent<{ fileName: string; reason: FileRejectReason1 }>) => void;
         /**
           * Fired whenever the list of selected files changes.
          */
@@ -8827,6 +8866,7 @@ declare namespace LocalJSX {
         "ir-booking-header": IrBookingHeader;
         "ir-booking-listing": IrBookingListing;
         "ir-booking-printing": IrBookingPrinting;
+        "ir-brand-uploader": IrBrandUploader;
         "ir-button": IrButton;
         "ir-channel": IrChannel;
         "ir-channel-editor": IrChannelEditor;
@@ -9017,6 +9057,7 @@ declare module "@stencil/core" {
             "ir-booking-header": LocalJSX.IrBookingHeader & JSXBase.HTMLAttributes<HTMLIrBookingHeaderElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;
+            "ir-brand-uploader": LocalJSX.IrBrandUploader & JSXBase.HTMLAttributes<HTMLIrBrandUploaderElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
             "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
             "ir-channel-editor": LocalJSX.IrChannelEditor & JSXBase.HTMLAttributes<HTMLIrChannelEditorElement>;

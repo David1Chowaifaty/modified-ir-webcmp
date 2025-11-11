@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  height: 150px;
+  aspect-ratio: 1;
+}
+.brand-uploader__image-upload[data-has-image='true']::part(dropzone) {
+  background-image: var(--ir-uploader-img);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.brand-uploader__image-upload[data-has-image='true']::part(dropzone-content) {
+  opacity: 0;
+  user-select: none;
+}
