@@ -449,6 +449,17 @@ export namespace Components {
         "token": string;
     }
     interface IrBrandUploader {
+        /**
+          * Comma separated list of accepted mime types or file extensions. Defaults to the most common image formats.
+         */
+        "accept": string;
+        /**
+          * Max file size in bytes. Default is 10MB.
+         */
+        "maxFileSize": number;
+        /**
+          * Source URL of the uploaded image (logo or favicon).
+         */
         "src": string;
     }
     interface IrButton {
@@ -6346,6 +6357,14 @@ declare namespace LocalJSX {
     }
     interface IrBrandUploader {
         /**
+          * Comma separated list of accepted mime types or file extensions. Defaults to the most common image formats.
+         */
+        "accept"?: string;
+        /**
+          * Max file size in bytes. Default is 10MB.
+         */
+        "maxFileSize"?: number;
+        /**
           * Fired when a file is rejected due to type, size, or exceeding the limit.
          */
         "onFileRejected"?: (event: IrBrandUploaderCustomEvent<{ fileName: string; reason: FileRejectReason }>) => void;
@@ -6353,6 +6372,9 @@ declare namespace LocalJSX {
           * Fired whenever the list of selected files changes.
          */
         "onFilesSelected"?: (event: IrBrandUploaderCustomEvent<File[]>) => void;
+        /**
+          * Source URL of the uploaded image (logo or favicon).
+         */
         "src"?: string;
     }
     interface IrButton {

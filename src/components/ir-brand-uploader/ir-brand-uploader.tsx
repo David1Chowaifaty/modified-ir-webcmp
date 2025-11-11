@@ -9,7 +9,17 @@ import { FileRejectReason } from '../ir-image-upload/ir-image-upload';
 export class IrBrandUploader {
   @Element() el: HTMLIrBrandUploaderElement;
 
+  /** Source URL of the uploaded image (logo or favicon). */
   @Prop() src: string;
+  /**
+   * Comma separated list of accepted mime types or file extensions.
+   * Defaults to the most common image formats.
+   */
+  @Prop() accept: string = 'image/png,image/jpeg,image/webp,image/gif,image/svg+xml';
+
+  /** Max file size in bytes. Default is 10MB. */
+  @Prop() maxFileSize = 10 * 1024 * 1024;
+
   /** Fired whenever the list of selected files changes. */
   @Event() filesSelected: EventEmitter<File[]>;
 
@@ -21,7 +31,6 @@ export class IrBrandUploader {
     if (newSource === oldSource) {
       return;
     }
-    console.log(newSource);
     this.el.style.setProperty('--ir-uploader-img', `url("${newSource}")`);
   }
 
@@ -29,6 +38,8 @@ export class IrBrandUploader {
     return (
       <Host>
         <ir-image-upload
+          maxFileSize={this.maxFileSize}
+          accept={this.accept}
           data-has-image={this.src ? 'true' : 'false'}
           class="brand-uploader__image-upload"
           maxFiles={1}
