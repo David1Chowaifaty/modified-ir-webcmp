@@ -454,6 +454,10 @@ export namespace Components {
          */
         "accept": string;
         /**
+          * Maximum allowed image dimensions in the format "widthxheight" (e.g., "150x150"), where the first value is the width and the second is the height in pixels. Used to validate the uploaded image’s pixel size.
+         */
+        "dimensions": string;
+        /**
           * Extra message shown below the helper text (useful for accepted formats, size limits, etc.).
          */
         "footerText": string;
@@ -1095,6 +1099,10 @@ export namespace Components {
           * Clears all selected files.
          */
         "clear": () => Promise<void>;
+        /**
+          * Maximum allowed image dimensions in the format "widthxheight" (e.g., "150x150"), where the first value is the width and the second is the height in pixels. Used to validate the uploaded image’s pixel size.
+         */
+        "dimensions": string;
         /**
           * Disables user interaction when true.
          */
@@ -6373,6 +6381,10 @@ declare namespace LocalJSX {
          */
         "accept"?: string;
         /**
+          * Maximum allowed image dimensions in the format "widthxheight" (e.g., "150x150"), where the first value is the width and the second is the height in pixels. Used to validate the uploaded image’s pixel size.
+         */
+        "dimensions"?: string;
+        /**
           * Extra message shown below the helper text (useful for accepted formats, size limits, etc.).
          */
         "footerText"?: string;
@@ -7090,6 +7102,10 @@ declare namespace LocalJSX {
           * Comma separated list of accepted mime types or file extensions. Defaults to the most common image formats.
          */
         "accept"?: string;
+        /**
+          * Maximum allowed image dimensions in the format "widthxheight" (e.g., "150x150"), where the first value is the width and the second is the height in pixels. Used to validate the uploaded image’s pixel size.
+         */
+        "dimensions"?: string;
         /**
           * Disables user interaction when true.
          */

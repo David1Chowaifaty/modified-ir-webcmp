@@ -125,6 +125,14 @@
 
 .logo-upload {
   padding: 0.25rem 0;
+  width: fit-content;
+}
+.mpo-management__uploader-container {
+  padding-left: calc(130px + var(--ir-gap, 1rem));
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ir-gap, 1rem);
 }
 
 .mpo-management__form-actions {

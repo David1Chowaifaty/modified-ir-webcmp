@@ -27,6 +27,12 @@ export class IrBrandUploader {
 
   /** Max file size in bytes. Default is 10MB. */
   @Prop() maxFileSize = 10 * 1024 * 1024;
+  /**
+   * Maximum allowed image dimensions in the format "widthxheight" (e.g., "150x150"),
+   * where the first value is the width and the second is the height in pixels.
+   * Used to validate the uploaded image’s pixel size.
+   */
+  @Prop() dimensions: string;
 
   /** Fired whenever the list of selected files changes. */
   @Event() filesSelected: EventEmitter<File[]>;
@@ -46,6 +52,7 @@ export class IrBrandUploader {
     return (
       <Host>
         <ir-image-upload
+          dimensions={this.dimensions}
           label={this.label}
           helperText={this.helperText}
           footerText={this.footerText}

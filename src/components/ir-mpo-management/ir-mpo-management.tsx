@@ -120,7 +120,7 @@ export class IrMpoManagement {
               <ir-white-labeling></ir-white-labeling>
               <section class="mpo-management__panel">
                 <div class="mpo-management__panel-body">
-                  <div class="form-grid two">
+                  <div class="mpo-management__uploader-container">
                     <div class="logo-upload">
                       <ir-brand-uploader
                         src={previewSrc}
@@ -151,18 +151,22 @@ export class IrMpoManagement {
                     <div class="logo-upload">
                       <ir-brand-uploader
                         src={previewSrc}
+                        accept="image/png,image/x-icon,image/svg+xml"
                         label="Company Favicon"
-                        onFilesSelected={event => this.updateCompanyLogo(event.detail)}
+                        helperText="Upload a square PNG or ICO image up to 150 × 150 px (max 150 KB)."
+                        onFilesSelected={async event => {
+                          this.updateCompanyLogo(event.detail);
+                        }}
                         onFileRejected={event => {
                           const { fileName, reason } = event.detail;
                           let message = '';
 
                           switch (reason) {
                             case 'file-type':
-                              message = `The file "${fileName}" is not a supported image type. Please upload PNG, JPG, WEBP, GIF, or SVG formats.`;
+                              message = `The file "${fileName}" is not a supported favicon type. Please upload PNG, ICO, or SVG.`;
                               break;
                             case 'file-size':
-                              message = `The file "${fileName}" is too large. Please upload an image under 10 MB.`;
+                              message = `The file "${fileName}" is too large. Please upload an image under 150 KB.`;
                               break;
                             case 'max-files':
                               message = `You can only upload one image at a time.`;

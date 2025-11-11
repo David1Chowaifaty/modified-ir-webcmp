@@ -1,6 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
+import { z } from 'zod';
 
-export type FileRejectReason = 'file-type' | 'file-size' | 'max-files';
+export type FileRejectReason = 'file-type' | 'file-size' | 'max-files' | 'file-dimensions';
 
 @Component({
   tag: 'ir-image-upload',
@@ -43,6 +44,13 @@ export class IrImageUpload {
   /** Optional label describing an existing uploaded resource. */
   @Prop() existingValueLabel: string;
 
+  /**
+   * Maximum allowed image dimensions in the format "widthxheight" (e.g., "150x150"),
+   * where the first value is the width and the second is the height in pixels.
+   * Used to validate the uploaded image’s pixel size.
+   */
+  @Prop() dimensions: string;
+
   /** Fired whenever the list of selected files changes. */
   @Event() filesSelected: EventEmitter<File[]>;
 
@@ -58,6 +66,14 @@ export class IrImageUpload {
   componentWillLoad() {
     if (this.value?.length) {
       this.files = [...this.value];
+    }
+    const { error } = z
+      .string()
+      .regex(/^\d+x\d+$/)
+      .optional()
+      .safeParse(this.dimensions);
+    if (error) {
+      console.error(error);
     }
   }
 
@@ -79,7 +95,28 @@ export class IrImageUpload {
   private emitSelected() {
     this.filesSelected.emit(this.files);
   }
+  private async validateDimensions(file: File): Promise<string | null> {
+    const [maxWidth, maxHeight] = this.dimensions.split('x');
+    const objectUrl = URL.createObjectURL(file);
+    try {
+      const { width, height } = await new Promise<{ width: number; height: number }>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight });
+        img.onerror = reject;
+        img.src = objectUrl;
+      });
 
+      if (width > Number(maxWidth) || height > Number(maxHeight)) {
+        return `The image is ${width}×${height}px. Please upload an image up to 150×150 px.`;
+      }
+    } catch {
+      return `Could not read the image "${file.name}". Please try another file.`;
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+    }
+
+    return null; // valid
+  }
   private handleBrowseClick = () => {
     if (this.disabled) {
       return;
@@ -129,6 +166,10 @@ export class IrImageUpload {
       }
       if (!this.isFileAccepted(file, acceptedMimeTypes)) {
         this.fileRejected.emit({ fileName: file.name, reason: 'file-type' });
+        continue;
+      }
+      if (this.dimensions && !this.validateDimensions(file)) {
+        this.fileRejected.emit({ fileName: file.name, reason: 'file-dimensions' });
         continue;
       }
       nextFiles.push(file);
