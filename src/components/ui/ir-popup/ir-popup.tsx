@@ -72,6 +72,7 @@ export class IrPopup {
   private popupPanelId = `ir-popup-panel-${++popupId}`;
   private positionRaf?: number;
   private detachInteractionListeners?: () => void;
+  private detachHoverClickBlocker?: () => void;
 
   componentWillLoad() {
     if (!this.open && this.defaultOpen) {
@@ -137,6 +138,10 @@ export class IrPopup {
     if (this.detachInteractionListeners) {
       this.detachInteractionListeners();
       this.detachInteractionListeners = undefined;
+    }
+    if (this.detachHoverClickBlocker) {
+      this.detachHoverClickBlocker();
+      this.detachHoverClickBlocker = undefined;
     }
   }
 
@@ -255,6 +260,10 @@ export class IrPopup {
       this.detachInteractionListeners();
       this.detachInteractionListeners = undefined;
     }
+    if (this.detachHoverClickBlocker) {
+      this.detachHoverClickBlocker();
+      this.detachHoverClickBlocker = undefined;
+    }
 
     if (this.interaction === 'click') {
       const trigger = this.popupTriggerRef;
@@ -277,6 +286,18 @@ export class IrPopup {
           handleLeave();
         }
       };
+
+      const trigger = this.popupTriggerRef;
+      if (trigger) {
+        const blockClick = (event: MouseEvent) => {
+          event.preventDefault();
+          event.stopPropagation();
+        };
+        trigger.addEventListener('click', blockClick);
+        this.detachHoverClickBlocker = () => {
+          trigger.removeEventListener('click', blockClick);
+        };
+      }
 
       this.host.addEventListener('mouseenter', handleEnter);
       this.host.addEventListener('mouseleave', handleLeave);
