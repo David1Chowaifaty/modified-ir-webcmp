@@ -114,34 +114,70 @@ export class IrMpoManagement {
               </ir-tab>
             ))}
             <ir-tab-panel id="companyInformation">
-              <ir-brand-uploader
-                src={previewSrc}
-                onFilesSelected={event => this.updateCompanyLogo(event.detail)}
-                onFileRejected={event => {
-                  const { fileName, reason } = event.detail;
-                  let message = '';
-
-                  switch (reason) {
-                    case 'file-type':
-                      message = `The file "${fileName}" is not a supported image type. Please upload PNG, JPG, WEBP, GIF, or SVG formats.`;
-                      break;
-                    case 'file-size':
-                      message = `The file "${fileName}" is too large. Please upload an image under 10 MB.`;
-                      break;
-                    case 'max-files':
-                      message = `You can only upload one image at a time.`;
-                      break;
-                    default:
-                      message = `The file "${fileName}" could not be uploaded. Please try again.`;
-                  }
-
-                  alert(message);
-                }}
-              ></ir-brand-uploader>
               <ir-mpo-core-details></ir-mpo-core-details>
             </ir-tab-panel>
             <ir-tab-panel id="whiteLabeling">
               <ir-white-labeling></ir-white-labeling>
+              <section class="mpo-management__panel">
+                <div class="mpo-management__panel-body">
+                  <div class="form-grid two">
+                    <div class="logo-upload">
+                      <ir-brand-uploader
+                        src={previewSrc}
+                        label="Company Logo"
+                        onFilesSelected={event => this.updateCompanyLogo(event.detail)}
+                        onFileRejected={event => {
+                          const { fileName, reason } = event.detail;
+                          let message = '';
+
+                          switch (reason) {
+                            case 'file-type':
+                              message = `The file "${fileName}" is not a supported image type. Please upload PNG, JPG, WEBP, GIF, or SVG formats.`;
+                              break;
+                            case 'file-size':
+                              message = `The file "${fileName}" is too large. Please upload an image under 10 MB.`;
+                              break;
+                            case 'max-files':
+                              message = `You can only upload one image at a time.`;
+                              break;
+                            default:
+                              message = `The file "${fileName}" could not be uploaded. Please try again.`;
+                          }
+
+                          alert(message);
+                        }}
+                      ></ir-brand-uploader>
+                    </div>
+                    <div class="logo-upload">
+                      <ir-brand-uploader
+                        src={previewSrc}
+                        label="Company Favicon"
+                        onFilesSelected={event => this.updateCompanyLogo(event.detail)}
+                        onFileRejected={event => {
+                          const { fileName, reason } = event.detail;
+                          let message = '';
+
+                          switch (reason) {
+                            case 'file-type':
+                              message = `The file "${fileName}" is not a supported image type. Please upload PNG, JPG, WEBP, GIF, or SVG formats.`;
+                              break;
+                            case 'file-size':
+                              message = `The file "${fileName}" is too large. Please upload an image under 10 MB.`;
+                              break;
+                            case 'max-files':
+                              message = `You can only upload one image at a time.`;
+                              break;
+                            default:
+                              message = `The file "${fileName}" could not be uploaded. Please try again.`;
+                          }
+
+                          alert(message);
+                        }}
+                      ></ir-brand-uploader>
+                    </div>
+                  </div>
+                </div>
+              </section>
             </ir-tab-panel>
             <ir-tab-panel id="marketplaces">
               <ir-marketplace></ir-marketplace>

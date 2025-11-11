@@ -454,6 +454,18 @@ export namespace Components {
          */
         "accept": string;
         /**
+          * Extra message shown below the helper text (useful for accepted formats, size limits, etc.).
+         */
+        "footerText": string;
+        /**
+          * Helper text rendered beneath the dropzone.
+         */
+        "helperText": string;
+        /**
+          * Accessible label displayed above the dropzone.
+         */
+        "label": string;
+        /**
           * Max file size in bytes. Default is 10MB.
          */
         "maxFileSize": number;
@@ -6360,6 +6372,18 @@ declare namespace LocalJSX {
           * Comma separated list of accepted mime types or file extensions. Defaults to the most common image formats.
          */
         "accept"?: string;
+        /**
+          * Extra message shown below the helper text (useful for accepted formats, size limits, etc.).
+         */
+        "footerText"?: string;
+        /**
+          * Helper text rendered beneath the dropzone.
+         */
+        "helperText"?: string;
+        /**
+          * Accessible label displayed above the dropzone.
+         */
+        "label"?: string;
         /**
           * Max file size in bytes. Default is 10MB.
          */

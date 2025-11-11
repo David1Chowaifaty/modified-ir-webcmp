@@ -11,6 +11,14 @@ export class IrBrandUploader {
 
   /** Source URL of the uploaded image (logo or favicon). */
   @Prop() src: string;
+  /** Accessible label displayed above the dropzone. */
+  @Prop() label: string;
+
+  /** Helper text rendered beneath the dropzone. */
+  @Prop() helperText: string;
+
+  /** Extra message shown below the helper text (useful for accepted formats, size limits, etc.). */
+  @Prop() footerText: string;
   /**
    * Comma separated list of accepted mime types or file extensions.
    * Defaults to the most common image formats.
@@ -38,6 +46,9 @@ export class IrBrandUploader {
     return (
       <Host>
         <ir-image-upload
+          label={this.label}
+          helperText={this.helperText}
+          footerText={this.footerText}
           maxFileSize={this.maxFileSize}
           accept={this.accept}
           data-has-image={this.src ? 'true' : 'false'}
