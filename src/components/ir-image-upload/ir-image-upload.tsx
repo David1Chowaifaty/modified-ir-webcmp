@@ -116,6 +116,7 @@ export class IrImageUpload {
       .filter(Boolean);
 
     const nextFiles = this.replaceOnSelect ? [] : [...this.files];
+    let acceptedNewFile = false;
 
     for (const file of incoming) {
       if (nextFiles.length >= this.maxFiles) {
@@ -131,6 +132,11 @@ export class IrImageUpload {
         continue;
       }
       nextFiles.push(file);
+      acceptedNewFile = true;
+    }
+
+    if (this.replaceOnSelect && !acceptedNewFile) {
+      return;
     }
 
     this.files = nextFiles;
