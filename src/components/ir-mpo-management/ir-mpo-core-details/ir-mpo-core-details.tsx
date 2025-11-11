@@ -72,7 +72,7 @@ export class IrMpoCoreDetails {
                       onInput-change={event => this.handleInputChange('password', event.detail)}
                       labelPosition="side"
                     >
-                      <ir-popup class="mpo-management__popup" slot="suffix" interaction="hover" flip strategy="fixed">
+                      <ir-popup slot="prefix" shift class="mpo-management__popup" interaction="hover" flip strategy="fixed">
                         <button slot="trigger" class={'mpo-management__popup-trigger'}>
                           {this.isPasswordValid ? (
                             <svg xmlns="http://www.w3.org/2000/svg" style={{ color: '#28d094' }} height={24} width={24} viewBox="0 0 640 640">

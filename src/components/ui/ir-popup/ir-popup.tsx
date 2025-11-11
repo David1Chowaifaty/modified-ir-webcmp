@@ -49,6 +49,9 @@ export class IrPopup {
   /** Enable flip middleware to keep the popup visible. */
   @Prop() flip: boolean = false;
 
+  /** Enable shift middleware to keep the popup visible. */
+  @Prop() shift: boolean = false;
+
   /** Strategy used by Floating UI when multiple flip candidates exist. */
   @Prop({ attribute: 'flip-fallback-strategy' }) flipFallbackStrategy: 'best-fit' | 'initial' = 'best-fit';
 
@@ -200,7 +203,9 @@ export class IrPopup {
         }),
       );
     }
-    middleware.push(shift({ padding: this.shiftPadding }));
+    if (this.shift) {
+      middleware.push(shift({ padding: this.shiftPadding }));
+    }
 
     const { x, y, placement } = await computePosition(this.popupTriggerRef, this.popupMenuRef, {
       placement: this.placement,

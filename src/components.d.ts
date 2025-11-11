@@ -1974,6 +1974,10 @@ export namespace Components {
     | 'left-start'
     | 'left-end';
         /**
+          * Enable shift middleware to keep the popup visible.
+         */
+        "shift": boolean;
+        /**
           * Viewport padding passed to the shift middleware.
          */
         "shiftPadding": number;
@@ -8110,6 +8114,10 @@ declare namespace LocalJSX {
     | 'left'
     | 'left-start'
     | 'left-end';
+        /**
+          * Enable shift middleware to keep the popup visible.
+         */
+        "shift"?: boolean;
         /**
           * Viewport padding passed to the shift middleware.
          */
