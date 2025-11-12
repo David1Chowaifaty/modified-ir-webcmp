@@ -106,7 +106,7 @@ export class IrMpoManagement {
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <ir-title class="px-1" label="MPO Details"></ir-title>
-        <div class={'card m-0 px-0'}>
+        <div>
           <ir-tab-group orientation="horizontal">
             {this.panels.map(p => (
               <ir-tab slot="nav" key={p.value} panel={p.value}>
