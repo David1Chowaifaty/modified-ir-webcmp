@@ -1,11 +1,9 @@
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { mpoManagementStore, updateMpoManagementField, updateMpoManagementFields, updateMpoSelectField } from '@/stores/mpo-management.store';
+import { mpoManagementStore, updateMpoManagementField, updateMpoManagementFields, updateMpoSelectField, upsertMarketPlace } from '@/stores/mpo-management.store';
 import Token from '@/models/Token';
 import { BookingService } from '@/services/booking.service';
 import { PropertyService } from '@/services/property.service';
 import { MPOService } from '@/services/mpo-service';
-
-// const MAX_LOGO_FILE_SIZE = 10 * 1024 * 1024;
 
 @Component({
   tag: 'ir-mpo-management',
@@ -90,11 +88,8 @@ export class IrMpoManagement {
       notes: mpo.notes,
       receiveNotificationOnEmail: mpo.is_email_notification,
     });
+    upsertMarketPlace(mpo.market_places);
   }
-
-  // private updateTextField<Field extends Exclude<RootMpoFields, 'companyLogo' | 'receiveNotificationOnEmail'>>(field: Field, value: string | null) {
-  //   updateMpoManagementField(field, (value ?? '') as MpoManagementForm[Field]);
-  // }
 
   private updateCompanyLogo(files: File[]) {
     updateMpoManagementField('companyLogo', files.length ? [...files] : '');
@@ -103,20 +98,6 @@ export class IrMpoManagement {
     updateMpoManagementField('companyFavicon', files.length ? [...files] : '');
   }
 
-  // private toggleReceiveNotification(checked: boolean) {
-  //   updateMpoManagementField('receiveNotificationOnEmail', checked);
-  // }
-
-  // private handleSubmit(event: Event) {
-  //   event.preventDefault();
-  //   this.submitted = true;
-  //   try {
-  //     const cleaned = mpoManagementSchema.parse(this.store.form);
-  //     console.log('MPO management payload', cleaned);
-  //   } catch (error) {
-  //     console.warn('Validation errors', error);
-  //   }
-  // }
   private getSource(src: string | File[]) {
     return typeof src === 'string' ? src : Array.isArray(src) && src.length > 0 ? URL.createObjectURL(src[0]) : undefined;
   }
@@ -214,65 +195,6 @@ export class IrMpoManagement {
             </ir-tab-panel>
           </ir-tab-group>
         </div>
-        {/* <section class="mpo-management__page-content">
-          <form class="mpo-management-form" onSubmit={event => this.handleSubmit(event)}>
-            <section class="mpo-management__panel">
-              <div class="mpo-management__panel-body">
-                <div class="form-grid">
-                  <div class="logo-upload">
-                    <ir-image-upload
-                      label="Company Logo"
-                      helperText={`PNG, JPG, GIF, SVG, WEBP up to ${Math.round(MAX_LOGO_FILE_SIZE / (1024 * 1024))}MB`}
-                      accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
-                      maxFileSize={MAX_LOGO_FILE_SIZE}
-                      value={logoValue}
-                      existingValueLabel={existingLogoLabel}
-                      onFilesSelected={event => this.updateCompanyLogo(event.detail)}
-                      onFileRejected={event => console.warn('Logo upload rejected', event.detail)}
-                    ></ir-image-upload>
-                    {previewSrc && (
-                      <div class="mt-1" style={{ width: '150px', height: '150px' }}>
-                        <ir-image-preview src={previewSrc} alt="logo"></ir-image-preview>
-                      </div>
-                    )}
-                  </div>
-                  <div class="checkbox-card">
-                    <ir-checkbox
-                      style={{ gap: '0.5rem' }}
-                      label="Receive notifications via email"
-                      checked={form.receiveNotificationOnEmail}
-                      onCheckChange={event => this.toggleReceiveNotification(event.detail)}
-                    ></ir-checkbox>
-                    <p class="field-hint">Get updates about your account and important changes</p>
-                  </div>
-                  <style>
-                    {`
-                      .mpo-management__note-textfield .form-control{
-                        border-radius:0.5rem
-                      }
-                      
-                      `}
-                  </style>
-                  <ir-textarea
-                    class="mpo-management__note-textfield"
-                    label="Notes"
-                    placeholder=""
-                    rows={2}
-                    value={form.notes}
-                    onTextChange={event => this.updateTextField('notes', event.detail)}
-                  ></ir-textarea>
-                </div>
-              </div>
-            </section>
-            <ir-white-labeling></ir-white-labeling>
-            <ir-button btn_type="submit" text="Save" class="mt-2" size="md"></ir-button>
-          </form>
-          <section class="mpo-management-table">
-            <div>
-              <ir-affiliate-table></ir-affiliate-table>
-            </div>
-          </section>
-        </section> */}
       </Host>
     );
   }

@@ -1,7 +1,7 @@
 import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { IToast } from '@/components/ui/ir-toast/toast';
-import { mpoManagementStore } from '@/stores/mpo-management.store';
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { mpoManagementStore, removeMarketPlace } from '@/stores/mpo-management.store';
+import { Component, Event, EventEmitter, Host, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-marketplace',
@@ -9,8 +9,6 @@ import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/c
   scoped: true,
 })
 export class IrMarketplace {
-  @Prop({ mutable: true }) marketPlaces: any[] = [];
-
   @State() selectedCountry: string;
   @State() selectedMarketplace: string;
 
@@ -21,7 +19,7 @@ export class IrMarketplace {
   private async addMarketPlace(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.marketPlaces = [...this.marketPlaces, { country: this.selectedCountry, marketplace: this.selectedMarketplace }];
+    // this.marketPlaces = [...this.marketPlaces, { country: this.selectedCountry, marketplace: this.selectedMarketplace }];
     this.toast.emit({
       position: 'top-right',
       title: 'Marketplace was saved successfully',
@@ -62,22 +60,29 @@ export class IrMarketplace {
             </tr>
           </thead>
           <tbody>
-            {this.marketPlaces.length === 0 && (
+            {this.store.marketPlaces.length === 0 && (
               <tr class={'ir-table-row'}>
                 <td colSpan={3} class="text-center">
                   No data
                 </td>
               </tr>
             )}
-            {this.marketPlaces.map(m => {
-              const country = this.store.selects.marketPlaces.find(c => c.id.toString() === m.country);
-              const marketplace = country?.market_places.find(mp => mp.id.toString() === m.marketplace);
+            {this.store.marketPlaces.map(m => {
+              const country = this.store.selects.marketPlaces.find(c => c.id.toString() === m.country_id.toString());
               return (
                 <tr class={'ir-table-row'}>
                   <td>{country?.name}</td>
-                  <td>{marketplace?.name}</td>
+                  <td>{m?.name}</td>
                   <td>
-                    <ir-button class="payment-item__action-button" onClickHandler={() => {}} variant="icon" style={colorVariants.danger} icon_name="trash"></ir-button>
+                    <ir-button
+                      class="payment-item__action-button"
+                      onClickHandler={() => {
+                        removeMarketPlace(m.id);
+                      }}
+                      variant="icon"
+                      style={colorVariants.danger}
+                      icon_name="trash"
+                    ></ir-button>
                   </td>
                 </tr>
               );

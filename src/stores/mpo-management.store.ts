@@ -2,12 +2,14 @@ import { ICountry } from '@/models/IBooking';
 import { createStore } from '@stencil/store';
 import { z } from 'zod';
 import { Currency } from '@/models/property';
+import { MarketPlace } from '@/services/mpo-service/types';
 
 const optionalString = () => z.string().optional().or(z.literal(''));
 const optionalUrl = () => z.string().url().optional().or(z.literal(''));
 const fileSchema = typeof File !== 'undefined' ? z.instanceof(File) : z.any();
 const fileArraySchema = z.array(fileSchema).max(10);
 const smtpDependentKeys = ['smtpPort', 'smtpLogin', 'smtpPassword', 'noReplyEmail'] as const;
+
 export const smtpDependentFields = smtpDependentKeys;
 
 const mpoWhiteLabelBaseSchema = z.object({
@@ -95,6 +97,7 @@ export interface MpoManagementSelects {
 export interface MpoManagementStoreState {
   form: MpoManagementForm;
   selects: MpoManagementSelects;
+  marketPlaces: MarketPlace[];
 }
 
 const initialState: MpoManagementStoreState = {
@@ -124,6 +127,7 @@ const initialState: MpoManagementStoreState = {
       noReplyEmail: '',
     },
   },
+  marketPlaces: [],
   selects: {
     marketPlaces: [],
     countries: [],
@@ -173,4 +177,16 @@ export function resetMpoManagementForm(next?: Partial<MpoManagementForm>) {
       ...(next?.whiteLabel || {}),
     },
   };
+}
+
+//--------------
+// Marketplaces
+//--------------
+
+export function removeMarketPlace(id: MarketPlace['id']) {
+  mpoManagementStore.marketPlaces = [...mpoManagementStore.marketPlaces.filter(m => m.id !== id)];
+}
+
+export function upsertMarketPlace(params: MarketPlace[]) {
+  mpoManagementStore.marketPlaces = [...params];
 }

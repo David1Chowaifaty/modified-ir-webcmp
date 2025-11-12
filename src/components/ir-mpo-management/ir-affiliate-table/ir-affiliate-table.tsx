@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Host, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-affiliate-table',
@@ -6,10 +6,45 @@ import { Component, Host, h } from '@stencil/core';
   scoped: true,
 })
 export class IrAffiliateTable {
+  @State() isOpen: boolean;
   render() {
     return (
       <Host>
-        <slot></slot>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Active</th>
+              <th>Company name</th>
+              <th>Website</th>
+              <th>
+                <ir-button
+                  variant="icon"
+                  icon_name="plus"
+                  onClickHandler={() => {
+                    this.isOpen = true;
+                  }}
+                ></ir-button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="ir-table-row">
+              <td>hellow</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <ir-sidebar
+          showCloseButton={false}
+          open={this.isOpen}
+          onIrSidebarToggle={_ => {
+            this.isOpen = !this.isOpen;
+          }}
+        >
+          <ir-affiliate slot="sidebar-body"></ir-affiliate>
+        </ir-sidebar>
       </Host>
     );
   }

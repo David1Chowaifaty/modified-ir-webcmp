@@ -9,7 +9,7 @@ export class IrAffiliate {
   render() {
     return (
       <Host>
-        <slot></slot>
+        <ir-affiliate-form></ir-affiliate-form>
       </Host>
     );
   }

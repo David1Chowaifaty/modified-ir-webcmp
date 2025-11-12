@@ -1491,7 +1491,6 @@ export namespace Components {
         "value": string;
     }
     interface IrMarketplace {
-        "marketPlaces": any[];
     }
     interface IrMenuBar {
         "focusFirstMenu": () => Promise<void>;
@@ -7549,7 +7548,6 @@ declare namespace LocalJSX {
         "value": string;
     }
     interface IrMarketplace {
-        "marketPlaces"?: any[];
         "onToast"?: (event: IrMarketplaceCustomEvent<IToast>) => void;
     }
     interface IrMenuBar {
