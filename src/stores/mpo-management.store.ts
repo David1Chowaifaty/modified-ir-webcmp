@@ -41,6 +41,7 @@ export type MpoWhiteLabelSettings = z.infer<typeof mpoWhiteLabelSchema>;
 export const mpoManagementSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
   companyLogo: z.union([optionalString(), fileArraySchema.optional()]),
+  companyFavicon: z.union([optionalString(), fileArraySchema.optional()]),
   username: z.string().min(1, 'Username is required'),
   password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/, 'Password is required'),
   country: z.string().min(1, 'Country is required'),
@@ -138,6 +139,12 @@ export function updateMpoManagementField<Field extends RootMpoFields>(field: Fie
   mpoManagementStore.form = {
     ...mpoManagementStore.form,
     [field]: value,
+  };
+}
+export function updateMpoManagementFields(params: Partial<Omit<MpoManagementForm, 'whiteLabel'>>) {
+  mpoManagementStore.form = {
+    ...mpoManagementStore.form,
+    ...params,
   };
 }
 export function updateMpoSelectField(params: Partial<MpoManagementSelects>) {

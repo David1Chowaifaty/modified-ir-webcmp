@@ -1624,6 +1624,7 @@ export namespace Components {
     }
     interface IrMpoManagement {
         "language": string;
+        "mpoID": number;
         "propertyid": string;
         "ticket": string;
     }
@@ -7694,6 +7695,7 @@ declare namespace LocalJSX {
     }
     interface IrMpoManagement {
         "language"?: string;
+        "mpoID"?: number;
         "propertyid"?: string;
         "ticket"?: string;
     }

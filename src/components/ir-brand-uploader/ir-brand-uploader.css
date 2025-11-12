@@ -7,7 +7,7 @@
 .brand-uploader__image-upload[data-has-image='true']::part(dropzone) {
   background-image: var(--ir-uploader-img);
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 .brand-uploader__image-upload[data-has-image='true']::part(dropzone-content) {

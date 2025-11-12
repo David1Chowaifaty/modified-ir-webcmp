@@ -31,6 +31,7 @@ export class IrMpoCoreDetails {
     updateMpoManagementField('receiveNotificationOnEmail', checked);
   }
   render() {
+    console.log(this.store.form);
     return (
       <Host>
         <section class="mpo-management__panel">
@@ -145,8 +146,9 @@ export class IrMpoCoreDetails {
                   class="mpo-management__input"
                   required
                   label="Billing currency"
+                  value={this.store.form.billingCurrency}
                   labelPosition="side"
-                  options={[{ label: 'Select...', value: '' }, ...this.store.selects.currencies.map(c => ({ label: c.symbol, value: c.id }))]}
+                  options={[{ label: 'Select...', value: '' }, ...this.store.selects.currencies.map(c => ({ label: c.symbol, value: c.id.toString() }))]}
                 ></ir-native-select>
               </ir-validator>
             </div>

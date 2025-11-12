@@ -1,8 +1,9 @@
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { mpoManagementStore, updateMpoManagementField, updateMpoSelectField } from '@/stores/mpo-management.store';
+import { mpoManagementStore, updateMpoManagementField, updateMpoManagementFields, updateMpoSelectField } from '@/stores/mpo-management.store';
 import Token from '@/models/Token';
 import { BookingService } from '@/services/booking.service';
 import { PropertyService } from '@/services/property.service';
+import { MPOService } from '@/services/mpo-service';
 
 // const MAX_LOGO_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -14,14 +15,18 @@ import { PropertyService } from '@/services/property.service';
 export class IrMpoManagement {
   @Prop() ticket: string;
   @Prop() propertyid: string;
+  @Prop({ attribute: 'mpo-id' }) mpoID: number;
   @Prop() language: string = 'en';
 
   @State() isLoading: boolean;
   @State() submitted = false;
 
   private tokenService = new Token();
+
   private bookingService = new BookingService();
   private propertyService = new PropertyService();
+  private mpoService = new MPOService();
+
   private store = mpoManagementStore;
 
   private panels = [
@@ -59,12 +64,31 @@ export class IrMpoManagement {
   }
 
   private async init() {
-    const [countries, currencies] = await Promise.all([this.bookingService.getCountries(this.language), this.propertyService.getExposedCurrencies()]);
+    const [countries, currencies] = await Promise.all([this.bookingService.getCountries(this.language), this.propertyService.getExposedCurrencies(), this.getExposedMpo()]);
 
     updateMpoSelectField({
       marketPlaces: countries.filter(c => c.market_places !== null),
       countries,
       currencies,
+    });
+  }
+
+  private async getExposedMpo() {
+    const mpo = await this.mpoService.getExposedMpo({ id: this.mpoID });
+    updateMpoManagementFields({
+      address: mpo.address,
+      city: mpo.city,
+      companyName: mpo.company_name ?? mpo.name,
+      companyLogo: mpo.logo_url,
+      email: mpo.user.email,
+      phone: mpo.phone,
+      username: mpo.user.username,
+      password: mpo.user.password,
+      country: mpo.country.id.toString(),
+      billingCurrency: mpo.biling_currency.id.toString(),
+      companyFavicon: mpo.fav_icon,
+      notes: mpo.notes,
+      receiveNotificationOnEmail: mpo.is_email_notification,
     });
   }
 
@@ -74,6 +98,9 @@ export class IrMpoManagement {
 
   private updateCompanyLogo(files: File[]) {
     updateMpoManagementField('companyLogo', files.length ? [...files] : '');
+  }
+  private updateCompanyFavIcon(files: File[]) {
+    updateMpoManagementField('companyFavicon', files.length ? [...files] : '');
   }
 
   // private toggleReceiveNotification(checked: boolean) {
@@ -90,17 +117,13 @@ export class IrMpoManagement {
   //     console.warn('Validation errors', error);
   //   }
   // }
-
+  private getSource(src: string | File[]) {
+    return typeof src === 'string' ? src : Array.isArray(src) && src.length > 0 ? URL.createObjectURL(src[0]) : undefined;
+  }
   render() {
     const { form } = this.store;
-    // const logoValue = Array.isArray(form.companyLogo) ? form.companyLogo : [];
-    // const existingLogoLabel = typeof form.companyLogo === 'string' ? form.companyLogo : undefined;
-    const previewSrc =
-      typeof form.companyLogo === 'string'
-        ? form.companyLogo
-        : Array.isArray(form.companyLogo) && form.companyLogo.length > 0
-        ? URL.createObjectURL(form.companyLogo[0])
-        : undefined;
+    const previewSrc = this.getSource(form.companyLogo);
+    const previewFavIconSrc = this.getSource(form.companyFavicon);
     return (
       <Host class={'py-1'}>
         <ir-toast></ir-toast>
@@ -150,12 +173,12 @@ export class IrMpoManagement {
                     </div>
                     <div class="logo-upload">
                       <ir-brand-uploader
-                        src={previewSrc}
+                        src={previewFavIconSrc}
                         accept="image/png,image/x-icon,image/svg+xml"
                         label="Company Favicon"
                         helperText="Upload a square PNG or ICO image up to 150 × 150 px (max 150 KB)."
                         onFilesSelected={async event => {
-                          this.updateCompanyLogo(event.detail);
+                          this.updateCompanyFavIcon(event.detail);
                         }}
                         onFileRejected={event => {
                           const { fileName, reason } = event.detail;
