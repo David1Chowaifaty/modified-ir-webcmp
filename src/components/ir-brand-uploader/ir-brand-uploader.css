@@ -1,7 +1,8 @@
 :host {
   display: block;
-  height: 150px;
-  aspect-ratio: 2/1;
+  width: 100%;
+  /* height: 150px;
+  aspect-ratio: 2/1; */
 }
 .brand-uploader__image-upload[data-has-image='true']::part(dropzone) {
   background-image: var(--ir-uploader-img);

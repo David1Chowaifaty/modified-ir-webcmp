@@ -5,7 +5,13 @@
   margin-top: 1rem;
 }
 .white-labeling__input-forms::part(label) {
-  width: 130px;
-  text-align: right;
+  width: 110px;
   font-weight: bold;
+}
+/*md*/
+@media (min-width: 768px) {
+  .white-labeling__input-forms::part(label) {
+    text-align: right;
+    font-weight: bold;
+  }
 }

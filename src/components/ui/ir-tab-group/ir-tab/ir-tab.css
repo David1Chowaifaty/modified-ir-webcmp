@@ -3,6 +3,7 @@
   position: relative;
   color: var(--ir-foreground);
   font: inherit;
+  box-sizing: border-box;
 }
 
 :host(:focus-visible) {

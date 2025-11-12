@@ -4,8 +4,7 @@
   gap: 1rem;
 }
 .mpo-management__input::part(label) {
-  width: 130px;
-  text-align: right;
+  width: 110px;
   font-weight: bold;
 }
 .mpo-management__input-password::part(suffix) {
@@ -34,7 +33,12 @@
   cursor: pointer;
   margin: auto;
 }
+/*md*/
 @media (min-width: 768px) {
+  .mpo-management__input::part(label) {
+    width: 130px;
+    text-align: right;
+  }
   .mpo-management__input-city::part(label),
   .mpo-management__input-password::part(label) {
     display: none;
