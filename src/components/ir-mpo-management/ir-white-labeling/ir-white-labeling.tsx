@@ -100,6 +100,7 @@ export class IrWhiteLabeling {
                 {this.whiteLabelFieldMeta.map((field, index) => {
                   const disableField = disableFieldsAfterSmtp && smtpFieldIndex !== -1 && index > smtpFieldIndex;
                   const schema = this.getSchema(isSmtpServerProvided, field.key, field.label);
+                  const value = whiteLabel[field.key] as string;
                   return (
                     <div class="input-with-hint" key={field.key}>
                       <ir-validator schema={schema} valueEvent="input-change" blurEvent="input-blur">
@@ -110,10 +111,12 @@ export class IrWhiteLabeling {
                           labelPosition="side"
                           type={field.type || 'text'}
                           placeholder={field.placeholder}
-                          value={whiteLabel[field.key] as string}
+                          value={value}
                           disabled={disableField}
                           onInput-change={event => this.handleFieldChange(field.key, event.detail)}
-                        ></ir-input>
+                        >
+                          {field.key === 'smtpPassword' && value && <ir-copy-button class="copy-button" slot="suffix" text={value}></ir-copy-button>}
+                        </ir-input>
                       </ir-validator>
                     </div>
                   );

@@ -103,7 +103,6 @@ export const affiliateFormSchema = z.object({
     .string()
     .min(1, 'Website is required')
     .regex(/^(?!https?:\/\/)(?!www\.)[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/u, 'Enter a valid domain (no protocol or www)'),
-  ctaColor: optionalString(),
   logo: z.union([optionalString(), fileArraySchema.optional()]),
   favicon: z.union([optionalString(), fileArraySchema.optional()]),
   customCss: optionalString(),
@@ -111,6 +110,7 @@ export const affiliateFormSchema = z.object({
   headerTag: optionalString(),
   bodyTag: optionalString(),
   footerTag: optionalString(),
+  ctaColor: z.string().regex(/^#(?:[0-9a-fA-F]{3}){1,2}$/, 'Enter a valid hex color'),
 });
 
 export type AffiliateForm = z.infer<typeof affiliateFormSchema>;
@@ -129,6 +129,12 @@ export const affiliateFormSchemas = {
   website: affiliateShape.website,
   ctaColor: affiliateShape.ctaColor,
   logo: affiliateShape.logo,
+  favicon: affiliateShape.favicon,
+  customCss: affiliateShape.customCss,
+  conversionTag: affiliateShape.conversionTag,
+  headerTag: affiliateShape.headerTag,
+  bodyTag: affiliateShape.bodyTag,
+  footerTag: affiliateShape.footerTag,
 } as const;
 
 export interface MpoManagementSelects {

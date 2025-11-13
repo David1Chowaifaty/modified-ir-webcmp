@@ -118,6 +118,15 @@ export class IrAffiliateForm {
                   onInput-change={ev => this.handleInputChange('website', ev.detail)}
                 ></ir-input>
               </ir-validator>
+              <ir-validator schema={affiliateFormSchemas.ctaColor} valueEvent="color-change" blurEvent="input-blur">
+                <ir-color-picker
+                  onColor-change={e => this.handleInputChange('ctaColor', e.detail.value)}
+                  class="mpo-management__input picker"
+                  label="Call-to-action button color"
+                  required
+                  value={affiliateNewForm.website}
+                ></ir-color-picker>
+              </ir-validator>
             </div>
           </div>
         </section>

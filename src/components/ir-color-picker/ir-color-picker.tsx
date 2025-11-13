@@ -1,4 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { v4 } from 'uuid';
 
 export type ColorPickerChangeSource = 'picker' | 'input' | 'clear' | 'prop';
 
@@ -26,7 +27,10 @@ const HEX_MASK = {
 })
 export class IrColorPicker {
   /** Label rendered inside the hex input. */
-  @Prop() label: string = 'Hex color';
+  @Prop() label: string;
+
+  /** Required color. */
+  @Prop() required: boolean;
 
   /** Helper text displayed below the input. */
   @Prop() message?: string;
@@ -41,11 +45,14 @@ export class IrColorPicker {
   @State() private hexValue: string = '';
 
   private colorInputEl?: HTMLInputElement;
+  private _id: string;
 
   @Event({ eventName: 'color-change', bubbles: true, composed: true }) colorChange: EventEmitter<ColorPickerChangeDetail>;
+  @Event({ eventName: 'color-input-blur', bubbles: true, composed: true }) colorInputBlur: EventEmitter<FocusEvent>;
 
   componentWillLoad() {
     this.syncFromProp(this.value, false);
+    this._id = `color-picker-${v4()}`;
   }
 
   @Watch('value')
@@ -136,20 +143,26 @@ export class IrColorPicker {
     const previewStyle = this.colorValue ? { backgroundColor: this.colorValue } : undefined;
     return (
       <Host>
-        <div class="picker" data-disabled={this.disabled ? 'true' : 'false'}>
+        <label part="label" class="picker-label" htmlFor={this._id}>
+          {this.label} {this.required && <span style={{ color: 'red' }}>*</span>}
+        </label>
+        <div class="picker" part="picker" data-disabled={this.disabled ? 'true' : 'false'}>
           <button class="picker__swatch" type="button" onClick={this.handleSwatchClick} disabled={this.disabled} aria-label="Choose color">
             <span class={{ 'picker__swatch-bg': true, 'picker__swatch-bg--empty': !this.colorValue }} style={previewStyle}></span>
           </button>
 
           <input
+            id={this._id}
             class="picker__native"
             type="color"
             value={this.colorValue || '#000000'}
             ref={el => (this.colorInputEl = el)}
             disabled={this.disabled}
             onInput={this.handleNativeColorInput}
+            onBlur={e => this.colorInputBlur.emit(e)}
           />
           <ir-input
+            onInput-blur={e => this.colorInputBlur.emit(e.detail)}
             style={{ flex: '1 1 0%' }}
             value={this.hexValue}
             placeholder="#000000"

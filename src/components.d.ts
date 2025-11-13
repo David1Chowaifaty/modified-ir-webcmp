@@ -632,6 +632,10 @@ export namespace Components {
          */
         "message"?: string;
         /**
+          * Required color.
+         */
+        "required": boolean;
+        /**
           * Optional hex value to control the picker externally.
          */
         "value"?: string;
@@ -4030,6 +4034,7 @@ declare global {
     };
     interface HTMLIrColorPickerElementEventMap {
         "color-change": ColorPickerChangeDetail;
+        "color-input-blur": FocusEvent;
     }
     interface HTMLIrColorPickerElement extends Components.IrColorPicker, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrColorPickerElementEventMap>(type: K, listener: (this: HTMLIrColorPickerElement, ev: IrColorPickerCustomEvent<HTMLIrColorPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6657,6 +6662,11 @@ declare namespace LocalJSX {
          */
         "message"?: string;
         "onColor-change"?: (event: IrColorPickerCustomEvent<ColorPickerChangeDetail>) => void;
+        "onColor-input-blur"?: (event: IrColorPickerCustomEvent<FocusEvent>) => void;
+        /**
+          * Required color.
+         */
+        "required"?: boolean;
         /**
           * Optional hex value to control the picker externally.
          */
