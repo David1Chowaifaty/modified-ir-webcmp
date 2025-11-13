@@ -1,3 +1,4 @@
+import { mpoManagementStore } from '@/stores/mpo-management.store';
 import { Component, Host, State, h } from '@stencil/core';
 
 @Component({
@@ -7,7 +8,9 @@ import { Component, Host, State, h } from '@stencil/core';
 })
 export class IrAffiliateTable {
   @State() isOpen: boolean;
+  private store = mpoManagementStore;
   render() {
+    const { affiliates } = this.store;
     return (
       <Host>
         <table class="table">
@@ -28,11 +31,27 @@ export class IrAffiliateTable {
             </tr>
           </thead>
           <tbody>
-            <tr class="ir-table-row">
-              <td colSpan={4} class="text-center">
-                No Data
-              </td>
-            </tr>
+            {affiliates.length === 0 ? (
+              <tr class="ir-table-row">
+                <td colSpan={4} class="text-center">
+                  No Data
+                </td>
+              </tr>
+            ) : (
+              affiliates.map(a => {
+                return (
+                  <tr class="ir-table-row">
+                    <td>{String(a.active)}</td>
+                    <td>{a.companyName}</td>
+                    <td>{a.website}</td>
+                    <td>
+                      <ir-button variant="icon" icon_name="edit"></ir-button>
+                      <ir-button variant="icon" icon_name="trash"></ir-button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
         <ir-sidebar
