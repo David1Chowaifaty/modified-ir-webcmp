@@ -25,8 +25,10 @@ export class IrAffiliate {
             </style>
             <div class={'px-1 pb-1 d-flex flex-column'} style={{ gap: '1rem' }}>
               <ir-affiliate-form></ir-affiliate-form>
-              <ir-brand-uploader label="Website logo"></ir-brand-uploader>
-              <ir-brand-uploader label="Website favicon"></ir-brand-uploader>
+              <div class="d-flex align-items-center">
+                <ir-brand-uploader label="Website logo"></ir-brand-uploader>
+                <ir-brand-uploader label="Website favicon"></ir-brand-uploader>
+              </div>
 
               <ir-textarea class="mpo-management__note-textfield" placeholder="" label="Custom css"></ir-textarea>
               <ir-textarea class="mpo-management__note-textfield" placeholder="" label="Conversion tag"></ir-textarea>
