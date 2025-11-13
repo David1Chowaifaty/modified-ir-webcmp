@@ -35,7 +35,7 @@ export class IrMpoCoreDetails {
       <Host>
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
-            <div class="companyInfo-grid">
+            <div class="form-grid">
               <ir-validator schema={mpoCoreDetailSchemas.companyName} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
@@ -113,7 +113,7 @@ export class IrMpoCoreDetails {
         </section>
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
-            <div class="companyInfo-grid">
+            <div class="form-grid">
               <div class="mpo-management__country-container">
                 <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.country} valueEvent="select-change" blurEvent="select-blur">
                   <ir-native-select
@@ -166,7 +166,7 @@ export class IrMpoCoreDetails {
         </section>
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
-            <div class="companyInfo-grid">
+            <div class="form-grid">
               <ir-validator schema={mpoCoreDetailSchemas.mainContact} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
@@ -202,7 +202,7 @@ export class IrMpoCoreDetails {
                   onInput-change={event => this.handleInputChange('phone', event.detail)}
                 ></ir-input>
               </ir-validator>
-              <div class="companyInfo-switch-row">
+              <div class="form-switch-row">
                 <span>Receive notifications via email</span>
                 <ir-switch checked={this.store.companyInfo.receiveNotificationOnEmail} onCheckChange={e => this.toggleReceiveNotification(e.detail)}></ir-switch>
               </div>
