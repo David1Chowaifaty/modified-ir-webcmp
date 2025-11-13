@@ -203,8 +203,12 @@ export class IrMpoCoreDetails {
                 ></ir-input>
               </ir-validator>
               <div class="form-switch-row">
-                <span>Receive notifications via email</span>
-                <ir-switch checked={this.store.companyInfo.receiveNotificationOnEmail} onCheckChange={e => this.toggleReceiveNotification(e.detail)}></ir-switch>
+                <label htmlFor="notifications-email">Receive notifications via email</label>
+                <ir-switch
+                  switchId="notifications-email"
+                  checked={this.store.companyInfo.receiveNotificationOnEmail}
+                  onCheckChange={e => this.toggleReceiveNotification(e.detail)}
+                ></ir-switch>
               </div>
               <style>
                 {`

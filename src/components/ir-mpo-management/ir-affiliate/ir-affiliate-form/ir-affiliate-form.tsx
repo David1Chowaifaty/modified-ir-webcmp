@@ -21,8 +21,8 @@ export class IrAffiliateForm {
           <div class="mpo-management__panel-body">
             <div class="form-grid">
               <div class="form-switch-row">
-                <span>Active</span>
-                <ir-switch checked={affiliateNewForm.active} onCheckChange={event => this.handleInputChange('active', event.detail)}></ir-switch>
+                <label htmlFor="website-active">Active</label>
+                <ir-switch switchId="website-active" checked={affiliateNewForm.active} onCheckChange={event => this.handleInputChange('active', event.detail)}></ir-switch>
               </div>
               <ir-input
                 class="mpo-management__input flex-fill"

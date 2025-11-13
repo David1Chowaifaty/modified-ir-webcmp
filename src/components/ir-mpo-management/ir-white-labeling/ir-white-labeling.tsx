@@ -93,8 +93,12 @@ export class IrWhiteLabeling {
               </div>
               <div class="checkbox-card" style={{ gap: '1rem' }}>
                 <div class="form-switch-row">
-                  <span>Use your own SMTP</span>
-                  <ir-switch checked={whiteLabel['enableCustomSmtp']} onCheckChange={event => this.handleFieldChange('enableCustomSmtp', event.detail)}></ir-switch>
+                  <label htmlFor="custom-smtp">Use your own SMTP</label>
+                  <ir-switch
+                    switchId="custom-smtp"
+                    checked={whiteLabel['enableCustomSmtp']}
+                    onCheckChange={event => this.handleFieldChange('enableCustomSmtp', event.detail)}
+                  ></ir-switch>
                 </div>
 
                 {this.whiteLabelFieldMeta.map((field, index) => {
