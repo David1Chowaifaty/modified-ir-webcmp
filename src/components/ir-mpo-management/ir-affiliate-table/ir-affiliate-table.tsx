@@ -42,7 +42,7 @@ export class IrAffiliateTable {
             this.isOpen = !this.isOpen;
           }}
         >
-          <ir-affiliate slot="sidebar-body"></ir-affiliate>
+          {this.isOpen && <ir-affiliate slot="sidebar-body"></ir-affiliate>}
         </ir-sidebar>
       </Host>
     );
