@@ -26,6 +26,7 @@ import { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEnt
 import { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
+import { ColorPickerChangeDetail } from "./components/ir-color-picker/ir-color-picker";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
@@ -77,6 +78,7 @@ export { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEnt
 export { FileRejectReason } from "./components/ir-image-upload/ir-image-upload";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
+export { ColorPickerChangeDetail } from "./components/ir-color-picker/ir-color-picker";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
@@ -615,6 +617,24 @@ export namespace Components {
     }
     interface IrCheckboxes {
         "checkboxes": checkboxes[];
+    }
+    interface IrColorPicker {
+        /**
+          * Disables both inputs when true.
+         */
+        "disabled": boolean;
+        /**
+          * Optional label rendered above the inputs.
+         */
+        "label": string;
+        /**
+          * Helper text displayed below the picker.
+         */
+        "message"?: string;
+        /**
+          * Hex value used to initialize the control.
+         */
+        "value"?: string;
     }
     interface IrCombobox {
         /**
@@ -1170,6 +1190,10 @@ export namespace Components {
           * Maximum allowed value (for number or masked inputs).
          */
         "max": number;
+        /**
+          * Maximum input length
+         */
+        "maxLength": number;
         /**
           * Minimum allowed value (for number or masked inputs).
          */
@@ -2839,6 +2863,10 @@ export interface IrCheckboxesCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrCheckboxesElement;
 }
+export interface IrColorPickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrColorPickerElement;
+}
 export interface IrComboboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrComboboxElement;
@@ -3992,6 +4020,23 @@ declare global {
     var HTMLIrCheckboxesElement: {
         prototype: HTMLIrCheckboxesElement;
         new (): HTMLIrCheckboxesElement;
+    };
+    interface HTMLIrColorPickerElementEventMap {
+        "color-change": ColorPickerChangeDetail;
+    }
+    interface HTMLIrColorPickerElement extends Components.IrColorPicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrColorPickerElementEventMap>(type: K, listener: (this: HTMLIrColorPickerElement, ev: IrColorPickerCustomEvent<HTMLIrColorPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrColorPickerElementEventMap>(type: K, listener: (this: HTMLIrColorPickerElement, ev: IrColorPickerCustomEvent<HTMLIrColorPickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrColorPickerElement: {
+        prototype: HTMLIrColorPickerElement;
+        new (): HTMLIrColorPickerElement;
     };
     interface HTMLIrComboboxElementEventMap {
         "comboboxValueChange": { key: string; data: unknown };
@@ -5827,6 +5872,7 @@ declare global {
         "ir-channel-mapping": HTMLIrChannelMappingElement;
         "ir-checkbox": HTMLIrCheckboxElement;
         "ir-checkboxes": HTMLIrCheckboxesElement;
+        "ir-color-picker": HTMLIrColorPickerElement;
         "ir-combobox": HTMLIrComboboxElement;
         "ir-common": HTMLIrCommonElement;
         "ir-copy-button": HTMLIrCopyButtonElement;
@@ -6590,6 +6636,25 @@ declare namespace LocalJSX {
         "checkboxes"?: checkboxes[];
         "onCheckboxesChange"?: (event: IrCheckboxesCustomEvent<checkboxes[]>) => void;
     }
+    interface IrColorPicker {
+        /**
+          * Disables both inputs when true.
+         */
+        "disabled"?: boolean;
+        /**
+          * Optional label rendered above the inputs.
+         */
+        "label"?: string;
+        /**
+          * Helper text displayed below the picker.
+         */
+        "message"?: string;
+        "onColor-change"?: (event: IrColorPickerCustomEvent<ColorPickerChangeDetail>) => void;
+        /**
+          * Hex value used to initialize the control.
+         */
+        "value"?: string;
+    }
     interface IrCombobox {
         /**
           * Autofocuses the input field when true.
@@ -7210,6 +7275,10 @@ declare namespace LocalJSX {
           * Maximum allowed value (for number or masked inputs).
          */
         "max"?: number;
+        /**
+          * Maximum input length
+         */
+        "maxLength"?: number;
         /**
           * Minimum allowed value (for number or masked inputs).
          */
@@ -8979,6 +9048,7 @@ declare namespace LocalJSX {
         "ir-channel-mapping": IrChannelMapping;
         "ir-checkbox": IrCheckbox;
         "ir-checkboxes": IrCheckboxes;
+        "ir-color-picker": IrColorPicker;
         "ir-combobox": IrCombobox;
         "ir-common": IrCommon;
         "ir-copy-button": IrCopyButton;
@@ -9170,6 +9240,7 @@ declare module "@stencil/core" {
             "ir-channel-mapping": LocalJSX.IrChannelMapping & JSXBase.HTMLAttributes<HTMLIrChannelMappingElement>;
             "ir-checkbox": LocalJSX.IrCheckbox & JSXBase.HTMLAttributes<HTMLIrCheckboxElement>;
             "ir-checkboxes": LocalJSX.IrCheckboxes & JSXBase.HTMLAttributes<HTMLIrCheckboxesElement>;
+            "ir-color-picker": LocalJSX.IrColorPicker & JSXBase.HTMLAttributes<HTMLIrColorPickerElement>;
             "ir-combobox": LocalJSX.IrCombobox & JSXBase.HTMLAttributes<HTMLIrComboboxElement>;
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-copy-button": LocalJSX.IrCopyButton & JSXBase.HTMLAttributes<HTMLIrCopyButtonElement>;

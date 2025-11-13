@@ -1,0 +1,90 @@
+:host {
+  display: inline-block;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.color-picker--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.color-picker__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.color-picker__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.color-picker__swatch input[type='color'] {
+  appearance: none;
+  border: 1px solid #cbd5f5;
+  border-radius: 0.75rem;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.color-picker__hex {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.color-picker__hex-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.color-picker__hex-input {
+  width: 100%;
+  border: 1px solid #cbd5f5;
+  border-radius: 0.65rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-transform: uppercase;
+  background: #fff;
+}
+
+.color-picker__hex-input:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.color-picker__hex-input--invalid {
+  border-color: #f87171;
+}
+
+.color-picker__helper {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.color-picker__helper--error {
+  color: #dc2626;
+}

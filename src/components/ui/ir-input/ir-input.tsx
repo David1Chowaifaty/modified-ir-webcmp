@@ -37,6 +37,9 @@ export class IrInput {
   /** If true, displays a clear (X) button when the input has a value. */
   @Prop({ reflect: true }) clearable: boolean;
 
+  /** Maximum input length */
+  @Prop({ reflect: true }) maxLength: number;
+
   /** Hides the prefix slot content from assistive technologies when true. */
   @Prop({ attribute: 'prefix-hidden' }) prefixHidden = true;
 
@@ -282,6 +285,7 @@ export class IrInput {
             disabled={this.disabled}
             readonly={this.readonly}
             class="input-field"
+            maxLength={this.maxLength}
             type={this._type}
             ref={el => (this.inputRef = el)}
             id={this.id}

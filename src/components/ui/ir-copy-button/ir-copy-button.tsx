@@ -2,8 +2,8 @@ import { Component, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-copy-button',
-  styleUrl: 'ir-copy-button.css',
-  scoped: true,
+  styleUrls: ['ir-copy-button.css', '../../../common/global.css'],
+  shadow: true,
 })
 export class IrCopyButton {
   @Prop() text: string;
@@ -110,8 +110,9 @@ export class IrCopyButton {
 
     return (
       <button
+        part="base"
         type="button"
-        class="copy-button btn btn-outline-secondary p-0 m-0"
+        class="copy-button"
         data-state={state}
         data-tooltip-placeholder
         aria-label={this.tooltipMessage}
