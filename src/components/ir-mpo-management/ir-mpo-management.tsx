@@ -105,7 +105,7 @@ export class IrMpoManagement {
   }
 
   render() {
-    const { form } = this.store;
+    const { companyInfo: form } = this.store;
     const previewSrc = this.getSource(form.companyLogo);
     const previewFavIconSrc = this.getSource(form.companyFavicon);
     return (

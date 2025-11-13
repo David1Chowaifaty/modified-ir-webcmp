@@ -90,6 +90,41 @@ export const mpoWhiteLabelFieldSchemas = {
   enableCustomSmtp: whiteLabelShape.enableCustomSmtp,
 } as const;
 
+export const affiliateFormSchema = z.object({
+  active: z.boolean({ required_error: 'Select a status' }),
+  code: z.string().min(1, 'Affiliate code is required'),
+  companyName: z.string().min(1, 'Company name is required'),
+  country: z.string().min(1, 'Country is required'),
+  city: z.string().min(1, 'City is required'),
+  address: z.string().min(1, 'Address is required'),
+  phone: z.string().min(1, 'Phone is required'),
+  email: z.string().email('Enter a valid email'),
+  website: z
+    .string()
+    .min(1, 'Website is required')
+    .regex(/^(?!https?:\/\/)(?!www\.)[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/u, 'Enter a valid domain (no protocol or www)'),
+  ctaColor: optionalString(),
+  logo: optionalString(),
+});
+
+export type AffiliateForm = z.infer<typeof affiliateFormSchema>;
+
+const affiliateShape = affiliateFormSchema.shape;
+
+export const affiliateFormSchemas = {
+  active: affiliateShape.active,
+  code: affiliateShape.code,
+  companyName: affiliateShape.companyName,
+  country: affiliateShape.country,
+  city: affiliateShape.city,
+  address: affiliateShape.address,
+  phone: affiliateShape.phone,
+  email: affiliateShape.email,
+  website: affiliateShape.website,
+  ctaColor: affiliateShape.ctaColor,
+  logo: affiliateShape.logo,
+} as const;
+
 export interface MpoManagementSelects {
   countries: ICountry[];
   marketPlaces: ICountry[];
@@ -97,13 +132,15 @@ export interface MpoManagementSelects {
 }
 
 export interface MpoManagementStoreState {
-  form: MpoManagementForm;
+  companyInfo: MpoManagementForm;
   selects: MpoManagementSelects;
   marketPlaces: MarketPlace[];
+  affiliates: AffiliateForm[];
+  affiliateNewForm: AffiliateForm;
 }
 
 const initialState: MpoManagementStoreState = {
-  form: {
+  companyInfo: {
     companyName: '',
     companyLogo: '',
     username: '',
@@ -130,6 +167,20 @@ const initialState: MpoManagementStoreState = {
       enableCustomSmtp: false,
     },
   },
+  affiliates: [],
+  affiliateNewForm: {
+    active: false,
+    address: '',
+    city: '',
+    code: '',
+    companyName: '',
+    country: '',
+    ctaColor: '',
+    email: '',
+    logo: '',
+    phone: '',
+    website: '',
+  },
   marketPlaces: [],
   selects: {
     marketPlaces: [],
@@ -143,14 +194,14 @@ export const { state: mpoManagementStore } = createStore<MpoManagementStoreState
 export type RootMpoFields = Exclude<keyof MpoManagementForm, 'whiteLabel'>;
 
 export function updateMpoManagementField<Field extends RootMpoFields>(field: Field, value: MpoManagementForm[Field]) {
-  mpoManagementStore.form = {
-    ...mpoManagementStore.form,
+  mpoManagementStore.companyInfo = {
+    ...mpoManagementStore.companyInfo,
     [field]: value,
   };
 }
 export function updateMpoManagementFields(params: Partial<Omit<MpoManagementForm, 'whiteLabel'>>) {
-  mpoManagementStore.form = {
-    ...mpoManagementStore.form,
+  mpoManagementStore.companyInfo = {
+    ...mpoManagementStore.companyInfo,
     ...params,
   };
 }
@@ -162,21 +213,21 @@ export function updateMpoSelectField(params: Partial<MpoManagementSelects>) {
 }
 
 export function updateWhiteLabelField(field: keyof MpoWhiteLabelSettings, value: MpoWhiteLabelSettings[typeof field]) {
-  mpoManagementStore.form = {
-    ...mpoManagementStore.form,
+  mpoManagementStore.companyInfo = {
+    ...mpoManagementStore.companyInfo,
     whiteLabel: {
-      ...mpoManagementStore.form.whiteLabel,
+      ...mpoManagementStore.companyInfo.whiteLabel,
       [field]: value,
     },
   };
 }
 
 export function resetMpoManagementForm(next?: Partial<MpoManagementForm>) {
-  mpoManagementStore.form = {
-    ...initialState.form,
+  mpoManagementStore.companyInfo = {
+    ...initialState.companyInfo,
     ...next,
     whiteLabel: {
-      ...initialState.form.whiteLabel,
+      ...initialState.companyInfo.whiteLabel,
       ...(next?.whiteLabel || {}),
     },
   };
@@ -192,4 +243,22 @@ export function removeMarketPlace(id: MarketPlace['id']) {
 
 export function upsertMarketPlace(params: MarketPlace[]) {
   mpoManagementStore.marketPlaces = [...params];
+}
+
+//--------------
+// Affiliate
+//--------------
+
+export function updateAffiliateFormField<Field extends keyof AffiliateForm>(field: Field, value: AffiliateForm[Field]) {
+  mpoManagementStore.affiliateNewForm = {
+    ...mpoManagementStore.affiliateNewForm,
+    [field]: value,
+  };
+}
+
+export function resetAffiliateForm(next?: Partial<AffiliateForm>) {
+  mpoManagementStore.affiliateNewForm = {
+    ...initialState.affiliateNewForm,
+    ...next,
+  };
 }

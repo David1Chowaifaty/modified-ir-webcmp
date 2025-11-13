@@ -31,12 +31,11 @@ export class IrMpoCoreDetails {
     updateMpoManagementField('receiveNotificationOnEmail', checked);
   }
   render() {
-    console.log(this.store.form);
     return (
       <Host>
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
-            <div class="form-grid">
+            <div class="companyInfo-grid">
               <ir-validator schema={mpoCoreDetailSchemas.companyName} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
@@ -44,7 +43,7 @@ export class IrMpoCoreDetails {
                   label="Company name"
                   required
                   labelPosition="side"
-                  value={this.store.form.companyName}
+                  value={this.store.companyInfo.companyName}
                   onInput-change={event => this.handleInputChange('companyName', event.detail)}
                 ></ir-input>
               </ir-validator>
@@ -55,7 +54,7 @@ export class IrMpoCoreDetails {
                   label="Company website"
                   required
                   labelPosition="side"
-                  value={this.store.form.companyWebsite}
+                  value={this.store.companyInfo.companyWebsite}
                   onInput-change={event => this.handleInputChange('companyWebsite', event.detail)}
                 ></ir-input>
               </ir-validator>
@@ -69,7 +68,7 @@ export class IrMpoCoreDetails {
                       readonly
                       placeholder="Username"
                       labelPosition="side"
-                      value={this.store.form.username}
+                      value={this.store.companyInfo.username}
                     ></ir-input>
                   </ir-validator>
 
@@ -80,7 +79,7 @@ export class IrMpoCoreDetails {
                       label="Password"
                       type="password"
                       placeholder="Password"
-                      value={this.store.form.password}
+                      value={this.store.companyInfo.password}
                       onInput-change={event => this.handleInputChange('password', event.detail)}
                       labelPosition="side"
                     >
@@ -103,7 +102,7 @@ export class IrMpoCoreDetails {
                           )}
                         </button>
 
-                        <ir-password-validator onPasswordValidationChange={this.handlePasswordValidationChange} password={this.store.form.password}></ir-password-validator>
+                        <ir-password-validator onPasswordValidationChange={this.handlePasswordValidationChange} password={this.store.companyInfo.password}></ir-password-validator>
                       </ir-popup>
                     </ir-input>
                   </ir-validator>
@@ -114,7 +113,7 @@ export class IrMpoCoreDetails {
         </section>
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
-            <div class="form-grid">
+            <div class="companyInfo-grid">
               <div class="mpo-management__country-container">
                 <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.country} valueEvent="select-change" blurEvent="select-blur">
                   <ir-native-select
@@ -122,7 +121,7 @@ export class IrMpoCoreDetails {
                     required
                     class="mpo-management__input flex-fill"
                     options={[{ label: 'Select', value: '' }, ...this.store.selects.countries.map(c => ({ label: c.name, value: c.id.toString() }))]}
-                    value={this.store.form.country}
+                    value={this.store.companyInfo.country}
                     onSelect-change={event => this.handleInputChange('country', event.detail?.value?.toString() ?? '')}
                     labelPosition="side"
                   ></ir-native-select>
@@ -135,7 +134,7 @@ export class IrMpoCoreDetails {
                     label="City"
                     placeholder="City"
                     labelPosition="side"
-                    value={this.store.form.city}
+                    value={this.store.companyInfo.city}
                     onInput-change={event => this.handleInputChange('city', event.detail)}
                   ></ir-input>
                 </ir-validator>
@@ -147,7 +146,7 @@ export class IrMpoCoreDetails {
                   required
                   labelPosition="side"
                   placeholder="Address"
-                  value={this.store.form.address}
+                  value={this.store.companyInfo.address}
                   onInput-change={event => this.handleInputChange('address', event.detail)}
                 ></ir-input>
               </ir-validator>
@@ -157,7 +156,7 @@ export class IrMpoCoreDetails {
                   class="mpo-management__input"
                   required
                   label="Billing currency"
-                  value={this.store.form.billingCurrency}
+                  value={this.store.companyInfo.billingCurrency}
                   labelPosition="side"
                   options={[{ label: 'Select...', value: '' }, ...this.store.selects.currencies.map(c => ({ label: c.symbol, value: c.id.toString() }))]}
                 ></ir-native-select>
@@ -167,7 +166,7 @@ export class IrMpoCoreDetails {
         </section>
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
-            <div class="form-grid">
+            <div class="companyInfo-grid">
               <ir-validator schema={mpoCoreDetailSchemas.mainContact} valueEvent="input-change" blurEvent="input-blur">
                 <ir-input
                   class="mpo-management__input "
@@ -175,7 +174,7 @@ export class IrMpoCoreDetails {
                   label="Main contact"
                   required
                   labelPosition="side"
-                  value={this.store.form.mainContact}
+                  value={this.store.companyInfo.mainContact}
                   onInput-change={event => this.handleInputChange('mainContact', event.detail)}
                 ></ir-input>
               </ir-validator>
@@ -187,7 +186,7 @@ export class IrMpoCoreDetails {
                   required
                   placeholder="Email"
                   labelPosition="side"
-                  value={this.store.form.email}
+                  value={this.store.companyInfo.email}
                   onInput-change={event => this.handleInputChange('email', event.detail)}
                 ></ir-input>
               </ir-validator>
@@ -199,17 +198,17 @@ export class IrMpoCoreDetails {
                   required
                   placeholder="Phone"
                   labelPosition="side"
-                  value={this.store.form.phone}
+                  value={this.store.companyInfo.phone}
                   onInput-change={event => this.handleInputChange('phone', event.detail)}
                 ></ir-input>
               </ir-validator>
-              <div class="form-switch-row">
+              <div class="companyInfo-switch-row">
                 <span>Receive notifications via email</span>
-                <ir-switch checked={this.store.form.receiveNotificationOnEmail} onCheckChange={e => this.toggleReceiveNotification(e.detail)}></ir-switch>
+                <ir-switch checked={this.store.companyInfo.receiveNotificationOnEmail} onCheckChange={e => this.toggleReceiveNotification(e.detail)}></ir-switch>
               </div>
               <style>
                 {`
-                      .mpo-management__note-textfield .form-control{
+                      .mpo-management__note-textfield .companyInfo-control{
                         border-radius:0.5rem
                       }
                       
@@ -220,7 +219,7 @@ export class IrMpoCoreDetails {
                 label="Notes"
                 placeholder=""
                 rows={2}
-                value={this.store.form.notes}
+                value={this.store.companyInfo.notes}
                 onTextChange={event => this.updateTextField('notes', event.detail)}
               ></ir-textarea>
             </div>

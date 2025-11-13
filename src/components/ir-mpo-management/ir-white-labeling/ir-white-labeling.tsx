@@ -69,7 +69,7 @@ export class IrWhiteLabeling {
     return schema;
   }
   render() {
-    const whiteLabel = this.store.form.whiteLabel;
+    const whiteLabel = this.store.companyInfo.whiteLabel;
     const smtpFieldIndex = this.whiteLabelFieldMeta.findIndex(meta => meta.key === 'smtpServer');
     const disableFieldsAfterSmtp = !whiteLabel.smtpServer?.trim();
     const isSmtpServerProvided = !disableFieldsAfterSmtp;
