@@ -56,7 +56,7 @@ export class IrColorPicker {
   private syncFromProp(next?: string, emit = true) {
     const normalized = this.normalizeHex(next);
     this.colorValue = normalized || undefined;
-    this.hexValue = normalized || '';
+    this.hexValue = normalized ? normalized.slice(1) : '';
     if (emit) {
       this.emitChange('prop', Boolean(normalized));
     }
@@ -97,7 +97,7 @@ export class IrColorPicker {
 
   private setColor(value: string, source: ColorPickerChangeSource) {
     this.colorValue = value;
-    this.hexValue = value;
+    this.hexValue = value.startsWith('#') ? value.slice(1) : value;
     if (this.colorInputEl && this.colorInputEl.value !== value) {
       this.colorInputEl.value = value;
     }
@@ -159,7 +159,7 @@ export class IrColorPicker {
             onInput-change={this.handleHexInputChange}
             onCleared={this.handleHexCleared}
           >
-            <ir-copy-button slot="suffix" text={this.hexValue} disabled={!this.hexValue}></ir-copy-button>
+            <ir-copy-button class="copy-button" slot="suffix" text={this.hexValue ? `#${this.hexValue}` : ''} disabled={!this.hexValue}></ir-copy-button>
           </ir-input>
         </div>
       </Host>

@@ -199,6 +199,9 @@
   justify-content: center;
   width: var(--ir-clear-size);
   height: var(--ir-clear-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: var(--ir-clear-padding);
   cursor: pointer;
   margin: auto;

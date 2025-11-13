@@ -22,6 +22,20 @@
   background: none;
   cursor: pointer;
 }
+.copy-button {
+  width: var(--ir-clear-size);
+  height: var(--ir-clear-size);
+}
+.copy-button::part(base) {
+  width: var(--ir-clear-size);
+  height: var(--ir-clear-size);
+  min-height: auto;
+  min-width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
 
 .picker__swatch:disabled {
   cursor: not-allowed;
