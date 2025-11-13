@@ -1,5 +1,5 @@
 import { Component, Host, h } from '@stencil/core';
-import { affiliateFormStore, affiliateFormSchemas, updateAffiliateFormField } from '@/stores/affiliate-form.store';
+import { affiliateFormSchemas, mpoManagementStore, updateAffiliateFormField } from '@/stores/mpo-management.store';
 
 @Component({
   tag: 'ir-affiliate-form',
@@ -7,13 +7,14 @@ import { affiliateFormStore, affiliateFormSchemas, updateAffiliateFormField } fr
   scoped: true,
 })
 export class IrAffiliateForm {
-  private store = affiliateFormStore;
+  private store = mpoManagementStore;
 
   private handleInputChange(field: Parameters<typeof updateAffiliateFormField>[0], value?: string | boolean | null) {
     updateAffiliateFormField(field, value ?? '');
   }
 
   render() {
+    const { affiliateNewForm, selects } = this.store;
     return (
       <Host>
         <section class="mpo-management__panel">
@@ -21,7 +22,7 @@ export class IrAffiliateForm {
             <div class="form-grid">
               <div class="form-switch-row">
                 <span>Active</span>
-                <ir-switch checked={this.store.form.active} onCheckChange={event => this.handleInputChange('active', event.detail)}></ir-switch>
+                <ir-switch checked={affiliateNewForm.active} onCheckChange={event => this.handleInputChange('active', event.detail)}></ir-switch>
               </div>
               <ir-input
                 class="mpo-management__input flex-fill"
@@ -29,7 +30,7 @@ export class IrAffiliateForm {
                 placeholder="Affiliate code"
                 labelPosition="side"
                 readonly
-                value={this.store.form.code}
+                value={affiliateNewForm.code}
                 onInput-change={ev => this.handleInputChange('code', ev.detail)}
               ></ir-input>
 
@@ -40,7 +41,7 @@ export class IrAffiliateForm {
                   required
                   placeholder="Company name"
                   labelPosition="side"
-                  value={this.store.form.companyName}
+                  value={affiliateNewForm.companyName}
                   onInput-change={ev => this.handleInputChange('companyName', ev.detail)}
                 ></ir-input>
               </ir-validator>
@@ -51,8 +52,8 @@ export class IrAffiliateForm {
                   label="Country"
                   required
                   labelPosition="side"
-                  options={this.store.selects.countries}
-                  value={this.store.form.country}
+                  options={[{ label: 'Select a country', value: '' }, ...selects.countries.map(c => ({ label: c.name, value: c.id.toString() }))]}
+                  value={affiliateNewForm.country}
                   onSelect-change={ev => this.handleInputChange('country', ev.detail?.value?.toString() ?? '')}
                 ></ir-native-select>
               </ir-validator>
@@ -64,7 +65,7 @@ export class IrAffiliateForm {
                   required
                   placeholder="City"
                   labelPosition="side"
-                  value={this.store.form.city}
+                  value={affiliateNewForm.city}
                   onInput-change={ev => this.handleInputChange('city', ev.detail)}
                 ></ir-input>
               </ir-validator>
@@ -76,7 +77,7 @@ export class IrAffiliateForm {
                   required
                   placeholder="Address"
                   labelPosition="side"
-                  value={this.store.form.address}
+                  value={affiliateNewForm.address}
                   onInput-change={ev => this.handleInputChange('address', ev.detail)}
                 ></ir-input>
               </ir-validator>
@@ -88,7 +89,7 @@ export class IrAffiliateForm {
                   required
                   placeholder="Phone"
                   labelPosition="side"
-                  value={this.store.form.phone}
+                  value={affiliateNewForm.phone}
                   onInput-change={ev => this.handleInputChange('phone', ev.detail)}
                 ></ir-input>
               </ir-validator>
@@ -101,7 +102,7 @@ export class IrAffiliateForm {
                   required
                   placeholder="Email"
                   labelPosition="side"
-                  value={this.store.form.email}
+                  value={affiliateNewForm.email}
                   onInput-change={ev => this.handleInputChange('email', ev.detail)}
                 ></ir-input>
               </ir-validator>
@@ -113,7 +114,7 @@ export class IrAffiliateForm {
                   required
                   placeholder="yourdomain.com (without www)"
                   labelPosition="side"
-                  value={this.store.form.website}
+                  value={affiliateNewForm.website}
                   onInput-change={ev => this.handleInputChange('website', ev.detail)}
                 ></ir-input>
               </ir-validator>
