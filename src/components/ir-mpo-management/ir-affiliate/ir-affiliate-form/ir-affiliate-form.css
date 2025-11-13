@@ -1,3 +1,27 @@
 :host {
   display: block;
 }
+.mpo-management__input::part(label) {
+  font-weight: bold;
+}
+.mpo-management__input {
+  flex-direction: column;
+  align-items: flex-start;
+  --ir-gap: 0.5rem;
+}
+.mpo-management__input::part(wrapper) {
+  flex: 1 1 0%;
+  width: 100%;
+}
+/*md*/
+@media (min-width: 768px) {
+  .mpo-management__input {
+    flex-direction: row;
+    align-items: center;
+    --ir-gap: 1rem;
+  }
+  .mpo-management__input::part(label) {
+    width: 130px;
+    text-align: right;
+  }
+}

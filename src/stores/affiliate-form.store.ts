@@ -4,7 +4,7 @@ import { z } from 'zod';
 const optionalString = () => z.string().optional().or(z.literal(''));
 
 export const affiliateFormSchema = z.object({
-  active: z.enum(['true', 'false'], { required_error: 'Select a status' }),
+  active: z.boolean({ required_error: 'Select a status' }),
   code: z.string().min(1, 'Affiliate code is required'),
   companyName: z.string().min(1, 'Company name is required'),
   country: z.string().min(1, 'Country is required'),
@@ -51,7 +51,7 @@ export interface AffiliateFormStoreState {
 
 const initialState: AffiliateFormStoreState = {
   form: {
-    active: 'true',
+    active: false,
     code: '',
     companyName: '',
     country: '',

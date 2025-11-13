@@ -48,6 +48,17 @@ export class IrMpoCoreDetails {
                   onInput-change={event => this.handleInputChange('companyName', event.detail)}
                 ></ir-input>
               </ir-validator>
+              <ir-validator schema={mpoCoreDetailSchemas.companyName} valueEvent="input-change" blurEvent="input-blur">
+                <ir-input
+                  class="mpo-management__input "
+                  placeholder="Company website"
+                  label="Company website"
+                  required
+                  labelPosition="side"
+                  value={this.store.form.companyName}
+                  onInput-change={event => this.handleInputChange('companyName', event.detail)}
+                ></ir-input>
+              </ir-validator>
               <div>
                 <div class="mpo-management__credentials-container">
                   <ir-validator class={'flex-fill'} schema={mpoCoreDetailSchemas.username} valueEvent="input-change" blurEvent="input-blur">

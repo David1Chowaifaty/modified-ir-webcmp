@@ -4,13 +4,24 @@
   gap: 1rem;
 }
 .mpo-management__input::part(label) {
-  width: 110px;
+  width: 140px;
   font-weight: bold;
 }
+.mpo-management__input {
+  flex-direction: column;
+  align-items: flex-start;
+  --ir-gap: 0.5rem;
+}
+.mpo-management__input::part(wrapper) {
+  flex: 1 1 0%;
+  width: 100%;
+}
+
 .mpo-management__input-password::part(suffix) {
   gap: 0.25rem;
   align-items: center;
 }
+
 .mpo-management__country-container,
 .mpo-management__credentials-container {
   display: flex;
@@ -35,8 +46,12 @@
 }
 /*md*/
 @media (min-width: 768px) {
+  .mpo-management__input {
+    flex-direction: row;
+    align-items: center;
+    --ir-gap: 1rem;
+  }
   .mpo-management__input::part(label) {
-    width: 130px;
     text-align: right;
   }
   .mpo-management__input-city::part(label),

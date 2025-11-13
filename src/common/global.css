@@ -25,6 +25,7 @@
   --ir-destructive: oklch(0.577 0.245 27.325);
   --ir-border: oklch(0.8581 0.0337 276.32);
   --ir-input: oklch(1 0 0);
+  --ir-input-foreground: #5d5d65;
 
   --ir-ring: oklch(0.6774 0.16 244.37);
   --ir-chart-1: oklch(0.646 0.222 41.116);

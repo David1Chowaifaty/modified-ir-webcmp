@@ -24,7 +24,7 @@
   --ir-select-color: inherit;
 
   /** @prop --ir-label-font-size: Default font size of the label. */
-  --ir-label-font-size: 0.875rem;
+  --ir-label-font-size: 1rem;
 
   /** @prop --ir-label-color: Default color of the label text. */
   --ir-label-color: #444;

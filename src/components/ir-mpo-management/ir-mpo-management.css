@@ -4,9 +4,13 @@
   min-height: 100vh;
 
   width: 100%;
+  padding: 1rem 0;
+
+  --mpo-tables-max-width: 600px;
   /* overflow-x: hidden; */
-  background-color: white;
+  /* background-color: white; */
   /* min-height: 100; */
+  /* padding: 2rem; */
 }
 
 :host * {
@@ -139,13 +143,21 @@
 .primary-action {
   width: 100%;
 }
-
+.mpo-management__card {
+  padding: 1rem 0;
+}
 .mpo-management__uploader-container {
   display: flex;
   flex-direction: column;
-  gap: var(--ir-gap, 1rem);
+  gap: 1rem;
 }
 @media (min-width: 768px) {
+  :host {
+    padding: 1rem 2rem;
+  }
+  .mpo-management__card {
+    padding: 1rem;
+  }
   /* .logo-upload {
     padding: 0.25rem 0; 
      width: fit-content;
@@ -157,6 +169,10 @@
     flex-wrap: wrap;
     gap: var(--ir-gap, 1rem);
   } */
+  .mpo-management__uploader-container {
+    flex-direction: row;
+    gap: 2rem;
+  }
   .mpo-management__page-content {
     flex-direction: row;
     gap: 6rem;

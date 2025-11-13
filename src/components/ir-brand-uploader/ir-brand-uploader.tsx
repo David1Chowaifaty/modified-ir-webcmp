@@ -13,6 +13,10 @@ export class IrBrandUploader {
   @Prop() src: string;
   /** Accessible label displayed above the dropzone. */
   @Prop() label: string;
+  /**
+   * Short helper text displayed beneath the label.
+   */
+  @Prop() hint: string;
 
   /** Helper text rendered beneath the dropzone. */
   @Prop() helperText: string;
@@ -55,6 +59,7 @@ export class IrBrandUploader {
           dimensions={this.dimensions}
           label={this.label}
           helperText={this.helperText}
+          hint={this.hint}
           footerText={this.footerText}
           maxFileSize={this.maxFileSize}
           accept={this.accept}

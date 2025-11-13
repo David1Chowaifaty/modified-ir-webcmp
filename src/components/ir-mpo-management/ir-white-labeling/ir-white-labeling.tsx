@@ -17,20 +17,13 @@ export class IrWhiteLabeling {
     hint?: string;
     mask?: string;
   }> = [
-    {
-      key: 'extranetUrl',
-      label: 'Extranet Url',
-      placeholder: 'youradmindomain.com',
-      hint: 'Your custom domain or subdomain',
-      mask: 'url',
-    },
-    {
-      key: 'companyWebsite',
-      label: 'Company website',
-      placeholder: 'yourgroupwebsite.com',
-      hint: 'Name shown to your customers',
-      mask: 'url',
-    },
+    // {
+    //   key: 'companyWebsite',
+    //   label: 'Company website',
+    //   placeholder: 'yourgroupwebsite.com',
+    //   hint: 'Name shown to your customers',
+    //   mask: 'url',
+    // },
     {
       key: 'smtpServer',
       label: 'SMTP Server',
@@ -40,7 +33,7 @@ export class IrWhiteLabeling {
     },
     {
       key: 'smtpPort',
-      label: 'Port',
+      label: 'Port (TLS)',
       placeholder: '2525',
       hint: 'Common ports: 2525 / 465 (SSL) / 587 (TLS)',
     },
@@ -69,6 +62,12 @@ export class IrWhiteLabeling {
   private handleFieldChange(field: keyof MpoWhiteLabelSettings, value?: string | null) {
     updateWhiteLabelField(field, (value ?? '') as MpoWhiteLabelSettings[typeof field]);
   }
+
+  private getSchema(isSmtpServerProvided: boolean, key: string, label: string) {
+    const shouldRequireField = isSmtpServerProvided && smtpDependentFields.includes(key as (typeof smtpDependentFields)[number]);
+    const schema = shouldRequireField ? z.string().min(1, `${label} is required when SMTP server is provided`) : mpoWhiteLabelFieldSchemas[key];
+    return schema;
+  }
   render() {
     const whiteLabel = this.store.form.whiteLabel;
     const smtpFieldIndex = this.whiteLabelFieldMeta.findIndex(meta => meta.key === 'smtpServer');
@@ -77,38 +76,49 @@ export class IrWhiteLabeling {
     return (
       <Host>
         <section class="mpo-management__panel">
-          <div class="mpo-management__panel-header">
-            <div class="header-with-switch">
-              <div>
-                <h2 class="mpo-management__panel-title">White Labeling</h2>
-                <p class="mpo-management__panel-subtitle">Customize your brand appearance and identity</p>
-              </div>
-            </div>
-          </div>
           <div class={{ 'mpo-management__panel-body': true }}>
             <div class="form-grid">
-              {this.whiteLabelFieldMeta.map((field, index) => {
-                const disableField = disableFieldsAfterSmtp && smtpFieldIndex !== -1 && index > smtpFieldIndex;
-                const shouldRequireField = isSmtpServerProvided && smtpDependentFields.includes(field.key as (typeof smtpDependentFields)[number]);
-                const schema = shouldRequireField ? z.string().min(1, `${field.label} is required when SMTP server is provided`) : mpoWhiteLabelFieldSchemas[field.key];
-                return (
-                  <div class="input-with-hint" key={field.key}>
-                    <ir-validator schema={schema} valueEvent="input-change" blurEvent="input-blur">
-                      <ir-input
-                        mask={field.mask}
-                        class="white-labeling__input-forms"
-                        label={field.label}
-                        labelPosition="side"
-                        type={field.type || 'text'}
-                        placeholder={field.placeholder}
-                        value={whiteLabel[field.key] as string}
-                        disabled={disableField}
-                        onInput-change={event => this.handleFieldChange(field.key, event.detail)}
-                      ></ir-input>
-                    </ir-validator>
-                  </div>
-                );
-              })}
+              <div class="input-with-hint">
+                <ir-validator schema={this.getSchema(isSmtpServerProvided, 'extranetUrl', 'Extranet Url')} valueEvent="input-change" blurEvent="input-blur">
+                  <ir-input
+                    mask={'url'}
+                    class="white-labeling__input-forms"
+                    label={'Extranet Url'}
+                    labelPosition="side"
+                    placeholder={'youradmindomain.com'}
+                    value={whiteLabel['extranetUrl'] as string}
+                    onInput-change={event => this.handleFieldChange('extranetUrl', event.detail)}
+                  ></ir-input>
+                </ir-validator>
+              </div>
+              <div class="checkbox-card" style={{ gap: '1rem' }}>
+                <div class="d-flex align-items-center" style={{ gap: '1rem' }}>
+                  <p class={'m-0 p-0'}>Use your own SMTP</p>
+                  <ir-switch></ir-switch>
+                </div>
+
+                {this.whiteLabelFieldMeta.map((field, index) => {
+                  const disableField = disableFieldsAfterSmtp && smtpFieldIndex !== -1 && index > smtpFieldIndex;
+                  const schema = this.getSchema(isSmtpServerProvided, field.key, field.label);
+                  return (
+                    <div class="input-with-hint" key={field.key}>
+                      <ir-validator schema={schema} valueEvent="input-change" blurEvent="input-blur">
+                        <ir-input
+                          mask={field.mask}
+                          class="white-labeling__input-forms"
+                          label={field.label}
+                          labelPosition="side"
+                          type={field.type || 'text'}
+                          placeholder={field.placeholder}
+                          value={whiteLabel[field.key] as string}
+                          disabled={disableField}
+                          onInput-change={event => this.handleFieldChange(field.key, event.detail)}
+                        ></ir-input>
+                      </ir-validator>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>

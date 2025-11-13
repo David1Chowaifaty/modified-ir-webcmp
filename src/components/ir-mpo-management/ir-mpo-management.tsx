@@ -15,6 +15,7 @@ export class IrMpoManagement {
   @Prop() propertyid: string;
   @Prop({ attribute: 'mpo-id' }) mpoID: number;
   @Prop() language: string = 'en';
+  @Prop() userTypeCode: string = '1';
 
   @State() isLoading: boolean;
   @State() submitted = false;
@@ -94,6 +95,7 @@ export class IrMpoManagement {
   private updateCompanyLogo(files: File[]) {
     updateMpoManagementField('companyLogo', files.length ? [...files] : '');
   }
+
   private updateCompanyFavIcon(files: File[]) {
     updateMpoManagementField('companyFavicon', files.length ? [...files] : '');
   }
@@ -101,19 +103,20 @@ export class IrMpoManagement {
   private getSource(src: string | File[]) {
     return typeof src === 'string' ? src : Array.isArray(src) && src.length > 0 ? URL.createObjectURL(src[0]) : undefined;
   }
+
   render() {
     const { form } = this.store;
     const previewSrc = this.getSource(form.companyLogo);
     const previewFavIconSrc = this.getSource(form.companyFavicon);
     return (
-      <Host class={'py-1'}>
+      <Host>
         <ir-toast></ir-toast>
         <ir-interceptor></ir-interceptor>
         <ir-title class="px-1" label="MPO Details"></ir-title>
-        <div>
+        <div class="card mpo-management__card">
           <ir-tab-group orientation="horizontal">
             {this.panels.map(p => (
-              <ir-tab slot="nav" key={p.value} panel={p.value}>
+              <ir-tab slot="nav" key={p.value} panel={p.value} disabled={p.value === 'marketplaces' && this.userTypeCode === '4'}>
                 {p.label}
               </ir-tab>
             ))}
@@ -121,14 +124,15 @@ export class IrMpoManagement {
               <ir-mpo-core-details></ir-mpo-core-details>
             </ir-tab-panel>
             <ir-tab-panel id="whiteLabeling">
-              <ir-white-labeling></ir-white-labeling>
               <section class="mpo-management__panel">
                 <div class="mpo-management__panel-body">
                   <div class="mpo-management__uploader-container">
                     <div class="logo-upload">
                       <ir-brand-uploader
+                        dimensions="300x60"
                         src={previewSrc}
                         label="Company Logo"
+                        maxFileSize={5}
                         onFilesSelected={event => this.updateCompanyLogo(event.detail)}
                         onFileRejected={event => {
                           const { fileName, reason } = event.detail;
@@ -139,7 +143,7 @@ export class IrMpoManagement {
                               message = `The file "${fileName}" is not a supported image type. Please upload PNG, JPG, WEBP, GIF, or SVG formats.`;
                               break;
                             case 'file-size':
-                              message = `The file "${fileName}" is too large. Please upload an image under 10 MB.`;
+                              message = `The file "${fileName}" size is too large. Please do not exceed 500 Kb.`;
                               break;
                             case 'max-files':
                               message = `You can only upload one image at a time.`;
@@ -157,7 +161,8 @@ export class IrMpoManagement {
                         src={previewFavIconSrc}
                         accept="image/png,image/x-icon,image/svg+xml"
                         label="Company Favicon"
-                        helperText="Upload a square PNG or ICO image up to 150 × 150 px (max 150 KB)."
+                        hint="Recommended image size 150px × 150px"
+                        helperText=""
                         onFilesSelected={async event => {
                           this.updateCompanyFavIcon(event.detail);
                         }}
@@ -170,7 +175,7 @@ export class IrMpoManagement {
                               message = `The file "${fileName}" is not a supported favicon type. Please upload PNG, ICO, or SVG.`;
                               break;
                             case 'file-size':
-                              message = `The file "${fileName}" is too large. Please upload an image under 150 KB.`;
+                              message = `The file "${fileName}" is too large. Please upload an image under 150 Kb.`;
                               break;
                             case 'max-files':
                               message = `You can only upload one image at a time.`;
@@ -186,6 +191,7 @@ export class IrMpoManagement {
                   </div>
                 </div>
               </section>
+              <ir-white-labeling></ir-white-labeling>
             </ir-tab-panel>
             <ir-tab-panel id="marketplaces">
               <ir-marketplace></ir-marketplace>

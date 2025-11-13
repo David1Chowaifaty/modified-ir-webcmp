@@ -8,8 +8,22 @@
   width: 110px;
   font-weight: bold;
 }
+.white-labeling__input-forms::part(wrapper) {
+  flex: 1 1 0%;
+  width: 100%;
+}
+.white-labeling__input-forms {
+  flex-direction: column;
+  align-items: flex-start;
+  --ir-gap: 0.5rem;
+}
 /*md*/
 @media (min-width: 768px) {
+  .white-labeling__input-forms {
+    flex-direction: row;
+    align-items: center;
+    --ir-gap: 1rem;
+  }
   .white-labeling__input-forms::part(label) {
     text-align: right;
     font-weight: bold;

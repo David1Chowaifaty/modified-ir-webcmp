@@ -14,6 +14,11 @@ export class IrImageUpload {
   /** Accessible label displayed above the dropzone. */
   @Prop() label: string;
 
+  /**
+   * Short helper text displayed beneath the label.
+   */
+  @Prop() hint: string;
+
   /** Helper text rendered beneath the dropzone. */
   @Prop() helperText: string;
 
@@ -219,15 +224,20 @@ export class IrImageUpload {
   };
 
   render() {
-    const maxSizeText = `${Math.round(this.maxFileSize / (1024 * 1024))}MB`;
-
     return (
       <Host>
         <div part="base" class={{ container: true, disabled: this.disabled }}>
           {this.label && (
-            <label class="upload-label" htmlFor={this.inputId}>
-              {this.label}
-            </label>
+            <div class="upload-label-container" part="label-container">
+              <label class="upload-label" part="upload-label" htmlFor={this.inputId}>
+                {this.label}
+              </label>
+              {this.hint && (
+                <p class="upload-hint" part="upload-hint">
+                  {this.hint}
+                </p>
+              )}
+            </div>
           )}
           <div
             class={{
@@ -267,6 +277,7 @@ export class IrImageUpload {
           >
             <div class="dropzone-content" part="dropzone-content">
               <svg
+                part="dropzone-icon"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -283,10 +294,24 @@ export class IrImageUpload {
                 <path d="m8 17 4-4 4 4" />
               </svg>
 
-              <p class="dropzone-title">Click to upload or drag and drop</p>
-              <p class="dropzone-subtitle">{this.helperText || `PNG, JPG, GIF, WEBP up to ${maxSizeText}`}</p>
-              {this.footerText && <p class="dropzone-footer">{this.footerText}</p>}
-              {this.existingValueLabel && !this.files.length && <p class="existing-value">Current: {this.existingValueLabel}</p>}
+              <p class="dropzone-title" part="dropzone-title">
+                Click to upload or drag and drop
+              </p>
+              {this.helperText && (
+                <p part="dropzone-subtitle" class="dropzone-subtitle">
+                  {this.helperText}
+                </p>
+              )}
+              {this.footerText && (
+                <p part="dropzone-footer" class="dropzone-footer">
+                  {this.footerText}
+                </p>
+              )}
+              {this.existingValueLabel && !this.files.length && (
+                <p part="existing-value" class="existing-value">
+                  Current: {this.existingValueLabel}
+                </p>
+              )}
             </div>
             <input
               ref={el => (this.fileInput = el)}

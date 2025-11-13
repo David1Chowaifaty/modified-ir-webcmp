@@ -466,6 +466,10 @@ export namespace Components {
          */
         "helperText": string;
         /**
+          * Short helper text displayed beneath the label.
+         */
+        "hint": string;
+        /**
           * Accessible label displayed above the dropzone.
          */
         "label": string;
@@ -1120,6 +1124,10 @@ export namespace Components {
          */
         "helperText": string;
         /**
+          * Short helper text displayed beneath the label.
+         */
+        "hint": string;
+        /**
           * Accessible label displayed above the dropzone.
          */
         "label": string;
@@ -1626,6 +1634,7 @@ export namespace Components {
         "mpoID": number;
         "propertyid": string;
         "ticket": string;
+        "userTypeCode": string;
     }
     interface IrNativeSelect {
         /**
@@ -2778,6 +2787,10 @@ export interface IrAccordionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrAccordionElement;
 }
+export interface IrAffiliateCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrAffiliateElement;
+}
 export interface IrApplicablePoliciesCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrApplicablePoliciesElement;
@@ -3694,7 +3707,18 @@ declare global {
         prototype: HTMLIrAccordionElement;
         new (): HTMLIrAccordionElement;
     };
+    interface HTMLIrAffiliateElementEventMap {
+        "closeModal": void;
+    }
     interface HTMLIrAffiliateElement extends Components.IrAffiliate, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrAffiliateElementEventMap>(type: K, listener: (this: HTMLIrAffiliateElement, ev: IrAffiliateCustomEvent<HTMLIrAffiliateElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrAffiliateElementEventMap>(type: K, listener: (this: HTMLIrAffiliateElement, ev: IrAffiliateCustomEvent<HTMLIrAffiliateElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrAffiliateElement: {
         prototype: HTMLIrAffiliateElement;
@@ -6281,6 +6305,7 @@ declare namespace LocalJSX {
         "onIr-toggle"?: (event: IrAccordionCustomEvent<{ expanded: boolean }>) => void;
     }
     interface IrAffiliate {
+        "onCloseModal"?: (event: IrAffiliateCustomEvent<void>) => void;
     }
     interface IrAffiliateForm {
     }
@@ -6396,6 +6421,10 @@ declare namespace LocalJSX {
           * Helper text rendered beneath the dropzone.
          */
         "helperText"?: string;
+        /**
+          * Short helper text displayed beneath the label.
+         */
+        "hint"?: string;
         /**
           * Accessible label displayed above the dropzone.
          */
@@ -7127,6 +7156,10 @@ declare namespace LocalJSX {
          */
         "helperText"?: string;
         /**
+          * Short helper text displayed beneath the label.
+         */
+        "hint"?: string;
+        /**
           * Accessible label displayed above the dropzone.
          */
         "label"?: string;
@@ -7696,6 +7729,7 @@ declare namespace LocalJSX {
         "mpoID"?: number;
         "propertyid"?: string;
         "ticket"?: string;
+        "userTypeCode"?: string;
     }
     interface IrNativeSelect {
         /**

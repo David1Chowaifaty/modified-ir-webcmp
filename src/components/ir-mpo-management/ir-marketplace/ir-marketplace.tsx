@@ -35,7 +35,7 @@ export class IrMarketplace {
     return (
       <Host>
         {/* <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1b2a4b' }}>Marketplaces</p> */}
-        <div class={'d-flex align-items-center mb-1'} style={{ gap: '0.5rem' }}>
+        <div class={'d-flex align-items-center mb-2'} style={{ gap: '1rem' }}>
           <ir-native-select
             class="flex-fill"
             onSelect-change={e => (this.selectedCountry = e.detail.value.toString())}
@@ -46,7 +46,7 @@ export class IrMarketplace {
             class="flex-fill"
             disabled={!this.selectedCountry}
             onSelect-change={e => (this.selectedMarketplace = e.detail.value.toString())}
-            options={[{ label: 'Select a marketplace', value: '' }, ...marketPlaces]}
+            options={[{ label: 'Assign a marketplace', value: '' }, ...marketPlaces]}
           ></ir-native-select>
 
           <ir-button onClickHandler={this.addMarketPlace.bind(this)} btn_disabled={!this.selectedCountry && !this.selectedMarketplace} variant="icon" icon_name="plus"></ir-button>

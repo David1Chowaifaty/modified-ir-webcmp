@@ -27,7 +27,7 @@
   --ir-input-color: var(--ir-input-foreground);
 
   /** @prop --ir-label-font-size: Default font size of the label. */
-  --ir-label-font-size: 0.875rem;
+  --ir-label-font-size: 1rem;
 
   /** @prop --ir-label-color: Default color of the label text. */
   --ir-label-color: #444;
@@ -81,6 +81,7 @@
   border-radius: var(--ir-input-radius);
   border: var(--ir-input-border);
   background: var(--ir-input-bg);
+  font-size: 1rem;
   color: var(--ir-input-color);
   outline: none;
   width: 100%;

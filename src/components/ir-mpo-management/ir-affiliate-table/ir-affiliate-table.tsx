@@ -29,10 +29,9 @@ export class IrAffiliateTable {
           </thead>
           <tbody>
             <tr class="ir-table-row">
-              <td>hellow</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td colSpan={4} class="text-center">
+                No Data
+              </td>
             </tr>
           </tbody>
         </table>
