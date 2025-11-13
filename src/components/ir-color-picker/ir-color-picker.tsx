@@ -127,8 +127,8 @@ export class IrColorPicker {
             <div class="color-picker__swatch">
               <input id={this.colorInputId} type="color" value={this.currentValue} disabled={this.disabled} onInput={event => this.handleColorInput(event)} />
             </div>
-            <ir-input onInput-change={e => this.handleHexInput(e.detail)} value={this.textValue} disabled={this.disabled} maxLength={7}>
-              <ir-copy-button slot="suffix"></ir-copy-button>
+            <ir-input clearable onInput-change={e => this.handleHexInput(e.detail)} value={this.textValue} disabled={this.disabled} maxLength={7}>
+              <ir-copy-button disabled={!this.textValue} text={this.textValue} slot="suffix"></ir-copy-button>
             </ir-input>
           </div>
         </div>

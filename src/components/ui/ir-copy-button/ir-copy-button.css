@@ -25,6 +25,13 @@
   background: var(--ir-muted);
   color: var(--ir-muted-foreground);
 }
+.copy-button:disabled {
+  opacity: 0.5;
+}
+.copy-button:disabled:hover {
+  background-color: transparent;
+  color: inherit;
+}
 .copy-button:active {
   transform: scale(0.9);
 }

@@ -175,7 +175,7 @@
   z-index: 1;
   box-sizing: border-box;
   display: flex;
-  gap: var(--ir-gap);
+  gap: 0.25rem;
   align-items: center;
   position: absolute;
   bottom: 0;

@@ -670,6 +670,13 @@ export namespace Components {
         "extraResources": string;
     }
     interface IrCopyButton {
+        /**
+          * If true, the copy action is disabled.
+         */
+        "disabled": boolean;
+        /**
+          * Value copied to the clipboard.
+         */
         "text": string;
     }
     interface IrCountryPicker {
@@ -6701,6 +6708,13 @@ declare namespace LocalJSX {
         "extraResources"?: string;
     }
     interface IrCopyButton {
+        /**
+          * If true, the copy action is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * Value copied to the clipboard.
+         */
         "text"?: string;
     }
     interface IrCountryPicker {

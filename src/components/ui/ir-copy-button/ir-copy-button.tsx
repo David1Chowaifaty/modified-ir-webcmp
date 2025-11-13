@@ -6,7 +6,12 @@ import { Component, Prop, State, h } from '@stencil/core';
   shadow: true,
 })
 export class IrCopyButton {
-  @Prop() text: string;
+  /** Value copied to the clipboard. */
+  @Prop({ reflect: true }) text: string;
+
+  /** If true, the copy action is disabled. */
+  @Prop({ reflect: true }) disabled: boolean;
+
   @State() state: 'success' | 'failed' | 'loading' | null = null;
 
   private tooltipId = `ir-copy-tooltip-${Math.random().toString(36).slice(2)}`;
@@ -118,7 +123,7 @@ export class IrCopyButton {
         aria-label={this.tooltipMessage}
         aria-describedby={this.tooltipId}
         aria-busy={state === 'loading' ? 'true' : 'false'}
-        disabled={state === 'loading'}
+        disabled={state === 'loading' || this.disabled}
         onClick={() => this.copyToClipboard()}
       >
         {this.renderIcons()}
