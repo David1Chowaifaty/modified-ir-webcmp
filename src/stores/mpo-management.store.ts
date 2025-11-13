@@ -104,7 +104,13 @@ export const affiliateFormSchema = z.object({
     .min(1, 'Website is required')
     .regex(/^(?!https?:\/\/)(?!www\.)[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/u, 'Enter a valid domain (no protocol or www)'),
   ctaColor: optionalString(),
-  logo: optionalString(),
+  logo: z.union([optionalString(), fileArraySchema.optional()]),
+  favicon: z.union([optionalString(), fileArraySchema.optional()]),
+  customCss: optionalString(),
+  conversionTag: optionalString(),
+  headerTag: optionalString(),
+  bodyTag: optionalString(),
+  footerTag: optionalString(),
 });
 
 export type AffiliateForm = z.infer<typeof affiliateFormSchema>;
@@ -180,6 +186,12 @@ const initialState: MpoManagementStoreState = {
     logo: '',
     phone: '',
     website: '',
+    bodyTag: '',
+    conversionTag: '',
+    customCss: '',
+    favicon: '',
+    footerTag: '',
+    headerTag: '',
   },
   marketPlaces: [],
   selects: {
