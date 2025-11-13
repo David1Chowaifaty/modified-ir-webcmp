@@ -114,7 +114,7 @@ export class IrMpoManagement {
         <ir-interceptor></ir-interceptor>
         <ir-title class="px-1" label="MPO Details"></ir-title>
         <div class="card mpo-management__card">
-          <ir-tab-group orientation="horizontal" initialPanel="websites">
+          <ir-tab-group orientation="horizontal">
             {this.panels.map(p => (
               <ir-tab slot="nav" key={p.value} panel={p.value} disabled={p.value === 'marketplaces' && this.userTypeCode === '4'}>
                 {p.label}

@@ -10,7 +10,6 @@ export class IrAffiliateTable {
   render() {
     return (
       <Host>
-        <ir-color-picker></ir-color-picker>
         <table class="table">
           <thead>
             <tr>
