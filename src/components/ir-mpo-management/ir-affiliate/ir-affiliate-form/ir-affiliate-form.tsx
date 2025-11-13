@@ -19,14 +19,9 @@ export class IrAffiliateForm {
         <section class="mpo-management__panel">
           <div class="mpo-management__panel-body">
             <div class="form-grid">
-              <div class="checkbox-card">
-                <ir-checkbox
-                  style={{ gap: '0.5rem' }}
-                  label="Active"
-                  checked={this.store.form.active}
-                  onCheckChange={event => this.handleInputChange('active', event.detail)}
-                ></ir-checkbox>
-                {/* <p class="field-hint">Get updates about your account and important changes</p> */}
+              <div class="form-switch-row">
+                <span>Active</span>
+                <ir-switch checked={this.store.form.active} onCheckChange={event => this.handleInputChange('active', event.detail)}></ir-switch>
               </div>
               <ir-input
                 class="mpo-management__input flex-fill"

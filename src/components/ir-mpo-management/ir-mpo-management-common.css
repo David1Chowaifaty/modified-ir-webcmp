@@ -24,6 +24,14 @@
   gap: 1rem;
   margin-bottom: 0.875rem;
 }
+.form-switch-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.form-switch-row span {
+  font-weight: bold;
+}
 
 .mpo-management__panel-title {
   margin: 0;
@@ -72,4 +80,10 @@
 
 .form-grid.three {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+@media (min-width: 768px) {
+  .form-switch-row span {
+    width: var(--form-max-width, 130px);
+    text-align: right;
+  }
 }

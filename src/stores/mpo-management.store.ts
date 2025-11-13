@@ -15,12 +15,12 @@ export const smtpDependentFields = smtpDependentKeys;
 const mpoWhiteLabelBaseSchema = z.object({
   enabled: z.boolean(),
   extranetUrl: optionalUrl(),
-  companyWebsite: optionalUrl(),
   smtpServer: optionalUrl(),
   smtpPort: optionalString(),
   smtpLogin: optionalString(),
   smtpPassword: optionalString(),
   noReplyEmail: optionalString(),
+  enableCustomSmtp: z.boolean().default(false),
 });
 
 export const mpoWhiteLabelSchema = mpoWhiteLabelBaseSchema.superRefine((values, ctx) => {
@@ -48,6 +48,7 @@ export const mpoManagementSchema = z.object({
   password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+]).{8,16}$/, 'Password is required'),
   country: z.string().min(1, 'Country is required'),
   city: z.string().min(1, 'City is required'),
+  companyWebsite: optionalUrl(),
   address: z.string().min(1, 'Address is required'),
   billingCurrency: z.string().min(1, 'Billing currency is required'),
   mainContact: z.string().min(1, 'Main contact is required'),
@@ -74,18 +75,19 @@ export const mpoCoreDetailSchemas = {
   mainContact: schemaShape.mainContact,
   email: schemaShape.email,
   phone: schemaShape.phone,
+  companyWebsite: schemaShape.companyWebsite,
 } as const;
 
 const whiteLabelShape = mpoWhiteLabelBaseSchema.shape;
 
 export const mpoWhiteLabelFieldSchemas = {
   extranetUrl: whiteLabelShape.extranetUrl,
-  companyWebsite: whiteLabelShape.companyWebsite,
   smtpServer: whiteLabelShape.smtpServer,
   smtpPort: whiteLabelShape.smtpPort,
   smtpLogin: whiteLabelShape.smtpLogin,
   smtpPassword: whiteLabelShape.smtpPassword,
   noReplyEmail: whiteLabelShape.noReplyEmail,
+  enableCustomSmtp: whiteLabelShape.enableCustomSmtp,
 } as const;
 
 export interface MpoManagementSelects {
@@ -116,15 +118,16 @@ const initialState: MpoManagementStoreState = {
     notificationEmail: '',
     receiveNotificationOnEmail: true,
     notes: '',
+    companyWebsite: '',
     whiteLabel: {
       enabled: false,
       extranetUrl: '',
-      companyWebsite: '',
       smtpServer: '',
       smtpPort: '',
       smtpLogin: '',
       smtpPassword: '',
       noReplyEmail: '',
+      enableCustomSmtp: false,
     },
   },
   marketPlaces: [],

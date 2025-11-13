@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 0.5rem;
   margin-top: 1rem;
+  --form-max-width: max-content;
 }
 .white-labeling__input-forms::part(label) {
   width: 110px;

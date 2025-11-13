@@ -59,7 +59,7 @@ export class IrWhiteLabeling {
     },
   ];
 
-  private handleFieldChange(field: keyof MpoWhiteLabelSettings, value?: string | null) {
+  private handleFieldChange(field: keyof MpoWhiteLabelSettings, value?: string | boolean | null) {
     updateWhiteLabelField(field, (value ?? '') as MpoWhiteLabelSettings[typeof field]);
   }
 
@@ -92,9 +92,9 @@ export class IrWhiteLabeling {
                 </ir-validator>
               </div>
               <div class="checkbox-card" style={{ gap: '1rem' }}>
-                <div class="d-flex align-items-center" style={{ gap: '1rem' }}>
-                  <p class={'m-0 p-0'}>Use your own SMTP</p>
-                  <ir-switch></ir-switch>
+                <div class="form-switch-row">
+                  <span>Use your own SMTP</span>
+                  <ir-switch checked={whiteLabel['enableCustomSmtp']} onCheckChange={event => this.handleFieldChange('enableCustomSmtp', event.detail)}></ir-switch>
                 </div>
 
                 {this.whiteLabelFieldMeta.map((field, index) => {

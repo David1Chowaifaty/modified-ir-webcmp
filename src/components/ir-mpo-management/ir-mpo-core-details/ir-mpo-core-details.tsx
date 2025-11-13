@@ -55,8 +55,8 @@ export class IrMpoCoreDetails {
                   label="Company website"
                   required
                   labelPosition="side"
-                  value={this.store.form.companyName}
-                  onInput-change={event => this.handleInputChange('companyName', event.detail)}
+                  value={this.store.form.companyWebsite}
+                  onInput-change={event => this.handleInputChange('companyWebsite', event.detail)}
                 ></ir-input>
               </ir-validator>
               <div>
@@ -203,14 +203,9 @@ export class IrMpoCoreDetails {
                   onInput-change={event => this.handleInputChange('phone', event.detail)}
                 ></ir-input>
               </ir-validator>
-              <div class="checkbox-card">
-                <ir-checkbox
-                  style={{ gap: '0.5rem' }}
-                  label="Receive notifications via email"
-                  checked={this.store.form.receiveNotificationOnEmail}
-                  onCheckChange={event => this.toggleReceiveNotification(event.detail)}
-                ></ir-checkbox>
-                <p class="field-hint">Get updates about your account and important changes</p>
+              <div class="form-switch-row">
+                <span>Receive notifications via email</span>
+                <ir-switch checked={this.store.form.receiveNotificationOnEmail} onCheckChange={e => this.toggleReceiveNotification(e.detail)}></ir-switch>
               </div>
               <style>
                 {`
