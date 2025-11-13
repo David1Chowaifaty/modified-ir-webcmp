@@ -27,6 +27,7 @@
 }
 .copy-button:disabled {
   opacity: 0.5;
+  cursor: not-allowed !important;
 }
 .copy-button:disabled:hover {
   background-color: transparent;
@@ -36,8 +37,8 @@
   transform: scale(0.9);
 }
 
-.copy-button[disabled] {
-  cursor: wait;
+.copy-button[data-state='loading'] {
+  cursor: wait !important;
 }
 
 .icon-container {

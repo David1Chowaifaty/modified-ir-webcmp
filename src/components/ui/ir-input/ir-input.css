@@ -202,4 +202,9 @@
   padding: var(--ir-clear-padding);
   cursor: pointer;
   margin: auto;
+  border-radius: 0.5rem;
+}
+.clear-button:hover,
+.visibility-button:hover {
+  background: var(--ir-muted);
 }

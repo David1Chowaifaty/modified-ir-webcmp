@@ -131,6 +131,17 @@ export class IrInput {
     this.rebuildMask();
   }
 
+  @Watch('value')
+  protected handleValueChange(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      if (this._mask) {
+        this._mask.value = newValue;
+      } else {
+        this.handleInput(newValue);
+      }
+    }
+  }
+
   // ─────────────────────────────────────────────────────────────
   // Methods (extracted handlers)
   // ─────────────────────────────────────────────────────────────
@@ -277,7 +288,7 @@ export class IrInput {
         )}
 
         <div class="input-wrapper" part="wrapper">
-          <div class="input-prefix" part="prefix" aria-hidden={String(this.prefixHidden)}>
+          <div role="group" class="input-prefix" part="prefix" aria-hidden={String(this.prefixHidden)}>
             <slot name="prefix"></slot>
           </div>
 
@@ -298,7 +309,7 @@ export class IrInput {
             aria-label={this.label || this.placeholder || 'Input field'}
           />
 
-          <div class="input-suffix" part="suffix" aria-hidden={String(this.suffixHidden)}>
+          <div class="input-suffix" role="group" part="suffix" aria-hidden={String(this.suffixHidden)}>
             <slot name="suffix"></slot>
 
             {this.clearable && this.value && (

@@ -1,54 +1,56 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { IrColorPicker } from '../ir-color-picker';
+import { IrInput } from '@/components/ui/ir-input/ir-input';
 
 describe('ir-color-picker', () => {
-  it('renders label and inputs', async () => {
+  it('renders empty state with checker background', async () => {
     const page = await newSpecPage({
-      components: [IrColorPicker],
-      html: `<ir-color-picker label="Brand color" message="Select a color"></ir-color-picker>`,
+      components: [IrColorPicker, IrInput],
+      html: `<ir-color-picker></ir-color-picker>`,
     });
 
-    const label = page.root?.shadowRoot?.querySelector('.color-picker__label');
-    expect(label?.textContent).toBe('Brand color');
-
-    const hexInput = page.root?.shadowRoot?.querySelector('.color-picker__hex-input') as HTMLInputElement;
-    expect(hexInput.value).toBe('#2563EB');
+    const input = page.root?.shadowRoot?.querySelector('ir-input') as HTMLIrInputElement;
+    expect(input.value).toBe('');
+    const swatch = page.root?.shadowRoot?.querySelector('.picker__swatch-bg') as HTMLElement;
+    expect(swatch?.classList.contains('picker__swatch-bg--empty')).toBe(true);
   });
 
-  it('emits color-change when the native color input changes', async () => {
+  it('emits color-change when hex input receives a valid value', async () => {
     const page = await newSpecPage({
-      components: [IrColorPicker],
+      components: [IrColorPicker, IrInput],
       html: `<ir-color-picker></ir-color-picker>`,
     });
 
     const spy = jest.fn();
     page.root?.addEventListener('color-change', spy);
 
-    const colorInput = page.root?.shadowRoot?.querySelector('input[type="color"]') as HTMLInputElement;
-    colorInput.value = '#ff0000';
-    colorInput.dispatchEvent(new Event('input'));
+    const input = page.root?.shadowRoot?.querySelector('ir-input');
+    input?.dispatchEvent(new CustomEvent('input-change', { detail: '#aabbcc', bubbles: true }));
     await page.waitForChanges();
 
     expect(spy).toHaveBeenCalled();
-    const detail = spy.mock.calls[0][0].detail;
-    expect(detail.value).toBe('#FF0000');
-    expect(detail.source).toBe('picker');
+    const detail = spy.mock.calls[spy.mock.calls.length - 1][0].detail;
+    expect(detail.value).toBe('#AABBCC');
+    expect(detail.source).toBe('input');
     expect(detail.isValid).toBe(true);
   });
 
-  it('marks the hex input invalid when an incorrect value is entered', async () => {
+  it('clears the value when the input clear button is used', async () => {
     const page = await newSpecPage({
-      components: [IrColorPicker],
-      html: `<ir-color-picker></ir-color-picker>`,
+      components: [IrColorPicker, IrInput],
+      html: `<ir-color-picker value="#123456"></ir-color-picker>`,
     });
 
-    const hexInput = page.root?.shadowRoot?.querySelector('.color-picker__hex-input') as HTMLInputElement;
-    hexInput.value = '#12';
-    hexInput.dispatchEvent(new Event('input'));
+    const spy = jest.fn();
+    page.root?.addEventListener('color-change', spy);
+
+    const input = page.root?.shadowRoot?.querySelector('ir-input');
+    input?.dispatchEvent(new CustomEvent('cleared', { bubbles: true }));
     await page.waitForChanges();
 
-    const helper = page.root?.shadowRoot?.querySelector('.color-picker__helper--error');
-    expect(helper).not.toBeNull();
-    expect(hexInput.getAttribute('aria-invalid')).toBe('true');
+    const detail = spy.mock.calls[spy.mock.calls.length - 1][0].detail;
+    expect(detail.value).toBeUndefined();
+    expect(detail.source).toBe('clear');
+    expect(detail.isValid).toBe(false);
   });
 });

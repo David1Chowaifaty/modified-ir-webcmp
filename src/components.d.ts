@@ -620,19 +620,19 @@ export namespace Components {
     }
     interface IrColorPicker {
         /**
-          * Disables both inputs when true.
+          * Disables the picker.
          */
         "disabled": boolean;
         /**
-          * Optional label rendered above the inputs.
+          * Label rendered inside the hex input.
          */
         "label": string;
         /**
-          * Helper text displayed below the picker.
+          * Helper text displayed below the input.
          */
         "message"?: string;
         /**
-          * Hex value used to initialize the control.
+          * Optional hex value to control the picker externally.
          */
         "value"?: string;
     }
@@ -6645,20 +6645,20 @@ declare namespace LocalJSX {
     }
     interface IrColorPicker {
         /**
-          * Disables both inputs when true.
+          * Disables the picker.
          */
         "disabled"?: boolean;
         /**
-          * Optional label rendered above the inputs.
+          * Label rendered inside the hex input.
          */
         "label"?: string;
         /**
-          * Helper text displayed below the picker.
+          * Helper text displayed below the input.
          */
         "message"?: string;
         "onColor-change"?: (event: IrColorPickerCustomEvent<ColorPickerChangeDetail>) => void;
         /**
-          * Hex value used to initialize the control.
+          * Optional hex value to control the picker externally.
          */
         "value"?: string;
     }

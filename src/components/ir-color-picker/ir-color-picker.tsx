@@ -1,14 +1,23 @@
-import { Component, Host, h, State, Event, EventEmitter, Prop, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 
-const DEFAULT_COLOR = '#2563EB';
-
-export type ColorPickerChangeSource = 'picker' | 'input' | 'prop';
+export type ColorPickerChangeSource = 'picker' | 'input' | 'clear' | 'prop';
 
 export interface ColorPickerChangeDetail {
-  value: string;
+  value?: string;
   source: ColorPickerChangeSource;
   isValid: boolean;
 }
+
+const HEX_MASK = {
+  mask: '#HHHHHH',
+  placeholderChar: '_',
+  definitions: {
+    // Single hex digit
+    H: /[0-9a-fA-F]/,
+  },
+  // Normalize input to uppercase
+  // prepare: (str: string) => str.toUpperCase(),
+};
 
 @Component({
   tag: 'ir-color-picker',
@@ -16,121 +25,142 @@ export interface ColorPickerChangeDetail {
   shadow: true,
 })
 export class IrColorPicker {
-  private colorInputId = `ir-color-picker-${Math.random().toString(36).slice(2)}`;
-  /**
-   * Optional label rendered above the inputs.
-   */
-  @Prop() label: string = 'Color';
+  /** Label rendered inside the hex input. */
+  @Prop() label: string = 'Hex color';
 
-  /**
-   * Helper text displayed below the picker.
-   */
+  /** Helper text displayed below the input. */
   @Prop() message?: string;
 
-  /**
-   * Disables both inputs when true.
-   */
-  @Prop() disabled: boolean = false;
+  /** Disables the picker. */
+  @Prop({ reflect: true }) disabled: boolean = false;
 
-  /**
-   * Hex value used to initialize the control.
-   */
+  /** Optional hex value to control the picker externally. */
   @Prop() value?: string;
+
+  @State() private colorValue?: string;
+  @State() private hexValue: string = '';
+
+  private colorInputEl?: HTMLInputElement;
 
   @Event({ eventName: 'color-change', bubbles: true, composed: true }) colorChange: EventEmitter<ColorPickerChangeDetail>;
 
-  @State() currentValue: string = DEFAULT_COLOR;
-  @State() textValue: string = DEFAULT_COLOR;
-  @State() isInvalid: boolean = false;
-
   componentWillLoad() {
-    this.applyPropValue(this.value, { emit: false });
+    this.syncFromProp(this.value, false);
   }
 
   @Watch('value')
-  handleValueChange(next?: string) {
-    this.applyPropValue(next);
+  protected handleValueChange(next?: string) {
+    this.syncFromProp(next);
   }
 
-  private applyPropValue(value?: string, options: { emit?: boolean } = {}) {
-    const normalized = this.normalizeHex(value);
-    if (!normalized) return;
-    this.currentValue = normalized;
-    this.textValue = normalized;
-    this.isInvalid = false;
-    if (options.emit !== false) {
-      this.emitChange('prop', true);
+  private syncFromProp(next?: string, emit = true) {
+    const normalized = this.normalizeHex(next);
+    this.colorValue = normalized || undefined;
+    this.hexValue = normalized || '';
+    if (emit) {
+      this.emitChange('prop', Boolean(normalized));
     }
   }
 
-  private handleColorInput(event: Event) {
+  private handleSwatchClick = () => {
+    if (this.disabled) return;
+    this.colorInputEl?.click();
+  };
+
+  private handleNativeColorInput = (event: Event) => {
     const target = event.target as HTMLInputElement;
     if (!target?.value) return;
     const normalized = this.normalizeHex(target.value);
     if (!normalized) return;
-    this.currentValue = normalized;
-    this.textValue = normalized;
-    this.isInvalid = false;
-    this.emitChange('picker', true);
+    this.setColor(normalized, 'picker');
+  };
+
+  private handleHexInputChange = (event: CustomEvent<string>) => {
+    const next = (event.detail || '').toUpperCase();
+    this.hexValue = next;
+
+    const normalized = this.normalizeHex(next);
+    if (normalized) {
+      this.setColor(normalized, 'input');
+      return;
+    }
+
+    if (next === '') {
+      this.clearColor('input');
+      return;
+    }
+  };
+
+  private handleHexCleared = () => {
+    this.clearColor('clear');
+  };
+
+  private setColor(value: string, source: ColorPickerChangeSource) {
+    this.colorValue = value;
+    this.hexValue = value;
+    if (this.colorInputEl && this.colorInputEl.value !== value) {
+      this.colorInputEl.value = value;
+    }
+    this.emitChange(source, true);
   }
 
-  private handleHexInput(value: string) {
-    const raw = value.toUpperCase();
-    this.textValue = raw.startsWith('#') ? raw : `#${raw}`;
-
-    const normalized = this.normalizeHex(value);
-    if (normalized) {
-      this.currentValue = normalized;
-      this.isInvalid = false;
-      this.emitChange('input', true);
-    } else {
-      this.isInvalid = true;
-      this.emitChange('input', false);
+  private clearColor(source: ColorPickerChangeSource) {
+    if (!this.colorValue && !this.hexValue) {
+      this.emitChange(source, false);
+      return;
     }
+    this.colorValue = undefined;
+    this.hexValue = '';
+    if (this.colorInputEl) {
+      this.colorInputEl.value = '#000000';
+    }
+    this.emitChange(source, false);
   }
 
   private emitChange(source: ColorPickerChangeSource, isValid: boolean) {
-    this.colorChange.emit({ value: this.currentValue, source, isValid });
+    this.colorChange.emit({ value: this.colorValue, source, isValid });
   }
 
-  private normalizeHex(value?: string): string | null {
+  private normalizeHex(value?: string | null): string | null {
     if (!value) return null;
     const trimmed = value.trim();
     if (!trimmed) return null;
     const prefixed = trimmed.startsWith('#') ? trimmed : `#${trimmed}`;
-    const upper = prefixed.toUpperCase();
-    if (/^#([0-9A-F]{6})$/.test(upper)) {
-      return upper;
-    }
-    const short = upper.match(/^#([0-9A-F]{3})$/);
-    if (short) {
-      const expanded = short[1]
-        .split('')
-        .map(char => `${char}${char}`)
-        .join('');
-      return `#${expanded}`;
+    if (/^#[0-9A-Fa-f]{6}$/.test(prefixed)) {
+      return prefixed.toUpperCase();
     }
     return null;
   }
 
   render() {
+    const previewStyle = this.colorValue ? { backgroundColor: this.colorValue } : undefined;
     return (
       <Host>
-        <div class={{ 'color-picker': true, 'color-picker--disabled': this.disabled }}>
-          {this.label && (
-            <label class="color-picker__label" htmlFor={this.colorInputId}>
-              {this.label}
-            </label>
-          )}
+        <div class="picker" data-disabled={this.disabled ? 'true' : 'false'}>
+          <button class="picker__swatch" type="button" onClick={this.handleSwatchClick} disabled={this.disabled} aria-label="Choose color">
+            <span class={{ 'picker__swatch-bg': true, 'picker__swatch-bg--empty': !this.colorValue }} style={previewStyle}></span>
+          </button>
 
-          <div class="color-picker__controls">
-            <div class="color-picker__swatch">
-              <input id={this.colorInputId} type="color" value={this.currentValue} disabled={this.disabled} onInput={event => this.handleColorInput(event)} />
-            </div>
-            <ir-input clearable onInput-change={e => this.handleHexInput(e.detail)} value={this.textValue} disabled={this.disabled} maxLength={7}>
-              <ir-copy-button disabled={!this.textValue} text={this.textValue} slot="suffix"></ir-copy-button>
-            </ir-input>
-          </div>
+          <input
+            class="picker__native"
+            type="color"
+            value={this.colorValue || '#000000'}
+            ref={el => (this.colorInputEl = el)}
+            disabled={this.disabled}
+            onInput={this.handleNativeColorInput}
+          />
+          <ir-input
+            style={{ flex: '1 1 0%' }}
+            value={this.hexValue}
+            placeholder="#000000"
+            clearable={!this.disabled}
+            disabled={this.disabled}
+            mask={HEX_MASK}
+            onInput-change={this.handleHexInputChange}
+            onCleared={this.handleHexCleared}
+          >
+            <ir-copy-button slot="suffix" text={this.hexValue} disabled={!this.hexValue}></ir-copy-button>
+          </ir-input>
         </div>
       </Host>
     );
