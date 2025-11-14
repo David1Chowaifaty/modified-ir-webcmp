@@ -34,7 +34,7 @@
 @media (min-width: 768px) {
   .brand-uploader__image-upload::part(dropzone) {
     height: 98px;
-    width: 98px;
+    width: var(--brand-dropzone-width, 98px);
   }
   .brand-uploader__image-upload::part(label-container) {
     width: 130px;

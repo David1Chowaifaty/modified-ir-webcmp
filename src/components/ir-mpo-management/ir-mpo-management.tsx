@@ -145,17 +145,17 @@ export class IrMpoManagement {
             ))}
             <ir-tab-panel id="companyInformation">
               <ir-mpo-core-details></ir-mpo-core-details>
-            </ir-tab-panel>
-            <ir-tab-panel id="whiteLabeling">
               <section class="mpo-management__panel">
                 <div class="mpo-management__panel-body">
                   <div class="mpo-management__uploader-container">
                     <div class="logo-upload">
                       <ir-brand-uploader
+                        style={{ '--brand-dropzone-width': '280px' }}
                         dimensions="300x60"
+                        hint="Maximum image size 300px × 60px"
+                        maxFileSize={500000}
                         src={previewSrc}
-                        label="Company Logo"
-                        maxFileSize={5}
+                        label="Company logo"
                         onFilesSelected={event => this.updateCompanyLogo(event.detail)}
                         onFileRejected={event => {
                           const { fileName, reason } = event.detail;
@@ -183,7 +183,8 @@ export class IrMpoManagement {
                       <ir-brand-uploader
                         src={previewFavIconSrc}
                         accept="image/png,image/x-icon,image/svg+xml"
-                        label="Company Favicon"
+                        label="Company favicon"
+                        maxFileSize={150000}
                         hint="Recommended image size 150px × 150px"
                         helperText=""
                         onFilesSelected={async event => {
@@ -214,6 +215,8 @@ export class IrMpoManagement {
                   </div>
                 </div>
               </section>
+            </ir-tab-panel>
+            <ir-tab-panel id="whiteLabeling">
               <ir-white-labeling></ir-white-labeling>
             </ir-tab-panel>
             <ir-tab-panel id="marketplaces">

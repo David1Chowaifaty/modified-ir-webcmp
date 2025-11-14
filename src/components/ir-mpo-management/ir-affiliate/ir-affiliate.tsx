@@ -46,9 +46,10 @@ export class IrAffiliate {
               <div class="d-flex align-items-center">
                 <ir-brand-uploader
                   dimensions="300x60"
+                  hint="Maximum image size 300px × 60px"
+                  maxFileSize={500000}
                   src={previewSrc}
-                  label="Website Logo"
-                  maxFileSize={1024 * 1024}
+                  label="Website logo"
                   onFilesSelected={event => this.updateCompanyLogo(event.detail)}
                   onFileRejected={event => {
                     const { fileName, reason } = event.detail;
@@ -75,8 +76,8 @@ export class IrAffiliate {
                   <ir-brand-uploader
                     src={previewFavIconSrc}
                     accept="image/png,image/x-icon,image/svg+xml"
-                    label="Website Favicon"
-                    maxFileSize={1024 * 1024}
+                    label="Website favicon"
+                    maxFileSize={150000}
                     hint="Recommended image size 150px × 150px"
                     helperText=""
                     onFilesSelected={async event => {

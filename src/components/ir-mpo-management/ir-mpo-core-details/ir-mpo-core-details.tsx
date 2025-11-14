@@ -52,6 +52,7 @@ export class IrMpoCoreDetails {
                   class="mpo-management__input "
                   placeholder="Company website"
                   label="Company website"
+                  mask={'url'}
                   required
                   labelPosition="side"
                   value={this.store.companyInfo.companyWebsite}

@@ -34,7 +34,7 @@ export class IrWhiteLabeling {
     {
       key: 'smtpPort',
       label: 'Port (TLS)',
-      placeholder: '2525',
+      placeholder: '587',
       hint: 'Common ports: 2525 / 465 (SSL) / 587 (TLS)',
     },
     {
