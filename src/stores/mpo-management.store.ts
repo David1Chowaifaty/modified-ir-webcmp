@@ -91,6 +91,7 @@ export const mpoWhiteLabelFieldSchemas = {
 } as const;
 
 export const affiliateFormSchema = z.object({
+  id: z.number().default(-1),
   active: z.boolean({ required_error: 'Select a status' }),
   code: z.string().min(1, 'Affiliate code is required'),
   companyName: z.string().min(1, 'Company name is required'),
@@ -118,6 +119,7 @@ export type AffiliateForm = z.infer<typeof affiliateFormSchema>;
 const affiliateShape = affiliateFormSchema.shape;
 
 export const affiliateFormSchemas = {
+  id: affiliateShape.id,
   active: affiliateShape.active,
   code: affiliateShape.code,
   companyName: affiliateShape.companyName,
@@ -181,6 +183,7 @@ const initialState: MpoManagementStoreState = {
   },
   affiliates: [],
   affiliateNewForm: {
+    id: -1,
     active: false,
     address: '',
     city: '',
@@ -271,6 +274,14 @@ export function updateAffiliateFormField<Field extends keyof AffiliateForm>(fiel
   mpoManagementStore.affiliateNewForm = {
     ...mpoManagementStore.affiliateNewForm,
     [field]: value,
+  };
+}
+export function upsertAffiliates(params: AffiliateForm[]) {
+  mpoManagementStore.affiliates = [...params];
+}
+export function upsertAffiliateForm(params: AffiliateForm) {
+  mpoManagementStore.affiliateNewForm = {
+    ...params,
   };
 }
 

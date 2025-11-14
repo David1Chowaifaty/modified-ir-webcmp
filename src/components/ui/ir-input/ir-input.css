@@ -132,6 +132,7 @@
   box-sizing: border-box;
   font-size: var(--ir-label-font-size);
   color: var(--ir-label-color);
+  font-weight: bold;
   transition: transform var(--ir-floating-transition), color var(--ir-floating-transition), font-size var(--ir-floating-transition), top var(--ir-floating-transition),
     inset-inline-start var(--ir-floating-transition), padding var(--ir-floating-transition), background-color var(--ir-floating-transition);
 }
@@ -144,7 +145,7 @@
   inset-inline-start: calc(var(--ir-input-padding-inline) + var(--ir-prefix-width, 0px));
   pointer-events: none;
   z-index: 1;
-
+  font-weight: 400;
   padding-inline: 0;
   background: transparent;
 }

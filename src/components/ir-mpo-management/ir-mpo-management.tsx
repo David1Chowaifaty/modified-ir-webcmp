@@ -1,5 +1,5 @@
 import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
-import { mpoManagementStore, updateMpoManagementField, updateMpoManagementFields, updateMpoSelectField, upsertMarketPlace } from '@/stores/mpo-management.store';
+import { mpoManagementStore, updateMpoManagementField, updateMpoManagementFields, updateMpoSelectField, upsertAffiliates, upsertMarketPlace } from '@/stores/mpo-management.store';
 import Token from '@/models/Token';
 import { BookingService } from '@/services/booking.service';
 import { PropertyService } from '@/services/property.service';
@@ -90,6 +90,29 @@ export class IrMpoManagement {
       receiveNotificationOnEmail: mpo.is_email_notification,
     });
     upsertMarketPlace(mpo.market_places);
+    upsertAffiliates(
+      mpo.affiliates.map(aff => ({
+        active: false,
+        favicon: '',
+        companyName: '',
+        ///////////////////
+        id: aff.id,
+        address: aff.address,
+        city: aff.city,
+        code: aff.afname,
+        country: aff.country,
+        ctaColor: aff.call_to_action_btn_color,
+        email: aff.email,
+        logo: aff.logo,
+        phone: aff.phone,
+        website: aff.url,
+        bodyTag: aff.body_tag,
+        conversionTag: aff.conversion_tag,
+        customCss: aff.custom_css,
+        footerTag: aff.footer_tag,
+        headerTag: aff.header_tag,
+      })),
+    );
   }
 
   private updateCompanyLogo(files: File[]) {

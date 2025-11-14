@@ -1,4 +1,5 @@
-import { mpoManagementStore } from '@/stores/mpo-management.store';
+import { colorVariants } from '@/components/ui/ir-icons/icons';
+import { mpoManagementStore, upsertAffiliateForm } from '@/stores/mpo-management.store';
 import { Component, Host, State, h } from '@stencil/core';
 
 @Component({
@@ -45,8 +46,15 @@ export class IrAffiliateTable {
                     <td>{a.companyName}</td>
                     <td>{a.website}</td>
                     <td>
-                      <ir-button variant="icon" icon_name="edit"></ir-button>
-                      <ir-button variant="icon" icon_name="trash"></ir-button>
+                      <ir-button
+                        variant="icon"
+                        icon_name="edit"
+                        onClickHandler={() => {
+                          upsertAffiliateForm(a);
+                          this.isOpen = true;
+                        }}
+                      ></ir-button>
+                      <ir-button style={colorVariants.danger} variant="icon" icon_name="trash"></ir-button>
                     </td>
                   </tr>
                 );
