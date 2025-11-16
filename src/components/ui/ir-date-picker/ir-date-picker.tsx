@@ -132,28 +132,8 @@ export class IrDatePicker {
     if (this.date) {
       this.currentDate = this.toValidDate(this.date);
     }
-    this.setPickerStyle();
+    // this.setPickerStyle();
   }
-  private setPickerStyle() {
-    const STYLE_ID = 'air-datepicker-custom-style';
-
-    // Try to find an existing <style> tag in the <head> with our ID
-    let styleEl = document.getElementById(STYLE_ID);
-    if (styleEl) {
-      return;
-    }
-
-    const cssRule = `
-      .air-datepicker.-custom-position-.-active- {
-        height: 280px !important;
-      }
-    `;
-    styleEl = document.createElement('style');
-    styleEl.id = STYLE_ID;
-    styleEl.textContent += cssRule;
-    document.head.appendChild(styleEl);
-  }
-
   componentDidLoad() {
     this.initializeDatepicker();
     this.setupTriggerFocusHandling();
@@ -280,6 +260,7 @@ export class IrDatePicker {
       locale: localeEn,
       showOtherMonths: this.showOtherMonths,
       selectOtherMonths: this.selectOtherMonths,
+
       onHide: () => {
         this.datePickerBlur.emit();
       },
@@ -303,7 +284,6 @@ export class IrDatePicker {
           end: moment(date),
         });
       },
-
       position({ $datepicker, $target, $pointer, done }) {
         let popper = createPopper($target, $datepicker, {
           placement: 'top',
@@ -329,6 +309,7 @@ export class IrDatePicker {
         };
       },
     });
+    this.datePicker.$datepicker.style.height = '280px';
   }
 
   disconnectedCallback() {
