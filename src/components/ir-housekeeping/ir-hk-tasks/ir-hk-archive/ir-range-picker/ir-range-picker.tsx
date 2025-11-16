@@ -171,7 +171,7 @@ export class IrRangePicker {
             />
           </svg>
           {this.renderDatePicker('toDate', this.toDate, this.fromDate?.toDate() || this.minSelectableDate, el => (this.toDatePicker = el), {
-            forceDestroyOnUpdate: true,
+            forceDestroyOnUpdate: false,
           })}
         </div>
       </Host>
