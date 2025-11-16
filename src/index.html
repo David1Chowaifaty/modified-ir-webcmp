@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>MPO Management</title>
+    <title>Sales by Country</title>
     <script type="module" src="/build/ir-webcmp.esm.js"></script>
     <script nomodule src="/build/ir-webcmp.js"></script>
     <script src="assets/scripts/jquery.min.js"></script>
@@ -22,19 +22,19 @@
     </style>
 </head>
 
-<body style="margin: 0;padding:0;box-sizing:border-box">
+<body>
     <ir-common></ir-common>
-    <ir-mpo-management mpo-id="22" baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-mpo-management>
-    <!-- <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css"> -->
+    <ir-sales-by-country propertyid="42" language="en"
+        baseurl="https://gateway.igloorooms.com/IR"></ir-sales-by-country>
+    <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
     <script>
-        const mpoManagementEl = document.querySelector("ir-mpo-management");
-        if (mpoManagementEl) {
-            (async () => {
-                mpoManagementEl.propertyid = getId();
-                mpoManagementEl.ticket = await getToken()
-            })();
-        } 
+        const salesByCountryEl = document.querySelector("ir-sales-by-country");
+        setTimeout(async () => {
+            const ticket = await getToken();
+            salesByCountryEl.propertyid = getId();
+            salesByCountryEl.ticket = ticket;
+        }, 300)
     </script>
 
 </body>
