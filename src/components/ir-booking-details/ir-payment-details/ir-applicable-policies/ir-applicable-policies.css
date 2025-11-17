@@ -32,7 +32,7 @@
   padding: 0.5rem 1rem;
   border: 1px solid rgba(30, 159, 242, 40%);
   border-radius: 0.25rem;
-  max-height: 200px;
+  max-height: 245px;
   overflow-y: auto;
 }
 .applicable-policies__highlighted-bracket {
