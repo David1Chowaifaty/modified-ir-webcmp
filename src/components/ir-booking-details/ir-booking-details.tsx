@@ -623,17 +623,16 @@ export class IrBookingDetails {
         <div class="booking-details__info-column">
           <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
           <wa-card>
-            <div slot="header" class="font-size-large d-flex justify-content-between align-items-center">
-              <ir-date-view from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
-              {!this.hasRoomAdd && this.booking.is_editable && (
-                <Fragment>
-                  <wa-tooltip for="room-add">Add unit</wa-tooltip>
-                  <ir-custom-button id="room-add" appearance={'plain'} size={'small'} variant={'neutral'}>
-                    <wa-icon name="plus" style={{ fontSize: '1rem' }} label="Add unit"></wa-icon>
-                  </ir-custom-button>
-                </Fragment>
-              )}
-            </div>
+            <ir-date-view class="font-size-large" slot="header" from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
+            {!this.hasRoomAdd && this.booking.is_editable && (
+              <Fragment>
+                <wa-tooltip for="room-add">Add unit</wa-tooltip>
+                <ir-custom-button slot="header-actions" id="room-add" appearance={'plain'} size={'small'} variant={'neutral'}>
+                  <wa-icon name="plus" style={{ fontSize: '1rem' }} label="Add unit"></wa-icon>
+                </ir-custom-button>
+              </Fragment>
+            )}
+
             {roomsSection}
           </wa-card>
           {/* <ir-ota-services services={this.booking.ota_services}></ir-ota-services> */}

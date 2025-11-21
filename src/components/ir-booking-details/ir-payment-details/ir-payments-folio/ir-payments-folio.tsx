@@ -71,16 +71,15 @@ export class IrPaymentsFolio {
   render() {
     return (
       <wa-card class=" payments-container">
-        <div slot="header" class="d-flex align-items-center justify-content-between">
-          <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-            <p class="font-size-large p-0 m-0">Guest Folio</p>
-            <HelpDocButton message="Help" href="https://help.igloorooms.com/extranet/booking-details/guest-folio" />
-          </div>
-          <wa-tooltip for="create-payment">Add Payment</wa-tooltip>
-          <ir-custom-button id="create-payment" size="small" variant="neutral" appearance="plain" onClickHandler={this.handleAddPayment}>
-            <wa-icon name="plus" style={{ fontSize: '1rem' }}></wa-icon>
-          </ir-custom-button>
+        <div slot="header" class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+          <p class="font-size-large p-0 m-0">Guest Folio</p>
+          <HelpDocButton message="Help" href="https://help.igloorooms.com/extranet/booking-details/guest-folio" />
         </div>
+        <wa-tooltip for="create-payment">Add Payment</wa-tooltip>
+        <ir-custom-button slot="header-actions" id="create-payment" size="small" variant="neutral" appearance="plain" onClickHandler={this.handleAddPayment}>
+          <wa-icon name="plus" style={{ fontSize: '1rem' }}></wa-icon>
+        </ir-custom-button>
+
         {this.hasPayments() ? this.payments.map((payment, index) => this.renderPaymentItem(payment, index)) : this.renderEmptyState()}
       </wa-card>
     );

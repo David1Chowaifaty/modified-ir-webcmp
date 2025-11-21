@@ -18,14 +18,15 @@ export class IrPickupView {
     return (
       <Host>
         <wa-card>
-          <div slot="header" class={'d-flex w-100  align-items-center justify-content-between'}>
-            <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_Pickup}</p>
-            {/* <ir-button id="pickup" data-testid="new_pickup_btn" variant="icon" icon_name="edit" style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}></ir-button> */}
-            <wa-tooltip for="pickup">{this.booking.pickup_info ? 'Edit' : 'Add'} pickup</wa-tooltip>
-            <ir-custom-button id="pickup" size="small" appearance="plain" variant="neutral">
-              <wa-icon name="edit" style={{ fontSize: '1rem' }}></wa-icon>
-            </ir-custom-button>
-          </div>
+          <p slot="header" class={'font-size-large p-0 m-0 '}>
+            {locales.entries.Lcz_Pickup}
+          </p>
+          {/* <ir-button id="pickup" data-testid="new_pickup_btn" variant="icon" icon_name="edit" style={{ ...colorVariants.secondary, '--icon-size': '1.5rem' }}></ir-button> */}
+          <wa-tooltip for="pickup">{this.booking.pickup_info ? 'Edit' : 'Add'} pickup</wa-tooltip>
+          <ir-custom-button slot="header-actions" id="pickup" size="small" appearance="plain" variant="neutral">
+            <wa-icon name="edit" style={{ fontSize: '1rem' }}></wa-icon>
+          </ir-custom-button>
+
           {this.booking.pickup_info && (
             <div>
               <div class={'d-flex align-items-center py-0 my-0 pickup-margin'}>

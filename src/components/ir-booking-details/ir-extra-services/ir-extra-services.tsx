@@ -13,13 +13,14 @@ export class IrExtraServices {
     return (
       <Host>
         <wa-card>
-          <div slot="header" class="font-size-large d-flex justify-content-between align-items-center">
-            <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_ExtraServices}</p>
-            <wa-tooltip for="extra_service_btn">Add extra service</wa-tooltip>
-            <ir-custom-button id="extra_service_btn" size="small" appearance="plain" variant="neutral">
-              <wa-icon name="plus" style={{ fontSize: '1rem' }}></wa-icon>
-            </ir-custom-button>
-          </div>
+          <p slot="header" class={'font-size-large p-0 m-0 '}>
+            {locales.entries.Lcz_ExtraServices}
+          </p>
+          <wa-tooltip for="extra_service_btn">Add extra service</wa-tooltip>
+          <ir-custom-button slot="header-actions" id="extra_service_btn" size="small" appearance="plain" variant="neutral">
+            <wa-icon name="plus" style={{ fontSize: '1rem' }}></wa-icon>
+          </ir-custom-button>
+
           {this.booking.extra_services?.map((service, index) => (
             <Fragment>
               <ir-extra-service
