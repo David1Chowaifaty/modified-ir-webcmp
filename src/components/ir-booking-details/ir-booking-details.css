@@ -15,6 +15,25 @@
 :host th {
   font-weight: 600;
 }
+
+.booking-details__booking-info {
+  display: grid;
+  padding: var(--wa-space-m);
+  gap: var(--wa-space-l);
+}
+.booking-details__info-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wa-space-l);
+}
+
+@media (min-width: 768px) {
+  .booking-details__booking-info {
+    gap: var(--wa-space-xl);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .card.room-group {
   margin-bottom: 1rem !important;
 }

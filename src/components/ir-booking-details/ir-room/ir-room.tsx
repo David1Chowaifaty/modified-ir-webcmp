@@ -5,7 +5,6 @@ import { TIglBookPropertyPayload } from '@/models/igl-book-property';
 import { formatName } from '@/utils/booking';
 import locales from '@/stores/locales.store';
 import calendar_data, { isSingleUnit } from '@/stores/calendar-data';
-import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { formatAmount } from '@/utils/utils';
 import { IEntries } from '@/models/IBooking';
 import { BookingService } from '@/services/booking.service';
@@ -302,8 +301,8 @@ export class IrRoom {
   render() {
     const bed = this.getBedName();
     return (
-      <Host class="p-1 d-flex m-0">
-        <ir-button
+      <Host class="d-flex m-0">
+        {/* <ir-button
           variant="icon"
           id="drawer-icon"
           data-toggle="collapse"
@@ -316,101 +315,120 @@ export class IrRoom {
             this.collapsed = !this.collapsed;
           }}
           style={{ '--icon-size': '1.6rem' }}
-        ></ir-button>
-        <div class="flex-fill m-0 ">
-          <div class="d-flex align-items-start justify-content-between sm-mb-1">
-            <p class="m-0 p-0">
-              <span class="m-0 p-0" style={{ fontWeight: '600' }}>
-                {this.myRoomTypeFoodCat || ''}{' '}
-              </span>{' '}
-              {this.mealCodeName} {this.room.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
-            </p>
-            {/*this.room.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
-            <div class="d-flex m-0 p-0 align-items-center room_actions_btns">
-              <span class="p-0 m-0 font-weight-bold">{formatAmount(this.currency, this.room['gross_total'])}</span>
-              {this.hasRoomEdit && this.isEditable && (
-                <ir-button
-                  id={`roomEdit-${this.room.identifier}`}
-                  variant="icon"
-                  icon_name="edit"
-                  // class="mx-1"
-                  style={colorVariants.secondary}
-                  onClickHandler={this.handleEditClick.bind(this)}
-                ></ir-button>
+        ></ir-button> */}
+
+        <wa-details class="booking-room__details" appearance="plain">
+          <div slot="summary" style={{ width: '100%' }}>
+            <div class="d-flex align-items-center justify-content-between">
+              <p class="m-0 p-0">
+                <span class="m-0 p-0" style={{ fontWeight: '600' }}>
+                  {this.myRoomTypeFoodCat || ''}{' '}
+                </span>{' '}
+                {this.mealCodeName} {this.room.rateplan.is_non_refundable && ` - ${locales.entries.Lcz_NonRefundable}`}{' '}
+              </p>
+              {/*this.room.My_Room_type.My_Room_type_desc[0].CUSTOM_TXT || ''*/}
+              <div class="booking-room__price-row">
+                <span class="booking-room__price">{formatAmount(this.currency, this.room['gross_total'])}</span>
+
+                <div class="booking-room__actions">
+                  {this.hasRoomEdit && this.isEditable && (
+                    <Fragment>
+                      <wa-tooltip for={`edit-room-${this.room.identifier}`}>Edit {this.room.roomtype.name}</wa-tooltip>
+                      <ir-custom-button
+                        id={`edit-room-${this.room.identifier}`}
+                        class="booking-room__edit-button"
+                        onClickHandler={this.handleEditClick.bind(this)}
+                        variant="neutral"
+                        size="small"
+                        appearance="plain"
+                      >
+                        <wa-icon label="Edit room" class="booking-room__edit-icon" name="edit" style={{ fontSize: '1rem' }}></wa-icon>
+                      </ir-custom-button>
+                    </Fragment>
+                  )}
+
+                  {this.hasRoomDelete && this.isEditable && (
+                    <Fragment>
+                      <wa-tooltip for={`delete-room-${this.room.identifier}`}>Delete {this.room.roomtype.name}</wa-tooltip>
+                      <ir-custom-button
+                        id={`delete-room-${this.room.identifier}`}
+                        class="booking-room__delete-button"
+                        onClickHandler={this.openModal.bind(this, 'delete')}
+                        variant="danger"
+                        size="small"
+                        appearance="plain"
+                      >
+                        <wa-icon label="Delete room" class="booking-room__delete-icon" name="trash-can" style={{ fontSize: '1rem' }}></wa-icon>
+                      </ir-custom-button>
+                    </Fragment>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div class="d-flex align-items-center sm-mb-1">
+              <ir-date-view
+                class="mr-1  flex-grow-1"
+                style={{ width: 'fit-content' }}
+                from_date={this.room.from_date}
+                to_date={this.room.to_date}
+                showDateDifference={false}
+              ></ir-date-view>
+              {!isSingleUnit(this.room.roomtype.id) && calendar_data.is_frontdesk_enabled && this.room.unit && (
+                <div class={'d-flex justify-content-center align-items-center'}>
+                  <ir-tooltip message={(this.room.unit as IUnit).name} customSlot>
+                    <span slot="tooltip-trigger" class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>
+                      {(this.room.unit as IUnit).name}
+                    </span>
+                  </ir-tooltip>
+                </div>
               )}
-              {this.hasRoomDelete && this.isEditable && (
-                <ir-button
-                  variant="icon"
-                  onClickHandler={this.openModal.bind(this, 'delete')}
-                  id={`roomDelete-${this.room.identifier}`}
-                  icon_name="trash"
-                  style={colorVariants.danger}
-                ></ir-button>
+              {this.hasCheckIn && (
+                <ir-button onClickHandler={this.handleCheckIn.bind(this)} id="checkin" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckIn}></ir-button>
+              )}
+              {this.hasCheckOut && (
+                <ir-button onClickHandler={this.openModal.bind(this, 'checkout')} id="checkout" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckOut}></ir-button>
               )}
             </div>
-          </div>
-          <div class="d-flex align-items-center sm-mb-1">
-            <ir-date-view
-              class="mr-1  flex-grow-1"
-              style={{ width: 'fit-content' }}
-              from_date={this.room.from_date}
-              to_date={this.room.to_date}
-              showDateDifference={false}
-            ></ir-date-view>
-            {!isSingleUnit(this.room.roomtype.id) && calendar_data.is_frontdesk_enabled && this.room.unit && (
-              <div class={'d-flex justify-content-center align-items-center'}>
-                <ir-tooltip message={(this.room.unit as IUnit).name} customSlot>
-                  <span slot="tooltip-trigger" class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>
-                    {(this.room.unit as IUnit).name}
-                  </span>
-                </ir-tooltip>
+            <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+              <p class="m-0 p-0">{`${this.mainGuest.first_name || ''} ${this.mainGuest.last_name || ''}`}</p>
+              {this.room.rateplan.selected_variation.adult_nbr > 0 &&
+                (this.room.unit ? (
+                  <ir-tooltip message={'View guests'} class="m-0 p-0" customSlot>
+                    <ir-button
+                      class="m-0 p-0"
+                      slot="tooltip-trigger"
+                      btn_color="link"
+                      renderContentAsHtml
+                      onClickHandler={() => this.showGuestModal()}
+                      size="sm"
+                      btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit', textAlign: 'center', lineHeight: '1.2' }}
+                      text={this.formatVariation(this.room.occupancy)}
+                    ></ir-button>
+                  </ir-tooltip>
+                ) : (
+                  <span innerHTML={this.formatVariation(this.room.occupancy)}></span>
+                ))}
+              {bed && <p class="m-0 p-0">({bed})</p>}
+            </div>
+            {this.includeDepartureTime && (
+              <div class="d-flex align-items-center" style={{ marginTop: '0.5rem', marginBottom: '0.875rem', gap: '0.5rem' }}>
+                <p class="m-0 p-0">Expected departure time:</p>
+                <ir-select
+                  selectedValue={this.room.departure_time?.code}
+                  showFirstOption={false}
+                  onSelectChange={e => {
+                    this.updateDepartureTime(e.detail);
+                  }}
+                  data={this.departureTime?.map(d => ({
+                    text: d[`CODE_VALUE_${this.language?.toUpperCase()}`] ?? d[`CODE_VALUE_EN`],
+                    value: d.CODE_NAME,
+                  }))}
+                ></ir-select>
               </div>
             )}
-            {this.hasCheckIn && (
-              <ir-button onClickHandler={this.handleCheckIn.bind(this)} id="checkin" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckIn}></ir-button>
-            )}
-            {this.hasCheckOut && (
-              <ir-button onClickHandler={this.openModal.bind(this, 'checkout')} id="checkout" btn_color="outline" size="sm" text={locales.entries.Lcz_CheckOut}></ir-button>
-            )}
           </div>
-          <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-            <p class="m-0 p-0">{`${this.mainGuest.first_name || ''} ${this.mainGuest.last_name || ''}`}</p>
-            {this.room.rateplan.selected_variation.adult_nbr > 0 &&
-              (this.room.unit ? (
-                <ir-tooltip message={'View guests'} class="m-0 p-0" customSlot>
-                  <ir-button
-                    class="m-0 p-0"
-                    slot="tooltip-trigger"
-                    btn_color="link"
-                    renderContentAsHtml
-                    onClickHandler={() => this.showGuestModal()}
-                    size="sm"
-                    btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit', textAlign: 'center', lineHeight: '1.2' }}
-                    text={this.formatVariation(this.room.occupancy)}
-                  ></ir-button>
-                </ir-tooltip>
-              ) : (
-                <span innerHTML={this.formatVariation(this.room.occupancy)}></span>
-              ))}
-            {bed && <p class="m-0 p-0">({bed})</p>}
-          </div>
-          {this.includeDepartureTime && (
-            <div class="d-flex align-items-center" style={{ marginTop: '0.5rem', marginBottom: '0.875rem', gap: '0.5rem' }}>
-              <p class="m-0 p-0">Expected departure time:</p>
-              <ir-select
-                selectedValue={this.room.departure_time?.code}
-                showFirstOption={false}
-                onSelectChange={e => {
-                  this.updateDepartureTime(e.detail);
-                }}
-                data={this.departureTime?.map(d => ({
-                  text: d[`CODE_VALUE_${this.language?.toUpperCase()}`] ?? d[`CODE_VALUE_EN`],
-                  value: d.CODE_NAME,
-                }))}
-              ></ir-select>
-            </div>
-          )}
-          <div class="collapse" id={`roomCollapse-${this.room.identifier?.split(' ').join('')}`}>
+
+          <div>
             <div class="d-flex sm-mb-1 sm-mt-1">
               <div class=" sm-padding-top">
                 <p class="sm-padding-right" style={{ fontWeight: '600' }}>{`${locales.entries.Lcz_Breakdown}:`}</p>
@@ -493,7 +511,7 @@ export class IrRoom {
             )}
             {/* {this.bookingEvent.is_direct && <ir-label labelText={`${locales.entries.Lcz_MealPlan}:`} content={this.mealCodeName}></ir-label>} */}
           </div>
-        </div>
+        </wa-details>
         <ir-modal
           autoClose={false}
           ref={el => (this.modal = el)}

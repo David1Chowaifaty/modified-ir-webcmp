@@ -31,9 +31,7 @@ export class IrPmsLogs {
 
   render() {
     return (
-      <div class="p-1">
-        <h3 class=" text-left mb-1 dialog-title ">{locales.entries.Lcz_PMS_Logs}</h3>
-
+      <div class="">
         {isRequestPending('/Get_Exposed_PMS_Logs') ? (
           <div class={'d-flex align-items-center justify-content-center dialog-container-height'}>
             <ir-spinner></ir-spinner>

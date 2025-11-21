@@ -13,6 +13,7 @@ export class IrPaymentsFolio {
   @Event({ bubbles: true }) addPayment: EventEmitter<void>;
   @Event({ bubbles: true }) editPayment: EventEmitter<IPayment>;
   @Event({ bubbles: true }) deletePayment: EventEmitter<IPayment>;
+  @Event({ bubbles: true }) issueReceipt: EventEmitter<IPayment>;
 
   private handleAddPayment = () => {
     this.addPayment.emit();
@@ -25,6 +26,10 @@ export class IrPaymentsFolio {
   private handleDeletePayment = (payment: IPayment) => {
     this.deletePayment.emit(payment);
   };
+
+  private handleIssueReceipt(payment: IPayment) {
+    this.issueReceipt.emit(payment);
+  }
 
   private hasPayments(): boolean {
     return this.payments && this.payments.length > 0;
@@ -45,8 +50,13 @@ export class IrPaymentsFolio {
           e.stopPropagation();
           this.handleEditPayment(e.detail);
         }}
+        onIssueReceipt={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.handleIssueReceipt(e.detail);
+        }}
       />,
-      index < this.payments.length - 1 && <hr class="p-0 m-0" />,
+      index < this.payments.length - 1 && <wa-divider class="payment-divider"></wa-divider>,
     ];
   }
 
@@ -60,21 +70,19 @@ export class IrPaymentsFolio {
 
   render() {
     return (
-      <div class="mt-1">
-        <div class="d-flex flex-column rounded payment-container">
-          <div class="d-flex align-items-center justify-content-between">
-            <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-              <p class="font-size-large p-0 m-0">Guest Folio</p>
-              <HelpDocButton message="Help" href="https://help.igloorooms.com/extranet/booking-details/guest-folio" />
-            </div>
-            <ir-button id="add-payment" variant="icon" icon_name="square_plus" style={{ '--icon-size': '1.5rem' }} onClickHandler={this.handleAddPayment} />
+      <wa-card class=" payments-container">
+        <div slot="header" class="d-flex align-items-center justify-content-between">
+          <div class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+            <p class="font-size-large p-0 m-0">Guest Folio</p>
+            <HelpDocButton message="Help" href="https://help.igloorooms.com/extranet/booking-details/guest-folio" />
           </div>
-
-          <div class="mt-1 card p-1 payments-container">
-            {this.hasPayments() ? this.payments.map((payment, index) => this.renderPaymentItem(payment, index)) : this.renderEmptyState()}
-          </div>
+          <wa-tooltip for="create-payment">Add Payment</wa-tooltip>
+          <ir-custom-button id="create-payment" size="small" variant="neutral" appearance="plain" onClickHandler={this.handleAddPayment}>
+            <wa-icon name="plus" style={{ fontSize: '1rem' }}></wa-icon>
+          </ir-custom-button>
         </div>
-      </div>
+        {this.hasPayments() ? this.payments.map((payment, index) => this.renderPaymentItem(payment, index)) : this.renderEmptyState()}
+      </wa-card>
     );
   }
 }

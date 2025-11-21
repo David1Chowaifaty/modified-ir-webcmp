@@ -26,7 +26,7 @@ export class IrPaymentFolio {
 
   @Prop() mode: FolioEntryMode;
 
-  @State() isLoading: boolean;
+  @State() isLoading: 'save' | 'save-print' = null;
   @State() errors: any;
   @State() autoValidate: boolean = false;
   @State() folioData: Payment;
@@ -88,15 +88,15 @@ export class IrPaymentFolio {
     this.folioData = { ...this.folioData, ...params };
   }
 
-  private async savePayment() {
+  private async savePayment(print: boolean = false) {
     try {
-      this.isLoading = true;
+      this.isLoading = print ? 'save-print' : 'save';
       this.autoValidate = true;
       if (this.errors) {
         this.errors = null;
       }
       this.folioSchema.parse(this.folioData ?? {});
-      await this.paymentService.AddPayment(
+      const data = await this.paymentService.AddPayment(
         {
           ...this.folioData,
           currency: calendar_data.currency,
@@ -105,6 +105,9 @@ export class IrPaymentFolio {
         },
         this.bookingNumber,
       );
+      if (print) {
+        console.log(data);
+      }
       this.resetBookingEvt.emit(null);
       this.resetExposedCancellationDueAmount.emit(null);
       this.closeModal.emit(null);
@@ -118,7 +121,7 @@ export class IrPaymentFolio {
       console.error(error);
       this.errors = err;
     } finally {
-      this.isLoading = false;
+      this.isLoading = null;
     }
   }
 
@@ -205,14 +208,9 @@ export class IrPaymentFolio {
     ));
   }
   render() {
+    const isNewPayment = this.folioData?.payment_type?.code === '001' && this.folioData.id === -1;
     return (
-      <form
-        class={'sheet-container'}
-        onSubmit={async e => {
-          e.preventDefault();
-          this.savePayment();
-        }}
-      >
+      <form class={'sheet-container'}>
         <ir-title
           class="px-1 sheet-header"
           onCloseSideBar={() => this.closeModal.emit(null)}
@@ -332,16 +330,39 @@ export class IrPaymentFolio {
             ></ir-input-text>
           </div>
         </section>
+
         <div class={'sheet-footer'}>
-          <ir-button onClick={() => this.closeModal.emit(null)} btn_styles="justify-content-center" class={`flex-fill`} text={'Cancel'} btn_color="secondary"></ir-button>
-          <ir-button
-            btn_styles="justify-content-center align-items-center"
-            class={'flex-fill'}
-            isLoading={this.isLoading}
-            text={'Save'}
-            btn_color="primary"
-            btn_type="submit"
-          ></ir-button>
+          {/* <ir-button onClick={() => this.closeModal.emit(null)} btn_styles="justify-content-center" class={`flex-fill`} text={'Cancel'} btn_color="secondary"></ir-button> */}
+          <ir-custom-button onClickHandler={() => this.closeModal.emit(null)} size="medium" appearance="filled" variant="neutral">
+            Cancel
+          </ir-custom-button>
+          <ir-custom-button
+            type={'button'}
+            onClickHandler={e => {
+              e.stopImmediatePropagation();
+              this.savePayment();
+            }}
+            size="medium"
+            loading={this.isLoading === 'save'}
+            appearance={isNewPayment ? 'filled' : 'accent'}
+            variant="brand"
+          >
+            Save
+          </ir-custom-button>
+          {isNewPayment && (
+            <ir-custom-button
+              size="medium"
+              type={'button'}
+              onClickHandler={e => {
+                e.stopPropagation();
+                this.savePayment(true);
+              }}
+              loading={this.isLoading === 'save-print'}
+              variant="brand"
+            >
+              Save And Print Receipt
+            </ir-custom-button>
+          )}
         </div>
       </form>
     );

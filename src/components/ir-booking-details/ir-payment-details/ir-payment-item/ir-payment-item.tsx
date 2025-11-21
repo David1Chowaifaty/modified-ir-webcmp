@@ -15,6 +15,7 @@ export class IrPaymentItem {
 
   @Event() editPayment: EventEmitter<IPayment>;
   @Event() deletePayment: EventEmitter<IPayment>;
+  @Event() issueReceipt: EventEmitter<IPayment>;
 
   render() {
     const isCredit = this.payment.payment_type.operation === 'CR';
@@ -43,24 +44,40 @@ export class IrPaymentItem {
                 {/* <ir-icons name="user" style={{ '--icon-size': '1rem', 'color': colorVariants.secondary['--icon-button-color'] }}></ir-icons> */}
               </ir-popover>
             </div>
-            <ir-button
-              class="payment-item__action-button"
-              variant="icon"
-              onClickHandler={() => {
-                this.editPayment.emit(this.payment);
+            <wa-dropdown
+              onwa-select={e => {
+                switch ((e.detail as any).item.value) {
+                  case 'edit':
+                    this.editPayment.emit(this.payment);
+                    break;
+                  case 'delete':
+                    this.deletePayment.emit(this.payment);
+                    break;
+                  case 'receipt':
+                    this.issueReceipt.emit(this.payment);
+                    break;
+                }
               }}
-              icon_name="edit"
-              style={colorVariants.secondary}
-            ></ir-button>
-            <ir-button
-              class="payment-item__action-button"
-              onClickHandler={() => {
-                this.deletePayment.emit(this.payment);
-              }}
-              variant="icon"
-              style={colorVariants.danger}
-              icon_name="trash"
-            ></ir-button>
+            >
+              <ir-custom-button slot="trigger" appearance="plain">
+                <wa-icon name="ellipsis-vertical"></wa-icon>
+              </ir-custom-button>
+
+              {this.payment.payment_type.code === '001' && (
+                <wa-dropdown-item value="receipt">
+                  <wa-icon name="receipt" slot="icon"></wa-icon>
+                  Print Receipt
+                </wa-dropdown-item>
+              )}
+              <wa-dropdown-item value="edit">
+                <wa-icon slot="icon" name="edit"></wa-icon>
+                Edit
+              </wa-dropdown-item>
+              <wa-dropdown-item value="delete" variant="danger">
+                <wa-icon slot="icon" name="trash"></wa-icon>
+                Delete
+              </wa-dropdown-item>
+            </wa-dropdown>
           </div>
         </div>
 

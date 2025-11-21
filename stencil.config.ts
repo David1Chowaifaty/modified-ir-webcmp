@@ -2,7 +2,8 @@ import { Config } from '@stencil/core';
 
 export const config: Config = {
   namespace: 'ir-webcmp',
-  globalStyle: 'src/common/global.css',
+  globalStyle: 'src/global/app.css',
+  globalScript: 'src/global/app.ts',
   outputTargets: [
     {
       type: 'dist',

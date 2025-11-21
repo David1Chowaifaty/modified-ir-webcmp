@@ -112,10 +112,8 @@ export class IglReallocationDialog {
     this.showRateplanError = false;
   }
 
-  private handleDialogVisibilityChange = (event: CustomEvent<boolean>) => {
-    if (!event.detail) {
-      this.dialogClose.emit(false);
-    }
+  private handleDialogVisibilityChange = (_: CustomEvent) => {
+    this.dialogClose.emit(false);
   };
 
   private handleRateplanChange = (event: CustomEvent<string>) => {
@@ -132,11 +130,10 @@ export class IglReallocationDialog {
     const hasRateplans = this.hasRateplanRequirement();
 
     return (
-      <ir-dialog ref={el => (this.dialogEl = el)} onOpenChange={this.handleDialogVisibilityChange}>
+      <ir-dialog label={this.data.title} ref={el => (this.dialogEl = el)} onIrDialogHide={this.handleDialogVisibilityChange}>
         {this.data && (
           <Fragment>
-            {this.data.title && <div slot="modal-title">{this.data.title}</div>}
-            <div slot="modal-body" class="dialog-body">
+            <div class="dialog-body">
               <p class="text-left dialog-body__description m-0 p-0">{this.data.description}</p>
               {hasRateplans && (
                 <ir-select
@@ -149,7 +146,7 @@ export class IglReallocationDialog {
                 ></ir-select>
               )}
             </div>
-            <div class="dialog-footer" slot="modal-footer">
+            <div class="dialog-footer" slot="footer">
               <ir-button onClick={this.handleCancelClick} text="Cancel" size="md" btn_color="secondary"></ir-button>
               <ir-button text="Confirm" onClick={() => this.reallocateUnit()} size="md" isLoading={isRequestPending('/ReAllocate_Exposed_Room')}></ir-button>
             </div>

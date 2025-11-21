@@ -4,7 +4,7 @@ import { BookingService } from '@/services/booking.service';
 import { PaymentService, IPaymentAction } from '@/services/payment.service';
 import locales from '@/stores/locales.store';
 import { IToast } from '@/components/ui/ir-toast/toast';
-import { Payment, PaymentEntries, PaymentSidebarEvent } from '../types';
+import { Payment, PaymentEntries, PaymentSidebarEvent, PrintScreenOptions } from '../types';
 import moment from 'moment';
 import { formatAmount } from '@/utils/utils';
 import calendar_data from '@/stores/calendar-data';
@@ -28,6 +28,7 @@ export class IrPaymentDetails {
   @Event({ bubbles: true }) resetExposedCancellationDueAmount: EventEmitter<null>;
   @Event({ bubbles: true }) toast: EventEmitter<IToast>;
   @Event({ bubbles: true }) openSidebar: EventEmitter<PaymentSidebarEvent>;
+  @Event({ bubbles: true }) openPrintScreen: EventEmitter<PrintScreenOptions>;
 
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
@@ -117,6 +118,27 @@ export class IrPaymentDetails {
     this.toBeDeletedItem = payment;
     this.openModal();
   };
+
+  private async handleIssueReceipt(detail: IPayment) {
+    if (detail.receipt_nbr) {
+      this.openPrintScreen.emit({
+        mode: 'receipt',
+        payload: {
+          pid: detail.id.toString(),
+          rnb: detail.receipt_nbr,
+        },
+      });
+      return;
+    }
+    const _number = await this.bookingService.getNextValue({ starter: 'RC' });
+    this.openPrintScreen.emit({
+      mode: 'receipt',
+      payload: {
+        pid: detail.id.toString(),
+        rnb: `RC-${_number.My_Result}`,
+      },
+    });
+  }
 
   private async cancelPayment() {
     try {
@@ -212,7 +234,7 @@ export class IrPaymentDetails {
     const { financial, currency } = this.booking;
 
     return [
-      <div class="card p-1">
+      <wa-card>
         <ir-payment-summary
           isBookingCancelled={['003', '004'].includes(this.booking.status.code)}
           totalCost={financial.gross_cost}
@@ -250,12 +272,13 @@ export class IrPaymentDetails {
             ></ir-button>
           </div>
         )}
-      </div>,
+      </wa-card>,
       <ir-payments-folio
         payments={financial.payments || []}
         onAddPayment={() => this.handleAddPayment()}
         onEditPayment={e => this.handleEditPayment(e.detail)}
         onDeletePayment={e => this.handleDeletePayment(e.detail)}
+        onIssueReceipt={e => this.handleIssueReceipt(e.detail)}
       />,
       <ir-modal
         item={this.toBeDeletedItem}

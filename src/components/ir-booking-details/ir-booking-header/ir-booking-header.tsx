@@ -1,12 +1,11 @@
 import { IToast } from '@/components/ui/ir-toast/toast';
-import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { Booking } from '@/models/booking.dto';
-import calendar_data from '@/stores/calendar-data';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import locales from '@/stores/locales.store';
-import { Component, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, h, Listen, Prop, State } from '@stencil/core';
 import { BookingDetailsDialogEvents, OpenDialogEvent, OpenSidebarEvent } from '../types';
 import { BookingService } from '@/services/booking.service';
+import WaBadge from '@awesome.me/webawesome/dist/components/badge/badge';
 
 @Component({
   tag: 'ir-booking-header',
@@ -30,11 +29,17 @@ export class IrBookingHeader {
   @Event() resetBookingEvt: EventEmitter<null>;
   @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
 
-  private confirmationBG = {
-    '001': 'bg-ir-orange',
-    '002': 'bg-ir-green',
-    '003': 'bg-ir-red',
-    '004': 'bg-ir-red',
+  // private confirmationBG = {
+  //   '001': 'bg-ir-orange',
+  //   '002': 'bg-ir-green',
+  //   '003': 'bg-ir-red',
+  //   '004': 'bg-ir-red',
+  // };
+  private badgeVariant: Record<string, WaBadge['variant']> = {
+    '001': 'warning',
+    '002': 'success',
+    '003': 'danger',
+    '004': 'danger',
   };
   private dialogRef: HTMLIrDialogElement;
 
@@ -84,9 +89,9 @@ export class IrBookingHeader {
   private renderDialogBody() {
     switch (this.currentDialogStatus) {
       case 'pms':
-        return <ir-pms-logs slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-pms-logs>;
+        return <ir-pms-logs bookingNumber={this.booking.booking_nbr}></ir-pms-logs>;
       case 'events-log':
-        return <ir-events-log booking={this.booking} slot="modal-body" bookingNumber={this.booking.booking_nbr}></ir-events-log>;
+        return <ir-events-log booking={this.booking} bookingNumber={this.booking.booking_nbr}></ir-events-log>;
     }
   }
 
@@ -94,7 +99,7 @@ export class IrBookingHeader {
     const lastManipulation = this.booking.ota_manipulations ? this.booking.ota_manipulations[this.booking.ota_manipulations.length - 1] : null;
     return (
       <div class="fluid-container px-1">
-        <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between mt-1">
+        <div class="d-flex flex-column p-0 mx-0 flex-lg-row align-items-md-center justify-content-between">
           <div class="m-0 p-0 mb-1 mb-lg-0 mt-md-0">
             <p class="font-size-large m-0 p-0">{`${locales.entries.Lcz_Booking}#${this.booking.booking_nbr}`}</p>
             <p class="m-0 p-0">{!this.booking.is_direct && <span class="mr-1 m-0">{this.booking.channel_booking_nbr}</span>}</p>
@@ -102,9 +107,12 @@ export class IrBookingHeader {
 
           <div class="d-flex justify-content-end align-items-center" style={{ gap: '1rem', flexWrap: 'wrap' }}>
             <div class="d-flex flex-column align-items-center">
-              <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
+              {/* <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
                 {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
-              </span>
+              </span> */}
+              <wa-badge variant={this.badgeVariant[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}>
+                {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
+              </wa-badge>
               {lastManipulation && (
                 <ir-popover
                   trigger="hover"
@@ -120,7 +128,7 @@ export class IrBookingHeader {
             </div>
             {this.booking.allowed_actions.length > 0 && this.booking.is_editable && (
               <div class="m-0 p-0 d-flex align-items-center" style={{ gap: '0.25rem' }}>
-                <ir-select
+                {/* <ir-select
                   selectContainerStyle="h-28"
                   selectStyles="d-flex status-select align-items-center h-28"
                   firstOption={locales.entries.Lcz_Select}
@@ -131,8 +139,22 @@ export class IrBookingHeader {
                   textSize="sm"
                   class="sm-padding-right m-0 "
                   selectedValue={this.bookingStatus}
-                ></ir-select>
-                <ir-button
+                ></ir-select> */}
+                <wa-select
+                  onchange={e => {
+                    this.bookingStatus = (e.target as any).value;
+                  }}
+                  style={{ width: '120px' }}
+                  size="small"
+                  placeholder="Select..."
+                  value={this.bookingStatus ?? ''}
+                >
+                  <wa-option value="">Select...</wa-option>
+                  {this.booking.allowed_actions.map(option => (
+                    <wa-option value={option.code}>{option.description}</wa-option>
+                  ))}
+                </wa-select>
+                <ir-custom-button
                   onClickHandler={() => {
                     if (!this.booking.is_direct) {
                       this.modalEl.openModal();
@@ -140,70 +162,109 @@ export class IrBookingHeader {
                     }
                     this.updateStatus();
                   }}
-                  btn_styles="h-28"
-                  isLoading={isRequestPending('/Change_Exposed_Booking_Status')}
-                  btn_disabled={isRequestPending('/Change_Exposed_Booking_Status')}
-                  id="update-status-btn"
-                  size="sm"
-                  text="Update"
-                ></ir-button>
+                  loading={isRequestPending('/Change_Exposed_Booking_Status')}
+                  appearance={'accent'}
+                  size="small"
+                  variant="brand"
+                >
+                  Update
+                </ir-custom-button>
               </div>
             )}
-            <ir-button
-              size="sm"
-              btn_color="outline"
-              text={locales.entries.Lcz_EventsLog}
+            <ir-custom-button
               onClickHandler={e => {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
                 this.openDialog({ type: 'events-log' });
               }}
-            ></ir-button>
-            {calendar_data.is_pms_enabled && (
-              <ir-button
-                size="sm"
-                btn_color="outline"
-                text={locales.entries.Lcz_pms}
-                onClick={e => {
-                  e.stopImmediatePropagation();
-                  e.stopPropagation();
-                  this.openDialog({ type: 'pms' });
-                }}
-              ></ir-button>
-            )}
-            {this.hasReceipt && <ir-button variant="icon" id="receipt" icon_name="reciept" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
-            {this.hasPrint && <ir-button variant="icon" id="print" icon_name="print" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
-            {this.hasEmail && <ir-button variant="icon" id="email" title="Email this booking" icon_name="email" class="" style={{ '--icon-size': '1.65rem' }}></ir-button>}
-            {this.hasDelete && <ir-button variant="icon" id="book-delete" icon_name="trash" class="" style={{ ...colorVariants.danger, '--icon-size': '1.65rem' }}></ir-button>}
-            {this.hasMenu && <ir-button variant="icon" class="mr-1" id="menu" icon_name="menu_list" style={{ '--icon-size': '1.65rem' }}></ir-button>}
+              appearance={'outlined'}
+              size="small"
+              variant="brand"
+            >
+              Events log
+            </ir-custom-button>
+            <ir-custom-button
+              onClickHandler={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.openDialog({ type: 'pms' });
+              }}
+              appearance={'outlined'}
+              size="small"
+              variant="brand"
+            >
+              PMS
+            </ir-custom-button>
 
+            {this.hasReceipt && (
+              <Fragment>
+                <wa-tooltip for="invoice">Print invoice</wa-tooltip>
+                <ir-custom-button id="invoice" variant="neutral" size="small" appearance="plain">
+                  <wa-icon name="file-invoice" label="invoice" style={{ fontSize: '1.65rem' }}></wa-icon>
+                </ir-custom-button>
+              </Fragment>
+            )}
+            {this.hasPrint && (
+              <Fragment>
+                <wa-tooltip for="print">Print booking</wa-tooltip>
+                <ir-custom-button id="print" variant="neutral" size="small" appearance="plain">
+                  <wa-icon label="Print" name="print" style={{ fontSize: '1.65rem' }}></wa-icon>
+                </ir-custom-button>
+              </Fragment>
+            )}
+
+            {this.hasEmail && (
+              <Fragment>
+                <wa-tooltip for="email">Email this booking</wa-tooltip>
+                <ir-custom-button id="email" variant="neutral" size="small" appearance="plain">
+                  <wa-icon name="envelope" style={{ fontSize: '1.65rem' }} label="Email this booking"></wa-icon>
+                </ir-custom-button>
+              </Fragment>
+            )}
+            {this.hasDelete && (
+              <Fragment>
+                <wa-tooltip for="book-delete">Delete this booking</wa-tooltip>
+                <ir-custom-button id="book-delete" variant="danger" size="small" appearance="plain">
+                  <wa-icon name="envelope" style={{ fontSize: '1.65rem' }} label="Email this booking"></wa-icon>
+                </ir-custom-button>
+              </Fragment>
+            )}
+            {this.hasMenu && (
+              <Fragment>
+                <wa-tooltip for="menu">Go back</wa-tooltip>
+                <ir-custom-button id="menu" variant="neutral" size="small" appearance="plain">
+                  <wa-icon name="list" style={{ fontSize: '1.65rem' }} label="Go back"></wa-icon>
+                </ir-custom-button>
+              </Fragment>
+            )}
             {this.hasCloseButton && (
-              <ir-button
-                id="close"
-                variant="icon"
-                style={{ '--icon-size': '1.65rem' }}
-                icon_name="xmark"
-                class="ml-2"
+              <ir-custom-button
                 onClickHandler={e => {
                   e.stopPropagation();
                   e.stopImmediatePropagation();
                   this.closeSidebar.emit(null);
                 }}
-              ></ir-button>
+                id="close"
+                variant="neutral"
+                size="small"
+                appearance="plain"
+              >
+                <wa-icon name="xmark" style={{ fontSize: '1.65rem' }} label="Go back"></wa-icon>
+              </ir-custom-button>
             )}
           </div>
         </div>
         <ir-dialog
-          onOpenChange={e => {
-            if (!e.detail) {
-              this.currentDialogStatus = null;
-            }
+          onIrDialogHide={_ => {
+            this.currentDialogStatus = null;
           }}
+          label={this.currentDialogStatus === 'pms' ? locales.entries.Lcz_PMS_Logs : locales.entries.Lcz_EventsLog}
           style={this.currentDialogStatus === 'events-log' && { '--ir-dialog-max-width': 'max-content' }}
           ref={el => (this.dialogRef = el)}
         >
           {this.renderDialogBody()}
         </ir-dialog>
+
         <ir-modal
           ref={el => (this.modalEl = el)}
           modalTitle={''}

@@ -105,6 +105,13 @@ export class BookingService {
     }
     return data;
   }
+  public async getNextValue(props: { starter: string }) {
+    const { data } = await axios.post(`/Get_Next_Value`, props);
+    if (data.ExceptionMsg !== '') {
+      throw new Error(data.ExceptionMsg);
+    }
+    return data;
+  }
   public async getExposedApplicablePolicies(props: {
     booking_nbr: string;
     currency_id: number;

@@ -250,10 +250,7 @@ export class IrApplicablePolicies {
               </div>
               {remainingGuaranteeAmount < 0 && (
                 <div class="applicable-policies__guarantee-action">
-                  <ir-button
-                    btn_color="dark"
-                    text="Pay"
-                    size="sm"
+                  <ir-custom-button
                     onClickHandler={() => {
                       this.generatePayment.emit({
                         amount: Math.abs(remainingGuaranteeAmount),
@@ -265,7 +262,10 @@ export class IrApplicablePolicies {
                         type: 'OVERDUE',
                       });
                     }}
-                  ></ir-button>
+                    size="small"
+                  >
+                    Pay
+                  </ir-custom-button>
                 </div>
               )}
             </div>

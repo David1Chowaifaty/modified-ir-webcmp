@@ -9,7 +9,7 @@ import { IToast } from '@components/ui/ir-toast/toast';
 import { ICountry, IEntries } from '@/models/IBooking';
 import { IPaymentAction, PaymentService } from '@/services/payment.service';
 import Token from '@/models/Token';
-import { BookingDetailsSidebarEvents, OpenSidebarEvent, PaymentEntries } from './types';
+import { BookingDetailsSidebarEvents, OpenSidebarEvent, PaymentEntries, PrintScreenOptions } from './types';
 import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
 import { IrModalCustomEvent } from '@/components';
@@ -18,7 +18,7 @@ import { buildSplitIndex, SplitIndex } from '@/utils/booking';
 
 @Component({
   tag: 'ir-booking-details',
-  styleUrl: 'ir-booking-details.css',
+  styleUrls: ['../../global/app.css', 'ir-booking-details.css'],
   scoped: true,
 })
 export class IrBookingDetails {
@@ -82,7 +82,8 @@ export class IrBookingDetails {
   private paymentService = new PaymentService();
   private token = new Token();
 
-  private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
+  // private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
+  private printingBaseUrl = 'http://localhost:5863/%1/printing?id=%2';
   private modalRef: HTMLIrModalElement;
 
   componentWillLoad() {
@@ -126,10 +127,10 @@ export class IrBookingDetails {
         this.modalRef.openModal();
         return;
       case 'print':
-        this.openPrintingScreen();
+        this.openPrintingScreen({ mode: 'printing' });
         return;
-      case 'receipt':
-        this.openPrintingScreen('invoice');
+      case 'invoice':
+        this.openPrintingScreen({ mode: 'invoice' });
         return;
       case 'book-delete':
         return;
@@ -216,6 +217,10 @@ export class IrBookingDetails {
     this.selectedService = e.detail;
     this.sidebarState = 'extra_service';
   }
+  @Listen('openPrintScreen')
+  handleOpenPrintScreen(e: CustomEvent<PrintScreenOptions>) {
+    this.openPrintingScreen(e.detail);
+  }
 
   private setRoomsData(roomServiceResp) {
     let roomsData: { [key: string]: any }[] = new Array();
@@ -285,21 +290,44 @@ export class IrBookingDetails {
     }
   }
 
-  private async openPrintingScreen(mode: 'invoice' | 'print' = 'print', version: 'old' | 'new' = 'new') {
+  private async openPrintingScreen(options: PrintScreenOptions, version: 'old' | 'new' = 'new') {
+    const { mode } = options;
+
     if (version === 'old') {
       if (mode === 'invoice') {
-        return window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.booking.system_id}&&PM=I&TK=${this.ticket}`);
+        return window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${encodeURIComponent(this.booking.system_id)}&&PM=I&TK=${encodeURIComponent(this.ticket)}`);
       }
-      return window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${this.booking.system_id}&&PM=B&TK=${this.ticket}`);
+      return window.open(`https://x.igloorooms.com/manage/AcBookingEdit.aspx?IRID=${encodeURIComponent(this.booking.system_id)}&&PM=B&TK=${encodeURIComponent(this.ticket)}`);
     }
+
+    // Start with base URL
     let url = this.printingBaseUrl;
-    if (mode === 'invoice') {
-      url = url + '&mode=invoice';
+
+    // Add mode safely
+    url += `&mode=${encodeURIComponent(mode)}`;
+
+    // Add ANY payload safely
+    if ('payload' in options && options.payload) {
+      const payload = options.payload;
+
+      const safeParams = Object.entries(payload)
+        .map(([key, value]) => {
+          const safeKey = encodeURIComponent(key);
+          const safeValue = encodeURIComponent(String(value));
+          return `${safeKey}=${safeValue}`;
+        })
+        .join('&');
+
+      url += `&${safeParams}`;
     }
+
+    // Add token safely
     const { data } = await axios.post(`Get_ShortLiving_Token`);
     if (!data.ExceptionMsg) {
-      url = url + `&token=${data.My_Result}`;
+      url += `&token=${encodeURIComponent(data.My_Result)}`;
     }
+
+    // Final: fully safe URL
     window.open(url);
   }
 
@@ -535,33 +563,32 @@ export class IrBookingDetails {
 
     if (!hasSplitGroups) {
       const groupRooms = groups[0].rooms;
-      return (
-        <div class="card p-0 mx-0">
-          {groupRooms.map((room, idx) => (
-            <Fragment>
-              {this.renderRoomItem(room, indexById.get(room.identifier) ?? idx)}
-              {idx < groupRooms.length - 1 ? <hr class="mr-2 ml-2 my-0 p-0" /> : null}
-            </Fragment>
-          ))}
-        </div>
-      );
+      return groupRooms.map((room, idx) => (
+        <Fragment>
+          {this.renderRoomItem(room, indexById.get(room.identifier) ?? idx)}
+          {idx < groupRooms.length - 1 ? <wa-divider></wa-divider> : null}
+        </Fragment>
+      ));
     }
 
     return (
       <Fragment>
-        {groups.map((group, groupIdx) => {
-          const isLastGroup = groupIdx === groups.length - 1;
-          return (
-            <div class={`card p-0 mx-0 ${isLastGroup ? '' : 'room-group'}`} key={`room-group-${group.order}-${groupIdx}`}>
-              {group.rooms.map((room, roomIdx) => (
-                <Fragment>
-                  {this.renderRoomItem(room, indexById.get(room.identifier) ?? roomIdx, roomIdx === group.rooms.length - 1)}
-                  {roomIdx < group.rooms.length - 1 ? <hr class="mr-2 ml-2 my-0 p-0" /> : null}
-                </Fragment>
-              ))}
-            </div>
-          );
-        })}
+        <div class="d-flex flex-column" style={{ gap: '1rem' }}>
+          {groups.map((group, groupIdx) => {
+            const isLastGroup = groupIdx === groups.length - 1;
+            return (
+              <div class={`${isLastGroup ? '' : 'room-group'}`} key={`room-group-${group.order}-${groupIdx}`}>
+                {group.rooms.map((room, roomIdx) => (
+                  <Fragment>
+                    {this.renderRoomItem(room, indexById.get(room.identifier) ?? roomIdx, roomIdx === group.rooms.length - 1)}
+                    {roomIdx < group.rooms.length - 1 ? <wa-divider></wa-divider> : null}
+                  </Fragment>
+                ))}
+                {!isLastGroup && <wa-divider style={{ '--width': '3px' }}></wa-divider>}
+              </div>
+            );
+          })}
+        </div>
       </Fragment>
     );
   }
@@ -592,34 +619,39 @@ export class IrBookingDetails {
         hasReceipt={this.hasReceipt}
         hasEmail={['001', '002'].includes(this.booking?.status?.code)}
       ></ir-booking-header>,
-      <div class="fluid-container p-1 text-left mx-0">
-        <div class="row m-0">
-          <div class="col-12 p-0 mx-0 pr-lg-1 col-lg-6">
-            <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
-            <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
+      <div class="booking-details__booking-info">
+        <div class="booking-details__info-column">
+          <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
+          <wa-card>
+            <div slot="header" class="font-size-large d-flex justify-content-between align-items-center">
               <ir-date-view from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
-              {
-                // this.hasRoomAdd && this.booking.is_direct && this.booking.is_editable && (
-                this.hasRoomAdd && this.booking.is_editable && <ir-button id="room-add" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
-              }
+              {!this.hasRoomAdd && this.booking.is_editable && (
+                <Fragment>
+                  <wa-tooltip for="room-add">Add unit</wa-tooltip>
+                  <ir-custom-button id="room-add" appearance={'plain'} size={'small'} variant={'neutral'}>
+                    <wa-icon name="plus" style={{ fontSize: '1rem' }} label="Add unit"></wa-icon>
+                  </ir-custom-button>
+                </Fragment>
+              )}
             </div>
             {roomsSection}
-            {/* <ir-ota-services services={this.booking.ota_services}></ir-ota-services> */}
-            <ir-pickup-view booking={this.booking}></ir-pickup-view>
-            <section>
-              <div class="font-size-large d-flex justify-content-between align-items-center mb-1">
-                <p class={'font-size-large p-0 m-0 '}>{locales.entries.Lcz_ExtraServices}</p>
-                <ir-button id="extra_service_btn" icon_name="square_plus" variant="icon" style={{ '--icon-size': '1.5rem' }}></ir-button>
-              </div>
-              <ir-extra-services
-                booking={{ booking_nbr: this.booking.booking_nbr, currency: this.booking.currency, extra_services: this.booking.extra_services }}
-              ></ir-extra-services>
-            </section>
-          </div>
-          <div class="col-12 p-0 m-0 pl-lg-1 col-lg-6">
-            <ir-payment-details propertyId={this.property_id} paymentEntries={this.paymentEntries} paymentActions={this.paymentActions} booking={this.booking}></ir-payment-details>
-          </div>
+          </wa-card>
+          {/* <ir-ota-services services={this.booking.ota_services}></ir-ota-services> */}
+          <ir-pickup-view booking={this.booking}></ir-pickup-view>
+          <section>
+            <ir-extra-services
+              booking={{ booking_nbr: this.booking.booking_nbr, currency: this.booking.currency, extra_services: this.booking.extra_services }}
+            ></ir-extra-services>
+          </section>
         </div>
+
+        <ir-payment-details
+          class="booking-details__info-column"
+          propertyId={this.property_id}
+          paymentEntries={this.paymentEntries}
+          paymentActions={this.paymentActions}
+          booking={this.booking}
+        ></ir-payment-details>
       </div>,
       <ir-modal
         modalBody={this.modalState?.message}

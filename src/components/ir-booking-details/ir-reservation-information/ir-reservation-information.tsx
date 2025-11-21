@@ -7,6 +7,8 @@ import { ICountry } from '@/models/IBooking';
 import { _formatDate, _formatTime } from '../functions';
 import { BookingDetailsSidebarEvents, OpenSidebarEvent } from '../types';
 
+// Hover over WaButtonJsxProps: you should see an `onClick?` property.
+// If you don't, the global .d.ts file isn't being loaded.
 @Component({
   tag: 'ir-reservation-information',
   styleUrl: 'ir-reservation-information.css',
@@ -17,6 +19,7 @@ export class IrReservationInformation {
   @Prop() countries: ICountry[];
 
   @State() userCountry: ICountry | null = null;
+  @State() isOpen: boolean;
   @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
   componentWillLoad() {
     const guestCountryId = this.booking?.guest?.country_id;
@@ -65,8 +68,8 @@ export class IrReservationInformation {
   render() {
     const privateNote = getPrivateNote(this.booking.extras);
     return (
-      <div class="card">
-        <div class="p-1">
+      <wa-card>
+        <div>
           <p>{this.booking.property.name || ''}</p>
           <ir-label
             labelText={`${locales.entries.Lcz_Source}:`}
@@ -102,6 +105,26 @@ export class IrReservationInformation {
               onClickHandler={e => this.handleEditClick(e, 'guest')}
             ></ir-button>
           </ir-label>
+          <div class="d-flex align-items-center justify-content-between">
+            <ir-label
+              labelText={`Company:`}
+              placeholder={'no company entered'}
+              content={''}
+              display={'flex'}
+              // ignore_content
+            ></ir-label>
+
+            {/* <ir-custom-button onClickHandler={e => (this.isOpen = true)} appearance={'plain'}>
+              <wa-icon name="edit"></wa-icon>
+            </ir-custom-button> */}
+            <ir-button
+              variant="icon"
+              icon_name="edit"
+              style={colorVariants.secondary}
+              onClickHandler={() => (this.isOpen = true)}
+              // onClickHandler={e => this.handleEditClick(e, 'guest')}
+            ></ir-button>
+          </div>
           {this.booking.guest.mobile && <ir-label labelText={`${locales.entries.Lcz_Phone}:`} content={this.renderPhoneNumber()}></ir-label>}
           {!this.booking.agent && <ir-label labelText={`${locales.entries.Lcz_Email}:`} content={this.booking.guest.email}></ir-label>}
           {this.booking.guest.alternative_email && <ir-label labelText={`${locales.entries.Lcz_AlternativeEmail}:`} content={this.booking.guest.alternative_email}></ir-label>}
@@ -139,6 +162,7 @@ export class IrReservationInformation {
               maxVisibleItems={this.booking.ota_notes?.length}
             ></ota-label>
           )}
+
           <div class="d-flex align-items-center justify-content-between">
             <ir-label
               labelText={`${locales.entries.Lcz_BookingPrivateNote}:`}
@@ -150,7 +174,21 @@ export class IrReservationInformation {
             <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary} onClickHandler={e => this.handleEditClick(e, 'extra_note')}></ir-button>
           </div>
         </div>
-      </div>
+        <ir-dialog open={this.isOpen} onIrDialogHide={() => (this.isOpen = false)} label="Company" id="dialog-overview">
+          <div class="d-flex  flex-column" style={{ gap: '1rem' }}>
+            <wa-input label="Name" autofocus placeholder="XYZ LTD"></wa-input>
+            <wa-input label="Tax ID" placeholder="VAT 123456"></wa-input>
+          </div>
+          <div slot="footer" class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+            <ir-custom-button size="medium" appearance="filled" variant="neutral" data-dialog="close">
+              Cancel
+            </ir-custom-button>
+            <ir-custom-button size="medium" variant="brand">
+              Save
+            </ir-custom-button>
+          </div>
+        </ir-dialog>
+      </wa-card>
     );
   }
 }

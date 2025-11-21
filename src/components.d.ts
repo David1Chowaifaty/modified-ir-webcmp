@@ -22,7 +22,7 @@ import { CalendarSidebarState as CalendarSidebarState1 } from "./components/iglo
 import { IPaymentAction } from "./services/payment.service";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { BookingService } from "./services/booking.service";
-import { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+import { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -68,7 +68,7 @@ export { CalendarSidebarState as CalendarSidebarState1 } from "./components/iglo
 export { IPaymentAction } from "./services/payment.service";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { BookingService } from "./services/booking.service";
-export { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, RoomGuestsPayload } from "./components/ir-booking-details/types";
+export { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -632,6 +632,15 @@ export namespace Components {
          */
         "testId": string;
     }
+    interface IrCustomButton {
+        "appearance": WaButton['appearance'];
+        "disabled": WaButton['disabled'];
+        "loading": WaButton['loading'];
+        "size": WaButton['size'];
+        "type": WaButton['type'];
+        "variant": WaButton['variant'];
+        "withCaret": WaButton['withCaret'];
+    }
     interface IrDailyRevenue {
         "language": string;
         "p": string;
@@ -816,18 +825,24 @@ export namespace Components {
         "user": IHouseKeepers;
     }
     interface IrDialog {
-        /**
-          * Closes the dialog programmatically and restores focus to the previously active element.
-         */
         "closeModal": () => Promise<void>;
         /**
-          * Controls whether the dialog is open. Reflects to the host attribute for CSS hooks.
+          * The dialog's label as displayed in the header. You should always include a relevant label, as it is required for proper accessibility. If you need to display HTML, use the label slot instead.
+         */
+        "label": string;
+        /**
+          * When enabled, the dialog will be closed when the user clicks outside of it.
+         */
+        "lightDismiss": boolean;
+        /**
+          * Indicates whether or not the dialog is open. Toggle this attribute to show and hide the dialog.
          */
         "open": boolean;
-        /**
-          * Opens the dialog programmatically using the native `showModal` API.
-         */
         "openModal": () => Promise<void>;
+        /**
+          * Disables the header. This will also remove the default close button.
+         */
+        "withoutHeader": boolean;
     }
     interface IrDrawer {
         "closeDrawer": () => Promise<void>;
@@ -2500,6 +2515,10 @@ export interface IrCountryPickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrCountryPickerElement;
 }
+export interface IrCustomButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrCustomButtonElement;
+}
 export interface IrDailyRevenueCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDailyRevenueElement;
@@ -3607,6 +3626,23 @@ declare global {
         prototype: HTMLIrCountryPickerElement;
         new (): HTMLIrCountryPickerElement;
     };
+    interface HTMLIrCustomButtonElementEventMap {
+        "clickHandler": MouseEvent;
+    }
+    interface HTMLIrCustomButtonElement extends Components.IrCustomButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrCustomButtonElementEventMap>(type: K, listener: (this: HTMLIrCustomButtonElement, ev: IrCustomButtonCustomEvent<HTMLIrCustomButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrCustomButtonElementEventMap>(type: K, listener: (this: HTMLIrCustomButtonElement, ev: IrCustomButtonCustomEvent<HTMLIrCustomButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrCustomButtonElement: {
+        prototype: HTMLIrCustomButtonElement;
+        new (): HTMLIrCustomButtonElement;
+    };
     interface HTMLIrDailyRevenueElementEventMap {
         "preventPageLoad": null;
     }
@@ -3708,7 +3744,10 @@ declare global {
         new (): HTMLIrDeleteModalElement;
     };
     interface HTMLIrDialogElementEventMap {
-        "openChange": boolean;
+        "irDialogShow": void;
+        "irDialogHide": { source: Element };
+        "irDialogAfterShow": void;
+        "irDialogAfterHide": void;
     }
     interface HTMLIrDialogElement extends Components.IrDialog, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrDialogElementEventMap>(type: K, listener: (this: HTMLIrDialogElement, ev: IrDialogCustomEvent<HTMLIrDialogElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4373,6 +4412,7 @@ declare global {
         "resetExposedCancellationDueAmount": null;
         "toast": IToast;
         "openSidebar": PaymentSidebarEvent;
+        "openPrintScreen": PrintScreenOptions;
     }
     interface HTMLIrPaymentDetailsElement extends Components.IrPaymentDetails, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentDetailsElementEventMap>(type: K, listener: (this: HTMLIrPaymentDetailsElement, ev: IrPaymentDetailsCustomEvent<HTMLIrPaymentDetailsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4410,6 +4450,7 @@ declare global {
     interface HTMLIrPaymentItemElementEventMap {
         "editPayment": IPayment;
         "deletePayment": IPayment;
+        "issueReceipt": IPayment;
     }
     interface HTMLIrPaymentItemElement extends Components.IrPaymentItem, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentItemElementEventMap>(type: K, listener: (this: HTMLIrPaymentItemElement, ev: IrPaymentItemCustomEvent<HTMLIrPaymentItemElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4452,6 +4493,7 @@ declare global {
         "addPayment": void;
         "editPayment": IPayment;
         "deletePayment": IPayment;
+        "issueReceipt": IPayment;
     }
     interface HTMLIrPaymentsFolioElement extends Components.IrPaymentsFolio, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentsFolioElementEventMap>(type: K, listener: (this: HTMLIrPaymentsFolioElement, ev: IrPaymentsFolioCustomEvent<HTMLIrPaymentsFolioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5174,6 +5216,7 @@ declare global {
         "ir-common": HTMLIrCommonElement;
         "ir-copy-button": HTMLIrCopyButtonElement;
         "ir-country-picker": HTMLIrCountryPickerElement;
+        "ir-custom-button": HTMLIrCustomButtonElement;
         "ir-daily-revenue": HTMLIrDailyRevenueElement;
         "ir-daily-revenue-filters": HTMLIrDailyRevenueFiltersElement;
         "ir-date-picker": HTMLIrDatePickerElement;
@@ -5949,6 +5992,16 @@ declare namespace LocalJSX {
          */
         "testId"?: string;
     }
+    interface IrCustomButton {
+        "appearance"?: WaButton['appearance'];
+        "disabled"?: WaButton['disabled'];
+        "loading"?: WaButton['loading'];
+        "onClickHandler"?: (event: IrCustomButtonCustomEvent<MouseEvent>) => void;
+        "size"?: WaButton['size'];
+        "type"?: WaButton['type'];
+        "variant"?: WaButton['variant'];
+        "withCaret"?: WaButton['withCaret'];
+    }
     interface IrDailyRevenue {
         "language"?: string;
         "onPreventPageLoad"?: (event: IrDailyRevenueCustomEvent<null>) => void;
@@ -6143,13 +6196,37 @@ declare namespace LocalJSX {
     }
     interface IrDialog {
         /**
-          * Emits when the open state changes due to user interaction or programmatic control.
+          * The dialog's label as displayed in the header. You should always include a relevant label, as it is required for proper accessibility. If you need to display HTML, use the label slot instead.
          */
-        "onOpenChange"?: (event: IrDialogCustomEvent<boolean>) => void;
+        "label"?: string;
         /**
-          * Controls whether the dialog is open. Reflects to the host attribute for CSS hooks.
+          * When enabled, the dialog will be closed when the user clicks outside of it.
+         */
+        "lightDismiss"?: boolean;
+        /**
+          * Emitted after the dialog closes and all animations are complete.
+         */
+        "onIrDialogAfterHide"?: (event: IrDialogCustomEvent<void>) => void;
+        /**
+          * Emitted after the dialog opens and all animations are complete.
+         */
+        "onIrDialogAfterShow"?: (event: IrDialogCustomEvent<void>) => void;
+        /**
+          * Emitted when the dialog is requested to close. Calling event.preventDefault() will prevent the dialog from closing. You can inspect event.detail.source to see which element caused the dialog to close. If the source is the dialog element itself, the user has pressed Escape or the dialog has been closed programmatically. Avoid using this unless closing the dialog will result in destructive behavior such as data loss.
+         */
+        "onIrDialogHide"?: (event: IrDialogCustomEvent<{ source: Element }>) => void;
+        /**
+          * Emitted when the dialog opens.
+         */
+        "onIrDialogShow"?: (event: IrDialogCustomEvent<void>) => void;
+        /**
+          * Indicates whether or not the dialog is open. Toggle this attribute to show and hide the dialog.
          */
         "open"?: boolean;
+        /**
+          * Disables the header. This will also remove the default close button.
+         */
+        "withoutHeader"?: boolean;
     }
     interface IrDrawer {
         /**
@@ -7013,6 +7090,7 @@ declare namespace LocalJSX {
     }
     interface IrPaymentDetails {
         "booking"?: Booking;
+        "onOpenPrintScreen"?: (event: IrPaymentDetailsCustomEvent<PrintScreenOptions>) => void;
         "onOpenSidebar"?: (event: IrPaymentDetailsCustomEvent<PaymentSidebarEvent>) => void;
         "onResetBookingEvt"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
         "onResetExposedCancellationDueAmount"?: (event: IrPaymentDetailsCustomEvent<null>) => void;
@@ -7033,6 +7111,7 @@ declare namespace LocalJSX {
     interface IrPaymentItem {
         "onDeletePayment"?: (event: IrPaymentItemCustomEvent<IPayment>) => void;
         "onEditPayment"?: (event: IrPaymentItemCustomEvent<IPayment>) => void;
+        "onIssueReceipt"?: (event: IrPaymentItemCustomEvent<IPayment>) => void;
         "payment"?: IPayment;
     }
     interface IrPaymentOption {
@@ -7055,6 +7134,7 @@ declare namespace LocalJSX {
         "onAddPayment"?: (event: IrPaymentsFolioCustomEvent<void>) => void;
         "onDeletePayment"?: (event: IrPaymentsFolioCustomEvent<IPayment>) => void;
         "onEditPayment"?: (event: IrPaymentsFolioCustomEvent<IPayment>) => void;
+        "onIssueReceipt"?: (event: IrPaymentsFolioCustomEvent<IPayment>) => void;
         "payments"?: IPayment[];
     }
     interface IrPhoneInput {
@@ -7913,6 +7993,7 @@ declare namespace LocalJSX {
         "ir-common": IrCommon;
         "ir-copy-button": IrCopyButton;
         "ir-country-picker": IrCountryPicker;
+        "ir-custom-button": IrCustomButton;
         "ir-daily-revenue": IrDailyRevenue;
         "ir-daily-revenue-filters": IrDailyRevenueFilters;
         "ir-date-picker": IrDatePicker;
@@ -8083,6 +8164,7 @@ declare module "@stencil/core" {
             "ir-common": LocalJSX.IrCommon & JSXBase.HTMLAttributes<HTMLIrCommonElement>;
             "ir-copy-button": LocalJSX.IrCopyButton & JSXBase.HTMLAttributes<HTMLIrCopyButtonElement>;
             "ir-country-picker": LocalJSX.IrCountryPicker & JSXBase.HTMLAttributes<HTMLIrCountryPickerElement>;
+            "ir-custom-button": LocalJSX.IrCustomButton & JSXBase.HTMLAttributes<HTMLIrCustomButtonElement>;
             "ir-daily-revenue": LocalJSX.IrDailyRevenue & JSXBase.HTMLAttributes<HTMLIrDailyRevenueElement>;
             "ir-daily-revenue-filters": LocalJSX.IrDailyRevenueFilters & JSXBase.HTMLAttributes<HTMLIrDailyRevenueFiltersElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;

@@ -1,6 +1,5 @@
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { Component, Fragment, Prop, State, h } from '@stencil/core';
-import locales from '@/stores/locales.store';
 import { Booking, ExposedBookingEvent } from '@/models/booking.dto';
 
 @Component({
@@ -28,12 +27,7 @@ export class IrEventsLog {
 
   render() {
     return (
-      <div class="p-1">
-        <div class="d-flex  align-items-center" style={{ gap: '0.5rem' }}>
-          <h3 class=" text-left p-0 m-0  dialog-title ">{locales.entries.Lcz_EventsLog}</h3>
-          {/* <span class="m-0 beta">Beta</span> */}
-        </div>
-
+      <div class="">
         {isRequestPending('/Get_Exposed_Booking_Events') ? (
           <div class={'d-flex align-items-center justify-content-center dialog-container-height'}>
             <ir-spinner></ir-spinner>
@@ -41,7 +35,7 @@ export class IrEventsLog {
         ) : (
           <Fragment>
             <table class=" dialog-container-height">
-              <thead style={{ opacity: '0' }}>
+              <thead class="sr-only">
                 <tr>
                   <th>date</th>
                   <th>user</th>

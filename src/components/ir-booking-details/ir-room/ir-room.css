@@ -85,3 +85,29 @@
   margin-right: var(--m) !important;
   margin-left: var(--m) !important;
 }
+:host(*) {
+  box-sizing: border-box;
+}
+.booking-room__price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--wa-space-xs);
+}
+.booking-room__actions {
+  display: flex;
+  align-items: center;
+}
+.booking-room__details,
+.booking-room__details::part(base),
+.booking-room__details::part(header),
+.booking-room__details::part(content) {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+}
+.booking-room__details::part(header) {
+  /* align-items: flex-start; */
+}
+.booking-room__price {
+  font-weight: bold;
+}

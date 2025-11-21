@@ -352,6 +352,8 @@ export interface IPayment {
   payment_gateway_code?: number;
   payment_type?: PaymentType;
   payment_method?: PaymentType;
+  receipt_nbr?: string;
+  is_receipt_issued?: boolean;
   time_stamp: {
     date: string;
     hour: number;
@@ -396,6 +398,8 @@ export interface Currency {
 }
 
 export interface Guest {
+  company_name: string | null;
+  company_tax_nbr: string | null;
   address: string | null;
   city: string | null;
   country_id: number | null;
