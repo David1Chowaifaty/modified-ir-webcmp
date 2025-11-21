@@ -1,4 +1,3 @@
-import { colorVariants } from '@/components/ui/ir-icons/icons';
 import { Booking } from '@/models/booking.dto';
 import locales from '@/stores/locales.store';
 import { getPrivateNote } from '@/utils/booking';
@@ -97,13 +96,11 @@ export class IrReservationInformation {
                 </ir-tooltip>
               </div>
             )}
-            <ir-button
-              slot="suffix"
-              variant="icon"
-              icon_name={'edit'}
-              style={{ ...colorVariants.secondary, '--icon-size': '1.1rem' }}
-              onClickHandler={e => this.handleEditClick(e, 'guest')}
-            ></ir-button>
+
+            <wa-tooltip for={`edit_guest-details`}>Edit guest details</wa-tooltip>
+            <ir-custom-button slot="suffix" id={`edit_guest-details`} onClickHandler={e => this.handleEditClick(e, 'guest')} appearance={'plain'} variant={'neutral'}>
+              <wa-icon name="edit" label="Edit guest details" style={{ fontSize: '1rem' }}></wa-icon>
+            </ir-custom-button>
           </ir-label>
           <div class="d-flex align-items-center justify-content-between">
             <ir-label
@@ -113,17 +110,19 @@ export class IrReservationInformation {
               display={'flex'}
               // ignore_content
             ></ir-label>
-
-            {/* <ir-custom-button onClickHandler={e => (this.isOpen = true)} appearance={'plain'}>
-              <wa-icon name="edit"></wa-icon>
-            </ir-custom-button> */}
-            <ir-button
-              variant="icon"
-              icon_name="edit"
-              style={colorVariants.secondary}
-              onClickHandler={() => (this.isOpen = true)}
-              // onClickHandler={e => this.handleEditClick(e, 'guest')}
-            ></ir-button>
+            <wa-tooltip for={`edit_create-company-info`}>Add company info</wa-tooltip>
+            <ir-custom-button
+              id={`edit_create-company-info`}
+              onClickHandler={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.isOpen = true;
+              }}
+              appearance={'plain'}
+              variant={'neutral'}
+            >
+              <wa-icon name="edit" label="Add or modify company info" style={{ fontSize: '1rem' }}></wa-icon>
+            </ir-custom-button>
           </div>
           {this.booking.guest.mobile && <ir-label labelText={`${locales.entries.Lcz_Phone}:`} content={this.renderPhoneNumber()}></ir-label>}
           {!this.booking.agent && <ir-label labelText={`${locales.entries.Lcz_Email}:`} content={this.booking.guest.email}></ir-label>}
@@ -171,7 +170,10 @@ export class IrReservationInformation {
               display={privateNote ? 'inline' : 'flex'}
               // ignore_content
             ></ir-label>
-            <ir-button variant="icon" icon_name="edit" style={colorVariants.secondary} onClickHandler={e => this.handleEditClick(e, 'extra_note')}></ir-button>
+            <wa-tooltip for={`edit_create-extra-note`}>{privateNote ? 'Edit' : 'Create'} private note</wa-tooltip>
+            <ir-custom-button id={`edit_create-extra-note`} onClickHandler={e => this.handleEditClick(e, 'extra_note')} appearance={'plain'} variant={'neutral'}>
+              <wa-icon style={{ fontSize: '1rem' }} name="edit" label="Edit or create private note"></wa-icon>
+            </ir-custom-button>
           </div>
         </div>
         <ir-dialog open={this.isOpen} onIrDialogHide={() => (this.isOpen = false)} label="Company" id="dialog-overview">
