@@ -1,7 +1,6 @@
 import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 import { ExtraService } from '@/models/booking.dto';
 import { formatAmount } from '@/utils/utils';
-import { colorVariants } from '@/components/ui/ir-icons/icons';
 import locales from '@/stores/locales.store';
 import moment from 'moment';
 import { BookingService } from '@/services/booking.service';
@@ -45,22 +44,34 @@ export class IrExtraService {
               {!!this.service.price && this.service.price > 0 && (
                 <p class="extra-service-price p-0 m-0 font-weight-bold">{formatAmount(this.currencySymbol, this.service.price)}</p>
               )}
-              <ir-button
-                id={`serviceEdit-${this.service.booking_system_id}`}
-                class="extra-service-edit-btn m-0 p-0"
-                variant="icon"
-                icon_name="edit"
-                style={colorVariants.secondary}
-                onClickHandler={() => this.editExtraService.emit(this.service)}
-              ></ir-button>
-              <ir-button
-                class="extra-service-delete-btn m-0 p-0"
-                variant="icon"
-                onClickHandler={() => this.irModalRef.openModal()}
-                id={`roomDelete-${this.service.booking_system_id}`}
-                icon_name="trash"
-                style={colorVariants.danger}
-              ></ir-button>
+              <div class="d-flex align-items-center">
+                <wa-tooltip for={`edit-extra-service-${this.service.booking_system_id}`}>Edit service</wa-tooltip>
+                <ir-custom-button
+                  id={`edit-extra-service-${this.service.booking_system_id}`}
+                  onClickHandler={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    this.editExtraService.emit(this.service);
+                  }}
+                  appearance={'plain'}
+                  variant={'neutral'}
+                >
+                  <wa-icon name="edit" label="Edit" style={{ fontSize: '1rem' }}></wa-icon>
+                </ir-custom-button>
+                <wa-tooltip for={`delete-extra-service-${this.service.booking_system_id}`}>Delete service</wa-tooltip>
+                <ir-custom-button
+                  id={`delete-extra-service-${this.service.booking_system_id}`}
+                  onClickHandler={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    this.irModalRef.openModal();
+                  }}
+                  appearance={'plain'}
+                  variant={'danger'}
+                >
+                  <wa-icon name="trash-can" label="Edit" style={{ fontSize: '1rem' }}></wa-icon>
+                </ir-custom-button>
+              </div>
             </div>
           </div>
           <div class="extra-service-conditional-date">
