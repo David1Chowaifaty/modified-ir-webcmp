@@ -27,6 +27,7 @@ import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
+import { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
 import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
@@ -73,6 +74,7 @@ export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
+export { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
 export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
@@ -633,13 +635,86 @@ export namespace Components {
         "testId": string;
     }
     interface IrCustomButton {
-        "appearance": WaButton['appearance'];
-        "disabled": WaButton['disabled'];
-        "loading": WaButton['loading'];
-        "size": WaButton['size'];
-        "type": WaButton['type'];
-        "variant": WaButton['variant'];
-        "withCaret": WaButton['withCaret'];
+        /**
+          * The button's visual appearance.
+         */
+        "appearance": NativeButton['appearance'];
+        /**
+          * Disables the button. Does not apply to link buttons.
+         */
+        "disabled": NativeButton['disabled'];
+        /**
+          * Tells the browser to download the linked file as this filename. Only used when `href` is present.
+         */
+        "download": NativeButton['download'];
+        /**
+          * The "form owner" to associate the button with. If omitted, the closest containing form will be used instead. The value of this attribute must be an id of a form in the same document or shadow root as the button.
+         */
+        "form": NativeButton['form'];
+        /**
+          * Used to override the form owner's `action` attribute.
+         */
+        "formAction": NativeButton['formAction'];
+        /**
+          * Used to override the form owner's `enctype` attribute.
+         */
+        "formEnctype": NativeButton['formEnctype'];
+        /**
+          * Used to override the form owner's `method` attribute.
+         */
+        "formMethod": NativeButton['formMethod'];
+        /**
+          * Used to override the form owner's `novalidate` attribute.
+         */
+        "formNoValidate": NativeButton['formNoValidate'];
+        /**
+          * Used to override the form owner's `target` attribute.
+         */
+        "formTarget": NativeButton['formTarget'];
+        /**
+          * When set, the underlying button will be rendered as an `<a>` with this `href` instead of a `<button>`.
+         */
+        "href": NativeButton['href'];
+        /**
+          * Draws the button in a loading state.
+         */
+        "loading": NativeButton['loading'];
+        /**
+          * The name of the button, submitted as a name/value pair with form data, but only when this button is the submitter. This attribute is ignored when `href` is present.
+         */
+        "name": NativeButton['name'];
+        /**
+          * Draws a pill-style button with rounded edges.
+         */
+        "pill": NativeButton['pill'];
+        /**
+          * When using `href`, this attribute will map to the underlying link's `rel` attribute.
+         */
+        "rel": NativeButton['rel'];
+        /**
+          * The button's size.
+         */
+        "size": NativeButton['size'];
+        /**
+          * Tells the browser where to open the link. Only used when `href` is present.
+         */
+        "target": NativeButton['target'];
+        /**
+          * The type of button. Note that the default value is `button` instead of `submit`, which is opposite of how native `<button>` elements behave. When the type is `submit`, the button will submit the surrounding form.
+         */
+        "type": NativeButton['type'];
+        /**
+          * The value of the button, submitted as a pair with the button's name as part of the form data, but only when this button is the submitter. This attribute is ignored when `href` is present.
+         */
+        "value": NativeButton['value'];
+        /**
+          * The button's theme variant. Defaults to `neutral` if not within another element with a variant.
+         */
+        "variant": NativeButton['variant'];
+        /**
+          * Draws the button with a caret. Used to indicate that the button triggers a dropdown menu or similar behavior.
+         */
+        "withCaret": NativeButton['withCaret'];
     }
     interface IrDailyRevenue {
         "language": string;
@@ -5993,14 +6068,87 @@ declare namespace LocalJSX {
         "testId"?: string;
     }
     interface IrCustomButton {
-        "appearance"?: WaButton['appearance'];
-        "disabled"?: WaButton['disabled'];
-        "loading"?: WaButton['loading'];
+        /**
+          * The button's visual appearance.
+         */
+        "appearance"?: NativeButton['appearance'];
+        /**
+          * Disables the button. Does not apply to link buttons.
+         */
+        "disabled"?: NativeButton['disabled'];
+        /**
+          * Tells the browser to download the linked file as this filename. Only used when `href` is present.
+         */
+        "download"?: NativeButton['download'];
+        /**
+          * The "form owner" to associate the button with. If omitted, the closest containing form will be used instead. The value of this attribute must be an id of a form in the same document or shadow root as the button.
+         */
+        "form"?: NativeButton['form'];
+        /**
+          * Used to override the form owner's `action` attribute.
+         */
+        "formAction"?: NativeButton['formAction'];
+        /**
+          * Used to override the form owner's `enctype` attribute.
+         */
+        "formEnctype"?: NativeButton['formEnctype'];
+        /**
+          * Used to override the form owner's `method` attribute.
+         */
+        "formMethod"?: NativeButton['formMethod'];
+        /**
+          * Used to override the form owner's `novalidate` attribute.
+         */
+        "formNoValidate"?: NativeButton['formNoValidate'];
+        /**
+          * Used to override the form owner's `target` attribute.
+         */
+        "formTarget"?: NativeButton['formTarget'];
+        /**
+          * When set, the underlying button will be rendered as an `<a>` with this `href` instead of a `<button>`.
+         */
+        "href"?: NativeButton['href'];
+        /**
+          * Draws the button in a loading state.
+         */
+        "loading"?: NativeButton['loading'];
+        /**
+          * The name of the button, submitted as a name/value pair with form data, but only when this button is the submitter. This attribute is ignored when `href` is present.
+         */
+        "name"?: NativeButton['name'];
         "onClickHandler"?: (event: IrCustomButtonCustomEvent<MouseEvent>) => void;
-        "size"?: WaButton['size'];
-        "type"?: WaButton['type'];
-        "variant"?: WaButton['variant'];
-        "withCaret"?: WaButton['withCaret'];
+        /**
+          * Draws a pill-style button with rounded edges.
+         */
+        "pill"?: NativeButton['pill'];
+        /**
+          * When using `href`, this attribute will map to the underlying link's `rel` attribute.
+         */
+        "rel"?: NativeButton['rel'];
+        /**
+          * The button's size.
+         */
+        "size"?: NativeButton['size'];
+        /**
+          * Tells the browser where to open the link. Only used when `href` is present.
+         */
+        "target"?: NativeButton['target'];
+        /**
+          * The type of button. Note that the default value is `button` instead of `submit`, which is opposite of how native `<button>` elements behave. When the type is `submit`, the button will submit the surrounding form.
+         */
+        "type"?: NativeButton['type'];
+        /**
+          * The value of the button, submitted as a pair with the button's name as part of the form data, but only when this button is the submitter. This attribute is ignored when `href` is present.
+         */
+        "value"?: NativeButton['value'];
+        /**
+          * The button's theme variant. Defaults to `neutral` if not within another element with a variant.
+         */
+        "variant"?: NativeButton['variant'];
+        /**
+          * Draws the button with a caret. Used to indicate that the button triggers a dropdown menu or similar behavior.
+         */
+        "withCaret"?: NativeButton['withCaret'];
     }
     interface IrDailyRevenue {
         "language"?: string;
