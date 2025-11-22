@@ -425,7 +425,6 @@ export class IrBookingDetails {
           <ir-payment-folio
             bookingNumber={this.booking.booking_nbr}
             paymentEntries={this.paymentEntries}
-            slot="sidebar-body"
             payment={this.sidebarPayload.payment}
             mode={this.sidebarPayload.mode}
             onCloseModal={handleClose}
@@ -680,19 +679,39 @@ export class IrBookingDetails {
       >
         {this.renderSidebarContent()}
       </ir-sidebar>,
-      <ir-sidebar
+      // <ir-sidebar
+      //   open={this.sidebarState === 'payment-folio'}
+      //   side={'left'}
+      //   id="folioSidebar"
+      //   onIrSidebarToggle={e => {
+      //     e.stopImmediatePropagation();
+      //     e.stopPropagation();
+      //     this.sidebarState = null;
+      //   }}
+      //   showCloseButton={false}
+      // >
+      //   {this.renderSidebarContent()}
+      // </ir-sidebar>,
+      <ir-drawer
+        placement="start"
+        label="New Folio Entry"
         open={this.sidebarState === 'payment-folio'}
-        side={'left'}
-        id="folioSidebar"
-        onIrSidebarToggle={e => {
+        onDrawerHide={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
           this.sidebarState = null;
         }}
-        showCloseButton={false}
       >
         {this.renderSidebarContent()}
-      </ir-sidebar>,
+        <div slot="footer" class="w-100 d-flex align-items-center" style={{ gap: 'var(--wa-space-xs)' }}>
+          <ir-custom-button class="flex-fill" size="medium" data-drawer="close" appearance="filled" variant="neutral">
+            Cancel
+          </ir-custom-button>
+          <ir-custom-button class="flex-fill" type="submit" form="ir__folio-form" size="medium" appearance="accent" variant="brand">
+            Save
+          </ir-custom-button>
+        </div>
+      </ir-drawer>,
       <Fragment>
         {this.bookingItem && (
           <igl-book-property

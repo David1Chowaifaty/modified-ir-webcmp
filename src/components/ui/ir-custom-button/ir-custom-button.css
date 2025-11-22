@@ -1,3 +1,6 @@
 :host {
   display: block;
 }
+.ir__custom-button {
+  width: 100%;
+}

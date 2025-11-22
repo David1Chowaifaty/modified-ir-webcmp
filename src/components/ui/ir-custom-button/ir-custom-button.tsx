@@ -104,6 +104,7 @@ export class IrCustomButton {
           /* core button props */
           type={this.type}
           size={this.size}
+          class="ir__custom-button"
           disabled={this.disabled}
           appearance={this.appearance}
           loading={this.loading}

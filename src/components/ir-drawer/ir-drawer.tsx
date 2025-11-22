@@ -1,97 +1,64 @@
-import { Component, h, State, Element, EventEmitter, Event, Prop, Listen, Method, Watch } from '@stencil/core';
+import { OverflowAdd, OverflowRelease } from '@/decorators/OverflowLock';
+import WaDrawer from '@awesome.me/webawesome/dist/components/drawer/drawer';
+import { Component, Event, EventEmitter, h, Prop } from '@stencil/core';
 
+export type NativeDrawer = WaDrawer;
 @Component({
   tag: 'ir-drawer',
-  styleUrl: 'ir-drawer.css',
-  shadow: true,
+  styleUrls: ['ir-drawer.css', '../../global/app.css'],
+  shadow: false,
 })
 export class IrDrawer {
-  @State() showDrawer: boolean = false;
-  @Element() el: HTMLElement;
-
+  /** Indicates whether or not the drawer is open. Toggle this attribute to show and hide the drawer. */
+  @Prop({ reflect: true }) open: NativeDrawer['open'];
   /**
-   * The title of the drawer
+   * The drawer's label as displayed in the header. You should always include a relevant label, as it is required for
+   * proper accessibility. If you need to display HTML, use the `label` slot instead.
    */
-  @Prop() drawerTitle: string;
+  @Prop({ reflect: true }) label: NativeDrawer['label'];
+  /** The direction from which the drawer will open. */
+  @Prop({ reflect: true }) placement: NativeDrawer['placement'];
+  /** Disables the header. This will also remove the default close button. */
+  @Prop({ reflect: true }) withoutHeader: NativeDrawer['withoutHeader'];
+  /** When enabled, the drawer will be closed when the user clicks outside of it. */
+  @Prop({ reflect: true }) lightDismiss: NativeDrawer['lightDismiss'] = true;
 
-  /**
-   * The placement of the drawer
-   */
-  @Prop() placement: 'left' | 'right' = 'right';
+  /** Emitted when the drawer opens. */
+  @Event() drawerShow: EventEmitter<void>;
+  /**Emitted when the drawer is requesting to close. Calling event.preventDefault() will prevent the drawer from closing. You can inspect event.detail.source to see which element caused the drawer to close. If the source is the drawer element itself, the user has pressed Escape or the drawer has been closed programmatically. Avoid using this unless closing the drawer will result in destructive behavior such as data loss. */
+  @Event() drawerHide: EventEmitter<{ source: Element }>;
 
-  /**
-   * Is the drawer open?
-   */
-  @Prop({ mutable: true, reflect: true }) open: boolean = false;
-
-  /**
-   * Emitted when the drawer visibility changes.
-   */
-  @Event() drawerChange: EventEmitter<boolean>;
-
-  /**
-   * Emitted when the drawer is requested to be closed via keyboard
-   */
-  @Event() drawerCloseRequested: EventEmitter<void>;
-
-  componentDidLoad() {
-    if (this.open) {
-      this.showDrawer = true;
-    }
+  @OverflowAdd()
+  private handleDrawerShow(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.drawerShow.emit();
   }
 
-  @Listen('keydown', {
-    target: 'document',
-    passive: true,
-  })
-  handleKeyDown(ev: KeyboardEvent) {
-    if (this.open) {
-      if (ev.key === 'Escape' || ev.key === 'Esc') {
-        this.closeDrawer();
-        this.drawerCloseRequested.emit();
-      }
-    }
+  @OverflowRelease()
+  private handleDrawerHide(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.drawerHide.emit(e.detail);
   }
-
-  @Watch('open')
-  openHandler(newValue: boolean) {
-    this.showDrawer = newValue;
-  }
-
-  toggleDrawer = () => {
-    this.open = !this.open;
-    this.showDrawer = this.open;
-    this.drawerChange.emit(this.open);
-  };
-
-  @Method()
-  async closeDrawer() {
-    this.open = false;
-    this.showDrawer = false;
-    this.drawerChange.emit(this.open);
-  }
-
   render() {
     return (
-      <div class={{ 'app-drawer': true, 'app-drawer--open': this.showDrawer }} aria-hidden={!this.showDrawer}>
-        <div class="app-drawer-overlay" onClick={() => this.closeDrawer()} aria-hidden={!this.showDrawer} tabindex={this.showDrawer ? '0' : '-1'}></div>
-
-        <div class={`app-drawer-content app-drawer-content--${this.placement}`} role="dialog" aria-modal="true" aria-labelledby="drawer-title">
-          <div class="app-drawer-header">
-            <slot name="header">
-              <h2 id="drawer-title">{this.drawerTitle}</h2>
-            </slot>
-          </div>
-
-          <div class="app-drawer-body">
-            <slot></slot>
-          </div>
-
-          <div class="app-drawer-footer">
-            <slot name="footer"></slot>
-          </div>
-        </div>
-      </div>
+      <wa-drawer
+        onwa-show={this.handleDrawerShow.bind(this)}
+        onwa-hide={this.handleDrawerHide.bind(this)}
+        class="ir__drawer"
+        style={{ '--size': 'var(--ir-drawer-width,40rem)' }}
+        open={this.open}
+        label={this.label}
+        placement={this.placement}
+        withoutHeader={this.withoutHeader}
+        lightDismiss={this.lightDismiss}
+      >
+        <slot slot="label" name="label"></slot>
+        <slot slot="header-actions" name="header-actions"></slot>
+        <slot></slot>
+        <slot slot="footer" name="footer"></slot>
+      </wa-drawer>
     );
   }
 }

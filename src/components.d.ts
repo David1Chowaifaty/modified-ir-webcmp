@@ -30,6 +30,7 @@ import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2
 import { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
 import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+import { NativeDrawer } from "./components/ir-drawer/ir-drawer";
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
@@ -77,6 +78,7 @@ export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2
 export { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
 export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
+export { NativeDrawer } from "./components/ir-drawer/ir-drawer";
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
@@ -920,19 +922,26 @@ export namespace Components {
         "withoutHeader": boolean;
     }
     interface IrDrawer {
-        "closeDrawer": () => Promise<void>;
         /**
-          * The title of the drawer
+          * The drawer's label as displayed in the header. You should always include a relevant label, as it is required for proper accessibility. If you need to display HTML, use the `label` slot instead.
          */
-        "drawerTitle": string;
+        "label": NativeDrawer['label'];
         /**
-          * Is the drawer open?
+          * When enabled, the drawer will be closed when the user clicks outside of it.
          */
-        "open": boolean;
+        "lightDismiss": NativeDrawer['lightDismiss'];
         /**
-          * The placement of the drawer
+          * Indicates whether or not the drawer is open. Toggle this attribute to show and hide the drawer.
          */
-        "placement": 'left' | 'right';
+        "open": NativeDrawer['open'];
+        /**
+          * The direction from which the drawer will open.
+         */
+        "placement": NativeDrawer['placement'];
+        /**
+          * Disables the header. This will also remove the default close button.
+         */
+        "withoutHeader": NativeDrawer['withoutHeader'];
     }
     interface IrDropdown {
         "caret": boolean;
@@ -3839,8 +3848,8 @@ declare global {
         new (): HTMLIrDialogElement;
     };
     interface HTMLIrDrawerElementEventMap {
-        "drawerChange": boolean;
-        "drawerCloseRequested": void;
+        "drawerShow": void;
+        "drawerHide": { source: Element };
     }
     interface HTMLIrDrawerElement extends Components.IrDrawer, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrDrawerElementEventMap>(type: K, listener: (this: HTMLIrDrawerElement, ev: IrDrawerCustomEvent<HTMLIrDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6378,25 +6387,33 @@ declare namespace LocalJSX {
     }
     interface IrDrawer {
         /**
-          * The title of the drawer
+          * The drawer's label as displayed in the header. You should always include a relevant label, as it is required for proper accessibility. If you need to display HTML, use the `label` slot instead.
          */
-        "drawerTitle"?: string;
+        "label"?: NativeDrawer['label'];
         /**
-          * Emitted when the drawer visibility changes.
+          * When enabled, the drawer will be closed when the user clicks outside of it.
          */
-        "onDrawerChange"?: (event: IrDrawerCustomEvent<boolean>) => void;
+        "lightDismiss"?: NativeDrawer['lightDismiss'];
         /**
-          * Emitted when the drawer is requested to be closed via keyboard
+          * Emitted when the drawer is requesting to close. Calling event.preventDefault() will prevent the drawer from closing. You can inspect event.detail.source to see which element caused the drawer to close. If the source is the drawer element itself, the user has pressed Escape or the drawer has been closed programmatically. Avoid using this unless closing the drawer will result in destructive behavior such as data loss.
          */
-        "onDrawerCloseRequested"?: (event: IrDrawerCustomEvent<void>) => void;
+        "onDrawerHide"?: (event: IrDrawerCustomEvent<{ source: Element }>) => void;
         /**
-          * Is the drawer open?
+          * Emitted when the drawer opens.
          */
-        "open"?: boolean;
+        "onDrawerShow"?: (event: IrDrawerCustomEvent<void>) => void;
         /**
-          * The placement of the drawer
+          * Indicates whether or not the drawer is open. Toggle this attribute to show and hide the drawer.
          */
-        "placement"?: 'left' | 'right';
+        "open"?: NativeDrawer['open'];
+        /**
+          * The direction from which the drawer will open.
+         */
+        "placement"?: NativeDrawer['placement'];
+        /**
+          * Disables the header. This will also remove the default close button.
+         */
+        "withoutHeader"?: NativeDrawer['withoutHeader'];
     }
     interface IrDropdown {
         "caret"?: boolean;
