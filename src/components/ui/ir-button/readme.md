@@ -15,7 +15,7 @@
 | `btn_styles`               | `btn_styles`                  | Additional custom class names for the button.                                    | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `undefined` |
 | `btn_type`                 | `btn_type`                    | The button type attribute (`button`, `submit`, or `reset`).                      | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `'button'`  |
 | `iconPosition`             | `icon-position`               | Position of the icon relative to the button text.                                | `"left" \| "right"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `'left'`    |
-| `icon_name`                | `icon_name`                   | The name of the icon to display.                                                 | `"print" \| "key" \| "angle-down" \| "clock" \| "check" \| "heart-fill" \| "envelope-circle-check" \| "danger" \| "bell" \| "burger_menu" \| "home" \| "xmark" \| "minus" \| "user" \| "heart" \| "user_group" \| "search" \| "arrow_right" \| "arrow_left" \| "circle_info" \| "calendar" \| "xmark-fill" \| "globe" \| "facebook" \| "twitter" \| "whatsapp" \| "instagram" \| "youtube" \| "angle_left" \| "circle_check" \| "eraser" \| "file" \| "edit" \| "trash" \| "plus" \| "reciept" \| "menu_list" \| "save" \| "credit_card" \| "closed_eye" \| "open_eye" \| "server" \| "double_caret_left" \| "square_plus" \| "angles_left" \| "angle_right" \| "angles_right" \| "outline_user" \| "unlock" \| "circle_plus" \| "arrow-right-from-bracket" \| "note" \| "email" \| "calendar-xmark" \| "arrow-trend-up" \| "hotel" \| "arrow-trend-down" \| "angle-up" \| "ban"` | `undefined` |
+| `icon_name`                | `icon_name`                   | The name of the icon to display.                                                 | `"angle-down" \| "clock" \| "check" \| "heart-fill" \| "envelope-circle-check" \| "danger" \| "bell" \| "burger_menu" \| "home" \| "xmark" \| "minus" \| "user" \| "heart" \| "user_group" \| "search" \| "arrow_right" \| "arrow_left" \| "circle_info" \| "calendar" \| "xmark-fill" \| "globe" \| "facebook" \| "twitter" \| "whatsapp" \| "instagram" \| "youtube" \| "angle_left" \| "circle_check" \| "eraser" \| "file" \| "edit" \| "trash" \| "plus" \| "reciept" \| "print" \| "menu_list" \| "save" \| "credit_card" \| "closed_eye" \| "open_eye" \| "server" \| "double_caret_left" \| "square_plus" \| "angles_left" \| "angle_right" \| "angles_right" \| "outline_user" \| "key" \| "unlock" \| "circle_plus" \| "arrow-right-from-bracket" \| "note" \| "email" \| "calendar-xmark" \| "arrow-trend-up" \| "hotel" \| "arrow-trend-down" \| "angle-up" \| "ban"` | `undefined` |
 | `icon_style`               | `icon_style`                  | Custom style object for the icon.                                                | `any`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `undefined` |
 | `isLoading`                | `is-loading`                  | Displays a loading indicator when true and disables the button.                  | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `false`     |
 | `labelStyle`               | --                            | Custom inline styles for the label/text inside the button.                       | `{ [key: string]: string; }`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `undefined` |
@@ -63,12 +63,9 @@ Type: `Promise<void>`
  - [igl-split-booking](../../igloo-calendar/igl-split-booking)
  - [igl-tba-booking-view](../../igloo-calendar/igl-to-be-assigned/igl-tba-booking-view)
  - [igl-to-be-assigned](../../igloo-calendar/igl-to-be-assigned)
- - [ir-applicable-policies](../../ir-booking-details/ir-payment-details/ir-applicable-policies)
- - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-email-logs](../../ir-booking-email-logs)
  - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
  - [ir-booking-guarantee](../../ir-booking-details/ir-payment-details/ir-booking-guarantee)
- - [ir-booking-header](../../ir-booking-details/ir-booking-header)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-channel](../../ir-channel)
  - [ir-channel-editor](../../ir-channel/ir-channel-editor)
@@ -76,7 +73,6 @@ Type: `Promise<void>`
  - [ir-daily-revenue](../../ir-daily-revenue)
  - [ir-daily-revenue-filters](../../ir-daily-revenue/ir-daily-revenue-filters)
  - [ir-delete-modal](../../ir-housekeeping/ir-delete-modal)
- - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-filters-panel](../ir-filters-panel)
  - [ir-financial-actions](../../ir-financial-actions)
@@ -99,13 +95,9 @@ Type: `Promise<void>`
  - [ir-pagination](../../ir-pagination)
  - [ir-payment-action](../../ir-booking-details/ir-payment-details/ir-payment-actions/ir-payment-action)
  - [ir-payment-details](../../ir-booking-details/ir-payment-details)
- - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
  - [ir-payment-item](../../ir-booking-details/ir-payment-details/ir-payment-item)
  - [ir-payment-option](../../ir-payment-option)
- - [ir-payments-folio](../../ir-booking-details/ir-payment-details/ir-payments-folio)
  - [ir-pickup](../../ir-booking-details/ir-pickup)
- - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
- - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-reset-password](../../ir-reset-password)
  - [ir-revenue-row-details](../../ir-daily-revenue/ir-revenue-table/ir-revenue-row/ir-revenue-row-details)
  - [ir-room](../../ir-booking-details/ir-room)
@@ -143,12 +135,9 @@ graph TD;
   igl-split-booking --> ir-button
   igl-tba-booking-view --> ir-button
   igl-to-be-assigned --> ir-button
-  ir-applicable-policies --> ir-button
-  ir-booking-details --> ir-button
   ir-booking-email-logs --> ir-button
   ir-booking-extra-note --> ir-button
   ir-booking-guarantee --> ir-button
-  ir-booking-header --> ir-button
   ir-booking-listing --> ir-button
   ir-channel --> ir-button
   ir-channel-editor --> ir-button
@@ -156,7 +145,6 @@ graph TD;
   ir-daily-revenue --> ir-button
   ir-daily-revenue-filters --> ir-button
   ir-delete-modal --> ir-button
-  ir-extra-service --> ir-button
   ir-extra-service-config --> ir-button
   ir-filters-panel --> ir-button
   ir-financial-actions --> ir-button
@@ -179,13 +167,9 @@ graph TD;
   ir-pagination --> ir-button
   ir-payment-action --> ir-button
   ir-payment-details --> ir-button
-  ir-payment-folio --> ir-button
   ir-payment-item --> ir-button
   ir-payment-option --> ir-button
-  ir-payments-folio --> ir-button
   ir-pickup --> ir-button
-  ir-pickup-view --> ir-button
-  ir-reservation-information --> ir-button
   ir-reset-password --> ir-button
   ir-revenue-row-details --> ir-button
   ir-room --> ir-button

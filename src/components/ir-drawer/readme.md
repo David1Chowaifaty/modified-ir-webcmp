@@ -7,33 +7,35 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                 | Type                | Default     |
-| ------------- | -------------- | --------------------------- | ------------------- | ----------- |
-| `drawerTitle` | `drawer-title` | The title of the drawer     | `string`            | `undefined` |
-| `open`        | `open`         | Is the drawer open?         | `boolean`           | `false`     |
-| `placement`   | `placement`    | The placement of the drawer | `"left" \| "right"` | `'right'`   |
+| Property        | Attribute        | Description                                                                                                                                                                                       | Type                                    | Default     |
+| --------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ----------- |
+| `label`         | `label`          | The drawer's label as displayed in the header. You should always include a relevant label, as it is required for proper accessibility. If you need to display HTML, use the `label` slot instead. | `string`                                | `undefined` |
+| `lightDismiss`  | `light-dismiss`  | When enabled, the drawer will be closed when the user clicks outside of it.                                                                                                                       | `boolean`                               | `true`      |
+| `open`          | `open`           | Indicates whether or not the drawer is open. Toggle this attribute to show and hide the drawer.                                                                                                   | `boolean`                               | `undefined` |
+| `placement`     | `placement`      | The direction from which the drawer will open.                                                                                                                                                    | `"bottom" \| "end" \| "start" \| "top"` | `undefined` |
+| `withoutHeader` | `without-header` | Disables the header. This will also remove the default close button.                                                                                                                              | `boolean`                               | `undefined` |
 
 
 ## Events
 
-| Event                  | Description                                                    | Type                   |
-| ---------------------- | -------------------------------------------------------------- | ---------------------- |
-| `drawerChange`         | Emitted when the drawer visibility changes.                    | `CustomEvent<boolean>` |
-| `drawerCloseRequested` | Emitted when the drawer is requested to be closed via keyboard | `CustomEvent<void>`    |
+| Event        | Description                                                                                                                                                                                                                                                                                                                                                                                                                         | Type                                |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `drawerHide` | Emitted when the drawer is requesting to close. Calling event.preventDefault() will prevent the drawer from closing. You can inspect event.detail.source to see which element caused the drawer to close. If the source is the drawer element itself, the user has pressed Escape or the drawer has been closed programmatically. Avoid using this unless closing the drawer will result in destructive behavior such as data loss. | `CustomEvent<{ source: Element; }>` |
+| `drawerShow` | Emitted when the drawer opens.                                                                                                                                                                                                                                                                                                                                                                                                      | `CustomEvent<void>`                 |
 
 
-## Methods
+## Dependencies
 
-### `closeDrawer() => Promise<void>`
+### Used by
 
+ - [ir-booking-details](../ir-booking-details)
 
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
+### Graph
+```mermaid
+graph TD;
+  ir-booking-details --> ir-drawer
+  style ir-drawer fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

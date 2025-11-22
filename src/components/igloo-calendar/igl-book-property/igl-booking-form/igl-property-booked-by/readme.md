@@ -35,6 +35,7 @@
 - [ir-tooltip](../../../../ui/ir-tooltip)
 - [ir-country-picker](../../../../ui/ir-country-picker)
 - [ir-phone-input](../../../../ui/ir-phone-input)
+- [ir-select](../../../../ui/ir-select)
 
 ### Graph
 ```mermaid
@@ -43,6 +44,7 @@ graph TD;
   igl-property-booked-by --> ir-tooltip
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
+  igl-property-booked-by --> ir-select
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   igl-booking-form --> igl-property-booked-by

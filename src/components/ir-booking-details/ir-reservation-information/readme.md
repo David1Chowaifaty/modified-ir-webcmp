@@ -31,8 +31,9 @@
 - [ir-label](../../ui/ir-label)
 - [ir-tooltip](../../ui/ir-tooltip)
 - [ir-icons](../../ui/ir-icons)
-- [ir-button](../../ui/ir-button)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [ota-label](../../ui/ota-label)
+- [ir-dialog](../../ui/ir-dialog)
 
 ### Graph
 ```mermaid
@@ -40,9 +41,9 @@ graph TD;
   ir-reservation-information --> ir-label
   ir-reservation-information --> ir-tooltip
   ir-reservation-information --> ir-icons
-  ir-reservation-information --> ir-button
+  ir-reservation-information --> ir-custom-button
   ir-reservation-information --> ota-label
-  ir-button --> ir-icons
+  ir-reservation-information --> ir-dialog
   ir-booking-details --> ir-reservation-information
   style ir-reservation-information fill:#f9f,stroke:#333,stroke-width:4px
 ```

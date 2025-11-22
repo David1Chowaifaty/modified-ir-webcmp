@@ -39,8 +39,7 @@
 - [ir-pms-logs](ir-pms-logs)
 - [ir-events-log](events-log)
 - [ir-popover](../../ui/ir-popover)
-- [ir-select](../../ui/ir-select)
-- [ir-button](../../ui/ir-button)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [ir-dialog](../../ui/ir-dialog)
 - [ir-modal](../../ui/ir-modal)
 
@@ -50,14 +49,13 @@ graph TD;
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-popover
-  ir-booking-header --> ir-select
-  ir-booking-header --> ir-button
+  ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-dialog
   ir-booking-header --> ir-modal
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
-  ir-button --> ir-icons
   ir-modal --> ir-button
+  ir-button --> ir-icons
   ir-booking-details --> ir-booking-header
   style ir-booking-header fill:#f9f,stroke:#333,stroke-width:4px
 ```

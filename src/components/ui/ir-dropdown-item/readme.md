@@ -64,13 +64,11 @@ Type: `Promise<void>`
 ### Used by
 
  - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
- - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-booking-event-hover --> ir-dropdown-item
-  ir-payment-folio --> ir-dropdown-item
   style ir-dropdown-item fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

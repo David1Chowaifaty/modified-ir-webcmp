@@ -20,13 +20,12 @@
 
 ### Depends on
 
-- [ir-button](../../ui/ir-button)
+- [ir-custom-button](../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-pickup-view --> ir-button
-  ir-button --> ir-icons
+  ir-pickup-view --> ir-custom-button
   ir-booking-details --> ir-pickup-view
   style ir-pickup-view fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -1,0 +1,214 @@
+:host {
+  /** @prop --ir-gap: Spacing between the label, input, and any adjacent elements. */
+  --ir-gap: 1rem;
+
+  /** @prop --ir-input-padding-block: Vertical padding inside the input field. */
+  --ir-input-padding-block: 0.75rem;
+
+  /** @prop --ir-danger: Error color for borders and text. */
+  --ir-danger: #ff4961;
+
+  /** @prop --ir-input-padding-inline: Horizontal padding inside the input field. */
+  --ir-input-padding-inline: 1rem;
+
+  /** @prop --ir-input-radius: Corner radius of the input field. */
+  --ir-input-radius: var(--ir-radius);
+
+  /** @prop --ir-input-border: Default input border (complete shorthand). */
+  --ir-input-border: 1px solid var(--ir-border);
+
+  /** @prop --ir-input-border-focus: Border color when the input is focused. */
+  --ir-input-border-focus: #1e9ff2;
+
+  /** @prop --ir-input-bg: Background color of the input field. */
+  --ir-input-bg: var(--ir-input);
+
+  /** @prop --ir-input-color: Text color used inside the input field. */
+  --ir-input-color: var(--ir-input-foreground);
+
+  /** @prop --ir-label-font-size: Default font size of the label. */
+  --ir-label-font-size: 1rem;
+
+  /** @prop --ir-label-color: Default color of the label text. */
+  --ir-label-color: #444;
+
+  /** @prop --ir-label-floating-font-size: Font size of the label when floating above the input. */
+  --ir-label-floating-font-size: 0.875rem;
+
+  /** @prop --ir-label-floating-color: Label text color when active or floated. */
+  --ir-label-floating-color: #1e9ff2;
+
+  /** @prop --ir-floating-offset-block: Vertical distance from the top when the label floats. (No longer used for positioning, but can be kept for other purposes if needed) */
+  --ir-floating-offset-block: 0.5rem;
+
+  /** @prop --ir-floating-offset-inline: Horizontal inset alignment for the floating label. */
+  --ir-floating-offset-inline: 1rem;
+
+  /** @prop --ir-floating-transition: Transition speed and easing for label animations. */
+  --ir-floating-transition: 150ms ease;
+
+  /** @prop --ir-clear-size: Size (width/height) of the clear button. */
+  --ir-clear-size: 1.5rem;
+
+  /** @prop --ir-clear-padding: Inner padding of the clear button. */
+  --ir-clear-padding: 0.25rem;
+
+  /** @prop --ir-prefix-width: (Internal) Width of the prefix slot content. Should be set by JS. */
+  --ir-prefix-width: 0px; /* Default value */
+
+  /** @prop --ir-input-ring-width-focus: Width of the focus ring. */
+  --ir-input-ring-width-focus: 3px;
+
+  /** @prop --ir-input-placeholder-color: Input placeholder color. */
+  --ir-input-placeholder-color: #cacfe7;
+
+  /** @prop --ir-input-ring-color-focus: Color of the focus ring. */
+  --ir-input-ring-color-focus: transparent;
+  /* --ir-input-ring-color-focus: rgba(30, 159, 242, 0.25); */
+
+  display: flex;
+  gap: var(--ir-gap);
+  flex-direction: column;
+}
+
+:host([label-position='side']) {
+  flex-direction: row;
+  align-items: center;
+}
+.input-field {
+  padding-block: var(--ir-input-padding-block);
+  padding-inline: var(--ir-input-padding-inline);
+  border-radius: var(--ir-input-radius);
+  border: var(--ir-input-border);
+  background: var(--ir-input-bg);
+  font-size: 1rem;
+  color: var(--ir-input-color);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  flex: 1 1 0%;
+  padding-inline-start: calc(var(--ir-input-padding-inline) + var(--ir-prefix-width, 0px));
+  height: 2.8rem;
+  transition: border-color var(--ir-floating-transition), box-shadow var(--ir-floating-transition);
+}
+
+:host([aria-invalid='true']) .input-field {
+  border-color: var(--ir-danger);
+}
+.input-field:read-only {
+  cursor: default;
+}
+
+.input-field:disabled {
+  /* --ir-input-bg: #9aa1ac; */
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.input-wrapper {
+  position: relative;
+  flex: 1 1 0%;
+}
+
+.input-field:focus {
+  border-color: var(--ir-input-border-focus);
+  box-shadow: 0 0 0 var(--ir-input-ring-width-focus) var(--ir-input-ring-color-focus);
+}
+
+:host([label-position='floating']) {
+  position: relative;
+}
+.input-field::placeholder {
+  color: var(--ir-input-placeholder-color);
+}
+/* The ::placeholder selector is no longer needed since JS will control the active state. 
+   However, we keep it if your input *does not* have a value on render. */
+:host([label-position='floating']) .input-field::placeholder {
+  color: transparent;
+}
+
+.input-label {
+  box-sizing: border-box;
+  font-size: var(--ir-label-font-size);
+  color: var(--ir-label-color);
+  font-weight: bold;
+  transition: transform var(--ir-floating-transition), color var(--ir-floating-transition), font-size var(--ir-floating-transition), top var(--ir-floating-transition),
+    inset-inline-start var(--ir-floating-transition), padding var(--ir-floating-transition), background-color var(--ir-floating-transition);
+}
+
+/* Initial "placeholder" state for the floating label. */
+:host([label-position='floating']) .input-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inset-inline-start: calc(var(--ir-input-padding-inline) + var(--ir-prefix-width, 0px));
+  pointer-events: none;
+  z-index: 1;
+  font-weight: 400;
+  padding-inline: 0;
+  background: transparent;
+}
+
+/* 🔥 THE FIX: Use data-attribute to drive the floating state 🔥
+   When the label has the data-attribute 'data-active' set to 'true', apply floating styles.
+*/
+:host([label-position='floating']) .input-label[data-active='true'] {
+  top: 0;
+  inset-inline-start: var(--ir-floating-offset-inline);
+  transform: translateY(-50%);
+  font-size: var(--ir-label-floating-font-size);
+
+  /* These two properties create the "border gap" */
+  background: var(--ir-input-bg);
+  padding-inline: 0.25rem;
+}
+/* When the input inside gains focus, color the floating label */
+:host([label-position='floating']):focus-within .input-label[data-active='true'] {
+  color: var(--ir-label-floating-color) !important;
+}
+
+:host([label-position='floating']) .input-label:dir(rtl) {
+}
+
+.input-suffix,
+.input-prefix {
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+}
+.input-suffix:dir(ltr),
+.input-prefix:dir(rtl) {
+  right: var(--ir-floating-offset-inline);
+}
+.input-suffix:dir(rtl),
+.input-prefix:dir(ltr) {
+  left: var(--ir-floating-offset-inline);
+}
+
+.clear-button,
+.visibility-button {
+  all: unset;
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  width: var(--ir-clear-size);
+  height: var(--ir-clear-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ir-clear-padding);
+  cursor: pointer;
+  margin: auto;
+  border-radius: 0.5rem;
+}
+.clear-button:hover,
+.visibility-button:hover {
+  background: var(--ir-muted);
+}

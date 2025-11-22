@@ -28,14 +28,16 @@ import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 import { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
+import { MaskProp, NativeWaInput } from "./components/ui/ir-custom-input/ir-custom-input";
 import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { NativeDrawer } from "./components/ir-drawer/ir-drawer";
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
+import { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
-import { ZodType } from "zod";
+import { ZodType, ZodTypeAny } from "zod";
 import { PaymentEntries } from "./components/ir-booking-details/types";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
@@ -76,14 +78,16 @@ export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
 export { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
+export { MaskProp, NativeWaInput } from "./components/ui/ir-custom-input/ir-custom-input";
 export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { NativeDrawer } from "./components/ir-drawer/ir-drawer";
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
+export { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
-export { ZodType } from "zod";
+export { ZodType, ZodTypeAny } from "zod";
 export { PaymentEntries } from "./components/ir-booking-details/types";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
@@ -718,6 +722,208 @@ export namespace Components {
          */
         "withCaret": NativeButton['withCaret'];
     }
+    interface IrCustomDatePicker {
+        /**
+          * Closes the picker automatically after a date is selected.
+         */
+        "autoClose": boolean;
+        "clearDatePicker": () => Promise<void>;
+        /**
+          * Pass a container element if you need the date picker to be appended to a specific element for styling or positioning (particularly for arrow rendering). If not provided, it defaults to `this.el`.
+         */
+        "container"?: HTMLElement;
+        /**
+          * Controls how the date picker is triggered. - **`true`**: The picker can be triggered by custom UI elements (provided via a `<slot name="trigger">`). - **`false`**: A default button input is used to open the picker.  Defaults to `false`.
+         */
+        "customPicker": boolean;
+        /**
+          * The initially selected date; can be a `Date` object or a string recognized by `AirDatepicker`.
+         */
+        "date": string | Date | null;
+        /**
+          * Format for the date as it appears in the input field. Follows the `AirDatepicker` format rules.
+         */
+        "dateFormat": string;
+        /**
+          * Disables the input and prevents interaction.
+         */
+        "disabled": boolean;
+        /**
+          * If `true`, the component will emit a `dateChanged` event when the selected date becomes empty (null). Otherwise, empty-date changes will be ignored (no event emitted).  Defaults to `false`.
+         */
+        "emitEmptyDate": boolean;
+        /**
+          * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`.
+         */
+        "forceDestroyOnUpdate": boolean;
+        /**
+          * Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.
+         */
+        "inline": boolean;
+        /**
+          * The latest date that can be selected.
+         */
+        "maxDate"?: string | Date;
+        /**
+          * The earliest date that can be selected.
+         */
+        "minDate"?: string | Date;
+        /**
+          * Enables multiple dates. If `true`, multiple selection is allowed. If you pass a number (e.g. 3), that is the maximum number of selectable dates.
+         */
+        "multipleDates": boolean | number;
+        "openDatePicker": () => Promise<void>;
+        /**
+          * Whether the picker should allow range selection (start and end date).
+         */
+        "range": boolean;
+        /**
+          * Allows selecting days from previous/next month shown in the current view.
+         */
+        "selectOtherMonths": boolean;
+        /**
+          * Shows days from previous/next month in the current month's calendar.
+         */
+        "showOtherMonths": boolean;
+        /**
+          * Enables the timepicker functionality (select hours and minutes).
+         */
+        "timepicker": boolean;
+        /**
+          * Styles for the trigger container
+         */
+        "triggerContainerStyle": string;
+    }
+    interface IrCustomInput {
+        /**
+          * The input's visual appearance.
+         */
+        "appearance": NativeWaInput['appearance'];
+        /**
+          * Controls whether and how text input is automatically capitalized as it is entered by the user.
+         */
+        "autocapitalize": NativeWaInput['autocapitalize'];
+        /**
+          * Specifies what permission the browser has to provide assistance in filling out form field values. Refer to [this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.
+         */
+        "autocomplete": NativeWaInput['autocomplete'];
+        /**
+          * Indicates whether the browser's autocorrect feature is on or off.
+         */
+        "autocorrect": NativeWaInput['autocorrect'];
+        /**
+          * Indicates that the input should receive focus on page load.
+         */
+        "autofocus": NativeWaInput['autofocus'];
+        /**
+          * The default value of the form control. Primarily used for resetting the form control.
+         */
+        "defaultValue": NativeWaInput['defaultValue'];
+        /**
+          * Used to customize the label or icon of the Enter key on virtual keyboards.
+         */
+        "enterkeyhint": NativeWaInput['enterkeyhint'];
+        /**
+          * By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you to place the form control outside of a form and associate it with the form that has this `id`. The form must be in the same document or shadow root for this to work.
+         */
+        "form": NativeWaInput['form'];
+        /**
+          * The input's hint. If you need to display HTML, use the `hint` slot instead.
+         */
+        "hint": NativeWaInput['hint'];
+        /**
+          * Tells the browser what type of data will be entered by the user, allowing it to display the appropriate virtual keyboard on supportive devices.
+         */
+        "inputmode": NativeWaInput['inputmode'];
+        /**
+          * The input's label. If you need to display HTML, use the `label` slot instead.
+         */
+        "label": NativeWaInput['label'];
+        /**
+          * Mask for the input field (optional)
+         */
+        "mask": MaskProp;
+        /**
+          * The input's maximum value. Only applies to date and number input types.
+         */
+        "max": NativeWaInput['max'];
+        /**
+          * The maximum length of input that will be considered valid.
+         */
+        "maxlength": NativeWaInput['maxlength'];
+        /**
+          * The input's minimum value. Only applies to date and number input types.
+         */
+        "min": NativeWaInput['min'];
+        /**
+          * The minimum length of input that will be considered valid.
+         */
+        "minlength": NativeWaInput['minlength'];
+        /**
+          * Adds a button to toggle the password's visibility. Only applies to password types.
+         */
+        "passwordToggle": NativeWaInput['passwordToggle'];
+        /**
+          * Determines whether or not the password is currently visible. Only applies to password input types.
+         */
+        "passwordVisible": NativeWaInput['passwordVisible'];
+        /**
+          * A regular expression pattern to validate input against.
+         */
+        "pattern": NativeWaInput['pattern'];
+        /**
+          * Draws a pill-style input with rounded edges.
+         */
+        "pill": NativeWaInput['pill'];
+        /**
+          * Placeholder text to show as a hint when the input is empty.
+         */
+        "placeholder": NativeWaInput['placeholder'];
+        /**
+          * Makes the input readonly.
+         */
+        "readonly": NativeWaInput['readonly'];
+        /**
+          * Makes the input a required field.
+         */
+        "required": NativeWaInput['required'];
+        /**
+          * The input's size.
+         */
+        "size": NativeWaInput['size'];
+        /**
+          * Enables spell checking on the input.
+         */
+        "spellcheck": NativeWaInput['spellcheck'];
+        /**
+          * Specifies the granularity that the value must adhere to, or the special value `any` which means no stepping is implied, allowing any numeric value. Only applies to date and number input types.
+         */
+        "step": NativeWaInput['step'];
+        /**
+          * The type of input. Works the same as a native `<input>` element, but only a subset of types are supported. Defaults to `text`.
+         */
+        "type": NativeWaInput['type'];
+        /**
+          * The value of the input.
+         */
+        "value": string;
+        /**
+          * Adds a clear button when the input is not empty.
+         */
+        "withClear": NativeWaInput['withClear'];
+        /**
+          * Used for SSR. Will determine if the SSRed component will have the hint slot rendered on initial paint.
+         */
+        "withHint": NativeWaInput['withHint'];
+        /**
+          * Used for SSR. Will determine if the SSRed component will have the label slot rendered on initial paint.
+         */
+        "withLabel": NativeWaInput['withLabel'];
+        /**
+          * Hides the browser's built-in increment/decrement spin buttons for number inputs.
+         */
+        "withoutSpinButtons": NativeWaInput['withoutSpinButtons'];
+    }
     interface IrDailyRevenue {
         "language": string;
         "p": string;
@@ -1136,6 +1342,59 @@ export namespace Components {
           * Additional CSS class applied to the `<svg>` element. Can be used for sizing, positioning, etc.
          */
         "svgClassName": string;
+    }
+    interface IrInput {
+        /**
+          * If true, displays a clear (X) button when the input has a value.
+         */
+        "clearable": boolean;
+        "disabled": boolean;
+        /**
+          * The label text displayed alongside or above the input.
+         */
+        "label": string;
+        /**
+          * Controls where the label is positioned: 'default', 'side', or 'floating'.
+         */
+        "labelPosition": 'default' | 'side' | 'floating';
+        /**
+          * Mask for the input field (optional)
+         */
+        "mask": MaskProp1;
+        /**
+          * Maximum allowed value (for number or masked inputs).
+         */
+        "max": number;
+        /**
+          * Maximum input length
+         */
+        "maxLength": number;
+        /**
+          * Minimum allowed value (for number or masked inputs).
+         */
+        "min": number;
+        /**
+          * Placeholder text displayed inside the input when empty.
+         */
+        "placeholder": string;
+        /**
+          * Hides the prefix slot content from assistive technologies when true.
+         */
+        "prefixHidden": boolean;
+        "readonly": boolean;
+        "required": boolean;
+        /**
+          * Hides the suffix slot content from assistive technologies when true.
+         */
+        "suffixHidden": boolean;
+        /**
+          * Type of input element — can be 'text', 'password', 'email', or 'number'.
+         */
+        "type": 'text' | 'password' | 'email' | 'number';
+        /**
+          * The value of the input.
+         */
+        "value": string;
     }
     interface IrInputText {
         /**
@@ -1689,7 +1948,9 @@ export namespace Components {
     }
     interface IrPaymentFolio {
         "bookingNumber": string;
+        "closeFolio": () => Promise<void>;
         "mode": FolioEntryMode;
+        "openFolio": () => Promise<void>;
         "payment": Payment;
         "paymentEntries": PaymentEntries1;
     }
@@ -2404,6 +2665,32 @@ export namespace Components {
         "userTypes": Map<string | number, string>;
         "users": User[];
     }
+    interface IrValidator {
+        /**
+          * Enables automatic validation on every value change.
+         */
+        "autovalidate"?: boolean;
+        /**
+          * Event names (space/comma separated) dispatched when the child loses focus.
+         */
+        "blurEvent": string;
+        /**
+          * Optional form id. Falls back to the closest ancestor form when omitted.
+         */
+        "form"?: string;
+        /**
+          * Zod schema used to validate the child control's value.
+         */
+        "schema": ZodTypeAny;
+        /**
+          * Debounce delay (ms) before running validation for autovalidated changes.
+         */
+        "validationDebounce": number;
+        /**
+          * Event names (space/comma separated) dispatched when the child value changes.
+         */
+        "valueEvent": string;
+    }
     interface IrWeekdaySelector {
         /**
           * Initial list of selected weekdays (numeric values).
@@ -2603,6 +2890,14 @@ export interface IrCustomButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrCustomButtonElement;
 }
+export interface IrCustomDatePickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrCustomDatePickerElement;
+}
+export interface IrCustomInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrCustomInputElement;
+}
 export interface IrDailyRevenueCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrDailyRevenueElement;
@@ -2682,6 +2977,10 @@ export interface IrHousekeepingCustomEvent<T> extends CustomEvent<T> {
 export interface IrIconCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrIconElement;
+}
+export interface IrInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrInputElement;
 }
 export interface IrInputTextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2878,6 +3177,10 @@ export interface IrUserFormPanelCustomEvent<T> extends CustomEvent<T> {
 export interface IrUserManagementTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrUserManagementTableElement;
+}
+export interface IrValidatorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrValidatorElement;
 }
 export interface IrWeekdaySelectorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3727,6 +4030,47 @@ declare global {
         prototype: HTMLIrCustomButtonElement;
         new (): HTMLIrCustomButtonElement;
     };
+    interface HTMLIrCustomDatePickerElementEventMap {
+        "dateChanged": {
+    start: moment.Moment;
+    end: moment.Moment;
+  };
+        "datePickerFocus": void;
+        "datePickerBlur": void;
+    }
+    interface HTMLIrCustomDatePickerElement extends Components.IrCustomDatePicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrCustomDatePickerElementEventMap>(type: K, listener: (this: HTMLIrCustomDatePickerElement, ev: IrCustomDatePickerCustomEvent<HTMLIrCustomDatePickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrCustomDatePickerElementEventMap>(type: K, listener: (this: HTMLIrCustomDatePickerElement, ev: IrCustomDatePickerCustomEvent<HTMLIrCustomDatePickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrCustomDatePickerElement: {
+        prototype: HTMLIrCustomDatePickerElement;
+        new (): HTMLIrCustomDatePickerElement;
+    };
+    interface HTMLIrCustomInputElementEventMap {
+        "textChange": string;
+        "inputBlur": void;
+        "inputFocus": void;
+    }
+    interface HTMLIrCustomInputElement extends Components.IrCustomInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrCustomInputElementEventMap>(type: K, listener: (this: HTMLIrCustomInputElement, ev: IrCustomInputCustomEvent<HTMLIrCustomInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrCustomInputElementEventMap>(type: K, listener: (this: HTMLIrCustomInputElement, ev: IrCustomInputCustomEvent<HTMLIrCustomInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrCustomInputElement: {
+        prototype: HTMLIrCustomInputElement;
+        new (): HTMLIrCustomInputElement;
+    };
     interface HTMLIrDailyRevenueElementEventMap {
         "preventPageLoad": null;
     }
@@ -4137,6 +4481,26 @@ declare global {
     var HTMLIrIconsElement: {
         prototype: HTMLIrIconsElement;
         new (): HTMLIrIconsElement;
+    };
+    interface HTMLIrInputElementEventMap {
+        "input-change": string;
+        "cleared": void;
+        "input-focus": FocusEvent;
+        "input-blur": FocusEvent;
+    }
+    interface HTMLIrInputElement extends Components.IrInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrInputElementEventMap>(type: K, listener: (this: HTMLIrInputElement, ev: IrInputCustomEvent<HTMLIrInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrInputElementEventMap>(type: K, listener: (this: HTMLIrInputElement, ev: IrInputCustomEvent<HTMLIrInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrInputElement: {
+        prototype: HTMLIrInputElement;
+        new (): HTMLIrInputElement;
     };
     interface HTMLIrInputTextElementEventMap {
         "textChange": any;
@@ -5219,6 +5583,24 @@ declare global {
         prototype: HTMLIrUserManagementTableElement;
         new (): HTMLIrUserManagementTableElement;
     };
+    interface HTMLIrValidatorElementEventMap {
+        "irValidationChange": { valid: boolean; value: unknown };
+        "irValueChange": { value: unknown };
+    }
+    interface HTMLIrValidatorElement extends Components.IrValidator, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrValidatorElementEventMap>(type: K, listener: (this: HTMLIrValidatorElement, ev: IrValidatorCustomEvent<HTMLIrValidatorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrValidatorElementEventMap>(type: K, listener: (this: HTMLIrValidatorElement, ev: IrValidatorCustomEvent<HTMLIrValidatorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrValidatorElement: {
+        prototype: HTMLIrValidatorElement;
+        new (): HTMLIrValidatorElement;
+    };
     interface HTMLIrWeekdaySelectorElementEventMap {
         "weekdayChange": number[];
     }
@@ -5301,6 +5683,8 @@ declare global {
         "ir-copy-button": HTMLIrCopyButtonElement;
         "ir-country-picker": HTMLIrCountryPickerElement;
         "ir-custom-button": HTMLIrCustomButtonElement;
+        "ir-custom-date-picker": HTMLIrCustomDatePickerElement;
+        "ir-custom-input": HTMLIrCustomInputElement;
         "ir-daily-revenue": HTMLIrDailyRevenueElement;
         "ir-daily-revenue-filters": HTMLIrDailyRevenueFiltersElement;
         "ir-date-picker": HTMLIrDatePickerElement;
@@ -5329,6 +5713,7 @@ declare global {
         "ir-housekeeping": HTMLIrHousekeepingElement;
         "ir-icon": HTMLIrIconElement;
         "ir-icons": HTMLIrIconsElement;
+        "ir-input": HTMLIrInputElement;
         "ir-input-text": HTMLIrInputTextElement;
         "ir-interactive-title": HTMLIrInteractiveTitleElement;
         "ir-interceptor": HTMLIrInterceptorElement;
@@ -5411,6 +5796,7 @@ declare global {
         "ir-user-form-panel": HTMLIrUserFormPanelElement;
         "ir-user-management": HTMLIrUserManagementElement;
         "ir-user-management-table": HTMLIrUserManagementTableElement;
+        "ir-validator": HTMLIrValidatorElement;
         "ir-weekday-selector": HTMLIrWeekdaySelectorElement;
         "ota-label": HTMLOtaLabelElement;
         "requirement-check": HTMLRequirementCheckElement;
@@ -6159,6 +6545,215 @@ declare namespace LocalJSX {
          */
         "withCaret"?: NativeButton['withCaret'];
     }
+    interface IrCustomDatePicker {
+        /**
+          * Closes the picker automatically after a date is selected.
+         */
+        "autoClose"?: boolean;
+        /**
+          * Pass a container element if you need the date picker to be appended to a specific element for styling or positioning (particularly for arrow rendering). If not provided, it defaults to `this.el`.
+         */
+        "container"?: HTMLElement;
+        /**
+          * Controls how the date picker is triggered. - **`true`**: The picker can be triggered by custom UI elements (provided via a `<slot name="trigger">`). - **`false`**: A default button input is used to open the picker.  Defaults to `false`.
+         */
+        "customPicker"?: boolean;
+        /**
+          * The initially selected date; can be a `Date` object or a string recognized by `AirDatepicker`.
+         */
+        "date"?: string | Date | null;
+        /**
+          * Format for the date as it appears in the input field. Follows the `AirDatepicker` format rules.
+         */
+        "dateFormat"?: string;
+        /**
+          * Disables the input and prevents interaction.
+         */
+        "disabled"?: boolean;
+        /**
+          * If `true`, the component will emit a `dateChanged` event when the selected date becomes empty (null). Otherwise, empty-date changes will be ignored (no event emitted).  Defaults to `false`.
+         */
+        "emitEmptyDate"?: boolean;
+        /**
+          * If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`.
+         */
+        "forceDestroyOnUpdate"?: boolean;
+        /**
+          * Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.
+         */
+        "inline"?: boolean;
+        /**
+          * The latest date that can be selected.
+         */
+        "maxDate"?: string | Date;
+        /**
+          * The earliest date that can be selected.
+         */
+        "minDate"?: string | Date;
+        /**
+          * Enables multiple dates. If `true`, multiple selection is allowed. If you pass a number (e.g. 3), that is the maximum number of selectable dates.
+         */
+        "multipleDates"?: boolean | number;
+        "onDateChanged"?: (event: IrCustomDatePickerCustomEvent<{
+    start: moment.Moment;
+    end: moment.Moment;
+  }>) => void;
+        "onDatePickerBlur"?: (event: IrCustomDatePickerCustomEvent<void>) => void;
+        "onDatePickerFocus"?: (event: IrCustomDatePickerCustomEvent<void>) => void;
+        /**
+          * Whether the picker should allow range selection (start and end date).
+         */
+        "range"?: boolean;
+        /**
+          * Allows selecting days from previous/next month shown in the current view.
+         */
+        "selectOtherMonths"?: boolean;
+        /**
+          * Shows days from previous/next month in the current month's calendar.
+         */
+        "showOtherMonths"?: boolean;
+        /**
+          * Enables the timepicker functionality (select hours and minutes).
+         */
+        "timepicker"?: boolean;
+        /**
+          * Styles for the trigger container
+         */
+        "triggerContainerStyle"?: string;
+    }
+    interface IrCustomInput {
+        /**
+          * The input's visual appearance.
+         */
+        "appearance"?: NativeWaInput['appearance'];
+        /**
+          * Controls whether and how text input is automatically capitalized as it is entered by the user.
+         */
+        "autocapitalize"?: NativeWaInput['autocapitalize'];
+        /**
+          * Specifies what permission the browser has to provide assistance in filling out form field values. Refer to [this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.
+         */
+        "autocomplete"?: NativeWaInput['autocomplete'];
+        /**
+          * Indicates whether the browser's autocorrect feature is on or off.
+         */
+        "autocorrect"?: NativeWaInput['autocorrect'];
+        /**
+          * Indicates that the input should receive focus on page load.
+         */
+        "autofocus"?: NativeWaInput['autofocus'];
+        /**
+          * The default value of the form control. Primarily used for resetting the form control.
+         */
+        "defaultValue"?: NativeWaInput['defaultValue'];
+        /**
+          * Used to customize the label or icon of the Enter key on virtual keyboards.
+         */
+        "enterkeyhint"?: NativeWaInput['enterkeyhint'];
+        /**
+          * By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you to place the form control outside of a form and associate it with the form that has this `id`. The form must be in the same document or shadow root for this to work.
+         */
+        "form"?: NativeWaInput['form'];
+        /**
+          * The input's hint. If you need to display HTML, use the `hint` slot instead.
+         */
+        "hint"?: NativeWaInput['hint'];
+        /**
+          * Tells the browser what type of data will be entered by the user, allowing it to display the appropriate virtual keyboard on supportive devices.
+         */
+        "inputmode"?: NativeWaInput['inputmode'];
+        /**
+          * The input's label. If you need to display HTML, use the `label` slot instead.
+         */
+        "label"?: NativeWaInput['label'];
+        /**
+          * Mask for the input field (optional)
+         */
+        "mask"?: MaskProp;
+        /**
+          * The input's maximum value. Only applies to date and number input types.
+         */
+        "max"?: NativeWaInput['max'];
+        /**
+          * The maximum length of input that will be considered valid.
+         */
+        "maxlength"?: NativeWaInput['maxlength'];
+        /**
+          * The input's minimum value. Only applies to date and number input types.
+         */
+        "min"?: NativeWaInput['min'];
+        /**
+          * The minimum length of input that will be considered valid.
+         */
+        "minlength"?: NativeWaInput['minlength'];
+        "onInputBlur"?: (event: IrCustomInputCustomEvent<void>) => void;
+        "onInputFocus"?: (event: IrCustomInputCustomEvent<void>) => void;
+        "onTextChange"?: (event: IrCustomInputCustomEvent<string>) => void;
+        /**
+          * Adds a button to toggle the password's visibility. Only applies to password types.
+         */
+        "passwordToggle"?: NativeWaInput['passwordToggle'];
+        /**
+          * Determines whether or not the password is currently visible. Only applies to password input types.
+         */
+        "passwordVisible"?: NativeWaInput['passwordVisible'];
+        /**
+          * A regular expression pattern to validate input against.
+         */
+        "pattern"?: NativeWaInput['pattern'];
+        /**
+          * Draws a pill-style input with rounded edges.
+         */
+        "pill"?: NativeWaInput['pill'];
+        /**
+          * Placeholder text to show as a hint when the input is empty.
+         */
+        "placeholder"?: NativeWaInput['placeholder'];
+        /**
+          * Makes the input readonly.
+         */
+        "readonly"?: NativeWaInput['readonly'];
+        /**
+          * Makes the input a required field.
+         */
+        "required"?: NativeWaInput['required'];
+        /**
+          * The input's size.
+         */
+        "size"?: NativeWaInput['size'];
+        /**
+          * Enables spell checking on the input.
+         */
+        "spellcheck"?: NativeWaInput['spellcheck'];
+        /**
+          * Specifies the granularity that the value must adhere to, or the special value `any` which means no stepping is implied, allowing any numeric value. Only applies to date and number input types.
+         */
+        "step"?: NativeWaInput['step'];
+        /**
+          * The type of input. Works the same as a native `<input>` element, but only a subset of types are supported. Defaults to `text`.
+         */
+        "type"?: NativeWaInput['type'];
+        /**
+          * The value of the input.
+         */
+        "value"?: string;
+        /**
+          * Adds a clear button when the input is not empty.
+         */
+        "withClear"?: NativeWaInput['withClear'];
+        /**
+          * Used for SSR. Will determine if the SSRed component will have the hint slot rendered on initial paint.
+         */
+        "withHint"?: NativeWaInput['withHint'];
+        /**
+          * Used for SSR. Will determine if the SSRed component will have the label slot rendered on initial paint.
+         */
+        "withLabel"?: NativeWaInput['withLabel'];
+        /**
+          * Hides the browser's built-in increment/decrement spin buttons for number inputs.
+         */
+        "withoutSpinButtons"?: NativeWaInput['withoutSpinButtons'];
+    }
     interface IrDailyRevenue {
         "language"?: string;
         "onPreventPageLoad"?: (event: IrDailyRevenueCustomEvent<null>) => void;
@@ -6641,6 +7236,75 @@ declare namespace LocalJSX {
           * Additional CSS class applied to the `<svg>` element. Can be used for sizing, positioning, etc.
          */
         "svgClassName"?: string;
+    }
+    interface IrInput {
+        /**
+          * If true, displays a clear (X) button when the input has a value.
+         */
+        "clearable"?: boolean;
+        "disabled"?: boolean;
+        /**
+          * The label text displayed alongside or above the input.
+         */
+        "label"?: string;
+        /**
+          * Controls where the label is positioned: 'default', 'side', or 'floating'.
+         */
+        "labelPosition"?: 'default' | 'side' | 'floating';
+        /**
+          * Mask for the input field (optional)
+         */
+        "mask"?: MaskProp1;
+        /**
+          * Maximum allowed value (for number or masked inputs).
+         */
+        "max"?: number;
+        /**
+          * Maximum input length
+         */
+        "maxLength"?: number;
+        /**
+          * Minimum allowed value (for number or masked inputs).
+         */
+        "min"?: number;
+        /**
+          * Fired only when the clear button is pressed.
+         */
+        "onCleared"?: (event: IrInputCustomEvent<void>) => void;
+        /**
+          * Fired only when the input is blurred.
+         */
+        "onInput-blur"?: (event: IrInputCustomEvent<FocusEvent>) => void;
+        /**
+          * Fired on any value change (typing, programmatic set, or clear).
+         */
+        "onInput-change"?: (event: IrInputCustomEvent<string>) => void;
+        /**
+          * Fired only when the input is focused.
+         */
+        "onInput-focus"?: (event: IrInputCustomEvent<FocusEvent>) => void;
+        /**
+          * Placeholder text displayed inside the input when empty.
+         */
+        "placeholder"?: string;
+        /**
+          * Hides the prefix slot content from assistive technologies when true.
+         */
+        "prefixHidden"?: boolean;
+        "readonly"?: boolean;
+        "required"?: boolean;
+        /**
+          * Hides the suffix slot content from assistive technologies when true.
+         */
+        "suffixHidden"?: boolean;
+        /**
+          * Type of input element — can be 'text', 'password', 'email', or 'number'.
+         */
+        "type"?: 'text' | 'password' | 'email' | 'number';
+        /**
+          * The value of the input.
+         */
+        "value"?: string;
     }
     interface IrInputText {
         /**
@@ -8072,6 +8736,40 @@ declare namespace LocalJSX {
         "userTypes"?: Map<string | number, string>;
         "users"?: User[];
     }
+    interface IrValidator {
+        /**
+          * Enables automatic validation on every value change.
+         */
+        "autovalidate"?: boolean;
+        /**
+          * Event names (space/comma separated) dispatched when the child loses focus.
+         */
+        "blurEvent"?: string;
+        /**
+          * Optional form id. Falls back to the closest ancestor form when omitted.
+         */
+        "form"?: string;
+        /**
+          * Emits whenever the validation state toggles.
+         */
+        "onIrValidationChange"?: (event: IrValidatorCustomEvent<{ valid: boolean; value: unknown }>) => void;
+        /**
+          * Emits whenever the tracked value changes.
+         */
+        "onIrValueChange"?: (event: IrValidatorCustomEvent<{ value: unknown }>) => void;
+        /**
+          * Zod schema used to validate the child control's value.
+         */
+        "schema": ZodTypeAny;
+        /**
+          * Debounce delay (ms) before running validation for autovalidated changes.
+         */
+        "validationDebounce"?: number;
+        /**
+          * Event names (space/comma separated) dispatched when the child value changes.
+         */
+        "valueEvent"?: string;
+    }
     interface IrWeekdaySelector {
         /**
           * Emits an updated list of selected weekday values when the selection changes.  Example: ```tsx <ir-weekday-selector onWeekdayChange={(e) => console.log(e.detail)} /> ```
@@ -8159,6 +8857,8 @@ declare namespace LocalJSX {
         "ir-copy-button": IrCopyButton;
         "ir-country-picker": IrCountryPicker;
         "ir-custom-button": IrCustomButton;
+        "ir-custom-date-picker": IrCustomDatePicker;
+        "ir-custom-input": IrCustomInput;
         "ir-daily-revenue": IrDailyRevenue;
         "ir-daily-revenue-filters": IrDailyRevenueFilters;
         "ir-date-picker": IrDatePicker;
@@ -8187,6 +8887,7 @@ declare namespace LocalJSX {
         "ir-housekeeping": IrHousekeeping;
         "ir-icon": IrIcon;
         "ir-icons": IrIcons;
+        "ir-input": IrInput;
         "ir-input-text": IrInputText;
         "ir-interactive-title": IrInteractiveTitle;
         "ir-interceptor": IrInterceptor;
@@ -8269,6 +8970,7 @@ declare namespace LocalJSX {
         "ir-user-form-panel": IrUserFormPanel;
         "ir-user-management": IrUserManagement;
         "ir-user-management-table": IrUserManagementTable;
+        "ir-validator": IrValidator;
         "ir-weekday-selector": IrWeekdaySelector;
         "ota-label": OtaLabel;
         "requirement-check": RequirementCheck;
@@ -8330,6 +9032,8 @@ declare module "@stencil/core" {
             "ir-copy-button": LocalJSX.IrCopyButton & JSXBase.HTMLAttributes<HTMLIrCopyButtonElement>;
             "ir-country-picker": LocalJSX.IrCountryPicker & JSXBase.HTMLAttributes<HTMLIrCountryPickerElement>;
             "ir-custom-button": LocalJSX.IrCustomButton & JSXBase.HTMLAttributes<HTMLIrCustomButtonElement>;
+            "ir-custom-date-picker": LocalJSX.IrCustomDatePicker & JSXBase.HTMLAttributes<HTMLIrCustomDatePickerElement>;
+            "ir-custom-input": LocalJSX.IrCustomInput & JSXBase.HTMLAttributes<HTMLIrCustomInputElement>;
             "ir-daily-revenue": LocalJSX.IrDailyRevenue & JSXBase.HTMLAttributes<HTMLIrDailyRevenueElement>;
             "ir-daily-revenue-filters": LocalJSX.IrDailyRevenueFilters & JSXBase.HTMLAttributes<HTMLIrDailyRevenueFiltersElement>;
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
@@ -8358,6 +9062,7 @@ declare module "@stencil/core" {
             "ir-housekeeping": LocalJSX.IrHousekeeping & JSXBase.HTMLAttributes<HTMLIrHousekeepingElement>;
             "ir-icon": LocalJSX.IrIcon & JSXBase.HTMLAttributes<HTMLIrIconElement>;
             "ir-icons": LocalJSX.IrIcons & JSXBase.HTMLAttributes<HTMLIrIconsElement>;
+            "ir-input": LocalJSX.IrInput & JSXBase.HTMLAttributes<HTMLIrInputElement>;
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
             "ir-interactive-title": LocalJSX.IrInteractiveTitle & JSXBase.HTMLAttributes<HTMLIrInteractiveTitleElement>;
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;
@@ -8440,6 +9145,7 @@ declare module "@stencil/core" {
             "ir-user-form-panel": LocalJSX.IrUserFormPanel & JSXBase.HTMLAttributes<HTMLIrUserFormPanelElement>;
             "ir-user-management": LocalJSX.IrUserManagement & JSXBase.HTMLAttributes<HTMLIrUserManagementElement>;
             "ir-user-management-table": LocalJSX.IrUserManagementTable & JSXBase.HTMLAttributes<HTMLIrUserManagementTableElement>;
+            "ir-validator": LocalJSX.IrValidator & JSXBase.HTMLAttributes<HTMLIrValidatorElement>;
             "ir-weekday-selector": LocalJSX.IrWeekdaySelector & JSXBase.HTMLAttributes<HTMLIrWeekdaySelectorElement>;
             "ota-label": LocalJSX.OtaLabel & JSXBase.HTMLAttributes<HTMLOtaLabelElement>;
             "requirement-check": LocalJSX.RequirementCheck & JSXBase.HTMLAttributes<HTMLRequirementCheckElement>;

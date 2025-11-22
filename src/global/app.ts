@@ -10,7 +10,6 @@ import '@awesome.me/webawesome/dist/components/dropdown/dropdown.js';
 import '@awesome.me/webawesome/dist/components/tag/tag.js';
 import '@awesome.me/webawesome/dist/components/input/input.js';
 import '@awesome.me/webawesome/dist/components/card/card.js';
-import '@awesome.me/webawesome/dist/components/popover/popover.js';
 import '@awesome.me/webawesome/dist/components/divider/divider.js';
 import '@awesome.me/webawesome/dist/components/select/select.js';
 import '@awesome.me/webawesome/dist/components/switch/switch.js';
@@ -24,6 +23,7 @@ import '@awesome.me/webawesome/dist/components/button-group/button-group.js';
 import '@awesome.me/webawesome/dist/components/tree/tree.js';
 import '@awesome.me/webawesome/dist/components/badge/badge.js';
 import '@awesome.me/webawesome/dist/components/dialog/dialog.js';
+import '@awesome.me/webawesome/dist/components/popover/popover.js';
 
 export default () => {
   /* The side-effect imports above define the custom elements; nothing else to execute at runtime. */

@@ -85,6 +85,7 @@ export class IrBookingDetails {
   // private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
   private printingBaseUrl = 'http://localhost:5863/%1/printing?id=%2';
   private modalRef: HTMLIrModalElement;
+  private paymentFolioRef: HTMLIrPaymentFolioElement;
 
   componentWillLoad() {
     if (this.ticket !== '') {
@@ -106,6 +107,9 @@ export class IrBookingDetails {
   handleSideBarEvents(e: CustomEvent<OpenSidebarEvent<unknown>>) {
     this.sidebarState = e.detail.type;
     this.sidebarPayload = e.detail.payload;
+    if (this.sidebarState === 'payment-folio') {
+      this.paymentFolioRef.openFolio();
+    }
   }
 
   @Listen('clickHandler')
@@ -420,16 +424,7 @@ export class IrBookingDetails {
             onCloseModal={handleClose}
           ></ir-room-guests>
         );
-      case 'payment-folio':
-        return (
-          <ir-payment-folio
-            bookingNumber={this.booking.booking_nbr}
-            paymentEntries={this.paymentEntries}
-            payment={this.sidebarPayload.payment}
-            mode={this.sidebarPayload.mode}
-            onCloseModal={handleClose}
-          ></ir-payment-folio>
-        );
+
       default:
         return null;
     }
@@ -692,26 +687,14 @@ export class IrBookingDetails {
       // >
       //   {this.renderSidebarContent()}
       // </ir-sidebar>,
-      <ir-drawer
-        placement="start"
-        label="New Folio Entry"
-        open={this.sidebarState === 'payment-folio'}
-        onDrawerHide={e => {
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-          this.sidebarState = null;
-        }}
-      >
-        {this.renderSidebarContent()}
-        <div slot="footer" class="w-100 d-flex align-items-center" style={{ gap: 'var(--wa-space-xs)' }}>
-          <ir-custom-button class="flex-fill" size="medium" data-drawer="close" appearance="filled" variant="neutral">
-            Cancel
-          </ir-custom-button>
-          <ir-custom-button class="flex-fill" type="submit" form="ir__folio-form" size="medium" appearance="accent" variant="brand">
-            Save
-          </ir-custom-button>
-        </div>
-      </ir-drawer>,
+      <ir-payment-folio
+        bookingNumber={this.booking.booking_nbr}
+        paymentEntries={this.paymentEntries}
+        payment={this.sidebarPayload?.payment}
+        mode={this.sidebarPayload?.mode}
+        ref={el => (this.paymentFolioRef = el)}
+        onCloseModal={() => (this.sidebarState = null)}
+      ></ir-payment-folio>,
       <Fragment>
         {this.bookingItem && (
           <igl-book-property

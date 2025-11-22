@@ -11,6 +11,7 @@
 | ----------------- | ------------------ | ----------- | ------------------------- | ----------- |
 | `calendarData`    | --                 |             | `{ [key: string]: any; }` | `undefined` |
 | `highlightedDate` | `highlighted-date` |             | `string`                  | `undefined` |
+| `isLegendOpen`    | `is-legend-open`   |             | `boolean`                 | `false`     |
 | `today`           | --                 |             | `String`                  | `undefined` |
 
 

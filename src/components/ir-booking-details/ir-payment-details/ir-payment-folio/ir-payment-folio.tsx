@@ -1,5 +1,5 @@
 import calendar_data from '@/stores/calendar-data';
-import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Method, Prop, State, Watch, h } from '@stencil/core';
 import moment from 'moment';
 import { z, ZodError } from 'zod';
 import { IEntries } from '@/models/IBooking';
@@ -31,6 +31,7 @@ export class IrPaymentFolio {
   @State() autoValidate: boolean = false;
   @State() folioData: Payment;
   @State() _paymentTypes: Record<string, IEntries[]> = {};
+  @State() isOpen: boolean;
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetBookingEvt: EventEmitter<null>;
@@ -83,6 +84,15 @@ export class IrPaymentFolio {
       this.getPaymentTypes();
     }
   }
+  @Method()
+  async openFolio() {
+    this.isOpen = true;
+  }
+  @Method()
+  async closeFolio() {
+    this.isOpen = false;
+    this.closeModal.emit(null);
+  }
 
   private updateFolioData(params: Partial<Payment>): void {
     this.folioData = { ...this.folioData, ...params };
@@ -95,6 +105,7 @@ export class IrPaymentFolio {
       if (this.errors) {
         this.errors = null;
       }
+      console.log(this.folioData);
       this.folioSchema.parse(this.folioData ?? {});
       const data = await this.paymentService.AddPayment(
         {
@@ -110,7 +121,7 @@ export class IrPaymentFolio {
       }
       this.resetBookingEvt.emit(null);
       this.resetExposedCancellationDueAmount.emit(null);
-      this.closeModal.emit(null);
+      this.closeFolio();
     } catch (error) {
       const err = {};
       if (error instanceof ZodError) {
@@ -126,6 +137,7 @@ export class IrPaymentFolio {
   }
 
   private handleDropdownChange(value: string) {
+    console.log(value);
     this.updateFolioData({ designation: value });
     if (!value) {
       this.updateFolioData({
@@ -205,25 +217,23 @@ export class IrPaymentFolio {
     ));
   }
   render() {
+    console.log(this.folioData);
     // const isNewPayment = this.folioData?.payment_type?.code === '001' && this.folioData.id === -1;
     return (
-      <form
-        class="payment-folio__form"
-        id="ir__folio-form"
-        onSubmit={e => {
-          e.preventDefault();
-          this.savePayment();
+      <ir-drawer
+        placement="start"
+        label="New Folio Entry"
+        open={this.isOpen}
+        onDrawerHide={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.isOpen = false;
         }}
       >
-        {/* <ir-title
-          class="px-1 sheet-header"
-          onCloseSideBar={() => this.closeModal.emit(null)}
-          label={this.mode === 'edit' ? 'Edit Folio Entry' : 'New Folio Entry'}
-          displayContext="sidebar"
-        ></ir-title> */}
-
-        <div class={'d-flex w-fill'} style={{ gap: '0.5rem' }}>
-          {/*Date Picker */}
+        {this.isOpen && (
+          <form class="payment-folio__form" id="ir__folio-form">
+            {/*Date Picker */}
+            {/* <div class={'d-flex w-fill'} style={{ gap: '0.5rem' }}>
           <div class="form-group  mb-0 flex-grow-1">
             <div class="input-group row m-0 flex-grow-1">
               <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
@@ -256,130 +266,105 @@ export class IrPaymentFolio {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+            <ir-custom-date-picker
+              aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
+              data-testid="pickup_date"
+              onDateChanged={evt => {
+                this.updateFolioData({ date: evt.detail.start?.format('YYYY-MM-DD') });
+              }}
+              emitEmptyDate={true}
+              maxDate={moment().format('YYYY-MM-DD')}
+              date={this.folioData?.date}
+            ></ir-custom-date-picker>
+            <ir-validator schema={this.folioSchema.pick({ payment_type: true })}>
+              <wa-select
+                onwa-hide={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                }}
+                onwa-show={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                }}
+                placeholder="Select..."
+                label="Transaction type"
+                defaultValue={this.folioData?.payment_type?.code}
+                value={this.folioData?.payment_type?.code}
+                disabled={this.mode === 'payment-action'}
+                onchange={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                  this.handleDropdownChange((e.target as any).value);
+                }}
+              >
+                <wa-option value="">Select...</wa-option>
+                {this.renderDropdownItems()}
+              </wa-select>
+            </ir-validator>
 
-        <div>
-          <wa-select
-            onwa-hide={e => {
-              e.stopImmediatePropagation();
-              e.stopPropagation();
-            }}
-            onwa-show={e => {
-              e.stopImmediatePropagation();
-              e.stopPropagation();
-            }}
-            placeholder="Select..."
-            label="Transaction type"
-            value={this.folioData?.payment_type?.code}
-            disabled={this.mode === 'payment-action'}
-            onchange={e => {
-              e.stopImmediatePropagation();
-              e.stopPropagation();
-              this.handleDropdownChange((e.target as any).value);
-            }}
-          >
-            <wa-option value="">Select...</wa-option>
-            {this.renderDropdownItems()}
-          </wa-select>
-        </div>
-        {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
-          <div>
-            <wa-select
-              label={`${this.folioData.payment_type?.code === '001' ? 'Payment' : 'Refund'} method`}
-              onwa-show={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-              }}
-              onwa-hide={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-              }}
-              value={this.folioData?.payment_method?.code ?? ''}
-              onchange={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                this.handlePaymentMethodDropdownChange((e.target as any).value);
-              }}
-              aria-invalid={String(this.errors?.payment_method && !this.folioData?.payment_method?.code)}
-            >
-              <wa-option value="">Select...</wa-option>
-              {this.paymentEntries?.methods?.map(pt => {
-                return (
-                  <wa-option label={pt.CODE_VALUE_EN} value={pt.CODE_NAME}>
-                    {pt.CODE_VALUE_EN}
-                  </wa-option>
-                );
-              })}
-            </wa-select>
-          </div>
+            {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
+              <ir-validator schema={this.folioSchema.pick({ payment_method: true })}>
+                <wa-select
+                  label={`${this.folioData.payment_type?.code === '001' ? 'Payment' : 'Refund'} method`}
+                  onwa-show={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                  }}
+                  onwa-hide={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                  }}
+                  defaultValue={this.folioData?.payment_method?.code}
+                  value={this.folioData?.payment_method?.code ?? ''}
+                  onchange={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    this.handlePaymentMethodDropdownChange((e.target as any).value);
+                  }}
+                  // aria-invalid={String(this.errors?.payment_method && !this.folioData?.payment_method?.code)}
+                >
+                  <wa-option value="">Select...</wa-option>
+                  {this.paymentEntries?.methods?.map(pt => {
+                    return (
+                      <wa-option label={pt.CODE_VALUE_EN} value={pt.CODE_NAME}>
+                        {pt.CODE_VALUE_EN}
+                      </wa-option>
+                    );
+                  })}
+                </wa-select>
+              </ir-validator>
+            )}
+            <ir-validator schema={this.folioSchema.pick({ amount: true })} valueEvent="textChange">
+              <ir-custom-input
+                value={this.folioData?.amount?.toString() ?? ''}
+                label="Amount"
+                mask="price"
+                min={0}
+                onTextChange={e => this.updateFolioData({ amount: parseFloat(e.detail.replace(/,/g, '')) })}
+              >
+                <span slot="start">{calendar_data.currency.symbol}</span>
+              </ir-custom-input>
+            </ir-validator>
+            <ir-validator schema={this.folioSchema.pick({ reference: true })}>
+              <ir-custom-input
+                value={this.folioData?.reference}
+                label="Reference"
+                maxlength={50}
+                onTextChange={e => this.updateFolioData({ reference: e.detail })}
+              ></ir-custom-input>
+            </ir-validator>
+          </form>
         )}
-        <div>
-          <ir-price-input
-            containerClassname="row"
-            labelContainerClassname="col-4 col-md-3 p-0 text-dark border-0"
-            minValue={0}
-            autoValidate={this.autoValidate}
-            zod={this.folioSchema.pick({ amount: true })}
-            wrapKey="amount"
-            label="Amount"
-            labelStyle={'flex-grow-1 text-dark  border-theme'}
-            error={this.errors?.amount && !this.folioData?.amount}
-            value={this.folioData?.amount?.toString()}
-            currency={calendar_data.currency.symbol}
-            onTextChange={e => this.updateFolioData({ amount: Number(e.detail) })}
-          ></ir-price-input>
-        </div>
-        <div>
-          <ir-input-text
-            value={this.folioData?.reference}
-            error={this.errors?.reference_number}
-            autoValidate={this.autoValidate}
-            zod={this.folioSchema.pick({ reference: true })}
-            label="Reference"
-            maxLength={50}
-            inputContainerStyle={{
-              margin: '0',
-            }}
-            onTextChange={e => this.updateFolioData({ reference: e.detail })}
-            labelWidth={3}
-            labelContainerClassname={'col-4 col-md-3'}
-          ></ir-input-text>
-        </div>
-
-        {/* <div class={'sheet-footer'}>
-       
-          <ir-custom-button onClickHandler={() => this.closeModal.emit(null)} size="medium" appearance="filled" variant="neutral">
+        <div slot="footer" class="w-100 d-flex align-items-center" style={{ gap: 'var(--wa-space-xs)' }}>
+          <ir-custom-button class="flex-fill" size="medium" data-drawer="close" appearance="filled" variant="neutral">
             Cancel
           </ir-custom-button>
-          <ir-custom-button
-            type={'button'}
-            onClickHandler={e => {
-              e.stopImmediatePropagation();
-              this.savePayment();
-            }}
-            size="medium"
-            loading={this.isLoading === 'save'}
-            appearance={isNewPayment ? 'filled' : 'accent'}
-            variant="brand"
-          >
+          <ir-custom-button onClickHandler={() => this.savePayment()} loading={this.isLoading === 'save'} class="flex-fill" size="medium" appearance="accent" variant="brand">
             Save
           </ir-custom-button>
-          {isNewPayment && (
-            <ir-custom-button
-              size="medium"
-              type={'button'}
-              onClickHandler={e => {
-                e.stopPropagation();
-                this.savePayment(true);
-              }}
-              loading={this.isLoading === 'save-print'}
-              variant="brand"
-            >
-              Save And Print Receipt
-            </ir-custom-button>
-          )}
-        </div> */}
-      </form>
+        </div>
+      </ir-drawer>
     );
   }
 }

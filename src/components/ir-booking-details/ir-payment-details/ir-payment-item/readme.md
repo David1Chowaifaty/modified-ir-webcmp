@@ -18,6 +18,7 @@
 | --------------- | ----------- | ----------------------- |
 | `deletePayment` |             | `CustomEvent<IPayment>` |
 | `editPayment`   |             | `CustomEvent<IPayment>` |
+| `issueReceipt`  |             | `CustomEvent<IPayment>` |
 
 
 ## Shadow Parts
@@ -38,12 +39,14 @@
 
 - [ir-popover](../../../ui/ir-popover)
 - [ir-button](../../../ui/ir-button)
+- [ir-custom-button](../../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-payment-item --> ir-popover
   ir-payment-item --> ir-button
+  ir-payment-item --> ir-custom-button
   ir-button --> ir-icons
   ir-payments-folio --> ir-payment-item
   style ir-payment-item fill:#f9f,stroke:#333,stroke-width:4px

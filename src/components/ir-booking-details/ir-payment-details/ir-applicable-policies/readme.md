@@ -29,15 +29,14 @@
 
 ### Depends on
 
-- [ir-button](../../../ui/ir-button)
+- [ir-custom-button](../../../ui/ir-custom-button)
 - [ir-icons](../../../ui/ir-icons)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-applicable-policies --> ir-button
+  ir-applicable-policies --> ir-custom-button
   ir-applicable-policies --> ir-icons
-  ir-button --> ir-icons
   ir-payment-details --> ir-applicable-policies
   style ir-applicable-policies fill:#f9f,stroke:#333,stroke-width:4px
 ```
