@@ -1,10 +1,11 @@
 import type WaButton from '@awesome.me/webawesome/dist/components/button/button';
 import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 export type NativeButton = WaButton;
+
 @Component({
   tag: 'ir-custom-button',
-  styleUrl: 'ir-custom-button.css',
-  scoped: true,
+  styleUrls: ['ir-custom-button.css', '../../../global/app.css'],
+  shadow: false,
 })
 export class IrCustomButton {
   /** The button's theme variant. Defaults to `neutral` if not within another element with a variant. */
