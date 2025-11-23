@@ -20,6 +20,7 @@ export class IrReservationInformation {
   @State() userCountry: ICountry | null = null;
   @State() isOpen: boolean;
   @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
+  private irBookingCompanyFormRef: any;
   componentWillLoad() {
     const guestCountryId = this.booking?.guest?.country_id;
     this.userCountry = guestCountryId ? this.countries?.find(country => country.id === guestCountryId) || null : null;
@@ -116,7 +117,7 @@ export class IrReservationInformation {
               onClickHandler={e => {
                 e.stopImmediatePropagation();
                 e.stopPropagation();
-                this.isOpen = true;
+                this.irBookingCompanyFormRef.openCompanyForm();
               }}
               appearance={'plain'}
               variant={'neutral'}
@@ -175,21 +176,8 @@ export class IrReservationInformation {
               <wa-icon style={{ fontSize: '1rem' }} name="edit" label="Edit or create private note"></wa-icon>
             </ir-custom-button>
           </div>
+          <ir-booking-company-form ref={el => (this.irBookingCompanyFormRef = el)}></ir-booking-company-form>
         </div>
-        <ir-dialog open={this.isOpen} onIrDialogHide={() => (this.isOpen = false)} label="Company" id="dialog-overview">
-          <div class="d-flex  flex-column" style={{ gap: '1rem' }}>
-            <wa-input label="Name" autofocus placeholder="XYZ LTD"></wa-input>
-            <wa-input label="Tax ID" placeholder="VAT 123456"></wa-input>
-          </div>
-          <div slot="footer" class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
-            <ir-custom-button size="medium" appearance="filled" variant="neutral" data-dialog="close">
-              Cancel
-            </ir-custom-button>
-            <ir-custom-button size="medium" variant="brand">
-              Save
-            </ir-custom-button>
-          </div>
-        </ir-dialog>
       </wa-card>
     );
   }
