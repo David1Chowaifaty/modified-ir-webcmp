@@ -15,6 +15,9 @@
 :host th {
   font-weight: 600;
 }
+.booking-details__date-view-header {
+  font-size: 1.1rem !important;
+}
 
 .booking-details__booking-info {
   display: grid;

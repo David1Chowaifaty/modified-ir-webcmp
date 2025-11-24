@@ -8,6 +8,7 @@ export type NativeButton = WaButton;
   shadow: false,
 })
 export class IrCustomButton {
+  @Prop({ reflect: true }) iconBtn: boolean;
   /** The button's theme variant. Defaults to `neutral` if not within another element with a variant. */
   @Prop() variant: NativeButton['variant'];
 
@@ -104,7 +105,7 @@ export class IrCustomButton {
           /* core button props */
           type={this.type}
           size={this.size}
-          class="ir__custom-button"
+          class={`ir__custom-button ${this.iconBtn ? 'icon-btn' : ''}`}
           disabled={this.disabled}
           appearance={this.appearance}
           loading={this.loading}

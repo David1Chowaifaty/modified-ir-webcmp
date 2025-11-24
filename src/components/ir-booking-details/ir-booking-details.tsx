@@ -617,7 +617,7 @@ export class IrBookingDetails {
         <div class="booking-details__info-column">
           <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
           <wa-card>
-            <ir-date-view class="font-size-large" slot="header" from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
+            <ir-date-view class="booking-details__date-view-header" slot="header" from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
             {this.hasRoomAdd && this.booking.is_editable && (
               <Fragment>
                 <wa-tooltip for="room-add">Add unit</wa-tooltip>

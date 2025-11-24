@@ -126,7 +126,7 @@ export class IrReservationInformation {
             )}
 
             <wa-tooltip for={`edit_guest-details`}>Edit guest details</wa-tooltip>
-            <ir-custom-button slot="suffix" id={`edit_guest-details`} onClickHandler={e => this.handleEditClick(e, 'guest')} appearance={'plain'} variant={'neutral'}>
+            <ir-custom-button iconBtn slot="suffix" id={`edit_guest-details`} onClickHandler={e => this.handleEditClick(e, 'guest')} appearance={'plain'} variant={'neutral'}>
               <wa-icon name="edit" label="Edit guest details" style={{ fontSize: '1rem' }}></wa-icon>
             </ir-custom-button>
           </ir-label>
@@ -140,6 +140,7 @@ export class IrReservationInformation {
             ></ir-label>
             <wa-tooltip for={`edit_create-company-info`}>Add company info</wa-tooltip>
             <ir-custom-button
+              iconBtn
               id={`edit_create-company-info`}
               onClickHandler={e => {
                 e.stopImmediatePropagation();
@@ -199,7 +200,7 @@ export class IrReservationInformation {
               // ignore_content
             ></ir-label>
             <wa-tooltip for={`edit_create-extra-note`}>{privateNote ? 'Edit' : 'Create'} private note</wa-tooltip>
-            <ir-custom-button id={`edit_create-extra-note`} onClickHandler={e => this.handleEditClick(e, 'extra_note')} appearance={'plain'} variant={'neutral'}>
+            <ir-custom-button iconBtn id={`edit_create-extra-note`} onClickHandler={e => this.handleEditClick(e, 'extra_note')} appearance={'plain'} variant={'neutral'}>
               <wa-icon style={{ fontSize: '1rem' }} name="edit" label="Edit or create private note"></wa-icon>
             </ir-custom-button>
           </div>

@@ -4,3 +4,8 @@
 .ir__custom-button {
   width: 100%;
 }
+.ir__custom-button.icon-btn::part(base) {
+  height: auto;
+  width: auto;
+  padding: 0;
+}
