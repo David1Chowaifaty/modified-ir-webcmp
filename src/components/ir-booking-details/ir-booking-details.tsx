@@ -85,7 +85,7 @@ export class IrBookingDetails {
   // private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
   private printingBaseUrl = 'http://localhost:5863/%1/printing?id=%2';
   private modalRef: HTMLIrModalElement;
-  private paymentFolioRef: HTMLIrPaymentFolioElement;
+  // private paymentFolioRef: HTMLIrPaymentFolioElement;
 
   componentWillLoad() {
     if (this.ticket !== '') {
