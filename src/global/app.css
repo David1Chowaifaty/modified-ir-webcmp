@@ -26,6 +26,7 @@ wa-input[aria-invalid='true']::part(base),
 wa-select[aria-invalid='true']::part(combobox) {
   border-color: var(--wa-color-danger-border-loud);
   outline-color: var(--wa-color-danger-border-loud);
+  border-width: 2px;
 }
 
 /* Shared layout for form controls inside wa-select, wa-input, wa-textarea */

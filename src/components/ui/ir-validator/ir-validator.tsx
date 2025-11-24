@@ -15,6 +15,7 @@ export class IrValidator {
 
   /** Zod schema used to validate the child control's value. */
   @Prop() schema!: ZodTypeAny;
+  @Prop() value: any;
 
   /** Enables automatic validation on every value change. */
   @Prop({ reflect: true }) autovalidate?: boolean;
@@ -38,11 +39,11 @@ export class IrValidator {
   @Event({ eventName: 'irValueChange' }) valueChange!: EventEmitter<{ value: unknown }>;
 
   @State() private isValid = true;
+  @State() private autoValidateActive = false;
 
   private childEl?: ValidatableChild;
   private formEl?: HTMLFormElement | null;
   private slotEl?: HTMLSlotElement;
-  private autoValidateActive = false;
   private currentValue: unknown;
   private hasInteracted = false;
   private validationTimer?: ReturnType<typeof setTimeout>;
@@ -78,9 +79,9 @@ export class IrValidator {
   }
 
   @Watch('autovalidate')
-  protected handleAutovalidatePropChange(next?: boolean) {
+  protected handleAutoValidatePropChange(next?: boolean) {
     this.syncAutovalidateFlag(next);
-    if (this.autoValidateActive && this.hasInteracted) {
+    if (this.autoValidateActive) {
       this.flushValidation();
     }
   }
@@ -113,6 +114,16 @@ export class IrValidator {
       .split(/[\s,]+/)
       .map(token => token.trim())
       .filter(Boolean);
+  }
+
+  @Watch('value')
+  protected handleValuePropChange(next: unknown, previous: unknown) {
+    if (Object.is(next, previous)) return;
+    // keep the tracked value in sync with external changes without emitting another change event
+    this.updateValue(next, { suppressValidation: true, emitChange: false });
+    if (this.autoValidateActive && this.hasInteracted) {
+      this.flushValidation();
+    }
   }
 
   private handleSlotChange = () => {
@@ -215,6 +226,9 @@ export class IrValidator {
   }
 
   private readValueFromChild() {
+    if (this.value !== undefined) {
+      return this.value;
+    }
     if (!this.childEl) return undefined;
     if ('value' in this.childEl) {
       return this.childEl.value;
@@ -298,7 +312,6 @@ export class IrValidator {
 
   private scheduleValidation(immediate = false) {
     this.clearValidationTimer();
-
     const delay = Number(this.validationDebounce);
     if (immediate || !isFinite(delay) || delay <= 0) {
       return this.validateCurrentValue(true);

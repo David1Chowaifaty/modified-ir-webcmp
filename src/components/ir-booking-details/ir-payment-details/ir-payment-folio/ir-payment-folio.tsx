@@ -217,12 +217,11 @@ export class IrPaymentFolio {
     ));
   }
   render() {
-    console.log(this.folioData);
     // const isNewPayment = this.folioData?.payment_type?.code === '001' && this.folioData.id === -1;
     return (
       <ir-drawer
         placement="start"
-        label="New Folio Entry"
+        label={this.payment?.id !== -1 ? 'Edit Folio Entry' : 'New Folio Entry'}
         open={this.isOpen}
         onDrawerHide={e => {
           e.stopImmediatePropagation();
@@ -231,7 +230,7 @@ export class IrPaymentFolio {
         }}
       >
         {this.isOpen && (
-          <form class="payment-folio__form" id="ir__folio-form">
+          <div class="payment-folio__form" id="ir__folio-form">
             {/*Date Picker */}
             {/* <div class={'d-flex w-fill'} style={{ gap: '0.5rem' }}>
           <div class="form-group  mb-0 flex-grow-1">
@@ -277,7 +276,13 @@ export class IrPaymentFolio {
               maxDate={moment().format('YYYY-MM-DD')}
               date={this.folioData?.date}
             ></ir-custom-date-picker>
-            <ir-validator autovalidate={this.autoValidate} schema={this.folioSchema.pick({ payment_type: true })}>
+            <ir-validator
+              value={this.folioData?.payment_type?.code}
+              autovalidate={this.autoValidate}
+              schema={this.folioSchema.shape?.payment_type?.shape?.code}
+              valueEvent="change wa-change select-change"
+              blurEvent="wa-hide"
+            >
               <wa-select
                 onwa-hide={e => {
                   e.stopImmediatePropagation();
@@ -304,7 +309,13 @@ export class IrPaymentFolio {
             </ir-validator>
 
             {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
-              <ir-validator autovalidate={this.autoValidate} schema={this.folioSchema.pick({ payment_method: true })}>
+              <ir-validator
+                value={this.folioData?.payment_method?.code ?? ''}
+                autovalidate={this.autoValidate}
+                schema={this.folioSchema.shape?.payment_method?.shape?.code}
+                valueEvent="change wa-change select-change"
+                blurEvent="wa-hide"
+              >
                 <wa-select
                   label={`${this.folioData.payment_type?.code === '001' ? 'Payment' : 'Refund'} method`}
                   onwa-show={e => {
@@ -335,7 +346,13 @@ export class IrPaymentFolio {
                 </wa-select>
               </ir-validator>
             )}
-            <ir-validator autovalidate={this.autoValidate} schema={this.folioSchema.pick({ amount: true })} valueEvent="textChange" blurEvent="input-blur">
+            <ir-validator
+              value={this.folioData?.amount?.toString() ?? ''}
+              autovalidate={this.autoValidate}
+              schema={this.folioSchema.shape?.amount}
+              valueEvent="text-change input input-change"
+              blurEvent="input-blur"
+            >
               <ir-custom-input
                 value={this.folioData?.amount?.toString() ?? ''}
                 label="Amount"
@@ -346,15 +363,21 @@ export class IrPaymentFolio {
                 <span slot="start">{calendar_data.currency.symbol}</span>
               </ir-custom-input>
             </ir-validator>
-            <ir-validator autovalidate={this.autoValidate} schema={this.folioSchema.pick({ reference: true })} valueEvent="textChange" blurEvent="input-blur">
+            <ir-validator
+              value={this.folioData?.reference ?? ''}
+              autovalidate={this.autoValidate}
+              schema={this.folioSchema.shape?.reference}
+              valueEvent="text-change input input-change"
+              blurEvent="input-blur"
+            >
               <ir-custom-input
-                value={this.folioData?.reference}
+                value={this.folioData?.reference ?? ''}
                 label="Reference"
                 maxlength={50}
-                onText-change={e => this.updateFolioData({ reference: e.detail })}
+                onText-change={e => this.updateFolioData({ reference: e.detail ?? '' })}
               ></ir-custom-input>
             </ir-validator>
-          </form>
+          </div>
         )}
         <div slot="footer" class="w-100 d-flex align-items-center" style={{ gap: 'var(--wa-space-xs)' }}>
           <ir-custom-button class="flex-fill" size="medium" data-drawer="close" appearance="filled" variant="neutral">

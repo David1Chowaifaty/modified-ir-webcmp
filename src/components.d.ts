@@ -2690,6 +2690,7 @@ export namespace Components {
           * Debounce delay (ms) before running validation for autovalidated changes.
          */
         "validationDebounce": number;
+        "value": any;
         /**
           * Event names (space/comma separated) dispatched when the child value changes.
          */
@@ -8779,6 +8780,7 @@ declare namespace LocalJSX {
           * Debounce delay (ms) before running validation for autovalidated changes.
          */
         "validationDebounce"?: number;
+        "value"?: any;
         /**
           * Event names (space/comma separated) dispatched when the child value changes.
          */

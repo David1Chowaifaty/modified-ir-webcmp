@@ -27,7 +27,7 @@ export class IrPickupView {
             <wa-icon name="edit" style={{ fontSize: '1rem' }}></wa-icon>
           </ir-custom-button>
 
-          {this.booking.pickup_info && (
+          {this.booking.pickup_info ? (
             <div>
               <div class={'d-flex align-items-center py-0 my-0 pickup-margin'}>
                 <p class={'font-weight-bold mr-1 py-0 my-0'}>
@@ -58,6 +58,10 @@ export class IrPickupView {
                 {calendar_data.pickup_service.pickup_instruction.description}
                 {calendar_data.pickup_service.pickup_cancelation_prepayment.description}
               </p>
+            </div>
+          ) : (
+            <div class="text-center p-1">
+              <p class="text-muted">No pickup recorded yet</p>
             </div>
           )}
         </wa-card>
