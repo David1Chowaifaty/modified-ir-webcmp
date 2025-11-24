@@ -29,36 +29,34 @@ export class IrPickupView {
 
           {this.booking.pickup_info ? (
             <div class="pickup-info">
-              <div class="pickup-info__primary">
-                <div class="pickup-info__item">
-                  <span class="pickup-info__label">{locales.entries.Lcz_Date}:</span>
-                  <span>{moment(this.booking.pickup_info.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</span>
+              <div class="pickup-info__summary">
+                <div>
+                  <p class="pickup-info__datetime">
+                    {moment(this.booking.pickup_info.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}
+                    {this.booking.pickup_info.hour && this.booking.pickup_info.minute && (
+                      <span> • {_formatTime(this.booking.pickup_info.hour.toString(), this.booking.pickup_info.minute.toString())}</span>
+                    )}
+                  </p>
                 </div>
-                {this.booking.pickup_info.hour && this.booking.pickup_info.minute && (
-                  <div class="pickup-info__item">
-                    <span class="pickup-info__label">{locales.entries.Lcz_Time}:</span>
-                    <span>{_formatTime(this.booking.pickup_info.hour.toString(), this.booking.pickup_info.minute.toString())}</span>
-                  </div>
-                )}
-                <div class="pickup-info__item pickup-info__item--strong">
-                  <span class="pickup-info__label">{locales.entries.Lcz_DueUponBooking}:</span>
-                  <span>
+                <p class="pickup-info__due">
+                  {/* {locales.entries.Lcz_DueUponBooking}:{' '} */}
+                  <strong>
                     {this.booking.pickup_info.currency.symbol}
                     {this.booking.pickup_info.total}
-                  </span>
-                </div>
+                  </strong>
+                </p>
               </div>
 
-              <div class="pickup-info__item">
-                <span class="pickup-info__label">{locales.entries.Lcz_FlightDetails}:</span>
-                <span>{this.booking.pickup_info.details}</span>
-              </div>
-
-              <p class="pickup-info__vehicle">{this.booking.pickup_info.selected_option.vehicle.description}</p>
-
-              <div class="pickup-info__item pickup-info__item--inline">
-                <span class="pickup-info__label">{locales.entries.Lcz_NbrOfVehicles}:</span>
-                <span>{this.booking.pickup_info.nbr_of_units}</span>
+              <div class="pickup-info__details">
+                <ir-label display="inline" labelText={`${locales.entries.Lcz_FlightDetails}:`} content={this.booking.pickup_info.details}></ir-label>
+                <p class="pickup-info__line">
+                  <span class="pickup-info__label">Vehicle:</span>
+                  <span>{this.booking.pickup_info.selected_option.vehicle.description}</span>
+                </p>
+                <p class="pickup-info__line">
+                  <span class="pickup-info__label">{locales.entries.Lcz_NbrOfVehicles}:</span>
+                  <strong>{this.booking.pickup_info.nbr_of_units}</strong>
+                </p>
               </div>
 
               <p class="pickup-info__note">

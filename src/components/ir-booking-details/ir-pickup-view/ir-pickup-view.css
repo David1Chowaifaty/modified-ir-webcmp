@@ -8,39 +8,45 @@
   gap: 0.75rem;
 }
 
-.pickup-info__primary {
+.pickup-info__summary {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-}
-
-.pickup-info__item {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 0.35rem;
-  row-gap: 0.25rem;
+  align-items: center;
   color: #1f2a37;
 }
 
-.pickup-info__item--strong {
+.pickup-info__datetime {
   font-weight: 600;
-  justify-content: flex-end;
+  margin: 0;
+}
+
+.pickup-info__due {
+  margin: 0;
+  color: #1f2a37;
+}
+
+.pickup-info__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: #1f2a37;
+}
+
+.pickup-info__line {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }
 
 .pickup-info__label {
   font-weight: 600;
 }
 
-.pickup-info__item--inline {
-  flex-wrap: nowrap;
-  align-items: baseline;
-}
-
-.pickup-info__vehicle {
-  margin: 0;
-  color: #1f2a37;
+.pickup-info__divider {
+  opacity: 0.4;
 }
 
 .pickup-info__note {
@@ -50,11 +56,8 @@
 }
 
 @media (max-width: 600px) {
-  .pickup-info__primary {
-    grid-template-columns: 1fr;
-  }
-
-  .pickup-info__item--strong {
-    justify-content: flex-start;
+  .pickup-info__summary {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
