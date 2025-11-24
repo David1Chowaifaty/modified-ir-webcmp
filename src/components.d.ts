@@ -386,6 +386,10 @@ export namespace Components {
         "p": string;
         "propertyid": number;
     }
+    interface IrBookingCompanyForm {
+        "booking": Booking;
+        "openCompanyForm": () => Promise<void>;
+    }
     interface IrBookingDetails {
         "bookingNumber": string;
         "hasCheckIn": boolean;
@@ -3768,6 +3772,12 @@ declare global {
         prototype: HTMLIrBookingElement;
         new (): HTMLIrBookingElement;
     };
+    interface HTMLIrBookingCompanyFormElement extends Components.IrBookingCompanyForm, HTMLStencilElement {
+    }
+    var HTMLIrBookingCompanyFormElement: {
+        prototype: HTMLIrBookingCompanyFormElement;
+        new (): HTMLIrBookingCompanyFormElement;
+    };
     interface HTMLIrBookingDetailsElementEventMap {
         "toast": IToast;
         "bookingChanged": Booking;
@@ -4053,8 +4063,8 @@ declare global {
         new (): HTMLIrCustomDatePickerElement;
     };
     interface HTMLIrCustomInputElementEventMap {
-        "textChange": string;
-        "inputBlur": void;
+        "text-change": string;
+        "input-blur": void;
         "inputFocus": void;
     }
     interface HTMLIrCustomInputElement extends Components.IrCustomInput, HTMLStencilElement {
@@ -5663,6 +5673,7 @@ declare global {
         "ir-applicable-policies": HTMLIrApplicablePoliciesElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking": HTMLIrBookingElement;
+        "ir-booking-company-form": HTMLIrBookingCompanyFormElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
         "ir-booking-extra-note": HTMLIrBookingExtraNoteElement;
@@ -6172,6 +6183,9 @@ declare namespace LocalJSX {
         "bookingNumber"?: string;
         "p"?: string;
         "propertyid"?: number;
+    }
+    interface IrBookingCompanyForm {
+        "booking"?: Booking;
     }
     interface IrBookingDetails {
         "bookingNumber"?: string;
@@ -6686,9 +6700,9 @@ declare namespace LocalJSX {
           * The minimum length of input that will be considered valid.
          */
         "minlength"?: NativeWaInput['minlength'];
-        "onInputBlur"?: (event: IrCustomInputCustomEvent<void>) => void;
+        "onInput-blur"?: (event: IrCustomInputCustomEvent<void>) => void;
         "onInputFocus"?: (event: IrCustomInputCustomEvent<void>) => void;
-        "onTextChange"?: (event: IrCustomInputCustomEvent<string>) => void;
+        "onText-change"?: (event: IrCustomInputCustomEvent<string>) => void;
         /**
           * Adds a button to toggle the password's visibility. Only applies to password types.
          */
@@ -8837,6 +8851,7 @@ declare namespace LocalJSX {
         "ir-applicable-policies": IrApplicablePolicies;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking": IrBooking;
+        "ir-booking-company-form": IrBookingCompanyForm;
         "ir-booking-details": IrBookingDetails;
         "ir-booking-email-logs": IrBookingEmailLogs;
         "ir-booking-extra-note": IrBookingExtraNote;
@@ -9012,6 +9027,7 @@ declare module "@stencil/core" {
             "ir-applicable-policies": LocalJSX.IrApplicablePolicies & JSXBase.HTMLAttributes<HTMLIrApplicablePoliciesElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
+            "ir-booking-company-form": LocalJSX.IrBookingCompanyForm & JSXBase.HTMLAttributes<HTMLIrBookingCompanyFormElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
             "ir-booking-extra-note": LocalJSX.IrBookingExtraNote & JSXBase.HTMLAttributes<HTMLIrBookingExtraNoteElement>;

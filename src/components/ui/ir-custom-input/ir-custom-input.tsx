@@ -1,5 +1,5 @@
 import WaInput from '@awesome.me/webawesome/dist/components/input/input';
-import { Component, Event, EventEmitter, Host, Prop, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { masks } from './masks';
 import IMask, { FactoryArg, InputMask } from 'imask';
 
@@ -130,9 +130,11 @@ export class IrCustomInput {
   /** Mask for the input field (optional) */
   @Prop() mask: MaskProp;
 
-  @Event() textChange: EventEmitter<string>;
-  @Event() inputBlur: EventEmitter<void>;
-  @Event() inputFocus: EventEmitter<void>;
+  @Event({ bubbles: true, composed: true, eventName: 'text-change' }) textChange: EventEmitter<string>;
+  @Event({ bubbles: true, composed: true, eventName: 'input-blur' }) inputBlur: EventEmitter<void>;
+  @Event({ bubbles: true, composed: true }) inputFocus: EventEmitter<void>;
+
+  @State() private isValid: boolean = true;
 
   private _mask?: InputMask<any>;
   private inputRef: WaInput;
@@ -167,6 +169,11 @@ export class IrCustomInput {
         this._mask.value = newValue;
       }
     }
+  }
+
+  @Watch('aria-invalid')
+  handleAriaInvalidChange(e) {
+    this.isValid = !Boolean(e);
   }
   private handleInput = (nextValue: string) => {
     this.value = nextValue ?? '';
@@ -210,6 +217,7 @@ export class IrCustomInput {
     this._mask.on('accept', () => {
       if (!this._mask) return;
       const isEmpty = this.inputRef.value.trim() === '' || this._mask.unmaskedValue === '';
+      console.log(this._mask.unmaskedValue);
       this.handleInput(isEmpty ? '' : this._mask.unmaskedValue);
     });
   }
@@ -255,7 +263,7 @@ export class IrCustomInput {
   private handleChange = (e: CustomEvent) => {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.handleInput((e.target as any).value);
+    if (!this.mask) this.handleInput((e.target as any).value);
   };
   private handleClear = (e: CustomEvent) => {
     e.stopImmediatePropagation();
@@ -287,6 +295,7 @@ export class IrCustomInput {
           size={this.size}
           appearance={this.appearance}
           pill={this.pill}
+          aria-invalid={String(!this.isValid)}
           label={this.label}
           hint={this.hint}
           withClear={this.withClear}

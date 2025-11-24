@@ -176,7 +176,7 @@ export class IrReservationInformation {
               <wa-icon style={{ fontSize: '1rem' }} name="edit" label="Edit or create private note"></wa-icon>
             </ir-custom-button>
           </div>
-          <ir-booking-company-form ref={el => (this.irBookingCompanyFormRef = el)}></ir-booking-company-form>
+          <ir-booking-company-form booking={this.booking} ref={el => (this.irBookingCompanyFormRef = el)}></ir-booking-company-form>
         </div>
       </wa-card>
     );

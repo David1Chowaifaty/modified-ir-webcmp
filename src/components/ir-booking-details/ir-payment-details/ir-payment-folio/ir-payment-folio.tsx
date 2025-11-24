@@ -277,7 +277,7 @@ export class IrPaymentFolio {
               maxDate={moment().format('YYYY-MM-DD')}
               date={this.folioData?.date}
             ></ir-custom-date-picker>
-            <ir-validator schema={this.folioSchema.pick({ payment_type: true })}>
+            <ir-validator autovalidate={this.autoValidate} schema={this.folioSchema.pick({ payment_type: true })}>
               <wa-select
                 onwa-hide={e => {
                   e.stopImmediatePropagation();
@@ -304,7 +304,7 @@ export class IrPaymentFolio {
             </ir-validator>
 
             {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
-              <ir-validator schema={this.folioSchema.pick({ payment_method: true })}>
+              <ir-validator autovalidate={this.autoValidate} schema={this.folioSchema.pick({ payment_method: true })}>
                 <wa-select
                   label={`${this.folioData.payment_type?.code === '001' ? 'Payment' : 'Refund'} method`}
                   onwa-show={e => {
@@ -335,23 +335,23 @@ export class IrPaymentFolio {
                 </wa-select>
               </ir-validator>
             )}
-            <ir-validator schema={this.folioSchema.pick({ amount: true })} valueEvent="textChange">
+            <ir-validator autovalidate={this.autoValidate} schema={this.folioSchema.pick({ amount: true })} valueEvent="textChange" blurEvent="input-blur">
               <ir-custom-input
                 value={this.folioData?.amount?.toString() ?? ''}
                 label="Amount"
                 mask="price"
                 min={0}
-                onTextChange={e => this.updateFolioData({ amount: parseFloat(e.detail.replace(/,/g, '')) })}
+                onText-change={e => this.updateFolioData({ amount: !e.detail ? null : Number(e.detail) })}
               >
                 <span slot="start">{calendar_data.currency.symbol}</span>
               </ir-custom-input>
             </ir-validator>
-            <ir-validator schema={this.folioSchema.pick({ reference: true })}>
+            <ir-validator autovalidate={this.autoValidate} schema={this.folioSchema.pick({ reference: true })} valueEvent="textChange" blurEvent="input-blur">
               <ir-custom-input
                 value={this.folioData?.reference}
                 label="Reference"
                 maxlength={50}
-                onTextChange={e => this.updateFolioData({ reference: e.detail })}
+                onText-change={e => this.updateFolioData({ reference: e.detail })}
               ></ir-custom-input>
             </ir-validator>
           </form>
