@@ -7,6 +7,9 @@
   gap: 5px;
   align-items: center;
 }
+:host([data-empty]) {
+  display: none !important;
+}
 .icon {
   margin-left: 3px;
   padding: 0;
@@ -46,14 +49,14 @@ svg {
   display: inline;
   max-width: 100%;
   gap: 5px;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
 }
 .label_wrapper_flex {
   display: flex;
   align-items: center;
   gap: 5px;
   max-width: 100%;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
 }
 
 .label_title {

@@ -82,8 +82,8 @@ export class IrBookingDetails {
   private paymentService = new PaymentService();
   private token = new Token();
 
-  // private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
-  private printingBaseUrl = 'http://localhost:5863/%1/printing?id=%2';
+  private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
+  // private printingBaseUrl = 'http://localhost:5863/%1/printing?id=%2';
   private modalRef: HTMLIrModalElement;
   private paymentFolioRef: HTMLIrPaymentFolioElement;
 
@@ -618,7 +618,7 @@ export class IrBookingDetails {
           <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
           <wa-card>
             <ir-date-view class="font-size-large" slot="header" from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
-            {!this.hasRoomAdd && this.booking.is_editable && (
+            {this.hasRoomAdd && this.booking.is_editable && (
               <Fragment>
                 <wa-tooltip for="room-add">Add unit</wa-tooltip>
                 <ir-custom-button slot="header-actions" id="room-add" appearance={'plain'} size={'small'} variant={'neutral'}>

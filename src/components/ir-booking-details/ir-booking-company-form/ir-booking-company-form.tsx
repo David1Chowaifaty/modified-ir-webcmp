@@ -27,6 +27,7 @@ export class IrBookingCompanyForm {
   }
   private async saveCompany() {
     try {
+      this.isLoading = true;
       await this.bookingService.editExposedGuest(this.guest, this.booking.booking_nbr ?? null);
       this.open = false;
     } catch (error) {
@@ -46,7 +47,7 @@ export class IrBookingCompanyForm {
           <ir-custom-button size="medium" appearance="filled" variant="neutral" data-dialog="close">
             Cancel
           </ir-custom-button>
-          <ir-custom-button loading={this.isLoading} size="medium" variant="brand" onClickHandler={() => this.saveCompany}>
+          <ir-custom-button loading={this.isLoading} size="medium" variant="brand" onClickHandler={() => this.saveCompany()}>
             Save
           </ir-custom-button>
         </div>

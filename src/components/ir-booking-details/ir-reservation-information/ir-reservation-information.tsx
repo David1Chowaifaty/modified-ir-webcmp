@@ -20,10 +20,18 @@ export class IrReservationInformation {
   @State() userCountry: ICountry | null = null;
   @State() isOpen: boolean;
   @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
+  private reservationInformationEl?: HTMLDivElement;
   private irBookingCompanyFormRef: any;
   componentWillLoad() {
     const guestCountryId = this.booking?.guest?.country_id;
     this.userCountry = guestCountryId ? this.countries?.find(country => country.id === guestCountryId) || null : null;
+  }
+  componentDidLoad() {
+    this.setDynamicLabelHeight();
+  }
+
+  componentDidUpdate() {
+    this.setDynamicLabelHeight();
   }
   private handleEditClick(e: CustomEvent, type: BookingDetailsSidebarEvents) {
     e.stopImmediatePropagation();
@@ -65,12 +73,31 @@ export class IrReservationInformation {
     // }
     // return mobile;
   }
+  private setDynamicLabelHeight() {
+    if (!this.reservationInformationEl) {
+      return;
+    }
+    requestAnimationFrame(() => {
+      const labelElements = this.reservationInformationEl?.querySelectorAll('ir-label, ota-label, .reservation-information__row');
+      if (!labelElements || labelElements.length === 0) {
+        return;
+      }
+      const measured = Array.from(labelElements)
+        .map(el => el.getBoundingClientRect().height)
+        .filter(height => height > 0);
+      if (!measured.length) {
+        return;
+      }
+      const maxHeight = Math.max(...measured, 32);
+      this.reservationInformationEl.style.setProperty('--ir-reservation-label-height', `${maxHeight}px`);
+    });
+  }
   render() {
     const privateNote = getPrivateNote(this.booking.extras);
     return (
       <wa-card>
-        <div>
-          <p>{this.booking.property.name || ''}</p>
+        <div class="reservation-information" ref={el => (this.reservationInformationEl = el as HTMLDivElement)}>
+          <p class="reservation-information__property-name">{this.booking.property.name || ''}</p>
           <ir-label
             labelText={`${locales.entries.Lcz_Source}:`}
             content={this.booking.origin.Label}
@@ -86,9 +113,9 @@ export class IrReservationInformation {
           ></ir-label>
           <ir-label labelText={`${locales.entries.Lcz_BookedBy}:`} content={`${this.booking.guest.first_name} ${this.booking.guest.last_name}`}>
             {this.booking.guest?.nbr_confirmed_bookings > 1 && !this.booking.agent && (
-              <div class={'m-0 p-0'} slot="prefix">
+              <div class={'m-0 p-0 '} slot="prefix">
                 <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())} customSlot>
-                  <div class="d-flex align-items-center m-0 p-0" slot="tooltip-trigger" style={{ gap: '0.25rem' }}>
+                  <div class="d-flex align-items-center m-0 p-0 flex-fill" slot="tooltip-trigger" style={{ gap: '0.25rem' }}>
                     <p class={'p-0 m-0'} style={{ color: '#FB0AAD' }}>
                       {this.booking.guest.nbr_confirmed_bookings}
                     </p>
@@ -103,7 +130,7 @@ export class IrReservationInformation {
               <wa-icon name="edit" label="Edit guest details" style={{ fontSize: '1rem' }}></wa-icon>
             </ir-custom-button>
           </ir-label>
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="reservation-information__row">
             <ir-label
               labelText={`Company:`}
               placeholder={'no company entered'}
@@ -163,7 +190,7 @@ export class IrReservationInformation {
             ></ota-label>
           )}
 
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="reservation-information__row">
             <ir-label
               labelText={`${locales.entries.Lcz_BookingPrivateNote}:`}
               placeholder={locales.entries.Lcz_VisibleToHotelOnly}
