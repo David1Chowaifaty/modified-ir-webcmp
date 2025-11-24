@@ -107,9 +107,10 @@ export class IrBookingDetails {
   handleSideBarEvents(e: CustomEvent<OpenSidebarEvent<unknown>>) {
     this.sidebarState = e.detail.type;
     this.sidebarPayload = e.detail.payload;
-    if (this.sidebarState === 'payment-folio') {
-      this.paymentFolioRef.openFolio();
-    }
+    //TODO:Enable
+    // if (this.sidebarState === 'payment-folio') {
+    //   this.paymentFolioRef.openFolio();
+    // }
   }
 
   @Listen('clickHandler')
@@ -424,7 +425,17 @@ export class IrBookingDetails {
             onCloseModal={handleClose}
           ></ir-room-guests>
         );
-
+      case 'payment-folio':
+        return (
+          <ir-payment-folio
+            bookingNumber={this.booking.booking_nbr}
+            paymentEntries={this.paymentEntries}
+            slot="sidebar-body"
+            payment={this.sidebarPayload.payment}
+            mode={this.sidebarPayload.mode}
+            onCloseModal={handleClose}
+          ></ir-payment-folio>
+        );
       default:
         return null;
     }
@@ -674,27 +685,27 @@ export class IrBookingDetails {
       >
         {this.renderSidebarContent()}
       </ir-sidebar>,
-      // <ir-sidebar
-      //   open={this.sidebarState === 'payment-folio'}
-      //   side={'left'}
-      //   id="folioSidebar"
-      //   onIrSidebarToggle={e => {
-      //     e.stopImmediatePropagation();
-      //     e.stopPropagation();
-      //     this.sidebarState = null;
-      //   }}
-      //   showCloseButton={false}
-      // >
-      //   {this.renderSidebarContent()}
-      // </ir-sidebar>,
-      <ir-payment-folio
-        bookingNumber={this.booking.booking_nbr}
-        paymentEntries={this.paymentEntries}
-        payment={this.sidebarPayload?.payment}
-        mode={this.sidebarPayload?.mode}
-        ref={el => (this.paymentFolioRef = el)}
-        onCloseModal={() => (this.sidebarState = null)}
-      ></ir-payment-folio>,
+      <ir-sidebar
+        open={this.sidebarState === 'payment-folio'}
+        side={'left'}
+        id="folioSidebar"
+        onIrSidebarToggle={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.sidebarState = null;
+        }}
+        showCloseButton={false}
+      >
+        {this.renderSidebarContent()}
+      </ir-sidebar>,
+      // <ir-payment-folio
+      //   bookingNumber={this.booking.booking_nbr}
+      //   paymentEntries={this.paymentEntries}
+      //   payment={this.sidebarPayload?.payment}
+      //   mode={this.sidebarPayload?.mode}
+      //   ref={el => (this.paymentFolioRef = el)}
+      //   onCloseModal={() => (this.sidebarState = null)}
+      // ></ir-payment-folio>,
       <Fragment>
         {this.bookingItem && (
           <igl-book-property

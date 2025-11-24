@@ -1,5 +1,5 @@
 import calendar_data from '@/stores/calendar-data';
-import { Component, Event, EventEmitter, Fragment, Method, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
 import moment from 'moment';
 import { z, ZodError } from 'zod';
 import { IEntries } from '@/models/IBooking';
@@ -26,12 +26,11 @@ export class IrPaymentFolio {
 
   @Prop() mode: FolioEntryMode;
 
-  @State() isLoading: 'save' | 'save-print' = null;
+  @State() isLoading: boolean;
   @State() errors: any;
   @State() autoValidate: boolean = false;
   @State() folioData: Payment;
   @State() _paymentTypes: Record<string, IEntries[]> = {};
-  @State() isOpen: boolean;
 
   @Event() closeModal: EventEmitter<null>;
   @Event() resetBookingEvt: EventEmitter<null>;
@@ -84,30 +83,20 @@ export class IrPaymentFolio {
       this.getPaymentTypes();
     }
   }
-  @Method()
-  async openFolio() {
-    this.isOpen = true;
-  }
-  @Method()
-  async closeFolio() {
-    this.isOpen = false;
-    this.closeModal.emit(null);
-  }
 
   private updateFolioData(params: Partial<Payment>): void {
     this.folioData = { ...this.folioData, ...params };
   }
 
-  private async savePayment(print: boolean = false) {
+  private async savePayment() {
     try {
-      this.isLoading = print ? 'save-print' : 'save';
+      this.isLoading = true;
       this.autoValidate = true;
       if (this.errors) {
         this.errors = null;
       }
-      console.log(this.folioData);
       this.folioSchema.parse(this.folioData ?? {});
-      const data = await this.paymentService.AddPayment(
+      await this.paymentService.AddPayment(
         {
           ...this.folioData,
           currency: calendar_data.currency,
@@ -116,12 +105,9 @@ export class IrPaymentFolio {
         },
         this.bookingNumber,
       );
-      if (print) {
-        console.log(data);
-      }
       this.resetBookingEvt.emit(null);
       this.resetExposedCancellationDueAmount.emit(null);
-      this.closeFolio();
+      this.closeModal.emit(null);
     } catch (error) {
       const err = {};
       if (error instanceof ZodError) {
@@ -132,21 +118,24 @@ export class IrPaymentFolio {
       console.error(error);
       this.errors = err;
     } finally {
-      this.isLoading = null;
+      this.isLoading = false;
     }
   }
 
-  private handleDropdownChange(value: string) {
+  private handleDropdownChange(e: CustomEvent<string | number>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const value = e.detail.toString();
     console.log(value);
     this.updateFolioData({ designation: value });
-    if (!value) {
+    if (!e.detail) {
       this.updateFolioData({
         payment_type: null,
       });
     } else {
       const payment_type = this.paymentEntries?.types.find(pt => pt.CODE_NAME === value);
       if (!payment_type) {
-        console.warn(`Invalid payment type ${value}`);
+        console.warn(`Invalid payment type ${e.detail}`);
         this.updateFolioData({
           payment_type: null,
         });
@@ -169,10 +158,13 @@ export class IrPaymentFolio {
       });
     }
   }
-  private handlePaymentMethodDropdownChange(value: string) {
+  private handlePaymentMethodDropdownChange(e: CustomEvent<string | number>) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const value = e.detail.toString();
     const payment_method = this.paymentEntries?.methods.find(pt => pt.CODE_NAME === value);
     if (!payment_method) {
-      console.warn(`Invalid payment method ${value}`);
+      console.warn(`Invalid payment method ${e.detail}`);
       this.updateFolioData({
         payment_type: null,
       });
@@ -203,191 +195,155 @@ export class IrPaymentFolio {
     return Object.values(this._paymentTypes).map((p, idx) => (
       <Fragment>
         {p.map(pt => (
-          <wa-option value={pt.CODE_NAME} label={pt.CODE_VALUE_EN}>
-            <div class={'payment-folio__payment-type-option'}>
-              <span>{pt.CODE_VALUE_EN}</span>
-              <wa-badge variant={pt.NOTES === 'CR' ? 'success' : 'danger'} style={{ fontSize: 'var(--wa-font-size-s)' }}>
-                {pt.NOTES === 'CR' ? 'credit' : 'debit'}
-              </wa-badge>
-            </div>
-          </wa-option>
+          <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
+            <span>{pt.CODE_VALUE_EN}</span>
+            <span class={`payment-type-badge ${pt.NOTES === 'CR' ? 'credit-badge' : 'debit-badge'}`}>{pt.NOTES === 'CR' ? 'credit' : 'debit'}</span>
+          </ir-dropdown-item>
         ))}
-        {idx !== Object.values(this._paymentTypes).length - 1 && <wa-divider></wa-divider>}
+        {idx !== Object.values(this._paymentTypes).length - 1 && <div class="dropdown-divider"></div>}
       </Fragment>
     ));
   }
   render() {
-    // const isNewPayment = this.folioData?.payment_type?.code === '001' && this.folioData.id === -1;
     return (
-      <ir-drawer
-        placement="start"
-        label={this.payment?.id !== -1 ? 'Edit Folio Entry' : 'New Folio Entry'}
-        open={this.isOpen}
-        onDrawerHide={e => {
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-          this.isOpen = false;
+      <form
+        class={'sheet-container'}
+        onSubmit={async e => {
+          e.preventDefault();
+          this.savePayment();
         }}
       >
-        {this.isOpen && (
-          <div class="payment-folio__form" id="ir__folio-form">
+        <ir-title
+          class="px-1 sheet-header"
+          onCloseSideBar={() => this.closeModal.emit(null)}
+          label={this.mode === 'edit' ? 'Edit Folio Entry' : 'New Folio Entry'}
+          displayContext="sidebar"
+        ></ir-title>
+        <section class={'px-1 sheet-body d-flex flex-column'} style={{ gap: '1rem' }}>
+          <div class={'d-flex w-fill'} style={{ gap: '0.5rem' }}>
             {/*Date Picker */}
-            {/* <div class={'d-flex w-fill'} style={{ gap: '0.5rem' }}>
-          <div class="form-group  mb-0 flex-grow-1">
-            <div class="input-group row m-0 flex-grow-1">
-              <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
-                <label class={`input-group-text flex-grow-1 text-dark border-theme `}>Date</label>
-              </div>
-              <div class="form-control  form-control-md col-10 flex-grow-1 d-flex align-items-center px-0 mx-0" style={{ border: '0' }}>
-                <style>
-                  {`.ir-date-picker-trigger{
+            <div class="form-group  mb-0 flex-grow-1">
+              <div class="input-group row m-0 flex-grow-1">
+                <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
+                  <label class={`input-group-text flex-grow-1 text-dark border-theme `}>Date</label>
+                </div>
+                <div class="form-control  form-control-md col-10 flex-grow-1 d-flex align-items-center px-0 mx-0" style={{ border: '0' }}>
+                  <style>
+                    {`.ir-date-picker-trigger{
                     width:100%;}`}
-                </style>
-                <ir-date-picker
-                  data-testid="pickup_date"
-                  date={this.folioData?.date}
-                  class="w-100"
-                  emitEmptyDate={true}
-                  maxDate={moment().format('YYYY-MM-DD')}
-                  aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
-                  onDateChanged={evt => {
-                    this.updateFolioData({ date: evt.detail.start?.format('YYYY-MM-DD') });
-                  }}
-                >
-                  <input
-                    type="text"
-                    slot="trigger"
-                    value={this.folioData?.date ? moment(this.folioData?.date).format('MMM DD, YYYY') : null}
-                    class={`form-control w-100 input-sm ${this.errors?.date && !this.folioData?.date ? 'border-danger' : ''} text-left`}
-                    style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0', width: '100%' }}
-                  ></input>
-                </ir-date-picker>
+                  </style>
+                  <ir-date-picker
+                    data-testid="pickup_date"
+                    date={this.folioData?.date}
+                    class="w-100"
+                    emitEmptyDate={true}
+                    maxDate={moment().format('YYYY-MM-DD')}
+                    aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
+                    onDateChanged={evt => {
+                      this.updateFolioData({ date: evt.detail.start?.format('YYYY-MM-DD') });
+                    }}
+                  >
+                    <input
+                      type="text"
+                      slot="trigger"
+                      value={this.folioData?.date ? moment(this.folioData?.date).format('MMM DD, YYYY') : null}
+                      class={`form-control w-100 input-sm ${this.errors?.date && !this.folioData?.date ? 'border-danger' : ''} text-left`}
+                      style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0', width: '100%' }}
+                    ></input>
+                  </ir-date-picker>
+                </div>
               </div>
             </div>
           </div>
-        </div> */}
-            <ir-custom-date-picker
-              aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
-              data-testid="pickup_date"
-              onDateChanged={evt => {
-                this.updateFolioData({ date: evt.detail.start?.format('YYYY-MM-DD') });
-              }}
-              emitEmptyDate={true}
-              maxDate={moment().format('YYYY-MM-DD')}
-              date={this.folioData?.date}
-            ></ir-custom-date-picker>
-            <ir-validator
-              value={this.folioData?.payment_type?.code}
-              autovalidate={this.autoValidate}
-              schema={this.folioSchema.shape?.payment_type?.shape?.code}
-              valueEvent="change wa-change select-change"
-              blurEvent="wa-hide"
-            >
-              <wa-select
-                onwa-hide={e => {
-                  e.stopImmediatePropagation();
-                  e.stopPropagation();
-                }}
-                onwa-show={e => {
-                  e.stopImmediatePropagation();
-                  e.stopPropagation();
-                }}
-                placeholder="Select..."
-                label="Transaction type"
-                defaultValue={this.folioData?.payment_type?.code}
-                value={this.folioData?.payment_type?.code}
-                disabled={this.mode === 'payment-action'}
-                onchange={e => {
-                  e.stopImmediatePropagation();
-                  e.stopPropagation();
-                  this.handleDropdownChange((e.target as any).value);
-                }}
-              >
-                <wa-option value="">Select...</wa-option>
-                {this.renderDropdownItems()}
-              </wa-select>
-            </ir-validator>
-
-            {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
-              <ir-validator
-                value={this.folioData?.payment_method?.code ?? ''}
-                autovalidate={this.autoValidate}
-                schema={this.folioSchema.shape?.payment_method?.shape?.code}
-                valueEvent="change wa-change select-change"
-                blurEvent="wa-hide"
-              >
-                <wa-select
-                  label={`${this.folioData.payment_type?.code === '001' ? 'Payment' : 'Refund'} method`}
-                  onwa-show={e => {
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                  }}
-                  onwa-hide={e => {
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                  }}
-                  defaultValue={this.folioData?.payment_method?.code}
-                  value={this.folioData?.payment_method?.code ?? ''}
-                  onchange={e => {
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    this.handlePaymentMethodDropdownChange((e.target as any).value);
-                  }}
-                  // aria-invalid={String(this.errors?.payment_method && !this.folioData?.payment_method?.code)}
+          <div>
+            <ir-dropdown value={this.folioData?.payment_type?.code} disabled={this.mode === 'payment-action'} onOptionChange={this.handleDropdownChange.bind(this)}>
+              <div slot="trigger" class={'input-group row m-0 '}>
+                <div class={`input-group-prepend col-4 col-md-3 p-0 text-dark border-0`}>
+                  <label class={`input-group-text flex-grow-1 text-dark  border-theme`}>Transaction type</label>
+                </div>
+                <button
+                  type="button"
+                  disabled={this.mode === 'payment-action'}
+                  class={`form-control  d-flex align-items-center cursor-pointer ${this.errors?.payment_type && !this.folioData?.payment_type?.code ? 'border-danger' : ''}`}
                 >
-                  <wa-option value="">Select...</wa-option>
-                  {this.paymentEntries?.methods?.map(pt => {
-                    return (
-                      <wa-option label={pt.CODE_VALUE_EN} value={pt.CODE_NAME}>
-                        {pt.CODE_VALUE_EN}
-                      </wa-option>
-                    );
-                  })}
-                </wa-select>
-              </ir-validator>
-            )}
-            <ir-validator
-              value={this.folioData?.amount?.toString() ?? ''}
-              autovalidate={this.autoValidate}
-              schema={this.folioSchema.shape?.amount}
-              valueEvent="text-change input input-change"
-              blurEvent="input-blur"
-            >
-              <ir-custom-input
-                value={this.folioData?.amount?.toString() ?? ''}
-                label="Amount"
-                mask="price"
-                min={0}
-                onText-change={e => this.updateFolioData({ amount: !e.detail ? null : Number(e.detail) })}
-              >
-                <span slot="start">{calendar_data.currency.symbol}</span>
-              </ir-custom-input>
-            </ir-validator>
-            <ir-validator
-              value={this.folioData?.reference ?? ''}
-              autovalidate={this.autoValidate}
-              schema={this.folioSchema.shape?.reference}
-              valueEvent="text-change input input-change"
-              blurEvent="input-blur"
-            >
-              <ir-custom-input
-                value={this.folioData?.reference ?? ''}
-                label="Reference"
-                maxlength={50}
-                onText-change={e => this.updateFolioData({ reference: e.detail ?? '' })}
-              ></ir-custom-input>
-            </ir-validator>
+                  {this.folioData?.payment_type ? <span>{this.folioData.payment_type?.description}</span> : <span>Select...</span>}
+                </button>
+              </div>
+              <ir-dropdown-item value="">Select...</ir-dropdown-item>
+              {this.renderDropdownItems()}
+            </ir-dropdown>
           </div>
-        )}
-        <div slot="footer" class="w-100 d-flex align-items-center" style={{ gap: 'var(--wa-space-xs)' }}>
-          <ir-custom-button class="flex-fill" size="medium" data-drawer="close" appearance="filled" variant="neutral">
-            Cancel
-          </ir-custom-button>
-          <ir-custom-button onClickHandler={() => this.savePayment()} loading={this.isLoading === 'save'} class="flex-fill" size="medium" appearance="accent" variant="brand">
-            Save
-          </ir-custom-button>
+          {PAYMENT_TYPES_WITH_METHOD.includes(this.folioData?.payment_type?.code) && (
+            <div>
+              <ir-dropdown value={this.folioData?.payment_method?.code} onOptionChange={this.handlePaymentMethodDropdownChange.bind(this)}>
+                <button
+                  slot="trigger"
+                  type="button"
+                  class={`form-control d-flex align-items-center cursor-pointer ${this.errors?.payment_method && !this.folioData?.payment_method?.code ? 'border-danger' : ''}`}
+                >
+                  {this.folioData?.payment_method ? (
+                    <span>{this.folioData.payment_method?.description}</span>
+                  ) : (
+                    <span>Select {this.folioData?.payment_type?.code === '001' ? 'payment' : 'refund'} method...</span>
+                  )}
+                </button>
+
+                <ir-dropdown-item value="">Select {this.folioData.payment_type?.code === '001' ? 'payment' : 'refund'} method...</ir-dropdown-item>
+                {this.paymentEntries?.methods?.map(pt => {
+                  return (
+                    <ir-dropdown-item value={pt.CODE_NAME} class="dropdown-item-payment">
+                      <span>{pt.CODE_VALUE_EN}</span>
+                    </ir-dropdown-item>
+                  );
+                })}
+              </ir-dropdown>
+            </div>
+          )}
+          <div>
+            <ir-price-input
+              containerClassname="row"
+              labelContainerClassname="col-4 col-md-3 p-0 text-dark border-0"
+              minValue={0}
+              autoValidate={this.autoValidate}
+              zod={this.folioSchema.pick({ amount: true })}
+              wrapKey="amount"
+              label="Amount"
+              labelStyle={'flex-grow-1 text-dark  border-theme'}
+              error={this.errors?.amount && !this.folioData?.amount}
+              value={this.folioData?.amount?.toString()}
+              currency={calendar_data.currency.symbol}
+              onTextChange={e => this.updateFolioData({ amount: Number(e.detail) })}
+            ></ir-price-input>
+          </div>
+          <div>
+            <ir-input-text
+              value={this.folioData?.reference}
+              error={this.errors?.reference_number}
+              autoValidate={this.autoValidate}
+              zod={this.folioSchema.pick({ reference: true })}
+              label="Reference"
+              maxLength={50}
+              inputContainerStyle={{
+                margin: '0',
+              }}
+              onTextChange={e => this.updateFolioData({ reference: e.detail })}
+              labelWidth={3}
+              labelContainerClassname={'col-4 col-md-3'}
+            ></ir-input-text>
+          </div>
+        </section>
+        <div class={'sheet-footer'}>
+          <ir-button onClick={() => this.closeModal.emit(null)} btn_styles="justify-content-center" class={`flex-fill`} text={'Cancel'} btn_color="secondary"></ir-button>
+          <ir-button
+            btn_styles="justify-content-center align-items-center"
+            class={'flex-fill'}
+            isLoading={this.isLoading}
+            text={'Save'}
+            btn_color="primary"
+            btn_type="submit"
+          ></ir-button>
         </div>
-      </ir-drawer>
+      </form>
     );
   }
 }

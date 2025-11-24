@@ -1952,9 +1952,7 @@ export namespace Components {
     }
     interface IrPaymentFolio {
         "bookingNumber": string;
-        "closeFolio": () => Promise<void>;
         "mode": FolioEntryMode;
-        "openFolio": () => Promise<void>;
         "payment": Payment;
         "paymentEntries": PaymentEntries1;
     }
