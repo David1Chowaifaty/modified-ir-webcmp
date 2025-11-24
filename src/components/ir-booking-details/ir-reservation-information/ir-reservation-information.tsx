@@ -114,14 +114,13 @@ export class IrReservationInformation {
           <ir-label labelText={`${locales.entries.Lcz_BookedBy}:`} content={`${this.booking.guest.first_name} ${this.booking.guest.last_name}`}>
             {this.booking.guest?.nbr_confirmed_bookings > 1 && !this.booking.agent && (
               <div class={'m-0 p-0 '} slot="prefix">
-                <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())} customSlot>
-                  <div class="d-flex align-items-center m-0 p-0 flex-fill" slot="tooltip-trigger" style={{ gap: '0.25rem' }}>
-                    <p class={'p-0 m-0'} style={{ color: '#FB0AAD' }}>
-                      {this.booking.guest.nbr_confirmed_bookings}
-                    </p>
-                    <ir-icons style={{ '--icon-size': '1rem' }} color="#FB0AAD" name="heart-fill"></ir-icons>
-                  </div>
-                </ir-tooltip>
+                <wa-tooltip for="guests_nbr_confirmed_bookings">
+                  {`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())}
+                </wa-tooltip>
+                <div style={{ color: '#FB0AAD' }} id="guests_nbr_confirmed_bookings">
+                  <span> {this.booking.guest.nbr_confirmed_bookings}</span>
+                  <wa-icon name="heart" style={{ color: '#FB0AAD' }}></wa-icon>
+                </div>
               </div>
             )}
 

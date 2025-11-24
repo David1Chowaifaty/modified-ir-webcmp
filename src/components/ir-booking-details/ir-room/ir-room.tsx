@@ -317,7 +317,7 @@ export class IrRoom {
           style={{ '--icon-size': '1.6rem' }}
         ></ir-button> */}
 
-        <wa-details icon-placement="start" class="booking-room__details" appearance="plain">
+        <wa-details name="room" icon-placement="start" class="booking-room__details" appearance="plain">
           <div slot="summary" class="booking-room_summary" style={{ width: '100%' }}>
             <div class="d-flex align-items-center justify-content-between">
               <p class="m-0 p-0">
