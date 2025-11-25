@@ -1,5 +1,7 @@
 import locales from '@/stores/locales.store';
+import { isWeekend } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import moment from 'moment';
 
 @Component({
   tag: 'igl-cal-footer',
@@ -12,6 +14,8 @@ export class IglCalFooter {
   @Prop() isLegendOpen: boolean = false;
   @Prop() today: String;
   @Prop() highlightedDate: string;
+
+  private _today = moment().format('YYYY-MM-DD');
 
   // private isOnline:boolean = false;
 
@@ -47,9 +51,16 @@ export class IglCalFooter {
             <i class="la la-share-alt isOffline"></i><span>{this.isOnline ? "Connected": "Offline"}</span>
           </div> */}
         </div>
+
         {this.calendarData.days.map(dayInfo => (
           <div class="footerCell align-items-center">
-            <div class={`dayTitle full-height align-items-center ${dayInfo.day === this.today || this.highlightedDate === dayInfo.day ? 'currentDay' : ''}`}>
+            <div
+              class={{
+                'dayTitle full-height align-items-center': true,
+                'weekend': isWeekend(dayInfo.value),
+                'currentDay': dayInfo.value === this._today || this.highlightedDate === dayInfo.day,
+              }}
+            >
               {dayInfo.dayDisplayName}
             </div>
 

@@ -14,7 +14,11 @@
 .btn {
   pointer-events: auto;
 }
-
+.dayTitle.weekend {
+  font-weight: bold;
+  color: #1e9ff2;
+  color: black;
+}
 .stickyCell {
   display: -ms-inline-grid;
   display: -moz-inline-grid;

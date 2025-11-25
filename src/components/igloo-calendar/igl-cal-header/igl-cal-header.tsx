@@ -1,6 +1,6 @@
 import { Component, Event, EventEmitter, Host, Prop, h, State, Listen, Watch } from '@stencil/core';
 import { ToBeAssignedService } from '@/services/toBeAssigned.service';
-import { dateToFormattedString } from '@/utils/utils';
+import { dateToFormattedString, isWeekend } from '@/utils/utils';
 import moment from 'moment';
 import locales from '@/stores/locales.store';
 import { handleUnAssignedDatesChange } from '@/stores/unassigned_dates.store';
@@ -346,25 +346,28 @@ export class IglCalHeader {
               </div>
             ))}
           </div>
-          {this.calendarData.days.map(dayInfo => (
-            <div
-              class={`headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''}`}
-              data-day={dayInfo.day}
-            >
-              {!this.calendarData.is_vacation_rental && (
-                <div class="preventPageScroll">
-                  <span
-                    class={`badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
-                    onClick={() => this.showToBeAssigned(dayInfo)}
-                  >
-                    {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr}
-                  </span>
-                </div>
-              )}
-              <div class="dayTitle">{dayInfo.dayDisplayName}</div>
-              <div class="dayCapacityPercent">{dayInfo.occupancy}%</div>
-            </div>
-          ))}
+          {this.calendarData.days.map(dayInfo => {
+            return (
+              <div
+                class={`headerCell align-items-center ${'day-' + dayInfo.day} ${dayInfo.day === this.today || dayInfo.day === this.highlightedDate ? 'currentDay' : ''}`}
+                data-day={dayInfo.day}
+              >
+                {!this.calendarData.is_vacation_rental && (
+                  <div class="preventPageScroll">
+                    <span
+                      class={`badge badge-${this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr !== 0 ? 'info pointer' : 'light'} badge-pill`}
+                      onClick={() => this.showToBeAssigned(dayInfo)}
+                    >
+                      {this.unassignedRoomsNumber[dayInfo.day] || dayInfo.unassigned_units_nbr}
+                    </span>
+                  </div>
+                )}
+
+                <div class={{ dayTitle: true, weekend: isWeekend(dayInfo.value) }}>{dayInfo.dayDisplayName}</div>
+                <div class="dayCapacityPercent">{dayInfo.occupancy}%</div>
+              </div>
+            );
+          })}
         </div>
       </Host>
     );
