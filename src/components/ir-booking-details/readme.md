@@ -54,12 +54,10 @@
 - [ir-booking-extra-note](ir-booking-extra-note)
 - [ir-extra-service-config](./ir-extra-services/ir-extra-service-config)
 - [ir-room-guests](ir-room-guests)
-- [ir-payment-folio](./ir-payment-details/ir-payment-folio)
 - [ir-room](ir-room)
 - [ir-spinner](../ui/ir-spinner)
 - [ir-toast](../ui/ir-toast)
 - [ir-interceptor](../ir-interceptor)
-- [ir-custom-date-picker](../ir-custom-date-picker)
 - [ir-booking-header](ir-booking-header)
 - [ir-reservation-information](ir-reservation-information)
 - [ir-date-view](../ir-date-view)
@@ -69,7 +67,7 @@
 - [ir-payment-details](ir-payment-details)
 - [ir-modal](../ui/ir-modal)
 - [ir-sidebar](../ui/ir-sidebar)
-- [ir-drawer](../ir-drawer)
+- [ir-payment-folio](./ir-payment-details/ir-payment-folio)
 - [igl-book-property](../igloo-calendar/igl-book-property)
 
 ### Graph
@@ -80,12 +78,10 @@ graph TD;
   ir-booking-details --> ir-booking-extra-note
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-room-guests
-  ir-booking-details --> ir-payment-folio
   ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
   ir-booking-details --> ir-interceptor
-  ir-booking-details --> ir-custom-date-picker
   ir-booking-details --> ir-booking-header
   ir-booking-details --> ir-reservation-information
   ir-booking-details --> ir-date-view
@@ -95,7 +91,7 @@ graph TD;
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-modal
   ir-booking-details --> ir-sidebar
-  ir-booking-details --> ir-drawer
+  ir-booking-details --> ir-payment-folio
   ir-booking-details --> igl-book-property
   ir-guest-info --> ir-spinner
   ir-guest-info --> ir-toast
@@ -133,16 +129,10 @@ graph TD;
   ir-room-guests --> ir-country-picker
   ir-room-guests --> ir-select
   ir-room-guests --> ir-button
-  ir-payment-folio --> ir-date-picker
-  ir-payment-folio --> ir-custom-date-picker
-  ir-payment-folio --> ir-validator
-  ir-payment-folio --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-button
   ir-room --> ir-custom-button
   ir-room --> ir-date-view
   ir-room --> ir-tooltip
   ir-room --> ir-button
-  ir-room --> ir-select
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button
@@ -155,12 +145,14 @@ graph TD;
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
   ir-reservation-information --> ir-label
-  ir-reservation-information --> ir-tooltip
-  ir-reservation-information --> ir-icons
   ir-reservation-information --> ir-custom-button
   ir-reservation-information --> ota-label
-  ir-reservation-information --> ir-dialog
+  ir-reservation-information --> ir-booking-company-form
+  ir-booking-company-form --> ir-dialog
+  ir-booking-company-form --> ir-custom-input
+  ir-booking-company-form --> ir-custom-button
   ir-pickup-view --> ir-custom-button
+  ir-pickup-view --> ir-label
   ir-extra-services --> ir-custom-button
   ir-extra-services --> ir-extra-service
   ir-extra-service --> ir-custom-button
@@ -182,6 +174,11 @@ graph TD;
   ir-payment-item --> ir-button
   ir-payment-item --> ir-custom-button
   ir-sidebar --> ir-icon
+  ir-payment-folio --> ir-drawer
+  ir-payment-folio --> ir-custom-date-picker
+  ir-payment-folio --> ir-validator
+  ir-payment-folio --> ir-custom-input
+  ir-payment-folio --> ir-custom-button
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon

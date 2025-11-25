@@ -26,7 +26,6 @@
  - [ir-dropdown](../ir-dropdown)
  - [ir-login](../../ir-login)
  - [ir-payment-option](../../ir-payment-option)
- - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-stats-card](../ir-stats-card)
  - [ir-success-loader](../ir-success-loader)
  - [ir-tasks-header](../../ir-housekeeping/ir-hk-tasks/ir-tasks-header)
@@ -45,7 +44,6 @@ graph TD;
   ir-dropdown --> ir-icons
   ir-login --> ir-icons
   ir-payment-option --> ir-icons
-  ir-reservation-information --> ir-icons
   ir-stats-card --> ir-icons
   ir-success-loader --> ir-icons
   ir-tasks-header --> ir-icons

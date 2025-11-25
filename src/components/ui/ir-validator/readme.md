@@ -14,6 +14,7 @@
 | `form`                | `form`                | Optional form id. Falls back to the closest ancestor form when omitted.      | `string`                 | `undefined`                                       |
 | `schema` _(required)_ | --                    | Zod schema used to validate the child control's value.                       | `ZodType<any, any, any>` | `undefined`                                       |
 | `validationDebounce`  | `validation-debounce` | Debounce delay (ms) before running validation for autovalidated changes.     | `number`                 | `200`                                             |
+| `value`               | `value`               |                                                                              | `any`                    | `undefined`                                       |
 | `valueEvent`          | `value-event`         | Event names (space/comma separated) dispatched when the child value changes. | `string`                 | `'input input-change value-change select-change'` |
 
 

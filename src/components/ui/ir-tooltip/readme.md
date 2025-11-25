@@ -27,7 +27,6 @@
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-monthly-bookings-report-table](../../ir-monthly-bookings-report/ir-monthly-bookings-report-table)
- - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
 
 ### Graph
@@ -39,7 +38,6 @@ graph TD;
   ir-booking-listing --> ir-tooltip
   ir-hk-archive --> ir-tooltip
   ir-monthly-bookings-report-table --> ir-tooltip
-  ir-reservation-information --> ir-tooltip
   ir-room --> ir-tooltip
   style ir-tooltip fill:#f9f,stroke:#333,stroke-width:4px
 ```

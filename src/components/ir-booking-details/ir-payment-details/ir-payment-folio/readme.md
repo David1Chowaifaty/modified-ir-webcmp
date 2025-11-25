@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property         | Attribute        | Description | Type                                                                                                                                                                                                                                                                        | Default                                                                                                                                          |
-| ---------------- | ---------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `bookingNumber`  | `booking-number` |             | `string`                                                                                                                                                                                                                                                                    | `undefined`                                                                                                                                      |
-| `mode`           | `mode`           |             | `"edit" \| "new" \| "payment-action"`                                                                                                                                                                                                                                       | `undefined`                                                                                                                                      |
-| `payment`        | --               |             | `{ id: number; date: string; amount: number; currency: ICurrency; designation: string; reference: string; book_nbr?: string; payment_gateway_code?: number; payment_type?: PaymentType; payment_method?: PaymentType; receipt_nbr?: string; is_receipt_issued?: boolean; }` | `{     date: moment().format('YYYY-MM-DD'),     amount: 0,     designation: undefined,     currency: null,     reference: null,     id: -1,   }` |
-| `paymentEntries` | --               |             | `{ types: IEntries[]; groups: IEntries[]; methods: IEntries[]; }`                                                                                                                                                                                                           | `undefined`                                                                                                                                      |
+| Property         | Attribute        | Description | Type                                                                                                                                                                                                                                                                        | Default                                                                                                                                         |
+| ---------------- | ---------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bookingNumber`  | `booking-number` |             | `string`                                                                                                                                                                                                                                                                    | `undefined`                                                                                                                                     |
+| `mode`           | `mode`           |             | `"edit" \| "new" \| "payment-action"`                                                                                                                                                                                                                                       | `undefined`                                                                                                                                     |
+| `payment`        | --               |             | `{ id: number; date: string; amount: number; currency: ICurrency; designation: string; reference: string; book_nbr?: string; payment_gateway_code?: number; payment_type?: PaymentType; payment_method?: PaymentType; receipt_nbr?: string; is_receipt_issued?: boolean; }` | `{     date: moment().format(DATE_FORMAT),     amount: 0,     designation: undefined,     currency: null,     reference: null,     id: -1,   }` |
+| `paymentEntries` | --               |             | `{ types: IEntries[]; groups: IEntries[]; methods: IEntries[]; }`                                                                                                                                                                                                           | `undefined`                                                                                                                                     |
 
 
 ## Events
@@ -24,6 +24,29 @@
 | `resetExposedCancellationDueAmount` |             | `CustomEvent<null>` |
 
 
+## Methods
+
+### `closeFolio() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `openFolio() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Used by
@@ -33,19 +56,20 @@
 
 ### Depends on
 
-- [ir-date-picker](../../../ui/ir-date-picker)
+- [ir-drawer](../../../ir-drawer)
 - [ir-custom-date-picker](../../../ir-custom-date-picker)
 - [ir-validator](../../../ui/ir-validator)
 - [ir-custom-input](../../../ui/ir-custom-input)
+- [ir-custom-button](../../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-payment-folio --> ir-date-picker
+  ir-payment-folio --> ir-drawer
   ir-payment-folio --> ir-custom-date-picker
   ir-payment-folio --> ir-validator
   ir-payment-folio --> ir-custom-input
-  ir-custom-date-picker --> ir-custom-button
+  ir-payment-folio --> ir-custom-button
   ir-booking-details --> ir-payment-folio
   ir-financial-actions --> ir-payment-folio
   style ir-payment-folio fill:#f9f,stroke:#333,stroke-width:4px
