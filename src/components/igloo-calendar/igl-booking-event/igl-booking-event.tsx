@@ -10,7 +10,8 @@ import locales from '@/stores/locales.store';
 import { ICountry } from '@/models/IBooking';
 import calendar_dates from '@/stores/calendar-dates.store';
 import calendar_data from '@/stores/calendar-data';
-
+import { ClickOutside } from '@/decorators/ClickOutside';
+export type BarPosition = { top: string; left: string; width: string; height: string };
 @Component({
   tag: 'igl-booking-event',
   styleUrl: 'igl-booking-event.css',
@@ -71,18 +72,10 @@ export class IglBookingEvent {
 
   private handleMouseMoveBind = this.handleMouseMove.bind(this);
   private handleMouseUpBind = this.handleMouseUp.bind(this);
-  private handleClickOutsideBind = this.handleClickOutside.bind(this);
 
   private role: string = '';
 
-  componentWillLoad() {
-    window.addEventListener('click', this.handleClickOutsideBind);
-
-    this.bookingEvent.SPLIT_INDEX = buildSplitIndex(this.bookingEvent.ROOMS);
-    if (this.bookingEvent.SPLIT_INDEX) {
-      this.role = getSplitRole(this.bookingEvent.SPLIT_INDEX, this.bookingEvent.IDENTIFIER) ?? '';
-    }
-  }
+  componentWillLoad() {}
 
   componentDidLoad() {
     if (this.isNewEvent()) {
@@ -103,19 +96,8 @@ export class IglBookingEvent {
   }
 
   disconnectedCallback() {
-    window.removeEventListener('click', this.handleClickOutsideBind);
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
-    }
-  }
-
-  @Listen('click', { target: 'window' })
-  handleClickOutside(event: Event) {
-    const clickedElement = event.target as HTMLElement;
-    // Check if the clicked element is not within the target div
-    if (!this.element.contains(clickedElement)) {
-      // The click occurred outside the target div
-      this.showEventInfo(false);
     }
   }
 
@@ -319,6 +301,10 @@ export class IglBookingEvent {
     }
   }
 
+  @ClickOutside()
+  closeEventBubble() {
+    this.showEventInfo(false);
+  }
   private async fetchAndAssignBookingData() {
     try {
       console.log('clicked on book#', this.bookingEvent.BOOKING_NUMBER);
@@ -398,6 +384,15 @@ export class IglBookingEvent {
     }
     return null;
   };
+
+  private buildBarIds() {
+    const bookingId = this.getBookingId();
+    return {
+      bar: `event_${bookingId}`,
+      lateCheckout: `event_late_checkout_${bookingId}`,
+      balance: `event_balance_${bookingId}`,
+    };
+  }
 
   private getModalDescription(toRoomId: number, from_date, to_date): { status: '200' | '400'; description: string; newRatePlans?: any[] } {
     if (!this.bookingEvent.is_direct) {
@@ -489,7 +484,15 @@ export class IglBookingEvent {
     }
   }
 
-  checkIfSlotOccupied(toRoomId, from_date, to_date) {
+  /**
+   * Checks if the target room already has a booking overlapping the given date range.
+   *
+   * @param toRoomId   - Room ID to check.
+   * @param from_date  - Start date (YYYY-MM-DD).
+   * @param to_date    - End date (YYYY-MM-DD).
+   * @returns `true` if another booking occupies the slot, otherwise `false`.
+   */
+  private checkIfSlotOccupied(toRoomId: number, from_date: string, to_date: string) {
     const fromTime = moment(from_date, 'YYYY-MM-DD');
     const toTime = moment(to_date, 'YYYY-MM-DD');
     const isOccupied = this.allBookingEvents.some(event => {
@@ -591,40 +594,44 @@ export class IglBookingEvent {
   getStayDays() {
     return this.bookingEvent.NO_OF_DAYS;
   }
-
-  getPosition() {
+  /**
+   * Calculates the booking bar position and width in the calendar grid.
+   *
+   * @returns {{ top: string; left: string; width: string; height: string }}
+   *          Inline style values used to place the event.
+   */
+  private getPosition(): BarPosition {
     let startingDate = this.getEventStartingDate();
     let startingCellClass = '.room_' + this.getBookedRoomId() + '_' + startingDate.getDate() + '_' + (startingDate.getMonth() + 1) + '_' + startingDate.getFullYear();
     let bodyContainer = document.querySelector('.bodyContainer');
     let startingCell = document.querySelector(startingCellClass);
     let pos = { top: '0', left: '0', width: '0', height: '20px' };
-    if (startingCell && bodyContainer && startingCell.getBoundingClientRect() && bodyContainer.getBoundingClientRect()) {
-      let bodyContainerRect = bodyContainer.getBoundingClientRect();
-      let boundingRect = startingCell.getBoundingClientRect();
-      this.dayWidth = this.dayWidth || boundingRect.width;
-      pos.top = boundingRect.top + boundingRect.height / 2 - this.vertSpace - bodyContainerRect.top + 'px';
-      // pos.left = boundingRect.left + this.dayWidth / 2 + this.eventSpace / 2 - bodyContainerRect.left + 'px';
-      // pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
-      pos.left =
-        boundingRect.left +
-        (!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 0 : this.dayWidth / 2) +
-        this.eventSpace / 2 -
-        bodyContainerRect.left +
-        'px';
-      pos.width =
-        (this.getStayDays() + (!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 0.5 : 0)) *
-          this.dayWidth -
-        this.eventSpace +
-        'px';
-    } else {
-      console.log(this.bookingEvent);
-      console.log('Locating event cell failed ', startingCellClass);
+
+    if (!startingCell && bodyContainer && startingCell.getBoundingClientRect() && bodyContainer.getBoundingClientRect()) {
+      console.warn('Failed to locate event cell', startingCellClass, this.bookingEvent);
+      return pos;
     }
-    //console.log(pos);
+    let bodyContainerRect = bodyContainer.getBoundingClientRect();
+    let boundingRect = startingCell.getBoundingClientRect();
+    this.dayWidth = this.dayWidth || boundingRect.width;
+    pos.top = boundingRect.top + boundingRect.height / 2 - this.vertSpace - bodyContainerRect.top + 'px';
+    // pos.left = boundingRect.left + this.dayWidth / 2 + this.eventSpace / 2 - bodyContainerRect.left + 'px';
+    // pos.width = this.getStayDays() * this.dayWidth - this.eventSpace + 'px';
+    pos.left =
+      boundingRect.left +
+      (!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 0 : this.dayWidth / 2) +
+      this.eventSpace / 2 -
+      bodyContainerRect.left +
+      'px';
+    pos.width =
+      (this.getStayDays() + (!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 0.5 : 0)) *
+        this.dayWidth -
+      this.eventSpace +
+      'px';
     return pos;
   }
 
-  getNumber(aData) {
+  private getNumber(aData: string) {
     return aData ? parseFloat(aData) : 0;
   }
 
@@ -842,7 +849,7 @@ export class IglBookingEvent {
       transform: 'translateX(-50%)',
     };
   }
-  renderEventBookingNumber() {
+  private renderEventBookingNumber() {
     if (this.bookingEvent.STATUS === 'TEMP-EVENT' || this.bookingEvent.ID === 'NEW_TEMP_EVENT') {
       return '';
     }
@@ -854,36 +861,8 @@ export class IglBookingEvent {
     }
     return ` - ${this.bookingEvent.BOOKING_NUMBER}`;
   }
-  showEventInfo(showInfo) {
-    // if (this.isHighlightEventType() || this.bookingEvent.hideBubble) {
-    //   return null;
-    // }
 
-    // if (showInfo) {
-    //   // Calculate which side we need to show the bubble, top side or bottom.
-    //   let bodyContainer = document.querySelector('.calendarScrollContainer');
-    //   let bodyContainerRect: { [key: string]: any } = bodyContainer.getBoundingClientRect();
-    //   let elementRect: { [key: string]: any } = this.element.getBoundingClientRect();
-    //   let midPoint = bodyContainerRect.height / 2 + bodyContainerRect.top + 50;
-    //   // let topDifference = elementRect.top - bodyContainerRect.top;
-    //   // let bottomDifference = bodyContainerRect.bottom - elementRect.bottom;
-
-    //   if (elementRect.top < midPoint) {
-    //     this.bubbleInfoTopSide = false;
-    //   } else {
-    //     this.bubbleInfoTopSide = true;
-    //   }
-    // }
-
-    // // showInfo = true;
-    // if (showInfo) {
-    //   this.hideBubbleInfo.emit({
-    //     key: 'hidePopup',
-    //     currentInfoBubbleId: this.getBookingId(),
-    //   });
-    // }
-    // this.showInfoPopup = showInfo;
-    // this.renderAgain();
+  private showEventInfo(showInfo: boolean) {
     if (this.isHighlightEventType() || this.bookingEvent.hideBubble) {
       return null;
     }
@@ -917,7 +896,7 @@ export class IglBookingEvent {
    *
    * @returns {boolean} `true` if departure is after `check_out_till`, otherwise `false`.
    */
-  private isDepartureAfterHotelCheckout() {
+  private isDepartureAfterHotelCheckout(): boolean {
     const departureTime = this.bookingEvent.DEPARTURE_TIME;
     if (!departureTime?.code) {
       return false;
@@ -926,9 +905,16 @@ export class IglBookingEvent {
     const t2 = moment(departureTime.description, 'HH:mm');
     return t1.isBefore(t2);
   }
+  private computeSplitRole() {
+    const SPLIT_INDEX = buildSplitIndex(this.bookingEvent.ROOMS);
+    let splitRole = null;
+    if (SPLIT_INDEX) {
+      splitRole = getSplitRole(SPLIT_INDEX, this.bookingEvent.IDENTIFIER) ?? '';
+    }
+    return splitRole;
+  }
 
   render() {
-    // onMouseLeave={()=>this.showEventInfo(false)}
     let legend = this.getEventLegend();
 
     let noteNode = this.getNoteNode();
@@ -942,29 +928,12 @@ export class IglBookingEvent {
     };
     backgroundColor = this.bookingEvent.STATUS === 'CHECKED-OUT' ? legend.color : backgroundColor;
     const isDepartureAfterHotelCheckout = this.isDepartureAfterHotelCheckout();
-    // console.log(this.bookingEvent.BOOKING_NUMBER === '46231881' ? this.bookingEvent : '');
-    return (
-      <Host
-        class={`bookingEvent  ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `}
-        style={this.getPosition()}
-        id={'event_' + this.getBookingId()}
-      >
-        {/* onMouseOver={() =>this.showEventInfo(true)}  */}
-        <div
-          //     class={`bookingEventBase  ${
-          //       !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)) ? 'skewedLeft' : ''
-          //     }
-          //     ${!this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.to_date)).isAfter(new Date(this.bookingEvent.TO_DATE)) ? 'skewedRight' : ''}
-          //  ${this.bookingEvent.STATUS === 'IN-HOUSE' ? 'striped-bar vertical' : ''}
-          //  ${isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003' ? 'striped-bar animated' : ''}
-          //  ${
-          //    !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS !== 'TEMP-EVENT' && this.bookingEvent.ID !== 'NEW_TEMP_EVENT'
-          //      ? 'border border-dark ota-booking-event'
-          //      : ''
-          //  }  ${this.isSplitBooking() ? 'splitBooking' : ''}
-          //       fullSplit
+    const { balance, bar, lateCheckout } = this.buildBarIds();
+    const splitRole = this.computeSplitRole();
 
-          //       `}
+    return (
+      <Host class={`bookingEvent  ${this.isNewEvent() || this.isHighlightEventType() ? 'newEvent' : ''} ${legend.clsName} `} style={this.getPosition()} id={bar}>
+        <div
           class={{
             'bookingEventBase': true,
             'skewedLeft': !this.isNewEvent() && moment(new Date(this.bookingEvent.defaultDates.from_date)).isBefore(new Date(this.bookingEvent.FROM_DATE)),
@@ -973,7 +942,7 @@ export class IglBookingEvent {
             'striped-bar animated': isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS_CODE === '003',
             'border border-dark ota-booking-event':
               !this.bookingEvent.is_direct && !isBlockUnit(this.bookingEvent.STATUS_CODE) && this.bookingEvent.STATUS !== 'TEMP-EVENT' && this.bookingEvent.ID !== 'NEW_TEMP_EVENT',
-            [this.role]: true,
+            [splitRole]: true,
           }}
           style={{
             'backgroundColor': backgroundColor,
@@ -983,20 +952,16 @@ export class IglBookingEvent {
           onTouchStart={event => this.startDragging(event, 'move')}
           onMouseDown={event => this.startDragging(event, 'move')}
         ></div>
-        {isDepartureAfterHotelCheckout && (
-          <wa-tooltip for={'event_late_checkout_' + this.getBookingId()}>Departure time: {this.bookingEvent.DEPARTURE_TIME?.description}</wa-tooltip>
-        )}
-        {balanceNode && (
-          <wa-tooltip for={'event_balance_' + this.getBookingId()}>Balance: {formatAmount(calendar_data.property.currency.symbol, this.bookingEvent.BALANCE)}</wa-tooltip>
-        )}
+        {isDepartureAfterHotelCheckout && <wa-tooltip for={lateCheckout}>Departure time: {this.bookingEvent.DEPARTURE_TIME?.description}</wa-tooltip>}
+        {balanceNode && <wa-tooltip for={balance}>Balance: {formatAmount(calendar_data.property.currency.symbol, this.bookingEvent.BALANCE)}</wa-tooltip>}
         {noteNode ? <div class="legend_circle noteIcon" style={{ backgroundColor: noteNode.color }}></div> : null}
         {(balanceNode || isDepartureAfterHotelCheckout) && (
           <div class="balanceIcon d-flex">
-            {isDepartureAfterHotelCheckout && <div id={'event_late_checkout_' + this.getBookingId()} class="legend_circle" style={{ backgroundColor: '#999999' }}></div>}
-            {balanceNode ? <div id={'event_balance_' + this.getBookingId()} class="legend_circle" style={{ backgroundColor: '#f34752' }}></div> : null}
+            {isDepartureAfterHotelCheckout && <div id={lateCheckout} class="legend_circle" style={{ backgroundColor: '#999999' }}></div>}
+            {balanceNode ? <div id={balance} class="legend_circle" style={{ backgroundColor: '#f34752' }}></div> : null}
           </div>
         )}
-        {/* onMouseOver={() => this.showEventInfo(true)}  */}
+
         <div
           class="bookingEventTitle"
           style={{ color: foreground }}
@@ -1006,8 +971,6 @@ export class IglBookingEvent {
           {this.getBookedBy()}
           {this.renderEventBookingNumber()}
         </div>
-
-        {/* {(this.bookingEvent.is_direct || isBlockUnit(this.bookingEvent.STATUS_CODE)) && ( */}
         <Fragment>
           <div
             class={`bookingEventDragHandle leftSide ${
@@ -1026,7 +989,6 @@ export class IglBookingEvent {
             onMouseDown={event => this.startDragging(event, 'rightSide')}
           ></div>
         </Fragment>
-        {/* )} */}
 
         {this.showInfoPopup ? (
           <igl-booking-event-hover
