@@ -19,14 +19,14 @@ const requiresPaymentMethodCode = (code?: string) => {
 
 const paymentTypeSchema = z.object({
   code: z.string().min(3).max(4),
-  description: z.string().min(1),
+  description: z.string(),
   operation: z.union([z.literal('CR'), z.literal('DB')]),
 });
 
 const paymentMethodSchema = z.object({
   code: z.string().min(3).max(4),
-  description: z.string().min(1),
-  operation: z.string().min(1),
+  description: z.string(),
+  operation: z.string(),
 });
 
 const folioBaseSchema = z.object({
@@ -41,7 +41,7 @@ const folioBaseSchema = z.object({
       },
       { message: `Invalid date` },
     ),
-  amount: z.coerce.number().refine(a => a >= 0),
+  amount: z.coerce.number().min(0.01),
   reference: z.string().optional().nullable(),
   payment_type: paymentTypeSchema,
   payment_method: paymentMethodSchema.nullable().optional(),
@@ -169,7 +169,7 @@ export class IrPaymentFolio {
       this.isLoading = print ? 'save-print' : 'save';
       this.autoValidate = true;
       this.errors = {};
-      const parsedData: FolioFormData = folioValidationSchema.parse(this.folioData ?? {});
+      const parsedData: FolioFormData = folioValidationSchema.parse({ ...(this.folioData ?? {}), amount: this.folioData?.amount ?? undefined });
       const { payment_type, payment_method, ...rest } = parsedData;
       const payload: Payment = {
         ...rest,
@@ -270,7 +270,6 @@ export class IrPaymentFolio {
   }
   render() {
     const isNewPayment = this.folioData?.payment_type?.code === '001' && this.folioData.id === -1;
-    console.log(isNewPayment);
     return (
       <ir-drawer
         placement="start"
@@ -350,7 +349,7 @@ export class IrPaymentFolio {
               </ir-validator>
             )}
             <ir-validator
-              value={this.folioData?.amount?.toString() ?? ''}
+              value={this.folioData?.amount?.toString() ?? undefined}
               autovalidate={this.autoValidate}
               schema={folioBaseSchema.shape.amount}
               valueEvent="text-change input input-change"
@@ -361,7 +360,7 @@ export class IrPaymentFolio {
                 label="Amount"
                 mask="price"
                 min={0}
-                onText-change={e => this.updateFolioData({ amount: !e.detail ? null : Number(e.detail) })}
+                onText-change={e => this.updateFolioData({ amount: !e.detail ? undefined : Number(e.detail) })}
               >
                 <span slot="start">{calendar_data.currency.symbol}</span>
               </ir-custom-input>
@@ -386,14 +385,28 @@ export class IrPaymentFolio {
           <ir-custom-button class="flex-fill" size="medium" data-drawer="close" appearance="filled" variant="neutral" onClickHandler={() => this.closeFolio()}>
             Cancel
           </ir-custom-button>
-          <ir-custom-button onClickHandler={() => this.savePayment()} loading={this.isLoading === 'save'} class="flex-fill" size="medium" appearance="accent" variant="brand">
+          <ir-custom-button
+            onClickHandler={() => this.savePayment()}
+            loading={this.isLoading === 'save'}
+            class="flex-fill"
+            size="medium"
+            appearance={isNewPayment ? 'filled' : 'accent'}
+            variant="brand"
+          >
             Save
           </ir-custom-button>
-          {/* {isNewPayment && ( */}
-          <ir-custom-button onClickHandler={() => this.savePayment(true)} loading={this.isLoading === 'save'} class="flex-fill" size="medium" appearance="accent" variant="brand">
-            Save & Print
-          </ir-custom-button>
-          {/* )} */}
+          {isNewPayment && (
+            <ir-custom-button
+              onClickHandler={() => this.savePayment(true)}
+              loading={this.isLoading === 'save-print'}
+              class="flex-fill"
+              size="medium"
+              appearance="accent"
+              variant="brand"
+            >
+              Save & Print
+            </ir-custom-button>
+          )}
         </div>
       </ir-drawer>
     );
