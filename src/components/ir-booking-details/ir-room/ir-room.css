@@ -88,8 +88,29 @@
 :host(*) {
   box-sizing: border-box;
 }
-.booking-room__details-container {
+/* .booking-room__details-container {
   padding-inline-start: calc(1.25rem + var(--spacing));
+} */
+.booking-room__collapse-btn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  height: fit-content;
+  border-radius: calc(var(--wa-panel-border-radius) - var(--wa-panel-border-width));
+  aspect-ratio: 1;
+  transition: rotate var(--wa-transition-normal) var(--wa-transition-easing);
+}
+.booking-room__collapse-btn[data-state='opened'] {
+  rotate: 90deg;
+}
+.booking-room__collapse-btn[data-state='opened']:dir(rtl) {
+  rotate: -90deg;
+}
+
+.booking-room__collapse-btn:focus-visible {
+  outline: var(--wa-focus-ring);
+  outline-offset: calc(var(--wa-panel-border-width) + var(--wa-focus-ring-offset));
 }
 .booking-room__price-row {
   display: flex;
