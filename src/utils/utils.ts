@@ -162,7 +162,29 @@ export function dateToFormattedString(date: Date): string {
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
-
+/**
+ * Converts a status like "IN-HOUSE" to "IN_HOUSE".
+ *
+ * @param status - Status string to normalize.
+ * @returns The status with hyphens replaced by underscores.
+ */
+export function normalizeStatus(status: string): string {
+  return status.replace(/-/g, '_');
+}
+/**
+ * Converts a phrase like "Pending confirmation" into "PENDING-CONFIRMATION".
+ *
+ * Rules:
+ *  - Trim extra spaces
+ *  - Replace spaces with hyphens
+ *  - Uppercase the entire string
+ *
+ * @param text - Input status text.
+ * @returns Normalized status in UPPERCASE with hyphens.
+ */
+export function toStatusCode(text: string): string {
+  return text.trim().replace(/\s+/g, '-').toUpperCase();
+}
 export function formatLegendColors(legendData) {
   let formattedLegendData: any = {};
 
@@ -176,9 +198,16 @@ export function formatLegendColors(legendData) {
     'BLOCKED': { id: 6, clsName: 'BLOCKED' },
     'BLOCKED-WITH-DATES': { id: 7, clsName: 'BLOCKED_WITH_DATES' },
     'NOTES': { id: 8, clsName: 'NOTES' },
-    'OUTSTANDING-BALANCE': { id: 9, clsName: 'OUTSTANDING_BALANCE' },
-    'TEMP-EVENT': { id: 10, clsName: 'PENDING_CONFIRMATION' },
+    'OUTSTANDING-BALANCE': { id: 10, clsName: 'OUTSTANDING_BALANCE' },
+    'TEMP-EVENT': { id: 11, clsName: 'PENDING_CONFIRMATION' },
   };
+  // const statusId = (() => {
+  //   let d = {};
+  //   legendData.forEach(element => {
+  //     d[toStatusCode(element.name)] = { id: Number(element?.id), clsName: normalizeStatus(element.name) };
+  //   });
+  //   return d;
+  // })();
   legendData.forEach(legend => {
     formattedLegendData[legend.id] = legend;
     formattedLegendData.statusId = statusId; // NOTE: This will overwrite the 'statusId' property with every iteration.
