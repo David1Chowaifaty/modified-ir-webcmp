@@ -4,7 +4,7 @@
   --ota-bar-width: 2px;
   --stripe-period: 20px;
   --split-border-width: 5px;
-  --split-border-color: black;
+  --split-border-color: #000000;
 }
 
 .bookingEventBase {
