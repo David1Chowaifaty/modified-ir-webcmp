@@ -993,7 +993,7 @@ export class IglBookingEvent {
         {(balanceNode || isDepartureAfterHotelCheckout) && (
           <div class="balanceIcon d-flex">
             {isDepartureAfterHotelCheckout && <div id={'event_late_checkout_' + this.getBookingId()} class="legend_circle" style={{ backgroundColor: '#999999' }}></div>}
-            {balanceNode ? <div id={'event_balance_' + this.getBookingId()} class="legend_circle" style={{ backgroundColor: balanceNode.color }}></div> : null}
+            {balanceNode ? <div id={'event_balance_' + this.getBookingId()} class="legend_circle" style={{ backgroundColor: '#f34752' }}></div> : null}
           </div>
         )}
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
