@@ -130,7 +130,7 @@ export class IglReallocationDialog {
     const hasRateplans = this.hasRateplanRequirement();
 
     return (
-      <ir-dialog label={'Change rate plan'} ref={el => (this.dialogEl = el)} onIrDialogHide={this.handleDialogVisibilityChange}>
+      <ir-dialog label={this.data?.title} ref={el => (this.dialogEl = el)} onIrDialogHide={this.handleDialogVisibilityChange}>
         {this.data && (
           <Fragment>
             <div class="dialog-body">
