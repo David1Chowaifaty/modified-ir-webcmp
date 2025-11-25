@@ -116,8 +116,8 @@ export class IglReallocationDialog {
     this.dialogClose.emit(false);
   };
 
-  private handleRateplanChange = (event: CustomEvent<string>) => {
-    this.selectedRateplan = event.detail;
+  private handleRateplanChange = (value: string) => {
+    this.selectedRateplan = value;
     this.showRateplanError = false;
   };
 
@@ -130,25 +130,49 @@ export class IglReallocationDialog {
     const hasRateplans = this.hasRateplanRequirement();
 
     return (
-      <ir-dialog label={this.data.title} ref={el => (this.dialogEl = el)} onIrDialogHide={this.handleDialogVisibilityChange}>
+      <ir-dialog label={'Alert'} ref={el => (this.dialogEl = el)} onIrDialogHide={this.handleDialogVisibilityChange}>
         {this.data && (
           <Fragment>
             <div class="dialog-body">
               <p class="text-left dialog-body__description m-0 p-0">{this.data.description}</p>
               {hasRateplans && (
-                <ir-select
-                  ref={el => (this.rateplanSelectEl = el)}
-                  required
-                  firstOption="Select rate plan..."
-                  data={this.rateplanOptions.map(option => ({ text: option.text, value: option.value }))}
-                  error={this.showRateplanError}
-                  onSelectChange={this.handleRateplanChange}
-                ></ir-select>
+                // <ir-select
+                //   ref={el => (this.rateplanSelectEl = el)}
+                //   required
+                //   firstOption="Select rate plan..."
+                //   data={this.rateplanOptions.map(option => ({ text: option.text, value: option.value }))}
+                //   error={this.showRateplanError}
+                //   onSelectChange={this.handleRateplanChange}
+                // ></ir-select>
+                <wa-select
+                  onwa-hide={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                  }}
+                  defaultValue={''}
+                  onwa-show={e => {
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                  }}
+                  aria-invalid={String(this.showRateplanError)}
+                  onchange={e => this.handleRateplanChange((e.target as any).value)}
+                >
+                  <wa-option value="">Select rate plan...</wa-option>
+                  {this.rateplanOptions.map(option => (
+                    <wa-option key={option.value} value={option.value}>
+                      {option.text}
+                    </wa-option>
+                  ))}
+                </wa-select>
               )}
             </div>
             <div class="dialog-footer" slot="footer">
-              <ir-button onClick={this.handleCancelClick} text="Cancel" size="md" btn_color="secondary"></ir-button>
-              <ir-button text="Confirm" onClick={() => this.reallocateUnit()} size="md" isLoading={isRequestPending('/ReAllocate_Exposed_Room')}></ir-button>
+              <ir-custom-button appearance="filled" variant="neutral" onClickHandler={this.handleCancelClick} size="medium">
+                Cancel
+              </ir-custom-button>
+              <ir-custom-button variant="brand" onClickHandler={() => this.reallocateUnit()} size="medium" loading={isRequestPending('/ReAllocate_Exposed_Room')}>
+                Confirm
+              </ir-custom-button>
             </div>
           </Fragment>
         )}

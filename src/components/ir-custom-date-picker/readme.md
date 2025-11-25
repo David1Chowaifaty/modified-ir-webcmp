@@ -64,18 +64,11 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [ir-booking-details](../ir-booking-details)
  - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
-
-### Depends on
-
-- [ir-custom-button](../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-custom-date-picker --> ir-custom-button
-  ir-booking-details --> ir-custom-date-picker
   ir-payment-folio --> ir-custom-date-picker
   style ir-custom-date-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```

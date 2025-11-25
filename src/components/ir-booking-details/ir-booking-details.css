@@ -1,6 +1,7 @@
 :host {
   overflow-x: hidden;
   --ir-dialog-max-width: 20rem;
+  text-align: start;
   font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
 }
 :host * {
@@ -14,6 +15,9 @@
 
 :host th {
   font-weight: 600;
+}
+.booking-details__date-view-header {
+  font-size: 1.1rem !important;
 }
 
 .booking-details__booking-info {

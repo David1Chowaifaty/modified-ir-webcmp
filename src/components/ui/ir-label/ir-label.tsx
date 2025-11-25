@@ -41,7 +41,7 @@ export class IrLabel {
   render() {
     // If we have no content and no placeholder, and we are NOT ignoring the empty content, return null.
     if (!this.placeholder && !this.content && !this.ignoreEmptyContent) {
-      return null;
+      return <Host data-empty></Host>;
     }
 
     return (

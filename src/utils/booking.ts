@@ -151,11 +151,7 @@ export async function getMyBookings(months: MonthType[]): Promise<any[]> {
   return Array.from(bookingsByPool.values());
 }
 
-function assignBooking(
-  physicalRoom: PhysicalRoomType[],
-  bookingsByPool: Map<string, any>,
-  stayStatusLookup: Map<string, string>,
-): void {
+function assignBooking(physicalRoom: PhysicalRoomType[], bookingsByPool: Map<string, any>, stayStatusLookup: Map<string, string>): void {
   if (!physicalRoom?.length) {
     return;
   }

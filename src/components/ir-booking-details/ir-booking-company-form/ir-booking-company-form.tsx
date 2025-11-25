@@ -1,4 +1,4 @@
-import { Component, h, Method, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Method, Prop, State } from '@stencil/core';
 import { Booking } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 @Component({
@@ -11,11 +11,13 @@ export class IrBookingCompanyForm {
 
   @State() open: boolean;
   @State() isLoading: boolean;
-  @State() guest: Booking['guest'];
+  @State() formData: Pick<Booking, 'company_name' | 'company_tax_nbr'>;
+
+  @Event() resetBookingEvt: EventEmitter<Booking>;
 
   private bookingService = new BookingService();
   componentWillLoad() {
-    this.guest = { ...this.booking.guest };
+    this.formData = { company_name: this.booking.company_name, company_tax_nbr: this.booking.company_tax_nbr };
   }
 
   @Method()
@@ -23,11 +25,38 @@ export class IrBookingCompanyForm {
     this.open = true;
   }
   private updateGuest(params: Partial<Booking['guest']>) {
-    this.guest = { ...this.guest, ...params };
+    this.formData = { ...this.formData, ...params };
   }
   private async saveCompany() {
     try {
-      await this.bookingService.editExposedGuest(this.guest, this.booking.booking_nbr ?? null);
+      this.isLoading = true;
+      const booking = {
+        assign_units: true,
+        is_pms: true,
+        is_direct: this.booking.is_direct,
+        is_backend: true,
+        is_in_loyalty_mode: this.booking.is_in_loyalty_mode,
+        promo_key: this.booking.promo_key,
+        extras: this.booking.extras,
+        agent: this.booking.agent,
+        booking: {
+          ...this.formData,
+          from_date: this.booking.from_date,
+          to_date: this.booking.to_date,
+          remark: this.booking.remark,
+          booking_nbr: this.booking.booking_nbr,
+          property: this.booking.property,
+          booked_on: this.booking.booked_on,
+          source: this.booking.source,
+          rooms: this.booking.rooms,
+          currency: this.booking.currency,
+          arrival: this.booking.arrival,
+          guest: this.booking.guest,
+        },
+        pickup_info: this.booking.pickup_info,
+      };
+      await this.bookingService.doReservation(booking);
+      this.resetBookingEvt.emit({ ...this.booking, ...this.formData });
       this.open = false;
     } catch (error) {
     } finally {
@@ -46,7 +75,7 @@ export class IrBookingCompanyForm {
           <ir-custom-button size="medium" appearance="filled" variant="neutral" data-dialog="close">
             Cancel
           </ir-custom-button>
-          <ir-custom-button loading={this.isLoading} size="medium" variant="brand" onClickHandler={() => this.saveCompany}>
+          <ir-custom-button loading={this.isLoading} size="medium" variant="brand" onClickHandler={() => this.saveCompany()}>
             Save
           </ir-custom-button>
         </div>

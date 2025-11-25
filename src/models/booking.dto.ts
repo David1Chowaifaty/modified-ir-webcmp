@@ -258,6 +258,8 @@ export interface Booking {
     verification_mode: null;
   } | null;
   events: ExposedBookingEvent[];
+  company_name: string | null;
+  company_tax_nbr: string | null;
   ota_manipulations: OTAManipulations[];
   bypassed_ota_revisions: BypassedOtaRevisions[];
   ota_services: OtaService[];

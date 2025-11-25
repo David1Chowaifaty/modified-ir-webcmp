@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { MomentFormatSpecification } from 'moment';
 import IBooking, { ICountry, PhysicalRoomType, PropertyRoomType } from '../models/IBooking';
 import { z } from 'zod';
 import { compareTime, createDateWithOffsetAndHour } from '@/utils/booking';
@@ -477,4 +477,16 @@ export function generateTimeSlotsMilitary(from: string, to: string, stepMinutes:
   }
 
   return timeSlots;
+}
+
+/**
+ * Checks whether a given date falls on a weekend (Saturday or Sunday).
+ *
+ * @param date   - The date to check, as a string (parsed using the given `format`).
+ * @param format - Moment.js format used to parse `date`. Defaults to `'YYYY-MM-DD'`.
+ * @returns `true` if the parsed date is a Saturday or Sunday, otherwise `false`.
+ */
+export function isWeekend(date: string, format: MomentFormatSpecification = 'YYYY-MM-DD'): boolean {
+  const d = moment(date, format);
+  return d.day() === 0 || d.day() === 6;
 }

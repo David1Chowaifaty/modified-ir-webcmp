@@ -317,8 +317,8 @@ export class IrRoom {
           style={{ '--icon-size': '1.6rem' }}
         ></ir-button> */}
 
-        <wa-details class="booking-room__details" appearance="plain">
-          <div slot="summary" style={{ width: '100%' }}>
+        <wa-details name="room" icon-placement="start" class="booking-room__details" appearance="plain">
+          <div slot="summary" class="booking-room_summary" style={{ width: '100%' }}>
             <div class="d-flex align-items-center justify-content-between">
               <p class="m-0 p-0">
                 <span class="m-0 p-0" style={{ fontWeight: '600' }}>
@@ -335,6 +335,7 @@ export class IrRoom {
                     <Fragment>
                       <wa-tooltip for={`edit-room-${this.room.identifier}`}>Edit {this.room.roomtype.name}</wa-tooltip>
                       <ir-custom-button
+                        iconBtn
                         id={`edit-room-${this.room.identifier}`}
                         class="booking-room__edit-button"
                         onClickHandler={this.handleEditClick.bind(this)}
@@ -351,6 +352,7 @@ export class IrRoom {
                     <Fragment>
                       <wa-tooltip for={`delete-room-${this.room.identifier}`}>Delete {this.room.roomtype.name}</wa-tooltip>
                       <ir-custom-button
+                        iconBtn
                         id={`delete-room-${this.room.identifier}`}
                         class="booking-room__delete-button"
                         onClickHandler={this.openModal.bind(this, 'delete')}
@@ -365,7 +367,7 @@ export class IrRoom {
                 </div>
               </div>
             </div>
-            <div class="d-flex align-items-center sm-mb-1">
+            <div class="d-flex align-items-center">
               <ir-date-view
                 class="mr-1  flex-grow-1"
                 style={{ width: 'fit-content' }}
@@ -393,18 +395,24 @@ export class IrRoom {
               <p class="m-0 p-0">{`${this.mainGuest.first_name || ''} ${this.mainGuest.last_name || ''}`}</p>
               {this.room.rateplan.selected_variation.adult_nbr > 0 &&
                 (this.room.unit ? (
-                  <ir-tooltip message={'View guests'} class="m-0 p-0" customSlot>
-                    <ir-button
-                      class="m-0 p-0"
-                      slot="tooltip-trigger"
-                      btn_color="link"
-                      renderContentAsHtml
-                      onClickHandler={() => this.showGuestModal()}
-                      size="sm"
-                      btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit', textAlign: 'center', lineHeight: '1.2' }}
-                      text={this.formatVariation(this.room.occupancy)}
-                    ></ir-button>
-                  </ir-tooltip>
+                  // <ir-tooltip message={'View guests'} class="m-0 p-0" customSlot>
+                  //   <ir-button
+                  //     class="m-0 p-0"
+                  //     slot="tooltip-trigger"
+                  //     btn_color="link"
+                  //     renderContentAsHtml
+                  //     onClickHandler={() => this.showGuestModal()}
+                  //     size="sm"
+                  //     btnStyle={{ width: 'fit-content', margin: '0', padding: '0', fontSize: 'inherit', textAlign: 'center', lineHeight: '1.2' }}
+                  //     text={this.formatVariation(this.room.occupancy)}
+                  //   ></ir-button>
+                  // </ir-tooltip>
+                  <Fragment>
+                    <wa-tooltip for={`view-guest-btn-${this.room.identifier}`}>View guests</wa-tooltip>
+                    <ir-custom-button onClickHandler={() => this.showGuestModal()} id={`view-guest-btn-${this.room.identifier}`} variant="brand" appearance="plain">
+                      <span innerHTML={this.formatVariation(this.room.occupancy)}></span>
+                    </ir-custom-button>
+                  </Fragment>
                 ) : (
                   <span innerHTML={this.formatVariation(this.room.occupancy)}></span>
                 ))}
@@ -413,7 +421,7 @@ export class IrRoom {
             {this.includeDepartureTime && (
               <div class="d-flex align-items-center" style={{ marginTop: '0.5rem', marginBottom: '0.875rem', gap: '0.5rem' }}>
                 <p class="m-0 p-0">Expected departure time:</p>
-                <ir-select
+                {/* <ir-select
                   selectedValue={this.room.departure_time?.code}
                   showFirstOption={false}
                   onSelectChange={e => {
@@ -423,12 +431,28 @@ export class IrRoom {
                     text: d[`CODE_VALUE_${this.language?.toUpperCase()}`] ?? d[`CODE_VALUE_EN`],
                     value: d.CODE_NAME,
                   }))}
-                ></ir-select>
+                ></ir-select> */}
+                <wa-select
+                  onchange={e => {
+                    this.updateDepartureTime((e.target as any).value);
+                  }}
+                  style={{ width: '140px' }}
+                  size="small"
+                  placeholder="Not provided"
+                  value={this.room.departure_time?.code}
+                  defaultValue={this.room.departure_time?.code}
+                >
+                  {this.departureTime?.map(dt => (
+                    <wa-option key={dt.CODE_NAME} value={dt.CODE_NAME}>
+                      {dt[`CODE_VALUE_${this.language?.toUpperCase()}`] ?? dt[`CODE_VALUE_EN`]}
+                    </wa-option>
+                  ))}
+                </wa-select>
               </div>
             )}
           </div>
 
-          <div>
+          <div class="booking-room__details-container">
             <div class="d-flex sm-mb-1 sm-mt-1">
               <div class=" sm-padding-top">
                 <p class="sm-padding-right" style={{ fontWeight: '600' }}>{`${locales.entries.Lcz_Breakdown}:`}</p>

@@ -104,7 +104,7 @@ export class IglSplitBooking {
       this.errors = null;
       const selectedUnit = SelectedUnitSchema.parse(this.selectedUnit);
       const oldRooms = this.booking.rooms.filter(r => r.identifier !== this.identifier);
-      const canCheckIn = this.room.in_out?.code === '001' ? (moment().isBefore(this.selectedDates.from_date) ? false : true) : false;
+      //  const canCheckIn = this.room.in_out?.code === '001' ? (moment().isBefore(this.selectedDates.from_date) ? false : true) : false;
       let rooms = [
         ...oldRooms,
         {
@@ -117,12 +117,6 @@ export class IglSplitBooking {
         {
           ...this.room,
           identifier: null,
-          in_out: canCheckIn
-            ? this.room.in_out
-            : {
-                code: '000',
-              },
-          check_in: canCheckIn,
           assigned_units_pool: null,
           parent_room_identifier: this.room.identifier,
           is_split: true,

@@ -53,15 +53,15 @@ Type: `Promise<void>`
 ### Used by
 
  - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
+ - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
- - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
 
 ### Graph
 ```mermaid
 graph TD;
   igl-reallocation-dialog --> ir-dialog
+  ir-booking-company-form --> ir-dialog
   ir-booking-header --> ir-dialog
-  ir-reservation-information --> ir-dialog
   style ir-dialog fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

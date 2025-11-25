@@ -1,3 +1,32 @@
 :host {
   display: block;
 }
+
+.reservation-information {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem !important;
+  /* --ir-reservation-label-height: 32px; */
+}
+
+.reservation-information__property-name {
+  margin: 0;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.reservation-information__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  /* min-height: var(--ir-reservation-label-height); */
+}
+
+.reservation-information > ir-label,
+.reservation-information > ota-label,
+.reservation-information__row ir-label {
+  /* min-height: var(--ir-reservation-label-height); */
+  display: flex;
+  align-items: center;
+}

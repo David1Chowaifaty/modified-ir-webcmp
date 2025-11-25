@@ -20,10 +20,18 @@ export class IrReservationInformation {
   @State() userCountry: ICountry | null = null;
   @State() isOpen: boolean;
   @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
+  private reservationInformationEl?: HTMLDivElement;
   private irBookingCompanyFormRef: any;
   componentWillLoad() {
     const guestCountryId = this.booking?.guest?.country_id;
     this.userCountry = guestCountryId ? this.countries?.find(country => country.id === guestCountryId) || null : null;
+  }
+  componentDidLoad() {
+    this.setDynamicLabelHeight();
+  }
+
+  componentDidUpdate() {
+    this.setDynamicLabelHeight();
   }
   private handleEditClick(e: CustomEvent, type: BookingDetailsSidebarEvents) {
     e.stopImmediatePropagation();
@@ -65,12 +73,31 @@ export class IrReservationInformation {
     // }
     // return mobile;
   }
+  private setDynamicLabelHeight() {
+    if (!this.reservationInformationEl) {
+      return;
+    }
+    requestAnimationFrame(() => {
+      const labelElements = this.reservationInformationEl?.querySelectorAll('ir-label, ota-label, .reservation-information__row');
+      if (!labelElements || labelElements.length === 0) {
+        return;
+      }
+      const measured = Array.from(labelElements)
+        .map(el => el.getBoundingClientRect().height)
+        .filter(height => height > 0);
+      if (!measured.length) {
+        return;
+      }
+      const maxHeight = Math.max(...measured, 32);
+      this.reservationInformationEl.style.setProperty('--ir-reservation-label-height', `${maxHeight}px`);
+    });
+  }
   render() {
     const privateNote = getPrivateNote(this.booking.extras);
     return (
       <wa-card>
-        <div>
-          <p>{this.booking.property.name || ''}</p>
+        <div class="reservation-information" ref={el => (this.reservationInformationEl = el as HTMLDivElement)}>
+          <p class="reservation-information__property-name">{this.booking.property.name || ''}</p>
           <ir-label
             labelText={`${locales.entries.Lcz_Source}:`}
             content={this.booking.origin.Label}
@@ -86,33 +113,33 @@ export class IrReservationInformation {
           ></ir-label>
           <ir-label labelText={`${locales.entries.Lcz_BookedBy}:`} content={`${this.booking.guest.first_name} ${this.booking.guest.last_name}`}>
             {this.booking.guest?.nbr_confirmed_bookings > 1 && !this.booking.agent && (
-              <div class={'m-0 p-0'} slot="prefix">
-                <ir-tooltip message={`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())} customSlot>
-                  <div class="d-flex align-items-center m-0 p-0" slot="tooltip-trigger" style={{ gap: '0.25rem' }}>
-                    <p class={'p-0 m-0'} style={{ color: '#FB0AAD' }}>
-                      {this.booking.guest.nbr_confirmed_bookings}
-                    </p>
-                    <ir-icons style={{ '--icon-size': '1rem' }} color="#FB0AAD" name="heart-fill"></ir-icons>
-                  </div>
-                </ir-tooltip>
+              <div class={'m-0 p-0 '} slot="prefix">
+                <wa-tooltip for="guests_nbr_confirmed_bookings">
+                  {`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())}
+                </wa-tooltip>
+                <div style={{ color: '#FB0AAD' }} id="guests_nbr_confirmed_bookings">
+                  <span> {this.booking.guest.nbr_confirmed_bookings}</span>
+                  <wa-icon name="heart" style={{ color: '#FB0AAD' }}></wa-icon>
+                </div>
               </div>
             )}
 
             <wa-tooltip for={`edit_guest-details`}>Edit guest details</wa-tooltip>
-            <ir-custom-button slot="suffix" id={`edit_guest-details`} onClickHandler={e => this.handleEditClick(e, 'guest')} appearance={'plain'} variant={'neutral'}>
+            <ir-custom-button iconBtn slot="suffix" id={`edit_guest-details`} onClickHandler={e => this.handleEditClick(e, 'guest')} appearance={'plain'} variant={'neutral'}>
               <wa-icon name="edit" label="Edit guest details" style={{ fontSize: '1rem' }}></wa-icon>
             </ir-custom-button>
           </ir-label>
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="reservation-information__row">
             <ir-label
               labelText={`Company:`}
-              placeholder={'no company entered'}
-              content={''}
+              placeholder={'No company name provided'}
+              content={`${this.booking.company_name ?? ''}${this.booking.company_tax_nbr ? ` - ${this.booking.company_tax_nbr}` : ''}`}
               display={'flex'}
               // ignore_content
             ></ir-label>
             <wa-tooltip for={`edit_create-company-info`}>Add company info</wa-tooltip>
             <ir-custom-button
+              iconBtn
               id={`edit_create-company-info`}
               onClickHandler={e => {
                 e.stopImmediatePropagation();
@@ -163,7 +190,7 @@ export class IrReservationInformation {
             ></ota-label>
           )}
 
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="reservation-information__row">
             <ir-label
               labelText={`${locales.entries.Lcz_BookingPrivateNote}:`}
               placeholder={locales.entries.Lcz_VisibleToHotelOnly}
@@ -172,7 +199,7 @@ export class IrReservationInformation {
               // ignore_content
             ></ir-label>
             <wa-tooltip for={`edit_create-extra-note`}>{privateNote ? 'Edit' : 'Create'} private note</wa-tooltip>
-            <ir-custom-button id={`edit_create-extra-note`} onClickHandler={e => this.handleEditClick(e, 'extra_note')} appearance={'plain'} variant={'neutral'}>
+            <ir-custom-button iconBtn id={`edit_create-extra-note`} onClickHandler={e => this.handleEditClick(e, 'extra_note')} appearance={'plain'} variant={'neutral'}>
               <wa-icon style={{ fontSize: '1rem' }} name="edit" label="Edit or create private note"></wa-icon>
             </ir-custom-button>
           </div>

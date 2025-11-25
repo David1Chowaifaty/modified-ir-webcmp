@@ -85,7 +85,7 @@ export class IrBookingDetails {
   private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
   // private printingBaseUrl = 'http://localhost:5863/%1/printing?id=%2';
   private modalRef: HTMLIrModalElement;
-  // private paymentFolioRef: HTMLIrPaymentFolioElement;
+  private paymentFolioRef: HTMLIrPaymentFolioElement;
 
   componentWillLoad() {
     if (this.ticket !== '') {
@@ -107,10 +107,9 @@ export class IrBookingDetails {
   handleSideBarEvents(e: CustomEvent<OpenSidebarEvent<unknown>>) {
     this.sidebarState = e.detail.type;
     this.sidebarPayload = e.detail.payload;
-    //TODO:Enable
-    // if (this.sidebarState === 'payment-folio') {
-    //   this.paymentFolioRef.openFolio();
-    // }
+    if (this.sidebarState === 'payment-folio') {
+      this.paymentFolioRef.openFolio();
+    }
   }
 
   @Listen('clickHandler')
@@ -425,17 +424,7 @@ export class IrBookingDetails {
             onCloseModal={handleClose}
           ></ir-room-guests>
         );
-      case 'payment-folio':
-        return (
-          <ir-payment-folio
-            bookingNumber={this.booking.booking_nbr}
-            paymentEntries={this.paymentEntries}
-            slot="sidebar-body"
-            payment={this.sidebarPayload.payment}
-            mode={this.sidebarPayload.mode}
-            onCloseModal={handleClose}
-          ></ir-payment-folio>
-        );
+
       default:
         return null;
     }
@@ -628,7 +617,7 @@ export class IrBookingDetails {
         <div class="booking-details__info-column">
           <ir-reservation-information countries={this.countries} booking={this.booking}></ir-reservation-information>
           <wa-card>
-            <ir-date-view class="font-size-large" slot="header" from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
+            <ir-date-view class="booking-details__date-view-header" slot="header" from_date={this.booking.from_date} to_date={this.booking.to_date}></ir-date-view>
             {this.hasRoomAdd && this.booking.is_editable && (
               <Fragment>
                 <wa-tooltip for="room-add">Add unit</wa-tooltip>
@@ -685,27 +674,28 @@ export class IrBookingDetails {
       >
         {this.renderSidebarContent()}
       </ir-sidebar>,
-      <ir-sidebar
-        open={this.sidebarState === 'payment-folio'}
-        side={'left'}
-        id="folioSidebar"
-        onIrSidebarToggle={e => {
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-          this.sidebarState = null;
-        }}
-        showCloseButton={false}
-      >
-        {this.renderSidebarContent()}
-      </ir-sidebar>,
-      // <ir-payment-folio
-      //   bookingNumber={this.booking.booking_nbr}
-      //   paymentEntries={this.paymentEntries}
-      //   payment={this.sidebarPayload?.payment}
-      //   mode={this.sidebarPayload?.mode}
-      //   ref={el => (this.paymentFolioRef = el)}
-      //   onCloseModal={() => (this.sidebarState = null)}
-      // ></ir-payment-folio>,
+      // <ir-sidebar
+      //   open={this.sidebarState === 'payment-folio'}
+      //   side={'left'}
+      //   id="folioSidebar"
+      //   onIrSidebarToggle={e => {
+      //     e.stopImmediatePropagation();
+      //     e.stopPropagation();
+      //     this.sidebarState = null;
+      //   }}
+      //   showCloseButton={false}
+      // >
+      //   {this.renderSidebarContent()}
+      // </ir-sidebar>,
+      <ir-payment-folio
+        style={{ height: 'auto' }}
+        bookingNumber={this.booking.booking_nbr}
+        paymentEntries={this.paymentEntries}
+        payment={this.sidebarPayload?.payment}
+        mode={this.sidebarPayload?.mode}
+        ref={el => (this.paymentFolioRef = el)}
+        onCloseModal={() => (this.sidebarState = null)}
+      ></ir-payment-folio>,
       <Fragment>
         {this.bookingItem && (
           <igl-book-property

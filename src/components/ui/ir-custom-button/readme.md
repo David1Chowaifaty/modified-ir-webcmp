@@ -19,6 +19,7 @@
 | `formNoValidate` | `form-no-validate` | Used to override the form owner's `novalidate` attribute.                                                                                                                                                            | `boolean`                                                                      | `undefined` |
 | `formTarget`     | `form-target`      | Used to override the form owner's `target` attribute.                                                                                                                                                                | `string`                                                                       | `undefined` |
 | `href`           | `href`             | When set, the underlying button will be rendered as an `<a>` with this `href` instead of a `<button>`.                                                                                                               | `string`                                                                       | `undefined` |
+| `iconBtn`        | `icon-btn`         |                                                                                                                                                                                                                      | `boolean`                                                                      | `undefined` |
 | `loading`        | `loading`          | Draws the button in a loading state.                                                                                                                                                                                 | `boolean`                                                                      | `undefined` |
 | `name`           | `name`             | The name of the button, submitted as a name/value pair with form data, but only when this button is the submitter. This attribute is ignored when `href` is present.                                                 | `string`                                                                       | `undefined` |
 | `pill`           | `pill`             | Draws a pill-style button with rounded edges.                                                                                                                                                                        | `boolean`                                                                      | `undefined` |
@@ -43,11 +44,12 @@
 ### Used by
 
  - [ir-applicable-policies](../../ir-booking-details/ir-payment-details/ir-applicable-policies)
+ - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
- - [ir-custom-date-picker](../../ir-custom-date-picker)
  - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-extra-services](../../ir-booking-details/ir-extra-services)
+ - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
  - [ir-payment-item](../../ir-booking-details/ir-payment-details/ir-payment-item)
  - [ir-payments-folio](../../ir-booking-details/ir-payment-details/ir-payments-folio)
  - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
@@ -58,11 +60,12 @@
 ```mermaid
 graph TD;
   ir-applicable-policies --> ir-custom-button
+  ir-booking-company-form --> ir-custom-button
   ir-booking-details --> ir-custom-button
   ir-booking-header --> ir-custom-button
-  ir-custom-date-picker --> ir-custom-button
   ir-extra-service --> ir-custom-button
   ir-extra-services --> ir-custom-button
+  ir-payment-folio --> ir-custom-button
   ir-payment-item --> ir-custom-button
   ir-payments-folio --> ir-custom-button
   ir-pickup-view --> ir-custom-button

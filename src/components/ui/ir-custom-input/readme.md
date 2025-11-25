@@ -45,22 +45,24 @@
 
 ## Events
 
-| Event        | Description | Type                  |
-| ------------ | ----------- | --------------------- |
-| `inputBlur`  |             | `CustomEvent<void>`   |
-| `inputFocus` |             | `CustomEvent<void>`   |
-| `textChange` |             | `CustomEvent<string>` |
+| Event         | Description | Type                  |
+| ------------- | ----------- | --------------------- |
+| `input-blur`  |             | `CustomEvent<void>`   |
+| `inputFocus`  |             | `CustomEvent<void>`   |
+| `text-change` |             | `CustomEvent<string>` |
 
 
 ## Dependencies
 
 ### Used by
 
+ - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-booking-company-form --> ir-custom-input
   ir-payment-folio --> ir-custom-input
   style ir-custom-input fill:#f9f,stroke:#333,stroke-width:4px
 ```

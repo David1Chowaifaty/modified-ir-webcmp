@@ -86,3 +86,8 @@
   font-size: 0.7em;
   margin-bottom: 2px;
 }
+
+.weekend {
+  font-weight: bold;
+  color: black;
+}

@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Fragment, Host, Listen, Prop, State, h } from '@stencil/core';
 import { BookingService } from '@/services/booking.service';
 import { buildSplitIndex, calculateDaysBetweenDates, getSplitRole, transformNewBooking } from '@/utils/booking';
-import { checkMealPlan, isBlockUnit } from '@/utils/utils';
+import { checkMealPlan, formatAmount, isBlockUnit } from '@/utils/utils';
 import { IRoomNightsData, CalendarModalEvent } from '@/models/property-types';
 import moment from 'moment';
 import { IToast } from '@components/ui/ir-toast/toast';
@@ -912,6 +912,21 @@ export class IglBookingEvent {
     this.renderAgain();
   }
 
+  /**
+   * Checks if the booking's departure time is later than the hotel's configured check-out time.
+   *
+   * @returns {boolean} `true` if departure is after `check_out_till`, otherwise `false`.
+   */
+  private isDepartureAfterHotelCheckout() {
+    const departureTime = this.bookingEvent.DEPARTURE_TIME;
+    if (!departureTime?.code) {
+      return false;
+    }
+    const t1 = moment(calendar_data.property.time_constraints.check_out_till, 'HH:mm');
+    const t2 = moment(departureTime.description, 'HH:mm');
+    return t1.isBefore(t2);
+  }
+
   render() {
     // onMouseLeave={()=>this.showEventInfo(false)}
     let legend = this.getEventLegend();
@@ -926,6 +941,7 @@ export class IglBookingEvent {
       checkout: '',
     };
     backgroundColor = this.bookingEvent.STATUS === 'CHECKED-OUT' ? legend.color : backgroundColor;
+    const isDepartureAfterHotelCheckout = this.isDepartureAfterHotelCheckout();
     // console.log(this.bookingEvent.BOOKING_NUMBER === '46231881' ? this.bookingEvent : '');
     return (
       <Host
@@ -967,8 +983,19 @@ export class IglBookingEvent {
           onTouchStart={event => this.startDragging(event, 'move')}
           onMouseDown={event => this.startDragging(event, 'move')}
         ></div>
+        {isDepartureAfterHotelCheckout && (
+          <wa-tooltip for={'event_late_checkout_' + this.getBookingId()}>Departure time: {this.bookingEvent.DEPARTURE_TIME?.description}</wa-tooltip>
+        )}
+        {balanceNode && (
+          <wa-tooltip for={'event_balance_' + this.getBookingId()}>Balance: {formatAmount(calendar_data.property.currency.symbol, this.bookingEvent.BALANCE)}</wa-tooltip>
+        )}
         {noteNode ? <div class="legend_circle noteIcon" style={{ backgroundColor: noteNode.color }}></div> : null}
-        {balanceNode ? <div class="legend_circle balanceIcon" style={{ backgroundColor: balanceNode.color }}></div> : null}
+        {(balanceNode || isDepartureAfterHotelCheckout) && (
+          <div class="balanceIcon d-flex">
+            {isDepartureAfterHotelCheckout && <div id={'event_late_checkout_' + this.getBookingId()} class="legend_circle" style={{ backgroundColor: '#999999' }}></div>}
+            {balanceNode ? <div id={'event_balance_' + this.getBookingId()} class="legend_circle" style={{ backgroundColor: balanceNode.color }}></div> : null}
+          </div>
+        )}
         {/* onMouseOver={() => this.showEventInfo(true)}  */}
         <div
           class="bookingEventTitle"

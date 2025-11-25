@@ -1,3 +1,63 @@
 :host {
   display: block;
 }
+
+.pickup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pickup-info__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  color: #1f2a37;
+}
+
+.pickup-info__datetime {
+  font-weight: 600;
+  margin: 0;
+}
+
+.pickup-info__due {
+  margin: 0;
+  color: #1f2a37;
+}
+
+.pickup-info__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: #1f2a37;
+}
+
+.pickup-info__line {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.pickup-info__label {
+  font-weight: 600;
+}
+
+.pickup-info__divider {
+  opacity: 0.4;
+}
+
+.pickup-info__note {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 600px) {
+  .pickup-info__summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -28,33 +28,38 @@ export class IrPickupView {
           </ir-custom-button>
 
           {this.booking.pickup_info ? (
-            <div>
-              <div class={'d-flex align-items-center py-0 my-0 pickup-margin'}>
-                <p class={'font-weight-bold mr-1 py-0 my-0'}>
-                  {locales.entries.Lcz_Date}: <span class={'font-weight-normal'}>{moment(this.booking.pickup_info.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</span>
-                </p>
-                {this.booking.pickup_info.hour && this.booking.pickup_info.minute && (
-                  <p class={'font-weight-bold flex-fill py-0 my-0'}>
-                    {locales.entries.Lcz_Time}:
-                    <span class={'font-weight-normal'}> {_formatTime(this.booking.pickup_info.hour.toString(), this.booking.pickup_info.minute.toString())}</span>
+            <div class="pickup-info">
+              <div class="pickup-info__summary">
+                <div>
+                  <p class="pickup-info__datetime">
+                    {moment(this.booking.pickup_info.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}
+                    {this.booking.pickup_info.hour && this.booking.pickup_info.minute && (
+                      <span> • {_formatTime(this.booking.pickup_info.hour.toString(), this.booking.pickup_info.minute.toString())}</span>
+                    )}
                   </p>
-                )}
-                <p class={'font-weight-bold py-0 my-0'}>
-                  {locales.entries.Lcz_DueUponBooking}:{' '}
-                  <span class={'font-weight-normal'}>
+                </div>
+                <p class="pickup-info__due">
+                  {/* {locales.entries.Lcz_DueUponBooking}:{' '} */}
+                  <strong>
                     {this.booking.pickup_info.currency.symbol}
                     {this.booking.pickup_info.total}
-                  </span>
+                  </strong>
                 </p>
               </div>
-              <p class={'font-weight-bold py-0 my-0'}>
-                {locales.entries.Lcz_FlightDetails}:<span class={'font-weight-normal'}> {`${this.booking.pickup_info.details}`}</span>
-              </p>
-              <p class={'py-0 my-0 pickup-margin'}>{`${this.booking.pickup_info.selected_option.vehicle.description}`}</p>
-              <p class={'font-weight-bold py-0 my-0 pickup-margin'}>
-                {locales.entries.Lcz_NbrOfVehicles}:<span class={'font-weight-normal'}> {`${this.booking.pickup_info.nbr_of_units}`}</span>
-              </p>
-              <p class={'small py-0 my-0 pickup-margin'}>
+
+              <div class="pickup-info__details">
+                <ir-label display="inline" labelText={`${locales.entries.Lcz_FlightDetails}:`} content={this.booking.pickup_info.details}></ir-label>
+                <p class="pickup-info__line">
+                  <span class="pickup-info__label">Vehicle:</span>
+                  <span>{this.booking.pickup_info.selected_option.vehicle.description}</span>
+                </p>
+                <p class="pickup-info__line">
+                  <span class="pickup-info__label">{locales.entries.Lcz_NbrOfVehicles}:</span>
+                  <strong>{this.booking.pickup_info.nbr_of_units}</strong>
+                </p>
+              </div>
+
+              <p class="pickup-info__note">
                 {calendar_data.pickup_service.pickup_instruction.description}
                 {calendar_data.pickup_service.pickup_cancelation_prepayment.description}
               </p>

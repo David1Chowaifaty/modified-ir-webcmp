@@ -1,6 +1,7 @@
 :host {
   display: block;
   --payment-type-badge-bg: #ff4961;
+  text-align: start;
 }
 .payment-type-badge {
   background: var(--payment-type-badge-bg);

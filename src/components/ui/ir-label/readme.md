@@ -28,6 +28,7 @@
  - [igl-booking-event-hover](../../igloo-calendar/igl-booking-event-hover)
  - [ir-booking-guarantee](../../ir-booking-details/ir-payment-details/ir-booking-guarantee)
  - [ir-ota-service](../../ir-booking-details/ir-ota-services/ir-ota-service)
+ - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
 
@@ -37,6 +38,7 @@ graph TD;
   igl-booking-event-hover --> ir-label
   ir-booking-guarantee --> ir-label
   ir-ota-service --> ir-label
+  ir-pickup-view --> ir-label
   ir-reservation-information --> ir-label
   ir-room --> ir-label
   style ir-label fill:#f9f,stroke:#333,stroke-width:4px
