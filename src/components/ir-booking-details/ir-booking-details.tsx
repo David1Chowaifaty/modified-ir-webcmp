@@ -688,6 +688,7 @@ export class IrBookingDetails {
       //   {this.renderSidebarContent()}
       // </ir-sidebar>,
       <ir-payment-folio
+        style={{ height: 'auto' }}
         bookingNumber={this.booking.booking_nbr}
         paymentEntries={this.paymentEntries}
         payment={this.sidebarPayload?.payment}
