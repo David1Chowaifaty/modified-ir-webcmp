@@ -132,8 +132,8 @@ export class IrReservationInformation {
           <div class="reservation-information__row">
             <ir-label
               labelText={`Company:`}
-              placeholder={'no company entered'}
-              content={''}
+              placeholder={'No company name provided'}
+              content={`${this.booking.company_name ?? ''}${this.booking.company_tax_nbr ? ` - ${this.booking.company_tax_nbr}` : ''}`}
               display={'flex'}
               // ignore_content
             ></ir-label>

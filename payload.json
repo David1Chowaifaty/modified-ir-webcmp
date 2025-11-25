@@ -4,700 +4,1000 @@
   "is_direct": true,
   "is_backend": true,
   "is_in_loyalty_mode": false,
-  "promo_key": null,
+  "promo_key": "",
+  "company_name": "Igloorooms LTD",
+  "company_tax_nbr": "VAT 1232",
   "extras": [
-      {
-          "key": "private_note",
-          "value": ""
-      },
-      {
-          "key": "is_backend",
-          "value": true
-      },
-      {
-          "key": "ERROR_EMAIL",
-          "value": ""
-      },
-      {
-          "key": "agent_payment_mode",
-          "value": ""
-      },
-      {
-          "key": "payment_code",
-          "value": ""
-      }
+    {
+      "key": "private_note",
+      "value": "flowers"
+    },
+    {
+      "key": "is_backend",
+      "value": "true"
+    }
   ],
-  "agent": {
-      "id": "2"
-  },
+  "agent": null,
   "booking": {
-      "from_date": "2025-08-01",
-      "to_date": "2025-08-02",
-      "remark": null,
-      "booking_nbr": "",
-      "property": {
-          "id": 42
-      },
-      "booked_on": {
-          "date": "2025-08-01",
-          "hour": 14,
-          "minute": 25
-      },
-      "source": "",
-      "rooms": [
+    "from_date": "2025-11-30",
+    "to_date": "2025-12-08",
+    "remark": "",
+    "booking_nbr": "48205422552",
+    "property": {
+      "address": null,
+      "adult_child_constraints": null,
+      "affiliates": null,
+      "agents": null,
+      "allowed_booking_sources": null,
+      "allowed_cards": null,
+      "allowed_payment_methods": null,
+      "amenities": null,
+      "aname": null,
+      "area": null,
+      "baby_cot_offering": null,
+      "be_listing_mode": null,
+      "calendar_extra": null,
+      "calendar_legends": null,
+      "city": null,
+      "cleaning_frequency": null,
+      "company": null,
+      "contacts": null,
+      "country": null,
+      "currency": null,
+      "description": null,
+      "extra_info": null,
+      "id": 42,
+      "images": null,
+      "internet_offering": null,
+      "is_automatic_check_in_out": null,
+      "is_be_enabled": null,
+      "is_frontdesk_enabled": null,
+      "is_multi_property": null,
+      "is_pms_enabled": null,
+      "is_vacation_rental": null,
+      "location": null,
+      "max_nights": 0,
+      "mpo": null,
+      "name": "igloorooms Demo Hotel",
+      "parking_offering": null,
+      "payment_methods": null,
+      "perma_link": null,
+      "pets_acceptance": null,
+      "phone": null,
+      "pickup_service": null,
+      "postal": null,
+      "privacy_policy": null,
+      "promotions": null,
+      "registered_name": null,
+      "roomtypes": null,
+      "social_media": null,
+      "sources": null,
+      "space_theme": null,
+      "tags": null,
+      "tax_nbr": null,
+      "tax_statement": null,
+      "taxation_strategy": null,
+      "taxes": null,
+      "time_constraints": null
+    },
+    "booked_on": {
+      "date": "2025-11-18",
+      "hour": 12,
+      "minute": 5
+    },
+    "source": {
+      "code": "003",
+      "description": "Phone/Email",
+      "id": null,
+      "tag": "",
+      "type": null
+    },
+    "rooms": [
+      {
+        "applicable_policies": [
           {
-              "identifier": null,
-              "roomtype": {
-                  "amenities": [],
-                  "availabilities": null,
-                  "bedding_setup": [
-                      {
-                          "code": "doublebed",
-                          "count": 1,
-                          "name": "Double bed"
-                      }
-                  ],
-                  "description": "Luxury Suites with balcony and amenities",
-                  "exposed_inventory": null,
-                  "id": 112,
-                  "images": [
-                      {
-                          "thumbnail": "",
-                          "tooltip": "VIP Suites",
-                          "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_224.jpg"
-                      },
-                      {
-                          "thumbnail": "",
-                          "tooltip": "VIP Suites",
-                          "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_251.jpg"
-                      },
-                      {
-                          "thumbnail": "",
-                          "tooltip": "VIP Suites",
-                          "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_241.jpg"
-                      },
-                      {
-                          "thumbnail": "",
-                          "tooltip": "VIP Suites",
-                          "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_239.jpg"
-                      },
-                      {
-                          "thumbnail": "",
-                          "tooltip": "VIP Suites",
-                          "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_234.jpg"
-                      },
-                      {
-                          "thumbnail": "",
-                          "tooltip": "VIP Suites",
-                          "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_231.jpg"
-                      },
-                      {
-                          "thumbnail": "",
-                          "tooltip": "VIP Suites",
-                          "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_226.jpg"
-                      },
-                      {
-                          "thumbnail": "",
-                          "tooltip": "VIP Suites",
-                          "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_229.jpg"
-                      }
-                  ],
-                  "inventory": 5,
-                  "is_active": true,
-                  "is_available_to_book": true,
-                  "is_bed_configuration_enabled": false,
-                  "main_image": {
-                      "thumbnail": null,
-                      "tooltip": "VIP Suites",
-                      "url": "https://dhl6m8m6g2w2j.cloudfront.net/ac/AcImage_42_224.jpg"
-                  },
-                  "name": "VIP Suites",
-                  "not_available_reason": null,
-                  "occupancy_default": {
-                      "adult_nbr": 4,
-                      "children_nbr": 0,
-                      "infant_nbr": null
-                  },
-                  "occupancy_max": {
-                      "adult_nbr": 6,
-                      "children_nbr": 0,
-                      "infant_nbr": 0
-                  },
-                  "physicalrooms": null,
-                  "rate": null,
-                  "rateplans": null,
-                  "size": 75,
-                  "smoking_option": {
-                      "allowed_smoking_options": [
-                          {
-                              "code": "",
-                              "description": "No preferences"
-                          },
-                          {
-                              "code": "001",
-                              "description": "Smoking"
-                          },
-                          {
-                              "code": "002",
-                              "description": "Non-smoking"
-                          }
-                      ],
-                      "code": "001",
-                      "description": "Ask"
-                  }
+            "brackets": [
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "000",
+                "currency_id": 4,
+                "due_on": "2025-11-18",
+                "due_on_formatted": "Tuesday, 18 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "Do not use"
               },
-              "rateplan": {
-                  "agents": [
-                      {
-                          "code": "TEST1",
-                          "id": 2,
-                          "is_active": null,
-                          "name": "Alitalia Cabin Crew",
-                          "payment_mode": null,
-                          "verification_mode": null
-                      }
-                  ],
-                  "assignable_units": [
-                      {
-                          "Is_Fully_Available": false,
-                          "Is_Not_Available": true,
-                          "Is_Partially_Available": false,
-                          "from_date": "2025-08-01",
-                          "name": "201",
-                          "pr_id": 52,
-                          "prs_entries": [],
-                          "to_date": "2025-08-02"
-                      },
-                      {
-                          "Is_Fully_Available": true,
-                          "Is_Not_Available": false,
-                          "Is_Partially_Available": false,
-                          "from_date": "2025-08-01",
-                          "name": "202",
-                          "pr_id": 11,
-                          "prs_entries": [
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-01",
-                                  "PRS_ID": null,
-                                  "PR_ID": 11,
-                                  "STAY_SHIFT_CODE": "002",
-                                  "STAY_STATUS_CODE": null
-                              },
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-02",
-                                  "PRS_ID": null,
-                                  "PR_ID": 11,
-                                  "STAY_SHIFT_CODE": "001",
-                                  "STAY_STATUS_CODE": null
-                              }
-                          ],
-                          "to_date": "2025-08-02"
-                      },
-                      {
-                          "Is_Fully_Available": true,
-                          "Is_Not_Available": false,
-                          "Is_Partially_Available": false,
-                          "from_date": "2025-08-01",
-                          "name": "203",
-                          "pr_id": 53,
-                          "prs_entries": [
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-01",
-                                  "PRS_ID": null,
-                                  "PR_ID": 53,
-                                  "STAY_SHIFT_CODE": "002",
-                                  "STAY_STATUS_CODE": null
-                              },
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-02",
-                                  "PRS_ID": null,
-                                  "PR_ID": 53,
-                                  "STAY_SHIFT_CODE": "001",
-                                  "STAY_STATUS_CODE": null
-                              }
-                          ],
-                          "to_date": "2025-08-02"
-                      },
-                      {
-                          "Is_Fully_Available": true,
-                          "Is_Not_Available": false,
-                          "Is_Partially_Available": false,
-                          "from_date": "2025-08-01",
-                          "name": "204",
-                          "pr_id": 54,
-                          "prs_entries": [
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-01",
-                                  "PRS_ID": null,
-                                  "PR_ID": 54,
-                                  "STAY_SHIFT_CODE": "002",
-                                  "STAY_STATUS_CODE": null
-                              },
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-02",
-                                  "PRS_ID": null,
-                                  "PR_ID": 54,
-                                  "STAY_SHIFT_CODE": "001",
-                                  "STAY_STATUS_CODE": null
-                              }
-                          ],
-                          "to_date": "2025-08-02"
-                      },
-                      {
-                          "Is_Fully_Available": true,
-                          "Is_Not_Available": false,
-                          "Is_Partially_Available": false,
-                          "from_date": "2025-08-01",
-                          "name": "205",
-                          "pr_id": 55,
-                          "prs_entries": [
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-01",
-                                  "PRS_ID": null,
-                                  "PR_ID": 55,
-                                  "STAY_SHIFT_CODE": "002",
-                                  "STAY_STATUS_CODE": null
-                              },
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-02",
-                                  "PRS_ID": null,
-                                  "PR_ID": 55,
-                                  "STAY_SHIFT_CODE": "001",
-                                  "STAY_STATUS_CODE": null
-                              }
-                          ],
-                          "to_date": "2025-08-02"
-                      },
-                      {
-                          "Is_Fully_Available": true,
-                          "Is_Not_Available": false,
-                          "Is_Partially_Available": false,
-                          "from_date": "2025-08-01",
-                          "name": "206",
-                          "pr_id": 56,
-                          "prs_entries": [
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-01",
-                                  "PRS_ID": null,
-                                  "PR_ID": 56,
-                                  "STAY_SHIFT_CODE": "002",
-                                  "STAY_STATUS_CODE": null
-                              },
-                              {
-                                  "BLOCKED_TILL_DATE": null,
-                                  "BLOCKED_TILL_HOUR": null,
-                                  "BLOCKED_TILL_MINUTE": null,
-                                  "BOOK_NBR": null,
-                                  "BSA_REF": null,
-                                  "DESCRIPTION": null,
-                                  "ENTRY_DATE": null,
-                                  "ENTRY_USER_ID": null,
-                                  "EXTRA_DATA": null,
-                                  "EXTRA_DATA_TYPE": null,
-                                  "IS_CONTINUITY": null,
-                                  "My_Pr": null,
-                                  "NOTES": null,
-                                  "OWNER_ID": null,
-                                  "POOL": null,
-                                  "PRS_DATE": "2025-08-02",
-                                  "PRS_ID": null,
-                                  "PR_ID": 56,
-                                  "STAY_SHIFT_CODE": "001",
-                                  "STAY_STATUS_CODE": null
-                              }
-                          ],
-                          "to_date": "2025-08-02"
-                      }
-                  ],
-                  "cancelation": null,
-                  "custom_text": "",
-                  "extra_bed_for_code": "002",
-                  "extra_bed_max": 2,
-                  "extra_bed_rate_per_night": 20,
-                  "extra_bed_rate_per_night_additional_child": 10,
-                  "extra_bed_rate_per_night_first_child": 10,
-                  "guarantee": null,
-                  "id": 4476,
-                  "is_active": true,
-                  "is_available_to_book": true,
-                  "is_booking_engine_enabled": true,
-                  "is_channel_enabled": false,
-                  "is_closed": null,
-                  "is_extra_bed_free_for_children": false,
-                  "is_non_refundable": false,
-                  "is_targeting_travel_agency": true,
-                  "meal_plan": {
-                      "code": "001",
-                      "name": "Bed only"
-                  },
-                  "name": "VIP Suites/Bed-only/Ali",
-                  "not_available_reason": null,
-                  "pre_payment_amount": null,
-                  "pre_payment_amount_gross": null,
-                  "rate_restrictions": null,
-                  "selected_variation": null,
-                  "sell_mode": {
-                      "code": "001",
-                      "description": "Per Room"
-                  },
-                  "short_name": "Bed only",
-                  "sleeps": 4,
-                  "variations": [
-                      {
-                          "IS_MLS_VIOLATED": false,
-                          "MLS_ALERT": null,
-                          "MLS_ALERT_VALUE": null,
-                          "adult_child_offering": null,
-                          "adult_nbr": 2,
-                          "amount": 80,
-                          "amount_gross": 88.8,
-                          "amount_per_night": 80,
-                          "amount_per_night_gross": 88.8,
-                          "applicable_policies": [
-                              {
-                                  "brackets": [
-                                      {
-                                          "amount": 80,
-                                          "amount_formatted": "US$80.00",
-                                          "code": "004",
-                                          "currency_id": 4,
-                                          "due_on": "2025-08-01",
-                                          "due_on_formatted": "Friday, 1 Aug 2025, 14:00",
-                                          "gross_amount": 88.8,
-                                          "gross_amount_formatted": "US$88.80",
-                                          "statement": "100% of the total price"
-                                      }
-                                  ],
-                                  "combined_statement": "US$88.80 if cancelled later or in case of no show.",
-                                  "type": "cancelation"
-                              },
-                              {
-                                  "brackets": [
-                                      {
-                                          "amount": 80,
-                                          "amount_formatted": "US$80.00",
-                                          "code": "001",
-                                          "currency_id": 4,
-                                          "due_on": "2025-08-01",
-                                          "due_on_formatted": null,
-                                          "gross_amount": 88.8,
-                                          "gross_amount_formatted": "US$88.80",
-                                          "statement": "First night from your booking will be charged."
-                                      }
-                                  ],
-                                  "combined_statement": "First night from your booking will be charged.",
-                                  "type": "guarantee"
-                              }
-                          ],
-                          "bed_preference_code": "001",
-                          "child_nbr": 0,
-                          "discount_pct": 0,
-                          "discounted_amount": 80,
-                          "discounted_gross_amount": 88.8,
-                          "extra_bed_free_nbr": 0,
-                          "extra_bed_nbr": 0,
-                          "extra_bed_rate_per_night": 20,
-                          "food_nbr_upsell": 0,
-                          "infant_nbr": null,
-                          "is_lmd": null,
-                          "nights": [
-                              {
-                                  "amount": 80,
-                                  "applied_promotion": null,
-                                  "discounted_amount": 80,
-                                  "discounted_gross_amount": 88.8,
-                                  "extra_bed_nbr": 0,
-                                  "extra_bed_nbr_child": 0,
-                                  "extra_bed_nbr_child_addi": 0,
-                                  "extra_bed_rate_per_night": 20,
-                                  "extra_bed_rate_per_night_child": 10,
-                                  "extra_bed_rate_per_night_child_addi": 10,
-                                  "gross_amount": 88.8,
-                                  "night": "2025-08-01",
-                                  "night_index": 1
-                              }
-                          ],
-                          "nights_nbr": 1,
-                          "prepayment_amount": 80,
-                          "prepayment_amount_gross": 88.8,
-                          "rate_plan_id": 4476,
-                          "smoking_code": "001",
-                          "total_before_discount": null
-                      },
-                      {
-                          "IS_MLS_VIOLATED": false,
-                          "MLS_ALERT": null,
-                          "MLS_ALERT_VALUE": null,
-                          "adult_child_offering": null,
-                          "adult_nbr": 1,
-                          "amount": 80,
-                          "amount_gross": 88.8,
-                          "amount_per_night": 80,
-                          "amount_per_night_gross": 88.8,
-                          "applicable_policies": [
-                              {
-                                  "brackets": [
-                                      {
-                                          "amount": 80,
-                                          "amount_formatted": "US$80.00",
-                                          "code": "004",
-                                          "currency_id": 4,
-                                          "due_on": "2025-08-01",
-                                          "due_on_formatted": "Friday, 1 Aug 2025, 14:00",
-                                          "gross_amount": 88.8,
-                                          "gross_amount_formatted": "US$88.80",
-                                          "statement": "100% of the total price"
-                                      }
-                                  ],
-                                  "combined_statement": "US$88.80 if cancelled later or in case of no show.",
-                                  "type": "cancelation"
-                              },
-                              {
-                                  "brackets": [
-                                      {
-                                          "amount": 80,
-                                          "amount_formatted": "US$80.00",
-                                          "code": "001",
-                                          "currency_id": 4,
-                                          "due_on": "2025-08-01",
-                                          "due_on_formatted": null,
-                                          "gross_amount": 88.8,
-                                          "gross_amount_formatted": "US$88.80",
-                                          "statement": "First night from your booking will be charged."
-                                      }
-                                  ],
-                                  "combined_statement": "First night from your booking will be charged.",
-                                  "type": "guarantee"
-                              }
-                          ],
-                          "bed_preference_code": "001",
-                          "child_nbr": 0,
-                          "discount_pct": 0,
-                          "discounted_amount": 80,
-                          "discounted_gross_amount": 88.8,
-                          "extra_bed_free_nbr": 0,
-                          "extra_bed_nbr": 0,
-                          "extra_bed_rate_per_night": 20,
-                          "food_nbr_upsell": 0,
-                          "infant_nbr": null,
-                          "is_lmd": null,
-                          "nights": [
-                              {
-                                  "amount": 80,
-                                  "applied_promotion": null,
-                                  "discounted_amount": 80,
-                                  "discounted_gross_amount": 88.8,
-                                  "extra_bed_nbr": 0,
-                                  "extra_bed_nbr_child": 0,
-                                  "extra_bed_nbr_child_addi": 0,
-                                  "extra_bed_rate_per_night": 20,
-                                  "extra_bed_rate_per_night_child": 10,
-                                  "extra_bed_rate_per_night_child_addi": 10,
-                                  "gross_amount": 88.8,
-                                  "night": "2025-08-01",
-                                  "night_index": 1
-                              }
-                          ],
-                          "nights_nbr": 1,
-                          "prepayment_amount": 80,
-                          "prepayment_amount_gross": 88.8,
-                          "rate_plan_id": 4476,
-                          "smoking_code": "001",
-                          "total_before_discount": null
-                      }
-                  ]
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "000",
+                "currency_id": 4,
+                "due_on": "2025-11-29",
+                "due_on_formatted": "Saturday, 29 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "Do not use"
               },
-              "prepayment_amount_gross": 0,
-              "unit": {
-                  "id": "11"
-              },
-              "occupancy": {
-                  "adult_nbr": 2,
-                  "children_nbr": 0,
-                  "infant_nbr": null
-              },
-              "bed_preference": null,
-              "from_date": "2025-08-01",
-              "to_date": "2025-08-02",
-              "notes": "",
-              "check_in": false,
-              "days": [
-                  {
-                      "date": "2025-08-01",
-                      "amount": 80,
-                      "cost": null
-                  }
-              ],
-              "guest": {
-                  "email": null,
-                  "first_name": "test",
-                  "last_name": "TEST",
-                  "country_id": null,
-                  "city": null,
-                  "mobile": null,
-                  "address": null,
-                  "dob": null,
-                  "subscribe_to_news_letter": null,
-                  "cci": null
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "007",
+                "currency_id": 4,
+                "due_on": "2025-11-30",
+                "due_on_formatted": "Sunday, 30 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "0%"
               }
+            ],
+            "combined_statement": "No penalty if cancelled before Saturday, 29 Nov 2025, 14:00.",
+            "type": "cancelation"
+          },
+          {
+            "brackets": [
+              {
+                "amount": 112.375,
+                "amount_formatted": "US$112.38",
+                "code": "001",
+                "currency_id": 4,
+                "due_on": "2025-11-18",
+                "due_on_formatted": null,
+                "gross_amount": 124.73625,
+                "gross_amount_formatted": "US$124.74",
+                "statement": "25% of your booking total will be charged"
+              }
+            ],
+            "combined_statement": "25% of your booking total will be charged",
+            "type": "guarantee"
           }
-      ],
-      "currency": {
-          "code": "USD",
-          "id": 4,
-          "symbol": "US$"
-      },
-      "arrival": {
-          "code": "001"
-      },
-      "guest": {
-          "email": "estest.test@gmail.com",
-          "first_name": "test",
-          "last_name": "test5",
-          "country_id": 486,
+        ],
+        "assigned_units_pool": "cf1c8ce8-8870-4f24-b3db-04994183a324",
+        "bed_preference": null,
+        "calendar_extra": "{\"booking_color\":{\"design\":\"skew\",\"color\":\"#ffe502\",\"name\":\"Influencers\"}}",
+        "check_in": false,
+        "cost": null,
+        "days": [
+          {
+            "amount": 139.5,
+            "cost": null,
+            "date": "2025-11-30"
+          },
+          {
+            "amount": 155,
+            "cost": null,
+            "date": "2025-12-01"
+          },
+          {
+            "amount": 155,
+            "cost": null,
+            "date": "2025-12-02"
+          }
+        ],
+        "departure_time": {
+          "code": "015",
+          "description": "11:00"
+        },
+        "from_date": "2025-11-30",
+        "gross_cost": null,
+        "gross_guarantee": 124.73625,
+        "gross_total": 498.945,
+        "guarantee": 112.375,
+        "guest": {
+          "address": null,
+          "alternative_email": null,
+          "cci": null,
           "city": null,
-          "mobile": "12345678",
-          "country_phone_prefix": "+501",
-          "address": "",
+          "country": null,
+          "country_id": null,
+          "country_phone_prefix": null,
           "dob": null,
-          "subscribe_to_news_letter": false,
-          "cci": null
+          "email": null,
+          "first_name": null,
+          "id": null,
+          "id_info": null,
+          "is_main": false,
+          "last_name": "tac",
+          "mobile": null,
+          "mobile_without_prefix": null,
+          "nbr_confirmed_bookings": 0,
+          "notes": null,
+          "password": null,
+          "subscribe_to_news_letter": null
+        },
+        "identifier": "fa30acbc-634b-4e88-a445-c26a66f4ba2f",
+        "in_out": {
+          "code": "000",
+          "description": "Not Set"
+        },
+        "is_split": null,
+        "notes": "",
+        "occupancy": {
+          "adult_nbr": 3,
+          "children_nbr": 1,
+          "infant_nbr": 1
+        },
+        "ota_meta": null,
+        "ota_meta_plain": null,
+        "ota_taxes": null,
+        "ota_unique_id": null,
+        "parent_room_identifier": null,
+        "prepayment_amount": null,
+        "prepayment_amount_gross": null,
+        "rateplan": {
+          "agents": null,
+          "assignable_units": null,
+          "cancelation": "No penalty if cancelled before Saturday, 29 Nov 2025, 14:00.",
+          "custom_text": null,
+          "extra_bed_for_code": null,
+          "extra_bed_max": null,
+          "extra_bed_rate_per_night": null,
+          "extra_bed_rate_per_night_additional_child": null,
+          "extra_bed_rate_per_night_first_child": null,
+          "guarantee": "25% of your booking total will be charged",
+          "id": 3755,
+          "is_active": null,
+          "is_available_to_book": false,
+          "is_booking_engine_enabled": null,
+          "is_channel_enabled": null,
+          "is_closed": null,
+          "is_derived": false,
+          "is_extra_bed_free_for_children": false,
+          "is_non_refundable": false,
+          "is_targeting_travel_agency": null,
+          "meal_plan": {
+            "code": "003",
+            "name": null
+          },
+          "name": "Breakfast & dinner/Half-board",
+          "not_available_reason": null,
+          "pre_payment_amount": null,
+          "pre_payment_amount_gross": null,
+          "rate_restrictions": null,
+          "selected_variation": {
+            "IS_MLS_VIOLATED": false,
+            "MLS_ALERT": null,
+            "MLS_ALERT_VALUE": null,
+            "adult_child_offering": "3 adults - 1 child",
+            "adult_nbr": 3,
+            "amount": null,
+            "amount_gross": null,
+            "amount_per_night": null,
+            "amount_per_night_gross": null,
+            "applicable_policies": null,
+            "bed_preference_code": null,
+            "child_nbr": 1,
+            "discount_pct": null,
+            "discounted_amount": null,
+            "discounted_gross_amount": null,
+            "extra_bed_free_nbr": null,
+            "extra_bed_nbr": null,
+            "extra_bed_rate_per_night": null,
+            "food_nbr_upsell": 0,
+            "infant_nbr": null,
+            "is_lmd": null,
+            "nights": null,
+            "nights_nbr": null,
+            "prepayment_amount": null,
+            "prepayment_amount_gross": null,
+            "rate_plan_id": 3755,
+            "smoking_code": null,
+            "total_before_discount": null
+          },
+          "sell_mode": null,
+          "short_name": "Half board",
+          "sleeps": null,
+          "variations": null
+        },
+        "roomtype": {
+          "amenities": null,
+          "availabilities": null,
+          "bedding_setup": null,
+          "description": null,
+          "exposed_inventory": null,
+          "id": 111,
+          "images": null,
+          "inventory": null,
+          "is_active": null,
+          "is_available_to_book": null,
+          "is_bed_configuration_enabled": null,
+          "is_channel_enabled": null,
+          "main_image": null,
+          "name": "Premium Suites",
+          "not_available_reason": null,
+          "occupancy_default": null,
+          "occupancy_max": null,
+          "physicalrooms": null,
+          "rate": null,
+          "rateplans": null,
+          "size": null,
+          "smoking_option": null
+        },
+        "sharing_persons": [
+          {
+            "address": null,
+            "alternative_email": null,
+            "cci": null,
+            "city": null,
+            "country": {
+              "cities": null,
+              "code": null,
+              "currency": null,
+              "flag": null,
+              "gmt_offset": 0,
+              "id": null,
+              "market_places": null,
+              "name": null,
+              "phone_prefix": null
+            },
+            "country_id": null,
+            "country_phone_prefix": null,
+            "dob": null,
+            "email": null,
+            "first_name": "Tic",
+            "id": 128160,
+            "id_info": {
+              "number": "",
+              "type": {
+                "code": "001",
+                "description": "Passport"
+              }
+            },
+            "is_main": true,
+            "last_name": "tac",
+            "mobile": null,
+            "mobile_without_prefix": null,
+            "nbr_confirmed_bookings": 0,
+            "notes": null,
+            "password": null,
+            "subscribe_to_news_letter": null
+          }
+        ],
+        "smoking_option": null,
+        "taxes": null,
+        "to_date": "2025-12-03",
+        "total": 449.5,
+        "unit": {
+          "calendar_cell": null,
+          "hk_status": null,
+          "housekeeper": null,
+          "id": 6,
+          "is_active": null,
+          "name": "105"
+        }
+      },
+      {
+        "applicable_policies": [
+          {
+            "brackets": [
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "000",
+                "currency_id": 4,
+                "due_on": "2025-11-18",
+                "due_on_formatted": "Tuesday, 18 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "Do not use"
+              },
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "000",
+                "currency_id": 4,
+                "due_on": "2025-11-29",
+                "due_on_formatted": "Saturday, 29 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "Do not use"
+              },
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "007",
+                "currency_id": 4,
+                "due_on": "2025-11-30",
+                "due_on_formatted": "Sunday, 30 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "0%"
+              }
+            ],
+            "combined_statement": "No penalty if cancelled before Saturday, 29 Nov 2025, 14:00.",
+            "type": "cancelation"
+          },
+          {
+            "brackets": [
+              {
+                "amount": 42.75,
+                "amount_formatted": "US$42.75",
+                "code": "001",
+                "currency_id": 4,
+                "due_on": "2025-11-18",
+                "due_on_formatted": null,
+                "gross_amount": 47.4525,
+                "gross_amount_formatted": "US$47.45",
+                "statement": "25% of your booking total will be charged"
+              }
+            ],
+            "combined_statement": "25% of your booking total will be charged",
+            "type": "guarantee"
+          }
+        ],
+        "assigned_units_pool": "8a1ae6a1-68c0-4caf-84ae-129b74b5f09b",
+        "bed_preference": null,
+        "calendar_extra": null,
+        "check_in": false,
+        "cost": null,
+        "days": [
+          {
+            "amount": 81,
+            "cost": null,
+            "date": "2025-11-30"
+          },
+          {
+            "amount": 90,
+            "cost": null,
+            "date": "2025-12-01"
+          }
+        ],
+        "departure_time": {
+          "code": "",
+          "description": ""
+        },
+        "from_date": "2025-11-30",
+        "gross_cost": null,
+        "gross_guarantee": 47.4525,
+        "gross_total": 189.81,
+        "guarantee": 42.75,
+        "guest": {
+          "address": null,
+          "alternative_email": null,
+          "cci": null,
+          "city": null,
+          "country": null,
+          "country_id": null,
+          "country_phone_prefix": null,
+          "dob": null,
+          "email": null,
+          "first_name": "Jhon",
+          "id": null,
+          "id_info": null,
+          "is_main": false,
+          "last_name": "Doe",
+          "mobile": null,
+          "mobile_without_prefix": null,
+          "nbr_confirmed_bookings": 0,
+          "notes": null,
+          "password": null,
+          "subscribe_to_news_letter": null
+        },
+        "identifier": "d6f1e4c2-a272-42a3-a2bc-6efbde4a06a0",
+        "in_out": {
+          "code": "000",
+          "description": "Not Set"
+        },
+        "is_split": null,
+        "notes": "",
+        "occupancy": {
+          "adult_nbr": 2,
+          "children_nbr": 0,
+          "infant_nbr": null
+        },
+        "ota_meta": null,
+        "ota_meta_plain": null,
+        "ota_taxes": null,
+        "ota_unique_id": null,
+        "parent_room_identifier": null,
+        "prepayment_amount": null,
+        "prepayment_amount_gross": null,
+        "rateplan": {
+          "agents": null,
+          "assignable_units": null,
+          "cancelation": "No penalty if cancelled before Saturday, 29 Nov 2025, 14:00.",
+          "custom_text": null,
+          "extra_bed_for_code": null,
+          "extra_bed_max": null,
+          "extra_bed_rate_per_night": null,
+          "extra_bed_rate_per_night_additional_child": null,
+          "extra_bed_rate_per_night_first_child": null,
+          "guarantee": "25% of your booking total will be charged",
+          "id": 123,
+          "is_active": null,
+          "is_available_to_book": false,
+          "is_booking_engine_enabled": null,
+          "is_channel_enabled": null,
+          "is_closed": null,
+          "is_derived": false,
+          "is_extra_bed_free_for_children": false,
+          "is_non_refundable": false,
+          "is_targeting_travel_agency": null,
+          "meal_plan": {
+            "code": "002",
+            "name": null
+          },
+          "name": "Car Rental included/Bed-&-breakfast",
+          "not_available_reason": null,
+          "pre_payment_amount": null,
+          "pre_payment_amount_gross": null,
+          "rate_restrictions": null,
+          "selected_variation": {
+            "IS_MLS_VIOLATED": false,
+            "MLS_ALERT": null,
+            "MLS_ALERT_VALUE": null,
+            "adult_child_offering": "2 adults",
+            "adult_nbr": 2,
+            "amount": null,
+            "amount_gross": null,
+            "amount_per_night": null,
+            "amount_per_night_gross": null,
+            "applicable_policies": null,
+            "bed_preference_code": null,
+            "child_nbr": 0,
+            "discount_pct": null,
+            "discounted_amount": null,
+            "discounted_gross_amount": null,
+            "extra_bed_free_nbr": null,
+            "extra_bed_nbr": null,
+            "extra_bed_rate_per_night": null,
+            "food_nbr_upsell": 0,
+            "infant_nbr": null,
+            "is_lmd": null,
+            "nights": null,
+            "nights_nbr": null,
+            "prepayment_amount": null,
+            "prepayment_amount_gross": null,
+            "rate_plan_id": 123,
+            "smoking_code": null,
+            "total_before_discount": null
+          },
+          "sell_mode": null,
+          "short_name": "Bed & breakfast",
+          "sleeps": null,
+          "variations": null
+        },
+        "roomtype": {
+          "amenities": null,
+          "availabilities": null,
+          "bedding_setup": null,
+          "description": null,
+          "exposed_inventory": null,
+          "id": 110,
+          "images": null,
+          "inventory": null,
+          "is_active": null,
+          "is_available_to_book": null,
+          "is_bed_configuration_enabled": null,
+          "is_channel_enabled": null,
+          "main_image": null,
+          "name": "Standard Rooms",
+          "not_available_reason": null,
+          "occupancy_default": null,
+          "occupancy_max": null,
+          "physicalrooms": null,
+          "rate": null,
+          "rateplans": null,
+          "size": null,
+          "smoking_option": null
+        },
+        "sharing_persons": [
+          {
+            "address": null,
+            "alternative_email": null,
+            "cci": null,
+            "city": null,
+            "country": {
+              "cities": null,
+              "code": null,
+              "currency": null,
+              "flag": null,
+              "gmt_offset": 0,
+              "id": null,
+              "market_places": null,
+              "name": null,
+              "phone_prefix": null
+            },
+            "country_id": null,
+            "country_phone_prefix": null,
+            "dob": "1900-01-01",
+            "email": null,
+            "first_name": "Jhon",
+            "id": 129249,
+            "id_info": {
+              "number": "",
+              "type": {
+                "code": "001",
+                "description": "Passport"
+              }
+            },
+            "is_main": true,
+            "last_name": "Doe",
+            "mobile": null,
+            "mobile_without_prefix": null,
+            "nbr_confirmed_bookings": 0,
+            "notes": null,
+            "password": null,
+            "subscribe_to_news_letter": null
+          }
+        ],
+        "smoking_option": null,
+        "taxes": null,
+        "to_date": "2025-12-02",
+        "total": 171,
+        "unit": {
+          "calendar_cell": null,
+          "hk_status": null,
+          "housekeeper": null,
+          "id": 16,
+          "is_active": null,
+          "name": "05"
+        }
+      },
+      {
+        "applicable_policies": [
+          {
+            "brackets": [
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "000",
+                "currency_id": 4,
+                "due_on": "2025-11-18",
+                "due_on_formatted": "Tuesday, 18 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "Do not use"
+              },
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "000",
+                "currency_id": 4,
+                "due_on": "2025-11-29",
+                "due_on_formatted": "Saturday, 29 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "Do not use"
+              },
+              {
+                "amount": 0,
+                "amount_formatted": "US$0.00",
+                "code": "000",
+                "currency_id": 4,
+                "due_on": "2025-11-30",
+                "due_on_formatted": "Sunday, 30 Nov 2025, 14:00",
+                "gross_amount": 0,
+                "gross_amount_formatted": "US$0.00",
+                "statement": "Do not use"
+              }
+            ],
+            "combined_statement": "No penalty if cancelled before Saturday, 29 Nov 2025, 14:00.",
+            "type": "cancelation"
+          },
+          {
+            "brackets": [
+              {
+                "amount": 147.375,
+                "amount_formatted": "US$147.38",
+                "code": "001",
+                "currency_id": 4,
+                "due_on": "2025-11-18",
+                "due_on_formatted": null,
+                "gross_amount": 163.58625,
+                "gross_amount_formatted": "US$163.59",
+                "statement": "25% of your booking total will be charged"
+              }
+            ],
+            "combined_statement": "25% of your booking total will be charged",
+            "type": "guarantee"
+          }
+        ],
+        "assigned_units_pool": "5255e5d3-939d-4089-a836-4c47c9b92bb1",
+        "bed_preference": null,
+        "calendar_extra": null,
+        "check_in": false,
+        "cost": null,
+        "days": [
+          {
+            "amount": 90,
+            "cost": null,
+            "date": "2025-12-02"
+          },
+          {
+            "amount": 99.9,
+            "cost": null,
+            "date": "2025-12-03"
+          },
+          {
+            "amount": 99.9,
+            "cost": null,
+            "date": "2025-12-04"
+          },
+          {
+            "amount": 99.9,
+            "cost": null,
+            "date": "2025-12-05"
+          },
+          {
+            "amount": 99.9,
+            "cost": null,
+            "date": "2025-12-06"
+          },
+          {
+            "amount": 99.9,
+            "cost": null,
+            "date": "2025-12-07"
+          }
+        ],
+        "departure_time": {
+          "code": "007",
+          "description": "07:00"
+        },
+        "from_date": "2025-12-02",
+        "gross_cost": null,
+        "gross_guarantee": 163.58625,
+        "gross_total": 654.345,
+        "guarantee": 147.375,
+        "guest": {
+          "address": null,
+          "alternative_email": null,
+          "cci": null,
+          "city": null,
+          "country": null,
+          "country_id": null,
+          "country_phone_prefix": null,
+          "dob": null,
+          "email": null,
+          "first_name": "Jhon",
+          "id": null,
+          "id_info": null,
+          "is_main": false,
+          "last_name": "Doe",
+          "mobile": null,
+          "mobile_without_prefix": null,
+          "nbr_confirmed_bookings": 0,
+          "notes": null,
+          "password": null,
+          "subscribe_to_news_letter": null
+        },
+        "identifier": "f624cce2-a35b-46a3-bf41-ec36dbdf8d3a",
+        "in_out": {
+          "code": "000",
+          "description": "Not Set"
+        },
+        "is_split": true,
+        "notes": "",
+        "occupancy": {
+          "adult_nbr": 2,
+          "children_nbr": 0,
+          "infant_nbr": null
+        },
+        "ota_meta": null,
+        "ota_meta_plain": null,
+        "ota_taxes": null,
+        "ota_unique_id": null,
+        "parent_room_identifier": "d6f1e4c2-a272-42a3-a2bc-6efbde4a06a0",
+        "prepayment_amount": null,
+        "prepayment_amount_gross": null,
+        "rateplan": {
+          "agents": null,
+          "assignable_units": null,
+          "cancelation": "No penalty if cancelled before Saturday, 29 Nov 2025, 14:00.",
+          "custom_text": null,
+          "extra_bed_for_code": null,
+          "extra_bed_max": null,
+          "extra_bed_rate_per_night": null,
+          "extra_bed_rate_per_night_additional_child": null,
+          "extra_bed_rate_per_night_first_child": null,
+          "guarantee": "25% of your booking total will be charged",
+          "id": 123,
+          "is_active": null,
+          "is_available_to_book": false,
+          "is_booking_engine_enabled": null,
+          "is_channel_enabled": null,
+          "is_closed": null,
+          "is_derived": false,
+          "is_extra_bed_free_for_children": false,
+          "is_non_refundable": false,
+          "is_targeting_travel_agency": null,
+          "meal_plan": {
+            "code": "002",
+            "name": null
+          },
+          "name": "Car Rental included/Bed-&-breakfast",
+          "not_available_reason": null,
+          "pre_payment_amount": null,
+          "pre_payment_amount_gross": null,
+          "rate_restrictions": null,
+          "selected_variation": {
+            "IS_MLS_VIOLATED": false,
+            "MLS_ALERT": null,
+            "MLS_ALERT_VALUE": null,
+            "adult_child_offering": "2 adults",
+            "adult_nbr": 2,
+            "amount": null,
+            "amount_gross": null,
+            "amount_per_night": null,
+            "amount_per_night_gross": null,
+            "applicable_policies": null,
+            "bed_preference_code": null,
+            "child_nbr": 0,
+            "discount_pct": null,
+            "discounted_amount": null,
+            "discounted_gross_amount": null,
+            "extra_bed_free_nbr": null,
+            "extra_bed_nbr": null,
+            "extra_bed_rate_per_night": null,
+            "food_nbr_upsell": 0,
+            "infant_nbr": null,
+            "is_lmd": null,
+            "nights": null,
+            "nights_nbr": null,
+            "prepayment_amount": null,
+            "prepayment_amount_gross": null,
+            "rate_plan_id": 123,
+            "smoking_code": null,
+            "total_before_discount": null
+          },
+          "sell_mode": null,
+          "short_name": "Bed & breakfast",
+          "sleeps": null,
+          "variations": null
+        },
+        "roomtype": {
+          "amenities": null,
+          "availabilities": null,
+          "bedding_setup": null,
+          "description": null,
+          "exposed_inventory": null,
+          "id": 110,
+          "images": null,
+          "inventory": null,
+          "is_active": null,
+          "is_available_to_book": null,
+          "is_bed_configuration_enabled": null,
+          "is_channel_enabled": null,
+          "main_image": null,
+          "name": "Standard Rooms",
+          "not_available_reason": null,
+          "occupancy_default": null,
+          "occupancy_max": null,
+          "physicalrooms": null,
+          "rate": null,
+          "rateplans": null,
+          "size": null,
+          "smoking_option": null
+        },
+        "sharing_persons": [
+          {
+            "address": null,
+            "alternative_email": null,
+            "cci": null,
+            "city": null,
+            "country": {
+              "cities": null,
+              "code": null,
+              "currency": null,
+              "flag": null,
+              "gmt_offset": 0,
+              "id": null,
+              "market_places": null,
+              "name": null,
+              "phone_prefix": null
+            },
+            "country_id": null,
+            "country_phone_prefix": null,
+            "dob": "1900-01-01",
+            "email": null,
+            "first_name": "Jhon",
+            "id": 129262,
+            "id_info": {
+              "number": "",
+              "type": {
+                "code": "001",
+                "description": "Passport"
+              }
+            },
+            "is_main": true,
+            "last_name": "Doe",
+            "mobile": null,
+            "mobile_without_prefix": null,
+            "nbr_confirmed_bookings": 0,
+            "notes": null,
+            "password": null,
+            "subscribe_to_news_letter": null
+          }
+        ],
+        "smoking_option": null,
+        "taxes": null,
+        "to_date": "2025-12-08",
+        "total": 589.5,
+        "unit": {
+          "calendar_cell": null,
+          "hk_status": null,
+          "housekeeper": null,
+          "id": 26,
+          "is_active": null,
+          "name": "07"
+        }
       }
+    ],
+    "currency": {
+      "code": "USD",
+      "id": 4,
+      "symbol": "US$"
+    },
+    "arrival": {
+      "code": "001",
+      "description": "Not sure yet"
+    },
+    "guest": {
+      "address": "",
+      "alternative_email": null,
+      "cci": null,
+      "city": null,
+      "country": {
+        "cities": null,
+        "code": "LB",
+        "currency": null,
+        "flag": null,
+        "gmt_offset": 0,
+        "id": 2,
+        "market_places": null,
+        "name": "Lebanon",
+        "phone_prefix": null
+      },
+      "country_id": 2,
+      "country_phone_prefix": "+961",
+      "dob": null,
+      "email": "toe@nomail.com",
+      "first_name": "tic",
+      "id": 779653,
+      "id_info": null,
+      "is_main": false,
+      "last_name": "tac",
+      "mobile": "81123567",
+      "mobile_without_prefix": "81123567",
+      "nbr_confirmed_bookings": 2,
+      "notes": "",
+      "password": null,
+      "subscribe_to_news_letter": false
+    }
   },
-  "pickup_info": null
+  "pickup_info": {
+    "currency": {
+      "code": "USD",
+      "id": 4,
+      "symbol": "US$"
+    },
+    "date": "2025-11-30",
+    "details": "Flight ME204 (Middle East Airlines) arriving from Paris Charles de Gaulle (CDG) at 12:22. Passenger: John Doe. No expected baggage delays.",
+    "hour": 12,
+    "minute": 22,
+    "nbr_of_units": 1,
+    "selected_option": {
+      "amount": 50,
+      "currency": {
+        "code": "USD",
+        "id": 4,
+        "symbol": "US$"
+      },
+      "id": 19,
+      "location": {
+        "description": "Beirut International Airport",
+        "id": 1
+      },
+      "pricing_model": {
+        "code": "002",
+        "description": "Person"
+      },
+      "vehicle": {
+        "capacity": 4,
+        "code": "002",
+        "description": "Sedan car (2 large & 3 small suitcases)"
+      }
+    },
+    "total": 200
+  }
 }

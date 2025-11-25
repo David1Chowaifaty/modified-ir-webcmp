@@ -2848,6 +2848,10 @@ export interface IrAutocompleteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrAutocompleteElement;
 }
+export interface IrBookingCompanyFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingCompanyFormElement;
+}
 export interface IrBookingDetailsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingDetailsElement;
@@ -3774,7 +3778,18 @@ declare global {
         prototype: HTMLIrBookingElement;
         new (): HTMLIrBookingElement;
     };
+    interface HTMLIrBookingCompanyFormElementEventMap {
+        "resetBookingEvt": Booking;
+    }
     interface HTMLIrBookingCompanyFormElement extends Components.IrBookingCompanyForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingCompanyFormElementEventMap>(type: K, listener: (this: HTMLIrBookingCompanyFormElement, ev: IrBookingCompanyFormCustomEvent<HTMLIrBookingCompanyFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingCompanyFormElementEventMap>(type: K, listener: (this: HTMLIrBookingCompanyFormElement, ev: IrBookingCompanyFormCustomEvent<HTMLIrBookingCompanyFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrBookingCompanyFormElement: {
         prototype: HTMLIrBookingCompanyFormElement;
@@ -6188,6 +6203,7 @@ declare namespace LocalJSX {
     }
     interface IrBookingCompanyForm {
         "booking"?: Booking;
+        "onResetBookingEvt"?: (event: IrBookingCompanyFormCustomEvent<Booking>) => void;
     }
     interface IrBookingDetails {
         "bookingNumber"?: string;
