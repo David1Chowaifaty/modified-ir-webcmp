@@ -74,6 +74,13 @@
 .custom-date-picker__trigger--invalid[data-active='true'] {
   outline-color: var(--wa-color-danger-border-loud);
 }
+.ir-custom-date-picker__form-control-label {
+  display: inline-flex !important;
+  color: var(--wa-form-control-label-color) !important;
+  font-weight: var(--wa-form-control-label-font-weight) !important;
+  line-height: var(--wa-form-control-label-line-height) !important;
+  margin-block-end: 0.5em !important;
+}
 
 .picker-surface {
   background: var(--wa-color-neutral-0, #fff);

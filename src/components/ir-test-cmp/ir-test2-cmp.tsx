@@ -10,7 +10,7 @@ export class IrTest2Cmp {
   render() {
     return (
       <Host style={{ background: 'white' }}>
-        <ir-booking-billing-recipient booking={booking as any}></ir-booking-billing-recipient>
+        <ir-invoice booking={booking as any}></ir-invoice>
       </Host>
     );
   }

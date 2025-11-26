@@ -367,7 +367,9 @@ export class IrCustomDatePicker {
 
     return (
       <Host class={{ 'custom-date-picker': true, 'custom-date-picker--open': this.isActive, 'custom-date-picker--disabled': this.disabled }}>
-        <label htmlFor="custom-date-picker__anchor">Date</label>
+        <label htmlFor="ir-custom-date-picker__anchor" class="ir-custom-date-picker__form-control-label">
+          Date
+        </label>
         <wa-popup distance={8} class="custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
           <div
             id="ir-custom-date-picker__anchor"

@@ -1,5 +1,7 @@
 :host {
   display: block;
+  padding: 0 !important;
+  box-sizing: border-box;
 }
 .billing-recipient__room::part(label) {
   display: flex;

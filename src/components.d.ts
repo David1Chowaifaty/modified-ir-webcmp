@@ -1591,6 +1591,10 @@ export namespace Components {
          */
         "suppressToastEndpoints": string[];
     }
+    interface IrInvoice {
+        "booking": Booking;
+        "mode": 'create' | 'check_in-create';
+    }
     interface IrLabel {
         /**
           * inline styles for the component container
@@ -4601,6 +4605,12 @@ declare global {
         prototype: HTMLIrInterceptorElement;
         new (): HTMLIrInterceptorElement;
     };
+    interface HTMLIrInvoiceElement extends Components.IrInvoice, HTMLStencilElement {
+    }
+    var HTMLIrInvoiceElement: {
+        prototype: HTMLIrInvoiceElement;
+        new (): HTMLIrInvoiceElement;
+    };
     interface HTMLIrLabelElement extends Components.IrLabel, HTMLStencilElement {
     }
     var HTMLIrLabelElement: {
@@ -5782,6 +5792,7 @@ declare global {
         "ir-input-text": HTMLIrInputTextElement;
         "ir-interactive-title": HTMLIrInteractiveTitleElement;
         "ir-interceptor": HTMLIrInterceptorElement;
+        "ir-invoice": HTMLIrInvoiceElement;
         "ir-label": HTMLIrLabelElement;
         "ir-listing-header": HTMLIrListingHeaderElement;
         "ir-listing-modal": HTMLIrListingModalElement;
@@ -7574,6 +7585,10 @@ declare namespace LocalJSX {
          */
         "suppressToastEndpoints"?: string[];
     }
+    interface IrInvoice {
+        "booking"?: Booking;
+        "mode"?: 'create' | 'check_in-create';
+    }
     interface IrLabel {
         /**
           * inline styles for the component container
@@ -8973,6 +8988,7 @@ declare namespace LocalJSX {
         "ir-input-text": IrInputText;
         "ir-interactive-title": IrInteractiveTitle;
         "ir-interceptor": IrInterceptor;
+        "ir-invoice": IrInvoice;
         "ir-label": IrLabel;
         "ir-listing-header": IrListingHeader;
         "ir-listing-modal": IrListingModal;
@@ -9151,6 +9167,7 @@ declare module "@stencil/core" {
             "ir-input-text": LocalJSX.IrInputText & JSXBase.HTMLAttributes<HTMLIrInputTextElement>;
             "ir-interactive-title": LocalJSX.IrInteractiveTitle & JSXBase.HTMLAttributes<HTMLIrInteractiveTitleElement>;
             "ir-interceptor": LocalJSX.IrInterceptor & JSXBase.HTMLAttributes<HTMLIrInterceptorElement>;
+            "ir-invoice": LocalJSX.IrInvoice & JSXBase.HTMLAttributes<HTMLIrInvoiceElement>;
             "ir-label": LocalJSX.IrLabel & JSXBase.HTMLAttributes<HTMLIrLabelElement>;
             "ir-listing-header": LocalJSX.IrListingHeader & JSXBase.HTMLAttributes<HTMLIrListingHeaderElement>;
             "ir-listing-modal": LocalJSX.IrListingModal & JSXBase.HTMLAttributes<HTMLIrListingModalElement>;

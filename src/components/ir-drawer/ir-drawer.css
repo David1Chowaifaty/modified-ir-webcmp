@@ -10,3 +10,8 @@
   padding-top: calc(var(--spacing) / 2);
   border-top: 1px solid var(--wa-color-surface-border);
 }
+.ir__drawer-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
