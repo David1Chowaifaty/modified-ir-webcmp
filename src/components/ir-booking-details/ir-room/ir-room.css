@@ -99,6 +99,7 @@
   height: fit-content;
   border-radius: calc(var(--wa-panel-border-radius) - var(--wa-panel-border-width));
   aspect-ratio: 1;
+  cursor: pointer;
   transition: rotate var(--wa-transition-normal) var(--wa-transition-easing);
 }
 .booking-room__collapse-btn[data-state='opened'] {
