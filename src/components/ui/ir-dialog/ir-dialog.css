@@ -21,6 +21,11 @@
   backdrop-filter: blur(2px);
   animation: overlayShow 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+.ir-dialog__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
 .dialog__content {
   box-sizing: border-box;

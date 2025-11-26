@@ -393,8 +393,8 @@ export class IrBookingDetails {
             onCloseModal={handleClose}
           ></ir-pickup>
         );
-      case 'extra_note':
-        return <ir-booking-extra-note slot="sidebar-body" booking={this.booking} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
+      // case 'extra_note':
+      //   return <ir-booking-extra-note slot="sidebar-body" booking={this.booking} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
       case 'extra_service':
         return (
           <ir-extra-service-config

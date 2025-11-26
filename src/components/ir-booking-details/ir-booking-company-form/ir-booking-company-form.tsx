@@ -71,7 +71,7 @@ export class IrBookingCompanyForm {
           <ir-custom-input onText-change={e => this.updateGuest({ company_name: e.detail })} label="Name" autofocus placeholder="XYZ LTD"></ir-custom-input>
           <ir-custom-input onText-change={e => this.updateGuest({ company_tax_nbr: e.detail })} label="Tax ID" placeholder="VAT 123456"></ir-custom-input>
         </div>
-        <div slot="footer" class={'d-flex align-items-center'} style={{ gap: '0.5rem' }}>
+        <div slot="footer" class="ir-dialog__footer">
           <ir-custom-button size="medium" appearance="filled" variant="neutral" data-dialog="close">
             Cancel
           </ir-custom-button>

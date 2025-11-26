@@ -22,6 +22,7 @@ export class IrReservationInformation {
   @Event() openSidebar: EventEmitter<OpenSidebarEvent<any>>;
   private reservationInformationEl?: HTMLDivElement;
   private irBookingCompanyFormRef: any;
+  irBookingExtraNoteRef: HTMLIrBookingExtraNoteElement;
   componentWillLoad() {
     const guestCountryId = this.booking?.guest?.country_id;
     this.userCountry = guestCountryId ? this.countries?.find(country => country.id === guestCountryId) || null : null;
@@ -199,10 +200,19 @@ export class IrReservationInformation {
               // ignore_content
             ></ir-label>
             <wa-tooltip for={`edit_create-extra-note`}>{privateNote ? 'Edit' : 'Create'} private note</wa-tooltip>
-            <ir-custom-button iconBtn id={`edit_create-extra-note`} onClickHandler={e => this.handleEditClick(e, 'extra_note')} appearance={'plain'} variant={'neutral'}>
+            <ir-custom-button
+              iconBtn
+              id={`edit_create-extra-note`}
+              onClickHandler={() => {
+                this.irBookingExtraNoteRef.openDialog();
+              }}
+              appearance={'plain'}
+              variant={'neutral'}
+            >
               <wa-icon style={{ fontSize: '1rem' }} name="edit" label="Edit or create private note"></wa-icon>
             </ir-custom-button>
           </div>
+          <ir-booking-extra-note booking={this.booking} ref={el => (this.irBookingExtraNoteRef = el)}></ir-booking-extra-note>
           <ir-booking-company-form booking={this.booking} ref={el => (this.irBookingCompanyFormRef = el)}></ir-booking-company-form>
         </div>
       </wa-card>

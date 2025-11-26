@@ -24,6 +24,7 @@ import '@awesome.me/webawesome/dist/components/tree/tree.js';
 import '@awesome.me/webawesome/dist/components/badge/badge.js';
 import '@awesome.me/webawesome/dist/components/dialog/dialog.js';
 import '@awesome.me/webawesome/dist/components/popover/popover.js';
+import '@awesome.me/webawesome/dist/components/textarea/textarea.js';
 
 export default () => {
   /* The side-effect imports above define the custom elements; nothing else to execute at runtime. */

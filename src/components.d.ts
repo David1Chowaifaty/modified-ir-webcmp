@@ -413,6 +413,9 @@ export namespace Components {
     }
     interface IrBookingExtraNote {
         "booking": Booking;
+        "closeDialog": () => Promise<void>;
+        "open": boolean;
+        "openDialog": () => Promise<void>;
     }
     interface IrBookingGuarantee {
         "booking": Booking;
@@ -6233,6 +6236,7 @@ declare namespace LocalJSX {
         "booking"?: Booking;
         "onCloseModal"?: (event: IrBookingExtraNoteCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrBookingExtraNoteCustomEvent<Booking | null>) => void;
+        "open"?: boolean;
     }
     interface IrBookingGuarantee {
         "booking"?: Booking;
