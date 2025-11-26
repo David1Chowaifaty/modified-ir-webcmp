@@ -43,41 +43,41 @@ export class IrPaymentItem {
                 <ir-button variant="icon" style={{ 'color': colorVariants.secondary['--icon-button-color'], '--icon-size': '1.1rem' }} icon_name="user"></ir-button>
                 {/* <ir-icons name="user" style={{ '--icon-size': '1rem', 'color': colorVariants.secondary['--icon-button-color'] }}></ir-icons> */}
               </ir-popover>
-            </div>
-            <wa-dropdown
-              onwa-select={e => {
-                switch ((e.detail as any).item.value) {
-                  case 'edit':
-                    this.editPayment.emit(this.payment);
-                    break;
-                  case 'delete':
-                    this.deletePayment.emit(this.payment);
-                    break;
-                  case 'receipt':
-                    this.issueReceipt.emit(this.payment);
-                    break;
-                }
-              }}
-            >
-              <ir-custom-button slot="trigger" appearance="plain">
-                <wa-icon name="ellipsis-vertical"></wa-icon>
-              </ir-custom-button>
+              <wa-dropdown
+                onwa-select={e => {
+                  switch ((e.detail as any).item.value) {
+                    case 'edit':
+                      this.editPayment.emit(this.payment);
+                      break;
+                    case 'delete':
+                      this.deletePayment.emit(this.payment);
+                      break;
+                    case 'receipt':
+                      this.issueReceipt.emit(this.payment);
+                      break;
+                  }
+                }}
+              >
+                <ir-custom-button slot="trigger" appearance="plain">
+                  <wa-icon name="ellipsis-vertical"></wa-icon>
+                </ir-custom-button>
 
-              {this.payment.payment_type.code === '001' && (
-                <wa-dropdown-item value="receipt">
-                  <wa-icon name="receipt" slot="icon"></wa-icon>
-                  Print Receipt
+                {this.payment.payment_type.code === '001' && (
+                  <wa-dropdown-item value="receipt">
+                    <wa-icon name="receipt" slot="icon"></wa-icon>
+                    Print Receipt
+                  </wa-dropdown-item>
+                )}
+                <wa-dropdown-item value="edit">
+                  <wa-icon slot="icon" name="edit"></wa-icon>
+                  Edit
                 </wa-dropdown-item>
-              )}
-              <wa-dropdown-item value="edit">
-                <wa-icon slot="icon" name="edit"></wa-icon>
-                Edit
-              </wa-dropdown-item>
-              <wa-dropdown-item value="delete" variant="danger">
-                <wa-icon slot="icon" name="trash"></wa-icon>
-                Delete
-              </wa-dropdown-item>
-            </wa-dropdown>
+                <wa-dropdown-item value="delete" variant="danger">
+                  <wa-icon slot="icon" name="trash"></wa-icon>
+                  Delete
+                </wa-dropdown-item>
+              </wa-dropdown>
+            </div>
           </div>
         </div>
 
