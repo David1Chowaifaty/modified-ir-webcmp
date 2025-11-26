@@ -386,6 +386,9 @@ export namespace Components {
         "p": string;
         "propertyid": number;
     }
+    interface IrBookingBillingRecipient {
+        "booking": Booking;
+    }
     interface IrBookingCompanyForm {
         "booking": Booking;
         "openCompanyForm": () => Promise<void>;
@@ -2512,6 +2515,8 @@ export namespace Components {
     }
     interface IrTestCmp {
     }
+    interface IrTest2Cmp {
+    }
     interface IrTextEditor {
         "error": boolean;
         "maxLength": number;
@@ -2850,6 +2855,10 @@ export interface IrApplicablePoliciesCustomEvent<T> extends CustomEvent<T> {
 export interface IrAutocompleteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrAutocompleteElement;
+}
+export interface IrBookingBillingRecipientCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingBillingRecipientElement;
 }
 export interface IrBookingCompanyFormCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -3781,8 +3790,26 @@ declare global {
         prototype: HTMLIrBookingElement;
         new (): HTMLIrBookingElement;
     };
+    interface HTMLIrBookingBillingRecipientElementEventMap {
+        "recipientChange": string;
+    }
+    interface HTMLIrBookingBillingRecipientElement extends Components.IrBookingBillingRecipient, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingBillingRecipientElementEventMap>(type: K, listener: (this: HTMLIrBookingBillingRecipientElement, ev: IrBookingBillingRecipientCustomEvent<HTMLIrBookingBillingRecipientElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingBillingRecipientElementEventMap>(type: K, listener: (this: HTMLIrBookingBillingRecipientElement, ev: IrBookingBillingRecipientCustomEvent<HTMLIrBookingBillingRecipientElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBookingBillingRecipientElement: {
+        prototype: HTMLIrBookingBillingRecipientElement;
+        new (): HTMLIrBookingBillingRecipientElement;
+    };
     interface HTMLIrBookingCompanyFormElementEventMap {
         "resetBookingEvt": Booking;
+        "companyFormClosed": void;
     }
     interface HTMLIrBookingCompanyFormElement extends Components.IrBookingCompanyForm, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingCompanyFormElementEventMap>(type: K, listener: (this: HTMLIrBookingCompanyFormElement, ev: IrBookingCompanyFormCustomEvent<HTMLIrBookingCompanyFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5491,6 +5518,12 @@ declare global {
         prototype: HTMLIrTestCmpElement;
         new (): HTMLIrTestCmpElement;
     };
+    interface HTMLIrTest2CmpElement extends Components.IrTest2Cmp, HTMLStencilElement {
+    }
+    var HTMLIrTest2CmpElement: {
+        prototype: HTMLIrTest2CmpElement;
+        new (): HTMLIrTest2CmpElement;
+    };
     interface HTMLIrTextEditorElementEventMap {
         "textChange": string;
     }
@@ -5693,6 +5726,7 @@ declare global {
         "ir-applicable-policies": HTMLIrApplicablePoliciesElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking": HTMLIrBookingElement;
+        "ir-booking-billing-recipient": HTMLIrBookingBillingRecipientElement;
         "ir-booking-company-form": HTMLIrBookingCompanyFormElement;
         "ir-booking-details": HTMLIrBookingDetailsElement;
         "ir-booking-email-logs": HTMLIrBookingEmailLogsElement;
@@ -5818,6 +5852,7 @@ declare global {
         "ir-tasks-table": HTMLIrTasksTableElement;
         "ir-tasks-table-pagination": HTMLIrTasksTablePaginationElement;
         "ir-test-cmp": HTMLIrTestCmpElement;
+        "ir-test2-cmp": HTMLIrTest2CmpElement;
         "ir-text-editor": HTMLIrTextEditorElement;
         "ir-textarea": HTMLIrTextareaElement;
         "ir-title": HTMLIrTitleElement;
@@ -6204,8 +6239,13 @@ declare namespace LocalJSX {
         "p"?: string;
         "propertyid"?: number;
     }
+    interface IrBookingBillingRecipient {
+        "booking"?: Booking;
+        "onRecipientChange"?: (event: IrBookingBillingRecipientCustomEvent<string>) => void;
+    }
     interface IrBookingCompanyForm {
         "booking"?: Booking;
+        "onCompanyFormClosed"?: (event: IrBookingCompanyFormCustomEvent<void>) => void;
         "onResetBookingEvt"?: (event: IrBookingCompanyFormCustomEvent<Booking>) => void;
     }
     interface IrBookingDetails {
@@ -8598,6 +8638,8 @@ declare namespace LocalJSX {
     }
     interface IrTestCmp {
     }
+    interface IrTest2Cmp {
+    }
     interface IrTextEditor {
         "error"?: boolean;
         "maxLength"?: number;
@@ -8875,6 +8917,7 @@ declare namespace LocalJSX {
         "ir-applicable-policies": IrApplicablePolicies;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking": IrBooking;
+        "ir-booking-billing-recipient": IrBookingBillingRecipient;
         "ir-booking-company-form": IrBookingCompanyForm;
         "ir-booking-details": IrBookingDetails;
         "ir-booking-email-logs": IrBookingEmailLogs;
@@ -9000,6 +9043,7 @@ declare namespace LocalJSX {
         "ir-tasks-table": IrTasksTable;
         "ir-tasks-table-pagination": IrTasksTablePagination;
         "ir-test-cmp": IrTestCmp;
+        "ir-test2-cmp": IrTest2Cmp;
         "ir-text-editor": IrTextEditor;
         "ir-textarea": IrTextarea;
         "ir-title": IrTitle;
@@ -9051,6 +9095,7 @@ declare module "@stencil/core" {
             "ir-applicable-policies": LocalJSX.IrApplicablePolicies & JSXBase.HTMLAttributes<HTMLIrApplicablePoliciesElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
+            "ir-booking-billing-recipient": LocalJSX.IrBookingBillingRecipient & JSXBase.HTMLAttributes<HTMLIrBookingBillingRecipientElement>;
             "ir-booking-company-form": LocalJSX.IrBookingCompanyForm & JSXBase.HTMLAttributes<HTMLIrBookingCompanyFormElement>;
             "ir-booking-details": LocalJSX.IrBookingDetails & JSXBase.HTMLAttributes<HTMLIrBookingDetailsElement>;
             "ir-booking-email-logs": LocalJSX.IrBookingEmailLogs & JSXBase.HTMLAttributes<HTMLIrBookingEmailLogsElement>;
@@ -9176,6 +9221,7 @@ declare module "@stencil/core" {
             "ir-tasks-table": LocalJSX.IrTasksTable & JSXBase.HTMLAttributes<HTMLIrTasksTableElement>;
             "ir-tasks-table-pagination": LocalJSX.IrTasksTablePagination & JSXBase.HTMLAttributes<HTMLIrTasksTablePaginationElement>;
             "ir-test-cmp": LocalJSX.IrTestCmp & JSXBase.HTMLAttributes<HTMLIrTestCmpElement>;
+            "ir-test2-cmp": LocalJSX.IrTest2Cmp & JSXBase.HTMLAttributes<HTMLIrTest2CmpElement>;
             "ir-text-editor": LocalJSX.IrTextEditor & JSXBase.HTMLAttributes<HTMLIrTextEditorElement>;
             "ir-textarea": LocalJSX.IrTextarea & JSXBase.HTMLAttributes<HTMLIrTextareaElement>;
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;

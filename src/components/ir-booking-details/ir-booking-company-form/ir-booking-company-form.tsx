@@ -14,6 +14,7 @@ export class IrBookingCompanyForm {
   @State() formData: Pick<Booking, 'company_name' | 'company_tax_nbr'>;
 
   @Event() resetBookingEvt: EventEmitter<Booking>;
+  @Event() companyFormClosed: EventEmitter<void>;
 
   private bookingService = new BookingService();
   componentWillLoad() {
@@ -66,7 +67,17 @@ export class IrBookingCompanyForm {
 
   render() {
     return (
-      <ir-dialog open={this.open} onIrDialogHide={() => (this.open = false)} label="Company" id="dialog-overview">
+      <ir-dialog
+        open={this.open}
+        onIrDialogHide={e => {
+          this.open = false;
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          this.companyFormClosed.emit();
+        }}
+        label="Company"
+        id="dialog-overview"
+      >
         <div class="d-flex  flex-column" style={{ gap: '1rem' }}>
           <ir-custom-input onText-change={e => this.updateGuest({ company_name: e.detail })} label="Name" autofocus placeholder="XYZ LTD"></ir-custom-input>
           <ir-custom-input onText-change={e => this.updateGuest({ company_tax_nbr: e.detail })} label="Tax ID" placeholder="VAT 123456"></ir-custom-input>

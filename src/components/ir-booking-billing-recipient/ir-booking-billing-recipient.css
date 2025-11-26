@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+.billing-recipient__room::part(label) {
+  display: flex;
+  align-items: center;
+  gap: var(--wa-space-xl);
+  width: 100%;
+}
+
+.billing-recipient__guest-name {
+  font-weight: 500;
+}
+
+.billing-recipient__room-details {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--wa-color-neutral-600);
+}
+
+.billing-recipient__roomtype {
+  font-weight: 600;
+}
