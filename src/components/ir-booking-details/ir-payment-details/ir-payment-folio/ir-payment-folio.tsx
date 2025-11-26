@@ -288,6 +288,7 @@ export class IrPaymentFolio {
               onDateChanged={evt => {
                 this.updateFolioData({ date: evt.detail.start?.format(DATE_FORMAT) });
               }}
+              minDate={moment().add(-2, 'months').format('YYYY-MM-DD')}
               emitEmptyDate={true}
               maxDate={this.today}
               date={this.folioData?.date}
