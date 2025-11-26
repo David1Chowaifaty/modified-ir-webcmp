@@ -7,7 +7,7 @@ import { ClickOutside } from '../../decorators/ClickOutside';
 @Component({
   tag: 'ir-custom-date-picker',
   styleUrls: ['ir-custom-date-picker.css', '../../global/app.css'],
-  scoped: false,
+  shadow: false,
 })
 export class IrCustomDatePicker {
   @Element() el: HTMLElement;
@@ -115,6 +115,7 @@ export class IrCustomDatePicker {
 
   @State() currentDate: Date | null = null;
   @State() isActive: boolean = false;
+  @State() isPickerInvalid: boolean;
 
   @Event() dateChanged: EventEmitter<{
     start: moment.Moment;
@@ -128,6 +129,11 @@ export class IrCustomDatePicker {
   private datePicker?: AirDatepicker<HTMLInputElement>;
 
   componentWillLoad() {
+    const hasAriaInvalidAttr = this.el.hasAttribute('aria-invalid');
+    if (hasAriaInvalidAttr) {
+      this.isPickerInvalid = JSON.parse(this.el.getAttribute('aria-invalid'));
+    }
+
     if (this.date) {
       const initialDate = this.toValidDate(this.date);
       if (initialDate) {
@@ -184,6 +190,10 @@ export class IrCustomDatePicker {
     if (newVal) {
       this.closePopup();
     }
+  }
+  @Watch('aria-invalid')
+  handleAriaInvalidChange(newVal: string) {
+    this.isPickerInvalid = JSON.parse(newVal);
   }
 
   @Method()
@@ -351,12 +361,14 @@ export class IrCustomDatePicker {
   }
 
   render() {
-    const triggerClasses = `picker-trigger ${this.triggerContainerStyle} ${this.disabled ? 'picker-trigger--disabled' : ''}`;
+    const triggerClasses = `custom-date-picker__trigger ${this.triggerContainerStyle} ${this.disabled ? 'custom-date-picker__trigger--disabled' : ''} ${
+      this.isPickerInvalid ? 'custom-date-picker__trigger--invalid' : ''
+    }`;
 
     return (
-      <Host class={{ 'ir-custom-date-picker': true, 'ir-custom-date-picker--open': this.isActive, 'ir-custom-date-picker--disabled': this.disabled }}>
-        <label htmlFor="ir-custom-date-picker__anchor">Date</label>
-        <wa-popup distance={8} class="ir-custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
+      <Host class={{ 'custom-date-picker': true, 'custom-date-picker--open': this.isActive, 'custom-date-picker--disabled': this.disabled }}>
+        <label htmlFor="custom-date-picker__anchor">Date</label>
+        <wa-popup distance={8} class="custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
           <div
             id="ir-custom-date-picker__anchor"
             slot="anchor"

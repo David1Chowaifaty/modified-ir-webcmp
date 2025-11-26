@@ -31,10 +31,15 @@
   gap: var(--wa-space-l);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 890px) {
+  .booking-details__booking-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
   .booking-details__booking-info {
     gap: var(--wa-space-xl);
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 

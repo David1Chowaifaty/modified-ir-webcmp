@@ -137,5 +137,8 @@
   align-items: flex-start;
 }
 .booking-room__price {
-  font-weight: bold;
+  font-weight: 700;
+  color: var(--wa-color-neutral-900);
+  white-space: nowrap;
+  text-align: right;
 }

@@ -1,45 +1,37 @@
 @import url('../../assets/air-datepicker.css');
+@import url('../../../node_modules/@awesome.me/webawesome/dist/styles/themes/default.css');
 
 :host {
   display: inline-block;
 }
 
-:host(.ir-custom-date-picker--disabled) {
+:host(.custom-date-picker--disabled) {
   cursor: not-allowed;
 }
 
-.ir-custom-date-picker__popup {
+.custom-date-picker__popup {
   --arrow-color: var(--wa-color-neutral-0, #fff);
   --arrow-size: 10px;
 }
 
-.ir-custom-date-picker__popup::part(popup) {
+.custom-date-picker__popup::part(popup) {
   background: transparent;
   border: none;
   padding: 0;
   box-shadow: none;
 }
 
-.picker-trigger {
+.custom-date-picker__trigger {
   display: inline-flex;
   width: 100%;
   cursor: pointer;
-}
 
-.picker-trigger--disabled {
-  cursor: not-allowed;
-  pointer-events: none;
-  opacity: 0.65;
-}
-
-.ir-custom-date-picker__trigger {
   background-color: var(--wa-form-control-background-color);
+  border-radius: var(--wa-form-control-border-radius);
+  border-style: var(--wa-form-control-border-style);
+  border-width: var(--wa-form-control-border-width);
   border-color: var(--wa-form-control-border-color);
-  width: 100%;
-  display: flex;
-  align-items: stretch;
-  align-items: center;
-  justify-content: start;
+
   box-sizing: border-box;
   height: var(--wa-form-control-height);
   color: var(--wa-form-control-value-color);
@@ -48,30 +40,38 @@
   font-weight: var(--wa-form-control-value-font-weight);
   line-height: var(--wa-form-control-value-line-height);
   vertical-align: middle;
-  width: 100%;
-  transition-timing-function: var(--wa-transition-easing);
-  background-color: var(--wa-form-control-background-color);
-  box-shadow: var(--box-shadow);
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   flex: 1 1 auto;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--wa-form-control-border-color);
-  border-radius: var(--wa-form-control-border-radius);
-  border-style: var(--wa-form-control-border-style);
-  border-width: var(--wa-form-control-border-width);
+
+  box-shadow: var(--box-shadow);
   padding: 0 var(--wa-form-control-padding-inline);
+
+  transition-timing-function: var(--wa-transition-easing);
 }
-.ir-custom-date-picker__trigger:focus-within,
-.ir-custom-date-picker__trigger[data-active='true'] {
+
+.custom-date-picker__trigger:focus-within,
+.custom-date-picker__trigger[data-active='true'] {
   outline: var(--wa-focus-ring);
   outline-offset: var(--wa-focus-ring-offset);
 }
 
-:host([aria-invalid='true']) .ir-custom-date-picker__trigger {
-  border-color: var(--wa-color-danger-border-loud);
+.custom-date-picker__trigger--disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.65;
 }
-:host([aria-invalid='true']) .ir-custom-date-picker__trigger:focus-within,
-:host([aria-invalid='true']) .ir-custom-date-picker__trigger[data-active='true'] {
+
+/* Unified invalid state (no conflicts) */
+.custom-date-picker__trigger--invalid {
+  border-color: var(--wa-color-danger-border-loud);
+  border-width: 2px;
+}
+
+.custom-date-picker__trigger--invalid:focus-within,
+.custom-date-picker__trigger--invalid[data-active='true'] {
   outline-color: var(--wa-color-danger-border-loud);
 }
 
@@ -91,7 +91,7 @@
   pointer-events: none;
 }
 
-.ir-custom-date-picker__calendar {
+.custom-date-picker__calendar {
   --adp-background-color: var(--wa-color-neutral-0, #fff);
   --adp-border-radius: 12px;
   --adp-cell-border-radius: 8px;
@@ -108,10 +108,10 @@
   --adp-day-name-color: rgba(15, 23, 42, 0.65);
 }
 
-.ir-custom-date-picker__calendar .air-datepicker-body--day-name {
+.custom-date-picker__calendar .air-datepicker-body--day-name {
   font-weight: 600;
 }
 
-.ir-custom-date-picker__calendar .air-datepicker-nav--action svg {
+.custom-date-picker__calendar .air-datepicker-nav--action svg {
   stroke: currentColor;
 }
