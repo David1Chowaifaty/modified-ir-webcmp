@@ -39,7 +39,7 @@ export class IrPmsLogs {
         ) : (
           <div class={'dialog-container-height'}>
             <div class="d-flex align-items-center " style={{ paddingBottom: '0.5rem' }}>
-              <p class="list-title p-0 m-0">{locales.entries.Lcz_SentAt}</p>
+              <p class="list-title p-0 m-0">{locales.entries.Lcz_SentAt}:</p>
               {this.pmsLogs?.sent_date ? (
                 <p class="list-item">
                   {this.pmsLogs?.sent_date} {_formatTime(this.pmsLogs?.sent_hour.toString(), this.pmsLogs?.sent_minute.toString())}
@@ -49,7 +49,7 @@ export class IrPmsLogs {
               )}
             </div>
             <div class="d-flex align-items-center p-0 m-0">
-              <h4 class="list-title p-0 m-0">{locales.entries.Lcz_Acknowledged}</h4>
+              <p class="list-title p-0 m-0">{locales.entries.Lcz_Acknowledged}</p>
               <p class={`list-item  ${this.pmsLogs?.is_acknowledged ? 'green' : 'red'}`}>{this.pmsLogs?.is_acknowledged ? locales.entries.Lcz_YES : locales.entries.Lcz_NO}</p>
             </div>
           </div>
