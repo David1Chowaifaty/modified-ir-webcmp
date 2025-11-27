@@ -1,6 +1,7 @@
 import { Booking } from '@/models/booking.dto';
 import { formatAmount } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-invoice',
@@ -84,11 +85,16 @@ export class IrInvoice {
     roomIdentifier?: string;
     mode: 'create' | 'check_in-create';
   }>;
-  invoiceFormRef: HTMLFormElement;
+
+  private invoiceFormRef: HTMLFormElement;
+  private room: Booking['rooms'][0];
 
   componentWillLoad() {
     if (this.booking) {
       this.selectedRecipient = this.booking.guest.id.toString();
+      if (this.for === 'room' && this.roomIdentifier) {
+        this.room = this.booking.rooms.find(r => r.identifier === this.roomIdentifier);
+      }
     }
   }
 
@@ -96,6 +102,9 @@ export class IrInvoice {
   handleBookingChange() {
     if (this.booking) {
       this.selectedRecipient = this.booking.guest.id.toString();
+      if (this.for === 'room' && this.roomIdentifier) {
+        this.room = this.booking.rooms.find(r => r.identifier === this.roomIdentifier);
+      }
     }
   }
 
@@ -159,6 +168,27 @@ export class IrInvoice {
       }
     }
   }
+  private getMinDate() {
+    if (this.for === 'room') {
+      return this.room.to_date;
+    }
+    const getMinCheckoutDate = () => {
+      let minDate = moment();
+      for (const room of this.booking.rooms) {
+        const d = moment(room.to_date, 'YYYY-MM-DD');
+        if (d.isBefore(minDate)) {
+          minDate = d.clone();
+        }
+      }
+      return minDate;
+    };
+
+    return getMinCheckoutDate().format('YYYY-MM-DD');
+  }
+
+  private getMaxDate() {
+    return moment().format('YYYY-MM-DD');
+  }
 
   render() {
     return (
@@ -173,7 +203,7 @@ export class IrInvoice {
           }}
         >
           <form ref={el => (this.invoiceFormRef = el)} class="ir-invoice__container">
-            <ir-custom-date-picker></ir-custom-date-picker>
+            <ir-custom-date-picker minDate={this.getMinDate()} maxDate={this.getMaxDate()}></ir-custom-date-picker>
             <ir-booking-billing-recipient onRecipientChange={e => (this.selectedRecipient = e.detail)} booking={this.booking}></ir-booking-billing-recipient>
             <div class={'ir-invoice__services'}>
               <p class="ir-invoice__form-control-label">Choose what to invoice</p>
