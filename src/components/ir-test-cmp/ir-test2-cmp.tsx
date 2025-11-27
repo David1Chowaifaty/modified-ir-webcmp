@@ -15,7 +15,7 @@ export class IrTest2Cmp {
         <ir-custom-button onClickHandler={() => this.invoiceRef.openDrawer()}>open</ir-custom-button>
         <ir-invoice ref={el => (this.invoiceRef = el)} booking={booking as any}></ir-invoice>
         <div style={{ background: 'white' }}>
-          <table class="ir-table ir-table--hover-rows">
+          <table class="table ir-table ir-zebra-rows ir-hover-rows">
             <caption>
               This
               <code>&lt;caption&gt;</code>

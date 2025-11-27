@@ -44,10 +44,17 @@
   box-sizing: border-box;
   width: 100%;
 }
+.ir-invoice__checkbox.group::part(base) {
+  padding-block: 1rem;
+  align-items: flex-start;
+}
 .ir-invoice__room-checkbox-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+.ir-invoice__room-checkbox-container.group {
+  flex-direction: column;
 }
 .ir-invoice__checkbox-price {
   font-weight: 700;

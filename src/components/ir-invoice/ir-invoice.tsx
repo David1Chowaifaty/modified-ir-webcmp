@@ -1,4 +1,5 @@
-import { Booking } from '@/models/booking.dto';
+import { Booking, Room } from '@/models/booking.dto';
+import { buildSplitIndex } from '@/utils/booking';
 import { formatAmount } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 import moment from 'moment';
@@ -189,6 +190,135 @@ export class IrInvoice {
   private getMaxDate() {
     return moment().format('YYYY-MM-DD');
   }
+  private computeRoomGroups(rooms: Room[]) {
+    const indexById = new Map<string, number>();
+    rooms.forEach((room, idx) => indexById.set(room.identifier, idx));
+
+    if (!rooms.length) {
+      return { groups: [], indexById, hasSplitGroups: false };
+    }
+
+    const groupSortKey = (groupRooms: Room[]) => {
+      let min = Number.MAX_SAFE_INTEGER;
+      for (const r of groupRooms) {
+        const ts = Date.parse(r?.from_date ?? '');
+        if (!Number.isNaN(ts)) {
+          min = Math.min(min, ts);
+        }
+      }
+      return min;
+    };
+
+    const splitIndex = buildSplitIndex(rooms);
+    if (!splitIndex) {
+      const sortedRooms = [...rooms].sort((a, b) => {
+        const diff = Date.parse(a?.from_date ?? '') - Date.parse(b?.from_date ?? '');
+        if (!Number.isNaN(diff) && diff !== 0) {
+          return diff;
+        }
+        return (indexById.get(a.identifier) ?? 0) - (indexById.get(b.identifier) ?? 0);
+      });
+      return { groups: [{ rooms: sortedRooms, order: 0, isSplit: false, sortKey: groupSortKey(sortedRooms) }], indexById, hasSplitGroups: false };
+    }
+
+    const roomsById = new Map<string, Room>(rooms.map(room => [room.identifier, room]));
+    const grouped: { rooms: Room[]; order: number; sortKey: number; isSplit: boolean }[] = [];
+    const visited = new Set<string>();
+
+    for (const head of splitIndex.heads) {
+      const chain = splitIndex.chainOf.get(head) ?? [head];
+      const chainRooms = chain.map(id => roomsById.get(id)).filter((room): room is Room => Boolean(room));
+      if (!chainRooms.length) continue;
+
+      const chainHasSplitLink =
+        chain.some(id => {
+          const parent = splitIndex.parentOf.get(id);
+          const children = splitIndex.childrenOf.get(id) ?? [];
+          return Boolean(parent) || children.length > 0;
+        }) || chainRooms.some(room => Boolean(room?.is_split));
+
+      if (chainHasSplitLink) {
+        chainRooms.forEach(room => visited.add(room.identifier));
+        const order = Math.min(...chainRooms.map(room => indexById.get(room.identifier) ?? Number.MAX_SAFE_INTEGER));
+        grouped.push({ rooms: chainRooms, order, sortKey: groupSortKey(chainRooms), isSplit: true });
+      }
+    }
+
+    for (const room of rooms) {
+      if (!visited.has(room.identifier)) {
+        const order = indexById.get(room.identifier) ?? Number.MAX_SAFE_INTEGER;
+        const singleGroup = [room];
+        grouped.push({ rooms: singleGroup, order, sortKey: groupSortKey(singleGroup), isSplit: false });
+      }
+    }
+
+    grouped.sort((a, b) => {
+      if (a.sortKey !== b.sortKey) {
+        return a.sortKey - b.sortKey;
+      }
+      return a.order - b.order;
+    });
+    const hasSplitGroups = grouped.some(group => group.isSplit);
+
+    if (!hasSplitGroups) {
+      const merged = grouped
+        .map(group => group.rooms)
+        .reduce<Room[]>((acc, curr) => acc.concat(curr), [])
+        .sort((a, b) => {
+          const diff = Date.parse(a?.from_date ?? '') - Date.parse(b?.from_date ?? '');
+          if (!Number.isNaN(diff) && diff !== 0) {
+            return diff;
+          }
+          return (indexById.get(a.identifier) ?? 0) - (indexById.get(b.identifier) ?? 0);
+        });
+      return { groups: [{ rooms: merged, order: 0, sortKey: groupSortKey(merged), isSplit: false }], indexById, hasSplitGroups: false };
+    }
+
+    return { groups: grouped, indexById, hasSplitGroups: true };
+  }
+  private renderRooms() {
+    const rooms = this.booking?.rooms ?? [];
+    if (!rooms.length) {
+      return null;
+    }
+
+    const { groups, hasSplitGroups } = this.computeRoomGroups(rooms);
+
+    if (!hasSplitGroups) {
+      const groupRooms = groups[0].rooms;
+      return groupRooms.map(room => (
+        <div class="ir-invoice__service" key={room.identifier}>
+          <wa-checkbox class="ir-invoice__checkbox" checked>
+            <div class={'ir-invoice__room-checkbox-container'}>
+              <b>{room.roomtype.name}</b>
+              <span>{room.rateplan.short_name}</span>
+              <span class="ir-invoice__checkbox-price">{formatAmount('$US', room.gross_total)}</span>
+            </div>
+          </wa-checkbox>
+        </div>
+
+        // {this.renderRoomItem(room, indexById.get(room.identifier) ?? idx)}
+        // {idx < groupRooms.length - 1 ? <wa-divider></wa-divider> : null}
+      ));
+    }
+    return groups.map(group => (
+      <div class="ir-invoice__service" key={group.order}>
+        <wa-checkbox class="ir-invoice__checkbox group" checked>
+          <div class={'ir-invoice__room-checkbox-container group'}>
+            {group.rooms.map(room => {
+              return (
+                <div class="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+                  <b>{room.roomtype.name}</b>
+                  <span>{room.rateplan.short_name}</span>
+                  <span class="ir-invoice__checkbox-price">{formatAmount('$US', room.gross_total)}</span>
+                </div>
+              );
+            })}
+          </div>
+        </wa-checkbox>
+      </div>
+    ));
+  }
 
   render() {
     return (
@@ -208,19 +338,7 @@ export class IrInvoice {
             <div class={'ir-invoice__services'}>
               <p class="ir-invoice__form-control-label">Choose what to invoice</p>
               <div class="ir-invoice__services-container">
-                {this.booking?.rooms?.map(r => {
-                  return (
-                    <div class="ir-invoice__service" key={r.identifier}>
-                      <wa-checkbox class="ir-invoice__checkbox" checked>
-                        <div class={'ir-invoice__room-checkbox-container'}>
-                          <b>{r.roomtype.name}</b>
-                          <span>{r.rateplan.short_name}</span>
-                          <span class="ir-invoice__checkbox-price">{formatAmount('$US', r.gross_total)}</span>
-                        </div>
-                      </wa-checkbox>
-                    </div>
-                  );
-                })}
+                {this.renderRooms()}
                 {this.booking.pickup_info && (
                   <div class="ir-invoice__service">
                     <wa-checkbox class="ir-invoice__checkbox">
