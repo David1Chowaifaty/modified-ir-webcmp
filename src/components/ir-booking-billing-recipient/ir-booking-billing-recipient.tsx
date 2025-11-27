@@ -66,6 +66,7 @@ export class IrBookingBillingRecipient {
     return (
       <Host>
         <wa-radio-group
+          defaultValue={this.initialValue}
           onchange={e => this.handleRecipientChange((e.target as any).value)}
           label="Bill to"
           orientation="vertical"

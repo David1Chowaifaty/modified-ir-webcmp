@@ -72,9 +72,19 @@ function ensureStyleForTag(tag: string) {
   const styleId = STYLE_ID_PREFIX + tag;
   if (document.getElementById(styleId)) return;
 
+  // Determine if page has vertical overflow
+  const hasOverflow = document.documentElement.scrollHeight > window.innerHeight;
+
+  // Calculate scrollbar width (0 if no overflow)
+  const scrollbarWidth = hasOverflow ? window.innerWidth - document.documentElement.clientWidth : 0;
+
   const css = `
     /* Auto-inserted overflow lock for "${tag}" */
-    body[${BODY_ATTR}~="${tag}"] { overflow: hidden !important;margin-right:15px; }
+    body[${BODY_ATTR}~="${tag}"] {
+      overflow: hidden !important;
+      /* margin-inline-end respects LTR/RTL direction */
+      margin-inline-end: ${scrollbarWidth}px !important;
+    }
   `.trim();
 
   const style = document.createElement('style');

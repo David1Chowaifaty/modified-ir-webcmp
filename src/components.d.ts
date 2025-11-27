@@ -1592,11 +1592,40 @@ export namespace Components {
         "suppressToastEndpoints": string[];
     }
     interface IrInvoice {
+        /**
+          * When `true`, automatically triggers `window.print()` after an invoice is created. Useful for setups where the invoice should immediately be sent to a printer.
+         */
+        "autoPrint": boolean;
+        /**
+          * The booking object for which the invoice is being generated. Should contain room, guest, and pricing information.
+         */
         "booking": Booking;
+        /**
+          * Closes the invoice drawer.  This method sets the `open` property to `false`, hiding the drawer. Parent components can call this to close the drawer programmatically, and it is also used internally when the drawer emits `onDrawerHide`.  Also emits the `invoiceClose` event.
+          * @returns Resolves once the drawer state is updated.
+         */
         "closeDrawer": () => Promise<void>;
+        /**
+          * Specifies what the invoice is for. - `"room"`: invoice for a specific room - `"booking"`: invoice for the entire booking
+         */
+        "for": 'room' | 'booking';
+        /**
+          * Determines what should happen after creating the invoice. - `"create"`: create an invoice normally - `"check_in-create"`: create an invoice as part of the check-in flow
+         */
         "mode": 'create' | 'check_in-create';
+        /**
+          * Whether the invoice drawer is open.  This prop is mutable and reflected to the host element, allowing parent components to control visibility via markup or via the public `openDrawer()` / `closeDrawer()` methods.
+         */
         "open": boolean;
+        /**
+          * Opens the invoice drawer.  This method sets the `open` property to `true`, making the drawer visible. It can be called programmatically by parent components.  Also emits the `invoiceOpen` event.
+          * @returns Resolves once the drawer state is updated.
+         */
         "openDrawer": () => Promise<void>;
+        /**
+          * The identifier of the room for which the invoice is being generated. Used when invoicing at room level instead of booking level.
+         */
+        "roomIdentifier": string;
     }
     interface IrLabel {
         /**
@@ -3018,6 +3047,10 @@ export interface IrInputTextCustomEvent<T> extends CustomEvent<T> {
 export interface IrInterceptorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrInterceptorElement;
+}
+export interface IrInvoiceCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrInvoiceElement;
 }
 export interface IrListingHeaderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4608,7 +4641,26 @@ declare global {
         prototype: HTMLIrInterceptorElement;
         new (): HTMLIrInterceptorElement;
     };
+    interface HTMLIrInvoiceElementEventMap {
+        "invoiceOpen": void;
+        "invoiceClose": void;
+        "invoiceCreated": {
+    booking: Booking;
+    recipientId: string;
+    for: 'room' | 'booking';
+    roomIdentifier?: string;
+    mode: 'create' | 'check_in-create';
+  };
+    }
     interface HTMLIrInvoiceElement extends Components.IrInvoice, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrInvoiceElementEventMap>(type: K, listener: (this: HTMLIrInvoiceElement, ev: IrInvoiceCustomEvent<HTMLIrInvoiceElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrInvoiceElementEventMap>(type: K, listener: (this: HTMLIrInvoiceElement, ev: IrInvoiceCustomEvent<HTMLIrInvoiceElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrInvoiceElement: {
         prototype: HTMLIrInvoiceElement;
@@ -7589,9 +7641,48 @@ declare namespace LocalJSX {
         "suppressToastEndpoints"?: string[];
     }
     interface IrInvoice {
+        /**
+          * When `true`, automatically triggers `window.print()` after an invoice is created. Useful for setups where the invoice should immediately be sent to a printer.
+         */
+        "autoPrint"?: boolean;
+        /**
+          * The booking object for which the invoice is being generated. Should contain room, guest, and pricing information.
+         */
         "booking"?: Booking;
+        /**
+          * Specifies what the invoice is for. - `"room"`: invoice for a specific room - `"booking"`: invoice for the entire booking
+         */
+        "for"?: 'room' | 'booking';
+        /**
+          * Determines what should happen after creating the invoice. - `"create"`: create an invoice normally - `"check_in-create"`: create an invoice as part of the check-in flow
+         */
         "mode"?: 'create' | 'check_in-create';
+        /**
+          * Emitted when the invoice drawer is closed.  Fired when `closeDrawer()` is called, including when the underlying drawer emits `onDrawerHide`.
+         */
+        "onInvoiceClose"?: (event: IrInvoiceCustomEvent<void>) => void;
+        /**
+          * Emitted when an invoice is created/confirmed.  The event `detail` contains: - `booking`: the booking associated with the invoice - `recipientId`: the selected billing recipient - `for`: whether the invoice is for `"room"` or `"booking"` - `roomIdentifier`: the room identifier when invoicing a specific room - `mode`: the current invoice mode
+         */
+        "onInvoiceCreated"?: (event: IrInvoiceCustomEvent<{
+    booking: Booking;
+    recipientId: string;
+    for: 'room' | 'booking';
+    roomIdentifier?: string;
+    mode: 'create' | 'check_in-create';
+  }>) => void;
+        /**
+          * Emitted when the invoice drawer is opened.  Fired when `openDrawer()` is called and the component transitions into the open state.
+         */
+        "onInvoiceOpen"?: (event: IrInvoiceCustomEvent<void>) => void;
+        /**
+          * Whether the invoice drawer is open.  This prop is mutable and reflected to the host element, allowing parent components to control visibility via markup or via the public `openDrawer()` / `closeDrawer()` methods.
+         */
         "open"?: boolean;
+        /**
+          * The identifier of the room for which the invoice is being generated. Used when invoicing at room level instead of booking level.
+         */
+        "roomIdentifier"?: string;
     }
     interface IrLabel {
         /**

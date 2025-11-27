@@ -28,15 +28,23 @@ export class IrDrawer {
   /**Emitted when the drawer is requesting to close. Calling event.preventDefault() will prevent the drawer from closing. You can inspect event.detail.source to see which element caused the drawer to close. If the source is the drawer element itself, the user has pressed Escape or the drawer has been closed programmatically. Avoid using this unless closing the drawer will result in destructive behavior such as data loss. */
   @Event() drawerHide: EventEmitter<{ source: Element }>;
 
+  private readonly onDrawerShow = (event: CustomEvent<void>) => {
+    this.emitDrawerShow(event);
+  };
+
+  private readonly onDrawerHide = (event: CustomEvent<{ source: Element }>) => {
+    this.emitDrawerHide(event);
+  };
+
   @OverflowAdd()
-  private handleDrawerShow(e: CustomEvent) {
+  private emitDrawerShow(e: CustomEvent<void>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     this.drawerShow.emit();
   }
 
   @OverflowRelease()
-  private handleDrawerHide(e: CustomEvent) {
+  private emitDrawerHide(e: CustomEvent<{ source: Element }>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
     this.drawerHide.emit(e.detail);
@@ -44,8 +52,8 @@ export class IrDrawer {
   render() {
     return (
       <wa-drawer
-        onwa-show={this.handleDrawerShow.bind(this)}
-        onwa-hide={this.handleDrawerHide.bind(this)}
+        onwa-show={this.onDrawerShow}
+        onwa-hide={this.onDrawerHide}
         class="ir__drawer"
         style={{ '--size': 'var(--ir-drawer-width,40rem)' }}
         open={this.open}
