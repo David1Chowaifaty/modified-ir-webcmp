@@ -1,4 +1,4 @@
-import { Component, Host, State, h } from '@stencil/core';
+import { Component, Host, h } from '@stencil/core';
 import { booking } from './_data';
 
 @Component({
