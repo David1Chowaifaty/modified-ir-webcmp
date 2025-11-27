@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
-import { Booking, IUnit } from '@/models/booking.dto';
+import { Booking } from '@/models/booking.dto';
 @Component({
   tag: 'ir-booking-billing-recipient',
   styleUrls: ['ir-booking-billing-recipient.css', '../../global/app.css'],
@@ -53,10 +53,15 @@ export class IrBookingBillingRecipient {
     };
     const { guest: mainGuest } = this.booking;
     let _rooms = [];
+    const guests = new Set<string>();
+    const main_guest = `${normalize(mainGuest.first_name)}_${normalize(mainGuest.last_name)}`;
+    guests.add(main_guest);
     for (const room of this.booking.rooms) {
-      if (normalize(room.guest.first_name) === normalize(mainGuest.first_name) && normalize(room.guest.last_name) === normalize(mainGuest.last_name)) {
+      const _g = `${normalize(room.guest.first_name)}_${normalize(room.guest.last_name)}`;
+      if (guests.has(_g)) {
         continue;
       }
+      guests.add(_g);
       _rooms.push(room);
     }
     this.rooms = [..._rooms];
@@ -82,7 +87,7 @@ export class IrBookingBillingRecipient {
                 {r.guest.first_name} {r.guest.last_name}
               </span>
 
-              <div class="billing-recipient__room-details">
+              {/* <div class="billing-recipient__room-details">
                 <b class="billing-recipient__roomtype">{r.roomtype.name}</b>
                 <span class="billing-recipient__rateplan">{r.rateplan.short_name}</span>
 
@@ -91,7 +96,7 @@ export class IrBookingBillingRecipient {
                     {(r.unit as IUnit)?.name}
                   </wa-tag>
                 )}
-              </div>
+              </div> */}
             </wa-radio>
           ))}
           <wa-radio appearance="button" value="company">

@@ -203,7 +203,7 @@ export class IrInvoice {
           }}
         >
           <form ref={el => (this.invoiceFormRef = el)} class="ir-invoice__container">
-            <ir-custom-date-picker minDate={this.getMinDate()} maxDate={this.getMaxDate()}></ir-custom-date-picker>
+            <ir-custom-date-picker date={moment().format('YYYY-MM-DD')} minDate={this.getMinDate()} maxDate={this.getMaxDate()}></ir-custom-date-picker>
             <ir-booking-billing-recipient onRecipientChange={e => (this.selectedRecipient = e.detail)} booking={this.booking}></ir-booking-billing-recipient>
             <div class={'ir-invoice__services'}>
               <p class="ir-invoice__form-control-label">Choose what to invoice</p>
@@ -242,6 +242,7 @@ export class IrInvoice {
             <ir-custom-button
               size="medium"
               appearance="filled"
+              class="w-100 flex-fill"
               variant="neutral"
               onClickHandler={() => {
                 this.closeDrawer();
@@ -254,19 +255,21 @@ export class IrInvoice {
                 this.handleConfirmInvoice(true);
               }}
               size="medium"
+              class="w-100 flex-fill"
               appearance="outlined"
               variant="brand"
             >
-              Pro-forma Invoice
+              Pro-forma invoice
             </ir-custom-button>
             <ir-custom-button
               onClickHandler={() => {
                 this.handleConfirmInvoice();
               }}
+              class="w-100 flex-fill"
               size="medium"
               variant="brand"
             >
-              Confirm Invoice
+              Confirm invoice
             </ir-custom-button>
           </div>
         </ir-drawer>
