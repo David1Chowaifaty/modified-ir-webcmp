@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Host, State, h } from '@stencil/core';
 import { booking } from './_data';
 
 @Component({
@@ -7,10 +7,13 @@ import { booking } from './_data';
   scoped: true,
 })
 export class IrTest2Cmp {
+  invoiceRef: HTMLIrInvoiceElement;
+
   render() {
     return (
       <Host style={{ background: 'white' }}>
-        <ir-invoice booking={booking as any}></ir-invoice>
+        <ir-custom-button onClickHandler={() => this.invoiceRef.openDrawer()}>open</ir-custom-button>
+        <ir-invoice ref={el => (this.invoiceRef = el)} booking={booking as any}></ir-invoice>
       </Host>
     );
   }

@@ -1593,7 +1593,10 @@ export namespace Components {
     }
     interface IrInvoice {
         "booking": Booking;
+        "closeDrawer": () => Promise<void>;
         "mode": 'create' | 'check_in-create';
+        "open": boolean;
+        "openDrawer": () => Promise<void>;
     }
     interface IrLabel {
         /**
@@ -7588,6 +7591,7 @@ declare namespace LocalJSX {
     interface IrInvoice {
         "booking"?: Booking;
         "mode"?: 'create' | 'check_in-create';
+        "open"?: boolean;
     }
     interface IrLabel {
         /**

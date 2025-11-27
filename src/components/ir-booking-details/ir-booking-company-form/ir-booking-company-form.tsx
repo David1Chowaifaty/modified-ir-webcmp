@@ -70,9 +70,9 @@ export class IrBookingCompanyForm {
       <ir-dialog
         open={this.open}
         onIrDialogHide={e => {
-          this.open = false;
           e.stopPropagation();
           e.stopImmediatePropagation();
+          this.open = false;
           this.companyFormClosed.emit();
         }}
         label="Company"

@@ -32,6 +32,7 @@ export class IrBookingBillingRecipient {
   }
 
   private handleRecipientChange(value: string) {
+    this.selectedRecipient = value;
     switch (value) {
       case 'company':
         if (!this.booking.company_name) {
@@ -43,7 +44,6 @@ export class IrBookingBillingRecipient {
       default:
         break;
     }
-    this.selectedRecipient = value;
     this.recipientChange.emit(this.selectedRecipient);
   }
 

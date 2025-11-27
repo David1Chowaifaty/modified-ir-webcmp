@@ -1,6 +1,6 @@
 import { Booking } from '@/models/booking.dto';
 import { formatAmount } from '@/utils/utils';
-import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-invoice',
@@ -8,6 +8,7 @@ import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
   scoped: true,
 })
 export class IrInvoice {
+  @Prop({ mutable: true, reflect: true }) open: boolean;
   @Prop() booking: Booking;
   @Prop() mode: 'create' | 'check_in-create' = 'create';
 
@@ -25,11 +26,28 @@ export class IrInvoice {
       this.selectedRecipient = this.booking.guest.id.toString();
     }
   }
+  @Method()
+  async openDrawer() {
+    this.open = true;
+  }
+  @Method()
+  async closeDrawer() {
+    this.open = false;
+  }
 
   render() {
     return (
       <Host>
-        <ir-drawer label="Invoice" open>
+        <ir-drawer
+          label="Invoice"
+          open={this.open}
+          onDrawerHide={e => {
+            console.log('hello');
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.closeDrawer();
+          }}
+        >
           <div class="ir-invoice__container">
             <ir-custom-date-picker></ir-custom-date-picker>
             <ir-booking-billing-recipient onRecipientChange={e => (this.selectedRecipient = e.detail)} booking={this.booking}></ir-booking-billing-recipient>
@@ -67,7 +85,14 @@ export class IrInvoice {
             </div>
           </div>
           <div slot="footer" class="ir__drawer-footer">
-            <ir-custom-button size="medium" appearance="filled" variant="neutral" data-close="dialog">
+            <ir-custom-button
+              size="medium"
+              appearance="filled"
+              variant="neutral"
+              onClickHandler={() => {
+                this.closeDrawer();
+              }}
+            >
               Cancel
             </ir-custom-button>
             <ir-custom-button size="medium" appearance="outlined" variant="brand">
