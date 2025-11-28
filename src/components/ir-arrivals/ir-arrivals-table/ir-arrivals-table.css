@@ -4,6 +4,7 @@
   border-radius: 0.5rem;
   overflow-x: auto;
   min-height: 60vh;
+  max-width: 1920px;
   border: 1px solid var(--wa-color-neutral-border-quiet, #abaeb9);
   /* border-bottom: 0; */
 }
@@ -27,6 +28,11 @@
 }
 .arrivals-table__actions-cell {
   display: flex;
-  min-width: 250px;
+  min-width: 100px;
   justify-content: flex-end;
+}
+@media (min-width: 1024px) {
+  .arrivals-table__actions-cell {
+    min-width: 250px;
+  }
 }

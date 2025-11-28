@@ -19,6 +19,7 @@ import { IrToast } from "./components/ui/ir-toast/ir-toast";
 import { Currency, RatePlan, RoomType } from "./models/property";
 import { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
 import { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
+import { IrActionButton } from "./components/ir-arrivals/ir-arrivals-table/cells/ir-actions-cell/ir-actions-cell";
 import { IPaymentAction } from "./services/payment.service";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { BookingService } from "./services/booking.service";
@@ -69,6 +70,7 @@ export { IrToast } from "./components/ui/ir-toast/ir-toast";
 export { Currency, RatePlan, RoomType } from "./models/property";
 export { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
 export { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
+export { IrActionButton } from "./components/ir-arrivals/ir-arrivals-table/cells/ir-actions-cell/ir-actions-cell";
 export { IPaymentAction } from "./services/payment.service";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { BookingService } from "./services/booking.service";
@@ -361,6 +363,7 @@ export namespace Components {
         "show": () => Promise<void>;
     }
     interface IrActionsCell {
+        "buttons": IrActionButton[];
     }
     interface IrApplicablePolicies {
         "booking": Booking;
@@ -368,6 +371,9 @@ export namespace Components {
         "propertyId": number;
     }
     interface IrArrivals {
+        "language": string;
+        "propertyId": string;
+        "ticket": string;
     }
     interface IrArrivalsFilters {
     }
@@ -2922,6 +2928,10 @@ export interface IrAccordionCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrAccordionElement;
 }
+export interface IrActionsCellCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrActionsCellElement;
+}
 export interface IrApplicablePoliciesCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrApplicablePoliciesElement;
@@ -3826,7 +3836,18 @@ declare global {
         prototype: HTMLIrAccordionElement;
         new (): HTMLIrAccordionElement;
     };
+    interface HTMLIrActionsCellElementEventMap {
+        "irAction": { action: IrActionButton };
+    }
     interface HTMLIrActionsCellElement extends Components.IrActionsCell, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrActionsCellElementEventMap>(type: K, listener: (this: HTMLIrActionsCellElement, ev: IrActionsCellCustomEvent<HTMLIrActionsCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrActionsCellElementEventMap>(type: K, listener: (this: HTMLIrActionsCellElement, ev: IrActionsCellCustomEvent<HTMLIrActionsCellElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrActionsCellElement: {
         prototype: HTMLIrActionsCellElement;
@@ -6398,6 +6419,8 @@ declare namespace LocalJSX {
         "onIr-toggle"?: (event: IrAccordionCustomEvent<{ expanded: boolean }>) => void;
     }
     interface IrActionsCell {
+        "buttons"?: IrActionButton[];
+        "onIrAction"?: (event: IrActionsCellCustomEvent<{ action: IrActionButton }>) => void;
     }
     interface IrApplicablePolicies {
         "booking"?: Booking;
@@ -6406,6 +6429,9 @@ declare namespace LocalJSX {
         "propertyId"?: number;
     }
     interface IrArrivals {
+        "language"?: string;
+        "propertyId"?: string;
+        "ticket"?: string;
     }
     interface IrArrivalsFilters {
     }

@@ -1,5 +1,7 @@
+import { Booking } from '@/models/booking.dto';
+import { arrivalsStore } from '@/stores/arrivals.store';
 import { Component, Host, h } from '@stencil/core';
-import { data } from '../_data';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-arrivals-table',
@@ -7,7 +9,53 @@ import { data } from '../_data';
   scoped: true,
 })
 export class IrArrivalsTable {
+  private renderSection(bookings: Booking[], showAction = false) {
+    if (!bookings?.length) {
+      return null;
+    }
+
+    const rows = bookings.flatMap(booking => this.renderBookingRows(booking, showAction));
+    return [...rows];
+  }
+
+  private renderBookingRows(booking: Booking, showAction: boolean) {
+    return (booking.rooms ?? []).map((room, index) => this.renderRow(booking, room, index, showAction));
+  }
+
+  private renderRow(booking: Booking, room: Booking['rooms'][number], index: number, showAction: boolean) {
+    const rowKey = `${booking.booking_nbr}-${room?.identifier ?? index}`;
+    const isOverdueCheckIn = moment(room.from_date, 'YYYY-MM-DD').isBefore(moment());
+    return (
+      <tr class="ir-table-row" key={rowKey}>
+        <td class="sticky-column">
+          <ir-booking-number-cell channelBookingNumber={booking.channel_booking_nbr} bookingNumber={booking.booking_nbr}></ir-booking-number-cell>
+        </td>
+        <td>
+          <ir-booked-by-source-cell origin={booking.origin} guest={booking.guest} source={booking.source}></ir-booked-by-source-cell>
+        </td>
+        <td>
+          <ir-guest-name-cell name={room.guest}></ir-guest-name-cell>
+        </td>
+        <td>
+          <ir-unit-cell room={room}></ir-unit-cell>
+        </td>
+        <td>
+          <ir-dates-cell overdueCheckin={isOverdueCheckIn} checkIn={room.from_date} checkOut={room.to_date}></ir-dates-cell>
+        </td>
+        <td class="text-right">
+          <ir-balance-cell amount={booking.financial.gross_total}></ir-balance-cell>
+        </td>
+        <td>
+          <div class="arrivals-table__actions-cell">
+            {showAction ? <ir-actions-cell buttons={isOverdueCheckIn ? ['overdue_check_in'] : ['check_in']}></ir-actions-cell> : 'In-house'}
+          </div>
+        </td>
+      </tr>
+    );
+  }
+
   render() {
+    const { needsCheckInBookings, inHouseBookings } = arrivalsStore;
     return (
       <Host>
         <div class="table--container">
@@ -28,62 +76,15 @@ export class IrArrivalsTable {
               </tr>
             </thead>
             <tbody>
-              {(data as any).map(d => (
-                <tr class="ir-table-row">
-                  <td class="sticky-column">
-                    <ir-booking-number-cell channelBookingNumber={d.channel_booking_nbr} bookingNumber={d.booking_nbr}></ir-booking-number-cell>
-                  </td>
-                  <td>
-                    <ir-booked-by-source-cell origin={d.origin} guest={d.guest} source={d.source}></ir-booked-by-source-cell>
-                  </td>
-                  <td>
-                    <ir-guest-name-cell name={d.rooms[0].guest}></ir-guest-name-cell>
-                  </td>
-                  <td>
-                    <ir-unit-cell room={d.rooms[0]}></ir-unit-cell>
-                  </td>
-                  <td>
-                    <ir-dates-cell overdue-checkin checkIn={d.rooms[0].from_date} checkOut={d.rooms[0].to_date}></ir-dates-cell>
-                  </td>
-                  <td class="text-right">
-                    <ir-balance-cell amount={d.financial.gross_total}></ir-balance-cell>
-                  </td>
-                  <td>
-                    <div class="arrivals-table__actions-cell">
-                      {/* <ir-actions-cell></ir-actions-cell> */}
-                      <ir-custom-button variant="neutral">Overdue check in</ir-custom-button>
-                    </div>
+              {this.renderSection(needsCheckInBookings, true)}
+              {this.renderSection(inHouseBookings)}
+              {!needsCheckInBookings.length && !inHouseBookings.length && (
+                <tr>
+                  <td colSpan={7} class="text-center text-muted">
+                    No arrivals found for today.
                   </td>
                 </tr>
-              ))}
-              {/* <tr>
-                <th colSpan={7}>In-house</th>
-              </tr> */}
-              {(data as any).map(d => (
-                <tr class="ir-table-row">
-                  <td>
-                    <ir-booking-number-cell channelBookingNumber={d.channel_booking_nbr} bookingNumber={d.booking_nbr}></ir-booking-number-cell>
-                  </td>
-                  <td>
-                    <ir-booked-by-source-cell origin={d.origin} guest={d.guest} source={d.source}></ir-booked-by-source-cell>
-                  </td>
-                  <td>
-                    <ir-guest-name-cell name={d.rooms[0].guest}></ir-guest-name-cell>
-                  </td>
-                  <td>
-                    <ir-unit-cell room={d.rooms[0]}></ir-unit-cell>
-                  </td>
-                  <td>
-                    <ir-dates-cell checkIn={d.rooms[0].from_date} checkOut={d.rooms[0].to_date}></ir-dates-cell>
-                  </td>
-                  <td class="text-right">
-                    <ir-balance-cell amount={d.financial.gross_total}></ir-balance-cell>
-                  </td>
-                  <td>
-                    <div class="arrivals-table__actions-cell">In-house</div>
-                  </td>
-                </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

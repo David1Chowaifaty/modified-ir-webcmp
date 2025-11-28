@@ -1,4 +1,6 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Host, Prop, Event, EventEmitter, h } from '@stencil/core';
+
+export type IrActionButton = 'check_in' | 'check_out' | 'overdue_check_in' | 'overdue_check_out' | 'edit' | 'delete';
 
 @Component({
   tag: 'ir-actions-cell',
@@ -6,11 +8,67 @@ import { Component, Host, h } from '@stencil/core';
   scoped: true,
 })
 export class IrActionsCell {
-  render() {
+  @Prop() buttons: IrActionButton[] = [];
+
+  @Event() irAction: EventEmitter<{ action: IrActionButton }>;
+
+  private getLabel(type: IrActionButton): string {
+    switch (type) {
+      case 'check_in':
+        return 'Check in';
+      case 'check_out':
+        return 'Check out';
+      case 'overdue_check_in':
+        return 'Overdue check-in';
+      case 'overdue_check_out':
+        return 'Overdue check-out';
+      case 'edit':
+        return 'Edit';
+      case 'delete':
+        return 'Delete';
+      default:
+        return '';
+    }
+  }
+  private getVariant(type: IrActionButton): HTMLIrCustomButtonElement['variant'] {
+    switch (type) {
+      case 'overdue_check_in':
+      case 'overdue_check_out':
+        return 'neutral';
+      case 'delete':
+        return 'danger';
+      default:
+        return 'brand';
+    }
+  }
+  private getAppearance(type: IrActionButton): HTMLIrCustomButtonElement['appearance'] {
+    switch (type) {
+      case 'edit':
+      case 'delete':
+        return 'plain';
+      default:
+        return 'accent';
+    }
+  }
+
+  private onClick(action: IrActionButton) {
+    this.irAction.emit({ action });
+  }
+
+  private renderButton(type: IrActionButton) {
+    const label = this.getLabel(type);
+    const variant = this.getVariant(type);
+    const appearance = this.getAppearance(type);
+    if (!label) return null;
+
     return (
-      <Host>
-        <ir-custom-button variant="brand">Check in</ir-custom-button>
-      </Host>
+      <ir-custom-button variant={variant} appearance={appearance} data-action={type} onClick={() => this.onClick(type)}>
+        {label}
+      </ir-custom-button>
     );
+  }
+
+  render() {
+    return <Host>{this.buttons.map(button => this.renderButton(button))}</Host>;
   }
 }
