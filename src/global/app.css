@@ -1,6 +1,6 @@
 /* Web Awesome core styles */
-/* @import url('../../node_modules/@awesome.me/webawesome/dist/styles/webawesome.css'); */
-@import url('../../node_modules/@awesome.me/webawesome/dist/styles/themes/default.css');
+/* @import url('../assets/webawesome/themes/webawesome.css'); */
+@import url('../assets/webawesome/themes/default.css');
 
 /* Place project-wide overrides below. */
 .my-custom-style {
