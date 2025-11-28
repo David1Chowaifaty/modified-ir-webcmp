@@ -10,6 +10,7 @@ export class IrDatesCell {
   @Prop() checkIn: string;
   @Prop() checkOut: string;
   @Prop() overdueCheckin: boolean;
+  @Prop() overdueCheckout: boolean;
   private formatDate(date: string) {
     return moment(date, 'YYYY-MM-DD').format('DD MMM YYYY');
   }
@@ -17,7 +18,7 @@ export class IrDatesCell {
     return (
       <Host>
         <p style={{ fontWeight: this.overdueCheckin ? 'bold' : 'auto' }}>{this.formatDate(this.checkIn)}</p>
-        <p>{this.formatDate(this.checkOut)}</p>
+        <p style={{ fontWeight: this.overdueCheckout ? 'bold' : 'auto' }}>{this.formatDate(this.checkOut)}</p>
       </Host>
     );
   }

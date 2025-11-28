@@ -1,5 +1,5 @@
 import { Booking } from '@/models/booking.dto';
-import { arrivalsStore } from '@/stores/arrivals.store';
+import { departuresStore } from '@/stores/departures.store';
 import { Component, Host, h } from '@stencil/core';
 import moment from 'moment';
 @Component({
@@ -23,7 +23,7 @@ export class IrDeparturesTable {
 
   private renderRow(booking: Booking, room: Booking['rooms'][number], index: number, showAction: boolean) {
     const rowKey = `${booking.booking_nbr}-${room?.identifier ?? index}`;
-    const isOverdueCheckIn = moment(room.from_date, 'YYYY-MM-DD').isBefore(moment());
+    const isOverdueCheckout = moment(room.to_date, 'YYYY-MM-DD').startOf('day').isBefore(moment().startOf('day'));
     return (
       <tr class="ir-table-row" key={rowKey}>
         <td class="sticky-column">
@@ -39,14 +39,14 @@ export class IrDeparturesTable {
           <ir-unit-cell room={room}></ir-unit-cell>
         </td>
         <td>
-          <ir-dates-cell overdueCheckin={isOverdueCheckIn} checkIn={room.from_date} checkOut={room.to_date}></ir-dates-cell>
+          <ir-dates-cell overdueCheckout={isOverdueCheckout} checkIn={room.from_date} checkOut={room.to_date}></ir-dates-cell>
         </td>
         <td class="text-right">
           <ir-balance-cell currencySymbol={booking.currency.symbol} amount={booking.financial.gross_total}></ir-balance-cell>
         </td>
         <td>
           <div class="departures-table__actions-cell">
-            {showAction ? <ir-actions-cell buttons={isOverdueCheckIn ? ['overdue_check_in'] : ['check_in']}></ir-actions-cell> : 'In-house'}
+            {showAction ? <ir-actions-cell buttons={isOverdueCheckout ? ['overdue_check_in'] : ['check_in']}></ir-actions-cell> : 'In-house'}
           </div>
         </td>
       </tr>
@@ -54,7 +54,7 @@ export class IrDeparturesTable {
   }
 
   render() {
-    const { needsCheckInBookings, inHouseBookings } = arrivalsStore;
+    const { needsCheckOutBookings, outBookings } = departuresStore;
     return (
       <Host>
         <div class="table--container">
@@ -75,12 +75,12 @@ export class IrDeparturesTable {
               </tr>
             </thead>
             <tbody>
-              {this.renderSection(needsCheckInBookings, true)}
-              {this.renderSection(inHouseBookings)}
-              {!needsCheckInBookings.length && !inHouseBookings.length && (
+              {this.renderSection(needsCheckOutBookings, true)}
+              {this.renderSection(outBookings)}
+              {!needsCheckOutBookings.length && !outBookings.length && (
                 <tr>
                   <td colSpan={7} class="text-center text-muted">
-                    No arrivals found for today.
+                    No departures found for today.
                   </td>
                 </tr>
               )}

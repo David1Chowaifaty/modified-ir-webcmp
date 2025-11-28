@@ -1146,6 +1146,7 @@ export namespace Components {
         "checkIn": string;
         "checkOut": string;
         "overdueCheckin": boolean;
+        "overdueCheckout": boolean;
     }
     interface IrDeleteModal {
         "closeModal": () => Promise<void>;
@@ -7297,6 +7298,7 @@ declare namespace LocalJSX {
         "checkIn"?: string;
         "checkOut"?: string;
         "overdueCheckin"?: boolean;
+        "overdueCheckout"?: boolean;
     }
     interface IrDeleteModal {
         "onModalClosed"?: (event: IrDeleteModalCustomEvent<null>) => void;

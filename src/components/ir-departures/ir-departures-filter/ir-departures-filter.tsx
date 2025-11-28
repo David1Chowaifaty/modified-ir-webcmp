@@ -1,4 +1,4 @@
-import { arrivalsStore, setArrivalsSearchTerm } from '@/stores/arrivals.store';
+import { departuresStore, setDeparturesSearchTerm } from '@/stores/departures.store';
 import { Component, h } from '@stencil/core';
 
 @Component({
@@ -8,7 +8,7 @@ import { Component, h } from '@stencil/core';
 })
 export class IrDeparturesFilter {
   private handleSearchChange = (event: CustomEvent<string>) => {
-    setArrivalsSearchTerm(event.detail ?? '');
+    setDeparturesSearchTerm(event.detail ?? '');
   };
 
   render() {
@@ -22,7 +22,7 @@ export class IrDeparturesFilter {
           withClear
           class="departures-filters__search-bar"
           placeholder="Search guests or bookings"
-          value={arrivalsStore.searchTerm}
+          value={departuresStore.searchTerm}
           onText-change={this.handleSearchChange}
         >
           <wa-icon name="magnifying-glass" slot="start"></wa-icon>
