@@ -3,7 +3,7 @@ import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-arrivals',
-  styleUrls: ['ir-arrivals.css', '../../global/app.css', '../../assets/webawesome/component/host.css'],
+  styleUrls: ['../../assets/webawesome/component/host.css', '../../global/app.css', 'ir-arrivals.css'],
   scoped: true,
 })
 export class IrArrivals {

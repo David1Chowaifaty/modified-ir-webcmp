@@ -363,35 +363,27 @@ export class IrCustomDatePicker {
   }
 
   render() {
-    const triggerClasses = `custom-date-picker__trigger ${this.triggerContainerStyle} ${this.disabled ? 'custom-date-picker__trigger--disabled' : ''} ${
-      this.isPickerInvalid ? 'custom-date-picker__trigger--invalid' : ''
-    }`;
+    const triggerClasses = `custom-date-picker__trigger ${this.triggerContainerStyle} ${this.disabled ? 'custom-date-picker__trigger--disabled' : ''}`;
 
     return (
       <Host class={{ 'custom-date-picker': true, 'custom-date-picker--open': this.isActive, 'custom-date-picker--disabled': this.disabled }}>
-        {this.label && (
-          <label htmlFor="ir-custom-date-picker__anchor" class="ir-custom-date-picker__form-control-label">
-            {this.label}
-          </label>
-        )}
         <wa-popup distance={8} class="custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
-          <div
-            id="ir-custom-date-picker__anchor"
-            slot="anchor"
-            class={triggerClasses}
-            onClick={this.handleAnchorClick}
-            onKeyDown={this.handleAnchorKeyDown}
+          <ir-custom-input
+            tabIndex={!this.customPicker && !this.disabled ? 0 : undefined}
             aria-expanded={!this.customPicker ? String(this.isActive) : undefined}
             aria-disabled={this.disabled ? 'true' : undefined}
-            role={!this.customPicker ? 'button' : undefined}
-            tabIndex={!this.customPicker && !this.disabled ? 0 : undefined}
+            onKeyDown={this.handleAnchorKeyDown}
+            aria-invalid={String(this.isPickerInvalid)}
+            class={triggerClasses}
+            onClick={this.handleAnchorClick}
+            readonly
+            slot="anchor"
+            value={this.getTriggerLabel()}
+            label={this.label}
           >
-            <slot name="trigger">
-              <div data-active={String(this.isActive)} class="ir-custom-date-picker__trigger">
-                {this.getTriggerLabel()}
-              </div>
-            </slot>
-          </div>
+            <slot name="start" slot="start"></slot>
+            <slot name="end" slot="end"></slot>
+          </ir-custom-input>
 
           <div class="picker-surface">
             <div class="picker-surface__calendar" ref={el => (this.calendarContainerRef = el)}></div>
