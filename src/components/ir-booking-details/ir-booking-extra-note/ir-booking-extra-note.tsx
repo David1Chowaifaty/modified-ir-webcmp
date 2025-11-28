@@ -85,14 +85,7 @@ export class IrBookingExtraNote {
           value={this.note}
         ></wa-textarea>
         <div slot="footer" class="ir-dialog__footer">
-          <ir-custom-button
-            data-dialog="close"
-            size="medium"
-            variant="neutral"
-            appearance="filled"
-            onClickHandler={() => this.closeModal.emit(null)}
-            class={`mb-1 mb-sm-0 flex-fill  mr-sm-1'}`}
-          >
+          <ir-custom-button data-dialog="close" size="medium" variant="neutral" appearance="filled" onClickHandler={() => this.closeModal.emit(null)} class={`flex-fill'}`}>
             {locales.entries.Lcz_Cancel}
           </ir-custom-button>
 
