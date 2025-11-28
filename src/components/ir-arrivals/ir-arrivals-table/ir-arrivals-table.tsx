@@ -43,7 +43,7 @@ export class IrArrivalsTable {
           <ir-dates-cell overdueCheckin={isOverdueCheckIn} checkIn={room.from_date} checkOut={room.to_date}></ir-dates-cell>
         </td>
         <td class="text-right">
-          <ir-balance-cell currencySymbol={booking.currency.symbol} amount={booking.financial.gross_total}></ir-balance-cell>
+          <ir-balance-cell isDirect={booking.is_direct} statusCode={booking.status.code} currencySymbol={booking.currency.symbol} financial={booking.financial}></ir-balance-cell>
         </td>
         <td>
           <div class="arrivals-table__actions-cell">

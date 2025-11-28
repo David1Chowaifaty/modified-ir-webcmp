@@ -396,8 +396,10 @@ export namespace Components {
         "value": string;
     }
     interface IrBalanceCell {
-        "amount": number;
         "currencySymbol": string;
+        "financial": Booking['financial'];
+        "isDirect": boolean;
+        "statusCode": string;
     }
     interface IrBookedBySourceCell {
         "guest": Booking['guest'];
@@ -2949,6 +2951,10 @@ export interface IrAutocompleteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrAutocompleteElement;
 }
+export interface IrBalanceCellCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBalanceCellElement;
+}
 export interface IrBookingBillingRecipientCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingBillingRecipientElement;
@@ -3920,7 +3926,18 @@ declare global {
         prototype: HTMLIrAutocompleteElement;
         new (): HTMLIrAutocompleteElement;
     };
+    interface HTMLIrBalanceCellElementEventMap {
+        "payBookingBalance": void;
+    }
     interface HTMLIrBalanceCellElement extends Components.IrBalanceCell, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBalanceCellElementEventMap>(type: K, listener: (this: HTMLIrBalanceCellElement, ev: IrBalanceCellCustomEvent<HTMLIrBalanceCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBalanceCellElementEventMap>(type: K, listener: (this: HTMLIrBalanceCellElement, ev: IrBalanceCellCustomEvent<HTMLIrBalanceCellElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrBalanceCellElement: {
         prototype: HTMLIrBalanceCellElement;
@@ -6495,8 +6512,11 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface IrBalanceCell {
-        "amount"?: number;
         "currencySymbol"?: string;
+        "financial"?: Booking['financial'];
+        "isDirect": boolean;
+        "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<void>) => void;
+        "statusCode": string;
     }
     interface IrBookedBySourceCell {
         "guest"?: Booking['guest'];
