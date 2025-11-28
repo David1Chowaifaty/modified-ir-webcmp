@@ -1,6 +1,7 @@
 import { Booking, Room } from '@/models/booking.dto';
 import { createStore } from '@stencil/store';
 import { data as arrivalsMockData } from '@/components/ir-arrivals/_data';
+import moment from 'moment';
 
 export interface DeparturesPagination {
   page: number;
@@ -63,7 +64,7 @@ export function setDeparturesPageSize(pageSize: number) {
 }
 
 export function setDeparturesReferenceDate(date: string | Date) {
-  departuresStore.today = formatDateInput(date ?? new Date());
+  departuresStore.today = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
   runDeparturesPipeline();
 }
 
@@ -157,17 +158,7 @@ function buildName(person?: { first_name?: string | null; last_name?: string | n
 }
 
 function getTodayString() {
-  return formatDateInput(new Date());
-}
-
-function formatDateInput(value: string | Date) {
-  if (value instanceof Date) {
-    const year = value.getFullYear();
-    const month = `${value.getMonth() + 1}`.padStart(2, '0');
-    const day = `${value.getDate()}`.padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-  return normalizeDate(value);
+  return moment().format('YYYY-MM-DD');
 }
 
 function normalizeDate(value?: string | null) {
