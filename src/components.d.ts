@@ -22,8 +22,9 @@ import { CalendarSidebarState as CalendarSidebarState1 } from "./components/iglo
 import { IrActionButton } from "./components/table-cells/booking/ir-actions-cell/ir-actions-cell";
 import { IPaymentAction } from "./services/payment.service";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
+import { Payment, PaymentEntries } from "./components/ir-booking-details/types";
 import { BookingService } from "./services/booking.service";
-import { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
+import { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -39,7 +40,6 @@ import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-f
 import { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
 import { ZodType, ZodTypeAny } from "zod";
-import { PaymentEntries } from "./components/ir-booking-details/types";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { Notification } from "./components/ir-notifications/types";
@@ -73,8 +73,9 @@ export { CalendarSidebarState as CalendarSidebarState1 } from "./components/iglo
 export { IrActionButton } from "./components/table-cells/booking/ir-actions-cell/ir-actions-cell";
 export { IPaymentAction } from "./services/payment.service";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
+export { Payment, PaymentEntries } from "./components/ir-booking-details/types";
 export { BookingService } from "./services/booking.service";
-export { FolioEntryMode, OpenSidebarEvent, Payment, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
+export { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -90,7 +91,6 @@ export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-f
 export { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
 export { ZodType, ZodTypeAny } from "zod";
-export { PaymentEntries } from "./components/ir-booking-details/types";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { Notification } from "./components/ir-notifications/types";
@@ -1158,7 +1158,8 @@ export namespace Components {
     }
     interface IrDepartures {
         "language": string;
-        "propertyId": string;
+        "p": string;
+        "propertyid": number;
         "ticket": string;
     }
     interface IrDeparturesFilter {
@@ -2048,7 +2049,7 @@ export namespace Components {
         "closeFolio": () => Promise<void>;
         "mode": FolioEntryMode;
         "openFolio": () => Promise<void>;
-        "payment": Payment;
+        "payment": Payment1;
         "paymentEntries": PaymentEntries1;
     }
     interface IrPaymentItem {
@@ -3928,7 +3929,7 @@ declare global {
         new (): HTMLIrAutocompleteElement;
     };
     interface HTMLIrBalanceCellElementEventMap {
-        "payBookingBalance": string;
+        "payBookingBalance": { booking_nbr: string; payment: Payment };
     }
     interface HTMLIrBalanceCellElement extends Components.IrBalanceCell, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBalanceCellElementEventMap>(type: K, listener: (this: HTMLIrBalanceCellElement, ev: IrBalanceCellCustomEvent<HTMLIrBalanceCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6517,7 +6518,7 @@ declare namespace LocalJSX {
         "currencySymbol": string;
         "financial": Booking['financial'];
         "isDirect": boolean;
-        "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<string>) => void;
+        "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<{ booking_nbr: string; payment: Payment }>) => void;
         "statusCode": string;
     }
     interface IrBookedBySourceCell {
@@ -7329,7 +7330,8 @@ declare namespace LocalJSX {
     }
     interface IrDepartures {
         "language"?: string;
-        "propertyId"?: string;
+        "p"?: string;
+        "propertyid"?: number;
         "ticket"?: string;
     }
     interface IrDeparturesFilter {
@@ -8371,7 +8373,7 @@ declare namespace LocalJSX {
         "onCloseModal"?: (event: IrPaymentFolioCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrPaymentFolioCustomEvent<null>) => void;
         "onResetExposedCancellationDueAmount"?: (event: IrPaymentFolioCustomEvent<null>) => void;
-        "payment"?: Payment;
+        "payment"?: Payment1;
         "paymentEntries"?: PaymentEntries1;
     }
     interface IrPaymentItem {

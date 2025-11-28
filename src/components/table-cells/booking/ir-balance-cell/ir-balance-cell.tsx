@@ -1,6 +1,9 @@
+import { Payment } from '@/components/ir-booking-details/types';
 import { Booking } from '@/models/booking.dto';
+import calendar_data from '@/stores/calendar-data';
 import { formatAmount } from '@/utils/utils';
 import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
+import moment from 'moment';
 
 @Component({
   tag: 'ir-balance-cell',
@@ -14,7 +17,7 @@ export class IrBalanceCell {
   @Prop() bookingNumber!: string;
   @Prop() currencySymbol!: string;
 
-  @Event({ composed: true, bubbles: true }) payBookingBalance: EventEmitter<string>;
+  @Event({ composed: true, bubbles: true }) payBookingBalance: EventEmitter<{ booking_nbr: string; payment: Payment }>;
 
   render() {
     return (
@@ -26,7 +29,19 @@ export class IrBalanceCell {
               this.financial.due_amount !== 0 && (
                 <ir-custom-button
                   onClickHandler={() => {
-                    this.payBookingBalance.emit(this.bookingNumber);
+                    this.payBookingBalance.emit({
+                      booking_nbr: this.bookingNumber,
+                      payment: {
+                        amount: Math.abs(this.financial.cancelation_penality_as_if_today),
+                        currency: calendar_data.property.currency,
+                        date: moment().format('YYYY-MM-DD'),
+                        designation: null,
+                        payment_method: null,
+                        payment_type: { code: '001', description: null, operation: null },
+                        id: -1,
+                        reference: '',
+                      },
+                    });
                   }}
                   style={{ '--ir-c-btn-height': '0.5rem' }}
                   size="small"
@@ -40,7 +55,19 @@ export class IrBalanceCell {
             : this.financial.due_amount !== 0 && (
                 <ir-custom-button
                   onClickHandler={() => {
-                    this.payBookingBalance.emit(this.bookingNumber);
+                    this.payBookingBalance.emit({
+                      booking_nbr: this.bookingNumber,
+                      payment: {
+                        amount: this.financial.due_amount,
+                        currency: calendar_data.property.currency,
+                        date: moment().format('YYYY-MM-DD'),
+                        designation: null,
+                        payment_method: null,
+                        payment_type: { code: '001', description: null, operation: null },
+                        id: -1,
+                        reference: '',
+                      },
+                    });
                   }}
                   style={{ '--ir-c-btn-height': '1.5rem' }}
                   size="small"
