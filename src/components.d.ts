@@ -396,6 +396,7 @@ export namespace Components {
         "value": string;
     }
     interface IrBalanceCell {
+        "bookingNumber": string;
         "currencySymbol": string;
         "financial": Booking['financial'];
         "isDirect": boolean;
@@ -3927,7 +3928,7 @@ declare global {
         new (): HTMLIrAutocompleteElement;
     };
     interface HTMLIrBalanceCellElementEventMap {
-        "payBookingBalance": void;
+        "payBookingBalance": string;
     }
     interface HTMLIrBalanceCellElement extends Components.IrBalanceCell, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBalanceCellElementEventMap>(type: K, listener: (this: HTMLIrBalanceCellElement, ev: IrBalanceCellCustomEvent<HTMLIrBalanceCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6512,10 +6513,11 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface IrBalanceCell {
-        "currencySymbol"?: string;
-        "financial"?: Booking['financial'];
+        "bookingNumber": string;
+        "currencySymbol": string;
+        "financial": Booking['financial'];
         "isDirect": boolean;
-        "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<void>) => void;
+        "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<string>) => void;
         "statusCode": string;
     }
     interface IrBookedBySourceCell {

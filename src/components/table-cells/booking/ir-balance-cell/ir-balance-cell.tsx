@@ -8,12 +8,13 @@ import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
   scoped: true,
 })
 export class IrBalanceCell {
-  @Prop() financial: Booking['financial'];
+  @Prop() financial!: Booking['financial'];
   @Prop() statusCode!: string;
   @Prop() isDirect!: boolean;
-  @Prop() currencySymbol: string;
+  @Prop() bookingNumber!: string;
+  @Prop() currencySymbol!: string;
 
-  @Event() payBookingBalance: EventEmitter<void>;
+  @Event({ composed: true, bubbles: true }) payBookingBalance: EventEmitter<string>;
 
   render() {
     return (
@@ -25,7 +26,7 @@ export class IrBalanceCell {
               this.financial.due_amount !== 0 && (
                 <ir-custom-button
                   onClickHandler={() => {
-                    this.payBookingBalance.emit();
+                    this.payBookingBalance.emit(this.bookingNumber);
                   }}
                   style={{ '--ir-c-btn-height': '0.5rem' }}
                   size="small"
@@ -39,7 +40,7 @@ export class IrBalanceCell {
             : this.financial.due_amount !== 0 && (
                 <ir-custom-button
                   onClickHandler={() => {
-                    this.payBookingBalance.emit();
+                    this.payBookingBalance.emit(this.bookingNumber);
                   }}
                   style={{ '--ir-c-btn-height': '1.5rem' }}
                   size="small"
