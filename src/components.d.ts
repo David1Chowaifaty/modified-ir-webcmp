@@ -1153,6 +1153,13 @@ export namespace Components {
         "user": IHouseKeepers;
     }
     interface IrDepartures {
+        "language": string;
+        "propertyId": string;
+        "ticket": string;
+    }
+    interface IrDeparturesFilter {
+    }
+    interface IrDeparturesTable {
     }
     interface IrDialog {
         "closeModal": () => Promise<void>;
@@ -4397,6 +4404,18 @@ declare global {
         prototype: HTMLIrDeparturesElement;
         new (): HTMLIrDeparturesElement;
     };
+    interface HTMLIrDeparturesFilterElement extends Components.IrDeparturesFilter, HTMLStencilElement {
+    }
+    var HTMLIrDeparturesFilterElement: {
+        prototype: HTMLIrDeparturesFilterElement;
+        new (): HTMLIrDeparturesFilterElement;
+    };
+    interface HTMLIrDeparturesTableElement extends Components.IrDeparturesTable, HTMLStencilElement {
+    }
+    var HTMLIrDeparturesTableElement: {
+        prototype: HTMLIrDeparturesTableElement;
+        new (): HTMLIrDeparturesTableElement;
+    };
     interface HTMLIrDialogElementEventMap {
         "irDialogShow": void;
         "irDialogHide": { source: Element };
@@ -5977,6 +5996,8 @@ declare global {
         "ir-dates-cell": HTMLIrDatesCellElement;
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-departures": HTMLIrDeparturesElement;
+        "ir-departures-filter": HTMLIrDeparturesFilterElement;
+        "ir-departures-table": HTMLIrDeparturesTableElement;
         "ir-dialog": HTMLIrDialogElement;
         "ir-drawer": HTMLIrDrawerElement;
         "ir-dropdown": HTMLIrDropdownElement;
@@ -7283,6 +7304,13 @@ declare namespace LocalJSX {
         "user"?: IHouseKeepers;
     }
     interface IrDepartures {
+        "language"?: string;
+        "propertyId"?: string;
+        "ticket"?: string;
+    }
+    interface IrDeparturesFilter {
+    }
+    interface IrDeparturesTable {
     }
     interface IrDialog {
         /**
@@ -9270,6 +9298,8 @@ declare namespace LocalJSX {
         "ir-dates-cell": IrDatesCell;
         "ir-delete-modal": IrDeleteModal;
         "ir-departures": IrDepartures;
+        "ir-departures-filter": IrDeparturesFilter;
+        "ir-departures-table": IrDeparturesTable;
         "ir-dialog": IrDialog;
         "ir-drawer": IrDrawer;
         "ir-dropdown": IrDropdown;
@@ -9461,6 +9491,8 @@ declare module "@stencil/core" {
             "ir-dates-cell": LocalJSX.IrDatesCell & JSXBase.HTMLAttributes<HTMLIrDatesCellElement>;
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-departures": LocalJSX.IrDepartures & JSXBase.HTMLAttributes<HTMLIrDeparturesElement>;
+            "ir-departures-filter": LocalJSX.IrDeparturesFilter & JSXBase.HTMLAttributes<HTMLIrDeparturesFilterElement>;
+            "ir-departures-table": LocalJSX.IrDeparturesTable & JSXBase.HTMLAttributes<HTMLIrDeparturesTableElement>;
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
             "ir-drawer": LocalJSX.IrDrawer & JSXBase.HTMLAttributes<HTMLIrDrawerElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;

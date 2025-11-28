@@ -29,7 +29,7 @@
 
     <script>
         const departures_el = document.querySelector("ir-departures");
-        if (booking_listing) {
+        if (departures_el) {
             (async () => {
                 departures_el.propertyid = getId();
                 departures_el.ticket = await getToken()

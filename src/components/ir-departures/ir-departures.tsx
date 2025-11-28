@@ -41,8 +41,8 @@ export class IrDepartures {
     return (
       <Host>
         <h3 class="page-title">Departures</h3>
-        <ir-departure-filters></ir-departure-filters>
-        <ir-departure-table></ir-departure-table>
+        <ir-departures-filter></ir-departures-filter>
+        <ir-departures-table></ir-departures-table>
         <ir-drawer
           onDrawerHide={e => {
             e.stopImmediatePropagation();
