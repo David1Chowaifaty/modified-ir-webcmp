@@ -11,7 +11,7 @@ export class IrBalanceCell {
   render() {
     return (
       <Host>
-        <p>{formatAmount('$US', this.amount)}</p>
+        <p class="ir-price">{formatAmount('$US', this.amount)}</p>
       </Host>
     );
   }

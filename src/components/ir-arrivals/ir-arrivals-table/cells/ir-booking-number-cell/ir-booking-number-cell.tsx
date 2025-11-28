@@ -12,7 +12,15 @@ export class IrBookingNumberCell {
   render() {
     return (
       <Host>
-        <slot></slot>
+        <slot name="start"></slot>
+        <div>
+          <ir-custom-button link variant="brand" appearance="plain">
+            {this.bookingNumber}
+          </ir-custom-button>
+
+          {this.channelBookingNumber && <p>{this.channelBookingNumber}</p>}
+        </div>
+        <slot name="end"></slot>
       </Host>
     );
   }

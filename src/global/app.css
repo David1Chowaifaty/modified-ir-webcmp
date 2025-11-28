@@ -6,7 +6,14 @@
   background: #000;
   color: white;
 }
-
+.ir-price {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ir-price-color, #1a1a1a);
+  text-align: right;
+  white-space: nowrap;
+}
 :host {
   --wa-form-control-required-content-color: var(--wa-color-danger-border-loud);
   padding: var(--wa-space-l);

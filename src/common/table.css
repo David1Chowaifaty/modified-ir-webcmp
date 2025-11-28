@@ -78,3 +78,8 @@
   position: sticky;
   right:var(--ir-table-sticky-padding,-1rem);
 } */
+.sticky-column {
+  position: sticky !important;
+  right: 0;
+  background-color: white;
+}

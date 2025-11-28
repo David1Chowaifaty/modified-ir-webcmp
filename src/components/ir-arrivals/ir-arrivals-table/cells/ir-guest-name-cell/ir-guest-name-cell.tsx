@@ -11,7 +11,7 @@ export class IrGuestNameCell {
   render() {
     return (
       <Host>
-        <slot></slot>
+        {this.name.first_name} {this.name.last_name}
       </Host>
     );
   }

@@ -712,6 +712,7 @@ export namespace Components {
          */
         "href": NativeButton['href'];
         "iconBtn": boolean;
+        "link": boolean;
         /**
           * Draws the button in a loading state.
          */
@@ -1137,6 +1138,7 @@ export namespace Components {
     interface IrDatesCell {
         "checkIn": string;
         "checkOut": string;
+        "overdueCheckin": boolean;
     }
     interface IrDeleteModal {
         "closeModal": () => Promise<void>;
@@ -2709,9 +2711,12 @@ export namespace Components {
         "withHtml": boolean;
     }
     interface IrUnitCell {
-        "unit": Room['unit'];
+        "room": Room;
     }
     interface IrUnitStatus {
+    }
+    interface IrUnitTag {
+        "unit": string;
     }
     interface IrUserFormPanel {
         "allowedUsersTypes": AllowedUser[];
@@ -5768,6 +5773,12 @@ declare global {
         prototype: HTMLIrUnitStatusElement;
         new (): HTMLIrUnitStatusElement;
     };
+    interface HTMLIrUnitTagElement extends Components.IrUnitTag, HTMLStencilElement {
+    }
+    var HTMLIrUnitTagElement: {
+        prototype: HTMLIrUnitTagElement;
+        new (): HTMLIrUnitTagElement;
+    };
     interface HTMLIrUserFormPanelElementEventMap {
         "resetData": null;
         "closeSideBar": null;
@@ -6035,6 +6046,7 @@ declare global {
         "ir-tooltip": HTMLIrTooltipElement;
         "ir-unit-cell": HTMLIrUnitCellElement;
         "ir-unit-status": HTMLIrUnitStatusElement;
+        "ir-unit-tag": HTMLIrUnitTagElement;
         "ir-user-form-panel": HTMLIrUserFormPanelElement;
         "ir-user-management": HTMLIrUserManagementElement;
         "ir-user-management-table": HTMLIrUserManagementTableElement;
@@ -6776,6 +6788,7 @@ declare namespace LocalJSX {
          */
         "href"?: NativeButton['href'];
         "iconBtn"?: boolean;
+        "link"?: boolean;
         /**
           * Draws the button in a loading state.
          */
@@ -7218,6 +7231,7 @@ declare namespace LocalJSX {
     interface IrDatesCell {
         "checkIn"?: string;
         "checkOut"?: string;
+        "overdueCheckin"?: boolean;
     }
     interface IrDeleteModal {
         "onModalClosed"?: (event: IrDeleteModalCustomEvent<null>) => void;
@@ -9025,10 +9039,13 @@ declare namespace LocalJSX {
         "withHtml"?: boolean;
     }
     interface IrUnitCell {
-        "unit"?: Room['unit'];
+        "room"?: Room;
     }
     interface IrUnitStatus {
         "onResetData"?: (event: IrUnitStatusCustomEvent<null>) => void;
+    }
+    interface IrUnitTag {
+        "unit"?: string;
     }
     interface IrUserFormPanel {
         "allowedUsersTypes"?: AllowedUser[];
@@ -9315,6 +9332,7 @@ declare namespace LocalJSX {
         "ir-tooltip": IrTooltip;
         "ir-unit-cell": IrUnitCell;
         "ir-unit-status": IrUnitStatus;
+        "ir-unit-tag": IrUnitTag;
         "ir-user-form-panel": IrUserFormPanel;
         "ir-user-management": IrUserManagement;
         "ir-user-management-table": IrUserManagementTable;
@@ -9505,6 +9523,7 @@ declare module "@stencil/core" {
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
             "ir-unit-cell": LocalJSX.IrUnitCell & JSXBase.HTMLAttributes<HTMLIrUnitCellElement>;
             "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;
+            "ir-unit-tag": LocalJSX.IrUnitTag & JSXBase.HTMLAttributes<HTMLIrUnitTagElement>;
             "ir-user-form-panel": LocalJSX.IrUserFormPanel & JSXBase.HTMLAttributes<HTMLIrUserFormPanelElement>;
             "ir-user-management": LocalJSX.IrUserManagement & JSXBase.HTMLAttributes<HTMLIrUserManagementElement>;
             "ir-user-management-table": LocalJSX.IrUserManagementTable & JSXBase.HTMLAttributes<HTMLIrUserManagementTableElement>;

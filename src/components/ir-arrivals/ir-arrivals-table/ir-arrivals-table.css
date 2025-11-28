@@ -1,9 +1,11 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   border-radius: 0.5rem;
   overflow-x: auto;
+  min-height: 60vh;
   border: 1px solid var(--wa-color-neutral-border-quiet, #abaeb9);
-  border-bottom: 0;
+  /* border-bottom: 0; */
 }
 :host {
   box-sizing: border-box !important;
@@ -19,4 +21,7 @@
 
 [hidden] {
   display: none !important;
+}
+.table--container {
+  flex: 1 1 0%;
 }

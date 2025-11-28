@@ -1,4 +1,4 @@
-import { Room } from '@/models/booking.dto';
+import { IUnit, Room } from '@/models/booking.dto';
 import { Component, Host, Prop, h } from '@stencil/core';
 
 @Component({
@@ -7,11 +7,12 @@ import { Component, Host, Prop, h } from '@stencil/core';
   scoped: true,
 })
 export class IrUnitCell {
-  @Prop() unit: Room['unit'];
+  @Prop() room: Room;
   render() {
     return (
       <Host>
-        <slot></slot>
+        <p>{this.room.roomtype.name}</p>
+        {this.room.unit && <ir-unit-tag unit={(this.room.unit as IUnit).name}></ir-unit-tag>}
       </Host>
     );
   }

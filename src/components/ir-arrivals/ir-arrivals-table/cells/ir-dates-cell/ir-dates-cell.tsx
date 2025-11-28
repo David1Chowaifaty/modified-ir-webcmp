@@ -9,13 +9,14 @@ import moment from 'moment';
 export class IrDatesCell {
   @Prop() checkIn: string;
   @Prop() checkOut: string;
+  @Prop() overdueCheckin: boolean;
   private formatDate(date: string) {
     return moment(date, 'YYYY-MM-DD').format('DD MMM YYYY');
   }
   render() {
     return (
       <Host>
-        <p>{this.formatDate(this.checkIn)}</p>
+        <p style={{ fontWeight: this.overdueCheckin ? 'bold' : 'auto' }}>{this.formatDate(this.checkIn)}</p>
         <p>{this.formatDate(this.checkOut)}</p>
       </Host>
     );

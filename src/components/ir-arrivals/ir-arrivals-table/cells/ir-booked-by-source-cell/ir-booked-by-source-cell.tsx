@@ -19,7 +19,7 @@ export class IrBookedBySourceCell {
           <p>
             {this.guest.first_name} {this.guest.last_name}
           </p>
-          <p>{this.source.description}</p>
+          <p class="booked-by-cell__description">{this.source.description}</p>
         </div>
       </Host>
     );

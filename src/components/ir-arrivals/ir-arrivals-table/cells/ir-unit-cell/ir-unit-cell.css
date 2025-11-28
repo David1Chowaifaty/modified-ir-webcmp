@@ -1,4 +1,6 @@
 @import url('../../../../../assets/webawesome/component/host.css');
 :host {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

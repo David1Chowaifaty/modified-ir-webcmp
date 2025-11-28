@@ -1,0 +1,18 @@
+:host {
+  display: inline-flex;
+  box-sizing: border-box;
+}
+.unit-tag__content {
+  max-width: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+.unit-tag__el::part(base) {
+  padding-top: 0;
+  padding-bottom: 0;
+  height: fit-content;
+  line-height: 1;
+  box-sizing: border-box;
+}

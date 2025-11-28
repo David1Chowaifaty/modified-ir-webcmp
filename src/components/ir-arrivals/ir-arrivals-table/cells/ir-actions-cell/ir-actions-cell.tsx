@@ -9,7 +9,7 @@ export class IrActionsCell {
   render() {
     return (
       <Host>
-        <slot></slot>
+        <ir-custom-button variant="brand">Check in</ir-custom-button>
       </Host>
     );
   }

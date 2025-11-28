@@ -7,3 +7,6 @@
 .booked-by-source__logo {
   width: 1.5625rem;
 }
+.booked-by-cell__description {
+  font-size: 0.875rem;
+}
