@@ -1,5 +1,5 @@
 import { Booking } from '@/models/booking.dto';
-import { Component, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-booking-number-cell',
@@ -9,12 +9,13 @@ import { Component, Host, Prop, h } from '@stencil/core';
 export class IrBookingNumberCell {
   @Prop() bookingNumber: Booking['booking_nbr'];
   @Prop() channelBookingNumber: Booking['channel_booking_nbr'];
+  @Event({ bubbles: true, composed: true }) openBookingDetails: EventEmitter<Booking['booking_nbr']>;
   render() {
     return (
       <Host>
         <slot name="start"></slot>
         <div>
-          <ir-custom-button link variant="brand" appearance="plain">
+          <ir-custom-button onClickHandler={() => this.openBookingDetails.emit(this.bookingNumber)} link variant="brand" appearance="plain">
             {this.bookingNumber}
           </ir-custom-button>
 

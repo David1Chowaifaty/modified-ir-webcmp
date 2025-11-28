@@ -69,6 +69,9 @@ export class IrDialog {
   private handleWaHide(e: CustomEvent<{ source: Element }>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
+    if (!e.detail) {
+      return;
+    }
     this.open = false;
     this.irDialogHide.emit(e.detail);
   }

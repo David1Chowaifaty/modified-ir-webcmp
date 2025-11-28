@@ -2960,6 +2960,10 @@ export interface IrBookingHeaderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingHeaderElement;
 }
+export interface IrBookingNumberCellCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingNumberCellElement;
+}
 export interface IrButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrButtonElement;
@@ -4035,7 +4039,18 @@ declare global {
         prototype: HTMLIrBookingListingElement;
         new (): HTMLIrBookingListingElement;
     };
+    interface HTMLIrBookingNumberCellElementEventMap {
+        "openBookingDetails": Booking['booking_nbr'];
+    }
     interface HTMLIrBookingNumberCellElement extends Components.IrBookingNumberCell, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingNumberCellElementEventMap>(type: K, listener: (this: HTMLIrBookingNumberCellElement, ev: IrBookingNumberCellCustomEvent<HTMLIrBookingNumberCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingNumberCellElementEventMap>(type: K, listener: (this: HTMLIrBookingNumberCellElement, ev: IrBookingNumberCellCustomEvent<HTMLIrBookingNumberCellElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrBookingNumberCellElement: {
         prototype: HTMLIrBookingNumberCellElement;
@@ -6537,6 +6552,7 @@ declare namespace LocalJSX {
     interface IrBookingNumberCell {
         "bookingNumber"?: Booking['booking_nbr'];
         "channelBookingNumber"?: Booking['channel_booking_nbr'];
+        "onOpenBookingDetails"?: (event: IrBookingNumberCellCustomEvent<Booking['booking_nbr']>) => void;
     }
     interface IrBookingPrinting {
         "bookingNumber"?: string;

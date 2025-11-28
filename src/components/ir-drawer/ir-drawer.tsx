@@ -47,6 +47,9 @@ export class IrDrawer {
   private emitDrawerHide(e: CustomEvent<{ source: Element }>) {
     e.stopImmediatePropagation();
     e.stopPropagation();
+    if (!e.detail) {
+      return;
+    }
     this.drawerHide.emit(e.detail);
   }
   render() {

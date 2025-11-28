@@ -1,5 +1,5 @@
 import Token from '@/models/Token';
-import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-arrivals',
@@ -10,14 +10,18 @@ export class IrArrivals {
   @Prop() ticket: string;
   @Prop() propertyId: string;
   @Prop() language: string = 'en';
+
   @State() bookingNumber: number;
+
   private tokenService = new Token();
+
   componentWillLoad() {
     if (this.ticket) {
       this.tokenService.setToken(this.ticket);
       this.init();
     }
   }
+
   @Watch('ticket')
   handleTicketChange(newValue: string, oldValue: string) {
     if (newValue !== oldValue && newValue) {
@@ -25,14 +29,30 @@ export class IrArrivals {
       this.init();
     }
   }
+
+  @Listen('openBookingDetails')
+  handleOpen(e: CustomEvent) {
+    this.bookingNumber = e.detail;
+  }
+
   private init() {}
+
   render() {
     return (
       <Host>
         <h3 class="page-title">Arrivals</h3>
         <ir-arrivals-filters></ir-arrivals-filters>
         <ir-arrivals-table></ir-arrivals-table>
-        <ir-drawer withoutHeader open={!!this.bookingNumber} style={{ '--ir-drawer-width': '80rem' }}>
+        <ir-drawer
+          onDrawerHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.bookingNumber = null;
+          }}
+          withoutHeader
+          open={!!this.bookingNumber}
+          style={{ '--ir-drawer-width': '80rem', '--ir-drawer-background-color': '#F2F3F8', '--ir-drawer-padding-left': '0', '--ir-drawer-padding-right': '0' }}
+        >
           {this.bookingNumber && (
             <ir-booking-details
               hasPrint

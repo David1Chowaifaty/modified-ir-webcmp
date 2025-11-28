@@ -273,7 +273,12 @@ export class IrPaymentFolio {
     return (
       <ir-drawer
         placement="start"
-        style={{ '--ir-drawer-width': '40rem' }}
+        style={{
+          '--ir-drawer-width': '40rem',
+          '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
+          '--ir-drawer-padding-left': 'var(--spacing)',
+          '--ir-drawer-padding-right': 'var(--spacing)',
+        }}
         label={this.payment?.id !== -1 ? 'Edit Folio Entry' : 'New Folio Entry'}
         open={this.isOpen}
         onDrawerHide={event => {
