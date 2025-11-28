@@ -1,4 +1,5 @@
 import { Component, Host, h } from '@stencil/core';
+import { data } from '../_data';
 
 @Component({
   tag: 'ir-arrivals-table',
@@ -23,19 +24,35 @@ export class IrArrivalsTable {
               <th>Unit</th>
               <th>Dates</th>
               <th>Balance</th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="ir-table-row">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            {(data as any).map(d => (
+              <tr class="ir-table-row">
+                <td>
+                  <ir-booking-number-cell channelBookingNumber={d.channel_booking_nbr} bookingNumber={d.booking_nbr}></ir-booking-number-cell>
+                </td>
+                <td>
+                  <ir-booked-by-source-cell origin={d.origin} guest={d.guest} source={d.source}></ir-booked-by-source-cell>
+                </td>
+                <td>
+                  <ir-guest-name-cell name={d.rooms[0].guest}></ir-guest-name-cell>
+                </td>
+                <td>
+                  <ir-unit-cell unit={d.rooms[0].unit}></ir-unit-cell>
+                </td>
+                <td>
+                  <ir-dates-cell checkIn={d.rooms[0].from_date} checkOut={d.rooms[0].to_date}></ir-dates-cell>
+                </td>
+                <td>
+                  <ir-balance-cell amount={d.financial.gross_total}></ir-balance-cell>
+                </td>
+                <td>
+                  <ir-actions-cell></ir-actions-cell>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </Host>

@@ -1,0 +1,9 @@
+@import url('../../../../../assets/webawesome/component/host.css');
+:host {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.booked-by-source__logo {
+  width: 1.5625rem;
+}

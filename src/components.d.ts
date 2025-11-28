@@ -17,7 +17,7 @@ import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { IrToast } from "./components/ui/ir-toast/ir-toast";
 import { Currency, RatePlan, RoomType } from "./models/property";
-import { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+import { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
 import { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
 import { IPaymentAction } from "./services/payment.service";
 import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
@@ -67,7 +67,7 @@ export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { IrToast } from "./components/ui/ir-toast/ir-toast";
 export { Currency, RatePlan, RoomType } from "./models/property";
-export { Booking, ExtraService, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+export { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
 export { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
 export { IPaymentAction } from "./services/payment.service";
 export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
@@ -360,6 +360,8 @@ export namespace Components {
         "hide": () => Promise<void>;
         "show": () => Promise<void>;
     }
+    interface IrActionsCell {
+    }
     interface IrApplicablePolicies {
         "booking": Booking;
         "language": string;
@@ -386,6 +388,14 @@ export namespace Components {
         "to_date": string;
         "type": 'email' | 'text' | 'password' | 'number' | 'search';
         "value": string;
+    }
+    interface IrBalanceCell {
+        "amount": number;
+    }
+    interface IrBookedBySourceCell {
+        "guest": Booking['guest'];
+        "origin": Booking['origin'];
+        "source": Booking['source'];
     }
     interface IrBooking {
         "bookingNumber": string;
@@ -447,6 +457,10 @@ export namespace Components {
         "rowCount": number;
         "ticket": string;
         "userType": number;
+    }
+    interface IrBookingNumberCell {
+        "bookingNumber": Booking['booking_nbr'];
+        "channelBookingNumber": Booking['channel_booking_nbr'];
     }
     interface IrBookingPrinting {
         "bookingNumber": string;
@@ -1120,6 +1134,10 @@ export namespace Components {
         "showDateDifference": boolean;
         "to_date": string | Date | moment.Moment;
     }
+    interface IrDatesCell {
+        "checkIn": string;
+        "checkOut": string;
+    }
     interface IrDeleteModal {
         "closeModal": () => Promise<void>;
         "openModal": () => Promise<void>;
@@ -1316,6 +1334,9 @@ export namespace Components {
         "isInSideBar": boolean;
         "language": string;
         "ticket": string;
+    }
+    interface IrGuestNameCell {
+        "name": Guest;
     }
     interface IrHkArchive {
         "language": string;
@@ -2687,6 +2708,9 @@ export namespace Components {
          */
         "withHtml": boolean;
     }
+    interface IrUnitCell {
+        "unit": Room['unit'];
+    }
     interface IrUnitStatus {
     }
     interface IrUserFormPanel {
@@ -3797,6 +3821,12 @@ declare global {
         prototype: HTMLIrAccordionElement;
         new (): HTMLIrAccordionElement;
     };
+    interface HTMLIrActionsCellElement extends Components.IrActionsCell, HTMLStencilElement {
+    }
+    var HTMLIrActionsCellElement: {
+        prototype: HTMLIrActionsCellElement;
+        new (): HTMLIrActionsCellElement;
+    };
     interface HTMLIrApplicablePoliciesElementEventMap {
         "generatePayment": IPaymentAction;
     }
@@ -3850,6 +3880,18 @@ declare global {
     var HTMLIrAutocompleteElement: {
         prototype: HTMLIrAutocompleteElement;
         new (): HTMLIrAutocompleteElement;
+    };
+    interface HTMLIrBalanceCellElement extends Components.IrBalanceCell, HTMLStencilElement {
+    }
+    var HTMLIrBalanceCellElement: {
+        prototype: HTMLIrBalanceCellElement;
+        new (): HTMLIrBalanceCellElement;
+    };
+    interface HTMLIrBookedBySourceCellElement extends Components.IrBookedBySourceCell, HTMLStencilElement {
+    }
+    var HTMLIrBookedBySourceCellElement: {
+        prototype: HTMLIrBookedBySourceCellElement;
+        new (): HTMLIrBookedBySourceCellElement;
     };
     interface HTMLIrBookingElement extends Components.IrBooking, HTMLStencilElement {
     }
@@ -3966,6 +4008,12 @@ declare global {
     var HTMLIrBookingListingElement: {
         prototype: HTMLIrBookingListingElement;
         new (): HTMLIrBookingListingElement;
+    };
+    interface HTMLIrBookingNumberCellElement extends Components.IrBookingNumberCell, HTMLStencilElement {
+    }
+    var HTMLIrBookingNumberCellElement: {
+        prototype: HTMLIrBookingNumberCellElement;
+        new (): HTMLIrBookingNumberCellElement;
     };
     interface HTMLIrBookingPrintingElement extends Components.IrBookingPrinting, HTMLStencilElement {
     }
@@ -4277,6 +4325,12 @@ declare global {
         prototype: HTMLIrDateViewElement;
         new (): HTMLIrDateViewElement;
     };
+    interface HTMLIrDatesCellElement extends Components.IrDatesCell, HTMLStencilElement {
+    }
+    var HTMLIrDatesCellElement: {
+        prototype: HTMLIrDatesCellElement;
+        new (): HTMLIrDatesCellElement;
+    };
     interface HTMLIrDeleteModalElementEventMap {
         "modalClosed": null;
         "resetData": string;
@@ -4506,6 +4560,12 @@ declare global {
     var HTMLIrGuestInfoElement: {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
+    };
+    interface HTMLIrGuestNameCellElement extends Components.IrGuestNameCell, HTMLStencilElement {
+    }
+    var HTMLIrGuestNameCellElement: {
+        prototype: HTMLIrGuestNameCellElement;
+        new (): HTMLIrGuestNameCellElement;
     };
     interface HTMLIrHkArchiveElement extends Components.IrHkArchive, HTMLStencilElement {
     }
@@ -5685,6 +5745,12 @@ declare global {
         prototype: HTMLIrTooltipElement;
         new (): HTMLIrTooltipElement;
     };
+    interface HTMLIrUnitCellElement extends Components.IrUnitCell, HTMLStencilElement {
+    }
+    var HTMLIrUnitCellElement: {
+        prototype: HTMLIrUnitCellElement;
+        new (): HTMLIrUnitCellElement;
+    };
     interface HTMLIrUnitStatusElementEventMap {
         "resetData": null;
     }
@@ -5821,11 +5887,14 @@ declare global {
         "igl-to-be-assigned": HTMLIglToBeAssignedElement;
         "igloo-calendar": HTMLIglooCalendarElement;
         "ir-accordion": HTMLIrAccordionElement;
+        "ir-actions-cell": HTMLIrActionsCellElement;
         "ir-applicable-policies": HTMLIrApplicablePoliciesElement;
         "ir-arrivals": HTMLIrArrivalsElement;
         "ir-arrivals-filters": HTMLIrArrivalsFiltersElement;
         "ir-arrivals-table": HTMLIrArrivalsTableElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
+        "ir-balance-cell": HTMLIrBalanceCellElement;
+        "ir-booked-by-source-cell": HTMLIrBookedBySourceCellElement;
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-billing-recipient": HTMLIrBookingBillingRecipientElement;
         "ir-booking-company-form": HTMLIrBookingCompanyFormElement;
@@ -5835,6 +5904,7 @@ declare global {
         "ir-booking-guarantee": HTMLIrBookingGuaranteeElement;
         "ir-booking-header": HTMLIrBookingHeaderElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
+        "ir-booking-number-cell": HTMLIrBookingNumberCellElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
         "ir-button": HTMLIrButtonElement;
         "ir-channel": HTMLIrChannelElement;
@@ -5856,6 +5926,7 @@ declare global {
         "ir-date-picker": HTMLIrDatePickerElement;
         "ir-date-range": HTMLIrDateRangeElement;
         "ir-date-view": HTMLIrDateViewElement;
+        "ir-dates-cell": HTMLIrDatesCellElement;
         "ir-delete-modal": HTMLIrDeleteModalElement;
         "ir-departures": HTMLIrDeparturesElement;
         "ir-dialog": HTMLIrDialogElement;
@@ -5872,6 +5943,7 @@ declare global {
         "ir-financial-summary": HTMLIrFinancialSummaryElement;
         "ir-financial-table": HTMLIrFinancialTableElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-guest-name-cell": HTMLIrGuestNameCellElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
         "ir-hk-tasks": HTMLIrHkTasksElement;
         "ir-hk-team": HTMLIrHkTeamElement;
@@ -5961,6 +6033,7 @@ declare global {
         "ir-title": HTMLIrTitleElement;
         "ir-toast": HTMLIrToastElement;
         "ir-tooltip": HTMLIrTooltipElement;
+        "ir-unit-cell": HTMLIrUnitCellElement;
         "ir-unit-status": HTMLIrUnitStatusElement;
         "ir-user-form-panel": HTMLIrUserFormPanelElement;
         "ir-user-management": HTMLIrUserManagementElement;
@@ -6312,6 +6385,8 @@ declare namespace LocalJSX {
          */
         "onIr-toggle"?: (event: IrAccordionCustomEvent<{ expanded: boolean }>) => void;
     }
+    interface IrActionsCell {
+    }
     interface IrApplicablePolicies {
         "booking"?: Booking;
         "language"?: string;
@@ -6342,6 +6417,14 @@ declare namespace LocalJSX {
         "to_date"?: string;
         "type"?: 'email' | 'text' | 'password' | 'number' | 'search';
         "value"?: string;
+    }
+    interface IrBalanceCell {
+        "amount"?: number;
+    }
+    interface IrBookedBySourceCell {
+        "guest"?: Booking['guest'];
+        "origin"?: Booking['origin'];
+        "source"?: Booking['source'];
     }
     interface IrBooking {
         "bookingNumber"?: string;
@@ -6412,6 +6495,10 @@ declare namespace LocalJSX {
         "rowCount"?: number;
         "ticket"?: string;
         "userType"?: number;
+    }
+    interface IrBookingNumberCell {
+        "bookingNumber"?: Booking['booking_nbr'];
+        "channelBookingNumber"?: Booking['channel_booking_nbr'];
     }
     interface IrBookingPrinting {
         "bookingNumber"?: string;
@@ -7128,6 +7215,10 @@ declare namespace LocalJSX {
         "showDateDifference"?: boolean;
         "to_date"?: string | Date | moment.Moment;
     }
+    interface IrDatesCell {
+        "checkIn"?: string;
+        "checkOut"?: string;
+    }
     interface IrDeleteModal {
         "onModalClosed"?: (event: IrDeleteModalCustomEvent<null>) => void;
         "onResetData"?: (event: IrDeleteModalCustomEvent<string>) => void;
@@ -7372,6 +7463,9 @@ declare namespace LocalJSX {
         "onResetBookingEvt"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "onToast"?: (event: IrGuestInfoCustomEvent<IToast>) => void;
         "ticket"?: string;
+    }
+    interface IrGuestNameCell {
+        "name"?: Guest;
     }
     interface IrHkArchive {
         "language"?: string;
@@ -8930,6 +9024,9 @@ declare namespace LocalJSX {
          */
         "withHtml"?: boolean;
     }
+    interface IrUnitCell {
+        "unit"?: Room['unit'];
+    }
     interface IrUnitStatus {
         "onResetData"?: (event: IrUnitStatusCustomEvent<null>) => void;
     }
@@ -9070,11 +9167,14 @@ declare namespace LocalJSX {
         "igl-to-be-assigned": IglToBeAssigned;
         "igloo-calendar": IglooCalendar;
         "ir-accordion": IrAccordion;
+        "ir-actions-cell": IrActionsCell;
         "ir-applicable-policies": IrApplicablePolicies;
         "ir-arrivals": IrArrivals;
         "ir-arrivals-filters": IrArrivalsFilters;
         "ir-arrivals-table": IrArrivalsTable;
         "ir-autocomplete": IrAutocomplete;
+        "ir-balance-cell": IrBalanceCell;
+        "ir-booked-by-source-cell": IrBookedBySourceCell;
         "ir-booking": IrBooking;
         "ir-booking-billing-recipient": IrBookingBillingRecipient;
         "ir-booking-company-form": IrBookingCompanyForm;
@@ -9084,6 +9184,7 @@ declare namespace LocalJSX {
         "ir-booking-guarantee": IrBookingGuarantee;
         "ir-booking-header": IrBookingHeader;
         "ir-booking-listing": IrBookingListing;
+        "ir-booking-number-cell": IrBookingNumberCell;
         "ir-booking-printing": IrBookingPrinting;
         "ir-button": IrButton;
         "ir-channel": IrChannel;
@@ -9105,6 +9206,7 @@ declare namespace LocalJSX {
         "ir-date-picker": IrDatePicker;
         "ir-date-range": IrDateRange;
         "ir-date-view": IrDateView;
+        "ir-dates-cell": IrDatesCell;
         "ir-delete-modal": IrDeleteModal;
         "ir-departures": IrDepartures;
         "ir-dialog": IrDialog;
@@ -9121,6 +9223,7 @@ declare namespace LocalJSX {
         "ir-financial-summary": IrFinancialSummary;
         "ir-financial-table": IrFinancialTable;
         "ir-guest-info": IrGuestInfo;
+        "ir-guest-name-cell": IrGuestNameCell;
         "ir-hk-archive": IrHkArchive;
         "ir-hk-tasks": IrHkTasks;
         "ir-hk-team": IrHkTeam;
@@ -9210,6 +9313,7 @@ declare namespace LocalJSX {
         "ir-title": IrTitle;
         "ir-toast": IrToast;
         "ir-tooltip": IrTooltip;
+        "ir-unit-cell": IrUnitCell;
         "ir-unit-status": IrUnitStatus;
         "ir-user-form-panel": IrUserFormPanel;
         "ir-user-management": IrUserManagement;
@@ -9253,11 +9357,14 @@ declare module "@stencil/core" {
             "igl-to-be-assigned": LocalJSX.IglToBeAssigned & JSXBase.HTMLAttributes<HTMLIglToBeAssignedElement>;
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
             "ir-accordion": LocalJSX.IrAccordion & JSXBase.HTMLAttributes<HTMLIrAccordionElement>;
+            "ir-actions-cell": LocalJSX.IrActionsCell & JSXBase.HTMLAttributes<HTMLIrActionsCellElement>;
             "ir-applicable-policies": LocalJSX.IrApplicablePolicies & JSXBase.HTMLAttributes<HTMLIrApplicablePoliciesElement>;
             "ir-arrivals": LocalJSX.IrArrivals & JSXBase.HTMLAttributes<HTMLIrArrivalsElement>;
             "ir-arrivals-filters": LocalJSX.IrArrivalsFilters & JSXBase.HTMLAttributes<HTMLIrArrivalsFiltersElement>;
             "ir-arrivals-table": LocalJSX.IrArrivalsTable & JSXBase.HTMLAttributes<HTMLIrArrivalsTableElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
+            "ir-balance-cell": LocalJSX.IrBalanceCell & JSXBase.HTMLAttributes<HTMLIrBalanceCellElement>;
+            "ir-booked-by-source-cell": LocalJSX.IrBookedBySourceCell & JSXBase.HTMLAttributes<HTMLIrBookedBySourceCellElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-billing-recipient": LocalJSX.IrBookingBillingRecipient & JSXBase.HTMLAttributes<HTMLIrBookingBillingRecipientElement>;
             "ir-booking-company-form": LocalJSX.IrBookingCompanyForm & JSXBase.HTMLAttributes<HTMLIrBookingCompanyFormElement>;
@@ -9267,6 +9374,7 @@ declare module "@stencil/core" {
             "ir-booking-guarantee": LocalJSX.IrBookingGuarantee & JSXBase.HTMLAttributes<HTMLIrBookingGuaranteeElement>;
             "ir-booking-header": LocalJSX.IrBookingHeader & JSXBase.HTMLAttributes<HTMLIrBookingHeaderElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
+            "ir-booking-number-cell": LocalJSX.IrBookingNumberCell & JSXBase.HTMLAttributes<HTMLIrBookingNumberCellElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
             "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
@@ -9288,6 +9396,7 @@ declare module "@stencil/core" {
             "ir-date-picker": LocalJSX.IrDatePicker & JSXBase.HTMLAttributes<HTMLIrDatePickerElement>;
             "ir-date-range": LocalJSX.IrDateRange & JSXBase.HTMLAttributes<HTMLIrDateRangeElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
+            "ir-dates-cell": LocalJSX.IrDatesCell & JSXBase.HTMLAttributes<HTMLIrDatesCellElement>;
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
             "ir-departures": LocalJSX.IrDepartures & JSXBase.HTMLAttributes<HTMLIrDeparturesElement>;
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
@@ -9304,6 +9413,7 @@ declare module "@stencil/core" {
             "ir-financial-summary": LocalJSX.IrFinancialSummary & JSXBase.HTMLAttributes<HTMLIrFinancialSummaryElement>;
             "ir-financial-table": LocalJSX.IrFinancialTable & JSXBase.HTMLAttributes<HTMLIrFinancialTableElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-guest-name-cell": LocalJSX.IrGuestNameCell & JSXBase.HTMLAttributes<HTMLIrGuestNameCellElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
             "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;
             "ir-hk-team": LocalJSX.IrHkTeam & JSXBase.HTMLAttributes<HTMLIrHkTeamElement>;
@@ -9393,6 +9503,7 @@ declare module "@stencil/core" {
             "ir-title": LocalJSX.IrTitle & JSXBase.HTMLAttributes<HTMLIrTitleElement>;
             "ir-toast": LocalJSX.IrToast & JSXBase.HTMLAttributes<HTMLIrToastElement>;
             "ir-tooltip": LocalJSX.IrTooltip & JSXBase.HTMLAttributes<HTMLIrTooltipElement>;
+            "ir-unit-cell": LocalJSX.IrUnitCell & JSXBase.HTMLAttributes<HTMLIrUnitCellElement>;
             "ir-unit-status": LocalJSX.IrUnitStatus & JSXBase.HTMLAttributes<HTMLIrUnitStatusElement>;
             "ir-user-form-panel": LocalJSX.IrUserFormPanel & JSXBase.HTMLAttributes<HTMLIrUserFormPanelElement>;
             "ir-user-management": LocalJSX.IrUserManagement & JSXBase.HTMLAttributes<HTMLIrUserManagementElement>;

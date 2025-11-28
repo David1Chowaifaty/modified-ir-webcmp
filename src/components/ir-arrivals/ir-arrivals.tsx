@@ -9,7 +9,7 @@ export class IrArrivals {
   render() {
     return (
       <Host>
-        <h4>Arrivals</h4>
+        <h3 class="page-title">Arrivals</h3>
         <ir-arrivals-filters></ir-arrivals-filters>
         <ir-arrivals-table></ir-arrivals-table>
       </Host>
