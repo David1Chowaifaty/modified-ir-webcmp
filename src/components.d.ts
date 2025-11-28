@@ -397,6 +397,7 @@ export namespace Components {
     }
     interface IrBalanceCell {
         "amount": number;
+        "currencySymbol": string;
     }
     interface IrBookedBySourceCell {
         "guest": Booking['guest'];
@@ -6473,6 +6474,7 @@ declare namespace LocalJSX {
     }
     interface IrBalanceCell {
         "amount"?: number;
+        "currencySymbol"?: string;
     }
     interface IrBookedBySourceCell {
         "guest"?: Booking['guest'];

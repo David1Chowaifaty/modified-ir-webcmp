@@ -8,10 +8,11 @@ import { Component, Host, Prop, h } from '@stencil/core';
 })
 export class IrBalanceCell {
   @Prop() amount: number;
+  @Prop() currencySymbol: string;
   render() {
     return (
       <Host>
-        <p class="ir-price">{formatAmount('$US', this.amount)}</p>
+        <p class="ir-price">{formatAmount(this.currencySymbol, this.amount)}</p>
       </Host>
     );
   }

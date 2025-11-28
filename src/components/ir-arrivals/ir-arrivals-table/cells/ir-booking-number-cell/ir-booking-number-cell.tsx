@@ -15,7 +15,7 @@ export class IrBookingNumberCell {
       <Host>
         <slot name="start"></slot>
         <div>
-          <ir-custom-button onClickHandler={() => this.openBookingDetails.emit(this.bookingNumber)} link variant="brand" appearance="plain">
+          <ir-custom-button size="medium" onClickHandler={() => this.openBookingDetails.emit(this.bookingNumber)} link variant="brand" appearance="plain">
             {this.bookingNumber}
           </ir-custom-button>
 
