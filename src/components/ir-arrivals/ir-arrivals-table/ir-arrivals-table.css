@@ -1,5 +1,9 @@
 :host {
   display: block;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  border: 1px solid var(--wa-color-neutral-border-quiet, #abaeb9);
+  border-bottom: 0;
 }
 :host {
   box-sizing: border-box !important;

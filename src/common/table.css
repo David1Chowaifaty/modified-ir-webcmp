@@ -19,9 +19,10 @@
 
 .table td {
   border-top: 0;
-  border-bottom: 1px solid #e3ebf3;
+  border-bottom: 1px solid var(--wa-color-neutral-border-quiet, #abaeb9);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
 /* .table thead th:first-child {
   border-top-left-radius: 0.5rem;
   }
@@ -31,6 +32,7 @@
 .table thead th {
   border: none !important;
   background: #ececec;
+  background: color-mix(in oklab, var(--wa-color-neutral-fill-quiet, #f1f2f3) 60%, transparent);
   color: #374151;
   padding: 0.5rem 1rem !important;
   text-align: left;
@@ -62,6 +64,7 @@
 }
 .ir-table-row:hover td {
   background: #e2e6ea3f !important;
+  background: var(--wa-color-neutral-fill-quiet, #f1f2f3) !important;
 }
 .sortable:active {
   color: #212529;
@@ -75,69 +78,3 @@
   position: sticky;
   right:var(--ir-table-sticky-padding,-1rem);
 } */
-
-/* #region Tables ~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-/* Base table */
-table.ir-table {
-  width: 100% !important;
-
-  border: none !important;
-  border-collapse: collapse !important;
-}
-
-/* Caption */
-table.ir-table > caption {
-  color: var(--wa-color-text-quiet) !important;
-  font-size: var(--wa-font-size-smaller) !important;
-  /* Old CSS can't use :has, so we always add the bottom margin.
-     If you need it conditional, you'd style the next sibling instead. */
-  margin-bottom: 0.75em !important;
-}
-
-/* Body rows */
-table.ir-table > tbody > tr {
-  border-top: solid var(--wa-border-width-s) var(--wa-color-border-quiet) !important;
-}
-
-/* Zebra rows */
-table.ir-table.ir-table--zebra-rows > tbody > tr:nth-child(odd) {
-  background-color: color-mix(in oklab, var(--wa-color-fill-quiet) 60%, transparent) !important;
-}
-
-/* Hover rows – base (no hover yet) */
-table.ir-table.ir-table--hover-rows > tbody > tr {
-  /* no special styles here; hover handled in media query below */
-}
-
-/* Hover rows – only on hover-capable devices */
-@media (hover: hover) {
-  table.ir-table.ir-table--hover-rows > tbody > tr:hover {
-    background-color: var(--wa-color-fill-quiet) !important;
-    border-top-color: var(--wa-color-border-normal) !important;
-  }
-
-  table.ir-table.ir-table--hover-rows > tbody > tr:hover + tr {
-    border-top-color: var(--wa-color-border-normal) !important;
-  }
-}
-
-/* Cells */
-table.ir-table td,
-table.ir-table th {
-  padding: 0.75em !important;
-
-  text-align: left !important;
-  vertical-align: top !important;
-}
-
-/* Header cells */
-table.ir-table th {
-  padding-top: 0.75em !important;
-  padding-bottom: 0.75em !important;
-
-  font-size: var(--wa-font-size-smaller) !important;
-  font-weight: var(--wa-font-weight-bold) !important;
-}
-
-/* #endregion */
