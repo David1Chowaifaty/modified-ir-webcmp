@@ -365,6 +365,12 @@ export namespace Components {
         "language": string;
         "propertyId": number;
     }
+    interface IrArrivals {
+    }
+    interface IrArrivalsFilters {
+    }
+    interface IrArrivalsTable {
+    }
     interface IrAutocomplete {
         "danger_border": boolean;
         "disabled": boolean;
@@ -771,6 +777,7 @@ export namespace Components {
           * Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.
          */
         "inline": boolean;
+        "label": string;
         /**
           * The latest date that can be selected.
          */
@@ -1117,6 +1124,8 @@ export namespace Components {
         "closeModal": () => Promise<void>;
         "openModal": () => Promise<void>;
         "user": IHouseKeepers;
+    }
+    interface IrDepartures {
     }
     interface IrDialog {
         "closeModal": () => Promise<void>;
@@ -3805,6 +3814,24 @@ declare global {
         prototype: HTMLIrApplicablePoliciesElement;
         new (): HTMLIrApplicablePoliciesElement;
     };
+    interface HTMLIrArrivalsElement extends Components.IrArrivals, HTMLStencilElement {
+    }
+    var HTMLIrArrivalsElement: {
+        prototype: HTMLIrArrivalsElement;
+        new (): HTMLIrArrivalsElement;
+    };
+    interface HTMLIrArrivalsFiltersElement extends Components.IrArrivalsFilters, HTMLStencilElement {
+    }
+    var HTMLIrArrivalsFiltersElement: {
+        prototype: HTMLIrArrivalsFiltersElement;
+        new (): HTMLIrArrivalsFiltersElement;
+    };
+    interface HTMLIrArrivalsTableElement extends Components.IrArrivalsTable, HTMLStencilElement {
+    }
+    var HTMLIrArrivalsTableElement: {
+        prototype: HTMLIrArrivalsTableElement;
+        new (): HTMLIrArrivalsTableElement;
+    };
     interface HTMLIrAutocompleteElementEventMap {
         "comboboxValue": { key: string; data: unknown };
         "inputCleared": null;
@@ -4267,6 +4294,12 @@ declare global {
     var HTMLIrDeleteModalElement: {
         prototype: HTMLIrDeleteModalElement;
         new (): HTMLIrDeleteModalElement;
+    };
+    interface HTMLIrDeparturesElement extends Components.IrDepartures, HTMLStencilElement {
+    }
+    var HTMLIrDeparturesElement: {
+        prototype: HTMLIrDeparturesElement;
+        new (): HTMLIrDeparturesElement;
     };
     interface HTMLIrDialogElementEventMap {
         "irDialogShow": void;
@@ -5789,6 +5822,9 @@ declare global {
         "igloo-calendar": HTMLIglooCalendarElement;
         "ir-accordion": HTMLIrAccordionElement;
         "ir-applicable-policies": HTMLIrApplicablePoliciesElement;
+        "ir-arrivals": HTMLIrArrivalsElement;
+        "ir-arrivals-filters": HTMLIrArrivalsFiltersElement;
+        "ir-arrivals-table": HTMLIrArrivalsTableElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-billing-recipient": HTMLIrBookingBillingRecipientElement;
@@ -5821,6 +5857,7 @@ declare global {
         "ir-date-range": HTMLIrDateRangeElement;
         "ir-date-view": HTMLIrDateViewElement;
         "ir-delete-modal": HTMLIrDeleteModalElement;
+        "ir-departures": HTMLIrDeparturesElement;
         "ir-dialog": HTMLIrDialogElement;
         "ir-drawer": HTMLIrDrawerElement;
         "ir-dropdown": HTMLIrDropdownElement;
@@ -6281,6 +6318,12 @@ declare namespace LocalJSX {
         "onGeneratePayment"?: (event: IrApplicablePoliciesCustomEvent<IPaymentAction>) => void;
         "propertyId"?: number;
     }
+    interface IrArrivals {
+    }
+    interface IrArrivalsFilters {
+    }
+    interface IrArrivalsTable {
+    }
     interface IrAutocomplete {
         "danger_border"?: boolean;
         "disabled"?: boolean;
@@ -6725,6 +6768,7 @@ declare namespace LocalJSX {
           * Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.
          */
         "inline"?: boolean;
+        "label"?: string;
         /**
           * The latest date that can be selected.
          */
@@ -7088,6 +7132,8 @@ declare namespace LocalJSX {
         "onModalClosed"?: (event: IrDeleteModalCustomEvent<null>) => void;
         "onResetData"?: (event: IrDeleteModalCustomEvent<string>) => void;
         "user"?: IHouseKeepers;
+    }
+    interface IrDepartures {
     }
     interface IrDialog {
         /**
@@ -9025,6 +9071,9 @@ declare namespace LocalJSX {
         "igloo-calendar": IglooCalendar;
         "ir-accordion": IrAccordion;
         "ir-applicable-policies": IrApplicablePolicies;
+        "ir-arrivals": IrArrivals;
+        "ir-arrivals-filters": IrArrivalsFilters;
+        "ir-arrivals-table": IrArrivalsTable;
         "ir-autocomplete": IrAutocomplete;
         "ir-booking": IrBooking;
         "ir-booking-billing-recipient": IrBookingBillingRecipient;
@@ -9057,6 +9106,7 @@ declare namespace LocalJSX {
         "ir-date-range": IrDateRange;
         "ir-date-view": IrDateView;
         "ir-delete-modal": IrDeleteModal;
+        "ir-departures": IrDepartures;
         "ir-dialog": IrDialog;
         "ir-drawer": IrDrawer;
         "ir-dropdown": IrDropdown;
@@ -9204,6 +9254,9 @@ declare module "@stencil/core" {
             "igloo-calendar": LocalJSX.IglooCalendar & JSXBase.HTMLAttributes<HTMLIglooCalendarElement>;
             "ir-accordion": LocalJSX.IrAccordion & JSXBase.HTMLAttributes<HTMLIrAccordionElement>;
             "ir-applicable-policies": LocalJSX.IrApplicablePolicies & JSXBase.HTMLAttributes<HTMLIrApplicablePoliciesElement>;
+            "ir-arrivals": LocalJSX.IrArrivals & JSXBase.HTMLAttributes<HTMLIrArrivalsElement>;
+            "ir-arrivals-filters": LocalJSX.IrArrivalsFilters & JSXBase.HTMLAttributes<HTMLIrArrivalsFiltersElement>;
+            "ir-arrivals-table": LocalJSX.IrArrivalsTable & JSXBase.HTMLAttributes<HTMLIrArrivalsTableElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-billing-recipient": LocalJSX.IrBookingBillingRecipient & JSXBase.HTMLAttributes<HTMLIrBookingBillingRecipientElement>;
@@ -9236,6 +9289,7 @@ declare module "@stencil/core" {
             "ir-date-range": LocalJSX.IrDateRange & JSXBase.HTMLAttributes<HTMLIrDateRangeElement>;
             "ir-date-view": LocalJSX.IrDateView & JSXBase.HTMLAttributes<HTMLIrDateViewElement>;
             "ir-delete-modal": LocalJSX.IrDeleteModal & JSXBase.HTMLAttributes<HTMLIrDeleteModalElement>;
+            "ir-departures": LocalJSX.IrDepartures & JSXBase.HTMLAttributes<HTMLIrDeparturesElement>;
             "ir-dialog": LocalJSX.IrDialog & JSXBase.HTMLAttributes<HTMLIrDialogElement>;
             "ir-drawer": LocalJSX.IrDrawer & JSXBase.HTMLAttributes<HTMLIrDrawerElement>;
             "ir-dropdown": LocalJSX.IrDropdown & JSXBase.HTMLAttributes<HTMLIrDropdownElement>;

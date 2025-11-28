@@ -333,7 +333,7 @@ export class IrInvoice {
           }}
         >
           <form ref={el => (this.invoiceFormRef = el)} class="ir-invoice__container">
-            <ir-custom-date-picker date={moment().format('YYYY-MM-DD')} minDate={this.getMinDate()} maxDate={this.getMaxDate()}></ir-custom-date-picker>
+            <ir-custom-date-picker label="Date" date={moment().format('YYYY-MM-DD')} minDate={this.getMinDate()} maxDate={this.getMaxDate()}></ir-custom-date-picker>
             <ir-booking-billing-recipient onRecipientChange={e => (this.selectedRecipient = e.detail)} booking={this.booking}></ir-booking-billing-recipient>
             <div class={'ir-invoice__services'}>
               <p class="ir-invoice__form-control-label">Choose what to invoice</p>

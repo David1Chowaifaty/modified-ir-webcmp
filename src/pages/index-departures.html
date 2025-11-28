@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-    <title>Arrivals</title>
+    <title>Departures</title>
     <script type="module" src="/build/ir-webcmp.esm.js"></script>
     <script nomodule src="/build/ir-webcmp.js"></script>
     <script src="assets/scripts/jquery.min.js"></script>
@@ -24,15 +24,15 @@
 
 <body>
     <ir-common></ir-common>
-    <ir-arrivals baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-arrivals>
+    <ir-departures baseurl="https://gateway.igloorooms.com/IR" language="en"></ir-departures>
     <link rel="stylesheet" href="assets/scripts/toastr/toastr.css" type="text/css">
 
     <script>
-        const arrivals_el = document.querySelector("ir-arrivals");
+        const departures_el = document.querySelector("ir-departures");
         if (booking_listing) {
             (async () => {
-                arrivals_el.propertyid = getId();
-                arrivals_el.ticket = await getToken()
+                departures_el.propertyid = getId();
+                departures_el.ticket = await getToken()
             })();
         } 
     </script>

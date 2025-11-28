@@ -283,6 +283,7 @@ export class IrPaymentFolio {
         {this.isOpen && (
           <div class="payment-folio__form" id="ir__folio-form">
             <ir-custom-date-picker
+              label="Date"
               aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
               data-testid="pickup_date"
               onDateChanged={evt => {

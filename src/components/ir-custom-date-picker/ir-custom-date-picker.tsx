@@ -12,6 +12,8 @@ import { ClickOutside } from '../../decorators/ClickOutside';
 export class IrCustomDatePicker {
   @Element() el: HTMLElement;
 
+  @Prop() label: string;
+
   /**
    * Determines whether the date picker is rendered inline or in a pop-up.
    * If `true`, the picker is always visible inline.
@@ -367,9 +369,11 @@ export class IrCustomDatePicker {
 
     return (
       <Host class={{ 'custom-date-picker': true, 'custom-date-picker--open': this.isActive, 'custom-date-picker--disabled': this.disabled }}>
-        <label htmlFor="ir-custom-date-picker__anchor" class="ir-custom-date-picker__form-control-label">
-          Date
-        </label>
+        {this.label && (
+          <label htmlFor="ir-custom-date-picker__anchor" class="ir-custom-date-picker__form-control-label">
+            {this.label}
+          </label>
+        )}
         <wa-popup distance={8} class="custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
           <div
             id="ir-custom-date-picker__anchor"
