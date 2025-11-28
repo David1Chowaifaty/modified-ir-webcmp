@@ -372,7 +372,8 @@ export namespace Components {
     }
     interface IrArrivals {
         "language": string;
-        "propertyId": string;
+        "p": string;
+        "propertyid": number;
         "ticket": string;
     }
     interface IrArrivalsFilters {
@@ -6487,7 +6488,8 @@ declare namespace LocalJSX {
     }
     interface IrArrivals {
         "language"?: string;
-        "propertyId"?: string;
+        "p"?: string;
+        "propertyid"?: number;
         "ticket"?: string;
     }
     interface IrArrivalsFilters {

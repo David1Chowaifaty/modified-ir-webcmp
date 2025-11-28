@@ -28,7 +28,6 @@ export class IrDepartures {
   private bookingService = new BookingService();
 
   private paymentFolioRef: HTMLIrPaymentFolioElement;
-  paymentFolioProps: any;
 
   componentWillLoad() {
     if (this.ticket) {
@@ -49,8 +48,11 @@ export class IrDepartures {
   handleOpen(e: CustomEvent) {
     this.bookingNumber = e.detail;
   }
+
   @Listen('payBookingBalance')
   handleBookingPayment(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     const { booking_nbr, payment } = e.detail;
     this.booking = departuresStore.bookings.find(b => b.booking_nbr === booking_nbr);
     this.payment = payment;
@@ -81,6 +83,8 @@ export class IrDepartures {
     }
     return (
       <Host>
+        <ir-toast></ir-toast>
+        <ir-interceptor></ir-interceptor>
         <h3 class="page-title">Departures</h3>
         <ir-departures-filter></ir-departures-filter>
         <ir-departures-table></ir-departures-table>
@@ -120,7 +124,7 @@ export class IrDepartures {
           ref={el => (this.paymentFolioRef = el)}
           onCloseModal={() => {
             this.booking = null;
-            this.payment = this.payment;
+            this.payment = null;
           }}
         ></ir-payment-folio>
       </Host>
