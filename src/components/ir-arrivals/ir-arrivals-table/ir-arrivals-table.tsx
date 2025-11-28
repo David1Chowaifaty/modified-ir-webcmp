@@ -49,7 +49,7 @@ export class IrArrivalsTable {
                     <ir-balance-cell amount={d.financial.gross_total}></ir-balance-cell>
                   </td>
                   <td>
-                    <div style={{ minWidth: '120px' }}>
+                    <div class="arrivals-table__actions-cell">
                       {/* <ir-actions-cell></ir-actions-cell> */}
                       <ir-custom-button variant="neutral">Overdue check in</ir-custom-button>
                     </div>
@@ -79,7 +79,9 @@ export class IrArrivalsTable {
                   <td class="text-right">
                     <ir-balance-cell amount={d.financial.gross_total}></ir-balance-cell>
                   </td>
-                  <td>In house</td>
+                  <td>
+                    <div class="arrivals-table__actions-cell">In-house</div>
+                  </td>
                 </tr>
               ))}
             </tbody>
