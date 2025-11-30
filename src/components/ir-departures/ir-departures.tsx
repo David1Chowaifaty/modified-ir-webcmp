@@ -83,8 +83,8 @@ export class IrDepartures {
     }
     return (
       <Host>
-        <ir-toast></ir-toast>
-        <ir-interceptor></ir-interceptor>
+        <ir-toast style={{ display: 'none' }}></ir-toast>
+        <ir-interceptor style={{ display: 'none' }}></ir-interceptor>
         <h3 class="page-title">Departures</h3>
         <ir-departures-filter></ir-departures-filter>
         <ir-departures-table></ir-departures-table>

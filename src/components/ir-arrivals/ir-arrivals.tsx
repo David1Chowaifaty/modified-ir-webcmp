@@ -83,8 +83,8 @@ export class IrArrivals {
     }
     return (
       <Host>
-        <ir-toast></ir-toast>
-        <ir-interceptor></ir-interceptor>
+        <ir-toast style={{ display: 'none' }}></ir-toast>
+        <ir-interceptor style={{ display: 'none' }}></ir-interceptor>
         <h3 class="page-title">Arrivals</h3>
         <ir-arrivals-filters></ir-arrivals-filters>
         <ir-arrivals-table></ir-arrivals-table>
