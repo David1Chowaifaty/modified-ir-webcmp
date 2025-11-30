@@ -67,7 +67,9 @@ export class IrDeparturesTable {
           <table class="table">
             <thead>
               <tr>
-                <th class="sticky-column">Booking#</th>
+                <th>
+                  <span class={'departures-table__departure__cell'}>Booking#</span>
+                </th>
                 <th>
                   <div>
                     <p>Booked by / Source</p>

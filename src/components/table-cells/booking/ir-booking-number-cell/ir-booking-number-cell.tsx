@@ -14,12 +14,14 @@ export class IrBookingNumberCell {
     return (
       <Host>
         <slot name="start"></slot>
-        <div>
-          <ir-custom-button size="medium" onClickHandler={() => this.openBookingDetails.emit(this.bookingNumber)} link variant="brand" appearance="plain">
-            {this.bookingNumber}
-          </ir-custom-button>
+        <div class="booking-nbr-cell__container">
+          <div style={{ width: 'fit-content' }}>
+            <ir-custom-button size="medium" onClickHandler={() => this.openBookingDetails.emit(this.bookingNumber)} link variant="brand" appearance="plain">
+              {this.bookingNumber}
+            </ir-custom-button>
+          </div>
 
-          {this.channelBookingNumber && <p>{this.channelBookingNumber}</p>}
+          {this.channelBookingNumber && <p class="booking-nbr-cell__channel_nbr">{this.channelBookingNumber}</p>}
         </div>
         <slot name="end"></slot>
       </Host>

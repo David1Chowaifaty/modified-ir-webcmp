@@ -68,7 +68,9 @@ export class IrArrivalsTable {
           <table class="table">
             <thead>
               <tr>
-                <th class="sticky-column">Booking#</th>
+                <th>
+                  <span class={'arrivals-table__departure__cell'}>Booking#</span>
+                </th>
                 <th>
                   <div>
                     <p>Booked by / Source</p>

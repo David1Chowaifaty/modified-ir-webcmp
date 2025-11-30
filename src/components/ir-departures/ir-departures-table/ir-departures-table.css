@@ -31,6 +31,9 @@
   min-width: 100px;
   justify-content: flex-end;
 }
+.departures-table__departure__cell {
+  padding-inline: var(--wa-form-control-padding-inline, 1rem);
+}
 @media (min-width: 1024px) {
   .departures-table__actions-cell {
     min-width: 250px;

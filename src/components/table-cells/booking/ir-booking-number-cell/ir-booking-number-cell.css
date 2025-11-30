@@ -4,3 +4,11 @@
   gap: 1rem;
   align-items: center;
 }
+.booking-nbr-cell__channel_nbr {
+  padding-inline: var(--wa-form-control-padding-inline, 1rem);
+}
+.booking-nbr-cell__container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
