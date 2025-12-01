@@ -2167,6 +2167,7 @@ export namespace Components {
           * Two-letter language code used for country fetching.
          */
         "language": string;
+        "mode": 'modern' | 'default';
         /**
           * If provided, sets the phone prefix and updates selected country.
          */
@@ -8709,6 +8710,7 @@ declare namespace LocalJSX {
           * Two-letter language code used for country fetching.
          */
         "language"?: string;
+        "mode"?: 'modern' | 'default';
         /**
           * Emits when the user changes the phone number. Emits `{ phone_prefix, mobile }` object.  Example: ```tsx <ir-phone-input onTextChange={(e) => console.log(e.detail)} /> ```
          */

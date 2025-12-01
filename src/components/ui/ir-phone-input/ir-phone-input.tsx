@@ -10,6 +10,7 @@ import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, Wat
 })
 export class IrPhoneInput {
   @Element() el: HTMLElement;
+  @Prop() mode: 'modern' | 'default' = 'default';
   /**
    * Label displayed next to the phone input.
    */
@@ -197,6 +198,42 @@ export class IrPhoneInput {
     const useFloating = this.floatingLabel && this.label;
     const showSideLabel = !!this.label && !useFloating;
     const isActive = this.hasFocus || !!this.inputValue; // float when focused or has value
+    if (this.mode === 'modern') {
+      return (
+        <Host>
+          <div class="phone-input__container">
+            <wa-input class="phone-input__prefix" label={this.label} readonly>
+              <button slot="start" type="button" onClick={() => (this.isDropdownVisible = !this.isDropdownVisible)} class="dropdown-trigger">
+                {this.currentCountry ? <img src={this.currentCountry?.flag} class="flag" /> : <p class="p-0 m-0 ">{locales.entries.Lcz_Select}</p>}
+                {this.currentCountry && <span>{this.currentCountry.phone_prefix}</span>}
+                <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
+                  <path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                </svg>
+              </button>
+            </wa-input>
+            <wa-input onchange={e => this.handleInputChange(e as any)} max={14} value={this.inputValue} class="phone-input__phone" placeholder={this.placeholder}></wa-input>
+          </div>
+          {this.isDropdownVisible && (
+            <div>
+              <ir-combobox
+                onComboboxValueChange={e => {
+                  this.setCurrentCountry(+e.detail.data);
+                  this.isDropdownVisible = false;
+                }}
+                class="bg-white"
+                autoFocus
+                placeholder="Search country"
+                data={this.countries.map(c => ({
+                  id: c.id.toString(),
+                  name: `${c.name} (${c.phone_prefix})`,
+                  image: c.flag,
+                }))}
+              ></ir-combobox>
+            </div>
+          )}
+        </Host>
+      );
+    }
     return (
       <Host>
         <div class="form-group mr-0">

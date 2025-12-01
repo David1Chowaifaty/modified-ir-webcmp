@@ -130,3 +130,38 @@
 :host .input-container.has-floating .dropdown-trigger:hover ~ .floating-label {
   opacity: 0.9;
 } */
+
+.phone-input__container {
+  display: flex;
+  align-items: flex-end;
+}
+.phone-input__prefix {
+  width: 150px;
+}
+.phone-input__prefix::part(input),
+.phone-input__prefix::part(end) {
+  display: none;
+}
+.phone-input__prefix:dir(ltr)::part(base),
+.phone-input__phone:dir(rtl)::part(base) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.phone-input__prefix:dir(rtl)::part(base),
+.phone-input__phone:dir(ltr)::part(base) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.phone-input__phone {
+  flex: 1 1 0%;
+}
+.phone-input__prefix::part(start) {
+  width: 100% !important;
+}
+.phone-input__prefix .dropdown-trigger {
+  border-right: 0;
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

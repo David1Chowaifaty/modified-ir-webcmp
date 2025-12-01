@@ -57,9 +57,9 @@ export class IrGuestInfoForm {
           onCountryChange={e => this.handleInputChange({ country_id: e.detail.id })}
           countries={this.countries}
         ></ir-country-picker>
-        {/*
 
         <ir-phone-input
+          mode="modern"
           onTextChange={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
@@ -74,7 +74,7 @@ export class IrGuestInfoForm {
           language={this.language}
           label={locales.entries?.Lcz_MobilePhone}
           countries={this.countries}
-        /> */}
+        />
 
         <wa-textarea onchange={e => this.handleInputChange({ notes: (e.target as any).value })} value={this.guest?.notes} label={locales.entries?.Lcz_PrivateNote}></wa-textarea>
       </Host>
