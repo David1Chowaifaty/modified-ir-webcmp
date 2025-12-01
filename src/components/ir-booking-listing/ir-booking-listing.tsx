@@ -10,7 +10,6 @@ import booking_listing, {
   setPaginationPageSize,
   updatePaginationFromSelection,
 } from '@/stores/booking_listing.store';
-import locales from '@/stores/locales.store';
 import { isPrivilegedUser } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
 import Token from '@/models/Token';
