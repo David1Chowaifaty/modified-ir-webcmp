@@ -23,9 +23,9 @@ export class IrActionsCell {
       case 'overdue_check_out':
         return 'Overdue check-out';
       case 'edit':
-        return 'Edit';
+        return 'icon';
       case 'delete':
-        return 'Delete';
+        return 'icon';
       default:
         return '';
     }
@@ -34,6 +34,8 @@ export class IrActionsCell {
     switch (type) {
       case 'overdue_check_in':
       case 'overdue_check_out':
+        return 'neutral';
+      case 'edit':
         return 'neutral';
       case 'delete':
         return 'danger';
@@ -63,7 +65,9 @@ export class IrActionsCell {
 
     return (
       <ir-custom-button variant={variant} appearance={appearance} data-action={type} onClick={() => this.onClick(type)}>
-        {label}
+        {label !== 'icon' && label}
+        {type === 'edit' && <wa-icon name="edit" style={{ fontSize: '1.2rem' }}></wa-icon>}
+        {type === 'delete' && <wa-icon name="trash-can" style={{ fontSize: '1.2rem' }}></wa-icon>}
       </ir-custom-button>
     );
   }

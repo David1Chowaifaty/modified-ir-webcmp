@@ -1,0 +1,9 @@
+@import url('../../../../assets/webawesome/component/host.css');
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.booked-on-cell__time {
+  font-size: 0.875rem;
+}

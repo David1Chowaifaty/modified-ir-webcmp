@@ -408,6 +408,9 @@ export namespace Components {
         "origin": Booking['origin'];
         "source": Booking['source'];
     }
+    interface IrBookedOnCell {
+        "bookedOn": Booking['booked_on'];
+    }
     interface IrBooking {
         "bookingNumber": string;
         "p": string;
@@ -468,6 +471,8 @@ export namespace Components {
         "rowCount": number;
         "ticket": string;
         "userType": number;
+    }
+    interface IrBookingListingTable {
     }
     interface IrBookingNumberCell {
         "bookingNumber": Booking['booking_nbr'];
@@ -3952,6 +3957,12 @@ declare global {
         prototype: HTMLIrBookedBySourceCellElement;
         new (): HTMLIrBookedBySourceCellElement;
     };
+    interface HTMLIrBookedOnCellElement extends Components.IrBookedOnCell, HTMLStencilElement {
+    }
+    var HTMLIrBookedOnCellElement: {
+        prototype: HTMLIrBookedOnCellElement;
+        new (): HTMLIrBookedOnCellElement;
+    };
     interface HTMLIrBookingElement extends Components.IrBooking, HTMLStencilElement {
     }
     var HTMLIrBookingElement: {
@@ -4067,6 +4078,12 @@ declare global {
     var HTMLIrBookingListingElement: {
         prototype: HTMLIrBookingListingElement;
         new (): HTMLIrBookingListingElement;
+    };
+    interface HTMLIrBookingListingTableElement extends Components.IrBookingListingTable, HTMLStencilElement {
+    }
+    var HTMLIrBookingListingTableElement: {
+        prototype: HTMLIrBookingListingTableElement;
+        new (): HTMLIrBookingListingTableElement;
     };
     interface HTMLIrBookingNumberCellElementEventMap {
         "openBookingDetails": Booking['booking_nbr'];
@@ -5983,6 +6000,7 @@ declare global {
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-balance-cell": HTMLIrBalanceCellElement;
         "ir-booked-by-source-cell": HTMLIrBookedBySourceCellElement;
+        "ir-booked-on-cell": HTMLIrBookedOnCellElement;
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-billing-recipient": HTMLIrBookingBillingRecipientElement;
         "ir-booking-company-form": HTMLIrBookingCompanyFormElement;
@@ -5992,6 +6010,7 @@ declare global {
         "ir-booking-guarantee": HTMLIrBookingGuaranteeElement;
         "ir-booking-header": HTMLIrBookingHeaderElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
+        "ir-booking-listing-table": HTMLIrBookingListingTableElement;
         "ir-booking-number-cell": HTMLIrBookingNumberCellElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
         "ir-button": HTMLIrButtonElement;
@@ -6528,6 +6547,9 @@ declare namespace LocalJSX {
         "origin"?: Booking['origin'];
         "source"?: Booking['source'];
     }
+    interface IrBookedOnCell {
+        "bookedOn"?: Booking['booked_on'];
+    }
     interface IrBooking {
         "bookingNumber"?: string;
         "p"?: string;
@@ -6597,6 +6619,8 @@ declare namespace LocalJSX {
         "rowCount"?: number;
         "ticket"?: string;
         "userType"?: number;
+    }
+    interface IrBookingListingTable {
     }
     interface IrBookingNumberCell {
         "bookingNumber"?: Booking['booking_nbr'];
@@ -9292,6 +9316,7 @@ declare namespace LocalJSX {
         "ir-autocomplete": IrAutocomplete;
         "ir-balance-cell": IrBalanceCell;
         "ir-booked-by-source-cell": IrBookedBySourceCell;
+        "ir-booked-on-cell": IrBookedOnCell;
         "ir-booking": IrBooking;
         "ir-booking-billing-recipient": IrBookingBillingRecipient;
         "ir-booking-company-form": IrBookingCompanyForm;
@@ -9301,6 +9326,7 @@ declare namespace LocalJSX {
         "ir-booking-guarantee": IrBookingGuarantee;
         "ir-booking-header": IrBookingHeader;
         "ir-booking-listing": IrBookingListing;
+        "ir-booking-listing-table": IrBookingListingTable;
         "ir-booking-number-cell": IrBookingNumberCell;
         "ir-booking-printing": IrBookingPrinting;
         "ir-button": IrButton;
@@ -9485,6 +9511,7 @@ declare module "@stencil/core" {
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-balance-cell": LocalJSX.IrBalanceCell & JSXBase.HTMLAttributes<HTMLIrBalanceCellElement>;
             "ir-booked-by-source-cell": LocalJSX.IrBookedBySourceCell & JSXBase.HTMLAttributes<HTMLIrBookedBySourceCellElement>;
+            "ir-booked-on-cell": LocalJSX.IrBookedOnCell & JSXBase.HTMLAttributes<HTMLIrBookedOnCellElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-billing-recipient": LocalJSX.IrBookingBillingRecipient & JSXBase.HTMLAttributes<HTMLIrBookingBillingRecipientElement>;
             "ir-booking-company-form": LocalJSX.IrBookingCompanyForm & JSXBase.HTMLAttributes<HTMLIrBookingCompanyFormElement>;
@@ -9494,6 +9521,7 @@ declare module "@stencil/core" {
             "ir-booking-guarantee": LocalJSX.IrBookingGuarantee & JSXBase.HTMLAttributes<HTMLIrBookingGuaranteeElement>;
             "ir-booking-header": LocalJSX.IrBookingHeader & JSXBase.HTMLAttributes<HTMLIrBookingHeaderElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
+            "ir-booking-listing-table": LocalJSX.IrBookingListingTable & JSXBase.HTMLAttributes<HTMLIrBookingListingTableElement>;
             "ir-booking-number-cell": LocalJSX.IrBookingNumberCell & JSXBase.HTMLAttributes<HTMLIrBookingNumberCellElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
