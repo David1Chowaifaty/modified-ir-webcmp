@@ -1,23 +1,19 @@
-import { Booking, IUnit, Occupancy } from '@/models/booking.dto';
+import { Booking } from '@/models/booking.dto';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { RoomService } from '@/services/room.service';
 import booking_listing, { updateUserSelection, onBookingListingChange, updateUserSelections, ExposedBookingsParams } from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
-import { formatAmount, isPrivilegedUser } from '@/utils/utils';
-import { Component, Host, Prop, State, Watch, h, Element, Listen, Fragment } from '@stencil/core';
-import moment from 'moment';
-import { _formatTime } from '../ir-booking-details/functions';
-import { getPrivateNote } from '@/utils/booking';
+import { isPrivilegedUser } from '@/utils/utils';
+import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
 import Token from '@/models/Token';
-import { isSingleUnit } from '@/stores/calendar-data';
 import { getAllParams } from '@/utils/browserHistory';
 import { BookingService } from '@/services/booking.service';
-import { PaymentEntries } from '../ir-booking-details/types';
+import { Payment, PaymentEntries } from '../ir-booking-details/types';
 import { AllowedProperties, PropertyService } from '@/services/property.service';
 
 @Component({
   tag: 'ir-booking-listing',
-  styleUrl: 'ir-booking-listing.css',
+  styleUrls: ['ir-booking-listing.css', '../../global/app.css'],
   scoped: true,
 })
 export class IrBookingListing {
@@ -38,6 +34,8 @@ export class IrBookingListing {
   @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' } | null = null;
   @State() showCost = false;
   @State() paymentEntries: PaymentEntries;
+  @State() payment: Payment;
+  @State() booking: Booking;
 
   private bookingListingService = new BookingListingService();
   private bookingService = new BookingService();
@@ -47,14 +45,9 @@ export class IrBookingListing {
 
   private listingModal: HTMLIrListingModalElement;
   private listingModalTimeout: NodeJS.Timeout;
-  private statusColors = {
-    '001': 'badge-warning',
-    '002': 'badge-success',
-    '003': 'badge-danger',
-    '004': 'badge-danger',
-  };
   private allowedProperties: number[];
   private havePrivilege: boolean;
+  private paymentFolioRef: HTMLIrPaymentFolioElement;
 
   componentWillLoad() {
     if (this.baseUrl) {
@@ -228,6 +221,7 @@ export class IrBookingListing {
     e.stopPropagation();
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
   }
+
   @Listen('bookingChanged')
   handleBookingChanged(e: CustomEvent<Booking>) {
     e.stopImmediatePropagation();
@@ -241,7 +235,45 @@ export class IrBookingListing {
       }),
     ];
   }
+  @Listen('payBookingBalance')
+  handleBookingPayment(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const { booking_nbr, payment } = e.detail;
+    this.booking = this.findBooking(booking_nbr);
+    this.payment = payment;
+    this.paymentFolioRef.openFolio();
+  }
+  @Listen('guestSelected')
+  handleSelectGuestEvent(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    const booking = this.findBooking(e.detail);
+    if (!booking) {
+      return;
+    }
+    this.editBookingItem = {
+      booking,
+      cause: 'guest',
+    };
+  }
+  @Listen('openBookingDetails')
+  handleOpen(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation;
+    const booking = this.findBooking(e.detail);
+    if (!booking) {
+      return;
+    }
+    this.editBookingItem = {
+      booking,
+      cause: 'edit',
+    };
+  }
 
+  private findBooking(bookingNumber: Booking['booking_nbr']) {
+    return booking_listing.bookings.find(b => b.booking_nbr === bookingNumber);
+  }
   renderItemRange() {
     const { endItem, startItem, totalCount } = this.getPaginationBounds();
     return `${locales.entries.Lcz_View} ${startItem + 1} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
@@ -260,14 +292,7 @@ export class IrBookingListing {
       end_row: endItem,
     });
   }
-  private calculateTotalPersons(booking: Booking) {
-    const sumOfOccupancy = ({ adult_nbr, children_nbr, infant_nbr }: Occupancy) => {
-      return (adult_nbr ?? 0) + (children_nbr ?? 0) + (infant_nbr ?? 0);
-    };
-    return booking.rooms.reduce((prev, cur) => {
-      return sumOfOccupancy(cur.occupancy) + prev;
-    }, 0);
-  }
+
   render() {
     if (this.isLoading || this.ticket === '') {
       return <ir-loading-screen></ir-loading-screen>;
@@ -276,11 +301,10 @@ export class IrBookingListing {
       <Host>
         <ir-interceptor></ir-interceptor>
         <ir-toast></ir-toast>
-        <div class="p-1 main-container">
+        <div class="main-container">
           <ir-listing-header propertyId={this.propertyid} p={this.p} language={this.language}></ir-listing-header>
-          <section>
-            <div class="card p-1 flex-fill m-0 mt-2">
-              <table class="table table-striped table-bordered no-footer dataTable">
+          <section class="mt-2">
+            {/* <table class="table table-striped table-bordered no-footer dataTable">
                 <thead>
                   <tr>
                     {this.havePrivilege && <th class="text-left">Property</th>}
@@ -372,14 +396,8 @@ export class IrBookingListing {
                                       </ir-tooltip>
                                     </div>
                                   )}
-                                  {/* <button
-                                    class="booking_number p-0 m-0 "
-                                    onClick={() => {
-                                      this.editBookingItem = { booking, cause: 'guest' };
-                                    }}
-                                  ></button> */}
+
                                   <span class={'p-0 m-0'}>
-                                    {/* {booking.occupancy.adult_nbr} */}
                                     {totalPersons}
                                     {locales.entries.Lcz_P}
                                   </span>
@@ -408,7 +426,6 @@ export class IrBookingListing {
                                   </svg>
                                 )}
                               </div>
-                              {/* {booking.agent && <p class="m-0 secondary-p">{locales.entries.Lcz_AgentCode.replace('%1', booking.agent.name)}</p>} */}
                             </div>
                           </div>
                         </td>
@@ -521,72 +538,72 @@ export class IrBookingListing {
                     );
                   })}
                 </tbody>
-              </table>
-              {this.totalPages > 1 && (
-                <section class={'d-flex flex-column flex-md-row align-items-center justify-content-between pagination-container'}>
-                  <p class="m-0 mb-1 mb-md-0">{this.renderItemRange()}</p>
-                  <div class={'d-flex align-items-center buttons-container'}>
-                    <ir-button
-                      size="sm"
-                      btn_disabled={this.currentPage === 1}
-                      onClickHandler={async () => {
-                        this.currentPage = 1;
-                        await this.updateData();
-                      }}
-                      icon_name="angles_left"
-                      style={{ '--icon-size': '0.875rem' }}
-                    ></ir-button>
-                    <ir-button
-                      size="sm"
-                      btn_disabled={this.currentPage === 1}
-                      onClickHandler={async () => {
-                        this.currentPage = this.currentPage - 1;
-                        await this.updateData();
-                      }}
-                      icon_name="angle_left"
-                      style={{ '--icon-size': '0.875rem' }}
-                    ></ir-button>
-                    <ir-select
-                      selectedValue={this.currentPage.toString()}
-                      showFirstOption={false}
-                      onSelectChange={async e => {
-                        this.currentPage = +e.detail;
-                        await this.updateData();
-                      }}
-                      data={Array.from(Array(this.totalPages), (_, i) => i + 1).map(i => ({
-                        text: i.toString(),
-                        value: i.toString(),
-                      }))}
-                    ></ir-select>
-                    <ir-button
-                      size="sm"
-                      btn_disabled={this.currentPage === this.totalPages}
-                      onClickHandler={async () => {
-                        this.currentPage = this.currentPage + 1;
-                        await this.updateData();
-                      }}
-                      icon_name="angle_right"
-                      style={{ '--icon-size': '0.875rem' }}
-                    ></ir-button>
-                    <ir-button
-                      size="sm"
-                      btn_disabled={this.currentPage === this.totalPages}
-                      onClickHandler={async () => {
-                        this.currentPage = this.totalPages;
-                        console.log(this.currentPage);
-                        await this.updateData();
-                      }}
-                      icon_name="angles_right"
-                      style={{ '--icon-size': '0.875rem' }}
-                    ></ir-button>
-                  </div>
-                </section>
-              )}
-            </div>
+              </table> */}
+            <ir-booking-listing-table></ir-booking-listing-table>
+            {/* {this.totalPages > 1 && (
+              <section class={'d-flex flex-column flex-md-row align-items-center justify-content-between pagination-container'}>
+                <p class="m-0 mb-1 mb-md-0">{this.renderItemRange()}</p>
+                <div class={'d-flex align-items-center buttons-container'}>
+                  <ir-button
+                    size="sm"
+                    btn_disabled={this.currentPage === 1}
+                    onClickHandler={async () => {
+                      this.currentPage = 1;
+                      await this.updateData();
+                    }}
+                    icon_name="angles_left"
+                    style={{ '--icon-size': '0.875rem' }}
+                  ></ir-button>
+                  <ir-button
+                    size="sm"
+                    btn_disabled={this.currentPage === 1}
+                    onClickHandler={async () => {
+                      this.currentPage = this.currentPage - 1;
+                      await this.updateData();
+                    }}
+                    icon_name="angle_left"
+                    style={{ '--icon-size': '0.875rem' }}
+                  ></ir-button>
+                  <ir-select
+                    selectedValue={this.currentPage.toString()}
+                    showFirstOption={false}
+                    onSelectChange={async e => {
+                      this.currentPage = +e.detail;
+                      await this.updateData();
+                    }}
+                    data={Array.from(Array(this.totalPages), (_, i) => i + 1).map(i => ({
+                      text: i.toString(),
+                      value: i.toString(),
+                    }))}
+                  ></ir-select>
+                  <ir-button
+                    size="sm"
+                    btn_disabled={this.currentPage === this.totalPages}
+                    onClickHandler={async () => {
+                      this.currentPage = this.currentPage + 1;
+                      await this.updateData();
+                    }}
+                    icon_name="angle_right"
+                    style={{ '--icon-size': '0.875rem' }}
+                  ></ir-button>
+                  <ir-button
+                    size="sm"
+                    btn_disabled={this.currentPage === this.totalPages}
+                    onClickHandler={async () => {
+                      this.currentPage = this.totalPages;
+                      console.log(this.currentPage);
+                      await this.updateData();
+                    }}
+                    icon_name="angles_right"
+                    style={{ '--icon-size': '0.875rem' }}
+                  ></ir-button>
+                </div>
+              </section>
+            )} */}
           </section>
         </div>
-        {this.editBookingItem && <ir-listing-modal paymentEntries={this.paymentEntries} onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>}
-        <ir-sidebar
+        {/* {this.editBookingItem && <ir-listing-modal paymentEntries={this.paymentEntries} onModalClosed={() => (this.editBookingItem = null)}></ir-listing-modal>} */}
+        {/* <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
           open={this.editBookingItem !== null && ['edit', 'guest'].includes(this.editBookingItem.cause)}
           showCloseButton={false}
@@ -623,7 +640,65 @@ export class IrBookingListing {
               onCloseSideBar={() => (this.editBookingItem = null)}
             ></ir-guest-info>
           )}
-        </ir-sidebar>
+        </ir-sidebar> */}
+        <ir-drawer
+          onDrawerHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.editBookingItem = null;
+          }}
+          withoutHeader
+          open={this.editBookingItem?.cause === 'edit'}
+          style={{ '--ir-drawer-width': '80rem', '--ir-drawer-background-color': '#F2F3F8', '--ir-drawer-padding-left': '0', '--ir-drawer-padding-right': '0' }}
+        >
+          {this.editBookingItem?.booking && (
+            <ir-booking-details
+              hasPrint
+              hasReceipt
+              hasCloseButton
+              onCloseSidebar={() => (this.editBookingItem.booking = null)}
+              is_from_front_desk
+              propertyid={this.propertyid as any}
+              hasRoomEdit
+              hasRoomDelete
+              bookingNumber={this.editBookingItem.booking?.booking_nbr.toString()}
+              ticket={this.ticket}
+              language={this.language}
+              hasRoomAdd
+            ></ir-booking-details>
+          )}
+        </ir-drawer>
+        <ir-drawer
+          open={this.editBookingItem?.cause === 'guest'}
+          onDrawerHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.editBookingItem = null;
+          }}
+        >
+          {this.editBookingItem?.cause === 'guest' && (
+            <ir-guest-info
+              isInSideBar={true}
+              headerShown={false}
+              booking_nbr={this.editBookingItem?.booking?.booking_nbr}
+              email={this.editBookingItem?.booking?.guest.email}
+              language={this.language}
+              onCloseSideBar={() => (this.editBookingItem = null)}
+            ></ir-guest-info>
+          )}
+        </ir-drawer>
+        <ir-payment-folio
+          style={{ height: 'auto' }}
+          bookingNumber={this.booking?.booking_nbr}
+          paymentEntries={this.paymentEntries}
+          payment={this.payment}
+          mode={'payment-action'}
+          ref={el => (this.paymentFolioRef = el)}
+          onCloseModal={() => {
+            this.booking = null;
+            this.payment = null;
+          }}
+        ></ir-payment-folio>
       </Host>
     );
   }
