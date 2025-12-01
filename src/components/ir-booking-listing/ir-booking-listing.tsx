@@ -1,7 +1,15 @@
 import { Booking } from '@/models/booking.dto';
 import { BookingListingService } from '@/services/booking_listing.service';
 import { RoomService } from '@/services/room.service';
-import booking_listing, { updateUserSelection, onBookingListingChange, updateUserSelections, ExposedBookingsParams } from '@/stores/booking_listing.store';
+import booking_listing, {
+  updateUserSelection,
+  onBookingListingChange,
+  updateUserSelections,
+  ExposedBookingsParams,
+  setPaginationPage,
+  setPaginationPageSize,
+  updatePaginationFromSelection,
+} from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
 import { isPrivilegedUser } from '@/utils/utils';
 import { Component, Host, Prop, State, Watch, h, Element, Listen } from '@stencil/core';
@@ -10,6 +18,7 @@ import { getAllParams } from '@/utils/browserHistory';
 import { BookingService } from '@/services/booking.service';
 import { Payment, PaymentEntries } from '../ir-booking-details/types';
 import { AllowedProperties, PropertyService } from '@/services/property.service';
+import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagination';
 
 @Component({
   tag: 'ir-booking-listing',
@@ -28,9 +37,6 @@ export class IrBookingListing {
   @Prop() userType: number;
 
   @State() isLoading = false;
-  @State() currentPage = 1;
-  @State() totalPages = 1;
-  @State() oldStartValue = 0;
   @State() editBookingItem: { booking: Booking; cause: 'edit' | 'payment' | 'delete' | 'guest' } | null = null;
   @State() showCost = false;
   @State() paymentEntries: PaymentEntries;
@@ -55,16 +61,16 @@ export class IrBookingListing {
     }
     updateUserSelection('end_row', this.rowCount);
     booking_listing.rowCount = this.rowCount;
+    setPaginationPageSize(this.rowCount);
     if (this.ticket !== '') {
       booking_listing.token = this.ticket;
       this.token.setToken(this.ticket);
       this.initializeApp();
     }
-    onBookingListingChange('userSelection', async newValue => {
-      const newTotal = newValue.total_count;
-      this.totalPages = Math.ceil(newTotal / this.rowCount);
+    onBookingListingChange('userSelection', newValue => {
+      updatePaginationFromSelection(newValue);
     });
-    onBookingListingChange('bookings', async newValue => {
+    onBookingListingChange('bookings', newValue => {
       this.showCost = newValue.some(booking => booking.financial.gross_cost !== null && booking.financial.gross_cost > 0);
     });
   }
@@ -76,6 +82,13 @@ export class IrBookingListing {
     this.token.setToken(this.ticket);
     booking_listing.token = this.ticket;
     this.initializeApp();
+  }
+
+  private async fetchBookings() {
+    await this.bookingListingService.getExposedBookings({
+      ...booking_listing.userSelection,
+      is_to_export: false,
+    });
   }
 
   private async initializeApp() {
@@ -145,10 +158,7 @@ export class IrBookingListing {
         userTypeCode: this.userType,
       });
 
-      await this.bookingListingService.getExposedBookings({
-        ...booking_listing.userSelection,
-        is_to_export: false,
-      });
+      await this.fetchBookings();
     } catch (error) {
       console.error('Error initializing app:', error);
     } finally {
@@ -189,14 +199,6 @@ export class IrBookingListing {
     }
     console.log('params=>', params);
   }
-  getPaginationBounds() {
-    const totalCount = booking_listing.userSelection.total_count;
-    const startItem = (this.currentPage - 1) * this.rowCount;
-    let endItem = this.currentPage * this.rowCount;
-    endItem = endItem > totalCount ? totalCount : endItem;
-    return { startItem, endItem, totalCount };
-  }
-
   openModal() {
     this.listingModalTimeout = setTimeout(() => {
       this.listingModal = this.el.querySelector('ir-listing-modal');
@@ -208,18 +210,40 @@ export class IrBookingListing {
     clearTimeout(this.listingModalTimeout);
   }
 
+  @Listen('requestPageChange')
+  async handlePaginationChange(event: CustomEvent<PaginationChangeEvent>) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    if (!event.detail) {
+      return;
+    }
+    setPaginationPage(event.detail.currentPage);
+    await this.fetchBookings();
+  }
+
+  @Listen('requestPageSizeChange')
+  async handlePaginationPageSizeChange(event: CustomEvent<PaginationChangeEvent>) {
+    if (!event.detail || !event.detail.pageSize) {
+      return;
+    }
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    setPaginationPageSize(event.detail.pageSize);
+    await this.fetchBookings();
+  }
+
   @Listen('resetData')
   async handleResetData(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
+    await this.fetchBookings();
   }
 
   @Listen('resetBookingData')
   async handleResetStoreData(e: CustomEvent) {
     e.stopImmediatePropagation();
     e.stopPropagation();
-    await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, is_to_export: false });
+    await this.fetchBookings();
   }
 
   @Listen('bookingChanged')
@@ -274,25 +298,6 @@ export class IrBookingListing {
   private findBooking(bookingNumber: Booking['booking_nbr']) {
     return booking_listing.bookings.find(b => b.booking_nbr === bookingNumber);
   }
-  renderItemRange() {
-    const { endItem, startItem, totalCount } = this.getPaginationBounds();
-    return `${locales.entries.Lcz_View} ${startItem + 1} - ${endItem} ${locales.entries.Lcz_Of} ${totalCount}`;
-  }
-
-  async updateData() {
-    const { endItem, startItem } = this.getPaginationBounds();
-    // setParams({
-    //   s: startItem,
-    //   e: endItem,
-    // });
-    await this.bookingListingService.getExposedBookings({
-      ...booking_listing.userSelection,
-      is_to_export: false,
-      start_row: startItem,
-      end_row: endItem,
-    });
-  }
-
   render() {
     if (this.isLoading || this.ticket === '') {
       return <ir-loading-screen></ir-loading-screen>;

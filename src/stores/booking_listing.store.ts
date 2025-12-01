@@ -4,6 +4,19 @@ import { createStore } from '@stencil/store';
 import moment from 'moment';
 import { z } from 'zod';
 
+interface PaginationRange {
+  from: number;
+  to: number;
+}
+
+export interface BookingListingPagination {
+  currentPage: number;
+  totalPages: number;
+  totalRecords: number;
+  pageSize: number;
+  showing: PaginationRange;
+}
+
 export interface IBookingListingStore extends IExposedBookingsCriteria {
   token: string;
   userSelection: ExposedBookingsParams;
@@ -11,6 +24,7 @@ export interface IBookingListingStore extends IExposedBookingsCriteria {
   download_url: string | null;
   rowCount: number;
   balance_filter: { name: string; value: string }[];
+  pagination: BookingListingPagination;
 }
 const ymdDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected date in YYYY-MM-DD format');
 export const ExposedBookingsParamsSchema = z.object({
@@ -56,6 +70,16 @@ const initialState: IBookingListingStore = {
   rowCount: 10,
   bookings: [],
   balance_filter: [],
+  pagination: {
+    currentPage: 1,
+    totalPages: 0,
+    totalRecords: 0,
+    pageSize: 10,
+    showing: {
+      from: 0,
+      to: 0,
+    },
+  },
   userSelection: {
     from: moment().add(-7, 'days').format('YYYY-MM-DD'),
     to: moment().format('YYYY-MM-DD'),
@@ -107,5 +131,95 @@ export function updateUserSelection(key: keyof ExposedBookingsParams, value: any
     ...booking_listing.userSelection,
     [key]: value,
   };
+}
+
+const clamp = (value: number, min: number, max: number) => {
+  return Math.min(Math.max(value, min), max);
+};
+
+const calculateShowing = (page: number, pageSize: number, totalRecords: number): PaginationRange => {
+  if (totalRecords === 0) {
+    return { from: 0, to: 0 };
+  }
+
+  const startRow = (page - 1) * pageSize;
+  return {
+    from: startRow + 1,
+    to: Math.min(startRow + pageSize, totalRecords),
+  };
+};
+
+const calculateTotalPages = (totalRecords: number, pageSize: number) => {
+  if (totalRecords === 0) {
+    return 0;
+  }
+  return Math.ceil(totalRecords / pageSize);
+};
+
+const getRowBounds = (page: number, pageSize: number) => {
+  const startRow = (page - 1) * pageSize;
+  return {
+    startRow,
+    endRow: startRow + pageSize,
+  };
+};
+
+export function updatePaginationFromSelection(selection: ExposedBookingsParams) {
+  const nextPageSize = selection.end_row - selection.start_row || booking_listing.pagination.pageSize || booking_listing.rowCount;
+  const totalRecords = selection.total_count;
+  const totalPages = calculateTotalPages(totalRecords, nextPageSize);
+  const currentPage = totalPages === 0 ? 1 : Math.floor(selection.start_row / nextPageSize) + 1;
+
+  booking_listing.rowCount = nextPageSize;
+  booking_listing.pagination = {
+    ...booking_listing.pagination,
+    pageSize: nextPageSize,
+    currentPage,
+    totalPages,
+    totalRecords,
+    showing: calculateShowing(currentPage, nextPageSize, totalRecords),
+  };
+}
+
+export function setPaginationPage(page: number) {
+  const pageSize = booking_listing.pagination.pageSize || booking_listing.rowCount;
+  const totalPages = booking_listing.pagination.totalPages || Math.max(calculateTotalPages(booking_listing.pagination.totalRecords, pageSize), 1);
+  const nextPage = clamp(page, 1, Math.max(totalPages, 1));
+  const { startRow, endRow } = getRowBounds(nextPage, pageSize);
+
+  updateUserSelections({
+    start_row: startRow,
+    end_row: endRow,
+  });
+
+  booking_listing.pagination = {
+    ...booking_listing.pagination,
+    currentPage: nextPage,
+    showing: calculateShowing(nextPage, pageSize, booking_listing.pagination.totalRecords),
+  };
+  return { startRow, endRow };
+}
+
+export function setPaginationPageSize(pageSize: number) {
+  const normalizedPageSize = Math.max(pageSize, 1);
+  booking_listing.rowCount = normalizedPageSize;
+  const totalRecords = booking_listing.pagination.totalRecords;
+  const totalPages = calculateTotalPages(totalRecords, normalizedPageSize);
+  const nextPage = totalPages === 0 ? 1 : clamp(booking_listing.pagination.currentPage, 1, Math.max(totalPages, 1));
+  const { startRow, endRow } = getRowBounds(nextPage, normalizedPageSize);
+
+  booking_listing.pagination = {
+    ...booking_listing.pagination,
+    pageSize: normalizedPageSize,
+    currentPage: nextPage,
+    totalPages,
+    showing: calculateShowing(nextPage, normalizedPageSize, totalRecords),
+  };
+
+  updateUserSelections({
+    start_row: startRow,
+    end_row: endRow,
+  });
+  return { startRow, endRow };
 }
 export default booking_listing;

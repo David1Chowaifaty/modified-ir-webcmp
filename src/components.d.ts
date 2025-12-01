@@ -25,6 +25,7 @@ import { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 import { Payment, PaymentEntries } from "./components/ir-booking-details/types";
 import { BookingService } from "./services/booking.service";
 import { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
+import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -44,7 +45,6 @@ import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
-import { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 import { Moment } from "moment";
 import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 import { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
@@ -76,6 +76,7 @@ export { IToast as IToast1, TPositions } from "./components/ui/ir-toast/toast";
 export { Payment, PaymentEntries } from "./components/ir-booking-details/types";
 export { BookingService } from "./services/booking.service";
 export { FolioEntryMode, OpenSidebarEvent, Payment as Payment1, PaymentEntries as PaymentEntries1, PaymentSidebarEvent, PrintScreenOptions, RoomGuestsPayload } from "./components/ir-booking-details/types";
+export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
@@ -95,7 +96,6 @@ export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
-export { PaginationChangeEvent, PaginationRange } from "./components/ir-pagination/ir-pagination";
 export { Moment } from "moment";
 export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 export { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
@@ -4157,6 +4157,8 @@ declare global {
     };
     interface HTMLIrBookingListingTableElementEventMap {
         "openBookingDetails": string;
+        "requestPageChange": PaginationChangeEvent;
+        "requestPageSizeChange": PaginationChangeEvent;
     }
     interface HTMLIrBookingListingTableElement extends Components.IrBookingListingTable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrBookingListingTableElementEventMap>(type: K, listener: (this: HTMLIrBookingListingTableElement, ev: IrBookingListingTableCustomEvent<HTMLIrBookingListingTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -6772,6 +6774,8 @@ declare namespace LocalJSX {
     }
     interface IrBookingListingTable {
         "onOpenBookingDetails"?: (event: IrBookingListingTableCustomEvent<string>) => void;
+        "onRequestPageChange"?: (event: IrBookingListingTableCustomEvent<PaginationChangeEvent>) => void;
+        "onRequestPageSizeChange"?: (event: IrBookingListingTableCustomEvent<PaginationChangeEvent>) => void;
     }
     interface IrBookingNumberCell {
         "bookingNumber"?: Booking['booking_nbr'];

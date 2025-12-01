@@ -3,7 +3,9 @@ import { Booking, Occupancy } from '@/models/booking.dto';
 import booking_listing from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
 import { getPrivateNote } from '@/utils/booking';
-import { Component, Event, EventEmitter, Host, h } from '@stencil/core';
+import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagination';
+import { Component, Event, EventEmitter, Host, State, h } from '@stencil/core';
+import { BookingListingService } from '@/services/booking_listing.service';
 
 @Component({
   tag: 'ir-booking-listing-table',
@@ -11,7 +13,27 @@ import { Component, Event, EventEmitter, Host, h } from '@stencil/core';
   scoped: true,
 })
 export class IrBookingListingTable {
+  @State() booking_nbr: string;
+  @State() isLoading: boolean;
+
   @Event() openBookingDetails: EventEmitter<string>;
+  @Event() requestPageChange: EventEmitter<PaginationChangeEvent>;
+  @Event() requestPageSizeChange: EventEmitter<PaginationChangeEvent>;
+
+  private bookingListingsService = new BookingListingService();
+
+  private async deleteBooking() {
+    if (!this.booking_nbr) {
+      return;
+    }
+    try {
+      this.isLoading = true;
+      await this.bookingListingsService.removeExposedBooking(this.booking_nbr, true);
+    } catch (error) {
+    } finally {
+      this.isLoading = false;
+    }
+  }
 
   private calculateTotalPersons(booking: Booking) {
     const sumOfOccupancy = ({ adult_nbr, children_nbr, infant_nbr }: Occupancy) => {
@@ -22,9 +44,26 @@ export class IrBookingListingTable {
     }, 0);
   }
   private handleIrActions({ action, booking }: { action: IrActionButton; booking: Booking }) {
-    if (action === 'edit') {
-      this.openBookingDetails.emit(booking.booking_nbr);
+    switch (action) {
+      case 'edit':
+        this.openBookingDetails.emit(booking.booking_nbr);
+        break;
+      case 'delete':
+        this.booking_nbr = booking.booking_nbr;
+        break;
+      default:
+        console.warn(`${action} not handled`);
     }
+  }
+  private handlePageChange(event: CustomEvent<PaginationChangeEvent>) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    this.requestPageChange.emit(event.detail);
+  }
+  private handlePageSizeChange(event: CustomEvent<PaginationChangeEvent>) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    this.requestPageSizeChange.emit(event.detail);
   }
   private renderRow(booking: Booking) {
     const rowKey = `${booking.booking_nbr}`;
@@ -103,6 +142,7 @@ export class IrBookingListingTable {
     );
   }
   render() {
+    const pagination = booking_listing.pagination;
     return (
       <Host>
         <div class="table--container">
@@ -137,22 +177,59 @@ export class IrBookingListingTable {
             </tbody>
           </table>
         </div>
-        <ir-pagination
-          showing={{
-            from: 1,
-            to: 10,
+        {pagination.totalRecords > 0 && (
+          <ir-pagination
+            class="data-table--pagination"
+            showing={pagination.showing}
+            total={pagination.totalRecords}
+            pages={pagination.totalPages}
+            pageSize={pagination.pageSize}
+            currentPage={pagination.currentPage}
+            allowPageSizeChange={false}
+            pageSizes={[pagination.pageSize]}
+            recordLabel={locales.entries?.Lcz_Bookings ?? 'bookings'}
+            onPageChange={event => this.handlePageChange(event as CustomEvent<PaginationChangeEvent>)}
+            onPageSizeChange={event => this.handlePageSizeChange(event as CustomEvent<PaginationChangeEvent>)}
+          ></ir-pagination>
+        )}
+        <ir-dialog
+          label="Delete"
+          open={!!this.booking_nbr}
+          onIrDialogHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.booking_nbr = null;
           }}
-          class="data-table--pagination"
-          total={10}
-          pages={10}
-          pageSize={10}
-          currentPage={1}
-          pageSizes={[10]}
-          onPageChange={e => {}}
-          onPageSizeChange={e => {}}
-          showTotalRecords={true}
-          recordLabel="bookings"
-        ></ir-pagination>
+          lightDismiss={false}
+        >
+          <span>{locales.entries.Lcz_SureYouWantToDeleteBookingNbr + this.booking_nbr}</span>
+          <div slot="footer" class="ir-dialog__footer">
+            <ir-custom-button
+              onClickHandler={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.booking_nbr = null;
+              }}
+              size="medium"
+              variant="neutral"
+              appearance="filled"
+            >
+              Cancel
+            </ir-custom-button>
+            <ir-custom-button
+              onClickHandler={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.deleteBooking();
+              }}
+              loading={this.isLoading}
+              size="medium"
+              variant="danger"
+            >
+              Confirm
+            </ir-custom-button>
+          </div>
+        </ir-dialog>
       </Host>
     );
   }

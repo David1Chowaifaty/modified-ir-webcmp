@@ -265,6 +265,7 @@ export class IrPagination {
                 <wa-icon name="angle-left" label="Go to previous page"></wa-icon>
               </ir-custom-button>
               <wa-select
+                value={this.currentPage?.toString()}
                 class="pagination__current-page-select"
                 onchange={e => this.handlePageChange(+(e.target as any).value, 'direct')}
                 aria-label={`Current page ${this.currentPage} of ${this.pages}`}
