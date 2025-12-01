@@ -21,6 +21,7 @@
   text-wrap: balance;
   font-size: var(--wa-font-size-xl);
 }
+
 :host {
   --wa-form-control-required-content-color: var(--wa-color-danger-border-loud);
   padding: var(--wa-space-l);

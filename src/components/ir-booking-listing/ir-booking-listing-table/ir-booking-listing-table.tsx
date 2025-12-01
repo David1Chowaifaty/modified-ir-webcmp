@@ -25,7 +25,7 @@ export class IrBookingListingTable {
 
     return (
       <tr class="ir-table-row" key={rowKey}>
-        <td class="sticky-column">
+        <td>
           <ir-booking-number-cell channelBookingNumber={booking.channel_booking_nbr} bookingNumber={booking.booking_nbr}></ir-booking-number-cell>
         </td>
         <td>
@@ -91,7 +91,7 @@ export class IrBookingListingTable {
     return (
       <Host>
         <div class="table--container">
-          <table class="table">
+          <table class="table data-table">
             <thead>
               <tr>
                 <th>
@@ -122,6 +122,22 @@ export class IrBookingListingTable {
             </tbody>
           </table>
         </div>
+        <ir-pagination
+          showing={{
+            from: 1,
+            to: 10,
+          }}
+          class="p-1 tasks-pagination"
+          total={10}
+          pages={10}
+          pageSize={10}
+          currentPage={1}
+          pageSizes={[10]}
+          onPageChange={e => {}}
+          onPageSizeChange={e => {}}
+          showTotalRecords={true}
+          recordLabel="bookings"
+        ></ir-pagination>
       </Host>
     );
   }

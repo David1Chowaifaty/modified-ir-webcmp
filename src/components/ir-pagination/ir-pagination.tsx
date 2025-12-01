@@ -1,4 +1,4 @@
-import { Component, Host, Prop, Event, EventEmitter, Watch, h, Fragment } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, Watch, h, Fragment } from '@stencil/core';
 
 /**
  * Interface for pagination range display
@@ -24,7 +24,7 @@ export interface PaginationChangeEvent {
 
 @Component({
   tag: 'ir-pagination',
-  styleUrl: 'ir-pagination.css',
+  styleUrls: ['ir-pagination.css', '../../global/app.css'],
   scoped: true,
 })
 export class IrPagination {
@@ -218,81 +218,88 @@ export class IrPagination {
     const isLastPage = this.currentPage === this.pages;
 
     return (
-      <Host
+      <div
         class={{
-          'd-flex flex-column flex-md-row align-items-center justify-content-between pagination-container': true,
-          'disabled': this.disabled,
+          'pagination-container': true,
+          'pagination-container--disabled': this.disabled,
         }}
         role="navigation"
         aria-label="Pagination Navigation"
       >
         {this.showTotalRecords && (
-          <p class="m-0 mb-1 mb-md-0 pagination-info" aria-live="polite">
+          <p class="pagination-info" aria-live="polite">
             {this.renderItemRange()}
           </p>
         )}
-        <div class={'d-flex align-items-center buttons-container'}>
+        <div class="buttons-container">
           {this.allowPageSizeChange && this.pageSizes && (
             <ir-select
+              class="page-size-select"
               selectedValue={String(this.pageSize)}
               data={this.pageSizes.map(size => ({
                 text: `${size} ${this.recordLabel}`,
                 value: String(size),
               }))}
               showFirstOption={false}
-              style={{ margin: '0 0.5rem' }}
               onSelectChange={e => this.handlePageSizeChange(Number(e.detail))}
             ></ir-select>
           )}
           {this.pages > 1 && (
             <Fragment>
-              <ir-button
-                size="sm"
-                btn_disabled={isFirstPage || this.disabled}
-                onClickHandler={() => this.handlePageChange(1, 'first')}
-                icon_name="angles_left"
-                style={{ '--icon-size': '0.875rem' }}
+              <ir-custom-button
                 aria-label="Go to first page"
-              ></ir-button>
-              <ir-button
-                size="sm"
-                btn_disabled={isFirstPage || this.disabled}
+                onClickHandler={() => this.handlePageChange(1, 'first')}
+                disabled={isFirstPage || this.disabled}
+                variant="neutral"
+                appearance="plain"
+              >
+                <wa-icon name="angles-left" label="Go to first page"></wa-icon>
+              </ir-custom-button>
+              <ir-custom-button
                 onClickHandler={() => this.handlePageChange(this.currentPage - 1, 'previous')}
-                icon_name="angle_left"
-                style={{ '--icon-size': '0.875rem' }}
+                variant="neutral"
+                appearance="plain"
+                disabled={isFirstPage || this.disabled}
                 aria-label="Go to previous page"
-              ></ir-button>
-              <ir-select
-                selectedValue={this.currentPage.toString()}
-                showFirstOption={false}
-                onSelectChange={e => this.handlePageChange(+e.detail, 'direct')}
-                data={Array.from(Array(this.pages), (_, i) => i + 1).map(i => ({
-                  text: i.toString(),
-                  value: i.toString(),
-                }))}
+              >
+                <wa-icon name="angle-left" label="Go to previous page"></wa-icon>
+              </ir-custom-button>
+              <wa-select
+                class="pagination__current-page-select"
+                onchange={e => this.handlePageChange(+(e.target as any).value, 'direct')}
                 aria-label={`Current page ${this.currentPage} of ${this.pages}`}
                 disabled={this.disabled}
-              ></ir-select>
-              <ir-button
-                size="sm"
-                btn_disabled={isLastPage || this.disabled}
-                onClickHandler={() => this.handlePageChange(this.currentPage + 1, 'next')}
-                icon_name="angle_right"
-                style={{ '--icon-size': '0.875rem' }}
+                size="small"
+                defaultValue={'1'}
+              >
+                {Array.from(Array(this.pages), (_, i) => i + 1).map(i => (
+                  <wa-option value={i.toString()} key={`${this.recordLabel}-${i}`}>
+                    {i}
+                  </wa-option>
+                ))}
+              </wa-select>
+              <ir-custom-button
                 aria-label="Go to next page"
-              ></ir-button>
-              <ir-button
-                size="sm"
-                btn_disabled={isLastPage || this.disabled}
+                onClickHandler={() => this.handlePageChange(this.currentPage + 1, 'next')}
+                disabled={isLastPage || this.disabled}
+                variant="neutral"
+                appearance="plain"
+              >
+                <wa-icon name="angle-right" label="Go to next page"></wa-icon>
+              </ir-custom-button>
+              <ir-custom-button
                 onClickHandler={() => this.handlePageChange(this.pages, 'last')}
-                icon_name="angles_right"
-                style={{ '--icon-size': '0.875rem' }}
+                variant="neutral"
+                appearance="plain"
+                disabled={isLastPage || this.disabled}
                 aria-label="Go to last page"
-              ></ir-button>
+              >
+                <wa-icon name="angles-right" label="Go to last page"></wa-icon>
+              </ir-custom-button>
             </Fragment>
           )}
         </div>
-      </Host>
+      </div>
     );
   }
 }

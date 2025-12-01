@@ -88,7 +88,7 @@ export class IrListingHeader {
         <section class="d-flex align-items-center ">
           <div class="d-flex flex-fill flex-column flex-md-row align-items-md-center booking-container">
             <div class="d-flex mb-1 d-md-none align-items-center justify-content-bettween width-fill">
-              <h3 class="flex-fill">{locales.entries?.Lcz_Bookings}</h3>
+              <h3 class="page-title">{locales.entries?.Lcz_Bookings}</h3>
               <div>
                 {!havePrivilege && (
                   <igl-book-property-container
