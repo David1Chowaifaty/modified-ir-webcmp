@@ -45,6 +45,8 @@ import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
+import { NativeWaInput as NativeWaInput1 } from "./components/ui/ir-custom-input/ir-custom-input";
+import { IrComboboxSelectEventDetail } from "./components/ui/ir-picker/ir-picker";
 import { Moment } from "moment";
 import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 import { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
@@ -96,6 +98,8 @@ export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
+export { NativeWaInput as NativeWaInput1 } from "./components/ui/ir-custom-input/ir-custom-input";
+export { IrComboboxSelectEventDetail } from "./components/ui/ir-picker/ir-picker";
 export { Moment } from "moment";
 export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
 export { ChannelReportResult, ChannelSaleFilter, SalesByChannelMode } from "./components/ir-sales-by-channel/types";
@@ -734,6 +738,7 @@ export namespace Components {
           * Test ID for automated testing.
          */
         "testId": string;
+        "variant": 'modern' | 'default';
     }
     interface IrCustomButton {
         /**
@@ -1410,6 +1415,11 @@ export namespace Components {
         "isInSideBar": boolean;
         "language": string;
         "ticket": string;
+    }
+    interface IrGuestInfoForm {
+        "countries": ICountry[];
+        "guest": Guest;
+        "language": string;
     }
     interface IrGuestNameCell {
         "name": Guest;
@@ -2176,6 +2186,44 @@ export namespace Components {
         /**
           * Initial phone number value.
          */
+        "value": string;
+    }
+    interface IrPicker {
+        /**
+          * The input's visual appearance.
+         */
+        "appearance": NativeWaInput1['appearance'];
+        "close": () => Promise<void>;
+        /**
+          * The default value of the form control. Primarily used for resetting the form control.
+         */
+        "defaultValue": NativeWaInput1['defaultValue'];
+        /**
+          * Optional label applied to the text field.
+         */
+        "label"?: string;
+        "loading": boolean;
+        "mode": 'select' | 'default';
+        "open": () => Promise<void>;
+        "pill": boolean;
+        /**
+          * Placeholder shown inside the input when there is no query.
+         */
+        "placeholder": string;
+        /**
+          * The input's size.
+         */
+        "size": NativeWaInput1['size'];
+        /**
+          * Selected value (also shown in the input when `mode="select"`).
+         */
+        "value": string;
+    }
+    interface IrPickerItem {
+        "active": boolean;
+        "disabled": boolean;
+        "label": string;
+        "selected": boolean;
         "value": string;
     }
     interface IrPickup {
@@ -3271,6 +3319,10 @@ export interface IrPaymentsFolioCustomEvent<T> extends CustomEvent<T> {
 export interface IrPhoneInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPhoneInputElement;
+}
+export interface IrPickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPickerElement;
 }
 export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4755,6 +4807,12 @@ declare global {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
     };
+    interface HTMLIrGuestInfoFormElement extends Components.IrGuestInfoForm, HTMLStencilElement {
+    }
+    var HTMLIrGuestInfoFormElement: {
+        prototype: HTMLIrGuestInfoFormElement;
+        new (): HTMLIrGuestInfoFormElement;
+    };
     interface HTMLIrGuestNameCellElement extends Components.IrGuestNameCell, HTMLStencilElement {
     }
     var HTMLIrGuestNameCellElement: {
@@ -5382,6 +5440,29 @@ declare global {
     var HTMLIrPhoneInputElement: {
         prototype: HTMLIrPhoneInputElement;
         new (): HTMLIrPhoneInputElement;
+    };
+    interface HTMLIrPickerElementEventMap {
+        "combobox-select": IrComboboxSelectEventDetail;
+    }
+    interface HTMLIrPickerElement extends Components.IrPicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPickerElementEventMap>(type: K, listener: (this: HTMLIrPickerElement, ev: IrPickerCustomEvent<HTMLIrPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPickerElementEventMap>(type: K, listener: (this: HTMLIrPickerElement, ev: IrPickerCustomEvent<HTMLIrPickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPickerElement: {
+        prototype: HTMLIrPickerElement;
+        new (): HTMLIrPickerElement;
+    };
+    interface HTMLIrPickerItemElement extends Components.IrPickerItem, HTMLStencilElement {
+    }
+    var HTMLIrPickerItemElement: {
+        prototype: HTMLIrPickerItemElement;
+        new (): HTMLIrPickerItemElement;
     };
     interface HTMLIrPickupElementEventMap {
         "closeModal": null;
@@ -6154,6 +6235,7 @@ declare global {
         "ir-financial-summary": HTMLIrFinancialSummaryElement;
         "ir-financial-table": HTMLIrFinancialTableElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-guest-info-form": HTMLIrGuestInfoFormElement;
         "ir-guest-name-cell": HTMLIrGuestNameCellElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
         "ir-hk-tasks": HTMLIrHkTasksElement;
@@ -6198,6 +6280,8 @@ declare global {
         "ir-payment-summary": HTMLIrPaymentSummaryElement;
         "ir-payments-folio": HTMLIrPaymentsFolioElement;
         "ir-phone-input": HTMLIrPhoneInputElement;
+        "ir-picker": HTMLIrPickerElement;
+        "ir-picker-item": HTMLIrPickerItemElement;
         "ir-pickup": HTMLIrPickupElement;
         "ir-pickup-view": HTMLIrPickupViewElement;
         "ir-pms-logs": HTMLIrPmsLogsElement;
@@ -7019,6 +7103,7 @@ declare namespace LocalJSX {
           * Test ID for automated testing.
          */
         "testId"?: string;
+        "variant"?: 'modern' | 'default';
     }
     interface IrCustomButton {
         /**
@@ -7760,6 +7845,11 @@ declare namespace LocalJSX {
         "onResetBookingEvt"?: (event: IrGuestInfoCustomEvent<null>) => void;
         "onToast"?: (event: IrGuestInfoCustomEvent<IToast>) => void;
         "ticket"?: string;
+    }
+    interface IrGuestInfoForm {
+        "countries"?: ICountry[];
+        "guest"?: Guest;
+        "language"?: string;
     }
     interface IrGuestNameCell {
         "name"?: Guest;
@@ -8642,6 +8732,43 @@ declare namespace LocalJSX {
         /**
           * Initial phone number value.
          */
+        "value"?: string;
+    }
+    interface IrPicker {
+        /**
+          * The input's visual appearance.
+         */
+        "appearance"?: NativeWaInput1['appearance'];
+        /**
+          * The default value of the form control. Primarily used for resetting the form control.
+         */
+        "defaultValue"?: NativeWaInput1['defaultValue'];
+        /**
+          * Optional label applied to the text field.
+         */
+        "label"?: string;
+        "loading"?: boolean;
+        "mode"?: 'select' | 'default';
+        "onCombobox-select"?: (event: IrPickerCustomEvent<IrComboboxSelectEventDetail>) => void;
+        "pill"?: boolean;
+        /**
+          * Placeholder shown inside the input when there is no query.
+         */
+        "placeholder"?: string;
+        /**
+          * The input's size.
+         */
+        "size"?: NativeWaInput1['size'];
+        /**
+          * Selected value (also shown in the input when `mode="select"`).
+         */
+        "value"?: string;
+    }
+    interface IrPickerItem {
+        "active"?: boolean;
+        "disabled"?: boolean;
+        "label"?: string;
+        "selected"?: boolean;
         "value"?: string;
     }
     interface IrPickup {
@@ -9536,6 +9663,7 @@ declare namespace LocalJSX {
         "ir-financial-summary": IrFinancialSummary;
         "ir-financial-table": IrFinancialTable;
         "ir-guest-info": IrGuestInfo;
+        "ir-guest-info-form": IrGuestInfoForm;
         "ir-guest-name-cell": IrGuestNameCell;
         "ir-hk-archive": IrHkArchive;
         "ir-hk-tasks": IrHkTasks;
@@ -9580,6 +9708,8 @@ declare namespace LocalJSX {
         "ir-payment-summary": IrPaymentSummary;
         "ir-payments-folio": IrPaymentsFolio;
         "ir-phone-input": IrPhoneInput;
+        "ir-picker": IrPicker;
+        "ir-picker-item": IrPickerItem;
         "ir-pickup": IrPickup;
         "ir-pickup-view": IrPickupView;
         "ir-pms-logs": IrPmsLogs;
@@ -9733,6 +9863,7 @@ declare module "@stencil/core" {
             "ir-financial-summary": LocalJSX.IrFinancialSummary & JSXBase.HTMLAttributes<HTMLIrFinancialSummaryElement>;
             "ir-financial-table": LocalJSX.IrFinancialTable & JSXBase.HTMLAttributes<HTMLIrFinancialTableElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-guest-info-form": LocalJSX.IrGuestInfoForm & JSXBase.HTMLAttributes<HTMLIrGuestInfoFormElement>;
             "ir-guest-name-cell": LocalJSX.IrGuestNameCell & JSXBase.HTMLAttributes<HTMLIrGuestNameCellElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
             "ir-hk-tasks": LocalJSX.IrHkTasks & JSXBase.HTMLAttributes<HTMLIrHkTasksElement>;
@@ -9777,6 +9908,8 @@ declare module "@stencil/core" {
             "ir-payment-summary": LocalJSX.IrPaymentSummary & JSXBase.HTMLAttributes<HTMLIrPaymentSummaryElement>;
             "ir-payments-folio": LocalJSX.IrPaymentsFolio & JSXBase.HTMLAttributes<HTMLIrPaymentsFolioElement>;
             "ir-phone-input": LocalJSX.IrPhoneInput & JSXBase.HTMLAttributes<HTMLIrPhoneInputElement>;
+            "ir-picker": LocalJSX.IrPicker & JSXBase.HTMLAttributes<HTMLIrPickerElement>;
+            "ir-picker-item": LocalJSX.IrPickerItem & JSXBase.HTMLAttributes<HTMLIrPickerItemElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
             "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;
             "ir-pms-logs": LocalJSX.IrPmsLogs & JSXBase.HTMLAttributes<HTMLIrPmsLogsElement>;

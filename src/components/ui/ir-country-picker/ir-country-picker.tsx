@@ -3,10 +3,11 @@ import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from 
 
 @Component({
   tag: 'ir-country-picker',
-  styleUrl: 'ir-country-picker.css',
+  styleUrls: ['ir-country-picker.css'],
   scoped: true,
 })
 export class IrCountryPicker {
+  @Prop() variant: 'modern' | 'default' = 'default';
   /**
    * List of countries to display in the dropdown.
    */
@@ -122,6 +123,30 @@ export class IrCountryPicker {
   }
   render() {
     const shouldShowPropertyCountry = this.filteredCountries.length > 0 && this.propertyCountry && (!this.searching || (this.searching && this.inputValue === ''));
+    if (this.variant === 'modern') {
+      return (
+        <ir-picker
+          label={this.label}
+          mode="select"
+          value={this.selectedCountry?.id?.toString()}
+          onCombobox-select={e => {
+            const country = this.filteredCountries.find(c => c.id.toString() === e.detail.item.value);
+            if (!country) {
+              console.warn(`country not found`, e.detail.item);
+              return;
+            }
+            this.selectCountry(country);
+          }}
+        >
+          {this.filteredCountries.map(country => (
+            <ir-picker-item value={country.id?.toString()} label={country.name} key={country.id}>
+              <img src={country.flag} alt={country.name} style={{ aspectRatio: '1', height: '15px', borderRadius: '4px' }} />
+              <p class="pl-1 m-0">{country.name}</p>
+            </ir-picker-item>
+          ))}
+        </ir-picker>
+      );
+    }
     return (
       <form class="dropdown m-0 p-0">
         <ir-input-text
