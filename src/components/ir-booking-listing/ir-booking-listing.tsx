@@ -660,7 +660,7 @@ export class IrBookingListing {
               hasPrint
               hasReceipt
               hasCloseButton
-              onCloseSidebar={() => (this.editBookingItem.booking = null)}
+              onCloseSidebar={() => (this.editBookingItem = null)}
               is_from_front_desk
               propertyid={this.propertyid as any}
               hasRoomEdit
@@ -672,25 +672,12 @@ export class IrBookingListing {
             ></ir-booking-details>
           )}
         </ir-drawer>
-        <ir-drawer
+        <ir-guest-info-drawer
+          booking_nbr={this.editBookingItem?.booking?.booking_nbr}
+          email={this.editBookingItem?.booking?.guest.email}
+          language={this.language}
           open={this.editBookingItem?.cause === 'guest'}
-          onDrawerHide={e => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
-            this.editBookingItem = null;
-          }}
-        >
-          {this.editBookingItem?.cause === 'guest' && (
-            <ir-guest-info
-              isInSideBar={true}
-              headerShown={false}
-              booking_nbr={this.editBookingItem?.booking?.booking_nbr}
-              email={this.editBookingItem?.booking?.guest.email}
-              language={this.language}
-              onCloseSideBar={() => (this.editBookingItem = null)}
-            ></ir-guest-info>
-          )}
-        </ir-drawer>
+        ></ir-guest-info-drawer>
         <ir-payment-folio
           style={{ height: 'auto' }}
           bookingNumber={this.booking?.booking_nbr}

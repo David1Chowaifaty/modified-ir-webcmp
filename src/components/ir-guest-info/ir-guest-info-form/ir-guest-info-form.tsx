@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 import { Guest } from '@/models/booking.dto';
 import locales from '@/stores/locales.store';
 import { ICountry } from '@/models/IBooking';
@@ -14,8 +14,10 @@ export class IrGuestInfoForm {
   @Prop() countries: ICountry[];
   autoValidate: boolean;
 
+  @Event() guestChanged: EventEmitter<Guest>;
+
   private handleInputChange(params: Partial<Guest>) {
-    this.guest = { ...this.guest, ...params };
+    this.guestChanged.emit({ ...this.guest, ...params });
   }
   render() {
     return (

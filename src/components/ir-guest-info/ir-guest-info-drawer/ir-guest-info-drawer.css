@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+.drawer-form {
+  margin: 0;
+}
+.drawer-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+.drawer-footer {
+  display: flex;
+  gap: 0.5rem;
+}

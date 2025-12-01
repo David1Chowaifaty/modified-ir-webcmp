@@ -1,19 +1,20 @@
-import { Component, State, h, Prop, EventEmitter, Event, Watch } from '@stencil/core';
+import { Component, State, h, Prop, EventEmitter, Event, Watch, Fragment } from '@stencil/core';
 import { Guest } from '@/models/booking.dto';
 import { BookingService } from '@/services/booking.service';
 import { ICountry } from '@/components';
 import { RoomService } from '@/services/room.service';
 import locales from '@/stores/locales.store';
 import Token from '@/models/Token';
+import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { IToast } from '@components/ui/ir-toast/toast';
 
 @Component({
   tag: 'ir-guest-info',
-  styleUrls: ['ir-guest-info.css', '../../common/sheet.css', '../../global/app.css'],
+  styleUrls: ['ir-guest-info.css', '../../common/sheet.css'],
   scoped: true,
 })
 export class GuestInfo {
-  @Prop() language: string = 'en';
+  @Prop() language: string;
   @Prop() headerShown: boolean;
   @Prop() email: string;
   @Prop() booking_nbr: string;
@@ -75,6 +76,9 @@ export class GuestInfo {
       this.isLoading = false;
     }
   }
+  private handleInputChange(params: Partial<Guest>) {
+    this.guest = { ...this.guest, ...params };
+  }
 
   private async editGuest() {
     try {
@@ -113,7 +117,7 @@ export class GuestInfo {
         {!this.isInSideBar && [<ir-toast></ir-toast>, <ir-interceptor></ir-interceptor>]}
         {this.headerShown && <ir-title class="px-1 sheet-header" displayContext="sidebar" label={locales.entries.Lcz_GuestDetails}></ir-title>}
         <div class={this.isInSideBar ? 'sheet-body' : 'card-content collapse show '}>
-          {/* <div class={this.headerShown ? 'card-body px-1 pt-0' : 'pt-0'}>
+          <div class={this.headerShown ? 'card-body px-1 pt-0' : 'pt-0'}>
             <ir-input-text
               autoValidate={this.autoValidate}
               label={locales.entries?.Lcz_FirstName}
@@ -146,7 +150,23 @@ export class GuestInfo {
               value={this.guest?.alternative_email}
               onTextChange={e => this.handleInputChange({ alternative_email: e.detail })}
             ></ir-input-text>
-
+            {/* <ir-input-text label="Password" placeholder="" name="password" submited={this.submit} type="password" value={this.Model.password} required></ir-input-text> */}
+            {/* <ir-select
+              selectContainerStyle="mb-1"
+              required
+              name="country"
+              submited={this.submit}
+              label={locales.entries.Lcz_Country}
+              selectedValue={this.guest?.country_id?.toString() ?? ''}
+              data={this.countries?.map(item => {
+                return {
+                  value: item.id.toString(),
+                  text: item.name,
+                };
+              })}
+              firstOption={'...'}
+              onSelectChange={e => this.handleInputChange({ country_id: e.detail })}
+            ></ir-select> */}
             <ir-country-picker
               // error={this.submit && !this.guest.country_id}
               country={this.countries.find(c => c.id === this.guest.country_id)}
@@ -204,12 +224,9 @@ export class GuestInfo {
                 </Fragment>
               )}
             </div>
-          </div> */}
-          <div class={this.headerShown ? 'card-body px-1 pt-0' : 'pt-0'}>
-            <ir-guest-info-form countries={this.countries} language={this.language} guest={this.guest}></ir-guest-info-form>
           </div>
         </div>
-        {/* {this.isInSideBar && (
+        {this.isInSideBar && (
           <div class={'sheet-footer'}>
             <ir-button
               data-testid="cancel"
@@ -229,7 +246,7 @@ export class GuestInfo {
               text={locales.entries.Lcz_Save}
             ></ir-button>
           </div>
-        )} */}
+        )}
       </form>
     );
   }

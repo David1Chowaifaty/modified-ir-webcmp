@@ -38,6 +38,7 @@ import { NativeDrawer } from "./components/ir-drawer/ir-drawer";
 import { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 import { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
+import { Element } from "@stencil/core";
 import { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
 import { ZodType, ZodTypeAny } from "zod";
@@ -91,6 +92,7 @@ export { NativeDrawer } from "./components/ir-drawer/ir-drawer";
 export { DropdownItem } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DropdownItem as DropdownItem1 } from "./components/ui/ir-dropdown/ir-dropdown";
 export { DailyFinancialActionsFilter, SidebarOpenEvent } from "./components/ir-financial-actions/types";
+export { Element } from "@stencil/core";
 export { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
 export { ZodType, ZodTypeAny } from "zod";
@@ -1414,6 +1416,13 @@ export namespace Components {
         "headerShown": boolean;
         "isInSideBar": boolean;
         "language": string;
+        "ticket": string;
+    }
+    interface IrGuestInfoDrawer {
+        "booking_nbr": string;
+        "email": string;
+        "language": string;
+        "open": boolean;
         "ticket": string;
     }
     interface IrGuestInfoForm {
@@ -3205,6 +3214,14 @@ export interface IrGuestInfoCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrGuestInfoElement;
 }
+export interface IrGuestInfoDrawerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrGuestInfoDrawerElement;
+}
+export interface IrGuestInfoFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrGuestInfoFormElement;
+}
 export interface IrHkTasksCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrHkTasksElement;
@@ -4808,7 +4825,37 @@ declare global {
         prototype: HTMLIrGuestInfoElement;
         new (): HTMLIrGuestInfoElement;
     };
+    interface HTMLIrGuestInfoDrawerElementEventMap {
+        "guestInfoDrawerClosed": { source: Element };
+        "resetBookingEvt": null;
+        "toast": IToast;
+    }
+    interface HTMLIrGuestInfoDrawerElement extends Components.IrGuestInfoDrawer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrGuestInfoDrawerElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoDrawerElement, ev: IrGuestInfoDrawerCustomEvent<HTMLIrGuestInfoDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrGuestInfoDrawerElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoDrawerElement, ev: IrGuestInfoDrawerCustomEvent<HTMLIrGuestInfoDrawerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrGuestInfoDrawerElement: {
+        prototype: HTMLIrGuestInfoDrawerElement;
+        new (): HTMLIrGuestInfoDrawerElement;
+    };
+    interface HTMLIrGuestInfoFormElementEventMap {
+        "guestChanged": Guest;
+    }
     interface HTMLIrGuestInfoFormElement extends Components.IrGuestInfoForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrGuestInfoFormElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoFormElement, ev: IrGuestInfoFormCustomEvent<HTMLIrGuestInfoFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrGuestInfoFormElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoFormElement, ev: IrGuestInfoFormCustomEvent<HTMLIrGuestInfoFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrGuestInfoFormElement: {
         prototype: HTMLIrGuestInfoFormElement;
@@ -6236,6 +6283,7 @@ declare global {
         "ir-financial-summary": HTMLIrFinancialSummaryElement;
         "ir-financial-table": HTMLIrFinancialTableElement;
         "ir-guest-info": HTMLIrGuestInfoElement;
+        "ir-guest-info-drawer": HTMLIrGuestInfoDrawerElement;
         "ir-guest-info-form": HTMLIrGuestInfoFormElement;
         "ir-guest-name-cell": HTMLIrGuestNameCellElement;
         "ir-hk-archive": HTMLIrHkArchiveElement;
@@ -7847,10 +7895,21 @@ declare namespace LocalJSX {
         "onToast"?: (event: IrGuestInfoCustomEvent<IToast>) => void;
         "ticket"?: string;
     }
+    interface IrGuestInfoDrawer {
+        "booking_nbr"?: string;
+        "email"?: string;
+        "language"?: string;
+        "onGuestInfoDrawerClosed"?: (event: IrGuestInfoDrawerCustomEvent<{ source: Element }>) => void;
+        "onResetBookingEvt"?: (event: IrGuestInfoDrawerCustomEvent<null>) => void;
+        "onToast"?: (event: IrGuestInfoDrawerCustomEvent<IToast>) => void;
+        "open"?: boolean;
+        "ticket"?: string;
+    }
     interface IrGuestInfoForm {
         "countries"?: ICountry[];
         "guest"?: Guest;
         "language"?: string;
+        "onGuestChanged"?: (event: IrGuestInfoFormCustomEvent<Guest>) => void;
     }
     interface IrGuestNameCell {
         "name"?: Guest;
@@ -9665,6 +9724,7 @@ declare namespace LocalJSX {
         "ir-financial-summary": IrFinancialSummary;
         "ir-financial-table": IrFinancialTable;
         "ir-guest-info": IrGuestInfo;
+        "ir-guest-info-drawer": IrGuestInfoDrawer;
         "ir-guest-info-form": IrGuestInfoForm;
         "ir-guest-name-cell": IrGuestNameCell;
         "ir-hk-archive": IrHkArchive;
@@ -9865,6 +9925,7 @@ declare module "@stencil/core" {
             "ir-financial-summary": LocalJSX.IrFinancialSummary & JSXBase.HTMLAttributes<HTMLIrFinancialSummaryElement>;
             "ir-financial-table": LocalJSX.IrFinancialTable & JSXBase.HTMLAttributes<HTMLIrFinancialTableElement>;
             "ir-guest-info": LocalJSX.IrGuestInfo & JSXBase.HTMLAttributes<HTMLIrGuestInfoElement>;
+            "ir-guest-info-drawer": LocalJSX.IrGuestInfoDrawer & JSXBase.HTMLAttributes<HTMLIrGuestInfoDrawerElement>;
             "ir-guest-info-form": LocalJSX.IrGuestInfoForm & JSXBase.HTMLAttributes<HTMLIrGuestInfoFormElement>;
             "ir-guest-name-cell": LocalJSX.IrGuestNameCell & JSXBase.HTMLAttributes<HTMLIrGuestNameCellElement>;
             "ir-hk-archive": LocalJSX.IrHkArchive & JSXBase.HTMLAttributes<HTMLIrHkArchiveElement>;
