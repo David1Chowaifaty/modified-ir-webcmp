@@ -1,8 +1,9 @@
+import { IrActionButton } from '@/components/table-cells/booking/ir-actions-cell/ir-actions-cell';
 import { Booking, Occupancy } from '@/models/booking.dto';
 import booking_listing from '@/stores/booking_listing.store';
 import locales from '@/stores/locales.store';
 import { getPrivateNote } from '@/utils/booking';
-import { Component, Host, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-booking-listing-table',
@@ -10,6 +11,8 @@ import { Component, Host, h } from '@stencil/core';
   scoped: true,
 })
 export class IrBookingListingTable {
+  @Event() openBookingDetails: EventEmitter<string>;
+
   private calculateTotalPersons(booking: Booking) {
     const sumOfOccupancy = ({ adult_nbr, children_nbr, infant_nbr }: Occupancy) => {
       return (adult_nbr ?? 0) + (children_nbr ?? 0) + (infant_nbr ?? 0);
@@ -17,6 +20,11 @@ export class IrBookingListingTable {
     return booking.rooms.reduce((prev, cur) => {
       return sumOfOccupancy(cur.occupancy) + prev;
     }, 0);
+  }
+  private handleIrActions({ action, booking }: { action: IrActionButton; booking: Booking }) {
+    if (action === 'edit') {
+      this.openBookingDetails.emit(booking.booking_nbr);
+    }
   }
   private renderRow(booking: Booking) {
     const rowKey = `${booking.booking_nbr}`;
@@ -81,7 +89,14 @@ export class IrBookingListingTable {
         </td>
         <td>
           <div class="">
-            <ir-actions-cell buttons={['edit', 'delete']}></ir-actions-cell>
+            <ir-actions-cell
+              onIrAction={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.handleIrActions({ action: e.detail.action, booking });
+              }}
+              buttons={['edit', 'delete']}
+            ></ir-actions-cell>
           </div>
         </td>
       </tr>
@@ -111,14 +126,14 @@ export class IrBookingListingTable {
               </tr>
             </thead>
             <tbody>
-              {booking_listing.bookings?.map(booking => this.renderRow(booking))}
-              {/* {!needsCheckInBookings.length && !inHouseBookings.length && (
+              {booking_listing.bookings.length === 0 && (
                 <tr>
-                  <td colSpan={7} class="text-center text-muted">
-                    No arrivals found.
+                  <td colSpan={8} class="empty-row">
+                    No bookings found
                   </td>
                 </tr>
-              )} */}
+              )}
+              {booking_listing.bookings?.map(booking => this.renderRow(booking))}
             </tbody>
           </table>
         </div>
@@ -127,7 +142,7 @@ export class IrBookingListingTable {
             from: 1,
             to: 10,
           }}
-          class="p-1 tasks-pagination"
+          class="data-table--pagination"
           total={10}
           pages={10}
           pageSize={10}

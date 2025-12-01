@@ -44,6 +44,10 @@ export class IrPaymentItem {
                 {/* <ir-icons name="user" style={{ '--icon-size': '1rem', 'color': colorVariants.secondary['--icon-button-color'] }}></ir-icons> */}
               </ir-popover>
               <wa-dropdown
+                onwa-hide={e => {
+                  e.stopImmediatePropagation();
+                  e.stopPropagation();
+                }}
                 onwa-select={e => {
                   switch ((e.detail as any).item.value) {
                     case 'edit':
