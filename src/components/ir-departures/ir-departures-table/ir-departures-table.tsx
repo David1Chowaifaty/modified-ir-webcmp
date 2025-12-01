@@ -64,7 +64,7 @@ export class IrDeparturesTable {
     return (
       <Host>
         <div class="table--container">
-          <table class="table">
+          <table class="table data-table">
             <thead>
               <tr>
                 <th>
@@ -87,7 +87,7 @@ export class IrDeparturesTable {
               {this.renderSection(outBookings)}
               {!needsCheckOutBookings.length && !outBookings.length && (
                 <tr>
-                  <td colSpan={7} class="text-center text-muted">
+                  <td colSpan={7} class="empty-row">
                     No departures found.
                   </td>
                 </tr>

@@ -5,7 +5,6 @@ import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, h, Listen, Prop, State } from '@stencil/core';
 import { BookingDetailsDialogEvents, OpenDialogEvent, OpenSidebarEvent } from '../types';
 import { BookingService } from '@/services/booking.service';
-import WaBadge from '@awesome.me/webawesome/dist/components/badge/badge';
 
 @Component({
   tag: 'ir-booking-header',
@@ -35,12 +34,7 @@ export class IrBookingHeader {
   //   '003': 'bg-ir-red',
   //   '004': 'bg-ir-red',
   // };
-  private badgeVariant: Record<string, WaBadge['variant']> = {
-    '001': 'warning',
-    '002': 'success',
-    '003': 'danger',
-    '004': 'danger',
-  };
+
   private dialogRef: HTMLIrDialogElement;
 
   private bookingService = new BookingService();
@@ -110,9 +104,7 @@ export class IrBookingHeader {
               {/* <span class={`confirmed btn-sm m-0  ${this.confirmationBG[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}`}>
                 {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
               </span> */}
-              <wa-badge variant={this.badgeVariant[this.booking.is_requested_to_cancel ? '003' : this.booking.status.code]}>
-                {this.booking.is_requested_to_cancel ? locales.entries.Lcz_CancellationRequested : this.booking.status.description}
-              </wa-badge>
+              <ir-booking-status-tag status={this.booking.status} isRequestToCancel={this.booking.is_requested_to_cancel}></ir-booking-status-tag>
               {lastManipulation && (
                 <ir-popover
                   trigger="hover"

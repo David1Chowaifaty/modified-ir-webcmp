@@ -531,6 +531,10 @@ export namespace Components {
         "propertyid": number;
         "token": string;
     }
+    interface IrBookingStatusTag {
+        "isRequestToCancel": Booking['is_requested_to_cancel'];
+        "status": Booking['status'];
+    }
     interface IrButton {
         /**
           * Triggers a bounce animation on the button.
@@ -4176,6 +4180,12 @@ declare global {
         prototype: HTMLIrBookingPrintingElement;
         new (): HTMLIrBookingPrintingElement;
     };
+    interface HTMLIrBookingStatusTagElement extends Components.IrBookingStatusTag, HTMLStencilElement {
+    }
+    var HTMLIrBookingStatusTagElement: {
+        prototype: HTMLIrBookingStatusTagElement;
+        new (): HTMLIrBookingStatusTagElement;
+    };
     interface HTMLIrButtonElementEventMap {
         "clickHandler": any;
     }
@@ -6087,6 +6097,7 @@ declare global {
         "ir-booking-listing-table": HTMLIrBookingListingTableElement;
         "ir-booking-number-cell": HTMLIrBookingNumberCellElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
+        "ir-booking-status-tag": HTMLIrBookingStatusTagElement;
         "ir-button": HTMLIrButtonElement;
         "ir-channel": HTMLIrChannelElement;
         "ir-channel-editor": HTMLIrChannelEditorElement;
@@ -6758,6 +6769,10 @@ declare namespace LocalJSX {
         "mode"?: 'invoice' | 'default';
         "propertyid"?: number;
         "token"?: string;
+    }
+    interface IrBookingStatusTag {
+        "isRequestToCancel"?: Booking['is_requested_to_cancel'];
+        "status"?: Booking['status'];
     }
     interface IrButton {
         /**
@@ -9461,6 +9476,7 @@ declare namespace LocalJSX {
         "ir-booking-listing-table": IrBookingListingTable;
         "ir-booking-number-cell": IrBookingNumberCell;
         "ir-booking-printing": IrBookingPrinting;
+        "ir-booking-status-tag": IrBookingStatusTag;
         "ir-button": IrButton;
         "ir-channel": IrChannel;
         "ir-channel-editor": IrChannelEditor;
@@ -9657,6 +9673,7 @@ declare module "@stencil/core" {
             "ir-booking-listing-table": LocalJSX.IrBookingListingTable & JSXBase.HTMLAttributes<HTMLIrBookingListingTableElement>;
             "ir-booking-number-cell": LocalJSX.IrBookingNumberCell & JSXBase.HTMLAttributes<HTMLIrBookingNumberCellElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;
+            "ir-booking-status-tag": LocalJSX.IrBookingStatusTag & JSXBase.HTMLAttributes<HTMLIrBookingStatusTagElement>;
             "ir-button": LocalJSX.IrButton & JSXBase.HTMLAttributes<HTMLIrButtonElement>;
             "ir-channel": LocalJSX.IrChannel & JSXBase.HTMLAttributes<HTMLIrChannelElement>;
             "ir-channel-editor": LocalJSX.IrChannelEditor & JSXBase.HTMLAttributes<HTMLIrChannelEditorElement>;

@@ -65,7 +65,7 @@ export class IrArrivalsTable {
     return (
       <Host>
         <div class="table--container">
-          <table class="table">
+          <table class="table data-table">
             <thead>
               <tr>
                 <th>
@@ -88,7 +88,7 @@ export class IrArrivalsTable {
               {this.renderSection(inHouseBookings)}
               {!needsCheckInBookings.length && !inHouseBookings.length && (
                 <tr>
-                  <td colSpan={7} class="text-center text-muted">
+                  <td colSpan={7} class="empty-row">
                     No arrivals found.
                   </td>
                 </tr>

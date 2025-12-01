@@ -23,6 +23,9 @@
 [hidden] {
   display: none !important;
 }
+:host {
+  background: white;
+}
 .table--container {
   flex: 1 1 0%;
 }

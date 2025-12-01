@@ -1,6 +1,8 @@
 @import url('../../../../assets/webawesome/component/host.css');
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .balance_button-container {
   display: flex;

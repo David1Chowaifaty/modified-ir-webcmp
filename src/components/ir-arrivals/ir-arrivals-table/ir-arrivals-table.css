@@ -5,6 +5,7 @@
   overflow-x: auto;
   min-height: 60vh;
   max-width: 1920px;
+  background-color: white;
   border: 1px solid var(--wa-color-neutral-border-quiet, #abaeb9);
   /* border-bottom: 0; */
 }

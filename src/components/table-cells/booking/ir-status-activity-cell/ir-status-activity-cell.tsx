@@ -1,5 +1,4 @@
 import { Booking, OTAManipulations } from '@/models/booking.dto';
-import WaBadge from '@awesome.me/webawesome/dist/components/badge/badge';
 import { Component, Fragment, Host, Prop, h } from '@stencil/core';
 
 @Component({
@@ -15,19 +14,10 @@ export class IrStatusActivityCell {
   @Prop() lastManipulation: OTAManipulations;
   @Prop() bookingNumber: string;
 
-  private badgeVariant: Record<string, WaBadge['variant']> = {
-    '001': 'warning',
-    '002': 'success',
-    '003': 'danger',
-    '004': 'danger',
-  };
-
   render() {
     return (
       <Host>
-        <wa-badge style={{ padding: '0.375em 0.625em' }} variant={this.badgeVariant[this.isRequestToCancel ? '003' : this.status.code]}>
-          {this.status.description}
-        </wa-badge>
+        <ir-booking-status-tag status={this.status} isRequestToCancel={this.isRequestToCancel}></ir-booking-status-tag>
         {this.showModifiedBadge && <p class="status-activity__modified">Modified</p>}
         {this.showManipulationBadge && (
           <Fragment>

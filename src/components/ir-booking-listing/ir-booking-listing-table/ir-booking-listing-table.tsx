@@ -31,8 +31,9 @@ export class IrBookingListingTable {
         <td>
           <ir-booked-on-cell bookedOn={booking.booked_on}></ir-booked-on-cell>
         </td>
-        <td>
+        <td class="text-center">
           <ir-booked-by-source-cell
+            class="text-center"
             clickableGuest
             showRepeatGuestBadge={booking.guest.nbr_confirmed_bookings > 1 && !booking.agent}
             origin={booking.origin}
@@ -55,11 +56,12 @@ export class IrBookingListingTable {
             {booking.extra_services && <p>{locales.entries.Lcz_ExtraServices}</p>}
           </div>
         </td>
-        <td>
+        <td class="text-center">
           <ir-dates-cell checkIn={booking.from_date} checkOut={booking.to_date}></ir-dates-cell>
         </td>
-        <td class="text-right">
+        <td class="text-center">
           <ir-balance-cell
+            data-css="center"
             bookingNumber={booking.booking_nbr}
             isDirect={booking.is_direct}
             statusCode={booking.status.code}
@@ -95,15 +97,15 @@ export class IrBookingListingTable {
                 <th>
                   <span class={'arrivals-table__departure__cell'}>Booking#</span>
                 </th>
-                <th>Booked on</th>
+                <th class="text-center">Booked on</th>
                 <th>
                   <div>
                     <p>Booked by / Source</p>
                   </div>
                 </th>
                 <th>Services</th>
-                <th>Dates</th>
-                <th class="text-right">Amount</th>
+                <th class="text-center">Dates</th>
+                <th class="text-center">Amount</th>
                 <th class="text-center">Status</th>
                 <th></th>
               </tr>
