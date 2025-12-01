@@ -88,7 +88,7 @@ export class IrDeparturesTable {
               {!needsCheckOutBookings.length && !outBookings.length && (
                 <tr>
                   <td colSpan={7} class="text-center text-muted">
-                    No departures found for today.
+                    No departures found.
                   </td>
                 </tr>
               )}

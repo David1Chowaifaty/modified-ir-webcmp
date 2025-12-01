@@ -89,7 +89,7 @@ export class IrArrivalsTable {
               {!needsCheckInBookings.length && !inHouseBookings.length && (
                 <tr>
                   <td colSpan={7} class="text-center text-muted">
-                    No arrivals found for today.
+                    No arrivals found.
                   </td>
                 </tr>
               )}
