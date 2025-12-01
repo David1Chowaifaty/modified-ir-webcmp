@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+.status-activity__manipulation {
+  color: var(--wa-color-danger);
+}
+.status-activity__modified,
+.status-activity__manipulation {
+  font-size: 0.875rem;
+}

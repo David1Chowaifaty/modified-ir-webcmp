@@ -1,5 +1,7 @@
-import { Booking } from '@/models/booking.dto';
+import { Booking, Occupancy } from '@/models/booking.dto';
 import booking_listing from '@/stores/booking_listing.store';
+import locales from '@/stores/locales.store';
+import { getPrivateNote } from '@/utils/booking';
 import { Component, Host, h } from '@stencil/core';
 
 @Component({
@@ -8,8 +10,18 @@ import { Component, Host, h } from '@stencil/core';
   scoped: true,
 })
 export class IrBookingListingTable {
+  private calculateTotalPersons(booking: Booking) {
+    const sumOfOccupancy = ({ adult_nbr, children_nbr, infant_nbr }: Occupancy) => {
+      return (adult_nbr ?? 0) + (children_nbr ?? 0) + (infant_nbr ?? 0);
+    };
+    return booking.rooms.reduce((prev, cur) => {
+      return sumOfOccupancy(cur.occupancy) + prev;
+    }, 0);
+  }
   private renderRow(booking: Booking) {
     const rowKey = `${booking.booking_nbr}`;
+    const totalPersons = this.calculateTotalPersons(booking);
+    const lastManipulation = booking.ota_manipulations ? booking.ota_manipulations[booking.ota_manipulations.length - 1] : null;
 
     return (
       <tr class="ir-table-row" key={rowKey}>
@@ -20,13 +32,26 @@ export class IrBookingListingTable {
           <ir-booked-on-cell bookedOn={booking.booked_on}></ir-booked-on-cell>
         </td>
         <td>
-          <ir-booked-by-source-cell origin={booking.origin} guest={booking.guest} source={booking.source}></ir-booked-by-source-cell>
+          <ir-booked-by-source-cell
+            showRepeatGuestBadge={booking.guest.nbr_confirmed_bookings > 1 && !booking.agent}
+            origin={booking.origin}
+            guest={booking.guest}
+            source={booking.source}
+            identifier={booking.booking_nbr}
+            showPersons
+            showPrivateNoteDot={getPrivateNote(booking.extras)}
+            totalPersons={totalPersons?.toString()}
+            showPromoIcon={!!booking.promo_key}
+            promoKey={booking.promo_key}
+            showLoyaltyIcon={booking.is_in_loyalty_mode && !booking.promo_key}
+          ></ir-booked-by-source-cell>
         </td>
         <td>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {booking.rooms.map(room => (
               <ir-unit-cell key={room.identifier} room={room}></ir-unit-cell>
             ))}
+            {booking.extra_services && <p>{locales.entries.Lcz_ExtraServices}</p>}
           </div>
         </td>
         <td>
@@ -41,12 +66,15 @@ export class IrBookingListingTable {
             financial={booking.financial}
           ></ir-balance-cell>
         </td>
-        <td>
-          <div>
-            <wa-badge style={{ padding: '0.375em 0.625em' }} variant="success">
-              {booking.status.description}
-            </wa-badge>
-          </div>
+        <td class="text-center">
+          <ir-status-activity-cell
+            lastManipulation={lastManipulation}
+            showManipulationBadge={!!lastManipulation}
+            showModifiedBadge={!lastManipulation && booking.events?.length > 0 && booking.events[0].type.toLowerCase() === 'modified'}
+            status={booking.status}
+            isRequestToCancel={booking.is_requested_to_cancel}
+            bookingNumber={booking.booking_nbr}
+          ></ir-status-activity-cell>
         </td>
         <td>
           <div class="">
@@ -75,7 +103,7 @@ export class IrBookingListingTable {
                 <th>Services</th>
                 <th>Dates</th>
                 <th class="text-right">Amount</th>
-                <th>Status</th>
+                <th class="text-center">Status</th>
                 <th></th>
               </tr>
             </thead>

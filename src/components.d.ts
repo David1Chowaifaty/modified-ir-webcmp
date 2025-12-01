@@ -17,7 +17,7 @@ import { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar
 import { IPageTwoDataUpdateProps } from "./models/models";
 import { IrToast } from "./components/ui/ir-toast/ir-toast";
 import { Currency, RatePlan, RoomType } from "./models/property";
-import { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+import { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OTAManipulations, OtaService, Room, SharedPerson } from "./models/booking.dto";
 import { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
 import { IrActionButton } from "./components/table-cells/booking/ir-actions-cell/ir-actions-cell";
 import { IPaymentAction } from "./services/payment.service";
@@ -68,7 +68,7 @@ export { CalendarSidebarState } from "./components/igloo-calendar/igloo-calendar
 export { IPageTwoDataUpdateProps } from "./models/models";
 export { IrToast } from "./components/ui/ir-toast/ir-toast";
 export { Currency, RatePlan, RoomType } from "./models/property";
-export { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OtaService, Room, SharedPerson } from "./models/booking.dto";
+export { Booking, ExtraService, Guest, IBookingPickupInfo, IOtaNotes, IPayment, OTAManipulations, OtaService, Room, SharedPerson } from "./models/booking.dto";
 export { CalendarSidebarState as CalendarSidebarState1 } from "./components/igloo-calendar/igloo-calendar";
 export { IrActionButton } from "./components/table-cells/booking/ir-actions-cell/ir-actions-cell";
 export { IPaymentAction } from "./services/payment.service";
@@ -404,9 +404,18 @@ export namespace Components {
         "statusCode": string;
     }
     interface IrBookedBySourceCell {
+        "clickableGuest": boolean;
         "guest": Booking['guest'];
+        "identifier": string;
         "origin": Booking['origin'];
+        "promoKey": string;
+        "showLoyaltyIcon": boolean;
+        "showPersons": boolean;
+        "showPrivateNoteDot": boolean;
+        "showPromoIcon": boolean;
+        "showRepeatGuestBadge": boolean;
         "source": Booking['source'];
+        "totalPersons": string;
     }
     interface IrBookedOnCell {
         "bookedOn": Booking['booked_on'];
@@ -2532,6 +2541,14 @@ export namespace Components {
         "icon": TIcons;
         "subtitle": string;
         "value": string;
+    }
+    interface IrStatusActivityCell {
+        "bookingNumber": string;
+        "isRequestToCancel": boolean;
+        "lastManipulation": OTAManipulations;
+        "showManipulationBadge": boolean;
+        "showModifiedBadge": boolean;
+        "status": Booking['status'];
     }
     interface IrSuccessLoader {
         /**
@@ -5640,6 +5657,12 @@ declare global {
         prototype: HTMLIrStatsCardElement;
         new (): HTMLIrStatsCardElement;
     };
+    interface HTMLIrStatusActivityCellElement extends Components.IrStatusActivityCell, HTMLStencilElement {
+    }
+    var HTMLIrStatusActivityCellElement: {
+        prototype: HTMLIrStatusActivityCellElement;
+        new (): HTMLIrStatusActivityCellElement;
+    };
     interface HTMLIrSuccessLoaderElementEventMap {
         "loaderComplete": void;
     }
@@ -6127,6 +6150,7 @@ declare global {
         "ir-span": HTMLIrSpanElement;
         "ir-spinner": HTMLIrSpinnerElement;
         "ir-stats-card": HTMLIrStatsCardElement;
+        "ir-status-activity-cell": HTMLIrStatusActivityCellElement;
         "ir-success-loader": HTMLIrSuccessLoaderElement;
         "ir-switch": HTMLIrSwitchElement;
         "ir-tabs": HTMLIrTabsElement;
@@ -6543,9 +6567,18 @@ declare namespace LocalJSX {
         "statusCode": string;
     }
     interface IrBookedBySourceCell {
+        "clickableGuest"?: boolean;
         "guest"?: Booking['guest'];
+        "identifier"?: string;
         "origin"?: Booking['origin'];
+        "promoKey"?: string;
+        "showLoyaltyIcon"?: boolean;
+        "showPersons"?: boolean;
+        "showPrivateNoteDot"?: boolean;
+        "showPromoIcon"?: boolean;
+        "showRepeatGuestBadge"?: boolean;
         "source"?: Booking['source'];
+        "totalPersons"?: string;
     }
     interface IrBookedOnCell {
         "bookedOn"?: Booking['booked_on'];
@@ -8929,6 +8962,14 @@ declare namespace LocalJSX {
         "subtitle"?: string;
         "value"?: string;
     }
+    interface IrStatusActivityCell {
+        "bookingNumber"?: string;
+        "isRequestToCancel"?: boolean;
+        "lastManipulation"?: OTAManipulations;
+        "showManipulationBadge"?: boolean;
+        "showModifiedBadge"?: boolean;
+        "status"?: Booking['status'];
+    }
     interface IrSuccessLoader {
         /**
           * Controls the visibility of the loader. Setting this to `true` starts the spinner/success cycle.
@@ -9443,6 +9484,7 @@ declare namespace LocalJSX {
         "ir-span": IrSpan;
         "ir-spinner": IrSpinner;
         "ir-stats-card": IrStatsCard;
+        "ir-status-activity-cell": IrStatusActivityCell;
         "ir-success-loader": IrSuccessLoader;
         "ir-switch": IrSwitch;
         "ir-tabs": IrTabs;
@@ -9638,6 +9680,7 @@ declare module "@stencil/core" {
             "ir-span": LocalJSX.IrSpan & JSXBase.HTMLAttributes<HTMLIrSpanElement>;
             "ir-spinner": LocalJSX.IrSpinner & JSXBase.HTMLAttributes<HTMLIrSpinnerElement>;
             "ir-stats-card": LocalJSX.IrStatsCard & JSXBase.HTMLAttributes<HTMLIrStatsCardElement>;
+            "ir-status-activity-cell": LocalJSX.IrStatusActivityCell & JSXBase.HTMLAttributes<HTMLIrStatusActivityCellElement>;
             "ir-success-loader": LocalJSX.IrSuccessLoader & JSXBase.HTMLAttributes<HTMLIrSuccessLoaderElement>;
             "ir-switch": LocalJSX.IrSwitch & JSXBase.HTMLAttributes<HTMLIrSwitchElement>;
             "ir-tabs": LocalJSX.IrTabs & JSXBase.HTMLAttributes<HTMLIrTabsElement>;
