@@ -646,6 +646,12 @@ export class IrBookingListing {
           )}
         </ir-sidebar> */}
         <ir-drawer
+          style={{
+            '--ir-drawer-width': '40rem',
+            '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
+            '--ir-drawer-padding-left': 'var(--spacing)',
+            '--ir-drawer-padding-right': 'var(--spacing)',
+          }}
           onDrawerHide={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();
@@ -653,7 +659,6 @@ export class IrBookingListing {
           }}
           withoutHeader
           open={this.editBookingItem?.cause === 'edit'}
-          style={{ '--ir-drawer-width': '80rem', '--ir-drawer-background-color': '#F2F3F8', '--ir-drawer-padding-left': '0', '--ir-drawer-padding-right': '0' }}
         >
           {this.editBookingItem?.booking && (
             <ir-booking-details
@@ -673,6 +678,9 @@ export class IrBookingListing {
           )}
         </ir-drawer>
         <ir-guest-info-drawer
+          onGuestInfoDrawerClosed={() => {
+            this.editBookingItem = null;
+          }}
           booking_nbr={this.editBookingItem?.booking?.booking_nbr}
           email={this.editBookingItem?.booking?.guest.email}
           language={this.language}

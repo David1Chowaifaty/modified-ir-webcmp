@@ -39,7 +39,7 @@ export class IrGuestInfoDrawer {
     if (this.ticket) {
       this.token.setToken(this.ticket);
     }
-    if (!!this.token.getToken()) {
+    if (this.open && !!this.token.getToken()) {
       this.init();
     }
   }
@@ -53,7 +53,20 @@ export class IrGuestInfoDrawer {
     this.init();
   }
 
+  @Watch('open')
+  openChanged(newValue: boolean) {
+    if (!newValue) {
+      return;
+    }
+    if (!!this.token.getToken() && (!this.guest || !this.countries.length)) {
+      this.init();
+    }
+  }
+
   private async init() {
+    if (!this.open) {
+      return;
+    }
     try {
       this.isLoading = true;
       const [guest, countries, fetchedLocales] = await Promise.all([
@@ -117,11 +130,11 @@ export class IrGuestInfoDrawer {
         ) : (
           <ir-guest-info-form guest={this.guest} countries={this.countries} language={this.language} onGuestChanged={this.handleGuestChanged}></ir-guest-info-form>
         )}
-        <div slot="footer" class="drawer-footer">
+        <div slot="footer" class="ir__drawer-footer">
           <ir-custom-button size="medium" appearance="filled" variant="neutral" type="button" onClickHandler={this.handleCancel}>
             {locales.entries?.Lcz_Cancel || 'Cancel'}
           </ir-custom-button>
-          <ir-custom-button size="medium" variant="brand" type="submit" loading={isRequestPending('/Edit_Exposed_Guest')} disabled={this.isLoading}>
+          <ir-custom-button size="medium" variant="brand" onClick={() => this.editGuest()} loading={isRequestPending('/Edit_Exposed_Guest')} disabled={this.isLoading}>
             {locales.entries?.Lcz_Save || 'Save'}
           </ir-custom-button>
         </div>
