@@ -33,6 +33,7 @@ export class IrBookingListingTable {
         </td>
         <td>
           <ir-booked-by-source-cell
+            clickableGuest
             showRepeatGuestBadge={booking.guest.nbr_confirmed_bookings > 1 && !booking.agent}
             origin={booking.origin}
             guest={booking.guest}

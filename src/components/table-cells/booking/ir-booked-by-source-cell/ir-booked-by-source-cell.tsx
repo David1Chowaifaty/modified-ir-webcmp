@@ -26,15 +26,19 @@ export class IrBookedBySourceCell {
     const repeatGuestBadgeId = `repeat-guest-badge-${this.guest.id}_${this.identifier}`;
     const loyaltyBadgeId = `loyalty-badge-${this.guest.id}_${this.identifier}`;
     const couponBadgeId = `coupon-badge-${this.guest.id}_${this.identifier}`;
-
+    const guest = `${this.guest.first_name} ${this.guest.last_name}`;
     return (
       <Host>
         <img class="booked-by-source__logo" src={this.origin.Icon} alt={this.origin.Label} />
         <div>
           <div class="booked-by-source__container">
-            <p>
-              {this.guest.first_name} {this.guest.last_name}
-            </p>
+            {this.clickableGuest ? (
+              <ir-custom-button variant="brand" appearance="plain" link>
+                {guest}
+              </ir-custom-button>
+            ) : (
+              <p>{guest}</p>
+            )}
             {this.showRepeatGuestBadge && (
               <Fragment>
                 <wa-tooltip for={repeatGuestBadgeId}>{`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.guest.nbr_confirmed_bookings.toString())}</wa-tooltip>
