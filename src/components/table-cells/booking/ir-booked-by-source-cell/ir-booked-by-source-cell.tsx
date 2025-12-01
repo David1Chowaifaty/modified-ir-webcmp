@@ -1,6 +1,6 @@
 import { Booking } from '@/models/booking.dto';
 import locales from '@/stores/locales.store';
-import { Component, Fragment, Host, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-booked-by-source-cell',
@@ -8,19 +8,79 @@ import { Component, Fragment, Host, Prop, h } from '@stencil/core';
   scoped: true,
 })
 export class IrBookedBySourceCell {
+  /**
+   * Guest associated with this booking.
+   */
   @Prop() guest: Booking['guest'];
+
+  /**
+   * Source of the booking (e.g. website, channel).
+   */
   @Prop() source: Booking['source'];
+
+  /**
+   * Origin metadata containing label + icon used as logo.
+   */
   @Prop() origin: Booking['origin'];
+
+  /**
+   * Unique identifier for this cell. Used for tooltip scoping.
+   */
   @Prop() identifier: string;
+
+  /**
+   * Total number of persons staying (adults + children).
+   */
   @Prop() totalPersons: string;
+
+  /**
+   * Promo key if a promo/coupon was applied.
+   */
   @Prop() promoKey: string;
 
+  /**
+   * Show pink heart icon if guest has repeated bookings.
+   */
   @Prop() showRepeatGuestBadge: boolean = false;
+
+  /**
+   * Show total persons count (e.g. "3P").
+   */
   @Prop() showPersons: boolean = false;
+
+  /**
+   * Show yellow dot indicating the booking has a private note.
+   */
   @Prop() showPrivateNoteDot: boolean = false;
+
+  /**
+   * Show loyalty discount icon (pink heart-outline).
+   */
   @Prop() showLoyaltyIcon: boolean = false;
+
+  /**
+   * Show promo/coupon icon.
+   */
   @Prop() showPromoIcon: boolean = false;
+
+  /**
+   * Makes the guest name clickable.
+   * Emits `openGuestDetails` when clicked.
+   */
   @Prop() clickableGuest: boolean = false;
+
+  /**
+   * Emitted when the guest name is clicked.
+   * Sends the `identifier` for parent lookup.
+   */
+  @Event({ bubbles: true, composed: true })
+  guestSelected: EventEmitter<string>;
+
+  private handleGuestClick(e: CustomEvent) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.guestSelected.emit(this.identifier);
+  }
 
   render() {
     const repeatGuestBadgeId = `repeat-guest-badge-${this.guest.id}_${this.identifier}`;
@@ -33,7 +93,7 @@ export class IrBookedBySourceCell {
         <div>
           <div class="booked-by-source__container">
             {this.clickableGuest ? (
-              <ir-custom-button variant="brand" appearance="plain" link>
+              <ir-custom-button onClickHandler={this.handleGuestClick.bind(this)} variant="brand" appearance="plain" link>
                 {guest}
               </ir-custom-button>
             ) : (

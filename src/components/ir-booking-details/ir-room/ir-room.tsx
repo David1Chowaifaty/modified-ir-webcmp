@@ -409,7 +409,7 @@ export class IrRoom {
                     // </ir-tooltip>
                     <Fragment>
                       <wa-tooltip for={`view-guest-btn-${this.room.identifier}`}>View guests</wa-tooltip>
-                      <ir-custom-button onClickHandler={() => this.showGuestModal()} id={`view-guest-btn-${this.room.identifier}`} variant="brand" appearance="plain">
+                      <ir-custom-button link onClickHandler={() => this.showGuestModal()} id={`view-guest-btn-${this.room.identifier}`} variant="brand" appearance="plain">
                         <span innerHTML={this.formatVariation(this.room.occupancy)}></span>
                       </ir-custom-button>
                     </Fragment>

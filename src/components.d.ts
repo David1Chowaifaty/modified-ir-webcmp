@@ -404,17 +404,53 @@ export namespace Components {
         "statusCode": string;
     }
     interface IrBookedBySourceCell {
+        /**
+          * Makes the guest name clickable. Emits `openGuestDetails` when clicked.
+         */
         "clickableGuest": boolean;
+        /**
+          * Guest associated with this booking.
+         */
         "guest": Booking['guest'];
+        /**
+          * Unique identifier for this cell. Used for tooltip scoping.
+         */
         "identifier": string;
+        /**
+          * Origin metadata containing label + icon used as logo.
+         */
         "origin": Booking['origin'];
+        /**
+          * Promo key if a promo/coupon was applied.
+         */
         "promoKey": string;
+        /**
+          * Show loyalty discount icon (pink heart-outline).
+         */
         "showLoyaltyIcon": boolean;
+        /**
+          * Show total persons count (e.g. "3P").
+         */
         "showPersons": boolean;
+        /**
+          * Show yellow dot indicating the booking has a private note.
+         */
         "showPrivateNoteDot": boolean;
+        /**
+          * Show promo/coupon icon.
+         */
         "showPromoIcon": boolean;
+        /**
+          * Show pink heart icon if guest has repeated bookings.
+         */
         "showRepeatGuestBadge": boolean;
+        /**
+          * Source of the booking (e.g. website, channel).
+         */
         "source": Booking['source'];
+        /**
+          * Total number of persons staying (adults + children).
+         */
         "totalPersons": string;
     }
     interface IrBookedOnCell {
@@ -2980,6 +3016,10 @@ export interface IrBalanceCellCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBalanceCellElement;
 }
+export interface IrBookedBySourceCellCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookedBySourceCellElement;
+}
 export interface IrBookingBillingRecipientCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingBillingRecipientElement;
@@ -3968,7 +4008,18 @@ declare global {
         prototype: HTMLIrBalanceCellElement;
         new (): HTMLIrBalanceCellElement;
     };
+    interface HTMLIrBookedBySourceCellElementEventMap {
+        "guestSelected": string;
+    }
     interface HTMLIrBookedBySourceCellElement extends Components.IrBookedBySourceCell, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookedBySourceCellElementEventMap>(type: K, listener: (this: HTMLIrBookedBySourceCellElement, ev: IrBookedBySourceCellCustomEvent<HTMLIrBookedBySourceCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookedBySourceCellElementEventMap>(type: K, listener: (this: HTMLIrBookedBySourceCellElement, ev: IrBookedBySourceCellCustomEvent<HTMLIrBookedBySourceCellElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLIrBookedBySourceCellElement: {
         prototype: HTMLIrBookedBySourceCellElement;
@@ -6567,17 +6618,57 @@ declare namespace LocalJSX {
         "statusCode": string;
     }
     interface IrBookedBySourceCell {
+        /**
+          * Makes the guest name clickable. Emits `openGuestDetails` when clicked.
+         */
         "clickableGuest"?: boolean;
+        /**
+          * Guest associated with this booking.
+         */
         "guest"?: Booking['guest'];
+        /**
+          * Unique identifier for this cell. Used for tooltip scoping.
+         */
         "identifier"?: string;
+        /**
+          * Emitted when the guest name is clicked. Sends the `identifier` for parent lookup.
+         */
+        "onGuestSelected"?: (event: IrBookedBySourceCellCustomEvent<string>) => void;
+        /**
+          * Origin metadata containing label + icon used as logo.
+         */
         "origin"?: Booking['origin'];
+        /**
+          * Promo key if a promo/coupon was applied.
+         */
         "promoKey"?: string;
+        /**
+          * Show loyalty discount icon (pink heart-outline).
+         */
         "showLoyaltyIcon"?: boolean;
+        /**
+          * Show total persons count (e.g. "3P").
+         */
         "showPersons"?: boolean;
+        /**
+          * Show yellow dot indicating the booking has a private note.
+         */
         "showPrivateNoteDot"?: boolean;
+        /**
+          * Show promo/coupon icon.
+         */
         "showPromoIcon"?: boolean;
+        /**
+          * Show pink heart icon if guest has repeated bookings.
+         */
         "showRepeatGuestBadge"?: boolean;
+        /**
+          * Source of the booking (e.g. website, channel).
+         */
         "source"?: Booking['source'];
+        /**
+          * Total number of persons staying (adults + children).
+         */
         "totalPersons"?: string;
     }
     interface IrBookedOnCell {
