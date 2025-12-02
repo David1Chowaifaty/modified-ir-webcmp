@@ -73,19 +73,22 @@ export class IrBookingListingTable {
     return (
       <tr class="ir-table-row" key={rowKey}>
         <td>
-          <ir-booking-number-cell channelBookingNumber={booking.channel_booking_nbr} bookingNumber={booking.booking_nbr}></ir-booking-number-cell>
+          <ir-booking-number-cell
+            origin={booking.origin}
+            source={booking.source}
+            channelBookingNumber={booking.channel_booking_nbr}
+            bookingNumber={booking.booking_nbr}
+          ></ir-booking-number-cell>
         </td>
         <td>
           <ir-booked-on-cell bookedOn={booking.booked_on}></ir-booked-on-cell>
         </td>
         <td class="text-center">
-          <ir-booked-by-source-cell
+          <ir-booked-by-cell
             class="text-center"
             clickableGuest
             showRepeatGuestBadge={booking.guest.nbr_confirmed_bookings > 1 && !booking.agent}
-            origin={booking.origin}
             guest={booking.guest}
-            source={booking.source}
             identifier={booking.booking_nbr}
             showPersons
             showPrivateNoteDot={getPrivateNote(booking.extras)}
@@ -93,7 +96,10 @@ export class IrBookingListingTable {
             showPromoIcon={!!booking.promo_key}
             promoKey={booking.promo_key}
             showLoyaltyIcon={booking.is_in_loyalty_mode && !booking.promo_key}
-          ></ir-booked-by-source-cell>
+          ></ir-booked-by-cell>
+        </td>
+        <td>
+          <ir-dates-cell checkIn={booking.from_date} checkOut={booking.to_date}></ir-dates-cell>
         </td>
         <td>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -102,9 +108,6 @@ export class IrBookingListingTable {
             ))}
             {booking.extra_services && <p>{locales.entries.Lcz_ExtraServices}</p>}
           </div>
-        </td>
-        <td class="text-center">
-          <ir-dates-cell checkIn={booking.from_date} checkOut={booking.to_date}></ir-dates-cell>
         </td>
         <td class="text-center">
           <ir-balance-cell
@@ -152,14 +155,14 @@ export class IrBookingListingTable {
                 <th>
                   <span class={'arrivals-table__departure__cell'}>Booking#</span>
                 </th>
-                <th class="text-center">Booked on</th>
+                <th>Booked on</th>
                 <th>
                   <div>
-                    <p>Booked by / Source</p>
+                    <p>Booked by</p>
                   </div>
                 </th>
+                <th>Dates</th>
                 <th>Services</th>
-                <th class="text-center">Dates</th>
                 <th class="text-center">
                   <p>Amount </p>
                   <wa-tooltip for="balance-info">Booking balance click to settle.</wa-tooltip>

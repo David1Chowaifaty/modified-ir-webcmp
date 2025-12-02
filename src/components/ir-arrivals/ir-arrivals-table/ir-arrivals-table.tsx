@@ -28,10 +28,15 @@ export class IrArrivalsTable {
     return (
       <tr class="ir-table-row" key={rowKey}>
         <td class="sticky-column">
-          <ir-booking-number-cell channelBookingNumber={booking.channel_booking_nbr} bookingNumber={booking.booking_nbr}></ir-booking-number-cell>
+          <ir-booking-number-cell
+            source={booking.source}
+            origin={booking.origin}
+            channelBookingNumber={booking.channel_booking_nbr}
+            bookingNumber={booking.booking_nbr}
+          ></ir-booking-number-cell>
         </td>
         <td>
-          <ir-booked-by-source-cell origin={booking.origin} guest={booking.guest} source={booking.source}></ir-booked-by-source-cell>
+          <ir-booked-by-cell guest={booking.guest}></ir-booked-by-cell>
         </td>
         <td>
           <ir-guest-name-cell name={room.guest}></ir-guest-name-cell>
@@ -73,7 +78,7 @@ export class IrArrivalsTable {
                 </th>
                 <th>
                   <div>
-                    <p>Booked by / Source</p>
+                    <p>Booked by</p>
                   </div>
                 </th>
                 <th>Guest name</th>

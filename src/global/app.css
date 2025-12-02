@@ -6,6 +6,9 @@
   background: #000;
   color: white;
 }
+/* body {
+  background-color: var(--wa-color-surface-default) !important;
+} */
 html {
   font-size: 13px !important;
 }
@@ -13,9 +16,9 @@ html {
   font-family: inherit;
   font-size: 1rem;
   font-weight: 800;
-  color: var(--ir-price-color, #1a1a1a);
   text-align: right;
   white-space: nowrap;
+  color: var(--wa-color-text-normal);
 }
 .page-title {
   font-family: var(--wa-font-family-heading);

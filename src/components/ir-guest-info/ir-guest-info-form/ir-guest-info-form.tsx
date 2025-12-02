@@ -84,12 +84,7 @@ export class IrGuestInfoForm {
           ></ir-custom-input>
         </ir-validator>
 
-        <ir-validator
-          schema={guestInfoFormSchema.shape.country_id}
-          value={this.guest?.country_id ?? undefined}
-          autovalidate={this.autoValidate}
-          valueEvent="countryChange"
-        >
+        <ir-validator schema={guestInfoFormSchema.shape.country_id} value={this.guest?.country_id ?? undefined} autovalidate={this.autoValidate} valueEvent="countryChange">
           <ir-country-picker
             variant="modern"
             country={this.countries.find(c => c.id === this.guest?.country_id)}
@@ -116,18 +111,13 @@ export class IrGuestInfoForm {
           label={locales.entries?.Lcz_MobilePhone}
           countries={this.countries}
         /> */}
-        <ir-validator
-          schema={guestInfoFormSchema.shape.mobile}
-          value={this.guest?.mobile ?? ''}
-          autovalidate={this.autoValidate}
-          valueEvent="mobile-input-change"
-        >
+        <ir-validator schema={guestInfoFormSchema.shape.mobile} value={this.guest?.mobile ?? ''} autovalidate={this.autoValidate} valueEvent="mobile-input-change">
           <ir-mobile-input
             onMobile-input-change={e => {
               this.handleInputChange({ mobile: e.detail.formattedValue });
             }}
             onMobile-input-country-change={e => this.handleInputChange({ country_phone_prefix: e.detail.phone_prefix })}
-            value={this.guest?.mobile ?? ''}
+            // value={this.guest?.mobile ?? ''}
             required
             countryCode={this.countries.find(c => c.phone_prefix === this.guest?.country_phone_prefix)?.code}
             countries={this.countries}
@@ -141,7 +131,11 @@ export class IrGuestInfoForm {
           valueEvent="wa-change change input"
           blurEvent="wa-blur blur"
         >
-          <wa-textarea onchange={e => this.handleInputChange({ notes: (e.target as any).value })} value={this.guest?.notes ?? ''} label={locales.entries?.Lcz_PrivateNote}></wa-textarea>
+          <wa-textarea
+            onchange={e => this.handleInputChange({ notes: (e.target as any).value })}
+            value={this.guest?.notes ?? ''}
+            label={locales.entries?.Lcz_PrivateNote}
+          ></wa-textarea>
         </ir-validator>
       </Host>
     );

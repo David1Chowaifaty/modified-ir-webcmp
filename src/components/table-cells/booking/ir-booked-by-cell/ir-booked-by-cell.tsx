@@ -3,25 +3,15 @@ import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stencil/core';
 
 @Component({
-  tag: 'ir-booked-by-source-cell',
-  styleUrls: ['ir-booked-by-source-cell.css'],
+  tag: 'ir-booked-by-cell',
+  styleUrls: ['ir-booked-by-cell.css'],
   scoped: true,
 })
-export class IrBookedBySourceCell {
+export class IrBookedByCell {
   /**
    * Guest associated with this booking.
    */
   @Prop() guest: Booking['guest'];
-
-  /**
-   * Source of the booking (e.g. website, channel).
-   */
-  @Prop() source: Booking['source'];
-
-  /**
-   * Origin metadata containing label + icon used as logo.
-   */
-  @Prop() origin: Booking['origin'];
 
   /**
    * Unique identifier for this cell. Used for tooltip scoping.
@@ -89,7 +79,6 @@ export class IrBookedBySourceCell {
     const guest = `${this.guest.first_name} ${this.guest.last_name}`;
     return (
       <Host>
-        <img class="booked-by-source__logo" src={this.origin.Icon} alt={this.origin.Label} />
         <div>
           <div class="booked-by-source__container">
             {this.clickableGuest ? (
@@ -114,7 +103,6 @@ export class IrBookedBySourceCell {
             {this.showPrivateNoteDot && <span class="booked-by-source__private-note"></span>}
           </div>
           <div class="booked-by-source__container">
-            <p class="booked-by-cell__description">{this.origin.Label}</p>
             {this.showLoyaltyIcon && (
               <Fragment>
                 <wa-tooltip for={loyaltyBadgeId}>{locales.entries.Lcz_LoyaltyDiscountApplied}</wa-tooltip>

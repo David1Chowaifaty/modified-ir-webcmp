@@ -411,7 +411,7 @@ export namespace Components {
         "isDirect": boolean;
         "statusCode": string;
     }
-    interface IrBookedBySourceCell {
+    interface IrBookedByCell {
         /**
           * Makes the guest name clickable. Emits `openGuestDetails` when clicked.
          */
@@ -424,10 +424,6 @@ export namespace Components {
           * Unique identifier for this cell. Used for tooltip scoping.
          */
         "identifier": string;
-        /**
-          * Origin metadata containing label + icon used as logo.
-         */
-        "origin": Booking['origin'];
         /**
           * Promo key if a promo/coupon was applied.
          */
@@ -452,10 +448,6 @@ export namespace Components {
           * Show pink heart icon if guest has repeated bookings.
          */
         "showRepeatGuestBadge": boolean;
-        /**
-          * Source of the booking (e.g. website, channel).
-         */
-        "source": Booking['source'];
         /**
           * Total number of persons staying (adults + children).
          */
@@ -530,6 +522,14 @@ export namespace Components {
     interface IrBookingNumberCell {
         "bookingNumber": Booking['booking_nbr'];
         "channelBookingNumber": Booking['channel_booking_nbr'];
+        /**
+          * Origin metadata containing label + icon used as logo.
+         */
+        "origin": Booking['origin'];
+        /**
+          * Source of the booking (e.g. website, channel).
+         */
+        "source": Booking['source'];
     }
     interface IrBookingPrinting {
         "bookingNumber": string;
@@ -3123,9 +3123,9 @@ export interface IrBalanceCellCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBalanceCellElement;
 }
-export interface IrBookedBySourceCellCustomEvent<T> extends CustomEvent<T> {
+export interface IrBookedByCellCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLIrBookedBySourceCellElement;
+    target: HTMLIrBookedByCellElement;
 }
 export interface IrBookingBillingRecipientCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4135,22 +4135,22 @@ declare global {
         prototype: HTMLIrBalanceCellElement;
         new (): HTMLIrBalanceCellElement;
     };
-    interface HTMLIrBookedBySourceCellElementEventMap {
+    interface HTMLIrBookedByCellElementEventMap {
         "guestSelected": string;
     }
-    interface HTMLIrBookedBySourceCellElement extends Components.IrBookedBySourceCell, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLIrBookedBySourceCellElementEventMap>(type: K, listener: (this: HTMLIrBookedBySourceCellElement, ev: IrBookedBySourceCellCustomEvent<HTMLIrBookedBySourceCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+    interface HTMLIrBookedByCellElement extends Components.IrBookedByCell, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookedByCellElementEventMap>(type: K, listener: (this: HTMLIrBookedByCellElement, ev: IrBookedByCellCustomEvent<HTMLIrBookedByCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLIrBookedBySourceCellElementEventMap>(type: K, listener: (this: HTMLIrBookedBySourceCellElement, ev: IrBookedBySourceCellCustomEvent<HTMLIrBookedBySourceCellElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookedByCellElementEventMap>(type: K, listener: (this: HTMLIrBookedByCellElement, ev: IrBookedByCellCustomEvent<HTMLIrBookedByCellElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
         removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
-    var HTMLIrBookedBySourceCellElement: {
-        prototype: HTMLIrBookedBySourceCellElement;
-        new (): HTMLIrBookedBySourceCellElement;
+    var HTMLIrBookedByCellElement: {
+        prototype: HTMLIrBookedByCellElement;
+        new (): HTMLIrBookedByCellElement;
     };
     interface HTMLIrBookedOnCellElement extends Components.IrBookedOnCell, HTMLStencilElement {
     }
@@ -6296,7 +6296,7 @@ declare global {
         "ir-arrivals-table": HTMLIrArrivalsTableElement;
         "ir-autocomplete": HTMLIrAutocompleteElement;
         "ir-balance-cell": HTMLIrBalanceCellElement;
-        "ir-booked-by-source-cell": HTMLIrBookedBySourceCellElement;
+        "ir-booked-by-cell": HTMLIrBookedByCellElement;
         "ir-booked-on-cell": HTMLIrBookedOnCellElement;
         "ir-booking": HTMLIrBookingElement;
         "ir-booking-billing-recipient": HTMLIrBookingBillingRecipientElement;
@@ -6846,7 +6846,7 @@ declare namespace LocalJSX {
         "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<{ booking_nbr: string; payment: Payment }>) => void;
         "statusCode": string;
     }
-    interface IrBookedBySourceCell {
+    interface IrBookedByCell {
         /**
           * Makes the guest name clickable. Emits `openGuestDetails` when clicked.
          */
@@ -6862,11 +6862,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the guest name is clicked. Sends the `identifier` for parent lookup.
          */
-        "onGuestSelected"?: (event: IrBookedBySourceCellCustomEvent<string>) => void;
-        /**
-          * Origin metadata containing label + icon used as logo.
-         */
-        "origin"?: Booking['origin'];
+        "onGuestSelected"?: (event: IrBookedByCellCustomEvent<string>) => void;
         /**
           * Promo key if a promo/coupon was applied.
          */
@@ -6891,10 +6887,6 @@ declare namespace LocalJSX {
           * Show pink heart icon if guest has repeated bookings.
          */
         "showRepeatGuestBadge"?: boolean;
-        /**
-          * Source of the booking (e.g. website, channel).
-         */
-        "source"?: Booking['source'];
         /**
           * Total number of persons staying (adults + children).
          */
@@ -6982,6 +6974,14 @@ declare namespace LocalJSX {
         "bookingNumber"?: Booking['booking_nbr'];
         "channelBookingNumber"?: Booking['channel_booking_nbr'];
         "onOpenBookingDetails"?: (event: IrBookingNumberCellCustomEvent<Booking['booking_nbr']>) => void;
+        /**
+          * Origin metadata containing label + icon used as logo.
+         */
+        "origin"?: Booking['origin'];
+        /**
+          * Source of the booking (e.g. website, channel).
+         */
+        "source"?: Booking['source'];
     }
     interface IrBookingPrinting {
         "bookingNumber"?: string;
@@ -9783,7 +9783,7 @@ declare namespace LocalJSX {
         "ir-arrivals-table": IrArrivalsTable;
         "ir-autocomplete": IrAutocomplete;
         "ir-balance-cell": IrBalanceCell;
-        "ir-booked-by-source-cell": IrBookedBySourceCell;
+        "ir-booked-by-cell": IrBookedByCell;
         "ir-booked-on-cell": IrBookedOnCell;
         "ir-booking": IrBooking;
         "ir-booking-billing-recipient": IrBookingBillingRecipient;
@@ -9985,7 +9985,7 @@ declare module "@stencil/core" {
             "ir-arrivals-table": LocalJSX.IrArrivalsTable & JSXBase.HTMLAttributes<HTMLIrArrivalsTableElement>;
             "ir-autocomplete": LocalJSX.IrAutocomplete & JSXBase.HTMLAttributes<HTMLIrAutocompleteElement>;
             "ir-balance-cell": LocalJSX.IrBalanceCell & JSXBase.HTMLAttributes<HTMLIrBalanceCellElement>;
-            "ir-booked-by-source-cell": LocalJSX.IrBookedBySourceCell & JSXBase.HTMLAttributes<HTMLIrBookedBySourceCellElement>;
+            "ir-booked-by-cell": LocalJSX.IrBookedByCell & JSXBase.HTMLAttributes<HTMLIrBookedByCellElement>;
             "ir-booked-on-cell": LocalJSX.IrBookedOnCell & JSXBase.HTMLAttributes<HTMLIrBookedOnCellElement>;
             "ir-booking": LocalJSX.IrBooking & JSXBase.HTMLAttributes<HTMLIrBookingElement>;
             "ir-booking-billing-recipient": LocalJSX.IrBookingBillingRecipient & JSXBase.HTMLAttributes<HTMLIrBookingBillingRecipientElement>;

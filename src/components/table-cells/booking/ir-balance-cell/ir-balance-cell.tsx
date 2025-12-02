@@ -37,7 +37,7 @@ export class IrBalanceCell {
                         date: moment().format('YYYY-MM-DD'),
                         designation: null,
                         payment_method: null,
-                        payment_type: { code: '001', description: null, operation: null },
+                        payment_type: { code: this.financial.cancelation_penality_as_if_today < 0 ? '010' : '001', description: null, operation: null },
                         id: -1,
                         reference: '',
                       },

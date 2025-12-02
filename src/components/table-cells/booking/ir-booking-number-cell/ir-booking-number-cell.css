@@ -5,10 +5,18 @@
   align-items: center;
 }
 .booking-nbr-cell__channel_nbr {
-  padding-inline: var(--wa-form-control-padding-inline, 1rem);
+  font-size: 0.875rem;
+  padding: 0;
+  margin: 0;
 }
 .booking-nbr-cell__container {
   display: flex;
   flex-direction: column;
   align-self: flex-start;
+}
+
+.booked-by-source__logo {
+  width: 1.5625rem;
+  background-color: white;
+  border-radius: 50%;
 }

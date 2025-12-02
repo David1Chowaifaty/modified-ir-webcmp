@@ -3,8 +3,9 @@
   padding: 0.5rem 1rem !important;
   text-align: left;
   z-index: 2;
-  background-color: white;
+  background-color: var(--wa-color-surface-default);
   white-space: nowrap;
+  color: var(--wa-color-text-normal);
   /* width: max-content;
   max-width: max-content; */
 }
@@ -35,10 +36,11 @@
   text-align: left;
 }
 .data-table thead th {
-  background: rgb(255, 255, 255) !important;
+  background: var(--wa-color-surface-default) !important;
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
   border-bottom: 1px solid var(--wa-color-neutral-70) !important;
+  color: var(--wa-color-text-normal);
 }
 .data-table .empty-row {
   height: 50vh !important;
@@ -50,6 +52,7 @@
   padding: 0.5rem 1rem;
   position: sticky;
   bottom: 0;
+  background: var(--wa-color-surface-default);
   border-top: 1px solid var(--wa-color-neutral-70);
 }
 
