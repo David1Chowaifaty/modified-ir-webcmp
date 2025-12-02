@@ -1428,6 +1428,7 @@ export namespace Components {
         "ticket": string;
     }
     interface IrGuestInfoForm {
+        "autoValidate": boolean;
         "countries": ICountry[];
         "guest": Guest;
         "language": string;
@@ -7973,6 +7974,7 @@ declare namespace LocalJSX {
         "ticket"?: string;
     }
     interface IrGuestInfoForm {
+        "autoValidate"?: boolean;
         "countries"?: ICountry[];
         "guest"?: Guest;
         "language"?: string;

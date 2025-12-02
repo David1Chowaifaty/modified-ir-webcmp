@@ -7,6 +7,7 @@ import Token from '@/models/Token';
 import { ICountry } from '@/models/IBooking';
 import { IToast } from '@/components/ui/ir-toast/toast';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
+import { guestInfoFormSchema } from '../ir-guest-info-form/types';
 
 @Component({
   tag: 'ir-guest-info-drawer',
@@ -94,6 +95,8 @@ export class IrGuestInfoDrawer {
   };
 
   private handleDrawerHide = (event: CustomEvent<{ source: Element }>) => {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
     this.guestInfoDrawerClosed.emit({ source: event.detail?.source ?? this.hostElement });
   };
 
@@ -104,6 +107,7 @@ export class IrGuestInfoDrawer {
   private async editGuest() {
     try {
       this.autoValidate = true;
+      guestInfoFormSchema.parse(this.guest);
       await this.bookingService.editExposedGuest(this.guest, this.booking_nbr ?? null);
       this.toast.emit({
         type: 'success',
@@ -122,13 +126,31 @@ export class IrGuestInfoDrawer {
     const drawerLabel = locales?.entries?.Lcz_GuestDetails || 'Guest info';
 
     return (
-      <ir-drawer open={this.open} label={drawerLabel} onDrawerHide={this.handleDrawerHide}>
+      <ir-drawer
+        open={this.open}
+        label={drawerLabel}
+        onDrawerHide={this.handleDrawerHide}
+        style={{
+          '--ir-drawer-width': '40rem',
+          '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
+          '--ir-drawer-padding-left': 'var(--spacing)',
+          '--ir-drawer-padding-right': 'var(--spacing)',
+          '--ir-drawer-padding-top': 'var(--spacing)',
+          '--ir-drawer-padding-bottom': 'var(--spacing)',
+        }}
+      >
         {this.isLoading ? (
-          <div class="drawer-loading">
-            <ir-spinner></ir-spinner>
+          <div class={'loading-container'}>
+            <wa-spinner style={{ fontSize: '2rem' }}></wa-spinner>
           </div>
         ) : (
-          <ir-guest-info-form guest={this.guest} countries={this.countries} language={this.language} onGuestChanged={this.handleGuestChanged}></ir-guest-info-form>
+          <ir-guest-info-form
+            guest={this.guest}
+            countries={this.countries}
+            language={this.language}
+            autoValidate={this.autoValidate}
+            onGuestChanged={this.handleGuestChanged}
+          ></ir-guest-info-form>
         )}
         <div slot="footer" class="ir__drawer-footer">
           <ir-custom-button size="medium" appearance="filled" variant="neutral" type="button" onClickHandler={this.handleCancel}>

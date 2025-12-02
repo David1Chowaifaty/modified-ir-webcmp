@@ -370,18 +370,18 @@ export class IrBookingDetails {
       this.sidebarState = null;
     };
     switch (this.sidebarState) {
-      case 'guest':
-        return (
-          <ir-guest-info
-            isInSideBar
-            headerShown
-            slot="sidebar-body"
-            booking_nbr={this.bookingNumber}
-            email={this.booking?.guest.email}
-            language={this.language}
-            onCloseSideBar={handleClose}
-          ></ir-guest-info>
-        );
+      // case 'guest':
+      //   return (
+      //     <ir-guest-info
+      //       isInSideBar
+      //       headerShown
+      //       slot="sidebar-body"
+      //       booking_nbr={this.bookingNumber}
+      //       email={this.booking?.guest.email}
+      //       language={this.language}
+      //       onCloseSideBar={handleClose}
+      //     ></ir-guest-info>
+      //   );
       case 'pickup':
         return (
           <ir-pickup
@@ -687,6 +687,15 @@ export class IrBookingDetails {
       // >
       //   {this.renderSidebarContent()}
       // </ir-sidebar>,
+      <ir-guest-info-drawer
+        onGuestInfoDrawerClosed={() => {
+          this.sidebarState = null;
+        }}
+        booking_nbr={this.bookingNumber}
+        email={this.booking?.guest.email}
+        language={this.language}
+        open={this.sidebarState === 'guest'}
+      ></ir-guest-info-drawer>,
       <ir-payment-folio
         style={{ height: 'auto' }}
         bookingNumber={this.booking.booking_nbr}

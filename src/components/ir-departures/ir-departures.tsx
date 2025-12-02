@@ -96,7 +96,14 @@ export class IrDepartures {
           }}
           withoutHeader
           open={!!this.bookingNumber}
-          style={{ '--ir-drawer-width': '80rem', '--ir-drawer-background-color': '#F2F3F8', '--ir-drawer-padding-left': '0', '--ir-drawer-padding-right': '0' }}
+          style={{
+            '--ir-drawer-width': '80rem',
+            '--ir-drawer-background-color': '#F2F3F8',
+            '--ir-drawer-padding-left': '0',
+            '--ir-drawer-padding-right': '0',
+            '--ir-drawer-padding-top': '0',
+            '--ir-drawer-padding-bottom': '0',
+          }}
         >
           {this.bookingNumber && (
             <ir-booking-details

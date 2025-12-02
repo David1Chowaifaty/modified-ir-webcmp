@@ -278,6 +278,8 @@ export class IrPaymentFolio {
           '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
           '--ir-drawer-padding-left': 'var(--spacing)',
           '--ir-drawer-padding-right': 'var(--spacing)',
+          '--ir-drawer-padding-top': 'var(--spacing)',
+          '--ir-drawer-padding-bottom': 'var(--spacing)',
         }}
         label={this.payment?.id !== -1 ? 'Edit Folio Entry' : 'New Folio Entry'}
         open={this.isOpen}

@@ -160,7 +160,15 @@ export class IrBookingListingTable {
                 </th>
                 <th>Services</th>
                 <th class="text-center">Dates</th>
-                <th class="text-center">Amount</th>
+                <th class="text-center">
+                  <p>Amount </p>
+                  <wa-tooltip for="balance-info">Booking balance click to settle.</wa-tooltip>
+                  <div style={{ width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}>
+                    <ir-custom-button id="balance-info" style={{ '--ir-c-btn-height': '1.3125rem' }} size="small" variant="danger" appearance="outlined">
+                      Balance
+                    </ir-custom-button>
+                  </div>
+                </th>
                 <th class="text-center">Status</th>
                 <th></th>
               </tr>

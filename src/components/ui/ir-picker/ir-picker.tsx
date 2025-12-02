@@ -468,7 +468,7 @@ export class IrPicker {
           <wa-input
             slot="anchor"
             class="search-bar"
-            withClear
+            // withClear
             value={this.query}
             ref={el => (this.inputRef = el)}
             appearance={this.appearance}

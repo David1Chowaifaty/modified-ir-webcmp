@@ -43,7 +43,7 @@ export class IrBalanceCell {
                       },
                     });
                   }}
-                  style={{ '--ir-c-btn-height': '0.5rem' }}
+                  style={{ '--ir-c-btn-height': '1.3125rem' }}
                   size="small"
                   variant="danger"
                   appearance="outlined"
