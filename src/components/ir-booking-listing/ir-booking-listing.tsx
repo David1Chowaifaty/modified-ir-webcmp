@@ -646,12 +646,7 @@ export class IrBookingListing {
           )}
         </ir-sidebar> */}
         <ir-drawer
-          style={{
-            '--ir-drawer-width': '40rem',
-            '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
-            '--ir-drawer-padding-left': 'var(--spacing)',
-            '--ir-drawer-padding-right': 'var(--spacing)',
-          }}
+          style={{ '--ir-drawer-width': '80rem', '--ir-drawer-background-color': '#F2F3F8', '--ir-drawer-padding-left': '0', '--ir-drawer-padding-right': '0' }}
           onDrawerHide={e => {
             e.stopImmediatePropagation();
             e.stopPropagation();

@@ -43,6 +43,7 @@ import { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 import { FactoryArg } from "imask";
 import { ZodType, ZodTypeAny } from "zod";
 import { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
+import { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mobile-input";
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
@@ -97,6 +98,7 @@ export { MaskProp as MaskProp1 } from "./components/ui/ir-input/ir-input";
 export { FactoryArg } from "imask";
 export { ZodType, ZodTypeAny } from "zod";
 export { ComboboxOption, DataMode } from "./components/ir-m-combobox/types";
+export { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mobile-input";
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
@@ -1869,6 +1871,48 @@ export namespace Components {
          */
         "value": string;
     }
+    interface IrMobileInput {
+        /**
+          * Country list, used to populate prefix and dropdown. If not provided, fetched from the booking service.
+         */
+        "countries": ICountry[];
+        /**
+          * Selected country ISO code. Component updates this prop when a new country is chosen
+         */
+        "countryCode"?: string;
+        /**
+          * Help text rendered under the label
+         */
+        "description"?: string;
+        /**
+          * Whether the control is disabled
+         */
+        "disabled": boolean;
+        /**
+          * Error message announced to screen readers
+         */
+        "error"?: string;
+        /**
+          * Visible label for the phone input
+         */
+        "label": string;
+        /**
+          * Name attribute passed to the native input
+         */
+        "name": string;
+        /**
+          * Placeholder shown when the input is empty
+         */
+        "placeholder": string;
+        /**
+          * Native required attribute
+         */
+        "required": boolean;
+        /**
+          * Input value without formatting. Component keeps this prop in sync
+         */
+        "value": string;
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -3277,6 +3321,10 @@ export interface IrMComboboxCustomEvent<T> extends CustomEvent<T> {
 export interface IrMComboboxItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrMComboboxItemElement;
+}
+export interface IrMobileInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrMobileInputElement;
 }
 export interface IrModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -5169,6 +5217,24 @@ declare global {
         prototype: HTMLIrMComboboxItemElement;
         new (): HTMLIrMComboboxItemElement;
     };
+    interface HTMLIrMobileInputElementEventMap {
+        "mobile-input-change": IrMobileInputChangeDetail;
+        "mobile-input-country-change": ICountry;
+    }
+    interface HTMLIrMobileInputElement extends Components.IrMobileInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrMobileInputElementEventMap>(type: K, listener: (this: HTMLIrMobileInputElement, ev: IrMobileInputCustomEvent<HTMLIrMobileInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrMobileInputElementEventMap>(type: K, listener: (this: HTMLIrMobileInputElement, ev: IrMobileInputCustomEvent<HTMLIrMobileInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrMobileInputElement: {
+        prototype: HTMLIrMobileInputElement;
+        new (): HTMLIrMobileInputElement;
+    };
     interface HTMLIrModalElementEventMap {
         "confirmModal": any;
         "cancelModal": any;
@@ -6307,6 +6373,7 @@ declare global {
         "ir-m-combobox": HTMLIrMComboboxElement;
         "ir-m-combobox-booking-item": HTMLIrMComboboxBookingItemElement;
         "ir-m-combobox-item": HTMLIrMComboboxItemElement;
+        "ir-mobile-input": HTMLIrMobileInputElement;
         "ir-modal": HTMLIrModalElement;
         "ir-monthly-bookings-report": HTMLIrMonthlyBookingsReportElement;
         "ir-monthly-bookings-report-filter": HTMLIrMonthlyBookingsReportFilterElement;
@@ -8407,6 +8474,50 @@ declare namespace LocalJSX {
          */
         "value": string;
     }
+    interface IrMobileInput {
+        /**
+          * Country list, used to populate prefix and dropdown. If not provided, fetched from the booking service.
+         */
+        "countries"?: ICountry[];
+        /**
+          * Selected country ISO code. Component updates this prop when a new country is chosen
+         */
+        "countryCode"?: string;
+        /**
+          * Help text rendered under the label
+         */
+        "description"?: string;
+        /**
+          * Whether the control is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Error message announced to screen readers
+         */
+        "error"?: string;
+        /**
+          * Visible label for the phone input
+         */
+        "label"?: string;
+        /**
+          * Name attribute passed to the native input
+         */
+        "name"?: string;
+        "onMobile-input-change"?: (event: IrMobileInputCustomEvent<IrMobileInputChangeDetail>) => void;
+        "onMobile-input-country-change"?: (event: IrMobileInputCustomEvent<ICountry>) => void;
+        /**
+          * Placeholder shown when the input is empty
+         */
+        "placeholder"?: string;
+        /**
+          * Native required attribute
+         */
+        "required"?: boolean;
+        /**
+          * Input value without formatting. Component keeps this prop in sync
+         */
+        "value"?: string;
+    }
     interface IrModal {
         /**
           * If true, the modal automatically closes after confirm/cancel actions.
@@ -9748,6 +9859,7 @@ declare namespace LocalJSX {
         "ir-m-combobox": IrMCombobox;
         "ir-m-combobox-booking-item": IrMComboboxBookingItem;
         "ir-m-combobox-item": IrMComboboxItem;
+        "ir-mobile-input": IrMobileInput;
         "ir-modal": IrModal;
         "ir-monthly-bookings-report": IrMonthlyBookingsReport;
         "ir-monthly-bookings-report-filter": IrMonthlyBookingsReportFilter;
@@ -9949,6 +10061,7 @@ declare module "@stencil/core" {
             "ir-m-combobox": LocalJSX.IrMCombobox & JSXBase.HTMLAttributes<HTMLIrMComboboxElement>;
             "ir-m-combobox-booking-item": LocalJSX.IrMComboboxBookingItem & JSXBase.HTMLAttributes<HTMLIrMComboboxBookingItemElement>;
             "ir-m-combobox-item": LocalJSX.IrMComboboxItem & JSXBase.HTMLAttributes<HTMLIrMComboboxItemElement>;
+            "ir-mobile-input": LocalJSX.IrMobileInput & JSXBase.HTMLAttributes<HTMLIrMobileInputElement>;
             "ir-modal": LocalJSX.IrModal & JSXBase.HTMLAttributes<HTMLIrModalElement>;
             "ir-monthly-bookings-report": LocalJSX.IrMonthlyBookingsReport & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportElement>;
             "ir-monthly-bookings-report-filter": LocalJSX.IrMonthlyBookingsReportFilter & JSXBase.HTMLAttributes<HTMLIrMonthlyBookingsReportFilterElement>;

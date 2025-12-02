@@ -9,7 +9,7 @@ import { ICountry } from '@/models/IBooking';
   scoped: true,
 })
 export class IrGuestInfoForm {
-  @Prop() guest: Guest;
+  @Prop({ mutable: true }) guest: Guest;
   @Prop() language: string;
   @Prop() countries: ICountry[];
   autoValidate: boolean;
@@ -17,9 +17,11 @@ export class IrGuestInfoForm {
   @Event() guestChanged: EventEmitter<Guest>;
 
   private handleInputChange(params: Partial<Guest>) {
-    this.guestChanged.emit({ ...this.guest, ...params });
+    // this.guestChanged.emit({ ...this.guest, ...params });
+    this.guest = { ...this.guest, ...params };
   }
   render() {
+    console.log(this.guest);
     return (
       <Host>
         <ir-custom-input
@@ -60,7 +62,7 @@ export class IrGuestInfoForm {
           countries={this.countries}
         ></ir-country-picker>
 
-        <ir-phone-input
+        {/* <ir-phone-input
           mode="modern"
           onTextChange={e => {
             e.stopImmediatePropagation();
@@ -76,7 +78,18 @@ export class IrGuestInfoForm {
           language={this.language}
           label={locales.entries?.Lcz_MobilePhone}
           countries={this.countries}
-        />
+        /> */}
+        <ir-mobile-input
+          onMobile-input-change={e => {
+            console.log(e.detail);
+            this.handleInputChange({ mobile: e.detail.formattedValue });
+          }}
+          onMobile-input-country-change={e => this.handleInputChange({ country_phone_prefix: e.detail.phone_prefix })}
+          value={this.guest.mobile}
+          required
+          countryCode={this.countries.find(c => c.phone_prefix === this.guest.country_phone_prefix)?.code}
+          countries={this.countries}
+        ></ir-mobile-input>
 
         <wa-textarea onchange={e => this.handleInputChange({ notes: (e.target as any).value })} value={this.guest?.notes} label={locales.entries?.Lcz_PrivateNote}></wa-textarea>
       </Host>
