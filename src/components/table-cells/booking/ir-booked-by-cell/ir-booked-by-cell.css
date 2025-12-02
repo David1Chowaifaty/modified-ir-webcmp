@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  font-size: 0.93rem;
 }
 .booked-by-source__logo {
   width: 1.5625rem;

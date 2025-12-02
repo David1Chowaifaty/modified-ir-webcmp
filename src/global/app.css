@@ -1,6 +1,7 @@
 /* Web Awesome core styles */
 /* @import url('../assets/webawesome/themes/webawesome.css'); */
 @import url('../assets/webawesome/themes/default.css');
+
 /* Place project-wide overrides below. */
 .my-custom-style {
   background: #000;
@@ -10,7 +11,7 @@
   background-color: var(--wa-color-surface-default) !important;
 } */
 html {
-  font-size: 13px !important;
+  font-size: 14px !important;
 }
 .ir-price {
   font-family: inherit;

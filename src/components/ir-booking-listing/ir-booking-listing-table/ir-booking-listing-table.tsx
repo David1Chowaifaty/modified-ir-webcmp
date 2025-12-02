@@ -102,7 +102,7 @@ export class IrBookingListingTable {
           <ir-dates-cell checkIn={booking.from_date} checkOut={booking.to_date}></ir-dates-cell>
         </td>
         <td>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             {booking.rooms.map(room => (
               <ir-unit-cell key={room.identifier} room={room}></ir-unit-cell>
             ))}

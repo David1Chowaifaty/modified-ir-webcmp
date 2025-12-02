@@ -1,4 +1,5 @@
 @import url('../../../../assets/webawesome/component/host.css');
 :host {
   display: block;
+  font-size: 0.93rem;
 }

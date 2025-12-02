@@ -3,9 +3,10 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+  font-size: 0.93rem;
 }
 .booking-nbr-cell__channel_nbr {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   padding: 0;
   margin: 0;
 }
