@@ -43,7 +43,7 @@ export class IrBalanceCell {
                       },
                     });
                   }}
-                  style={{ '--ir-c-btn-height': '1.3125rem' }}
+                  style={{ '--ir-c-btn-height': 'fit-content', '--ir-c-btn-padding': '0.25rem' }}
                   size="small"
                   variant="danger"
                   appearance="outlined"
@@ -69,7 +69,7 @@ export class IrBalanceCell {
                       },
                     });
                   }}
-                  style={{ '--ir-c-btn-height': '1.5rem' }}
+                  style={{ '--ir-c-btn-height': 'fit-content', '--ir-c-btn-padding': '0.25rem' }}
                   size="small"
                   variant="danger"
                   appearance="outlined"

@@ -167,7 +167,13 @@ export class IrBookingListingTable {
                   <p>Amount </p>
                   <wa-tooltip for="balance-info">Booking balance click to settle.</wa-tooltip>
                   <div style={{ width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}>
-                    <ir-custom-button id="balance-info" style={{ '--ir-c-btn-height': '1.3125rem' }} size="small" variant="danger" appearance="outlined">
+                    <ir-custom-button
+                      id="balance-info"
+                      style={{ '--ir-c-btn-height': 'fit-content', '--ir-c-btn-padding': '0.25rem' }}
+                      size="small"
+                      variant="danger"
+                      appearance="outlined"
+                    >
                       Balance
                     </ir-custom-button>
                   </div>
