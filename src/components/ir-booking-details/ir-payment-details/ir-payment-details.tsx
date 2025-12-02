@@ -250,26 +250,28 @@ export class IrPaymentDetails {
 
         {this.shouldShowRefundButton() && (
           <div class="d-flex mt-1">
-            <ir-button
-              btn_color="outline"
-              text={`Refund ${formatAmount(currency.symbol, Math.abs(this.booking.financial.cancelation_penality_as_if_today))}`}
-              size="sm"
+            <ir-custom-button
+              variant="brand"
+              appearance="outlined"
               onClickHandler={() => {
                 this.handleAddPayment({ type: 'refund', amount: Math.abs(this.booking.financial.cancelation_penality_as_if_today) });
               }}
-            ></ir-button>
+            >
+              {`Refund ${formatAmount(currency.symbol, Math.abs(this.booking.financial.cancelation_penality_as_if_today))}`}
+            </ir-custom-button>
           </div>
         )}
         {this.shouldCancellationButton() && (
           <div class="d-flex mt-1">
-            <ir-button
-              btn_color="outline"
-              text={`Charge cancellation penalty ${formatAmount(currency.symbol, this.booking.financial.cancelation_penality_as_if_today)}`}
-              size="sm"
+            <ir-custom-button
+              variant="brand"
+              appearance="outlined"
               onClickHandler={() => {
                 this.handleAddPayment({ type: 'cancellation-penalty', amount: Math.abs(this.booking.financial.cancelation_penality_as_if_today) });
               }}
-            ></ir-button>
+            >
+              {`Charge cancellation penalty ${formatAmount(currency.symbol, this.booking.financial.cancelation_penality_as_if_today)}`}
+            </ir-custom-button>
           </div>
         )}
       </wa-card>,

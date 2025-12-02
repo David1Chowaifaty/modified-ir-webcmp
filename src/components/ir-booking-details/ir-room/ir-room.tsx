@@ -372,13 +372,14 @@ export class IrRoom {
                   showDateDifference={false}
                 ></ir-date-view>
                 {!isSingleUnit(this.room.roomtype.id) && calendar_data.is_frontdesk_enabled && this.room.unit && (
-                  <div class={'d-flex justify-content-center align-items-center'}>
-                    <ir-tooltip message={(this.room.unit as IUnit).name} customSlot>
-                      <span slot="tooltip-trigger" class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>
-                        {(this.room.unit as IUnit).name}
-                      </span>
-                    </ir-tooltip>
-                  </div>
+                  // <div class={'d-flex justify-content-center align-items-center'}>
+                  //   <ir-tooltip message={(this.room.unit as IUnit).name} customSlot>
+                  //     <span slot="tooltip-trigger" class={`light-blue-bg  ${this.hasCheckIn || this.hasCheckOut ? 'mr-2' : ''} `}>
+                  //       {(this.room.unit as IUnit).name}
+                  //     </span>
+                  //   </ir-tooltip>
+                  // </div>
+                  <ir-unit-tag unit={(this.room.unit as IUnit).name}></ir-unit-tag>
                 )}
                 {this.hasCheckIn && (
                   <ir-custom-button onClickHandler={this.handleCheckIn.bind(this)} id="checkin" appearance="outlined" variant="brand">
