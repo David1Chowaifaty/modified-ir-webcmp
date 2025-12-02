@@ -44,7 +44,6 @@ graph TD;
   ir-range-picker --> ir-date-picker
   ir-button --> ir-icons
   ir-sidebar --> ir-icon
-  ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-room-guests
@@ -61,25 +60,9 @@ graph TD;
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-modal
   ir-booking-details --> ir-sidebar
+  ir-booking-details --> ir-guest-info-drawer
   ir-booking-details --> ir-payment-folio
   ir-booking-details --> igl-book-property
-  ir-guest-info --> ir-spinner
-  ir-guest-info --> ir-toast
-  ir-guest-info --> ir-interceptor
-  ir-guest-info --> ir-title
-  ir-guest-info --> ir-input-text
-  ir-guest-info --> ir-country-picker
-  ir-guest-info --> ir-phone-input
-  ir-guest-info --> ir-textarea
-  ir-guest-info --> ir-button
-  ir-interceptor --> ir-otp-modal
-  ir-otp-modal --> ir-spinner
-  ir-otp-modal --> ir-otp
-  ir-otp-modal --> ir-button
-  ir-country-picker --> ir-picker
-  ir-country-picker --> ir-picker-item
-  ir-country-picker --> ir-input-text
-  ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
@@ -96,12 +79,19 @@ graph TD;
   ir-room-guests --> ir-country-picker
   ir-room-guests --> ir-select
   ir-room-guests --> ir-button
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
+  ir-country-picker --> ir-input-text
   ir-room --> ir-custom-button
   ir-room --> ir-date-view
   ir-room --> ir-tooltip
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button
+  ir-interceptor --> ir-otp-modal
+  ir-otp-modal --> ir-spinner
+  ir-otp-modal --> ir-otp
+  ir-otp-modal --> ir-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
   ir-booking-header --> ir-booking-status-tag
@@ -143,6 +133,13 @@ graph TD;
   ir-payment-item --> ir-popover
   ir-payment-item --> ir-button
   ir-payment-item --> ir-custom-button
+  ir-guest-info-drawer --> ir-drawer
+  ir-guest-info-drawer --> ir-guest-info-form
+  ir-guest-info-drawer --> ir-custom-button
+  ir-guest-info-form --> ir-validator
+  ir-guest-info-form --> ir-custom-input
+  ir-guest-info-form --> ir-country-picker
+  ir-guest-info-form --> ir-mobile-input
   ir-payment-folio --> ir-drawer
   ir-payment-folio --> ir-custom-date-picker
   ir-payment-folio --> ir-validator
@@ -176,6 +173,7 @@ graph TD;
   igl-property-booked-by --> ir-country-picker
   igl-property-booked-by --> ir-phone-input
   igl-property-booked-by --> ir-select
+  ir-phone-input --> ir-combobox
   igl-book-property-footer --> ir-button
   ir-hk-tasks --> ir-hk-archive
   style ir-hk-archive fill:#f9f,stroke:#333,stroke-width:4px

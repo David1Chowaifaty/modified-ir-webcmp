@@ -29,12 +29,12 @@
 
 ### Used by
 
+ - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-listing](../../ir-booking-listing)
 
 ### Depends on
 
 - [ir-drawer](../../ir-drawer)
-- [ir-spinner](../../ui/ir-spinner)
 - [ir-guest-info-form](../ir-guest-info-form)
 - [ir-custom-button](../../ui/ir-custom-button)
 
@@ -42,15 +42,16 @@
 ```mermaid
 graph TD;
   ir-guest-info-drawer --> ir-drawer
-  ir-guest-info-drawer --> ir-spinner
   ir-guest-info-drawer --> ir-guest-info-form
   ir-guest-info-drawer --> ir-custom-button
+  ir-guest-info-form --> ir-validator
   ir-guest-info-form --> ir-custom-input
   ir-guest-info-form --> ir-country-picker
   ir-guest-info-form --> ir-mobile-input
   ir-country-picker --> ir-picker
   ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
+  ir-booking-details --> ir-guest-info-drawer
   ir-booking-listing --> ir-guest-info-drawer
   style ir-guest-info-drawer fill:#f9f,stroke:#333,stroke-width:4px
 ```

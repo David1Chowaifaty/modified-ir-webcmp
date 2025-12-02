@@ -30,11 +30,13 @@
 
 ### Used by
 
+ - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
  - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-guest-info-form --> ir-validator
   ir-payment-folio --> ir-validator
   style ir-validator fill:#f9f,stroke:#333,stroke-width:4px
 ```

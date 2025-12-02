@@ -30,9 +30,9 @@
 - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
 - [ir-status-activity-cell](../../table-cells/booking/ir-status-activity-cell)
 - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [ir-pagination](../../ir-pagination)
 - [ir-dialog](../../ui/ir-dialog)
-- [ir-custom-button](../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
@@ -45,9 +45,9 @@ graph TD;
   ir-booking-listing-table --> ir-balance-cell
   ir-booking-listing-table --> ir-status-activity-cell
   ir-booking-listing-table --> ir-actions-cell
+  ir-booking-listing-table --> ir-custom-button
   ir-booking-listing-table --> ir-pagination
   ir-booking-listing-table --> ir-dialog
-  ir-booking-listing-table --> ir-custom-button
   ir-booking-number-cell --> ir-custom-button
   ir-booked-by-source-cell --> ir-custom-button
   ir-unit-cell --> ir-unit-tag

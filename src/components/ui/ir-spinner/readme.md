@@ -23,7 +23,6 @@
  - [ir-booking-details](../../ir-booking-details)
  - [ir-events-log](../../ir-booking-details/ir-booking-header/events-log)
  - [ir-guest-info](../../ir-guest-info)
- - [ir-guest-info-drawer](../../ir-guest-info/ir-guest-info-drawer)
  - [ir-otp-modal](../../ir-otp-modal)
  - [ir-pms-logs](../../ir-booking-details/ir-booking-header/ir-pms-logs)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
@@ -35,7 +34,6 @@ graph TD;
   ir-booking-details --> ir-spinner
   ir-events-log --> ir-spinner
   ir-guest-info --> ir-spinner
-  ir-guest-info-drawer --> ir-spinner
   ir-otp-modal --> ir-spinner
   ir-pms-logs --> ir-spinner
   ir-room-guests --> ir-spinner

@@ -102,9 +102,9 @@ graph TD;
   ir-booking-listing-table --> ir-balance-cell
   ir-booking-listing-table --> ir-status-activity-cell
   ir-booking-listing-table --> ir-actions-cell
+  ir-booking-listing-table --> ir-custom-button
   ir-booking-listing-table --> ir-pagination
   ir-booking-listing-table --> ir-dialog
-  ir-booking-listing-table --> ir-custom-button
   ir-booking-number-cell --> ir-custom-button
   ir-booked-by-source-cell --> ir-custom-button
   ir-unit-cell --> ir-unit-tag
@@ -113,7 +113,6 @@ graph TD;
   ir-actions-cell --> ir-custom-button
   ir-pagination --> ir-select
   ir-pagination --> ir-custom-button
-  ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-room-guests
@@ -130,24 +129,16 @@ graph TD;
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-modal
   ir-booking-details --> ir-sidebar
+  ir-booking-details --> ir-guest-info-drawer
   ir-booking-details --> ir-payment-folio
   ir-booking-details --> igl-book-property
-  ir-guest-info --> ir-spinner
-  ir-guest-info --> ir-toast
-  ir-guest-info --> ir-interceptor
-  ir-guest-info --> ir-title
-  ir-guest-info --> ir-input-text
-  ir-guest-info --> ir-country-picker
-  ir-guest-info --> ir-phone-input
-  ir-guest-info --> ir-textarea
-  ir-guest-info --> ir-button
-  ir-title --> ir-icon
   ir-pickup --> ir-title
   ir-pickup --> ir-select
   ir-pickup --> ir-date-picker
   ir-pickup --> ir-input-text
   ir-pickup --> ir-price-input
   ir-pickup --> ir-button
+  ir-title --> ir-icon
   ir-extra-service-config --> ir-title
   ir-extra-service-config --> ir-date-picker
   ir-extra-service-config --> ir-button
@@ -206,19 +197,19 @@ graph TD;
   ir-payment-item --> ir-button
   ir-payment-item --> ir-custom-button
   ir-sidebar --> ir-icon
+  ir-guest-info-drawer --> ir-drawer
+  ir-guest-info-drawer --> ir-guest-info-form
+  ir-guest-info-drawer --> ir-custom-button
+  ir-guest-info-form --> ir-validator
+  ir-guest-info-form --> ir-custom-input
+  ir-guest-info-form --> ir-country-picker
+  ir-guest-info-form --> ir-mobile-input
   ir-payment-folio --> ir-drawer
   ir-payment-folio --> ir-custom-date-picker
   ir-payment-folio --> ir-validator
   ir-payment-folio --> ir-custom-input
   ir-payment-folio --> ir-custom-button
   ir-custom-date-picker --> ir-custom-input
-  ir-guest-info-drawer --> ir-drawer
-  ir-guest-info-drawer --> ir-spinner
-  ir-guest-info-drawer --> ir-guest-info-form
-  ir-guest-info-drawer --> ir-custom-button
-  ir-guest-info-form --> ir-custom-input
-  ir-guest-info-form --> ir-country-picker
-  ir-guest-info-form --> ir-mobile-input
   ir-secure-tasks --> ir-booking-listing
   style ir-booking-listing fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property    | Attribute  | Description | Type         | Default     |
-| ----------- | ---------- | ----------- | ------------ | ----------- |
-| `countries` | --         |             | `ICountry[]` | `undefined` |
-| `guest`     | --         |             | `Guest`      | `undefined` |
-| `language`  | `language` |             | `string`     | `undefined` |
+| Property       | Attribute       | Description | Type         | Default     |
+| -------------- | --------------- | ----------- | ------------ | ----------- |
+| `autoValidate` | `auto-validate` |             | `boolean`    | `false`     |
+| `countries`    | --              |             | `ICountry[]` | `undefined` |
+| `guest`        | --              |             | `Guest`      | `undefined` |
+| `language`     | `language`      |             | `string`     | `undefined` |
 
 
 ## Events
@@ -29,6 +30,7 @@
 
 ### Depends on
 
+- [ir-validator](../../ui/ir-validator)
 - [ir-custom-input](../../ui/ir-custom-input)
 - [ir-country-picker](../../ui/ir-country-picker)
 - [ir-mobile-input](../../ui/ir-mobile-input)
@@ -36,6 +38,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  ir-guest-info-form --> ir-validator
   ir-guest-info-form --> ir-custom-input
   ir-guest-info-form --> ir-country-picker
   ir-guest-info-form --> ir-mobile-input
