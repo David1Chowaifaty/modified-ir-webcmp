@@ -15,12 +15,12 @@ export class IrGuestInfoForm {
   @Prop() countries: ICountry[];
   @Prop() autoValidate: boolean = false;
 
-  @Event() guestChanged: EventEmitter<Guest>;
+  @Event() guestChanged: EventEmitter<Partial<Guest>>;
 
   private handleInputChange(params: Partial<Guest>) {
-    this.guestChanged.emit({ ...this.guest, ...params });
-    this.guest = { ...this.guest, ...params };
+    this.guestChanged.emit(params);
   }
+
   render() {
     return (
       <Host>
@@ -114,10 +114,11 @@ export class IrGuestInfoForm {
         <ir-validator schema={guestInfoFormSchema.shape.mobile} value={this.guest?.mobile ?? ''} autovalidate={this.autoValidate} valueEvent="mobile-input-change">
           <ir-mobile-input
             onMobile-input-change={e => {
+              console.log(e.detail);
               this.handleInputChange({ mobile: e.detail.formattedValue });
             }}
             onMobile-input-country-change={e => this.handleInputChange({ country_phone_prefix: e.detail.phone_prefix })}
-            // value={this.guest?.mobile ?? ''}
+            value={this.guest?.mobile ?? ''}
             required
             countryCode={this.countries.find(c => c.phone_prefix === this.guest?.country_phone_prefix)?.code}
             countries={this.countries}

@@ -96,16 +96,21 @@ export class IrMobileInput {
 
   @Watch('value')
   protected handleValueChange(newValue: string, oldValue: string) {
-    if (newValue === oldValue) return;
-    if (this.mask) {
-      if (this.mask.unmaskedValue !== (newValue ?? '')) {
-        this.mask.unmaskedValue = newValue ?? '';
-      }
-      this.displayValue = this.mask.value;
-    } else {
-      this.displayValue = newValue ?? '';
-      if (this.inputRef && this.inputRef.value !== this.displayValue) {
-        this.inputRef.value = this.displayValue;
+    // if (newValue === oldValue) return;
+    // if (this.mask) {
+    //   if (this.mask.unmaskedValue !== (newValue ?? '')) {
+    //     this.mask.unmaskedValue = newValue ?? '';
+    //   }
+    //   this.displayValue = this.mask.value;
+    // } else {
+    //   this.displayValue = newValue ?? '';
+    //   if (this.inputRef && this.inputRef.value !== this.displayValue) {
+    //     this.inputRef.value = this.displayValue;
+    //   }
+    // }
+    if (newValue !== oldValue) {
+      if (this.mask) {
+        this.mask.value = newValue;
       }
     }
   }

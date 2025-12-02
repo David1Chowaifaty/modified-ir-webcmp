@@ -90,8 +90,8 @@ export class IrGuestInfoDrawer {
     }
   }
 
-  private handleGuestChanged = (event: CustomEvent<Guest>) => {
-    this.guest = event.detail;
+  private handleGuestChanged = (event: CustomEvent<Partial<Guest>>) => {
+    this.guest = { ...this.guest, ...event.detail };
   };
 
   private handleDrawerHide = (event: CustomEvent<{ source: Element }>) => {

@@ -28,9 +28,8 @@ html {
   font-size: var(--wa-font-size-xl);
 }
 
-:host {
+:root {
   --wa-form-control-required-content-color: var(--wa-color-danger-border-loud, #f3676c);
-  padding: var(--wa-space-l);
 }
 /* td {
   padding: 0 !important;

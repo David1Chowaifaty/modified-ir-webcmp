@@ -4894,7 +4894,7 @@ declare global {
         new (): HTMLIrGuestInfoDrawerElement;
     };
     interface HTMLIrGuestInfoFormElementEventMap {
-        "guestChanged": Guest;
+        "guestChanged": Partial<Guest>;
     }
     interface HTMLIrGuestInfoFormElement extends Components.IrGuestInfoForm, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrGuestInfoFormElementEventMap>(type: K, listener: (this: HTMLIrGuestInfoFormElement, ev: IrGuestInfoFormCustomEvent<HTMLIrGuestInfoFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -7978,7 +7978,7 @@ declare namespace LocalJSX {
         "countries"?: ICountry[];
         "guest"?: Guest;
         "language"?: string;
-        "onGuestChanged"?: (event: IrGuestInfoFormCustomEvent<Guest>) => void;
+        "onGuestChanged"?: (event: IrGuestInfoFormCustomEvent<Partial<Guest>>) => void;
     }
     interface IrGuestNameCell {
         "name"?: Guest;
