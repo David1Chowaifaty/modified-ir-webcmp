@@ -4,7 +4,7 @@ import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stenci
 
 @Component({
   tag: 'ir-booked-by-source-cell',
-  styleUrls: ['ir-booked-by-source-cell.css', '../../../../global/app.css'],
+  styleUrls: ['ir-booked-by-source-cell.css'],
   scoped: true,
 })
 export class IrBookedBySourceCell {

@@ -8,7 +8,7 @@ import { BookingService } from '@/services/booking.service';
 
 @Component({
   tag: 'ir-departures',
-  styleUrls: ['../../assets/webawesome/component/host.css', '../../global/app.css', 'ir-departures.css'],
+  styleUrls: ['../../assets/webawesome/component/host.css', 'ir-departures.css'],
   scoped: true,
 })
 export class IrDepartures {

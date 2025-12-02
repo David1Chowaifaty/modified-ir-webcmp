@@ -21,7 +21,7 @@ import type { PaginationChangeEvent } from '@/components/ir-pagination/ir-pagina
 
 @Component({
   tag: 'ir-booking-listing',
-  styleUrls: ['ir-booking-listing.css', '../../global/app.css'],
+  styleUrls: ['ir-booking-listing.css'],
   scoped: true,
 })
 export class IrBookingListing {

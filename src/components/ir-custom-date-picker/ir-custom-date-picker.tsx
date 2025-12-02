@@ -6,7 +6,7 @@ import { ClickOutside } from '../../decorators/ClickOutside';
 
 @Component({
   tag: 'ir-custom-date-picker',
-  styleUrls: ['ir-custom-date-picker.css', '../../global/app.css'],
+  styleUrls: ['ir-custom-date-picker.css'],
   shadow: false,
 })
 export class IrCustomDatePicker {

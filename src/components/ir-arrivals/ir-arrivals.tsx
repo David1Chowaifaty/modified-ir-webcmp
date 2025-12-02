@@ -8,7 +8,7 @@ import { arrivalsStore } from '@/stores/arrivals.store';
 
 @Component({
   tag: 'ir-arrivals',
-  styleUrls: ['../../assets/webawesome/component/host.css', '../../global/app.css', 'ir-arrivals.css'],
+  styleUrls: ['../../assets/webawesome/component/host.css', 'ir-arrivals.css'],
   scoped: true,
 })
 export class IrArrivals {

@@ -4,7 +4,7 @@ export type NativeButton = WaButton;
 
 @Component({
   tag: 'ir-custom-button',
-  styleUrls: ['ir-custom-button.css', '../../../global/app.css'],
+  styleUrls: ['ir-custom-button.css'],
   shadow: false,
 })
 export class IrCustomButton {

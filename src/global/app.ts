@@ -1,3 +1,4 @@
+import '../assets/webawesome/themes/default.css';
 /**
  * Register only the Web Awesome components we actually use so they get bundled with our library.
  * This avoids forcing consumers to include additional scripts or styles.

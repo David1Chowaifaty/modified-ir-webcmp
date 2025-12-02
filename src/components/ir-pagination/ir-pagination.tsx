@@ -24,7 +24,7 @@ export interface PaginationChangeEvent {
 
 @Component({
   tag: 'ir-pagination',
-  styleUrls: ['ir-pagination.css', '../../global/app.css'],
+  styleUrls: ['ir-pagination.css'],
   scoped: true,
 })
 export class IrPagination {

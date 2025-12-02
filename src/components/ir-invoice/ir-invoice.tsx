@@ -6,7 +6,7 @@ import moment from 'moment';
 
 @Component({
   tag: 'ir-invoice',
-  styleUrls: ['ir-invoice.css', '../../global/app.css'],
+  styleUrls: ['ir-invoice.css'],
   scoped: true,
 })
 export class IrInvoice {

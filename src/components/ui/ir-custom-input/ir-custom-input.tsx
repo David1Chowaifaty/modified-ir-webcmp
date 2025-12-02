@@ -10,7 +10,7 @@ export type NativeWaInput = WaInput;
 
 @Component({
   tag: 'ir-custom-input',
-  styleUrls: ['ir-custom-input.css', '../../../global/app.css'],
+  styleUrls: ['ir-custom-input.css'],
   shadow: false,
 })
 export class IrCustomInput {

@@ -3,7 +3,7 @@ import { v4 } from 'uuid';
 
 @Component({
   tag: 'ir-unit-tag',
-  styleUrls: ['ir-unit-tag.css', '../../global/app.css'],
+  styleUrls: ['ir-unit-tag.css'],
   scoped: true,
 })
 export class IrUnitTag {

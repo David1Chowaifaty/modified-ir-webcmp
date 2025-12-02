@@ -4,6 +4,8 @@ import { onlineResources } from '../../common/ir.common.resources';
 
 @Component({
   tag: 'ir-common',
+  styleUrl: '../../global/app.css',
+  shadow: false,
 })
 export class IrCommon {
   @Prop({ reflect: true }) extraResources: string = '';
@@ -61,10 +63,6 @@ export class IrCommon {
   }
 
   render() {
-    return (
-      <Host>
-        <slot></slot>
-      </Host>
-    );
+    return null;
   }
 }

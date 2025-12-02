@@ -2,7 +2,7 @@ import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@st
 import { Booking } from '@/models/booking.dto';
 @Component({
   tag: 'ir-booking-billing-recipient',
-  styleUrls: ['ir-booking-billing-recipient.css', '../../global/app.css'],
+  styleUrls: ['ir-booking-billing-recipient.css'],
   scoped: true,
 })
 export class IrBookingBillingRecipient {

@@ -18,7 +18,7 @@ import { buildSplitIndex, SplitIndex } from '@/utils/booking';
 
 @Component({
   tag: 'ir-booking-details',
-  styleUrls: ['../../global/app.css', 'ir-booking-details.css'],
+  styleUrls: ['ir-booking-details.css'],
   scoped: true,
 })
 export class IrBookingDetails {

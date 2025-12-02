@@ -3,7 +3,7 @@ import { Component, Event, EventEmitter, Method, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-dialog',
-  styleUrls: ['ir-dialog.css', '../../../global/app.css'],
+  styleUrls: ['ir-dialog.css'],
   shadow: false,
 })
 export class IrDialog {

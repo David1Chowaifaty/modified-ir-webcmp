@@ -5,7 +5,7 @@ import { Component, Event, EventEmitter, h, Prop } from '@stencil/core';
 export type NativeDrawer = WaDrawer;
 @Component({
   tag: 'ir-drawer',
-  styleUrls: ['ir-drawer.css', '../../global/app.css'],
+  styleUrls: ['ir-drawer.css'],
   shadow: false,
 })
 export class IrDrawer {
