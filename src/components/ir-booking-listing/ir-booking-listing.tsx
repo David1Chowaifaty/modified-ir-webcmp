@@ -30,7 +30,7 @@ export class IrBookingListing {
   @Prop() language: string = '';
   @Prop() ticket: string = '';
   @Prop() propertyid: number;
-  @Prop() rowCount: number = 10;
+  @Prop() rowCount: number = 20;
   @Prop() p: string;
   @Prop() baseUrl: string;
   @Prop() userType: number;
