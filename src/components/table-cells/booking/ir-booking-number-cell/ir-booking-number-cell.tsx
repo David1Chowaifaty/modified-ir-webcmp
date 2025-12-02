@@ -18,11 +18,14 @@ export class IrBookingNumberCell {
   @Prop() origin: Booking['origin'];
 
   @Prop() channelBookingNumber: Booking['channel_booking_nbr'];
+
   @Event({ bubbles: true, composed: true }) openBookingDetails: EventEmitter<Booking['booking_nbr']>;
+
   render() {
     return (
       <Host>
-        <img class="booked-by-source__logo" src={this.origin.Icon} alt={this.origin.Label} />
+        {this.channelBookingNumber && <wa-tooltip for={`source-logo__${this.bookingNumber}`}>{this.origin.Label}</wa-tooltip>}
+        <img class="booked-by-source__logo" id={`source-logo__${this.bookingNumber}`} src={this.origin.Icon} alt={this.origin.Label} />
         <div class="booking-nbr-cell__container">
           <div style={{ width: 'fit-content' }}>
             <ir-custom-button size="medium" onClickHandler={() => this.openBookingDetails.emit(this.bookingNumber)} link variant="brand" appearance="plain">
