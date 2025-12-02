@@ -65,23 +65,7 @@ export class IrListingHeader {
     }
     await this.bookingListingService.getExposedBookings({ ...booking_listing.userSelection, start_row: 0, end_row: 20, is_to_export: false });
   }
-  // private async handleFromDateChange(e: CustomEvent) {
-  //   e.stopImmediatePropagation();
-  //   e.stopPropagation();
-  //   const date = e.detail.start;
-  //   if (moment(booking_listing.userSelection.from, 'YYYY-MM-DD').isSame(date, 'days')) {
-  //     return;
-  //   }
-  //   let fromDate = date;
-  //   let toDate = moment(new Date(booking_listing.userSelection.to));
-  //   if (fromDate.isAfter(toDate)) {
-  //     toDate = fromDate;
-  //   }
-  //   booking_listing.userSelection = { ...booking_listing.userSelection, from: fromDate.format('YYYY-MM-DD'), to: toDate.format('YYYY-MM-DD') };
-  //   await this.toDateRef.openDatePicker();
-  // }
   render() {
-    console.log(booking_listing.balance_filter);
     const havePrivilege = isPrivilegedUser(booking_listing.userSelection.userTypeCode);
     return (
       <Host>
@@ -116,20 +100,6 @@ export class IrListingHeader {
               }}
               class="booking-search-field width-fill"
             >
-              {/* <ir-input-text
-                
-                value={this.inputValue}
-                onTextChange={e => (this.inputValue = e.detail)}
-                variant="icon"
-                placeholder={locales.entries?.Lcz_FindBookNbrorName}
-              >
-                <svg slot="icon" xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 512 512">
-                  <path
-                    fill="currentColor"
-                    d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-                  />
-                </svg>
-              </ir-input-text> */}
               <ir-custom-input
                 class={'flex-fill'}
                 value={this.inputValue}
@@ -184,59 +154,6 @@ export class IrListingHeader {
               </wa-option>
             ))}
           </wa-select>
-          {/* <div class={'booking-dates-container'}>
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox={'0 0 448 512'} style={{ height: '14px', width: '14px' }}>
-                <path
-                  fill="currentColor"
-                  d={
-                    'M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192H400V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z'
-                  }
-                ></path>
-              </svg>
-            </span>
-            <ir-date-picker
-              id="fromDate"
-              class="date-picker-wrapper"
-              date={new Date(booking_listing.userSelection.from)}
-              minDate="2000-01-01"
-              onDateChanged={e => this.handleFromDateChange(e)}
-            >
-              <p slot="trigger" class="m-0 p-0 date-display">
-                {moment(new Date(booking_listing.userSelection.from)).format('MMM DD, yyyy')}
-              </p>
-            </ir-date-picker>
-
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" height="14" width="14" viewBox="0 0 512 512">
-                <path
-                  fill="currentColor"
-                  d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"
-                />
-              </svg>
-            </span>
-            <ir-date-picker
-              id="toDate"
-              forceDestroyOnUpdate
-              class="date-picker-wrapper"
-              date={new Date(booking_listing.userSelection.to)}
-              ref={el => (this.toDateRef = el)}
-              minDate={new Date(booking_listing.userSelection.from)}
-              maxDate={moment().add(1, 'years').endOf('year').toDate()}
-              onDateChanged={e => {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                if (e.detail.start.isSame(booking_listing.userSelection.to, 'days') || e.detail.start.isBefore(booking_listing.userSelection.from, 'days')) {
-                  return;
-                }
-                booking_listing.userSelection = { ...booking_listing.userSelection, to: e.detail.start.format('YYYY-MM-DD') };
-              }}
-            >
-              <p slot="trigger" class="m-0 p-0 date-display">
-                {moment(new Date(booking_listing.userSelection.to)).format('MMM DD, YYYY')}
-              </p>
-            </ir-date-picker>
-          </div> */}
           <ir-range-picker
             onDateRangeChanged={e => {
               e.stopImmediatePropagation();
@@ -287,17 +204,6 @@ export class IrListingHeader {
             </wa-select>
           )}
 
-          {/* <ir-select
-            class="flex-sm-wrap"
-            selectedValue={booking_listing.userSelection.balance_filter}
-            onSelectChange={e => updateUserSelection('balance_filter', e.detail)}
-            data={booking_listing?.balance_filter.map(b => ({
-              value: b.value,
-              text: b.name,
-            }))}
-            showFirstOption={false}
-            selectId="balance_filter"
-          ></ir-select> */}
           <wa-select
             onchange={e => {
               updateUserSelection('balance_filter', (e.target as any).value);

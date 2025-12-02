@@ -93,24 +93,6 @@ export class IrGuestInfoForm {
             countries={this.countries}
           ></ir-country-picker>
         </ir-validator>
-
-        {/* <ir-phone-input
-          mode="modern"
-          onTextChange={e => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
-            const { mobile, phone_prefix } = e.detail;
-            if (mobile !== this.guest.mobile) {
-              this.handleInputChange({ mobile });
-            }
-            if (phone_prefix !== this.guest.country_phone_prefix) this.handleInputChange({ country_phone_prefix: phone_prefix });
-          }}
-          phone_prefix={this.guest.country_phone_prefix}
-          value={this.guest.mobile}
-          language={this.language}
-          label={locales.entries?.Lcz_MobilePhone}
-          countries={this.countries}
-        /> */}
         <ir-validator schema={guestInfoFormSchema.shape.mobile} value={this.guest?.mobile ?? ''} autovalidate={this.autoValidate} valueEvent="mobile-input-change">
           <ir-mobile-input
             onMobile-input-change={e => {

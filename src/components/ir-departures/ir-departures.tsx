@@ -55,7 +55,15 @@ export class IrDepartures {
     e.stopPropagation();
     const { booking_nbr, payment } = e.detail;
     this.booking = departuresStore.bookings.find(b => b.booking_nbr === booking_nbr);
-    this.payment = payment;
+    const paymentType = this.paymentEntries.types.find(p => p.CODE_NAME === payment.payment_type.code);
+    this.payment = {
+      ...payment,
+      payment_type: {
+        code: paymentType.CODE_NAME,
+        description: paymentType.CODE_VALUE_EN,
+        operation: paymentType.NOTES,
+      },
+    };
     this.paymentFolioRef.openFolio();
   }
 

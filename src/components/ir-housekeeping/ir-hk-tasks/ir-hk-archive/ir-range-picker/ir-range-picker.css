@@ -1,3 +1,4 @@
+@import url('../../../../../assets/webawesome/utilities/size.css');
 :host {
   display: block;
   --ir-range-gap: 0.5rem;
@@ -11,16 +12,8 @@
   box-sizing: border-box;
 }
 .range-picker__container.focused {
-  border-bottom-color: rgb(198, 206, 231);
-  border-left-color: rgb(198, 206, 231);
-  border-right-color: rgb(198, 206, 231);
-  border-top-color: rgb(198, 206, 231);
-  color: #4e5154;
-  background-color: #fff;
-  border-color: var(--blue, #1e9ff2);
-  outline: 0;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  outline: var(--wa-focus-ring);
+  outline-offset: var(--wa-focus-ring-offset);
 }
 
 .range-picker__icon--hidden,
@@ -51,7 +44,7 @@
 }
 .range-picker__date-picker:hover .range-picker__date-picker-button,
 .range-picker__date-picker.focused .range-picker__date-picker-button {
-  color: var(--blue, #1e9ff2);
+  color: var(--wa-color-fill-loud, var(--wa-color-brand-50));
 }
 .range-picker__date-picker-button {
   background: inherit;
@@ -72,4 +65,26 @@
 .range-picker__arrow-icon {
   height: 14px;
   width: 14px;
+}
+
+.range-picker__container {
+  height: var(--wa-form-control-height);
+  padding: 0 1rem !important;
+  color: var(--wa-form-control-value-color);
+  font-size: var(--wa-form-control-value-size);
+  font-family: inherit;
+  font-weight: var(--wa-form-control-value-font-weight);
+  line-height: var(--wa-form-control-value-line-height);
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-sizing: border-box;
+  background-color: var(--wa-form-control-background-color);
+  border-color: var(--wa-form-control-border-color);
+  border-style: var(--wa-form-control-border-style);
+  border-width: var(--wa-form-control-border-width);
+  border-radius: var(--wa-form-control-border-radius);
+  transition: background-color var(--wa-transition-normal), border var(--wa-transition-normal), all var(--wa-transition-normal), outline var(--wa-transition-fast);
+  transition-timing-function: var(--wa-transition-easing);
 }

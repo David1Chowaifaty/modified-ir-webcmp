@@ -310,6 +310,11 @@ export class IrDatePicker {
       },
     });
     this.datePicker.$datepicker.style.height = '280px';
+    this.datePicker.$datepicker?.classList.add('ir-custom-date-picker__calendar');
+    this.datePicker.$datepicker.style.setProperty('--adp-cell-background-color-selected', 'var(--wa-color-brand-50)');
+    this.datePicker.$datepicker.style.setProperty('--adp-cell-background-color-selected-hover', 'var(--wa-color-brand-50)');
+    this.datePicker.$datepicker.style.setProperty('--adp-accent-color', 'var(--wa-color-brand-50)');
+    this.datePicker.$datepicker.style.setProperty('--adp-day-name-color', 'lab(48.496% 0 0)');
   }
 
   disconnectedCallback() {

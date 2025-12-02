@@ -264,7 +264,15 @@ export class IrBookingListing {
     e.stopPropagation();
     const { booking_nbr, payment } = e.detail;
     this.booking = this.findBooking(booking_nbr);
-    this.payment = payment;
+    const paymentType = this.paymentEntries.types.find(p => p.CODE_NAME === payment.payment_type.code);
+    this.payment = {
+      ...payment,
+      payment_type: {
+        code: paymentType.CODE_NAME,
+        description: paymentType.CODE_VALUE_EN,
+        operation: paymentType.NOTES,
+      },
+    };
     this.paymentFolioRef.openFolio();
   }
   @Listen('guestSelected')
