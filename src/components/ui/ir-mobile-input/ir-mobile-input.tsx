@@ -217,7 +217,7 @@ export class IrMobileInput {
     const describedByIds = [this.description ? this.descriptionId : null, this.error ? this.errorId : null].filter(Boolean).join(' ') || undefined;
 
     return (
-      <Host role="group" aria-labelledby={this.labelId} aria-describedby={describedByIds}>
+      <Host size="small" role="group" aria-labelledby={this.labelId} aria-describedby={describedByIds}>
         <label class="mobile-input__label" id={this.labelId} htmlFor={this.inputId}>
           {this.label}
           {this.required ? (

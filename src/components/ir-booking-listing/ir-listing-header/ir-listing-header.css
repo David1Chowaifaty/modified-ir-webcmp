@@ -146,6 +146,8 @@ ir-input-text {
 @media (min-width: 1200px) {
   .booking-search-field {
     margin-left: 40px;
+    width: 100%;
+    max-width: 400px;
   }
 }
 

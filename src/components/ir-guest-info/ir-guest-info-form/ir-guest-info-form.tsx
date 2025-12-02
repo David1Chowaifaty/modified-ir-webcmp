@@ -114,6 +114,7 @@ export class IrGuestInfoForm {
           blurEvent="wa-blur blur"
         >
           <wa-textarea
+            size="small"
             onchange={e => this.handleInputChange({ notes: (e.target as any).value })}
             value={this.guest?.notes ?? ''}
             label={locales.entries?.Lcz_PrivateNote}

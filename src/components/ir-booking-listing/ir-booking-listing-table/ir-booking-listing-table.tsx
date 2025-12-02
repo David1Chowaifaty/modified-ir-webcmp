@@ -106,7 +106,7 @@ export class IrBookingListingTable {
             {booking.rooms.map(room => (
               <ir-unit-cell key={room.identifier} room={room}></ir-unit-cell>
             ))}
-            {booking.extra_services && <p>{locales.entries.Lcz_ExtraServices}</p>}
+            {booking.extra_services && <p style={{ fontSize: '0.93rem' }}>{locales.entries.Lcz_ExtraServices}</p>}
           </div>
         </td>
         <td class="text-center">
@@ -169,7 +169,7 @@ export class IrBookingListingTable {
                   <div style={{ width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}>
                     <ir-custom-button
                       id="balance-info"
-                      style={{ '--ir-c-btn-height': 'fit-content', '--ir-c-btn-padding': '0.25rem' }}
+                      style={{ '--ir-c-btn-height': 'fit-content', '--ir-c-btn-padding': '0.25rem', '--ir-c-btn-font-size': '0.725rem' }}
                       size="small"
                       variant="danger"
                       appearance="outlined"

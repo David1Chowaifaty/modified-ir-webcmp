@@ -76,7 +76,7 @@
 .mobile-input__trigger,
 .mobile-input__phone {
   height: var(--wa-form-control-height);
-  padding: 0 1rem !important;
+  padding: 0 var(--wa-form-control-padding-inline) !important;
   color: var(--wa-form-control-value-color);
   font-size: var(--wa-form-control-value-size);
   font-family: inherit;

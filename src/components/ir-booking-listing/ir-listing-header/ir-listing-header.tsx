@@ -101,7 +101,7 @@ export class IrListingHeader {
               class="booking-search-field width-fill"
             >
               <ir-custom-input
-                class={'flex-fill'}
+                class={'flex-fill w-100'}
                 value={this.inputValue}
                 onText-change={e => (this.inputValue = e.detail)}
                 size="small"
