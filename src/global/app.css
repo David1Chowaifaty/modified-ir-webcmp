@@ -23,7 +23,7 @@
 }
 
 :host {
-  --wa-form-control-required-content-color: var(--wa-color-danger-border-loud);
+  --wa-form-control-required-content-color: var(--wa-color-danger-border-loud, #f3676c);
   padding: var(--wa-space-l);
 }
 /* td {
