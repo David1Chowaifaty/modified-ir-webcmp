@@ -114,7 +114,6 @@ export class IrGuestInfoForm {
         <ir-validator schema={guestInfoFormSchema.shape.mobile} value={this.guest?.mobile ?? ''} autovalidate={this.autoValidate} valueEvent="mobile-input-change">
           <ir-mobile-input
             onMobile-input-change={e => {
-              console.log(e.detail);
               this.handleInputChange({ mobile: e.detail.formattedValue });
             }}
             onMobile-input-country-change={e => this.handleInputChange({ country_phone_prefix: e.detail.phone_prefix })}
