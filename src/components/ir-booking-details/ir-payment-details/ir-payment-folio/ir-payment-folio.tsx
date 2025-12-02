@@ -41,7 +41,7 @@ const folioBaseSchema = z.object({
       },
       { message: `Invalid date` },
     ),
-  amount: z.coerce.number().min(0.01),
+  amount: z.coerce.number().min(0),
   reference: z.string().optional().nullable(),
   payment_type: paymentTypeSchema,
   payment_method: paymentMethodSchema.nullable().optional(),
@@ -366,6 +366,7 @@ export class IrPaymentFolio {
               blurEvent="input-blur"
             >
               <ir-custom-input
+                aria-invalid={String(!!this.errors?.amount)}
                 value={this.folioData?.amount?.toString() ?? ''}
                 label="Amount"
                 mask="price"
