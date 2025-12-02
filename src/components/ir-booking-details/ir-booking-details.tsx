@@ -599,8 +599,8 @@ export class IrBookingDetails {
       <Fragment>
         {!this.is_from_front_desk && (
           <Fragment>
-            <ir-toast></ir-toast>
-            <ir-interceptor></ir-interceptor>
+            <ir-toast style={{ height: '0' }}></ir-toast>
+            <ir-interceptor style={{ height: '0' }}></ir-interceptor>
           </Fragment>
         )}
       </Fragment>,

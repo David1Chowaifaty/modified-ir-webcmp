@@ -59,14 +59,11 @@ Type: `Promise<void>`
  - [igl-bulk-block](../../igloo-calendar/igl-bulk-operations/igl-bulk-block)
  - [igl-bulk-stop-sale](../../igloo-calendar/igl-bulk-operations/igl-bulk-stop-sale)
  - [igl-cal-header](../../igloo-calendar/igl-cal-header)
- - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
  - [igl-split-booking](../../igloo-calendar/igl-split-booking)
  - [igl-tba-booking-view](../../igloo-calendar/igl-to-be-assigned/igl-tba-booking-view)
  - [igl-to-be-assigned](../../igloo-calendar/igl-to-be-assigned)
  - [ir-booking-email-logs](../../ir-booking-email-logs)
- - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
  - [ir-booking-guarantee](../../ir-booking-details/ir-payment-details/ir-booking-guarantee)
- - [ir-booking-listing](../../ir-booking-listing)
  - [ir-channel](../../ir-channel)
  - [ir-channel-editor](../../ir-channel/ir-channel-editor)
  - [ir-channel-mapping](../../ir-channel/ir-channel-mapping)
@@ -92,7 +89,6 @@ Type: `Promise<void>`
  - [ir-notifications](../../ir-notifications)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-otp-modal](../../ir-otp-modal)
- - [ir-pagination](../../ir-pagination)
  - [ir-payment-action](../../ir-booking-details/ir-payment-details/ir-payment-actions/ir-payment-action)
  - [ir-payment-details](../../ir-booking-details/ir-payment-details)
  - [ir-payment-item](../../ir-booking-details/ir-payment-details/ir-payment-item)
@@ -100,7 +96,6 @@ Type: `Promise<void>`
  - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-reset-password](../../ir-reset-password)
  - [ir-revenue-row-details](../../ir-daily-revenue/ir-revenue-table/ir-revenue-row/ir-revenue-row-details)
- - [ir-room](../../ir-booking-details/ir-room)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-room-nights](../../igloo-calendar/ir-room-nights)
  - [ir-sales-by-channel](../../ir-sales-by-channel)
@@ -131,14 +126,11 @@ graph TD;
   igl-bulk-block --> ir-button
   igl-bulk-stop-sale --> ir-button
   igl-cal-header --> ir-button
-  igl-reallocation-dialog --> ir-button
   igl-split-booking --> ir-button
   igl-tba-booking-view --> ir-button
   igl-to-be-assigned --> ir-button
   ir-booking-email-logs --> ir-button
-  ir-booking-extra-note --> ir-button
   ir-booking-guarantee --> ir-button
-  ir-booking-listing --> ir-button
   ir-channel --> ir-button
   ir-channel-editor --> ir-button
   ir-channel-mapping --> ir-button
@@ -164,7 +156,6 @@ graph TD;
   ir-notifications --> ir-button
   ir-option-details --> ir-button
   ir-otp-modal --> ir-button
-  ir-pagination --> ir-button
   ir-payment-action --> ir-button
   ir-payment-details --> ir-button
   ir-payment-item --> ir-button
@@ -172,7 +163,6 @@ graph TD;
   ir-pickup --> ir-button
   ir-reset-password --> ir-button
   ir-revenue-row-details --> ir-button
-  ir-room --> ir-button
   ir-room-guests --> ir-button
   ir-room-nights --> ir-button
   ir-sales-by-channel --> ir-button

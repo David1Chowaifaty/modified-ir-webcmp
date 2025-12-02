@@ -77,7 +77,7 @@ graph TD;
   ir-tasks-table-pagination --> ir-button
   ir-tasks-table-pagination --> ir-pagination
   ir-pagination --> ir-select
-  ir-pagination --> ir-button
+  ir-pagination --> ir-custom-button
   ir-modal --> ir-button
   ir-sidebar --> ir-icon
   ir-hk-archive --> ir-title
@@ -91,7 +91,6 @@ graph TD;
   ir-range-picker --> ir-date-picker
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
-  ir-booking-details --> ir-booking-extra-note
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-room-guests
   ir-booking-details --> ir-room
@@ -118,6 +117,8 @@ graph TD;
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
@@ -126,9 +127,6 @@ graph TD;
   ir-pickup --> ir-input-text
   ir-pickup --> ir-price-input
   ir-pickup --> ir-button
-  ir-booking-extra-note --> ir-title
-  ir-booking-extra-note --> ir-textarea
-  ir-booking-extra-note --> ir-button
   ir-extra-service-config --> ir-title
   ir-extra-service-config --> ir-date-picker
   ir-extra-service-config --> ir-button
@@ -142,11 +140,11 @@ graph TD;
   ir-room --> ir-custom-button
   ir-room --> ir-date-view
   ir-room --> ir-tooltip
-  ir-room --> ir-button
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
+  ir-booking-header --> ir-booking-status-tag
   ir-booking-header --> ir-popover
   ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-dialog
@@ -156,7 +154,10 @@ graph TD;
   ir-reservation-information --> ir-label
   ir-reservation-information --> ir-custom-button
   ir-reservation-information --> ota-label
+  ir-reservation-information --> ir-booking-extra-note
   ir-reservation-information --> ir-booking-company-form
+  ir-booking-extra-note --> ir-dialog
+  ir-booking-extra-note --> ir-custom-button
   ir-booking-company-form --> ir-dialog
   ir-booking-company-form --> ir-custom-input
   ir-booking-company-form --> ir-custom-button
@@ -187,6 +188,7 @@ graph TD;
   ir-payment-folio --> ir-validator
   ir-payment-folio --> ir-custom-input
   ir-payment-folio --> ir-custom-button
+  ir-custom-date-picker --> ir-custom-input
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon
@@ -280,8 +282,7 @@ graph TD;
   igl-bulk-block --> ir-button
   igl-bulk-block --> ir-date-picker
   igl-reallocation-dialog --> ir-dialog
-  igl-reallocation-dialog --> ir-select
-  igl-reallocation-dialog --> ir-button
+  igl-reallocation-dialog --> ir-custom-button
   ir-housekeeping --> ir-loading-screen
   ir-housekeeping --> ir-interceptor
   ir-housekeeping --> ir-toast
@@ -385,15 +386,11 @@ graph TD;
   ir-booking-listing --> ir-interceptor
   ir-booking-listing --> ir-toast
   ir-booking-listing --> ir-listing-header
-  ir-booking-listing --> ir-tooltip
-  ir-booking-listing --> ir-button
-  ir-booking-listing --> ir-icons
-  ir-booking-listing --> ir-popover
-  ir-booking-listing --> ir-select
-  ir-booking-listing --> ir-listing-modal
-  ir-booking-listing --> ir-sidebar
+  ir-booking-listing --> ir-booking-listing-table
+  ir-booking-listing --> ir-drawer
   ir-booking-listing --> ir-booking-details
-  ir-booking-listing --> ir-guest-info
+  ir-booking-listing --> ir-guest-info-drawer
+  ir-booking-listing --> ir-payment-folio
   ir-listing-header --> igl-book-property-container
   ir-listing-header --> ir-button
   ir-listing-header --> ir-input-text
@@ -402,9 +399,30 @@ graph TD;
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property
-  ir-listing-modal --> ir-icon
-  ir-listing-modal --> ir-select
-  ir-listing-modal --> ir-button
+  ir-booking-listing-table --> ir-booking-number-cell
+  ir-booking-listing-table --> ir-booked-on-cell
+  ir-booking-listing-table --> ir-booked-by-source-cell
+  ir-booking-listing-table --> ir-unit-cell
+  ir-booking-listing-table --> ir-dates-cell
+  ir-booking-listing-table --> ir-balance-cell
+  ir-booking-listing-table --> ir-status-activity-cell
+  ir-booking-listing-table --> ir-actions-cell
+  ir-booking-listing-table --> ir-pagination
+  ir-booking-listing-table --> ir-dialog
+  ir-booking-listing-table --> ir-custom-button
+  ir-booking-number-cell --> ir-custom-button
+  ir-booked-by-source-cell --> ir-custom-button
+  ir-unit-cell --> ir-unit-tag
+  ir-balance-cell --> ir-custom-button
+  ir-status-activity-cell --> ir-booking-status-tag
+  ir-actions-cell --> ir-custom-button
+  ir-guest-info-drawer --> ir-drawer
+  ir-guest-info-drawer --> ir-spinner
+  ir-guest-info-drawer --> ir-guest-info-form
+  ir-guest-info-drawer --> ir-custom-button
+  ir-guest-info-form --> ir-custom-input
+  ir-guest-info-form --> ir-country-picker
+  ir-guest-info-form --> ir-mobile-input
   ir-sales-by-channel --> ir-loading-screen
   ir-sales-by-channel --> ir-toast
   ir-sales-by-channel --> ir-interceptor

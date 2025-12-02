@@ -51,7 +51,10 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [ir-arrivals](../../../ir-arrivals)
  - [ir-booking-details](../..)
+ - [ir-booking-listing](../../../ir-booking-listing)
+ - [ir-departures](../../../ir-departures)
  - [ir-financial-actions](../../../ir-financial-actions)
 
 ### Depends on
@@ -70,7 +73,11 @@ graph TD;
   ir-payment-folio --> ir-validator
   ir-payment-folio --> ir-custom-input
   ir-payment-folio --> ir-custom-button
+  ir-custom-date-picker --> ir-custom-input
+  ir-arrivals --> ir-payment-folio
   ir-booking-details --> ir-payment-folio
+  ir-booking-listing --> ir-payment-folio
+  ir-departures --> ir-payment-folio
   ir-financial-actions --> ir-payment-folio
   style ir-payment-folio fill:#f9f,stroke:#333,stroke-width:4px
 ```

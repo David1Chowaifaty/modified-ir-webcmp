@@ -20,6 +20,7 @@
 | `formTarget`     | `form-target`      | Used to override the form owner's `target` attribute.                                                                                                                                                                | `string`                                                                       | `undefined` |
 | `href`           | `href`             | When set, the underlying button will be rendered as an `<a>` with this `href` instead of a `<button>`.                                                                                                               | `string`                                                                       | `undefined` |
 | `iconBtn`        | `icon-btn`         |                                                                                                                                                                                                                      | `boolean`                                                                      | `undefined` |
+| `link`           | `link`             |                                                                                                                                                                                                                      | `boolean`                                                                      | `undefined` |
 | `loading`        | `loading`          | Draws the button in a loading state.                                                                                                                                                                                 | `boolean`                                                                      | `undefined` |
 | `name`           | `name`             | The name of the button, submitted as a name/value pair with form data, but only when this button is the submitter. This attribute is ignored when `href` is present.                                                 | `string`                                                                       | `undefined` |
 | `pill`           | `pill`             | Draws a pill-style button with rounded edges.                                                                                                                                                                        | `boolean`                                                                      | `undefined` |
@@ -43,34 +44,56 @@
 
 ### Used by
 
+ - [igl-reallocation-dialog](../../igloo-calendar/igl-reallocation-dialog)
+ - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
  - [ir-applicable-policies](../../ir-booking-details/ir-payment-details/ir-applicable-policies)
+ - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
+ - [ir-booked-by-source-cell](../../table-cells/booking/ir-booked-by-source-cell)
  - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-booking-details](../../ir-booking-details)
+ - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
+ - [ir-booking-listing-table](../../ir-booking-listing/ir-booking-listing-table)
+ - [ir-booking-number-cell](../../table-cells/booking/ir-booking-number-cell)
  - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
  - [ir-extra-services](../../ir-booking-details/ir-extra-services)
+ - [ir-guest-info-drawer](../../ir-guest-info/ir-guest-info-drawer)
+ - [ir-invoice](../../ir-invoice)
+ - [ir-pagination](../../ir-pagination)
  - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
  - [ir-payment-item](../../ir-booking-details/ir-payment-details/ir-payment-item)
  - [ir-payments-folio](../../ir-booking-details/ir-payment-details/ir-payments-folio)
  - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
+ - [ir-test2-cmp](../../ir-test-cmp)
 
 ### Graph
 ```mermaid
 graph TD;
+  igl-reallocation-dialog --> ir-custom-button
+  ir-actions-cell --> ir-custom-button
   ir-applicable-policies --> ir-custom-button
+  ir-balance-cell --> ir-custom-button
+  ir-booked-by-source-cell --> ir-custom-button
   ir-booking-company-form --> ir-custom-button
   ir-booking-details --> ir-custom-button
+  ir-booking-extra-note --> ir-custom-button
   ir-booking-header --> ir-custom-button
+  ir-booking-listing-table --> ir-custom-button
+  ir-booking-number-cell --> ir-custom-button
   ir-extra-service --> ir-custom-button
   ir-extra-services --> ir-custom-button
+  ir-guest-info-drawer --> ir-custom-button
+  ir-invoice --> ir-custom-button
+  ir-pagination --> ir-custom-button
   ir-payment-folio --> ir-custom-button
   ir-payment-item --> ir-custom-button
   ir-payments-folio --> ir-custom-button
   ir-pickup-view --> ir-custom-button
   ir-reservation-information --> ir-custom-button
   ir-room --> ir-custom-button
+  ir-test2-cmp --> ir-custom-button
   style ir-custom-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

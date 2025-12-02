@@ -18,11 +18,13 @@
 
  - [igl-book-property-container](../../igl-book-property-container)
  - [igloo-calendar](../../igloo-calendar)
+ - [ir-arrivals](../../ir-arrivals)
  - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-email-logs](../../ir-booking-email-logs)
  - [ir-booking-listing](../../ir-booking-listing)
  - [ir-channel](../../ir-channel)
  - [ir-daily-revenue](../../ir-daily-revenue)
+ - [ir-departures](../../ir-departures)
  - [ir-financial-actions](../../ir-financial-actions)
  - [ir-guest-info](../../ir-guest-info)
  - [ir-hk-tasks](../../ir-housekeeping/ir-hk-tasks)
@@ -40,11 +42,13 @@
 graph TD;
   igl-book-property-container --> ir-toast
   igloo-calendar --> ir-toast
+  ir-arrivals --> ir-toast
   ir-booking-details --> ir-toast
   ir-booking-email-logs --> ir-toast
   ir-booking-listing --> ir-toast
   ir-channel --> ir-toast
   ir-daily-revenue --> ir-toast
+  ir-departures --> ir-toast
   ir-financial-actions --> ir-toast
   ir-guest-info --> ir-toast
   ir-hk-tasks --> ir-toast

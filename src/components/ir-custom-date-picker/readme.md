@@ -18,6 +18,7 @@
 | `emitEmptyDate`         | `emit-empty-date`         | If `true`, the component will emit a `dateChanged` event when the selected date becomes empty (null). Otherwise, empty-date changes will be ignored (no event emitted).  Defaults to `false`.                                                                                          | `boolean`           | `false`        |
 | `forceDestroyOnUpdate`  | `force-destroy-on-update` | If `true`, the date picker instance is destroyed and rebuilt each time the `date` prop changes. This can be useful if you need the picker to fully re-initialize in response to dynamic changes, but note that it may affect performance if triggered frequently. Defaults to `false`. | `boolean`           | `false`        |
 | `inline`                | `inline`                  | Determines whether the date picker is rendered inline or in a pop-up. If `true`, the picker is always visible inline.                                                                                                                                                                  | `boolean`           | `false`        |
+| `label`                 | `label`                   |                                                                                                                                                                                                                                                                                        | `string`            | `undefined`    |
 | `maxDate`               | `max-date`                | The latest date that can be selected.                                                                                                                                                                                                                                                  | `Date \| string`    | `undefined`    |
 | `minDate`               | `min-date`                | The earliest date that can be selected.                                                                                                                                                                                                                                                | `Date \| string`    | `undefined`    |
 | `multipleDates`         | `multiple-dates`          | Enables multiple dates. If `true`, multiple selection is allowed. If you pass a number (e.g. 3), that is the maximum number of selectable dates.                                                                                                                                       | `boolean \| number` | `false`        |
@@ -64,11 +65,22 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [ir-arrivals-filters](../ir-arrivals/ir-arrivals-filters)
+ - [ir-departures-filter](../ir-departures/ir-departures-filter)
+ - [ir-invoice](../ir-invoice)
  - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
+
+### Depends on
+
+- [ir-custom-input](../ui/ir-custom-input)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-custom-date-picker --> ir-custom-input
+  ir-arrivals-filters --> ir-custom-date-picker
+  ir-departures-filter --> ir-custom-date-picker
+  ir-invoice --> ir-custom-date-picker
   ir-payment-folio --> ir-custom-date-picker
   style ir-custom-date-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```

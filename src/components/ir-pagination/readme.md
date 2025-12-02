@@ -37,19 +37,20 @@
 
 ### Used by
 
+ - [ir-booking-listing-table](../ir-booking-listing/ir-booking-listing-table)
  - [ir-tasks-table-pagination](../ir-housekeeping/ir-hk-tasks/ir-tasks-table/ir-tasks-table-pagination)
 
 ### Depends on
 
 - [ir-select](../ui/ir-select)
-- [ir-button](../ui/ir-button)
+- [ir-custom-button](../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-pagination --> ir-select
-  ir-pagination --> ir-button
-  ir-button --> ir-icons
+  ir-pagination --> ir-custom-button
+  ir-booking-listing-table --> ir-pagination
   ir-tasks-table-pagination --> ir-pagination
   style ir-pagination fill:#f9f,stroke:#333,stroke-width:4px
 ```

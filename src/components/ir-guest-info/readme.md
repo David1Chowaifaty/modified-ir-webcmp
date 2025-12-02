@@ -31,7 +31,6 @@
 ### Used by
 
  - [ir-booking-details](../ir-booking-details)
- - [ir-booking-listing](../ir-booking-listing)
 
 ### Depends on
 
@@ -63,10 +62,11 @@ graph TD;
   ir-otp-modal --> ir-button
   ir-button --> ir-icons
   ir-title --> ir-icon
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-booking-details --> ir-guest-info
-  ir-booking-listing --> ir-guest-info
   style ir-guest-info fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

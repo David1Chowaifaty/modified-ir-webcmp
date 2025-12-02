@@ -31,6 +31,7 @@
 - [ir-label](../../ui/ir-label)
 - [ir-custom-button](../../ui/ir-custom-button)
 - [ota-label](../../ui/ota-label)
+- [ir-booking-extra-note](../ir-booking-extra-note)
 - [ir-booking-company-form](../ir-booking-company-form)
 
 ### Graph
@@ -39,7 +40,10 @@ graph TD;
   ir-reservation-information --> ir-label
   ir-reservation-information --> ir-custom-button
   ir-reservation-information --> ota-label
+  ir-reservation-information --> ir-booking-extra-note
   ir-reservation-information --> ir-booking-company-form
+  ir-booking-extra-note --> ir-dialog
+  ir-booking-extra-note --> ir-custom-button
   ir-booking-company-form --> ir-dialog
   ir-booking-company-form --> ir-custom-input
   ir-booking-company-form --> ir-custom-button

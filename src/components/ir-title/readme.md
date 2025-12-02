@@ -28,7 +28,6 @@
 
  - [igl-bulk-operations](../igloo-calendar/igl-bulk-operations)
  - [igl-split-booking](../igloo-calendar/igl-split-booking)
- - [ir-booking-extra-note](../ir-booking-details/ir-booking-extra-note)
  - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info](../ir-guest-info)
  - [ir-hk-archive](../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
@@ -54,7 +53,6 @@ graph TD;
   ir-title --> ir-icon
   igl-bulk-operations --> ir-title
   igl-split-booking --> ir-title
-  ir-booking-extra-note --> ir-title
   ir-extra-service-config --> ir-title
   ir-guest-info --> ir-title
   ir-hk-archive --> ir-title

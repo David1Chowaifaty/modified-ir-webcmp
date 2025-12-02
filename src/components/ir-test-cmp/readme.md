@@ -9,26 +9,24 @@
 
 ### Depends on
 
-- [ir-m-combobox](../ir-m-combobox)
-- [ir-notifications](../ir-notifications)
-- [ac-pages-menu](../ac-pages-menu)
-- [ir-input-text](../ui/ir-input-text)
-- [ir-select](../ui/ir-select)
-- [ir-button](../ui/ir-button)
+- [ir-custom-button](../ui/ir-custom-button)
+- [ir-invoice](../ir-invoice)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-test-cmp --> ir-m-combobox
-  ir-test-cmp --> ir-notifications
-  ir-test-cmp --> ac-pages-menu
-  ir-test-cmp --> ir-input-text
-  ir-test-cmp --> ir-select
-  ir-test-cmp --> ir-button
-  ir-notifications --> ir-button
-  ir-button --> ir-icons
-  ac-pages-menu --> ir-icons
-  style ir-test-cmp fill:#f9f,stroke:#333,stroke-width:4px
+  ir-test2-cmp --> ir-custom-button
+  ir-test2-cmp --> ir-invoice
+  ir-invoice --> ir-drawer
+  ir-invoice --> ir-custom-date-picker
+  ir-invoice --> ir-booking-billing-recipient
+  ir-invoice --> ir-custom-button
+  ir-custom-date-picker --> ir-custom-input
+  ir-booking-billing-recipient --> ir-booking-company-form
+  ir-booking-company-form --> ir-dialog
+  ir-booking-company-form --> ir-custom-input
+  ir-booking-company-form --> ir-custom-button
+  style ir-test2-cmp fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

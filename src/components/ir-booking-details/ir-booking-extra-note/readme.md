@@ -10,6 +10,7 @@
 | Property  | Attribute | Description | Type      | Default     |
 | --------- | --------- | ----------- | --------- | ----------- |
 | `booking` | --        |             | `Booking` | `undefined` |
+| `open`    | `open`    |             | `boolean` | `undefined` |
 
 
 ## Events
@@ -20,27 +21,46 @@
 | `resetBookingEvt` |             | `CustomEvent<Booking>` |
 
 
+## Methods
+
+### `closeDialog() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `openDialog() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Used by
 
- - [ir-booking-details](..)
+ - [ir-reservation-information](../ir-reservation-information)
 
 ### Depends on
 
-- [ir-title](../../ir-title)
-- [ir-textarea](../../ui/ir-textarea)
-- [ir-button](../../ui/ir-button)
+- [ir-dialog](../../ui/ir-dialog)
+- [ir-custom-button](../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-booking-extra-note --> ir-title
-  ir-booking-extra-note --> ir-textarea
-  ir-booking-extra-note --> ir-button
-  ir-title --> ir-icon
-  ir-button --> ir-icons
-  ir-booking-details --> ir-booking-extra-note
+  ir-booking-extra-note --> ir-dialog
+  ir-booking-extra-note --> ir-custom-button
+  ir-reservation-information --> ir-booking-extra-note
   style ir-booking-extra-note fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

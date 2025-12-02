@@ -43,7 +43,6 @@ graph TD;
   ir-financial-actions --> ir-sidebar
   ir-booking-details --> ir-guest-info
   ir-booking-details --> ir-pickup
-  ir-booking-details --> ir-booking-extra-note
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-room-guests
   ir-booking-details --> ir-room
@@ -76,6 +75,8 @@ graph TD;
   ir-otp-modal --> ir-button
   ir-button --> ir-icons
   ir-title --> ir-icon
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
   ir-phone-input --> ir-combobox
   ir-pickup --> ir-title
@@ -84,9 +85,6 @@ graph TD;
   ir-pickup --> ir-input-text
   ir-pickup --> ir-price-input
   ir-pickup --> ir-button
-  ir-booking-extra-note --> ir-title
-  ir-booking-extra-note --> ir-textarea
-  ir-booking-extra-note --> ir-button
   ir-extra-service-config --> ir-title
   ir-extra-service-config --> ir-date-picker
   ir-extra-service-config --> ir-button
@@ -100,12 +98,12 @@ graph TD;
   ir-room --> ir-custom-button
   ir-room --> ir-date-view
   ir-room --> ir-tooltip
-  ir-room --> ir-button
   ir-room --> ir-label
   ir-room --> ir-modal
   ir-modal --> ir-button
   ir-booking-header --> ir-pms-logs
   ir-booking-header --> ir-events-log
+  ir-booking-header --> ir-booking-status-tag
   ir-booking-header --> ir-popover
   ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-dialog
@@ -115,7 +113,10 @@ graph TD;
   ir-reservation-information --> ir-label
   ir-reservation-information --> ir-custom-button
   ir-reservation-information --> ota-label
+  ir-reservation-information --> ir-booking-extra-note
   ir-reservation-information --> ir-booking-company-form
+  ir-booking-extra-note --> ir-dialog
+  ir-booking-extra-note --> ir-custom-button
   ir-booking-company-form --> ir-dialog
   ir-booking-company-form --> ir-custom-input
   ir-booking-company-form --> ir-custom-button
@@ -147,6 +148,7 @@ graph TD;
   ir-payment-folio --> ir-validator
   ir-payment-folio --> ir-custom-input
   ir-payment-folio --> ir-custom-button
+  ir-custom-date-picker --> ir-custom-input
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon

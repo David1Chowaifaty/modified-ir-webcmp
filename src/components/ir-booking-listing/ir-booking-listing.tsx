@@ -298,6 +298,10 @@ export class IrBookingListing {
     return booking_listing.bookings.find(b => b.booking_nbr === bookingNumber);
   }
   render() {
+    const b = true;
+    if (b) {
+      return <ir-loading-screen></ir-loading-screen>;
+    }
     if (this.isLoading || this.ticket === '') {
       return <ir-loading-screen></ir-loading-screen>;
     }

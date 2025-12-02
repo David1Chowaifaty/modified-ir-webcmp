@@ -56,13 +56,21 @@
 
 ### Used by
 
+ - [ir-arrivals-filters](../../ir-arrivals/ir-arrivals-filters)
  - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
+ - [ir-custom-date-picker](../../ir-custom-date-picker)
+ - [ir-departures-filter](../../ir-departures/ir-departures-filter)
+ - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
  - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-arrivals-filters --> ir-custom-input
   ir-booking-company-form --> ir-custom-input
+  ir-custom-date-picker --> ir-custom-input
+  ir-departures-filter --> ir-custom-input
+  ir-guest-info-form --> ir-custom-input
   ir-payment-folio --> ir-custom-input
   style ir-custom-input fill:#f9f,stroke:#333,stroke-width:4px
 ```

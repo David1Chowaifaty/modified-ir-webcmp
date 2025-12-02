@@ -12,6 +12,14 @@
 | `booking` | --        |             | `Booking` | `undefined` |
 
 
+## Events
+
+| Event               | Description | Type                   |
+| ------------------- | ----------- | ---------------------- |
+| `companyFormClosed` |             | `CustomEvent<void>`    |
+| `resetBookingEvt`   |             | `CustomEvent<Booking>` |
+
+
 ## Methods
 
 ### `openCompanyForm() => Promise<void>`
@@ -29,6 +37,7 @@ Type: `Promise<void>`
 
 ### Used by
 
+ - [ir-booking-billing-recipient](../../ir-booking-billing-recipient)
  - [ir-reservation-information](../ir-reservation-information)
 
 ### Depends on
@@ -43,6 +52,7 @@ graph TD;
   ir-booking-company-form --> ir-dialog
   ir-booking-company-form --> ir-custom-input
   ir-booking-company-form --> ir-custom-button
+  ir-booking-billing-recipient --> ir-booking-company-form
   ir-reservation-information --> ir-booking-company-form
   style ir-booking-company-form fill:#f9f,stroke:#333,stroke-width:4px
 ```

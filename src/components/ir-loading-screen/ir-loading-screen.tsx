@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h } from '@stencil/core';
+import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'ir-loading-screen',
@@ -9,10 +9,10 @@ export class IrLoadingScreen {
   @Prop() message: string = '';
   render() {
     return (
-      <Host>
+      <div class="loader__container">
         <span class="loader"></span>
         {/* {this.message && <p class={'m-0'}>{this.message}</p>} */}
-      </Host>
+      </div>
     );
   }
 }

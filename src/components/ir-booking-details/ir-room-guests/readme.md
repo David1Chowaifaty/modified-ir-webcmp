@@ -54,6 +54,8 @@ graph TD;
   ir-room-guests --> ir-select
   ir-room-guests --> ir-button
   ir-title --> ir-icon
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
   ir-button --> ir-icons
   igloo-calendar --> ir-room-guests
