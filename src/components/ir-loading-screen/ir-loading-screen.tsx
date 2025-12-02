@@ -10,7 +10,8 @@ export class IrLoadingScreen {
   render() {
     return (
       <div class="loader__container">
-        <span class="loader"></span>
+        {/* <span class="loader"></span> */}
+        <wa-spinner style={{ fontSize: '2.5rem' }}></wa-spinner>
         {/* {this.message && <p class={'m-0'}>{this.message}</p>} */}
       </div>
     );
