@@ -173,7 +173,7 @@ export class IrCustomInput {
 
   @Watch('aria-invalid')
   handleAriaInvalidChange(e) {
-    this.isValid = !Boolean(e);
+    this.isValid = !JSON.parse(e);
   }
   private handleInput = (nextValue: string) => {
     this.value = nextValue ?? '';

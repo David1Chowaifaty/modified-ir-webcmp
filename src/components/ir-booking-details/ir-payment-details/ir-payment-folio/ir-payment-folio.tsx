@@ -68,7 +68,7 @@ export class IrPaymentFolio {
   @Prop() bookingNumber: string;
   @Prop() payment: Payment = {
     date: moment().format(DATE_FORMAT),
-    amount: 0,
+    amount: null,
     designation: undefined,
     currency: null,
     reference: null,
@@ -349,23 +349,24 @@ export class IrPaymentFolio {
                 </wa-select>
               </ir-validator>
             )}
-            <ir-validator
+            {/**<ir-validator
               value={this.folioData?.amount?.toString() ?? undefined}
               autovalidate={this.autoValidate}
               schema={folioBaseSchema.shape.amount}
               valueEvent="text-change input input-change"
               blurEvent="input-blur"
+            >**/}
+            <ir-custom-input
+              aria-invalid={String(this.autoValidate && this.folioData?.amount === null)}
+              value={this.folioData?.amount?.toString() ?? ''}
+              label="Amount"
+              mask="price"
+              min={0}
+              onText-change={e => this.updateFolioData({ amount: !e.detail ? undefined : Number(e.detail) })}
             >
-              <ir-custom-input
-                value={this.folioData?.amount?.toString() ?? ''}
-                label="Amount"
-                mask="price"
-                min={0}
-                onText-change={e => this.updateFolioData({ amount: !e.detail ? undefined : Number(e.detail) })}
-              >
-                <span slot="start">{calendar_data.currency.symbol}</span>
-              </ir-custom-input>
-            </ir-validator>
+              <span slot="start">{calendar_data.currency.symbol}</span>
+            </ir-custom-input>
+            {/* </ir-validator> */}
             <ir-validator
               value={this.folioData?.reference ?? ''}
               autovalidate={this.autoValidate}
