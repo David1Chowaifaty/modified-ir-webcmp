@@ -200,88 +200,18 @@ export class IrBookingListingTable {
             const totalPersons = this.calculateTotalPersons(booking);
             const lastManipulation = booking.ota_manipulations ? booking.ota_manipulations[booking.ota_manipulations.length - 1] : null;
             return (
-              <wa-card key={rowKey}>
-                <div slot="header" class="d-flex align-items-center justify-content-between">
-                  <ir-booking-number-cell
-                    origin={booking.origin}
-                    source={booking.source}
-                    channelBookingNumber={booking.channel_booking_nbr}
-                    bookingNumber={booking.booking_nbr}
-                  ></ir-booking-number-cell>
-                  <ir-status-activity-cell
-                    lastManipulation={lastManipulation}
-                    showManipulationBadge={!!lastManipulation}
-                    showModifiedBadge={!lastManipulation && booking.events?.length > 0 && booking.events[0].type.toLowerCase() === 'modified'}
-                    status={booking.status}
-                    isRequestToCancel={booking.is_requested_to_cancel}
-                    bookingNumber={booking.booking_nbr}
-                  ></ir-status-activity-cell>
-                </div>
-                <div class="d-flex flex-column" style={{ gap: '0.5rem' }}>
-                  <ir-booked-by-cell
-                    display="inline"
-                    class="text-center"
-                    label="Booked by"
-                    clickableGuest
-                    showRepeatGuestBadge={booking.guest.nbr_confirmed_bookings > 1 && !booking.agent}
-                    guest={booking.guest}
-                    identifier={`mobile-${booking.booking_nbr}`}
-                    showPersons
-                    showPrivateNoteDot={getPrivateNote(booking.extras)}
-                    totalPersons={totalPersons?.toString()}
-                    showPromoIcon={!!booking.promo_key}
-                    promoKey={booking.promo_key}
-                    showLoyaltyIcon={booking.is_in_loyalty_mode && !booking.promo_key}
-                  ></ir-booked-by-cell>
-
-                  <ir-booked-on-cell display="inline" label="Booked on" bookedOn={booking.booked_on}></ir-booked-on-cell>
-
-                  <div>
-                    <div class="d-flex align-items-center">
-                      <ir-dates-cell display="inline" checkInLabel="Check-in" checkoutLabel="Check-out" checkIn={booking.from_date} checkOut={booking.to_date}></ir-dates-cell>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
-                    {booking.rooms.map((room, idx) => (
-                      <div class="d-flex">
-                        <ir-unit-cell key={room.identifier} room={room}></ir-unit-cell>
-                        {idx < booking.rooms.length - 1 && <span>, </span>}
-                      </div>
-                    ))}
-                    {booking.extra_services && <p style={{ fontSize: '0.93rem' }}>{locales.entries.Lcz_ExtraServices}</p>}
-                  </div>
-                  <ir-balance-cell
-                    display="inline"
-                    label="Amount"
-                    bookingNumber={booking.booking_nbr}
-                    isDirect={booking.is_direct}
-                    statusCode={booking.status.code}
-                    currencySymbol={booking.currency.symbol}
-                    financial={booking.financial}
-                  ></ir-balance-cell>
-                </div>
-                <div slot="footer" class="d-flex" style={{ gap: '0.5rem' }}>
-                  <ir-custom-button
-                    onClickHandler={() => {
-                      this.handleIrActions({ action: 'edit', booking });
-                    }}
-                    style={{ flex: '1 1 0%' }}
-                    appearance="outlined"
-                  >
-                    Edit
-                  </ir-custom-button>
-                  <ir-custom-button
-                    onClickHandler={() => {
-                      this.handleIrActions({ action: 'delete', booking });
-                    }}
-                    style={{ flex: '1 1 0%' }}
-                    variant="danger"
-                  >
-                    Delete
-                  </ir-custom-button>
-                </div>
-              </wa-card>
+              <ir-booking-listing-mobile-card
+                key={rowKey}
+                booking={booking}
+                totalPersons={totalPersons}
+                lastManipulation={lastManipulation}
+                extraServicesLabel={locales.entries.Lcz_ExtraServices}
+                onIrBookingCardAction={event => {
+                  event.stopImmediatePropagation();
+                  event.stopPropagation();
+                  this.handleIrActions({ action: event.detail.action, booking: event.detail.booking });
+                }}
+              ></ir-booking-listing-mobile-card>
             );
           })}
         </div>

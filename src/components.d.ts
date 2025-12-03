@@ -414,6 +414,7 @@ export namespace Components {
         "statusCode": string;
     }
     interface IrBookedByCell {
+        "cellId": string;
         /**
           * Makes the guest name clickable. Emits `openGuestDetails` when clicked.
          */
@@ -522,6 +523,12 @@ export namespace Components {
         "rowCount": number;
         "ticket": string;
         "userType": number;
+    }
+    interface IrBookingListingMobileCard {
+        "booking": Booking;
+        "extraServicesLabel"?: string;
+        "lastManipulation"?: Booking['ota_manipulations'] extends Array<infer T> ? T : never;
+        "totalPersons"?: number;
     }
     interface IrBookingListingTable {
     }
@@ -3156,6 +3163,10 @@ export interface IrBookingHeaderCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingHeaderElement;
 }
+export interface IrBookingListingMobileCardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrBookingListingMobileCardElement;
+}
 export interface IrBookingListingTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrBookingListingTableElement;
@@ -4282,6 +4293,23 @@ declare global {
     var HTMLIrBookingListingElement: {
         prototype: HTMLIrBookingListingElement;
         new (): HTMLIrBookingListingElement;
+    };
+    interface HTMLIrBookingListingMobileCardElementEventMap {
+        "irBookingCardAction": { action: IrActionButton; booking: Booking };
+    }
+    interface HTMLIrBookingListingMobileCardElement extends Components.IrBookingListingMobileCard, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrBookingListingMobileCardElementEventMap>(type: K, listener: (this: HTMLIrBookingListingMobileCardElement, ev: IrBookingListingMobileCardCustomEvent<HTMLIrBookingListingMobileCardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrBookingListingMobileCardElementEventMap>(type: K, listener: (this: HTMLIrBookingListingMobileCardElement, ev: IrBookingListingMobileCardCustomEvent<HTMLIrBookingListingMobileCardElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrBookingListingMobileCardElement: {
+        prototype: HTMLIrBookingListingMobileCardElement;
+        new (): HTMLIrBookingListingMobileCardElement;
     };
     interface HTMLIrBookingListingTableElementEventMap {
         "openBookingDetails": string;
@@ -6316,6 +6344,7 @@ declare global {
         "ir-booking-guarantee": HTMLIrBookingGuaranteeElement;
         "ir-booking-header": HTMLIrBookingHeaderElement;
         "ir-booking-listing": HTMLIrBookingListingElement;
+        "ir-booking-listing-mobile-card": HTMLIrBookingListingMobileCardElement;
         "ir-booking-listing-table": HTMLIrBookingListingTableElement;
         "ir-booking-number-cell": HTMLIrBookingNumberCellElement;
         "ir-booking-printing": HTMLIrBookingPrintingElement;
@@ -6858,6 +6887,7 @@ declare namespace LocalJSX {
         "statusCode": string;
     }
     interface IrBookedByCell {
+        "cellId"?: string;
         /**
           * Makes the guest name clickable. Emits `openGuestDetails` when clicked.
          */
@@ -6979,6 +7009,13 @@ declare namespace LocalJSX {
         "rowCount"?: number;
         "ticket"?: string;
         "userType"?: number;
+    }
+    interface IrBookingListingMobileCard {
+        "booking"?: Booking;
+        "extraServicesLabel"?: string;
+        "lastManipulation"?: Booking['ota_manipulations'] extends Array<infer T> ? T : never;
+        "onIrBookingCardAction"?: (event: IrBookingListingMobileCardCustomEvent<{ action: IrActionButton; booking: Booking }>) => void;
+        "totalPersons"?: number;
     }
     interface IrBookingListingTable {
         "onOpenBookingDetails"?: (event: IrBookingListingTableCustomEvent<string>) => void;
@@ -9812,6 +9849,7 @@ declare namespace LocalJSX {
         "ir-booking-guarantee": IrBookingGuarantee;
         "ir-booking-header": IrBookingHeader;
         "ir-booking-listing": IrBookingListing;
+        "ir-booking-listing-mobile-card": IrBookingListingMobileCard;
         "ir-booking-listing-table": IrBookingListingTable;
         "ir-booking-number-cell": IrBookingNumberCell;
         "ir-booking-printing": IrBookingPrinting;
@@ -10014,6 +10052,7 @@ declare module "@stencil/core" {
             "ir-booking-guarantee": LocalJSX.IrBookingGuarantee & JSXBase.HTMLAttributes<HTMLIrBookingGuaranteeElement>;
             "ir-booking-header": LocalJSX.IrBookingHeader & JSXBase.HTMLAttributes<HTMLIrBookingHeaderElement>;
             "ir-booking-listing": LocalJSX.IrBookingListing & JSXBase.HTMLAttributes<HTMLIrBookingListingElement>;
+            "ir-booking-listing-mobile-card": LocalJSX.IrBookingListingMobileCard & JSXBase.HTMLAttributes<HTMLIrBookingListingMobileCardElement>;
             "ir-booking-listing-table": LocalJSX.IrBookingListingTable & JSXBase.HTMLAttributes<HTMLIrBookingListingTableElement>;
             "ir-booking-number-cell": LocalJSX.IrBookingNumberCell & JSXBase.HTMLAttributes<HTMLIrBookingNumberCellElement>;
             "ir-booking-printing": LocalJSX.IrBookingPrinting & JSXBase.HTMLAttributes<HTMLIrBookingPrintingElement>;

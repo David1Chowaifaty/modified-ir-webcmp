@@ -9,6 +9,7 @@ import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stenci
 })
 export class IrBookedByCell {
   @Prop() label: string;
+  @Prop() cellId: string;
   @Prop({ reflect: true }) display: 'inline' | 'block' = 'block';
   /**
    * Guest associated with this booking.
@@ -75,9 +76,9 @@ export class IrBookedByCell {
   }
 
   render() {
-    const repeatGuestBadgeId = `repeat-guest-badge-${this.guest.id}_${this.identifier}`;
-    const loyaltyBadgeId = `loyalty-badge-${this.guest.id}_${this.identifier}`;
-    const couponBadgeId = `coupon-badge-${this.guest.id}_${this.identifier}`;
+    const repeatGuestBadgeId = `repeat-guest-badge-${this.guest.id}_${this.cellId ?? this.identifier}`;
+    const loyaltyBadgeId = `loyalty-badge-${this.guest.id}_${this.cellId ?? this.identifier}`;
+    const couponBadgeId = `coupon-badge-${this.guest.id}_${this.cellId ?? this.identifier}`;
     const guest = `${this.guest.first_name} ${this.guest.last_name}`;
     return (
       <Host>
