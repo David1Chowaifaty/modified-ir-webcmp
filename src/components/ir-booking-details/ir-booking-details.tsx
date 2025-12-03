@@ -218,6 +218,7 @@ export class IrBookingDetails {
   @Listen('editExtraService')
   handleEditExtraService(e: CustomEvent) {
     this.selectedService = e.detail;
+    console.log(this.selectedService);
     this.sidebarState = 'extra_service';
   }
   @Listen('openPrintScreen')
@@ -392,20 +393,20 @@ export class IrBookingDetails {
         );
       // case 'extra_note':
       //   return <ir-booking-extra-note slot="sidebar-body" booking={this.booking} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
-      case 'extra_service':
-        return (
-          <ir-extra-service-config
-            service={this.selectedService}
-            booking={{ from_date: this.booking.from_date, to_date: this.booking.to_date, booking_nbr: this.booking.booking_nbr, currency: this.booking.currency }}
-            slot="sidebar-body"
-            onCloseModal={() => {
-              handleClose();
-              if (this.selectedService) {
-                this.selectedService = null;
-              }
-            }}
-          ></ir-extra-service-config>
-        );
+      // case 'extra_service':
+      //   return (
+      //     <ir-extra-service-config
+      //       service={this.selectedService}
+      //       booking={{ from_date: this.booking.from_date, to_date: this.booking.to_date, booking_nbr: this.booking.booking_nbr, currency: this.booking.currency }}
+      //       slot="sidebar-body"
+      //       onCloseModal={() => {
+      //         handleClose();
+      //         if (this.selectedService) {
+      //           this.selectedService = null;
+      //         }
+      //       }}
+      //     ></ir-extra-service-config>
+      //   );
       case 'room-guest':
         return (
           <ir-room-guests
@@ -686,6 +687,20 @@ export class IrBookingDetails {
       >
         {this.renderSidebarContent()}
       </ir-sidebar>,
+      <ir-extra-service-config
+        open={this.sidebarState === 'extra_service'}
+        service={this.selectedService}
+        booking={{ from_date: this.booking.from_date, to_date: this.booking.to_date, booking_nbr: this.booking.booking_nbr, currency: this.booking.currency }}
+        slot="sidebar-body"
+        onCloseModal={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.sidebarState = null;
+          if (this.selectedService) {
+            this.selectedService = null;
+          }
+        }}
+      ></ir-extra-service-config>,
       // <ir-sidebar
       //   open={this.sidebarState === 'payment-folio'}
       //   side={'left'}

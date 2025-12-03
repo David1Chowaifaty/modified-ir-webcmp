@@ -12,6 +12,10 @@ import { ClickOutside } from '../../decorators/ClickOutside';
 export class IrCustomDatePicker {
   @Element() el: HTMLElement;
 
+  @Prop() withClear: boolean;
+
+  @Prop() placeholder: string;
+
   @Prop() label: string;
 
   /**
@@ -356,7 +360,7 @@ export class IrCustomDatePicker {
 
   private getTriggerLabel(): string {
     if (!this.currentDate) {
-      return 'Select date';
+      return null;
     }
 
     return this.timepicker ? moment(this.currentDate).format('MMM DD, YYYY, HH:mm') : moment(this.currentDate).format('MMM DD, YYYY');
@@ -369,6 +373,8 @@ export class IrCustomDatePicker {
       <Host class={{ 'custom-date-picker': true, 'custom-date-picker--open': this.isActive, 'custom-date-picker--disabled': this.disabled }}>
         <wa-popup distance={8} class="custom-date-picker__popup" arrow arrow-placement="anchor" flip shift active={this.isActive}>
           <ir-custom-input
+            placeholder={this.placeholder}
+            withClear={this.withClear}
             tabIndex={!this.customPicker && !this.disabled ? 0 : undefined}
             aria-expanded={!this.customPicker ? String(this.isActive) : undefined}
             aria-disabled={this.disabled ? 'true' : undefined}

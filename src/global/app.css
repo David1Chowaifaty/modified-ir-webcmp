@@ -43,6 +43,7 @@ wa-card::part(base) {
   box-sizing: border-box;
 }
 wa-input[aria-invalid='true']::part(base),
+wa-textarea[aria-invalid='true']::part(base),
 wa-select[aria-invalid='true']::part(combobox) {
   border-color: var(--wa-color-danger-border-loud);
   outline-color: var(--wa-color-danger-border-loud);

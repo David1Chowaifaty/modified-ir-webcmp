@@ -302,9 +302,9 @@ export const ExtraServiceSchema = z.object({
   cost: z.coerce.number().nullable(),
   currency_id: z.number().min(1),
   description: z.string().min(1),
-  end_date: z.string().nullable(),
-  price: z.coerce.number(),
-  start_date: z.string().nullable(),
+  end_date: z.string().nullable().optional().default(null),
+  start_date: z.string().nullable().optional().default(null),
+  price: z.coerce.number().min(0.01),
   system_id: z.number().optional(),
 });
 

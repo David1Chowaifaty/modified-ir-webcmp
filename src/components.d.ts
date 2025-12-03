@@ -893,6 +893,7 @@ export namespace Components {
          */
         "multipleDates": boolean | number;
         "openDatePicker": () => Promise<void>;
+        "placeholder": string;
         /**
           * Whether the picker should allow range selection (start and end date).
          */
@@ -913,6 +914,7 @@ export namespace Components {
           * Styles for the trigger container
          */
         "triggerContainerStyle": string;
+        "withClear": boolean;
     }
     interface IrCustomInput {
         /**
@@ -1324,6 +1326,7 @@ export namespace Components {
     }
     interface IrExtraServiceConfig {
         "booking": Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
+        "open": boolean;
         "service": ExtraService;
     }
     interface IrExtraServices {
@@ -7415,6 +7418,7 @@ declare namespace LocalJSX {
   }>) => void;
         "onDatePickerBlur"?: (event: IrCustomDatePickerCustomEvent<void>) => void;
         "onDatePickerFocus"?: (event: IrCustomDatePickerCustomEvent<void>) => void;
+        "placeholder"?: string;
         /**
           * Whether the picker should allow range selection (start and end date).
          */
@@ -7435,6 +7439,7 @@ declare namespace LocalJSX {
           * Styles for the trigger container
          */
         "triggerContainerStyle"?: string;
+        "withClear"?: boolean;
     }
     interface IrCustomInput {
         /**
@@ -7898,6 +7903,7 @@ declare namespace LocalJSX {
         "booking"?: Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
         "onCloseModal"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
+        "open"?: boolean;
         "service"?: ExtraService;
     }
     interface IrExtraServices {

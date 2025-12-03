@@ -105,7 +105,7 @@ export class IrValidator {
   }
 
   private syncAutovalidateFlag(next?: boolean) {
-    this.autoValidateActive = Boolean(next);
+    this.autoValidateActive = JSON.parse(String(next ?? false));
   }
 
   private parseEvents(spec?: string) {
