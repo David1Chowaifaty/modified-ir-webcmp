@@ -23,6 +23,7 @@
 }
 .table--container {
   display: none;
+  overflow-x: auto;
 }
 .card--container {
   display: flex;

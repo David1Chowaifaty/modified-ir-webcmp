@@ -12,7 +12,7 @@ import moment from 'moment';
 })
 export class IrBalanceCell {
   @Prop() label: string;
-  @Prop({ reflect: true }) display: 'inline' | 'block' = 'inline';
+  @Prop({ reflect: true }) display: 'inline' | 'block' = 'block';
   @Prop() financial!: Booking['financial'];
   @Prop() statusCode!: string;
   @Prop() isDirect!: boolean;
