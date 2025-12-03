@@ -19,7 +19,7 @@ export class IrExtraService {
   @Event() editExtraService: EventEmitter<ExtraService>;
   @Event() resetBookingEvt: EventEmitter<null>;
 
-  private irModalRef: HTMLIrModalElement;
+  private irModalRef: HTMLIrDialogElement;
   private bookingService = new BookingService();
 
   private async deleteService() {
@@ -29,6 +29,7 @@ export class IrExtraService {
         is_remove: true,
         booking_nbr: this.bookingNumber,
       });
+      this.irModalRef.closeModal();
       this.resetBookingEvt.emit(null);
     } catch (error) {
       console.log(error);
@@ -82,20 +83,25 @@ export class IrExtraService {
             )}
           </div>
         </div>
-        <ir-modal
-          autoClose={false}
+        <ir-dialog
+          onIrDialogHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+          }}
+          label="Alert"
           ref={el => (this.irModalRef = el)}
-          isLoading={isRequestPending('/Do_Booking_Extra_Service')}
-          onConfirmModal={this.deleteService.bind(this)}
-          iconAvailable={true}
-          icon="ft-alert-triangle danger h1"
-          leftBtnText={locales.entries.Lcz_Cancel}
-          rightBtnText={locales.entries.Lcz_Delete}
-          leftBtnColor="secondary"
-          rightBtnColor="danger"
-          modalTitle={locales.entries.Lcz_Confirmation}
-          modalBody={`${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${locales.entries.Lcz_ThisService} ${locales.entries.Lcz_FromThisBooking}`}
-        ></ir-modal>
+          lightDismiss={false}
+        >
+          {`${locales.entries['Lcz_AreYouSureDoYouWantToRemove ']} ${locales.entries.Lcz_ThisService} ${locales.entries.Lcz_FromThisBooking}`}
+          <div slot="footer" class="ir-dialog__footer">
+            <ir-custom-button appearance="filled" variant="neutral" size="medium" data-dialog="close">
+              {locales.entries.Lcz_Cancel}
+            </ir-custom-button>
+            <ir-custom-button onClickHandler={() => this.deleteService()} loading={isRequestPending('/Do_Booking_Extra_Service')} variant="danger" size="medium">
+              {locales.entries.Lcz_Delete}
+            </ir-custom-button>
+          </div>
+        </ir-dialog>
       </Host>
     );
   }
