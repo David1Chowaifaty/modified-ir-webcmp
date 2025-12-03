@@ -240,7 +240,7 @@ export class IrApplicablePolicies {
       <Host>
         {this.guaranteeAmount !== 0 && (
           <section>
-            <div class="applicable-policies__guarantee">
+            <wa-callout variant="danger" class="applicable-policies__guarantee">
               <div class="applicable-policies__guarantee-info">
                 <p class="applicable-policies__guarantee-date">{moment(this.booking.booked_on.date, 'YYYY-MM-DD').format('MMM DD, YYYY')}</p>
                 <p class="applicable-policies__guarantee-amount">
@@ -268,7 +268,7 @@ export class IrApplicablePolicies {
                   </ir-custom-button>
                 </div>
               )}
-            </div>
+            </wa-callout>
           </section>
         )}
         <section>
@@ -281,7 +281,7 @@ export class IrApplicablePolicies {
           </div>
 
           {this.cancellationStatements?.length > 0 && this.cancellationStatements.every(e => e.brackets.length > 0) && this.shouldShowCancellationBrackets && (
-            <div class="applicable-policies__statements">
+            <wa-callout variant="brand" class="applicable-policies__statements">
               {this.cancellationStatements?.map(statement => {
                 const currentBracket = this._getCurrentBracket(statement.brackets);
                 // const isTodaySameOrAfterCheckInDate = moment().isSameOrAfter(moment(statement.checkInDate, 'YYYY-MM-DD').add(1, 'days'));
@@ -356,7 +356,7 @@ export class IrApplicablePolicies {
                   </div>
                 );
               })}
-            </div>
+            </wa-callout>
           )}
         </section>
       </Host>
