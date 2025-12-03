@@ -68,7 +68,7 @@ export class IrPaymentFolio {
   @Prop() bookingNumber: string;
   @Prop() payment: Payment = {
     date: moment().format(DATE_FORMAT),
-    amount: null,
+    amount: 0,
     designation: undefined,
     currency: null,
     reference: null,
@@ -273,6 +273,14 @@ export class IrPaymentFolio {
     return (
       <ir-drawer
         placement="start"
+        style={{
+          '--ir-drawer-width': '40rem',
+          '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
+          '--ir-drawer-padding-left': 'var(--spacing)',
+          '--ir-drawer-padding-right': 'var(--spacing)',
+          '--ir-drawer-padding-top': 'var(--spacing)',
+          '--ir-drawer-padding-bottom': 'var(--spacing)',
+        }}
         label={this.payment?.id !== -1 ? 'Edit Folio Entry' : 'New Folio Entry'}
         open={this.isOpen}
         onDrawerHide={event => {
@@ -349,24 +357,24 @@ export class IrPaymentFolio {
                 </wa-select>
               </ir-validator>
             )}
-            {/**<ir-validator
+            <ir-validator
               value={this.folioData?.amount?.toString() ?? undefined}
               autovalidate={this.autoValidate}
               schema={folioBaseSchema.shape.amount}
               valueEvent="text-change input input-change"
               blurEvent="input-blur"
-            >**/}
-            <ir-custom-input
-              aria-invalid={String(this.autoValidate && this.folioData?.amount === null)}
-              value={this.folioData?.amount?.toString() ?? ''}
-              label="Amount"
-              mask="price"
-              min={0}
-              onText-change={e => this.updateFolioData({ amount: !e.detail ? undefined : Number(e.detail) })}
             >
-              <span slot="start">{calendar_data.currency.symbol}</span>
-            </ir-custom-input>
-            {/* </ir-validator> */}
+              <ir-custom-input
+                aria-invalid={String(!!this.errors?.amount)}
+                value={this.folioData?.amount?.toString() ?? ''}
+                label="Amount"
+                mask="price"
+                min={0}
+                onText-change={e => this.updateFolioData({ amount: !e.detail ? undefined : Number(e.detail) })}
+              >
+                <span slot="start">{calendar_data.currency.symbol}</span>
+              </ir-custom-input>
+            </ir-validator>
             <ir-validator
               value={this.folioData?.reference ?? ''}
               autovalidate={this.autoValidate}
