@@ -217,7 +217,6 @@ export class IrCustomInput {
     this._mask.on('accept', () => {
       if (!this._mask) return;
       const isEmpty = this.inputRef.value.trim() === '' || this._mask.unmaskedValue === '';
-      console.log(this._mask.unmaskedValue);
       this.handleInput(isEmpty ? '' : this._mask.unmaskedValue);
     });
   }
