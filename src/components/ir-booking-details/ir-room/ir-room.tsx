@@ -57,8 +57,9 @@ export class IrRoom {
   @Event() resetbooking: EventEmitter<null>;
   @Event() openSidebar: EventEmitter<OpenSidebarEvent<RoomGuestsPayload>>;
 
-  private modal: HTMLIrModalElement;
+  private modal: HTMLIrDialogElement;
   private bookingService = new BookingService();
+  dialogRef: HTMLIrDialogElement;
 
   componentWillLoad() {
     this.mainGuest = this.getMainGuest();
@@ -540,20 +541,35 @@ export class IrRoom {
             )}
           </div>
         </div>
-        <ir-modal
-          autoClose={false}
+        <ir-dialog
+          label={this.modalReason === 'delete' ? 'Alert' : locales.entries.Lcz_Confirmation}
           ref={el => (this.modal = el)}
-          isLoading={this.isLoading}
-          onConfirmModal={this.handleModalConfirmation.bind(this)}
-          iconAvailable={true}
-          icon="ft-alert-triangle danger h1"
-          leftBtnText={locales.entries.Lcz_Cancel}
-          rightBtnText={this.modalReason === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
-          leftBtnColor="secondary"
-          rightBtnColor={this.modalReason === 'delete' ? 'danger' : 'primary'}
-          modalTitle={locales.entries.Lcz_Confirmation}
-          modalBody={this.renderModalMessage()}
-        ></ir-modal>
+          onIrDialogHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+          }}
+          onIrDialogAfterHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.modalReason = null;
+          }}
+          lightDismiss={this.modalReason === 'checkin'}
+        >
+          <p>{this.renderModalMessage()}</p>
+          <div slot="footer" class="ir-dialog__footer">
+            <ir-custom-button size="medium" data-dialog="close" appearance="filled" variant="neutral">
+              {locales.entries.Lcz_Cancel}
+            </ir-custom-button>
+            <ir-custom-button
+              size="medium"
+              loading={this.isLoading}
+              onClickHandler={e => this.handleModalConfirmation(e)}
+              variant={this.modalReason === 'delete' ? 'danger' : 'brand'}
+            >
+              {this.modalReason === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
+            </ir-custom-button>
+          </div>
+        </ir-dialog>
       </Host>
     );
   }

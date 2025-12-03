@@ -12,7 +12,6 @@ import Token from '@/models/Token';
 import { BookingDetailsSidebarEvents, OpenSidebarEvent, PaymentEntries, PrintScreenOptions } from './types';
 import calendar_data from '@/stores/calendar-data';
 import moment from 'moment';
-import { IrModalCustomEvent } from '@/components';
 import { isRequestPending } from '@/stores/ir-interceptor.store';
 import { buildSplitIndex, SplitIndex } from '@/utils/booking';
 

@@ -32,6 +32,7 @@ export class IrPaymentDetails {
 
   private paymentService = new PaymentService();
   private bookingService = new BookingService();
+  private dialogRef: HTMLIrDialogElement;
 
   @Listen('generatePayment')
   handlePaymentGeneration(e: CustomEvent) {
@@ -116,7 +117,7 @@ export class IrPaymentDetails {
   private handleDeletePayment = (payment: IPayment) => {
     this.modalMode = 'delete';
     this.toBeDeletedItem = payment;
-    this.openModal();
+    this.dialogRef.openModal();
   };
 
   private async handleIssueReceipt(detail: IPayment) {
@@ -181,11 +182,6 @@ export class IrPaymentDetails {
     this.modalMode = null;
     this.toBeDeletedItem = null;
   };
-
-  private openModal() {
-    const modal: any = document.querySelector('.delete-record-modal');
-    modal?.openModal();
-  }
 
   private hasValidFinancialData(): boolean {
     return Boolean(this.booking?.financial);
@@ -282,20 +278,28 @@ export class IrPaymentDetails {
         onDeletePayment={e => this.handleDeletePayment(e.detail)}
         onIssueReceipt={e => this.handleIssueReceipt(e.detail)}
       />,
-      <ir-modal
-        item={this.toBeDeletedItem}
-        class="delete-record-modal"
-        modalTitle={locales.entries.Lcz_Confirmation}
-        modalBody={this.modalMode === 'delete' ? locales.entries.Lcz_IfDeletedPermantlyLost : locales.entries.Lcz_EnteringAmountGreaterThanDue}
-        iconAvailable={true}
-        icon="ft-alert-triangle danger h1"
-        leftBtnText={locales.entries.Lcz_Cancel}
-        rightBtnText={this.modalMode === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
-        leftBtnColor="secondary"
-        rightBtnColor={this.modalMode === 'delete' ? 'danger' : 'primary'}
-        onConfirmModal={this.handleConfirmModal}
-        onCancelModal={this.handleCancelModal}
-      />,
+      <ir-dialog
+        onIrDialogHide={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+        }}
+        onIrDialogAfterHide={e => {
+          this.handleCancelModal(e);
+        }}
+        ref={el => (this.dialogRef = el)}
+        label="Alert"
+        lightDismiss={this.modalMode !== 'delete'}
+      >
+        <p>{this.modalMode === 'delete' ? locales.entries.Lcz_IfDeletedPermantlyLost : locales.entries.Lcz_EnteringAmountGreaterThanDue}</p>
+        <div slot="footer" class="ir-dialog__footer">
+          <ir-custom-button size="medium" data-dialog="close" variant="neutral" appearance="filled">
+            {locales.entries.Lcz_Cancel}
+          </ir-custom-button>
+          <ir-custom-button size="medium" onClickHandler={e => this.handleConfirmModal(e)} variant={this.modalMode === 'delete' ? 'danger' : 'brand'}>
+            {this.modalMode === 'delete' ? locales.entries.Lcz_Delete : locales.entries.Lcz_Confirm}
+          </ir-custom-button>
+        </div>
+      </ir-dialog>,
     ];
   }
 }
