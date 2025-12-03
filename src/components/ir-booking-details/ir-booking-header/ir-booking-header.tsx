@@ -39,7 +39,7 @@ export class IrBookingHeader {
 
   private bookingService = new BookingService();
   private alertMessage = `ALERT! Modifying an OTA booking will create a discrepancy between igloorooms and the source. Future guest modifications on the OTA may require manual adjustments of the booking.`;
-  modalEl: HTMLIrModalElement;
+  private modalEl: HTMLIrDialogElement;
 
   @Listen('selectChange')
   handleSelectChange(e: CustomEvent<any>) {
@@ -257,15 +257,34 @@ export class IrBookingHeader {
           {this.renderDialogBody()}
         </ir-dialog>
 
-        <ir-modal
+        <ir-dialog
           ref={el => (this.modalEl = el)}
-          modalTitle={''}
-          leftBtnText={locales?.entries?.Lcz_Cancel}
-          rightBtnText={locales?.entries?.Lcz_Confirm}
-          modalBody={locales.entries.Lcz_OTA_Modification_Alter}
-          isLoading={isRequestPending('/Change_Exposed_Booking_Status')}
-          onConfirmModal={this.updateStatus.bind(this)}
-        ></ir-modal>
+          label="Alert"
+          lightDismiss={false}
+          onIrDialogHide={e => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+          }}
+        >
+          <p>{locales.entries.Lcz_OTA_Modification_Alter}</p>
+          <div class="ir-dialog__footer">
+            <ir-custom-button data-dialog="close" size="medium" appearance="filled" variant="neutral">
+              {locales?.entries?.Lcz_Cancel}
+            </ir-custom-button>
+            <ir-custom-button
+              onClickHandler={e => {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                this.updateStatus();
+              }}
+              size="medium"
+              variant="danger"
+              loading={isRequestPending('/Change_Exposed_Booking_Status')}
+            >
+              {locales?.entries?.Lcz_Confirm}
+            </ir-custom-button>
+          </div>
+        </ir-dialog>
       </div>
     );
   }

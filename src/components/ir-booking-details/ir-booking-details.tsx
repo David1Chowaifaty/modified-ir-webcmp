@@ -84,7 +84,7 @@ export class IrBookingDetails {
 
   private printingBaseUrl = 'https://gateway.igloorooms.com/PrintBooking/%1/printing?id=%2';
   // private printingBaseUrl = 'http://localhost:5863/%1/printing?id=%2';
-  private modalRef: HTMLIrModalElement;
+  private modalRef: HTMLIrDialogElement;
   private paymentFolioRef: HTMLIrPaymentFolioElement;
 
   componentWillLoad() {
@@ -354,9 +354,7 @@ export class IrBookingDetails {
       console.log(error);
     }
   }
-  private async handleModalConfirm(e: IrModalCustomEvent<any>) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+  private async handleModalConfirm() {
     switch (this.modalState.type) {
       case 'email':
         await this.bookingService.sendBookingConfirmationEmail(this.booking.booking_nbr, this.language);
@@ -646,20 +644,35 @@ export class IrBookingDetails {
           booking={this.booking}
         ></ir-payment-details>
       </div>,
-      <ir-modal
-        modalBody={this.modalState?.message}
-        leftBtnText={locales.entries.Lcz_Cancel}
-        rightBtnText={locales.entries.Lcz_Confirm}
-        autoClose={false}
-        isLoading={isRequestPending('/Send_Booking_Confirmation_Email')}
-        ref={el => (this.modalRef = el)}
-        onConfirmModal={e => {
-          this.handleModalConfirm(e);
-        }}
-        onCancelModal={() => {
+      <ir-dialog
+        label="Send Email"
+        onIrDialogHide={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
           this.modalRef.closeModal();
+          this.modalState = null;
         }}
-      ></ir-modal>,
+        ref={el => (this.modalRef = el)}
+      >
+        <p>{this.modalState?.message}</p>
+        <div slot="footer" class="ir-dialog__footer">
+          <ir-custom-button data-dialog="close" size="medium" appearance="filled" variant="neutral">
+            {locales.entries.Lcz_Cancel}
+          </ir-custom-button>
+          <ir-custom-button
+            loading={isRequestPending('/Send_Booking_Confirmation_Email')}
+            onClickHandler={e => {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              this.handleModalConfirm();
+            }}
+            size="medium"
+            variant="brand"
+          >
+            {locales.entries.Lcz_Confirm}
+          </ir-custom-button>
+        </div>
+      </ir-dialog>,
       <ir-sidebar
         open={this.sidebarState !== null && this.sidebarState !== 'payment-folio'}
         side={'right'}
