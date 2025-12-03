@@ -31,9 +31,11 @@
  - [ir-arrivals](../ir-arrivals)
  - [ir-booking-listing](../ir-booking-listing)
  - [ir-departures](../ir-departures)
+ - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info-drawer](../ir-guest-info/ir-guest-info-drawer)
  - [ir-invoice](../ir-invoice)
  - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
+ - [ir-pickup](../ir-booking-details/ir-pickup)
 
 ### Graph
 ```mermaid
@@ -41,9 +43,11 @@ graph TD;
   ir-arrivals --> ir-drawer
   ir-booking-listing --> ir-drawer
   ir-departures --> ir-drawer
+  ir-extra-service-config --> ir-drawer
   ir-guest-info-drawer --> ir-drawer
   ir-invoice --> ir-drawer
   ir-payment-folio --> ir-drawer
+  ir-pickup --> ir-drawer
   style ir-drawer fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

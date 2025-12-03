@@ -68,12 +68,10 @@
  - [ir-hk-archive](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive)
  - [ir-hk-unassigned-units](../../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-housekeeping](../../ir-housekeeping)
- - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../../ir-booking-listing/ir-listing-modal)
  - [ir-monthly-bookings-report-filter](../../ir-monthly-bookings-report/ir-monthly-bookings-report-filter)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-pagination](../../ir-pagination)
- - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-sales-by-channel-filters](../../ir-sales-by-channel/ir-sales-by-channel-filters)
  - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
@@ -95,12 +93,10 @@ graph TD;
   ir-hk-archive --> ir-select
   ir-hk-unassigned-units --> ir-select
   ir-housekeeping --> ir-select
-  ir-listing-header --> ir-select
   ir-listing-modal --> ir-select
   ir-monthly-bookings-report-filter --> ir-select
   ir-option-details --> ir-select
   ir-pagination --> ir-select
-  ir-pickup --> ir-select
   ir-room-guests --> ir-select
   ir-sales-by-channel-filters --> ir-select
   ir-sales-filters --> ir-select

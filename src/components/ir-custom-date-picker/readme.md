@@ -22,11 +22,13 @@
 | `maxDate`               | `max-date`                | The latest date that can be selected.                                                                                                                                                                                                                                                  | `Date \| string`    | `undefined`    |
 | `minDate`               | `min-date`                | The earliest date that can be selected.                                                                                                                                                                                                                                                | `Date \| string`    | `undefined`    |
 | `multipleDates`         | `multiple-dates`          | Enables multiple dates. If `true`, multiple selection is allowed. If you pass a number (e.g. 3), that is the maximum number of selectable dates.                                                                                                                                       | `boolean \| number` | `false`        |
+| `placeholder`           | `placeholder`             |                                                                                                                                                                                                                                                                                        | `string`            | `undefined`    |
 | `range`                 | `range`                   | Whether the picker should allow range selection (start and end date).                                                                                                                                                                                                                  | `boolean`           | `false`        |
 | `selectOtherMonths`     | `select-other-months`     | Allows selecting days from previous/next month shown in the current view.                                                                                                                                                                                                              | `boolean`           | `true`         |
 | `showOtherMonths`       | `show-other-months`       | Shows days from previous/next month in the current month's calendar.                                                                                                                                                                                                                   | `boolean`           | `true`         |
 | `timepicker`            | `timepicker`              | Enables the timepicker functionality (select hours and minutes).                                                                                                                                                                                                                       | `boolean`           | `false`        |
 | `triggerContainerStyle` | `trigger-container-style` | Styles for the trigger container                                                                                                                                                                                                                                                       | `string`            | `''`           |
+| `withClear`             | `with-clear`              |                                                                                                                                                                                                                                                                                        | `boolean`           | `undefined`    |
 
 
 ## Events
@@ -67,8 +69,10 @@ Type: `Promise<void>`
 
  - [ir-arrivals-filters](../ir-arrivals/ir-arrivals-filters)
  - [ir-departures-filter](../ir-departures/ir-departures-filter)
+ - [ir-extra-service-config](../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-invoice](../ir-invoice)
  - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
+ - [ir-pickup](../ir-booking-details/ir-pickup)
 
 ### Depends on
 
@@ -80,8 +84,10 @@ graph TD;
   ir-custom-date-picker --> ir-custom-input
   ir-arrivals-filters --> ir-custom-date-picker
   ir-departures-filter --> ir-custom-date-picker
+  ir-extra-service-config --> ir-custom-date-picker
   ir-invoice --> ir-custom-date-picker
   ir-payment-folio --> ir-custom-date-picker
+  ir-pickup --> ir-custom-date-picker
   style ir-custom-date-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

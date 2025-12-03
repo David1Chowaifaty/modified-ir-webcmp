@@ -30,22 +30,21 @@
 ### Depends on
 
 - [igl-book-property-container](../../igl-book-property-container)
-- [ir-button](../../ui/ir-button)
-- [ir-input-text](../../ui/ir-input-text)
-- [ir-select](../../ui/ir-select)
+- [ir-custom-button](../../ui/ir-custom-button)
+- [ir-custom-input](../../ui/ir-custom-input)
 - [ir-range-picker](../../ir-housekeeping/ir-hk-tasks/ir-hk-archive/ir-range-picker)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-listing-header --> igl-book-property-container
-  ir-listing-header --> ir-button
-  ir-listing-header --> ir-input-text
-  ir-listing-header --> ir-select
+  ir-listing-header --> ir-custom-button
+  ir-listing-header --> ir-custom-input
   ir-listing-header --> ir-range-picker
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp

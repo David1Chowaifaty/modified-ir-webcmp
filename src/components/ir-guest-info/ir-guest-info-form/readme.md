@@ -17,9 +17,9 @@
 
 ## Events
 
-| Event          | Description | Type                 |
-| -------------- | ----------- | -------------------- |
-| `guestChanged` |             | `CustomEvent<Guest>` |
+| Event          | Description | Type                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `guestChanged` |             | `CustomEvent<{ company_name?: string; company_tax_nbr?: string; address?: string; city?: string; country_id?: number; dob?: string; email?: string; first_name?: string; id?: number; last_name?: string; mobile?: string; country_phone_prefix?: string; subscribe_to_news_letter?: boolean; cci?: ICCI; alternative_email?: string; nbr_confirmed_bookings?: number; notes?: string; mobile_without_prefix?: string; }>` |
 
 
 ## Dependencies

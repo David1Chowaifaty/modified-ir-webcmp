@@ -70,7 +70,6 @@ Type: `Promise<void>`
  - [ir-daily-revenue](../../ir-daily-revenue)
  - [ir-daily-revenue-filters](../../ir-daily-revenue/ir-daily-revenue-filters)
  - [ir-delete-modal](../../ir-housekeeping/ir-delete-modal)
- - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-filters-panel](../ir-filters-panel)
  - [ir-financial-actions](../../ir-financial-actions)
  - [ir-financial-filters](../../ir-financial-actions/ir-financial-filters)
@@ -80,7 +79,6 @@ Type: `Promise<void>`
  - [ir-hk-team](../../ir-housekeeping/ir-hk-team)
  - [ir-hk-unassigned-units](../../ir-housekeeping/ir-hk-unassigned-units)
  - [ir-hk-user](../../ir-housekeeping/ir-hk-user)
- - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-listing-modal](../../ir-booking-listing/ir-listing-modal)
  - [ir-login](../../ir-login)
  - [ir-modal](../ir-modal)
@@ -90,10 +88,7 @@ Type: `Promise<void>`
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-otp-modal](../../ir-otp-modal)
  - [ir-payment-action](../../ir-booking-details/ir-payment-details/ir-payment-actions/ir-payment-action)
- - [ir-payment-details](../../ir-booking-details/ir-payment-details)
- - [ir-payment-item](../../ir-booking-details/ir-payment-details/ir-payment-item)
  - [ir-payment-option](../../ir-payment-option)
- - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-reset-password](../../ir-reset-password)
  - [ir-revenue-row-details](../../ir-daily-revenue/ir-revenue-table/ir-revenue-row/ir-revenue-row-details)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
@@ -137,7 +132,6 @@ graph TD;
   ir-daily-revenue --> ir-button
   ir-daily-revenue-filters --> ir-button
   ir-delete-modal --> ir-button
-  ir-extra-service-config --> ir-button
   ir-filters-panel --> ir-button
   ir-financial-actions --> ir-button
   ir-financial-filters --> ir-button
@@ -147,7 +141,6 @@ graph TD;
   ir-hk-team --> ir-button
   ir-hk-unassigned-units --> ir-button
   ir-hk-user --> ir-button
-  ir-listing-header --> ir-button
   ir-listing-modal --> ir-button
   ir-login --> ir-button
   ir-modal --> ir-button
@@ -157,10 +150,7 @@ graph TD;
   ir-option-details --> ir-button
   ir-otp-modal --> ir-button
   ir-payment-action --> ir-button
-  ir-payment-details --> ir-button
-  ir-payment-item --> ir-button
   ir-payment-option --> ir-button
-  ir-pickup --> ir-button
   ir-reset-password --> ir-button
   ir-revenue-row-details --> ir-button
   ir-room-guests --> ir-button

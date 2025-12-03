@@ -7,10 +7,12 @@
 
 ## Properties
 
-| Property               | Attribute                | Description | Type     | Default     |
-| ---------------------- | ------------------------ | ----------- | -------- | ----------- |
-| `bookingNumber`        | `booking-number`         |             | `string` | `undefined` |
-| `channelBookingNumber` | `channel-booking-number` |             | `string` | `undefined` |
+| Property               | Attribute                | Description                                           | Type     | Default     |
+| ---------------------- | ------------------------ | ----------------------------------------------------- | -------- | ----------- |
+| `bookingNumber`        | `booking-number`         |                                                       | `string` | `undefined` |
+| `channelBookingNumber` | `channel-booking-number` |                                                       | `string` | `undefined` |
+| `origin`               | --                       | Origin metadata containing label + icon used as logo. | `Origin` | `undefined` |
+| `source`               | --                       | Source of the booking (e.g. website, channel).        | `Source` | `undefined` |
 
 
 ## Events
@@ -25,6 +27,7 @@
 ### Used by
 
  - [ir-arrivals-table](../../../ir-arrivals/ir-arrivals-table)
+ - [ir-booking-listing-mobile-card](../../../ir-booking-listing/ir-booking-listing-mobile-card)
  - [ir-booking-listing-table](../../../ir-booking-listing/ir-booking-listing-table)
  - [ir-departures-table](../../../ir-departures/ir-departures-table)
 
@@ -37,6 +40,7 @@
 graph TD;
   ir-booking-number-cell --> ir-custom-button
   ir-arrivals-table --> ir-booking-number-cell
+  ir-booking-listing-mobile-card --> ir-booking-number-cell
   ir-booking-listing-table --> ir-booking-number-cell
   ir-departures-table --> ir-booking-number-cell
   style ir-booking-number-cell fill:#f9f,stroke:#333,stroke-width:4px

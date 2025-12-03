@@ -53,20 +53,18 @@
 
 - [ir-custom-button](../../ui/ir-custom-button)
 - [ir-date-view](../../ir-date-view)
-- [ir-tooltip](../../ui/ir-tooltip)
+- [ir-unit-tag](../../ir-unit-tag)
 - [ir-label](../../ui/ir-label)
-- [ir-modal](../../ui/ir-modal)
+- [ir-dialog](../../ui/ir-dialog)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-room --> ir-custom-button
   ir-room --> ir-date-view
-  ir-room --> ir-tooltip
+  ir-room --> ir-unit-tag
   ir-room --> ir-label
-  ir-room --> ir-modal
-  ir-modal --> ir-button
-  ir-button --> ir-icons
+  ir-room --> ir-dialog
   ir-booking-details --> ir-room
   style ir-room fill:#f9f,stroke:#333,stroke-width:4px
 ```

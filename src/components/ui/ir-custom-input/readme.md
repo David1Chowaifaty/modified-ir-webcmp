@@ -60,8 +60,11 @@
  - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-custom-date-picker](../../ir-custom-date-picker)
  - [ir-departures-filter](../../ir-departures/ir-departures-filter)
+ - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
+ - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
+ - [ir-pickup](../../ir-booking-details/ir-pickup)
 
 ### Graph
 ```mermaid
@@ -70,8 +73,11 @@ graph TD;
   ir-booking-company-form --> ir-custom-input
   ir-custom-date-picker --> ir-custom-input
   ir-departures-filter --> ir-custom-input
+  ir-extra-service-config --> ir-custom-input
   ir-guest-info-form --> ir-custom-input
+  ir-listing-header --> ir-custom-input
   ir-payment-folio --> ir-custom-input
+  ir-pickup --> ir-custom-input
   style ir-custom-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

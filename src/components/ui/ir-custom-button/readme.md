@@ -48,21 +48,26 @@
  - [ir-actions-cell](../../table-cells/booking/ir-actions-cell)
  - [ir-applicable-policies](../../ir-booking-details/ir-payment-details/ir-applicable-policies)
  - [ir-balance-cell](../../table-cells/booking/ir-balance-cell)
- - [ir-booked-by-source-cell](../../table-cells/booking/ir-booked-by-source-cell)
+ - [ir-booked-by-cell](../../table-cells/booking/ir-booked-by-cell)
  - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-booking-details](../../ir-booking-details)
  - [ir-booking-extra-note](../../ir-booking-details/ir-booking-extra-note)
  - [ir-booking-header](../../ir-booking-details/ir-booking-header)
+ - [ir-booking-listing-mobile-card](../../ir-booking-listing/ir-booking-listing-mobile-card)
  - [ir-booking-listing-table](../../ir-booking-listing/ir-booking-listing-table)
  - [ir-booking-number-cell](../../table-cells/booking/ir-booking-number-cell)
  - [ir-extra-service](../../ir-booking-details/ir-extra-services/ir-extra-service)
+ - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-extra-services](../../ir-booking-details/ir-extra-services)
  - [ir-guest-info-drawer](../../ir-guest-info/ir-guest-info-drawer)
  - [ir-invoice](../../ir-invoice)
+ - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-pagination](../../ir-pagination)
+ - [ir-payment-details](../../ir-booking-details/ir-payment-details)
  - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
  - [ir-payment-item](../../ir-booking-details/ir-payment-details/ir-payment-item)
  - [ir-payments-folio](../../ir-booking-details/ir-payment-details/ir-payments-folio)
+ - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
@@ -75,21 +80,26 @@ graph TD;
   ir-actions-cell --> ir-custom-button
   ir-applicable-policies --> ir-custom-button
   ir-balance-cell --> ir-custom-button
-  ir-booked-by-source-cell --> ir-custom-button
+  ir-booked-by-cell --> ir-custom-button
   ir-booking-company-form --> ir-custom-button
   ir-booking-details --> ir-custom-button
   ir-booking-extra-note --> ir-custom-button
   ir-booking-header --> ir-custom-button
+  ir-booking-listing-mobile-card --> ir-custom-button
   ir-booking-listing-table --> ir-custom-button
   ir-booking-number-cell --> ir-custom-button
   ir-extra-service --> ir-custom-button
+  ir-extra-service-config --> ir-custom-button
   ir-extra-services --> ir-custom-button
   ir-guest-info-drawer --> ir-custom-button
   ir-invoice --> ir-custom-button
+  ir-listing-header --> ir-custom-button
   ir-pagination --> ir-custom-button
+  ir-payment-details --> ir-custom-button
   ir-payment-folio --> ir-custom-button
   ir-payment-item --> ir-custom-button
   ir-payments-folio --> ir-custom-button
+  ir-pickup --> ir-custom-button
   ir-pickup-view --> ir-custom-button
   ir-reservation-information --> ir-custom-button
   ir-room --> ir-custom-button

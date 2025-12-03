@@ -46,11 +46,13 @@
 
 ### Depends on
 
+- [ir-spinner](../ui/ir-spinner)
 - [ir-otp-modal](../ir-otp-modal)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp

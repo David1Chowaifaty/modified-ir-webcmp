@@ -108,10 +108,8 @@
  - [ir-country-picker](../ir-country-picker)
  - [ir-guest-info](../../ir-guest-info)
  - [ir-hk-user](../../ir-housekeeping/ir-hk-user)
- - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
  - [ir-login](../../ir-login)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
- - [ir-pickup](../../ir-booking-details/ir-pickup)
  - [ir-reset-password](../../ir-reset-password)
  - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-tasks-header](../../ir-housekeeping/ir-hk-tasks/ir-tasks-header)
@@ -126,10 +124,8 @@ graph TD;
   ir-country-picker --> ir-input-text
   ir-guest-info --> ir-input-text
   ir-hk-user --> ir-input-text
-  ir-listing-header --> ir-input-text
   ir-login --> ir-input-text
   ir-option-details --> ir-input-text
-  ir-pickup --> ir-input-text
   ir-reset-password --> ir-input-text
   ir-room-guests --> ir-input-text
   ir-tasks-header --> ir-input-text

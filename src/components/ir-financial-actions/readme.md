@@ -41,8 +41,6 @@ graph TD;
   ir-financial-actions --> ir-financial-filters
   ir-financial-actions --> ir-financial-table
   ir-financial-actions --> ir-sidebar
-  ir-booking-details --> ir-pickup
-  ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-room-guests
   ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
@@ -55,38 +53,30 @@ graph TD;
   ir-booking-details --> ir-pickup-view
   ir-booking-details --> ir-extra-services
   ir-booking-details --> ir-payment-details
-  ir-booking-details --> ir-modal
+  ir-booking-details --> ir-dialog
   ir-booking-details --> ir-sidebar
+  ir-booking-details --> ir-extra-service-config
+  ir-booking-details --> ir-pickup
   ir-booking-details --> ir-guest-info-drawer
   ir-booking-details --> ir-payment-folio
   ir-booking-details --> igl-book-property
-  ir-pickup --> ir-title
-  ir-pickup --> ir-select
-  ir-pickup --> ir-date-picker
-  ir-pickup --> ir-input-text
-  ir-pickup --> ir-price-input
-  ir-pickup --> ir-button
-  ir-title --> ir-icon
-  ir-button --> ir-icons
-  ir-extra-service-config --> ir-title
-  ir-extra-service-config --> ir-date-picker
-  ir-extra-service-config --> ir-button
-  ir-extra-service-config --> ir-price-input
   ir-room-guests --> ir-spinner
   ir-room-guests --> ir-title
   ir-room-guests --> ir-input-text
   ir-room-guests --> ir-country-picker
   ir-room-guests --> ir-select
   ir-room-guests --> ir-button
+  ir-title --> ir-icon
   ir-country-picker --> ir-picker
   ir-country-picker --> ir-picker-item
   ir-country-picker --> ir-input-text
+  ir-button --> ir-icons
   ir-room --> ir-custom-button
   ir-room --> ir-date-view
-  ir-room --> ir-tooltip
+  ir-room --> ir-unit-tag
   ir-room --> ir-label
-  ir-room --> ir-modal
-  ir-modal --> ir-button
+  ir-room --> ir-dialog
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp
@@ -97,7 +87,6 @@ graph TD;
   ir-booking-header --> ir-popover
   ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-dialog
-  ir-booking-header --> ir-modal
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
   ir-reservation-information --> ir-label
@@ -116,23 +105,32 @@ graph TD;
   ir-extra-services --> ir-extra-service
   ir-extra-service --> ir-custom-button
   ir-extra-service --> ir-date-view
-  ir-extra-service --> ir-modal
+  ir-extra-service --> ir-dialog
   ir-payment-details --> ir-payment-summary
   ir-payment-details --> ir-booking-guarantee
   ir-payment-details --> ir-applicable-policies
-  ir-payment-details --> ir-button
+  ir-payment-details --> ir-custom-button
   ir-payment-details --> ir-payments-folio
-  ir-payment-details --> ir-modal
+  ir-payment-details --> ir-dialog
   ir-booking-guarantee --> ir-label
   ir-booking-guarantee --> ir-button
   ir-applicable-policies --> ir-custom-button
   ir-applicable-policies --> ir-icons
   ir-payments-folio --> ir-payment-item
   ir-payments-folio --> ir-custom-button
-  ir-payment-item --> ir-popover
-  ir-payment-item --> ir-button
   ir-payment-item --> ir-custom-button
   ir-sidebar --> ir-icon
+  ir-extra-service-config --> ir-drawer
+  ir-extra-service-config --> ir-validator
+  ir-extra-service-config --> ir-custom-date-picker
+  ir-extra-service-config --> ir-custom-input
+  ir-extra-service-config --> ir-custom-button
+  ir-custom-date-picker --> ir-custom-input
+  ir-pickup --> ir-drawer
+  ir-pickup --> ir-validator
+  ir-pickup --> ir-custom-date-picker
+  ir-pickup --> ir-custom-input
+  ir-pickup --> ir-custom-button
   ir-guest-info-drawer --> ir-drawer
   ir-guest-info-drawer --> ir-guest-info-form
   ir-guest-info-drawer --> ir-custom-button
@@ -145,7 +143,6 @@ graph TD;
   ir-payment-folio --> ir-validator
   ir-payment-folio --> ir-custom-input
   ir-payment-folio --> ir-custom-button
-  ir-custom-date-picker --> ir-custom-input
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon

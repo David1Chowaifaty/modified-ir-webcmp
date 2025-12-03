@@ -42,7 +42,6 @@
 - [ir-popover](../../ui/ir-popover)
 - [ir-custom-button](../../ui/ir-custom-button)
 - [ir-dialog](../../ui/ir-dialog)
-- [ir-modal](../../ui/ir-modal)
 
 ### Graph
 ```mermaid
@@ -53,11 +52,8 @@ graph TD;
   ir-booking-header --> ir-popover
   ir-booking-header --> ir-custom-button
   ir-booking-header --> ir-dialog
-  ir-booking-header --> ir-modal
   ir-pms-logs --> ir-spinner
   ir-events-log --> ir-spinner
-  ir-modal --> ir-button
-  ir-button --> ir-icons
   ir-booking-details --> ir-booking-header
   style ir-booking-header fill:#f9f,stroke:#333,stroke-width:4px
 ```

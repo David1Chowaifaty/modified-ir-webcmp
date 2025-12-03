@@ -9,7 +9,7 @@
 
 | Property  | Attribute | Description | Type                                                                                                                                                                                                                                     | Default     |
 | --------- | --------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `booking` | --        |             | `{ currency: Currency; booking_nbr: string; extra_services: { cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; price?: number; start_date?: string; system_id?: number; }[]; }` | `undefined` |
+| `booking` | --        |             | `{ currency: Currency; booking_nbr: string; extra_services: { cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; system_id?: number; }[]; }` | `undefined` |
 
 
 ## Dependencies
@@ -30,9 +30,7 @@ graph TD;
   ir-extra-services --> ir-extra-service
   ir-extra-service --> ir-custom-button
   ir-extra-service --> ir-date-view
-  ir-extra-service --> ir-modal
-  ir-modal --> ir-button
-  ir-button --> ir-icons
+  ir-extra-service --> ir-dialog
   ir-booking-details --> ir-extra-services
   style ir-extra-services fill:#f9f,stroke:#333,stroke-width:4px
 ```

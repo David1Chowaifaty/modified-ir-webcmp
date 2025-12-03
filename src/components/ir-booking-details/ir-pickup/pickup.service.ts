@@ -1,23 +1,34 @@
 import axios from 'axios';
-import { TDueParams, TPickupData } from './types';
-import calendar_data from '@/stores/calendar-data';
-import { IBookingPickupInfo } from '@/components';
-import { z, ZodError } from 'zod';
-import { renderTime } from '@/utils/utils';
 import moment from 'moment';
+import { z, ZodTypeAny } from 'zod';
+
+import { IBookingPickupInfo } from '@/components';
+import calendar_data from '@/stores/calendar-data';
+import { renderTime } from '@/utils/utils';
+
+import { TDueParams, TPickupData } from './types';
 
 export class PickupService {
   public async savePickup(params: TPickupData, booking_nbr: string, is_remove: boolean) {
     try {
-      const splitTime = params.arrival_time.split(':');
+      if (!params.currency || !params.selected_option) {
+        throw new Error('Cannot save pickup without a selected option and currency.');
+      }
+
+      const [_, hours, minutes] = params.arrival_time
+        ? params.arrival_time
+            ?.toString()
+            ?.match(/(\d{2})(\d{2})/)!
+            ?.map(Number)
+        : [null, null, null];
       await axios.post(`/Do_Pickup`, {
         booking_nbr,
         is_remove,
         currency: params.currency,
         date: params.arrival_date,
         details: params.flight_details,
-        hour: splitTime[0],
-        minute: splitTime[1],
+        hour: hours ?? null,
+        minute: minutes ?? null,
         nbr_of_units: params.number_of_vehicles,
         selected_option: params.selected_option,
         total: +params.due_upon_booking,
@@ -53,11 +64,30 @@ export class PickupService {
     });
     return locations;
   }
-  public createPickupSchema(minDate: string, maxDate: string) {
+  public createPickupSchema(minDate: string, maxDate: string, options?: { allowRemoval?: boolean }) {
+    const allowRemoval = Boolean(options?.allowRemoval);
+    const asNumber = (value: unknown) => {
+      if (typeof value === 'number') {
+        return value;
+      }
+      if (typeof value === 'string' && value.trim() !== '') {
+        const parsed = Number(value);
+        return Number.isNaN(parsed) ? value : parsed;
+      }
+      return value;
+    };
+
+    const arrivalDateSchema = z
+      .string()
+      .min(1, { message: 'Arrival date is required.' })
+      .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid date format, expected YYYY-MM-DD.' });
+
     return z.object({
+      location: z.preprocess(asNumber, z.number().int()).refine(value => (allowRemoval ? value === -1 || value > 0 : value > 0), {
+        message: 'Please select a pickup option.',
+      }),
       arrival_date: z
-        .string()
-        .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Invalid date format, expected YYYY-MM-DD' })
+        .preprocess(value => (typeof value === 'string' ? value : value ?? ''), arrivalDateSchema)
         .refine(
           dateStr => {
             const date = moment(dateStr, 'YYYY-MM-DD', true);
@@ -65,66 +95,31 @@ export class PickupService {
             const max = moment(maxDate, 'YYYY-MM-DD', true);
             return date.isValid() && min.isValid() && max.isValid() && date.isBetween(min, max, undefined, '[]');
           },
-          { message: `arrival_date must be between ${minDate} and ${maxDate}` },
+          { message: `Arrival date must be between ${minDate} and ${maxDate}.` },
         ),
-
       arrival_time: z
-        .string()
-        .regex(/^\d{2}:\d{2}$/, { message: 'Invalid time format. Expected HH:MM' })
+        .preprocess(value => (typeof value === 'string' ? value : value ?? ''), z.string().regex(/^\d{2}\d{2}$/, { message: 'Invalid time format. Expected HH:MM.' }))
         .refine(
           time => {
-            const [hours, minutes] = time.split(':').map(Number);
+            const strTime = time.toString();
+            if (strTime.length < 4) {
+              return false;
+            }
+
+            const [_, hours, minutes] = strTime.match(/(\d{2})(\d{2})/)!.map(Number);
+
+            // const [hours, minutes] = time.split(':').map(Number);
             return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
           },
-          { message: 'Time values are out of range' },
+          { message: 'Time values are out of range.' },
         ),
-      flight_details: z.string().nonempty({ message: 'Flight details cannot be empty' }),
-      vehicle_type_code: z.string().nonempty({ message: 'Vehicle type code cannot be empty' }),
-      number_of_vehicles: z.coerce.number().min(1, { message: 'At least one vehicle is required' }),
+      flight_details: z.preprocess(value => (typeof value === 'string' ? value : ''), z.string().nonempty({ message: 'Flight details cannot be empty.' })),
+      vehicle_type_code: z.preprocess(value => (typeof value === 'string' ? value : ''), z.string().nonempty({ message: 'Vehicle type code cannot be empty.' })),
+      number_of_vehicles: z.preprocess(asNumber, z.number().int().min(1, { message: 'At least one vehicle is required.' })),
     });
   }
-  public validateForm(
-    params: TPickupData,
-    schema: any, // : { error: boolean; cause?: keyof TPickupData }
-  ) {
-    try {
-      schema.parse(params);
-      return null;
-    } catch (error) {
-      console.log(error);
-      const err = {};
-      if (error instanceof ZodError) {
-        error.issues.forEach(e => {
-          err[e.path[0]] = true;
-        });
-        return err;
-      }
-    }
-    // if (params.arrival_time.split(':').length !== 2) {
-    //   return {
-    //     error: true,
-    //     cause: 'arrival_time',
-    //   };
-    // }
-    // if (params.flight_details === '') {
-    //   return {
-    //     error: true,
-    //     cause: 'flight_details',
-    //   };
-    // }
-    // if (params.vehicle_type_code === '') {
-    //   return {
-    //     error: true,
-    //     cause: 'vehicle_type_code',
-    //   };
-    // }
-    // if (params.number_of_vehicles === 0) {
-    //   return {
-    //     error: true,
-    //     cause: 'number_of_vehicles',
-    //   };
-    // }
-    // return { error: false };
+  public validateForm(params: TPickupData, schema: ZodTypeAny) {
+    return schema.safeParse(params);
   }
   public getNumberOfVehicles(capacity: number, numberOfPersons: number) {
     let total_number_of_vehicles = Math.ceil(numberOfPersons / capacity);

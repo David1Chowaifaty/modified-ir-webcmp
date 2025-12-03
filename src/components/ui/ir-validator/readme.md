@@ -30,14 +30,18 @@
 
 ### Used by
 
+ - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
  - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
  - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
+ - [ir-pickup](../../ir-booking-details/ir-pickup)
 
 ### Graph
 ```mermaid
 graph TD;
+  ir-extra-service-config --> ir-validator
   ir-guest-info-form --> ir-validator
   ir-payment-folio --> ir-validator
+  ir-pickup --> ir-validator
   style ir-validator fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

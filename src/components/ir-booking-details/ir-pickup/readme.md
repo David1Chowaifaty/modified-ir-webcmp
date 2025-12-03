@@ -13,6 +13,7 @@
 | `bookingNumber`     | `booking-number`    |             | `string`                        | `undefined` |
 | `defaultPickupData` | --                  |             | `IBookingPickupInfo`            | `undefined` |
 | `numberOfPersons`   | `number-of-persons` |             | `number`                        | `0`         |
+| `open`              | `open`              |             | `boolean`                       | `undefined` |
 
 
 ## Events
@@ -31,24 +32,21 @@
 
 ### Depends on
 
-- [ir-title](../../ir-title)
-- [ir-select](../../ui/ir-select)
-- [ir-date-picker](../../ui/ir-date-picker)
-- [ir-input-text](../../ui/ir-input-text)
-- [ir-price-input](../../ui/ir-price-input)
-- [ir-button](../../ui/ir-button)
+- [ir-drawer](../../ir-drawer)
+- [ir-validator](../../ui/ir-validator)
+- [ir-custom-date-picker](../../ir-custom-date-picker)
+- [ir-custom-input](../../ui/ir-custom-input)
+- [ir-custom-button](../../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-pickup --> ir-title
-  ir-pickup --> ir-select
-  ir-pickup --> ir-date-picker
-  ir-pickup --> ir-input-text
-  ir-pickup --> ir-price-input
-  ir-pickup --> ir-button
-  ir-title --> ir-icon
-  ir-button --> ir-icons
+  ir-pickup --> ir-drawer
+  ir-pickup --> ir-validator
+  ir-pickup --> ir-custom-date-picker
+  ir-pickup --> ir-custom-input
+  ir-pickup --> ir-custom-button
+  ir-custom-date-picker --> ir-custom-input
   ir-booking-details --> ir-pickup
   style ir-pickup fill:#f9f,stroke:#333,stroke-width:4px
 ```

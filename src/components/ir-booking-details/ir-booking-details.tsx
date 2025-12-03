@@ -368,45 +368,6 @@ export class IrBookingDetails {
       this.sidebarState = null;
     };
     switch (this.sidebarState) {
-      // case 'guest':
-      //   return (
-      //     <ir-guest-info
-      //       isInSideBar
-      //       headerShown
-      //       slot="sidebar-body"
-      //       booking_nbr={this.bookingNumber}
-      //       email={this.booking?.guest.email}
-      //       language={this.language}
-      //       onCloseSideBar={handleClose}
-      //     ></ir-guest-info>
-      //   );
-      case 'pickup':
-        return (
-          <ir-pickup
-            bookingDates={{ from: this.booking.from_date, to: this.booking.to_date }}
-            slot="sidebar-body"
-            defaultPickupData={this.booking.pickup_info}
-            bookingNumber={this.booking.booking_nbr}
-            numberOfPersons={this.booking.occupancy.adult_nbr + this.booking.occupancy.children_nbr}
-            onCloseModal={handleClose}
-          ></ir-pickup>
-        );
-      // case 'extra_note':
-      //   return <ir-booking-extra-note slot="sidebar-body" booking={this.booking} onCloseModal={() => (this.sidebarState = null)}></ir-booking-extra-note>;
-      // case 'extra_service':
-      //   return (
-      //     <ir-extra-service-config
-      //       service={this.selectedService}
-      //       booking={{ from_date: this.booking.from_date, to_date: this.booking.to_date, booking_nbr: this.booking.booking_nbr, currency: this.booking.currency }}
-      //       slot="sidebar-body"
-      //       onCloseModal={() => {
-      //         handleClose();
-      //         if (this.selectedService) {
-      //           this.selectedService = null;
-      //         }
-      //       }}
-      //     ></ir-extra-service-config>
-      //   );
       case 'room-guest':
         return (
           <ir-room-guests
@@ -674,7 +635,7 @@ export class IrBookingDetails {
         </div>
       </ir-dialog>,
       <ir-sidebar
-        open={this.sidebarState !== null && this.sidebarState !== 'payment-folio'}
+        open={this.sidebarState === 'room-guest'}
         side={'right'}
         id="editGuestInfo"
         style={{ '--sidebar-width': this.sidebarState === 'room-guest' ? '60rem' : undefined }}
@@ -701,19 +662,16 @@ export class IrBookingDetails {
           }
         }}
       ></ir-extra-service-config>,
-      // <ir-sidebar
-      //   open={this.sidebarState === 'payment-folio'}
-      //   side={'left'}
-      //   id="folioSidebar"
-      //   onIrSidebarToggle={e => {
-      //     e.stopImmediatePropagation();
-      //     e.stopPropagation();
-      //     this.sidebarState = null;
-      //   }}
-      //   showCloseButton={false}
-      // >
-      //   {this.renderSidebarContent()}
-      // </ir-sidebar>,
+      <ir-pickup
+        open={this.sidebarState === 'pickup'}
+        bookingDates={{ from: this.booking.from_date, to: this.booking.to_date }}
+        defaultPickupData={this.booking.pickup_info}
+        bookingNumber={this.booking.booking_nbr}
+        numberOfPersons={this.booking.occupancy.adult_nbr + this.booking.occupancy.children_nbr}
+        onCloseModal={() => {
+          this.sidebarState = null;
+        }}
+      ></ir-pickup>,
       <ir-guest-info-drawer
         onGuestInfoDrawerClosed={() => {
           this.sidebarState = null;

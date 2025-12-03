@@ -11,14 +11,14 @@
 | ---------------- | ----------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `bookingNumber`  | `booking-number`  |             | `string`                                                                                                                                                                 | `undefined` |
 | `currencySymbol` | `currency-symbol` |             | `string`                                                                                                                                                                 | `undefined` |
-| `service`        | --                |             | `{ cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; price?: number; start_date?: string; system_id?: number; }` | `undefined` |
+| `service`        | --                |             | `{ cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; system_id?: number; }` | `undefined` |
 
 
 ## Events
 
 | Event              | Description | Type                                                                                                                                                                                  |
 | ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `editExtraService` |             | `CustomEvent<{ cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; price?: number; start_date?: string; system_id?: number; }>` |
+| `editExtraService` |             | `CustomEvent<{ cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; system_id?: number; }>` |
 | `resetBookingEvt`  |             | `CustomEvent<null>`                                                                                                                                                                   |
 
 
@@ -32,16 +32,14 @@
 
 - [ir-custom-button](../../../ui/ir-custom-button)
 - [ir-date-view](../../../ir-date-view)
-- [ir-modal](../../../ui/ir-modal)
+- [ir-dialog](../../../ui/ir-dialog)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-extra-service --> ir-custom-button
   ir-extra-service --> ir-date-view
-  ir-extra-service --> ir-modal
-  ir-modal --> ir-button
-  ir-button --> ir-icons
+  ir-extra-service --> ir-dialog
   ir-extra-services --> ir-extra-service
   style ir-extra-service fill:#f9f,stroke:#333,stroke-width:4px
 ```

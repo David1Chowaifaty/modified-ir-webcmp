@@ -2305,6 +2305,7 @@ export namespace Components {
         "bookingNumber": string;
         "defaultPickupData": IBookingPickupInfo | null;
         "numberOfPersons": number;
+        "open": boolean;
     }
     interface IrPickupView {
         "booking": Booking;
@@ -9013,6 +9014,7 @@ declare namespace LocalJSX {
         "numberOfPersons"?: number;
         "onCloseModal"?: (event: IrPickupCustomEvent<null>) => void;
         "onResetBookingEvt"?: (event: IrPickupCustomEvent<null>) => void;
+        "open"?: boolean;
     }
     interface IrPickupView {
         "booking"?: Booking;

@@ -41,6 +41,7 @@ graph TD;
   ir-sales-by-country --> ir-sales-by-country-summary
   ir-sales-by-country --> ir-sales-filters
   ir-sales-by-country --> ir-sales-table
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp

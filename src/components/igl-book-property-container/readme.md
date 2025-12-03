@@ -43,6 +43,7 @@ graph TD;
   igl-book-property-container --> ir-toast
   igl-book-property-container --> ir-interceptor
   igl-book-property-container --> igl-book-property
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp

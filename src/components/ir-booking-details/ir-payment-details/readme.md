@@ -37,9 +37,9 @@
 - [ir-payment-summary](ir-payment-summary)
 - [ir-booking-guarantee](ir-booking-guarantee)
 - [ir-applicable-policies](ir-applicable-policies)
-- [ir-button](../../ui/ir-button)
+- [ir-custom-button](../../ui/ir-custom-button)
 - [ir-payments-folio](ir-payments-folio)
-- [ir-modal](../../ui/ir-modal)
+- [ir-dialog](../../ui/ir-dialog)
 
 ### Graph
 ```mermaid
@@ -47,9 +47,9 @@ graph TD;
   ir-payment-details --> ir-payment-summary
   ir-payment-details --> ir-booking-guarantee
   ir-payment-details --> ir-applicable-policies
-  ir-payment-details --> ir-button
+  ir-payment-details --> ir-custom-button
   ir-payment-details --> ir-payments-folio
-  ir-payment-details --> ir-modal
+  ir-payment-details --> ir-dialog
   ir-booking-guarantee --> ir-label
   ir-booking-guarantee --> ir-button
   ir-button --> ir-icons
@@ -57,10 +57,7 @@ graph TD;
   ir-applicable-policies --> ir-icons
   ir-payments-folio --> ir-payment-item
   ir-payments-folio --> ir-custom-button
-  ir-payment-item --> ir-popover
-  ir-payment-item --> ir-button
   ir-payment-item --> ir-custom-button
-  ir-modal --> ir-button
   ir-booking-details --> ir-payment-details
   style ir-payment-details fill:#f9f,stroke:#333,stroke-width:4px
 ```

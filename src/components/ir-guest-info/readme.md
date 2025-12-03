@@ -52,6 +52,7 @@ graph TD;
   ir-guest-info --> ir-phone-input
   ir-guest-info --> ir-textarea
   ir-guest-info --> ir-button
+  ir-interceptor --> ir-spinner
   ir-interceptor --> ir-otp-modal
   ir-otp-modal --> ir-spinner
   ir-otp-modal --> ir-otp

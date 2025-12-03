@@ -13,6 +13,11 @@
 .border-theme {
   border: 1px solid #cacfe7;
 }
+.pickup__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 @media (min-width: 768px) {
   .price-input-container {
     max-width: 290px;
