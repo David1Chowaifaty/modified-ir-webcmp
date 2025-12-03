@@ -1,15 +1,21 @@
 @import url('../../../../assets/webawesome/component/host.css');
 :host {
-  display: flex;
+  display: block;
+  font-size: 0.93rem;
+}
+:host[display='inline'] {
+  display: inline-flex;
   align-items: center;
   gap: 1rem;
-  font-size: 0.93rem;
 }
 .booked-by-source__logo {
   width: 1.5625rem;
 }
 .booked-by-cell__description {
   font-size: 0.875rem;
+}
+.cell-label {
+  font-weight: 700;
 }
 .booked-by-source__private-note {
   height: 0.5rem;

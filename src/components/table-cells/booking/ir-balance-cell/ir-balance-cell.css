@@ -5,6 +5,14 @@
   align-items: center;
   font-size: 0.93rem;
 }
+:host[display='inline'] {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.cell-label {
+  font-weight: 700;
+}
 .balance_button-container {
   display: flex;
   align-items: center;

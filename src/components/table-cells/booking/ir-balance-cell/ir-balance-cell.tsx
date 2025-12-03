@@ -11,6 +11,8 @@ import moment from 'moment';
   scoped: true,
 })
 export class IrBalanceCell {
+  @Prop() label: string;
+  @Prop({ reflect: true }) display: 'inline' | 'block' = 'inline';
   @Prop() financial!: Booking['financial'];
   @Prop() statusCode!: string;
   @Prop() isDirect!: boolean;
@@ -22,6 +24,7 @@ export class IrBalanceCell {
   render() {
     return (
       <Host>
+        {this.label && <p class="cell-label">{this.label}:</p>}
         <p class="ir-price">{formatAmount(this.currencySymbol, this.financial.gross_total)}</p>
         <div class="balance_button-container">
           {['003', '004'].includes(this.statusCode) && this.isDirect

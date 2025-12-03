@@ -407,8 +407,10 @@ export namespace Components {
     interface IrBalanceCell {
         "bookingNumber": string;
         "currencySymbol": string;
+        "display": 'inline' | 'block';
         "financial": Booking['financial'];
         "isDirect": boolean;
+        "label": string;
         "statusCode": string;
     }
     interface IrBookedByCell {
@@ -416,6 +418,7 @@ export namespace Components {
           * Makes the guest name clickable. Emits `openGuestDetails` when clicked.
          */
         "clickableGuest": boolean;
+        "display": 'inline' | 'block';
         /**
           * Guest associated with this booking.
          */
@@ -424,6 +427,7 @@ export namespace Components {
           * Unique identifier for this cell. Used for tooltip scoping.
          */
         "identifier": string;
+        "label": string;
         /**
           * Promo key if a promo/coupon was applied.
          */
@@ -455,6 +459,8 @@ export namespace Components {
     }
     interface IrBookedOnCell {
         "bookedOn": Booking['booked_on'];
+        "display": 'inline' | 'block';
+        "label": string;
     }
     interface IrBooking {
         "bookingNumber": string;
@@ -1211,7 +1217,10 @@ export namespace Components {
     }
     interface IrDatesCell {
         "checkIn": string;
+        "checkInLabel": string;
         "checkOut": string;
+        "checkoutLabel": string;
+        "display": 'block' | 'inline';
         "overdueCheckin": boolean;
         "overdueCheckout": boolean;
     }
@@ -6841,8 +6850,10 @@ declare namespace LocalJSX {
     interface IrBalanceCell {
         "bookingNumber": string;
         "currencySymbol": string;
+        "display"?: 'inline' | 'block';
         "financial": Booking['financial'];
         "isDirect": boolean;
+        "label"?: string;
         "onPayBookingBalance"?: (event: IrBalanceCellCustomEvent<{ booking_nbr: string; payment: Payment }>) => void;
         "statusCode": string;
     }
@@ -6851,6 +6862,7 @@ declare namespace LocalJSX {
           * Makes the guest name clickable. Emits `openGuestDetails` when clicked.
          */
         "clickableGuest"?: boolean;
+        "display"?: 'inline' | 'block';
         /**
           * Guest associated with this booking.
          */
@@ -6859,6 +6871,7 @@ declare namespace LocalJSX {
           * Unique identifier for this cell. Used for tooltip scoping.
          */
         "identifier"?: string;
+        "label"?: string;
         /**
           * Emitted when the guest name is clicked. Sends the `identifier` for parent lookup.
          */
@@ -6894,6 +6907,8 @@ declare namespace LocalJSX {
     }
     interface IrBookedOnCell {
         "bookedOn"?: Booking['booked_on'];
+        "display"?: 'inline' | 'block';
+        "label"?: string;
     }
     interface IrBooking {
         "bookingNumber"?: string;
@@ -7706,7 +7721,10 @@ declare namespace LocalJSX {
     }
     interface IrDatesCell {
         "checkIn"?: string;
+        "checkInLabel"?: string;
         "checkOut"?: string;
+        "checkoutLabel"?: string;
+        "display"?: 'block' | 'inline';
         "overdueCheckin"?: boolean;
         "overdueCheckout"?: boolean;
     }

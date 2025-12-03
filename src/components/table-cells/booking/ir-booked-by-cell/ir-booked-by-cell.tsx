@@ -8,6 +8,8 @@ import { Component, Event, EventEmitter, Fragment, Host, Prop, h } from '@stenci
   scoped: true,
 })
 export class IrBookedByCell {
+  @Prop() label: string;
+  @Prop({ reflect: true }) display: 'inline' | 'block' = 'block';
   /**
    * Guest associated with this booking.
    */
@@ -79,45 +81,44 @@ export class IrBookedByCell {
     const guest = `${this.guest.first_name} ${this.guest.last_name}`;
     return (
       <Host>
-        <div>
-          <div class="booked-by-source__container">
-            {this.clickableGuest ? (
-              <ir-custom-button size="medium" onClickHandler={this.handleGuestClick.bind(this)} variant="brand" appearance="plain" link>
-                {guest}
-              </ir-custom-button>
-            ) : (
-              <p>{guest}</p>
-            )}
-            {this.showRepeatGuestBadge && (
-              <Fragment>
-                <wa-tooltip for={repeatGuestBadgeId}>{`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.guest.nbr_confirmed_bookings.toString())}</wa-tooltip>
-                <wa-icon name="heart" style={{ color: '#FB0AAD' }} id={repeatGuestBadgeId}></wa-icon>
-              </Fragment>
-            )}
-            {this.showPersons && (
-              <p>
-                {this.totalPersons}
-                {locales.entries.Lcz_P}
-              </p>
-            )}
-            {this.showPrivateNoteDot && <span class="booked-by-source__private-note"></span>}
-          </div>
-          <div class="booked-by-source__container">
-            {this.showLoyaltyIcon && (
-              <Fragment>
-                <wa-tooltip for={loyaltyBadgeId}>{locales.entries.Lcz_LoyaltyDiscountApplied}</wa-tooltip>
-                <wa-icon name="heart" variant="regular" style={{ color: '#fc6c85' }} id={loyaltyBadgeId}></wa-icon>
-              </Fragment>
-            )}
-            {this.showPromoIcon && (
-              <Fragment>
-                <wa-tooltip for={couponBadgeId}>
-                  {locales.entries.Lcz_Coupon}: {this.promoKey}
-                </wa-tooltip>
-                <wa-icon id={couponBadgeId} name="ticket"></wa-icon>
-              </Fragment>
-            )}
-          </div>
+        {this.label && <p class="cell-label">{this.label}:</p>}
+        <div class="booked-by-source__container">
+          {this.clickableGuest ? (
+            <ir-custom-button size="medium" onClickHandler={this.handleGuestClick.bind(this)} variant="brand" appearance="plain" link>
+              {guest}
+            </ir-custom-button>
+          ) : (
+            <p>{guest}</p>
+          )}
+          {this.showRepeatGuestBadge && (
+            <Fragment>
+              <wa-tooltip for={repeatGuestBadgeId}>{`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.guest.nbr_confirmed_bookings.toString())}</wa-tooltip>
+              <wa-icon name="heart" style={{ color: '#FB0AAD' }} id={repeatGuestBadgeId}></wa-icon>
+            </Fragment>
+          )}
+          {this.showPersons && (
+            <p>
+              {this.totalPersons}
+              {locales.entries.Lcz_P}
+            </p>
+          )}
+          {this.showPrivateNoteDot && <span class="booked-by-source__private-note"></span>}
+        </div>
+        <div class="booked-by-source__container">
+          {this.showLoyaltyIcon && (
+            <Fragment>
+              <wa-tooltip for={loyaltyBadgeId}>{locales.entries.Lcz_LoyaltyDiscountApplied}</wa-tooltip>
+              <wa-icon name="heart" variant="regular" style={{ color: '#fc6c85' }} id={loyaltyBadgeId}></wa-icon>
+            </Fragment>
+          )}
+          {this.showPromoIcon && (
+            <Fragment>
+              <wa-tooltip for={couponBadgeId}>
+                {locales.entries.Lcz_Coupon}: {this.promoKey}
+              </wa-tooltip>
+              <wa-icon id={couponBadgeId} name="ticket"></wa-icon>
+            </Fragment>
+          )}
         </div>
       </Host>
     );

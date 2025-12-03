@@ -7,8 +7,11 @@ import moment from 'moment';
   scoped: true,
 })
 export class IrDatesCell {
+  @Prop({ reflect: true }) display: 'block' | 'inline' = 'block';
   @Prop() checkIn: string;
   @Prop() checkOut: string;
+  @Prop() checkInLabel: string;
+  @Prop() checkoutLabel: string;
   @Prop() overdueCheckin: boolean;
   @Prop() overdueCheckout: boolean;
   private formatDate(date: string) {
@@ -17,8 +20,14 @@ export class IrDatesCell {
   render() {
     return (
       <Host>
-        <p style={{ fontWeight: this.overdueCheckin ? 'bold' : 'auto' }}>{this.formatDate(this.checkIn)}</p>
-        <p style={{ fontWeight: this.overdueCheckout ? 'bold' : 'auto' }}>{this.formatDate(this.checkOut)}</p>
+        <div class="date-cell__container">
+          {this.checkInLabel && <span class="date-cell__label">{this.checkInLabel}: </span>}
+          <p style={{ fontWeight: this.overdueCheckin ? 'bold' : 'auto' }}>{this.formatDate(this.checkIn)}</p>
+        </div>
+        <div class="date-cell__container">
+          {this.checkoutLabel && <span class="date-cell__label">{this.checkoutLabel}: </span>}
+          <p style={{ fontWeight: this.overdueCheckout ? 'bold' : 'auto' }}>{this.formatDate(this.checkOut)}</p>
+        </div>
       </Host>
     );
   }
