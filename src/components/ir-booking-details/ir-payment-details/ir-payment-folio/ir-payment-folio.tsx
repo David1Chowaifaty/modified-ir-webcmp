@@ -26,7 +26,7 @@ const paymentTypeSchema = z.object({
 const paymentMethodSchema = z.object({
   code: z.string().min(3).max(4),
   description: z.string(),
-  operation: z.string(),
+  operation: z.string().optional().nullable(),
 });
 
 const folioBaseSchema = z.object({
