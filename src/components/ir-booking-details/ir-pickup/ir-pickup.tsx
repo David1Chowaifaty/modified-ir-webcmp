@@ -41,7 +41,6 @@ export class IrPickup {
 
   private pickupService = new PickupService();
   private pickupSchema: ReturnType<PickupService['createPickupSchema']>;
-  private formRef: HTMLFormElement;
 
   private get shouldRenderDetails() {
     return this.pickupData.location > 0;
@@ -215,7 +214,6 @@ export class IrPickup {
       >
         {/* {this.open && ( */}
         <form
-          ref={el => (this.formRef = el)}
           id="pickup-form"
           class="pickup__container"
           onSubmit={async e => {
