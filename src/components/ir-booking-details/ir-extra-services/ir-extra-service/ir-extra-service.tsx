@@ -54,6 +54,7 @@ export class IrExtraService {
                     e.stopPropagation();
                     this.editExtraService.emit(this.service);
                   }}
+                  iconBtn
                   appearance={'plain'}
                   variant={'neutral'}
                 >
@@ -61,6 +62,7 @@ export class IrExtraService {
                 </ir-custom-button>
                 <wa-tooltip for={`delete-extra-service-${this.service.booking_system_id}`}>Delete service</wa-tooltip>
                 <ir-custom-button
+                  iconBtn
                   id={`delete-extra-service-${this.service.booking_system_id}`}
                   onClickHandler={e => {
                     e.stopImmediatePropagation();

@@ -59,6 +59,7 @@ export class IrExtraServiceConfig {
   }
   private closeDialog() {
     // this.formRef.reset();
+    this.s_service = null;
     this.closeModal.emit();
   }
   private updateService(params: Partial<ExtraService>) {
