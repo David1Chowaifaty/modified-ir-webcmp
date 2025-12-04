@@ -41,6 +41,7 @@ export class IrPickup {
 
   private pickupService = new PickupService();
   private pickupSchema: ReturnType<PickupService['createPickupSchema']>;
+  private formRef: HTMLFormElement;
 
   private get shouldRenderDetails() {
     return this.pickupData.location > 0;
@@ -182,15 +183,39 @@ export class IrPickup {
   render() {
     return (
       <ir-drawer
+        style={{
+          '--ir-drawer-width': '40rem',
+          '--ir-drawer-background-color': 'var(--wa-color-surface-default)',
+          '--ir-drawer-padding-left': 'var(--spacing)',
+          '--ir-drawer-padding-right': 'var(--spacing)',
+          '--ir-drawer-padding-top': 'var(--spacing)',
+          '--ir-drawer-padding-bottom': 'var(--spacing)',
+        }}
         label={locales.entries.Lcz_Pickup}
         open={this.open}
         onDrawerHide={e => {
           e.stopImmediatePropagation();
           e.stopPropagation();
+          // this.formRef.reset();
+          this.pickupData = {
+            ...{
+              location: -1,
+              flight_details: '',
+              due_upon_booking: '',
+              number_of_vehicles: 1,
+              vehicle_type_code: '',
+              currency: undefined,
+              arrival_time: '',
+              arrival_date: null,
+              selected_option: undefined,
+            },
+          };
           this.closeModal.emit();
         }}
       >
+        {/* {this.open && ( */}
         <form
+          ref={el => (this.formRef = el)}
           id="pickup-form"
           class="pickup__container"
           onSubmit={async e => {
@@ -315,6 +340,7 @@ export class IrPickup {
             </div>
           )}
         </form>
+        {/* )} */}
         <div slot="footer" class={'ir__drawer-footer'}>
           <ir-custom-button class={`flex-fill`} size="medium" appearance="filled" variant="neutral" data-drawer="close">
             {locales.entries.Lcz_Cancel}
