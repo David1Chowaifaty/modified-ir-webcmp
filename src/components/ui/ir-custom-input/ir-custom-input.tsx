@@ -192,7 +192,11 @@ export class IrCustomInput {
 
     this._mask = IMask(nativeInput, maskOpts);
     if (this.value) {
-      this._mask.value = this.value;
+      if (this.returnMaskedValue) {
+        this._mask.unmaskedValue = this.value;
+      } else {
+        this._mask.value = this.value;
+      }
     }
     this._mask.on('accept', () => {
       const isEmpty = this.inputRef.value.trim() === '' || this._mask.unmaskedValue === '';
@@ -266,11 +270,19 @@ export class IrCustomInput {
   };
 
   render() {
+    let displayValue = this.value;
+
+    if (this._mask && this.returnMaskedValue) {
+      // IMask holds the formatted string (e.g., "1,000.00")
+      // this.value holds the raw number (e.g., "1000")
+      // We must pass "1,000.00" to wa-input to avoid the overwrite warning
+      displayValue = this._mask.value;
+    }
     return (
       <Host>
         <wa-input
           type={this.type}
-          value={this.value}
+          value={displayValue}
           ref={el => (this.inputRef = el)}
           defaultValue={this.defaultValue}
           size={this.size}
