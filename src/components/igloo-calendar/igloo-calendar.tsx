@@ -1297,6 +1297,26 @@ export class IglooCalendar {
   private handleCloseBookingWindow() {
     this.bookingItem = null;
   }
+  private get isSidebarOpen(): boolean {
+    // 1) Always open when editing a booking
+    if (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING') {
+      return true;
+    }
+
+    // 2) Open when room nights dialog is showing in the sidebar
+    if (this.roomNightsData) {
+      return true;
+    }
+
+    // 3) Open for sidebar-based flows (but not room-guests, which uses <ir-room-guests>)
+    if (this.calendarSidebarState) {
+      const type = this.calendarSidebarState.type;
+      return type === 'split' || type === 'bulk-blocks';
+    }
+
+    // 4) Default: closed
+    return false;
+  }
   render() {
     // if (!this.isAuthenticated) {
     //   return <ir-login onAuthFinish={() => this.auth.setIsAuthenticated(true)}></ir-login>;
@@ -1370,15 +1390,7 @@ export class IglooCalendar {
         )}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
-          open={(() => {
-            if (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING') {
-              return true;
-            }
-            if (!this.calendarSidebarState || this.calendarSidebarState?.type === 'room-guests' || this.roomNightsData === null) {
-              return false;
-            }
-            return true;
-          })()}
+          open={this.isSidebarOpen}
           showCloseButton={false}
           sidebarStyles={{
             width: this.calendarSidebarState?.type === 'room-guests' ? '60rem' : this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)',
@@ -1437,7 +1449,7 @@ export class IglooCalendar {
           countries={this.countries}
           language={this.language}
           identifier={this.calendarSidebarState?.payload?.identifier}
-          bookingNumber={this.calendarSidebarState?.payload.bookingNumber}
+          bookingNumber={this.calendarSidebarState?.payload?.bookingNumber}
           roomName={this.calendarSidebarState?.payload?.roomName}
           totalGuests={this.calendarSidebarState?.payload?.totalGuests}
           sharedPersons={this.calendarSidebarState?.payload?.sharing_persons}
