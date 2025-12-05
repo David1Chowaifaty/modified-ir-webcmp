@@ -15,20 +15,15 @@ export class PickupService {
         throw new Error('Cannot save pickup without a selected option and currency.');
       }
 
-      const [_, hours, minutes] = params.arrival_time
-        ? params.arrival_time
-            ?.toString()
-            ?.match(/(\d{2})(\d{2})/)!
-            ?.map(Number)
-        : [null, null, null];
+      const splitTime = params.arrival_time.split(':');
       await axios.post(`/Do_Pickup`, {
         booking_nbr,
         is_remove,
         currency: params.currency,
         date: params.arrival_date,
         details: params.flight_details,
-        hour: hours ?? null,
-        minute: minutes ?? null,
+        hour: splitTime[0],
+        minute: splitTime[1],
         nbr_of_units: params.number_of_vehicles,
         selected_option: params.selected_option,
         total: +params.due_upon_booking,
@@ -98,21 +93,31 @@ export class PickupService {
           { message: `Arrival date must be between ${minDate} and ${maxDate}.` },
         ),
       arrival_time: z
-        .preprocess(value => (typeof value === 'string' ? value : value ?? ''), z.string().regex(/^\d{2}\d{2}$/, { message: 'Invalid time format. Expected HH:MM.' }))
+        .string()
+        .regex(/^\d{2}:\d{2}$/, { message: 'Invalid time format. Expected HH:MM' })
         .refine(
           time => {
-            const strTime = time.toString();
-            if (strTime.length < 4) {
-              return false;
-            }
-
-            const [_, hours, minutes] = strTime.match(/(\d{2})(\d{2})/)!.map(Number);
-
-            // const [hours, minutes] = time.split(':').map(Number);
+            const [hours, minutes] = time.split(':').map(Number);
             return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
           },
-          { message: 'Time values are out of range.' },
+          { message: 'Time values are out of range' },
         ),
+      // arrival_time: z
+      //   .preprocess(value => (typeof value === 'string' ? value : value ?? ''), z.string().regex(/^\d{2}\d{2}$/, { message: 'Invalid time format. Expected HH:MM.' }))
+      //   .refine(
+      //     time => {
+      //       const strTime = time.toString();
+      //       if (strTime.length < 4) {
+      //         return false;
+      //       }
+
+      //       const [_, hours, minutes] = strTime.match(/(\d{2})(\d{2})/)!.map(Number);
+
+      //       // const [hours, minutes] = time.split(':').map(Number);
+      //       return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
+      //     },
+      //     { message: 'Time values are out of range.' },
+      //   ),
       flight_details: z.preprocess(value => (typeof value === 'string' ? value : ''), z.string().nonempty({ message: 'Flight details cannot be empty.' })),
       vehicle_type_code: z.preprocess(value => (typeof value === 'string' ? value : ''), z.string().nonempty({ message: 'Vehicle type code cannot be empty.' })),
       number_of_vehicles: z.preprocess(asNumber, z.number().int().min(1, { message: 'At least one vehicle is required.' })),

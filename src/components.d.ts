@@ -1013,6 +1013,7 @@ export namespace Components {
           * Makes the input a required field.
          */
         "required": NativeWaInput1['required'];
+        "returnMaskedValue": boolean;
         /**
           * The input's size.
          */
@@ -1331,6 +1332,10 @@ export namespace Components {
     interface IrExtraServiceConfig {
         "booking": Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
         "open": boolean;
+        "service": ExtraService;
+    }
+    interface IrExtraServiceConfigForm {
+        "booking": Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
         "service": ExtraService;
     }
     interface IrExtraServices {
@@ -2198,6 +2203,12 @@ export namespace Components {
         "payment": Payment1;
         "paymentEntries": PaymentEntries1;
     }
+    interface IrPaymentFolioForm {
+        "bookingNumber": string;
+        "mode": FolioEntryMode;
+        "payment": Payment1;
+        "paymentEntries": PaymentEntries1;
+    }
     interface IrPaymentItem {
         "payment": IPayment;
     }
@@ -2309,11 +2320,33 @@ export namespace Components {
         "value": string;
     }
     interface IrPickup {
+        /**
+          * The date range of the booking (check-in and check-out). Determines allowed pickup dates and validation rules.
+         */
+        "bookingDates": { from: string; to: string };
+        /**
+          * Unique booking reference number used to associate pickup updates with a specific reservation.
+         */
+        "bookingNumber": string;
+        /**
+          * Pre-filled pickup information coming from the booking. When provided, the pickup form initializes with this data and the user may update or remove it.
+         */
+        "defaultPickupData": IBookingPickupInfo | null;
+        /**
+          * Total number of persons included in the booking. Used to compute vehicle capacity and validate pickup options.
+         */
+        "numberOfPersons": number;
+        /**
+          * Controls whether the pickup drawer/modal is open. When true, the drawer becomes visible and initializes the form.
+         */
+        "open": boolean;
+    }
+    interface IrPickupForm {
         "bookingDates": { from: string; to: string };
         "bookingNumber": string;
         "defaultPickupData": IBookingPickupInfo | null;
+        "formId": string;
         "numberOfPersons": number;
-        "open": boolean;
     }
     interface IrPickupView {
         "booking": Booking;
@@ -3310,6 +3343,10 @@ export interface IrExtraServiceConfigCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrExtraServiceConfigElement;
 }
+export interface IrExtraServiceConfigFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrExtraServiceConfigFormElement;
+}
 export interface IrFiltersPanelCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrFiltersPanelElement;
@@ -3438,6 +3475,10 @@ export interface IrPaymentFolioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPaymentFolioElement;
 }
+export interface IrPaymentFolioFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPaymentFolioFormElement;
+}
 export interface IrPaymentItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPaymentItemElement;
@@ -3461,6 +3502,10 @@ export interface IrPickerCustomEvent<T> extends CustomEvent<T> {
 export interface IrPickupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrPickupElement;
+}
+export interface IrPickupFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrPickupFormElement;
 }
 export interface IrPriceInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -4856,7 +4901,6 @@ declare global {
     };
     interface HTMLIrExtraServiceConfigElementEventMap {
         "closeModal": null;
-        "resetBookingEvt": null;
     }
     interface HTMLIrExtraServiceConfigElement extends Components.IrExtraServiceConfig, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrExtraServiceConfigElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceConfigElement, ev: IrExtraServiceConfigCustomEvent<HTMLIrExtraServiceConfigElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4871,6 +4915,24 @@ declare global {
     var HTMLIrExtraServiceConfigElement: {
         prototype: HTMLIrExtraServiceConfigElement;
         new (): HTMLIrExtraServiceConfigElement;
+    };
+    interface HTMLIrExtraServiceConfigFormElementEventMap {
+        "closeModal": null;
+        "resetBookingEvt": null;
+    }
+    interface HTMLIrExtraServiceConfigFormElement extends Components.IrExtraServiceConfigForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrExtraServiceConfigFormElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceConfigFormElement, ev: IrExtraServiceConfigFormCustomEvent<HTMLIrExtraServiceConfigFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrExtraServiceConfigFormElementEventMap>(type: K, listener: (this: HTMLIrExtraServiceConfigFormElement, ev: IrExtraServiceConfigFormCustomEvent<HTMLIrExtraServiceConfigFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrExtraServiceConfigFormElement: {
+        prototype: HTMLIrExtraServiceConfigFormElement;
+        new (): HTMLIrExtraServiceConfigFormElement;
     };
     interface HTMLIrExtraServicesElement extends Components.IrExtraServices, HTMLStencilElement {
     }
@@ -5548,8 +5610,6 @@ declare global {
     };
     interface HTMLIrPaymentFolioElementEventMap {
         "closeModal": null;
-        "resetBookingEvt": null;
-        "resetExposedCancellationDueAmount": null;
     }
     interface HTMLIrPaymentFolioElement extends Components.IrPaymentFolio, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPaymentFolioElementEventMap>(type: K, listener: (this: HTMLIrPaymentFolioElement, ev: IrPaymentFolioCustomEvent<HTMLIrPaymentFolioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5564,6 +5624,26 @@ declare global {
     var HTMLIrPaymentFolioElement: {
         prototype: HTMLIrPaymentFolioElement;
         new (): HTMLIrPaymentFolioElement;
+    };
+    interface HTMLIrPaymentFolioFormElementEventMap {
+        "closeModal": null;
+        "resetBookingEvt": null;
+        "resetExposedCancellationDueAmount": null;
+        "loadingChanged": 'save' | 'save-print' | null;
+    }
+    interface HTMLIrPaymentFolioFormElement extends Components.IrPaymentFolioForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPaymentFolioFormElementEventMap>(type: K, listener: (this: HTMLIrPaymentFolioFormElement, ev: IrPaymentFolioFormCustomEvent<HTMLIrPaymentFolioFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPaymentFolioFormElementEventMap>(type: K, listener: (this: HTMLIrPaymentFolioFormElement, ev: IrPaymentFolioFormCustomEvent<HTMLIrPaymentFolioFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPaymentFolioFormElement: {
+        prototype: HTMLIrPaymentFolioFormElement;
+        new (): HTMLIrPaymentFolioFormElement;
     };
     interface HTMLIrPaymentItemElementEventMap {
         "editPayment": IPayment;
@@ -5669,7 +5749,6 @@ declare global {
     };
     interface HTMLIrPickupElementEventMap {
         "closeModal": null;
-        "resetBookingEvt": null;
     }
     interface HTMLIrPickupElement extends Components.IrPickup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrPickupElementEventMap>(type: K, listener: (this: HTMLIrPickupElement, ev: IrPickupCustomEvent<HTMLIrPickupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5684,6 +5763,26 @@ declare global {
     var HTMLIrPickupElement: {
         prototype: HTMLIrPickupElement;
         new (): HTMLIrPickupElement;
+    };
+    interface HTMLIrPickupFormElementEventMap {
+        "closeModal": null;
+        "canSubmitPickupChange": boolean;
+        "loadingChange": boolean;
+        "resetBookingEvt": null;
+    }
+    interface HTMLIrPickupFormElement extends Components.IrPickupForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrPickupFormElementEventMap>(type: K, listener: (this: HTMLIrPickupFormElement, ev: IrPickupFormCustomEvent<HTMLIrPickupFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrPickupFormElementEventMap>(type: K, listener: (this: HTMLIrPickupFormElement, ev: IrPickupFormCustomEvent<HTMLIrPickupFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrPickupFormElement: {
+        prototype: HTMLIrPickupFormElement;
+        new (): HTMLIrPickupFormElement;
     };
     interface HTMLIrPickupViewElement extends Components.IrPickupView, HTMLStencilElement {
     }
@@ -6449,6 +6548,7 @@ declare global {
         "ir-events-log": HTMLIrEventsLogElement;
         "ir-extra-service": HTMLIrExtraServiceElement;
         "ir-extra-service-config": HTMLIrExtraServiceConfigElement;
+        "ir-extra-service-config-form": HTMLIrExtraServiceConfigFormElement;
         "ir-extra-services": HTMLIrExtraServicesElement;
         "ir-filters-panel": HTMLIrFiltersPanelElement;
         "ir-financial-actions": HTMLIrFinancialActionsElement;
@@ -6498,6 +6598,7 @@ declare global {
         "ir-payment-actions": HTMLIrPaymentActionsElement;
         "ir-payment-details": HTMLIrPaymentDetailsElement;
         "ir-payment-folio": HTMLIrPaymentFolioElement;
+        "ir-payment-folio-form": HTMLIrPaymentFolioFormElement;
         "ir-payment-item": HTMLIrPaymentItemElement;
         "ir-payment-option": HTMLIrPaymentOptionElement;
         "ir-payment-summary": HTMLIrPaymentSummaryElement;
@@ -6506,6 +6607,7 @@ declare global {
         "ir-picker": HTMLIrPickerElement;
         "ir-picker-item": HTMLIrPickerItemElement;
         "ir-pickup": HTMLIrPickupElement;
+        "ir-pickup-form": HTMLIrPickupFormElement;
         "ir-pickup-view": HTMLIrPickupViewElement;
         "ir-pms-logs": HTMLIrPmsLogsElement;
         "ir-popover": HTMLIrPopoverElement;
@@ -7607,6 +7709,7 @@ declare namespace LocalJSX {
           * Makes the input a required field.
          */
         "required"?: NativeWaInput1['required'];
+        "returnMaskedValue"?: boolean;
         /**
           * The input's size.
          */
@@ -7972,8 +8075,13 @@ declare namespace LocalJSX {
     interface IrExtraServiceConfig {
         "booking"?: Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
         "onCloseModal"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
-        "onResetBookingEvt"?: (event: IrExtraServiceConfigCustomEvent<null>) => void;
         "open"?: boolean;
+        "service"?: ExtraService;
+    }
+    interface IrExtraServiceConfigForm {
+        "booking"?: Pick<Booking, 'from_date' | 'to_date' | 'currency' | 'booking_nbr'>;
+        "onCloseModal"?: (event: IrExtraServiceConfigFormCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrExtraServiceConfigFormCustomEvent<null>) => void;
         "service"?: ExtraService;
     }
     interface IrExtraServices {
@@ -8954,8 +9062,16 @@ declare namespace LocalJSX {
         "bookingNumber"?: string;
         "mode"?: FolioEntryMode;
         "onCloseModal"?: (event: IrPaymentFolioCustomEvent<null>) => void;
-        "onResetBookingEvt"?: (event: IrPaymentFolioCustomEvent<null>) => void;
-        "onResetExposedCancellationDueAmount"?: (event: IrPaymentFolioCustomEvent<null>) => void;
+        "payment"?: Payment1;
+        "paymentEntries"?: PaymentEntries1;
+    }
+    interface IrPaymentFolioForm {
+        "bookingNumber"?: string;
+        "mode"?: FolioEntryMode;
+        "onCloseModal"?: (event: IrPaymentFolioFormCustomEvent<null>) => void;
+        "onLoadingChanged"?: (event: IrPaymentFolioFormCustomEvent<'save' | 'save-print' | null>) => void;
+        "onResetBookingEvt"?: (event: IrPaymentFolioFormCustomEvent<null>) => void;
+        "onResetExposedCancellationDueAmount"?: (event: IrPaymentFolioFormCustomEvent<null>) => void;
         "payment"?: Payment1;
         "paymentEntries"?: PaymentEntries1;
     }
@@ -9081,13 +9197,41 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface IrPickup {
+        /**
+          * The date range of the booking (check-in and check-out). Determines allowed pickup dates and validation rules.
+         */
+        "bookingDates"?: { from: string; to: string };
+        /**
+          * Unique booking reference number used to associate pickup updates with a specific reservation.
+         */
+        "bookingNumber"?: string;
+        /**
+          * Pre-filled pickup information coming from the booking. When provided, the pickup form initializes with this data and the user may update or remove it.
+         */
+        "defaultPickupData"?: IBookingPickupInfo | null;
+        /**
+          * Total number of persons included in the booking. Used to compute vehicle capacity and validate pickup options.
+         */
+        "numberOfPersons"?: number;
+        /**
+          * Emitted when the pickup drawer should be closed. Triggered when the user dismisses the drawer or when the inner pickup form requests the modal to close.
+         */
+        "onCloseModal"?: (event: IrPickupCustomEvent<null>) => void;
+        /**
+          * Controls whether the pickup drawer/modal is open. When true, the drawer becomes visible and initializes the form.
+         */
+        "open"?: boolean;
+    }
+    interface IrPickupForm {
         "bookingDates"?: { from: string; to: string };
         "bookingNumber"?: string;
         "defaultPickupData"?: IBookingPickupInfo | null;
+        "formId"?: string;
         "numberOfPersons"?: number;
-        "onCloseModal"?: (event: IrPickupCustomEvent<null>) => void;
-        "onResetBookingEvt"?: (event: IrPickupCustomEvent<null>) => void;
-        "open"?: boolean;
+        "onCanSubmitPickupChange"?: (event: IrPickupFormCustomEvent<boolean>) => void;
+        "onCloseModal"?: (event: IrPickupFormCustomEvent<null>) => void;
+        "onLoadingChange"?: (event: IrPickupFormCustomEvent<boolean>) => void;
+        "onResetBookingEvt"?: (event: IrPickupFormCustomEvent<null>) => void;
     }
     interface IrPickupView {
         "booking"?: Booking;
@@ -10003,6 +10147,7 @@ declare namespace LocalJSX {
         "ir-events-log": IrEventsLog;
         "ir-extra-service": IrExtraService;
         "ir-extra-service-config": IrExtraServiceConfig;
+        "ir-extra-service-config-form": IrExtraServiceConfigForm;
         "ir-extra-services": IrExtraServices;
         "ir-filters-panel": IrFiltersPanel;
         "ir-financial-actions": IrFinancialActions;
@@ -10052,6 +10197,7 @@ declare namespace LocalJSX {
         "ir-payment-actions": IrPaymentActions;
         "ir-payment-details": IrPaymentDetails;
         "ir-payment-folio": IrPaymentFolio;
+        "ir-payment-folio-form": IrPaymentFolioForm;
         "ir-payment-item": IrPaymentItem;
         "ir-payment-option": IrPaymentOption;
         "ir-payment-summary": IrPaymentSummary;
@@ -10060,6 +10206,7 @@ declare namespace LocalJSX {
         "ir-picker": IrPicker;
         "ir-picker-item": IrPickerItem;
         "ir-pickup": IrPickup;
+        "ir-pickup-form": IrPickupForm;
         "ir-pickup-view": IrPickupView;
         "ir-pms-logs": IrPmsLogs;
         "ir-popover": IrPopover;
@@ -10207,6 +10354,7 @@ declare module "@stencil/core" {
             "ir-events-log": LocalJSX.IrEventsLog & JSXBase.HTMLAttributes<HTMLIrEventsLogElement>;
             "ir-extra-service": LocalJSX.IrExtraService & JSXBase.HTMLAttributes<HTMLIrExtraServiceElement>;
             "ir-extra-service-config": LocalJSX.IrExtraServiceConfig & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigElement>;
+            "ir-extra-service-config-form": LocalJSX.IrExtraServiceConfigForm & JSXBase.HTMLAttributes<HTMLIrExtraServiceConfigFormElement>;
             "ir-extra-services": LocalJSX.IrExtraServices & JSXBase.HTMLAttributes<HTMLIrExtraServicesElement>;
             "ir-filters-panel": LocalJSX.IrFiltersPanel & JSXBase.HTMLAttributes<HTMLIrFiltersPanelElement>;
             "ir-financial-actions": LocalJSX.IrFinancialActions & JSXBase.HTMLAttributes<HTMLIrFinancialActionsElement>;
@@ -10256,6 +10404,7 @@ declare module "@stencil/core" {
             "ir-payment-actions": LocalJSX.IrPaymentActions & JSXBase.HTMLAttributes<HTMLIrPaymentActionsElement>;
             "ir-payment-details": LocalJSX.IrPaymentDetails & JSXBase.HTMLAttributes<HTMLIrPaymentDetailsElement>;
             "ir-payment-folio": LocalJSX.IrPaymentFolio & JSXBase.HTMLAttributes<HTMLIrPaymentFolioElement>;
+            "ir-payment-folio-form": LocalJSX.IrPaymentFolioForm & JSXBase.HTMLAttributes<HTMLIrPaymentFolioFormElement>;
             "ir-payment-item": LocalJSX.IrPaymentItem & JSXBase.HTMLAttributes<HTMLIrPaymentItemElement>;
             "ir-payment-option": LocalJSX.IrPaymentOption & JSXBase.HTMLAttributes<HTMLIrPaymentOptionElement>;
             "ir-payment-summary": LocalJSX.IrPaymentSummary & JSXBase.HTMLAttributes<HTMLIrPaymentSummaryElement>;
@@ -10264,6 +10413,7 @@ declare module "@stencil/core" {
             "ir-picker": LocalJSX.IrPicker & JSXBase.HTMLAttributes<HTMLIrPickerElement>;
             "ir-picker-item": LocalJSX.IrPickerItem & JSXBase.HTMLAttributes<HTMLIrPickerItemElement>;
             "ir-pickup": LocalJSX.IrPickup & JSXBase.HTMLAttributes<HTMLIrPickupElement>;
+            "ir-pickup-form": LocalJSX.IrPickupForm & JSXBase.HTMLAttributes<HTMLIrPickupFormElement>;
             "ir-pickup-view": LocalJSX.IrPickupView & JSXBase.HTMLAttributes<HTMLIrPickupViewElement>;
             "ir-pms-logs": LocalJSX.IrPmsLogs & JSXBase.HTMLAttributes<HTMLIrPmsLogsElement>;
             "ir-popover": LocalJSX.IrPopover & JSXBase.HTMLAttributes<HTMLIrPopoverElement>;

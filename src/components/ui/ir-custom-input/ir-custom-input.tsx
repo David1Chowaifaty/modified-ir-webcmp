@@ -35,6 +35,8 @@ export class IrCustomInput {
   /** Draws a pill-style input with rounded edges. */
   @Prop({ reflect: true }) pill: NativeWaInput['pill'];
 
+  @Prop({ mutable: true }) returnMaskedValue: boolean = false;
+
   /** The input's label. If you need to display HTML, use the `label` slot instead. */
   @Prop({ reflect: true }) label: NativeWaInput['label'];
 
@@ -140,6 +142,11 @@ export class IrCustomInput {
   private inputRef: WaInput;
   private animationFrame: number;
 
+  componentWillLoad() {
+    if (this.mask === 'price' && typeof this.mask === 'string') {
+      this.returnMaskedValue = true;
+    }
+  }
   componentDidLoad() {
     // Find the closest form element (if any)
     // track slotted prefix to compute width
@@ -162,15 +169,6 @@ export class IrCustomInput {
     this.rebuildMask();
   }
 
-  @Watch('value')
-  protected handleValueChange(newValue: string, oldValue: string) {
-    if (newValue !== oldValue) {
-      if (this._mask) {
-        this._mask.value = newValue;
-      }
-    }
-  }
-
   @Watch('aria-invalid')
   handleAriaInvalidChange(e) {
     this.isValid = !JSON.parse(e);
@@ -180,24 +178,6 @@ export class IrCustomInput {
     this.textChange.emit(this.value);
   };
 
-  // private initializeMask() {
-  //   if (!this.inputRef) return;
-  //   const maskOpts = this.buildMaskOptions();
-  //   if (!maskOpts) return;
-  //   this.animationFrame = requestAnimationFrame(() => {
-  //     this._mask = IMask(this.inputRef.input, maskOpts);
-
-  //     if (this.value) {
-  //       this._mask.unmaskedValue = this.value;
-  //     }
-
-  //     this._mask.on('accept', () => {
-  //       if (!this._mask) return;
-  //       const isEmpty = this.inputRef.value.trim() === '' || this._mask.unmaskedValue === '';
-  //       this.handleInput(isEmpty ? '' : this._mask.unmaskedValue);
-  //     });
-  //   });
-  // }
   private async initializeMask() {
     if (!this.inputRef) return;
 
@@ -212,12 +192,12 @@ export class IrCustomInput {
 
     this._mask = IMask(nativeInput, maskOpts);
     if (this.value) {
-      this._mask.unmaskedValue = this.value;
+      this._mask.value = this.value;
     }
     this._mask.on('accept', () => {
-      if (!this._mask) return;
       const isEmpty = this.inputRef.value.trim() === '' || this._mask.unmaskedValue === '';
-      this.handleInput(isEmpty ? '' : this._mask.unmaskedValue);
+      const value = isEmpty ? '' : this.returnMaskedValue ? this._mask.unmaskedValue : this._mask.value;
+      this.handleInput(value);
     });
   }
 
@@ -255,7 +235,9 @@ export class IrCustomInput {
 
   private resolveMask() {
     if (!this.mask) return;
-    if (typeof this.mask === 'string') return masks[this.mask];
+    if (typeof this.mask === 'string') {
+      return masks[this.mask];
+    }
     return this.mask;
   }
 

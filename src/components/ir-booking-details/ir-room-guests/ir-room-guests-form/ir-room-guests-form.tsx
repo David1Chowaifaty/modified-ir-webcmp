@@ -1,4 +1,4 @@
-import { SharedPerson, validateSharedPerson, ZIdInfo, ZSharedPerson } from '@/models/booking.dto';
+import { SharedPerson, validateSharedPerson, ZSharedPerson } from '@/models/booking.dto';
 
 import locales from '@/stores/locales.store';
 import { Component, Event, EventEmitter, Fragment, Prop, State, h } from '@stencil/core';
@@ -218,111 +218,55 @@ export class IrRoomGuestsForm {
                     </div>
                   )}
                   <div key={idx} class="guest-grid">
-                    {/* <div class={'m-0 p-0 d-flex align-items-center h-100'}>
-                      <p class="guest_label">First name</p>
-                      <ir-input-text
-                        class="flex-grow-1 h-100"
-                        id={`first_name_${idx}`}
-                        zod={ZSharedPerson.pick({ first_name: true })}
-                        error={!!this.error['first_name'] && !isRowValid}
-                        autoValidate={this.autoValidate}
-                        wrapKey="first_name"
-                        placeholder="First name"
-                        onTextChange={e => this.updateGuestInfo(idx, { first_name: e.detail })}
-                        value={guest.first_name}
-                        maxLength={40}
-                      ></ir-input-text>
-                    </div> */}
-                    <div>
-                      <p class="guest_label">First name</p>
-                      <ir-custom-input
-                        size="small"
-                        class="flex-grow-1"
-                        id={`first_name_${idx}`}
-                        // zod={ZSharedPerson.pick({ first_name: true })}
-                        // error={!!this.error['first_name'] && !isRowValid}
-                        // autoValidate={this.autoValidate}
-                        // wrapKey="first_name"
-                        placeholder="First name"
-                        onText-change={e => this.updateGuestInfo(idx, { first_name: e.detail })}
-                        value={guest.first_name}
-                        maxlength={40}
-                      ></ir-custom-input>
+                    <div class="room-guest__section">
+                      <label htmlFor={`first_name_${idx}`} class="guest_label">
+                        First name
+                      </label>
+                      <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.first_name}>
+                        <ir-custom-input
+                          size="small"
+                          id={`first_name_${idx}`}
+                          placeholder="First name"
+                          onText-change={e => this.updateGuestInfo(idx, { first_name: e.detail })}
+                          value={guest.first_name}
+                          maxlength={40}
+                        ></ir-custom-input>
+                      </ir-validator>
                     </div>
-                    <div>
-                      <p class="guest_label">Last name</p>
-                      <ir-custom-input
-                        class="flex-grow-1"
-                        size="small"
-                        id={`last_name_${idx}`}
-                        // zod={ZSharedPerson.pick({ first_name: true })}
-                        // error={!!this.error['first_name'] && !isRowValid}
-                        // autoValidate={this.autoValidate}
-                        // wrapKey="first_name"
-                        placeholder="Last name"
-                        onText-change={e => this.updateGuestInfo(idx, { first_name: e.detail })}
-                        value={guest.last_name}
-                        maxlength={40}
-                      ></ir-custom-input>
+                    <div class="room-guest__section">
+                      <label class="guest_label">Last name</label>
+                      <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.last_name}>
+                        <ir-custom-input
+                          size="small"
+                          id={`last_name_${idx}`}
+                          placeholder="Last name"
+                          onText-change={e => this.updateGuestInfo(idx, { first_name: e.detail })}
+                          value={guest.last_name}
+                          maxlength={40}
+                        ></ir-custom-input>
+                      </ir-validator>
                     </div>
-
-                    {/* <div class={'m-0 p-0 d-flex align-items-center h-100'}>
-                      <p class="guest_label">Last name</p>
-                      <ir-input-text
-                        maxLength={40}
-                        class="flex-grow-1 h-100"
-                        id={`last_name_${idx}`}
-                        zod={ZSharedPerson.pick({ last_name: true })}
-                        error={!!this.error['last_name'] && !isRowValid}
-                        autoValidate={this.autoValidate}
-                        wrapKey="last_name"
-                        placeholder="Last name"
-                        onTextChange={e => this.updateGuestInfo(idx, { last_name: e.detail })}
-                        value={guest.last_name}
-                      ></ir-input-text>
-                    </div> */}
-                    {/* <div class="flex-grow-0 m-0 p-0 h-100 d-flex align-items-center">
+                    <div class="room-guest__section">
                       <p class="guest_label">{locales.entries.Lcz_DOB}</p>
-                      <ir-input-text
-                        class="flex-grow-1 h-100"
-                        id={`dob_${idx}`}
-                        zod={ZSharedPerson.pick({ dob: true })}
-                        error={!!this.error['dob'] && !isRowValid}
-                        autoValidate={this.autoValidate}
-                        wrapKey="dob"
-                        mask={dateMask}
-                        placeholder=""
-                        onTextChange={e => {
-                          this.updateGuestInfo(idx, { dob: e.detail });
-                        }}
-                        value={guest.dob}
-                      ></ir-input-text>
-                    </div> */}
-                    <div>
-                      <p class="guest_label">{locales.entries.Lcz_DOB}</p>
-                      <ir-custom-input
-                        class="flex-grow-1 h-100"
-                        id={`dob_${idx}`}
-                        // zod={ZSharedPerson.pick({ dob: true })}
-                        // error={!!this.error['dob'] && !isRowValid}
-                        // autoValidate={this.autoValidate}
-                        // wrapKey="dob"
-                        mask={dateMask}
-                        size="small"
-                        placeholder=""
-                        onText-change={e => {
-                          this.updateGuestInfo(idx, { dob: e.detail });
-                        }}
-                        value={guest.dob}
-                      ></ir-custom-input>
+                      <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.dob}>
+                        <ir-custom-input
+                          id={`dob_${idx}`}
+                          mask={dateMask}
+                          size="small"
+                          placeholder=""
+                          onText-change={e => {
+                            this.updateGuestInfo(idx, { dob: e.detail });
+                          }}
+                          value={guest.dob}
+                        ></ir-custom-input>
+                      </ir-validator>
                     </div>
-                    <div>
+                    <div class="room-guest__section">
                       <p class="guest_label">{locales.entries.Lcz_Nationality}</p>
-                      <div class="mx-0  h-100">
+                      <div class="flex-grow-1">
                         <ir-country-picker
                           size="small"
                           variant="modern"
-                          class="flex-grow-1"
                           propertyCountry={this.propertyCountry}
                           id={`{locales.entries.Lcz_Nationality}_${idx}`}
                           error={!!this.error['country_id'] && !guest.country_id}
@@ -332,9 +276,9 @@ export class IrRoomGuestsForm {
                         ></ir-country-picker>
                       </div>
                     </div>
-                    <div>
+                    <div class="room-guest__section">
                       <p class="guest_label">{locales.entries.Lcz_Documents}</p>
-                      <div class={'room-guest__info-container'}>
+                      <div class={'room-guest__info-container flex-grow-1'}>
                         <wa-select
                           class="room-guest__id-info"
                           defaultValue={this.idTypes[0]?.CODE_NAME}
@@ -351,26 +295,6 @@ export class IrRoomGuestsForm {
                             });
                           }}
                           size="small"
-                          // selectForcedStyles={{
-                          //   borderTopRightRadius: '0px',
-                          //   borderBottomRightRadius: '0px',
-                          //   borderRight: '0',
-                          // }}
-                          // selectStyles={'rounded-top-0 rounded-bottom-0'}
-                          // onSelectChange={e => {
-                          //   this.updateGuestInfo(idx, {
-                          //     id_info: {
-                          //       ...this.guests[idx].id_info,
-                          //       type: {
-                          //         code: e.detail,
-                          //         description: '',
-                          //       },
-                          //     },
-                          //   });
-                          // }}
-                          // selectedValue={guest.id_info?.type?.code}
-                          // showFirstOption={false}
-                          // data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
                         >
                           {this.idTypes?.map(t => {
                             const label = t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`];
@@ -397,73 +321,7 @@ export class IrRoomGuestsForm {
                             })
                           }
                         ></wa-input>
-                        {/* <ir-input-text
-                          autoValidate={this.autoValidate}
-                          maxLength={18}
-                          placeholder="12345"
-                          class="flex-grow-1 guest_document"
-                          type="text"
-                          inputForcedStyle={{ borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px' }}
-                          value={guest?.id_info?.number}
-                          zod={ZIdInfo.pick({ number: true })}
-                          error={!!this.error['number'] && !isRowValid}
-                          wrapKey="number"
-                          inputStyles="form-control"
-                          onTextChange={e =>
-                            this.updateGuestInfo(idx, {
-                              id_info: {
-                                ...this.guests[idx].id_info,
-                                number: e.detail,
-                              },
-                            })
-                          }
-                        ></ir-input-text> */}
                       </div>
-                      {/* <div class={' d-flex m-0 flex-grow-1 h-100'}>
-                        <ir-select
-                          selectForcedStyles={{
-                            borderTopRightRadius: '0px',
-                            borderBottomRightRadius: '0px',
-                            borderRight: '0',
-                          }}
-                          selectStyles={'rounded-top-0 rounded-bottom-0'}
-                          onSelectChange={e => {
-                            this.updateGuestInfo(idx, {
-                              id_info: {
-                                ...this.guests[idx].id_info,
-                                type: {
-                                  code: e.detail,
-                                  description: '',
-                                },
-                              },
-                            });
-                          }}
-                          selectedValue={guest.id_info?.type?.code}
-                          showFirstOption={false}
-                          data={this.idTypes?.map(t => ({ text: t[`CODE_VALUE_${this.language.toUpperCase()}`] ?? t[`CODE_VALUE_EN`], value: t.CODE_NAME }))}
-                        ></ir-select>
-                        <ir-input-text
-                          autoValidate={this.autoValidate}
-                          maxLength={18}
-                          placeholder="12345"
-                          class="flex-grow-1 guest_document"
-                          type="text"
-                          inputForcedStyle={{ borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px' }}
-                          value={guest?.id_info?.number}
-                          zod={ZIdInfo.pick({ number: true })}
-                          error={!!this.error['number'] && !isRowValid}
-                          wrapKey="number"
-                          inputStyles="form-control"
-                          onTextChange={e =>
-                            this.updateGuestInfo(idx, {
-                              id_info: {
-                                ...this.guests[idx].id_info,
-                                number: e.detail,
-                              },
-                            })
-                          }
-                        ></ir-input-text>
-                      </div> */}
                     </div>
                   </div>
                 </Fragment>
