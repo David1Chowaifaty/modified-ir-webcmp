@@ -12,7 +12,7 @@ import { guestInfoFormSchema } from '../ir-guest-info-form/types';
 @Component({
   tag: 'ir-guest-info-drawer',
   styleUrl: 'ir-guest-info-drawer.css',
-  shadow: true,
+  scoped: true,
 })
 export class IrGuestInfoDrawer {
   @Prop() open: boolean;

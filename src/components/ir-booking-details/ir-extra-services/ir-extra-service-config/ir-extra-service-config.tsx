@@ -107,6 +107,7 @@ export class IrExtraServiceConfig {
           >
             <ir-validator id="amenity description-validator" schema={ExtraServiceSchema.shape.description}>
               <wa-textarea
+                size="small"
                 defaultValue={this.s_service?.description}
                 value={this.s_service?.description}
                 onchange={e => this.updateService({ description: (e.target as any).value })}

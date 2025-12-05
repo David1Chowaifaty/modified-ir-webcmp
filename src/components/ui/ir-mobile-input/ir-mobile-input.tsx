@@ -2,6 +2,7 @@ import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@st
 import IMask, { FactoryArg, InputMask } from 'imask';
 import { masks } from './countries_masks';
 import { ICountry } from '@/models/IBooking';
+import { NativeWaInput } from '../ir-custom-input/ir-custom-input';
 
 export interface IrMobileInputChangeDetail {
   country: ICountry;
@@ -26,6 +27,8 @@ export class IrMobileInput {
   private inputRef?: HTMLInputElement;
   private mask?: InputMask<any>;
 
+  /** The input's size. */
+  @Prop({ reflect: true }) size: NativeWaInput['size'] = 'small';
   /** Visible label for the phone input */
   @Prop() label: string = 'Phone number';
   /** Name attribute passed to the native input */
@@ -217,7 +220,7 @@ export class IrMobileInput {
     const describedByIds = [this.description ? this.descriptionId : null, this.error ? this.errorId : null].filter(Boolean).join(' ') || undefined;
 
     return (
-      <Host size="small" role="group" aria-labelledby={this.labelId} aria-describedby={describedByIds}>
+      <Host size={'small'} role="group" aria-labelledby={this.labelId} aria-describedby={describedByIds}>
         <label class="mobile-input__label" id={this.labelId} htmlFor={this.inputId}>
           {this.label}
           {this.required ? (

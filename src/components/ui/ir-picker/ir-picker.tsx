@@ -469,6 +469,7 @@ export class IrPicker {
             slot="anchor"
             class="search-bar"
             // withClear
+            size={this.size}
             value={this.query}
             ref={el => (this.inputRef = el)}
             appearance={this.appearance}

@@ -310,6 +310,7 @@ export class IrPaymentFolio {
               blurEvent="wa-hide"
             >
               <wa-select
+                size="small"
                 onwa-hide={event => this.stopEventPropagation(event)}
                 onwa-show={event => this.stopEventPropagation(event)}
                 placeholder="Select..."
@@ -336,6 +337,7 @@ export class IrPaymentFolio {
                 blurEvent="wa-hide"
               >
                 <wa-select
+                  size="small"
                   label={`${this.folioData.payment_type?.code === '001' ? 'Payment' : 'Refund'} method`}
                   onwa-show={event => this.stopEventPropagation(event)}
                   onwa-hide={event => this.stopEventPropagation(event)}

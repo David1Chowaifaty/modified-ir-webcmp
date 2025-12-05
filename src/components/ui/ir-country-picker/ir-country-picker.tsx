@@ -1,5 +1,6 @@
 import { ICountry } from '@/models/IBooking';
 import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from '@stencil/core';
+import { NativeWaInput } from '../ir-custom-input/ir-custom-input';
 
 @Component({
   tag: 'ir-country-picker',
@@ -7,6 +8,9 @@ import { Component, Event, EventEmitter, Fragment, Prop, State, Watch, h } from 
   scoped: true,
 })
 export class IrCountryPicker {
+  /** The input's size. */
+  @Prop({ reflect: true }) size: NativeWaInput['size'];
+
   @Prop() variant: 'modern' | 'default' = 'default';
   /**
    * List of countries to display in the dropdown.
@@ -126,6 +130,7 @@ export class IrCountryPicker {
     if (this.variant === 'modern') {
       return (
         <ir-picker
+          size={this.size}
           label={this.label}
           mode="select"
           value={this.selectedCountry?.id?.toString()}

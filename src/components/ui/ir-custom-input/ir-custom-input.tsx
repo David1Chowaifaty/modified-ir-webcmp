@@ -27,7 +27,7 @@ export class IrCustomInput {
   @Prop({ reflect: true }) defaultValue: NativeWaInput['defaultValue'];
 
   /** The input's size. */
-  @Prop({ reflect: true }) size: NativeWaInput['size'];
+  @Prop({ reflect: true }) size: NativeWaInput['size'] = 'small';
 
   /** The input's visual appearance. */
   @Prop({ reflect: true }) appearance: NativeWaInput['appearance'];

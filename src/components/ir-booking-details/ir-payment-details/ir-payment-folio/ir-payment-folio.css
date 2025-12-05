@@ -36,5 +36,5 @@
 }
 .payment-folio__form {
   display: grid;
-  gap: var(--wa-space-l, 1rem);
+  gap: var(--wa-space-m, 1rem);
 }

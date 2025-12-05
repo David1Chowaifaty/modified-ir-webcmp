@@ -1,3 +1,4 @@
+@import url('../../../assets/webawesome/utilities/size.css');
 :host {
   box-sizing: border-box;
   width: 100%;
@@ -16,7 +17,7 @@
   border: 0;
 }
 .mobile-input__logo {
-  height: 1rem;
+  height: var(--wa-font-size-s);
   aspect-ratio: 4/3;
   border-radius: 3px;
 }
@@ -75,8 +76,7 @@
 }
 .mobile-input__trigger,
 .mobile-input__phone {
-  height: var(--wa-form-control-height);
-  padding: 0 var(--wa-form-control-padding-inline) !important;
+  padding: 0 var(--wa-form-control-padding-inline);
   color: var(--wa-form-control-value-color);
   font-size: var(--wa-form-control-value-size);
   font-family: inherit;
@@ -94,6 +94,12 @@
   border-radius: var(--wa-form-control-border-radius);
   transition: background-color var(--wa-transition-normal), border var(--wa-transition-normal), all var(--wa-transition-normal), outline var(--wa-transition-fast);
   transition-timing-function: var(--wa-transition-easing);
+}
+.mobile-input__container {
+  height: var(--wa-form-control-height);
+}
+.mobile-input__trigger {
+  height: 100%;
 }
 .mobile-input__trigger:focus,
 .mobile-input__phone:focus {

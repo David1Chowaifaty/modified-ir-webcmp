@@ -79,6 +79,7 @@ export class IrBookingExtraNote {
         }}
       >
         <wa-textarea
+          size="small"
           placeholder={locales.entries.Lcz_PrivateNote_MaxChar}
           defaultValue={this.note}
           onchange={e => this.setNote((e.target as any).value)}

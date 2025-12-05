@@ -30,8 +30,9 @@ import { TIcons } from "./components/ui/ir-icons/icons";
 import { checkboxes, selectOption } from "./common/models";
 import { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 import { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
+import { NativeWaInput } from "./components/ui/ir-custom-input/ir-custom-input";
 import { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
-import { MaskProp, NativeWaInput } from "./components/ui/ir-custom-input/ir-custom-input";
+import { MaskProp, NativeWaInput as NativeWaInput1 } from "./components/ui/ir-custom-input/ir-custom-input";
 import { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 import { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 import { NativeDrawer } from "./components/ir-drawer/ir-drawer";
@@ -47,7 +48,6 @@ import { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mo
 import { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 import { Notification } from "./components/ir-notifications/types";
 import { PaymentOption } from "./models/payment-options";
-import { NativeWaInput as NativeWaInput1 } from "./components/ui/ir-custom-input/ir-custom-input";
 import { IrComboboxSelectEventDetail } from "./components/ui/ir-picker/ir-picker";
 import { Moment } from "moment";
 import { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
@@ -85,8 +85,9 @@ export { TIcons } from "./components/ui/ir-icons/icons";
 export { checkboxes, selectOption } from "./common/models";
 export { ComboboxItem } from "./components/ui/ir-combobox/ir-combobox";
 export { FolioPayment as FolioPayment1, ICountry as ICountry1, IToast as IToast2 } from "./components.d";
+export { NativeWaInput } from "./components/ui/ir-custom-input/ir-custom-input";
 export { NativeButton } from "./components/ui/ir-custom-button/ir-custom-button";
-export { MaskProp, NativeWaInput } from "./components/ui/ir-custom-input/ir-custom-input";
+export { MaskProp, NativeWaInput as NativeWaInput1 } from "./components/ui/ir-custom-input/ir-custom-input";
 export { DailyPaymentFilter, FolioPayment, GroupedFolioPayment } from "./components/ir-daily-revenue/types";
 export { CleanTaskEvent, IHouseKeepers, Task, THKUser } from "./models/housekeeping";
 export { NativeDrawer } from "./components/ir-drawer/ir-drawer";
@@ -102,7 +103,6 @@ export { IrMobileInputChangeDetail } from "./components/ui/ir-mobile-input/ir-mo
 export { DailyReport, DailyReportFilter } from "./components/ir-monthly-bookings-report/types";
 export { Notification } from "./components/ir-notifications/types";
 export { PaymentOption } from "./models/payment-options";
-export { NativeWaInput as NativeWaInput1 } from "./components/ui/ir-custom-input/ir-custom-input";
 export { IrComboboxSelectEventDetail } from "./components/ui/ir-picker/ir-picker";
 export { Moment } from "moment";
 export { SidebarOpenEvent as SidebarOpenEvent1 } from "./components/ir-daily-revenue/types";
@@ -752,6 +752,10 @@ export namespace Components {
          */
         "propertyCountry": ICountry;
         /**
+          * The input's size.
+         */
+        "size": NativeWaInput['size'];
+        /**
           * Test ID for automated testing.
          */
         "testId": string;
@@ -920,47 +924,47 @@ export namespace Components {
         /**
           * The input's visual appearance.
          */
-        "appearance": NativeWaInput['appearance'];
+        "appearance": NativeWaInput1['appearance'];
         /**
           * Controls whether and how text input is automatically capitalized as it is entered by the user.
          */
-        "autocapitalize": NativeWaInput['autocapitalize'];
+        "autocapitalize": NativeWaInput1['autocapitalize'];
         /**
           * Specifies what permission the browser has to provide assistance in filling out form field values. Refer to [this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.
          */
-        "autocomplete": NativeWaInput['autocomplete'];
+        "autocomplete": NativeWaInput1['autocomplete'];
         /**
           * Indicates whether the browser's autocorrect feature is on or off.
          */
-        "autocorrect": NativeWaInput['autocorrect'];
+        "autocorrect": NativeWaInput1['autocorrect'];
         /**
           * Indicates that the input should receive focus on page load.
          */
-        "autofocus": NativeWaInput['autofocus'];
+        "autofocus": NativeWaInput1['autofocus'];
         /**
           * The default value of the form control. Primarily used for resetting the form control.
          */
-        "defaultValue": NativeWaInput['defaultValue'];
+        "defaultValue": NativeWaInput1['defaultValue'];
         /**
           * Used to customize the label or icon of the Enter key on virtual keyboards.
          */
-        "enterkeyhint": NativeWaInput['enterkeyhint'];
+        "enterkeyhint": NativeWaInput1['enterkeyhint'];
         /**
           * By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you to place the form control outside of a form and associate it with the form that has this `id`. The form must be in the same document or shadow root for this to work.
          */
-        "form": NativeWaInput['form'];
+        "form": NativeWaInput1['form'];
         /**
           * The input's hint. If you need to display HTML, use the `hint` slot instead.
          */
-        "hint": NativeWaInput['hint'];
+        "hint": NativeWaInput1['hint'];
         /**
           * Tells the browser what type of data will be entered by the user, allowing it to display the appropriate virtual keyboard on supportive devices.
          */
-        "inputmode": NativeWaInput['inputmode'];
+        "inputmode": NativeWaInput1['inputmode'];
         /**
           * The input's label. If you need to display HTML, use the `label` slot instead.
          */
-        "label": NativeWaInput['label'];
+        "label": NativeWaInput1['label'];
         /**
           * Mask for the input field (optional)
          */
@@ -968,63 +972,63 @@ export namespace Components {
         /**
           * The input's maximum value. Only applies to date and number input types.
          */
-        "max": NativeWaInput['max'];
+        "max": NativeWaInput1['max'];
         /**
           * The maximum length of input that will be considered valid.
          */
-        "maxlength": NativeWaInput['maxlength'];
+        "maxlength": NativeWaInput1['maxlength'];
         /**
           * The input's minimum value. Only applies to date and number input types.
          */
-        "min": NativeWaInput['min'];
+        "min": NativeWaInput1['min'];
         /**
           * The minimum length of input that will be considered valid.
          */
-        "minlength": NativeWaInput['minlength'];
+        "minlength": NativeWaInput1['minlength'];
         /**
           * Adds a button to toggle the password's visibility. Only applies to password types.
          */
-        "passwordToggle": NativeWaInput['passwordToggle'];
+        "passwordToggle": NativeWaInput1['passwordToggle'];
         /**
           * Determines whether or not the password is currently visible. Only applies to password input types.
          */
-        "passwordVisible": NativeWaInput['passwordVisible'];
+        "passwordVisible": NativeWaInput1['passwordVisible'];
         /**
           * A regular expression pattern to validate input against.
          */
-        "pattern": NativeWaInput['pattern'];
+        "pattern": NativeWaInput1['pattern'];
         /**
           * Draws a pill-style input with rounded edges.
          */
-        "pill": NativeWaInput['pill'];
+        "pill": NativeWaInput1['pill'];
         /**
           * Placeholder text to show as a hint when the input is empty.
          */
-        "placeholder": NativeWaInput['placeholder'];
+        "placeholder": NativeWaInput1['placeholder'];
         /**
           * Makes the input readonly.
          */
-        "readonly": NativeWaInput['readonly'];
+        "readonly": NativeWaInput1['readonly'];
         /**
           * Makes the input a required field.
          */
-        "required": NativeWaInput['required'];
+        "required": NativeWaInput1['required'];
         /**
           * The input's size.
          */
-        "size": NativeWaInput['size'];
+        "size": NativeWaInput1['size'];
         /**
           * Enables spell checking on the input.
          */
-        "spellcheck": NativeWaInput['spellcheck'];
+        "spellcheck": NativeWaInput1['spellcheck'];
         /**
           * Specifies the granularity that the value must adhere to, or the special value `any` which means no stepping is implied, allowing any numeric value. Only applies to date and number input types.
          */
-        "step": NativeWaInput['step'];
+        "step": NativeWaInput1['step'];
         /**
           * The type of input. Works the same as a native `<input>` element, but only a subset of types are supported. Defaults to `text`.
          */
-        "type": NativeWaInput['type'];
+        "type": NativeWaInput1['type'];
         /**
           * The value of the input.
          */
@@ -1032,19 +1036,19 @@ export namespace Components {
         /**
           * Adds a clear button when the input is not empty.
          */
-        "withClear": NativeWaInput['withClear'];
+        "withClear": NativeWaInput1['withClear'];
         /**
           * Used for SSR. Will determine if the SSRed component will have the hint slot rendered on initial paint.
          */
-        "withHint": NativeWaInput['withHint'];
+        "withHint": NativeWaInput1['withHint'];
         /**
           * Used for SSR. Will determine if the SSRed component will have the label slot rendered on initial paint.
          */
-        "withLabel": NativeWaInput['withLabel'];
+        "withLabel": NativeWaInput1['withLabel'];
         /**
           * Hides the browser's built-in increment/decrement spin buttons for number inputs.
          */
-        "withoutSpinButtons": NativeWaInput['withoutSpinButtons'];
+        "withoutSpinButtons": NativeWaInput1['withoutSpinButtons'];
     }
     interface IrDailyRevenue {
         "language": string;
@@ -1929,6 +1933,10 @@ export namespace Components {
          */
         "required": boolean;
         /**
+          * The input's size.
+         */
+        "size": NativeWaInput['size'];
+        /**
           * Input value without formatting. Component keeps this prop in sync
          */
         "value": string;
@@ -2266,12 +2274,12 @@ export namespace Components {
         /**
           * The input's visual appearance.
          */
-        "appearance": NativeWaInput1['appearance'];
+        "appearance": NativeWaInput['appearance'];
         "close": () => Promise<void>;
         /**
           * The default value of the form control. Primarily used for resetting the form control.
          */
-        "defaultValue": NativeWaInput1['defaultValue'];
+        "defaultValue": NativeWaInput['defaultValue'];
         /**
           * Optional label applied to the text field.
          */
@@ -2287,7 +2295,7 @@ export namespace Components {
         /**
           * The input's size.
          */
-        "size": NativeWaInput1['size'];
+        "size": NativeWaInput['size'];
         /**
           * Selected value (also shown in the input when `mode="select"`).
          */
@@ -7330,6 +7338,10 @@ declare namespace LocalJSX {
          */
         "propertyCountry"?: ICountry;
         /**
+          * The input's size.
+         */
+        "size"?: NativeWaInput['size'];
+        /**
           * Test ID for automated testing.
          */
         "testId"?: string;
@@ -7503,47 +7515,47 @@ declare namespace LocalJSX {
         /**
           * The input's visual appearance.
          */
-        "appearance"?: NativeWaInput['appearance'];
+        "appearance"?: NativeWaInput1['appearance'];
         /**
           * Controls whether and how text input is automatically capitalized as it is entered by the user.
          */
-        "autocapitalize"?: NativeWaInput['autocapitalize'];
+        "autocapitalize"?: NativeWaInput1['autocapitalize'];
         /**
           * Specifies what permission the browser has to provide assistance in filling out form field values. Refer to [this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.
          */
-        "autocomplete"?: NativeWaInput['autocomplete'];
+        "autocomplete"?: NativeWaInput1['autocomplete'];
         /**
           * Indicates whether the browser's autocorrect feature is on or off.
          */
-        "autocorrect"?: NativeWaInput['autocorrect'];
+        "autocorrect"?: NativeWaInput1['autocorrect'];
         /**
           * Indicates that the input should receive focus on page load.
          */
-        "autofocus"?: NativeWaInput['autofocus'];
+        "autofocus"?: NativeWaInput1['autofocus'];
         /**
           * The default value of the form control. Primarily used for resetting the form control.
          */
-        "defaultValue"?: NativeWaInput['defaultValue'];
+        "defaultValue"?: NativeWaInput1['defaultValue'];
         /**
           * Used to customize the label or icon of the Enter key on virtual keyboards.
          */
-        "enterkeyhint"?: NativeWaInput['enterkeyhint'];
+        "enterkeyhint"?: NativeWaInput1['enterkeyhint'];
         /**
           * By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you to place the form control outside of a form and associate it with the form that has this `id`. The form must be in the same document or shadow root for this to work.
          */
-        "form"?: NativeWaInput['form'];
+        "form"?: NativeWaInput1['form'];
         /**
           * The input's hint. If you need to display HTML, use the `hint` slot instead.
          */
-        "hint"?: NativeWaInput['hint'];
+        "hint"?: NativeWaInput1['hint'];
         /**
           * Tells the browser what type of data will be entered by the user, allowing it to display the appropriate virtual keyboard on supportive devices.
          */
-        "inputmode"?: NativeWaInput['inputmode'];
+        "inputmode"?: NativeWaInput1['inputmode'];
         /**
           * The input's label. If you need to display HTML, use the `label` slot instead.
          */
-        "label"?: NativeWaInput['label'];
+        "label"?: NativeWaInput1['label'];
         /**
           * Mask for the input field (optional)
          */
@@ -7551,66 +7563,66 @@ declare namespace LocalJSX {
         /**
           * The input's maximum value. Only applies to date and number input types.
          */
-        "max"?: NativeWaInput['max'];
+        "max"?: NativeWaInput1['max'];
         /**
           * The maximum length of input that will be considered valid.
          */
-        "maxlength"?: NativeWaInput['maxlength'];
+        "maxlength"?: NativeWaInput1['maxlength'];
         /**
           * The input's minimum value. Only applies to date and number input types.
          */
-        "min"?: NativeWaInput['min'];
+        "min"?: NativeWaInput1['min'];
         /**
           * The minimum length of input that will be considered valid.
          */
-        "minlength"?: NativeWaInput['minlength'];
+        "minlength"?: NativeWaInput1['minlength'];
         "onInput-blur"?: (event: IrCustomInputCustomEvent<void>) => void;
         "onInputFocus"?: (event: IrCustomInputCustomEvent<void>) => void;
         "onText-change"?: (event: IrCustomInputCustomEvent<string>) => void;
         /**
           * Adds a button to toggle the password's visibility. Only applies to password types.
          */
-        "passwordToggle"?: NativeWaInput['passwordToggle'];
+        "passwordToggle"?: NativeWaInput1['passwordToggle'];
         /**
           * Determines whether or not the password is currently visible. Only applies to password input types.
          */
-        "passwordVisible"?: NativeWaInput['passwordVisible'];
+        "passwordVisible"?: NativeWaInput1['passwordVisible'];
         /**
           * A regular expression pattern to validate input against.
          */
-        "pattern"?: NativeWaInput['pattern'];
+        "pattern"?: NativeWaInput1['pattern'];
         /**
           * Draws a pill-style input with rounded edges.
          */
-        "pill"?: NativeWaInput['pill'];
+        "pill"?: NativeWaInput1['pill'];
         /**
           * Placeholder text to show as a hint when the input is empty.
          */
-        "placeholder"?: NativeWaInput['placeholder'];
+        "placeholder"?: NativeWaInput1['placeholder'];
         /**
           * Makes the input readonly.
          */
-        "readonly"?: NativeWaInput['readonly'];
+        "readonly"?: NativeWaInput1['readonly'];
         /**
           * Makes the input a required field.
          */
-        "required"?: NativeWaInput['required'];
+        "required"?: NativeWaInput1['required'];
         /**
           * The input's size.
          */
-        "size"?: NativeWaInput['size'];
+        "size"?: NativeWaInput1['size'];
         /**
           * Enables spell checking on the input.
          */
-        "spellcheck"?: NativeWaInput['spellcheck'];
+        "spellcheck"?: NativeWaInput1['spellcheck'];
         /**
           * Specifies the granularity that the value must adhere to, or the special value `any` which means no stepping is implied, allowing any numeric value. Only applies to date and number input types.
          */
-        "step"?: NativeWaInput['step'];
+        "step"?: NativeWaInput1['step'];
         /**
           * The type of input. Works the same as a native `<input>` element, but only a subset of types are supported. Defaults to `text`.
          */
-        "type"?: NativeWaInput['type'];
+        "type"?: NativeWaInput1['type'];
         /**
           * The value of the input.
          */
@@ -7618,19 +7630,19 @@ declare namespace LocalJSX {
         /**
           * Adds a clear button when the input is not empty.
          */
-        "withClear"?: NativeWaInput['withClear'];
+        "withClear"?: NativeWaInput1['withClear'];
         /**
           * Used for SSR. Will determine if the SSRed component will have the hint slot rendered on initial paint.
          */
-        "withHint"?: NativeWaInput['withHint'];
+        "withHint"?: NativeWaInput1['withHint'];
         /**
           * Used for SSR. Will determine if the SSRed component will have the label slot rendered on initial paint.
          */
-        "withLabel"?: NativeWaInput['withLabel'];
+        "withLabel"?: NativeWaInput1['withLabel'];
         /**
           * Hides the browser's built-in increment/decrement spin buttons for number inputs.
          */
-        "withoutSpinButtons"?: NativeWaInput['withoutSpinButtons'];
+        "withoutSpinButtons"?: NativeWaInput1['withoutSpinButtons'];
     }
     interface IrDailyRevenue {
         "language"?: string;
@@ -8635,6 +8647,10 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
+          * The input's size.
+         */
+        "size"?: NativeWaInput['size'];
+        /**
           * Input value without formatting. Component keeps this prop in sync
          */
         "value"?: string;
@@ -9031,11 +9047,11 @@ declare namespace LocalJSX {
         /**
           * The input's visual appearance.
          */
-        "appearance"?: NativeWaInput1['appearance'];
+        "appearance"?: NativeWaInput['appearance'];
         /**
           * The default value of the form control. Primarily used for resetting the form control.
          */
-        "defaultValue"?: NativeWaInput1['defaultValue'];
+        "defaultValue"?: NativeWaInput['defaultValue'];
         /**
           * Optional label applied to the text field.
          */
@@ -9051,7 +9067,7 @@ declare namespace LocalJSX {
         /**
           * The input's size.
          */
-        "size"?: NativeWaInput1['size'];
+        "size"?: NativeWaInput['size'];
         /**
           * Selected value (also shown in the input when `mode="select"`).
          */

@@ -46,7 +46,36 @@
   margin-bottom: 0.5rem;
   padding-bottom: 0;
 }
+.room-guest__info-container {
+  display: flex;
+  flex: 1 1 0%;
+  align-items: center;
+}
+.room-guest__document::part(base):dir(ltr),
+.room-guest__id-info::part(combobox):dir(rtl) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
 
+.room-guest__id-info::part(combobox):dir(ltr),
+.room-guest__document::part(base):dir(rtl) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.room-guest__id-info::part(combobox):dir(ltr) {
+  border-right-width: 0;
+}
+
+.room-guest__id-info::part(combobox):dir(rtl) {
+  border-left-width: 0;
+}
+
+.room-guest__id-info[open],
+.room-guest__id-info:focus-visible,
+.room-guest__id-info:focus-within {
+  z-index: 2;
+}
 /*sm*/
 @media (min-width: 640px) {
 }
@@ -61,7 +90,12 @@
   }
   .guest-grid {
     display: grid;
-    grid-template-columns: 2fr 2fr 2fr 2fr 5fr;
+    grid-template-columns:
+      minmax(0, 120px) /* First name */
+      minmax(0, 120px) /* Last name */
+      minmax(0, 120px) /* DOB */
+      minmax(0, 120px) /* Nationality */
+      minmax(0, 1fr);
     gap: 0.5rem;
     align-items: flex-start;
   }

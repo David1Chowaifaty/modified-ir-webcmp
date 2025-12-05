@@ -86,6 +86,7 @@ export class IrGuestInfoForm {
 
         <ir-validator schema={guestInfoFormSchema.shape.country_id} value={this.guest?.country_id ?? undefined} autovalidate={this.autoValidate} valueEvent="countryChange">
           <ir-country-picker
+            size="small"
             variant="modern"
             country={this.countries.find(c => c.id === this.guest?.country_id)}
             label={locales.entries?.Lcz_Country}
@@ -95,6 +96,7 @@ export class IrGuestInfoForm {
         </ir-validator>
         <ir-validator schema={guestInfoFormSchema.shape.mobile} value={this.guest?.mobile ?? ''} autovalidate={this.autoValidate} valueEvent="mobile-input-change">
           <ir-mobile-input
+            size="small"
             onMobile-input-change={e => {
               this.handleInputChange({ mobile: e.detail.formattedValue });
             }}

@@ -27,7 +27,7 @@
   font-feature-settings: inherit;
   font-variation-settings: inherit;
   padding: 0;
-  /* padding: 0.5em 1em 0.5em 0.25em !important; */
+  padding: 0.5em 1em 0.5em 0.25em !important;
   line-height: var(--wa-line-height-condensed);
   transition: fill var(--wa-transition-normal) var(--wa-transition-easing);
   cursor: pointer;

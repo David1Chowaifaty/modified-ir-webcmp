@@ -1,5 +1,5 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: var(--wa-space-l, 1rem);
+  gap: var(--wa-space-m, 1rem);
 }

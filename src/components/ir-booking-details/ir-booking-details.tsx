@@ -363,31 +363,6 @@ export class IrBookingDetails {
     this.modalState = null;
     this.modalRef.closeModal();
   }
-  private renderSidebarContent() {
-    const handleClose = () => {
-      this.sidebarState = null;
-    };
-    switch (this.sidebarState) {
-      case 'room-guest':
-        return (
-          <ir-room-guests
-            countries={this.countries}
-            language={this.language}
-            identifier={this.sidebarPayload?.identifier}
-            bookingNumber={this.booking.booking_nbr}
-            roomName={this.sidebarPayload?.roomName}
-            totalGuests={this.sidebarPayload?.totalGuests}
-            sharedPersons={this.sidebarPayload?.sharing_persons}
-            slot="sidebar-body"
-            checkIn={this.sidebarPayload?.checkin}
-            onCloseModal={handleClose}
-          ></ir-room-guests>
-        );
-
-      default:
-        return null;
-    }
-  }
 
   private computeRoomGroups(rooms: Room[]) {
     const indexById = new Map<string, number>();
