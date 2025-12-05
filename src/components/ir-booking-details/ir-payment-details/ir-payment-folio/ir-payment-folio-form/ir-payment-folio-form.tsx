@@ -266,10 +266,10 @@ export class IrPaymentFolioForm {
       <form
         onSubmit={e => {
           e.preventDefault();
-          const submitter = (e as SubmitEvent).submitter as HTMLElement | null;
-          if (submitter?.id === 'saveBtn') {
+          const submitter = (e as SubmitEvent).submitter as any | null;
+          if (submitter?.value === 'save') {
             this.savePayment();
-          } else if (submitter?.id === 'savePrintBtn') {
+          } else if (submitter?.value === 'saveAndPrint') {
             // this.savePayment(true);
           }
         }}
