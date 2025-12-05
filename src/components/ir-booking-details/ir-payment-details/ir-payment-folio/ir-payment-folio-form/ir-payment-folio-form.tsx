@@ -66,6 +66,7 @@ const folioValidationSchema = folioBaseSchema.superRefine((data, ctx) => {
 export class IrPaymentFolioForm {
   @Prop() paymentEntries: PaymentEntries;
   @Prop() bookingNumber: string;
+  @Prop() formId: string;
   @Prop() payment: Payment = {
     date: moment().format(DATE_FORMAT),
     amount: 0,
@@ -265,10 +266,15 @@ export class IrPaymentFolioForm {
       <form
         onSubmit={e => {
           e.preventDefault();
-          this.savePayment();
+          const submitter = (e as SubmitEvent).submitter as HTMLElement | null;
+          if (submitter?.id === 'saveBtn') {
+            this.savePayment();
+          } else if (submitter?.id === 'savePrintBtn') {
+            // this.savePayment(true);
+          }
         }}
         class="payment-folio__form"
-        id={`ir__folio-form-${this.bookingNumber}`}
+        id={this.formId}
       >
         <ir-custom-date-picker
           label="Date"
