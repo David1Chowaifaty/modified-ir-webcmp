@@ -9,6 +9,7 @@ import booking_store from '@/stores/booking.store';
 import calendar_data from '@/stores/calendar-data';
 import { PaymentEntries } from '@/components/ir-booking-details/types';
 import { z } from 'zod';
+import { BookingInvoiceInfo, BookingInvoiceInfoSchema } from '@/components/ir-invoice/types';
 
 export interface IBookingParams {
   bookedByInfoData: any;
@@ -97,6 +98,7 @@ export function buildPaymentTypes(paymentEntries: PaymentEntries): Record<string
     return {};
   }
 }
+
 export class BookingService {
   public async unBlockUnitByPeriod(props: { unit_id: number; from_date: string; to_date: string }) {
     const { data } = await axios.post(`/Unblock_Unit_By_Period`, props);
@@ -291,6 +293,11 @@ export class BookingService {
       console.log(error);
       throw new Error(error);
     }
+  }
+
+  public async getBookingInvoiceInfo(props: { booking_nbr: string }): Promise<BookingInvoiceInfo> {
+    const { data } = await axios.post('/Get_Booking_Invoice_Info', props);
+    return BookingInvoiceInfoSchema.parse(data.My_Result);
   }
   public async getBookingAvailability(props: {
     from_date: string;

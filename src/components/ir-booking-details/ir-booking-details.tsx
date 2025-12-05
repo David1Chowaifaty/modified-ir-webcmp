@@ -133,7 +133,8 @@ export class IrBookingDetails {
         this.openPrintingScreen({ mode: 'printing' });
         return;
       case 'invoice':
-        this.openPrintingScreen({ mode: 'invoice' });
+        // this.openPrintingScreen({ mode: 'invoice' });
+        this.sidebarState = 'invoice';
         return;
       case 'book-delete':
         return;
@@ -660,6 +661,15 @@ export class IrBookingDetails {
           this.sidebarState = null;
         }}
       ></ir-pickup>,
+      <ir-invoice
+        open={this.sidebarState === 'invoice'}
+        onInvoiceClose={e => {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.sidebarState = null;
+        }}
+        booking={this.booking}
+      ></ir-invoice>,
       <ir-guest-info-drawer
         onGuestInfoDrawerClosed={() => {
           this.sidebarState = null;

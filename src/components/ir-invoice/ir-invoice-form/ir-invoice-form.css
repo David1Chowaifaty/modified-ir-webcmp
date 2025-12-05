@@ -1,0 +1,73 @@
+:host {
+  display: block;
+  height: 100%;
+}
+.ir-invoice__container {
+  display: grid;
+  gap: var(--wa-space-l);
+  box-sizing: border-box;
+}
+.ir-invoice__service:last-child {
+  border-bottom-left-radius: var(--wa-border-radius-m);
+  border-bottom-right-radius: var(--wa-border-radius-m);
+}
+.ir-invoice__service:first-child {
+  border-top-left-radius: var(--wa-border-radius-m);
+  border-top-right-radius: var(--wa-border-radius-m);
+  border-top: var(--wa-form-control-border-width) var(--wa-form-control-border-style) var(--wa-form-control-border-color);
+}
+.ir-invoice__service {
+  border-bottom: var(--wa-form-control-border-width) var(--wa-form-control-border-style) var(--wa-form-control-border-color);
+  border-left: var(--wa-form-control-border-width) var(--wa-form-control-border-style) var(--wa-form-control-border-color);
+  border-right: var(--wa-form-control-border-width) var(--wa-form-control-border-style) var(--wa-form-control-border-color);
+  background-color: var(--wa-color-surface-default);
+  /* border-radius: var(--wa-border-radius-m); */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+.ir-invoice__service:hover {
+  background-color: color-mix(in srgb, var(--wa-color-surface-default) 95%, var(--wa-color-mix-hover));
+}
+.ir-invoice__checkbox,
+.ir-invoice__checkbox::part(base) {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+}
+.ir-invoice__checkbox::part(base) {
+  min-height: var(--wa-form-control-height);
+  padding: 0 var(--wa-form-control-padding-inline);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+.ir-invoice__checkbox.group::part(base) {
+  padding-block: 1rem;
+  align-items: flex-start;
+}
+.ir-invoice__room-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ir-invoice__room-checkbox-container.group {
+  flex-direction: column;
+}
+.ir-invoice__checkbox-price {
+  font-weight: 700;
+  color: var(--wa-color-neutral-900);
+  white-space: nowrap;
+  text-align: right;
+  flex: 1 1 0%;
+}
+.ir-invoice__form-control-label {
+  display: inline-flex;
+  color: var(--wa-form-control-label-color);
+  font-weight: var(--wa-form-control-label-font-weight);
+  line-height: var(--wa-form-control-label-line-height);
+  margin-block-end: 0.5em;
+}

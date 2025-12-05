@@ -2,7 +2,7 @@ import { IEntries } from '@/models/IBooking';
 import { RoomType, RatePlan, ExposedApplicablePolicy } from '@/models/booking.dto';
 import { IPayment, SharedPerson } from './../../models/booking.dto';
 //Sidebar
-export type BookingDetailsSidebarEvents = 'guest' | 'pickup' | 'extra_note' | 'extra_service' | 'room-guest' | 'payment-folio';
+export type BookingDetailsSidebarEvents = 'invoice' | 'guest' | 'pickup' | 'extra_note' | 'extra_service' | 'room-guest' | 'payment-folio';
 export type OpenSidebarEvent<T> = {
   type: BookingDetailsSidebarEvents;
   payload?: T;
