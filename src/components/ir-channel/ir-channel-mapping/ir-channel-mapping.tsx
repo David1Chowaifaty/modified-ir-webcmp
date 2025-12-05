@@ -70,7 +70,7 @@ export class IrChannelMapping {
           </div>
           <div class="pl-2 flex-fill d-none mapped_item text-blue d-sm-flex align-items-center">
             <span class="mapped_name">
-              {isRoomType ? mappedField.result.name : mappedField.result['short_name']} {mappedField.result['is_non_refundable'] ? 'Non-refundable' : 'non'}
+              {isRoomType ? mappedField.result.name : mappedField.result['short_name']} {mappedField.result['is_non_refundable'] ? 'Non-refundable' : ''}
             </span>
             <div class="d-flex align-items-center gap-3 flex-fill">
               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
