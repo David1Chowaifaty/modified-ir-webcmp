@@ -58,6 +58,8 @@ const folioValidationSchema = folioBaseSchema.superRefine((data, ctx) => {
     });
   }
 });
+
+let folioFormInstanceCounter = 0;
 @Component({
   tag: 'ir-payment-folio-form',
   styleUrl: 'ir-payment-folio-form.css',
@@ -92,6 +94,14 @@ export class IrPaymentFolioForm {
   private readonly today = moment().format(DATE_FORMAT);
 
   private paymentService = new PaymentService();
+  private readonly componentId = `ir-payment-folio-form-${++folioFormInstanceCounter}`;
+  private readonly controlIds = {
+    date: `${this.componentId}-date`,
+    transactionType: `${this.componentId}-transaction-type`,
+    paymentMethod: `${this.componentId}-payment-method`,
+    amount: `${this.componentId}-amount`,
+    reference: `${this.componentId}-reference`,
+  } as const;
 
   componentWillLoad() {
     if (this.payment) {
@@ -277,6 +287,7 @@ export class IrPaymentFolioForm {
         id={this.formId}
       >
         <ir-custom-date-picker
+          id={this.controlIds.date}
           label="Date"
           aria-invalid={this.errors?.date && !this.folioData?.date ? 'true' : 'false'}
           data-testid="pickup_date"
@@ -296,6 +307,7 @@ export class IrPaymentFolioForm {
           blurEvent="wa-hide"
         >
           <wa-select
+            id={this.controlIds.transactionType}
             size="small"
             onwa-hide={event => this.stopEventPropagation(event)}
             onwa-show={event => this.stopEventPropagation(event)}
@@ -323,6 +335,7 @@ export class IrPaymentFolioForm {
             blurEvent="wa-hide"
           >
             <wa-select
+              id={this.controlIds.paymentMethod}
               size="small"
               label={`${this.folioData.payment_type?.code === '001' ? 'Payment' : 'Refund'} method`}
               onwa-show={event => this.stopEventPropagation(event)}
@@ -354,6 +367,7 @@ export class IrPaymentFolioForm {
           blurEvent="input-blur"
         >
           <ir-custom-input
+            id={this.controlIds.amount}
             aria-invalid={String(!!this.errors?.amount)}
             value={this.folioData?.amount?.toString() ?? ''}
             label="Amount"
@@ -372,6 +386,7 @@ export class IrPaymentFolioForm {
           blurEvent="input-blur"
         >
           <ir-custom-input
+            id={this.controlIds.reference}
             value={this.folioData?.reference ?? ''}
             label="Reference"
             maxlength={50}
