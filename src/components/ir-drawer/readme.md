@@ -36,6 +36,7 @@
  - [ir-invoice](../ir-invoice)
  - [ir-payment-folio](../ir-booking-details/ir-payment-details/ir-payment-folio)
  - [ir-pickup](../ir-booking-details/ir-pickup)
+ - [ir-room-guests](../ir-booking-details/ir-room-guests)
 
 ### Graph
 ```mermaid
@@ -48,6 +49,7 @@ graph TD;
   ir-invoice --> ir-drawer
   ir-payment-folio --> ir-drawer
   ir-pickup --> ir-drawer
+  ir-room-guests --> ir-drawer
   style ir-drawer fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

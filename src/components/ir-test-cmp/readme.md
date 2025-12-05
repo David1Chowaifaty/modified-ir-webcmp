@@ -18,9 +18,11 @@ graph TD;
   ir-test2-cmp --> ir-custom-button
   ir-test2-cmp --> ir-invoice
   ir-invoice --> ir-drawer
-  ir-invoice --> ir-custom-date-picker
-  ir-invoice --> ir-booking-billing-recipient
+  ir-invoice --> ir-invoice-form
   ir-invoice --> ir-custom-button
+  ir-invoice-form --> ir-spinner
+  ir-invoice-form --> ir-custom-date-picker
+  ir-invoice-form --> ir-booking-billing-recipient
   ir-custom-date-picker --> ir-custom-input
   ir-booking-billing-recipient --> ir-booking-company-form
   ir-booking-company-form --> ir-dialog

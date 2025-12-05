@@ -32,7 +32,8 @@
 | `placeholder`        | `placeholder`          | Placeholder text to show as a hint when the input is empty.                                                                                                                                                                                                                            | `string`                                                                                                            | `undefined` |
 | `readonly`           | `readonly`             | Makes the input readonly.                                                                                                                                                                                                                                                              | `boolean`                                                                                                           | `undefined` |
 | `required`           | `required`             | Makes the input a required field.                                                                                                                                                                                                                                                      | `boolean`                                                                                                           | `undefined` |
-| `size`               | `size`                 | The input's size.                                                                                                                                                                                                                                                                      | `"large" \| "medium" \| "small"`                                                                                    | `undefined` |
+| `returnMaskedValue`  | `return-masked-value`  |                                                                                                                                                                                                                                                                                        | `boolean`                                                                                                           | `false`     |
+| `size`               | `size`                 | The input's size.                                                                                                                                                                                                                                                                      | `"large" \| "medium" \| "small"`                                                                                    | `'small'`   |
 | `spellcheck`         | `spellcheck`           | Enables spell checking on the input.                                                                                                                                                                                                                                                   | `boolean`                                                                                                           | `undefined` |
 | `step`               | `step`                 | Specifies the granularity that the value must adhere to, or the special value `any` which means no stepping is implied, allowing any numeric value. Only applies to date and number input types.                                                                                       | `"any" \| number`                                                                                                   | `undefined` |
 | `type`               | `type`                 | The type of input. Works the same as a native `<input>` element, but only a subset of types are supported. Defaults to `text`.                                                                                                                                                         | `"date" \| "datetime-local" \| "email" \| "number" \| "password" \| "search" \| "tel" \| "text" \| "time" \| "url"` | `'text'`    |
@@ -60,11 +61,12 @@
  - [ir-booking-company-form](../../ir-booking-details/ir-booking-company-form)
  - [ir-custom-date-picker](../../ir-custom-date-picker)
  - [ir-departures-filter](../../ir-departures/ir-departures-filter)
- - [ir-extra-service-config](../../ir-booking-details/ir-extra-services/ir-extra-service-config)
+ - [ir-extra-service-config-form](../../ir-booking-details/ir-extra-services/ir-extra-service-config/ir-extra-service-config-form)
  - [ir-guest-info-form](../../ir-guest-info/ir-guest-info-form)
  - [ir-listing-header](../../ir-booking-listing/ir-listing-header)
- - [ir-payment-folio](../../ir-booking-details/ir-payment-details/ir-payment-folio)
- - [ir-pickup](../../ir-booking-details/ir-pickup)
+ - [ir-payment-folio-form](../../ir-booking-details/ir-payment-details/ir-payment-folio/ir-payment-folio-form)
+ - [ir-pickup-form](../../ir-booking-details/ir-pickup/ir-pickup-form)
+ - [ir-room-guests-form](../../ir-booking-details/ir-room-guests/ir-room-guests-form)
 
 ### Graph
 ```mermaid
@@ -73,11 +75,12 @@ graph TD;
   ir-booking-company-form --> ir-custom-input
   ir-custom-date-picker --> ir-custom-input
   ir-departures-filter --> ir-custom-input
-  ir-extra-service-config --> ir-custom-input
+  ir-extra-service-config-form --> ir-custom-input
   ir-guest-info-form --> ir-custom-input
   ir-listing-header --> ir-custom-input
-  ir-payment-folio --> ir-custom-input
-  ir-pickup --> ir-custom-input
+  ir-payment-folio-form --> ir-custom-input
+  ir-pickup-form --> ir-custom-input
+  ir-room-guests-form --> ir-custom-input
   style ir-custom-input fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

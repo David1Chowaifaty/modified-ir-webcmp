@@ -72,7 +72,6 @@
  - [ir-monthly-bookings-report-filter](../../ir-monthly-bookings-report/ir-monthly-bookings-report-filter)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-pagination](../../ir-pagination)
- - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-sales-by-channel-filters](../../ir-sales-by-channel/ir-sales-by-channel-filters)
  - [ir-sales-filters](../../ir-sales-by-country/ir-sales-filters)
  - [ir-tasks-filters](../../ir-housekeeping/ir-hk-tasks/ir-tasks-filters)
@@ -97,7 +96,6 @@ graph TD;
   ir-monthly-bookings-report-filter --> ir-select
   ir-option-details --> ir-select
   ir-pagination --> ir-select
-  ir-room-guests --> ir-select
   ir-sales-by-channel-filters --> ir-select
   ir-sales-filters --> ir-select
   ir-tasks-filters --> ir-select

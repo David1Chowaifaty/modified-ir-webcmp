@@ -23,7 +23,7 @@
 
 ### Used by
 
- - [ir-invoice](../ir-invoice)
+ - [ir-invoice-form](../ir-invoice/ir-invoice-form)
 
 ### Depends on
 
@@ -36,7 +36,7 @@ graph TD;
   ir-booking-company-form --> ir-dialog
   ir-booking-company-form --> ir-custom-input
   ir-booking-company-form --> ir-custom-button
-  ir-invoice --> ir-booking-billing-recipient
+  ir-invoice-form --> ir-booking-billing-recipient
   style ir-booking-billing-recipient fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

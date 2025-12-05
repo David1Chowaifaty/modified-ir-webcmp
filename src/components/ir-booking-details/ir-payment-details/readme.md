@@ -19,7 +19,7 @@
 
 | Event                               | Description | Type                                                                                                                                            |
 | ----------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `openPrintScreen`                   |             | `CustomEvent<{ mode: "printing" \| "invoice" \| "proforma" \| "creditnote"; } \| { mode: "receipt"; payload: { pid: string; rnb: string; }; }>` |
+| `openPrintScreen`                   |             | `CustomEvent<{ mode: "invoice" \| "printing" \| "proforma" \| "creditnote"; } \| { mode: "receipt"; payload: { pid: string; rnb: string; }; }>` |
 | `openSidebar`                       |             | `CustomEvent<{ type: "payment-folio"; payload: { payment: Payment; mode: FolioEntryMode; }; }>`                                                 |
 | `resetBookingEvt`                   |             | `CustomEvent<null>`                                                                                                                             |
 | `resetExposedCancellationDueAmount` |             | `CustomEvent<null>`                                                                                                                             |

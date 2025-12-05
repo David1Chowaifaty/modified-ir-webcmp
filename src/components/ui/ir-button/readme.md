@@ -91,7 +91,6 @@ Type: `Promise<void>`
  - [ir-payment-option](../../ir-payment-option)
  - [ir-reset-password](../../ir-reset-password)
  - [ir-revenue-row-details](../../ir-daily-revenue/ir-revenue-table/ir-revenue-row/ir-revenue-row-details)
- - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-room-nights](../../igloo-calendar/ir-room-nights)
  - [ir-sales-by-channel](../../ir-sales-by-channel)
  - [ir-sales-by-channel-table](../../ir-sales-by-channel/ir-sales-by-channel-table)
@@ -153,7 +152,6 @@ graph TD;
   ir-payment-option --> ir-button
   ir-reset-password --> ir-button
   ir-revenue-row-details --> ir-button
-  ir-room-guests --> ir-button
   ir-room-nights --> ir-button
   ir-sales-by-channel --> ir-button
   ir-sales-by-channel-table --> ir-button

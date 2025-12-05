@@ -60,7 +60,6 @@ graph TD;
   ir-unit-cell --> ir-unit-tag
   ir-balance-cell --> ir-custom-button
   ir-actions-cell --> ir-custom-button
-  ir-booking-details --> ir-room-guests
   ir-booking-details --> ir-room
   ir-booking-details --> ir-spinner
   ir-booking-details --> ir-toast
@@ -73,22 +72,13 @@ graph TD;
   ir-booking-details --> ir-extra-services
   ir-booking-details --> ir-payment-details
   ir-booking-details --> ir-dialog
-  ir-booking-details --> ir-sidebar
+  ir-booking-details --> ir-room-guests
   ir-booking-details --> ir-extra-service-config
   ir-booking-details --> ir-pickup
+  ir-booking-details --> ir-invoice
   ir-booking-details --> ir-guest-info-drawer
   ir-booking-details --> ir-payment-folio
   ir-booking-details --> igl-book-property
-  ir-room-guests --> ir-spinner
-  ir-room-guests --> ir-title
-  ir-room-guests --> ir-input-text
-  ir-room-guests --> ir-country-picker
-  ir-room-guests --> ir-select
-  ir-room-guests --> ir-button
-  ir-title --> ir-icon
-  ir-country-picker --> ir-picker
-  ir-country-picker --> ir-picker-item
-  ir-country-picker --> ir-input-text
   ir-room --> ir-custom-button
   ir-room --> ir-date-view
   ir-room --> ir-unit-tag
@@ -132,17 +122,35 @@ graph TD;
   ir-payments-folio --> ir-payment-item
   ir-payments-folio --> ir-custom-button
   ir-payment-item --> ir-custom-button
-  ir-sidebar --> ir-icon
+  ir-room-guests --> ir-drawer
+  ir-room-guests --> ir-room-guests-form
+  ir-room-guests --> ir-custom-button
+  ir-room-guests-form --> ir-spinner
+  ir-room-guests-form --> ir-validator
+  ir-room-guests-form --> ir-custom-input
+  ir-room-guests-form --> ir-country-picker
+  ir-country-picker --> ir-picker
+  ir-country-picker --> ir-picker-item
+  ir-country-picker --> ir-input-text
   ir-extra-service-config --> ir-drawer
-  ir-extra-service-config --> ir-validator
-  ir-extra-service-config --> ir-custom-date-picker
-  ir-extra-service-config --> ir-custom-input
+  ir-extra-service-config --> ir-extra-service-config-form
   ir-extra-service-config --> ir-custom-button
+  ir-extra-service-config-form --> ir-validator
+  ir-extra-service-config-form --> ir-custom-date-picker
+  ir-extra-service-config-form --> ir-custom-input
   ir-pickup --> ir-drawer
-  ir-pickup --> ir-validator
-  ir-pickup --> ir-custom-date-picker
-  ir-pickup --> ir-custom-input
+  ir-pickup --> ir-pickup-form
   ir-pickup --> ir-custom-button
+  ir-pickup-form --> ir-validator
+  ir-pickup-form --> ir-custom-date-picker
+  ir-pickup-form --> ir-custom-input
+  ir-invoice --> ir-drawer
+  ir-invoice --> ir-invoice-form
+  ir-invoice --> ir-custom-button
+  ir-invoice-form --> ir-spinner
+  ir-invoice-form --> ir-custom-date-picker
+  ir-invoice-form --> ir-booking-billing-recipient
+  ir-booking-billing-recipient --> ir-booking-company-form
   ir-guest-info-drawer --> ir-drawer
   ir-guest-info-drawer --> ir-guest-info-form
   ir-guest-info-drawer --> ir-custom-button
@@ -151,10 +159,11 @@ graph TD;
   ir-guest-info-form --> ir-country-picker
   ir-guest-info-form --> ir-mobile-input
   ir-payment-folio --> ir-drawer
-  ir-payment-folio --> ir-custom-date-picker
-  ir-payment-folio --> ir-validator
-  ir-payment-folio --> ir-custom-input
+  ir-payment-folio --> ir-payment-folio-form
   ir-payment-folio --> ir-custom-button
+  ir-payment-folio-form --> ir-custom-date-picker
+  ir-payment-folio-form --> ir-validator
+  ir-payment-folio-form --> ir-custom-input
   igl-book-property --> igl-block-dates-view
   igl-book-property --> ir-spinner
   igl-book-property --> ir-icon

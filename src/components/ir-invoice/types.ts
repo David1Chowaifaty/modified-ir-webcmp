@@ -7,6 +7,13 @@ export const CurrencySchema = z.object({
 });
 export type Currency = z.infer<typeof CurrencySchema>;
 
+/**
+ * `"BSA"` = Accommodation
+ * `"BSP"` = Pickup
+ * `"BSE"` = Extra service
+ */
+export type InvoicableItemType = 'BSA' | 'BSP' | 'BSE';
+
 export const InvoicableItemSchema = z.object({
   amount: z.number(),
   booking_nbr: z.string(),
@@ -16,7 +23,7 @@ export const InvoicableItemSchema = z.object({
   key: z.null(),
   status: z.null(),
   system_id: z.null(),
-  type: z.string(),
+  type: z.enum(['BSA', 'BSP', 'BSE']) as z.ZodType<InvoicableItemType>,
 });
 export type InvoicableItem = z.infer<typeof InvoicableItemSchema>;
 

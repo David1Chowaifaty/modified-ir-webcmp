@@ -53,7 +53,6 @@ Type: `Promise<void>`
 ### Used by
 
  - [igloo-calendar](../../igloo-calendar)
- - [ir-booking-details](../../ir-booking-details)
  - [ir-channel](../../ir-channel)
  - [ir-daily-revenue](../../ir-daily-revenue)
  - [ir-financial-actions](../../ir-financial-actions)
@@ -73,7 +72,6 @@ Type: `Promise<void>`
 graph TD;
   ir-sidebar --> ir-icon
   igloo-calendar --> ir-sidebar
-  ir-booking-details --> ir-sidebar
   ir-channel --> ir-sidebar
   ir-daily-revenue --> ir-sidebar
   ir-financial-actions --> ir-sidebar

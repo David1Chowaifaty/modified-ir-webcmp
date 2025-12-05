@@ -1,4 +1,4 @@
-# ir-extra-service-config
+# ir-extra-service-config-form
 
 
 
@@ -10,41 +10,38 @@
 | Property  | Attribute | Description | Type                                                                                                                                                                     | Default     |
 | --------- | --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
 | `booking` | --        |             | `{ currency: Currency; from_date: string; to_date: string; booking_nbr: string; }`                                                                                       | `undefined` |
-| `open`    | `open`    |             | `boolean`                                                                                                                                                                | `undefined` |
 | `service` | --        |             | `{ cost?: number; description?: string; booking_system_id?: number; currency_id?: number; end_date?: string; start_date?: string; price?: number; system_id?: number; }` | `undefined` |
 
 
 ## Events
 
-| Event        | Description | Type                |
-| ------------ | ----------- | ------------------- |
-| `closeModal` |             | `CustomEvent<null>` |
+| Event             | Description | Type                |
+| ----------------- | ----------- | ------------------- |
+| `closeModal`      |             | `CustomEvent<null>` |
+| `resetBookingEvt` |             | `CustomEvent<null>` |
 
 
 ## Dependencies
 
 ### Used by
 
- - [ir-booking-details](../..)
+ - [ir-extra-service-config](..)
 
 ### Depends on
 
-- [ir-drawer](../../../ir-drawer)
-- [ir-extra-service-config-form](ir-extra-service-config-form)
-- [ir-custom-button](../../../ui/ir-custom-button)
+- [ir-validator](../../../../ui/ir-validator)
+- [ir-custom-date-picker](../../../../ir-custom-date-picker)
+- [ir-custom-input](../../../../ui/ir-custom-input)
 
 ### Graph
 ```mermaid
 graph TD;
-  ir-extra-service-config --> ir-drawer
-  ir-extra-service-config --> ir-extra-service-config-form
-  ir-extra-service-config --> ir-custom-button
   ir-extra-service-config-form --> ir-validator
   ir-extra-service-config-form --> ir-custom-date-picker
   ir-extra-service-config-form --> ir-custom-input
   ir-custom-date-picker --> ir-custom-input
-  ir-booking-details --> ir-extra-service-config
-  style ir-extra-service-config fill:#f9f,stroke:#333,stroke-width:4px
+  ir-extra-service-config --> ir-extra-service-config-form
+  style ir-extra-service-config-form fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

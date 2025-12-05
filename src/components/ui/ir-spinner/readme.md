@@ -24,9 +24,10 @@
  - [ir-events-log](../../ir-booking-details/ir-booking-header/events-log)
  - [ir-guest-info](../../ir-guest-info)
  - [ir-interceptor](../../ir-interceptor)
+ - [ir-invoice-form](../../ir-invoice/ir-invoice-form)
  - [ir-otp-modal](../../ir-otp-modal)
  - [ir-pms-logs](../../ir-booking-details/ir-booking-header/ir-pms-logs)
- - [ir-room-guests](../../ir-booking-details/ir-room-guests)
+ - [ir-room-guests-form](../../ir-booking-details/ir-room-guests/ir-room-guests-form)
 
 ### Graph
 ```mermaid
@@ -36,9 +37,10 @@ graph TD;
   ir-events-log --> ir-spinner
   ir-guest-info --> ir-spinner
   ir-interceptor --> ir-spinner
+  ir-invoice-form --> ir-spinner
   ir-otp-modal --> ir-spinner
   ir-pms-logs --> ir-spinner
-  ir-room-guests --> ir-spinner
+  ir-room-guests-form --> ir-spinner
   style ir-spinner fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

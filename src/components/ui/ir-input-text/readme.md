@@ -111,7 +111,6 @@
  - [ir-login](../../ir-login)
  - [ir-option-details](../../ir-payment-option/ir-option-details)
  - [ir-reset-password](../../ir-reset-password)
- - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-tasks-header](../../ir-housekeeping/ir-hk-tasks/ir-tasks-header)
  - [ir-test-cmp](../../ir-test-cmp)
  - [ir-user-form-panel](../../ir-user-management/ir-user-form-panel)
@@ -127,7 +126,6 @@ graph TD;
   ir-login --> ir-input-text
   ir-option-details --> ir-input-text
   ir-reset-password --> ir-input-text
-  ir-room-guests --> ir-input-text
   ir-tasks-header --> ir-input-text
   ir-test-cmp --> ir-input-text
   ir-user-form-panel --> ir-input-text

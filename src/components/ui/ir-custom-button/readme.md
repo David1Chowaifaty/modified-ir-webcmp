@@ -71,6 +71,7 @@
  - [ir-pickup-view](../../ir-booking-details/ir-pickup-view)
  - [ir-reservation-information](../../ir-booking-details/ir-reservation-information)
  - [ir-room](../../ir-booking-details/ir-room)
+ - [ir-room-guests](../../ir-booking-details/ir-room-guests)
  - [ir-test2-cmp](../../ir-test-cmp)
 
 ### Graph
@@ -103,6 +104,7 @@ graph TD;
   ir-pickup-view --> ir-custom-button
   ir-reservation-information --> ir-custom-button
   ir-room --> ir-custom-button
+  ir-room-guests --> ir-custom-button
   ir-test2-cmp --> ir-custom-button
   style ir-custom-button fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -19,11 +19,10 @@
 
 ## Events
 
-| Event            | Description                                                                                                                                                                                                                                                                                                                                            | Type                                                                                                                                              |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `invoiceClose`   | Emitted when the invoice drawer is closed.  Fired when `closeDrawer()` is called, including when the underlying drawer emits `onDrawerHide`.                                                                                                                                                                                                           | `CustomEvent<void>`                                                                                                                               |
-| `invoiceCreated` | Emitted when an invoice is created/confirmed.  The event `detail` contains: - `booking`: the booking associated with the invoice - `recipientId`: the selected billing recipient - `for`: whether the invoice is for `"room"` or `"booking"` - `roomIdentifier`: the room identifier when invoicing a specific room - `mode`: the current invoice mode | `CustomEvent<{ booking: Booking; recipientId: string; for: "room" \| "booking"; roomIdentifier?: string; mode: "create" \| "check_in-create"; }>` |
-| `invoiceOpen`    | Emitted when the invoice drawer is opened.  Fired when `openDrawer()` is called and the component transitions into the open state.                                                                                                                                                                                                                     | `CustomEvent<void>`                                                                                                                               |
+| Event          | Description                                                                                                                                  | Type                |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `invoiceClose` | Emitted when the invoice drawer is closed.  Fired when `closeDrawer()` is called, including when the underlying drawer emits `onDrawerHide`. | `CustomEvent<void>` |
+| `invoiceOpen`  | Emitted when the invoice drawer is opened.  Fired when `openDrawer()` is called and the component transitions into the open state.           | `CustomEvent<void>` |
 
 
 ## Methods
@@ -64,27 +63,30 @@ Resolves once the drawer state is updated.
 
 ### Used by
 
+ - [ir-booking-details](../ir-booking-details)
  - [ir-test2-cmp](../ir-test-cmp)
 
 ### Depends on
 
 - [ir-drawer](../ir-drawer)
-- [ir-custom-date-picker](../ir-custom-date-picker)
-- [ir-booking-billing-recipient](../ir-booking-billing-recipient)
+- [ir-invoice-form](ir-invoice-form)
 - [ir-custom-button](../ui/ir-custom-button)
 
 ### Graph
 ```mermaid
 graph TD;
   ir-invoice --> ir-drawer
-  ir-invoice --> ir-custom-date-picker
-  ir-invoice --> ir-booking-billing-recipient
+  ir-invoice --> ir-invoice-form
   ir-invoice --> ir-custom-button
+  ir-invoice-form --> ir-spinner
+  ir-invoice-form --> ir-custom-date-picker
+  ir-invoice-form --> ir-booking-billing-recipient
   ir-custom-date-picker --> ir-custom-input
   ir-booking-billing-recipient --> ir-booking-company-form
   ir-booking-company-form --> ir-dialog
   ir-booking-company-form --> ir-custom-input
   ir-booking-company-form --> ir-custom-button
+  ir-booking-details --> ir-invoice
   ir-test2-cmp --> ir-invoice
   style ir-invoice fill:#f9f,stroke:#333,stroke-width:4px
 ```
