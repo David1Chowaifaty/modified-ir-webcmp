@@ -634,20 +634,33 @@ export class IrBookingDetails {
           </ir-custom-button>
         </div>
       </ir-dialog>,
-      <ir-sidebar
+      // <ir-sidebar
+      //   open={this.sidebarState === 'room-guest'}
+      //   side={'right'}
+      //   id="editGuestInfo"
+      //   style={{ '--sidebar-width': this.sidebarState === 'room-guest' ? '60rem' : undefined }}
+      //   onIrSidebarToggle={e => {
+      //     e.stopImmediatePropagation();
+      //     e.stopPropagation();
+      //     this.sidebarState = null;
+      //   }}
+      //   showCloseButton={false}
+      // >
+      //   {this.renderSidebarContent()}
+      // </ir-sidebar>,
+      <ir-room-guests
         open={this.sidebarState === 'room-guest'}
-        side={'right'}
-        id="editGuestInfo"
-        style={{ '--sidebar-width': this.sidebarState === 'room-guest' ? '60rem' : undefined }}
-        onIrSidebarToggle={e => {
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-          this.sidebarState = null;
-        }}
-        showCloseButton={false}
-      >
-        {this.renderSidebarContent()}
-      </ir-sidebar>,
+        countries={this.countries}
+        language={this.language}
+        identifier={this.sidebarPayload?.identifier}
+        bookingNumber={this.booking.booking_nbr}
+        roomName={this.sidebarPayload?.roomName}
+        totalGuests={this.sidebarPayload?.totalGuests}
+        sharedPersons={this.sidebarPayload?.sharing_persons}
+        slot="sidebar-body"
+        checkIn={this.sidebarPayload?.checkin}
+        onCloseModal={() => (this.sidebarState = null)}
+      ></ir-room-guests>,
       <ir-extra-service-config
         open={this.sidebarState === 'extra_service'}
         service={this.selectedService}

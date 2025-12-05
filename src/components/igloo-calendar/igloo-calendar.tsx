@@ -1370,7 +1370,15 @@ export class IglooCalendar {
         )}
         <ir-sidebar
           onIrSidebarToggle={this.handleSideBarToggle.bind(this)}
-          open={!!this.calendarSidebarState || this.roomNightsData !== null || (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING')}
+          open={(() => {
+            if (this.editBookingItem && this.editBookingItem.event_type === 'EDIT_BOOKING') {
+              return true;
+            }
+            if (!this.calendarSidebarState || this.calendarSidebarState?.type === 'room-guests' || this.roomNightsData === null) {
+              return false;
+            }
+            return true;
+          })()}
           showCloseButton={false}
           sidebarStyles={{
             width: this.calendarSidebarState?.type === 'room-guests' ? '60rem' : this.editBookingItem ? '80rem' : 'var(--sidebar-width,40rem)',
@@ -1417,25 +1425,26 @@ export class IglooCalendar {
               hasRoomAdd
             ></ir-booking-details>
           )}
-          {this.calendarSidebarState?.type === 'room-guests' && (
-            <ir-room-guests
-              countries={this.countries}
-              language={this.language}
-              identifier={this.calendarSidebarState?.payload?.identifier}
-              bookingNumber={this.calendarSidebarState?.payload.bookingNumber}
-              roomName={this.calendarSidebarState?.payload?.roomName}
-              totalGuests={this.calendarSidebarState?.payload?.totalGuests}
-              sharedPersons={this.calendarSidebarState?.payload?.sharing_persons}
-              slot="sidebar-body"
-              checkIn={this.calendarSidebarState?.payload?.checkin}
-              onCloseModal={() => (this.calendarSidebarState = null)}
-            ></ir-room-guests>
-          )}
+
           {this.calendarSidebarState?.type === 'bulk-blocks' && (
             <igl-bulk-operations slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-operations>
             // <igl-bulk-stop-sale slot="sidebar-body" property_id={this.property_id} onCloseModal={() => (this.calendarSidebarState = null)}></igl-bulk-stop-sale>
           )}
         </ir-sidebar>
+
+        <ir-room-guests
+          open={this.calendarSidebarState?.type === 'room-guests'}
+          countries={this.countries}
+          language={this.language}
+          identifier={this.calendarSidebarState?.payload?.identifier}
+          bookingNumber={this.calendarSidebarState?.payload.bookingNumber}
+          roomName={this.calendarSidebarState?.payload?.roomName}
+          totalGuests={this.calendarSidebarState?.payload?.totalGuests}
+          sharedPersons={this.calendarSidebarState?.payload?.sharing_persons}
+          checkIn={this.calendarSidebarState?.payload?.checkin}
+          onCloseModal={() => (this.calendarSidebarState = null)}
+        ></ir-room-guests>
+
         <igl-reallocation-dialog
           onResetModalState={() => (this.dialogData = null)}
           onDialogClose={() => this.handleModalCancel()}

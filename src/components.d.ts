@@ -2551,6 +2551,41 @@ export namespace Components {
           * The language used for displaying text content in the component. Defaults to English ('en'), but can be set to other supported languages.
          */
         "language": string;
+        "open": boolean;
+        /**
+          * The name of the room currently being displayed. Used to label the room in the user interface for clarity.
+         */
+        "roomName": string;
+        /**
+          * An array of people sharing the room. Contains information about the {locales.entries.Lcz_MainGuest} and additional guests, such as their name, date of birth, {locales.entries.Lcz_Nationality}, and ID details.
+         */
+        "sharedPersons": SharedPerson[];
+        /**
+          * The total number of guests for the room. Determines how many guest input forms to display in the UI.
+         */
+        "totalGuests": number;
+    }
+    interface IrRoomGuestsForm {
+        /**
+          * A unique booking number associated with the room. This is used for backend operations like saving guest information or checking in the room.
+         */
+        "bookingNumber": string;
+        /**
+          * A boolean indicating whether the room is in the process of being checked in. If true, additional actions like saving the room state as "checked in" are performed.
+         */
+        "checkIn": boolean;
+        /**
+          * A list of available countries. Used to populate dropdowns for selecting the {locales.entries.Lcz_Nationality} of guests.
+         */
+        "countries": ICountry[];
+        /**
+          * A unique identifier for the room. This is used to distinguish between rooms, especially when performing operations like saving or checking in guests.
+         */
+        "identifier": string;
+        /**
+          * The language used for displaying text content in the component. Defaults to English ('en'), but can be set to other supported languages.
+         */
+        "language": string;
         /**
           * The name of the room currently being displayed. Used to label the room in the user interface for clarity.
          */
@@ -3450,6 +3485,10 @@ export interface IrRoomCustomEvent<T> extends CustomEvent<T> {
 export interface IrRoomGuestsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLIrRoomGuestsElement;
+}
+export interface IrRoomGuestsFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLIrRoomGuestsFormElement;
 }
 export interface IrRoomNightsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -5809,8 +5848,6 @@ declare global {
     };
     interface HTMLIrRoomGuestsElementEventMap {
         "closeModal": null;
-        "resetBookingEvt": null;
-        "updateRoomGuests": { identifier: string; guests: SharedPerson[] };
     }
     interface HTMLIrRoomGuestsElement extends Components.IrRoomGuests, HTMLStencilElement {
         addEventListener<K extends keyof HTMLIrRoomGuestsElementEventMap>(type: K, listener: (this: HTMLIrRoomGuestsElement, ev: IrRoomGuestsCustomEvent<HTMLIrRoomGuestsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5825,6 +5862,25 @@ declare global {
     var HTMLIrRoomGuestsElement: {
         prototype: HTMLIrRoomGuestsElement;
         new (): HTMLIrRoomGuestsElement;
+    };
+    interface HTMLIrRoomGuestsFormElementEventMap {
+        "closeModal": null;
+        "resetBookingEvt": null;
+        "updateRoomGuests": { identifier: string; guests: SharedPerson[] };
+    }
+    interface HTMLIrRoomGuestsFormElement extends Components.IrRoomGuestsForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLIrRoomGuestsFormElementEventMap>(type: K, listener: (this: HTMLIrRoomGuestsFormElement, ev: IrRoomGuestsFormCustomEvent<HTMLIrRoomGuestsFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLIrRoomGuestsFormElementEventMap>(type: K, listener: (this: HTMLIrRoomGuestsFormElement, ev: IrRoomGuestsFormCustomEvent<HTMLIrRoomGuestsFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLIrRoomGuestsFormElement: {
+        prototype: HTMLIrRoomGuestsFormElement;
+        new (): HTMLIrRoomGuestsFormElement;
     };
     interface HTMLIrRoomNightsElementEventMap {
         "closeRoomNightsDialog": IRoomNightsDataEventPayload;
@@ -6457,6 +6513,7 @@ declare global {
         "ir-revenue-table": HTMLIrRevenueTableElement;
         "ir-room": HTMLIrRoomElement;
         "ir-room-guests": HTMLIrRoomGuestsElement;
+        "ir-room-guests-form": HTMLIrRoomGuestsFormElement;
         "ir-room-nights": HTMLIrRoomNightsElement;
         "ir-sales-by-channel": HTMLIrSalesByChannelElement;
         "ir-sales-by-channel-filters": HTMLIrSalesByChannelFiltersElement;
@@ -9288,8 +9345,44 @@ declare namespace LocalJSX {
          */
         "language"?: string;
         "onCloseModal"?: (event: IrRoomGuestsCustomEvent<null>) => void;
-        "onResetBookingEvt"?: (event: IrRoomGuestsCustomEvent<null>) => void;
-        "onUpdateRoomGuests"?: (event: IrRoomGuestsCustomEvent<{ identifier: string; guests: SharedPerson[] }>) => void;
+        "open"?: boolean;
+        /**
+          * The name of the room currently being displayed. Used to label the room in the user interface for clarity.
+         */
+        "roomName"?: string;
+        /**
+          * An array of people sharing the room. Contains information about the {locales.entries.Lcz_MainGuest} and additional guests, such as their name, date of birth, {locales.entries.Lcz_Nationality}, and ID details.
+         */
+        "sharedPersons"?: SharedPerson[];
+        /**
+          * The total number of guests for the room. Determines how many guest input forms to display in the UI.
+         */
+        "totalGuests"?: number;
+    }
+    interface IrRoomGuestsForm {
+        /**
+          * A unique booking number associated with the room. This is used for backend operations like saving guest information or checking in the room.
+         */
+        "bookingNumber"?: string;
+        /**
+          * A boolean indicating whether the room is in the process of being checked in. If true, additional actions like saving the room state as "checked in" are performed.
+         */
+        "checkIn"?: boolean;
+        /**
+          * A list of available countries. Used to populate dropdowns for selecting the {locales.entries.Lcz_Nationality} of guests.
+         */
+        "countries"?: ICountry[];
+        /**
+          * A unique identifier for the room. This is used to distinguish between rooms, especially when performing operations like saving or checking in guests.
+         */
+        "identifier"?: string;
+        /**
+          * The language used for displaying text content in the component. Defaults to English ('en'), but can be set to other supported languages.
+         */
+        "language"?: string;
+        "onCloseModal"?: (event: IrRoomGuestsFormCustomEvent<null>) => void;
+        "onResetBookingEvt"?: (event: IrRoomGuestsFormCustomEvent<null>) => void;
+        "onUpdateRoomGuests"?: (event: IrRoomGuestsFormCustomEvent<{ identifier: string; guests: SharedPerson[] }>) => void;
         /**
           * The name of the room currently being displayed. Used to label the room in the user interface for clarity.
          */
@@ -9966,6 +10059,7 @@ declare namespace LocalJSX {
         "ir-revenue-table": IrRevenueTable;
         "ir-room": IrRoom;
         "ir-room-guests": IrRoomGuests;
+        "ir-room-guests-form": IrRoomGuestsForm;
         "ir-room-nights": IrRoomNights;
         "ir-sales-by-channel": IrSalesByChannel;
         "ir-sales-by-channel-filters": IrSalesByChannelFilters;
@@ -10169,6 +10263,7 @@ declare module "@stencil/core" {
             "ir-revenue-table": LocalJSX.IrRevenueTable & JSXBase.HTMLAttributes<HTMLIrRevenueTableElement>;
             "ir-room": LocalJSX.IrRoom & JSXBase.HTMLAttributes<HTMLIrRoomElement>;
             "ir-room-guests": LocalJSX.IrRoomGuests & JSXBase.HTMLAttributes<HTMLIrRoomGuestsElement>;
+            "ir-room-guests-form": LocalJSX.IrRoomGuestsForm & JSXBase.HTMLAttributes<HTMLIrRoomGuestsFormElement>;
             "ir-room-nights": LocalJSX.IrRoomNights & JSXBase.HTMLAttributes<HTMLIrRoomNightsElement>;
             "ir-sales-by-channel": LocalJSX.IrSalesByChannel & JSXBase.HTMLAttributes<HTMLIrSalesByChannelElement>;
             "ir-sales-by-channel-filters": LocalJSX.IrSalesByChannelFilters & JSXBase.HTMLAttributes<HTMLIrSalesByChannelFiltersElement>;
