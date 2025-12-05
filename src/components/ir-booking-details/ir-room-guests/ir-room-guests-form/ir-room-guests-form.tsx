@@ -224,6 +224,7 @@ export class IrRoomGuestsForm {
                       </label>
                       <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.first_name}>
                         <ir-custom-input
+                          aria-invalid={String(!!this.error['first_name'] && !isRowValid)}
                           size="small"
                           id={`first_name_${idx}`}
                           placeholder="First name"
@@ -237,6 +238,7 @@ export class IrRoomGuestsForm {
                       <label class="guest_label">Last name</label>
                       <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.last_name}>
                         <ir-custom-input
+                          aria-invalid={String(!!this.error['last_name'] && !isRowValid)}
                           size="small"
                           id={`last_name_${idx}`}
                           placeholder="Last name"
@@ -250,6 +252,7 @@ export class IrRoomGuestsForm {
                       <p class="guest_label">{locales.entries.Lcz_DOB}</p>
                       <ir-validator class="flex-grow-1" schema={ZSharedPerson.shape.dob}>
                         <ir-custom-input
+                          aria-invalid={String(!!this.error['dob'] && !isRowValid)}
                           id={`dob_${idx}`}
                           mask={dateMask}
                           size="small"
@@ -267,6 +270,7 @@ export class IrRoomGuestsForm {
                         <ir-country-picker
                           size="small"
                           variant="modern"
+                          aria-invalid={String(!!this.error['country_id'] && !guest.country_id)}
                           propertyCountry={this.propertyCountry}
                           id={`{locales.entries.Lcz_Nationality}_${idx}`}
                           error={!!this.error['country_id'] && !guest.country_id}
@@ -307,6 +311,7 @@ export class IrRoomGuestsForm {
                         </wa-select>
                         <wa-input
                           size="small"
+                          aria-invalid={String(!!this.error['number'] && !isRowValid)}
                           class="room-guest__document"
                           defaultValue={guest?.id_info?.number}
                           value={guest?.id_info?.number}
