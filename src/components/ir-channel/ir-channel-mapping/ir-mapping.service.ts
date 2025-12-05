@@ -133,7 +133,7 @@ export class IrMappingService {
       .filter(rate_plan => channels_data.mappedChannels.find(r => rate_plan.id.toString() === r.ir_id) === undefined && rate_plan['is_active'])
       .map(rate_plan => ({
         id: rate_plan.id.toString(),
-        name: rate_plan['short_name'],
+        name: `${rate_plan['short_name']} ${rate_plan['is_non_refundable'] ? 'Non-refundable' : ''}`,
         occupancy: selectedRoomType.occupancy_default.adult_nbr,
       }));
   }
