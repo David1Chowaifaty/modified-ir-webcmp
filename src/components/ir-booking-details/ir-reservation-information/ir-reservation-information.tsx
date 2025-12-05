@@ -112,24 +112,25 @@ export class IrReservationInformation {
               this.booking.booked_on.minute.toString(),
             )}`}
           ></ir-label>
-          <ir-label labelText={`${locales.entries.Lcz_BookedBy}:`} content={`${this.booking.guest.first_name} ${this.booking.guest.last_name}`}>
-            {this.booking.guest?.nbr_confirmed_bookings > 1 && !this.booking.agent && (
-              <div class={'m-0 p-0 '} slot="prefix">
-                <wa-tooltip for="guests_nbr_confirmed_bookings">
-                  {`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())}
-                </wa-tooltip>
-                <div style={{ color: '#FB0AAD' }} id="guests_nbr_confirmed_bookings">
-                  <span> {this.booking.guest.nbr_confirmed_bookings}</span>
-                  <wa-icon name="heart" style={{ color: '#FB0AAD' }}></wa-icon>
+          <div class="reservation-information__row">
+            <ir-label labelText={`${locales.entries.Lcz_BookedBy}:`} content={`${this.booking.guest.first_name} ${this.booking.guest.last_name}`}>
+              {this.booking.guest?.nbr_confirmed_bookings > 1 && !this.booking.agent && (
+                <div class={'m-0 p-0 '} slot="prefix">
+                  <wa-tooltip for="guests_nbr_confirmed_bookings">
+                    {`${locales.entries.Lcz_BookingsNbr}`.replace('%1', this.booking.guest.nbr_confirmed_bookings.toString())}
+                  </wa-tooltip>
+                  <div style={{ color: '#FB0AAD' }} id="guests_nbr_confirmed_bookings">
+                    <span> {this.booking.guest.nbr_confirmed_bookings}</span>
+                    <wa-icon name="heart" style={{ color: '#FB0AAD' }}></wa-icon>
+                  </div>
                 </div>
-              </div>
-            )}
-
+              )}
+            </ir-label>
             <wa-tooltip for={`edit_guest-details`}>Edit guest details</wa-tooltip>
-            <ir-custom-button iconBtn slot="suffix" id={`edit_guest-details`} onClickHandler={e => this.handleEditClick(e, 'guest')} appearance={'plain'} variant={'neutral'}>
+            <ir-custom-button iconBtn id={`edit_guest-details`} onClickHandler={e => this.handleEditClick(e, 'guest')} appearance={'plain'} variant={'neutral'}>
               <wa-icon name="edit" label="Edit guest details" style={{ fontSize: '1rem' }}></wa-icon>
             </ir-custom-button>
-          </ir-label>
+          </div>
           <div class="reservation-information__row">
             <ir-label
               labelText={`Company:`}
